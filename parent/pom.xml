@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sxj</groupId>
@@ -6,6 +5,16 @@
   <version>1.0</version>
   <packaging>pom</packaging>
   <modules>
-    <module>supervisor-manager</module>
+  	<module>supervisor-manager</module>
   </modules>
+  <properties>
+  	<com.sxj.spring>4.2.3</com.sxj.spring>
+  </properties>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.sxj</groupId>
+  		<artifactId>spring-core</artifactId>
+  		<version>${com.sxj.spring}</version>
+  	</dependency>
+  </dependencies>
 </project>
