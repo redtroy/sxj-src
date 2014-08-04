@@ -14,11 +14,6 @@
 		<java.version>1.7</java.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${com.sxj.spring}</version>
-		</dependency>
 	</dependencies>	<build>
 		<plugins>
 			<plugin>
