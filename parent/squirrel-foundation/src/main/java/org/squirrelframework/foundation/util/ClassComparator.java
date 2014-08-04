@@ -13,7 +13,7 @@ import java.util.Comparator;
 public class ClassComparator<T> implements Comparator<T>, Serializable {
 
     private static final long serialVersionUID = 7351750287378530968L;
-
+ 
     @Override
     public int compare(T o1, T o2) {
         Class<?> c1 = o1.getClass();
