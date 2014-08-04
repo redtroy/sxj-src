@@ -20,16 +20,6 @@
 		  	<version>2.4.1.3</version>
 		</dependency>
 		<dependency>
-  			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-  			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>jsonrpc-core</artifactId>
 			<version>1.0</version>

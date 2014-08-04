@@ -9,6 +9,10 @@
 		<module>jsonrpc-client</module>
 		<module>jsonrpc-core</module>
 	 	<module>jsonrpc-server</module>
+	 	<module>jsonprc-client-spring</module>
+	 	<module>jsonprc-server-spring</module>
+    <module>jsonrpc-client-spring</module>
+    <module>jsonrpc-server-spring</module>
   </modules>
 	<properties>
 		<java.version>1.7</java.version>
@@ -105,7 +109,7 @@
 					<version>2.5.1</version>
 				</plugin>
 
-				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�?-->
+				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�?-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>

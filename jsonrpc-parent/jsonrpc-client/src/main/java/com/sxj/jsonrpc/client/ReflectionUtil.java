@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.sxj.jsonrpc.core.JsonRpcMethod;
-import com.sxj.jsonrpc.core.JsonRpcParam;
+import com.sxj.jsonrpc.annotation.JsonRpcMethod;
+import com.sxj.jsonrpc.annotation.JsonRpcParam;
 
 /**
  * Utilities for reflection.

@@ -39,11 +39,12 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.remoting.support.UrlBasedRemoteAccessor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sxj.jsonrpc.client.JsonRpcClient.RequestListener;
 import com.sxj.jsonrpc.client.JsonRpcHttpClient;
 import com.sxj.jsonrpc.client.ReflectionUtil;
-import com.sxj.jsonrpc.client.JsonRpcClient.RequestListener;
 
 /**
  * {@link FactoryBean} for creating a {@link UrlBasedRemoteAccessor} (aka
@@ -62,11 +63,11 @@ public class JsonProxyFactoryBean implements MethodInterceptor,
     
     private Object proxyObject = null;
     
-    private com.sxj.jsonrpc.client.JsonRpcClient.RequestListener requestListener = null;
+    private RequestListener requestListener = null;
     
     private ObjectMapper objectMapper = null;
     
-    private com.sxj.jsonrpc.client.JsonRpcHttpClient jsonRpcHttpClient = null;
+    private JsonRpcHttpClient jsonRpcHttpClient = null;
     
     private Map<String, String> extraHttpHeaders = new HashMap<String, String>();
     

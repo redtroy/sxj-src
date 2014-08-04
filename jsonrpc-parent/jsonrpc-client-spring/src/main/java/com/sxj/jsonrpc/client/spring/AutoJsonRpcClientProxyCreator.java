@@ -46,7 +46,7 @@ import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 
-import com.sxj.jsonrpc.core.JsonRpcService;
+import com.sxj.jsonrpc.annotation.JsonRpcService;
 
 /**
  * Auto-creates proxies for service interfaces annotated with
