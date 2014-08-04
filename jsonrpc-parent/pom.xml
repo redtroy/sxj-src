@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sxj</groupId>
 	<artifactId>jsonrpc-parent</artifactId>
 	<version>1.0</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>jsonrpc-annotation</module>
 		<module>jsonrpc-client</module>
 		<module>jsonrpc-core</module>
-	</modules>
+	 	<module>jsonrpc-server</module>
+  </modules>
 	<properties>
 		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -106,7 +105,7 @@
 					<version>2.5.1</version>
 				</plugin>
 
-				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
+				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�?-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
