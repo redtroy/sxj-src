@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-package com.googlecode.jsonrpc4j;
+package com.sxj.jsonrpc.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,33 +30,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for mapping exceptions in service methods to
- * custom JsonRpc errors.
+ * Annotation for annotating service parameters as
+ * JsonRpc params by name.
  *
  */
-@Target(ElementType.ANNOTATION_TYPE)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JsonRpcError {
+public @interface JsonRpcParam {
 
 	/**
-	 * Exception handled by the annotation.
+	 * The parameter's name.
 	 */
-	Class<? extends Throwable> exception();
+	String value();
 
-	/**
-	 * The JsonRpc error code.
-	 */
-	int code();
-
-	/**
-	 * The JsonRpc error message.
-	 */
-	String message() default "";
-
-	/**
-	 * The JsonRpc error data. If data is not specified,
-	 * message from exception will be used. If the message
-	 * is null, the data element be omitted in the error.
-	 */
-	String data() default "";
 }
