@@ -1,4 +1,4 @@
-package org.jsonrpc.server;
+package com.sjx.jsonrpc.server.spring;
 
 /**
  * Hello world!
