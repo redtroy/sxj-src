@@ -44,7 +44,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sxj.jsonrpc.client.exception.HttpException;
+import com.sxj.jsonrpc.core.exception.HttpException;
 
 /**
  * A JSON-RPC client that uses the HTTP protocol.

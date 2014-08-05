@@ -41,7 +41,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.sxj.jsonrpc.client.exception.JsonRpcClientException;
+import com.sxj.jsonrpc.core.DefaultExceptionResolver;
+import com.sxj.jsonrpc.core.ExceptionResolver;
+import com.sxj.jsonrpc.core.exception.JsonRpcClientException;
 
 /**
  * A JSON-RPC client.

@@ -32,7 +32,7 @@ import java.util.WeakHashMap;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sxj.jsonrpc.client.exception.StreamEndedException;
+import com.sxj.jsonrpc.core.exception.StreamEndedException;
 
 public class ReadContext
 {
