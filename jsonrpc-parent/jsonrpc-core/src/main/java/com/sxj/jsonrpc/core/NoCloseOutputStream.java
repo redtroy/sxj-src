@@ -22,59 +22,51 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-package com.sxj.jsonrpc.client;
+package com.sxj.jsonrpc.core;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 
-public class NoCloseInputStream
-	extends InputStream {
+public class NoCloseOutputStream
+	extends OutputStream {
 
-	private InputStream ips;
+	private OutputStream ops;
 	private boolean closeAttempted = false;
 
-	public NoCloseInputStream(InputStream ips) {
-		this.ips = ips;
+	public NoCloseOutputStream(OutputStream ops) {
+		this.ops = ops;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int read() throws IOException {
-		return this.ips.read();
+	public void write(int b) throws IOException {
+		this.ops.write(b);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int read(byte[] b) throws IOException {
-		return this.ips.read(b);
+	public void write(byte[] b) throws IOException {
+		this.ops.write(b);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int read(byte[] b, int off, int len) throws IOException {
-		return this.ips.read(b, off, len);
+	public void write(byte[] b, int off, int len) throws IOException {
+		this.ops.write(b, off, len);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public long skip(long n) throws IOException {
-		return this.ips.skip(n);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int available() throws IOException {
-		return this.ips.available();
+	public void flush() throws IOException {
+		this.ops.flush();
 	}
 
 	/**
@@ -83,30 +75,6 @@ public class NoCloseInputStream
 	@Override
 	public void close() throws IOException {
 		closeAttempted = true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public synchronized void mark(int readlimit) {
-		this.ips.mark(readlimit);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public synchronized void reset() throws IOException {
-		this.ips.reset();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean markSupported() {
-		return this.ips.markSupported();
 	}
 
 	/**

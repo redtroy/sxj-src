@@ -19,6 +19,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<jsonrpc.version>1.0</jsonrpc.version>
+		<jackson.version>2.4.1.3</jackson.version>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -109,7 +110,7 @@
 					<version>2.5.1</version>
 				</plugin>
 
-				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�?-->
+				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�?-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>

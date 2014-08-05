@@ -22,66 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-package com.sxj.jsonrpc.client;
+package com.sxj.jsonrpc.core;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class NoCloseOutputStream
-	extends OutputStream {
-
-	private OutputStream ops;
-	private boolean closeAttempted = false;
-
-	public NoCloseOutputStream(OutputStream ops) {
-		this.ops = ops;
-	}
+/**
+ * Resolves client {@link Throwable}s from server
+ * generated {@link ObjectNode}.
+ *
+ */
+public interface ExceptionResolver {
 
 	/**
-	 * {@inheritDoc}
+	 * Resolves the exception from the given json-rpc
+	 * response {@link ObjectNode}.
+	 * @param response the response
+	 * @return the exception
 	 */
-	@Override
-	public void write(int b) throws IOException {
-		this.ops.write(b);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void write(byte[] b) throws IOException {
-		this.ops.write(b);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void write(byte[] b, int off, int len) throws IOException {
-		this.ops.write(b, off, len);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void flush() throws IOException {
-		this.ops.flush();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void close() throws IOException {
-		closeAttempted = true;
-	}
-
-	/**
-	 * @return the closeAttempted
-	 */
-	public boolean wasCloseAttempted() {
-		return closeAttempted;
-	}
+	Throwable resolveException(ObjectNode response);
 
 }

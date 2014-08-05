@@ -44,7 +44,7 @@ import org.springframework.remoting.support.UrlBasedRemoteAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sxj.jsonrpc.client.JsonRpcClient.RequestListener;
 import com.sxj.jsonrpc.client.JsonRpcHttpClient;
-import com.sxj.jsonrpc.client.ReflectionUtil;
+import com.sxj.jsonrpc.core.ReflectionUtil;
 
 /**
  * {@link FactoryBean} for creating a {@link UrlBasedRemoteAccessor} (aka
@@ -138,7 +138,7 @@ public class JsonProxyFactoryBean implements MethodInterceptor,
                 .getGenericReturnType()
                 : invocation.getMethod().getReturnType();
         
-        // get arguments
+        // get arguments 
         Object arguments = ReflectionUtil.parseArguments(invocation.getMethod(),
                 invocation.getArguments(),
                 useNamedParams);

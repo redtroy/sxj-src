@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-package com.sxj.jsonrpc.client;
+package com.sxj.jsonrpc.core;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -53,11 +53,8 @@ public abstract class ReflectionUtil
     
     /**
      * Finds methods with the given name on the given class.
-     * 
-     * @param clazzes
-     *            the classes
-     * @param name
-     *            the method name
+     * @param clazzes the classes
+     * @param name the method name
      * @return the methods
      */
     public static Set<Method> findMethods(Class<?>[] clazzes, String name)
@@ -90,11 +87,7 @@ public abstract class ReflectionUtil
     }
     
     /**
-     * Checks for the annotation {@link JsonRpcMethod} on
-     * 
-     * @param method
-     *            to see if its value matches
-     * @param name}
+     * Checks for the annotation {@link JsonRpcMethod} on {@param method} to see if its value matches {@param name}
      */
     public static boolean annotationMatches(Method method, String name)
     {
@@ -111,9 +104,7 @@ public abstract class ReflectionUtil
     
     /**
      * Returns the parameter types for the given {@link Method}.
-     * 
-     * @param method
-     *            the {@link Method}
+     * @param method the {@link Method}
      * @return the parameter types
      */
     public static List<Class<?>> getParameterTypes(Method method)
@@ -130,11 +121,9 @@ public abstract class ReflectionUtil
     }
     
     /**
-     * Returns all of the {@link Annotation}s defined on the given
-     * {@link Method}.
-     * 
-     * @param method
-     *            the {@link Method}
+     * Returns all of the {@link Annotation}s defined on
+     * the given {@link Method}.
+     * @param method the {@link Method}
      * @return the {@link Annotation}s
      */
     public static List<Annotation> getAnnotations(Method method)
@@ -151,15 +140,11 @@ public abstract class ReflectionUtil
     }
     
     /**
-     * Returns {@link Annotation}s of the given type defined on the given
-     * {@link Method}.
-     * 
-     * @param <T>
-     *            the {@link Annotation} type
-     * @param method
-     *            the {@link Method}
-     * @param type
-     *            the type
+     * Returns {@link Annotation}s of the given type defined
+     * on the given {@link Method}.
+     * @param <T> the {@link Annotation} type
+     * @param method the {@link Method}
+     * @param type the type
      * @return the {@link Annotation}s
      */
     public static <T extends Annotation> List<T> getAnnotations(Method method,
@@ -177,15 +162,11 @@ public abstract class ReflectionUtil
     }
     
     /**
-     * Returns the first {@link Annotation} of the given type defined on the
-     * given {@link Method}.
-     * 
-     * @param <T>
-     *            the type
-     * @param method
-     *            the method
-     * @param type
-     *            the type of annotation
+     * Returns the first {@link Annotation} of the given type
+     * defined on the given {@link Method}.
+     * @param <T> the type
+     * @param method the method
+     * @param type the type of annotation
      * @return the annotation or null
      */
     public static <T extends Annotation> T getAnnotation(Method method,
@@ -202,10 +183,9 @@ public abstract class ReflectionUtil
     }
     
     /**
-     * Returns the parameter {@link Annotation}s for the given {@link Method}.
-     * 
-     * @param method
-     *            the {@link Method}
+     * Returns the parameter {@link Annotation}s for the
+     * given {@link Method}.
+     * @param method the {@link Method}
      * @return the {@link Annotation}s
      */
     public static List<List<Annotation>> getParameterAnnotations(Method method)
@@ -227,15 +207,11 @@ public abstract class ReflectionUtil
     }
     
     /**
-     * Returns the parameter {@link Annotation}s of the given type for the given
-     * {@link Method}.
-     * 
-     * @param <T>
-     *            the {@link Annotation} type
-     * @param type
-     *            the type
-     * @param method
-     *            the {@link Method}
+     * Returns the parameter {@link Annotation}s of the
+     * given type for the given {@link Method}.
+     * @param <T> the {@link Annotation} type
+     * @param type the type
+     * @param method the {@link Method}
      * @return the {@link Annotation}s
      */
     public static <T extends Annotation> List<List<T>> getParameterAnnotations(
@@ -258,15 +234,11 @@ public abstract class ReflectionUtil
     }
     
     /**
-     * Parses the given arguments for the given method optionally turning them
-     * into named parameters.
-     * 
-     * @param method
-     *            the method
-     * @param arguments
-     *            the arguments
-     * @param useNamedParams
-     *            whether or not to used named params
+     * Parses the given arguments for the given method optionally
+     * turning them into named parameters.
+     * @param method the method
+     * @param arguments the arguments
+     * @param useNamedParams whether or not to used named params
      * @return the parsed arguments
      */
     public static Object parseArguments(Method method, Object[] arguments,

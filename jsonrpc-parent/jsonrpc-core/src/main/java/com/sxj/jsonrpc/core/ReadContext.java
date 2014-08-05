@@ -21,17 +21,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
-package com.sxj.jsonrpc.client;
+package com.sxj.jsonrpc.core;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.WeakHashMap;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sxj.jsonrpc.core.NoCloseInputStream;
 import com.sxj.jsonrpc.core.exception.StreamEndedException;
 
 public class ReadContext
@@ -63,9 +62,7 @@ public class ReadContext
     
     public JsonNode nextValue() throws IOException
     {
-        return mapper.readValue(new InputStreamReader(input,
-                Charset.forName("GBK")),
-                JsonNode.class);
+        return mapper.readValue(input, JsonNode.class);
     }
     
     public void assertReadable() throws StreamEndedException, IOException

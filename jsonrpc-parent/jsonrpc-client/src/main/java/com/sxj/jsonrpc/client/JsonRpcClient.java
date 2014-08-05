@@ -43,6 +43,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.sxj.jsonrpc.core.DefaultExceptionResolver;
 import com.sxj.jsonrpc.core.ExceptionResolver;
+import com.sxj.jsonrpc.core.NoCloseOutputStream;
+import com.sxj.jsonrpc.core.ReadContext;
 import com.sxj.jsonrpc.core.exception.JsonRpcClientException;
 
 /**
