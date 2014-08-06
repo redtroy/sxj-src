@@ -31,6 +31,8 @@ public class Main
                 System.out.println(user.getName());
             }
             PageUser page = new PageUser();
+            
+            page.setPagable(true);
             page.setCurrentPage(2);
             page.setShowCount(3);
             users = session1.selectList("selectPageUsers", page);
