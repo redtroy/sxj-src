@@ -8,29 +8,50 @@
 		<artifactId>parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>sxj-utils</artifactId>
-	<name>sxj-utils</name>
+	<artifactId>sjx-service</artifactId>
+	<name>sjx-service</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<!-- sxj -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
+			<groupId>com.sxj</groupId>
+			<artifactId>sxj-utils</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
+			<groupId>com.sxj</groupId>
+			<artifactId>sjx-dao</artifactId>
+		</dependency>
+		<!-- springside -->
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-core</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-extension</artifactId>
+			<optional>true</optional>
 		</dependency>
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 </project>

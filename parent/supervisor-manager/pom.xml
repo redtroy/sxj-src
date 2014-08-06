@@ -18,16 +18,39 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- springside -->
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-core</artifactId>
-			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-extension</artifactId>
+		</dependency>
+
+		<!-- sxj -->
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>sxj-utils</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>sjx-service</artifactId>
+		</dependency>
+
 
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+
+		<!-- mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
 		</dependency>
 
 		<!-- Servlet -->
@@ -48,10 +71,8 @@
 
 
 		<!-- apache commons -->
-		<!-- <dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-		</dependency> -->
+		<!-- <dependency> <groupId>commons-dbcp</groupId> <artifactId>commons-dbcp</artifactId> 
+			</dependency> -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -64,7 +85,6 @@
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 		</dependency>
-
 	</dependencies>
 
 
