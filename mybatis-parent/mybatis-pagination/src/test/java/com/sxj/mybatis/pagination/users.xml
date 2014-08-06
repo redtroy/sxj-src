@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="users">
+	
+	<cache size="1024">
+		
+	</cache>
+	
+	<resultMap type="user" id="userResultMap">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		
+	</resultMap>
+	
+	<select id="getUserById" parameterType="int" resultMap="userResultMap">
+		select id,name from users where id = #{id}
+	</select>
+	
+	<select id="selectUsers" resultMap="userResultMap" parameterType="user">
+	
+		select * from users
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+		</where>
+	</select>
+	 
+	 <select id="selectPageUsers" resultMap="userResultMap" parameterType="com.xwtech.mybatis.po.PageUser">
+	
+		select * from users
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+		</where>
+	</select>
+	 <insert id="addUser" parameterType="user">
+	 	insert into users (id,name,department_id) values(#{id},#{name},#{department.id})
+	 	
+	 </insert>
+	 
+</mapper>

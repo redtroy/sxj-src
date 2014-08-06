@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>mybatis-orm</module>
+		<module>mybatis-pagination</module>
 	</modules>
 	<properties>
 		<mybatis.version>3.2.2</mybatis.version>

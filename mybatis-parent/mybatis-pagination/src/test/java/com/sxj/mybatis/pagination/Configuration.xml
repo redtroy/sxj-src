@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<properties>
+		<property name="dialect" value="oracle"/>
+	</properties>
+
+	<typeAliases>
+		<typeAlias type="com.xwtech.mybatis.po.User" alias="user"/>
+		<!-- <typeAlias type="study.mybatis.po.Department" alias="department"/> -->
+	</typeAliases>
+
+	<plugins>
+		<plugin interceptor="com.xwtech.mybatis.interceptor.PaginationInterceptor">
+		</plugin>
+	</plugins>
+	
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="jdbc">
+				<property name="allowAutoCommit" value="true"/>
+			</transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
+				<property name="url" value="jdbc:oracle:thin:@192.168.21.15:1521:orcl" />
+				<property name="username" value="xw_distr" />
+				<property name="password" value="xw_distr" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/xwtech/mybatis/test/users.xml"/>
+		<!-- <mapper resource="study/mybatis/main/department.xml"/> -->
+	</mappers>
+</configuration>
