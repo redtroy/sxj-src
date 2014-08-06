@@ -24,7 +24,7 @@
 	</bean>
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="org.makersoft.activesql.mapper" />
+		<property name="basePackage" value="com.sxj.mybatis.orm.mapper" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 	
