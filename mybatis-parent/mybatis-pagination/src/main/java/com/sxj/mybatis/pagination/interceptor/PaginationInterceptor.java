@@ -32,6 +32,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
+import com.sxj.mybatis.pagination.IPagable;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.mybatis.pagination.dialect.Dialect;
 import com.sxj.mybatis.pagination.dialect.MySql5Dialect;
@@ -57,7 +58,7 @@ public class PaginationInterceptor implements Interceptor
         BoundSql boundSql = statementHandler.getBoundSql();
         Object parameter = boundSql.getParameterObject();
         if (parameter != null && parameter instanceof Pagable
-                && ((Pagable) parameter).isPagable())
+                && ((IPagable) parameter).isPagable())
         {
             // if (page == null || !(page instanceof Page))
             // throw new Exception("分页函数参数只能是Page类型！");
@@ -79,7 +80,7 @@ public class PaginationInterceptor implements Interceptor
             rs.close();
             countStmt.close();
             
-            Pagable page = (Pagable) parameter;
+            IPagable page = (IPagable) parameter;
             page.setTotalResult(count);
             page.setTotalPage(page.getTotalResult() / page.getShowCount()
                     + (page.getTotalResult() % page.getShowCount() > 0 ? 1 : 0));
