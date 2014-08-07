@@ -2,7 +2,7 @@ package com.sxj.mybatis.pagination.po;
 
 import com.sxj.mybatis.pagination.Pagable;
 
-public class PageUser extends Pagable {
+public class PageUserDTO extends Pagable {
 	private Integer id;
 
 	private String name;

@@ -1,4 +1,4 @@
-package com.sxj.mybatis.pagination.po;
+package com.sxj.mybatis.pagination.entity;
 
 import java.io.Serializable;
 

@@ -5,16 +5,15 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <configuration>
 
 	<properties>
-		<property name="dialect" value="oracle"/>
+		<property name="dialect" value="mysql"/>
 	</properties>
 
 	<typeAliases>
-		<typeAlias type="com.xwtech.mybatis.po.User" alias="user"/>
-		<!-- <typeAlias type="study.mybatis.po.Department" alias="department"/> -->
+		<typeAlias type="com.sxj.mybatis.pagination.entity.User" alias="user"/>
 	</typeAliases>
 
 	<plugins>
-		<plugin interceptor="com.xwtech.mybatis.interceptor.PaginationInterceptor">
+		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor">
 		</plugin>
 	</plugins>
 	
@@ -24,15 +23,14 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 				<property name="allowAutoCommit" value="true"/>
 			</transactionManager>
 			<dataSource type="POOLED">
-				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
-				<property name="url" value="jdbc:oracle:thin:@192.168.21.15:1521:orcl" />
-				<property name="username" value="xw_distr" />
-				<property name="password" value="xw_distr" />
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://192.168.1.12:3306/sxj-supervisor" />
+				<property name="username" value="sxj-supervisor" />
+				<property name="password" value="sxj-supervisor" />
 			</dataSource>
 		</environment>
 	</environments>
 	<mappers>
-		<mapper resource="com/xwtech/mybatis/test/users.xml"/>
-		<!-- <mapper resource="study/mybatis/main/department.xml"/> -->
+		<mapper resource="com/sxj/mybatis/pagination/users.xml"/>
 	</mappers>
 </configuration>

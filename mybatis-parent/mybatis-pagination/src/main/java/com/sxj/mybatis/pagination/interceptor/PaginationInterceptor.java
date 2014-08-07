@@ -65,7 +65,7 @@ public class PaginationInterceptor implements Interceptor
             Connection connection = (Connection) invocation.getArgs()[0];
             String sql = boundSql.getSql();
             
-            String countSql = "select count(0) from (" + sql + ")";
+            String countSql = "select count(0) from (" + sql + ") t";
             PreparedStatement countStmt = connection.prepareStatement(countSql);
             BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(),
                     countSql, boundSql.getParameterMappings(), parameter);
@@ -111,9 +111,11 @@ public class PaginationInterceptor implements Interceptor
             {
                 case MYSQL:
                     dialect = new MySql5Dialect();
+                    break;
                 case ORACLE:
                     dialect = new OracleDialect();
-                    
+                    break;
+            
             }
             String pageSql = dialect.getLimitString(sql,
                     (page.getCurrentPage() - 1) * page.getShowCount(),
