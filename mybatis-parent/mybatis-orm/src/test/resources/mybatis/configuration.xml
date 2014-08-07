@@ -4,11 +4,17 @@
     "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+	<properties>
+		<property name="dialect" value="mysql" />
+	</properties>
 	<settings>
 		<setting name="lazyLoadingEnabled" value="false" />
 	</settings>
-	
+	<plugins>
+		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor">
+		</plugin>
+	</plugins>
 	<mappers>
-		<mapper resource="mybatis/mapper/UserMapper.xml"/>
+		<mapper resource="mybatis/mapper/UserMapper.xml" />
 	</mappers>
 </configuration>

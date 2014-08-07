@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sxj</groupId>
 	<artifactId>mybatis-parent</artifactId>
-	<version>1.0</version>
+	<version>3.2.2</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>mybatis-orm</module>

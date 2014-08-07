@@ -147,6 +147,8 @@ public class PaginationInterceptor implements Interceptor
                 .activity("setting parameters")
                 .object(mappedStatement.getParameterMap().getId());
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
+        parameterMappings = mappedStatement.getBoundSql(parameterObject)
+                .getParameterMappings();
         if (parameterMappings != null)
         {
             Configuration configuration = mappedStatement.getConfiguration();

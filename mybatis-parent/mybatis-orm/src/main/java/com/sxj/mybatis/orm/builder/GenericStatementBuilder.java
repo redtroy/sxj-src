@@ -45,7 +45,7 @@ import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Insert;
-import com.sxj.mybatis.orm.annotations.Select;
+import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.annotations.Transient;
 import com.sxj.mybatis.orm.annotations.Update;
@@ -137,7 +137,8 @@ public class GenericStatementBuilder extends BaseBuilder
             public void doWith(Field field) throws IllegalArgumentException,
                     IllegalAccessException
             {
-                columnFields.add(field);
+                if (field.isAnnotationPresent(Column.class))
+                    columnFields.add(field);
             }
         }, new FieldFilter()
         {
@@ -258,7 +259,7 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             
             List<Method> selectMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
-                    Select.class);
+                    Get.class);
             if (selectMethods != null && selectMethods.size() > 0)
             {
                 if (selectMethods.size() > 1)

@@ -2,18 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.makersoft.activesql.mapper.UserMapper">
-	<resultMap id="BaseResultMap" type="org.makersoft.activesql.model.User">
-		<id property="id" column="id" jdbcType="INTEGER"/>
-		<result property="userName" column="user_name" jdbcType="VARCHAR"/>
-		<result property="password" column="password" jdbcType="VARCHAR"/>
-		<result property="birthDay" column="birth_day" jdbcType="TIMESTAMP"/>
-		<result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
-		<result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+<mapper namespace="com.sxj.mybatis.orm.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="com.sxj.mybatis.orm.model.User">
+		<id property="id" column="USER_ID" jdbcType="INTEGER"/>
+		<result property="userName" column="USER_NAME" jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	<sql id="Base_Column_List">
-		id, user_name, password, birth_day, created_at, updated_at
+		USER_ID, USER_NAME
 	</sql>
 	<!-- 
 	<insert id="insertUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="org.makersoft.activesql.model.User">

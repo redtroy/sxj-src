@@ -6,11 +6,9 @@
 	<parent>
 		<groupId>com.sxj</groupId>
 		<artifactId>mybatis-parent</artifactId>
-		<version>1.0</version>
+		<version>3.2.2</version>
 	</parent>
-	<groupId>com.sxj</groupId>
 	<artifactId>mybatis-pagination</artifactId>
-	<version>1.0</version>
 	<name>mybatis-pagination</name>
 	<url>http://maven.apache.org</url>
 	<properties>

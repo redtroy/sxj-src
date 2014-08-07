@@ -9,25 +9,26 @@
 package com.sxj.mybatis.orm.mapper;
 
 import com.sxj.mybatis.orm.annotations.Delete;
+import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
-import com.sxj.mybatis.orm.annotations.Select;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.mybatis.orm.model.User;
 
 /**
  * Class description goes here.
  */
-public interface UserMapper {
-
-	@Insert
-	int insertUser(User user);
-	
-	@Delete
-	int delete(User user);
-	
-	@Update
-	int update(User user);
-	
-	@Select
-	User get(Long id);
+public interface UserMapper
+{
+    
+    @Insert
+    int insertUser(User user);
+    
+    @Delete
+    int delete(User user);
+    
+    @Update
+    int update(User user);
+    
+    @Get
+    User get(Long id);
 }

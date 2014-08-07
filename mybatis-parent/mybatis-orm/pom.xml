@@ -6,11 +6,9 @@
 	<parent>
 		<groupId>com.sxj</groupId>
 		<artifactId>mybatis-parent</artifactId>
-		<version>1.0</version>
+		<version>3.2.2</version>
 	</parent>
-	<groupId>com.sxj</groupId>
 	<artifactId>mybatis-orm</artifactId>
-	<version>1.0</version>
 	<name>mybatis-orm</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -28,6 +26,17 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.31</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.scannotation</groupId>
 			<artifactId>scannotation</artifactId>
 			<version>1.0.2</version>
@@ -37,6 +46,11 @@
 					<groupId>javassist</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.9.0.GA</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -69,6 +83,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>mybatis-pagination</artifactId>
+			<version>3.2.2</version>
 		</dependency>
 	</dependencies>
 	<build>
