@@ -5,7 +5,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="users">
 	
 	<cache size="1024">
-		
 	</cache>
 	
 	<resultMap type="user" id="userResultMap">
@@ -13,8 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="name" column="USER_NAME"/>
 	</resultMap>
 	
-	
-	<select id="selectUsers" resultMap="userResultMap" parameterType="user">
+	<select id="selectUsers" resultMap="userResultMap" parameterType="com.sxj.mybatis.pagination.po.PageUserDTO">
 	
 		select * from USER
 		<where>
@@ -26,18 +24,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
 	</select>
-	 
-	 <select id="selectPageUsers" resultMap="userResultMap" parameterType="com.sxj.mybatis.pagination.po.PageUserDTO">
-	
-		select * from users
-		<where>
-			<if test="id != null">
-				id = #{id}
-			</if>
-			<if test="name != null">
-				and name = #{name}
-			</if>
-		</where>
-	</select>
-	 
 </mapper>
