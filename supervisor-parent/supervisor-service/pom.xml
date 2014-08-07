@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.sxj</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>supervisor-parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>sjx-service</artifactId>
-	<name>sjx-service</name>
+	<artifactId>supervisor-service</artifactId>
+	<name>supervisor-service</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,12 +18,12 @@
 		<!-- sxj -->
 		<dependency>
 			<groupId>com.sxj</groupId>
-			<artifactId>sxj-utils</artifactId>
+			<artifactId>supervisor-utils</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.sxj</groupId>
-			<artifactId>sjx-dao</artifactId>
+			<artifactId>supervisor-dao</artifactId>
 		</dependency>
 		<!-- springside -->
 		<dependency>

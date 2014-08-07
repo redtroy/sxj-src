@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.sxj</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>supervisor-parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>sjx-dao</artifactId>
-	<name>sjx-dao</name>
+	<artifactId>supervisor-dao</artifactId>
+	<name>supervisor-dao</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
