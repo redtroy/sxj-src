@@ -7,22 +7,6 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
 
-	<!-- 抛出的异常转到特定View -->
-	<bean id="exceptionResolver"
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="defaultErrorView" value="failure" />
-		<property name="exceptionMappings">
-			<props>
-				<prop key="com.jscn.pay.exception.WebException">page/error</prop>
-				<prop key="java.lang.Exception">page/error</prop>
-				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
-				<prop key="java.lang.Throwable">error/500</prop>
-			</props>
-		</property>
-	</bean>
-
-
-
 	<!-- 自动扫描且只扫描@Controller -->
 	<context:component-scan base-package="com.sxj.supervisor.manage.controller"
 		use-default-filters="false">
@@ -32,64 +16,21 @@
 			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 
-	<!-- 定义JSP文件的位置 -->
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/views/jsp/" />
-		<property name="suffix" value=".jsp" />
-		<property name="contentType" value="text/html;charset=UTF-8" />
-	</bean>
-
-
-	<mvc:annotation-driven
-		content-negotiation-manager="contentNegotiationManager">
-		<mvc:message-converters register-defaults="true">
-			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
-			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-				<constructor-arg value="UTF-8" />
-			</bean>
-			<!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
-			<bean
-				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-				<property name="prettyPrint" value="true" />
-			</bean>
-		</mvc:message-converters>
-	</mvc:annotation-driven>
-
-	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
-	<bean id="contentNegotiationManager"
-		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-		<property name="mediaTypes">
-			<value>
-				json=application/json
-				xml=application/xml
-			</value>
+	<!-- webflow配置 -->
+	<bean id="viewMappings"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<!-- /shopping.do 请求由 flowController 来处理 -->
+		<property name="mappings">
+			<value>/manage=flowController</value>
+		</property>
+		<property name="defaultHandler">
+			<!-- UrlFilenameViewController 会将 "/index" 这样的请求映射成名为 "index" 的视图 -->
+			<bean class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
 		</property>
 	</bean>
-
-	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="messageConverters">
-			<list>
-				<!-- json转换器 -->
-				<ref bean="mappingJacksonHttpMessageConverter" />
-			</list>
-		</property>
-		<property name="webBindingInitializer">
-			<bean
-				class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
-				<property name="validator" ref="validator" />
-			</bean>
-		</property>
+	<bean id="flowController" class="org.springframework.webflow.mvc.servlet.FlowController">
+		<property name="flowExecutor" ref="flowExecutor" />
 	</bean>
-
-	<bean id="validator"
-		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
-
-	<bean id="mappingJacksonHttpMessageConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
-
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-		p:defaultEncoding="utf-8" p:maxUploadSize="10000000" />
+	<import resource="classpath*:spring/mvc/view-config.xml" />
+	<import resource="classpath*:spring/webflow/webflow-config.xml" />
 </beans>

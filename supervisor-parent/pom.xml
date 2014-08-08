@@ -20,8 +20,11 @@
 		<com.sxj.spring>4.2.3</com.sxj.spring>
 		<mybatis.version>3.2.7</mybatis.version>
 		<spring.mybatis.version>1.2.2</spring.mybatis.version>
+		<com.alibaba.druid.version>1.0.7</com.alibaba.druid.version>
+		<mysql.version>5.1.31</mysql.version>
 		<junit>3.8.1</junit>
 		<spring.version>4.0.5.RELEASE</spring.version>
+		<spring.webflow.version>2.4.0.RELEASE</spring.webflow.version>
 		<servlet.version>3.0.1</servlet.version>
 		<jstl.version>1.2</jstl.version>
 		<jsp.version>2.0</jsp.version>
@@ -70,6 +73,17 @@
 				<artifactId>supervisor-service</artifactId>
 				<version>${com.sxj.version}</version>
 			</dependency>
+			<!-- 数据库连接 -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${com.alibaba.druid.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
 
 			<!-- SPRING -->
 			<dependency>
@@ -87,6 +101,18 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
 				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.webflow</groupId>
+				<artifactId>spring-webflow</artifactId>
+				<version>${spring.webflow.version}</version>
 			</dependency>
 
 			<!-- mybatis -->
