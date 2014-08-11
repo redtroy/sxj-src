@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.IMemberDao">
+	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.member.MemberEntity">
+		<id property="id" column="ID" jdbcType="INTEGER"/>
+		<result property="name" column="NAME" jdbcType="VARCHAR"/>
+		<result property="bLicenseNo" column="B_LICENSE_NO" jdbcType="VARCHAR"/>
+		<result property="type" column="TYPE" jdbcType="INTEGER"/>
+		<result property="area" column="AREA" jdbcType="VARCHAR"/>
+		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR"/>
+		<result property="energyNo" column="ENERGY_NO" jdbcType="VARCHAR"/>
+		<result property="phoneNo" column="PHONE_NO" jdbcType="VARCHAR"/>
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR"/>
+		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR"/>
+		<result property="regDate" column="REG_DATE" jdbcType="TIME"/>
+		<result property="authorDate" column="AUTHOR_DATE" jdbcType="TIME"/>
+		<result property="state" column="STATE" jdbcType="INTEGER"/>
+		<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER"/>
+		<result property="totalAmount" column="TOTAL_AMOUNT" jdbcType="INTEGER"/>
+		<result property="accountNum" column="ACCOUNT_NUM" jdbcType="INTEGER"/>
+		<result property="password" column="PASSWORD" jdbcType="VARCHAR"/>
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="get" resultType="com.sxj.supervisor.entity.member.MemberEntity" parameterType="com.sxj.supervisor.entity.member.MemberEntity">
+		SELECT id AS id,user_name AS userName,password AS password,birth_day AS birthDay,created_at AS createdAt,updated_At AS updatedAt 
+		FROM t_user WHERE id =#{id}
+	</select>
+</mapper>
