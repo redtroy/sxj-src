@@ -11,7 +11,7 @@
 		<module>mybatis-pagination</module>
 	</modules>
 	<properties>
-		<mybatis.version>3.2.2</mybatis.version>
+		<mybatis.version>3.2.7</mybatis.version>
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<java.version>1.7</java.version>
 	</properties>
