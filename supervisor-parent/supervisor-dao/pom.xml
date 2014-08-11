@@ -20,8 +20,12 @@
 			<artifactId>mybatis</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>mybatis-orm</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<artifactId>junit</artifactId> 
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
