@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>supervisor-manager</artifactId>
 	<packaging>war</packaging>
-	<name>supervisor-manager Maven Webapp</name>
+	<name>supervisor-manager Maven Webapp</name> 
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -89,7 +89,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 
-		<!-- apache commons -->
+		<!-- apache commons --> 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
