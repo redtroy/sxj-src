@@ -5,7 +5,7 @@
 //  @ Project : 私享家架构设计
 //  @ File Name : MemberEntity.java
 //  @ Date : 2014/8/11
-//  @ Author : 
+//  @ Author :   
 //
 //
 
