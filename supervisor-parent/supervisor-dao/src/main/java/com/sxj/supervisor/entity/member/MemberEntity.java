@@ -14,9 +14,23 @@ package com.sxj.supervisor.entity.member;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.GeneratedValue;
+import com.sxj.mybatis.orm.annotations.GenerationType;
+import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Table;
+import com.sxj.mybatis.orm.mapper.UserMapper;
 import com.sxj.mybatis.pagination.Pagable;
 
-public class MemberEntity  extends Pagable implements Serializable{
+/**
+ * 会员信息实体
+ * 
+ * @author Administrator
+ *
+ */
+@Entity(mapper = UserMapper.class)
+@Table(name = "MEMBER")
+public class MemberEntity extends Pagable implements Serializable {
 	/**
 	 * 
 	 */
@@ -25,6 +39,8 @@ public class MemberEntity  extends Pagable implements Serializable{
 	/**
 	 * 标识
 	 **/
+	@Id(column = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
 
 	/**
