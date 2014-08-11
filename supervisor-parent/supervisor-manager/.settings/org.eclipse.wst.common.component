@@ -10,6 +10,15 @@
         <dependent-module archiveName="supervisor-service-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/supervisor-service/supervisor-service">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="supervisor-dao-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/supervisor-dao/supervisor-dao">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mybatis-orm-3.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-orm/mybatis-orm">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mybatis-pagination-3.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-pagination/mybatis-pagination">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="supervisor-manager"/>
         <property name="java-output-path" value="/supervisor-manager/target/classes"/>
     </wb-module>
