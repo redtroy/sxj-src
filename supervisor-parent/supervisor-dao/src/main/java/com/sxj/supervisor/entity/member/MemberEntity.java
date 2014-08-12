@@ -20,8 +20,8 @@ import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
-import com.sxj.mybatis.orm.mapper.UserMapper;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.member.IMemberDao;
 
 /**
  * 会员信息实体
@@ -29,7 +29,7 @@ import com.sxj.mybatis.pagination.Pagable;
  * @author Administrator
  *
  */
-@Entity(mapper = UserMapper.class)
+@Entity(mapper = IMemberDao.class)
 @Table(name = "MEMBER")
 public class MemberEntity extends Pagable implements Serializable {
 	/**
