@@ -80,6 +80,12 @@
 				<artifactId>mybatis-orm</artifactId>
 				<version>${mybatis.orm.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.sxj</groupId>
+				<artifactId>mybatis-pagination</artifactId>
+				<version>${mybatis.orm.version}</version>
+			</dependency>
 			<!-- 数据库连接 -->
 			<dependency>
 				<groupId>com.alibaba</groupId>

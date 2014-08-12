@@ -1,11 +1,9 @@
 package com.sxj.util.persistent;
 
 import java.io.Serializable;
-
-
 import java.util.List;
 
-import com.sxj.util.page.Pagination;
+import com.sxj.mybatis.pagination.Pagable;
 
 
 /**
@@ -29,12 +27,12 @@ public interface ResultList<T> extends Serializable {
 	 * 获取分页信息
 	 * @return <code>Pagination</code> 对象
 	 */
-	public Pagination getPage() ;
+	public Pagable getPage() ;
 
 	/**
 	 * 设置分页信息
 	 * @param page <code>Pagination</code> 对象
 	 */
-	public void setPage(Pagination page) ;
+	public void setPage(Pagable page) ;
 	
 }
