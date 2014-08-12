@@ -16,18 +16,24 @@ public class QueryCondition<T> implements Serializable {
 
 	private static final long serialVersionUID = 4676611900143160715L;
 
+	public static final String ASC = "asc";
+
+	public static final String DESC = "desc";
+
 	private Map<String, Object> condition = new HashMap<String, Object>();
 
 	private Set<String> columns = new HashSet<String>();
 
 	private Set<String> groups = new HashSet<String>();
 
-	/** 增加条件
+	/**
+	 * 增加条件
 	 * 
 	 * @param key
-	 *        键（查询条件字段名称）
+	 *            键（查询条件字段名称）
 	 * @param value
-	 *        查询条件字段取值 */
+	 *            查询条件字段取值
+	 */
 	public void addCondition(String key, Object value) {
 		if (StringUtils.isNotEmpty(key)) {
 			if (value == null)
@@ -36,28 +42,34 @@ public class QueryCondition<T> implements Serializable {
 		}
 	}
 
-	/** 增加查询返回列
+	/**
+	 * 增加查询返回列
 	 * 
 	 * @param columnName
-	 *        列名称 */
+	 *            列名称
+	 */
 	public void addColumn(String columnName) {
 		columns.add(columnName);
 
 	}
 
-	/** 增加查询排序列
+	/**
+	 * 增加查询排序列
 	 * 
 	 * @param groupName
-	 *        列名称 */
+	 *            列名称
+	 */
 	public void addGroup(String groupName) {
 		groups.add(groupName);
 
 	}
 
-	/** 将实体中所有的列格式化成sql查询列
+	/**
+	 * 将实体中所有的列格式化成sql查询列
 	 * 
 	 * @param entity
-	 *        实体 */
+	 *            实体
+	 */
 	public void addAllColumn(Class<T> entity) {
 		try {
 			Field[] fields = entity.getDeclaredFields();
@@ -103,11 +115,13 @@ public class QueryCondition<T> implements Serializable {
 		this.condition = condition;
 	}
 
-	/** 获取SQL查询列字符串
+	/**
+	 * 获取SQL查询列字符串
 	 * <p/>
 	 * 即：select c1,c2,c3 from table_1 中的 c1,c2,c3
 	 * 
-	 * @return SQL查询列字符串 */
+	 * @return SQL查询列字符串
+	 */
 	public String getSelectColumn() {
 		Iterator<String> iter = columns.iterator();
 		String val;

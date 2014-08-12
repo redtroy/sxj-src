@@ -4,7 +4,16 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="spring-core-4.2.3.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/springside-core/springside-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-extension-4.2.3.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/springside-extension/springside-extension">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="supervisor-utils-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/supervisor-utils/supervisor-utils">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mybatis-pagination-3.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-pagination/mybatis-pagination">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="mybatis-pagination-3.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-pagination/mybatis-pagination">
