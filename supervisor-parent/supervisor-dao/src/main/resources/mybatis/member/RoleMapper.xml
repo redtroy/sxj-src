@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.IRoleDao">
+	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.member.RoleEntity">
+		<id property="id" column="ID" jdbcType="INTEGER" />
+		<result property="functionId" column="FUNCTION_ID" jdbcType="VARCHAR" />
+		<result property="accountId" column="ACCOUNT_ID" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 获取权限列表 -->
+	<select id="getRoles" resultType="java.util.List"
+		parameterType="int">
+		<![CDATA[SELECT ID,FUNCTION_ID,ACCOUNT_ID FROM ROLE WHERE ACCOUNT_ID=#{accountId}]]>
+	</select>
+</mapper>
