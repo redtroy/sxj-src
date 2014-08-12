@@ -4,28 +4,71 @@
 
 <mapper namespace="com.sxj.supervisor.dao.member.IMemberDao">
 	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.member.MemberEntity">
-		<id property="id" column="ID" jdbcType="INTEGER"/>
-		<result property="name" column="NAME" jdbcType="VARCHAR"/>
-		<result property="bLicenseNo" column="B_LICENSE_NO" jdbcType="VARCHAR"/>
-		<result property="type" column="TYPE" jdbcType="INTEGER"/>
-		<result property="area" column="AREA" jdbcType="VARCHAR"/>
-		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR"/>
-		<result property="energyNo" column="ENERGY_NO" jdbcType="VARCHAR"/>
-		<result property="phoneNo" column="PHONE_NO" jdbcType="VARCHAR"/>
-		<result property="address" column="ADDRESS" jdbcType="VARCHAR"/>
-		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR"/>
-		<result property="regDate" column="REG_DATE" jdbcType="TIME"/>
-		<result property="authorDate" column="AUTHOR_DATE" jdbcType="TIME"/>
-		<result property="state" column="STATE" jdbcType="INTEGER"/>
-		<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER"/>
-		<result property="totalAmount" column="TOTAL_AMOUNT" jdbcType="INTEGER"/>
-		<result property="accountNum" column="ACCOUNT_NUM" jdbcType="INTEGER"/>
-		<result property="password" column="PASSWORD" jdbcType="VARCHAR"/>
-		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR"/>
+		<id property="id" column="ID" jdbcType="INTEGER" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="bLicenseNo" column="B_LICENSE_NO" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="area" column="AREA" jdbcType="VARCHAR" />
+		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR" />
+		<result property="energyNo" column="ENERGY_NO" jdbcType="VARCHAR" />
+		<result property="phoneNo" column="PHONE_NO" jdbcType="VARCHAR" />
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
+		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
+		<result property="regDate" column="REG_DATE" jdbcType="TIME" />
+		<result property="authorDate" column="AUTHOR_DATE" jdbcType="TIME" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
+		<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER" />
+		<result property="totalAmount" column="TOTAL_AMOUNT" jdbcType="INTEGER" />
+		<result property="accountNum" column="ACCOUNT_NUM" jdbcType="INTEGER" />
+		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="bLicensePath" column="B_LICENSE_PATH" jdbcType="VARCHAR" />
+		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
 	</resultMap>
-	
-	<select id="get" resultType="com.sxj.supervisor.entity.member.MemberEntity" parameterType="com.sxj.supervisor.entity.member.MemberEntity">
-		SELECT id AS id,user_name AS userName,password AS password,birth_day AS birthDay,created_at AS createdAt,updated_At AS updatedAt 
-		FROM t_user WHERE id =#{id}
+
+	<!-- 条件查询会员 -->
+	<select id="queryMenbers" resultType="java.util.List"
+		parameterType="com.sxj.supervisor.entity.member.MemberEntity">
+		<![CDATA[SELECT * FROM t_user WHERE 1=1]]>
+		<!-- 会员号 -->
+		<if test="memberNo != null">
+			<![CDATA[AND MEMBER_NO = #{memberNo}]]>
+		</if>
+		<!-- 会员名称 -->
+		<if test="name != null">
+			<![CDATA[AND NAME = #{name}]]>
+		</if>
+		<!-- 联系人 -->
+		<if test="contacts != null">
+			<![CDATA[AND CONTACTS = #{contacts}]]>
+		</if>
+		<!-- 联系人电话-->
+		<if test="phoneNo != null">
+			<![CDATA[AND PHONE_NO = #{phoneNo}]]>
+		</if>
+		<!-- 地理位置 -->
+		<if test="area != null">
+			<![CDATA[AND AREA = #{area}]]>
+		</if>
+		<!-- 营业执照号码 -->
+		<if test="bLicenseNo != null">
+			<![CDATA[AND B_LICENSE_NO = #{bLicenseNo}]]>
+		</if>
+		<!-- 节能标识 -->
+		<if test="energyNo != null">
+			<![CDATA[AND ENERGY_NO = #{energyNo}]]>
+		</if>
+		<!-- 会员类型-->
+		<if test="type != null">
+			<![CDATA[AND TYPE = #{type}]]>
+		</if>
+		<!-- 会员状态 -->
+		<if test="checkState != null">
+			<![CDATA[AND CHECK_STATE = #{checkState}]]>
+		</if>
+		<!-- 会员注册时间段 -->
+		<if test="startTime != null and endTime != null">
+			<![CDATA[AND REG_DATE >=#{startTime} AND REG_DATE <= #{endTime}]]>
+		</if>
 	</select>
 </mapper>

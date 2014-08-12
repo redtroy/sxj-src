@@ -145,6 +145,60 @@ public class MemberEntity extends Pagable implements Serializable {
 	 **/
 	@Column(name = "MEMBER_NO")
 	private String memberNo;
+	/**
+	 * 营业执照图片path
+	**/
+	@Column(name = "B_LICENSE_PATH")
+	private String bLicensePath;
+	
+	/**
+	 * 节能标识图片path
+	**/
+	@Column(name = "ENERGY_PATH")
+	private String energyPath;
+	
+	/**
+	 * 开始时间
+	 */
+	private String startTime;
+	
+	/**
+	 * 结束时间
+	 */
+	private String endTime;
+	
+	
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getbLicensePath() {
+		return bLicensePath;
+	}
+
+	public void setbLicensePath(String bLicensePath) {
+		this.bLicensePath = bLicensePath;
+	}
+
+	public String getEnergyPath() {
+		return energyPath;
+	}
+
+	public void setEnergyPath(String energyPath) {
+		this.energyPath = energyPath;
+	}
 
 	public String getId() {
 		return id;
