@@ -14,6 +14,7 @@ package com.sxj.supervisor.entity.member;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
@@ -46,86 +47,103 @@ public class MemberEntity extends Pagable implements Serializable {
 	/**
 	 * 会员名称
 	 **/
+	@Column(name = "NAME")
 	private String name;
 
 	/**
 	 * 营业执照号
 	 **/
+	@Column(name = "B_LICENSE_NO")
 	private String bLicenseNo;
 
 	/**
 	 * 会员类型
 	 **/
+	@Column(name = "TYPE")
 	private Integer type;
 
 	/**
 	 * 地理区域
 	 **/
+	@Column(name = "AREA")
 	private String area;
 
 	/**
 	 * 联系人名称
 	 **/
+	@Column(name = "CONTACTS")
 	private String contacts;
 
 	/**
 	 * 节能标识号
 	 **/
+	@Column(name = "ENERGY_NO")
 	private String energyNo;
 
 	/**
 	 * 联系人手机
 	 **/
+	@Column(name = "PHONE_NO")
 	private String phoneNo;
 
 	/**
 	 * 公司地址
 	 **/
+	@Column(name = "ADDRESS")
 	private String address;
 
 	/**
 	 * 联系电话
 	 **/
+	@Column(name = "TEL_NUM")
 	private String telNum;
 
 	/**
 	 * 注册日期
 	 **/
+	@Column(name = "REG_DATE")
 	private Date regDate;
 
 	/**
 	 * 认证日期
 	 **/
+	@Column(name = "AUTHOR_DATE")
 	private Date authorDate;
 
 	/**
 	 * 账户状态
 	 **/
+	@Column(name = "STATE")
 	private Integer state;
 
 	/**
 	 * 审核状态
 	 **/
+	@Column(name = "CHECK_STATE")
 	private Integer checkState;
 
 	/**
 	 * 总交易额
 	 **/
+	@Column(name = "TOTAL_AMOUNT")
 	private Long totalAmount;
 
 	/**
 	 * 子账户数目
 	 **/
+	@Column(name = "ACCOUNT_NUM")
 	private Integer accountNum;
 
 	/**
 	 * 会员密码
 	 **/
+	@Column(name = "PASSWORD")
 	private String password;
 
 	/**
 	 * 会员号
 	 **/
+	@Column(name = "MEMBER_NO")
 	private String memberNo;
 
 	public String getId() {
