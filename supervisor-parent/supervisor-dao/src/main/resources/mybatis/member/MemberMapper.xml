@@ -28,47 +28,50 @@
 
 	<!-- 条件查询会员 -->
 	<select id="queryMenbers" resultType="java.util.List"
-		parameterType="com.sxj.supervisor.entity.member.MemberEntity">
-		<![CDATA[SELECT * FROM t_user WHERE 1=1]]>
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT ID,NAME,B_LICENSE_NO,TYPE,AREA,CONTACTS,ENERGY_NO,PHONE_NO,
+		ADDRESS,TEL_NUM,REG_DATE,AUTHOR_DATE,STATE,CHECK_STATE,TOTAL_AMOUNT,ACCOUNT_NUM,
+		PASSWORD,MEMBER_NO,B_LICENSE_PATH,ENERGY_PATH
+		 FROM MENBER WHERE 1=1]]>
 		<!-- 会员号 -->
-		<if test="memberNo != null">
-			<![CDATA[AND MEMBER_NO = #{memberNo}]]>
+		<if test="condition.memberNo != null">
+			<![CDATA[AND MEMBER_NO = #{condition.memberNo}]]>
 		</if>
 		<!-- 会员名称 -->
-		<if test="name != null">
-			<![CDATA[AND NAME = #{name}]]>
+		<if test="condition.name != null">
+			<![CDATA[AND NAME = #{condition.name}]]>
 		</if>
 		<!-- 联系人 -->
-		<if test="contacts != null">
-			<![CDATA[AND CONTACTS = #{contacts}]]>
+		<if test="condition.contacts != null">
+			<![CDATA[AND CONTACTS = #{condition.contacts}]]>
 		</if>
 		<!-- 联系人电话-->
-		<if test="phoneNo != null">
-			<![CDATA[AND PHONE_NO = #{phoneNo}]]>
+		<if test="condition.phoneNo != null">
+			<![CDATA[AND PHONE_NO = #{condition.phoneNo}]]>
 		</if>
 		<!-- 地理位置 -->
-		<if test="area != null">
-			<![CDATA[AND AREA = #{area}]]>
+		<if test="condition.area != null">
+			<![CDATA[AND AREA = #{condition.area}]]>
 		</if>
 		<!-- 营业执照号码 -->
-		<if test="bLicenseNo != null">
-			<![CDATA[AND B_LICENSE_NO = #{bLicenseNo}]]>
+		<if test="condition.bLicenseNo != null">
+			<![CDATA[AND B_LICENSE_NO = #{condition.bLicenseNo}]]>
 		</if>
 		<!-- 节能标识 -->
-		<if test="energyNo != null">
-			<![CDATA[AND ENERGY_NO = #{energyNo}]]>
+		<if test="condition.energyNo != null">
+			<![CDATA[AND ENERGY_NO = #{condition.energyNo}]]>
 		</if>
 		<!-- 会员类型-->
-		<if test="type != null">
-			<![CDATA[AND TYPE = #{type}]]>
+		<if test="condition.type != null">
+			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
 		<!-- 会员状态 -->
-		<if test="checkState != null">
-			<![CDATA[AND CHECK_STATE = #{checkState}]]>
+		<if test="condition.checkState != null">
+			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>
 		</if>
 		<!-- 会员注册时间段 -->
-		<if test="startTime != null and endTime != null">
-			<![CDATA[AND REG_DATE >=#{startTime} AND REG_DATE <= #{endTime}]]>
+		<if test="condition.startTime != null and condition.endTime != null">
+			<![CDATA[AND REG_DATE >=#{condition.startTime} AND REG_DATE <= #{condition.endTime}]]>
 		</if>
 	</select>
 </mapper>

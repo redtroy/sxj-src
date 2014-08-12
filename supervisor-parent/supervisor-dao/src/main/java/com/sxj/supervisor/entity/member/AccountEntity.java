@@ -1,14 +1,24 @@
 package com.sxj.supervisor.entity.member;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import com.sxj.mybatis.orm.annotations.Column;
+import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.GeneratedValue;
+import com.sxj.mybatis.orm.annotations.GenerationType;
+import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.member.IAccountDao;
 
 /**
  * 子账号实体
  * @author Administrator
  *
  */
+@Entity(mapper = IAccountDao.class)
+@Table(name = "ACCOUNT")
 public class AccountEntity extends Pagable implements Serializable {
 	
 
@@ -21,41 +31,50 @@ public class AccountEntity extends Pagable implements Serializable {
 	/**
 	 * 主键标识
 	**/
+	@Id(column = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
 	
 	/**
 	 * 所属会员ID
 	**/
+	@Column(name = "PARENT_ID")
 	private String parentId;
 	
 	/**
 	 * 子账户名称
 	**/
+	@Column(name = "ACCOUNT_NAME")
 	private String accountName;
 	
 	/**
 	 * 姓名
 	**/
+	@Column(name = "NAME")
 	private String name;
 	
 	/**
 	 * 子账户状态
 	**/
+	@Column(name = "STATE")
 	private Integer state;
 	
 	/**
 	 * 注册日期
 	**/
-	private Object regDate;
+	@Column(name = "REG_DATE")
+	private Date regDate;
 	
 	/**
 	 * 子账户密码
 	**/
+	@Column(name = "PASSWORD")
 	private String password;
 	
 	/**
 	 * 子账户ID
 	**/
+	@Column(name = "ACCOUNT_NO")
 	private String accountNo;
 	
 	public String getId() {
@@ -98,11 +117,11 @@ public class AccountEntity extends Pagable implements Serializable {
 		this.state = state;
 	}
 
-	public Object getRegDate() {
+	public Date getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Object regDate) {
+	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
 	}
 

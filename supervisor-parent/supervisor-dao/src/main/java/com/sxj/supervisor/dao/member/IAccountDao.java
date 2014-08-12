@@ -1,6 +1,13 @@
 package com.sxj.supervisor.dao.member;
 
+import java.util.List;
+
+import com.sxj.mybatis.orm.annotations.Delete;
+import com.sxj.mybatis.orm.annotations.Get;
+import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.util.persistent.QueryCondition;
 
 public interface IAccountDao {
 	/**
@@ -8,6 +15,7 @@ public interface IAccountDao {
 	 *
 	 * @param    account
 	**/
+	@Insert
 	public void addAccount(AccountEntity account);
 	
 	/**
@@ -15,6 +23,7 @@ public interface IAccountDao {
 	 *
 	 * @param    account
 	**/
+	@Update
 	public void updateAccount(AccountEntity account);
 	
 	/**
@@ -22,6 +31,7 @@ public interface IAccountDao {
 	 *
 	 * @param    id
 	**/
+	@Get
 	public AccountEntity getAccount(String id);
 	
 	/**
@@ -29,6 +39,7 @@ public interface IAccountDao {
 	 *
 	 * @param    id
 	**/
+	@Delete
 	public void deleteAccount(String id);
 	
 	/**
@@ -36,5 +47,5 @@ public interface IAccountDao {
 	 *
 	 * @param    account
 	**/
-	public java.util.List<AccountEntity> queryAccount(AccountEntity account);
+	public List<AccountEntity> queryAccount(QueryCondition<AccountEntity> account);
 }

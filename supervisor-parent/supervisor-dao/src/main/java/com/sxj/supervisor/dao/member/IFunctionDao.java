@@ -1,6 +1,9 @@
 package com.sxj.supervisor.dao.member;
 
+import java.util.List;
+
 import com.sxj.supervisor.entity.member.FunctionEntity;
+import com.sxj.util.persistent.QueryCondition;
 
 public interface IFunctionDao {
 	/**
@@ -29,5 +32,5 @@ public interface IFunctionDao {
 	 *
 	 * @param    function
 	**/
-	public java.util.List<FunctionEntity> queryFunction(FunctionEntity function);
+	public List<FunctionEntity> queryFunction(QueryCondition<FunctionEntity> query);
 }

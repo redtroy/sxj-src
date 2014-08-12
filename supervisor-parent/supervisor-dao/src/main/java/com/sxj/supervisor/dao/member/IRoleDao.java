@@ -1,5 +1,9 @@
 package com.sxj.supervisor.dao.member;
 
+import java.util.List;
+
+import com.sxj.mybatis.orm.annotations.Delete;
+import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.supervisor.entity.member.RoleEntity;
 
 public interface IRoleDao {
@@ -8,6 +12,7 @@ public interface IRoleDao {
 	 *
 	 * @param    roles
 	**/
+	@Insert
 	public void addRoles(RoleEntity[] roles);
 	
 	/**
@@ -15,6 +20,7 @@ public interface IRoleDao {
 	 *
 	 * @param    accountId
 	**/
+	@Delete
 	public void deleteRoles(String accountId);
 	
 	/**
@@ -22,5 +28,5 @@ public interface IRoleDao {
 	 *
 	 * @param    accountId
 	**/
-	public java.util.List<RoleEntity> getRoles(String accountId);
+	public  List<RoleEntity> getRoles(String accountId);
 }
