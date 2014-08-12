@@ -5,7 +5,7 @@ package com.sxj.util.persistent;
 
 import java.util.List;
 
-import com.sxj.util.page.Pagination;
+import com.sxj.mybatis.pagination.Pagable;
 
 /**
  * 持久化结果集列表接口实现类
@@ -21,9 +21,9 @@ public class ResultListImpl<T> implements ResultList<T> {
 	private List<T> results;
 
 	/** 返回分页信息 */
-	private Pagination page;
+	private Pagable page;
 
-	public Pagination getPage() {
+	public Pagable getPage() {
 		return page;
 	}
 
@@ -31,7 +31,7 @@ public class ResultListImpl<T> implements ResultList<T> {
 		return results;
 	}
 
-	public void setPage(Pagination page) {
+	public void setPage(Pagable page) {
 		this.page = page;
 	}
 
