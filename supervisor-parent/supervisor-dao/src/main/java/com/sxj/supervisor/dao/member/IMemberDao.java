@@ -13,6 +13,10 @@ package com.sxj.supervisor.dao.member;
 
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.Delete;
+import com.sxj.mybatis.orm.annotations.Get;
+import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.member.MemberEntity;
 
 public interface IMemberDao {
@@ -21,6 +25,7 @@ public interface IMemberDao {
 	 *
 	 * @param member
 	 **/
+	@Insert
 	public void addMember(MemberEntity member);
 
 	/**
@@ -28,6 +33,7 @@ public interface IMemberDao {
 	 *
 	 * @param member
 	 **/
+	@Update
 	public void updateMember(MemberEntity member);
 
 	/**
@@ -35,6 +41,7 @@ public interface IMemberDao {
 	 *
 	 * @param id
 	 **/
+	 @Get
 	public MemberEntity getMember(String id);
 
 	/**
@@ -42,6 +49,7 @@ public interface IMemberDao {
 	 *
 	 * @param id
 	 **/
+	@Delete
 	public void deleteMember(String id);
 
 	/**
