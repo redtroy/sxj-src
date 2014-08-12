@@ -2,6 +2,9 @@ package com.sxj.supervisor.dao.member;
 
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.Delete;
+import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.member.FunctionEntity;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -11,6 +14,7 @@ public interface IFunctionDao {
 	 *
 	 * @param    function
 	**/
+	@Insert
 	public void addFunction(FunctionEntity function);
 	
 	/**
@@ -18,6 +22,7 @@ public interface IFunctionDao {
 	 *
 	 * @param    function
 	**/
+	@Update
 	public void updateFunction(FunctionEntity function);
 	
 	/**
@@ -25,6 +30,7 @@ public interface IFunctionDao {
 	 *
 	 * @param    id
 	**/
+	@Delete
 	public void deleteFunction(String id);
 	
 	/**
