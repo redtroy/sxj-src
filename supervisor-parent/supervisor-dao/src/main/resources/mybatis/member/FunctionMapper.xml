@@ -4,7 +4,7 @@
 
 <mapper namespace="com.sxj.supervisor.dao.member.IFunctionDao">
 	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.member.FunctionEntity">
-		<id property="id" column="ID" jdbcType="INTEGER" />
+		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="title" column="TITLE" jdbcType="VARCHAR" />
 		<result property="url" column="URL" jdbcType="VARCHAR" />
 		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />

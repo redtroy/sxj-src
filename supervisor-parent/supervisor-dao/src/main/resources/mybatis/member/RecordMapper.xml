@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.record.IRecordDao">
+	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.record.RecordEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
+		<result property="applyId" column="APPLY_ID" jdbcType="VARCHAR" />
+		<result property="applyName" column="APPLY_NAME" jdbcType="VARCHAR" />
+		<result property="memberIdA" column="MEMBER_ID_A" jdbcType="VARCHAR" />
+		<result property="memberNameA" column="MEMBER_NAME_A" jdbcType="VARCHAR" />
+		<result property="memberIdB" column="MEMBER_ID_B" jdbcType="VARCHAR" />
+		<result property="memberNameB" column="MEMBER_NAME_B" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="imgPath" column="IMG_PATH" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
+		<result property="contractType" column="CONTRACT_TYPE" jdbcType="INTEGER" />
+		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="refContractNo" column="REF_CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="applyDate" column="APPLY_DATE" jdbcType="TIME" />
+		<result property="acceptDate" column="ACCEPT_DATE" jdbcType="TIME" />
+	</resultMap>
+
+	<!-- 条件查询备案 -->
+	<select id="queryRecord" resultType="java.util.List"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT ID,RECORD_NO,APPLY_ID,APPLY_NAME,MEMBER_ID_A,MEMBER_NAME_A,MEMBER_ID_B,MEMBER_NAME_B,
+		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE 
+		 FROM MENBER WHERE 1=1]]>
+		<!-- 备案号 -->
+		<if test="condition.recordNo != null">
+			<![CDATA[AND RECORD_NO = #{condition.recordNo}]]>
+		</if>
+		<!-- 申请会员ID -->
+		<if test="condition.applyId != null">
+			<![CDATA[AND APPLY_ID = #{condition.applyId}]]>
+		</if>
+		<!-- 合同签订者  -->
+		<if test="condition.memberId != null">
+			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
+		</if>
+		<!-- 合同类型-->
+		<if test="condition.contractType != null">
+			<![CDATA[AND CONTRACT_TYPE = #{condition.contractType}]]>
+		</if>
+		<!-- 对应合同号-->
+		<if test="condition.contractNo != null">
+			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
+		</if>
+		<!-- 备案状态-->
+		<if test="condition.state != null">
+			<![CDATA[AND STATE = #{condition.state}]]>
+		</if>
+		<!-- 备案类型-->
+		<if test="condition.type != null">
+			<![CDATA[AND TYPE = #{condition.type}]]>
+		</if>
+		<!-- 申请时间段 -->
+ 		<if test="condition.applyStartTime != null and condition.applyEndTime != null"> -->
+			<![CDATA[AND APPLY_DATE >=#{condition.applyStartTime} AND APPLY_DATE <= #{condition.applyEndTime}]]>
+		</if>
+		<!-- 受理时间段 -->
+		<if test="condition.acceptStartTime != null and condition.acceptEndTime != null">
+			<![CDATA[AND ACCEPT_DATE >=#{condition.acceptStartTime} AND ACCEPT_DATE <= #{condition.acceptEndTime}]]>
+		</if>
+	</select>
+</mapper>
