@@ -7,7 +7,9 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.util.persistent.QueryCondition;
+import com.sxj.util.persistent.ResultList;
 
 public interface IAccountDao {
 	/**
@@ -47,5 +49,5 @@ public interface IAccountDao {
 	 *
 	 * @param    account
 	**/
-	public List<AccountEntity> queryAccount(QueryCondition<AccountEntity> account);
+	public ResultList<AccountEntity> queryAccount(QueryCondition<AccountEntity> account);
 }
