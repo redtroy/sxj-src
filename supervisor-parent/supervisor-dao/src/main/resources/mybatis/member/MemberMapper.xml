@@ -4,7 +4,7 @@
 
 <mapper namespace="com.sxj.supervisor.dao.member.IMemberDao">
 	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.member.MemberEntity">
-		<id property="id" column="ID" jdbcType="INTEGER" />
+		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="bLicenseNo" column="B_LICENSE_NO" jdbcType="VARCHAR" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />

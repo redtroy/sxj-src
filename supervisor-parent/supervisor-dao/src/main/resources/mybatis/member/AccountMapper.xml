@@ -4,7 +4,7 @@
 
 <mapper namespace="com.sxj.supervisor.dao.member.IAccountDao">
 	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.member.AccountEntity">
-		<id property="id" column="ID" jdbcType="INTEGER" />
+		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
 		<result property="accountName" column="ACCOUNT_NAME" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />

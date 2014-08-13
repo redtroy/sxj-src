@@ -4,7 +4,7 @@
 
 <mapper namespace="com.sxj.supervisor.dao.record.IRecordDao">
 	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.record.RecordEntity">
-		<id property="id" column="ID" jdbcType="INTEGER" />
+		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
 		<result property="applyId" column="APPLY_ID" jdbcType="VARCHAR" />
 		<result property="applyName" column="APPLY_NAME" jdbcType="VARCHAR" />

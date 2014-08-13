@@ -4,7 +4,7 @@
 
 <mapper namespace="com.sxj.supervisor.dao.member.IRoleDao">
 	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.member.RoleEntity">
-		<id property="id" column="ID" jdbcType="INTEGER" />
+		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="functionId" column="FUNCTION_ID" jdbcType="VARCHAR" />
 		<result property="accountId" column="ACCOUNT_ID" jdbcType="VARCHAR" />
 	</resultMap>
