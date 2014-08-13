@@ -1,8 +1,10 @@
 package com.sxj.supervisor.service.impl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -11,8 +13,10 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;
 
+@Transactional
 public class MemberServiceImpl implements IMemberService {
 	
+	@Autowired
 	private IMemberDao menberDao;
 	 
 	/**
@@ -45,6 +49,7 @@ public class MemberServiceImpl implements IMemberService {
 	 * 会员高级查询
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public ResultList<MemberEntity> queryMembers(MemberQuery query) {
 		QueryCondition<MemberEntity> qc = new QueryCondition<MemberEntity>();
 		Map<String, Object> condition =new HashMap<String, Object>();

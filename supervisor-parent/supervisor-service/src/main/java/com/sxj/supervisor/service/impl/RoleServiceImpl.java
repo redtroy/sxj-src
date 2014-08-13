@@ -3,12 +3,16 @@ package com.sxj.supervisor.service.impl;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sxj.supervisor.dao.member.IRoleDao;
 import com.sxj.supervisor.entity.member.RoleEntity;
 import com.sxj.supervisor.service.member.IRoleService;
-
+@Transactional
 public class RoleServiceImpl implements IRoleService {
 
+	@Autowired
 	private IRoleDao roleDao;
 	@Override
 	public void addRoles(List<RoleEntity> roles) {
