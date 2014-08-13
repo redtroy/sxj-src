@@ -19,6 +19,7 @@ import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.util.persistent.QueryCondition;
+import com.sxj.util.persistent.ResultList;
 
 public interface IMemberDao {
 	/**
@@ -59,5 +60,5 @@ public interface IMemberDao {
 	 * @param member
 	 * @param memberList
 	 **/
-	public List<MemberEntity> queryMenbers(QueryCondition<MemberEntity> query);
+	public ResultList<MemberEntity> queryMenbers(QueryCondition<MemberEntity> query);
 }
