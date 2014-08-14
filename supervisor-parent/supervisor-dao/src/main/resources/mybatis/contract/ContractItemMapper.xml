@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.contract.IContractItemDao">
+	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.contract.ContractItemEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="contractId" column="CONTRACT_ID" jdbcType="VARCHAR" />
+		<result property="productName" column="PRODUCT_NAME" jdbcType="VARCHAR" />
+		<result property="productModel" column="PRODUCT_MODEL" jdbcType="INTEGER" />
+		<result property="quantity" column="QUANTITY" jdbcType="FLOAT" />
+		<result property="price" column="PRICE" jdbcType="INTEGER" />
+		<result property="amount" column="AMOUNT" jdbcType="INTEGER" />
+		<result property="remarks" column="REMARKS" jdbcType="VARCHAR" />
+	</resultMap>
+
+<!-- 条件查询合同批次 -->
+	<select id="queryItems" resultType="java.util.List"
+		parameterType="String">
+		<![CDATA[SELECT ID,CONTRACT_ID,PRODUCT_NAME,PRODUCT_MODEL,QUANTITY,
+		PRICE,AMOUNT,REMARKS 
+		  FROM CONTRACT_ITEM WHERE CONTRACT_ID=#{contractId}]]>
+	</select>
+</mapper>
