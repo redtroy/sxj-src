@@ -15,6 +15,7 @@
 		<mybatis.version>3.2.7</mybatis.version>
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<java.version>1.7</java.version>
+		<springside.version>4.2.3</springside.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -37,8 +38,8 @@
 			</dependency>
 			<dependency>
 				<groupId>com.sxj</groupId>
-				<artifactId>spring-extension</artifactId>
-				<version>4.2.3</version>
+				<artifactId>spring-util</artifactId>
+				<version>${springside.version}</version>
 				<optional>true</optional>
 			</dependency>
 		</dependencies>

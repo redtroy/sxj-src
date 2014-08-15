@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.mybatis.orm.mapper.FunctionMapper">
+	<resultMap id="functionMap" type="com.sxj.mybatis.orm.model.Function">
+		<id property="id" column="F_FUNC_ID" jdbcType="VARCHAR"/>
+		<result property="userName" column="F_FUNC_NAME" jdbcType="VARCHAR"/>
+	</resultMap>
+</mapper>
