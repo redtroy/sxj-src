@@ -9,7 +9,6 @@
 	<modules>
 		<module>mybatis-orm</module>
 		<module>mybatis-pagination</module>
-		<module>mybatis-redis</module>
 	</modules>
 	<properties>
 		<mybatis.version>3.2.7</mybatis.version>
@@ -72,4 +71,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Local Nexus Repository</name>
+			<url>http://192.168.1.11:8080/nexus/content/repositories/releases</url>
+		</repository>
+	</distributionManagement>
 </project>
