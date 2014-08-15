@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>mybatis-pagination</artifactId>
-			<version>3.2.2</version>
+			<version>${mybatis.parent}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sxj</groupId>
