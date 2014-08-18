@@ -43,16 +43,20 @@ import org.springframework.util.ReflectionUtils.FieldFilter;
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.GeneratedValue;
+import com.sxj.mybatis.orm.annotations.GenerationType;
+import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Insert;
-import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.annotations.Transient;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.mybatis.orm.annotations.Version;
-import com.sxj.mybatis.orm.utils.AnnotationUtils;
-import com.sxj.mybatis.orm.utils.CaseFormatUtils;
-import com.sxj.mybatis.orm.utils.ReflectUtils;
+import com.sxj.mybatis.orm.keygen.UuidKeyGenerator;
+import com.sxj.spring.modules.util.AnnotationUtils;
+import com.sxj.spring.modules.util.CaseFormatUtils;
+import com.sxj.spring.modules.util.Collections3;
+import com.sxj.spring.modules.util.ReflectUtils;
 
 /**
  * Class description goes here.
@@ -127,7 +131,9 @@ public class GenericStatementBuilder extends BaseBuilder
         ///~~~~~~~~~~~~~~~~~~~~~~
         idField = AnnotationUtils.findDeclaredFieldWithAnnoation(Id.class,
                 entityClass);
-        
+        if (idField.isAnnotationPresent(GeneratedValue.class)
+                && idField.getAnnotation(GeneratedValue.class).strategy() == GenerationType.UUID)
+            columnFields.add(idField);
         versionField = AnnotationUtils.findDeclaredFieldWithAnnoation(Version.class,
                 entityClass);
         
@@ -139,6 +145,7 @@ public class GenericStatementBuilder extends BaseBuilder
             {
                 if (field.isAnnotationPresent(Column.class))
                     columnFields.add(field);
+                
             }
         }, new FieldFilter()
         {
@@ -170,6 +177,10 @@ public class GenericStatementBuilder extends BaseBuilder
         Column column = field.getAnnotation(Column.class);
         if (column == null)
         {
+            Id idColumn = field.getAnnotation(Id.class);
+            if (idColumn != null)
+                return StringUtils.isNotBlank(idColumn.column()) ? idColumn.column()
+                        : CaseFormatUtils.camelToUnderScore(field.getName());
             return CaseFormatUtils.camelToUnderScore(field.getName());
         }
         else
@@ -227,7 +238,7 @@ public class GenericStatementBuilder extends BaseBuilder
         {
             List<Method> insertMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
                     Insert.class);
-            if (insertMethods != null && insertMethods.size() > 0)
+            if (Collections3.isNotEmpty(insertMethods))
             {
                 if (insertMethods.size() > 1)
                 {
@@ -238,7 +249,7 @@ public class GenericStatementBuilder extends BaseBuilder
             
             List<Method> deleteMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
                     Delete.class);
-            if (deleteMethods != null && deleteMethods.size() > 0)
+            if (Collections3.isNotEmpty(deleteMethods))
             {
                 if (deleteMethods.size() > 1)
                 {
@@ -249,7 +260,7 @@ public class GenericStatementBuilder extends BaseBuilder
             
             List<Method> updateMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
                     Update.class);
-            if (updateMethods != null)
+            if (Collections3.isNotEmpty(updateMethods))
             {
                 if (updateMethods.size() > 1 && updateMethods.size() > 0)
                 {
@@ -260,7 +271,7 @@ public class GenericStatementBuilder extends BaseBuilder
             
             List<Method> selectMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
                     Get.class);
-            if (selectMethods != null && selectMethods.size() > 0)
+            if (Collections3.isNotEmpty(selectMethods))
             {
                 if (selectMethods.size() > 1)
                 {
@@ -313,20 +324,30 @@ public class GenericStatementBuilder extends BaseBuilder
         String keyColumn = null;
         
         Id id = AnnotationUtils.findDeclaredAnnotation(Id.class, entityClass);
+        GeneratedValue generatedValue = AnnotationUtils.findDeclaredAnnotation(GeneratedValue.class,
+                entityClass);
         if (id != null)
         {
             String keyStatementId = entityClass.getName() + ".insert"
                     + SelectKeyGenerator.SELECT_KEY_SUFFIX;
+            
             if (configuration.hasKeyGenerator(keyStatementId))
             {
                 keyGenerator = configuration.getKeyGenerator(keyStatementId);
+            }
+            else if (generatedValue != null)
+            {
+                if (generatedValue.strategy() == GenerationType.UUID)
+                {
+                    keyGenerator = new UuidKeyGenerator(generatedValue.length());
+                    
+                }
             }
             else
             {
                 keyGenerator = id.generatedKeys() ? new Jdbc3KeyGenerator()
                         : new NoKeyGenerator();
             }
-            
             keyProperty = idField.getName();
             keyColumn = StringUtils.isBlank(id.column()) ? CaseFormatUtils.camelToUnderScore(idField.getName())
                     : id.column();
@@ -373,10 +394,9 @@ public class GenericStatementBuilder extends BaseBuilder
         for (Field field : columnFields)
         {
             List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
-            
-            if (Date.class.isAssignableFrom(field.getType())
-                    && field.getAnnotation(Column.class) != null
-                    && field.getAnnotation(Column.class).sysdate() == true)
+            Column column = field.getAnnotation(Column.class);
+            if (Date.class.isAssignableFrom(field.getType()) && column != null
+                    && column.sysdate() == true)
             {
                 sqlNodes.add(new TextSqlNode("now(),"));
             }

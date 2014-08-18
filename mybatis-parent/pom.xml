@@ -14,7 +14,30 @@
 		<mybatis.version>3.2.7</mybatis.version>
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<java.version>1.7</java.version>
+		<springside.version>4.2.3</springside.version>
+		<mybatis.parent>3.2.2</mybatis.parent>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.sxj</groupId>
+				<artifactId>spring-util</artifactId>
+				<version>${springside.version}</version>
+				<optional>true</optional>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<build>
 		<plugins>
 			<plugin>
@@ -48,4 +71,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Local Nexus Repository</name>
+			<url>http://192.168.1.11:8080/nexus/content/repositories/releases</url>
+		</repository>
+	</distributionManagement>
 </project>
