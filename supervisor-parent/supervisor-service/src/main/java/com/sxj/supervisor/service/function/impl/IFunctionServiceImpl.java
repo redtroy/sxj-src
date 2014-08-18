@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sxj.supervisor.dao.member.IFunctionDao;
 import com.sxj.supervisor.entity.member.FunctionEntity;
-import com.sxj.supervisor.function.model.FunctionModel;
+import com.sxj.supervisor.model.function.FunctionModel;
 import com.sxj.supervisor.service.function.IFunctionService;
 import com.sxj.util.persistent.QueryCondition;
 
