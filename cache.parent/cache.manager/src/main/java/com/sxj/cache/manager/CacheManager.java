@@ -25,7 +25,7 @@ class CacheManager
     
     private final static Logger log = LoggerFactory.getLogger(CacheManager.class);
     
-    private final static String CONFIG_FILE = "/j2cache.properties";
+    private final static String CONFIG_FILE = "/cache.properties";
     
     private static CacheProvider l1_provider;
     
@@ -51,18 +51,26 @@ class CacheManager
         {
             props.load(configStream);
             configStream.close();
-            
-            CacheManager.l1_provider = getProviderInstance(props.getProperty("cache.L1.provider_class"));
-            CacheManager.l1_provider.start(getProviderProperties(props,
-                    CacheManager.l1_provider));
-            log.info("Using L1 CacheProvider : "
-                    + l1_provider.getClass().getName());
-            
-            CacheManager.l2_provider = getProviderInstance(props.getProperty("cache.L2.provider_class"));
-            CacheManager.l2_provider.start(getProviderProperties(props,
-                    CacheManager.l2_provider));
-            log.info("Using L2 CacheProvider : "
-                    + l2_provider.getClass().getName());
+            if (props.getProperty("cache.L1.provider_class") == null
+                    && props.getProperty("cache.L2.provider_class") == null)
+                throw new CacheException(
+                        "At lease one provider_class should be defined!");
+            if (props.getProperty("cache.L1.provider_class") != null)
+            {
+                CacheManager.l1_provider = getProviderInstance(props.getProperty("cache.L1.provider_class"));
+                CacheManager.l1_provider.start(getProviderProperties(props,
+                        CacheManager.l1_provider));
+                log.info("Using L1 CacheProvider : "
+                        + l1_provider.getClass().getName());
+            }
+            if (props.getProperty("cache.L2.provider_class") != null)
+            {
+                CacheManager.l2_provider = getProviderInstance(props.getProperty("cache.L2.provider_class"));
+                CacheManager.l2_provider.start(getProviderProperties(props,
+                        CacheManager.l2_provider));
+                log.info("Using L2 CacheProvider : "
+                        + l2_provider.getClass().getName());
+            }
             
         }
         catch (Exception e)
