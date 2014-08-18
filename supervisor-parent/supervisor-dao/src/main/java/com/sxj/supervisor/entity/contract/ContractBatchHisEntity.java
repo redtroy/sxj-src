@@ -40,6 +40,19 @@ public class ContractBatchHisEntity extends Pagable implements Serializable {
 	 **/
 	private String batchItems;
 
+	/**
+	 * 变更备案号
+	**/
+	private String recordNo;
+	
+	public String getRecordNo() {
+		return recordNo;
+	}
+
+	public void setRecordNo(String recordNo) {
+		this.recordNo = recordNo;
+	}
+
 	public String getId() {
 		return id;
 	}

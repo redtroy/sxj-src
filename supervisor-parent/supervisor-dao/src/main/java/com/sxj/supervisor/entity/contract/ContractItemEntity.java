@@ -2,7 +2,6 @@ package com.sxj.supervisor.entity.contract;
 
 import java.io.Serializable;
 
-import org.apache.ibatis.type.JdbcType;
 
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;

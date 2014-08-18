@@ -25,7 +25,7 @@
 		<result property="memberNameB" column="MEMBER_NAME_B" jdbcType="VARCHAR" />
 		<result property="stateLog" column="STATE_LOG" jdbcType="VARCHAR" />
 		<result property="imgId" column="IMG_ID" jdbcType="VARCHAR" />
-		<result property="creationDate" column="CREATION_DATE" jdbcType="TIME" />
+		<result property="createDate" column="CREATE_DATE" jdbcType="TIME" />
 		<result property="recordDate" column="RECORD_DATE" jdbcType="TIME" />
 	</resultMap>
 
@@ -34,7 +34,7 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,CONTRACT_NO,ADDRESS,MEMBER_ID_A,MEMBER_ID_B,ENG_NAME,ENG_ADDRESS,RECORD_NO,SIGNED_DATE,VALIDITY_DATE,
 		START_DATE,DEPOSIT,REMARKS,DELIVERY_ADDRESS,STATE,TYPE,REF_CONTRACT_NO,MEMBER_NAME_A,MEMBER_NAME_B,STATE_LOG,IMG_ID,
-		CREATION_DATE,RECORD_DATE FROM CONTRACT WHERE 1=1]]>
+		CREATE_DATE,RECORD_DATE FROM CONTRACT WHERE 1=1]]>
 		<!-- 合同号 -->
 		<if test="condition.contractId != null">
 			<![CDATA[AND CONTRACT_ID = #{condition.contractId}]]>
