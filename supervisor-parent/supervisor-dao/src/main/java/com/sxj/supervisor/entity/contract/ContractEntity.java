@@ -97,8 +97,8 @@ public class ContractEntity extends Pagable implements Serializable {
 	/**
 	 * 生成时间
 	 */
-	@Column(name = "CREATION_DATE")
-	private Date creationDate;
+	@Column(name = "CREATE_DATE")
+	private Date createDate;
 	
 	/**
 	 * 备案时间
@@ -155,17 +155,59 @@ public class ContractEntity extends Pagable implements Serializable {
 	private String memberNameB;
 	
 	/**
-	 * 合同状态变更记录
+	 * 合同状态变更记录(JOSN)
 	**/
 	@Column(name = "STATE_LOG")
 	private String stateLog;
 	
 	/**
-	 * 有效图片路径Id
+	 * 总批次
 	**/
-	@Column(name = "IMG_ID")
-	private String imgId;
+	@Column(name = "BATCH_COUNT")
+	private Integer batchCount;
+	/**
+	 * 当前更新备案号
+	 */
+	@Column(name = "NOW_RECORD_NO")
+	private String nowRecordNo;
+	/**
+	 * 扫描件路径
+	 */
+	@Column(name = "IMG_PATH")
+	private String imgPath;
 	
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Integer getBatchCount() {
+		return batchCount;
+	}
+
+	public void setBatchCount(Integer batchCount) {
+		this.batchCount = batchCount;
+	}
+
+	public String getNowRecordNo() {
+		return nowRecordNo;
+	}
+
+	public void setNowRecordNo(String nowRecordNo) {
+		this.nowRecordNo = nowRecordNo;
+	}
+
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+
 	public Date getRecordDate() {
 		return recordDate;
 	}
@@ -174,13 +216,6 @@ public class ContractEntity extends Pagable implements Serializable {
 		this.recordDate = recordDate;
 	}
 
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
 
 	public String getId() {
 		return id;
@@ -342,11 +377,4 @@ public class ContractEntity extends Pagable implements Serializable {
 		this.stateLog = stateLog;
 	}
 
-	public String getImgId() {
-		return imgId;
-	}
-
-	public void setImgId(String imgId) {
-		this.imgId = imgId;
-	}
 }

@@ -68,6 +68,20 @@ public class ContractItemHisEntity extends Pagable implements Serializable {
 	@Column(name = "REMARKS")
 	private String remarks;
 
+	/**
+	 * 变更备案号
+	**/
+	@Column(name = "RECORD_NO")
+	private String recordNo;
+	
+	public String getRecordNo() {
+		return recordNo;
+	}
+
+	public void setRecordNo(String recordNo) {
+		this.recordNo = recordNo;
+	}
+
 	public String getId() {
 		return id;
 	}
