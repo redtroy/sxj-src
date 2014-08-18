@@ -7,7 +7,7 @@ public class JsonSerializer implements Serializer
 {
     
     @Override
-    public String serialize(Object obj)
+    public String serialize(final Object obj)
     {
         CacheObject cacheObject = new CacheObject();
         cacheObject.setType(obj.getClass());
@@ -16,7 +16,7 @@ public class JsonSerializer implements Serializer
     }
     
     @Override
-    public Object deserialize(String str)
+    public Object deserialize(final String str)
     {
         CacheObject fromJson = new Gson().fromJson(str, CacheObject.class);
         return new Gson().fromJson(fromJson.getJson(), fromJson.getType());

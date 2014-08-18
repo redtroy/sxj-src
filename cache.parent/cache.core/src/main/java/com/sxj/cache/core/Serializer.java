@@ -2,7 +2,7 @@ package com.sxj.cache.core;
 
 public interface Serializer
 {
-    public String serialize(Object obj);
+    public String serialize(final Object obj);
     
-    public Object deserialize(String str);
+    public Object deserialize(final String str);
 }

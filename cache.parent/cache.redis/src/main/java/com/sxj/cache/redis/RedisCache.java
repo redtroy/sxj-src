@@ -10,7 +10,8 @@ import redis.clients.jedis.Jedis;
 
 import com.sxj.cache.core.Cache;
 import com.sxj.cache.core.CacheException;
-import com.sxj.cache.core.util.SerializationUtils;
+import com.sxj.cache.core.Serializer;
+import com.sxj.cache.core.util.JsonSerializer;
 
 /**
  * Redis 缓存实现
@@ -22,11 +23,18 @@ public class RedisCache implements Cache
     
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(RedisCache.class);
     
+    private final static Serializer SERIALIZER = new JsonSerializer();
+    
     private String region;
     
     public RedisCache(String region)
     {
         this.region = region;
+    }
+    
+    private Object deserialize(String json)
+    {
+        return SERIALIZER.deserialize(json);
     }
     
     /**
@@ -35,29 +43,19 @@ public class RedisCache implements Cache
      * @return
      */
     @SuppressWarnings("rawtypes")
-    private String getKeyName(Object key)
+    private String serialize(Object key)
     {
         
-        if (key instanceof Number)
-            return region + ":I:" + key;
-        else
-        {
-            Class keyClass = key.getClass();
-            if (String.class.equals(keyClass)
-                    || StringBuffer.class.equals(keyClass)
-                    || StringBuilder.class.equals(keyClass))
-                return region + ":S:" + key;
-        }
-        return region + ":O:" + key;
+        return SERIALIZER.serialize(key);
     }
     
     public static void main(String[] args)
     {
         RedisCache cache = new RedisCache("User");
-        System.out.println(cache.getKeyName("Hello"));
-        System.out.println(cache.getKeyName(2));
-        System.out.println(cache.getKeyName((byte) 2));
-        System.out.println(cache.getKeyName(2L));
+        System.out.println(cache.serialize("Hello"));
+        System.out.println(cache.serialize(2));
+        System.out.println(cache.serialize((byte) 2));
+        System.out.println(cache.serialize(2L));
     }
     
     @Override
@@ -70,9 +68,9 @@ public class RedisCache implements Cache
         {
             if (null == key)
                 return null;
-            byte[] b = cache.get(getKeyName(key).getBytes());
+            byte[] b = cache.get(serialize(key).getBytes());
             if (b != null)
-                obj = SerializationUtils.deserialize(b);
+                obj = deserialize(new String(b));
         }
         catch (Exception e)
         {
@@ -99,8 +97,8 @@ public class RedisCache implements Cache
             Jedis cache = RedisCacheProvider.getResource();
             try
             {
-                cache.set(getKeyName(key).getBytes(),
-                        SerializationUtils.serialize(value));
+                cache.set(serialize(key).getBytes(),
+                        serialize(value).getBytes());
             }
             catch (Exception e)
             {
@@ -127,7 +125,7 @@ public class RedisCache implements Cache
         Jedis cache = RedisCacheProvider.getResource();
         try
         {
-            cache.del(getKeyName(key));
+            cache.del(serialize(key));
         }
         catch (Exception e)
         {
@@ -156,7 +154,7 @@ public class RedisCache implements Cache
             String[] okeys = new String[keys.size()];
             for (int i = 0; i < okeys.length; i++)
             {
-                okeys[i] = getKeyName(keys.get(i));
+                okeys[i] = serialize(keys.get(i));
             }
             cache.del(okeys);
         }
