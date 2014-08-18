@@ -2,7 +2,7 @@ package com.sxj.supervisor.service.member;
 
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.model.MemberQuery;
+import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.util.persistent.ResultList;
 
 public interface IMemberService {

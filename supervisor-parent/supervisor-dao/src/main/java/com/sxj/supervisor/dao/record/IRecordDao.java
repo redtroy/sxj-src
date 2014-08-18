@@ -31,19 +31,19 @@ public interface IRecordDao {
 	 * @return
 	 */
 	@Get
-	public RecordEntity getRecord(Integer id);
+	public RecordEntity getRecord(String id);
 
 	/**
 	 * 删除备案
 	 * @param id
 	 */
 	@Delete
-	public void deleteRecord(Integer id);
+	public void deleteRecord(String id);
 
 	/**
 	 * 备案高级查询
 	 * @param query
 	 * @return
 	 */
-	public List<RecordEntity> queryRecord(QueryCondition<FunctionEntity> query);
+	public List<RecordEntity> queryRecord(QueryCondition<RecordEntity> query);
 }
