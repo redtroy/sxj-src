@@ -51,11 +51,13 @@ public class RedisCache implements Cache
     
     public static void main(String[] args)
     {
-        RedisCache cache = new RedisCache("User");
-        System.out.println(cache.serialize("Hello"));
-        System.out.println(cache.serialize(2));
-        System.out.println(cache.serialize((byte) 2));
-        System.out.println(cache.serialize(2L));
+        RedisCache cache = new RedisCache("user");
+        System.out.println(cache);
+        JsonSerializer serializer = new JsonSerializer();
+        String key = serializer.serialize(cache);
+        System.out.println(key);
+        cache = (RedisCache) serializer.deserialize(key);
+        System.out.println(cache);
     }
     
     @Override

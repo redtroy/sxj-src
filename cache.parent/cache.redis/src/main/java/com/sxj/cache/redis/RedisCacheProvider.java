@@ -78,13 +78,8 @@ public class RedisCacheProvider implements CacheProvider
         timeout = getProperty(props, "timeout", 2000);
         database = getProperty(props, "database", 0);
         
-        //        config.setWhenExhaustedAction((byte) getProperty(props,
-        //                "whenExhaustedAction",
-        //                1));
         config.setMaxIdle(getProperty(props, "maxIdle", 10));
         config.setMinIdle(getProperty(props, "minIdle", 5));
-        //        config.setMaxActive(getProperty(props, "maxActive", 50));
-        //        config.setMaxWait(getProperty(props, "maxWait", 100));
         config.setTestWhileIdle(getProperty(props, "testWhileIdle", false));
         config.setTestOnBorrow(getProperty(props, "testOnBorrow", true));
         config.setTestOnReturn(getProperty(props, "testOnReturn", false));
@@ -100,8 +95,6 @@ public class RedisCacheProvider implements CacheProvider
         config.setTimeBetweenEvictionRunsMillis(getProperty(props,
                 "timeBetweenEvictionRunsMillis",
                 10));
-        //        config.lifo = getProperty(props, "lifo", false);
-        
         pool = new JedisPool(config, host, port, timeout, password, database);
         
     }

@@ -1,6 +1,7 @@
 package com.sxj.cache.core.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sxj.cache.core.Serializer;
 
 public class JsonSerializer implements Serializer
@@ -9,44 +10,22 @@ public class JsonSerializer implements Serializer
     @Override
     public String serialize(final Object obj)
     {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Class.class,
+                new ClassTypeAdapter()).create();
+        String obJson = gson.toJson(obj);
         CacheObject cacheObject = new CacheObject();
         cacheObject.setType(obj.getClass());
-        cacheObject.setJson(new Gson().toJson(obj));
-        return new Gson().toJson(cacheObject);
+        cacheObject.setValue(obJson);
+        return gson.toJson(cacheObject);
     }
     
     @Override
     public Object deserialize(final String str)
     {
-        CacheObject fromJson = new Gson().fromJson(str, CacheObject.class);
-        return new Gson().fromJson(fromJson.getJson(), fromJson.getType());
-    }
-    
-    private class CacheObject
-    {
-        private Class<?> type;
-        
-        private String json;
-        
-        public Class<?> getType()
-        {
-            return type;
-        }
-        
-        public void setType(Class<?> type)
-        {
-            this.type = type;
-        }
-        
-        public String getJson()
-        {
-            return json;
-        }
-        
-        public void setJson(String json)
-        {
-            this.json = json;
-        }
+        Gson gson = new GsonBuilder().registerTypeAdapter(Class.class,
+                new ClassTypeAdapter()).create();
+        CacheObject fromJson = gson.fromJson(str, CacheObject.class);
+        return gson.fromJson(fromJson.getValue(), fromJson.getType());
     }
     
 }
