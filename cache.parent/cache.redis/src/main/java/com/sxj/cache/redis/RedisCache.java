@@ -43,10 +43,15 @@ public class RedisCache implements Cache
      * @return
      */
     @SuppressWarnings("rawtypes")
-    private String serialize(Object key)
+    private String serializeObject(Object object)
     {
         
-        return SERIALIZER.serialize(key);
+        return SERIALIZER.serialize(object);
+    }
+    
+    private String serializeKey(Object key)
+    {
+        return region + ":" + SERIALIZER.serialize(key);
     }
     
     public static void main(String[] args)
@@ -70,7 +75,7 @@ public class RedisCache implements Cache
         {
             if (null == key)
                 return null;
-            byte[] b = cache.get(serialize(key).getBytes());
+            byte[] b = cache.get(serializeKey(key).getBytes());
             if (b != null)
                 obj = deserialize(new String(b));
         }
@@ -99,8 +104,8 @@ public class RedisCache implements Cache
             Jedis cache = RedisCacheProvider.getResource();
             try
             {
-                cache.set(serialize(key).getBytes(),
-                        serialize(value).getBytes());
+                cache.set(serializeKey(key).getBytes(),
+                        serializeObject(value).getBytes());
             }
             catch (Exception e)
             {
@@ -127,7 +132,7 @@ public class RedisCache implements Cache
         Jedis cache = RedisCacheProvider.getResource();
         try
         {
-            cache.del(serialize(key));
+            cache.del(serializeKey(key));
         }
         catch (Exception e)
         {
@@ -156,7 +161,7 @@ public class RedisCache implements Cache
             String[] okeys = new String[keys.size()];
             for (int i = 0; i < okeys.length; i++)
             {
-                okeys[i] = serialize(keys.get(i));
+                okeys[i] = serializeKey(keys.get(i));
             }
             cache.del(okeys);
         }
