@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.function.impl;
+package com.sxj.supervisor.service.impl.function;
 
 import java.util.ArrayList;
 import java.util.Iterator;
