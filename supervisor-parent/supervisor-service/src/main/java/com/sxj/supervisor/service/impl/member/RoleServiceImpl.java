@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.impl;
+package com.sxj.supervisor.service.impl.member;
 
 import java.util.Iterator;
 import java.util.List;

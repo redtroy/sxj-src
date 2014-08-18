@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.impl;
+package com.sxj.supervisor.service.impl.member;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IAccountDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
-import com.sxj.supervisor.model.AccountQuery;
+import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;

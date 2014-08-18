@@ -3,7 +3,6 @@ package com.sxj.supervisor.dao.contract;
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
-import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractImgEntity;
 import com.sxj.util.persistent.QueryCondition;
 

@@ -1,57 +1,40 @@
-package com.sxj.supervisor.entity.contract;
+package com.sxj.supervisor.model.contract;
 
 import java.io.Serializable;
+import java.util.List;
 
-import com.sxj.mybatis.pagination.Pagable;
-
-/**
- * 批次条目变更实体
- * @author Administrator
- *
- */
-public class ContractBatchHisEntity extends Pagable implements Serializable {
+public class ContractBatchModel implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5666599729742676725L;
+	private static final long serialVersionUID = 2009473407892728810L;
 
 	/**
 	 * 主键
-	 **/
+	**/
 	private String id;
-
+	
 	/**
 	 * 合同编号
-	 **/
+	**/
 	private String contractId;
-
+	
 	/**
 	 * RFID号
-	 **/
+	**/
 	private String rfidNo;
-
+	
 	/**
 	 * 金额
-	 **/
+	**/
 	private Long amount;
-
+	
 	/**
 	 * 批次条目JSON
-	 **/
-	private String batchItems;
-
-	/**
-	 * 变更备案号
 	**/
-	private String recordNo;
+	private List<BatchItemModel> batchItems;
 	
-	public String getRecordNo() {
-		return recordNo;
-	}
-
-	public void setRecordNo(String recordNo) {
-		this.recordNo = recordNo;
-	}
+	private String recordNo;
 
 	public String getId() {
 		return id;
@@ -85,11 +68,19 @@ public class ContractBatchHisEntity extends Pagable implements Serializable {
 		this.amount = amount;
 	}
 
-	public String getBatchItems() {
+	public List<BatchItemModel> getBatchItems() {
 		return batchItems;
 	}
 
-	public void setBatchItems(String batchItems) {
+	public void setBatchItems(List<BatchItemModel> batchItems) {
 		this.batchItems = batchItems;
+	}
+
+	public String getRecordNo() {
+		return recordNo;
+	}
+
+	public void setRecordNo(String recordNo) {
+		this.recordNo = recordNo;
 	}
 }

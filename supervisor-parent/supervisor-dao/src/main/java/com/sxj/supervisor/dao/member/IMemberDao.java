@@ -11,7 +11,6 @@
 //
 package com.sxj.supervisor.dao.member;
 
-import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
