@@ -13,6 +13,7 @@ import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;
+import com.sxj.util.persistent.ResultListImpl;
 
 @Transactional
 public class RecordServiceImpl implements IRecordService {
@@ -76,7 +77,7 @@ public class RecordServiceImpl implements IRecordService {
 		condition.put("endAcceptDate",query.getEndAcceptDate());//结束受理时间
 		qc.setCondition(condition);
 		List<RecordEntity> recordList= recordDao.queryRecord(qc);
-		ResultList resultList = null;
+		ResultList resultList =  new ResultListImpl();
 		resultList.setResults(recordList);
 		return resultList;
 	}

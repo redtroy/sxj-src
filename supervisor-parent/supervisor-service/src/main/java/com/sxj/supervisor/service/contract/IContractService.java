@@ -69,13 +69,23 @@ public interface IContractService {
 	**/
 	public void suppContract(String contractId, List<ContractBatchModel> batchList, String recordNo);
 	/**
-	 * 更改合同状态
+	 * 更新状态
 	 * @param contractId
 	 * @param state
 	 */
 	public void modifyState(String contractId, Integer state);
 	
+	/**
+	 * 新增合同状态变更记录
+	 * @param stateLog
+	 * @param contractId
+	 */
 	public void addStateLog(StateLogModel stateLog, String contractId);
 	
+	/**
+	 * 变更确认状态
+	 * @param contractId
+	 * @param state
+	 */
 	public void modifyCheckState(String contractId, Integer state);
 }
