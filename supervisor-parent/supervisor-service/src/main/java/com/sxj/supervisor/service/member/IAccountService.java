@@ -1,7 +1,7 @@
 package com.sxj.supervisor.service.member;
 
 import com.sxj.supervisor.entity.member.AccountEntity;
-import com.sxj.supervisor.model.AccountQuery;
+import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.util.persistent.ResultList;
 
 public interface IAccountService {
