@@ -11,6 +11,7 @@ package com.sxj.mybatis.orm.annotations;
 /**
  * Class description goes here.
  */
-public enum GenerationType {
-	AUTO, IDENTITY, SEQUENCE, TABLE;
+public enum GenerationType
+{
+    AUTO, IDENTITY, SEQUENCE, TABLE, UUID;
 }
