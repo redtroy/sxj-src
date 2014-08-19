@@ -27,12 +27,12 @@
 	</resultMap>
 
 	<!-- 条件查询会员 -->
-	<select id="queryMenbers" resultType="java.util.List"
+	<select id="queryMembers" resultType="java.util.List"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,NAME,B_LICENSE_NO,TYPE,AREA,CONTACTS,ENERGY_NO,PHONE_NO,
 		ADDRESS,TEL_NUM,REG_DATE,AUTHOR_DATE,STATE,CHECK_STATE,TOTAL_AMOUNT,ACCOUNT_NUM,
 		PASSWORD,MEMBER_NO,B_LICENSE_PATH,ENERGY_PATH
-		 FROM MENBER WHERE 1=1]]>
+		 FROM M_MENBER WHERE 1=1]]>
 		<!-- 会员号 -->
 		<if test="condition.memberNo != null">
 			<![CDATA[AND MEMBER_NO = #{condition.memberNo}]]>
