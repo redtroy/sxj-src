@@ -1,5 +1,6 @@
 package com.sxj.supervisor.model.contract;
 
+
 import java.io.Serializable;
 import java.util.Date;
 
