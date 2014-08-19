@@ -1,4 +1,4 @@
-package com.sxj.mybatis.sn;
+package com.sxj.mybatis.sn.interceptor;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
