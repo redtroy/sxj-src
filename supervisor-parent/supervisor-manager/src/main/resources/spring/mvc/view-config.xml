@@ -58,6 +58,7 @@
 		<property name="templateLoaderPath" value="/WEB-INF/views/fm/" />
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="freemarkerSettings" ref="freemarkerConfiguration" />
+		
 		<!-- <property name="freemarkerVariables">
 			<map>
 				<entry key="shiro" value-ref="shiroTags" />

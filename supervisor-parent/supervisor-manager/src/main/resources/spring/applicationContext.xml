@@ -42,7 +42,11 @@
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
 		<property name="typeAliasesPackage" value="com.sxj.supervisor.entity" />
 		<!-- 显式指定Mapper文件位置 -->
+<<<<<<< HEAD
 		<property name="mapperLocations" value="classpath:/mybatis/**/*Mapper.xml" />
+=======
+		<property name="mapperLocations" value="classpath:/mapper/**/*.xml" />
+>>>>>>> c3616dc22205a75bb4ed3d4725766eb16d6cd81e
 
 
 	</bean>
@@ -52,4 +56,5 @@
 		<!--<property name="annotationClass" value="com.sxj.repository.mybatis.MyBatisRepository" 
 			/> -->
 	</bean>
+
 </beans>

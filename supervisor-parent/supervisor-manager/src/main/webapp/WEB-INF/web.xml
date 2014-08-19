@@ -41,13 +41,7 @@
 			<filter-name>charset</filter-name>
 			<url-pattern>/*</url-pattern>
 		</filter-mapping>
-		<!-- <filter> <filter-name>loginFilter</filter-name> <filter-class>com.jscn.pay.manage.controller.LoginFilter</filter-class> 
-			</filter> <filter-mapping> <filter-name>loginFilter</filter-name> <url-pattern>/j_spring_security_check</url-pattern> 
-			</filter-mapping> <filter> <filter-name>springSecurityFilterChain</filter-name> 
-			<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> 
-			</filter> <filter-mapping> <filter-name>springSecurityFilterChain</filter-name> 
-			<url-pattern>/*</url-pattern> </filter-mapping> <listener> <listener-class>com.jscn.pay.manage.security.PaySessionEventPublisher</listener-class> 
-			</listener> -->
+		
 		<welcome-file-list>
 			<welcome-file>/login.htm</welcome-file>
 			<welcome-file>/index.htm</welcome-file>
