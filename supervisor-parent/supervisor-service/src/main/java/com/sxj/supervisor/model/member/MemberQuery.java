@@ -3,8 +3,10 @@ package com.sxj.supervisor.model.member;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MemberQuery  implements Serializable {
-	
+import com.sxj.mybatis.pagination.Pagable;
+
+public class MemberQuery implements Serializable {
+
 	/**
 	 * 
 	 */
@@ -31,7 +33,17 @@ public class MemberQuery  implements Serializable {
 	private Date startDate;
 
 	private Date endDate;
-	
+
+	public Pagable getPage() {
+		return page;
+	}
+
+	public void setPage(Pagable page) {
+		this.page = page;
+	}
+
+	private Pagable page;
+
 	public String getMemberNo() {
 		return memberNo;
 	}
