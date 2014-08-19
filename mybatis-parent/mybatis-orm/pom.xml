@@ -101,6 +101,11 @@
 			<artifactId>mybatis-sn</artifactId>
 			<version>3.2.2</version>
 		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

@@ -27,14 +27,14 @@ public class OracleDialect extends Dialect
         StringBuffer sb = new StringBuffer("update ");
         sb.append(sn.getTableName());
         sb.append(" set ");
-        sb.append(sn.getStub());
-        sb.append("=");
-        sb.append(sn.getStub());
-        sb.append("+");
+        sb.append(sn.getSn());
+        sb.append(" = ");
+        sb.append(sn.getSn());
+        sb.append(" + ");
         sb.append(sn.getStep());
-        sb.append("where");
+        sb.append(" where ");
         sb.append(sn.getStub());
-        sb.append("=");
+        sb.append(" = ");
         sb.append(sn.getStubValue());
         return sb.toString();
     }
@@ -43,5 +43,29 @@ public class OracleDialect extends Dialect
     {
         super();
         setType(Dialect.Type.ORACLE);
+    }
+    
+    @Override
+    public String getSnInsertString(SN sn)
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append("insert into ");
+        sb.append(sn.getTableName());
+        sb.append(" (");
+        sb.append(sn.getStub());
+        sb.append(",");
+        sb.append(sn.getSn());
+        sb.append(") values ('");
+        sb.append(sn.getStubValue());
+        sb.append("',0");
+        sb.append(")");
+        return sb.toString();
+    }
+    
+    @Override
+    public String getSnSelectString(SN sn)
+    {
+        return "select 1 from " + sn.getTableName() + " where " + sn.getStub()
+                + "='" + sn.getStubValue() + "'";
     }
 }

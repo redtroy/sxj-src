@@ -4,11 +4,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IRoleDao;
 import com.sxj.supervisor.entity.member.RoleEntity;
 import com.sxj.supervisor.service.member.IRoleService;
+@Service
 @Transactional
 public class RoleServiceImpl implements IRoleService {
 

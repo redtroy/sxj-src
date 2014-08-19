@@ -15,11 +15,13 @@ public @interface Sn
     
     int step() default 1;
     
-    String table() default "";
+    String table() default "T_SN";
     
     String stub() default "";
     
-    long stubValue() default 1l;
+    String stubValue() default "DEFAULT";
+    
+    String sn() default "ID";
     
     String pattern() default "0000";
 }

@@ -7,7 +7,13 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ContractBatchHisEntity;
+import com.sxj.util.persistent.QueryCondition;
 
+/**
+ * 批次变更管理Dao
+ * @author Ann
+ *
+ */
 public interface IContractBatchHisDao {
 	/**
 	 * 添加批次信息
@@ -30,7 +36,7 @@ public interface IContractBatchHisDao {
 	 *
 	 * @param    contractId
 	**/
-	public List<ContractBatchHisEntity> queryBacths(String contractId);
+	public List<ContractBatchHisEntity> queryBacths(QueryCondition<ContractBatchHisEntity> query);
 	/**
 	 * 刪除批次
 	 * @param contractId

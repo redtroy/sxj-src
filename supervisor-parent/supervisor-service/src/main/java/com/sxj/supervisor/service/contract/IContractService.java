@@ -5,7 +5,7 @@ import java.util.List;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
-import com.sxj.supervisor.model.contract.BatchItemModel;
+import com.sxj.supervisor.entity.contract.ContractItemHisEntity;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
@@ -58,7 +58,7 @@ public interface IContractService {
 	 * @param    batchList
 	 * @param    recordNo
 	**/
-	public void changeContract(String contractId, List<BatchItemModel> itemList, List<ContractBatchModel> batchList, String recordNo);
+	public void changeContract(String contractId, List<ContractItemHisEntity> itemList, List<ContractBatchModel> batchList, String recordNo);
 	
 	/**
 	 * 补损合同

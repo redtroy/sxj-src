@@ -51,26 +51,12 @@ public class BaseController {
 		return INDEX;
 	}
 
-	@RequestMapping("header")
-	public String ToHeader() {
-		return "page/main/header1";
-	}
-
 	@RequestMapping("content")
 	public String ToContent() {
 		return "page/main/content1";
 	}
 
-	@RequestMapping("footer")
-	public String ToFooter() {
-		return "page/main/footer1";
-	}
-
-	@RequestMapping("middel")
-	public String ToMiddel() {
-		return "page/main/middel1";
-	}
-
+	
 	@RequestMapping("default")
 	public String ToDefault() {
 		return "page/default";

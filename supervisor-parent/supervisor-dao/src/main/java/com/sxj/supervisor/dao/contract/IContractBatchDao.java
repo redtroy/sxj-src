@@ -6,7 +6,11 @@ import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
-
+/**
+ * 批次DAO
+ * @author Ann
+ *
+ */
 public interface IContractBatchDao {
 	/**
 	 * 添加批次信息

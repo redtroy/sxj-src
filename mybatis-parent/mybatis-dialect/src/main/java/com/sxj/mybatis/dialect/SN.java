@@ -8,7 +8,9 @@ public class SN
     
     private String stub;
     
-    private long stubValue;
+    private String stubValue;
+    
+    private String sn;
     
     public String getTableName()
     {
@@ -40,13 +42,24 @@ public class SN
         this.step = step;
     }
     
-    public long getStubValue()
+    public String getStubValue()
     {
         return stubValue;
     }
     
-    public void setStubValue(long stubValue)
+    public void setStubValue(String stubValue)
     {
         this.stubValue = stubValue;
     }
+    
+    public String getSn()
+    {
+        return sn;
+    }
+    
+    public void setSn(String sn)
+    {
+        this.sn = sn;
+    }
+    
 }

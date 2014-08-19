@@ -16,6 +16,10 @@ public abstract class Dialect
     
     public abstract String getSnString(SN sn);
     
+    public abstract String getSnInsertString(SN sn);
+    
+    public abstract String getSnSelectString(SN sn);
+    
     public Type getType()
     {
         return type;

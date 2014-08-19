@@ -1,7 +1,8 @@
 package com.sxj.mybatis.sn.interceptor;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -9,11 +10,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.WeakHashMap;
 
-import org.apache.ibatis.executor.statement.RoutingStatementHandler;
+import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
+import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.wrapper.DefaultObjectWrapperFactory;
@@ -27,6 +30,7 @@ import com.sxj.mybatis.sn.annotations.Sn;
 import com.sxj.spring.modules.util.ReflectUtils;
 import com.sxj.spring.modules.util.Reflections;
 
+@Intercepts({ @Signature(type = StatementHandler.class, method = "update", args = { Statement.class }) })
 public class SnInterceptor implements Interceptor
 {
     private Map<String, List<Field>> cachedSnFields = new WeakHashMap<String, List<Field>>();
@@ -36,12 +40,11 @@ public class SnInterceptor implements Interceptor
     @Override
     public Object intercept(Invocation invocation) throws Throwable
     {
-        RoutingStatementHandler statementHandler = (RoutingStatementHandler) invocation.getTarget();
+        StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
         Dialect dialect = getDialect(statementHandler);
         BoundSql boundSql = statementHandler.getBoundSql();
         Object parameter = boundSql.getParameterObject();
-        Connection connection = (Connection) invocation.getArgs()[0];
-        Statement statement = connection.createStatement();
+        Statement statement = (Statement) invocation.getArgs()[0];
         Class<?> userClass = Reflections.getUserClass(parameter);
         List<Field> snFields = findSnFields(userClass);
         for (Field field : snFields)
@@ -49,10 +52,14 @@ public class SnInterceptor implements Interceptor
             Sn sn = field.getAnnotation(Sn.class);
             SN snPojo = new SN();
             snPojo.setStep(sn.step());
+            snPojo.setSn(sn.sn());
             snPojo.setStub(sn.stub());
             snPojo.setStubValue(sn.stubValue());
             snPojo.setTableName(sn.table());
             String snSql = dialect.getSnString(snPojo);
+            
+            initSn(dialect, statement, snPojo);
+            
             while (statement.executeUpdate(snSql) < 1)
             {
                 snPojo.setStubValue(snPojo.getStubValue() + snPojo.getStep());
@@ -63,6 +70,33 @@ public class SnInterceptor implements Interceptor
                     df.format(snPojo.getStubValue() + snPojo.getStep()));
         }
         return invocation.proceed();
+    }
+    
+    private void initSn(Dialect dialect, Statement statement, SN snPojo)
+            throws SQLException
+    {
+        String snSelectString = dialect.getSnSelectString(snPojo);
+        ResultSet rs = null;
+        try
+        {
+            rs = statement.executeQuery(snSelectString);
+            rs.last();
+            int row = rs.getRow();
+            if (row == 0)
+            {
+                String snInsertString = dialect.getSnInsertString(snPojo);
+                statement.executeUpdate(snInsertString);
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (rs != null)
+                rs.close();
+        }
     }
     
     private List<Field> findSnFields(Class<?> userClass)
@@ -76,11 +110,12 @@ public class SnInterceptor implements Interceptor
         return snFields;
     }
     
-    private Dialect getDialect(RoutingStatementHandler statementHandler)
+    private Dialect getDialect(StatementHandler statementHandler)
     {
         MetaObject metaStatementHandler = MetaObject.forObject(statementHandler,
                 new DefaultObjectFactory(),
                 new DefaultObjectWrapperFactory());
+        Reflections.getFieldValue(statementHandler, "delegate");
         Configuration configuration = (Configuration) metaStatementHandler.getValue("delegate.configuration");
         Dialect.Type databaseType = null;
         try

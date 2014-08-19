@@ -7,16 +7,18 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.mapper.FunctionMapper;
+import com.sxj.mybatis.sn.annotations.Sn;
 
 @Entity(mapper = FunctionMapper.class)
-@Table(name = "T_FUNCTION")
+@Table(name = "M_FUNCTION")
 public class Function
 {
-    @Id(column = "F_FUNC_ID")
+    @Id(column = "ID")
     @GeneratedValue(strategy = GenerationType.UUID, length = 31)
     private String functionId;
     
-    @Column(name = "F_FUNC_NAME")
+    @Sn(table = "T_SN", stub = "F_SN_NAME", stubValue = "function", sn = "F_SN_NUMBER", step = 1, pattern = "0000")
+    @Column(name = "TITLE")
     private String functionName;
     
     public String getFunctionId()

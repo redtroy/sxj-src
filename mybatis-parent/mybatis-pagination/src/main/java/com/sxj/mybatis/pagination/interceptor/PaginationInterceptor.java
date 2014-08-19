@@ -47,24 +47,19 @@ public class PaginationInterceptor implements Interceptor
     
     public Object intercept(Invocation invocation) throws Throwable
     {
-        // StatementHandler statementHandler = (StatementHandler) invocation
-        // .getTarget();
         
         RoutingStatementHandler statementHandler = (RoutingStatementHandler) invocation.getTarget();
-        BaseStatementHandler delegate = (BaseStatementHandler) Reflections.invokeGetter(statementHandler,
+        BaseStatementHandler delegate = (BaseStatementHandler) Reflections.getFieldValue(statementHandler,
                 "delegate");
-        //                ReflectHelper.getValueByFieldName(statementHandler,
-        //                "delegate");
-        MappedStatement mappedStatement = (MappedStatement) Reflections.invokeGetter(delegate,
+        MappedStatement mappedStatement = (MappedStatement) Reflections.getFieldValue(delegate,
                 "mappedStatement");
-        //                ReflectHelper.getValueByFieldName(delegate,
-        //                "mappedStatement");
         
         BoundSql boundSql = statementHandler.getBoundSql();
         Object parameter = boundSql.getParameterObject();
         if (parameter != null && parameter instanceof Pagable
                 && ((IPagable) parameter).isPagable())
         {
+            
             // if (page == null || !(page instanceof Page))
             // throw new Exception("分页函数参数只能是Page类型！");
             // 计算总行数
