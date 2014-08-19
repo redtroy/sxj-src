@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
@@ -37,6 +38,7 @@ import com.sxj.util.persistent.ResultListImpl;
  * @author Ann
  *
  */
+@Service
 @Transactional
 public class ContractServiceImpl implements IContractService {
 
