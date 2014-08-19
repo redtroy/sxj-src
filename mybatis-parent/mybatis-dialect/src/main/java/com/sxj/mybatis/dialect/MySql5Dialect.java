@@ -25,4 +25,5 @@ public class MySql5Dialect extends Dialect
     {
         return MySql5PageHepler.getCountString(sql);
     }
+    
 }
