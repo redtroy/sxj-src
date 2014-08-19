@@ -31,7 +31,7 @@ public class BasicController extends BaseController{
 	@RequestMapping("menu")
 	public String ToMenu(ModelMap map) {
         List<FunctionModel> list=functionService.queryFunctions();
-      //  map.put("list", list);
+        map.put("list", list);
 		return "manage/menu";
 	}
 }
