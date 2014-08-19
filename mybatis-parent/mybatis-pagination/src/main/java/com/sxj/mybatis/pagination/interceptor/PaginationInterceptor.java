@@ -32,11 +32,11 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
+import com.sxj.mybatis.dialect.Dialect;
+import com.sxj.mybatis.dialect.MySql5Dialect;
+import com.sxj.mybatis.dialect.OracleDialect;
 import com.sxj.mybatis.pagination.IPagable;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.mybatis.pagination.dialect.Dialect;
-import com.sxj.mybatis.pagination.dialect.MySql5Dialect;
-import com.sxj.mybatis.pagination.dialect.OracleDialect;
 
 @Intercepts({ @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class }) })
 public class PaginationInterceptor implements Interceptor
@@ -65,7 +65,7 @@ public class PaginationInterceptor implements Interceptor
             // 计算总行数
             Connection connection = (Connection) invocation.getArgs()[0];
             String sql = boundSql.getSql();
-            
+            Dialect dialect = getDialect(statementHandler);
             String countSql = "select count(0) from (" + sql + ") t";
             PreparedStatement countStmt = connection.prepareStatement(countSql);
             BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(),
@@ -85,39 +85,6 @@ public class PaginationInterceptor implements Interceptor
             page.setTotalPage(page.getTotalResult() / page.getShowCount()
                     + (page.getTotalResult() % page.getShowCount() > 0 ? 1 : 0));
             
-            MetaObject metaStatementHandler = MetaObject.forObject(statementHandler,
-                    new DefaultObjectFactory(),
-                    new DefaultObjectWrapperFactory());
-            Configuration configuration = (Configuration) metaStatementHandler.getValue("delegate.configuration");
-            Dialect.Type databaseType = null;
-            try
-            {
-                databaseType = Dialect.Type.valueOf(configuration.getVariables()
-                        .getProperty("dialect")
-                        .toUpperCase());
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
-            if (databaseType == null)
-            {
-                throw new RuntimeException(
-                        "the value of the dialect property in configuration.xml is not defined : "
-                                + configuration.getVariables()
-                                        .getProperty("dialect"));
-            }
-            Dialect dialect = null;
-            switch (databaseType)
-            {
-                case MYSQL:
-                    dialect = new MySql5Dialect();
-                    break;
-                case ORACLE:
-                    dialect = new OracleDialect();
-                    break;
-            
-            }
             String pageSql = dialect.getLimitString(sql,
                     (page.getCurrentPage() - 1) * page.getShowCount(),
                     page.getShowCount());
@@ -137,6 +104,40 @@ public class PaginationInterceptor implements Interceptor
             // }
         }
         return invocation.proceed();
+    }
+    
+    private Dialect getDialect(RoutingStatementHandler statementHandler)
+    {
+        MetaObject metaStatementHandler = MetaObject.forObject(statementHandler,
+                new DefaultObjectFactory(),
+                new DefaultObjectWrapperFactory());
+        Configuration configuration = (Configuration) metaStatementHandler.getValue("delegate.configuration");
+        Dialect.Type databaseType = null;
+        try
+        {
+            databaseType = Dialect.Type.valueOf(configuration.getVariables()
+                    .getProperty("dialect")
+                    .toUpperCase());
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(
+                    "the value of the dialect property in configuration.xml is not defined : "
+                            + configuration.getVariables()
+                                    .getProperty("dialect"));
+        }
+        Dialect dialect = null;
+        switch (databaseType)
+        {
+            case MYSQL:
+                dialect = new MySql5Dialect();
+                break;
+            case ORACLE:
+                dialect = new OracleDialect();
+                break;
+        
+        }
+        return dialect;
     }
     
     private void setParameters(PreparedStatement ps,
