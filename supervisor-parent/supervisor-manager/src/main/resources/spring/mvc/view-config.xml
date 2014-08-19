@@ -23,7 +23,7 @@
 
 
 
-	<!-- 定义JSP视图 -->
+	<!-- 定义JSP视图 
 	<bean id="jspViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
@@ -33,7 +33,7 @@
 		<property name="contentType" value="text/html;charset=UTF-8" />
 		<property name="order" value="0" />
 
-	</bean>
+	</bean>-->
 
 	<!-- 定义freemark视图 -->
 	<bean id="viewResolver"
@@ -42,7 +42,7 @@
 			value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
 		<property name="requestContextAttribute" value="ctp" />
 		<property name="cache" value="true" />
-		<property name="prefix" value="/WEB-INF/views/fm/" />
+		<!-- <property name="prefix" value="/WEB-INF/views/fm/manage/" /> -->
 		<property name="suffix" value=".html" />
 		<property name="contentType" value="text/html;charset=UTF-8" />
 		<property name="order" value="1" />
@@ -58,12 +58,12 @@
 		<property name="templateLoaderPath" value="/WEB-INF/views/fm/" />
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="freemarkerSettings" ref="freemarkerConfiguration" />
-		<property name="freemarkerVariables">
+		<!-- <property name="freemarkerVariables">
 			<map>
 				<entry key="shiro" value-ref="shiroTags" />
 				<entry key="xw" value-ref="xwTags"></entry>
 			</map>
-		</property>
+		</property> -->
 	</bean>
 
 
