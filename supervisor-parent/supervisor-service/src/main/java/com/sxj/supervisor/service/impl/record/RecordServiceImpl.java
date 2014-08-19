@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.record.IRecordDao;
@@ -14,7 +15,7 @@ import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;
 import com.sxj.util.persistent.ResultListImpl;
-
+@Service
 @Transactional
 public class RecordServiceImpl implements IRecordService {
 

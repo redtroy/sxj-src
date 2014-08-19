@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IAccountDao;
@@ -12,7 +13,7 @@ import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;
-
+@Service
 @Transactional
 public class AccountServiceImpl implements IAccountService {
 	
