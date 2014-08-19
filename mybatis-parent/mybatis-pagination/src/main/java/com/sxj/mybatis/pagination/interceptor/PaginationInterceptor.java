@@ -37,6 +37,7 @@ import com.sxj.mybatis.dialect.MySql5Dialect;
 import com.sxj.mybatis.dialect.OracleDialect;
 import com.sxj.mybatis.pagination.IPagable;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.spring.modules.util.Reflections;
 
 @Intercepts({ @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class }) })
 public class PaginationInterceptor implements Interceptor
@@ -50,10 +51,14 @@ public class PaginationInterceptor implements Interceptor
         // .getTarget();
         
         RoutingStatementHandler statementHandler = (RoutingStatementHandler) invocation.getTarget();
-        BaseStatementHandler delegate = (BaseStatementHandler) ReflectHelper.getValueByFieldName(statementHandler,
+        BaseStatementHandler delegate = (BaseStatementHandler) Reflections.invokeGetter(statementHandler,
                 "delegate");
-        MappedStatement mappedStatement = (MappedStatement) ReflectHelper.getValueByFieldName(delegate,
+        //                ReflectHelper.getValueByFieldName(statementHandler,
+        //                "delegate");
+        MappedStatement mappedStatement = (MappedStatement) Reflections.invokeGetter(delegate,
                 "mappedStatement");
+        //                ReflectHelper.getValueByFieldName(delegate,
+        //                "mappedStatement");
         
         BoundSql boundSql = statementHandler.getBoundSql();
         Object parameter = boundSql.getParameterObject();
@@ -66,7 +71,8 @@ public class PaginationInterceptor implements Interceptor
             Connection connection = (Connection) invocation.getArgs()[0];
             String sql = boundSql.getSql();
             Dialect dialect = getDialect(statementHandler);
-            String countSql = "select count(0) from (" + sql + ") t";
+            //            String countSql = "select count(0) from (" + sql + ") t";
+            String countSql = dialect.getCountString(sql);
             PreparedStatement countStmt = connection.prepareStatement(countSql);
             BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(),
                     countSql, boundSql.getParameterMappings(), parameter);
@@ -88,7 +94,8 @@ public class PaginationInterceptor implements Interceptor
             String pageSql = dialect.getLimitString(sql,
                     (page.getCurrentPage() - 1) * page.getShowCount(),
                     page.getShowCount());
-            ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql); // 将分页sql语句反射回BoundSql.
+            //            ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql); 
+            Reflections.invokeSetter(boundSql, "sql", pageSql);// 将分页sql语句反射回BoundSql.
             //
             // String originalSql = (String) metaStatementHandler
             // .getValue("delegate.boundSql.sql");
