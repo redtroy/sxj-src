@@ -32,11 +32,12 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
+import com.sxj.mybatis.dialect.Dialect;
+import com.sxj.mybatis.dialect.MySql5Dialect;
+import com.sxj.mybatis.dialect.OracleDialect;
 import com.sxj.mybatis.pagination.IPagable;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.mybatis.pagination.dialect.Dialect;
-import com.sxj.mybatis.pagination.dialect.MySql5Dialect;
-import com.sxj.mybatis.pagination.dialect.OracleDialect;
+import com.sxj.spring.modules.util.Reflections;
 
 @Intercepts({ @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class }) })
 public class PaginationInterceptor implements Interceptor
@@ -46,13 +47,11 @@ public class PaginationInterceptor implements Interceptor
     
     public Object intercept(Invocation invocation) throws Throwable
     {
-        // StatementHandler statementHandler = (StatementHandler) invocation
-        // .getTarget();
         
         RoutingStatementHandler statementHandler = (RoutingStatementHandler) invocation.getTarget();
-        BaseStatementHandler delegate = (BaseStatementHandler) ReflectHelper.getValueByFieldName(statementHandler,
+        BaseStatementHandler delegate = (BaseStatementHandler) Reflections.getFieldValue(statementHandler,
                 "delegate");
-        MappedStatement mappedStatement = (MappedStatement) ReflectHelper.getValueByFieldName(delegate,
+        MappedStatement mappedStatement = (MappedStatement) Reflections.getFieldValue(delegate,
                 "mappedStatement");
         
         BoundSql boundSql = statementHandler.getBoundSql();
@@ -60,13 +59,15 @@ public class PaginationInterceptor implements Interceptor
         if (parameter != null && parameter instanceof Pagable
                 && ((IPagable) parameter).isPagable())
         {
+            
             // if (page == null || !(page instanceof Page))
             // throw new Exception("分页函数参数只能是Page类型！");
             // 计算总行数
             Connection connection = (Connection) invocation.getArgs()[0];
             String sql = boundSql.getSql();
-            
-            String countSql = "select count(0) from (" + sql + ") t";
+            Dialect dialect = getDialect(statementHandler);
+            //            String countSql = "select count(0) from (" + sql + ") t";
+            String countSql = dialect.getCountString(sql);
             PreparedStatement countStmt = connection.prepareStatement(countSql);
             BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(),
                     countSql, boundSql.getParameterMappings(), parameter);
@@ -85,58 +86,48 @@ public class PaginationInterceptor implements Interceptor
             page.setTotalPage(page.getTotalResult() / page.getShowCount()
                     + (page.getTotalResult() % page.getShowCount() > 0 ? 1 : 0));
             
-            MetaObject metaStatementHandler = MetaObject.forObject(statementHandler,
-                    new DefaultObjectFactory(),
-                    new DefaultObjectWrapperFactory());
-            Configuration configuration = (Configuration) metaStatementHandler.getValue("delegate.configuration");
-            Dialect.Type databaseType = null;
-            try
-            {
-                databaseType = Dialect.Type.valueOf(configuration.getVariables()
-                        .getProperty("dialect")
-                        .toUpperCase());
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
-            if (databaseType == null)
-            {
-                throw new RuntimeException(
-                        "the value of the dialect property in configuration.xml is not defined : "
-                                + configuration.getVariables()
-                                        .getProperty("dialect"));
-            }
-            Dialect dialect = null;
-            switch (databaseType)
-            {
-                case MYSQL:
-                    dialect = new MySql5Dialect();
-                    break;
-                case ORACLE:
-                    dialect = new OracleDialect();
-                    break;
-            
-            }
             String pageSql = dialect.getLimitString(sql,
                     (page.getCurrentPage() - 1) * page.getShowCount(),
                     page.getShowCount());
-            ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql); // 将分页sql语句反射回BoundSql.
-            //
-            // String originalSql = (String) metaStatementHandler
-            // .getValue("delegate.boundSql.sql");
-            // metaStatementHandler.setValue("delegate.boundSql.sql", dialect
-            // .getLimitString(originalSql, rowBounds.getOffset(),
-            // rowBounds.getLimit()));
-            // metaStatementHandler.setValue("delegate.rowBounds.offset",
-            // RowBounds.NO_ROW_OFFSET);
-            // metaStatementHandler.setValue("delegate.rowBounds.limit",
-            // RowBounds.NO_ROW_LIMIT);
-            // if (log.isDebugEnabled()) {
-            // log.debug("生成分页SQL : " + boundSql.getSql());
-            // }
+            //            ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql); 
+            Reflections.invokeSetter(boundSql, "sql", pageSql);// 将分页sql语句反射回BoundSql.
+            log.debug("分页sql：" + boundSql.getSql());
         }
         return invocation.proceed();
+    }
+    
+    private Dialect getDialect(RoutingStatementHandler statementHandler)
+    {
+        MetaObject metaStatementHandler = MetaObject.forObject(statementHandler,
+                new DefaultObjectFactory(),
+                new DefaultObjectWrapperFactory());
+        Configuration configuration = (Configuration) metaStatementHandler.getValue("delegate.configuration");
+        Dialect.Type databaseType = null;
+        try
+        {
+            databaseType = Dialect.Type.valueOf(configuration.getVariables()
+                    .getProperty("dialect")
+                    .toUpperCase());
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(
+                    "the value of the dialect property in configuration.xml is not defined : "
+                            + configuration.getVariables()
+                                    .getProperty("dialect"));
+        }
+        Dialect dialect = null;
+        switch (databaseType)
+        {
+            case MYSQL:
+                dialect = new MySql5Dialect();
+                break;
+            case ORACLE:
+                dialect = new OracleDialect();
+                break;
+        
+        }
+        return dialect;
     }
     
     private void setParameters(PreparedStatement ps,

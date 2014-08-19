@@ -1,9 +1,16 @@
-<<<<<<< HEAD
 target/
 
 .settings/
 .classpath
+<<<<<<< HEAD
+<<<<<<< HEAD
 
+.project
+=======
+
+=======
+
+>>>>>>> 61d2ea10df99428cbe74d0ddc63ae033643c3f6a
 .project
 =======
 /target/
@@ -16,3 +23,4 @@ target/
 /target/
 >>>>>>> 73e76367eb62e0589851f099d3253d630554d2f5
 >>>>>>> 7c4b4227003f4a93b12f893dfba25805e94062c6
+>>>>>>> f20c892bd9f38bd82ad2e718cb9b4c84d468ada5

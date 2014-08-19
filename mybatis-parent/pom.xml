@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sxj</groupId>
 	<artifactId>mybatis-parent</artifactId>
@@ -9,6 +8,8 @@
 	<modules>
 		<module>mybatis-orm</module>
 		<module>mybatis-pagination</module>
+    <module>mybatis-dialect</module>
+    <module>mybatis-sn</module>
 	</modules>
 	<properties>
 		<mybatis.version>3.2.7</mybatis.version>
@@ -27,7 +28,7 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>4.10</version>
+				<version>4.11</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
