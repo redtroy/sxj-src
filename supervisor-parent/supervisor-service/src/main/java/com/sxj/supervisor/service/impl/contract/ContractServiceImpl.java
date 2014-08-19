@@ -28,6 +28,7 @@ import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.ContractType;
 import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.util.exception.ServiceException;
@@ -203,7 +204,6 @@ public class ContractServiceImpl implements IContractService {
 		for (Iterator<ContractEntity> iterator = contractList.iterator(); iterator.hasNext();) {
 			ContractEntity contractEntity = (ContractEntity) iterator.next();
 			//JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(), StateLogModel.class);
-			
 			ContractModel cm = new ContractModel();
 			cm.setContract(contractEntity);
 			contractModelList.add(cm);
