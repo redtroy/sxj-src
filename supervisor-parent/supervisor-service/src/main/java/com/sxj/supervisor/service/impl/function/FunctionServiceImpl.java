@@ -23,7 +23,7 @@ public class FunctionServiceImpl implements IFunctionService {
 	@Transactional(readOnly=true)
 	public List<FunctionModel> queryFunctions() {
 		QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
-		query.addCondition("level", 1);
+		query.addCondition("parentId", 0);
 		List<FunctionEntity> functionList = functiondao.queryFunction(query);
 		List<FunctionModel> list = new ArrayList<FunctionModel>();
 		for (FunctionEntity functionEntity : functionList) {
@@ -31,9 +31,9 @@ public class FunctionServiceImpl implements IFunctionService {
 				continue;
 			}
 			QueryCondition<FunctionEntity> childrenQuery = new QueryCondition<FunctionEntity>();
-			childrenQuery.addCondition("level", 2);
+			childrenQuery.addCondition("parentId", functionEntity.getId());
 			List<FunctionEntity> childrenList = functiondao
-					.queryFunction(query);
+					.queryFunction(childrenQuery);
 			FunctionModel model = new FunctionModel();
 			model.setFunction(functionEntity);
 			model.setChildren(childrenList);
