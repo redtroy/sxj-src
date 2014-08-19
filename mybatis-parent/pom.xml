@@ -9,7 +9,8 @@
 		<module>mybatis-orm</module>
 		<module>mybatis-pagination</module>
     <module>mybatis-dialect</module>
-  </modules>
+    <module>mybatis-sn</module>
+	</modules>
 	<properties>
 		<mybatis.version>3.2.7</mybatis.version>
 		<spring.version>4.0.6.RELEASE</spring.version>

@@ -96,19 +96,7 @@ public class PaginationInterceptor implements Interceptor
                     page.getShowCount());
             //            ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql); 
             Reflections.invokeSetter(boundSql, "sql", pageSql);// 将分页sql语句反射回BoundSql.
-            //
-            // String originalSql = (String) metaStatementHandler
-            // .getValue("delegate.boundSql.sql");
-            // metaStatementHandler.setValue("delegate.boundSql.sql", dialect
-            // .getLimitString(originalSql, rowBounds.getOffset(),
-            // rowBounds.getLimit()));
-            // metaStatementHandler.setValue("delegate.rowBounds.offset",
-            // RowBounds.NO_ROW_OFFSET);
-            // metaStatementHandler.setValue("delegate.rowBounds.limit",
-            // RowBounds.NO_ROW_LIMIT);
-            // if (log.isDebugEnabled()) {
-            // log.debug("生成分页SQL : " + boundSql.getSql());
-            // }
+            log.debug("分页sql：" + boundSql.getSql());
         }
         return invocation.proceed();
     }
