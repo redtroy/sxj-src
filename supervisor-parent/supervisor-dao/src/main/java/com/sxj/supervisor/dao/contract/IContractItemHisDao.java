@@ -7,6 +7,7 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ContractItemHisEntity;
+import com.sxj.util.persistent.QueryCondition;
 
 public interface IContractItemHisDao {
 	/**
@@ -22,7 +23,7 @@ public interface IContractItemHisDao {
 	 *
 	 * @param    contractId
 	**/
-	public List<ContractItemHisEntity> queryItems(String contractId);
+	public List<ContractItemHisEntity> queryItems(QueryCondition<ContractItemHisEntity> query);
 	/**
 	 * 刪除條目
 	 * @param contractId

@@ -1,23 +1,39 @@
 package com.sxj.supervisor.service.impl.contract;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.supervisor.dao.contract.IContractBatchDao;
+import com.sxj.supervisor.dao.contract.IContractBatchHisDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
+import com.sxj.supervisor.dao.contract.IContractImgHisDao;
+import com.sxj.supervisor.dao.contract.IContractItemDao;
+import com.sxj.supervisor.dao.contract.IContractItemHisDao;
+import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
+import com.sxj.supervisor.entity.contract.ContractBatchHisEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.contract.ContractImgHisEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
-import com.sxj.supervisor.model.contract.BatchItemModel;
+import com.sxj.supervisor.entity.contract.ContractItemHisEntity;
+import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;
+import com.sxj.util.persistent.ResultListImpl;
+
 /**
- * 合同业务类
+ * 合同管理业务类
+ * 
  * @author Ann
  *
  */
@@ -29,6 +45,37 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Autowired
 	private IContractDao contractDao;
+
+	/**
+	 * 批次DAO
+	 */
+	@Autowired
+	private IContractBatchDao contractBatchDao;
+	/**
+	 * 变更合同批次DAO
+	 */
+	@Autowired
+	private IContractBatchHisDao contractBatchHisDao;
+	/**
+	 * 变更合同扫描件
+	 */
+	@Autowired
+	private IContractImgHisDao contractImgHisDao;
+	/**
+	 * 合同产品条目
+	 */
+	@Autowired
+	private IContractItemDao contractItemDao;
+	/**
+	 * 变更合同产品条目
+	 */
+	@Autowired
+	private IContractItemHisDao contractItemHisDao;
+	/**
+	 * 备案Dao
+	 */
+	@Autowired
+	private IRecordDao recordDao;
 	
 	/**
 	 * 新增合同
@@ -37,8 +84,25 @@ public class ContractServiceImpl implements IContractService {
 	public void addContract(ContractEntity contract,
 			List<ContractItemEntity> itemList,
 			List<ContractBatchEntity> batchList) {
-		// TODO Auto-generated method stub
-
+		contractDao.addContract(contract);
+		if (contract.getId() != null) {
+			if (itemList != null) {
+				for (int i = 0; i < itemList.size(); i++) {
+					ContractItemEntity ci = itemList.get(i);
+					ci.setContractId(contract.getId());
+				}
+				contractItemDao.addItems(itemList
+						.toArray(new ContractItemEntity[itemList.size()]));// 新增条目
+			}
+			if (batchList != null) {
+				for (int i = 0; i < batchList.size(); i++) {
+					ContractBatchEntity cb = batchList.get(i);
+					cb.setContractId(contract.getId());// 新增批次
+				}
+				contractBatchDao.addBatchs(batchList
+						.toArray(new ContractBatchEntity[batchList.size()]));
+			}
+		}
 	}
 
 	/**
@@ -55,8 +119,59 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public ContractModel getContract(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		ContractModel contractModel = new ContractModel();
+		ContractEntity contract = contractDao.getContract(id);// 合同主体
+		if (contract != null) {
+			contractModel.setContract(contract);
+			List<ContractItemEntity> itemList = contractItemDao
+					.queryItems(contract.getId());// 产品条目
+			if (itemList != null && itemList.size() > 0) {
+				contractModel.setItemList(itemList);
+			}
+			List<ContractBatchEntity> batchList = contractBatchDao
+					.queryBacths(contract.getId());// 批次
+			if (batchList != null && batchList.size() > 0) {
+				contractModel.setBatchList(batchList);
+			}
+			// 变更信息
+			QueryCondition<RecordEntity> qc = new QueryCondition<RecordEntity>();
+			Map<String, Object> condition =new HashMap<String, Object>();
+			condition.put("contractNo", contract.getId());//合同号
+			qc.setCondition(condition);
+			List<RecordEntity> record=recordDao.queryRecord(qc);
+			if(record!=null){
+				String recordId = "";
+				for (Iterator<RecordEntity> iterator = record.iterator(); iterator.hasNext();) {
+					RecordEntity recordEntity = (RecordEntity) iterator.next();
+					if(recordEntity.getType()==1){//合同变更备案类型
+						recordId +=recordEntity.getId()+",";
+					}
+					recordId = recordId.substring(0,recordId.length()-1);
+				}
+				//条目
+				QueryCondition<ContractItemHisEntity> itemQuery = new QueryCondition<ContractItemHisEntity>();
+				Map<String, Object> itemMap =new HashMap<String, Object>();
+				itemMap.put("recordIds", recordId);//合同号
+				itemQuery.setCondition(itemMap);
+				List itemHisList=contractItemHisDao.queryItems(itemQuery);
+				contractModel.setModifyItemList(itemHisList);
+				//批次
+				QueryCondition<ContractBatchHisEntity> batchQuery = new QueryCondition<ContractBatchHisEntity>();
+				Map<String, Object> batchMap =new HashMap<String, Object>();
+				batchMap.put("recordIds", recordId);//合同号
+				batchQuery.setCondition(batchMap);
+				List batchHisList=contractBatchHisDao.queryBacths(batchQuery);
+				contractModel.setModifyBatchList(batchHisList);
+				//变更扫描件
+				QueryCondition<ContractImgHisEntity> imgQuery = new QueryCondition<ContractImgHisEntity>();
+				Map<String, Object> imgMap =new HashMap<String, Object>();
+				imgMap.put("recordIds", recordId);//合同号
+				imgQuery.setCondition(imgMap);
+				List imgHisList=contractImgHisDao.queryImages(imgQuery);
+				contractModel.setHisImageList(imgHisList);
+			}
+		}
+		return contractModel;
 	}
 
 	/**
@@ -64,8 +179,24 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public ResultList<ContractModel> queryContracts(ContractQuery query) {
-		// TODO Auto-generated method stub
-		return null;
+		QueryCondition<ContractEntity> qc = new QueryCondition<ContractEntity>();
+		Map<String, Object> map =new HashMap<String, Object>();
+		map.put("contractNo", query.getContractNo());//合同号
+		map.put("recordNo", query.getRecordNo());//备案号
+		map.put("memberId", query.getMemberId());//签订会员ＩＤ
+		map.put("contractType",query.getContractType());//合同类型
+		map.put("refContractNo", query.getRefContractNo());//关联合同号
+		map.put("startCreateDate", query.getStartCreateDate());//开始签订时间
+		map.put("endCreateDate", query.getEndCreateDate());//结束签订合同号
+		map.put("startRecordDate", query.getStartRecordDate());//开始备案时间
+		map.put("endRecordDate", query.getEndRecordDate());//结束备案时间
+		map.put("confirmState", query.getConfirmState());//确认状态
+		map.put("state", query.getState());//合同状态
+		qc.setCondition(map);
+		List contractList =contractDao.queryContract(qc);
+		ResultList resultList =  new ResultListImpl();
+		resultList.setResults(contractList);
+		return resultList;
 	}
 
 	/**
@@ -73,8 +204,8 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void deleteContract(String id) {
-		// TODO Auto-generated method stub
-
+		contractDao.deleteContract(id);
+		
 	}
 
 	/**
@@ -82,10 +213,9 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void changeContract(String contractId,
-			List<BatchItemModel> itemList, List<ContractBatchModel> batchList,
+			List<ContractItemHisEntity> itemList, List<ContractBatchModel> batchList,
 			String recordNo) {
-		// TODO Auto-generated method stub
-
+		contractBatchHisDao.addBatchs(batchList.toArray(new ContractBatchHisEntity[itemList.size()]));
 	}
 
 	/**
@@ -103,9 +233,13 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void modifyState(String contractId, Integer state) {
-		// TODO Auto-generated method stub
-
+		ContractEntity ce=contractDao.getContract(contractId);
+		if(ce!=null){
+			ce.setState(state);
+			contractDao.updateContract(ce);
+		}
 	}
+
 	/**
 	 * 新增合同状态变更记录
 	 */
@@ -120,8 +254,11 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void modifyCheckState(String contractId, Integer state) {
-		// TODO Auto-generated method stub
-
+		ContractEntity ce=contractDao.getContract(contractId);
+		if(ce!=null){
+			ce.setState(state);
+			contractDao.updateContract(ce);
+		}
 	}
 
 }
