@@ -30,42 +30,8 @@
 	</resultMap>
 
 	<!-- 条件查询合同 -->
-	<select id="queryContract" resultType="java.util.List"
+	<select id="queryContract" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,CONTRACT_NO,ADDRESS,MEMBER_ID_A,MEMBER_ID_B,ENG_NAME,ENG_ADDRESS,RECORD_NO,SIGNED_DATE,VALIDITY_DATE,
-		START_DATE,DEPOSIT,REMARKS,DELIVERY_ADDRESS,STATE,TYPE,REF_CONTRACT_NO,MEMBER_NAME_A,MEMBER_NAME_B,STATE_LOG,IMG_ID,
-		CREATE_DATE,RECORD_DATE FROM CONTRACT WHERE 1=1]]>
-		<!-- 合同号 -->
-		<if test="condition.contractId != null">
-			<![CDATA[AND CONTRACT_ID = #{condition.contractId}]]>
-		</if>
-		<!-- 备案号 -->
-		<if test="condition.recordNo != null">
-			<![CDATA[AND RECORD_NO = #{condition.recordNo}]]>
-		</if>
-		<!-- 合同签订者  -->
-		<if test="condition.memberId != null">
-			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
-		</if>
-		<!-- 合同类型-->
-		<if test="condition.type != null">
-			<![CDATA[AND TYPE = #{condition.type}]]>
-		</if>
-		<!-- 关联招标合同号 -->
-		<if test="condition.refContractNo != null">
-			<![CDATA[AND REF_CONTRACT_NO = #{condition.refContractNo}]]>
-		</if>
-		<!-- 状态-->
-		<if test="condition.state != null">
-			<![CDATA[AND STATE = #{condition.state}]]>
-		</if>
-		<!-- 生成时间-->
-		<if test="condition.creationStartTime != null and condition.creationEndTime != null">
-			<![CDATA[AND CREATION_DATE >=#{condition.creationStartTime} AND CREATION_DATE <= #{condition.creationEndTime}]]>
-		</if>
-		<!-- 备案时间-->
-		<if test="condition.startTime != null and condition.endTime != null">
-			<![CDATA[AND REG_DATE >=#{condition.startTime} AND REG_DATE <= #{condition.endTime}]]>
-		</if>
+		<![CDATA[SELECT * FROM M_CONTRACT WHERE 1=1 ]]>
 	</select>
 </mapper>

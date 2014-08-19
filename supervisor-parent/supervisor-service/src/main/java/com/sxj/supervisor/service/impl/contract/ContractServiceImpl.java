@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.contract;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractBatchHisDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
@@ -28,6 +30,7 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;
 import com.sxj.util.persistent.ResultListImpl;
@@ -180,7 +183,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 查询合同列表
 	 */
 	@Override
-	public ResultList<ContractModel> queryContracts(ContractQuery query) {
+	public ResultList<ContractModel> queryContracts(ContractQuery query) throws ServiceException {
 		QueryCondition<ContractEntity> qc = new QueryCondition<ContractEntity>();
 		Map<String, Object> map =new HashMap<String, Object>();
 		map.put("contractNo", query.getContractNo());//合同号
@@ -195,9 +198,18 @@ public class ContractServiceImpl implements IContractService {
 		map.put("confirmState", query.getConfirmState());//确认状态
 		map.put("state", query.getState());//合同状态
 		qc.setCondition(map);
-		List contractList =contractDao.queryContract(qc);
-		ResultList resultList =  new ResultListImpl();
-		resultList.setResults(contractList);
+		List<ContractEntity> contractList =contractDao.queryContract(qc);
+		List<ContractModel> contractModelList = new ArrayList<ContractModel>();
+		for (Iterator<ContractEntity> iterator = contractList.iterator(); iterator.hasNext();) {
+			ContractEntity contractEntity = (ContractEntity) iterator.next();
+			//JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(), StateLogModel.class);
+			
+			ContractModel cm = new ContractModel();
+			cm.setContract(contractEntity);
+			contractModelList.add(cm);
+		}
+		ResultList<ContractModel> resultList =  new ResultListImpl<ContractModel>();
+		resultList.setResults(contractModelList);
 		return resultList;
 	}
 
