@@ -1,10 +1,13 @@
 package com.sxj.supervisor.manage.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.sxj.supervisor.model.function.FunctionModel;
 import com.sxj.supervisor.service.function.IFunctionService;
 
 @Controller
@@ -12,7 +15,7 @@ import com.sxj.supervisor.service.function.IFunctionService;
 public class BasicController extends BaseController{
     
 	@Autowired
-	private IFunctionService IFS;
+	private IFunctionService functionService;
 	
 	
 	@RequestMapping("footer")
@@ -27,8 +30,8 @@ public class BasicController extends BaseController{
 
 	@RequestMapping("menu")
 	public String ToMenu(ModelMap map) {
-       // List<FunctionModel> list=IFS.queryFunctions();
-        map.put("aaaa", 555555);
+        List<FunctionModel> list=functionService.queryFunctions();
+      //  map.put("list", list);
 		return "manage/menu";
 	}
 }

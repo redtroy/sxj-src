@@ -11,12 +11,10 @@
 		<result property="level" column="LEVEL" jdbcType="INTEGER" />
 	</resultMap>
 
-	<!-- 系统功能高级查询 -->
-	<select id="queryFunction" resultType="java.util.List"
+	<!-- 系统功能高级查询 --> 
+	<select id="queryFunction" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT  ID,TITLE,URL,PARENT_ID,LEVEL 
-		 FROM FUNCTION  WHERE PARENT_ID=#{condition.parentId}  ]]>
+		<![CDATA[SELECT ID,TITLE,URL,PARENT_ID,LEVEL 
+		 FROM M_FUNCTION  WHERE PARENT_ID=#{condition.parentId}]]>
 	</select>
-
-	
 </mapper>

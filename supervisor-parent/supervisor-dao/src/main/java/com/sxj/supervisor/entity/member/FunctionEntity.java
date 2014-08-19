@@ -16,7 +16,7 @@ import com.sxj.supervisor.dao.member.IFunctionDao;
  *
  */
 @Entity(mapper = IFunctionDao.class)
-@Table(name = "FUNCTION")
+@Table(name = "M_FUNCTION")
 public class FunctionEntity extends Pagable implements Serializable {
 	/**
 	 * 
