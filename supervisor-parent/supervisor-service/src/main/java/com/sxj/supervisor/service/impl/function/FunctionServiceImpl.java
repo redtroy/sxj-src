@@ -18,7 +18,11 @@ import com.sxj.util.persistent.QueryCondition;
 public class FunctionServiceImpl implements IFunctionService {
 	@Autowired
 	private IFunctionDao functiondao;
-
+    
+	
+	/**
+	 * 获取左侧菜单
+	 */
 	@Override
 	@Transactional(readOnly=true)
 	public List<FunctionModel> queryFunctions() {

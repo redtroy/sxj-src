@@ -45,6 +45,7 @@
 		<property name="mapperLocations" value="classpath:/mapper/**/*.xml" />
 
 
+
 	</bean>
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
