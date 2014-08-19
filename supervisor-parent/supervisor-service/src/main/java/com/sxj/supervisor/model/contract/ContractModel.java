@@ -3,8 +3,10 @@ package com.sxj.supervisor.model.contract;
 import java.io.Serializable;
 import java.util.List;
 
+import com.sxj.supervisor.entity.contract.ContractBatchEntity;
+import com.sxj.supervisor.entity.contract.ContractBatchHisEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
-import com.sxj.supervisor.entity.contract.ContractImgEntity;
+import com.sxj.supervisor.entity.contract.ContractImgHisEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ContractItemHisEntity;
 
@@ -18,15 +20,32 @@ public class ContractModel implements Serializable {
 	
 	private List<ContractItemEntity> itemList;
 	
-	private List<BatchItemModel> batchList;
+	private List<ContractBatchEntity> batchList;
 	
 	private List<ContractItemHisEntity> modifyItemList;
 	
-	private List<BatchItemModel> modifyBatchList;
+	private List<ContractBatchHisEntity> modifyBatchList;
 	
-	private List<ContractImgEntity> hisImageList;
+	private List<ContractImgHisEntity> hisImageList;
 	
 	private List<StateLogModel> stateLogList;
+
+	public List<ContractBatchHisEntity> getModifyBatchList() {
+		return modifyBatchList;
+	}
+
+	public void setModifyBatchList(List<ContractBatchHisEntity> modifyBatchList) {
+		this.modifyBatchList = modifyBatchList;
+	}
+
+	public List<ContractBatchEntity> getBatchList() {
+		return batchList;
+	}
+
+	public void setBatchList(List<ContractBatchEntity> batchList) {
+		this.batchList = batchList;
+	}
+
 
 	public ContractEntity getContract() {
 		return contract;
@@ -44,13 +63,6 @@ public class ContractModel implements Serializable {
 		this.itemList = itemList;
 	}
 
-	public List<BatchItemModel> getBatchList() {
-		return batchList;
-	}
-
-	public void setBatchList(List<BatchItemModel> batchList) {
-		this.batchList = batchList;
-	}
 
 	public List<ContractItemHisEntity> getModifyItemList() {
 		return modifyItemList;
@@ -60,19 +72,12 @@ public class ContractModel implements Serializable {
 		this.modifyItemList = modifyItemList;
 	}
 
-	public List<BatchItemModel> getModifyBatchList() {
-		return modifyBatchList;
-	}
 
-	public void setModifyBatchList(List<BatchItemModel> modifyBatchList) {
-		this.modifyBatchList = modifyBatchList;
-	}
-
-	public List<ContractImgEntity> getHisImageList() {
+	public List<ContractImgHisEntity> getHisImageList() {
 		return hisImageList;
 	}
 
-	public void setHisImageList(List<ContractImgEntity> hisImageList) {
+	public void setHisImageList(List<ContractImgHisEntity> hisImageList) {
 		this.hisImageList = hisImageList;
 	}
 

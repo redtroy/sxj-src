@@ -1,6 +1,7 @@
 package com.sxj.supervisor.model.contract;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class StateLogModel implements Serializable {
 	
@@ -9,16 +10,16 @@ public class StateLogModel implements Serializable {
 	 */
 	private static final long serialVersionUID = 8223133461217484753L;
 
-	private java.util.Date modifyDate;
+	private Date modifyDate;
 	
 	private Integer state;
 	
 	private String stateTitle;
 	
-	public java.util.Date getModifyDate() {
+	public Date getModifyDate() {
 		return modifyDate;
 	}
-	public void setModifyDate(java.util.Date modifyDate) {
+	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
 	public Integer getState() {

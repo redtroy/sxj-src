@@ -7,9 +7,13 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ContractImgHisEntity;
-import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.util.persistent.QueryCondition;
 
+/**
+ * 变更合同扫面件
+ * @author Ann
+ *
+ */
 public interface IContractImgHisDao {
 	/**
 	 * 新增合同扫描件
@@ -29,7 +33,7 @@ public interface IContractImgHisDao {
 	/**
 	 * 多条件查询扫描件
 	 */
-	public List<ContractImgHisEntity> queryImages(QueryCondition<MemberEntity> query);
+	public List<ContractImgHisEntity> queryImages(QueryCondition<ContractImgHisEntity> query);
 	/**
 	 * 查询扫描件
 	 * @param id
