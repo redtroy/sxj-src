@@ -27,7 +27,11 @@ public class BasicController extends BaseController{
 	public String ToHeader() {
 		return "manage/head";
 	}
-
+    /**
+     * 左侧菜单
+     * @param map
+     * @return
+     */
 	@RequestMapping("menu")
 	public String ToMenu(ModelMap map) {
         List<FunctionModel> list=functionService.queryFunctions();

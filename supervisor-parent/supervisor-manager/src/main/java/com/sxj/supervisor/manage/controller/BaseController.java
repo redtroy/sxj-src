@@ -57,9 +57,9 @@ public class BaseController {
 	}
 
 	
-	@RequestMapping("default")
-	public String ToDefault() {
-		return "page/default";
+	@RequestMapping("base")
+	public String ToBase() {
+		return "manage/base";
 	}
 
 	@RequestMapping("accessdenied")

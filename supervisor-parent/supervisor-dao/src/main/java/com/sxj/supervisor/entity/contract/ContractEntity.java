@@ -18,7 +18,7 @@ import com.sxj.supervisor.dao.contract.IContractDao;
  *
  */
 @Entity(mapper = IContractDao.class)
-@Table(name = "CONTRACT")
+@Table(name = "M_CONTRACT")
 public class ContractEntity extends Pagable implements Serializable {
 
 	/**
