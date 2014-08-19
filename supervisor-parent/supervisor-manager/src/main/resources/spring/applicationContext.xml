@@ -46,7 +46,7 @@
 	</bean>
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.sxj.supervisor.mapper" />
+		<property name="basePackage" value="com.sxj.supervisor.dao" />
 		<!--<property name="annotationClass" value="com.sxj.repository.mybatis.MyBatisRepository" 
 			/> -->
 	</bean>

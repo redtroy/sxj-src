@@ -1,10 +1,11 @@
 package com.sxj.supervisor.service.impl.function;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IFunctionDao;
 import com.sxj.supervisor.entity.member.FunctionEntity;
@@ -12,11 +13,14 @@ import com.sxj.supervisor.model.function.FunctionModel;
 import com.sxj.supervisor.service.function.IFunctionService;
 import com.sxj.util.persistent.QueryCondition;
 
-public class IFunctionServiceImpl implements IFunctionService {
+@Service
+@Transactional
+public class FunctionServiceImpl implements IFunctionService {
 	@Autowired
 	private IFunctionDao functiondao;
 
 	@Override
+	@Transactional(readOnly=true)
 	public List<FunctionModel> queryFunctions() {
 		QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
 		query.addCondition("level", 1);
@@ -43,6 +47,7 @@ public class IFunctionServiceImpl implements IFunctionService {
 	 * 获取系统功能信息
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public FunctionEntity getFunction(String id) {
 		FunctionEntity fe = functiondao.getFunction(id);
 		return fe;
