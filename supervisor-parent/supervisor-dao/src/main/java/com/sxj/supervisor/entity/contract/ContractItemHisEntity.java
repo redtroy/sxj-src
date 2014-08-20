@@ -12,7 +12,7 @@ import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractItemDao;
 
 @Entity(mapper = IContractItemDao.class)
-@Table(name = "CONTRACT_ITEM_HIS")
+@Table(name = "M_CONTRACT_ITEM_HIS")
 public class ContractItemHisEntity extends Pagable implements Serializable {
 
 	/**

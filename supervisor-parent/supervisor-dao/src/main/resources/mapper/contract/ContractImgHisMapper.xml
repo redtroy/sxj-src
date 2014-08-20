@@ -11,13 +11,9 @@
 	</resultMap>
 
 	<!-- 条件查询合同图片-->
-	<select id="queryImages" resultType="java.util.List"
+	<select id="queryImages" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,CONTRACT_NO,IMG_PATH,RECORD_NO 
-		 FROM CONTRACT WHERE 1=1]]>
-		<!-- 合同号 -->
-		<if test="condition.contractId != null">
-			<![CDATA[AND CONTRACT_ID = #{condition.contractId}]]>
-		</if>
+		<![CDATA[SELECT ID, CONTRACT_ID, IMG_PATH, RECORD_NO FROM M_CONTRACT_IMG_HIS 
+		WHERE  RECORD_NO in (#{condition.recordIds})]]>
 	</select>
 </mapper>

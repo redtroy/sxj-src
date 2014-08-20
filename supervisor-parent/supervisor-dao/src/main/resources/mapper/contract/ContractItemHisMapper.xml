@@ -16,10 +16,9 @@
 	</resultMap>
 
 <!-- 条件查询合同批次 -->
-	<select id="queryItems" resultType="java.util.List"
+	<select id="queryItems" resultMap="BaseResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID,CONTRACT_ID,PRODUCT_NAME,PRODUCT_MODEL,QUANTITY,
-		PRICE,AMOUNT,REMARKS,RECORD_NO 
-		  FROM CONTRACT_ITEM WHERE CONTRACT_ID=#{contractId}]]>
+		<![CDATA[SELECT ID, CONTRACT_ID, PRODUCT_NAME, PRODUCT_MODEL, QUANTITY, PRICE,
+ 		AMOUNT, REMARKS,RECORD_NO FROM M_CONTRACT_ITEM_HIS WHERE RECORD_NO in (#{condition.recordIds})]]>
 	</select>
 </mapper>

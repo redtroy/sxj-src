@@ -17,7 +17,7 @@ import com.sxj.supervisor.dao.contract.IContractBatchDao;
  *
  */
 @Entity(mapper = IContractBatchDao.class)
-@Table(name = "CONTRACT_BATCH")
+@Table(name = "M_CONTRACT_BATCH")
 public class ContractBatchEntity extends Pagable implements Serializable {
 	/**
 	 * 
