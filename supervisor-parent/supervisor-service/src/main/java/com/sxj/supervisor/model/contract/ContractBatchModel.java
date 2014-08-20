@@ -3,6 +3,13 @@ package com.sxj.supervisor.model.contract;
 import java.io.Serializable;
 import java.util.List;
 
+import com.sxj.supervisor.entity.contract.ContractBatchEntity;
+
+/**
+ * 合同批次信息
+ * @author Ann
+ *
+ */
 public class ContractBatchModel implements Serializable {
 	/**
 	 * 
@@ -10,62 +17,21 @@ public class ContractBatchModel implements Serializable {
 	private static final long serialVersionUID = 2009473407892728810L;
 
 	/**
-	 * 主键
-	**/
-	private String id;
-	
-	/**
-	 * 合同编号
-	**/
-	private String contractId;
-	
-	/**
-	 * RFID号
-	**/
-	private String rfidNo;
-	
-	/**
-	 * 金额
-	**/
-	private Long amount;
-	
+	 * 合同批次信息
+	 */
+	private ContractBatchEntity batch;
+
 	/**
 	 * 批次条目JSON
-	**/
+	 **/
 	private List<BatchItemModel> batchItems;
-	
-	private String recordNo;
 
-	public String getId() {
-		return id;
+	public ContractBatchEntity getBatch() {
+		return batch;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getContractId() {
-		return contractId;
-	}
-
-	public void setContractId(String contractId) {
-		this.contractId = contractId;
-	}
-
-	public String getRfidNo() {
-		return rfidNo;
-	}
-
-	public void setRfidNo(String rfidNo) {
-		this.rfidNo = rfidNo;
-	}
-
-	public Long getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Long amount) {
-		this.amount = amount;
+	public void setBatch(ContractBatchEntity batch) {
+		this.batch = batch;
 	}
 
 	public List<BatchItemModel> getBatchItems() {
@@ -76,11 +42,4 @@ public class ContractBatchModel implements Serializable {
 		this.batchItems = batchItems;
 	}
 
-	public String getRecordNo() {
-		return recordNo;
-	}
-
-	public void setRecordNo(String recordNo) {
-		this.recordNo = recordNo;
-	}
 }

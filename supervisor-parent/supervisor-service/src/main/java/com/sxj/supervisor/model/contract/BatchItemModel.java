@@ -28,10 +28,6 @@ public class BatchItemModel implements Serializable {
 	**/
 	private Float quantity;
 	
-	/**
-	 * 修改记录
-	**/
-	private String record;
 
 	public String getId() {
 		return id;
@@ -65,11 +61,4 @@ public class BatchItemModel implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public String getRecord() {
-		return record;
-	}
-
-	public void setRecord(String record) {
-		this.record = record;
-	}
 }

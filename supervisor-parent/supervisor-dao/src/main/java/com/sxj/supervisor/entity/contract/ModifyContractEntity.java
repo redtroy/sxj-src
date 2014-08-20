@@ -3,50 +3,46 @@ package com.sxj.supervisor.entity.contract;
 import java.io.Serializable;
 
 import com.sxj.mybatis.orm.annotations.Column;
-import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
-import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.contract.IContractBatchDao;
+
 /**
- * 变更扫描件
+ * 合同变更信息
  * @author Ann
  *
  */
-@Entity(mapper = IContractBatchDao.class)
-@Table(name = "M_CONTRACT_IMG_HIS")
-public class ContractImgHisEntity extends Pagable implements Serializable {
+public class ModifyContractEntity extends Pagable implements Serializable {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7818294410415140004L;
+	private static final long serialVersionUID = -5950638462075792173L;
 
 	/**
-	 * 标识
-	**/
+	 * 主键
+	 **/
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
-	
+
 	/**
-	 * 合同Id
-	**/
+	 * 合同ID
+	 */
 	@Column(name = "CONTRACT_ID")
 	private String contractId;
-	
 	/**
-	 * 图片Path
-	**/
-	@Column(name = "IMG_PATH")
-	private String imgPath;
-	
-	/**
-	 * 变更备案号
-	**/
+	 * 备案号
+	 */
 	@Column(name = "RECORD_NO")
 	private String recordNo;
+
+	/**
+	 * 扫描件
+	 */
+	@Column(name = "IMG_PATH")
+	private String imgPath;
 
 	public String getId() {
 		return id;
@@ -64,6 +60,14 @@ public class ContractImgHisEntity extends Pagable implements Serializable {
 		this.contractId = contractId;
 	}
 
+	public String getRecordNo() {
+		return recordNo;
+	}
+
+	public void setRecordNo(String recordNo) {
+		this.recordNo = recordNo;
+	}
+
 	public String getImgPath() {
 		return imgPath;
 	}
@@ -72,11 +76,4 @@ public class ContractImgHisEntity extends Pagable implements Serializable {
 		this.imgPath = imgPath;
 	}
 
-	public String getRecordNo() {
-		return recordNo;
-	}
-
-	public void setRecordNo(String recordNo) {
-		this.recordNo = recordNo;
-	}
 }

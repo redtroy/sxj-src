@@ -4,7 +4,9 @@ package com.sxj.supervisor.model.contract;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ContractQuery implements Serializable {
+import com.sxj.mybatis.pagination.Pagable;
+
+public class ContractQuery extends Pagable  implements Serializable {
 	/**
 	 * 
 	 */

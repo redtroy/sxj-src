@@ -26,7 +26,10 @@ public interface IContractItemDao {
 	 * @param    contractId
 	**/
 	public List<ContractItemEntity> queryItems(String contractId);
-	
+	/**
+	 * 删除条目
+	 * @param contractId
+	 */
 	@Delete
 	public void deleteItems(String contractId);
 }

@@ -6,7 +6,7 @@ import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
-import com.sxj.supervisor.entity.contract.ContractBatchHisEntity;
+import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.util.persistent.QueryCondition;
 
 /**
@@ -14,14 +14,14 @@ import com.sxj.util.persistent.QueryCondition;
  * @author Ann
  *
  */
-public interface IContractBatchHisDao {
+public interface IContractModifyBatchDao {
 	/**
 	 * 添加批次信息
 	 *
 	 * @param    batchs
 	**/
 	@Insert
-	public void addBatchs(ContractBatchHisEntity[] batchs);
+	public void addBatchs(ModifyBatchEntity[] batchs);
 	
 	/**
 	 * 获取批次信息
@@ -29,14 +29,14 @@ public interface IContractBatchHisDao {
 	 * @param    id
 	**/
 	@Get
-	public ContractBatchHisEntity getBatch(String id);
+	public ModifyBatchEntity getBatch(String id);
 	
 	/**
 	 * 查询批次列表
 	 *
 	 * @param    contractId
 	**/
-	public List<ContractBatchHisEntity> queryBacths(QueryCondition<ContractBatchHisEntity> query);
+	public List<ModifyBatchEntity> queryBacths(QueryCondition<ModifyBatchEntity> query);
 	/**
 	 * 刪除批次
 	 * @param contractId
@@ -48,5 +48,5 @@ public interface IContractBatchHisDao {
 	 * @param items
 	 */
 	@Update
-	public void updateItems(ContractBatchHisEntity[] items);
+	public void updateItems(ModifyBatchEntity[] items);
 }
