@@ -43,6 +43,7 @@ public class HierarchicalCache implements Cache
     
     private void putObject(int level, Object key, Object value)
     {
+        
         HierarchicalCacheManager.set(level, this.cacheId, key, value);
         if ((level + 1) <= this.level)
             putObject(level + 1, key, value);

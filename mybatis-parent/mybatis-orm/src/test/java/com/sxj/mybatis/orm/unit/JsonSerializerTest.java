@@ -2,6 +2,8 @@ package com.sxj.mybatis.orm.unit;
 
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 import com.google.gson.Gson;
@@ -22,8 +24,7 @@ public class JsonSerializerTest
         object.setValue(value);
         Gson gson = new GsonBuilder().registerTypeAdapter(Class.class,
                 new ClassTypeAdapter()).create();
-        gson.fromJson(object.getValue(), Function.class);
+        gson.fromJson(object.getValue(), new ArrayList<Function>().getClass());
         fail("Not yet implemented");
     }
-    
 }
