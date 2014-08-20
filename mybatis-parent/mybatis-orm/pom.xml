@@ -37,17 +37,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.scannotation</groupId>
-			<artifactId>scannotation</artifactId>
-			<version>1.0.2</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>javassist</artifactId>
-					<groupId>javassist</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>javassist</groupId>
 			<artifactId>javassist</artifactId>
 			<version>3.9.0.GA</version>
