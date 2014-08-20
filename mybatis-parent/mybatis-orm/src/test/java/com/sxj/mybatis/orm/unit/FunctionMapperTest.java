@@ -42,6 +42,7 @@ public class FunctionMapperTest
     public void testGet()
     {
         Function function = mapper.getFunction("A6D7ZXo6oDMKbOtbY5vp6RF6nJXSbAK");
+        mapper.getFunction("A6D7ZXo6oDMKbOtbY5vp6RF6nJXSbAK");
         System.out.println(function.getFunctionName());
     }
     

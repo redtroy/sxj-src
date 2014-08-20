@@ -33,6 +33,16 @@ public class HierarchicalCacheManager
     
     private static CacheExpiredListener listener;
     
+    public HierarchicalCacheManager()
+    {
+        initCacheProvider();
+    }
+    
+    public static void initCacheProvider()
+    {
+        initCacheProvider(null);
+    }
+    
     public static void initCacheProvider(CacheExpiredListener listener)
     {
         

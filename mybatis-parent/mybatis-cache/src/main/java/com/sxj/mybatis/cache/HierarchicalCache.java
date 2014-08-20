@@ -4,7 +4,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 
 import org.apache.ibatis.cache.Cache;
 
-import com.sxj.cache.manager.CacheLevel;
+import com.sxj.cache.manager.HierarchicalCacheManager;
 
 public class HierarchicalCache implements Cache
 {
@@ -13,7 +13,7 @@ public class HierarchicalCache implements Cache
     
     private String cacheId;
     
-    private CacheLevel level = CacheLevel.EHCACHE;
+    private int level = 0;
     
     public HierarchicalCache(String cacheId)
     {
@@ -38,14 +38,30 @@ public class HierarchicalCache implements Cache
     @Override
     public void putObject(Object key, Object value)
     {
-        // TODO Auto-generated method stub
-        System.out.println("putting object");
+        putObject(0, key, value);
+    }
+    
+    private void putObject(int level, Object key, Object value)
+    {
+        HierarchicalCacheManager.set(level, this.cacheId, key, value);
+        if ((level + 1) <= this.level)
+            putObject(level + 1, key, value);
     }
     
     @Override
     public Object getObject(Object key)
     {
-        System.out.println("getting object");
+        
+        return getObject(0, key);
+    }
+    
+    private Object getObject(int level, Object key)
+    {
+        Object object = HierarchicalCacheManager.get(level, this.cacheId, key);
+        if (object != null)
+            return object;
+        if ((level + 1) <= this.level)
+            return getObject(level + 1, key);
         return null;
     }
     
@@ -87,12 +103,12 @@ public class HierarchicalCache implements Cache
         this.cacheId = cacheId;
     }
     
-    public CacheLevel getLevel()
+    public int getLevel()
     {
         return level;
     }
     
-    public void setLevel(CacheLevel level)
+    public void setLevel(int level)
     {
         this.level = level;
     }

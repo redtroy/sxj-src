@@ -10,7 +10,7 @@ import com.sxj.mybatis.orm.mapper.FunctionMapper;
 import com.sxj.mybatis.sn.annotations.Sn;
 
 @Entity(mapper = FunctionMapper.class)
-@Table(name = "M_FUNCTION")
+@Table(name = "TEST_FUNCTION")
 public class Function
 {
     @Id(column = "ID")
