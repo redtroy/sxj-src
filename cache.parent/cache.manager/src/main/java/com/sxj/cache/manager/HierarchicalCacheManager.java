@@ -20,10 +20,10 @@ import com.sxj.cache.redis.RedisCacheProvider;
  * 缓存管理器
  * @author liudong
  */
-class CacheManager
+public class HierarchicalCacheManager
 {
     
-    private final static Logger log = LoggerFactory.getLogger(CacheManager.class);
+    private final static Logger log = LoggerFactory.getLogger(HierarchicalCacheManager.class);
     
     private final static String CONFIG_FILE = "/cache.properties";
     
@@ -36,17 +36,17 @@ class CacheManager
     public static void initCacheProvider(CacheExpiredListener listener)
     {
         
-        InputStream configStream = CacheManager.class.getClassLoader()
+        InputStream configStream = HierarchicalCacheManager.class.getClassLoader()
                 .getParent()
                 .getResourceAsStream(CONFIG_FILE);
         if (configStream == null)
-            configStream = CacheManager.class.getResourceAsStream(CONFIG_FILE);
+            configStream = HierarchicalCacheManager.class.getResourceAsStream(CONFIG_FILE);
         if (configStream == null)
             throw new CacheException("Cannot find " + CONFIG_FILE + " !!!");
         
         Properties props = new Properties();
         
-        CacheManager.listener = listener;
+        HierarchicalCacheManager.listener = listener;
         try
         {
             props.load(configStream);
@@ -57,17 +57,17 @@ class CacheManager
                         "At lease one provider_class should be defined!");
             if (props.getProperty("cache.L1.provider_class") != null)
             {
-                CacheManager.l1_provider = getProviderInstance(props.getProperty("cache.L1.provider_class"));
-                CacheManager.l1_provider.start(getProviderProperties(props,
-                        CacheManager.l1_provider));
+                HierarchicalCacheManager.l1_provider = getProviderInstance(props.getProperty("cache.L1.provider_class"));
+                HierarchicalCacheManager.l1_provider.start(getProviderProperties(props,
+                        HierarchicalCacheManager.l1_provider));
                 log.info("Using L1 CacheProvider : "
                         + l1_provider.getClass().getName());
             }
             if (props.getProperty("cache.L2.provider_class") != null)
             {
-                CacheManager.l2_provider = getProviderInstance(props.getProperty("cache.L2.provider_class"));
-                CacheManager.l2_provider.start(getProviderProperties(props,
-                        CacheManager.l2_provider));
+                HierarchicalCacheManager.l2_provider = getProviderInstance(props.getProperty("cache.L2.provider_class"));
+                HierarchicalCacheManager.l2_provider.start(getProviderProperties(props,
+                        HierarchicalCacheManager.l2_provider));
                 log.info("Using L2 CacheProvider : "
                         + l2_provider.getClass().getName());
             }
@@ -110,9 +110,20 @@ class CacheManager
     private final static Cache _GetCache(int level, String cache_name,
             boolean autoCreate)
     {
-        return ((level == 1) ? l1_provider : l2_provider).buildCache(cache_name,
-                autoCreate,
-                listener);
+        switch (level)
+        {
+            case 1:
+                return l1_provider.buildCache(cache_name, autoCreate, listener);
+            case 2:
+                return l2_provider.buildCache(cache_name, autoCreate, listener);
+            default:
+                return new NullCacheProvider().buildCache(cache_name,
+                        autoCreate,
+                        listener);
+        }
+        //        return ((level == 1) ? l1_provider : l2_provider).buildCache(cache_name,
+        //                autoCreate,
+        //                listener);
     }
     
     public final static void shutdown(int level)

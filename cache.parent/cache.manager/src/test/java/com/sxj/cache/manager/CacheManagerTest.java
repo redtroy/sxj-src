@@ -6,12 +6,11 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Before;
-import org.junit.Test;
 
 public class CacheManagerTest
 {
     
-    private CacheManager cacheManager;
+    private HierarchicalCacheManager cacheManager;
     
     @Before
     public void setUp()
@@ -26,7 +25,6 @@ public class CacheManagerTest
         Assert.assertEquals("demovalue", object.toString());
     }
     
-    @Test
     public void testL2Cache()
     {
         List<String> result = new ArrayList<String>();
