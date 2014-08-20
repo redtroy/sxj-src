@@ -357,7 +357,6 @@ public class GenericStatementBuilder extends BaseBuilder
         contents.add(this.getInsertSql());
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,

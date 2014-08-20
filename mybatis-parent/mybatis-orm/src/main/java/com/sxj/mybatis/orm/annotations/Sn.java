@@ -1,4 +1,4 @@
-package com.sxj.mybatis.sn.annotations;
+package com.sxj.mybatis.orm.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
