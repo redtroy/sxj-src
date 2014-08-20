@@ -8,7 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.supervisor.model.function.FunctionModel;
-import com.sxj.supervisor.service.function.IFunctionService;
+import com.sxj.supervisor.service.system.IFunctionService;
 
 @Controller
 @RequestMapping("/basic")

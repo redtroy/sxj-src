@@ -13,11 +13,12 @@ import com.sxj.supervisor.dao.contract.IContractBatchDao;
 
 /**
  * 批次条目实体
+ * 
  * @author Administrator
  *
  */
 @Entity(mapper = IContractBatchDao.class)
-@Table(name = "CONTRACT_BATCH")
+@Table(name = "M_CONTRACT_BATCH")
 public class ContractBatchEntity extends Pagable implements Serializable {
 	/**
 	 * 
@@ -30,6 +31,12 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
+
+	/**
+	 * 批次号
+	 */
+	@Column(name = "BATCH_NO")
+	private String batchNo;
 
 	/**
 	 * 合同编号
@@ -57,6 +64,14 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 
 	public String getId() {
 		return id;
+	}
+
+	public String getBatchNo() {
+		return batchNo;
+	}
+
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
 	public void setId(String id) {

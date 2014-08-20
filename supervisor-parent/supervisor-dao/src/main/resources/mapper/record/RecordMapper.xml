@@ -23,11 +23,11 @@
 	</resultMap>
 
 	<!-- 条件查询备案 -->
-	<select id="queryRecord" resultType="java.util.List"
+	<select id="queryRecord" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,RECORD_NO,APPLY_ID,APPLY_NAME,MEMBER_ID_A,MEMBER_NAME_A,MEMBER_ID_B,MEMBER_NAME_B,
 		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE 
-		 FROM MENBER WHERE 1=1]]>
+		 FROM M_RECORD WHERE 1=1]]>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null">
 			<![CDATA[AND RECORD_NO = #{condition.recordNo}]]>
