@@ -9,31 +9,41 @@
 package com.sxj.mybatis.orm;
 
 import java.io.IOException;
-import java.util.Map;
+import java.net.URL;
+import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.scannotation.AnnotationDB;
-import org.scannotation.ClasspathUrlFinder;
-import org.scannotation.WarUrlFinder;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternUtils;
+import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.core.type.ClassMetadata;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.builder.GenericStatementBuilder;
+import com.sxj.spring.modules.util.Reflections;
 
 /**
  * Class description goes here.
  */
 public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
-        implements ApplicationContextAware
+        implements ApplicationContextAware, ResourceLoaderAware
 {
     
     private Configuration configuration;
+    
+    private ResourceLoader resourceLoader;
     
     private ApplicationContext applicationContext;
     
@@ -60,16 +70,50 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
     
     private Set<String> findEntityClassNames() throws IOException
     {
-        AnnotationDB annotationDB = new AnnotationDB();
-        annotationDB.setScanClassAnnotations(true);
-        if (applicationContext instanceof WebApplicationContext)
-            annotationDB.scanArchives(WarUrlFinder.findWebInfLibClasspaths(((WebApplicationContext) applicationContext).getServletContext()));
-        else
-            annotationDB.scanArchives(ClasspathUrlFinder.findClassPaths());
-        Map<String, Set<String>> map = annotationDB.getAnnotationIndex();
-        Set<String> classNames = map.get(Entity.class.getName());
+        Set<String> classNames = new HashSet<String>();
+        SimpleMetadataReaderFactory metadataReaderFactory = new SimpleMetadataReaderFactory(
+                applicationContext);
+        String fieldValue = (String) Reflections.getFieldValue(this,
+                "typeAliasesPackage");
+        Resource[] resources = applicationContext.getResources("classpath:"
+                + StringUtils.replaceChars(fieldValue, '.', '/')
+                + "/**/*.class");
+        for (Resource resource : resources)
+        {
+            if (resource.isReadable())
+            {
+                MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                ClassMetadata classMetadata = metadataReader.getClassMetadata();
+                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+                String entityAnnotation = Entity.class.getName();
+                if (annotationMetadata.isAnnotated(entityAnnotation))
+                {
+                    classNames.add(classMetadata.getClassName());
+                }
+            }
+        }
         
         return classNames;
+    }
+    
+    private URL[] findClassPath() throws IOException
+    {
+        ResourcePatternResolver resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
+        String fieldValue = (String) Reflections.getFieldValue(this,
+                "typeAliasesPackage");
+        Resource[] resources = resourcePatternResolver.getResources("classpath:"
+                + StringUtils.replaceChars(fieldValue, '.', '/')
+                + "/**/*.class");
+        URL[] classPaths = new URL[resources.length];
+        for (int i = 0; i < resources.length; i++)
+            classPaths[i] = resources[i].getURL();
+        return classPaths;
+    }
+    
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader)
+    {
+        this.resourceLoader = resourceLoader;
     }
     
     @Override
