@@ -38,4 +38,7 @@ public class BasicController extends BaseController{
         map.put("list", list);
 		return "manage/menu";
 	}
+	
 }
+
+

@@ -7,32 +7,34 @@
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="bLicenseNo" column="B_LICENSE_NO" jdbcType="VARCHAR" />
-		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="type" column="TYPE" jdbcType="INTEGER"
+			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
 		<result property="area" column="AREA" jdbcType="VARCHAR" />
 		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR" />
 		<result property="energyNo" column="ENERGY_NO" jdbcType="VARCHAR" />
 		<result property="phoneNo" column="PHONE_NO" jdbcType="VARCHAR" />
 		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
 		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
-		<result property="regDate" column="REG_DATE" jdbcType="TIME" />
-		<result property="authorDate" column="AUTHOR_DATE" jdbcType="TIME" />
-		<result property="state" column="STATE" jdbcType="INTEGER" />
-		<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER" />
+		<result property="regDate" column="REG_DATE" jdbcType="DATE" />
+		<result property="authorDate" column="AUTHOR_DATE" jdbcType="DATE" />
+		<result property="state" column="STATE" jdbcType="INTEGER"
+			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+		<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER"
+			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
 		<result property="totalAmount" column="TOTAL_AMOUNT" jdbcType="INTEGER" />
 		<result property="accountNum" column="ACCOUNT_NUM" jdbcType="INTEGER" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
-		<result property="bLicensePath" column="B_LICENSE_PATH" jdbcType="VARCHAR" />
+		<result property="bLicensePath" column="B_LICENSE_PATH"
+			jdbcType="VARCHAR" />
 		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 条件查询会员 -->
-	<select id="queryMembers" resultType="java.util.List"
+	<select id="queryMembers" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,NAME,B_LICENSE_NO,TYPE,AREA,CONTACTS,ENERGY_NO,PHONE_NO,
-		ADDRESS,TEL_NUM,REG_DATE,AUTHOR_DATE,STATE,CHECK_STATE,TOTAL_AMOUNT,ACCOUNT_NUM,
-		PASSWORD,MEMBER_NO,B_LICENSE_PATH,ENERGY_PATH
-		 FROM M_MENBER WHERE 1=1]]>
+		<![CDATA[SELECT *
+		 FROM M_MEMBER WHERE 1=1]]>
 		<!-- 会员号 -->
 		<if test="condition.memberNo != null">
 			<![CDATA[AND MEMBER_NO = #{condition.memberNo}]]>
@@ -45,7 +47,7 @@
 		<if test="condition.contacts != null">
 			<![CDATA[AND CONTACTS = #{condition.contacts}]]>
 		</if>
-		<!-- 联系人电话-->
+		<!-- 联系人电话 -->
 		<if test="condition.phoneNo != null">
 			<![CDATA[AND PHONE_NO = #{condition.phoneNo}]]>
 		</if>
@@ -61,7 +63,7 @@
 		<if test="condition.energyNo != null">
 			<![CDATA[AND ENERGY_NO = #{condition.energyNo}]]>
 		</if>
-		<!-- 会员类型-->
+		<!-- 会员类型 -->
 		<if test="condition.type != null">
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
