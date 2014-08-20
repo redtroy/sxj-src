@@ -12,13 +12,13 @@ import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 
 /**
- * 合同补损信息
+ * 合同补损批次信息
  * 
  * @author Administrator
  *
  */
 @Entity(mapper = IContractBatchDao.class)
-@Table(name = "M_CONTRACT_BATCH_HIS")
+@Table(name = "M_CONTRACT_REPLENISH_BATCH")
 public class ReplenishBatchEntity extends Pagable implements Serializable {
 	/**
 	 * 
@@ -40,8 +40,8 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	/**
 	 * 变更ID
 	 **/
-	@Column(name = "MODIFY_ID")
-	private String modifyId;
+	@Column(name = "REPLENISH_ID")
+	private String replenishId;
 
 	/**
 	 * RFID号
@@ -61,6 +61,14 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	@Column(name = "BATCH_ITEMS")
 	private String batchItems;
 
+	public String getReplenishId() {
+		return replenishId;
+	}
+
+	public void setReplenishId(String replenishId) {
+		this.replenishId = replenishId;
+	}
+
 	public String getBatchNo() {
 		return batchNo;
 	}
@@ -77,13 +85,6 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 		this.id = id;
 	}
 
-	public String getModifyId() {
-		return modifyId;
-	}
-
-	public void setModifyId(String modifyId) {
-		this.modifyId = modifyId;
-	}
 
 	public String getRfidNo() {
 		return rfidNo;

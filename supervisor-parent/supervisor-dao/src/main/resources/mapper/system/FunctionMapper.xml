@@ -15,6 +15,6 @@
 	<select id="queryFunction" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,TITLE,URL,PARENT_ID,LEVEL 
-		 FROM M_FUNCTION  WHERE PARENT_ID=#{condition.parentId}]]>
+		 FROM M_SYS_FUNCTION  WHERE PARENT_ID=#{condition.parentId}]]>
 	</select>
 </mapper>

@@ -9,7 +9,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.contract.IContractBatchDao;
+import com.sxj.supervisor.dao.contract.IContractModifyBatchDao;
 
 /**
  * 批次条目变更实体
@@ -17,8 +17,8 @@ import com.sxj.supervisor.dao.contract.IContractBatchDao;
  * @author Administrator
  *
  */
-@Entity(mapper = IContractBatchDao.class)
-@Table(name = "M_CONTRACT_BATCH_HIS")
+@Entity(mapper = IContractModifyBatchDao.class)
+@Table(name = "M_CONTRACT_MODIFY_BATCH")
 public class ModifyBatchEntity extends Pagable implements Serializable {
 	/**
 	 * 
