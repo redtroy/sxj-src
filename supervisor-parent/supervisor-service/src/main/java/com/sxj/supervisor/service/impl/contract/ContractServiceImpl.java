@@ -14,14 +14,12 @@ import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractModifyBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
-import com.sxj.supervisor.dao.contract.IContractImgHisDao;
 import com.sxj.supervisor.dao.contract.IContractItemDao;
 import com.sxj.supervisor.dao.contract.IContractModifyItemDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
-import com.sxj.supervisor.entity.contract.ContractImgHisEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ModifyItemEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
@@ -62,11 +60,6 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Autowired
 	private IContractModifyBatchDao contractBatchHisDao;
-	/**
-	 * 变更合同扫描件
-	 */
-	@Autowired
-	private IContractImgHisDao contractImgHisDao;
 	/**
 	 * 合同产品条目
 	 */
@@ -141,14 +134,6 @@ public class ContractServiceImpl implements IContractService {
 				for (int i = 0; i < batchList.size(); i++) {
 					ContractBatchEntity batch=batchList.get(i);
 					ContractBatchModel batchModel = new ContractBatchModel();
-					batchModel.setId(batch.getId());
-					batchModel.setContractId(batch.getContractId());
-					batchModel.setRfidNo(batch.getRfidNo());
-					batchModel.setAmount(batch.getAmount());
-					batchModel.setRecordNo(batch.getRfidNo());
-					List<BatchItemModel> batchModelList=(List<BatchItemModel>) JsonMapper.nonEmptyMapper().fromJson(batch.getBatchItems(), BatchItemModel.class);
-					batchModel.setBatchItems(batchModelList);
-					newBatchModelLIst.add(batchModel);
 				}
 				contractModel.setBatchList(newBatchModelLIst);
 			}
