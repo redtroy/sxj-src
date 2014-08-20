@@ -1,8 +1,8 @@
-package com.sxj.supervisor.service.function;
+package com.sxj.supervisor.service.system;
 
 import java.util.List;
 
-import com.sxj.supervisor.entity.member.FunctionEntity;
+import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.model.function.FunctionModel;
 
 

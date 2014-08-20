@@ -3,7 +3,7 @@ package com.sxj.supervisor.model.function;
 import java.io.Serializable;
 import java.util.List;
 
-import com.sxj.supervisor.entity.member.FunctionEntity;
+import com.sxj.supervisor.entity.system.FunctionEntity;
 
 public class FunctionModel implements Serializable {
 

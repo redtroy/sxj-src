@@ -7,39 +7,25 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
 
-	<!-- 抛出的异常转到特定View 
-	<bean id="exceptionResolver"
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="defaultErrorView" value="failure" />
-		<property name="exceptionMappings">
-			<props>
-				<prop key="com.jscn.pay.exception.WebException">page/error</prop>
-				<prop key="java.lang.Exception">page/error</prop>
-				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
-				<prop key="java.lang.Throwable">error/500</prop>
-			</props>
-		</property>
-	</bean>-->
+	<!-- 抛出的异常转到特定View <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
+		<property name="defaultErrorView" value="failure" /> <property name="exceptionMappings"> 
+		<props> <prop key="com.jscn.pay.exception.WebException">page/error</prop> 
+		<prop key="java.lang.Exception">page/error</prop> <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop> 
+		<prop key="java.lang.Throwable">error/500</prop> </props> </property> </bean> -->
 
 
 
-	<!-- 定义JSP视图 
-	<bean id="jspViewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/views/jsp/" />
-		<property name="suffix" value=".jsp" />
-		<property name="contentType" value="text/html;charset=UTF-8" />
-		<property name="order" value="0" />
-
-	</bean>-->
+	<!-- 定义JSP视图 <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
+		/> <property name="prefix" value="/WEB-INF/views/jsp/" /> <property name="suffix" 
+		value=".jsp" /> <property name="contentType" value="text/html;charset=UTF-8" 
+		/> <property name="order" value="0" /> </bean> -->
 
 	<!-- 定义freemark视图 -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<property name="viewClass"
-			value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+			value="com.sxj.supervisor.manage.view.MyFreeMarkerView" />
 		<property name="requestContextAttribute" value="ctp" />
 		<property name="cache" value="true" />
 		<!-- <property name="prefix" value="/WEB-INF/views/fm/manage/" /> -->
@@ -58,13 +44,9 @@
 		<property name="templateLoaderPath" value="/WEB-INF/views/fm/" />
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="freemarkerSettings" ref="freemarkerConfiguration" />
-		
-		<!-- <property name="freemarkerVariables">
-			<map>
-				<entry key="shiro" value-ref="shiroTags" />
-				<entry key="xw" value-ref="xwTags"></entry>
-			</map>
-		</property> -->
+
+		<!-- <property name="freemarkerVariables"> <map> <entry key="shiro" value-ref="shiroTags" 
+			/> <entry key="xw" value-ref="xwTags"></entry> </map> </property> -->
 	</bean>
 
 

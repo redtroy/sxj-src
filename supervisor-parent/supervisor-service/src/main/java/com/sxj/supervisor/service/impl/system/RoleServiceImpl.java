@@ -1,15 +1,16 @@
-package com.sxj.supervisor.service.impl.member;
+package com.sxj.supervisor.service.impl.system;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.supervisor.dao.member.IRoleDao;
-import com.sxj.supervisor.entity.member.RoleEntity;
-import com.sxj.supervisor.service.member.IRoleService;
+import com.sxj.supervisor.dao.system.IRoleDao;
+import com.sxj.supervisor.entity.system.FunctionEntity;
+import com.sxj.supervisor.entity.system.RoleEntity;
+import com.sxj.supervisor.service.system.IRoleService;
+import com.sxj.util.exception.ServiceException;
 @Service
 @Transactional
 public class RoleServiceImpl implements IRoleService {
@@ -35,6 +36,17 @@ public class RoleServiceImpl implements IRoleService {
 		
 		return roleDao.getRoles(accountId);
 
+	}
+
+	@Override
+	public List<FunctionEntity> getRoleFunction(String accountId)
+			throws ServiceException {
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 
 }

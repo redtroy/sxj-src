@@ -1,4 +1,4 @@
-package com.sxj.supervisor.entity.member;
+package com.sxj.supervisor.entity.system;
 
 import java.io.Serializable;
 
@@ -9,14 +9,14 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.member.IFunctionDao;
+import com.sxj.supervisor.dao.system.IFunctionDao;
 /**
  * 系统功能
  * @author AnShaoshuai
  *
  */
 @Entity(mapper = IFunctionDao.class)
-@Table(name = "M_FUNCTION")
+@Table(name = "M_SYS_FUNCTION")
 public class FunctionEntity extends Pagable implements Serializable {
 	/**
 	 * 

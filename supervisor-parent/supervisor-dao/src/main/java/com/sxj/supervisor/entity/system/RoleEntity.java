@@ -1,4 +1,4 @@
-package com.sxj.supervisor.entity.member;
+package com.sxj.supervisor.entity.system;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.member.IRoleDao;
+import com.sxj.supervisor.dao.system.IRoleDao;
 /**
  * 子账户关联系统功能
  * @author AnShaoshuai
@@ -37,7 +37,7 @@ public class RoleEntity extends Pagable implements Serializable {
 	private String functionId;
 	
 	/**
-	 * 子账户ID
+	 * 账户ID
 	**/
 	@Column(name = "ACCOUNT_ID")
 	private String accountId;

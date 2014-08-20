@@ -12,6 +12,7 @@
 window.onload = function() {
 var elements = document.querySelectorAll( '.demo-image' );
 Intense( elements );
+$("#leftList").load("${basePath}basic/menu.htm");
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -25,7 +26,9 @@ Intense( elements );
 <!--主菜单 -->
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
-     <#include "${basePath}basic/menu.htm"> 
+	<div id="leftList">
+	
+	</div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">合同管理</h2>
