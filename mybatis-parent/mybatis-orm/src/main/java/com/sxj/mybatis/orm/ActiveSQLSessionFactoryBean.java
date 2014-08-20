@@ -20,7 +20,6 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -38,7 +37,7 @@ import com.sxj.spring.modules.util.Reflections;
  * Class description goes here.
  */
 public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
-        implements ApplicationContextAware, ResourceLoaderAware
+        implements ApplicationContextAware
 {
     
     private Configuration configuration;
@@ -108,12 +107,6 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
         for (int i = 0; i < resources.length; i++)
             classPaths[i] = resources[i].getURL();
         return classPaths;
-    }
-    
-    @Override
-    public void setResourceLoader(ResourceLoader resourceLoader)
-    {
-        this.resourceLoader = resourceLoader;
     }
     
     @Override
