@@ -1,10 +1,10 @@
-package com.sxj.supervisor.model.member;
+package com.sxj.supervisor.entity.member;
 /**
  * 会员子帐号状态
  * @author Administrator
  *
  */
-public enum MemberStates {
+public enum MemberStatesEnum {
 	normal("正常", 0), stop("停用", 1);
 
 	// 成员变量
@@ -12,14 +12,14 @@ public enum MemberStates {
 
 	private String name;
 
-	private MemberStates(String name, Integer id) {
+	private MemberStatesEnum(String name, Integer id) {
 		this.name = name;
 		this.id = id;
 	}
 
 	// 普通方法
 	public static String getName(Integer id) {
-		for (MemberStates c : MemberStates.values()) {
+		for (MemberStatesEnum c : MemberStatesEnum.values()) {
 			if (c.getId() == id) {
 				return c.name;
 			}

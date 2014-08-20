@@ -12,18 +12,18 @@ import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 
 /**
- * 批次条目实体
+ * 合同补损信息
  * 
  * @author Administrator
  *
  */
 @Entity(mapper = IContractBatchDao.class)
-@Table(name = "M_CONTRACT_BATCH")
-public class ContractBatchEntity extends Pagable implements Serializable {
+@Table(name = "M_CONTRACT_BATCH_HIS")
+public class ReplenishBatchEntity extends Pagable implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -918867108456859467L;
+	private static final long serialVersionUID = -5666599729742676725L;
 
 	/**
 	 * 主键
@@ -31,7 +31,6 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
-
 	/**
 	 * 批次号
 	 */
@@ -39,10 +38,10 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 	private String batchNo;
 
 	/**
-	 * 合同编号
+	 * 变更ID
 	 **/
-	@Column(name = "CONTRACT_ID")
-	private String contractId;
+	@Column(name = "MODIFY_ID")
+	private String modifyId;
 
 	/**
 	 * RFID号
@@ -62,10 +61,6 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 	@Column(name = "BATCH_ITEMS")
 	private String batchItems;
 
-	public String getId() {
-		return id;
-	}
-
 	public String getBatchNo() {
 		return batchNo;
 	}
@@ -74,16 +69,20 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 		this.batchNo = batchNo;
 	}
 
+	public String getId() {
+		return id;
+	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getContractId() {
-		return contractId;
+	public String getModifyId() {
+		return modifyId;
 	}
 
-	public void setContractId(String contractId) {
-		this.contractId = contractId;
+	public void setModifyId(String modifyId) {
+		this.modifyId = modifyId;
 	}
 
 	public String getRfidNo() {
@@ -109,5 +108,4 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 	public void setBatchItems(String batchItems) {
 		this.batchItems = batchItems;
 	}
-
 }

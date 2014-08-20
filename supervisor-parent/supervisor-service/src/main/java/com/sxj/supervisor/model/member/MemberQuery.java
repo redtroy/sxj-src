@@ -5,7 +5,7 @@ import java.util.Date;
 
 import com.sxj.mybatis.pagination.Pagable;
 
-public class MemberQuery implements Serializable {
+public class MemberQuery extends Pagable implements Serializable {
 
 	/**
 	 * 

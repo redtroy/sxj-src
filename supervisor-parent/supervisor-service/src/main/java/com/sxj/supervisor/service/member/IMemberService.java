@@ -1,5 +1,7 @@
 package com.sxj.supervisor.service.member;
 
+import java.util.List;
+
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.util.exception.ServiceException;
@@ -13,7 +15,7 @@ public interface IMemberService {
 
 	public MemberEntity getMember(String id) throws ServiceException;
 
-	public ResultList<MemberEntity> queryMembers(MemberQuery query)
+	public List<MemberEntity> queryMembers(MemberQuery query)
 			throws ServiceException;
 
 	public void removeMember(String id) throws ServiceException;

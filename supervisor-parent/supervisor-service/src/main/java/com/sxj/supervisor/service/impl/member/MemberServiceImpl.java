@@ -55,7 +55,7 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public ResultList<MemberEntity> queryMembers(MemberQuery query)
+	public List<MemberEntity> queryMembers(MemberQuery query)
 			throws ServiceException {
 		try {
 			if (query == null) {
@@ -76,10 +76,7 @@ public class MemberServiceImpl implements IMemberService {
 			condition.put("endDate", query.getEndDate());// 结束时间
 			qc.setCondition(condition);
 			List<MemberEntity> memberList = menberDao.queryMembers(qc);
-			ResultList<MemberEntity> res = new ResultListImpl<MemberEntity>();
-			res.setResults(memberList);
-			res.setPage(query.getPage());
-			return res;
+			return memberList;
 		} catch (Exception e) {
 			throw new ServiceException("查询会员信息错误", e);
 		}

@@ -1,26 +1,27 @@
-package com.sxj.supervisor.model.member;
+package com.sxj.supervisor.entity.member;
+
 /**
- * 会员状态
+ * 会员类型
+ * 
  * @author Administrator
  *
  */
-public enum MemberState {
-
-	unaudited("未审核",0), unrecognized ("未认证", 1), certified ("已认证", 2), frozen ("已冻结", 3);
+public enum MemberTypeEnum {
+	DAWP("门窗厂", 0), glassFactory("玻璃厂", 1), genresFactory("类型厂", 2);
 
 	// 成员变量
 	private Integer id;
 
 	private String name;
 
-	private MemberState(String name, Integer id) {
+	private MemberTypeEnum(String name, Integer id) {
 		this.name = name;
 		this.id = id;
 	}
 
 	// 普通方法
-	public static String getName(Integer id) {
-		for (MemberState c : MemberState.values()) {
+	public String getName(Integer id) {
+		for (MemberTypeEnum c : MemberTypeEnum.values()) {
 			if (c.getId() == id) {
 				return c.name;
 			}
@@ -43,5 +44,4 @@ public enum MemberState {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }

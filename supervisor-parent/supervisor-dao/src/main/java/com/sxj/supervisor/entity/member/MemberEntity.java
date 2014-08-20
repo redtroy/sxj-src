@@ -60,7 +60,7 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 会员类型
 	 **/
 	@Column(name = "TYPE")
-	private Integer type;
+	private MemberTypeEnum type;
 
 	/**
 	 * 地理区域
@@ -114,13 +114,13 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 账户状态
 	 **/
 	@Column(name = "STATE")
-	private Integer state;
+	private MemberStatesEnum state;
 
 	/**
 	 * 审核状态
 	 **/
 	@Column(name = "CHECK_STATE")
-	private Integer checkState;
+	private MemberCheckStateEnum checkState;
 
 	/**
 	 * 总交易额
@@ -147,13 +147,13 @@ public class MemberEntity extends Pagable implements Serializable {
 	private String memberNo;
 	/**
 	 * 营业执照图片path
-	**/
+	 **/
 	@Column(name = "B_LICENSE_PATH")
 	private String bLicensePath;
-	
+
 	/**
 	 * 节能标识图片path
-	**/
+	 **/
 	@Column(name = "ENERGY_PATH")
 	private String energyPath;
 
@@ -195,14 +195,6 @@ public class MemberEntity extends Pagable implements Serializable {
 
 	public void setbLicenseNo(String bLicenseNo) {
 		this.bLicenseNo = bLicenseNo;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
 	}
 
 	public String getArea() {
@@ -269,22 +261,6 @@ public class MemberEntity extends Pagable implements Serializable {
 		this.authorDate = authorDate;
 	}
 
-	public Integer getState() {
-		return state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
-	}
-
-	public Integer getCheckState() {
-		return checkState;
-	}
-
-	public void setCheckState(Integer checkState) {
-		this.checkState = checkState;
-	}
-
 	public Long getTotalAmount() {
 		return totalAmount;
 	}
@@ -315,6 +291,30 @@ public class MemberEntity extends Pagable implements Serializable {
 
 	public void setMemberNo(String memberNo) {
 		this.memberNo = memberNo;
+	}
+
+	public MemberTypeEnum getType() {
+		return type;
+	}
+
+	public void setType(MemberTypeEnum type) {
+		this.type = type;
+	}
+
+	public MemberStatesEnum getState() {
+		return state;
+	}
+
+	public void setState(MemberStatesEnum state) {
+		this.state = state;
+	}
+
+	public MemberCheckStateEnum getCheckState() {
+		return checkState;
+	}
+
+	public void setCheckState(MemberCheckStateEnum checkState) {
+		this.checkState = checkState;
 	}
 
 }

@@ -3,49 +3,50 @@ package com.sxj.supervisor.model.contract;
 import java.io.Serializable;
 import java.util.List;
 
-import com.sxj.supervisor.entity.contract.ContractBatchEntity;
-import com.sxj.supervisor.entity.contract.ContractBatchHisEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
-import com.sxj.supervisor.entity.contract.ContractImgHisEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
-import com.sxj.supervisor.entity.contract.ContractItemHisEntity;
 
+/**
+ * 合同信息模型
+ * @author Ann
+ *
+ */
 public class ContractModel implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 980424780684626879L;
 	
+	/**
+	 * 合同主体信息
+	 */
 	private ContractEntity contract;
 	
+	/**
+	 * 合同产品条目信息
+	 */
 	private List<ContractItemEntity> itemList;
 	
-	private List<ContractBatchEntity> batchList;
+	/**
+	 * 合同批次条目信息
+	 */
+	private List<ContractBatchModel> batchList;
 	
-	private List<ContractItemHisEntity> modifyItemList;
+	/**
+	 * 合同变更产品条目信息
+	 */
+	private List<ContractModifyModel> modifyList;
 	
-	private List<ContractBatchHisEntity> modifyBatchList;
+	/**
+	 * 合同补损条目信息
+	 */
 	
-	private List<ContractImgHisEntity> hisImageList;
+	private List<ContractReplenishModel> replenishList;
 	
+	/**
+	 * 变更记录
+	 */
 	private List<StateLogModel> stateLogList;
-
-	public List<ContractBatchHisEntity> getModifyBatchList() {
-		return modifyBatchList;
-	}
-
-	public void setModifyBatchList(List<ContractBatchHisEntity> modifyBatchList) {
-		this.modifyBatchList = modifyBatchList;
-	}
-
-	public List<ContractBatchEntity> getBatchList() {
-		return batchList;
-	}
-
-	public void setBatchList(List<ContractBatchEntity> batchList) {
-		this.batchList = batchList;
-	}
-
 
 	public ContractEntity getContract() {
 		return contract;
@@ -63,22 +64,28 @@ public class ContractModel implements Serializable {
 		this.itemList = itemList;
 	}
 
-
-	public List<ContractItemHisEntity> getModifyItemList() {
-		return modifyItemList;
+	public List<ContractBatchModel> getBatchList() {
+		return batchList;
 	}
 
-	public void setModifyItemList(List<ContractItemHisEntity> modifyItemList) {
-		this.modifyItemList = modifyItemList;
+	public void setBatchList(List<ContractBatchModel> batchList) {
+		this.batchList = batchList;
 	}
 
-
-	public List<ContractImgHisEntity> getHisImageList() {
-		return hisImageList;
+	public List<ContractModifyModel> getModifyList() {
+		return modifyList;
 	}
 
-	public void setHisImageList(List<ContractImgHisEntity> hisImageList) {
-		this.hisImageList = hisImageList;
+	public void setModifyList(List<ContractModifyModel> modifyList) {
+		this.modifyList = modifyList;
+	}
+
+	public List<ContractReplenishModel> getReplenishList() {
+		return replenishList;
+	}
+
+	public void setReplenishList(List<ContractReplenishModel> replenishList) {
+		this.replenishList = replenishList;
 	}
 
 	public List<StateLogModel> getStateLogList() {
@@ -89,7 +96,5 @@ public class ContractModel implements Serializable {
 		this.stateLogList = stateLogList;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+	
 }

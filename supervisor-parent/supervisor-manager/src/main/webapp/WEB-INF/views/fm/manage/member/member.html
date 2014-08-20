@@ -34,13 +34,12 @@ Intense( elements );
 <!-- InstanceEndEditable -->
 </head>
 <body>
-<#include "${basePath}/include/head.htm"> 
+<#include "manage/head.html"> 
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
-<#include "${basePath}/include/menuPath.htm"> 
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
-   <#include "${basePath}/include/menu.htm"> 
+   
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">会员管理</h2>
@@ -72,16 +71,15 @@ Intense( elements );
           <input type="text" name="insurantName" value="" />
           会员类型
           <select name="select">
-            <option selected="selected">门窗厂</option>
-            <option>玻璃厂</option>
-            <option>型材厂</option>
+            <#list types as type>
+            <option value="${type.getId()}">${type.getName()}</option>
+            </#list>
           </select>
           会员状态
           <select name="select">
-            <option selected="selected">未审核</option>
-            <option>未认证</option>
-            <option>已认证</option>
-            <option>已冻结</option>
+           <#list states as state>
+            <option value="${state.getId()}">${state.getName()}</option>
+           </#list>
           </select>
 		   会员注册时间段
           <input class="form-control" type="text" datepicker>
@@ -119,101 +117,21 @@ Intense( elements );
           <th>帐户状态</th>
           <th class="rLine">操作</th>
         </tr>
+        <#list memberList as member>
         <tr>
-          <td><a href="#" class="lnk-blue">6987456</a></td>
-          <td>私享家商贸有限公司</td>
-          <td>张一</td>
-          <td>YZHE0192873</td>
-          <td>JNTG025988</td>
-          <td>门窗厂</td>
-          <td>2014年<br />
-            6月7日</td>
-          <td>2014年<br />
-            6月12日</td>
-          <td><button class="btn btn-gray"><span>审核</span></button></td>
-          <td><button class="btn btn-red"><span>冻结</span></button></td>
+          <td><a href="#" class="lnk-blue">${member.getMemberNo()}</a></td>
+          <td>${member.name}</td>
+          <td>${member.getContacts()}</td>
+          <td>${member.getbLicenseNo()}</td>
+          <td>${member.getEnergyNo()}</td>
+          <td>${member.type.getName()}</td>
+          <td>${member.regDate?date}</td>
+          <td>${member.authorDate?date}</td>
+          <td><button class="btn btn-gray"><span>${member.checkState.getName()}</span></button></td>
+          <td><button class="btn btn-red"><span>${member.state.getName()}</span></button></td>
           <td><button class="btn btn-gray btn-password" href="javascript:;"><span>初始化密码</span></button></td>
         </tr>
-        <tr class="tableInfo" style="display:;">
-          <td colspan="11">
-          <div class="infoBox">
-          <ul class="ly-clearFix">
-          <li><label>会员名称</label><input type="text" value="私享家商贸有限公司" /></li>
-          <li><label>城市</label> 江苏省-
-            <select name="select3">
-              <option selected="selected">南京市</option>
-              <option>无锡市</option>
-              <option>苏州市</option>
-              <option>常州市</option>
-              <option>徐州市</option>
-              <option>扬州市</option>
-              <option>南通市</option>
-              <option>镇江市</option>
-              <option>泰州市</option>
-              <option>盐城市</option>
-              <option>淮安市</option>
-              <option>宿迁市</option>
-              <option>连云港市</option>
-            </select>
-            <label>会员类型</label><select name="select2">
-              <option selected="selected">门窗厂</option>
-              <option>玻璃厂</option>
-              <option>型材厂</option>
-            </select>
-          </li>
-          <li class="view"><label>营业执照</label><input type="text" value="YZHE0192873" />
-          <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/yyzz.gif">查看缩略图</a></p>
-          </li>
-          <li class="view"><label>节能标识推广证</label><input type="text" value="JTGH2342345" />
-          <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/jntg.gif">查看缩略图</a></p>
-          </li>
-          <li><label>联系人名称</label><input type="text" value="张一" /></li>
-          <li><label>联系人手机</label><input type="text" value="1595888525" /></li>
-          <li><label>公司地址</label><input type="text" value="仙林大道18号321人才大厦" /></li>
-          <li><label>固定电话</label><input type="text" value="025-8653254" /></li>
-          <li><label>注册时间</label>2014年6月7日</li>
-          <li><label>认证时间</label>2014年6月12日</li>
-          <li><label>审核状态</label><em class="state normal">审核中</em></li>
-          <li><label>帐户状态</label><em class="state verified">正常</em></li>
-          <li><label>子帐号</label>10个</li>
-          <li><label>总交易额</label>23659874元</li>
-          </ul>
-          <div class="btnBox"><a href="#" class="button button-orange button-small">确认修改</a><a href="#" class="button button-gray button-small">收起</a> </div>
-          </div>
-          </td>
-        </tr>
-        <tr>
-          <td>6548971</td>
-          <td>长三角新能源公司</td>
-          <td>李四</td>
-          <td>JSBN025598</td>
-          <td>JNTG025878</td>
-          <td>型材厂</td>
-          <td>2014年<br />
-            5月15日</td>
-          <td>2014年<br />
-            5月20日</td>
-          <td><button class="btn btn-green"><span>认证</span></button>
-          <div class="msg-remind"><span class="icon icon16 icon-remind"></span>该会员资料不完整，不能认证</div>
-          </td>
-          <td><button class="btn btn-red"><span>冻结</span></button></td>
-          <td><button class="btn"><span>初始化密码</span></button></td>
-        </tr>
-        <tr>
-          <td>6548971</td>
-          <td>长三角新能源公司</td>
-          <td>李四</td>
-          <td>JSBN025598</td>
-          <td>JNTG025878</td>
-          <td>型材厂</td>
-          <td>2014年<br />
-            5月15日</td>
-          <td>2014年<br />
-            5月20日</td>
-          <td><em class="state verified">已认证</em></td>
-          <td><button class="btn btn-green"><span>解冻</span></button></td>
-          <td><button class="btn"><span>初始化密码</span></button></td>
-        </tr>
+        </#list>
       </table>
       <div class="pageBox">
       <div><span class="sumP">共<strong>57</strong>条记录</span><span class="curP">1</span><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#" class="pnext"><span title="翻至下一页">&gt;</span></a></div></div>
@@ -229,6 +147,6 @@ Intense( elements );
      </div>
      <!-- InstanceEndEditable --></div>
 </div>
-<#include "${basePath}/include/footer.htm"> 
+<#include "manage/footer.html"> 
 </body>
 <!-- InstanceEnd --></html>

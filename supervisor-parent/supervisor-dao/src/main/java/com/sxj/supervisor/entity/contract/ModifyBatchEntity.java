@@ -13,17 +13,17 @@ import com.sxj.supervisor.dao.contract.IContractBatchDao;
 
 /**
  * 批次条目变更实体
+ * 
  * @author Administrator
  *
  */
 @Entity(mapper = IContractBatchDao.class)
 @Table(name = "M_CONTRACT_BATCH_HIS")
-public class ContractBatchHisEntity extends Pagable implements Serializable {
+public class ModifyBatchEntity extends Pagable implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5666599729742676725L;
-
 
 	/**
 	 * 主键
@@ -31,12 +31,17 @@ public class ContractBatchHisEntity extends Pagable implements Serializable {
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
+	/**
+	 * 批次号
+	 */
+	@Column(name = "BATCH_NO")
+	private String batchNo;
 
 	/**
-	 * 合同编号
+	 * 变更ID
 	 **/
-	@Column(name = "CONTRACT_ID")
-	private String contractId;
+	@Column(name = "MODIFY_ID")
+	private String modifyId;
 
 	/**
 	 * RFID号
@@ -55,18 +60,13 @@ public class ContractBatchHisEntity extends Pagable implements Serializable {
 	 **/
 	@Column(name = "BATCH_ITEMS")
 	private String batchItems;
-	/**
-	 * 变更备案号
-	**/
-	@Column(name = "RECORD_NO")
-	private String recordNo;
-	
-	public String getRecordNo() {
-		return recordNo;
+
+	public String getBatchNo() {
+		return batchNo;
 	}
 
-	public void setRecordNo(String recordNo) {
-		this.recordNo = recordNo;
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
 	public String getId() {
@@ -77,12 +77,12 @@ public class ContractBatchHisEntity extends Pagable implements Serializable {
 		this.id = id;
 	}
 
-	public String getContractId() {
-		return contractId;
+	public String getModifyId() {
+		return modifyId;
 	}
 
-	public void setContractId(String contractId) {
-		this.contractId = contractId;
+	public void setModifyId(String modifyId) {
+		this.modifyId = modifyId;
 	}
 
 	public String getRfidNo() {

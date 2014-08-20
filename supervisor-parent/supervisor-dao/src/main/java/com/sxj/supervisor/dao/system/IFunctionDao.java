@@ -1,4 +1,4 @@
-package com.sxj.supervisor.dao.member;
+package com.sxj.supervisor.dao.system;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
-import com.sxj.supervisor.entity.member.FunctionEntity;
+import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.util.persistent.QueryCondition;
 
 public interface IFunctionDao {

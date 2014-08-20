@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.system.ISystemManageDao">
+	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.system.SystemAccountEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="account" column="ACCOUNT" jdbcType="VARCHAR" />
+		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 条件查询备案 -->
+	<select id="querySystemAccount" resultMap="BaseResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT ID,NAME,ACCOUNT,PASSWORD FROM M_SYS_ACCOUNT WHERE 1=1]]>
+		<!-- 备案号 -->
+		<if test="condition.id != null">
+			<![CDATA[ AND ID = #{condition.id}]]>
+		</if>
+		<!-- 申请会员ID -->
+		<if test="condition.name != null">
+			<![CDATA[ AND NAME = #{condition.name}]]>
+		</if>
+		<!-- 合同签订者  -->
+		<if test="condition.account != null">
+			<![CDATA[ AND ACCOUNT=#{condition.account}]]>
+		</if>
+	</select>
+</mapper>
