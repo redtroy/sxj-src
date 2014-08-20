@@ -6,24 +6,24 @@ import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
-import com.sxj.supervisor.entity.contract.ContractItemHisEntity;
+import com.sxj.supervisor.entity.contract.ModifyItemEntity;
 import com.sxj.util.persistent.QueryCondition;
 
-public interface IContractItemHisDao {
+public interface IContractModifyItemDao {
 	/**
 	 * 新增合同条目
 	 *
 	 * @param    items
 	**/
 	@Insert
-	public void addItems(ContractItemHisEntity items);
+	public void addItems(ModifyItemEntity items);
 	
 	/**
 	 *  通过合同ID查询条目列表
 	 *
 	 * @param    contractId
 	**/
-	public List<ContractItemHisEntity> queryItems(QueryCondition<ContractItemHisEntity> query);
+	public List<ModifyItemEntity> queryItems(QueryCondition<ModifyItemEntity> query);
 	/**
 	 * 刪除條目
 	 * @param contractId
@@ -35,5 +35,5 @@ public interface IContractItemHisDao {
 	 * @param items
 	 */
 	@Update
-	public void updateItems(ContractItemHisEntity[] items);
+	public void updateItems(ModifyItemEntity[] items);
 }

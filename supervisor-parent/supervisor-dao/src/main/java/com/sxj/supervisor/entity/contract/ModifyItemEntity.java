@@ -11,9 +11,14 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractItemDao;
 
+/**
+ * 合同变更产品条目信息
+ * @author Ann
+ *
+ */
 @Entity(mapper = IContractItemDao.class)
 @Table(name = "M_CONTRACT_ITEM_HIS")
-public class ContractItemHisEntity extends Pagable implements Serializable {
+public class ModifyItemEntity extends Pagable implements Serializable {
 
 	/**
 	 * 
@@ -21,66 +26,52 @@ public class ContractItemHisEntity extends Pagable implements Serializable {
 	private static final long serialVersionUID = 1564168265758964083L;
 	/**
 	 * 主键
-	**/
+	 **/
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
-	
+
 	/**
-	 * 合同ID
-	**/
-	@Column(name = "CONTRACT_ID")
-	private String contractId;
-	
+	 * 变更记录ID
+	 **/
+	@Column(name = "MODIFY_ID")
+	private String modifyId;
+
 	/**
 	 * 产品名称
-	**/
+	 **/
 	@Column(name = "PRODUCT_NAME")
 	private String productName;
-	
+
 	/**
 	 * 规格型号
-	**/
+	 **/
 	@Column(name = "PRODUCT_MODEL")
 	private String productModel;
-	
+
 	/**
 	 * 数量
-	**/
+	 **/
 	@Column(name = "QUANTITY")
 	private Float quantity;
-	
+
 	/**
 	 * 单价
-	**/
+	 **/
 	@Column(name = "PRICE")
 	private Long price;
-	
+
 	/**
 	 * 金额
-	**/
+	 **/
 	@Column(name = "AMOUNT")
 	private Long amount;
-	
+
 	/**
 	 * 备注
-	**/
+	 **/
 	@Column(name = "REMARKS")
 	private String remarks;
-
-	/**
-	 * 变更备案号
-	**/
-	@Column(name = "RECORD_NO")
-	private String recordNo;
-	
-	public String getRecordNo() {
-		return recordNo;
-	}
-
-	public void setRecordNo(String recordNo) {
-		this.recordNo = recordNo;
-	}
 
 	public String getId() {
 		return id;
@@ -90,12 +81,12 @@ public class ContractItemHisEntity extends Pagable implements Serializable {
 		this.id = id;
 	}
 
-	public String getContractId() {
-		return contractId;
+	public String getModifyId() {
+		return modifyId;
 	}
 
-	public void setContractId(String contractId) {
-		this.contractId = contractId;
+	public void setModifyId(String modifyId) {
+		this.modifyId = modifyId;
 	}
 
 	public String getProductName() {
