@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.contract.IContractReplenishDao">
+	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.contract.ReplenishContractEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="contractId" column="CONTRACT_ID" jdbcType="VARCHAR" />
+		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
+		<result property="imgPath" column="IMG_PATH" jdbcType="VARCHAR" />
+		<result property="batchRfidNo" column="BATCH_RFID_NO" jdbcType="VARCHAR" />
+		<result property="rfidOrderNo" column="RFID_ORDER_NO" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 条件查询合同批次 -->
+	<select id="queryModify" resultMap="BaseResultMap"
+		parameterType="String">
+		<![CDATA[SELECT ID,CONTRACT_ID,RECORD_NO,BATCH_RFID_NO,RFID_ORDER_NO,IMG_PATH
+					FROM M_CONTRACT_REPLENISH WHERE RECORD_NO in(#{condition.recordIds})]]>
+	</select>
+</mapper>

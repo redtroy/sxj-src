@@ -3,6 +3,7 @@ package com.sxj.supervisor.dao.contract;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.supervisor.entity.contract.ModifyContractEntity;
 import com.sxj.util.persistent.QueryCondition;
@@ -27,4 +28,10 @@ public interface IContractModifyDao {
 	 * @return
 	 */
 	public  List<ModifyContractEntity> queryModify(QueryCondition<ModifyBatchEntity> query); 
+	/**
+	 * 更新变更合同
+	 * @param modifyContractEntity
+	 */
+	@Update
+	public void updateModify(ModifyContractEntity modifyContractEntity);
 }

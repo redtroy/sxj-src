@@ -9,15 +9,15 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.contract.IContractItemDao;
+import com.sxj.supervisor.dao.contract.IContractModifyItemDao;
 
 /**
  * 合同变更产品条目信息
  * @author Ann
  *
  */
-@Entity(mapper = IContractItemDao.class)
-@Table(name = "M_CONTRACT_ITEM_HIS")
+@Entity(mapper = IContractModifyItemDao.class)
+@Table(name = "M_CONTRACT_MODIFY_ITEM")
 public class ModifyItemEntity extends Pagable implements Serializable {
 
 	/**

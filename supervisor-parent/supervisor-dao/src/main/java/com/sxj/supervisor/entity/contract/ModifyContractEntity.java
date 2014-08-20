@@ -3,16 +3,21 @@ package com.sxj.supervisor.entity.contract;
 import java.io.Serializable;
 
 import com.sxj.mybatis.orm.annotations.Column;
+import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.contract.IContractModifyDao;
 
 /**
  * 合同变更信息
  * @author Ann
  *
  */
+@Entity(mapper = IContractModifyDao.class)
+@Table(name = "M_CONTRACT_MODIFY")
 public class ModifyContractEntity extends Pagable implements Serializable {
 
 	/**

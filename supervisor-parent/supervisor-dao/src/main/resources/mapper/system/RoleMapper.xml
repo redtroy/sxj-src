@@ -23,7 +23,7 @@
 	</select>
 	
 	<!-- 获取权限操作列表 -->
-	<select id="getRoles" resultMap="BaseResultMap"
+	<select id="getRoleFunction" resultMap="BaseResultMap"
 		parameterType="String">
 		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL from M_SYS_FUNCTION f 
 		INNER JOIN M_ROLE_ACCOUNT r where f.ID=r.FUNCTION_ID WHERE r.ACCOUNT_ID=#{accountId}]]>

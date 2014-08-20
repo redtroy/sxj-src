@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sxj.supervisor.dao.contract.IContractBatchHisDao">
-	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.contract.ContractBatchHisEntity">
+<mapper namespace="com.sxj.supervisor.dao.contract.IContractModifyBatchDao">
+	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.contract.ModifyBatchEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="modifyId" column="MODIFY_ID" jdbcType="VARCHAR" />
+		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 		<result property="amount" column="AMOUNT" jdbcType="INTEGER" />
 		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
-		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
 	<select id="queryBacths" resultMap="BaseResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID, MODIFY_ID, RFID_NO, AMOUNT, BATCH_ITEMS,RECORD_NO FROM M_CONTRACT_BATCH_HIS
-					WHERE RECORD_NO in(#{condition.recordIds})]]>
+		<![CDATA[SELECT ID, MODIFY_ID,　RFID_NO,AMOUNT,BATCH_ITEMS,RECORD_NO,BATCH_NO　FROM
+　M_CONTRACT_MODIFY_BATCH　where MODIFY_ID=#{condition.modifyId}]]>
 	</select>
 </mapper>
