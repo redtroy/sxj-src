@@ -33,7 +33,6 @@ public class UuidKeyGenerator implements KeyGenerator
     public void processBefore(Executor executor, MappedStatement ms,
             Statement stmt, Object parameter)
     {
-        
         Configuration configuration = ms.getConfiguration();
         TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
         String[] keyProperties = ms.getKeyProperties();
@@ -44,6 +43,8 @@ public class UuidKeyGenerator implements KeyGenerator
         try
         {
             populateKeys(metaParam, keyProperties, typeHandlers);
+            //            generateSn(executor, ms, parameter);
+            new SnGenerator().generateSn(executor, ms, parameter);
         }
         catch (SQLException e)
         {
@@ -51,13 +52,14 @@ public class UuidKeyGenerator implements KeyGenerator
                     "Error getting generated key or setting result to parameter object. Cause: "
                             + e, e);
         }
+        
     }
     
     @Override
     public void processAfter(Executor executor, MappedStatement ms,
             Statement stmt, Object parameter)
     {
-        
+        System.out.println();
     }
     
     private TypeHandler<?>[] getTypeHandlers(

@@ -74,6 +74,7 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
                 applicationContext);
         String fieldValue = (String) Reflections.getFieldValue(this,
                 "typeAliasesPackage");
+        fieldValue = fieldValue == null ? "" : fieldValue;
         Resource[] resources = applicationContext.getResources("classpath:"
                 + StringUtils.replaceChars(fieldValue, '.', '/')
                 + "/**/*.class");

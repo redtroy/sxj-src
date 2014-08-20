@@ -4,6 +4,8 @@ public class SN
 {
     private int step;
     
+    private long current;
+    
     private String tableName;
     
     private String stub;
@@ -60,6 +62,16 @@ public class SN
     public void setSn(String sn)
     {
         this.sn = sn;
+    }
+    
+    public long getCurrent()
+    {
+        return current;
+    }
+    
+    public void setCurrent(long current)
+    {
+        this.current = current;
     }
     
 }

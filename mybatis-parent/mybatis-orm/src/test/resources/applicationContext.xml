@@ -16,6 +16,7 @@
 	<bean id="sqlSessionFactory" class="com.sxj.mybatis.orm.ActiveSQLSessionFactoryBean">
 		<property name="configLocation" value="classpath:mybatis/configuration.xml" />
 		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.sxj.mybatis.orm.model"></property>
 		<property name="mapperLocations" value="classpath*:mybatis/mappers/*.xml" />
 	</bean>
 	

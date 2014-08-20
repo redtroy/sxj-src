@@ -71,8 +71,8 @@ public class MySql5Dialect extends Dialect
     @Override
     public String getSnSelectString(SN sn)
     {
-        return "select 1 from " + sn.getTableName() + " where " + sn.getStub()
-                + "='" + sn.getStubValue() + "'";
+        return "select " + sn.getSn() + " from " + sn.getTableName()
+                + " where " + sn.getStub() + "='" + sn.getStubValue() + "'";
     }
     
 }
