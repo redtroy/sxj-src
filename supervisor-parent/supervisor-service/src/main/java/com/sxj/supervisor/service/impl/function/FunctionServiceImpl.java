@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.supervisor.dao.member.IFunctionDao;
-import com.sxj.supervisor.entity.member.FunctionEntity;
+import com.sxj.supervisor.dao.system.IFunctionDao;
+import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.model.function.FunctionModel;
-import com.sxj.supervisor.service.function.IFunctionService;
+import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service

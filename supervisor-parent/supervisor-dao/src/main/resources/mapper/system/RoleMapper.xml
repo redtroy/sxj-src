@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.system.IRoleDao">
+	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.system.RoleEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="functionId" column="FUNCTION_ID" jdbcType="VARCHAR" />
+		<result property="accountId" column="ACCOUNT_ID" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="FunctionResultMap" type="com.sxj.supervisor.entity.system.FunctionEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE" jdbcType="VARCHAR" />
+		<result property="url" column="URL" jdbcType="VARCHAR" />
+		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL" jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 获取权限列表 -->
+	<select id="getRoles" resultMap="BaseResultMap"
+		parameterType="String">
+		<![CDATA[SELECT ID,FUNCTION_ID,ACCOUNT_ID FROM ROLE WHERE ACCOUNT_ID=#{accountId}]]>
+	</select>
+	
+	<!-- 获取权限操作列表 -->
+	<select id="getRoles" resultMap="BaseResultMap"
+		parameterType="String">
+		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL from M_SYS_FUNCTION f 
+		INNER JOIN M_ROLE_ACCOUNT r where f.ID=r.FUNCTION_ID WHERE r.ACCOUNT_ID=#{accountId}]]>
+	</select>
+</mapper>

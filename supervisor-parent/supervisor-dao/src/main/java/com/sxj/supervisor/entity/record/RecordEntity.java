@@ -18,7 +18,7 @@ import com.sxj.supervisor.dao.record.IRecordDao;
  *
  */
 @Entity(mapper = IRecordDao.class)
-@Table(name = "RECORD")
+@Table(name = "M_RECORD")
 public class RecordEntity extends Pagable implements Serializable {
 	/**
 	 * 

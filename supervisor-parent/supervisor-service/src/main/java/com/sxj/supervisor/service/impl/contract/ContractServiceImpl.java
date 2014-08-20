@@ -12,19 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
-import com.sxj.supervisor.dao.contract.IContractBatchHisDao;
+import com.sxj.supervisor.dao.contract.IContractModifyBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
-import com.sxj.supervisor.dao.contract.IContractImgHisDao;
 import com.sxj.supervisor.dao.contract.IContractItemDao;
-import com.sxj.supervisor.dao.contract.IContractItemHisDao;
+import com.sxj.supervisor.dao.contract.IContractModifyItemDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
-import com.sxj.supervisor.entity.contract.ContractBatchHisEntity;
+import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
-import com.sxj.supervisor.entity.contract.ContractImgHisEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
-import com.sxj.supervisor.entity.contract.ContractItemHisEntity;
+import com.sxj.supervisor.entity.contract.ModifyItemEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
@@ -60,12 +59,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 变更合同批次DAO
 	 */
 	@Autowired
-	private IContractBatchHisDao contractBatchHisDao;
-	/**
-	 * 变更合同扫描件
-	 */
-	@Autowired
-	private IContractImgHisDao contractImgHisDao;
+	private IContractModifyBatchDao contractBatchHisDao;
 	/**
 	 * 合同产品条目
 	 */
@@ -75,7 +69,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 变更合同产品条目
 	 */
 	@Autowired
-	private IContractItemHisDao contractItemHisDao;
+	private IContractModifyItemDao contractItemHisDao;
 	/**
 	 * 备案Dao
 	 */
@@ -136,7 +130,12 @@ public class ContractServiceImpl implements IContractService {
 			List<ContractBatchEntity> batchList = contractBatchDao
 					.queryBacths(contract.getId());// 批次
 			if (batchList != null && batchList.size() > 0) {
-				contractModel.setBatchList(batchList);
+				List<ContractBatchModel> newBatchModelLIst = new ArrayList<ContractBatchModel>();
+				for (int i = 0; i < batchList.size(); i++) {
+					ContractBatchEntity batch=batchList.get(i);
+					ContractBatchModel batchModel = new ContractBatchModel();
+				}
+				contractModel.setBatchList(newBatchModelLIst);
 			}
 			// 变更信息
 			QueryCondition<RecordEntity> qc = new QueryCondition<RecordEntity>();
@@ -153,27 +152,27 @@ public class ContractServiceImpl implements IContractService {
 					}
 					recordId = recordId.substring(0,recordId.length()-1);
 				}
-				//条目
-				QueryCondition<ContractItemHisEntity> itemQuery = new QueryCondition<ContractItemHisEntity>();
-				Map<String, Object> itemMap =new HashMap<String, Object>();
-				itemMap.put("recordIds", recordId);//合同号
-				itemQuery.setCondition(itemMap);
-				List itemHisList=contractItemHisDao.queryItems(itemQuery);
-				contractModel.setModifyItemList(itemHisList);
-				//批次
-				QueryCondition<ContractBatchHisEntity> batchQuery = new QueryCondition<ContractBatchHisEntity>();
-				Map<String, Object> batchMap =new HashMap<String, Object>();
-				batchMap.put("recordIds", recordId);//合同号
-				batchQuery.setCondition(batchMap);
-				List batchHisList=contractBatchHisDao.queryBacths(batchQuery);
-				contractModel.setModifyBatchList(batchHisList);
-				//变更扫描件
-				QueryCondition<ContractImgHisEntity> imgQuery = new QueryCondition<ContractImgHisEntity>();
-				Map<String, Object> imgMap =new HashMap<String, Object>();
-				imgMap.put("recordIds", recordId);//合同号
-				imgQuery.setCondition(imgMap);
-				List imgHisList=contractImgHisDao.queryImages(imgQuery);
-				contractModel.setHisImageList(imgHisList);
+//				//条目
+//				QueryCondition<ModifyItemEntity> itemQuery = new QueryCondition<ModifyItemEntity>();
+//				Map<String, Object> itemMap =new HashMap<String, Object>();
+//				itemMap.put("recordIds", recordId);//合同号
+//				itemQuery.setCondition(itemMap);
+//				List itemHisList=contractItemHisDao.queryItems(itemQuery);
+//				contractModel.setModifyItemList(itemHisList);
+//				//批次
+//				QueryCondition<ModifyBatchEntity> batchQuery = new QueryCondition<ModifyBatchEntity>();
+//				Map<String, Object> batchMap =new HashMap<String, Object>();
+//				batchMap.put("recordIds", recordId);//合同号
+//				batchQuery.setCondition(batchMap);
+//				List batchHisList=contractBatchHisDao.queryBacths(batchQuery);
+//				contractModel.setModifyBatchList(batchHisList);
+//				//变更扫描件
+//				QueryCondition<ContractImgHisEntity> imgQuery = new QueryCondition<ContractImgHisEntity>();
+//				Map<String, Object> imgMap =new HashMap<String, Object>();
+//				imgMap.put("recordIds", recordId);//合同号
+//				imgQuery.setCondition(imgMap);
+//				List imgHisList=contractImgHisDao.queryImages(imgQuery);
+//				contractModel.setHisImageList(imgHisList);
 			}
 		}
 		return contractModel;
@@ -183,7 +182,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 查询合同列表
 	 */
 	@Override
-	public ResultList<ContractModel> queryContracts(ContractQuery query) throws ServiceException {
+	public List<ContractModel> queryContracts(ContractQuery query) throws ServiceException {
 		QueryCondition<ContractEntity> qc = new QueryCondition<ContractEntity>();
 		Map<String, Object> map =new HashMap<String, Object>();
 		map.put("contractNo", query.getContractNo());//合同号
@@ -202,15 +201,12 @@ public class ContractServiceImpl implements IContractService {
 		List<ContractModel> contractModelList = new ArrayList<ContractModel>();
 		for (Iterator<ContractEntity> iterator = contractList.iterator(); iterator.hasNext();) {
 			ContractEntity contractEntity = (ContractEntity) iterator.next();
-			//JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(), StateLogModel.class);
-			
+			//JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(), StateLogModel.class);//备案记录
 			ContractModel cm = new ContractModel();
 			cm.setContract(contractEntity);
 			contractModelList.add(cm);
 		}
-		ResultList<ContractModel> resultList =  new ResultListImpl<ContractModel>();
-		resultList.setResults(contractModelList);
-		return resultList;
+		return contractModelList;
 	}
 
 	/**
@@ -227,9 +223,9 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void changeContract(String contractId,
-			List<ContractItemHisEntity> itemList, List<ContractBatchModel> batchList,
+			List<ModifyItemEntity> itemList, List<ContractBatchModel> batchList,
 			String recordNo) {
-		contractBatchHisDao.addBatchs(batchList.toArray(new ContractBatchHisEntity[itemList.size()]));
+		contractBatchHisDao.addBatchs(batchList.toArray(new ModifyBatchEntity[itemList.size()]));
 	}
 
 	/**

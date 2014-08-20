@@ -12,8 +12,9 @@
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
-	<select id="queryContract" resultType="java.util.List"
+	<select id="queryBacths" resultMap="BaseResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID,CONTRACT_ID,RFID_NO,AMOUNT,BATCH_ITEMS  FROM CONTRACT_BATCH WHERE CONTRACT_ID=#{contractId}]]>
+		<![CDATA[SELECT ID, CONTRACT_ID, RFID_NO, AMOUNT, BATCH_ITEMS FROM M_CONTRACT_BATCH
+			WHERE CONTRACT_ID=#{condition.contractId}]]>
 	</select>
 </mapper>
