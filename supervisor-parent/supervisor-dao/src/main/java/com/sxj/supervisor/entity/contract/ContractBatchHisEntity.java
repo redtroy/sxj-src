@@ -2,47 +2,63 @@ package com.sxj.supervisor.entity.contract;
 
 import java.io.Serializable;
 
+import com.sxj.mybatis.orm.annotations.Column;
+import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.GeneratedValue;
+import com.sxj.mybatis.orm.annotations.GenerationType;
+import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.contract.IContractBatchDao;
 
 /**
  * 批次条目变更实体
  * @author Administrator
  *
  */
+@Entity(mapper = IContractBatchDao.class)
+@Table(name = "M_CONTRACT_BATCH_HIS")
 public class ContractBatchHisEntity extends Pagable implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5666599729742676725L;
 
+
 	/**
 	 * 主键
 	 **/
+	@Id(column = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
 
 	/**
 	 * 合同编号
 	 **/
+	@Column(name = "CONTRACT_ID")
 	private String contractId;
 
 	/**
 	 * RFID号
 	 **/
+	@Column(name = "RFID_NO")
 	private String rfidNo;
 
 	/**
 	 * 金额
 	 **/
+	@Column(name = "AMOUNT")
 	private Long amount;
 
 	/**
 	 * 批次条目JSON
 	 **/
+	@Column(name = "BATCH_ITEMS")
 	private String batchItems;
-
 	/**
 	 * 变更备案号
 	**/
+	@Column(name = "RECORD_NO")
 	private String recordNo;
 	
 	public String getRecordNo() {
