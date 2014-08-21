@@ -160,15 +160,14 @@
             <label>关联招标合同号</label>
             ${contractModel.contract.refContractNo} </div>
             </div>
+            <#if contractModel.modifyList?exists>
           <div class="infoBox producedBox changeBox text-left">
             <h2 class="title">合同变更信息</h2>
             <!-- 变更信息遍历begin -->
-              <#list batch.modifyBatchList as batchItemHis>
-                <#list batch.modifyItemList as itemListHis>
-                  <#list batch.hisImageList as imgListHis>
+              <#list contractModel.modifyList as modifyList>
             <div>
               <label>合同变更备案号</label>
-              BA14070001</div>
+              ${modifyList.modifyContract.recordNo}</div>
             <div class="contPic">
               <label>合同变更扫描件</label>
               <div class="rollBox">
@@ -177,15 +176,10 @@
                   <div class="ScrCont">
                     <div id="List3">
                       <!-- 图片列表 begin -->
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                       <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
+                      <#list imgArr  as modifyimgPath>
+                      	<div class="pic"><a href="#" target="_blank"><img src="${modifyimgPath}"  /></a></div>
+              		  </#list>
                       <!-- 图片列表 end -->
                     </div>
                     <div id="List4"></div>
@@ -211,15 +205,17 @@
                 <th>备注说明</th>
                 <th class="rLine">&nbsp;</th>
               </tr>
+              <#list modifyList.modifyItemList  as modifyItem>
               <tr>
-                <td>中空玻璃</td>
-                <td>5+9A+5 双钢中空 W323/H1176</td>
-                <td>132.04</td>
-                <td>87.00</td>
-                <td>114.00</td>
-                <td>甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金。乙方逾期送货，按银行同期贷款利率支付逾期利息, 并赔偿甲方的损失，支付1%的违约金。</td>
+                <td>${modifyItem.productName}</td>
+                <td>${modifyItem.productModel}</td>
+                <td>${modifyItem.quantity}</td>
+                <td>${modifyItem.price}</td>
+                <td>${modifyItem.amount}</td>
+                <td>${modifyItem.remarks}</td>
                 <td>&nbsp;</td>
               </tr>
+              </#list>
             </table>
             <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
               <col width="20%" />
@@ -236,42 +232,46 @@
                 <th>对应批次RFID编号</th>
                 <th class="rLine">&nbsp;</th>
               </tr>
+              <#list modifyList.modifyBatchList  as modifyBatch>
               <tr>
-                <td>第1批次</td>
+                <td>第${modifyBatch.modifyBatch.batchNo}批次</td>
+                <td>
+                <table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                 <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
+                    <tr>
+                      <td>${modifyBatchItems.productModel}</td>
+                    </tr>
+                  </#list>
+                  </table>
+                  </td>
                 <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                   <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
                     <tr>
-                      <td>5+6A+5 双白中空 W779/H1176</td>
+                      <td>${modifyBatchItems.quantity}</td>
                     </tr>
-                    <tr>
-                      <td>5+9A+5 双钢中空 W323/H117</td>
-                    </tr>
+                  </#list>
                   </table></td>
-                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                    <tr>
-                      <td>1312.24</td>
-                    </tr>
-                    <tr>
-                      <td>132.04</td>
-                    </tr>
-                  </table></td>
-                <td>8564.00</td>
-                <td>AAAA00001</td>
+                <td>${modifyBatch.modifyBatch.amount}</td>
+                <td>${modifyBatch.modifyBatch.rfidNo}</td>
                 <td>&nbsp;</td>
               </tr>
-            </table>
-             	</#list>
               </#list>
+            </table>
+             	
              </#list>
             <!-- 变更信息遍历结束 -->
           </div>
+          </#if>
+          <#if contractModel.replenishList?exists>
           <div class="infoBox producedBox changeBox text-left">
             <h2 class="title">合同补损信息</h2>
+            <#list contractModel.replenishList as replenishList>
             <div>
               <label>合同补损备案号</label>
-              BA14070001</div>
+              ${replenishList.replenishContract.recordNo}</div>
             <div>
               <label>补损批次RFID</label>
-              AAAA00001/AAAA00002/AAAA00003</div>
+              ${replenishList.replenishContract.batchRfidNo}</div>
             <div class="contPic">
               <label>合同补损扫描件</label>
               <div class="rollBox">
@@ -280,15 +280,10 @@
                   <div class="ScrCont">
                     <div id="List5">
                       <!-- 图片列表 begin -->
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                      <#assign replenishArr=(replenishList.replenishContract.imgPath?split(","))>
+                      <#list replenishArr  as replenishImg>
+                      <div class="pic"><a href="#" target="_blank"><img src="${replenishImg}"  /></a></div>
+                      </#list>
                       <!-- 图片列表 end -->
                     </div>
                     <div id="List6"></div>
@@ -314,34 +309,38 @@
                 <th>新RFID编号</th>
                 <th class="rLine">&nbsp;</th>
               </tr>
+              <#list replenishList.batchItems as replenishItem>
               <tr>
-                <td>第1批次</td>
+                <td>第${replenishItem.replenishBatch.batchNo}批次</td>
                 <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                 <#list replenishItem.replenishBatchItems as replenishBatchItems>
                     <tr>
-                      <td>5+6A+5 双白中空 W779/H117</td>
+                      <td>${replenishBatchItems.productModel}</td>
                     </tr>
-                    <tr>
-                      <td>5+9A+5 双钢中空 W323/H1176</td>
-                    </tr>
+                 </#list>
                   </table></td>
                 <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                     <#list replenishItem.replenishBatchItems as replenishBatchItems>
                     <tr>
-                      <td>1312.24</td>
+                      <td>${replenishBatchItems.quantity}</td>
                     </tr>
-                    <tr>
-                      <td>132.04</td>
-                    </tr>
+                 </#list>
                   </table></td>
-                <td>8564.00</td>
-                <td>AAAA00001</td>
-                <td>AAAA00001</td>
+                <td>${replenishItem.replenishBatch.amount}</td>
+                <td>${replenishItem.replenishBatch.rfidNo}</td>
+                <td>${replenishItem.replenishBatch.newRfidNo}</td>
                 <td>&nbsp;</td>
               </tr>
+               </#list>
             </table>
             <div>
               <label>RFID订单号</label>
-              CT14070001D01</div>
-            <div class="btnBox text-center"><a href="#" class="button button-gray button-small">收起</a></div>
-          </div></td>
+              ${replenishList.replenishContract.rfidOrderNo}</div>
+              </#list>
+               </#if>
+            <div class="btnBox text-center"><a href="###" class="button button-gray button-small" onclick="closeContract('${contractId}')">收起</a></div>
+          </div>
+         
+        </td>
 </body>
 </html>

@@ -36,7 +36,7 @@ public interface IContractModifyBatchDao {
 	 *
 	 * @param    contractId
 	**/
-	public List<ModifyBatchEntity> queryBacths(QueryCondition<ModifyBatchEntity> query);
+	public List<ModifyBatchEntity> queryBacths(String modifyId);
 	/**
 	 * 刪除批次
 	 * @param contractId

@@ -129,7 +129,11 @@ public class ContractEntity extends Pagable implements Serializable {
 	**/
 	@Column(name = "STATE")
 	private Integer state;
-	
+	/**
+	 * 确认状态状态
+	**/
+	@Column(name = "CONFIRM_STATE")
+	private Integer confirmState;
 	/**
 	 * 合同类型
 	**/
@@ -176,6 +180,14 @@ public class ContractEntity extends Pagable implements Serializable {
 	@Column(name = "IMG_PATH")
 	private String imgPath;
 	
+	public Integer getConfirmState() {
+		return confirmState;
+	}
+
+	public void setConfirmState(Integer confirmState) {
+		this.confirmState = confirmState;
+	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}

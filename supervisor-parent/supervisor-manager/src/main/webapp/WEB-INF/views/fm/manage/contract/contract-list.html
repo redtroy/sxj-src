@@ -8,6 +8,10 @@
 <link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${staticPath}js/jquery.js"></script>
 <script src="${staticPath}js/intense.js"></script>
+<link rel="stylesheet" href="${staticPath}js/datepicker.css"/>
+<script src="${staticPath}js/datepicker.js"></script>
+<script src="${staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${staticPath}js/intense.js"></script>
 <script>
 window.onload = function() {
 var elements = document.querySelectorAll( '.demo-image' );
@@ -17,6 +21,16 @@ $("#leftList").load("${basePath}basic/menu.htm");
 
 function loadInfo(id){
 	$("#info"+id).load("info.htm?contractId="+id);
+}
+function closeContract(id){
+	$("#info"+id).slideUp("slow");
+}
+
+function query(){
+	 $.get("query.htm",$("#query").serialize(),
+			  function(data,status){
+			    alert("Data: " + data + "\nStatus: " + status);
+	 });
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -36,46 +50,50 @@ function loadInfo(id){
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">合同管理</h2>
+    <form action="query.htm" id="query" method="post">
     <div id="searchBox">
       <p>合同号
-        <input type="text" name="insurantName" value="" />
+        <input type="text" name="contractNo" value="${query.contractNo}" />
         备案号
-        <input type="text" name="insurantName" value="" />
+        <input type="text" name="recordNo" value="${query.recordNo}" />
         合同签订者
-        <input type="text" name="insurantName" value="" />
+        <input type="text" name="memberId" value="${query.memberId}" />
         合同类型
-        <select name="select">
-          <option selected="selected">门窗招标</option>
-          <option>玻璃采购</option>
-          <option>型材采购</option>
+        <select name="contractType" >
+        <option value="">--请选择--</option>
+           <#list contractType as type>
+            <option value="${type.getId()}">${type.getName()}</option>
+           </#list>
         </select>
         关联招标合同号
-        <input type="text" name="insurantName" value="" />
+        <input type="text" name="refContractNo" value="" />
       </p>
       <p> 合同生成时间段
-        <input type="text" name="insurantName" value="" />
+      <input class="form-control" name="startCreateDate" type="text" value="${query.startCreateDate}" datepicker>
         -
-        <input type="text" name="insurantName" value="" />
+         <input class="form-control" name="endCreateDate" type="text" value="${query.endCreateDate}" datepicker>
         合同备案时间段
-        <input type="text" name="insurantName" value="" />
+        <input class="form-control" name="startRecordDate" type="text" value="${query.startRecordDate}" datepicker>
         -
-        <input type="text" name="insurantName" value="" />
+         <input class="form-control" name="endRecordDate" type="text" value="${query.endRecordDate}" datepicker>
         确认状态
-        <select name="select">
-          <option selected="selected">未确认</option>
-          <option>甲方确认</option>
-          <option>乙方确认</option>
-          <option>已备案</option>
+        <select name="confirmState">
+        <option value="">--请选择--</option>
+           <#list contractSureState as sureState>
+            <option value="${sureState.getId()}">${sureState.getName()}</option>
+           </#list>
         </select>
         状态
-        <select name="select">
-          <option selected="selected">未审核</option>
-          <option>已审核</option>
+        <select name="state" >
+         <option value="">--请选择--</option>
+           <#list contractState as state>
+            <option value="${state.getId()}">${state.getName()}</option>
+           </#list>
         </select>
-        <button class="btn btn-blue"><span>查询</span></button>
+        <button class="btn btn-blue" ><span>查询</span></button>
       </p>
     </div>
-      
+  </form>    
          
     <table border="0" cellpadding="0" cellspacing="0" class="tabList recordTable">
       <col width="20px" />
@@ -103,6 +121,7 @@ function loadInfo(id){
         <th>状态</th>
         <th class="rLine">操作</th>
       </tr>
+       <#if list?exists>
       <#list list as model>
       <tr onclick="loadInfo('${model.contract.id}');" >
         <td><a href="#" class="lnk-blue">${model.contract.contractNo}</a></td>
@@ -111,149 +130,25 @@ function loadInfo(id){
         <td>${model.contract.memberNameB}</td>
         <td>${model.contract.type}</td>
         <td>${model.contract.refContractNo}</td>
-        <td>${model.contract.createDate?string("yyyy年MM月dd日")}</td>
-        <td>${model.contract.recordDate?string("yyyy年MM月dd日")}</td>
-        <td><em class="state normal">${model.contract.state}</em></td>
-        <td><#if model.contract.state == "1">已审核<#else> <button class="btn"><span>审核</span></button></#if></td>
+        <td>${model.contract.createDate?date}</td>
+        <td>${model.contract.recordDate?date}</td>
+        <td><em class="state normal"> <#list contractSureState as sureState><#if model.contract.confirmState== sureState.getId()> ${sureState.getName()}</#if></#list></em></td>
+        <td><#list contractState as state><#if model.contract.state== state.getId()> ${state.getName()}</#if></#list></td>
         <td class="operation">
         <a href="contract-edit.html" class="edit">修改</a>
         <a href="#" class="del">删除</a></td>
       </tr>
       <tr id="info${model.contract.id}" class="tableInfo" ></tr>
       </#list>
-      
-      <tr>
-        <td><a href="#" class="lnk-blue">CT14070003</a></td>
-        <td><a href="#" class="lnk-blue">乙方已申请合同备案</a></td>
-        <td>南京三丰玻璃有限公司</td>
-        <td>南京金陵装饰有限公司</td>
-        <td>门窗招标</td>
-        <td>-</td>
-        <td>2014年<br />
-          6月7日</td>
-        <td>2014年<br />
-          6月12日</td>
-        <td><em class="state verified">已备案</em></td>
-        <td><em class="state verified">已审核</em></td>
-        <td class="operation"><a href="contract-kfsedit.html" class="edit">修改</a>
-          <a href="#" class="del">删除</a></td>
-      </tr>
-      <tr class="tableInfo" style="display:none;">
-        <td colspan="11"><div class="infoBox text-left">
-            <ul class="ly-clearFix">
-              <li>
-                <label>订单号</label>
-                CT14070003</li>
-              <li>&nbsp;</li>
-              <li>
-                <label>工程名称</label>
-                马群科创园</li>
-              <li>
-                <label>工程地址</label>
-                仙林大道18号</li>
-              <li>
-                <label>甲方</label>
-                XXXXX开发商</li>
-              <li>
-                <label>乙方</label>
-                安丰节能有限公司</li>
-              <li>
-                <label>签订地点</label>
-                南京市栖霞区</li>
-              <li>
-                <label>签订时间</label>
-                2012年1月20日</li>
-            </ul>
-            <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-              <col width="10%" />
-              <col width="15%" />
-              <col width="5%" />
-              <col width="10%" />
-              <col width="10%" />
-              <col width="45%" />
-              <col width="5%" />
-              <tr>
-                <th>产品名称</th>
-                <th>型号规格</th>
-                <th>数量</th>
-                <th>单价￥</th>
-                <th>合价￥</th>
-                <th>备注说明</th>
-                <th class="rLine">&nbsp;</th>
-              </tr>
-              <tr>
-                <td>浴室门窗</td>
-                <td>C120 60X120</td>
-                <td>15</td>
-                <td>12.00</td>
-                <td>324.00</td>
-                <td>甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金</td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td><strong>合计</strong></td>
-                <td>&nbsp;</td>
-                <td>500</td>
-                <td>&nbsp;</td>
-                <td>10000元</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-              </tr>
-            </table>
-            <div>
-              <label>合同备注</label>
-              <textarea name="textarea2" id="textarea2" cols="80" rows="2" readonly="readonly">甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金,甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金</textarea>
-            </div>
-            <div class="contPic">
-              <label>合同扫描件</label>
-              <div class="rollBox">
-                <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-                <div class="Cont" id="ISL_Cont4">
-                  <div class="ScrCont">
-                    <div id="List7">
-                      <!-- 图片列表 begin -->
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <!-- 图片列表 end -->
-                    </div>
-                    <div id="List8"></div>
-                  </div>
-                </div>
-                <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
-              </div>
-            </div>
-            <div class="btnBox text-center"><a href="#" class="button button-gray button-small">收起</a></div>
-          </div></td>
-      </tr>
-      <tr>
-        <td><a href="#" class="lnk-blue">CT14070004</a></td>
-        <td><a href="#" class="lnk-blue">甲方已申请补损备案</a></td>
-        <td>南京三丰玻璃有限公司</td>
-        <td>南京金陵装饰有限公司</td>
-        <td>门窗招标</td>
-        <td>-</td>
-        <td>2014年<br />
-          6月7日</td>
-        <td>2014年<br />
-          6月12日</td>
-        <td><em class="state verified">已备案</em></td>
-        <td><em class="state verified">已审核</em></td>
-        <td class="operation"><a href="contract-kfsedit.html" class="edit">修改</a>
-          <a href="#" class="del">删除</a></td>
-      </tr>
-      <tr style="display:;">
+      </#if>
+      <tr style="display:none;">
         <td colspan="11"><div class="planBox text-left f14">
+        
             <div class="item">
               <label class="time">2014年5月20日14：52</label>
               甲方已申请合同备案 </div>
             <div class="line"></div>
+            
             <div class="item">
               <label class="time">2014年5月21日15：30</label>
               乙方已申请合同备案 </div>
@@ -266,14 +161,6 @@ function loadInfo(id){
               <label class="time">2014年6月25日12：20</label>
               甲方已申请合同补损备案 </div>
             <div class="btnBox"><a href="#" class="button button-gray button-small">收起</a></div>
-          </div></td>
-      </tr>
-      <tr style="display:;">
-        <td colspan="11"><div class="planBox text-left f14">
-            <div class="item">
-              <label class="time">2014年5月20日14：52</label>
-              乙方已申请合同备案 </div>
-            <div class="btnBox text-center"><a href="#" class="button button-gray button-small">收起</a></div>
           </div></td>
       </tr>
     </table>

@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<#include "manage/base.html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家电子商贸平台</title>
+<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${staticPath}js/datepicker.css"/>
+<script src="${staticPath}js/jquery.js"></script>
+<script src="${staticPath}js/datepicker.js"></script>
+<script src="${staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${staticPath}js/intense.js"></script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<script>
+		function addTable(){
+			var vTb=$("#TbData");//得到表格ID=TbData的jquery对象 
+			var totalTr=$("#total_tr");
+			//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
+			var vNum=$("#TbData tr").filter(".CaseRow").size()+1;//表格有多少个数据行 
+			var vTr=$("#TbData #trDataRow1"); //得到表格中的第一行数据 
+			var vTrClone=vTr.clone(true);//创建第一行的副本对象vTrClone 
+			vTrClone[0].id="trDataRow"+vNum;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個； 
+			vTrClone.insertBefore(totalTr);//把副本单元格对象添加到表格上方 
+		}
+		function saveContract(){
+			$.post("addContract.htm",$("#addForm").serialize(), function(data){
+				  alert("Data Loaded: " + data);
+			});
+		}
+</script>
+</head>
+<body>
+<#include "manage/head.html">
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span><a href="record.html">备案管理</a><span>&gt;</span>生成合同确认书</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList">
+      
+    </div>
+    <form action="" method="post" id="addForm">
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">生成合同确认书</h2>
+      <div class="infoBox producedBox f14">
+      <ul class="ly-clearFix">
+      <li><label>工程名称</label><input type="text" value="" name="contract.engAddress" /></li>
+      <li><label>工程地址</label><input type="text" value="" name="contract.engName" /></li>
+      <li><label>甲方</label><input type="text" value="" name="contract.memberNameA" /></li>
+      <li><label>乙方</label><input type="text" value="" name="contract.memberNameB" /></li>
+     <<li><label>签订地点</label><input type="text" value="" name="contract.address" /></li> 
+      <li><label>签订时间</label><input type="text" value="" name="contract.signedDate" datepicker></li>
+      <li><label>合同期限</label><input type="text" value="" name="contract.validityDate" datepicker></li>
+      <li><label>生效时间</label><input type="text" value="" name="contract.startDate" datepicker></li> 
+      </ul>      
+      <table border="0" cellpadding="0" cellspacing="0" id="TbData" class="tabList producedTable">       
+        <col width="20%" />
+        <col width="20%" />
+        <col width="15%" />
+        <col width="15%" />
+        <col width="10%" />
+        <col width="15%" />
+		<col width="5%" />
+        <tr>
+          <th>产品名称</th>
+          <th>产品规格</th>
+          <th>数量㎡/吨</th>
+          <th>单价<span class="money">&yen;</span>/㎡/吨</th>
+          <th>金额<span class="money">&yen;</span></th>
+          <th>备注说明</th>
+		  <th class="rLine">&nbsp;</th>
+        </tr>
+        <tr id="trDataRow1" class="CaseRow">
+          <td><input type="text" value="" name="items[0].productName"/></td>
+           <td><input type="text" value="" name="items[0].productModel"/></td>
+          <td><input type="text" value="" name="items[0].quantity"/></td>
+          <td><input type="text" value="" name="items[0].price"/></td>
+          <td><input type="text" value="" name="items[0].amount"/></td>
+          <td><textarea name="textarea" id="textarea" cols="45" rows="1" name="items[0].remarks"></textarea></td>
+		  <td><a href="javascript:void(0);" class="lnk-green" name="add" onclick="addTable()">+</a></td>
+        </tr>
+        <tr id="total_tr">
+          <td><strong>合计</strong></td>
+          <td>&nbsp;</td>
+          <td>5898吨</td>
+          <td>&nbsp;</td>
+          <td>1598756元</td>
+          <td>&nbsp;</td>
+		  <td>&nbsp;</td>
+        </tr>
+        </table>
+      <div><label>交货地址</label><input type="text" value="" name="contract.deliveryAddress" /></div>
+		<div><label>合同总批次</label><input type="text" value="" name="contract.batchCount" /></div>
+        <div><label>合同定金</label><input type="text" value="" name="contract.deposit" /> 元</div>
+        <div><label>合同备注</label><textarea name="textarea2" id="textarea2" cols="80" rows="2" name="contract.remarks"></textarea></div>
+        <div class="contPic">
+          <label>合同扫描件</label>
+          <div class="rollBox">
+            <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
+            <div class="Cont" id="ISL_Cont">
+              <div class="ScrCont">
+                <div id="List1">
+                  <!-- 图片列表 begin -->
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                  <!-- 图片列表 end -->
+                </div>
+                <div id="List2"></div>
+              </div>
+            </div>
+            <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+          </div>
+        </div>
+        <div><label>关联招标合同号</label><input type="text" value="" name="contract.refContractNo" />
+        </div>
+        </ul>        
+        <div class="btnBox"><a href="javascript:void(0);" class="button button-orange button-small" onclick="saveContract();">生成</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>
+      </div>
+      </form>
+    <!-- InstanceEndEditable --></div>
+</div>
+<#include "manage/footer.html">
+</body>
+<!-- InstanceEnd --></html>
