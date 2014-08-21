@@ -7,8 +7,7 @@
 		<parameter property="functionId" jdbcType="VARCHAR"/>
 		<parameter property="functionName" jdbcType="VARCHAR"/>
 	</parameterMap>
-	<!--  <cache type="com.sxj.mybatis.cache.HierarchicalCache">
+	<cache type="com.sxj.mybatis.cache.HierarchicalCache">
 		<property name="level" value="2"/>
-	</cache>  -->
-	<cache></cache>
+	</cache>
 </mapper>

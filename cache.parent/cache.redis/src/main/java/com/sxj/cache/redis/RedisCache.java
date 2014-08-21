@@ -10,8 +10,9 @@ import redis.clients.jedis.Jedis;
 
 import com.sxj.cache.core.Cache;
 import com.sxj.cache.core.CacheException;
-import com.sxj.cache.core.Serializer;
-import com.sxj.cache.core.util.JsonSerializer;
+import com.sxj.cache.core.serializer.JdkSerializer;
+import com.sxj.cache.core.serializer.JsonSerializer;
+import com.sxj.cache.core.serializer.Serializer;
 
 /**
  * Redis 缓存实现
@@ -23,7 +24,9 @@ public class RedisCache implements Cache
     
     private final static org.slf4j.Logger log = LoggerFactory.getLogger(RedisCache.class);
     
-    private final static Serializer SERIALIZER = new JsonSerializer();
+    private final static Serializer K_SERIALIZER = new JsonSerializer();
+    
+    private final static Serializer V_SERIALIZER = new JdkSerializer();
     
     private String region;
     
@@ -32,26 +35,25 @@ public class RedisCache implements Cache
         this.region = region;
     }
     
-    private Object deserialize(String json)
+    private Object deserializeKey(String json)
     {
-        return SERIALIZER.deserialize(json);
+        return K_SERIALIZER.deserialize(json);
     }
     
-    /**
-     * 生成缓存的 key
-     * @param key
-     * @return
-     */
-    @SuppressWarnings("rawtypes")
     private String serializeObject(Object object)
     {
         
-        return SERIALIZER.serialize(object);
+        return V_SERIALIZER.serialize(object);
+    }
+    
+    private Object deserializeObject(String str)
+    {
+        return V_SERIALIZER.deserialize(str);
     }
     
     private String serializeKey(Object key)
     {
-        return region + ":" + SERIALIZER.serialize(key);
+        return region + ":" + K_SERIALIZER.serialize(key);
     }
     
     public static void main(String[] args)
@@ -77,7 +79,7 @@ public class RedisCache implements Cache
                 return null;
             byte[] b = cache.get(serializeKey(key).getBytes());
             if (b != null)
-                obj = deserialize(new String(b));
+                obj = deserializeObject(new String(b));
         }
         catch (Exception e)
         {

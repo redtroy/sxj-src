@@ -1,4 +1,4 @@
-package com.sxj.cache.core;
+package com.sxj.cache.core.serializer;
 
 public interface Serializer
 {

@@ -1,5 +1,7 @@
 package com.sxj.mybatis.orm.model;
 
+import java.io.Serializable;
+
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
@@ -11,7 +13,7 @@ import com.sxj.mybatis.sn.annotations.Sn;
 
 @Entity(mapper = FunctionMapper.class)
 @Table(name = "TEST_FUNCTION")
-public class Function
+public class Function implements Serializable
 {
     @Id(column = "ID")
     @GeneratedValue(strategy = GenerationType.UUID, length = 31)

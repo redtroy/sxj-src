@@ -1,4 +1,4 @@
-package com.sxj.cache.core.util;
+package com.sxj.cache.core.serializer;
 
 public class CacheObject
 {
