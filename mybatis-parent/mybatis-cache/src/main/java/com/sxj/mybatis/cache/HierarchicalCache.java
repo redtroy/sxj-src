@@ -38,29 +38,31 @@ public class HierarchicalCache implements Cache
     @Override
     public void putObject(Object key, Object value)
     {
-        putObject(0, key, value);
+        putObject(level, key, value);
     }
     
     private void putObject(int level, Object key, Object value)
     {
         
         HierarchicalCacheManager.set(level, this.cacheId, key, value);
-        if ((level + 1) <= this.level)
+        if ((level - 1) > 0)
             putObject(level + 1, key, value);
     }
     
     @Override
     public Object getObject(Object key)
     {
-        
-        return getObject(0, key);
+        return getObject(1, key);
     }
     
     private Object getObject(int level, Object key)
     {
         Object object = HierarchicalCacheManager.get(level, this.cacheId, key);
         if (object != null)
+        {
+            putObject(level - 1, key, object);
             return object;
+        }
         if ((level + 1) <= this.level)
             return getObject(level + 1, key);
         return null;
@@ -69,15 +71,28 @@ public class HierarchicalCache implements Cache
     @Override
     public Object removeObject(Object key)
     {
-        System.out.println("removing object");
+        removeObject(level, key);
         return null;
+    }
+    
+    private void removeObject(int level, Object key)
+    {
+        HierarchicalCacheManager.evict(level, cacheId, key);
+        if ((level - 1) > 0)
+            removeObject(level - 1, key);
+    }
+    
+    private void clear(int level)
+    {
+        HierarchicalCacheManager.clear(level, cacheId);
+        if ((level - 1) > 0)
+            clear(level - 1);
     }
     
     @Override
     public void clear()
     {
-        // TODO Auto-generated method stub
-        
+        clear(level);
     }
     
     @Override
