@@ -36,7 +36,10 @@ public class AccountServiceImpl implements IAccountService {
 	 */
 	@Override
 	public void modifyAccount(AccountEntity account) {
-		accountDao.updateAccount(account);
+		AccountEntity ae=accountDao.getAccount(account.getId());
+		ae.setName(account.getName());
+		ae.setAccountName(account.getAccountName());
+		accountDao.updateAccount(ae);
 
 	}
 

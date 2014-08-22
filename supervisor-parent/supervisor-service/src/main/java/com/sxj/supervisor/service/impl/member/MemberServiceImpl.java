@@ -37,8 +37,15 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	public void modifyMember(MemberEntity member) {
-		menberDao.updateMember(member);
-
+		MemberEntity mb=menberDao.getMember(member.getId());
+		mb.setName(member.getName());
+		mb.setbLicenseNo(member.getbLicenseNo());
+		mb.setEnergyNo(member.getEnergyNo());
+		mb.setContacts(member.getContacts());
+		mb.setPhoneNo(member.getPhoneNo());
+		mb.setAddress(member.getAddress());
+		mb.setTelNum(member.getTelNum());
+		menberDao.updateMember(mb);
 	}
 
 	/**

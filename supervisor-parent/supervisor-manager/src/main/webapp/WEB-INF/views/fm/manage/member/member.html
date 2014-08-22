@@ -86,7 +86,7 @@ jQuery(document).ready(function($) {
 	   console.log(address)
 	   console.log(telNum)
 	 */
-	   $.post("editMember.htm",{id:id,memberNo:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
+	   $.post("editMember.htm",{id:id,name:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
 		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum
 		 },function(data){
 			 if (data.isOK=='ok'){
