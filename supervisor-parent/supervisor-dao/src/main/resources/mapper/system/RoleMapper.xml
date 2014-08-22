@@ -8,14 +8,6 @@
 		<result property="functionId" column="FUNCTION_ID" jdbcType="VARCHAR" />
 		<result property="accountId" column="ACCOUNT_ID" jdbcType="VARCHAR" />
 	</resultMap>
-	<resultMap id="RoleFunctionResultMap"
-		type="com.sxj.supervisor.entity.system.FunctionEntity">
-		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="title" column="TITLE" jdbcType="VARCHAR" />
-		<result property="url" column="URL" jdbcType="VARCHAR" />
-		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
-		<result property="level" column="LEVEL" jdbcType="INTEGER" />
-	</resultMap>
 
 	<!-- 获取权限列表 -->
 	<select id="getRoles" resultMap="RoleResultMap" parameterType="String">
@@ -23,7 +15,7 @@
 	</select>
 
 	<!-- 获取权限操作列表 -->
-	<select id="getRoleFunction" resultMap="RoleFunctionResultMap"
+	<select id="getRoleFunction" resultMap="com.sxj.supervisor.dao.system.IFunctionDao.FunctionResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL from M_SYS_FUNCTION f 
 		INNER JOIN M_ROLE_ACCOUNT r on f.ID=r.FUNCTION_ID WHERE 1=1 ]]>
@@ -36,7 +28,7 @@
 		</if>
 	</select>
 	<!-- 获取权限操作列表 -->
-	<select id="getAllRoleFunction" resultMap="RoleFunctionResultMap"
+	<select id="getAllRoleFunction" resultMap="com.sxj.supervisor.dao.system.IFunctionDao.FunctionResultMap"
 		parameterType="String">
 		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL from M_SYS_FUNCTION f 
 		INNER JOIN M_ROLE_ACCOUNT r on f.ID=r.FUNCTION_ID WHERE r.ACCOUNT_ID=#{accountId}]]>

@@ -15,6 +15,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
+import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultSetType;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.SqlSource;
@@ -263,7 +265,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + insertStatementId))
                 {
-                    buildInsert(insertStatementId);
+                    buildInsert(namespace + "." + insertStatementId);
                 }
             }
             
@@ -279,7 +281,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + deleteStatementId))
                 {
-                    buildDelete(deleteStatementId);
+                    buildDelete(namespace + "." + deleteStatementId);
                 }
             }
             
@@ -295,7 +297,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + updateStatementId))
                 {
-                    buildUpdate(updateStatementId);
+                    buildUpdate(namespace + "." + updateStatementId);
                 }
             }
             
@@ -311,7 +313,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + selectStatementId))
                 {
-                    buildSelect(selectStatementId);
+                    buildSelect(namespace + "." + selectStatementId);
                 }
             }
             
@@ -327,7 +329,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasCache(namespace + "."
                         + batchInsertStatementId))
                 {
-                    buildBatchInsert(batchInsertStatementId,
+                    buildBatchInsert(namespace + "." + batchInsertStatementId,
                             getCollection(ReflectUtils.findMethodsAnnotatedWith(mapperType,
                                     BatchInsert.class)));
                 }
@@ -344,7 +346,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasCache(namespace + "."
                         + batchDeleteStatementId))
                 {
-                    buildBatchDelete(batchDeleteStatementId,
+                    buildBatchDelete(namespace + "." + batchDeleteStatementId,
                             getCollection(ReflectUtils.findMethodsAnnotatedWith(mapperType,
                                     BatchDelete.class)));
                 }
@@ -371,7 +373,7 @@ public class GenericStatementBuilder extends BaseBuilder
     private void buildBatchDelete(String statementId, String collection)
     {
         Integer timeout = null;
-        Class<?> parameterType = String.class;
+        Class<?> parameterType = idField.getType();
         
         //~~~~~~~~~~~~~~~~~~~~~~~
         boolean flushCache = true;
@@ -801,7 +803,21 @@ public class GenericStatementBuilder extends BaseBuilder
         
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        
+        String resultMap = null;
+        Iterator<String> resultMapNames = configuration.getResultMapNames()
+                .iterator();
+        while (resultMapNames.hasNext())
+        {
+            String name = resultMapNames.next();
+            ResultMap temp = configuration.getResultMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                resultMap = temp.getId();
+                System.out.println("========" + statementId + "=========已绑定"
+                        + resultMap);
+                break;
+            }
+        }
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
@@ -809,9 +825,9 @@ public class GenericStatementBuilder extends BaseBuilder
                 fetchSize,
                 timeout,
                 null,
-                null,
-                null,
-                resultType,
+                idField.getType(),
+                resultMap,
+                entityClass,
                 null,
                 flushCache,
                 useCache,
