@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.contract.IContractDao">
-	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.contract.ContractEntity">
+	<resultMap id="ContractResultMap" type="com.sxj.supervisor.entity.contract.ContractEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
@@ -32,7 +32,7 @@
 	</resultMap>
 
 	<!-- 条件查询合同 -->
-	<select id="queryContract" resultMap="BaseResultMap"
+	<select id="queryContract" resultMap="ContractResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,CONTRACT_NO,ADDRESS,MEMBER_ID_A,MEMBER_ID_B,ENG_NAME,ENG_ADDRESS,RECORD_NO,
 					SIGNED_DATE,VALIDITY_DATE,START_DATE,CREATE_DATE,RECORD_DATE,DEPOSIT,REMARKS,

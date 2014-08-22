@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.contract.IContractModifyDao">
-	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.contract.ModifyContractEntity">
+	<resultMap id="ModifyResultMap" type="com.sxj.supervisor.entity.contract.ModifyContractEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="contractId" column="CONTRACT_ID" jdbcType="VARCHAR" />
 		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
@@ -11,7 +11,7 @@
 	</resultMap>
 
 	<!-- 条件查询变更合同 -->
-	<select id="queryModify" resultMap="BaseResultMap"
+	<select id="queryModify" resultMap="ModifyResultMap"
 		parameterType="String">
 		<![CDATA[ SELECT ID,CONTRACT_ID,RECORD_NO,IMG_PATH FROM M_CONTRACT_MODIFY
 					WHERE RECORD_NO in(#{condition.recordIds})]]>

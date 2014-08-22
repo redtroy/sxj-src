@@ -3,11 +3,13 @@ package com.sxj.supervisor.entity.contract;
 import java.io.Serializable;
 
 
+
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractItemDao;
@@ -30,7 +32,7 @@ public class ContractItemEntity extends Pagable implements Serializable {
 	 * 主键
 	**/
 	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	
 	/**

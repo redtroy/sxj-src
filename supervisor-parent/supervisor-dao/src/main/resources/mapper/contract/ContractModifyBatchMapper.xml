@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.contract.IContractModifyBatchDao">
-	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.contract.ModifyBatchEntity">
+	<resultMap id="ModifyBacthResultMap" type="com.sxj.supervisor.entity.contract.ModifyBatchEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="modifyId" column="MODIFY_ID" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
@@ -13,7 +13,7 @@
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
-	<select id="queryBacths" resultMap="BaseResultMap"
+	<select id="queryBacths" resultMap="ModifyBacthResultMap"
 		parameterType="String">
 		<![CDATA[SELECT ID, MODIFY_ID,　RFID_NO,AMOUNT,BATCH_ITEMS,RECORD_NO,BATCH_NO　FROM
 　M_CONTRACT_MODIFY_BATCH　where MODIFY_ID=#{condition.modifyId}]]>

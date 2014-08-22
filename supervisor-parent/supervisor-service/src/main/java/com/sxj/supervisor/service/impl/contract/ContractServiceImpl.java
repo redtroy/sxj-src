@@ -130,10 +130,13 @@ public class ContractServiceImpl implements IContractService {
 			if (itemList != null) {
 				for (int i = 0; i < itemList.size(); i++) {
 					ContractItemEntity ci = itemList.get(i);
-					ci.setContractId(contract.getId());
+					if(ci.getAmount()!=null && ci.getPrice()!=null){
+						ci.setContractId(contract.getId());
+						contractItemDao.addItem(ci);// 新增条目
+					}
+					
 				}
-				contractItemDao.addItems(itemList
-						.toArray(new ContractItemEntity[itemList.size()]));// 新增条目
+				
 			}
 		}
 	}
@@ -143,7 +146,7 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void modifyContract(ContractModel contract) {
-		// TODO Auto-generated method stub
+	
 
 	}
 
