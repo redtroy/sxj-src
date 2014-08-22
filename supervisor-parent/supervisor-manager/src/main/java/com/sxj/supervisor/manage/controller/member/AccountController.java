@@ -40,12 +40,26 @@ public class AccountController extends BaseController {
 	/**
 	 * 根据ID删除子帐号
 	 * 
-	 * @param query
+	 * @param delAccount
 	 * @return
 	 */
 	@RequestMapping("delAccount")
 	public @ResponseBody Map<String, String> delAccount(String id) {
 		accountService.reomveAccount(id);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isOK", "ok");
+		return map;
+	}
+	
+	/**
+	 * 根据更新子帐号信息
+	 * 
+	 * @param editAccount
+	 * @return
+	 */
+	@RequestMapping("editAccount")
+	public @ResponseBody Map<String, String> editAccount(AccountEntity account) {
+		accountService.modifyAccount(account);;
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		return map;
