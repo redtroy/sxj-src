@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<#include "manage/base.html"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家电子商贸平台</title>
+<link href="${staticPath}style/home.css" rel="stylesheet" type="text/css" />
+<script src="${staticPath}js/jquery.js"></script>
+</head>
+<body>
+<div id="main" class="join-box">
+<div class="join-modern">
+<div class="join-tabs"><img src="${staticPath}images/logo-home.jpg" title="私享家电子商贸后台管理系统" />
+私享家电子商贸后台管理系统</div>
+<div class="join-info register_form">
+<form id="login_form" action="${basePath}login.htm" method="post">
+	<div class="join-info-bg"></div>
+	<div class="form-join">
+	  <span class="icon join-name"></span><input type="text" id="user_name" name="account" value="${account}" class="text tip" title="3-20位字符，可由中文、英文、数字及“_”、“-”组成" />
+	    <#if message??>
+	    <div class="msg-error"><span class="icon16 icon-error"></span>${message}</div>
+    	</#if>
+	    
+	</div>
+	<div class="form-join">
+	<span class="icon join-password"></span><input type="password" id="password" name="password" class="text tip" title="6-16位字符，可由英文、数字及标点符号组成" />
+	</div>
+	<div class="btn-box">
+	  <a href="javascript:login()" class="btn btn-join">登&nbsp;&nbsp;录</a>
+	</div>
+</form>
+</div>
+</div>
+<div id="footer" class="yard-1000">&copy; 2014 私享家电子商贸 版权所有 经营许可证编号:<a href="#" target="_blank">苏B2-20140088</a>苏ICP备14025589号</div>
+</div>
+</body>
+<script type="text/javascript" src="${staticPath}js/jquery.poshytip.min.js" charset="utf-8"></script>
+<script>
+function login()
+{
+	$("#login_form").submit();
+	
+}
+
+
+//注册表单提示
+$('.tip').poshytip({
+	className: 'tip-yellowsimple',
+	showOn: 'focus',
+	alignTo: 'target',
+	alignX: 'center',
+	alignY: 'top',
+	offsetX: 0,
+	offsetY: 5,
+	allowTipHover: false
+});
+
+//注册表单验证
+$(function(){
+		jQuery.validator.addMethod("lettersonly", function(value, element) {
+			return this.optional(element) || /^[^:%,'\*\"\s\<\>\&]+$/i.test(value);
+		}, "Letters only please"); 
+		jQuery.validator.addMethod("lettersmin", function(value, element) {
+			return this.optional(element) || ($.trim(value.replace(/[^\u0000-\u00ff]/g,"aa")).length>=3);
+		}, "Letters min please"); 
+		jQuery.validator.addMethod("lettersmax", function(value, element) {
+			return this.optional(element) || ($.trim(value.replace(/[^\u0000-\u00ff]/g,"aa")).length<=15);
+		}, "Letters max please");
+    $("#register_form").validate({
+        errorPlacement: function(error, element){
+            var error_td = element.parent('dd');
+            error_td.find('label').hide();
+            error_td.append(error);
+        },
+        submitHandler:function(form){
+            ajaxpost('register_form', '', '', 'onerror') 
+        },
+        rules : {
+            user_name : {
+                required : true,
+                lettersmin : true,
+                lettersmax : true,
+                lettersonly : true,
+                remote   : {
+                    url :'index.php?act=login&op=check_member&column=ok',
+                    type:'get',
+                    data:{
+                        user_name : function(){
+                            return $('#user_name').val();
+                        }
+                    }
+                }
+            },
+            password : {
+                required : true,
+                minlength: 6,
+				maxlength: 20
+            },
+            password_confirm : {
+                required : true,
+                equalTo  : '#password'
+            },
+            email : {
+                required : true,
+                email    : true,
+                remote   : {
+                    url : 'index.php?act=login&op=check_email',
+                    type: 'get',
+                    data:{
+                        email : function(){
+                            return $('#email').val();
+                        }
+                    }
+                }
+            },
+			            captcha : {
+                required : true,
+                minlength: 4,
+                remote   : {
+                    url : 'index.php?act=seccode&op=check&nchash=206f94ec',
+                    type: 'get',
+                    data:{
+                        captcha : function(){
+                            return $('#captcha').val();
+                        }
+                    }
+                }
+            },
+			            agree : {
+                required : true
+            }
+        },
+        messages : {
+            user_name : {
+                required : '用户名不能为空',
+                lettersmin : '用户名必须在3-15个字符之间',
+                lettersmax : '用户名必须在3-15个字符之间',
+				lettersonly: '用户名不能包含敏感字符',
+				remote	 : '该用户名已经存在'
+            },
+            password  : {
+                required : '密码不能为空',
+                minlength: '密码长度应在6-20个字符之间',
+				maxlength: '密码长度应在6-20个字符之间'
+            },
+            password_confirm : {
+                required : '请再次输入您的密码',
+                equalTo  : '两次输入的密码不一致'
+            },
+            email : {
+                required : '电子邮箱不能为空',
+                email    : '这不是一个有效的电子邮箱',
+				remote	 : '该电子邮箱已经存在'
+            },
+			            captcha : {
+                required : '请输入验证码',
+                minlength: '验证码不正确',
+				remote	 : '验证码不正确'
+            },
+			            agree : {
+                required : '请阅读并同意该协议'
+            }
+        }
+    });
+});
+</script>
+</html>

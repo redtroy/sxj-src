@@ -1,71 +1,92 @@
 package com.sxj.supervisor.manage.login;
 
+import java.io.IOException;
+
+import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.apache.shiro.web.util.WebUtils;
+import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 
-public class CaptchaFormAuthenticationFilter extends FormAuthenticationFilter {
-	public static final String DEFAULT_CAPTCHA_PARAM = "captcha";
+import com.sxj.supervisor.entity.system.SystemAccountEntity;
+import com.sxj.util.common.StringUtils;
 
-	private String captchaParam = DEFAULT_CAPTCHA_PARAM;
+public class MyAuthenticationFilter extends
+		PermissionsAuthorizationFilter {
+	
+	//@Resource
+	//private CacheManager shiroCacheManager;
 
-	public String getCaptchaParam() {
-		return captchaParam;
-	}
+	@Override
+	public boolean isAccessAllowed(ServletRequest request,
+			ServletResponse response, Object mappedValue) throws IOException {
+		Subject user = SecurityUtils.getSubject();
+		SystemAccountEntity shiroUser = (SystemAccountEntity) user.getPrincipal();
 
-	public void setCaptchaParam(String captchaParam) {
-		this.captchaParam = captchaParam;
-	}
+		/*
+		 * Session session = user.getSession(false); Cache<Object, Object> cache
+		 * = shiroCacheManager.getCache(GlobalStatic.authenticationCacheName);
+		 * String cachedSessionId =
+		 * cache.get(GlobalStatic.authenticationCacheName
+		 * +"-"+shiroUser.getAccount()).toString(); String sessionId=(String)
+		 * session.getId(); if(!sessionId.equals(cachedSessionId)){
+		 * user.logout(); }
+		 */
 
-	protected String getCaptcha(ServletRequest request) {
-		return WebUtils.getCleanParam(request, getCaptchaParam());
-	}
-
-	// 创建 Token
-	protected CaptchaUsernamePasswordToken createToken(ServletRequest request,
-			ServletResponse response) {
-
-		String username = getUsername(request);
-		String password = getPassword(request);
-		String captcha = getCaptcha(request);
-		boolean rememberMe = isRememberMe(request);
-		String host = getHost(request);
-
-		return new CaptchaUsernamePasswordToken(username,
-				password.toCharArray(), rememberMe, host, captcha);
-	}
-
-	// 验证码校验
-	protected void doCaptchaValidate(HttpServletRequest request,
-			CaptchaUsernamePasswordToken token) {
-//
-//		String captcha = (String) request.getSession().getAttribute(
-//				com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
-//
-//		if (captcha != null && !captcha.equalsIgnoreCase(token.getCaptcha())) {
-//			throw new IncorrectCaptchaException("验证码错误！");
-//		}
-	}
-
-	// 认证
-	protected boolean executeLogin(ServletRequest request,
-			ServletResponse response) throws Exception {
-		CaptchaUsernamePasswordToken token = createToken(request, response);
-
-		try {
-			doCaptchaValidate((HttpServletRequest) request, token);
-
-			Subject subject = getSubject(request, response);
-			subject.login(token);
-
-			return onLoginSuccess(token, subject, request, response);
-		} catch (AuthenticationException e) {
-			return onLoginFailure(token, e, request, response);
+		HttpServletRequest req = (HttpServletRequest) request;
+		Subject subject = getSubject(request, response);
+		String uri = req.getRequestURI();
+		String requestURL = req.getRequestURL().toString();
+		String contextPath = req.getContextPath();
+		if (uri.endsWith("/pre")) {// 去掉pre
+			uri = uri.substring(0, uri.length() - 4);
 		}
+		int i = uri.indexOf(contextPath);
+		if (i > -1) {
+			uri = uri.substring(i + contextPath.length());
+		}
+		if (StringUtils.isBlank(uri)) {
+			uri = "/";
+		}
+		boolean permitted = false;
+		if ("/".equals(uri)) {
+			permitted = true;
+		} else {
+			permitted = subject.isPermitted(uri);
+		}
+		String isqx = "否";
+		if (permitted) {
+			isqx = "是";
+		}
+		//String ip = IPUtils.getClientAddress(req);
+
+		// Fwlog fwlog = new Fwlog();
+		// fwlog.setFwUrl(requestURL);
+		// fwlog.setIsqx(isqx);
+		// fwlog.setIp(ip);
+
+		// fwlog.setUserCode(shiroUser.getLoginName());
+		// fwlog.setUserName(shiroUser.getUserName());
+		// Date startDate = new Date();
+		// fwlog.setStartDate(startDate);
+		// fwlog.setStrDate(DateUtils.convertDate2String(
+		// "yyyy-MM-dd HH:mm:ss.SSSS", startDate));
+		// HttpSession httpSession = req.getSession(false);
+		// if (httpSession != null) {
+		// fwlog.setSessionId(httpSession.getId());
+		// }
+		// try {
+		// String menuName = menuService.getNameByPageurl(uri);
+		// fwlog.setMenuName(menuName);
+		// menuService.save(fwlog);
+		// } catch (Exception e) {
+		// logger.error(e.getMessage(), e);
+		// }
+		return permitted;
+
 	}
 }

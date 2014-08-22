@@ -198,7 +198,7 @@ public class EncryptUtil {
     }
 
     public static void main(String[] args) {
-		String aaa1="MAL120509080603";
+		String aaa1="123456";
 		aaa1=EncryptUtil.md5Hex(aaa1);
 		String aaa2="MAL120509074311";
 		aaa2=EncryptUtil.md5Hex(aaa2);

@@ -1,4 +1,4 @@
-package com.sxj.supervisor.manage.login;
+package com.sxj.supervisor.service.impl.shiro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,17 +16,21 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.util.common.StringUtils;
 
-public class MyShiroRealm extends AuthorizingRealm {
+public class MyShiroRealmService extends AuthorizingRealm {
 
 	// 用于获取用户信息及用户权限信息的业务接口
+	@Autowired
 	private ISystemAccountService accountService;
 
+	@Autowired
 	private IRoleService roleService;
 
 	public static final String HASH_ALGORITHM = "MD5";
@@ -35,7 +39,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 
 	private static final int SALT_SIZE = 8;
 
-	public MyShiroRealm() {
+	public MyShiroRealmService() {
 		// 认证
 		super.setAuthenticationCachingEnabled(false);
 		// 授权
@@ -72,11 +76,14 @@ public class MyShiroRealm extends AuthorizingRealm {
 			// }
 			// }
 			List<FunctionEntity> functionList = roleService
-					.getRoleFunction(username);
+					.getAllRoleFunction(username);
 			List<String> permissions = new ArrayList<String>();
 			if (functionList != null && functionList.size() > 0) {
 				for (FunctionEntity functionEntity : functionList) {
 					if (functionEntity == null) {
+						continue;
+					}
+					if (StringUtils.isEmpty(functionEntity.getUrl())) {
 						continue;
 					}
 					permissions.add(functionEntity.getUrl());
@@ -103,7 +110,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 			SystemAccountEntity account = accountService
 					.getAccountByAccount(username);
 			if (account != null) {
-				return new SimpleAuthenticationInfo(account.getAccount(),
+				return new SimpleAuthenticationInfo(account,
 						account.getPassword(), getName());
 			}
 		}

@@ -1,7 +1,6 @@
 package com.sxj.supervisor.manage.login;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.springframework.web.context.WebApplicationContext;
 
 public class CaptchaUsernamePasswordToken extends UsernamePasswordToken {
 

@@ -1,0 +1,179 @@
+<script>
+jQuery(document).ready(function($) {
+	$('.sltinput').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.dropList').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+	$('.popBtn').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+})
+</script>
+    <!-- InstanceBeginEditable name="rightBar" -->
+    <h2 class="title">管理员管理</h2>
+    <div id="searchBox" class="ly-clearFix"> 管理员ID
+      <input type="text" name="insurantName" value="">
+      姓名
+      <input type="text" name="insurantName" value="">
+      帐号
+      <input type="text" name="insurantName" value="">
+      权限
+      <select name="select">
+        <option selected="selected">全部</option>
+        <option>合同管理</option>
+        <option>备案管理</option>
+        <option>RFID跟踪管理</option>
+        <option>会员行为跟踪管理</option>
+        <option>支付管理</option>
+      </select>
+      <button class="btn btn-blue"><span>搜索</span></button>
+      &nbsp;&nbsp;
+      <button onclick="javascript:window.location.href='admin-add.html'" class="btn btn-blue ly-right"><span>新增管理员</span></button>
+    </div>
+    <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+      <col width="10%" />
+      <col width="13%"/>
+      <col width="15%"/>
+      <col width="10%" />
+      <col width="10%" />
+      <col width="12%" />
+      <col width="15%" />
+      <tr>
+        <th>管理员ID</th>
+        <th>姓名</th>
+        <th>帐号</th>
+        <th>权限</th>
+        <th>操作记录</th>
+        <th>操作</th>
+        <th class="rLine">&nbsp;</th>
+      </tr>
+      <tr>
+        <td>0001</td>
+        <td><input type="text" name="input" value="刘阳" /></td>
+        <td><input type="text" name="input2" value="sale-liu" /></td>
+        <td class="permission"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
+        <td><a href="admin-view.html" class="lnk-blue lnk-underline">查询</a></td>
+        <td class="operation"><a href="admin.html" class="confirm lnk-yellow">确认</a><a href="#" class="del lnk-blue">删除</a></td>
+        <td><button class="btn"><span>初始化密码</span></button></td>
+      </tr>
+      <tr>
+        <td>0002</td>
+        <td>周明</td>
+        <td>sale-zhou</td>
+        <td><p>合同管理</p></td>
+        <td><a href="#" class="lnk-blue lnk-underline">查询</a></td>
+        <td class="operation"><a href="#" class="edit lnk-blue">修改</a><a href="#" class="del lnk-blue">删除</a></td>
+        <td><button class="btn"><span>初始化密码</span></button></td>
+      </tr>
+      <tr>
+        <td>0003</td>
+        <td>李一</td>
+        <td>liyi</td>
+        <td>备案管理</td>
+        <td><a href="#" class="lnk-blue lnk-underline">查询</a></td>
+        <td class="operation"><a href="#" class="edit lnk-blue">修改</a><a href="#" class="del lnk-blue">删除</a></td>
+        <td><button class="btn"><span>初始化密码</span></button></td>
+      </tr>
+    </table>
+    <div class="modal-wrap popDemo dropList" style="display:none;">
+      <div class="modal-header"><span class="close">关闭</span></div>
+      <div class="modal-body dropBox">
+        <div class="perBox"><span>已选择权限</span>
+          <ul>
+            <li>
+              <input  type="checkbox"  title="会员中心" value="593" checked="checked" />
+              会员管理</li>
+            <li>
+              <input  type="checkbox"  title="会员中心" value="593" checked="checked" />
+              会员管理子帐号管理</li>
+          </ul>
+        </div>
+        <div class="item"> <span>
+          <input  type="checkbox"  title="会员中心" value="593" checked="checked" />
+          会员中心</span>
+          <ul>
+            <li>
+              <input  type="checkbox"  title="会员中心" value="593" checked="checked" />
+              会员管理</li>
+            <li>
+              <input  type="checkbox"  title="会员中心" value="593" checked="checked" />
+              会员管理子帐号管理</li>
+          </ul>
+        </div>
+        <div class="item"> <span>
+          <input  type="checkbox" value="593"  title="备案管理" />
+          备案管理</span>
+          <ul>
+            <li>
+              <input  type="checkbox" value="593"  title="备案管理" />
+              备案管理</li>
+          </ul>
+        </div>
+        <div class="item"> <span>
+          <input  type="checkbox" value="593"  title="合同管理" />
+          合同管理</span>
+          <ul>
+            <li>
+              <input  type="checkbox" value="593"  title="合同管理" />
+              合同管理</li>
+          </ul>
+        </div>
+        <div class="item"> <span>
+          <input  type="checkbox" value="593"  title="RFID跟踪管理" />
+          RFID跟踪管理</span>
+          <ul>
+            <li>
+              <input  type="checkbox" value="593"  title="生成RFID标签" />
+              生成RFID标签</li>
+            <li>
+              <input  type="checkbox" value="593"  title="供应商RFID管理" />
+              供应商RFID管理</li>
+            <li>
+              <input  type="checkbox" value="593"  title="门窗厂RFID管理" />
+              门窗厂RFID管理</li>
+            <li>
+              <input  type="checkbox" value="593"  title="RFID补损管理" />
+              RFID补损管理</li>
+            <li>
+              <input  type="checkbox" value="593"  title="RFID订单管理" />
+              RFID订单管理</li>
+          </ul>
+        </div>
+        <div class="item"> <span>
+          <input  type="checkbox" value="593"  title="会员行为跟踪管理" />
+          会员行为跟踪管理</span>
+          <ul>
+            <li>
+              <input  type="checkbox" value="593"  title="会员行为跟踪管理" />
+              会员行为跟踪管理</li>
+          </ul>
+        </div>
+        <div class="item"> <span>
+          <input  type="checkbox" value="593"  title="支付管理" />
+          支付管理</span>
+          <ul>
+            <li>
+              <input  type="checkbox" value="593"  title="支付管理" />
+              支付管理</li>
+          </ul>
+        </div>
+        <div class="item"> <span>
+          <input  type="checkbox" value="593"  title="管理员管理" />
+          管理员管理</span>
+          <ul>
+            <li>
+              <input  type="checkbox" value="593"  title="管理员管理" />
+              管理员管理</li>
+          </ul>
+        </div>
+        <button class="popBtn">确认</button>
+      </div>
+    </div>
+    <div class="maskdivgen" style="display:none"></div>
+
+

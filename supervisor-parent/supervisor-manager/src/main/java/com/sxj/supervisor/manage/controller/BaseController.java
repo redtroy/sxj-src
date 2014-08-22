@@ -1,24 +1,19 @@
 package com.sxj.supervisor.manage.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sxj.util.common.StringUtils;
-
-@Controller
 public class BaseController {
 
-	public static final String LOGIN = "page/login";
+	public static final String LOGIN = "manage/login";
 
-	public static final String INDEX = "page/index";
+	public static final String INDEX = "manage/index";
 
 	public static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
 
@@ -31,40 +26,25 @@ public class BaseController {
 
 	}
 
-	@RequestMapping("login")
-	public String ToLogin(String error, ModelMap model)
-			throws UnsupportedEncodingException {
-		if (StringUtils.isNotEmpty(error)) {
-			if ("no_validate".equals(error)) {
-				error = "请输入验证码";
-			} else if ("validate_error".equals(error)) {
-				error = "验证码错误，请重新输入";
-			}
-		}
-		model.addAttribute("error", error);
-
-		return LOGIN;
+	protected String getBasePath(HttpServletRequest request) {
+		return request.getScheme() + "://" + request.getServerName() + ":"
+				+ request.getServerPort() + request.getContextPath() + "/";
 	}
-
-	@RequestMapping("index")
-	public String ToIndex() {
-		return INDEX;
-	}
-
-	@RequestMapping("content")
-	public String ToContent() {
-		return "page/main/content1";
-	}
-
 	
-	@RequestMapping("base")
-	public String ToBase() {
-		return "manage/base";
-	}
+	
 
-	@RequestMapping("accessdenied")
-	public String ToAccessdenied() {
-		return "page/accessdenied";
-	}
+	// @RequestMapping("login")
+	// public String ToLogin(String error, ModelMap model)
+	// throws UnsupportedEncodingException {
+	// if (StringUtils.isNotEmpty(error)) {
+	// if ("no_validate".equals(error)) {
+	// error = "请输入验证码";
+	// } else if ("validate_error".equals(error)) {
+	// error = "验证码错误，请重新输入";
+	// }
+	// }
+	// model.addAttribute("error", error);
+	// return LOGIN;
+	// }
 
 }

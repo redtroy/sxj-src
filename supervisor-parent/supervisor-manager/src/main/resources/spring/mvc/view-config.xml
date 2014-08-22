@@ -49,7 +49,6 @@
 			/> <entry key="xw" value-ref="xwTags"></entry> </map> </property> -->
 	</bean>
 
-
 	<mvc:annotation-driven
 		content-negotiation-manager="contentNegotiationManager">
 		<mvc:message-converters register-defaults="true">
@@ -68,10 +67,15 @@
 	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
 	<bean id="contentNegotiationManager"
 		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="false" />
+		<property name="favorParameter" value="false" />
+		<property name="ignoreAcceptHeader" value="false" />
 		<property name="mediaTypes">
 			<value>
+				atom=application/atom+xml
+				html=text/html
 				json=application/json
-				xml=application/xml
+				*=*/*
 			</value>
 		</property>
 	</bean>
