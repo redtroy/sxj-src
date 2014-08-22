@@ -1,11 +1,14 @@
 package com.sxj.supervisor.manage.controller.member;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.AccountStatesEnum;
@@ -32,5 +35,19 @@ public class AccountController extends BaseController {
 		map.put("states", states);
 		map.put("list", list);
 		return "manage/member/account";
-	}	
+	}
+	
+	/**
+	 * 根据ID删除子帐号
+	 * 
+	 * @param query
+	 * @return
+	 */
+	@RequestMapping("delAccount")
+	public @ResponseBody Map<String, String> delAccount(String id) {
+		accountService.reomveAccount(id);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isOK", "ok");
+		return map;
+	}
 }

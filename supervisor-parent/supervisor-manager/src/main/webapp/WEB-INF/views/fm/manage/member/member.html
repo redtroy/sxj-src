@@ -49,7 +49,14 @@ jQuery(document).ready(function($) {
    }
    //重置密码
    function resetPwd(id){
-	   $('.popDemo').slideDown(200);
+	   var pwd;
+	   $.post("initializePwd.htm",{id:id},function(data){
+		   if (data.isOK=='ok'){
+			   pwd=data.password
+			   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
+			   $('.popDemo').slideDown(200);
+		   }
+	   })
    }
    //收起菜单
    function swallowing(lable){
@@ -82,17 +89,9 @@ jQuery(document).ready(function($) {
 	   $.post("editMember.htm",{id:id,memberNo:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
 		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum
 		 },function(data){
-<<<<<<< HEAD
-			 if (data.isOK='ok'){
+			 if (data.isOK=='ok'){
 				 alert('修改成功！')
 			}
-=======
-			 
-			 alert(data.isOK);
-			// if (data.isOK='ok'){
-				// alert('修改成功！')
-			 //}
->>>>>>> ac6f63aa2a5ff2abbee1f32e673d23b807761339
 		 },"json")
 	    
    }
@@ -268,7 +267,7 @@ Intense( elements );
      <div class="modal-body">
      <div class="tipBox ly-clearFix">
      <span class="icon32 icon-32-info"></span>
-     <p class="color-blue fontYH f18">初始密码为：5896123，谢谢!</p>
+     <p class="color-blue fontYH f18" id="promptPwd"></p>
      </div>
      <button class="popBtn">确认</button>
      </div>

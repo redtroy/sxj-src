@@ -15,8 +15,8 @@ public class AccountQuery extends Pagable implements Serializable {
 	private String accountId;
 	private String accountName;
 	private Integer state;
-	private Date startDate;
-	private Date endDate;
+	private String startDate;
+	private String endDate;
 	private String roleId;
 
 	public String getMemberNo() {
@@ -51,19 +51,21 @@ public class AccountQuery extends Pagable implements Serializable {
 		this.state = state;
 	}
 
-	public java.util.Date getStartDate() {
+	
+
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(java.util.Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public java.util.Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(java.util.Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 

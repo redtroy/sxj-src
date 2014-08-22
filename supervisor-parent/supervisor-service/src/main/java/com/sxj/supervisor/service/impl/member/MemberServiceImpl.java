@@ -98,7 +98,7 @@ public class MemberServiceImpl implements IMemberService {
 		try {
 			MemberEntity member = getMember(memberId);
 			// 随机密码
-			String password = "";
+			String password = "123456";
 			member.setPassword(password);
 			modifyMember(member);
 			return password;
