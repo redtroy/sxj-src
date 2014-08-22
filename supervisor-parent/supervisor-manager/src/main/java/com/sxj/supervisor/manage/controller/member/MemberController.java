@@ -30,7 +30,7 @@ public class MemberController extends BaseController {
 	 * @param map
 	 * @return
 	 */
-	@RequestMapping("memberList")
+	@RequestMapping("memberList") 
 	public String memberList(MemberQuery query, ModelMap map) {
 		MemberTypeEnum[] types = MemberTypeEnum.values();
 		MemberCheckStateEnum[] state = MemberCheckStateEnum.values();
