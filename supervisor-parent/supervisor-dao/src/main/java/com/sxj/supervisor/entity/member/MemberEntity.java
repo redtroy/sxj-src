@@ -30,7 +30,7 @@ import com.sxj.supervisor.dao.member.IMemberDao;
  *
  */
 @Entity(mapper = IMemberDao.class)
-@Table(name = "MEMBER")
+@Table(name = "M_MEMBER")
 public class MemberEntity extends Pagable implements Serializable {
 	/**
 	 * 
