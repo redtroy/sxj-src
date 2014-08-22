@@ -1,5 +1,9 @@
 package com.sxj.mybatis.orm.mapper;
 
+import java.util.List;
+
+import com.sxj.mybatis.orm.annotations.BatchDelete;
+import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.model.Function;
@@ -11,4 +15,14 @@ public interface FunctionMapper
     
     @Get
     Function getFunction(String functionId);
+    
+    void batchInsert(List<Function> functions);
+    
+    @BatchInsert
+    void batchInsert(Function[] functions);
+    
+    @BatchDelete
+    void batchDelete(String[] functionIds);
+    
+    void batchDelete(List<String> functionIds);
 }

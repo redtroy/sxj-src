@@ -1,5 +1,10 @@
 package com.sxj.mybatis.orm.unit;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +33,38 @@ public class FunctionMapperTest
     private Function buildFunction()
     {
         Function function = new Function();
+        function.setStubValue("M"
+                + new SimpleDateFormat("MMdd").format(new Date()));
         return function;
     }
     
+    private List<Function> buildFunctions()
+    {
+        List<Function> functions = new ArrayList<Function>();
+        Function buildFunction = buildFunction();
+        buildFunction.setFunctionName("list1");
+        functions.add(buildFunction);
+        buildFunction = buildFunction();
+        buildFunction.setFunctionName("list2");
+        functions.add(buildFunction);
+        return functions;
+        
+    }
+    
+    private Function[] buildArrayFunctions()
+    {
+        Function[] functions = new Function[2];
+        Function buildFunction = buildFunction();
+        buildFunction.setFunctionName("list1");
+        functions[0] = buildFunction;
+        buildFunction = buildFunction();
+        buildFunction.setFunctionName("list2");
+        functions[1] = buildFunction;
+        return functions;
+        
+    }
+    
+    @Test
     public void testInsert()
     {
         Function function = buildFunction();
@@ -38,7 +72,6 @@ public class FunctionMapperTest
         System.out.println("==============" + function.getFunctionId());
     }
     
-    @Test
     public void testGet()
     {
         Function function = mapper.getFunction("A6D7ZXo6oDMKbOtbY5vp6RF6nJXSbAK");
@@ -46,4 +79,29 @@ public class FunctionMapperTest
         System.out.println(function.getFunctionName());
     }
     
+    public void testBatchInsert()
+    {
+        mapper.batchInsert(buildFunctions());
+    }
+    
+    public void testBatchInsertArray()
+    {
+        mapper.batchInsert(buildArrayFunctions());
+    }
+    
+    public void testBatchDelete()
+    {
+        List<String> functionIds = new ArrayList<String>();
+        functionIds.add("4ilOonHRGS6xupOoBzHgORGawUcxOSJ");
+        functionIds.add("CMqrrU1Pbei0W187LbeGYbTiHGrJLF1");
+        mapper.batchDelete(functionIds);
+    }
+    
+    public void testBatchDeleteArray()
+    {
+        String[] functionIds = new String[2];
+        functionIds[0] = "szkaQLTo5oQxuymp0GewlvUeGndJQh3";
+        functionIds[1] = "UBpFPlk3wIdVKezAu96QP4t0AAVmx2B";
+        mapper.batchDelete(functionIds);
+    }
 }

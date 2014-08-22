@@ -19,7 +19,7 @@ import com.sxj.mybatis.dialect.Dialect;
 import com.sxj.mybatis.dialect.MySql5Dialect;
 import com.sxj.mybatis.dialect.OracleDialect;
 import com.sxj.mybatis.dialect.SN;
-import com.sxj.mybatis.sn.annotations.Sn;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.spring.modules.util.ReflectUtils;
 import com.sxj.spring.modules.util.Reflections;
 
@@ -37,7 +37,7 @@ public class SnGenerator
         {
             connection = transaction.getConnection();
             statement = connection.createStatement();
-            new SnGenerator().processBefore(ms, statement, parameter);
+            processBefore(ms, statement, parameter);
             transaction.commit();
         }
         catch (SQLException e)
@@ -70,6 +70,11 @@ public class SnGenerator
                 snPojo.setStub(sn.stub());
                 snPojo.setStubValue(sn.stubValue());
                 snPojo.setTableName(sn.table());
+                if (parameter instanceof SnStub)
+                {
+                    snPojo.setStubValue((String) Reflections.invokeGetter(parameter,
+                            "stubValue"));
+                }
                 String snSql = dialect.getSnString(snPojo);
                 
                 initSn(dialect, statement, snPojo);

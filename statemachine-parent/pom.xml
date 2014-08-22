@@ -7,5 +7,9 @@
   <packaging>pom</packaging>
   <modules>
     <module>statemachine-impl</module>
+    <module>statemachine-manager</module>
   </modules>
+  <properties>
+  	<statemachine.version>1.0</statemachine.version>
+  </properties>
 </project>

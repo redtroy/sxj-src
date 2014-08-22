@@ -19,32 +19,32 @@ public class SN
         return tableName;
     }
     
-    public void setTableName(String tableName)
+    public final void setTableName(String tableName)
     {
         this.tableName = tableName;
     }
     
-    public String getStub()
+    public final String getStub()
     {
         return stub;
     }
     
-    public void setStub(String stub)
+    public final void setStub(String stub)
     {
         this.stub = stub;
     }
     
-    public int getStep()
+    public final int getStep()
     {
         return step;
     }
     
-    public void setStep(int step)
+    public final void setStep(int step)
     {
         this.step = step;
     }
     
-    public String getStubValue()
+    public final String getStubValue()
     {
         return stubValue;
     }
@@ -54,22 +54,22 @@ public class SN
         this.stubValue = stubValue;
     }
     
-    public String getSn()
+    public final String getSn()
     {
         return sn;
     }
     
-    public void setSn(String sn)
+    public final void setSn(String sn)
     {
         this.sn = sn;
     }
     
-    public long getCurrent()
+    public final long getCurrent()
     {
         return current;
     }
     
-    public void setCurrent(long current)
+    public final void setCurrent(long current)
     {
         this.current = current;
     }
