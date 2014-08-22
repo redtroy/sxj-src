@@ -23,7 +23,7 @@ public interface IContractModifyItemDao {
 	 *
 	 * @param    contractId
 	**/
-	public List<ModifyItemEntity> queryItems(QueryCondition<ModifyItemEntity> query);
+	public List<ModifyItemEntity> queryItems(String modifyId);
 	/**
 	 * 刪除條目
 	 * @param contractId
