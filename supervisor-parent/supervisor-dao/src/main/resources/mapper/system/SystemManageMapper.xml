@@ -13,7 +13,7 @@
 	<!-- 条件查询用户 -->
 	<select id="querySystemAccount" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD,r.FUNCTION FROM M_SYS_ACCOUNT a
+		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD FROM M_SYS_ACCOUNT a
 		INNER JOIN M_ROLE_ACCOUNT r ON a.ID=r.ACCOUNT_ID WHERE 1=1]]>
 		<!-- 用户ID -->
 		<if test="condition.id != null and condition.id!=''">
