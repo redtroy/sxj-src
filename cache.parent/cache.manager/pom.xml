@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.sxj</groupId>
     <artifactId>cache.parent</artifactId>
-    <version>${cache.version}</version>
+    <version>1.0</version>
   </parent>
   <artifactId>cache.manager</artifactId>
   <name>cache.manager</name>

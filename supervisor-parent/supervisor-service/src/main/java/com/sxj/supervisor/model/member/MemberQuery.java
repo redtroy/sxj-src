@@ -30,9 +30,9 @@ public class MemberQuery extends Pagable implements Serializable {
 
 	private Integer memberState;
 
-	private Date startDate;
+	private String startDate;
 
-	private Date endDate;
+	private String endDate;
 
 	public Pagable getPage() {
 		return page;
@@ -116,20 +116,22 @@ public class MemberQuery extends Pagable implements Serializable {
 		this.memberState = memberState;
 	}
 
-	public java.util.Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(java.util.Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public java.util.Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(java.util.Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
+
+	
 
 }

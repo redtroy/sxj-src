@@ -38,24 +38,24 @@ public class ContractQuery extends Pagable  implements Serializable {
 	private String refContractNo;
 	
 	/**
-	 * 开始签订日期
+	 * 开始生成日期
 	**/
-	private Date startCreateDate;
+	private String startCreateDate;
 	
 	/**
-	 * 结束签订日期
+	 * 结束生成日期
 	**/
-	private Date endCreateDate;
+	private String endCreateDate;
 	
 	/**
 	 * 开始备案日期
 	**/
-	private Date startRecordDate;
+	private String startRecordDate;
 	
 	/**
 	 * 结束备案日期
 	**/
-	private Date endRecordDate;
+	private String endRecordDate;
 	
 	/**
 	 * 确认状态
@@ -107,38 +107,6 @@ public class ContractQuery extends Pagable  implements Serializable {
 		this.refContractNo = refContractNo;
 	}
 
-	public Date getStartCreateDate() {
-		return startCreateDate;
-	}
-
-	public void setStartCreateDate(Date startCreateDate) {
-		this.startCreateDate = startCreateDate;
-	}
-
-	public Date getEndCreateDate() {
-		return endCreateDate;
-	}
-
-	public void setEndCreateDate(Date endCreateDate) {
-		this.endCreateDate = endCreateDate;
-	}
-
-	public Date getStartRecordDate() {
-		return startRecordDate;
-	}
-
-	public void setStartRecordDate(Date startRecordDate) {
-		this.startRecordDate = startRecordDate;
-	}
-
-	public Date getEndRecordDate() {
-		return endRecordDate;
-	}
-
-	public void setEndRecordDate(Date endRecordDate) {
-		this.endRecordDate = endRecordDate;
-	}
-
 	public Integer getConfirmState() {
 		return confirmState;
 	}
@@ -153,5 +121,37 @@ public class ContractQuery extends Pagable  implements Serializable {
 
 	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public String getStartCreateDate() {
+		return startCreateDate;
+	}
+
+	public void setStartCreateDate(String startCreateDate) {
+		this.startCreateDate = startCreateDate;
+	}
+
+	public String getEndCreateDate() {
+		return endCreateDate;
+	}
+
+	public void setEndCreateDate(String endCreateDate) {
+		this.endCreateDate = endCreateDate;
+	}
+
+	public String getStartRecordDate() {
+		return startRecordDate;
+	}
+
+	public void setStartRecordDate(String startRecordDate) {
+		this.startRecordDate = startRecordDate;
+	}
+
+	public String getEndRecordDate() {
+		return endRecordDate;
+	}
+
+	public void setEndRecordDate(String endRecordDate) {
+		this.endRecordDate = endRecordDate;
 	}
 }

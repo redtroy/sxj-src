@@ -1,22 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
+<#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="../style/style.css" rel="stylesheet" type="text/css" />
+<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 </head>
 <body>
-<#include "${basePath}/include/head.htm"> 
+<#include "manage/head.html">
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
-<#include "${basePath}/include/menuPath.htm"> 
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
-    <#include "${basePath}/include/menu.htm"> 
+    <div id="leftList">
+ 	<script>$("#leftList").load("${basePath}basic/menu.htm");</script>
+ 	</div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">会员子帐号管理</h2>
@@ -26,17 +28,15 @@
           子帐号名<input type="text" name="insurantName" value="">
           权限
           <select name="select">
-            <option selected="selected">全部</option>
-            <option>合同管理</option>
-            <option>备案管理</option>
-            <option>RFID跟踪管理</option>
-            <option>会员行为跟踪管理</option>
-            <option>支付管理</option>
+          <#list mas as ma>
+            <option value="${ma.getId()}">${ma.getName()}</option>
+          </#list>
           </select>
 状态
 <select>
-          <option selected="selected">正常</option>
-          <option>停用</option>
+           <#list states as state>
+            <option value="${state.getId()}">${state.getName()}</option>
+           </#list>
           </select>
         </p>
         <p> 会员注册时间段
@@ -67,6 +67,7 @@
           <th>子帐号操作</th>
           <th class="rLine">操作</th>
         </tr>
+        
         <tr>
           <td>M0001-01</td>
           <td>6987456</td>
@@ -78,31 +79,9 @@
           <td class="operation"><a href="accounts-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
           <td><button class="btn"><span>初始化密码</span></button></td>
         </tr>
-        <tr>
-          <td>M0001-02</td>
-          <td>6985647</td>
-          <td>sale-zhou</td>
-          <td>周明</td>
-          <td>备案管理</td>
-          <td><button class="btn btn-red"><span>停用</span></button></td>
-          <td>2014年6月12日</td>
-          <td class="operation"><a href="accounts-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
-          <td><button class="btn"><span>初始化密码</span></button></td>
-        </tr>
-        <tr class="disable">
-          <td>M0001-03</td>
-          <td>5987465</td>
-          <td>liyi</td>
-          <td>李一</td>
-          <td>会员管理</td>
-          <td><button class="btn btn-green"><span>恢复</span></button></td>
-          <td>2014年6月12日</td>
-          <td class="operation"><a href="accounts-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
-          <td><button class="btn"><span>初始化密码</span></button></td>
-        </tr>
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
-<#include "${basePath}/include/footer.htm"> 
+<#include "manage/footer.html"> 
 </body>
 <!-- InstanceEnd --></html>

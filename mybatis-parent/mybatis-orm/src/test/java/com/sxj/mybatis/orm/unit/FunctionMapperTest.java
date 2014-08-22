@@ -31,12 +31,19 @@ public class FunctionMapperTest
         return function;
     }
     
-    @Test
     public void testInsert()
     {
         Function function = buildFunction();
         mapper.insert(function);
         System.out.println("==============" + function.getFunctionId());
+    }
+    
+    @Test
+    public void testGet()
+    {
+        Function function = mapper.getFunction("A6D7ZXo6oDMKbOtbY5vp6RF6nJXSbAK");
+        mapper.getFunction("A6D7ZXo6oDMKbOtbY5vp6RF6nJXSbAK");
+        System.out.println(function.getFunctionName());
     }
     
 }

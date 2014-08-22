@@ -20,7 +20,7 @@ public interface IContractService {
 	 * @param    itemList
 	 * @param    batchList
 	**/
-	public void addContract(ContractEntity contract, List<ContractItemEntity> itemList, List<ContractBatchEntity> batchList);
+	public void addContract(ContractEntity contract, List<ContractItemEntity> itemList,String recordId);
 	
 	/**
 	 * 修改合同

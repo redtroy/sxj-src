@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -111,8 +112,14 @@ public class GenericStatementBuilder extends BaseBuilder
         {
             namespace = entityClass.getName();
         }
-        
         assistant.setCurrentNamespace(namespace);
+        Collection<String> cacheNames = configuration.getCacheNames();
+        for (String name : cacheNames)
+            if (namespace.equals(name))
+            {
+                assistant.useCacheRef(name);
+                break;
+            }
         
         databaseId = super.getConfiguration().getDatabaseId();
         lang = super.getConfiguration().getDefaultScriptingLanuageInstance();
@@ -357,6 +364,7 @@ public class GenericStatementBuilder extends BaseBuilder
         contents.add(this.getInsertSql());
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
+        
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,

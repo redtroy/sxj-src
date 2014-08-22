@@ -3,7 +3,9 @@ package com.sxj.supervisor.model.member;
 import java.io.Serializable;
 import java.util.Date;
 
-public class AccountQuery implements Serializable {
+import com.sxj.mybatis.pagination.Pagable;
+
+public class AccountQuery extends Pagable implements Serializable {
 	/**
 	 * 
 	 */
