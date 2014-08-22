@@ -15,7 +15,7 @@
 	</resultMap>
 
 <!-- 条件查询合同批次 -->
-	<select id="queryItems" resultMap="BaseResultMap"
+	<select id="queryItems" resultMap="ItemResultMap"
 		parameterType="String">
 		<![CDATA[SELECT ID, CONTRACT_ID, PRODUCT_NAME, PRODUCT_MODEL, QUANTITY, PRICE,
  		AMOUNT, REMARKS FROM M_CONTRACT_ITEM WHERE CONTRACT_ID=#{contractId}]]>
