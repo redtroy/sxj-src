@@ -1,6 +1,8 @@
 package com.sxj.supervisor.dao.member;
 
 
+import java.util.List;
+
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
@@ -47,5 +49,5 @@ public interface IAccountDao {
 	 *
 	 * @param    account
 	**/
-	public ResultList<AccountEntity> queryAccount(QueryCondition<AccountEntity> account);
+	public List<AccountEntity> queryAccount(QueryCondition<AccountEntity> account);
 }

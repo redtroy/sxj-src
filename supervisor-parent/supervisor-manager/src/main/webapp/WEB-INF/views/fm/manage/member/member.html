@@ -1,20 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
+<#include "manage/base.html"> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="../style/style.css" rel="stylesheet" type="text/css" />
-<script src="../js/jquery.js"></script>
-<link rel="stylesheet" href="../js/datepicker.css">
-<script src="../js/datepicker.js"></script>
-<script src="../js/datepicker.zh-CN.js"></script>
-<script src="../js/intense.js"></script>
+<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${staticPath}js/datepicker.css">
+<script src="${staticPath}js/datepicker.js"></script>
+<script src="${staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${staticPath}js/intense.js"></script>
 <script>
 jQuery(document).ready(function($) {
+	/*
 	$('.btn-password').click(function(){
+		
 		$('.popDemo').slideDown(200);
 	})
+	*/
 	$('.modal-header .close').click(function(){
 		$('.popDemo').slideUp(200);
 	})
@@ -22,6 +26,39 @@ jQuery(document).ready(function($) {
 		$('.popDemo').slideUp(200);
 	})
 })
+    function query(){
+	$("#serch_form").submit();
+	/*
+	 var memberID=$("#memberID").val();
+	 var memberName=$("#memberName").val();
+	 var contacts=$("#contacts").val();
+	 var contactsPhone=$("#contactsPhone").val();
+	 var bLicenseNo=$("#bLicenseNo").val();
+	 var energyNo=$("#energyNo").val();
+	 var type=$("#type").val();
+	 var state=$("#state").val();
+	 var time1=$("#time1").val();
+	 var time2=$("#time2").val();
+	 alert('kkk');
+	 $.post("serchMemberList.htm",{memberNo:memberID,memberName:memberName,contacts:contacts,contactsPhone:contactsPhone,
+		 bLicenseNo:bLicenseNo,energyNo:energyNo,memberType:type,memberState:state,startDate:time1,endDate:time2
+	 },function(data){
+		 
+	 })
+	*/
+   }
+   //重置密码
+   function resetPwd(id){
+	   $('.popDemo').slideDown(200);
+   }
+   //收起菜单
+   function swallowing(lable){
+	   $("#"+lable).hide();
+   }
+   //打开菜单
+   function openDiv(lable){
+	   $("#"+lable).show();
+   }
 </script>
 <script>
 window.onload = function() {
@@ -39,17 +76,21 @@ Intense( elements );
 <!-- InstanceBeginEditable name="local" -->
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
-   
+ 	<div id="leftList">
+ 	<script>$("#leftList").load("${basePath}basic/menu.htm");</script>
+ 	</div>
+  
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">会员管理</h2>
       <div id="searchBox">
-        <p> 会员ID<input type="text" name="insurantName" value="" />
-          会员名称<input type="text" name="insurantName" value="" />
-          联系人名称<input type="text" name="insurantName" value="" />
-          联系人手机<input type="text" name="insurantName" value="" />
+      <form action="memberList.htm" method="post" id="search_form">
+        <p> 会员ID<input type="text" name="memberNo" id="memberID" value="" />
+          会员名称<input type="text" name="memberName" id="memberName" value="" />
+          联系人名称<input type="text" name="contacts" id="contacts" value="" />
+          联系人手机<input type="text" name="contactsPhone" id="contactsPhone" value="" />
           城市 江苏省-
-          <select name="select">
+          <select name="select" id="city">
             <option selected="selected">南京市</option>
             <option>无锡市</option>
             <option>苏州市</option>
@@ -65,28 +106,29 @@ Intense( elements );
             <option>连云港市</option>
           </select>
          营业执照号码
-          <input type="text" name="insurantName" value="" /></p>
+          <input type="text" name="bLicenseNo" id="bLicenseNo" value="" /></p>
 		  <p>
           节能标识推广证号
-          <input type="text" name="insurantName" value="" />
+          <input type="text" name="energyNo" id="energyNo" value="" />
           会员类型
-          <select name="select">
+          <select name="memberType" id="type">
             <#list types as type>
             <option value="${type.getId()}">${type.getName()}</option>
             </#list>
           </select>
           会员状态
-          <select name="select">
+          <select name="memberState" id="state">
            <#list states as state>
             <option value="${state.getId()}">${state.getName()}</option>
            </#list>
           </select>
 		   会员注册时间段
-          <input class="form-control" type="text" datepicker>
+          <input class="form-control" type="text" datepicker id="time1" name="startDate">
           -
-          <input class="form-control" type="text" datepicker>
-          <button class="btn btn-blue"><span>查询</span></button>
+          <input class="form-control" type="text" datepicker id="time2" name="endDate">
+          <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
         </p>
+        </form>
       </div>
       <div class="pageBox">
         <div><span class="sumP">共<strong>56</strong>条记录</span><span class="curP">1</span><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#" class="pnext"><span title="翻至下一页">&gt;</span></a></div>
@@ -119,7 +161,7 @@ Intense( elements );
         </tr>
         <#list memberList as member>
         <tr>
-          <td><a href="#" class="lnk-blue">${member.getMemberNo()}</a></td>
+          <td><a href="#" class="lnk-blue" onclick="openDiv(${member.getMemberNo()})">${member.getMemberNo()}</a></td>
           <td>${member.name}</td>
           <td>${member.getContacts()}</td>
           <td>${member.getbLicenseNo()}</td>
@@ -129,7 +171,55 @@ Intense( elements );
           <td>${member.authorDate?date}</td>
           <td><button class="btn btn-gray"><span>${member.checkState.getName()}</span></button></td>
           <td><button class="btn btn-red"><span>${member.state.getName()}</span></button></td>
-          <td><button class="btn btn-gray btn-password" href="javascript:;"><span>初始化密码</span></button></td>
+          <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd(${member.id})"><span>初始化密码</span></button></td>
+        </tr>
+        <tr class="tableInfo" style="display:none;" id="${member.getMemberNo()}">
+          <td colspan="11">
+          <div class="infoBox">
+          <ul class="ly-clearFix">
+          <li><label>会员名称</label><input type="text" value="${member.name}" /></li>
+          <li><label>城市</label> 江苏省-
+            <select name="select3">
+              <option selected="selected">南京市</option>
+              <option>无锡市</option>
+              <option>苏州市</option>
+              <option>常州市</option>
+              <option>徐州市</option>
+              <option>扬州市</option>
+              <option>南通市</option>
+              <option>镇江市</option>
+              <option>泰州市</option>
+              <option>盐城市</option>
+              <option>淮安市</option>
+              <option>宿迁市</option>
+              <option>连云港市</option>
+            </select>
+            <label>会员类型</label><select name="select2">
+              <option selected="selected">门窗厂</option>
+              <option>玻璃厂</option>
+              <option>型材厂</option>
+            </select>
+          </li>
+          <li class="view"><label>${member.getbLicenseNo()}</label><input type="text" value="YZHE0192873" />
+          <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/yyzz.gif">查看缩略图</a></p>
+          </li>
+          <li class="view"><label>${member.getEnergyNo()}</label><input type="text" value="JTGH2342345" />
+          <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/jntg.gif">查看缩略图</a></p>
+          </li>
+          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" /></li>
+          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" /></li>
+          <li><label>公司地址</label><input type="text" value="${member.address}" /></li>
+          <li><label>固定电话</label><input type="text" value="${member.telNum}" /></li>
+          <li><label>注册时间</label>${member.regDate?date}</li>
+          <li><label>认证时间</label>${member.authorDate?date}</li>
+          <li><label>审核状态</label><em class="state normal">${member.checkState.getName()}</em></li>
+          <li><label>帐户状态</label><em class="state verified">${member.state.getName()}</em></li>
+          <li><label>子帐号</label>${member.getAccountNum()}</li>
+          <li><label>总交易额</label>${member.totalAmount}元</li>
+          </ul>
+          <div class="btnBox"><a href="#" class="button button-orange button-small">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing(${member.getMemberNo()})">收起</a> </div>
+          </div>
+          </td>
         </tr>
         </#list>
       </table>

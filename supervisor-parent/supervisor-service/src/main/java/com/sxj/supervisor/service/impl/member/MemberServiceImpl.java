@@ -92,4 +92,20 @@ public class MemberServiceImpl implements IMemberService {
 
 	}
 
+	@Override
+	@Transactional
+	public String initializePwd(String memberId) throws ServiceException {
+		try {
+			MemberEntity member = getMember(memberId);
+			// 随机密码
+			String password = "";
+			member.setPassword(password);
+			modifyMember(member);
+			return password;
+		} catch (Exception e) {
+			throw new ServiceException("初始化密码错误", e.getMessage());
+		}
+
+	}
+
 }

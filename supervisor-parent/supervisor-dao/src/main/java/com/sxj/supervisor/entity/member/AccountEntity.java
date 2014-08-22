@@ -18,7 +18,7 @@ import com.sxj.supervisor.dao.member.IAccountDao;
  *
  */
 @Entity(mapper = IAccountDao.class)
-@Table(name = "ACCOUNT")
+@Table(name = "M_MEMBER_ACCOUNT")
 public class AccountEntity extends Pagable implements Serializable {
 	
 
@@ -57,7 +57,7 @@ public class AccountEntity extends Pagable implements Serializable {
 	 * 子账户状态
 	**/
 	@Column(name = "STATE")
-	private Integer state;
+	private MemberStatesEnum state;
 	
 	/**
 	 * 注册日期
@@ -109,11 +109,12 @@ public class AccountEntity extends Pagable implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getState() {
+
+	public MemberStatesEnum getState() {
 		return state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(MemberStatesEnum state) {
 		this.state = state;
 	}
 

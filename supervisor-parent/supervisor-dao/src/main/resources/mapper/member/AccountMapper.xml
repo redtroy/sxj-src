@@ -8,26 +8,23 @@
 		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
 		<result property="accountName" column="ACCOUNT_NAME" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
-		<result property="state" column="STATE" jdbcType="INTEGER" />
-		<result property="regDate" column="REG_DATE" jdbcType="TIME" />
+		<result property="state" column="STATE" jdbcType="INTEGER" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+		<result property="regDate" column="REG_DATE" jdbcType="DATE" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 子账户高级查询 -->
-	<select id="queryAccount" resultType="java.util.List"
+	<select id="queryAccount" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT A.ID,A.PARENT_ID,A.ACCOUNT_NAME,A.NAME,
 		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO 
-		 FROM ACCOUNT A , ROLE R , WHERE A.ID=R.ACCOUNT_ID ]]>
+		 FROM M_MEMBER_ACCOUNT A  WHERE 1=1 ]]>
 		<if test="condition.parentId != null">
 			<![CDATA[AND A.PARENT_ID = #{condition.parentId}]]>
 		</if>
 		<if test="condition.accountNo != null">
 			<![CDATA[AND A.ACCOUNT_NO = #{condition.accountNo}]]>
-		</if>
-		<if test="condition.roleId != null">
-			<![CDATA[AND R.ID = #{condition.roleId}]]>
 		</if>
 		<if test="condition.accountName != null">
 			<![CDATA[AND A.ACCOUNT_NAME = #{condition.accountName}]]>
