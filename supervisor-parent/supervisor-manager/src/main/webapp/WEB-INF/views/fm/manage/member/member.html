@@ -82,9 +82,17 @@ jQuery(document).ready(function($) {
 	   $.post("editMember.htm",{id:id,memberNo:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
 		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum
 		 },function(data){
+<<<<<<< HEAD
 			 if (data.isOK='ok'){
 				 alert('修改成功！')
 			}
+=======
+			 
+			 alert(data.isOK);
+			// if (data.isOK='ok'){
+				// alert('修改成功！')
+			 //}
+>>>>>>> ac6f63aa2a5ff2abbee1f32e673d23b807761339
 		 },"json")
 	    
    }
