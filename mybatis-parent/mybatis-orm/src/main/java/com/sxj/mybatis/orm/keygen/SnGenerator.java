@@ -70,6 +70,11 @@ public class SnGenerator
                 snPojo.setStub(sn.stub());
                 snPojo.setStubValue(sn.stubValue());
                 snPojo.setTableName(sn.table());
+                if (parameter instanceof SnStub)
+                {
+                    snPojo.setStubValue((String) Reflections.invokeGetter(parameter,
+                            "stubValue"));
+                }
                 String snSql = dialect.getSnString(snPojo);
                 
                 initSn(dialect, statement, snPojo);

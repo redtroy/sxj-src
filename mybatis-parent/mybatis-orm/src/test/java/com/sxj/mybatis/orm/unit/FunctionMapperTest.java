@@ -1,6 +1,8 @@
 package com.sxj.mybatis.orm.unit;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -31,6 +33,8 @@ public class FunctionMapperTest
     private Function buildFunction()
     {
         Function function = new Function();
+        function.setStubValue("M"
+                + new SimpleDateFormat("MMdd").format(new Date()));
         return function;
     }
     
@@ -60,6 +64,7 @@ public class FunctionMapperTest
         
     }
     
+    @Test
     public void testInsert()
     {
         Function function = buildFunction();
@@ -92,7 +97,6 @@ public class FunctionMapperTest
         mapper.batchDelete(functionIds);
     }
     
-    @Test
     public void testBatchDeleteArray()
     {
         String[] functionIds = new String[2];
