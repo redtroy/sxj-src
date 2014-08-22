@@ -37,7 +37,7 @@ public class SnGenerator
         {
             connection = transaction.getConnection();
             statement = connection.createStatement();
-            new SnGenerator().processBefore(ms, statement, parameter);
+            processBefore(ms, statement, parameter);
             transaction.commit();
         }
         catch (SQLException e)
