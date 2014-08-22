@@ -3,7 +3,7 @@
 	<h2 class="tit">${model.function.title}</h2>
 	<ul>
 	    <#list model.children as mc>
-		<li><a href=${mc.url}>${mc.title}</a></li>
+		<li><a href="${basePath}${mc.url}">${mc.title}</a></li>
 		</#list>
 	</ul>
 	</#list>

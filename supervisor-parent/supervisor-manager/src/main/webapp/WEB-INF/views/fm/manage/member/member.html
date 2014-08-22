@@ -59,6 +59,43 @@ jQuery(document).ready(function($) {
    function openDiv(lable){
 	   $("#"+lable).show();
    }
+   //修改
+   function edit(id){
+	   var memberNo=$("#memberID1").val(); //会员号
+	   var type=$("#type1").val();//会员类型
+	   var bLicenseNo=$("#bLicenseNo1").val();//营业执照
+	   var energyNo=$("#energyNo1").val();//节能标识号
+	   var contacts=$("#contacts1").val();//联系人名称
+	   var phoneNo=$("#phoneNo1").val();//联系人手机
+	   var address=$("#address1").val();//公司地址
+	   var telNum=$("#telNum1").val();//固定电话
+	   /*
+	   console.log(memberNo)
+	   console.log(type)
+	   console.log(bLicenseNo)
+	   console.log(energyNo)
+	   console.log(contacts)
+	   console.log(phoneNo)
+	   console.log(address)
+	   console.log(telNum)
+	 */
+	   $.post("editMember.htm",{id:id,memberNo:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
+		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum
+		 },function(data){
+<<<<<<< HEAD
+			 if (data.isOK='ok'){
+				 alert('修改成功！')
+			}
+=======
+			 
+			 alert(data.isOK);
+			// if (data.isOK='ok'){
+				// alert('修改成功！')
+			 //}
+>>>>>>> ac6f63aa2a5ff2abbee1f32e673d23b807761339
+		 },"json")
+	    
+   }
 </script>
 <script>
 window.onload = function() {
@@ -77,7 +114,7 @@ Intense( elements );
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
  	<div id="leftList">
- 	<script>$("#leftList").load("${basePath}basic/menu.htm");</script>
+ 	<script>$("#leftList").load("${basePath}menu.htm");</script>
  	</div>
   
     <div id="rightBar">
@@ -177,7 +214,7 @@ Intense( elements );
           <td colspan="11">
           <div class="infoBox">
           <ul class="ly-clearFix">
-          <li><label>会员名称</label><input type="text" value="${member.name}" /></li>
+          <li><label>会员名称</label><input type="text" value="${member.name}" id="memberID1"/></li>
           <li><label>城市</label> 江苏省-
             <select name="select3">
               <option selected="selected">南京市</option>
@@ -194,30 +231,31 @@ Intense( elements );
               <option>宿迁市</option>
               <option>连云港市</option>
             </select>
-            <label>会员类型</label><select name="select2">
-              <option selected="selected">门窗厂</option>
-              <option>玻璃厂</option>
-              <option>型材厂</option>
+            <label>会员类型</label>
+            <select name="select2" id="type1">
+              <#list types as type>
+            <option value="${type.getId()}">${type.getName()}</option>
+            </#list>
             </select>
           </li>
-          <li class="view"><label>${member.getbLicenseNo()}</label><input type="text" value="YZHE0192873" />
+          <li class="view"><label>营业执照</label><input type="text" id="bLicenseNo1" value="${member.getbLicenseNo()}" />
           <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/yyzz.gif">查看缩略图</a></p>
           </li>
-          <li class="view"><label>${member.getEnergyNo()}</label><input type="text" value="JTGH2342345" />
+          <li class="view"><label >节能标识推广证</label><input id="energyNo1" type="text" value="${member.getEnergyNo()}" />
           <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/jntg.gif">查看缩略图</a></p>
           </li>
-          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" /></li>
-          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" /></li>
-          <li><label>公司地址</label><input type="text" value="${member.address}" /></li>
-          <li><label>固定电话</label><input type="text" value="${member.telNum}" /></li>
-          <li><label>注册时间</label>${member.regDate?date}</li>
-          <li><label>认证时间</label>${member.authorDate?date}</li>
-          <li><label>审核状态</label><em class="state normal">${member.checkState.getName()}</em></li>
-          <li><label>帐户状态</label><em class="state verified">${member.state.getName()}</em></li>
-          <li><label>子帐号</label>${member.getAccountNum()}</li>
-          <li><label>总交易额</label>${member.totalAmount}元</li>
+          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" id="contacts1"/></li>
+          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" id="phoneNo1"/></li>
+          <li><label>公司地址</label><input type="text" value="${member.address}" id="address1"/></li>
+          <li><label>固定电话</label><input type="text" value="${member.telNum}" id="telNum1"/></li>
+          <li><label>注册时间</label id="regDate1">${member.regDate?date}</li>
+          <li><label>认证时间</label id="authorDate1">${member.authorDate?date}</li>
+          <li><label>审核状态</label><em class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
+          <li><label>帐户状态</label><em class="state verified" id="state1">${member.state.getName()}</em></li>
+          <li><label>子帐号</label id="accountNum1">${member.getAccountNum()}</li>
+          <li><label>总交易额</label id="totalAmount1">${member.totalAmount}元</li>
           </ul>
-          <div class="btnBox"><a href="#" class="button button-orange button-small">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing(${member.getMemberNo()})">收起</a> </div>
+          <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="edit(${member.id})">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing(${member.getMemberNo()})">收起</a> </div>
           </div>
           </td>
         </tr>

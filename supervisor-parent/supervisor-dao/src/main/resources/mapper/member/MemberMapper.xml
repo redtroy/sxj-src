@@ -36,43 +36,43 @@
 		<![CDATA[SELECT *
 		 FROM M_MEMBER WHERE 1=1]]>
 		<!-- 会员号 -->
-		<if test="condition.memberNo != null">
+		<if test="condition.memberNo != null and condition.memberNo !=''">
 			<![CDATA[AND MEMBER_NO = #{condition.memberNo}]]>
 		</if>
 		<!-- 会员名称 -->
-		<if test="condition.name != null">
+		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[AND NAME = #{condition.name}]]>
 		</if>
 		<!-- 联系人 -->
-		<if test="condition.contacts != null">
+		<if test="condition.contacts != null and condition.contacts != ''">
 			<![CDATA[AND CONTACTS = #{condition.contacts}]]>
 		</if>
 		<!-- 联系人电话 -->
-		<if test="condition.phoneNo != null">
+		<if test="condition.phoneNo != null and condition.phoneNo != ''">
 			<![CDATA[AND PHONE_NO = #{condition.phoneNo}]]>
 		</if>
 		<!-- 地理位置 -->
-		<if test="condition.area != null">
+		<if test="condition.area != null and condition.area != ''">
 			<![CDATA[AND AREA = #{condition.area}]]>
 		</if>
 		<!-- 营业执照号码 -->
-		<if test="condition.bLicenseNo != null">
+		<if test="condition.bLicenseNo != null and condition.bLicenseNo != ''">
 			<![CDATA[AND B_LICENSE_NO = #{condition.bLicenseNo}]]>
 		</if>
 		<!-- 节能标识 -->
-		<if test="condition.energyNo != null">
+		<if test="condition.energyNo != null and condition.energyNo != ''">
 			<![CDATA[AND ENERGY_NO = #{condition.energyNo}]]>
 		</if>
 		<!-- 会员类型 -->
-		<if test="condition.type != null">
+		<if test="condition.type != null and condition.type != ''">
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
 		<!-- 会员状态 -->
-		<if test="condition.checkState != null">
+		<if test="condition.checkState != null and condition.checkState != ''">
 			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>
 		</if>
 		<!-- 会员注册时间段 -->
-		<if test="condition.startTime != null and condition.endTime != null">
+		<if test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">
 			<![CDATA[AND REG_DATE >=#{condition.startTime} AND REG_DATE <= #{condition.endTime}]]>
 		</if>
 	</select>

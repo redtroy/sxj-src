@@ -9,10 +9,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.util.common.StringUtils;
 
 /** 查询条件 */
-public class QueryCondition<T> implements Serializable {
+public class QueryCondition<T> extends Pagable implements Serializable {
 
 	private static final long serialVersionUID = 4676611900143160715L;
 

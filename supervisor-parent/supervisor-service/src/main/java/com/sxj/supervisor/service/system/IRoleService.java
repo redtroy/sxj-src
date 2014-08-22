@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.RoleEntity;
+import com.sxj.supervisor.model.function.FunctionModel;
 import com.sxj.util.exception.ServiceException;
 
 public interface IRoleService {
@@ -14,6 +15,9 @@ public interface IRoleService {
 
 	public List<RoleEntity> getRoles(String accountId);
 
-	public List<FunctionEntity> getRoleFunction(String accountId)
+	public List<FunctionModel> getRoleFunction(String accountId)
+			throws ServiceException;
+
+	public List<FunctionEntity> getAllRoleFunction(String accountId)
 			throws ServiceException;
 }

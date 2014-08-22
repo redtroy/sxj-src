@@ -10,21 +10,26 @@
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 	</resultMap>
 
-	<!-- 条件查询备案 -->
+	<!-- 条件查询用户 -->
 	<select id="querySystemAccount" resultMap="BaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,NAME,ACCOUNT,PASSWORD FROM M_SYS_ACCOUNT WHERE 1=1]]>
-		<!-- 备案号 -->
-		<if test="condition.id != null">
-			<![CDATA[ AND ID = #{condition.id}]]>
+		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD FROM M_SYS_ACCOUNT a
+		INNER JOIN M_ROLE_ACCOUNT r ON a.ID=r.ACCOUNT_ID WHERE 1=1]]>
+		<!-- 用户ID -->
+		<if test="condition.id != null and condition.id!=''">
+			<![CDATA[ AND a.ID = #{condition.id}]]>
 		</if>
-		<!-- 申请会员ID -->
-		<if test="condition.name != null">
-			<![CDATA[ AND NAME = #{condition.name}]]>
+		<!-- 用户账户 -->
+		<if test="condition.account != null  and condition.account!=''">
+			<![CDATA[ AND a.ACCOUNT = #{condition.account}]]>
 		</if>
-		<!-- 合同签订者  -->
-		<if test="condition.account != null">
-			<![CDATA[ AND ACCOUNT=#{condition.account}]]>
+		<!-- 用户姓名  -->
+		<if test="condition.name != null  and condition.name!=''">
+			<![CDATA[ AND a.NAME=#{condition.name}]]>
+		</if>
+		<!-- 用户姓名  -->
+		<if test="condition.functionId!= null  and condition.functionId!=''">
+			<![CDATA[ AND r.FUNCTION_ID=#{condition.functionId}]]>
 		</if>
 	</select>
 </mapper>
