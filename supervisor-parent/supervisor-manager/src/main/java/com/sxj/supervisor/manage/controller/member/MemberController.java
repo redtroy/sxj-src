@@ -35,8 +35,6 @@ public class MemberController extends BaseController {
 		MemberTypeEnum[] types = MemberTypeEnum.values();
 		MemberCheckStateEnum[] state = MemberCheckStateEnum.values();
 		query.setArea(null);
-		query.setMemberState(null);
-		query.setMemberType(null);
 		List<MemberEntity> list = memberService.queryMembers(query);
 		map.put("types", types);
 		map.put("states", state);
@@ -54,8 +52,21 @@ public class MemberController extends BaseController {
 	public @ResponseBody Map<String, Object> initializePwd(String id) {
 		String password = memberService.initializePwd(id);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("isOK", true);
+		map.put("isOK", "ok");
 		map.put("password", password);
+		return map;
+	}
+	
+	/**
+	 * 修改会员资料
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("editMember")
+	public @ResponseBody Map<String, String> editMember(MemberEntity member) {
+		//memberService.modifyMember(member);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isOK", "ok");
 		return map;
 	}
 }
