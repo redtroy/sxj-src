@@ -7,9 +7,9 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.mapper.FunctionMapper;
-import com.sxj.mybatis.sn.annotations.Sn;
 
 @Entity(mapper = FunctionMapper.class)
 @Table(name = "TEST_FUNCTION")

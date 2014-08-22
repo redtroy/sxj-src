@@ -30,6 +30,7 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.mapping.StatementType;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.xmltags.DynamicSqlSource;
+import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.apache.ibatis.scripting.xmltags.IfSqlNode;
 import org.apache.ibatis.scripting.xmltags.MixedSqlNode;
 import org.apache.ibatis.scripting.xmltags.SetSqlNode;
@@ -41,6 +42,8 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 import org.springframework.util.ReflectionUtils.FieldFilter;
 
+import com.sxj.mybatis.orm.annotations.BatchDelete;
+import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Entity;
@@ -90,6 +93,8 @@ public class GenericStatementBuilder extends BaseBuilder
     private Entity entity;
     
     private String namespace;
+    
+    private static final String ITEM = "item";
     
     public GenericStatementBuilder(Configuration configuration,
             Class<?> entityClass)
@@ -197,7 +202,7 @@ public class GenericStatementBuilder extends BaseBuilder
         }
     }
     
-    private String getTestByField(Field field)
+    private String getTestByField(String prefix, Field field)
     {
         Column column = field.getAnnotation(Column.class);
         if (column != null && StringUtils.isNotBlank(column.test()))
@@ -206,7 +211,8 @@ public class GenericStatementBuilder extends BaseBuilder
         }
         else
         {
-            return field.getName() + "!= null";
+            return (StringUtils.isEmpty(prefix) ? "" : prefix + ".")
+                    + field.getName() + "!= null";
         }
         
     }
@@ -240,6 +246,8 @@ public class GenericStatementBuilder extends BaseBuilder
         String deleteStatementId = "delete";
         String updateStatementId = "update";
         String selectStatementId = "get";
+        String batchInsertStatementId = "batchinsert";
+        String batchDeleteStatementId = "batchDelete";
         
         if (!mapperType.isAssignableFrom(Void.class))
         {
@@ -252,6 +260,11 @@ public class GenericStatementBuilder extends BaseBuilder
                     throw new RuntimeException("有多个@Insert方法");
                 }
                 insertStatementId = insertMethods.get(0).getName();
+                if (!super.getConfiguration().hasStatement(namespace + "."
+                        + insertStatementId))
+                {
+                    buildInsert(insertStatementId);
+                }
             }
             
             List<Method> deleteMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
@@ -263,6 +276,11 @@ public class GenericStatementBuilder extends BaseBuilder
                     throw new RuntimeException("有多个@Delete方法");
                 }
                 deleteStatementId = deleteMethods.get(0).getName();
+                if (!super.getConfiguration().hasStatement(namespace + "."
+                        + deleteStatementId))
+                {
+                    buildDelete(deleteStatementId);
+                }
             }
             
             List<Method> updateMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
@@ -274,6 +292,11 @@ public class GenericStatementBuilder extends BaseBuilder
                     throw new RuntimeException("有多个@Update方法");
                 }
                 updateStatementId = updateMethods.get(0).getName();
+                if (!super.getConfiguration().hasStatement(namespace + "."
+                        + updateStatementId))
+                {
+                    buildUpdate(updateStatementId);
+                }
             }
             
             List<Method> selectMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
@@ -285,34 +308,169 @@ public class GenericStatementBuilder extends BaseBuilder
                     throw new RuntimeException("有多个@Select方法");
                 }
                 selectStatementId = selectMethods.get(0).getName();
+                if (!super.getConfiguration().hasStatement(namespace + "."
+                        + selectStatementId))
+                {
+                    buildSelect(selectStatementId);
+                }
+            }
+            
+            List<Method> batchInsertMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
+                    BatchInsert.class);
+            if (Collections3.isNotEmpty(batchInsertMethods))
+            {
+                if (batchInsertMethods.size() > 1)
+                {
+                    throw new RuntimeException("有多个@BatchInsert方法");
+                }
+                batchInsertStatementId = batchInsertMethods.get(0).getName();
+                if (!super.getConfiguration().hasCache(namespace + "."
+                        + batchInsertStatementId))
+                {
+                    buildBatchInsert(batchInsertStatementId,
+                            getCollection(ReflectUtils.findMethodsAnnotatedWith(mapperType,
+                                    BatchInsert.class)));
+                }
+            }
+            List<Method> batchDeleteMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
+                    BatchDelete.class);
+            if (Collections3.isNotEmpty(batchDeleteMethods))
+            {
+                if (batchDeleteMethods.size() > 1)
+                {
+                    throw new RuntimeException("有多个@BatchDelete方法");
+                }
+                batchDeleteStatementId = batchDeleteMethods.get(0).getName();
+                if (!super.getConfiguration().hasCache(namespace + "."
+                        + batchDeleteStatementId))
+                {
+                    buildBatchDelete(batchDeleteStatementId,
+                            getCollection(ReflectUtils.findMethodsAnnotatedWith(mapperType,
+                                    BatchDelete.class)));
+                }
             }
             
         }
         
-        if (!super.getConfiguration().hasStatement(namespace + "."
-                + insertStatementId))
+    }
+    
+    private String getCollection(List<Method> methods)
+    
+    {
+        Method method = methods.get(0);
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        if (parameterTypes.length != 1)
+            throw new RuntimeException("@BatchInsert有且仅能有一个参数");
+        Class<?> parameterType = parameterTypes[0];
+        if (parameterType.equals(List.class))
+            return "list";
+        else
+            return "array";
+    }
+    
+    private void buildBatchDelete(String statementId, String collection)
+    {
+        Integer timeout = null;
+        Class<?> parameterType = String.class;
+        
+        //~~~~~~~~~~~~~~~~~~~~~~~
+        boolean flushCache = true;
+        boolean useCache = false;
+        boolean resultOrdered = false;
+        KeyGenerator keyGenerator = new NoKeyGenerator();
+        
+        SqlSource sqlSource = new DynamicSqlSource(configuration,
+                getBatchDeleteSql(collection));
+        
+        assistant.addMappedStatement(statementId,
+                sqlSource,
+                StatementType.PREPARED,
+                SqlCommandType.DELETE,
+                null,
+                timeout,
+                null,
+                parameterType,
+                null,
+                null,
+                null,
+                flushCache,
+                useCache,
+                resultOrdered,
+                keyGenerator,
+                null,
+                null,
+                databaseId,
+                lang);
+    }
+    
+    private void buildBatchInsert(String statementId, String collection)
+    {
+        Integer fetchSize = null;
+        Integer timeout = null;
+        Class<?> parameterType = entityClass;
+        
+        ///~~~~~~~~~~
+        boolean flushCache = true;
+        boolean useCache = false;
+        boolean resultOrdered = false;
+        KeyGenerator keyGenerator = null;
+        String keyProperty = null;
+        String keyColumn = null;
+        
+        Id id = AnnotationUtils.findDeclaredAnnotation(Id.class, entityClass);
+        GeneratedValue generatedValue = AnnotationUtils.findDeclaredAnnotation(GeneratedValue.class,
+                entityClass);
+        if (id != null)
         {
-            buildInsert(insertStatementId);
+            String keyStatementId = entityClass.getName() + ".insert"
+                    + SelectKeyGenerator.SELECT_KEY_SUFFIX;
+            
+            if (configuration.hasKeyGenerator(keyStatementId))
+            {
+                keyGenerator = configuration.getKeyGenerator(keyStatementId);
+            }
+            else if (generatedValue != null)
+            {
+                if (generatedValue.strategy() == GenerationType.UUID)
+                {
+                    keyGenerator = new UuidKeyGenerator(generatedValue.length());
+                    
+                }
+            }
+            else
+            {
+                keyGenerator = id.generatedKeys() ? new Jdbc3KeyGenerator()
+                        : new NoKeyGenerator();
+            }
+            keyProperty = idField.getName();
+            keyColumn = StringUtils.isBlank(id.column()) ? CaseFormatUtils.camelToUnderScore(idField.getName())
+                    : id.column();
         }
         
-        if (!super.getConfiguration().hasStatement(namespace + "."
-                + deleteStatementId))
-        {
-            buildDelete(deleteStatementId);
-        }
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        contents.add(this.getBatchInsertSql(collection));
+        SqlSource sqlSource = new DynamicSqlSource(configuration,
+                new MixedSqlNode(contents));
         
-        if (!super.getConfiguration().hasStatement(namespace + "."
-                + updateStatementId))
-        {
-            buildUpdate(updateStatementId);
-        }
-        
-        if (!super.getConfiguration().hasStatement(namespace + "."
-                + selectStatementId))
-        {
-            buildSelect(selectStatementId);
-        }
-        
+        assistant.addMappedStatement(statementId,
+                sqlSource,
+                StatementType.PREPARED,
+                SqlCommandType.INSERT,
+                fetchSize,
+                timeout,
+                null,
+                parameterType,
+                null,
+                null,
+                ResultSetType.FORWARD_ONLY,
+                flushCache,
+                useCache,
+                resultOrdered,
+                keyGenerator,
+                keyProperty,
+                keyColumn,
+                databaseId,
+                lang);
     }
     
     private void buildInsert(String statementId)
@@ -386,6 +544,61 @@ public class GenericStatementBuilder extends BaseBuilder
                 lang);
     }
     
+    private SqlNode getBatchInsertSql(String collection)
+    {
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        contents.add(new TextSqlNode("INSERT INTO " + tableName + " "));
+        contents.add(getBatchInsertColumns());
+        contents.add(getBatchInsertFields(collection));
+        return new MixedSqlNode(contents);
+    }
+    
+    private SqlNode getBatchDeleteSql(String collection)
+    {
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        contents.add(new TextSqlNode("DELETE FROM " + tableName + " WHERE "
+                + getIdColumnName() + " in "));
+        contents.add(getBatchDeleteFields(collection));
+        return new MixedSqlNode(contents);
+    }
+    
+    private SqlNode getBatchDeleteFields(String collection)
+    {
+        TextSqlNode fieldSqlNode = new TextSqlNode("#{" + ITEM + "}");
+        ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration,
+                fieldSqlNode, collection, "index", ITEM, "(", ")", ",");
+        return forEachSqlNode;
+    }
+    
+    private SqlNode getBatchInsertFields(String collection)
+    {
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        for (Field field : columnFields)
+        {
+            List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+            Column column = field.getAnnotation(Column.class);
+            if (Date.class.isAssignableFrom(field.getType()) && column != null
+                    && column.sysdate() == true)
+            {
+                sqlNodes.add(new TextSqlNode("now(),"));
+            }
+            else
+            {
+                sqlNodes.add(new TextSqlNode("#{item." + field.getName() + "},"));
+            }
+            
+            contents.add(new MixedSqlNode(sqlNodes));
+        }
+        TrimSqlNode fieldSqlNode = new TrimSqlNode(configuration,
+                new MixedSqlNode(contents), " (", null, ")", ",");
+        
+        ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration,
+                fieldSqlNode, collection, "index", ITEM, "", "", ",");
+        
+        return new TrimSqlNode(configuration, forEachSqlNode, " VALUES ", null,
+                "", ",");
+    }
+    
     private SqlNode getInsertSql()
     {
         List<SqlNode> contents = new ArrayList<SqlNode>();
@@ -413,11 +626,26 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             
             contents.add(new IfSqlNode(new MixedSqlNode(sqlNodes),
-                    getTestByField(field)));
+                    getTestByField(null, field)));
         }
         
         return new TrimSqlNode(configuration, new MixedSqlNode(contents),
                 " VALUES (", null, ")", ",");
+    }
+    
+    private TrimSqlNode getBatchInsertColumns()
+    {
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        for (Field field : columnFields)
+        {
+            List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+            sqlNodes.add(new TextSqlNode(getColumnNameByField(field) + ","));
+            
+            contents.add(new MixedSqlNode(sqlNodes));
+        }
+        
+        return new TrimSqlNode(configuration, new MixedSqlNode(contents), "(",
+                null, ")", ",");
     }
     
     private TrimSqlNode getInsertColumns()
@@ -429,7 +657,7 @@ public class GenericStatementBuilder extends BaseBuilder
             sqlNodes.add(new TextSqlNode(getColumnNameByField(field) + ","));
             
             contents.add(new IfSqlNode(new MixedSqlNode(sqlNodes),
-                    getTestByField(field)));
+                    getTestByField(null, field)));
         }
         
         return new TrimSqlNode(configuration, new MixedSqlNode(contents), "(",
@@ -548,7 +776,7 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             
             contents.add(new IfSqlNode(new MixedSqlNode(sqlNodes),
-                    getTestByField(field)));
+                    getTestByField(null, field)));
         }
         
         return new SetSqlNode(configuration, new MixedSqlNode(contents));

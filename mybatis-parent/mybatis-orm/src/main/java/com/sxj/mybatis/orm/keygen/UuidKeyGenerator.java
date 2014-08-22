@@ -1,16 +1,14 @@
 package com.sxj.mybatis.orm.keygen;
 
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.ExecutorException;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.type.TypeHandler;
-import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
 import com.sxj.spring.modules.util.Identities;
 
@@ -33,26 +31,55 @@ public class UuidKeyGenerator implements KeyGenerator
     public void processBefore(Executor executor, MappedStatement ms,
             Statement stmt, Object parameter)
     {
-        Configuration configuration = ms.getConfiguration();
-        TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+        MetaObject newMetaObject = ms.getConfiguration()
+                .newMetaObject(parameter);
         String[] keyProperties = ms.getKeyProperties();
-        final MetaObject metaParam = configuration.newMetaObject(parameter);
-        TypeHandler<?>[] typeHandlers = getTypeHandlers(typeHandlerRegistry,
-                metaParam,
-                keyProperties);
+        SnGenerator snGenerator = new SnGenerator();
         try
         {
-            populateKeys(metaParam, keyProperties, typeHandlers);
-            //            generateSn(executor, ms, parameter);
-            new SnGenerator().generateSn(executor, ms, parameter);
+            if (parameter instanceof StrictMap)
+            {
+                
+                StrictMap map = (StrictMap) parameter;
+                Iterator<String> keySet = map.keySet().iterator();
+                while (keySet.hasNext())
+                {
+                    String key = keySet.next();
+                    if (key.equals("list"))
+                    {
+                        List list = (List) map.get(key);
+                        if (list != null)
+                            for (Object object : list)
+                            {
+                                populateKey(ms.getConfiguration()
+                                        .newMetaObject(object), keyProperties);
+                                snGenerator.generateSn(executor, ms, object);
+                            }
+                    }
+                    else if (key.equals("array"))
+                    {
+                        
+                        Object[] array = (Object[]) map.get(key);
+                        if (array != null)
+                            for (Object object : array)
+                            {
+                                populateKey(ms.getConfiguration()
+                                        .newMetaObject(object), keyProperties);
+                                snGenerator.generateSn(executor, ms, object);
+                            }
+                    }
+                }
+            }
+            else
+            {
+                populateKey(newMetaObject, keyProperties);
+                snGenerator.generateSn(executor, ms, parameter);
+            }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
-            throw new ExecutorException(
-                    "Error getting generated key or setting result to parameter object. Cause: "
-                            + e, e);
+            throw new RuntimeException(e);
         }
-        
     }
     
     @Override
@@ -62,25 +89,7 @@ public class UuidKeyGenerator implements KeyGenerator
         System.out.println();
     }
     
-    private TypeHandler<?>[] getTypeHandlers(
-            TypeHandlerRegistry typeHandlerRegistry, MetaObject metaParam,
-            String[] keyProperties)
-    {
-        TypeHandler<?>[] typeHandlers = new TypeHandler<?>[keyProperties.length];
-        for (int i = 0; i < keyProperties.length; i++)
-        {
-            if (metaParam.hasSetter(keyProperties[i]))
-            {
-                Class<?> keyPropertyType = metaParam.getSetterType(keyProperties[i]);
-                TypeHandler<?> th = typeHandlerRegistry.getTypeHandler(keyPropertyType);
-                typeHandlers[i] = th;
-            }
-        }
-        return typeHandlers;
-    }
-    
-    private void populateKeys(MetaObject metaParam, String[] keyProperties,
-            TypeHandler<?>[] typeHandlers) throws SQLException
+    private void populateKey(MetaObject metaParam, String[] keyProperties)
     {
         for (int i = 0; i < keyProperties.length; i++)
         {
@@ -88,4 +97,5 @@ public class UuidKeyGenerator implements KeyGenerator
                     Identities.randomBase62(length));
         }
     }
+    
 }

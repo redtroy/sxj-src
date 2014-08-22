@@ -19,7 +19,7 @@ import com.sxj.mybatis.dialect.Dialect;
 import com.sxj.mybatis.dialect.MySql5Dialect;
 import com.sxj.mybatis.dialect.OracleDialect;
 import com.sxj.mybatis.dialect.SN;
-import com.sxj.mybatis.sn.annotations.Sn;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.spring.modules.util.ReflectUtils;
 import com.sxj.spring.modules.util.Reflections;
 
