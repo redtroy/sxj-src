@@ -265,7 +265,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + insertStatementId))
                 {
-                    buildInsert(insertStatementId);
+                    buildInsert(namespace + "." + insertStatementId);
                 }
             }
             
@@ -281,7 +281,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + deleteStatementId))
                 {
-                    buildDelete(deleteStatementId);
+                    buildDelete(namespace + "." + deleteStatementId);
                 }
             }
             
@@ -297,7 +297,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + updateStatementId))
                 {
-                    buildUpdate(updateStatementId);
+                    buildUpdate(namespace + "." + updateStatementId);
                 }
             }
             
@@ -313,7 +313,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + selectStatementId))
                 {
-                    buildSelect(selectStatementId);
+                    buildSelect(namespace + "." + selectStatementId);
                 }
             }
             
@@ -329,7 +329,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasCache(namespace + "."
                         + batchInsertStatementId))
                 {
-                    buildBatchInsert(batchInsertStatementId,
+                    buildBatchInsert(namespace + "." + batchInsertStatementId,
                             getCollection(ReflectUtils.findMethodsAnnotatedWith(mapperType,
                                     BatchInsert.class)));
                 }
@@ -346,7 +346,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasCache(namespace + "."
                         + batchDeleteStatementId))
                 {
-                    buildBatchDelete(batchDeleteStatementId,
+                    buildBatchDelete(namespace + "." + batchDeleteStatementId,
                             getCollection(ReflectUtils.findMethodsAnnotatedWith(mapperType,
                                     BatchDelete.class)));
                 }
@@ -803,13 +803,20 @@ public class GenericStatementBuilder extends BaseBuilder
         
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        ResultMap resultMap = null;
-        Collection<String> resultMaps = configuration.getResultMapNames();
-        Iterator iterator = resultMaps.iterator();
-        while (iterator.hasNext())
+        String resultMap = null;
+        Iterator<String> resultMapNames = configuration.getResultMapNames()
+                .iterator();
+        while (resultMapNames.hasNext())
         {
-            ResultMap resultMap2 = configuration.getResultMap((String) iterator.next());
-            System.out.println(iterator.next().toString());
+            String name = resultMapNames.next();
+            ResultMap temp = configuration.getResultMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                resultMap = temp.getId();
+                System.out.println("========" + statementId + "=========已绑定"
+                        + resultMap);
+                break;
+            }
         }
         assistant.addMappedStatement(statementId,
                 sqlSource,
@@ -818,9 +825,9 @@ public class GenericStatementBuilder extends BaseBuilder
                 fetchSize,
                 timeout,
                 null,
-                null,
-                null,
-                resultType,
+                idField.getType(),
+                resultMap,
+                entityClass,
                 null,
                 flushCache,
                 useCache,
