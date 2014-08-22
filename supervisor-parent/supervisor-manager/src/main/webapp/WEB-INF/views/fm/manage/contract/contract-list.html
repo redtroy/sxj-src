@@ -130,8 +130,8 @@ function query(){
         <td>${model.contract.memberNameB}</td>
         <td>${model.contract.type}</td>
         <td>${model.contract.refContractNo}</td>
-        <td>${model.contract.createDate?date}</td>
-        <td>${model.contract.recordDate?date}</td>
+        <td>${model.contract.createDate?string("yyyy-MM-dd")}</td>
+        <td>${model.contract.recordDate?string("yyyy-MM-dd")}</td>
         <td><em class="state normal"> <#list contractSureState as sureState><#if model.contract.confirmState== sureState.getId()> ${sureState.getName()}</#if></#list></em></td>
         <td><#list contractState as state><#if model.contract.state== state.getId()> ${state.getName()}</#if></#list></td>
         <td class="operation">

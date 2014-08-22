@@ -18,7 +18,7 @@ public interface IContractItemDao {
 	 * @param    items
 	**/
 	@Insert
-	public void addItems(ContractItemEntity[] items);
+	public void addItem(ContractItemEntity items);
 	
 	/**
 	 *  通过合同ID查询条目列表

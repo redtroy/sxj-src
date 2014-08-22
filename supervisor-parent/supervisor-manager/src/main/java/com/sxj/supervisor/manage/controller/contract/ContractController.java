@@ -1,20 +1,12 @@
 package com.sxj.supervisor.manage.controller.contract;
 
-import java.io.PrintWriter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sxj.supervisor.entity.contract.ContractBatchEntity;
-import com.sxj.supervisor.entity.contract.ContractEntity;
-import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ContractStateEnum;
 import com.sxj.supervisor.entity.contract.ContractSureStateEnum;
 import com.sxj.supervisor.entity.contract.ContractTypeEnum;
@@ -69,11 +61,10 @@ public class ContractController extends BaseController {
 		return "manage/contract/contract-list";
 	}
 	@RequestMapping("toModify")
-	public String addContract(String  contractId) {
-		ModelMap model = new ModelMap();
-		ContractModel contractModel = contractService.getContract(contractId);
+	public String addContract(String  contractId,ModelMap model) {
+		ContractModel contractModel = contractService.getContract("1");
 		model.put("contractModel", contractModel);
 		model.put("contractId", contractId);
-		return "manage/contract/contract-list";
+		return "manage/contract/contract-edit";
 	}
 }

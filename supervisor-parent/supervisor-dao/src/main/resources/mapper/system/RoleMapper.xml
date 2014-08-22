@@ -3,10 +3,18 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.system.IRoleDao">
-	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.system.RoleEntity">
+	<resultMap id="RoleResultMap" type="com.sxj.supervisor.entity.system.RoleEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="functionId" column="FUNCTION_ID" jdbcType="VARCHAR" />
 		<result property="accountId" column="ACCOUNT_ID" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="RoleFunctionResultMap"
+		type="com.sxj.supervisor.entity.system.FunctionEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE" jdbcType="VARCHAR" />
+		<result property="url" column="URL" jdbcType="VARCHAR" />
+		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 获取权限列表 -->

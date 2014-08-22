@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -11,309 +12,361 @@
 <script src="${staticPath}js/datepicker.js"></script>
 <script src="${staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${staticPath}js/intense.js"></script>
+<script src="${staticPath}js/jquery.uploadify.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
+<script >
+	//上传图片
+</script>
 </head>
 <body>
-<#include "manage/head.html">
-<div id="main" class="fence-wide">
-<!-- InstanceBeginEditable name="local" -->
-<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>备案管理<span>&gt;</span>修改采购合同</div>
-<!-- InstanceEndEditable -->
-<div id="mainBg" class="ly-clearFix yard-1200">
-    <div id="leftList">
-      <!-- 菜单 -->
-    </div>
-    <div id="rightBar">
-    <!-- InstanceBeginEditable name="rightBar" -->
-    <h2 class="title">修改采购合同</h2>
-    <div class="infoBox producedBox f14">
-      <ul class="ly-clearFix">
-        <li>
-          <label>合同号</label>
-           ${contractModel.contract.contractNo} </li>
-        <li>
-          <label>签订地点</label>
-          <input name="" type="text" value="${contractModel.contract.address}" />
-        </li>
-        <li>
-          <label>甲方</label>
-          <input name="" type="text" value="${contractModel.contract.memberNameA}" />
-        </li>
-        <li>
-          <label>乙方</label>
-          <input name="" type="text" value="${contractModel.contract.memberNameB}" />
-        </li>
-        <li>
-          <label>工程名称</label>
-          <input name="" type="text" value="${contractModel.contract.engName}" />
-        </li>
-        <li>
-          <label>工程地址</label>
-          <input name="" type="text" value="${contractModel.contract.engAddress}" />
-        </li>
-        <li>
-          <label>对应备案号</label>
-          <input name="" type="text" value="BA14070001" class="input-w80" />
-          <input name="" type="text" value="BA14070002" class="input-w80" />
-        </li>
-        <li>
-          <label>签订时间</label>
-          <input name="" type="text" value="2011年11月15日" datepicker />
-        </li>
-        <li>
-          <label>合同期限</label>
-          <input name="" type="text" value="2012年1月20日" datepicker />
-        </li>
-        <li>
-          <label>生效时间</label>
-          2011年11月15日 </li>
-      </ul>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-        <col width="20%" />
-        <col width="20%" />
-        <col width="15%" />
-        <col width="10%" />
-        <col width="10%" />
-        <col width="20%" />
-        <col width="5%" />
-        <tr>
-          <th>产品名称</th>
-          <th>产品规格</th>
-          <th>数量<span>（㎡/吨）</span></th>
-          <th>单价<span>(元/㎡/吨)</span></th>
-          <th>金额<span>(元)</span></th>
-          <th>备注说明</th>
-          <th class="rLine">&nbsp;</th>
-        </tr>
-        <tr>
-          <td><input name="" type="text" value="中空玻璃" /></td>
-          <td><input name="" type="text" value="5+6A+5 双白中空 W779/H1176" /></td>
-          <td><input name="" type="text" value="1312.24" /></td>
-          <td><input name="" type="text" value="67.00" /></td>
-          <td><input name="" type="text" value="879.20" /></td>
-          <td><textarea name="" cols="" rows="2">成品不足0.3平方米的，平方差额我公司承担40%，贵公司承担60%，按实际供货面积</textarea></td>
-          <td class="color-red">！</td>
-        </tr>
-        <tr>
-          <td><input name="" type="text" value="中空玻璃" /></td>
-          <td><input name="" type="text" value="5+9A+5 双钢中空 W323/H1176" /></td>
-          <td><input name="" type="text" value="132.04" /></td>
-          <td><input name="" type="text" value="87.00" /></td>
-          <td><input name="" type="text" value="114.88" /></td>
-          <td><textarea name="" cols="" rows="2">成品不足0.3平方米的，平方差额我公司承担40%，贵公司承担60%，按实际供货面积</textarea></td>
-          <td><a href="#" class="lnk-green">+</a>&nbsp;&nbsp;<a href="#" class="lnk-green">X</a></td>
-        </tr>
-        <tr>
-          <td><strong>合计</strong></td>
-          <td>&nbsp;</td>
-          <td>1667.82</td>
-          <td>&nbsp;</td>
-          <td>5265.54</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-      </table>
-      <div>
-        <label>交货地址</label>
-        <input name="" type="text" value="桥北金城丽景厂里" />
-      </div>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-        <col width="20%" />
-        <col width="30%" />
-        <col width="20%" />
-        <col width="10%" />
-        <col width="20%" />
-        <tr>
-          <th>交货批次</th>
-          <th>产品规格</th>
-          <th>数量<span>（㎡/吨）</span></th>
-          <th>应付货款<span>（元）</span></th>
-          <th class="rLine">对应批次RFID编号</th>
-        </tr>
-        <tr>
-          <td>第
-            <input name="" type="text" value="1" class="input-w30"/>
-            批次</td>
-          <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-              <tr>
-                <td><input name="" type="text" value="5+6A+5 双白中空 W779/H1176" /></td>
-              </tr>
-              <tr>
-                <td><input name="" type="text" value="5+9A+5 双钢中空 W323/H1176" /></td>
-              </tr>
-            </table></td>
-          <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-              <tr>
-                <td><input name="" type="text" value="1312.24" />
-                  &nbsp;</td>
-              </tr>
-              <tr>
-                <td><input name="" type="text" value="1312.24" />
-                  &nbsp;</td>
-              </tr>
-            </table></td>
-          <td><input name="" type="text" value="8564.00" /></td>
-          <td><input name="" type="text" value="AAAA00001" /></td>
-        </tr>
-      </table>
-      <div>
-        <label>本合同还有</label>
-        <input name="" type="text" value="2" class="input-w30" />
-        批次待交付 </div>
-      <div>
-        <label>合同定金</label>
-        <input name="" type="text" value="50,000" />
-        元 </div>
-      <div>
-        <label>合同备注</label>
-        <textarea name="textarea2" id="textarea2" cols="80" rows="3">甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金。乙方逾期送货，按银行同期贷款利率支付逾期利息, 并赔偿甲方的损失，支付1%的违约金。</textarea>
-      </div>
-      <div class="contPic">
-        <label>合同备案扫描件</label>
-        <button class="button button-green button-middle">上传合同扫描件</button>
-      </div>
-      <div>
-        <label>关联招标合同号</label>
-        <input name="" type="text" value="CT14070001" />
-      </div>
-    </div>
-    <div class="changeBox">
-    <h2 class="title">合同变更信息</h2>
-    <div class="infoBox producedBox f14">
-      <div>
-        <label>合同变更备案号</label>
-        BA14070001</div>
-      <div class="contPic">
-        <label>合同变更扫描件</label>
-        <button class="button button-green button-middle">上传合同变更扫描件</button>
-      </div>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-        <col width="20%" />
-        <col width="20%" />
-        <col width="15%" />
-        <col width="10%" />
-        <col width="10%" />
-        <col width="25%" />
-        <tr>
-          <th>产品名称</th>
-          <th>产品规格</th>
-          <th>数量<span>（㎡/吨）</span></th>
-          <th>单价<span>(元/㎡/吨)</span></th>
-          <th>金额<span>(元)</span></th>
-          <th class="rLine">备注说明</th>
-        </tr>
-        <tr>
-          <td><input type="text" value="中空玻璃" /></td>
-          <td><textarea name="textarea9" id="textarea9" cols="25" rows="1">5+9A+5 双钢中空 W323/H1176</textarea></td>
-          <td><input type="text" value="132.04" /></td>
-          <td><input type="text" value="87.00" /></td>
-          <td><input type="text" value="114.00" /></td>
-          <td><textarea name="textarea9" id="textarea10" cols="25" rows="1"></textarea>
-            &nbsp;&nbsp;<a href="#" class="lnk-green">X</a></td>
-        </tr>
-      </table>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-        <col width="20%" />
-        <col width="25%" />
-        <col width="20%" />
-        <col width="10%" />
-        <col width="25%" />
-        <tr>
-          <th>交货批次</th>
-          <th>产品规格</th>
-          <th>数量<span>（㎡/吨）</span></th>
-          <th>应付货款<span>（元）</span></th>
-          <th class="rLine">对应批次RFID编号</th>
-        </tr>
-        <tr>
-          <td>第1批次</td>
-          <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-              <tr>
-                <td><textarea name="textarea10" id="textarea14" cols="25" rows="1">5+6A+5 双白中空 W779/H1176</textarea></td>
-              </tr>
-              <tr>
-                <td><textarea name="textarea10" id="textarea15" cols="25" rows="1">5+9A+5 双钢中空 W323/H1176
-                </textarea></td>
-              </tr>
-            </table></td>
-          <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-              <tr>
-                <td><input type="text" value="1312.24" />
-                  &nbsp;<a href="#" class="lnk-green">+</a></td>
-              </tr>
-              <tr>
-                <td><input type="text" value="132.04" />
-                  &nbsp;<a href="#" class="lnk-green">+</a></td>
-              </tr>
-            </table></td>
-          <td><input type="text" value="8564.00" /></td>
-          <td><input type="text" class="input-w80"value="AAAA00001" />
-            <a href="#" class="lnk-green">X</a></td>
-        </tr>
-      </table>
-      </div>
-    </div>
-    <div class="changeBox">
-      <h2 class="title">合同补损信息</h2>
-      <div class="infoBox producedBox f14">
-        <div>
-          <label>合同补损备案号</label>
-          BA14070001</div>
-        <div>
-          <label>补损批次RFID</label>
-          AAAA00001/AAAA00002/AAAA00003</div>
-        <div class="contPic">
-          <label>合同补损扫描件</label>
-          <button class="button button-green button-middle">上传合同补损扫描件</button>
-        </div>
-        <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-          <col width="10%" />
-          <col width="25%" />
-          <col width="20%" />
-          <col width="10%" />
-          <col width="15%" />
-          <col width="20%" />
-          <tr>
-            <th>交货批次</th>
-            <th>产品规格</th>
-            <th>数量<span>（㎡/吨）</span></th>
-            <th>应付货款<span>（元）</span></th>
-            <th>对应批次RFID编号</th>
-            <th class="rLine">新RFID编号</th>
-          </tr>
-          <tr>
-            <td>第1批次</td>
-            <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                <tr>
-                  <td><textarea name="textarea10" id="textarea14" cols="25" rows="1">5+6A+5 双白中空 W779/H1176</textarea></td>
-                </tr>
-                <tr>
-                  <td><textarea name="textarea10" id="textarea15" cols="25" rows="1">5+9A+5 双钢中空 W323/H1176
-                </textarea></td>
-                </tr>
-              </table></td>
-            <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                <tr>
-                  <td><input type="text" value="1312.24" /></td>
-                </tr>
-                <tr>
-                  <td><input type="text" value="132.04" /></td>
-                </tr>
-              </table></td>
-            <td><input type="text" value="8564.00" /></td>
-            <td><input type="text" class="input-w80"value="AAAA00001" /></td>
-            <td><input type="text" class="input-w80"value="AAAA00002" />
-              &nbsp;<a href="#" class="lnk-green">X</a></td>
-          </tr>
-        </table>
-        <div><label>RFID订单号</label><input type="text" value="CT14070001D01" /></div>
-        <div class="btnBox"><a href="contract.html" class="button button-orange button-small">修改</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a></div>
-      </div>
-    </div>
-    <!-- InstanceEndEditable --></div>
-</div>
-<#include "manage/footer.html">
+	
+	<div id="main" class="fence-wide">
+		<!-- InstanceBeginEditable name="local" -->
+		<div class="local">
+			<a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>备案管理<span>&gt;</span>修改采购合同
+		</div>
+		<!-- InstanceEndEditable -->
+		<div id="mainBg" class="ly-clearFix yard-1200">
+			<div id="leftList">
+				<h2 class="tit">会员中心</h2>
+				<ul>
+					<li><a href="member.html">会员管理</a></li>
+					<li><a href="accounts.html">会员子帐号管理</a></li>
+				</ul>
+				<h2 class="tit">备案管理</h2>
+				<ul>
+					<li><a href="record.html">备案管理</a></li>
+				</ul>
+				<h2 class="tit">合同管理</h2>
+				<ul>
+					<li><a href="contract.html">合同管理</a></li>
+				</ul>
+				<h2 class="tit">RFID跟踪管理</h2>
+				<ul>
+					<li><a href="#">生成RFID标签</a></li>
+					<li><a href="#">供应商RFID管理</a></li>
+					<li><a href="#">门窗厂RFID管理</a></li>
+					<li><a href="#">RFID补损管理</a></li>
+					<li><a href="#">RFID订单管理</a></li>
+				</ul>
+				<h2 class="tit">会员行为跟踪管理</h2>
+				<ul>
+					<li><a href="behavior.html">会员行为跟踪管理</a></li>
+				</ul>
+				<h2 class="tit">支付管理</h2>
+				<ul>
+					<li><a href="#">支付管理</a></li>
+				</ul>
+				<h2 class="tit">管理员管理</h2>
+				<ul>
+					<li><a href="admin.html">管理员管理</a></li>
+				</ul>
+			</div>
+			<div id="rightBar">
+				<h2 class="title">修改采购合同</h2>
+				<div class="infoBox producedBox f14">
+					<ul class="ly-clearFix">
+						<li><label>合同号</label> ${contractModel.contract.contractNo}</li>
+						<li><label>签订地点</label> <input name="" type="text"
+							value="${contractModel.contract.address}" /></li>
+						<li><label>甲方</label> <input name="" type="text"
+							value="${contractModel.contract.memberNameA}" /></li>
+						<li><label>乙方</label> <input name="" type="text"
+							value="${contractModel.contract.memberNameB}" /></li>
+						<li><label>工程名称</label> <input name="" type="text"
+							value="${contractModel.contract.engName}" /></li>
+						<li><label>工程地址</label> <input name="" type="text"
+							value="${contractModel.contract.engAddress}" /></li>
+						<li><label>对应备案号</label> <input name="" type="text"
+							value="${contractModel.contract.recordNo}"  />
+						</li>
+						<li><label>签订时间</label> <input name="" type="text" value="${contractModel.contract.signedDate?string('yyyy-MM-dd')}" datepicker /> </li>
+						<li><label>合同期限</label> <input name="" type="text" value="${contractModel.contract.validityDate?string('yyyy-MM-dd')}" datepicker /></li>
+						<li><label>生效时间</label>
+							${contractModel.contract.startDate?string("yyyy-MM-dd")}</li>
+					</ul>
+					<table border="0" cellpadding="0" cellspacing="0"
+						class="tabList producedTable">
+						<col width="20%" />
+						<col width="20%" />
+						<col width="15%" />
+						<col width="10%" />
+						<col width="10%" />
+						<col width="20%" />
+						<col width="5%" />
+						<tr>
+							<th>产品名称</th>
+							<th>产品规格</th>
+							<th>数量<span>（㎡/吨）</span></th>
+							<th>单价<span>(元/㎡/吨)</span></th>
+							<th>金额<span>(元)</span></th>
+							<th>备注说明</th>
+							<th class="rLine">&nbsp;</th>
+						</tr>
+						<#assign n = 0> 
+						<#assign m = 0>
+						 <#list contractModel.itemList as item>
+						  <#assign n = (n+item.price)?int > 
+						  <#assign m = (m+item.amount)?int >
+						<tr>
+							<td><input
+								name="item[${contractModel.itemList?size}].productName"
+								type="text" value="${item.productName}" /></td>
+							<td><input
+								name="item[${contractModel.itemList?size}].productModel"
+								type="text" value="${item.productModel}" /></td>
+							<td><input
+								name="item[${contractModel.itemList?size}].quantity" type="text"
+								value="${item.quantity}" /></td>
+							<td><input name="item[${contractModel.itemList?size}].price"
+								type="text" value="${item.price}" /></td>
+							<td><input
+								name="item[${contractModel.itemList?size}].amount" type="text"
+								value="${item.amount}" /></td>
+							<td><textarea
+									name="item[${contractModel.itemList?size}].remarks" cols=""
+									rows="2">${item.remarks}</textarea></td>
+							<td class="color-red">！</td>
+						</tr>
+						</#list>
+						<tr>
+							<td><strong>合计</strong></td>
+							<td>&nbsp;</td>
+							<td>${n}</td>
+							<td>&nbsp;</td>
+							<td>${m}</td>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+					<div>
+						<label>交货地址</label> <input name="" type="text"
+							value="${contractModel.contract.deliveryAddress}" />
+					</div>
+					<table border="0" cellpadding="0" cellspacing="0"
+						class="tabList producedTable">
+						<col width="20%" />
+						<col width="30%" />
+						<col width="20%" />
+						<col width="10%" />
+						<col width="20%" />
+						<tr>
+							<th>交货批次</th>
+							<th>产品规格</th>
+							<th>数量<span>（㎡/吨）</span></th>
+							<th>应付货款<span>（元）</span></th>
+							<th class="rLine">对应批次RFID编号</th>
+						</tr>
+						<#list modifyList.modifyBatchList  as modifyBatch>
+						<tr>
+							<td>第 <input name="" type="text" value="${modifyBatch.modifyBatch.batchNo}" class="input-w30" />
+								批次
+							</td>
+							<td><table border="0" cellpadding="0" cellspacing="0"
+									class="tabList prodIable">
+									 <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
+									<tr>
+										<td><input name="" type="text"
+											value="${modifyBatchItems.productModel}" /></td>
+									</tr>
+									</#list>
+								</table></td>
+							<td><table border="0" cellpadding="0" cellspacing="0"
+									class="tabList prodIable">
+									  <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
+									<tr>
+										<td><input name="" type="text" value="${modifyBatchItems.quantity}" /> &nbsp;</td>
+									</tr>
+									 </#list>
+								</table></td>
+							<td><input name="" type="text" value="${modifyBatch.modifyBatch.amount}" /></td>
+							<td><input name="" type="text" value="${modifyBatch.modifyBatch.rfidNo}" /></td>
+						</tr>
+              </#list>
+					</table>
+					<div>
+						<label>本合同还有</label> <input name="" type="<#if contractModel.batchList?exists> ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
+            <#else> ${contractModel.contract.batchCount} </#if>" value="2" class="input-w30" /> 批次待交付
+					</div>
+					<div>
+						<label>合同定金</label> <input name="" type="text" value=" ${contractModel.contract.deposit}" />
+						元
+					</div>
+					<div>
+						<label>合同备注</label>
+						<textarea name="textarea2" id="textarea2" cols="80" rows="3">${contractModel.contract.remarks}</textarea>
+					</div>
+					<div class="contPic">
+						<label>合同备案扫描件</label>
+						<button class="button button-green button-middle">上传合同扫描件</button>
+					</div>
+					<div>
+						<label>关联招标合同号</label> <input name="" type="text"
+							value="${contractModel.contract.refContractNo}" />
+					</div>
+				</div>
+				<#if contractModel.modifyList?exists>
+				<div class="changeBox">
+					<h2 class="title">合同变更信息</h2>
+					<#list contractModel.modifyList as modifyList>
+					<div class="infoBox producedBox f14">
+						<div>
+							<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
+						</div>
+						<div class="contPic">
+							<label>合同变更扫描件</label>
+							<button class="button button-green button-middle">上传合同变更扫描件</button>
+						</div>
+						<table border="0" cellpadding="0" cellspacing="0"
+							class="tabList producedTable">
+							<col width="20%" />
+							<col width="20%" />
+							<col width="15%" />
+							<col width="10%" />
+							<col width="10%" />
+							<col width="25%" />
+							<tr>
+								<th>产品名称</th>
+								<th>产品规格</th>
+								<th>数量<span>（㎡/吨）</span></th>
+								<th>单价<span>(元/㎡/吨)</span></th>
+								<th>金额<span>(元)</span></th>
+								<th class="rLine">备注说明</th>
+							</tr>
+             			<#list modifyList.modifyItemList  as modifyItem>
+							<tr>
+								<td><input type="text" value="${modifyItem.productName}" /></td>
+								<td><textarea name="textarea9" id="textarea9" cols="25"
+										rows="1">${modifyItem.productModel}</textarea></td>
+								<td><input type="text" value="${modifyItem.quantity}" /></td>
+								<td><input type="text" value="${modifyItem.price}" /></td>
+								<td><input type="text" value="${modifyItem.amount}" /></td>
+								<td><textarea name="textarea9" id="textarea10" cols="25"
+										rows="1">${modifyItem.remarks}</textarea> 
+										&nbsp;&nbsp;<a href="#" class="lnk-green">X</a></td>
+							</tr>
+						 </#list>
+						</table>
+						<table border="0" cellpadding="0" cellspacing="0"
+							class="tabList producedTable">
+							<col width="20%" />
+							<col width="25%" />
+							<col width="20%" />
+							<col width="10%" />
+							<col width="25%" />
+							<tr>
+								<th>交货批次</th>
+								<th>产品规格</th>
+								<th>数量<span>（㎡/吨）</span></th>
+								<th>应付货款<span>（元）</span></th>
+								<th class="rLine">对应批次RFID编号</th>
+							</tr>
+							<#list modifyList.modifyBatchList  as modifyBatch>
+							<tr>
+								<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
+								<td><table border="0" cellpadding="0" cellspacing="0"
+										class="tabList prodIable">
+                  					<#list modifyBatch.modifyBatchItems  as modifyBatchItems>
+										<tr>
+											<td><textarea name="textarea10" id="textarea15"
+													cols="25" rows="1">${modifyBatchItems.productModel}</textarea></td>
+										</tr>
+									 </#list>
+									</table></td>
+								<td><table border="0" cellpadding="0" cellspacing="0"
+										class="tabList prodIable">
+										<#list modifyBatch.modifyBatchItems  as modifyBatchItems>
+										<tr>
+											<td><input type="text" value="${modifyBatchItems.quantity}" /> &nbsp;<a
+												href="#" class="lnk-green">+</a></td>
+										</tr>
+										 </#list>
+									</table></td>
+								<td><input type="text" value="8564.00" /></td>
+								<td><input type="text" class="input-w80" value="AAAA00001" />
+									<a href="#" class="lnk-green">X</a></td>
+							</tr>
+							</#list>
+						</table>
+					</div>
+					</#list>
+				</div>
+				</#if>
+				 <#if contractModel.replenishList?exists>
+				<div class="changeBox">
+					<h2 class="title">合同补损信息</h2>
+					<#list contractModel.replenishList as replenishList>
+					<div class="infoBox producedBox f14">
+						<div>
+							<label>合同补损备案号</label> ${replenishList.replenishContract.recordNo}
+						</div>
+						<div>
+							<label>补损批次RFID</label> ${replenishList.replenishContract.batchRfidNo}
+						</div>
+						<div class="contPic">
+							<label>合同补损扫描件</label>
+							<button class="button button-green button-middle">上传合同补损扫描件</button>
+						</div>
+						<table border="0" cellpadding="0" cellspacing="0"
+							class="tabList producedTable">
+							<col width="10%" />
+							<col width="25%" />
+							<col width="20%" />
+							<col width="10%" />
+							<col width="15%" />
+							<col width="20%" />
+							<tr>
+								<th>交货批次</th>
+								<th>产品规格</th>
+								<th>数量<span>（㎡/吨）</span></th>
+								<th>应付货款<span>（元）</span></th>
+								<th>对应批次RFID编号</th>
+								<th class="rLine">新RFID编号</th>
+							</tr>
+							<#list replenishList.batchItems as replenishItem>
+							<tr>
+								<td>第${replenishItem.replenishBatch.batchNo}批次</td>
+								<td><table border="0" cellpadding="0" cellspacing="0"
+										class="tabList prodIable">
+										 <#list replenishItem.replenishBatchItems as replenishBatchItems>
+										<tr>
+											<td><textarea name="textarea10" id="textarea14"
+													cols="25" rows="1">${replenishBatchItems.productModel}</textarea></td>
+										</tr>
+										</#list>
+									</table></td>
+								<td><table border="0" cellpadding="0" cellspacing="0"
+										class="tabList prodIable">
+										<#list replenishItem.replenishBatchItems as replenishBatchItems>
+										<tr>
+											<td><input type="text" value="${replenishBatchItems.quantity}" /></td>
+										</tr>
+										</#list>
+									</table></td>
+								<td><input type="text" value="${replenishItem.replenishBatch.amount}" /></td>
+								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.rfidNo}" /></td>
+								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.newRfidNo}" />
+									&nbsp;<a href="#" class="lnk-green">X</a></td>
+							</tr>
+						</table>
+						<div>
+							<label>RFID订单号</label><input type="text" value="${replenishList.replenishContract.rfidOrderNo}" />
+						</div>
+					</#list>	
+					</#if>
+						<div class="btnBox">
+							<a href="contract.html" class="button button-orange button-small">修改</a><a
+								href="javascript:history.go(-1);"
+								class="button button-gray button-small">返回</a>
+						</div>
+					</div>
+				</div>
+				<!-- InstanceEndEditable -->
+			</div>
+		</div>
+		<#include "manage/footer.html">
 </body>
-<!-- InstanceEnd --></html>
+<!-- InstanceEnd -->
+</html>

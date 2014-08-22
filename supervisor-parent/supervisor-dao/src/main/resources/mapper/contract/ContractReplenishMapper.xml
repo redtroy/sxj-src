@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.contract.IContractReplenishDao">
-	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.contract.ReplenishContractEntity">
+	<resultMap id="ReplenishResultMap" type="com.sxj.supervisor.entity.contract.ReplenishContractEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="contractId" column="CONTRACT_ID" jdbcType="VARCHAR" />
 		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
@@ -13,7 +13,7 @@
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
-	<select id="queryModify" resultMap="BaseResultMap"
+	<select id="queryReplenish" resultMap="ReplenishResultMap"
 		parameterType="String">
 		<![CDATA[SELECT ID,CONTRACT_ID,RECORD_NO,BATCH_RFID_NO,RFID_ORDER_NO,IMG_PATH
 					FROM M_CONTRACT_REPLENISH WHERE RECORD_NO in(#{condition.recordIds})]]>

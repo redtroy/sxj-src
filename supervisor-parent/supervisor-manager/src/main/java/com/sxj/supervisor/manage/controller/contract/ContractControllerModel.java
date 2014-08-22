@@ -13,11 +13,22 @@ public class ContractControllerModel implements Serializable {
 	 */
 	private static final long serialVersionUID = 3300733982514378519L;
 
+	/**
+	 * 合同实体
+	 */
 	private ContractEntity contract;
 
+	/**
+	 * 产品条目
+	 */
 	private List<ContractItemEntity> items;
-	
+	/**
+	 * 备案ID
+	 */
 	private String recordId;
+	
+	
+	
 
 	public String getRecordId() {
 		return recordId;
