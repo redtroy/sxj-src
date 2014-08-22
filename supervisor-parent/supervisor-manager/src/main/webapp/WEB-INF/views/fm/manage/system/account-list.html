@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<#include "manage/base.html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家电子商贸平台</title>
+<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${staticPath}js/jquery.js"></script>
+<script src="${staticPath}js/intense.js"></script>
+<script>
+jQuery(document).ready(function($) {
+	$('.del').click(function(){
+		$('.popDemo').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.popDemo').slideUp(200);
+	})
+});
+
+function searchSumbit(){
+	var params=$("#search_form").serialize();
+	$.post("${basePath}system/account-list.htm",params);
+}
+
+function accountInfo(id){
+	$.get("${basePath}system/account-info.htm?accountId="+id,function(data){
+		$("#rightBar").empty();
+		$("#rightBar").append(data);
+	});
+}
+
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<#include "manage/head.html">
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<#include "manage/menu-path.html">
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+   	<div id="leftList">
+   	 <script>$("#leftList").load("${basePath}menu.htm");</script>
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">管理员管理</h2>
+      <div id="searchBox" class="ly-clearFix">
+      <form id="search_form" action="">
+	          管理员ID<input type="text" name="id" value="${query.id}">
+	          姓名<input type="text" name="name" value="${query.name}">
+	          帐号<input type="text" name="account" value="${query.account}">
+	          权限<select name="functionId">
+	           	 <option value="0">全部</option>
+	             <#list functions as f>
+	             	<#if f.id==query.functionId>
+	            	<option value="${f.id}" selected="selected">${f.title}</option>
+	            	<#else>
+	            	<option value="${f.id}">${f.title}</option>
+	            	</#if>
+	            </#list>
+	          </select>
+	          <button class="btn btn-blue" onclick="javascript:searchSumbit();"><span>搜索</span></button>&nbsp;&nbsp;
+			  <button onclick="javascript:window.location.href='admin-add.html'" class="btn btn-blue ly-right"><span>新增管理员</span></button>
+ 	 </form>
+    </div>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+        <col width="10%" />
+        <col width="13%"/>
+        <col width="15%"/>
+        <col width="10%" />
+        <col width="10%" />
+        <col width="12%" />
+        <col width="15%" />
+        <tr>
+          <th>管理员ID</th>
+          <th>姓名</th>
+          <th>帐号</th>
+          <th>权限</th>
+          <th>操作记录</th>
+          <th>操作</th>
+          <th class="rLine">&nbsp;</th>
+        </tr>
+         <#list list as model>
+	        <tr>
+	          <td>${model.id}</td>
+	          <td>${model.name}</td>
+	          <td style="display:none"><input type="text" name="name" value="${model.name}" /></td>
+	          <td>${model.account}</td>
+	          <td style="display:none"><input type="text" name="account" value="${model.account}" /></td>
+	          <td>RFID跟踪</td>
+	          <td class="permission" style="display:none"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
+	          <td><a href="javascript:accountInfo(${model.id});" class="lnk-blue lnk-underline">查询</a></td>
+	          <td class="operation"><a href="admin-edit.html" class="edit lnk-blue">修改</a><a href="javascript:;" class="del lnk-blue">删除</a></td>
+	          <td><button class="btn"><span>初始化密码</span></button></td>
+	        </tr>
+        </#list>
+        
+        <tr >
+        <td>0001</td>
+        
+      
+        <td class="permission"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
+        <td><a href="admin-view.html" class="lnk-blue lnk-underline">查询</a></td>
+        <td class="operation"><a href="admin.html" class="confirm lnk-yellow">确认</a><a href="#" class="del lnk-blue">删除</a></td>
+        <td><button class="btn"><span>初始化密码</span></button></td>
+      </tr>
+        
+      </table>
+      <div class="modal-wrap popDemo" style="display:none;">
+        <div class="modal-header">
+          <span class="close">关闭</span></div>
+        <div class="modal-body popbtnBox">
+          <button class="popBtn">确认删除</button><button class="popBtn btnGray">取消</button>
+        </div>
+      </div>
+    <!-- InstanceEndEditable --></div>
+</div>
+<#include "manage/footer.html">
+</body>
+<!-- InstanceEnd --></html>

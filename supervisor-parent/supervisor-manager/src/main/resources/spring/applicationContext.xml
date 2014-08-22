@@ -48,5 +48,5 @@
 		<property name="basePackage" value="com.sxj.supervisor.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
-
+<import resource="classpath*:spring/applicationContext-shiro.xml" />
 </beans>

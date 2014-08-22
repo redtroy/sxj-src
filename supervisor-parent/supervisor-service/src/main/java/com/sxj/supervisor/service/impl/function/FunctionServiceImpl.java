@@ -11,6 +11,7 @@ import com.sxj.supervisor.dao.system.IFunctionDao;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.model.function.FunctionModel;
 import com.sxj.supervisor.service.system.IFunctionService;
+import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -18,13 +19,12 @@ import com.sxj.util.persistent.QueryCondition;
 public class FunctionServiceImpl implements IFunctionService {
 	@Autowired
 	private IFunctionDao functiondao;
-    
-	
+
 	/**
 	 * 获取左侧菜单
 	 */
 	@Override
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public List<FunctionModel> queryFunctions() {
 		QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
 		query.addCondition("parentId", 0);
@@ -51,10 +51,21 @@ public class FunctionServiceImpl implements IFunctionService {
 	 * 获取系统功能信息
 	 */
 	@Override
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public FunctionEntity getFunction(String id) {
 		FunctionEntity fe = functiondao.getFunction(id);
 		return fe;
 	}
 
+	@Override
+	public List<FunctionEntity> queryChildrenFunctions(String parentId) {
+		try {
+			QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
+			query.addCondition("parentId", parentId);
+			List<FunctionEntity> entity = functiondao.queryFunction(query);
+			return entity;
+		} catch (Exception e) {
+			throw new ServiceException("查询功能菜单错误",e);
+		}
+	}
 }

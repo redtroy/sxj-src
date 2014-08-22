@@ -8,7 +8,8 @@
 		<result property="functionId" column="FUNCTION_ID" jdbcType="VARCHAR" />
 		<result property="accountId" column="ACCOUNT_ID" jdbcType="VARCHAR" />
 	</resultMap>
-	<resultMap id="FunctionResultMap" type="com.sxj.supervisor.entity.system.FunctionEntity">
+	<resultMap id="FunctionResultMap"
+		type="com.sxj.supervisor.entity.system.FunctionEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="title" column="TITLE" jdbcType="VARCHAR" />
 		<result property="url" column="URL" jdbcType="VARCHAR" />
@@ -17,15 +18,27 @@
 	</resultMap>
 
 	<!-- 获取权限列表 -->
-	<select id="getRoles" resultMap="BaseResultMap"
-		parameterType="String">
+	<select id="getRoles" resultMap="BaseResultMap" parameterType="String">
 		<![CDATA[SELECT ID,FUNCTION_ID,ACCOUNT_ID FROM ROLE WHERE ACCOUNT_ID=#{accountId}]]>
 	</select>
-	
+
 	<!-- 获取权限操作列表 -->
-	<select id="getRoleFunction" resultMap="BaseResultMap"
+	<select id="getRoleFunction" resultMap="FunctionResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL from M_SYS_FUNCTION f 
+		INNER JOIN M_ROLE_ACCOUNT r on f.ID=r.FUNCTION_ID WHERE 1=1 ]]>
+		<if test="condition.accountId != null">
+			<![CDATA[ AND r.ACCOUNT_ID = #{condition.accountId}]]>
+		</if>
+		<!-- 申请会员ID -->
+		<if test="condition.parentId != null">
+			<![CDATA[ AND f.PARENT_ID = #{condition.parentId}]]>
+		</if>
+	</select>
+	<!-- 获取权限操作列表 -->
+	<select id="getAllRoleFunction" resultMap="FunctionResultMap"
 		parameterType="String">
 		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL from M_SYS_FUNCTION f 
-		INNER JOIN M_ROLE_ACCOUNT r where f.ID=r.FUNCTION_ID WHERE r.ACCOUNT_ID=#{accountId}]]>
+		INNER JOIN M_ROLE_ACCOUNT r on f.ID=r.FUNCTION_ID WHERE r.ACCOUNT_ID=#{accountId}]]>
 	</select>
 </mapper>

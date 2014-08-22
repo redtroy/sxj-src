@@ -7,6 +7,7 @@ import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.RoleEntity;
+import com.sxj.util.persistent.QueryCondition;
 
 public interface IRoleDao {
 	/**
@@ -34,8 +35,18 @@ public interface IRoleDao {
 
 	/**
 	 * 获取授权操作列表
+	 * 
 	 * @return
-	 * @throws SQLException
+	 * @throws SQLException2
 	 */
-	public List<FunctionEntity> getRoleFunction(String accountId) throws SQLException;
+	public List<FunctionEntity> getRoleFunction(
+			QueryCondition<FunctionEntity> query) throws SQLException;
+
+	/**
+	 * 获取授权操作列表
+	 * 
+	 * @return
+	 * @throws SQLException2
+	 */
+	public List<FunctionEntity> getAllRoleFunction(String accountId) throws SQLException;
 }
