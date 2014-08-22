@@ -82,7 +82,8 @@ jQuery(document).ready(function($) {
 	   $.post("editMember.htm",{id:id,memberNo:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
 		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum
 		 },function(data){
-			 alert(data);
+			 
+			 alert(data.isOK);
 			// if (data.isOK='ok'){
 				// alert('修改成功！')
 			 //}

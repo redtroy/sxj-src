@@ -64,7 +64,7 @@ public class MemberController extends BaseController {
 	 */
 	@RequestMapping("editMember")
 	public @ResponseBody Map<String, String> editMember(MemberEntity member) {
-		//memberService.modifyMember(member);
+		memberService.modifyMember(member);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		return map;
