@@ -23,8 +23,8 @@
 		<spring.mybatis.version>1.2.2</spring.mybatis.version>
 		<com.alibaba.druid.version>1.0.7</com.alibaba.druid.version>
 		<mysql.version>5.1.31</mysql.version>
-		<junit>3.8.1</junit>
-		<spring.version>4.0.5.RELEASE</spring.version>
+		<junit>4.11</junit>
+		<spring.version>4.0.6.RELEASE</spring.version>
 		<spring.webflow.version>2.4.0.RELEASE</spring.webflow.version>
 		<servlet.version>3.0.1</servlet.version>
 		<jstl.version>1.2</jstl.version>
@@ -56,7 +56,12 @@
 				<artifactId>spring-webmvc</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring.version}</version>
+				<scope>test</scope>
+			</dependency>
 			<dependency>
 				<groupId>com.sxj</groupId>
 				<artifactId>supervisor-utils</artifactId>

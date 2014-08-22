@@ -15,6 +15,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
+import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultSetType;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.SqlSource;
@@ -371,7 +373,7 @@ public class GenericStatementBuilder extends BaseBuilder
     private void buildBatchDelete(String statementId, String collection)
     {
         Integer timeout = null;
-        Class<?> parameterType = String.class;
+        Class<?> parameterType = idField.getType();
         
         //~~~~~~~~~~~~~~~~~~~~~~~
         boolean flushCache = true;
@@ -801,7 +803,14 @@ public class GenericStatementBuilder extends BaseBuilder
         
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        
+        ResultMap resultMap = null;
+        Collection<String> resultMaps = configuration.getResultMapNames();
+        Iterator iterator = resultMaps.iterator();
+        while (iterator.hasNext())
+        {
+            ResultMap resultMap2 = configuration.getResultMap((String) iterator.next());
+            System.out.println(iterator.next().toString());
+        }
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
