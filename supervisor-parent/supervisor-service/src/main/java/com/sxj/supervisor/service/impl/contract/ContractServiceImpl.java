@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.impl.contract;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -111,11 +112,21 @@ public class ContractServiceImpl implements IContractService {
 	 * 新增合同
 	 */
 	@Override
+	@Transactional
 	public void addContract(ContractEntity contract,
-			List<ContractItemEntity> itemList,
-			List<ContractBatchEntity> batchList) {
-		contractDao.addContract(contract);
-		if (contract.getId() != null) {
+			List<ContractItemEntity> itemList,String recordId)throws ServiceException {
+		if(contract!=null){
+			RecordEntity record=recordDao.getRecord(recordId);
+			//拼装实体
+			if(record!=null){
+				contract.setRecordDate(record.getAcceptDate());	//备案时间就是受理时间?
+				contract.setRecordNo(record.getRecordNo());//备案号
+			}
+			contract.setState(0);
+			contract.setConfirmState(0);
+			contract.setCreateDate(new Date());
+			contractDao.addContract(contract);
+		
 			if (itemList != null) {
 				for (int i = 0; i < itemList.size(); i++) {
 					ContractItemEntity ci = itemList.get(i);
@@ -123,14 +134,6 @@ public class ContractServiceImpl implements IContractService {
 				}
 				contractItemDao.addItems(itemList
 						.toArray(new ContractItemEntity[itemList.size()]));// 新增条目
-			}
-			if (batchList != null) {
-				for (int i = 0; i < batchList.size(); i++) {
-					ContractBatchEntity cb = batchList.get(i);
-					cb.setContractId(contract.getId());// 新增批次
-				}
-				contractBatchDao.addBatchs(batchList
-						.toArray(new ContractBatchEntity[batchList.size()]));
 			}
 		}
 	}
@@ -148,6 +151,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 获取合同
 	 */
 	@Override
+	@Transactional
 	public ContractModel getContract(String id)throws ServiceException {
 		ContractModel contractModel = new ContractModel();
 		ContractEntity contract = contractDao.getContract(id);// 合同主体

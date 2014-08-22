@@ -1,5 +1,6 @@
 package com.sxj.supervisor.manage.controller.contract;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +64,16 @@ public class ContractController extends BaseController {
 	@RequestMapping("addContract")
 	public String addContract(ContractControllerModel contract) {
 		ModelMap model = new ModelMap();
-		//contractService.addContract(contract, itemList, null);
-		model.put("SUCCESS", "成功");
-		return "manage/contract/contract-info";
+		contractService.addContract(contract.getContract(), contract.getItems(), contract.getRecordId());
+		
+		return "manage/contract/contract-list";
+	}
+	@RequestMapping("toModify")
+	public String addContract(String  contractId) {
+		ModelMap model = new ModelMap();
+		ContractModel contractModel = contractService.getContract(contractId);
+		model.put("contractModel", contractModel);
+		model.put("contractId", contractId);
+		return "manage/contract/contract-list";
 	}
 }
