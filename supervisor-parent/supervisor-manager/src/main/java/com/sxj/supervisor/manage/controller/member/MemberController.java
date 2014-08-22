@@ -69,4 +69,17 @@ public class MemberController extends BaseController {
 		map.put("isOK", "ok");
 		return map;
 	}
+	
+	/**
+	 * 修改会员状态
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("editState")
+	public @ResponseBody Map<String, String> editState(String id) {
+		//String state=memberService.modifyMember(member);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isOK", "ok");
+		return map;
+	}
 }

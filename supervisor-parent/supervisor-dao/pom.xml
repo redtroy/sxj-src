@@ -19,7 +19,7 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>supervisor-utils</artifactId>
 		</dependency>
-		<dependency>
+		<dependency> 
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
 		</dependency>
