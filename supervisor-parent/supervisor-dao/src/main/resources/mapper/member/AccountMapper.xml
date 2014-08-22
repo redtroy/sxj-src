@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.member.IAccountDao">
-	<resultMap id="BaseResultMap" type="com.sxj.supervisor.entity.member.AccountEntity">
+	<resultMap id="AccountResultMap" type="com.sxj.supervisor.entity.member.AccountEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
 		<result property="accountName" column="ACCOUNT_NAME" jdbcType="VARCHAR" />
@@ -15,7 +15,7 @@
 	</resultMap>
 
 	<!-- 子账户高级查询 -->
-	<select id="queryAccount" resultMap="BaseResultMap"
+	<select id="queryAccount" resultMap="AccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT A.ID,A.PARENT_ID,A.ACCOUNT_NAME,A.NAME,
 		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO 
