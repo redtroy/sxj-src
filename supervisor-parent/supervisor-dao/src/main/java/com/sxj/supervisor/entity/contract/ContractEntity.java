@@ -30,7 +30,7 @@ public class ContractEntity extends Pagable implements Serializable {
 	 * 主键ID
 	**/
 	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	
 	/**

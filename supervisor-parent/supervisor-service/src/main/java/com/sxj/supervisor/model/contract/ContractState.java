@@ -5,7 +5,7 @@ package com.sxj.supervisor.model.contract;
  *
  */
 public enum ContractState {
-	approval("已审核", 0), noapproval("未审核", 1);
+	approval("未审核", 0), noapproval("已审核", 1);
 
 	// 成员变量
 	private Integer id;

@@ -1,5 +1,6 @@
 package com.sxj.supervisor.manage.controller.contract;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
+import com.sxj.supervisor.entity.contract.ContractStateEnum;
+import com.sxj.supervisor.entity.contract.ContractSureStateEnum;
+import com.sxj.supervisor.entity.contract.ContractTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
-import com.sxj.supervisor.model.contract.ContractState;
-import com.sxj.supervisor.model.contract.ContractSureState;
-import com.sxj.supervisor.model.contract.ContractType;
+
 import com.sxj.supervisor.service.contract.IContractService;
 
 @Controller
@@ -33,9 +35,9 @@ public class ContractController extends BaseController {
 	@RequestMapping("query")
 	public String queryContract(ContractQuery query, ModelMap model) {
 		List<ContractModel> list = contractService.queryContracts(query);
-		ContractType[] contractType = ContractType.values();// 合同类型
-		ContractSureState[] contractSureState = ContractSureState.values();// 确认状态
-		ContractState[] contractState = ContractState.values();// 状态
+		ContractTypeEnum[] contractType = ContractTypeEnum.values();// 合同类型
+		ContractSureStateEnum[] contractSureState = ContractSureStateEnum.values();// 确认状态
+		ContractStateEnum[] contractState = ContractStateEnum.values();// 状态
 		model.put("contractType", contractType);
 		model.put("contractSureState", contractSureState);
 		model.put("contractState", contractState);
@@ -62,8 +64,16 @@ public class ContractController extends BaseController {
 	@RequestMapping("addContract")
 	public String addContract(ContractControllerModel contract) {
 		ModelMap model = new ModelMap();
-		//contractService.addContract(contract, itemList, null);
-		model.put("SUCCESS", "成功");
-		return "manage/contract/contract-info";
+		contractService.addContract(contract.getContract(), contract.getItems(), contract.getRecordId());
+		
+		return "manage/contract/contract-list";
+	}
+	@RequestMapping("toModify")
+	public String addContract(String  contractId) {
+		ModelMap model = new ModelMap();
+		ContractModel contractModel = contractService.getContract(contractId);
+		model.put("contractModel", contractModel);
+		model.put("contractId", contractId);
+		return "manage/contract/contract-list";
 	}
 }

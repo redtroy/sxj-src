@@ -15,21 +15,50 @@
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script>
-		function addTable(){
-			var vTb=$("#TbData");//得到表格ID=TbData的jquery对象 
-			var totalTr=$("#total_tr");
-			//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-			var vNum=$("#TbData tr").filter(".CaseRow").size()+1;//表格有多少个数据行 
-			var vTr=$("#TbData #trDataRow1"); //得到表格中的第一行数据 
-			var vTrClone=vTr.clone(true);//创建第一行的副本对象vTrClone 
-			vTrClone[0].id="trDataRow"+vNum;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個； 
-			vTrClone.insertBefore(totalTr);//把副本单元格对象添加到表格上方 
-		}
+	var num = 1;
+	function addTable(){
+		var vTb=$("#TbData");//得到表格ID=TbData的jquery对象 
+		var totalTr=$("#total_tr");
+		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
+		var vNum=$("#TbData tr").filter(".CaseRow").size()+1;//表格有多少个数据行 
+		var vTr=$("#TbData #trDataRow1"); //得到表格中的第一行数据 
+		var vTrClone=vTr.clone(true);//创建第一行的副本对象vTrClone 
+		var id="trDataRow"+vNum;
+		vTrClone[0].id=id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
+		//alert(vTrClone.find("td :last").find('a').text());	
+		vTrClone.find("td :last").attr("onclick","");		
+		vTrClone.find("td :last").addClass("TrDel");			
+		vTrClone.find("td :last").html("x");//更改按钮
+		//设置item[]
+
+		vTrClone.find("td").eq(0).find("input").attr("name","items["+num+"].productName");
+		vTrClone.find("td").eq(1).find("input").attr("name","items["+num+"].productModel");
+		vTrClone.find("td").eq(2).find("input").attr("name","items["+num+"].quantity");
+		vTrClone.find("td").eq(3).find("input").attr("name","items["+num+"].price");
+		vTrClone.find("td").eq(4).find("input").attr("name","items["+num+"].amount");
+		vTrClone.find("td").eq(5).find("textarea").attr("name","items["+num+"].remarks");
+		num++;
+		
+		vTrClone.insertBefore(totalTr);//把副本单元格对象添加到表格上方 
+	}
+
+	$(function() {
+	    $(".TrDel").live("click",function(){
+			$(this).parent().parent().remove();
+		});
+	});
 		function saveContract(){
-			$.post("addContract.htm",$("#addForm").serialize(), function(data){
-				  alert("Data Loaded: " + data);
-			});
+		//	$.post("addContract.htm",$("#addForm").serialize(), function(data){
+			//});
+			$("#addForm").submit();
 		}
+	//function sum(){
+		//var amount =$("[attribute*=amount]");
+		//alert(amount.eq(0).name);
+	//		for (var i=0;i<=amount.size;i++){
+	//			alert(amount[i].val());onkeydown="sum();"s
+	//		}
+	//}
 </script>
 </head>
 <body>
@@ -42,7 +71,8 @@
     <div id="leftList">
       
     </div>
-    <form action="" method="post" id="addForm">
+    <form action="addContract.htm" method="post" id="addForm">
+    <input type="hidden" name="recordId" value="${recordId}" />
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">生成合同确认书</h2>
@@ -52,7 +82,7 @@
       <li><label>工程地址</label><input type="text" value="" name="contract.engName" /></li>
       <li><label>甲方</label><input type="text" value="" name="contract.memberNameA" /></li>
       <li><label>乙方</label><input type="text" value="" name="contract.memberNameB" /></li>
-     <<li><label>签订地点</label><input type="text" value="" name="contract.address" /></li> 
+     <li><label>签订地点</label><input type="text" value="" name="contract.address" /></li> 
       <li><label>签订时间</label><input type="text" value="" name="contract.signedDate" datepicker></li>
       <li><label>合同期限</label><input type="text" value="" name="contract.validityDate" datepicker></li>
       <li><label>生效时间</label><input type="text" value="" name="contract.startDate" datepicker></li> 
@@ -79,8 +109,8 @@
            <td><input type="text" value="" name="items[0].productModel"/></td>
           <td><input type="text" value="" name="items[0].quantity"/></td>
           <td><input type="text" value="" name="items[0].price"/></td>
-          <td><input type="text" value="" name="items[0].amount"/></td>
-          <td><textarea name="textarea" id="textarea" cols="45" rows="1" name="items[0].remarks"></textarea></td>
+          <td><input type="text" value="" name="items[0].amount" /></td>
+          <td><textarea  id="textarea" cols="45" rows="1" name="items[0].remarks"></textarea></td>
 		  <td><a href="javascript:void(0);" class="lnk-green" name="add" onclick="addTable()">+</a></td>
         </tr>
         <tr id="total_tr">

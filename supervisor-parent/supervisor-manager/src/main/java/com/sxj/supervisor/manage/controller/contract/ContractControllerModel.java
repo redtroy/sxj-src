@@ -16,6 +16,16 @@ public class ContractControllerModel implements Serializable {
 	private ContractEntity contract;
 
 	private List<ContractItemEntity> items;
+	
+	private String recordId;
+
+	public String getRecordId() {
+		return recordId;
+	}
+
+	public void setRecordId(String recordId) {
+		this.recordId = recordId;
+	}
 
 	public List<ContractItemEntity> getItems() {
 		return items;
