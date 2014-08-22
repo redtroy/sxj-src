@@ -13,7 +13,7 @@
 	</resultMap>
 
 	<!-- 条件查询合同补损批次 -->
-	<select id="queryBacths" resultMap="BaseResultMap"
+	<select id="queryReplenishBatch" resultMap="BaseResultMap"
 		parameterType="String">
 		<![CDATA[ SELECT ID,BATCH_NO,REPLENISH_ID,RFID_NO,AMOUNT,BATCH_ITEMS
 		FROM M_CONTRACT_REPLENISH_BATCH WHERE REPLENISH_ID=#{condition.recordIds}]]>

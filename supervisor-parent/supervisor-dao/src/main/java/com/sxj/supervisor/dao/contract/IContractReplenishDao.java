@@ -33,6 +33,6 @@ public interface IContractReplenishDao {
 	 * @param query
 	 * @return
 	 */
-	public List<ReplenishContractEntity> queryReplenish(QueryCondition<ModifyItemEntity> query);
+	public List<ReplenishContractEntity> queryReplenish(QueryCondition<ReplenishContractEntity> query);
 	
 }
