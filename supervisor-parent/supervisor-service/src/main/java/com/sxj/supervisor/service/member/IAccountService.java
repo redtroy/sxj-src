@@ -1,5 +1,7 @@
 package com.sxj.supervisor.service.member;
 
+import java.util.List;
+
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.util.persistent.ResultList;
@@ -13,7 +15,7 @@ public interface IAccountService {
 
 	public AccountEntity getAccount(String id);
 
-	public ResultList<AccountEntity> queryAccounts(AccountQuery query);
+	public List<AccountEntity> queryAccounts(AccountQuery query);
 
 	public void reomveAccount(String id);
 }

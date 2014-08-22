@@ -1,11 +1,11 @@
 package com.sxj.supervisor.entity.member;
 /**
- * 会员子帐号状态
+ * 会员帐号状态
  * @author Administrator
  *
  */
 public enum MemberStatesEnum {
-	normal("正常", 0), stop("停用", 1);
+	normal("冻结", 0), stop("解冻", 1);
 
 	// 成员变量
 	private Integer id;

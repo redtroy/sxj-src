@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.impl.member;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IAccountDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.util.persistent.QueryCondition;
@@ -52,7 +54,7 @@ public class AccountServiceImpl implements IAccountService {
 	 */
 	@Override
 	@Transactional(readOnly=true)
-	public ResultList<AccountEntity> queryAccounts(AccountQuery query) {
+	public List<AccountEntity> queryAccounts(AccountQuery query) {
 		QueryCondition<AccountEntity> qc = new QueryCondition<AccountEntity>();
 		Map<String, Object> condition =new HashMap<String, Object>();
 		condition.put("parentId", query.getMemberNo());//父会员号
@@ -63,8 +65,8 @@ public class AccountServiceImpl implements IAccountService {
 		condition.put("endDate", query.getEndDate());//结束时间
 		condition.put("roleId", query.getRoleId());//权限ＩＤ
 		qc.setCondition(condition);
-		ResultList<AccountEntity> rl= accountDao.queryAccount(qc);
-		return rl;
+		List<AccountEntity> aacountList= accountDao.queryAccount(qc);
+		return aacountList;
 	}
 
 	/**
