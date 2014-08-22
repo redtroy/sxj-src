@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
+import com.sxj.supervisor.entity.contract.ContractStateEnum;
+import com.sxj.supervisor.entity.contract.ContractSureStateEnum;
+import com.sxj.supervisor.entity.contract.ContractTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
-import com.sxj.supervisor.model.contract.ContractState;
-import com.sxj.supervisor.model.contract.ContractSureState;
-import com.sxj.supervisor.model.contract.ContractType;
+
 import com.sxj.supervisor.service.contract.IContractService;
 
 @Controller
@@ -33,9 +34,9 @@ public class ContractController extends BaseController {
 	@RequestMapping("query")
 	public String queryContract(ContractQuery query, ModelMap model) {
 		List<ContractModel> list = contractService.queryContracts(query);
-		ContractType[] contractType = ContractType.values();// 合同类型
-		ContractSureState[] contractSureState = ContractSureState.values();// 确认状态
-		ContractState[] contractState = ContractState.values();// 状态
+		ContractTypeEnum[] contractType = ContractTypeEnum.values();// 合同类型
+		ContractSureStateEnum[] contractSureState = ContractSureStateEnum.values();// 确认状态
+		ContractStateEnum[] contractState = ContractStateEnum.values();// 状态
 		model.put("contractType", contractType);
 		model.put("contractSureState", contractSureState);
 		model.put("contractState", contractState);
