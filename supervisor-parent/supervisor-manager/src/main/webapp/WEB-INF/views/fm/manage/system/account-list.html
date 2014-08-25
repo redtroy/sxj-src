@@ -43,11 +43,49 @@ function closeDiv(divId){
 	$("#"+divId).css("display","none");
 }
 
+function toAdd(id){
+	$.get("${basePath}system/to_add.htm",function(data){
+		$("#rightBar").empty();
+		$("#rightBar").append(data);
+		
+	});
+	
+}
+
 function edit(id){
 	var params=$("#edit_form_"+id).serialize();
-	$.post("${basePath}/system/edit_account.htm",params,function(data){
-		alert(data.isOK);
+	$.post("${basePath}system/edit_account.htm",params,function(data){
+		if(data.isOK==true){
+			toInfo(id,data);
+			alert("修改成功");
+		}
+		else{
+			alert("修改失败");
+		}
 	});
+}
+
+function toInfo(accountId,data){
+	
+	$("#"+accountId+"_tr").children("#id_hidden").val(data.account.id);
+	
+	$("#"+accountId+"_tr").children("#functionIds_hidden").val(data.functionIds);
+	
+	$("#"+accountId+"_tr").children("#name_td").css("display","");
+	$("#"+accountId+"_tr").children("#name_td").text(data.account.name);
+	$("#"+accountId+"_tr").children("#name_td2").css("display","none");
+	$("#"+accountId+"_tr").children("#name_td2").children(":input").val(data.account.name);
+	
+	$("#"+accountId+"_tr").children("#account_td").css("display","");
+	$("#"+accountId+"_tr").children("#account_td").text(data.account.account);
+	$("#"+accountId+"_tr").children("#account_td2").css("display","none");
+	$("#"+accountId+"_tr").children("#account_td2").children(":input").val(data.account.account);
+	
+	$("#"+accountId+"_tr").children("#role_td").css("display","");
+	$("#"+accountId+"_tr").children("#role_td2").css("display","none");
+	
+	$("#"+accountId+"_tr").children().children("#edit_a").css("display","");
+	$("#"+accountId+"_tr").children().children("#confirm_a").css("display","none");
 }
 
 function toEdit(accountId){
@@ -84,12 +122,12 @@ function toEdit(accountId){
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">管理员管理</h2>
       <div id="searchBox" class="ly-clearFix">
-      <form id="search_form" action="">
+      <form id="search_form" action="#">
 	          管理员ID<input type="text" name="id" value="${query.id}">
 	          姓名<input type="text" name="name" value="${query.name}">
 	          帐号<input type="text" name="account" value="${query.account}">
 	          权限<select name="functionId">
-	           	 <option value="0">全部</option>
+	           	 <option value="">全部</option>
 	             <#list functions as f>
 	             	<#if f.id==query.functionId>
 	            	<option value="${f.id}" selected="selected">${f.title}</option>
@@ -99,7 +137,7 @@ function toEdit(accountId){
 	            </#list>
 	          </select>
 	          <button class="btn btn-blue" onclick="javascript:searchSumbit();"><span>搜索</span></button>&nbsp;&nbsp;
-			  <button onclick="javascript:window.location.href='admin-add.html'" class="btn btn-blue ly-right"><span>新增管理员</span></button>
+			  <button onclick="javascript:toAdd();" class="btn btn-blue ly-right"><span>新增管理员</span></button>
  	 </form>
     </div>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
@@ -124,13 +162,13 @@ function toEdit(accountId){
 	        <tr id="${model.id}_tr" >
 	          <td>${model.id}</td>
 	          <td id="name_td">${model.name}</td>
-	          <input type="hidden" name="id" value="${model.id}" />
+	          <input id="id_hidden" type="hidden" name="id" value="${model.id}" />
 	          <td id="name_td2" style="display:none"><input type="text" name="name" value="${model.name}" /></td>
 	          <td id="account_td">${model.account}</td>
 	          <td id="account_td2" style="display:none"><input type="text" name="account" value="${model.account}" /></td>
 	          <td id="role_td"><a href="javascript:roleInfo(${model.id},'get');" class="lnk-blue lnk-underline">查询权限</a></td>
 	          <td id="role_td2" class="permission" style="display:none" onclick="javascript:roleInfo(${model.id},'edit');"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
-	           <input type="hidden" name="functionIds" value="none" />
+	           <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
 	          <td><a href="javascript:accountInfo(${model.id});" class="lnk-blue lnk-underline">查询</a></td>
 	          <td class="operation">
 	          	<a id="edit_a" href="javascript:toEdit(${model.id});" class="edit lnk-blue">修改</a>
@@ -141,7 +179,6 @@ function toEdit(accountId){
 	        </tr>
 	        </form>
         </#list>
-      </tr>
       </table>
       <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
 	  </div>

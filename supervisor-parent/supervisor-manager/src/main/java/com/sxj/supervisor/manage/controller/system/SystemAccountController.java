@@ -61,13 +61,20 @@ public class SystemAccountController extends BaseController {
 		return "manage/system/account-edit";
 	}
 
+	@RequestMapping("to_add")
+	public String toAddAccount() {
+		return "manage/system/account-add";
+	}
+
 	@RequestMapping("edit_account")
-	public @ResponseBody Map<String, Boolean> editAccount(
+	public @ResponseBody Map<String, Object> editAccount(
 			SystemAccountEntity account,
 			@RequestParam("functionIds") String[] functionIds) {
 		accountService.modifyAccount(account, functionIds);
-		Map<String, Boolean> map = new HashMap<String, Boolean>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("isOK", true);
+		map.put("account", account);
+		map.put("functionIds", functionIds);
 		return map;
 	}
 
@@ -77,6 +84,11 @@ public class SystemAccountController extends BaseController {
 			List<FunctionModel> list = roleService.getRoleFunction(accountId);
 			map.put("list", list);
 			return "manage/system/role_function";
+		} else if ("add".equals(type)) {
+			List<FunctionModel> allList = functionService.queryFunctions();
+			map.put("allList", allList);
+			return "manage/system/edit_role";
+
 		} else if ("edit".equals(type)) {
 			List<FunctionEntity> list = roleService
 					.getAllRoleFunction(accountId);
