@@ -11,7 +11,7 @@
 
 	<!-- 获取权限列表 -->
 	<select id="getRoles" resultMap="RoleResultMap" parameterType="String">
-		<![CDATA[SELECT ID,FUNCTION_ID,ACCOUNT_ID FROM ROLE WHERE ACCOUNT_ID=#{accountId}]]>
+		<![CDATA[SELECT ID,FUNCTION_ID,ACCOUNT_ID FROM M_ROLE_ACCOUNT WHERE ACCOUNT_ID=#{accountId}]]>
 	</select>
 
 	<!-- 获取权限操作列表 -->

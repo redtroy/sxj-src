@@ -14,7 +14,7 @@ public interface ISystemAccountService {
 	 */
 	public void addAccount(SystemAccountEntity account) throws ServiceException;
 
-	public void modifyAccount(SystemAccountEntity account)
+	public void modifyAccount(SystemAccountEntity account,String[] functionIds)
 			throws ServiceException;
 
 	public void deleteAccount(String id) throws ServiceException;

@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.system;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.system.ISystemAccountDao;
+import com.sxj.supervisor.entity.system.RoleEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.system.SysAccountQuery;
+import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
@@ -22,6 +25,9 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	@Autowired
 	private ISystemAccountDao accountDao;
 
+	@Autowired
+	private IRoleService roleServce;
+
 	@Override
 	public void addAccount(SystemAccountEntity account) throws ServiceException {
 		// TODO Auto-generated method stub
@@ -29,9 +35,29 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	}
 
 	@Override
-	public void modifyAccount(SystemAccountEntity account)
+	@Transactional
+	public void modifyAccount(SystemAccountEntity account, String[] functionIds)
 			throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			if (account == null) {
+				return;
+			}
+			roleServce.removeRoles(account.getId());
+			List<RoleEntity> roles = new ArrayList<RoleEntity>();
+			for (int i = 0; i < functionIds.length; i++) {
+				if (functionIds[i] == null) {
+					continue;
+				}
+				RoleEntity role = new RoleEntity();
+				role.setAccountId(account.getId());
+				role.setFunctionId(functionIds[i]);
+				roles.add(role);
+			}
+			roleServce.addRoles(roles);
+			accountDao.updateSystemAccount(account);
+		} catch (Exception e) {
+			throw new ServiceException("修改系统用户信息错误", e);
+		}
 
 	}
 
@@ -82,7 +108,7 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			res.setResults(list);
 			return res;
 		} catch (Exception e) {
-			throw new ServiceException("查询系统用户错误",e);
+			throw new ServiceException("查询系统用户错误", e);
 		}
 	}
 
