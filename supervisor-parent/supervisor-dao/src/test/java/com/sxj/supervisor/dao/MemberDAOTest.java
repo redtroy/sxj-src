@@ -10,6 +10,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberTypeEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext.xml" })
@@ -21,10 +22,19 @@ public class MemberDAOTest
     private IMemberDao memberDao;
     
     @Test
-    public void testGetMember()
+    public void testUpdateMember()
     {
-        MemberEntity member = memberDao.getMember("1");
+        MemberEntity member = new MemberEntity();
+        member.setId("1");
+        member.setType(MemberTypeEnum.DAWP);
+        memberDao.updateMember(member);
         System.out.println(member.getAddress());
+    }
+    
+    @Test
+    public void testGetMemeber()
+    {
+        memberDao.getMember("1");
     }
     
     public void setMemberDao(IMemberDao memberDao)

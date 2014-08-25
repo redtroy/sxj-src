@@ -40,10 +40,4 @@
 			<artifactId>spring-util</artifactId>
 		</dependency>
 	</dependencies>
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<url>http://61.132.53.150:8081/nexus/content/repositories/releases/</url>
-		</repository>
-	</distributionManagement>
 </project>
