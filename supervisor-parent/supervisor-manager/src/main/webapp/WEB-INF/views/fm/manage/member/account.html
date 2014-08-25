@@ -58,14 +58,14 @@
    }
    //更改状态
    function checkState(id,obj){
-	   /*
+	   
 	  $.post("editState.htm",{id:id},function(data){
 		  if (data.isOK=='ok'){
-			   
+			  $(obj).children().text(data.state)
 		   }
 	  })
-	  */
-	  $(obj).children().text("解冻")
+	
+	  
    }
 </Script>
 <body>
