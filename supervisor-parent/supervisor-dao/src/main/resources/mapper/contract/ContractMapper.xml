@@ -26,7 +26,9 @@
 		<result property="memberNameB" column="MEMBER_NAME_B" jdbcType="VARCHAR" />
 		<result property="confirmState" column="CONFIRM_STATE" jdbcType="VARCHAR" />
 		<result property="stateLog" column="STATE_LOG" jdbcType="VARCHAR" />
-		<result property="imgId" column="IMG_ID" jdbcType="VARCHAR" />
+		<result property="imgPath" column="IMG_PATH" jdbcType="VARCHAR" />
+		<result property="batchCount" column="BATCH_COUNT" jdbcType="VARCHAR" />
+		<result property="nowRecordNo" column="NOW_RECORD_NO" jdbcType="VARCHAR" />
 		<result property="createDate" column="CREATE_DATE" jdbcType="DATE" />
 		<result property="recordDate" column="RECORD_DATE" jdbcType="DATE" />
 	</resultMap>
