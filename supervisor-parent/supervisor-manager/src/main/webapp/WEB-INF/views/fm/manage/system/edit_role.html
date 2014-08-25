@@ -1,0 +1,81 @@
+ 
+      <div class="modal-header"><span class="close" onclick="closeDiv('roleInfo_div');">关闭</span></div>
+      <div class="modal-body dropBox">
+        <div class="perBox"><span>已选择权限</span>
+        </div>
+        <#list allList as model>
+        <div class="item"> <span id="parent_span_${model.function.id}">
+        <#assign isCheck=false>
+        	<#list roleList as check>
+        		<#if check.id==model.function.id>
+          			<#assign isCheck=true>
+          		</#if>
+          	</#list>
+          	<#if isCheck=true>
+          	<input  type="checkbox"  title="${model.function.title}" value="${model.function.id}" checked="checked" id="${model.function.id}"/>
+          	<#else>
+          	<input  type="checkbox"  title="${model.function.title}" value="${model.function.id}" id="${model.function.id}"/>
+          	</#if>
+          	${model.function.title}</span>
+          	<ul id="children_ul_${model.function.id}">
+           	<#list (model.children) as children>
+            <li>
+            <#assign childIsCheck=false>
+            <#list roleList as check>
+            	 <#if check.id==children.id>
+            	 	<#assign childIsCheck=true>
+            	 </#if>
+              </#list>
+              <#if childIsCheck=true>
+              	<input  type="checkbox"  title="${children.title}" value="${children.id}" checked="checked" id="${children.id}" parentId="${children.parentId}"/>
+              	<#else>
+              	<input  type="checkbox"  title="${children.title}" value="${children.id}" id="${children.id}" parentId="${children.parentId}"/>
+              	</#if>
+              ${children.title}
+              </li>
+            </#list>
+          </ul>
+        </div>
+        </#list>
+        <button class="popBtn" onclick="confim();">确认</button>
+      </div>
+      
+   <script>
+   $(":checkbox").change( function () {
+	   var thisId=$(this).attr("id");
+	   var parentId=$(this).attr("parentId");
+	   var isCheck=$(this).attr("checked");
+	   var children=$("#children_ul_"+thisId).children().children(":checkbox");
+	   var parent=$("#"+parentId);
+	   if(isCheck=="checked"){
+		   parent.attr("checked","checked");
+	   }
+	   else{
+		   var children2=$("#children_ul_"+parentId).children().children(":checked");
+		   if(children2.size()<=0){
+			   parent.attr("checked",false);
+		   }
+	   }
+	   children.each(function(i){
+		   var thisParentId=$(this).attr("parentId");
+		   if(thisParentId==thisId){
+			   if(isCheck=="checked"){
+				   $(this).attr("checked","checked");
+			   }
+			   else{
+				   $(this).attr("checked",false);
+			   }
+		   }
+		});
+	   
+	});
+   
+   function confim(){
+	   var values = new Array();
+	   $("input:checked").each(function(i){
+		   values[i]=$(this).val()
+	   });
+	   $("input[name='functionIds']").val(values);
+	   closeDiv('roleInfo_div');
+   }
+   </script>
