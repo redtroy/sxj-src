@@ -45,8 +45,8 @@
 	</bean>
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
 		<property name="basePackage" value="com.sxj.supervisor.dao" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 <import resource="classpath*:spring/applicationContext-shiro.xml" />
 </beans>
