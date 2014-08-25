@@ -22,7 +22,11 @@ import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.util.persistent.ResultList;
 
 @Controller
+<<<<<<< HEAD
 @RequestMapping("/system")
+=======
+@RequestMapping("/system")
+>>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 public class SystemAccountController extends BaseController {
 
 	@Autowired
@@ -100,5 +104,9 @@ public class SystemAccountController extends BaseController {
 			return null;
 		}
 
+<<<<<<< HEAD
 	}
+=======
+	}
+>>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 }

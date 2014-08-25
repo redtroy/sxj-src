@@ -28,8 +28,8 @@
 		<result property="bLicensePath" column="B_LICENSE_PATH"
 			jdbcType="VARCHAR" />
 		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
-	</resultMap>
-
+	</resultMap> 
+   
 	<update id="update">
 		update M_MEMBER set TYPE=#{type} where ID=1
 	</update>

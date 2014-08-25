@@ -20,4 +20,8 @@ public interface IMemberService {
 			throws ServiceException;
 
 	public void removeMember(String id) throws ServiceException;
+	
+	public String editState(String id);
+	
+	public String editCheckState(String id);
 }
