@@ -2,6 +2,8 @@ package com.sxj.supervisor.dao.contract;
 
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.BatchInsert;
+import com.sxj.mybatis.orm.annotations.BatchUpdate;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ModifyItemEntity;
@@ -18,14 +20,14 @@ public interface IContractReplenishDao {
 	 * 新增补损
 	 * @param replenish
 	 */
-	@Insert
+	@BatchInsert
 	public void addReplenish(ReplenishContractEntity replenish);
 	
 	/**
 	 * 更新补损
 	 * @param replenish
 	 */
-	@Update
+	@BatchUpdate
 	public void updateReplenish(List<ReplenishContractEntity> replenish);
 	
 	/**
