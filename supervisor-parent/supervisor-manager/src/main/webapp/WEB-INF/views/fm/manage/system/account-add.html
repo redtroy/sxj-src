@@ -22,8 +22,8 @@
       </div>
       <div class="permission">
         <label>权限</label>
-        <div class="adminDrop dropMenu sltinput"> <span onclick="javascript:roleInfo('','add');">全部权限</span> <span class="icon"></span> </div>
-      <div class="btnBox"><a href="admin.html" class="button button-orange button-small">新增</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>
+        <div class="adminDrop dropMenu sltinput" onclick="javascript:roleInfo('','add');"> <span>全部权限</span> <span class="icon"></span> </div>
+      <div class="btnBox"><a href="javascript:add();" class="button button-orange button-small">新增</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>
       </div>
       </form>
     </div>
@@ -32,10 +32,11 @@
      <div class="maskdivgen" style="display:none"></div>
  <script>
  function add(){
-		var params=$("#add_form_").serialize();
+		var params=$("#add_form").serialize();
 		$.post("${basePath}system/add_account.htm",params,function(data){
 			if(data.isOK==true){
 				alert("添加成功");
+				searchSumbit();
 			}
 			else{
 				alert("添加失败");
