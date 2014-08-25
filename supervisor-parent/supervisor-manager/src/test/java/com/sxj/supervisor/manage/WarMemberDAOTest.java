@@ -10,7 +10,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.entity.member.MemberTypeEnum;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext.xml" })
