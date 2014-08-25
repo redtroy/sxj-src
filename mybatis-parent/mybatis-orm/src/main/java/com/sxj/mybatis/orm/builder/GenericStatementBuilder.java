@@ -15,6 +15,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,8 @@ import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
+import org.apache.ibatis.mapping.ParameterMap;
+import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultSetType;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.SqlSource;
@@ -44,6 +47,7 @@ import org.springframework.util.ReflectionUtils.FieldFilter;
 
 import com.sxj.mybatis.orm.annotations.BatchDelete;
 import com.sxj.mybatis.orm.annotations.BatchInsert;
+import com.sxj.mybatis.orm.annotations.BatchUpdate;
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Entity;
@@ -263,7 +267,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + insertStatementId))
                 {
-                    buildInsert(insertStatementId);
+                    buildInsert(namespace + "." + insertStatementId);
                 }
             }
             
@@ -279,7 +283,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + deleteStatementId))
                 {
-                    buildDelete(deleteStatementId);
+                    buildDelete(namespace + "." + deleteStatementId);
                 }
             }
             
@@ -295,7 +299,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + updateStatementId))
                 {
-                    buildUpdate(updateStatementId);
+                    buildUpdate(namespace + "." + updateStatementId);
                 }
             }
             
@@ -311,7 +315,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasStatement(namespace + "."
                         + selectStatementId))
                 {
-                    buildSelect(selectStatementId);
+                    buildSelect(namespace + "." + selectStatementId);
                 }
             }
             
@@ -327,9 +331,8 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasCache(namespace + "."
                         + batchInsertStatementId))
                 {
-                    buildBatchInsert(batchInsertStatementId,
-                            getCollection(ReflectUtils.findMethodsAnnotatedWith(mapperType,
-                                    BatchInsert.class)));
+                    buildBatchInsert(namespace + "." + batchInsertStatementId,
+                            getCollection(batchInsertMethods.get(0)));
                 }
             }
             List<Method> batchDeleteMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
@@ -344,9 +347,24 @@ public class GenericStatementBuilder extends BaseBuilder
                 if (!super.getConfiguration().hasCache(namespace + "."
                         + batchDeleteStatementId))
                 {
-                    buildBatchDelete(batchDeleteStatementId,
-                            getCollection(ReflectUtils.findMethodsAnnotatedWith(mapperType,
-                                    BatchDelete.class)));
+                    buildBatchDelete(namespace + "." + batchDeleteStatementId,
+                            getCollection(batchDeleteMethods.get(0)));
+                }
+            }
+            List<Method> batchUpdateMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
+                    BatchUpdate.class);
+            if (Collections3.isNotEmpty(batchUpdateMethods))
+            {
+                if (batchUpdateMethods.size() > 1)
+                {
+                    throw new RuntimeException("有多个@BatchUpdate方法");
+                }
+                batchDeleteStatementId = batchUpdateMethods.get(0).getName();
+                if (!super.getConfiguration().hasCache(namespace + "."
+                        + batchDeleteStatementId))
+                {
+                    buildBatchUpdate(namespace + "." + batchDeleteStatementId,
+                            getCollection(batchUpdateMethods.get(0)));
                 }
             }
             
@@ -354,10 +372,10 @@ public class GenericStatementBuilder extends BaseBuilder
         
     }
     
-    private String getCollection(List<Method> methods)
+    private String getCollection(Method method)
     
     {
-        Method method = methods.get(0);
+        //        Method method = methods.get(0);
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length != 1)
             throw new RuntimeException("@BatchInsert有且仅能有一个参数");
@@ -371,7 +389,7 @@ public class GenericStatementBuilder extends BaseBuilder
     private void buildBatchDelete(String statementId, String collection)
     {
         Integer timeout = null;
-        Class<?> parameterType = String.class;
+        Class<?> parameterType = idField.getType();
         
         //~~~~~~~~~~~~~~~~~~~~~~~
         boolean flushCache = true;
@@ -704,6 +722,58 @@ public class GenericStatementBuilder extends BaseBuilder
                 lang);
     }
     
+    private void buildBatchUpdate(String statementId, String collection)
+    {
+        Integer timeout = null;
+        Class<?> parameterType = entityClass;
+        
+        //~~~~~~~~~~~~~
+        boolean flushCache = true;
+        boolean useCache = false;
+        boolean resultOrdered = false;
+        KeyGenerator keyGenerator = new NoKeyGenerator();
+        
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        contents.add(this.getBatchUpdateSql(collection));
+        
+        SqlSource sqlSource = new DynamicSqlSource(configuration,
+                new MixedSqlNode(contents));
+        String parameterMap = null;
+        Iterator<String> parameterMapNames = configuration.getParameterMapNames()
+                .iterator();
+        while (parameterMapNames.hasNext())
+        {
+            String name = parameterMapNames.next();
+            ParameterMap temp = configuration.getParameterMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                parameterMap = temp.getId();
+                System.out.println("========" + statementId + "=========已绑定"
+                        + parameterMap);
+                break;
+            }
+        }
+        assistant.addMappedStatement(statementId,
+                sqlSource,
+                StatementType.PREPARED,
+                SqlCommandType.UPDATE,
+                null,
+                timeout,
+                parameterMap,
+                parameterType,
+                null,
+                null,
+                null,
+                flushCache,
+                useCache,
+                resultOrdered,
+                keyGenerator,
+                null,
+                null,
+                databaseId,
+                lang);
+    }
+    
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //update
     private void buildUpdate(String statementId)
@@ -722,14 +792,28 @@ public class GenericStatementBuilder extends BaseBuilder
         
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        
+        String parameterMap = null;
+        Iterator<String> parameterMapNames = configuration.getParameterMapNames()
+                .iterator();
+        while (parameterMapNames.hasNext())
+        {
+            String name = parameterMapNames.next();
+            ParameterMap temp = configuration.getParameterMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                parameterMap = temp.getId();
+                System.out.println("========" + statementId + "=========已绑定"
+                        + parameterMap);
+                break;
+            }
+        }
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
                 SqlCommandType.UPDATE,
                 null,
                 timeout,
-                null,
+                parameterMap,
                 parameterType,
                 null,
                 null,
@@ -753,6 +837,46 @@ public class GenericStatementBuilder extends BaseBuilder
         contents.add(new TextSqlNode(" WHERE " + getIdColumnName() + " = #{"
                 + getIdFieldName() + "}" + getVersionSQL()));
         return new MixedSqlNode(contents);
+    }
+    
+    private SqlNode getBatchUpdateSql(String collection)
+    {
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        contents.add(new TextSqlNode("UPDATE " + tableName + " "));
+        contents.add(getBatchUpdateColumns());
+        
+        contents.add(new TextSqlNode(" WHERE " + getIdColumnName() + " = #{"
+                + ITEM + "." + getIdFieldName() + "}" + getVersionSQL()));
+        
+        MixedSqlNode mixedSqlNode = new MixedSqlNode(contents);
+        return new ForEachSqlNode(configuration, mixedSqlNode, collection,
+                "index", ITEM, "", "", ";");
+    }
+    
+    private SqlNode getBatchUpdateColumns()
+    {
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        for (Field field : columnFields)
+        {
+            List<SqlNode> sqlNodes = new ArrayList<SqlNode>();
+            if (Date.class.isAssignableFrom(field.getType())
+                    && field.getAnnotation(Column.class) != null
+                    && field.getAnnotation(Column.class).sysdate() == true)
+            {
+                sqlNodes.add(new TextSqlNode(getColumnNameByField(field)
+                        + " = now(),"));
+            }
+            else
+            {
+                sqlNodes.add(new TextSqlNode(getColumnNameByField(field)
+                        + " = #{" + ITEM + "." + field.getName() + "},"));
+            }
+            
+            contents.add(new IfSqlNode(new MixedSqlNode(sqlNodes),
+                    getTestByField(ITEM, field)));
+        }
+        
+        return new SetSqlNode(configuration, new MixedSqlNode(contents));
     }
     
     private SqlNode getUpdateColumns()
@@ -801,7 +925,21 @@ public class GenericStatementBuilder extends BaseBuilder
         
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        
+        String resultMap = null;
+        Iterator<String> resultMapNames = configuration.getResultMapNames()
+                .iterator();
+        while (resultMapNames.hasNext())
+        {
+            String name = resultMapNames.next();
+            ResultMap temp = configuration.getResultMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                resultMap = temp.getId();
+                System.out.println("========" + statementId + "=========已绑定"
+                        + resultMap);
+                break;
+            }
+        }
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
@@ -809,9 +947,9 @@ public class GenericStatementBuilder extends BaseBuilder
                 fetchSize,
                 timeout,
                 null,
-                null,
-                null,
-                resultType,
+                idField.getType(),
+                resultMap,
+                entityClass,
                 null,
                 flushCache,
                 useCache,

@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.AutoMappingBehavior;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -52,7 +53,7 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
         super.afterPropertiesSet();
         SqlSessionFactory sqlSessionFactory = super.getObject();
         configuration = sqlSessionFactory.getConfiguration();
-        
+        configuration.setAutoMappingBehavior(AutoMappingBehavior.NONE);
         for (String clazzName : findEntityClassNames())
         {
             GenericStatementBuilder builder = new GenericStatementBuilder(

@@ -66,7 +66,7 @@
 		<!-- 确认状态-->
 		<if test="condition.confirmState != null and condition.confirmState != ''">
 			<![CDATA[AND CONFIRM_STATE = #{condition.confirmState}]]>
-		</if>
+		</if> 
 		<!-- 生成时间-->
 		<if test="condition.startCreateDate != null and condition.endCreateDate != null and  condition.startCreateDate != '' and condition.endCreateDate != ''">
 			<![CDATA[AND CREATE_DATE >=#{condition.startCreateDate} AND CREATE_DATE <= #{condition.endCreateDate}]]>

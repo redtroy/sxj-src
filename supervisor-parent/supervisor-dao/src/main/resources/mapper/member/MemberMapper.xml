@@ -28,7 +28,11 @@
 		<result property="bLicensePath" column="B_LICENSE_PATH"
 			jdbcType="VARCHAR" />
 		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
-	</resultMap>
+	</resultMap> 
+   
+	<update id="update">
+		update M_MEMBER set TYPE=#{type} where ID=1
+	</update>
 
 	<!-- 条件查询会员 -->
 	<select id="queryMembers" resultMap="MemberResultMap"
@@ -72,7 +76,8 @@
 			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>
 		</if>
 		<!-- 会员注册时间段 -->
-		<if test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">
+		<if
+			test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">
 			<![CDATA[AND REG_DATE >=#{condition.startTime} AND REG_DATE <= #{condition.endTime}]]>
 		</if>
 	</select>

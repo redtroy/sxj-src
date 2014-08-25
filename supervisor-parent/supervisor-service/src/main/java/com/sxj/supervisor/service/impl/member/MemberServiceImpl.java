@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IMemberDao;
+import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.MemberCheckStateEnum;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberStatesEnum;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.util.exception.ServiceException;
@@ -113,6 +116,44 @@ public class MemberServiceImpl implements IMemberService {
 			throw new ServiceException("初始化密码错误", e.getMessage());
 		}
 
+	}
+    
+	
+	/**
+	 * 更改账户状态
+	 */
+	@Override
+	public String editState(String id) {
+		MemberEntity member = menberDao.getMember(id);
+		if (member.getState().getId().intValue() == MemberStatesEnum.normal
+				.getId().intValue()) {
+			member.setState(MemberStatesEnum.stop);
+			menberDao.updateMember(member);
+			return MemberStatesEnum.stop.getName();
+		} else {
+			member.setState(MemberStatesEnum.normal);
+            menberDao.updateMember(member);;
+            return MemberStatesEnum.normal.getName();
+		}
+	}
+    
+	
+	/**
+	 * 更改审核状态
+	 */
+	@Override
+	public String editCheckState(String id) {
+		MemberEntity member = menberDao.getMember(id);
+		if (member.getCheckState().getId().intValue() ==MemberCheckStateEnum.unaudited.getId().intValue()){
+			member.setCheckState(MemberCheckStateEnum.unrecognized);
+			menberDao.updateMember(member);
+			return MemberCheckStateEnum.unrecognized.getName();
+		}else if (member.getCheckState().getId().intValue()==MemberCheckStateEnum.unrecognized.getId().intValue()){
+			member.setCheckState(MemberCheckStateEnum.certified);
+			menberDao.updateMember(member);
+			return MemberCheckStateEnum.certified.getName();
+		}
+		 return MemberCheckStateEnum.certified.getName();
 	}
 
 }

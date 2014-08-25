@@ -59,9 +59,39 @@ public class AccountController extends BaseController {
 	 */
 	@RequestMapping("editAccount")
 	public @ResponseBody Map<String, String> editAccount(AccountEntity account) {
+		System.out.println("test");
 		accountService.modifyAccount(account);;
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
+		return map;
+	}
+	
+	/**
+	 * 修改子会员状态
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("editState")
+	public @ResponseBody Map<String, String> editState(String id) {
+		String state=accountService.editState(id);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isOK", "ok");
+		map.put("state", state);
+		return map;
+	}
+	
+	/**
+	 * 初始化密码
+	 * 
+	 * @param query
+	 * @return
+	 */
+	@RequestMapping("initializePwd")
+	public @ResponseBody Map<String, Object> initializePwd(String id) {
+		String password = accountService.initializePwd(id);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("isOK", "ok");
+		map.put("password", password);
 		return map;
 	}
 }

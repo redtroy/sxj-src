@@ -64,7 +64,6 @@ public class FunctionMapperTest
         
     }
     
-    @Test
     public void testInsert()
     {
         Function function = buildFunction();
@@ -103,5 +102,24 @@ public class FunctionMapperTest
         functionIds[0] = "szkaQLTo5oQxuymp0GewlvUeGndJQh3";
         functionIds[1] = "UBpFPlk3wIdVKezAu96QP4t0AAVmx2B";
         mapper.batchDelete(functionIds);
+    }
+    
+    @Test
+    public void testBatchUpdate()
+    {
+        Function function = new Function();
+        function.setFunctionName("after1");
+        function.setFunctionId("GQhduZZ00zKdGrKjJ8uML3uGo5nm360");
+        Function function2 = new Function();
+        function2.setFunctionId("iznukncL33vvg6s0KzQVea49thDyUDy");
+        function2.setFunctionName("after2");
+        List<Function> functions = new ArrayList<Function>();
+        functions.add(function2);
+        functions.add(function);
+        mapper.batchUpdate(functions);
+    }
+    
+    public void testBatchUpdateArray()
+    {
     }
 }
