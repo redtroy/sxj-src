@@ -94,8 +94,14 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteAccount(String id) throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			accountDao.deleteSystemAccount(id);
+			roleServce.removeRoles(id);
+		} catch (Exception e) {
+			throw new ServiceException("删除系统用户信息错误", e);
+		}
 
 	}
 
