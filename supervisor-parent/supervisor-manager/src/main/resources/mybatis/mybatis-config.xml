@@ -14,6 +14,5 @@
 	<typeHandlers>
 		<typeHandler handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler" javaType="com.sxj.supervisor.entity.member.MemberTypeEnum"/>
 		<typeHandler handler="com.sxj.supervisor.typehandler.MemberStatesEnumTypeHandler" javaType="com.sxj.supervisor.entity.member.MemberStatesEnum"/>
-	    <typeHandler handler="com.sxj.supervisor.typehandler.MemberCheckStateEnumTypeHandler" javaType="com.sxj.supervisor.entity.member.MemberCheckStateEnum"/>
 	</typeHandlers>
 </configuration>   
