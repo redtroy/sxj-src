@@ -5,7 +5,7 @@
 <mapper namespace="com.sxj.supervisor.dao.contract.IContractDao">
 	<resultMap id="ContractResultMap" type="com.sxj.supervisor.entity.contract.ContractEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" javaType="String"/>
 		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
 		<result property="memberIdA" column="MEMBER_ID_A" jdbcType="INTEGER" />
 		<result property="memberIdB" column="MEMBER_ID_B" jdbcType="VARCHAR" />

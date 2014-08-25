@@ -961,7 +961,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 null,
                 idField.getType(),
                 resultMap,
-                entityClass,
+                resultType,
                 null,
                 flushCache,
                 useCache,
@@ -979,7 +979,8 @@ public class GenericStatementBuilder extends BaseBuilder
         
         for (Field field : columnFields)
         {
-            sql += "," + getColumnNameByField(field) + " AS " + field.getName();
+            sql += "," + getColumnNameByField(field) + " AS "
+                    + getColumnNameByField(field);
         }
         
         sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " = #{"
