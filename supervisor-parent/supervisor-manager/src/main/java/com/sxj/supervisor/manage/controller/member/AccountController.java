@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.AccountEntity;
-import com.sxj.supervisor.entity.member.AccountStatesEnum;
-import com.sxj.supervisor.entity.member.MemberAuthorityEnum;
-import com.sxj.supervisor.entity.member.MemberCheckStateEnum;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.entity.member.MemberStatesEnum;
+import com.sxj.supervisor.enu.member.AccountStatesEnum;
+import com.sxj.supervisor.enu.member.MemberAuthorityEnum;
+import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
+import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.service.member.IAccountService;

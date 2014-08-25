@@ -24,13 +24,13 @@ public class RecordQuery implements Serializable {
 	
 	private Integer state;
 	
-	private Date startApplyDate;
+	private String startApplyDate;
 	
-	private Date endApplyDate;
+	private String endApplyDate;
 	
-	private Date startAcceptDate;
+	private String startAcceptDate;
 	
-	private Date endAcceptDate;
+	private String endAcceptDate;
 
 	public String getRecrodNo() {
 		return recrodNo;
@@ -88,35 +88,37 @@ public class RecordQuery implements Serializable {
 		this.state = state;
 	}
 
-	public Date getStartApplyDate() {
+	public String getStartApplyDate() {
 		return startApplyDate;
 	}
 
-	public void setStartApplyDate(Date startApplyDate) {
+	public void setStartApplyDate(String startApplyDate) {
 		this.startApplyDate = startApplyDate;
 	}
 
-	public Date getEndApplyDate() {
+	public String getEndApplyDate() {
 		return endApplyDate;
 	}
 
-	public void setEndApplyDate(Date endApplyDate) {
+	public void setEndApplyDate(String endApplyDate) {
 		this.endApplyDate = endApplyDate;
 	}
 
-	public Date getStartAcceptDate() {
+	public String getStartAcceptDate() {
 		return startAcceptDate;
 	}
 
-	public void setStartAcceptDate(Date startAcceptDate) {
+	public void setStartAcceptDate(String startAcceptDate) {
 		this.startAcceptDate = startAcceptDate;
 	}
 
-	public Date getEndAcceptDate() {
+	public String getEndAcceptDate() {
 		return endAcceptDate;
 	}
 
-	public void setEndAcceptDate(Date endAcceptDate) {
+	public void setEndAcceptDate(String endAcceptDate) {
 		this.endAcceptDate = endAcceptDate;
 	}
+
+	
 }

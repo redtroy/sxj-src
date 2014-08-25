@@ -11,6 +11,9 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.record.IRecordDao;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.enu.record.RecordTypeEnum;
 
 /**
  * 备案实体类
@@ -78,7 +81,7 @@ public class RecordEntity extends Pagable implements Serializable {
 	 * 备案类型
 	 **/
 	@Column(name = "TYPE")
-	private Integer type;
+	private RecordTypeEnum type;
 
 	/**
 	 * 备案扫描件
@@ -90,13 +93,13 @@ public class RecordEntity extends Pagable implements Serializable {
 	 * 备案状态
 	 **/
 	@Column(name = "STATE")
-	private Integer state;
+	private RecordStateEnum state;
 
 	/**
 	 * 合同类型
 	 **/
 	@Column(name = "CONTRACT_TYPE")
-	private Integer contractType;
+	private ContractTypeEnum contractType;
 
 	/**
 	 * 绑定合同号
@@ -202,13 +205,6 @@ public class RecordEntity extends Pagable implements Serializable {
 		this.memberNameB = memberNameB;
 	}
 
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
 
 	public String getImgPath() {
 		return imgPath;
@@ -218,19 +214,29 @@ public class RecordEntity extends Pagable implements Serializable {
 		this.imgPath = imgPath;
 	}
 
-	public Integer getState() {
+
+
+	public RecordTypeEnum getType() {
+		return type;
+	}
+
+	public void setType(RecordTypeEnum type) {
+		this.type = type;
+	}
+
+	public RecordStateEnum getState() {
 		return state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(RecordStateEnum state) {
 		this.state = state;
 	}
 
-	public Integer getContractType() {
+	public ContractTypeEnum getContractType() {
 		return contractType;
 	}
 
-	public void setContractType(Integer contractType) {
+	public void setContractType(ContractTypeEnum contractType) {
 		this.contractType = contractType;
 	}
 

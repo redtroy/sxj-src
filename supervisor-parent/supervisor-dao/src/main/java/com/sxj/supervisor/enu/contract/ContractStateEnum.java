@@ -1,4 +1,4 @@
-package com.sxj.supervisor.entity.contract;
+package com.sxj.supervisor.enu.contract;
 /**
  * 状态
  * @author Administrator

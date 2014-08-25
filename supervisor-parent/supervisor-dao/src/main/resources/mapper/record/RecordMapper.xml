@@ -29,39 +29,39 @@
 		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE 
 		 FROM M_CONTRACT_RECORD WHERE 1=1]]>
 		<!-- 备案号 -->
-		<if test="condition.recordNo != null">
+		<if test="condition.recordNo != null and condition.recordNo != ''">
 			<![CDATA[AND RECORD_NO = #{condition.recordNo}]]>
 		</if>
 		<!-- 申请会员ID -->
-		<if test="condition.applyId != null">
+		<if test="condition.applyId != null and condition.applyId != ''">
 			<![CDATA[AND APPLY_ID = #{condition.applyId}]]>
 		</if>
 		<!-- 合同签订者  -->
-		<if test="condition.memberId != null">
+		<if test="condition.memberId != null and condition.memberId != ''">
 			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
 		</if>
 		<!-- 合同类型-->
-		<if test="condition.contractType != null">
+		<if test="condition.contractType != null and condition.contractType != ''">
 			<![CDATA[AND CONTRACT_TYPE = #{condition.contractType}]]>
 		</if>
 		<!-- 对应合同号-->
-		<if test="condition.contractNo != null">
+		<if test="condition.contractNo != null and condition.contractNo != ''">
 			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
 		</if>
 		<!-- 备案状态-->
-		<if test="condition.state != null">
+		<if test="condition.state != null and ondition.state != ''">
 			<![CDATA[AND STATE = #{condition.state}]]>
 		</if>
 		<!-- 备案类型-->
-		<if test="condition.type != null">
+		<if test="condition.type != null and condition.type != ''">
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
 		<!-- 申请时间段 -->
- 		<if test="condition.applyStartTime != null and condition.applyEndTime != null"> -->
+ 		<if test="condition.applyStartTime != null and condition.applyEndTime != null and condition.applyStartTime != ''  and condition.applyEndTime != ''"> -->
 			<![CDATA[AND APPLY_DATE >=#{condition.applyStartTime} AND APPLY_DATE <= #{condition.applyEndTime}]]>
 		</if>
 		<!-- 受理时间段 -->
-		<if test="condition.acceptStartTime != null and condition.acceptEndTime != null">
+		<if test="condition.acceptStartTime != null and condition.acceptEndTime != null and condition.acceptStartTime != '' and condition.acceptEndTime != ''">
 			<![CDATA[AND ACCEPT_DATE >=#{condition.acceptStartTime} AND ACCEPT_DATE <= #{condition.acceptEndTime}]]>
 		</if>
 	</select>
