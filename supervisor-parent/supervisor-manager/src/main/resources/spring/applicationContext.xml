@@ -11,7 +11,7 @@
                         http://www.springframework.org/schema/task 
                         http://www.springframework.org/schema/task/spring-task-4.0.xsd"
 	default-lazy-init="true">
-
+	<import resource="classpath:spring/applicationContext-shiro.xml"/>
 	<task:annotation-driven />
 	<context:annotation-config />
 
