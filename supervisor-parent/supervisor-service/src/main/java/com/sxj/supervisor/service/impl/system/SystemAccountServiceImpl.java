@@ -42,18 +42,26 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			if (account == null) {
 				return;
 			}
-			roleServce.removeRoles(account.getId());
-			List<RoleEntity> roles = new ArrayList<RoleEntity>();
-			for (int i = 0; i < functionIds.length; i++) {
-				if (functionIds[i] == null) {
-					continue;
+			if (functionIds != null && functionIds.length > 0) {
+				List<RoleEntity> roles = new ArrayList<RoleEntity>();
+				for (int i = 0; i < functionIds.length; i++) {
+					if (functionIds[i] == null) {
+						continue;
+					}
+					if ("none".equals(functionIds[i])) {
+						continue;
+					}
+					RoleEntity role = new RoleEntity();
+					role.setAccountId(account.getId());
+					role.setFunctionId(functionIds[i]);
+					roles.add(role);
 				}
-				RoleEntity role = new RoleEntity();
-				role.setAccountId(account.getId());
-				role.setFunctionId(functionIds[i]);
-				roles.add(role);
+				if (roles.size() > 0) {
+					roleServce.removeRoles(account.getId());
+					roleServce.addRoles(roles);
+				}
 			}
-			roleServce.addRoles(roles);
+
 			accountDao.updateSystemAccount(account);
 		} catch (Exception e) {
 			throw new ServiceException("修改系统用户信息错误", e);

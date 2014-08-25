@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
-import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.RoleEntity;
 import com.sxj.util.persistent.QueryCondition;
@@ -23,7 +22,6 @@ public interface IRoleDao {
 	 *
 	 * @param accountId
 	 **/
-	@Delete
 	public void deleteRoles(String accountId);
 
 	/**
