@@ -12,17 +12,9 @@
                         http://www.springframework.org/schema/task/spring-task-4.0.xsd"
 	default-lazy-init="true">
 
-	<import resource="classpath*:spring/database-config.xml" />
 	<task:annotation-driven />
 	<context:annotation-config />
 
-	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
-	<context:component-scan base-package="com.sxj.supervisor.service">
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
-	</context:component-scan>
 
 	<!-- 事务管理器, Jdbc单数据源事务 -->
 	<bean id="transactionManager"
@@ -45,8 +37,9 @@
 	</bean>
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
 		<property name="basePackage" value="com.sxj.supervisor.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
-<import resource="classpath*:spring/applicationContext-shiro.xml" />
+	
+	<import resource="classpath*:spring/database-config.xml" />
 </beans>
