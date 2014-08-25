@@ -65,12 +65,19 @@ public class SystemAccountController extends BaseController {
 	public String toAddAccount() {
 		return "manage/system/account-add";
 	}
-	
+
+	@RequestMapping("remove")
+	public @ResponseBody Map<String, Object> remove(String accountId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		accountService.deleteAccount(accountId);
+		return map;
+	}
+
 	@RequestMapping("add_account")
 	public @ResponseBody Map<String, Object> addAccount(
 			SystemAccountEntity account,
 			@RequestParam("functionIds") String[] functionIds) {
-		accountService.addAccount(account,functionIds);
+		accountService.addAccount(account, functionIds);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("isOK", true);
 		return map;
