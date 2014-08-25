@@ -33,5 +33,5 @@ public interface IContractModifyDao {
 	 * @param modifyContractEntity
 	 */
 	@Update
-	public void updateModify(ModifyContractEntity modifyContractEntity);
+	public void updateModify(List<ModifyContractEntity> modifyContractEntity);
 }

@@ -24,7 +24,7 @@ public interface IContractReplenishBatchDao {
 	 * @param replenishBatchEntity
 	 */
 	@Update
-	public void updateReplenishBatch(ReplenishBatchEntity replenishBatchEntity);
+	public void updateReplenishBatch(List<ReplenishBatchEntity> replenishBatchEntity);
 	/**
 	 * 查询不损合同
 	 * @param replenishId

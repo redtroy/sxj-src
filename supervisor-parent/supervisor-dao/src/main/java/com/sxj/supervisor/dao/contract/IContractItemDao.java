@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 
 /**
@@ -18,7 +19,7 @@ public interface IContractItemDao {
 	 * @param    items
 	**/
 	@Insert
-	public void addItem(ContractItemEntity items);
+	public void addItem(List<ContractItemEntity> items);
 	
 	/**
 	 *  通过合同ID查询条目列表
@@ -32,4 +33,12 @@ public interface IContractItemDao {
 	 */
 	@Delete
 	public void deleteItems(String contractId);
+	
+	/**
+	 * 更新合同条目
+	 *
+	 * @param    items
+	**/
+	@Update
+	public void updateItem(List<ContractItemEntity> items);
 }

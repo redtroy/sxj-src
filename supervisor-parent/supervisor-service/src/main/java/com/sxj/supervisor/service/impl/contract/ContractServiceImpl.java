@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.text.html.ListView;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,15 +130,17 @@ public class ContractServiceImpl implements IContractService {
 			contractDao.addContract(contract);
 		
 			if (itemList != null) {
+				List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
 				for (int i = 0; i < itemList.size(); i++) {
 					ContractItemEntity ci = itemList.get(i);
 					if(ci.getAmount()!=null && ci.getPrice()!=null){
 						ci.setContractId(contract.getId());
-						contractItemDao.addItem(ci);// 新增条目
+						newList.add(ci);
+						
 					}
 					
 				}
-				
+				contractItemDao.addItem(newList);// 新增条目
 			}
 		}
 	}
@@ -146,8 +150,72 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void modifyContract(ContractModel contract) {
-	
-
+		//主体
+		if(contract.getContract()!=null){
+			contractDao.updateContract(contract.getContract());
+		}
+		//条目
+		if(contract.getItemList()!=null){
+			contractItemDao.updateItem(contract.getItemList());
+		}
+		//批次
+		if(contract.getBatchList()!=null){
+			List<ContractBatchEntity> cbelist = new ArrayList<ContractBatchEntity>();
+			for (int i = 0; i < contract.getBatchList().size(); i++) {
+				ContractBatchModel cbm= contract.getBatchList().get(i); 
+				ContractBatchEntity cbe = cbm.getBatch();
+				if(cbm.getBatchItems()!=null){
+					cbe.setBatchItems(JsonMapper.nonEmptyMapper().toJson(cbm.getBatchItems()));//转json
+				}
+				cbelist.add(cbe);
+			}
+			contractBatchDao.updateBatchs(cbelist);
+		}
+		//变更记录
+		if(contract.getModifyList()!=null){
+			List<ModifyContractEntity> mceList = new ArrayList<ModifyContractEntity>();//变更记录主体
+			for (int i = 0; i < contract.getModifyList().size(); i++) {
+				ContractModifyModel cmm = contract.getModifyList().get(i);
+				if(cmm.getModifyContract()!=null){
+					mceList.add(cmm.getModifyContract());
+				}
+				if(cmm.getModifyItemList()!=null){
+					contractModifyItemDao.updateItems(cmm.getModifyItemList());
+				}
+				List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
+				for (int j = 0; j < cmm.getModifyBatchList().size(); j++) {
+					ModifyBatchModel mbm = cmm.getModifyBatchList().get(j);
+					if(mbm.getModifyBatchItems()!=null){
+						mbm.getModifyBatch().setBatchItems(JsonMapper.nonEmptyMapper().toJson(mbm.getModifyBatchItems()));
+					}
+					mbeList.add(mbm.getModifyBatch());
+				}
+				contractModifyBatchDao.updateItems(mbeList);
+			}
+			contractModifyDao.updateModify(mceList);
+		}
+		//补损记录
+		if(contract.getReplenishList()!=null){
+			List<ReplenishContractEntity> mceList = new ArrayList<ReplenishContractEntity>();//补损记录主体	
+			for (int i = 0; i < contract.getReplenishList().size(); i++) {
+				ContractReplenishModel crm=  contract.getReplenishList().get(i);
+				if(crm.getReplenishContract()!=null){
+					mceList.add(crm.getReplenishContract());
+				}
+				List<ReplenishBatchEntity> rbeList = new ArrayList<ReplenishBatchEntity>();
+				if(crm.getBatchItems()!=null){
+					for (int j = 0; j < crm.getBatchItems().size(); j++) {
+						ReplenishBatchModel rbm = crm.getBatchItems().get(j);
+						if(rbm.getReplenishBatch()!=null){
+							rbm.getReplenishBatch().setBatchItems(JsonMapper.nonEmptyMapper().toJson(rbm.getReplenishBatchItems()));
+						}
+						rbeList.add(rbm.getReplenishBatch());
+					}
+					contractReplenishBatchDao.updateReplenishBatch(rbeList);
+				}
+			}
+			contractReplenishDao.updateReplenish(mceList);
+		}
 	}
 
 	/**

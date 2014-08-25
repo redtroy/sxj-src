@@ -48,5 +48,5 @@ public interface IContractModifyBatchDao {
 	 * @param items
 	 */
 	@Update
-	public void updateItems(ModifyBatchEntity[] items);
+	public void updateItems(List<ModifyBatchEntity> items);
 }

@@ -26,7 +26,7 @@ public interface IContractReplenishDao {
 	 * @param replenish
 	 */
 	@Update
-	public void updateReplenish(ReplenishContractEntity replenish);
+	public void updateReplenish(List<ReplenishContractEntity> replenish);
 	
 	/**
 	 * 条件查询补损信息
