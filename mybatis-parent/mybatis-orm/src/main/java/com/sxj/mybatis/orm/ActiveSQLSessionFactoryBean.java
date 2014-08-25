@@ -47,9 +47,13 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
     
     private ApplicationContext applicationContext;
     
+    public static int times = 0;
+    
     @Override
     public void afterPropertiesSet() throws Exception
     {
+        System.out.println("------------------------------------------------------------"
+                + times++);
         super.afterPropertiesSet();
         SqlSessionFactory sqlSessionFactory = super.getObject();
         configuration = sqlSessionFactory.getConfiguration();

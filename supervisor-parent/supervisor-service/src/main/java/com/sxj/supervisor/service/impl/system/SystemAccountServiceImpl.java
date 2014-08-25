@@ -29,8 +29,32 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	private IRoleService roleServce;
 
 	@Override
-	public void addAccount(SystemAccountEntity account) throws ServiceException {
-		// TODO Auto-generated method stub
+	@Transactional
+	public void addAccount(SystemAccountEntity account, String[] functionIds)
+			throws ServiceException {
+		try {
+			accountDao.addSystemAccount(account);
+			if (functionIds != null && functionIds.length > 0) {
+				List<RoleEntity> roles = new ArrayList<RoleEntity>();
+				for (int i = 0; i < functionIds.length; i++) {
+					if (functionIds[i] == null) {
+						continue;
+					}
+					if ("none".equals(functionIds[i])) {
+						continue;
+					}
+					RoleEntity role = new RoleEntity();
+					role.setAccountId(account.getId());
+					role.setFunctionId(functionIds[i]);
+					roles.add(role);
+				}
+				if (roles.size() > 0) {
+					roleServce.addRoles(roles);
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("添加系统用户信息错误", e);
+		}
 
 	}
 
