@@ -25,6 +25,7 @@ import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
+import org.apache.ibatis.mapping.ParameterMap;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultSetType;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -724,14 +725,28 @@ public class GenericStatementBuilder extends BaseBuilder
         
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        
+        String parameterMap = null;
+        Iterator<String> parameterMapNames = configuration.getParameterMapNames()
+                .iterator();
+        while (parameterMapNames.hasNext())
+        {
+            String name = parameterMapNames.next();
+            ParameterMap temp = configuration.getParameterMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                parameterMap = temp.getId();
+                System.out.println("========" + statementId + "=========已绑定"
+                        + parameterMap);
+                break;
+            }
+        }
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
                 SqlCommandType.UPDATE,
                 null,
                 timeout,
-                null,
+                parameterMap,
                 parameterType,
                 null,
                 null,

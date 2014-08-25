@@ -329,16 +329,6 @@ public class MemberEntity extends Pagable implements Serializable
         this.memberNo = memberNo;
     }
     
-    public MemberTypeEnum getType()
-    {
-        return type;
-    }
-    
-    public void setType(MemberTypeEnum type)
-    {
-        this.type = type;
-    }
-    
     public MemberStatesEnum getState()
     {
         return state;
@@ -357,6 +347,16 @@ public class MemberEntity extends Pagable implements Serializable
     public void setCheckState(MemberCheckStateEnum checkState)
     {
         this.checkState = checkState;
+    }
+    
+    public MemberTypeEnum getType()
+    {
+        return type;
+    }
+    
+    public void setType(MemberTypeEnum type)
+    {
+        this.type = type;
     }
     
 }

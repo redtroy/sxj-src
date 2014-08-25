@@ -10,4 +10,9 @@
 		<!-- changes from the defaults -->
 		<setting name="lazyLoadingEnabled" value="false" />
 	</settings>
+	
+	<typeHandlers>
+		<typeHandler handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler" javaType="com.sxj.supervisor.entity.member.MemberTypeEnum"/>
+		<typeHandler handler="com.sxj.supervisor.typehandler.MemberStatesEnumTypeHandler" javaType="com.sxj.supervisor.entity.member.MemberStatesEnum"/>
+	</typeHandlers>
 </configuration>   

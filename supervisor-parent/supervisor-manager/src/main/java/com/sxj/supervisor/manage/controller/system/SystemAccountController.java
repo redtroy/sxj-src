@@ -23,6 +23,7 @@ import com.sxj.util.persistent.ResultList;
 
 @Controller
 @RequestMapping("/system")
+<<<<<<< HEAD
 public class SystemAccountController extends BaseController {
 
 	@Autowired
@@ -89,4 +90,42 @@ public class SystemAccountController extends BaseController {
 		}
 
 	}
+=======
+public class SystemAccountController extends BaseController
+{
+    
+    @Autowired
+    private ISystemAccountService accountService;
+    
+    @Autowired
+    private IFunctionService functionService;
+    
+    @RequestMapping("account-list")
+    public String getSysAccountList(SysAccountQuery query, ModelMap map)
+    {
+        ResultList<SystemAccountEntity> list = accountService.queryAccounts(query);
+        List<FunctionEntity> functionList = functionService.queryChildrenFunctions("0");
+        map.put("list", list.getResults());
+        map.put("functions", functionList);
+        map.put("query", query);
+        return "manage/system/account-list";
+        
+    }
+    
+    @RequestMapping("account-info")
+    public String getgetSysAccount(String accountId, ModelMap map)
+    {
+        SystemAccountEntity account = accountService.getAccount(accountId);
+        map.put("account", account);
+        return "manage/system/account-info";
+    }
+    
+    @RequestMapping("to_edit")
+    public String toEditAccount(String accountId, ModelMap map)
+    {
+        SystemAccountEntity account = accountService.getAccount(accountId);
+        map.put("account", account);
+        return "manage/system/account-edit";
+    }
+>>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 }
