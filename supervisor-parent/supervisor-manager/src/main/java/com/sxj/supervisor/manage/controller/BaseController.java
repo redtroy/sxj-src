@@ -30,8 +30,6 @@ public class BaseController {
 		return request.getScheme() + "://" + request.getServerName() + ":"
 				+ request.getServerPort() + request.getContextPath() + "/";
 	}
-	
-	
 
 	// @RequestMapping("login")
 	// public String ToLogin(String error, ModelMap model)
