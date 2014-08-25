@@ -9,7 +9,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.contract.IContractBatchDao;
+import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 
 /**
  * 合同补损批次信息
@@ -17,7 +17,7 @@ import com.sxj.supervisor.dao.contract.IContractBatchDao;
  * @author Administrator
  *
  */
-@Entity(mapper = IContractBatchDao.class)
+@Entity(mapper = IContractReplenishBatchDao.class)
 @Table(name = "M_CONTRACT_REPLENISH_BATCH")
 public class ReplenishBatchEntity extends Pagable implements Serializable {
 	/**

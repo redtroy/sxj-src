@@ -12,9 +12,13 @@ public interface ISystemAccountService {
 	 * @param account
 	 * @throws ServiceException
 	 */
-	public void addAccount(SystemAccountEntity account) throws ServiceException;
+	public void addAccount(SystemAccountEntity account, String[] functionIds)
+			throws ServiceException;
 
-	public void modifyAccount(SystemAccountEntity account,String[] functionIds)
+	public void modifyAccount(SystemAccountEntity account, String[] functionIds)
+			throws ServiceException;
+
+	public String initPassword(String accountId)
 			throws ServiceException;
 
 	public void deleteAccount(String id) throws ServiceException;

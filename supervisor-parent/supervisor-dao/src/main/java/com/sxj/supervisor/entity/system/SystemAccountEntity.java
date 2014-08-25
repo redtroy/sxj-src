@@ -24,7 +24,7 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 	 * 主键
 	 **/
 	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	@Column(name = "NAME")

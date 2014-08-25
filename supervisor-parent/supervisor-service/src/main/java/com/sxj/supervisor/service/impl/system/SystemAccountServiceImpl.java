@@ -13,6 +13,8 @@ import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.system.SysAccountQuery;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.util.common.NumberUtils;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;
@@ -29,8 +31,32 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	private IRoleService roleServce;
 
 	@Override
-	public void addAccount(SystemAccountEntity account) throws ServiceException {
-		// TODO Auto-generated method stub
+	@Transactional
+	public void addAccount(SystemAccountEntity account, String[] functionIds)
+			throws ServiceException {
+		try {
+			accountDao.addSystemAccount(account);
+			if (functionIds != null && functionIds.length > 0) {
+				List<RoleEntity> roles = new ArrayList<RoleEntity>();
+				for (int i = 0; i < functionIds.length; i++) {
+					if (functionIds[i] == null) {
+						continue;
+					}
+					if ("none".equals(functionIds[i])) {
+						continue;
+					}
+					RoleEntity role = new RoleEntity();
+					role.setAccountId(account.getId());
+					role.setFunctionId(functionIds[i]);
+					roles.add(role);
+				}
+				if (roles.size() > 0) {
+					roleServce.addRoles(roles);
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("添加系统用户信息错误", e);
+		}
 
 	}
 
@@ -42,18 +68,26 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			if (account == null) {
 				return;
 			}
-			roleServce.removeRoles(account.getId());
-			List<RoleEntity> roles = new ArrayList<RoleEntity>();
-			for (int i = 0; i < functionIds.length; i++) {
-				if (functionIds[i] == null) {
-					continue;
+			if (functionIds != null && functionIds.length > 0) {
+				List<RoleEntity> roles = new ArrayList<RoleEntity>();
+				for (int i = 0; i < functionIds.length; i++) {
+					if (functionIds[i] == null) {
+						continue;
+					}
+					if ("none".equals(functionIds[i])) {
+						continue;
+					}
+					RoleEntity role = new RoleEntity();
+					role.setAccountId(account.getId());
+					role.setFunctionId(functionIds[i]);
+					roles.add(role);
 				}
-				RoleEntity role = new RoleEntity();
-				role.setAccountId(account.getId());
-				role.setFunctionId(functionIds[i]);
-				roles.add(role);
+				if (roles.size() > 0) {
+					roleServce.removeRoles(account.getId());
+					roleServce.addRoles(roles);
+				}
 			}
-			roleServce.addRoles(roles);
+
 			accountDao.updateSystemAccount(account);
 		} catch (Exception e) {
 			throw new ServiceException("修改系统用户信息错误", e);
@@ -62,8 +96,14 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteAccount(String id) throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			accountDao.deleteSystemAccount(id);
+			roleServce.removeRoles(id);
+		} catch (Exception e) {
+			throw new ServiceException("删除系统用户信息错误", e);
+		}
 
 	}
 
@@ -109,6 +149,22 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			return res;
 		} catch (Exception e) {
 			throw new ServiceException("查询系统用户错误", e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public String initPassword(String accountId) throws ServiceException {
+		try {
+			int rondom = NumberUtils.getRandomIntInMax(999999);
+			String password = StringUtils.getLengthStr(rondom + "", 6, '0');
+			SystemAccountEntity account = new SystemAccountEntity();
+			account.setId(accountId);
+			account.setPassword(password);
+			accountDao.updateSystemAccount(account);
+			return password;
+		} catch (Exception e) {
+			throw new ServiceException("初始化系统用户密码错误", e);
 		}
 	}
 
