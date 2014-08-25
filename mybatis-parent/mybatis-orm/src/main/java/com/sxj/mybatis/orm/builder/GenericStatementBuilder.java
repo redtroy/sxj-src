@@ -758,8 +758,6 @@ public class GenericStatementBuilder extends BaseBuilder
             if (temp.getType().equals(entityClass))
             {
                 parameterMap = temp.getId();
-                System.out.println("========" + statementId + "=========已绑定"
-                        + parameterMap);
                 break;
             }
         }
