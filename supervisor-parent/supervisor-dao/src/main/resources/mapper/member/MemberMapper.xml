@@ -72,7 +72,8 @@
 			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>
 		</if>
 		<!-- 会员注册时间段 -->
-		<if test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">
+		<if
+			test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">
 			<![CDATA[AND REG_DATE >=#{condition.startTime} AND REG_DATE <= #{condition.endTime}]]>
 		</if>
 	</select>

@@ -16,7 +16,7 @@ import com.sxj.supervisor.dao.system.IRoleDao;
  *
  */
 @Entity(mapper = IRoleDao.class)
-@Table(name = "ROLE")
+@Table(name = "M_ROLE_ACCOUNT")
 public class RoleEntity extends Pagable implements Serializable {
 	/**
 	 * 
@@ -27,7 +27,7 @@ public class RoleEntity extends Pagable implements Serializable {
 	 * 主键标识
 	**/
 	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	
 	/**
