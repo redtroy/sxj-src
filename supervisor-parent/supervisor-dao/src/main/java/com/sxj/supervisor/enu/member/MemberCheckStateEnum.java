@@ -1,4 +1,4 @@
-package com.sxj.supervisor.entity.member;
+package com.sxj.supervisor.enu.member;
 
 /**
  * 会员状态

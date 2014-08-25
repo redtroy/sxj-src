@@ -1,5 +1,7 @@
 package com.sxj.supervisor.service.record;
 
+import java.util.List;
+
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.util.persistent.ResultList;
@@ -36,7 +38,7 @@ public interface IRecordService {
 	 *
 	 * @param    query
 	**/
-	public ResultList<RecordEntity> queryRecord(RecordQuery query);
+	public List<RecordEntity> queryRecord(RecordQuery query);
 	
 	/**
 	 * 绑定合同

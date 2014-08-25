@@ -35,7 +35,9 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	public void modifyRecord(RecordEntity record) {
-		recordDao.updateRecord(record);
+		RecordEntity re=new RecordEntity();
+		
+		recordDao.updateRecord(re);
 
 	}
 
@@ -62,7 +64,7 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	@Transactional
-	public ResultList<RecordEntity> queryRecord(RecordQuery query) {
+	public List<RecordEntity> queryRecord(RecordQuery query) {
 		QueryCondition<RecordEntity> qc = new QueryCondition<RecordEntity>();
 		Map<String, Object> condition =new HashMap<String, Object>();
 		condition.put("recrodNo", query.getRecrodNo());//备案号
@@ -78,9 +80,7 @@ public class RecordServiceImpl implements IRecordService {
 		condition.put("endAcceptDate",query.getEndAcceptDate());//结束受理时间
 		qc.setCondition(condition);
 		List<RecordEntity> recordList= recordDao.queryRecord(qc);
-		ResultList resultList =  new ResultListImpl();
-		resultList.setResults(recordList);
-		return resultList;
+		return recordList;
 	}
 
 	/**

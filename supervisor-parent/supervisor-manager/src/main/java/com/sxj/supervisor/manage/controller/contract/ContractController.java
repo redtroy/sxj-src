@@ -7,13 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sxj.supervisor.entity.contract.ContractStateEnum;
-import com.sxj.supervisor.entity.contract.ContractSureStateEnum;
-import com.sxj.supervisor.entity.contract.ContractTypeEnum;
+import com.sxj.supervisor.enu.contract.ContractStateEnum;
+import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.enu.contract.ContractTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
-
 import com.sxj.supervisor.service.contract.IContractService;
 
 @Controller

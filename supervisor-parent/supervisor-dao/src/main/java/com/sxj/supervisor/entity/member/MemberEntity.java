@@ -22,6 +22,9 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IMemberDao;
+import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
+import com.sxj.supervisor.enu.member.MemberStatesEnum;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 
 /**
  * 会员信息实体

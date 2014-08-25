@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
-import com.sxj.supervisor.entity.member.MemberCheckStateEnum;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.entity.member.MemberStatesEnum;
+import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
+import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.util.exception.ServiceException;
