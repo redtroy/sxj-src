@@ -75,6 +75,21 @@ public class ContractItemEntity extends Pagable implements Serializable {
 	**/
 	@Column(name = "REMARKS")
 	private String remarks;
+	/**
+	 * 标识状态
+	 */
+	@Column(name = "UPDATE_STATE")
+	private Integer updateState;
+	
+	
+
+	public Integer getUpdateState() {
+		return updateState;
+	}
+
+	public void setUpdateState(Integer updateState) {
+		this.updateState = updateState;
+	}
 
 	public String getId() {
 		return id;
