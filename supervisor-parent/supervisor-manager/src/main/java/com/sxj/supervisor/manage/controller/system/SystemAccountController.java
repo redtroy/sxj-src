@@ -83,6 +83,15 @@ public class SystemAccountController extends BaseController {
 		return map;
 	}
 
+	@RequestMapping("init_password")
+	public @ResponseBody Map<String, Object> initPassword(String accountId) {
+		String password = accountService.initPassword(accountId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("isOK", true);
+		map.put("password", password);
+		return map;
+	}
+
 	@RequestMapping("edit_account")
 	public @ResponseBody Map<String, Object> editAccount(
 			SystemAccountEntity account,

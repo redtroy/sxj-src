@@ -13,6 +13,8 @@ import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.system.SysAccountQuery;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.util.common.NumberUtils;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 import com.sxj.util.persistent.ResultList;
@@ -147,6 +149,22 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			return res;
 		} catch (Exception e) {
 			throw new ServiceException("查询系统用户错误", e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public String initPassword(String accountId) throws ServiceException {
+		try {
+			int rondom = NumberUtils.getRandomIntInMax(999999);
+			String password = StringUtils.getLengthStr(rondom + "", 6, '0');
+			SystemAccountEntity account = new SystemAccountEntity();
+			account.setId(accountId);
+			account.setPassword(password);
+			accountDao.updateSystemAccount(account);
+			return password;
+		} catch (Exception e) {
+			throw new ServiceException("初始化系统用户密码错误", e);
 		}
 	}
 

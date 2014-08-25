@@ -10,7 +10,16 @@
                         http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
                         http://www.springframework.org/schema/task 
                         http://www.springframework.org/schema/task/spring-task-4.0.xsd"
-	default-lazy-init="true">
+	default-lazy-init="false">
+
+	<bean id="configBean"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:config/database.properties</value>
+			</list>
+		</property>
+	</bean>
 
 	<import resource="classpath*:spring/database-config.xml" />
 	<task:annotation-driven />
@@ -48,5 +57,5 @@
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
 		<property name="basePackage" value="com.sxj.supervisor.dao" />
 	</bean>
-<import resource="classpath*:spring/applicationContext-shiro.xml" />
+	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 </beans>

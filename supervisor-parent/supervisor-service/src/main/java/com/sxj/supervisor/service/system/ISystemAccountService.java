@@ -18,6 +18,9 @@ public interface ISystemAccountService {
 	public void modifyAccount(SystemAccountEntity account, String[] functionIds)
 			throws ServiceException;
 
+	public String initPassword(String accountId)
+			throws ServiceException;
+
 	public void deleteAccount(String id) throws ServiceException;
 
 	public SystemAccountEntity getAccount(String id) throws ServiceException;
