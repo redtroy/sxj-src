@@ -13,6 +13,10 @@
 	<select id="getRoles" resultMap="RoleResultMap" parameterType="String">
 		<![CDATA[SELECT ID,FUNCTION_ID,ACCOUNT_ID FROM M_ROLE_ACCOUNT WHERE ACCOUNT_ID=#{accountId}]]>
 	</select>
+	
+	<delete id="deleteRoles" parameterType="String">
+		<![CDATA[DELETE FROM M_ROLE_ACCOUNT WHERE ACCOUNT_ID=#{accountId}]]>
+	</delete>
 
 	<!-- 获取权限操作列表 -->
 	<select id="getRoleFunction" resultMap="com.sxj.supervisor.dao.system.IFunctionDao.FunctionResultMap"
