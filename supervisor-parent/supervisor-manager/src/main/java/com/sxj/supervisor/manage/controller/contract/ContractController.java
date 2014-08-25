@@ -61,10 +61,24 @@ public class ContractController extends BaseController {
 		return "manage/contract/contract-list";
 	}
 	@RequestMapping("toModify")
-	public String addContract(String  contractId,ModelMap model) {
+	public String toModifyContract(String  contractId,ModelMap model) {
 		ContractModel contractModel = contractService.getContract("1");
 		model.put("contractModel", contractModel);
 		model.put("contractId", contractId);
 		return "manage/contract/contract-edit";
+	}
+	@RequestMapping("modify")
+	public String modifyContract(ContractModel  contractModel,ModelMap model) {
+		contractService.modifyContract(contractModel);
+		
+		return "manage/contract/contract-edit";
+	}
+	
+	@RequestMapping("changes")
+	public String changesContract(ModelMap model, String contractId) {
+		ContractModel contractModel = contractService.getContract("1");
+		model.put("contractModel", contractModel);
+		model.put("contractId", contractId);
+		return "manage/contract/contract-changes";
 	}
 }

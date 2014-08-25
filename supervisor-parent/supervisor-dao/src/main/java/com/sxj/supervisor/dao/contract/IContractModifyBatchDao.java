@@ -2,6 +2,8 @@ package com.sxj.supervisor.dao.contract;
 
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.BatchInsert;
+import com.sxj.mybatis.orm.annotations.BatchUpdate;
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
@@ -20,7 +22,7 @@ public interface IContractModifyBatchDao {
 	 *
 	 * @param    batchs
 	**/
-	@Insert
+	@BatchInsert
 	public void addBatchs(ModifyBatchEntity[] batchs);
 	
 	/**
@@ -47,6 +49,6 @@ public interface IContractModifyBatchDao {
 	 * 更新批次
 	 * @param items
 	 */
-	@Update
-	public void updateItems(ModifyBatchEntity[] items);
+	@BatchUpdate
+	public void updateItems(List<ModifyBatchEntity> items);
 }

@@ -95,6 +95,32 @@ jQuery(document).ready(function($) {
 		 },"json")
 	    
    }
+   //更改账户状态
+   function checkState(id,obj){
+	  $.post("editState.htm",{id:id},function(data){
+		  if (data.isOK=='ok'){
+			  $(obj).children().text(data.state)
+		   }
+	  })
+   }
+   
+ //更改审核状态
+   function editCheckState(id,obj){
+	  $.post("editCheckState.htm",{id:id},function(data){
+		  if (data.isOK=='ok'){
+			  $(obj).children().text(data.state)
+			  /*
+			  if (data.state=='未审核'){
+			     $(obj).children().text("审核")
+			  }else if (data.state=="未认证"){
+			     $(obj).children().text("认证")  
+			  }else{
+			     $(obj).children().text(data.state)  
+			  }
+			  */
+		   }
+	  })
+   }
 </script>
 <script>
 window.onload = function() {
@@ -205,8 +231,8 @@ Intense( elements );
           <td>${member.type.getName()}</td>
           <td>${member.regDate?date}</td>
           <td>${member.authorDate?date}</td>
-          <td><button class="btn btn-gray"><span>${member.checkState.getName()}</span></button></td>
-          <td><button class="btn btn-red"><span>${member.state.getName()}</span></button></td>
+          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},this)"><span>${member.checkState.getName()}</span></button></td>
+          <td><button class="btn btn-red" onclick="checkState(${member.id},this)"><span>${member.state.getName()}</span></button></td>
           <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd(${member.id})"><span>初始化密码</span></button></td>
         </tr>
         <tr class="tableInfo" style="display:none;" id="${member.getMemberNo()}">
@@ -233,7 +259,11 @@ Intense( elements );
             <label>会员类型</label>
             <select name="select2" id="type1">
               <#list types as type>
-            <option value="${type.getId()}">${type.getName()}</option>
+                <#if (type.getId()==member.type.getId())>
+                      <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+                <#else>
+                      <option value="${type.getId()}">${type.getName()}</option>
+                </#if>
             </#list>
             </select>
           </li>

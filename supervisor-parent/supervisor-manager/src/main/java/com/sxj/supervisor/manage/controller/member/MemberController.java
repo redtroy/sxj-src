@@ -71,15 +71,30 @@ public class MemberController extends BaseController {
 	}
 	
 	/**
-	 * 修改会员状态
+	 * 修改账户状态
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping("editState")
 	public @ResponseBody Map<String, String> editState(String id) {
-		//String state=memberService.modifyMember(member);
+		String state=memberService.editState(id);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
+		map.put("state", state);
+		return map;
+	}
+	
+	/**
+	 * 修改审核状态
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("editCheckState")
+	public @ResponseBody Map<String, String> editCheckState(String id) {
+		String state=memberService.editCheckState(id);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isOK", "ok");
+		map.put("state", state);
 		return map;
 	}
 }

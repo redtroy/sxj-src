@@ -388,6 +388,8 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private void buildBatchDelete(String statementId, String collection)
     {
+        System.out.println("create MappedState with statementId=============="
+                + statementId);
         Integer timeout = null;
         Class<?> parameterType = idField.getType();
         
@@ -423,6 +425,8 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private void buildBatchInsert(String statementId, String collection)
     {
+        System.out.println("create MappedState with statementId=============="
+                + statementId);
         Integer fetchSize = null;
         Integer timeout = null;
         Class<?> parameterType = entityClass;
@@ -493,6 +497,8 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private void buildInsert(String statementId)
     {
+        System.out.println("create MappedState with statementId=============="
+                + statementId);
         //
         Integer fetchSize = null;
         Integer timeout = null;
@@ -686,6 +692,8 @@ public class GenericStatementBuilder extends BaseBuilder
     //delete
     private void buildDelete(String statementId)
     {
+        System.out.println("create MappedState with statementId=============="
+                + statementId);
         Integer timeout = null;
         Class<?> parameterType = entityClass;
         
@@ -724,6 +732,8 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private void buildBatchUpdate(String statementId, String collection)
     {
+        System.out.println("create MappedState with statementId=============="
+                + statementId);
         Integer timeout = null;
         Class<?> parameterType = entityClass;
         
@@ -778,6 +788,8 @@ public class GenericStatementBuilder extends BaseBuilder
     //update
     private void buildUpdate(String statementId)
     {
+        System.out.println("create MappedState with statementId=============="
+                + statementId);
         Integer timeout = null;
         Class<?> parameterType = entityClass;
         
@@ -910,6 +922,8 @@ public class GenericStatementBuilder extends BaseBuilder
     //get
     private void buildSelect(String statementId)
     {
+        System.out.println("create MappedState with statementId=============="
+                + statementId);
         Integer fetchSize = null;
         Integer timeout = entity.timeout() == -1 ? null : entity.timeout();
         Class<?> resultType = entityClass;

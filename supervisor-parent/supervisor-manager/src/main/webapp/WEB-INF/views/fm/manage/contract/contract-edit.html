@@ -17,7 +17,7 @@
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script >
-	//上传图片
+	//
 </script>
 </head>
 <body>
@@ -30,60 +30,30 @@
 		<!-- InstanceEndEditable -->
 		<div id="mainBg" class="ly-clearFix yard-1200">
 			<div id="leftList">
-				<h2 class="tit">会员中心</h2>
-				<ul>
-					<li><a href="member.html">会员管理</a></li>
-					<li><a href="accounts.html">会员子帐号管理</a></li>
-				</ul>
-				<h2 class="tit">备案管理</h2>
-				<ul>
-					<li><a href="record.html">备案管理</a></li>
-				</ul>
-				<h2 class="tit">合同管理</h2>
-				<ul>
-					<li><a href="contract.html">合同管理</a></li>
-				</ul>
-				<h2 class="tit">RFID跟踪管理</h2>
-				<ul>
-					<li><a href="#">生成RFID标签</a></li>
-					<li><a href="#">供应商RFID管理</a></li>
-					<li><a href="#">门窗厂RFID管理</a></li>
-					<li><a href="#">RFID补损管理</a></li>
-					<li><a href="#">RFID订单管理</a></li>
-				</ul>
-				<h2 class="tit">会员行为跟踪管理</h2>
-				<ul>
-					<li><a href="behavior.html">会员行为跟踪管理</a></li>
-				</ul>
-				<h2 class="tit">支付管理</h2>
-				<ul>
-					<li><a href="#">支付管理</a></li>
-				</ul>
-				<h2 class="tit">管理员管理</h2>
-				<ul>
-					<li><a href="admin.html">管理员管理</a></li>
-				</ul>
+				<!-- 菜单 -->
 			</div>
 			<div id="rightBar">
+			<form action="modify.htm" id="modifyForm" method="post">
 				<h2 class="title">修改采购合同</h2>
 				<div class="infoBox producedBox f14">
+				<input type="hidden" value="${contractModel.contract.id}"  name="contract.id" />
 					<ul class="ly-clearFix">
 						<li><label>合同号</label> ${contractModel.contract.contractNo}</li>
-						<li><label>签订地点</label> <input name="" type="text"
+						<li><label>签订地点</label> <input name="contract.address" type="text"
 							value="${contractModel.contract.address}" /></li>
-						<li><label>甲方</label> <input name="" type="text"
+						<li><label>甲方</label> <input name="contract.memberNameA" type="text"
 							value="${contractModel.contract.memberNameA}" /></li>
-						<li><label>乙方</label> <input name="" type="text"
+						<li><label>乙方</label> <input name="contract.memberNameB" type="text"
 							value="${contractModel.contract.memberNameB}" /></li>
-						<li><label>工程名称</label> <input name="" type="text"
+						<li><label>工程名称</label> <input name="contract.engName" type="text"
 							value="${contractModel.contract.engName}" /></li>
-						<li><label>工程地址</label> <input name="" type="text"
+						<li><label>工程地址</label> <input name="contract.engAddress" type="text"
 							value="${contractModel.contract.engAddress}" /></li>
-						<li><label>对应备案号</label> <input name="" type="text"
+						<li><label>对应备案号</label> <input name="contract.recordNo" type="text"
 							value="${contractModel.contract.recordNo}"  />
 						</li>
-						<li><label>签订时间</label> <input name="" type="text" value="${contractModel.contract.signedDate?string('yyyy-MM-dd')}" datepicker /> </li>
-						<li><label>合同期限</label> <input name="" type="text" value="${contractModel.contract.validityDate?string('yyyy-MM-dd')}" datepicker /></li>
+						<li><label>签订时间</label> <input name="contract.signedDate" type="text" value="${contractModel.contract.signedDate?string('yyyy-MM-dd')}" datepicker /> </li>
+						<li><label>合同期限</label> <input name="contract.validityDate" type="text" value="${contractModel.contract.validityDate?string('yyyy-MM-dd')}" datepicker /></li>
 						<li><label>生效时间</label>
 							${contractModel.contract.startDate?string("yyyy-MM-dd")}</li>
 					</ul>
@@ -110,23 +80,25 @@
 						 <#list contractModel.itemList as item>
 						  <#assign n = (n+item.price)?int > 
 						  <#assign m = (m+item.amount)?int >
+						  <input name="itemList[${item_index}].id"
+								type="hidden" value="${item.id}" />
 						<tr>
 							<td><input
-								name="item[${contractModel.itemList?size}].productName"
+								name="itemList[${item_index}].productName"
 								type="text" value="${item.productName}" /></td>
 							<td><input
-								name="item[${contractModel.itemList?size}].productModel"
+								name="itemList[${item_index}].productModel"
 								type="text" value="${item.productModel}" /></td>
 							<td><input
-								name="item[${contractModel.itemList?size}].quantity" type="text"
+								name="itemList[${item_index}].quantity" type="text"
 								value="${item.quantity}" /></td>
-							<td><input name="item[${contractModel.itemList?size}].price"
+							<td><input name="itemList[${item_index}].price"
 								type="text" value="${item.price}" /></td>
 							<td><input
-								name="item[${contractModel.itemList?size}].amount" type="text"
+								name="itemList[${item_index}].amount" type="text"
 								value="${item.amount}" /></td>
 							<td><textarea
-									name="item[${contractModel.itemList?size}].remarks" cols=""
+									name="itemList[${item_index}].remarks" cols=""
 									rows="2">${item.remarks}</textarea></td>
 							<td class="color-red">！</td>
 						</tr>
@@ -142,7 +114,7 @@
 						</tr>
 					</table>
 					<div>
-						<label>交货地址</label> <input name="" type="text"
+						<label>交货地址</label> <input name="contract.deliveryAddress" type="text"
 							value="${contractModel.contract.deliveryAddress}" />
 					</div>
 					<table border="0" cellpadding="0" cellspacing="0"
@@ -160,16 +132,20 @@
 							<th class="rLine">对应批次RFID编号</th>
 						</tr>
 						<#list modifyList.modifyBatchList  as modifyBatch>
+						<input name="batchList[${modifyBatch_index}].id" type="hidden" value="${modifyBatch.modifyBatch.id}" />
 						<tr>
-							<td>第 <input name="" type="text" value="${modifyBatch.modifyBatch.batchNo}" class="input-w30" />
+							<td>第 <input name="batchList[${modifyBatch_index}].batchNo" type="text" value="${modifyBatch.modifyBatch.batchNo}" class="input-w30" />
 								批次
 							</td>
 							<td><table border="0" cellpadding="0" cellspacing="0"
 									class="tabList prodIable">
 									 <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
 									<tr>
-										<td><input name="" type="text"
-											value="${modifyBatchItems.productModel}" /></td>
+										<td><input name="batchList[${modifyBatch_index}].batchItems[${modifyBatchItems_index}].productModel" type="text"
+											value="${modifyBatchItems.productModel}" />
+										<input name="batchList[${modifyBatch_index}].batchItems[${modifyBatchItems_index}].id" type="text"
+											value="${modifyBatchItems.id}" />	
+										</td>
 									</tr>
 									</#list>
 								</table></td>
@@ -177,33 +153,33 @@
 									class="tabList prodIable">
 									  <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
 									<tr>
-										<td><input name="" type="text" value="${modifyBatchItems.quantity}" /> &nbsp;</td>
+										<td><input name="batchList[${modifyBatch_index}].batchItems[${modifyBatchItems_index}].quantity" type="text" value="${modifyBatchItems.quantity}" /> &nbsp;</td>
 									</tr>
 									 </#list>
 								</table></td>
-							<td><input name="" type="text" value="${modifyBatch.modifyBatch.amount}" /></td>
-							<td><input name="" type="text" value="${modifyBatch.modifyBatch.rfidNo}" /></td>
+							<td><input name="batchList[${modifyBatch_index}].amount" type="text" value="${modifyBatch.modifyBatch.amount}" /></td>
+							<td><input name="batchList[${modifyBatch_index}].rfidNo" type="text" value="${modifyBatch.modifyBatch.rfidNo}" /></td>
 						</tr>
               </#list>
 					</table>
 					<div>
-						<label>本合同还有</label> <input name="" type="<#if contractModel.batchList?exists> ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
+						<label>本合同还有</label> <input name="${contractModel.contract.batchCount}" type="<#if contractModel.batchList?exists> ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
             <#else> ${contractModel.contract.batchCount} </#if>" value="2" class="input-w30" /> 批次待交付
 					</div>
 					<div>
-						<label>合同定金</label> <input name="" type="text" value=" ${contractModel.contract.deposit}" />
+						<label>合同定金</label> <input name="${contractModel.contract.deposit}" type="text" value=" ${contractModel.contract.deposit}" />
 						元
 					</div>
 					<div>
 						<label>合同备注</label>
-						<textarea name="textarea2" id="textarea2" cols="80" rows="3">${contractModel.contract.remarks}</textarea>
+						<textarea name="${contractModel.contract.remarks}" id="textarea2" cols="80" rows="3">${contractModel.contract.remarks}</textarea>
 					</div>
 					<div class="contPic">
 						<label>合同备案扫描件</label>
 						<button class="button button-green button-middle">上传合同扫描件</button>
 					</div>
 					<div>
-						<label>关联招标合同号</label> <input name="" type="text"
+						<label>关联招标合同号</label> <input name="${contractModel.contract.refContractNo}" type="text"
 							value="${contractModel.contract.refContractNo}" />
 					</div>
 				</div>
@@ -211,6 +187,7 @@
 				<div class="changeBox">
 					<h2 class="title">合同变更信息</h2>
 					<#list contractModel.modifyList as modifyList>
+					<input type="hidden" value="${modifyList.modifyContract.id}" name="modifyList[${modifyList_index}].modifyContract.id" />
 					<div class="infoBox producedBox f14">
 						<div>
 							<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
@@ -236,16 +213,17 @@
 								<th class="rLine">备注说明</th>
 							</tr>
              			<#list modifyList.modifyItemList  as modifyItem>
+             			
 							<tr>
-								<td><input type="text" value="${modifyItem.productName}" /></td>
-								<td><textarea name="textarea9" id="textarea9" cols="25"
+								<td><input type="text" value="${modifyItem.productName}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productName" /></td>
+								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}]" id="textarea9" cols="25"
 										rows="1">${modifyItem.productModel}</textarea></td>
-								<td><input type="text" value="${modifyItem.quantity}" /></td>
-								<td><input type="text" value="${modifyItem.price}" /></td>
-								<td><input type="text" value="${modifyItem.amount}" /></td>
-								<td><textarea name="textarea9" id="textarea10" cols="25"
+								<td><input type="text" value="${modifyItem.quantity}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity" /></td>
+								<td><input type="text" value="${modifyItem.price}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" /></td>
+								<td><input type="text" value="${modifyItem.amount}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" /></td>
+								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].remarks" id="textarea10" cols="25"
 										rows="1">${modifyItem.remarks}</textarea> 
-										&nbsp;&nbsp;<a href="#" class="lnk-green">X</a></td>
+										&nbsp;&nbsp;<a href="#" class="lnk-green">X</a><input type="hidden" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].id" value="${modifyItem.id}" /> </td>
 							</tr>
 						 </#list>
 						</table>
@@ -264,14 +242,18 @@
 								<th class="rLine">对应批次RFID编号</th>
 							</tr>
 							<#list modifyList.modifyBatchList  as modifyBatch>
+							<input type="hidden" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.id" value="${modifyBatch.id}" /> 
 							<tr>
 								<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
 								<td><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
                   					<#list modifyBatch.modifyBatchItems  as modifyBatchItems>
 										<tr>
-											<td><textarea name="textarea10" id="textarea15"
-													cols="25" rows="1">${modifyBatchItems.productModel}</textarea></td>
+											<td><textarea name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].productModel" id="textarea15"
+													cols="25" rows="1">${modifyBatchItems.productModel}</textarea>
+											<input type="hidden" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].id" value="${modifyBatchItems.id}" /> 
+													
+											</td>
 										</tr>
 									 </#list>
 									</table></td>
@@ -279,13 +261,13 @@
 										class="tabList prodIable">
 										<#list modifyBatch.modifyBatchItems  as modifyBatchItems>
 										<tr>
-											<td><input type="text" value="${modifyBatchItems.quantity}" /> &nbsp;<a
+											<td><input type="text" value="${modifyBatchItems.quantity}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].quantity" /> &nbsp;<a
 												href="#" class="lnk-green">+</a></td>
 										</tr>
 										 </#list>
 									</table></td>
-								<td><input type="text" value="8564.00" /></td>
-								<td><input type="text" class="input-w80" value="AAAA00001" />
+								<td><input type="text" value="${modifyBatch.modifyBatch.amount}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.amount" /></td>
+								<td><input type="text" class="input-w80" value="${modifyBatch.modifyBatch.rfidNo}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.rfidNo" />
 									<a href="#" class="lnk-green">X</a></td>
 							</tr>
 							</#list>
@@ -298,6 +280,7 @@
 				<div class="changeBox">
 					<h2 class="title">合同补损信息</h2>
 					<#list contractModel.replenishList as replenishList>
+					<input type="hidden" value="${replenishList.replenishContract.id}" name="replenishList[${replenishList_index}].replenishContract.id" />
 					<div class="infoBox producedBox f14">
 						<div>
 							<label>合同补损备案号</label> ${replenishList.replenishContract.recordNo}
@@ -327,12 +310,14 @@
 							</tr>
 							<#list replenishList.batchItems as replenishItem>
 							<tr>
-								<td>第${replenishItem.replenishBatch.batchNo}批次</td>
+								<td>第${replenishItem.replenishBatch.batchNo}批次
+								<input type="hidden" value="${replenishItem.replenishBatch.id}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.id" />
+								</td>
 								<td><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										 <#list replenishItem.replenishBatchItems as replenishBatchItems>
 										<tr>
-											<td><textarea name="textarea10" id="textarea14"
+											<td><textarea name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatchItems[${replenishBatchItems_index}].productModel" id="textarea14"
 													cols="25" rows="1">${replenishBatchItems.productModel}</textarea></td>
 										</tr>
 										</#list>
@@ -341,31 +326,35 @@
 										class="tabList prodIable">
 										<#list replenishItem.replenishBatchItems as replenishBatchItems>
 										<tr>
-											<td><input type="text" value="${replenishBatchItems.quantity}" /></td>
+											<td><input type="text" value="${replenishBatchItems.quantity}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatchItems[${replenishBatchItems_index}].quantity" />
+											</td>
 										</tr>
 										</#list>
 									</table></td>
-								<td><input type="text" value="${replenishItem.replenishBatch.amount}" /></td>
-								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.rfidNo}" /></td>
-								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.newRfidNo}" />
+								<td><input type="text" value="${replenishItem.replenishBatch.amount}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.amount" /></td>
+								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.rfidNo}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.rfidNo" /></td>
+								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.newRfidNo}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.newRfidNo" />
 									&nbsp;<a href="#" class="lnk-green">X</a></td>
 							</tr>
+							</#list>
 						</table>
 						<div>
-							<label>RFID订单号</label><input type="text" value="${replenishList.replenishContract.rfidOrderNo}" />
+							<label>RFID订单号</label><input type="text" value="${replenishList.replenishContract.rfidOrderNo}" name="replenishList[${replenishList-index}].replenishContract.rfidOrderNo" />
 						</div>
 					</#list>	
 					</#if>
 						<div class="btnBox">
-							<a href="contract.html" class="button button-orange button-small">修改</a><a
+							<button class="button button-orange button-small" type="submit">修改</button><a
 								href="javascript:history.go(-1);"
 								class="button button-gray button-small">返回</a>
 						</div>
 					</div>
 				</div>
+				</form>
 				<!-- InstanceEndEditable -->
 			</div>
 		</div>
+		
 		<#include "manage/footer.html">
 </body>
 <!-- InstanceEnd -->
