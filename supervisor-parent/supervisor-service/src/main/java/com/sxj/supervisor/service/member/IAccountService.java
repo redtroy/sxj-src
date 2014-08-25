@@ -18,4 +18,8 @@ public interface IAccountService {
 	public List<AccountEntity> queryAccounts(AccountQuery query);
 
 	public void reomveAccount(String id);
+	
+	public String editState(String id);
+	
+	public String initializePwd(String id);
 }
