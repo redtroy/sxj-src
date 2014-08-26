@@ -7,6 +7,7 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.system.ISystemAccountDao;
@@ -27,6 +28,10 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
+	@Column(name = "ACCOUNT_NO")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stubValue = "SYS", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	private String accountNo;
+
 	@Column(name = "NAME")
 	private String name;
 
@@ -35,6 +40,9 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 
 	@Column(name = "PASSWORD")
 	private String password;
+
+	@Column(name = "DEL_STATE")
+	private Boolean delState=false;
 
 	public String getId() {
 		return id;
@@ -67,5 +75,23 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getAccountNo() {
+		return accountNo;
+	}
+
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
+	}
+
+	public Boolean getDelState() {
+		return delState;
+	}
+
+	public void setDelState(Boolean delState) {
+		this.delState = delState;
+	}
+
+	
 
 }

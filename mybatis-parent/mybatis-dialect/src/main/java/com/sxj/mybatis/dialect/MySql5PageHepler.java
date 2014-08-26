@@ -26,7 +26,7 @@ public class MySql5PageHepler
         
         querySelect = CountHelper.getLineSql(querySelect);
         
-        String sql = querySelect.replaceAll("[^\\s,]+\\.", "") + " limit "
+        String sql = querySelect + " limit "
                 + offset + " ," + limit;
         
         return sql;

@@ -8,14 +8,47 @@
 <link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${staticPath}js/jquery.js"></script>
 <script src="${staticPath}js/intense.js"></script>
+<script src="${staticPath}js/jquery.paginate.js"></script>
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
+<script type="text/javascript">
+
+function loadPage(currentPage,totalPage){
+	$("#pager").paginate({
+		count 		: totalPage,
+		start 		: currentPage,
+		display     : 10,
+		border					: true,
+		border_color			: '#CCC',
+		text_color  			: '#333',
+		background_color    	: '#FFF',	
+		border_hover_color		: '#ff4400',
+		text_hover_color  		: '#ff4400',
+		background_hover_color	: '#fff', 
+		images					: false,
+		mouse					: 'press',
+		onChange				: function(page){
+			var params=$("#search_form").serialize();
+			params=params+"&currentPage="+page;
+			$.post("${basePath}system/account-list.htm",params,function(data){
+				var res=$(data).find("#rightBar");
+				$("#rightBar").empty();
+				$("#rightBar").append(res.html());
+				var totalPage=$("#pager").attr("totalPage");
+				var currentPage=$("#pager").attr("currentPage");
+				loadPage(currentPage,totalPage);
+				
+			});
+		}
+	});
+}
+
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage});
+})
+</script>
 <script>
 jQuery(document).ready(function($) {
-	$('.del').click(function(){
-		$("#remove_div").slideDown(200);
-		var accountId=$(this).attr("accountId");
-		$("#remove_div").attr("accountId",accountId);
-		
-	})
 	$('.modal-header .close').click(function(){
 		$('.popDemo').slideUp(200);
 	})
@@ -27,6 +60,9 @@ function searchSumbit(){
 		var res=$(data).find("#rightBar");
 		$("#rightBar").empty();
 		$("#rightBar").append(res.html());
+		var totalPage=$("#pager").attr("totalPage");
+		var currentPage=$("#pager").attr("currentPage");
+		loadPage(currentPage,totalPage);
 	});
 }
 
@@ -46,7 +82,6 @@ function roleInfo(id,type){
 }
 
 function closeDiv(divId){
-	$("#"+divId).empty();
 	$("#"+divId).css("display","none");
 }
 
@@ -56,11 +91,17 @@ function toAdd(id){
 		$("#rightBar").append(data);
 		
 	});
-	
+}
+
+function toRemove(id){
+	$('#remove_div').css("display","");
+	$('#remove_div').slideDown(300);
+	$("#remove_div").attr("accountId",id)
 }
 
 function edit(id){
-	var params=$("#edit_form_"+id).serialize();
+	var params=$("#"+id+"_tr").find(":input");
+	$("#edit_form").append(params.html());
 	$.post("${basePath}system/edit_account.htm",params,function(data){
 		if(data.isOK==true){
 			toInfo(id,data);
@@ -78,8 +119,7 @@ function initPassword(id){
     	$.post("${basePath}system/init_password.htm?accountId="+id,function(data){
     		if(data.isOK==true){
     			$("#password_div").css("display","");
-    			
-    			toInfo(id,data);
+    			$("#password_div").children().find("p").text("初始密码为："+data.password+"，谢谢!");
     		}
     		else{
     			alert("初始化失败");
@@ -139,7 +179,6 @@ function toEdit(accountId){
 	$("#"+accountId+"_tr").children().children("#confirm_a").css("display","");
 	
 }
-
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -160,7 +199,7 @@ function toEdit(accountId){
       <h2 class="title">管理员管理</h2>
       <div id="searchBox" class="ly-clearFix">
       <form id="search_form" action="javascript:void(0)">
-	          管理员ID<input type="text" name="id" value="${query.id}">
+	          管理员ID<input type="text" name="accountNo" value="${query.accountNo}">
 	          姓名<input type="text" name="name" value="${query.name}">
 	          帐号<input type="text" name="account" value="${query.account}">
 	          权限<select name="functionId">
@@ -178,6 +217,9 @@ function toEdit(accountId){
 			  <button onclick="javascript:toAdd();" class="btn btn-blue ly-right"><span>新增管理员</span></button>
  	 </form>
     </div>
+     
+    <form  id="edit_form"></form>,
+    <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%" />
         <col width="13%"/>
@@ -197,45 +239,35 @@ function toEdit(accountId){
         </tr>
          <#list list as model>
 	        <tr id="${model.id}_tr" >
-	          <td>${model.id}</td>
+	          <td>${model.accountNo}</td>
 	          <td id="name_td">${model.name}</td>
-	          <form  id="edit_form_${model.id}">
 		          <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
 		          <input id="id_hidden" type="hidden" name="id" value="${model.id}" />
+		          <input id="id_hidden" type="hidden" name="accountNo" value="${model.accountNo}" />
 		          <td id="name_td2" style="display:none"><input type="text" name="name" value="${model.name}" /></td>
 		          <td id="account_td">${model.account}</td>
 		          <td id="account_td2" style="display:none"><input type="text" name="account" value="${model.account}" /></td>
-	          </form>
+	         
 	          <td id="role_td"><a href="javascript:roleInfo('${model.id}','get');" class="lnk-blue lnk-underline">查询权限</a></td>
-	          <td id="role_td2" class="permission" style="display:none" onclick="javascript:roleInfo(${model.id},'edit');"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
+	          <td id="role_td2" class="permission" style="display:none" onclick="javascript:roleInfo('${model.id}','edit');"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
 	        
 	          <td><a href="javascript:accountInfo(${model.id});" class="lnk-blue lnk-underline">查询</a></td>
 	          <td class="operation">
 	          	<a id="edit_a" href="javascript:toEdit('${model.id}');" class="edit lnk-blue">修改</a>
 	          	<a id="confirm_a" href="javascript:edit('${model.id}');" class="confirm lnk-yellow" style="display:none">确认</a>
-	          	<a href="javascript:void(0);" class="del lnk-blue" accountId="${model.id}">删除</a>
+	          	<a href="javascript:toRemove('${model.id}');" class="del lnk-blue" accountId="${model.id}">删除</a>
 	          </td>
-	          <td><button class="btn" onclick=""><span>初始化密码</span></button></td>
+	          <td><button class="btn" onclick="javascript:initPassword('${model.id}');"><span>初始化密码</span></button></td>
 	        </tr>
         </#list>
       </table>
-       <div class="pageBox">
-	      	<div>
-	      		<span class="sumP">共<strong>57</strong>条记录</span>
-	      		<span class="curP">1</span>
-	      		<a href="#">2</a><a href="#">3</a><a href="#">4</a>
-	      		<a href="#" class="pnext">
-	      			<span title="翻至下一页">&gt;</span>
-	      		</a>
-	      	</div>
-      	</div>
       <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
 	  </div>
-      <div id="" class="modal-wrap popDemo" style="display:none;" accountId="">
+      <div id="remove_div" class="modal-wrap popDemo" style="display:none;" accountId="">
         <div class="modal-header">
           <span class="close">关闭</span></div>
         <div class="modal-body popbtnBox">
-          <button class="popBtn" onclick="removeAccount();">确认删除</button><button class="popBtn btnGray">取消</button>
+          <button class="popBtn" onclick="removeAccount();">确认删除</button><button class="popBtn btnGray" onclick="closeDiv('remove_div');">取消</button>
         </div>
       </div>
      <div id="password_div" class="modal-wrap popDemo passwordBox" style="display:none">
@@ -243,9 +275,9 @@ function toEdit(accountId){
 	     <div class="modal-body">
 	     <div class="tipBox ly-clearFix">
 	     <span class="icon32 icon-32-info"></span>
-	     <p class="color-blue fontYH f18">初始密码为：5896123，谢谢!</p>
+	     <p class="color-blue fontYH f18"></p>
 	     </div>
-	     <button class="popBtn">确认</button>
+	     <button class="popBtn" onclick="closeDiv('password_div');">确认</button>
 	     </div>
      </div>
     <!-- InstanceEndEditable --></div>

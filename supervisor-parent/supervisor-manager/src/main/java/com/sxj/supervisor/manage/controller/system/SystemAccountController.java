@@ -19,6 +19,7 @@ import com.sxj.supervisor.model.system.SysAccountQuery;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.util.exception.WebException;
 import com.sxj.util.persistent.ResultList;
 
 @Controller
@@ -70,17 +71,28 @@ public class SystemAccountController extends BaseController {
 	public @ResponseBody Map<String, Object> remove(String accountId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		accountService.deleteAccount(accountId);
+		map.put("isOK", true);
 		return map;
 	}
 
 	@RequestMapping("add_account")
 	public @ResponseBody Map<String, Object> addAccount(
 			SystemAccountEntity account,
-			@RequestParam("functionIds") String[] functionIds) {
-		accountService.addAccount(account, functionIds);
+			@RequestParam("password_confirm") String password_confirm,
+			@RequestParam("functionIds") String[] functionIds)
+			throws WebException {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("isOK", true);
-		return map;
+		try {
+			if (!password_confirm.equals(account.getPassword())) {
+				throw new WebException("两次密码不一致");
+			}
+			accountService.addAccount(account, functionIds);
+			map.put("isOK", true);
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e.getMessage());
+		}
+
 	}
 
 	@RequestMapping("init_password")

@@ -13,11 +13,15 @@ public class SysAccountQuery extends Pagable implements Serializable {
 
 	private String id;
 
+	private String accountNo;
+
 	private String name;
 
 	private String account;
 
 	private String functionId;
+
+	private Boolean delState=false;
 
 	public String getId() {
 		return id;
@@ -25,6 +29,14 @@ public class SysAccountQuery extends Pagable implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getAccountNo() {
+		return accountNo;
+	}
+
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
 	}
 
 	public String getName() {
@@ -50,5 +62,15 @@ public class SysAccountQuery extends Pagable implements Serializable {
 	public void setFunctionId(String functionId) {
 		this.functionId = functionId;
 	}
+
+	public Boolean getDelState() {
+		return delState;
+	}
+
+	public void setDelState(Boolean delState) {
+		this.delState = delState;
+	}
+	
+	
 
 }

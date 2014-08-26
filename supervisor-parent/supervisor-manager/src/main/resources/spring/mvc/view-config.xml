@@ -7,11 +7,18 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
 
-	<!-- 抛出的异常转到特定View <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
-		<property name="defaultErrorView" value="failure" /> <property name="exceptionMappings"> 
-		<props> <prop key="com.jscn.pay.exception.WebException">page/error</prop> 
-		<prop key="java.lang.Exception">page/error</prop> <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop> 
-		<prop key="java.lang.Throwable">error/500</prop> </props> </property> </bean> -->
+	<!--抛出的异常转到特定View -->
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="failure" />
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.jscn.pay.exception.WebException">manage/error</prop>
+				<prop key="java.lang.Exception">manage/error</prop>
+				<prop key="java.lang.Throwable">manage/error</prop>
+			</props>
+		</property>
+	</bean>
 
 
 
