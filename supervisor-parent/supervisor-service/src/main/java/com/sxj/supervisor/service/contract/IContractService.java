@@ -2,7 +2,6 @@ package com.sxj.supervisor.service.contract;
 
 import java.util.List;
 
-import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ModifyItemEntity;
@@ -10,7 +9,6 @@ import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.StateLogModel;
-import com.sxj.util.persistent.ResultList;
 
 public interface IContractService {
 	/**
@@ -35,6 +33,13 @@ public interface IContractService {
 	 * @param    id
 	**/
 	public ContractModel getContract(String id);
+	
+	/**
+	 * 根据合同号获取合同
+	 *
+	 * @param    id
+	**/
+	public ContractModel getContractByContractNo(String contractNo);
 	
 	/**
 	 * 查询合同列表
@@ -88,4 +93,6 @@ public interface IContractService {
 	 * @param state
 	 */
 	public void modifyCheckState(String contractId, Integer state);
+	
+	
 }
