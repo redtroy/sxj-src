@@ -49,6 +49,14 @@
 		<if test="condition.contractNo != null and condition.contractNo != ''">
 			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
 		</if>
+		<!-- 对应甲方会员ID-->
+		<if test="condition.memberIdA != null and condition.memberIdA != ''">
+			<![CDATA[AND CONTRACT_NO = #{condition.memberIdA}]]>
+		</if>
+		<!-- 对应乙方会员ID-->
+		<if test="condition.memberIdB != null and condition.memberIdB != ''">
+			<![CDATA[AND CONTRACT_NO = #{condition.memberIdB}]]>
+		</if>
 		<!-- 备案状态-->
 		<if test="condition.state != null and ondition.state != ''">
 			<![CDATA[AND STATE = #{condition.state}]]>

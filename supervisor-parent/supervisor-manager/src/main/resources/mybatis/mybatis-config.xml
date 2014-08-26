@@ -18,5 +18,6 @@
 	    <typeHandler handler="com.sxj.supervisor.typehandler.ContractTypeEnumTypeHandler" javaType="com.sxj.supervisor.enu.record.ContractTypeEnum"/>
 	    <typeHandler handler="com.sxj.supervisor.typehandler.RecordStateEnumTypeHandler" javaType="com.sxj.supervisor.enu.record.RecordStateEnum"/>
 	    <typeHandler handler="com.sxj.supervisor.typehandler.RecordTypeEnumTypeHandler" javaType="com.sxj.supervisor.enu.record.RecordTypeEnum"/>
+	    <typeHandler handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler" javaType="com.sxj.supervisor.enu.record.RecordFlagEnum"/>
 	</typeHandlers>
 </configuration>   

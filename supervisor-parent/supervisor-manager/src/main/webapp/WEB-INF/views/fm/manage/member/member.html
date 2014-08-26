@@ -257,7 +257,7 @@ Intense( elements );
               <option>连云港市</option>
             </select>
             <label>会员类型</label>
-            <select name="select2" id="type1">
+            <select name="type" id="type1">
               <#list types as type>
                 <#if (type.getId()==member.type.getId())>
                       <option value="${type.getId()}" selected="selected">${type.getName()}</option>

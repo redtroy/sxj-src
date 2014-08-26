@@ -10,6 +10,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordTypeEnum;
 
 public class BaseController {
 
@@ -28,7 +30,15 @@ public class BaseController {
 		binder.registerCustomEditor(MemberTypeEnum.class,
 				new EnumPropertyEditorSupport<MemberTypeEnum>(
 						MemberTypeEnum.class));
-
+		binder.registerCustomEditor(RecordTypeEnum.class,
+				new EnumPropertyEditorSupport<RecordTypeEnum>(
+						RecordTypeEnum.class));
+		binder.registerCustomEditor(ContractTypeEnum.class,
+				new EnumPropertyEditorSupport<ContractTypeEnum>(
+						ContractTypeEnum.class));
+		binder.registerCustomEditor(MemberTypeEnum.class,
+				new EnumPropertyEditorSupport<MemberTypeEnum>(
+						MemberTypeEnum.class));
 	}
 
 	protected String getBasePath(HttpServletRequest request) {

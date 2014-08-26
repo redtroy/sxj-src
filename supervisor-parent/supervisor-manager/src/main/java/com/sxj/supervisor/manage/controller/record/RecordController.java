@@ -1,18 +1,23 @@
 package com.sxj.supervisor.manage.controller.record;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.record.RecordQuery;
+import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 
 @Controller
@@ -21,6 +26,8 @@ public class RecordController extends BaseController {
 
 	@Autowired
 	IRecordService recordService;
+
+	IContractService service;
 
 	/**
 	 * 备案管理页面
@@ -88,7 +95,17 @@ public class RecordController extends BaseController {
 	@RequestMapping("/banding_edit")
 	public String banding_edit(ModelMap map, String id) {
 		RecordEntity record = recordService.getRecord(id);
+		RecordFlagEnum[] flag = RecordFlagEnum.values();
 		map.put("record", record);
+		map.put("flag", flag);
 		return "manage/record/record_banding";
+	}
+
+	@RequestMapping("/queryRecordNo")
+	public @ResponseBody Map<String, Object> queryRecordNo(RecordQuery query) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<RecordEntity> list = recordService.queryRecord(query);
+		map.put("record", list.get(0));
+		return map;
 	}
 }

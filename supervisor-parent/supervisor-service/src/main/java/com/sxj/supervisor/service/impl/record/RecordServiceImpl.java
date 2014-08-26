@@ -82,6 +82,8 @@ public class RecordServiceImpl implements IRecordService {
 		condition.put("endApplyDate", query.getEndApplyDate());// 结束申请时间
 		condition.put("startAcceptDate", query.getStartAcceptDate());// 开始受理时间
 		condition.put("endAcceptDate", query.getEndAcceptDate());// 结束受理时间
+		condition.put("memberIdA", query.getMemberIdA());// 结束受理时间
+		condition.put("memberIdB", query.getMemberIdB());// 结束受理时间
 		qc.setCondition(condition);
 		List<RecordEntity> recordList = recordDao.queryRecord(qc);
 		return recordList;
@@ -102,5 +104,4 @@ public class RecordServiceImpl implements IRecordService {
 			recordDao.updateRecord(record);
 		}
 	}
-
 }

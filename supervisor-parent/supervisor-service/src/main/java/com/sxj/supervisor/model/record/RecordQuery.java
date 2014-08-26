@@ -1,36 +1,65 @@
 package com.sxj.supervisor.model.record;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class RecordQuery implements Serializable {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7160738924586342611L;
 
 	private String recrodNo;
-	
+
 	private String memberId;
-	
+
 	private String applyId;
-	
+
 	private Integer contractType;
-	
+
 	private String contractNo;
-	
+
 	private Integer recordType;
-	
+
 	private Integer state;
-	
+
+	private String memberIdA;
+
+	private String memberIdB;
+
+	public String getMemberIdA() {
+		return memberIdA;
+	}
+
+	public void setMemberIdA(String memberIdA) {
+		this.memberIdA = memberIdA;
+	}
+
+	public String getMemberIdB() {
+		return memberIdB;
+	}
+
+	public void setMemberIdB(String memberIdB) {
+		this.memberIdB = memberIdB;
+	}
+
 	private String startApplyDate;
-	
+
 	private String endApplyDate;
-	
+
 	private String startAcceptDate;
-	
+
 	private String endAcceptDate;
+
+	private Boolean delstate = false;
+
+	public Boolean getDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
+	}
 
 	public String getRecrodNo() {
 		return recrodNo;
@@ -120,5 +149,4 @@ public class RecordQuery implements Serializable {
 		this.endAcceptDate = endAcceptDate;
 	}
 
-	
 }

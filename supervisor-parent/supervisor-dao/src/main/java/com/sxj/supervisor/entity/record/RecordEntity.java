@@ -43,6 +43,9 @@ public class RecordEntity extends Pagable implements Serializable {
 	@Column(name = "RECORD_NO")
 	private String recordNo;
 
+	/**
+	 * 标记
+	 */
 	@Column(name = "RECORD_FLAG")
 	private RecordFlagEnum flag;
 
