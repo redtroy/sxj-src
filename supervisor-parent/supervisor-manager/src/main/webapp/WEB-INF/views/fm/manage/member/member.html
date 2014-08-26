@@ -87,7 +87,7 @@ jQuery(document).ready(function($) {
 	   console.log(telNum)
 	 */
 	   $.post("editMember.htm",{id:id,name:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
-		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum
+		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum,type:type
 		 },function(data){
 			 if (data.isOK=='ok'){
 				 alert('修改成功！')
@@ -109,15 +109,13 @@ jQuery(document).ready(function($) {
 	  $.post("editCheckState.htm",{id:id},function(data){
 		  if (data.isOK=='ok'){
 			  $(obj).children().text(data.state)
-			  /*
 			  if (data.state=='未审核'){
 			     $(obj).children().text("审核")
 			  }else if (data.state=="未认证"){
 			     $(obj).children().text("认证")  
 			  }else{
-			     $(obj).children().text(data.state)  
+			     $(obj).parent().html('<em class="state verified">已认证</em>');  
 			  }
-			  */
 		   }
 	  })
    }
@@ -179,7 +177,7 @@ Intense( elements );
             </#list>
           </select>
           会员状态
-          <select name="memberState" id="state">
+          <select name="checkState" id="state">
            <#list states as state>
             <option value="${state.getId()}">${state.getName()}</option>
            </#list>
@@ -231,7 +229,13 @@ Intense( elements );
           <td>${member.type.getName()}</td>
           <td>${member.regDate?date}</td>
           <td>${member.authorDate?date}</td>
-          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},this)"><span>${member.checkState.getName()}</span></button></td>
+          <#if (member.checkState.id==0)>
+          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},this)"><span>审核</span></button></td>
+          <#elseif (member.checkState.id==1)>
+          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},this)"><span>认证</span></button></td>
+          <#else>
+           <td><em class="state verified">已认证</em></td>
+          </#if>
           <td><button class="btn btn-red" onclick="checkState(${member.id},this)"><span>${member.state.getName()}</span></button></td>
           <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd(${member.id})"><span>初始化密码</span></button></td>
         </tr>
@@ -257,7 +261,7 @@ Intense( elements );
               <option>连云港市</option>
             </select>
             <label>会员类型</label>
-            <select name="select2" id="type1">
+            <select name="typeEnum" id="type1">
               <#list types as type>
                 <#if (type.getId()==member.type.getId())>
                       <option value="${type.getId()}" selected="selected">${type.getName()}</option>

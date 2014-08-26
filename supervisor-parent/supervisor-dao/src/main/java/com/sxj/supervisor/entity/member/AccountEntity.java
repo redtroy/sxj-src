@@ -15,14 +15,13 @@ import com.sxj.supervisor.enu.member.MemberStatesEnum;
 
 /**
  * 子账号实体
+ * 
  * @author Administrator
  *
  */
 @Entity(mapper = IAccountDao.class)
 @Table(name = "M_MEMBER_ACCOUNT")
 public class AccountEntity extends Pagable implements Serializable {
-	
-
 
 	/**
 	 * 
@@ -31,53 +30,67 @@ public class AccountEntity extends Pagable implements Serializable {
 
 	/**
 	 * 主键标识
-	**/
+	 **/
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
-	
+
 	/**
 	 * 所属会员ID
-	**/
+	 **/
 	@Column(name = "PARENT_ID")
 	private String parentId;
-	
+
 	/**
 	 * 子账户名称
-	**/
+	 **/
 	@Column(name = "ACCOUNT_NAME")
 	private String accountName;
-	
+
 	/**
 	 * 姓名
-	**/
+	 **/
 	@Column(name = "NAME")
 	private String name;
-	
+
 	/**
 	 * 子账户状态
-	**/
+	 **/
 	@Column(name = "STATE")
 	private MemberStatesEnum state;
-	
+
 	/**
 	 * 注册日期
-	**/
+	 **/
 	@Column(name = "REG_DATE")
 	private Date regDate;
-	
+
 	/**
 	 * 子账户密码
-	**/
+	 **/
 	@Column(name = "PASSWORD")
 	private String password;
-	
+
 	/**
 	 * 子账户ID
-	**/
+	 **/
 	@Column(name = "ACCOUNT_NO")
 	private String accountNo;
-	
+
+	/**
+	 * 逻辑删除标记
+	 **/
+	@Column(name = "DEL_STATE")
+	private Boolean delstate = false;
+
+	public Boolean getDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -109,7 +122,6 @@ public class AccountEntity extends Pagable implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public MemberStatesEnum getState() {
 		return state;

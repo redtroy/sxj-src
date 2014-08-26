@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.AccountEntity;
-import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberAuthorityEnum;
-import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
-import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.service.member.IAccountService;
@@ -25,10 +22,10 @@ import com.sxj.supervisor.service.member.IAccountService;
 public class AccountController extends BaseController {
 	@Autowired
 	IAccountService accountService;
-	
+
 	@RequestMapping("accountList")
-	public String memberList(AccountQuery query,ModelMap map) {
-		MemberAuthorityEnum[] mas=MemberAuthorityEnum.values();
+	public String memberList(AccountQuery query, ModelMap map) {
+		MemberAuthorityEnum[] mas = MemberAuthorityEnum.values();
 		AccountStatesEnum[] states = AccountStatesEnum.values();
 		List<AccountEntity> list = accountService.queryAccounts(query);
 		map.put("mas", mas);
@@ -36,7 +33,7 @@ public class AccountController extends BaseController {
 		map.put("list", list);
 		return "manage/member/account";
 	}
-	
+
 	/**
 	 * 根据ID删除子帐号
 	 * 
@@ -50,7 +47,7 @@ public class AccountController extends BaseController {
 		map.put("isOK", "ok");
 		return map;
 	}
-	
+
 	/**
 	 * 根据更新子帐号信息
 	 * 
@@ -60,26 +57,28 @@ public class AccountController extends BaseController {
 	@RequestMapping("editAccount")
 	public @ResponseBody Map<String, String> editAccount(AccountEntity account) {
 		System.out.println("test");
-		accountService.modifyAccount(account);;
+		accountService.modifyAccount(account);
+		;
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		return map;
 	}
-	
+
 	/**
 	 * 修改子会员状态
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping("editState")
 	public @ResponseBody Map<String, String> editState(String id) {
-		String state=accountService.editState(id);
+		String state = accountService.editState(id);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		map.put("state", state);
 		return map;
 	}
-	
+
 	/**
 	 * 初始化密码
 	 * 

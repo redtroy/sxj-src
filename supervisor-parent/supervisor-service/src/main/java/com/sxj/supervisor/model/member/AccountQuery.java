@@ -1,7 +1,6 @@
 package com.sxj.supervisor.model.member;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import com.sxj.mybatis.pagination.Pagable;
 
@@ -18,6 +17,15 @@ public class AccountQuery extends Pagable implements Serializable {
 	private String startDate;
 	private String endDate;
 	private String roleId;
+	private Boolean delstate = false;
+
+	public Boolean getDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
+	}
 
 	public String getMemberNo() {
 		return memberNo;
@@ -50,8 +58,6 @@ public class AccountQuery extends Pagable implements Serializable {
 	public void setState(Integer state) {
 		this.state = state;
 	}
-
-	
 
 	public String getStartDate() {
 		return startDate;
