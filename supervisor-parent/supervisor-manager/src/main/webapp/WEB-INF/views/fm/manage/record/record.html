@@ -43,7 +43,35 @@ Intense( elements );
 				mouse					: 'press'
 			});
        });
-		
+		function loadPage(currentPage,totalPage){
+			$("#pager").paginate({
+				count 		: totalPage,
+				start 		: currentPage,
+				display     : 10,
+				border					: true,
+				border_color			: '#CCC',
+				text_color  			: '#333',
+				background_color    	: '#FFF',	
+				border_hover_color		: '#ff4400',
+				text_hover_color  		: '#ff4400',
+				background_hover_color	: '#fff', 
+				images					: false,
+				mouse					: 'press',
+				onChange				: function(page){
+					var params=$("#search_form").serialize();
+					params=params+"&currentPage="+page;
+					$.post("${basePath}system/account-list.htm",params,function(data){
+						var res=$(data).find("#rightBar");
+						$("#rightBar").empty();
+						$("#rightBar").append(res.html());
+						var totalPage=$("#pager").attr("totalPage");
+						var currentPage=$("#pager").attr("currentPage");
+						loadPage(currentPage,totalPage);
+						
+					});
+				}
+			});
+		}	
 		
 	//按条件查找	
 	function search(){
@@ -108,9 +136,7 @@ Intense( elements );
         </form>
       </div>
 	   <div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的备案申请！</div>
-       <div id="pager" class="jPaginate">
-       
-      </div>       
+       <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
       <table border="0" cellpadding="0" cellspacing="0" class="tabList recordTable">
         <col width="5%" />
         <col width="7%"/>

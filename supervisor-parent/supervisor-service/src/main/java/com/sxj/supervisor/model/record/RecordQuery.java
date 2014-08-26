@@ -2,7 +2,9 @@ package com.sxj.supervisor.model.record;
 
 import java.io.Serializable;
 
-public class RecordQuery implements Serializable {
+import com.sxj.mybatis.pagination.Pagable;
+
+public class RecordQuery extends Pagable implements Serializable {
 
 	/**
 	 * 
