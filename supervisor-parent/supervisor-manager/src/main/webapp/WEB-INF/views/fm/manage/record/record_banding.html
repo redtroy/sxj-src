@@ -28,7 +28,16 @@ function query(type){
 	*/
 	$.post("queryRecordNo.htm",{recordType:type,memberIdA:memberIdA,memberIdB:memberIdB,contractNo:contractNo},function(data){
 		if (data.length()>0){
-			
+			if (memberIdA != null && memberIdA !=""){
+				$("#memberNameB").text(data.record.memberNameB);
+				$("#recordNoB").text(data.record.recordNo);
+			}else{
+				$("#memberNameA").text(data.record.memberNameA);
+				$("#recordNoA").text(data.record.recordNo);
+			}
+			if (data.refContractNo != null && data.refContractNo !=''){
+				$("#refContractNo").val(data.refContractNo);
+			}
 		}
 	})
 }
@@ -53,7 +62,7 @@ function query(type){
       	<li><label id="recordNoA">甲方备案号</label><#if (record.flag.id==flag[0].id)> ${record.recordNo}  <input type="hidden" id="memberIdA" value="${record.memberIdA}"/> </#if ></li>
       <li><label id="memberNameB">乙方名称</label>${record.memberNameB}</li>
       <li><label id="recordNoB">乙方备案号</label><#if (record.flag.id==flag[1].id)> ${record.recordNo} <input type="hidden" id="memberIdB" value="${record.memberIdB}"/>  </#if></li>
-      <li><label>关联招标合同</label><input type="text" value="" /></li>
+      <li><label>关联招标合同</label><input type="text" value="" id="refContractNo"/></li>
       </ul>
       <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="">绑定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>
       </div>

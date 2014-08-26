@@ -16,6 +16,7 @@ import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
@@ -27,7 +28,7 @@ public class RecordController extends BaseController {
 	@Autowired
 	IRecordService recordService;
 
-	IContractService service;
+	IContractService contractService;
 
 	/**
 	 * 备案管理页面
@@ -105,7 +106,10 @@ public class RecordController extends BaseController {
 	public @ResponseBody Map<String, Object> queryRecordNo(RecordQuery query) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<RecordEntity> list = recordService.queryRecord(query);
+		ContractModel cm = contractService.getContractByContractNo(query
+				.getContractNo());
 		map.put("record", list.get(0));
+		map.put("refContractNo", cm.getContract().getRefContractNo());
 		return map;
 	}
 }
