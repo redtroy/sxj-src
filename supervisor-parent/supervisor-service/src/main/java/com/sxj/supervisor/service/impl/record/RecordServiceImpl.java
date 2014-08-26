@@ -89,7 +89,9 @@ public class RecordServiceImpl implements IRecordService {
 		condition.put("memberIdA", query.getMemberIdA());// 结束受理时间
 		condition.put("memberIdB", query.getMemberIdB());// 结束受理时间
 		qc.setCondition(condition);
+		qc.setPage(query);
 		List<RecordEntity> recordList = recordDao.queryRecord(qc);
+		query.setPage(qc);
 		return recordList;
 	}
 
