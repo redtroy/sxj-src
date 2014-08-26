@@ -133,6 +133,20 @@ public class RecordEntity extends Pagable implements Serializable {
 	@Column(name = "ACCEPT_DATE")
 	private Date acceptDate;
 
+	/**
+	 * 删除标记
+	 */
+	@Column(name = "DEL_STATE")
+	private Boolean delState = false;
+
+	public Boolean getDelState() {
+		return delState;
+	}
+
+	public void setDelState(Boolean delState) {
+		this.delState = delState;
+	}
+
 	public Date getApplyDate() {
 		return applyDate;
 	}

@@ -21,6 +21,7 @@
 		<result property="refContractNo" column="REF_CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="applyDate" column="APPLY_DATE" jdbcType="TIME" />
 		<result property="acceptDate" column="ACCEPT_DATE" jdbcType="TIME" />
+		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
 	</resultMap>
 
 	<!-- 条件查询备案 -->
@@ -42,8 +43,12 @@
 			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
 		</if>
 		<!-- 合同类型-->
-		<if test="condition.contractType != null and condition.contractType != ''">
+		<if test="condition.contractType != null ">
 			<![CDATA[AND CONTRACT_TYPE = #{condition.contractType}]]>
+		</if>
+		<!-- 逻辑删除标记-->
+		<if test="condition.delState != null">
+			<![CDATA[AND DEL_STATE = #{condition.delState}]]>
 		</if>
 		<!-- 对应合同号-->
 		<if test="condition.contractNo != null and condition.contractNo != ''">
@@ -58,11 +63,11 @@
 			<![CDATA[AND CONTRACT_NO = #{condition.memberIdB}]]>
 		</if>
 		<!-- 备案状态-->
-		<if test="condition.state != null and ondition.state != ''">
+		<if test="condition.state != null ">
 			<![CDATA[AND STATE = #{condition.state}]]>
 		</if>
 		<!-- 备案类型-->
-		<if test="condition.type != null and condition.type != ''">
+		<if test="condition.type != null ">
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
 		<!-- 申请时间段 -->

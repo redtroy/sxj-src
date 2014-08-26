@@ -27,6 +27,16 @@ public class RecordQuery implements Serializable {
 
 	private String memberIdB;
 
+	private Boolean delState = false;
+
+	public Boolean getDelState() {
+		return delState;
+	}
+
+	public void setDelState(Boolean delState) {
+		this.delState = delState;
+	}
+
 	public String getMemberIdA() {
 		return memberIdA;
 	}

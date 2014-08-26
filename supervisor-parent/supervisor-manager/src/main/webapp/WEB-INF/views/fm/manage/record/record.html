@@ -49,6 +49,15 @@ Intense( elements );
 	function search(){
 		$("#search_box").submit();
 	}
+	
+	//删除
+	function del(id){
+		$.post("delRecord.htm",{id:id},function(data){
+			if (data.isOk=="ok"){
+				$("#id").remove();
+			}
+		})
+	}
 </script>
 <body>
 <#include "manage/head.html">
@@ -132,7 +141,7 @@ Intense( elements );
           <th class="rLine">状态</th>
         </tr>
         <#list list as record>
-        <tr>
+        <tr id="${record.id}">
           <td>${record.recordNo}</td>
           <td>${record.applyId}</td>
           <td>${record.memberNameA}</td>
@@ -143,8 +152,20 @@ Intense( elements );
           <td>${record.type.getName()}</td>
           <td>${record.applyDate?date}</td>
           <td>${record.acceptDate?date}</td>
-          <td class="operation"><a href="record_edit.htm?id=${record.id}" class="edit">修改</a><a href="#" class="del">删除</a></td>
+          <td class="operation"><a href="record_edit.htm?id=${record.id}" class="edit">修改</a><a href="#" class="del" onclick="del(${record.id})">删除</a></td>
+          <#if (record.state.id==0)>
           <td class="contract"><a href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a href="produced.html" class="lnk-green">生成合同</a></td>
+          <#elseif (record.state.id==1)>
+          <td class="contract"><em class="state verified">已绑定</em></td>
+          <#elseif (record.state.id==2)>
+          <td class="contract"><a href="../html/contract-changes.html" class="lnk-green">变更当前合同</a></td>
+          <#elseif (record.state.id==3)>
+          <td class="contract"><em class="state verified">已变更</em></td>
+          <#elseif (record.state.id==4)>
+          <td class="contract"><a href="../html/contract-loss.html" class="lnk-green">补损当前合同</a></td>
+          <#elseif (record.state.id==5)>
+          <td class="contract"><em class="state verified">已补损</em></td>
+          </#if>
         </tr>
         </#list>
       </table>
@@ -158,15 +179,15 @@ Intense( elements );
               <div class="ScrCont">
                 <div id="List1">
                   <!-- 图片列表 begin -->
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht01.gif"><img src="../images/ht01s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht02.gif"><img src="../images/ht02s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht03.gif"><img src="../images/ht03s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht01.gif"><img src="../images/ht01s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht02.gif"><img src="../images/ht02s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht03.gif"><img src="../images/ht03s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht01.gif"><img src="../images/ht01s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht02.gif"><img src="../images/ht02s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht03.gif"><img src="../images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht01.gif"><img src="${staticPath}images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht02.gif"><img src="${staticPath}images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht03.gif"><img src="${staticPath}images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht01.gif"><img src="${staticPath}images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht02.gif"><img src="${staticPath}images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht03.gif"><img src="${staticPath}images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht01.gif"><img src="${staticPath}images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht02.gif"><img src="${staticPath}images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht03.gif"><img src="${staticPath}images/ht03s.gif"  /></a></div>
                   <!-- 图片列表 end -->
                 </div>
                 <div id="List2"></div>

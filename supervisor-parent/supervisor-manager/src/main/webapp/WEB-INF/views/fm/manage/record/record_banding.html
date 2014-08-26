@@ -41,6 +41,16 @@ function query(type){
 		}
 	})
 }
+
+  function bind_save(){
+	  var contractNo=$("#contractNo").val();
+	  var refContractNo=$("#refContractNo").val();
+	  var recordNo=$("#recordNoA").text();
+	  var recordNo2=$("#recordNoB").text();
+	  $.post("banding_save.htm",{contractNo:contractNo,refContractNo:refContractNo,recordNo:recordNo,recordNo2:recordNo2},function(data){
+		  alert("更新成功！");
+	  })
+  }
 </SCRIPT>
 <body>
 <#include "manage/head.html">

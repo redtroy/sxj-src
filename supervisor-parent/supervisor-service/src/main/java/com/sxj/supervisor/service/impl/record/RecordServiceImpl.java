@@ -12,6 +12,7 @@ import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.record.IRecordService;
+import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -50,7 +51,10 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	public void deleteRecord(String id) {
-		recordDao.deleteRecord(id);
+		RecordEntity record = getRecord(id);
+		record.setDelState(true);
+		recordDao.updateRecord(record);
+		// recordDao.deleteRecord(id);
 
 	}
 
@@ -95,13 +99,35 @@ public class RecordServiceImpl implements IRecordService {
 	@Override
 	@Transactional
 	public void bindingContract(String contractNo, String refContractNo,
-			String recordId) {
+			String recordNo, String recordNo2) {
 
-		RecordEntity record = recordDao.getRecord(recordId);
+		RecordEntity record = recordDao.getRecord(recordNo);
+		RecordEntity record2 = recordDao.getRecord(recordNo2);
 		if (record != null) {
 			record.setRefContractNo(refContractNo);
 			record.setContractNo(contractNo);
 			recordDao.updateRecord(record);
+		}
+		if (record2 != null) {
+			record2.setRefContractNo(refContractNo);
+			record2.setContractNo(contractNo);
+			recordDao.updateRecord(record2);
+		}
+
+	}
+
+	@Override
+	public RecordEntity getRecordByNo(String no) throws ServiceException {
+		try {
+			RecordQuery query = new RecordQuery();
+			query.setRecrodNo(no);
+			List<RecordEntity> list = queryRecord(query);
+			if (list != null && list.size() > 0) {
+				return list.get(0);
+			}
+			return null;
+		} catch (Exception e) {
+			throw new ServiceException("", e);
 		}
 	}
 }

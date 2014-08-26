@@ -102,6 +102,21 @@ public class RecordController extends BaseController {
 		return "manage/record/record_banding";
 	}
 
+	@RequestMapping("/banding_save")
+	public @ResponseBody Map<String, String> bandingSave(String contractNo,
+			String refContractNo, String recordNo, String recordNo2) {
+		Map<String, String> map = new HashMap<String, String>();
+		recordService.bindingContract(contractNo, refContractNo, recordNo,
+				recordNo2);
+		return map;
+	}
+
+	/**
+	 * 根据合同号查询
+	 * 
+	 * @param query
+	 * @return
+	 */
 	@RequestMapping("/queryRecordNo")
 	public @ResponseBody Map<String, Object> queryRecordNo(RecordQuery query) {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -110,6 +125,20 @@ public class RecordController extends BaseController {
 				.getContractNo());
 		map.put("record", list.get(0));
 		map.put("refContractNo", cm.getContract().getRefContractNo());
+		return map;
+	}
+
+	/**
+	 * 根据ID删除备案
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/delRecord")
+	public @ResponseBody Map<String, String> delRecord(String id) {
+		Map<String, String> map = new HashMap<String, String>();
+		recordService.deleteRecord(id);
+		map.put("isOk", "ok");
 		return map;
 	}
 }
