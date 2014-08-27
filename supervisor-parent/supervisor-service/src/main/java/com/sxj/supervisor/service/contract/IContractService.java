@@ -2,15 +2,13 @@ package com.sxj.supervisor.service.contract;
 
 import java.util.List;
 
-import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
-import com.sxj.supervisor.entity.contract.ModifyItemEntity;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.StateLogModel;
-import com.sxj.util.persistent.ResultList;
 
 public interface IContractService {
 	/**
@@ -58,7 +56,7 @@ public interface IContractService {
 	 * @param    batchList
 	 * @param    recordNo
 	**/
-	public void changeContract(String contractId, List<ModifyItemEntity> itemList, List<ContractBatchModel> batchList, String recordNo);
+	public void changeContract(String contractId, ContractModifyModel model, String recordNo,List<ContractItemEntity> itemList);
 	
 	/**
 	 * 补损合同

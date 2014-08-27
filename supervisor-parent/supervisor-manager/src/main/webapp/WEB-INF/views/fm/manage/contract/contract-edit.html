@@ -163,23 +163,23 @@
               </#list>
 					</table>
 					<div>
-						<label>本合同还有</label> <input name="${contractModel.contract.batchCount}" type="<#if contractModel.batchList?exists> ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
+						<label>本合同还有</label> <input name="contractModel.contract.batchCount" type="<#if contractModel.batchList?exists> ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
             <#else> ${contractModel.contract.batchCount} </#if>" value="2" class="input-w30" /> 批次待交付
 					</div>
 					<div>
-						<label>合同定金</label> <input name="${contractModel.contract.deposit}" type="text" value=" ${contractModel.contract.deposit}" />
+						<label>合同定金</label> <input name="contractModel.contract.deposit" type="text" value=" ${contractModel.contract.deposit}" />
 						元
 					</div>
 					<div>
 						<label>合同备注</label>
-						<textarea name="${contractModel.contract.remarks}" id="textarea2" cols="80" rows="3">${contractModel.contract.remarks}</textarea>
+						<textarea name="contractModel.contract.remarks" id="textarea2" cols="80" rows="3">${contractModel.contract.remarks}</textarea>
 					</div>
 					<div class="contPic">
 						<label>合同备案扫描件</label>
 						<button class="button button-green button-middle">上传合同扫描件</button>
 					</div>
 					<div>
-						<label>关联招标合同号</label> <input name="${contractModel.contract.refContractNo}" type="text"
+						<label>关联招标合同号</label> <input name="contractModel.contract.refContractNo" type="text"
 							value="${contractModel.contract.refContractNo}" />
 					</div>
 				</div>

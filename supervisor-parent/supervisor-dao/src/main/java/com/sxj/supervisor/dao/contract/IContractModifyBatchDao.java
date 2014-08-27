@@ -23,7 +23,7 @@ public interface IContractModifyBatchDao {
 	 * @param    batchs
 	**/
 	@BatchInsert
-	public void addBatchs(ModifyBatchEntity[] batchs);
+	public void addBatchs(List<ModifyBatchEntity> batchs);
 	
 	/**
 	 * 获取批次信息

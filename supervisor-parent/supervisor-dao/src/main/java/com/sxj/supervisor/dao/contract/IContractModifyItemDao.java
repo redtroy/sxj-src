@@ -18,7 +18,7 @@ public interface IContractModifyItemDao {
 	 * @param    items
 	**/
 	@BatchInsert
-	public void addItems(ModifyItemEntity items);
+	public void addItems(List<ModifyItemEntity> items);
 	
 	/**
 	 *  通过合同ID查询条目列表
