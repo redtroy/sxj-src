@@ -46,5 +46,5 @@ public interface IRoleDao {
 	 * @return
 	 * @throws SQLException2
 	 */
-	public List<FunctionEntity> getAllRoleFunction(String accountId) throws SQLException;
+	public List<FunctionEntity> getAllRoleFunction(String account) throws SQLException;
 }

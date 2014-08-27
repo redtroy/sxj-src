@@ -7,10 +7,46 @@
 <title>私享家电子商贸平台</title>
 <link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${staticPath}js/jquery.js"></script>
+<script src="${staticPath}js/jquery.paginate.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 </head>
+<script type="text/javascript">
+function loadPage(currentPage,totalPage){
+	$("#pager").paginate({
+		count 		: totalPage,
+		start 		: currentPage,
+		display     : 10,
+		border					: true,
+		border_color			: '#CCC',
+		text_color  			: '#333',
+		background_color    	: '#FFF',	
+		border_hover_color		: '#ff4400',
+		text_hover_color  		: '#ff4400',
+		background_hover_color	: '#fff', 
+		images					: false,
+		mouse					: 'press',
+		onChange				: function(page){
+			var params=$("#search_form").serialize();
+			params=params+"&currentPage="+page;
+			$.post("${basePath}system/account-list.htm",params,function(data){
+				var res=$(data).find("#rightBar");
+				$("#rightBar").empty();
+				$("#rightBar").append(res.html());
+				var totalPage=$("#pager").attr("totalPage");
+				var currentPage=$("#pager").attr("currentPage");
+				loadPage(currentPage,totalPage);
+				
+			});
+		}
+	});
+}
+
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage});
+});
+</script>
 <Script>
    //根据ID删除子帐号
    function del(id){
@@ -21,7 +57,17 @@
    }
    //查询
    function query(){
-	   $("#serchAccount").submit();  
+	   //$("#serchAccount").submit();  
+	   var params=$("#serchAccount").serialize();
+		$.post("${basePath}member/account/accountList.htm.htm",params,function(data){
+			var res=$(data).find("#rightBar");
+			$("#rightBar").empty();
+			$("#rightBar").append(res.html());
+			var totalPage=$("#pager").attr("totalPage");
+			var currentPage=$("#pager").attr("currentPage");
+			loadPage(currentPage,totalPage);
+		});
+	   
    }
    //修改
    function edit(id){
@@ -81,31 +127,36 @@
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">会员子帐号管理</h2>
       <div id="searchBox">
-      <form action="accountList.htm" method="post" id="serchAccount">
-        <p>上级会员ID<input type="text" name="memberNo" value="">
-          子帐号ID<input type="text" name="accountId" value="">
-          子帐号名<input type="text" name="accountName" value="">
+      <form action="javascript:void(0);" id="serchAccount">
+        <p>上级会员ID<input type="text" name="memberNo" value="${query.memberNo}">
+          子帐号ID<input type="text" name="accountId" value="${query.accountId}">
+          子帐号名<input type="text" name="accountName" value="${query.accountName}">
           权限
           <select>
           <#list mas as ma>
             <option value="${ma.getId()}">${ma.getName()}</option>
           </#list>
           </select>
-状态
+	状态
           <select name="state">
            <#list states as state>
-            <option value="${state.getId()}">${state.getName()}</option>
+           	<#if state.id==query.state>
+            <option value="${state.getId()}" selected="selected">${state.getName()}</option>
+            <#else>
+             <option value="${state.getId()}">${state.getName()}</option>
+            </#if>
            </#list>
           </select>
         </p>
         <p> 会员注册时间段
-          <input type="text" name="startDate" value="">
+          <input type="text" name="startDate" value="${query.startDate}">
           -
-          <input type="text" name="endDate" value="">
-          <button class="btn btn-blue" onclick="query()"><span>查询</span></button>
+          <input type="text" name="endDate" value="${query.endDate}">
+          <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
         </p>
         </form>
     </div>
+     <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%" />
         <col width="10%"/>

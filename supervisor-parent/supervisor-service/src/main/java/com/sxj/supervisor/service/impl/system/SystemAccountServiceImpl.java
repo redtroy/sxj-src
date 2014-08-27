@@ -145,7 +145,6 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 		try {
 			QueryCondition<SystemAccountEntity> condition = new QueryCondition<SystemAccountEntity>();
 			if (query != null) {
-				query.setPagable(true);
 				condition.addCondition("id", query.getId());
 				condition.addCondition("accountNo", query.getAccountNo());
 				condition.addCondition("delState", query.getDelState());

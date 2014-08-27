@@ -37,8 +37,6 @@ public class QueryCondition<T> extends Pagable implements Serializable {
 	 */
 	public void addCondition(String key, Object value) {
 		if (StringUtils.isNotEmpty(key)) {
-			if (value == null)
-				value = "";
 			condition.put(key, value);
 		}
 	}

@@ -32,6 +32,9 @@ public class MemberController extends BaseController {
 	 */
 	@RequestMapping("memberList")
 	public String memberList(MemberQuery query, ModelMap map) {
+		if (query != null) {
+			query.setPagable(true);
+		}
 		MemberTypeEnum[] types = MemberTypeEnum.values();
 		MemberCheckStateEnum[] state = MemberCheckStateEnum.values();
 		query.setArea(null);
@@ -39,6 +42,7 @@ public class MemberController extends BaseController {
 		map.put("types", types);
 		map.put("states", state);
 		map.put("memberList", list);
+		map.put("query", query);
 		return "manage/member/member";
 	}
 
