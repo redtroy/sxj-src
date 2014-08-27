@@ -38,45 +38,9 @@
 				searchSumbit();
 			}
 			else{
-				alert("添加失败");
-				alert(data);
 				errorInfo(data);
 			}
 		});
 	}
- 
- function errorInfo(data){
-	 
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		   // area: ['auto', 'auto'],
-		    border: [0], //去掉默认边框
-		    shade: [0], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data
-		    }
-		});
-		//自设关闭
-		$('#pagebtn').on('click', function(){
-		    layer.close(pageii);
-		});
-	 
- }
- 
- $('#test2').on('click', function(){
-	 alert("dddfdfd");
-	    $.layer({
-	        type: 1,
-	        title: false, //不显示默认标题栏
-	        shade: [0], //不显示遮罩
-	        area: ['600px', '360px'],
-	        page: {html: '<img src="http://static.oschina.net/uploads/space/2014/0516/012728_nAh8_1168184.jpg" alt="layer">'}
-	    });
-	});
- 
- 
  </script>
 
