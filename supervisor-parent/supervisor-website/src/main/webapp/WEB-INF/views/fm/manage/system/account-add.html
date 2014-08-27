@@ -1,0 +1,82 @@
+    <!-- InstanceBeginEditable name="rightBar" -->
+    <h2 class="title">新增管理员</h2>
+    <div class="adminBox f14">
+    <form id="add_form" action="" method="post">
+      <div>
+        <label>姓名</label>
+        <input type="text" id="user_name" name="name" class="text tip" title="由中文组成" />
+        <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
+      </div>
+      <div>
+        <label>帐号</label>
+        <input type="text" id="user_name" name="account" class="text tip" title="3-20位字符，可由中文、英文、数字及“_”、“-”组成" />
+      </div>
+      <div>
+        <label>密码</label>
+        <input type="password" id="password" name="password" class="text tip" title="6-16位字符，可由英文、数字及标点符号组成" />
+      </div>
+      <div>
+        <label>确认密码</label>
+        <input type="password" id="password_confirm" name="password_confirm" class="text tip" title="请再次输入您的密码" />
+      </div>
+      <div class="permission">
+        <label>权限</label>
+        <div class="adminDrop dropMenu sltinput" onclick="javascript:roleInfo('','add');"> <span>全部权限</span> <span class="icon"></span> </div>
+      <div class="btnBox"><a href="javascript:add();" class="button button-orange button-small">新增</a><a id="test2" class="button button-gray button-small">返回</a> </div>
+      </div>
+      </form>
+    </div>
+    <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
+	  </div>
+     <div class="maskdivgen" style="display:none"></div>
+ <script>
+ function add(){
+		var params=$("#add_form").serialize();
+		$.post("${basePath}system/add_account.htm",params,function(data){
+			if(data.isOK==true){
+				alert("添加成功");
+				searchSumbit();
+			}
+			else{
+				alert("添加失败");
+				alert(data);
+				errorInfo(data);
+			}
+		});
+	}
+ 
+ function errorInfo(data){
+	 
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   // area: ['auto', 'auto'],
+		    border: [0], //去掉默认边框
+		    shade: [0], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data
+		    }
+		});
+		//自设关闭
+		$('#pagebtn').on('click', function(){
+		    layer.close(pageii);
+		});
+	 
+ }
+ 
+ $('#test2').on('click', function(){
+	 alert("dddfdfd");
+	    $.layer({
+	        type: 1,
+	        title: false, //不显示默认标题栏
+	        shade: [0], //不显示遮罩
+	        area: ['600px', '360px'],
+	        page: {html: '<img src="http://static.oschina.net/uploads/space/2014/0516/012728_nAh8_1168184.jpg" alt="layer">'}
+	    });
+	});
+ 
+ 
+ </script>
+

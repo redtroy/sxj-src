@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<#include "manage/base.html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家电子商贸平台</title>
+<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${staticPath}js/jquery.js"></script>
+<script src="${staticPath}js/intense.js"></script>
+<script src="${staticPath}js/jquery.paginate.js"></script>
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
+<script type="text/javascript">
+
+function loadPage(currentPage,totalPage){
+	$("#pager").paginate({
+		count 		: totalPage,
+		start 		: currentPage,
+		display     : 10,
+		border					: true,
+		border_color			: '#CCC',
+		text_color  			: '#333',
+		background_color    	: '#FFF',	
+		border_hover_color		: '#ff4400',
+		text_hover_color  		: '#ff4400',
+		background_hover_color	: '#fff', 
+		images					: false,
+		mouse					: 'press',
+		onChange				: function(page){
+			var params=$("#search_form").serialize();
+			params=params+"&currentPage="+page;
+			$.post("${basePath}system/account-list.htm",params,function(data){
+				var res=$(data).find("#rightBar");
+				$("#rightBar").empty();
+				$("#rightBar").append(res.html());
+				var totalPage=$("#pager").attr("totalPage");
+				var currentPage=$("#pager").attr("currentPage");
+				loadPage(currentPage,totalPage);
+				
+			});
+		}
+	});
+}
+
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage});
+})
+</script>
+<script>
+jQuery(document).ready(function($) {
+	$('.modal-header .close').click(function(){
+		$('.popDemo').slideUp(200);
+	})
+});
+
+function searchSumbit(){
+	var params=$("#search_form").serialize();
+	$.post("${basePath}system/account-list.htm",params,function(data){
+		var res=$(data).find("#rightBar");
+		$("#rightBar").empty();
+		$("#rightBar").append(res.html());
+		var totalPage=$("#pager").attr("totalPage");
+		var currentPage=$("#pager").attr("currentPage");
+		loadPage(currentPage,totalPage);
+	});
+}
+
+function accountInfo(id){
+	$.get("${basePath}system/account-info.htm?accountId="+id,function(data){
+		$("#rightBar").empty();
+		$("#rightBar").append(data);
+	});
+}
+
+function roleInfo(id,type){
+	$.get("${basePath}system/get_role_function.htm?accountId="+id+"&type="+type,function(data){
+		$("#roleInfo_div").empty();
+		$("#roleInfo_div").css("display","");
+		$("#roleInfo_div").append(data);
+	});
+}
+
+function closeDiv(divId){
+	$("#"+divId).css("display","none");
+}
+
+function toAdd(id){
+	$.get("${basePath}system/to_add.htm",function(data){
+		$("#rightBar").empty();
+		$("#rightBar").append(data);
+		
+	});
+}
+
+function toRemove(id){
+	$('#remove_div').css("display","");
+	$('#remove_div').slideDown(300);
+	$("#remove_div").attr("accountId",id)
+}
+
+function edit(id){
+	var params=$("#"+id+"_tr").find(":input");
+	$("#edit_form").append(params.html());
+	$.post("${basePath}system/edit_account.htm",params,function(data){
+		if(data.isOK==true){
+			toInfo(id,data);
+			alert("修改成功");
+		}
+		else{
+			alert("修改失败");
+		}
+	});
+}
+
+function initPassword(id){
+	var r=confirm("确认初始化密码吗?");
+    if (r==true){
+    	$.post("${basePath}system/init_password.htm?accountId="+id,function(data){
+    		if(data.isOK==true){
+    			$("#password_div").css("display","");
+    			$("#password_div").children().find("p").text("初始密码为："+data.password+"，谢谢!");
+    		}
+    		else{
+    			alert("初始化失败");
+    		}
+    	});
+    }
+	
+}
+
+function removeAccount(){
+	var id=$("#remove_div").attr("accountId");
+	$.get("${basePath}system/remove.htm?accountId="+id,function(data){
+		if(data.isOK==true){
+			alert("删除成功");
+			searchSumbit();
+		}
+		else{
+			alert("删除失败");
+		}
+	})
+}
+
+function toInfo(accountId,data){
+	
+	$("#"+accountId+"_tr").children("#id_hidden").val(data.account.id);
+	
+	$("#"+accountId+"_tr").children("#functionIds_hidden").val(data.functionIds);
+	
+	$("#"+accountId+"_tr").children("#name_td").css("display","");
+	$("#"+accountId+"_tr").children("#name_td").text(data.account.name);
+	$("#"+accountId+"_tr").children("#name_td2").css("display","none");
+	$("#"+accountId+"_tr").children("#name_td2").children(":input").val(data.account.name);
+	
+	$("#"+accountId+"_tr").children("#account_td").css("display","");
+	$("#"+accountId+"_tr").children("#account_td").text(data.account.account);
+	$("#"+accountId+"_tr").children("#account_td2").css("display","none");
+	$("#"+accountId+"_tr").children("#account_td2").children(":input").val(data.account.account);
+	
+	$("#"+accountId+"_tr").children("#role_td").css("display","");
+	$("#"+accountId+"_tr").children("#role_td2").css("display","none");
+	
+	$("#"+accountId+"_tr").children().children("#edit_a").css("display","");
+	$("#"+accountId+"_tr").children().children("#confirm_a").css("display","none");
+}
+
+function toEdit(accountId){
+	$("#"+accountId+"_tr").children("#name_td").css("display","none");
+	$("#"+accountId+"_tr").children("#name_td2").css("display","");
+	
+	$("#"+accountId+"_tr").children("#account_td").css("display","none");
+	$("#"+accountId+"_tr").children("#account_td2").css("display","");
+	
+	$("#"+accountId+"_tr").children("#role_td").css("display","none");
+	$("#"+accountId+"_tr").children("#role_td2").css("display","");
+	
+	$("#"+accountId+"_tr").children().children("#edit_a").css("display","none");
+	$("#"+accountId+"_tr").children().children("#confirm_a").css("display","");
+	
+}
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<#include "manage/head.html">
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<#include "manage/menu-path.html">
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+   	<div id="leftList">
+   	 <script>$("#leftList").load("${basePath}menu.htm");</script>
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">管理员管理</h2>
+      <div id="searchBox" class="ly-clearFix">
+      <form id="search_form" action="javascript:void(0)">
+	          管理员ID<input type="text" name="accountNo" value="${query.accountNo}">
+	          姓名<input type="text" name="name" value="${query.name}">
+	          帐号<input type="text" name="account" value="${query.account}">
+	          权限<select name="functionId">
+	           	 <option value="">全部</option>
+	             <#list functions as f>
+	             	<#if f.id==query.functionId>
+	            	<option value="${f.id}" selected="selected">${f.title}</option>
+	            	<#else>
+	            	<option value="${f.id}">${f.title}</option>
+	            	</#if>
+	            </#list>
+	          </select>
+	          <button class="btn btn-blue" onclick="javascript:searchSumbit();"><span>搜索</span></button>&nbsp;&nbsp;
+	          
+			  <button onclick="javascript:toAdd();" class="btn btn-blue ly-right"><span>新增管理员</span></button>
+ 	 </form>
+    </div>
+     
+    <form  id="edit_form"></form>,
+    <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+        <col width="10%" />
+        <col width="13%"/>
+        <col width="15%"/>
+        <col width="10%" />
+        <col width="10%" />
+        <col width="12%" />
+        <col width="15%" />
+        <tr>
+          <th>管理员ID</th>
+          <th>姓名</th>
+          <th>帐号</th>
+          <th>权限</th>
+          <th>操作记录</th>
+          <th>操作</th>
+          <th class="rLine">&nbsp;</th>
+        </tr>
+         <#list list as model>
+	        <tr id="${model.id}_tr" >
+	          <td>${model.accountNo}</td>
+	          <td id="name_td">${model.name}</td>
+		          <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
+		          <input id="id_hidden" type="hidden" name="id" value="${model.id}" />
+		          <input id="id_hidden" type="hidden" name="accountNo" value="${model.accountNo}" />
+		          <td id="name_td2" style="display:none"><input type="text" name="name" value="${model.name}" /></td>
+		          <td id="account_td">${model.account}</td>
+		          <td id="account_td2" style="display:none"><input type="text" name="account" value="${model.account}" /></td>
+	         
+	          <td id="role_td"><a href="javascript:roleInfo('${model.id}','get');" class="lnk-blue lnk-underline">查询权限</a></td>
+	          <td id="role_td2" class="permission" style="display:none" onclick="javascript:roleInfo('${model.id}','edit');"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
+	        
+	          <td><a href="javascript:accountInfo(${model.id});" class="lnk-blue lnk-underline">查询</a></td>
+	          <td class="operation">
+	          	<a id="edit_a" href="javascript:toEdit('${model.id}');" class="edit lnk-blue">修改</a>
+	          	<a id="confirm_a" href="javascript:edit('${model.id}');" class="confirm lnk-yellow" style="display:none">确认</a>
+	          	<a href="javascript:toRemove('${model.id}');" class="del lnk-blue" accountId="${model.id}">删除</a>
+	          </td>
+	          <td><button class="btn" onclick="javascript:initPassword('${model.id}');"><span>初始化密码</span></button></td>
+	        </tr>
+        </#list>
+      </table>
+      <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
+	  </div>
+      <div id="remove_div" class="modal-wrap popDemo" style="display:none;" accountId="">
+        <div class="modal-header">
+          <span class="close">关闭</span></div>
+        <div class="modal-body popbtnBox">
+          <button class="popBtn" onclick="removeAccount();">确认删除</button><button class="popBtn btnGray" onclick="closeDiv('remove_div');">取消</button>
+        </div>
+      </div>
+     <div id="password_div" class="modal-wrap popDemo passwordBox" style="display:none">
+	     <div class="modal-header"><span title="关闭" class="close">关闭</span></div>
+	     <div class="modal-body">
+	     <div class="tipBox ly-clearFix">
+	     <span class="icon32 icon-32-info"></span>
+	     <p class="color-blue fontYH f18"></p>
+	     </div>
+	     <button class="popBtn" onclick="closeDiv('password_div');">确认</button>
+	     </div>
+     </div>
+    <!-- InstanceEndEditable --></div>
+</div>
+<#include "manage/footer.html">
+</body>
+<!-- InstanceEnd --></html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<#include "manage/base.html">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家电子商贸平台</title>
+<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${staticPath}js/jquery.js"></script>
+<script>
+jQuery(document).ready(function($) {
+	$('.edit-password').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.modal-mask').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.modal-mask').slideUp(200);
+	})
+	$('.popBtn').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.modal-mask').slideUp(200);
+	})
+})
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<#include "manage/head.html">
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<#include "manage/menu-path.html">
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList">
+    <script>$("#leftList").load("${basePath}menu.htm");</script>
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+    <div class="welcomeBox text-center">
+     <h2 class="welcome fontYH">欢迎您再次登录</h2>
+     <div class="color-gray6">您上次登陆时间为：2014年6月10日14:50</div>
+     <a class="button button-green button-middle edit-password fontYH f14">修改登录密码</a>
+    </div>
+    <div class="modal-mask" style="display:none">
+     <div class="modal-wrap">
+     <div class="modal-header"><span class="close">关闭</span></div>
+     <div class="modal-body passdwordBox">
+     <div class="form-group">
+     <label>新密码</label>
+     <input type="password" name="loginpassword" id="loginpassword" tabindex="1" class="input input-w270h36" placeholder="请输入新密码"></div>
+     <div class="form-group">
+     <label>确认密码</label>
+     <input type="password" name="newpassword" id="newpassword" tabindex="1" class="input input-w270h36" placeholder="请确认新密码">
+     </div>
+     <button class="popBtn">确认修改</button>
+     </div>
+     </div>
+     </div>
+    <div class="maskdivgen" style="display:none"></div>
+    <!-- InstanceEndEditable --></div>
+</div>
+<!-- 底部-->
+<#include "manage/footer.html">
+</body>
+<!-- InstanceEnd --></html>
