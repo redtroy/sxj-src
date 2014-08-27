@@ -12,7 +12,6 @@
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
 <script type="text/javascript">
-
 function loadPage(currentPage,totalPage){
 	$("#pager").paginate({
 		count 		: totalPage,
@@ -45,7 +44,7 @@ function loadPage(currentPage,totalPage){
 
 $("#pager").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage});
-})
+});
 </script>
 <script>
 jQuery(document).ready(function($) {
@@ -198,7 +197,7 @@ function toEdit(accountId){
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">管理员管理</h2>
       <div id="searchBox" class="ly-clearFix">
-      <form id="search_form" action="javascript:void(0)">
+      <form id="search_form" action="javascript:void(0);">
 	          管理员ID<input type="text" name="accountNo" value="${query.accountNo}">
 	          姓名<input type="text" name="name" value="${query.name}">
 	          帐号<input type="text" name="account" value="${query.account}">

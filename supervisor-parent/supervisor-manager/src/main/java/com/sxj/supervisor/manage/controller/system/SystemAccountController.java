@@ -37,6 +37,9 @@ public class SystemAccountController extends BaseController {
 
 	@RequestMapping("account-list")
 	public String getSysAccountList(SysAccountQuery query, ModelMap map) {
+		if (query != null) {
+			query.setPagable(true);
+		}
 		ResultList<SystemAccountEntity> list = accountService
 				.queryAccounts(query);
 		List<FunctionEntity> functionList = functionService

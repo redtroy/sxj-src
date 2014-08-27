@@ -59,18 +59,20 @@ public class AccountServiceImpl implements IAccountService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<AccountEntity> queryAccounts(AccountQuery query) {
-		QueryCondition<AccountEntity> qc = new QueryCondition<AccountEntity>();
-		Map<String, Object> condition = new HashMap<String, Object>();
-		condition.put("parentId", query.getMemberNo());// 父会员号
-		condition.put("id", query.getAccountId());// 子会员ＩＤ
-		condition.put("accountName", query.getAccountName());// 子会员名称
-		condition.put("state", query.getState());// 子账户状态
-		condition.put("delstate", query.getDelstate());// 删除标记
-		condition.put("startDate", query.getStartDate());// 开始时间
-		condition.put("endDate", query.getEndDate());// 结束时间
-		condition.put("roleId", query.getRoleId());// 权限ＩＤ
-		qc.setCondition(condition);
-		List<AccountEntity> aacountList = accountDao.queryAccount(qc);
+		QueryCondition<AccountEntity> condition = new QueryCondition<AccountEntity>();
+		if (query != null) {
+			condition.addCondition("parentId", query.getMemberNo());// 父会员号
+			condition.addCondition("id", query.getAccountId());// 子会员ＩＤ
+			condition.addCondition("accountName", query.getAccountName());// 子会员名称
+			condition.addCondition("state", query.getState());// 子账户状态
+			condition.addCondition("delstate", query.getDelstate());// 删除标记
+			condition.addCondition("startDate", query.getStartDate());// 开始时间
+			condition.addCondition("endDate", query.getEndDate());// 结束时间
+			condition.addCondition("roleId", query.getRoleId());// 权限ＩＤ
+			condition.setPage(query);
+		}
+		List<AccountEntity> aacountList = accountDao.queryAccount(condition);
+		query.setPage(condition);
 		return aacountList;
 	}
 
