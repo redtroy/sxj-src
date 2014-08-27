@@ -1,1 +1,24 @@
 <#assign staticPath="http://192.168.1.9/sxj/supervisor-manager/" />
+<script>
+function errorInfo(data){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '30%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data
+		    }
+		});
+		//自设关闭
+		$('#close_button').on('click', function(){
+		    layer.close(pageii);
+		});
+		$('#close_span').on('click', function(){
+		    layer.close(pageii);
+		});
+ }
+ </script>
