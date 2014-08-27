@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>supervisor-manager</module>
+		<module>supervisor-website</module>
 		<module>supervisor-dao</module>
 		<module>supervisor-service</module>
 		<module>supervisor-utils</module>
