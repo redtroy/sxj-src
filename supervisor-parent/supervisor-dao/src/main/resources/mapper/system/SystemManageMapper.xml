@@ -8,16 +8,24 @@
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="account" column="ACCOUNT" jdbcType="VARCHAR" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
+		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
+		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
 	</resultMap>
 
 	<!-- 条件查询用户 -->
 	<select id="querySystemAccount" resultMap="SystemAccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD FROM M_SYS_ACCOUNT a
+		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD,a.ACCOUNT_NO FROM M_SYS_ACCOUNT a
 		LEFT JOIN M_ROLE_ACCOUNT r ON a.ID=r.ACCOUNT_ID WHERE 1=1]]>
 		<!-- 用户ID -->
 		<if test="condition.id != null and condition.id!=''">
 			<![CDATA[ AND a.ID = #{condition.id}]]>
+		</if>
+		<if test="condition.accountNo != null and condition.accountNo!=''">
+			<![CDATA[ AND a.ACCOUNT_NO = #{condition.accountNo}]]>
+		</if>
+		<if test="condition.delState != null">
+			<![CDATA[ AND a.DEL_STATE = #{condition.delState}]]>
 		</if>
 		<!-- 用户账户 -->
 		<if test="condition.account != null  and condition.account!=''">
@@ -31,5 +39,6 @@
 		<if test="condition.functionId!= null  and condition.functionId!=''">
 			<![CDATA[ AND r.FUNCTION_ID=#{condition.functionId}]]>
 		</if>
+		
 	</select>
 </mapper>

@@ -12,11 +12,13 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 
 /**
  * 备案实体类
+ * 
  * @author Administrator
  *
  */
@@ -40,6 +42,12 @@ public class RecordEntity extends Pagable implements Serializable {
 	 **/
 	@Column(name = "RECORD_NO")
 	private String recordNo;
+
+	/**
+	 * 标记
+	 */
+	@Column(name = "RECORD_FLAG")
+	private RecordFlagEnum flag;
 
 	/**
 	 * 申请会员ID
@@ -115,16 +123,30 @@ public class RecordEntity extends Pagable implements Serializable {
 
 	/**
 	 * 申请时间
-	**/
+	 **/
 	@Column(name = "APPLY_DATE")
 	private Date applyDate;
-	
+
 	/**
 	 * 受理时间
-	**/
+	 **/
 	@Column(name = "ACCEPT_DATE")
 	private Date acceptDate;
-	
+
+	/**
+	 * 删除标记
+	 */
+	@Column(name = "DEL_STATE")
+	private Boolean delState = false;
+
+	public Boolean getDelState() {
+		return delState;
+	}
+
+	public void setDelState(Boolean delState) {
+		this.delState = delState;
+	}
+
 	public Date getApplyDate() {
 		return applyDate;
 	}
@@ -205,7 +227,6 @@ public class RecordEntity extends Pagable implements Serializable {
 		this.memberNameB = memberNameB;
 	}
 
-
 	public String getImgPath() {
 		return imgPath;
 	}
@@ -213,8 +234,6 @@ public class RecordEntity extends Pagable implements Serializable {
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
 	}
-
-
 
 	public RecordTypeEnum getType() {
 		return type;
@@ -255,4 +274,13 @@ public class RecordEntity extends Pagable implements Serializable {
 	public void setRefContractNo(String refContractNo) {
 		this.refContractNo = refContractNo;
 	}
+
+	public RecordFlagEnum getFlag() {
+		return flag;
+	}
+
+	public void setFlag(RecordFlagEnum flag) {
+		this.flag = flag;
+	}
+
 }

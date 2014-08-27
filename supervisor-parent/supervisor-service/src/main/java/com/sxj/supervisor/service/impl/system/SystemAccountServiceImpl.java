@@ -13,6 +13,7 @@ import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.system.SysAccountQuery;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
@@ -35,6 +36,11 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	public void addAccount(SystemAccountEntity account, String[] functionIds)
 			throws ServiceException {
 		try {
+			SystemAccountEntity oldAccount = getAccountByAccount(account
+					.getAccount());
+			if (oldAccount != null) {
+				throw new ServiceException("用户账户已存在");
+			}
 			accountDao.addSystemAccount(account);
 			if (functionIds != null && functionIds.length > 0) {
 				List<RoleEntity> roles = new ArrayList<RoleEntity>();
@@ -99,7 +105,10 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	@Transactional
 	public void deleteAccount(String id) throws ServiceException {
 		try {
-			accountDao.deleteSystemAccount(id);
+			SystemAccountEntity account = new SystemAccountEntity();
+			account.setId(id);
+			account.setDelState(true);
+			accountDao.updateSystemAccount(account);
 			roleServce.removeRoles(id);
 		} catch (Exception e) {
 			throw new ServiceException("删除系统用户信息错误", e);
@@ -134,16 +143,20 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	public ResultList<SystemAccountEntity> queryAccounts(SysAccountQuery query)
 			throws ServiceException {
 		try {
-
 			QueryCondition<SystemAccountEntity> condition = new QueryCondition<SystemAccountEntity>();
 			if (query != null) {
+				query.setPagable(true);
 				condition.addCondition("id", query.getId());
+				condition.addCondition("accountNo", query.getAccountNo());
+				condition.addCondition("delState", query.getDelState());
 				condition.addCondition("name", query.getName());
 				condition.addCondition("account", query.getAccount());
 				condition.addCondition("functionId", query.getFunctionId());
+				condition.setPage(query);
 			}
 			List<SystemAccountEntity> list = accountDao
 					.querySystemAccount(condition);
+			query.setPage(condition);
 			ResultList<SystemAccountEntity> res = new ResultListImpl<SystemAccountEntity>();
 			res.setResults(list);
 			return res;
@@ -160,7 +173,7 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			String password = StringUtils.getLengthStr(rondom + "", 6, '0');
 			SystemAccountEntity account = new SystemAccountEntity();
 			account.setId(accountId);
-			account.setPassword(password);
+			account.setPassword(EncryptUtil.md5Hex(password));
 			accountDao.updateSystemAccount(account);
 			return password;
 		} catch (Exception e) {

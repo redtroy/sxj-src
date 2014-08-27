@@ -12,6 +12,7 @@
 		<result property="regDate" column="REG_DATE" jdbcType="DATE" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
+		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
 	</resultMap>
 
 	<!-- 子账户高级查询 -->
@@ -29,8 +30,11 @@
 		<if test="condition.accountName != null and condition.accountName != ''">
 			<![CDATA[AND A.ACCOUNT_NAME = #{condition.accountName}]]>
 		</if>
-		<if test="condition.state != null and condition.state != ''">
+		<if test="condition.state != null">
 			<![CDATA[AND A.STATE = #{condition.state}]]>
+		</if>
+		<if test="condition.delstate != null ">
+			<![CDATA[AND A.DEL_STATE = #{condition.delstate}]]>
 		</if>
 		<!-- 子会员注册时间段 -->
 		<if test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">

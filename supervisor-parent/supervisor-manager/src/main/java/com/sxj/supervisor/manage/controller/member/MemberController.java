@@ -30,7 +30,7 @@ public class MemberController extends BaseController {
 	 * @param map
 	 * @return
 	 */
-	@RequestMapping("memberList") 
+	@RequestMapping("memberList")
 	public String memberList(MemberQuery query, ModelMap map) {
 		MemberTypeEnum[] types = MemberTypeEnum.values();
 		MemberCheckStateEnum[] state = MemberCheckStateEnum.values();
@@ -56,9 +56,10 @@ public class MemberController extends BaseController {
 		map.put("password", password);
 		return map;
 	}
-	
+
 	/**
 	 * 修改会员资料
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -69,29 +70,31 @@ public class MemberController extends BaseController {
 		map.put("isOK", "ok");
 		return map;
 	}
-	
+
 	/**
 	 * 修改账户状态
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping("editState")
 	public @ResponseBody Map<String, String> editState(String id) {
-		String state=memberService.editState(id);
+		String state = memberService.editState(id);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		map.put("state", state);
 		return map;
 	}
-	
+
 	/**
 	 * 修改审核状态
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping("editCheckState")
 	public @ResponseBody Map<String, String> editCheckState(String id) {
-		String state=memberService.editCheckState(id);
+		String state = memberService.editCheckState(id);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		map.put("state", state);

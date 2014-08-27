@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IMemberDao;
-import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
@@ -17,8 +16,6 @@ import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
-import com.sxj.util.persistent.ResultList;
-import com.sxj.util.persistent.ResultListImpl;
 
 @Service
 @Transactional
@@ -40,11 +37,12 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	public void modifyMember(MemberEntity member) {
-		MemberEntity mb=menberDao.getMember(member.getId());
+		MemberEntity mb = menberDao.getMember(member.getId());
 		mb.setName(member.getName());
 		mb.setbLicenseNo(member.getbLicenseNo());
 		mb.setEnergyNo(member.getEnergyNo());
 		mb.setContacts(member.getContacts());
+		mb.setType(member.getType());
 		mb.setPhoneNo(member.getPhoneNo());
 		mb.setAddress(member.getAddress());
 		mb.setTelNum(member.getTelNum());
@@ -81,7 +79,11 @@ public class MemberServiceImpl implements IMemberService {
 			condition.put("bLicenseNo", query.getbLicenseNo());// 营业执照号
 			condition.put("energyNo", query.getEnergyNo());// 节能标识号
 			condition.put("type", query.getMemberType());// 会员类型
-			condition.put("state", query.getMemberState());// 状态
+			if (query.getCheckState() != null && query.getCheckState() == 3) {
+				condition.put("state", 1);// 状态
+			} else {
+				condition.put("checkState", query.getCheckState());
+			}
 			condition.put("startDate", query.getStartDate());// 开始时间
 			condition.put("endDate", query.getEndDate());// 结束时间
 			qc.setCondition(condition);
@@ -117,8 +119,7 @@ public class MemberServiceImpl implements IMemberService {
 		}
 
 	}
-    
-	
+
 	/**
 	 * 更改账户状态
 	 */
@@ -132,28 +133,30 @@ public class MemberServiceImpl implements IMemberService {
 			return MemberStatesEnum.stop.getName();
 		} else {
 			member.setState(MemberStatesEnum.normal);
-            menberDao.updateMember(member);;
-            return MemberStatesEnum.normal.getName();
+			menberDao.updateMember(member);
+			;
+			return MemberStatesEnum.normal.getName();
 		}
 	}
-    
-	
+
 	/**
 	 * 更改审核状态
 	 */
 	@Override
 	public String editCheckState(String id) {
 		MemberEntity member = menberDao.getMember(id);
-		if (member.getCheckState().getId().intValue() ==MemberCheckStateEnum.unaudited.getId().intValue()){
+		if (member.getCheckState().getId().intValue() == MemberCheckStateEnum.unaudited
+				.getId().intValue()) {
 			member.setCheckState(MemberCheckStateEnum.unrecognized);
 			menberDao.updateMember(member);
 			return MemberCheckStateEnum.unrecognized.getName();
-		}else if (member.getCheckState().getId().intValue()==MemberCheckStateEnum.unrecognized.getId().intValue()){
+		} else if (member.getCheckState().getId().intValue() == MemberCheckStateEnum.unrecognized
+				.getId().intValue()) {
 			member.setCheckState(MemberCheckStateEnum.certified);
 			menberDao.updateMember(member);
 			return MemberCheckStateEnum.certified.getName();
 		}
-		 return MemberCheckStateEnum.certified.getName();
+		return MemberCheckStateEnum.certified.getName();
 	}
 
 }

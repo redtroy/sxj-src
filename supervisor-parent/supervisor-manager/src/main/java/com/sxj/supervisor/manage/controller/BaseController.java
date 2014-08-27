@@ -9,6 +9,10 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordTypeEnum;
+
 public class BaseController {
 
 	public static final String LOGIN = "manage/login";
@@ -23,15 +27,24 @@ public class BaseController {
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(
 				dateFormat, false));
-
+		binder.registerCustomEditor(MemberTypeEnum.class,
+				new EnumPropertyEditorSupport<MemberTypeEnum>(
+						MemberTypeEnum.class));
+		binder.registerCustomEditor(RecordTypeEnum.class,
+				new EnumPropertyEditorSupport<RecordTypeEnum>(
+						RecordTypeEnum.class));
+		binder.registerCustomEditor(ContractTypeEnum.class,
+				new EnumPropertyEditorSupport<ContractTypeEnum>(
+						ContractTypeEnum.class));
+		binder.registerCustomEditor(MemberTypeEnum.class,
+				new EnumPropertyEditorSupport<MemberTypeEnum>(
+						MemberTypeEnum.class));
 	}
 
 	protected String getBasePath(HttpServletRequest request) {
 		return request.getScheme() + "://" + request.getServerName() + ":"
 				+ request.getServerPort() + request.getContextPath() + "/";
 	}
-	
-	
 
 	// @RequestMapping("login")
 	// public String ToLogin(String error, ModelMap model)

@@ -68,11 +68,11 @@
 			<![CDATA[AND ENERGY_NO = #{condition.energyNo}]]>
 		</if>
 		<!-- 会员类型 -->
-		<if test="condition.type != null and condition.type != ''">
+		<if test="condition.type != null ">
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
 		<!-- 会员状态 -->
-		<if test="condition.checkState != null and condition.checkState != ''">
+		<if test="condition.checkState != null ">
 			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>
 		</if>
 		<!-- 会员注册时间段 -->

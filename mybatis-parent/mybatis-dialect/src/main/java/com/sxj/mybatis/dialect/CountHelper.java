@@ -43,7 +43,7 @@ public class CountHelper
                 || !isBracketCanPartnership(querySelect.substring(orderIndex,
                         querySelect.length())))
         {
-            throw new RuntimeException("My SQL 分页必须要有Order by 语句!");
+        	return querySelect.length();
         }
         return orderIndex;
     }

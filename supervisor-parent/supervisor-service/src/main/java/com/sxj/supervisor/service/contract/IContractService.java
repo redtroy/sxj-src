@@ -35,6 +35,13 @@ public interface IContractService {
 	public ContractModel getContract(String id);
 	
 	/**
+	 * 根据合同号获取合同
+	 *
+	 * @param    id
+	**/
+	public ContractModel getContractByContractNo(String contractNo);
+	
+	/**
 	 * 查询合同列表
 	 *
 	 * @param    query
@@ -86,4 +93,6 @@ public interface IContractService {
 	 * @param state
 	 */
 	public void modifyCheckState(String contractId, Integer state);
+	
+	
 }

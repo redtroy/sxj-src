@@ -17,11 +17,11 @@ public @interface Sn
     
     String table() default "T_SN";
     
-    String stub() default "";
+    String stub() default "F_SN_NAME";
     
     String stubValue() default "DEFAULT";
     
-    String sn() default "ID";
+    String sn() default "F_SN_NUMBER";
     
     String pattern() default "0000";
 }

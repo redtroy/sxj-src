@@ -90,7 +90,7 @@ public class PaginationInterceptor implements Interceptor
                     (page.getCurrentPage() - 1) * page.getShowCount(),
                     page.getShowCount());
             //            ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql); 
-            Reflections.invokeSetter(boundSql, "sql", pageSql);// 将分页sql语句反射回BoundSql.
+            Reflections.setFieldValue(boundSql, "sql", pageSql);// 将分页sql语句反射回BoundSql.
             log.debug("分页sql：" + boundSql.getSql());
         }
         return invocation.proceed();

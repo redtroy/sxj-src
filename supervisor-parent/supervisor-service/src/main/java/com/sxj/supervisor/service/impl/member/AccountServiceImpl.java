@@ -10,13 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IAccountDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
-import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
-import com.sxj.util.persistent.ResultList;
 
 @Service
 @Transactional
@@ -67,6 +65,7 @@ public class AccountServiceImpl implements IAccountService {
 		condition.put("id", query.getAccountId());// 子会员ＩＤ
 		condition.put("accountName", query.getAccountName());// 子会员名称
 		condition.put("state", query.getState());// 子账户状态
+		condition.put("delstate", query.getDelstate());// 删除标记
 		condition.put("startDate", query.getStartDate());// 开始时间
 		condition.put("endDate", query.getEndDate());// 结束时间
 		condition.put("roleId", query.getRoleId());// 权限ＩＤ
@@ -80,8 +79,10 @@ public class AccountServiceImpl implements IAccountService {
 	 */
 	@Override
 	public void reomveAccount(String id) {
-		accountDao.deleteAccount(id);
-
+		AccountEntity account = getAccount(id);
+		account.setDelstate(true);
+		accountDao.updateAccount(account);
+		// accountDao.deleteAccount(id);
 	}
 
 	/**
@@ -96,13 +97,12 @@ public class AccountServiceImpl implements IAccountService {
 			accountDao.updateAccount(account);
 			return MemberStatesEnum.stop.getName();
 		} else {
-            account.setState(MemberStatesEnum.normal);
-            accountDao.updateAccount(account);
-            return MemberStatesEnum.normal.getName();
+			account.setState(MemberStatesEnum.normal);
+			accountDao.updateAccount(account);
+			return MemberStatesEnum.normal.getName();
 		}
 	}
-    
-	
+
 	/**
 	 * 初始化密码
 	 */
