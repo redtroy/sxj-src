@@ -37,8 +37,8 @@
 			<![CDATA[AND A.DEL_STATE = #{condition.delstate}]]>
 		</if>
 		<!-- 子会员注册时间段 -->
-		<if test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">
-			<![CDATA[AND A.REG_DATE >=#{condition.startTime} AND A.REG_DATE <= #{condition.endTime}]]>
+		<if test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
+			<![CDATA[AND A.REG_DATE >=#{condition.startDate} AND A.REG_DATE <= #{condition.endDate}]]>
 		</if>
 	</select>
 </mapper>

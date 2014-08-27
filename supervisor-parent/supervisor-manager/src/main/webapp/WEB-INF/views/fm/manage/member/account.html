@@ -6,8 +6,11 @@
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
 <link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${staticPath}js/datepicker.css">
 <script src="${staticPath}js/jquery.js"></script>
 <script src="${staticPath}js/jquery.paginate.js"></script>
+<script src="${staticPath}js/datepicker.js"></script>
+<script src="${staticPath}js/datepicker.zh-CN.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -28,17 +31,7 @@ function loadPage(currentPage,totalPage){
 		images					: false,
 		mouse					: 'press',
 		onChange				: function(page){
-			var params=$("#search_form").serialize();
-			params=params+"&currentPage="+page;
-			$.post("${basePath}system/account-list.htm",params,function(data){
-				var res=$(data).find("#rightBar");
-				$("#rightBar").empty();
-				$("#rightBar").append(res.html());
-				var totalPage=$("#pager").attr("totalPage");
-				var currentPage=$("#pager").attr("currentPage");
-				loadPage(currentPage,totalPage);
-				
-			});
+			query(page);
 		}
 	});
 }
@@ -50,21 +43,30 @@ $("#pager").ready(function(){
 <Script>
    //根据ID删除子帐号
    function del(id){
-	   $.post("delAccount.htm",{id:id},function(data){
-		   
-	   })
-	   $("#"+id).remove();
+		var r=confirm("确认删除吗?");
+	    if (r==true){
+	    	 $.post("${basePath}member/account/delAccount.htm",{id:id},function(data){
+	    		 if (data.isOK=='ok'){
+	   			  query();
+	   		   }
+	  	   });
+	    }
+	  
    }
    //查询
-   function query(){
+   function query(page){
 	   //$("#serchAccount").submit();  
 	   var params=$("#serchAccount").serialize();
+	   if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
 		$.post("${basePath}member/account/accountList.htm.htm",params,function(data){
-			var res=$(data).find("#rightBar");
-			$("#rightBar").empty();
-			$("#rightBar").append(res.html());
-			var totalPage=$("#pager").attr("totalPage");
-			var currentPage=$("#pager").attr("currentPage");
+			var res=$(data).find("#rightBar").children("#res_table");
+			var pager=$(data).find("#rightBar").children("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
 			loadPage(currentPage,totalPage);
 		});
 	   
@@ -87,27 +89,25 @@ $("#pager").ready(function(){
 	   var anobj=$("#"+id).children().eq(2);//子帐号名称TD对象
 	   var nobj=$("#"+id).children().eq(3);//姓名TD对象
 	   var ok=$("#"+id).children().eq(7);//确认的对象
-	   $.post("editAccount.htm",{id:id,accountName:accountName,name:name},function(data){
-		   
+	   $.post("${basePath}member/account/editAccount.htm",{id:id,accountName:accountName,name:name},function(data){
+		   if (data.isOK=='ok'){
+				  query();
+			   }
 	   })
-	   anobj.html(accountName);
-	   nobj.html(name);
-	   ok.html('<a  class="edit" onclick="edit('+id+')">修改</a><a href="#" class="del" onclick="del('+id+')">删除</a>');
    }
    //初始化密码
    function resetPwd(id){
-	   $.post("initializePwd.htm",{id:id},function(data){
+	   $.post("${basePath}member/account/initializePwd.htm",{id:id},function(data){
 		   if (data.isOK=='ok'){
 			   alert('初始密码为:'+data.password+',谢谢!');
 		   }
 	   })
    }
    //更改状态
-   function checkState(id,obj){
-	   
-	  $.post("editState.htm",{id:id},function(data){
+   function checkState(id,stateId){
+	  $.post("${basePath}member/account/editState.htm",{'id':id,'state':stateId},function(data){
 		  if (data.isOK=='ok'){
-			  $(obj).children().text(data.state)
+			  query();
 		   }
 	  })
 	
@@ -139,6 +139,7 @@ $("#pager").ready(function(){
           </select>
 	状态
           <select name="state">
+          <option value="">-请选择-</option>
            <#list states as state>
            	<#if state.id==query.state>
             <option value="${state.getId()}" selected="selected">${state.getName()}</option>
@@ -149,15 +150,15 @@ $("#pager").ready(function(){
           </select>
         </p>
         <p> 会员注册时间段
-          <input type="text" name="startDate" value="${query.startDate}">
+          <input type="text" name="startDate" value="${query.startDate}" datepicker id="time1">
           -
-          <input type="text" name="endDate" value="${query.endDate}">
+          <input type="text" name="endDate" value="${query.endDate}" datepicker id="time2">
           <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
         </p>
         </form>
     </div>
      <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="10%" />
         <col width="10%"/>
         <col width="10%"/>
@@ -185,7 +186,11 @@ $("#pager").ready(function(){
           <td>${account.accountName}</td>
           <td>${account.name}</td>
           <td>合同管理</td>
-          <td><button class="btn btn-red" onclick="checkState(${account.id},this)"><span>${account.state.getName()}</span></button></td>
+          <#if account.state.id==0>
+          <td><button class="btn btn-red" onclick="checkState(${account.id},1)"><span>解冻</span></button></td>
+          <#elseif account.state.id==1>
+          <td><button class="btn btn-red" onclick="checkState(${account.id},0)"><span>冻结</span></button></td>
+          </#if>
           <td>${account.regDate?date}</td>
           <td class="operation"><a  class="edit" onclick="edit(${account.id})">修改</a><a href="#" class="del" onclick="del(${account.id})">删除</a></td>
           <td><button class="btn" onclick="resetPwd(${account.id})"><span>初始化密码</span></button></td>

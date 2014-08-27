@@ -244,9 +244,9 @@ Intense( elements );
         </tr>
         <#list memberList as member>
         <tr>
-          <td><a href="#" class="lnk-blue" onclick="openDiv(${member.getMemberNo()})">${member.getMemberNo()}</a></td>
+          <td><a href="#" class="lnk-blue" onclick="openDiv(${member.memberNo})">${member.memberNo}</a></td>
           <td>${member.name}</td>
-          <td>${member.getContacts()}</td>
+          <td>${member.contacts}</td>
           <td>${member.getbLicenseNo()}</td>
           <td>${member.getEnergyNo()}</td>
           <td>${member.type.getName()}</td>
@@ -262,7 +262,7 @@ Intense( elements );
           <td><button class="btn btn-red" onclick="checkState(${member.id},this)"><span>${member.state.getName()}</span></button></td>
           <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd(${member.id})"><span>初始化密码</span></button></td>
         </tr>
-        <tr class="tableInfo" style="display:none;" id="${member.getMemberNo()}">
+        <tr class="tableInfo" style="display:none;" id="${member.memberNo}">
           <td colspan="11">
           <div class="infoBox">
           <ul class="ly-clearFix">
