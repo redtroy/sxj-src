@@ -254,4 +254,17 @@ public class HierarchicalCacheManager
         return (cache != null) ? cache.keys() : null;
     }
     
+    public final static Long size(int level, String name) throws CacheException
+    {
+        Cache cache = _GetCache(level, name, false);
+        return (cache != null) ? cache.size() : 0l;
+    }
+    
+    public final static List values(int level, String name)
+            throws CacheException
+    {
+        Cache cache = _GetCache(level, name, false);
+        return (cache != null) ? cache.values() : null;
+    }
+    
 }

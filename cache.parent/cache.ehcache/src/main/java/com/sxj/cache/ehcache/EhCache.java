@@ -251,4 +251,16 @@ public class EhCache implements Cache, CacheEventListener
     {
     }
     
+    @Override
+    public Long size() throws CacheException
+    {
+        return (long) keys().size();
+    }
+    
+    @Override
+    public List values() throws CacheException
+    {
+        return null;
+    }
+    
 }
