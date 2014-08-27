@@ -25,8 +25,8 @@
 		<property name="realm" ref="myShiroRealmService" />
 		<!-- session 管理器 -->
 		<property name="sessionManager" ref="sessionManager" />
-		<!-- 缓存管理器 <property name="cacheManager" ref="shiroCacheManager" /> -->
-
+		<!-- 缓存管理器  -->
+		<property name="cacheManager" ref="shiroCacheManager"></property>
 		<property name="rememberMeManager.cookie.name" value="rememberMe" />
 		<property name="rememberMeManager.cookie.path" value="/" />
 		<property name="rememberMeManager.cookie.maxAge" value="1209600" />
@@ -48,7 +48,9 @@
 	<!-- <bean id="sessionListener" class="org.springrain.frame.listener.SessionListener" 
 		/> -->
 
-
+	<bean id="shiroCacheManager" class="com.sxj.supervisor.manage.login.ShiroRedisCacheManager">
+		<property name="level" value="2"></property>
+	</bean>
 
 	<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
 	<bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
