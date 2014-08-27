@@ -89,11 +89,11 @@
 			<value>
 				/index.htm=user
 				/unauth.htm = anon
-				/contract/**=user
-				/member/account/**=user
-				/member/**=user
-				/record/**=user
-				/system/**=user
+				/contract/**=user,frameperms
+				/member/account/**=user,frameperms
+				/member/**=user,frameperms
+				/record/**=user,frameperms
+				/system/**=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->
