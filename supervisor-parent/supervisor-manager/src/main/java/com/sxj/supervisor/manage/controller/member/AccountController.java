@@ -25,12 +25,16 @@ public class AccountController extends BaseController {
 
 	@RequestMapping("accountList")
 	public String memberList(AccountQuery query, ModelMap map) {
+		if (query != null) {
+			query.setPagable(true);
+		}
 		MemberAuthorityEnum[] mas = MemberAuthorityEnum.values();
 		AccountStatesEnum[] states = AccountStatesEnum.values();
 		List<AccountEntity> list = accountService.queryAccounts(query);
 		map.put("mas", mas);
 		map.put("states", states);
 		map.put("list", list);
+		map.put("query", query);
 		return "manage/member/account";
 	}
 

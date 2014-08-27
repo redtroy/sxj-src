@@ -10,12 +10,13 @@
 		<result property="amount" column="AMOUNT" jdbcType="INTEGER" />
 		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
+		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
 	<select id="queryBacths" resultMap="BacthResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID, CONTRACT_ID, RFID_NO, AMOUNT, BATCH_ITEMS,BATCH_NO FROM M_CONTRACT_BATCH
+		<![CDATA[SELECT ID, CONTRACT_ID, RFID_NO, AMOUNT, BATCH_ITEMS,BATCH_NO,UPDATE_STATE FROM M_CONTRACT_BATCH
 			WHERE CONTRACT_ID=#{condition.contractId}]]>
 	</select>
 </mapper>

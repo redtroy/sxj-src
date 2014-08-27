@@ -22,7 +22,7 @@ public interface IContractModifyDao {
 	 * 新增变更合同
 	 * @param modifyContractEntity
 	 */
-	@BatchInsert
+	@Insert
 	public void addModify(ModifyContractEntity modifyContractEntity);
 	/**
 	 * 查询变更合同

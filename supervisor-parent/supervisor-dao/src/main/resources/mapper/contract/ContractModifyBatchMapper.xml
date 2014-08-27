@@ -15,7 +15,6 @@
 	<!-- 条件查询合同批次 -->
 	<select id="queryBacths" resultMap="ModifyBacthResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID, MODIFY_ID,　RFID_NO,AMOUNT,BATCH_ITEMS,RECORD_NO,BATCH_NO　FROM
-　M_CONTRACT_MODIFY_BATCH　where MODIFY_ID=#{condition.modifyId}]]>
+		<![CDATA[SELECT ID,MODIFY_ID,RFID_NO,AMOUNT,BATCH_ITEMS,RECORD_NO,BATCH_NO FROM M_CONTRACT_MODIFY_BATCH where MODIFY_ID=#{condition.modifyId}]]>
 	</select>
 </mapper>

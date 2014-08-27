@@ -8,6 +8,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
+import com.sxj.supervisor.entity.contract.ModifyContractEntity;
+import com.sxj.supervisor.entity.contract.ModifyItemEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
@@ -16,6 +18,7 @@ import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 
@@ -82,14 +85,27 @@ public class ContractController extends BaseController {
 	@RequestMapping("changes")
 	public String changesContract(ModelMap model, String contractId,String recordId) {
 		ContractModel contractModel = contractService.getContract("1");
-		RecordEntity  record= recordService.getRecord(recordId);
+		RecordEntity  record= recordService.getRecord("1");
 		model.put("contractModel", contractModel);
 		model.put("record", record);
 		return "manage/contract/contract-changes";
 	}
 	@RequestMapping("saveChanges")
-	public String saveChanges(ContractModifyModel model, String contractId,String recordNo,List<ContractItemEntity> itemList) {
-		contractService.changeContract(contractId, model, recordNo,itemList);
+	public String saveChanges(ContractModifyControllerModel contractModifyModel) {
+		ContractModifyModel model = new ContractModifyModel();
+		model.setModifyContract(contractModifyModel.getModifyContract());
+		model.setModifyBatchList(contractModifyModel.getModifyBatchList());
+		model.setModifyItemList(contractModifyModel.getModifyItemList());
+		contractService.changeContract(contractModifyModel.getContractId(),model,contractModifyModel.getRecordNo(),
+				contractModifyModel.getItemList());
 		return "manage/contract/contract-list";
+	}
+	@RequestMapping("replenish")
+	public String replenishContract(ModelMap model, String contractId,String recordId){
+		ContractModel contractModel = contractService.getContract("1");
+		RecordEntity  record= recordService.getRecord("1");
+		model.put("contractModel", contractModel);
+		model.put("record", record);
+		return "manage/contract/contract-replenish";
 	}
 }

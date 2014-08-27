@@ -29,7 +29,7 @@ public class ModifyContractEntity extends Pagable implements Serializable {
 	 * 主键
 	 **/
 	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	/**

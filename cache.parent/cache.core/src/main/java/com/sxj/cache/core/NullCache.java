@@ -77,4 +77,16 @@ public class NullCache implements Cache
     {
     }
     
+    @Override
+    public Long size() throws CacheException
+    {
+        return 0l;
+    }
+    
+    @Override
+    public List values() throws CacheException
+    {
+        return null;
+    }
+    
 }

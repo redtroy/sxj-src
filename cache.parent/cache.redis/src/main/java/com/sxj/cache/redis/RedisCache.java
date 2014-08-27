@@ -205,6 +205,31 @@ public class RedisCache implements Cache
         }
     }
     
+    private List originalKeys() throws CacheException
+    {
+        Jedis cache = RedisCacheProvider.getResource();
+        boolean broken = false;
+        try
+        {
+            List<String> keys = new ArrayList<String>();
+            keys.addAll(cache.keys(region + ":*"));
+            for (int i = 0; i < keys.size(); i++)
+            {
+                keys.set(i, keys.get(i));
+            }
+            return keys;
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new CacheException(e);
+        }
+        finally
+        {
+            RedisCacheProvider.returnResource(cache, broken);
+        }
+    }
+    
     @Override
     public void clear() throws CacheException
     {
@@ -229,5 +254,18 @@ public class RedisCache implements Cache
     public void destroy() throws CacheException
     {
         this.clear();
+    }
+    
+    @Override
+    public Long size() throws CacheException
+    {
+        
+        return (long) keys().size();
+    }
+    
+    @Override
+    public List values() throws CacheException
+    {
+        return null;
     }
 }

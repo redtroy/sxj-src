@@ -6,11 +6,38 @@
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
 <link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${staticPath}js/jquery.js"></script>
 <link rel="stylesheet" href="${staticPath}js/datepicker.css">
+<script src="${staticPath}js/jquery.js"></script>
 <script src="${staticPath}js/datepicker.js"></script>
 <script src="${staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${staticPath}js/intense.js"></script>
+<script src="${staticPath}js/jquery.paginate.js"></script>
+<script type="text/javascript">
+function loadPage(currentPage,totalPage){
+	$("#pager").paginate({
+		count 		: totalPage,
+		start 		: currentPage,
+		display     : 10,
+		border					: true,
+		border_color			: '#CCC',
+		text_color  			: '#333',
+		background_color    	: '#FFF',	
+		border_hover_color		: '#ff4400',
+		text_hover_color  		: '#ff4400',
+		background_hover_color	: '#fff', 
+		images					: false,
+		mouse					: 'press',
+		onChange				: function(page){
+			alert("ddd");
+		}
+	});
+}
+
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage});
+});
+</script>
+
 <script>
 jQuery(document).ready(function($) {
 	/*
@@ -21,11 +48,11 @@ jQuery(document).ready(function($) {
 	*/
 	$('.modal-header .close').click(function(){
 		$('.popDemo').slideUp(200);
-	})
+	});
 	$('.passwordBox .popBtn').click(function(){
 		$('.popDemo').slideUp(200);
-	})
-})
+	});
+});
     function query(){
 	$("#serch_form").submit();
 	/*
@@ -56,7 +83,7 @@ jQuery(document).ready(function($) {
 			   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
 			   $('.popDemo').slideDown(200);
 		   }
-	   })
+	   });
    }
    //收起菜单
    function swallowing(lable){
@@ -92,7 +119,7 @@ jQuery(document).ready(function($) {
 			 if (data.isOK=='ok'){
 				 alert('修改成功！')
 			}
-		 },"json")
+		 },"json");
 	    
    }
    //更改账户状态
@@ -101,7 +128,7 @@ jQuery(document).ready(function($) {
 		  if (data.isOK=='ok'){
 			  $(obj).children().text(data.state)
 		   }
-	  })
+	  });
    }
    
  //更改审核状态
@@ -117,10 +144,8 @@ jQuery(document).ready(function($) {
 			     $(obj).parent().html('<em class="state verified">已认证</em>');  
 			  }
 		   }
-	  })
+	  });
    }
-</script>
-<script>
 window.onload = function() {
 var elements = document.querySelectorAll( '.demo-image' );
 Intense( elements );
@@ -134,7 +159,7 @@ Intense( elements );
 <#include "manage/head.html"> 
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
-<!-- InstanceEndEditable -->
+<#include "manage/menu-path.html">
 <div id="mainBg" class="ly-clearFix yard-1200">
  	<div id="leftList">
  	<script>$("#leftList").load("${basePath}menu.htm");</script>
@@ -190,9 +215,7 @@ Intense( elements );
         </p>
         </form>
       </div>
-      <div class="pageBox">
-        <div><span class="sumP">共<strong>56</strong>条记录</span><span class="curP">1</span><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#" class="pnext"><span title="翻至下一页">&gt;</span></a></div>
-      </div>
+      <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="6%" />
         <col width="10%"/>
@@ -221,9 +244,9 @@ Intense( elements );
         </tr>
         <#list memberList as member>
         <tr>
-          <td><a href="#" class="lnk-blue" onclick="openDiv(${member.getMemberNo()})">${member.getMemberNo()}</a></td>
+          <td><a href="#" class="lnk-blue" onclick="openDiv(${member.memberNo})">${member.memberNo}</a></td>
           <td>${member.name}</td>
-          <td>${member.getContacts()}</td>
+          <td>${member.contacts}</td>
           <td>${member.getbLicenseNo()}</td>
           <td>${member.getEnergyNo()}</td>
           <td>${member.type.getName()}</td>
@@ -239,7 +262,7 @@ Intense( elements );
           <td><button class="btn btn-red" onclick="checkState(${member.id},this)"><span>${member.state.getName()}</span></button></td>
           <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd(${member.id})"><span>初始化密码</span></button></td>
         </tr>
-        <tr class="tableInfo" style="display:none;" id="${member.getMemberNo()}">
+        <tr class="tableInfo" style="display:none;" id="${member.memberNo}">
           <td colspan="11">
           <div class="infoBox">
           <ul class="ly-clearFix">
@@ -281,12 +304,12 @@ Intense( elements );
           <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" id="phoneNo1"/></li>
           <li><label>公司地址</label><input type="text" value="${member.address}" id="address1"/></li>
           <li><label>固定电话</label><input type="text" value="${member.telNum}" id="telNum1"/></li>
-          <li><label>注册时间</label id="regDate1">${member.regDate?date}</li>
-          <li><label>认证时间</label id="authorDate1">${member.authorDate?date}</li>
+          <li><label>注册时间</label>${member.regDate?date}</li>
+          <li><label>认证时间</label>${member.authorDate?date}</li>
           <li><label>审核状态</label><em class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
           <li><label>帐户状态</label><em class="state verified" id="state1">${member.state.getName()}</em></li>
-          <li><label>子帐号</label id="accountNum1">${member.getAccountNum()}</li>
-          <li><label>总交易额</label id="totalAmount1">${member.totalAmount}元</li>
+          <li><label>子帐号</label>${member.getAccountNum()}</li>
+          <li><label>总交易额</label>${member.totalAmount}元</li>
           </ul>
           <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="edit(${member.id})">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing(${member.getMemberNo()})">收起</a> </div>
           </div>
@@ -294,8 +317,6 @@ Intense( elements );
         </tr>
         </#list>
       </table>
-      <div class="pageBox">
-      <div><span class="sumP">共<strong>57</strong>条记录</span><span class="curP">1</span><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#" class="pnext"><span title="翻至下一页">&gt;</span></a></div></div>
     <div class="modal-wrap popDemo passwordBox" style="display:none">
      <div class="modal-header"><span title="关闭" class="close">关闭</span></div>
      <div class="modal-body">

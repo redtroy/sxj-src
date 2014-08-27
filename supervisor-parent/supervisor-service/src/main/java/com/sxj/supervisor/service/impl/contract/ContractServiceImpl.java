@@ -236,14 +236,6 @@ public class ContractServiceImpl implements IContractService {
 	@Override
 	@Transactional
 	public ContractModel getContract(String id) throws ServiceException {
-<<<<<<< HEAD
-		try {
-			//拆分静态方法---现在没时间
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-=======
->>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 		ContractModel contractModel = new ContractModel();
 		ContractEntity contract = contractDao.getContract(id);// 合同主体
 		if (contract != null) {

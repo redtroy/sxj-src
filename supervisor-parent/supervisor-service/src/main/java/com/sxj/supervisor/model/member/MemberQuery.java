@@ -43,16 +43,6 @@ public class MemberQuery extends Pagable implements Serializable {
 		this.checkState = checkState;
 	}
 
-	public Pagable getPage() {
-		return page;
-	}
-
-	public void setPage(Pagable page) {
-		this.page = page;
-	}
-
-	private Pagable page;
-
 	public String getMemberNo() {
 		return memberNo;
 	}
