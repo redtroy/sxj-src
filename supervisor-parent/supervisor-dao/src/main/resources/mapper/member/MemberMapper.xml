@@ -12,6 +12,7 @@
 		<result property="area" column="AREA" jdbcType="VARCHAR" />
 		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR" />
 		<result property="energyNo" column="ENERGY_NO" jdbcType="VARCHAR" />
+		<result property="code" column="CODE" jdbcType="VARCHAR" />
 		<result property="phoneNo" column="PHONE_NO" jdbcType="VARCHAR" />
 		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
 		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />

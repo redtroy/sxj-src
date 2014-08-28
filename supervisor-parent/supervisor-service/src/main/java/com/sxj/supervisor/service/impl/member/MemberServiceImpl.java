@@ -172,4 +172,19 @@ public class MemberServiceImpl implements IMemberService {
 
 	}
 
+	/**
+	 * 根据会员号，查询会员信息
+	 */
+	@Override
+	public MemberEntity memberInfo(String memberNo) throws ServiceException {
+		MemberQuery query = new MemberQuery();
+		query.setMemberNo(memberNo);
+		List<MemberEntity> list = queryMembers(query);
+		if (list.size() > 0) {
+			MemberEntity member = list.get(0);
+			return member;
+		}
+		return null;
+	}
+
 }
