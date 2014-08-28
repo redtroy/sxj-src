@@ -12,6 +12,8 @@ import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.util.common.EncryptUtil;
+import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
@@ -109,10 +111,13 @@ public class MemberServiceImpl implements IMemberService {
 	@Transactional
 	public String initializePwd(String memberId) throws ServiceException {
 		try {
-			MemberEntity member = getMember(memberId);
+			MemberEntity member = new MemberEntity();
+			member.setId(memberId);
 			// 随机密码
-			String password = "123456";
-			member.setPassword(password);
+			int rondom = NumberUtils.getRandomIntInMax(999999);
+			String password = StringUtils.getLengthStr(rondom + "", 6, '0');
+			String md5Passwrod = EncryptUtil.md5Hex(password);
+			member.setPassword(md5Passwrod);
 			modifyMember(member);
 			return password;
 		} catch (Exception e) {

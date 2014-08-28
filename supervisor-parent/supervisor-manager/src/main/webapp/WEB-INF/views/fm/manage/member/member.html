@@ -40,17 +40,12 @@ $("#pager").ready(function(){
 
 <script>
 jQuery(document).ready(function($) {
-	/*
-	$('.btn-password').click(function(){
-		
-		$('.popDemo').slideDown(200);
-	})
-	*/
 	$('.modal-header .close').click(function(){
 		$('.popDemo').slideUp(200);
 	});
 	$('.passwordBox .popBtn').click(function(){
 		$('.popDemo').slideUp(200);
+		
 	});
 });
     function query(page){
@@ -71,7 +66,7 @@ jQuery(document).ready(function($) {
    //重置密码
    function resetPwd(id){
 	   var pwd;
-	   $.post("initializePwd.htm",{id:id},function(data){
+	   $.post("${basePath}member/initializePwd.htm",{id:id},function(data){
 		   if (data.isOK=='ok'){
 			   pwd=data.password
 			   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
