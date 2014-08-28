@@ -15,9 +15,9 @@ import com.sxj.supervisor.enu.record.RecordTypeEnum;
 
 public class BaseController {
 
-	public static final String LOGIN = "manage/login";
+	public static final String LOGIN = "site/login";
 
-	public static final String INDEX = "manage/index";
+	public static final String INDEX = "site/index";
 
 	public static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
 

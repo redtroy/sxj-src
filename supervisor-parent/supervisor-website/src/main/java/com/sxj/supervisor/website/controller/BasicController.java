@@ -1,7 +1,5 @@
 package com.sxj.supervisor.website.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -15,7 +13,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
-import com.sxj.supervisor.model.function.FunctionModel;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 
@@ -30,12 +27,12 @@ public class BasicController extends BaseController {
 
 	@RequestMapping("footer")
 	public String ToFooter() {
-		return "manage/footer";
+		return "site/footer";
 	}
 
 	@RequestMapping("head")
 	public String ToHeader() {
-		return "manage/head";
+		return "site/head";
 	}
 
 	@RequestMapping("index")
@@ -84,16 +81,16 @@ public class BasicController extends BaseController {
 	 */
 	@RequestMapping("menu")
 	public String ToMenu(ModelMap map) {
-		Subject user = SecurityUtils.getSubject();
-		SystemAccountEntity userName = (SystemAccountEntity) user
-				.getPrincipal();
-		if (userName == null) {
-			return "403";
-		}
-		List<FunctionModel> list = roleService
-				.getRoleFunction(userName.getId());
-		map.put("list", list);
-		return "manage/menu";
+		// Subject user = SecurityUtils.getSubject();
+		// SystemAccountEntity userName = (SystemAccountEntity) user
+		// .getPrincipal();
+		// if (userName == null) {
+		// return "403";
+		// }
+		// List<FunctionModel> list = roleService
+		// .getRoleFunction(userName.getId());
+		// map.put("list", list);
+		return "site/menu";
 	}
 
 }

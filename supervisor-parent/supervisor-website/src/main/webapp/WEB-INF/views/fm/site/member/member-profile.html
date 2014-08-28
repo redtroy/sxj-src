@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<#include "site/base.html"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${staticPath}js/jquery.js" type="text/javascript"></script>
+<script>
+jQuery(document).ready(function($) {
+	$('.btnPassword').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.passwordPop').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.passwordPop').slideUp(200);
+	})
+	$('.button-pop').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.passwordPop').slideUp(200);
+	})
+	})
+</script>
+</head>
+
+<body>
+<div id="header" class="fence">
+<#include "site/head.html"> 
+</div>
+<div class="mainBg">
+<div class="fence-wide ly-clearFix">
+<div class="main pb20">
+<div class="yard-190 ly-left leftMenu">
+<#include "site/menu.html">
+</div>
+<div class="yard-870 rightSide ly-left">
+<div class="heading mb15 ly-clearFix">
+  <h1 class="ly-left">
+  <span class="title fontYH f20 fb">会员中心</span><span class="color-gray6 f14">（您的会员资料已经完善，您的帐户<span class="color-green">已认证</span>）</span></h1>
+</div>
+<div class="contBox">
+<div class="item">
+  <label>会员编号</label>
+  <span class="color-blue">${member.memberNo}</span></div>
+<div class="item">
+  <label>会员名称</label>${member.name}</div>
+<div class="item">
+  <label>会员类型</label>
+ ${member.type.getName()}</div>
+<div class="item"><label>公司所在地</label>江苏省南京市</div>
+<div class="item certCont ly-clearFix">
+<label>企业资质</label>
+<div class="upload">
+<img src="${staticPath}images/test-conr.jpg" width="80" height="107" />
+<a class="button button-blue f12">查看缩略图</a>
+</div>
+<div class="upload">
+<img src="${staticPath}images/test-conr.jpg" width="80" height="107" />
+<a class="button button-blue f12">查看缩略图</a>
+</div></div>
+<div class="item"><label>公司电话</label>${member.telNum}</div>
+<div class="item">
+  <label>公司地址</label>${member.address}</div>
+<div class="item">
+  <label>邮政编码</label>${member.code}</div>
+<div class="item">
+  <label>联系人</label>${member.contacts}先生</div>
+<div class="item">
+  <label>联系人手机</label>
+  ${member.phoneNo}
+</div>
+<div class="item">
+  <label>子帐号</label><a href="sub-account.html" class="lnk-blue">${member.accountNum}个</a>
+</div>
+<div class="item">
+  <label>帐号状态</label>
+  <span class="state verified">${member.checkState.getName()}</span></div>
+<div class="item">
+  <label>总交易额</label><a href="finance.html" class="lnk-blue">查看明细</a> </div>
+<div class="item">
+  <label>注册时间</label>
+  ${member.regDate?date}</div>
+<div class="item mt10">
+  <label>&nbsp;</label>
+  <a href="edit-member.html" class="button button-orange mr15">修改会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<#include "site/footer.html"> 
+<div class="modal-wrap popDemo contPop passwordPop" style="display:none;">
+      <div class="modal-header"><span class="close">关闭</span></div>
+      <div class="modal-body">
+        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password"/></div>
+        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password"/></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop">确认修改</button><button class="button button-gray ">取消</button></div>
+  </div>
+</div>
+    <div class="maskdivgen" style="display:none"></div>
+</body>
+</html>
