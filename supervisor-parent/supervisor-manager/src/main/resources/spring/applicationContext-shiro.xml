@@ -92,7 +92,7 @@
 				/contract/**=user,frameperms
 				/member/account/accountList.htm=user,frameperms
 				/member/memberList.htm=user,frameperms
-				/record/**=user,frameperms
+				/record/recordList.htm=user,frameperms
 				/system/account-list.htm=user,frameperms
 			</value>
 		</property>

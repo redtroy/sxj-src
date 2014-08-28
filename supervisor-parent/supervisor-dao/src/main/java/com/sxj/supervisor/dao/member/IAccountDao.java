@@ -9,7 +9,6 @@ import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.util.persistent.QueryCondition;
-import com.sxj.util.persistent.ResultList;
 
 public interface IAccountDao {
 	/**

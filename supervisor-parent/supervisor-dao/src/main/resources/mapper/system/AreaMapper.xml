@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.system.IAreaDao">
+	<resultMap id="AreaResultMap" type="com.sxj.supervisor.entity.system.AreaEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL" jdbcType="INTEGER" />
+	</resultMap>
+
+	<delete id="deleteChildrenArea" parameterType="String">
+		<![CDATA[DELETE FROM M_SYS_AREA WHERE PARENT_ID=#{parentId}]]>
+	</delete>
+
+	<!-- 高级查询 -->
+	<select id="getAreas" resultMap="AreaResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT ID,NAME,PARENT_ID,LEVEL 
+		 FROM M_SYS_AREA  WHERE 1=1]]>
+		<if test="condition.parentId != null and condition.parentId!=''">
+			<![CDATA[ AND PARENT_ID=#{condition.parentId}]]>
+		</if>
+	</select>
+</mapper>

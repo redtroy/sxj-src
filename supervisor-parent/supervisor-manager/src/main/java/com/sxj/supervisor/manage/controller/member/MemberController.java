@@ -11,20 +11,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.system.IAreaService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/member")
 public class MemberController extends BaseController {
 
 	@Autowired
-	IMemberService memberService;
+	private IMemberService memberService;
+
+	@Autowired
+	private IAreaService areaService;
 
 	/**
 	 * 会员管理列表
@@ -33,21 +40,34 @@ public class MemberController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("memberList")
-	public String memberList(MemberQuery query, ModelMap map) {
-		if (query != null) {
-			query.setPagable(true);
+	public String memberList(MemberQuery query, ModelMap map)
+			throws WebException {
+		try {
+			if (query != null) {
+				query.setPagable(true);
+			}
+			if (StringUtils.isNotEmpty(query.getArea())) {
+				String areaId = query.getArea();
+				areaId = "32," + areaId;
+				query.setArea(areaId);
+			}
+			MemberTypeEnum[] types = MemberTypeEnum.values();
+			MemberCheckStateEnum[] checkStates = MemberCheckStateEnum.values();
+			MemberStatesEnum[] states = MemberStatesEnum.values();
+			List<AreaEntity> cityList = areaService.getChildrenAreas("32");
+			List<MemberEntity> list = memberService.queryMembers(query);
+			map.put("types", types);
+			map.put("checkStates", checkStates);
+			map.put("states", states);
+			map.put("memberList", list);
+			map.put("cityList", cityList);
+			map.put("query", query);
+			return "manage/member/member";
+		} catch (Exception e) {
+			SxjLogger.error("查询会员信息错误", e, this.getClass());
+			throw new WebException("查询会员信息错误");
 		}
-		MemberTypeEnum[] types = MemberTypeEnum.values();
-		MemberCheckStateEnum[] checkStates = MemberCheckStateEnum.values();
-		MemberStatesEnum[] states = MemberStatesEnum.values();
-		query.setArea(null);
-		List<MemberEntity> list = memberService.queryMembers(query);
-		map.put("types", types);
-		map.put("checkStates", checkStates);
-		map.put("states", states);
-		map.put("memberList", list);
-		map.put("query", query);
-		return "manage/member/member";
+
 	}
 
 	/**

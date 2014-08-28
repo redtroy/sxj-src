@@ -1,43 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<#include "manage/base.html"> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="${staticPath}js/datepicker.css">
-<script src="${staticPath}js/jquery.js"></script>
-<script src="${staticPath}js/datepicker.js"></script>
-<script src="${staticPath}js/datepicker.zh-CN.js"></script>
-<script src="${staticPath}js/intense.js"></script>
-<script src="${staticPath}js/jquery.paginate.js"></script>
-<script type="text/javascript">
-function loadPage(currentPage,totalPage){
-	$("#pager").paginate({
-		count 		: totalPage,
-		start 		: currentPage,
-		display     : 10,
-		border					: true,
-		border_color			: '#CCC',
-		text_color  			: '#333',
-		background_color    	: '#FFF',	
-		border_hover_color		: '#ff4400',
-		text_hover_color  		: '#ff4400',
-		background_hover_color	: '#fff', 
-		images					: false,
-		mouse					: 'press',
-		onChange				: function(page){
-			query(page);
-		}
-	});
-}
-
-$("#pager").ready(function(){
-	loadPage(${query.currentPage},${query.totalPage});
-});
-</script>
-
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<#if (memberList?size>0)>
+<@b.pageScript/>
+</#if>
+<@b.errorInfo/>
 <script>
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
@@ -49,7 +25,7 @@ jQuery(document).ready(function($) {
 	});
 });
     function query(page){
-   	 	var params=$("#serch_form").serialize();
+   	 	var params=$("#search_form").serialize();
 		if(page!=undefined){
 		   params=params+"&currentPage="+page;
 	  	}
@@ -60,7 +36,7 @@ jQuery(document).ready(function($) {
 			$("#res_table").append(res.html());
 			var totalPage=pager.attr("totalPage");
 			var currentPage=pager.attr("currentPage");
-			loadPage(currentPage,totalPage);
+			loadPage(currentPage,totalPage,query);
 		});
    }
    //重置密码
@@ -72,6 +48,9 @@ jQuery(document).ready(function($) {
 			   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
 			   $('.popDemo').slideDown(200);
 		   }
+		   else{
+				errorInfo(data);
+			}
 	   });
    }
    //收起菜单
@@ -98,6 +77,9 @@ jQuery(document).ready(function($) {
 			 if (data.isOK=='ok'){
 				 alert('修改成功！')
 			}
+			else{
+				errorInfo(data);
+			}
 		 },"json");
 	    
    }
@@ -106,7 +88,9 @@ jQuery(document).ready(function($) {
 	  $.post("editState.htm",{id:id,state:state},function(data){
 		  if (data.isOK=='ok'){
 			  query();
-		   }
+		   }else{
+				errorInfo(data);
+			}
 	  });
    }
    
@@ -115,7 +99,9 @@ jQuery(document).ready(function($) {
 	  $.post("editCheckState.htm",{id:id,state:state},function(data){
 		  if (data.isOK=='ok'){
 			  query();
-		   }
+		   }else{
+				errorInfo(data);
+			}
 	  });
    }
 window.onload = function() {
@@ -128,13 +114,13 @@ Intense( elements );
 <!-- InstanceEndEditable -->
 </head>
 <body>
-<#include "manage/head.html"> 
+<@b.header />
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
 <#include "manage/menu-path.html">
 <div id="mainBg" class="ly-clearFix yard-1200">
  	<div id="leftList">
- 	<script>$("#leftList").load("${basePath}menu.htm");</script>
+ 	<div id="leftList"><@b.leftMenu /></div>
  	</div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
@@ -146,20 +132,11 @@ Intense( elements );
           联系人名称<input type="text" name="contacts" id="contacts" value="${query.contacts}" />
           联系人手机<input type="text" name="contactsPhone" id="contactsPhone" value="${query.contactsPhone}" />
           城市 江苏省-
-          <select name="select" id="city">
-            <option selected="selected">南京市</option>
-            <option>无锡市</option>
-            <option>苏州市</option>
-            <option>常州市</option>
-            <option>徐州市</option>
-            <option>扬州市</option>
-            <option>南通市</option>
-            <option>镇江市</option>
-            <option>泰州市</option>
-            <option>盐城市</option>
-            <option>淮安市</option>
-            <option>宿迁市</option>
-            <option>连云港市</option>
+          <select name="area" id="city">
+           <option value="">-请选择-</option>
+          	<#list cityList as city>
+            <option value="${city.id}">${city.name}</option>
+            </#list>
           </select>
          营业执照号码
           <input type="text" name="bLicenseNo" id="bLicenseNo" value="${query.bLicenseNo}" /></p>
@@ -207,7 +184,9 @@ Intense( elements );
         </p>
         </form>
       </div>
-      <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
+      <#if (memberList?size>0) >
+      <@b.pager/>
+		</#if>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="6%" />
         <col width="10%"/>
@@ -326,6 +305,6 @@ Intense( elements );
      </div>
      <!-- InstanceEndEditable --></div>
 </div>
-<#include "manage/footer.html"> 
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>
