@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.util.checkMolde.CheckModel;
 import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
@@ -39,14 +41,30 @@ public class MemberServiceImpl implements IMemberService {
 	@Override
 	public void modifyMember(MemberEntity member) {
 		MemberEntity mb = menberDao.getMember(member.getId());
-		mb.setName(member.getName());
-		mb.setbLicenseNo(member.getbLicenseNo());
-		mb.setEnergyNo(member.getEnergyNo());
-		mb.setContacts(member.getContacts());
-		mb.setType(member.getType());
-		mb.setPhoneNo(member.getPhoneNo());
-		mb.setAddress(member.getAddress());
-		mb.setTelNum(member.getTelNum());
+		CheckModel cm = new CheckModel();
+		try {
+			mb = (MemberEntity) cm.model(mb, member);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// mb.setName(member.getName());
+		// mb.setbLicenseNo(member.getbLicenseNo());
+		// mb.setEnergyNo(member.getEnergyNo());
+		// mb.setContacts(member.getContacts());
+		// mb.setType(member.getType());
+		// mb.setPhoneNo(member.getPhoneNo());
+		// mb.setAddress(member.getAddress());
+		// mb.setTelNum(member.getTelNum());
 		menberDao.updateMember(mb);
 	}
 
@@ -176,6 +194,16 @@ public class MemberServiceImpl implements IMemberService {
 			return member;
 		}
 		return null;
+	}
+
+	/**
+	 * 修改密码
+	 */
+	@Override
+	public void edit_pwd(String id, String pwd) throws ServiceException {
+		MemberEntity member = getMember(id);
+		member.setPassword(pwd);
+		menberDao.updateMember(member);
 	}
 
 }
