@@ -1,46 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="${staticPath}js/datepicker.css">
-<script src="${staticPath}js/jquery.js"></script>
-<script src="${staticPath}js/jquery.paginate.js"></script>
-<script src="${staticPath}js/datepicker.js"></script>
-<script src="${staticPath}js/datepicker.zh-CN.js"></script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
-</head>
-<script type="text/javascript">
-function loadPage(currentPage,totalPage){
-	$("#pager").paginate({
-		count 		: totalPage,
-		start 		: currentPage,
-		display     : 10,
-		border					: true,
-		border_color			: '#CCC',
-		text_color  			: '#333',
-		background_color    	: '#FFF',	
-		border_hover_color		: '#ff4400',
-		text_hover_color  		: '#ff4400',
-		background_hover_color	: '#fff', 
-		images					: false,
-		mouse					: 'press',
-		onChange				: function(page){
-			query(page);
-		}
-	});
-}
-
-$("#pager").ready(function(){
-	loadPage(${query.currentPage},${query.totalPage});
-});
-</script>
-<Script>
+<@b.pageScript/>
+<@b.errorInfo/>
+<script>
    //根据ID删除子帐号
    function del(id){
 		var r=confirm("确认删除吗?");
@@ -48,10 +22,11 @@ $("#pager").ready(function(){
 	    	 $.post("${basePath}member/account/delAccount.htm",{id:id},function(data){
 	    		 if (data.isOK=='ok'){
 	   			  query();
-	   		   }
+	   		   }else{
+					errorInfo(data);
+				}
 	  	   });
 	    }
-	  
    }
    //查询
    function query(page){
@@ -66,7 +41,7 @@ $("#pager").ready(function(){
 			$("#res_table").append(res.html());
 			var totalPage=pager.attr("totalPage");
 			var currentPage=pager.attr("currentPage");
-			loadPage(currentPage,totalPage);
+			loadPage(currentPage,totalPage,query);
 		});
 	   
    }
@@ -91,7 +66,9 @@ $("#pager").ready(function(){
 	   $.post("${basePath}member/account/editAccount.htm",{id:id,accountName:accountName,name:name},function(data){
 		   if (data.isOK=='ok'){
 				  query();
-			   }
+			   }else{
+					errorInfo(data);
+				}
 	   })
    }
    //初始化密码
@@ -99,7 +76,9 @@ $("#pager").ready(function(){
 	   $.post("${basePath}member/account/initializePwd.htm",{id:id},function(data){
 		   if (data.isOK=='ok'){
 			   alert('初始密码为:'+data.password+',谢谢!');
-		   }
+		   }else{
+				errorInfo(data);
+			}
 	   })
    }
    //更改状态
@@ -107,21 +86,22 @@ $("#pager").ready(function(){
 	  $.post("${basePath}member/account/editState.htm",{'id':id,'state':stateId},function(data){
 		  if (data.isOK=='ok'){
 			  query();
-		   }
+		   }else{
+				errorInfo(data);
+			}
 	  })
 	
 	  
    }
-</Script>
+</script>
+</head>
 <body>
-<#include "manage/head.html">
+<@b.header />
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
-    <div id="leftList">
- 	<script>$("#leftList").load("${basePath}menu.htm");</script>
- 	</div>
+ 	<div id="leftList"><@b.leftMenu /></div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">会员子帐号管理</h2>
@@ -156,7 +136,7 @@ $("#pager").ready(function(){
         </p>
         </form>
     </div>
-     <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
+    <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="10%" />
         <col width="10%"/>
@@ -198,6 +178,6 @@ $("#pager").ready(function(){
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
-<#include "manage/footer.html"> 
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>

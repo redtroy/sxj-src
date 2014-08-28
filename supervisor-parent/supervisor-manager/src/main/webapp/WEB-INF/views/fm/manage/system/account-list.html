@@ -1,50 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${staticPath}js/jquery.js"></script>
-<script src="${staticPath}js/intense.js"></script>
-<script src="${staticPath}js/jquery.paginate.js"></script>
-<script src="${staticPath}js/layer.min.js"></script>
-<script src="${staticPath}js/layer.ext.js"></script>
-<script type="text/javascript">
-function loadPage(currentPage,totalPage){
-	$("#pager").paginate({
-		count 		: totalPage,
-		start 		: currentPage,
-		display     : 10,
-		border					: true,
-		border_color			: '#CCC',
-		text_color  			: '#333',
-		background_color    	: '#FFF',	
-		border_hover_color		: '#ff4400',
-		text_hover_color  		: '#ff4400',
-		background_hover_color	: '#fff', 
-		images					: false,
-		mouse					: 'press',
-		onChange				: function(page){
-			var params=$("#search_form").serialize();
-			params=params+"&currentPage="+page;
-			$.post("${basePath}system/account-list.htm",params,function(data){
-				var res=$(data).find("#rightBar");
-				$("#rightBar").empty();
-				$("#rightBar").append(res.html());
-				var totalPage=$("#pager").attr("totalPage");
-				var currentPage=$("#pager").attr("currentPage");
-				loadPage(currentPage,totalPage);
-			});
-		}
-	});
-}
-
-$("#pager").ready(function(){
-	loadPage(${query.currentPage},${query.totalPage});
-});
-</script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<@b.pageScript/>
+<@b.errorInfo/>
 <script>
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
@@ -52,15 +16,19 @@ jQuery(document).ready(function($) {
 	})
 });
 
-function searchSumbit(){
+function query(page){
 	var params=$("#search_form").serialize();
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
 	$.post("${basePath}system/account-list.htm",params,function(data){
 		var res=$(data).find("#rightBar");
+		var pager=$(data).find("#rightBar").children("#pager");
 		$("#rightBar").empty();
 		$("#rightBar").append(res.html());
-		var totalPage=$("#pager").attr("totalPage");
-		var currentPage=$("#pager").attr("currentPage");
-		loadPage(currentPage,totalPage);
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
 	});
 }
 
@@ -104,9 +72,8 @@ function edit(id){
 		if(data.isOK==true){
 			toInfo(id,data);
 			alert("修改成功");
-		}
-		else{
-			alert("修改失败");
+		}else{
+			errorInfo(data);
 		}
 	});
 }
@@ -118,10 +85,9 @@ function initPassword(id){
     		if(data.isOK==true){
     			$("#password_div").css("display","");
     			$("#password_div").children().find("p").text("初始密码为："+data.password+"，谢谢!");
-    		}
-    		else{
-    			alert("初始化失败");
-    		}
+    		}else{
+				errorInfo(data);
+			}
     	});
     }
 	
@@ -132,10 +98,9 @@ function removeAccount(){
 	$.get("${basePath}system/remove.htm?accountId="+id,function(data){
 		if(data.isOK==true){
 			alert("删除成功");
-			searchSumbit();
-		}
-		else{
-			alert("删除失败");
+			query();
+		}else{
+			errorInfo(data);
 		}
 	})
 }
@@ -183,15 +148,13 @@ function toEdit(accountId){
 <!-- InstanceEndEditable -->
 </head>
 <body>
-<#include "manage/head.html">
+<@b.header />
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
 <#include "manage/menu-path.html">
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
-   	<div id="leftList">
-   	 <script>$("#leftList").load("${basePath}menu.htm");</script>
-    </div>
+   	<div id="leftList"><@b.leftMenu /></div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">管理员管理</h2>
@@ -210,14 +173,13 @@ function toEdit(accountId){
 	            	</#if>
 	            </#list>
 	          </select>
-	          <button class="btn btn-blue" onclick="javascript:searchSumbit();"><span>搜索</span></button>&nbsp;&nbsp;
+	          <button class="btn btn-blue" onclick="javascript:query();"><span>搜索</span></button>&nbsp;&nbsp;
 	          
 			  <button onclick="javascript:toAdd();" class="btn btn-blue ly-right"><span>新增管理员</span></button>
  	 </form>
     </div>
-     
-    <form  id="edit_form"></form>,
-    <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
+    <form  id="edit_form"></form>
+    <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%" />
         <col width="13%"/>
@@ -280,6 +242,6 @@ function toEdit(accountId){
      </div>
     <!-- InstanceEndEditable --></div>
 </div>
-<#include "manage/footer.html">
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>

@@ -29,6 +29,7 @@ public class MemberServiceImpl implements IMemberService {
 	 * 新增会员
 	 */
 	@Override
+	@Transactional
 	public void addMember(MemberEntity member) {
 		menberDao.addMember(member);
 	}
@@ -37,23 +38,31 @@ public class MemberServiceImpl implements IMemberService {
 	 * 更新会员
 	 */
 	@Override
-	public void modifyMember(MemberEntity member) {
-		MemberEntity mb = menberDao.getMember(member.getId());
-		mb.setName(member.getName());
-		mb.setbLicenseNo(member.getbLicenseNo());
-		mb.setEnergyNo(member.getEnergyNo());
-		mb.setContacts(member.getContacts());
-		mb.setType(member.getType());
-		mb.setPhoneNo(member.getPhoneNo());
-		mb.setAddress(member.getAddress());
-		mb.setTelNum(member.getTelNum());
-		menberDao.updateMember(mb);
+	@Transactional
+	public void modifyMember(MemberEntity member) throws ServiceException {
+		try {
+			MemberEntity mb = new MemberEntity();
+			mb.setId(member.getId());
+			mb.setName(member.getName());
+			mb.setbLicenseNo(member.getbLicenseNo());
+			mb.setEnergyNo(member.getEnergyNo());
+			mb.setContacts(member.getContacts());
+			mb.setType(member.getType());
+			mb.setPhoneNo(member.getPhoneNo());
+			mb.setAddress(member.getAddress());
+			mb.setTelNum(member.getTelNum());
+			menberDao.updateMember(mb);
+		} catch (Exception e) {
+			throw new ServiceException("修改会员信息错误", e);
+		}
+
 	}
 
 	/**
 	 * 查找会员
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public MemberEntity getMember(String id) {
 		MemberEntity member = menberDao.getMember(id);
 		return member;
@@ -118,7 +127,7 @@ public class MemberServiceImpl implements IMemberService {
 			String password = StringUtils.getLengthStr(rondom + "", 6, '0');
 			String md5Passwrod = EncryptUtil.md5Hex(password);
 			member.setPassword(md5Passwrod);
-			modifyMember(member);
+			menberDao.updateMember(member);
 			return password;
 		} catch (Exception e) {
 			throw new ServiceException("初始化密码错误", e.getMessage());

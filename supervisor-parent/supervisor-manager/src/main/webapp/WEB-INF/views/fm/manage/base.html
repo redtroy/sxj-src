@@ -1,4 +1,7 @@
 <#assign staticPath="http://192.168.1.9/sxj/supervisor-manager/" />
+<#macro errorInfo>
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
 <script>
 function errorInfo(data){
 	 var pageii = $.layer({
@@ -21,4 +24,55 @@ function errorInfo(data){
 		    layer.close(pageii);
 		});
  }
- </script>
+</script>
+</#macro>
+<#macro pageScript>
+<script src="${staticPath}js/jquery.paginate.js"></script>
+<script>
+function loadPage(currentPage,totalPage,query){
+	$("#pager").paginate({
+		count 		: totalPage,
+		start 		: currentPage,
+		display     : 10,
+		border					: true,
+		border_color			: '#CCC',
+		text_color  			: '#333',
+		background_color    	: '#FFF',	
+		border_hover_color		: '#ff4400',
+		text_hover_color  		: '#ff4400',
+		background_hover_color	: '#fff', 
+		images					: false,
+		mouse					: 'press',
+		onChange				: function(page){
+			query(page);
+		}
+	});
+}
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage},query);
+});
+</script>
+</#macro>
+ 
+<#macro header>
+ <div id="header" class="fence-wide">
+    <h1 class="yard-1200"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span></h1>
+    <div class="border-header"></div>
+</div>
+</#macro>
+<#macro footer>
+<div id="footer" class="fence-wide">
+  <div class="yard-1200">
+    <p><a href="#">关于我们</a>&nbsp;|<a href="#">联系我们</a>|<a href="#">友情链接</a>|<a href="#">网站地图</a></p>
+    <p>&copy; 2014 私享家电子商贸 版权所有 经营许可证编号:<a href="#" target="_blank">苏B2-20140088</a>苏ICP备14025589号</p>
+  </div>
+</div>
+</#macro>
+<#macro leftMenu>
+<script>$("#leftList").load("${basePath}menu.htm");</script>
+</#macro>
+<#macro pager>
+<div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
+</#macro>
+
+

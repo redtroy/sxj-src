@@ -16,7 +16,7 @@ import com.sxj.supervisor.dao.system.IRoleDao;
  *
  */
 @Entity(mapper = IRoleDao.class)
-@Table(name = "M_ROLE_ACCOUNT")
+@Table(name = "M_SYS_ROLE")
 public class RoleEntity extends Pagable implements Serializable {
 	/**
 	 * 

@@ -16,7 +16,7 @@
 	<select id="querySystemAccount" resultMap="SystemAccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD,a.ACCOUNT_NO FROM M_SYS_ACCOUNT a
-		LEFT JOIN M_ROLE_ACCOUNT r ON a.ID=r.ACCOUNT_ID WHERE 1=1]]>
+		LEFT JOIN M_SYS_ROLE r ON a.ID=r.ACCOUNT_ID WHERE 1=1]]>
 		<!-- 用户ID -->
 		<if test="condition.id != null and condition.id!=''">
 			<![CDATA[ AND a.ID = #{condition.id}]]>
