@@ -1,8 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,17 +89,19 @@ public class AccountServiceImpl implements IAccountService {
 	 * 更新自会员状态
 	 */
 	@Override
-	public String editState(String id) {
-		AccountEntity account = accountDao.getAccount(id);
-		if (account.getState().getId().intValue() == MemberStatesEnum.normal
-				.getId().intValue()) {
+	public String editState(String id, Integer state) {
+		AccountEntity account = new AccountEntity();
+		account.setId(id);
+		if (state == MemberStatesEnum.normal.getId().intValue()) {
+			account.setState(MemberStatesEnum.normal);
+			accountDao.updateAccount(account);
+			return MemberStatesEnum.normal.getName();
+		} else if (state == MemberStatesEnum.stop.getId().intValue()) {
 			account.setState(MemberStatesEnum.stop);
 			accountDao.updateAccount(account);
 			return MemberStatesEnum.stop.getName();
 		} else {
-			account.setState(MemberStatesEnum.normal);
-			accountDao.updateAccount(account);
-			return MemberStatesEnum.normal.getName();
+			return null;
 		}
 	}
 

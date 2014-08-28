@@ -12,6 +12,7 @@ import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -124,39 +125,37 @@ public class MemberServiceImpl implements IMemberService {
 	 * 更改账户状态
 	 */
 	@Override
-	public String editState(String id) {
-		MemberEntity member = menberDao.getMember(id);
-		if (member.getState().getId().intValue() == MemberStatesEnum.normal
-				.getId().intValue()) {
-			member.setState(MemberStatesEnum.stop);
-			menberDao.updateMember(member);
-			return MemberStatesEnum.stop.getName();
-		} else {
-			member.setState(MemberStatesEnum.normal);
-			menberDao.updateMember(member);
-			;
-			return MemberStatesEnum.normal.getName();
+	public void editState(String id, Integer state) throws ServiceException {
+		try {
+			if (state != null && StringUtils.isNotEmpty(id)) {
+				MemberEntity member = new MemberEntity();
+				member.setId(id);
+				member.setState(MemberStatesEnum.getEnum(state));
+				menberDao.updateMember(member);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("更改会员状态错误", e);
 		}
+
 	}
 
 	/**
 	 * 更改审核状态
 	 */
 	@Override
-	public String editCheckState(String id) {
-		MemberEntity member = menberDao.getMember(id);
-		if (member.getCheckState().getId().intValue() == MemberCheckStateEnum.unaudited
-				.getId().intValue()) {
-			member.setCheckState(MemberCheckStateEnum.unrecognized);
-			menberDao.updateMember(member);
-			return MemberCheckStateEnum.unrecognized.getName();
-		} else if (member.getCheckState().getId().intValue() == MemberCheckStateEnum.unrecognized
-				.getId().intValue()) {
-			member.setCheckState(MemberCheckStateEnum.certified);
-			menberDao.updateMember(member);
-			return MemberCheckStateEnum.certified.getName();
+	public void editCheckState(String id, Integer state)
+			throws ServiceException {
+		try {
+			if (state != null && StringUtils.isNotEmpty(id)) {
+				MemberEntity member = new MemberEntity();
+				member.setId(id);
+				member.setCheckState(MemberCheckStateEnum.getEnum(state));
+				menberDao.updateMember(member);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("更改审核状态错误", e);
 		}
-		return MemberCheckStateEnum.certified.getName();
+
 	}
 
 }

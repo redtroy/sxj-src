@@ -55,12 +55,11 @@ $("#pager").ready(function(){
    }
    //查询
    function query(page){
-	   //$("#serchAccount").submit();  
 	   var params=$("#serchAccount").serialize();
 	   if(page!=undefined){
 		   params=params+"&currentPage="+page;
 	   }
-		$.post("${basePath}member/account/accountList.htm.htm",params,function(data){
+		$.post("${basePath}member/account/accountList.htm",params,function(data){
 			var res=$(data).find("#rightBar").children("#res_table");
 			var pager=$(data).find("#rightBar").children("#pager");
 			$("#res_table").empty();

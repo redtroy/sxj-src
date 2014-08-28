@@ -28,7 +28,7 @@ function loadPage(currentPage,totalPage){
 		images					: false,
 		mouse					: 'press',
 		onChange				: function(page){
-			alert("ddd");
+			query(page);
 		}
 	});
 }
@@ -53,26 +53,20 @@ jQuery(document).ready(function($) {
 		$('.popDemo').slideUp(200);
 	});
 });
-    function query(){
-	$("#serch_form").submit();
-	/*
-	 var memberID=$("#memberID").val();
-	 var memberName=$("#memberName").val();
-	 var contacts=$("#contacts").val();
-	 var contactsPhone=$("#contactsPhone").val();
-	 var bLicenseNo=$("#bLicenseNo").val();
-	 var energyNo=$("#energyNo").val();
-	 var type=$("#type").val();
-	 var state=$("#state").val();
-	 var time1=$("#time1").val();
-	 var time2=$("#time2").val();
-	 alert('kkk');
-	 $.post("serchMemberList.htm",{memberNo:memberID,memberName:memberName,contacts:contacts,contactsPhone:contactsPhone,
-		 bLicenseNo:bLicenseNo,energyNo:energyNo,memberType:type,memberState:state,startDate:time1,endDate:time2
-	 },function(data){
-		 
-	 })
-	*/
+    function query(page){
+   	 	var params=$("#serch_form").serialize();
+		if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	  	}
+		$.post("${basePath}member/memberList.htm",params,function(data){
+			var res=$(data).find("#rightBar").children("#res_table");
+			var pager=$(data).find("#rightBar").children("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage);
+		});
    }
    //重置密码
    function resetPwd(id){
@@ -103,16 +97,6 @@ jQuery(document).ready(function($) {
 	   var phoneNo=$("#phoneNo1").val();//联系人手机
 	   var address=$("#address1").val();//公司地址
 	   var telNum=$("#telNum1").val();//固定电话
-	   /*
-	   console.log(memberNo)
-	   console.log(type)
-	   console.log(bLicenseNo)
-	   console.log(energyNo)
-	   console.log(contacts)
-	   console.log(phoneNo)
-	   console.log(address)
-	   console.log(telNum)
-	 */
 	   $.post("editMember.htm",{id:id,name:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
 		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum,type:type
 		 },function(data){
@@ -123,26 +107,19 @@ jQuery(document).ready(function($) {
 	    
    }
    //更改账户状态
-   function checkState(id,obj){
-	  $.post("editState.htm",{id:id},function(data){
+   function editState(id,state){
+	  $.post("editState.htm",{id:id,state:state},function(data){
 		  if (data.isOK=='ok'){
-			  $(obj).children().text(data.state)
+			  query();
 		   }
 	  });
    }
    
  //更改审核状态
-   function editCheckState(id,obj){
-	  $.post("editCheckState.htm",{id:id},function(data){
+   function editCheckState(id,state){
+	  $.post("editCheckState.htm",{id:id,state:state},function(data){
 		  if (data.isOK=='ok'){
-			  $(obj).children().text(data.state)
-			  if (data.state=='未审核'){
-			     $(obj).children().text("审核")
-			  }else if (data.state=="未认证"){
-			     $(obj).children().text("认证")  
-			  }else{
-			     $(obj).parent().html('<em class="state verified">已认证</em>');  
-			  }
+			  query();
 		   }
 	  });
    }
@@ -164,16 +141,15 @@ Intense( elements );
  	<div id="leftList">
  	<script>$("#leftList").load("${basePath}menu.htm");</script>
  	</div>
-  
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">会员管理</h2>
-      <div id="searchBox">
-      <form action="memberList.htm" method="post" id="search_form">
-        <p> 会员ID<input type="text" name="memberNo" id="memberID" value="" />
-          会员名称<input type="text" name="memberName" id="memberName" value="" />
-          联系人名称<input type="text" name="contacts" id="contacts" value="" />
-          联系人手机<input type="text" name="contactsPhone" id="contactsPhone" value="" />
+      <div id="searchBox" class="ly-clearFix">
+      <form action="javascript:void(0);" id="search_form">
+        <p> 会员ID<input type="text" name="memberNo" id="memberID" value="${query.memberNo}" />
+          会员名称<input type="text" name="memberName" id="memberName" value="${query.memberName}" />
+          联系人名称<input type="text" name="contacts" id="contacts" value="${query.contacts}" />
+          联系人手机<input type="text" name="contactsPhone" id="contactsPhone" value="${query.contactsPhone}" />
           城市 江苏省-
           <select name="select" id="city">
             <option selected="selected">南京市</option>
@@ -191,32 +167,53 @@ Intense( elements );
             <option>连云港市</option>
           </select>
          营业执照号码
-          <input type="text" name="bLicenseNo" id="bLicenseNo" value="" /></p>
+          <input type="text" name="bLicenseNo" id="bLicenseNo" value="${query.bLicenseNo}" /></p>
 		  <p>
           节能标识推广证号
-          <input type="text" name="energyNo" id="energyNo" value="" />
+          <input type="text" name="energyNo" id="energyNo" value="${query.energyNo}" />
           会员类型
           <select name="memberType" id="type">
+           <option value="">-请选择-</option>
             <#list types as type>
-            <option value="${type.getId()}">${type.getName()}</option>
+            <#if type.id==query.memberType>
+            	<option value="${type.getId()}" selected="selected">${type.getName()}</option>
+             <#else>
+             	<option value="${type.getId()}">${type.getName()}</option>
+            </#if>
             </#list>
           </select>
-          会员状态
-          <select name="checkState" id="state">
+          审核状态
+          <select name="checkState" id="checkState">
+           <option value="">-请选择-</option>
+           <#list checkStates as state>
+           <#if state.id=query.checkState>
+            <option value="${state.getId()}" selected="selected">${state.getName()}</option>
+            <#else>
+             <option value="${state.getId()}">${state.getName()}</option>
+            </#if>
+           </#list>
+          </select>
+          账户状态
+          <select name="memberState" id="memberState">
+           <option value="">-请选择-</option>
            <#list states as state>
-            <option value="${state.getId()}">${state.getName()}</option>
+            <#if state.id=query.memberState>
+            <option value="${state.getId()}" selected="selected">${state.getName()}</option>
+            <#else>
+             <option value="${state.getId()}">${state.getName()}</option>
+            </#if>
            </#list>
           </select>
 		   会员注册时间段
           <input class="form-control" type="text" datepicker id="time1" name="startDate">
           -
           <input class="form-control" type="text" datepicker id="time2" name="endDate">
-          <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+          <button class="btn btn-blue ly-right" onclick="query();"><span>查询</span></button>
         </p>
         </form>
       </div>
       <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="6%" />
         <col width="10%"/>
         <col width="10%"/>
@@ -234,7 +231,7 @@ Intense( elements );
           <th>联系人名称</th>
           <th>营业执照号码</th>
           <th>节能标识<br />
-            推广证号</th>
+            	推广证号</th>
           <th>会员类型</th>
           <th>注册时间</th>
           <th>认证时间</th>
@@ -244,7 +241,7 @@ Intense( elements );
         </tr>
         <#list memberList as member>
         <tr>
-          <td><a href="#" class="lnk-blue" onclick="openDiv(${member.memberNo})">${member.memberNo}</a></td>
+          <td><a href="javascript:openDiv('${member.memberNo}');" class="lnk-blue">${member.memberNo}</a></td>
           <td>${member.name}</td>
           <td>${member.contacts}</td>
           <td>${member.getbLicenseNo()}</td>
@@ -253,13 +250,18 @@ Intense( elements );
           <td>${member.regDate?date}</td>
           <td>${member.authorDate?date}</td>
           <#if (member.checkState.id==0)>
-          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},this)"><span>审核</span></button></td>
+          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},1)"><span>审核</span></button></td>
           <#elseif (member.checkState.id==1)>
-          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},this)"><span>认证</span></button></td>
-          <#else>
+          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},2)"><span>认证</span></button></td>
+          <#elseif (member.checkState.id==2)>
            <td><em class="state verified">已认证</em></td>
           </#if>
-          <td><button class="btn btn-red" onclick="checkState(${member.id},this)"><span>${member.state.getName()}</span></button></td>
+          <#if member.state.id==0>
+          <td><button class="btn btn-red" onclick="editState(${member.id},1)"><span>解冻</span></button></td>
+           <#elseif member.state.id==1>
+           <td><button class="btn btn-red" onclick="editState(${member.id},0)"><span>冻结</span></button></td>
+          </#if>
+          
           <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd(${member.id})"><span>初始化密码</span></button></td>
         </tr>
         <tr class="tableInfo" style="display:none;" id="${member.memberNo}">
@@ -311,7 +313,7 @@ Intense( elements );
           <li><label>子帐号</label>${member.getAccountNum()}</li>
           <li><label>总交易额</label>${member.totalAmount}元</li>
           </ul>
-          <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="edit(${member.id})">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing(${member.getMemberNo()})">收起</a> </div>
+          <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="edit(${member.id})">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing('${member.getMemberNo()}')">收起</a> </div>
           </div>
           </td>
         </tr>

@@ -75,11 +75,11 @@ public class AccountController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("editState")
-	public @ResponseBody Map<String, String> editState(String id) {
-		String state = accountService.editState(id);
+	public @ResponseBody Map<String, String> editState(String id, Integer state) {
+		String stateName = accountService.editState(id, state);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
-		map.put("state", state);
+		map.put("state", stateName);
 		return map;
 	}
 

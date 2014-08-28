@@ -8,8 +8,7 @@ package com.sxj.supervisor.enu.member;
  */
 public enum MemberCheckStateEnum {
 
-	unaudited("未审核", 0), unrecognized("未认证", 1), certified("已认证", 2), frozen(
-			"已冻结", 3);
+	unaudited("未审核", 0), unrecognized("未认证", 1), certified("已认证", 2);
 
 	// 成员变量
 	private Integer id;
@@ -45,6 +44,15 @@ public enum MemberCheckStateEnum {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public static MemberCheckStateEnum getEnum(Integer id) {
+		for (MemberCheckStateEnum c : MemberCheckStateEnum.values()) {
+			if (c.getId() == id) {
+				return c;
+			}
+		}
+		return null;
 	}
 
 	public static void main(String args[]) {

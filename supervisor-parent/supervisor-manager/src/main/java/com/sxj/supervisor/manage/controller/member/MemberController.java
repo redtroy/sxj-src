@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
+import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.util.exception.WebException;
 
 @Controller
 @RequestMapping("/member")
@@ -36,11 +38,13 @@ public class MemberController extends BaseController {
 			query.setPagable(true);
 		}
 		MemberTypeEnum[] types = MemberTypeEnum.values();
-		MemberCheckStateEnum[] state = MemberCheckStateEnum.values();
+		MemberCheckStateEnum[] checkStates = MemberCheckStateEnum.values();
+		MemberStatesEnum[] states = MemberStatesEnum.values();
 		query.setArea(null);
 		List<MemberEntity> list = memberService.queryMembers(query);
 		map.put("types", types);
-		map.put("states", state);
+		map.put("checkStates", checkStates);
+		map.put("states", states);
 		map.put("memberList", list);
 		map.put("query", query);
 		return "manage/member/member";
@@ -82,12 +86,17 @@ public class MemberController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("editState")
-	public @ResponseBody Map<String, String> editState(String id) {
-		String state = memberService.editState(id);
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("isOK", "ok");
-		map.put("state", state);
-		return map;
+	public @ResponseBody Map<String, String> editState(String id, Integer state)
+			throws WebException {
+		try {
+			memberService.editState(id, state);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
+
 	}
 
 	/**
@@ -97,11 +106,16 @@ public class MemberController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("editCheckState")
-	public @ResponseBody Map<String, String> editCheckState(String id) {
-		String state = memberService.editCheckState(id);
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("isOK", "ok");
-		map.put("state", state);
-		return map;
+	public @ResponseBody Map<String, String> editCheckState(String id,
+			Integer state) throws WebException {
+		try {
+			memberService.editCheckState(id, state);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
+
 	}
 }
