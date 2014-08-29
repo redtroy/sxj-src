@@ -39,21 +39,11 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	@Transactional
-	public void modifyMember(MemberEntity member) throws ServiceException {
+	public void modifyMember(MemberEntity member) {
 		try {
-			MemberEntity mb = new MemberEntity();
-			mb.setId(member.getId());
-			mb.setName(member.getName());
-			mb.setbLicenseNo(member.getbLicenseNo());
-			mb.setEnergyNo(member.getEnergyNo());
-			mb.setContacts(member.getContacts());
-			mb.setType(member.getType());
-			mb.setPhoneNo(member.getPhoneNo());
-			mb.setAddress(member.getAddress());
-			mb.setTelNum(member.getTelNum());
-			menberDao.updateMember(mb);
+			menberDao.updateMember(member);
 		} catch (Exception e) {
-			throw new ServiceException("修改会员信息错误", e);
+			throw new ServiceException("会员信息更新失败！", e);
 		}
 	}
 
