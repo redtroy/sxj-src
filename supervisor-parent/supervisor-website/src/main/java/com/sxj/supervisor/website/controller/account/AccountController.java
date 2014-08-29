@@ -32,7 +32,7 @@ public class AccountController extends BaseController {
 	@RequestMapping("accountList")
 	public String accountList(AccountQuery query, ModelMap map) {
 		String parentId = "1";
-		query.setMemberId(parentId);
+		query.setMemberNo(parentId);
 		MemberAuthorityEnum[] ma = MemberAuthorityEnum.values();// 权限
 		List<AccountEntity> list = accountService.queryAccounts(query);
 		map.put("list", list);
