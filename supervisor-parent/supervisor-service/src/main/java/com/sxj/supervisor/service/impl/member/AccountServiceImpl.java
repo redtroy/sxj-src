@@ -60,8 +60,13 @@ public class AccountServiceImpl implements IAccountService {
 	public List<AccountEntity> queryAccounts(AccountQuery query) {
 		QueryCondition<AccountEntity> condition = new QueryCondition<AccountEntity>();
 		if (query != null) {
+<<<<<<< HEAD
 			condition.addCondition("parentId", query.getMemberNo());// 父会员号
 			condition.addCondition("accountNo", query.getAccountNo());// 子会员
+=======
+			condition.addCondition("parentId", query.getMemberId());// 父会员号
+			condition.addCondition("id", query.getAccountId());// 子会员ＩＤ
+>>>>>>> 21c1d89118c71636811b61c371af3886c92b4d4b
 			condition.addCondition("accountName", query.getAccountName());// 子会员名称
 			condition.addCondition("state", query.getState());// 子账户状态
 			condition.addCondition("delstate", query.getDelstate());// 删除标记

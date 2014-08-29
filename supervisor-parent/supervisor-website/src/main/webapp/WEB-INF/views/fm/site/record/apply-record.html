@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<#include "site/base.html"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${staticPath}style/uploadify.css " rel="stylesheet" type="text/css" /> 
+<script src="${staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
+<script src="${staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#tabsholder").tytabs({
+							prefixtabs:"tabz",
+							prefixcontent:"content",
+							classcontent:"tabscontent",
+							tabinit:"3",
+							catchget:"tab2",
+							fadespeed:"normal"
+							});
+});
+
+$(function () {
+    $("#uploadify").uploadify({
+        //指定swf文件
+        'swf': '${staticPath}js/uploadify.swf',
+        //后台处理的页面
+        'uploader': 'UploadHandler.ashx',
+        //按钮显示的文字
+        'buttonText': '上传图片',
+        //显示的高度和宽度，默认 height 30；width 120
+        //'height': 15,
+        //'width': 80,
+        //上传文件的类型  默认为所有文件    'All Files'  ;  '*.*'
+        //在浏览窗口底部的文件类型下拉菜单中显示的文本
+        'fileTypeDesc': 'Image Files',
+        //允许上传的文件后缀
+        'fileTypeExts': '*.gif; *.jpg; *.png',
+        //发送给后台的其他参数通过formData指定
+        //'formData': { 'someKey': 'someValue', 'someOtherKey': 1 },
+        //上传文件页面中，你想要用来作为文件队列的元素的id, 默认为false  自动生成,  不带#
+        'queueID': 'fileQueue',
+        //选择文件后自动上传
+        'auto': false,
+        //设置为true将允许多文件上传
+        'multi': true
+    });
+});
+/**
+ * 甲方申请采购
+ */
+function  AcgApplyRecord(){
+	$.post("AcgApplyRecord.htm",$("#cgForm").serialize(),function(data){
+		   if (data.isOK=='ok'){
+			   $("#recordNo").html(data.recordNo);
+			   	 $("#contBox").show();
+				  $("#cgDiv").hide();
+			   }
+	})
+}
+/**
+ * 乙方申请招标
+ */
+function  zbApplyRecord(){
+	$.post("zbApplyRecord.htm",$("#cgForm").serialize(),function(data){
+		   if (data.isOK=='ok'){
+			   $("#recordNo").html(data.recordNo);
+			   	 $("#contBox").show();
+				  $("#cgDiv").hide();
+			   }
+	})
+}
+/**
+ * 乙方申请采购
+ */
+function  BzbApplyRecord(){
+	$.post("BzbApplyRecord.htm",$("#BcgForm").serialize(),function(data){
+		   if (data.isOK=='ok'){
+			   $("#recordNo").html(data.recordNo);
+			   $("#contBox").show();
+			   $("#BcgDiv").hide();
+			   }
+	})
+}
+</script>
+</head>
+
+<body>
+<div id="header" class="fence">
+<#include "site/head.html"> 
+</div>
+<div class="mainBg">
+<div class="fence-wide ly-clearFix">
+<div class="main pb20">
+<div class="yard-190 ly-left leftMenu">
+<#include "site/menu.html">
+</div>
+<div class="yard-870 rightSide ly-left">
+<div class="heading mb15 ly-clearFix">
+  <h1 class="ly-left">
+  <span class="title fontYH f20 fb">申请合同备案</span></h1>
+</div>
+
+<div class="contBox" id="contBox" style="display: none;" >
+<div class="msg-suc msgbar ly-clearFix p10">
+<div class="icon icon32 icon-32-suc ly-left">&nbsp;</div>
+<div class="msgCont ly-left">
+<dl>
+<dt class="fontYH f20 mb10">恭喜您已成功备案</dt>
+<dd class="mb5">您的备案号为：<span id="recordNo"></span></dd>
+<dd class="f12">现在就开始<a href="contract.html" class="lnk-underline ml5 mr5">管理您的合同</a>吧！</dd>
+</dl>
+</div>
+</div>
+</div>
+
+<#if status==0>
+<div class="contBox" id="cgDiv">
+<div id="tabsholder">
+<ul class="tabs">
+<li id="tabz1"><a href="#">备案采购合同</a></li>
+<li id="tabz2"><a href="#">备案招标合同</a></li>
+</ul>
+<div class="contents">
+<form action="" id="cgForm" method="post">
+<input type="hidden" name="memberNameA" value="${name}" />
+<div id="content1" class="tabscontent">
+<div class="item"><label>甲方</label>${name}</div>
+<div class="item"><label>乙方</label><input class="input input-w240h36" value="" name="memberNameB" /></div>
+<div class="item"><label>关联招标合同号</label><input class="input input-w240h36" value="" name="refContractNo"/></div>
+<!-- <div id="fileQueue"></div>
+<div class="item"><label>选择上传文件</label><input type="file" name="uploadify" id="uploadify" /></div> -->
+<div class="item"><label>&nbsp;</label><button class="button button-brown" onclick="javascript:$('#uploadify').uploadify('upload')">上传采购合同</button></div>
+<div class="item mt10"><label>&nbsp;</label><a href="javascript:AcgApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
+</div>
+</form>
+<form action="" id="zbForm" method="post">
+<input type="hidden" name="memberNameB" value="${name}" />
+<div id="content2" class="tabscontent">
+    <div class="item">
+      <label>甲方</label>
+      <input class="input input-w240h36" value="" name="memberNameA" />
+    </div>
+    <div class="item">
+      <label>乙方</label>
+      ${name}</div>
+    <div class="item">
+      <label>&nbsp;</label>
+      <button class="button button-brown">上传门窗招标合同</button></div>
+    <div class="item mt10">
+      <label>&nbsp;</label>
+      <a href="javascript:zbApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
+  </div>
+  </form>
+  </div>
+</div>
+</div>
+</#if>
+<#if status==1>
+<div class="contBox" id="BcgDiv">
+<form action="" id="BcgForm" method="post">
+<input type="hidden" name="memberNameB" value="${name}" />
+  <div class="item">
+    <label>甲方</label>
+    <input class="input input-w240h36" value=""  name="memberNameA"/>
+  </div>
+  <div class="item">
+    <label>乙方</label>
+   ${name}</div>
+  <div class="item">
+    <label>&nbsp;</label>
+    <button class="button button-brown">上传采购合同</button>
+  </div>
+  <div class="item mt10">
+    <label>&nbsp;</label>
+    <a class="button button-orange mr15" href="javascript:BzbApplyRecord();"  >确定</a><a class="button button-gray">取消</a></div>
+</form>
+</div>
+</#if>
+</div>
+</div>
+</div>
+</div>
+<#include "site/footer.html"> 
+</body>
+</html>

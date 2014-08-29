@@ -25,7 +25,8 @@ public interface IMemberService {
 
 	public void editCheckState(String id, Integer state)
 			throws ServiceException;
-	
-	public MemberEntity memberInfo(String memberNo)
-			throws ServiceException;
+
+	public MemberEntity memberInfo(String memberNo) throws ServiceException;
+
+	public void edit_pwd(String id, String pwd) throws ServiceException;
 }

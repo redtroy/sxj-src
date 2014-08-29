@@ -8,6 +8,7 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.record.IRecordDao;
@@ -34,13 +35,14 @@ public class RecordEntity extends Pagable implements Serializable {
 	 * 主键ID
 	 **/
 	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	/**
 	 * 备案号
 	 **/
 	@Column(name = "RECORD_NO")
+	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "ACC", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String recordNo;
 
 	/**

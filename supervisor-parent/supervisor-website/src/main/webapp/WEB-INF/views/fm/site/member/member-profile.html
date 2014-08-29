@@ -23,6 +23,21 @@ jQuery(document).ready(function($) {
 		$('.passwordPop').slideUp(200);
 	})
 	})
+function edit_pwd(id){
+	var pwd1=$("#pwd1").val();
+	var pwd2=$("#pwd2").val();
+	if (pwd1==pwd2){
+		$.post("edit_pwd.htm",{id:id,password:pwd1},function(data){
+			alert("修改成功！");
+			$('.maskdivgen').fadeOut(100);
+			$('.passwordPop').slideUp(200);
+		})
+	}else{
+		alert("两次密码输入不一样请重新输入!");
+		$("#pwd1").val("");
+		$("pwd2").val("");
+	}
+}
 </script>
 </head>
 
@@ -63,7 +78,7 @@ jQuery(document).ready(function($) {
 <div class="item">
   <label>邮政编码</label>${member.code}</div>
 <div class="item">
-  <label>联系人</label>${member.contacts}先生</div>
+  <label>联系人</label>${member.contacts}</div>
 <div class="item">
   <label>联系人手机</label>
   ${member.phoneNo}
@@ -81,7 +96,7 @@ jQuery(document).ready(function($) {
   ${member.regDate?date}</div>
 <div class="item mt10">
   <label>&nbsp;</label>
-  <a href="edit-member.html" class="button button-orange mr15">修改会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
+  <a href="edit_member.htm?id=${member.id}" class="button button-orange mr15">修改会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
 </div>
 </div>
 </div>
@@ -91,9 +106,9 @@ jQuery(document).ready(function($) {
 <div class="modal-wrap popDemo contPop passwordPop" style="display:none;">
       <div class="modal-header"><span class="close">关闭</span></div>
       <div class="modal-body">
-        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password"/></div>
-        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password"/></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop">确认修改</button><button class="button button-gray ">取消</button></div>
+        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1"/></div>
+        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2"/></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd(${member.id})">确认修改</button><button class="button button-pop ">取消</button></div>
   </div>
 </div>
     <div class="maskdivgen" style="display:none"></div>

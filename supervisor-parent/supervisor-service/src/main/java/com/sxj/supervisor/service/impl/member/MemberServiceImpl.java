@@ -39,13 +39,12 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	@Transactional
-	public void modifyMember(MemberEntity member) throws ServiceException {
+	public void modifyMember(MemberEntity member) {
 		try {
 			menberDao.updateMember(member);
 		} catch (Exception e) {
-			throw new ServiceException("修改会员信息错误", e);
+			throw new ServiceException("会员信息更新失败！", e);
 		}
-
 	}
 
 	/**
@@ -170,6 +169,16 @@ public class MemberServiceImpl implements IMemberService {
 			return member;
 		}
 		return null;
+	}
+
+	/**
+	 * 修改密码
+	 */
+	@Override
+	public void edit_pwd(String id, String pwd) throws ServiceException {
+		MemberEntity member = getMember(id);
+		member.setPassword(pwd);
+		menberDao.updateMember(member);
 	}
 
 }
