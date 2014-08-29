@@ -71,12 +71,12 @@
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
 		<!-- 申请时间段 -->
- 		<if test="condition.applyStartTime != null and condition.applyEndTime != null and condition.applyStartTime != ''  and condition.applyEndTime != ''"> -->
-			<![CDATA[AND APPLY_DATE >=#{condition.applyStartTime} AND APPLY_DATE <= #{condition.applyEndTime}]]>
+ 		<if test="condition.startApplyDate != null and condition.endApplyDate != null and condition.startApplyDate != ''  and condition.endApplyDate != ''"> -->
+			<![CDATA[AND APPLY_DATE >=#{condition.startApplyDate} AND APPLY_DATE <= #{condition.endApplyDate}]]>
 		</if>
 		<!-- 受理时间段 -->
-		<if test="condition.acceptStartTime != null and condition.acceptEndTime != null and condition.acceptStartTime != '' and condition.acceptEndTime != ''">
-			<![CDATA[AND ACCEPT_DATE >=#{condition.acceptStartTime} AND ACCEPT_DATE <= #{condition.acceptEndTime}]]>
+		<if test="condition.startAcceptDate != null and condition.endAcceptDate != null and condition.startAcceptDate != '' and condition.endAcceptDate != ''">
+			<![CDATA[AND ACCEPT_DATE >=#{condition.startAcceptDate} AND ACCEPT_DATE <= #{condition.endAcceptDate}]]>
 		</if>
 	</select>
 </mapper>

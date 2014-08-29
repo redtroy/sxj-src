@@ -41,17 +41,7 @@ public class MemberServiceImpl implements IMemberService {
 	@Transactional
 	public void modifyMember(MemberEntity member) throws ServiceException {
 		try {
-			MemberEntity mb = new MemberEntity();
-			mb.setId(member.getId());
-			mb.setName(member.getName());
-			mb.setbLicenseNo(member.getbLicenseNo());
-			mb.setEnergyNo(member.getEnergyNo());
-			mb.setContacts(member.getContacts());
-			mb.setType(member.getType());
-			mb.setPhoneNo(member.getPhoneNo());
-			mb.setAddress(member.getAddress());
-			mb.setTelNum(member.getTelNum());
-			menberDao.updateMember(mb);
+			menberDao.updateMember(member);
 		} catch (Exception e) {
 			throw new ServiceException("修改会员信息错误", e);
 		}
@@ -80,24 +70,19 @@ public class MemberServiceImpl implements IMemberService {
 				return null;
 			}
 			QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
-			if (query != null) {
-				condition.addCondition("memberNo", query.getMemberNo());// 会员号
-				condition.addCondition("name", query.getMemberName());// 会员名称
-				condition.addCondition("contacts", query.getContacts());// 联系人名称
-				condition.addCondition("phoneNo", query.getContactsPhone());// 联系人电话
-				condition.addCondition("area", query.getArea());// 地理区域
-				condition.addCondition("bLicenseNo", query.getbLicenseNo());// 营业执照号
-				condition.addCondition("energyNo", query.getEnergyNo());// 节能标识号
-				condition.addCondition("type", query.getMemberType());// 会员类型
-				if (query.getCheckState() != null && query.getCheckState() == 3) {
-					condition.addCondition("state", 1);// 状态
-				} else {
-					condition.addCondition("checkState", query.getCheckState());
-				}
-				condition.addCondition("startDate", query.getStartDate());// 开始时间
-				condition.addCondition("endDate", query.getEndDate());// 结束时间
-				condition.setPage(query);
-			}
+			condition.addCondition("memberNo", query.getMemberNo());// 会员号
+			condition.addCondition("name", query.getMemberName());// 会员名称
+			condition.addCondition("contacts", query.getContacts());// 联系人名称
+			condition.addCondition("phoneNo", query.getContactsPhone());// 联系人电话
+			condition.addCondition("area", query.getArea());// 地理区域
+			condition.addCondition("bLicenseNo", query.getbLicenseNo());// 营业执照号
+			condition.addCondition("energyNo", query.getEnergyNo());// 节能标识号
+			condition.addCondition("type", query.getMemberType());// 会员类型
+			condition.addCondition("checkState", query.getCheckState());
+			condition.addCondition("state", query.getMemberState());
+			condition.addCondition("startDate", query.getStartDate());// 开始时间
+			condition.addCondition("endDate", query.getEndDate());// 结束时间
+			condition.setPage(query);
 			List<MemberEntity> memberList = menberDao.queryMembers(condition);
 			query.setPage(condition);
 			return memberList;

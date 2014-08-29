@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.impl.function;
+package com.sxj.supervisor.service.impl.member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.system.IFunctionDao;
 import com.sxj.supervisor.entity.system.FunctionEntity;
-import com.sxj.supervisor.model.function.FunctionModel;
+import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -25,26 +26,33 @@ public class FunctionServiceImpl implements IFunctionService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<FunctionModel> queryFunctions() {
-		QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
-		query.addCondition("parentId", 0);
-		List<FunctionEntity> functionList = functiondao.queryFunction(query);
-		List<FunctionModel> list = new ArrayList<FunctionModel>();
-		for (FunctionEntity functionEntity : functionList) {
-			if (functionEntity == null) {
-				continue;
-			}
-			QueryCondition<FunctionEntity> childrenQuery = new QueryCondition<FunctionEntity>();
-			childrenQuery.addCondition("parentId", functionEntity.getId());
-			List<FunctionEntity> childrenList = functiondao
-					.queryFunction(childrenQuery);
-			FunctionModel model = new FunctionModel();
-			model.setFunction(functionEntity);
-			model.setChildren(childrenList);
-			list.add(model);
+	public List<FunctionModel> queryFunctions() throws ServiceException {
+		try {
+			QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
+			query.addCondition("parentId", 0);
+			List<FunctionEntity> functionList = functiondao
+					.queryFunction(query);
+			List<FunctionModel> list = new ArrayList<FunctionModel>();
+			for (FunctionEntity functionEntity : functionList) {
+				if (functionEntity == null) {
+					continue;
+				}
+				QueryCondition<FunctionEntity> childrenQuery = new QueryCondition<FunctionEntity>();
+				childrenQuery.addCondition("parentId", functionEntity.getId());
+				List<FunctionEntity> childrenList = functiondao
+						.queryFunction(childrenQuery);
+				FunctionModel model = new FunctionModel();
+				model.setFunction(functionEntity);
+				model.setChildren(childrenList);
+				list.add(model);
 
+			}
+			return list;
+		} catch (Exception e) {
+			SxjLogger.error("查询所有系统菜单错误", e, this.getClass());
+			throw new ServiceException("查询所有系统菜单错误", e);
 		}
-		return list;
+
 	}
 
 	/**
@@ -65,7 +73,7 @@ public class FunctionServiceImpl implements IFunctionService {
 			List<FunctionEntity> entity = functiondao.queryFunction(query);
 			return entity;
 		} catch (Exception e) {
-			throw new ServiceException("查询功能菜单错误",e);
+			throw new ServiceException("查询功能菜单错误", e);
 		}
 	}
 }

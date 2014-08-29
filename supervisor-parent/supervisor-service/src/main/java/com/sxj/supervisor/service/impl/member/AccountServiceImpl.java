@@ -12,6 +12,7 @@ import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -60,7 +61,7 @@ public class AccountServiceImpl implements IAccountService {
 		QueryCondition<AccountEntity> condition = new QueryCondition<AccountEntity>();
 		if (query != null) {
 			condition.addCondition("parentId", query.getMemberNo());// 父会员号
-			condition.addCondition("id", query.getAccountId());// 子会员ＩＤ
+			condition.addCondition("accountNo", query.getAccountNo());// 子会员
 			condition.addCondition("accountName", query.getAccountName());// 子会员名称
 			condition.addCondition("state", query.getState());// 子账户状态
 			condition.addCondition("delstate", query.getDelstate());// 删除标记
@@ -123,4 +124,21 @@ public class AccountServiceImpl implements IAccountService {
 		}
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public AccountEntity getAccountByNo(String accountNo)
+			throws ServiceException {
+		try {
+			AccountQuery query = new AccountQuery();
+			query.setAccountNo(accountNo);
+			List<AccountEntity> list = queryAccounts(query);
+			if (list != null && list.size() > 0) {
+				return list.get(0);
+			}
+			return null;
+		} catch (Exception e) {
+			SxjLogger.error("根据子账号查询信息错误", e, this.getClass());
+			throw new ServiceException("根据子账号查询信息错误", e.getMessage());
+		}
+	}
 }

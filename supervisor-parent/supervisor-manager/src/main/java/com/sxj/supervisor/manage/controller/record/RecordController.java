@@ -20,15 +20,18 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
+import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/record")
 public class RecordController extends BaseController {
 
 	@Autowired
-	IRecordService recordService;
+	private IRecordService recordService;
 
-	IContractService contractService;
+	@Autowired
+	private IContractService contractService;
 
 	/**
 	 * 备案管理页面
@@ -36,16 +39,27 @@ public class RecordController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/recordList")
-	public String recordList(RecordQuery query, ModelMap map) {
-		ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
-		RecordStateEnum[] rse = RecordStateEnum.values();// 备案状态
-		RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
-		List<RecordEntity> list = recordService.queryRecord(query);
-		map.put("cte", cte);
-		map.put("rse", rse);
-		map.put("rte", rte);
-		map.put("list", list);
-		return "manage/record/record";
+	public String recordList(RecordQuery query, ModelMap map)
+			throws WebException {
+		try {
+			if (query != null) {
+				query.setPagable(true);
+			}
+			ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
+			RecordStateEnum[] rse = RecordStateEnum.values();// 备案状态
+			RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
+			List<RecordEntity> list = recordService.queryRecord(query);
+			map.put("cte", cte);
+			map.put("rse", rse);
+			map.put("rte", rte);
+			map.put("list", list);
+			map.put("query", query);
+			return "manage/record/record";
+		} catch (Exception e) {
+			SxjLogger.error("查询备案信息错误", e, this.getClass());
+			throw new WebException("查询备案信息错误");
+		}
+
 	}
 
 	/**

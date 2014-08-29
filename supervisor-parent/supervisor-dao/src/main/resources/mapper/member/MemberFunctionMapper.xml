@@ -8,14 +8,15 @@
 		<result property="title" column="TITLE" jdbcType="VARCHAR" />
 		<result property="url" column="URL" jdbcType="VARCHAR" />
 		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
+		<result property="style" column="STYLE" jdbcType="VARCHAR" />
 		<result property="level" column="LEVEL" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 系统功能高级查询 --> 
 	<select id="queryFunctions" resultMap="MemberFunctionResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,TITLE,URL,PARENT_ID,LEVEL 
-		 FROM M_MENEBR_FUNCTION  WHERE 1=1 ]]>
+		<![CDATA[SELECT ID,TITLE,URL,PARENT_ID,LEVEL,STYLE 
+		 FROM M_MEMBER_FUNCTION  WHERE 1=1 ]]>
 		 <if test="condition.parentId != null and condition.parentId!=''">
 			<![CDATA[ AND PARENT_ID=#{condition.parentId}]]>
 		</if>

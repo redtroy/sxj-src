@@ -15,7 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
-import com.sxj.supervisor.model.function.FunctionModel;
+import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 

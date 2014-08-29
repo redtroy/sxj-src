@@ -11,7 +11,7 @@ public class RecordQuery extends Pagable implements Serializable {
 	 */
 	private static final long serialVersionUID = 7160738924586342611L;
 
-	private String recrodNo;
+	private String recordNo;
 
 	private String memberId;
 
@@ -30,6 +30,22 @@ public class RecordQuery extends Pagable implements Serializable {
 	private String memberIdB;
 
 	private Boolean delState = false;
+
+	private String startApplyDate;
+
+	private String endApplyDate;
+
+	private String startAcceptDate;
+
+	private String endAcceptDate;
+
+	public String getRecordNo() {
+		return recordNo;
+	}
+
+	public void setRecordNo(String recordNo) {
+		this.recordNo = recordNo;
+	}
 
 	public Boolean getDelState() {
 		return delState;
@@ -53,32 +69,6 @@ public class RecordQuery extends Pagable implements Serializable {
 
 	public void setMemberIdB(String memberIdB) {
 		this.memberIdB = memberIdB;
-	}
-
-	private String startApplyDate;
-
-	private String endApplyDate;
-
-	private String startAcceptDate;
-
-	private String endAcceptDate;
-
-	private Boolean delstate = false;
-
-	public Boolean getDelstate() {
-		return delstate;
-	}
-
-	public void setDelstate(Boolean delstate) {
-		this.delstate = delstate;
-	}
-
-	public String getRecrodNo() {
-		return recrodNo;
-	}
-
-	public void setRecrodNo(String recrodNo) {
-		this.recrodNo = recrodNo;
 	}
 
 	public String getMemberId() {

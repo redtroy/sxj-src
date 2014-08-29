@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sxj.supervisor.dao.system.IRoleDao;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.RoleEntity;
-import com.sxj.supervisor.model.function.FunctionModel;
+import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;

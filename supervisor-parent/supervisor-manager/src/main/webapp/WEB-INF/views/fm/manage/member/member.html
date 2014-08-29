@@ -10,9 +10,7 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
-<#if (memberList?size>0)>
 <@b.pageScript/>
-</#if>
 <@b.errorInfo/>
 <script>
 jQuery(document).ready(function($) {
@@ -63,25 +61,15 @@ jQuery(document).ready(function($) {
    }
    //修改
    function edit(id){
-	   var memberNo=$("#memberID1").val(); //会员号
-	   var type=$("#type1").val();//会员类型
-	   var bLicenseNo=$("#bLicenseNo1").val();//营业执照
-	   var energyNo=$("#energyNo1").val();//节能标识号
-	   var contacts=$("#contacts1").val();//联系人名称
-	   var phoneNo=$("#phoneNo1").val();//联系人手机
-	   var address=$("#address1").val();//公司地址
-	   var telNum=$("#telNum1").val();//固定电话
-	   $.post("editMember.htm",{id:id,name:memberNo,bLicenseNo:bLicenseNo,energyNo:energyNo,
-		   contacts:contacts,phoneNo:phoneNo,address:address,telNum:telNum,type:type
-		 },function(data){
-			 if (data.isOK=='ok'){
-				 alert('修改成功！')
-			}
-			else{
+	   var params=$("#"+id+"_info").find(":input");
+		$("#edit_form").append(params.html());
+		$.post("${basePath}member/editMember.htm",params,function(data){
+			if(data.isOK=='ok'){
+				alert("修改成功");
+			}else{
 				errorInfo(data);
 			}
-		 },"json");
-	    
+		});
    }
    //更改账户状态
    function editState(id,state){
@@ -135,7 +123,7 @@ Intense( elements );
           <select name="area" id="city">
            <option value="">-请选择-</option>
           	<#list cityList as city>
-            <option value="${city.id}">${city.name}</option>
+            <option value="${city.id}:${city.name}">${city.name}</option>
             </#list>
           </select>
          营业执照号码
@@ -184,9 +172,8 @@ Intense( elements );
         </p>
         </form>
       </div>
-      <#if (memberList?size>0) >
+       <form id="edit_form"></form>
       <@b.pager/>
-		</#if>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="6%" />
         <col width="10%"/>
@@ -215,7 +202,7 @@ Intense( elements );
         </tr>
         <#list memberList as member>
         <tr>
-          <td><a href="javascript:openDiv('${member.memberNo}');" class="lnk-blue">${member.memberNo}</a></td>
+          <td><a href="javascript:openDiv('${member.id}_info');" class="lnk-blue">${member.memberNo}</a></td>
           <td>${member.name}</td>
           <td>${member.contacts}</td>
           <td>${member.getbLicenseNo()}</td>
@@ -238,29 +225,25 @@ Intense( elements );
           
           <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd(${member.id})"><span>初始化密码</span></button></td>
         </tr>
-        <tr class="tableInfo" style="display:none;" id="${member.memberNo}">
+        <tr class="tableInfo" style="display:none;" id="${member.id}_info">
           <td colspan="11">
           <div class="infoBox">
           <ul class="ly-clearFix">
-          <li><label>会员名称</label><input type="text" value="${member.name}" id="memberID1"/></li>
+          <input type="hidden" name ="id" value="${member.id}"/>
+          <li><label>会员名称</label><input type="text" value="${member.name}" name="name"/></li>
           <li><label>城市</label> 江苏省-
-            <select name="select3">
-              <option selected="selected">南京市</option>
-              <option>无锡市</option>
-              <option>苏州市</option>
-              <option>常州市</option>
-              <option>徐州市</option>
-              <option>扬州市</option>
-              <option>南通市</option>
-              <option>镇江市</option>
-              <option>泰州市</option>
-              <option>盐城市</option>
-              <option>淮安市</option>
-              <option>宿迁市</option>
-              <option>连云港市</option>
-            </select>
+            <select name="area" id="city">
+           	<option value="">-请选择-</option>
+          	<#list cityList as city>
+          	<#if (("32:江苏省,"+city.id+":"+city.name)==member.area)>
+          	 <option value="32:江苏省,${city.id}:${city.name}" selected="selected">${city.name}</option>
+          	<#else>
+            <option value="32:江苏省,${city.id}:${city.name}">${city.name}</option>
+            </#if>
+            </#list>
+          </select>
             <label>会员类型</label>
-            <select name="typeEnum" id="type1">
+            <select name="type">
               <#list types as type>
                 <#if (type.getId()==member.type.getId())>
                       <option value="${type.getId()}" selected="selected">${type.getName()}</option>
@@ -270,16 +253,16 @@ Intense( elements );
             </#list>
             </select>
           </li>
-          <li class="view"><label>营业执照</label><input type="text" id="bLicenseNo1" value="${member.getbLicenseNo()}" />
+          <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo" value="${member.getbLicenseNo()}" />
           <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/yyzz.gif">查看缩略图</a></p>
           </li>
-          <li class="view"><label >节能标识推广证</label><input id="energyNo1" type="text" value="${member.getEnergyNo()}" />
+          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" value="${member.getEnergyNo()}" />
           <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/jntg.gif">查看缩略图</a></p>
           </li>
-          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" id="contacts1"/></li>
-          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" id="phoneNo1"/></li>
-          <li><label>公司地址</label><input type="text" value="${member.address}" id="address1"/></li>
-          <li><label>固定电话</label><input type="text" value="${member.telNum}" id="telNum1"/></li>
+          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" name="contacts"/></li>
+          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" name="phoneNo"/></li>
+          <li><label>公司地址</label><input type="text" value="${member.address}" name="address"/></li>
+          <li><label>固定电话</label><input type="text" value="${member.telNum}" name="telNum"/></li>
           <li><label>注册时间</label>${member.regDate?date}</li>
           <li><label>认证时间</label>${member.authorDate?date}</li>
           <li><label>审核状态</label><em class="state normal" id="checkState1">${member.checkState.getName()}</em></li>

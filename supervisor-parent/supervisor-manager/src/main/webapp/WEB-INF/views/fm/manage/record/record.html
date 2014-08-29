@@ -1,15 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${staticPath}js/jquery.js"></script>
-<script src="${staticPath}js/intense.js"></script>
-<script src="${staticPath}js/jquery.paginate.js"></script>
-
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.pageScript/>
+<@b.errorInfo/>
 <script>
 jQuery(document).ready(function($) {
 	$('.lnk-view').click(function(){
@@ -25,87 +27,51 @@ window.onload = function() {
 var elements = document.querySelectorAll( '.demo-image' );
 Intense( elements );
 }
-</script>
-<script type="text/javascript">
-		$(function() {
-			$("#pager").paginate({
-				count 		: 50,
-				start 		: 1,
-				display     : 10,
-				border					: true,
-				border_color			: '#CCC',
-				text_color  			: '#333',
-				background_color    	: '#FFF',	
-				border_hover_color		: '#ff4400',
-				text_hover_color  		: '#ff4400',
-				background_hover_color	: '#fff', 
-				images					: false,
-				mouse					: 'press'
-			});
-       });
-		function loadPage(currentPage,totalPage){
-			$("#pager").paginate({
-				count 		: totalPage,
-				start 		: currentPage,
-				display     : 10,
-				border					: true,
-				border_color			: '#CCC',
-				text_color  			: '#333',
-				background_color    	: '#FFF',	
-				border_hover_color		: '#ff4400',
-				text_hover_color  		: '#ff4400',
-				background_hover_color	: '#fff', 
-				images					: false,
-				mouse					: 'press',
-				onChange				: function(page){
-					var params=$("#search_form").serialize();
-					params=params+"&currentPage="+page;
-					$.post("${basePath}system/account-list.htm",params,function(data){
-						var res=$(data).find("#rightBar");
-						$("#rightBar").empty();
-						$("#rightBar").append(res.html());
-						var totalPage=$("#pager").attr("totalPage");
-						var currentPage=$("#pager").attr("currentPage");
-						loadPage(currentPage,totalPage);
-						
-					});
-				}
-			});
-		}	
-		
-	//按条件查找	
-	function search(){
-		$("#search_box").submit();
-	}
-	
-	//删除
-	function del(id){
-		$.post("delRecord.htm",{id:id},function(data){
-			if (data.isOk=="ok"){
-				$("#id").remove();
-			}
-		})
-	}
+
+//按条件查找	
+function query(page){
+	var params=$("#search_box").serialize();
+	if(page!=undefined){
+	   params=params+"&currentPage="+page;
+  	}
+	$.post("${basePath}record/recordList.htm",params,function(data){
+		var res=$(data).find("#rightBar").children("#res_table");
+		var pager=$(data).find("#rightBar").children("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+
+//删除
+function del(id){
+	$.post("delRecord.htm",{id:id},function(data){
+		if (data.isOk=="ok"){
+			$("#id").remove();
+		}
+	})
+}
 </script>
 <body>
-<#include "manage/head.html">
+<@b.header />
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
 <!-- InstanceEndEditable -->
 <div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>备案管理<span>&gt;</span>备案管理</div>
 <div id="mainBg" class="ly-clearFix yard-1200">
-    <div id="leftList">
- 	<script>$("#leftList").load("${basePath}menu.htm");</script>
- 	</div>
+   <div id="leftList"><@b.leftMenu /></div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">备案管理</h2>
       <div id="searchBox">
-      <form action="recordList.htm" id="search_box" method="post">
+      <form id="search_box" action="javascript:void(0);">
         <p>备案号<input type="text" name="recordNo" value="" />
           申请会员ID<input type="text" name="applyId" value="" />
          合同签订者<input type="text" name="insurantName" value="" />
           合同类型<select name="contractType">
+           <option value="">-请选择-</option>
           <#list cte as type>
             <option value="${type.id}">${type.getName()}</option>
            </#list>
@@ -114,30 +80,32 @@ Intense( elements );
         </p>
         <p>
         备案类型<select name="type">
+         <option value="">-请选择-</option>
             <#list rte as state>
             <option value="${state.id}">${state.getName()}</option>
             </#list>
           </select>
         状态<select name="state">
+         <option value="">-请选择-</option>
             <#list rse as type>
             <option value="${type.id}">${type.getName()}</option>
             </#list>
           </select>
           申请备案时间段
-          <input type="text" name="startApplyDate" value="" />
+          <input type="text" name="startApplyDate"  datepicker id="time1" value="" />
           -
-          <input type="text" name="endApplyDate" value="" />
+          <input type="text" name="endApplyDate"  datepicker id="time2" value="" />
 		  受理时间段
-          <input type="text" name="startAcceptDate" value="" />
+          <input type="text" name="startAcceptDate" datepicker id="time3" value="" />
           -
-          <input type="text" name="endAcceptDate" value="" />
-          <button class="btn btn-blue"><span>查询</span></button>
+          <input type="text" name="endAcceptDate" datepicker id="time4" value="" />
+          <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
         </p>
         </form>
       </div>
 	   <div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的备案申请！</div>
-       <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList recordTable">
+ 		<@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList recordTable" id="res_table">
         <col width="5%" />
         <col width="7%"/>
         <col width="8%"/>
@@ -205,15 +173,15 @@ Intense( elements );
               <div class="ScrCont">
                 <div id="List1">
                   <!-- 图片列表 begin -->
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht01.gif"><img src="${staticPath}images/ht01s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht02.gif"><img src="${staticPath}images/ht02s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht03.gif"><img src="${staticPath}images/ht03s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht01.gif"><img src="${staticPath}images/ht01s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht02.gif"><img src="${staticPath}images/ht02s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht03.gif"><img src="${staticPath}images/ht03s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht01.gif"><img src="${staticPath}images/ht01s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht02.gif"><img src="${staticPath}images/ht02s.gif"  /></a></div>
-                  <div class="pic"><a href="#" class="demo-image" data-image="${staticPath}images/ht03.gif"><img src="${staticPath}images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht01.gif"><img src="${b.staticPath}images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht02.gif"><img src="${b.staticPath}images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht03.gif"><img src="${b.staticPath}images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht01.gif"><img src="${b.staticPath}images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht02.gif"><img src="${b.staticPath}images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht03.gif"><img src="${b.staticPath}images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht01.gif"><img src="${b.staticPath}images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht02.gif"><img src="${b.staticPath}images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="${b.staticPath}images/ht03.gif"><img src="${b.staticPath}images/ht03s.gif"  /></a></div>
                   <!-- 图片列表 end -->
                 </div>
                 <div id="List2"></div>
@@ -226,6 +194,6 @@ Intense( elements );
     <!-- InstanceEndEditable --></div>
 </div>
 </div>
-<#include "manage/footer.html"> 
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>

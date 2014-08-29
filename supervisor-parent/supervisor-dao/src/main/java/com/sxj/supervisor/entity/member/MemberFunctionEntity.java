@@ -50,6 +50,12 @@ public class MemberFunctionEntity extends Pagable implements Serializable {
 	@Column(name = "LEVEL")
 	private Integer level;
 
+	/**
+	 * 样式
+	 */
+	@Column(name = "STYLE")
+	private String style;
+
 	public String getId() {
 		return id;
 	}
@@ -88,6 +94,14 @@ public class MemberFunctionEntity extends Pagable implements Serializable {
 
 	public void setLevel(Integer level) {
 		this.level = level;
+	}
+
+	public String getStyle() {
+		return style;
+	}
+
+	public void setStyle(String style) {
+		this.style = style;
 	}
 
 }

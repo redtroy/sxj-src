@@ -1,8 +1,6 @@
 package com.sxj.supervisor.service.impl.record;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +52,6 @@ public class RecordServiceImpl implements IRecordService {
 		RecordEntity record = getRecord(id);
 		record.setDelState(true);
 		recordDao.updateRecord(record);
-		// recordDao.deleteRecord(id);
 
 	}
 
@@ -72,27 +69,34 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	@Transactional
-	public List<RecordEntity> queryRecord(RecordQuery query) {
-		QueryCondition<RecordEntity> qc = new QueryCondition<RecordEntity>();
-		Map<String, Object> condition = new HashMap<String, Object>();
-		condition.put("recrodNo", query.getRecrodNo());// 备案号
-		condition.put("memberId", query.getMemberId());// 会员Id
-		condition.put("applyId", query.getApplyId());// 申请会员ID
-		condition.put("contractType", query.getContractType());// 合同类型
-		condition.put("contractNo", query.getContractNo());// 合同号
-		condition.put("recordType", query.getRecordType());// 备案类型
-		condition.put("state", query.getState());// 备案状态
-		condition.put("startApplyDate", query.getStartApplyDate());// 开始申请时间
-		condition.put("endApplyDate", query.getEndApplyDate());// 结束申请时间
-		condition.put("startAcceptDate", query.getStartAcceptDate());// 开始受理时间
-		condition.put("endAcceptDate", query.getEndAcceptDate());// 结束受理时间
-		condition.put("memberIdA", query.getMemberIdA());// 结束受理时间
-		condition.put("memberIdB", query.getMemberIdB());// 结束受理时间
-		qc.setCondition(condition);
-		qc.setPage(query);
-		List<RecordEntity> recordList = recordDao.queryRecord(qc);
-		query.setPage(qc);
-		return recordList;
+	public List<RecordEntity> queryRecord(RecordQuery query) throws ServiceException {
+		try {
+			if (query == null) {
+				return null;
+			}
+			QueryCondition<RecordEntity> condition = new QueryCondition<RecordEntity>();
+			condition.addCondition("recordNo", query.getRecordNo());// 备案号
+			condition.addCondition("memberId", query.getMemberId());// 会员Id
+			condition.addCondition("applyId", query.getApplyId());// 申请会员ID
+			condition.addCondition("contractType", query.getContractType());// 合同类型
+			condition.addCondition("contractNo", query.getContractNo());// 合同号
+			condition.addCondition("recordType", query.getRecordType());// 备案类型
+			condition.addCondition("state", query.getState());// 备案状态
+			condition.addCondition("startApplyDate", query.getStartApplyDate());// 开始申请时间
+			condition.addCondition("endApplyDate", query.getEndApplyDate());// 结束申请时间
+			condition.addCondition("startAcceptDate",
+					query.getStartAcceptDate());// 开始受理时间
+			condition.addCondition("endAcceptDate", query.getEndAcceptDate());// 结束受理时间
+			condition.addCondition("memberIdA", query.getMemberIdA());// 结束受理时间
+			condition.addCondition("memberIdB", query.getMemberIdB());// 结束受理时间
+			condition.setPage(query);
+			List<RecordEntity> recordList = recordDao.queryRecord(condition);
+			query.setPage(condition);
+			return recordList;
+		} catch (Exception e) {
+			throw new ServiceException("查询备案信息错误", e);
+		}
+
 	}
 
 	/**
@@ -122,7 +126,7 @@ public class RecordServiceImpl implements IRecordService {
 	public RecordEntity getRecordByNo(String no) throws ServiceException {
 		try {
 			RecordQuery query = new RecordQuery();
-			query.setRecrodNo(no);
+			query.setRecordNo(no);
 			List<RecordEntity> list = queryRecord(query);
 			if (list != null && list.size() > 0) {
 				return list.get(0);

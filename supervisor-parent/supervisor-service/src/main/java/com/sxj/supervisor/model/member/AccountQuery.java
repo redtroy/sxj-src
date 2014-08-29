@@ -11,12 +11,19 @@ public class AccountQuery extends Pagable implements Serializable {
 	private static final long serialVersionUID = -5168931378789020273L;
 
 	private String memberNo;
-	private String accountId;
+
+	private String accountNo;
+
 	private String accountName;
+
 	private Integer state;
+
 	private String startDate;
+
 	private String endDate;
+
 	private String roleId;
+
 	private Boolean delstate = false;
 
 	public Boolean getDelstate() {
@@ -35,12 +42,12 @@ public class AccountQuery extends Pagable implements Serializable {
 		this.memberNo = memberNo;
 	}
 
-	public String getAccountId() {
-		return accountId;
+	public String getAccountNo() {
+		return accountNo;
 	}
 
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
 	}
 
 	public String getAccountName() {

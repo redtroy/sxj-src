@@ -1,5 +1,7 @@
 package com.sxj.supervisor.website.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,27 +15,18 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
-import com.sxj.supervisor.service.system.IRoleService;
+import com.sxj.supervisor.model.member.MemberFunctionModel;
+import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 
 @Controller
 public class BasicController extends BaseController {
 
 	@Autowired
-	private IRoleService roleService;
+	private IMemberFunctionService functionService;
 
 	@Autowired
 	private ISystemAccountService accountService;
-
-	@RequestMapping("footer")
-	public String ToFooter() {
-		return "site/footer";
-	}
-
-	@RequestMapping("head")
-	public String ToHeader() {
-		return "site/head";
-	}
 
 	@RequestMapping("index")
 	public String ToIndex() {
@@ -87,9 +80,10 @@ public class BasicController extends BaseController {
 		// if (userName == null) {
 		// return "403";
 		// }
-		// List<FunctionModel> list = roleService
+		// List<MemberFunctionEntity> list = roleService
 		// .getRoleFunction(userName.getId());
-		// map.put("list", list);
+		List<MemberFunctionModel> list = functionService.queryFunctions();
+		map.put("list", list);
 		return "site/menu";
 	}
 

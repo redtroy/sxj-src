@@ -1,4 +1,4 @@
-package com.sxj.supervisor.model.function;
+package com.sxj.supervisor.model.system;
 
 import java.io.Serializable;
 import java.util.List;

@@ -48,7 +48,7 @@ public class MemberController extends BaseController {
 			}
 			if (StringUtils.isNotEmpty(query.getArea())) {
 				String areaId = query.getArea();
-				areaId = "32," + areaId;
+				areaId = "32:江苏省," + areaId;
 				query.setArea(areaId);
 			}
 			MemberTypeEnum[] types = MemberTypeEnum.values();
