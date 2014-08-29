@@ -12,21 +12,30 @@ public class CheckModel {
 	 */
 	public Object model(Object model1, Object model2)
 			throws NoSuchMethodException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+			InvocationTargetException {
 		Field[] field2 = model2.getClass().getDeclaredFields(); // 获取实体类2的所有属性，
-		for (int j = 0; j < field2.length; j++) { // 遍历所有属性
+		for (int j = 1; j < field2.length; j++) { // 遍历所有属性
 			String name = field2[j].getName();
 			String name1 = name;
 			name = name.substring(0, 1).toUpperCase() + name.substring(1);
 			// String type = field2[j].getGenericType().toString();
 			// System.out.println(type);
-			Method m2 = model2.getClass().getMethod("get" + name);
+			Method m2;
+			try {
+				m2 = model2.getClass().getMethod("get" + name);
+			} catch (Exception e) {
+				m2 = model2.getClass().getMethod("get" + name1);
+			}
 			// String value = (String) m2.invoke(model2); // 调用getter方法获取属性值
 			Object value = m2.invoke(model2);
 			if (value != null) {
 				// Field[] field1 = model1.getClass().getDeclaredFields(); //
 				// 获取实体类1的所有属性，
-				Reflections.invokeSetter(model1, name, value);
+				try {
+					Reflections.setFieldValue(model1, name, value);
+				} catch (Exception e) {
+					Reflections.setFieldValue(model1, name1, value);
+				}
 
 			}
 		}

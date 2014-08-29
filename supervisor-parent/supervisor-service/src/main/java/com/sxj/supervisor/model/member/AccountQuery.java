@@ -10,7 +10,7 @@ public class AccountQuery extends Pagable implements Serializable {
 	 */
 	private static final long serialVersionUID = -5168931378789020273L;
 
-	private String memberNo;
+	private String memberId;
 	private String accountId;
 	private String accountName;
 	private Integer state;
@@ -27,12 +27,12 @@ public class AccountQuery extends Pagable implements Serializable {
 		this.delstate = delstate;
 	}
 
-	public String getMemberNo() {
-		return memberNo;
+	public String getMemberId() {
+		return memberId;
 	}
 
-	public void setMemberNo(String memberNo) {
-		this.memberNo = memberNo;
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 
 	public String getAccountId() {

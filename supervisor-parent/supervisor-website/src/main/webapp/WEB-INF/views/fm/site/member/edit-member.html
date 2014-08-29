@@ -9,8 +9,18 @@
 <link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <link href="${staticPath}style/form.css" rel="stylesheet" type="text/css" />
 <link href="${staticPath}style/msg.css" rel="stylesheet" type="text/css" />
+<script src="${staticPath}js/jquery.js"></script>
 <script>
-
+function save(id){
+	var telNum=$("#qh").val()+$("#telNum").val();
+	var address=$("#address").val();
+    var code=$("#code").val();	
+    var contacts=$("#contacts").val();
+    var phoneNo=$("#phoneNo").val();
+    $.post("save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo},function(data){
+    	alert("修改成功！");
+    })
+}
 </script>
 </head>
 
@@ -93,7 +103,7 @@
         </div>
         <div class="item mt10">
           <label>&nbsp;</label>
-          <a class="button button-orange mr15" href="member-profile.html">确认会员资料</a><a class="button button-gray" href="javascript:history.go(-1)">取消
+          <a class="button button-orange mr15" href="#" onclick="save(${member.id})">确认会员资料</a><a class="button button-gray" href="javascript:history.go(-1)">取消
           
           </a> </div>
       </div>
