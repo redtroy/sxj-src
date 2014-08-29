@@ -1,6 +1,5 @@
 package com.sxj.supervisor.service.impl.member;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
-import com.sxj.util.checkMolde.CheckModel;
 import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
@@ -40,35 +38,6 @@ public class MemberServiceImpl implements IMemberService {
 	 * 更新会员
 	 */
 	@Override
-<<<<<<< HEAD
-	public void modifyMember(MemberEntity member) {
-		MemberEntity mb = menberDao.getMember(member.getId());
-		CheckModel cm = new CheckModel();
-		try {
-			mb = (MemberEntity) cm.model(mb, member);
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// mb.setName(member.getName());
-		// mb.setbLicenseNo(member.getbLicenseNo());
-		// mb.setEnergyNo(member.getEnergyNo());
-		// mb.setContacts(member.getContacts());
-		// mb.setType(member.getType());
-		// mb.setPhoneNo(member.getPhoneNo());
-		// mb.setAddress(member.getAddress());
-		// mb.setTelNum(member.getTelNum());
-		menberDao.updateMember(mb);
-=======
 	@Transactional
 	public void modifyMember(MemberEntity member) throws ServiceException {
 		try {
@@ -86,8 +55,6 @@ public class MemberServiceImpl implements IMemberService {
 		} catch (Exception e) {
 			throw new ServiceException("修改会员信息错误", e);
 		}
-
->>>>>>> 60468822b9cc45c797003119811cbc00ef908058
 	}
 
 	/**
