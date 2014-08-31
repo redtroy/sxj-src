@@ -1,18 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<#include "site/base.html"> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link href="${staticPath}style/form.css" rel="stylesheet" type="text/css" />
-<link href="${staticPath}style/msg.css" rel="stylesheet" type="text/css" />
-<script src="${staticPath}js/jquery.js"></script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/form.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/msg.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
 <script>
 function save(id){
-	var telNum=$("#qh").val()+$("#telNum").val();
+	var telNum=$("#qh").val()+'-'+$("#telNum").val();
 	var address=$("#address").val();
     var code=$("#code").val();	
     var contacts=$("#contacts").val();
@@ -26,13 +25,13 @@ function save(id){
 
 <body>
 <div id="header" class="fence">
-<#include "site/head.html"> 
+<@b.header />
 </div>
 <div class="mainBg">
 <div class="fence-wide ly-clearFix">
 <div class="main pb20">
 <div class="yard-190 ly-left leftMenu">
-<#include "site/menu.html">
+<@b.leftMenu />
 </div>
 <div class="yard-870 rightSide ly-left">
       <div class="heading mb15 ly-clearFix">
@@ -111,6 +110,6 @@ function save(id){
 </div>
 </div>
 </div>
-<#include "site/footer.html"> 
+<@b.footer /> 
 </body>
 </html>
