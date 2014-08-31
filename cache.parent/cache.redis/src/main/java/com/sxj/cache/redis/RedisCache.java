@@ -30,6 +30,10 @@ public class RedisCache implements Cache
     
     private String region;
     
+    private static final String DELETE_SCRIPT_IN_LUA = "local keys = redis.call('keys', '%s')"
+            + "  for i,k in ipairs(keys) do"
+            + "    local res = redis.call('del', k)" + "  end";
+    
     public RedisCache(String region)
     {
         this.region = region;
@@ -230,6 +234,35 @@ public class RedisCache implements Cache
         }
     }
     
+    public void deleteKeys(String pattern)
+    {
+        boolean broken = false;
+        Jedis cache = RedisCacheProvider.getResource();
+        try
+        {
+            
+            if (cache == null)
+            {
+                throw new Exception("Unable to get jedis resource!");
+            }
+            
+            cache.eval(String.format(DELETE_SCRIPT_IN_LUA, pattern));
+        }
+        catch (Exception exc)
+        {
+            broken = true;
+            throw new CacheException(exc);
+        }
+        
+        finally
+        {
+            if (cache != null)
+            {
+                RedisCacheProvider.returnResource(cache, broken);
+            }
+        }
+    }
+    
     @Override
     public void clear() throws CacheException
     {
@@ -237,7 +270,7 @@ public class RedisCache implements Cache
         boolean broken = false;
         try
         {
-            cache.del(region + ":*");
+            deleteKeys(region + ":*");
         }
         catch (Exception e)
         {

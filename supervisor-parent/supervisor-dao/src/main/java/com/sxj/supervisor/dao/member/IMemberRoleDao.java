@@ -48,4 +48,13 @@ public interface IMemberRoleDao {
 	public List<MemberFunctionEntity> getRoleFunctions(
 			QueryCondition<MemberFunctionEntity> query) throws SQLException;
 
+	/**
+	 * 获取授权操作列表
+	 * 
+	 * @return
+	 * @throws SQLException2
+	 */
+	public List<MemberFunctionEntity> getAllRoleFunction(String account)
+			throws SQLException;
+
 }
