@@ -83,14 +83,13 @@
    }
    //更改状态
    function checkState(id,stateId){
-	  $.post("${basePath}member/account/editState.htm",{'id':id,'state':stateId},function(data){
+	  $.post("${basePath}member/account/editState.htm",{id:id,state:stateId},function(data){
 		  if (data.isOK=='ok'){
 			  query();
 		   }else{
 				errorInfo(data);
 			}
 	  })
-	
 	  
    }
 </script>

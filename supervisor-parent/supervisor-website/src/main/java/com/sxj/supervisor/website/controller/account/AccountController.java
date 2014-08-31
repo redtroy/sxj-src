@@ -1,5 +1,6 @@
 package com.sxj.supervisor.website.controller.account;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,12 +32,16 @@ public class AccountController extends BaseController {
 	 */
 	@RequestMapping("accountList")
 	public String accountList(AccountQuery query, ModelMap map) {
+		if (query != null) {
+			query.setPagable(true);
+		}
 		String parentId = "1";
 		query.setMemberNo(parentId);
 		MemberAuthorityEnum[] ma = MemberAuthorityEnum.values();// 权限
 		List<AccountEntity> list = accountService.queryAccounts(query);
 		map.put("list", list);
 		map.put("ma", ma);
+		map.put("query", query);
 		return "site/member/edit-account";
 	}
 
@@ -69,5 +74,36 @@ public class AccountController extends BaseController {
 	public @ResponseBody Map<String, String> save_pwd(AccountEntity account) {
 		accountService.modifyAccount(account);
 		return null;
+	}
+
+	/**
+	 * 根据更新子帐号信息
+	 * 
+	 * @param editAccount
+	 * @return
+	 */
+	@RequestMapping("editAccount")
+	public @ResponseBody Map<String, String> editAccount(AccountEntity account) {
+		System.out.println("test");
+		accountService.modifyAccount(account);
+		;
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isOK", "ok");
+		return map;
+	}
+
+	/**
+	 * 修改子会员状态
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("editState")
+	public @ResponseBody Map<String, String> editState(String id, Integer state) {
+		String stateName = accountService.editState(id, state);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("isOK", "ok");
+		map.put("state", stateName);
+		return map;
 	}
 }

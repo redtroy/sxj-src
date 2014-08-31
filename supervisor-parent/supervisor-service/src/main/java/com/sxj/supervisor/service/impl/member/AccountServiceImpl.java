@@ -36,10 +36,11 @@ public class AccountServiceImpl implements IAccountService {
 	 */
 	@Override
 	public void modifyAccount(AccountEntity account) {
-		AccountEntity ae = accountDao.getAccount(account.getId());
-		ae.setName(account.getName());
-		ae.setAccountName(account.getAccountName());
-		accountDao.updateAccount(ae);
+		// AccountEntity ae = accountDao.getAccount(account.getId());
+		// ae.setName(account.getName());
+		// ae.setAccountName(account.getAccountName());
+		// accountDao.updateAccount(ae);
+		accountDao.updateAccount(account);
 
 	}
 
@@ -94,13 +95,13 @@ public class AccountServiceImpl implements IAccountService {
 		AccountEntity account = new AccountEntity();
 		account.setId(id);
 		if (state == MemberStatesEnum.normal.getId().intValue()) {
-			account.setState(MemberStatesEnum.normal);
-			accountDao.updateAccount(account);
-			return MemberStatesEnum.normal.getName();
-		} else if (state == MemberStatesEnum.stop.getId().intValue()) {
 			account.setState(MemberStatesEnum.stop);
 			accountDao.updateAccount(account);
 			return MemberStatesEnum.stop.getName();
+		} else if (state == MemberStatesEnum.stop.getId().intValue()) {
+			account.setState(MemberStatesEnum.normal);
+			accountDao.updateAccount(account);
+			return MemberStatesEnum.normal.getName();
 		} else {
 			return null;
 		}
