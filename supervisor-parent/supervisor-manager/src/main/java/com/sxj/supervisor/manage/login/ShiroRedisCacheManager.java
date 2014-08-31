@@ -9,6 +9,12 @@ public class ShiroRedisCacheManager extends AbstractCacheManager
     
     private int level = 2;
     
+    //认证
+    public static final String authenticationCacheName = "shiro-authenticationCacheName";
+    
+    //授权
+    public static final String authorizationCacheName = "shiro-authorizationCacheName";
+    
     @Override
     protected Cache createCache(String cacheName) throws CacheException
     {

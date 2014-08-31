@@ -42,10 +42,7 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm
     
     public SupervisorManagerShiroRealm()
     {
-        // 认证
         super.setAuthenticationCachingEnabled(false);
-        // 授权
-        // super.setAuthorizationCacheName(GlobalStatic.authorizationCacheName);
     }
     
     // 获取授权信息
@@ -127,5 +124,11 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm
         matcher.setHashIterations(HASH_INTERATIONS);
         
         setCredentialsMatcher(matcher);
+    }
+    
+    @Override
+    protected void clearCachedAuthorizationInfo(PrincipalCollection arg0)
+    {
+        super.clearCachedAuthorizationInfo(arg0);
     }
 }

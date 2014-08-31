@@ -3,6 +3,7 @@ package com.sxj.cache.redis;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.LoggerFactory;
 
@@ -237,7 +238,9 @@ public class RedisCache implements Cache
         boolean broken = false;
         try
         {
-            cache.del(region + ":*");
+            Set<String> keys = cache.keys(region + ":*");
+            for (String key : keys)
+                cache.del(key);
         }
         catch (Exception e)
         {
