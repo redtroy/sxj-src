@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
+import com.sxj.supervisor.website.login.SupervisorPrincipal;
 
 public class BaseController {
 
@@ -44,6 +46,16 @@ public class BaseController {
 	protected String getBasePath(HttpServletRequest request) {
 		return request.getScheme() + "://" + request.getServerName() + ":"
 				+ request.getServerPort() + request.getContextPath() + "/";
+	}
+
+	protected SupervisorPrincipal getLoginInfo(HttpSession session) {
+		Object object = session.getAttribute("userinfo");
+		if (object != null) {
+			SupervisorPrincipal userBean = (SupervisorPrincipal) object;
+			return userBean;
+		}
+		return null;
+
 	}
 
 	// @RequestMapping("login")

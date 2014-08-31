@@ -16,6 +16,8 @@ public interface IMemberService {
 
 	public MemberEntity getMember(String id) throws ServiceException;
 
+	public MemberEntity getMemberByName(String name) throws ServiceException;
+
 	public List<MemberEntity> queryMembers(MemberQuery query)
 			throws ServiceException;
 

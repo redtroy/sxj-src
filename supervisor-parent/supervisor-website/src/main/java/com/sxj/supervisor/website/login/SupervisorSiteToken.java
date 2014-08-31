@@ -1,10 +1,8 @@
 package com.sxj.supervisor.website.login;
 
-import org.apache.shiro.authc.HostAuthenticationToken;
-import org.apache.shiro.authc.RememberMeAuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 
-public class SupervisorSiteToken implements HostAuthenticationToken,
-		RememberMeAuthenticationToken {
+public class SupervisorSiteToken extends UsernamePasswordToken {
 
 	/**
 	 * 
@@ -13,12 +11,6 @@ public class SupervisorSiteToken implements HostAuthenticationToken,
 
 	private SupervisorPrincipal userBean;
 
-	private String password;
-
-	private boolean rememberMe = false;
-
-	private String host;
-
 	public SupervisorSiteToken() {
 
 	}
@@ -26,9 +18,23 @@ public class SupervisorSiteToken implements HostAuthenticationToken,
 	public SupervisorSiteToken(final SupervisorPrincipal userBean,
 			final String password, final boolean rememberMe, final String host) {
 		this.userBean = userBean;
-		this.password = password;
-		this.rememberMe = rememberMe;
-		this.host = host;
+		super.setPassword(password.toCharArray());
+		super.setRememberMe(rememberMe);
+		super.setHost(host);
+		if (this.userBean != null) {
+			if (this.userBean.getMember() != null
+					&& this.userBean.getAccount() != null) {
+				super.setUsername(userBean.getAccount().getAccountNo());
+			} else if (this.userBean.getMember() != null
+					&& this.userBean.getAccount() == null) {
+				super.setUsername(userBean.getMember().getMemberNo());
+			}
+		}
+	}
+
+	public SupervisorSiteToken(final SupervisorPrincipal userBean,
+			final String password) {
+		this(userBean, password, false, null);
 	}
 
 	public SupervisorPrincipal getUserBean() {
@@ -39,22 +45,6 @@ public class SupervisorSiteToken implements HostAuthenticationToken,
 		this.userBean = userBean;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setRememberMe(boolean rememberMe) {
-		this.rememberMe = rememberMe;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
 	@Override
 	public Object getPrincipal() {
 		return getUserBean();
@@ -63,16 +53,6 @@ public class SupervisorSiteToken implements HostAuthenticationToken,
 	@Override
 	public Object getCredentials() {
 		return getPassword();
-	}
-
-	@Override
-	public boolean isRememberMe() {
-		return rememberMe;
-	}
-
-	@Override
-	public String getHost() {
-		return host;
 	}
 
 }

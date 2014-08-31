@@ -16,6 +16,7 @@ import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -179,6 +180,23 @@ public class MemberServiceImpl implements IMemberService {
 		MemberEntity member = getMember(id);
 		member.setPassword(pwd);
 		menberDao.updateMember(member);
+	}
+
+	@Override
+	public MemberEntity getMemberByName(String name) throws ServiceException {
+		try {
+			MemberQuery query = new MemberQuery();
+			query.setMemberName(name);
+			List<MemberEntity> list = queryMembers(query);
+			if (list.size() > 0) {
+				MemberEntity member = list.get(0);
+				return member;
+			}
+			return null;
+		} catch (Exception e) {
+			SxjLogger.error("根据会员名称查询会员错误", e, this.getClass());
+			throw new ServiceException("根据会员名称查询会员错误", e);
+		}
 	}
 
 }
