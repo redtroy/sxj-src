@@ -13,6 +13,7 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
@@ -92,7 +93,11 @@ public class RecordEntity extends Pagable implements Serializable {
 	 **/
 	@Column(name = "TYPE")
 	private RecordTypeEnum type;
-
+	/**
+	 * 备案状态
+	 **/
+	@Column(name = "CONFIRM_STATE")
+	private RecordConfirmStateEnum confirmState;
 	/**
 	 * 备案扫描件
 	 **/
@@ -140,6 +145,14 @@ public class RecordEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "DEL_STATE")
 	private Boolean delState = false;
+
+	public RecordConfirmStateEnum getConfirmState() {
+		return confirmState;
+	}
+
+	public void setConfirmState(RecordConfirmStateEnum confirmState) {
+		this.confirmState = confirmState;
+	}
 
 	public Boolean getDelState() {
 		return delState;

@@ -17,6 +17,7 @@
 		<result property="imgPath" column="IMG_PATH" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="contractType" column="CONTRACT_TYPE" jdbcType="INTEGER" />
+		<result property="confirmState" column="CONFIRM_STATE" jdbcType="INTEGER" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="refContractNo" column="REF_CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="applyDate" column="APPLY_DATE" jdbcType="TIME" />
@@ -28,7 +29,7 @@
 	<select id="queryRecord" resultMap="RecordResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,RECORD_NO,APPLY_ID,APPLY_NAME,MEMBER_ID_A,MEMBER_NAME_A,MEMBER_ID_B,MEMBER_NAME_B,
-		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE 
+		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE,CONFIRM_STATE
 		 FROM M_CONTRACT_RECORD WHERE 1=1]]>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
@@ -38,7 +39,7 @@
 		<if test="condition.applyId != null and condition.applyId != ''">
 			<![CDATA[AND APPLY_ID = #{condition.applyId}]]>
 		</if>
-		<!-- 合同签订者  -->
+		<!-- 查询当前会员所关联的备案 -->
 		<if test="condition.memberId != null and condition.memberId != ''">
 			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
 		</if>
