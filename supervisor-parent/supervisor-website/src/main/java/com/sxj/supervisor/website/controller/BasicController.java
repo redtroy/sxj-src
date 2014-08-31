@@ -14,10 +14,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
+import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
+import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.supervisor.website.login.SupervisorPrincipal;
+import com.sxj.supervisor.website.login.SupervisorSiteToken;
+import com.sxj.util.common.StringUtils;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 public class BasicController extends BaseController {
@@ -26,7 +34,10 @@ public class BasicController extends BaseController {
 	private IMemberFunctionService functionService;
 
 	@Autowired
-	private ISystemAccountService accountService;
+	private IMemberService memberService;
+
+	@Autowired
+	private IAccountService accountService;
 
 	@RequestMapping("index")
 	public String ToIndex() {
@@ -39,27 +50,56 @@ public class BasicController extends BaseController {
 	}
 
 	@RequestMapping("login")
-	public String login(String account, String password, HttpSession session,
-			HttpServletRequest request, ModelMap map) {
-		map.put("account", account);
-		SystemAccountEntity user = accountService.getAccountByAccount(account);
-		if (user == null) {
-			map.put("message", "用户名不存在");
-			return LOGIN;
+	public String login(String memberName, String accountNo, String password,
+			HttpSession session, HttpServletRequest request, ModelMap map) {
+		map.put("account", accountNo);
+		map.put("memberName", memberName);
+		SupervisorSiteToken token = null;
+		SupervisorPrincipal userBean = null;
+		if (StringUtils.isNotEmpty(memberName)
+				&& StringUtils.isNotEmpty(accountNo)) {
+			AccountEntity account = accountService.getAccountByNo(accountNo);
+			if (account == null) {
+				map.put("message", "会员子账户不存在");
+				return LOGIN;
+			}
+			String memberNo = account.getParentId();
+			MemberEntity member = memberService.memberInfo(memberNo);
+			if (member == null) {
+				map.put("message", "会员不存在");
+				return LOGIN;
+			}
+			if (!member.getName().equals(memberName)) {
+				map.put("message", "会员名错误");
+				return LOGIN;
+			}
+			userBean = new SupervisorPrincipal();
+			userBean.setAccount(account);
+			userBean.setMember(member);
+			token = new SupervisorSiteToken(userBean, password);
+		} else if (StringUtils.isNotEmpty(memberName)
+				&& StringUtils.isEmpty(accountNo)) {
+			MemberEntity member = memberService.getMemberByName(memberName);
+			if (member == null) {
+				map.put("message", "会员不存在");
+				return LOGIN;
+			}
+			userBean = new SupervisorPrincipal();
+			userBean.setMember(member);
+			token = new SupervisorSiteToken(userBean, password);
 		}
 		Subject currentUser = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(account,
-				password);
 		try {
 			currentUser.login(token);
 		} catch (AuthenticationException e) {
-			map.put("message", "用户名或密码错误");
+			SxjLogger.error("登陆失败", e, this.getClass());
+			map.put("message", "密码错误");
 			return LOGIN;
 
 		}
 		if (currentUser.isAuthenticated()) {
-			session.setAttribute("userinfo", user);
-			return "redirect:" + getBasePath(request) + "index.htm";
+			session.setAttribute("userinfo", userBean);
+			return "redirect:" + getBasePath(request) + "member/memberInfo.htm";
 		} else {
 			map.put("message", "登陆失败");
 			return LOGIN;

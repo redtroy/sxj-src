@@ -14,7 +14,12 @@
 		http://www.springframework.org/schema/aop/spring-aop.xsd"
 	default-lazy-init="false">
 
-	<bean id="myShiroRealmService" class="com.sxj.supervisor.service.impl.shiro.MyShiroRealmService" />
+	<bean id="myShiroRealmService"
+		class="com.sxj.supervisor.website.login.SupervisorSiteShiroRealm">
+	</bean>
+	<bean id="authenticationFilter"
+		class="com.sxj.supervisor.website.login.SupervisorSiteAuthenticationFilter" />
+
 
 	<!-- 权限管理器 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -22,9 +27,8 @@
 		<property name="realm" ref="myShiroRealmService" />
 		<!-- session 管理器 -->
 		<property name="sessionManager" ref="sessionManager" />
-		<!-- 缓存管理器 
-		<property name="cacheManager" ref="shiroCacheManager" />-->
-
+		<!-- 缓存管理器 -->
+		<property name="cacheManager" ref="shiroCacheManager"></property>
 		<property name="rememberMeManager.cookie.name" value="rememberMe" />
 		<property name="rememberMeManager.cookie.path" value="/" />
 		<property name="rememberMeManager.cookie.maxAge" value="1209600" />
@@ -33,23 +37,27 @@
 	<bean id="sessionManager"
 		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
 		<!-- 超时时间 30*60*1000(30min) -->
-		<property name="globalSessionTimeout" value="120000" />
+		<property name="globalSessionTimeout" value="5000" />
 		<!-- session存储的实现 -->
 		<property name="sessionDAO" ref="shiroSessionDao" />
 		<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
 		<property name="sessionIdCookie" ref="sharesession" />
 		<!-- 定时检查失效的session -->
 		<property name="sessionValidationSchedulerEnabled" value="true" />
-		<!-- session 监听 
+		<!-- session 监听 -->
 		<property name="sessionListeners">
 			<list>
 				<ref bean="sessionListener" />
 			</list>
-		</property>-->
+		</property>
 	</bean>
-	<!-- <bean id="sessionListener" class="org.springrain.frame.listener.SessionListener" /> -->
-
-	<bean id="authenticationFilter" class="com.sxj.supervisor.manage.login.MyAuthenticationFilter" />
+	<bean id="sessionListener" class="com.sxj.spring.modules.security.shiro.ShiroSessionListener">
+		<property name="securityManager" ref="securityManager"></property>
+	</bean>
+ 
+	<bean id="shiroCacheManager" class="com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager">
+		<property name="level" value="2"></property>
+	</bean>
 
 	<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
 	<bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
@@ -60,7 +68,8 @@
 	</bean>
 	<!-- session存储的实现 -->
 	<bean id="shiroSessionDao"
-		class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO" />
+		class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+	</bean>
 
 	<!-- 单机session -->
 	<!-- <bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" 
@@ -69,9 +78,8 @@
 	<!-- session 集群 <bean id="shiroCacheManager" class="org.springrain.frame.shiro.ShiroRedisCacheManager"> 
 		<property name="cached" ref="redisCached" /> </bean> -->
 
-	<!--<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-		<property name="cacheManager" ref="cacheManager" />
-	</bean>  -->
+	<!--<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"> 
+		<property name="cacheManager" ref="cacheManager" /> </bean> -->
 
 
 	<!-- shiro的主过滤器,beanId 和web.xml中配置的filter name需要保持一致 -->
@@ -88,11 +96,12 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/index.htm=user
-				/js/** = anon
-				/style/** = anon
-				/images/** = anon
-				/unauth = anon
-				/login = anon
+				/unauth.htm = anon
+				/contract/**=user,frameperms
+				/member/account/accountList.htm=user,frameperms
+				/member/memberList.htm=user,frameperms
+				/record/recordList.htm=user,frameperms
+				/system/account-list.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->
