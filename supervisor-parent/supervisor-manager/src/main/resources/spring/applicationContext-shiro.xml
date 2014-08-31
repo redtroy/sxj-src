@@ -51,11 +51,11 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="sessionListener" class="com.sxj.supervisor.manage.login.ShiroSessionListener">
+	<bean id="sessionListener" class="com.sxj.spring.modules.security.shiro.ShiroSessionListener">
 		<property name="securityManager" ref="securityManager"></property>
 	</bean>
-
-	<bean id="shiroCacheManager" class="com.sxj.supervisor.manage.login.ShiroRedisCacheManager">
+ 
+	<bean id="shiroCacheManager" class="com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager">
 		<property name="level" value="2"></property>
 	</bean>
 
