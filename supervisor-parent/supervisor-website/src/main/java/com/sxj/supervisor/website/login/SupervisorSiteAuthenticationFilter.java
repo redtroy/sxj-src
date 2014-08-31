@@ -11,7 +11,8 @@ import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 
 import com.sxj.util.common.StringUtils;
 
-public class SupervisorSiteAuthenticationFilter extends PermissionsAuthorizationFilter {
+public class SupervisorSiteAuthenticationFilter extends
+		PermissionsAuthorizationFilter {
 
 	// @Resource
 	// private CacheManager shiroCacheManager;
@@ -39,6 +40,10 @@ public class SupervisorSiteAuthenticationFilter extends PermissionsAuthorization
 		}
 		if (StringUtils.isBlank(uri)) {
 			uri = "/";
+		}
+		i=uri.indexOf(";");
+		if (i > 0) {
+			uri = uri.substring(i-1);
 		}
 		boolean permitted = false;
 		if ("/".equals(uri)) {
