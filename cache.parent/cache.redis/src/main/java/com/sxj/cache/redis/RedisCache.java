@@ -3,7 +3,6 @@ package com.sxj.cache.redis;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +29,10 @@ public class RedisCache implements Cache
     private final static Serializer V_SERIALIZER = new JdkSerializer();
     
     private String region;
+    
+    private static final String DELETE_SCRIPT_IN_LUA = "local keys = redis.call('keys', '%s')"
+            + "  for i,k in ipairs(keys) do"
+            + "    local res = redis.call('del', k)" + "  end";
     
     public RedisCache(String region)
     {
@@ -231,6 +234,35 @@ public class RedisCache implements Cache
         }
     }
     
+    public void deleteKeys(String pattern)
+    {
+        boolean broken = false;
+        Jedis cache = RedisCacheProvider.getResource();
+        try
+        {
+            
+            if (cache == null)
+            {
+                throw new Exception("Unable to get jedis resource!");
+            }
+            
+            cache.eval(String.format(DELETE_SCRIPT_IN_LUA, pattern));
+        }
+        catch (Exception exc)
+        {
+            broken = true;
+            throw new CacheException(exc);
+        }
+        
+        finally
+        {
+            if (cache != null)
+            {
+                RedisCacheProvider.returnResource(cache, broken);
+            }
+        }
+    }
+    
     @Override
     public void clear() throws CacheException
     {
@@ -238,9 +270,7 @@ public class RedisCache implements Cache
         boolean broken = false;
         try
         {
-            Set<String> keys = cache.keys(region + ":*");
-            for (String key : keys)
-                cache.del(key);
+            deleteKeys(region + ":*");
         }
         catch (Exception e)
         {
