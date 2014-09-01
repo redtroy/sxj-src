@@ -301,4 +301,35 @@ public class RedisCache implements Cache
     {
         return null;
     }
+    
+    @Override
+    public void put(Object key, Object value, int seconds)
+            throws CacheException
+    {
+        if (value == null)
+            evict(key);
+        else
+        {
+            boolean broken = false;
+            Jedis cache = RedisCacheProvider.getResource();
+            try
+            {
+                cache.set(serializeKey(key).getBytes(),
+                        serializeObject(value).getBytes(),
+                        "NX".getBytes(),
+                        "EX".getBytes(),
+                        seconds);
+            }
+            catch (Exception e)
+            {
+                broken = true;
+                throw new CacheException(e);
+            }
+            finally
+            {
+                RedisCacheProvider.returnResource(cache, broken);
+            }
+        }
+        
+    }
 }

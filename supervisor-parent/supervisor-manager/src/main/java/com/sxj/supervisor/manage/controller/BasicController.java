@@ -64,7 +64,6 @@ public class BasicController extends BaseController
     public String login(String account, String password, HttpSession session,
             HttpServletRequest request, ModelMap map)
     {
-        map.put("account", account);
         SystemAccountEntity user = accountService.getAccountByAccount(account);
         if (user == null)
         {
@@ -80,6 +79,7 @@ public class BasicController extends BaseController
         }
         catch (AuthenticationException e)
         {
+            map.put("account", account);
             map.put("message", "用户名或密码错误");
             return LOGIN;
             
@@ -91,6 +91,7 @@ public class BasicController extends BaseController
         }
         else
         {
+            map.put("account", account);
             map.put("message", "登陆失败");
             return LOGIN;
         }

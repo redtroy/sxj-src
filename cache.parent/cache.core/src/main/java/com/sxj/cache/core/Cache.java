@@ -27,6 +27,9 @@ public interface Cache
      */
     public void put(Object key, Object value) throws CacheException;
     
+    public void put(Object key, Object value, int seconds)
+            throws CacheException;
+    
     /**
      * Add an item to the cache
      * @param key

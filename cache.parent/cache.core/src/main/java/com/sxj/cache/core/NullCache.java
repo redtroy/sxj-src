@@ -89,4 +89,12 @@ public class NullCache implements Cache
         return null;
     }
     
+    @Override
+    public void put(Object key, Object value, int seconds)
+            throws CacheException
+    {
+        // TODO Auto-generated method stub
+        
+    }
+    
 }

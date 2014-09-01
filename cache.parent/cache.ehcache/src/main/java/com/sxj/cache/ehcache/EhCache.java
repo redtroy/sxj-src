@@ -263,4 +263,28 @@ public class EhCache implements Cache, CacheEventListener
         return null;
     }
     
+    @Override
+    public void put(Object key, Object value, int seconds)
+            throws CacheException
+    {
+        try
+        {
+            Element element = new Element(key, value);
+            element.setTimeToLive(seconds);
+            cache.put(element);
+        }
+        catch (IllegalArgumentException e)
+        {
+            throw new CacheException(e);
+        }
+        catch (IllegalStateException e)
+        {
+            throw new CacheException(e);
+        }
+        catch (net.sf.ehcache.CacheException e)
+        {
+            throw new CacheException(e);
+        }
+    }
+    
 }
