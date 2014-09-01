@@ -8,7 +8,21 @@
 <link href="${b.staticPath}style/regin.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script>
+ var message;
+ var reName=true;
   function regist(){
+	 if($("#readme").attr("checked")=="checked"){
+		 $("#erro_text").show();
+		 return false;
+	 }
+	 if ($("#ms").val() != message){
+		 alert("请输入验证码！");
+		 return false;
+	 }
+	 if (reName){
+		 alert('请检查用户名')
+		 return false;
+	 }
 	  $("#regist_box").submit();
   }
   $(function(){
@@ -20,12 +34,18 @@
 				 $("#name_text").html('<span style="color:red">'+data.text+'</span>');
 			 }else{
 				 $("#name_text").html('<span style="color:green">可以注册</span>');
+				 reName=false;
 			 }
 			 
 		 })
 		 }
 	  });
   });
+  function send_ms(){
+	  $.post("send_ms.htm",function(data){
+		  message=data.ms;
+	  })
+  }
 </script>
 </head>
 <body>
@@ -71,10 +91,10 @@ ${type[0].getName()}</span>/
 </div>
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>短信验证码</label>
-  <input class="input-w50h36" type="text" autocomplete="off" placeholder="" title="短信验证码" id="" name="" value="" />
+  <input class="input-w50h36" type="text" autocomplete="off" placeholder="" title="短信验证码" id="ms" name="" value="" />
   <em class="color-green f12">60秒后重新获取验证码</em>
   </div>
-<div class="item f12"><label>&nbsp;</label><input type="checkbox" class="checkbox" checked="checked" id="readme">我已阅读并同意<a href="protocal.html" target="_blank" class="lnk-blue">《私享家注册协议》</a></div>
+<div class="item f12"><label>&nbsp;</label><input type="checkbox" class="checkbox"  id="readme">我已阅读并同意<a href="protocal.html" target="_blank" class="lnk-blue"  >《私享家注册协议》</a><div class="tipMsg msg-error" style="display:none;" id="erro_text">请同意注册协议</div></div>
 <div class="item" disabled="none"><label>&nbsp;</label>
 <a href="#" class="button button-orange btn-regin" onclick="regist()">同意协议并注册</a>
 </div>
