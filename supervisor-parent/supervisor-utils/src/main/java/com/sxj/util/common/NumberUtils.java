@@ -24,7 +24,7 @@ public class NumberUtils {
 	 *            待拆分的数字 （350）
 	 * @param splitDecimal
 	 *            以什么数来拆分 （100,50）大的在前 小的再后
-	 * @throws SystemException 
+	 * @throws SystemException
 	 * @return｛100,100,100,50｝
 	 * @throws ErrorMessageException
 	 */
@@ -248,9 +248,8 @@ public class NumberUtils {
 	/**
 	 * 校验身份证的校验码
 	 */
-	@SuppressWarnings("unchecked")
 	public static boolean verifyCid(String idcard) {
-		Map month = new HashMap();
+		Map<String, String> month = new HashMap<String, String>();
 		month.put("01", "01");
 		month.put("03", "03");
 		month.put("05", "05");
@@ -482,6 +481,7 @@ public class NumberUtils {
 		BigDecimal bd = new BigDecimal(number1);
 		return bd.add(new BigDecimal(number2)).toString();
 	}
+
 	public static void main(String[] args) {
 		System.out.println(NumberUtils.rightMove("-0.014", 2));
 	}
