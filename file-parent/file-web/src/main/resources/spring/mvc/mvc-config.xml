@@ -20,9 +20,10 @@
 			</props>
 		</property>
 	</bean>
-
-
-
+	<!-- 配置多级缓存 -->
+	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
+		lazy-init="false">
+	</bean>
 	<!-- 定义JSP视图 <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
 		/> <property name="prefix" value="/WEB-INF/views/jsp/" /> <property name="suffix" 
@@ -46,7 +47,6 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location" value="classpath:config/freemarker.properties" />
 	</bean>
-
 	<bean id="freeMarkerConfigurer"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="templateLoaderPath" value="/WEB-INF/views/fm/" />
