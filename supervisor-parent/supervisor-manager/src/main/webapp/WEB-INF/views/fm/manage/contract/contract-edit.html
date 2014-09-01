@@ -6,15 +6,20 @@
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="${staticPath}js/datepicker.css"/>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
-<script src="${b.staticPath}js/jquery.uploadify.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
+<@b.upload/>
+<script>
+$(document).ready(function() { 
+	loadUpload("contractFile","${basePath}contract/upload.htm","contractFileQueue");
+});  
+</script>
 </head>
 <body>
 <@b.header/>
@@ -168,8 +173,9 @@
 					</div>
 					<div class="contPic">
 						<label>合同备案扫描件</label>
-						<button class="button button-green button-middle">上传合同扫描件</button>
 					</div>
+					<input type="file" name="contractFile" id="contractFile"  multiple="true"/>
+    					<div id="contractFileQueue"></div>
 					<div>
 						<label>关联招标合同号</label> <input name="contractModel.contract.refContractNo" type="text"
 							value="${contractModel.contract.refContractNo}" />
@@ -186,6 +192,7 @@
 						</div>
 						<div class="contPic">
 							<label>合同变更扫描件</label>
+							<input type="file" name="" id="" value="" />
 							<button class="button button-green button-middle">上传合同变更扫描件</button>
 						</div>
 						<table border="0" cellpadding="0" cellspacing="0"
