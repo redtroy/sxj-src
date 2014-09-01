@@ -56,21 +56,6 @@
 			/> <entry key="xw" value-ref="xwTags"></entry> </map> </property> -->
 	</bean>
 
-	<mvc:annotation-driven
-		content-negotiation-manager="contentNegotiationManager">
-		<mvc:message-converters register-defaults="true">
-			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
-			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-				<constructor-arg value="UTF-8" />
-			</bean>
-			<!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
-			<bean
-				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-				<property name="prettyPrint" value="true" />
-			</bean>
-		</mvc:message-converters>
-	</mvc:annotation-driven>
-
 	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
 	<bean id="contentNegotiationManager"
 		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
@@ -88,7 +73,7 @@
 	</bean>
 
 	<bean
-		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
 			<list>
 				<!-- json转换器 -->
@@ -107,8 +92,47 @@
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
 	<bean id="mappingJacksonHttpMessageConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<bean class="org.springframework.http.MediaType">
+					<constructor-arg index="0" value="text" />
+					<constructor-arg index="1" value="plain" />
+					<constructor-arg index="2" value="UTF-8" />
+				</bean>
+				<bean class="org.springframework.http.MediaType">
+					<constructor-arg index="0" value="*" />
+					<constructor-arg index="1" value="*" />
+					<constructor-arg index="2" value="UTF-8" />
+				</bean>
+				<bean class="org.springframework.http.MediaType">
+					<constructor-arg index="0" value="text" />
+					<constructor-arg index="1" value="*" />
+					<constructor-arg index="2" value="UTF-8" />
+				</bean>
+				<bean class="org.springframework.http.MediaType">
+					<constructor-arg index="0" value="application" />
+					<constructor-arg index="1" value="json" />
+					<constructor-arg index="2" value="UTF-8" />
+				</bean>
+			</list>
+		</property>
 
+	</bean>
+	<mvc:annotation-driven
+		content-negotiation-manager="contentNegotiationManager">
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="prettyPrint" value="true" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8" /> <!-- 默认编码 (ISO-8859-1) -->

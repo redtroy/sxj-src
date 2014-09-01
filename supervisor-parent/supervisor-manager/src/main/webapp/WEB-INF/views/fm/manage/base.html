@@ -72,12 +72,17 @@ function loadUpload(id,url,fileQueue){
 	        height:30,
 	        width:120,
 	        buttonText:'上传文件',
-	        onUploadComplete : function(file, data, response) {
+	        onUploadSuccess : function(file, data, response) {
 	            alert('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
 	        }
 	        
 	    });
 } 
+</script>
+<script>
+$(document).ready(function() { 
+	loadUpload("contractFile","upload.htm","contractFileQueue");
+});  
 </script>
 </#macro>
  
