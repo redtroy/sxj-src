@@ -59,7 +59,7 @@ function del(id){
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
 <!-- InstanceEndEditable -->
-<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>备案管理<span>&gt;</span>备案管理</div>
+<@b.menuPath/>
 <div id="mainBg" class="ly-clearFix yard-1200">
    <div id="leftList"><@b.leftMenu /></div>
     <div id="rightBar">
@@ -145,7 +145,11 @@ function del(id){
           <td>${record.contractNo}</td>
           <td>${record.type.getName()}</td>
           <td>${record.applyDate?date}</td>
-          <td>${record.acceptDate?date}</td>
+          <td>
+          <#if record.acceptDate?exists>
+          ${record.acceptDate?date}
+          </#if>
+          </td>
           <td class="operation"><a href="record_edit.htm?id=${record.id}" class="edit">修改</a><a href="#" class="del" onclick="del(${record.id})">删除</a></td>
           <#if (record.state.id==0)>
           <td class="contract"><a href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a href="produced.html" class="lnk-green">生成合同</a></td>

@@ -2,36 +2,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="${staticPath}js/datepicker.css"/>
-<script src="${staticPath}js/jquery.js"></script>
-<script src="${staticPath}js/datepicker.js"></script>
-<script src="${staticPath}js/datepicker.zh-CN.js"></script>
-<script src="${staticPath}js/intense.js"></script>
-<script src="${staticPath}js/jquery.uploadify.js"></script>
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jquery.uploadify.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
-<script >
-	//
-</script>
 </head>
 <body>
-	
+<@b.header/>
 	<div id="main" class="fence-wide">
 		<!-- InstanceBeginEditable name="local" -->
-		<div class="local">
-			<a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>备案管理<span>&gt;</span>修改采购合同
-		</div>
+		<@b.menuPath/>
 		<!-- InstanceEndEditable -->
 		<div id="mainBg" class="ly-clearFix yard-1200">
-			<div id="leftList">
-				<!-- 菜单 -->
-			</div>
+			<div id="leftList"><@b.leftMenu /></div>
 			<div id="rightBar">
 			<form action="modify.htm" id="modifyForm" method="post">
 				<h2 class="title">修改采购合同</h2>
@@ -354,8 +346,7 @@
 				<!-- InstanceEndEditable -->
 			</div>
 		</div>
-		
-		<#include "manage/footer.html">
+		<@b.footer />
 </body>
 <!-- InstanceEnd -->
 </html>

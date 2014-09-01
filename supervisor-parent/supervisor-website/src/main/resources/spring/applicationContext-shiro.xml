@@ -65,7 +65,7 @@
 	<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
 	<bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
 		<!-- cookie的name,对应的默认是 JSESSIONID -->
-		<constructor-arg name="name" value="SHAREJSESSIONID" />
+		<constructor-arg name="name" value="SHAREJSESSIONID_WEBSITE" />
 		<!-- jsessionId的path为 / 用于多个系统共享jsessionId -->
 		<property name="path" value="/" />
 	</bean>
@@ -90,7 +90,7 @@
 		<!-- 安全管理器 -->
 		<property name="securityManager" ref="securityManager" />
 		<!-- 默认的登陆访问url -->
-		<property name="loginUrl" value="/login.htm" />
+		<property name="loginUrl" value="/to_login.htm" />
 		<!-- 登陆成功后跳转的url -->
 		<property name="successUrl" value="/index.htm" />
 		<!-- 没有权限跳转的url -->

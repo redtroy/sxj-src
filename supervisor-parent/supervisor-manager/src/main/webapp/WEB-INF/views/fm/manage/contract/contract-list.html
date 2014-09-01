@@ -1,17 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${staticPath}js/jquery.js"></script>
-<script src="${staticPath}js/intense.js"></script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
 <link rel="stylesheet" href="${staticPath}js/datepicker.css"/>
-<script src="${staticPath}js/datepicker.js"></script>
-<script src="${staticPath}js/datepicker.zh-CN.js"></script>
-<script src="${staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
 <script>
 window.onload = function() {
 var elements = document.querySelectorAll( '.demo-image' );
@@ -38,15 +37,14 @@ function query(){
 <!-- InstanceEndEditable -->
 </head>
 <body>
-<#include "manage/head.html">
+<@b.header/>
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
 <!--主菜单 -->
 <!-- InstanceEndEditable -->
+<@b.menuPath/>
 <div id="mainBg" class="ly-clearFix yard-1200">
-	<div id="leftList">
-	
-	</div>
+	<div id="leftList"><@b.leftMenu /></div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">合同管理</h2>
@@ -167,6 +165,6 @@ function query(){
     <!-- InstanceEndEditable --></div>
 </div>
 <!-- 底部-->
-<#include "manage/footer.html">
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>

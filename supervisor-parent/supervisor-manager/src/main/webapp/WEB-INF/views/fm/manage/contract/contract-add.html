@@ -1,16 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="${staticPath}js/datepicker.css"/>
-<script src="${staticPath}js/jquery.js"></script>
-<script src="${staticPath}js/datepicker.js"></script>
-<script src="${staticPath}js/datepicker.zh-CN.js"></script>
-<script src="${staticPath}js/intense.js"></script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -62,15 +61,13 @@
 </script>
 </head>
 <body>
-<#include "manage/head.html">
+<@b.header/>
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
-<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span><a href="record.html">备案管理</a><span>&gt;</span>生成合同确认书</div>
 <!-- InstanceEndEditable -->
+<@b.menuPath/>
 <div id="mainBg" class="ly-clearFix yard-1200">
-    <div id="leftList">
-      
-    </div>
+     <div id="leftList"><@b.leftMenu /></div>
     <form action="addContract.htm" method="post" id="addForm">
     <input type="hidden" name="recordId" value="${recordId}" />
     <div id="rightBar">
@@ -160,6 +157,6 @@
       </form>
     <!-- InstanceEndEditable --></div>
 </div>
-<#include "manage/footer.html">
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>

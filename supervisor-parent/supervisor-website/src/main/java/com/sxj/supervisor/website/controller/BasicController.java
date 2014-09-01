@@ -37,8 +37,8 @@ public class BasicController extends BaseController {
 	private IAccountService accountService;
 
 	@RequestMapping("index")
-	public String ToIndex() {
-		return INDEX;
+	public String ToIndex(HttpServletRequest request) {
+		return "redirect:" + getBasePath(request) + "member/memberInfo.htm";
 	}
 
 	@RequestMapping("to_login")
