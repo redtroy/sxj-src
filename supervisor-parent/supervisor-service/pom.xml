@@ -69,5 +69,10 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.csource</groupId>
+			<artifactId>fastdfs_client</artifactId>
+			<version>1.20</version>
+		</dependency>
 	</dependencies>
 </project>
