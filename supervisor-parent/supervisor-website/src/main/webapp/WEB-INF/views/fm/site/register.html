@@ -11,12 +11,25 @@
   function regist(){
 	  $("#regist_box").submit();
   }
+  $(function(){
+	  $("#name").blur(function(){
+		 var name=$("#name").val();
+		 if (name != ""){
+		 $.post("check_member.htm",{name:name},function(data){
+			 if (data.text != undefined){
+				 $("#name_text").html('<span style="color:red">'+data.text+'</span>');
+			 }else{
+				 $("#name_text").html('<span style="color:green">可以注册</span>');
+			 }
+			 
+		 })
+		 }
+	  });
+  });
 </script>
 </head>
 <body>
-<div id="header" class="fence">
-  <h1 class="fence-wide ly-clearFix"><a href="register.html" class="logo"><img src="${b.staticPath}images/logo.jpg" alt="私享家绿色门窗平台" title="私享家绿色门窗平台" /></a> <span><img src="${b.staticPath}images/top-banner.jpg" title="中国绿色建材产品交易平台" alt="中国绿色建材产品交易平台" /></span> </h1>
-</div>
+<@b.header/>
 <div class="joinBox">
 <div class="joinSign">
 <div class="header">
@@ -27,8 +40,8 @@
 <form action="regist_save.htm" method="post" id="regist_box">
 <div class="item">
 <label><span class="color-red mr5 fb">*</span>公司名称</label>
-<input class="input input-w270h36" type="text" autocomplete="off" placeholder="" title="公司名称-作为登录用的超级账号名" id="" name="name" value="" />
-<div class="tipMsg msg-gray">请输入您的公司名称</div>
+<input class="input input-w270h36" type="text" autocomplete="off" placeholder="" title="公司名称-作为登录用的超级账号名" id="name" name="name" value="" />
+<div class="tipMsg msg-gray" id="name_text">请输入您的公司名称</div>
 </div>
 <div class="item">
 <label><span class="color-red mr5 fb">*</span>公司类型</label>
@@ -39,20 +52,10 @@ ${type[0].getName()}</span>/
 <span><input name="type" type="radio" value="${type[2].id}" />${type[2].getName()}</span></div>
 <div class="item">
 <label><span class="color-red mr5 fb">*</span>公司所在地</label>
-<span class="mr10">江苏省</span><select name="">
-  <option>南京市</option>
-  <option>无锡市</option>
-  <option>苏州市</option>
-  <option>常州市</option>
-  <option>镇江市</option>
-  <option>扬州市</option>
-  <option>泰州市</option>
-  <option>南通市</option>
-  <option>盐城市</option>
-  <option>淮安市</option>
-  <option>宿迁市</option>
-  <option>连云港市</option>
-  <option>徐州市</option>
+<span class="mr10">江苏省</span><select name="area">
+  <#list list as are>
+  <option value="32:江苏省,${are.id}:${are.name}">${are.name}</option>
+  </#list>
 </select></div>
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>联系人</label>
@@ -72,18 +75,15 @@ ${type[0].getName()}</span>/
   <em class="color-green f12">60秒后重新获取验证码</em>
   </div>
 <div class="item f12"><label>&nbsp;</label><input type="checkbox" class="checkbox" checked="checked" id="readme">我已阅读并同意<a href="protocal.html" target="_blank" class="lnk-blue">《私享家注册协议》</a></div>
-<div class="item"><label>&nbsp;</label>
+<div class="item" disabled="none"><label>&nbsp;</label>
 <a href="#" class="button button-orange btn-regin" onclick="regist()">同意协议并注册</a>
+</div>
 </form>
 </div>
 </div>
 <div class="aside ly-left">&nbsp;</div>
 </div>
 </div>
-</div>
-<div id="footer" class="mt10">
-<div class="fence f12">&copy; 2014 私享家绿色门窗平台 版权所有 经营许可证编号:<a href="#" target="_blank">苏B2-20140088</a>苏ICP备14025589号
-</div>
-</div>
+<@b.footer/>
 </body>
 </html>
