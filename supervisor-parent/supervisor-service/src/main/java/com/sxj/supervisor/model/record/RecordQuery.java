@@ -39,6 +39,16 @@ public class RecordQuery extends Pagable implements Serializable {
 
 	private String endAcceptDate;
 
+	private String contractPepole;
+
+	public String getContractPepole() {
+		return contractPepole;
+	}
+
+	public void setContractPepole(String contractPepole) {
+		this.contractPepole = contractPepole;
+	}
+
 	public String getRecordNo() {
 		return recordNo;
 	}

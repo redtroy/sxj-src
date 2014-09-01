@@ -69,7 +69,8 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	@Transactional
-	public List<RecordEntity> queryRecord(RecordQuery query) throws ServiceException {
+	public List<RecordEntity> queryRecord(RecordQuery query)
+			throws ServiceException {
 		try {
 			if (query == null) {
 				return null;
@@ -87,6 +88,7 @@ public class RecordServiceImpl implements IRecordService {
 			condition.addCondition("startAcceptDate",
 					query.getStartAcceptDate());// 开始受理时间
 			condition.addCondition("endAcceptDate", query.getEndAcceptDate());// 结束受理时间
+			condition.addCondition("contractPepole", query.getContractPepole());
 			condition.addCondition("memberIdA", query.getMemberIdA());// 结束受理时间
 			condition.addCondition("memberIdB", query.getMemberIdB());// 结束受理时间
 			condition.setPage(query);

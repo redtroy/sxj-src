@@ -59,6 +59,10 @@
 		<if test="condition.memberIdA != null and condition.memberIdA != ''">
 			<![CDATA[AND CONTRACT_NO = #{condition.memberIdA}]]>
 		</if>
+		<!-- 合同签订人-->
+		<if test="condition.contractPepole != null and condition.contractPepole != ''">
+			<![CDATA[AND (memberNameA = #{condition.contractPepole} OR memberNameB = #{condition.contractPepole})]]>
+		</if>
 		<!-- 对应乙方会员ID-->
 		<if test="condition.memberIdB != null and condition.memberIdB != ''">
 			<![CDATA[AND CONTRACT_NO = #{condition.memberIdB}]]>
