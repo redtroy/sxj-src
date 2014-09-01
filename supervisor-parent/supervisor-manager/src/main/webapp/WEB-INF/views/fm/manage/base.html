@@ -57,6 +57,25 @@ $("#pager").ready(function(){
 });
 </script>
 </#macro>
+<#macro upload>
+<script src="${staticPath}js/jquery.uploadify.js"></script>
+<link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
+<script>
+function loadUpload(id,url,fileQueue){
+	  $("#"+id).uploadify({
+	        swf: '${staticPath}images/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        auto: true,
+	        multi: true,
+	        height:30,
+	        width:120,
+	        buttonText:'上传文件'
+	        
+	    });
+} 
+</script>
+</#macro>
  
 <#macro header>
  <div id="header" class="fence-wide">

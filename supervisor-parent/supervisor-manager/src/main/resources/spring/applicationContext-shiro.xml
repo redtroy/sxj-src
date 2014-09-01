@@ -97,7 +97,7 @@
 			<value>
 				/index.htm=user
 				/unauth.htm = anon
-				/contract/**=user,frameperms
+				/contract/query.htm=user,frameperms
 				/member/account/accountList.htm=user,frameperms
 				/member/memberList.htm=user,frameperms
 				/record/recordList.htm=user,frameperms
