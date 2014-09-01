@@ -1,4 +1,5 @@
 <#assign staticPath="http://192.168.1.9/sxj/supervisor-manager/" />
+<#assign imagePath="http://192.168.1.9/sxj/file-web/" />
 <#macro errorInfo>
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
@@ -63,14 +64,17 @@ $("#pager").ready(function(){
 <script>
 function loadUpload(id,url,fileQueue){
 	  $("#"+id).uploadify({
-	        swf: '${staticPath}images/uploadify.swf',
+	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
 	        fileTypeExts: '*.gif; *.jpg; *.png',
 	        auto: true,
 	        multi: true,
 	        height:30,
 	        width:120,
-	        buttonText:'上传文件'
+	        buttonText:'上传文件',
+	        onUploadComplete : function(file, data, response) {
+	            alert('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+	        }
 	        
 	    });
 } 
