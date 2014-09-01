@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
@@ -73,4 +74,22 @@ public class MemberController extends BaseController {
 		return null;
 	}
 
+	/**
+	 * 注册账户
+	 */
+	@RequestMapping("/regist")
+	public String regist(ModelMap map) {
+		MemberTypeEnum[] type = MemberTypeEnum.values();
+		map.put("type", type);
+		return "site/register";
+	}
+
+	/**
+	 * 添加会员
+	 */
+	@RequestMapping("regist_save")
+	public String regist_save(MemberEntity member) {
+		memberService.addMember(member);
+		return "";
+	}
 }
