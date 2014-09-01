@@ -119,4 +119,16 @@ public class MemberController extends BaseController {
 			return map;
 		}
 	}
+
+	/**
+	 * 发送验证码
+	 */
+	@RequestMapping("send_ms")
+	public @ResponseBody Map<String, String> send_ms(String phoneNo) {
+		String message = "123456";
+		memberService.createvalidata(phoneNo, message);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("ms", message);
+		return map;
+	}
 }

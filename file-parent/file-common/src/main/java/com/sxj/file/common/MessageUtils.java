@@ -10,7 +10,7 @@ public class MessageUtils {
 
 	private static Properties properties = new Properties();
 
-	private static String path = "/config/eqtconfig.properties";
+	private static String path = "/config/fileconfig.properties";
 
 	static {
 		InputStream inputFile;
