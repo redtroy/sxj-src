@@ -7,7 +7,6 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.record.RecordEntity;
-import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.util.persistent.QueryCondition;
 
 public interface IRecordDao {

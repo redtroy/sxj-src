@@ -7,7 +7,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberService;
-import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.common.StringUtils;
@@ -40,8 +37,8 @@ public class BasicController extends BaseController {
 	private IAccountService accountService;
 
 	@RequestMapping("index")
-	public String ToIndex() {
-		return INDEX;
+	public String ToIndex(HttpServletRequest request) {
+		return "redirect:" + getBasePath(request) + "member/memberInfo.htm";
 	}
 
 	@RequestMapping("to_login")

@@ -1,17 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
-<#include "manage/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${staticPath}js/jquery.js"></script>
-<script src="${staticPath}js/intense.js"></script>
-<link rel="stylesheet" href="${staticPath}js/datepicker.css"/>
-<script src="${staticPath}js/datepicker.js"></script>
-<script src="${staticPath}js/datepicker.zh-CN.js"></script>
-<script src="${staticPath}js/intense.js"></script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -157,50 +156,12 @@ function saveChenges(){
 </script>
 </head>
 <body>
-<div id="header" class="fence-wide">
-    <h1 class="yard-1200"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span></h1>
-    <div class="border-header"></div>
-</div>
+<@b.header />
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
-<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>备案管理<span>&gt;</span>变更当前合同</div>
-<!-- InstanceEndEditable -->
+<@b.menuPath/>
 <div id="mainBg" class="ly-clearFix yard-1200">
-    <div id="leftList">
-      <h2 class="tit">会员中心</h2>
-      <ul>
-        <li><a href="member.html">会员管理</a></li>
-        <li><a href="accounts.html">会员子帐号管理</a></li>
-      </ul>
-      <h2 class="tit">备案管理</h2>
-      <ul>
-        <li><a href="record.html">备案管理</a></li>
-      </ul>
-      <h2 class="tit">合同管理</h2>
-      <ul>
-        <li><a href="contract.html">合同管理</a></li>
-      </ul>
-      <h2 class="tit">RFID跟踪管理</h2>
-      <ul>
-        <li><a href="#">生成RFID标签</a></li>
-        <li><a href="#">供应商RFID管理</a></li>
-        <li><a href="#">门窗厂RFID管理</a></li>
-        <li><a href="#">RFID补损管理</a></li>
-        <li><a href="#">RFID订单管理</a></li>
-      </ul>
-      <h2 class="tit">会员行为跟踪管理</h2>
-      <ul>
-        <li><a href="behavior.html">会员行为跟踪管理</a></li>
-      </ul>
-      <h2 class="tit">支付管理</h2>
-      <ul>
-        <li><a href="#">支付管理</a></li>
-      </ul>
-      <h2 class="tit">管理员管理</h2>
-      <ul>
-        <li><a href="admin.html">管理员管理</a></li>
-      </ul>
-    </div>
+  <div id="leftList"><@b.leftMenu /></div>
     <form action="saveChanges.htm" id="changsForm" method="post">
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
@@ -467,11 +428,6 @@ function saveChenges(){
       </form>
     <!-- InstanceEndEditable --></div>
 </div>
-<div id="footer" class="fence-wide">
-  <div class="yard-1200">
-    <p><a href="#">关于我们</a>&nbsp;|<a href="#">联系我们</a>|<a href="#">友情链接</a>|<a href="#">网站地图</a></p>
-    <p>&copy; 2014 私享家电子商贸 版权所有 经营许可证编号:<a href="#" target="_blank">苏B2-20140088</a>苏ICP备14025589号</p>
-  </div>
-</div>
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>
