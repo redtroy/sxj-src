@@ -209,33 +209,32 @@ public class FastDFSImpl implements IFileUpLoad {
 
 	public static void main(String[] args) {
 		try {
-			// String aa = "sasa.gif";
-			// boolean ac = aa.matches("[.]\\p{Punct}[.]");
-			// System.out.println(ac);
-			// long start = System.currentTimeMillis();
-			// IFileUpLoad fileuplaod = UpLoadFactory.buildImageUpLoad();
-			// for (int i = 0; i < 2; i++) {
-			// byte[] ass = LocalFileUtil
-			// .readByte("D:/My Documents/My Pictures/dq5nds_001.jpg");
-			// String id = fileuplaod.uploadFile(ass, "jpg");
-			// System.out.println(id);
-			// System.out.println(i);
-			// }
-			// System.out.println(System.currentTimeMillis() - start);
-			// FastDFSImpl im = new FastDFSImpl();
-			// im.deleteFile("http://192.168.18.118/00/00/wKgSdkvFmcoAAAAAAAASoE3DieQ165.jpg");
-			// String file_id =
-			// "http://192.168.18.118/data/00/AB/wKgSdkvFfIsAAAAAAAASoF6t6Q8275.jpg";
-			//
-			// if (StringUtil.isNotEmpty(file_id)) {
-			// file_id = file_id.substring(7, file_id.length());
-			// String[] aaa = file_id.split("/");
-			// String http = aaa[0] + "/" + aaa[1];
-			// file_id = file_id.substring(http.length(), file_id.length());
-			// http = properties.getProperty(http);
-			// file_id = http + file_id;
-			// }
-			// System.out.println(file_id);
+			String aa = "sasa.gif";
+			boolean ac = aa.matches("[.]\\p{Punct}[.]");
+			System.out.println(ac);
+			long start = System.currentTimeMillis();
+			IFileUpLoad fileuplaod = UpLoadFactory.buildImageUpLoad();
+			for (int i = 0; i < 2; i++) {
+				byte[] ass = LocalFileUtil
+						.readByte("C:/Users/dujinxin/Desktop/adu/DSC_0357.JPG");
+				String id = fileuplaod.uploadFile(ass, "jpg");
+				System.out.println(id);
+				System.out.println(i);
+			}
+//			System.out.println(System.currentTimeMillis() - start);
+//			FastDFSImpl im = new FastDFSImpl();
+//			im.deleteFile("http://192.168.18.118/00/00/wKgSdkvFmcoAAAAAAAASoE3DieQ165.jpg");
+//			String file_id = "http://192.168.18.118/data/00/AB/wKgSdkvFfIsAAAAAAAASoF6t6Q8275.jpg";
+//
+//			if (StringUtil.isNotEmpty(file_id)) {
+//				file_id = file_id.substring(7, file_id.length());
+//				String[] aaa = file_id.split("/");
+//				String http = aaa[0] + "/" + aaa[1];
+//				file_id = file_id.substring(http.length(), file_id.length());
+//				http = properties.getProperty(http);
+//				file_id = http + file_id;
+//			}
+//			System.out.println(file_id);
 			String serviceUrl = "http://pay.5iding.com/eqtpayweb/paygetway/to_paygetway.htm?orderId=null&billId=BI201109062012170072;jsessionid=50E57794E5C6B4AE8CFC035372389162.node2&amount=null&returnUrl=null&type=2";
 			// String serviceUrl = constructServiceUrl(request, response);
 			//
@@ -251,11 +250,11 @@ public class FastDFSImpl implements IFileUpLoad {
 			// }
 			// serviceUrl = URLEncoder.encode(serviceUrl, "utf-8");
 			// }
-			Date aaa = new Date(System.currentTimeMillis() + (30 * 1000));
-			Calendar calendar = Calendar.getInstance();
-			calendar.add(Calendar.SECOND, 30);
-			System.out.println(aaa);
-			System.out.println(calendar.getTime());
+			// Date aaa = new Date(System.currentTimeMillis() + (30 * 1000));
+			// Calendar calendar = Calendar.getInstance();
+			// calendar.add(Calendar.SECOND, 30);
+			// System.out.println(aaa);
+			// System.out.println(calendar.getTime());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
