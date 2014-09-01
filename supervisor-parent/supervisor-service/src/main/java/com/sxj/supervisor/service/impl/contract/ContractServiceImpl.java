@@ -303,8 +303,7 @@ public class ContractServiceImpl implements IContractService {
 				// 变更合同主体
 				QueryCondition<ModifyBatchEntity> modifyCondition = new QueryCondition<ModifyBatchEntity>();
 				Map<String, Object> modifyMap = new HashMap<String, Object>();
-				modifyMap.put("recordIds", modifyRecordIds);// 变更备案ID
-				modifyCondition.setCondition(modifyMap);
+				modifyCondition.addCondition("recordIds", modifyRecordIds);// 变更备案ID
 				List<ModifyContractEntity> modifyList = contractModifyDao
 						.queryModify(modifyCondition);
 				if (modifyList != null) {
@@ -349,9 +348,7 @@ public class ContractServiceImpl implements IContractService {
 			if (replenishRecordIds != null && replenishRecordIds.length() > 0) {
 
 				QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
-				Map<String, Object> replenishMap = new HashMap<String, Object>();
-				replenishMap.put("recordIds", replenishRecordIds);// 补损备案ID
-				replenishCondition.setCondition(replenishMap);
+				replenishCondition.addCondition("recordIds", replenishRecordIds);// 补损备案ID
 				List<ReplenishContractEntity> replenishList = contractReplenishDao
 						.queryReplenish(replenishCondition);
 				for (int i = 0; i < replenishList.size(); i++) {
@@ -425,21 +422,24 @@ public class ContractServiceImpl implements IContractService {
 	@Override
 	public List<ContractModel> queryContracts(ContractQuery query)
 			throws ServiceException {
-		QueryCondition<ContractEntity> qc = new QueryCondition<ContractEntity>();
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("contractNo", query.getContractNo());// 合同号
-		map.put("recordNo", query.getRecordNo());// 备案号
-		map.put("memberId", query.getMemberId());// 签订会员ＩＤ
-		map.put("contractType", query.getContractType());// 合同类型
-		map.put("refContractNo", query.getRefContractNo());// 关联合同号
-		map.put("startCreateDate", query.getStartCreateDate());// 开始签订时间
-		map.put("endCreateDate", query.getEndCreateDate());// 结束签订合同号
-		map.put("startRecordDate", query.getStartRecordDate());// 开始备案时间
-		map.put("endRecordDate", query.getEndRecordDate());// 结束备案时间
-		map.put("confirmState", query.getConfirmState());// 确认状态
-		map.put("state", query.getState());// 合同状态
-		qc.setCondition(map);
-		List<ContractEntity> contractList = contractDao.queryContract(qc);
+		try {
+			if (query == null) {
+				return null;
+			}
+		QueryCondition<ContractEntity> condition = new QueryCondition<ContractEntity>();
+		condition.addCondition("contractNo", query.getContractNo());// 合同号
+		condition.addCondition("recordNo", query.getRecordNo());// 备案号
+		condition.addCondition("memberId", query.getMemberId());// 签订会员ＩＤ
+		condition.addCondition("contractType", query.getContractType());// 合同类型
+		condition.addCondition("refContractNo", query.getRefContractNo());// 关联合同号
+		condition.addCondition("startCreateDate", query.getStartCreateDate());// 开始签订时间
+		condition.addCondition("endCreateDate", query.getEndCreateDate());// 结束签订合同号
+		condition.addCondition("startRecordDate", query.getStartRecordDate());// 开始备案时间
+		condition.addCondition("endRecordDate", query.getEndRecordDate());// 结束备案时间
+		condition.addCondition("confirmState", query.getConfirmState());// 确认状态
+		condition.addCondition("state", query.getState());// 合同状态
+		query.setPage(condition);
+		List<ContractEntity> contractList = contractDao.queryContract(condition);
 		List<ContractModel> contractModelList = new ArrayList<ContractModel>();
 		for (Iterator<ContractEntity> iterator = contractList.iterator(); iterator
 				.hasNext();) {
@@ -451,6 +451,10 @@ public class ContractServiceImpl implements IContractService {
 			contractModelList.add(cm);
 		}
 		return contractModelList;
+		} catch (Exception e) {
+			throw new ServiceException("查询合同信息错误", e);
+		}
+		
 	}
 
 	/**

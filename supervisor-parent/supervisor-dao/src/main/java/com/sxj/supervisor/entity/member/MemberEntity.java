@@ -19,6 +19,7 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IMemberDao;
@@ -44,7 +45,7 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 标识
 	 **/
 	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	/**
@@ -155,6 +156,7 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 会员号
 	 **/
 	@Column(name = "MEMBER_NO")
+	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "MEM", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String memberNo;
 
 	/**

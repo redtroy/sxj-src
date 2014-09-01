@@ -11,6 +11,8 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
+<@b.pageScript/>
+<@b.errorInfo/>
 <script>
 window.onload = function() {
 var elements = document.querySelectorAll( '.demo-image' );
@@ -26,10 +28,13 @@ function closeContract(id){
 }
 
 function query(){
-	 $.get("query.htm",$("#query").serialize(),
-			  function(data,status){
-			    alert("Data: " + data + "\nStatus: " + status);
-	 });
+	var params=$("#query").serialize();
+	$.post("${basePath}contract/query.htm",params,function(data){
+		var pager=$(data).find("#rightBar").children("#pager");
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -48,7 +53,7 @@ function query(){
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">合同管理</h2>
-    <form action="query.htm" id="query" method="post">
+    <form action="" id="query" method="post">
     <div id="searchBox">
       <p>合同号
         <input type="text" name="contractNo" value="${query.contractNo}" />
@@ -92,7 +97,7 @@ function query(){
       </p>
     </div>
   </form>    
-         
+      <@b.pager/>   
     <table border="0" cellpadding="0" cellspacing="0" class="tabList recordTable">
       <col width="20px" />
       <col width="85px"/>
@@ -133,8 +138,8 @@ function query(){
         <td><em class="state normal"> <#list contractSureState as sureState><#if model.contract.confirmState== sureState.getId()> ${sureState.getName()}</#if></#list></em></td>
         <td><#list contractState as state><#if model.contract.state== state.getId()> ${state.getName()}</#if></#list></td>
         <td class="operation">
-        <a href="contract-edit.html" class="edit">修改</a>
-        <a href="#" class="del">删除</a></td>
+        <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
+        <a href="javascript:void(0)" class="del">删除</a></td>
       </tr>
       <tr id="info${model.contract.id}" class="tableInfo" ></tr>
       </#list>

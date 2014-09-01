@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.impl.member;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.message.SendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -25,6 +27,24 @@ public class MemberServiceImpl implements IMemberService {
 
 	@Autowired
 	private IMemberDao menberDao;
+
+	@Value("${mobile.sOpenUrl}")
+	private String sOpenUrl;
+
+	@Value("${mobile.sDataUrl}")
+	private String sDataUrl;
+
+	@Value("${mobile.account}")
+	private String account;
+
+	@Value("${mobile.authkey}")
+	private String authkey;
+
+	@Value("${mobile.cgid}")
+	private Integer cgid;
+
+	@Value("${mobile.csid}")
+	private Integer csid;
 
 	/**
 	 * 新增会员
@@ -199,4 +219,15 @@ public class MemberServiceImpl implements IMemberService {
 		}
 	}
 
+	@Override
+	public String createvalidata(String phoneNo, String message)
+			throws ServiceException {
+		try {
+			SendMessage.getInstance(sOpenUrl, sDataUrl, account, authkey, cgid,
+					csid);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
 }
