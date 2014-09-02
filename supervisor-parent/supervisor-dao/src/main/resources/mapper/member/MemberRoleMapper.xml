@@ -35,12 +35,12 @@
 	<select id="getRoleFunctions"
 		resultMap="com.sxj.supervisor.dao.member.IMemberFunctionDao.MemberFunctionResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL,f.STYLE from M_MEMEBR_FUNCTION f 
+		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL,f.STYLE from M_MEMBER_FUNCTION f 
 		INNER JOIN M_MEMBER_ROLE r on f.ID=r.FUNCTION_ID WHERE 1=1 ]]>
 		<if test="condition.accountId != null and condition.accountId !=''">
 			<![CDATA[ AND r.ACCOUNT_ID = #{condition.accountId}]]>
 		</if>
-		<if test="condition.accountId != null and condition.accountId !=''">
+		<if test="condition.memberId != null and condition.memberId !=''">
 			<![CDATA[ AND r.MEMBER_ID = #{condition.memberId}]]>
 		</if>
 		<!-- 申请会员ID -->

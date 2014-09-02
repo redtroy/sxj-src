@@ -62,23 +62,23 @@ function  BzbApplyRecord(){
 }
 
 $(document).ready(function() { 
-	loadUpload("cgFile","upload.htm",upload);
-	loadUpload("zbFile","upload.htm",upload);
-	loadUpload("BcgFile","upload.htm",upload);
+	loadUpload("cgFile","upload.htm","true","上传合同扫描件",upload);
+	loadUpload("zbFile","upload.htm","true","上传合同扫描件",upload);
+	loadUpload("BcgFile","upload.htm","true","上传合同扫描件",upload);
 }); 
 
 function upload(data)
 {
     var dataObj=eval("("+data+")");//转换为json对象 
-    $("#"+img).append("<img src='${imagePath}"+dataObj+"100x120.jpg' alt='' />");
+    $("#BcgImageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
     //获取隐藏域
-   var hideVal= $("#"+hideInput).val();
+   var hideVal= $("#BcgImgPathHide").val();
     if(hideVal==""){
     	hideVal+=dataObj.fileIds;
     }else{
     	hideVal+=","+dataObj.fileIds;
     }
-    $("#"+hideInput).val(hideVal);
+    $("#BcgImgPathHide").val(hideVal);
 }
 
 </script>
@@ -127,10 +127,11 @@ function upload(data)
 <div class="item"><label>甲方</label>${name}</div>
 <div class="item"><label>乙方</label><input class="input input-w240h36" value="" name="memberNameB" /></div>
 <div class="item"><label>关联招标合同号</label><input class="input input-w240h36" value="" name="refContractNo"/></div>
+ <div class="ly-left">
 <div id="cgImageList"></div>
 <input type="hidden" name="imgPath" id="cgImgPathHide" value=""/>
 <input type="file" name="cgFile" id="cgFile"  multiple="true"/>
-<div></div>
+</div>
 <div class="item"><label>&nbsp;</label><button class="button button-brown" onclick="javascript:$('#uploadify').uploadify('upload')">上传采购合同</button></div>
 <div class="item mt10"><label>&nbsp;</label><a href="javascript:AcgApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
 </div>
@@ -148,10 +149,11 @@ function upload(data)
     <div class="item">
       <label>&nbsp;</label>
       </div>
+       <div class="ly-left">
       <div id="zbImageList"></div>
 	  <input type="hidden" name="imgPath" id="zbImgPathHide" value=""/>
 	  <input type="file" name="zbFile" id="zbFile"  multiple="true"/>
-	  <div></div>
+	  </div>
     <div class="item mt10">
       <label>&nbsp;</label>
       <a href="javascript:zbApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
@@ -175,9 +177,11 @@ function upload(data)
   <div class="item">
     <label>&nbsp;</label>
      </div>
+      <div class="ly-left">
   	  <div id="BcgImageList"></div>
 	  <input type="hidden" name="imgPath" id="BcgImgPathHide" value=""/>
 	  <input type="file" name="BcgFile" id="BcgFile"  multiple="true"/>
+	  </div>
 	  
   <div class="item mt10">
     <label>&nbsp;</label>

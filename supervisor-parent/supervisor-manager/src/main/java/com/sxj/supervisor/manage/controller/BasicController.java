@@ -23,15 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-<<<<<<< HEAD
-import com.sxj.supervisor.entity.system.FunctionEntity;
-=======
 import com.sxj.file.common.LocalFileUtil;
 import com.sxj.file.fastdfs.FastDFSImpl;
 import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
->>>>>>> 87c47e5ecabbab453736974b45895571c13bbcef
+import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.system.IFunctionService;
@@ -48,12 +45,9 @@ public class BasicController extends BaseController {
 	@Autowired
 	private ISystemAccountService accountService;
 
-<<<<<<< HEAD
 	@Autowired
 	private IFunctionService functionService;
 
-=======
->>>>>>> 87c47e5ecabbab453736974b45895571c13bbcef
 	@RequestMapping("footer")
 	public String ToFooter() {
 		return "manage/footer";
@@ -116,11 +110,7 @@ public class BasicController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("menu")
-<<<<<<< HEAD
 	public String toMenu(ModelMap map) {
-=======
-	public String ToMenu(ModelMap map) {
->>>>>>> 87c47e5ecabbab453736974b45895571c13bbcef
 		Subject user = SecurityUtils.getSubject();
 		SystemAccountEntity userName = (SystemAccountEntity) user
 				.getPrincipal();
@@ -133,7 +123,6 @@ public class BasicController extends BaseController {
 		return "manage/menu";
 	}
 
-<<<<<<< HEAD
 	@RequestMapping("menu_path")
 	public String menuPath(HttpServletRequest request, ModelMap map)
 			throws WebException {
@@ -156,7 +145,7 @@ public class BasicController extends BaseController {
 		} catch (Exception e) {
 			throw new WebException("系统错误");
 		}
-=======
+	}
 	@RequestMapping("upload")
 	public void uploadFile(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -185,7 +174,5 @@ public class BasicController extends BaseController {
 		out.print(res);
 		out.flush();
 		out.close();
->>>>>>> 87c47e5ecabbab453736974b45895571c13bbcef
 	}
-
 }
