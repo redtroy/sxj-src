@@ -3,8 +3,11 @@
 <span class="${model.function.style}"></span>${model.function.title}</h2>
 <ul>
  <#list model.children as mc>
-<li><a href="${basePath}${mc.url}">${mc.title}</a></li>
-<!--<li class="on"><a href="sub-account.html">子帐号管理</a></li>-->
+<#if Session.functionId==mc.id>
+<li class="on"><a href="${basePath}${mc.url}?functionId=${mc.id}">${mc.title}</a></li>
+<#else>
+<li><a href="${basePath}${mc.url}?functionId=${mc.id}"">${mc.title}</a></li>
+</#if>
 </#list>
 </ul>
 </#list>

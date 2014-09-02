@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.sxj.supervisor.dao.member.IMemberRoleDao;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
+import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.persistent.QueryCondition;
 
 @Service
 public class MemberRoleServiceImpl implements IMemberRoleService {
@@ -27,6 +30,35 @@ public class MemberRoleServiceImpl implements IMemberRoleService {
 		} catch (Exception e) {
 			SxjLogger.error("查询会员账户所有权限列表错误", e, this.getClass());
 			throw new ServiceException("查询会员账户所有权限列表错误");
+		}
+	}
+
+	@Override
+	public List<MemberFunctionModel> getRoleFunctions(String accountId)
+			throws ServiceException {
+		try {
+			QueryCondition<MemberFunctionEntity> query = new QueryCondition<MemberFunctionEntity>();
+			query.addCondition("parentId", "0");
+			query.addCondition("accountId", accountId);
+			List<MemberFunctionEntity> functionList = roleDao.getRoleFunctions(query);
+			List<MemberFunctionModel> list = new ArrayList<MemberFunctionModel>();
+			for (MemberFunctionEntity functionEntity : functionList) {
+				if (functionEntity == null) {
+					continue;
+				}
+				QueryCondition<MemberFunctionEntity> childrenQuery = new QueryCondition<MemberFunctionEntity>();
+				childrenQuery.addCondition("parentId", functionEntity.getId());
+				childrenQuery.addCondition("accountId", accountId);
+				List<MemberFunctionEntity> childrenList = roleDao
+						.getRoleFunctions(childrenQuery);
+				MemberFunctionModel model = new MemberFunctionModel();
+				model.setFunction(functionEntity);
+				model.setChildren(childrenList);
+				list.add(model);
+			}
+			return list;
+		} catch (Exception e) {
+			throw new ServiceException("查询权限菜单错误", e);
 		}
 	}
 

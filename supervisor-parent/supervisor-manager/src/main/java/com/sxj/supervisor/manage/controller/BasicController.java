@@ -28,10 +28,13 @@ import com.sxj.file.fastdfs.FastDFSImpl;
 import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.system.FunctionModel;
+import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.util.exception.WebException;
 
 @Controller
 public class BasicController extends BaseController {
@@ -41,6 +44,9 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private ISystemAccountService accountService;
+
+	@Autowired
+	private IFunctionService functionService;
 
 	@RequestMapping("footer")
 	public String ToFooter() {
@@ -104,7 +110,7 @@ public class BasicController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("menu")
-	public String ToMenu(ModelMap map) {
+	public String toMenu(ModelMap map) {
 		Subject user = SecurityUtils.getSubject();
 		SystemAccountEntity userName = (SystemAccountEntity) user
 				.getPrincipal();
@@ -117,6 +123,29 @@ public class BasicController extends BaseController {
 		return "manage/menu";
 	}
 
+	@RequestMapping("menu_path")
+	public String menuPath(HttpServletRequest request, ModelMap map)
+			throws WebException {
+		try {
+			HttpSession session = request.getSession(false);
+			if (session.getAttribute("functionId") != null) {
+				String functionId = (String) session.getAttribute("functionId");
+				FunctionEntity function = functionService
+						.getFunction(functionId);
+				if (function != null) {
+					if (!function.getParentId().equals("0")) {
+						FunctionEntity parent = functionService
+								.getFunction(function.getParentId());
+						map.put("parentTitle", parent.getTitle());
+					}
+					map.put("title", function.getTitle());
+				}
+			}
+			return "manage/menu-path";
+		} catch (Exception e) {
+			throw new WebException("系统错误");
+		}
+	}
 	@RequestMapping("upload")
 	public void uploadFile(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -146,5 +175,4 @@ public class BasicController extends BaseController {
 		out.flush();
 		out.close();
 	}
-
 }

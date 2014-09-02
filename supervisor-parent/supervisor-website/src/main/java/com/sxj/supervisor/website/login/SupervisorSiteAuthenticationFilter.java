@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
@@ -31,6 +32,10 @@ public class SupervisorSiteAuthenticationFilter extends
 		 */
 
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpSession session = req.getSession(false);
+		String functionId = req.getParameter("functionId");
+		session.setAttribute("functionId", functionId);
+		
 		Subject subject = getSubject(request, response);
 		String uri = req.getRequestURI();
 		String contextPath = req.getContextPath() + "/";
