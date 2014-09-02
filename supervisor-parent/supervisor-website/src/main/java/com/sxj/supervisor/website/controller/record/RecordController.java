@@ -26,6 +26,7 @@ import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
@@ -54,17 +55,16 @@ public class RecordController extends BaseController {
 	IRecordService recordService;
 
 	@RequestMapping("/query")
-	public String to_query(ModelMap map, HttpSession session) {
-		RecordQuery query = new RecordQuery();
+	public String to_query(ModelMap map, HttpSession session,RecordQuery record) {
 		RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
 		ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
-		RecordStateEnum[] rse = RecordStateEnum.values();// 备案状态
+		RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
-		query.setMemberId(userBean.getMember().getId());
-		List<RecordEntity> list = recordService.queryRecord(query);
+		record.setMemberId(userBean.getMember().getId());
+		List<RecordEntity> list = recordService.queryRecord(record);
 		map.put("recordlist", list);
-		map.put("recordType", rte);
-		map.put("contractType", cte);
+		map.put("confirmState", rse);
+		map.put("record", record);
 		return "site/record/contract-list";
 	}
 
@@ -250,6 +250,7 @@ public class RecordController extends BaseController {
 			if (RFID != "" && RFID != null) {
 				record.setRfidNo(RFID);
 			}
+			recordService.modifyRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;

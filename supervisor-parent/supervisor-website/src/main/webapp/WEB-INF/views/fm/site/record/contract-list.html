@@ -12,12 +12,13 @@
 <script src="${staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
 <script src="${staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
 <script src="${staticPath}/js/jquery.paginate.js"></script>
+<@b.upload/>
 <script>
 jQuery(document).ready(function($) {
 	$('.variContract').click(function(){
 		$('.maskdivgen').fadeIn(100);
 		$('.chanPop').slideDown(200);
-		$('#bgRecordId').val($(this).prop('recordId'));
+		$('#bgRecordId').val($(this).attr("recordId"));
 		loadUpload("bgFile","upload.htm","bgImageList","bgImgPathHide");
 	})
 	$('.modal-header .close').click(function(){
@@ -25,13 +26,21 @@ jQuery(document).ready(function($) {
 		$('.chanPop').slideUp(200);
 	})
 	$('.button-pop').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.chanPop').slideUp(200);
+		var o = {"recordId": $("#bgRecordId").val(),"imgPath": $("#bgImgPathHide").val()};
+		$.post("modifyRecord.htm",o,function(data){
+			if (data.isOK=='ok'){
+				alert("上传变更扫描件成功");
+				 window.location.href="query.htm";
+			}else{
+				alert("上传变更扫描件失败");
+			}
+		  });
+		
 	})
 	$('.suppContract').click(function(){
 		$('.maskdivgen').fadeIn(100);
 		$('.suppPop').slideDown(200);
-		$('#bsRecordId').val($(this).prop('recordId'));
+		$('#bsRecordId').val($(this).attr('recordId'));
 		loadUpload("bsFile","upload.htm","bsImageList","bsImgPathHide");
 	})
 	$('.modal-header .close').click(function(){
@@ -39,8 +48,15 @@ jQuery(document).ready(function($) {
 		$('.suppPop').slideUp(200);
 	})
 	$('.button-pop').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.suppPop').slideUp(200);
+		var o = {"recordId": $("#bsRecordId").val(),"imgPath": $("#bsImgPathHide").val(),"RFID":$("input[name='rfid']").val()};
+		$.post("modifyRecord.htm",o,function(data){
+			var dataObj=eval("("+data+")");
+			if (dataObj.isOK=='ok'){
+				alert("上传补损扫描件成功");
+			}else{
+				alert("上传补损扫描件失败");
+			}
+		  });
 	})
 })
 
@@ -50,29 +66,6 @@ function loadInfo(contractNo,recordNo){
 function closeContract(recordNo){
 	$("#info"+recordNo).slideUp("slow");
 }
-function bgModify() { 
-	var o = {"recordId": $("#bgRecordId").val(),"imgPath": $("#bsImgPathHide").val()};
-	$.post("modifyRecord.htm",o,function(data){
-		if(data.isOK=="ok"){
-			alert("上传变更扫描件成功");
-		}else{
-			alert("上传变更扫描件失败");
-		}
-	  });
-} 
-/**
- * 补损上传扫描件
- */
-function bsModify() { 
-	var o = {"recordId": $("#bsRecordId").val(),"imgPath": $("#bsImgPathHide").val(),"RFID":$("input[name='rfid']").val()};
-	$.post("modifyRecord.htm",o,function(data){
-		if(data.isOK=="ok"){
-			alert("上传补损扫描件成功");
-		}else{
-			alert("上传补损扫描件失败");
-		}
-	  });
-} 
 </script>
 </head>
 
@@ -90,22 +83,22 @@ function bsModify() {
         <div class="heading mb15 ly-clearFix">
           <h1 class="ly-left"> <span class="title fontYH f20 fb">合同备案管理</span></h1>
         </div>
+        <form action="query.htm" method="post">
         <div class="contBox">
           <div class="searBox f12 mb10"> 备案号
-            <input type="text" class="input" name="" value="">
+            <input type="text" class="input" name="recordNo" value="${record.recordNo}">
             合同号
-            <input type="text" class="input" name="" value="">
+            <input type="text" class="input" name="contractNo" value="${record.contractNo}">
             合同备案状态
-            <select name="select">
-              <option selected="selected">全部</option>
-              <option>受理中</option>
-              <option>未确认</option>
-              <option>甲方确认</option>
-              <option>乙方确认</option>
-              <option>已备案</option>
+            <select name="confirmState">
+              <option selected="selected" value="">全部</option>
+               <#list confirmState as state>
+            <option value="${state.getId()}">${state.getName()}</option>
+           </#list>
             </select>
-            <button class="button button-search">查询</button>
+            <button class="button button-search" type="submit">查询</button>
           </div>
+          </form>
           <div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有笔应付款的订单<span class="fb">未付款</span></div>
           <div class="msgBox msg-info msgTip tipOge"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="cont-material.html" class="lnk-blue">待确认</a>的合同信息</div>
           <div class="msgBox msg-info msgTip tipOge"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="cont-developers.html" class="lnk-blue">待确认</a>的开发商合同信息</div>
@@ -177,10 +170,10 @@ function bsModify() {
               </div>
                 <div class="color-red">20%</div></td>
               <td>
-              <a href="edit-record.html" class="lnk-blue"><span class="icon icon16 icon-edit"></span>修改</a>
+              <a href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span class="icon icon16 icon-edit"></span>修改</a>
               <a href="#" class="lnk-blue"><span class="icon icon16 icon-del" ></span>删除</a>
-               <a href="#" class="lnk-blue variContract mr10" recordId="${record.Id}" >变更</a>
-              <a href="#" class="lnk-blue suppContract" recordId="${record.Id}>补损</a>
+               <a href="#" class="lnk-blue variContract mr10" recordId="${record.id}" >变更</a>
+              <a href="#" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
               </td>
              
             </tr>
@@ -189,7 +182,7 @@ function bsModify() {
             </tr>
             </#list>
             </#if>
-            <tr>
+            <tr style="display: none;">
               <td colspan="12"><div class="speedInfo tl">
                   <ol>
                     <li>第1批次 5+6A+5 双白中空 W779/H1176型号共1250件玻璃已出库，<span class="color-green">已付款</span>（支付单号：896237）</li>
@@ -214,14 +207,13 @@ function bsModify() {
 <div class="modal-wrap popDemo contPop chanPop" style="display:none;">
   <div class="modal-header"><span class="close">关闭</span></div>
   <div class="modal-body">
-  <a href="#" class="button button-green">上传变更协议扫描附件</a>
   <div id="bgImageList"></div>
   <input type="hidden" name="" id="bgRecordId" value=""/>
 <input type="hidden" name="imgPath" id="bgImgPathHide" value=""/>
 <input type="file" name="bgFile" id="bgFile"  multiple="true"/>
 <div></div>
    <div class="button-box">
-    <button class="button button-pop" >确认</button>
+    <button class="button button-pop"  >确认</button>
 	<button class="button button-gray">取消</button>
   </div>
   </div>
@@ -231,11 +223,12 @@ function bsModify() {
   <div class="modal-body">
     <div class="item">
       <label>&nbsp;</label>
-      <a href="#" class="button button-green">上传补损协议</a></div>
-       <div id="bsImageList"></div>
+      <div id="bsImageList"></div>
   <input type="hidden" name="" id="bsRecordId" value=""/>
 <input type="hidden" name="imgPath" id="bsImgPathHide" value=""/>
 <input type="file" name="bsFile" id="bsFile"  multiple="true"/>
+    </div>
+       
     <div class="item">
       <label>对应批次的RFID编号</label>
       <input class="input input-w180h36" name="rfid" value="" />

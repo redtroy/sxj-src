@@ -88,17 +88,7 @@
 		<property name="supportedMediaTypes">
 			<list>
 				<bean class="org.springframework.http.MediaType">
-					<constructor-arg index="0" value="text" />
-					<constructor-arg index="1" value="plain" />
-					<constructor-arg index="2" value="UTF-8" />
-				</bean>
-				<bean class="org.springframework.http.MediaType">
 					<constructor-arg index="0" value="*" />
-					<constructor-arg index="1" value="*" />
-					<constructor-arg index="2" value="UTF-8" />
-				</bean>
-				<bean class="org.springframework.http.MediaType">
-					<constructor-arg index="0" value="text" />
 					<constructor-arg index="1" value="*" />
 					<constructor-arg index="2" value="UTF-8" />
 				</bean>

@@ -1,6 +1,7 @@
 package com.sxj.supervisor.manage.controller.contract;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import com.sxj.file.common.LocalFileUtil;
 import com.sxj.file.fastdfs.FastDFSImpl;
 import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
@@ -101,9 +104,10 @@ public class ContractController extends BaseController {
 	}
 
 	@RequestMapping("modify")
-	public @ResponseBody Map<String, Object>  modifyContract(ContractModel contractModel, ModelMap model) {
+	public @ResponseBody Map<String, Object> modifyContract(
+			ContractModel contractModel, ModelMap model) {
 		contractService.modifyContract(contractModel);
-		 Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("isOk", "OK");
 		return map;
 	}
@@ -141,11 +145,11 @@ public class ContractController extends BaseController {
 	}
 
 	@RequestMapping("upload")
-	public @ResponseBody Map<String, Object> uploadFile(
-			HttpServletRequest request) throws IOException {
+	public void uploadFile(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (!(request instanceof DefaultMultipartHttpServletRequest)) {
-			return map;
+			return;
 		}
 		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMaps = re.getFileMap();
@@ -162,7 +166,11 @@ public class ContractController extends BaseController {
 			}
 		}
 		map.put("fileIds", fileIds);
-
-		return map;
+		String res = JsonMapper.nonDefaultMapper().toJson(map);
+		response.setContentType("text/plain;UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(res);
+		out.flush();
+		out.close();
 	}
 }

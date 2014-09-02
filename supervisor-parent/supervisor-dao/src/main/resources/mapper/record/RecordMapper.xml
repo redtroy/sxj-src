@@ -23,13 +23,14 @@
 		<result property="applyDate" column="APPLY_DATE" jdbcType="TIME" />
 		<result property="acceptDate" column="ACCEPT_DATE" jdbcType="TIME" />
 		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
+		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 条件查询备案 -->
 	<select id="queryRecord" resultMap="RecordResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,RECORD_NO,APPLY_ID,APPLY_NAME,MEMBER_ID_A,MEMBER_NAME_A,MEMBER_ID_B,MEMBER_NAME_B,
-		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE,CONFIRM_STATE
+		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE,CONFIRM_STATE,RFID_NO
 		 FROM M_CONTRACT_RECORD WHERE 1=1]]>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
@@ -68,12 +69,15 @@
 			<![CDATA[AND CONTRACT_NO = #{condition.memberIdB}]]>
 		</if>
 		<!-- 备案状态-->
-		<if test="condition.state != null ">
+		<if test="condition.state != null and condition.state != ''">
 			<![CDATA[AND STATE = #{condition.state}]]>
 		</if>
 		<!-- 备案类型-->
-		<if test="condition.type != null ">
+		<if test="condition.type != null and condition.type != ''">
 			<![CDATA[AND TYPE = #{condition.type}]]>
+		</if>
+		<if test="condition.confirmState != null and condition.confirmState != ''">
+			<![CDATA[AND CONFIRM_STATE = #{condition.confirmState}]]>
 		</if>
 		<!-- 申请时间段 -->
  		<if test="condition.startApplyDate != null and condition.endApplyDate != null and condition.startApplyDate != ''  and condition.endApplyDate != ''"> -->

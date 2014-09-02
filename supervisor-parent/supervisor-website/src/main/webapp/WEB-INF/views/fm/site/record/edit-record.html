@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<#include "site/base.html"> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
@@ -11,8 +12,21 @@
 <script src="${staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
 <script src="${staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
 <script src="${staticPath}/js/jquery.paginate.js"></script>
+<@b.upload/>
 <script>
-	
+	$(function(){
+		loadUpload("uploadFile","upload.htm","imageList","imgPathHide");
+	});
+	function modify(){
+		$.post("modify.htm",$('form[0]').serialize(),function(data){
+			var dataObj=eval("("+data+")");
+			if (dataObj.isOK=='ok'){
+				alert("修改成功");
+			}else{
+				alert("上修改失败");
+			}
+		  });
+	}
 </script>
 </head>
 
@@ -32,13 +46,14 @@
   <span class="title fontYH f20 fb">修改备案信息</span></h1>
 </div>
 <!-- 甲方--(门窗厂采购) -->
-<#if record.type==0 && member.getMember().type==0>
+<#if record.contractType!=0 && member.getMember().type==0>
+<form action="modify.html" method="post">
 <div class="contBox">
 <div class="item">
   <label>备案号</label>
   ${record.recordNo} </div>
 <div class="item"><label>甲方</label>${member.getMember().name}</div>
-<div class="item"><label>乙方</label><input class="input input-w270h30" value="" /></div>
+<div class="item"><label>乙方</label><input class="input input-w270h30" name="memberNameB" value="" /></div>
 <div class="item"><label>&nbsp;</label>
 					<#assign arr=(record.imgPath?split(","))>
                       <#list arr as img>
@@ -46,103 +61,131 @@
                     </#list>
 <div class="item ly-clearFix">
   <label>上传合同扫描件</label>
-    <form class="ly-left">
-		<div id="queue"></div>
-		<input id="file_upload" name="file_upload" type="file" multiple="true">
-	    </form><a href="javascript:$('#uploadify').uploadify('cancel')" class="button button-gray ml10 f12 ly-left">取消上传</a>
-        </div>
+      <div id="imageList"></div>
+  	  <input type="hidden" name="" id="id" value="${record.id}"/>
+	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
+</div>
 <div class="item"><label>&nbsp;</label><a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
+</form>
 </#if>
+<#if record.contractType!=0 && member.getMember().type!=0>
 <!-- 乙方(玻璃厂/型材厂 采购) -->
+<form action="modify.html" method="post">
 <div class="contBox">
 <div class="item">
-<label>备案号</label>BA14580951
+<label>备案号</label>${record.recordNo}
 </div>
   <div class="item">
     <label>甲方</label>
-    <input class="input input-w270h30" value="江苏私享家商贸有限公司" />
+    <input class="input input-w270h30" value="" />
   </div>
   <div class="item">
-    <label>乙方</label>南京金陵装饰有限公司
+    <label>乙方</label>${member.getMember().name}
   </div>
   <div class="item">
     <label>&nbsp;</label>
-    <img src="../images/test-conr.jpg" width="80" height="107" /></div>
+    	<#assign arr=(record.imgPath?split(","))>
+                <#list arr as img>
+                   <img src="${img}" alt="采购合同扫描件" width="80" height="107" />
+                 </#list>
+                    </div>
   <div class="item ly-clearFix">
     <label>上传合同扫描件</label>
-    <form class="ly-left">
-      <div id="queue2"></div>
-      <input id="file_upload2" name="file_upload" type="file" multiple="multiple" />
-    </form>
-    <a href="javascript:$('#uploadify').uploadify('cancel')" class="button button-gray ml10 f12 ly-left">取消上传</a> </div>
+     <div id="imageList"></div>
+  	  <input type="hidden" name="" id="bgRecordId" value=""/>
+	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
+ </div>
   <div class="item">
     <label>&nbsp;</label>
     <a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
+</form>
+</#if>
+<#if record.contractType==0 && member.getMember().type==0>
 <!-- 甲方 门窗厂 招标 -->
+<form action="modify.html" method="post">
 <div class="contBox">
   <div class="item">
     <label>备案号</label>
-    BA14588556 </div>
+    ${record.recordNo} </div>
   <div class="item">
     <label>甲方</label>
     <input class="input input-w270h30" value="南京马群科创园" />
   </div>
   <div class="item">
-    <label>乙方</label>江苏私享家商贸有限公司
+    <label>乙方</label>${member.getMember().name}
   </div>
   <div class="item">
     <label>&nbsp;</label>
-    <img src="../images/test-conr.jpg" width="80" height="107" /></div>
+   <#assign arr=(record.imgPath?split(","))>
+       <#list arr as img>
+         <img src="${img}" alt="合同扫描件" width="80" height="107" />
+      </#list>
+
+</div>
   <div class="item">
     <label>上传合同扫描件</label>
-    <form class="ly-left">
-      <div id="queue3"></div>
-      <input id="file_upload3" name="file_upload" type="file" multiple="multiple" />
-    </form>
-    <a href="javascript:$('#uploadify').uploadify('cancel')" class="button button-gray ml10 f12 ly-left">取消上传</a>
+     <div id="imageList"></div>
+  	  <input type="hidden" name="" id="bgRecordId" value=""/>
+	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
     </div>
   <div class="item">
     <label>&nbsp;</label>
     <a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
+</form>
+</#if>
 <!-- 变更 -->
+<#if record.type==1>
+<form action="modify.html" method="post">
 <div class="contBox">
   <div class="item">
     <label>备案号</label>
-    BA14745165 </div>
+    ${record.recordNo} </div>
   <div class="item">
     <label>&nbsp;</label>
-    <img src="../images/test-conr.jpg" width="80" height="107" /></div>
+       <#assign arr=(record.imgPath?split(","))>
+       <#list arr as img>
+         <img src="${img}" alt="合同扫描件" width="80" height="107" />
+      </#list>
+</div>
   <div class="item">
     <label>上传变更合同扫描件</label>
-    <form class="ly-left">
-      <div id="queue4"></div>
-      <input id="file_upload4" name="file_upload" type="file" multiple="multiple" />
-    </form>
-    <a href="javascript:$('#uploadify').uploadify('cancel')" class="button button-gray ml10 f12 ly-left">取消上传</a>
+    <div id="imageList"></div>
+  	  <input type="hidden" name="" id="bgRecordId" value=""/>
+	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
     </div>
   <div class="item">
     <label>&nbsp;</label>
     <a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
+</form>
+</#if>
 <!-- 补损 -->
+<#if record.type==2>
+<form action="modify.html" method="post">
 <div class="contBox">
   <div class="item">
     <label>备案号</label>
-    BA14787579 </div>
-</div>
+    ${record.recordNo} </div>
 <div class="item">
   <label>&nbsp;</label>
-  <img src="../images/test-conr.jpg" width="80" height="107" /></div>  
+   <#assign arr=(record.imgPath?split(","))>
+       <#list arr as img>
+         <img src="${img}" alt="合同扫描件" width="80" height="107" />
+      </#list>  
+</div>  
     <div class="item">
     <label>上传补损合同扫描件</label>
-    <form class="ly-left">
-      <div id="queue5"></div>
-      <input id="file_upload5" name="file_upload" type="file" multiple="multiple" />
-    </form>
-    <a href="javascript:$('#uploadify').uploadify('cancel')" class="button button-gray ml10 f12 ly-left">取消上传</a>
+    <div id="imageList"></div>
+  	  <input type="hidden" name="" id="bgRecordId" value=""/>
+	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
     </div>
     <div class="item">
     <label>合同号</label>
@@ -162,6 +205,8 @@
     <label>&nbsp;</label>
     <a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
+</form>
+</#if>
 </div>
 </div>
 </div>

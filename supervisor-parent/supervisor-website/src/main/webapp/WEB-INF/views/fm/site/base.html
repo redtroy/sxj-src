@@ -74,8 +74,9 @@ function loadUpload(id,url,img,hideInput){
 	        width:120,
 	        buttonText:'上传文件',
 	        onUploadSuccess : function(file, data, response) {
+	        	alert(data);
 	            var dataObj=eval("("+data+")");//转换为json对象 
-	            $("#"+img).append("<img src='${imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+	            $("#"+img).append("<img src='${imagePath}"+dataObj+"100x120.jpg' alt='' />");
 	            //获取隐藏域
 	           var hideVal= $("#"+hideInput).val();
 	            if(hideVal==""){
