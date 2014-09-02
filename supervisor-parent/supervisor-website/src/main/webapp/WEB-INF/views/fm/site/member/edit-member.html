@@ -9,14 +9,36 @@
 <link href="${b.staticPath}style/form.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/msg.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<@b.upload/>
 <script>
+$(document).ready(function() { 
+	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
+	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
+}); 
+function uploadLicense(data){
+    var dataObj=eval("("+data+")");//转换为json对象
+    $("#bLicensePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.jpg")
+    $("#bLicensePath_hidden").val(dataObj.fileIds);
+}
+
+function uploadenergyPath(data){
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.jpg");
+    $("#energyPath_hidden").val(dataObj.fileIds);
+}
+
 function save(id){
+	var bLicensePath= $("#bLicensePath_hidden").val();
+	var energyPath= $("#energyPath_hidden").val();
 	var telNum=$("#qh").val()+'-'+$("#telNum").val();
 	var address=$("#address").val();
     var code=$("#code").val();	
     var contacts=$("#contacts").val();
     var phoneNo=$("#phoneNo").val();
-    $.post("save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo},function(data){
+    var area= $("#city  option:selected").val();
+    $.post("save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
+    	,energyPath:energyPath,area:area
+    },function(data){
     	alert("修改成功！");
     })
 }
@@ -50,32 +72,26 @@ function save(id){
         <div class="item">
           <label>公司所在地</label>
           江苏省-
-          <select name="city" id="city">
-            <option value="南京市">南京市</option>
-            <option value="无锡市">无锡市</option>
-            <option value="苏州市">苏州市</option>
-            <option value="扬州市">扬州市</option>
-            <option value="泰州市">泰州市</option>
-            <option value="南通市">南通市</option>
-            <option value="盐城市">盐城市</option>
-            <option value="徐州市">徐州市</option>
-            <option value="连云港市">连云港市</option>
-            <option value="宿迁市">宿迁市</option>
-            <option value="淮安市">淮安市</option>
-            <option value="镇江市">镇江市</option>
-            <option value="常州市">常州市</option>
-
+          <select name="area" id="city">
+           	<option value="">-请选择-</option>
+          	<#list cityList as city>
+          	<#if (("32:江苏省,"+city.id+":"+city.name)==member.area)>
+          	 <option value="32:江苏省,${city.id}:${city.name}" selected="selected">${city.name}</option>
+          	<#else>
+            <option value="32:江苏省,${city.id}:${city.name}">${city.name}</option>
+            </#if>
+            </#list>
           </select>
         </div>
         <div class="item certCont ly-clearFix">
           <label>企业资质编号</label>
-          <div class="upload"> <img width="80" height="107" src="${staticPath}images/test-conr.jpg">
-          <input type="file" class="input-w180h30" id="input" name="input6">
-            <div class="btnCon btnBox"><a class="button button-brown f12" href="javascript:$('#uploadify').uploadify('upload')">请上传营业执照扫描件</a></div>
+          <div class="upload"> <img id="bLicensePath_img" width="80" height="107" src="${imagePath}${member.bLicensePath}">
+          <input type="file" class="input-w180h30" id="bLicensePath_File" name="input5" />
+          <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
-          <div class="upload"> <img width="80" height="107" src="${staticPath}images/test-conr.jpg">
-            <input type="file" class="input-w180h30" id="input" name="input6">
-            <div class="btnCon btnBox"><a class="button button-brown f12" href="javascript:$('#uploadify').uploadify('upload')">请上传节能标识推广证扫描件</a></div>
+          <div class="upload"> <img id="energyPath_img" width="80" height="107" src="${imagePath}${member.energyPath}">
+            <input type="file" class="input-w180h30" id="energyPath_File" name="input6">
+            <input type="hidden" class="input-w180h30" id="energyPath_hidden" name="energyPath" value="${member.energyPath}">
           </div>
         </div>
         <div class="item">

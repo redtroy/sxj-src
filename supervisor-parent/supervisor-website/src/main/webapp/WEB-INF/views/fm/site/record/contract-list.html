@@ -50,8 +50,7 @@ jQuery(document).ready(function($) {
 	$('.button-pop').click(function(){
 		var o = {"recordId": $("#bsRecordId").val(),"imgPath": $("#bsImgPathHide").val(),"RFID":$("input[name='rfid']").val()};
 		$.post("modifyRecord.htm",o,function(data){
-			var dataObj=eval("("+data+")");
-			if (dataObj.isOK=='ok'){
+			if (data.isOK=='ok'){
 				alert("上传补损扫描件成功");
 			}else{
 				alert("上传补损扫描件失败");

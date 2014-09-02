@@ -102,6 +102,8 @@
 				/unauth.htm =anon
 				/member/memberInfo.htm=user,frameperms
 				/member/account/accountList.htm=user,frameperms
+				/record/to_apply.htm=user,frameperms
+				/record/query.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->

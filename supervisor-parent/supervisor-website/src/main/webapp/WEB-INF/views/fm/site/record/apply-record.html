@@ -62,10 +62,24 @@ function  BzbApplyRecord(){
 }
 
 $(document).ready(function() { 
-	loadUpload("cgFile","upload.htm","cgImageList","cgImgPathHide");
-	loadUpload("zbFile","upload.htm","zbImageList","zbImgPathHide");
-	loadUpload("BcgFile","upload.htm","BcgImageList","BcgImgPathHide");
+	loadUpload("cgFile","upload.htm",upload);
+	loadUpload("zbFile","upload.htm",upload);
+	loadUpload("BcgFile","upload.htm",upload);
 }); 
+
+function upload(data)
+{
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#"+img).append("<img src='${imagePath}"+dataObj+"100x120.jpg' alt='' />");
+    //获取隐藏域
+   var hideVal= $("#"+hideInput).val();
+    if(hideVal==""){
+    	hideVal+=dataObj.fileIds;
+    }else{
+    	hideVal+=","+dataObj.fileIds;
+    }
+    $("#"+hideInput).val(hideVal);
+}
 
 </script>
 </head>
@@ -93,7 +107,7 @@ $(document).ready(function() {
 <dl>
 <dt class="fontYH f20 mb10">恭喜您已成功备案</dt>
 <dd class="mb5">您的备案号为：<span id="recordNo"></span></dd>
-<dd class="f12">现在就开始<a href="contract.html" class="lnk-underline ml5 mr5">管理您的合同</a>吧！</dd>
+<dd class="f12">现在就开始<a href="query.htm" class="lnk-underline ml5 mr5">管理您的合同</a>吧！</dd>
 </dl>
 </div>
 </div>

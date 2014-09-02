@@ -18,12 +18,12 @@
 		loadUpload("uploadFile","upload.htm","imageList","imgPathHide");
 	});
 	function modify(){
-		$.post("modify.htm",$('form[0]').serialize(),function(data){
-			var dataObj=eval("("+data+")");
-			if (dataObj.isOK=='ok'){
+		$.post("modify.htm",$('form').serialize(),function(data){
+			if (data.isOK=='ok'){
 				alert("修改成功");
+				window.location.href="query.htm";
 			}else{
-				alert("上修改失败");
+				alert("修改失败");
 			}
 		  });
 	}
@@ -52,12 +52,12 @@
 <div class="item">
   <label>备案号</label>
   ${record.recordNo} </div>
-<div class="item"><label>甲方</label>${member.getMember().name}</div>
-<div class="item"><label>乙方</label><input class="input input-w270h30" name="memberNameB" value="" /></div>
+<div class="item"><label>甲方</label>${record.memberNameA}</div>
+<div class="item"><label>乙方</label><input class="input input-w270h30" name="memberNameB" value="${record.memberNameB}" /></div>
 <div class="item"><label>&nbsp;</label>
 					<#assign arr=(record.imgPath?split(","))>
                       <#list arr as img>
-                      	<img src="${img}" alt="合同扫描件" width="80" height="107" />
+                      	<img src="${b.imagePath}${img}" alt="合同扫描件" width="80" height="107" />
                     </#list>
 <div class="item ly-clearFix">
   <label>上传合同扫描件</label>
@@ -66,7 +66,7 @@
 	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
 </div>
-<div class="item"><label>&nbsp;</label><a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+<div class="item"><label>&nbsp;</label><a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </form>
 </#if>
@@ -79,28 +79,30 @@
 </div>
   <div class="item">
     <label>甲方</label>
-    <input class="input input-w270h30" value="" />
+    <input class="input input-w270h30" value="${record.memberNameA}" name="memberNameA"/>
+    <input type="hidden" name="id" id="id" value="${record.id}"/>
   </div>
   <div class="item">
-    <label>乙方</label>${member.getMember().name}
+    <label>乙方</label>${record.memberNameB}
   </div>
   <div class="item">
     <label>&nbsp;</label>
     	<#assign arr=(record.imgPath?split(","))>
                 <#list arr as img>
-                   <img src="${img}" alt="采购合同扫描件" width="80" height="107" />
+                   <img src="${b.imagePath}${img}" alt="采购合同扫描件" width="80" height="107" />
                  </#list>
                     </div>
   <div class="item ly-clearFix">
     <label>上传合同扫描件</label>
+    <div class="ly-left">
      <div id="imageList"></div>
-  	  <input type="hidden" name="" id="bgRecordId" value=""/>
 	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
+      </div>
  </div>
   <div class="item">
     <label>&nbsp;</label>
-    <a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+    <a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </form>
 </#if>
@@ -113,29 +115,30 @@
     ${record.recordNo} </div>
   <div class="item">
     <label>甲方</label>
-    <input class="input input-w270h30" value="南京马群科创园" />
+    <input type="hidden" name="id" id="id" value="${record.id}"/>
+    <input class="input input-w270h30" value="${record.memberNameA}" name="memberNameA" />
   </div>
   <div class="item">
-    <label>乙方</label>${member.getMember().name}
+    <label>乙方</label>${record.memberNameB}
   </div>
   <div class="item">
     <label>&nbsp;</label>
    <#assign arr=(record.imgPath?split(","))>
        <#list arr as img>
-         <img src="${img}" alt="合同扫描件" width="80" height="107" />
+         <img src="${b.imagePath}${img}" alt="合同扫描件" width="80" height="107" />
       </#list>
 
 </div>
   <div class="item">
     <label>上传合同扫描件</label>
+    <div class="ly-left">
      <div id="imageList"></div>
-  	  <input type="hidden" name="" id="bgRecordId" value=""/>
 	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
-    </div>
+    </div></div>
   <div class="item">
     <label>&nbsp;</label>
-    <a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+    <a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </form>
 </#if>
@@ -150,19 +153,20 @@
     <label>&nbsp;</label>
        <#assign arr=(record.imgPath?split(","))>
        <#list arr as img>
-         <img src="${img}" alt="合同扫描件" width="80" height="107" />
+         <img src="${b.imagePath}${img}" alt="合同扫描件" width="80" height="107" />
       </#list>
 </div>
   <div class="item">
     <label>上传变更合同扫描件</label>
+    <div class="ly-left">
     <div id="imageList"></div>
-  	  <input type="hidden" name="" id="bgRecordId" value=""/>
+  	  <input type="hidden" name="id" id="id" value="${record.id}"/>
 	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
-    </div>
+    </div></div>
   <div class="item">
     <label>&nbsp;</label>
-    <a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+    <a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </form>
 </#if>
@@ -177,19 +181,20 @@
   <label>&nbsp;</label>
    <#assign arr=(record.imgPath?split(","))>
        <#list arr as img>
-         <img src="${img}" alt="合同扫描件" width="80" height="107" />
+         <img src="${b.imagePath}${img}" alt="合同扫描件" width="80" height="107" />
       </#list>  
 </div>  
     <div class="item">
     <label>上传补损合同扫描件</label>
+    <div class="ly-left">
     <div id="imageList"></div>
-  	  <input type="hidden" name="" id="bgRecordId" value=""/>
+  	  <input type="hidden" name="id" id="id" value="${record.id}"/>
 	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
-    </div>
+    </div></div>
     <div class="item">
     <label>合同号</label>
-    CT14060021</div>
+    ${record.contractNo}</div>
   <div class="item">
     <label>对应批次</label><select name="">
       <option>第一批次</option>
@@ -198,12 +203,12 @@
     </select>
   </div>
   <div class="item">
-    <label>对应批次RFID编号</label>RF14075801<span class="icon icon-add"></span>
+    <label>对应批次RFID编号</label> ${record.rfidNo}<span class="icon icon-add"></span>
     
   </div>
   <div class="item">
     <label>&nbsp;</label>
-    <a href="contract.html" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+    <a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </form>
 </#if>

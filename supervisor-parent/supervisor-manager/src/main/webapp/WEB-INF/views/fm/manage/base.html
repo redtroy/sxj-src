@@ -1,5 +1,5 @@
-<#assign staticPath="http://192.168.1.9/sxj/supervisor-website/" />
-<#assign imagePath="http://192.168.1.105:8080/file-web/" />
+<#assign staticPath="http://61.132.53.150:81/sxj/supervisor-manager/" />
+<#assign imagePath="http://192.168.1.109:8080/file-web/" />
 <#macro errorInfo>
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
@@ -58,24 +58,22 @@ $("#pager").ready(function(){
 });
 </script>
 </#macro>
-
- <#macro upload>
+<#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
 <script>
-function loadUpload(id,url,isMulti,text,fn){
+function loadUpload(id,url,img,hideInput){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
 	        fileTypeExts: '*.gif; *.jpg; *.png',
 	        auto: true,
-	        multi: isMulti,
+	        multi: true,
 	        height:30,
 	        width:120,
-	        buttonText:text,
+	        buttonText:'上传文件',
 	        onUploadSuccess : function(file, data, response) {
-<<<<<<< HEAD
-	        	var dataObj=eval("("+data+")");//转换为json对象 
+	            var dataObj=eval("("+data+")");//转换为json对象 
 	            $("#"+img).append("<img src='${imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
 	            //获取隐藏域
 	           var hideVal= $("#"+hideInput).val();
@@ -85,36 +83,39 @@ function loadUpload(id,url,isMulti,text,fn){
 	            	hideVal+=","+dataObj.fileIds;
 	            }
 	            $("#"+hideInput).val(hideVal);
-=======
-	        	fn(data);
-	        	
->>>>>>> 42a816055ceb8bba4b791e44b1a268603582b405
 	        }
 	        
 	    });
 } 
 </script>
 </#macro>
+ 
 <#macro header>
-<div class="fence" id="header">
-<h1 class="fence-wide ly-clearFix">
-<a class="logo" href="${staticPath}html/register.html"><img title="私享家绿色门窗平台" alt="私享家绿色门窗平台" src="${staticPath}images/logo.jpg"></a>
-<span><img alt="中国绿色建材产品交易平台" title="中国绿色建材产品交易平台" src="${staticPath}images/top-banner.jpg"></span>
-</h1>
+ <div id="header" class="fence-wide">
+    <h1 class="yard-1200"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span></h1>
+    <div class="border-header"></div>
 </div>
 </#macro>
 <#macro footer>
-<div id="footer">
-<div class="fence f12">&copy; 2014 私享家绿色门窗平台 版权所有 经营许可证编号:<a target="_blank" href="#">苏B2-20140088</a>苏ICP备14025589号
+<div id="footer" class="fence-wide">
+  <div class="yard-1200">
+    <p><a href="#">关于我们</a>&nbsp;|<a href="#">联系我们</a>|<a href="#">友情链接</a>|<a href="#">网站地图</a></p>
+    <p>&copy; 2014 私享家电子商贸 版权所有 经营许可证编号:<a href="#" target="_blank">苏B2-20140088</a>苏ICP备14025589号</p>
+  </div>
 </div>
 </#macro>
 <#macro leftMenu>
-<div class="yard-190 ly-left leftMenu" id="leftList">
 <script>$("#leftList").load("${basePath}menu.htm");</script>
-</div>
 </#macro>
 <#macro pager>
 <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
+</#macro>
+<#macro menuPath>
+<div class="local" id="menuPath">
+</div>
+<script>
+$("#menuPath").load("${basePath}menu_path.htm");
+</script>
 </#macro>
 
 
