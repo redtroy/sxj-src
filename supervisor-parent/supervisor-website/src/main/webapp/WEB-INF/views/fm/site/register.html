@@ -15,10 +15,6 @@
 		 $("#erro_text").show();
 		 return false;
 	 }
-	 if ($("#ms").val() != message){
-		 alert("请输入验证码！");
-		 return false;
-	 }
 	 if (reName){
 		 alert('请检查用户名')
 		 return false;
@@ -40,10 +36,14 @@
 		 })
 		 }
 	  });
+	  
   });
+  
   function send_ms(){
-	  $.post("send_ms.htm",function(data){
-		  message=data.ms;
+	  var phoneNo=$("#phoneNo").val();
+	  //alert(phoneNo)
+	  $.post("send_ms.htm",{phoneNo:phoneNo},function(data){
+		  
 	  })
   }
 </script>
@@ -60,7 +60,7 @@
 <form action="regist_save.htm" method="post" id="regist_box">
 <div class="item">
 <label><span class="color-red mr5 fb">*</span>公司名称</label>
-<input class="input input-w270h36" type="text" autocomplete="off" placeholder="" title="公司名称-作为登录用的超级账号名" id="name" name="name" value="" />
+<input class="input input-w270h36" type="text" autocomplete="off" placeholder="" title="公司名称-作为登录用的超级账号名" id="name" name="name" value="${member.name}" />
 <div class="tipMsg msg-gray" id="name_text">请输入您的公司名称</div>
 </div>
 <div class="item">
@@ -79,19 +79,19 @@ ${type[0].getName()}</span>/
 </select></div>
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>联系人</label>
-  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人" id="" name="contacts" value="" />
+  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人" id="" name="contacts" value="${member.contacts}" />
   <div class="tipMsg msg-gray">请输入公司联系人</div>
 </div>
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>联系人手机</label>
-  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人手机" id="" name="phoneNo" value="" />
-  <button class="button button-gray f12">获取短信验证码</button>
+  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人手机" id="phoneNo" name="phoneNo" value="${member.phoneNo}" />
+  <button class="button button-gray f12" onclick="send_ms();return false;">获取短信验证码</button>
   <div class="tipMsg msg-gray">通过验证后，您可以用该手机号找回密码</div>
   <div class="tipMsg msg-error">手机号码格式有误，请输入正确的手机号</div>
 </div>
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>短信验证码</label>
-  <input class="input-w50h36" type="text" autocomplete="off" placeholder="" title="短信验证码" id="ms" name="" value="" />
+  <input class="input-w50h36" type="text" autocomplete="off" placeholder="" title="短信验证码" id="ms" name="ms" value=""/>
   <em class="color-green f12">60秒后重新获取验证码</em>
   </div>
 <div class="item f12"><label>&nbsp;</label><input type="checkbox" class="checkbox"  id="readme">我已阅读并同意<a href="protocal.html" target="_blank" class="lnk-blue"  >《私享家注册协议》</a><div class="tipMsg msg-error" style="display:none;" id="erro_text">请同意注册协议</div></div>

@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -98,11 +99,22 @@ public class MemberController extends BaseController {
 	 * 添加会员
 	 */
 	@RequestMapping("regist_save")
-	public String regist_save(MemberEntity member) {
-		member.setState(MemberStatesEnum.stop);
-		member.setCheckState(MemberCheckStateEnum.unaudited);
-		memberService.addMember(member);
-		return LOGIN;
+	public String regist_save(MemberEntity member, ModelMap map, String ms) {
+		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
+				"checkMs");
+		if (message.equals(ms)) {
+			member.setState(MemberStatesEnum.stop);
+			member.setCheckState(MemberCheckStateEnum.unaudited);
+			memberService.addMember(member);
+			return LOGIN;
+		} else {
+			MemberTypeEnum[] type = MemberTypeEnum.values();
+			List<AreaEntity> list = areaService.getChildrenAreas("32");
+			map.put("type", type);
+			map.put("list", list);
+			map.put("member", member);
+			return "site/register";
+		}
 	}
 
 	/**
@@ -126,9 +138,9 @@ public class MemberController extends BaseController {
 	@RequestMapping("send_ms")
 	public @ResponseBody Map<String, String> send_ms(String phoneNo) {
 		String message = "123456";
-		memberService.createvalidata(phoneNo, message);
+		message = memberService.createvalidata(phoneNo, message);
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("ms", message);
+		HierarchicalCacheManager.set(2, "checkMs", "checkMs", message);
 		return map;
 	}
 }

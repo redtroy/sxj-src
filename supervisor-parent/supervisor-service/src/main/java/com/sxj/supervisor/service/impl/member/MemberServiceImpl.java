@@ -223,11 +223,12 @@ public class MemberServiceImpl implements IMemberService {
 	public String createvalidata(String phoneNo, String message)
 			throws ServiceException {
 		try {
+			message = String.valueOf(NumberUtils.getRandomIntInMax(999));
 			SendMessage.getInstance(sOpenUrl, sDataUrl, account, authkey, cgid,
-					csid);
+					csid).sendMessage(phoneNo, message);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return null;
+		return message;
 	}
 }
