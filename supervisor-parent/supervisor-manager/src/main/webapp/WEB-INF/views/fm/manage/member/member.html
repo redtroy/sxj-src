@@ -64,7 +64,6 @@ jQuery(document).ready(function($) {
 	   var params=$("#"+id+"_info").find(":input");
 		$("#edit_form").append(params.html());
 		$.post("${basePath}member/editMember.htm",params,function(data){
-			alert(data.isOK)
 			if(data.isOK == 'ok'){
 				alert("修改成功");
 				query();
@@ -256,10 +255,10 @@ Intense( elements );
             </select>
           </li>
           <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo" value="${member.getbLicenseNo()}" />
-          <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/yyzz.gif">查看缩略图</a></p>
+          <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p>
           </li>
           <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" value="${member.getEnergyNo()}" />
-          <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="../images/jntg.gif">查看缩略图</a></p>
+          <p><a href="#" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p>
           </li>
           <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" name="contacts"/></li>
           <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" name="phoneNo"/></li>

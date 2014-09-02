@@ -1,29 +1,15 @@
 package com.sxj.supervisor.manage.controller.contract;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import com.sxj.file.common.LocalFileUtil;
-import com.sxj.file.fastdfs.FastDFSImpl;
-import com.sxj.file.fastdfs.FileGroup;
-import com.sxj.file.fastdfs.IFileUpLoad;
-import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
@@ -142,35 +128,5 @@ public class ContractController extends BaseController {
 		model.put("contractModel", contractModel);
 		model.put("record", record);
 		return "manage/contract/contract-replenish";
-	}
-
-	@RequestMapping("upload")
-	public void uploadFile(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (!(request instanceof DefaultMultipartHttpServletRequest)) {
-			return;
-		}
-		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
-		Map<String, MultipartFile> fileMaps = re.getFileMap();
-		Collection<MultipartFile> files = fileMaps.values();
-		List<String> fileIds = new ArrayList<String>();
-		for (MultipartFile myfile : files) {
-			if (myfile.isEmpty()) {
-				System.err.println("文件未上传");
-			} else {
-				IFileUpLoad dfs = new FastDFSImpl(FileGroup.imgGroup);
-				String fileId = dfs.uploadFile(myfile.getBytes(), LocalFileUtil
-						.getFileExtName(myfile.getOriginalFilename()));
-				fileIds.add(fileId);
-			}
-		}
-		map.put("fileIds", fileIds);
-		String res = JsonMapper.nonDefaultMapper().toJson(map);
-		response.setContentType("text/plain;UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(res);
-		out.flush();
-		out.close();
 	}
 }
