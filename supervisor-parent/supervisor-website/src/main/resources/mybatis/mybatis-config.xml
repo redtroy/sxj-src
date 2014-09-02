@@ -34,6 +34,9 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.record.RecordFlagEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordConfirmStateEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
