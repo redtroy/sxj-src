@@ -73,6 +73,8 @@ public class MemberController extends BaseController {
 	@RequestMapping("edit_member")
 	public String edit_member(String id, ModelMap map) {
 		MemberEntity member = memberService.getMember(id);
+		List<AreaEntity> cityList = areaService.getChildrenAreas("32");
+		map.put("cityList", cityList);
 		map.put("member", member);
 		return "site/member/edit-member";
 	}
