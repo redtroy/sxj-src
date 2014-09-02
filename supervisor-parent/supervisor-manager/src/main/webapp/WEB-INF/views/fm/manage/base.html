@@ -61,31 +61,26 @@ $("#pager").ready(function(){
 <#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
+
 <script>
 function loadUpload(id,url,fileQueue){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
+	        debug   : true,
 	        uploader: url,
 	        fileTypeExts: '*.gif; *.jpg; *.png',
-	        auto: true,
 	        multi: true,
 	        height:30,
 	        width:120,
 	        buttonText:'上传文件',
 	        onUploadSuccess : function(file, data, response) {
 	            alert('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
-	            $("#imageList").appent("<img src='${imagePath}data' alt="" />");
-	            
-	        }
+	        },
 	        
 	    });
-} 
+}
 </script>
-<script>
-$(document).ready(function() { 
-	loadUpload("contractFile","upload.htm","contractFileQueue");
-});  
-</script>
+
 </#macro>
  
 <#macro header>
