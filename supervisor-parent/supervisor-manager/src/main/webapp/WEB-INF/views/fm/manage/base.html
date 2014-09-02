@@ -62,7 +62,7 @@ $("#pager").ready(function(){
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
 <script>
-function loadUpload(id,url,fileQueue){
+function loadUpload(id,url,img,hideInput){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
@@ -73,18 +73,20 @@ function loadUpload(id,url,fileQueue){
 	        width:120,
 	        buttonText:'上传文件',
 	        onUploadSuccess : function(file, data, response) {
-	            alert('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
-	            $("#imageList").appent("<img src='${imagePath}data' alt="" />");
-	            
+	            var dataObj=eval("("+data+")");//转换为json对象 
+	            $("#"+img).append("<img src='${imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+	            //获取隐藏域
+	           var hideVal= $("#"+hideInput).val();
+	            if(hideVal==""){
+	            	hideVal+=dataObj.fileIds;
+	            }else{
+	            	hideVal+=","+dataObj.fileIds;
+	            }
+	            $("#"+hideInput).val(hideVal);
 	        }
 	        
 	    });
 } 
-</script>
-<script>
-$(document).ready(function() { 
-	loadUpload("contractFile","upload.htm","contractFileQueue");
-});  
 </script>
 </#macro>
  

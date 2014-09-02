@@ -41,6 +41,12 @@ public class RecordServiceImpl implements IRecordService {
 		re.setContractType(record.getContractType());
 		re.setRecordNo(record.getRecordNo());
 		re.setType(record.getType());
+		if(record.getImgPath()!=null && record.getImgPath().length()>0){
+			re.setImgPath(record.getImgPath());
+		}
+		if(record.getRfidNo()!=null && record.getRfidNo().length()>0){
+			re.setRfidNo(record.getRfidNo());
+		}
 		recordDao.updateRecord(re);
 	}
 
@@ -91,6 +97,7 @@ public class RecordServiceImpl implements IRecordService {
 			condition.addCondition("contractPepole", query.getContractPepole());
 			condition.addCondition("memberIdA", query.getMemberIdA());// 结束受理时间
 			condition.addCondition("memberIdB", query.getMemberIdB());// 结束受理时间
+			condition.addCondition("confirmState", query.getConfirmState());// 确认状态
 			condition.setPage(query);
 			List<RecordEntity> recordList = recordDao.queryRecord(condition);
 			query.setPage(condition);

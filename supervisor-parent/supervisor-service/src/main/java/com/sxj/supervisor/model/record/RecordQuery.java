@@ -3,6 +3,7 @@ package com.sxj.supervisor.model.record;
 import java.io.Serializable;
 
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 
 public class RecordQuery extends Pagable implements Serializable {
 
@@ -20,6 +21,8 @@ public class RecordQuery extends Pagable implements Serializable {
 	private Integer contractType;
 
 	private String contractNo;
+	
+	private String confirmState;
 
 	private Integer recordType;
 
@@ -40,6 +43,14 @@ public class RecordQuery extends Pagable implements Serializable {
 	private String endAcceptDate;
 
 	private String contractPepole;
+
+	public String getConfirmState() {
+		return confirmState;
+	}
+
+	public void setConfirmState(String confirmState) {
+		this.confirmState = confirmState;
+	}
 
 	public String getContractPepole() {
 		return contractPepole;
