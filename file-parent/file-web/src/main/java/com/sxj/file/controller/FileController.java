@@ -20,7 +20,6 @@ import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-@RequestMapping("/upload")
 public class FileController {
 
 	@RequestMapping(value = "{group}/{st}/{f1}/{f2}/{id}")

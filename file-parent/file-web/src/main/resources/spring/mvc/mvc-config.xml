@@ -6,8 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
-	<context:component-scan base-package="com.sjx.file.controller" />
-
+	<context:component-scan base-package="com.sxj.file.controller" />
 	<!--抛出的异常转到特定View -->
 	<bean id="exceptionResolver"
 		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
@@ -20,40 +19,8 @@
 			</props>
 		</property>
 	</bean>
-	<!-- 配置多级缓存 -->
+	<!-- 配置多级缓存-->
 	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
 		lazy-init="false">
-	</bean>
-	<!-- 定义JSP视图 <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
-		/> <property name="prefix" value="/WEB-INF/views/jsp/" /> <property name="suffix" 
-		value=".jsp" /> <property name="contentType" value="text/html;charset=UTF-8" 
-		/> <property name="order" value="0" /> </bean> -->
-
-	<!-- 定义freemark视图 -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-		<property name="viewClass"
-			value="com.sxj.supervisor.manage.view.MyFreeMarkerView" />
-		<property name="requestContextAttribute" value="ctp" />
-		<property name="cache" value="true" />
-		<!-- <property name="prefix" value="/WEB-INF/views/fm/manage/" /> -->
-		<property name="suffix" value=".html" />
-		<property name="contentType" value="text/html;charset=UTF-8" />
-		<property name="order" value="1" />
-	</bean>
-	<!-- 定义freemark文件的位置 -->
-	<bean id="freemarkerConfiguration"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="location" value="classpath:config/freemarker.properties" />
-	</bean>
-	<bean id="freeMarkerConfigurer"
-		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-		<property name="templateLoaderPath" value="/WEB-INF/views/fm/" />
-		<property name="defaultEncoding" value="UTF-8" />
-		<property name="freemarkerSettings" ref="freemarkerConfiguration" />
-
-		<!-- <property name="freemarkerVariables"> <map> <entry key="shiro" value-ref="shiroTags" 
-			/> <entry key="xw" value-ref="xwTags"></entry> </map> </property> -->
-	</bean>
+	</bean> 
 </beans>
