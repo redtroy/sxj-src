@@ -63,17 +63,18 @@ $("#pager").ready(function(){
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
 <script>
-function loadUpload(id,url,img,hideInput){
+function loadUpload(id,url,isMulti,text,fn){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
 	        fileTypeExts: '*.gif; *.jpg; *.png',
 	        auto: true,
-	        multi: true,
+	        multi: isMulti,
 	        height:30,
 	        width:120,
-	        buttonText:'上传文件',
+	        buttonText:text,
 	        onUploadSuccess : function(file, data, response) {
+<<<<<<< HEAD
 	        	var dataObj=eval("("+data+")");//转换为json对象 
 	            $("#"+img).append("<img src='${imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
 	            //获取隐藏域
@@ -84,6 +85,10 @@ function loadUpload(id,url,img,hideInput){
 	            	hideVal+=","+dataObj.fileIds;
 	            }
 	            $("#"+hideInput).val(hideVal);
+=======
+	        	fn(data);
+	        	
+>>>>>>> 42a816055ceb8bba4b791e44b1a268603582b405
 	        }
 	        
 	    });
