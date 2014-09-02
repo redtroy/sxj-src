@@ -101,10 +101,11 @@ public class ContractController extends BaseController {
 	}
 
 	@RequestMapping("modify")
-	public String modifyContract(ContractModel contractModel, ModelMap model) {
+	public @ResponseBody Map<String, Object>  modifyContract(ContractModel contractModel, ModelMap model) {
 		contractService.modifyContract(contractModel);
-
-		return "manage/contract/contract-edit";
+		 Map<String, Object> map = new HashMap<String, Object>();
+		map.put("isOk", "OK");
+		return map;
 	}
 
 	@RequestMapping("changes")

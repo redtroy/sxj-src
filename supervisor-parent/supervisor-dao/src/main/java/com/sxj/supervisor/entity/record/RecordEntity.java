@@ -94,7 +94,7 @@ public class RecordEntity extends Pagable implements Serializable {
 	@Column(name = "TYPE")
 	private RecordTypeEnum type;
 	/**
-	 * 备案状态
+	 * 备案确认状态
 	 **/
 	@Column(name = "CONFIRM_STATE")
 	private RecordConfirmStateEnum confirmState;
@@ -145,6 +145,20 @@ public class RecordEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "DEL_STATE")
 	private Boolean delState = false;
+
+	/**
+	 * 补损RFID
+	 */
+	@Column(name = "RFID_NO")
+	private String rfidNo;
+	
+	public String getRfidNo() {
+		return rfidNo;
+	}
+
+	public void setRfidNo(String rfidNo) {
+		this.rfidNo = rfidNo;
+	}
 
 	public RecordConfirmStateEnum getConfirmState() {
 		return confirmState;

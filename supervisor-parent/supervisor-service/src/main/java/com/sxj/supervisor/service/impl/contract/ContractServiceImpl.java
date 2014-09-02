@@ -324,14 +324,23 @@ public class ContractServiceImpl implements IContractService {
 							if (modifyBatchEntity.getBatchItems() != null
 									&& modifyBatchEntity.getBatchItems()
 											.length() > 0) {
-								List<BatchItemModel> batchItemModel = (List<BatchItemModel>) JsonMapper
-										.nonEmptyMapper()
-										.fromJson(
-												modifyBatchEntity
-														.getBatchItems(),
-												BatchItemModel.class);
-								modifyBatchModel
-										.setModifyBatchItems(batchItemModel);
+								List<BatchItemModel> batchItemModel = null;
+								try {
+									batchItemModel = JsonMapper.nonEmptyMapper()
+											.getMapper().readValue(modifyBatchEntity.getBatchItems(),
+													new TypeReference<List<BatchItemModel>>() {
+													});
+								} catch (JsonParseException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (JsonMappingException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								modifyBatchModel.setModifyBatchItems(batchItemModel);
 							}
 							modifyBatchModel.setModifyBatch(modifyBatchEntity);
 							modifyBatchModelList.add(modifyBatchModel);
@@ -370,12 +379,23 @@ public class ContractServiceImpl implements IContractService {
 							if (ReplenishBatchEntity.getBatchItems() != null
 									&& ReplenishBatchEntity.getBatchItems()
 											.length() > 0) {
-								List<BatchItemModel> batchItemModelList = (List<BatchItemModel>) JsonMapper
-										.nonEmptyMapper()
-										.fromJson(
-												ReplenishBatchEntity
-														.getBatchItems(),
-												BatchItemModel.class);
+								List<BatchItemModel> batchItemModelList =null;
+								try {
+									batchItemModelList = JsonMapper.nonEmptyMapper()
+											.getMapper().readValue(ReplenishBatchEntity
+													.getBatchItems(),
+													new TypeReference<List<BatchItemModel>>() {
+													});
+								} catch (JsonParseException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (JsonMappingException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								replenishBatchModel
 										.setReplenishBatchItems(batchItemModelList);
 							}

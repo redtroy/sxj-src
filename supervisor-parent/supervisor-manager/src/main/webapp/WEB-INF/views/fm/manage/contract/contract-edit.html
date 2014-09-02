@@ -15,7 +15,19 @@
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <@b.upload/>
-
+<script>
+$(document).ready(function() { 
+	loadUpload("contractFile","upload.htm","imageList","contractImgPathHide");
+});  
+function modify(){
+	$.post("modify.htm",$("#modifyForm").serialize(),function(data){
+		   if (data.isOK=='ok'){
+			  alert("成功")
+			  window.location.href="query.htm";
+		}
+	})
+}
+</script>
 </head>
 <body>
 <@b.header/>
@@ -26,7 +38,7 @@
 		<div id="mainBg" class="ly-clearFix yard-1200">
 			<div id="leftList"><@b.leftMenu /></div>
 			<div id="rightBar">
-			<form action="modify.htm" id="modifyForm" method="post">
+			<form action="" id="modifyForm" method="post">
 				<h2 class="title">修改采购合同</h2>
 				<div class="infoBox producedBox f14">
 				<input type="hidden" value="${contractModel.contract.id}"  name="contract.id" />
@@ -170,8 +182,8 @@
 					<div class="contPic">
 						<label>合同备案扫描件</label>
 						<div id="imageList">
-						<img src="" alt="" />
 						</div>
+						<input type="hidden" name="contractModel.contract.imgPath" id="contractImgPathHide" value=""/>
 					</div>
 					<input type="file" name="contractFile" id="contractFile"  multiple="true"/>
     					<div id="contractFileQueue"></div>
@@ -189,11 +201,19 @@
 						<div>
 							<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
 						</div>
+						<script>
+							$(document).ready(function() { 
+								loadUpload("modifyFile","upload.htm","modifyimageList","modifyContractHide${modifyList_index}");
+							});  
+						</script>
 						<div class="contPic">
 							<label>合同变更扫描件</label>
-							<input type="file" name="" id="" value="" />
-							<button class="button button-green button-middle">上传合同变更扫描件</button>
+							<div id="modifyimageList">
 						</div>
+						<input type="hidden" name="modifyList[${modifyList_index}].modifyContract.imgPath" id="modifyContractHide${modifyList_index}" value=""/>
+					</div>
+					<input type="file" name="modifyFile" id="modifyFile"  multiple="true"/>
+    					<div></div>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="20%" />
@@ -286,10 +306,19 @@
 						<div>
 							<label>补损批次RFID</label> ${replenishList.replenishContract.batchRfidNo}
 						</div>
+						<script>
+							$(document).ready(function() { 
+								loadUpload("replenishFile","upload.htm","replenishimageList","replenishContractHide${replenishList_index}");
+							});  
+						</script>
 						<div class="contPic">
 							<label>合同补损扫描件</label>
-							<button class="button button-green button-middle">上传合同补损扫描件</button>
+							<div id="replenishimageList">
+							</div>
+						<input type="hidden" name="replenishList[${replenishList_index}].replenishContract.imgPath" id="replenishContractHide${replenishList_index}" value=""/>
 						</div>
+						<input type="file" name="replenishFile" id="replenishFile"  multiple="true"/>
+    					<div></div>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="10%" />

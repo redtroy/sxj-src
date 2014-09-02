@@ -17,6 +17,8 @@ jQuery(document).ready(function($) {
 	$('.variContract').click(function(){
 		$('.maskdivgen').fadeIn(100);
 		$('.chanPop').slideDown(200);
+		$('#bgRecordId').val($(this).prop('recordId'));
+		loadUpload("bgFile","upload.htm","bgImageList","bgImgPathHide");
 	})
 	$('.modal-header .close').click(function(){
 		$('.maskdivgen').fadeOut(100);
@@ -29,6 +31,8 @@ jQuery(document).ready(function($) {
 	$('.suppContract').click(function(){
 		$('.maskdivgen').fadeIn(100);
 		$('.suppPop').slideDown(200);
+		$('#bsRecordId').val($(this).prop('recordId'));
+		loadUpload("bsFile","upload.htm","bsImageList","bsImgPathHide");
 	})
 	$('.modal-header .close').click(function(){
 		$('.maskdivgen').fadeOut(100);
@@ -46,6 +50,29 @@ function loadInfo(contractNo,recordNo){
 function closeContract(recordNo){
 	$("#info"+recordNo).slideUp("slow");
 }
+function bgModify() { 
+	var o = {"recordId": $("#bgRecordId").val(),"imgPath": $("#bsImgPathHide").val()};
+	$.post("modifyRecord.htm",o,function(data){
+		if(data.isOK=="ok"){
+			alert("上传变更扫描件成功");
+		}else{
+			alert("上传变更扫描件失败");
+		}
+	  });
+} 
+/**
+ * 补损上传扫描件
+ */
+function bsModify() { 
+	var o = {"recordId": $("#bsRecordId").val(),"imgPath": $("#bsImgPathHide").val(),"RFID":$("input[name='rfid']").val()};
+	$.post("modifyRecord.htm",o,function(data){
+		if(data.isOK=="ok"){
+			alert("上传补损扫描件成功");
+		}else{
+			alert("上传补损扫描件失败");
+		}
+	  });
+} 
 </script>
 </head>
 
@@ -129,19 +156,19 @@ function closeContract(recordNo){
               <td>${record.applyDate?date}</td>
               <td><#if record.acceptDate?exists>${record.acceptDate?date}</#if></td>
               <td>
-              <#if record.state.getId() ==0>
+              <#if record.confirmState.getId() ==0>
               	<span class="state normal">受理中</span>
               </#if>
-              <#if record.state.getId() ==1>
+              <#if record.confirmState.getId() ==1>
               	<span class="state frozen">未确认</span>
               </#if>
-              <#if record.state.getId() ==2>
+              <#if record.confirmState.getId() ==2>
               	<span class="state process">甲方确认</span>
               </#if>
-              <#if record.state.getId() ==3>
+              <#if record.confirmState.getId() ==3>
               	<span class="state process">乙方确认</span>
               </#if>
-              <#if record.state.getId() ==4>
+              <#if record.confirmState.getId() ==4>
               	<span class="state verified">已备案</span>
               </#if>
               </td>
@@ -149,7 +176,13 @@ function closeContract(recordNo){
                 <div class="progre" style="width:20%"></div>
               </div>
                 <div class="color-red">20%</div></td>
-              <td><a href="edit-record.html" class="lnk-blue"><span class="icon icon16 icon-edit"></span>修改</a><a href="#" class="lnk-blue"><span class="icon icon16 icon-del"></span>删除</a></td>
+              <td>
+              <a href="edit-record.html" class="lnk-blue"><span class="icon icon16 icon-edit"></span>修改</a>
+              <a href="#" class="lnk-blue"><span class="icon icon16 icon-del" ></span>删除</a>
+               <a href="#" class="lnk-blue variContract mr10" recordId="${record.Id}" >变更</a>
+              <a href="#" class="lnk-blue suppContract" recordId="${record.Id}>补损</a>
+              </td>
+             
             </tr>
             <tr id="info${record.recordNo}">
               <!-- 详细内容 -->
@@ -182,8 +215,13 @@ function closeContract(recordNo){
   <div class="modal-header"><span class="close">关闭</span></div>
   <div class="modal-body">
   <a href="#" class="button button-green">上传变更协议扫描附件</a>
+  <div id="bgImageList"></div>
+  <input type="hidden" name="" id="bgRecordId" value=""/>
+<input type="hidden" name="imgPath" id="bgImgPathHide" value=""/>
+<input type="file" name="bgFile" id="bgFile"  multiple="true"/>
+<div></div>
    <div class="button-box">
-    <button class="button button-pop">确认</button>
+    <button class="button button-pop" >确认</button>
 	<button class="button button-gray">取消</button>
   </div>
   </div>
@@ -194,9 +232,13 @@ function closeContract(recordNo){
     <div class="item">
       <label>&nbsp;</label>
       <a href="#" class="button button-green">上传补损协议</a></div>
+       <div id="bsImageList"></div>
+  <input type="hidden" name="" id="bsRecordId" value=""/>
+<input type="hidden" name="imgPath" id="bsImgPathHide" value=""/>
+<input type="file" name="bsFile" id="bsFile"  multiple="true"/>
     <div class="item">
       <label>对应批次的RFID编号</label>
-      <input class="input input-w180h36" />
+      <input class="input input-w180h36" name="rfid" value="" />
       <span class="color-green hand ml10">+</span></div>
     <div class="item">
       <label>&nbsp;</label>
