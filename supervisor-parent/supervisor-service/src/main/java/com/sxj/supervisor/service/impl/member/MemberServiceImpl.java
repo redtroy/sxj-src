@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.spring.modules.util.Identities;
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -223,7 +224,7 @@ public class MemberServiceImpl implements IMemberService {
 	public String createvalidata(String phoneNo, String message)
 			throws ServiceException {
 		try {
-			message = String.valueOf(NumberUtils.getRandomIntInMax(999));
+			message = Identities.randomNumber(6);
 			SendMessage.getInstance(sOpenUrl, sDataUrl, account, authkey, cgid,
 					csid).sendMessage(phoneNo, message);
 		} catch (Exception e) {
