@@ -1,6 +1,7 @@
 package com.sxj.supervisor.website.controller.record;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import com.sxj.file.common.LocalFileUtil;
 import com.sxj.file.fastdfs.FastDFSImpl;
 import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
@@ -89,11 +92,11 @@ public class RecordController extends BaseController {
 	 * @throws IOException
 	 */
 	@RequestMapping("upload")
-	public @ResponseBody Map<String, Object> uploadFile(
-			HttpServletRequest request) throws IOException {
+	public void uploadFile(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (!(request instanceof DefaultMultipartHttpServletRequest)) {
-			return map;
+			return;
 		}
 		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMaps = re.getFileMap();
@@ -110,9 +113,14 @@ public class RecordController extends BaseController {
 			}
 		}
 		map.put("fileIds", fileIds);
-
-		return map;
+		String res = JsonMapper.nonDefaultMapper().toJson(map);
+		response.setContentType("text/plain;UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(res);
+		out.flush();
+		out.close();
 	}
+
 
 	/**
 	 * 跳转申请合同
@@ -250,6 +258,17 @@ public class RecordController extends BaseController {
 			if (RFID != "" && RFID != null) {
 				record.setRfidNo(RFID);
 			}
+			recordService.modifyRecord(record);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
+	}
+	@RequestMapping("/modify")
+	public @ResponseBody Map<String, String> modify(RecordEntity  record) throws WebException {
+		try {
 			recordService.modifyRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
