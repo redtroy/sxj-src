@@ -32,6 +32,7 @@ import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
+import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
@@ -49,6 +50,9 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IAccountService accountService;
+
+	@Autowired
+	private IMemberRoleService roleService;
 
 	@RequestMapping("index")
 	public String ToIndex(HttpServletRequest request) {
@@ -124,17 +128,22 @@ public class BasicController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("menu")
-	public String ToMenu(ModelMap map) {
-		// Subject user = SecurityUtils.getSubject();
-		// SystemAccountEntity userName = (SystemAccountEntity) user
-		// .getPrincipal();
-		// if (userName == null) {
-		// return "403";
-		// }
-		// List<MemberFunctionEntity> list = roleService
-		// .getRoleFunction(userName.getId());
-		List<MemberFunctionModel> list = functionService.queryFunctions();
-		map.put("list", list);
+	public String ToMenu(HttpServletRequest request, ModelMap map) {
+		HttpSession session = request.getSession(false);
+		if (session.getAttribute("userinfo") == null) {
+			return "403";
+		}
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		if (userBean.getMember() != null && userBean.getAccount() == null) {
+			List<MemberFunctionModel> list = functionService.queryFunctions();
+			map.put("list", list);
+		} else if (userBean.getMember() != null
+				&& userBean.getAccount() != null) {
+			List<MemberFunctionModel> list = roleService
+					.getRoleFunctions(userBean.getAccount().getId());
+			map.put("list", list);
+		}
 		return "site/menu";
 	}
 
