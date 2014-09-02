@@ -61,10 +61,12 @@
                     </#list>
 <div class="item ly-clearFix">
   <label>上传合同扫描件</label>
+  <div class="ly-left">
       <div id="imageList"></div>
   	  <input type="hidden" name="" id="id" value="${record.id}"/>
 	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
+      </div>
 </div>
 <div class="item"><label>&nbsp;</label><a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
