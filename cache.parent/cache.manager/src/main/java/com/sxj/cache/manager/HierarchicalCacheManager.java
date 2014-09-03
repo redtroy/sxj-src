@@ -25,7 +25,7 @@ public class HierarchicalCacheManager
     
     private final static Logger log = LoggerFactory.getLogger(HierarchicalCacheManager.class);
     
-    private final static String CONFIG_FILE = "/cache.properties";
+    private final static String CONFIG_FILE = "cache.properties";
     
     private static CacheProvider l1_provider;
     
@@ -50,9 +50,13 @@ public class HierarchicalCacheManager
                 .getParent()
                 .getResourceAsStream(CONFIG_FILE);
         if (configStream == null)
-            configStream = HierarchicalCacheManager.class.getResourceAsStream(CONFIG_FILE);
+            configStream = HierarchicalCacheManager.class.getClassLoader()
+                    .getResourceAsStream(CONFIG_FILE);
         if (configStream == null)
-            throw new CacheException("Cannot find " + CONFIG_FILE + " !!!");
+            throw new CacheException("Cannot find "
+                    + HierarchicalCacheManager.class.getClassLoader()
+                            .getResource(CONFIG_FILE)
+                            .toExternalForm() + " !!!");
         
         Properties props = new Properties();
         

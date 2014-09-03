@@ -1,6 +1,5 @@
 package com.sxj.supervisor.dao;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,7 +20,6 @@ public class MemberDAOTest
     @Autowired
     private IMemberDao memberDao;
     
-    @Test
     public void testUpdateMember()
     {
         MemberEntity member = new MemberEntity();
@@ -31,7 +29,6 @@ public class MemberDAOTest
         System.out.println(member.getAddress());
     }
     
-    @Test
     public void testGetMemeber()
     {
         memberDao.getMember("1");
