@@ -10,7 +10,20 @@
 <script>
  var message;
  var reName=true;
+ var intDiff = parseInt(59);//倒计时总秒数量
   function regist(){
+	 if ($("#contacts").val()=="" || $("#contacts").val()==null){
+		 alert("联系人不能为空！");
+		 return false;
+	 }
+	 
+	  if ($("input[name='type']:checked").val()==null){
+			 alert('请选择公司类型!');
+			 return false;
+		 }
+	 if (!checkSubmitMobil()){
+		 return false;
+	 }
 	 if($("#readme").attr("checked")=="checked"){
 		 $("#erro_text").show();
 		 return false;
@@ -36,16 +49,68 @@
 		 })
 		 }
 	  });
-	  
+	  $("#phoneNo").blur(function(){
+		  checkSubmitMobil();
+	  })
   });
-  
-  function send_ms(){
+  //发送短信
+  function send_ms(obj){
 	  var phoneNo=$("#phoneNo").val();
 	  //alert(phoneNo)
 	  $.post("send_ms.htm",{phoneNo:phoneNo},function(data){
-		  
+		  $(obj).attr("disabled", "disabled"); 
+	      timer(intDiff,obj)
 	  })
   }
+  var timer1;
+  function timer(intDiff,obj){
+	   timer1=window.setInterval(function(){
+	    var day=0,
+	        hour=0,
+	        minute=0,
+	        second=0;//时间默认值       
+	    if(intDiff > 0){
+	        day = Math.floor(intDiff / (60 * 60 * 24));
+	        hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+	        minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+	        second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+	    }
+	    if (minute <= 9) minute = '0' + minute;
+	    if (second <= 9) second = '0' + second;
+	    /*
+	    $('#day_show').html(day+"天");
+	    $('#hour_show').html('<s id="h"></s>'+hour+'时');
+	    $('#minute_show').html('<s></s>'+minute+'分');
+	    $('#second_show').html('<s></s>'+second+'秒');
+	    */
+	    $("#time").text(second+"秒后重新获取验证码")
+	    if (second==0){
+	    	 $(obj).removeAttr("disabled", "disabled");
+	    	 clearInterval(timer1);
+	    }
+	    intDiff--;
+	    }, 1000);
+	} 
+  //手机号码验证
+  function checkSubmitMobil() {
+	  $("#moileMsg_hidden").hide();
+	  if ($("#phoneNo").val() == "") {
+	//  alert("手机号码不能为空！");
+	  $("#moileMsg").show();
+	  $("#moileMsg").html("<font color='red'>手机号码不能为空！请输入正确的手机号码！</font>");
+	  return false;
+	  }
+
+	  if (!$("#phoneNo").val().match(/^(((13[0-9]{1})|159|153)+\d{8})$/)) {
+	//  alert("手机号码格式不正确！");
+	  $("#moileMsg").show();
+	  $("#moileMsg").html("<font color='red'>手机号码格式不正确！请重新输入！</font>");
+	  return false;
+	  }
+	  $("#moileMsg").html("<font color='green'>手机号输入正确！</font>");
+	  return true;
+	  } 
+  
 </script>
 </head>
 <body>
@@ -85,14 +150,14 @@ ${type[0].getName()}</span>/
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>联系人手机</label>
   <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人手机" id="phoneNo" name="phoneNo" value="${member.phoneNo}" />
-  <button class="button button-gray f12" onclick="send_ms();return false;">获取短信验证码</button>
-  <div class="tipMsg msg-gray">通过验证后，您可以用该手机号找回密码</div>
-  <div class="tipMsg msg-error">手机号码格式有误，请输入正确的手机号</div>
+  <button class="button button-gray f12" onclick="send_ms(this);return false;">获取短信验证码</button>
+  <div class="tipMsg msg-gray" id="moileMsg_hidden">通过验证后，您可以用该手机号找回密码</div>
+  <div class="tipMsg msg-error" id="moileMsg" style="display:none;">手机号码格式有误，请输入正确的手机号</div>
 </div>
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>短信验证码</label>
   <input class="input-w50h36" type="text" autocomplete="off" placeholder="" title="短信验证码" id="ms" name="ms" value=""/>
-  <em class="color-green f12">60秒后重新获取验证码</em>
+  <em class="color-green f12" id="time">60秒后重新获取验证码</em>
   </div>
 <div class="item f12"><label>&nbsp;</label><input type="checkbox" class="checkbox"  id="readme">我已阅读并同意<a href="protocal.html" target="_blank" class="lnk-blue"  >《私享家注册协议》</a><div class="tipMsg msg-error" style="display:none;" id="erro_text">请同意注册协议</div></div>
 <div class="item" disabled="none"><label>&nbsp;</label>

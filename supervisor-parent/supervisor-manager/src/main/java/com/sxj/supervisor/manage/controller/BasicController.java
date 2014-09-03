@@ -1,15 +1,8 @@
 package com.sxj.supervisor.manage.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
@@ -20,18 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-<<<<<<< HEAD
 import com.sxj.supervisor.entity.system.FunctionEntity;
-=======
-import com.sxj.file.common.LocalFileUtil;
-import com.sxj.file.fastdfs.FastDFSImpl;
-import com.sxj.file.fastdfs.FileGroup;
-import com.sxj.file.fastdfs.IFileUpLoad;
-import com.sxj.spring.modules.mapper.JsonMapper;
->>>>>>> 87c47e5ecabbab453736974b45895571c13bbcef
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.system.IFunctionService;
@@ -48,12 +31,9 @@ public class BasicController extends BaseController {
 	@Autowired
 	private ISystemAccountService accountService;
 
-<<<<<<< HEAD
 	@Autowired
 	private IFunctionService functionService;
 
-=======
->>>>>>> 87c47e5ecabbab453736974b45895571c13bbcef
 	@RequestMapping("footer")
 	public String ToFooter() {
 		return "manage/footer";
@@ -116,11 +96,7 @@ public class BasicController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("menu")
-<<<<<<< HEAD
 	public String toMenu(ModelMap map) {
-=======
-	public String ToMenu(ModelMap map) {
->>>>>>> 87c47e5ecabbab453736974b45895571c13bbcef
 		Subject user = SecurityUtils.getSubject();
 		SystemAccountEntity userName = (SystemAccountEntity) user
 				.getPrincipal();
@@ -133,7 +109,6 @@ public class BasicController extends BaseController {
 		return "manage/menu";
 	}
 
-<<<<<<< HEAD
 	@RequestMapping("menu_path")
 	public String menuPath(HttpServletRequest request, ModelMap map)
 			throws WebException {
@@ -156,36 +131,6 @@ public class BasicController extends BaseController {
 		} catch (Exception e) {
 			throw new WebException("系统错误");
 		}
-=======
-	@RequestMapping("upload")
-	public void uploadFile(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (!(request instanceof DefaultMultipartHttpServletRequest)) {
-			return;
-		}
-		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
-		Map<String, MultipartFile> fileMaps = re.getFileMap();
-		Collection<MultipartFile> files = fileMaps.values();
-		List<String> fileIds = new ArrayList<String>();
-		for (MultipartFile myfile : files) {
-			if (myfile.isEmpty()) {
-				System.err.println("文件未上传");
-			} else {
-				IFileUpLoad dfs = new FastDFSImpl(FileGroup.imgGroup);
-				String fileId = dfs.uploadFile(myfile.getBytes(), LocalFileUtil
-						.getFileExtName(myfile.getOriginalFilename()));
-				fileIds.add(fileId);
-			}
-		}
-		map.put("fileIds", fileIds);
-		String res = JsonMapper.nonDefaultMapper().toJson(map);
-		response.setContentType("text/plain;UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(res);
-		out.flush();
-		out.close();
->>>>>>> 87c47e5ecabbab453736974b45895571c13bbcef
 	}
 
 }
