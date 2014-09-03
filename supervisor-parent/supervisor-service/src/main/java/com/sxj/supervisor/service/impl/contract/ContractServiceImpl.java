@@ -124,6 +124,7 @@ public class ContractServiceImpl implements IContractService {
 	public void addContract(ContractEntity contract,
 			List<ContractItemEntity> itemList, String recordId)
 			throws ServiceException {
+		try{
 		if (contract != null) {
 			RecordEntity record = recordDao.getRecord(recordId);
 			// 拼装实体
@@ -149,6 +150,11 @@ public class ContractServiceImpl implements IContractService {
 				}
 				contractItemDao.addItem(newList);// 新增条目
 			}
+			record.setContractNo(contract.getId());
+			recordDao.updateRecord(record);
+		}
+		}catch (Exception e) {
+			throw new ServiceException("新增合同出错", e);
 		}
 	}
 

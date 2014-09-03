@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
@@ -30,6 +31,7 @@ import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
+import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
@@ -176,5 +178,27 @@ public class BasicController extends BaseController {
 		out.flush();
 		out.close();
 	}
-
+	@RequestMapping("autoComple")
+	public @ResponseBody Map<String, String> autoComple(HttpServletRequest request,
+			HttpServletResponse response,String keyword) throws IOException {
+		MemberQuery mq=	new MemberQuery();
+		if(keyword!="" && keyword!=null){
+			mq.setMemberName(keyword);
+		}
+		List<MemberEntity> list=memberService.queryMembers(mq);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (MemberEntity memberEntity : list) {
+			sb="{\"title\":\""+memberEntity.getName()+"\",\"result\":\""+memberEntity.getId()+"\"}";
+			strlist.add(sb);
+		}
+		String json = "{\"data\":"+strlist.toString()+"}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null ;
+	}
+	 
 }

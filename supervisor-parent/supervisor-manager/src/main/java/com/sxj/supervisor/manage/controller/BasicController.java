@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
@@ -28,9 +29,13 @@ import com.sxj.file.fastdfs.FastDFSImpl;
 import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
+import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.system.FunctionModel;
+import com.sxj.supervisor.service.impl.member.MemberServiceImpl;
+import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
@@ -47,6 +52,9 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IFunctionService functionService;
+	
+	@Autowired
+	private IMemberService memberService;
 
 	@RequestMapping("footer")
 	public String ToFooter() {
@@ -174,5 +182,27 @@ public class BasicController extends BaseController {
 		out.print(res);
 		out.flush();
 		out.close();
+	}
+	@RequestMapping("autoComple")
+	public @ResponseBody Map<String, String> autoComple(HttpServletRequest request,
+			HttpServletResponse response,String keyword) throws IOException {
+		MemberQuery mq=	new MemberQuery();
+		if(keyword!="" && keyword!=null){
+			mq.setMemberName(keyword);
+		}
+		List<MemberEntity> list=memberService.queryMembers(mq);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (MemberEntity memberEntity : list) {
+			sb="{\"title\":\""+memberEntity.getName()+"\",\"result\":\""+memberEntity.getId()+"\"}";
+			strlist.add(sb);
+		}
+		String json = "{\"data\":"+strlist.toString()+"}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null ;
 	}
 }

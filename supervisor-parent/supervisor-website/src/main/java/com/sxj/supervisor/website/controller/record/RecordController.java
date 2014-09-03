@@ -133,7 +133,7 @@ public class RecordController extends BaseController {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
 		map.put("type", userBean.getMember().getType());
 		map.put("name", userBean.getMember().getName());// name
-
+		map.put("id", userBean.getMember().getId());
 		return "site/record/apply-record";
 	}
 
@@ -158,6 +158,7 @@ public class RecordController extends BaseController {
 			record.setDelState(false);
 			record.setContractType(ContractTypeEnum.glass);// 合同类型
 			record.setFlag(RecordFlagEnum.A);
+			record.setConfirmState(RecordConfirmStateEnum.accepted);
 			recordService.addRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
@@ -187,6 +188,7 @@ public class RecordController extends BaseController {
 			record.setType(RecordTypeEnum.contract);
 			record.setApplyDate(new Date());
 			record.setDelState(false);
+			record.setConfirmState(RecordConfirmStateEnum.accepted);
 			record.setContractType(ContractTypeEnum.bidding);// 合同类型
 			record.setFlag(RecordFlagEnum.B);
 			recordService.addRecord(record);
@@ -220,6 +222,7 @@ public class RecordController extends BaseController {
 			record.setDelState(false);
 			record.setContractType(ContractTypeEnum.extrusions);// 合同类型
 			record.setFlag(RecordFlagEnum.B);
+			record.setConfirmState(RecordConfirmStateEnum.accepted);
 			recordService.addRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");

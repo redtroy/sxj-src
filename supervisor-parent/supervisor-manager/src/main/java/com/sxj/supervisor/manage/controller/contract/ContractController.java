@@ -66,19 +66,24 @@ public class ContractController extends BaseController {
 	}
 
 	@RequestMapping("produced")
-	public String producedContract(String recordId) {
-		ModelMap model = new ModelMap();
-		model.put("recordId", recordId);
+	public String producedContract(String recordId,ModelMap model) {
+		RecordEntity record = recordService.getRecord(recordId);
+		model.put("record", record);
 		return "manage/contract/contract-add";
 	}
 
 	@RequestMapping("addContract")
-	public String addContract(ContractControllerModel contract) {
-		ModelMap model = new ModelMap();
-		contractService.addContract(contract.getContract(),
-				contract.getItems(), contract.getRecordId());
-
-		return "manage/contract/contract-list";
+	public @ResponseBody Map<String, String> addContract(
+			ContractControllerModel contract,String recordId) throws WebException {
+		try {
+			contractService.addContract(contract.getContract(),
+					contract.getItems(), contract.getRecordId());
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
 	}
 
 	@RequestMapping("toModify")
