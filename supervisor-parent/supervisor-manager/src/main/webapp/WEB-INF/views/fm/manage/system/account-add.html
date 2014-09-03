@@ -1,7 +1,7 @@
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">新增管理员</h2>
     <div class="adminBox f14">
-    <form id="add_form" action="" method="post">
+    <form id="add_form" action="javascript:void(0);" method="post">
       <div>
         <label>姓名</label>
         <input type="text" id="user_name" name="name" class="text tip" title="由中文组成" />
@@ -36,7 +36,7 @@
 		$.post("${basePath}system/add_account.htm",params,function(data){
 			if(data.isOK==true){
 				alert("添加成功");
-				searchSumbit();
+				query();
 			}
 			else{
 				errorInfo(data);

@@ -9,11 +9,11 @@ import com.sxj.util.exception.ServiceException;
 
 public interface IRoleService {
 
-	public void addRoles(List<RoleEntity> roles);
+	public void addRoles(List<RoleEntity> roles) throws ServiceException;
 
-	public void removeRoles(String accountId);
+	public void removeRoles(String accountId) throws ServiceException;
 
-	public List<RoleEntity> getRoles(String accountId);
+	public List<RoleEntity> getRoles(String accountId) throws ServiceException;
 
 	public List<FunctionModel> getRoleFunction(String accountId)
 			throws ServiceException;

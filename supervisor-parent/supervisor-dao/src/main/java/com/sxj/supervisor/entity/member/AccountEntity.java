@@ -11,7 +11,7 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IAccountDao;
-import com.sxj.supervisor.enu.member.MemberStatesEnum;
+import com.sxj.supervisor.enu.member.AccountStatesEnum;
 
 /**
  * 子账号实体
@@ -57,7 +57,7 @@ public class AccountEntity extends Pagable implements Serializable {
 	 * 子账户状态
 	 **/
 	@Column(name = "STATE")
-	private MemberStatesEnum state;
+	private AccountStatesEnum state;
 
 	/**
 	 * 注册日期
@@ -123,11 +123,11 @@ public class AccountEntity extends Pagable implements Serializable {
 		this.name = name;
 	}
 
-	public MemberStatesEnum getState() {
+	public AccountStatesEnum getState() {
 		return state;
 	}
 
-	public void setState(MemberStatesEnum state) {
+	public void setState(AccountStatesEnum state) {
 		this.state = state;
 	}
 

@@ -29,7 +29,7 @@ public class FunctionServiceImpl implements IFunctionService {
 	public List<FunctionModel> queryFunctions() throws ServiceException {
 		try {
 			QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
-			query.addCondition("parentId", 0);
+			query.addCondition("parentId", "0");
 			List<FunctionEntity> functionList = functiondao
 					.queryFunction(query);
 			List<FunctionModel> list = new ArrayList<FunctionModel>();

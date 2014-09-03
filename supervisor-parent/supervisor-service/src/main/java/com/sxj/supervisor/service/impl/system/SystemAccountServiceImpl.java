@@ -118,8 +118,11 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 
 	@Override
 	public SystemAccountEntity getAccount(String id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return accountDao.getSystemAccount(id);
+		} catch (Exception e) {
+			throw new ServiceException("查询系统用户信息错误", e);
+		}
 	}
 
 	@Override

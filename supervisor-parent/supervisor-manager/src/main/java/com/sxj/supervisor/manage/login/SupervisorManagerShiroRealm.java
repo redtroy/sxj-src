@@ -65,7 +65,7 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm
         
         if (username != null)
         {
-            List<FunctionEntity> functionList = roleService.getAllRoleFunction(username);
+            List<FunctionEntity> functionList = roleService.getAllRoleFunction(current.getId());
             List<String> permissions = new ArrayList<String>();
             if (functionList != null && functionList.size() > 0)
             {

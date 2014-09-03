@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IAccountDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
-import com.sxj.supervisor.enu.member.MemberStatesEnum;
+import com.sxj.supervisor.entity.member.MemberRoleEntity;
+import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.service.member.IAccountService;
+import com.sxj.supervisor.service.member.IMemberRoleService;
+import com.sxj.util.common.EncryptUtil;
+import com.sxj.util.common.NumberUtils;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -22,25 +28,81 @@ public class AccountServiceImpl implements IAccountService {
 	@Autowired
 	private IAccountDao accountDao;
 
+	@Autowired
+	private IMemberRoleService roleServce;
+
 	/**
 	 * 新增子会员
 	 */
 	@Override
-	public void addAccount(AccountEntity account) {
-		accountDao.addAccount(account);
-
+	@Transactional
+	public void addAccount(AccountEntity account, String[] functionIds)
+			throws ServiceException {
+		try {
+			AccountEntity oldAccount = getAccountByNo(account.getAccountNo());
+			if (oldAccount != null) {
+				throw new ServiceException("用户账户已存在");
+			}
+			accountDao.addAccount(account);
+			if (functionIds != null && functionIds.length > 0) {
+				List<MemberRoleEntity> roles = new ArrayList<MemberRoleEntity>();
+				for (int i = 0; i < functionIds.length; i++) {
+					if (functionIds[i] == null) {
+						continue;
+					}
+					if ("none".equals(functionIds[i])) {
+						continue;
+					}
+					MemberRoleEntity role = new MemberRoleEntity();
+					role.setAccountId(account.getId());
+					role.setFunctionId(functionIds[i]);
+					roles.add(role);
+				}
+				if (roles.size() > 0) {
+					roleServce.addRoles(roles);
+				}
+			}
+		} catch (Exception e) {
+			SxjLogger.error("添加会员子账户信息错误", e, this.getClass());
+			throw new ServiceException("添加会员子账户信息错误", e);
+		}
 	}
 
 	/**
 	 * 更新子会员
 	 */
 	@Override
-	public void modifyAccount(AccountEntity account) {
-		// AccountEntity ae = accountDao.getAccount(account.getId());
-		// ae.setName(account.getName());
-		// ae.setAccountName(account.getAccountName());
-		// accountDao.updateAccount(ae);
-		accountDao.updateAccount(account);
+	@Transactional
+	public void modifyAccount(AccountEntity account, String[] functionIds)
+			throws ServiceException {
+		try {
+			if (account == null) {
+				return;
+			}
+			if (functionIds != null && functionIds.length > 0) {
+				List<MemberRoleEntity> roles = new ArrayList<MemberRoleEntity>();
+				for (int i = 0; i < functionIds.length; i++) {
+					if (functionIds[i] == null) {
+						continue;
+					}
+					if ("none".equals(functionIds[i])) {
+						continue;
+					}
+					MemberRoleEntity role = new MemberRoleEntity();
+					role.setAccountId(account.getId());
+					role.setFunctionId(functionIds[i]);
+					roles.add(role);
+				}
+				if (roles.size() > 0) {
+					roleServce.removeRoles(account.getId());
+					roleServce.addRoles(roles);
+				}
+			}
+			accountDao.updateAccount(account);
+		} catch (Exception e) {
+			SxjLogger.error("更新子账户信息错误", e, this.getClass());
+			throw new ServiceException("更新子账户信息错误", e);
+		}
 
 	}
 
@@ -68,7 +130,7 @@ public class AccountServiceImpl implements IAccountService {
 			condition.addCondition("delstate", query.getDelstate());// 删除标记
 			condition.addCondition("startDate", query.getStartDate());// 开始时间
 			condition.addCondition("endDate", query.getEndDate());// 结束时间
-			condition.addCondition("roleId", query.getRoleId());// 权限ＩＤ
+			condition.addCondition("functionId", query.getFunctionId());// 权限ＩＤ
 			condition.setPage(query);
 		}
 		List<AccountEntity> aacountList = accountDao.queryAccount(condition);
@@ -80,6 +142,7 @@ public class AccountServiceImpl implements IAccountService {
 	 * 删除子会员
 	 */
 	@Override
+	@Transactional
 	public void reomveAccount(String id) {
 		AccountEntity account = getAccount(id);
 		account.setDelstate(true);
@@ -88,20 +151,21 @@ public class AccountServiceImpl implements IAccountService {
 	}
 
 	/**
-	 * 更新自会员状态
+	 * 更新子会员状态
 	 */
 	@Override
+	@Transactional
 	public String editState(String id, Integer state) {
 		AccountEntity account = new AccountEntity();
 		account.setId(id);
-		if (state == MemberStatesEnum.normal.getId().intValue()) {
-			account.setState(MemberStatesEnum.stop);
+		if (state == AccountStatesEnum.normal.getId().intValue()) {
+			account.setState(AccountStatesEnum.stop);
 			accountDao.updateAccount(account);
-			return MemberStatesEnum.stop.getName();
-		} else if (state == MemberStatesEnum.stop.getId().intValue()) {
-			account.setState(MemberStatesEnum.normal);
+			return AccountStatesEnum.stop.getName();
+		} else if (state == AccountStatesEnum.stop.getId().intValue()) {
+			account.setState(AccountStatesEnum.normal);
 			accountDao.updateAccount(account);
-			return MemberStatesEnum.normal.getName();
+			return AccountStatesEnum.normal.getName();
 		} else {
 			return null;
 		}
@@ -114,11 +178,13 @@ public class AccountServiceImpl implements IAccountService {
 	@Transactional
 	public String initializePwd(String id) {
 		try {
-			AccountEntity account = getAccount(id);
-			// 随机密码
-			String password = "123456";
-			account.setPassword(password);
-			modifyAccount(account);
+
+			int rondom = NumberUtils.getRandomIntInMax(999999);
+			String password = StringUtils.getLengthStr(rondom + "", 6, '0');
+			AccountEntity account = new AccountEntity();
+			account.setId(id);
+			account.setPassword(EncryptUtil.md5Hex(password));
+			accountDao.updateAccount(account);
 			return password;
 		} catch (Exception e) {
 			throw new ServiceException("初始化密码错误", e.getMessage());

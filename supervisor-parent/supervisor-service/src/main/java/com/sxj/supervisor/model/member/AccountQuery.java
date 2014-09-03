@@ -22,7 +22,7 @@ public class AccountQuery extends Pagable implements Serializable {
 
 	private String endDate;
 
-	private String roleId;
+	private String functionId;
 
 	private Boolean delstate = false;
 
@@ -82,11 +82,12 @@ public class AccountQuery extends Pagable implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public String getRoleId() {
-		return roleId;
+	public String getFunctionId() {
+		return functionId;
 	}
 
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
+	public void setFunctionId(String functionId) {
+		this.functionId = functionId;
 	}
+
 }

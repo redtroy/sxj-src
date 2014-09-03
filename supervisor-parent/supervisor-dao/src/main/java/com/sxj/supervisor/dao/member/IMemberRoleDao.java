@@ -54,7 +54,7 @@ public interface IMemberRoleDao {
 	 * @return
 	 * @throws SQLException2
 	 */
-	public List<MemberFunctionEntity> getAllRoleFunction(String account)
+	public List<MemberFunctionEntity> getAllRoleFunction(String accountId)
 			throws SQLException;
 
 }

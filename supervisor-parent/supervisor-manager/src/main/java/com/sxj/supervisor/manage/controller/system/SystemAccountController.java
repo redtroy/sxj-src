@@ -19,6 +19,7 @@ import com.sxj.supervisor.model.system.SysAccountQuery;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.persistent.ResultList;
 
@@ -110,8 +111,12 @@ public class SystemAccountController extends BaseController {
 	@RequestMapping("edit_account")
 	public @ResponseBody Map<String, Object> editAccount(
 			SystemAccountEntity account,
-			@RequestParam("functionIds") String[] functionIds) {
-		accountService.modifyAccount(account, functionIds);
+			@RequestParam("functionIds") String functionIds) {
+		String[] ids = null;
+		if (StringUtils.isNotEmpty(functionIds)) {
+			ids = functionIds.split(",");
+		}
+		accountService.modifyAccount(account, ids);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("isOK", true);
 		map.put("account", account);

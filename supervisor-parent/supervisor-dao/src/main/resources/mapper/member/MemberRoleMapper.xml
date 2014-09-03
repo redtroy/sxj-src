@@ -55,6 +55,6 @@
 		parameterType="String">
 		<![CDATA[select DISTINCT f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL,f.STYLE from M_MEMBER_FUNCTION f 
 		INNER JOIN M_MEMBER_ROLE r on f.ID=r.FUNCTION_ID inner join
-		 M_MEMBER_ACCOUNT a ON a.ID=r.ACCOUNT_ID WHERE a.ACCOUNT_NO=#{account} order by f.DESC]]>
+		 M_MEMBER_ACCOUNT a ON a.ID=r.ACCOUNT_ID WHERE a.ID=#{accountId} order by f.DESC]]>
 	</select>
 </mapper>
