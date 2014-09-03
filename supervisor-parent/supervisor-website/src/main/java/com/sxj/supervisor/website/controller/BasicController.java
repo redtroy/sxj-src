@@ -65,15 +65,15 @@ public class BasicController extends BaseController {
 	}
 
 	@RequestMapping("login")
-	public String login(String memberName, String accountNo, String password,
+	public String login(String memberName, String accountName, String password,
 			HttpSession session, HttpServletRequest request, ModelMap map) {
-		map.put("account", accountNo);
+		map.put("accountName", accountName);
 		map.put("memberName", memberName);
 		SupervisorSiteToken token = null;
 		SupervisorPrincipal userBean = null;
 		if (StringUtils.isNotEmpty(memberName)
-				&& StringUtils.isNotEmpty(accountNo)) {
-			AccountEntity account = accountService.getAccountByNo(accountNo);
+				&& StringUtils.isNotEmpty(accountName)) {
+			AccountEntity account = accountService.getAccountByName(accountName);
 			if (account == null) {
 				map.put("message", "会员子账户不存在");
 				return LOGIN;
@@ -93,7 +93,7 @@ public class BasicController extends BaseController {
 			userBean.setMember(member);
 			token = new SupervisorSiteToken(userBean, password);
 		} else if (StringUtils.isNotEmpty(memberName)
-				&& StringUtils.isEmpty(accountNo)) {
+				&& StringUtils.isEmpty(accountName)) {
 			MemberEntity member = memberService.getMemberByName(memberName);
 			if (member == null) {
 				map.put("message", "会员不存在");

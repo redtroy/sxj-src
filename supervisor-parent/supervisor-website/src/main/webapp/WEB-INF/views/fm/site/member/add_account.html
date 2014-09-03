@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <div class="yard-870 rightSide ly-left" id="right_div">
       <div class="heading mb15 ly-clearFix">
         <h1 class="ly-left"> <span class="title fontYH f20 fb">新增子帐号</span></h1>
@@ -24,7 +23,7 @@
         </div>
         <div class="item">
           <label>帐号权限</label>
-           <div class="adminDrop dropMenu sltinput" onclick="javascript:roleInfo('','add');"> <span>全部权限</span> <span class="icon"></span> </div>
+          <a class="f12 lnk-blue" href="javascript:roleInfo('','add');">设置</a>
         </div>
 		<div class="item mt10">
           <label>&nbsp;</label><a class="button button-orange mr15" href="#" onclick="save();">新增</a><a class="button button-gray" href="#" onclick="cancel();">取消</a>
@@ -32,6 +31,9 @@
       </div>
       </form>
     </div>
+    <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
+	  </div>
+     <div class="maskdivgen" style="display:none"></div>
 <script type="text/javascript">
    function save(){
 	   var params=$("#add_form").serialize();
@@ -44,62 +46,8 @@
 				errorInfo(data);
 			}
 		});
-	   
    }
    function cancel(){
 	   query();
    }
 </script>
-
-
-=======
-<div class="yard-870 rightSide ly-left" id="right_div">
-      <div class="heading mb15 ly-clearFix">
-        <h1 class="ly-left"> <span class="title fontYH f20 fb">新增子帐号</span></h1>
-      </div>
-      <div class="contBox">
-        <div class="item">
-          <label>帐号名</label>
-          <input class="input input-w180h36" id="accountName">
-        </div>
-        <div class="item">
-          <label>姓名</label>
-          <input class="input input-w180h36" id="name">
-        </div>
-        <div class="item">
-          <label>帐号密码</label>
-          <input type="password" class="input input-w180h36" id="pwd1">
-        </div>
-        <div class="item">
-          <label>确认密码</label>
-          <input type="password" class="input input-w180h36" id="pwd2">
-        </div>
-        <div class="item">
-          <label>帐号权限</label><a class="f12 lnk-blue" href="#">设置</a>
-        </div>
-<div class="item mt10">
-          <label>&nbsp;</label><a class="button button-orange mr15" href="#" onclick="save()">新增</a><a class="button button-gray" href="#" onclick="cancel()">取消</a>
-        </div>
-      </div>
-    </div>
-<script type="text/javascript">
-   function save(){
-	   var accountName=$("#accountName").val();
-	   var name=$("#name").val();
-	   var pwd1=$("#pwd1").val();
-	   var pwd2=$("#pwd2").val();
-	   if (pwd1 != pwd2){
-		   alert("两次密码不一样，请重新输入！");
-		   return false;
-	   }
-	   $.post("add_account.htm",{accountName:accountName,name:name,password:pwd1},function(data){
-		   query();
-	   })
-   }
-   function cancel(){
-	   query();
-   }
-</script>
-
-
->>>>>>> 76f29511475585032735076d80871bbb09da8d12

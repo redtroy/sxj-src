@@ -113,8 +113,11 @@ public class AccountController extends BaseController {
 	 * 修改密码
 	 */
 	@RequestMapping("save_pwd")
-	public @ResponseBody Map<String, String> save_pwd(AccountEntity account) {
-		accountService.modifyAccount(account, null);
+	public @ResponseBody Map<String, String> save_pwd(String id, String password) {
+		// if (StringUtils.isNotEmpty(account.getPassword())) {
+		//
+		// }
+		// accountService.modifyAccount(account, null);
 		return null;
 	}
 
@@ -160,9 +163,10 @@ public class AccountController extends BaseController {
 			map.put("list", list);
 			return "site/member/role_function";
 		} else if ("add".equals(type)) {
-			// List<FunctionModel> allList = functionService.queryFunctions();
-			// map.put("allList", allList);
-			return "manage/system/edit_role";
+			List<MemberFunctionModel> allList = functionService
+					.queryFunctions();
+			map.put("allList", allList);
+			return "site/member/edit_role";
 
 		} else if ("edit".equals(type)) {
 			List<MemberFunctionEntity> list = roleService
