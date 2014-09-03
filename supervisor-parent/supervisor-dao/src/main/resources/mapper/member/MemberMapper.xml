@@ -46,7 +46,7 @@
 		</if>
 		<!-- 会员名称 -->
 		<if test="condition.name != null and condition.name != ''">
-			<![CDATA[AND NAME = #{condition.name}]]>
+			<![CDATA[AND NAME  like "%"#{condition.name}"%"]]>
 		</if>
 		<!-- 联系人 -->
 		<if test="condition.contacts != null and condition.contacts != ''">
