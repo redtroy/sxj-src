@@ -71,6 +71,7 @@ public class FunctionMapperTest
         System.out.println("==============" + function.getFunctionId());
     }
     
+    @Test
     public void testGet()
     {
         Function function = mapper.getFunction("A6D7ZXo6oDMKbOtbY5vp6RF6nJXSbAK");
@@ -104,7 +105,6 @@ public class FunctionMapperTest
         mapper.batchDelete(functionIds);
     }
     
-    @Test
     public void testBatchUpdate()
     {
         Function function = new Function();
