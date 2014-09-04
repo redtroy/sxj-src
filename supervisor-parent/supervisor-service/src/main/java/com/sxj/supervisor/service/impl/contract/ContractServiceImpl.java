@@ -124,36 +124,36 @@ public class ContractServiceImpl implements IContractService {
 	public void addContract(ContractEntity contract,
 			List<ContractItemEntity> itemList, String recordId)
 			throws ServiceException {
-		try{
-		if (contract != null) {
-			RecordEntity record = recordDao.getRecord(recordId);
-			// 拼装实体
-			if (record != null) {
-				contract.setRecordDate(record.getAcceptDate()); // 备案时间就是受理时间?
-				contract.setRecordNo(record.getRecordNo());// 备案号
-			}
-			contract.setState(0);
-			contract.setConfirmState(0);
-			contract.setCreateDate(new Date());
-			contractDao.addContract(contract);
+		try {
+			if (contract != null) {
+				RecordEntity record = recordDao.getRecord(recordId);
+				// 拼装实体
+				if (record != null) {
+					contract.setRecordDate(record.getAcceptDate()); // 备案时间就是受理时间?
+					contract.setRecordNo(record.getRecordNo());// 备案号
+				}
+				contract.setState(0);
+				contract.setConfirmState(0);
+				contract.setCreateDate(new Date());
+				contractDao.addContract(contract);
 
-			if (itemList != null) {
-				List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
-				for (int i = 0; i < itemList.size(); i++) {
-					ContractItemEntity ci = itemList.get(i);
-					if (ci.getAmount() != null && ci.getPrice() != null) {
-						ci.setContractId(contract.getId());
-						newList.add(ci);
+				if (itemList != null) {
+					List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
+					for (int i = 0; i < itemList.size(); i++) {
+						ContractItemEntity ci = itemList.get(i);
+						if (ci.getAmount() != null && ci.getPrice() != null) {
+							ci.setContractId(contract.getId());
+							newList.add(ci);
+
+						}
 
 					}
-
+					contractItemDao.addItem(newList);// 新增条目
 				}
-				contractItemDao.addItem(newList);// 新增条目
+				record.setContractNo(contract.getContractNo());
+				recordDao.updateRecord(record);
 			}
-			record.setContractNo(contract.getId());
-			recordDao.updateRecord(record);
-		}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new ServiceException("新增合同出错", e);
 		}
 	}
@@ -162,77 +162,84 @@ public class ContractServiceImpl implements IContractService {
 	 * 修改合同
 	 */
 	@Override
-	public void modifyContract(ContractModel contract) {
-		// 主体
-		if (contract.getContract() != null) {
-			contractDao.updateContract(contract.getContract());
-		}
-		// 条目
-		if (contract.getItemList() != null) {
-			contractItemDao.updateItem(contract.getItemList());
-		}
-		// 批次
-		if (contract.getBatchList() != null) {
-			List<ContractBatchEntity> cbelist = new ArrayList<ContractBatchEntity>();
-			for (int i = 0; i < contract.getBatchList().size(); i++) {
-				ContractBatchModel cbm = contract.getBatchList().get(i);
-				ContractBatchEntity cbe = cbm.getBatch();
-				if (cbm.getBatchItems() != null) {
-					cbe.setBatchItems(JsonMapper.nonEmptyMapper().toJson(
-							cbm.getBatchItems()));// 转json
-				}
-				cbelist.add(cbe);
+	public void modifyContract(ContractModel contract) throws ServiceException {
+		try {
+			// 主体
+			if (contract.getContract() != null) {
+				contractDao.updateContract(contract.getContract());
 			}
-			contractBatchDao.updateBatchs(cbelist);
-		}
-		// 变更记录
-		if (contract.getModifyList() != null) {
-			List<ModifyContractEntity> mceList = new ArrayList<ModifyContractEntity>();// 变更记录主体
-			for (int i = 0; i < contract.getModifyList().size(); i++) {
-				ContractModifyModel cmm = contract.getModifyList().get(i);
-				if (cmm.getModifyContract() != null) {
-					mceList.add(cmm.getModifyContract());
-				}
-				if (cmm.getModifyItemList() != null) {
-					contractModifyItemDao.updateItems(cmm.getModifyItemList());
-				}
-				List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
-				for (int j = 0; j < cmm.getModifyBatchList().size(); j++) {
-					ModifyBatchModel mbm = cmm.getModifyBatchList().get(j);
-					if (mbm.getModifyBatchItems() != null) {
-						mbm.getModifyBatch().setBatchItems(
-								JsonMapper.nonEmptyMapper().toJson(
-										mbm.getModifyBatchItems()));
+			// 条目
+			if (contract.getItemList() != null) {
+				contractItemDao.updateItem(contract.getItemList());
+			}
+			// 批次
+			if (contract.getBatchList() != null) {
+				List<ContractBatchEntity> cbelist = new ArrayList<ContractBatchEntity>();
+				for (int i = 0; i < contract.getBatchList().size(); i++) {
+					ContractBatchModel cbm = contract.getBatchList().get(i);
+					ContractBatchEntity cbe = cbm.getBatch();
+					if (cbm.getBatchItems() != null) {
+						cbe.setBatchItems(JsonMapper.nonEmptyMapper().toJson(
+								cbm.getBatchItems()));// 转json
 					}
-					mbeList.add(mbm.getModifyBatch());
+					cbelist.add(cbe);
 				}
-				contractModifyBatchDao.updateItems(mbeList);
+				contractBatchDao.updateBatchs(cbelist);
 			}
-			contractModifyDao.updateModify(mceList);
-		}
-		// 补损记录
-		if (contract.getReplenishList() != null) {
-			List<ReplenishContractEntity> mceList = new ArrayList<ReplenishContractEntity>();// 补损记录主体
-			for (int i = 0; i < contract.getReplenishList().size(); i++) {
-				ContractReplenishModel crm = contract.getReplenishList().get(i);
-				if (crm.getReplenishContract() != null) {
-					mceList.add(crm.getReplenishContract());
-				}
-				List<ReplenishBatchEntity> rbeList = new ArrayList<ReplenishBatchEntity>();
-				if (crm.getBatchItems() != null) {
-					for (int j = 0; j < crm.getBatchItems().size(); j++) {
-						ReplenishBatchModel rbm = crm.getBatchItems().get(j);
-						if (rbm.getReplenishBatch() != null) {
-							rbm.getReplenishBatch().setBatchItems(
+			// 变更记录
+			if (contract.getModifyList() != null) {
+				List<ModifyContractEntity> mceList = new ArrayList<ModifyContractEntity>();// 变更记录主体
+				for (int i = 0; i < contract.getModifyList().size(); i++) {
+					ContractModifyModel cmm = contract.getModifyList().get(i);
+					if (cmm.getModifyContract() != null) {
+						mceList.add(cmm.getModifyContract());
+					}
+					if (cmm.getModifyItemList() != null) {
+						contractModifyItemDao.updateItems(cmm
+								.getModifyItemList());
+					}
+					List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
+					for (int j = 0; j < cmm.getModifyBatchList().size(); j++) {
+						ModifyBatchModel mbm = cmm.getModifyBatchList().get(j);
+						if (mbm.getModifyBatchItems() != null) {
+							mbm.getModifyBatch().setBatchItems(
 									JsonMapper.nonEmptyMapper().toJson(
-											rbm.getReplenishBatchItems()));
+											mbm.getModifyBatchItems()));
 						}
-						rbeList.add(rbm.getReplenishBatch());
+						mbeList.add(mbm.getModifyBatch());
 					}
-					contractReplenishBatchDao.updateReplenishBatch(rbeList);
+					contractModifyBatchDao.updateItems(mbeList);
 				}
+				contractModifyDao.updateModify(mceList);
 			}
-			contractReplenishDao.updateReplenish(mceList);
+			// 补损记录
+			if (contract.getReplenishList() != null) {
+				List<ReplenishContractEntity> mceList = new ArrayList<ReplenishContractEntity>();// 补损记录主体
+				for (int i = 0; i < contract.getReplenishList().size(); i++) {
+					ContractReplenishModel crm = contract.getReplenishList()
+							.get(i);
+					if (crm.getReplenishContract() != null) {
+						mceList.add(crm.getReplenishContract());
+					}
+					List<ReplenishBatchEntity> rbeList = new ArrayList<ReplenishBatchEntity>();
+					if (crm.getBatchItems() != null) {
+						for (int j = 0; j < crm.getBatchItems().size(); j++) {
+							ReplenishBatchModel rbm = crm.getBatchItems()
+									.get(j);
+							if (rbm.getReplenishBatch() != null) {
+								rbm.getReplenishBatch().setBatchItems(
+										JsonMapper.nonEmptyMapper().toJson(
+												rbm.getReplenishBatchItems()));
+							}
+							rbeList.add(rbm.getReplenishBatch());
+						}
+						contractReplenishBatchDao.updateReplenishBatch(rbeList);
+					}
+				}
+				contractReplenishDao.updateReplenish(mceList);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("修改合同出错", e);
 		}
 	}
 
@@ -313,7 +320,7 @@ public class ContractServiceImpl implements IContractService {
 				List<ModifyContractEntity> modifyList = contractModifyDao
 						.queryModify(modifyCondition);
 				if (modifyList != null) {
-					List<ContractModifyModel> modifymodelList = new ArrayList<ContractModifyModel>();
+					List<ContractModifyModel> modifymodelList = null;
 					for (int i = 0; i < modifyList.size(); i++) {
 						ContractModifyModel cmm = new ContractModifyModel();
 						ModifyContractEntity modify = modifyList.get(i);
@@ -332,8 +339,12 @@ public class ContractServiceImpl implements IContractService {
 											.length() > 0) {
 								List<BatchItemModel> batchItemModel = null;
 								try {
-									batchItemModel = JsonMapper.nonEmptyMapper()
-											.getMapper().readValue(modifyBatchEntity.getBatchItems(),
+									batchItemModel = JsonMapper
+											.nonEmptyMapper()
+											.getMapper()
+											.readValue(
+													modifyBatchEntity
+															.getBatchItems(),
 													new TypeReference<List<BatchItemModel>>() {
 													});
 								} catch (JsonParseException e) {
@@ -346,7 +357,8 @@ public class ContractServiceImpl implements IContractService {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								modifyBatchModel.setModifyBatchItems(batchItemModel);
+								modifyBatchModel
+										.setModifyBatchItems(batchItemModel);
 							}
 							modifyBatchModel.setModifyBatch(modifyBatchEntity);
 							modifyBatchModelList.add(modifyBatchModel);
@@ -363,7 +375,8 @@ public class ContractServiceImpl implements IContractService {
 			if (replenishRecordIds != null && replenishRecordIds.length() > 0) {
 
 				QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
-				replenishCondition.addCondition("recordIds", replenishRecordIds);// 补损备案ID
+				replenishCondition
+						.addCondition("recordIds", replenishRecordIds);// 补损备案ID
 				List<ReplenishContractEntity> replenishList = contractReplenishDao
 						.queryReplenish(replenishCondition);
 				for (int i = 0; i < replenishList.size(); i++) {
@@ -385,11 +398,14 @@ public class ContractServiceImpl implements IContractService {
 							if (ReplenishBatchEntity.getBatchItems() != null
 									&& ReplenishBatchEntity.getBatchItems()
 											.length() > 0) {
-								List<BatchItemModel> batchItemModelList =null;
+								List<BatchItemModel> batchItemModelList = null;
 								try {
-									batchItemModelList = JsonMapper.nonEmptyMapper()
-											.getMapper().readValue(ReplenishBatchEntity
-													.getBatchItems(),
+									batchItemModelList = JsonMapper
+											.nonEmptyMapper()
+											.getMapper()
+											.readValue(
+													ReplenishBatchEntity
+															.getBatchItems(),
 													new TypeReference<List<BatchItemModel>>() {
 													});
 								} catch (JsonParseException e) {
@@ -452,44 +468,54 @@ public class ContractServiceImpl implements IContractService {
 			if (query == null) {
 				return null;
 			}
-		QueryCondition<ContractEntity> condition = new QueryCondition<ContractEntity>();
-		condition.addCondition("contractNo", query.getContractNo());// 合同号
-		condition.addCondition("recordNo", query.getRecordNo());// 备案号
-		condition.addCondition("memberId", query.getMemberId());// 签订会员ＩＤ
-		condition.addCondition("contractType", query.getContractType());// 合同类型
-		condition.addCondition("refContractNo", query.getRefContractNo());// 关联合同号
-		condition.addCondition("startCreateDate", query.getStartCreateDate());// 开始签订时间
-		condition.addCondition("endCreateDate", query.getEndCreateDate());// 结束签订合同号
-		condition.addCondition("startRecordDate", query.getStartRecordDate());// 开始备案时间
-		condition.addCondition("endRecordDate", query.getEndRecordDate());// 结束备案时间
-		condition.addCondition("confirmState", query.getConfirmState());// 确认状态
-		condition.addCondition("state", query.getState());// 合同状态
-		query.setPage(condition);
-		List<ContractEntity> contractList = contractDao.queryContract(condition);
-		List<ContractModel> contractModelList = new ArrayList<ContractModel>();
-		for (Iterator<ContractEntity> iterator = contractList.iterator(); iterator
-				.hasNext();) {
-			ContractEntity contractEntity = (ContractEntity) iterator.next();
-			// JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(),
-			// StateLogModel.class);//备案记录
-			ContractModel cm = new ContractModel();
-			cm.setContract(contractEntity);
-			contractModelList.add(cm);
-		}
-		return contractModelList;
+			QueryCondition<ContractEntity> condition = new QueryCondition<ContractEntity>();
+			condition.addCondition("contractNo", query.getContractNo());// 合同号
+			condition.addCondition("recordNo", query.getRecordNo());// 备案号
+			condition.addCondition("memberId", query.getMemberId());// 签订会员ＩＤ
+			condition.addCondition("contractType", query.getContractType());// 合同类型
+			condition.addCondition("refContractNo", query.getRefContractNo());// 关联合同号
+			condition.addCondition("startCreateDate",
+					query.getStartCreateDate());// 开始签订时间
+			condition.addCondition("endCreateDate", query.getEndCreateDate());// 结束签订合同号
+			condition.addCondition("startRecordDate",
+					query.getStartRecordDate());// 开始备案时间
+			condition.addCondition("endRecordDate", query.getEndRecordDate());// 结束备案时间
+			condition.addCondition("confirmState", query.getConfirmState());// 确认状态
+			condition.addCondition("state", query.getState());// 合同状态
+			query.setPage(condition);
+			List<ContractEntity> contractList = contractDao
+					.queryContract(condition);
+			List<ContractModel> contractModelList = new ArrayList<ContractModel>();
+			for (Iterator<ContractEntity> iterator = contractList.iterator(); iterator
+					.hasNext();) {
+				ContractEntity contractEntity = (ContractEntity) iterator
+						.next();
+				// JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(),
+				// StateLogModel.class);//备案记录
+				ContractModel cm = new ContractModel();
+				cm.setContract(contractEntity);
+				contractModelList.add(cm);
+			}
+			return contractModelList;
 		} catch (Exception e) {
 			throw new ServiceException("查询合同信息错误", e);
 		}
-		
+
 	}
 
 	/**
 	 * 删除合同
 	 */
 	@Override
-	public void deleteContract(String id) {
-		contractDao.deleteContract(id);
-
+	public void deleteContract(String id)throws ServiceException {
+		try {
+			ContractEntity ce = new ContractEntity();
+			ce.setId(id);
+			ce.setDeleteState(1);
+			contractDao.updateContract(ce);
+		} catch (Exception e) {
+			throw new ServiceException("删除合同出错", e);
+		}
 	}
 
 	/**
@@ -497,43 +523,48 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	@Transactional
-	public void changeContract(String contractId, ContractModifyModel model, String recordNo,List<ContractItemEntity> itemList) {
-		 ModifyContractEntity mec= model.getModifyContract();
-		 if(itemList!=null){
-			 contractItemDao.updateItem(itemList);	 
-		 }
-		 if(mec !=null){
-			 contractModifyDao.addModify(mec);
-			 if(mec.getId()!=null){
-				 //变更条目
-				 List<ModifyItemEntity> mieList = new ArrayList<ModifyItemEntity>();
-				 if(model.getModifyItemList()!=null){
-					 for (Iterator iterator = model.getModifyItemList().iterator(); iterator
-							.hasNext();) {
-						 ModifyItemEntity mie = (ModifyItemEntity) iterator.next();
-						 mie.setModifyId(mec.getId());
-						 mieList.add(mie);
+	public void changeContract(String contractId, ContractModifyModel model,
+			String recordNo, List<ContractItemEntity> itemList) {
+		ModifyContractEntity mec = model.getModifyContract();
+		if (itemList != null) {
+			contractItemDao.updateItem(itemList);
+		}
+		if (mec != null) {
+			contractModifyDao.addModify(mec);
+			if (mec.getId() != null) {
+				// 变更条目
+				List<ModifyItemEntity> mieList = new ArrayList<ModifyItemEntity>();
+				if (model.getModifyItemList() != null) {
+					for (Iterator iterator = model.getModifyItemList()
+							.iterator(); iterator.hasNext();) {
+						ModifyItemEntity mie = (ModifyItemEntity) iterator
+								.next();
+						mie.setModifyId(mec.getId());
+						mieList.add(mie);
 					}
-					 contractModifyItemDao.addItems(mieList); 
-				 }
-				 //变更批次
-				 List<ModifyBatchModel> mbmList= model.getModifyBatchList();
-				 List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
-				 if(mbmList!=null){
-					 for (Iterator iterator = mbmList.iterator(); iterator
+					contractModifyItemDao.addItems(mieList);
+				}
+				// 变更批次
+				List<ModifyBatchModel> mbmList = model.getModifyBatchList();
+				List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
+				if (mbmList != null) {
+					for (Iterator iterator = mbmList.iterator(); iterator
 							.hasNext();) {
-						ModifyBatchModel modifyBatchModel = (ModifyBatchModel) iterator.next();
-						ModifyBatchEntity mbe = modifyBatchModel.getModifyBatch();
-						String json =JsonMapper.nonEmptyMapper().toJson(modifyBatchModel.getModifyBatchItems());
+						ModifyBatchModel modifyBatchModel = (ModifyBatchModel) iterator
+								.next();
+						ModifyBatchEntity mbe = modifyBatchModel
+								.getModifyBatch();
+						String json = JsonMapper.nonEmptyMapper().toJson(
+								modifyBatchModel.getModifyBatchItems());
 						mbe.setBatchItems(json);
 						mbeList.add(mbe);
 					}
-					 contractModifyBatchDao.addBatchs(mbeList);
-				 }
-				 
-			 }
-		 }
-		
+					contractModifyBatchDao.addBatchs(mbeList);
+				}
+
+			}
+		}
+
 	}
 
 	/**
@@ -550,11 +581,14 @@ public class ContractServiceImpl implements IContractService {
 	 * 更新合同
 	 */
 	@Override
-	public void modifyState(String contractId, Integer state) {
-		ContractEntity ce = contractDao.getContract(contractId);
-		if (ce != null) {
+	public void modifyState(String contractId, Integer state)throws ServiceException {
+		try {
+			ContractEntity ce = new ContractEntity();
+			ce.setId(contractId);
 			ce.setState(state);
 			contractDao.updateContract(ce);
+		} catch (Exception e) {
+			throw new ServiceException("更改合同状态出错", e);
 		}
 	}
 

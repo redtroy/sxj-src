@@ -66,7 +66,7 @@ public class ContractController extends BaseController {
 	}
 
 	@RequestMapping("produced")
-	public String producedContract(String recordId,ModelMap model) {
+	public String producedContract(String recordId, ModelMap model) {
 		RecordEntity record = recordService.getRecord(recordId);
 		model.put("record", record);
 		return "manage/contract/contract-add";
@@ -74,7 +74,8 @@ public class ContractController extends BaseController {
 
 	@RequestMapping("addContract")
 	public @ResponseBody Map<String, String> addContract(
-			ContractControllerModel contract,String recordId) throws WebException {
+			ContractControllerModel contract, String recordId)
+			throws WebException {
 		try {
 			contractService.addContract(contract.getContract(),
 					contract.getItems(), contract.getRecordId());
@@ -88,7 +89,7 @@ public class ContractController extends BaseController {
 
 	@RequestMapping("toModify")
 	public String toModifyContract(String contractId, ModelMap model) {
-		ContractModel contractModel = contractService.getContract("1");
+		ContractModel contractModel = contractService.getContract(contractId);
 		model.put("contractModel", contractModel);
 		model.put("contractId", contractId);
 		return "manage/contract/contract-edit";
@@ -96,11 +97,28 @@ public class ContractController extends BaseController {
 
 	@RequestMapping("modify")
 	public @ResponseBody Map<String, Object> modifyContract(
-			ContractModel contractModel, ModelMap model) {
-		contractService.modifyContract(contractModel);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("isOk", "OK");
-		return map;
+			ContractModel contractModel, ModelMap model) throws WebException {
+		try {
+			contractService.modifyContract(contractModel);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
+		
+	}
+	@RequestMapping("delete")
+	public @ResponseBody Map<String, Object> deleteContract(String id) throws WebException {
+		try {
+			contractService.deleteContract(id);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
+		
 	}
 
 	@RequestMapping("changes")
