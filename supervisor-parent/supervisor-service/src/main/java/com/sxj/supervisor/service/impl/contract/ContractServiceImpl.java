@@ -10,17 +10,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.text.html.ListView;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.type.ArrayType;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
@@ -40,6 +36,8 @@ import com.sxj.supervisor.entity.contract.ModifyItemEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.contract.ContractStateEnum;
+import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -131,10 +129,12 @@ public class ContractServiceImpl implements IContractService {
 				if (record != null) {
 					contract.setRecordDate(record.getAcceptDate()); // 备案时间就是受理时间?
 					contract.setRecordNo(record.getRecordNo());// 备案号
+					contract.setType(record.getContractType());
 				}
-				contract.setState(0);
-				contract.setConfirmState(0);
+				contract.setState(ContractStateEnum.approval);
+				contract.setConfirmState(ContractSureStateEnum.noaffirm);
 				contract.setCreateDate(new Date());
+				contract.setDeleteState(0);
 				contractDao.addContract(contract);
 
 				if (itemList != null) {
@@ -295,19 +295,35 @@ public class ContractServiceImpl implements IContractService {
 				contractModel.setBatchList(newBatchModelLIst);
 			}
 			// 时间轴
-			// if(contract.getStateLog()!=null &&
-			// contract.getStateLog().length()>0){
-			// List<StateLogModel> stateLogModel=(List<StateLogModel>)
-			// JsonMapper.nonEmptyMapper().fromJson(contract.getStateLog(),
-			// StateLogModel.class);
-			// //时间排序
-			// Collections.sort(stateLogModel, new Comparator<StateLogModel>() {
-			// public int compare(StateLogModel arg0, StateLogModel arg1) {
-			// return arg0.getModifyDate().compareTo(arg1.getModifyDate());
-			// }
-			// });
-			// contractModel.setStateLogList(stateLogModel);//时间轴
-			// }
+			if (contract.getStateLog() != null
+					&& contract.getStateLog().length() > 0) {
+				List<StateLogModel> stateLogModel = null;
+				try {
+					stateLogModel = JsonMapper
+							.nonEmptyMapper()
+							.getMapper()
+							.readValue(
+									contract.getStateLog(),
+									new TypeReference<List<StateLogModel>>() {
+									});
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				// 时间排序
+				Collections.sort(stateLogModel,
+						new Comparator<StateLogModel>() {
+							public int compare(StateLogModel arg0,
+									StateLogModel arg1) {
+								return arg0.getModifyDate().compareTo(
+										arg1.getModifyDate());
+							}
+						});
+				contractModel.setStateLogList(stateLogModel);// 时间轴
+			}
 			// 变更信息
 
 			String modifyRecordIds = this.recordIdArr(contract.getId(), "1");// 获取变更备案
@@ -507,7 +523,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 删除合同
 	 */
 	@Override
-	public void deleteContract(String id)throws ServiceException {
+	public void deleteContract(String id) throws ServiceException {
 		try {
 			ContractEntity ce = new ContractEntity();
 			ce.setId(id);
@@ -581,11 +597,12 @@ public class ContractServiceImpl implements IContractService {
 	 * 更新合同
 	 */
 	@Override
-	public void modifyState(String contractId, Integer state)throws ServiceException {
+	public void modifyState(String contractId, Integer state)
+			throws ServiceException {
 		try {
 			ContractEntity ce = new ContractEntity();
 			ce.setId(contractId);
-			ce.setState(state);
+			//ce.setState(ContractStateEnum.approval);
 			contractDao.updateContract(ce);
 		} catch (Exception e) {
 			throw new ServiceException("更改合同状态出错", e);
@@ -608,7 +625,6 @@ public class ContractServiceImpl implements IContractService {
 	public void modifyCheckState(String contractId, Integer state) {
 		ContractEntity ce = contractDao.getContract(contractId);
 		if (ce != null) {
-			ce.setState(state);
 			contractDao.updateContract(ce);
 		}
 	}
