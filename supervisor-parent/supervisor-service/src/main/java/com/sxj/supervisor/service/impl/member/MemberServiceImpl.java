@@ -197,10 +197,19 @@ public class MemberServiceImpl implements IMemberService {
 	 * 修改密码
 	 */
 	@Override
+	@Transactional
 	public void edit_pwd(String id, String pwd) throws ServiceException {
-		MemberEntity member = getMember(id);
-		member.setPassword(pwd);
-		menberDao.updateMember(member);
+		try {
+			MemberEntity member = new MemberEntity();
+			String md5Passwrod = EncryptUtil.md5Hex(pwd);
+			member.setId(id);
+			member.setPassword(md5Passwrod);
+			menberDao.updateMember(member);
+		} catch (Exception e) {
+			SxjLogger.error("修改会员超级密码错误", e, this.getClass());
+			throw new ServiceException("修改会员超级密码错误", e);
+		}
+
 	}
 
 	@Override

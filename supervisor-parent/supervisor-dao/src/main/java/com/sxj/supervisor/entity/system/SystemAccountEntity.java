@@ -2,6 +2,9 @@ package com.sxj.supervisor.entity.system;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
@@ -33,12 +36,18 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 	private String accountNo;
 
 	@Column(name = "NAME")
+	@NotEmpty(message = "管理员姓名不能为空")
+	@Length(max = 50, message = "管理员姓名长度过长")
 	private String name;
 
 	@Column(name = "ACCOUNT")
+	@NotEmpty(message = "管理员账号不能为空")
+	@Length(max = 20, message = "管理员账号长度过长")
 	private String account;
 
 	@Column(name = "PASSWORD")
+	@NotEmpty(message = "密码不能为空")
+	@Length(max = 20, message = "密码长度过长")
 	private String password;
 
 	@Column(name = "DEL_STATE")
