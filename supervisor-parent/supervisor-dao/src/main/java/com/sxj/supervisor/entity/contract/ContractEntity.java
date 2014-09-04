@@ -132,6 +132,19 @@ public class ContractEntity extends Pagable implements Serializable {
 	@Column(name = "STATE")
 	private Integer state;
 	/**
+	 * 删除状态
+	**/
+	@Column(name = "DELETE_STATE")
+	private Integer deleteState;
+	public Integer getDeleteState() {
+		return deleteState;
+	}
+
+	public void setDeleteState(Integer deleteState) {
+		this.deleteState = deleteState;
+	}
+
+	/**
 	 * 确认状态状态
 	**/
 	@Column(name = "CONFIRM_STATE")

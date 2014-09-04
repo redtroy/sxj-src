@@ -16,7 +16,19 @@
 <script>
 	$(function(){
 		loadUpload("uploadFile","upload.htm","imageList","imgPathHide");
+		loadUpload("uploadFile","${basePath}upload.htm",true,"请上传扫描件",upload);
 	});
+	function upload(data){
+	    var dataObj=eval("("+data+")");//转换为json对象 
+	    $("#imageList").attr("src","${b.imagePath}"+dataObj.fileIds+"100x120.jpg");
+	    var hideVal= $("#imgPathHide").val();
+        if(hideVal==""){
+        	hideVal+=dataObj.fileIds;
+        }else{
+        	hideVal+=","+dataObj.fileIds;
+        }
+        $("#imgPathHide").val(hideVal);
+	}
 	function modify(){
 		$.post("modify.htm",$('form').serialize(),function(data){
 			if (data.isOK=='ok'){

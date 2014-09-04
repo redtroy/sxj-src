@@ -87,7 +87,7 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 		} else if (current instanceof AccountEntity) {
 			AccountEntity account = (AccountEntity) current;
 			List<MemberFunctionEntity> functionList = roleService
-					.getAllRoleFunction(account.getAccountNo());
+					.getAllRoleFunction(account.getId());
 			if (functionList != null && functionList.size() > 0) {
 				for (MemberFunctionEntity functionEntity : functionList) {
 					if (functionEntity == null) {

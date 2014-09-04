@@ -61,8 +61,7 @@ public class AccountController extends BaseController {
 	@RequestMapping("editAccount")
 	public @ResponseBody Map<String, String> editAccount(AccountEntity account) {
 		System.out.println("test");
-		accountService.modifyAccount(account);
-		;
+		accountService.modifyAccount(account, null);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		return map;

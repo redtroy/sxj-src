@@ -2,48 +2,52 @@
       <div class="heading mb15 ly-clearFix">
         <h1 class="ly-left"> <span class="title fontYH f20 fb">新增子帐号</span></h1>
       </div>
+       <form id="add_form" action="javascript:void(0);" method="post">
       <div class="contBox">
+       <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
         <div class="item">
           <label>帐号名</label>
-          <input class="input input-w180h36" id="accountName">
+          <input class="input input-w180h36" id="accountName" name="accountName">
         </div>
         <div class="item">
           <label>姓名</label>
-          <input class="input input-w180h36" id="name">
+          <input class="input input-w180h36" id="name" name="name">
         </div>
         <div class="item">
           <label>帐号密码</label>
-          <input type="password" class="input input-w180h36" id="pwd1">
+          <input type="password" class="input input-w180h36" id="pwd1" name="password" >
         </div>
         <div class="item">
           <label>确认密码</label>
-          <input type="password" class="input input-w180h36" id="pwd2">
+          <input type="password" class="input input-w180h36" id="pwd2" name="password_confirm" >
         </div>
         <div class="item">
-          <label>帐号权限</label><a class="f12 lnk-blue" href="#">设置</a>
+          <label>帐号权限</label>
+          <a class="f12 lnk-blue" href="javascript:roleInfo('','add');">设置</a>
         </div>
-<div class="item mt10">
-          <label>&nbsp;</label><a class="button button-orange mr15" href="#" onclick="save()">新增</a><a class="button button-gray" href="#" onclick="cancel()">取消</a>
+		<div class="item mt10">
+          <label>&nbsp;</label><a class="button button-orange mr15" href="#" onclick="save();">新增</a><a class="button button-gray" href="#" onclick="cancel();">取消</a>
         </div>
       </div>
+      </form>
     </div>
+    <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
+	  </div>
+     <div class="maskdivgen" style="display:none"></div>
 <script type="text/javascript">
    function save(){
-	   var accountName=$("#accountName").val();
-	   var name=$("#name").val();
-	   var pwd1=$("#pwd1").val();
-	   var pwd2=$("#pwd2").val();
-	   if (pwd1 != pwd2){
-		   alert("两次密码不一样，请重新输入！");
-		   return false;
-	   }
-	   $.post("add_account.htm",{accountName:accountName,name:name,password:pwd1},function(data){
-		   query();
-	   })
+	   var params=$("#add_form").serialize();
+		$.post("add_account.htm",params,function(data){
+			if(data.isOK=="ok"){
+				alert("添加成功");
+				query();
+			}
+			else{
+				errorInfo(data);
+			}
+		});
    }
    function cancel(){
 	   query();
    }
 </script>
-
-

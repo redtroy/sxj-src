@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.sxj.supervisor.dao.member.IMemberRoleDao;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
+import com.sxj.supervisor.entity.member.MemberRoleEntity;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.util.exception.ServiceException;
@@ -40,7 +41,8 @@ public class MemberRoleServiceImpl implements IMemberRoleService {
 			QueryCondition<MemberFunctionEntity> query = new QueryCondition<MemberFunctionEntity>();
 			query.addCondition("parentId", "0");
 			query.addCondition("accountId", accountId);
-			List<MemberFunctionEntity> functionList = roleDao.getRoleFunctions(query);
+			List<MemberFunctionEntity> functionList = roleDao
+					.getRoleFunctions(query);
 			List<MemberFunctionModel> list = new ArrayList<MemberFunctionModel>();
 			for (MemberFunctionEntity functionEntity : functionList) {
 				if (functionEntity == null) {
@@ -60,6 +62,31 @@ public class MemberRoleServiceImpl implements IMemberRoleService {
 		} catch (Exception e) {
 			throw new ServiceException("查询权限菜单错误", e);
 		}
+	}
+
+	@Override
+	public void addRoles(List<MemberRoleEntity> roles) throws ServiceException {
+		try {
+			int size = roles.size();
+			MemberRoleEntity[] roleArr = (MemberRoleEntity[]) roles
+					.toArray(new MemberRoleEntity[size]);
+			roleDao.addRoles(roleArr);
+		} catch (Exception e) {
+			SxjLogger.error("新增会员子账户权限错误", e, this.getClass());
+			throw new ServiceException("新增会员子账户权限错误", e);
+		}
+
+	}
+
+	@Override
+	public void removeRoles(String accountId) throws ServiceException {
+		try {
+			roleDao.deleteRolesByAccount(accountId);
+		} catch (Exception e) {
+			SxjLogger.error("删除会员子账户权限错误", e, this.getClass());
+			throw new ServiceException("删除会员子账户权限错误", e);
+		}
+
 	}
 
 }

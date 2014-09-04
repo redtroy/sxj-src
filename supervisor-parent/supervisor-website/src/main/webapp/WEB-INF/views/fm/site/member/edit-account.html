@@ -8,6 +8,7 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <@b.pageScript/>
+<@b.errorInfo/>
 <Script>
 var editId;
 jQuery(document).ready(function($) {
@@ -39,6 +40,17 @@ jQuery(document).ready(function($) {
 			loadPage(currentPage,totalPage,query);
 		});
   }
+  
+  function roleInfo(id,type){
+		$.get("${basePath}member/account/get_role_function.htm?accountId="+id+"&type="+type,function(data){
+			$("#roleInfo_div").empty();
+			$("#roleInfo_div").css("display","");
+			$("#roleInfo_div").append(data);
+		});
+	}
+  function closeDiv(divId){
+		$("#"+divId).css("display","none");
+	}
 //修改密码
   function edit_pwd(id){
 	$('.maskdivgen').fadeIn(100);
@@ -65,29 +77,28 @@ jQuery(document).ready(function($) {
   }
   //修改
   function edit_account(id){
-	  var anobj=$("#"+id).children().eq(2);//子帐号名称TD对象
-	   var nobj=$("#"+id).children().eq(1);//姓名TD对象
-	   var ok=$("#"+id).children().eq(6);//确认的对象
-	   var accountName=anobj.text();
-	   var name=nobj.text();
-	   anobj.html('<input type="text" value='+accountName+' id="accountEdit"/>');
-	   nobj.html('<input type="text" value='+name+' id="nameEdit"/>');
-	   ok.html('<td><a href="#"  onclick="edit_save('+id+')" class="lnk-green mr20"><span class="icon icon16 icon-ok"></span>确认</a><a href="#" class="lnk-blue" onclick="edit_pwd(${account.id})"><span class="icon icon16 icon-password"></span>修改密码</a></td>')
+	   $("#"+id).find("#name_td").hide();
+	   $("#"+id).find("#name_td2").show();
+	   $("#"+id).find("#account_td").hide();
+	   $("#"+id).find("#account_td2").show();
+	   $("#"+id).find("#role_td").hide();
+	   $("#"+id).find("#editrole_td").show();
+	   $("#"+id).find("#edit_td").hide();
+	   $("#"+id).find("#confim_td").show();
   }
+  
   //确认修改
   function edit_save(id){
-	  var accountName=$("#accountEdit").val();
-	   var name=$("#nameEdit").val();
-	   var anobj=$("#"+id).children().eq(2);//子帐号名称TD对象
-	   var nobj=$("#"+id).children().eq(1);//姓名TD对象
-	   var ok=$("#"+id).children().eq(6);//确认的对象
-	   $.post("editAccount.htm",{id:id,accountName:accountName,name:name},function(data){
-		   if (data.isOK=='ok'){
-				  query();
-			   }else{
-					errorInfo(data);
-				}
-	   })
+	  var params=$("#"+id).find(":input");
+	  $("#edit_form").append(params.html());
+	  $.post("editAccount.htm",params,function(data){
+			if(data.isOK=='ok'){
+				query();
+				alert("修改成功");
+			}else{
+				errorInfo(data);
+			}
+		});
   }
 //更改状态
   function checkState(id,stateId){
@@ -122,13 +133,19 @@ jQuery(document).ready(function($) {
 <div class="searBox mb10">
 <form id="search_form" action="javascript:void(0);">
 姓名<input type="text" class="input" name="name" value="">帐号名<input type="text" class="input" name="accountName" value="">权限
-          <select name="select">
-           <#list ma as m>
-            <option value="${m.id}">${m.getName()}</option>
+          <select name="functionId">
+          <option value="">-请选择-</option>
+           <#list functions as f>
+           <#if f.id==query.functionId>
+            <option value="${f.id}" selected="selected">${f.title}</option>
+            <#else>
+             <option value="${f.id}">${f.title}</option>
+            </#if>
             </#list>
           </select><button class="button button-search" onclick="query();">查询</button>
 </form>
 </div>
+<form id="edit_form"></form>
 <@b.pager/>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
   <col width="9%" />
@@ -139,7 +156,7 @@ jQuery(document).ready(function($) {
   <col width="15%" />
   <col width="20%" />
     <tr>
-      <th>序号</th>
+      <th>会员号</th>
       <th>姓名</th>
       <th>帐号名</th>
       <th>权限</th>
@@ -149,20 +166,30 @@ jQuery(document).ready(function($) {
       <#list list as account>
     </tr>
     <tr id="${account.id}">
+     <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
+	 <input id="id_hidden" type="hidden" name="id" value="${account.id}" />
       <td>${account.accountNo}</td>
-      <td>${account.name}</td>
-      <td>${account.accountName}</td>
-      <td><a href="#" class="lnk-blue">查看</a></td>
+      <td id="name_td">${account.name}</td>
+      <td id="name_td2" style="display: none"><input type="text" value="${account.name}" id="nameEdit" name="name"/></td>
+      <td id="account_td">${account.accountName}</td>
+      <td id="account_td2" style="display: none"><input type="text" value="${account.accountName}" id="accountEdit" name="accountName"/></td>
+      <td id="role_td" ><a href="javascript:roleInfo('${account.id}','get');" class="lnk-blue">查看</a></td>
+      <td id="editrole_td" class="permission" style="display: none" onclick="roleInfo('${account.id}','edit');">
+      	 <div class="dropMenu sltinput" id="district_cn"> <span>全部权限</span> <span class="icon"></span>
+     	 </div>
+      </td>
       <#if (account.state.id == 1)>
       <td><button class="button button-red" onclick="checkState(${account.id},${account.state.id})" >停用</button></td>
       <#elseif (account.state.id == 0)>
       <td><button class="button button-green" onclick="checkState(${account.id},${account.state.id})" >恢复</button></td>
       </#if>
       <td>${account.regDate?date}</td>
-      <td><a href="#" class="lnk-blue mr20" onclick="edit_account(${account.id})"><span class="icon icon16 icon-edit"></span>修改</a><a href="#" class="lnk-blue btnPassword" onclick="edit_pwd(${account.id})"><span class="icon icon16 icon-password" ></span>修改密码</a></td>
+      <td id="edit_td"><a href="javascript:void(0);" class="lnk-blue mr20" onclick="edit_account(${account.id})"><span class="icon icon16 icon-edit"></span>修改</a><a href="javascript:void(0);" class="lnk-blue btnPassword" onclick="edit_pwd(${account.id})"><span class="icon icon16 icon-password" ></span>修改密码</a></td>
+      <td id="confim_td" style="display: none"><a href="javascript:void(0);"  onclick="edit_save(${account.id})" class="lnk-green mr20"><span class="icon icon16 icon-ok"></span>确认</a><a href="javascript:void(0);" class="lnk-blue" onclick="edit_pwd(${account.id})"><span class="icon icon16 icon-password"></span>修改密码</a></td>
     </tr>
     </#list>
   </table>
+  <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
 </div>
 </div>
 </div>

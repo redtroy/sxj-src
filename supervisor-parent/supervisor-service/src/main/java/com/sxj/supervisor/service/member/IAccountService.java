@@ -8,13 +8,15 @@ import com.sxj.util.exception.ServiceException;
 
 public interface IAccountService {
 
-	public void addAccount(AccountEntity account) throws ServiceException;
+	public void addAccount(AccountEntity account, String[] functionIds)
+			throws ServiceException;
 
-	public void modifyAccount(AccountEntity account) throws ServiceException;
+	public void modifyAccount(AccountEntity account, String[] functionIds)
+			throws ServiceException;
 
 	public AccountEntity getAccount(String id) throws ServiceException;
 
-	public AccountEntity getAccountByNo(String accountNo)
+	public AccountEntity getAccountByName(String accountName)
 			throws ServiceException;
 
 	public List<AccountEntity> queryAccounts(AccountQuery query)

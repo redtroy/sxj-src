@@ -1,0 +1,109 @@
+<#assign staticPath="http://192.168.1.9/sxj/supervisor-website/" />
+<#assign imagePath="http://192.168.1.1.9/file-web/" />
+<#macro validate>
+<script src="${staticPath}js/jquery.validate.js"></script>
+</#macro>
+<#macro errorInfo>
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
+<script>
+function errorInfo(data){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '30%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data
+		    }
+		});
+		//自设关闭
+		$('#close_button').on('click', function(){
+		    layer.close(pageii);
+		});
+		$('#close_span').on('click', function(){
+		    layer.close(pageii);
+		});
+ }
+</script>
+</#macro>
+<#macro pageScript>
+<script src="${staticPath}js/jquery.paginate.js"></script>
+<script>
+function loadPage(currentPage,totalPage,query){
+	if(totalPage>0){
+		$("#pager").paginate({
+			count 		: totalPage,
+			start 		: currentPage,
+			display     : 10,
+			border					: true,
+			border_color			: '#CCC',
+			text_color  			: '#333',
+			background_color    	: '#FFF',	
+			border_hover_color		: '#ff4400',
+			text_hover_color  		: '#ff4400',
+			background_hover_color	: '#fff', 
+			images					: false,
+			mouse					: 'press',
+			onChange				: function(page){
+				query(page);
+			}
+		});
+	}else{
+		$("#pager").empty();
+	}
+}
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage},query);
+});
+</script>
+</#macro>
+
+ <#macro upload>
+<script src="${staticPath}js/jquery.uploadify.js"></script>
+<link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
+<script>
+function loadUpload(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        auto: true,
+	        multi: isMulti,
+	        height:30,
+	        width:120,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+} 
+</script>
+</#macro>
+<#macro header>
+<div class="fence" id="header">
+<h1 class="fence-wide ly-clearFix">
+<a class="logo" href="${staticPath}html/register.html"><img title="私享家绿色门窗平台" alt="私享家绿色门窗平台" src="${staticPath}images/logo.jpg"></a>
+<span><img alt="中国绿色建材产品交易平台" title="中国绿色建材产品交易平台" src="${staticPath}images/top-banner.jpg"></span>
+</h1>
+</div>
+</#macro>
+<#macro footer>
+<div id="footer">
+<div class="fence f12">&copy; 2014 私享家绿色门窗平台 版权所有 经营许可证编号:<a target="_blank" href="#">苏B2-20140088</a>苏ICP备14025589号
+</div>
+</#macro>
+<#macro leftMenu>
+<div class="yard-190 ly-left leftMenu" id="leftList">
+<script>$("#leftList").load("${basePath}menu.htm");</script>
+</div>
+</#macro>
+<#macro pager>
+<div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
+</#macro>
+
+

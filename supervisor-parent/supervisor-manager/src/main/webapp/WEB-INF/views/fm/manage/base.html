@@ -1,5 +1,5 @@
 <#assign staticPath="http://61.132.53.150:81/sxj/supervisor-manager/" />
-<#assign imagePath="http://192.168.1.109:8080/file-web/" />
+<#assign imagePath="http://192.168.1.105:8080/file-web/" />
 <#macro errorInfo>
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
@@ -68,12 +68,36 @@ function loadUpload(id,url,multi,text,fn){
 	        uploader: url,
 	        fileTypeExts: '*.gif; *.jpg; *.png',
 	        auto: true,
+	        multi: multi,
+	        height:30,
+	        width:120,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	           fn(data);
+	        }
+	    });
+} 
+function classLoadUpload(text){
+	  $(":file").uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: "${basePath}upload.htm",
+	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        auto: true,
 	        multi: true,
 	        height:30,
 	        width:120,
 	        buttonText:'上传文件',
 	        onUploadSuccess : function(file, data, response) {
-	           fn(data);
+	        	var contPic=$(this.button).parent(".uploadify").siblings(".contPic");
+	        	var dataObj=eval("("+data+")");//转换为json对象 
+	        	contPic.find(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+	        	  var hideVal= contPic.find(":input ").val();
+	        	    if(hideVal==""){
+	        	    	hideVal+=dataObj.fileIds;
+	        	    }else{
+	        	    	hideVal+=","+dataObj.fileIds;
+	        	    }
+	        	    contPic.find(":input ").val(hideVal);
 	        }
 	    });
 } 

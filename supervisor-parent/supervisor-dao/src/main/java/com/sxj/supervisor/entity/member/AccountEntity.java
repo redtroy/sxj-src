@@ -8,10 +8,11 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IAccountDao;
-import com.sxj.supervisor.enu.member.MemberStatesEnum;
+import com.sxj.supervisor.enu.member.AccountStatesEnum;
 
 /**
  * 子账号实体
@@ -32,8 +33,15 @@ public class AccountEntity extends Pagable implements Serializable {
 	 * 主键标识
 	 **/
 	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
+
+	/**
+	 * 子账户ID
+	 **/
+	@Column(name = "ACCOUNT_NO")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stubValue = "M", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	private String accountNo;
 
 	/**
 	 * 所属会员ID
@@ -57,7 +65,7 @@ public class AccountEntity extends Pagable implements Serializable {
 	 * 子账户状态
 	 **/
 	@Column(name = "STATE")
-	private MemberStatesEnum state;
+	private AccountStatesEnum state;
 
 	/**
 	 * 注册日期
@@ -70,12 +78,6 @@ public class AccountEntity extends Pagable implements Serializable {
 	 **/
 	@Column(name = "PASSWORD")
 	private String password;
-
-	/**
-	 * 子账户ID
-	 **/
-	@Column(name = "ACCOUNT_NO")
-	private String accountNo;
 
 	/**
 	 * 逻辑删除标记
@@ -123,11 +125,11 @@ public class AccountEntity extends Pagable implements Serializable {
 		this.name = name;
 	}
 
-	public MemberStatesEnum getState() {
+	public AccountStatesEnum getState() {
 		return state;
 	}
 
-	public void setState(MemberStatesEnum state) {
+	public void setState(AccountStatesEnum state) {
 		this.state = state;
 	}
 

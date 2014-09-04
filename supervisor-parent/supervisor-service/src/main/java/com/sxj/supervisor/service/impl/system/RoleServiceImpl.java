@@ -13,6 +13,7 @@ import com.sxj.supervisor.entity.system.RoleEntity;
 import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -23,25 +24,39 @@ public class RoleServiceImpl implements IRoleService {
 	private IRoleDao roleDao;
 
 	@Override
-	public void addRoles(List<RoleEntity> roles) {
-		int size = roles.size();
-		RoleEntity[] roleArr = (RoleEntity[]) roles
-				.toArray(new RoleEntity[size]);
-		roleDao.addRoles(roleArr);
+	public void addRoles(List<RoleEntity> roles) throws ServiceException {
+		try {
+			int size = roles.size();
+			RoleEntity[] roleArr = (RoleEntity[]) roles
+					.toArray(new RoleEntity[size]);
+			roleDao.addRoles(roleArr);
+		} catch (Exception e) {
+			SxjLogger.error("新增系统会员权限失败", e, this.getClass());
+			throw new ServiceException("新增系统会员权限失败", e.getMessage());
+		}
 
 	}
 
 	@Override
-	public void removeRoles(String accountId) {
-		roleDao.deleteRoles(accountId);
+	public void removeRoles(String accountId) throws ServiceException {
+		try {
+			roleDao.deleteRoles(accountId);
+		} catch (Exception e) {
+			SxjLogger.error("删除系统会员权限失败", e, this.getClass());
+			throw new ServiceException("删除系统会员权限失败", e.getMessage());
+		}
 
 	}
 
 	@Override
-	public List<RoleEntity> getRoles(String accountId) {
-
-		return roleDao.getRoles(accountId);
-
+	public List<RoleEntity> getRoles(String accountId) throws ServiceException {
+		try {
+			return roleDao.getRoles(accountId);
+		} catch (Exception e) {
+			SxjLogger.error("查询系统会员权限失败", e, this.getClass());
+			throw new ServiceException("查询系统会员权限失败", e.getMessage());
+		}
+		
 	}
 
 	@Override
@@ -69,6 +84,7 @@ public class RoleServiceImpl implements IRoleService {
 			}
 			return list;
 		} catch (Exception e) {
+			SxjLogger.error("查询权限菜单错误", e, this.getClass());
 			throw new ServiceException("查询权限菜单错误", e);
 		}
 	}
@@ -80,6 +96,7 @@ public class RoleServiceImpl implements IRoleService {
 			List<FunctionEntity> list = roleDao.getAllRoleFunction(accountId);
 			return list;
 		} catch (Exception e) {
+			SxjLogger.error("查询所有权限菜单错误", e, this.getClass());
 			throw new ServiceException("查询所有权限菜单错误", e);
 		}
 	}
