@@ -12,6 +12,9 @@ import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractDao;
+import com.sxj.supervisor.enu.contract.ContractStateEnum;
+import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 
 /**
  * 合同实体
@@ -130,17 +133,23 @@ public class ContractEntity extends Pagable implements Serializable {
 	 * 状态
 	**/
 	@Column(name = "STATE")
-	private Integer state;
+	private ContractStateEnum state;
+	/**
+	 * 删除状态
+	**/
+	@Column(name = "DELETE_STATE")
+	private Integer deleteState;
+
 	/**
 	 * 确认状态状态
 	**/
 	@Column(name = "CONFIRM_STATE")
-	private Integer confirmState;
+	private ContractSureStateEnum confirmState;
 	/**
 	 * 合同类型
 	**/
 	@Column(name = "TYPE")
-	private Integer type;
+	private ContractTypeEnum type;
 	
 	/**
 	 * 关联合同号
@@ -182,13 +191,14 @@ public class ContractEntity extends Pagable implements Serializable {
 	@Column(name = "IMG_PATH")
 	private String imgPath;
 	
-	public Integer getConfirmState() {
-		return confirmState;
+	public Integer getDeleteState() {
+		return deleteState;
 	}
 
-	public void setConfirmState(Integer confirmState) {
-		this.confirmState = confirmState;
+	public void setDeleteState(Integer deleteState) {
+		this.deleteState = deleteState;
 	}
+	
 
 	public Date getCreateDate() {
 		return createDate;
@@ -343,19 +353,28 @@ public class ContractEntity extends Pagable implements Serializable {
 		this.deliveryAddress = deliveryAddress;
 	}
 
-	public Integer getState() {
+
+	public ContractStateEnum getState() {
 		return state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(ContractStateEnum state) {
 		this.state = state;
 	}
 
-	public Integer getType() {
+	public ContractSureStateEnum getConfirmState() {
+		return confirmState;
+	}
+
+	public void setConfirmState(ContractSureStateEnum confirmState) {
+		this.confirmState = confirmState;
+	}
+
+	public ContractTypeEnum getType() {
 		return type;
 	}
 
-	public void setType(Integer type) {
+	public void setType(ContractTypeEnum type) {
 		this.type = type;
 	}
 

@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +24,7 @@ import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.ResultList;
 
 @Controller
@@ -81,12 +85,13 @@ public class SystemAccountController extends BaseController {
 
 	@RequestMapping("add_account")
 	public @ResponseBody Map<String, Object> addAccount(
-			SystemAccountEntity account,
+			@Valid SystemAccountEntity account, BindingResult result,
 			@RequestParam("password_confirm") String password_confirm,
 			@RequestParam("functionIds") String[] functionIds)
 			throws WebException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
+			getValidError(result);
 			if (!password_confirm.equals(account.getPassword())) {
 				throw new WebException("两次密码不一致");
 			}
@@ -94,6 +99,7 @@ public class SystemAccountController extends BaseController {
 			map.put("isOK", true);
 			return map;
 		} catch (Exception e) {
+			SxjLogger.error("添加管理员账户错误", e, this.getClass());
 			throw new WebException(e.getMessage());
 		}
 

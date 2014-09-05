@@ -68,7 +68,7 @@
               <td>${item.price}</td>
               <td>${item.amount}</td>
               <td>${item.remarks}</td>
-              <td class="color-red">！</td>
+              <td><#if item.updateState==1><span class="color-red">！</span></#if></td>
             </tr>
             </#list>
             <tr>
@@ -117,7 +117,7 @@
                 </table></td>
               <td>${batch.amount}</td>
               <td>${batch.rfidNo}</td>
-              <td class="color-red">！</td>
+              <td><#if batch.updateState==1><span class="color-red">！</span></#if></td>
             </tr>
               </#list>
           </table>
@@ -338,7 +338,7 @@
               ${replenishList.replenishContract.rfidOrderNo}</div>
               </#list>
                </#if>
-            <div class="btnBox text-center"><a href="###" class="button button-gray button-small" onclick="closeContract('${contractId}')">收起</a></div>
+            <div class="btnBox text-center"><a href="javascript:void(0)" class="button button-gray button-small" onclick="closeContract('${contractId}')">收起</a></div>
           </div>
          
         </td>

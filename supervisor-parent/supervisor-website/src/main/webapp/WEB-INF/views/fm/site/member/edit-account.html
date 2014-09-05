@@ -129,7 +129,7 @@ jQuery(document).ready(function($) {
 </div>
 <div class="contBox f12">
 <div class="addBox mb10">
-<a href="#" class="lnk-green" onclick="add_account(${account.id})"><span class="icon icon16 icon-add"></span>新增子帐号</a>
+<a href="#" class="lnk-green" onclick="add_account('${account.id}')"><span class="icon icon16 icon-add"></span>新增子帐号</a>
 </div>
 <div class="searBox mb10">
 <form id="search_form" action="javascript:void(0);">
@@ -180,13 +180,13 @@ jQuery(document).ready(function($) {
      	 </div>
       </td>
       <#if (account.state.id == 1)>
-      <td><button class="button button-red" onclick="checkState(${account.id},${account.state.id})" >停用</button></td>
+      <td><button class="button button-red" onclick="checkState('${account.id}','${account.state.id}')" >停用</button></td>
       <#elseif (account.state.id == 0)>
-      <td><button class="button button-green" onclick="checkState(${account.id},${account.state.id})" >恢复</button></td>
+      <td><button class="button button-green" onclick="checkState('${account.id}','${account.state.id}')" >恢复</button></td>
       </#if>
       <td>${account.regDate?date}</td>
-      <td id="edit_td"><a href="javascript:void(0);" class="lnk-blue mr20" onclick="edit_account(${account.id})"><span class="icon icon16 icon-edit"></span>修改</a><a href="javascript:void(0);" class="lnk-blue btnPassword" onclick="edit_pwd(${account.id})"><span class="icon icon16 icon-password" ></span>修改密码</a></td>
-      <td id="confim_td" style="display: none"><a href="javascript:void(0);"  onclick="edit_save(${account.id})" class="lnk-green mr20"><span class="icon icon16 icon-ok"></span>确认</a><a href="javascript:void(0);" class="lnk-blue" onclick="edit_pwd(${account.id})"><span class="icon icon16 icon-password"></span>修改密码</a></td>
+      <td id="edit_td"><a href="javascript:void(0);" class="lnk-blue mr20" onclick="edit_account('${account.id}')"><span class="icon icon16 icon-edit"></span>修改</a><a href="javascript:void(0);" class="lnk-blue btnPassword" onclick="edit_pwd('${account.id}')"><span class="icon icon16 icon-password" ></span>修改密码</a></td>
+      <td id="confim_td" style="display: none"><a href="javascript:void(0);"  onclick="edit_save('${account.id}')" class="lnk-green mr20"><span class="icon icon16 icon-ok"></span>确认</a><a href="javascript:void(0);" class="lnk-blue" onclick="edit_pwd('${account.id}')"><span class="icon icon16 icon-password"></span>修改密码</a></td>
     </tr>
     </#list>
   </table>

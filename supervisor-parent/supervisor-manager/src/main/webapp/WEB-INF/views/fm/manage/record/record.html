@@ -150,7 +150,7 @@ function del(id){
           ${record.acceptDate?date}
           </#if>
           </td>
-          <td class="operation"><a href="record_edit.htm?id=${record.id}" class="edit">修改</a><a href="#" class="del" onclick="del(${record.id})">删除</a></td>
+          <td class="operation"><a href="record_edit.htm?id=${record.id}" class="edit">修改</a><a href="#" class="del" onclick="del('${record.id}')">删除</a></td>
           <#if (record.state.id==0)>
           <td class="contract"><a href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a href="${basePath}contract/produced.htm?recordId=${record.id}" class="lnk-green">生成合同</a></td>
           <#elseif (record.state.id==1)>

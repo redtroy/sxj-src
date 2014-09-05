@@ -27,35 +27,47 @@ public class HierarchicalCacheManager
     
     private final static String CONFIG_FILE = "cache.properties";
     
+    private String configFile;
+    
+    private String databaseId;
+    
     private static CacheProvider l1_provider;
     
     private static CacheProvider l2_provider;
     
     private static CacheExpiredListener listener;
     
-    public HierarchicalCacheManager()
-    {
-        initCacheProvider();
-    }
-    
-    public static void initCacheProvider()
+    public void initCacheProvider()
     {
         initCacheProvider(null);
     }
     
-    public static void initCacheProvider(CacheExpiredListener listener)
+    public void initCacheProvider(CacheExpiredListener listener)
     {
-        
+        initCacheProvider(CONFIG_FILE, listener);
+    }
+    
+    public void initCacheProvider(String configFile,
+            CacheExpiredListener listener)
+    {
+        initCacheProvider(configFile, 1, listener);
+    }
+    
+    public void initCacheProvider(String configFile, int databaseId,
+            CacheExpiredListener listener)
+    {
+        final String path = getConfigFile() == null ? CONFIG_FILE
+                : getConfigFile();
         InputStream configStream = HierarchicalCacheManager.class.getClassLoader()
                 .getParent()
-                .getResourceAsStream(CONFIG_FILE);
+                .getResourceAsStream(path);
         if (configStream == null)
             configStream = HierarchicalCacheManager.class.getClassLoader()
-                    .getResourceAsStream(CONFIG_FILE);
+                    .getResourceAsStream(path);
         if (configStream == null)
             throw new CacheException("Cannot find "
                     + HierarchicalCacheManager.class.getClassLoader()
-                            .getResource(CONFIG_FILE)
+                            .getResource(path)
                             .toExternalForm() + " !!!");
         
         Properties props = new Properties();
@@ -64,6 +76,9 @@ public class HierarchicalCacheManager
         try
         {
             props.load(configStream);
+            props.setProperty("redis.database",
+                    props.getProperty("redis.database",
+                            String.valueOf(databaseId)));
             configStream.close();
             if (props.getProperty("cache.L1.provider_class") == null
                     && props.getProperty("cache.L2.provider_class") == null)
@@ -269,6 +284,26 @@ public class HierarchicalCacheManager
     {
         Cache cache = _GetCache(level, name, false);
         return (cache != null) ? cache.values() : null;
+    }
+    
+    public String getConfigFile()
+    {
+        return configFile;
+    }
+    
+    public void setConfigFile(String configFile)
+    {
+        this.configFile = configFile;
+    }
+    
+    public String getDatabaseId()
+    {
+        return databaseId;
+    }
+    
+    public void setDatabaseId(String databaseId)
+    {
+        this.databaseId = databaseId;
     }
     
 }

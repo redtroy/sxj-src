@@ -166,13 +166,13 @@
           <td>${account.name}</td>
           <td>合同管理</td>
           <#if account.state.id==0>
-          <td><button class="btn btn-red" onclick="checkState(${account.id},1)"><span>解冻</span></button></td>
+          <td><button class="btn btn-red" onclick="checkState('${account.id}',1)"><span>解冻</span></button></td>
           <#elseif account.state.id==1>
-          <td><button class="btn btn-red" onclick="checkState(${account.id},0)"><span>冻结</span></button></td>
+          <td><button class="btn btn-red" onclick="checkState('${account.id}',0)"><span>冻结</span></button></td>
           </#if>
           <td>${account.regDate?date}</td>
-          <td class="operation"><a  class="edit" onclick="edit(${account.id})">修改</a><a href="#" class="del" onclick="del(${account.id})">删除</a></td>
-          <td><button class="btn" onclick="resetPwd(${account.id})"><span>初始化密码</span></button></td>
+          <td class="operation"><a  class="edit" onclick="edit('${account.id}')">修改</a><a href="#" class="del" onclick="del('${account.id}')">删除</a></td>
+          <td><button class="btn" onclick="resetPwd('${account.id}')"><span>初始化密码</span></button></td>
         </tr>
         </#list>
       </table>

@@ -29,7 +29,9 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<!-- 配置多级缓存 -->
-	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager">
+	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager" init-method="initCacheProvider">
+		<property name="configFile" value="cache.properties"></property>
+		<property name="databaseId" value="1"></property>
 	</bean>
 	
 	<!-- 使用annotation定义事务

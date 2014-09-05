@@ -212,19 +212,19 @@ Intense( elements );
           <td>${member.regDate?date}</td>
           <td>${member.authorDate?date}</td>
           <#if (member.checkState.id==0)>
-          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},1)"><span>审核</span></button></td>
+          <td><button class="btn btn-gray" onclick="editCheckState('${member.id}',1)"><span>审核</span></button></td>
           <#elseif (member.checkState.id==1)>
-          <td><button class="btn btn-gray" onclick="editCheckState(${member.id},2)"><span>认证</span></button></td>
+          <td><button class="btn btn-gray" onclick="editCheckState('${member.id}',2)"><span>认证</span></button></td>
           <#elseif (member.checkState.id==2)>
            <td><em class="state verified">已认证</em></td>
           </#if>
           <#if member.state.id==0>
-          <td><button class="btn btn-red" onclick="editState(${member.id},1)"><span>解冻</span></button></td>
+          <td><button class="btn btn-red" onclick="editState('${member.id}',1)"><span>解冻</span></button></td>
            <#elseif member.state.id==1>
-           <td><button class="btn btn-red" onclick="editState(${member.id},0)"><span>冻结</span></button></td>
+           <td><button class="btn btn-red" onclick="editState('${member.id}',0)"><span>冻结</span></button></td>
           </#if>
           
-          <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd(${member.id})"><span>初始化密码</span></button></td>
+          <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd('${member.id}')"><span>初始化密码</span></button></td>
         </tr>
         <tr class="tableInfo" style="display:none;" id="${member.id}_info">
           <td colspan="11">
@@ -271,7 +271,7 @@ Intense( elements );
           <li><label>子帐号</label>${member.getAccountNum()}</li>
           <li><label>总交易额</label>${member.totalAmount}元</li>
           </ul>
-          <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="edit(${member.id})">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing('${member.getMemberNo()}')">收起</a> </div>
+          <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="edit('${member.id}')">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing('${member.getMemberNo()}')">收起</a> </div>
           </div>
           </td>
         </tr>
