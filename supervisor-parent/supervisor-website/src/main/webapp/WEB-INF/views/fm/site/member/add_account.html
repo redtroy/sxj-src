@@ -1,41 +1,50 @@
+<@b.validate/>
 <div class="yard-870 rightSide ly-left" id="right_div">
-      <div class="heading mb15 ly-clearFix">
-        <h1 class="ly-left"> <span class="title fontYH f20 fb">新增子帐号</span></h1>
-      </div>
-       <form id="add_form" action="javascript:void(0);" method="post">
-      <div class="contBox">
-       <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
-        <div class="item">
-          <label>帐号名</label>
-          <input class="input input-w180h36" id="accountName" name="accountName">
-        </div>
-        <div class="item">
-          <label>姓名</label>
-          <input class="input input-w180h36" id="name" name="name">
-        </div>
-        <div class="item">
-          <label>帐号密码</label>
-          <input type="password" class="input input-w180h36" id="pwd1" name="password" >
-        </div>
-        <div class="item">
-          <label>确认密码</label>
-          <input type="password" class="input input-w180h36" id="pwd2" name="password_confirm" >
-        </div>
-        <div class="item">
-          <label>帐号权限</label>
-          <a class="f12 lnk-blue" href="javascript:roleInfo('','add');">设置</a>
-        </div>
-		<div class="item mt10">
-          <label>&nbsp;</label><a class="button button-orange mr15" href="#" onclick="save();">新增</a><a class="button button-gray" href="#" onclick="cancel();">取消</a>
-        </div>
-      </div>
-      </form>
-    </div>
-    <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
-	  </div>
-     <div class="maskdivgen" style="display:none"></div>
+	<div class="heading mb15 ly-clearFix">
+		<h1 class="ly-left">
+			<span class="title fontYH f20 fb">新增子帐号</span>
+		</h1>
+	</div>
+	<form id="add_form" action="javascript:void(0);" method="post">
+		<div class="contBox">
+			<input id="functionIds_hidden" type="hidden" name="functionIds"
+				value="none" />
+			<div class="item">
+				<label>帐号名</label> <input class="input input-w180h36"
+					id="accountName" name="accountName" title="请输入账户名!"  datatype="*2-20"  nullmsg="请输入帐户名" ajaxurl="check_account.htm" >
+			</div>
+			<div class="item">
+				<label>姓名</label> <input class="input input-w180h36" id="name" title="请输入用户名!" datatype="*2-20" nullmsg="请输入用户名"
+					name="name">
+			</div>
+			<div class="item">
+				<label>帐号密码</label> <input type="password"
+					class="input input-w180h36" id="pwd1" name="password" title="请输入密码" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！" >
+			</div>
+			<div class="item">
+				<label>确认密码</label> <input type="password"
+					class="input input-w180h36" id="pwd2" name="password_confirm" title="再次输入密码" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="password" nullmsg="请设置密码！">
+			</div>
+			<div class="item">
+				<label>帐号权限</label> <a class="f12 lnk-blue"
+					href="javascript:roleInfo('','add');">设置</a>
+			</div>
+			<div class="item mt10">
+				<label>&nbsp;</label><a class="button button-orange mr15" href="#"
+					onclick="subForm();">新增</a><a class="button button-gray" href="#"
+					onclick="cancel();">取消</a>
+			</div>
+		</div>
+	</form>
+</div>
+<div id="roleInfo_div" class="modal-wrap popDemo dropList"
+	style="display: none;"></div>
+<div class="maskdivgen" style="display: none"></div>
 <script type="text/javascript">
-   function save(){
+   function subForm(){
+	  $("#add_form").submit();
+   }
+ 	function save(){
 	   var params=$("#add_form").serialize();
 		$.post("add_account.htm",params,function(data){
 			if(data.isOK=="ok"){
@@ -50,4 +59,10 @@
    function cancel(){
 	   query();
    }
+	$("#add_form").Validform({
+		tiptype:3,
+		callback:function(form){
+			save();
+		}
+	});
 </script>

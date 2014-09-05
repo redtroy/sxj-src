@@ -7,10 +7,21 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
+<@b.validate/>
 <script>
 	function edit(){
 		$("#record_save").submit();
 	}
+	$(function(){
+		$("#record_save").Validform({
+			tiptype:3,
+			callback:function(form){
+				bind_save();
+			}
+		});
+		
+	})
+	
 	
 </script>
 <SCRIPT>
@@ -61,6 +72,7 @@ function query(type){
     <div id="leftList"><@b.leftMenu /></div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
+    <form id="record_save">
       <h2 class="title">绑定合同</h2>
       <div class="infoBox binBox f14">
       <ul>
@@ -69,10 +81,11 @@ function query(type){
       	<li><label id="recordNoA">甲方备案号</label><#if (record.flag.id==flag[0].id)> ${record.recordNo}  <input type="hidden" id="memberIdA" value="${record.memberIdA}"/> </#if ></li>
       <li><label id="memberNameB">乙方名称</label>${record.memberNameB}</li>
       <li><label id="recordNoB">乙方备案号</label><#if (record.flag.id==flag[1].id)> ${record.recordNo} <input type="hidden" id="memberIdB" value="${record.memberIdB}"/>  </#if></li>
-      <li><label>关联招标合同</label><input type="text" value="" id="refContractNo"/></li>
+      <li><label>关联招标合同</label><input type="text" value="" id="refContractNo"  datatype="*2-50" nullmsg="请输入乙方名称"/></li>
       </ul>
-      <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="">绑定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>
+      <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="edit()">绑定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>
       </div>
+      </form>
     <!-- InstanceEndEditable --></div>
 </div>
 </div>
