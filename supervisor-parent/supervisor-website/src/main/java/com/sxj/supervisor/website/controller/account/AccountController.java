@@ -181,4 +181,14 @@ public class AccountController extends BaseController {
 		}
 
 	}
+
+	/**
+	 * 判断自会员帐号是否存在
+	 */
+	@RequestMapping("check_account")
+	public @ResponseBody String check_account(String accountName) {
+		if (accountService.getAccountByName(accountName) == null)
+			return "y";
+		return "n";
+	}
 }
