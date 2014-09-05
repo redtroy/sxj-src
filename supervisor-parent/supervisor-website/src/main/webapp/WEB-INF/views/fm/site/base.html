@@ -6,13 +6,17 @@
 <script src="${staticPath}js/jquery.poshytip.min.js"></script>
 <script>
 $(function(){
-	$(":input").select("[title!='']").poshytip({
+	$(":input").each(function(){
+		if($(this).attr("title"))
+			$(this).poshytip({
 		className: 'tipMsg msg-gray ml5',
 		showOn: 'focus',
 		alignTo: 'target',
 		alignX: 'right',
 		alignY: 'center',
 		offsetX: 5
+	});
+	
 	});
 });
 </script>
