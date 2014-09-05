@@ -27,6 +27,27 @@ function errorInfo(data){
  }
 </script>
 </#macro>
+<#macro validate>
+<!--<script src="${staticPath}js/jquery.validate.js"></script>-->
+<script src="${staticPath}js/Validform_v5.3.2.js"></script>
+<script src="${staticPath}js/jquery.poshytip.min.js"></script>
+<script>
+$(function(){
+	$(":input").each(function(){
+		if($(this).attr("title"))
+			$(this).poshytip({
+		className: 'tipMsg msg-gray ml5',
+		showOn: 'focus',
+		alignTo: 'target',
+		alignX: 'right',
+		alignY: 'center',
+		offsetX: 5
+	});
+	
+	});
+});
+</script>
+</#macro>
 <#macro pageScript>
 <script src="${staticPath}js/jquery.paginate.js"></script>
 <script>

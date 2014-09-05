@@ -57,12 +57,21 @@
 	   ok.html('<a href="#" class="confirm" onclick="editOk('+id+')">确认</a><a href="#" class="del" onclick="del('+id+')">删除</a>');
    }
    //确认修改
+   var regex =/^[\u4e00-\u9fa5a-zA-Z-0-9]{2,20}$/ ;
    function editOk(id){
 	   var accountName=$("#accountEdit").val();
 	   var name=$("#nameEdit").val();
 	   var anobj=$("#"+id).children().eq(2);//子帐号名称TD对象
 	   var nobj=$("#"+id).children().eq(3);//姓名TD对象
 	   var ok=$("#"+id).children().eq(7);//确认的对象
+	   if (!regex.test(accountName) || accountName==""){
+		   alert("子帐号不能为空，或特殊字符");
+		   return false;
+	   }
+	   if (!regex.test(name) || name==""){
+		   alert("姓名不能为空，或特殊字符");
+		   return false;
+	   }
 	   $.post("${basePath}member/account/editAccount.htm",{id:id,accountName:accountName,name:name},function(data){
 		   if (data.isOK=='ok'){
 				  query();

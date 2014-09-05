@@ -7,10 +7,17 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
+<@b.validate/>
 <script type="text/javascript">
 	function edit(){
 		$("#record_save").submit();
-	}	
+	}
+	$(function(){
+		$("#record_save").Validform({
+			tiptype:3
+		});
+	})
+	
 </script>
 <body>
 <@b.header/>
@@ -27,9 +34,9 @@
       <ul>
       <form action="record_save.htm?id=${record.id}" method="post" id="record_save">
       <li><label>备案号</label>${record.recordNo}</li>
-      <li><label>申请会员</label><input type="text" value="${record.applyName}"  id="applyName" name="applyName"/></li>
-      <li><label>甲方名称</label><input type="text" value="${record.memberNameA}" id="memberNameA" name="memberNameA"/></li>
-      <li><label>乙方名称</label><input type="text" value="${record.memberNameB}" id="memberNameB" name="memberNameB"/></li>
+      <li><label>申请会员</label><input type="text" value="${record.applyName}"  id="applyName" name="applyName" datatype="*2-50" nullmsg="请输入会员名称"/></li>
+      <li><label>甲方名称</label><input type="text" value="${record.memberNameA}" id="memberNameA" name="memberNameA" datatype="*2-50" nullmsg="请输入甲方名称"/></li>
+      <li><label>乙方名称</label><input type="text" value="${record.memberNameB}" id="memberNameB" name="memberNameB" datatype="*2-50" nullmsg="请输入乙方名称"/></li>
       <li><label>合同类型</label><select  id="contractType" name="contractType">
              <#list cte as type>
 	        <#if (type.id=record.contractType.id)>
@@ -40,7 +47,7 @@
             </#list>
           </select></li>
       <li class="contPic ly-clearFix"><label>合同副本</label><button class="button button-green button-middle">上传合同扫描件</button></li>
-      <li><label>关联招标合同</label><input type="text" value="${record.recordNo}" name="recordNo"/></li>
+      <li><label>关联招标合同</label><input type="text" value="${record.refContractNo}" name="refContractNo" datatype="*2-50" nullmsg="请输入招标合同"/></li>
 	  <li><label>备案类型</label><select  id="type" name="type">
 	        <#list rte as type>
 	        <#if (type.id=record.type.id)>
