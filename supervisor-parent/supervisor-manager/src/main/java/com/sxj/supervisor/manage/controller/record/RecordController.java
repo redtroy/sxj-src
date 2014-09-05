@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -86,18 +88,10 @@ public class RecordController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/record_save")
-	public String record_save(RecordEntity record, ModelMap map) {
+	public String record_save(HttpServletRequest request, RecordEntity record,
+			ModelMap map) {
 		recordService.modifyRecord(record);
-		ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
-		RecordStateEnum[] rse = RecordStateEnum.values();// 备案状态
-		RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
-		RecordQuery query = new RecordQuery();
-		List<RecordEntity> list = recordService.queryRecord(query);
-		map.put("cte", cte);
-		map.put("rse", rse);
-		map.put("rte", rte);
-		map.put("list", list);
-		return "manage/record/record";
+		return "redirect:" + getBasePath(request) + "record/recordList.htm";
 	}
 
 	/**
@@ -118,11 +112,18 @@ public class RecordController extends BaseController {
 
 	@RequestMapping("/banding_save")
 	public @ResponseBody Map<String, String> bandingSave(String contractNo,
-			String refContractNo, String recordNo, String recordNo2) {
-		Map<String, String> map = new HashMap<String, String>();
-		recordService.bindingContract(contractNo, refContractNo, recordNo,
-				recordNo2);
-		return map;
+			String refContractNo, String recordNo, String recordNo2)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			recordService.bindingContract(contractNo, refContractNo, recordNo,
+					recordNo2);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("绑定合同错误", e, this.getClass());
+			throw new WebException("绑定合同错误 ");
+		}
+
 	}
 
 	/**
