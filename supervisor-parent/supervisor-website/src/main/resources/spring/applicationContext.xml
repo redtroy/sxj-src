@@ -49,4 +49,10 @@
 		<property name="basePackage" value="com.sxj.supervisor.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
+	<!-- 配置多级缓存 -->
+	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
+		lazy-init="false" init-method="initCacheProvider">
+		<!-- <property name="configFile" value="cache.properties"></property> -->
+		<property name="databaseId" value="0"></property>
+	</bean>
 </beans>

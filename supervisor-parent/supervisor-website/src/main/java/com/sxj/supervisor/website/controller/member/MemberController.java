@@ -1,5 +1,6 @@
 package com.sxj.supervisor.website.controller.member;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,8 +23,11 @@ import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
+import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
+import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/member")
@@ -80,9 +86,20 @@ public class MemberController extends BaseController {
 	}
 
 	@RequestMapping("save_member")
-	public @ResponseBody Map<String, String> save_member(MemberEntity member) {
-		memberService.modifyMember(member);
-		return null;
+	public @ResponseBody Map<String, Object> save_member(
+			@Validated({ UpdateGroup.class }) MemberEntity member,
+			BindingResult result) throws WebException {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			getValidError(result);
+			memberService.modifyMember(member);
+			map.put("isOK", true);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("修改会员信息错误", e, this.getClass());
+			throw new WebException(e.getMessage());
+		}
+
 	}
 
 	/**
@@ -107,6 +124,7 @@ public class MemberController extends BaseController {
 		if (message.equals(ms)) {
 			member.setState(MemberStatesEnum.stop);
 			member.setCheckState(MemberCheckStateEnum.unaudited);
+			member.setRegDate(new Date());
 			memberService.addMember(member);
 			return LOGIN;
 		} else {

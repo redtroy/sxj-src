@@ -33,9 +33,10 @@ public class SupervisorManagerPermissionsAuthorizationFilter extends
 		 */
 
 		HttpServletRequest req = (HttpServletRequest) request;
+		req.setCharacterEncoding("UTF-8");
 		HttpSession session = req.getSession(false);
-		String functionId = req.getParameter("functionId");
-		session.setAttribute("functionId", functionId);
+		String function = req.getParameter("function");
+		session.setAttribute("function", function);
 
 		Subject subject = getSubject(request, response);
 		String uri = req.getRequestURI();

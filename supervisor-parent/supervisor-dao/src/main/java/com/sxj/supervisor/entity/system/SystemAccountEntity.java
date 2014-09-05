@@ -14,6 +14,8 @@ import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.system.ISystemAccountDao;
+import com.sxj.supervisor.validator.hibernate.AddGroup;
+import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 
 @Entity(mapper = ISystemAccountDao.class)
 @Table(name = "M_SYS_ACCOUNT")
@@ -36,22 +38,27 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 	private String accountNo;
 
 	@Column(name = "NAME")
-	@NotEmpty(message = "管理员姓名不能为空")
-	@Length(max = 50, message = "管理员姓名长度过长")
+	@NotEmpty(message = "管理员姓名不能为空", groups = { AddGroup.class,
+			UpdateGroup.class })
+	@Length(max = 50, message = "管理员姓名长度过长", groups = { AddGroup.class,
+			UpdateGroup.class })
 	private String name;
 
 	@Column(name = "ACCOUNT")
-	@NotEmpty(message = "管理员账号不能为空")
-	@Length(max = 20, message = "管理员账号长度过长")
+	@NotEmpty(message = "管理员账号不能为空", groups = { AddGroup.class,
+			UpdateGroup.class })
+	@Length(max = 20, message = "管理员账号长度过长", groups = { AddGroup.class,
+			UpdateGroup.class })
 	private String account;
 
 	@Column(name = "PASSWORD")
-	@NotEmpty(message = "密码不能为空")
-	@Length(max = 20, message = "密码长度过长")
+	@NotEmpty(message = "密码不能为空", groups = { AddGroup.class, UpdateGroup.class })
+	@Length(max = 20, message = "密码长度过长", groups = { AddGroup.class,
+			UpdateGroup.class })
 	private String password;
 
 	@Column(name = "DEL_STATE")
-	private Boolean delState=false;
+	private Boolean delState = false;
 
 	public String getId() {
 		return id;
@@ -100,7 +107,5 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 	public void setDelState(Boolean delState) {
 		this.delState = delState;
 	}
-
-	
 
 }
