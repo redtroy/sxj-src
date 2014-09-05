@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.type.JdbcType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
@@ -124,15 +126,20 @@ public class ContractController extends BaseController {
 	@RequestMapping("changes")
 	public String changesContract(ModelMap model, String contractId,
 			String recordId) {
-		ContractModel contractModel = contractService.getContract("1");
-		RecordEntity record = recordService.getRecord("1");
-		model.put("contractModel", contractModel);
-		model.put("record", record);
+		RecordEntity record = recordService.getRecord(recordId);
+		if(record!=null){
+			ContractModel conEntity =contractService.getContractModelByContractNo(record.getContractNo());
+			model.put("contractModel", conEntity);
+			model.put("record", record);
+		}
+		
+		
 		return "manage/contract/contract-changes";
 	}
 
 	@RequestMapping("saveChanges")
-	public String saveChanges(ContractModifyControllerModel contractModifyModel) {
+	public @ResponseBody Map<String, Object> saveChanges(ContractModifyControllerModel contractModifyModel) throws WebException {
+		try {
 		ContractModifyModel model = new ContractModifyModel();
 		model.setModifyContract(contractModifyModel.getModifyContract());
 		model.setModifyBatchList(contractModifyModel.getModifyBatchList());
@@ -140,7 +147,12 @@ public class ContractController extends BaseController {
 		contractService.changeContract(contractModifyModel.getContractId(),
 				model, contractModifyModel.getRecordNo(),
 				contractModifyModel.getItemList());
-		return "manage/contract/contract-list";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("isOK", "ok");
+		return map;
+	} catch (Exception e) {
+		throw new WebException(e);
+	}
 	}
 
 	@RequestMapping("replenish")
