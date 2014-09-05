@@ -31,7 +31,7 @@
 		<result property="nowRecordNo" column="NOW_RECORD_NO" jdbcType="VARCHAR" />
 		<result property="createDate" column="CREATE_DATE" jdbcType="DATE" />
 		<result property="recordDate" column="RECORD_DATE" jdbcType="DATE" />
-		<result property="deleteState" column="DELETE_STATE" jdbcType="INTEGER" />
+		<result property="deleteState" column="DELETE_STATE" jdbcType="BOOLEAN" />
 		
 	</resultMap>
 

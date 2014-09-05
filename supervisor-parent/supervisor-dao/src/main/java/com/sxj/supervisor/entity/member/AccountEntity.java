@@ -3,6 +3,11 @@ package com.sxj.supervisor.entity.member;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
@@ -13,6 +18,8 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IAccountDao;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
+import com.sxj.supervisor.validator.hibernate.AddGroup;
+import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 
 /**
  * 子账号实体
@@ -47,36 +54,49 @@ public class AccountEntity extends Pagable implements Serializable {
 	 * 所属会员ID
 	 **/
 	@Column(name = "PARENT_ID")
+	@NotEmpty(message = "所属会员ID不能为空", groups = { AddGroup.class })
+	@Length(max = 50, message = "所属会员ID长度过长", groups = { AddGroup.class })
 	private String parentId;
 
 	/**
 	 * 子账户名称
 	 **/
 	@Column(name = "ACCOUNT_NAME")
+	@NotEmpty(message = "子账户名称不能为空", groups = { AddGroup.class,
+			UpdateGroup.class })
+	@Length(max = 50, message = "子账户名称长度过长", groups = { AddGroup.class,
+			UpdateGroup.class })
 	private String accountName;
 
 	/**
 	 * 姓名
 	 **/
 	@Column(name = "NAME")
+	@NotEmpty(message = "姓名不能为空", groups = { AddGroup.class, UpdateGroup.class })
+	@Length(max = 50, message = "姓名长度过长", groups = { AddGroup.class,
+			UpdateGroup.class })
 	private String name;
 
 	/**
 	 * 子账户状态
 	 **/
 	@Column(name = "STATE")
+	@NotNull(message = "子账户状态不能为空", groups = { AddGroup.class })
 	private AccountStatesEnum state;
 
 	/**
 	 * 注册日期
 	 **/
 	@Column(name = "REG_DATE")
+	@NotNull(message = "注册日期不能为空", groups = { AddGroup.class })
 	private Date regDate;
 
 	/**
 	 * 子账户密码
 	 **/
 	@Column(name = "PASSWORD")
+	@NotEmpty(message = "子账户密码不能为空", groups = { AddGroup.class })
+	@Length(max = 50, message = "子账户密码长度过长", groups = { AddGroup.class })
 	private String password;
 
 	/**

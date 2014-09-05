@@ -60,6 +60,19 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
 	 **/
 	@Column(name = "BATCH_ITEMS")
 	private String batchItems;
+	/**
+     * 标识状态
+     */
+    @Column(name = "UPDATE_STATE")
+    private Integer updateState;
+    
+	public Integer getUpdateState() {
+		return updateState;
+	}
+
+	public void setUpdateState(Integer updateState) {
+		this.updateState = updateState;
+	}
 
 	public String getBatchNo() {
 		return batchNo;

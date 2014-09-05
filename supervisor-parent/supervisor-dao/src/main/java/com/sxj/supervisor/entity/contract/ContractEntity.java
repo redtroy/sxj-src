@@ -138,7 +138,7 @@ public class ContractEntity extends Pagable implements Serializable {
 	 * 删除状态
 	**/
 	@Column(name = "DELETE_STATE")
-	private Integer deleteState;
+	private Boolean deleteState =false;
 
 	/**
 	 * 确认状态状态
@@ -191,14 +191,14 @@ public class ContractEntity extends Pagable implements Serializable {
 	@Column(name = "IMG_PATH")
 	private String imgPath;
 	
-	public Integer getDeleteState() {
+
+	public Boolean getDeleteState() {
 		return deleteState;
 	}
 
-	public void setDeleteState(Integer deleteState) {
+	public void setDeleteState(Boolean deleteState) {
 		this.deleteState = deleteState;
 	}
-	
 
 	public Date getCreateDate() {
 		return createDate;

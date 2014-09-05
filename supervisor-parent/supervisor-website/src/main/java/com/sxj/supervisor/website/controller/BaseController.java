@@ -2,11 +2,14 @@ package com.sxj.supervisor.website.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
@@ -14,6 +17,8 @@ import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
+import com.sxj.util.exception.SystemException;
+import com.sxj.util.logger.SxjLogger;
 
 public class BaseController {
 
@@ -58,18 +63,20 @@ public class BaseController {
 
 	}
 
-	// @RequestMapping("login")
-	// public String ToLogin(String error, ModelMap model)
-	// throws UnsupportedEncodingException {
-	// if (StringUtils.isNotEmpty(error)) {
-	// if ("no_validate".equals(error)) {
-	// error = "请输入验证码";
-	// } else if ("validate_error".equals(error)) {
-	// error = "验证码错误，请重新输入";
-	// }
-	// }
-	// model.addAttribute("error", error);
-	// return LOGIN;
-	// }
+	protected void getValidError(BindingResult result) throws SystemException {
+		if (result.hasErrors()) {
+			String message = "";
+			List<ObjectError> errors = result.getAllErrors();
+			for (ObjectError error : errors) {
+				if (error == null) {
+					continue;
+				}
+				message = message + error.getDefaultMessage();
+			}
+			SxjLogger.error("Nested path [" + result.getNestedPath()
+					+ "] has errors [" + message + "]", this.getClass());
+			throw new SystemException(message);
+		}
+	}
 
 }

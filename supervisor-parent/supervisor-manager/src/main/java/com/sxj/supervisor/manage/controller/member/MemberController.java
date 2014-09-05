@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,6 +21,7 @@ import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
+import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -90,13 +93,23 @@ public class MemberController extends BaseController {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws WebException
 	 */
 	@RequestMapping("editMember")
-	public @ResponseBody Map<String, String> editMember(MemberEntity member) {
-		memberService.modifyMember(member);
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("isOK", "ok");
-		return map;
+	public @ResponseBody Map<String, String> editMember(
+			@Validated({ UpdateGroup.class }) MemberEntity member,
+			BindingResult result) throws WebException {
+		try {
+			getValidError(result);
+			memberService.modifyMember(member);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("修改会员信息错误", e, this.getClass());
+			throw new WebException(e.getMessage());
+		}
+
 	}
 
 	/**
