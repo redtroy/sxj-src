@@ -10,7 +10,9 @@
 <link href="${b.staticPath}style/msg.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.upload/>
+<@b.validate/>
 <script>
+var id;
 $(document).ready(function() { 
 	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
 	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
@@ -27,7 +29,7 @@ function uploadenergyPath(data){
     $("#energyPath_hidden").val(dataObj.fileIds);
 }
 
-function save(id){
+function save(){
 	var bLicensePath= $("#bLicensePath_hidden").val();
 	var energyPath= $("#energyPath_hidden").val();
 	var telNum=$("#qh").val()+'-'+$("#telNum").val();
@@ -42,6 +44,20 @@ function save(id){
     	alert("修改成功！");
     })
 }
+function subForm(ids){
+	  id=ids;
+	  $("#add_form").submit();
+ }
+ $(function(){
+	 $("#add_form").Validform({
+			tiptype:3,
+			callback:function(form){
+				save();
+			}
+		});
+	 
+ })
+	
 </script>
 </head>
 
@@ -60,6 +76,7 @@ function save(id){
         <h1 class="ly-left"> <span class="title fontYH f20 fb">会员资料修改</span></h1>
       </div>
       <div class="contBox">
+      <form id="add_form" action="javascript:void(0);" method="post">
         <div class="item">
           <label>会员编号</label>
           <span class="color-blue">${member.memberNo}</span></div>
@@ -96,31 +113,32 @@ function save(id){
         </div>
         <div class="item">
           <label>公司电话</label>
-          <input type="text" class="input input-w50h36" value="${member.telNum?split("-")[0]}" name="input" id="qh">
+          <input type="text" class="input input-w50h36" value="${member.telNum?split("-")[0]}" name="input" id="qh" datatype="n2-6">
           --
-          <input type="text" class="input input-w100h36" value="${member.telNum?split("-")[1]}" name="input2" id="telNum">
+          <input type="text" class="input input-w100h36" value="${member.telNum?split("-")[1]}" name="input2" id="telNum" datatype="n5-10">
         </div>
         <div class="item">
           <label>公司地址</label>
-          <input type="text" class="input input-w270h36" value="${member.address}" name="input3" id="address">
+          <input type="text" class="input input-w270h36" value="${member.address}" title="请输入公司地址" name="input3" id="address" datatype="*2-30" nullmsg="请输入公司名" />
         </div>
         <div class="item">
           <label>邮政编码</label>
-          <input type="text" class="input input-w100h36" value="${member.code}" name="input4" id="code">
+          <input type="text" class="input input-w100h36" value="${member.code}" title="请输入邮政编码" name="input4" id="code" datatype="n6-6" errormsg="区号为6位数字！" nullmsg="请输入邮政编码" />
         </div>
         <div class="item">
           <label>联系人</label>
-          <input type="text" class="input input-w100h36" value="${member.contacts}" name="input5" id="contacts">
+          <input type="text" class="input input-w100h36" value="${member.contacts}" title="请输入联系人" name="input5" id="contacts" datatype="*2-30" nullmsg="请输入公司名" />
         </div>
         <div class="item">
           <label>联系人手机</label>
-          <input type="text" class="input input-w100h36" value=" ${member.phoneNo}" name="input3" id="phoneNo">
+          <input type="text" class="input input-w100h36" value=" ${member.phoneNo}" name="input3" id="phoneNo" datatype="n11-11" nullmsg="请输入手机号码" title="请输入手机号码"/>
         </div>
         <div class="item mt10">
           <label>&nbsp;</label>
-          <a class="button button-orange mr15" href="#" onclick="save($'{member.id}')">确认会员资料</a><a class="button button-gray" href="javascript:history.go(-1)">取消
+          <a class="button button-orange mr15" href="#" onclick="subForm('${member.id}')">确认会员资料</a><a class="button button-gray" href="javascript:history.go(-1)">取消
           
           </a> </div>
+          </form>
       </div>
     </div>
 </div>

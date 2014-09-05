@@ -140,7 +140,6 @@ function saveChenges(){
 		}
 		var batchSize = $("#batchTb tr").filter(".batchClass").size();
 		var batchItemSize=$("#batchItem1 tr").filter(".batchItemClass1").size();
-		alert(batchItemSize);
 		for (var i=0;i<parseInt(batchSize);i++){
 			$("#batchTb tr").filter(".batchClass").eq(i).find("td").eq(5).find("input").attr("name","modifyBatchList["+i+"].modifyBatch.amount");
 			$("#batchTb tr").filter(".batchClass").eq(i).find("td").eq(6).find("input").attr("name","modifyBatchList["+i+"].modifyBatch.rfidNo");
@@ -149,7 +148,14 @@ function saveChenges(){
 				$("#batchItem2 tr").filter(".batchItemClass2").eq(j).find("td").eq(0).find("input").attr("name","modifyBatchList["+i+"].modifyBatchItems["+j+"].quantity");	
 			}
 		}
-		$("#changsForm").submit();
+			$.post("saveChanges.htm",$("#changsForm").serialize(),function(data){
+				if (data.isOK == 'ok') {
+					  alert("变更成功")
+					  window.location.href="query.htm";
+					}else{
+						alert("变更失败");
+					}
+			})
 	});
 	
 	}
@@ -162,7 +168,7 @@ function saveChenges(){
 <@b.menuPath/>
 <div id="mainBg" class="ly-clearFix yard-1200">
   <div id="leftList"><@b.leftMenu /></div>
-    <form action="saveChanges.htm" id="changsForm" method="post">
+    <form action="" id="changsForm" method="post">
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">变更当前合同</h2>
@@ -331,6 +337,116 @@ function saveChenges(){
          ${contractModel.contract.refContractNo}
         </div>
     </div>
+    <!-- 变更信息 -->
+     <#if contractModel.modifyList?exists>
+      <#list contractModel.modifyList as modifyList>
+     <div class="changeBox">
+         <div id="chenges">
+        <h2 class="title">合同变更信息</h2>
+       
+		<div class="infoBox producedBox f14">
+		<div><label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}</div>
+		<div class="contPic">
+		  <label>合同变更扫描件</label>
+		  <div class="rollBox">
+		    <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
+		    <div class="Cont" id="ISL_Cont2">
+		      <div class="ScrCont">
+		        <div id="List3">
+		        <input type="hidden" value="${record.imgPath}" name="modifyContract.imgPath"  />
+		        
+		          <!-- 图片列表 begin -->
+		          	  <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
+                      <#list imgArr  as modifyimgPath>
+                      	<div class="pic"><a href="#" target="_blank"><img src="${modifyimgPath}"  /></a></div>
+              		  </#list>
+		          <!-- 图片列表 end -->
+	            </div>
+		        <div id="List4"></div>
+	          </div>
+	        </div>
+		    <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+	      </div>
+		  </div>
+		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable" id="TbData" >
+          <col width="15%" />
+          <col width="20%" />
+          <col width="15%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="25%" />
+		  <col width="5%" />
+          <tr>
+            <th>产品名称</th>
+            <th>产品规格</th>
+            <th>数量<span>（㎡/吨）</span></th>
+            <th>单价<span>(元/㎡/吨)</span></th>
+            <th>金额<span>(元)</span></th>
+            <th>备注说明</th>
+			<th class="rLine">&nbsp;</th>
+          </tr>
+          <#list modifyList.modifyItemList  as modifyItem>
+              <tr>
+                <td>${modifyItem.productName}</td>
+                <td>${modifyItem.productModel}</td>
+                <td>${modifyItem.quantity}</td>
+                <td>${modifyItem.price}</td>
+                <td>${modifyItem.amount}</td>
+                <td>${modifyItem.remarks}</td>
+                <td><#if modifyItem.updateState==0><span class="lnk-green">√</span> <#else> <span class="lnk-red">!</span> </#if></td>
+              </tr>
+            </#list>
+        </table>
+         <#if modifyList.modifyBatchList?exists>
+        <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable" id="batchTb">
+          <col width="20%" />
+          <col width="25%" />
+		  <col width="20%" />
+          <col width="10%" />
+          <col width="20%" />
+		  <col width="5%" />
+          <tr>
+            <th>交货批次</th>
+            <th>产品规格</th>
+            <th>数量<span>（㎡/吨）</span></th>
+            <th>应付货款<span>（元）</span></th>
+            <th>对应批次RFID编号</th>
+			<th class="rLine">&nbsp;</th>
+          </tr>
+          <#list modifyList.modifyBatchList  as modifyBatch>
+              <tr>
+                <td>第${modifyBatch.modifyBatch.batchNo}批次</td>
+                <td>
+                <table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                 <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
+                    <tr>
+                      <td>${modifyBatchItems.productModel}</td>
+                    </tr>
+                  </#list>
+                  </table>
+                  </td>
+                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                   <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
+                    <tr>
+                      <td>${modifyBatchItems.quantity}</td>
+                    </tr>
+                  </#list>
+                  </table></td>
+                <td>${modifyBatch.modifyBatch.amount}</td>
+                <td>${modifyBatch.modifyBatch.rfidNo}</td>
+                <td>&nbsp;</td>
+              </tr>
+              </#list>
+        </table>
+        </#if>
+        </div>
+        
+      </div>
+      </div>
+      </#list>
+      </#if>
+    <!-- 变更信息结束 -->
+    
         <div class="changeBox">
          <div id="chenges">
         <h2 class="title">合同变更信息</h2>

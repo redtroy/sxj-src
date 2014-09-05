@@ -93,6 +93,13 @@ public interface IContractService {
 	 * @param state
 	 */
 	public void modifyCheckState(String contractId, Integer state);
+
+	/**
+	 * 根据合同号获取详情
+	 * @param contractNo
+	 * @return
+	 */
+	public ContractModel getContractModelByContractNo(String contractNo);
 	
 	
 }

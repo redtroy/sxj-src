@@ -156,7 +156,7 @@ function del(id){
           <#elseif (record.state.id==1)>
           <td class="contract"><em class="state verified">已绑定</em></td>
           <#elseif (record.state.id==2)>
-          <td class="contract"><a href="../html/contract-changes.html" class="lnk-green">变更当前合同</a></td>
+          <td class="contract"><a href="${basePath}contract/changes.htm?recordId=${record.id}" class="lnk-green">变更当前合同</a></td>
           <#elseif (record.state.id==3)>
           <td class="contract"><em class="state verified">已变更</em></td>
           <#elseif (record.state.id==4)>

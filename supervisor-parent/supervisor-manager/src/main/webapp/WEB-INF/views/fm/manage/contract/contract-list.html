@@ -24,7 +24,7 @@ function loadInfo(id){
 	$("#info"+id).load("info.htm?contractId="+id);
 }
 function closeContract(id){
-	$("#info"+id).slideUp("slow");
+	$("#info"+id).html("");
 }
 
 function query(){
@@ -138,17 +138,16 @@ function delContract(id){
       </tr>
        <#if list?exists>
       <#list list as model>
-      <tr onclick="loadInfo('${model.contract.id}');" >
-        <td><a href="#" class="lnk-blue">${model.contract.contractNo}</a></td>
+        <td><a href="javascript:loadInfo('${model.contract.id}');"  class="lnk-blue">${model.contract.contractNo}</a></td>
         <td><a href="#" class="lnk-blue">甲方已申请合同备案</a></td>
         <td>${model.contract.memberNameA}</td>
         <td>${model.contract.memberNameB}</td>
-        <td>${model.contract.type}</td>
+        <td>${model.contract.type.getName()}</td>
         <td>${model.contract.refContractNo}</td>
         <td>${model.contract.createDate?string("yyyy-MM-dd")}</td>
         <td><#if model.contract.recordDate?exists>${model.contract.recordDate?string("yyyy-MM-dd")}</#if></td>
-        <td><em class="state normal"> <#list contractSureState as sureState><#if model.contract.confirmState== sureState.getId()> ${sureState.getName()}</#if></#list></em></td>
-        <td><#list contractState as state><#if model.contract.state== state.getId()> ${state.getName()}</#if></#list></td>
+        <td><em class="state normal">${model.contract.confirmState.getName()}</em></td>
+        <td><#if model.contract.state.getId() ==1>${model.contract.state.getName()}<#else><button class="btn"><span>审核</span></button></#if></td>
         <td class="operation">
         <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
         <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a></td>

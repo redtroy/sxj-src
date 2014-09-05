@@ -12,6 +12,7 @@
 		<result property="price" column="PRICE" jdbcType="INTEGER" />
 		<result property="amount" column="AMOUNT" jdbcType="INTEGER" />
 		<result property="remarks" column="REMARKS" jdbcType="VARCHAR" />
+		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
 	</resultMap>
 
 <!-- 条件查询合同变更批次 -->

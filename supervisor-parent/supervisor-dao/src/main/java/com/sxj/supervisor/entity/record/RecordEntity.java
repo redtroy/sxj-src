@@ -87,7 +87,6 @@ public class RecordEntity extends Pagable implements Serializable {
 	 **/
 	@Column(name = "MEMBER_NAME_B")
 	private String memberNameB;
-
 	/**
 	 * 备案类型
 	 **/
