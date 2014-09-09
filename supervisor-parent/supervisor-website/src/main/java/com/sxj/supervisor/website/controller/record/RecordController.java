@@ -280,4 +280,17 @@ public class RecordController extends BaseController {
 			throw new WebException(e);
 		}
 	}
+	/**
+	 * 根据ID删除备案
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/delRecord")
+	public @ResponseBody Map<String, String> delRecord(String id) {
+		Map<String, String> map = new HashMap<String, String>();
+		recordService.deleteRecord(id);
+		map.put("isOk", "ok");
+		return map;
+	}
 }

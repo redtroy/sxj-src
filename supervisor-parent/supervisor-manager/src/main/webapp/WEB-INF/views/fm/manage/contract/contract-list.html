@@ -11,6 +11,7 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
 <script>
@@ -48,6 +49,24 @@ function delContract(id){
 	});
 	}
 }
+$(function(){
+	var url_ = "${basePath}autoComple.htm";
+	$("#memberName").bigAutocomplete({url:url_,callback:function(data){
+        $("#memberId").val(data.result);
+    }});
+});
+function check(id){
+	if(confirm('确实要审核该合同吗?')){
+	$.post("check.htm",{contractId:id},function(data){
+		if (data.isOK == 'ok') {
+			  alert("成功")
+			  window.location.href="query.htm";
+			}else{
+				alert("失败");
+			}	
+	});
+	}
+}
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -72,7 +91,8 @@ function delContract(id){
         备案号
         <input type="text" name="recordNo" value="${query.recordNo}" />
         合同签订者
-        <input type="text" name="memberId" value="${query.memberId}" />
+        <input type="text" name="memberName" id="memberName" value="${query.memberName}" />
+        <input type="hidden" name="memberId" id="memberId" value="${query.memberId}" />
         合同类型
         <select name="contractType" >
         <option value="">--请选择--</option>
@@ -147,7 +167,7 @@ function delContract(id){
         <td>${model.contract.createDate?string("yyyy-MM-dd")}</td>
         <td><#if model.contract.recordDate?exists>${model.contract.recordDate?string("yyyy-MM-dd")}</#if></td>
         <td><em class="state normal">${model.contract.confirmState.getName()}</em></td>
-        <td><#if model.contract.state.getId() ==1>${model.contract.state.getName()}<#else><button class="btn"><span>审核</span></button></#if></td>
+        <td><#if model.contract.state.getId() ==1>${model.contract.state.getName()}<#else><button class="btn" onclick="check('${model.contract.id}');"><span>审核</span></button></#if></td>
         <td class="operation">
         <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
         <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a></td>

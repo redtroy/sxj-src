@@ -595,9 +595,33 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void suppContract(String contractId,
-			List<ContractBatchModel> batchList, String recordNo) {
-		// TODO Auto-generated method stub
+			List<ReplenishBatchModel> batchList,
+			ReplenishContractEntity replenishContract) throws ServiceException {
+		try {
+			if (replenishContract != null) {
+				contractReplenishDao.addReplenish(replenishContract);
+				if (replenishContract.getId() != null) {
+					// 补损批次
+					if (batchList != null) {
+						List<ReplenishBatchEntity> list = new ArrayList<ReplenishBatchEntity>();
+						for (ReplenishBatchModel replenishBatchModel : batchList) {
+							String json = JsonMapper.nonEmptyMapper().toJson(
+									replenishBatchModel
+											.getReplenishBatchItems());
+							ReplenishBatchEntity rb = replenishBatchModel
+									.getReplenishBatch();
+							rb.setBatchItems(json);
+							list.add(rb);
+						}
+						contractReplenishBatchDao.addReplenishBatch(list);
+					}
 
+				}
+
+			}
+		} catch (Exception e) {
+			throw new ServiceException("补损合同信息错误", e);
+		}
 	}
 
 	/**
@@ -629,10 +653,16 @@ public class ContractServiceImpl implements IContractService {
 	 * 变更确认状态
 	 */
 	@Override
-	public void modifyCheckState(String contractId, Integer state) {
-		ContractEntity ce = contractDao.getContract(contractId);
-		if (ce != null) {
-			contractDao.updateContract(ce);
+	public void modifyCheckState(String contractId, ContractStateEnum state)throws ServiceException {
+		try {
+			ContractEntity ce = new ContractEntity();
+			if (contractId != null) {
+				ce.setId(contractId);
+				ce.setState(state);
+				contractDao.updateContract(ce);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("审核合同错误", e);
 		}
 	}
 

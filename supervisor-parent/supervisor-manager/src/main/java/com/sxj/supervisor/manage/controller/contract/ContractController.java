@@ -4,14 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.type.JdbcType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
@@ -20,6 +18,7 @@ import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.ContractReplenishModel;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.exception.WebException;
@@ -108,10 +107,12 @@ public class ContractController extends BaseController {
 		} catch (Exception e) {
 			throw new WebException(e);
 		}
-		
+
 	}
+
 	@RequestMapping("delete")
-	public @ResponseBody Map<String, Object> deleteContract(String id) throws WebException {
+	public @ResponseBody Map<String, Object> deleteContract(String id)
+			throws WebException {
 		try {
 			contractService.deleteContract(id);
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -120,48 +121,82 @@ public class ContractController extends BaseController {
 		} catch (Exception e) {
 			throw new WebException(e);
 		}
-		
+
 	}
 
 	@RequestMapping("changes")
 	public String changesContract(ModelMap model, String contractId,
 			String recordId) {
 		RecordEntity record = recordService.getRecord(recordId);
-		if(record!=null){
-			ContractModel conEntity =contractService.getContractModelByContractNo(record.getContractNo());
+		if (record != null) {
+			ContractModel conEntity = contractService
+					.getContractModelByContractNo(record.getContractNo());
 			model.put("contractModel", conEntity);
 			model.put("record", record);
 		}
-		
-		
+
 		return "manage/contract/contract-changes";
 	}
 
 	@RequestMapping("saveChanges")
-	public @ResponseBody Map<String, Object> saveChanges(ContractModifyControllerModel contractModifyModel) throws WebException {
+	public @ResponseBody Map<String, Object> saveChanges(
+			ContractModifyControllerModel contractModifyModel)
+			throws WebException {
 		try {
-		ContractModifyModel model = new ContractModifyModel();
-		model.setModifyContract(contractModifyModel.getModifyContract());
-		model.setModifyBatchList(contractModifyModel.getModifyBatchList());
-		model.setModifyItemList(contractModifyModel.getModifyItemList());
-		contractService.changeContract(contractModifyModel.getContractId(),
-				model, contractModifyModel.getRecordNo(),
-				contractModifyModel.getItemList());
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("isOK", "ok");
-		return map;
-	} catch (Exception e) {
-		throw new WebException(e);
-	}
+			ContractModifyModel model = new ContractModifyModel();
+			model.setModifyContract(contractModifyModel.getModifyContract());
+			model.setModifyBatchList(contractModifyModel.getModifyBatchList());
+			model.setModifyItemList(contractModifyModel.getModifyItemList());
+			contractService.changeContract(contractModifyModel.getContractId(),
+					model, contractModifyModel.getRecordNo(),
+					contractModifyModel.getItemList());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
 	}
 
 	@RequestMapping("replenish")
 	public String replenishContract(ModelMap model, String contractId,
 			String recordId) {
-		ContractModel contractModel = contractService.getContract("1");
-		RecordEntity record = recordService.getRecord("1");
-		model.put("contractModel", contractModel);
-		model.put("record", record);
+		RecordEntity record = recordService.getRecord("1232");
+		if (record != null) {
+			ContractModel conEntity = contractService
+					.getContractModelByContractNo(record.getContractNo());
+			model.put("contractModel", conEntity);
+			model.put("record", record);
+		}
 		return "manage/contract/contract-replenish";
+	}
+
+	@RequestMapping("saveReplenish")
+	public @ResponseBody Map<String, Object> saveReplenish(
+			ContractReplenishControllerModel contractReplenish)
+			throws WebException {
+		try {
+			contractService.suppContract(contractReplenish.getReplenish()
+					.getContractId(), contractReplenish.getBatchList(),
+					contractReplenish.getReplenish());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
+	}
+	
+	@RequestMapping("check")
+	public @ResponseBody Map<String, Object> check(String contractId)
+			throws WebException {
+		try {
+			contractService.modifyCheckState(contractId, ContractStateEnum.noapproval);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
 	}
 }
