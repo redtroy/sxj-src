@@ -19,7 +19,10 @@ jQuery(document).ready(function($) {
 		$('.passwordPop').slideUp(200);
 	})
 	})
- 
+ function close_pwd(){
+	$('.maskdivgen').fadeOut(100);
+	$('.passwordPop').slideUp(200);
+}
   //增加子账户
   function add_account(id){
 	$.post("new_account.htm",{id:id},function(data){
@@ -106,7 +109,17 @@ jQuery(document).ready(function($) {
 	  $("#edit_form").append(params.html());
 	  $.post("editAccount.htm",params,function(data){
 			if(data.isOK=='ok'){
-				query();
+				//query();
+				 $("#"+id).find("#name_td").text(name);
+				 $("#"+id).find("#name_td").show();
+				 $("#"+id).find("#name_td2").hide();
+				 $("#"+id).find("#account_td").text(accountName);
+				 $("#"+id).find("#account_td").show();
+				 $("#"+id).find("#account_td2").hide();
+				 $("#"+id).find("#role_td").show();
+				 $("#"+id).find("#editrole_td").hide();
+				 $("#"+id).find("#edit_td").show();
+				 $("#"+id).find("#confim_td").hide();
 				alert("修改成功");
 			}else{
 				errorInfo(data);
@@ -214,7 +227,7 @@ jQuery(document).ready(function($) {
       <div class="modal-body">
         <div class="item"><label>新密码</label><input type="password" class="input input-w180h30" id="pwd1"/></div>
         <div class="item"><label>确认密码</label><input type="password" class="input input-w180h30" id="pwd2"/></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="save_pwd()">确认修改</button><button class="button button-gray">取消</button></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="save_pwd()">确认修改</button><button class="button button-gray " onclick="close_pwd()">取消</button></div>
   </div>
 </div>
     <div class="maskdivgen" style="display:none"></div>
