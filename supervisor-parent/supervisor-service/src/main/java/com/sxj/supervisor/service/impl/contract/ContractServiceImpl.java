@@ -504,10 +504,7 @@ public class ContractServiceImpl implements IContractService {
 			List<ContractEntity> contractList = contractDao
 					.queryContract(condition);
 			List<ContractModel> contractModelList = new ArrayList<ContractModel>();
-			for (Iterator<ContractEntity> iterator = contractList.iterator(); iterator
-					.hasNext();) {
-				ContractEntity contractEntity = (ContractEntity) iterator
-						.next();
+			for (ContractEntity contractEntity : contractList) {
 				// JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(),
 				// StateLogModel.class);//备案记录
 				ContractModel cm = new ContractModel();

@@ -40,6 +40,7 @@ import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/record")
@@ -58,30 +59,42 @@ public class RecordController extends BaseController {
 	IRecordService recordService;
 
 	@RequestMapping("/query")
-	public String to_query(ModelMap map, HttpSession session,RecordQuery record) {
+	public String to_query(ModelMap map, HttpSession session, RecordQuery query)throws WebException {
+		try {
 		RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
 		ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
 		RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
-		SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
-		record.setMemberId(userBean.getMember().getId());
-		List<RecordEntity> list = recordService.queryRecord(record);
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		query.setMemberId(userBean.getMember().getId());
+		List<RecordEntity> list = recordService.queryRecord(query);
 		map.put("recordlist", list);
 		map.put("confirmState", rse);
-		map.put("record", record);
+		map.put("query", query);
 		return "site/record/contract-list";
+	} catch (Exception e) {
+		SxjLogger.error("查询合同信息错误", e, this.getClass());
+		throw new WebException("查询合同信息错误");
+	}
 	}
 
 	@RequestMapping("info")
-	public String queryContractInfo(ModelMap model, String contractNo) {
-		ContractModel contract = contractService
-				.getContractByContractNo(contractNo);
-		ContractModel contractModel = new ContractModel();
-		if (contract.getContract() != null) {
-			contractModel = contractService.getContract(contract.getContract()
-					.getId());
+	public String queryContractInfo(ModelMap model, String contractNo)
+			throws WebException {
+		try {
+			ContractModel contract = contractService
+					.getContractByContractNo(contractNo);
+			ContractModel contractModel = new ContractModel();
+			if (contract.getContract() != null) {
+				contractModel = contractService.getContract(contract
+						.getContract().getId());
+			}
+			model.put("contractModel", contractModel);
+			return "site/record/contract-info";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
 		}
-		model.put("contractModel", contractModel);
-		return "site/record/contract-info";
 	}
 
 	/**
@@ -121,7 +134,6 @@ public class RecordController extends BaseController {
 		out.close();
 	}
 
-
 	/**
 	 * 跳转申请合同
 	 * 
@@ -130,7 +142,8 @@ public class RecordController extends BaseController {
 	 */
 	@RequestMapping("/to_apply")
 	public String to_apply(ModelMap map, HttpSession session) {
-		SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
 		map.put("type", userBean.getMember().getType());
 		map.put("name", userBean.getMember().getName());// name
 		map.put("id", userBean.getMember().getId());
@@ -146,10 +159,11 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("/AcgApplyRecord")
-	public @ResponseBody Map<String, String> cgApplyRecord(RecordEntity record,HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> cgApplyRecord(RecordEntity record,
+			HttpSession session) throws WebException {
 		try {
-			SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+			SupervisorPrincipal userBean = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
 			record.setApplyId(userBean.getMember().getId());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
@@ -178,10 +192,11 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("/zbApplyRecord")
-	public @ResponseBody Map<String, String> zbApplyRecord(RecordEntity record,HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> zbApplyRecord(RecordEntity record,
+			HttpSession session) throws WebException {
 		try {
-			SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+			SupervisorPrincipal userBean = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
 			record.setApplyId(userBean.getMember().getId());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
@@ -210,10 +225,11 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("/BzbApplyRecord")
-	public @ResponseBody Map<String, String> BzbApplyRecord(RecordEntity record,HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> BzbApplyRecord(
+			RecordEntity record, HttpSession session) throws WebException {
 		try {
-			SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+			SupervisorPrincipal userBean = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
 			record.setApplyId(userBean.getMember().getId());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
@@ -234,13 +250,14 @@ public class RecordController extends BaseController {
 	}
 
 	@RequestMapping("/to_modify")
-	public String to_modify(String recordId,ModelMap map, HttpSession session)
+	public String to_modify(String recordId, ModelMap map, HttpSession session)
 			throws WebException {
 		try {
-			RecordEntity record= recordService.getRecord(recordId);
-			SupervisorPrincipal member = (SupervisorPrincipal) session.getAttribute("userinfo");
-			map.put("record", record);//备案类型
-			map.put("member", member);//会员类型
+			RecordEntity record = recordService.getRecord(recordId);
+			SupervisorPrincipal member = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
+			map.put("record", record);// 备案类型
+			map.put("member", member);// 会员类型
 			return "site/record/edit-record";
 		} catch (Exception e) {
 			throw new WebException(e);
@@ -251,7 +268,7 @@ public class RecordController extends BaseController {
 	public @ResponseBody Map<String, String> modifyRecord(String recordId,
 			String imgPath, String RFID) throws WebException {
 		try {
-			RecordEntity  record = new RecordEntity();
+			RecordEntity record = new RecordEntity();
 			if (recordId != "" && recordId != null) {
 				record.setId(recordId);
 			}
@@ -269,8 +286,10 @@ public class RecordController extends BaseController {
 			throw new WebException(e);
 		}
 	}
+
 	@RequestMapping("/modify")
-	public @ResponseBody Map<String, String> modify(RecordEntity  record) throws WebException {
+	public @ResponseBody Map<String, String> modify(RecordEntity record)
+			throws WebException {
 		try {
 			recordService.modifyRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
@@ -280,6 +299,7 @@ public class RecordController extends BaseController {
 			throw new WebException(e);
 		}
 	}
+
 	/**
 	 * 根据ID删除备案
 	 * 

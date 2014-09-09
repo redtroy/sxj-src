@@ -38,14 +38,11 @@
 			javaType="com.sxj.supervisor.enu.record.RecordConfirmStateEnum" />
 
 		<typeHandler
-			handler="com.sxj.supervisor.typehandler.ContractTypeEnumTypeHandler"
+			handler="com.sxj.supervisor.typehandler.ContractStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractStateEnum" />
 		<typeHandler
-			handler="com.sxj.supervisor.typehandler.ContractTypeEnumTypeHandler"
+			handler="com.sxj.supervisor.typehandler.ContractSureStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractSureStateEnum" />
-		<typeHandler
-			handler="com.sxj.supervisor.typehandler.ContractTypeEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.record.ContractTypeEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
