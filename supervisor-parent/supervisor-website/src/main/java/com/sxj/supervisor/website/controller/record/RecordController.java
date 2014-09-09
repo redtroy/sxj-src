@@ -61,6 +61,7 @@ public class RecordController extends BaseController {
 	@RequestMapping("/query")
 	public String to_query(ModelMap map, HttpSession session, RecordQuery query)throws WebException {
 		try {
+		query.setPagable(true);
 		RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
 		ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
 		RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
@@ -79,7 +80,7 @@ public class RecordController extends BaseController {
 	}
 
 	@RequestMapping("info")
-	public String queryContractInfo(ModelMap model, String contractNo)
+	public String queryContractInfo(ModelMap model, String contractNo,String recordNo)
 			throws WebException {
 		try {
 			ContractModel contract = contractService
@@ -90,6 +91,7 @@ public class RecordController extends BaseController {
 						.getContract().getId());
 			}
 			model.put("contractModel", contractModel);
+			model.put("recordNo", recordNo);
 			return "site/record/contract-info";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());

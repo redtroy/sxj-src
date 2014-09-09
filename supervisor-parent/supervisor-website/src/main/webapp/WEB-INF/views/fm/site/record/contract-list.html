@@ -13,72 +13,99 @@
 <script src="${staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
 <script src="${staticPath}/js/jquery.paginate.js"></script>
 <@b.pageScript/>
+<@b.errorInfo/>
 <@b.upload/>
 <script>
-jQuery(document).ready(function($) {
-	$('.variContract').click(function(){
-		$('.maskdivgen').fadeIn(100);
-		$('.chanPop').slideDown(200);
-		$('#bgRecordId').val($(this).attr("recordId"));
-		loadUpload("bgFile","upload.htm","bgImageList","bgImgPathHide");
-	})
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.chanPop').slideUp(200);
-	})
-	$('.button-pop').click(function(){
-		var o = {"recordId": $("#bgRecordId").val(),"imgPath": $("#bgImgPathHide").val()};
-		$.post("modifyRecord.htm",o,function(data){
-			if (data.isOK=='ok'){
-				alert("上传变更扫描件成功");
-				 window.location.href="query.htm";
-			}else{
-				alert("上传变更扫描件失败");
-			}
-		  });
-		
-	})
-	$('.suppContract').click(function(){
-		$('.maskdivgen').fadeIn(100);
-		$('.suppPop').slideDown(200);
-		$('#bsRecordId').val($(this).attr('recordId'));
-		loadUpload("bsFile","upload.htm","bsImageList","bsImgPathHide");
-	})
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.suppPop').slideUp(200);
-	})
-	$('.button-pop').click(function(){
-		var o = {"recordId": $("#bsRecordId").val(),"imgPath": $("#bsImgPathHide").val(),"RFID":$("input[name='rfid']").val()};
-		$.post("modifyRecord.htm",o,function(data){
-			if (data.isOK=='ok'){
-				alert("上传补损扫描件成功");
-			}else{
-				alert("上传补损扫描件失败");
-			}
-		  });
-	})
-})
 
-function loadInfo(contractNo,recordNo){
-	$("#info"+recordNo).load("info.htm?contractNo="+contractNo);
-}
-function closeContract(recordNo){
-	$("#info"+recordNo).slideUp("slow");
-}
+	jQuery(document).ready(function($) {
+		$('.variContract').click(function() {
+			$('.maskdivgen').fadeIn(100);
+			$('.chanPop').slideDown(200);
+			$('#bgRecordId').val($(this).attr("recordId"));
+			classLoadUpload("上传变更扫描文件");
+		})
+		$('.modal-header .close').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.chanPop').slideUp(200);
+		})
+		$('#bgButton').click(function() {
+			var o = {
+				"recordId" : $("#bgRecordId").val(),
+				"imgPath" : $("#bgImgPathHide").val()
+			};
+			$.post("modifyRecord.htm", o, function(data) {
+				if (data.isOK == 'ok') {
+					alert("上传变更扫描件成功");
+					window.location.href = "query.htm";
+				} else {
+					alert("上传变更扫描件失败");
+				}
+			});
 
-function delRecord(id){
-	if(confirm("确定删除备案吗?")){
+		})
+		$('.suppContract').click(function() {
+			$('.maskdivgen').fadeIn(100);
+			$('.suppPop').slideDown(200);
+			$('#bsRecordId').val($(this).attr('recordId'));
+			classLoadUpload("上传补损扫描文件");
+		})
+		$('.modal-header .close').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.suppPop').slideUp(200);
+		})
+		$('#bsButton').click(function() {
+			var o = {
+				"recordId" : $("#bsRecordId").val(),
+				"imgPath" : $("#bsImgPathHide").val(),
+				"RFID" : $("input[name='rfid']").val()
+			};
+			$.post("modifyRecord.htm", o, function(data) {
+				if (data.isOK == 'ok') {
+					alert("上传补损扫描件成功");
+					window.location.href = "query.htm";
+				} else {
+					alert("上传补损扫描件失败");
+				}
+			});
+		})
+	})
 	
-	$.post("delRecord.htm",{id:id},function(data){
-		if (data.isOk=="ok"){
-			$("#"+id).remove();
-		}else{
-			alert("删除备案失败");
+	function query(page) {
+		var params = $("#search_form").serialize();
+		if (page != undefined) {
+			params = params + "&currentPage=" + page;
 		}
-	  });
+		$.post("query.htm", params, function(data) {
+			var res = $(data).find("#res_table");
+			var pager = $(data).find("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
+		});
 	}
-}
+
+	function loadInfo(contractNo, recordNo) {
+		$("#info" + recordNo).load("info.htm?contractNo=" + contractNo+"&recordNo="+recordNo);
+	}
+	function closeContract(recordNo) {
+		$("#info" + recordNo).html("");
+	}
+
+	function delRecord(id) {
+		if (confirm("确定删除备案吗?")) {
+			$.post("delRecord.htm", {
+				id : id
+			}, function(data) {
+				if (data.isOk == "ok") {
+					$("#" + id).remove();
+				} else {
+					alert("删除备案失败");
+				}
+			});
+		}
+	}
 </script>
 </head>
 
@@ -96,7 +123,7 @@ function delRecord(id){
         <div class="heading mb15 ly-clearFix">
           <h1 class="ly-left"> <span class="title fontYH f20 fb">合同备案管理</span></h1>
         </div>
-        <form action="query.htm" method="post">
+        <form id="search_form" action="javascript:void(0);" method="post">
         <div class="contBox">
           <div class="searBox f12 mb10"> 备案号
             <input type="text" class="input" name="recordNo" value="${query.recordNo}">
@@ -109,14 +136,14 @@ function delRecord(id){
             <option value="${state.getId()}">${state.getName()}</option>
            </#list>
             </select>
-            <button class="button button-search" type="submit">查询</button>
+            <button class="button button-search" onclick="query();">查询</button>
           </div>
           </form>
           <div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有笔应付款的订单<span class="fb">未付款</span></div>
           <div class="msgBox msg-info msgTip tipOge"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="cont-material.html" class="lnk-blue">待确认</a>的合同信息</div>
           <div class="msgBox msg-info msgTip tipOge"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="cont-developers.html" class="lnk-blue">待确认</a>的开发商合同信息</div>
           <div class="msgBox msg-info msgTip tipOge"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="cont-material-change.html" class="lnk-blue">待确认</a>的变更/补损合同信息</div>
-          <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+          <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
             <col width="40px" />
             <col width="40px" />
             <col width="80px" />
@@ -203,7 +230,7 @@ function delRecord(id){
                   </ol>
                   <div class="item mb5">
                     <label>&nbsp;</label>
-                    <button class="button button-gray">收起</button>
+                    <button class="button button-gray" onclick="closeContract('${record.recordNo}');">收起</button>
                   </div>
                 </div></td>
             </tr>
@@ -220,13 +247,13 @@ function delRecord(id){
 <div class="modal-wrap popDemo contPop chanPop" style="display:none;">
   <div class="modal-header"><span class="close">关闭</span></div>
   <div class="modal-body">
-  <div id="bgImageList"></div>
+  <div class="imageList"></div>
   <input type="hidden" name="" id="bgRecordId" value=""/>
-<input type="hidden" name="imgPath" id="bgImgPathHide" value=""/>
+<input type="hidden" name="imgPath" class="imgPathHide" id="bgImgPathHide" value=""/>
 <input type="file" name="bgFile" id="bgFile"  multiple="true"/>
 <div></div>
    <div class="button-box">
-    <button class="button button-pop"  >确认</button>
+    <button class="button button-pop"  id="bgButton">确认</button>
 	<button class="button button-gray">取消</button>
   </div>
   </div>
@@ -234,13 +261,11 @@ function delRecord(id){
 <div class="modal-wrap popDemo contPop suppPop" style="display:none;">
   <div class="modal-header"><span class="close">关闭</span></div>
   <div class="modal-body">
-    <div class="item">
       <label>&nbsp;</label>
-      <div id="bsImageList"></div>
-  <input type="hidden" name="" id="bsRecordId" value=""/>
-<input type="hidden" name="imgPath" id="bsImgPathHide" value=""/>
-<input type="file" name="bsFile" id="bsFile"  multiple="true"/>
-    </div>
+      	<div class="imageList"></div>
+	    <input type="hidden" name="" id="bsRecordId" value=""/>
+		<input type="hidden" name="imgPath" class="imgPathHide" id="bsImgPathHide" value=""/>
+		<input type="file" name="bsFile" id="bsFile"  multiple="true"/>
        
     <div class="item">
       <label>对应批次的RFID编号</label>
@@ -248,7 +273,7 @@ function delRecord(id){
       <span class="color-green hand ml10">+</span></div>
     <div class="item">
       <label>&nbsp;</label>
-      <button class="button button-pop">确定补损</button>
+      <button class="button button-pop" id="bsButton">确定补损</button>
       <button class="button button-gray">取消</button>
     </div>
   </div>

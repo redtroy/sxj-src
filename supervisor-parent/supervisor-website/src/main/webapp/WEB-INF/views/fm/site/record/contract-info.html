@@ -97,7 +97,7 @@
                   <div class="item">
                     <label>&nbsp;</label>
                      <#list arr  as imgPath>
-                    <img src="${imgPath}" alt="合同扫描件" width="80" height="107" />
+                    <img src="${b.imagePath}${imgPath}" alt="合同扫描件" width="80" height="107" />
                     </#list>
                     </div>
                   <span class="item">
@@ -114,7 +114,7 @@
                     <label>合同变更扫描件</label>
                      <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
                       <#list imgArr  as modifyimgPath>
-                      	 <img src="${imgPath}" alt="变更合同扫描件" width="80" height="107" />
+                      	 <img src="${b.imagePath}${imgPath}" alt="变更合同扫描件" width="80" height="107" />
                     </#list>
                       </div>
                   <div class="item ly-clearFix">
@@ -203,7 +203,7 @@
                       <label>合同补损扫描件</label>
 						<#assign replenishArr=(replenishList.replenishContract.imgPath?split(","))>
                       <#list replenishArr  as replenishImg>
-                      	<img src="${imgPath}" alt="合同扫描件" width="80" height="107" />
+                      	<img src="${b.imagePath}${imgPath}" alt="合同扫描件" width="80" height="107" />
                     </#list>
 					</div>
                   <div class="item ly-clearFix">
@@ -247,6 +247,6 @@
                      </#if>
                   <div class="item mt10">
                     <label>&nbsp;</label>
-                    <button class="button button-gray" onclick="closeContract('${contractModel.contract.nowRecordNo}')">收起</button>
+                    <button class="button button-gray" onclick="closeContract('${recordNo}')">收起</button>
                   </div>
                 </div></td>

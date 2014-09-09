@@ -63,9 +63,7 @@ function  BzbApplyRecord(){
 }
 
 $(document).ready(function() { 
-	loadUpload("cgFile","upload.htm","true","上传合同扫描件",upload);
-	loadUpload("zbFile","upload.htm","true","上传合同扫描件",upload);
-	loadUpload("BcgFile","upload.htm","true","上传合同扫描件",upload);
+	classLoadUpload("上传扫描件");
 }); 
 
 function upload(data)
@@ -134,7 +132,7 @@ $(function(){
 <div class="item"><label>乙方</label><input class="input input-w240h36" value="" name="memberNameB" /></div>
 <div class="item"><label>关联招标合同号</label><input class="input input-w240h36" value="" name="refContractNo"/></div>
  <div class="ly-left">
-<div id="cgImageList"></div>
+<div class="imageList"></div>
 <input type="hidden" name="imgPath" id="cgImgPathHide" value=""/>
 <input type="file" name="cgFile" id="cgFile"  multiple="true"/>
 </div>
@@ -156,7 +154,7 @@ $(function(){
       <label>&nbsp;</label>
       </div>
        <div class="ly-left">
-      <div id="zbImageList"></div>
+      <div class="imageList"></div>
 	  <input type="hidden" name="imgPath" id="zbImgPathHide" value=""/>
 	  <input type="file" name="zbFile" id="zbFile"  multiple="true"/>
 	  </div>
@@ -183,13 +181,13 @@ $(function(){
    ${name}<input type="hidden" name="memberIdB" id="" value="${id}"/></div>
   <div class="item">
     <label>&nbsp;</label>
-     </div>
+    
       <div class="ly-left">
-  	  <div id="BcgImageList"></div>
+  	  <div class="imageList"></div>
 	  <input type="hidden" name="imgPath" id="BcgImgPathHide" value=""/>
 	  <input type="file" name="BcgFile" id="BcgFile"  multiple="true"/>
 	  </div>
-	  
+	 </div>  
   <div class="item mt10">
     <label>&nbsp;</label>
     <a class="button button-orange mr15" href="javascript:BzbApplyRecord();"  >确定</a><a class="button button-gray">取消</a></div>

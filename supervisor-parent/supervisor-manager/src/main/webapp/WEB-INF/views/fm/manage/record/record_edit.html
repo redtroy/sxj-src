@@ -7,6 +7,7 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
+<@b.upload/>
 <@b.validate/>
 <script type="text/javascript">
 	function edit(){
@@ -17,7 +18,48 @@
 			tiptype:3
 		});
 	})
-	
+/*
+$(document).ready(function() { 
+	loadUpload("img_path","${basePath}upload.htm",false,"上传合同扫描件",uploadLicense);
+    }); 
+*/
+$(document).ready(function() {
+	star_img();
+	var hideVal= $(".imgPath").val();
+	$(":file").uploadify({
+        swf: '${basePath}upload/uploadify.swf',
+        uploader: "${basePath}upload.htm",
+        fileTypeExts: '*.gif; *.jpg; *.png',
+        auto: true,
+        multi: true,
+        height:30,
+        width:120,
+        buttonText:'上传合同扫描件',
+        onUploadSuccess : function(file, data, response) {
+        	var dataObj=eval("("+data+")");//转换为json对象 
+        	$("#imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+        	  
+        	    if(hideVal==null){
+        	    	hideVal=dataObj.fileIds;
+        	    }else{
+        	    	hideVal+=","+dataObj.fileIds;
+        	    }
+        	    $("#imgPath").val(hideVal);
+        }
+    });
+}); 
+function star_img(){
+	var imgpath=$("#imgPath").val();
+	var imgs=imgpath.split(",");
+	for (var i=0;i<imgs.length;i++){
+		$("#imageList").append("<img src='${b.imagePath}"+imgs[i]+"100x120.jpg' alt='' />")
+	}
+}
+function uploadLicense(data){
+    var dataObj=eval("("+data+")");//转换为json对象
+    $("#imgPath").val(dataObj.fileIds);
+}
+
 </script>
 <body>
 <@b.header/>
@@ -46,7 +88,14 @@
             </#if>
             </#list>
           </select></li>
-      <li class="contPic ly-clearFix"><label>合同副本</label><button class="button button-green button-middle">上传合同扫描件</button></li>
+      <li class="contPic ly-clearFix"><label>合同副本</label>
+      <!--  <span class="ly-left"><button id="img_path" class="button button-green button-middle"></button><input type="hidden" id="imgPath" name="imgPath"></span>-->
+						<span class="ly-left">
+						<div id="imageList"></div>
+						<input type="hidden" name="imgPath" id="imgPath" value="${record.imgPath}"/>
+                        <input type="file" name="contractFile" id="contractFile"  multiple="true"/>
+                        </span>
+      </li>
       <li><label>关联招标合同</label><input type="text" value="${record.refContractNo}" name="refContractNo" datatype="*2-50" nullmsg="请输入招标合同"/></li>
 	  <li><label>备案类型</label><select  id="type" name="type">
 	        <#list rte as type>
@@ -59,10 +108,14 @@
           </select></li>
 	  <li>
 	    <label>申请备案时间</label>
+	    <#if (record.applyDate??)>
 	    ${record.applyDate?date}</li>
+	    </#if>
 	  <li>
 	    <label>受理时间</label>
+	    <#if (record.acceptDate??)>
 	    ${record.acceptDate?date}</li>
+	     </#if>
       </ul>
       </form>
       <div class="btnBox">

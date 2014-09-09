@@ -16,7 +16,7 @@
 <@b.upload/>
 <script>
 	$(function(){
-		loadUpload("uploadFile","${basePath}upload.htm",true,"请上传扫描件",upload);
+		classLoadUpload("上传扫描件");
 	});
 	function upload(data){
 	    var dataObj=eval("("+data+")");//转换为json对象 
@@ -84,9 +84,9 @@
 <div class="item ly-clearFix">
   <label>上传合同扫描件</label>
   <div class="ly-left">
-      <div id="imageList"></div>
+      <div class="imageList"></div>
   	  <input type="hidden" name="" id="id" value="${record.id}"/>
-	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
       </div>
 </div>
@@ -119,8 +119,8 @@
   <div class="item ly-clearFix">
     <label>上传合同扫描件</label>
     <div class="ly-left">
-     <div id="imageList"></div>
-	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+     <div class="imageList"></div>
+	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
       </div>
  </div>
@@ -156,8 +156,8 @@
   <div class="item">
     <label>上传合同扫描件</label>
     <div class="ly-left">
-     <div id="imageList"></div>
-	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+     <div class="imageList"></div>
+	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
     </div></div>
   <div class="item">
@@ -183,9 +183,9 @@
   <div class="item">
     <label>上传变更合同扫描件</label>
     <div class="ly-left">
-    <div id="imageList"></div>
+    <div class="imageList"></div>
   	  <input type="hidden" name="id" id="id" value="${record.id}"/>
-	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
     </div></div>
   <div class="item">
@@ -211,9 +211,9 @@
     <div class="item">
     <label>上传补损合同扫描件</label>
     <div class="ly-left">
-    <div id="imageList"></div>
+    <div class="imageList"></div>
   	  <input type="hidden" name="id" id="id" value="${record.id}"/>
-	  <input type="hidden" name="imgPath" id="imgPathHide" value=""/>
+	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
       <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
     </div></div>
     <div class="item">

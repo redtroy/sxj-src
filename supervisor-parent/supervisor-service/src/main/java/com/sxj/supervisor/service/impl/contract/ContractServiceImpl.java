@@ -130,6 +130,7 @@ public class ContractServiceImpl implements IContractService {
 					contract.setRecordDate(record.getAcceptDate()); // 备案时间就是受理时间?
 					contract.setRecordNo(record.getRecordNo());// 备案号
 					contract.setType(record.getContractType());
+					contract.setImgPath(record.getImgPath());
 				}
 				contract.setState(ContractStateEnum.approval);
 				contract.setConfirmState(ContractSureStateEnum.noaffirm);
@@ -500,9 +501,11 @@ public class ContractServiceImpl implements IContractService {
 			condition.addCondition("endRecordDate", query.getEndRecordDate());// 结束备案时间
 			condition.addCondition("confirmState", query.getConfirmState());// 确认状态
 			condition.addCondition("state", query.getState());// 合同状态
-			query.setPage(condition);
+			condition.setPage(query);
+			
 			List<ContractEntity> contractList = contractDao
 					.queryContract(condition);
+			query.setPage(condition);
 			List<ContractModel> contractModelList = new ArrayList<ContractModel>();
 			for (ContractEntity contractEntity : contractList) {
 				// JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(),
