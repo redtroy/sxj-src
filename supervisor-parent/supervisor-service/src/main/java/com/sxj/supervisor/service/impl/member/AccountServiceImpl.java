@@ -125,6 +125,7 @@ public class AccountServiceImpl implements IAccountService {
 	public List<AccountEntity> queryAccounts(AccountQuery query) {
 		QueryCondition<AccountEntity> condition = new QueryCondition<AccountEntity>();
 		if (query != null) {
+			condition.addCondition("name", query.getName());// 姓名
 			condition.addCondition("parentId", query.getMemberNo());// 父会员号
 			condition.addCondition("accountNo", query.getAccountNo());// 子会员
 			condition.addCondition("accountName", query.getAccountName());// 子会员名称

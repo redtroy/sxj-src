@@ -24,6 +24,9 @@
 		<if test="condition.parentId != null and condition.parentId != ''">
 			<![CDATA[AND A.PARENT_ID = #{condition.parentId}]]>
 		</if>
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND A.NAME LIKE '%'||#{condition.name}||'%']]>
+		</if>
 		<if test="condition.accountNo != null and condition.accountNo != ''">
 			<![CDATA[AND A.ACCOUNT_NO = #{condition.accountNo}]]>
 		</if>

@@ -10,6 +10,8 @@ public class AccountQuery extends Pagable implements Serializable {
 	 */
 	private static final long serialVersionUID = -5168931378789020273L;
 
+	private String name;
+
 	private String memberNo;
 
 	private String accountNo;
@@ -25,6 +27,14 @@ public class AccountQuery extends Pagable implements Serializable {
 	private String functionId;
 
 	private Boolean delstate = false;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Boolean getDelstate() {
 		return delstate;
