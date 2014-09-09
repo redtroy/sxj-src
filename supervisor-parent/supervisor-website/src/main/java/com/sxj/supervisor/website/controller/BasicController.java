@@ -66,6 +66,14 @@ public class BasicController extends BaseController {
 		return LOGIN;
 	}
 
+	@RequestMapping("logout")
+	public String logout(HttpServletRequest request) {
+		Subject currentUser = SecurityUtils.getSubject();
+		currentUser.logout();
+		return "redirect:" + getBasePath(request) + "to_login.htm";
+
+	}
+
 	@RequestMapping("login")
 	public String login(String memberName, String accountName, String password,
 			HttpSession session, HttpServletRequest request, ModelMap map) {
@@ -75,7 +83,8 @@ public class BasicController extends BaseController {
 		SupervisorPrincipal userBean = null;
 		if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isNotEmpty(accountName)) {
-			AccountEntity account = accountService.getAccountByName(accountName);
+			AccountEntity account = accountService
+					.getAccountByName(accountName);
 			if (account == null) {
 				map.put("message", "会员子账户不存在");
 				return LOGIN;
@@ -178,27 +187,30 @@ public class BasicController extends BaseController {
 		out.flush();
 		out.close();
 	}
+
 	@RequestMapping("autoComple")
-	public @ResponseBody Map<String, String> autoComple(HttpServletRequest request,
-			HttpServletResponse response,String keyword) throws IOException {
-		MemberQuery mq=	new MemberQuery();
-		if(keyword!="" && keyword!=null){
+	public @ResponseBody Map<String, String> autoComple(
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword) throws IOException {
+		MemberQuery mq = new MemberQuery();
+		if (keyword != "" && keyword != null) {
 			mq.setMemberName(keyword);
 		}
-		List<MemberEntity> list=memberService.queryMembers(mq);
+		List<MemberEntity> list = memberService.queryMembers(mq);
 		List strlist = new ArrayList();
 		String sb = "";
 		for (MemberEntity memberEntity : list) {
-			sb="{\"title\":\""+memberEntity.getName()+"\",\"result\":\""+memberEntity.getId()+"\"}";
+			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+					+ memberEntity.getId() + "\"}";
 			strlist.add(sb);
 		}
-		String json = "{\"data\":"+strlist.toString()+"}";
+		String json = "{\"data\":" + strlist.toString() + "}";
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		out.print(json);
 		out.flush();
 		out.close();
-		return null ;
+		return null;
 	}
-	 
+
 }

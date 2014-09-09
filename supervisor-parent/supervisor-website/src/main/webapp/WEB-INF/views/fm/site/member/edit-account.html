@@ -18,6 +18,11 @@ jQuery(document).ready(function($) {
 		$('.maskdivgen').fadeOut(100);
 		$('.passwordPop').slideUp(200);
 	})
+	  $('#state_div').css({
+		  position:'absolute',
+		  left: ($(window).width() - $('#state_div').outerWidth())/2,
+		  top: ($(window).height() - $('#state_div').outerHeight())/2 + $(document).scrollTop()
+		  });
 	})
  function close_pwd(){
 	$('.maskdivgen').fadeOut(100);
@@ -54,7 +59,8 @@ jQuery(document).ready(function($) {
 		});
 	}
   function closeDiv(divId){
-		$("#"+divId).css("display","none");
+		//$("#"+divId).css("display","none");
+	  $("#"+divId).hide();
 	}
 //修改密码
   function edit_pwd(id){
@@ -128,14 +134,22 @@ jQuery(document).ready(function($) {
   }
 //更改状态
   function checkState(id,stateId){
-	  $.post("editState.htm",{id:id,state:stateId},function(data){
-		  if (data.isOK=='ok'){
-			  query();
-		   }else{
-				errorInfo(data);
-			}
-	  })
+	
+	  $("#state_div").show();
+	  $("#state_div button:eq(0)").unbind("click");
+	  $("#state_div button:eq(0)").attr("value",id).attr("stateId",stateId).click(function(){
+		  $.post("editState.htm",{id:$(this).attr("value"),state:$(this).attr("stateId")},function(data){
+			  if (data.isOK=='ok'){
+				  query();
+				  $("#state_div").hide();
+			   }else{
+					errorInfo(data);
+				}
+		  })
+	  });
 }
+	  //初始化函数
+	  $(window).resize(); 
 </Script>
 </head>
 
@@ -215,8 +229,19 @@ jQuery(document).ready(function($) {
     </tr>
     </#list>
   </table>
-  <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
-</div>
+  <div id="state_div" style="display:none;" class="modal-wrap popDemo popWin mb20">
+          <div class="modal-header">
+            <div class="tit">&nbsp;</div>
+            <span class="close" onclick="closeDiv('state_div');">关闭</span></div>
+          <div class="modal-body">
+            <p class="color-blue fontYH f18" style="margin-left:20%;">是否确认更改状态！</p>
+            <div class="button-box">
+              <button class="button button-pop btn-ok mr20" >确认</button>
+              <button class="button button-gray" onclick="closeDiv('state_div');">取消</button>
+            </div>
+          </div>
+        </div>
+  <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;"></div>
 </div>
 </div>
 </div>

@@ -51,7 +51,7 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IFunctionService functionService;
-	
+
 	@Autowired
 	private IMemberService memberService;
 
@@ -72,12 +72,6 @@ public class BasicController extends BaseController {
 
 	@RequestMapping("to_login")
 	public String ToLogin() {
-		return LOGIN;
-	}
-
-	@RequestMapping("logout")
-	public String logout() {
-		SecurityUtils.getSubject().logout();
 		return LOGIN;
 	}
 
@@ -108,6 +102,14 @@ public class BasicController extends BaseController {
 			map.put("message", "登陆失败");
 			return LOGIN;
 		}
+	}
+
+	@RequestMapping("logout")
+	public String logout(HttpServletRequest request) {
+		Subject currentUser = SecurityUtils.getSubject();
+		currentUser.logout();
+		return "redirect:" + getBasePath(request) + "to_login.htm";
+
 	}
 
 	/**
@@ -153,6 +155,7 @@ public class BasicController extends BaseController {
 			throw new WebException("系统错误");
 		}
 	}
+
 	@RequestMapping("upload")
 	public void uploadFile(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
@@ -182,26 +185,29 @@ public class BasicController extends BaseController {
 		out.flush();
 		out.close();
 	}
+
 	@RequestMapping("autoComple")
-	public @ResponseBody Map<String, String> autoComple(HttpServletRequest request,
-			HttpServletResponse response,String keyword) throws IOException {
-		MemberQuery mq=	new MemberQuery();
-		if(keyword!="" && keyword!=null){
+	public @ResponseBody Map<String, String> autoComple(
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword) throws IOException {
+		MemberQuery mq = new MemberQuery();
+		if (keyword != "" && keyword != null) {
 			mq.setMemberName(keyword);
 		}
-		List<MemberEntity> list=memberService.queryMembers(mq);
+		List<MemberEntity> list = memberService.queryMembers(mq);
 		List strlist = new ArrayList();
 		String sb = "";
 		for (MemberEntity memberEntity : list) {
-			sb="{\"title\":\""+memberEntity.getName()+"\",\"result\":\""+memberEntity.getId()+"\"}";
+			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+					+ memberEntity.getId() + "\"}";
 			strlist.add(sb);
 		}
-		String json = "{\"data\":"+strlist.toString()+"}";
+		String json = "{\"data\":" + strlist.toString() + "}";
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		out.print(json);
 		out.flush();
 		out.close();
-		return null ;
+		return null;
 	}
 }

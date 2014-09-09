@@ -43,6 +43,7 @@ function save(){
     },function(data){
     	if(data.isOK="ok"){
     		alert("修改成功！");
+    		 window.location.href="memberInfo.htm"; 
     	}
     	else{
     		alert("修改失败！");
@@ -108,11 +109,11 @@ function subForm(ids){
         </div>
         <div class="item certCont ly-clearFix">
           <label>企业资质编号</label>
-          <div class="upload"> <img id="bLicensePath_img" width="80" height="107" src="${imagePath}${member.bLicensePath}">
+          <div class="upload"> <img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
           <input type="file" class="input-w180h30" id="bLicensePath_File" name="input5" />
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
-          <div class="upload"> <img id="energyPath_img" width="80" height="107" src="${imagePath}${member.energyPath}">
+          <div class="upload"> <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
             <input type="file" class="input-w180h30" id="energyPath_File" name="input6">
             <input type="hidden" class="input-w180h30" id="energyPath_hidden" name="energyPath" value="${member.energyPath}">
           </div>

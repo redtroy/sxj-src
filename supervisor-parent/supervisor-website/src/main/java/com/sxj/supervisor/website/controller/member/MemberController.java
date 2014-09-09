@@ -10,8 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,7 +21,6 @@ import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
-import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
@@ -44,16 +41,23 @@ public class MemberController extends BaseController {
 	 * 
 	 * @param map
 	 * @return
+	 * @throws WebException 
 	 */
 	@RequestMapping("/memberInfo")
-	public String memberList(ModelMap map, HttpSession session) {
-		SupervisorPrincipal info = getLoginInfo(session);
-		if (info != null) {
-			MemberEntity member = info.getMember();
-			map.put("member", member);
-			return "site/member/member-profile";
+	public String memberList(ModelMap map, HttpSession session) throws WebException {
+		try {
+			SupervisorPrincipal info = getLoginInfo(session);
+			if (info != null) {
+				MemberEntity member = memberService.getMember(info.getMember()
+						.getId());
+				map.put("member", member);
+				return "site/member/member-profile";
+			}
+			return LOGIN;
+		} catch (Exception e) {
+			SxjLogger.error("修改会员信息错误", e, this.getClass());
+			throw new WebException(e.getMessage());
 		}
-		return LOGIN;
 
 	}
 
@@ -86,7 +90,8 @@ public class MemberController extends BaseController {
 	}
 
 	@RequestMapping("save_member")
-	public @ResponseBody Map<String, Object> save_member(MemberEntity member) throws WebException {
+	public @ResponseBody Map<String, Object> save_member(MemberEntity member)
+			throws WebException {
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
 			memberService.modifyMember(member);
