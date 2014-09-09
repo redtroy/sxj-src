@@ -38,9 +38,7 @@ public class ContractController extends BaseController {
 	public String queryContract(ContractQuery query, ModelMap model)
 			throws WebException {
 		try {
-			if (query != null) {
-				query.setPagable(true);
-			}
+			query.setPagable(true);
 			List<ContractModel> list = contractService.queryContracts(query);
 			ContractTypeEnum[] contractType = ContractTypeEnum.values();// 合同类型
 			ContractSureStateEnum[] contractSureState = ContractSureStateEnum

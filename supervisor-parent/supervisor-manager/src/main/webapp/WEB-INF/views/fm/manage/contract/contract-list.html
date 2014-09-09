@@ -7,7 +7,7 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
-<link rel="stylesheet" href="${staticPath}js/datepicker.css"/>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
@@ -28,10 +28,16 @@ function closeContract(id){
 	$("#info"+id).html("");
 }
 
-function query(){
-	var params=$("#query").serialize();
-	$.post("${basePath}contract/query.htm",params,function(data){
-		var pager=$(data).find("#rightBar").children("#pager");
+function query(page){
+	var params=$("#search_form").serialize();
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+	$.post("query.htm",params,function(data){
+		var res=$(data).find("#res_table");
+		var pager=$(data).find("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
 		var totalPage=pager.attr("totalPage");
 		var currentPage=pager.attr("currentPage");
 		loadPage(currentPage,totalPage,query);
@@ -84,7 +90,7 @@ function check(id){
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">合同管理</h2>
-    <form action="" id="query" method="post">
+    <form action="javascript:void(0);" id="search_form" method="post">
     <div id="searchBox">
       <p>合同号
         <input type="text" name="contractNo" value="${query.contractNo}" />
@@ -125,12 +131,12 @@ function check(id){
             <option value="${state.getId()}">${state.getName()}</option>
            </#list>
         </select>
-        <button class="btn btn-blue" ><span>查询</span></button>
+        <button class="btn btn-blue" onclick="query();" ><span>查询</span></button>
       </p>
     </div>
   </form>    
       <@b.pager/>   
-    <table border="0" cellpadding="0" cellspacing="0" class="tabList recordTable">
+    <table border="0" cellpadding="0" cellspacing="0" class="tabList recordTable" id="res_table">
       <col width="20px" />
       <col width="85px"/>
       <col width="95px"/>

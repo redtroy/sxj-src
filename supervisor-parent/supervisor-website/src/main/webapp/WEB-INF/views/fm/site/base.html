@@ -109,18 +109,17 @@ function classLoadUpload(text){
 	        multi: true,
 	        height:30,
 	        width:120,
-	        buttonText:'上传文件',
+	        buttonText:text,
 	        onUploadSuccess : function(file, data, response) {
-	        	var contPic=$(this.button).parent(".uploadify").siblings(".contPic");
 	        	var dataObj=eval("("+data+")");//转换为json对象 
-	        	contPic.find(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
-	        	  var hideVal= contPic.find(":input ").val();
+	        	$(this.button).parent(".uploadify").siblings(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+	        	  var hideVal= $(this.button).parent(".uploadify").siblings(".imgPathHide ").val();
 	        	    if(hideVal==""){
 	        	    	hideVal+=dataObj.fileIds;
 	        	    }else{
 	        	    	hideVal+=","+dataObj.fileIds;
 	        	    }
-	        	    contPic.find(":input ").val(hideVal);
+	        	    $(this.button).parent(".uploadify").siblings(".imgPathHide ").val(hideVal);
 	        }
 	    });
 } 
@@ -130,7 +129,7 @@ function classLoadUpload(text){
 <div class="fence" id="header">
 <h1 class="fence-wide ly-clearFix">
 <a class="logo" href="${staticPath}html/register.html"><img title="私享家绿色门窗平台" alt="私享家绿色门窗平台" src="${staticPath}images/logo.jpg"></a>
-<span><img alt="中国绿色建材产品交易平台" title="中国绿色建材产品交易平台" src="${staticPath}images/top-banner.jpg"></span>
+<div class=" topBan pr"><span class="pa logOut"><a href="${basePath}logout.htm">注销帐户并退出</a></span></div>
 </h1>
 </div>
 </#macro>
