@@ -94,7 +94,7 @@ function delRecord(id){
       </div>
       <div class="yard-870 rightSide ly-left">
         <div class="heading mb15 ly-clearFix">
-          <h1 class="ly-left"> <span class="title fontYH f20 fb">合同备案管理${query.totalPage}</span></h1>
+          <h1 class="ly-left"> <span class="title fontYH f20 fb">合同备案管理</span></h1>
         </div>
         <form action="query.htm" method="post">
         <div class="contBox">
@@ -209,8 +209,8 @@ function delRecord(id){
             </tr>
           </table>
           <div class="ly-clearFix">
-        <div id="pager" class="jPaginate"><@b.pager/></div>
-  </div>
+          	<@b.pager/>
+  		  </div>
         </div>
       </div>
     </div>
@@ -254,23 +254,5 @@ function delRecord(id){
   </div>
 </div>
 <div class="maskdivgen" style="display:none"></div>
-<script type="text/javascript">
-		$(function() {
-			$("#pager").paginate({
-				count 		: 50,
-				start 		: 1,
-				display     : 10,
-				border					: true,
-				border_color			: '#CCC',
-				text_color  			: '#333',
-				background_color    	: '#FFF',	
-				border_hover_color		: '#ff4400',
-				text_hover_color  		: '#ff4400',
-				background_hover_color	: '#fff', 
-				images					: false,
-				mouse					: 'press'
-			});
-});
-		</script> 
 </body>
 </html>
