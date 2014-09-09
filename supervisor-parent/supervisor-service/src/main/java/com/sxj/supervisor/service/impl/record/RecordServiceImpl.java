@@ -33,21 +33,21 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	public void modifyRecord(RecordEntity record) {
-		RecordEntity re = getRecord(record.getId());
-		re.setId(record.getId());
-		re.setApplyName(record.getApplyName());
-		re.setMemberNameA(record.getMemberNameA());
-		re.setMemberNameB(record.getMemberNameB());
-		re.setContractType(record.getContractType());
-		re.setRecordNo(record.getRecordNo());
-		re.setType(record.getType());
-		if(record.getImgPath()!=null && record.getImgPath().length()>0){
-			re.setImgPath(record.getImgPath());
-		}
-		if(record.getRfidNo()!=null && record.getRfidNo().length()>0){
-			re.setRfidNo(record.getRfidNo());
-		}
-		recordDao.updateRecord(re);
+		// RecordEntity re = getRecord(record.getId());
+		// re.setId(record.getId());
+		// re.setApplyName(record.getApplyName());
+		// re.setMemberNameA(record.getMemberNameA());
+		// re.setMemberNameB(record.getMemberNameB());
+		// re.setContractType(record.getContractType());
+		// re.setRecordNo(record.getRecordNo());
+		// re.setType(record.getType());
+		// if(record.getImgPath()!=null && record.getImgPath().length()>0){
+		// re.setImgPath(record.getImgPath());
+		// }
+		// if(record.getRfidNo()!=null && record.getRfidNo().length()>0){
+		// re.setRfidNo(record.getRfidNo());
+		// }
+		recordDao.updateRecord(record);
 	}
 
 	/**

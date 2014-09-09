@@ -166,7 +166,7 @@
 					<includeTypes>jar</includeTypes>
 					<overWriteSnapshots>true</overWriteSnapshots>
 					<type>jar</type>
-					<outputDirectory>${project.build.directory}/extlib</outputDirectory>
+					<outputDirectory>E:\opensoft\apache-tomcat-7.0.55\extlib</outputDirectory>
 				</configuration>
 			</plugin>
 			<plugin>

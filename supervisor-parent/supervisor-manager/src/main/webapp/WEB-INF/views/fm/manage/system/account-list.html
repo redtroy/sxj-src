@@ -66,8 +66,10 @@ function toRemove(id){
 }
 
 function edit(id){
-	var params=$("#"+id+"_tr").find(":input");
-	$("#edit_form").append(params.html());
+	var params=$("#"+id).find(":input");
+	$("#edit_form").empty();
+	$("#edit_form").append(params);
+	params=$("#edit_form").serialize();
 	$.post("${basePath}system/edit_account.htm",params,function(data){
 		if(data.isOK==true){
 			toInfo(id,data);
@@ -111,35 +113,35 @@ function toInfo(accountId,data){
 	
 	$("#"+accountId+"_tr").children("#functionIds_hidden").val(data.functionIds);
 	
-	$("#"+accountId+"_tr").children("#name_td").css("display","");
+	$("#"+accountId+"_tr").children("#name_td").show();
 	$("#"+accountId+"_tr").children("#name_td").text(data.account.name);
-	$("#"+accountId+"_tr").children("#name_td2").css("display","none");
+	$("#"+accountId+"_tr").children("#name_td2").hide();
 	$("#"+accountId+"_tr").children("#name_td2").children(":input").val(data.account.name);
 	
-	$("#"+accountId+"_tr").children("#account_td").css("display","");
+	$("#"+accountId+"_tr").children("#account_td").show();
 	$("#"+accountId+"_tr").children("#account_td").text(data.account.account);
-	$("#"+accountId+"_tr").children("#account_td2").css("display","none");
+	$("#"+accountId+"_tr").children("#account_td2").hide();
 	$("#"+accountId+"_tr").children("#account_td2").children(":input").val(data.account.account);
 	
-	$("#"+accountId+"_tr").children("#role_td").css("display","");
-	$("#"+accountId+"_tr").children("#role_td2").css("display","none");
+	$("#"+accountId+"_tr").children("#role_td").show();
+	$("#"+accountId+"_tr").children("#role_td2").hide();
 	
-	$("#"+accountId+"_tr").children().children("#edit_a").css("display","");
-	$("#"+accountId+"_tr").children().children("#confirm_a").css("display","none");
+	$("#"+accountId+"_tr").children().children("#edit_a").show();
+	$("#"+accountId+"_tr").children().children("#confirm_a").hide();
 }
 
 function toEdit(accountId){
-	$("#"+accountId+"_tr").children("#name_td").css("display","none");
-	$("#"+accountId+"_tr").children("#name_td2").css("display","");
+	$("#"+accountId+"_tr").children("#name_td").hide();
+	$("#"+accountId+"_tr").children("#name_td2").show();
 	
-	$("#"+accountId+"_tr").children("#account_td").css("display","none");
-	$("#"+accountId+"_tr").children("#account_td2").css("display","");
+	$("#"+accountId+"_tr").children("#account_td").hide();
+	$("#"+accountId+"_tr").children("#account_td2").show();
 	
-	$("#"+accountId+"_tr").children("#role_td").css("display","none");
-	$("#"+accountId+"_tr").children("#role_td2").css("display","");
+	$("#"+accountId+"_tr").children("#role_td").hide();
+	$("#"+accountId+"_tr").children("#role_td2").show();
 	
-	$("#"+accountId+"_tr").children().children("#edit_a").css("display","none");
-	$("#"+accountId+"_tr").children().children("#confirm_a").css("display","");
+	$("#"+accountId+"_tr").children().children("#edit_a").hide();
+	$("#"+accountId+"_tr").children().children("#confirm_a").show();
 	
 }
 </script>
@@ -178,7 +180,7 @@ function toEdit(accountId){
 			  <button onclick="javascript:toAdd();" class="btn btn-blue ly-right"><span>新增管理员</span></button>
  	 </form>
     </div>
-    <form  id="edit_form"></form>
+    <form  id="edit_form" method="post"></form>
     <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%" />
@@ -199,15 +201,14 @@ function toEdit(accountId){
         </tr>
          <#list list as model>
 	        <tr id="${model.id}_tr" >
+	         <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
+		     <input id="id_hidden" type="hidden" name="id" value="${model.id}" />
+		     <input id="id_hidden" type="hidden" name="accountNo" value="${model.accountNo}" />
 	          <td>${model.accountNo}</td>
 	          <td id="name_td">${model.name}</td>
-		          <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
-		          <input id="id_hidden" type="hidden" name="id" value="${model.id}" />
-		          <input id="id_hidden" type="hidden" name="accountNo" value="${model.accountNo}" />
 		          <td id="name_td2" style="display:none"><input type="text" name="name" value="${model.name}" /></td>
 		          <td id="account_td">${model.account}</td>
 		          <td id="account_td2" style="display:none"><input type="text" name="account" value="${model.account}" /></td>
-	         
 	          <td id="role_td"><a href="javascript:roleInfo('${model.id}','get');" class="lnk-blue lnk-underline">查询权限</a></td>
 	          <td id="role_td2" class="permission" style="display:none" onclick="javascript:roleInfo('${model.id}','edit');"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
 	        

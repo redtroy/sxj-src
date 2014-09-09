@@ -4,12 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +21,8 @@ import com.sxj.supervisor.model.system.SysAccountQuery;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.supervisor.validator.hibernate.AddGroup;
+import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -85,7 +86,8 @@ public class SystemAccountController extends BaseController {
 
 	@RequestMapping("add_account")
 	public @ResponseBody Map<String, Object> addAccount(
-			@Valid SystemAccountEntity account, BindingResult result,
+			@Validated({ AddGroup.class }) SystemAccountEntity account,
+			BindingResult result,
 			@RequestParam("password_confirm") String password_confirm,
 			@RequestParam("functionIds") String[] functionIds)
 			throws WebException {
@@ -116,7 +118,7 @@ public class SystemAccountController extends BaseController {
 
 	@RequestMapping("edit_account")
 	public @ResponseBody Map<String, Object> editAccount(
-			SystemAccountEntity account,
+			@Validated({ UpdateGroup.class }) SystemAccountEntity account,
 			@RequestParam("functionIds") String functionIds) {
 		String[] ids = null;
 		if (StringUtils.isNotEmpty(functionIds)) {
