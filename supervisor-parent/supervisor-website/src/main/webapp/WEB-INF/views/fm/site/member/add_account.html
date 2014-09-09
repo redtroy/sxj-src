@@ -1,5 +1,4 @@
 <@b.validate/>
-<div class="yard-870 rightSide ly-left" id="right_div">
 	<div class="heading mb15 ly-clearFix">
 		<h1 class="ly-left">
 			<span class="title fontYH f20 fb">新增子帐号</span>
@@ -36,7 +35,6 @@
 			</div>
 		</div>
 	</form>
-</div>
 <div id="roleInfo_div" class="modal-wrap popDemo dropList"
 	style="display: none;"></div>
 <div class="maskdivgen" style="display: none"></div>
@@ -49,7 +47,15 @@
 		$.post("add_account.htm",params,function(data){
 			if(data.isOK=="ok"){
 				alert("添加成功");
-				query();
+				$.post("accountList.htm",function(data){
+					var res=$(data).find("#right_div");
+					var pager=$(data).find("#pager");
+					$("#right_div").empty();
+					$("#right_div").append(res.html());
+					var totalPage=pager.attr("totalPage");
+					var currentPage=pager.attr("currentPage");
+					loadPage(currentPage,totalPage,query);
+				});
 			}
 			else{
 				errorInfo(data);

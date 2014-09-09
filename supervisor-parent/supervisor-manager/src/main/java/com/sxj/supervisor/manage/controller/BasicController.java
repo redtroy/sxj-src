@@ -34,7 +34,6 @@ import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.system.FunctionModel;
-import com.sxj.supervisor.service.impl.member.MemberServiceImpl;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
@@ -136,8 +135,8 @@ public class BasicController extends BaseController {
 			throws WebException {
 		try {
 			HttpSession session = request.getSession(false);
-			if (session.getAttribute("functionId") != null) {
-				String functionId = (String) session.getAttribute("functionId");
+			if (session.getAttribute("function") != null) {
+				String functionId = (String) session.getAttribute("function");
 				FunctionEntity function = functionService
 						.getFunction(functionId);
 				if (function != null) {

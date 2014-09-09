@@ -41,7 +41,13 @@ function save(){
     $.post("save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
     	,energyPath:energyPath,area:area
     },function(data){
-    	alert("修改成功！");
+    	if(data.isOK="ok"){
+    		alert("修改成功！");
+    	}
+    	else{
+    		alert("修改失败！");
+    	}
+    	
     })
 }
 function subForm(ids){
