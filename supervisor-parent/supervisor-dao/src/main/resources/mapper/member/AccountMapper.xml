@@ -22,16 +22,16 @@
 		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO 
 		 FROM M_MEMBER_ACCOUNT A  WHERE 1=1 ]]>
 		<if test="condition.parentId != null and condition.parentId != ''">
-			<![CDATA[AND A.PARENT_ID = #{condition.parentId}]]>
+			<![CDATA[AND A.PARENT_ID LIKE CONCAT('%',#{condition.parentId},'%') ]]>
 		</if>
 		<if test="condition.name != null and condition.name != ''">
-			<![CDATA[AND A.NAME LIKE '%'||#{condition.name}||'%']]>
+			<![CDATA[AND A.NAME LIKE CONCAT('%',#{condition.name},'%')]]>
 		</if>
 		<if test="condition.accountNo != null and condition.accountNo != ''">
-			<![CDATA[AND A.ACCOUNT_NO = #{condition.accountNo}]]>
+			<![CDATA[AND A.ACCOUNT_NO LIKE CONCAT('%',#{condition.accountNo},'%') ]]>
 		</if>
 		<if test="condition.accountName != null and condition.accountName != ''">
-			<![CDATA[AND A.ACCOUNT_NAME = #{condition.accountName}]]>
+			<![CDATA[AND A.ACCOUNT_NAME LIKE CONCAT('%',#{condition.accountName},'%')]]>
 		</if>
 		<if test="condition.state != null">
 			<![CDATA[AND A.STATE = #{condition.state}]]>
