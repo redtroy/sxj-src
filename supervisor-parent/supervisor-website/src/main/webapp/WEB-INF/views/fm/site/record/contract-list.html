@@ -158,8 +158,8 @@ function delRecord(id){
               <td>${record.type.getName()}</td>
               <td>${record.contractType.getName()}</td>
               <td><a href="#" class="lnk-blue">查看</a></td>
-              <td>${record.applyDate?date}</td>
-              <td><#if record.acceptDate?exists>${record.acceptDate?date}</#if></td>
+              <td>${record.applyDate?string("yyyy-MM-dd")}</td>
+              <td><#if record.acceptDate?exists>${record.acceptDate?string("yyyy-MM-dd")}</#if></td>
               <td>
               <#if record.confirmState.getId() ==0>
               	<span class="state normal">受理中</span>

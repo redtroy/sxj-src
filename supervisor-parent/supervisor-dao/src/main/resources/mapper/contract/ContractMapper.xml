@@ -13,7 +13,7 @@
 		<result property="engAddress" column="ENG_ADDRESS" jdbcType="VARCHAR" />
 		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
 		<result property="signedDate" column="SIGNED_DATE" jdbcType="TIME" />
-		<result property="validityDate" column="VALIDITY_DATE" jdbcType="TIME" />
+		<result property="validityDate" column="VALIDITY_DATE" jdbcType="DATE" />
 		<result property="startDate" column="START_DATE" jdbcType="TIME" />
 		<result property="deposit" column="DEPOSIT" jdbcType="INTEGER" />
 		<result property="remarks" column="REMARKS" jdbcType="VARCHAR" />

@@ -20,8 +20,8 @@
 		<result property="confirmState" column="CONFIRM_STATE" jdbcType="INTEGER" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="refContractNo" column="REF_CONTRACT_NO" jdbcType="VARCHAR" />
-		<result property="applyDate" column="APPLY_DATE" jdbcType="TIME" />
-		<result property="acceptDate" column="ACCEPT_DATE" jdbcType="TIME" />
+		<result property="applyDate" column="APPLY_DATE" jdbcType="DATE" />
+		<result property="acceptDate" column="ACCEPT_DATE" jdbcType="DATE" />
 		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 	</resultMap>
