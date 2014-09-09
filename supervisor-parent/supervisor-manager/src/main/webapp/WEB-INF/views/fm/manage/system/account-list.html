@@ -128,9 +128,11 @@ function toInfo(accountId,data){
 	
 	$("#"+accountId+"_tr").children().children("#edit_a").show();
 	$("#"+accountId+"_tr").children().children("#confirm_a").hide();
+	$(".edit").hide();
 }
 
 function toEdit(accountId){
+	$(".edit").hide();
 	$("#"+accountId+"_tr").children("#name_td").hide();
 	$("#"+accountId+"_tr").children("#name_td2").show();
 	

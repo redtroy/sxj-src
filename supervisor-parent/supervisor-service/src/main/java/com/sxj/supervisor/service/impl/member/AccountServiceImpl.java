@@ -57,6 +57,7 @@ public class AccountServiceImpl implements IAccountService {
 					MemberRoleEntity role = new MemberRoleEntity();
 					role.setAccountId(account.getId());
 					role.setFunctionId(functionIds[i]);
+					role.setMemberId(account.getParentId());
 					roles.add(role);
 				}
 				if (roles.size() > 0) {

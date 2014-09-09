@@ -89,7 +89,7 @@ public class SystemAccountController extends BaseController {
 			@Validated({ AddGroup.class }) SystemAccountEntity account,
 			BindingResult result,
 			@RequestParam("password_confirm") String password_confirm,
-			@RequestParam("functionIds") String[] functionIds)
+			@RequestParam("functionIds") String functionIds)
 			throws WebException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -97,8 +97,14 @@ public class SystemAccountController extends BaseController {
 			if (!password_confirm.equals(account.getPassword())) {
 				throw new WebException("两次密码不一致");
 			}
-			accountService.addAccount(account, functionIds);
-			map.put("isOK", true);
+			if (account != null) {
+				String[] ids = null;
+				if (StringUtils.isNotEmpty(functionIds)) {
+					ids = functionIds.split(",");
+				}
+				accountService.addAccount(account, ids);
+				map.put("isOK", true);
+			}
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("添加管理员账户错误", e, this.getClass());

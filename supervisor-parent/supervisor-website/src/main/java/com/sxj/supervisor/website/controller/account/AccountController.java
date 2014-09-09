@@ -87,7 +87,7 @@ public class AccountController extends BaseController {
 	public @ResponseBody Map<String, String> add_account(HttpSession session,
 			AccountEntity account,
 			@RequestParam("password_confirm") String password_confirm,
-			@RequestParam("functionIds") String[] functionIds)
+			@RequestParam("functionIds") String functionIds)
 			throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
@@ -96,10 +96,14 @@ public class AccountController extends BaseController {
 			}
 			SupervisorPrincipal userInfo = getLoginInfo(session);
 			if (userInfo != null) {
+				String[] ids = null;
+				if (StringUtils.isNotEmpty(functionIds)) {
+					ids = functionIds.split(",");
+				}
 				account.setState(AccountStatesEnum.normal);
 				account.setRegDate(new Date());
 				account.setParentId(userInfo.getMember().getMemberNo());
-				accountService.addAccount(account, functionIds);
+				accountService.addAccount(account, ids);
 				map.put("isOK", "ok");
 			}
 			return map;
