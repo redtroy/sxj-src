@@ -20,7 +20,7 @@ public interface IContractReplenishDao {
 	 * 新增补损
 	 * @param replenish
 	 */
-	@BatchInsert
+	@Insert
 	public void addReplenish(ReplenishContractEntity replenish);
 	
 	/**

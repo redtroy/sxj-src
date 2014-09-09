@@ -28,6 +28,10 @@ public class ContractQuery extends Pagable  implements Serializable {
 	private String memberId;
 	
 	/**
+	 * 签订者会员名称
+	**/
+	private String  memberName;
+	/**
 	 * 合同类型
 	**/
 	private Integer contractType;
@@ -66,6 +70,14 @@ public class ContractQuery extends Pagable  implements Serializable {
 	 * 合同状态
 	**/
 	private Integer state;
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
 
 	public String getContractNo() {
 		return contractNo;

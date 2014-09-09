@@ -65,6 +65,19 @@ function loadInfo(contractNo,recordNo){
 function closeContract(recordNo){
 	$("#info"+recordNo).slideUp("slow");
 }
+
+function delRecord(id){
+	if(confirm("确定删除备案吗?")){
+	
+	$.post("delRecord.htm",{id:id},function(data){
+		if (data.isOk=="ok"){
+			$("#"+id).remove();
+		}else{
+			alert("删除备案失败");
+		}
+	  });
+	}
+}
 </script>
 </head>
 
@@ -137,16 +150,16 @@ function closeContract(recordNo){
             </tr>
              <#if recordlist?exists>
       			<#list recordlist as record>
-            <tr onclick="loadInfo('${record.contractNo}','${record.recordNo}');">
+            <tr id="${record.id}">
               <td>${record.recordNo}</td>
-              <td><a href="#" class="lnk-blue">${record.contractNo}</a></td>
+              <td><a href="javascript:loadInfo('${record.contractNo}','${record.recordNo}');" class="lnk-blue">${record.contractNo}</a></td>
               <td>${record.memberNameA}</td>
               <td>${record.memberNameB}</td>
               <td>${record.type.getName()}</td>
               <td>${record.contractType.getName()}</td>
               <td><a href="#" class="lnk-blue">查看</a></td>
-              <td>${record.applyDate?date}</td>
-              <td><#if record.acceptDate?exists>${record.acceptDate?date}</#if></td>
+              <td>${record.applyDate?string("yyyy-MM-dd")}</td>
+              <td><#if record.acceptDate?exists>${record.acceptDate?string("yyyy-MM-dd")}</#if></td>
               <td>
               <#if record.confirmState.getId() ==0>
               	<span class="state normal">受理中</span>
@@ -170,7 +183,7 @@ function closeContract(recordNo){
                 <div class="color-red">20%</div></td>
               <td>
               <a href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span class="icon icon16 icon-edit"></span>修改</a>
-              <a href="#" class="lnk-blue"><span class="icon icon16 icon-del" ></span>删除</a>
+              <a href="javascript:delRecord('${record.id}')" class="lnk-blue"><span class="icon icon16 icon-del" ></span>删除</a>
                <a href="#" class="lnk-blue variContract mr10" recordId="${record.id}" >变更</a>
               <a href="#" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
               </td>

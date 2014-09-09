@@ -49,7 +49,7 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	@Column(name = "RFID_NO")
 	private String rfidNo;
 	/**
-	 * RFID号
+	 * 新RFID号
 	 **/
 	@Column(name = "NEW_RFID_NO")
 	private String newRfidNo;

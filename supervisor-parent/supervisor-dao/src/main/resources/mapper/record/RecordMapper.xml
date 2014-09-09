@@ -20,8 +20,8 @@
 		<result property="confirmState" column="CONFIRM_STATE" jdbcType="INTEGER" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="refContractNo" column="REF_CONTRACT_NO" jdbcType="VARCHAR" />
-		<result property="applyDate" column="APPLY_DATE" jdbcType="TIME" />
-		<result property="acceptDate" column="ACCEPT_DATE" jdbcType="TIME" />
+		<result property="applyDate" column="APPLY_DATE" jdbcType="DATE" />
+		<result property="acceptDate" column="ACCEPT_DATE" jdbcType="DATE" />
 		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 	</resultMap>
@@ -31,7 +31,7 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,RECORD_NO,APPLY_ID,APPLY_NAME,MEMBER_ID_A,MEMBER_NAME_A,MEMBER_ID_B,MEMBER_NAME_B,
 		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE,CONFIRM_STATE,RFID_NO
-		 FROM M_CONTRACT_RECORD WHERE 1=1]]>
+		 FROM M_CONTRACT_RECORD WHERE DEL_STATE=0]]>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
 			<![CDATA[AND RECORD_NO = #{condition.recordNo}]]>

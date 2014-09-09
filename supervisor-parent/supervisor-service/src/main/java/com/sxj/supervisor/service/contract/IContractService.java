@@ -4,10 +4,13 @@ import java.util.List;
 
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
+import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
+import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.contract.StateLogModel;
 
 public interface IContractService {
@@ -69,10 +72,10 @@ public interface IContractService {
 	 * 补损合同
 	 *
 	 * @param    contractId
-	 * @param    batchList
+	 * @param    list
 	 * @param    recordNo
 	**/
-	public void suppContract(String contractId, List<ContractBatchModel> batchList, String recordNo);
+	public void suppContract(String contractId, List<ReplenishBatchModel> list, ReplenishContractEntity replenishContract);
 	/**
 	 * 更新状态
 	 * @param contractId
@@ -92,7 +95,7 @@ public interface IContractService {
 	 * @param contractId
 	 * @param state
 	 */
-	public void modifyCheckState(String contractId, Integer state);
+	public void modifyCheckState(String contractId, ContractStateEnum state);
 
 	/**
 	 * 根据合同号获取详情

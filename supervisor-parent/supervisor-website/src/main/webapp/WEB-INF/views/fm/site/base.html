@@ -1,5 +1,9 @@
 <#assign staticPath="http://61.132.53.150:81/sxj/supervisor-website/" />
+<<<<<<< HEAD
 <#assign imagePath="http://192.168.1.12:8080/file-web/" />
+=======
+<#assign imagePath="http://61.132.53.150:8082/file-web/" />
+>>>>>>> 7c314074b1d6060ade4b314b3c39564dbfa55477
 <#macro validate>
 <!--<script src="${staticPath}js/jquery.validate.js"></script>-->
 <script src="${staticPath}js/Validform_v5.3.2.js"></script>
@@ -100,7 +104,30 @@ function loadUpload(id,url,isMulti,text,fn){
 	        
 	    });
 } 
-
+function classLoadUpload(text){
+	  $(":file").uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: "${basePath}upload.htm",
+	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        auto: true,
+	        multi: true,
+	        height:30,
+	        width:120,
+	        buttonText:'上传文件',
+	        onUploadSuccess : function(file, data, response) {
+	        	var contPic=$(this.button).parent(".uploadify").siblings(".contPic");
+	        	var dataObj=eval("("+data+")");//转换为json对象 
+	        	contPic.find(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+	        	  var hideVal= contPic.find(":input ").val();
+	        	    if(hideVal==""){
+	        	    	hideVal+=dataObj.fileIds;
+	        	    }else{
+	        	    	hideVal+=","+dataObj.fileIds;
+	        	    }
+	        	    contPic.find(":input ").val(hideVal);
+	        }
+	    });
+} 
 </script>
 </#macro>
 <#macro header>

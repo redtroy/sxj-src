@@ -18,10 +18,11 @@
    //根据ID删除子帐号
    function del(id){
 		var r=confirm("确认删除吗?");
+		
 	    if (r==true){
 	    	 $.post("${basePath}member/account/delAccount.htm",{id:id},function(data){
 	    		 if (data.isOK=='ok'){
-	   			  query();
+	   			 $("#"+id).remove();
 	   		   }else{
 					errorInfo(data);
 				}
@@ -74,7 +75,10 @@
 	   }
 	   $.post("${basePath}member/account/editAccount.htm",{id:id,accountName:accountName,name:name},function(data){
 		   if (data.isOK=='ok'){
-				  query();
+				 // query();
+			   anobj.html('<input type="text" value='+accountName+' id="accountEdit"/>');
+			   nobj.html('<input type="text" value='+name+' id="nameEdit"/>');
+			   ok.html('<a  class="edit" onclick="edit('+id+')">修改</a><a href="#" class="del" onclick="del('+id+')">删除</a>');
 			   }else{
 					errorInfo(data);
 				}

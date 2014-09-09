@@ -12,6 +12,9 @@
 		<setting name="lazyLoadingEnabled" value="false" />
 	</settings>
 	<typeHandlers>
+	<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.AccountStatesEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.member.MemberTypeEnum" />
