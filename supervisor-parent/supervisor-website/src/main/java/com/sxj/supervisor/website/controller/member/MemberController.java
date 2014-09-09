@@ -44,16 +44,23 @@ public class MemberController extends BaseController {
 	 * 
 	 * @param map
 	 * @return
+	 * @throws WebException 
 	 */
 	@RequestMapping("/memberInfo")
-	public String memberList(ModelMap map, HttpSession session) {
-		SupervisorPrincipal info = getLoginInfo(session);
-		if (info != null) {
-			MemberEntity member = info.getMember();
-			map.put("member", member);
-			return "site/member/member-profile";
+	public String memberList(ModelMap map, HttpSession session) throws WebException {
+		try {
+			SupervisorPrincipal info = getLoginInfo(session);
+			if (info != null) {
+				MemberEntity member = memberService.getMember(info.getMember()
+						.getId());
+				map.put("member", member);
+				return "site/member/member-profile";
+			}
+			return LOGIN;
+		} catch (Exception e) {
+			SxjLogger.error("修改会员信息错误", e, this.getClass());
+			throw new WebException(e.getMessage());
 		}
-		return LOGIN;
 
 	}
 
@@ -86,7 +93,8 @@ public class MemberController extends BaseController {
 	}
 
 	@RequestMapping("save_member")
-	public @ResponseBody Map<String, Object> save_member(MemberEntity member) throws WebException {
+	public @ResponseBody Map<String, Object> save_member(MemberEntity member)
+			throws WebException {
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
 			memberService.modifyMember(member);
