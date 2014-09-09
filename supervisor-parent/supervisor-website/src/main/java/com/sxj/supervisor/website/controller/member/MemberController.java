@@ -86,14 +86,11 @@ public class MemberController extends BaseController {
 	}
 
 	@RequestMapping("save_member")
-	public @ResponseBody Map<String, Object> save_member(
-			@Validated({ UpdateGroup.class }) MemberEntity member,
-			BindingResult result) throws WebException {
+	public @ResponseBody Map<String, Object> save_member(MemberEntity member) throws WebException {
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
-			getValidError(result);
 			memberService.modifyMember(member);
-			map.put("isOK", true);
+			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("修改会员信息错误", e, this.getClass());
