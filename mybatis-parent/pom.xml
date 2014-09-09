@@ -10,6 +10,7 @@
 		<module>mybatis-pagination</module>
     <module>mybatis-dialect</module>
     <module>mybatis-cache</module>
+    <module>mybatis-shard</module>
   </modules>
 	<properties>
 		<mybatis.version>3.2.7</mybatis.version>

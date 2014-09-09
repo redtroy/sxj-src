@@ -1,0 +1,289 @@
+package com.sxj.mybatis.shard.util;
+
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ParameterMapping;
+import org.apache.ibatis.mapping.ParameterMode;
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.property.PropertyTokenizer;
+import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
+import org.apache.ibatis.type.TypeHandlerRegistry;
+
+import com.sxj.mybatis.shard.util.DataSourceFactory.DataSourceNode;
+
+public class DataSourceRouter
+{
+    
+    // 数据节点数量
+    private static int nodeNum = DataSourceFactory.getNodes().size();
+    
+    private final static String Command_W = "w";
+    
+    private final static String Command_R = "r";
+    
+    public static void main(String[] args)
+    {
+        String s = "";
+        s = " update   able set aa = 1;";
+        s = "	insert 	into talbe_ads values()";
+        s = "select    * from aaa where aadd=adea ";
+        s = "delete from adeaadd ";
+        
+        s = "update sample_blog set aad=12,wee=2 where  user_id  = ? and abc = ? and a=? and def =?";
+        // s =
+        // "insert into sample_blog (context,  user_id, title) values ('\'asdf\'asdf\'asdf,,,,()', 122,'12341');";
+        // s = "delete from sample_blog where aaa like ? and user_id = ?";
+        // s =
+        // "select * from sample_blog where asd like ? and ssea <> ? and asdf != ? and user_id = ?";
+        // getDsIndex(s);
+        //        s = "update sample_blog set context = ? where ( title like ? and id is not null and user_id = ? and ( aa like ? or ads like ?) )";
+        //        BoundSql bs = new BoundSql(configuration, s, null, null);
+        //        getDataSource(null, bs, null);
+    }
+    
+    public static DataSource getDataSource(MappedStatement ms,
+            BoundSql boundSql, Object param)
+    {
+        
+        String sql = boundSql.getSql();
+        
+        sql = sql.replaceAll("\\s+", " ");
+        sql = sql.trim().toLowerCase();
+        
+        String commandName = getCommand(sql);
+        String commandType = null;
+        String tblName = null;
+        
+        if (commandName.equals("select"))
+        {
+            commandType = Command_R;
+        }
+        else
+        {
+            commandType = Command_W;
+        }
+        
+        // for update sql : update t set xxx where aa = 22
+        if (commandName.equals("update"))
+        {
+            tblName = sql.substring(7, sql.indexOf(" ", 7));
+        }
+        // for insert sql
+        else if (commandName.equals("insert"))
+        {
+            tblName = sql.substring(12, sql.indexOf(" ", 12));
+        }
+        // for select or delete
+        else
+        {
+            int index = sql.indexOf("from");
+            int sIndex = index + 5;
+            int eIndex = sql.indexOf(" ", sIndex);
+            if (eIndex == -1)
+            {
+                tblName = sql.substring(sIndex);
+            }
+            else
+            {
+                tblName = sql.substring(sIndex, eIndex);
+            }
+        }
+        
+        if (tblName == null)
+        {
+            throw new IllegalArgumentException("wrong sql");
+        }
+        
+        DataSourceNode targetNode = null;
+        
+        String columnRule = DataSourceFactory.getShardTables().get(tblName);
+        // don't need to shard, return the first dataSourceNode
+        if (columnRule == null)
+        {
+            targetNode = DataSourceFactory.getNodes().get(0);
+        }
+        else
+        {
+            // shard column value
+            int shardValueIndex = -1;
+            
+            // for sql contains where
+            if (commandName.equals("update") || commandName.equals("select")
+                    || commandName.equals("delete"))
+            {
+                int index = 0;
+                if (commandName.equals("update"))
+                {
+                    String setStr = RegexUtil.substr(sql, "set", "where");
+                    index = setStr.split(",").length;
+                }
+                
+                String whereStr = sql.substring(sql.indexOf("where") + 5);
+                whereStr = whereStr.replaceAll("\\(", "");
+                whereStr = whereStr.replaceAll("\\)", "");
+                String[] wheres = whereStr.split(" and ");
+                for (String str : wheres)
+                {
+                    for (String t : str.split(" or "))
+                    {
+                        if (t.contains("?"))
+                        {
+                            if (t.startsWith(columnRule + " "))
+                            {
+                                shardValueIndex = index;
+                                break;
+                            }
+                            index++;
+                        }
+                    }
+                }
+                
+            }
+            // for insert sql
+            else if (commandName.equals("insert"))
+            {
+                String insertColumnStrs = RegexUtil.substr(sql, "(", ")");
+                
+                String[] columns = insertColumnStrs.split(",");
+                int i = 0;
+                for (String col : columns)
+                {
+                    col = col.trim();
+                    if (col.equals(columnRule))
+                    {
+                        shardValueIndex = i;
+                        break;
+                    }
+                    i++;
+                }
+                
+                String insertValues = sql.substring(sql.indexOf("values") + 6)
+                        .trim();
+                insertValues = insertValues.substring(1,
+                        insertValues.length() - 1);
+                insertValues = insertValues.replaceAll("\\(.*?\\)", "");
+                String[] insertVs = insertValues.split(",");
+                for (int j = 0; j < insertVs.length; j++)
+                {
+                    if (j >= i)
+                    {
+                        break;
+                    }
+                    
+                    if (!(insertVs[j].trim()).equals("?"))
+                    {
+                        shardValueIndex--;
+                    }
+                }
+            }
+            
+            if (shardValueIndex == -1)
+            {
+                throw new UnsupportedOperationException(
+                        "need shard param in where case for column:"
+                                + columnRule);
+            }
+            
+            Object shardValue = getParamValue(ms,
+                    boundSql,
+                    param,
+                    shardValueIndex);
+            int value = -1;
+            if (shardValue instanceof Integer)
+            {
+                value = (Integer) shardValue;
+            }
+            else if (shardValue instanceof Long)
+            {
+                value = ((Long) shardValue).intValue();
+            }
+            else
+            {
+                throw new UnsupportedOperationException(
+                        "shard value must be int or long");
+            }
+            
+            int nodeIndex = (int) (value % nodeNum);
+            
+            targetNode = DataSourceFactory.getNodes().get(nodeIndex);
+        }
+        
+        DataSource ds = null;
+        if (commandType.equals(Command_R))
+        {
+            int index = (int) (targetNode.getReadNodes().size() * Math.random());
+            ds = targetNode.getReadNodes().get(index);
+        }
+        else
+        {
+            ds = targetNode.getWriteNodes().get(0);
+        }
+        return ds;
+    }
+    
+    private static Object getParamValue(MappedStatement ms, BoundSql boundSql,
+            Object param, int index)
+    {
+        TypeHandlerRegistry typeHandlerRegistry = ms.getConfiguration()
+                .getTypeHandlerRegistry();
+        List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
+        MetaObject metaObject = param == null ? null
+                : ConfigUtil.getConfiguration().newMetaObject(param);
+        
+        ParameterMapping parameterMapping = parameterMappings.get(index);
+        
+        Object value = null;
+        if (parameterMapping.getMode() != ParameterMode.OUT)
+        {
+            
+            String propertyName = parameterMapping.getProperty();
+            PropertyTokenizer prop = new PropertyTokenizer(propertyName);
+            if (param == null)
+            {
+                value = null;
+            }
+            else if (typeHandlerRegistry.hasTypeHandler(param.getClass()))
+            {
+                value = param;
+            }
+            else if (boundSql.hasAdditionalParameter(propertyName))
+            {
+                value = boundSql.getAdditionalParameter(propertyName);
+            }
+            else if (propertyName.startsWith(ForEachSqlNode.ITEM_PREFIX)
+                    && boundSql.hasAdditionalParameter(prop.getName()))
+            {
+                value = boundSql.getAdditionalParameter(prop.getName());
+                if (value != null)
+                {
+                    value = ConfigUtil.getConfiguration()
+                            .newMetaObject(value)
+                            .getValue(propertyName.substring(prop.getName()
+                                    .length()));
+                }
+            }
+            else
+            {
+                value = metaObject == null ? null
+                        : metaObject.getValue(propertyName);
+            }
+        }
+        
+        return value;
+    }
+    
+    private static String getCommand(String sql)
+    {
+        int index = sql.indexOf(" ");
+        if (index == -1)
+        {
+            throw new IllegalArgumentException();
+        }
+        String tmp = sql.substring(0, index);
+        return tmp;
+    }
+}

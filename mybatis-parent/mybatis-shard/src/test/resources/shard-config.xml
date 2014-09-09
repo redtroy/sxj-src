@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+	<!-- 配置数据源 -->
+	<dataSource name="ds1">
+		<url>jdbc:mysql://10.1.4.241:3306/sample_db1?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	<dataSource name="ds1_rep1">
+		<url>jdbc:mysql://10.1.4.242:3306/sample_db1?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	<dataSource name="ds1_rep2">
+		<url>jdbc:mysql://10.1.4.243:3306/sample_db1?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	
+	<dataSource name="ds2">
+		<url>jdbc:mysql://10.1.4.241:3306/sample_db2?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	<dataSource name="ds2_rep1">
+		<url>jdbc:mysql://10.1.4.242:3306/sample_db2?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	<dataSource name="ds2_rep2">
+		<url>jdbc:mysql://10.1.4.243:3306/sample_db2?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	
+	<dataSource name="ds3">
+		<url>jdbc:mysql://10.1.4.241:3306/sample_db3?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	<dataSource name="ds3_rep1">
+		<url>jdbc:mysql://10.1.4.242:3306/sample_db3?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	<dataSource name="ds3_rep2">
+		<url>jdbc:mysql://10.1.4.243:3306/sample_db3?useUnicode=true&amp;characterEncoding=UTF-8</url>
+		<userName>root</userName>
+		<password>123456</password>
+	</dataSource>
+	
+	<!-- 数据结点配置，main=true 代表该结点为主库（不参于分库的表，都存储在该节点中） -->
+	<dataNodes>
+		<dataNode main="true">
+			<writeNodes>ds1</writeNodes>
+			<readNodes>ds1_rep1, ds1_rep2</readNodes>
+		</dataNode>
+		<dataNode>
+			<writeNodes>ds2</writeNodes>
+			<readNodes>ds2_rep1, ds2_rep2</readNodes>
+		</dataNode>
+		<dataNode>
+			<writeNodes>ds3</writeNodes>
+			<readNodes>ds3_rep1, ds3_rep2</readNodes>
+		</dataNode>
+	</dataNodes>
+	
+	<!-- 配置需要分库的表，分库所依赖的字段  -->
+	<rules>
+		<table name="sample_blog" column="user_id"></table>
+	</rules>
+
+</configs>
