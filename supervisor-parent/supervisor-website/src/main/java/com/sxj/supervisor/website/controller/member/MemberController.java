@@ -134,7 +134,7 @@ public class MemberController extends BaseController {
 			member.setCheckState(MemberCheckStateEnum.unaudited);
 			member.setRegDate(new Date());
 			memberService.addMember(member);
-			return LOGIN;
+			return "site/reg-suc";
 		} else {
 			MemberTypeEnum[] type = MemberTypeEnum.values();
 			List<AreaEntity> list = areaService.getChildrenAreas("32");

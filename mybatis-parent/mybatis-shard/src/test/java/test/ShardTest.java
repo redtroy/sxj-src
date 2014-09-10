@@ -26,6 +26,7 @@ public class ShardTest
     @Autowired
     ShardMapper mapper;
     
+    @Test
     public void testInsert()
     {
         Shard shard = new Shard();
@@ -43,10 +44,9 @@ public class ShardTest
         //		mapper.updateByExampleSelective(record, ex);
     }
     
-    @Test
     public void testGet()
     {
-        Shard shard = mapper.get(1);
+        Shard shard = mapper.get(2);
         System.out.println(shard.getShardName());
     }
     

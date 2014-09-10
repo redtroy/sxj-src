@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -23,9 +24,9 @@ public class DataSourceRouter
     // 数据节点数量
     private static int nodeNum = DataSourceFactory.getNodes().size();
     
-    private final static String Command_W = "w";
+    public final static String Command_W = "w";
     
-    private final static String Command_R = "r";
+    public final static String Command_R = "r";
     
     public static void main(String[] args)
     {
@@ -36,6 +37,7 @@ public class DataSourceRouter
         s = "delete from adeaadd ";
         
         s = "update sample_blog set aad=12,wee=2 where  user_id  = ? and abc = ? and a=? and def =?";
+        System.out.println(HashCodeBuilder.reflectionHashCode(s + "2", true));
         // s =
         // "insert into sample_blog (context,  user_id, title) values ('\'asdf\'asdf\'asdf,,,,()', 122,'12341');";
         // s = "delete from sample_blog where aaa like ? and user_id = ?";
@@ -54,9 +56,9 @@ public class DataSourceRouter
         String sql = boundSql.getSql();
         
         sql = sql.replaceAll("\\s+", " ");
-        sql = sql.trim().toLowerCase();
+        String lowerSql = sql.trim().toLowerCase();
         
-        String commandName = getCommand(sql);
+        String commandName = getCommand(lowerSql);
         String commandType = null;
         String tblName = null;
         
@@ -82,7 +84,7 @@ public class DataSourceRouter
         // for select or delete
         else
         {
-            int index = sql.indexOf("from");
+            int index = lowerSql.indexOf("from");
             int sIndex = index + 5;
             int eIndex = sql.indexOf(" ", sIndex);
             if (eIndex == -1)
@@ -123,7 +125,7 @@ public class DataSourceRouter
                     String setStr = RegexUtil.substr(sql, "set", "where");
                     index = setStr.split(",").length;
                 }
-                String whereStr = sql.substring(sql.indexOf("where") + 5);
+                String whereStr = lowerSql.substring(lowerSql.indexOf("where") + 5);
                 whereStr = whereStr.replaceAll("\\(", "");
                 whereStr = whereStr.replaceAll("\\)", "");
                 String[] wheres = whereStr.split(" and ");
@@ -133,7 +135,7 @@ public class DataSourceRouter
                     {
                         if (t.contains("?"))
                         {
-                            if (t.trim().startsWith(columnRule))
+                            if (t.trim().startsWith(columnRule.toLowerCase()))
                             {
                                 shardValueIndex = index;
                                 break;
@@ -202,15 +204,20 @@ public class DataSourceRouter
             {
                 value = ((Long) shardValue).intValue();
             }
+            else if (shardValue instanceof String)
+            {
+                value = HashCodeBuilder.reflectionHashCode(shardValue, true);
+            }
             else
             {
                 throw new UnsupportedOperationException(
                         "shard value must be int or long");
             }
+            List<DataSourceNode> availableNodes = DataSourceFactory.getNodes(tblName);
             
-            int nodeIndex = (int) (value % nodeNum);
+            int nodeIndex = (int) (value % availableNodes.size());
             
-            targetNode = DataSourceFactory.getNodes().get(nodeIndex);
+            targetNode = availableNodes.get(nodeIndex);
         }
         
         DataSource ds = null;
@@ -221,7 +228,8 @@ public class DataSourceRouter
         }
         else
         {
-            ds = targetNode.getWriteNodes().get(0);
+            int index = (int) (targetNode.getWriteNodes().size() * Math.random());
+            ds = targetNode.getWriteNodes().get(index);
         }
         return ds;
     }
@@ -287,4 +295,5 @@ public class DataSourceRouter
         String tmp = sql.substring(0, index);
         return tmp;
     }
+    
 }

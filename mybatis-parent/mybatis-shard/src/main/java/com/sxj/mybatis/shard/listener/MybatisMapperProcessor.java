@@ -1,6 +1,7 @@
 package com.sxj.mybatis.shard.listener;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,9 +18,14 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 
 import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.builder.GenericStatementBuilder;
 import com.sxj.mybatis.shard.MybatisConfiguration;
+import com.sxj.mybatis.shard.configuration.XmlReader;
+import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
 import com.sxj.mybatis.shard.mapper.MapperScanConfigurator;
+import com.sxj.spring.modules.util.AnnotationUtils;
 
 public class MybatisMapperProcessor implements
         ApplicationListener<ContextRefreshedEvent>
@@ -52,7 +58,8 @@ public class MybatisMapperProcessor implements
     }
     
     private Set<String> findEntityClassNames(
-            ApplicationContext applicationContext) throws IOException
+            ApplicationContext applicationContext) throws IOException,
+            ClassNotFoundException
     {
         Set<String> classNames = new HashSet<String>();
         SimpleMetadataReaderFactory metadataReaderFactory = new SimpleMetadataReaderFactory(
@@ -68,10 +75,22 @@ public class MybatisMapperProcessor implements
             {
                 MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
                 ClassMetadata classMetadata = metadataReader.getClassMetadata();
-                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+                AnnotationMetadata classAnnotationMetadata = metadataReader.getAnnotationMetadata();
                 String entityAnnotation = Entity.class.getName();
-                if (annotationMetadata.isAnnotated(entityAnnotation))
+                if (classAnnotationMetadata.isAnnotated(entityAnnotation))
                 {
+                    Field idFiled = AnnotationUtils.findDeclaredFieldWithAnnoation(Id.class,
+                            Class.forName(classMetadata.getClassName()));
+                    Table table = Class.forName(classMetadata.getClassName())
+                            .getAnnotation(Table.class);
+                    if (idFiled != null && table != null)
+                    {
+                        Id annotation = idFiled.getAnnotation(Id.class);
+                        ShardRuleCfg rule = new ShardRuleCfg();
+                        rule.setTableName(table.name());
+                        rule.setColumn(annotation.column());
+                        XmlReader.getRules().put(rule.getTableName(), rule);
+                    }
                     classNames.add(classMetadata.getClassName());
                 }
             }

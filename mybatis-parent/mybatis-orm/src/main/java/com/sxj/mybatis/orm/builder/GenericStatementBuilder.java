@@ -109,7 +109,6 @@ public class GenericStatementBuilder extends BaseBuilder
         String resource = entityClass.getName().replace('.', '/')
                 + ".java (best guess)";
         assistant = new MapperBuilderAssistant(configuration, resource);
-        
         entity = entityClass.getAnnotation(Entity.class);
         mapperType = entity.mapper();
         
@@ -147,8 +146,8 @@ public class GenericStatementBuilder extends BaseBuilder
         ///~~~~~~~~~~~~~~~~~~~~~~
         idField = AnnotationUtils.findDeclaredFieldWithAnnoation(Id.class,
                 entityClass);
-        if (idField.isAnnotationPresent(GeneratedValue.class)
-                && idField.getAnnotation(GeneratedValue.class).strategy() == GenerationType.UUID)
+        if (!idField.isAnnotationPresent(GeneratedValue.class)
+                || idField.getAnnotation(GeneratedValue.class).strategy() != GenerationType.AUTO)
             columnFields.add(idField);
         versionField = AnnotationUtils.findDeclaredFieldWithAnnoation(Version.class,
                 entityClass);

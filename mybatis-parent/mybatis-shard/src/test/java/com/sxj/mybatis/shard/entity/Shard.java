@@ -11,6 +11,7 @@ import com.sxj.mybatis.shard.dao.ShardMapper;
 public class Shard
 {
     @Id(column = "SHARD_ID")
+    @Column(name = "SHARD_ID")
     private int shardId;
     
     @Column(name = "SHARD_NAME")

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.sxj.mybatis.shard.configuration.XmlReader;
@@ -34,6 +35,35 @@ public class DataSourceFactory
             initDataSources();
         }
         return nodes;
+    }
+    
+    public static List<DataSourceNode> getNodes(String tableName, String command)
+    {
+        if (nodes == null)
+            initDataSources();
+        return filter(tableName, command);
+    }
+    
+    public static List<DataSourceNode> getNodes(String tableName)
+    {
+        if (nodes == null)
+            initDataSources();
+        return filter(tableName, null);
+    }
+    
+    private static List<DataSourceNode> filter(String tableName, String command)
+    {
+        if (StringUtils.isEmpty(tableName))
+            return nodes;
+        List<DataSourceNode> result = new ArrayList<DataSourceNode>();
+        for (DataSourceNode node : nodes)
+        {
+            if (node.getTables()
+                    .toLowerCase()
+                    .contains(tableName.toLowerCase()))
+                result.add(node);
+        }
+        return result;
     }
     
     public static Map<String, String> getShardTables()
@@ -90,6 +120,9 @@ public class DataSourceFactory
                 }
                 
                 DataSourceNode dsNode = new DataSourceNode(w, r);
+                dsNode.setTables(cfg.getTables());
+                dsNode.setWriteTables(cfg.getWriteTables());
+                dsNode.setReadTables(cfg.getReadTables());
                 nodes.add(dsNode);
             }
             
@@ -142,6 +175,12 @@ public class DataSourceFactory
         
         private List<DataSource> readNodes;
         
+        private String tables;
+        
+        private String writeTables;
+        
+        private String readTables;
+        
         public DataSourceNode(List<DataSource> writeNodes,
                 List<DataSource> readNodes)
         {
@@ -157,6 +196,41 @@ public class DataSourceFactory
         public List<DataSource> getReadNodes()
         {
             return readNodes;
+        }
+        
+        public String getTables()
+        {
+            return tables;
+        }
+        
+        public void setTables(String tables)
+        {
+            this.tables = tables;
+        }
+        
+        public String getWriteTables()
+        {
+            return writeTables;
+        }
+        
+        public void setWriteTables(String writeTables)
+        {
+            this.writeTables = writeTables;
+        }
+        
+        public void setWriteNodes(List<DataSource> writeNodes)
+        {
+            this.writeNodes = writeNodes;
+        }
+        
+        public String getReadTables()
+        {
+            return readTables;
+        }
+        
+        public void setReadTables(String readTables)
+        {
+            this.readTables = readTables;
         }
         
     }

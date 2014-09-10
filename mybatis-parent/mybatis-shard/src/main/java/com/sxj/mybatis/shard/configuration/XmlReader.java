@@ -24,6 +24,18 @@ public class XmlReader
     
     private static Map<String, ShardRuleCfg> rules = new ConcurrentHashMap<String, ShardRuleCfg>();
     
+    private static String getChildNodeText(Node parent, String nodeName)
+    {
+        NodeList childNodes = parent.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++)
+        {
+            String name = childNodes.item(i).getNodeName();
+            if (nodeName.equals(name))
+                return childNodes.item(i).getTextContent();
+        }
+        return null;
+    }
+    
     public static void loadShardConfigs()
     {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -35,21 +47,22 @@ public class XmlReader
             InputStream is = XmlReader.class.getResourceAsStream("/shard-config.xml");
             Document xmldoc = db.parse(is);
             root = xmldoc.getDocumentElement();
-            NodeList nodeList = root.getElementsByTagName("dataSource");
             
             NodeList dataNodesCfg = root.getElementsByTagName("dataNodes")
                     .item(0)
                     .getChildNodes();
             for (int i = 0; i < dataNodesCfg.getLength(); i++)
             {
-                if (dataNodesCfg.item(i) == null
-                        || dataNodesCfg.item(i).getChildNodes().getLength() < 1)
+                Node dataNode = dataNodesCfg.item(i);
+                if (dataNode == null
+                        || dataNode.getChildNodes().getLength() < 1)
                 {
                     continue;
                 }
-                NodeList dn = dataNodesCfg.item(i).getChildNodes();
-                DataNodeCfg dataNode = new DataNodeCfg();
-                dataNodes.add(dataNode);
+                NodeList dn = dataNode.getChildNodes();
+                DataNodeCfg dataNodeCfg = new DataNodeCfg();
+                dataNodeCfg.setTables(getChildNodeText(dataNode, "tables"));
+                dataNodes.add(dataNodeCfg);
                 for (int k = 0; k < dn.getLength(); k++)
                 {
                     Node tmp = dn.item(k);
@@ -59,45 +72,54 @@ public class XmlReader
                     }
                     if ("writeNodes".equals(tmp.getNodeName()))
                     {
-                        dataNode.setWriteNodes(tmp.getTextContent());
+                        dataNodeCfg.setWriteNodes(((Element) tmp).getAttribute("ref"));
+                        dataNodeCfg.setWriteTables(getChildNodeText(tmp,
+                                "tables"));
                         continue;
                     }
                     if ("readNodes".equals(tmp.getNodeName()))
                     {
-                        dataNode.setReadNodes(tmp.getTextContent());
+                        dataNodeCfg.setReadNodes(((Element) tmp).getAttribute("ref"));
+                        dataNodeCfg.setReadTables(getChildNodeText(tmp,
+                                "tables"));
                         continue;
                     }
+                    
                 }
             }
             
-            NodeList ruleCfgs = root.getElementsByTagName("rules")
-                    .item(0)
-                    .getChildNodes();
-            for (int i = 0; i < ruleCfgs.getLength(); i++)
+            NodeList ruleNodes = root.getElementsByTagName("rules");
+            if (ruleNodes != null && ruleNodes.getLength() > 0)
             {
-                Node tmp = ruleCfgs.item(i);
-                if (tmp.getAttributes() == null)
+                NodeList ruleCfgs = root.getElementsByTagName("rules")
+                        .item(0)
+                        .getChildNodes();
+                for (int i = 0; i < ruleCfgs.getLength(); i++)
                 {
-                    continue;
+                    Node tmp = ruleCfgs.item(i);
+                    if (tmp.getAttributes() == null)
+                    {
+                        continue;
+                    }
+                    String table = tmp.getAttributes()
+                            .getNamedItem("name")
+                            .getNodeValue()
+                            .toLowerCase();
+                    String column = tmp.getAttributes()
+                            .getNamedItem("column")
+                            .getNodeValue()
+                            .toLowerCase();
+                    
+                    if (table == null || table.matches("\\s*")
+                            || column == null || column.matches("\\s*"))
+                    {
+                        continue;
+                    }
+                    ShardRuleCfg rule = new ShardRuleCfg();
+                    rule.setTableName(table);
+                    rule.setColumn(column);
+                    rules.put(rule.getTableName(), rule);
                 }
-                String table = tmp.getAttributes()
-                        .getNamedItem("name")
-                        .getNodeValue()
-                        .toLowerCase();
-                String column = tmp.getAttributes()
-                        .getNamedItem("column")
-                        .getNodeValue()
-                        .toLowerCase();
-                
-                if (table == null || table.matches("\\s*") || column == null
-                        || column.matches("\\s*"))
-                {
-                    continue;
-                }
-                ShardRuleCfg rule = new ShardRuleCfg();
-                rule.setTableName(table);
-                rule.setColumn(column);
-                rules.put(rule.getTableName(), rule);
             }
             
         }
