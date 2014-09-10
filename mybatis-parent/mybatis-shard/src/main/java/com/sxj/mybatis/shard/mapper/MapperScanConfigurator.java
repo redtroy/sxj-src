@@ -36,7 +36,11 @@ public class MapperScanConfigurator implements
     
     private String basePackage;
     
+    private static String typeAliasesPackage;
+    
     private Resource configLocation;
+    
+    private static Resource[] mapperLocations;
     
     private Class<? extends Annotation> annotationClass;
     
@@ -59,6 +63,7 @@ public class MapperScanConfigurator implements
                 ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
         //初始化所有数据源、sessionFactory
         MybatisConfiguration.setApplicationContext(applicationContext);
+        MybatisConfiguration.setConfigLocation(configLocation);
         DataSourceFactory.setContext(applicationContext);
         
     }
@@ -230,6 +235,26 @@ public class MapperScanConfigurator implements
     public void setConfigLocation(Resource configLocation)
     {
         this.configLocation = configLocation;
+    }
+    
+    public static Resource[] getMapperLocations()
+    {
+        return mapperLocations;
+    }
+    
+    public void setMapperLocations(Resource[] mapperLocations)
+    {
+        MapperScanConfigurator.mapperLocations = mapperLocations;
+    }
+    
+    public static String getTypeAliasesPackage()
+    {
+        return typeAliasesPackage;
+    }
+    
+    public void setTypeAliasesPackage(String typeAliasesPackage)
+    {
+        MapperScanConfigurator.typeAliasesPackage = typeAliasesPackage;
     }
     
 }

@@ -53,7 +53,11 @@
 
 	<bean class="com.sxj.mybatis.shard.mapper.MapperScanConfigurator">
 		<property name="basePackage" value="com.sxj.mybatis.shard.dao" />
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+		<property name="mapperLocations" value="classpath*:mapper/*.xml" />
+		<property name="typeAliasesPackage" value="com.sxj.mybatis.shard.entity"></property>
 	</bean>
+	<!-- 后置处理器，初始化所有Mapper -->
 	<bean class="com.sxj.mybatis.shard.listener.MybatisMapperProcessor"></bean>
 
 

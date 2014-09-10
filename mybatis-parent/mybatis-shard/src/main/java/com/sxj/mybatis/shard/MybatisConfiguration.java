@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.AutoMappingBehavior;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.springframework.context.ApplicationContext;
@@ -21,6 +22,8 @@ public class MybatisConfiguration
     private static Configuration configuration;
     
     private static ApplicationContext applicationContext;
+    
+    private static Resource configLocation;
     
     public static void setApplicationContext(
             ApplicationContext applicationContext)
@@ -60,6 +63,7 @@ public class MybatisConfiguration
                     configuration.setVariables(configurationProperties);
                 }
             }
+            configuration.setAutoMappingBehavior(AutoMappingBehavior.NONE);
         }
         catch (IOException ioe)
         {
@@ -70,6 +74,17 @@ public class MybatisConfiguration
     
     public static Configuration getConfiguration()
     {
-        return getConfiguration(null);
+        return getConfiguration(getConfigLocation());
     }
+    
+    public static Resource getConfigLocation()
+    {
+        return configLocation;
+    }
+    
+    public static void setConfigLocation(Resource configLocation)
+    {
+        MybatisConfiguration.configLocation = configLocation;
+    }
+    
 }
