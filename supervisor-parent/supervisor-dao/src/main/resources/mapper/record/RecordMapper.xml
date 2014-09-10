@@ -58,7 +58,7 @@
 		</if>
 		<!-- 对应甲方会员ID-->
 		<if test="condition.memberIdA != null and condition.memberIdA != ''">
-			<![CDATA[AND CONTRACT_NO = #{condition.memberIdA}]]>
+			<![CDATA[AND MEMBER_ID_A = #{condition.memberIdA}]]>
 		</if>
 		<!-- 合同签订人-->
 		<if test="condition.contractPepole != null and condition.contractPepole != ''">
@@ -66,7 +66,7 @@
 		</if>
 		<!-- 对应乙方会员ID-->
 		<if test="condition.memberIdB != null and condition.memberIdB != ''">
-			<![CDATA[AND CONTRACT_NO = #{condition.memberIdB}]]>
+			<![CDATA[AND MEMBER_ID_B = #{condition.memberIdB}]]>
 		</if>
 		<!-- 备案状态-->
 		<if test="condition.state != null and condition.state != ''">

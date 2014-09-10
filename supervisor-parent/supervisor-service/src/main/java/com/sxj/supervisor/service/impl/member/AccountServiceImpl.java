@@ -49,9 +49,13 @@ public class AccountServiceImpl implements IAccountService {
 			if (oldAccount != null) {
 				throw new ServiceException("用户账户已存在");
 			}
+			account.setState(AccountStatesEnum.stop);
 			accountDao.addAccount(account);
 			MemberEntity member = memberService.memberInfo(account
 					.getParentId());
+			if (member.getAccountNum() == null) {
+				member.setAccountNum(0);
+			}
 			member.setAccountNum(member.getAccountNum() + 1);
 			memberService.modifyMember(member);
 			if (functionIds != null && functionIds.length > 0) {

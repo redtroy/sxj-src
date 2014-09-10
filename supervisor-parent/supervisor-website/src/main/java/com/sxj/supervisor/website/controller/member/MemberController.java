@@ -52,6 +52,9 @@ public class MemberController extends BaseController {
 			if (info != null) {
 				MemberEntity member = memberService.getMember(info.getMember()
 						.getId());
+				if (member.getAccountNum() == null) {
+					member.setAccountNum(0);
+				}
 				map.put("member", member);
 				return "site/member/member-profile";
 			}
