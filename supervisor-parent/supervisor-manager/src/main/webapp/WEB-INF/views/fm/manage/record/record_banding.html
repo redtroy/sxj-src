@@ -37,7 +37,7 @@ function query(type){
 	console.log(memberIdB);
 	*/
 	$.post("queryRecordNo.htm",{recordType:type,memberIdA:memberIdA,memberIdB:memberIdB,contractNo:contractNo},function(data){
-		if (data){
+		if (data.erro != "false"){
 			if (memberIdA != null && memberIdA !=""){
 				$("#memberNameB_edit").text(data.record.memberNameB);
 				$("#recordNoB_edit").text(data.record.recordNo);
@@ -54,7 +54,6 @@ function query(type){
 }
 
   function bind_save(){
-	  alert('kk')
 	  var contractNo=$("#contractNo").val();
 	  var refContractNo=$("#refContractNo").val();
 	  var recordNo=$("#recordNoA_edit").text();

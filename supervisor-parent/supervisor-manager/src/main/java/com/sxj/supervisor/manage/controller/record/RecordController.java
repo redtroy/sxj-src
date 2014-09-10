@@ -150,8 +150,12 @@ public class RecordController extends BaseController {
 		List<RecordEntity> list = recordService.queryRecord(query);
 		ContractModel cm = contractService.getContractByContractNo(query
 				.getContractNo());
-		map.put("record", list.get(0));
-		map.put("refContractNo", cm.getContract().getRefContractNo());
+		if (list.size() > 0) {
+			map.put("record", list.get(0));
+			map.put("refContractNo", cm.getContract().getRefContractNo());
+		} else {
+			map.put("erro", "false");
+		}
 		return map;
 	}
 

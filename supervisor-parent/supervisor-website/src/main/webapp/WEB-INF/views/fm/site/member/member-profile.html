@@ -17,11 +17,12 @@ jQuery(document).ready(function($) {
 		$('.maskdivgen').fadeOut(100);
 		$('.passwordPop').slideUp(200);
 	})
-	$('.button-pop').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.passwordPop').slideUp(200);
+	
 	})
-	})
+	function close_div(){
+	$('.maskdivgen').fadeOut(100);
+	$('.passwordPop').slideUp(200);
+}
 function edit_pwd(id){
 	var pwd1=$("#pwd1").val();
 	var pwd2=$("#pwd2").val();
@@ -110,7 +111,7 @@ function query(){
       <div class="modal-body">
         <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1"/></div>
         <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2"/></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-pop ">取消</button></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-pop " onclick="close_div();">取消</button></div>
   </div>
 </div>
     <div class="maskdivgen" style="display:none"></div>

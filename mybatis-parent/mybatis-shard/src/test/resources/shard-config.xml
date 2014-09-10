@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+	<!-- 配置数据源 -->
+	<!-- <dataSource name="ds1">
+		<url>jdbc:mysql://192.168.1.12:3306/sxj-supervisor?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</url>
+		<userName>sxj-supervisor</userName>
+		<password>sxj-supervisor</password>
+	</dataSource>
+	<dataSource name="ds1_rep1">
+		<url>jdbc:mysql://192.168.1.12:3306/sxj-supervisor?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</url>
+		<userName>sxj-supervisor</userName>
+		<password>sxj-supervisor</password>
+	</dataSource>
+	
+	<dataSource name="ds2">
+		<url>jdbc:mysql://192.168.1.12:3306/sxj-rfid?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</url>
+		<userName>sxj-rfid</userName>
+		<password>sxj-rfid</password>
+	</dataSource>
+	<dataSource name="ds2_rep1">
+		<url>jdbc:mysql://192.168.1.12:3306/sxj-rfid?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true</url>
+		<userName>sxj-rfid</userName>
+		<password>sxj-rfid</password>
+	</dataSource> -->
+	
+	<!-- 数据结点配置，main=true 代表该结点为主库（不参于分库的表，都存储在该节点中） -->
+	<dataNodes>
+		<dataNode main="true">
+			<writeNodes>ds1</writeNodes>
+			<readNodes>ds1-read</readNodes>
+		</dataNode>
+		<dataNode>
+			<writeNodes>ds2</writeNodes>
+			<readNodes>ds2-read</readNodes>
+		</dataNode>
+	</dataNodes>
+	
+	<!-- 配置需要分库的表，分库所依赖的字段  -->
+	<rules>
+		<table name="SHARD" column="SHARD_ID"></table>
+	</rules>
+
+</configs>

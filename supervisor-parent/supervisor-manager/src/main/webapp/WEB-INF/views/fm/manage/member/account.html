@@ -95,10 +95,15 @@
 	   })
    }
    //更改状态
-   function checkState(id,stateId){
+   function checkState(id,stateId,obj){
 	  $.post("${basePath}member/account/editState.htm",{id:id,state:stateId},function(data){
 		  if (data.isOK=='ok'){
-			  query();
+			  if (data.state=="已冻结"){
+				  $(obj).parent().html('<button class="btn btn-red" onclick="checkState(\''+id+'\',0,this)"><span>解冻</span></button>');
+			  }else{
+				  $(obj).parent().html('<button class="btn btn-red" onclick="checkState(\''+id+'\',1,this)"><span>冻结</span></button>');
+			  }
+			  
 		   }else{
 				errorInfo(data);
 			}
@@ -179,9 +184,9 @@
           <td>${account.name}</td>
           <td>合同管理</td>
           <#if account.state.id==0>
-          <td><button class="btn btn-red" onclick="checkState('${account.id}',1)"><span>解冻</span></button></td>
+          <td><button class="btn btn-red" onclick="checkState('${account.id}',0,this)"><span>解冻</span></button></td>
           <#elseif account.state.id==1>
-          <td><button class="btn btn-red" onclick="checkState('${account.id}',0)"><span>冻结</span></button></td>
+          <td><button class="btn btn-red" onclick="checkState('${account.id}',1,this)"><span>冻结</span></button></td>
           </#if>
           <td>${account.regDate?date}</td>
           <td class="operation"><a  class="edit" onclick="edit('${account.id}')">修改</a><a href="#" class="del" onclick="del('${account.id}')">删除</a></td>
