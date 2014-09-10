@@ -11,7 +11,6 @@
 		<module>supervisor-website</module>
 		<module>supervisor-dao</module>
 		<module>supervisor-service</module>
-		<module>supervisor-utils</module>
 	</modules>
 	<properties>
 		<com.sxj.spring>4.2.3</com.sxj.spring>
@@ -64,7 +63,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.sxj</groupId>
-				<artifactId>supervisor-utils</artifactId>
+				<artifactId>sxj-common</artifactId>
 				<version>${com.sxj.version}</version>
 			</dependency>
 

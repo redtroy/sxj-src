@@ -32,18 +32,11 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-extension</artifactId>
 		</dependency>
-
 		<!-- sxj -->
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>supervisor-utils</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>supervisor-service</artifactId>
 		</dependency>
-
 
 		<!-- Spring -->
 		<dependency>

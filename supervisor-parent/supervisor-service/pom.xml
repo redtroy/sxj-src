@@ -18,11 +18,6 @@
 		<!-- sxj -->
 		<dependency>
 			<groupId>com.sxj</groupId>
-			<artifactId>supervisor-utils</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
 			<artifactId>supervisor-dao</artifactId>
 		</dependency>
 		<!-- springside -->

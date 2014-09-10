@@ -22,7 +22,7 @@
 		</dependency>
 		<dependency> 
 			<groupId>com.sxj</groupId>
-			<artifactId>supervisor-utils</artifactId>
+			<artifactId>sxj-common</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>
