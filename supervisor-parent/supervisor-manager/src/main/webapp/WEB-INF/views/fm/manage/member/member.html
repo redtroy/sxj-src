@@ -61,7 +61,7 @@ jQuery(document).ready(function($) {
    }
    //修改
    function edit(id){
-	   var params=$("#"+id+"_info").find(":input");
+	   var params=$("#"+id).find(":input");
 		$("#edit_form").append(params.html());
 		$.post("${basePath}member/editMember.htm",params,function(data){
 			if(data.isOK == 'ok'){
