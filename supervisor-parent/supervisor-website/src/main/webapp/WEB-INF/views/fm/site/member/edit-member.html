@@ -107,16 +107,23 @@ function subForm(ids){
             </#list>
           </select>
         </div>
-        <div class="item certCont ly-clearFix">
-          <label>企业资质编号</label>
-          <div class="upload"> <img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
+        <div class="item  ly-clearFix">
+          <label>企业资质编号</label>          
+          <div class="ly-left editBox mr15">
+		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
+          <div class="uploadify">
           <input type="file" class="input-w180h30" id="bLicensePath_File" name="input5" />
+           </div>
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
-          <div class="upload"> <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
+         <div class="ly-left editBox">
+         <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
+         <div class="uploadify"> 
             <input type="file" class="input-w180h30" id="energyPath_File" name="input6">
             <input type="hidden" class="input-w180h30" id="energyPath_hidden" name="energyPath" value="${member.energyPath}">
           </div>
+         </div>
+          
         </div>
         <div class="item">
           <label>公司电话</label>
