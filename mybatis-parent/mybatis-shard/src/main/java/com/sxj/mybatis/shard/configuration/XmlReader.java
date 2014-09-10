@@ -15,13 +15,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sxj.mybatis.shard.configuration.node.DataNodeCfg;
-import com.sxj.mybatis.shard.configuration.node.DataSourceCfg;
 import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
 
 public class XmlReader
 {
-    
-    private static Map<String, DataSourceCfg> dataSources = new ConcurrentHashMap<String, DataSourceCfg>();
     
     private static List<DataNodeCfg> dataNodes = new ArrayList<DataNodeCfg>();
     
@@ -39,41 +36,6 @@ public class XmlReader
             Document xmldoc = db.parse(is);
             root = xmldoc.getDocumentElement();
             NodeList nodeList = root.getElementsByTagName("dataSource");
-            main: for (int i = 0; i < nodeList.getLength(); i++)
-            {
-                DataSourceCfg dataSource = new DataSourceCfg();
-                String dsName = nodeList.item(i)
-                        .getAttributes()
-                        .getNamedItem("name")
-                        .getNodeValue();
-                dataSource.setName(dsName);
-                dataSources.put(dsName, dataSource);
-                NodeList dsNodes = nodeList.item(i).getChildNodes();
-                for (int j = 0; j < dsNodes.getLength(); j++)
-                {
-                    Node tmp = dsNodes.item(j);
-                    if (tmp == null)
-                    {
-                        continue main;
-                    }
-                    if ("url".equals(tmp.getNodeName()))
-                    {
-                        dataSource.setUrl(tmp.getTextContent());
-                        continue;
-                    }
-                    if ("userName".equals(tmp.getNodeName()))
-                    {
-                        dataSource.setUserName(tmp.getTextContent());
-                        continue;
-                    }
-                    if ("password".equals(tmp.getNodeName()))
-                    {
-                        dataSource.setPassword(tmp.getTextContent());
-                        continue;
-                    }
-                }
-                
-            }
             
             NodeList dataNodesCfg = root.getElementsByTagName("dataNodes")
                     .item(0)
@@ -143,11 +105,6 @@ public class XmlReader
         {
             e.printStackTrace();
         }
-    }
-    
-    public static Map<String, DataSourceCfg> getDataSources()
-    {
-        return dataSources;
     }
     
     public static List<DataNodeCfg> getDataNodes()

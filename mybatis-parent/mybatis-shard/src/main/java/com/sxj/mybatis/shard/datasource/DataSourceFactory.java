@@ -1,4 +1,4 @@
-package com.sxj.mybatis.shard.util;
+package com.sxj.mybatis.shard.datasource;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.sxj.mybatis.shard.util;
+package com.sxj.mybatis.shard.session;
 
 import java.sql.PreparedStatement;
 
@@ -36,7 +36,6 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
 
-import com.sxj.mybatis.shard.session.ShardSqlSessionFactory;
 import com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager;
 
 
@@ -48,14 +47,14 @@ import com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager;
  * @version $Id: SqlSessionUtils.java 4198 2011-12-02 08:20:30Z
  *          eduardo.macarron@gmail.com $
  */
-public final class SqlSessionUtils {
+public final class ShardedSqlSession {
 
 	private static final Log logger = LogFactory.getLog(PreparedStatement.class);
 
 	/**
 	 * This class can't be instantiated, exposes static utility methods only.
 	 */
-	private SqlSessionUtils() {
+	private ShardedSqlSession() {
 		// do nothing
 	}
 

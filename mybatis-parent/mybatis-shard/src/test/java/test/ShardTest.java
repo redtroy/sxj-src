@@ -26,11 +26,10 @@ public class ShardTest
     @Autowired
     ShardMapper mapper;
     
-    @Test
-    public void testMapper()
+    public void testInsert()
     {
         Shard shard = new Shard();
-        shard.setShardId(3);
+        shard.setShardId(4);
         shard.setShardName("test测试");
         mapper.insert(shard);
         //		BlogMapper mapper = factory.getBean(BlogMapper.class);
@@ -42,6 +41,13 @@ public class ShardTest
         //		record.setCreateTime(new Date());
         //		record.setIsUse(true);
         //		mapper.updateByExampleSelective(record, ex);
+    }
+    
+    @Test
+    public void testGet()
+    {
+        Shard shard = mapper.get(1);
+        System.out.println(shard.getShardName());
     }
     
 }

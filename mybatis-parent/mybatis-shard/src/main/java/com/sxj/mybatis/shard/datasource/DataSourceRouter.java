@@ -1,4 +1,4 @@
-package com.sxj.mybatis.shard.util;
+package com.sxj.mybatis.shard.datasource;
 
 import java.util.List;
 
@@ -13,7 +13,8 @@ import org.apache.ibatis.reflection.property.PropertyTokenizer;
 import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
-import com.sxj.mybatis.shard.util.DataSourceFactory.DataSourceNode;
+import com.sxj.mybatis.shard.MybatisConfiguration;
+import com.sxj.mybatis.shard.datasource.DataSourceFactory.DataSourceNode;
 import com.sxj.spring.modules.util.RegexUtil;
 
 public class DataSourceRouter
@@ -132,7 +133,7 @@ public class DataSourceRouter
                     {
                         if (t.contains("?"))
                         {
-                            if (t.startsWith(columnRule + " "))
+                            if (t.trim().startsWith(columnRule))
                             {
                                 shardValueIndex = index;
                                 break;
@@ -232,7 +233,7 @@ public class DataSourceRouter
                 .getTypeHandlerRegistry();
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
         MetaObject metaObject = param == null ? null
-                : ConfigUtil.getConfiguration().newMetaObject(param);
+                : MybatisConfiguration.getConfiguration().newMetaObject(param);
         
         ParameterMapping parameterMapping = parameterMappings.get(index);
         
@@ -260,7 +261,7 @@ public class DataSourceRouter
                 value = boundSql.getAdditionalParameter(prop.getName());
                 if (value != null)
                 {
-                    value = ConfigUtil.getConfiguration()
+                    value = MybatisConfiguration.getConfiguration()
                             .newMetaObject(value)
                             .getValue(propertyName.substring(prop.getName()
                                     .length()));

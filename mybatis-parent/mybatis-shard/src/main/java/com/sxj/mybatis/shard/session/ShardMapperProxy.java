@@ -20,17 +20,16 @@ import org.mybatis.spring.MyBatisExceptionTranslator;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import com.sxj.mybatis.shard.MybatisConfiguration;
+import com.sxj.mybatis.shard.datasource.DataSourceRouter;
 import com.sxj.mybatis.shard.mapper.ShardMapperMethod;
-import com.sxj.mybatis.shard.util.ConfigUtil;
-import com.sxj.mybatis.shard.util.DataSourceRouter;
-import com.sxj.mybatis.shard.util.SqlSessionUtils;
 
 
 public class ShardMapperProxy implements InvocationHandler, Serializable {
 
 	private static final long serialVersionUID = -6424540398559729838L;
 
-	private Configuration cfg = ConfigUtil.getConfiguration();
+	private Configuration cfg = MybatisConfiguration.getConfiguration();
 
 	private <T> ShardMapperProxy() {
 	}
@@ -53,7 +52,7 @@ public class ShardMapperProxy implements InvocationHandler, Serializable {
 		DataSource ds = DataSourceRouter.getDataSource(ms, boundSql, param);
 
 		Object result = null;
-		sqlSession = SqlSessionUtils.getSqlSession(ds, ShardSqlSessionFactory.instance(), null, null);
+		sqlSession = ShardedSqlSession.getSqlSession(ds, ShardSqlSessionFactory.instance(), null, null);
 
 		try {
 			result = mapperMethod.execute(args, sqlSession);
@@ -75,7 +74,7 @@ public class ShardMapperProxy implements InvocationHandler, Serializable {
 			}
 			throw unwrapped;
 		} finally {
-			SqlSessionUtils.closeSqlSession(sqlSession, ds);
+			ShardedSqlSession.closeSqlSession(sqlSession, ds);
 		}
 		return result;
 	}

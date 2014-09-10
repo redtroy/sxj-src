@@ -17,7 +17,7 @@ import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.managed.ManagedTransactionFactory;
 
-import com.sxj.mybatis.shard.util.ConfigUtil;
+import com.sxj.mybatis.shard.MybatisConfiguration;
 
 
 public class ShardSqlSessionFactory {
@@ -33,7 +33,7 @@ public class ShardSqlSessionFactory {
 	public static ShardSqlSessionFactory instance() {
 		if (factory == null) {
 			factory = new ShardSqlSessionFactory();
-			factory.configuration = ConfigUtil.getConfiguration();
+			factory.configuration = MybatisConfiguration.getConfiguration();
 			factory.managedTransactionFactory = new ManagedTransactionFactory();
 		}
 		return factory;

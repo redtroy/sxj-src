@@ -27,14 +27,16 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.StringUtils;
 
-import com.sxj.mybatis.shard.util.ConfigUtil;
-import com.sxj.mybatis.shard.util.DataSourceFactory;
+import com.sxj.mybatis.shard.MybatisConfiguration;
+import com.sxj.mybatis.shard.datasource.DataSourceFactory;
 
 public class MapperScanConfigurator implements
         BeanDefinitionRegistryPostProcessor, ApplicationContextAware
 {
     
     private String basePackage;
+    
+    private Resource configLocation;
     
     private Class<? extends Annotation> annotationClass;
     
@@ -56,7 +58,7 @@ public class MapperScanConfigurator implements
         scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage,
                 ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
         //初始化所有数据源、sessionFactory
-        ConfigUtil.setApplicationContext(applicationContext);
+        MybatisConfiguration.setApplicationContext(applicationContext);
         DataSourceFactory.setContext(applicationContext);
         
     }
@@ -223,6 +225,11 @@ public class MapperScanConfigurator implements
     public static Set<String> getMapperInterfaces()
     {
         return mapperInterfaces;
+    }
+    
+    public void setConfigLocation(Resource configLocation)
+    {
+        this.configLocation = configLocation;
     }
     
 }
