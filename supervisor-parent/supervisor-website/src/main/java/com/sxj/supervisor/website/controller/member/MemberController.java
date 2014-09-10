@@ -122,9 +122,10 @@ public class MemberController extends BaseController {
 	 * 添加会员
 	 */
 	@RequestMapping("regist_save")
-	public String regist_save(MemberEntity member, ModelMap map, String ms) {
+	public String regist_save(MemberEntity member, ModelMap map, String ms,
+			HttpSession session) {
 		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
-				"checkMs");
+				session.getId() + "_checkMs");
 		if (message.equals(ms)) {
 			member.setState(MemberStatesEnum.stop);
 			member.setCheckState(MemberCheckStateEnum.unaudited);
@@ -188,11 +189,13 @@ public class MemberController extends BaseController {
 	 * 发送验证码
 	 */
 	@RequestMapping("send_ms")
-	public @ResponseBody Map<String, String> send_ms(String phoneNo) {
+	public @ResponseBody Map<String, String> send_ms(HttpSession session,
+			String phoneNo) {
 		String message = "123456";
 		message = memberService.createvalidata(phoneNo, message);
 		Map<String, String> map = new HashMap<String, String>();
-		HierarchicalCacheManager.set(2, "checkMs", "checkMs", message);
+		HierarchicalCacheManager.set(2, "checkMs",
+				session.getId() + "_checkMs", message);
 		return map;
 	}
 
@@ -200,11 +203,11 @@ public class MemberController extends BaseController {
 	 * 短信验证
 	 */
 	@RequestMapping("check_ms")
-	public @ResponseBody Map<String, String> check_ms(String ms)
-			throws WebException {
+	public @ResponseBody Map<String, String> check_ms(HttpSession session,
+			String ms) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
-				"checkMs");
+				session.getId() + "_checkMs");
 		if (message.equals(ms)) {
 			map.put("flag", "true");
 		} else {
