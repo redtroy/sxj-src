@@ -107,7 +107,7 @@ public class SystemAccountController extends BaseController {
 			}
 			return map;
 		} catch (Exception e) {
-			SxjLogger.error("添加管理员账户错误", e, this.getClass());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new WebException(e.getMessage());
 		}
 

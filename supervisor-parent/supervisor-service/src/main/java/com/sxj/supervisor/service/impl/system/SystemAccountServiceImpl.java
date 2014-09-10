@@ -61,7 +61,7 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 				}
 			}
 		} catch (Exception e) {
-			throw new ServiceException("添加系统用户信息错误", e);
+			throw new ServiceException(e.getMessage(), e);
 		}
 
 	}

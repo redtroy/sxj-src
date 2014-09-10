@@ -48,6 +48,10 @@ public class SupervisorManagerPermissionsAuthorizationFilter extends
 		if (StringUtils.isBlank(uri)) {
 			uri = "/";
 		}
+		i = uri.indexOf(";");
+		if (i > 0) {
+			uri = uri.substring(0, i);
+		}
 		boolean permitted = false;
 		if ("/".equals(uri)) {
 			permitted = true;
