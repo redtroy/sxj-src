@@ -5,14 +5,7 @@ import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.sql.DataSource;
-
-import org.apache.ibatis.mapping.Environment;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.transaction.TransactionFactory;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -24,131 +17,212 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.core.io.Resource;
+import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
+import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.StringUtils;
 
 import com.sxj.mybatis.shard.util.ConfigUtil;
+import com.sxj.mybatis.shard.util.DataSourceFactory;
 
-
-public class MapperScanConfigurator implements BeanDefinitionRegistryPostProcessor, ApplicationContextAware {
-
-	private String basePackage;
-
-	private Class<? extends Annotation> annotationClass;
-
-	private Class<?> markerInterface;
-
-	private ApplicationContext applicationContext;
-
-	private Set<String> mapperInterfaces = new HashSet<String>();
-
-	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-
-		// 初始化所有 mapper
-		Scanner scanner = new Scanner(registry);
-		scanner.setResourceLoader(this.applicationContext);
-		scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
-		ConfigUtil.setApplicationContext(applicationContext);
-		try {
-			for (String clsName : mapperInterfaces) {
-				ConfigUtil.getConfiguration().addMapper(Class.forName(clsName));
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		//初始化所有数据源、sessionFactory
-		
-	}
-
-	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-
-	}
-
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
-
-	public void setBasePackage(String basePackage) {
-		this.basePackage = basePackage;
-	}
-
-	private final class Scanner extends ClassPathBeanDefinitionScanner {
-
-		public Scanner(BeanDefinitionRegistry registry) {
-			super(registry);
-		}
-
-		protected void registerDefaultFilters() {
-			boolean acceptAllInterfaces = true;
-
-			// if specified, use the given annotation and / or marker interface
-			if (MapperScanConfigurator.this.annotationClass != null) {
-				addIncludeFilter(new AnnotationTypeFilter(MapperScanConfigurator.this.annotationClass));
-				acceptAllInterfaces = false;
-			}
-
-			// override AssignableTypeFilter to ignore matches on the actual marker interface
-			if (MapperScanConfigurator.this.markerInterface != null) {
-				addIncludeFilter(new AssignableTypeFilter(MapperScanConfigurator.this.markerInterface) {
-					@Override
-					protected boolean matchClassName(String className) {
-						return false;
-					}
-				});
-				acceptAllInterfaces = false;
-			}
-
-			if (acceptAllInterfaces) {
-				// default include filter that accepts all classes
-				addIncludeFilter(new TypeFilter() {
-					public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
-						return true;
-					}
-				});
-			}
-
-			// exclude package-info.java
-			addExcludeFilter(new TypeFilter() {
-				public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
-					String className = metadataReader.getClassMetadata().getClassName();
-					return className.endsWith("package-info");
-				}
-			});
-		}
-
-		protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
-			Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);
-
-			if (beanDefinitions.isEmpty()) {
-				logger.warn("No MyBatis mapper was found in '" + MapperScanConfigurator.this.basePackage + "' package. Please check your configuration.");
-			} else {
-				for (BeanDefinitionHolder holder : beanDefinitions) {
-					GenericBeanDefinition definition = (GenericBeanDefinition) holder.getBeanDefinition();
-					mapperInterfaces.add(definition.getBeanClassName());
-					definition.getPropertyValues().add("mapperInterface", definition.getBeanClassName());
-					definition.setBeanClass(ShardMapperFactoryBean.class);
-				}
-			}
-
-			return beanDefinitions;
-		}
-
-		protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
-			return (beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent());
-		}
-
-		protected boolean checkCandidate(String beanName, BeanDefinition beanDefinition) throws IllegalStateException {
-			if (super.checkCandidate(beanName, beanDefinition)) {
-				return true;
-			} else {
-				logger.warn("Skipping MapperFactoryBean with name '" + beanName + "' and '" + beanDefinition.getBeanClassName() + "' mapperInterface" + ". Bean already defined with the same name!");
-				return false;
-			}
-		}
-	}
+public class MapperScanConfigurator implements
+        BeanDefinitionRegistryPostProcessor, ApplicationContextAware
+{
+    
+    private String basePackage;
+    
+    private Class<? extends Annotation> annotationClass;
+    
+    private Class<?> markerInterface;
+    
+    private ApplicationContext applicationContext;
+    
+    private static Set<String> mapperInterfaces = new HashSet<String>();
+    
+    private Scanner scanner;
+    
+    @Override
+    public void postProcessBeanDefinitionRegistry(
+            BeanDefinitionRegistry registry) throws BeansException
+    {
+        // 初始化所有 mapper
+        scanner = new Scanner(registry);
+        scanner.setResourceLoader(this.applicationContext);
+        scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage,
+                ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
+        //初始化所有数据源、sessionFactory
+        ConfigUtil.setApplicationContext(applicationContext);
+        DataSourceFactory.setContext(applicationContext);
+        
+    }
+    
+    public void setApplicationContext(ApplicationContext applicationContext)
+            throws BeansException
+    {
+        this.applicationContext = applicationContext;
+    }
+    
+    public void setBasePackage(String basePackage)
+    {
+        this.basePackage = basePackage;
+    }
+    
+    private void findEntityClassNames() throws IOException
+    {
+        Set<String> classNames = new HashSet<String>();
+        SimpleMetadataReaderFactory metadataReaderFactory = new SimpleMetadataReaderFactory(
+                applicationContext);
+        String fieldValue = basePackage == null ? "" : basePackage;
+        Resource[] resources = applicationContext.getResources("classpath:"
+                + StringUtils.replace(fieldValue, ".", "/") + "/**/*.class");
+        for (Resource resource : resources)
+        {
+            if (resource.isReadable())
+            {
+                MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                ClassMetadata classMetadata = metadataReader.getClassMetadata();
+                mapperInterfaces.add(classMetadata.getClassName());
+                //                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+                //                String entityAnnotation = Entity.class.getName();
+                //                if (annotationMetadata.isAnnotated(entityAnnotation))
+                //                {
+                //                    classNames.add(classMetadata.getClassName());
+                //                }
+            }
+        }
+        
+    }
+    
+    private final class Scanner extends ClassPathBeanDefinitionScanner
+    {
+        
+        public Scanner(BeanDefinitionRegistry registry)
+        {
+            super(registry);
+        }
+        
+        protected void registerDefaultFilters()
+        {
+            boolean acceptAllInterfaces = true;
+            
+            // if specified, use the given annotation and / or marker interface
+            if (MapperScanConfigurator.this.annotationClass != null)
+            {
+                addIncludeFilter(new AnnotationTypeFilter(
+                        MapperScanConfigurator.this.annotationClass));
+                acceptAllInterfaces = false;
+            }
+            
+            // override AssignableTypeFilter to ignore matches on the actual marker interface
+            if (MapperScanConfigurator.this.markerInterface != null)
+            {
+                addIncludeFilter(new AssignableTypeFilter(
+                        MapperScanConfigurator.this.markerInterface)
+                {
+                    @Override
+                    protected boolean matchClassName(String className)
+                    {
+                        return false;
+                    }
+                });
+                acceptAllInterfaces = false;
+            }
+            
+            if (acceptAllInterfaces)
+            {
+                // default include filter that accepts all classes
+                addIncludeFilter(new TypeFilter()
+                {
+                    public boolean match(MetadataReader metadataReader,
+                            MetadataReaderFactory metadataReaderFactory)
+                            throws IOException
+                    {
+                        return true;
+                    }
+                });
+            }
+            
+            // exclude package-info.java
+            addExcludeFilter(new TypeFilter()
+            {
+                public boolean match(MetadataReader metadataReader,
+                        MetadataReaderFactory metadataReaderFactory)
+                        throws IOException
+                {
+                    String className = metadataReader.getClassMetadata()
+                            .getClassName();
+                    return className.endsWith("package-info");
+                }
+            });
+        }
+        
+        protected Set<BeanDefinitionHolder> doScan(String... basePackages)
+        {
+            Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);
+            
+            if (beanDefinitions.isEmpty())
+            {
+                logger.warn("No MyBatis mapper was found in '"
+                        + MapperScanConfigurator.this.basePackage
+                        + "' package. Please check your configuration.");
+            }
+            else
+            {
+                for (BeanDefinitionHolder holder : beanDefinitions)
+                {
+                    GenericBeanDefinition definition = (GenericBeanDefinition) holder.getBeanDefinition();
+                    mapperInterfaces.add(definition.getBeanClassName());
+                    definition.getPropertyValues().add("mapperInterface",
+                            definition.getBeanClassName());
+                    definition.setBeanClass(ShardMapperFactoryBean.class);
+                    //                    processPropertyPlaceHolders(definition.getBeanClassName());
+                }
+            }
+            
+            return beanDefinitions;
+        }
+        
+        protected boolean isCandidateComponent(
+                AnnotatedBeanDefinition beanDefinition)
+        {
+            return (beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata()
+                    .isIndependent());
+        }
+        
+        protected boolean checkCandidate(String beanName,
+                BeanDefinition beanDefinition) throws IllegalStateException
+        {
+            if (super.checkCandidate(beanName, beanDefinition))
+            {
+                return true;
+            }
+            else
+            {
+                logger.warn("Skipping MapperFactoryBean with name '" + beanName
+                        + "' and '" + beanDefinition.getBeanClassName()
+                        + "' mapperInterface"
+                        + ". Bean already defined with the same name!");
+                return false;
+            }
+        }
+    }
+    
+    @Override
+    public void postProcessBeanFactory(
+            ConfigurableListableBeanFactory beanFactory) throws BeansException
+    {
+        // TODO Auto-generated method stub
+        System.out.println();
+    }
+    
+    public static Set<String> getMapperInterfaces()
+    {
+        return mapperInterfaces;
+    }
+    
 }

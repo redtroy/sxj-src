@@ -58,5 +58,24 @@
   		<artifactId>mybatis-orm</artifactId>
   		<version>${mybatis.parent}</version>
   	</dependency>
+  	<dependency>
+  		<groupId>com.sxj</groupId>
+  		<artifactId>spring-util</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-aop</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.aspectj</groupId>
+  		<artifactId>aspectjrt</artifactId>
+  		<version>1.8.1</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>mysql</groupId>
+  		<artifactId>mysql-connector-java</artifactId>
+  		<version>5.1.31</version>
+  	</dependency>
   </dependencies>
 </project>

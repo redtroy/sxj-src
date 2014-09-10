@@ -14,6 +14,7 @@ import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
 import com.sxj.mybatis.shard.util.DataSourceFactory.DataSourceNode;
+import com.sxj.spring.modules.util.RegexUtil;
 
 public class DataSourceRouter
 {
@@ -121,7 +122,6 @@ public class DataSourceRouter
                     String setStr = RegexUtil.substr(sql, "set", "where");
                     index = setStr.split(",").length;
                 }
-                
                 String whereStr = sql.substring(sql.indexOf("where") + 5);
                 whereStr = whereStr.replaceAll("\\(", "");
                 whereStr = whereStr.replaceAll("\\)", "");
