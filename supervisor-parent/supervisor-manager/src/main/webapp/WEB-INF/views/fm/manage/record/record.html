@@ -14,7 +14,7 @@
 <@b.errorInfo/>
 <script>
 jQuery(document).ready(function($) {
-	$('.lnk-view').click(function(){
+	$('.lnk-view').live('click',function(){
 		var imgPath=$(this).attr("imgPath");
 		if(imgPath!=''){
 			$('.popDemo').slideDown(200);
@@ -26,7 +26,7 @@ jQuery(document).ready(function($) {
 			alert("暂无合同副本!");
 		}
 	})
-	$('.modal-header .close').click(function(){
+	$('.modal-header .close').live('click',function(){
 		$('.popDemo').slideUp(200);
 		$("#imgList").html("");
 	})

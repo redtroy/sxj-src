@@ -78,7 +78,7 @@
 			});
 		})
 		
-		$('.lnk-view').click(function(){
+		$('.lnk-view').live('click',function(){
 		var imgPath=$(this).attr("imgPath");
 		if(imgPath!=''){
 			$('#imgId').slideDown(200);
@@ -90,7 +90,7 @@
 			alert("暂无合同副本!");
 		}
 	})
-		$('.modal-header .close').click(function(){
+		$('.modal-header .close').live('click',function(){
 			$('#imgId').slideUp(200);
 			$("#imgList").html("");
 		})
