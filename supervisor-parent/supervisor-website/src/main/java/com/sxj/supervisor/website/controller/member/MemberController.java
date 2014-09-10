@@ -19,6 +19,7 @@ import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -41,10 +42,11 @@ public class MemberController extends BaseController {
 	 * 
 	 * @param map
 	 * @return
-	 * @throws WebException 
+	 * @throws WebException
 	 */
 	@RequestMapping("/memberInfo")
-	public String memberList(ModelMap map, HttpSession session) throws WebException {
+	public String memberList(ModelMap map, HttpSession session)
+			throws WebException {
 		try {
 			SupervisorPrincipal info = getLoginInfo(session);
 			if (info != null) {
@@ -140,6 +142,14 @@ public class MemberController extends BaseController {
 	}
 
 	/**
+	 * 忘记密码
+	 */
+	@RequestMapping("find_pwd")
+	public String find_pwd() {
+		return "site/find-password";
+	}
+
+	/**
 	 * 验证会员是否注册过
 	 */
 	@RequestMapping("check_member")
@@ -155,6 +165,26 @@ public class MemberController extends BaseController {
 	}
 
 	/**
+	 * 验证手机号是否已注册
+	 * 
+	 */
+	@RequestMapping("check_phone")
+	public @ResponseBody Map<String, String> check_phone(String phone)
+			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		MemberQuery query = new MemberQuery();
+		query.setContactsPhone(phone);
+		List<MemberEntity> list = memberService.queryMembers(query);
+		if (list.size() > 0) {
+			map.put("flag", "true");
+			map.put("id", list.get(0).getId());
+		} else {
+			map.put("flag", "false");
+		}
+		return map;
+	}
+
+	/**
 	 * 发送验证码
 	 */
 	@RequestMapping("send_ms")
@@ -163,6 +193,23 @@ public class MemberController extends BaseController {
 		message = memberService.createvalidata(phoneNo, message);
 		Map<String, String> map = new HashMap<String, String>();
 		HierarchicalCacheManager.set(2, "checkMs", "checkMs", message);
+		return map;
+	}
+
+	/**
+	 * 短信验证
+	 */
+	@RequestMapping("check_ms")
+	public @ResponseBody Map<String, String> check_ms(String ms)
+			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
+				"checkMs");
+		if (message.equals(ms)) {
+			map.put("flag", "true");
+		} else {
+			map.put("flag", "false");
+		}
 		return map;
 	}
 }

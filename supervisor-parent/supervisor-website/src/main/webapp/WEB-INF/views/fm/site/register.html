@@ -61,7 +61,8 @@
 		  return false;
 	  }
 	  $.post("send_ms.htm",{phoneNo:phoneNo},function(data){
-		  $(obj).attr("disabled", "disabled"); 
+		 $(obj).attr("disabled", "disabled"); 
+		 $(obj).addClass("button-disable");
 	      timer(intDiff,obj)
 	  })
   }
@@ -89,6 +90,7 @@
 	    $("#time").text(second+"秒后重新获取验证码")
 	    if (second==0){
 	    	 $(obj).removeAttr("disabled", "disabled");
+	    	 $(obj).removeClass("button-disable");
 	    	 clearInterval(timer1);
 	    }
 	    intDiff--;
@@ -151,7 +153,7 @@ ${type[0].getName()}</span>/
 </select></div>
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>联系人</label>
-  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人" id="" name="contacts" value="${member.contacts}" />
+  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人" id="contacts" name="contacts" value="${member.contacts}" />
   <div class="tipMsg msg-gray">请输入公司联系人</div>
 </div>
 <div class="item">
