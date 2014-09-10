@@ -147,7 +147,7 @@
                   <!-- 图片列表 begin -->
                   <#assign arr=(contractModel.contract.imgPath?split(","))>
                  <#list arr  as imgPath>
-                 	 <div class="pic"><a href="#" class="demo-image" data-image="${imgPath}"><img src="${imgPath}"  /></a></div>
+                 	 <div class="pic"><a href="#" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}"  /></a></div>
                  </#list>
                   <!-- 图片列表 end -->
                 </div>
@@ -178,7 +178,7 @@
                       <!-- 图片列表 begin -->
                        <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
                       <#list imgArr  as modifyimgPath>
-                      	<div class="pic"><a href="#" target="_blank"><img src="${modifyimgPath}"  /></a></div>
+                      	<div class="pic"><a href="#" target="_blank"><img src="${b.imagePath}${modifyimgPath}"  /></a></div>
               		  </#list>
                       <!-- 图片列表 end -->
                     </div>
@@ -282,7 +282,7 @@
                       <!-- 图片列表 begin -->
                       <#assign replenishArr=(replenishList.replenishContract.imgPath?split(","))>
                       <#list replenishArr  as replenishImg>
-                      <div class="pic"><a href="#" target="_blank"><img src="${replenishImg}"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="${b.imagePath}${replenishImg}"  /></a></div>
                       </#list>
                       <!-- 图片列表 end -->
                     </div>

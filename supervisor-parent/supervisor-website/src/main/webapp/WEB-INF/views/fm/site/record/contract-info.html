@@ -57,13 +57,12 @@
 			            <#assign n = (n+item.quantity)?int > 
 			            <#assign m = (m+item.amount)?int > 
                       <tr>
-                        <td>中空玻璃</td>
-                        <td>5+6A+5 双白中空<br />
-                          W779/H1176</td>
-                        <td>约1312.24</td>
-                        <td>67.00</td>
-                        <td>87920元</td>
-                        <td class="tl">成品不足0.3平方米的，平方差额我公司承担40%，贵公司承担60%，按实际供货面积计算。</td>
+                         <td>${item.productName}</td>
+			              <td>${item.productModel}</td>
+			              <td>${item.quantity}</td>
+			              <td>${item.price}</td>
+			              <td>${item.amount}</td>
+			              <td>${item.remarks}</td>
                       </tr>
                        </#list>
                       <tr class="fb">

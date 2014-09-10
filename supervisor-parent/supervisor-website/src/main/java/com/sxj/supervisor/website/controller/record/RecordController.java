@@ -166,7 +166,7 @@ public class RecordController extends BaseController {
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			record.setApplyId(userBean.getMember().getId());
+			record.setApplyId(userBean.getMember().getMemberNo());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
 			record.setType(RecordTypeEnum.contract);
@@ -199,7 +199,7 @@ public class RecordController extends BaseController {
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			record.setApplyId(userBean.getMember().getId());
+			record.setApplyId(userBean.getMember().getMemberNo());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
 			record.setType(RecordTypeEnum.contract);
@@ -232,7 +232,7 @@ public class RecordController extends BaseController {
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			record.setApplyId(userBean.getMember().getId());
+			record.setApplyId(userBean.getMember().getMemberNo());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
 			record.setType(RecordTypeEnum.contract);

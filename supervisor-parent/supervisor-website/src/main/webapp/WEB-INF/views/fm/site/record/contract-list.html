@@ -1,17 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<#include "site/base.html"> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link href="${staticPath}style/uploadify.css " rel="stylesheet" type="text/css" /> 
-<script src="${staticPath}js/jquery.js" type="text/javascript"></script>
-<script src="${staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
-<script src="${staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
-<script src="${staticPath}/js/jquery.paginate.js"></script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/uploadify.css " rel="stylesheet" type="text/css" /> 
+<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
+<script src="${b.staticPath}/js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
 <@b.upload/>
@@ -28,6 +28,11 @@
 			$('.maskdivgen').fadeOut(100);
 			$('.chanPop').slideUp(200);
 		})
+		$('.button-box .button-gray').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.chanPop').slideUp(200);
+		})
+		
 		$('#bgButton').click(function() {
 			var o = {
 				"recordId" : $("#bgRecordId").val(),
@@ -53,6 +58,10 @@
 			$('.maskdivgen').fadeOut(100);
 			$('.suppPop').slideUp(200);
 		})
+		$('.item .button-gray').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.suppPop').slideUp(200);
+		})
 		$('#bsButton').click(function() {
 			var o = {
 				"recordId" : $("#bsRecordId").val(),
@@ -67,6 +76,23 @@
 					alert("上传补损扫描件失败");
 				}
 			});
+		})
+		
+		$('.lnk-view').click(function(){
+		var imgPath=$(this).attr("imgPath");
+		if(imgPath!=''){
+			$('#imgId').slideDown(200);
+			var imgPaths =imgPath.split(",");
+			for (i=0;i<imgPaths.length ;i++ ) {  
+				$("#imgList").append("<div class='pic'><a href='#' class='demo-image' data-image='${b.imagePath}"+imgPaths[i]+"'><img src='${b.imagePath}"+imgPaths[i]+"'  /></a></div>");
+			}
+		}else{
+			alert("暂无合同副本!");
+		}
+	})
+		$('.modal-header .close').click(function(){
+			$('#imgId').slideUp(200);
+			$("#imgList").html("");
 		})
 	})
 	
@@ -185,7 +211,7 @@
               <td>${record.memberNameB}</td>
               <td>${record.type.getName()}</td>
               <td>${record.contractType.getName()}</td>
-              <td><a href="#" class="lnk-blue">查看</a></td>
+              <td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgPath="${record.imgPath}">查看</a></td>
               <td>${record.applyDate?string("yyyy-MM-dd")}</td>
               <td><#if record.acceptDate?exists>${record.acceptDate?string("yyyy-MM-dd")}</#if></td>
               <td>
@@ -279,5 +305,23 @@
   </div>
 </div>
 <div class="maskdivgen" style="display:none"></div>
+<div class="modal-wrap popDemo popView" id="imgId" style="display:none;">
+        <div class="modal-header">       
+           <span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></div>
+        <div class="modal-body infoBox">
+         <div class="rollBox">
+            <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
+            <div class="Cont" id="ISL_Cont">
+              <div class="ScrCont">
+                <div id="imgList">
+                   
+                </div>
+                <div id="List2"></div>
+              </div>
+            </div>
+            <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+          </div>
+        </div>        
+      </div>
 </body>
 </html>
