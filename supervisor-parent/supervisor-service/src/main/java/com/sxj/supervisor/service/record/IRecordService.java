@@ -55,5 +55,5 @@ public interface IRecordService {
 	 * @param recordId
 	 **/
 	public void bindingContract(String contractNo, String refContractNo,
-			String recordNo, String recordNo2) throws ServiceException ;
+			String recordNo, String recordNo2,String recordIdA,String recordIdB) throws ServiceException ;
 }

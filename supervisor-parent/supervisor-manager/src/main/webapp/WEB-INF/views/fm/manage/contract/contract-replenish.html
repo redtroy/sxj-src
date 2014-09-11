@@ -66,7 +66,7 @@
         	var vTrClone2=vTr2.clone(true);//创建第一行的副本对象vTrClone 
         	var id="BatchItemTrRowB"+vNum2+1;
         	vTrClone2[0].id=id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-        	vTrClone2.insertAfter(vTr2);
+        	vTrClone2.insertAfter(vTr2); 
         	vTrClone2.find("td").find("input").val("");
         	vTrClone2.find("td").find("a").remove();//更改按钮
         }
@@ -83,6 +83,7 @@
         				$("#batchItem2 tr").filter(".batchItemClass2").eq(j).find("td").eq(0).find("input").attr("name","batchList["+i+"].replenishBatchItems["+j+"].quantity");	
         			}
         		}
+        		if (confirm("确定补损合同吗?")) {
         			$.post("saveReplenish.htm",$("#changsForm").serialize(),function(data){
         				if (data.isOK == 'ok') {
         					  alert("补损成功")
@@ -91,6 +92,7 @@
         						alert("补损失败");
         					}
         			})
+        		}
         	});
         	
         	}
@@ -257,7 +259,7 @@
                   <!-- 图片列表 begin -->
                   <#assign arr=(contractModel.contract.imgPath?split(","))>
                  <#list arr  as imgPath>
-                 	 <div class="pic"><a href="#" class="demo-image" data-image="${imgPath}"><img src="${imgPath}"  /></a></div>
+                 	 <div class="pic"><a href="#" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}"  /></a></div>
                  </#list>
                   <!-- 图片列表 end -->
                 </div>
@@ -289,7 +291,7 @@
                   <#assign arr=(contractModel.contract.imgPath?split(","))>
                   <input type="hidden" value="${contractModel.contract.imgPath}" name="replenish.imgPath"  />
                  <#list arr  as imgPath>
-                 	 <div class="pic"><a href="#" class="demo-image" data-image="${imgPath}"><img src="${imgPath}"  /></a></div>
+                 	 <div class="pic"><a href="#" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}"  /></a></div>
                  </#list>
                   <!-- 图片列表 end -->
                 </div>

@@ -6,9 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
+import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
@@ -20,6 +25,11 @@ public class RecordServiceImpl implements IRecordService {
 	@Autowired
 	private IRecordDao recordDao;
 
+	@Autowired
+	private IContractService contractService;
+	
+	@Autowired
+	private IContractDao contractDao;
 	/**
 	 * 新增备案
 	 */
@@ -114,19 +124,28 @@ public class RecordServiceImpl implements IRecordService {
 	@Override
 	@Transactional
 	public void bindingContract(String contractNo, String refContractNo,
-			String recordNo, String recordNo2) {
+			String recordNo, String recordNo2,String recordIdA,String recordIdB) {
 
-		RecordEntity record = recordDao.getRecord(recordNo);
-		RecordEntity record2 = recordDao.getRecord(recordNo2);
+		RecordEntity record = recordDao.getRecord(recordIdA);
+		RecordEntity record2 = recordDao.getRecord(recordIdB);
 		if (record != null) {
 			record.setRefContractNo(refContractNo);
 			record.setContractNo(contractNo);
+			record.setState(RecordStateEnum.Binding);
 			recordDao.updateRecord(record);
 		}
 		if (record2 != null) {
 			record2.setRefContractNo(refContractNo);
 			record2.setContractNo(contractNo);
+			record2.setState(RecordStateEnum.Binding);
 			recordDao.updateRecord(record2);
+		}
+		//插入合同
+		ContractModel ce = contractService.getContractByContractNo(contractNo);
+		if(ce!=null){
+			ContractEntity contract =ce.getContract();
+			contract.setRecordNo(recordNo+","+recordNo2);
+			contractDao.updateContract(contract);
 		}
 
 	}
