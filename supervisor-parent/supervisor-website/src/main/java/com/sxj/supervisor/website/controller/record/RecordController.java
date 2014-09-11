@@ -28,6 +28,7 @@ import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
@@ -67,7 +68,7 @@ public class RecordController extends BaseController {
 		RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
-		query.setMemberId(userBean.getMember().getId());
+		query.setMemberId(userBean.getMember().getMemberNo());
 		List<RecordEntity> list = recordService.queryRecord(query);
 		map.put("recordlist", list);
 		map.put("confirmState", rse);
@@ -146,9 +147,9 @@ public class RecordController extends BaseController {
 	public String to_apply(ModelMap map, HttpSession session) {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
-		map.put("type", userBean.getMember().getType());
+		map.put("type",userBean.getMember().getType().getId() );
 		map.put("name", userBean.getMember().getName());// name
-		map.put("id", userBean.getMember().getId());
+		map.put("id", userBean.getMember().getMemberNo());
 		return "site/record/apply-record";
 	}
 

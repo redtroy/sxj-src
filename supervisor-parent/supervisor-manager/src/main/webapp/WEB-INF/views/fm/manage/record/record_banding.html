@@ -59,7 +59,12 @@ function query(type){
 	  var recordNo=$("#recordNoA_edit").text();
 	  var recordNo2=$("#recordNoB_edit").text();
 	  $.post("banding_save.htm",{contractNo:contractNo,refContractNo:refContractNo,recordNo:recordNo,recordNo2:recordNo2},function(data){
-		  alert("更新成功！");
+		  if (data.isOK=='ok'){
+			  alert("绑定成功!");
+			  window.location.href="recordList.htm";
+		  }else{
+			  alert("绑定失败!");
+		  }
 	  })
   }
 </SCRIPT>

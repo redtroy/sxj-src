@@ -130,6 +130,7 @@ public class RecordController extends BaseController {
 			Map<String, String> map = new HashMap<String, String>();
 			recordService.bindingContract(contractNo, refContractNo, recordNo,
 					recordNo2);
+			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("绑定合同错误", e, this.getClass());
