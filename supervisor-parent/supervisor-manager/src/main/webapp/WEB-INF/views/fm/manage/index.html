@@ -44,8 +44,12 @@ function edit_pwd(){
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
     <div class="welcomeBox text-center">
-     <h2 class="welcome fontYH">欢迎您再次登录</h2>
-     <div class="color-gray6">您上次登陆时间为：2014年6月10日14:50</div>
+     <h2 class="welcome fontYH">欢迎您登录</h2>
+     <#if Session.userinfo?exists>
+      <#if Session.userinfo.lastLogin?exists>
+     <div class="color-gray6">您上次登陆时间为： ${Session.userinfo.lastLogin?string("yyyy-MM-dd HH:mm:ss")}</div>
+     </#if>
+     </#if>
      <a class="button button-green button-middle edit-password fontYH f14">修改登录密码</a>
     </div>
     <div class="modal-mask" style="display:none">

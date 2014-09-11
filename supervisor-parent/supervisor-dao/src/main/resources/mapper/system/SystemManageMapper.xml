@@ -10,12 +10,13 @@
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
 		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
+		<result property="lastLogin" column="LAST_LOGIN" javaType="DATE" />
 	</resultMap>
 
 	<!-- 条件查询用户 -->
 	<select id="querySystemAccount" resultMap="SystemAccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD,a.ACCOUNT_NO FROM M_SYS_ACCOUNT a
+		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD,a.ACCOUNT_NO,a.LAST_LOGIN FROM M_SYS_ACCOUNT a
 		LEFT JOIN M_SYS_ROLE r ON a.ID=r.ACCOUNT_ID WHERE 1=1]]>
 		<!-- 用户ID -->
 		<if test="condition.id != null and condition.id!=''">

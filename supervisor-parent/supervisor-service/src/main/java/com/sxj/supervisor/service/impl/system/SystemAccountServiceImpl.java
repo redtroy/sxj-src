@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.impl.system;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,8 +93,9 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 					roleServce.removeRoles(account.getId());
 					roleServce.addRoles(roles);
 				}
+			} else {
+				roleServce.removeRoles(account.getId());
 			}
-
 			accountDao.updateSystemAccount(account);
 		} catch (Exception e) {
 			throw new ServiceException("修改系统用户信息错误", e);
@@ -181,6 +183,19 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 		} catch (Exception e) {
 			throw new ServiceException("初始化系统用户密码错误", e);
 		}
+	}
+
+	@Override
+	public void updateLoginTime(String accountId) throws ServiceException {
+		try {
+			SystemAccountEntity account = new SystemAccountEntity();
+			account.setId(accountId);
+			account.setLastLogin(new Date());
+			accountDao.updateSystemAccount(account);
+		} catch (Exception e) {
+			throw new ServiceException("更新系統用戶登錄時間错误", e);
+		}
+
 	}
 
 }
