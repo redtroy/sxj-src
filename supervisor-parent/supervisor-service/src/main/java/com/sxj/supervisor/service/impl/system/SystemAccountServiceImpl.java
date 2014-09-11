@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.system;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -196,6 +197,20 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			throw new ServiceException("更新系統用戶登錄時間错误", e);
 		}
 
+	}
+
+	@Override
+	public String edit_pwd(String id, String password) throws ServiceException {
+		SystemAccountEntity account = new SystemAccountEntity();
+		account.setId(id);
+		account.setPassword(password);
+		try {
+			accountDao.updateSystemAccount(account);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

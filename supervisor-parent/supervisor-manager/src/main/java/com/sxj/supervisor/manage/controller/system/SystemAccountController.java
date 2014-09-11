@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +24,6 @@ import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.supervisor.validator.hibernate.AddGroup;
-import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -120,6 +121,26 @@ public class SystemAccountController extends BaseController {
 		map.put("isOK", true);
 		map.put("password", password);
 		return map;
+	}
+
+	/**
+	 * 修改密码
+	 * 
+	 * @return
+	 */
+	@RequestMapping("edir_pwd")
+	public @ResponseBody Map<String, Object> edit_pwd(HttpSession session,
+			String password, String password2) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (password.equals(password2)) {
+			SystemAccountEntity user = getLoginInfo(session);
+			accountService.edit_pwd(user.getId(), password);
+			map.put("isOK", "ok");
+		} else {
+			map.put("erro", "两次密码输入不一样");
+		}
+		return map;
+
 	}
 
 	@RequestMapping("edit_account")

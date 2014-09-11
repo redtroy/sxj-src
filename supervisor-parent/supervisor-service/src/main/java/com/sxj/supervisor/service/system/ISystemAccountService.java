@@ -32,4 +32,5 @@ public interface ISystemAccountService {
 	public ResultList<SystemAccountEntity> queryAccounts(SysAccountQuery query)
 			throws ServiceException;
 
+	public String edit_pwd(String id, String password) throws ServiceException;
 }

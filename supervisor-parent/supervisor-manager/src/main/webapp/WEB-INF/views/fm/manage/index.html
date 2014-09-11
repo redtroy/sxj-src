@@ -25,8 +25,20 @@ function edit_pwd(){
 	var pwd1=$("#loginpassword").val();
 	var pwd2=$("#newpassword").val();
 	if (pwd1=="" || pwd2==""){
-		alert("")
+		alert("密码不能为空！")
+		return false;
 	}
+	if (pwd1 !=pwd2){
+		alert("两次密码输入不一样！请重新输入！")
+		return false;
+	}
+	$.post("${basePath}system/edir_pwd.htm",{password:pwd1,password2:pwd2},function(data){
+		if (data.isOK=="ok"){
+			alert("修改成功！");
+		}else{
+			alert(data.erro);
+		}
+	})
 }
 </script>
 <!-- InstanceEndEditable -->
