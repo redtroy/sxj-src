@@ -1,7 +1,9 @@
 package com.sxj.supervisor.entity.system;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import org.apache.ibatis.type.JdbcType;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -60,6 +62,9 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 	@Column(name = "DEL_STATE")
 	private Boolean delState = false;
 
+	@Column(name = "LAST_LOGIN")
+	private Date lastLogin;
+
 	public String getId() {
 		return id;
 	}
@@ -106,6 +111,14 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 
 	public void setDelState(Boolean delState) {
 		this.delState = delState;
+	}
+
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
 	}
 
 }

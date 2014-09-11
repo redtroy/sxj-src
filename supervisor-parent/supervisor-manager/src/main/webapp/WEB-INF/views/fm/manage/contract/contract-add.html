@@ -67,7 +67,7 @@
 		$.post("addContract.htm", $("#addForm").serialize(), function(data) {
 			if (data.isOK == 'ok') {
 				alert("生成合同成功");
-				window.location.href = "query.htm";
+				window.location.href = "${basePath}record/recordList.htm";
 			} else {
 				alert("生成合同失败");
 			}

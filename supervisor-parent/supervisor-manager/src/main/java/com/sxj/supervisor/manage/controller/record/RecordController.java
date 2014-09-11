@@ -124,12 +124,13 @@ public class RecordController extends BaseController {
 
 	@RequestMapping("/banding_save")
 	public @ResponseBody Map<String, String> bandingSave(String contractNo,
-			String refContractNo, String recordNo, String recordNo2)
+			String refContractNo, String recordNo, String recordNo2,String recordIdA,String recordIdB)
 			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			recordService.bindingContract(contractNo, refContractNo, recordNo,
-					recordNo2);
+					recordNo2,recordIdA,recordIdB);
+			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("绑定合同错误", e, this.getClass());

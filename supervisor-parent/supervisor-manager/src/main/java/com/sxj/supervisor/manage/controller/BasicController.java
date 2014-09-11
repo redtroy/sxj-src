@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,6 +97,8 @@ public class BasicController extends BaseController {
 		}
 		if (currentUser.isAuthenticated()) {
 			session.setAttribute("userinfo", user);
+			user.setLastLogin(new Date());
+			accountService.updateLoginTime(user.getId());
 			return "redirect:" + getBasePath(request) + "index.htm";
 		} else {
 			map.put("account", account);
@@ -199,7 +202,7 @@ public class BasicController extends BaseController {
 		String sb = "";
 		for (MemberEntity memberEntity : list) {
 			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
-					+ memberEntity.getId() + "\"}";
+					+ memberEntity.getMemberNo() + "\"}";
 			strlist.add(sb);
 		}
 		String json = "{\"data\":" + strlist.toString() + "}";

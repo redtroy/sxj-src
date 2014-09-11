@@ -38,6 +38,7 @@ import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -151,6 +152,7 @@ public class ContractServiceImpl implements IContractService {
 					contractItemDao.addItem(newList);// 新增条目
 				}
 				record.setContractNo(contract.getContractNo());
+				record.setState(RecordStateEnum.Binding);
 				recordDao.updateRecord(record);
 			}
 		} catch (Exception e) {
@@ -390,7 +392,7 @@ public class ContractServiceImpl implements IContractService {
 
 			}
 			// 补损合同
-			String replenishRecordIds = this.recordIdArr(contract.getId(), "2");// 获取变更备案
+			String replenishRecordIds = this.recordIdArr(contract.getContractNo(), "2");// 获取变更备案
 			if (replenishRecordIds != null && replenishRecordIds.length() > 0) {
 
 				QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
@@ -406,6 +408,7 @@ public class ContractServiceImpl implements IContractService {
 							.setReplenishContract(replenishEntity);
 					List<ReplenishBatchEntity> replenishBatchList = contractReplenishBatchDao
 							.queryReplenishBatch(replenishEntity.getId());
+					List<ContractReplenishModel> crmList = new ArrayList<ContractReplenishModel>();
 					if (replenishBatchList != null) {
 						List<ReplenishBatchModel> ReplenishBatchModelList = new ArrayList<ReplenishBatchModel>();
 						for (int j = 0; j < replenishBatchList.size(); j++) {
@@ -444,8 +447,11 @@ public class ContractServiceImpl implements IContractService {
 						}
 						contractReplenishModel
 								.setBatchItems(ReplenishBatchModelList);
+						crmList.add(contractReplenishModel);
 					}
+					contractModel.setReplenishList(crmList);
 				}
+				
 			}
 		}
 		return contractModel;
@@ -611,6 +617,7 @@ public class ContractServiceImpl implements IContractService {
 							ReplenishBatchEntity rb = replenishBatchModel
 									.getReplenishBatch();
 							rb.setBatchItems(json);
+							rb.setReplenishId(replenishContract.getId());
 							list.add(rb);
 						}
 						contractReplenishBatchDao.addReplenishBatch(list);

@@ -41,9 +41,11 @@ function query(type){
 			if (memberIdA != null && memberIdA !=""){
 				$("#memberNameB_edit").text(data.record.memberNameB);
 				$("#recordNoB_edit").text(data.record.recordNo);
+				$("#recordIdB_edit").val(data.record.id);
 			}else{
 				$("#memberNameA_edit").text(data.record.memberNameA);
 				$("#recordNoA_edit").text(data.record.recordNo);
+				$("#recordIdA_edit").val(data.record.id);
 			}
 			if (data.refContractNo != null && data.refContractNo !=''){
 				$("#refContractNo").val(data.refContractNo);
@@ -58,8 +60,16 @@ function query(type){
 	  var refContractNo=$("#refContractNo").val();
 	  var recordNo=$("#recordNoA_edit").text();
 	  var recordNo2=$("#recordNoB_edit").text();
-	  $.post("banding_save.htm",{contractNo:contractNo,refContractNo:refContractNo,recordNo:recordNo,recordNo2:recordNo2},function(data){
-		  alert("更新成功！");
+	  var recordIdB = $("#recordIdB_edit").val();
+ 	  var recordIdA = $("#recordIdA_edit").val();
+	  $.post("banding_save.htm",{contractNo:contractNo,refContractNo:refContractNo,
+		  recordNo:recordNo,recordNo2:recordNo2,recordIdB:recordIdB,recordIdA:recordIdA},function(data){
+		  if (data.isOK=='ok'){
+			  alert("绑定成功!");
+			  window.location.href="recordList.htm";
+		  }else{
+			  alert("绑定失败!");
+		  }
 	  })
   }
 </SCRIPT>
@@ -79,9 +89,9 @@ function query(type){
       <ul>
       <li><label>合同号</label><input type="text" value="" id="contractNo"/><button class="btn btn-blue" onclick="query(${record.type.id});return false;"><span>查询</span></button></li>
       <li><label id="memberNameA">甲方名称</label><span id="memberNameA_edit">${record.memberNameA}</span></li>
-      	<li><label id="recordNoA">甲方备案号</label><span id="recordNoA_edit"><#if (record.flag.id==flag[0].id)> ${record.recordNo}  <input type="hidden" id="memberIdA" value="${record.memberIdA}"/></#if ></span></li>
+      	<li><label id="recordNoA">甲方备案号</label><span id="recordNoA_edit"><#if (record.flag.id==flag[0].id)> ${record.recordNo}  <input type="hidden" id="memberIdA" value="${record.memberIdA}"/></#if ></span><input type="hidden" id="recordIdA_edit" value="${record.id}"/></li>
       <li><label id="memberNameB">乙方名称</label><span id="memberNameB_edit">${record.memberNameB}</span></li>
-      <li><label id="recordNoB">乙方备案号</label><span id="recordNoB_edit"><#if (record.flag.id==flag[1].id)> ${record.recordNo} <input type="hidden" id="memberIdB" value="${record.memberIdB}"/></span>  </#if></li>
+      <li><label id="recordNoB">乙方备案号</label><span id="recordNoB_edit"><#if (record.flag.id==flag[1].id)> ${record.recordNo} <input type="hidden" id="memberIdB" value="${record.memberIdB}"/>  </#if></span><input type="hidden" id="recordIdB_edit" value="${record.id}"/></li>
       <li><label>关联招标合同</label><input type="text" value="" id="refContractNo"  datatype="*1-50" nullmsg="请输入关联合同号"/></li>
       </ul>
       <div class="btnBox"><a href="javascript:void(0);" class="button button-orange button-small" onclick="edit();return false;">绑定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>

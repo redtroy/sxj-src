@@ -92,5 +92,7 @@
 			test="condition.startRecordDate != null and condition.endRecordDate != null and condition.startRecordDate != '' and condition.endRecordDate != ''">
 			<![CDATA[AND RECORD_DATE >=#{condition.startRecordDate} AND RECORD_DATE <= #{condition.endRecordDate}]]>
 		</if>
+		<![CDATA[ ORDER BY CONTRACT_NO DESC
+		]]>
 	</select>
 </mapper>

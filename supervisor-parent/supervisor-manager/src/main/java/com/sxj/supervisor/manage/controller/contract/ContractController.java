@@ -159,7 +159,7 @@ public class ContractController extends BaseController {
 	@RequestMapping("replenish")
 	public String replenishContract(ModelMap model, String contractId,
 			String recordId) {
-		RecordEntity record = recordService.getRecord("1232");
+		RecordEntity record = recordService.getRecord(recordId);
 		if (record != null) {
 			ContractModel conEntity = contractService
 					.getContractModelByContractNo(record.getContractNo());
