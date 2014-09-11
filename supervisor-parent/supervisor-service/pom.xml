@@ -24,12 +24,10 @@
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-core</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-extension</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<!-- Spring -->
 		<dependency>

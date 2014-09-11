@@ -9,7 +9,30 @@
 	<url>http://maven.apache.org</url>
 	<version>1.0</version>
 	<properties>
+		<com.sxj.spring>4.2.3</com.sxj.spring>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.7</java.version>
+		<com.sxj.version>1.0</com.sxj.version>
+		<com.sxj.spring>4.2.3</com.sxj.spring>
+		<mybatis.version>3.2.7</mybatis.version>
+		<mybatis.orm.version>3.2.2</mybatis.orm.version>
+		<spring.mybatis.version>1.2.2</spring.mybatis.version>
+		<com.alibaba.druid.version>1.0.7</com.alibaba.druid.version>
+		<mysql.version>5.1.31</mysql.version>
+		<junit>4.11</junit>
+		<spring.version>4.0.6.RELEASE</spring.version>
+		<spring.webflow.version>2.4.0.RELEASE</spring.webflow.version>
+		<servlet.version>3.0.1</servlet.version>
+		<jstl.version>1.2</jstl.version>
+		<jsp.version>2.0</jsp.version>
+		<commons-lang3.version>3.3.2</commons-lang3.version>
+		<commons-io.version>2.4</commons-io.version>
+		<commons-codec.version>1.9</commons-codec.version>
+		<commons-beanutils.version>1.9.2</commons-beanutils.version>
+		<commons-fileupload.version>1.3.1</commons-fileupload.version>
+		<commons-net.version>3.3</commons-net.version>
+		<slf4j.version>1.7.7</slf4j.version>
+		<logback.version>1.1.2</logback.version>
 	</properties>
 	<dependencies>
 		<dependency>

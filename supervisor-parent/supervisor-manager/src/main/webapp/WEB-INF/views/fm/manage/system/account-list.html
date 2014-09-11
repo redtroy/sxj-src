@@ -66,11 +66,12 @@ function toRemove(id){
 }
 
 function edit(id){
-	var params=$("#"+id).find(":input");
+	var params=$("#"+id+"_tr").find(":input");
 	$("#edit_form").empty();
 	$("#edit_form").append(params);
-	params=$("#edit_form").serialize();
-	$.post("${basePath}system/edit_account.htm",params,function(data){
+	var params2=$("#edit_form").serialize();
+	alert(params2);
+	$.post("${basePath}system/edit_account.htm",params2,function(data){
 		if(data.isOK==true){
 			toInfo(id,data);
 			alert("修改成功");
@@ -182,7 +183,7 @@ function toEdit(accountId){
 			  <button onclick="javascript:toAdd();" class="btn btn-blue ly-right"><span>新增管理员</span></button>
  	 </form>
     </div>
-    <form  id="edit_form" method="post"></form>
+    <form id="edit_form" method="post" action="javascript:void(0);"></form>
     <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%" />

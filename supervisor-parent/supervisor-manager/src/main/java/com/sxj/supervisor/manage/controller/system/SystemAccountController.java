@@ -124,7 +124,7 @@ public class SystemAccountController extends BaseController {
 
 	@RequestMapping("edit_account")
 	public @ResponseBody Map<String, Object> editAccount(
-			@Validated({ UpdateGroup.class }) SystemAccountEntity account,
+			SystemAccountEntity account,
 			@RequestParam("functionIds") String functionIds) {
 		String[] ids = null;
 		if (StringUtils.isNotEmpty(functionIds)) {
