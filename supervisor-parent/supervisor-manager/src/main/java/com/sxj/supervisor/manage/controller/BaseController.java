@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
@@ -65,6 +67,16 @@ public class BaseController {
 					+ "] has errors [" + message + "]", this.getClass());
 			throw new SystemException(message);
 		}
+	}
+
+	protected SystemAccountEntity getLoginInfo(HttpSession session) {
+		Object object = session.getAttribute("userinfo");
+		if (object != null) {
+			SystemAccountEntity user = (SystemAccountEntity) object;
+			return user;
+		}
+		return null;
+
 	}
 
 }

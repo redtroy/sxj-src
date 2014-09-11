@@ -21,6 +21,25 @@ jQuery(document).ready(function($) {
 		$('.modal-mask').slideUp(200);
 	})
 })
+function edit_pwd(){
+	var pwd1=$("#loginpassword").val();
+	var pwd2=$("#newpassword").val();
+	if (pwd1=="" || pwd2==""){
+		alert("密码不能为空！")
+		return false;
+	}
+	if (pwd1 !=pwd2){
+		alert("两次密码输入不一样！请重新输入！")
+		return false;
+	}
+	$.post("${basePath}system/edir_pwd.htm",{password:pwd1,password2:pwd2},function(data){
+		if (data.isOK=="ok"){
+			alert("修改成功！");
+		}else{
+			alert(data.erro);
+		}
+	})
+}
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -37,8 +56,12 @@ jQuery(document).ready(function($) {
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
     <div class="welcomeBox text-center">
-     <h2 class="welcome fontYH">欢迎您再次登录</h2>
-     <div class="color-gray6">您上次登陆时间为：2014年6月10日14:50</div>
+     <h2 class="welcome fontYH">欢迎您登录</h2>
+     <#if Session.userinfo?exists>
+      <#if Session.userinfo.lastLogin?exists>
+     <div class="color-gray6">您上次登陆时间为： ${Session.userinfo.lastLogin?string("yyyy-MM-dd HH:mm:ss")}</div>
+     </#if>
+     </#if>
      <a class="button button-green button-middle edit-password fontYH f14">修改登录密码</a>
     </div>
     <div class="modal-mask" style="display:none">
@@ -52,7 +75,7 @@ jQuery(document).ready(function($) {
      <label>确认密码</label>
      <input type="password" name="newpassword" id="newpassword" tabindex="1" class="input input-w270h36" placeholder="请确认新密码">
      </div>
-     <button class="popBtn">确认修改</button>
+     <button class="popBtn" onclick="edit_pwd();return false;">确认修改</button>
      </div>
      </div>
      </div>
