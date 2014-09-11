@@ -60,7 +60,7 @@ function del(id){
 	if(confirm('确实删除备案吗?')){
 	$.post("delRecord.htm",{id:id},function(data){
 		if (data.isOk=="ok"){
-			$("#"+id).remove();
+			window.location.href="recordList.htm";
 		}
 	})
 	}

@@ -199,7 +199,7 @@ public class BasicController extends BaseController {
 		String sb = "";
 		for (MemberEntity memberEntity : list) {
 			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
-					+ memberEntity.getId() + "\"}";
+					+ memberEntity.getMemberNo() + "\"}";
 			strlist.add(sb);
 		}
 		String json = "{\"data\":" + strlist.toString() + "}";
