@@ -19,25 +19,14 @@ import java.sql.PreparedStatement;
 
 import javax.sql.DataSource;
 
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
-import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionHolder;
-import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
-import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.util.Assert;
 
 import com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager;
-
 
 /**
  * Handles MyBatis SqlSession life cycle. It can register and get SqlSessions
@@ -47,34 +36,43 @@ import com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager;
  * @version $Id: SqlSessionUtils.java 4198 2011-12-02 08:20:30Z
  *          eduardo.macarron@gmail.com $
  */
-public final class ShardedSqlSession {
-
-	private static final Log logger = LogFactory.getLog(PreparedStatement.class);
-
-	/**
-	 * This class can't be instantiated, exposes static utility methods only.
-	 */
-	private ShardedSqlSession() {
-		// do nothing
-	}
-
-	public static SqlSession getSqlSession(DataSource ds, ShardSqlSessionFactory sessionFactory, ExecutorType executorType, PersistenceExceptionTranslator exceptionTranslator) {
-
-		SqlSession sess = ShardDataSourceTrasactionManager.getSession(ds);
-		if (sess == null) {
-			sess = sessionFactory.openSession(ds);
-			ShardDataSourceTrasactionManager.putSession(ds, sess);
-		}
-		return sess;
-	}
-
-	public static void closeSqlSession(SqlSession session, DataSource ds) {
-		SqlSession sess = ShardDataSourceTrasactionManager.getSession(ds);
-		if (sess == session) {
-			if (!TransactionSynchronizationManager.isSynchronizationActive()) {
-				sess.close();
-			}
-		}
-	}
-
+public final class ShardedSqlSession
+{
+    
+    private static final Log logger = LogFactory.getLog(PreparedStatement.class);
+    
+    /**
+     * This class can't be instantiated, exposes static utility methods only.
+     */
+    private ShardedSqlSession()
+    {
+        // do nothing
+    }
+    
+    public static SqlSession getSqlSession(DataSource ds,
+            ShardSqlSessionFactory sessionFactory, ExecutorType executorType,
+            PersistenceExceptionTranslator exceptionTranslator)
+    {
+        
+        SqlSession sess = ShardDataSourceTrasactionManager.getSession(ds);
+        if (sess == null)
+        {
+            sess = sessionFactory.openSession(ds);
+            ShardDataSourceTrasactionManager.putSession(ds, sess);
+        }
+        return sess;
+    }
+    
+    public static void closeSqlSession(SqlSession session, DataSource ds)
+    {
+        SqlSession sess = ShardDataSourceTrasactionManager.getSession(ds);
+        if (sess == session)
+        {
+            if (!TransactionSynchronizationManager.isSynchronizationActive())
+            {
+                sess.close();
+            }
+        }
+    }
+    
 }

@@ -24,13 +24,19 @@ public class Shard2Test
     {
     }
     
-    @Test
     public void testInsert()
     {
         Shard2 shard = new Shard2();
-        shard.setShard2Id("e");
+        //        shard.setShard2Id("e");
         shard.setShard2Name("c测试");
         mapper.insert(shard);
+    }
+    
+    @Test
+    public void testGet()
+    {
+        Shard2 shard2 = mapper.get("6u8h");
+        System.out.println(shard2.getShard2Name());
     }
     
 }

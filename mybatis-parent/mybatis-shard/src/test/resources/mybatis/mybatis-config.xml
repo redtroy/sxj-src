@@ -6,12 +6,13 @@
 
 	<properties>
 		<property name="dialect" value="mysql" />
+		<property name="sharded" value="true"/>
 	</properties>
 	<settings>
 		<!-- changes from the defaults -->
 		<setting name="lazyLoadingEnabled" value="false" />
 	</settings>
-	<typeHandlers>
+	<!-- <typeHandlers>
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.member.AccountStatesEnum" />
@@ -45,7 +46,7 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractSureStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractSureStateEnum" />
-	</typeHandlers>
+	</typeHandlers> -->
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
 	</plugins>

@@ -49,6 +49,12 @@ public class DataSourceRouter
         //        getDataSource(null, bs, null);
     }
     
+    public static DataSource getKeyGeneratorDataSource()
+    {
+        List<DataSource> keyGeneratorDs = DataSourceFactory.getKeyGeneratorDs();
+        return keyGeneratorDs.get((int) (keyGeneratorDs.size() * Math.random()));
+    }
+    
     public static DataSource getDataSource(MappedStatement ms,
             BoundSql boundSql, Object param)
     {

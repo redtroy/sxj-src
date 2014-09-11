@@ -15,10 +15,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sxj.mybatis.shard.configuration.node.DataNodeCfg;
+import com.sxj.mybatis.shard.configuration.node.KeyNodeCfg;
 import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
 
 public class XmlReader
 {
+    private static KeyNodeCfg keyNodeCfg = new KeyNodeCfg();
     
     private static List<DataNodeCfg> dataNodes = new ArrayList<DataNodeCfg>();
     
@@ -47,6 +49,12 @@ public class XmlReader
             InputStream is = XmlReader.class.getResourceAsStream("/shard-config.xml");
             Document xmldoc = db.parse(is);
             root = xmldoc.getDocumentElement();
+            
+            NodeList keyNodesCfg = root.getElementsByTagName("keyNodes");
+            if (keyNodesCfg == null || keyNodesCfg.getLength() == 0)
+                throw new RuntimeException("No KeyNode defined");
+            String ref = ((Element) (keyNodesCfg.item(0))).getAttribute("ref");
+            keyNodeCfg.setKeyNodes(ref);
             
             NodeList dataNodesCfg = root.getElementsByTagName("dataNodes")
                     .item(0)
@@ -137,6 +145,11 @@ public class XmlReader
     public static Map<String, ShardRuleCfg> getRules()
     {
         return rules;
+    }
+    
+    public static KeyNodeCfg getKeyNodeCfg()
+    {
+        return keyNodeCfg;
     }
     
 }

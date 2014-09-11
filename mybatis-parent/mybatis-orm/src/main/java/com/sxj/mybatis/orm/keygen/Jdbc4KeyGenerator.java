@@ -7,6 +7,8 @@ import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 
+import com.sxj.mybatis.orm.ConfigurationProperties;
+
 public class Jdbc4KeyGenerator extends Jdbc3KeyGenerator
 {
     
@@ -17,11 +19,14 @@ public class Jdbc4KeyGenerator extends Jdbc3KeyGenerator
         super.processBefore(executor, ms, stmt, parameter);
         try
         {
-            new SnGenerator().generateSn(executor, ms, parameter);
+            SnGenerator snGenerator = new SnGenerator();
+            snGenerator.generateSn(executor.getTransaction().getConnection(),
+                    parameter,
+                    ConfigurationProperties.getDialect(ms.getConfiguration()));
         }
-        catch (SQLException e)
+        catch (SQLException sqle)
         {
-            throw new RuntimeException(e);
+            throw new RuntimeException(sqle);
         }
     }
     

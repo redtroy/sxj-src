@@ -54,7 +54,7 @@ public class MybatisConfiguration
                     xmlConfigBuilder = new XMLConfigBuilder(
                             configLocation.getInputStream(), null,
                             configurationProperties);
-                    configuration = xmlConfigBuilder.getConfiguration();
+                    configuration = xmlConfigBuilder.parse();
                     configuration.setEnvironment(environment);
                 }
                 else

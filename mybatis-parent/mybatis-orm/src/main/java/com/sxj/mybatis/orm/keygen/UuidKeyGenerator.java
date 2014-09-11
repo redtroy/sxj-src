@@ -10,6 +10,7 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
+import com.sxj.mybatis.orm.ConfigurationProperties;
 import com.sxj.spring.modules.util.Identities;
 
 public class UuidKeyGenerator implements KeyGenerator
@@ -39,7 +40,6 @@ public class UuidKeyGenerator implements KeyGenerator
         {
             if (parameter instanceof StrictMap)
             {
-                
                 StrictMap map = (StrictMap) parameter;
                 Iterator<String> keySet = map.keySet().iterator();
                 while (keySet.hasNext())
@@ -53,7 +53,7 @@ public class UuidKeyGenerator implements KeyGenerator
                             {
                                 populateKey(ms.getConfiguration()
                                         .newMetaObject(object), keyProperties);
-                                snGenerator.generateSn(executor, ms, object);
+                                
                             }
                     }
                     else if (key.equals("array"))
@@ -65,7 +65,6 @@ public class UuidKeyGenerator implements KeyGenerator
                             {
                                 populateKey(ms.getConfiguration()
                                         .newMetaObject(object), keyProperties);
-                                snGenerator.generateSn(executor, ms, object);
                             }
                     }
                 }
@@ -73,8 +72,11 @@ public class UuidKeyGenerator implements KeyGenerator
             else
             {
                 populateKey(newMetaObject, keyProperties);
-                snGenerator.generateSn(executor, ms, parameter);
             }
+            
+            snGenerator.generateSn(executor.getTransaction().getConnection(),
+                    parameter,
+                    ConfigurationProperties.getDialect(ms.getConfiguration()));
         }
         catch (Exception e)
         {

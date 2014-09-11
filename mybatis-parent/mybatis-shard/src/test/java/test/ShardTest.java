@@ -30,7 +30,7 @@ public class ShardTest
     public void testInsert()
     {
         Shard shard = new Shard();
-        shard.setShardId(4);
+        //        shard.setShardId(4);
         shard.setShardName("test测试");
         mapper.insert(shard);
         //		BlogMapper mapper = factory.getBean(BlogMapper.class);

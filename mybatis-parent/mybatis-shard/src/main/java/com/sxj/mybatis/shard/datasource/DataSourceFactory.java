@@ -12,12 +12,15 @@ import org.springframework.context.ApplicationContext;
 
 import com.sxj.mybatis.shard.configuration.XmlReader;
 import com.sxj.mybatis.shard.configuration.node.DataNodeCfg;
+import com.sxj.mybatis.shard.configuration.node.KeyNodeCfg;
 import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
 
 public class DataSourceFactory
 {
     
     private static List<DataSourceNode> nodes;
+    
+    private static List<DataSource> keyGeneratorDs;
     
     private static Map<String, String> shardTables = new HashMap<String, String>();
     
@@ -81,7 +84,7 @@ public class DataSourceFactory
         //        Map<String, DataSourceCfg> dataSourceCfgs = XmlReader.getDataSources();
         List<DataNodeCfg> dataNodeCfgs = XmlReader.getDataNodes();
         Map<String, ShardRuleCfg> ruleCfgs = XmlReader.getRules();
-        
+        KeyNodeCfg keyNodeCfg = XmlReader.getKeyNodeCfg();
         try
         {
             //            Map<String, DataSource> dataSourceMap = new HashMap<String, DataSource>();
@@ -103,11 +106,18 @@ public class DataSourceFactory
             //            }
             
             nodes = new ArrayList<DataSourceNode>();
+            keyGeneratorDs = new ArrayList<DataSource>();
+            List<String> kStr = split(keyNodeCfg.getKeyNodes(), ",");
+            for (String str : kStr)
+            {
+                keyGeneratorDs.add(context.getBean(str, DataSource.class));
+            }
             
             for (DataNodeCfg cfg : dataNodeCfgs)
             {
                 List<DataSource> w = new ArrayList<DataSource>();
                 List<DataSource> r = new ArrayList<DataSource>();
+                
                 List<String> wStr = split(cfg.getWriteNodes(), ",");
                 for (String str : wStr)
                 {
@@ -239,4 +249,10 @@ public class DataSourceFactory
     {
         DataSourceFactory.context = context;
     }
+    
+    public static List<DataSource> getKeyGeneratorDs()
+    {
+        return keyGeneratorDs;
+    }
+    
 }

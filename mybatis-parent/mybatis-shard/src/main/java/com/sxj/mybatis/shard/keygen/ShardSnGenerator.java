@@ -1,4 +1,4 @@
-package com.sxj.mybatis.orm.keygen;
+package com.sxj.mybatis.shard.keygen;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -6,79 +6,69 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
+import javax.sql.DataSource;
 
 import com.sxj.mybatis.dialect.Dialect;
 import com.sxj.mybatis.dialect.SN;
 import com.sxj.mybatis.orm.annotations.Sn;
+import com.sxj.mybatis.orm.keygen.SnStub;
 import com.sxj.spring.modules.util.ReflectUtils;
 import com.sxj.spring.modules.util.Reflections;
 
-public class SnGenerator
+public class ShardSnGenerator implements ShardKeyGenerator
 {
     private static Map<String, List<Field>> cachedSnFields = new WeakHashMap<String, List<Field>>();
     
-    public void generateSn(Connection connection, Object parameter,
-            Dialect dialect) throws SQLException
+    @Override
+    public void process(DataSource ds, Object parameter, Dialect dialect)
+            throws SQLException
     {
+        Connection connection = null;
         Statement statement = null;
+        
         try
         {
+            connection = ds.getConnection();
             statement = connection.createStatement();
-            if (parameter instanceof StrictMap)
+            List list = new ArrayList();
+            if (parameter instanceof Collection<?>)
             {
-                
-                StrictMap map = (StrictMap) parameter;
-                Iterator<String> keySet = map.keySet().iterator();
-                while (keySet.hasNext())
-                {
-                    String key = keySet.next();
-                    if (key.equals("list"))
-                    {
-                        List list = (List) map.get(key);
-                        if (list != null)
-                            for (Object object : list)
-                            {
-                                
-                                process(statement, object, dialect);
-                            }
-                    }
-                    else if (key.equals("array"))
-                    {
-                        
-                        Object[] array = (Object[]) map.get(key);
-                        if (array != null)
-                            for (Object object : array)
-                            {
-                                process(statement, object, dialect);
-                            }
-                    }
-                }
+                Collection tmp = (Collection.class.cast(parameter));
+                list.addAll(tmp);
+            }
+            else if (parameter.getClass().isArray())
+            {
+                list = Arrays.asList(parameter);
             }
             else
             {
                 process(statement, parameter, dialect);
+                return;
             }
+            for (Object object : list)
+                process(statement, object, dialect);
             connection.commit();
         }
-        catch (SQLException e)
+        catch (SQLException sqle)
         {
-            connection.rollback();
+            if (connection != null)
+                connection.rollback();
+            
         }
         finally
         {
             if (statement != null)
                 statement.close();
-            connection.close();
-            //            if (connection != null)
-            //                connection.close();
+            if (connection != null)
+                connection.close();
         }
-        
     }
     
     private void process(Statement statement, Object parameter, Dialect dialect)

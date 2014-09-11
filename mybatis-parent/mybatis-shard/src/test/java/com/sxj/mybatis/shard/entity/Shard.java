@@ -2,6 +2,8 @@ package com.sxj.mybatis.shard.entity;
 
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.GeneratedValue;
+import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.shard.dao.ShardMapper;
@@ -11,7 +13,7 @@ import com.sxj.mybatis.shard.dao.ShardMapper;
 public class Shard
 {
     @Id(column = "SHARD_ID")
-    @Column(name = "SHARD_ID")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private int shardId;
     
     @Column(name = "SHARD_NAME")

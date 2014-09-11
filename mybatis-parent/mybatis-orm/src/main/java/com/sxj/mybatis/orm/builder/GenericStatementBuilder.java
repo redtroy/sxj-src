@@ -15,13 +15,14 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.builder.BaseBuilder;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
-import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
@@ -45,6 +46,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 import org.springframework.util.ReflectionUtils.FieldFilter;
 
+import com.sxj.mybatis.orm.ConfigurationProperties;
 import com.sxj.mybatis.orm.annotations.BatchDelete;
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.BatchUpdate;
@@ -60,6 +62,9 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.annotations.Transient;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.mybatis.orm.annotations.Version;
+import com.sxj.mybatis.orm.keygen.Jdbc4KeyGenerator;
+import com.sxj.mybatis.orm.keygen.ShardKeyGenerator;
+import com.sxj.mybatis.orm.keygen.ShardUuidKeyGenerator;
 import com.sxj.mybatis.orm.keygen.UuidKeyGenerator;
 import com.sxj.spring.modules.util.AnnotationUtils;
 import com.sxj.spring.modules.util.CaseFormatUtils;
@@ -74,6 +79,8 @@ public class GenericStatementBuilder extends BaseBuilder
 {
     
     private MapperBuilderAssistant assistant;
+    
+    private static Map<String, ShardKeyGenerator> shardedKeyGenerators = new HashMap<String, ShardKeyGenerator>();
     
     private Class<?> entityClass;
     
@@ -100,12 +107,14 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private static final String ITEM = "item";
     
+    private boolean sharded = false;
+    
     public GenericStatementBuilder(Configuration configuration,
             Class<?> entityClass)
     {
         super(configuration);
         this.entityClass = entityClass;
-        
+        sharded = ConfigurationProperties.isSharded(configuration);
         String resource = entityClass.getName().replace('.', '/')
                 + ".java (best guess)";
         assistant = new MapperBuilderAssistant(configuration, resource);
@@ -146,8 +155,11 @@ public class GenericStatementBuilder extends BaseBuilder
         ///~~~~~~~~~~~~~~~~~~~~~~
         idField = AnnotationUtils.findDeclaredFieldWithAnnoation(Id.class,
                 entityClass);
-        if (!idField.isAnnotationPresent(GeneratedValue.class)
-                || idField.getAnnotation(GeneratedValue.class).strategy() != GenerationType.AUTO)
+        if (!sharded
+                && (this.idField.isAnnotationPresent(GeneratedValue.class))
+                && (((GeneratedValue) this.idField.getAnnotation(GeneratedValue.class)).strategy() == GenerationType.UUID))
+            columnFields.add(idField);
+        else
             columnFields.add(idField);
         versionField = AnnotationUtils.findDeclaredFieldWithAnnoation(Version.class,
                 entityClass);
@@ -430,7 +442,7 @@ public class GenericStatementBuilder extends BaseBuilder
         boolean flushCache = true;
         boolean useCache = false;
         boolean resultOrdered = false;
-        KeyGenerator keyGenerator = null;
+        KeyGenerator keyGenerator = new NoKeyGenerator();
         String keyProperty = null;
         String keyColumn = null;
         
@@ -441,23 +453,38 @@ public class GenericStatementBuilder extends BaseBuilder
         {
             String keyStatementId = entityClass.getName() + ".insert"
                     + SelectKeyGenerator.SELECT_KEY_SUFFIX;
-            
-            if (configuration.hasKeyGenerator(keyStatementId))
+            if (!sharded)
             {
-                keyGenerator = configuration.getKeyGenerator(keyStatementId);
-            }
-            else if (generatedValue != null)
-            {
-                if (generatedValue.strategy() == GenerationType.UUID)
+                if (configuration.hasKeyGenerator(keyStatementId))
                 {
-                    keyGenerator = new UuidKeyGenerator(generatedValue.length());
-                    
+                    keyGenerator = configuration.getKeyGenerator(keyStatementId);
+                }
+                else if (generatedValue != null)
+                {
+                    if (generatedValue.strategy() == GenerationType.UUID)
+                    {
+                        keyGenerator = new UuidKeyGenerator(
+                                generatedValue.length());
+                        
+                    }
+                }
+                else
+                {
+                    keyGenerator = id.generatedKeys() ? new Jdbc4KeyGenerator()
+                            : new NoKeyGenerator();
                 }
             }
             else
             {
-                keyGenerator = id.generatedKeys() ? new Jdbc3KeyGenerator()
-                        : new NoKeyGenerator();
+                if (generatedValue != null)
+                {
+                    if (generatedValue.strategy() == GenerationType.UUID)
+                    {
+                        shardedKeyGenerators.put(statementId,
+                                new ShardUuidKeyGenerator(
+                                        generatedValue.length()));
+                    }
+                }
             }
             keyProperty = idField.getName();
             keyColumn = StringUtils.isBlank(id.column()) ? CaseFormatUtils.camelToUnderScore(idField.getName())
@@ -501,7 +528,7 @@ public class GenericStatementBuilder extends BaseBuilder
         boolean flushCache = true;
         boolean useCache = false;
         boolean resultOrdered = false;
-        KeyGenerator keyGenerator = null;
+        KeyGenerator keyGenerator = new NoKeyGenerator();
         String keyProperty = null;
         String keyColumn = null;
         
@@ -512,23 +539,39 @@ public class GenericStatementBuilder extends BaseBuilder
         {
             String keyStatementId = entityClass.getName() + ".insert"
                     + SelectKeyGenerator.SELECT_KEY_SUFFIX;
-            
-            if (configuration.hasKeyGenerator(keyStatementId))
+            if (!sharded)
             {
-                keyGenerator = configuration.getKeyGenerator(keyStatementId);
-            }
-            else if (generatedValue != null)
-            {
-                if (generatedValue.strategy() == GenerationType.UUID)
+                if (configuration.hasKeyGenerator(keyStatementId))
                 {
-                    keyGenerator = new UuidKeyGenerator(generatedValue.length());
-                    
+                    keyGenerator = configuration.getKeyGenerator(keyStatementId);
+                }
+                else if (generatedValue != null)
+                {
+                    if (generatedValue.strategy() == GenerationType.UUID)
+                    {
+                        keyGenerator = new UuidKeyGenerator(
+                                generatedValue.length());
+                        
+                    }
+                }
+                else
+                {
+                    keyGenerator = id.generatedKeys() ? new Jdbc4KeyGenerator()
+                            : new NoKeyGenerator();
                 }
             }
             else
             {
-                keyGenerator = id.generatedKeys() ? new Jdbc3KeyGenerator()
-                        : new NoKeyGenerator();
+                if (generatedValue != null)
+                {
+                    if (generatedValue.strategy() == GenerationType.UUID)
+                    {
+                        shardedKeyGenerators.put(statementId,
+                                new ShardUuidKeyGenerator(
+                                        generatedValue.length()));
+                    }
+                }
+                //                shardedKeyGenerators.put(statementId, new shardeduu)
             }
             keyProperty = idField.getName();
             keyColumn = StringUtils.isBlank(id.column()) ? CaseFormatUtils.camelToUnderScore(idField.getName())
@@ -968,6 +1011,11 @@ public class GenericStatementBuilder extends BaseBuilder
                 + getIdFieldName() + "}";
         
         return new TextSqlNode(sql);
+    }
+    
+    public static Map<String, ShardKeyGenerator> getShardedKeyGenerators()
+    {
+        return shardedKeyGenerators;
     }
     
 }
