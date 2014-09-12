@@ -143,7 +143,7 @@ public class MemberController extends BaseController {
 			member.setCheckState(MemberCheckStateEnum.unaudited);
 			member.setRegDate(new Date());
 			memberService.addMember(member);
-			return "site/reg-suc";
+			return "redirect:/member/regist_succ.htm";
 		} else {
 			MemberTypeEnum[] type = MemberTypeEnum.values();
 			List<AreaEntity> list = areaService.getChildrenAreas("32");
@@ -152,6 +152,11 @@ public class MemberController extends BaseController {
 			map.put("member", member);
 			return "site/register";
 		}
+	}
+
+	@RequestMapping("regist_succ")
+	public String regist_succ() {
+		return "site/reg-suc";
 	}
 
 	/**
@@ -220,6 +225,9 @@ public class MemberController extends BaseController {
 		Map<String, String> map = new HashMap<String, String>();
 		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
 				session.getId() + "_checkMs");
+		if (StringUtils.isEmpty(message)) {
+			map.put("flag", "false");
+		}
 		if (message.equals(ms)) {
 			map.put("flag", "true");
 		} else {

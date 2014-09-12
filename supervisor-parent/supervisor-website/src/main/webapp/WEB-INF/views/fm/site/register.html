@@ -48,8 +48,17 @@
 		  $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
 		 return false;
 	 }
-	 $("#sm_erro").html('<span style="color:green">验证通过</span>');
-	  $("#regist_box").submit();
+	 var param=$("#ms").val();
+	 $.get("${basePath}member/check_ms.htm?ms="+param,function(data){
+		 if(data.flag=="false"){
+			 $("#sm_erro").html('<span style="color:red">验证码错误</span>');
+			 return false;
+		 }
+		 $("#sm_erro").html('<span style="color:green">验证通过</span>');
+		 $("#regist_box").submit();
+	 })
+	 
+	
   }
   $(function(){
 	  $("#name").blur(function(){
