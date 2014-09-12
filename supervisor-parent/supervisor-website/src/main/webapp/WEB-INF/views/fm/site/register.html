@@ -43,7 +43,7 @@
 		 $("#sm_erro").html('<span style="color:red">请先获取验证码</span>');
 		 return false;
 	 }
-	 if (!$("#ms").val().match(/\d{6}/)){
+	 if (!$("#ms").val().match(/^\d{6}$/)){
 		 //alert("验证码只能为6位数字！");
 		  $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
 		 return false;
