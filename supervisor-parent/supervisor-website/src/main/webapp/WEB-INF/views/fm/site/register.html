@@ -12,6 +12,7 @@
  var reName=true;
  var intDiff = parseInt(59);//倒计时总秒数量
   function regist(){
+	 
 	 if ($("#contacts").val()=="" || $("#contacts").val()==null){
 		 alert("联系人不能为空！");
 		 return false;
@@ -32,6 +33,19 @@
 		 alert('请检查用户名')
 		 return false;
 	 }
+	 if ($("#ms").val()==""){
+		 alert("请输入验证码！");
+		 return false;
+	 }
+	 if (!send_flag){
+		 alert("请先获取验证码！")
+		 return false;
+	 }
+	 if (!$("#ms").val().match(/\d{6}/)){
+		 alert("验证码只能为6位数字！");
+		 return false;
+	 }
+	
 	  $("#regist_box").submit();
   }
   $(function(){
@@ -54,7 +68,9 @@
 	  })
   });
   //发送短信
+  var send_flag=false;;
   function send_ms(obj){
+	  send_flag=true;
 	  var phoneNo=$("#phoneNo").val();
 	  //alert(phoneNo)
 	  if (!checkSubmitMobil()){
