@@ -131,6 +131,11 @@ public class MemberController extends BaseController {
 		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
 				session.getId() + "_checkMs");
 		if (StringUtils.isEmpty(message)) {
+			MemberTypeEnum[] type = MemberTypeEnum.values();
+			List<AreaEntity> list = areaService.getChildrenAreas("32");
+			map.put("type", type);
+			map.put("list", list);
+			map.put("member", member);
 			return "site/register";
 		}
 		if (message.equals(ms)) {

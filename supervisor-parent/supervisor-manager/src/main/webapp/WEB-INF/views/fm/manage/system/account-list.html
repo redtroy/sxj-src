@@ -33,7 +33,7 @@ function query(page){
 	});
 }
 var page_account;
-function accountInfo (id){
+function accountInfo(id){
 	page_account=id;
 	var params="accountNo="+id;
     $.get("${basePath}system/query_operation.htm",params,function(data){
