@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<keyNodes ref="ds1,ds2">
+	<keyNodes ref="ds2">
 	</keyNodes>
 	<!-- 数据结点配置，main=true 代表该结点为主库（不参于分库的表，都存储在该节点中） -->
 	<dataNodes>

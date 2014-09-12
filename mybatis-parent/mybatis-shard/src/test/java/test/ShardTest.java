@@ -13,7 +13,7 @@ import com.sxj.mybatis.shard.entity.Shard;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-shard.xml" })
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
+@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 public class ShardTest
 {
     
