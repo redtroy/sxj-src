@@ -187,7 +187,7 @@ public class ContractServiceImpl implements IContractService {
 				if(!flag){
 					//解绑备案号
 					for (String str : arr) {
-						RecordEntity re = recordService.getRecordByNo(str);
+						RecordEntity re = recordService.getRecordByNo(str.trim());
 						re.setContractNo("");
 						re.setState(RecordStateEnum.noBinding);
 						recordDao.updateRecord(re);

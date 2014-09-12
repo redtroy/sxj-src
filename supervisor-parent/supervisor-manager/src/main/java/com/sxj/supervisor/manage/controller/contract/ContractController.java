@@ -218,7 +218,7 @@ public class ContractController extends BaseController {
 					map.put("flag", "false");
 				}
 			}else if(recordNo.length==2){
-				if(flag==2){
+				if(flag==2 || flag==1){
 					map.put("flag", "true");
 				}else{
 					map.put("flag", "false");
