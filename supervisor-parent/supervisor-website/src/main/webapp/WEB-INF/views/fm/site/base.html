@@ -129,7 +129,9 @@ function classLoadUpload(text){
 <div class="fence" id="header">
 <h1 class="fence-wide ly-clearFix">
 <a class="logo" href="${staticPath}html/register.html"><img title="私享家绿色门窗平台" alt="私享家绿色门窗平台" src="${staticPath}images/logo.jpg"></a>
+<#if Session.userinfo?exists>
 <div class=" topBan pr"><span class="pa logOut"><a href="${basePath}logout.htm">注销帐户并退出</a></span></div>
+</#if>
 </h1>
 </div>
 </#macro>

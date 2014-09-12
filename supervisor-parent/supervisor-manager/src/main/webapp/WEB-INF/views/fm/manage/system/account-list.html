@@ -71,7 +71,6 @@ function edit(id){
 	$("#edit_form").empty();
 	$("#edit_form").append(params);
 	var params2=$("#edit_form").serialize();
-	alert(params2);
 	$.post("${basePath}system/edit_account.htm",params2,function(data){
 		if(data.isOK==true){
 			toInfo(id,data);
