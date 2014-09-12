@@ -16,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.system.FunctionEntity;
+import com.sxj.supervisor.entity.system.OperatorLogEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.system.FunctionModel;
+import com.sxj.supervisor.model.system.LogQuery;
 import com.sxj.supervisor.model.system.SysAccountQuery;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.supervisor.service.system.IqueryOperation;
 import com.sxj.supervisor.validator.hibernate.AddGroup;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -41,6 +44,9 @@ public class SystemAccountController extends BaseController {
 
 	@Autowired
 	private IRoleService roleService;
+
+	@Autowired
+	private IqueryOperation queryOpreation;
 
 	@RequestMapping("account-list")
 	public String getSysAccountList(SysAccountQuery query, ModelMap map) {
@@ -181,5 +187,16 @@ public class SystemAccountController extends BaseController {
 			return null;
 		}
 
+	}
+
+	@RequestMapping("query_operation")
+	public String query_operation(ModelMap map, LogQuery query) {
+		if (query != null) {
+			query.setPagable(true);
+		}
+		List<OperatorLogEntity> list = queryOpreation.query(query);
+		map.put("list", list);
+		map.put("query", query);
+		return "manage/system/admin-view";
 	}
 }

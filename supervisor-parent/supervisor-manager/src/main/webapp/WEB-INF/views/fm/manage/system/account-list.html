@@ -32,11 +32,31 @@ function query(page){
 		loadPage(currentPage,totalPage,query);
 	});
 }
-
-function accountInfo(id){
-	$.get("${basePath}system/account-info.htm?accountId="+id,function(data){
+var page_account;
+function accountInfo (id){
+	page_account=id;
+	var params="accountNo="+id;
+    $.get("${basePath}system/query_operation.htm",params,function(data){
 		$("#rightBar").empty();
-		$("#rightBar").append(data);
+		$("#rightBar").html(data);
+		var pager=$(data).find("#pager");
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,accountInfo_page);
+	});
+}
+function accountInfo_page(page){
+	var params="accountNo="+page_account;
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+     $.get("${basePath}system/query_operation.htm",params,function(data){
+		$("#rightBar").empty();
+		$("#rightBar").html(data);
+		var pager=$(data).find("#pager");
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,accountInfo_page);
 	});
 }
 
@@ -215,7 +235,7 @@ function toEdit(accountId){
 	          <td id="role_td"><a href="javascript:roleInfo('${model.id}','get');" class="lnk-blue lnk-underline">查询权限</a></td>
 	          <td id="role_td2" class="permission" style="display:none" onclick="javascript:roleInfo('${model.id}','edit');"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
 	        
-	          <td><a href="javascript:accountInfo(${model.id});" class="lnk-blue lnk-underline">查询</a></td>
+	          <td><a href="javascript:accountInfo('${model.accountNo}');" class="lnk-blue lnk-underline">查询</a></td>
 	          <td class="operation">
 	          	<a id="edit_a" href="javascript:toEdit('${model.id}');" class="edit lnk-blue">修改</a>
 	          	<a id="confirm_a" href="javascript:edit('${model.id}');" class="confirm lnk-yellow" style="display:none">确认</a>
