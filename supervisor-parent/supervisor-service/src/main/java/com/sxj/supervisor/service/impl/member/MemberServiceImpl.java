@@ -52,8 +52,18 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	@Transactional
-	public void addMember(MemberEntity member) {
-		menberDao.addMember(member);
+	public void addMember(MemberEntity member) throws ServiceException {
+		try {
+			MemberEntity oldMember = getMemberByName(member.getName());
+			if (oldMember != null) {
+				throw new ServiceException("会员名称已经存在");
+			}
+			menberDao.addMember(member);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage(), e);
+		}
+
 	}
 
 	/**
