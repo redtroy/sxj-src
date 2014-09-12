@@ -18,7 +18,7 @@ import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
-import com.sxj.supervisor.model.contract.ContractReplenishModel;
+import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.exception.WebException;
@@ -192,6 +192,40 @@ public class ContractController extends BaseController {
 			contractService.modifyCheckState(contractId, ContractStateEnum.noapproval);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
+	}
+	@RequestMapping("getRecordNo")
+	public @ResponseBody Map<String, Object> getRecordNo(RecordQuery query)
+			throws WebException {
+		try {
+			String[] recordNo = query.getRecordNo().split(",");
+			int flag = 0;
+			for (String str : recordNo) {
+				query.setRecordNo(str);
+				List<RecordEntity> list = recordService.queryRecord(query);
+				if(list.size()>0){
+					flag++;
+				}
+			}
+			Map<String, Object> map = new HashMap<String, Object>();
+			if(recordNo.length==1){
+				if(flag==1){
+					map.put("flag", "true");
+				}else{
+					map.put("flag", "false");
+				}
+			}else if(recordNo.length==2){
+				if(flag==2){
+					map.put("flag", "true");
+				}else{
+					map.put("flag", "false");
+				}
+			}
+			
+			
 			return map;
 		} catch (Exception e) {
 			throw new WebException(e);

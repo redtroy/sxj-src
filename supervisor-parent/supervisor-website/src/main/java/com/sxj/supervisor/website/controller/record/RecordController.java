@@ -28,6 +28,7 @@ import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
@@ -269,7 +270,7 @@ public class RecordController extends BaseController {
 
 	@RequestMapping("/modifyRecord")
 	public @ResponseBody Map<String, String> modifyRecord(String recordId,
-			String imgPath, String RFID) throws WebException {
+			String imgPath, String RFID,String flag) throws WebException {
 		try {
 			RecordEntity record = new RecordEntity();
 			if (recordId != "" && recordId != null) {
@@ -280,6 +281,11 @@ public class RecordController extends BaseController {
 			}
 			if (RFID != "" && RFID != null) {
 				record.setRfidNo(RFID);
+			}
+			if(flag.equals("1")){
+				record.setType(RecordTypeEnum.change);
+			}else if(flag.equals("2")){
+				record.setType(RecordTypeEnum.supplement);
 			}
 			recordService.modifyRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
@@ -313,7 +319,57 @@ public class RecordController extends BaseController {
 	public @ResponseBody Map<String, String> delRecord(String id) {
 		Map<String, String> map = new HashMap<String, String>();
 		recordService.deleteRecord(id);
-		map.put("isOk", "ok");
+		map.put("isOK", "ok");
 		return map;
+	}
+	/**
+	 * 跳转确认合同
+	 * @param model
+	 * @param contractNo
+	 * @param recordNo
+	 * @param session
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("confirm")
+	public String confirm(ModelMap model, String contractNo,String recordId,HttpSession session)
+			throws WebException {
+		try {
+			SupervisorPrincipal member = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
+			ContractModel contract = contractService
+					.getContractByContractNo(contractNo);
+			ContractModel contractModel = new ContractModel();
+			if (contract.getContract() != null) {
+				contractModel = contractService.getContract(contract
+						.getContract().getId());
+			}
+			model.put("contractModel", contractModel);
+			model.put("recordId", recordId);
+			model.put("type", member.getMember().getType().getId());
+			return "site/record/contract-confirm";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
+	}
+	
+	@RequestMapping("confirmRecord")
+	public @ResponseBody Map<String, String> confirmRecord(String recordId,HttpSession session)throws WebException {
+		try {
+		Map<String, String> map = new HashMap<String, String>();
+		SupervisorPrincipal member = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		if(member.getMember().getType().getId()==0){
+			recordService.modifyState(recordId, RecordConfirmStateEnum.confirmedA);
+		}else{
+			recordService.modifyState(recordId, RecordConfirmStateEnum.confirmedB);
+		}
+		map.put("isOK","ok");
+		return map;
+	} catch (Exception e) {
+		SxjLogger.error("确认备案信息错误", e, this.getClass());
+		throw new WebException("确认备案信息错误");
+	}
 	}
 }

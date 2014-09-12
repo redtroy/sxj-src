@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.record;
 import java.util.List;
 
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.util.exception.ServiceException;
 
@@ -56,4 +57,10 @@ public interface IRecordService {
 	 **/
 	public void bindingContract(String contractNo, String refContractNo,
 			String recordNo, String recordNo2,String recordIdA,String recordIdB) throws ServiceException ;
+	/**
+	 * 更改状态
+	 * @param contractId
+	 * @param state
+	 */
+	public void modifyState(String contractId, RecordConfirmStateEnum state);
 }

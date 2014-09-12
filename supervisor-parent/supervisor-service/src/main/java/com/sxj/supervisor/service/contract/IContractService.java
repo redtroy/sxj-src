@@ -6,7 +6,7 @@ import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
-import com.sxj.supervisor.model.contract.ContractBatchModel;
+import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
@@ -81,7 +81,7 @@ public interface IContractService {
 	 * @param contractId
 	 * @param state
 	 */
-	public void modifyState(String contractId, Integer state);
+	public void modifyState(String contractId, RecordConfirmStateEnum state);
 	
 	/**
 	 * 新增合同状态变更记录
