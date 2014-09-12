@@ -22,7 +22,7 @@ public class DataSourceRouter
 {
     
     // 数据节点数量
-    private static int nodeNum = DataSourceFactory.getNodes().size();
+    //    private static int nodeNum = DataSourceFactory.getNodes().size();
     
     public final static String Command_W = "w";
     
@@ -53,6 +53,11 @@ public class DataSourceRouter
     {
         List<DataSource> keyGeneratorDs = DataSourceFactory.getKeyGeneratorDs();
         return keyGeneratorDs.get((int) (keyGeneratorDs.size() * Math.random()));
+    }
+    
+    public static List<DataSource> getKeyGeneratorDataSources()
+    {
+        return DataSourceFactory.getKeyGeneratorDs();
     }
     
     public static DataSource getDataSource(MappedStatement ms,

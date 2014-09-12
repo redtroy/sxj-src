@@ -21,6 +21,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import com.sxj.mybatis.orm.ConfigurationProperties;
 import com.sxj.mybatis.orm.builder.GenericStatementBuilder;
+import com.sxj.mybatis.orm.keygen.ShardJdbc4KeyGenerator;
 import com.sxj.mybatis.orm.keygen.ShardKeyGenerator;
 import com.sxj.mybatis.shard.MybatisConfiguration;
 import com.sxj.mybatis.shard.datasource.DataSourceRouter;
@@ -55,9 +56,24 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
         ShardKeyGenerator shardKeyGenerator = GenericStatementBuilder.getShardedKeyGenerators()
                 .get(ms.getId());
         if (shardKeyGenerator != null)
-            shardKeyGenerator.process(DataSourceRouter.getKeyGeneratorDataSource(),
-                    param,
-                    ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
+        {
+            if (shardKeyGenerator instanceof ShardJdbc4KeyGenerator)
+            {
+                List<DataSource> keyGeneratorDataSources = DataSourceRouter.getKeyGeneratorDataSources();
+                int m = keyGeneratorDataSources.size();
+                int n = (int) (keyGeneratorDataSources.size() * Math.random());
+                ShardJdbc4KeyGenerator generator = ((ShardJdbc4KeyGenerator) shardKeyGenerator);
+                generator.setStart(n + 1);
+                generator.setStep(m);
+                generator.process(keyGeneratorDataSources.get(n),
+                        param,
+                        ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
+            }
+            else
+                shardKeyGenerator.process(DataSourceRouter.getKeyGeneratorDataSource(),
+                        param,
+                        ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
+        }
         
         SqlSession sqlSession = null;
         // 判断 sql 中对应的表是否需要分表操作
@@ -110,7 +126,7 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
         }
         finally
         {
-            ShardedSqlSession.closeSqlSession(sqlSession, ds);
+            //            ShardedSqlSession.closeSqlSession(sqlSession, ds);
         }
         return result;
     }

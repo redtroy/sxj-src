@@ -16,13 +16,13 @@ public class OracleDialect extends Dialect
     }
     
     @Override
-    public String getCountString(String sql)
+    public String getCountSQL(String sql)
     {
         return OraclePageHelper.getCountString(sql);
     }
     
     @Override
-    public String getSnString(SN sn)
+    public String getSnIncrSQL(SNCfg sn)
     {
         StringBuffer sb = new StringBuffer("update ");
         sb.append(sn.getTableName());
@@ -46,7 +46,7 @@ public class OracleDialect extends Dialect
     }
     
     @Override
-    public String getSnInsertString(SN sn)
+    public String getSnInitSQL(SNCfg sn)
     {
         StringBuffer sb = new StringBuffer();
         sb.append("insert into ");
@@ -63,9 +63,30 @@ public class OracleDialect extends Dialect
     }
     
     @Override
-    public String getSnSelectString(SN sn)
+    public String getSnSelectSQL(SNCfg sn)
     {
         return "select " + sn.getSn() + " from " + sn.getTableName()
                 + " where " + sn.getStub() + "='" + sn.getStubValue() + "'";
+    }
+    
+    @Override
+    public String getIdSelectSQL(IDCfg cfg)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @Override
+    public String getIdInitSQL(IDCfg cfg)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @Override
+    public String getIdIncrSQL(IDCfg cfg)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

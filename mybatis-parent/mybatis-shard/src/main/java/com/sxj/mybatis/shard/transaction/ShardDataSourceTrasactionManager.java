@@ -13,6 +13,8 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
+import com.sxj.mybatis.shard.session.ShardedSqlSession;
+
 public class ShardDataSourceTrasactionManager extends
         AbstractPlatformTransactionManager
 {
@@ -96,13 +98,30 @@ public class ShardDataSourceTrasactionManager extends
     protected void doBegin(Object transaction, TransactionDefinition definition)
             throws TransactionException
     {
-        
+        System.out.println("Begin Transaction");
     }
     
     protected void doCommit(DefaultTransactionStatus status)
             throws TransactionException
     {
         
+        doCommit();
+        
+        doCloseSession();
+    }
+    
+    private void doCloseSession()
+    {
+        for (Map.Entry<DataSource, SqlSession> entry : currentSessions.get()
+                .entrySet())
+        {
+            ShardedSqlSession.closeSqlSession(entry.getValue(), entry.getKey());
+        }
+        currentSessions.remove();
+    }
+    
+    private void doCommit()
+    {
         Map<DataSource, Connection> conns = currentConnections.get();
         for (Map.Entry<DataSource, Connection> entry : conns.entrySet())
         {
@@ -115,15 +134,19 @@ public class ShardDataSourceTrasactionManager extends
                 e.printStackTrace();
             }
         }
-        
         currentConnections.remove();
-        currentSessions.remove();
     }
     
     protected void doRollback(DefaultTransactionStatus status)
             throws TransactionException
     {
         
+        doRollback();
+        doCloseSession();
+    }
+    
+    private void doRollback()
+    {
         Map<DataSource, Connection> conns = currentConnections.get();
         for (Map.Entry<DataSource, Connection> entry : conns.entrySet())
         {
@@ -136,9 +159,7 @@ public class ShardDataSourceTrasactionManager extends
                 e.printStackTrace();
             }
         }
-        
         currentConnections.remove();
-        currentSessions.remove();
     }
     
 }

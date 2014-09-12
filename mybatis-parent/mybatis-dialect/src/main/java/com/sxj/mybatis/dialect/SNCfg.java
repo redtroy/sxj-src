@@ -1,6 +1,6 @@
 package com.sxj.mybatis.dialect;
 
-public class SN
+public class SNCfg
 {
     private int step;
     

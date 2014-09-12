@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.mybatis.shard.dao.ShardMapper;
 import com.sxj.mybatis.shard.entity.Shard;
@@ -27,11 +28,23 @@ public class ShardTest
     ShardMapper mapper;
     
     @Test
+    @Transactional
     public void testInsert()
     {
         Shard shard = new Shard();
         //        shard.setShardId(4);
-        shard.setShardName("test测试");
+        shard.setShardName("test测试SHARD");
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
+        mapper.insert(shard);
         mapper.insert(shard);
         //		BlogMapper mapper = factory.getBean(BlogMapper.class);
         //		BlogExample ex = new BlogExample();

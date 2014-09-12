@@ -67,7 +67,7 @@ public class PaginationInterceptor implements Interceptor
             String sql = boundSql.getSql();
             Dialect dialect = getDialect(statementHandler);
             //            String countSql = "select count(0) from (" + sql + ") t";
-            String countSql = dialect.getCountString(sql);
+            String countSql = dialect.getCountSQL(sql);
             PreparedStatement countStmt = connection.prepareStatement(countSql);
             BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(),
                     countSql, boundSql.getParameterMappings(), parameter);

@@ -21,13 +21,13 @@ public class MySql5Dialect extends Dialect
     }
     
     @Override
-    public String getCountString(String sql)
+    public String getCountSQL(String sql)
     {
         return MySql5PageHepler.getCountString(sql);
     }
     
     @Override
-    public String getSnString(SN sn)
+    public String getSnIncrSQL(SNCfg sn)
     {
         StringBuffer sb = new StringBuffer("update ");
         sb.append(sn.getTableName());
@@ -52,7 +52,7 @@ public class MySql5Dialect extends Dialect
     }
     
     @Override
-    public String getSnInsertString(SN sn)
+    public String getSnInitSQL(SNCfg sn)
     {
         StringBuffer sb = new StringBuffer();
         sb.append("insert into ");
@@ -69,10 +69,56 @@ public class MySql5Dialect extends Dialect
     }
     
     @Override
-    public String getSnSelectString(SN sn)
+    public String getSnSelectSQL(SNCfg sn)
     {
         return "select " + sn.getSn() + " from " + sn.getTableName()
                 + " where " + sn.getStub() + "='" + sn.getStubValue() + "'";
     }
     
+    @Override
+    public String getIdSelectSQL(IDCfg cfg)
+    {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select ");
+        sql.append(cfg.getIdColumn());
+        sql.append(" from ");
+        sql.append(cfg.getTable());
+        sql.append(" where ");
+        sql.append(cfg.getDelimiterColumn());
+        sql.append("=?");
+        return sql.toString();
+    }
+    
+    @Override
+    public String getIdInitSQL(IDCfg cfg)
+    {
+        StringBuffer sql = new StringBuffer();
+        sql.append("insert into ");
+        sql.append(cfg.getTable());
+        sql.append(" (");
+        sql.append(cfg.getIdColumn());
+        sql.append(",");
+        sql.append(cfg.getDelimiterColumn());
+        sql.append(") values (?,?)");
+        return sql.toString();
+    }
+    
+    @Override
+    public String getIdIncrSQL(IDCfg cfg)
+    {
+        StringBuffer sql = new StringBuffer();
+        sql.append("update ");
+        sql.append(cfg.getTable());
+        sql.append(" set ");
+        sql.append(cfg.getIdColumn());
+        sql.append("=");
+        sql.append(cfg.getIdColumn());
+        sql.append("+?");
+        sql.append(" where ");
+        sql.append(cfg.getDelimiterColumn());
+        sql.append("=? and ");
+        sql.append(cfg.getIdColumn());
+        sql.append("=?");
+        return sql.toString();
+    }
 }

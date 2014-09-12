@@ -24,4 +24,10 @@ public @interface GeneratedValue
     GenerationType strategy() default GenerationType.AUTO;
     
     int length() default 32;
+    
+    String table() default "IDENTITIES";
+    
+    String idColumn() default "IDENTITIES_ID";
+    
+    String delimiterColumn() default "IDENTITIES_DELIMITER";
 }

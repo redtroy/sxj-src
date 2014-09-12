@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.sxj.mybatis.dialect.MySql5Dialect;
+import com.sxj.mybatis.orm.keygen.ShardUuidKeyGenerator;
 import com.sxj.mybatis.shard.entity.Shard2;
 
 public class ShardUuidKeyGeneratorTest

@@ -16,9 +16,8 @@ import java.util.WeakHashMap;
 import javax.sql.DataSource;
 
 import com.sxj.mybatis.dialect.Dialect;
-import com.sxj.mybatis.dialect.SN;
+import com.sxj.mybatis.dialect.SNCfg;
 import com.sxj.mybatis.orm.annotations.Sn;
-import com.sxj.mybatis.orm.keygen.SnStub;
 import com.sxj.spring.modules.util.ReflectUtils;
 import com.sxj.spring.modules.util.Reflections;
 
@@ -80,7 +79,7 @@ public class ShardSnGenerator implements ShardKeyGenerator
             for (Field field : snFields)
             {
                 Sn sn = field.getAnnotation(Sn.class);
-                SN snPojo = new SN();
+                SNCfg snPojo = new SNCfg();
                 snPojo.setStep(sn.step());
                 snPojo.setSn(sn.sn());
                 snPojo.setStub(sn.stub());
@@ -91,7 +90,7 @@ public class ShardSnGenerator implements ShardKeyGenerator
                     snPojo.setStubValue((String) Reflections.invokeGetter(parameter,
                             "stubValue"));
                 }
-                String snSql = dialect.getSnString(snPojo);
+                String snSql = dialect.getSnIncrSQL(snPojo);
                 
                 initSn(dialect, statement, snPojo);
                 
@@ -114,10 +113,10 @@ public class ShardSnGenerator implements ShardKeyGenerator
         }
     }
     
-    private void initSn(Dialect dialect, Statement statement, SN snPojo)
+    private void initSn(Dialect dialect, Statement statement, SNCfg snPojo)
             throws SQLException
     {
-        String snSelectString = dialect.getSnSelectString(snPojo);
+        String snSelectString = dialect.getSnSelectSQL(snPojo);
         ResultSet rs = null;
         try
         {
@@ -126,7 +125,7 @@ public class ShardSnGenerator implements ShardKeyGenerator
             int row = rs.getRow();
             if (row == 0)
             {
-                String snInsertString = dialect.getSnInsertString(snPojo);
+                String snInsertString = dialect.getSnInitSQL(snPojo);
                 statement.executeUpdate(snInsertString);
                 snPojo.setCurrent(0);
             }

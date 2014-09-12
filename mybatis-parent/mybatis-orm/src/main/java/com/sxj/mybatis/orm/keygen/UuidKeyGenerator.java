@@ -10,7 +10,7 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
-import com.sxj.mybatis.orm.ConfigurationProperties;
+import com.sxj.mybatis.orm.builder.GenericStatementBuilder;
 import com.sxj.spring.modules.util.Identities;
 
 public class UuidKeyGenerator implements KeyGenerator
@@ -35,7 +35,8 @@ public class UuidKeyGenerator implements KeyGenerator
         MetaObject newMetaObject = ms.getConfiguration()
                 .newMetaObject(parameter);
         String[] keyProperties = ms.getKeyProperties();
-        SnGenerator snGenerator = new SnGenerator();
+        SnGenerator snGenerator = GenericStatementBuilder.getSnGenerators()
+                .get(ms.getId());
         try
         {
             if (parameter instanceof StrictMap)
@@ -73,10 +74,8 @@ public class UuidKeyGenerator implements KeyGenerator
             {
                 populateKey(newMetaObject, keyProperties);
             }
-            
-            snGenerator.generateSn(executor.getTransaction().getConnection(),
-                    parameter,
-                    ConfigurationProperties.getDialect(ms.getConfiguration()));
+            if (snGenerator != null)
+                snGenerator.processBefore(executor, ms, stmt, parameter);
         }
         catch (Exception e)
         {
@@ -88,7 +87,6 @@ public class UuidKeyGenerator implements KeyGenerator
     public void processAfter(Executor executor, MappedStatement ms,
             Statement stmt, Object parameter)
     {
-        System.out.println();
     }
     
     private void populateKey(MetaObject metaParam, String[] keyProperties)

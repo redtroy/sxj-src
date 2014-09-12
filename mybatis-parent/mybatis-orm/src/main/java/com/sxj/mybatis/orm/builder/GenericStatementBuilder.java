@@ -58,13 +58,16 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.annotations.Transient;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.mybatis.orm.annotations.Version;
 import com.sxj.mybatis.orm.keygen.Jdbc4KeyGenerator;
+import com.sxj.mybatis.orm.keygen.ShardJdbc4KeyGenerator;
 import com.sxj.mybatis.orm.keygen.ShardKeyGenerator;
 import com.sxj.mybatis.orm.keygen.ShardUuidKeyGenerator;
+import com.sxj.mybatis.orm.keygen.SnGenerator;
 import com.sxj.mybatis.orm.keygen.UuidKeyGenerator;
 import com.sxj.spring.modules.util.AnnotationUtils;
 import com.sxj.spring.modules.util.CaseFormatUtils;
@@ -81,6 +84,10 @@ public class GenericStatementBuilder extends BaseBuilder
     private MapperBuilderAssistant assistant;
     
     private static Map<String, ShardKeyGenerator> shardedKeyGenerators = new HashMap<String, ShardKeyGenerator>();
+    
+    private static Map<String, SnGenerator> snGenerators = new HashMap<String, SnGenerator>();
+    
+    private boolean containSn = false;
     
     private Class<?> entityClass;
     
@@ -110,7 +117,7 @@ public class GenericStatementBuilder extends BaseBuilder
     private boolean sharded = false;
     
     public GenericStatementBuilder(Configuration configuration,
-            Class<?> entityClass)
+            final Class<?> entityClass)
     {
         super(configuration);
         this.entityClass = entityClass;
@@ -172,6 +179,8 @@ public class GenericStatementBuilder extends BaseBuilder
             {
                 if (field.isAnnotationPresent(Column.class))
                     columnFields.add(field);
+                if (field.isAnnotationPresent(Sn.class))
+                    containSn = true;
                 
             }
         }, new FieldFilter()
@@ -455,6 +464,8 @@ public class GenericStatementBuilder extends BaseBuilder
                     + SelectKeyGenerator.SELECT_KEY_SUFFIX;
             if (!sharded)
             {
+                if (containSn)
+                    snGenerators.put(statementId, new SnGenerator());
                 if (configuration.hasKeyGenerator(keyStatementId))
                 {
                     keyGenerator = configuration.getKeyGenerator(keyStatementId);
@@ -483,6 +494,12 @@ public class GenericStatementBuilder extends BaseBuilder
                         shardedKeyGenerators.put(statementId,
                                 new ShardUuidKeyGenerator(
                                         generatedValue.length()));
+                    }
+                    else if (generatedValue.strategy() == GenerationType.TABLE
+                            || generatedValue.strategy() == GenerationType.AUTO)
+                    {
+                        shardedKeyGenerators.put(statementId,
+                                new ShardJdbc4KeyGenerator());
                     }
                 }
             }
@@ -541,6 +558,8 @@ public class GenericStatementBuilder extends BaseBuilder
                     + SelectKeyGenerator.SELECT_KEY_SUFFIX;
             if (!sharded)
             {
+                if (containSn)
+                    snGenerators.put(statementId, new SnGenerator());
                 if (configuration.hasKeyGenerator(keyStatementId))
                 {
                     keyGenerator = configuration.getKeyGenerator(keyStatementId);
@@ -569,6 +588,12 @@ public class GenericStatementBuilder extends BaseBuilder
                         shardedKeyGenerators.put(statementId,
                                 new ShardUuidKeyGenerator(
                                         generatedValue.length()));
+                    }
+                    else if (generatedValue.strategy() == GenerationType.AUTO
+                            || generatedValue.strategy() == GenerationType.TABLE)
+                    {
+                        shardedKeyGenerators.put(statementId,
+                                new ShardJdbc4KeyGenerator());
                     }
                 }
                 //                shardedKeyGenerators.put(statementId, new shardeduu)
@@ -1016,6 +1041,11 @@ public class GenericStatementBuilder extends BaseBuilder
     public static Map<String, ShardKeyGenerator> getShardedKeyGenerators()
     {
         return shardedKeyGenerators;
+    }
+    
+    public static Map<String, SnGenerator> getSnGenerators()
+    {
+        return snGenerators;
     }
     
 }

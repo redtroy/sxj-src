@@ -71,7 +71,7 @@ public class DataSourceFactory
     
     public static Map<String, String> getShardTables()
     {
-        if (shardTables == null)
+        if (shardTables.size() == 0)
         {
             initDataSources();
         }
@@ -252,6 +252,10 @@ public class DataSourceFactory
     
     public static List<DataSource> getKeyGeneratorDs()
     {
+        if (nodes == null)
+        {
+            initDataSources();
+        }
         return keyGeneratorDs;
     }
     

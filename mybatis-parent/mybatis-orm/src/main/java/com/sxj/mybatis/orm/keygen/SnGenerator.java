@@ -11,19 +11,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.executor.keygen.KeyGenerator;
+import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
 import com.sxj.mybatis.dialect.Dialect;
-import com.sxj.mybatis.dialect.SN;
+import com.sxj.mybatis.dialect.SNCfg;
+import com.sxj.mybatis.orm.ConfigurationProperties;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.spring.modules.util.ReflectUtils;
 import com.sxj.spring.modules.util.Reflections;
 
-public class SnGenerator
+public class SnGenerator implements KeyGenerator
 {
     private static Map<String, List<Field>> cachedSnFields = new WeakHashMap<String, List<Field>>();
     
-    public void generateSn(Connection connection, Object parameter,
+    private void generateSn(Connection connection, Object parameter,
             Dialect dialect) throws SQLException
     {
         Statement statement = null;
@@ -90,7 +94,7 @@ public class SnGenerator
             for (Field field : snFields)
             {
                 Sn sn = field.getAnnotation(Sn.class);
-                SN snPojo = new SN();
+                SNCfg snPojo = new SNCfg();
                 snPojo.setStep(sn.step());
                 snPojo.setSn(sn.sn());
                 snPojo.setStub(sn.stub());
@@ -101,7 +105,7 @@ public class SnGenerator
                     snPojo.setStubValue((String) Reflections.invokeGetter(parameter,
                             "stubValue"));
                 }
-                String snSql = dialect.getSnString(snPojo);
+                String snSql = dialect.getSnIncrSQL(snPojo);
                 
                 initSn(dialect, statement, snPojo);
                 
@@ -124,10 +128,10 @@ public class SnGenerator
         }
     }
     
-    private void initSn(Dialect dialect, Statement statement, SN snPojo)
+    private void initSn(Dialect dialect, Statement statement, SNCfg snPojo)
             throws SQLException
     {
-        String snSelectString = dialect.getSnSelectString(snPojo);
+        String snSelectString = dialect.getSnSelectSQL(snPojo);
         ResultSet rs = null;
         try
         {
@@ -136,7 +140,7 @@ public class SnGenerator
             int row = rs.getRow();
             if (row == 0)
             {
-                String snInsertString = dialect.getSnInsertString(snPojo);
+                String snInsertString = dialect.getSnInitSQL(snPojo);
                 statement.executeUpdate(snInsertString);
                 snPojo.setCurrent(0);
             }
@@ -163,6 +167,29 @@ public class SnGenerator
             cachedSnFields.put(userClass.getName(), snFields);
         }
         return snFields;
+    }
+    
+    @Override
+    public void processBefore(Executor executor, MappedStatement ms,
+            Statement stmt, Object parameter)
+    {
+        try
+        {
+            generateSn(executor.getTransaction().getConnection(),
+                    parameter,
+                    ConfigurationProperties.getDialect(ms.getConfiguration()));
+        }
+        catch (SQLException sqle)
+        {
+            throw new RuntimeException(sqle);
+        }
+    }
+    
+    @Override
+    public void processAfter(Executor executor, MappedStatement ms,
+            Statement stmt, Object parameter)
+    {
+        
     }
     
 }
