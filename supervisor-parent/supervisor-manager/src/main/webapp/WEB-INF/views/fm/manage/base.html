@@ -107,7 +107,7 @@ function classLoadUpload(text){
 	        multi: true,
 	        height:30,
 	        width:120,
-	        buttonText:'上传文件',
+	        buttonText:text,
 	        onUploadSuccess : function(file, data, response) {
 	        	var contPic=$(this.button).parent(".uploadify").siblings(".contPic");
 	        	var dataObj=eval("("+data+")");//转换为json对象 

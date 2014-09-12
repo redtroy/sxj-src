@@ -65,6 +65,14 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	@Column(name = "BATCH_ITEMS")
 	private String batchItems;
 
+	public String getNewRfidNo() {
+		return newRfidNo;
+	}
+
+	public void setNewRfidNo(String newRfidNo) {
+		this.newRfidNo = newRfidNo;
+	}
+
 	public String getReplenishId() {
 		return replenishId;
 	}

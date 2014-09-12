@@ -36,8 +36,10 @@
 		$('#bgButton').click(function() {
 			var o = {
 				"recordId" : $("#bgRecordId").val(),
-				"imgPath" : $("#bgImgPathHide").val()
+				"imgPath" : $("#bgImgPathHide").val(),
+				"flag":"1"
 			};
+			if($("#bgImgPathHide").val()!='' ){
 			$.post("modifyRecord.htm", o, function(data) {
 				if (data.isOK == 'ok') {
 					alert("上传变更扫描件成功");
@@ -46,7 +48,9 @@
 					alert("上传变更扫描件失败");
 				}
 			});
-
+			}else{
+				alert("请上传图片");
+			}
 		})
 		$('.suppContract').click(function() {
 			$('.maskdivgen').fadeIn(100);
@@ -66,8 +70,10 @@
 			var o = {
 				"recordId" : $("#bsRecordId").val(),
 				"imgPath" : $("#bsImgPathHide").val(),
-				"RFID" : $("input[name='rfid']").val()
+				"RFID" : $("input[name='rfid']").val(),
+				"flag":"2"
 			};
+			if($("#bsImgPathHide").val()!='' ){
 			$.post("modifyRecord.htm", o, function(data) {
 				if (data.isOK == 'ok') {
 					alert("上传补损扫描件成功");
@@ -76,6 +82,9 @@
 					alert("上传补损扫描件失败");
 				}
 			});
+		}else{
+			alert("请上传图片");
+		}
 		})
 		
 		$('.lnk-view').live('click',function(){
@@ -124,7 +133,7 @@
 			$.post("delRecord.htm", {
 				id : id
 			}, function(data) {
-				if (data.isOk == "ok") {
+				if (data.isOK == "ok") {
 					$("#" + id).remove();
 				} else {
 					alert("删除备案失败");
@@ -240,6 +249,12 @@
               <a href="javascript:delRecord('${record.id}')" class="lnk-blue"><span class="icon icon16 icon-del" ></span>删除</a>
                <a href="#" class="lnk-blue variContract mr10" recordId="${record.id}" >变更</a>
               <a href="#" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+              <#if record.confirmState.getId() ==1>
+             	<#if record.contractNo?exists>
+              		 <a href="confirm.htm?contractNo=${record.contractNo}&recordId=${record.id}" >确认合同</a>
+              	</#if> 
+              </#if>
+             
               </td>
              
             </tr>

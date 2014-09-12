@@ -24,6 +24,7 @@ import com.sxj.file.fastdfs.FastDFSImpl;
 import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
@@ -31,11 +32,13 @@ import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.persistent.QueryCondition;
 
 @Controller
 @RequestMapping("/record")
@@ -151,12 +154,14 @@ public class RecordController extends BaseController {
 		List<RecordEntity> list = recordService.queryRecord(query);
 		ContractModel cm = contractService.getContractByContractNo(query
 				.getContractNo());
-		if (list.size() > 0) {
-			map.put("record", list.get(0));
-			map.put("refContractNo", cm.getContract().getRefContractNo());
-		} else {
-			map.put("erro", "false");
-		}
+		ContractQuery contractQuery = new ContractQuery();
+		contractQuery.setContractNo(query.getContractNo());
+			if (list.size() == 1) {
+				map.put("record", list.get(0));
+				map.put("refContractNo", cm.getContract().getRefContractNo());
+			} else {
+				map.put("erro", "false");
+			}
 		return map;
 	}
 

@@ -31,8 +31,6 @@
 			jdbcType="VARCHAR" />
 		<result property="memberNameA" column="MEMBER_NAME_A" jdbcType="VARCHAR" />
 		<result property="memberNameB" column="MEMBER_NAME_B" jdbcType="VARCHAR" />
-		<result property="confirmState" column="CONFIRM_STATE"
-			jdbcType="VARCHAR" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
 		<result property="stateLog" column="STATE_LOG" jdbcType="VARCHAR" />
 		<result property="imgPath" column="IMG_PATH" jdbcType="VARCHAR" />
 		<result property="batchCount" column="BATCH_COUNT" jdbcType="VARCHAR" />

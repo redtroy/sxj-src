@@ -10,6 +10,7 @@ import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -27,9 +28,10 @@ public class RecordServiceImpl implements IRecordService {
 
 	@Autowired
 	private IContractService contractService;
-	
+
 	@Autowired
 	private IContractDao contractDao;
+
 	/**
 	 * 新增备案
 	 */
@@ -124,7 +126,8 @@ public class RecordServiceImpl implements IRecordService {
 	@Override
 	@Transactional
 	public void bindingContract(String contractNo, String refContractNo,
-			String recordNo, String recordNo2,String recordIdA,String recordIdB) {
+			String recordNo, String recordNo2, String recordIdA,
+			String recordIdB) {
 
 		RecordEntity record = recordDao.getRecord(recordIdA);
 		RecordEntity record2 = recordDao.getRecord(recordIdB);
@@ -140,11 +143,11 @@ public class RecordServiceImpl implements IRecordService {
 			record2.setState(RecordStateEnum.Binding);
 			recordDao.updateRecord(record2);
 		}
-		//插入合同
+		// 插入合同
 		ContractModel ce = contractService.getContractByContractNo(contractNo);
-		if(ce!=null){
-			ContractEntity contract =ce.getContract();
-			contract.setRecordNo(recordNo+","+recordNo2);
+		if (ce != null) {
+			ContractEntity contract = ce.getContract();
+			contract.setRecordNo(recordNo + "," + recordNo2);
 			contractDao.updateContract(contract);
 		}
 
@@ -163,5 +166,18 @@ public class RecordServiceImpl implements IRecordService {
 		} catch (Exception e) {
 			throw new ServiceException("", e);
 		}
+	}
+
+	@Override
+	public void modifyState(String recordId, RecordConfirmStateEnum state) {
+		try {
+			RecordEntity re = new RecordEntity();
+			re.setId(recordId);
+			re.setConfirmState(state);
+			recordDao.updateRecord(re);
+		} catch (Exception e) {
+			throw new ServiceException("", e);
+		}
+
 	}
 }

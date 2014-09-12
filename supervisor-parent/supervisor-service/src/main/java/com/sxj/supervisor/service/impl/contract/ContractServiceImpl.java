@@ -2,6 +2,7 @@ package com.sxj.supervisor.service.impl.contract;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -38,6 +39,7 @@ import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
@@ -49,6 +51,7 @@ import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -114,6 +117,11 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Autowired
 	private IRecordDao recordDao;
+	/**
+	 * 备案service
+	 */
+	@Autowired
+	private IRecordService recordService;
 
 	/**
 	 * 新增合同
@@ -168,6 +176,30 @@ public class ContractServiceImpl implements IContractService {
 		try {
 			// 主体
 			if (contract.getContract() != null) {
+				
+				ContractEntity ce=	contractDao.getContract(contract.getContract().getId());
+				String[] arr =ce.getRecordNo().split(",");
+				
+				String recordNo =contract.getContract().getRecordNo();
+				
+				String[] recordNoArr= recordNo.split(",");
+				boolean flag= Arrays.equals(arr,recordNoArr);
+				if(!flag){
+					//解绑备案号
+					for (String str : arr) {
+						RecordEntity re = recordService.getRecordByNo(str);
+						re.setContractNo("");
+						re.setState(RecordStateEnum.noBinding);
+						recordDao.updateRecord(re);
+					}
+					//更新备案号
+					for (String str : recordNoArr) {
+						RecordEntity re = recordService.getRecordByNo(str);
+						re.setContractNo(contract.getContract().getContractNo());
+						re.setState(RecordStateEnum.Binding);
+						recordDao.updateRecord(re);
+					}
+				}
 				contractDao.updateContract(contract.getContract());
 			}
 			// 条目
@@ -635,16 +667,16 @@ public class ContractServiceImpl implements IContractService {
 	 * 更新合同
 	 */
 	@Override
-	public void modifyState(String contractId, Integer state)
+	public void modifyState(String contractId, RecordConfirmStateEnum state)
 			throws ServiceException {
-		try {
-			ContractEntity ce = new ContractEntity();
-			ce.setId(contractId);
-			// ce.setState(ContractStateEnum.approval);
-			contractDao.updateContract(ce);
-		} catch (Exception e) {
-			throw new ServiceException("更改合同状态出错", e);
-		}
+//		try {
+//			ContractEntity ce = new ContractEntity();
+//			ce.setId(contractId);
+//			ce.setConfirmState(state);
+//			contractDao.updateContract(ce);
+//		} catch (Exception e) {
+//			throw new ServiceException("更改合同状态出错", e);
+//		}
 	}
 
 	/**
