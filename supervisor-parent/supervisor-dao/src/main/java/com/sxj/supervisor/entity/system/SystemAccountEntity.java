@@ -3,7 +3,6 @@ package com.sxj.supervisor.entity.system;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.ibatis.type.JdbcType;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 

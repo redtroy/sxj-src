@@ -24,6 +24,7 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -129,6 +130,9 @@ public class MemberController extends BaseController {
 			HttpSession session) {
 		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
 				session.getId() + "_checkMs");
+		if (StringUtils.isEmpty(message)) {
+			return "site/register";
+		}
 		if (message.equals(ms)) {
 			member.setState(MemberStatesEnum.stop);
 			member.setCheckState(MemberCheckStateEnum.unaudited);
