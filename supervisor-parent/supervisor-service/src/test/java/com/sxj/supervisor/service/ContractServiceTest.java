@@ -36,11 +36,17 @@ public class ContractServiceTest
         ContractItemEntity item = new ContractItemEntity();
         item.setProductName("测试的产品hahahahahahaha");
         List<ContractItemEntity> itemList = new ArrayList<ContractItemEntity>();
+        item.setAmount(1l);
+        item.setPrice(2l);
         itemList.add(item);
         item = new ContractItemEntity();
         item.setProductName("2测试的产品hahahahahahahaah");
+        item.setAmount(3l);
+        item.setPrice(4l);
         itemList.add(item);
-        contractService.addContract(contract, itemList, "123");
+        contractService.addContract(contract,
+                itemList,
+                "zp4L5wuzIYNZaO4Hh5mHvrzMk1kiB49z");
     }
     
     public void testModifyContract()

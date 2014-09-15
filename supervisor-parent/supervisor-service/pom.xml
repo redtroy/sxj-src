@@ -77,5 +77,16 @@
 			<artifactId>spring-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>mybatis-shard</artifactId>
+			<version>3.2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

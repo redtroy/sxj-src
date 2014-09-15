@@ -1001,6 +1001,7 @@ public class GenericStatementBuilder extends BaseBuilder
         while (resultMapNames.hasNext())
         {
             String name = resultMapNames.next();
+            System.out.println(name);
             ResultMap temp = configuration.getResultMap(name);
             if (temp.getType().equals(entityClass))
             {
@@ -1031,12 +1032,13 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private SqlNode getGetSql()
     {
-        String sql = "SELECT " + getIdColumnName() + " AS " + getIdFieldName();
+        String sql = "SELECT " + getIdColumnName() + " AS " + getIdColumnName();
         
         for (Field field : columnFields)
         {
-            sql += "," + getColumnNameByField(field) + " AS "
-                    + getColumnNameByField(field);
+            if (!getColumnNameByField(field).equals(getIdColumnName()))
+                sql += "," + getColumnNameByField(field) + " AS "
+                        + getColumnNameByField(field);
         }
         
         sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " = #{"

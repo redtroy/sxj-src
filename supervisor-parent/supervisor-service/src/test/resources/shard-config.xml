@@ -15,7 +15,7 @@
 			</writeNodes>
 			<readNodes ref="supervisorDataSource">
 			</readNodes>
-			<tables>M_CONTRACT,M_CONTRACT_ITEM,M_CONTRACT_RECORD</tables>
+			<tables>M_CONTRACT,M_CONTRACT_ITEM,M_CONTRACT_RECORD,M_CONTRACT_RECORD</tables>
 		</dataNode>
 
 

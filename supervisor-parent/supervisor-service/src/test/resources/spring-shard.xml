@@ -136,7 +136,7 @@
 	<bean class="com.sxj.mybatis.shard.mapper.MapperScanConfigurator">
 		<property name="basePackage" value="com.sxj.supervisor.dao,com.sxj.supervisor.dao.rfid" />
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
-		<property name="mapperLocations" value="classpath*:mapper/*.xml" />
+		<property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" />
 		<property name="typeAliasesPackage" value="com.sxj.supervisor.entity,com.sxj.supervisor.entity.rfid"></property>
 	</bean>
 	<!-- 后置处理器，初始化所有Mapper -->
