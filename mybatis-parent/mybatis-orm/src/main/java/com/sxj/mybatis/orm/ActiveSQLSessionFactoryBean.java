@@ -80,20 +80,23 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
         String fieldValue = (String) Reflections.getFieldValue(this,
                 "typeAliasesPackage");
         fieldValue = fieldValue == null ? "" : fieldValue;
-        Resource[] resources = applicationContext.getResources("classpath:"
-                + StringUtils.replaceChars(fieldValue, '.', '/')
-                + "/**/*.class");
-        for (Resource resource : resources)
+        String[] split = fieldValue.split(",");
+        for (String value : split)
         {
-            if (resource.isReadable())
+            Resource[] resources = applicationContext.getResources("classpath*:"
+                    + StringUtils.replaceChars(value, '.', '/') + "/**/*.class");
+            for (Resource resource : resources)
             {
-                MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
-                ClassMetadata classMetadata = metadataReader.getClassMetadata();
-                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
-                String entityAnnotation = Entity.class.getName();
-                if (annotationMetadata.isAnnotated(entityAnnotation))
+                if (resource.isReadable())
                 {
-                    classNames.add(classMetadata.getClassName());
+                    MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                    ClassMetadata classMetadata = metadataReader.getClassMetadata();
+                    AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+                    String entityAnnotation = Entity.class.getName();
+                    if (annotationMetadata.isAnnotated(entityAnnotation))
+                    {
+                        classNames.add(classMetadata.getClassName());
+                    }
                 }
             }
         }

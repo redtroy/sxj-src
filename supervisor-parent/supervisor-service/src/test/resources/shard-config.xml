@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	
+	<keyNodes> 
+		<keyNode type="SN" ref="supervisorDataSource"></keyNode>
+		<keyNode type="ID" ref="supervisorDataSource"></keyNode>
+		<keyNode type="ID" ref="rfidDataSource"></keyNode>
+	</keyNodes>
+	<!-- 数据结点配置 -->
+	<dataNodes>
+		<!-- 数据节点1 -->
+		<dataNode>
+			<writeNodes ref="supervisorDataSource">
+			</writeNodes>
+			<readNodes ref="supervisorDataSource">
+			</readNodes>
+			<tables>M_CONTRACT,M_CONTRACT_ITEM,M_CONTRACT_RECORD,M_CONTRACT_RECORD</tables>
+		</dataNode>
+
+
+		<!-- 数据节点2 -->
+		<dataNode>
+			<writeNodes ref="rfidDataSource">
+				<tables></tables>
+			</writeNodes>
+			<readNodes ref="rfidDataSource">
+				<tables></tables>
+			</readNodes>
+			<tables>SHARD</tables>
+		</dataNode>
+	</dataNodes>
+
+	<!-- 配置需要分库的表，分库所依赖的字段 -->
+	<!-- <rules> <table name="SHARD" column="SHARD_ID"></table> </rules> -->
+
+</configuration>

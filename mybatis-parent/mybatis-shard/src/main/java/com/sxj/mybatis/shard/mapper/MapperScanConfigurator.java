@@ -81,25 +81,28 @@ public class MapperScanConfigurator implements
     
     private void findEntityClassNames() throws IOException
     {
-        Set<String> classNames = new HashSet<String>();
         SimpleMetadataReaderFactory metadataReaderFactory = new SimpleMetadataReaderFactory(
                 applicationContext);
         String fieldValue = basePackage == null ? "" : basePackage;
-        Resource[] resources = applicationContext.getResources("classpath:"
-                + StringUtils.replace(fieldValue, ".", "/") + "/**/*.class");
-        for (Resource resource : resources)
+        String[] split = fieldValue.split(",");
+        for (String value : split)
         {
-            if (resource.isReadable())
+            Resource[] resources = applicationContext.getResources("classpath:"
+                    + StringUtils.replace(value, ".", "/") + "/**/*.class");
+            for (Resource resource : resources)
             {
-                MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
-                ClassMetadata classMetadata = metadataReader.getClassMetadata();
-                mapperInterfaces.add(classMetadata.getClassName());
-                //                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
-                //                String entityAnnotation = Entity.class.getName();
-                //                if (annotationMetadata.isAnnotated(entityAnnotation))
-                //                {
-                //                    classNames.add(classMetadata.getClassName());
-                //                }
+                if (resource.isReadable())
+                {
+                    MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                    ClassMetadata classMetadata = metadataReader.getClassMetadata();
+                    mapperInterfaces.add(classMetadata.getClassName());
+                    //                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+                    //                String entityAnnotation = Entity.class.getName();
+                    //                if (annotationMetadata.isAnnotated(entityAnnotation))
+                    //                {
+                    //                    classNames.add(classMetadata.getClassName());
+                    //                }
+                }
             }
         }
         

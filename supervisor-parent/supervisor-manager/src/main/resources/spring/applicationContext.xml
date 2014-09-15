@@ -39,14 +39,14 @@
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
 		<property name="dataSource" ref="dataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.sxj.supervisor.entity" />
+		<property name="typeAliasesPackage" value="com.sxj.supervisor.entity,com.sxj.supervisor.entity.rfid" />
 		<!-- 显式指定Mapper文件位置 -->
 		<property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" />
 
 	</bean>
-	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
+	<!-- 扫描basePackage下所有标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.sxj.supervisor.dao" />
+		<property name="basePackage" value="com.sxj.supervisor.dao,com.sxj.supervisor.dao.rfid" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 	
