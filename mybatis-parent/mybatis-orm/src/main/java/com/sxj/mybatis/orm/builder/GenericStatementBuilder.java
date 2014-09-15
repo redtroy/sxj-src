@@ -1032,7 +1032,7 @@ public class GenericStatementBuilder extends BaseBuilder
     
     private SqlNode getGetSql()
     {
-        String sql = "SELECT " + getIdColumnName() + " AS " + getIdColumnName();
+        String sql = "SELECT " + getIdColumnName() + " AS " + getIdFieldName();
         
         for (Field field : columnFields)
         {
