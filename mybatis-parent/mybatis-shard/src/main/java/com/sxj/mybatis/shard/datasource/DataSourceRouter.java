@@ -60,6 +60,11 @@ public class DataSourceRouter
         return DataSourceFactory.getKeyGeneratorDs();
     }
     
+    public static List<DataSource> getSnGeneratorDataSources()
+    {
+        return DataSourceFactory.getSnGeneratorDs();
+    }
+    
     public static DataSource getDataSource(MappedStatement ms,
             BoundSql boundSql, Object param)
     {

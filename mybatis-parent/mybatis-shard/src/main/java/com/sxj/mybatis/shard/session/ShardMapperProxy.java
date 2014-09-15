@@ -23,6 +23,7 @@ import com.sxj.mybatis.orm.ConfigurationProperties;
 import com.sxj.mybatis.orm.builder.GenericStatementBuilder;
 import com.sxj.mybatis.orm.keygen.ShardJdbc4KeyGenerator;
 import com.sxj.mybatis.orm.keygen.ShardKeyGenerator;
+import com.sxj.mybatis.orm.keygen.ShardSnGenerator;
 import com.sxj.mybatis.shard.MybatisConfiguration;
 import com.sxj.mybatis.shard.datasource.DataSourceRouter;
 import com.sxj.mybatis.shard.mapper.ShardMapperMethod;
@@ -55,6 +56,16 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
         
         ShardKeyGenerator shardKeyGenerator = GenericStatementBuilder.getShardedKeyGenerators()
                 .get(ms.getId());
+        ShardSnGenerator shardSnGenerator = GenericStatementBuilder.getShardSnGenerators()
+                .get(ms.getId());
+        if (shardSnGenerator != null)
+        {
+            List<DataSource> snGeneratorDataSources = DataSourceRouter.getSnGeneratorDataSources();
+            shardSnGenerator.process(snGeneratorDataSources.get(0),
+                    param,
+                    ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
+        }
+        
         if (shardKeyGenerator != null)
         {
             if (shardKeyGenerator instanceof ShardJdbc4KeyGenerator)

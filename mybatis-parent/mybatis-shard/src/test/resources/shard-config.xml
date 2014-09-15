@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<keyNodes ref="ds2">
+	
+	<keyNodes> 
+		<keyNode type="SN" ref="ds1"></keyNode>
+		<keyNode type="ID" ref="ds1"></keyNode>
+		<keyNode type="ID" ref="ds2"></keyNode>
 	</keyNodes>
-	<!-- 数据结点配置，main=true 代表该结点为主库（不参于分库的表，都存储在该节点中） -->
+	<!-- 数据结点配置 -->
 	<dataNodes>
 		<!-- 数据节点1 -->
-		<dataNode main="true">
+		<dataNode>
 			<writeNodes ref="ds1,ds2">
 			</writeNodes>
 			<readNodes ref="ds1-read,ds2-read">
