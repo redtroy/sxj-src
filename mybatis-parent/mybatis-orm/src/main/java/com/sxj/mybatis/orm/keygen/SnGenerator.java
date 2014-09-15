@@ -78,7 +78,7 @@ public class SnGenerator implements KeyGenerator
         {
             if (statement != null)
                 statement.close();
-            connection.close();
+            //            connection.close();
             //            if (connection != null)
             //                connection.close();
         }
