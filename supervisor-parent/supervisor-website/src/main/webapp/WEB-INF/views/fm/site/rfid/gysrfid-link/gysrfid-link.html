@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="../style/style.css" rel="stylesheet" type="text/css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<div id="header" class="fence-wide">
+    <h1 class="yard-1200 ly-clearFix"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span><span class="logOut ly-right"><a href="#">注销帐户并退出</a></span></h1>
+    <div class="border-header"></div>
+</div>
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>RFID进销存管理<span>&gt;</span>物流RFID关联申请管理</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList">
+      <h2 class="tit">会员中心</h2>
+      <ul>
+        <li><a href="member.html">会员管理</a></li>
+        <li><a href="accounts.html">会员子帐号管理</a></li>
+      </ul>
+      <h2 class="tit">备案管理</h2>
+      <ul>
+        <li><a href="record.html">备案管理</a></li>
+      </ul>
+      <h2 class="tit">合同管理</h2>
+      <ul>
+        <li><a href="contract.html">合同管理</a></li>
+      </ul>
+      <h2 class="tit">RFID进销存管理</h2>
+      <ul>
+        <li><a href="order.html">RFID申请单管理</a></li>
+        <li><a href="purchase.html">RFID采购单管理</a></li>
+        <li><a href="mencprd.html">门窗RFID商品管理</a></li>
+		<li><a href="gysprd.html">物流RFID商品管理</a></li>
+		<li><a href="mencrfid-link.html">门窗RFID关联申请管理</a></li>
+		<li><a href="gysrfid-link.html">物流RFID关联申请管理</a></li>
+        <li><a href="supplier.html">RFID供应商管理</a></li>
+        <li><a href="pricemgr.html">RFID销售价格管理</a></li>
+		<li><a href="count.html">RFID统计管理</a></li>
+      </ul>
+      <h2 class="tit">会员行为跟踪管理</h2>
+      <ul>
+        <li><a href="behavior.html">会员行为跟踪管理</a></li>
+      </ul>
+      <h2 class="tit">支付管理</h2>
+      <ul>
+        <li><a href="#">支付管理</a></li>
+      </ul>
+      <h2 class="tit">管理员管理</h2>
+      <ul>
+        <li><a href="admin.html">管理员管理</a></li>
+      </ul>
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">物流RFID关联申请管理</h2>
+      <div id="searchBox">
+      <p>RFID关联申请号
+        <input type="text" name="" value="">
+	  RFID编号<input type="text" name="" value="">
+       申请人名称<input type="text" name="" value="">
+       采购合同号<input type="text" name="" value="">
+	   被补损RFID编号<input type="text" name="" value=""></p>
+       RFID类型
+       <select name="select2">
+         <option selected="selected">全部</option>
+         <option>玻璃标签</option>
+         <option>型材标签</option>
+       </select>
+	   关联类型
+	   <select name="select">
+          <option selected="selected">全部</option>
+		  <option>批次申请</option>
+          <option>RFID补损</option>
+		  <option>合同补损</option>
+        </select>
+		审核状态
+	   <select name="select">
+          <option selected="selected">全部</option>
+		  <option>未审核</option>
+          <option>已审核</option>
+        </select>
+       关联申请时间段
+       <input type="text" name="" value="">-<input type="text" name="" value="">
+        <button class="btn btn-blue"><span>查询</span></button>
+    </div>
+	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的物流RFID关联申请！</div>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+        <col width="10%"/>
+        <col width="8%"/>
+        <col width="12%" />
+        <col width="8%" />
+        <col width="8%" />
+		<col width="9%" />
+		<col width="4%" />
+		<col width="12%" />
+		<col width="8%" />
+		<col width="8%" />
+		<col width="12%" />
+        <tr>
+          <th>RFID关联申请号</th>
+          <th>RFID编号</th>
+          <th>申请人名称</th>
+          <th>RFID类型</th>
+          <th>关联类型</th>
+		  <th>采购合同号</th>
+		  <th>批次</th>
+		  <th>关联申请时间</th>
+		  <th>被补损RFID</th>
+		  <th>审核</th>
+          <th class="rLine">操作</th>
+        </tr>
+        <tr>
+          <td><a href="#" class="lnk-blue">GL14070001</a></td>
+          <td>AAAA00001</td>
+          <td>江苏私享家商贸</td>
+          <td>玻璃标签</td>
+		  <td>批次申请</td>
+		  <td>CT14070001</td>
+          <td>1</td>
+		  <td>2014年9月20日</br>
+12:30:03</td>
+		  <td>-</td>
+		  <td><button class="btn btn-gray"><span>审核</span></button></td>
+		  <td class="operation"><a href="#" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
+        </tr>
+		<tr class="tableInfo" style="display:;">
+        <td colspan="11"><div class="infoBox text-left">
+		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
+            <col width="10%" />
+			<col width="10%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="15%" />
+            <col width="15%" />
+            <tr class="infoBox">
+              <th>合同号</th>
+			  <th>交货批次</th>
+              <th>产品规格</th>
+              <th>数量<span>（㎡/吨）</span></th>
+              <th>应付货款<span>（元）</span></th>
+              <th class="rLine">对应批次RFID编号</th>
+              
+            </tr>
+            <tr>
+              <td><input type="text" name="" value="CT14070001"></td>
+			  <td>1</td>
+              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                  <tr>
+                    <td><input type="text" name="" value="5+6A+5 双白中空 W779/H1176"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" name="" value="5+6A+5 双白中空 W779/W1186"></td>
+                  </tr>
+                </table></td>
+              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                  <tr>
+                    <td><input type="text" name="" value="112.00" class="input50"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" name="" value="225.00" class="input50"></td>
+                  </tr>
+                </table></td>
+              <td><input type="text" name="" value="8500.00" class="input50"></td>
+              <td><input type="text" name="" value="AAAA00001"></td>
+            </tr>
+          </table>
+		  <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
+		  </td>
+	    </tr> 
+		<tr>
+          <td><a href="#" class="lnk-blue">GL14070002</a></td>
+          <td>AAAA00002 </td>
+          <td>江苏私享家商贸</td>
+          <td>型材标签</td>
+		  <td>RFID补损</td>
+		  <td>CT14070001</td>
+          <td>1</td>
+		  <td>2014年9月20日</br>
+	      12:30:03</td>
+		  <td>AAAB00002</td>
+		  <td><button class="btn btn-gray"><span>审核</span></button></td>
+		  <td class="operation"><a href="#" class="del">删除</a></td>
+        </tr>
+		<tr class="tableInfo" style="display:;">
+        <td colspan="11"><div class="infoBox text-left">
+            <ul class="ly-clearFix">
+              <li><label>标签补损RFID编号</label>
+                <input type="text" name="" value="AAAA00002"></li>
+			  <li>
+                <label>被补损RFID编号</label>
+                <input type="text" value="AAAB00002">
+			  </li>
+			  </ul>
+			  <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
+			  </div>
+	     </td> 
+        </tr>
+		 <tr>
+          <td><a href="#" class="lnk-blue">GL14070003</a></td>
+          <td>AAAA00003</td>
+          <td>江苏私享家商贸</td>
+          <td>玻璃标签</td>
+		  <td>合同补损</td>
+		  <td>CT14070001</td>
+          <td>2</td>
+		  <td>2014年9月20日</br>
+12:30:03</td>
+		  <td>AAAB00005</br>AAAB00006</td>
+		  <td><em class="state verified">已审核</em></td>
+		  <td class="operation"><a href="#" class="del">删除</a></td>
+        </tr>
+		<tr class="tableInfo" style="display:;">
+        <td colspan="11"><div class="infoBox text-left">
+            <ul class="ly-clearFix">
+              <li>
+                <label>合同补损RFID编号</label>
+                <input type="text" name="" value="AAAA00003"></li>
+			  <li>
+                <label>被补损RFID编号</label>
+                <input type="text" name="" value="AAAB00005,AAAB00006"></li>
+		    </ul>
+			  <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
+			  </div>
+	     </td> 
+        </tr>
+      </table>
+    <!-- InstanceEndEditable --></div>
+</div>
+<div id="footer" class="fence-wide">
+  <div class="yard-1200">
+    <p>&copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
+  </div>
+</div>
+</body>
+<!-- InstanceEnd --></html>

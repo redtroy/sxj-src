@@ -1,0 +1,558 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="../style/style.css" rel="stylesheet" type="text/css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<div id="header" class="fence-wide">
+    <h1 class="yard-1200 ly-clearFix"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span><span class="logOut ly-right"><a href="#">注销帐户并退出</a></span></h1>
+    <div class="border-header"></div>
+</div>
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>RFID进销存管理<span>&gt;</span>物流RIFD商品管理</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList">
+      <h2 class="tit">会员中心</h2>
+      <ul>
+        <li><a href="member.html">会员管理</a></li>
+        <li><a href="accounts.html">会员子帐号管理</a></li>
+      </ul>
+      <h2 class="tit">备案管理</h2>
+      <ul>
+        <li><a href="record.html">备案管理</a></li>
+      </ul>
+      <h2 class="tit">合同管理</h2>
+      <ul>
+        <li><a href="contract.html">合同管理</a></li>
+      </ul>
+      <h2 class="tit">RFID进销存管理</h2>
+      <ul>
+        <li><a href="order.html">RFID申请单管理</a></li>
+        <li><a href="purchase.html">RFID采购单管理</a></li>
+        <li><a href="mencprd.html">门窗RFID商品管理</a></li>
+		<li><a href="gysprd.html">物流RFID商品管理</a></li>
+		<li><a href="mencrfid-link.html">门窗RFID关联申请管理</a></li>
+		<li><a href="gysrfid-link.html">物流RFID关联申请管理</a></li>
+        <li><a href="supplier.html">RFID供应商管理</a></li>
+        <li><a href="pricemgr.html">RFID销售价格管理</a></li>
+		<li><a href="count.html">RFID统计管理</a></li>
+      </ul>
+      <h2 class="tit">会员行为跟踪管理</h2>
+      <ul>
+        <li><a href="behavior.html">会员行为跟踪管理</a></li>
+      </ul>
+      <h2 class="tit">支付管理</h2>
+      <ul>
+        <li><a href="#">支付管理</a></li>
+      </ul>
+      <h2 class="tit">管理员管理</h2>
+      <ul>
+        <li><a href="admin.html">管理员管理</a></li>
+      </ul>
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">物流RFID商品管理</h2>
+      <div id="searchBox">
+      <p>RFID编号
+        <input type="text" name="" value="">
+       采购单号
+       <input type="text" name="" value="">
+       采购合同号
+       <input type="text" name="" value="">
+	   RFID申请人名称
+       <input type="text" name="" value="">
+       RFID类型<select name="select">
+	   <option selected="selected">全部</option>
+          <option>玻璃标签</option>
+          <option>型材标签</option>
+        </select></p>
+	   进度状态
+	   <select name="select" class="selectx">
+          <option selected="selected">全部</option>
+		  <option>标签未发货</option>
+		  <option>标签已发货</option>
+		  <option>标签已收货</option>
+		  <option>货物已出库</option>
+          <option>货物已验收</option>
+        </select>
+	   RFID状态
+	   <select name="select">
+		<option selected="selected">全部</option>
+          <option>未使用</option>
+		  <option>已使用</option>
+		  <option>已破损</option>
+          <option>已停用</option>
+        </select>
+       导入时间段
+       <input type="text" name="" value="">-<input type="text" name="" value="">
+        <button class="btn btn-blue"><span>查询</span></button>
+    </div>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+        <col width="9%"/>
+        <col width="9%"/>
+        <col width="7%" />
+		<col width="8%" />
+        <col width="10%" />
+        <col width="6%" />
+		<col width="12%" />
+		<col width="9%" />
+		<col width="12%" />
+		<col width="9%" />
+		<col width="12%" />
+        <tr>
+          <th>RFID编号</th>
+          <th>采购单号</th>
+          <th>RFID类型</th>
+		  <th>RFID申请人</th>
+          <th>采购合同号</th>
+          <th>执行批次</th>
+		  <th>导入时间</th>
+		  <th>补损关联</th>
+		  <th>进度状态</th>
+		  <th>RFID状态</th>
+          <th class="rLine">操作</th>
+        </tr>
+        <tr>
+          <td><a href="#" class="lnk-blue">AAAA00001</a></td>
+          <td>CG14070001</td>
+          <td>玻璃标签</td>
+		  <td>江苏私享家</td>
+          <td><a href="#" class="lnk-blue">CT14070001</a></td>
+		  <td>1</td>
+		  <td>2014年9月20日</br>12:30:03</td>
+          <td>-</td>
+		  <td><em class="state frozen">标签未发货</em></td>
+		  <td><em class="state verified">已使用</em></td>
+		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
+        </tr>
+		 <tr style="display:;">
+        <td colspan="11"><div class="planBox text-left f14">
+            <div class="item">
+              <label class="time">2014年5月20日14：52</label>
+              标签已导入&nbsp;&nbsp;<em class="color-blue">TID号码:12345689985</em></div>
+            <div class="line"></div>
+            <div class="item">
+              <label class="time">2014年5月21日15：30</label>
+              标签已发货 </div>
+            <div class="line"></div>
+            <div class="item">
+              <label class="time">2014年5月30日12：20</label>
+              标签已收货
+            </div>
+            <div class="line"></div>
+            <div class="item">
+              <label class="time">2014年6月25日12：20</label>
+              货物已出库</div>
+		    <div class="line"></div>
+		    <div class="item">
+              <label class="time">2014年6月30日12：20</label>
+              货物已验货</div>
+			  <div class="line"></div>
+			  <div class="item">
+              <label class="time">2014年6月30日12：20</label>
+              <em class="color-red">标签已破损</em></div>
+            <div class="btnBox"><a href="#" class="button button-gray button-small">收起</a></div>
+          </div></td>
+      </tr>
+		<tr>
+          <td><a href="#" class="lnk-blue">AAAA00002</a></td>
+          <td>CG14070001</td>
+          <td>型材标签</td>
+		  <td>江苏私享家</td>
+          <td><a href="#" class="lnk-blue">CT14070002</a></td>
+		  <td>2</td>
+		  <td>2014年9月20日</br>12:30:03</td>
+          <td>AAAA00007</td>
+		  <td><em class="state normal">标签已发货</em></td>
+		  <td><em class="state frozen">已破损</em></td>
+		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
+        </tr>
+		<tr class="tableInfo" style="display:;">
+        <td colspan="11">
+        <div class="infoBox text-left">
+          <ul class="ly-clearFix">
+            <li>
+              <label>合同号</label>
+              CT14070001</li>
+            <li>
+              <label>签订地点</label>
+              南京马群科技园B</li>
+            <li>
+              <label>甲方</label>
+              南京三丰玻璃有限公司</li>
+            <li>
+              <label>乙方</label>
+              南京金陵装饰有限公司 </li>
+            <li>
+              <label>工程名称</label>
+              马群科创园 </li>
+            <li>
+              <label>工程地址</label>
+              江苏省南京市栖霞区 </li>
+            <li>
+              <label>对应备案号</label>
+              BA14070001&nbsp;&nbsp;BA14070002 </li>
+            <li>
+              <label>签订时间</label>
+              2011年11月15日 </li>
+            <li>
+              <label>合同期限</label>
+              2012年1月20日 </li>
+            <li>
+              <label>生效时间</label>
+              2011年11月15日 </li>
+          </ul>
+          <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
+            <col width="20%" />
+            <col width="20%" />
+            <col width="15%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="20%" />
+            <col width="5%" />
+            <tr>
+              <th>产品名称</th>
+              <th>产品规格</th>
+              <th>数量<span>（㎡/吨）</span></th>
+              <th>单价<span>(元/㎡/吨)</span></th>
+              <th>金额<span>(元)</span></th>
+              <th>备注说明</th>
+              <th class="rLine">&nbsp;</th>
+            </tr>
+            <tr>
+              <td>中空玻璃</td>
+              <td>5+6A+5 双白中空 W779/H1176</td>
+              <td>1312.24</td>
+              <td>67.00</td>
+              <td>879.20</td>
+              <td>成品不足0.3平方米的，平方差额我公司承担40%，贵公司承担60%，按实际供货面积</td>
+              <td class="color-red">！</td>
+            </tr>
+            <tr>
+              <td>中空玻璃</td>
+              <td>5+9A+5 双钢中空 W323/H1176</td>
+              <td>132.04</td>
+              <td>87.00</td>
+              <td>114.88</td>
+              <td>成品不足0.3平方米的，平方差额我公司承担40%，贵公司承担60%，按实际供货面积</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td><strong>合计</strong></td>
+              <td>&nbsp;</td>
+              <td>1667.82</td>
+              <td>&nbsp;</td>
+              <td>5265.54</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </table>
+          <div><label>交货地址</label>桥北金城丽景厂里 </div>
+          <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="10%" />
+            <col width="15%" />
+            <col width="5%" />
+            <tr>
+              <th>交货批次</th>
+              <th>产品规格</th>
+              <th>数量<span>（㎡/吨）</span></th>
+              <th>应付货款<span>（元）</span></th>
+              <th class="rLine">对应批次RFID编号</th>
+              <th class="rLine"></th>
+            </tr>
+            <tr>
+              <td>第1批次</td>
+              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                  <tr>
+                    <td>5+6A+5 双白中空 W779/H1176</td>
+                  </tr>
+                  <tr>
+                    <td>5+9A+5 双钢中空 W323/H1176</td>
+                  </tr>
+                </table></td>
+              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                  <tr>
+                    <td>1312.24&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td>131.24&nbsp;</td>
+                  </tr>
+                </table></td>
+              <td>8564.00</td>
+              <td>AAAA00001</td>
+              <td class="color-red">！</td>
+            </tr>
+          </table>
+          <div>
+            <label>本合同还有</label>
+            &nbsp;2&nbsp;
+            批次待交付 </div>
+          <div>
+            <label>合同定金</label>
+            50,000元 </div>
+          <div>
+            <label>合同备注</label>
+            <textarea name="textarea2" id="textarea2" cols="80" rows="3" readonly="readonly">甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金。乙方逾期送货，按银行同期贷款利率支付逾期利息, 并赔偿甲方的损失，支付1%的违约金。</textarea>
+          </div>
+          <div class="contPic">
+              <label>合同备案扫描件</label>
+              <div class="rollBox">
+      <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
+      <div class="Cont" id="ISL_Cont">
+      <div class="ScrCont">
+       <div id="List1">
+                  <!-- 图片列表 begin -->
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht01.gif"><img src="../images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht02.gif"><img src="../images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht03.gif"><img src="../images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht01.gif"><img src="../images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht02.gif"><img src="../images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht03.gif"><img src="../images/ht03s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht01.gif"><img src="../images/ht01s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht02.gif"><img src="../images/ht02s.gif"  /></a></div>
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht03.gif"><img src="../images/ht03s.gif"  /></a></div>
+                  <!-- 图片列表 end -->
+                </div>
+       <div id="List2"></div>
+      </div>
+     </div>
+     <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+   </div></div>
+          <div>
+            <label>关联招标合同号</label>
+            CT14070001 </div>
+            </div>
+          <div class="infoBox producedBox changeBox text-left">
+            <h2 class="title">合同变更信息</h2>
+            <div>
+              <label>合同变更备案号</label>
+              BA14070001</div>
+            <div class="contPic">
+              <label>合同变更扫描件</label>
+              <div class="rollBox">
+                <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
+                <div class="Cont" id="ISL_Cont2">
+                  <div class="ScrCont">
+                    <div id="List3">
+                      <!-- 图片列表 begin -->
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                      <!-- 图片列表 end -->
+                    </div>
+                    <div id="List4"></div>
+                  </div>
+                </div>
+                <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+              </div>
+            </div>
+            <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
+              <col width="15%" />
+              <col width="20%" />
+              <col width="15%" />
+              <col width="10%" />
+              <col width="10%" />
+              <col width="25%" />
+              <col width="5%" />
+              <tr>
+                <th>产品名称</th>
+                <th>产品规格</th>
+                <th>数量<span>（㎡/吨）</span></th>
+                <th>单价<span>(元/㎡/吨)</span></th>
+                <th>金额<span>(元)</span></th>
+                <th>备注说明</th>
+                <th class="rLine">&nbsp;</th>
+              </tr>
+              <tr>
+                <td>中空玻璃</td>
+                <td>5+9A+5 双钢中空 W323/H1176</td>
+                <td>132.04</td>
+                <td>87.00</td>
+                <td>114.00</td>
+                <td>甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金。乙方逾期送货，按银行同期贷款利率支付逾期利息, 并赔偿甲方的损失，支付1%的违约金。</td>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+            <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
+              <col width="20%" />
+              <col width="25%" />
+              <col width="20%" />
+              <col width="10%" />
+              <col width="20%" />
+              <col width="5%" />
+              <tr>
+                <th>交货批次</th>
+                <th>产品规格</th>
+                <th>数量<span>（㎡/吨）</span></th>
+                <th>应付货款<span>（元）</span></th>
+                <th>对应批次RFID编号</th>
+                <th class="rLine">&nbsp;</th>
+              </tr>
+              <tr>
+                <td>第1批次</td>
+                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                    <tr>
+                      <td>5+6A+5 双白中空 W779/H1176</td>
+                    </tr>
+                    <tr>
+                      <td>5+9A+5 双钢中空 W323/H117</td>
+                    </tr>
+                  </table></td>
+                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                    <tr>
+                      <td>1312.24</td>
+                    </tr>
+                    <tr>
+                      <td>132.04</td>
+                    </tr>
+                  </table></td>
+                <td>8564.00</td>
+                <td>AAAA00001</td>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+          </div>
+          <div class="infoBox producedBox changeBox text-left">
+            <h2 class="title">合同补损信息</h2>
+            <div>
+              <label>合同补损备案号</label>
+              BA14070001</div>
+            <div>
+              <label>补损批次RFID</label>
+              AAAA00001/AAAA00002/AAAA00003</div>
+            <div class="contPic">
+              <label>合同补损扫描件</label>
+              <div class="rollBox">
+                <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
+                <div class="Cont" id="ISL_Cont3">
+                  <div class="ScrCont">
+                    <div id="List5">
+                      <!-- 图片列表 begin -->
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
+                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
+                      <!-- 图片列表 end -->
+                    </div>
+                    <div id="List6"></div>
+                  </div>
+                </div>
+                <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+              </div>
+            </div>
+            <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
+              <col width="10%" />
+              <col width="25%" />
+              <col width="20%" />
+              <col width="10%" />
+              <col width="15%" />
+              <col width="15%" />
+              <col width="5%" />
+              <tr>
+                <th>交货批次</th>
+                <th>产品规格</th>
+                <th>数量<span>（㎡/吨）</span></th>
+                <th>应付货款<span>（元）</span></th>
+                <th>对应批次RFID编号</th>
+                <th>新RFID编号</th>
+                <th class="rLine">&nbsp;</th>
+              </tr>
+              <tr>
+                <td>补第1批次</td>
+                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                    <tr>
+                      <td>5+6A+5 双白中空 W779/H117</td>
+                    </tr>
+                    <tr>
+                      <td>5+9A+5 双钢中空 W323/H1176</td>
+                    </tr>
+                  </table></td>
+                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
+                    <tr>
+                      <td>1312.24</td>
+                    </tr>
+                    <tr>
+                      <td>132.04</td>
+                    </tr>
+                  </table></td>
+                <td>8564.00</td>
+                <td>AAAA00001</td>
+                <td>AAAA00001</td>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+            <div class="btnBox text-center"><a href="#" class="button button-gray button-small">收起</a></div>
+          </div></td>
+      </tr>
+		<tr>
+          <td><a href="#" class="lnk-blue">AAAA00003</a></td>
+          <td>CG14070001</td>
+          <td>型材标签</td>
+		  <td>江苏私享家</td>
+          <td>-</td>
+		  <td>-</td>
+		  <td>2014年9月20日</br>12:30:03</td>
+          <td>-</td>
+		  <td><em class="state process">标签已收货</em></td>
+		  <td><em class="state normal">未使用</em></td>
+		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
+        </tr>
+		 <tr>
+          <td><a href="#" class="lnk-blue">AAAA00004</a></td>
+          <td>CG14070001</td>
+          <td>玻璃标签</td>
+		  <td>江苏私享家</td>
+          <td><a href="#" class="lnk-blue">CT14070001</a></td>
+		  <td>2</td>
+		  <td>2014年9月20日</br>12:30:03</td>
+          <td>-</td>
+		  <td><em class="state normal">货物已出库</em></td>
+		  <td><em class="state frozen">已停用</em></td>
+		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
+        </tr>
+		<tr>
+          <td><a href="#" class="lnk-blue">AAAA00005</a></td>
+          <td>CG14070001</td>
+          <td>玻璃标签</td>
+		  <td>江苏私享家</td>
+          <td><a href="#" class="lnk-blue">CT14070001</a></td>
+		  <td>补1</td>
+		  <td>2014年9月20日</br>12:30:03</td>
+          <td>AAAA00010</td>
+		  <td><em class="state verified">货物已验收</em></td>
+		  <td><em class="state verified">已使用</em></td>
+		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
+        </tr>
+      </table>
+    <!-- InstanceEndEditable --></div>
+</div>
+<div id="footer" class="fence-wide">
+  <div class="yard-1200">
+    <p>&copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
+  </div>
+</div>
+</body>
+<!-- InstanceEnd --></html>
