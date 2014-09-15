@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.rfid.IRfidSupplierDao">
+	<resultMap id="SupplierResultMap" type="com.sxj.supervisor.entity.rfid.RfidSupplierEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="supplierNo" column="SUPPLIER_NO" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
+		<result property="contactName" column="CONTACT_NAME" jdbcType="VARCHAR" />
+		<result property="contactTel" column="CONTACT_TEL" jdbcType="VARCHAR" />
+		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
+		<result property="doorsPrice" column="DOORS_PRICE" jdbcType="INTEGER" />
+		<result property="batchPrice" column="BATCH_PRICE" jdbcType="INTEGER" />
+	</resultMap>
+	<!-- 按条件查询供应商 -->
+	<select id="queryList" resultMap="SupplierResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT *
+		 FROM M_RFID_SUPPLIER WHERE 1=1]]>
+		<!-- 会员号 -->
+		<if test="condition.supplierNo != null and condition.supplierNo !=''">
+			<![CDATA[AND SUPPLIER_NO = #{condition.supplierNo}]]>
+		</if>
+		<if test="condition.name != null and condition.name !=''">
+			<![CDATA[AND NAME = #{condition.name}]]>
+		</if>
+		<if test="condition.contactTel != null and condition.contactTel !=''">
+			<![CDATA[AND CONTACT_TEL = #{condition.contactTel}]]>
+		</if>
+		<if test="condition.telNum != null and condition.telNum !=''">
+			<![CDATA[AND TEL_NUM = #{condition.telNum}]]>
+		</if>
+	</select>
+</mapper>

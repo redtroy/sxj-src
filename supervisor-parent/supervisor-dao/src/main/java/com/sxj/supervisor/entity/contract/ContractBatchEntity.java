@@ -23,7 +23,7 @@ public class ContractBatchEntity extends Pagable implements Serializable
 {
     
     /**
-     * 
+     *  
      */
     private static final long serialVersionUID = -918867108456859467L;
     

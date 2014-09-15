@@ -66,32 +66,35 @@ public class MybatisMapperProcessor implements
                 applicationContext);
         String fieldValue = MapperScanConfigurator.getTypeAliasesPackage();
         fieldValue = fieldValue == null ? "" : fieldValue;
-        Resource[] resources = applicationContext.getResources("classpath:"
-                + StringUtils.replaceChars(fieldValue, '.', '/')
-                + "/**/*.class");
-        for (Resource resource : resources)
+        String[] split = fieldValue.split(",");
+        for (String value : split)
         {
-            if (resource.isReadable())
+            Resource[] resources = applicationContext.getResources("classpath:"
+                    + StringUtils.replaceChars(value, '.', '/') + "/**/*.class");
+            for (Resource resource : resources)
             {
-                MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
-                ClassMetadata classMetadata = metadataReader.getClassMetadata();
-                AnnotationMetadata classAnnotationMetadata = metadataReader.getAnnotationMetadata();
-                String entityAnnotation = Entity.class.getName();
-                if (classAnnotationMetadata.isAnnotated(entityAnnotation))
+                if (resource.isReadable())
                 {
-                    Field idFiled = AnnotationUtils.findDeclaredFieldWithAnnoation(Id.class,
-                            Class.forName(classMetadata.getClassName()));
-                    Table table = Class.forName(classMetadata.getClassName())
-                            .getAnnotation(Table.class);
-                    if (idFiled != null && table != null)
+                    MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+                    ClassMetadata classMetadata = metadataReader.getClassMetadata();
+                    AnnotationMetadata classAnnotationMetadata = metadataReader.getAnnotationMetadata();
+                    String entityAnnotation = Entity.class.getName();
+                    if (classAnnotationMetadata.isAnnotated(entityAnnotation))
                     {
-                        Id annotation = idFiled.getAnnotation(Id.class);
-                        ShardRuleCfg rule = new ShardRuleCfg();
-                        rule.setTableName(table.name());
-                        rule.setColumn(annotation.column());
-                        XmlReader.getRules().put(rule.getTableName(), rule);
+                        Field idFiled = AnnotationUtils.findDeclaredFieldWithAnnoation(Id.class,
+                                Class.forName(classMetadata.getClassName()));
+                        Table table = Class.forName(classMetadata.getClassName())
+                                .getAnnotation(Table.class);
+                        if (idFiled != null && table != null)
+                        {
+                            Id annotation = idFiled.getAnnotation(Id.class);
+                            ShardRuleCfg rule = new ShardRuleCfg();
+                            rule.setTableName(table.name());
+                            rule.setColumn(annotation.column());
+                            XmlReader.getRules().put(rule.getTableName(), rule);
+                        }
+                        classNames.add(classMetadata.getClassName());
                     }
-                    classNames.add(classMetadata.getClassName());
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.sxj.mybatis.shard.configuration;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,11 +17,13 @@ import org.w3c.dom.NodeList;
 
 import com.sxj.mybatis.shard.configuration.node.DataNodeCfg;
 import com.sxj.mybatis.shard.configuration.node.KeyNodeCfg;
+import com.sxj.mybatis.shard.configuration.node.KeyNodeType;
 import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
 
 public class XmlReader
 {
-    private static KeyNodeCfg keyNodeCfg = new KeyNodeCfg();
+    
+    private static Map<KeyNodeType, List<KeyNodeCfg>> keyNodeCfgs = new HashMap<KeyNodeType, List<KeyNodeCfg>>();
     
     private static List<DataNodeCfg> dataNodes = new ArrayList<DataNodeCfg>();
     
@@ -50,11 +53,38 @@ public class XmlReader
             Document xmldoc = db.parse(is);
             root = xmldoc.getDocumentElement();
             
-            NodeList keyNodesCfg = root.getElementsByTagName("keyNodes");
-            if (keyNodesCfg == null || keyNodesCfg.getLength() == 0)
+            NodeList keyNodesNode = root.getElementsByTagName("keyNodes");
+            if (keyNodesNode == null || keyNodesNode.getLength() == 0)
                 throw new RuntimeException("No KeyNode defined");
-            String ref = ((Element) (keyNodesCfg.item(0))).getAttribute("ref");
-            keyNodeCfg.setKeyNodes(ref);
+            NodeList keyNodes = keyNodesNode.item(0).getChildNodes();
+            for (int i = 0; i < keyNodes.getLength(); i++)
+            {
+                Node tmp = keyNodes.item(i);
+                if (tmp == null)
+                    continue;
+                if ("keyNode".equals(tmp.getNodeName()))
+                {
+                    Element item = (Element) tmp;
+                    String type = item.getAttribute("type");
+                    String ref = item.getAttribute("ref");
+                    KeyNodeType valueOf = KeyNodeType.valueOf(type);
+                    if (valueOf != null)
+                    {
+                        KeyNodeCfg cfg = new KeyNodeCfg();
+                        cfg.setKeyNodes(ref);
+                        if (keyNodeCfgs.get(valueOf) == null)
+                        {
+                            List<KeyNodeCfg> cfgs = new ArrayList<KeyNodeCfg>();
+                            cfgs.add(cfg);
+                            keyNodeCfgs.put(valueOf, cfgs);
+                        }
+                        else
+                        {
+                            keyNodeCfgs.get(valueOf).add(cfg);
+                        }
+                    }
+                }
+            }
             
             NodeList dataNodesCfg = root.getElementsByTagName("dataNodes")
                     .item(0)
@@ -147,9 +177,9 @@ public class XmlReader
         return rules;
     }
     
-    public static KeyNodeCfg getKeyNodeCfg()
+    public static List<KeyNodeCfg> getKeyNodeCfgs(KeyNodeType type)
     {
-        return keyNodeCfg;
+        return keyNodeCfgs.get(type);
     }
     
 }

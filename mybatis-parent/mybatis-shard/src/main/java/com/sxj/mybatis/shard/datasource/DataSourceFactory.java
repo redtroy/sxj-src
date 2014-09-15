@@ -1,6 +1,7 @@
 package com.sxj.mybatis.shard.datasource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import com.sxj.mybatis.shard.configuration.XmlReader;
 import com.sxj.mybatis.shard.configuration.node.DataNodeCfg;
 import com.sxj.mybatis.shard.configuration.node.KeyNodeCfg;
+import com.sxj.mybatis.shard.configuration.node.KeyNodeType;
 import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
 
 public class DataSourceFactory
@@ -21,6 +23,8 @@ public class DataSourceFactory
     private static List<DataSourceNode> nodes;
     
     private static List<DataSource> keyGeneratorDs;
+    
+    private static List<DataSource> snGeneratorDs;
     
     private static Map<String, String> shardTables = new HashMap<String, String>();
     
@@ -61,10 +65,15 @@ public class DataSourceFactory
         List<DataSourceNode> result = new ArrayList<DataSourceNode>();
         for (DataSourceNode node : nodes)
         {
-            if (node.getTables()
-                    .toLowerCase()
-                    .contains(tableName.toLowerCase()))
+            String tables = node.getTables();
+            if (StringUtils.isEmpty(tables))
                 result.add(node);
+            else
+            {
+                String[] split = tables.split(",");
+                if (Arrays.asList(split).contains(tableName))
+                    result.add(node);
+            }
         }
         return result;
     }
@@ -84,7 +93,8 @@ public class DataSourceFactory
         //        Map<String, DataSourceCfg> dataSourceCfgs = XmlReader.getDataSources();
         List<DataNodeCfg> dataNodeCfgs = XmlReader.getDataNodes();
         Map<String, ShardRuleCfg> ruleCfgs = XmlReader.getRules();
-        KeyNodeCfg keyNodeCfg = XmlReader.getKeyNodeCfg();
+        List<KeyNodeCfg> keyNodeCfgs = XmlReader.getKeyNodeCfgs(KeyNodeType.ID);
+        List<KeyNodeCfg> snNodeCfgs = XmlReader.getKeyNodeCfgs(KeyNodeType.SN);
         try
         {
             //            Map<String, DataSource> dataSourceMap = new HashMap<String, DataSource>();
@@ -107,10 +117,23 @@ public class DataSourceFactory
             
             nodes = new ArrayList<DataSourceNode>();
             keyGeneratorDs = new ArrayList<DataSource>();
-            List<String> kStr = split(keyNodeCfg.getKeyNodes(), ",");
-            for (String str : kStr)
+            for (KeyNodeCfg keyNodeCfg : keyNodeCfgs)
             {
-                keyGeneratorDs.add(context.getBean(str, DataSource.class));
+                List<String> kStr = split(keyNodeCfg.getKeyNodes(), ",");
+                for (String str : kStr)
+                {
+                    keyGeneratorDs.add(context.getBean(str, DataSource.class));
+                }
+            }
+            
+            snGeneratorDs = new ArrayList<DataSource>();
+            for (KeyNodeCfg snNodeCfg : snNodeCfgs)
+            {
+                List<String> kStr = split(snNodeCfg.getKeyNodes(), ",");
+                for (String str : kStr)
+                {
+                    snGeneratorDs.add(context.getBean(str, DataSource.class));
+                }
             }
             
             for (DataNodeCfg cfg : dataNodeCfgs)
@@ -257,6 +280,15 @@ public class DataSourceFactory
             initDataSources();
         }
         return keyGeneratorDs;
+    }
+    
+    public static List<DataSource> getSnGeneratorDs()
+    {
+        if (nodes == null)
+        {
+            initDataSources();
+        }
+        return snGeneratorDs;
     }
     
 }

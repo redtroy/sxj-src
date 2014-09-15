@@ -1,6 +1,9 @@
 /parent/
 
+
 .project
 bin/
 target/
 .classpath
+.settings/
+.sjxlogs/
