@@ -17,21 +17,12 @@
 <script>
 function addTable(TrId){
 	var vTb=$("#TbData");//得到表格ID=TbData的jquery对象 
-	var totalTr=$("#total_tr");
+	//var totalTr=$("#total_tr");
 	//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
 	var vNum=$("#TbData tr").filter(".CaseRow").size()-1;//表格有多少个数据行 
-	var vTr=$("#TbData #trDataRow"); //得到表格中的第一行数据 
+	var vTr=$("#displayTr"); //得到表格中的第一行数据 
 	var vTrClone=vTr.clone(true);//创建第一行的副本对象vTrClone 
-	var id="trDataRow"+vNum;
-	vTrClone[0].id=id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-	vTrClone.show();
-	//设置item[]
-	//vTrClone.find("td").eq(0).find("input").attr("name","modifyList["+num+"].modifyItemList["+num+"].productName");
-	//vTrClone.find("td").eq(1).find("textarea").attr("name","modifyList["+num+"].modifyItemList["+num+"].productModel");
-	//vTrClone.find("td").eq(2).find("input").attr("name","modifyList["+num+"].modifyItemList["+num+"].quantity");
-	//vTrClone.find("td").eq(3).find("input").attr("name","modifyList["+num+"].modifyItemList["+num+"].price");
-	//vTrClone.find("td").eq(4).find("input").attr("name","modifyList["+num+"].modifyItemList["+num+"].amount");
-	//vTrClone.find("td").eq(5).find("textarea").attr("name","modifyList["+num+"].modifyItemList["+num+"].remarks");
+	vTrClone[0].id="";
 	//放入数据
 	vTrClone.find("td").eq(0).find("input").val($("#item"+TrId).find("td").eq(0).html());
 	vTrClone.find("td").eq(1).find("textarea").val($("#item"+TrId).find("td").eq(1).html());
@@ -39,45 +30,39 @@ function addTable(TrId){
 	vTrClone.find("td").eq(3).find("input").val($("#item"+TrId).find("td").eq(3).html());
 	vTrClone.find("td").eq(4).find("input").val($("#item"+TrId).find("td").eq(4).html());
 	vTrClone.find("td").eq(5).find("textarea").val($("#item"+TrId).find("td").eq(5).html());
-	vTrClone.insertBefore(vTr);//把副本单元格对象添加到表格上方 
+	vTb.append(vTrClone);
 	$("#itemUpdateState"+TrId).val(1);
 }
 $(function() {
     $(".lnk-green").click(function(e) {
-        $(this).parent().addClass("color-red");
-        $(this).parent().html("！");
+    	 var flag= $(this).attr("flag");
+    	 var addBatch= $(this).attr("addBatch");
+    	 if(flag!=1){
+    		 $(this).parent().addClass("color-red");
+    	     $(this).parent().html("！"); 
+    	 }
+        //if(addBatch==1){
+        	//var tab2=$(this).parent().parent().parent().parent().parent();
+        //	var vTrClone=tab2.find(".batchItemClass").clone(true);
+       // 	tab2.append(vTrClone);
+       // }
+      
     });
 });
 function addChenges(){
 	var vTb=$("#TbData");//得到表格ID=TbData的jquery对象 
-	var totalTr=$("#total_tr");
-	//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-	var vNum=$("#TbData tr").filter(".CaseRow").size()-1;//表格有多少个数据行 
-	var vTr=$("#TbData #trDataRow"); //得到表格中的第一行数据 
+	var vTr=$("#displayTr"); //得到表格中的第一行数据 
 	var vTrClone=vTr.clone(true);//创建第一行的副本对象vTrClone 
-	var id="trDataRow"+vNum;
-	vTrClone.show();
-	vTrClone[0].id=id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-	//设置item[]
-	//vTrClone.find("td").eq(0).find("input").attr("name","modifyList["+num+"].modifyItemList["+num+"].productName");
-	//vTrClone.find("td").eq(1).find("textarea").attr("name","modifyList["+num+"].modifyItemList["+num+"].productModel");
-	//vTrClone.find("td").eq(2).find("input").attr("name","modifyList["+num+"].modifyItemList["+num+"].quantity");
-	//vTrClone.find("td").eq(3).find("input").attr("name","modifyList["+num+"].modifyItemList["+num+"].price");
-	//vTrClone.find("td").eq(4).find("input").attr("name","modifyList["+num+"].modifyItemList["+num+"].amount");
-	//vTrClone.find("td").eq(5).find("textarea").attr("name","modifyList["+num+"].modifyItemList["+num+"].remarks");
-	vTrClone.insertBefore(vTr);//把副本单元格对象添加到表格上方 
-
+	vTrClone[0].id="";
+	vTb.append(vTrClone);//把副本单元格对象添加到表格上方 
 }
 function addbatch(batchTrId,status){
 	var vTb=$("#batchTb");//得到表格ID=TbData的jquery对象 
 	//var totalTr=$("#total_tr");
 	//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-	var vNum=$("#batchTb tr").filter(".batchClass").size()-1;//表格有多少个数据行 
-	var vTr=$("#batchTb #BatchTrRow"); //得到表格中的第一行数据 
+	var vTr=$("#BatchDisplay"); //得到表格中的第一行数据 
 	var vTrClone=vTr.clone(true);//创建第一行的副本对象vTrClone 
-	var id="BatchTrRow"+vNum;
-	vTrClone.show();
-	vTrClone[0].id=id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
+	vTrClone[0].id="";//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
 	//设置item[]
 if(status==1){
 	var batchNo =$("#"+batchTrId).find("td").eq(0).html();
@@ -90,13 +75,8 @@ if(status==1){
 	vTrClone.find("td").eq(4).eq(0).find("input").val(quantity);
 	vTrClone.find("td").eq(5).find("input").val(amount);
 	vTrClone.find("td").eq(6).find("input").val(rfidNo);
-	//设置name
-	//vTrClone.find("td").eq(2).eq(0).find("textarea").attr("name","modifyList["+batchNum+"].modifyBatchList["+batchNum+"].modifyBatchItems["+batchNum+"].productName");
-	//vTrClone.find("td").eq(4).eq(0).find("input").attr("name","modifyList["+batchNum+"].modifyBatchList["+batchNum+"].modifyBatchItems["+batchNum+"].productName");
-	//vTrClone.find("td").eq(5).find("input").attr("name","modifyList["+batchNum+"].modifyBatchList["+batchNum+"].modifyBatch.productName");
-	//vTrClone.find("td").eq(6).find("input").attr("name","modifyList["+batchNum+"].modifyBatchList["+batchNum+"].modifyBatch.productName");
 }
-	vTrClone.insertBefore(vTr);
+vTb.append(vTrClone);
 	
 }
 $(function() {
@@ -322,7 +302,7 @@ function saveChenges(){
                   <!-- 图片列表 begin -->
                   <#assign arr=(contractModel.contract.imgPath?split(","))>
                  <#list arr  as imgPath>
-                 	 <div class="pic"><a href="#" class="demo-image" data-image="${imgPath}"><img src="${imgPath}"  /></a></div>
+                 	 <div class="pic"><a href="#" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}"  /></a></div>
                  </#list>
                   <!-- 图片列表 end -->
                 </div>
@@ -358,7 +338,7 @@ function saveChenges(){
 		          <!-- 图片列表 begin -->
 		          	  <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
                       <#list imgArr  as modifyimgPath>
-                      	<div class="pic"><a href="#" target="_blank"><img src="${modifyimgPath}"  /></a></div>
+                      	<div class="pic"><a href="#" target="_blank"><img src="${b.imagePath}${modifyimgPath}"  /></a></div>
               		  </#list>
 		          <!-- 图片列表 end -->
 	            </div>
@@ -368,7 +348,7 @@ function saveChenges(){
 		    <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
 	      </div>
 		  </div>
-		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable" id="TbData" >
+		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable" >
           <col width="15%" />
           <col width="20%" />
           <col width="15%" />
@@ -398,7 +378,7 @@ function saveChenges(){
             </#list>
         </table>
          <#if modifyList.modifyBatchList?exists>
-        <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable" id="batchTb">
+        <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable" >
           <col width="20%" />
           <col width="25%" />
 		  <col width="20%" />
@@ -464,7 +444,7 @@ function saveChenges(){
 		          <!-- 图片列表 begin -->
 		           <#assign arr=(record.imgPath?split(","))>
 		           <#list arr  as imgPath>
-		          	<div class="pic"><a href="#" target="_blank"><img src="${imgPath}"  /></a></div>
+		          	<div class="pic"><a href="#" target="_blank"><img src="${b.imagePath}${imgPath}"  /></a></div>
 		          </#list>
 		          <!-- 图片列表 end -->
 	            </div>
@@ -491,15 +471,7 @@ function saveChenges(){
             <th>备注说明</th>
 			<th class="rLine">&nbsp;</th>
           </tr>
-          <tr  class="CaseRow" id="trDataRow" style="display: none;">
-            <td><input type="text" value="" name="" /></td>
-            <td><textarea name="" id="textarea9" cols="25" rows="1"></textarea></td>
-            <td><input type="text" value="" name="" /></td>
-            <td><input type="text" value="" name=""  /></td>
-            <td><input type="text" value="" name="" /></td>
-            <td><textarea name="" id="textarea10" cols="25" rows="1"></textarea></td>
-			<td><a href="###" class="lnk-green" onclick="addChenges();" >+</a>&nbsp;<a href="#" class="lnk-green">√</a>&nbsp;<a href="#" class="TrDel" style="color: green;" >X</a></td>
-          </tr>
+         
         </table>
         <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable" id="batchTb">
           <col width="20%" />
@@ -516,7 +488,28 @@ function saveChenges(){
             <th>对应批次RFID编号</th>
 			<th class="rLine">&nbsp;</th>
           </tr>
-          <tr class="batchClass" id="BatchTrRow" style="display: none;">
+          
+        </table>
+        </div>
+      <div class="btnBox"><a href="javascript:void(0)" onclick="saveChenges()"  id="saveId" class="button button-orange button-small">确认</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a></div>
+      </div>
+      </div>
+      </form>
+    <!-- InstanceEndEditable --></div>
+</div>
+<table style="display: none;">
+ <tr  class="CaseRow" id="displayTr" >
+            <td><input type="text" value="" name="" /></td>
+            <td><textarea name="" id="textarea9" cols="25" rows="1"></textarea></td>
+            <td><input type="text" value="" name="" /></td>
+            <td><input type="text" value="" name=""  /></td>
+            <td><input type="text" value="" name="" /></td>
+            <td><textarea name="" id="textarea10" cols="25" rows="1"></textarea></td>
+			<td><a href="###" class="lnk-green" flag="1" onclick="addChenges();" >+</a>&nbsp;<a href="#" class="TrDel" style="color: green;" >×</a></td>
+</tr>
+</table>
+<table style="display: none;">
+<tr class="batchClass" id="BatchDisplay" >
             <td>第1批次</td>
             <td>
 	            <table border="0" id="batchItem1" cellpadding="0" cellspacing="0" class="tabList prodIable">
@@ -529,21 +522,14 @@ function saveChenges(){
 			 <td>
 			 <table border="0" id="batchItem2" cellpadding="0" cellspacing="0" class="tabList prodIable">
               <tr  class="batchItemClass2"> 
-                <td><input type="text" value="" />&nbsp;<a href="javascript:void(0)" onclick="addBatchItem();" class="lnk-green">+</a></td>
+                <td><input type="text" value="" />&nbsp;<a href="javascript:void(0)" onclick="addBatchItem();" addBatch="1"  flag="1" class="lnk-green addBatch">+</a></td>
               </tr>
             </table></td>
             <td><input type="text" value="" /></td>
             <td><input type="text" class="input-w80"value="" /></td>
-              <td>&nbsp;<a href="javascript:void(0)" onclick="addbatch('batch${batch.batch.id}','2');" class="lnk-green">+</a>&nbsp;<a href="javascript:void(0)"  class="lnk-green">√</a>&nbsp;<a href="#" class="TrDel" style="color: green;">X</a></td>
+              <td>&nbsp;<a href="javascript:void(0)" onclick="addbatch('batch${batch.batch.id}','2');" flag="1" class="lnk-green">+</a>&nbsp;<a href="javascript:void(0)"  class="lnk-green">√</a>&nbsp;<a href="#" class="TrDel" style="color: green;">X</a></td>
           </tr>
-        </table>
-        </div>
-      <div class="btnBox"><a href="javascript:void(0)" onclick="saveChenges()"  id="saveId" class="button button-orange button-small">确认</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a></div>
-      </div>
-      </div>
-      </form>
-    <!-- InstanceEndEditable --></div>
-</div>
+</table>
 <@b.footer />
 </body>
 <!-- InstanceEnd --></html>

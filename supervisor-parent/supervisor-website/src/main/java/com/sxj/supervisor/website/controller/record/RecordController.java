@@ -274,7 +274,8 @@ public class RecordController extends BaseController {
 		try {
 			RecordEntity record = new RecordEntity();
 			if (recordId != "" && recordId != null) {
-				record.setId(recordId);
+				record =recordService.getRecord(recordId);
+				record.setId("");
 			}
 			if (imgPath != "" && imgPath != null) {
 				record.setImgPath(imgPath);
@@ -287,7 +288,8 @@ public class RecordController extends BaseController {
 			}else if(flag.equals("2")){
 				record.setType(RecordTypeEnum.supplement);
 			}
-			recordService.modifyRecord(record);
+			record.setConfirmState(RecordConfirmStateEnum.accepted);
+			recordService.addRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;

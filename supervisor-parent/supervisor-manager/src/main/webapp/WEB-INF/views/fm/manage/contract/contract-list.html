@@ -27,7 +27,12 @@ function loadInfo(id){
 function closeContract(id){
 	$("#info"+id).html("");
 }
-
+function stateLog(contractNo){
+	$("#stateLog"+contractNo).load("stateLog.htm?contractNo="+contractNo);
+}
+function closeStateLog(contractNo){
+	$("#stateLog"+contractNo).html("");
+}
 function query(page){
 	var params=$("#search_form").serialize();
 	 if(page!=undefined){
@@ -165,7 +170,7 @@ function check(id){
        <#if list?exists>
       <#list list as model>
         <td><a href="javascript:loadInfo('${model.contract.id}');"  class="lnk-blue">${model.contract.contractNo}</a></td>
-        <td><a href="#" class="lnk-blue">甲方已申请合同备案</a></td>
+        <td><a href="javascript:stateLog('${model.contract.contractNo}')" class="lnk-blue">${model.contract.stateLog}</a></td>
         <td>${model.contract.memberNameA}</td>
         <td>${model.contract.memberNameB}</td>
         <td>${model.contract.type.getName()}</td>
@@ -179,30 +184,9 @@ function check(id){
         <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a></td>
       </tr>
       <tr id="info${model.contract.id}" class="tableInfo" ></tr>
+      <tr id="stateLog${model.contract.contractNo}"> </tr>
       </#list>
       </#if>
-      <tr style="display:none;">
-        <td colspan="11"><div class="planBox text-left f14">
-        
-            <div class="item">
-              <label class="time">2014年5月20日14：52</label>
-              甲方已申请合同备案 </div>
-            <div class="line"></div>
-            
-            <div class="item">
-              <label class="time">2014年5月21日15：30</label>
-              乙方已申请合同备案 </div>
-            <div class="line"></div>
-            <div class="item">
-              <label class="time">2014年5月30日12：20</label>
-              甲方已申请合同变更备案 </div>
-            <div class="line"></div>
-            <div class="item">
-              <label class="time">2014年6月25日12：20</label>
-              甲方已申请合同补损备案 </div>
-            <div class="btnBox"><a href="#" class="button button-gray button-small">收起</a></div>
-          </div></td>
-      </tr>
     </table>
     <!-- InstanceEndEditable --></div>
 </div>

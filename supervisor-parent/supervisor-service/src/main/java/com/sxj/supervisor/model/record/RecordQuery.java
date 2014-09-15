@@ -43,6 +43,26 @@ public class RecordQuery extends Pagable implements Serializable {
 	private String endAcceptDate;
 
 	private String contractPepole;
+	
+	private String sort;//排序
+	
+	private String sortColumn;//排序字段
+
+	public String getSortColumn() {
+		return sortColumn;
+	}
+
+	public void setSortColumn(String sortColumn) {
+		this.sortColumn = sortColumn;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
 
 	public String getConfirmState() {
 		return confirmState;

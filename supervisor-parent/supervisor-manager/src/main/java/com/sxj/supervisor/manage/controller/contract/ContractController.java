@@ -1,5 +1,6 @@
 package com.sxj.supervisor.manage.controller.contract;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
@@ -40,6 +42,29 @@ public class ContractController extends BaseController {
 		try {
 			query.setPagable(true);
 			List<ContractModel> list = contractService.queryContracts(query);
+			for (ContractModel contractModel : list) {
+				RecordQuery  rq = new RecordQuery();
+				rq.setContractNo(contractModel.getContract().getContractNo());
+				rq.setSort("desc");
+				rq.setSortColumn("APPLY_DATE");
+				List<RecordEntity> recordList=recordService.queryRecord(rq);
+				if(recordList.size()>0){
+					RecordEntity recordEntity=recordList.get(0);
+					if(recordEntity.getType().getId()==0){
+						if(recordEntity.getMemberIdA()==contractModel.getContract().getMemberIdA()){
+							contractModel.getContract().setStateLog("甲方已申请备案");	
+						}else{
+							contractModel.getContract().setStateLog("已方已申请备案");	
+						}
+					}else if(recordEntity.getType().getId()==1){
+						contractModel.getContract().setStateLog("甲方已申请变更备案");	
+					}else{
+						contractModel.getContract().setStateLog("甲方已申请补损备案");	
+					}
+						
+					}
+				}
+				
 			ContractTypeEnum[] contractType = ContractTypeEnum.values();// 合同类型
 			ContractSureStateEnum[] contractSureState = ContractSureStateEnum
 					.values();// 确认状态
@@ -55,13 +80,53 @@ public class ContractController extends BaseController {
 			throw new WebException("查询合同信息错误");
 		}
 	}
-
+	
+	@RequestMapping("stateLog")
+	public String getStateLog(ModelMap model, String contractNo) {
+		RecordQuery  rq = new RecordQuery();
+		rq.setContractNo(contractNo);
+		rq.setSort("desc");
+		rq.setSortColumn("APPLY_DATE");
+		ContractModel contractModel = contractService.getContractByContractNo(contractNo);
+		List<RecordEntity> recordList=recordService.queryRecord(rq);
+		List<StateLogModel> slList = new ArrayList<StateLogModel>();
+		if(recordList.size()>0){
+				for (RecordEntity recordEntity : recordList) {
+					StateLogModel sl = new StateLogModel();
+					if(recordEntity.getType().getId()==0){
+						if(recordEntity.getMemberIdA()==contractModel.getContract().getMemberIdA()){
+							sl.setStateTitle("甲方已申请备案");	
+							sl.setModifyDate(recordEntity.getApplyDate());
+						}else{
+							sl.setStateTitle("已方已申请备案");
+							sl.setModifyDate(recordEntity.getApplyDate());
+						}
+					}else if(recordEntity.getType().getId()==1){
+						sl.setStateTitle("甲方已申请变更备案");	
+						sl.setModifyDate(recordEntity.getApplyDate());
+					}else{
+						sl.setStateTitle("甲方已申请补损备案");
+						sl.setModifyDate(recordEntity.getApplyDate());
+					}
+					slList.add(sl);
+				}
+			}
+		model.put("stateLog", slList);
+		model.put("contractNo", contractNo);
+		
+		return "manage/contract/contract-stateLog";
+	}
 	@RequestMapping("info")
-	public String queryContractInfo(ModelMap model, String contractId) {
+	public String queryContractInfo(ModelMap model, String contractId)throws WebException {
+		try{
 		ContractModel contractModel = contractService.getContract(contractId);
 		model.put("contractModel", contractModel);
 		model.put("contractId", contractId);
 		return "manage/contract/contract-info";
+	} catch (Exception e) {
+		SxjLogger.error("查询合同信息错误", e, this.getClass());
+		throw new WebException("查询合同信息错误");
+	}
 	}
 
 	@RequestMapping("produced")
