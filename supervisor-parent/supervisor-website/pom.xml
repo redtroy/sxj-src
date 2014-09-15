@@ -139,6 +139,11 @@
 			<artifactId>file-common</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>rfid-service</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>supervisor-website</finalName>
