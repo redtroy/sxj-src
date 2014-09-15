@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.impl.rfid;
+package com.sxj.supervisor.service.impl.rfid.base;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sxj.supervisor.dao.rfid.IRfidSupplierDao;
-import com.sxj.supervisor.entity.rfid.RfidSupplierEntity;
-import com.sxj.supervisor.model.rfid.RfidSupplierQuery;
-import com.sxj.supervisor.service.rfid.IRfidSupplierService;
+import com.sxj.supervisor.dao.rfid.base.IRfidSupplierDao;
+import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
+import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
+import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.util.exception.ServiceException;
 
 @Service

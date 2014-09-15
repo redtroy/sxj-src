@@ -1,9 +1,9 @@
-package com.sxj.supervisor.service.rfid;
+package com.sxj.supervisor.service.rfid.base;
 
 import java.util.List;
 
-import com.sxj.supervisor.entity.rfid.RfidSupplierEntity;
-import com.sxj.supervisor.model.rfid.RfidSupplierQuery;
+import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
+import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
 import com.sxj.util.exception.ServiceException;
 
 public interface IRfidSupplierService {

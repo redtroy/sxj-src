@@ -1,4 +1,4 @@
-package com.sxj.supervisor.model.rfid;
+package com.sxj.supervisor.model.rfid.base;
 
 import java.io.Serializable;
 
