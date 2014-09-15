@@ -5,7 +5,7 @@
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -18,10 +18,8 @@
 <!-- InstanceBeginEditable name="local" -->
 <div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>RFID进销存管理<span>&gt;</span>RFID供应商管理</div>
 <!-- InstanceEndEditable -->
-<div id="mainBg">
-<div class="fence-wide ly-clearFix">
-<div class="main pb20">
-    <@b.leftMenu />
+<div id="mainBg" class="ly-clearFix yard-1200">
+  <div id="leftList"><@b.leftMenu /></div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">RFID供应商管理</h2>
@@ -83,8 +81,7 @@
         </tr>
       </table>
     <!-- InstanceEndEditable --></div>
-</div>
-</div>
+
 </div>
 <@b.footer /> 
 </body>

@@ -2,6 +2,7 @@ package com.sxj.supervisor.entity.rfid;
 
 import java.io.Serializable;
 
+import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
@@ -28,21 +29,29 @@ public class RfidSupplierEntity extends Pagable implements Serializable {
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-
+    
+	@Column(name="SUPPLIER_NO")
 	private String supplierNo;
-
+    
+	@Column(name="NAME")
 	private String name;
 
+	@Column(name="ADDRESS")
 	private String address;
-
+	
+	@Column(name="CONTACT_NAME")
 	private String contactName;
 
+	@Column(name="CONTACT_TEL")
 	private String contactTel;
 
+	@Column(name="TEL_NUM")
 	private String telNum;
 
+	@Column(name="DOORS_PRICE")
 	private Long doorsPrice;
 
+	@Column(name="BATCH_PRICE")
 	private Long batchPrice;
 
 	public String getId() {

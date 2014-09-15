@@ -14,7 +14,7 @@ public class RfidSupplierController extends BaseController {
 	@RequestMapping("supplier_list")
 	public String supplier_list() {
 
-		return "site/rfid/supplier/supplier";
+		return "manage/rfid/supplier/supplier";
 	}
 
 }
