@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.contract.IContractDao;
@@ -36,6 +37,7 @@ public class RecordServiceImpl implements IRecordService {
 	 * 新增备案
 	 */
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void addRecord(RecordEntity record) {
 		recordDao.addRecord(record);
 	}
@@ -44,6 +46,7 @@ public class RecordServiceImpl implements IRecordService {
 	 * 更新备案
 	 */
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void modifyRecord(RecordEntity record) {
 		// RecordEntity re = getRecord(record.getId());
 		// re.setId(record.getId());
@@ -66,6 +69,7 @@ public class RecordServiceImpl implements IRecordService {
 	 * 删除备案
 	 */
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void deleteRecord(String id) {
 		RecordEntity record = getRecord(id);
 		record.setDelState(true);
@@ -77,6 +81,7 @@ public class RecordServiceImpl implements IRecordService {
 	 * 查询备案
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public RecordEntity getRecord(String id) {
 		RecordEntity record = recordDao.getRecord(id);
 		return record;
