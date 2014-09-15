@@ -1,7 +1,9 @@
-package com.sxj.supervisor.entity.rfid;
+package com.sxj.supervisor.entity.rfid.base;
 
 import java.io.Serializable;
 
+import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 
 /**
@@ -9,29 +11,55 @@ import com.sxj.mybatis.pagination.Pagable;
  * @author dujinxin
  *
  */
+@Entity
+@Table(name = "R_RFID_APPLICATION")
 public class RfidSupplierEntity extends Pagable implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6361496754557084957L;
 
+	/**
+	 * ID
+	 */
 	private String id;
 
+	/**
+	 * 供应商ID
+	 */
 	private String supplierNo;
 
+	/**
+	 * 供应商名称
+	 */
 	private String name;
 
+	/**
+	 * 地址
+	 */
 	private String address;
 
+	/**
+	 * 联系人姓名
+	 */
 	private String contactName;
 
+	/**
+	 * 联系电话
+	 */
 	private String contactTel;
 
+	/**
+	 * 固定电话
+	 */
 	private String telNum;
 
+	/**
+	 * 门窗标签采购价
+	 */
 	private Long doorsPrice;
 
+	/**
+	 * 批次标签采购价
+	 */
 	private Long batchPrice;
 
 	public String getId() {

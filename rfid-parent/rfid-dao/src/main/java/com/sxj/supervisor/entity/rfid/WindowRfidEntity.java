@@ -13,19 +13,19 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 
 /**
- * 物流认证标签
+ * 门窗RFID管理
  * 
  * @author dujinxin
  *
  */
 @Entity
-@Table(name = "R_LOGISTICS_RFID")
-public class LogisticsRfidEntity extends Pagable implements Serializable {
+@Table(name = "R_WINDOW_RFID")
+public class WindowRfidEntity extends Pagable implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 797319101390939750L;
+	private static final long serialVersionUID = 1734629786698988694L;
 
 	/**
 	 * ID
@@ -48,34 +48,27 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	private String purchaseNo;
 
 	/**
-	 * RFID类型
-	 */
-	@Column(name = "TYPE")
-	private Enum type;
-
-	/**
-	 * 申请会员号
-	 */
-	@Column(name = "MEMBER_NO")
-	private String memberNo;
-
-	/**
-	 * 申请会员名称
-	 */
-	@Column(name = "MEMBER_NAME")
-	private String memberName;
-
-	/**
 	 * 采购合同号
 	 */
 	@Column(name = "CONTRACT_NO")
 	private String contractNo;
 
 	/**
-	 * 执行批次号
+	 * 窗型代号
 	 */
-	@Column(name = "BATCH_NO")
-	private String batchNo;
+	@Column(name = "WINDOW_TYPE")
+	private String windowType;
+	/**
+	 * 玻璃RFID
+	 */
+	@Column(name = "GLASS_RFID")
+	private String glassRfid;
+
+	/**
+	 * 型材RFID
+	 */
+	@Column(name = "PROFILE_RFID")
+	private String profileRfid;
 
 	/**
 	 * 导入日期
@@ -131,30 +124,6 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		this.purchaseNo = purchaseNo;
 	}
 
-	public Enum getType() {
-		return type;
-	}
-
-	public void setType(Enum type) {
-		this.type = type;
-	}
-
-	public String getMemberNo() {
-		return memberNo;
-	}
-
-	public void setMemberNo(String memberNo) {
-		this.memberNo = memberNo;
-	}
-
-	public String getMemberName() {
-		return memberName;
-	}
-
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
-	}
-
 	public String getContractNo() {
 		return contractNo;
 	}
@@ -163,12 +132,28 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		this.contractNo = contractNo;
 	}
 
-	public String getBatchNo() {
-		return batchNo;
+	public String getWindowType() {
+		return windowType;
 	}
 
-	public void setBatchNo(String batchNo) {
-		this.batchNo = batchNo;
+	public void setWindowType(String windowType) {
+		this.windowType = windowType;
+	}
+
+	public String getGlassRfid() {
+		return glassRfid;
+	}
+
+	public void setGlassRfid(String glassRfid) {
+		this.glassRfid = glassRfid;
+	}
+
+	public String getProfileRfid() {
+		return profileRfid;
+	}
+
+	public void setProfileRfid(String profileRfid) {
+		this.profileRfid = profileRfid;
 	}
 
 	public Date getImportDate() {
