@@ -40,7 +40,7 @@ function  AcgApplyRecord(){
  * 乙方申请招标
  */
 function  zbApplyRecord(){
-	$.post("zbApplyRecord.htm",$("#cgForm").serialize(),function(data){
+	$.post("zbApplyRecord.htm",$("#zbForm").serialize(),function(data){
 		   if (data.isOK=='ok'){
 			   $("#recordNo").html(data.recordNo);
 			   	 $("#contBox").show();
@@ -192,7 +192,7 @@ $(function(){
     <label>&nbsp;</label>
     <a class="button button-orange mr15" href="javascript:BzbApplyRecord();"  >确定</a><a class="button button-gray">取消</a></div>
 </form>
-</div>
+</div> 
 </#if>
 </div>
 </div>

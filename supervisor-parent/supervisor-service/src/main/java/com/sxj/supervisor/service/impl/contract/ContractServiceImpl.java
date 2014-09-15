@@ -140,28 +140,31 @@ public class ContractServiceImpl implements IContractService {
 					contract.setRecordNo(record.getRecordNo());// 备案号
 					contract.setType(record.getContractType());
 					contract.setImgPath(record.getImgPath());
-				}
-				contract.setState(ContractStateEnum.approval);
-				contract.setConfirmState(ContractSureStateEnum.noaffirm);
-				contract.setCreateDate(new Date());
-				contractDao.addContract(contract);
 
-				if (itemList != null) {
-					List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
-					for (int i = 0; i < itemList.size(); i++) {
-						ContractItemEntity ci = itemList.get(i);
-						if (ci.getAmount() != null && ci.getPrice() != null) {
-							ci.setContractId(contract.getId());
-							newList.add(ci);
+					contract.setState(ContractStateEnum.approval);
+					contract.setConfirmState(ContractSureStateEnum.noaffirm);
+					contract.setCreateDate(new Date());
+					contractDao.addContract(contract);
+
+					if (itemList != null) {
+						List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
+						for (int i = 0; i < itemList.size(); i++) {
+							ContractItemEntity ci = itemList.get(i);
+							if (ci.getAmount() != null && ci.getPrice() != null) {
+								ci.setContractId(contract.getId());
+								newList.add(ci);
+
+							}
 
 						}
-
+						contractItemDao.addItem(newList);// 新增条目
 					}
-					contractItemDao.addItem(newList);// 新增条目
+					if (contract.getContractNo() != null) {
+						record.setContractNo(contract.getContractNo());
+						record.setState(RecordStateEnum.Binding);
+						recordDao.updateRecord(record);
+					}
 				}
-				record.setContractNo(contract.getContractNo());
-				record.setState(RecordStateEnum.Binding);
-				recordDao.updateRecord(record);
 			}
 		} catch (Exception e) {
 			throw new ServiceException("新增合同出错", e);
@@ -176,23 +179,25 @@ public class ContractServiceImpl implements IContractService {
 		try {
 			// 主体
 			if (contract.getContract() != null) {
-				
-				ContractEntity ce=	contractDao.getContract(contract.getContract().getId());
-				String[] arr =ce.getRecordNo().split(",");
-				
-				String recordNo =contract.getContract().getRecordNo();
-				
-				String[] recordNoArr= recordNo.split(",");
-				boolean flag= Arrays.equals(arr,recordNoArr);
-				if(!flag){
-					//解绑备案号
+
+				ContractEntity ce = contractDao.getContract(contract
+						.getContract().getId());
+				String[] arr = ce.getRecordNo().split(",");
+
+				String recordNo = contract.getContract().getRecordNo();
+
+				String[] recordNoArr = recordNo.split(",");
+				boolean flag = Arrays.equals(arr, recordNoArr);
+				if (!flag) {
+					// 解绑备案号
 					for (String str : arr) {
-						RecordEntity re = recordService.getRecordByNo(str.trim());
+						RecordEntity re = recordService.getRecordByNo(str
+								.trim());
 						re.setContractNo("");
 						re.setState(RecordStateEnum.noBinding);
 						recordDao.updateRecord(re);
 					}
-					//更新备案号
+					// 更新备案号
 					for (String str : recordNoArr) {
 						RecordEntity re = recordService.getRecordByNo(str);
 						re.setContractNo(contract.getContract().getContractNo());
@@ -283,6 +288,7 @@ public class ContractServiceImpl implements IContractService {
 	@Override
 	@Transactional
 	public ContractModel getContract(String id) throws ServiceException {
+		try{
 		ContractModel contractModel = new ContractModel();
 		ContractEntity contract = contractDao.getContract(id);// 合同主体
 		if (contract != null) {
@@ -424,7 +430,8 @@ public class ContractServiceImpl implements IContractService {
 
 			}
 			// 补损合同
-			String replenishRecordIds = this.recordIdArr(contract.getContractNo(), "2");// 获取变更备案
+			String replenishRecordIds = this.recordIdArr(
+					contract.getContractNo(), "2");// 获取变更备案
 			if (replenishRecordIds != null && replenishRecordIds.length() > 0) {
 
 				QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
@@ -483,10 +490,13 @@ public class ContractServiceImpl implements IContractService {
 					}
 					contractModel.setReplenishList(crmList);
 				}
-				
+
 			}
 		}
 		return contractModel;
+	} catch (Exception e) {
+		throw new ServiceException("查询合同信息错误", e);
+	}
 	}
 
 	/**
@@ -540,7 +550,7 @@ public class ContractServiceImpl implements IContractService {
 			condition.addCondition("confirmState", query.getConfirmState());// 确认状态
 			condition.addCondition("state", query.getState());// 合同状态
 			condition.setPage(query);
-			
+
 			List<ContractEntity> contractList = contractDao
 					.queryContract(condition);
 			query.setPage(condition);
@@ -669,14 +679,14 @@ public class ContractServiceImpl implements IContractService {
 	@Override
 	public void modifyState(String contractId, RecordConfirmStateEnum state)
 			throws ServiceException {
-//		try {
-//			ContractEntity ce = new ContractEntity();
-//			ce.setId(contractId);
-//			ce.setConfirmState(state);
-//			contractDao.updateContract(ce);
-//		} catch (Exception e) {
-//			throw new ServiceException("更改合同状态出错", e);
-//		}
+		// try {
+		// ContractEntity ce = new ContractEntity();
+		// ce.setId(contractId);
+		// ce.setConfirmState(state);
+		// contractDao.updateContract(ce);
+		// } catch (Exception e) {
+		// throw new ServiceException("更改合同状态出错", e);
+		// }
 	}
 
 	/**
@@ -692,7 +702,8 @@ public class ContractServiceImpl implements IContractService {
 	 * 变更确认状态
 	 */
 	@Override
-	public void modifyCheckState(String contractId, ContractStateEnum state)throws ServiceException {
+	public void modifyCheckState(String contractId, ContractStateEnum state)
+			throws ServiceException {
 		try {
 			ContractEntity ce = new ContractEntity();
 			if (contractId != null) {

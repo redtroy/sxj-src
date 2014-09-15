@@ -87,6 +87,8 @@
 		<if test="condition.startAcceptDate != null and condition.endAcceptDate != null and condition.startAcceptDate != '' and condition.endAcceptDate != ''">
 			<![CDATA[AND ACCEPT_DATE >=#{condition.startAcceptDate} AND ACCEPT_DATE <= #{condition.endAcceptDate}]]>
 		</if>
-		<![CDATA[ORDER BY RECORD_NO DESC]]>
+		<if test="condition.sortColumn != null and condition.sortColumn != null and condition.sort != '' and condition.sort != ''">
+		<![CDATA[ORDER BY ${condition.sortColumn} ${condition.sort}]]>
+		</if>
 	</select>
 </mapper>

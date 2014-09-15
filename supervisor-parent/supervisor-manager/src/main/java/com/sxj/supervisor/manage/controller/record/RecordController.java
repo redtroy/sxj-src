@@ -65,6 +65,8 @@ public class RecordController extends BaseController {
 			ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
 			RecordStateEnum[] rse = RecordStateEnum.values();// 备案状态
 			RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
+			query.setSort("desc");
+			query.setSortColumn("RECORD_NO");
 			List<RecordEntity> list = recordService.queryRecord(query);
 			map.put("cte", cte);
 			map.put("rse", rse);
