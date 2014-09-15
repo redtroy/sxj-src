@@ -4,6 +4,7 @@ import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.shard.dao.ShardMapper;
 
@@ -17,6 +18,10 @@ public class Shard
     
     @Column(name = "SHARD_NAME")
     private String shardName;
+    
+    @Column(name = "SERIAL_NUMBER")
+    @Sn(stubValue = "SHARD")
+    private String serialNumber;
     
     public String getShardName()
     {
@@ -36,5 +41,15 @@ public class Shard
     public void setShardId(long shardId)
     {
         this.shardId = shardId;
+    }
+    
+    public String getSerialNumber()
+    {
+        return serialNumber;
+    }
+    
+    public void setSerialNumber(String serialNumber)
+    {
+        this.serialNumber = serialNumber;
     }
 }

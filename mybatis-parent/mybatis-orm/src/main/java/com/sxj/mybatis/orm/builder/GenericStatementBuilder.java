@@ -66,6 +66,7 @@ import com.sxj.mybatis.orm.annotations.Version;
 import com.sxj.mybatis.orm.keygen.Jdbc4KeyGenerator;
 import com.sxj.mybatis.orm.keygen.ShardJdbc4KeyGenerator;
 import com.sxj.mybatis.orm.keygen.ShardKeyGenerator;
+import com.sxj.mybatis.orm.keygen.ShardSnGenerator;
 import com.sxj.mybatis.orm.keygen.ShardUuidKeyGenerator;
 import com.sxj.mybatis.orm.keygen.SnGenerator;
 import com.sxj.mybatis.orm.keygen.UuidKeyGenerator;
@@ -84,6 +85,8 @@ public class GenericStatementBuilder extends BaseBuilder
     private MapperBuilderAssistant assistant;
     
     private static Map<String, ShardKeyGenerator> shardedKeyGenerators = new HashMap<String, ShardKeyGenerator>();
+    
+    private static Map<String, ShardSnGenerator> shardSnGenerators = new HashMap<String, ShardSnGenerator>();
     
     private static Map<String, SnGenerator> snGenerators = new HashMap<String, SnGenerator>();
     
@@ -466,6 +469,7 @@ public class GenericStatementBuilder extends BaseBuilder
             {
                 if (containSn)
                     snGenerators.put(statementId, new SnGenerator());
+                
                 if (configuration.hasKeyGenerator(keyStatementId))
                 {
                     keyGenerator = configuration.getKeyGenerator(keyStatementId);
@@ -487,6 +491,8 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             else
             {
+                if (containSn)
+                    shardSnGenerators.put(statementId, new ShardSnGenerator());
                 if (generatedValue != null)
                 {
                     if (generatedValue.strategy() == GenerationType.UUID)
@@ -558,6 +564,7 @@ public class GenericStatementBuilder extends BaseBuilder
                     + SelectKeyGenerator.SELECT_KEY_SUFFIX;
             if (!sharded)
             {
+                
                 if (containSn)
                     snGenerators.put(statementId, new SnGenerator());
                 if (configuration.hasKeyGenerator(keyStatementId))
@@ -581,6 +588,8 @@ public class GenericStatementBuilder extends BaseBuilder
             }
             else
             {
+                if (containSn)
+                    shardSnGenerators.put(statementId, new ShardSnGenerator());
                 if (generatedValue != null)
                 {
                     if (generatedValue.strategy() == GenerationType.UUID)
@@ -1046,6 +1055,11 @@ public class GenericStatementBuilder extends BaseBuilder
     public static Map<String, SnGenerator> getSnGenerators()
     {
         return snGenerators;
+    }
+    
+    public static Map<String, ShardSnGenerator> getShardSnGenerators()
+    {
+        return shardSnGenerators;
     }
     
 }
