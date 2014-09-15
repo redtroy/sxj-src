@@ -2,13 +2,10 @@ package com.sxj.supervisor.service.rfid;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.sxj.supervisor.entity.rfid.RfidSupplierEntity;
 import com.sxj.supervisor.model.rfid.RfidSupplierQuery;
 import com.sxj.util.exception.ServiceException;
 
-@Service
 public interface IRfidSupplierService {
 	/**
 	 * 根据条件高级查询

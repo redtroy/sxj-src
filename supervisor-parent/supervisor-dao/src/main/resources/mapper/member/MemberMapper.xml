@@ -31,10 +31,6 @@
 		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
 	</resultMap>
 
-	<update id="update">
-		update M_MEMBER set TYPE=#{type} where ID=1
-	</update>
-
 	<!-- 条件查询会员 -->
 	<select id="queryMembers" resultMap="MemberResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">

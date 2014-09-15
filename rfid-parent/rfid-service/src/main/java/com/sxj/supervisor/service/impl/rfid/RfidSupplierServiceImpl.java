@@ -14,6 +14,7 @@ import com.sxj.util.exception.ServiceException;
 
 @Service
 public class RfidSupplierServiceImpl implements IRfidSupplierService {
+
 	@Autowired
 	private IRfidSupplierDao supplierDao;
 

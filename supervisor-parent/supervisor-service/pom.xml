@@ -61,16 +61,11 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.csource</groupId>
 			<artifactId>fastdfs_client</artifactId>
 			<version>1.20</version>
 		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>rfid-dao</artifactId>
-			<version>1.0</version>
-		</dependency>
+		
 	</dependencies>
 </project>
