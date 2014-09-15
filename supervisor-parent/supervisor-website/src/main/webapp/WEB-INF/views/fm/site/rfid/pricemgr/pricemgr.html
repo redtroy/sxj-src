@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="../style/style.css" rel="stylesheet" type="text/css" />
+<script src="../js/jquery.js"></script>
+<script>
+jQuery(document).ready(function($) {
+	$('.sltinput').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.dropList').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+	$('.popBtn').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+})
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<div id="header" class="fence-wide">
+    <h1 class="yard-1200 ly-clearFix"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span><span class="logOut ly-right"><a href="#">注销帐户并退出</a></span></h1>
+    <div class="border-header"></div>
+</div>
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>RFID进销存管理<span>&gt;</span>RFID销售价格管理</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList">
+      <h2 class="tit">会员中心</h2>
+      <ul>
+        <li><a href="member.html">会员管理</a></li>
+        <li><a href="accounts.html">会员子帐号管理</a></li>
+      </ul>
+      <h2 class="tit">备案管理</h2>
+      <ul>
+        <li><a href="record.html">备案管理</a></li>
+      </ul>
+      <h2 class="tit">合同管理</h2>
+      <ul>
+        <li><a href="contract.html">合同管理</a></li>
+      </ul>
+      <h2 class="tit">RFID进销存管理</h2>
+      <ul>
+        <li><a href="order.html">RFID申请单管理</a></li>
+        <li><a href="purchase.html">RFID采购单管理</a></li>
+        <li><a href="mencprd.html">门窗RFID商品管理</a></li>
+		<li><a href="gysprd.html">物流RFID商品管理</a></li>
+		<li><a href="mencrfid-link.html">门窗RFID关联申请管理</a></li>
+		<li><a href="gysrfid-link.html">物流RFID关联申请管理</a></li>
+        <li><a href="supplier.html">RFID供应商管理</a></li>
+        <li><a href="pricemgr.html">RFID销售价格管理</a></li>
+		<li><a href="count.html">RFID统计管理</a></li>
+      </ul>
+      <h2 class="tit">会员行为跟踪管理</h2>
+      <ul>
+        <li><a href="behavior.html">会员行为跟踪管理</a></li>
+      </ul>
+      <h2 class="tit">支付管理</h2>
+      <ul>
+        <li><a href="#">支付管理</a></li>
+      </ul>
+      <h2 class="tit">管理员管理</h2>
+      <ul>
+        <li><a href="admin.html">管理员管理</a></li>
+      </ul>
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+    <h2 class="title">RFID销售价格管理</h2>
+    <div class="infoBox f14">
+      <div>
+        <label>门窗RFID销售价</label>
+        0.00元
+      </div>
+      <div>
+        <label>批次RFID销售价</label>
+        0.00元
+      </div>
+      <div>
+        <label>新门窗RFID单价</label>
+        <input type="text" id="" name="" value="" class="input-w30"/>元
+      </div>
+      <div>
+        <label>新批次RFID单价</label>
+        <input type="text" id="" name="" value="" class="input-w30"/>元
+      </div>   
+      <div class="btnBox"><a href="#" class="button button-orange button-small">设置</a><a href="welcome.html" class="button button-gray button-small">返回</a> </div></div>
+    <!-- InstanceEndEditable --></div>
+</div>
+<div id="footer" class="fence-wide">
+  <div class="yard-1200">
+    <p>&copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
+  </div>
+</div>
+</body>
+<!-- InstanceEnd --></html>

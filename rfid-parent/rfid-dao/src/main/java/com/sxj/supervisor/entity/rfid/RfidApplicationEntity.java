@@ -1,4 +1,4 @@
-package com.test;
+package com.sxj.supervisor.entity.rfid;
 
 import java.io.Serializable;
 import java.util.Date;
