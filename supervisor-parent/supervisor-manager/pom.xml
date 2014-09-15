@@ -37,6 +37,16 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>supervisor-service</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>file-common</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>rfid-service</artifactId>
+			<version>1.0</version>
+		</dependency>
 
 		<!-- Spring -->
 		<dependency>
@@ -120,11 +130,6 @@
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>cache.manager</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>file-common</artifactId>
 			<version>1.0</version>
 		</dependency>
 	</dependencies>

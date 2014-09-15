@@ -1,10 +1,10 @@
-package com.sxj.supervisor.website.controller.rfid;
+package com.sxj.supervisor.manage.controller.rfid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.supervisor.manage.controller.BaseController;
 
 @Controller
 @RequestMapping("/rfid/supplier")
