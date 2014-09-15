@@ -3,16 +3,20 @@ package com.sxj.supervisor.entity.rfid.base;
 import java.io.Serializable;
 
 import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.GeneratedValue;
+import com.sxj.mybatis.orm.annotations.GenerationType;
+import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.rfid.base.IRfidSupplierDao;
 
 /**
  * RFID供应商
  * @author dujinxin
  *
  */
-@Entity
-@Table(name = "R_RFID_APPLICATION")
+@Entity(mapper = IRfidSupplierDao.class)
+@Table(name = "M_RFID_SUPPLIER")
 public class RfidSupplierEntity extends Pagable implements Serializable {
 
 	private static final long serialVersionUID = -6361496754557084957L;
@@ -20,6 +24,8 @@ public class RfidSupplierEntity extends Pagable implements Serializable {
 	/**
 	 * ID
 	 */
+	@Id(column = "ID")
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	/**
