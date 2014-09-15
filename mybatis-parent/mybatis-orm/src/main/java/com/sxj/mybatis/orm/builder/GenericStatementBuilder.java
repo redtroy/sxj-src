@@ -501,8 +501,7 @@ public class GenericStatementBuilder extends BaseBuilder
                                 new ShardUuidKeyGenerator(
                                         generatedValue.length()));
                     }
-                    else if (generatedValue.strategy() == GenerationType.TABLE
-                            || generatedValue.strategy() == GenerationType.AUTO)
+                    else if (generatedValue.strategy() == GenerationType.TABLE)
                     {
                         shardedKeyGenerators.put(statementId,
                                 new ShardJdbc4KeyGenerator());
@@ -598,8 +597,7 @@ public class GenericStatementBuilder extends BaseBuilder
                                 new ShardUuidKeyGenerator(
                                         generatedValue.length()));
                     }
-                    else if (generatedValue.strategy() == GenerationType.AUTO
-                            || generatedValue.strategy() == GenerationType.TABLE)
+                    else if (generatedValue.strategy() == GenerationType.TABLE)
                     {
                         shardedKeyGenerators.put(statementId,
                                 new ShardJdbc4KeyGenerator());

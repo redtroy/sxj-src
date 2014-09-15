@@ -44,7 +44,7 @@
 		<property name="mapperLocations" value="classpath:/mapper/**/*Mapper.xml" />
 
 	</bean>
-	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
+	<!-- 扫描basePackage下所有标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.sxj.supervisor.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />

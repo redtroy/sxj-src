@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		     http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 引入 jdbc.properties -->
+	<context:property-placeholder location="classpath:config/database.properties,config/mobile_message.properties" />
+
+	<!-- 启动 ioc 注解 -->
+	<context:component-scan base-package="com.**" />
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- 配置数据源 -->
+
+	<bean id="supervisorDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${supervisor.database.driver}</value>
+		</property>
+		<property name="url">
+			<value>${supervisor.database.url}</value>
+		</property>
+		<property name="username">
+			<value>${supervisor.database.username}</value>
+		</property>
+		<property name="password">
+			<value>${supervisor.database.password}</value>
+		</property>
+		<property name="maxActive">
+			<value>50</value>
+		</property>
+		<property name="initialSize">
+			<value>5</value>
+		</property>
+		<property name="maxWait">
+			<value>60000</value>
+		</property>
+		<property name="minIdle">
+			<value>5</value>
+		</property>
+		<property name="removeAbandoned">
+			<value>true</value>
+		</property>
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+		<property name="removeAbandonedTimeout">
+			<value>1800</value>
+		</property>
+		<property name="testWhileIdle">
+			<value>true</value>
+		</property> <!-- 打开检查,用异步线程evict进行检查 -->
+		<property name="testOnBorrow">
+			<value>true</value>
+		</property>
+		<property name="testOnReturn">
+			<value>false</value>
+		</property>
+		<property name="validationQuery">
+			<value>select 1 </value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>300000</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>60000</value>
+		</property>
+		<property name="numTestsPerEvictionRun">
+			<value>50</value>
+		</property>
+	</bean>
+	<bean id="rfidDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${rfid.database.driver}</value>
+		</property>
+		<property name="url">
+			<value>${rfid.database.url}</value>
+		</property>
+		<property name="username">
+			<value>${rfid.database.username}</value>
+		</property>
+		<property name="password">
+			<value>${rfid.database.password}</value>
+		</property>
+		<property name="maxActive">
+			<value>50</value>
+		</property>
+		<property name="initialSize">
+			<value>5</value>
+		</property>
+		<property name="maxWait">
+			<value>60000</value>
+		</property>
+		<property name="minIdle">
+			<value>5</value>
+		</property>
+		<property name="removeAbandoned">
+			<value>true</value>
+		</property>
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+		<property name="removeAbandonedTimeout">
+			<value>1800</value>
+		</property>
+		<property name="testWhileIdle">
+			<value>true</value>
+		</property> <!-- 打开检查,用异步线程evict进行检查 -->
+		<property name="testOnBorrow">
+			<value>true</value>
+		</property>
+		<property name="testOnReturn">
+			<value>false</value>
+		</property>
+		<property name="validationQuery">
+			<value>select 1 </value>
+		</property>
+		<property name="minEvictableIdleTimeMillis">
+			<value>300000</value>
+		</property>
+		<property name="timeBetweenEvictionRunsMillis">
+			<value>60000</value>
+		</property>
+		<property name="numTestsPerEvictionRun">
+			<value>50</value>
+		</property>
+	</bean>
+	<bean class="com.sxj.mybatis.shard.mapper.MapperScanConfigurator">
+		<property name="basePackage" value="com.sxj.supervisor.dao,com.sxj.supervisor.dao.rfid" />
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+		<property name="mapperLocations" value="classpath*:mapper/*.xml" />
+		<property name="typeAliasesPackage" value="com.sxj.supervisor.entity,com.sxj.supervisor.entity.rfid"></property>
+	</bean>
+	<!-- 后置处理器，初始化所有Mapper -->
+	<bean class="com.sxj.mybatis.shard.listener.MybatisMapperProcessor"></bean>
+
+
+	<!-- 启动 事务 -->
+	<bean id="transactionManager"
+		class="com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager">
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+
+</beans>
