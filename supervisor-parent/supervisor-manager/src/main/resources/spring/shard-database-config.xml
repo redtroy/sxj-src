@@ -27,7 +27,7 @@
 			<value>${supervisor.database.password}</value>
 		</property>
 		<property name="maxActive">
-			<value>50</value>
+			<value>10</value>
 		</property>
 		<property name="initialSize">
 			<value>5</value>
@@ -36,7 +36,7 @@
 			<value>60000</value>
 		</property>
 		<property name="minIdle">
-			<value>5</value>
+			<value>1</value>
 		</property>
 		<property name="removeAbandoned">
 			<value>true</value>
@@ -58,20 +58,14 @@
 			<value>false</value>
 		</property>
 		<property name="validationQuery">
-			<value>select 1 </value>
+			<value>select 1 from dual</value>
 		</property>
-
 		<property name="minEvictableIdleTimeMillis">
 			<value>300000</value>
 		</property>
 		<property name="timeBetweenEvictionRunsMillis">
 			<value>60000</value>
 		</property>
-		<property name="numTestsPerEvictionRun">
-			<value>50</value>
-		</property>
-		<!-- <property name="proxyFilters"> <list> <ref bean="stat-filter" /> </list> 
-			</property> -->
 	</bean>
 	
 	
@@ -90,16 +84,16 @@
 			<value>${rfid.database.password}</value>
 		</property>
 		<property name="maxActive">
-			<value>50</value>
+			<value>2</value>
 		</property>
 		<property name="initialSize">
-			<value>5</value>
+			<value>1</value>
 		</property>
 		<property name="maxWait">
 			<value>60000</value>
 		</property>
 		<property name="minIdle">
-			<value>5</value>
+			<value>1</value>
 		</property>
 		<property name="removeAbandoned">
 			<value>true</value>
@@ -121,7 +115,7 @@
 			<value>false</value>
 		</property>
 		<property name="validationQuery">
-			<value>select 1 </value>
+			<value>select 1 from dual</value>
 		</property>
 
 		<property name="minEvictableIdleTimeMillis">
@@ -130,11 +124,6 @@
 		<property name="timeBetweenEvictionRunsMillis">
 			<value>60000</value>
 		</property>
-		<property name="numTestsPerEvictionRun">
-			<value>50</value>
-		</property>
-		<!-- <property name="proxyFilters"> <list> <ref bean="stat-filter" /> </list> 
-			</property> -->
 	</bean>
 
 </beans>

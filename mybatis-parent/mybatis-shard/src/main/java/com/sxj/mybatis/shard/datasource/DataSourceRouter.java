@@ -180,7 +180,7 @@ public class DataSourceRouter
                     i++;
                 }
                 
-                String insertValues = sql.substring(sql.indexOf("values") + 6)
+                String insertValues = sql.substring(lowerSql.indexOf("values") + 6)
                         .trim();
                 insertValues = insertValues.substring(1,
                         insertValues.length() - 1);

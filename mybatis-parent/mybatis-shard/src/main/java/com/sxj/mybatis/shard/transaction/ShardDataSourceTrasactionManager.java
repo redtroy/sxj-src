@@ -99,6 +99,8 @@ public class ShardDataSourceTrasactionManager extends
             throws TransactionException
     {
         //        System.out.println("Begin Transaction");
+        logger.debug("Begin transaction with name [" + definition.getName()
+                + "]: " + definition);
     }
     
     protected void doCommit(DefaultTransactionStatus status)
@@ -106,12 +108,21 @@ public class ShardDataSourceTrasactionManager extends
     {
         
         doCommit();
+        doCloseSession();
+    }
+    
+    protected void doRollback(DefaultTransactionStatus status)
+            throws TransactionException
+    {
         
+        doRollback();
         doCloseSession();
     }
     
     private void doCloseSession()
     {
+        if (currentSessions.get() == null)
+            return;
         for (Map.Entry<DataSource, SqlSession> entry : currentSessions.get()
                 .entrySet())
         {
@@ -123,11 +134,14 @@ public class ShardDataSourceTrasactionManager extends
     private void doCommit()
     {
         Map<DataSource, Connection> conns = currentConnections.get();
+        if (conns == null)
+            return;
         for (Map.Entry<DataSource, Connection> entry : conns.entrySet())
         {
             try
             {
                 entry.getValue().commit();
+                entry.getValue().close();
             }
             catch (SQLException e)
             {
@@ -137,22 +151,17 @@ public class ShardDataSourceTrasactionManager extends
         currentConnections.remove();
     }
     
-    protected void doRollback(DefaultTransactionStatus status)
-            throws TransactionException
-    {
-        
-        doRollback();
-        doCloseSession();
-    }
-    
     private void doRollback()
     {
         Map<DataSource, Connection> conns = currentConnections.get();
+        if (conns == null)
+            return;
         for (Map.Entry<DataSource, Connection> entry : conns.entrySet())
         {
             try
             {
                 entry.getValue().rollback();
+                entry.getValue().close();
             }
             catch (SQLException e)
             {
