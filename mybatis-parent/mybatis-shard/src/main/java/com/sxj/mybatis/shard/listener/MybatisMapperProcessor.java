@@ -69,7 +69,7 @@ public class MybatisMapperProcessor implements
         String[] split = fieldValue.split(",");
         for (String value : split)
         {
-            Resource[] resources = applicationContext.getResources("classpath:"
+            Resource[] resources = applicationContext.getResources("classpath*:"
                     + StringUtils.replaceChars(value, '.', '/') + "/**/*.class");
             for (Resource resource : resources)
             {
