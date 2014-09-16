@@ -58,7 +58,7 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "MEMBER_NAME")
 	private String memberName;
-	
+
 	/**
 	 * RFID类型
 	 */
@@ -74,8 +74,8 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 	/**
 	 * 批次
 	 */
-	@Column(name = "BATCH_ID")
-	private String batchId;
+	@Column(name = "BATCH_NO")
+	private String batchNo;
 
 	/**
 	 * 关联申请时间
@@ -151,12 +151,12 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 		this.type = type;
 	}
 
-	public String getBatchId() {
-		return batchId;
+	public String getBatchNo() {
+		return batchNo;
 	}
 
-	public void setBatchId(String batchId) {
-		this.batchId = batchId;
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
 	public Date getApplyDate() {
@@ -182,6 +182,5 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 	public void setContractNo(String contractNo) {
 		this.contractNo = contractNo;
 	}
-
 
 }

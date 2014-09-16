@@ -74,14 +74,14 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	/**
 	 * 玻璃批次
 	 */
-	@Column(name = "GLASS_BATCH_ID")
-	private String glassBatchId;
+	@Column(name = "GLASS_BATCH_NO")
+	private String glassBatchNo;
 
 	/**
 	 * 型材批次
 	 */
-	@Column(name = "PROFILE_BATCH_ID")
-	private String profileBatchId;
+	@Column(name = "PROFILE_BATCH_NO")
+	private String profileBatchNo;
 
 	/**
 	 * 关联申请时间
@@ -157,20 +157,20 @@ public class WindowRefEntity extends Pagable implements Serializable {
 		this.windowsNo = windowsNo;
 	}
 
-	public String getGlassBatchId() {
-		return glassBatchId;
+	public String getGlassBatchNo() {
+		return glassBatchNo;
 	}
 
-	public void setGlassBatchId(String glassBatchId) {
-		this.glassBatchId = glassBatchId;
+	public void setGlassBatchNo(String glassBatchNo) {
+		this.glassBatchNo = glassBatchNo;
 	}
 
-	public String getProfileBatchId() {
-		return profileBatchId;
+	public String getProfileBatchNo() {
+		return profileBatchNo;
 	}
 
-	public void setProfileBatchId(String profileBatchId) {
-		this.profileBatchId = profileBatchId;
+	public void setProfileBatchNo(String profileBatchNo) {
+		this.profileBatchNo = profileBatchNo;
 	}
 
 	public Date getApplyDate() {

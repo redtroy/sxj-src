@@ -2,10 +2,12 @@ package com.sxj.supervisor.entity.rfid.base;
 
 import java.io.Serializable;
 
+import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.base.IRfidSupplierDao;
@@ -16,7 +18,7 @@ import com.sxj.supervisor.dao.rfid.base.IRfidSupplierDao;
  *
  */
 @Entity(mapper = IRfidSupplierDao.class)
-@Table(name = "M_RFID_SUPPLIER")
+@Table(name = "R_RFID_SUPPLIER")
 public class RfidSupplierEntity extends Pagable implements Serializable {
 
 	private static final long serialVersionUID = -6361496754557084957L;
@@ -29,43 +31,52 @@ public class RfidSupplierEntity extends Pagable implements Serializable {
 	private String id;
 
 	/**
-	 * 供应商ID
+	 * 供应商NO
 	 */
+	@Column(name = "SUPPLIER_NO")
+	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "GY", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String supplierNo;
 
 	/**
 	 * 供应商名称
 	 */
+	@Column(name = "NAME")
 	private String name;
 
 	/**
 	 * 地址
 	 */
+	@Column(name = "ADDRESS")
 	private String address;
 
 	/**
 	 * 联系人姓名
 	 */
+	@Column(name = "CONTRACT_NAME")
 	private String contactName;
 
 	/**
 	 * 联系电话
 	 */
+	@Column(name = "CONTRCT_TEL")
 	private String contactTel;
 
 	/**
 	 * 固定电话
 	 */
+	@Column(name = "TEL_NAME")
 	private String telNum;
 
 	/**
 	 * 门窗标签采购价
 	 */
+	@Column(name = "DOORS_PRICE")
 	private Long doorsPrice;
 
 	/**
 	 * 批次标签采购价
 	 */
+	@Column(name = "BATCH_PRICE")
 	private Long batchPrice;
 
 	public String getId() {
