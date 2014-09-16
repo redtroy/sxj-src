@@ -99,7 +99,8 @@ public class XmlReader
                 }
                 NodeList dn = dataNode.getChildNodes();
                 DataNodeCfg dataNodeCfg = new DataNodeCfg();
-                dataNodeCfg.setTables(getChildNodeText(dataNode, "tables"));
+                dataNodeCfg.setTables(getChildNodeText(dataNode, "tables").trim()
+                        .replaceAll(" ", ""));
                 dataNodes.add(dataNodeCfg);
                 for (int k = 0; k < dn.getLength(); k++)
                 {
