@@ -9,7 +9,6 @@
 package com.sxj.mybatis.orm;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,9 +21,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
@@ -43,17 +39,13 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
     
     private Configuration configuration;
     
-    private ResourceLoader resourceLoader;
+    //    private ResourceLoader resourceLoader;
     
     private ApplicationContext applicationContext;
-    
-    public static int times = 0;
     
     @Override
     public void afterPropertiesSet() throws Exception
     {
-        System.out.println("------------------------------------------------------------"
-                + times++);
         super.afterPropertiesSet();
         SqlSessionFactory sqlSessionFactory = super.getObject();
         configuration = sqlSessionFactory.getConfiguration();
@@ -104,20 +96,20 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
         return classNames;
     }
     
-    private URL[] findClassPath() throws IOException
-    {
-        ResourcePatternResolver resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
-        String fieldValue = (String) Reflections.getFieldValue(this,
-                "typeAliasesPackage");
-        Resource[] resources = resourcePatternResolver.getResources("classpath:"
-                + StringUtils.replaceChars(fieldValue, '.', '/')
-                + "/**/*.class");
-        URL[] classPaths = new URL[resources.length];
-        for (int i = 0; i < resources.length; i++)
-            classPaths[i] = resources[i].getURL();
-        return classPaths;
-    }
-    
+    //    private URL[] findClassPath() throws IOException
+    //    {
+    //        ResourcePatternResolver resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
+    //        String fieldValue = (String) Reflections.getFieldValue(this,
+    //                "typeAliasesPackage");
+    //        Resource[] resources = resourcePatternResolver.getResources("classpath:"
+    //                + StringUtils.replaceChars(fieldValue, '.', '/')
+    //                + "/**/*.class");
+    //        URL[] classPaths = new URL[resources.length];
+    //        for (int i = 0; i < resources.length; i++)
+    //            classPaths[i] = resources[i].getURL();
+    //        return classPaths;
+    //    }
+    //    
     @Override
     public void setApplicationContext(ApplicationContext applicationContext)
             throws BeansException
