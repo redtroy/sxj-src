@@ -11,7 +11,7 @@
 		     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		     http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<import resource="classpath*:spring/database-config.xml" />
+	<import resource="classpath*:spring/shard-database-config.xml" />
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 

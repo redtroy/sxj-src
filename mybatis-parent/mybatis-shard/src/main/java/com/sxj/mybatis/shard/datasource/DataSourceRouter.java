@@ -202,38 +202,42 @@ public class DataSourceRouter
             
             if (shardValueIndex == -1)
             {
-                throw new UnsupportedOperationException(
-                        "need shard param in where case for column:"
-                                + columnRule);
-            }
-            
-            Object shardValue = getParamValue(ms,
-                    boundSql,
-                    param,
-                    shardValueIndex);
-            int value = -1;
-            if (shardValue instanceof Integer)
-            {
-                value = (Integer) shardValue;
-            }
-            else if (shardValue instanceof Long)
-            {
-                value = ((Long) shardValue).intValue();
-            }
-            else if (shardValue instanceof String)
-            {
-                value = HashCodeBuilder.reflectionHashCode(shardValue, true);
+                targetNode = DataSourceFactory.getNodes(tblName).get(0);
+                //                throw new UnsupportedOperationException(
+                //                        "need shard param in where case for column:"
+                //                                + columnRule);
             }
             else
             {
-                throw new UnsupportedOperationException(
-                        "shard value must be int or long");
+                
+                Object shardValue = getParamValue(ms,
+                        boundSql,
+                        param,
+                        shardValueIndex);
+                int value = -1;
+                if (shardValue instanceof Integer)
+                {
+                    value = (Integer) shardValue;
+                }
+                else if (shardValue instanceof Long)
+                {
+                    value = ((Long) shardValue).intValue();
+                }
+                else if (shardValue instanceof String)
+                {
+                    value = HashCodeBuilder.reflectionHashCode(shardValue, true);
+                }
+                else
+                {
+                    throw new UnsupportedOperationException(
+                            "shard value must be int or long");
+                }
+                List<DataSourceNode> availableNodes = DataSourceFactory.getNodes(tblName);
+                
+                int nodeIndex = (int) (value % availableNodes.size());
+                
+                targetNode = availableNodes.get(nodeIndex);
             }
-            List<DataSourceNode> availableNodes = DataSourceFactory.getNodes(tblName);
-            
-            int nodeIndex = (int) (value % availableNodes.size());
-            
-            targetNode = availableNodes.get(nodeIndex);
         }
         
         DataSource ds = null;

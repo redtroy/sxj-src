@@ -2,6 +2,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="configBean"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:config/shard-database.properties</value>
+				<value>classpath*:config/mobile_message.properties</value>
+			</list>
+		</property>
+	</bean>
+	
 	<bean id="supervisorDataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		destroy-method="close">
 		<property name="driverClassName">
