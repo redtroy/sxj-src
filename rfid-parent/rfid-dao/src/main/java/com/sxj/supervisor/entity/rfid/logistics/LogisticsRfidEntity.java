@@ -1,4 +1,4 @@
-package com.sxj.supervisor.entity.rfid;
+package com.sxj.supervisor.entity.rfid.logistics;
 
 import java.io.Serializable;
 import java.util.Date;
