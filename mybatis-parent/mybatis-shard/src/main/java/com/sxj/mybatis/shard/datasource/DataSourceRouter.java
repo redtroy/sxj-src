@@ -138,7 +138,7 @@ public class DataSourceRouter
                 int index = 0;
                 if (commandName.equals("update"))
                 {
-                    String setStr = RegexUtil.substr(sql, "set", "where");
+                    String setStr = RegexUtil.substr(lowerSql, "set", "where");
                     index = setStr.split(",").length;
                 }
                 String whereStr = lowerSql.substring(lowerSql.indexOf("where") + 5);
