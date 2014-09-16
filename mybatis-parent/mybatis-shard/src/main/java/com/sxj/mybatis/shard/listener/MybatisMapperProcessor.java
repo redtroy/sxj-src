@@ -24,6 +24,7 @@ import com.sxj.mybatis.orm.builder.GenericStatementBuilder;
 import com.sxj.mybatis.shard.MybatisConfiguration;
 import com.sxj.mybatis.shard.configuration.XmlReader;
 import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
+import com.sxj.mybatis.shard.datasource.DataSourceFactory;
 import com.sxj.mybatis.shard.mapper.MapperScanConfigurator;
 import com.sxj.spring.modules.util.AnnotationUtils;
 
@@ -36,8 +37,10 @@ public class MybatisMapperProcessor implements
     {
         try
         {
-            registerMappers();
+            MybatisConfiguration.initialize();
+            registerXMLMappers();
             buildOrmMapper(event);
+            DataSourceFactory.initDataSources();
         }
         catch (IOException | ClassNotFoundException ioe)
         {
@@ -102,7 +105,7 @@ public class MybatisMapperProcessor implements
         return classNames;
     }
     
-    private void registerMappers()
+    private void registerXMLMappers()
     {
         if (MapperScanConfigurator.getMapperLocations() != null
                 && MapperScanConfigurator.getMapperLocations().length > 0)

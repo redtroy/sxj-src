@@ -18,10 +18,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.core.io.Resource;
-import org.springframework.core.type.ClassMetadata;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
@@ -56,7 +54,7 @@ public class MapperScanConfigurator implements
     public void postProcessBeanDefinitionRegistry(
             BeanDefinitionRegistry registry) throws BeansException
     {
-        // 初始化所有 mapper
+        // 初始化所有 mapper interfaces
         scanner = new Scanner(registry);
         scanner.setResourceLoader(this.applicationContext);
         scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage,
@@ -65,7 +63,6 @@ public class MapperScanConfigurator implements
         MybatisConfiguration.setApplicationContext(applicationContext);
         MybatisConfiguration.setConfigLocation(configLocation);
         DataSourceFactory.setContext(applicationContext);
-        
     }
     
     public void setApplicationContext(ApplicationContext applicationContext)
@@ -79,34 +76,34 @@ public class MapperScanConfigurator implements
         this.basePackage = basePackage;
     }
     
-    private void findEntityClassNames() throws IOException
-    {
-        SimpleMetadataReaderFactory metadataReaderFactory = new SimpleMetadataReaderFactory(
-                applicationContext);
-        String fieldValue = basePackage == null ? "" : basePackage;
-        String[] split = fieldValue.split(",");
-        for (String value : split)
-        {
-            Resource[] resources = applicationContext.getResources("classpath:"
-                    + StringUtils.replace(value, ".", "/") + "/**/*.class");
-            for (Resource resource : resources)
-            {
-                if (resource.isReadable())
-                {
-                    MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
-                    ClassMetadata classMetadata = metadataReader.getClassMetadata();
-                    mapperInterfaces.add(classMetadata.getClassName());
-                    //                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
-                    //                String entityAnnotation = Entity.class.getName();
-                    //                if (annotationMetadata.isAnnotated(entityAnnotation))
-                    //                {
-                    //                    classNames.add(classMetadata.getClassName());
-                    //                }
-                }
-            }
-        }
-        
-    }
+    //    private void findEntityClassNames() throws IOException
+    //    {
+    //        SimpleMetadataReaderFactory metadataReaderFactory = new SimpleMetadataReaderFactory(
+    //                applicationContext);
+    //        String fieldValue = basePackage == null ? "" : basePackage;
+    //        String[] split = fieldValue.split(",");
+    //        for (String value : split)
+    //        {
+    //            Resource[] resources = applicationContext.getResources("classpath:"
+    //                    + StringUtils.replace(value, ".", "/") + "/**/*.class");
+    //            for (Resource resource : resources)
+    //            {
+    //                if (resource.isReadable())
+    //                {
+    //                    MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+    //                    ClassMetadata classMetadata = metadataReader.getClassMetadata();
+    //                    mapperInterfaces.add(classMetadata.getClassName());
+    //                    //                AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+    //                    //                String entityAnnotation = Entity.class.getName();
+    //                    //                if (annotationMetadata.isAnnotated(entityAnnotation))
+    //                    //                {
+    //                    //                    classNames.add(classMetadata.getClassName());
+    //                    //                }
+    //                }
+    //            }
+    //        }
+    //        
+    //    }
     
     private final class Scanner extends ClassPathBeanDefinitionScanner
     {
@@ -190,7 +187,6 @@ public class MapperScanConfigurator implements
                     definition.getPropertyValues().add("mapperInterface",
                             definition.getBeanClassName());
                     definition.setBeanClass(ShardMapperFactoryBean.class);
-                    //                    processPropertyPlaceHolders(definition.getBeanClassName());
                 }
             }
             
@@ -226,8 +222,6 @@ public class MapperScanConfigurator implements
     public void postProcessBeanFactory(
             ConfigurableListableBeanFactory beanFactory) throws BeansException
     {
-        // TODO Auto-generated method stub
-        System.out.println();
     }
     
     public static Set<String> getMapperInterfaces()

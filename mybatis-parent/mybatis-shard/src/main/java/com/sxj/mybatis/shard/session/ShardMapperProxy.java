@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,44 +54,14 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
         String commandName = mapperMethod.getCommandName();
         MappedStatement ms = cfg.getMappedStatement(commandName);
         Object param = wrapCollection(mapperMethod.getParam(args));
-        
-        ShardKeyGenerator shardKeyGenerator = GenericStatementBuilder.getShardedKeyGenerators()
-                .get(ms.getId());
-        ShardSnGenerator shardSnGenerator = GenericStatementBuilder.getShardSnGenerators()
-                .get(ms.getId());
-        if (shardSnGenerator != null)
-        {
-            List<DataSource> snGeneratorDataSources = DataSourceRouter.getSnGeneratorDataSources();
-            shardSnGenerator.process(snGeneratorDataSources.get(0),
-                    param,
-                    ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
-        }
-        
-        if (shardKeyGenerator != null)
-        {
-            if (shardKeyGenerator instanceof ShardJdbc4KeyGenerator)
-            {
-                List<DataSource> keyGeneratorDataSources = DataSourceRouter.getKeyGeneratorDataSources();
-                int m = keyGeneratorDataSources.size();
-                int n = (int) (keyGeneratorDataSources.size() * Math.random());
-                ShardJdbc4KeyGenerator generator = ((ShardJdbc4KeyGenerator) shardKeyGenerator);
-                generator.setStart(n + 1);
-                generator.setStep(m);
-                generator.process(keyGeneratorDataSources.get(n),
-                        param,
-                        ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
-            }
-            else
-                shardKeyGenerator.process(DataSourceRouter.getKeyGeneratorDataSource(),
-                        param,
-                        ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
-        }
-        
-        SqlSession sqlSession = null;
-        // 判断 sql 中对应的表是否需要分表操作
-        BoundSql boundSql = ms.getBoundSql(param);
+        /**
+         * 生成主键和SN，REQUIRE_NEW策略
+         */
+        processBefore(ms, param);
         
         // 根据该值进行路由，获取指定数据源的SqlSession
+        SqlSession sqlSession = null;
+        BoundSql boundSql = ms.getBoundSql(param);
         DataSource ds = DataSourceRouter.getDataSource(ms, boundSql, param);
         
         Object result = null;
@@ -140,6 +111,42 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
             //            ShardedSqlSession.closeSqlSession(sqlSession, ds);
         }
         return result;
+    }
+    
+    private void processBefore(MappedStatement ms, Object param)
+            throws SQLException
+    {
+        ShardKeyGenerator shardKeyGenerator = GenericStatementBuilder.getShardedKeyGenerators()
+                .get(ms.getId());
+        ShardSnGenerator shardSnGenerator = GenericStatementBuilder.getShardSnGenerators()
+                .get(ms.getId());
+        if (shardSnGenerator != null)
+        {
+            List<DataSource> snGeneratorDataSources = DataSourceRouter.getSnGeneratorDataSources();
+            shardSnGenerator.process(snGeneratorDataSources.get(0),
+                    param,
+                    ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
+        }
+        
+        if (shardKeyGenerator != null)
+        {
+            if (shardKeyGenerator instanceof ShardJdbc4KeyGenerator)
+            {
+                List<DataSource> keyGeneratorDataSources = DataSourceRouter.getKeyGeneratorDataSources();
+                int m = keyGeneratorDataSources.size();
+                int n = (int) (keyGeneratorDataSources.size() * Math.random());
+                ShardJdbc4KeyGenerator generator = ((ShardJdbc4KeyGenerator) shardKeyGenerator);
+                generator.setStart(n + 1);
+                generator.setStep(m);
+                generator.process(keyGeneratorDataSources.get(n),
+                        param,
+                        ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
+            }
+            else
+                shardKeyGenerator.process(DataSourceRouter.getKeyGeneratorDataSource(),
+                        param,
+                        ConfigurationProperties.getDialect(MybatisConfiguration.getConfiguration()));
+        }
     }
     
     private Class<?> findDeclaringInterface(Object proxy, Method method)

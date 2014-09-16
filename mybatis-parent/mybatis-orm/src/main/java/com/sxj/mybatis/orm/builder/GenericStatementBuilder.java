@@ -501,7 +501,8 @@ public class GenericStatementBuilder extends BaseBuilder
                                 new ShardUuidKeyGenerator(
                                         generatedValue.length()));
                     }
-                    else if (generatedValue.strategy() == GenerationType.TABLE)
+                    else if (generatedValue.strategy() == GenerationType.TABLE
+                            || generatedValue.strategy() == GenerationType.AUTO)
                     {
                         shardedKeyGenerators.put(statementId,
                                 new ShardJdbc4KeyGenerator());
@@ -597,7 +598,8 @@ public class GenericStatementBuilder extends BaseBuilder
                                 new ShardUuidKeyGenerator(
                                         generatedValue.length()));
                     }
-                    else if (generatedValue.strategy() == GenerationType.TABLE)
+                    else if (generatedValue.strategy() == GenerationType.TABLE
+                            || generatedValue.strategy() == GenerationType.AUTO)
                     {
                         shardedKeyGenerators.put(statementId,
                                 new ShardJdbc4KeyGenerator());
@@ -1001,7 +1003,6 @@ public class GenericStatementBuilder extends BaseBuilder
         while (resultMapNames.hasNext())
         {
             String name = resultMapNames.next();
-            System.out.println(name);
             ResultMap temp = configuration.getResultMap(name);
             if (temp.getType().equals(entityClass))
             {

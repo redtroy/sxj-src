@@ -98,7 +98,7 @@ public class ShardDataSourceTrasactionManager extends
     protected void doBegin(Object transaction, TransactionDefinition definition)
             throws TransactionException
     {
-        System.out.println("Begin Transaction");
+        //        System.out.println("Begin Transaction");
     }
     
     protected void doCommit(DefaultTransactionStatus status)

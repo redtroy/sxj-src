@@ -31,12 +31,17 @@ public class MybatisConfiguration
         MybatisConfiguration.applicationContext = applicationContext;
     }
     
-    public static Configuration getConfiguration(Resource configLocation)
+    public static void initialize()
+    {
+        getConfiguration(configLocation);
+    }
+    
+    private static Configuration getConfiguration(Resource configLocation)
     {
         return getConfiguration(configLocation, null);
     }
     
-    public static Configuration getConfiguration(Resource configLocation,
+    private static Configuration getConfiguration(Resource configLocation,
             Properties configurationProperties)
     {
         try
@@ -74,7 +79,7 @@ public class MybatisConfiguration
     
     public static Configuration getConfiguration()
     {
-        return getConfiguration(getConfigLocation());
+        return configuration;
     }
     
     public static Resource getConfigLocation()
