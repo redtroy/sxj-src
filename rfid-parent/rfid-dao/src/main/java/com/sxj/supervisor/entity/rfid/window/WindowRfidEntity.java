@@ -1,4 +1,4 @@
-package com.sxj.supervisor.entity.rfid;
+package com.sxj.supervisor.entity.rfid.window;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +11,10 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
+import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
+import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 
 /**
  * 门窗RFID管理
@@ -18,7 +22,7 @@ import com.sxj.mybatis.pagination.Pagable;
  * @author dujinxin
  *
  */
-@Entity
+@Entity(mapper = IWindowRfidDao.class)
 @Table(name = "R_WINDOW_RFID")
 public class WindowRfidEntity extends Pagable implements Serializable {
 
@@ -57,7 +61,7 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	 * 窗型代号
 	 */
 	@Column(name = "WINDOW_TYPE")
-	private String windowType;
+	private WindowTypeEnum windowType;
 	/**
 	 * 玻璃RFID
 	 */
@@ -86,13 +90,13 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	 * RFID状态
 	 */
 	@Column(name = "RFID_STATE")
-	private Enum rfidState;
+	private RfidStateEnum rfidState;
 
 	/**
 	 * 进度状态
 	 */
 	@Column(name = "PROGRESS_STATE")
-	private Enum progressState;
+	private LabelProgressEnum progressState;
 
 	/**
 	 * 执行日志
@@ -132,11 +136,11 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 		this.contractNo = contractNo;
 	}
 
-	public String getWindowType() {
+	public WindowTypeEnum getWindowType() {
 		return windowType;
 	}
 
-	public void setWindowType(String windowType) {
+	public void setWindowType(WindowTypeEnum windowType) {
 		this.windowType = windowType;
 	}
 
@@ -172,19 +176,19 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 		this.replenishNo = replenishNo;
 	}
 
-	public Enum getRfidState() {
+	public RfidStateEnum getRfidState() {
 		return rfidState;
 	}
 
-	public void setRfidState(Enum rfidState) {
+	public void setRfidState(RfidStateEnum rfidState) {
 		this.rfidState = rfidState;
 	}
 
-	public Enum getProgressState() {
+	public LabelProgressEnum getProgressState() {
 		return progressState;
 	}
 
-	public void setProgressState(Enum progressState) {
+	public void setProgressState(LabelProgressEnum progressState) {
 		this.progressState = progressState;
 	}
 
