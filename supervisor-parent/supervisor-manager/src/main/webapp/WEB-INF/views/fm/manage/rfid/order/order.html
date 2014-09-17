@@ -4,15 +4,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家绿色门窗平台管理系统</title>
-<link href="../style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 </head>
 <body>
 <div id="header" class="fence-wide">
-    <h1 class="yard-1200 ly-clearFix"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span><span class="logOut ly-right"><a href="#">注销帐户并退出</a></span></h1>
-    <div class="border-header"></div>
+     <@b.header />
 </div>
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
@@ -20,43 +19,7 @@
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
     <div id="leftList">
-      <h2 class="tit">会员中心</h2>
-      <ul>
-        <li><a href="member.html">会员管理</a></li>
-        <li><a href="accounts.html">会员子帐号管理</a></li>
-      </ul>
-      <h2 class="tit">备案管理</h2>
-      <ul>
-        <li><a href="record.html">备案管理</a></li>
-      </ul>
-      <h2 class="tit">合同管理</h2>
-      <ul>
-        <li><a href="contract.html">合同管理</a></li>
-      </ul>
-      <h2 class="tit">RFID进销存管理</h2>
-      <ul>
-        <li><a href="order.html">RFID申请单管理</a></li>
-        <li><a href="purchase.html">RFID采购单管理</a></li>
-        <li><a href="mencprd.html">门窗RFID商品管理</a></li>
-		<li><a href="gysprd.html">物流RFID商品管理</a></li>
-		<li><a href="mencrfid-link.html">门窗RFID关联申请管理</a></li>
-		<li><a href="gysrfid-link.html">物流RFID关联申请管理</a></li>
-        <li><a href="supplier.html">RFID供应商管理</a></li>
-        <li><a href="pricemgr.html">RFID销售价格管理</a></li>
-		<li><a href="count.html">RFID统计管理</a></li>
-      </ul>
-      <h2 class="tit">会员行为跟踪管理</h2>
-      <ul>
-        <li><a href="behavior.html">会员行为跟踪管理</a></li>
-      </ul>
-      <h2 class="tit">支付管理</h2>
-      <ul>
-        <li><a href="#">支付管理</a></li>
-      </ul>
-      <h2 class="tit">管理员管理</h2>
-      <ul>
-        <li><a href="admin.html">管理员管理</a></li>
-      </ul>
+      <@b.leftMenu />
     </div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
@@ -149,10 +112,6 @@
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
-<div id="footer" class="fence-wide">
-  <div class="yard-1200">
-    <p>&copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
-  </div>
-</div>
+<@b.footer /> 
 </body>
 <!-- InstanceEnd --></html>
