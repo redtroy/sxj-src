@@ -6,10 +6,54 @@
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<@b.validate/>
+<@b.pageScript/>
+<@b.errorInfo/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
+<script>
+//增加供应商
+function add(){
+	$.post("add_supplier.htm",function(data){
+		$("#rightBar").empty();
+		$("#rightBar").append(data);
+	})
+}
+function query(page){
+	var params=$("#search_form").serialize();
+	if(page!=undefined){
+	   params=params+"&currentPage="+page;
+  	}
+	$.post("supplier_list.htm",params,function(data){
+		var rightBar=$(data).find("#rightBar");
+		$("#rightBar").html(rightBar);
+		var pager=$(data).find("#rightBar").children("#pager");
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	})
+}
+function del(id){
+	$.post("del_supplier.htm",{id:id},function(data){
+		if(data.isOk=="ok"){
+			alert("删除成功");
+			query();
+		}
+		else{
+			errorInfo(data);
+		}
+	})
+}
+function edit(id){
+	$.post("edit_supplier.htm",{id:id},function(data){
+		$("#rightBar").empty();
+		$("#rightBar").append(data);
+	})
+}
+</script>
 </head>
+ 
 <body>
 <div id="header" class="fence-wide">
    <@b.header />
@@ -24,18 +68,21 @@
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">RFID供应商管理</h2>
       <div id="searchBox">
+      <form action="javascript:void(0);" method="post" id="search_form">
         供应商ID
-          <input type="text" name="" value="">
+          <input type="text" name="supplierNo" value="${query.supplierNo}">
           供应商名称
-          <input type="text" name="" value="">
+          <input type="text" name="name" value="${query.name}">
           联系电话
-          <input type="text" name="" value="">
+          <input type="text" name="contactTel" value="${query.contactTel}">
 		  固定电话
-          <input type="text" name="" value="">
+          <input type="text" name="telNum" value="${query.telNum}">
         
-          <button class="btn btn-blue"><span>查询</span></button>
-		  <button onclick="javascript:window.location.href='add_supplier.htm'" class="btn btn-blue ly-right"><span>新增供应商</span></button>
+          <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
+		  <button onclick="add();" class="btn btn-blue ly-right"><span>新增供应商</span></button>
+		</form>
       </div>
+      <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="8%" />
         <col width="12%"/>
@@ -57,28 +104,19 @@
           <th>批次标签</br>采购价</th>
           <th class="rLine">操作</th>
         </tr>
+        <#list list as supplier>
         <tr>
-          <td>GY001</td>
-          <td>三宝科技有限公司</td>
-          <td>杨旭旭</td>
-          <td>13913913999</td>
-          <td>0255-9653685</td>
-          <td>南京市栖霞区仙林大道188号</td>
-          <td>0.6</td>
-		  <td>0.55</td>
-          <td class="operation"><a href="supplier-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
+          <td>${supplier.supplierNo}</td>
+          <td>${supplier.name}</td>
+          <td>${supplier.contactName}</td>
+          <td>${supplier.contactTel}</td>
+          <td>${supplier.telNum}</td>
+          <td>${supplier.address}</td>
+          <td>${supplier.doorsPrice}</td>
+		  <td>${supplier.batchPrice}</td>
+          <td class="operation"><a href="javascript:edit('${supplier.id}')" class="edit">修改</a><a href="javascript:del('${supplier.id}')" class="del">删除</a></td>
         </tr>
-		 <tr>
-          <td>GY002</td>
-          <td>三宝科技有限公司</td>
-          <td>杨小旭</td>
-          <td>13913913999</td>
-          <td>0255-9653685</td>
-          <td>南京市栖霞区仙林大道188号</td>
-          <td>0.6</td>
-		  <td>0.55</td>
-          <td class="operation"><a href="supplier-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
-        </tr>
+        </#list>
       </table>
     <!-- InstanceEndEditable --></div>
 

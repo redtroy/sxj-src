@@ -1,64 +1,60 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- InstanceBeginEditable name="doctitle" -->
-<title>私享家绿色门窗平台管理系统</title>
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${b.staticPath}js/jquery.js"></script>
-
-<!-- InstanceEndEditable -->
-<!-- InstanceBeginEditable name="head" -->
-<!-- InstanceEndEditable -->
-</head>
-<body>
-<div id="header" class="fence-wide">
-    <@b.header />
-</div>
-<div id="main" class="fence-wide">
-<!-- InstanceBeginEditable name="local" -->
-<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>RFID进销存管理<span>&gt;</span>新增RFID供应商</div>
-<!-- InstanceEndEditable -->
-<div id="mainBg" class="ly-clearFix yard-1200">
-    <div id="leftList">
-     <@b.leftMenu />
-    </div>
-    <div id="rightBar">
+ <@b.validate/>
+<script>
+  function sub(){
+	 $("#sub").submit();
+  }
+  $("#sub").Validform({
+		tiptype:3,
+		callback:function(form){
+			add();
+		}
+	});
+  function add(){
+		var params=$("#sub").serialize();
+		$.post("${basePath}rfid/supplier/save_supplier.htm",params,function(data){
+			if(data.isOk=="ok"){
+				alert("添加成功");
+				query();
+			}
+			else{
+				errorInfo(data);
+			}
+		});
+	}
+</script>
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">新增RFID供应商</h2>
+    <form action="javascript:void(0);" id="sub">
     <div class="infoBox f14">
       <div>
         <label>供应商名称</label>
-        <input type="text" id="" name="" class="text tip" title="由中文组成" />
+        <input type="text" id="" name="name" class="text tip" title="由中文组成" datatype="s4-16" errormsg="供应商名称至少4个字符,最多50个字符！" nullmsg="请输入供应商名称" />
       </div>
       <div>
         <label>联系人姓名</label>
-        <input type="text" id="" name="" class="text tip" title="由中文组成" />
+        <input type="text" id="" name="contactName" class="text tip" title="由中文组成" datatype="s4-16" errormsg="联系人名称至少4个字符,最多16个字符！" nullmsg="请输入联系人名称"/>
       </div>
       <div>
         <label>联系电话</label>
-        <input type="text" id="" name="" class="text tip" title="填写联系人手机号码" />
+        <input type="text" id="" name="contactTel" class="text tip" title="填写联系人手机号码"  datatype="m" errormsg="请输入正确的手机号码格式" nullmsg="手机号码不能为空"/>
       </div>
       <div>
         <label>固定电话</label>
-        <input type="text" id="" name="" class="text tip" title="填写公司固定电话号码" />
+        <input type="text" id="" name="telNum" class="text tip" title="填写公司固定电话号码" />
       </div>
       <div>
         <label>公司地址</label>
-        <input type="text" id="" name="" class="text tip" title="填写公司地址" />
+        <input type="text" id="" name="address" class="text tip" title="填写公司地址" datatype="s10-50" errormsg="供应商名称至少10个字符,最多50个字符！" nullmsg="联系人地址不能为空"/>
       </div>
       <div>
         <label>门窗标签采购价</label>
-        <input type="text" id="" name="" class="input-w30"title="填写该供应商门窗标签参考采购价格" />元
+        <input type="text" id="" name="doorsPrice" class="input-w30"title="填写该供应商门窗标签参考采购价格" datatype="n" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
       </div>
       <div>
         <label>批次标签采购价</label>
-        <input type="text" id="" name="" class="input-w30" title="填写该供应商批次标签参考爱狗价格" />元
+        <input type="text" id="" name="batchPrice" class="input-w30" title="填写该供应商批次标签参考爱狗价格" datatype="n" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
       </div>
      
-      <div class="btnBox"><a href="supplier.html" class="button button-orange button-small">新增</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div></div>
-    <!-- InstanceEndEditable --></div>
-</div>
-<@b.footer /> 
-</body>
-<!-- InstanceEnd --></html>
+      <div class="btnBox"><a href="javascript:sub();" class="button button-orange button-small">新增</a><a href="javascript:query();" class="button button-gray button-small">返回</a> </div></div>
+    </form>
+

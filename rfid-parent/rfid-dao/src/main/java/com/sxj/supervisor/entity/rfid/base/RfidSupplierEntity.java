@@ -14,6 +14,7 @@ import com.sxj.supervisor.dao.rfid.base.IRfidSupplierDao;
 
 /**
  * RFID供应商
+ * 
  * @author dujinxin
  *
  */
@@ -58,7 +59,7 @@ public class RfidSupplierEntity extends Pagable implements Serializable {
 	/**
 	 * 联系电话
 	 */
-	@Column(name = "CONTRCT_TEL")
+	@Column(name = "CONTRACT_TEL")
 	private String contactTel;
 
 	/**
@@ -78,6 +79,20 @@ public class RfidSupplierEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "BATCH_PRICE")
 	private Long batchPrice;
+
+	/**
+	 * 逻辑删除
+	 */
+	@Column(name = "DEL_STATE")
+	private Boolean delstate = false;
+
+	public Boolean getDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
+	}
 
 	public String getId() {
 		return id;
