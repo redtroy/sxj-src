@@ -19,7 +19,6 @@ import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/rfid/supplier")
-<<<<<<< HEAD
 public class RfidSupplierController extends BaseController {
 	@Autowired
 	IRfidSupplierService supplierService;
@@ -125,52 +124,4 @@ public class RfidSupplierController extends BaseController {
 		}
 		return map;
 	}
-=======
-public class RfidSupplierController extends BaseController
-{
-    @Autowired
-    IRfidSupplierService supplierService;
-    
-    /**
-     * 进入供应商管理页面
-     * 
-     * @return
-     */
-    @RequestMapping("supplier_list")
-    public String supplier_list(ModelMap map, RfidSupplierQuery query)
-            throws WebException
-    {
-        try
-        {
-            if (query != null)
-            {
-                query.setPagable(true);
-            }
-            List<RfidSupplierEntity> list = supplierService.querySupplier(query);
-            map.put("list", list);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return "manage/rfid/supplier/supplier";
-    }
-    
-    /**
-     * 增加供应商页面
-     */
-    @RequestMapping("add_supplier")
-    public String add_supplier() throws WebException
-    {
-        try
-        {
-            
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return "manage/rfid/supplier/supplier-add";
-    }
->>>>>>> 8d87d35321ba58b6023afa2d58dba43c16211780
 }
