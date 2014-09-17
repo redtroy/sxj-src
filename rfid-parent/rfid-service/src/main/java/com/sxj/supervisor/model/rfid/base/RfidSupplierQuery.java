@@ -29,6 +29,16 @@ public class RfidSupplierQuery extends Pagable implements Serializable {
 
 	private Long batchPrice;
 
+	private Boolean delstate = false;
+
+	public Boolean getDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
+	}
+
 	public String getId() {
 		return id;
 	}

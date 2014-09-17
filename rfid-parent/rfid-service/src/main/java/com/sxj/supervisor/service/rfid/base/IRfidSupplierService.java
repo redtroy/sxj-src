@@ -34,4 +34,17 @@ public interface IRfidSupplierService {
 	 */
 	public void modifySupplier(RfidSupplierEntity Supplier)
 			throws ServiceException;
+
+	/**
+	 * 新增
+	 * 
+	 * @param Supplier
+	 * @throws ServiceException
+	 */
+	public void add(RfidSupplierEntity Supplier) throws ServiceException;
+
+	/**
+	 * 删除
+	 */
+	public void delSupplier(String id) throws ServiceException;
 }
