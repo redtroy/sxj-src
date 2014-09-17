@@ -1,4 +1,4 @@
-package com.sxj.supervisor.dao.rfid.app;
+package com.sxj.supervisor.dao.rfid.apply;
 
 import java.util.List;
 
