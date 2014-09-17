@@ -45,6 +45,7 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractSureStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractSureStateEnum" />
+<<<<<<< HEAD
 		<!-- FRID -->
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
@@ -55,6 +56,19 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.Enum.rfid.base.ReceiptStateEnum" />	
+=======
+
+		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.window.RfidStateEnum" />
+
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.LabelProgressEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.window.LabelProgressEnum" />
+
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.WindowTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.window.WindowTypeEnum" />
+>>>>>>> 8d87d35321ba58b6023afa2d58dba43c16211780
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

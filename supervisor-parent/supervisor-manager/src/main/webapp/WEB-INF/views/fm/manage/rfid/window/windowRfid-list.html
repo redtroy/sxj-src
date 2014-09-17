@@ -4,98 +4,91 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家绿色门窗平台管理系统</title>
-<link href="../style/style.css" rel="stylesheet" type="text/css" />
-<!-- InstanceEndEditable -->
-<!-- InstanceBeginEditable name="head" -->
-<!-- InstanceEndEditable -->
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.pageScript/>
+<script>
+function query(page){
+	var params=$("#search_form").serialize();
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+	$.post("query.htm",params,function(data){
+		var res=$(data).find("#res_table");
+		var pager=$(data).find("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+function  del(id){
+	if(confirm('确实要删除吗?')){
+	$.post("delete.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("删除成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("删除失败!");	
+		}
+	});
+	}
+}
+</script>
 </head>
 <body>
-<div id="header" class="fence-wide">
-    <h1 class="yard-1200 ly-clearFix"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span><span class="logOut ly-right"><a href="#">注销帐户并退出</a></span></h1>
-    <div class="border-header"></div>
-</div>
+<@b.header/>
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
-<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>RFID进销存管理<span>&gt;</span>门窗RFID商品管理</div>
+<@b.menuPath/>
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
     <div id="leftList">
-      <h2 class="tit">会员中心</h2>
-      <ul>
-        <li><a href="member.html">会员管理</a></li>
-        <li><a href="accounts.html">会员子帐号管理</a></li>
-      </ul>
-      <h2 class="tit">备案管理</h2>
-      <ul>
-        <li><a href="record.html">备案管理</a></li>
-      </ul>
-      <h2 class="tit">合同管理</h2>
-      <ul>
-        <li><a href="contract.html">合同管理</a></li>
-      </ul>
-      <h2 class="tit">RFID进销存管理</h2>
-      <ul>
-        <li><a href="order.html">RFID申请单管理</a></li>
-        <li><a href="purchase.html">RFID采购单管理</a></li>
-        <li><a href="mencprd.html">门窗RFID商品管理</a></li>
-		<li><a href="gysprd.html">物流RFID商品管理</a></li>
-		<li><a href="mencrfid-link.html">门窗RFID关联申请管理</a></li>
-		<li><a href="gysrfid-link.html">物流RFID关联申请管理</a></li>
-        <li><a href="supplier.html">RFID供应商管理</a></li>
-        <li><a href="pricemgr.html">RFID销售价格管理</a></li>
-		<li><a href="count.html">RFID统计管理</a></li>
-      </ul>
-      <h2 class="tit">会员行为跟踪管理</h2>
-      <ul>
-        <li><a href="behavior.html">会员行为跟踪管理</a></li>
-      </ul>
-      <h2 class="tit">支付管理</h2>
-      <ul>
-        <li><a href="#">支付管理</a></li>
-      </ul>
-      <h2 class="tit">管理员管理</h2>
-      <ul>
-        <li><a href="admin.html">管理员管理</a></li>
-      </ul>
+ <@b.leftMenu />
     </div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">门窗RFID商品管理</h2>
+      <form action="" id="search_form" method="post">
       <div id="searchBox">
       <p>RFID编号
-        <input type="text" name="" value="">
+        <input type="text" name="rfidNo" value="">
        采购单号
-       <input type="text" name="" value="">
-       招标合同号<input type="text" name="" value="">
-	   对应RFID编号<input type="text" name="" value="">
+       <input type="text" name="purchaseNo" value="">
+       招标合同号<input type="text" name="contractNo" value="">
+	   对应RFID编号<input type="text" name="rfid" value="">
        窗型代号
-       <select name="select" class="selectx">
-	   <option selected="selected">全部</option>
-          <option>C120 120X60</option>
-          <option>C150 150X80</option>
-          <option>C180 180X50</option>
+       <select name="windowType" class="selectx">
+	   <option value="" selected="selected">全部</option>
+	   <#list winType as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
         </select></p>
 	   进度状态
-	   <select name="select" class="selectx">
-          <option selected="selected">全部</option>
-		  <option>标签未发货</option>
-		  <option>标签已发货</option>
-		  <option>标签已收货</option>
-		  <option>门窗已安装</option>
-          <option>门窗已质检</option>
+	   <select name="progressState" class="selectx">
+          <option value="" selected="selected">全部</option>
+		  <#list Label as label> 
+          <option value="${label.getId()}">${label.getName()}</option>
+          </#list>
         </select>
-		RFID状态<select name="select">
-		<option selected="selected">全部</option>
-          <option>未使用</option>
-		  <option>已使用</option>
-		  <option>破损</option>
-          <option>停用</option>
+		RFID状态<select name="rfidState">
+		<option value="" selected="selected">全部</option>
+           <#list rfid as rfid> 
+          <option value="${rfid.getId()}">${rfid.getName()}</option>
+          </#list>
+		  
         </select>
        采购单时间段
-       <input type="text" name="" value="">-<input type="text" name="" value="">
-        <button class="btn btn-blue"><span>查询</span></button>
+       <input type="text" name="startImportDate" value="" datepicker/>-<input type="text" name="endImportDate" value="" datepicker/>
+        <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
     </div>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+    </form>
+    <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="8%"/>
         <col width="8%"/>
         <col width="8%" />
@@ -120,20 +113,22 @@
 		  <th>RFID状态</th>
           <th class="rLine">操作</th>
         </tr>
+        <#list winList as win>
         <tr>
-          <td><a href="#" class="lnk-blue">AAAA00001</a></td>
-          <td>CG14070001</td>
-          <td><a href="#" class="lnk-blue">CT14070001</a></td>
-          <td>C120 120X60 </td>
-		  <td><a href="#" class="lnk-blue">AAAB00001</a></td>
-		  <td><a href="#" class="lnk-blue">AAAC00001</a></td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td>-</td>
-		  <td><em class="state frozen">标签未发货</em></td>
-		  <td><em class="state verified">已使用</em></td>
-		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
+          <td><a href="#" class="lnk-blue">${win.rfidNo}</a></td>
+          <td>${win.purchaseNo}</td>
+          <td><a href="#" class="lnk-blue">${win.contractNo}</a></td>
+          <td>${win.windowType.getName()} </td>
+		  <td><a href="#" class="lnk-blue">${win.glassRfid}</a></td>
+		  <td><a href="#" class="lnk-blue">${win.profileRfid}</a></td>
+		  <td>${win.importDate?string("yyyy-MM-dd")}</td>
+          <td><#if win.replenishNo?exists>${win.replenishNo}<#else>-</#if></td>
+		  <td><em class="state frozen">${win.progressState.getName()}</em></td>
+		  <td><em class="state verified">${win.rfidState.getName()}</em></td>
+		  <td class="operation"><a href="#" class="stop">停用</a><a href="javascript:del('${win.id}');" class="del">删除</a></td>
         </tr>
-				 <tr style="display:;">
+        </#list>
+				 <tr style="display:none;">
         <td colspan="11"><div class="planBox text-left f14">
             <div class="item">
               <label class="time">2014年5月20日14：52</label>
@@ -175,7 +170,7 @@
 		  <td><em class="state frozen">已破损</em></td>
 		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
         </tr>
-		<tr class="tableInfo" style="display:;">
+		<tr class="tableInfo" style="display:none;">
         <td colspan="11"><div class="infoBox text-left">
             <ul class="ly-clearFix">
               <li>
@@ -282,7 +277,7 @@
 		  <td><em class="state frozen">已停用</em></td>
 		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
         </tr>
-		<tr class="tableInfo" style="display:;">
+		<tr class="tableInfo" style="display:none;">
         <td colspan="11"><div class="infoBox text-left">
 		<div class="color-blue f16">CT14070003</div>
 		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">

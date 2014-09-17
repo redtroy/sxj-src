@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.rfid.window.IWindowRfidDao">
+	<resultMap id="windowRfidResultMap"
+		type="com.sxj.supervisor.entity.rfid.window.WindowRfidEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
+		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
+		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="windowType" column="WINDOW_TYPE" jdbcType="INTEGER"/>
+		<result property="glassRfid" column="GLASS_RFID" jdbcType="VARCHAR" />
+		<result property="profileRfid" column="PROFILE_RFID" jdbcType="VARCHAR" />
+		<result property="importDate" column="IMPORT_DATE" jdbcType="DATE" />
+		<result property="replenishNo" column="REPLENISH_NO" jdbcType="VARCHAR" />
+		<result property="rfidState" column="RFID_STATE" jdbcType="INTEGER" />
+		<result property="progressState" column="PROGRESS_STATE"
+			jdbcType="INTEGER"  />
+		<result property="log" column="LOG" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 按条件查询门窗 -->
+	<select id="queryWindowRfidList" resultMap="windowRfidResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT ID, RFID_NO, PURCHASE_NO, CONTRACT_NO, WINDOW_TYPE, GLASS_RFID,
+ 					PROFILE_RFID, IMPORT_DATE, REPLENISH_NO, RFID_STATE,PROGRESS_STATE
+					FROM R_WINDOW_RFID WHERE RFID_STATE<>4]]>
+		<if test="condition.rfidNo != null and condition.rfidNo !=''">
+			<![CDATA[AND RFID_NO = #{condition.rfidNo}]]>
+		</if>
+		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
+			<![CDATA[AND PURCHASE_NO = #{condition.purchaseNo}]]>
+		</if>
+		<if test="condition.contractNo != null and condition.contractNo !=''">
+			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
+		</if>
+		<if test="condition.rfid != null and condition.rfid !=''">
+			<![CDATA[AND (GLASS_RFID = #{condition.rfid} or PROFILE_RFID = #{condition.rfid}) ]]>
+		</if>
+		<if test="condition.windowType != null and condition.windowType !=''">
+			<![CDATA[AND WINDOW_TYPE = #{condition.windowType}]]>
+		</if>
+		<if test="condition.progressState != null and condition.progressState !=''">
+			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
+		</if>
+		<if test="condition.rfidState != null and condition.rfidState !=''">
+			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>
+		</if>
+		<if
+			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">
+			<![CDATA[AND IMPORT_DATE >=#{condition.startImportDate} AND IMPORT_DATE <= #{condition.endImportDate}]]>
+		</if>
+	</select>
+</mapper>
