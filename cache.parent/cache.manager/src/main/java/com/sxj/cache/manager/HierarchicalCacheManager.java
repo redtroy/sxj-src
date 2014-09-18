@@ -221,6 +221,20 @@ public class HierarchicalCacheManager
         }
     }
     
+    public final static void set(int level, String name, Object key,
+            Object value, int seconds)
+    {
+        if (name != null && key != null && value != null)
+        {
+            Cache cache = _GetCache(level, name, true);
+            if (cache != null)
+                if (seconds <= 0)
+                    cache.put(key, value);
+                else
+                    cache.put(key, value, seconds);
+        }
+    }
+    
     /**
      * 清除缓存中的某个数据
      * @param level

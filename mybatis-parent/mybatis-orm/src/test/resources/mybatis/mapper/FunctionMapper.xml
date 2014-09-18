@@ -9,5 +9,7 @@
 	</parameterMap>
 	<cache type="com.sxj.mybatis.cache.HierarchicalCache">
 		<property name="level" value="2"/>
+		<!-- 默认存活5s -->
+		<property name="timeToLive" value="10"/>
 	</cache>
 </mapper>

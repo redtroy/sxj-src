@@ -15,6 +15,8 @@ public class HierarchicalCache implements Cache
     
     private int level = 0;
     
+    private int timeToLive = 5;
+    
     public HierarchicalCache(String cacheId)
     {
         //        if (cacheId == null)
@@ -38,15 +40,15 @@ public class HierarchicalCache implements Cache
     @Override
     public void putObject(Object key, Object value)
     {
-        putObject(level, key, value);
+        putObject(level, key, value, timeToLive);
     }
     
-    private void putObject(int level, Object key, Object value)
+    private void putObject(int level, Object key, Object value, int seconds)
     {
         
         HierarchicalCacheManager.set(level, this.cacheId, key, value);
         if ((level - 1) > 0)
-            putObject(level + 1, key, value);
+            putObject(level + 1, key, value, seconds);
     }
     
     @Override
@@ -60,7 +62,7 @@ public class HierarchicalCache implements Cache
         Object object = HierarchicalCacheManager.get(level, this.cacheId, key);
         if (object != null)
         {
-            putObject(level - 1, key, object);
+            putObject(level - 1, key, object, timeToLive);
             return object;
         }
         if ((level + 1) <= this.level)
@@ -127,6 +129,16 @@ public class HierarchicalCache implements Cache
     public void setLevel(int level)
     {
         this.level = level;
+    }
+    
+    public int getTimeToLive()
+    {
+        return timeToLive;
+    }
+    
+    public void setTimeToLive(int timeToLive)
+    {
+        this.timeToLive = timeToLive;
     }
     
 }
