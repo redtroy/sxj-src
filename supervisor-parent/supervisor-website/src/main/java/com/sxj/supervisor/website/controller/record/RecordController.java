@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.comet4j.core.CometContext;
+import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -39,6 +41,9 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
+import com.sxj.supervisor.website.comet.record.MessageChannel;
+import com.sxj.supervisor.website.comet.record.MessageConnectListener;
+import com.sxj.supervisor.website.comet.record.MessageDropListener;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
@@ -61,29 +66,29 @@ public class RecordController extends BaseController {
 	IRecordService recordService;
 
 	@RequestMapping("/query")
-	public String to_query(ModelMap map, HttpSession session, RecordQuery query)throws WebException {
+	public String to_query(ModelMap map, HttpSession session, RecordQuery query)
+			throws WebException {
 		try {
-		query.setPagable(true);
-		RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
-		ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
-		RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
-		SupervisorPrincipal userBean = (SupervisorPrincipal) session
-				.getAttribute("userinfo");
-		query.setMemberId(userBean.getMember().getMemberNo());
-		List<RecordEntity> list = recordService.queryRecord(query);
-		map.put("recordlist", list);
-		map.put("confirmState", rse);
-		map.put("query", query);
-		return "site/record/contract-list";
-	} catch (Exception e) {
-		SxjLogger.error("查询合同信息错误", e, this.getClass());
-		throw new WebException("查询合同信息错误");
-	}
+			query.setPagable(true);
+			RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
+			SupervisorPrincipal userBean = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
+			query.setMemberId(userBean.getMember().getMemberNo());
+			List<RecordEntity> list = recordService.queryRecord(query);
+			map.put("recordlist", list);
+			map.put("confirmState", rse);
+			map.put("query", query);
+			registChannel(MessageChannel.RECORD_MESSAGE);
+			return "site/record/contract-list";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
 	}
 
 	@RequestMapping("info")
-	public String queryContractInfo(ModelMap model, String contractNo,String recordNo)
-			throws WebException {
+	public String queryContractInfo(ModelMap model, String contractNo,
+			String recordNo) throws WebException {
 		try {
 			ContractModel contract = contractService
 					.getContractByContractNo(contractNo);
@@ -148,7 +153,7 @@ public class RecordController extends BaseController {
 	public String to_apply(ModelMap map, HttpSession session) {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
-		map.put("type",userBean.getMember().getType().getId() );
+		map.put("type", userBean.getMember().getType().getId());
 		map.put("name", userBean.getMember().getName());// name
 		map.put("id", userBean.getMember().getMemberNo());
 		return "site/record/apply-record";
@@ -270,11 +275,11 @@ public class RecordController extends BaseController {
 
 	@RequestMapping("/modifyRecord")
 	public @ResponseBody Map<String, String> modifyRecord(String recordId,
-			String imgPath, String RFID,String flag) throws WebException {
+			String imgPath, String RFID, String flag) throws WebException {
 		try {
 			RecordEntity record = new RecordEntity();
 			if (recordId != "" && recordId != null) {
-				record =recordService.getRecord(recordId);
+				record = recordService.getRecord(recordId);
 				record.setId("");
 			}
 			if (imgPath != "" && imgPath != null) {
@@ -283,9 +288,9 @@ public class RecordController extends BaseController {
 			if (RFID != "" && RFID != null) {
 				record.setRfidNo(RFID);
 			}
-			if(flag.equals("1")){
+			if (flag.equals("1")) {
 				record.setType(RecordTypeEnum.change);
-			}else if(flag.equals("2")){
+			} else if (flag.equals("2")) {
 				record.setType(RecordTypeEnum.supplement);
 			}
 			record.setConfirmState(RecordConfirmStateEnum.accepted);
@@ -324,8 +329,10 @@ public class RecordController extends BaseController {
 		map.put("isOK", "ok");
 		return map;
 	}
+
 	/**
 	 * 跳转确认合同
+	 * 
 	 * @param model
 	 * @param contractNo
 	 * @param recordNo
@@ -334,8 +341,8 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("confirm")
-	public String confirm(ModelMap model, String contractNo,String recordId,HttpSession session)
-			throws WebException {
+	public String confirm(ModelMap model, String contractNo, String recordId,
+			HttpSession session) throws WebException {
 		try {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
@@ -355,23 +362,26 @@ public class RecordController extends BaseController {
 			throw new WebException("查询合同信息错误");
 		}
 	}
-	
+
 	@RequestMapping("confirmRecord")
-	public @ResponseBody Map<String, String> confirmRecord(String recordId,HttpSession session)throws WebException {
+	public @ResponseBody Map<String, String> confirmRecord(String recordId,
+			HttpSession session) throws WebException {
 		try {
-		Map<String, String> map = new HashMap<String, String>();
-		SupervisorPrincipal member = (SupervisorPrincipal) session
-				.getAttribute("userinfo");
-		if(member.getMember().getType().getId()==0){
-			recordService.modifyState(recordId, RecordConfirmStateEnum.confirmedA);
-		}else{
-			recordService.modifyState(recordId, RecordConfirmStateEnum.confirmedB);
+			Map<String, String> map = new HashMap<String, String>();
+			SupervisorPrincipal member = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
+			if (member.getMember().getType().getId() == 0) {
+				recordService.modifyState(recordId,
+						RecordConfirmStateEnum.confirmedA);
+			} else {
+				recordService.modifyState(recordId,
+						RecordConfirmStateEnum.confirmedB);
+			}
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
 		}
-		map.put("isOK","ok");
-		return map;
-	} catch (Exception e) {
-		SxjLogger.error("确认备案信息错误", e, this.getClass());
-		throw new WebException("确认备案信息错误");
-	}
 	}
 }

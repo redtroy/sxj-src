@@ -58,14 +58,14 @@
 
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.RfidStateEnum" />
-
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.LabelProgressEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.LabelProgressEnum" />
-
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.WindowTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.WindowTypeEnum" />
+		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.window.RfidTypeEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

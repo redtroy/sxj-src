@@ -2,11 +2,13 @@ package com.sxj.supervisor.service.contract;
 
 import java.util.List;
 
+import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
+import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
@@ -103,6 +105,8 @@ public interface IContractService {
 	 * @return
 	 */
 	public ContractModel getContractModelByContractNo(String contractNo);
+
+	public List<ContractBatchModel> getContractBatch(String contractNo,String rfid);
 	
 	
 }

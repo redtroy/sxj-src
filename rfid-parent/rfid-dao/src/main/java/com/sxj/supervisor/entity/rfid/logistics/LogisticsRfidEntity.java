@@ -11,6 +11,10 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
+import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
+import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 
 /**
  * 物流认证标签
@@ -18,7 +22,7 @@ import com.sxj.mybatis.pagination.Pagable;
  * @author dujinxin
  *
  */
-@Entity
+@Entity(mapper = ILogisticsRfidDao.class)
 @Table(name = "R_LOGISTICS_RFID")
 public class LogisticsRfidEntity extends Pagable implements Serializable {
 
@@ -51,7 +55,7 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	 * RFID类型
 	 */
 	@Column(name = "TYPE")
-	private Enum type;
+	private RfidTypeEnum type;
 
 	/**
 	 * 申请会员号
@@ -93,13 +97,13 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	 * RFID状态
 	 */
 	@Column(name = "RFID_STATE")
-	private Enum rfidState;
+	private RfidStateEnum rfidState;
 
 	/**
 	 * 进度状态
 	 */
 	@Column(name = "PROGRESS_STATE")
-	private Enum progressState;
+	private LabelProgressEnum progressState;
 
 	/**
 	 * 执行日志
@@ -131,13 +135,6 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		this.purchaseNo = purchaseNo;
 	}
 
-	public Enum getType() {
-		return type;
-	}
-
-	public void setType(Enum type) {
-		this.type = type;
-	}
 
 	public String getMemberNo() {
 		return memberNo;
@@ -187,28 +184,36 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		this.replenishNo = replenishNo;
 	}
 
-	public Enum getRfidState() {
-		return rfidState;
-	}
-
-	public void setRfidState(Enum rfidState) {
-		this.rfidState = rfidState;
-	}
-
-	public Enum getProgressState() {
-		return progressState;
-	}
-
-	public void setProgressState(Enum progressState) {
-		this.progressState = progressState;
-	}
-
 	public String getLog() {
 		return log;
 	}
 
 	public void setLog(String log) {
 		this.log = log;
+	}
+
+	public RfidTypeEnum getType() {
+		return type;
+	}
+
+	public void setType(RfidTypeEnum type) {
+		this.type = type;
+	}
+
+	public RfidStateEnum getRfidState() {
+		return rfidState;
+	}
+
+	public void setRfidState(RfidStateEnum rfidState) {
+		this.rfidState = rfidState;
+	}
+
+	public LabelProgressEnum getProgressState() {
+		return progressState;
+	}
+
+	public void setProgressState(LabelProgressEnum progressState) {
+		this.progressState = progressState;
 	}
 
 }

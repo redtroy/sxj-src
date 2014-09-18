@@ -1,4 +1,4 @@
-package com.sxj.supervisor.manage.controller.rfid;
+package com.sxj.supervisor.manage.controller.rfid.apply;
 
 import java.util.List;
 
@@ -18,12 +18,13 @@ import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-@RequestMapping("/rfid/Application")
+@RequestMapping("/rfid/apply")
 public class RfidApplicationController extends BaseController {
 	@Autowired
 	IRfidApplicationService sppService;
 
 	@RequestMapping("appList")
+<<<<<<< HEAD:supervisor-parent/supervisor-manager/src/main/java/com/sxj/supervisor/manage/controller/rfid/RfidApplicationController.java
 	public String appList(ModelMap map, RfidApplicationQuery query)
 			throws WebException {
 		try {
@@ -40,6 +41,9 @@ public class RfidApplicationController extends BaseController {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
 			throw new WebException("申请单查询错误");
 		}
+=======
+	public String appList(ModelMap map, RfidApplicationQuery query) {
+>>>>>>> baf795f9fba7802dc2d6110e3afdf4b2dce88642:supervisor-parent/supervisor-manager/src/main/java/com/sxj/supervisor/manage/controller/rfid/apply/RfidApplicationController.java
 		return "manage/rfid/order/order";
 	}
 }

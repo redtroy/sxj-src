@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.comet;
+package com.sxj.supervisor.website.comet.record;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,7 +7,6 @@ import java.util.List;
 import org.comet4j.core.CometEngine;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
-import com.sxj.util.common.StringUtils;
 
 public class MessageThread extends Thread {
 
@@ -51,7 +50,7 @@ public class MessageThread extends Thread {
 						.hasNext();) {
 					String message = iterator.next();
 					// 开始发送
-					engine.sendToAll(CometContextListener.RECORD_MESSAGE,
+					engine.sendToAll(MessageChannel.RECORD_MESSAGE,
 							message);
 					iterator.remove();
 					HierarchicalCacheManager.set(2, "comet_record",

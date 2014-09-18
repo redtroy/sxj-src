@@ -64,12 +64,6 @@
         <servlet-name>CometServlet</servlet-name>  
         <url-pattern>/comet</url-pattern>  
     </servlet-mapping>  
-  
-    <listener>  
-        <description>TestComet</description>  
-        <listener-class>com.sxj.supervisor.website.comet.CometContextListener</listener-class>  
-    </listener>  
-		
 		<welcome-file-list>
 			<welcome-file>/index.htm</welcome-file>
 			<welcome-file>/to_login.htm</welcome-file>
