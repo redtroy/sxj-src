@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<<<<<<< HEAD
-<mapper namespace="com.sxj.supervisor.dao.rfid.app.IRfidApplicationDao">
-	<resultMap id="SupplierResultMap" type="com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity">
-=======
 <mapper namespace="com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao">
 	<resultMap id="ApplicationResultMap" type="com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity">
->>>>>>> c5170f54b7deb17f01de08015230be977916a98c
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="applyNo" column="APPLY_NO" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
