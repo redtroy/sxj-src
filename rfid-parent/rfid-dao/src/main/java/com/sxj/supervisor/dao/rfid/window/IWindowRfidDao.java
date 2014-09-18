@@ -31,7 +31,7 @@ public interface IWindowRfidDao {
 	 * @param member
 	 **/
 	@Insert
-	public void addWindowRfid(WindowRfidEntity supplier)
+	public void addWindowRfid(WindowRfidEntity window)
 			throws SQLException;
 
 	/**

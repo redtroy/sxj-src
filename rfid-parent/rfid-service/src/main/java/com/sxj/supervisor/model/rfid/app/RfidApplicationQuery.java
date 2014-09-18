@@ -32,18 +32,39 @@ public class RfidApplicationQuery extends Pagable implements Serializable {
 	 * RFID类型
 	 */
 	private Integer rfidType;
+
+	/**
+	 * 招标合同号
+	 */
+	private String contractNo;
+
+	/**
+	 * 申请数量
+	 */
+	private Long count;
+
+	/**
+	 * 申请开始日期
+	 */
+	private String starApplyDate;
+	/**
+	 * 申请结束日期
+	 */
+	private String endApplyDate;
+
+	/**
+	 * 支付状态
+	 */
+	private Integer payState;
+
+	/**
+	 * 收货状态
+	 */
+	private Integer receiptState;
 	/**
 	 * 逻辑删除标记
 	 */
 	private Boolean delstate = false;
-
-	public Boolean getDelstate() {
-		return delstate;
-	}
-
-	public void setDelstate(Boolean delstate) {
-		this.delstate = delstate;
-	}
 
 	public String getId() {
 		return id;
@@ -101,12 +122,20 @@ public class RfidApplicationQuery extends Pagable implements Serializable {
 		this.count = count;
 	}
 
-	public String getApplyDate() {
-		return applyDate;
+	public String getStarApplyDate() {
+		return starApplyDate;
 	}
 
-	public void setApplyDate(String applyDate) {
-		this.applyDate = applyDate;
+	public void setStarApplyDate(String starApplyDate) {
+		this.starApplyDate = starApplyDate;
+	}
+
+	public String getEndApplyDate() {
+		return endApplyDate;
+	}
+
+	public void setEndApplyDate(String endApplyDate) {
+		this.endApplyDate = endApplyDate;
 	}
 
 	public Integer getPayState() {
@@ -125,29 +154,12 @@ public class RfidApplicationQuery extends Pagable implements Serializable {
 		this.receiptState = receiptState;
 	}
 
-	/**
-	 * 招标合同号
-	 */
-	private String contractNo;
+	public Boolean getDelstate() {
+		return delstate;
+	}
 
-	/**
-	 * 申请数量
-	 */
-	private Long count;
-
-	/**
-	 * 申请日期
-	 */
-	private String applyDate;
-
-	/**
-	 * 支付状态
-	 */
-	private Integer payState;
-
-	/**
-	 * 收货状态
-	 */
-	private Integer receiptState;
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
+	}
 
 }

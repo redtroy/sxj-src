@@ -1,21 +1,21 @@
-package com.sxj.supervisor.Enum.rfid.base;
+package com.sxj.supervisor.enu.rfid.apply;
 
-public enum PayStateEnum {
-	payment("已付款", 0), non_payment("未付款", 1);
+public enum ReceiptStateEnum {
+	shipments("发货中", 0), Goods_receipt("已收货", 1);
 
 	// 成员变量
 	private Integer id;
 
 	private String name;
 
-	private PayStateEnum(String name, Integer id) {
+	private ReceiptStateEnum(String name, Integer id) {
 		this.name = name;
 		this.id = id;
 	}
 
 	// 普通方法
 	public static String getName(Integer id) {
-		for (PayStateEnum c : PayStateEnum.values()) {
+		for (ReceiptStateEnum c : ReceiptStateEnum.values()) {
 			if (c.getId() == id) {
 				return c.name;
 			}

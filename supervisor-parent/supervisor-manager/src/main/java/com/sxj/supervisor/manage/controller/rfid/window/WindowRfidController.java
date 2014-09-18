@@ -15,7 +15,11 @@ import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.contract.ContractBatchModel;
+import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
+import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -25,7 +29,16 @@ import com.sxj.util.logger.SxjLogger;
 public class WindowRfidController extends BaseController {
 	@Autowired
 	private IWindowRfidService windowRfidService;
-
+	
+	@Autowired
+	private IContractService contractService;
+	/**
+	 * 查询列表
+	 * @param query
+	 * @param model
+	 * @return
+	 * @throws WebException
+	 */
 	@RequestMapping("query")
 	public String queryWindowRfid(WindowRfidQuery query, ModelMap model)
 			throws WebException {
@@ -47,6 +60,13 @@ public class WindowRfidController extends BaseController {
 			throw new WebException("查询门窗RFID错误");
 		}
 	}
+	/**
+	 * 删除
+	 * @param id
+	 * @param model
+	 * @return
+	 * @throws WebException
+	 */
 	@RequestMapping("delete")
 	public @ResponseBody Map<String, String> delete(String id, ModelMap model)
 			throws WebException {
@@ -61,6 +81,81 @@ public class WindowRfidController extends BaseController {
 		} catch (Exception e) {
 			SxjLogger.error("删除门窗RFID错误", e, this.getClass());
 			throw new WebException("删除门窗RFID错误");
+		}
+	}
+	/**
+	 * 停用
+	 * @param id
+	 * @param model
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("disable")
+	public @ResponseBody Map<String, String> disable(String id, ModelMap model)
+			throws WebException {
+		try {
+			WindowRfidEntity win = new WindowRfidEntity();
+			win.setId(id);
+			win.setRfidState(RfidStateEnum.disable);
+			windowRfidService.updateWindowRfid(win);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("停用门窗RFID错误", e, this.getClass());
+			throw new WebException("停用门窗RFID错误");
+		}
+	}
+	/**
+	 * 获取合同详细
+	 * @param model
+	 * @param contractNo
+	 * @param rfid
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("contractInfo")
+	public String queryContractInfo(ModelMap model, String contractNo,String rfid)
+			throws WebException {
+		try {
+			ContractModel cmodel=contractService.getContractByContractNo(contractNo);
+			ContractModel contractModel = contractService
+					.getContract(cmodel.getContract().getId());
+			model.put("contractModel", contractModel);
+			model.put("rfid", rfid);
+			return "manage/rfid/window/contract-info";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
+	}
+	
+	@RequestMapping("contractBatch")
+	public String getContractBatch(ModelMap model, String contractNo,String rfidNo,String id)
+			throws WebException {
+		try {
+			List<ContractBatchModel> conBatch=contractService.getContractBatch(contractNo, rfidNo);
+			model.put("conBatch", conBatch);
+			model.put("id", id);
+			model.put("contractNo", contractNo);
+			return "manage/rfid/window/contract-batch";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
+	}
+	
+	@RequestMapping("stateLog")
+	public String getStateLog(ModelMap model,String id)
+			throws WebException {
+		try {
+			List<LogModel> logList=windowRfidService.getRfidStateLog(id);
+			model.put("id", id);
+			model.put("logList", logList);
+			return "manage/rfid/window/stateLog";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
 		}
 	}
 }
