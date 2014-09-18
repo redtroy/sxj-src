@@ -38,6 +38,46 @@ function  del(id){
 	});
 	}
 }
+function  disable(id){
+	if(confirm('确实要停用吗?')){
+	$.post("disable.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("停用成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("停用失败!");	
+		}
+	});
+	}
+}
+function loadInfo(id,contractNo){
+	$("#info"+id).load("contractInfo.htm?contractNo="+contractNo+"&rfid="+id);
+	$("#blBatch"+id).html("");
+	$("#xcBatch"+id).html("");
+}
+function closeContract(id){
+	$("#info"+id).html("");
+}
+
+function blBatch(id,contractNo,rfidNo){
+	$("#blBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=blBatch"+id);
+	$("#xcBatch"+id).html("");
+	$("#info"+id).html("");
+}
+function xcBatch(id,contractNo,rfidNo){
+	$("#xcBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=xcBatch"+id);
+	$("#blBatch"+id).html("");
+	$("#info"+id).html("");
+}
+function close(id){
+	$("#"+id).html("");
+}
+function log(id){
+	$("#log"+id).load("stateLog.htm?id="+id);
+}
+function closeLog(id){
+	$("#log"+id).html("");
+}
 </script>
 </head>
 <body>
@@ -115,243 +155,40 @@ function  del(id){
         </tr>
         <#list winList as win>
         <tr>
-          <td><a href="#" class="lnk-blue">${win.rfidNo}</a></td>
+          <td><a href="javascript:log('${win.id}');" class="lnk-blue">${win.rfidNo}</a></td>
           <td>${win.purchaseNo}</td>
-          <td><a href="#" class="lnk-blue">${win.contractNo}</a></td>
+          <td><a href="javascript:loadInfo('${win.id}','${win.contractNo}')" class="lnk-blue">${win.contractNo}</a></td>
           <td>${win.windowType.getName()} </td>
-		  <td><a href="#" class="lnk-blue">${win.glassRfid}</a></td>
-		  <td><a href="#" class="lnk-blue">${win.profileRfid}</a></td>
-		  <td>${win.importDate?string("yyyy-MM-dd")}</td>
+		  <td><a href="javascript:blBatch('${win.id}','${win.contractNo}','${win.glassRfid}')" class="lnk-blue">${win.glassRfid}</a></td>
+		  <td><a href="javascript:xcBatch('${win.id}','${win.contractNo}','${win.profileRfid}')" class="lnk-blue">${win.profileRfid}</a></td>
+		  <td>${win.importDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
           <td><#if win.replenishNo?exists>${win.replenishNo}<#else>-</#if></td>
 		  <td><em class="state frozen">${win.progressState.getName()}</em></td>
-		  <td><em class="state verified">${win.rfidState.getName()}</em></td>
-		  <td class="operation"><a href="#" class="stop">停用</a><a href="javascript:del('${win.id}');" class="del">删除</a></td>
+		  <td>
+		  <#if win.rfidState.getId()==0>
+		  <em class="state normal">${win.rfidState.getName()}</em>
+		  </#if>
+		   <#if win.rfidState.getId()==1>
+		   <em class="state verified">${win.rfidState.getName()}</em>
+		  </#if>
+		   <#if win.rfidState.getId()==2>
+		   <em class="state frozen">${win.rfidState.getName()}</em>
+		  </#if>
+		   <#if win.rfidState.getId()==3>
+		   <em class="state frozen">${win.rfidState.getName()}</em>
+		  </#if>
+		 </td>
+		  <td class="operation"><a href="javascript:disable('${win.id}');" class="stop">停用</a><a href="javascript:del('${win.id}');" class="del">删除</a></td>
         </tr>
+        <tr class="tableInfo"  id="info${win.id}"></tr>
+        <tr class="tableInfo" id="blBatch${win.id}"> </tr> 
+         <tr class="tableInfo" id="xcBatch${win.id}"> </tr> 
+         <tr id="log${win.id}"></tr>
         </#list>
-				 <tr style="display:none;">
-        <td colspan="11"><div class="planBox text-left f14">
-            <div class="item">
-              <label class="time">2014年5月20日14：52</label>
-              标签已导入&nbsp;&nbsp;<em class="color-blue">TID号码:12345689985</em></div>
-            <div class="line"></div>
-            <div class="item">
-              <label class="time">2014年5月21日15：30</label>
-              标签已发货 </div>
-            <div class="line"></div>
-            <div class="item">
-              <label class="time">2014年5月30日12：20</label>
-              标签已收货
-            </div>
-            <div class="line"></div>
-            <div class="item">
-              <label class="time">2014年6月25日12：20</label>
-              门窗已安装</div>
-		    <div class="line"></div>
-		    <div class="item">
-              <label class="time">2014年6月30日12：20</label>
-              门窗已质检</div>
-			  <div class="line"></div>
-			  <div class="item">
-              <label class="time">2014年6月30日12：20</label>
-              <em class="color-red">标签已破损</em></div>
-            <div class="btnBox"><a href="#" class="button button-gray button-small">收起</a></div>
-          </div></td>
-      </tr>
-		<tr>
-          <td><a href="#" class="lnk-blue">AAAA00002</a></td>
-          <td>CG14070001</td>
-          <td><a href="#" class="lnk-blue">CT14070001</a></td>
-          <td>C120 120X60 </td>
-		  <td><a href="#" class="lnk-blue">AAAB00002</a></td>
-		  <td><a href="#" class="lnk-blue">AAAC00002</a></td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td>AAAB00007</td>
-		  <td><em class="state normal">标签已发货</em></td>
-		  <td><em class="state frozen">已破损</em></td>
-		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
-        </tr>
-		<tr class="tableInfo" style="display:none;">
-        <td colspan="11"><div class="infoBox text-left">
-            <ul class="ly-clearFix">
-              <li>
-                <label>订单号</label>
-                CT14070003</li>
-              <li>&nbsp;</li>
-              <li>
-                <label>工程名称</label>
-                马群科创园</li>
-              <li>
-                <label>工程地址</label>
-                仙林大道18号</li>
-              <li>
-                <label>甲方</label>
-                XXXXX开发商</li>
-              <li>
-                <label>乙方</label>
-                安丰节能有限公司</li>
-              <li>
-                <label>签订地点</label>
-                南京市栖霞区</li>
-              <li>
-                <label>签订时间</label>
-                2012年1月20日</li>
-            </ul>
-            <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-              <col width="10%" />
-              <col width="15%" />
-              <col width="5%" />
-              <col width="10%" />
-              <col width="10%" />
-              <col width="45%" />
-              <col width="5%" />
-              <tr>
-                <th>产品名称</th>
-                <th>型号规格</th>
-                <th>数量</th>
-                <th>单价<em class="money">&yen;</em></th>
-                <th>合价<em class="money">&yen;</em></th>
-                <th>备注说明</th>
-                <th class="rLine">&nbsp;</th>
-              </tr>
-              <tr>
-                <td>浴室门窗</td>
-                <td>C120 60X120</td>
-                <td>15</td>
-                <td>12.00</td>
-                <td>324.00</td>
-                <td>甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金</td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td><strong>合计</strong></td>
-                <td>&nbsp;</td>
-                <td>500</td>
-                <td>&nbsp;</td>
-                <td>10000元</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-              </tr>
-            </table>
-            <div>
-              <label>合同备注</label>
-              <textarea name="textarea2" id="textarea2" cols="80" rows="2" readonly="readonly">甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金,甲方逾期付款，按银行同期贷款利率支付逾期利息, 并支付合同标的1%的违约金</textarea>
-            </div>
-            <div class="contPic">
-              <label>合同扫描件</label>
-              <div class="rollBox">
-                <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-                <div class="Cont" id="ISL_Cont4">
-                  <div class="ScrCont">
-                    <div id="List7">
-                      <!-- 图片列表 begin -->
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht01s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht02s.gif"  /></a></div>
-                      <div class="pic"><a href="#" target="_blank"><img src="../images/ht03s.gif"  /></a></div>
-                      <!-- 图片列表 end -->
-                    </div>
-                    <div id="List8"></div>
-                  </div>
-                </div>
-                <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
-              </div>
-            </div>
-            <div class="btnBox text-center"><a href="#" class="button button-gray button-small">收起</a></div>
-          </div></td>
-      </tr>
-		 <tr>
-          <td><a href="#" class="lnk-blue">AAAA00003</a></td>
-          <td>CG14070001</td>
-          <td><a href="#" class="lnk-blue">CT14070001</a></td>
-          <td>C120 120X60 </td>
-		  <td><a href="#" class="lnk-blue">AAAB00003</a></td>
-		  <td><a href="#" class="lnk-blue">AAAC00003</a></td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td>AAAB00009</td>
-		  <td><em class="state process">标签已收货</em></td>
-		  <td><em class="state frozen">已停用</em></td>
-		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
-        </tr>
-		<tr class="tableInfo" style="display:none;">
-        <td colspan="11"><div class="infoBox text-left">
-		<div class="color-blue f16">CT14070003</div>
-		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-            <col width="20%" />
-            <col width="30%" />
-            <col width="20%" />
-            <col width="15%" />
-            <col width="15%" />
-            <tr>
-              <th>交货批次</th>
-              <th>产品规格</th>
-              <th>数量<span>（㎡/吨）</span></th>
-              <th>应付货款<span>（元）</span></th>
-              <th class="rLine">对应批次RFID编号</th>
-              
-            </tr>
-            <tr>
-              <td>第1批次</td>
-              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                  <tr>
-                    <td>5+6A+5 双白中空 W779/H1176</td>
-                  </tr>
-                  <tr>
-                    <td>5+9A+5 双钢中空 W323/H1176</td>
-                  </tr>
-                </table></td>
-              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                  <tr>
-                    <td>1312.24&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>131.24&nbsp;</td>
-                  </tr>
-                </table></td>
-              <td>8564.00</td>
-              <td>AAAA00001</td>
-            </tr>
-          </table>
-		   <div class="btnBox text-center"><a href="#" class="button button-gray button-small">收起</a></div>
-		  </td>
-		 </tr> 
-		<tr>
-          <td><a href="#" class="lnk-blue">AAAA00004</a></td>
-          <td>CG14070001</td>
-          <td><a href="#" class="lnk-blue">CT14070001</a></td>
-          <td>C120 120X60 </td>
-		  <td><a href="#" class="lnk-blue">AAAB00004</a></td>
-		  <td><a href="#" class="lnk-blue">AAAC00004</a></td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td>-</td>
-		  <td><em class="state normal">门窗已安装</em></td>
-		  <td><em class="state verified">已使用</em></td>
-		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
-        </tr>
-		<tr>
-          <td><a href="#" class="lnk-blue">AAAA00005</a></td>
-          <td>CG14070001</td>
-          <td>-</td>
-          <td>-</td>
-		  <td>-</td>
-		  <td>-</td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td>-</td>
-		  <td><em class="state verified">门窗已质检</em></td>
-		  <td><em class="state normal">未使用</em></td>
-		  <td class="operation"><a href="#" class="stop">停用</a><a href="#" class="del">删除</a></td>
-        </tr>
+	
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
-<div id="footer" class="fence-wide">
-  <div class="yard-1200">
-    <p>&copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
-  </div>
-</div>
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>

@@ -2,16 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sxj.supervisor.dao.rfid.window.IWindowRfidDao">
-	<resultMap id="windowRfidResultMap"
-		type="com.sxj.supervisor.entity.rfid.window.WindowRfidEntity">
+<mapper namespace="com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao">
+	<resultMap id="logisticsResultMap"
+		type="com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="INTEGER"/>
+		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
-		<result property="windowType" column="WINDOW_TYPE" jdbcType="INTEGER"/>
-		<result property="glassRfid" column="GLASS_RFID" jdbcType="VARCHAR" />
-		<result property="profileRfid" column="PROFILE_RFID" jdbcType="VARCHAR" />
+		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="importDate" column="IMPORT_DATE" jdbcType="TIMESTAMP" />
 		<result property="replenishNo" column="REPLENISH_NO" jdbcType="VARCHAR" />
 		<result property="rfidState" column="RFID_STATE" jdbcType="INTEGER" />
@@ -20,11 +21,11 @@
 		<result property="log" column="LOG" jdbcType="VARCHAR" />
 	</resultMap>
 	<!-- 按条件查询门窗 -->
-	<select id="queryWindowRfidList" resultMap="windowRfidResultMap"
+	<select id="queryLogisticsRfidList" resultMap="logisticsResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID, RFID_NO, PURCHASE_NO, CONTRACT_NO, WINDOW_TYPE, GLASS_RFID,
- 					PROFILE_RFID, IMPORT_DATE, REPLENISH_NO, RFID_STATE,PROGRESS_STATE
-					FROM R_WINDOW_RFID WHERE RFID_STATE<>4]]>
+		<![CDATA[SELECT ID, RFID_NO, PURCHASE_NO, TYPE, MEMBER_NO, MEMBER_NAME, CONTRACT_NO, BATCH_NO,
+ 					IMPORT_DATE, REPLENISH_NO, RFID_STATE, PROGRESS_STATE, LOG FROM R_LOGISTICS_RFID
+ 					WHERE RFID_STATE<>4 ]]>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">
 			<![CDATA[AND RFID_NO = #{condition.rfidNo}]]>
 		</if>
@@ -34,11 +35,11 @@
 		<if test="condition.contractNo != null and condition.contractNo !=''">
 			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
 		</if>
-		<if test="condition.rfid != null and condition.rfid !=''">
-			<![CDATA[AND (GLASS_RFID = #{condition.rfid} or PROFILE_RFID = #{condition.rfid}) ]]>
+		<if test="condition.memberNo != null and condition.memberNo !=''">
+			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
 		</if>
-		<if test="condition.windowType != null and condition.windowType !=''">
-			<![CDATA[AND WINDOW_TYPE = #{condition.windowType}]]>
+		<if test="condition.type != null and condition.type !=''">
+			<![CDATA[ANDTYPE = #{condition.type}]]>
 		</if>
 		<if test="condition.progressState != null and condition.progressState !=''">
 			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>

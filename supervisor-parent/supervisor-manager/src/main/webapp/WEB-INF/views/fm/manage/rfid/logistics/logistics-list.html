@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<@b.pageScript/>
+<script >
+
+function query(page){
+	var params=$("#search_form").serialize();
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+	$.post("query.htm",params,function(data){
+		var res=$(data).find("#res_table");
+		var pager=$(data).find("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+function  del(id){
+	if(confirm('确实要删除吗?')){
+	$.post("delete.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("删除成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("删除失败!");	
+		}
+	});
+	}
+}
+function  disable(id){
+	if(confirm('确实要停用吗?')){
+	$.post("disable.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("停用成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("停用失败!");	
+		}
+	});
+	}
+}
+$(function(){
+	var url_ = "${basePath}autoComple.htm";
+	$("#memberName").bigAutocomplete({url:url_,callback:function(data){
+        $("#memberNo").val(data.result);
+    }});
+});
+function loadInfo(id,contractNo){
+	$("#info"+id).load("${basePath}/rfid/window/contractInfo.htm?contractNo="+contractNo+"&rfid="+id);
+}
+function closeContract(id){
+	$("#info"+id).html("");
+}
+</script>
+</head>
+<body>
+<@b.header/>
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<@b.menuPath/>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList">
+      <@b.leftMenu />
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">物流RFID商品管理</h2>
+      <form action="" method="post" id="search_form">
+      <div id="searchBox">
+      <p>RFID编号
+        <input type="text" name="rfidNo" value="${query.rfidNo}"/>
+       采购单号
+       <input type="text" name="purchaseNo" value="${query.purchaseNo}"/>
+       采购合同号
+       <input type="text" name="contractNo" value="${query.contractNo}"/>
+	   RFID申请人名称
+       <input type="text" name="memberName" id="memberName" value="${query.memberName}"/>
+       <input type="hidden" name="memberNo" id="memberNo" value="${query.memberNo}"/>
+       RFID类型<select name="type" >
+	   <option selected="selected" value="">全部</option>
+          <#list type as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
+        </select></p>
+	   进度状态
+	   <select name="progressState" class="selectx">
+          <option value="" selected="selected">全部</option>
+		  <#list Label as label> 
+          <option value="${label.getId()}">${label.getName()}</option>
+          </#list>
+        </select>
+	   RFID状态
+	   <select name="rfidState">
+		<option value="" selected="selected">全部</option>
+           <#list rfid as rfid>
+           <#if !rfid_has_next>
+           <#break>
+           </#if>
+          <option value="${rfid.getId()}">${rfid.getName()}</option>
+          </#list>
+        </select>
+       导入时间段
+       <input type="text" name="startImportDate" value="" datepicker/>-<input type="text" name="endImportDate" value="" datepicker/>
+        <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+    </div>
+    </form>
+     <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
+        <col width="9%"/>
+        <col width="9%"/>
+        <col width="7%" />
+		<col width="8%" />
+        <col width="10%" />
+        <col width="6%" />
+		<col width="12%" />
+		<col width="9%" />
+		<col width="12%" />
+		<col width="9%" />
+		<col width="12%" />
+        <tr>
+          <th>RFID编号</th>
+          <th>采购单号</th>
+          <th>RFID类型</th>
+		  <th>RFID申请人</th>
+          <th>采购合同号</th>
+          <th>执行批次</th>
+		  <th>导入时间</th>
+		  <th>补损关联</th>
+		  <th>进度状态</th>
+		  <th>RFID状态</th>
+          <th class="rLine">操作</th>
+        </tr>
+        <#list list as list>
+        <tr>
+          <td><a href="#" class="lnk-blue">${list.rfidNo}</a></td>
+          <td>${list.purchaseNo}</td>
+          <td>${list.type.getName()}</td>
+		  <td>${list.memberName}</td>
+          <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
+		  <td>${list.batchNo}</td>
+		  <td>${list.importDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
+          <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
+		  <td><em class="state frozen">${list.progressState.getName()}</em></td>
+		  <td> <#if list.rfidState.getId()==0>
+		  <em class="state normal">${list.rfidState.getName()}</em>
+		  </#if>
+		   <#if list.rfidState.getId()==1>
+		   <em class="state verified">${list.rfidState.getName()}</em>
+		  </#if>
+		   <#if list.rfidState.getId()==2>
+		   <em class="state frozen">${list.rfidState.getName()}</em>
+		  </#if>
+		   <#if list.rfidState.getId()==3>
+		   <em class="state frozen">${list.rfidState.getName()}</em>
+		  </#if></td>
+		  <td class="operation"><a href="javascript:disable('${list.id}');" class="stop">停用</a><a href="javascript:del('${list.id}');" class="del">删除</a></td>
+        </tr>
+        <tr class="tableInfo" id="info${list.id}"> </tr>
+        </#list>
+		 <tr style="display:none;">
+        <td colspan="11"><div class="planBox text-left f14">
+            <div class="item">
+              <label class="time">2014年5月20日14：52</label>
+              标签已导入&nbsp;&nbsp;<em class="color-blue">TID号码:12345689985</em></div>
+            <div class="line"></div>
+            <div class="item">
+              <label class="time">2014年5月21日15：30</label>
+              标签已发货 </div>
+            <div class="line"></div>
+            <div class="item">
+              <label class="time">2014年5月30日12：20</label>
+              标签已收货
+            </div>
+            <div class="line"></div>
+            <div class="item">
+              <label class="time">2014年6月25日12：20</label>
+              货物已出库</div>
+		    <div class="line"></div>
+		    <div class="item">
+              <label class="time">2014年6月30日12：20</label>
+              货物已验货</div>
+			  <div class="line"></div>
+			  <div class="item">
+              <label class="time">2014年6月30日12：20</label>
+              <em class="color-red">标签已破损</em></div>
+            <div class="btnBox"><a href="#" class="button button-gray button-small">收起</a></div>
+          </div></td>
+      </tr>
+		
+      </table>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>
