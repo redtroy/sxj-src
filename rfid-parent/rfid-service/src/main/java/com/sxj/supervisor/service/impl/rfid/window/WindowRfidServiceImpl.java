@@ -91,4 +91,14 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 		
 		
 	}
+
+	@Override
+	public WindowRfidEntity getWindowRfid(String id) throws ServiceException {
+		try{
+			WindowRfidEntity windowRfid= windowRfidDao.getWindowRfid(id);
+		return windowRfid;
+	} catch (Exception e) {
+		throw new ServiceException("获取门窗RFID错误", e);
+	}
+	}
 }

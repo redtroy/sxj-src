@@ -1,10 +1,10 @@
-package com.sxj.supervisor.manage.comet.record;
+package com.sxj.supervisor.manage.comet.rfid.apply;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.manage.comet.MessageChannel;
 import com.sxj.supervisor.manage.comet.MessageThread;
 
-public class RecordThread extends MessageThread {
+public class RfidApplyMessage extends MessageThread {
 
 	@Override
 	public void run() {
@@ -27,11 +27,11 @@ public class RecordThread extends MessageThread {
 			if (count != null && count > 0) {
 				// 开始发送
 				getEngine().sendToAll(MessageChannel.RECORD_MESSAGE, count);
-				HierarchicalCacheManager.evict(2, "comet_record", "record_count_message");
+				HierarchicalCacheManager.evict(2, "comet_record",
+						"record_count_message");
 			}
 
 		}
 
 	}
-
 }

@@ -8,6 +8,7 @@ import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 
 public class WindowRfidQuery extends Pagable implements Serializable {
 
@@ -39,7 +40,17 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	 * RFID
 	 */
 	private String rfid;
+	
+	/**
+	 * 玻璃RFID
+	 */
+	private String glassRfid;
 
+	/**
+	 * 型材RFID
+	 */
+	private String profileRfid;
+	
 	/**
 	 * 导入日期开始
 	 */
@@ -129,6 +140,22 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 
 	public void setProgressState(String progressState) {
 		this.progressState = progressState;
+	}
+
+	public String getGlassRfid() {
+		return glassRfid;
+	}
+
+	public void setGlassRfid(String glassRfid) {
+		this.glassRfid = glassRfid;
+	}
+
+	public String getProfileRfid() {
+		return profileRfid;
+	}
+
+	public void setProfileRfid(String profileRfid) {
+		this.profileRfid = profileRfid;
 	}
 
 }

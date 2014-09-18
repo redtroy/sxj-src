@@ -25,4 +25,7 @@ public interface IWindowRfidService {
 	public void updateWindowRfid(WindowRfidEntity win) throws ServiceException;
 	
 	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
+	
+	public WindowRfidEntity getWindowRfid(String id)
+			throws ServiceException;
 }

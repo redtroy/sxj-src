@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.rfid.logistics;
 import java.util.List;
 
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
+import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.util.exception.ServiceException;
 
@@ -22,6 +23,9 @@ public interface ILogisticsRfidService {
 	 * @throws ServiceException
 	 */
 	public void updateLogistics(LogisticsRfidEntity win) throws ServiceException;
+	
+	
+	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
 	
 	
 }

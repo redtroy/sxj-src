@@ -50,6 +50,7 @@ public class RfidApplicationController extends BaseController {
 			map.put("receiptStates", receiptStates);
 			map.put("types", types);
 			map.put("query", query);
+			// registChannel(MessageChannel.RFID_APPLY_MESSAGE, threadClass);
 
 		} catch (Exception e) {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
