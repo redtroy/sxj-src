@@ -11,6 +11,7 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
 
 /**
  * RFID申请单
@@ -18,7 +19,7 @@ import com.sxj.mybatis.pagination.Pagable;
  * @author dujinxin
  *
  */
-@Entity
+@Entity(mapper = IRfidApplicationDao.class)
 @Table(name = "R_RFID_APPLICATION")
 public class RfidApplicationEntity extends Pagable implements Serializable {
 
@@ -76,18 +77,32 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "APPLY_DATE")
 	private Date applyDate;
-	
-	 /**
-	  * 支付状态
-	  */
+
+	/**
+	 * 支付状态
+	 */
 	@Column(name = "PAY_STATE")
 	private Enum payState;
-	
+
 	/**
 	 * 收货状态
 	 */
 	@Column(name = "RECEIPT_STATE")
 	private Enum receiptState;
+
+	/**
+	 * 逻辑删除标记
+	 */
+	@Column(name = "DEL_STATE")
+	private Boolean delstate = false;
+
+	public Boolean getDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
+	}
 
 	public String getId() {
 		return id;
@@ -168,9 +183,5 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	public void setReceiptState(Enum receiptState) {
 		this.receiptState = receiptState;
 	}
-	
-	
-	
-	
 
 }

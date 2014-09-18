@@ -9,14 +9,12 @@
 <link href="${b.staticPath}style/uploadify.css " rel="stylesheet" type="text/css" /> 
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
-<script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
-<script src="${b.staticPath}/js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
+ <script src="${b.staticPath}js/comet4j.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
 <@b.upload/>
 <script>
-
 	jQuery(document).ready(function($) {
 		$('.variContract').click(function() {
 			$('.maskdivgen').fadeIn(100);
@@ -102,8 +100,24 @@
 		$('.modal-header .close').live('click',function(){
 			$('#imgId').slideUp(200);
 			$("#imgList").html("");
-		})
-	})
+		});
+		
+		 JS.Engine.on({  
+			 record_message : function(data){//侦听一个channel
+            	 var message = new Array();
+            	 message = data.split(",");
+            	 var bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?recordId="+message[0]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>";
+            	 $("#message_div").append(bb);
+             },   
+     });  
+     JS.Engine.start('${basePath}comet');
+		
+		
+	});
+	
+	function closeMessage(obj){
+		$(obj).parent().remove();
+	}
 	
 	function query(page) {
 		var params = $("#search_form").serialize();
@@ -174,10 +188,11 @@
             <button class="button button-search" onclick="query();">查询</button>
           </div>
           </form>
-          <div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有笔应付款的订单<span class="fb">未付款</span></div>
-          <div class="msgBox msg-info msgTip tipOge"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="cont-material.html" class="lnk-blue">待确认</a>的合同信息</div>
-          <div class="msgBox msg-info msgTip tipOge"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="cont-developers.html" class="lnk-blue">待确认</a>的开发商合同信息</div>
-          <div class="msgBox msg-info msgTip tipOge"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="cont-material-change.html" class="lnk-blue">待确认</a>的变更/补损合同信息</div>
+          <div id="message_div">
+          
+          </div>
+          <div class="msgBox msg-error msgTip tipRed" style="display: none"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有笔应付款的订单<span class="fb">未付款</span></div>
+          <div id="comet_div2" class="msgBox msg-info msgTip tipOge" style="display: none"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="#" class="lnk-blue" id="comet_div2_href">待确认</a>的合同信息</div>
           <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
             <col width="40px" />
             <col width="40px" />

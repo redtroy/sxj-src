@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sxj.supervisor.dao.rfid.base.IRfidSupplierDao;
-import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
 import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -24,12 +24,13 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 	public List<RfidSupplierEntity> querySupplier(RfidSupplierQuery query)
 			throws ServiceException {
 		try {
-			QueryCondition<RfidApplicationEntity> condition = new QueryCondition<RfidApplicationEntity>();
+			QueryCondition<RfidSupplierEntity> condition = new QueryCondition<RfidSupplierEntity>();
 			if (query != null) {
 				condition.addCondition("supplierNo", query.getSupplierNo());// 供应商ID
 				condition.addCondition("name", query.getName());// 供应商名称
 				condition.addCondition("contactTel", query.getContactTel());// 联系电话
 				condition.addCondition("telNum", query.getTelNum());// 固定电话
+				condition.addCondition("delstate", query.getDelstate());
 				condition.setPage(query);
 			}
 			List<RfidSupplierEntity> list = supplierDao.queryList(condition);
@@ -46,7 +47,8 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 	public RfidSupplierEntity getSupplier(String id) throws ServiceException {
 		// TODO Auto-generated method stub
 		try {
-			supplierDao.getRfidSupplier(id);
+			RfidSupplierEntity supplier = supplierDao.getRfidSupplier(id);
+			return supplier;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -66,4 +68,26 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 		}
 	}
 
+	@Override
+	public void add(RfidSupplierEntity Supplier) throws ServiceException {
+		try {
+			supplierDao.addRfidSupplier(Supplier);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void delSupplier(String id) throws ServiceException {
+		try {
+			RfidSupplierEntity supplier = new RfidSupplierEntity();
+			supplier.setDelstate(true);
+			supplier.setId(id);
+			supplierDao.updateRfidSupplier(supplier);
+		} catch (Exception e) {
+			SxjLogger.error("逻辑删除供应商ID错误", e, this.getClass());
+			throw new ServiceException("逻辑删除供应商ID错误");
+		}
+	}
 }

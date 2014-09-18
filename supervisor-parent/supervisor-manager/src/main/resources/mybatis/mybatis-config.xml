@@ -45,6 +45,20 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractSureStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractSureStateEnum" />
+<<<<<<< HEAD
+=======
+		<!-- FRID -->
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.Enum.rfid.base.ReceiptStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.Enum.rfid.base.RfidTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.Enum.rfid.base.ReceiptStateEnum" />	
+
+>>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.RfidStateEnum" />
 		<typeHandler
