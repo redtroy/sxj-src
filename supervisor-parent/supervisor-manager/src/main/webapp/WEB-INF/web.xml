@@ -105,7 +105,7 @@
 		  </filter>
 		   <filter-mapping>
 		    <filter-name>CacheFilter</filter-name>
-		    <url-pattern>*.html</url-pattern>
+		    <url-pattern>*.htm</url-pattern>
 		  </filter-mapping>
 		  <filter-mapping>
 		    <filter-name>CacheFilter</filter-name>
