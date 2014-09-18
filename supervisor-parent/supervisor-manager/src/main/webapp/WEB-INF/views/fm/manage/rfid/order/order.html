@@ -9,6 +9,38 @@
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
+<script>
+//修改
+  function edit(id){
+	  $("#edit_"+id).find("#count").html('<input type="text" id="count_val" name="input2" value="'+$("#edit_"+id).find("#count").text()+'" />');
+	  $("#edit_"+id).find(".operation").html('<a href="javascript:edid_save(\''+id+'\')" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+  }
+  function edid_save(){
+	  var count =$("#edit_"+id).find("#count_val").val();
+		  $.post("edit_apply.htm",{id:id,count:count},function(){
+			  if (data.idOk=="ok"){
+					 $("#edit_"+id).find("#count").html(count);
+				 }
+		  })
+  }
+  //删除
+  function del(id){
+	 $.post("del_apply.htm",{id:id},function(data){
+		 if (data.idOk=="ok"){
+			 alert('删除成功！');
+			 $("#edit_"+id).remove();
+		 }
+	 })
+  }
+  //确认收款
+  function ok(id){
+	  $.post("edit_apply.htm",{id:id,payState:"0"},function(){
+		  if (data.idOk=="ok"){
+				 $("#edit_"+id).find("#pay").html('<td><em class="state verified">已收款</em></td>');
+			 }
+	  })
+  }
+</script>
 </head>
 <body>
 <div id="header" class="fence-wide">
@@ -44,9 +76,9 @@
         </select>
 		收货状态<select name="select">
 		<option selected="selected" value="">全部</option>
-        <#list paystates as paystate>
-		  <option value="${receiptStates.id}">${receiptStates.getName()}</option>
-          </#list >
+        <#list receiptStates as receiptState>
+		  <option value="${receiptState.id}">${receiptState.getName()}</option>
+         </#list >
         </select></p>
        申请单时间段
        <input type="text" name="" value="">-<input type="text" name="" value="">
@@ -76,42 +108,28 @@
 		  <th>采购单</th>
           <th class="rLine">操作</th>
         </tr>
-        <tr>
-          <td>RF14070001</td>
-          <td>江苏XXX门窗厂</td>
-          <td>门窗标签</td>
-          <td>CT14070001</td>
-		  <td>1000</td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td><button class="btn btn-gray"><span>确认收款</span></button></td>
-		  <td><em class="state normal">发货中</em></td>
-		  <td><button onclick="javascript:window.location.href='purchase-add.html'" class="button button-green button-small"><span>生成采购单</span></button></td>
-		  <td class="operation"><a href="order-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
-        </tr>
-		<tr>
-          <td>RF14070001</td>
-          <td>江苏XXX门窗厂</td>
-          <td>门窗标签</td>
-          <td>CT14070001</td>
-		  <td>1000</td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td><button class="btn btn-gray"><span>确认收款</span></button></td>
-		  <td><em class="state verified">已收货</em></td>
-		  <td><button onclick="javascript:window.location.href='purchase-add.html'" class="button button-green button-small"><span>生成采购单</span></button></td>
-		  <td class="operation"><a href="order-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
-        </tr>
-		 <tr>
-          <td>RF14070002</td>
-          <td>江苏XXX玻璃厂</td>
-          <td>玻璃标签</td>
-          <td>-</td>
-		  <td>1000</td>
-		  <td>2014年9月20日</br>12:30:03</td>
+        <#list list as model>
+        <tr id="edit_${model.id}">
+          <td>${model.applyNo}</td>
+          <td>${model.memberName}</td>
+          <td>${model.rfidType.getName()}</td>
+          <td>${model.contractNo}</td>
+		  <td id="count">${model.count}</td>
+		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+		  <#if (model.payState.id==1)>
+          <td id="pay"><button class="btn btn-gray" onclick="ok('${model.id}');return false;"><span>确认收款</span></button></td>
+          <#else>
           <td><em class="state verified">已收款</em></td>
+          </#if>
+          <#if (model.receiptState.id==0)>
+		  <td><em class="state normal">发货中</em></td>
+		  <#else>
 		  <td><em class="state verified">已收货</em></td>
+		  </#if>
 		  <td><button onclick="javascript:window.location.href='purchase-add.html'" class="button button-green button-small"><span>生成采购单</span></button></td>
-		  <td class="operation"><a href="order-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
+		  <td class="operation"><a href="javascript:edit('${model.id}');" class="edit">修改</a><a href="javascript:del('${model.id}')" class="del">删除</a></td>
         </tr>
+        </#list>
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
