@@ -10,7 +10,7 @@
 		</listener>
 		<context-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath*:spring/applicationContext-shard.xml</param-value>
+			<param-value>classpath*:spring/applicationContext.xml</param-value>
 		</context-param>
 		<servlet>
 			<servlet-name>springmvc</servlet-name>
