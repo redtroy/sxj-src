@@ -53,8 +53,13 @@
 			handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum" />
 		<typeHandler
+<<<<<<< HEAD
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum" />	
+=======
+			handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.apply.PayStateEnum" />	
+>>>>>>> a1fa5bc094bb48b5bdc6888511690ed15ac4938e
 
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.RfidStateEnum" />
