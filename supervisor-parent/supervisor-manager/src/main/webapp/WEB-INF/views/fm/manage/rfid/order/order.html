@@ -30,21 +30,23 @@
        申请人名称<input type="text" name="" value="">
        招标合同号<input type="text" name="" value="">
        RFID类型<select name="select">
-	   <option selected="selected">全部</option>
-          <option>门窗标签</option>
-          <option>玻璃标签</option>
-          <option>型材标签</option>
+	   <option selected="selected" value="">全部</option>
+	    <#list types as type>
+          <option value="${type.id}">${type.getName()}</option>
+        </#list >
         </select>
 	   收款状态
 	   <select name="select">
-          <option selected="selected">全部</option>
-		  <option>未付款</option>
-          <option>已付款</option>
+          <option selected="selected" value="">全部</option>
+          <#list paystates as paystate>
+		  <option value="${paystate.id}">${paystate.getName()}</option>
+          </#list >
         </select>
 		收货状态<select name="select">
-		<option selected="selected">全部</option>
-          <option>发货中</option>
-          <option>已收货</option>
+		<option selected="selected" value="">全部</option>
+        <#list paystates as paystate>
+		  <option value="${receiptStates.id}">${receiptStates.getName()}</option>
+          </#list >
         </select></p>
        申请单时间段
        <input type="text" name="" value="">-<input type="text" name="" value="">
