@@ -12,15 +12,33 @@
 <script>
 //修改
   function edit(id){
-	  
+	  $("#edit_"+id).find("#count").html('<input type="text" id="count_val" name="input2" value="'+$("#edit_"+id).find("#count").text()+'" />');
+	  $("#edit_"+id).find(".operation").html('<a href="javascript:edid_save(\''+id+'\')" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+  }
+  function edid_save(){
+	  var count =$("#edit_"+id).find("#count_val").val();
+		  $.post("edit_apply.htm",{id:id,count:count},function(){
+			  if (data.idOk=="ok"){
+					 $("#edit_"+id).find("#count").html(count);
+				 }
+		  })
   }
   //删除
   function del(id){
-	  
+	 $.post("del_apply.htm",{id:id},function(data){
+		 if (data.idOk=="ok"){
+			 alert('删除成功！');
+			 $("#edit_"+id).remove();
+		 }
+	 })
   }
   //确认收款
   function ok(id){
-	  
+	  $.post("edit_apply.htm",{id:id,payState:"0"},function(){
+		  if (data.idOk=="ok"){
+				 $("#edit_"+id).find("#pay").html('<td><em class="state verified">已收款</em></td>');
+			 }
+	  })
   }
 </script>
 </head>
@@ -91,15 +109,15 @@
           <th class="rLine">操作</th>
         </tr>
         <#list list as model>
-        <tr>
+        <tr id="edit_${model.id}">
           <td>${model.applyNo}</td>
           <td>${model.memberName}</td>
           <td>${model.rfidType.getName()}</td>
           <td>${model.contractNo}</td>
-		  <td id="count_edit_${model.id}">${model.count}</td>
+		  <td id="count">${model.count}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
 		  <#if (model.payState.id==1)>
-          <td><button class="btn btn-gray" onclick="ok('${model.id}');return false;"><span>确认收款</span></button></td>
+          <td id="pay"><button class="btn btn-gray" onclick="ok('${model.id}');return false;"><span>确认收款</span></button></td>
           <#else>
           <td><em class="state verified">已收款</em></td>
           </#if>
