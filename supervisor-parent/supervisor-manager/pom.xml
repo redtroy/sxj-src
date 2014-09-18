@@ -23,6 +23,11 @@
 			<artifactId>ehcache-core</artifactId>
 			<version>2.6.9</version>
 		</dependency>
+		<dependency>
+			<groupId>org.comet4j</groupId>
+			<artifactId>comet4j-tomcat7</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<!-- springside -->
 		<dependency>
 			<groupId>com.sxj</groupId>

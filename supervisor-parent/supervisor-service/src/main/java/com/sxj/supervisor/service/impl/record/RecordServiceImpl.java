@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.record;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractEntity;
@@ -18,6 +20,7 @@ import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -37,16 +40,33 @@ public class RecordServiceImpl implements IRecordService {
 	 * 新增备案
 	 */
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED)
-	public void addRecord(RecordEntity record) {
-		recordDao.addRecord(record);
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void addRecord(RecordEntity record) throws ServiceException {
+		try {
+			recordDao.addRecord(record);
+			Long messageCount = null;
+			Object cache = HierarchicalCacheManager.get(2, "comet_record",
+					"record_count_message");
+			if (cache instanceof Long) {
+				messageCount = (Long) cache;
+			} else {
+				messageCount = 0l;
+			}
+			messageCount = messageCount + 1;
+			HierarchicalCacheManager.set(2, "comet_record",
+					"record_count_message", messageCount);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("新增备案信息错误", e);
+		}
+
 	}
 
 	/**
 	 * 更新备案
 	 */
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void modifyRecord(RecordEntity record) {
 		// RecordEntity re = getRecord(record.getId());
 		// re.setId(record.getId());
@@ -69,7 +89,7 @@ public class RecordServiceImpl implements IRecordService {
 	 * 删除备案
 	 */
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void deleteRecord(String id) {
 		RecordEntity record = getRecord(id);
 		record.setDelState(true);
@@ -81,7 +101,7 @@ public class RecordServiceImpl implements IRecordService {
 	 * 查询备案
 	 */
 	@Override
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public RecordEntity getRecord(String id) {
 		RecordEntity record = recordDao.getRecord(id);
 		return record;
@@ -115,8 +135,8 @@ public class RecordServiceImpl implements IRecordService {
 			condition.addCondition("memberIdA", query.getMemberIdA());// 结束受理时间
 			condition.addCondition("memberIdB", query.getMemberIdB());// 结束受理时间
 			condition.addCondition("confirmState", query.getConfirmState());// 确认状态
-			condition.addCondition("sort", query.getSort());//排序
-			condition.addCondition("sortColumn", query.getSortColumn());//排序字段
+			condition.addCondition("sort", query.getSort());// 排序
+			condition.addCondition("sortColumn", query.getSortColumn());// 排序字段
 			condition.setPage(query);
 			List<RecordEntity> recordList = recordDao.queryRecord(condition);
 			query.setPage(condition);

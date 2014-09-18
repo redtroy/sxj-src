@@ -41,9 +41,10 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
-import com.sxj.supervisor.website.comet.record.MessageChannel;
-import com.sxj.supervisor.website.comet.record.MessageConnectListener;
-import com.sxj.supervisor.website.comet.record.MessageDropListener;
+import com.sxj.supervisor.website.comet.MessageChannel;
+import com.sxj.supervisor.website.comet.MessageConnectListener;
+import com.sxj.supervisor.website.comet.MessageDropListener;
+import com.sxj.supervisor.website.comet.record.RecordThread;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
@@ -78,7 +79,7 @@ public class RecordController extends BaseController {
 			map.put("recordlist", list);
 			map.put("confirmState", rse);
 			map.put("query", query);
-			registChannel(MessageChannel.RECORD_MESSAGE);
+			registChannel(MessageChannel.RECORD_MESSAGE, RecordThread.class);
 			return "site/record/contract-list";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());

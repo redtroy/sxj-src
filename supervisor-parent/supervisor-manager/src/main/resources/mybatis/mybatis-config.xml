@@ -48,13 +48,13 @@
 		<!-- FRID -->
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.Enum.rfid.base.ReceiptStateEnum" />
+			javaType="com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
-			javaType="com.sxj.supervisor.Enum.rfid.base.RfidTypeEnum" />
+			javaType="com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.Enum.rfid.base.ReceiptStateEnum" />	
+			javaType="com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum" />	
 
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.RfidStateEnum" />
