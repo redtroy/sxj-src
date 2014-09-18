@@ -1,21 +1,21 @@
-package com.sxj.supervisor.Enum.rfid.base;
+package com.sxj.supervisor.enu.rfid.apply;
 
-public enum RfidTypeEnum {
-	door("门窗标签", 0), glass("玻璃标签", 1), extrusions("型材标签", 2);
+public enum PayStateEnum {
+	payment("已付款", 0), non_payment("未付款", 1);
 
 	// 成员变量
 	private Integer id;
 
 	private String name;
 
-	private RfidTypeEnum(String name, Integer id) {
+	private PayStateEnum(String name, Integer id) {
 		this.name = name;
 		this.id = id;
 	}
 
 	// 普通方法
 	public static String getName(Integer id) {
-		for (RfidTypeEnum c : RfidTypeEnum.values()) {
+		for (PayStateEnum c : PayStateEnum.values()) {
 			if (c.getId() == id) {
 				return c.name;
 			}

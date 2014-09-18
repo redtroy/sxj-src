@@ -2,7 +2,7 @@ package com.sxj.supervisor.typehandler;
 
 import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 
-import com.sxj.supervisor.Enum.rfid.base.PayStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 
 public class PayStateEnumTypeHandler extends
 		EnumOrdinalTypeHandler<PayStateEnum> {
