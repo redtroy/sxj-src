@@ -1,0 +1,43 @@
+
+<td colspan="10"><div class="infoBox text-left">
+		<table border="0" cellpadding="0" cellspacing="0"
+			class="tabList prodTable">
+			<col width="10%" />
+			<col width="10%" />
+			<col width="30%" />
+			<col width="20%" />
+			<col width="15%" />
+			<tr>
+				<th>合同号</th>
+				<th>交货批次</th>
+				<th>产品规格</th>
+				<th>数量<span>（m&sup2;/吨）</span></th>
+				<th class="rLine">应付货款<span>（元）</span></th>
+			</tr>
+			<#list conBatch as batch>
+			<tr>
+				<td>${contractNo}</td>
+				<td>第${batch.batch.batchNo}批次</td>
+				<td><table border="0" cellpadding="0" cellspacing="0"
+						class="tabList prodTable">
+						<#list batch.batchItems as batchItem>
+						<tr>
+							<td>${batchItem.productModel}</td>
+						</tr>
+						</#list>
+					</table></td>
+				<td><table border="0" cellpadding="0" cellspacing="0"
+						class="tabList prodTable">
+						<#list batch.batchItems as batchItem>
+						<tr>
+							<td>${batchItem.quantity}</td>
+						</tr>
+						</#list>
+					</table></td>
+				<td>${batch.batch.amount}</td>
+			</tr>
+			</#list>
+		</table>
+		<div class="btnBox pb10">
+			<a href="javascript:close('${id}');" class="button button-gray">收起</a>
+		</div></td>

@@ -1,4 +1,4 @@
-package com.sxj.supervisor.manage.controller.rfid.window;
+package com.sxj.supervisor.website.controller.rfid.window;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,13 +14,13 @@ import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
-import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
+import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -54,10 +54,10 @@ public class WindowRfidController extends BaseController {
 			model.put("winType", winType);
 			model.put("query", query);
 			model.put("winList", winList);
-			return "manage/rfid/window/windowRfid-list";
+			return "site/rfid/window/windowRfid-list";
 		} catch (Exception e) {
-			SxjLogger.error("查询门窗RFID错误", e, this.getClass());
-			throw new WebException("查询门窗RFID错误");
+			SxjLogger.error("查询认证信息错误", e, this.getClass());
+			throw new WebException("查询门认证信息错误");
 		}
 	}
 	/**
@@ -79,8 +79,8 @@ public class WindowRfidController extends BaseController {
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
-			SxjLogger.error("删除门窗RFID错误", e, this.getClass());
-			throw new WebException("删除门窗RFID错误");
+			SxjLogger.error("删除认证信息错误", e, this.getClass());
+			throw new WebException("删除认证信息错误");
 		}
 	}
 	/**
@@ -102,8 +102,8 @@ public class WindowRfidController extends BaseController {
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
-			SxjLogger.error("停用门窗RFID错误", e, this.getClass());
-			throw new WebException("停用门窗RFID错误");
+			SxjLogger.error("停用认证信息错误", e, this.getClass());
+			throw new WebException("停用认证信息错误");
 		}
 	}
 	/**
@@ -123,7 +123,7 @@ public class WindowRfidController extends BaseController {
 					.getContract(cmodel.getContract().getId());
 			model.put("contractModel", contractModel);
 			model.put("rfid", rfid);
-			return "manage/rfid/window/contract-info";
+			return "site/rfid/window/contract-info";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");
@@ -138,7 +138,7 @@ public class WindowRfidController extends BaseController {
 			model.put("conBatch", conBatch);
 			model.put("id", id);
 			model.put("contractNo", contractNo);
-			return "manage/rfid/window/contract-batch";
+			return "site/rfid/window/contract-batch";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");
@@ -158,10 +158,52 @@ public class WindowRfidController extends BaseController {
 			List<LogModel> logList=windowRfidService.getRfidStateLog(id);
 			model.put("id", id);
 			model.put("logList", logList);
-			return "manage/rfid/window/stateLog";
+			return "site/rfid/window/stateLog";
 		} catch (Exception e) {
 			SxjLogger.error("查询log动态信息错误", e, this.getClass());
 			throw new WebException("查询log动态信息错误");
+		}
+	}
+	/**
+	 * 跳转标签补损
+	 * @param model
+	 * @param id
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("toLableLosses")
+	public String toLableLosses(ModelMap model,String id)
+			throws WebException {
+		try {
+			WindowRfidEntity windowRfid=windowRfidService.getWindowRfid(id);
+			model.put("id", id);
+			model.put("windowRfid", windowRfid);
+			return "site/rfid/window/lable-losses";
+		} catch (Exception e) {
+			SxjLogger.error("查询标签补损错误", e, this.getClass());
+			throw new WebException("查询标签补损错误");
+		}
+	}
+	/**
+	 * 标签补损
+	 * @param model
+	 * @param id
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("lableLosses")
+	public @ResponseBody Map<String, String> lableLosses(String id,String replenishNo)
+			throws WebException {
+		try {
+			WindowRfidEntity windowRfid=windowRfidService.getWindowRfid(id);
+			windowRfid.setReplenishNo(replenishNo);
+			windowRfidService.updateWindowRfid(windowRfid);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("标签补损错误", e, this.getClass());
+			throw new WebException("标签补损错误");
 		}
 	}
 }

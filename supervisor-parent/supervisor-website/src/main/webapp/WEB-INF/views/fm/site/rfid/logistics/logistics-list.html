@@ -1,15 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- InstanceBeginEditable name="doctitle" -->
-<title>私享家绿色门窗平台管理系统</title>
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
-<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.pageScript/>
 <script >
 
@@ -73,45 +73,35 @@ function closeLog(id){
 }
 </script>
 </head>
+
 <body>
-<@b.header/>
-<div id="main" class="fence-wide">
-<!-- InstanceBeginEditable name="local" -->
-<@b.menuPath/>
-<!-- InstanceEndEditable -->
-<div id="mainBg" class="ly-clearFix yard-1200">
-    <div id="leftList">
-      <@b.leftMenu />
-    </div>
-    <div id="rightBar">
-    <!-- InstanceBeginEditable name="rightBar" -->
-      <h2 class="title">物流RFID商品管理</h2>
-      <form action="" method="post" id="search_form">
-      <div id="searchBox">
-      <p>RFID编号
-        <input type="text" name="rfidNo" value="${query.rfidNo}"/>
-       采购单号
-       <input type="text" name="purchaseNo" value="${query.purchaseNo}"/>
-       采购合同号
-       <input type="text" name="contractNo" value="${query.contractNo}"/>
-	   RFID申请人名称
-       <input type="text" name="memberName" id="memberName" value="${query.memberName}"/>
-       <input type="hidden" name="memberNo" id="memberNo" value="${query.memberNo}"/>
-       RFID类型<select name="type" >
-	   <option selected="selected" value="">全部</option>
-          <#list type as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
-          </#list>
-        </select></p>
-	   进度状态
-	   <select name="progressState" class="selectx">
+<div id="header" class="fence">
+<@b.header /> 
+</div>
+<div class="mainBg">
+<div class="fence-wide ly-clearFix">
+<div class="main pb20">
+<div class="yard-190 ly-left leftMenu">
+<@b.leftMenu />
+</div>
+<div class="yard-870 rightSide ly-left">
+<div class="heading mb15 ly-clearFix">
+  <h1 class="ly-left">
+  <span class="title fontYH f20 fb">物流标签管理</span></h1>
+</div>
+<div class="contBox f12">
+<form action="" method="post" id="search_form">
+<div class="searBox mb10">
+  标签编号<input type="text" name="rfidNo" value="${query.rfidNo}"/>
+  申请单号<input type="text" name="purchaseNo" value="${query.purchaseNo}"/>
+  采购合同号<input type="text" name="contractNo" value="${query.contractNo}"/>
+  标签进度<select name="progressState" class="selectx">
           <option value="" selected="selected">全部</option>
 		  <#list Label as label> 
           <option value="${label.getId()}">${label.getName()}</option>
           </#list>
         </select>
-	   RFID状态
-	   <select name="rfidState">
+  标签状态 <select name="rfidState">
 		<option value="" selected="selected">全部</option>
            <#list rfid as rfid>
            <#if !rfid_has_next>
@@ -119,47 +109,33 @@ function closeLog(id){
            </#if>
           <option value="${rfid.getId()}">${rfid.getName()}</option>
           </#list>
-        </select>
-       导入时间段
-       <input type="text" name="startImportDate" value="" datepicker/>-<input type="text" name="endImportDate" value="" datepicker/>
-        <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
-    </div>
-    </form>
-     <@b.pager/>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
-        <col width="9%"/>
-        <col width="9%"/>
-        <col width="7%" />
-		<col width="8%" />
-        <col width="10%" />
-        <col width="6%" />
-		<col width="12%" />
-		<col width="9%" />
-		<col width="12%" />
-		<col width="9%" />
-		<col width="12%" />
-        <tr>
-          <th>RFID编号</th>
-          <th>采购单号</th>
-          <th>RFID类型</th>
-		  <th>RFID申请人</th>
-          <th>采购合同号</th>
-          <th>执行批次</th>
-		  <th>导入时间</th>
-		  <th>补损关联</th>
-		  <th>进度状态</th>
-		  <th>RFID状态</th>
-          <th class="rLine">操作</th>
-        </tr>
-        <#list list as list>
+        </select><button class="button button-search" onclick="query();">查询</button>
+</div>
+</form>
+   <@b.pager/>
+  <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+  <col width="15%" />
+  <col width="15%" />
+  <col width="15%" />
+  <col width="10%" />
+  <col width="15%" />
+  <col width="15%" />
+  <col width="15%" />
+    <tr>
+      <th>标签编号</th>
+      <th>申请单号</th>
+      <th>采购合同号</th>
+      <th>执行批次</th>
+      <th>补损标签</th>
+	  <th>标签进度</th>
+	  <th class="rLine">标签状态</th>
+      </tr>
+       <#list list as list>
         <tr>
           <td><a href="javascript:log('${list.id}');" class="lnk-blue">${list.rfidNo}</a></td>
           <td>${list.purchaseNo}</td>
-          <td>${list.type.getName()}</td>
-		  <td>${list.memberName}</td>
           <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
 		  <td>${list.batchNo}</td>
-		  <td>${list.importDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
 		  <td><em class="state frozen">${list.progressState.getName()}</em></td>
 		  <td> <#if list.rfidState.getId()==0>
@@ -174,16 +150,15 @@ function closeLog(id){
 		   <#if list.rfidState.getId()==3>
 		   <em class="state frozen">${list.rfidState.getName()}</em>
 		  </#if></td>
-		  <td class="operation"><a href="javascript:disable('${list.id}');" class="stop">停用</a><a href="javascript:del('${list.id}');" class="del">删除</a></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}"> </tr>
         <tr id="log${list.id}"> </tr>
         </#list>
-		 
-		
-      </table>
-    <!-- InstanceEndEditable --></div>
+  </table>
+</div>
+</div>
+</div>
 </div>
 <@b.footer />
 </body>
-<!-- InstanceEnd --></html>
+</html>
