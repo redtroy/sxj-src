@@ -30,13 +30,13 @@
 		<if test="condition.contractNo != null and condition.contractNo !=''">
 			<![CDATA[AND CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
 		</if>
-		<if test="condition.rfidType != null and condition.rfidType !=''">
+		<if test="condition.rfidType != null ">
 			<![CDATA[AND RFID_TYPE = #{condition.rfidType} ]]>
 		</if>
-		<if test="condition.receiptState != null and condition.receiptState !=''">
+		<if test="condition.receiptState != null ">
 			<![CDATA[AND RECEIPT_STATE = #{condition.receiptState} ]]>
 		</if>
-		<if test="condition.payState != null and condition.payState !=''">
+		<if test="condition.payState != null ">
 			<![CDATA[AND PAY_STATE = #{condition.payState} ]]>
 		</if>
 		<!-- 申请时间段 -->
