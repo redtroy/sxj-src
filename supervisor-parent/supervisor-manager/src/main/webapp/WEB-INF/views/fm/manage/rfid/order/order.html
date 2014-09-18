@@ -6,6 +6,8 @@
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<@b.pageScript/>
+<@b.errorInfo/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -15,18 +17,20 @@
 	  $("#edit_"+id).find("#count").html('<input type="text" id="count_val" name="input2" value="'+$("#edit_"+id).find("#count").text()+'" />');
 	  $("#edit_"+id).find(".operation").html('<a href="javascript:edid_save(\''+id+'\')" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
   }
-  function edid_save(){
-	  var count =$("#edit_"+id).find("#count_val").val();
-		  $.post("edit_apply.htm",{id:id,count:count},function(){
-			  if (data.idOk=="ok"){
-					 $("#edit_"+id).find("#count").html(count);
+  //保存修改
+  function edid_save(id){
+	  var num =$("#edit_"+id).find("#count_val").val();
+		  $.post("edit_apply.htm",{id:id,count:num},function(data){
+			  if (data.isOk=="ok"){
+					 $("#edit_"+id).find("#count").text(num);
+					 $("#edit_"+id).find(".operation").html('<a href="javascript:edit(\''+id+'\');" class="edit">修改</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
 				 }
 		  })
   }
   //删除
   function del(id){
 	 $.post("del_apply.htm",{id:id},function(data){
-		 if (data.idOk=="ok"){
+		 if (data.isOk=="ok"){
 			 alert('删除成功！');
 			 $("#edit_"+id).remove();
 		 }
@@ -34,12 +38,26 @@
   }
   //确认收款
   function ok(id){
-	  $.post("edit_apply.htm",{id:id,payState:"0"},function(){
-		  if (data.idOk=="ok"){
-				 $("#edit_"+id).find("#pay").html('<td><em class="state verified">已收款</em></td>');
+	  $.post("edit_apply.htm",{id:id,payState:0},function(data){
+		  if (data.isOk=="ok"){
+				 $("#edit_"+id).find("#pay").html('<em class="state verified">已收款</em>');
 			 }
 	  })
   }
+  function query(page){
+		var params=$("#search_form").serialize();
+		if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	  	}
+		$.post("appList.htm",params,function(data){
+			var tableList=$(data).find(".tabList").html();
+			$("#rightBar").find(".tabList").html(tableList);
+			var pager=$(data).find("#rightBar").children("#pager");
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		})
+	}
 </script>
 </head>
 <body>
@@ -58,33 +76,36 @@
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">RFID申请单管理</h2>
       <div id="searchBox">
-      <p>RFID申请单号<input type="text" name="" value="">
-       申请人名称<input type="text" name="" value="">
-       招标合同号<input type="text" name="" value="">
-       RFID类型<select name="select">
+      <form action="javascript:void(0)" id="search_form">
+      <p>RFID申请单号<input type="text" name="applyNo" value="">
+       申请人名称<input type="text" name="memberName" value="">
+       招标合同号<input type="text" name="contractNo" value="">
+       RFID类型<select name="rfidType">
 	   <option selected="selected" value="">全部</option>
 	    <#list types as type>
           <option value="${type.id}">${type.getName()}</option>
         </#list >
         </select>
 	   收款状态
-	   <select name="select">
+	   <select name="payState">
           <option selected="selected" value="">全部</option>
           <#list paystates as paystate>
 		  <option value="${paystate.id}">${paystate.getName()}</option>
           </#list >
         </select>
-		收货状态<select name="select">
+		收货状态<select name="receiptState">
 		<option selected="selected" value="">全部</option>
         <#list receiptStates as receiptState>
 		  <option value="${receiptState.id}">${receiptState.getName()}</option>
          </#list >
         </select></p>
        申请单时间段
-       <input type="text" name="" value="">-<input type="text" name="" value="">
-        <button class="btn btn-blue"><span>查询</span></button>
+       <input type="text" name="starApplyDate" value="">-<input type="text" name="endApplyDate" value="">
+        <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
+        </form>
     </div>
 	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的RFID申请！</div>
+       <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%"/>
         <col width="15%"/>

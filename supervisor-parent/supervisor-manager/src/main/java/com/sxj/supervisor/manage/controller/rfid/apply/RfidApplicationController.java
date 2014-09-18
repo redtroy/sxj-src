@@ -49,6 +49,7 @@ public class RfidApplicationController extends BaseController {
 			map.put("paystates", paystates);
 			map.put("receiptStates", receiptStates);
 			map.put("types", types);
+			map.put("query", query);
 
 		} catch (Exception e) {
 			SxjLogger.error("申请单查询错误", e, this.getClass());

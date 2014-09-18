@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.file.fastdfs.UpLoadFactory;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -42,30 +44,30 @@ public class FileController {
 			SimpleDateFormat dataformat = new SimpleDateFormat(
 					"EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
 			dataformat.setTimeZone(new SimpleTimeZone(0, "GMT"));
-			
-//			Object lastModified = CacheFactory.buildCacheUtil().getObject(
-//					modifyId.toString());
-//			HierarchicalCacheManager.get
-//			if (lastModified == null) {
-//				Date nowdate = new Date();
-//				lastModified = dataformat.format(nowdate);
-//				CacheFactory.buildCacheUtil().setObject(modifyId.toString(),
-//						lastModified.toString());
-//				response.addHeader("Last-Modified", lastModified.toString());
-//			} else {
-//				String ifmodify = request.getHeader("If-Modified-Since");
-//				response.addHeader("Last-Modified", lastModified.toString());
-//				if (StringUtils.isNotEmpty(ifmodify)) {
-//					Date ifmodifydate = dataformat.parse(ifmodify);
-//					Date lastmodifydate = dataformat.parse(lastModified
-//							.toString());
-//					if (ifmodifydate.getTime() == lastmodifydate.getTime()) {
-//						response.setStatus(304);
-//						return;
-//					}
-//				}
-//			}
 
+			Object lastModified = HierarchicalCacheManager.get(
+					IFileUpLoad.LEVEL, IFileUpLoad.CACHE_NAME,
+					modifyId.toString());
+			if (lastModified == null) {
+				Date nowdate = new Date();
+				lastModified = dataformat.format(nowdate);
+				HierarchicalCacheManager.set(IFileUpLoad.LEVEL,
+						IFileUpLoad.CACHE_NAME, modifyId.toString(),
+						lastModified.toString());
+				response.addHeader("Last-Modified", lastModified.toString());
+			} else {
+				String ifmodify = request.getHeader("If-Modified-Since");
+				response.addHeader("Last-Modified", lastModified.toString());
+				if (StringUtils.isNotEmpty(ifmodify)) {
+					Date ifmodifydate = dataformat.parse(ifmodify);
+					Date lastmodifydate = dataformat.parse(lastModified
+							.toString());
+					if (ifmodifydate.getTime() == lastmodifydate.getTime()) {
+						response.setStatus(304);
+						return;
+					}
+				}
+			}
 			String url = request.getRequestURI();
 			String type = url.substring(url.lastIndexOf(".") + 1, url.length());
 			StringBuffer idbuff = new StringBuffer();

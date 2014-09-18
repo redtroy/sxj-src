@@ -11,6 +11,7 @@
 	<settings>
 		<!-- changes from the defaults -->
 		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="cacheEnabled" value="true"/>
 	</settings>
 	<typeHandlers>
 		<typeHandler
