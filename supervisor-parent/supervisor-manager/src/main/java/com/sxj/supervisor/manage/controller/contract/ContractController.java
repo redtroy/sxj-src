@@ -43,28 +43,29 @@ public class ContractController extends BaseController {
 			query.setPagable(true);
 			List<ContractModel> list = contractService.queryContracts(query);
 			for (ContractModel contractModel : list) {
-				RecordQuery  rq = new RecordQuery();
+				RecordQuery rq = new RecordQuery();
 				rq.setContractNo(contractModel.getContract().getContractNo());
 				rq.setSort("desc");
 				rq.setSortColumn("APPLY_DATE");
-				List<RecordEntity> recordList=recordService.queryRecord(rq);
-				if(recordList.size()>0){
-					RecordEntity recordEntity=recordList.get(0);
-					if(recordEntity.getType().getId()==0){
-						if(recordEntity.getMemberIdA()==contractModel.getContract().getMemberIdA()){
-							contractModel.getContract().setStateLog("甲方已申请备案");	
-						}else{
-							contractModel.getContract().setStateLog("已方已申请备案");	
+				List<RecordEntity> recordList = recordService.queryRecord(rq);
+				if (recordList.size() > 0) {
+					RecordEntity recordEntity = recordList.get(0);
+					if (recordEntity.getType().getId() == 0) {
+						if (recordEntity.getMemberIdA() == contractModel
+								.getContract().getMemberIdA()) {
+							contractModel.getContract().setStateLog("甲方已申请备案");
+						} else {
+							contractModel.getContract().setStateLog("已方已申请备案");
 						}
-					}else if(recordEntity.getType().getId()==1){
-						contractModel.getContract().setStateLog("甲方已申请变更备案");	
-					}else{
-						contractModel.getContract().setStateLog("甲方已申请补损备案");	
+					} else if (recordEntity.getType().getId() == 1) {
+						contractModel.getContract().setStateLog("甲方已申请变更备案");
+					} else {
+						contractModel.getContract().setStateLog("甲方已申请补损备案");
 					}
-						
-					}
+
 				}
-				
+			}
+
 			ContractTypeEnum[] contractType = ContractTypeEnum.values();// 合同类型
 			ContractSureStateEnum[] contractSureState = ContractSureStateEnum
 					.values();// 确认状态
@@ -80,53 +81,58 @@ public class ContractController extends BaseController {
 			throw new WebException("查询合同信息错误");
 		}
 	}
-	
+
 	@RequestMapping("stateLog")
 	public String getStateLog(ModelMap model, String contractNo) {
-		RecordQuery  rq = new RecordQuery();
+		RecordQuery rq = new RecordQuery();
 		rq.setContractNo(contractNo);
 		rq.setSort("desc");
 		rq.setSortColumn("APPLY_DATE");
-		ContractModel contractModel = contractService.getContractByContractNo(contractNo);
-		List<RecordEntity> recordList=recordService.queryRecord(rq);
+		ContractModel contractModel = contractService
+				.getContractByContractNo(contractNo);
+		List<RecordEntity> recordList = recordService.queryRecord(rq);
 		List<StateLogModel> slList = new ArrayList<StateLogModel>();
-		if(recordList.size()>0){
-				for (RecordEntity recordEntity : recordList) {
-					StateLogModel sl = new StateLogModel();
-					if(recordEntity.getType().getId()==0){
-						if(recordEntity.getMemberIdA()==contractModel.getContract().getMemberIdA()){
-							sl.setStateTitle("甲方已申请备案");	
-							sl.setModifyDate(recordEntity.getApplyDate());
-						}else{
-							sl.setStateTitle("已方已申请备案");
-							sl.setModifyDate(recordEntity.getApplyDate());
-						}
-					}else if(recordEntity.getType().getId()==1){
-						sl.setStateTitle("甲方已申请变更备案");	
+		if (recordList.size() > 0) {
+			for (RecordEntity recordEntity : recordList) {
+				StateLogModel sl = new StateLogModel();
+				if (recordEntity.getType().getId() == 0) {
+					if (recordEntity.getMemberIdA() == contractModel
+							.getContract().getMemberIdA()) {
+						sl.setStateTitle("甲方已申请备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
-					}else{
-						sl.setStateTitle("甲方已申请补损备案");
+					} else {
+						sl.setStateTitle("已方已申请备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
 					}
-					slList.add(sl);
+				} else if (recordEntity.getType().getId() == 1) {
+					sl.setStateTitle("甲方已申请变更备案");
+					sl.setModifyDate(recordEntity.getApplyDate());
+				} else {
+					sl.setStateTitle("甲方已申请补损备案");
+					sl.setModifyDate(recordEntity.getApplyDate());
 				}
+				slList.add(sl);
 			}
+		}
 		model.put("stateLog", slList);
 		model.put("contractNo", contractNo);
-		
+
 		return "manage/contract/contract-stateLog";
 	}
+
 	@RequestMapping("info")
-	public String queryContractInfo(ModelMap model, String contractId)throws WebException {
-		try{
-		ContractModel contractModel = contractService.getContract(contractId);
-		model.put("contractModel", contractModel);
-		model.put("contractId", contractId);
-		return "manage/contract/contract-info";
-	} catch (Exception e) {
-		SxjLogger.error("查询合同信息错误", e, this.getClass());
-		throw new WebException("查询合同信息错误");
-	}
+	public String queryContractInfo(ModelMap model, String contractId)
+			throws WebException {
+		try {
+			ContractModel contractModel = contractService
+					.getContract(contractId);
+			model.put("contractModel", contractModel);
+			model.put("contractId", contractId);
+			return "manage/contract/contract-info";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
 	}
 
 	@RequestMapping("produced")
@@ -249,12 +255,13 @@ public class ContractController extends BaseController {
 			throw new WebException(e);
 		}
 	}
-	
+
 	@RequestMapping("check")
 	public @ResponseBody Map<String, Object> check(String contractId)
 			throws WebException {
 		try {
-			contractService.modifyCheckState(contractId, ContractStateEnum.noapproval);
+			contractService.modifyCheckState(contractId,
+					ContractStateEnum.noapproval);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
 			return map;
@@ -262,6 +269,7 @@ public class ContractController extends BaseController {
 			throw new WebException(e);
 		}
 	}
+
 	@RequestMapping("getRecordNo")
 	public @ResponseBody Map<String, Object> getRecordNo(RecordQuery query)
 			throws WebException {
@@ -271,26 +279,25 @@ public class ContractController extends BaseController {
 			for (String str : recordNo) {
 				query.setRecordNo(str);
 				List<RecordEntity> list = recordService.queryRecord(query);
-				if(list.size()>0){
+				if (list.size() > 0) {
 					flag++;
 				}
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
-			if(recordNo.length==1){
-				if(flag==1){
+			if (recordNo.length == 1) {
+				if (flag == 1) {
 					map.put("flag", "true");
-				}else{
+				} else {
 					map.put("flag", "false");
 				}
-			}else if(recordNo.length==2){
-				if(flag==2 || flag==1){
+			} else if (recordNo.length == 2) {
+				if (flag == 2 || flag == 1) {
 					map.put("flag", "true");
-				}else{
+				} else {
 					map.put("flag", "false");
 				}
 			}
-			
-			
+
 			return map;
 		} catch (Exception e) {
 			throw new WebException(e);
