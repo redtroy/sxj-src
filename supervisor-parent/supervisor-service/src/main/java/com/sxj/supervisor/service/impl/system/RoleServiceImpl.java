@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.system.IRoleDao;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.RoleEntity;
@@ -26,10 +27,13 @@ public class RoleServiceImpl implements IRoleService {
 	@Override
 	public void addRoles(List<RoleEntity> roles) throws ServiceException {
 		try {
-			int size = roles.size();
-			RoleEntity[] roleArr = (RoleEntity[]) roles
-					.toArray(new RoleEntity[size]);
-			roleDao.addRoles(roleArr);
+			if(roles!=null&&roles.size()>0){
+				int size = roles.size();
+				RoleEntity[] roleArr = (RoleEntity[]) roles
+						.toArray(new RoleEntity[size]);
+				roleDao.addRoles(roleArr);
+				HierarchicalCacheManager.evict(2, "sys_role_menu",roleArr[0].getAccountId());
+			}
 		} catch (Exception e) {
 			SxjLogger.error("新增系统会员权限失败", e, this.getClass());
 			throw new ServiceException("新增系统会员权限失败", e.getMessage());
@@ -41,6 +45,7 @@ public class RoleServiceImpl implements IRoleService {
 	public void removeRoles(String accountId) throws ServiceException {
 		try {
 			roleDao.deleteRoles(accountId);
+			HierarchicalCacheManager.evict(2, "sys_role_menu",accountId);
 		} catch (Exception e) {
 			SxjLogger.error("删除系统会员权限失败", e, this.getClass());
 			throw new ServiceException("删除系统会员权限失败", e.getMessage());
@@ -56,13 +61,18 @@ public class RoleServiceImpl implements IRoleService {
 			SxjLogger.error("查询系统会员权限失败", e, this.getClass());
 			throw new ServiceException("查询系统会员权限失败", e.getMessage());
 		}
-		
+
 	}
 
 	@Override
 	public List<FunctionModel> getRoleFunction(String accountId)
 			throws ServiceException {
 		try {
+			Object cache = HierarchicalCacheManager.get(2, "sys_role_menu",
+					accountId);
+			if (cache instanceof List) {
+				return (List<FunctionModel>) cache;
+			}
 			QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
 			query.addCondition("parentId", 0);
 			query.addCondition("accountId", accountId);
@@ -82,6 +92,7 @@ public class RoleServiceImpl implements IRoleService {
 				model.setChildren(childrenList);
 				list.add(model);
 			}
+			HierarchicalCacheManager.set(2, "sys_role_menu", accountId, list);
 			return list;
 		} catch (Exception e) {
 			SxjLogger.error("查询权限菜单错误", e, this.getClass());

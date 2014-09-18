@@ -3,6 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.system.IAreaDao">
+ <cache />
 	<resultMap id="AreaResultMap" type="com.sxj.supervisor.entity.system.AreaEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
