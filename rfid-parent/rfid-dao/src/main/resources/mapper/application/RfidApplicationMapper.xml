@@ -21,9 +21,29 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT *
 		 FROM R_RFID_SUPPLIER WHERE 1=1]]>
-		<!-- 会员号 -->
-		<if test="condition.supplierNo != null and condition.supplierNo !=''">
-			<![CDATA[AND SUPPLIER_NO LIKE CONCAT('%',#{condition.supplierNo},'%') ]]>
+		<!-- 申请ID -->
+		<if test="condition.applyNo != null and condition.applyNo !=''">
+			<![CDATA[AND APPLY_NO LIKE CONCAT('%',#{condition.applyNo},'%') ]]>
+		</if>
+		<if test="condition.memberName != null and condition.memberName !=''">
+			<![CDATA[AND MEMBER_NAME LIKE CONCAT('%',#{condition.memberName},'%') ]]>
+		</if>
+		<if test="condition.contractNo != null and condition.contractNo !=''">
+			<![CDATA[AND CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
+		</if>
+		<if test="condition.rfidType != null and condition.rfidType !=''">
+			<![CDATA[AND RFID_TYPE = #{condition.rfidType} ]]>
+		</if>
+		<if test="condition.receiptState != null and condition.receiptState !=''">
+			<![CDATA[AND RECEIPT_STATE = #{condition.receiptState} ]]>
+		</if>
+		<if test="condition.payState != null and condition.payState !=''">
+			<![CDATA[AND PAY_STATE = #{condition.payState} ]]>
+		</if>
+		<!-- 申请时间段 -->
+		<if
+			test="condition.starApplyDate != null and condition.endApplyDate != null and condition.starApplyDate != '' and condition.endApplyDate != ''">
+			<![CDATA[AND APPLY_DATE >=#{condition.starApplyDate} AND APPLY_DATE <= #{condition.endApplyDate}]]>
 		</if>
 		<!-- 逻辑删除 -->
 		<if test="condition.delstate != null ">

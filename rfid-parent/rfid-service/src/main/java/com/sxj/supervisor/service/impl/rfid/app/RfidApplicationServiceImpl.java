@@ -11,6 +11,7 @@ import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.persistent.QueryCondition;
 
 @Service
 public class RfidApplicationServiceImpl implements IRfidApplicationService {
@@ -20,7 +21,28 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	@Override
 	public List<RfidApplicationEntity> query(RfidApplicationQuery query)
 			throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			QueryCondition<RfidApplicationEntity> condition = new QueryCondition<RfidApplicationEntity>();
+			if (query != null) {
+				condition.addCondition("applyNo", query.getApplyNo());// RFID申请单号
+				condition.addCondition("memberName", query.getMemberName());// 申请人名称
+				condition.addCondition("contractNo", query.getContractNo());// 招标合同号
+				condition.addCondition("rfidType", query.getRfidType());// RFID类型
+				condition.addCondition("receiptState", query.getReceiptState());// 收货状态
+				condition.addCondition("payState", query.getPayState());// 收款状态
+				condition.addCondition("starApplyDate",
+						query.getStarApplyDate());// RFID类型
+				condition.addCondition("endApplyDate", query.getEndApplyDate());// RFID类型
+				condition.addCondition("delstate", query.getDelstate());
+				condition.setPage(query);
+			}
+			List<RfidApplicationEntity> list = appDao.queryList(condition);
+			query.setPage(condition);
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
