@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
-import com.sxj.supervisor.website.comet.record.MessageConnectListener;
-import com.sxj.supervisor.website.comet.record.MessageDropListener;
+import com.sxj.supervisor.website.comet.MessageConnectListener;
+import com.sxj.supervisor.website.comet.MessageDropListener;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.SystemException;
 import com.sxj.util.logger.SxjLogger;
@@ -67,15 +67,16 @@ public class BaseController {
 
 	}
 
-	protected void registChannel(String channel) {
+	protected void registChannel(String channel, Class<?> threadClass) {
 		CometContext cc = CometContext.getInstance();
 		List<String> apps = cc.getAppModules();
 		int index = apps.indexOf(channel);
 		if (index < 0) {
 			cc.registChannel(channel);// 注册应用的channel
 			CometEngine engine = cc.getEngine();
-			engine.addConnectListener(new MessageConnectListener(engine));
-			engine.addDropListener(new MessageDropListener(engine));
+			engine.addConnectListener(new MessageConnectListener(engine,
+					threadClass));
+			engine.addDropListener(new MessageDropListener());
 		}
 	}
 
