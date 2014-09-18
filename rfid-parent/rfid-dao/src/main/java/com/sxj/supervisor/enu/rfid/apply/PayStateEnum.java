@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.rfid.apply;
 
 public enum PayStateEnum {
-	payment("已付款", 0), non_payment("未付款", 1);
+	payment("已收款", 0), non_payment("未收款", 1);
 
 	// 成员变量
 	private Integer id;

@@ -12,6 +12,9 @@ import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
+import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 
 /**
  * RFID申请单
@@ -58,7 +61,7 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	 * RFID类型
 	 */
 	@Column(name = "RFID_TYPE")
-	private Enum rfidType;
+	private RfidTypeEnum rfidType;
 
 	/**
 	 * 招标合同号
@@ -82,27 +85,19 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	 * 支付状态
 	 */
 	@Column(name = "PAY_STATE")
-	private Enum payState;
+	private PayStateEnum payState;
 
 	/**
 	 * 收货状态
 	 */
 	@Column(name = "RECEIPT_STATE")
-	private Enum receiptState;
+	private ReceiptStateEnum receiptState;
 
 	/**
 	 * 逻辑删除标记
 	 */
 	@Column(name = "DEL_STATE")
 	private Boolean delstate = false;
-
-	public Boolean getDelstate() {
-		return delstate;
-	}
-
-	public void setDelstate(Boolean delstate) {
-		this.delstate = delstate;
-	}
 
 	public String getId() {
 		return id;
@@ -136,11 +131,11 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 		this.memberName = memberName;
 	}
 
-	public Enum getRfidType() {
+	public RfidTypeEnum getRfidType() {
 		return rfidType;
 	}
 
-	public void setRfidType(Enum rfidType) {
+	public void setRfidType(RfidTypeEnum rfidType) {
 		this.rfidType = rfidType;
 	}
 
@@ -168,20 +163,28 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 		this.applyDate = applyDate;
 	}
 
-	public Enum getPayState() {
+	public PayStateEnum getPayState() {
 		return payState;
 	}
 
-	public void setPayState(Enum payState) {
+	public void setPayState(PayStateEnum payState) {
 		this.payState = payState;
 	}
 
-	public Enum getReceiptState() {
+	public ReceiptStateEnum getReceiptState() {
 		return receiptState;
 	}
 
-	public void setReceiptState(Enum receiptState) {
+	public void setReceiptState(ReceiptStateEnum receiptState) {
 		this.receiptState = receiptState;
+	}
+
+	public Boolean getDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
 	}
 
 }

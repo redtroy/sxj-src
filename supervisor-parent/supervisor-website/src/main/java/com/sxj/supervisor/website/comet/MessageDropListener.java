@@ -1,17 +1,9 @@
-package com.sxj.supervisor.website.comet.record;
+package com.sxj.supervisor.website.comet;
 
-import org.comet4j.core.CometEngine;
 import org.comet4j.core.event.DropEvent;
 import org.comet4j.core.listener.DropListener;
 
 public class MessageDropListener extends DropListener {
-
-	CometEngine engine;
-
-	public MessageDropListener(CometEngine engine) {
-		super();
-		this.engine = engine;
-	}
 
 	@Override
 	public boolean handleEvent(DropEvent arg0) {
@@ -22,9 +14,8 @@ public class MessageDropListener extends DropListener {
 			MessageConnectListener.setCount(count - 1);
 		}
 		if (MessageConnectListener.getCount() == 0) {
-			MessageConnectListener.getHelloAppModule().setFlat(false);
-			MessageConnectListener.getHelloAppModule().interrupt();
-			//engine.destroy();
+			MessageConnectListener.getAppModule().setFlat(false);
+			MessageConnectListener.getAppModule().interrupt();
 		}
 		return true;
 	}

@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.comet.record;
+package com.sxj.supervisor.website.comet;
 
 public class MessageChannel {
 

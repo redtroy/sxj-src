@@ -10,6 +10,7 @@
 <script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
 <script>
@@ -25,11 +26,19 @@ jQuery(document).ready(function($) {
 		}else{
 			alert("暂无合同副本!");
 		}
-	})
+	});
 	$('.modal-header .close').live('click',function(){
 		$('.popDemo').slideUp(200);
 		$("#imgList").html("");
-	})
+	});
+	 JS.Engine.on({  
+		 record_message : function(data){//侦听一个channel
+			 $("#message_div").empty();
+        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的备案申请！</div>";
+        	 $("#message_div").append(bb);
+         },   
+ });  
+ JS.Engine.start('${basePath}comet');
 })
 </script>
 <script>
@@ -115,8 +124,8 @@ function del(id){
         </p>
         </form>
       </div>
-	   <div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的备案申请！</div>
- 		<@b.pager/>
+      <div id="message_div"></div>
+ 	<@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList recordTable" id="res_table">
         <col width="5%" />
         <col width="7%"/>
