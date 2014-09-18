@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sxj.supervisor.Enum.rfid.base.PayStateEnum;
-import com.sxj.supervisor.Enum.rfid.base.ReceiptStateEnum;
-import com.sxj.supervisor.Enum.rfid.base.RfidTypeEnum;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
+import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
@@ -24,7 +24,6 @@ public class RfidApplicationController extends BaseController {
 	IRfidApplicationService sppService;
 
 	@RequestMapping("appList")
-<<<<<<< HEAD:supervisor-parent/supervisor-manager/src/main/java/com/sxj/supervisor/manage/controller/rfid/RfidApplicationController.java
 	public String appList(ModelMap map, RfidApplicationQuery query)
 			throws WebException {
 		try {
@@ -41,9 +40,6 @@ public class RfidApplicationController extends BaseController {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
 			throw new WebException("申请单查询错误");
 		}
-=======
-	public String appList(ModelMap map, RfidApplicationQuery query) {
->>>>>>> baf795f9fba7802dc2d6110e3afdf4b2dce88642:supervisor-parent/supervisor-manager/src/main/java/com/sxj/supervisor/manage/controller/rfid/apply/RfidApplicationController.java
 		return "manage/rfid/order/order";
 	}
 }
