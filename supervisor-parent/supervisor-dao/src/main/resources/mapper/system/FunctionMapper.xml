@@ -14,10 +14,11 @@
 	<!-- 系统功能高级查询 --> 
 	<select id="queryFunction" resultMap="FunctionResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,TITLE,URL,PARENT_ID,LEVEL 
-		 FROM M_SYS_FUNCTION  WHERE 1=1]]>
+		<![CDATA[SELECT f.ID,f.TITLE,f.URL,f.PARENT_ID,f.LEVEL 
+		 FROM M_SYS_FUNCTION f WHERE 1=1]]>
 		 <if test="condition.parentId != null and condition.parentId!=''">
-			<![CDATA[ AND PARENT_ID=#{condition.parentId}]]>
+			<![CDATA[ AND f.PARENT_ID=#{condition.parentId}]]>
 		</if>
+		<![CDATA[ ORDER BY f.DESC]]>
 	</select>
 </mapper>
