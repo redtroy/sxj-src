@@ -87,12 +87,13 @@ function toRemove(id){
 }
 
 function edit(id){
-	var params=$("#"+id+"_tr").find(":input");
+	var params=$("#"+id+"_tr").find(":input").clone();
 	$("#edit_form").empty();
 	$("#edit_form").append(params);
 	var params2=$("#edit_form").serialize();
 	$.post("${basePath}system/edit_account.htm",params2,function(data){
 		if(data.isOK==true){
+			$("#edit_form").empty();
 			toInfo(id,data);
 			alert("修改成功");
 		}else{
@@ -149,7 +150,7 @@ function toInfo(accountId,data){
 	
 	$("#"+accountId+"_tr").children().children("#edit_a").show();
 	$("#"+accountId+"_tr").children().children("#confirm_a").hide();
-	$(".edit").hide();
+	$(".edit").show();
 }
 
 function toEdit(accountId){
