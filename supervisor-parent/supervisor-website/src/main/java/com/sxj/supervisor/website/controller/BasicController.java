@@ -74,6 +74,16 @@ public class BasicController extends BaseController {
 
 	}
 
+	@RequestMapping("error")
+	public String ToError() {
+		return "site/500";
+	}
+	
+	@RequestMapping("404")
+	public String To404() {
+		return "site/404";
+	}
+
 	@RequestMapping("login")
 	public String login(String memberName, String accountName, String password,
 			HttpSession session, HttpServletRequest request, ModelMap map) {

@@ -66,6 +66,16 @@ public class BasicController extends BaseController {
 		return "manage/head";
 	}
 
+	@RequestMapping("error")
+	public String ToError() {
+		return "manage/500";
+	}
+	
+	@RequestMapping("404")
+	public String To404() {
+		return "manage/404";
+	}
+
 	@RequestMapping("index")
 	public String ToIndex() {
 		return INDEX;

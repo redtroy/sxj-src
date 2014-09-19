@@ -30,6 +30,7 @@
 		<if test="condition.parentId != null">
 			<![CDATA[ AND f.PARENT_ID = #{condition.parentId}]]>
 		</if>
+		<![CDATA[ ORDER BY f.DESC]]>
 	</select>
 	<!-- 获取权限操作列表 -->
 	<select id="getAllRoleFunction" resultMap="com.sxj.supervisor.dao.system.IFunctionDao.FunctionResultMap"
