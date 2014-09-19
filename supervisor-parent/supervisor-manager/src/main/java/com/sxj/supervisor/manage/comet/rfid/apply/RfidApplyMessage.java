@@ -18,17 +18,17 @@ public class RfidApplyMessage extends MessageThread {
 			// 获取消息内容
 
 			Long count = null;
-			Object cache = HierarchicalCacheManager.get(2, "comet_record",
-					"record_count_message");
+			Object cache = HierarchicalCacheManager.get(2, "comet_rfid_apply",
+					"rfid_apply_message");
 			if (cache instanceof Long) {
 				count = (Long) cache;
 			}
-			System.out.println("******************" + count);
+			System.out.println("#################" + count);
 			if (count != null && count > 0) {
 				// 开始发送
-				getEngine().sendToAll(MessageChannel.RECORD_MESSAGE, count);
-				HierarchicalCacheManager.evict(2, "comet_record",
-						"record_count_message");
+				getEngine().sendToAll(MessageChannel.RFID_APPLY_MESSAGE, count);
+				HierarchicalCacheManager.evict(2, "comet_rfid_apply",
+						"rfid_apply_message");
 			}
 
 		}
