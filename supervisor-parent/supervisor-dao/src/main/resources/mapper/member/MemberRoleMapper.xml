@@ -47,6 +47,7 @@
 		<if test="condition.parentId != null and condition.parentId!=''">
 			<![CDATA[ AND f.PARENT_ID = #{condition.parentId}]]>
 		</if>
+			<![CDATA[ ORDER BY f.DESC]]>
 	</select>
 
 	<!-- 获取权限操作列表 -->

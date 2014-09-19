@@ -20,5 +20,6 @@
 		 <if test="condition.parentId != null and condition.parentId!=''">
 			<![CDATA[ AND PARENT_ID=#{condition.parentId}]]>
 		</if>
+		<![CDATA[ ORDER BY 'DESC']]>
 	</select>
 </mapper>
