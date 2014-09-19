@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao">
+	<resultMap id="purchaseResultMap"
+		type="com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
+		<result property="supplierNo" column="SUPPLIER_NO" jdbcType="VARCHAR" />
+		<result property="supplierName" column="SUPPLIER_NAME" jdbcType="VARCHAR" />
+		<result property="rfidType" column="RFID_TYPE" jdbcType="INTEGER"/>
+		<result property="count" column="COUNT" jdbcType="INTEGER" />
+		<result property="price" column="PRICE" jdbcType="INTEGER" />
+		<result property="amount" column="AMOUNT" jdbcType="INTEGER" />
+		<result property="purchaseDate" column="PURCHASE_DATE" jdbcType="TIMESTAMP" />
+		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="applyNo" column="APPLY_NO" jdbcType="VARCHAR" />
+		<result property="importState" column="IMPORT_STATE" jdbcType="INTEGER"  />
+		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" />
+		<result property="receiptState" column="RECEIPT_STATE" jdbcType="INTEGER" />
+		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
+	</resultMap>
+	<!-- 按条件查询采购申请单 -->
+	<select id="queryList" resultMap="purchaseResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT ID, PURCHASE_NO, SUPPLIER_NO, SUPPLIER_NAME, RFID_TYPE, COUNT, PRICE, AMOUNT, 
+					PURCHASE_DATE, CONTRACT_NO, APPLY_NO, IMPORT_STATE, PAY_STATE, RECEIPT_STATE FROM R_RFID_PURCHASE
+ 					WHERE DEL_STATE=0 ]]>
+		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
+			<![CDATA[AND PURCHASE_NO = #{condition.purchaseNo}]]>
+		</if>
+		<if test="condition.applyNo != null and condition.applyNo !=''">
+			<![CDATA[AND APPLY_NO = #{condition.applyNo}]]>
+		</if>
+		<if test="condition.supplierNo != null and condition.supplierNo !=''">
+			<![CDATA[AND SUPPLIER_NO = #{condition.supplierNo}]]>
+		</if>
+		<if test="condition.rfidType != null and condition.rfidType !=''">
+			<![CDATA[AND RFID_TYPE = #{condition.rfidType} ]]>
+		</if>
+		<if test="condition.payState != null and condition.payState !=''">
+			<![CDATA[AND PAY_STATE= #{condition.payState}]]>
+		</if>
+		<if test="condition.receiptState != null and condition.receiptState !=''">
+			<![CDATA[AND RECEIPT_STATE = #{condition.receiptState}]]>
+		</if>
+		<if test="condition.importState != null and condition.importState !=''">
+			<![CDATA[AND IMPORT_STATE = #{condition.importState}]]>
+		</if>
+		<if
+			test="condition.startDate != null and condition.endDate != null and  condition.startDate != '' and condition.endDate != ''">
+			<![CDATA[AND PURCHASE_DATE >=#{condition.startDate} AND PURCHASE_DATE <= #{condition.endDate}]]>
+		</if>
+	</select>
+</mapper>
