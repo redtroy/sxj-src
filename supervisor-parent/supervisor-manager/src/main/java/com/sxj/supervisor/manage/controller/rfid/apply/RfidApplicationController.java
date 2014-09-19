@@ -14,6 +14,8 @@ import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.manage.comet.MessageChannel;
+import com.sxj.supervisor.manage.comet.rfid.apply.RfidApplyMessage;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
@@ -50,8 +52,8 @@ public class RfidApplicationController extends BaseController {
 			map.put("receiptStates", receiptStates);
 			map.put("types", types);
 			map.put("query", query);
-			// registChannel(MessageChannel.RFID_APPLY_MESSAGE, threadClass);
-
+			registChannel(MessageChannel.RFID_APPLY_MESSAGE,
+					RfidApplyMessage.class);
 		} catch (Exception e) {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
 			throw new WebException("申请单查询错误");

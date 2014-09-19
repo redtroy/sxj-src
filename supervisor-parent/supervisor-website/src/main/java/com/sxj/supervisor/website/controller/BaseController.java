@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
+import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 import com.sxj.supervisor.website.comet.MessageConnectListener;
 import com.sxj.supervisor.website.comet.MessageDropListener;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
@@ -50,6 +53,14 @@ public class BaseController {
 		binder.registerCustomEditor(MemberTypeEnum.class,
 				new EnumPropertyEditorSupport<MemberTypeEnum>(
 						MemberTypeEnum.class));
+		// RFID
+		binder.registerCustomEditor(RfidTypeEnum.class,
+				new EnumPropertyEditorSupport<RfidTypeEnum>(RfidTypeEnum.class));
+		binder.registerCustomEditor(PayStateEnum.class,
+				new EnumPropertyEditorSupport<PayStateEnum>(PayStateEnum.class));
+		binder.registerCustomEditor(ReceiptStateEnum.class,
+				new EnumPropertyEditorSupport<ReceiptStateEnum>(
+						ReceiptStateEnum.class));
 	}
 
 	protected String getBasePath(HttpServletRequest request) {

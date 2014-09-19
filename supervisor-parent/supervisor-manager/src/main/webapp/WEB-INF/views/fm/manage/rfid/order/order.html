@@ -6,12 +6,27 @@
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script>
+jQuery(document).ready(function($) {
+	 JS.Engine.on({  
+		 rfid_apply_message : function(data){//侦听一个channel
+			 $("#message_div").empty();
+        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的RFID申请！</div>";
+        	 $("#message_div").append(bb);
+         },   
+ });  
+ JS.Engine.start('${basePath}comet');
+})
+
+
+
+
 //修改
   function edit(id){
 	  $("#edit_"+id).find("#count").html('<input type="text" id="count_val" name="input2" value="'+$("#edit_"+id).find("#count").text()+'" />');
@@ -104,7 +119,7 @@
         <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
         </form>
     </div>
-	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的RFID申请！</div>
+    <div id="message_div"></div>
        <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%"/>

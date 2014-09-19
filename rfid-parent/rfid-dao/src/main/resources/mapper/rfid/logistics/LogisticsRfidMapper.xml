@@ -39,7 +39,7 @@
 			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
 		</if>
 		<if test="condition.type != null and condition.type !=''">
-			<![CDATA[ANDTYPE = #{condition.type}]]>
+			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
 		<if test="condition.progressState != null and condition.progressState !=''">
 			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>

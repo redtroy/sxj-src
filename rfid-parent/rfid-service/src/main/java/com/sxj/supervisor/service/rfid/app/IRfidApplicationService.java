@@ -32,4 +32,9 @@ public interface IRfidApplicationService {
 	 * @throws ServiceException
 	 */
 	public void delApp(String id) throws ServiceException;
+
+	/**
+	 * 新增申请单
+	 */
+	public void addApp(RfidApplicationEntity app) throws ServiceException;
 }

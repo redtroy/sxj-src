@@ -11,8 +11,13 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
+import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
+import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
+import com.sxj.supervisor.enu.rfid.purchase.PayStateEnum;
 
-@Entity
+@Entity(mapper = IRfidPurchaseDao.class)
 @Table(name = "R_RFID_PURCHASE")
 public class RfidPurchaseEntity extends Pagable implements Serializable {
 
@@ -51,7 +56,7 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 	 * RFID类型
 	 */
 	@Column(name = "RFID_TYPE")
-	private Enum rfidType;
+	private RfidTypeEnum rfidType;
 
 	/**
 	 * 数量
@@ -93,18 +98,31 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 	 * 导入状态
 	 */
 	@Column(name = "IMPORT_STATE")
-	private Enum importState;
+	private ImportStateEnum importState;
 	/**
 	 * 支付状态
 	 */
 	@Column(name = "PAY_STATE")
-	private Enum payState;
+	private PayStateEnum payState;
 
 	/**
 	 * 收货状态
 	 */
 	@Column(name = "RECEIPT_STATE")
-	private Enum receiptState;
+	private DeliveryStateEnum receiptState;
+	/**
+	 * 删除状态
+	 */
+	@Column(name = "DEL_STATE")
+	private boolean delstate=false;
+
+	public boolean isDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(boolean delstate) {
+		this.delstate = delstate;
+	}
 
 	public String getId() {
 		return id;
@@ -136,14 +154,6 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 
 	public void setSupplierName(String supplierName) {
 		this.supplierName = supplierName;
-	}
-
-	public Enum getRfidType() {
-		return rfidType;
-	}
-
-	public void setRfidType(Enum rfidType) {
-		this.rfidType = rfidType;
 	}
 
 	public Long getCount() {
@@ -198,24 +208,32 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 		return importState;
 	}
 
-	public void setImportState(Enum importState) {
-		this.importState = importState;
+	public RfidTypeEnum getRfidType() {
+		return rfidType;
 	}
 
-	public Enum getPayState() {
+	public void setRfidType(RfidTypeEnum rfidType) {
+		this.rfidType = rfidType;
+	}
+
+	public PayStateEnum getPayState() {
 		return payState;
 	}
 
-	public void setPayState(Enum payState) {
+	public void setPayState(PayStateEnum payState) {
 		this.payState = payState;
 	}
 
-	public Enum getReceiptState() {
+	public DeliveryStateEnum getReceiptState() {
 		return receiptState;
 	}
 
-	public void setReceiptState(Enum receiptState) {
+	public void setReceiptState(DeliveryStateEnum receiptState) {
 		this.receiptState = receiptState;
+	}
+
+	public void setImportState(ImportStateEnum importState) {
+		this.importState = importState;
 	}
 
 }
