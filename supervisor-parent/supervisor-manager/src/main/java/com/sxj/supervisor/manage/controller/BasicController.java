@@ -31,11 +31,14 @@ import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.member.MemberQuery;
+import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
 import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
@@ -55,6 +58,9 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IMemberService memberService;
+	
+	@Autowired
+	private IRfidSupplierService supplierService;
 
 	@RequestMapping("footer")
 	public String ToFooter() {
@@ -199,6 +205,14 @@ public class BasicController extends BaseController {
 		out.close();
 	}
 
+	/**
+	 * 自动感应会员
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping("autoComple")
 	public @ResponseBody Map<String, String> autoComple(
 			HttpServletRequest request, HttpServletResponse response,
@@ -213,6 +227,38 @@ public class BasicController extends BaseController {
 		for (MemberEntity memberEntity : list) {
 			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
 					+ memberEntity.getMemberNo() + "\"}";
+			strlist.add(sb);
+		}
+		String json = "{\"data\":" + strlist.toString() + "}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null;
+	}
+	/**
+	 * 自动感应供应商
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("autoSupplier")
+	public @ResponseBody Map<String, String> autoSupplier(
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword) throws IOException {
+		RfidSupplierQuery query = new RfidSupplierQuery();
+		if (keyword != "" && keyword != null) {
+			query.setName(keyword);
+		}
+		List<RfidSupplierEntity> list = supplierService.querySupplier(query);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (RfidSupplierEntity supplier : list) {
+			sb = "{\"title\":\"" + supplier.getName() + "\",\"result\":\""
+					+ supplier.getSupplierNo() + "\"}";
 			strlist.add(sb);
 		}
 		String json = "{\"data\":" + strlist.toString() + "}";

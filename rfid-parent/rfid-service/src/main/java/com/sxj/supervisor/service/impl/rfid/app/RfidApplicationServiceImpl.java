@@ -111,4 +111,24 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 
 	}
 
+	/**
+	 * 根据申请单号获取
+	 */
+	@Override
+	public RfidApplicationEntity getApplication(String no)
+			throws ServiceException {
+		try {
+			RfidApplicationQuery query = new RfidApplicationQuery();
+			query.setApplyNo(no);
+			List<RfidApplicationEntity> res = query(query);
+			if (res != null && res.size() > 0) {
+				RfidApplicationEntity app = res.get(0);
+				return app;
+			}
+			return null;
+		} catch (Exception e) {
+			throw new ServiceException("获取申请单信息错误", e);
+		}
+	}
+
 }

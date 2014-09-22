@@ -25,6 +25,5 @@ public interface IPurchaseRfidService {
 	 */
 	public void updatePurchase(RfidPurchaseEntity purchase) throws ServiceException;
 	
-	
-	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
+	RfidPurchaseEntity getRfidPurchase(String id) throws ServiceException;
 }

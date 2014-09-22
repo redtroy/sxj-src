@@ -1,0 +1,16 @@
+
+<td colspan="11">
+	<div class="infoBox text-left">
+		<ul class="ly-clearFix">
+			<li><label>申请人名称</label> ${member.name}</li>
+			<li><label>申请人地址</label> ${member.address}</li>
+			<li><label>固定电话</label> ${member.telNum}</li>
+			<li><label>申请总数量</label> ${app.count}</li>
+			<li><label>招标合同号</label>${app.contractNo}</li>
+			<li><label>RFID申请单时间</label>${app.applyDate?string("yyyy年MM月dd日 hh:mm:ss")}</li>
+		</ul>
+		<div class="btnBox text-center">
+			<a href="javascript:closeInfo('${id}')" class="button button-gray button-small">收起</a>
+		</div>
+	</div>
+</td>

@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.pageScript/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -29,6 +30,98 @@ function query(page){
 		loadPage(currentPage,totalPage,query);
 	});
 }
+
+function  del(id){
+	if(confirm('确实要删除吗?')){
+	$.post("delete.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("删除成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("删除失败!");	
+		}
+	});
+	}
+}
+
+function toImport(id){
+	$.post("toImport.htm",{id:id},function(data){
+		$("#rightBar").empty();
+		$("#rightBar").html(data);
+	});
+}
+function confirmDelivery(id){
+	if(confirm('是否确认发货?')){
+		$.post("confirmDelivery.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				alert("发货成功!");
+				window.location.href="query.htm";
+			}else{
+				alert("发货失败!");	
+			}
+		});
+		}
+}
+function confirmPay(id){
+	if(confirm('是否确认付款?')){
+		$.post("confirmPay.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				alert("确认付款成功!");
+				window.location.href="query.htm";
+			}else{
+				alert("确认付款失败!");	
+			}
+		});
+		}
+}
+function confirmReceipt(id){
+	if(confirm('是否确认收货?')){
+		$.post("confirmReceipt.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				alert("确认收货成功!");
+				window.location.href="query.htm";
+			}else{
+				alert("确认收货失败!");	
+			}
+		});
+		}
+}
+function loadInfo(id,applyNo){
+	$("#info"+id).load("purchaseInfo.htm?id="+id+"&applyNo="+applyNo);
+}
+function closeInfo(id){
+	$("#info"+id).html("");
+}
+
+function edit(id){
+	  $("#edit_"+id).find(".editName").html('<input type="text" id="supplierName" name="supplierName" value="'+$("#edit_"+id).find(".editName").text()+'" /><input type="hidden" id="supplierNo" name="supplierNo" value="'+$("#edit_"+id).find("#supplierNo").val()+'" />');
+	  var url_ = "${basePath}autoSupplier.htm";
+	  $("#edit_"+id).find("#supplierName").bigAutocomplete({url:url_,callback:function(data){
+		  $("#edit_"+id).find(".supplierNo").val(data.result);
+	    }});
+	  $("#edit_"+id).find(".editCount").html('<input type="text" id="count" name="count" value="'+$("#edit_"+id).find(".editCount").text()+'" />');
+	  $("#edit_"+id).find(".editPrice").html('<input type="text" id="price" name="price" value="'+$("#edit_"+id).find(".editPrice").text()+'" />');
+	  $("#edit_"+id).find(".operation").html('<a href="javascript:save(\''+id+'\');" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+}
+function save(id){
+	var supplierName =$("#edit_"+id).find(".editName").find("#supplierName").val();
+	var supplierNo =$("#edit_"+id).find(".editName").find("#supplierNo").val();
+	var price = $("#edit_"+id).find(".editCount").find("#price").val();
+	var count=$("#edit_"+id).find(".editPrice").find("#count").val();
+	var o ={id:id,supplierName:supplierName,supplierNo:supplierNo,price:price,count:count};
+	$.post("modify.htm",o,function(data){
+		if(data.isOK=='ok'){
+			$("#edit_"+id).find(".editName").text(supplierName);
+			$("#edit_"+id).find(".supplierNo").val(supplierNo);
+			$("#edit_"+id).find(".editCount").html(count);
+			$("#edit_"+id).find(".editPrice").html(price);
+			$("#edit_"+id).find(".operation").html('<a href="javascript:edit('${list.id}');" class="edit">修改</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+		
+		}else{
+			alert("确认收货失败!");	
+		}
+	});
+}
 </script>
 </head>
 <body>
@@ -44,6 +137,7 @@ function query(page){
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">RFID采购单管理</h2>
+      <form action="" method="post" id="search_form">
       <div id="searchBox">
       <p>RFID采购单号
         <input type="text" name="purchaseNo" value="${query.purchaseNo}" />
@@ -79,7 +173,9 @@ function query(page){
        <input type="text" name="startDate" value="${query.startDate}" datepicker/>-<input type="text" name="endDate" value="${query.endDate}" datepicker/>
         <button class="btn btn-blue"><span>查询</span></button>
     </div>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+    </form>
+    <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="9%"/>
 		<col width="9%"/>
         <col width="15%"/>
@@ -105,73 +201,24 @@ function query(page){
           <th class="rLine">操作</th>
         </tr>
         <#list list as list>
-        <tr>
+        <tr id="edit_${list.id}">
+        <input type="hidden" value="${list.supplierNo}" class="supplierNo" name="supplierNo"/>
 		  <td>${list.purchaseNo}</td>
-          <td><a href="#" class="lnk-blue">${list.applyNo}</a></td>
-          <td>${list.supplierName}</td>
+          <td><a href="javascript:loadInfo('${list.id}','${list.applyNo}');" class="lnk-blue">${list.applyNo}</a></td>
+          <td class="editName">${list.supplierName}</td>
           <td>${list.rfidType.getName()}</td>
-		  <td>${list.count}</td>
-		  <td>${list.price}</td>
+		  <td class="editCount">${list.count}</td>
+		  <td class="editPrice">${list.price}</td>
 		  <td>${list.purchaseDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
-          <td><#if list.payState.getId()==0><em class="state verified">已付款</em> <#else><button class="btn btn-gray"><span>确认付款</span></button></#if></td>
-		  <td><#if list.receiptState.getId()==0><button class="btn btn-gray"><span>确认发货</span></button><#elseif list.DeliveryStateEnum.getId()==1><button class="btn btn-orange"><span>确认收货</span></button><#else> <em class="state verified">已收货</em></#if></td>
-		  <td><#if list.importState.getId()==0><button onclick="javascript:window.location.href='rfid-add.html'" class="btn btn-gray"><span>导入</span></button><#else><em class="state verified">已导入</em></#if></td>
-		  <td class="operation"><a href="purchase-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
+          <td><#if list.payState.getId()==1><em class="state verified">已付款</em> <#else><button class="btn btn-gray" onclick="confirmPay('${list.id}');"><span>确认付款</span></button></#if></td>
+		  <td><#if list.receiptState.getId()==0><button class="btn btn-gray" onclick="confirmDelivery('${list.id}');"><span>确认发货</span></button><#elseif list.receiptState.getId()==1><button class="btn btn-orange" onclick="confirmReceipt('${list.id}');"><span>确认收货</span></button><#else> <em class="state verified">已收货</em></#if></td>
+		  <td><#if list.importState.getId()==0><button onclick="javascript:toImport('${list.id}')" class="btn btn-gray"><span>导入</span></button><#else><em class="state verified">已导入</em></#if></td>
+		  <td class="operation"><a href="javascript:edit('${list.id}');" class="edit">修改</a><a href="javascript:del('${list.id}');" class="del">删除</a></td>
         </tr>
-         </#list>
-		<tr class="tableInfo" style="display:;">
-        <td colspan="11">
-        <div class="infoBox text-left">
-          <ul class="ly-clearFix">
-            <li>
-              <label>申请人名称</label>
-              江苏私享家商贸有限公司</li>
-            <li>
-              <label>申请人地址</label>
-              栖霞区仙林大道18号B幢</li>
-			  <li>
-              <label>固定电话</label>
-              025-56956958</li>
-            <li>
-              <label>申请总数量</label>
-              10000</li>
-			  <li>
-              <label>招标合同号</label>
-              CT14070001</li>
-              <li>
-                <label>订单总额</label>
-                600元</li>
-              <li><label>RFID申请单时间</label>2014年9月15日12:30:03</li>
-          </ul>
-			 <div class="btnBox text-center"><a href="#" class="button button-gray button-small">收起</a></div>
-			  </div>		  </td>		  
+        <tr class="tableInfo" id="info${list.id}">
 	   </tr>
-		<tr>
-		  <td>CG14070001</td>
-          <td><a href="#" class="lnk-blue">RF14070001</a></td>
-          <td>三宝科技有限公司</td>
-          <td>门窗标签</td>
-		  <td>1000</td>
-		  <td>0.6</td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td><button class="btn btn-gray"><span>确认付款</span></button></td>
-		  <td><button class="btn btn-orange"><span>确认收货</span></button></td>
-		  <td><button onclick="javascript:window.location.href='rfid-add.html'" class="btn btn-gray"><span>导入</span></button></td>
-		  <td class="operation"><a href="purchase-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
-        </tr>
-		 <tr> 
-		  <td>CG14070001</td>
-          <td><a href="#" class="lnk-blue">RF14070002</a></td>
-          <td>三宝科技有限公司</td>
-          <td>玻璃标签</td>
-		  <td>1000</td>
-		  <td>0.55</td>
-		  <td>2014年9月20日</br>12:30:03</td>
-          <td><em class="state verified">已付款</em></td>
-		  <td><em class="state verified">已收货</em></td>
-		  <td><em class="state verified">已导入</em></td>
-		  <td class="operation"><a href="purchase-edit.html" class="edit">修改</a><a href="#" class="del">删除</a></td>
-        </tr>
+         </#list>
+		
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
