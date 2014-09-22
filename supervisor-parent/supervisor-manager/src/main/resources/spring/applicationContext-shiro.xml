@@ -102,6 +102,10 @@
 				/member/memberList.htm=user,frameperms
 				/record/recordList.htm=user,frameperms
 				/system/account-list.htm=user,frameperms
+				/rfid/apply/appList.htm=user,frameperms
+				/rfid/window/query.htm=user,frameperms
+				/rfid/logistics/query.htm=user,frameperms
+				/rfid/supplier/supplier_list.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->
