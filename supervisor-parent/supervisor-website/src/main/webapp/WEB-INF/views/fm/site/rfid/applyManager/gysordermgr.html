@@ -7,6 +7,7 @@
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<@b.pageScript/>
 <script>
 jQuery(document).ready(function($) {
 	$('.btnPassword').click(function(){
@@ -27,6 +28,22 @@ jQuery(document).ready(function($) {
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script>
+ function query(page){
+		var params=$("#search_form").serialize();
+		if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	  	}
+		$.post("applyManager_list.htm",params,function(data){
+			var tableList=$(data).find(".tabList").html();
+			$("#rightBar").find(".tabList").html(tableList);
+			var pager=$(data).find("#rightBar").children("#pager");
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		})
+ }
+</script>
 </head>
 
 <body>
@@ -35,21 +52,31 @@ jQuery(document).ready(function($) {
 <div class="fence-wide ly-clearFix">
 <div class="main pb20">
 <@b.leftMenu />
-<div class="yard-870 rightSide ly-left">
+<div class="yard-870 rightSide ly-left" id="rightBar">
 <div class="heading mb15 ly-clearFix">
   <h1 class="ly-left">
   <span class="title fontYH f20 fb">物流标签申请管理</span></h1>
 </div>
 <div class="contBox f12">
-<div class="searBox mb10">标签申请单号<input type="text" name="" value="" class="input">付款状态<select name="select"><option selected="selected">全部</option>
-            <option>未付款</option>
-            <option>已付款</option>
-            </select>收货状态<select name="select">
-            <option selected="selected">全部</option>
-            <option>发货中</option>
-            <option>已收货</option>
-            </select>申请时间段<input type="text" class="input input-time cal form-control" name="" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="" value="" datepicker><button class="button button-search">查询</button>
+<div class="searBox mb10">
+<form action="javascript:void(0)" id="search_form">
+标签申请单号<input type="text" name="applyNo" value="" class="input">
+         付款状态<select name="payState">
+         <option selected="selected" value="">全部</option>
+            <#list m_pay_states as m_pay_state>
+            <option value="${m_pay_state.id}">${m_pay_state.getName()}</option>
+            </#list>
+            </select>
+            收货状态<select name="receiptState">
+            <option selected="selected" value="">全部</option>
+            <#list receipt_states as receipt_state>
+            <option value="${receipt_state.id}">${receipt_state.getName()}</option>
+            </#list>
+            </select>
+            申请时间段<input type="text" class="input input-time cal form-control" name="starApplyDate" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="endApplyDate" value="" datepicker><button class="button button-search" onclick="query();return false;">查询</button>
+</form>
 </div>
+ <@b.pager/>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList">
   <col width="15%" />
   <col width="10%" />
@@ -67,33 +94,25 @@ jQuery(document).ready(function($) {
       <th>收货状态</th>
 	  <th class="rLine">操作</th>
     </tr>
+    <#list list as model>
     <tr>
-      <td>RF14070001</td>
-      <td>玻璃标签</td>
-      <td>1000</td>
-      <td>2014年08月15日 15:03:10 </td>
+      <td>${model.applyNo}</td>
+      <td>${model.rfidType.getName()}</td>
+      <td>${model.count}</td>
+      <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+      <#if (model.payState.id==1)>
       <td><span class="state frozen">未付款</span></td>
+      <#else>
+      <td><span class="state verified">已付款</span></td>
+      </#if>
+      <#if (model.receiptState.id==0)>
       <td><span class="state normal">发货中</span></td>
+      <#else>
+      <td><span class="state verified">已收货</span></td>
+      </#if>
 	  <td><a href="#" class="lnk-blue" title="后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！"><span class="icon icon16 icon-del"></span>删除</a></td>
     </tr>
-    <tr>
-      <td>RF14070002</td>
-      <td>型材标签</td>
-      <td>1500</td>
-      <td>2014年07月10日 16:20:50 </td>
-      <td><span class="state frozen">未付款</span></td>
-      <td><span class="state verified">已收货</span></td>
-	  <td><a href="#" class="lnk-blue"><span class="icon icon16 icon-del"></span>删除</a></td>
-    </tr>
-    <tr>
-      <td>RF14070003</td>
-      <td>玻璃标签</td>
-      <td>2000</td>
-      <td>2014年07月10日 15:50:15</td>
-      <td><span class="state verified">已付款</span></td>
-      <td><span class="state normal">发货中</span></td>
-	  <td><a href="#" class="lnk-blue"><span class="icon icon16 icon-del"></span>删除</a></td>
-      </tr>
+    </#list>
   </table>
 </div>
 </div>

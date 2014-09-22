@@ -30,6 +30,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			QueryCondition<RfidApplicationEntity> condition = new QueryCondition<RfidApplicationEntity>();
 			if (query != null) {
 				condition.addCondition("applyNo", query.getApplyNo());// RFID申请单号
+				condition.addCondition("memberNo", query.getMemberNo());// 申请人名称
 				condition.addCondition("memberName", query.getMemberName());// 申请人名称
 				condition.addCondition("contractNo", query.getContractNo());// 招标合同号
 				condition.addCondition("rfidType", query.getRfidType());// RFID类型
