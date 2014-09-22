@@ -45,10 +45,10 @@ public class HierarchicalCache implements Cache
     
     private void putObject(int level, Object key, Object value, int seconds)
     {
-        
-        HierarchicalCacheManager.set(level, this.cacheId, key, value);
+        HierarchicalCacheManager.evict(level, cacheId, key);
+        HierarchicalCacheManager.set(level, this.cacheId, key, value, seconds);
         if ((level - 1) > 0)
-            putObject(level + 1, key, value, seconds);
+            putObject(level - 1, key, value, seconds);
     }
     
     @Override
