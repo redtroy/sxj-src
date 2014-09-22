@@ -33,7 +33,7 @@
 	</bean>
 	<!-- 后置处理器，初始化所有Mapper -->
 	<bean class="com.sxj.mybatis.shard.listener.MybatisMapperProcessor"></bean>
-
+	<bean class="com.sxj.cache.spring.MethodCacheAspectJ"></bean>
 
 	<!-- 启动 事务 -->
 	<bean id="transactionManager"

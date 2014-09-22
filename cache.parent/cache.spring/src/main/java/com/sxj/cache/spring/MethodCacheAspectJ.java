@@ -49,6 +49,7 @@ public class MethodCacheAspectJ
             
             if (result != null)
             {
+                System.err.println("---------------------------");
                 HierarchicalCacheManager.set(level.ordinal(),
                         name,
                         cacheKey,
@@ -65,7 +66,7 @@ public class MethodCacheAspectJ
         Class<?>[] parameterTypes = new Class<?>[arguments.length];
         for (int i = 0; i < arguments.length; i++)
         {
-            parameterTypes[i] = arguments.getClass();
+            parameterTypes[i] = arguments[i].getClass();
         }
         Method method = clazz.getMethod(methodName, parameterTypes);
         if (method.isAnnotationPresent(Cached.class))

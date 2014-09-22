@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.cache.manager.CacheLevel;
+import com.sxj.cache.spring.annotation.Cached;
 import com.sxj.supervisor.dao.system.ISystemAccountDao;
 import com.sxj.supervisor.entity.system.RoleEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
@@ -159,6 +161,7 @@ public class SystemAccountServiceImpl implements ISystemAccountService
     }
     
     @Override
+    @Cached(level = CacheLevel.REDIS, name = "serviceCache", timeToLive = 30)
     public SystemAccountEntity getAccountByAccount(String account)
             throws ServiceException
     {
