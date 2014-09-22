@@ -94,20 +94,20 @@ function closeInfo(id){
 }
 
 function edit(id){
-	  $("#edit_"+id).find(".editName").html('<input type="text" id="supplierName" name="supplierName" value="'+$("#edit_"+id).find(".editName").text()+'" /><input type="hidden" id="supplierNo" name="supplierNo" value="'+$("#edit_"+id).find("#supplierNo").val()+'" />');
+	  $("#edit_"+id).find(".editName").html('<input type="text" class="supplierName" name="supplierName" value="'+$("#edit_"+id).find(".editName").text()+'" /><input type="hidden" class="supplierNo" name="supplierNo" value="'+$("#edit_"+id).find("#supplierNo").val()+'" />');
 	  var url_ = "${basePath}autoSupplier.htm";
-	  $("#edit_"+id).find("#supplierName").bigAutocomplete({url:url_,callback:function(data){
+	  $("#edit_"+id).find(".editName").find(".supplierName").bigAutocomplete({url:url_,callback:function(data){
 		  $("#edit_"+id).find(".supplierNo").val(data.result);
 	    }});
-	  $("#edit_"+id).find(".editCount").html('<input type="text" id="count" name="count" value="'+$("#edit_"+id).find(".editCount").text()+'" />');
-	  $("#edit_"+id).find(".editPrice").html('<input type="text" id="price" name="price" value="'+$("#edit_"+id).find(".editPrice").text()+'" />');
+	  $("#edit_"+id).find(".editCount").html('<input type="text" class="count" name="count" value="'+$("#edit_"+id).find(".editCount").text()+'" />');
+	  $("#edit_"+id).find(".editPrice").html('<input type="text" class="price" name="price" value="'+$("#edit_"+id).find(".editPrice").text()+'" />');
 	  $("#edit_"+id).find(".operation").html('<a href="javascript:save(\''+id+'\');" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
 }
 function save(id){
-	var supplierName =$("#edit_"+id).find(".editName").find("#supplierName").val();
-	var supplierNo =$("#edit_"+id).find(".editName").find("#supplierNo").val();
-	var price = $("#edit_"+id).find(".editCount").find("#price").val();
-	var count=$("#edit_"+id).find(".editPrice").find("#count").val();
+	var supplierName =$("#edit_"+id).find(".editName").find(".supplierName").val();
+	var supplierNo =$("#edit_"+id).find(".editName").find(".supplierNo").val();
+	var price = $("#edit_"+id).find(".editPrice").find(".price").val();
+	var count=$("#edit_"+id).find(".editCount").find(".count").val();
 	var o ={id:id,supplierName:supplierName,supplierNo:supplierNo,price:price,count:count};
 	$.post("modify.htm",o,function(data){
 		if(data.isOK=='ok'){
@@ -115,9 +115,9 @@ function save(id){
 			$("#edit_"+id).find(".supplierNo").val(supplierNo);
 			$("#edit_"+id).find(".editCount").html(count);
 			$("#edit_"+id).find(".editPrice").html(price);
-			$("#edit_"+id).find(".operation").html('<a href="javascript:edit('${list.id}');" class="edit">修改</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+			$("#edit_"+id).find(".operation").html('<a href="javascript:edit(\''+id+'\');" class="edit">修改</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
 		
-		}else{
+		}else{ 
 			alert("确认收货失败!");	
 		}
 	});
@@ -152,20 +152,20 @@ function save(id){
           <option>型材标签</option>
         </select>
 	   付款状态<select name="payState">
-          <option selected="selected">全部</option>
+          <option selected="selected" value="">全部</option>
 		  <option>未付款</option>
           <option>已付款</option>
         </select>
 		发货状态
 		<select name="receiptState">
-		<option selected="selected">全部</option>
+		<option selected="selected" value="">全部</option>
           <option>未发货</option>
 		  <option>已发货</option>
           <option>已收货</option>
         </select></p>
 		导入状态
 		<select name="importState">
-		<option selected="selected">全部</option>
+		<option selected="selected" value="">全部</option>
           <option>未导入</option>
 		  <option>已导入</option>
         </select>
