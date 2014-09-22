@@ -15,7 +15,6 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.ExceptionUtil;
-import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.MyBatisExceptionTranslator;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -34,7 +33,7 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
     
     private static final long serialVersionUID = -6424540398559729838L;
     
-    private Configuration cfg = MybatisConfiguration.getConfiguration();
+    //    private Configuration cfg = MybatisConfiguration.getConfiguration();
     
     private <T> ShardMapperProxy()
     {
@@ -52,7 +51,8 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
         final ShardMapperMethod mapperMethod = new ShardMapperMethod(
                 declaringInterface, method);
         String commandName = mapperMethod.getCommandName();
-        MappedStatement ms = cfg.getMappedStatement(commandName);
+        MappedStatement ms = MybatisConfiguration.getConfiguration()
+                .getMappedStatement(commandName);
         Object param = wrapCollection(mapperMethod.getParam(args));
         /**
          * 生成主键和SN，REQUIRE_NEW策略
