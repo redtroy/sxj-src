@@ -1,7 +1,12 @@
 package com.sxj.supervisor.dao.util;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CustomDecimal
 {
@@ -69,9 +74,20 @@ public class CustomDecimal
         return new DecimalFormat(sb.toString());
     }
     
-    public static void main(String... args)
+    public static void main(String... args) throws IOException
     {
-        System.out.println(CustomDecimal.getDecimalString(3,
-                BigDecimal.valueOf(1757599999)));
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        FileWriter writer = new FileWriter(new File("g:\\id.txt"));
+        for (int i = 1; i <= 1757599999; i++)
+        {
+            
+            writer.write(CustomDecimal.getDecimalString(3,
+                    BigDecimal.valueOf(i)));
+            writer.write(System.getProperty("line.separator"));
+            if (i % 1000 == 0)
+                writer.flush();
+        }
+        writer.close();
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
     }
 }

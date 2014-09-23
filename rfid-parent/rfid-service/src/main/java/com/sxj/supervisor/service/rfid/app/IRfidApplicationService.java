@@ -16,6 +16,16 @@ public interface IRfidApplicationService {
 	 */
 	public List<RfidApplicationEntity> query(RfidApplicationQuery query)
 			throws ServiceException;
+	
+	/**
+	 * 根据申请单号
+	 * 
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */
+	public RfidApplicationEntity getApplication(String no)
+			throws ServiceException;
 
 	/**
 	 * 更新
