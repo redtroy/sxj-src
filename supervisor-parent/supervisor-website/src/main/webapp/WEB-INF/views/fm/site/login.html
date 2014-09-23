@@ -39,6 +39,11 @@
 <@b.footer />
 </body>
 <script>
+$(document).keyup(function(event){
+	  if(event.keyCode ==13){
+		  login();
+	  }
+	});
 function login()
 {
 	$("#login_form").submit();
