@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script>
+$(function($) {
+		 var url_ = "${basePath}autoSupplier.htm";
+		$("#supplierName").bigAutocomplete({url:url_,callback:function(data){
+			  $("#supplierNo").val(data.result);
+		 }});	
+});
+function saveAdd(){
+	var count =$("#count").val();
+	if(count!=0){
+		if(confirm('是否生成采购单?')){
+			$.post("add.htm",$("#add").serialize(),function(data){
+				if(data.isOK=='ok'){
+					alert("生成成功!");
+					window.location.href="query.htm";
+				}else{
+					alert("生成失败!");	
+				}
+			});
+			}
+	}else{
+		alert("申请数量已用完!");
+	}
+}
+function sum(){
+	var remaining = $("#remaining").val();
+	var price=$("#price").val();
+	var count =$("#count").val();
+	if(parseInt(count)>parseInt(remaining)){
+		$("#count").val(remaining);
+	}
+	var ze=Number(price)*Number(count);
+	$("#ddze").html(ze+"元");
+}
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<@b.header/>
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<@b.menuPath/>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList">
+      <@b.leftMenu />
+    </div>
+    <form action="" method="post" id="add">
+    <input type="hidden" name="contractNo" value="${app.contractNo}" />
+    <input type="hidden" name="applyId" value="${app.id}" />
+    
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+    <h2 class="title">生成RFID采购单</h2>
+    <div class="infoBox f14">
+      <div>
+        <label>对应申请单号</label>
+        ${app.applyNo}
+        <input type="hidden" id="" name="applyNo" class="text tip" value="${app.applyNo}" />
+      </div>
+      <div>
+        <label>RFID类型</label>
+        ${app.rfidType.getName()}
+        <input type="hidden" id="" name="rfidType" class="text tip" value="${app.rfidType.id}" />
+      </div>
+      <div>
+        <label>RFID供应商</label>
+        <input type="text" id="supplierName" name="supplierName" class="text tip" title="" />
+        <input type="hidden" id="supplierNo" name="supplierNo" class="text tip" title="" />
+      </div>
+      <div>
+        <label>实际采购价格</label>
+        <input type="text" id="price" name="price" class="input-w30" value="" title="" onkeyup="value=value.replace(/[^\d.]/g,'');sum();" onafterpaste="value=value.replace(/[^\d.]/g,'');sum();" />元
+      </div>
+      <div>
+        <label>采购数量</label>
+        <input type="hidden" id="remaining" value="${app.count-app.hasNumber}" />
+         <input type="hidden" id="hasNumber" name="hasNumber" value="${app.hasNumber}" />
+        
+        <input type="text" id="count" name="count" class="input-w80" value="${app.count-app.hasNumber}" title="" onkeyup="this.value=this.value.replace(/\D/g,'');sum();" onafterpaste="this.value=this.value.replace(/\D/g,'');sum();"/><span class="color-red f12">该申请单已采购${app.hasNumber}张RFID</span>
+      </div>
+      <div>
+        <label>订单总额</label><span class="color-blue"><strong id="ddze">0元</strong></span></div>     
+    <div class="btnBox"><a href="javascript:saveAdd()" class="button button-orange button-small">生成</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div></div>
+    <!-- InstanceEndEditable --></div>
+    </form>
+</div>
+
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>

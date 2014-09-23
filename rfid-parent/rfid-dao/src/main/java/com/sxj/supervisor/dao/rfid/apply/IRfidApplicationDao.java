@@ -3,6 +3,7 @@ package com.sxj.supervisor.dao.rfid.apply;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
@@ -27,5 +28,8 @@ public interface IRfidApplicationDao {
 	 */
 	@Insert
 	public void addRfidApplication(RfidApplicationEntity app)
+			throws SQLException;
+	@Get
+	public RfidApplicationEntity getRfidApplication(String  id)
 			throws SQLException;
 }
