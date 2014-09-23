@@ -1,5 +1,7 @@
 package com.sxj.supervisor.service.impl.rfid.purchase;
 
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
-import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
-import com.sxj.supervisor.model.rfid.base.LogModel;
+import com.sxj.supervisor.entity.rfid.sale.RfidPriceEntity;
+import com.sxj.supervisor.entity.rfid.sale.RfidSaleStatisticalEntity;
+import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
 import com.sxj.supervisor.service.rfid.purchase.IPurchaseRfidService;
+import com.sxj.supervisor.service.rfid.sale.IRfidPriceService;
+import com.sxj.supervisor.service.rfid.sale.IRfidSaleStatisticalService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 @Service
@@ -21,6 +26,11 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	@Autowired
 	private IRfidPurchaseDao rfidPurchaseDao;
 	
+	@Autowired
+	private IRfidSaleStatisticalService saleStatisticalService;
+	
+	@Autowired
+	private IRfidPriceService rfidPriceService;
 	@Override
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
 			throws ServiceException {
@@ -68,6 +78,38 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			throw new ServiceException("获取采购单错误", e);
 		}
 		
+	}
+
+	/**
+	 * 确认发货
+	 */
+	@Override
+	@Transactional
+	public void confirmDelivery(String id) throws ServiceException {
+		try {
+			RfidPurchaseEntity purchase= rfidPurchaseDao.getRfidPurchase(id);
+			purchase.setReceiptState(DeliveryStateEnum.shipped);
+			rfidPurchaseDao.updateRfidPurchase(purchase);
+			RfidSaleStatisticalEntity entity = new RfidSaleStatisticalEntity();
+			entity.setApplyNo(purchase.getApplyNo());
+			entity.setPurchaseNo(purchase.getPurchaseNo());
+			entity.setSaleDate(new Date());
+			List<RfidPriceEntity> list= rfidPriceService.queryPrice();
+			if(list!=null && list.size()>0){
+				RfidPriceEntity price = list.get(0);
+				if(purchase.getRfidType().getId()==0){
+					entity.setPrice(price.getWindowPrice());
+				}else{
+					entity.setPrice(price.getLogisticsPrice());
+				}
+				
+			}else{
+				throw new ServiceException();
+			}
+			saleStatisticalService.add(entity);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
