@@ -8,7 +8,7 @@
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="applyNo" column="APPLY_NO" jdbcType="VARCHAR" />
 		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
-		<result property="price" column="PRICE" jdbcType="INTRGER" />
+		<result property="price" column="PRICE" jdbcType="INTEGER" />
 		<result property="saleDate" column="SALE_DATE" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<!-- 按条件查询 -->
