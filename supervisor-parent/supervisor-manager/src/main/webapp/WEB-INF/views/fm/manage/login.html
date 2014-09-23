@@ -35,6 +35,12 @@
 </body>
 <script type="text/javascript" src="${b.staticPath}js/jquery.poshytip.min.js" charset="utf-8"></script>
 <script>
+$(document).keyup(function(event){
+	  if(event.keyCode ==13){
+		  login();
+	  }
+	});
+
 function login()
 {
 	$("#login_form").submit();

@@ -1,13 +1,21 @@
-
     <#list list as model>
 	<h2 class="tit">${model.function.title}</h2>
 	<ul>
 	    <#list model.children as mc>
 	    <#if Session.function==mc.id>
-		<li class="on"><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
+		<li class="now"><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
 		<#else>
 		<li><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
 		</#if>
 		</#list>
 	</ul>
 	</#list>
+<script>
+function changeClass(a)
+{
+    $("li").removeClass();
+    $(a).addClass("now");
+}
+
+
+</script>
