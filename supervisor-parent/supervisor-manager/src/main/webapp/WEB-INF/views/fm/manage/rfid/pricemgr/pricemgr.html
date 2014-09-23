@@ -6,6 +6,7 @@
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<@b.validate/>
 <script>
 jQuery(document).ready(function($) {
 	$('.sltinput').click(function(){
@@ -21,6 +22,43 @@ jQuery(document).ready(function($) {
 		$('.dropList').slideUp(200);
 	})
 })
+var validform;
+$(function(){
+	 validform=$("#sub_form").Validform({
+		 tiptype:3,
+		 datatype:{
+			"f":/^(\d+(?:\.\d{2})?|-1)$/
+		 }
+	 });
+})
+
+function update(id){
+	var params=$("#sub_form").serialize();
+	if(!validform.check()){
+		return false;
+	}
+	
+	$.post("update.htm?id="+id,params,function(data){
+		alert('修改成功！');
+		query();
+	})
+	
+}
+function add(){
+	var params=$("#sub_form").serialize();
+	if(!validform.check()){
+		return false;
+	}
+	$.post("add.htm",params,function(data){
+		alert('修改成功！');
+		query();
+	})
+}
+function query(){
+	$.post("pricemgr_view.htm",function(data){
+		$("#rightBar").html($(data).find("#rightBar").html());
+	})
+	}	
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -44,21 +82,28 @@ jQuery(document).ready(function($) {
     <div class="infoBox f14">
       <div>
         <label>门窗RFID销售价</label>
-        0.00元
+        <#if (model??)> ${model.windowPrice/100}  <#else>0.00元  </#if>
       </div>
       <div>
         <label>批次RFID销售价</label>
-        0.00元
+         <#if (model??)> ${model.logisticsPrice/100 } <#else>0.00元  </#if>
       </div>
+      <form action="javascript:void(0)" id="sub_form">
       <div>
         <label>新门窗RFID单价</label>
-        <input type="text" id="" name="" value="" class="input-w30"/>元
+        <input type="text" id="windowPrice" name="windowPrice" value=""  class="input-w30" datatype="f" errormsg="请填写正确的数据类型"/>元
       </div>
       <div>
         <label>新批次RFID单价</label>
-        <input type="text" id="" name="" value="" class="input-w30"/>元
-      </div>   
-      <div class="btnBox"><a href="#" class="button button-orange button-small">设置</a><a href="welcome.html" class="button button-gray button-small">返回</a> </div></div>
+        <input type="text" id="logisticsPrice" name="logisticsPrice" value="" class="input-w30" datatype="f" errormsg="请填写正确的数据类型" />元
+      </div> 
+      </form>
+      <#if (model??)>  
+      <div class="btnBox"><a href="" onclick="update('${model.id}');return false;" class="button button-orange button-small">设置</a><a href="welcome.html" class="button button-gray button-small">返回</a> </div>
+      <#else>
+      <div class="btnBox"><a href="" onclick="add();return false;" class="button button-orange button-small">设置</a><a href="welcome.html" class="button button-gray button-small">返回</a> </div>
+      </#if>
+      </div>
     <!-- InstanceEndEditable --></div>
 </div>
 <@b.footer /> 
