@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-=======
-﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
->>>>>>> d163776d0000e297a88684da0510835f663aebac
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,7 +8,6 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script>
-<<<<<<< HEAD
 function check(contractNo,count){
 	/*
 	$.post("check_contract.htm",{contractNo:contractNo,count:count},function(data){
@@ -43,15 +38,13 @@ function check(contractNo,count){
     return flag;
 }
 
-=======
->>>>>>> d163776d0000e297a88684da0510835f663aebac
+
 function sub(){
 	 var memberNo= "${member.memberNo}";
 	 var memberName="${member.name}";
 	 var count=$("#count").val();
 	 var contractNo=$("#contractNo").val();
 	 var rfidType=${member.type.id};
-<<<<<<< HEAD
 	 if (!count.match(/^[0-9]*$/)){
 		 alert("申请数量请输入有效数字！");
 		 return false;
@@ -66,13 +59,6 @@ function sub(){
 		 })
 	 }
 	 
-=======
-	 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType,contractNo:contractNo},function(data){
-		 if (data.isOk="ok"){
-			 alert("添加成功！");
-		 }
-	 })
->>>>>>> d163776d0000e297a88684da0510835f663aebac
 }
 </script>
 </head>
