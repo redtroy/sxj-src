@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+=======
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -8,6 +12,7 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script>
+<<<<<<< HEAD
 function check(contractNo,count){
 	/*
 	$.post("check_contract.htm",{contractNo:contractNo,count:count},function(data){
@@ -38,12 +43,15 @@ function check(contractNo,count){
     return flag;
 }
 
+=======
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
 function sub(){
 	 var memberNo= "${member.memberNo}";
 	 var memberName="${member.name}";
 	 var count=$("#count").val();
 	 var contractNo=$("#contractNo").val();
 	 var rfidType=${member.type.id};
+<<<<<<< HEAD
 	 if (!count.match(/^[0-9]*$/)){
 		 alert("申请数量请输入有效数字！");
 		 return false;
@@ -58,6 +66,13 @@ function sub(){
 		 })
 	 }
 	 
+=======
+	 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType,contractNo:contractNo},function(data){
+		 if (data.isOk="ok"){
+			 alert("添加成功！");
+		 }
+	 })
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
 }
 </script>
 </head>
@@ -82,13 +97,21 @@ function sub(){
         </div>
 	    <div class="item">
           <label>对应门窗招标合同</label>
+<<<<<<< HEAD
           <input class="input input-w180h36 mr5" name="contractNo" id="contractNo" value=""/><em class="color-red" id="erro_text">认证标签与门窗合同绑定，定额定量发放！如无需要，请勿自助申请！</em></div>
+=======
+          <input class="input input-w180h36 mr5" name="contractNo" id="contractNo" value=""/><em class="color-red">认证标签与门窗合同绑定，定额定量发放！如无需要，请勿自助申请！</em></div>
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
         <div class="item">
           <label>申请数量</label>
           <input class="input input-w180h36" name="count" id="count" value=""/>
         </div>
        <div class="item mt10">
+<<<<<<< HEAD
           <label>&nbsp;</label><a href="" onclick="sub();return false;" class="button button-orange mr15" title="点申请时需要判断该笔招标合同关联的RFID数量是否已经达到合同里的门窗数量，如果超过门窗数量不可申请，提示错误信息">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
+=======
+          <label>&nbsp;</label><a href="javascript:sub()" class="button button-orange mr15" title="点申请时需要判断该笔招标合同关联的RFID数量是否已经达到合同里的门窗数量，如果超过门窗数量不可申请，提示错误信息">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
         </div>
       </div>
     </div>

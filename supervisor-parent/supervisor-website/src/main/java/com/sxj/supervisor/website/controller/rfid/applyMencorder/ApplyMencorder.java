@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package com.sxj.supervisor.website.controller.rfid.applyMencorder;
+=======
+﻿package com.sxj.supervisor.website.controller.rfid.applyMencorder;
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+<<<<<<< HEAD
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.service.contract.IContractService;
+=======
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
@@ -27,11 +34,16 @@ public class ApplyMencorder extends BaseController {
 	@Autowired
 	private IRfidApplicationService applyService;
 
+<<<<<<< HEAD
 	@Autowired
 	private IContractService contractService;
 
 	/**
 	 * 认证标签申请页面
+=======
+	/**
+	 * 认证标签申请状态
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
 	 * 
 	 * @param map
 	 * @param session
@@ -69,6 +81,7 @@ public class ApplyMencorder extends BaseController {
 		}
 		return map;
 	}
+<<<<<<< HEAD
 
 	/**
 	 * 根据合同号检查合同，做合同匹配认证，数量认证
@@ -107,4 +120,6 @@ public class ApplyMencorder extends BaseController {
 			throw new WebException("合同检查错误");
 		}
 	}
+=======
+>>>>>>> d163776d0000e297a88684da0510835f663aebac
 }

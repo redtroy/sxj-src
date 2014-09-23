@@ -106,7 +106,7 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 	private PayStateEnum payState;
 
 	/**
-	 * 收货状态
+	 * 发货状态
 	 */
 	@Column(name = "RECEIPT_STATE")
 	private DeliveryStateEnum receiptState;

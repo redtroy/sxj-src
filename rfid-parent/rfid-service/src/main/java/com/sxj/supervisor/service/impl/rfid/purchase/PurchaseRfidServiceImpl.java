@@ -60,9 +60,14 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	}
 
 	@Override
-	public List<LogModel> getRfidStateLog(String id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public RfidPurchaseEntity getRfidPurchase(String id) throws ServiceException {
+		try {
+			RfidPurchaseEntity purchase=rfidPurchaseDao.getRfidPurchase(id);
+			return purchase;
+		} catch (Exception e) {
+			throw new ServiceException("获取采购单错误", e);
+		}
+		
 	}
 
 }

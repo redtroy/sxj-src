@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao">
@@ -10,7 +10,7 @@
 		<result property="rfidType" column="RFID_TYPE" jdbcType="INTEGER" /> <!-- 枚举 -->
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="count" column="COUNT" jdbcType="INTEGER" />
-		<result property="applyDate" column="APPLY_DATE" jdbcType="DATE" />
+		<result property="applyDate" column="APPLY_DATE" jdbcType="TIMESTAMP" />
 		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" /><!-- 枚举 -->
 		<result property="receiptState" column="RECEIPT_STATE" jdbcType="INTEGER" /><!-- 枚举 -->
 		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
@@ -18,8 +18,7 @@
 	<!-- 按条件查询供应商 -->
 	<select id="queryList" resultMap="ApplicationResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT *
-		 FROM R_RFID_APPLICATION WHERE 1=1]]>
+		<![CDATA[SELECT * FROM R_RFID_APPLICATION WHERE 1=1]]>
 		<!-- 申请ID -->
 		<if test="condition.applyNo != null and condition.applyNo !=''">
 			<![CDATA[AND APPLY_NO LIKE CONCAT('%',#{condition.applyNo},'%') ]]>

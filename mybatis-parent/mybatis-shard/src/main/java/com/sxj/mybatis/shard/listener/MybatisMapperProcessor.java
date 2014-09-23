@@ -31,21 +31,24 @@ import com.sxj.spring.modules.util.AnnotationUtils;
 public class MybatisMapperProcessor implements
         ApplicationListener<ContextRefreshedEvent>
 {
+    private static boolean initialized = false;
     
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event)
     {
-        try
-        {
-            MybatisConfiguration.initialize();
-            registerXMLMappers();
-            buildOrmMapper(event);
-            DataSourceFactory.initDataSources();
-        }
-        catch (IOException | ClassNotFoundException ioe)
-        {
-            throw new RuntimeException(ioe);
-        }
+        if (!initialized)
+            try
+            {
+                MybatisConfiguration.initialize();
+                registerXMLMappers();
+                buildOrmMapper(event);
+                DataSourceFactory.initDataSources();
+                initialized = true;
+            }
+            catch (IOException | ClassNotFoundException ioe)
+            {
+                throw new RuntimeException(ioe);
+            }
     }
     
     private void buildOrmMapper(ContextRefreshedEvent event)
