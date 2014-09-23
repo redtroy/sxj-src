@@ -31,6 +31,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sxj.jsonrpc.core.ErrorResolver;
+import com.sxj.jsonrpc.core.ProxyUtil;
 import com.sxj.jsonrpc.server.JsonRpcServer;
 
 /**

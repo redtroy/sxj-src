@@ -88,5 +88,10 @@
 			<artifactId>cache.spring</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>jsonrpc-core</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 </project>

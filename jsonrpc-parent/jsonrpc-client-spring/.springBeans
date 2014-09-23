@@ -7,8 +7,7 @@
 	</configSuffixes>
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>src/main/resources/spring/shard-database-config.xml</config>
-		<config>src/main/resources/spring/rpc/jsonrpc-config.xml</config>
+		<config>src/test/resources/rpc/jsonrpc-client-config.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>
