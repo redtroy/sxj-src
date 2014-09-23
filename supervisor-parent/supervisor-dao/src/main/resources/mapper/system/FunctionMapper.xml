@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sxj.supervisor.dao.system.IFunctionDao">
@@ -10,12 +10,12 @@
 		<result property="level" column="LEVEL" jdbcType="INTEGER" />
 	</resultMap>
 
-	<!-- 系统功能高级查询 --> 
+	<!-- 系统功能高级查询 -->
 	<select id="queryFunction" resultMap="FunctionResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT f.ID,f.TITLE,f.URL,f.PARENT_ID,f.LEVEL 
 		 FROM M_SYS_FUNCTION f WHERE 1=1]]>
-		 <if test="condition.parentId != null and condition.parentId!=''">
+		<if test="condition.parentId != null and condition.parentId!=''">
 			<![CDATA[ AND f.PARENT_ID=#{condition.parentId}]]>
 		</if>
 		<![CDATA[ ORDER BY f.DESC]]>

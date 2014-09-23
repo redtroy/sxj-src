@@ -66,15 +66,14 @@
 			javaType="com.sxj.supervisor.enu.rfid.window.WindowTypeEnum" />
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.RfidTypeEnum" />
-
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.DeliveryStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum" />
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.purchase.PayStateEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ImportStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum" />
-		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.purchase.PayStateEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

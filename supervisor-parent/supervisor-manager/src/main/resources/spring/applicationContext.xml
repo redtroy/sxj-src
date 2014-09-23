@@ -14,6 +14,7 @@
 
 	<import resource="classpath*:spring/database-config.xml" />
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
+	<import resource="classpath*:spring/rpc/jsonrpc-config.xml" />
 	<task:annotation-driven />
 	<context:annotation-config />
 
