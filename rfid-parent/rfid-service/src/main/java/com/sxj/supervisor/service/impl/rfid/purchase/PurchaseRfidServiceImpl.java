@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
+import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.entity.rfid.sale.RfidPriceEntity;
 import com.sxj.supervisor.entity.rfid.sale.RfidSaleStatisticalEntity;
@@ -31,6 +33,9 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	
 	@Autowired
 	private IRfidPriceService rfidPriceService;
+
+	@Autowired
+	IRfidApplicationDao appDao; 
 	@Override
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
 			throws ServiceException {
@@ -68,6 +73,21 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 		}
 
 	}
+	@Override
+	@Transactional
+	public void addPurchase(RfidPurchaseEntity purchase,String applyId,String hasNumber)
+			throws ServiceException {
+		try {
+			RfidApplicationEntity app = new RfidApplicationEntity();
+			app.setId(applyId);
+			app.setHasNumber(Long.valueOf(hasNumber)+purchase.getCount());
+			rfidPurchaseDao.addRfidPurchase(purchase);
+			appDao.updateRfidApplication(app);
+		} catch (Exception e) {
+			throw new ServiceException("新增采购单错误", e);
+		}
+
+	}
 
 	@Override
 	public RfidPurchaseEntity getRfidPurchase(String id) throws ServiceException {
@@ -88,7 +108,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	public void confirmDelivery(String id) throws ServiceException {
 		try {
 			RfidPurchaseEntity purchase= rfidPurchaseDao.getRfidPurchase(id);
-			purchase.setReceiptState(DeliveryStateEnum.shipped);
+			purchase.setReceiptState(DeliveryStateEnum.receiving);
 			rfidPurchaseDao.updateRfidPurchase(purchase);
 			RfidSaleStatisticalEntity entity = new RfidSaleStatisticalEntity();
 			entity.setApplyNo(purchase.getApplyNo());

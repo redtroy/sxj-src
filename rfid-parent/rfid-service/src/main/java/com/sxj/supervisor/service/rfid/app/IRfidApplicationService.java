@@ -48,4 +48,6 @@ public interface IRfidApplicationService {
 	 */
 	public void addApp(RfidApplicationEntity app) throws ServiceException;
 
+	RfidApplicationEntity getApplicationInfo(String id) throws ServiceException;
+
 }

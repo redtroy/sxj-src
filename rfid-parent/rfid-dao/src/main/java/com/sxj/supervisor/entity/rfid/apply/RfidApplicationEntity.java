@@ -98,6 +98,20 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "DEL_STATE")
 	private Boolean delstate = false;
+	/**
+	 * 已申请数量
+	 */
+	@Column(name = "HAS_NUMBER")
+	private Long hasNumber;
+	
+
+	public Long getHasNumber() {
+		return hasNumber;
+	}
+
+	public void setHasNumber(Long hasNumber) {
+		this.hasNumber = hasNumber;
+	}
 
 	public String getId() {
 		return id;

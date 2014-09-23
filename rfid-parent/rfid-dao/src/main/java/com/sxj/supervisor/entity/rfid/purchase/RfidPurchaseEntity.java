@@ -204,7 +204,7 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 		this.applyNo = applyNo;
 	}
 
-	public Enum getImportState() {
+	public ImportStateEnum getImportState() {
 		return importState;
 	}
 

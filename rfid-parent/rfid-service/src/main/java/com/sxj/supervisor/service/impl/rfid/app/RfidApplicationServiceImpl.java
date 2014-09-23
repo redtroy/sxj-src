@@ -131,5 +131,18 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			throw new ServiceException("获取申请单信息错误", e);
 		}
 	}
+	/**
+	 * 获取申请单
+	 */
+	@Override
+	public RfidApplicationEntity getApplicationInfo(String id)
+			throws ServiceException {
+		try {
+			RfidApplicationEntity app =appDao.getRfidApplication(id);
+			return app;
+		} catch (Exception e) {
+			throw new ServiceException("获取申请单信息错误", e);
+		}
+	}
 
 }
