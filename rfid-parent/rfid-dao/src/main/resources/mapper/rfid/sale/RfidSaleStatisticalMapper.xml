@@ -11,7 +11,7 @@
 		<result property="price" column="PRICE" jdbcType="INTEGER" />
 		<result property="saleDate" column="SALE_DATE" jdbcType="TIMESTAMP" />
 	</resultMap>
-	<!-- 按条件查询 -->
+	<!-- 按条件查询 --> 
 	<select id="queryList" resultMap="SaleStatisticalResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM R_RFID_PRICE WHERE 1=1 ]]>
