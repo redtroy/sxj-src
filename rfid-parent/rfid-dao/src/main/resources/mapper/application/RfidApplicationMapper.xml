@@ -14,6 +14,7 @@
 		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" /><!-- 枚举 -->
 		<result property="receiptState" column="RECEIPT_STATE" jdbcType="INTEGER" /><!-- 枚举 -->
 		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
+		<result property="hasNumber" column="HAS_NUMBER" jdbcType="INTEGER" />
 	</resultMap>
 	<!-- 按条件查询供应商 -->
 	<select id="queryList" resultMap="ApplicationResultMap"

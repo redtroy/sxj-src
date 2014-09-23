@@ -47,4 +47,7 @@ public interface IRfidApplicationService {
 	 * 新增申请单
 	 */
 	public void addApp(RfidApplicationEntity app) throws ServiceException;
+
+	RfidApplicationEntity getApplicationInfo(String id) throws ServiceException;
+
 }

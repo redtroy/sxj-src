@@ -16,9 +16,9 @@
 		<result property="purchaseDate" column="PURCHASE_DATE" jdbcType="TIMESTAMP" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="applyNo" column="APPLY_NO" jdbcType="VARCHAR" />
-		<result property="importState" column="IMPORT_STATE" jdbcType="INTEGER"  />
-		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" />
-		<result property="receiptState" column="RECEIPT_STATE" jdbcType="INTEGER" />
+		<result property="importState" column="IMPORT_STATE" jdbcType="INTEGER" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+		<result property="receiptState" column="RECEIPT_STATE" jdbcType="INTEGER" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
 		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
 	</resultMap>
 	<!-- 按条件查询采购申请单 -->

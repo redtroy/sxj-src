@@ -1,7 +1,9 @@
 package com.sxj.supervisor.model.rfid.purchase;
 
 import java.io.Serializable;
+
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 
 public class PurchaseRfidQuery extends Pagable implements Serializable {
 
@@ -27,7 +29,7 @@ public class PurchaseRfidQuery extends Pagable implements Serializable {
 	/**
 	 * RFID类型
 	 */
-	private String rfidType;
+	private RfidTypeEnum rfidType;
 
 	/**
 	 * 数量
@@ -75,6 +77,7 @@ public class PurchaseRfidQuery extends Pagable implements Serializable {
 	 */
 	private String receiptState;
 
+
 	public String getPurchaseNo() {
 		return purchaseNo;
 	}
@@ -99,11 +102,11 @@ public class PurchaseRfidQuery extends Pagable implements Serializable {
 		this.supplierName = supplierName;
 	}
 
-	public String getRfidType() {
+	public RfidTypeEnum getRfidType() {
 		return rfidType;
 	}
 
-	public void setRfidType(String rfidType) {
+	public void setRfidType(RfidTypeEnum rfidType) {
 		this.rfidType = rfidType;
 	}
 

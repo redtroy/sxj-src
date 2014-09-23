@@ -6,7 +6,11 @@
 
 	<properties>
 		<property name="dialect" value="mysql" />
+<<<<<<< HEAD
 		<property name="sharded" value="false"/>
+=======
+		<!-- <property name="sharded" value="true"/> -->
+>>>>>>> fbd4125577f0b71d5235ced783b02311acf014d8
 	</properties>
 	<settings>
 		<!-- changes from the defaults -->

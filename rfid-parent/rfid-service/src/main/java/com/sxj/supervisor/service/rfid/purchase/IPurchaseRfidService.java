@@ -26,4 +26,8 @@ public interface IPurchaseRfidService {
 	public void updatePurchase(RfidPurchaseEntity purchase) throws ServiceException;
 	
 	RfidPurchaseEntity getRfidPurchase(String id) throws ServiceException;
+	
+	public void  confirmDelivery(String  id) throws ServiceException;
+	void addPurchase(RfidPurchaseEntity purchase, String applyId,String hasNumber)
+			throws ServiceException;
 }

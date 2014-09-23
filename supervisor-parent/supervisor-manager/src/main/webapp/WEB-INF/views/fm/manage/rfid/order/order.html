@@ -162,7 +162,7 @@ jQuery(document).ready(function($) {
 		  <#else>
 		  <td><em class="state verified">已收货</em></td>
 		  </#if>
-		  <td><button onclick="javascript:window.location.href='purchase-add.html'" class="button button-green button-small"><span>生成采购单</span></button></td>
+		  <td><button onclick="javascript:window.location.href='${basePath}rfid/purchase/toAdd.htm?id=${model.id}'" class="button button-green button-small"><span>生成采购单</span></button></td>
 		  <td class="operation"><a href="javascript:edit('${model.id}');" class="edit">修改</a><a href="javascript:del('${model.id}')" class="del">删除</a></td>
         </tr>
         </#list>
