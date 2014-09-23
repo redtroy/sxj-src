@@ -147,27 +147,29 @@ function save(id){
        <input type="text" name="supplierName" value="${qunery.supplierName}" />
        RFID类型<select name="rfidType">
 	   <option selected="selected" value="">全部</option>
-          <option>门窗标签</option>
-          <option>玻璃标签</option>
-          <option>型材标签</option>
+          <#list type as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
         </select>
 	   付款状态<select name="payState">
           <option selected="selected" value="">全部</option>
-		  <option>未付款</option>
-          <option>已付款</option>
+		   <#list payState as payState> 
+          <option value="${payState.getId()}">${payState.getName()}</option>
+          </#list>
         </select>
 		发货状态
 		<select name="receiptState">
 		<option selected="selected" value="">全部</option>
-          <option>未发货</option>
-		  <option>已发货</option>
-          <option>已收货</option>
+           <#list delivery as delivery> 
+          <option value="${delivery.getId()}">${delivery.getName()}</option>
+          </#list>
         </select></p>
 		导入状态
 		<select name="importState">
 		<option selected="selected" value="">全部</option>
-          <option>未导入</option>
-		  <option>已导入</option>
+          <#list importState as importState> 
+          <option value="${importState.getId()}">${importState.getName()}</option>
+          </#list>
         </select>
        采购单时间段
        <input type="text" name="startDate" value="${query.startDate}" datepicker/>-<input type="text" name="endDate" value="${query.endDate}" datepicker/>
