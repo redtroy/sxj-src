@@ -74,6 +74,12 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ImportStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum" />
+			
+		<typeHandler handler="com.sxj.supervisor.typehandler.AssociationTypesEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.AuditStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.ref.AuditStateEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

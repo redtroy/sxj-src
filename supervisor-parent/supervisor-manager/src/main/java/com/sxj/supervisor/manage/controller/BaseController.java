@@ -22,6 +22,8 @@ import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
+import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.manage.comet.MessageConnectListener;
 import com.sxj.supervisor.manage.comet.MessageDropListener;
 import com.sxj.util.exception.SystemException;
@@ -61,6 +63,15 @@ public class BaseController {
 		binder.registerCustomEditor(ReceiptStateEnum.class,
 				new EnumPropertyEditorSupport<ReceiptStateEnum>(
 						ReceiptStateEnum.class));
+
+		binder.registerCustomEditor(AssociationTypesEnum.class,
+				new EnumPropertyEditorSupport<AssociationTypesEnum>(
+						AssociationTypesEnum.class));
+		binder.registerCustomEditor(AuditStateEnum.class,
+				new EnumPropertyEditorSupport<AuditStateEnum>(
+						AuditStateEnum.class));
+		binder.registerCustomEditor(RfidTypeEnum.class,
+				new EnumPropertyEditorSupport<RfidTypeEnum>(RfidTypeEnum.class));
 	}
 
 	protected String getBasePath(HttpServletRequest request) {

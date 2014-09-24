@@ -11,6 +11,9 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
+import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
+import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 
 /**
  * 物流RFID关联申请
@@ -63,13 +66,13 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 	 * RFID类型
 	 */
 	@Column(name = "RFID_TYPE")
-	private Enum rfidType;
+	private RfidTypeEnum rfidType;
 
 	/**
 	 * 关联类型
 	 */
 	@Column(name = "TYPE")
-	private Enum type;
+	private AssociationTypesEnum type;
 
 	/**
 	 * 批次
@@ -94,6 +97,14 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "CONTRACT_NO")
 	private String contractNo;
+
+	/**
+	 * 审核状态
+	 * 
+	 * @return
+	 */
+	@Column(name = "STATE")
+	private AuditStateEnum state;
 
 	public String getId() {
 		return id;
@@ -135,19 +146,19 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 		this.memberName = memberName;
 	}
 
-	public Enum getRfidType() {
+	public RfidTypeEnum getRfidType() {
 		return rfidType;
 	}
 
-	public void setRfidType(Enum rfidType) {
+	public void setRfidType(RfidTypeEnum rfidType) {
 		this.rfidType = rfidType;
 	}
 
-	public Enum getType() {
+	public AssociationTypesEnum getType() {
 		return type;
 	}
 
-	public void setType(Enum type) {
+	public void setType(AssociationTypesEnum type) {
 		this.type = type;
 	}
 
@@ -181,6 +192,14 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 
 	public void setContractNo(String contractNo) {
 		this.contractNo = contractNo;
+	}
+
+	public AuditStateEnum getState() {
+		return state;
+	}
+
+	public void setState(AuditStateEnum state) {
+		this.state = state;
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.rfid.ref;
 
 
-public enum AssociationTypes {
+public enum AssociationTypesEnum {
 	APPLY("批次申请", 0), RFID_ADD("已使用", 1), CONTRACTOR_ADD("已破损", 2);
 
 	// 成员变量
@@ -9,14 +9,14 @@ public enum AssociationTypes {
 
 	private String name;
 
-	private AssociationTypes(String name, Integer id) {
+	private AssociationTypesEnum(String name, Integer id) {
 		this.name = name;
 		this.id = id;
 	}
 
 	// 普通方法
 	public static String getName(Integer id) {
-		for (AssociationTypes c : AssociationTypes.values()) {
+		for (AssociationTypesEnum c : AssociationTypesEnum.values()) {
 			if (c.getId() == id) {
 				return c.name;
 			}
