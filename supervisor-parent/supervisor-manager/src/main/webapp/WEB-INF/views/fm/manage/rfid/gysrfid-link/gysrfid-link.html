@@ -50,7 +50,7 @@
 		审核状态
 	   <select name="state">
           <option selected="selected" value="">全部</option>
-		   #list states as state>
+		  <#list states as state>
 		 <option value="${state.id}">${state.getName()}</option>
          </#list>
         </select>
@@ -72,6 +72,7 @@
 		<col width="8%" />
 		<col width="8%" />
 		<col width="12%" />
+		
         <tr>
           <th>RFID关联申请号</th>
           <th>RFID编号</th>
@@ -85,21 +86,22 @@
 		  <th>审核</th>
           <th class="rLine">操作</th>
         </tr>
+        <#list list as model>
+		<#if (model.type.id==0)>
         <tr>
-          <td><a href="#" class="lnk-blue">GL14070001</a></td>
-          <td>AAAA00001</td>
-          <td>江苏私享家商贸</td>
-          <td>玻璃标签</td>
-		  <td>批次申请</td>
-		  <td>CT14070001</td>
-          <td>1</td>
-		  <td>2014年9月20日</br>
-12:30:03</td>
+          <td><a href="" class="lnk-blue" onclick="open_1('${model.id}')">${model.rfidRefNo}</a></td>
+          <td>${model.rfidNo}</td>
+          <td>${model.memberName}</td>
+          <td>${model.rfidType.getName()}</td>
+		  <td>${model.type.getName()}</td>
+		  <td>${model.contractNo}</td>
+          <td>${model.batchNo}</td>
+		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
 		  <td>-</td>
 		  <td><button class="btn btn-gray"><span>审核</span></button></td>
 		  <td class="operation"><a href="#" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
         </tr>
-		<tr class="tableInfo" style="display:;">
+		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
 		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
             <col width="10%" />
@@ -140,24 +142,24 @@
               <td><input type="text" name="" value="AAAA00001"></td>
             </tr>
           </table>
-		  <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
+		  <div class="btnBox text-center"><a href="" onclick="save_1('${model.id}')"　class="button button-orange button-small">修改</a><a href="" onclick="close('${model.id}')" class="button button-gray button-small">收起</a></div>
 		  </td>
 	    </tr> 
-		<tr>
-          <td><a href="#" class="lnk-blue">GL14070002</a></td>
-          <td>AAAA00002 </td>
-          <td>江苏私享家商贸</td>
-          <td>型材标签</td>
-		  <td>RFID补损</td>
-		  <td>CT14070001</td>
-          <td>1</td>
-		  <td>2014年9月20日</br>
-	      12:30:03</td>
-		  <td>AAAB00002</td>
+	    <#else>
+		<tr >
+         <td><a href="#" class="lnk-blue">${model.rfidRefNo}</a></td>
+          <td>${model.rfidNo}</td>
+          <td>${model.memberName}</td>
+          <td>${model.rfidType.getName()}</td>
+		  <td>${model.type.getName()}</td>
+		  <td>${model.contractNo}</td>
+          <td>${model.batchNo}</td>
+		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+		  <td>${model.replenishRfid}</td>
 		  <td><button class="btn btn-gray"><span>审核</span></button></td>
 		  <td class="operation"><a href="#" class="del">删除</a></td>
         </tr>
-		<tr class="tableInfo" style="display:;">
+		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
             <ul class="ly-clearFix">
               <li><label>标签补损RFID编号</label>
@@ -171,34 +173,8 @@
 			  </div>
 	     </td> 
         </tr>
-		 <tr>
-          <td><a href="#" class="lnk-blue">GL14070003</a></td>
-          <td>AAAA00003</td>
-          <td>江苏私享家商贸</td>
-          <td>玻璃标签</td>
-		  <td>合同补损</td>
-		  <td>CT14070001</td>
-          <td>2</td>
-		  <td>2014年9月20日</br>
-12:30:03</td>
-		  <td>AAAB00005</br>AAAB00006</td>
-		  <td><em class="state verified">已审核</em></td>
-		  <td class="operation"><a href="#" class="del">删除</a></td>
-        </tr>
-		<tr class="tableInfo" style="display:;">
-        <td colspan="11"><div class="infoBox text-left">
-            <ul class="ly-clearFix">
-              <li>
-                <label>合同补损RFID编号</label>
-                <input type="text" name="" value="AAAA00003"></li>
-			  <li>
-                <label>被补损RFID编号</label>
-                <input type="text" name="" value="AAAB00005,AAAB00006"></li>
-		    </ul>
-			  <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
-			  </div>
-	     </td> 
-        </tr>
+        </#if>
+	   </#list>
       </table>
     <!-- InstanceEndEditable --></div>
 </div>

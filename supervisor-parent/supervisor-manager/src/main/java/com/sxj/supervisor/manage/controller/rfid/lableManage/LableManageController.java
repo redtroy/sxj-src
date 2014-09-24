@@ -1,9 +1,13 @@
 package com.sxj.supervisor.manage.controller.rfid.lableManage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
@@ -32,10 +36,15 @@ public class LableManageController extends BaseController {
 			AssociationTypesEnum[] types = AssociationTypesEnum.values();
 			AuditStateEnum[] states = AuditStateEnum.values();
 			RfidTypeEnum[] rfidtypes = RfidTypeEnum.values();
+			LogisticsRefEntity model = new LogisticsRefEntity();
+			model.setType(AssociationTypesEnum.APPLY);
+			List<LogisticsRefEntity> list = new ArrayList<LogisticsRefEntity>();
+			list.add(model);
 			map.put("types", types);
 			map.put("states", states);
 			map.put("rfidtypes", rfidtypes);
 			map.put("query", query);
+			map.put("list", list);
 
 		} catch (Exception e) {
 			SxjLogger.error("查询错误", e, this.getClass());
