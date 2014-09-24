@@ -1,102 +1,77 @@
-package com.sxj.supervisor.entity.rfid.ref;
+package com.sxj.supervisor.model.rfid.ref;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import com.sxj.mybatis.orm.annotations.Column;
-import com.sxj.mybatis.orm.annotations.Entity;
-import com.sxj.mybatis.orm.annotations.GeneratedValue;
-import com.sxj.mybatis.orm.annotations.GenerationType;
-import com.sxj.mybatis.orm.annotations.Id;
-import com.sxj.mybatis.orm.annotations.Sn;
-import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 
-/**
- * 物流RFID关联申请
- * 
- * @author dujinxin
- *
- */
-@Entity(mapper = ILogisticsRefDao.class)
-@Table(name = "R_LOGISTICE_REF")
-public class LogisticsRefEntity extends Pagable implements Serializable {
+public class LogisticsRefQuery extends Pagable implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2653603292849169190L;
+	private static final long serialVersionUID = 4241985427147288845L;
 
 	/**
 	 * ID
 	 */
-	@Id(column = "ID")
-	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	/**
 	 * RFID关联申请号
 	 */
-	@Column(name = "RFID_REF_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "GL", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String rfidRefNo;
 
 	/**
 	 * RFID编号
 	 */
-	@Column(name = "RFID_NO")
 	private String rfidNo;
 
 	/**
 	 * 申请人
 	 */
-	@Column(name = "MEMBER_NO")
 	private String memberNo;
 
 	/**
 	 * 申请人名称
 	 */
-	@Column(name = "MEMBER_NAME")
 	private String memberName;
 
 	/**
 	 * RFID类型
 	 */
-	@Column(name = "RFID_TYPE")
 	private RfidTypeEnum rfidType;
 
 	/**
 	 * 关联类型
 	 */
-	@Column(name = "TYPE")
 	private AssociationTypesEnum type;
 
 	/**
 	 * 批次
 	 */
-	@Column(name = "BATCH_NO")
 	private String batchNo;
 
 	/**
-	 * 关联申请时间
+	 * 关联开始申请时间
 	 */
-	@Column(name = "APPLY_DATE")
-	private Date applyDate;
+	private String starApplyDate;
+
+	/**
+	 * 关联结束申请时间
+	 */
+	private String endApplyDate;
 
 	/**
 	 * 被补损RFID
 	 */
-	@Column(name = "REPLENISH_RFID")
 	private String replenishRfid;
 
 	/**
 	 * 采购合同号
 	 */
-	@Column(name = "CONTRACT_NO")
 	private String contractNo;
 
 	/**
@@ -104,22 +79,12 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 	 * 
 	 * @return
 	 */
-	@Column(name = "STATE")
 	private AuditStateEnum state;
 
 	/**
 	 * 逻辑删除标记
 	 */
-	@Column(name = "DEL_STATE")
 	private Boolean delstate = false;
-
-	public Boolean getDelstate() {
-		return delstate;
-	}
-
-	public void setDelstate(Boolean delstate) {
-		this.delstate = delstate;
-	}
 
 	public String getId() {
 		return id;
@@ -185,12 +150,20 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 		this.batchNo = batchNo;
 	}
 
-	public Date getApplyDate() {
-		return applyDate;
+	public String getStarApplyDate() {
+		return starApplyDate;
 	}
 
-	public void setApplyDate(Date applyDate) {
-		this.applyDate = applyDate;
+	public void setStarApplyDate(String starApplyDate) {
+		this.starApplyDate = starApplyDate;
+	}
+
+	public String getEndApplyDate() {
+		return endApplyDate;
+	}
+
+	public void setEndApplyDate(String endApplyDate) {
+		this.endApplyDate = endApplyDate;
 	}
 
 	public String getReplenishRfid() {
@@ -215,6 +188,14 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 
 	public void setState(AuditStateEnum state) {
 		this.state = state;
+	}
+
+	public Boolean getDelstate() {
+		return delstate;
+	}
+
+	public void setDelstate(Boolean delstate) {
+		this.delstate = delstate;
 	}
 
 }

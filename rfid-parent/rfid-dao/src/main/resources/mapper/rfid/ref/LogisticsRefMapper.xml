@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao">
+	<resultMap id="LogisticsRefResultMap" type="com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="rfidRefNo" column="RFID_REF_NO" jdbcType="VARCHAR" />
+		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
+		<result property="rfidType" column="RFID_TYPE" jdbcType="INTEGER" /> <!-- 枚举 -->
+		<result property="type" column="TYPE" jdbcType="INTEGER" /> <!-- 枚举 -->
+		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
+		<result property="applyDate" column="APPLY_DATE" jdbcType="DATETIME" />
+		<result property="replenishRfid" column="REPLENISH_RFID" jdbcType="VARCHAR" />
+		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER" /> <!-- 枚举 -->
+		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
+	</resultMap>
+	<!-- 按条件查询供应商 -->
+	<select id="queryList" resultMap="LogisticsRefResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM R_LOGISTICE_REF WHERE 1=1]]>
+		<!-- RFID关联申请号  -->
+		<if test="condition.rfidRefNo != null and condition.rfidRefNo !=''">
+			<![CDATA[AND RFID_REF_NO LIKE CONCAT('%',#{condition.rfidRefNo},'%') ]]>
+		</if>
+		<!--   RFID编号  -->
+		<if test="condition.rfidNo != null and condition.rfidNo !=''">
+			<![CDATA[AND RFID_NO LIKE CONCAT('%',#{condition.rfidNo},'%') ]]>
+		</if>
+		<!--申请人名称  -->
+		<if test="condition.memberName != null and condition.memberName !=''">
+			<![CDATA[AND MEMBER_NAME LIKE CONCAT('%',#{condition.memberName},'%') ]]>
+		</if>
+		<!--采购合同号 -->
+		<if test="condition.contractNo != null and condition.contractNo !=''">
+			<![CDATA[AND CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
+		</if>
+		<!--被补损RFID编号 -->
+		<if test="condition.replenishRfid != null and condition.replenishRfid !=''">
+			<![CDATA[AND REPLENISH_RFID LIKE CONCAT('%',#{condition.replenishRfid},'%') ]]>
+		</if>
+		<!-- RFID类型  -->
+		<if test="condition.rfidType != null ">
+			<![CDATA[AND RFID_TYPE = #{condition.rfidType} ]]>
+		</if>
+		<!-- 关联类型   -->
+		<if test="condition.type != null ">
+			<![CDATA[AND TYPE = #{condition.type} ]]>
+		</if>
+		<!-- 审核状态  -->
+		<if test="condition.state != null ">
+			<![CDATA[AND STATE = #{condition.state} ]]>
+		</if>
+		<!-- 申请时间段 -->
+		<if
+			test="condition.starApplyDate != null and condition.endApplyDate != null and condition.starApplyDate != '' and condition.endApplyDate != ''">
+			<![CDATA[AND APPLY_DATE >=#{condition.starApplyDate} AND APPLY_DATE <= #{condition.endApplyDate}]]>
+		</if>
+		<!-- 逻辑删除 -->
+		<if test="condition.delstate != null ">
+			<![CDATA[AND DEL_STATE = #{condition.delstate}]]>
+		</if>
+	</select>
+</mapper>

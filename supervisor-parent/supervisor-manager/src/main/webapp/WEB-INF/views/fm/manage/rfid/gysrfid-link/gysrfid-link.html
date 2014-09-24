@@ -26,34 +26,38 @@
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">物流RFID关联申请管理</h2>
       <div id="searchBox">
+      <form action="javascript:void(0)">
       <p>RFID关联申请号
-        <input type="text" name="" value="">
-	  RFID编号<input type="text" name="" value="">
-       申请人名称<input type="text" name="" value="">
-       采购合同号<input type="text" name="" value="">
-	   被补损RFID编号<input type="text" name="" value=""></p>
+        <input type="text" name="rfidRefNo" value="">
+	  RFID编号<input type="text" name="rfidNo" value="">
+       申请人名称<input type="text" name="memberName" value="">
+       采购合同号<input type="text" name="contractNo" value="">
+	   被补损RFID编号<input type="text" name="replenishRfid" value=""></p>
        RFID类型
-       <select name="select2">
-         <option selected="selected">全部</option>
-         <option>玻璃标签</option>
-         <option>型材标签</option>
+       <select name="rfidType">
+         <option selected="selected" value="">全部</option>
+         <#list rfidtypes as type>
+         <option value="${type.id}">${type.getName()}</option>
+         </#list>
        </select>
 	   关联类型
-	   <select name="select">
-          <option selected="selected">全部</option>
-		  <option>批次申请</option>
-          <option>RFID补损</option>
-		  <option>合同补损</option>
+	   <select name="type">
+          <option selected="selected" value="">全部</option>
+         <#list types as type>
+		 <option value="${type.id}">${type.getName()}</option>
+         </#list>
         </select>
 		审核状态
-	   <select name="select">
-          <option selected="selected">全部</option>
-		  <option>未审核</option>
-          <option>已审核</option>
+	   <select name="state">
+          <option selected="selected" value="">全部</option>
+		   #list states as state>
+		 <option value="${state.id}">${state.getName()}</option>
+         </#list>
         </select>
        关联申请时间段
-       <input type="text" name="" value="">-<input type="text" name="" value="">
+       <input type="text" name="starApplyDate" value="">-<input type="text" name="endApplyDate" value="">
         <button class="btn btn-blue"><span>查询</span></button>
+         </form >
     </div>
 	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的物流RFID关联申请！</div>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
