@@ -1,4 +1,4 @@
-package com.sxj.supervisor.entity.rfid.ref;
+package com.sxj.supervisor.entity.rfid.windowRef;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,6 +11,9 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
+import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
+import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
 
 /**
  * 门窗RFID关联申请
@@ -18,7 +21,7 @@ import com.sxj.mybatis.pagination.Pagable;
  * @author dujinxin
  *
  */
-@Entity
+@Entity(mapper = IWindowRfidRefDao.class)
 @Table(name = "R_WINDOW_REF")
 public class WindowRefEntity extends Pagable implements Serializable {
 
@@ -37,7 +40,7 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	/**
 	 * RFID关联申请号
 	 */
-	@Column(name = "RFID_NO")
+	@Column(name = "RFID_REF_NO")
 	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "GL", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String rfidRefNo;
 
@@ -63,13 +66,13 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	 * 关联类型
 	 */
 	@Column(name = "TYPE")
-	private Enum type;
+	private LinkStateEnum type;
 
 	/**
 	 * 窗型代号
 	 */
 	@Column(name = "WINDOWS_NO")
-	private String windowsNo;
+	private WindowTypeEnum windowsNo;
 
 	/**
 	 * 玻璃批次
@@ -100,6 +103,21 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "CONTRACT_NO")
 	private String contractNo;
+	/**
+	 * 删除状态
+	 */
+	@Column(name = "DEL_STATE")
+	private boolean delState = false;
+
+	
+	
+	public boolean isDelState() {
+		return delState;
+	}
+
+	public void setDelState(boolean delState) {
+		this.delState = delState;
+	}
 
 	public String getId() {
 		return id;
@@ -141,19 +159,19 @@ public class WindowRefEntity extends Pagable implements Serializable {
 		this.memberName = memberName;
 	}
 
-	public Enum getType() {
+	public LinkStateEnum getType() {
 		return type;
 	}
 
-	public void setType(Enum type) {
+	public void setType(LinkStateEnum type) {
 		this.type = type;
 	}
 
-	public String getWindowsNo() {
+	public WindowTypeEnum getWindowsNo() {
 		return windowsNo;
 	}
 
-	public void setWindowsNo(String windowsNo) {
+	public void setWindowsNo(WindowTypeEnum windowsNo) {
 		this.windowsNo = windowsNo;
 	}
 
