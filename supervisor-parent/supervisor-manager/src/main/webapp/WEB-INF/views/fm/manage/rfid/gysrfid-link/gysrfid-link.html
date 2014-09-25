@@ -9,6 +9,48 @@
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
+<@b.pageScript/>
+<script>
+  function open_1(obj){
+	  
+  }
+  function swallowing(obj){
+	  
+  }
+  //审核
+  function review(id,obj){
+	  $.post("review.htm",{id:id},function(data){
+		  if (data.isOk=="ok"){
+			  alert('修改成功！');
+			  $(obj).parent().html('<em class="state verified">已审核</em>');
+			  
+		  }
+	  })
+  }
+  //根据ID 删除
+  function del(id){
+	 $.post("del.htm",{id:id},function(data){
+		 if (data.isOk=="ok"){
+			 alert('删除成功！');
+			 query();
+		 }
+	 }) 
+  }
+  function query(page){
+ 	 	var params=$("#search_form").serialize();
+		if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	  	}
+		$.post("lable_list.htm",params,function(data){
+			var tableList=$(data).find("#tabList").html();
+			$("#rightBar").find("#tabList").html(tableList);
+			var pager=$(data).find("#rightBar").children("#pager");
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		})
+ }
+</script>
 </head>
 <body>
 <div id="header" class="fence-wide">
@@ -26,7 +68,7 @@
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">物流RFID关联申请管理</h2>
       <div id="searchBox">
-      <form action="javascript:void(0)">
+      <form action="javascript:void(0)" id="search_form">
       <p>RFID关联申请号
         <input type="text" name="rfidRefNo" value="">
 	  RFID编号<input type="text" name="rfidNo" value="">
@@ -56,11 +98,12 @@
         </select>
        关联申请时间段
        <input type="text" name="starApplyDate" value="">-<input type="text" name="endApplyDate" value="">
-        <button class="btn btn-blue"><span>查询</span></button>
+        <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
          </form >
     </div>
 	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的物流RFID关联申请！</div>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+      <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="tabList">
         <col width="10%"/>
         <col width="8%"/>
         <col width="12%" />
@@ -89,7 +132,7 @@
         <#list list as model>
 		<#if (model.type.id==0)>
         <tr>
-          <td><a href="" class="lnk-blue" onclick="open_1('${model.id}')">${model.rfidRefNo}</a></td>
+          <td><a href="" class="lnk-blue" onclick="open_1('edit_1_${model.id}')">${model.rfidRefNo}</a></td>
           <td>${model.rfidNo}</td>
           <td>${model.memberName}</td>
           <td>${model.rfidType.getName()}</td>
@@ -98,8 +141,12 @@
           <td>${model.batchNo}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
 		  <td>-</td>
-		  <td><button class="btn btn-gray"><span>审核</span></button></td>
-		  <td class="operation"><a href="#" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
+		  <#if (model.state.id==0)>
+		  <td><button class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></button></td>
+		  <#else>
+		  <td><em class="state verified">已审核</em></td>
+		  </#if>
+		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
@@ -142,7 +189,7 @@
               <td><input type="text" name="" value="AAAA00001"></td>
             </tr>
           </table>
-		  <div class="btnBox text-center"><a href="" onclick="save_1('${model.id}')"　class="button button-orange button-small">修改</a><a href="" onclick="close('${model.id}')" class="button button-gray button-small">收起</a></div>
+		  <div class="btnBox text-center"><a href="" onclick="save_1('${model.id}')"　class="button button-orange button-small">修改</a><a href="" onclick="swallowing('edit_1_${model.id}')" class="button button-gray button-small">收起</a></div>
 		  </td>
 	    </tr> 
 	    <#else>
@@ -156,8 +203,11 @@
           <td>${model.batchNo}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
 		  <td>${model.replenishRfid}</td>
-		  <td><button class="btn btn-gray"><span>审核</span></button></td>
-		  <td class="operation"><a href="#" class="del">删除</a></td>
+		    <#if (model.state.id==0)>
+		  <td><button class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></button></td>
+		  <#else>
+		  <td><em class="state verified">已审核</em></td>
+		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
