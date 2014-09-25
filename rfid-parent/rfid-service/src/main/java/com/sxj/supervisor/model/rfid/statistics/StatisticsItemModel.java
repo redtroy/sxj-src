@@ -2,6 +2,7 @@ package com.sxj.supervisor.model.rfid.statistics;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class StatisticsItemModel implements Serializable {
 
@@ -10,24 +11,24 @@ public class StatisticsItemModel implements Serializable {
 	 */
 	private static final long serialVersionUID = 4237596274156476050L;
 
-	private Date date;
+	private List<Date> dateList;
 
-	private Long count;
+	private List<Long> countList;
 
-	public Date getDate() {
-		return date;
+	public List<Date> getDateList() {
+		return dateList;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDateList(List<Date> dateList) {
+		this.dateList = dateList;
 	}
 
-	public Long getCount() {
-		return count;
+	public List<Long> getCountList() {
+		return countList;
 	}
 
-	public void setCount(Long count) {
-		this.count = count;
+	public void setCountList(List<Long> countList) {
+		this.countList = countList;
 	}
 
 }
