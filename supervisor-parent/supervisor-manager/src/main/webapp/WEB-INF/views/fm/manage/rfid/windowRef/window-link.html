@@ -4,74 +4,96 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家绿色门窗平台管理系统</title>
-<link href="../style/style.css" rel="stylesheet" type="text/css" />
-<!-- InstanceEndEditable -->
-<!-- InstanceBeginEditable name="head" -->
-<!-- InstanceEndEditable -->
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.pageScript/>
+<script>
+function query(page){
+	var params=$("#search_form").serialize();
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+	$.post("query.htm",params,function(data){
+		var res=$(data).find("#res_table");
+		var pager=$(data).find("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+function  del(id){
+	if(confirm('确实要删除吗?')){
+	$.post("delete.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("删除成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("删除失败!");	
+		}
+	});
+	}
+}
+
+function  audit(id){
+	if(confirm('确实要审核吗?')){
+	$.post("audit.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("审核成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("审核失败!");	
+		}
+	});
+	}
+}
+function loadInfo(id){
+	$("#info"+id).load("info.htm?id="+id);
+}
+function closeContract(id){
+	$("#info"+id).html("");
+}
+function saveModify(id){
+	$.post("saveModify.htm",$("#form"+id).serialize(),function(data){
+		if(data.isOK=='ok'){
+			alert("修改成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("修改失败!");	
+		}
+	});
+}
+</script>
 </head>
 <body>
-<div id="header" class="fence-wide">
-    <h1 class="yard-1200 ly-clearFix"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span><span class="logOut ly-right"><a href="#">注销帐户并退出</a></span></h1>
-    <div class="border-header"></div>
-</div>
+<@b.header/>
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
-<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>RFID进销存管理<span>&gt;</span>门窗RFID关联申请管理</div>
+<@b.menuPath/>
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
     <div id="leftList">
-      <h2 class="tit">会员中心</h2>
-      <ul>
-        <li><a href="member.html">会员管理</a></li>
-        <li><a href="accounts.html">会员子帐号管理</a></li>
-      </ul>
-      <h2 class="tit">备案管理</h2>
-      <ul>
-        <li><a href="record.html">备案管理</a></li>
-      </ul>
-      <h2 class="tit">合同管理</h2>
-      <ul>
-        <li><a href="contract.html">合同管理</a></li>
-      </ul>
-      <h2 class="tit">RFID进销存管理</h2>
-      <ul>
-        <li><a href="order.html">RFID申请单管理</a></li>
-        <li><a href="purchase.html">RFID采购单管理</a></li>
-        <li><a href="mencprd.html">门窗RFID商品管理</a></li>
-		<li><a href="gysprd.html">物流RFID商品管理</a></li>
-		<li><a href="mencrfid-link.html">门窗RFID关联申请管理</a></li>
-		<li><a href="gysrfid-link.html">物流RFID关联申请管理</a></li>
-        <li><a href="supplier.html">RFID供应商管理</a></li>
-        <li><a href="pricemgr.html">RFID销售价格管理</a></li>
-		<li><a href="count.html">RFID统计管理</a></li>
-      </ul>
-      <h2 class="tit">会员行为跟踪管理</h2>
-      <ul>
-        <li><a href="behavior.html">会员行为跟踪管理</a></li>
-      </ul>
-      <h2 class="tit">支付管理</h2>
-      <ul>
-        <li><a href="#">支付管理</a></li>
-      </ul>
-      <h2 class="tit">管理员管理</h2>
-      <ul>
-        <li><a href="admin.html">管理员管理</a></li>
-      </ul>
+      <@b.leftMenu />
     </div>
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">门窗RFID关联申请管理</h2>
+    <form action="" id="search_form" method="post">
       <div id="searchBox">
       <p>RFID关联申请号
-        <input type="text" name="" value="">
+        <input type="text" name="" value=""/>
        RFID编号
-       <input type="text" name="" value="">
+       <input type="text" name="" value=""/>
        申请人名称
-       <input type="text" name="" value="">
+       <input type="text" name="" value=""/>
 	   相关批次RFID
-       <input type="text" name="" value="">
+       <input type="text" name="" value=""/>
 	   被补损RFID编号
-       <input type="text" name="" value=""></p>
+       <input type="text" name="" value=""/></p>
        窗型代号<select name="select">
 	   <option selected="selected">全部</option>
           <option>C120 120X60</option>
@@ -91,11 +113,13 @@
           <option>已审核</option>
         </select>	
        关联申请时间段
-       <input type="text" name="" value="">-<input type="text" name="" value="">
+       <input type="text" name="" value="" datepicker />-<input type="text" name="" value="" datepicker />
         <button class="btn btn-blue"><span>查询</span></button>
     </div>
+    </form>
 	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的门窗RFID关联申请！</div>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+      <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="12%"/>
         <col width="9%"/>
         <col width="12%" />
@@ -120,44 +144,22 @@
 		  <th>审核</th>
           <th class="rLine">操作</th>
         </tr>
+        <#list winList as win>
         <tr>
-          <td><a href="#" class="lnk-blue">GL14070001</a></td>
-          <td>AAAA00001-</br>AAAA00010</td>
-          <td>江苏私享家商贸</td>
-          <td>门窗申请</td>
-		  <td>C120</br>120X60</td>
-		  <td><a href="#" class="lnk-blue">AAAA00005</a></td>
-          <td><a href="#" class="lnk-blue">AAAA00009</a></td>
-		  <td>2014年9月20日</br>
-12:30:03</td>
-		  <td>-</td>
-		  <td><button class="btn btn-gray"><span>审核</span></button></td>
-		  <td class="operation"><a href="#" class="del">删除</a></td>
+          <td><a href="javascript:loadInfo('${win.id}');" class="lnk-blue">${win.rfidRefNo}</a></td>
+          <td>${win.rfidRange}</td>
+          <td>${win.memberName}</td>
+          <td>${win.type.getName()}</td>
+		  <td>${win.windowsNo.getName()}</td>
+		  <td><a href="#" class="lnk-blue">${win.glassBatchNo}</a></td>
+          <td><a href="#" class="lnk-blue">${win.profileBatchNo}</a></td>
+		  <td>${win.applyDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
+		  <td><#if win.replenishRfid?exists>${win.replenishRfid}<#else>-</#if></td>
+		  <td><#if win.state.getId()==0><button class="btn btn-gray" onclick="audit('${win.id}');"><span>审核</span></button><#else><em class="state verified">已审核</em></#if></td>
+		  <td class="operation"><a href="javascript:del('${win.id}');" class="del">删除</a></td>
         </tr>
-      <tr class="tableInfo" style="display:;">
-        <td colspan="11">
-        <div class="infoBox text-left">
-          <ul class="ly-clearFix">
-            <li>
-              <label>招标合同号</label>
-              <input type="text" name="" value="CT14070003"></li>
-            <li>
-              <label>窗型代号</label>
-              <input type="text" name="" value="C120 120X60"></li>
-			  <li>
-              <label>玻璃批次RIFD</label>
-              <input type="text" name="" value="AAAA00005"></li>
-            <li>
-              <label>型材批次RFID</label>
-              <input type="text" name="" value="AAAA00009"></li>
-			  <li>
-              <label>RFID编号区间</label>
-              <input type="text" name="" value="AAAA00001" class="input80">-<input type="text" name="" value="AAAA00010" class="input80"></li>
-            <li>&nbsp;</li>
-			  </ul>
-			 <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
-			  </div>		  </td>		  
-	   </tr>
+        <tr class="tableInfo" id="info${win.id}"></tr>
+        </#list>
 		 
 		<tr>
           <td><a href="#" class="lnk-blue">GL14070002</a></td>
@@ -273,10 +275,6 @@
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
-<div id="footer" class="fence-wide">
-  <div class="yard-1200">
-    <p>&copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
-  </div>
-</div>
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>

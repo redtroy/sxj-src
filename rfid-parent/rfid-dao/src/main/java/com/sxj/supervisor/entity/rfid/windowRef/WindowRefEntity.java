@@ -12,6 +12,7 @@ import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
+import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
 
@@ -109,8 +110,22 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	@Column(name = "DEL_STATE")
 	private boolean delState = false;
 
+	/**
+	 * 审核状态
+	 * 
+	 * @return
+	 */
+	@Column(name = "STATE")
+	private AuditStateEnum state;
 	
-	
+	public AuditStateEnum getState() {
+		return state;
+	}
+
+	public void setState(AuditStateEnum state) {
+		this.state = state;
+	}
+
 	public boolean isDelState() {
 		return delState;
 	}

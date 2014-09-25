@@ -17,6 +17,7 @@
 		<result property="applyDate" column="APPLY_DATE" jdbcType="TIMESTAMP" />
 		<result property="replenishRfid" column="REPLENISH_RFID" jdbcType="VARCHAR"  />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
 	</resultMap>
 	<!-- 按条件查询门窗 -->
 	<select id="queryWindowRfidRefList" resultMap="windowRfidRefResultMap"
