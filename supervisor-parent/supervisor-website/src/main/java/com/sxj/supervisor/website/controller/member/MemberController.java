@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class MemberController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("/memberInfo")
-	public String memberList(ModelMap map, HttpSession session)
-			throws WebException {
+	public String memberList(ModelMap map, HttpSession session,
+			HttpServletRequest request) throws WebException {
 		try {
 			SupervisorPrincipal info = getLoginInfo(session);
 			if (info != null) {
@@ -57,7 +58,14 @@ public class MemberController extends BaseController {
 					member.setAccountNum(0);
 				}
 				map.put("member", member);
-				return "site/member/member-profile";
+				if (member.getFlag()) {
+					return "site/member/member-profile";
+				} else {
+					List<AreaEntity> cityList = areaService
+							.getChildrenAreas("32");
+					map.put("cityList", cityList);
+					return "site/member/edit-member";
+				}
 			}
 			return LOGIN;
 		} catch (Exception e) {
@@ -100,6 +108,7 @@ public class MemberController extends BaseController {
 			throws WebException {
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
+			member.setFlag(true);
 			memberService.modifyMember(member);
 			map.put("isOK", "ok");
 			return map;
@@ -142,6 +151,7 @@ public class MemberController extends BaseController {
 			member.setState(MemberStatesEnum.stop);
 			member.setCheckState(MemberCheckStateEnum.unaudited);
 			member.setRegDate(new Date());
+			member.setFlag(false);
 			memberService.addMember(member);
 			return "redirect:/member/regist_succ.htm";
 		} else {

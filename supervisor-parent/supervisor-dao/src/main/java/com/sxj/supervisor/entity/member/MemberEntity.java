@@ -202,6 +202,22 @@ public class MemberEntity extends Pagable implements Serializable {
 	@Column(name = "CODE")
 	private String code;
 
+	/**
+	 * 是否完善会员资料标记
+	 * 
+	 * @return
+	 */
+	@Column(name = "FLAG")
+	private Boolean flag;
+
+	public Boolean getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Boolean flag) {
+		this.flag = flag;
+	}
+
 	public String getCode() {
 		return code;
 	}
