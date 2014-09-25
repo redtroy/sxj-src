@@ -6,7 +6,6 @@ import java.util.List;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
-import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.util.persistent.QueryCondition;
 /**
