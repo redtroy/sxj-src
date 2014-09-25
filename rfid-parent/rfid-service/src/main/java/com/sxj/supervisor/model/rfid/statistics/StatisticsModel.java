@@ -12,43 +12,43 @@ public class StatisticsModel implements Serializable {
 
 	private Long applySum;
 
-	private List<StatisticsItemModel> applyList;
+	private StatisticsItemModel applyList;
 
 	private Long purchaseSum;
 
-	private List<StatisticsItemModel> purchaseList;
+	private StatisticsItemModel purchaseList;
 
 	private Long windowSaleSum;
 
-	private List<StatisticsItemModel> windowSaleList;
+	private StatisticsItemModel windowSaleList;
 
 	private Long batchSaleSum;
 
-	private List<StatisticsItemModel> batchSaleList;
+	private StatisticsItemModel batchSaleList;
 
 	private Long windowSaleAmount;
 
-	private List<StatisticsItemModel> windowSaleAmountList;
+	private StatisticsItemModel windowSaleAmountList;
 
 	private Long batchSaleAmount;
 
-	private List<StatisticsItemModel> batchSaleAmountList;
+	private StatisticsItemModel batchSaleAmountList;
 
 	private Long windowPurchaseSum;
 
-	private List<StatisticsItemModel> windowPurchaseList;
+	private StatisticsItemModel windowPurchaseList;
 
 	private Long batchPurchaseSum;
 
-	private List<StatisticsItemModel> batchPurchaseList;
+	private StatisticsItemModel batchPurchaseList;
 
 	private Long expectProfit;
 
-	private List<StatisticsItemModel> expectProfitList;
+	private StatisticsItemModel expectProfitList;
 
 	private Long realityProfit;
 
-	private List<StatisticsItemModel> realityProfitList;
+	private StatisticsItemModel realityProfitList;
 
 	public Long getApplySum() {
 		return applySum;
@@ -58,11 +58,11 @@ public class StatisticsModel implements Serializable {
 		this.applySum = applySum;
 	}
 
-	public List<StatisticsItemModel> getApplyList() {
+	public StatisticsItemModel getApplyList() {
 		return applyList;
 	}
 
-	public void setApplyList(List<StatisticsItemModel> applyList) {
+	public void setApplyList(StatisticsItemModel applyList) {
 		this.applyList = applyList;
 	}
 
@@ -74,11 +74,11 @@ public class StatisticsModel implements Serializable {
 		this.purchaseSum = purchaseSum;
 	}
 
-	public List<StatisticsItemModel> getPurchaseList() {
+	public StatisticsItemModel getPurchaseList() {
 		return purchaseList;
 	}
 
-	public void setPurchaseList(List<StatisticsItemModel> purchaseList) {
+	public void setPurchaseList(StatisticsItemModel purchaseList) {
 		this.purchaseList = purchaseList;
 	}
 
@@ -90,11 +90,11 @@ public class StatisticsModel implements Serializable {
 		this.windowSaleSum = windowSaleSum;
 	}
 
-	public List<StatisticsItemModel> getWindowSaleList() {
+	public StatisticsItemModel getWindowSaleList() {
 		return windowSaleList;
 	}
 
-	public void setWindowSaleList(List<StatisticsItemModel> windowSaleList) {
+	public void setWindowSaleList(StatisticsItemModel windowSaleList) {
 		this.windowSaleList = windowSaleList;
 	}
 
@@ -106,11 +106,11 @@ public class StatisticsModel implements Serializable {
 		this.batchSaleSum = batchSaleSum;
 	}
 
-	public List<StatisticsItemModel> getBatchSaleList() {
+	public StatisticsItemModel getBatchSaleList() {
 		return batchSaleList;
 	}
 
-	public void setBatchSaleList(List<StatisticsItemModel> batchSaleList) {
+	public void setBatchSaleList(StatisticsItemModel batchSaleList) {
 		this.batchSaleList = batchSaleList;
 	}
 
@@ -122,12 +122,11 @@ public class StatisticsModel implements Serializable {
 		this.windowSaleAmount = windowSaleAmount;
 	}
 
-	public List<StatisticsItemModel> getWindowSaleAmountList() {
+	public StatisticsItemModel getWindowSaleAmountList() {
 		return windowSaleAmountList;
 	}
 
-	public void setWindowSaleAmountList(
-			List<StatisticsItemModel> windowSaleAmountList) {
+	public void setWindowSaleAmountList(StatisticsItemModel windowSaleAmountList) {
 		this.windowSaleAmountList = windowSaleAmountList;
 	}
 
@@ -139,12 +138,11 @@ public class StatisticsModel implements Serializable {
 		this.batchSaleAmount = batchSaleAmount;
 	}
 
-	public List<StatisticsItemModel> getBatchSaleAmountList() {
+	public StatisticsItemModel getBatchSaleAmountList() {
 		return batchSaleAmountList;
 	}
 
-	public void setBatchSaleAmountList(
-			List<StatisticsItemModel> batchSaleAmountList) {
+	public void setBatchSaleAmountList(StatisticsItemModel batchSaleAmountList) {
 		this.batchSaleAmountList = batchSaleAmountList;
 	}
 
@@ -156,12 +154,11 @@ public class StatisticsModel implements Serializable {
 		this.windowPurchaseSum = windowPurchaseSum;
 	}
 
-	public List<StatisticsItemModel> getWindowPurchaseList() {
+	public StatisticsItemModel getWindowPurchaseList() {
 		return windowPurchaseList;
 	}
 
-	public void setWindowPurchaseList(
-			List<StatisticsItemModel> windowPurchaseList) {
+	public void setWindowPurchaseList(StatisticsItemModel windowPurchaseList) {
 		this.windowPurchaseList = windowPurchaseList;
 	}
 
@@ -173,11 +170,11 @@ public class StatisticsModel implements Serializable {
 		this.batchPurchaseSum = batchPurchaseSum;
 	}
 
-	public List<StatisticsItemModel> getBatchPurchaseList() {
+	public StatisticsItemModel getBatchPurchaseList() {
 		return batchPurchaseList;
 	}
 
-	public void setBatchPurchaseList(List<StatisticsItemModel> batchPurchaseList) {
+	public void setBatchPurchaseList(StatisticsItemModel batchPurchaseList) {
 		this.batchPurchaseList = batchPurchaseList;
 	}
 
@@ -189,11 +186,11 @@ public class StatisticsModel implements Serializable {
 		this.expectProfit = expectProfit;
 	}
 
-	public List<StatisticsItemModel> getExpectProfitList() {
+	public StatisticsItemModel getExpectProfitList() {
 		return expectProfitList;
 	}
 
-	public void setExpectProfitList(List<StatisticsItemModel> expectProfitList) {
+	public void setExpectProfitList(StatisticsItemModel expectProfitList) {
 		this.expectProfitList = expectProfitList;
 	}
 
@@ -205,11 +202,11 @@ public class StatisticsModel implements Serializable {
 		this.realityProfit = realityProfit;
 	}
 
-	public List<StatisticsItemModel> getRealityProfitList() {
+	public StatisticsItemModel getRealityProfitList() {
 		return realityProfitList;
 	}
 
-	public void setRealityProfitList(List<StatisticsItemModel> realityProfitList) {
+	public void setRealityProfitList(StatisticsItemModel realityProfitList) {
 		this.realityProfitList = realityProfitList;
 	}
 
