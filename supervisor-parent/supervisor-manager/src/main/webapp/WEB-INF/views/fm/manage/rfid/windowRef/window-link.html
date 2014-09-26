@@ -51,8 +51,8 @@ function  audit(id){
 	});
 	}
 }
-function loadInfo(id){
-	$("#info"+id).load("info.htm?id="+id);
+function loadInfo(id,type){
+	$("#info"+id).load("info.htm?id="+id+"&type="+type);
 }
 function closeContract(id){
 	$("#info"+id).html("");
@@ -66,6 +66,9 @@ function saveModify(id){
 			alert("修改失败!");	
 		}
 	});
+}
+function batch(id,contractNo,rfidNo){
+	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
 }
 </script>
 </head>
@@ -85,32 +88,33 @@ function saveModify(id){
     <form action="" id="search_form" method="post">
       <div id="searchBox">
       <p>RFID关联申请号
-        <input type="text" name="" value=""/>
+        <input type="text" name="rfidRefNo" value=""/>
        RFID编号
-       <input type="text" name="" value=""/>
+       <input type="text" name="rfidRange" value=""/>
        申请人名称
        <input type="text" name="" value=""/>
 	   相关批次RFID
-       <input type="text" name="" value=""/>
+       <input type="text" name="batchNo" value=""/>
 	   被补损RFID编号
-       <input type="text" name="" value=""/></p>
-       窗型代号<select name="select">
-	   <option selected="selected">全部</option>
-          <option>C120 120X60</option>
-          <option>C150 150X60</option>
-          <option>C180 180X60</option>
+       <input type="text" name="replenishRfid" value=""/></p>
+       窗型代号<select name="windowsNo">
+	   <option selected="selected" value="">全部</option>
+          <#list winType as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
         </select>
        关联类型
-       <select name="select">
-          <option selected="selected">全部</option>
-		  <option>门窗申请</option>
-          <option>RFID补损</option>
-		  <option>门窗补损</option>
+       <select name="type">
+          <option selected="selected" value="">全部</option>
+		   <#list type as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
         </select>
-		审核状态<select name="select">
-		<option selected="selected">全部</option>
-          <option>未审核</option>
-          <option>已审核</option>
+		审核状态<select name="state">
+		<option selected="selected" value="">全部</option>
+        <#list state as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
         </select>	
        关联申请时间段
        <input type="text" name="" value="" datepicker />-<input type="text" name="" value="" datepicker />
@@ -146,13 +150,13 @@ function saveModify(id){
         </tr>
         <#list winList as win>
         <tr>
-          <td><a href="javascript:loadInfo('${win.id}');" class="lnk-blue">${win.rfidRefNo}</a></td>
+          <td><a href="javascript:loadInfo('${win.id}','${win.type.getId()}');" class="lnk-blue">${win.rfidRefNo}</a></td>
           <td>${win.rfidRange}</td>
           <td>${win.memberName}</td>
           <td>${win.type.getName()}</td>
 		  <td>${win.windowsNo.getName()}</td>
-		  <td><a href="#" class="lnk-blue">${win.glassBatchNo}</a></td>
-          <td><a href="#" class="lnk-blue">${win.profileBatchNo}</a></td>
+		  <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.glassBatchNo}')" class="lnk-blue">${win.glassBatchNo}</a></td>
+          <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.profileBatchNo}')" class="lnk-blue">${win.profileBatchNo}</a></td>
 		  <td>${win.applyDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
 		  <td><#if win.replenishRfid?exists>${win.replenishRfid}<#else>-</#if></td>
 		  <td><#if win.state.getId()==0><button class="btn btn-gray" onclick="audit('${win.id}');"><span>审核</span></button><#else><em class="state verified">已审核</em></#if></td>
@@ -161,117 +165,6 @@ function saveModify(id){
         <tr class="tableInfo" id="info${win.id}"></tr>
         </#list>
 		 
-		<tr>
-          <td><a href="#" class="lnk-blue">GL14070002</a></td>
-          <td title="XXX合同ZZZ批次">AAAA00002 </td>
-          <td>江苏私享家商贸</td>
-          <td>RFID补损</td>
-		  <td>C150</br>150X60</td>
-		  <td><a href="#" class="lnk-blue">AAAA00005</a></td>
-          <td><a href="#" class="lnk-blue">AAAA00009</a></td>
-		  <td>2014年9月20日</br>
-	      12:30:03</td>
-		  <td>AAAB00002</td>
-		  <td><button class="btn btn-gray"><span>审核</span></button></td>
-		  <td class="operation"><a href="#" class="del">删除</a></td>
-        </tr>
-		<tr class="tableInfo" style="display:;">
-        <td colspan="11"><div class="infoBox text-left">
-            <ul class="ly-clearFix">
-              <li>
-                <label>标签补损RFID编号</label>
-                <input type="text" name="" value="AAAA00002"></li>
-			  <li><label>被补损RFID编号</label>
-                <input type="text" value="AAAB00002">
-			  </li>
-			  </ul>
-			  <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
-			  </div>	     </td> 
-	     </tr>
-		 <tr>
-          <td><a href="#" class="lnk-blue">GL14070003</a></td>
-          <td>AAAA00002 </td>
-          <td>江苏私享家商贸</td>
-          <td>门窗补损</td>
-		  <td>C150</br>150X60</td>
-		  <td><a href="#" class="lnk-blue">AAAA00005</a></td>
-          <td><a href="#" class="lnk-blue">AAAA00009</a></td>
-		  <td>2014年9月20日</br>
-	      12:30:03</td>
-		  <td>AAAB00002</br>AAAB00003</br></td>
-		  <td><button class="btn btn-gray"><span>审核</span></button></td>
-		  <td class="operation"><a href="#" class="del">删除</a></td>
-        </tr>
-		<tr class="tableInfo" style="display:;">
-        <td colspan="11"><div class="infoBox text-left">
-            <ul class="ly-clearFix">
-              <li>
-                <label>门窗补损RFID编号</label>
-                <input type="text" name="Input" class="input80" value="AAAA00002" />-<input type="text" name="Input" class="input80" value="AAAA00022" />
-              </li>
-			  <li>
-			    <label>被补损RFID编号</label>
-                <input type="text" value="AAAB00002,AAAB00003">
-			  </li>
-			  </ul>
-			  <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
-			  </div>	     </td> 
-	     </tr>
-
-		 <tr>
-          <td><a href="#" class="lnk-blue">GL14070004</a></td>
-          <td>AAAA00003</td>
-          <td>江苏私享家商贸</td>
-          <td>门窗补损</td>
-		  <td>C180</br>180X60</td>
-		  <td><a href="#" class="lnk-blue">AAAA00005</a></td>
-          <td><a href="#" class="lnk-blue">AAAA00009</a></td>
-		  <td>2014年9月20日</br>
-12:30:03</td>
-		  <td>AAAB00005</td>
-		  <td><em class="state verified">已审核</em></td>
-		  <td class="operation"><a href="#" class="del">删除</a></td>
-        </tr>
-		<tr class="tableInfo" style="display:;">
-        <td colspan="11"><div class="infoBox text-left">
-		<div class="color-blue f16">CT14070003</div>
-		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-            <col width="20%" />
-            <col width="30%" />
-            <col width="20%" />
-            <col width="15%" />
-            <col width="15%" />
-            <tr>
-              <th>交货批次</th>
-              <th>产品规格</th>
-              <th>数量<span>（㎡/吨）</span></th>
-              <th>应付货款<span>（元）</span></th>
-              <th class="rLine">对应批次RFID编号</th>
-            </tr>
-            <tr>
-              <td>第1批次</td>
-              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                  <tr>
-                    <td>5+6A+5 双白中空 W779/H1176</td>
-                  </tr>
-                  <tr>
-                    <td>5+9A+5 双钢中空 W323/H1176</td>
-                  </tr>
-                </table></td>
-              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                  <tr>
-                    <td>1312.24&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td>131.24&nbsp;</td>
-                  </tr>
-                </table></td>
-              <td>8564.00</td>
-              <td>AAAA00001</td>
-            </tr>
-          </table>
-		   <div class="btnBox text-center"><a href="#" class="button button-gray button-small">收起</a></div>		  </td>
-		 </tr>
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
