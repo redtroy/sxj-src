@@ -23,7 +23,13 @@ jQuery(document).ready(function($) {
 		$('.maskdivgen').fadeOut(100);
 		$('.viewer').slideUp(200);
 	})
-})
+	  $('#edit_pwd').css({
+		  position:'absolute',
+		  left: ($(window).width() - $('#edit_pwd').outerWidth())/2,
+		  top: ($(window).height() - $('#edit_pwd').outerHeight())/2 + $(document).scrollTop()
+		  });
+	})
+
 window.onload = function() {
 	$(".demo-image").click(function(){
 		//alert($(this).siblings()[0])
@@ -138,7 +144,7 @@ function query(){
 </div>
 </div>
 <@b.footer />
-<div class="modal-wrap popDemo contPop passwordPop" style="display:none;">
+<div class="modal-wrap popDemo contPop passwordPop" style="display:none;" id="edit_pwd">
       <div class="modal-header"><span class="close">关闭</span></div>
       <div class="modal-body">
         <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1"/></div>
