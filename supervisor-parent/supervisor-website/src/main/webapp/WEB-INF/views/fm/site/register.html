@@ -250,4 +250,72 @@ ${type[0].getName()}</span>/
 	  } 
   
 </script>
+<<<<<<< HEAD
+=======
+</head>
+<body>
+<div class="fence" id="header">
+<h1 class="fence-wide ly-clearFix">
+<a class="logo" href="#"><img title="私享家绿色门窗平台" alt="私享家绿色门窗平台" src="${b.staticPath}images/logo.jpg"></a><div class=" topBan pr"></div> </h1>
+
+</h1>
+</div>
+<div class="joinBox">
+<div class="joinSign">
+<div class="header">
+<span class="ly-right f12">我已经注册，现在就<a href="${basePath}to_login.htm">登录</a></span>
+<h1 class="fontYH f18">欢迎注册成为私享家绿色门窗平台用户</h1></div>
+<div class="regBox ly-clearFix">
+<div class="regInfo ly-left">
+<form action="regist_save.htm" method="post" id="regist_box">
+<div class="item">
+<label><span class="color-red mr5 fb">*</span>公司名称</label>
+<input class="input input-w270h36" type="text" autocomplete="off" placeholder="" title="公司名称-作为登录用的超级账号名" id="name" name="name" value="${member.name}" />
+<div class="tipMsg msg-gray" id="name_text">请输入您的公司名称</div>
+</div>
+<div class="item">
+<label><span class="color-red mr5 fb">*</span>公司类型</label>
+<span class="mr20"><input name="type" type="radio" value="${type[0].id}" />
+${type[0].getName()}</span>/
+<span>
+<input name="type" type="radio" value="${type[1].id}" />${type[1].getName()}</span>
+<span><input name="type" type="radio" value="${type[2].id}" />${type[2].getName()}</span></div>
+<div class="item">
+<label><span class="color-red mr5 fb">*</span>公司所在地</label>
+<span class="mr10">江苏省</span><select name="area">
+  <#list list as are>
+  <option value="32:江苏省,${are.id}:${are.name}">${are.name}</option>
+  </#list>
+</select></div>
+<div class="item">
+  <label><span class="color-red mr5 fb">*</span>联系人</label>
+  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人" id="contacts" name="contacts" value="${member.contacts}" />
+  <div class="tipMsg msg-gray">请输入公司联系人</div>
+</div>
+<div class="item">
+  <label><span class="color-red mr5 fb">*</span>联系人手机</label>
+  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人手机" id="phoneNo" name="phoneNo" value="${member.phoneNo}" />
+  <button class="button button-gray f12 " onclick="send_ms(this);return false;">获取短信验证码</button>
+  <div class="tipMsg msg-gray" id="moileMsg_hidden">通过验证后，您可以用该手机号找回密码</div>
+  <div class="tipMsg msg-error" id="moileMsg" style="display:none;">手机号码格式有误，请输入正确的手机号</div>
+</div>
+<div class="item">
+  <label><span class="color-red mr5 fb">*</span>短信验证码</label>
+  <input class="input-w50h36" type="text" autocomplete="off" placeholder="" title="短信验证码" id="ms" name="ms" value=""/>
+  <em class="color-green f12" id="time">60秒后重新获取验证码</em>
+  <div id="sm_erro" class="tipMsg msg-error" style="display:none;"></div>
+  </div>
+<div class="item f12"><label>&nbsp;</label><input type="checkbox" class="checkbox"  id="readme">我已阅读并同意<a href="protocal.html" target="_blank" class="lnk-blue"  >《私享家注册协议》</a><div class="tipMsg msg-error" style="display:none;" id="erro_text">请同意注册协议</div></div>
+<div class="item" disabled="none"><label>&nbsp;</label>
+<a href="#" class="button button-orange btn-regin" onclick="regist()">同意协议并注册</a>
+</div>
+</form>
+</div>
+</div>
+<div class="aside ly-left">&nbsp;</div>
+</div>
+</div>
+<@b.footer/>
+</body>
+>>>>>>> b229b2a00f96c63e6ed6d33e97c9f55051baa341
 </html>

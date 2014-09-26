@@ -11,6 +11,7 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.sale.IRfidSaleStatisticalDao;
+import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 
 /**
  * RFID销售管理
@@ -18,7 +19,7 @@ import com.sxj.supervisor.dao.rfid.sale.IRfidSaleStatisticalDao;
  * @author dujinxin
  *
  */
-@Entity(mapper=IRfidSaleStatisticalDao.class)
+@Entity(mapper = IRfidSaleStatisticalDao.class)
 @Table(name = "R_RFID_SALE")
 public class RfidSaleStatisticalEntity extends Pagable implements Serializable {
 
@@ -47,10 +48,22 @@ public class RfidSaleStatisticalEntity extends Pagable implements Serializable {
 	private String purchaseNo;
 
 	/**
+	 * RFID类型
+	 */
+	@Column(name = "RFID_TYPE")
+	private RfidTypeEnum rfidType;
+
+	/**
 	 * 销售价格
 	 */
 	@Column(name = "PRICE")
 	private Long price;
+
+	/**
+	 * 销售数量
+	 */
+	@Column(name = "COUNT")
+	private Long count;
 
 	/**
 	 * 销售日期
@@ -82,7 +95,6 @@ public class RfidSaleStatisticalEntity extends Pagable implements Serializable {
 		this.purchaseNo = purchaseNo;
 	}
 
-
 	public Long getPrice() {
 		return price;
 	}
@@ -97,6 +109,22 @@ public class RfidSaleStatisticalEntity extends Pagable implements Serializable {
 
 	public void setSaleDate(Date saleDate) {
 		this.saleDate = saleDate;
+	}
+
+	public RfidTypeEnum getRfidType() {
+		return rfidType;
+	}
+
+	public void setRfidType(RfidTypeEnum rfidType) {
+		this.rfidType = rfidType;
+	}
+
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
 	}
 
 }

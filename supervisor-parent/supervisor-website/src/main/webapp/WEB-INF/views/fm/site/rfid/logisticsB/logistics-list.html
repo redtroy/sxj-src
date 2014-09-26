@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.pageScript/>
+<script >
+
+function query(page){
+	var params=$("#search_form").serialize();
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+	$.post("queryList.htm",params,function(data){
+		var res=$(data).find("#res_table");
+		var pager=$(data).find("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+function  del(id){
+	if(confirm('确实要删除吗?')){
+	$.post("delete.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("删除成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("删除失败!");	
+		}
+	});
+	}
+}
+function  disable(id){
+	if(confirm('确实要停用吗?')){
+	$.post("disable.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("停用成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("停用失败!");	
+		}
+	});
+	}
+}
+$(function(){
+	var url_ = "${basePath}autoComple.htm";
+	$("#memberName").bigAutocomplete({url:url_,callback:function(data){
+        $("#memberNo").val(data.result);
+    }});
+});
+function loadInfo(id,contractNo){
+	$("#info"+id).load("${basePath}/rfid/window/contractInfo.htm?contractNo="+contractNo+"&rfid="+id);
+}
+function closeContract(id){
+	$("#info"+id).html("");
+}
+
+function log(id){
+	$("#log"+id).load("stateLog.htm?id="+id);
+}
+function closeLog(id){
+	$("#log"+id).html("");
+}
+</script>
+</head>
+
+<body>
+<div id="header" class="fence">
+<@b.header /> 
+</div>
+<div class="mainBg">
+<div class="fence-wide ly-clearFix">
+<div class="main pb20">
+<div class="yard-190 ly-left leftMenu">
+<@b.leftMenu />
+</div>
+<div class="yard-870 rightSide ly-left">
+<div class="heading mb15 ly-clearFix">
+  <h1 class="ly-left">
+  <span class="title fontYH f20 fb">物流标签管理</span></h1>
+</div>
+<div class="contBox f12">
+<form action="" method="post" id="search_form">
+<div class="searBox mb10">
+  标签编号<input type="text" name="rfidNo" value="${query.rfidNo}"/>
+  申请单号<input type="text" name="purchaseNo" value="${query.purchaseNo}"/>
+  采购合同号<input type="text" name="contractNo" value="${query.contractNo}"/>
+  标签进度<select name="progressState" class="selectx">
+          <option value="" selected="selected">全部</option>
+		  <#list Label as label> 
+          <option value="${label.getId()}">${label.getName()}</option>
+          </#list>
+        </select>
+  标签状态 <select name="rfidState">
+		<option value="" selected="selected">全部</option>
+           <#list rfid as rfid>
+           <#if !rfid_has_next>
+           <#break>
+           </#if>
+          <option value="${rfid.getId()}">${rfid.getName()}</option>
+          </#list>
+        </select><button class="button button-search" onclick="query();">查询</button>
+</div>
+</form>
+   <@b.pager/>
+  <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+  <col width="15%" />
+  <col width="15%" />
+  <col width="15%" />
+  <col width="10%" />
+  <col width="15%" />
+  <col width="15%" />
+  <col width="15%" />
+    <tr>
+      <th>标签编号</th>
+      <th>申请单号</th>
+      <th>采购合同号</th>
+      <th>执行批次</th>
+      <th>补损标签</th>
+	  <th>标签进度</th>
+	  <th class="rLine">标签状态</th>
+      </tr>
+       <#list list as list>
+        <tr>
+          <td><a href="javascript:log('${list.id}');" class="lnk-blue">${list.rfidNo}</a></td>
+          <td>${list.purchaseNo}</td>
+          <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
+		  <td>${list.batchNo}</td>
+          <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
+		  <td><em class="state frozen">${list.progressState.getName()}</em></td>
+		  <td> <#if list.rfidState.getId()==0>
+		  <em class="state normal">${list.rfidState.getName()}</em>
+		  </#if>
+		   <#if list.rfidState.getId()==1>
+		   <em class="state verified">${list.rfidState.getName()}</em>
+		  </#if>
+		   <#if list.rfidState.getId()==2>
+		   <em class="state frozen">${list.rfidState.getName()}</em>
+		  </#if>
+		   <#if list.rfidState.getId()==3>
+		   <em class="state frozen">${list.rfidState.getName()}</em>
+		  </#if></td>
+        </tr>
+        <tr class="tableInfo" id="info${list.id}"> </tr>
+        <tr id="log${list.id}"> </tr>
+        </#list>
+  </table>
+</div>
+</div>
+</div>
+</div>
+<@b.footer />
+</body>
+</html>

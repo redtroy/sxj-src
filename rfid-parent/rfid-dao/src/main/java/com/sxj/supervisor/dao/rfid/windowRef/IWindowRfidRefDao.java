@@ -7,6 +7,7 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.util.persistent.QueryCondition;
 /**
  * 门窗RFID关联Dao
@@ -21,8 +22,8 @@ public interface IWindowRfidRefDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<WindowRfidEntity> queryWindowRfidRefList(
-			QueryCondition<WindowRfidEntity> query) throws SQLException;
+	public List<WindowRefEntity> queryWindowRfidRefList(
+			QueryCondition<WindowRefEntity> query) throws SQLException;
 
 	/**
 	 * 新增门窗RFID关联
@@ -30,7 +31,7 @@ public interface IWindowRfidRefDao {
 	 * @param member
 	 **/
 	@Insert
-	public void addWindowRfidRef(WindowRfidEntity window)
+	public void addWindowRfidRef(WindowRefEntity window)
 			throws SQLException;
 
 	/**
@@ -39,7 +40,7 @@ public interface IWindowRfidRefDao {
 	 * @param member
 	 **/
 	@Update
-	public void updateWindowRfidRef(WindowRfidEntity window)
+	public void updateWindowRfidRef(WindowRefEntity window)
 			throws SQLException;
 
 	/**
@@ -48,5 +49,5 @@ public interface IWindowRfidRefDao {
 	 * @param id
 	 **/
 	@Get
-	public WindowRfidEntity getWindowRfidRef(String id);
+	public WindowRefEntity getWindowRfidRef(String id);
 }

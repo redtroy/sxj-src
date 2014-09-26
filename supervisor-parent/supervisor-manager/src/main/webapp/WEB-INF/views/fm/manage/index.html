@@ -1,88 +1,102 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script>
-jQuery(document).ready(function($) {
-	$('.edit-password').click(function(){
-		$('.maskdivgen').fadeIn(100);
-		$('.modal-mask').slideDown(200);
+	
+	jQuery(document).ready(function($) {
+		$('.edit-password').click(function() {
+			$('.maskdivgen').fadeIn(100);
+			$('.modal-mask').slideDown(200);
+		})
+		$('.modal-header .close').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.modal-mask').slideUp(200);
+		})
+		$('.popBtn').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.modal-mask').slideUp(200);
+		})
+		
 	})
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.modal-mask').slideUp(200);
-	})
-	$('.popBtn').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.modal-mask').slideUp(200);
-	})
-})
-function edit_pwd(){
-	var pwd1=$("#loginpassword").val();
-	var pwd2=$("#newpassword").val();
-	if (pwd1=="" || pwd2==""){
-		alert("密码不能为空！")
-		return false;
-	}
-	if (pwd1 !=pwd2){
-		alert("两次密码输入不一样！请重新输入！")
-		return false;
-	}
-	$.post("${basePath}system/edir_pwd.htm",{password:pwd1,password2:pwd2},function(data){
-		if (data.isOK=="ok"){
-			alert("修改成功！");
-		}else{
-			alert(data.erro);
+	function edit_pwd() {
+		var pwd1 = $("#loginpassword").val();
+		var pwd2 = $("#newpassword").val();
+		if (pwd1 == "" || pwd2 == "") {
+			alert("密码不能为空！")
+			return false;
 		}
-	})
-}
+		if (pwd1 != pwd2) {
+			alert("两次密码输入不一样！请重新输入！")
+			return false;
+		}
+		$.post("${basePath}system/edir_pwd.htm", {
+			password : pwd1,
+			password2 : pwd2
+		}, function(data) {
+			if (data.isOK == "ok") {
+				alert("修改成功！");
+			} else {
+				alert(data.erro);
+			}
+		})
+	}
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 </head>
 <body>
-<@b.header />
-<div id="main" class="fence-wide">
-<!-- InstanceBeginEditable name="local" -->
-<@b.menuPath/>
-<!-- InstanceEndEditable -->
-<div id="mainBg" class="ly-clearFix yard-1200">
-    <div id="leftList"><@b.leftMenu /></div>
-    <div id="rightBar">
-    <!-- InstanceBeginEditable name="rightBar" -->
-    <div class="welcomeBox text-center">
-     <h2 class="welcome fontYH">欢迎您登录</h2>
-     <#if Session.userinfo?exists>
-      <#if Session.userinfo.lastLogin?exists>
-     <div class="color-gray6">您上次登陆时间为： ${Session.userinfo.lastLogin?string("yyyy-MM-dd HH:mm:ss")}</div>
-     </#if>
-     </#if>
-     <a class="button button-green button-middle edit-password fontYH f14">修改登录密码</a>
-    </div>
-    <div class="modal-mask" style="display:none">
-     <div class="modal-wrap">
-     <div class="modal-header"><span class="close">关闭</span></div>
-     <div class="modal-body passdwordBox">
-     <div class="form-group">
-     <label>新密码</label>
-     <input type="password" name="loginpassword" id="loginpassword" tabindex="1" class="input input-w270h36" placeholder="请输入新密码"></div>
-     <div class="form-group">
-     <label>确认密码</label>
-     <input type="password" name="newpassword" id="newpassword" tabindex="1" class="input input-w270h36" placeholder="请确认新密码">
-     </div>
-     <button class="popBtn" onclick="edit_pwd();return false;">确认修改</button>
-     </div>
-     </div>
-     </div>
-    <div class="maskdivgen" style="display:none"></div>
-    <!-- InstanceEndEditable --></div>
-</div>
-<!-- 底部-->
-<@b.footer />
+	<@b.header />
+	<div id="main" class="fence-wide">
+		<!-- InstanceBeginEditable name="local" -->
+		<@b.menuPath/>
+		<!-- InstanceEndEditable -->
+		<div id="mainBg" class="ly-clearFix yard-1200">
+			<div id="leftList"><@b.leftMenu /></div>
+			<div id="rightBar">
+				<!-- InstanceBeginEditable name="rightBar" -->
+				<div class="welcomeBox text-center">
+					<h2 class="welcome fontYH">欢迎您登录</h2>
+					<#if Session.userinfo?exists> <#if
+					Session.userinfo.lastLogin?exists>
+					<div class="color-gray6">您上次登陆时间为：
+						${Session.userinfo.lastLogin?string("yyyy-MM-dd HH:mm:ss")}</div>
+					</#if> </#if> <a
+						class="button button-green button-middle edit-password fontYH f14">修改登录密码</a>
+				</div>
+				<div class="modal-mask" style="display: none">
+					<div class="modal-wrap">
+						<div class="modal-header">
+							<span class="close">关闭</span>
+						</div>
+						<div class="modal-body passdwordBox">
+							<div class="form-group">
+								<label>新密码</label> <input type="password" name="loginpassword"
+									id="loginpassword" tabindex="1" class="input input-w270h36"
+									placeholder="请输入新密码">
+							</div>
+							<div class="form-group">
+								<label>确认密码</label> <input type="password" name="newpassword"
+									id="newpassword" tabindex="1" class="input input-w270h36"
+									placeholder="请确认新密码">
+							</div>
+							<button class="popBtn" onclick="edit_pwd();return false;">确认修改</button>
+						</div>
+					</div>
+				</div>
+				<div class="maskdivgen" style="display: none"></div>
+				<!-- InstanceEndEditable -->
+			</div>
+		</div>
+		<!-- 底部-->
+		<@b.footer />
 </body>
-<!-- InstanceEnd --></html>
+<!-- InstanceEnd -->
+</html>

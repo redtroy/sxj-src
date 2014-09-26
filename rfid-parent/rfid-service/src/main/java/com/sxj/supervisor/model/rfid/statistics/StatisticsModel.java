@@ -1,7 +1,6 @@
 package com.sxj.supervisor.model.rfid.statistics;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class StatisticsModel implements Serializable {
 
@@ -10,206 +9,105 @@ public class StatisticsModel implements Serializable {
 	 */
 	private static final long serialVersionUID = 3392948032546921011L;
 
-	private Long applySum;
+	private StatisticsItemModel applyList;
 
-	private List<StatisticsItemModel> applyList;
+	private StatisticsItemModel purchaseList;
 
-	private Long purchaseSum;
+	private StatisticsItemModel windowSaleList;
 
-	private List<StatisticsItemModel> purchaseList;
+	private StatisticsItemModel batchSaleList;
 
-	private Long windowSaleSum;
+	private StatisticsItemModel windowSaleAmountList;
 
-	private List<StatisticsItemModel> windowSaleList;
+	private StatisticsItemModel batchSaleAmountList;
 
-	private Long batchSaleSum;
+	private StatisticsItemModel windowPurchaseAmountList;
 
-	private List<StatisticsItemModel> batchSaleList;
+	private StatisticsItemModel batchPurchaseAmountList;
 
-	private Long windowSaleAmount;
+	private StatisticsItemModel expectProfitList;
 
-	private List<StatisticsItemModel> windowSaleAmountList;
+	private StatisticsItemModel realityProfitList;
 
-	private Long batchSaleAmount;
-
-	private List<StatisticsItemModel> batchSaleAmountList;
-
-	private Long windowPurchaseSum;
-
-	private List<StatisticsItemModel> windowPurchaseList;
-
-	private Long batchPurchaseSum;
-
-	private List<StatisticsItemModel> batchPurchaseList;
-
-	private Long expectProfit;
-
-	private List<StatisticsItemModel> expectProfitList;
-
-	private Long realityProfit;
-
-	private List<StatisticsItemModel> realityProfitList;
-
-	public Long getApplySum() {
-		return applySum;
-	}
-
-	public void setApplySum(Long applySum) {
-		this.applySum = applySum;
-	}
-
-	public List<StatisticsItemModel> getApplyList() {
+	public StatisticsItemModel getApplyList() {
 		return applyList;
 	}
 
-	public void setApplyList(List<StatisticsItemModel> applyList) {
+	public void setApplyList(StatisticsItemModel applyList) {
 		this.applyList = applyList;
 	}
 
-	public Long getPurchaseSum() {
-		return purchaseSum;
-	}
-
-	public void setPurchaseSum(Long purchaseSum) {
-		this.purchaseSum = purchaseSum;
-	}
-
-	public List<StatisticsItemModel> getPurchaseList() {
+	public StatisticsItemModel getPurchaseList() {
 		return purchaseList;
 	}
 
-	public void setPurchaseList(List<StatisticsItemModel> purchaseList) {
+	public void setPurchaseList(StatisticsItemModel purchaseList) {
 		this.purchaseList = purchaseList;
 	}
 
-	public Long getWindowSaleSum() {
-		return windowSaleSum;
-	}
-
-	public void setWindowSaleSum(Long windowSaleSum) {
-		this.windowSaleSum = windowSaleSum;
-	}
-
-	public List<StatisticsItemModel> getWindowSaleList() {
+	public StatisticsItemModel getWindowSaleList() {
 		return windowSaleList;
 	}
 
-	public void setWindowSaleList(List<StatisticsItemModel> windowSaleList) {
+	public void setWindowSaleList(StatisticsItemModel windowSaleList) {
 		this.windowSaleList = windowSaleList;
 	}
 
-	public Long getBatchSaleSum() {
-		return batchSaleSum;
-	}
-
-	public void setBatchSaleSum(Long batchSaleSum) {
-		this.batchSaleSum = batchSaleSum;
-	}
-
-	public List<StatisticsItemModel> getBatchSaleList() {
+	public StatisticsItemModel getBatchSaleList() {
 		return batchSaleList;
 	}
 
-	public void setBatchSaleList(List<StatisticsItemModel> batchSaleList) {
+	public void setBatchSaleList(StatisticsItemModel batchSaleList) {
 		this.batchSaleList = batchSaleList;
 	}
 
-	public Long getWindowSaleAmount() {
-		return windowSaleAmount;
-	}
-
-	public void setWindowSaleAmount(Long windowSaleAmount) {
-		this.windowSaleAmount = windowSaleAmount;
-	}
-
-	public List<StatisticsItemModel> getWindowSaleAmountList() {
+	public StatisticsItemModel getWindowSaleAmountList() {
 		return windowSaleAmountList;
 	}
 
-	public void setWindowSaleAmountList(
-			List<StatisticsItemModel> windowSaleAmountList) {
+	public void setWindowSaleAmountList(StatisticsItemModel windowSaleAmountList) {
 		this.windowSaleAmountList = windowSaleAmountList;
 	}
 
-	public Long getBatchSaleAmount() {
-		return batchSaleAmount;
-	}
-
-	public void setBatchSaleAmount(Long batchSaleAmount) {
-		this.batchSaleAmount = batchSaleAmount;
-	}
-
-	public List<StatisticsItemModel> getBatchSaleAmountList() {
+	public StatisticsItemModel getBatchSaleAmountList() {
 		return batchSaleAmountList;
 	}
 
-	public void setBatchSaleAmountList(
-			List<StatisticsItemModel> batchSaleAmountList) {
+	public void setBatchSaleAmountList(StatisticsItemModel batchSaleAmountList) {
 		this.batchSaleAmountList = batchSaleAmountList;
 	}
 
-	public Long getWindowPurchaseSum() {
-		return windowPurchaseSum;
+	public StatisticsItemModel getWindowPurchaseAmountList() {
+		return windowPurchaseAmountList;
 	}
 
-	public void setWindowPurchaseSum(Long windowPurchaseSum) {
-		this.windowPurchaseSum = windowPurchaseSum;
+	public void setWindowPurchaseAmountList(
+			StatisticsItemModel windowPurchaseAmountList) {
+		this.windowPurchaseAmountList = windowPurchaseAmountList;
 	}
 
-	public List<StatisticsItemModel> getWindowPurchaseList() {
-		return windowPurchaseList;
+	public StatisticsItemModel getBatchPurchaseAmountList() {
+		return batchPurchaseAmountList;
 	}
 
-	public void setWindowPurchaseList(
-			List<StatisticsItemModel> windowPurchaseList) {
-		this.windowPurchaseList = windowPurchaseList;
+	public void setBatchPurchaseAmountList(
+			StatisticsItemModel batchPurchaseAmountList) {
+		this.batchPurchaseAmountList = batchPurchaseAmountList;
 	}
 
-	public Long getBatchPurchaseSum() {
-		return batchPurchaseSum;
-	}
-
-	public void setBatchPurchaseSum(Long batchPurchaseSum) {
-		this.batchPurchaseSum = batchPurchaseSum;
-	}
-
-	public List<StatisticsItemModel> getBatchPurchaseList() {
-		return batchPurchaseList;
-	}
-
-	public void setBatchPurchaseList(List<StatisticsItemModel> batchPurchaseList) {
-		this.batchPurchaseList = batchPurchaseList;
-	}
-
-	public Long getExpectProfit() {
-		return expectProfit;
-	}
-
-	public void setExpectProfit(Long expectProfit) {
-		this.expectProfit = expectProfit;
-	}
-
-	public List<StatisticsItemModel> getExpectProfitList() {
+	public StatisticsItemModel getExpectProfitList() {
 		return expectProfitList;
 	}
 
-	public void setExpectProfitList(List<StatisticsItemModel> expectProfitList) {
+	public void setExpectProfitList(StatisticsItemModel expectProfitList) {
 		this.expectProfitList = expectProfitList;
 	}
 
-	public Long getRealityProfit() {
-		return realityProfit;
-	}
-
-	public void setRealityProfit(Long realityProfit) {
-		this.realityProfit = realityProfit;
-	}
-
-	public List<StatisticsItemModel> getRealityProfitList() {
+	public StatisticsItemModel getRealityProfitList() {
 		return realityProfitList;
 	}
 
-	public void setRealityProfitList(List<StatisticsItemModel> realityProfitList) {
+	public void setRealityProfitList(StatisticsItemModel realityProfitList) {
 		this.realityProfitList = realityProfitList;
 	}
 

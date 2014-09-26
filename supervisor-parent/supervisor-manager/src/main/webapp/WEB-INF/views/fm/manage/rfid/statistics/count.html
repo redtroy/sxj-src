@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script >
+function loadItem(type){
+	$.get("apply.htm?type="+type,function(data){
+		dateList=data.item.dateList;
+		countList=data.item.countList;
+		loadHighcharts(dateList,countList);
+	})
+}
+
+function query(page){
+	var params=$("#search_form").serialize();
+	$.post("query.htm",params,function(data){
+		var res=$(data).find("#rightBar").children("#res_table");
+		var pager=$(data).find("#rightBar").children("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+	});
+}
+function loadHighcharts(dateList,countList){
+	  $('#container').highcharts({
+	        chart: {
+	            type: 'column',
+	            margin: [ 50, 50, 100, 80]
+	        },
+	        title: {
+	            text: '统计数据'
+	        },
+	        xAxis: {
+	            categories: dateList,
+	            labels: {
+	                rotation: 0,
+	                align: 'center',
+	                style: {
+	                    fontSize: '12px',
+	                    fontFamily: 'tahoma,arial,Hiragino Sans GB,simsun,sans-serif'
+	                }
+	            }
+	        },
+	        yAxis: {
+	            min: 0,
+	            title: {
+	                text: '数量 (个)'
+	            }
+	        },
+	        legend: {
+	            enabled: false
+	        },
+	        tooltip: {
+	            pointFormat: '数量: <b>{point.y:.1f}个</b>',
+	        },
+	        series: [{
+	            name: 'Population',
+	            data: countList,
+	            dataLabels: {
+	                enabled: true,
+	                rotation: -90,
+	                color: '#FFFFFF',
+	                align: 'right',
+	                x: 4,
+	                y: 10,
+	                style: {
+	                    fontSize: '12px',
+	                    fontFamily: 'Verdana, sans-serif',
+	                    textShadow: '0 0 2px black'
+	                }
+	            }
+	        }]
+	    });
+}			
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<div id="header" class="fence-wide">
+     <@b.header />
+</div>
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>RFID进销存管理<span>&gt;</span>RFID统计管理</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+ <div id="leftList">
+      <@b.leftMenu />
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">RFID统计管理</h2>
+      <div id="searchBox">
+       统计时间段
+        <form action="javascript:void(0);" id="search_form">
+        <input type="text" datepicker id="time1" name="startDate">-<input type="text" datepicker id="time2" name="endDate">
+        <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+        </form>
+    </div>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
+        <col width="10%"/>
+        <col width="10%"/>
+        <col width="10%" />
+        <col width="10%" />
+        <col width="10%" />
+		<col width="10%" />
+		<col width="10%" />
+		<col width="10%" />
+		<col width="10%" />
+		<col width="10%" />
+        <tr>
+          <th>RFID申请单数量</th>
+          <th>RFID采购单数量</th>
+          <th>门窗标签销售量</th>
+          <th>批次标签销售量</th>
+          <th>门窗标签销售额</th>
+		  <th>批次标签销售额</th>
+		  <th>门窗标签采购额</th>
+		  <th>批次标签采购额</th>
+		  <th>预计利润</th>
+          <th class="rLine">实际利润</th>
+        </tr>
+        <tr>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(1);">${st.applyList.countSum}</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(2);">${st.purchaseList.countSum}</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(3);">${st.windowSaleList.countSum}</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(4);">${st.batchSaleList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(5);">${st.windowSaleAmountList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(6);">${st.batchSaleAmountList.countSum}</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(7);">${st.windowPurchaseAmountList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(8);">${st.batchPurchaseAmountList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(9);">${st.expectProfitList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(10);">${st.realityProfitList.countSum}</a></td>
+        </tr>
+		<tr style="display:;">
+        <td colspan="10">
+          <div id="container" style="min-width:700px;height:400px"></div>
+          </td>
+      </tr>
+      </table>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer /> 
+</body>
+<!-- InstanceEnd --></html>

@@ -113,13 +113,6 @@ public class PurchaseRfidController extends BaseController{
 		}
 	}
 	/**
-	 * 确认发货
-	 * @param id
-	 * @param model
-	 * @return
-	 * @throws WebException
-	 */
-	/**
 	 * 确认收货
 	 * @param id
 	 * @param model

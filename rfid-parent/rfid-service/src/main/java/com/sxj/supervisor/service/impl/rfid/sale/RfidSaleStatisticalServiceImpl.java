@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.rfid.sale.IRfidSaleStatisticalDao;
 import com.sxj.supervisor.entity.rfid.sale.RfidSaleStatisticalEntity;
+import com.sxj.supervisor.model.rfid.sale.RfidSaleQuery;
 import com.sxj.supervisor.service.rfid.sale.IRfidSaleStatisticalService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.persistent.QueryCondition;
 
 @Service
 @Transactional
@@ -32,9 +34,17 @@ public class RfidSaleStatisticalServiceImpl implements
 	}
 
 	@Override
-	public List<RfidSaleStatisticalEntity> queryList() throws ServiceException {
+	public List<RfidSaleStatisticalEntity> queryList(RfidSaleQuery query)
+			throws ServiceException {
 		try {
-			return dao.queryList(null);
+			QueryCondition<RfidSaleStatisticalEntity> condition = new QueryCondition<RfidSaleStatisticalEntity>();
+			condition.addCondition("startDate", query.getStartDate());
+			condition.addCondition("endDate", query.getEndDate());
+			if (query.getRfidType() != null) {
+				condition.addCondition("rfidType", query.getRfidType().getId());
+			}
+			List<RfidSaleStatisticalEntity> list = dao.queryList(condition);
+			return list;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("查询销售记录", e);

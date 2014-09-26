@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.pageScript/>
+<script>
+function query(page){
+	var params=$("#search_form").serialize();
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+	$.post("query.htm",params,function(data){
+		var res=$(data).find("#res_table");
+		var pager=$(data).find("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+function  del(id){
+	if(confirm('确实要删除吗?')){
+	$.post("delete.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("删除成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("删除失败!");	
+		}
+	});
+	}
+}
+
+function  audit(id){
+	if(confirm('确实要审核吗?')){
+	$.post("audit.htm",{id:id},function(data){
+		if(data.isOK=='ok'){
+			alert("审核成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("审核失败!");	
+		}
+	});
+	}
+}
+function loadInfo(id,type){
+	$("#info"+id).load("info.htm?id="+id+"&type="+type);
+}
+function closeContract(id){
+	$("#info"+id).html("");
+}
+function saveModify(id){
+	$.post("saveModify.htm",$("#form"+id).serialize(),function(data){
+		if(data.isOK=='ok'){
+			alert("修改成功!");
+			window.location.href="query.htm";
+		}else{
+			alert("修改失败!");	
+		}
+	});
+}
+function batch(id,contractNo,rfidNo){
+	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+}
+</script>
+</head>
+<body>
+<@b.header/>
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<@b.menuPath/>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList">
+      <@b.leftMenu />
+    </div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">门窗RFID关联申请管理</h2>
+    <form action="" id="search_form" method="post">
+      <div id="searchBox">
+      <p>RFID关联申请号
+        <input type="text" name="rfidRefNo" value=""/>
+       RFID编号
+       <input type="text" name="rfidRange" value=""/>
+       申请人名称
+       <input type="text" name="" value=""/>
+	   相关批次RFID
+       <input type="text" name="batchNo" value=""/>
+	   被补损RFID编号
+       <input type="text" name="replenishRfid" value=""/></p>
+       窗型代号<select name="windowsNo">
+	   <option selected="selected" value="">全部</option>
+          <#list winType as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
+        </select>
+       关联类型
+       <select name="type">
+          <option selected="selected" value="">全部</option>
+		   <#list type as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
+        </select>
+		审核状态<select name="state">
+		<option selected="selected" value="">全部</option>
+        <#list state as type> 
+          <option value="${type.getId()}">${type.getName()}</option>
+          </#list>
+        </select>	
+       关联申请时间段
+       <input type="text" name="" value="" datepicker />-<input type="text" name="" value="" datepicker />
+        <button class="btn btn-blue"><span>查询</span></button>
+    </div>
+    </form>
+	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的门窗RFID关联申请！</div>
+      <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
+        <col width="12%"/>
+        <col width="9%"/>
+        <col width="12%" />
+        <col width="7%" />
+        <col width="8%" />
+		<col width="9%" />
+		<col width="4%" />
+		<col width="12%" />
+		<col width="8%" />
+		<col width="8%" />
+		<col width="10%" />
+        <tr>
+          <th>RFID关联申请号</th>
+          <th>RFID编号区间</th>
+          <th>申请人名称</th>
+          <th>关联类型</th>
+          <th>窗型代号</th>
+		  <th>玻璃批次</th>
+		  <th>型材批次</th>
+		  <th>关联申请时间</th>
+		  <th>被补损RFID</th>
+		  <th>审核</th>
+          <th class="rLine">操作</th>
+        </tr>
+        <#list winList as win>
+        <tr>
+          <td><a href="javascript:loadInfo('${win.id}','${win.type.getId()}');" class="lnk-blue">${win.rfidRefNo}</a></td>
+          <td>${win.rfidRange}</td>
+          <td>${win.memberName}</td>
+          <td>${win.type.getName()}</td>
+		  <td>${win.windowsNo.getName()}</td>
+		  <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.glassBatchNo}')" class="lnk-blue">${win.glassBatchNo}</a></td>
+          <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.profileBatchNo}')" class="lnk-blue">${win.profileBatchNo}</a></td>
+		  <td>${win.applyDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
+		  <td><#if win.replenishRfid?exists>${win.replenishRfid}<#else>-</#if></td>
+		  <td><#if win.state.getId()==0><button class="btn btn-gray" onclick="audit('${win.id}');"><span>审核</span></button><#else><em class="state verified">已审核</em></#if></td>
+		  <td class="operation"><a href="javascript:del('${win.id}');" class="del">删除</a></td>
+        </tr>
+        <tr class="tableInfo" id="info${win.id}"></tr>
+        </#list>
+		 
+      </table>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>
