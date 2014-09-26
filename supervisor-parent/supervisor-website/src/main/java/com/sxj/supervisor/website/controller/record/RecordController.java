@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.comet4j.core.CometContext;
-import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,8 +28,6 @@ import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
-import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
-import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
@@ -40,10 +36,9 @@ import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.website.comet.MessageChannel;
-import com.sxj.supervisor.website.comet.MessageConnectListener;
-import com.sxj.supervisor.website.comet.MessageDropListener;
 import com.sxj.supervisor.website.comet.record.RecordThread;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
@@ -65,6 +60,9 @@ public class RecordController extends BaseController {
 	 */
 	@Autowired
 	IRecordService recordService;
+	
+	@Autowired
+	IMemberService memberService;
 
 	@RequestMapping("/query")
 	public String to_query(ModelMap map, HttpSession session, RecordQuery query)
@@ -174,13 +172,20 @@ public class RecordController extends BaseController {
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
+			MemberEntity member =memberService.memberInfo(record.getMemberIdB());
+			
 			record.setApplyId(userBean.getMember().getMemberNo());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
 			record.setType(RecordTypeEnum.contract);
 			record.setApplyDate(new Date());
 			record.setDelState(false);
-			record.setContractType(ContractTypeEnum.glass);// 合同类型
+			if(member.getType().getId()==2){
+				record.setContractType(ContractTypeEnum.glass);// 合同类型
+			}else if(member.getType().getId()==1){
+				record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+			}
+			
 			record.setFlag(RecordFlagEnum.A);
 			record.setConfirmState(RecordConfirmStateEnum.accepted);
 			recordService.addRecord(record);
@@ -240,13 +245,18 @@ public class RecordController extends BaseController {
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
+			MemberEntity member =memberService.memberInfo(record.getMemberIdB());
 			record.setApplyId(userBean.getMember().getMemberNo());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
 			record.setType(RecordTypeEnum.contract);
 			record.setApplyDate(new Date());
 			record.setDelState(false);
-			record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+			if(member.getType().getId()==2){
+				record.setContractType(ContractTypeEnum.glass);// 合同类型
+			}else if(member.getType().getId()==1){
+				record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+			}
 			record.setFlag(RecordFlagEnum.B);
 			record.setConfirmState(RecordConfirmStateEnum.accepted);
 			recordService.addRecord(record);

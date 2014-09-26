@@ -26,23 +26,23 @@
 		<if test="condition.rfidRefNo != null and condition.rfidRefNo !=''">
 			<![CDATA[AND RFID_REF_NO = #{condition.rfidRefNo}]]>
 		</if>
-		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
-			<![CDATA[AND PURCHASE_NO = #{condition.purchaseNo}]]>
+		<if test="condition.rfidRange != null and condition.rfidRange !=''">
+			<![CDATA[AND RFID_RANGE = #{condition.rfidRange}]]>
 		</if>
 		<if test="condition.contractNo != null and condition.contractNo !=''">
 			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
 		</if>
 		<if test="condition.rfid != null and condition.rfid !=''">
-			<![CDATA[AND (GLASS_RFID = #{condition.rfid} or PROFILE_RFID = #{condition.rfid}) ]]>
+			<![CDATA[AND (GLASS_BATCH_NO = #{condition.rfid} or PROFILE_BATCH_NO = #{condition.rfid}) ]]>
 		</if>
-		<if test="condition.windowType != null and condition.windowType !=''">
-			<![CDATA[AND WINDOW_TYPE = #{condition.windowType}]]>
+		<if test="condition.windowsNo != null and condition.windowsNo !=''">
+			<![CDATA[AND WINDOWS_NO = #{condition.windowsNo}]]>
 		</if>
-		<if test="condition.progressState != null and condition.progressState !=''">
-			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
+		<if test="condition.type != null and condition.type !=''">
+			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
-		<if test="condition.rfidState != null and condition.rfidState !=''">
-			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>
+		<if test="condition.replenishRfid != null and condition.replenishRfid !=''">
+			<![CDATA[AND REPLENISH_RFID = #{condition.replenishRfid}]]>
 		</if>
 		<if
 			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">

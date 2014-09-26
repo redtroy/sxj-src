@@ -43,7 +43,7 @@ public class RecordEntity extends Pagable implements Serializable {
 	 * 备案号
 	 **/
 	@Column(name = "RECORD_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "ACC", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "BA", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String recordNo;
 
 	/**
