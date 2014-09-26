@@ -5,10 +5,30 @@
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
 <script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
 <script >
-function loadHighcharts(dateList,dataList){
+function loadItem(type){
+	$.get("apply.htm?type="+type,function(data){
+		dateList=data.item.dateList;
+		countList=data.item.countList;
+		loadHighcharts(dateList,countList);
+	})
+}
+
+function query(page){
+	var params=$("#search_form").serialize();
+	$.post("query.htm",params,function(data){
+		var res=$(data).find("#rightBar").children("#res_table");
+		var pager=$(data).find("#rightBar").children("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+	});
+}
+function loadHighcharts(dateList,countList){
 	  $('#container').highcharts({
 	        chart: {
 	            type: 'column',
@@ -31,18 +51,18 @@ function loadHighcharts(dateList,dataList){
 	        yAxis: {
 	            min: 0,
 	            title: {
-	                text: 'Population (millions)'
+	                text: '数量 (个)'
 	            }
 	        },
 	        legend: {
 	            enabled: false
 	        },
 	        tooltip: {
-	            pointFormat: 'Population in 2008: <b>{point.y:.1f} millions</b>',
+	            pointFormat: '数量: <b>{point.y:.1f}个</b>',
 	        },
 	        series: [{
 	            name: 'Population',
-	            data: dataList,
+	            data: countList,
 	            dataLabels: {
 	                enabled: true,
 	                rotation: -90,
@@ -58,11 +78,7 @@ function loadHighcharts(dateList,dataList){
 	            }
 	        }]
 	    });
-}
-
-$(function () {
-  
-});				
+}			
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -85,10 +101,12 @@ $(function () {
       <h2 class="title">RFID统计管理</h2>
       <div id="searchBox">
        统计时间段
-       <input type="text" name="" value="">-<input type="text" name="" value="">
-        <button class="btn btn-blue"><span>查询</span></button>
+        <form action="javascript:void(0);" id="search_form">
+        <input type="text" datepicker id="time1" name="startDate">-<input type="text" datepicker id="time2" name="endDate">
+        <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+        </form>
     </div>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="10%"/>
         <col width="10%"/>
         <col width="10%" />
@@ -112,16 +130,16 @@ $(function () {
           <th class="rLine">实际利润</th>
         </tr>
         <tr>
-          <td><a href="#" class="lnk-blue">2000</a></td>
-          <td><a href="#" class="lnk-blue">3500</a></td>
-          <td><a href="#" class="lnk-blue">203350</a></td>
-          <td><a href="#" class="lnk-blue">500</a></td>
-		  <td><a href="#" class="lnk-blue">250003250.00</a></td>
-		  <td><a href="#" class="lnk-blue">5200.00</a></td>
-          <td><a href="#" class="lnk-blue">1500000.00</a></td>
-		  <td><a href="#" class="lnk-blue">3200.00</a></td>
-		  <td><a href="#" class="lnk-blue">12300000.00</a></td>
-		  <td><a href="#" class="lnk-blue">10000000.00</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(1);">${st.applyList.countSum}</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(2);">${st.purchaseList.countSum}</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(3);">${st.windowSaleList.countSum}</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(4);">${st.batchSaleList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(5);">${st.windowSaleAmountList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(6);">${st.batchSaleAmountList.countSum}</a></td>
+          <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(7);">${st.windowPurchaseAmountList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(8);">${st.batchPurchaseAmountList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(9);">${st.expectProfitList.countSum}</a></td>
+		  <td><a href="javascript:void(0);" class="lnk-blue" onclick="loadItem(10);">${st.realityProfitList.countSum}</a></td>
         </tr>
 		<tr style="display:;">
         <td colspan="10">
@@ -131,10 +149,6 @@ $(function () {
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
-<div id="footer" class="fence-wide">
-  <div class="yard-1200">
-    <p>&copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
-  </div>
-</div>
+<@b.footer /> 
 </body>
 <!-- InstanceEnd --></html>
