@@ -180,9 +180,9 @@ public class RecordController extends BaseController {
 			record.setType(RecordTypeEnum.contract);
 			record.setApplyDate(new Date());
 			record.setDelState(false);
-			if(member.getType().getId()==2){
+			if(member.getType().getId()==1){
 				record.setContractType(ContractTypeEnum.glass);// 合同类型
-			}else if(member.getType().getId()==1){
+			}else if(member.getType().getId()==2){
 				record.setContractType(ContractTypeEnum.extrusions);// 合同类型
 			}
 			
@@ -252,9 +252,9 @@ public class RecordController extends BaseController {
 			record.setType(RecordTypeEnum.contract);
 			record.setApplyDate(new Date());
 			record.setDelState(false);
-			if(member.getType().getId()==2){
+			if(member.getType().getId()==1){
 				record.setContractType(ContractTypeEnum.glass);// 合同类型
-			}else if(member.getType().getId()==1){
+			}else if(member.getType().getId()==2){
 				record.setContractType(ContractTypeEnum.extrusions);// 合同类型
 			}
 			record.setFlag(RecordFlagEnum.B);

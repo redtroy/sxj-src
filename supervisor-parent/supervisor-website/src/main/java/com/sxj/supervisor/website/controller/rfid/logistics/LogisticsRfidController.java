@@ -106,4 +106,17 @@ public class LogisticsRfidController extends BaseController {
 			throw new WebException("查询门窗RFID错误");
 		}
 	}
+	
+	@RequestMapping("to_start")
+	public String toStart(String id ,ModelMap model)
+			throws WebException {
+		try {
+			LogisticsRfidEntity logistics =  logisticsRfidService.getLogistics(id);
+			model.put("logistics", logistics);
+			return "site/rfid/logisticsB/start-rfid";
+		} catch (Exception e) {
+			SxjLogger.error("查询门窗RFID错误", e, this.getClass());
+			throw new WebException("查询门窗RFID错误");
+		}
+	}
 }

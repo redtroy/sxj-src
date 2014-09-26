@@ -118,8 +118,9 @@ function closeLog(id){
   <col width="15%" />
   <col width="15%" />
   <col width="10%" />
-  <col width="15%" />
-  <col width="15%" />
+  <col width="10%" />
+  <col width="10%" />
+  <col width="10%" />
   <col width="15%" />
     <tr>
       <th>标签编号</th>
@@ -128,7 +129,8 @@ function closeLog(id){
       <th>执行批次</th>
       <th>补损标签</th>
 	  <th>标签进度</th>
-	  <th class="rLine">标签状态</th>
+	  <th >标签状态</th>
+	   <th class="rLine">操作</th>
       </tr>
        <#list list as list>
         <tr>
@@ -150,6 +152,7 @@ function closeLog(id){
 		   <#if list.rfidState.getId()==3>
 		   <em class="state frozen">${list.rfidState.getName()}</em>
 		  </#if></td>
+		  <td><#if list.rfidState.getId()==0><a href="to_start.htm?id=${list.id}" class="lnk-blue" title=""><span class="icon icon16 icon-ok"></span>启用</a> &nbsp;&nbsp;<a href="loss-gysrfid.html" class="lnk-blue" title="只有未使用的才能补损，其余状态置灰或者点击报错"><span class="icon icon16 icon-relat"></span>补损</a></#if></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}"> </tr>
         <tr id="log${list.id}"> </tr>

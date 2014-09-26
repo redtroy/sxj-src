@@ -27,5 +27,5 @@ public interface ILogisticsRfidService {
 	
 	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
 	
-	
+	public LogisticsRfidEntity getLogistics(String  id) throws ServiceException;
 }

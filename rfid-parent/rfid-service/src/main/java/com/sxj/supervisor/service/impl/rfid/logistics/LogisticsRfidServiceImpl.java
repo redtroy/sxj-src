@@ -90,4 +90,14 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 		
 		
 	}
+
+	@Override
+	public LogisticsRfidEntity getLogistics(String id) throws ServiceException {
+		try{
+			LogisticsRfidEntity entity=logisticsRfidDao.getLogisticsRfid(id);
+			return entity;
+		} catch (Exception e) {
+			throw new ServiceException("获取物流RFID错误", e);
+		}
+	}
 }
