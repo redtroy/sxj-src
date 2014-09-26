@@ -118,6 +118,14 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	@Column(name = "STATE")
 	private AuditStateEnum state;
 	
+	public WindowTypeEnum getWindowsNo() {
+		return windowsNo;
+	}
+
+	public void setWindowsNo(WindowTypeEnum windowsNo) {
+		this.windowsNo = windowsNo;
+	}
+
 	public AuditStateEnum getState() {
 		return state;
 	}
@@ -180,14 +188,6 @@ public class WindowRefEntity extends Pagable implements Serializable {
 
 	public void setType(LinkStateEnum type) {
 		this.type = type;
-	}
-
-	public WindowTypeEnum getWindowsNo() {
-		return windowsNo;
-	}
-
-	public void setWindowsNo(WindowTypeEnum windowsNo) {
-		this.windowsNo = windowsNo;
 	}
 
 	public String getGlassBatchNo() {

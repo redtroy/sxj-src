@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
+import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.rfid.windowRef.WindowRefQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
@@ -41,12 +43,12 @@ public class WindowRefController extends BaseController {
 		try {
 			query.setPagable(true);
 			List<WindowRefEntity> winList = windowRefService.queryWindowRfidRef(query);
-//			LabelProgressEnum[] Label = LabelProgressEnum.values();
-//			RfidStateEnum[] rfid = RfidStateEnum.values();
-//			WindowTypeEnum[] winType = WindowTypeEnum.values();
-//			model.put("Label", Label);
-//			model.put("rfid", rfid);
-//			model.put("winType", winType);
+			AuditStateEnum[] state = AuditStateEnum.values();
+			LinkStateEnum[] type = LinkStateEnum.values();
+			WindowTypeEnum[] winType = WindowTypeEnum.values();
+			model.put("state", state);
+			model.put("type", type);
+			model.put("winType", winType);
 			model.put("query", query);
 			model.put("winList", winList);
 			return "manage/rfid/windowRef/window-link";
@@ -109,14 +111,22 @@ public class WindowRefController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("info")
-	public String getInfo(String id, ModelMap model)
+	public String getInfo(String id,int type, ModelMap model)
 			throws WebException {
 		try {
 			WindowRefEntity win = windowRefService.getWindowRfidRef(id);
-			WindowTypeEnum[] type = WindowTypeEnum.values();
-			model.put("type", type);
+			WindowTypeEnum[] windowType = WindowTypeEnum.values();
+			model.put("type", windowType);
 			model.put("win", win);
-			return "manage/rfid/windowRef/window-link-info";
+			model.put("id", id);
+			if(type==0){
+				return "manage/rfid/windowRef/window-link-info";
+			}else if(type==1){
+				return "manage/rfid/windowRef/rfid-modify";
+			}else{
+				return "manage/rfid/windowRef/window-rfid-modify";
+			}
+			
 		} catch (Exception e) {
 			SxjLogger.error("获取门窗RFID错误", e, this.getClass());
 			throw new WebException("获取门窗RFID错误");
@@ -131,7 +141,7 @@ public class WindowRefController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("saveModify")
-	public @ResponseBody Map<String, String> saveModify(WindowRefEntity win, ModelMap model)
+	public @ResponseBody Map<String, String> saveModify(WindowRefEntity win)
 			throws WebException {
 		try {
 			windowRefService.updateWindowRfidRef(win);
@@ -143,62 +153,18 @@ public class WindowRefController extends BaseController {
 			throw new WebException("修改门窗RFID错误");
 		}
 	}
-//	/**
-//	 * 获取合同详细
-//	 * @param model
-//	 * @param contractNo
-//	 * @param rfid
-//	 * @return
-//	 * @throws WebException
-//	 */
-//	@RequestMapping("contractInfo")
-//	public String queryContractInfo(ModelMap model, String contractNo,String rfid)
-//			throws WebException {
-//		try {
-//			ContractModel cmodel=contractService.getContractByContractNo(contractNo);
-//			ContractModel contractModel = contractService
-//					.getContract(cmodel.getContract().getId());
-//			model.put("contractModel", contractModel);
-//			model.put("rfid", rfid);
-//			return "manage/rfid/window/contract-info";
-//		} catch (Exception e) {
-//			SxjLogger.error("查询合同信息错误", e, this.getClass());
-//			throw new WebException("查询合同信息错误");
-//		}
-//	}
-//	
-//	@RequestMapping("contractBatch")
-//	public String getContractBatch(ModelMap model, String contractNo,String rfidNo,String id)
-//			throws WebException {
-//		try {
-//			List<ContractBatchModel> conBatch=contractService.getContractBatch(contractNo, rfidNo);
-//			model.put("conBatch", conBatch);
-//			model.put("id", id);
-//			model.put("contractNo", contractNo);
-//			return "manage/rfid/window/contract-batch";
-//		} catch (Exception e) {
-//			SxjLogger.error("查询合同信息错误", e, this.getClass());
-//			throw new WebException("查询合同信息错误");
-//		}
-//	}
-//	/**
-//	 * 获取log动态
-//	 * @param model
-//	 * @param id
-//	 * @return
-//	 * @throws WebException
-//	 */
-//	@RequestMapping("stateLog")
-//	public String getStateLog(ModelMap model,String id)
-//			throws WebException {
-//		try {
-//			List<LogModel> logList=windowRfidService.getRfidStateLog(id);
-//			model.put("id", id);
-//			model.put("logList", logList);
-//			return "manage/rfid/window/stateLog";
-//		} catch (Exception e) {
-//			SxjLogger.error("查询log动态信息错误", e, this.getClass());
-//			throw new WebException("查询log动态信息错误");
-//		}
-//	}
+	@RequestMapping("contractBatch")
+	public String getContractBatch(ModelMap model, String contractNo,String rfidNo,String id)
+			throws WebException {
+		try {
+			List<ContractBatchModel> conBatch=contractService.getContractBatch(contractNo, rfidNo);
+			model.put("conBatch", conBatch);
+			model.put("id", id);
+			model.put("contractNo", contractNo);
+			return "manage/rfid/windowRef/contract-batch";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
+	}
 }

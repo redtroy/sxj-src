@@ -5,13 +5,13 @@
 			<ul class="ly-clearFix">
 				<li><label>招标合同号</label> <input type="text" name="contractNo"
 					value="${win.contractNo}"></li>
-				<li><label>窗型代号</label> <select name="windowsNo"
+				<li><label>窗型代号</label> <select name="windowsNo" id="windowsNo"
 					style="width: 120px">
 						<option value="">全部</option> <#list type as type> <#if
 						type.getId()==win.windowsNo.getId()>
-						<option value="${type.getId()}" selected="selected">${type.getName()}</option>
+						<option value="${type.id}" selected="selected">${type.getName()}</option>
 						<#else>
-						<option value="${type.getId()}">${type.getName()}</option> </#if>
+						<option value="${type.id}">${type.getName()}</option> </#if>
 						</#list>
 				</select>
 				<li><label>玻璃批次RIFD</label> <input type="text"
@@ -19,12 +19,12 @@
 				<li><label>型材批次RFID</label> <input type="text"
 					name="profileBatchNo" value="${win.profileBatchNo}"></li>
 				<li><label>RFID编号区间</label> <input type="text" name="rfidRange"
-					value="${win.rfidRange}"> <#if rfid_has_next> - </#if></li>
+					value="${win.rfidRange}"></li>
 				<li>&nbsp;</li>
 			</ul>
 			<div class="btnBox text-center">
 				<a href="javascript:saveModify('${win.id}')"
-					class="button button-orange button-small">修改</a><a href="#"
+					class="button button-orange button-small">修改</a><a href="javascript:closeContract('${id}');"
 					class="button button-gray button-small">收起</a>
 			</div>
 		</div>
