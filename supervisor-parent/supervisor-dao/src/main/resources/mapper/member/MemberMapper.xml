@@ -16,8 +16,8 @@
 		<result property="phoneNo" column="PHONE_NO" jdbcType="VARCHAR" />
 		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
 		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
-		<result property="regDate" column="REG_DATE" jdbcType="DATE" />
-		<result property="authorDate" column="AUTHOR_DATE" jdbcType="DATE" />
+		<result property="regDate" column="REG_DATE" jdbcType="TIMESTAMP" />
+		<result property="authorDate" column="AUTHOR_DATE" jdbcType="TIMESTAMP" />
 		<result property="state" column="STATE" jdbcType="INTEGER"
 			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
 		<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER"

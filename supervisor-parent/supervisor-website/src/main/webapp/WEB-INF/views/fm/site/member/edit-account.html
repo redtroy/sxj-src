@@ -228,7 +228,7 @@ jQuery(document).ready(function($) {
       <#elseif (account.state.id == 0)>
       <td><button class="button button-green" onclick="checkState('${account.id}','${account.state.id}')" >恢复</button></td>
       </#if>
-      <td>${account.regDate?date}</td>
+      <td>${account.regDate?string("yyyy-MM-dd HH:mm:ss")}</td>
       <td id="edit_td"><a href="javascript:void(0);" class="lnk-blue mr20" onclick="edit_account('${account.id}')"><span class="icon icon16 icon-edit"></span>修改</a><a href="javascript:void(0);" class="lnk-blue btnPassword" onclick="edit_pwd('${account.id}')"><span class="icon icon16 icon-password" ></span>修改密码</a></td>
       <td id="confim_td" style="display: none"><a href="javascript:void(0);"  onclick="edit_save('${account.id}')" class="lnk-green mr20"><span class="icon icon16 icon-ok"></span>确认</a><a href="javascript:void(0);" class="lnk-blue" onclick="edit_pwd('${account.id}')"><span class="icon icon16 icon-password"></span>修改密码</a></td>
     </tr>

@@ -134,7 +134,7 @@ function query(){
   <label>总交易额</label><a href="finance.html" class="lnk-blue">查看明细</a> </div>
 <div class="item">
   <label>注册时间</label>
-  ${member.regDate?date}</div>
+  ${member.regDate?string("yyyy-MM-dd HH:mm:ss")}</div>
 <div class="item mt10">
   <label>&nbsp;</label>
   <a href="edit_member.htm?id=${member.id}" class="button button-orange mr15">修改会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>

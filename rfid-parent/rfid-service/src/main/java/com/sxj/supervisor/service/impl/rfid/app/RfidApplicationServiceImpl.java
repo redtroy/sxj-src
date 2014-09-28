@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
+import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
+import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
@@ -21,7 +23,10 @@ import com.sxj.util.persistent.QueryCondition;
 @Service
 public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	@Autowired
-	IRfidApplicationDao appDao;
+	private IRfidApplicationDao appDao;
+
+	@Autowired
+	private IRfidPurchaseDao purchaseDao;
 
 	@Override
 	public List<RfidApplicationEntity> query(RfidApplicationQuery query)
@@ -70,12 +75,22 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	 * 根据ID逻辑删除
 	 */
 	@Override
-	public void delApp(String id) throws ServiceException {
+	public Boolean delApp(String id, String applyNo) throws ServiceException {
 		try {
+			if (applyNo != null) {
+				QueryCondition<RfidPurchaseEntity> condition = new QueryCondition<RfidPurchaseEntity>();
+				condition.addCondition("applyNo", applyNo);
+				List<RfidPurchaseEntity> list = purchaseDao
+						.queryList(condition);
+				if (list.size() == 0) {
+					return false;
+				}
+			}
 			RfidApplicationEntity app = new RfidApplicationEntity();
 			app.setDelstate(true);
 			app.setId(id);
 			appDao.updateRfidApplication(app);
+			return true;
 		} catch (Exception e) {
 			SxjLogger.error("逻辑删除申请单错误", e, this.getClass());
 			throw new ServiceException("逻辑删除申请单错误");
@@ -131,6 +146,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			throw new ServiceException("获取申请单信息错误", e);
 		}
 	}
+
 	/**
 	 * 获取申请单
 	 */
@@ -138,7 +154,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	public RfidApplicationEntity getApplicationInfo(String id)
 			throws ServiceException {
 		try {
-			RfidApplicationEntity app =appDao.getRfidApplication(id);
+			RfidApplicationEntity app = appDao.getRfidApplication(id);
 			return app;
 		} catch (Exception e) {
 			throw new ServiceException("获取申请单信息错误", e);

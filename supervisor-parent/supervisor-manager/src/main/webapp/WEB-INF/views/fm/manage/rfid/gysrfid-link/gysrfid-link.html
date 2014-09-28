@@ -12,26 +12,45 @@
 <@b.pageScript/>
 <script>
   function open_1(id,rfidNo,contractNo,batchNo){
+	// var obj=$("#edit_1_"+id);
+    // alert(obj.children().eq(0).html())
+	//  obj.show();
+	  
 	  $.post("query_contract.htm",{id:id,rfidNo:rfidNo,contractNo:contractNo,batchNo:batchNo},function(data){
-		  var obj=$("edit_1_"+id);
-		  obj.children.eq(0).html(data);
+		  var obj=$("#edit_1_"+id);
+		  obj.children().eq(0).html(data);
 		  obj.show();
 	  })
+	 
   }
   function swallowing(obj){
-	  $("#obj").hide();
+	  $("#"+obj).hide();
   }
   function open_2(obj){
-	  obj.show();
+	  $("#"+obj).show();
+  }
+  function save_1(model_id,id){
+	var pare=$("#sub_form_"+id).serialize();
+	$.post("edit_1.htm?batch.id="+id,pare,function(data){
+		if (data.isOk=="ok"){
+			  alert("修改成功!");
+			  query();
+		  }
+	})
   }
   function edit_2(id){
 	  var obj=$("#edit_2_"+id);
 	  var replenishRfid=$(obj).find("#replenishRfid").val();
-	  
+	  $.post("edit_2.htm",{id:id,replenishRfid:replenishRfid},function(data){
+		  if (data.isOk=="ok"){
+			  alert("修改成功!");
+			  query();
+		  }
+	  })
   }
   //审核
   function review(id,obj){
-	  $.post("review.htm",{id:id},function(data){
+	  $.post("review.htm",{id:id,state:1},function(data){
 		  if (data.isOk=="ok"){
 			  alert('修改成功！');
 			  $(obj).parent().html('<em class="state verified">已审核</em>');
@@ -144,7 +163,7 @@
         <#list list as model>
 		<#if (model.type.id==0)>
         <tr>
-          <td><a href="" class="lnk-blue" onclick="open_1('${model.id}','${model.rfidNo}','${model.contractNo}','${model.batchNo}')">${model.rfidRefNo}</a></td>
+          <td><a href="" class="lnk-blue" onclick="open_1('${model.id}','${model.rfidNo}','${model.contractNo}','${model.batchNo}');return false;">${model.rfidRefNo}</a></td>
           <td>${model.rfidNo}</td>
           <td>${model.memberName}</td>
           <td>${model.rfidType.getName()}</td>
@@ -161,9 +180,9 @@
 		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
-        <td colspan="11">
-        
-		 </td>
+          <td colspan="11">
+          1234
+		  </td>
 	    </tr> 
 	    <#elseif (model.type.id==1)>
 		<tr >
@@ -193,7 +212,7 @@
                 <input type="text" id="replenishRfid" value="${model.replenishRfid}">
 			  </li>
 			  </ul>
-			  <div class="btnBox text-center"><a href="" onclick="edit_2('${model.id}');return false;"　class="button button-orange button-small">修改</a><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
+			  <div class="btnBox text-center"><a href="" class="button button-orange button-small" onclick="edit_2('${model.id}');return false;">修改</a><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
 			  </div>
 	     </td> 
         </tr>
@@ -225,7 +244,7 @@
                 <input type="text" id="replenishRfid" value="${model.replenishRfid}">
 			  </li>
 			  </ul>
-			  <div class="btnBox text-center"><a href="" onclick="edit_2('${model.id}');return false;" class="button button-orange button-small">修改</a><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
+			  <div class="btnBox text-center"><a href=""  class="button button-orange button-small"  onclick="edit_2('${model.id}');return false;">修改</a><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
 			  </div>
 	     </td> 
         </tr>

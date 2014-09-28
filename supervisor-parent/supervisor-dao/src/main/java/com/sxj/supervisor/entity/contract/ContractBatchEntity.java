@@ -19,115 +19,110 @@ import com.sxj.supervisor.dao.contract.IContractBatchDao;
  */
 @Entity(mapper = IContractBatchDao.class)
 @Table(name = "M_CONTRACT_BATCH")
-public class ContractBatchEntity extends Pagable implements Serializable
-{
-    
-    /**
+public class ContractBatchEntity extends Pagable implements Serializable {
+
+	/**
      *  
      */
-    private static final long serialVersionUID = -918867108456859467L;
-    
-    /**
-     * 主键
-     **/
-    @Id(column = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
-    
-    /**
-     * 批次号
-     */
-    @Column(name = "BATCH_NO")
-    private String batchNo;
-    
-    /**
-     * 合同编号
-     **/
-    @Column(name = "CONTRACT_ID")
-    private String contractId;
-    
-    /**
-     * RFID号
-     **/
-    @Column(name = "RFID_NO")
-    private String rfidNo;
-    
-    /**
-     * 金额
-     **/
-    @Column(name = "AMOUNT")
-    private Long amount;
-    
-    /**
-     * 批次条目JSON
-     **/
-    @Column(name = "BATCH_ITEMS")
-    private String batchItems;
-    
-    /**
-     * 标识状态
-     */
-    @Column(name = "UPDATE_STATE")
-    private Integer updateState;
-    
-    public String getId()
-    {
-        return id;
-    }
-    
-    public String getBatchNo()
-    {
-        return batchNo;
-    }
-    
-    public void setBatchNo(String batchNo)
-    {
-        this.batchNo = batchNo;
-    }
-    
-    public void setId(String id)
-    {
-        this.id = id;
-    }
-    
-    public String getContractId()
-    {
-        return contractId;
-    }
-    
-    public void setContractId(String contractId)
-    {
-        this.contractId = contractId;
-    }
-    
-    public String getRfidNo()
-    {
-        return rfidNo;
-    }
-    
-    public void setRfidNo(String rfidNo)
-    {
-        this.rfidNo = rfidNo;
-    }
-    
-    public Long getAmount()
-    {
-        return amount;
-    }
-    
-    public void setAmount(Long amount)
-    {
-        this.amount = amount;
-    }
-    
-    public String getBatchItems()
-    {
-        return batchItems;
-    }
-    
-    public void setBatchItems(String batchItems)
-    {
-        this.batchItems = batchItems;
-    }
-    
+	private static final long serialVersionUID = -918867108456859467L;
+
+	/**
+	 * 主键
+	 **/
+	@Id(column = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private String id;
+
+	/**
+	 * 批次号
+	 */
+	@Column(name = "BATCH_NO")
+	private String batchNo;
+
+	/**
+	 * 合同编号
+	 **/
+	@Column(name = "CONTRACT_ID")
+	private String contractId;
+
+	/**
+	 * RFID号
+	 **/
+	@Column(name = "RFID_NO")
+	private String rfidNo;
+
+	/**
+	 * 金额
+	 **/
+	@Column(name = "AMOUNT")
+	private Long amount;
+
+	/**
+	 * 批次条目JSON
+	 **/
+	@Column(name = "BATCH_ITEMS")
+	private String batchItems;
+
+	/**
+	 * 标识状态
+	 */
+	@Column(name = "UPDATE_STATE")
+	private Integer updateState;
+
+	public Integer getUpdateState() {
+		return updateState;
+	}
+
+	public void setUpdateState(Integer updateState) {
+		this.updateState = updateState;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public String getBatchNo() {
+		return batchNo;
+	}
+
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getContractId() {
+		return contractId;
+	}
+
+	public void setContractId(String contractId) {
+		this.contractId = contractId;
+	}
+
+	public String getRfidNo() {
+		return rfidNo;
+	}
+
+	public void setRfidNo(String rfidNo) {
+		this.rfidNo = rfidNo;
+	}
+
+	public Long getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Long amount) {
+		this.amount = amount;
+	}
+
+	public String getBatchItems() {
+		return batchItems;
+	}
+
+	public void setBatchItems(String batchItems) {
+		this.batchItems = batchItems;
+	}
+
 }

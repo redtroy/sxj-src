@@ -22,20 +22,20 @@
               <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                <#list model.batchItems as batchItem>
                   <tr>
-                    <td><input type="text" name="" value="${batchItem.productModel}"></td>
+                    <td><input type="text" name="batchItems[${batchItem_index}].productModel" value="${batchItem.productModel}"></td>
                   </tr>
                  </#list>
                 </table></td>
               <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                <#list model.batchItems as batchItem>
                   <tr>
-                    <td><input type="text" name="" value="${batchItem.quantity}" class="input50"></td>
+                    <td><input type="text" id="quantity" name="batchItems[${batchItem_index}].quantity" value="${batchItem.quantity}" class="input50"></td>
                   </tr>
                 </#list>  
                 </table></td>
-              <td><input type="text" name="" value="${model.batch.amount}" class="input50"></td>
+              <td><input type="text" name="batch.amount" value="${model.batch.amount}" class="input50"></td>
               <td>${model.batch.rfidNo}</td>
             </tr>
           </table>
           </form>
-<div class="btnBox text-center"><a href="" onclick="save_1('${model.id}','${id}')"　class="button button-orange button-small">修改</a><a href="" onclick="swallowing('edit_1_${id}');return false;" class="button button-gray button-small">收起</a></div>
+<div class="btnBox text-center"><a href="" class="button button-orange button-small" onclick="save_1('${model.id}','${id}');return false;">修改</a><a href="" onclick="swallowing('edit_1_${id}');return false;" class="button button-gray button-small">收起</a></div>

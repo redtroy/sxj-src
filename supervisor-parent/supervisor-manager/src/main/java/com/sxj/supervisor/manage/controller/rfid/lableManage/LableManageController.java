@@ -1,6 +1,5 @@
 package com.sxj.supervisor.manage.controller.rfid.lableManage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +48,7 @@ public class LableManageController extends BaseController {
 			AssociationTypesEnum[] types = AssociationTypesEnum.values();
 			AuditStateEnum[] states = AuditStateEnum.values();
 			RfidTypeEnum[] rfidtypes = RfidTypeEnum.values();
-			LogisticsRefEntity model = new LogisticsRefEntity();
-			model.setType(AssociationTypesEnum.APPLY);
-			List<LogisticsRefEntity> list = new ArrayList<LogisticsRefEntity>();
-			list.add(model);
+			List<LogisticsRefEntity> list = refService.query(query);
 			map.put("types", types);
 			map.put("states", states);
 			map.put("rfidtypes", rfidtypes);
@@ -128,14 +124,33 @@ public class LableManageController extends BaseController {
 	 * 补损修改
 	 */
 	@RequestMapping("edit_2")
-	public @ResponseBody Map<String, String> edit_2() throws WebException {
+	public @ResponseBody Map<String, String> edit_2(LogisticsRefEntity ref)
+			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-
+			refService.update(ref);
+			map.put("isOk", "ok");
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("更新补损错误", e, this.getClass());
 			throw new WebException("更新补损错误");
+		}
+	}
+
+	/**
+	 * 批次修改
+	 */
+	@RequestMapping("edit_1")
+	public @ResponseBody Map<String, String> edit_1(ContractBatchModel model)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			contractService.modifyBatch(model);
+			map.put("isOk", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("批次修改错误", e, this.getClass());
+			throw new WebException("批次修改错误");
 		}
 	}
 }
