@@ -300,122 +300,189 @@ public class ContractServiceImpl implements IContractService {
 	@Override
 	@Transactional
 	public ContractModel getContract(String id) throws ServiceException {
-		try{
-		ContractModel contractModel = new ContractModel();
-		ContractEntity contract = contractDao.getContract(id);// 合同主体
-		if (contract != null) {
-			contractModel.setContract(contract);
-			List<ContractItemEntity> itemList = contractItemDao
-					.queryItems(contract.getContractNo());// 产品条目
-			if (itemList != null && itemList.size() > 0) {
-				contractModel.setItemList(itemList);
-			}
-			QueryCondition<ContractBatchEntity> batchCondition = new QueryCondition<ContractBatchEntity>();
-			batchCondition
-					.addCondition("contractId", contract.getContractNo());// 补损备案
-			List<ContractBatchEntity> batchList = contractBatchDao
-					.queryBacths(batchCondition);// 批次
-			if (batchList != null && batchList.size() > 0) {
-				List<ContractBatchModel> newBatchModelLIst = new ArrayList<ContractBatchModel>();
-				List<BatchItemModel> bmList = new ArrayList<BatchItemModel>();
-				for (int i = 0; i < batchList.size(); i++) {
-					ContractBatchEntity batch = batchList.get(i);
-					ContractBatchModel batchModel = new ContractBatchModel();
-					batchModel.setBatch(batch);
-					System.err.println(batch.getBatchItems());
-					List<BatchItemModel> beanList = null;
-					try {
-						beanList = JsonMapper
-								.nonEmptyMapper()
-								.getMapper()
-								.readValue(
-										batch.getBatchItems(),
-										new TypeReference<List<BatchItemModel>>() {
-										});
-
-					} catch (JsonParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JsonMappingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					batchModel.setBatchItems(beanList);
-					newBatchModelLIst.add(batchModel);
+		try {
+			ContractModel contractModel = new ContractModel();
+			ContractEntity contract = contractDao.getContract(id);// 合同主体
+			if (contract != null) {
+				contractModel.setContract(contract);
+				List<ContractItemEntity> itemList = contractItemDao
+						.queryItems(contract.getContractNo());// 产品条目
+				if (itemList != null && itemList.size() > 0) {
+					contractModel.setItemList(itemList);
 				}
-				System.err.println(JsonMapper.nonEmptyMapper().toJson(bmList));
-				contractModel.setBatchList(newBatchModelLIst);
-			}
-//			// 时间轴
-//			if (contract.getStateLog() != null
-//					&& contract.getStateLog().length() > 0) {
-//				List<StateLogModel> stateLogModel = null;
-//				try {
-//					stateLogModel = JsonMapper
-//							.nonEmptyMapper()
-//							.getMapper()
-//							.readValue(contract.getStateLog(),
-//									new TypeReference<List<StateLogModel>>() {
-//									});
-//				} catch (JsonParseException e) {
-//					e.printStackTrace();
-//				} catch (JsonMappingException e) {
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//				// 时间排序
-//				Collections.sort(stateLogModel,
-//						new Comparator<StateLogModel>() {
-//							public int compare(StateLogModel arg0,
-//									StateLogModel arg1) {
-//								return arg0.getModifyDate().compareTo(
-//										arg1.getModifyDate());
-//							}
-//						});
-//				contractModel.setStateLogList(stateLogModel);// 时间轴
-//			}
-			// 变更信息
+				QueryCondition<ContractBatchEntity> batchCondition = new QueryCondition<ContractBatchEntity>();
+				batchCondition.addCondition("contractId",
+						contract.getContractNo());// 补损备案
+				List<ContractBatchEntity> batchList = contractBatchDao
+						.queryBacths(batchCondition);// 批次
+				if (batchList != null && batchList.size() > 0) {
+					List<ContractBatchModel> newBatchModelLIst = new ArrayList<ContractBatchModel>();
+					List<BatchItemModel> bmList = new ArrayList<BatchItemModel>();
+					for (int i = 0; i < batchList.size(); i++) {
+						ContractBatchEntity batch = batchList.get(i);
+						ContractBatchModel batchModel = new ContractBatchModel();
+						batchModel.setBatch(batch);
+						System.err.println(batch.getBatchItems());
+						List<BatchItemModel> beanList = null;
+						try {
+							beanList = JsonMapper
+									.nonEmptyMapper()
+									.getMapper()
+									.readValue(
+											batch.getBatchItems(),
+											new TypeReference<List<BatchItemModel>>() {
+											});
 
-			String modifyRecordIds = this.recordIdArr(contract.getContractNo(),
-					"1");// 获取变更备案
-			if (modifyRecordIds != null && modifyRecordIds.length() > 0) {
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						batchModel.setBatchItems(beanList);
+						newBatchModelLIst.add(batchModel);
+					}
+					System.err.println(JsonMapper.nonEmptyMapper().toJson(
+							bmList));
+					contractModel.setBatchList(newBatchModelLIst);
+				}
+				// // 时间轴
+				// if (contract.getStateLog() != null
+				// && contract.getStateLog().length() > 0) {
+				// List<StateLogModel> stateLogModel = null;
+				// try {
+				// stateLogModel = JsonMapper
+				// .nonEmptyMapper()
+				// .getMapper()
+				// .readValue(contract.getStateLog(),
+				// new TypeReference<List<StateLogModel>>() {
+				// });
+				// } catch (JsonParseException e) {
+				// e.printStackTrace();
+				// } catch (JsonMappingException e) {
+				// e.printStackTrace();
+				// } catch (IOException e) {
+				// e.printStackTrace();
+				// }
+				// // 时间排序
+				// Collections.sort(stateLogModel,
+				// new Comparator<StateLogModel>() {
+				// public int compare(StateLogModel arg0,
+				// StateLogModel arg1) {
+				// return arg0.getModifyDate().compareTo(
+				// arg1.getModifyDate());
+				// }
+				// });
+				// contractModel.setStateLogList(stateLogModel);// 时间轴
+				// }
+				// 变更信息
 
-				// 变更合同主体
-				QueryCondition<ModifyBatchEntity> modifyCondition = new QueryCondition<ModifyBatchEntity>();
-				modifyCondition.addCondition("recordIds", modifyRecordIds);// 变更备案ID
-				List<ModifyContractEntity> modifyList = contractModifyDao
-						.queryModify(modifyCondition);
-				if (modifyList != null) {
-					List<ContractModifyModel> modifymodelList = new ArrayList<ContractModifyModel>();
-					for (int i = 0; i < modifyList.size(); i++) {
-						ContractModifyModel cmm = new ContractModifyModel();
-						ModifyContractEntity modify = modifyList.get(i);
-						cmm.setModifyContract(modify);
-						List<ModifyItemEntity> item = contractModifyItemDao
-								.queryItems(modify.getId());// 变更条目
-						cmm.setModifyItemList(item);
-						List<ModifyBatchEntity> batch = contractModifyBatchDao
-								.queryBacths(modify.getId());// 变更批次
-						if (batch != null && batch.size() > 0) {
-							List<ModifyBatchModel> modifyBatchModelList = new ArrayList<ModifyBatchModel>();
-							for (int j = 0; j < batch.size(); j++) {
-								ModifyBatchModel modifyBatchModel = new ModifyBatchModel();
-								ModifyBatchEntity modifyBatchEntity = batch
+				String modifyRecordIds = this.recordIdArr(
+						contract.getContractNo(), "1");// 获取变更备案
+				if (modifyRecordIds != null && modifyRecordIds.length() > 0) {
+
+					// 变更合同主体
+					QueryCondition<ModifyBatchEntity> modifyCondition = new QueryCondition<ModifyBatchEntity>();
+					modifyCondition.addCondition("recordIds", modifyRecordIds);// 变更备案ID
+					List<ModifyContractEntity> modifyList = contractModifyDao
+							.queryModify(modifyCondition);
+					if (modifyList != null) {
+						List<ContractModifyModel> modifymodelList = new ArrayList<ContractModifyModel>();
+						for (int i = 0; i < modifyList.size(); i++) {
+							ContractModifyModel cmm = new ContractModifyModel();
+							ModifyContractEntity modify = modifyList.get(i);
+							cmm.setModifyContract(modify);
+							List<ModifyItemEntity> item = contractModifyItemDao
+									.queryItems(modify.getId());// 变更条目
+							cmm.setModifyItemList(item);
+							List<ModifyBatchEntity> batch = contractModifyBatchDao
+									.queryBacths(modify.getId());// 变更批次
+							if (batch != null && batch.size() > 0) {
+								List<ModifyBatchModel> modifyBatchModelList = new ArrayList<ModifyBatchModel>();
+								for (int j = 0; j < batch.size(); j++) {
+									ModifyBatchModel modifyBatchModel = new ModifyBatchModel();
+									ModifyBatchEntity modifyBatchEntity = batch
+											.get(j);
+									if (modifyBatchEntity.getBatchItems() != null
+											&& modifyBatchEntity
+													.getBatchItems().length() > 0) {
+										List<BatchItemModel> batchItemModel = null;
+										try {
+											batchItemModel = JsonMapper
+													.nonEmptyMapper()
+													.getMapper()
+													.readValue(
+															modifyBatchEntity
+																	.getBatchItems(),
+															new TypeReference<List<BatchItemModel>>() {
+															});
+										} catch (JsonParseException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										} catch (JsonMappingException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										} catch (IOException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+										modifyBatchModel
+												.setModifyBatchItems(batchItemModel);
+									}
+									modifyBatchModel
+											.setModifyBatch(modifyBatchEntity);
+									modifyBatchModelList.add(modifyBatchModel);
+								}
+								cmm.setModifyBatchList(modifyBatchModelList);
+							}
+							modifymodelList.add(cmm);
+						}
+						contractModel.setModifyList(modifymodelList);
+					}
+
+				}
+				// 补损合同
+				String replenishRecordIds = this.recordIdArr(
+						contract.getContractNo(), "2");// 获取变更备案
+				if (replenishRecordIds != null
+						&& replenishRecordIds.length() > 0) {
+
+					QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
+					replenishCondition.addCondition("recordIds",
+							replenishRecordIds);// 补损备案ID
+					List<ReplenishContractEntity> replenishList = contractReplenishDao
+							.queryReplenish(replenishCondition);
+					for (int i = 0; i < replenishList.size(); i++) {
+						ContractReplenishModel contractReplenishModel = new ContractReplenishModel();
+						ReplenishContractEntity replenishEntity = replenishList
+								.get(i);
+						contractReplenishModel
+								.setReplenishContract(replenishEntity);
+						List<ReplenishBatchEntity> replenishBatchList = contractReplenishBatchDao
+								.queryReplenishBatch(replenishEntity.getId());
+						List<ContractReplenishModel> crmList = new ArrayList<ContractReplenishModel>();
+						if (replenishBatchList != null) {
+							List<ReplenishBatchModel> ReplenishBatchModelList = new ArrayList<ReplenishBatchModel>();
+							for (int j = 0; j < replenishBatchList.size(); j++) {
+								ReplenishBatchModel replenishBatchModel = new ReplenishBatchModel();
+								ReplenishBatchEntity ReplenishBatchEntity = replenishBatchList
 										.get(j);
-								if (modifyBatchEntity.getBatchItems() != null
-										&& modifyBatchEntity.getBatchItems()
+								replenishBatchModel
+										.setReplenishBatch(ReplenishBatchEntity);
+								if (ReplenishBatchEntity.getBatchItems() != null
+										&& ReplenishBatchEntity.getBatchItems()
 												.length() > 0) {
-									List<BatchItemModel> batchItemModel = null;
+									List<BatchItemModel> batchItemModelList = null;
 									try {
-										batchItemModel = JsonMapper
+										batchItemModelList = JsonMapper
 												.nonEmptyMapper()
 												.getMapper()
 												.readValue(
-														modifyBatchEntity
+														ReplenishBatchEntity
 																.getBatchItems(),
 														new TypeReference<List<BatchItemModel>>() {
 														});
@@ -429,90 +496,27 @@ public class ContractServiceImpl implements IContractService {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
-									modifyBatchModel
-											.setModifyBatchItems(batchItemModel);
+									replenishBatchModel
+											.setReplenishBatchItems(batchItemModelList);
 								}
-								modifyBatchModel
-										.setModifyBatch(modifyBatchEntity);
-								modifyBatchModelList.add(modifyBatchModel);
+								ReplenishBatchModelList
+										.add(replenishBatchModel);
 							}
-							cmm.setModifyBatchList(modifyBatchModelList);
+							contractReplenishModel
+									.setBatchItems(ReplenishBatchModelList);
+							crmList.add(contractReplenishModel);
 						}
-						modifymodelList.add(cmm);
+						contractModel.setReplenishList(crmList);
 					}
-					contractModel.setModifyList(modifymodelList);
+
 				}
-
 			}
-			// 补损合同
-			String replenishRecordIds = this.recordIdArr(
-					contract.getContractNo(), "2");// 获取变更备案
-			if (replenishRecordIds != null && replenishRecordIds.length() > 0) {
-
-				QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
-				replenishCondition
-						.addCondition("recordIds", replenishRecordIds);// 补损备案ID
-				List<ReplenishContractEntity> replenishList = contractReplenishDao
-						.queryReplenish(replenishCondition);
-				for (int i = 0; i < replenishList.size(); i++) {
-					ContractReplenishModel contractReplenishModel = new ContractReplenishModel();
-					ReplenishContractEntity replenishEntity = replenishList
-							.get(i);
-					contractReplenishModel
-							.setReplenishContract(replenishEntity);
-					List<ReplenishBatchEntity> replenishBatchList = contractReplenishBatchDao
-							.queryReplenishBatch(replenishEntity.getId());
-					List<ContractReplenishModel> crmList = new ArrayList<ContractReplenishModel>();
-					if (replenishBatchList != null) {
-						List<ReplenishBatchModel> ReplenishBatchModelList = new ArrayList<ReplenishBatchModel>();
-						for (int j = 0; j < replenishBatchList.size(); j++) {
-							ReplenishBatchModel replenishBatchModel = new ReplenishBatchModel();
-							ReplenishBatchEntity ReplenishBatchEntity = replenishBatchList
-									.get(j);
-							replenishBatchModel
-									.setReplenishBatch(ReplenishBatchEntity);
-							if (ReplenishBatchEntity.getBatchItems() != null
-									&& ReplenishBatchEntity.getBatchItems()
-											.length() > 0) {
-								List<BatchItemModel> batchItemModelList = null;
-								try {
-									batchItemModelList = JsonMapper
-											.nonEmptyMapper()
-											.getMapper()
-											.readValue(
-													ReplenishBatchEntity
-															.getBatchItems(),
-													new TypeReference<List<BatchItemModel>>() {
-													});
-								} catch (JsonParseException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} catch (JsonMappingException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} catch (IOException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								replenishBatchModel
-										.setReplenishBatchItems(batchItemModelList);
-							}
-							ReplenishBatchModelList.add(replenishBatchModel);
-						}
-						contractReplenishModel
-								.setBatchItems(ReplenishBatchModelList);
-						crmList.add(contractReplenishModel);
-					}
-					contractModel.setReplenishList(crmList);
-				}
-
-			}
+			return contractModel;
+		} catch (Exception e) {
+			throw new ServiceException("查询合同信息错误", e);
 		}
-		return contractModel;
-	} catch (Exception e) {
-		throw new ServiceException("查询合同信息错误", e);
 	}
-	}
+
 	/**
 	 * 获取备案ID
 	 * 
@@ -762,14 +766,17 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException("获取合同信息错误", e);
 		}
 	}
+
 	@Override
 	@Transactional(readOnly = true)
-	public List<ContractBatchModel> getContractBatch(String contractNo,String rfidNo) {
+	public List<ContractBatchModel> getContractBatch(String contractNo,
+			String rfidNo) {
 		try {
 			QueryCondition<ContractBatchEntity> condition = new QueryCondition<ContractBatchEntity>();
 			condition.addCondition("contractId", contractNo);// 合同号
 			condition.addCondition("rfidNo", rfidNo);// 备案号
-			List<ContractBatchEntity> batchList = contractBatchDao.queryBacths(condition);// 批次
+			List<ContractBatchEntity> batchList = contractBatchDao
+					.queryBacths(condition);// 批次
 			List<ContractBatchModel> newBatchModelLIst = new ArrayList<ContractBatchModel>();
 			if (batchList != null && batchList.size() > 0) {
 				List<BatchItemModel> bmList = new ArrayList<BatchItemModel>();
@@ -807,5 +814,21 @@ public class ContractServiceImpl implements IContractService {
 		} catch (Exception e) {
 			throw new ServiceException("获取合同信息错误", e);
 		}
+	}
+
+	@Override
+	public void modifyBatch(ContractBatchModel model) throws ServiceException {
+		try {
+			String batchItems = JsonMapper.nonEmptyMapper().toJson(
+					model.getBatchItems());
+			ContractBatchEntity batch = model.getBatch();
+			batch.setBatchItems(batchItems);
+			List<ContractBatchEntity> list = new ArrayList<ContractBatchEntity>();
+			list.add(batch);
+			contractBatchDao.updateBatchs(list);
+		} catch (Exception e) {
+			throw new ServiceException("批次修改错误", e);
+		}
+
 	}
 }

@@ -93,7 +93,7 @@ public class RfidApplicationController extends BaseController {
 	public @ResponseBody Map<String, String> del(String id) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			sppService.delApp(id);
+			sppService.delApp(id, null);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("修改RFID申请单错误", e, this.getClass());

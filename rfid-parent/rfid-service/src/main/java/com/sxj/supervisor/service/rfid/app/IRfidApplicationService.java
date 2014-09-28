@@ -16,7 +16,7 @@ public interface IRfidApplicationService {
 	 */
 	public List<RfidApplicationEntity> query(RfidApplicationQuery query)
 			throws ServiceException;
-	
+
 	/**
 	 * 根据申请单号
 	 * 
@@ -41,7 +41,7 @@ public interface IRfidApplicationService {
 	 * @param app
 	 * @throws ServiceException
 	 */
-	public void delApp(String id) throws ServiceException;
+	public Boolean delApp(String id, String applyNo) throws ServiceException;
 
 	/**
 	 * 新增申请单
