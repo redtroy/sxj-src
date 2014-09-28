@@ -165,10 +165,10 @@ function del(id){
           <td><a href="#" class="lnk-blue lnk-underline lnk-view" imgPath="${record.imgPath}">查看</a></td>
           <td>${record.contractNo}</td>
           <td>${record.type.getName()}</td>
-          <td>${record.applyDate?date}</td>
+          <td>${record.applyDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td>
           <#if record.acceptDate?exists>
-          ${record.acceptDate?date}
+          ${record.acceptDate?string("yyyy-MM-dd HH:mm:ss")}
           </#if>
           </td>
           <td class="operation"><a href="record_edit.htm?id=${record.id}" class="edit">修改</a><a href="#" class="del" onclick="del('${record.id}')">删除</a></td>

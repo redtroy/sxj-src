@@ -9,7 +9,7 @@
 		<result property="accountName" column="ACCOUNT_NAME" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
-		<result property="regDate" column="REG_DATE" jdbcType="DATE" />
+		<result property="regDate" column="REG_DATE" jdbcType="TIMESTAMP" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
 		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />

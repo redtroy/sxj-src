@@ -124,9 +124,9 @@ function modify(){
 								name="itemList[${item_index}].quantity" type="text"
 								value="${item.quantity}" /></td>
 							<td><input name="itemList[${item_index}].price"
-								type="text" value="${item.price}" /></td>
+								type="text" value="${item.price/100}" /></td>
 							<td><input
-								name="itemList[${item_index}].amount" type="text"
+								name="itemList[${item_index/100}].amount" type="text"
 								value="${item.amount}" /></td>
 							<td><textarea
 									name="itemList[${item_index}].remarks" cols=""
@@ -188,7 +188,7 @@ function modify(){
 									</tr>
 									 </#list>
 								</table></td>
-							<td><input name="batchList[${modifyBatch_index}].amount" type="text" value="${modifyBatch.modifyBatch.amount}" /></td>
+							<td><input name="batchList[${modifyBatch_index}].amount" type="text" value="${modifyBatch.modifyBatch.amount/100}" /></td>
 							<td><input name="batchList[${modifyBatch_index}].rfidNo" type="text" value="${modifyBatch.modifyBatch.rfidNo}" /></td>
 						</tr>
               </#list>
@@ -288,8 +288,8 @@ function modify(){
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}]" id="textarea9" cols="25"
 										rows="1">${modifyItem.productModel}</textarea></td>
 								<td><input type="text" value="${modifyItem.quantity}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity" /></td>
-								<td><input type="text" value="${modifyItem.price}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" /></td>
-								<td><input type="text" value="${modifyItem.amount}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" /></td>
+								<td><input type="text" value="${modifyItem.price/100}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" /></td>
+								<td><input type="text" value="${modifyItem.amount/100}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" /></td>
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].remarks" id="textarea10" cols="25"
 										rows="1">${modifyItem.remarks}</textarea> 
 										&nbsp;&nbsp;<a href="#" class="lnk-green">X</a><input type="hidden" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].id" value="${modifyItem.id}" /> </td>
@@ -335,7 +335,7 @@ function modify(){
 										</tr>
 										 </#list>
 									</table></td>
-								<td><input type="text" value="${modifyBatch.modifyBatch.amount}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.amount" /></td>
+								<td><input type="text" value="${modifyBatch.modifyBatch.amount/100}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.amount" /></td>
 								<td><input type="text" class="input-w80" value="${modifyBatch.modifyBatch.rfidNo}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.rfidNo" />
 									<a href="#" class="lnk-green">X</a></td>
 							</tr>
@@ -403,7 +403,7 @@ function modify(){
 										</tr>
 										</#list>
 									</table></td>
-								<td><input type="text" value="${replenishItem.replenishBatch.amount}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.amount" /></td>
+								<td><input type="text" value="${replenishItem.replenishBatch.amount/100}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.amount" /></td>
 								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.rfidNo}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.rfidNo" /></td>
 								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.newRfidNo}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.newRfidNo" />
 									&nbsp;<a href="#" class="lnk-green">X</a></td>
