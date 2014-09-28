@@ -11,10 +11,22 @@
 <!-- InstanceEndEditable -->
 <@b.pageScript/>
 <script>
-  function open_1(obj){
-	  
+  function open_1(id,rfidNo,contractNo,batchNo){
+	  $.post("query_contract.htm",{id:id,rfidNo:rfidNo,contractNo:contractNo,batchNo:batchNo},function(data){
+		  var obj=$("edit_1_"+id);
+		  obj.children.eq(0).html(data);
+		  obj.show();
+	  })
   }
   function swallowing(obj){
+	  $("#obj").hide();
+  }
+  function open_2(obj){
+	  obj.show();
+  }
+  function edit_2(id){
+	  var obj=$("#edit_2_"+id);
+	  var replenishRfid=$(obj).find("#replenishRfid").val();
 	  
   }
   //审核
@@ -132,7 +144,7 @@
         <#list list as model>
 		<#if (model.type.id==0)>
         <tr>
-          <td><a href="" class="lnk-blue" onclick="open_1('edit_1_${model.id}')">${model.rfidRefNo}</a></td>
+          <td><a href="" class="lnk-blue" onclick="open_1('${model.id}','${model.rfidNo}','${model.contractNo}','${model.batchNo}')">${model.rfidRefNo}</a></td>
           <td>${model.rfidNo}</td>
           <td>${model.memberName}</td>
           <td>${model.rfidType.getName()}</td>
@@ -149,52 +161,13 @@
 		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
-        <td colspan="11"><div class="infoBox text-left">
-		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-            <col width="10%" />
-			<col width="10%" />
-            <col width="30%" />
-            <col width="20%" />
-            <col width="15%" />
-            <col width="15%" />
-            <tr class="infoBox">
-              <th>合同号</th>
-			  <th>交货批次</th>
-              <th>产品规格</th>
-              <th>数量<span>（㎡/吨）</span></th>
-              <th>应付货款<span>（元）</span></th>
-              <th class="rLine">对应批次RFID编号</th>
-              
-            </tr>
-            <tr>
-              <td><input type="text" name="" value="CT14070001"></td>
-			  <td>1</td>
-              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                  <tr>
-                    <td><input type="text" name="" value="5+6A+5 双白中空 W779/H1176"></td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" name="" value="5+6A+5 双白中空 W779/W1186"></td>
-                  </tr>
-                </table></td>
-              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                  <tr>
-                    <td><input type="text" name="" value="112.00" class="input50"></td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" name="" value="225.00" class="input50"></td>
-                  </tr>
-                </table></td>
-              <td><input type="text" name="" value="8500.00" class="input50"></td>
-              <td><input type="text" name="" value="AAAA00001"></td>
-            </tr>
-          </table>
-		  <div class="btnBox text-center"><a href="" onclick="save_1('${model.id}')"　class="button button-orange button-small">修改</a><a href="" onclick="swallowing('edit_1_${model.id}')" class="button button-gray button-small">收起</a></div>
-		  </td>
+        <td colspan="11">
+        
+		 </td>
 	    </tr> 
-	    <#else>
+	    <#elseif (model.type.id==1)>
 		<tr >
-         <td><a href="#" class="lnk-blue">${model.rfidRefNo}</a></td>
+         <td><a href="#" class="lnk-blue" onclick="open_2('edit_2_${model.id}')">${model.rfidRefNo}</a></td>
           <td>${model.rfidNo}</td>
           <td>${model.memberName}</td>
           <td>${model.rfidType.getName()}</td>
@@ -207,19 +180,52 @@
 		  <td><button class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></button></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
+		  </#if>
 		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
         </tr>
-		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
+		<tr class="tableInfo" style="display:none;" id="edit_2_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
             <ul class="ly-clearFix">
               <li><label>标签补损RFID编号</label>
-                <input type="text" name="" value="AAAA00002"></li>
+                ${model.rfidNo}</li>
 			  <li>
                 <label>被补损RFID编号</label>
-                <input type="text" value="AAAB00002">
+                <input type="text" id="replenishRfid" value="${model.replenishRfid}">
 			  </li>
 			  </ul>
-			  <div class="btnBox text-center"><a href="#" class="button button-orange button-small">修改</a><a href="#" class="button button-gray button-small">收起</a></div>
+			  <div class="btnBox text-center"><a href="" onclick="edit_2('${model.id}');return false;"　class="button button-orange button-small">修改</a><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
+			  </div>
+	     </td> 
+        </tr>
+        <#else>
+        <tr >
+         <td><a href="#" class="lnk-blue" onclick="open_2('edit_2_${model.id}')">${model.rfidRefNo}</a></td>
+          <td>${model.rfidNo}</td>
+          <td>${model.memberName}</td>
+          <td>${model.rfidType.getName()}</td>
+		  <td>${model.type.getName()}</td>
+		  <td>${model.contractNo}</td>
+          <td>${model.batchNo}</td>
+		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+		  <td>${model.replenishRfid}</td>
+		    <#if (model.state.id==0)>
+		  <td><button class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></button></td>
+		  <#else>
+		  <td><em class="state verified">已审核</em></td>
+		  </#if>
+		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
+        </tr>
+		<tr class="tableInfo" style="display:none;" id="edit_2_${model.id}">
+        <td colspan="11"><div class="infoBox text-left">
+            <ul class="ly-clearFix">
+              <li><label>合同补损RFID编号</label>
+                ${model.rfidNo}</li>
+			  <li>
+                <label>被补损RFID编号</label>
+                <input type="text" id="replenishRfid" value="${model.replenishRfid}">
+			  </li>
+			  </ul>
+			  <div class="btnBox text-center"><a href="" onclick="edit_2('${model.id}');return false;" class="button button-orange button-small">修改</a><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
 			  </div>
 	     </td> 
         </tr>

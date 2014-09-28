@@ -23,6 +23,11 @@ jQuery(document).ready(function($) {
 		  left: ($(window).width() - $('#state_div').outerWidth())/2,
 		  top: ($(window).height() - $('#state_div').outerHeight())/2 + $(document).scrollTop()
 		  });
+	  $('#edit_pwd').css({
+		  position:'absolute',
+		  left: ($(window).width() - $('#edit_pwd').outerWidth())/2,
+		  top: ($(window).height() - $('#edit_pwd').outerHeight())/2 + $(document).scrollTop()
+		  });
 	})
  function close_pwd(){
 	$('.maskdivgen').fadeOut(100);
@@ -247,7 +252,7 @@ jQuery(document).ready(function($) {
 </div>
 </div>
 <@b.footer />
-<div class="modal-wrap popDemo contPop passwordPop" style="display:none;">
+<div class="modal-wrap popDemo contPop passwordPop" style="display:none;" id="edit_pwd">
       <div class="modal-header"><span class="close">关闭</span></div>
       <div class="modal-body">
         <div class="item"><label>新密码</label><input type="password" class="input input-w180h30" id="pwd1"/></div>

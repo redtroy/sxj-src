@@ -19,7 +19,11 @@ $(document).ready(function() {
 }); 
 function uploadLicense(data){
     var dataObj=eval("("+data+")");//转换为json对象
+    if ($("#bLicensePath_img")!=null){
     $("#bLicensePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.jpg")
+    }else{
+    	
+    }
     $("#bLicensePath_hidden").val(dataObj.fileIds);
 }
 
@@ -110,14 +114,22 @@ function subForm(ids){
         <div class="item  ly-clearFix">
           <label>企业资质编号</label>          
           <div class="ly-left editBox mr15">
+           <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
+		   <#else>
+		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg">  
+		</#if>
           <div class="uploadify">
           <input type="file" class="input-w180h30" id="bLicensePath_File" name="input5" />
            </div>
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
          <div class="ly-left editBox">
+           <#if (member.bLicensePath??)>
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
+          <#else>
+		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg"> 
+         </#if>
          <div class="uploadify"> 
             <input type="file" class="input-w180h30" id="energyPath_File" name="input6">
             <input type="hidden" class="input-w180h30" id="energyPath_hidden" name="energyPath" value="${member.energyPath}">
