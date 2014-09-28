@@ -114,6 +114,8 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			entity.setApplyNo(purchase.getApplyNo());
 			entity.setPurchaseNo(purchase.getPurchaseNo());
 			entity.setSaleDate(new Date());
+			entity.setCount(purchase.getCount());
+			entity.setRfidType(purchase.getRfidType());
 			List<RfidPriceEntity> list= rfidPriceService.queryPrice();
 			if(list!=null && list.size()>0){
 				RfidPriceEntity price = list.get(0);
