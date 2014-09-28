@@ -109,16 +109,15 @@ function classLoadUpload(text){
 	        width:120,
 	        buttonText:text,
 	        onUploadSuccess : function(file, data, response) {
-	        	var contPic=$(this.button).parent(".uploadify").siblings(".contPic");
 	        	var dataObj=eval("("+data+")");//转换为json对象 
-	        	contPic.find(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
-	        	  var hideVal= contPic.find(":input ").val();
+	        	$(this.button).parent(".uploadify").siblings(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+	        	  var hideVal= $(this.button).parent(".uploadify").siblings(".imgPathHide ").val();
 	        	    if(hideVal==""){
 	        	    	hideVal+=dataObj.fileIds;
 	        	    }else{
 	        	    	hideVal+=","+dataObj.fileIds;
 	        	    }
-	        	    contPic.find(":input ").val(hideVal);
+	        	    $(this.button).parent(".uploadify").siblings(".imgPathHide ").val(hideVal);
 	        }
 	    });
 } 
