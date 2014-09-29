@@ -89,6 +89,9 @@
 
 		<typeHandler handler="com.sxj.supervisor.typehandler.LinkStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.LabelStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

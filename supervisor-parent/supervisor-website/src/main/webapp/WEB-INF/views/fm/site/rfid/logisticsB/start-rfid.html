@@ -10,6 +10,7 @@
 	type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script>
+var num =1;
 function addTable(){
 	var vTb = $("#TbData");//得到表格ID=TbData的jquery对象       
 	//所有的数据行有一个.CaseRow的Class,得到数据行的大小
@@ -21,10 +22,11 @@ function addTable(){
 	vTrClone.find("td").eq(0).find("input").val("");
 	vTrClone.find("td").eq(1).find("input").val("");
 	vTrClone.find("td").eq(0).find("input").attr("name",
-			"items[" + num + "].productName");
-	vTrClone.find("td").eq(1).find("select").attr("name",
-			"items[" + num + "].windowType");
+			"batchItems[" + num + "].productModel");
+	vTrClone.find("td").eq(1).find("input").attr("name",
+			"batchItems[" + num + "].quantity");
 	vTrClone.appendTo(vTb);//把副本单元格对象添加到表格下方
+	num++;
 }
 
 $(function() {
@@ -32,6 +34,17 @@ $(function() {
 		$(this).parent().parent().remove();
 	});
 });
+function startRfid() {
+	$.post("saveRfid.htm", $("#save_form").serialize(), function(data) {
+		if (data.isOK == 'ok') {
+			alert("启用成功");
+			window.location.href = "queryList.htm";
+		} else {
+			alert("启用失败");
+		}
+	});
+
+}
 </script>
 </head>
 
@@ -47,15 +60,17 @@ $(function() {
 							<span class="title fontYH f20 fb">启用物流标签</span>
 						</h1>
 					</div>
+					<form action="" id="save_form" method="post">
+					<input type="hidden" name="logisticsId" value="${logistics.id}" />
 					<div class="contBox">
 						<div class="item">
-							<label>标签编号</label> ${logistics.rfidNo}
+							<label>标签编号</label> ${logistics.rfidNo}<input type="hidden" name="batch.rfidNo" value="${logistics.rfidNo}" />
 						</div>
 						<div class="item">
-							<label>合同号</label> <input class="input input-w240h30" name="contractNo" value="${logistics.contractNo}" />
+							<label>合同号</label> <input class="input input-w240h30" name="batch.contractId" value="${logistics.contractNo}" />
 						</div>
 						<div class="item">
-							<label>批次</label>${logistics.batchNo}<input name="batchNo" type="hidden" value="${logistics.batchNo}" />
+							<label>批次</label>${logistics.batchNo}<input name="batch.batchNo" type="hidden" value="${logistics.batchNo}" />
 						</div>
 						<div class="item">
 							<label>批次详情</label>
@@ -70,23 +85,24 @@ $(function() {
 									<th>操作</th>
 								</tr>
 								<tr class="CaseRow" id="trDataRow1">
-									<td><input type="text" name="" value=""
-										class="input input-w270h30"></td>
-									<td><input type="text" name="" value=""
-										class="input input-w140h30"></td>
+									<td><input type="text" name="batchItems[0].productModel" value=""
+										class="input input-w270h30" /></td>
+									<td><input type="text" name="batchItems[0].quantity" value=""
+										class="input input-w140h30" /></td>
 									<td><a href="javascript:addTable();" class="lnk-green">+</a></td>
 								</tr>
 							</table>
 						</div>
 						<div class="item ly-clearFix">
-							<label>应付货款</label><input value=""
+							<label>应付货款</label><input value="" name="batch.amount"
 								class="input input-w100h30 mr5" />元
 						</div>
 						<div class="item mt10">
-							<label>&nbsp;</label><a href="gysrfidmgr.html"
+							<label>&nbsp;</label><a href="javascript:startRfid();"
 								class="button button-orange mr15">确定启用</a><a
 								href="javascript:history.go(-1)" class="button button-gray">取消</a>
 						</div>
+						</form>
 					</div>
 				</div>
 			</div>
