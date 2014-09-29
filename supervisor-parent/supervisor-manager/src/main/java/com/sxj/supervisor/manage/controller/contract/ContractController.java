@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -50,19 +51,22 @@ public class ContractController extends BaseController {
 				List<RecordEntity> recordList = recordService.queryRecord(rq);
 				if (recordList.size() > 0) {
 					RecordEntity recordEntity = recordList.get(0);
+					if(contractModel.getContract().getType().getId()==0){
+						contractModel.getContract().setStateLog("乙方已申请备案");
+					}else{
 					if (recordEntity.getType().getId() == 0) {
 						if (recordEntity.getMemberIdA() == contractModel
 								.getContract().getMemberIdA()) {
 							contractModel.getContract().setStateLog("甲方已申请备案");
 						} else {
-							contractModel.getContract().setStateLog("已方已申请备案");
+							contractModel.getContract().setStateLog("乙方已申请备案");
 						}
 					} else if (recordEntity.getType().getId() == 1) {
 						contractModel.getContract().setStateLog("甲方已申请变更备案");
 					} else {
 						contractModel.getContract().setStateLog("甲方已申请补损备案");
 					}
-
+					}
 				}
 			}
 
@@ -95,13 +99,17 @@ public class ContractController extends BaseController {
 		if (recordList.size() > 0) {
 			for (RecordEntity recordEntity : recordList) {
 				StateLogModel sl = new StateLogModel();
+				if(contractModel.getContract().getType().getId()==0){
+					sl.setStateTitle("乙方已申请备案");
+					sl.setModifyDate(recordEntity.getApplyDate());
+				}else{
 				if (recordEntity.getType().getId() == 0) {
 					if (recordEntity.getMemberIdA() == contractModel
 							.getContract().getMemberIdA()) {
 						sl.setStateTitle("甲方已申请备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
 					} else {
-						sl.setStateTitle("已方已申请备案");
+						sl.setStateTitle("乙方已申请备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
 					}
 				} else if (recordEntity.getType().getId() == 1) {
@@ -111,6 +119,7 @@ public class ContractController extends BaseController {
 					sl.setStateTitle("甲方已申请补损备案");
 					sl.setModifyDate(recordEntity.getApplyDate());
 				}
+			}
 				slList.add(sl);
 			}
 		}
@@ -141,6 +150,14 @@ public class ContractController extends BaseController {
 		model.put("record", record);
 		return "manage/contract/contract-add";
 	}
+	@RequestMapping("produced-kfs")
+	public String producedKfsContract(String recordId, ModelMap model) {
+		RecordEntity record = recordService.getRecord(recordId);
+		ContractWindowTypeEnum[] type = ContractWindowTypeEnum.values();
+		model.put("record", record);
+		model.put("type", type);
+		return "manage/contract/produced-kfs";
+	}
 
 	@RequestMapping("addContract")
 	public @ResponseBody Map<String, String> addContract(
@@ -164,7 +181,15 @@ public class ContractController extends BaseController {
 		model.put("contractId", contractId);
 		return "manage/contract/contract-edit";
 	}
-
+	@RequestMapping("toKfsModify")
+	public String toKfsModify(String contractId, ModelMap model) {
+		ContractModel contractModel = contractService.getContract(contractId);
+		ContractWindowTypeEnum[] type = ContractWindowTypeEnum.values();
+		model.put("contractModel", contractModel);
+		model.put("contractId", contractId);
+		model.put("type", type);
+		return "manage/contract/contract-kfs-edit";
+	}
 	@RequestMapping("modify")
 	public @ResponseBody Map<String, Object> modifyContract(
 			ContractModel contractModel, ModelMap model) throws WebException {

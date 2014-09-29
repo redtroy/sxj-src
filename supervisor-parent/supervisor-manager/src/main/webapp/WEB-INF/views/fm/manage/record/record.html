@@ -165,15 +165,15 @@ function del(id){
           <td><a href="#" class="lnk-blue lnk-underline lnk-view" imgPath="${record.imgPath}">查看</a></td>
           <td>${record.contractNo}</td>
           <td>${record.type.getName()}</td>
-          <td>${record.applyDate?date}</td>
+          <td>${record.applyDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td>
           <#if record.acceptDate?exists>
-          ${record.acceptDate?date}
+          ${record.acceptDate?string("yyyy-MM-dd HH:mm:ss")}
           </#if>
           </td>
           <td class="operation"><a href="record_edit.htm?id=${record.id}" class="edit">修改</a><a href="#" class="del" onclick="del('${record.id}')">删除</a></td>
           <#if (record.state.id==0)>
-          <td class="contract"><a href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a href="${basePath}contract/produced.htm?recordId=${record.id}" class="lnk-green">生成合同</a></td>
+          <td class="contract"> <#if record.contractType.getId()!=0><a href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a href="${basePath}contract/produced.htm?recordId=${record.id}" class="lnk-green">生成合同</a><#else><a href="${basePath}contract/produced-kfs.htm?recordId=${record.id}" class="lnk-green">生成招标合同</a></#if></td>
           <#elseif (record.state.id==1)>
           <td class="contract"><em class="state verified">已绑定</em></td>
           <#elseif (record.state.id==2)>

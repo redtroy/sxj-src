@@ -195,9 +195,9 @@ public class ContractServiceImpl implements IContractService {
 				ContractEntity ce = contractDao.getContract(contract
 						.getContract().getId());
 				String[] arr = ce.getRecordNo().split(",");
-
+				
 				String recordNo = contract.getContract().getRecordNo();
-
+				if(recordNo!=null && recordNo.length()>0){
 				String[] recordNoArr = recordNo.split(",");
 				boolean flag = Arrays.equals(arr, recordNoArr);
 				if (!flag) {
@@ -216,6 +216,7 @@ public class ContractServiceImpl implements IContractService {
 						re.setState(RecordStateEnum.Binding);
 						recordDao.updateRecord(re);
 					}
+				}
 				}
 				contractDao.updateContract(contract.getContract());
 			}

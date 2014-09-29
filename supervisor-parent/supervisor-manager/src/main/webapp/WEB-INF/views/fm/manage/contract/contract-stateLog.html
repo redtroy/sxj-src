@@ -2,7 +2,7 @@
 <td colspan="11"><div class="planBox text-left f14">
 		<#list stateLog as log>
 		<div class="item">
-			<label class="time">${log.modifyDate?string("yyyy-MM-dd")}</label> ${log.stateTitle}
+			<label class="time">${log.modifyDate?string("yyyy-MM-dd HH:mm:ss")}</label> ${log.stateTitle}
 		</div>
 		<#if log_has_next>
 		<div class="line"></div>

@@ -216,8 +216,8 @@ Intense( elements );
           <td>${member.getbLicenseNo()}</td>
           <td>${member.getEnergyNo()}</td>
           <td>${member.type.getName()}</td>
-          <td><#if (member.regDate??)>${member.regDate?date} </#if></td>
-          <td><#if (member.authorDate??)> ${member.authorDate?date} </#if></td>
+          <td><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+          <td><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <#if (member.checkState.id==0)>
           <td><button class="btn btn-gray" onclick="editCheckState('${member.id}',1)"><span>审核</span></button></td>
           <#elseif (member.checkState.id==1)>

@@ -47,6 +47,11 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractSureStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractSureStateEnum" />
+
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractWindowTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.ContractWindowTypeEnum" />
+
 		<!-- FRID -->
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"

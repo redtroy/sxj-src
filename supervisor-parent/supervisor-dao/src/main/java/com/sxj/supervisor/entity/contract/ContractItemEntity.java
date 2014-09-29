@@ -2,20 +2,19 @@ package com.sxj.supervisor.entity.contract;
 
 import java.io.Serializable;
 
-
-
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
-import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractItemDao;
- 
+import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
+
 /**
  * 合同产品实体
+ * 
  * @author Administrator
  *
  */
@@ -30,49 +29,49 @@ public class ContractItemEntity extends Pagable implements Serializable {
 
 	/**
 	 * 主键
-	**/
+	 **/
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-	
+
 	/**
 	 * 合同ID
-	**/
+	 **/
 	@Column(name = "CONTRACT_ID")
 	private String contractId;
-	
+
 	/**
 	 * 产品名称
-	**/
+	 **/
 	@Column(name = "PRODUCT_NAME")
 	private String productName;
-	
+
 	/**
 	 * 规格型号
-	**/
+	 **/
 	@Column(name = "PRODUCT_MODEL")
 	private String productModel;
-	
+
 	/**
 	 * 数量
-	**/
+	 **/
 	@Column(name = "QUANTITY")
 	private Float quantity;
 	/**
 	 * 单价
-	**/
+	 **/
 	@Column(name = "PRICE")
 	private Long price;
-	
+
 	/**
 	 * 金额
-	**/
+	 **/
 	@Column(name = "AMOUNT")
 	private Long amount;
-	
+
 	/**
 	 * 备注
-	**/
+	 **/
 	@Column(name = "REMARKS")
 	private String remarks;
 	/**
@@ -80,8 +79,19 @@ public class ContractItemEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "UPDATE_STATE")
 	private Integer updateState;
-	
-	
+	/**
+	 * 门窗类型
+	 */
+	@Column(name = "WINDOW_TYPE")
+	private ContractWindowTypeEnum windowType;
+
+	public ContractWindowTypeEnum getWindowType() {
+		return windowType;
+	}
+
+	public void setWindowType(ContractWindowTypeEnum windowType) {
+		this.windowType = windowType;
+	}
 
 	public Integer getUpdateState() {
 		return updateState;

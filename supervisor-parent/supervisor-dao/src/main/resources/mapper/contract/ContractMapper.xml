@@ -14,10 +14,10 @@
 		<result property="engName" column="ENG_NAME" jdbcType="VARCHAR" />
 		<result property="engAddress" column="ENG_ADDRESS" jdbcType="VARCHAR" />
 		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
-		<result property="signedDate" column="SIGNED_DATE" jdbcType="DATE" />
+		<result property="signedDate" column="SIGNED_DATE" jdbcType="TIMESTAMP" />
 		<result property="validityDate" column="VALIDITY_DATE"
 			jdbcType="DATE" />
-		<result property="startDate" column="START_DATE" jdbcType="DATE" />
+		<result property="startDate" column="START_DATE" jdbcType="TIMESTAMP" />
 		<result property="deposit" column="DEPOSIT" jdbcType="INTEGER" />
 		<result property="remarks" column="REMARKS" jdbcType="VARCHAR" />
 		<result property="deliveryAddress" column="DELIVERY_ADDRESS"
@@ -35,8 +35,8 @@
 		<result property="imgPath" column="IMG_PATH" jdbcType="VARCHAR" />
 		<result property="batchCount" column="BATCH_COUNT" jdbcType="VARCHAR" />
 		<result property="nowRecordNo" column="NOW_RECORD_NO" jdbcType="VARCHAR" />
-		<result property="createDate" column="CREATE_DATE" jdbcType="DATE" />
-		<result property="recordDate" column="RECORD_DATE" jdbcType="DATE" />
+		<result property="createDate" column="CREATE_DATE" jdbcType="TIMESTAMP" />
+		<result property="recordDate" column="RECORD_DATE" jdbcType="TIMESTAMP" />
 		<result property="deleteState" column="DELETE_STATE" jdbcType="BOOLEAN" />
 
 	</resultMap>
