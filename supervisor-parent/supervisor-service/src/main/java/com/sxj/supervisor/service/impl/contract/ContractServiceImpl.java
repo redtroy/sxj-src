@@ -846,6 +846,9 @@ public class ContractServiceImpl implements IContractService {
 		}
 
 	}
+	/**
+	 * 启用rfid(新增批次)
+	 */
 	@Override
 	@Transactional
 	public void addBatch(ContractBatchModel model,String id,MemberEntity member) throws ServiceException {
@@ -867,7 +870,7 @@ public class ContractServiceImpl implements IContractService {
 			logisticsRfidService.updateLogistics(logistics);
 			//申请关联
 			LogisticsRefEntity ref = new LogisticsRefEntity();
-			ref.setRfidNo(logistics.getRfidNo());
+			ref.setRfidNo(batch.getRfidNo());
 			ref.setMemberNo(member.getMemberNo());
 			ref.setMemberName(member.getName());
 			if(member.getType().getId()==1){
@@ -886,4 +889,45 @@ public class ContractServiceImpl implements IContractService {
 		}
 
 	}
+	/**
+	 * 补损rfid
+	 */
+	@Override
+	@Transactional
+	public void updateRfid(String id,String rfidNo,String contractNo,MemberEntity member,String newRfid) throws ServiceException {
+		try {
+			List<ContractBatchModel> batchList=getContractBatch(contractNo,rfidNo);
+			if(batchList!=null){
+				ContractBatchEntity batch =batchList.get(0).getBatch();
+				batch.setRfidNo(newRfid);
+				contractBatchDao.updateBatch(batch);
+				LogisticsRfidEntity logistics = new LogisticsRfidEntity();
+				logistics.setId(id);
+				logistics.setRfidState(RfidStateEnum.used);
+				logistics.setBatchNo(batch.getBatchNo());
+				logistics.setReplenishNo(rfidNo);
+				logisticsRfidService.updateLogistics(logistics);
+				//申请关联
+				LogisticsRefEntity ref = new LogisticsRefEntity();
+				ref.setRfidNo(batch.getRfidNo());
+				ref.setMemberNo(member.getMemberNo());
+				ref.setMemberName(member.getName());
+				if(member.getType().getId()==1){
+					ref.setRfidType(RfidTypeEnum.glass);
+				}else if(member.getType().getId()==2){
+					ref.setRfidType(RfidTypeEnum.profiles);
+				}
+				ref.setType(AssociationTypesEnum.RFID_ADD);
+				ref.setBatchNo(batch.getBatchNo());
+				ref.setApplyDate(new Date());
+				ref.setContractNo(batch.getContractId());
+				ref.setState(AuditStateEnum.approval);
+				logisticsRefDao.add(ref);
+			}
+			
+		}catch (Exception e) {
+			throw new ServiceException("添加批次错误错误", e);
+		}
+	}
+	
 }

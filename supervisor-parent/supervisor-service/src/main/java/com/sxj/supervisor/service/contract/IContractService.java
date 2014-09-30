@@ -129,4 +129,7 @@ public interface IContractService {
 	public void modifyBatch(ContractBatchModel model) throws ServiceException;
 
 	void addBatch(ContractBatchModel model, String id,MemberEntity member) throws ServiceException;
+
+	void updateRfid(String id, String rfidNo, String contractNo,
+			MemberEntity member,String newRfid) throws ServiceException;
 }

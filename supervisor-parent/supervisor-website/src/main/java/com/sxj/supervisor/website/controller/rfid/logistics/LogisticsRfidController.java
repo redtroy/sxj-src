@@ -1,9 +1,14 @@
 package com.sxj.supervisor.website.controller.rfid.logistics;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +17,19 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
+import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.supervisor.website.login.SupervisorPrincipal;
@@ -35,6 +45,8 @@ public class LogisticsRfidController extends BaseController {
 	@Autowired
 	private IContractService contractService;
 	
+	@Autowired
+	private IRecordService recordService;
 	/**
 	 * 查询列表
 	 * @param query
@@ -164,12 +176,81 @@ public class LogisticsRfidController extends BaseController {
 		try {
 			LogisticsRfidEntity logistics =  logisticsRfidService.getLogistics(id);
 			List<ContractBatchModel> conBatch=contractService.getContractBatch(logistics.getContractNo(), logistics.getRfidNo());
+			if(conBatch!=null&&conBatch.size()>0){
+				model.put("batch",conBatch.get(0).getBatchItems());
+			}else{
+				model.put("batch",null);
+			}
 			model.put("logistics", logistics);
-			model.put("batch",conBatch.get(0).getBatchItems());
+			
 			return "site/rfid/logisticsB/loss-gysrfid";
 		} catch (Exception e) {
 			SxjLogger.error("查询物流错误", e, this.getClass());
 			throw new WebException("查询物流错误");
+		}
+	}
+	@RequestMapping("rfid_loss")
+	public @ResponseBody Map<String, String> rfidLoss(String id,String rfidNo,String newRfid,String contractNo,HttpSession session)
+			throws WebException {
+		try {
+			SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+			contractService.updateRfid(id,rfidNo,contractNo,userBean.getMember(),newRfid);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("启用物流错误", e, this.getClass());
+			throw new WebException("启用物流错误");
+		}
+	}
+	@RequestMapping("autoContract")
+	public @ResponseBody Map<String, String> autoContract(
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword,HttpSession session) throws IOException {
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+		ContractQuery cm = new ContractQuery();
+		if (keyword != "" && keyword != null) {
+			cm.setContractNo(keyword);
+		}
+		cm.setMemberId(userBean.getMember().getMemberNo());
+		List<ContractModel> cmList=contractService.queryContracts(cm);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (ContractModel cmModel : cmList) {
+			sb = "{\"title\":\"" + cmModel.getContract().getContractNo() + "\",\"result\":\""
+					+ cmModel.getContract().getContractNo() + "\"}";
+			strlist.add(sb);
+		}
+		String json = "{\"data\":" + strlist.toString() + "}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null;
+	}
+	@RequestMapping("getRecord")
+	public @ResponseBody Map<String, String> getRecord(String contractNo,HttpSession session)
+			throws WebException {
+		try {
+			RecordQuery rq = new RecordQuery();
+			rq.setContractNo(contractNo);
+			rq.setRecordType(2);
+			List<RecordEntity>  reList=recordService.queryRecord(rq);
+			String str = "";
+			for (RecordEntity recordEntity : reList) {
+				str+=recordEntity.getRecordNo()+",";
+			}
+			if(str!=""){
+				str =str.substring(0,str.length()-1);
+			}
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			map.put("str", str);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("启用物流错误", e, this.getClass());
+			throw new WebException("启用物流错误");
 		}
 	}
 }

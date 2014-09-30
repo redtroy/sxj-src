@@ -9,6 +9,7 @@
 	type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#tabsholder").tytabs({
@@ -20,6 +21,40 @@ $(document).ready(function(){
 							fadespeed:"normal"
 							});
 });
+
+function  rfid(){
+	if(confirm('确实要补损吗?')){
+	$.post("rfid_loss.htm",$("#wlForm").serialize(),function(data){
+		if(data.isOK=='ok'){
+			alert("补损成功!");
+			window.location.href="queryList.htm";
+		}else{
+			alert("补损失败!");	
+		}
+	});
+	}
+}
+$(function(){
+	var url_ = "autoContract.htm";
+	$("#contractNo").bigAutocomplete({url:url_,callback:function(data){
+		getRecord(data.result);
+       // $("#memberId").val(data.result);
+    }});
+});
+function getRecord(contractNo){
+	$.post("getRecord.htm",{"contractNo":contractNo},function(data){
+		var arr=data.str.split(","); 
+		if(data.str!=''){
+			$("#record").empty();
+		}else{
+			$("#record").empty();
+			$("#record").append("<option value=''>该合同无补损备案</option>");		
+		}
+		for(var i=0;i<arr.length;i++){
+		$("#record").append("<option value='"+arr[i]+"'>"+arr[i]+"</option>");	
+		}
+	});
+}
 </script>
 </head>
 
@@ -47,9 +82,12 @@ $(document).ready(function(){
 
 <div class="contents">
 <form action="" method="post" id="wlForm">
+<input type="hidden" name="id" value="${logistics.id}" /> 
+<input type="hidden" name="contractNo" value="${logistics.contractNo}" /> 
+<input type="hidden" name="newRfid" value="${logistics.rfidNo}" /> 
 <div id="content1" class="tabscontent">
 <div class="item"><label>物流标签编号</label>${logistics.rfidNo}</div>
-<div class="item" title=""><label>破损物流标签编号</label><input class="input input-w180h36" /></div>
+<div class="item" title=""><label>破损物流标签编号</label><input class="input input-w180h36" type="text" name="rfidNo" value="" /></div>
 <div class="item"><label>采购合同号</label>${logistics.contractNo}</div>
 <div class="item"><label>批次</label>${logistics.batchNo}</div>
 <div class="item ly-clearFix"><label>批次详情</label>
@@ -73,7 +111,7 @@ $(document).ready(function(){
                 </table></div>				
 <div class="item mt10">
       <label>&nbsp;</label>
-      <a href="gysrfidmgr.html" class="button button-orange mr15">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+      <a href="javascript:rfid();" class="button button-orange mr15">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </form>
 <form action="" method="post" id="htForm">
@@ -82,13 +120,11 @@ $(document).ready(function(){
       <label>补损物流标签编号</label>${logistics.rfidNo}</div>
     <div class="item" title="通过输入合同号获得对应的补损备案号信息">
       <label>需补损的合同号</label>
-      <input class="input input-w180h36" value="${logistics.contractNo}"/>
+      <input class="input input-w180h36" id="contractNo" value="${logistics.contractNo}"/>
     </div>
     <div class="item" title="根据合同号找出对应的补损备案号">
-      <label>补损备案号</label> <select name="select">
+      <label>补损备案号</label> <select name="select" id="record">
             <option selected="selected">该合同无补损备案</option>
-            <option>BA14070001</option>
-            <option>BA14070002</option>
             </select></div>
     <div class="item" title="根据备案号列出需要补损的批次的标签编号">
       <label>需补损标签编号</label>AAAA00001-AAAA00002-AAAA00003</div>
