@@ -177,7 +177,7 @@ function check(id){
         <td>${model.contract.createDate?string("yyyy-MM-dd HH:mm:ss")}</td>
         <td><#if model.contract.recordDate?exists>${model.contract.recordDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
         <td><em class="state normal">${model.contract.confirmState.getName()}</em></td>
-        <td><#if model.contract.state.getId() ==1>${model.contract.state.getName()}<#else><button class="btn" onclick="check('${model.contract.id}');"><span>审核</span></button></#if></td>
+        <td><#if model.contract.state.getId() ==1><em class="state verified">${model.contract.state.getName()}</em><#else><button class="btn" onclick="check('${model.contract.id}');"><span>审核</span></button></#if></td>
         <td class="operation">
         <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
         <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a></td>
