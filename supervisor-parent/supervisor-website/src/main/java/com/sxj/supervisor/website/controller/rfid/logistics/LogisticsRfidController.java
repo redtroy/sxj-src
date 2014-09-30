@@ -1,6 +1,8 @@
 package com.sxj.supervisor.website.controller.rfid.logistics;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -8,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
-import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
+import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
+import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -30,6 +34,7 @@ public class LogisticsRfidController extends BaseController {
 	
 	@Autowired
 	private IContractService contractService;
+	
 	/**
 	 * 查询列表
 	 * @param query
@@ -43,7 +48,7 @@ public class LogisticsRfidController extends BaseController {
 		try {
 			query.setPagable(true);
 			List<LogisticsRfidEntity> list = logisticsRfidService.queryLogistics(query);
-			LabelProgressEnum[] Label = LabelProgressEnum.values();
+			LabelStateEnum[] Label = LabelStateEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();
 			model.put("Label", Label);
@@ -92,7 +97,7 @@ public class LogisticsRfidController extends BaseController {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
 			query.setMemberNo(userBean.getMember().getMemberNo());
 			List<LogisticsRfidEntity> list = logisticsRfidService.queryLogistics(query);
-			LabelProgressEnum[] Label = LabelProgressEnum.values();
+			LabelStateEnum[] Label = LabelStateEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();
 			model.put("Label", Label);
@@ -106,7 +111,13 @@ public class LogisticsRfidController extends BaseController {
 			throw new WebException("查询门窗RFID错误");
 		}
 	}
-	
+	/**
+	 * 跳转启用
+	 * @param id
+	 * @param model
+	 * @return
+	 * @throws WebException
+	 */
 	@RequestMapping("to_start")
 	public String toStart(String id ,ModelMap model)
 			throws WebException {
@@ -117,6 +128,48 @@ public class LogisticsRfidController extends BaseController {
 		} catch (Exception e) {
 			SxjLogger.error("查询门窗RFID错误", e, this.getClass());
 			throw new WebException("查询门窗RFID错误");
+		}
+	}
+	/**
+	 * 启用
+	 * @param batch
+	 * @param logisticsId
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("saveRfid")
+	public @ResponseBody Map<String, String> saveRfid(ContractBatchModel batch,String logisticsId,HttpSession session)
+			throws WebException {
+		try {
+			SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+			contractService.addBatch(batch,logisticsId,userBean.getMember());
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("启用物流错误", e, this.getClass());
+			throw new WebException("启用物流错误");
+		}
+	}
+	/**
+	 * 跳转补损
+	 * @param id
+	 * @param model
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("to_loss")
+	public String to_loss(String id ,ModelMap model)
+			throws WebException {
+		try {
+			LogisticsRfidEntity logistics =  logisticsRfidService.getLogistics(id);
+			List<ContractBatchModel> conBatch=contractService.getContractBatch(logistics.getContractNo(), logistics.getRfidNo());
+			model.put("logistics", logistics);
+			model.put("batch",conBatch.get(0).getBatchItems());
+			return "site/rfid/logisticsB/loss-gysrfid";
+		} catch (Exception e) {
+			SxjLogger.error("查询物流错误", e, this.getClass());
+			throw new WebException("查询物流错误");
 		}
 	}
 }

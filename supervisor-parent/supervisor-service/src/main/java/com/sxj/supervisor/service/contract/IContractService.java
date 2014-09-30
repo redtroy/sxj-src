@@ -6,6 +6,7 @@ import com.sxj.jsonrpc.annotation.JsonRpcService;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
@@ -126,4 +127,6 @@ public interface IContractService {
 	 * @param state
 	 */
 	public void modifyBatch(ContractBatchModel model) throws ServiceException;
+
+	void addBatch(ContractBatchModel model, String id,MemberEntity member) throws ServiceException;
 }

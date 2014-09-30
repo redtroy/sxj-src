@@ -27,6 +27,7 @@ import com.sxj.supervisor.dao.contract.IContractModifyItemDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
+import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
@@ -35,11 +36,18 @@ import com.sxj.supervisor.entity.contract.ModifyContractEntity;
 import com.sxj.supervisor.entity.contract.ModifyItemEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
+import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
+import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
+import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -51,6 +59,7 @@ import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
+import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -121,7 +130,12 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Autowired
 	private IRecordService recordService;
-
+	
+	@Autowired
+	private ILogisticsRfidService logisticsRfidService;
+	
+	@Autowired
+	private ILogisticsRefDao logisticsRefDao;
 	/**
 	 * 新增合同
 	 */
@@ -829,6 +843,46 @@ public class ContractServiceImpl implements IContractService {
 			contractBatchDao.updateBatchs(list);
 		} catch (Exception e) {
 			throw new ServiceException("批次修改错误", e);
+		}
+
+	}
+	@Override
+	@Transactional
+	public void addBatch(ContractBatchModel model,String id,MemberEntity member) throws ServiceException {
+		try {
+			String batchItems=null;
+			if(model.getBatchItems()!=null){
+				 batchItems = JsonMapper.nonEmptyMapper().toJson(
+					model.getBatchItems());
+			}
+			ContractBatchEntity batch = model.getBatch();
+			batch.setBatchItems(batchItems);
+			List<ContractBatchEntity> list = new ArrayList<ContractBatchEntity>();
+			list.add(batch);
+			contractBatchDao.addBatchs(list);
+			LogisticsRfidEntity logistics = new LogisticsRfidEntity();
+			logistics.setId(id);
+			logistics.setRfidState(RfidStateEnum.used);
+			logistics.setBatchNo(batch.getBatchNo());
+			logisticsRfidService.updateLogistics(logistics);
+			//申请关联
+			LogisticsRefEntity ref = new LogisticsRefEntity();
+			ref.setRfidNo(logistics.getRfidNo());
+			ref.setMemberNo(member.getMemberNo());
+			ref.setMemberName(member.getName());
+			if(member.getType().getId()==1){
+				ref.setRfidType(RfidTypeEnum.glass);
+			}else if(member.getType().getId()==2){
+				ref.setRfidType(RfidTypeEnum.profiles);
+			}
+			ref.setType(AssociationTypesEnum.APPLY);
+			ref.setBatchNo(batch.getBatchNo());
+			ref.setApplyDate(new Date());
+			ref.setContractNo(batch.getContractId());
+			ref.setState(AuditStateEnum.approval);
+			logisticsRefDao.add(ref);
+		} catch (Exception e) {
+			throw new ServiceException("添加批次错误错误", e);
 		}
 
 	}
