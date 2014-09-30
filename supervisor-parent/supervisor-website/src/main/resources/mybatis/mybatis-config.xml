@@ -54,16 +54,24 @@
 			javaType="com.sxj.supervisor.enu.rfid.window.WindowTypeEnum" />
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.RfidTypeEnum" />
-			<!-- FRID -->
+		<!-- FRID -->
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum" />
-		<typeHandler
-			handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
+		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum" />
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.apply.PayStateEnum" />
+
 		<typeHandler
-			handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.apply.PayStateEnum" />	
+			handler="com.sxj.supervisor.typehandler.LabelStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.AssociationTypesEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.AuditStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.ref.AuditStateEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

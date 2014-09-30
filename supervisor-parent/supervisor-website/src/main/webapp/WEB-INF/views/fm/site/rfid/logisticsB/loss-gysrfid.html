@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#tabsholder").tytabs({
+							prefixtabs:"tabz",
+							prefixcontent:"content",
+							classcontent:"tabscontent",
+							tabinit:"3",
+							catchget:"tab2",
+							fadespeed:"normal"
+							});
+});
+</script>
+</head>
+
+<body>
+<div id="header" class="fence">
+<@b.header />
+</div>
+<div class="mainBg">
+<div class="fence-wide ly-clearFix">
+<div class="main pb20">
+<div class="yard-190 ly-left leftMenu">
+<@b.leftMenu />
+</div>
+<div class="yard-870 rightSide ly-left">
+<div class="heading mb15 ly-clearFix">
+  <h1 class="ly-left">
+  <span class="title fontYH f20 fb">物流标签补损</span></h1>
+</div>
+<div class="contBox">
+<div id="tabsholder">
+<ul class="tabs">
+<li id="tabz1"><a href="#">物流标签补损</a></li>
+<li id="tabz2"><a href="#">采购合同补损</a></li>
+</ul>
+
+<div class="contents">
+<form action="" method="post" id="wlForm">
+<div id="content1" class="tabscontent">
+<div class="item"><label>物流标签编号</label>${logistics.rfidNo}</div>
+<div class="item" title=""><label>破损物流标签编号</label><input class="input input-w180h36" /></div>
+<div class="item"><label>采购合同号</label>${logistics.contractNo}</div>
+<div class="item"><label>批次</label>${logistics.batchNo}</div>
+<div class="item ly-clearFix"><label>批次详情</label>
+
+<table border="" cellpadding="0" cellspacing="0" class="tabProdpc ly-left">
+                      <col width="45%" />
+                      <col width="40%" />
+                      <col width="15%" />
+                      <tr>
+                        <th>产品规格</th>
+                        <th>数量（m&sup2;/吨）</th>
+                        <th></th>
+                      </tr>
+                      <#list batch as batch>
+                  <tr>
+                    <td>${batch.productModel}</td>
+					<td>${batch.quantity}</td>
+					<td></td>
+                  </tr>
+                  </#list>
+                </table></div>				
+<div class="item mt10">
+      <label>&nbsp;</label>
+      <a href="gysrfidmgr.html" class="button button-orange mr15">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+</div>
+</form>
+<form action="" method="post" id="htForm">
+<div id="content2" class="tabscontent">
+<div class="item">
+      <label>补损物流标签编号</label>${logistics.rfidNo}</div>
+    <div class="item" title="通过输入合同号获得对应的补损备案号信息">
+      <label>需补损的合同号</label>
+      <input class="input input-w180h36" value="${logistics.contractNo}"/>
+    </div>
+    <div class="item" title="根据合同号找出对应的补损备案号">
+      <label>补损备案号</label> <select name="select">
+            <option selected="selected">该合同无补损备案</option>
+            <option>BA14070001</option>
+            <option>BA14070002</option>
+            </select></div>
+    <div class="item" title="根据备案号列出需要补损的批次的标签编号">
+      <label>需补损标签编号</label>AAAA00001-AAAA00002-AAAA00003</div>
+    <div class="item mt10">
+      <label>&nbsp;</label>
+      <a href="gysrfidmgr.html" class="button button-orange mr15" title="如需补损的标签里有已经被补损过的，需要报错提示">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+  </div>
+  </form>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<@b.footer /></body>
+</html>

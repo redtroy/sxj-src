@@ -179,7 +179,7 @@ function check(id){
         <td><em class="state normal">${model.contract.confirmState.getName()}</em></td>
         <td><#if model.contract.state.getId() ==1><em class="state verified">${model.contract.state.getName()}</em><#else><button class="btn" onclick="check('${model.contract.id}');"><span>审核</span></button></#if></td>
         <td class="operation">
-        <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
+        <#if model.contract.type.getId()==0><a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a><#else> <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a></#if>
         <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a></td>
       </tr>
       <tr id="info${model.contract.id}" class="tableInfo" ></tr>

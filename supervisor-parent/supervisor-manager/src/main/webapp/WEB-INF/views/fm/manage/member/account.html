@@ -184,7 +184,7 @@
           <td>${account.name}</td>
           <td>合同管理</td>
           <#if account.state.id==0>
-          <td><button class="btn btn-red" onclick="checkState('${account.id}',0,this)"><span>解冻</span></button></td>
+          <td><button class="btn btn-green" onclick="checkState('${account.id}',0,this)"><span>解冻</span></button></td>
           <#elseif account.state.id==1>
           <td><button class="btn btn-red" onclick="checkState('${account.id}',1,this)"><span>冻结</span></button></td>
           </#if>

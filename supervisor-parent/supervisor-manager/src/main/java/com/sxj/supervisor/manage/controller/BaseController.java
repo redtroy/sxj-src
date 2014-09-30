@@ -25,6 +25,7 @@ import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
+import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
 import com.sxj.supervisor.manage.comet.MessageConnectListener;
 import com.sxj.supervisor.manage.comet.MessageDropListener;
 import com.sxj.util.exception.SystemException;
@@ -56,6 +57,8 @@ public class BaseController {
 		binder.registerCustomEditor(MemberTypeEnum.class,
 				new EnumPropertyEditorSupport<MemberTypeEnum>(
 						MemberTypeEnum.class));
+		binder.registerCustomEditor(ContractWindowTypeEnum.class,
+				new EnumPropertyEditorSupport<ContractWindowTypeEnum>(ContractWindowTypeEnum.class));
 		// RFIT枚举
 		binder.registerCustomEditor(RfidTypeEnum.class,
 				new EnumPropertyEditorSupport<RfidTypeEnum>(RfidTypeEnum.class));

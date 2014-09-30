@@ -57,7 +57,14 @@ jQuery(document).ready(function($) {
    }
    //打开菜单
    function openDiv(lable){
-	   $("#"+lable).show();
+	   var temp= $("#"+lable).is(":hidden");//是否隐藏 
+	   if (temp){
+		   $("#"+lable).show();
+	   }else{
+		   $("#"+lable).hide();
+	   }
+	    
+	  
    }
    //修改
    function edit(id){
@@ -214,12 +221,12 @@ Intense( elements );
           <#if (member.checkState.id==0)>
           <td><button class="btn btn-gray" onclick="editCheckState('${member.id}',1)"><span>审核</span></button></td>
           <#elseif (member.checkState.id==1)>
-          <td><button class="btn btn-gray" onclick="editCheckState('${member.id}',2)"><span>认证</span></button></td>
+          <td><button class="btn  btn-green" onclick="editCheckState('${member.id}',2)"><span>认证</span></button></td>
           <#elseif (member.checkState.id==2)>
            <td><em class="state verified">已认证</em></td>
           </#if>
           <#if member.state.id==0>
-          <td><button class="btn btn-red" onclick="editState('${member.id}',1)"><span>解冻</span></button></td>
+          <td><button class="btn btn-green" onclick="editState('${member.id}',1)"><span>解冻</span></button></td>
            <#elseif member.state.id==1>
            <td><button class="btn btn-red" onclick="editState('${member.id}',0)"><span>冻结</span></button></td>
           </#if>
