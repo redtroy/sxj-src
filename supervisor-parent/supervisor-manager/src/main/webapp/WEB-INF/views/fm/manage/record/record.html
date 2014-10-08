@@ -120,7 +120,7 @@ function del(id){
           <input type="text" name="startAcceptDate" datepicker id="time3" value="" />
           -
           <input type="text" name="endAcceptDate" datepicker id="time4" value="" />
-          <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+          <a class="btn btn-blue" onclick="query();"><span>查询</span></a>
         </p>
         </form>
       </div>
@@ -161,11 +161,11 @@ function del(id){
           <td>${record.applyId}</td>
           <td>${record.memberNameA}</td>
           <td>${record.memberNameB}</td>
-          <td>${record.contractType.getName()}</td>
+          <td><#if (record.contractType??)>${record.contractType.getName()}</#if></td>
           <td><a href="#" class="lnk-blue lnk-underline lnk-view" imgPath="${record.imgPath}">查看</a></td>
           <td>${record.contractNo}</td>
-          <td>${record.type.getName()}</td>
-          <td>${record.applyDate?string("yyyy-MM-dd HH:mm:ss")}</td>
+          <td><#if (record.type??)> ${record.type.getName()} </#if></td>
+          <td><#if (record.applyDate??)> ${record.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
           <td>
           <#if record.acceptDate?exists>
           ${record.acceptDate?string("yyyy-MM-dd HH:mm:ss")}
@@ -173,7 +173,7 @@ function del(id){
           </td>
           <td class="operation"><a href="record_edit.htm?id=${record.id}" class="edit">修改</a><a href="#" class="del" onclick="del('${record.id}')">删除</a></td>
           <#if (record.state.id==0)>
-          <td class="contract"> <#if record.contractType.getId()!=0><a href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a href="${basePath}contract/produced.htm?recordId=${record.id}" class="lnk-green">生成合同</a><#else><a href="${basePath}contract/produced-kfs.htm?recordId=${record.id}" class="lnk-green">生成招标合同</a></#if></td>
+          <td class="contract"><#if (record.contractType??)> <#if record.contractType.getId()!=0><a href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a href="${basePath}contract/produced.htm?recordId=${record.id}" class="lnk-green">生成合同</a><#else><a href="${basePath}contract/produced-kfs.htm?recordId=${record.id}" class="lnk-green">生成招标合同</a></#if></#if></td>
           <#elseif (record.state.id==1)>
           <td class="contract"><em class="state verified">已绑定</em></td>
           <#elseif (record.state.id==2)>

@@ -16,8 +16,10 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
+import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
@@ -25,7 +27,6 @@ import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
-import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
 import com.sxj.supervisor.manage.comet.MessageConnectListener;
 import com.sxj.supervisor.manage.comet.MessageDropListener;
 import com.sxj.util.exception.SystemException;
@@ -54,11 +55,15 @@ public class BaseController {
 		binder.registerCustomEditor(ContractTypeEnum.class,
 				new EnumPropertyEditorSupport<ContractTypeEnum>(
 						ContractTypeEnum.class));
+		binder.registerCustomEditor(RecordStateEnum.class,
+				new EnumPropertyEditorSupport<RecordStateEnum>(
+						RecordStateEnum.class));
 		binder.registerCustomEditor(MemberTypeEnum.class,
 				new EnumPropertyEditorSupport<MemberTypeEnum>(
 						MemberTypeEnum.class));
 		binder.registerCustomEditor(ContractWindowTypeEnum.class,
-				new EnumPropertyEditorSupport<ContractWindowTypeEnum>(ContractWindowTypeEnum.class));
+				new EnumPropertyEditorSupport<ContractWindowTypeEnum>(
+						ContractWindowTypeEnum.class));
 		// RFIT枚举
 		binder.registerCustomEditor(RfidTypeEnum.class,
 				new EnumPropertyEditorSupport<RfidTypeEnum>(RfidTypeEnum.class));
@@ -77,7 +82,8 @@ public class BaseController {
 		binder.registerCustomEditor(RfidTypeEnum.class,
 				new EnumPropertyEditorSupport<RfidTypeEnum>(RfidTypeEnum.class));
 		binder.registerCustomEditor(WindowTypeEnum.class,
-				new EnumPropertyEditorSupport<WindowTypeEnum>(WindowTypeEnum.class));
+				new EnumPropertyEditorSupport<WindowTypeEnum>(
+						WindowTypeEnum.class));
 	}
 
 	protected String getBasePath(HttpServletRequest request) {

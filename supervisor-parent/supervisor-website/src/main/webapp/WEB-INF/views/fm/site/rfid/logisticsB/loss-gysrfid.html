@@ -40,21 +40,59 @@ $(function(){
 		getRecord(data.result);
        // $("#memberId").val(data.result);
     }});
+	$("#record").change(function() {
+		$.post("getRecordInfo.htm",{"recordNo":this.val()},function(data){
+			$("#rfid").text(data.str);
+		});
+	});
 });
 function getRecord(contractNo){
 	$.post("getRecord.htm",{"contractNo":contractNo},function(data){
 		var arr=data.str.split(","); 
 		if(data.str!=''){
 			$("#record").empty();
+			for(var i=0;i<arr.length;i++){
+				$("#record").append("<option value='"+arr[i]+"'>"+arr[i]+"</option>");
+				$.post("getRecordInfo.htm",{"recordNo":arr[i]},function(data){
+					$("#rfid").text(data.str);
+				});
+			}
 		}else{
 			$("#record").empty();
 			$("#record").append("<option value=''>该合同无补损备案</option>");		
 		}
-		for(var i=0;i<arr.length;i++){
-		$("#record").append("<option value='"+arr[i]+"'>"+arr[i]+"</option>");	
-		}
+		
 	});
 }
+function  gysrfid(){
+	if($("#record").val()==''){
+		alert("没有补损备案号,不能补损!");
+		return;
+	}
+	var flag=0;
+	$.post("getLoss.htm",$("#htForm").serialize(),function(data){
+		if(data.isOK=='no'){
+			alert("该合同已补损!");	
+			flag=1;
+			return;
+		}
+	})
+	if(flag==0){
+		if(confirm('确实要补损吗?')){
+		$.post("rfid_loss.htm",$("#htForm").serialize(),function(data){
+			if(data.isOK=='ok'){
+				alert("补损成功!");
+				window.location.href="queryList.htm";
+			}else{
+				alert("补损失败!");	
+			}
+		});
+		}
+	}else{
+		alert("该合同已补损!");
+	}
+}
+
 </script>
 </head>
 
@@ -118,19 +156,19 @@ function getRecord(contractNo){
 <div id="content2" class="tabscontent">
 <div class="item">
       <label>补损物流标签编号</label>${logistics.rfidNo}</div>
-    <div class="item" title="通过输入合同号获得对应的补损备案号信息">
+    <div class="item" title="">
       <label>需补损的合同号</label>
-      <input class="input input-w180h36" id="contractNo" value="${logistics.contractNo}"/>
+      <input class="input input-w180h36" id="contractNo" value=""/>
     </div>
-    <div class="item" title="根据合同号找出对应的补损备案号">
+    <div class="item" title="">
       <label>补损备案号</label> <select name="select" id="record">
-            <option selected="selected">该合同无补损备案</option>
+            <option selected="selected" value="">该合同无补损备案</option>
             </select></div>
-    <div class="item" title="根据备案号列出需要补损的批次的标签编号">
-      <label>需补损标签编号</label>AAAA00001-AAAA00002-AAAA00003</div>
+    <div class="item" title="">
+      <label>需补损标签编号</label><span id="rfid"></span></div>
     <div class="item mt10">
       <label>&nbsp;</label>
-      <a href="gysrfidmgr.html" class="button button-orange mr15" title="如需补损的标签里有已经被补损过的，需要报错提示">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+      <a href="javascript:gysrfid();" class="button button-orange mr15" title="">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
   </div>
   </form>
   </div>
