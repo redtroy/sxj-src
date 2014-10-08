@@ -132,4 +132,6 @@ public interface IContractService {
 
 	void updateRfid(String id, String rfidNo, String contractNo,
 			MemberEntity member,String newRfid) throws ServiceException;
+
+	String getReplenish(String contractNo);
 }
