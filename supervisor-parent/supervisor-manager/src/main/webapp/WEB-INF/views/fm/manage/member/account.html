@@ -99,9 +99,9 @@
 	  $.post("${basePath}member/account/editState.htm",{id:id,state:stateId},function(data){
 		  if (data.isOK=='ok'){
 			  if (data.state=="已冻结"){
-				  $(obj).parent().html('<button class="btn btn-red" onclick="checkState(\''+id+'\',0,this)"><span>解冻</span></button>');
+				  $(obj).parent().html('<a class="btn btn-red" onclick="checkState(\''+id+'\',0,this)"><span>解冻</span></a>');
 			  }else{
-				  $(obj).parent().html('<button class="btn btn-red" onclick="checkState(\''+id+'\',1,this)"><span>冻结</span></button>');
+				  $(obj).parent().html('<a class="btn btn-red" onclick="checkState(\''+id+'\',1,this)"><span>冻结</span></a>');
 			  }
 			  
 		   }else{
@@ -150,7 +150,7 @@
           <input type="text" name="startDate" value="${query.startDate}" datepicker id="time1">
           -
           <input type="text" name="endDate" value="${query.endDate}" datepicker id="time2">
-          <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+          <a class="btn btn-blue" onclick="query();"><span>查询</span></a>
         </p>
         </form>
     </div>
@@ -184,13 +184,13 @@
           <td>${account.name}</td>
           <td>合同管理</td>
           <#if account.state.id==0>
-          <td><button class="btn btn-green" onclick="checkState('${account.id}',0,this)"><span>解冻</span></button></td>
+          <td><a class="btn btn-green" onclick="checkState('${account.id}',0,this)"><span>解冻</span></a></td>
           <#elseif account.state.id==1>
-          <td><button class="btn btn-red" onclick="checkState('${account.id}',1,this)"><span>冻结</span></button></td>
+          <td><a class="btn btn-red" onclick="checkState('${account.id}',1,this)"><span>冻结</span></a></td>
           </#if>
           <td>${account.regDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td class="operation"><a  class="edit" onclick="edit('${account.id}')">修改</a><a href="#" class="del" onclick="del('${account.id}')">删除</a></td>
-          <td><button class="btn" onclick="resetPwd('${account.id}')"><span>初始化密码</span></button></td>
+          <td><a class="btn" onclick="resetPwd('${account.id}')"><span>初始化密码</span></a></td>
         </tr>
         </#list>
       </table>

@@ -176,7 +176,7 @@ Intense( elements );
           <input class="form-control" type="text" datepicker id="time1" name="startDate">
           -
           <input class="form-control" type="text" datepicker id="time2" name="endDate">
-          <button class="btn btn-blue ly-right" onclick="query();"><span>查询</span></button>
+          <a class="btn btn-blue ly-right" onclick="query();"><span>查询</span></a>
         </p>
         </form>
       </div>
@@ -219,19 +219,19 @@ Intense( elements );
           <td><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <td><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <#if (member.checkState.id==0)>
-          <td><button class="btn btn-gray" onclick="editCheckState('${member.id}',1)"><span>审核</span></button></td>
+          <td><a class="btn btn-gray" onclick="editCheckState('${member.id}',1)"><span>审核</span></a></td>
           <#elseif (member.checkState.id==1)>
-          <td><button class="btn  btn-green" onclick="editCheckState('${member.id}',2)"><span>认证</span></button></td>
+          <td><a class="btn  btn-green" onclick="editCheckState('${member.id}',2)"><span>认证</span></a></td>
           <#elseif (member.checkState.id==2)>
            <td><em class="state verified">已认证</em></td>
           </#if>
           <#if member.state.id==0>
-          <td><button class="btn btn-green" onclick="editState('${member.id}',1)"><span>解冻</span></button></td>
+          <td><a class="btn btn-green" onclick="editState('${member.id}',1)"><span>解冻</span></a></td>
            <#elseif member.state.id==1>
-           <td><button class="btn btn-red" onclick="editState('${member.id}',0)"><span>冻结</span></button></td>
+           <td><a class="btn btn-red" onclick="editState('${member.id}',0)"><span>冻结</span></a></td>
           </#if>
           
-          <td><button class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd('${member.id}')"><span>初始化密码</span></button></td>
+          <td><a class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
         </tr>
         <tr class="tableInfo" style="display:none;" id="${member.id}_info">
           <td colspan="11">
@@ -291,7 +291,7 @@ Intense( elements );
      <span class="icon32 icon-32-info"></span>
      <p class="color-blue fontYH f18" id="promptPwd"></p>
      </div>
-     <button class="popBtn">确认</button>
+     <a class="popBtn">确认</a>
      </div>
      </div>
      <!-- InstanceEndEditable --></div>

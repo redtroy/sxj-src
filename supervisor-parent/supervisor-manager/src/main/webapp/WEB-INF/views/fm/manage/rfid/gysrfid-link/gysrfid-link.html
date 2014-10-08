@@ -173,7 +173,7 @@
 		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
 		  <td>-</td>
 		  <#if (model.state.id==0)>
-		  <td><button class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></button></td>
+		  <td><a class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
@@ -196,7 +196,7 @@
 		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
 		  <td>${model.replenishRfid}</td>
 		    <#if (model.state.id==0)>
-		  <td><button class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></button></td>
+		  <td><a class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
@@ -228,7 +228,7 @@
 		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
 		  <td>${model.replenishRfid}</td>
 		    <#if (model.state.id==0)>
-		  <td><button class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></button></td>
+		  <td><a class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
