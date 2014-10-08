@@ -31,6 +31,11 @@
 		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
 		<result property="flag" column="FLAG" jdbcType="BOOLEAN" />
 	</resultMap>
+	
+	<select id="getMemberByName" resultMap="MemberResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_MEMBER WHERE NAME=#{name}]]>
+	</select>
 
 	<!-- 条件查询会员 -->
 	<select id="queryMembers" resultMap="MemberResultMap"

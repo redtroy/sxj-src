@@ -46,10 +46,10 @@ jQuery(document).ready(function($) {
 			   params=params+"&currentPage="+page;
 		   }
 		$.post("accountList.htm",params,function(data){
-			var res=$(data).find("#res_table");
+			var res=$(data).find("#right_div");
 			var pager=$(data).find("#pager");
-			$("#res_table").empty();
-			$("#res_table").append(res.html());
+			$("#right_div").empty();
+			$("#right_div").append(res.html());
 			var totalPage=pager.attr("totalPage");
 			var currentPage=pager.attr("currentPage");
 			loadPage(currentPage,totalPage,query);
