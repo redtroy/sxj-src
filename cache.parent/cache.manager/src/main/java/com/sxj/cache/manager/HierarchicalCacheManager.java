@@ -65,6 +65,10 @@ public class HierarchicalCacheManager
             configStream = HierarchicalCacheManager.class.getClassLoader()
                     .getResourceAsStream(path);
         if (configStream == null)
+            configStream = Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResourceAsStream(path);
+        if (configStream == null)
             throw new CacheException("Cannot find "
                     + HierarchicalCacheManager.class.getClassLoader()
                             .getResource(path)

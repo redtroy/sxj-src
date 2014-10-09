@@ -121,6 +121,10 @@ public class EhCacheProvider implements CacheProvider
         if (xml == null)
             xml = getClass().getResource(CONFIG_XML);
         if (xml == null)
+            xml = Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResource(CONFIG_XML);
+        if (xml == null)
             throw new CacheException("cannot find ehcache.xml !!!");
         
         manager = new CacheManager();
