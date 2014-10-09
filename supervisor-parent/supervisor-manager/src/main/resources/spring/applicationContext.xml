@@ -54,6 +54,6 @@
 	<!-- 配置多级缓存 -->
 	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager" lazy-init="false" init-method="initCacheProvider">
 		<!-- <property name="configFile" value="cache.properties"></property> -->
-		<property name="databaseId" value="0"></property>
+		<property name="databaseId" value="2"></property>
 	</bean>
 </beans>

@@ -87,7 +87,11 @@ function confirmReceipt(id){
 		}
 }
 function loadInfo(id,applyNo){
+	if ($("#info"+id).html()==""){
 	$("#info"+id).load("purchaseInfo.htm?id="+id+"&applyNo="+applyNo);
+	}else{
+		$("#info"+id).html("");
+	}
 }
 function closeInfo(id){
 	$("#info"+id).html("");
