@@ -19,15 +19,17 @@
 	  <div class="item">
 	    <label>公司名称</label>
 	    <input class="input input-w240h36" type="text" autocomplete="off" placeholder="" title="" id="" name="memberName" value="${memberName}" />
+	    <div id="message_div" class="tip msg-error f12" style="display:none;">${message}</div>
 	  </div>
 	<div class="item">
 	    <label>登录帐户</label>
 	    <input class="input input-w240h36" type="text" autocomplete="off" placeholder="" title="" id="" name="accountName" value="${accountName}" />
+	    <div id="amessage_div" class="tip msg-error f12" style="display:none;">${amessage}</div>
 	  </div>
 	<div class="item">
 	  <label><a href="${basePath}member/find_pwd.htm" class="ly-right">忘记密码？</a>登录密码</label>
 	  <input class="input input-w240h36" type="password" name="password" autocomplete="off" placeholder="" title="" value="" />
-	  <div class="tip msg-error f12" style="display:none;">密码不正确，请输入正确的密码</div>
+	  <div id="pmessage_div" class="tip msg-error f12" style="display:none;">${pmessage}</div>
 	</div>
 	<a href="javascript:login();" class="button button-orange btn-regin mt5">登录</a>
 	<div class="signReg color-gray6 f12">还不是私享家会员？<a href="${basePath}member/regist.htm" class="lnk-green" title="免费注册私享家帐号" tabindex="6">免费注册&gt;</a></div>
@@ -39,6 +41,17 @@
 <@b.footer />
 </body>
 <script>
+$(function(){
+	if("${message}"!=""){
+		$("#message_div").show();
+	}
+	if("${amessage}"!=""){
+		$("#amessage_div").show();
+	}
+	if("${pmessage}"!=""){
+		$("#pmessage_div").show();
+	}
+});
 $(document).keyup(function(event){
 	  if(event.keyCode ==13){
 		  login();

@@ -49,6 +49,13 @@ public interface IMemberDao
     public MemberEntity getMember(String id);
     
     /**
+     * 获取会员信息
+     *
+     * @param id
+     **/
+    public MemberEntity getMemberByName(String name);
+    
+    /**
      * 删除会员
      *
      * @param id

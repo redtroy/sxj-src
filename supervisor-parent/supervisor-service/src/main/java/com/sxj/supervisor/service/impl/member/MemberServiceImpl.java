@@ -225,14 +225,7 @@ public class MemberServiceImpl implements IMemberService {
 	@Override
 	public MemberEntity getMemberByName(String name) throws ServiceException {
 		try {
-			MemberQuery query = new MemberQuery();
-			query.setMemberName(name);
-			List<MemberEntity> list = queryMembers(query);
-			if (list.size() > 0) {
-				MemberEntity member = list.get(0);
-				return member;
-			}
-			return null;
+			return menberDao.getMemberByName(name);
 		} catch (Exception e) {
 			SxjLogger.error("根据会员名称查询会员错误", e, this.getClass());
 			throw new ServiceException("根据会员名称查询会员错误", e);

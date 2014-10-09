@@ -249,8 +249,67 @@ public class LogisticsRfidController extends BaseController {
 			map.put("str", str);
 			return map;
 		} catch (Exception e) {
-			SxjLogger.error("启用物流错误", e, this.getClass());
-			throw new WebException("启用物流错误");
+			SxjLogger.error("查询备案错误", e, this.getClass());
+			throw new WebException("查询备案错误");
+		}
+	}
+	@RequestMapping("getRecordInfo")
+	public @ResponseBody Map<String, String> getRecordInfo(String recordNo,HttpSession session)
+			throws WebException {
+		try {
+			RecordEntity  record=recordService.getRecordByNo(recordNo);
+			String str = record.getRfidNo();
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("str", str);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("查询rfid错误", e, this.getClass());
+			throw new WebException("查询rfid错误");
+		}
+	}
+	/**
+	 * 补损采购合同
+	 * @param recordNo
+	 * @param session
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("gysrfid_loss")
+	public @ResponseBody Map<String, String> gysrfidLoss(String recordNo,HttpSession session)
+			throws WebException {
+		try {
+			RecordEntity  record=recordService.getRecordByNo(recordNo);
+			String str = record.getRfidNo();
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("str", str);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("采购合同补损错误", e, this.getClass());
+			throw new WebException("采购合同补损错误");
+		}
+	}
+	/**
+	 * 查询是否已补损
+	 * @param recordNo
+	 * @param session
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("getLoss")
+	public @ResponseBody Map<String, String> getLoss(String contractNo,HttpSession session)
+			throws WebException {
+		try {
+			String  record=contractService.getReplenish(contractNo);
+			Map<String, String> map = new HashMap<String, String>();
+			if(record==null){
+				map.put("isOK", "ok");
+			}else{
+				map.put("isOK", "no");
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("采购合同补损错误", e, this.getClass());
+			throw new WebException("采购合同补损错误");
 		}
 	}
 }

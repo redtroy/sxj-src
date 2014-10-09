@@ -929,5 +929,19 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException("添加批次错误错误", e);
 		}
 	}
-	
+	@Override
+	@Transactional
+	public String getReplenish(String contractNo){
+		QueryCondition<ReplenishContractEntity> query = new QueryCondition<ReplenishContractEntity>();
+		query.addCondition("contractId", contractNo);
+		List<ReplenishContractEntity> replenishList  =contractReplenishDao.queryReplenish(query);
+		if(replenishList.size()>0 && replenishList!=null){
+			ReplenishContractEntity replenish= replenishList.get(0);
+			if(replenish.getId()!=null){
+				List<ReplenishBatchEntity> replenisBatch =contractReplenishBatchDao.queryReplenishBatch(replenish.getId());
+				return replenisBatch.get(0).getNewRfidNo();
+			}
+		}
+			return null;
+	}
 }

@@ -58,7 +58,13 @@ public class BasicController extends BaseController {
 
 	@RequestMapping("index")
 	public String ToIndex(HttpServletRequest request) {
-		return "redirect:" + getBasePath(request) + "member/memberInfo.htm";
+		HttpSession session = request.getSession(false);
+		if (session.getAttribute("userinfo") == null) {
+			return LOGIN;
+		} else {
+			return "redirect:" + getBasePath(request) + "member/memberInfo.htm";
+		}
+
 	}
 
 	@RequestMapping("to_login")
@@ -78,7 +84,7 @@ public class BasicController extends BaseController {
 	public String ToError() {
 		return "site/500";
 	}
-	
+
 	@RequestMapping("404")
 	public String To404() {
 		return "site/404";
@@ -96,7 +102,7 @@ public class BasicController extends BaseController {
 			AccountEntity account = accountService
 					.getAccountByName(accountName);
 			if (account == null) {
-				map.put("message", "会员子账户不存在");
+				map.put("amessage", "会员子账户不存在");
 				return LOGIN;
 			}
 			String memberNo = account.getParentId();
@@ -129,7 +135,7 @@ public class BasicController extends BaseController {
 			currentUser.login(token);
 		} catch (AuthenticationException e) {
 			SxjLogger.error("登陆失败", e, this.getClass());
-			map.put("message", "密码错误");
+			map.put("pmessage", "密码错误");
 			return LOGIN;
 
 		}
@@ -152,7 +158,7 @@ public class BasicController extends BaseController {
 	public String ToMenu(HttpServletRequest request, ModelMap map) {
 		HttpSession session = request.getSession(false);
 		if (session.getAttribute("userinfo") == null) {
-			return "403";
+			return LOGIN;
 		}
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");

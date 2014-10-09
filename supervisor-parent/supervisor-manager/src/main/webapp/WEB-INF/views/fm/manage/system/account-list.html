@@ -24,7 +24,7 @@ function query(page){
 	   }
 	$.post("${basePath}system/account-list.htm",params,function(data){
 		var res=$(data).find("#rightBar");
-		var pager=$(data).find("#rightBar").children("#pager");
+		var pager=$(data).find("#pager");
 		$("#rightBar").empty();
 		$("#rightBar").append(res.html());
 		var totalPage=pager.attr("totalPage");
