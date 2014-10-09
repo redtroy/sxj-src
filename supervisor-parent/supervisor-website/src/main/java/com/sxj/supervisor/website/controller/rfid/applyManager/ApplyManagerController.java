@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.website.controller.rfid.applyManager;
+package com.sxj.supervisor.website.controller.rfid.applyManager;
 
 import java.util.HashMap;
 import java.util.List;
