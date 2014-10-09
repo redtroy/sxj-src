@@ -122,13 +122,34 @@ $(function(){
 <div class="contBox" id="cgDiv">
 <div id="tabsholder">
 <ul class="tabs">
-<li id="tabz1"><a href="#">备案采购合同</a></li>
-<li id="tabz2"><a href="#">备案招标合同</a></li>
+<li id="tabz1"><a href="#">备案招标合同</a></li>
+<li id="tabz2"><a href="#">备案采购合同</a></li>
 </ul>
 <div class="contents">
+<form action="" id="zbForm" method="post">
+<input type="hidden" name="memberNameB" value="${name}" />
+<div id="content1" class="tabscontent">
+    <div class="item">
+      <label>甲方</label>
+      <input class="input input-w240h36" value="" id="memberNameA" name="memberNameA" />
+      <input type="hidden" name="memberIdA" id="memberIdA" value=""/>
+    </div>
+    <div class="item">
+      <label>乙方</label>
+      ${name}<input type="hidden" name="memberIdB" id="" value="${id}"/></div>    
+       <div class="item"><label>&nbsp;</label><div class="ly-left">
+      <div class="imageList"></div>
+	  <input type="hidden" name="imgPath"  class="imgPathHide" value=""/>
+	  <input type="file" name="zbFile" id="zbFile"  multiple="true"/>
+	  </div></div>
+    <div class="item mt10">
+      <label>&nbsp;</label>
+      <a href="javascript:zbApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
+  </div>
+  </form>
 <form action="" id="cgForm" method="post">
 <input type="hidden" name="memberNameA" value="${name}" />
-<div id="content1" class="tabscontent">
+<div id="content2" class="tabscontent">
 <div class="item"><label>甲方</label>${name}<input type="hidden" name="memberIdA" id="" value="${id}"/></div>
 <div class="item"><label>乙方</label><input class="input input-w240h36" value="" id="memberNameB" name="memberNameB" /><input type="hidden"  id="memberIdB"  name="memberIdB" id="" value=""/></div>
 <div class="item"><label>关联招标合同号</label><input class="input input-w240h36" value="" name="refContractNo"/></div>
@@ -140,30 +161,7 @@ $(function(){
 <div class="item mt10"><label>&nbsp;</label><a href="javascript:AcgApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
 </div>
 </form>
-<form action="" id="zbForm" method="post">
-<input type="hidden" name="memberNameB" value="${name}" />
-<div id="content2" class="tabscontent">
-    <div class="item">
-      <label>甲方</label>
-      <input class="input input-w240h36" value="" id="memberNameA" name="memberNameA" />
-      <input type="hidden" name="memberIdA" id="memberIdA" value=""/>
-    </div>
-    <div class="item">
-      <label>乙方</label>
-      ${name}<input type="hidden" name="memberIdB" id="" value="${id}"/></div>
-    <div class="item">
-      <label>&nbsp;</label>
-      </div>
-       <div class="item"><label>&nbsp;</label><div class="ly-left">
-      <div class="imageList"></div>
-	  <input type="hidden" name="imgPath"  class="imgPathHide" value=""/>
-	  <input type="file" name="zbFile" id="zbFile"  multiple="true"/>
-	  </div></div>
-    <div class="item mt10">
-      <label>&nbsp;</label>
-      <a href="javascript:zbApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
-  </div>
-  </form>
+
   </div>
 </div>
 </div>

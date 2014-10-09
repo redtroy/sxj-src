@@ -1,6 +1,6 @@
 package com.sxj.supervisor.service.impl.record;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -162,12 +163,14 @@ public class RecordServiceImpl implements IRecordService {
 			record.setRefContractNo(refContractNo);
 			record.setContractNo(contractNo);
 			record.setState(RecordStateEnum.Binding);
+			record.setAcceptDate(new Date());
 			recordDao.updateRecord(record);
 		}
 		if (record2 != null) {
 			record2.setRefContractNo(refContractNo);
 			record2.setContractNo(contractNo);
 			record2.setState(RecordStateEnum.Binding);
+			record2.setAcceptDate(new Date());
 			recordDao.updateRecord(record2);
 		}
 		// 插入合同
@@ -196,12 +199,22 @@ public class RecordServiceImpl implements IRecordService {
 	}
 
 	@Override
-	public void modifyState(String recordId, RecordConfirmStateEnum state) {
+	@Transactional
+	public void modifyState(String contractId,String recordId, RecordConfirmStateEnum state) {
 		try {
+			
 			RecordEntity re = new RecordEntity();
 			re.setId(recordId);
 			re.setConfirmState(state);
 			recordDao.updateRecord(re);
+			ContractEntity con = new ContractEntity();
+			con.setId(contractId);
+			if(state.getId()==2){
+				con.setConfirmState(ContractSureStateEnum.aaffirm);
+			}else if(state.getId()==3){
+				con.setConfirmState(ContractSureStateEnum.baffirm);
+			}
+			contractDao.updateContract(con);
 		} catch (Exception e) {
 			throw new ServiceException("", e);
 		}

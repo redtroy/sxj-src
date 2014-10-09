@@ -375,17 +375,17 @@ public class RecordController extends BaseController {
 	}
 
 	@RequestMapping("confirmRecord")
-	public @ResponseBody Map<String, String> confirmRecord(String recordId,
+	public @ResponseBody Map<String, String> confirmRecord(String recordId,String contractId,
 			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			if (member.getMember().getType().getId() == 0) {
-				recordService.modifyState(recordId,
+				recordService.modifyState(contractId,recordId,
 						RecordConfirmStateEnum.confirmedA);
 			} else {
-				recordService.modifyState(recordId,
+				recordService.modifyState(contractId,recordId,
 						RecordConfirmStateEnum.confirmedB);
 			}
 			map.put("isOK", "ok");

@@ -175,6 +175,7 @@ public class ContractServiceImpl implements IContractService {
 					if (contract.getContractNo() != null) {
 						record.setContractNo(contract.getContractNo());
 						record.setState(RecordStateEnum.Binding);
+						record.setAcceptDate(new Date());
 						recordDao.updateRecord(record);
 					}
 					List<String> messageList = null;

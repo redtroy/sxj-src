@@ -62,5 +62,5 @@ public interface IRecordService {
 	 * @param contractId
 	 * @param state
 	 */
-	public void modifyState(String contractId, RecordConfirmStateEnum state);
+	public void modifyState(String contractId,String recordId, RecordConfirmStateEnum state);
 }

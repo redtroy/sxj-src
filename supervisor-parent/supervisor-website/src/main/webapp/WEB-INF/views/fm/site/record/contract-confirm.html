@@ -11,7 +11,8 @@
 <script>
 	function save(){
 		var id =$("#recordId").val();
-		$.post("confirmRecord.htm",{recordId:id},function(data){
+		var contractId = $("#contractId").val();
+		$.post("confirmRecord.htm",{recordId:id,contractId:contractId},function(data){
 			   if (data.isOK=='ok'){
 				alert("确认成功!");  
 				window.location.href="query.htm";
@@ -44,6 +45,8 @@
 <h2 class="fontYH f18 tc mb20"><#if type==0>门窗招标合同 <#elseif type==1>玻璃采购合同 <#elseif type==2>型材采购合同</#if></h2>
 <div class="contInfo tl">
 <input type="hidden" id="recordId" value="${recordId}" />
+<input type="hidden" id="contractId" value="${contractModel.contract.id}" />
+
                   <div class="info ly-clearFix">
                     <div class="item">
                       <label>合同号</label>

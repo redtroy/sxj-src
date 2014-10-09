@@ -149,6 +149,7 @@
 			}, function(data) {
 				if (data.isOK == "ok") {
 					$("#" + id).remove();
+					window.location.href="query.htm";
 				} else {
 					alert("删除备案失败");
 				}
