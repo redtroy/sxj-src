@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	
+	<keyNodes> 
+		<keyNode type="SN" ref="supervisorDataSource"></keyNode>
+		<keyNode type="ID" ref="supervisorDataSource"></keyNode>
+		<keyNode type="ID" ref="rfidDataSource"></keyNode>
+	</keyNodes>
+	<!-- 数据结点配置 -->
+	<dataNodes>
+		<!-- 数据节点1 -->
+		<dataNode>
+			<writeNodes ref="supervisorDataSource">
+			</writeNodes>
+			<readNodes ref="supervisorDataSource">
+			</readNodes>
+			<tables>M_CONTRACT, M_CONTRACT_BATCH, M_CONTRACT_ITEM, M_CONTRACT_MODIFY, M_CONTRACT_MODIFY_BATCH, M_CONTRACT_MODIFY_ITEM, M_CONTRACT_RECORD, M_CONTRACT_REPLENISH, M_CONTRACT_REPLENISH_BATCH, M_MEMBER, M_MEMBER_ACCOUNT, M_MEMBER_FUNCTION, M_MEMBER_ROLE, M_SYS_ACCOUNT, M_SYS_AREA, M_SYS_FUNCTION, M_SYS_LOG, M_SYS_ROLE, R_FACTORY_REGISTER, R_FACTORY_SCHAIN, R_LOGISTICE_REF, R_WINDOW_REF, T_ADMIN, T_ADMIN_ROLE, T_CONTRACT, T_CONTRACT_REGISTER, T_FACTORY, T_SN, T_SUBSYSTEM, T_SUPPLYCHAIN_DESCRIPTION, T_SYSTEM_PARAM</tables>
+		</dataNode>
+
+
+		<!-- 数据节点2 -->
+		<dataNode>
+			<writeNodes ref="rfidDataSource">
+			</writeNodes>
+			<readNodes ref="rfidDataSource">
+			</readNodes>
+			<tables>SHARD</tables>
+		</dataNode>
+	</dataNodes>
+
+	<!-- 配置需要分库的表，分库所依赖的字段 -->
+	<!-- <rules> <table name="SHARD" column="SHARD_ID"></table> </rules> -->
+
+</configuration>

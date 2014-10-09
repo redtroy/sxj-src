@@ -11,6 +11,7 @@
 		<module>supervisor-website</module>
 		<module>supervisor-dao</module>
 		<module>supervisor-service</module>
+		<module>supervisor-open</module>
 	</modules>
 	<properties>
 		<com.sxj.spring>4.2.3</com.sxj.spring>

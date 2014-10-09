@@ -59,7 +59,7 @@ public class BasicController extends BaseController {
 	@RequestMapping("index")
 	public String ToIndex(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
-		if (session.getAttribute("userinfo") == null) {
+		if (session == null || session.getAttribute("userinfo") == null) {
 			return LOGIN;
 		} else {
 			return "redirect:" + getBasePath(request) + "member/memberInfo.htm";
