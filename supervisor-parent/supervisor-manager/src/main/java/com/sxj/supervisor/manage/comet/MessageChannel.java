@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.manage.comet;
+package com.sxj.supervisor.manage.comet;
 
 public class MessageChannel
 {
