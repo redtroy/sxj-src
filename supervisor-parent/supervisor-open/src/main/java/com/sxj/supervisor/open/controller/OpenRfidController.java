@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 @Controller("/rfid")
 public class OpenRfidController {
 
-	public void sendGoods() {
+	public void sendGoods(String rfidNo) {
 
 	}
 
