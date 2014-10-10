@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberRoleService;

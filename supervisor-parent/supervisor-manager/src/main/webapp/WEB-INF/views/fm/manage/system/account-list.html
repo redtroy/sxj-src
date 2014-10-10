@@ -9,6 +9,7 @@
 <script src="${b.staticPath}js/intense.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<@b.dialogBox/>
  <@b.validate/>
 <script>
 jQuery(document).ready(function($) {
@@ -81,9 +82,16 @@ function toAdd(id){
 }
 
 function toRemove(id){
-	$('#remove_div').css("display","");
-	$('#remove_div').slideDown(300);
-	$("#remove_div").attr("accountId",id)
+	dialogBox(function(){
+		$.get("${basePath}system/remove.htm?accountId="+id,function(data){
+			if(data.isOK==true){
+				alert("删除成功");
+				query();
+			}else{
+				errorInfo(data);
+			}
+		})
+	});
 }
 
 function edit(id){
@@ -116,19 +124,6 @@ function initPassword(id){
     }
 	
 }
-
-function removeAccount(){
-	var id=$("#remove_div").attr("accountId");
-	$.get("${basePath}system/remove.htm?accountId="+id,function(data){
-		if(data.isOK==true){
-			alert("删除成功");
-			query();
-		}else{
-			errorInfo(data);
-		}
-	})
-}
-
 function toInfo(accountId,data){
 	
 	$("#"+accountId+"_tr").children("#id_hidden").val(data.account.id);
@@ -248,13 +243,6 @@ function toEdit(accountId){
       </table>
       <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
 	  </div>
-      <div id="remove_div" class="modal-wrap popDemo" style="display:none;" accountId="">
-        <div class="modal-header">
-          <span class="close">关闭</span></div>
-        <div class="modal-body popbtnBox">
-          <a class="popBtn" onclick="removeAccount();">确认删除</button><button class="popBtn btnGray" onclick="closeDiv('remove_div');">取消</a>
-        </div>
-      </div>
      <div id="password_div" class="modal-wrap popDemo passwordBox" style="display:none">
 	     <div class="modal-header"><span title="关闭" class="close">关闭</span></div>
 	     <div class="modal-body">

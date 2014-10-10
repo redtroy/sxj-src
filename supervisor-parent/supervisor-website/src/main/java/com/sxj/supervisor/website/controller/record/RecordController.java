@@ -34,6 +34,7 @@ import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.member.IMemberService;
@@ -41,7 +42,6 @@ import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.website.comet.MessageChannel;
 import com.sxj.supervisor.website.comet.record.RecordThread;
 import com.sxj.supervisor.website.controller.BaseController;
-import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 

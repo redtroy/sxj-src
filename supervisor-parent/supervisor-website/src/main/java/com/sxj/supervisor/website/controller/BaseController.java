@@ -23,9 +23,9 @@ import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.website.comet.MessageConnectListener;
 import com.sxj.supervisor.website.comet.MessageDropListener;
-import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.SystemException;
 import com.sxj.util.logger.SxjLogger;
 

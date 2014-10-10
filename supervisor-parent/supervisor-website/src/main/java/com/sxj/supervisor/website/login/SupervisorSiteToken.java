@@ -2,6 +2,8 @@ package com.sxj.supervisor.website.login;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
+
 public class SupervisorSiteToken extends UsernamePasswordToken {
 
 	/**

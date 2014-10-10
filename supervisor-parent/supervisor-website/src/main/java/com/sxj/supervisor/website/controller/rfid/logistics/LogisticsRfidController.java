@@ -25,6 +25,7 @@ import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
@@ -32,7 +33,6 @@ import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
-import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 

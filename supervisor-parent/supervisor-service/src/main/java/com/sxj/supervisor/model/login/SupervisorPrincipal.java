@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.login;
+package com.sxj.supervisor.model.login;
 
 import java.io.Serializable;
 

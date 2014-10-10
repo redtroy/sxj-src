@@ -48,6 +48,58 @@ function errorInfo(data){
  }
 </script>
 </#macro>
+<#macro dialogBox>
+<div id="diglog_div" style="display:none;">
+     <div class="modal-wrap popDemo popWin mb20">
+     <div class="modal-header">
+       <div class="tit">&nbsp;</div>
+       <span id="dialog_close_span" class="close">关闭</span></div>
+     <div class="modal-body">
+       <div class="button-box">
+         <button id="dialog_confirm_click" class="button button-pop btn-ok mr20">确认</button>
+         <button id="dialog_close_button" class="button button-gray">取消</button>
+       </div>
+     </div>
+</div>
+</div>
+
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
+<script>
+function dialogBox(confirm){
+	var data=$("#diglog_div");
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '30%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+	 
+	 	$("#dialog_confirm_click").live('click', function(){
+	 		layer.close(pageii);
+			confirm();
+			$("#dialog_confirm_click").die("click");
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		});
+		
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		});
+ }
+</script>
+</#macro>
+
 <#macro pageScript>
 <script src="${staticPath}js/jquery.paginate.js"></script>
 <script>

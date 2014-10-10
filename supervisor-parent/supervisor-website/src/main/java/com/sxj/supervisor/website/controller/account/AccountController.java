@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.website.controller.BaseController;
-import com.sxj.supervisor.website.login.SupervisorPrincipal;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 
