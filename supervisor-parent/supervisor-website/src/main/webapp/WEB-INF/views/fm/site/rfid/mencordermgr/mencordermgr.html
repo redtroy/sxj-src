@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 	})
 	})
 </script>
-<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
@@ -35,9 +35,10 @@ jQuery(document).ready(function($) {
 		   params=params+"&currentPage="+page;
 	  	}
 		$.post("mencordermgr_list.htm",params,function(data){
-			var tableList=$(data).find(".tabList").html();
-			$("#rightBar").find(".tabList").html(tableList);
-			var pager=$(data).find("#rightBar").children("#pager");
+			var tableList=$(data).find(".tabList");
+			var pager=$(data).find("#pager");
+			$(".tabList").empty();
+			$(".tabList").append(tableList.html());
 			var totalPage=pager.attr("totalPage");
 			var currentPage=pager.attr("currentPage");
 			loadPage(currentPage,totalPage,query);
