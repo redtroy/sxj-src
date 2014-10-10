@@ -58,15 +58,7 @@
 		  }
 	  })
   }
-  //根据ID 删除
-  function del(id){
-	 $.post("del.htm",{id:id},function(data){
-		 if (data.isOk=="ok"){
-			 alert('删除成功！');
-			 query();
-		 }
-	 }) 
-  }
+
   function query(page){
  	 	var params=$("#search_form").serialize();
 		if(page!=undefined){
@@ -81,6 +73,25 @@
 			loadPage(currentPage,totalPage,query);
 		})
  }
+  //根据ID 删除
+ function del(){
+	 var id=$("#remove_div").attr("accountId");
+	 $.post("del.htm",{id:id},function(data){
+		 if (data.isOk=="ok"){
+			 alert('删除成功！');
+			 closeDiv('remove_div');
+			 query();
+		 }
+	 }) 
+  }
+function toRemove(id){
+		$('#remove_div').css("display","");
+		$('#remove_div').slideDown(300);
+		$("#remove_div").attr("accountId",id)
+	}
+function closeDiv(divId){
+		$("#"+divId).css("display","none");
+	}
 </script>
 </head>
 <body>
@@ -177,7 +188,7 @@
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
-		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
+		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
           <td colspan="11">
@@ -200,7 +211,7 @@
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
-		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
+		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del">删除</a></td>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_2_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
@@ -232,7 +243,7 @@
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
-		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
+		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del">删除</a></td>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_2_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
@@ -252,6 +263,13 @@
 	   </#list>
       </table>
     <!-- InstanceEndEditable --></div>
+</div>
+<div id="remove_div" style="display:none;" class="modal-wrap popDemo" accountId="">
+        <div class="modal-header">
+          <span class="close" onclick="closeDiv('remove_div');">关闭</span></div>
+        <div class="modal-body popbtnBox">
+          <button class="popBtn" onclick="del();">确认删除</button><button class="popBtn btnGray" onclick="closeDiv('remove_div');">取消</button>
+        </div>
 </div>
 <div id="footer" class="fence-wide">
   <@b.footer /> 
