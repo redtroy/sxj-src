@@ -16,10 +16,15 @@
 		 alert("请输入有效数字！");
 		 return false;
 	 }
+	 if (count=="" || count==null){
+		 alert('数量不能为空');
+		 return false;
+	 }
 	 var rfidType=${member.type.id};
 	 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType},function(data){
 		 if (data.isOk="ok"){
 			 alert("添加成功！");
+			 window.location.href="${basePath}rfid/applyManager/applyManager_list.htm"; 
 		 }
 	 })
  }
