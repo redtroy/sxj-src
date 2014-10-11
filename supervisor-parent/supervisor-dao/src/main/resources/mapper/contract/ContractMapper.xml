@@ -57,7 +57,7 @@
 		</if>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
-			<![CDATA[AND RECORD_NO = #{condition.recordNo}]]>
+			<![CDATA[AND RECORD_NO like "%"#{condition.recordNo}"%"]]>
 		</if>
 		<!-- 合同签订者 -->
 		<if test="condition.memberId != null and condition.memberId != ''">

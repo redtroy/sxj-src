@@ -227,6 +227,7 @@ public class ContractController extends BaseController {
 					.getContractModelByContractNo(record.getContractNo());
 			model.put("contractModel", conEntity);
 			model.put("record", record);
+			model.put("recordId", recordId);
 		}
 
 		return "manage/contract/contract-changes";
@@ -234,14 +235,14 @@ public class ContractController extends BaseController {
 
 	@RequestMapping("saveChanges")
 	public @ResponseBody Map<String, Object> saveChanges(
-			ContractModifyControllerModel contractModifyModel)
+			ContractModifyControllerModel contractModifyModel,String recordId)
 			throws WebException {
 		try {
 			ContractModifyModel model = new ContractModifyModel();
 			model.setModifyContract(contractModifyModel.getModifyContract());
 			model.setModifyBatchList(contractModifyModel.getModifyBatchList());
 			model.setModifyItemList(contractModifyModel.getModifyItemList());
-			contractService.changeContract(contractModifyModel.getContractId(),
+			contractService.changeContract(recordId,contractModifyModel.getContractId(),
 					model, contractModifyModel.getRecordNo(),
 					contractModifyModel.getItemList());
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -261,16 +262,18 @@ public class ContractController extends BaseController {
 					.getContractModelByContractNo(record.getContractNo());
 			model.put("contractModel", conEntity);
 			model.put("record", record);
+			model.put("recordId", recordId);
+			
 		}
 		return "manage/contract/contract-replenish";
 	}
 
 	@RequestMapping("saveReplenish")
 	public @ResponseBody Map<String, Object> saveReplenish(
-			ContractReplenishControllerModel contractReplenish)
+			ContractReplenishControllerModel contractReplenish,String recordId)
 			throws WebException {
 		try {
-			contractService.suppContract(contractReplenish.getReplenish()
+			contractService.suppContract(recordId,contractReplenish.getReplenish()
 					.getContractId(), contractReplenish.getBatchList(),
 					contractReplenish.getReplenish());
 			Map<String, Object> map = new HashMap<String, Object>();
