@@ -72,7 +72,7 @@ public interface IContractService {
 	 * @param batchList
 	 * @param recordNo
 	 **/
-	public void changeContract(String contractId, ContractModifyModel model,
+	public void changeContract(String recordId,String contractId, ContractModifyModel model,
 			String recordNo, List<ContractItemEntity> itemList);
 
 	/**
@@ -82,7 +82,7 @@ public interface IContractService {
 	 * @param list
 	 * @param recordNo
 	 **/
-	public void suppContract(String contractId, List<ReplenishBatchModel> list,
+	public void suppContract(String recordId,String contractId, List<ReplenishBatchModel> list,
 			ReplenishContractEntity replenishContract);
 
 	/**
@@ -134,4 +134,5 @@ public interface IContractService {
 			MemberEntity member,String newRfid) throws ServiceException;
 
 	String getReplenish(String contractNo);
+
 }

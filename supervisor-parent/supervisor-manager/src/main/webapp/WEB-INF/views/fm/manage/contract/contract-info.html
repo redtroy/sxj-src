@@ -31,13 +31,13 @@
               ${contractModel.contract.recordNo} </li>
             <li>
               <label>签订时间</label>
-              ${contractModel.contract.signedDate?string("yyyy年MM月dd日")} </li>
+              <#if contractModel.contract.signedDate?exists> ${contractModel.contract.signedDate?string("yyyy年MM月dd日")}</#if> </li>
             <li>
               <label>合同期限</label>
-              ${contractModel.contract.validityDate?string("yyyy年MM月dd日")} </li>
+             <#if contractModel.contract.validityDate?exists> ${contractModel.contract.validityDate?string("yyyy年MM月dd日")}</#if> </li>
             <li>
               <label>生效时间</label>
-             ${contractModel.contract.startDate?string("yyyy年MM月dd日")} </li>
+             <#if contractModel.contract.validityDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if> </li>
           </ul>
           <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
             <col width="20%" />

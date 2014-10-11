@@ -77,6 +77,7 @@ public class RecordController extends BaseController {
 			map.put("recordlist", list);
 			map.put("confirmState", rse);
 			map.put("query", query);
+			
 			registChannel(MessageChannel.RECORD_MESSAGE, RecordThread.class);
 			return "site/record/contract-list";
 		} catch (Exception e) {

@@ -178,19 +178,6 @@ public class ContractServiceImpl implements IContractService {
 						record.setAcceptDate(new Date());
 						recordDao.updateRecord(record);
 					}
-					List<String> messageList = null;
-					Object cache = HierarchicalCacheManager.get(2,
-							"comet_record", "record_push_message");
-					if (cache instanceof ArrayList) {
-						messageList = (List<String>) cache;
-					} else {
-						messageList = new ArrayList<String>();
-					}
-					String message = record.getId() + ","
-							+ record.getType().getName();
-					messageList.add(message);
-					HierarchicalCacheManager.set(2, "comet_record",
-							"record_push_message", messageList);
 				}
 			}
 		} catch (Exception e) {
@@ -623,7 +610,7 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	@Transactional
-	public void changeContract(String contractId, ContractModifyModel model,
+	public void changeContract(String recordId,String contractId, ContractModifyModel model,
 			String recordNo, List<ContractItemEntity> itemList)
 			throws ServiceException {
 		try {
@@ -667,6 +654,10 @@ public class ContractServiceImpl implements IContractService {
 
 				}
 			}
+			RecordEntity re = new RecordEntity();
+			re.setId(recordId);
+			re.setState(RecordStateEnum.change);
+			recordDao.updateRecord(re);
 		} catch (Exception e) {
 			throw new ServiceException("变更合同信息错误", e);
 		}
@@ -676,7 +667,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 补损合同
 	 */
 	@Override
-	public void suppContract(String contractId,
+	public void suppContract(String recordId,String contractId,
 			List<ReplenishBatchModel> batchList,
 			ReplenishContractEntity replenishContract) throws ServiceException {
 		try {
@@ -702,6 +693,10 @@ public class ContractServiceImpl implements IContractService {
 				}
 
 			}
+			RecordEntity re = new RecordEntity();
+			re.setId(recordId);
+			re.setState(RecordStateEnum.supplement);
+			recordDao.updateRecord(re);
 		} catch (Exception e) {
 			throw new ServiceException("补损合同信息错误", e);
 		}
@@ -736,6 +731,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 变更确认状态
 	 */
 	@Override
+	@Transactional
 	public void modifyCheckState(String contractId, ContractStateEnum state)
 			throws ServiceException {
 		try {
@@ -745,6 +741,28 @@ public class ContractServiceImpl implements IContractService {
 				ce.setState(state);
 				contractDao.updateContract(ce);
 			}
+			ContractEntity  centity=contractDao.getContract(contractId);
+			if(centity.getRecordNo()!=null){
+				String[] arr =centity.getRecordNo().split(",");
+				for (String recordNo : arr) {
+					RecordEntity re = recordService.getRecordByNo(recordNo);
+					if(re!=null){
+					List<String> messageList = null;
+					Object cache = HierarchicalCacheManager.get(2,
+							"comet_record", "record_push_message");
+					if (cache instanceof ArrayList) {
+						messageList = (List<String>) cache;
+					} else {
+						messageList = new ArrayList<String>();
+					}
+					String message = re.getId() + "," + re.getType().getName()+","+centity.getContractNo();
+					messageList.add(message);
+					HierarchicalCacheManager.set(2, "comet_record",
+							"record_push_message", messageList);
+					}
+				}
+			}
+			
 		} catch (Exception e) {
 			throw new ServiceException("审核合同错误", e);
 		}
