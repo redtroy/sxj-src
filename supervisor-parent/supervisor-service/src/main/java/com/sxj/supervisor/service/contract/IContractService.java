@@ -13,6 +13,7 @@ import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.util.exception.ServiceException;
@@ -117,7 +118,32 @@ public interface IContractService {
 	 */
 	public ContractModel getContractModelByContractNo(String contractNo);
 
+	/**
+	 * 获取合同批次
+	 * @param contractNo
+	 * @param rfid
+	 * @return
+	 */
 	public List<ContractBatchModel> getContractBatch(String contractNo,
+			String rfid);
+	
+	/**
+	 * 获取合同变更批次
+	 * @param contractNo
+	 * @param rfid
+	 * @return
+	 */
+	public List<ModifyBatchModel> getContractModifyBatch(String contractNo,
+			String rfid);
+	
+
+	/**
+	 * 获取合同补损批次
+	 * @param contractNo
+	 * @param rfid
+	 * @return
+	 */
+	public List<ReplenishBatchModel> getContractReplenishBatch(String contractNo,
 			String rfid);
 
 	/**

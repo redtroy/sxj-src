@@ -1,10 +1,10 @@
+<#if list??>
 <#list list as model>
 <h2 class="fontYH f18">
 <span class="${model.function.style}"></span>${model.function.title}</h2>
 <ul>
  <#list model.children as mc>
 <#if Session.function==mc.id>
-
 <li class="on"><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
 <#else>
 <li><a href="${basePath}${mc.url}?function=${mc.id}"">${mc.title}</a></li>
@@ -12,3 +12,8 @@
 </#list>
 </ul>
 </#list>
+<#else>
+<h2 class="fontYH f18">
+<span class="icon icon-member"></span>会员中心</h2>
+<ul>
+</#if>

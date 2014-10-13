@@ -4,9 +4,8 @@ import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.BatchUpdate;
-import com.sxj.mybatis.orm.annotations.Insert;
-import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
+import com.sxj.util.persistent.QueryCondition;
 /**
  * 补损合同批次Dao
  * @author Ann
@@ -32,5 +31,5 @@ public interface IContractReplenishBatchDao {
 	 * @param replenishId
 	 * @return
 	 */
-	public List<ReplenishBatchEntity> queryReplenishBatch(String replenishId);
+	public List<ReplenishBatchEntity> queryReplenishBatch(QueryCondition<ReplenishBatchEntity> query);
 }
