@@ -165,12 +165,8 @@ public class RecordController extends BaseController {
 				.getContractNo());
 		ContractQuery contractQuery = new ContractQuery();
 		contractQuery.setContractNo(query.getContractNo());
-		if (list.size() == 1) {
-			map.put("record", list.get(0));
-			map.put("refContractNo", cm.getContract().getRefContractNo());
-		} else {
-			map.put("erro", "false");
-		}
+		map.put("record", list.get(0));
+		map.put("refContractNo", cm.getContract().getRefContractNo());
 		return map;
 	}
 
