@@ -69,8 +69,12 @@ jQuery(document).ready(function($) {
    //修改
    function edit(id){
 	   var params=$("#"+id).find(":input");
-		$("#edit_form").append(params.html());
+	//	$("#edit_form").append(params.html());
+	 if (check(id)){
+		 return false;
+	 }
 		$.post("${basePath}member/editMember.htm",params,function(data){
+			console.log(data)
 			if(data.isOK == 'ok'){
 				alert("修改成功");
 				query();
@@ -89,7 +93,25 @@ jQuery(document).ready(function($) {
 			}
 	  });
    }
-   
+   //状态验证
+   function check(obj){
+	   var name=$("#"+obj).find("[name='name']").val();
+	   var id=$("#"+obj).find("[name='id']").val();
+	   var flag=false;
+	   $.ajax({
+         url: "check_member.htm",
+         type: "POST",
+         data: ({name:name,id:id}),
+         async: false,
+         success: function(data){
+           if (data.text !="" && data.text !=null){
+        	  alert('会员名称已存在！');
+        	  flag=true;
+           }
+         }
+       });
+	   return flag;
+   }
  //更改审核状态
    function editCheckState(id,state){
 	  $.post("editCheckState.htm",{id:id,state:state},function(data){
@@ -278,7 +300,7 @@ Intense( elements );
           <li><label>子帐号</label>${member.getAccountNum()}</li>
           <li><label>总交易额</label>${member.totalAmount}元</li>
           </ul>
-          <div class="btnBox"><a href="#" class="button button-orange button-small" onclick="edit('${member.id}_info')">确认修改</a><a href="#" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
+          <div class="btnBox"><a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info')">确认修改</a><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
           </div>
           </td>
         </tr>
