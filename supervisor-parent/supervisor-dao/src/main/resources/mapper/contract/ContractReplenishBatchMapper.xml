@@ -17,6 +17,15 @@
 	<select id="queryReplenishBatch" resultMap="ReplenishBatchResultMap"
 		parameterType="String">
 		<![CDATA[ SELECT ID,BATCH_NO,REPLENISH_ID,RFID_NO,AMOUNT,BATCH_ITEMS,NEW_RFID_NO
-		FROM M_CONTRACT_REPLENISH_BATCH WHERE REPLENISH_ID=#{condition.recordIds}]]>
+		FROM M_CONTRACT_REPLENISH_BATCH WHERE 1=1 ]]>
+		<if test="condition.recordIds != null and condition.recordIds != ''">
+			<![CDATA[ AND REPLENISH_ID=#{condition.recordIds}]]>
+		</if>
+		<if test="condition.contractId != null and condition.contractId != ''">
+			<![CDATA[ AND CONTRACT_ID = #{condition.contractId}]]>
+		</if>
+		<if test="condition.rfidNo != null and condition.rfidNo != ''">
+			<![CDATA[ AND RFID_NO = #{condition.rfidNo}]]>
+		</if>
 	</select>
 </mapper>

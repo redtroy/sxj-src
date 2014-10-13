@@ -8,6 +8,7 @@ import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
+import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -38,7 +39,7 @@ public interface IContractModifyBatchDao {
 	 *
 	 * @param    contractId
 	**/
-	public List<ModifyBatchEntity> queryBacths(String modifyId);
+	public List<ModifyBatchEntity> queryBacths(QueryCondition<ModifyBatchEntity> query);
 	/**
 	 * 刪除批次
 	 * @param contractId

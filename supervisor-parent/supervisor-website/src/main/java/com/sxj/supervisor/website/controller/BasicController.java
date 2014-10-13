@@ -30,6 +30,7 @@ import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.model.member.MemberQuery;
@@ -163,8 +164,10 @@ public class BasicController extends BaseController {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
 		if (userBean.getMember() != null && userBean.getAccount() == null) {
-			List<MemberFunctionModel> list = functionService.queryFunctions();
-			map.put("list", list);
+			if(userBean.getMember().getCheckState().equals(MemberCheckStateEnum.certified)){
+				List<MemberFunctionModel> list = functionService.queryFunctions();
+				map.put("list", list);
+			}
 		} else if (userBean.getMember() != null
 				&& userBean.getAccount() != null) {
 			List<MemberFunctionModel> list = roleService
