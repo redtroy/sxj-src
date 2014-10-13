@@ -181,7 +181,7 @@ function closeLog(id){
 		   <em class="state frozen">${win.rfidState.getName()}</em>
 		  </#if>
 		 </td>
-		  <td class="operation"><a href="javascript:disable('${win.id}');" class="stop">停用</a><a href="javascript:del('${win.id}');" class="del">删除</a></td>
+		  <td class="operation"> <#if win.rfidState.getId()!=3><a href="javascript:disable('${win.id}');" class="stop">停用</a> </#if><a href="javascript:del('${win.id}');" class="del">删除</a></td>
         </tr>
         <tr class="tableInfo"  id="info${win.id}"></tr>
         <tr class="tableInfo" id="blBatch${win.id}"> </tr> 

@@ -49,12 +49,17 @@ function sub(){
 		 alert("申请数量请输入有效数字！");
 		 return false;
 	 }
+	 if (count=="" || count==null){
+		 alert('数量不能为空');
+		 return false;
+	 }
 	 if (check(contractNo,count)){
 		 return false;
 	 }else{
 		 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType,contractNo:contractNo},function(data){
 			 if (data.isOk="ok"){
 				 alert("添加成功！");
+				 window.location.href="${basePath}rfid/mencordermgr/mencordermgr_list.htm"; 
 			 }
 		 })
 	 }

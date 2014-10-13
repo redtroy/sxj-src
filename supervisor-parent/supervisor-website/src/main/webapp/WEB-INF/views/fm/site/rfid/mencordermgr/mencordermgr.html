@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 	})
 	})
 </script>
-<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
@@ -35,24 +35,46 @@ jQuery(document).ready(function($) {
 		   params=params+"&currentPage="+page;
 	  	}
 		$.post("mencordermgr_list.htm",params,function(data){
-			var tableList=$(data).find(".tabList").html();
-			$("#rightBar").find(".tabList").html(tableList);
-			var pager=$(data).find("#rightBar").children("#pager");
+			var tableList=$(data).find(".tabList");
+			var pager=$(data).find("#pager");
+			$(".tabList").empty();
+			$(".tabList").append(tableList.html());
 			var totalPage=pager.attr("totalPage");
 			var currentPage=pager.attr("currentPage");
 			loadPage(currentPage,totalPage,query);
 		})
  }
  function del(id,applyNo){
-		$.post("del.htm",{id:id,applyNo:applyNo},function(data){
-			if (data.flag=='ok'){
-				query();
-			}else{
-				alert("后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！");
-			}
-		})
-	}
+	 $("#remove_div").show();
+	 
+	  $("#remove_div button:eq(0)").unbind("click");
+	  $("#remove_div button:eq(0)").attr("value",id).attr("stateId",applyNo).click(function(){
+	  $.post("del.htm",{id:$(this).attr("value"),applyNo:$(this).attr("stateId")},function(data){
+		if (data.flag=='ok'){
+			$("#remove_div").hide();
+			query();
+		}else{
+			$("#remove_div").hide();
+			alert("后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！");
+		}
+	})
+	  })
+	 
+}
+function closeDiv(divId){
+	$("#"+divId).css("display","none");
+}
 </script>
+<Script>
+$(window).resize(); 
+jQuery(document).ready(function($) {
+	  $('#remove_div').css({
+		  position:'absolute',
+		  left: ($(window).width() - $('#remove_div').outerWidth())/2,
+		  top: ($(window).height() - $('#remove_div').outerHeight())/2 + $(document).scrollTop()
+		  });
+	})
+</Script>
 </head>
 
 <body>
@@ -119,7 +141,7 @@ jQuery(document).ready(function($) {
       <#else>
       <td><span class="state verified">已收货</span></td>
       </#if>
-	  <td><a href="" class="lnk-blue" title="后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！" onclick="del('${model.id}','${model.applyNo}'):return false;"><span class="icon icon16 icon-del"></span>删除</a></td>
+	  <td><a href="" class="lnk-blue" title="后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！" onclick="del('${model.id}','${model.applyNo}');return false;"><span class="icon icon16 icon-del"></span>删除</a></td>
     </tr>
     </#list>
   </table>
@@ -127,6 +149,18 @@ jQuery(document).ready(function($) {
 </div>
 </div>
 </div>
+  <div id="remove_div" style="display:none;" class="modal-wrap popDemo popWin mb20">
+          <div class="modal-header">
+            <div class="tit">&nbsp;</div>
+            <span class="close" onclick="closeDiv('remove_div');">关闭</span></div>
+          <div class="modal-body">
+            <p class="color-blue fontYH f18" style="margin-left:20%;">是否确认删除！</p>
+            <div class="button-box">
+              <button class="button button-pop btn-ok mr20" >确认</button>
+              <button class="button button-gray" onclick="closeDiv('remove_div');">取消</button>
+            </div>
+          </div>
+  </div>
 <@b.footer />
 <div class="modal-wrap popDemo contPop passwordPop" style="display:none;">
       <div class="modal-header"><span class="close">关闭</span></div>

@@ -6,10 +6,10 @@
   $("#sub").Validform({
 		tiptype:3,
 		callback:function(form){
-			add();
+			add_supplier();
 		}
 	});
-  function add(){
+  function add_supplier(){
 		var params=$("#sub").serialize();
 		$.post("${basePath}rfid/supplier/save_supplier.htm",params,function(data){
 			if(data.isOk=="ok"){
