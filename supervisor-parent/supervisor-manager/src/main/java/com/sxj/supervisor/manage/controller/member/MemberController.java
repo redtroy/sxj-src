@@ -152,4 +152,18 @@ public class MemberController extends BaseController {
 
 	}
 
+	/**
+	 * 验证会员是否注册过
+	 */
+	@RequestMapping("check_member")
+	public @ResponseBody Map<String, String> check_member(String name, String id) {
+		Map<String, String> map = new HashMap<String, String>();
+		MemberEntity member = memberService.getMemberByName(name);
+		if (member == null || member.getId().equals(id)) {
+			return null;
+		} else {
+			map.put("text", "该会员已存在！");
+			return map;
+		}
+	}
 }

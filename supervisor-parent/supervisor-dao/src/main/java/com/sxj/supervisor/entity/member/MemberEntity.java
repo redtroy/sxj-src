@@ -101,7 +101,7 @@ public class MemberEntity extends Pagable implements Serializable {
 	@Column(name = "AREA")
 	@NotEmpty(message = "地理区域不能为空", groups = { AddGroup.class,
 			UpdateGroup.class })
-	@Length(max = 20, message = "地理区域长度过长", groups = { AddGroup.class,
+	@Length(max = 50, message = "地理区域长度过长", groups = { AddGroup.class,
 			UpdateGroup.class })
 	private String area;
 
