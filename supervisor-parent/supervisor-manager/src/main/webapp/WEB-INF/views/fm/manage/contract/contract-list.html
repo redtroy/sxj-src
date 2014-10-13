@@ -9,16 +9,13 @@
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
-<script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 <@b.pageScript/>
 <@b.errorInfo/>
 <script>
-window.onload = function() {
-var elements = document.querySelectorAll( '.demo-image' );
-Intense( elements );
-$("#leftList").load("${basePath}basic/menu.htm");
-}
 
 function loadInfo(id){
 	$("#info"+id).load("info.htm?contractId="+id);
@@ -182,7 +179,7 @@ function check(id){
         <#if model.contract.type.getId()==0><a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a><#else> <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a></#if>
         <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a></td>
       </tr>
-      <tr id="info${model.contract.id}" class="tableInfo" ></tr>
+      <tr  class="tableInfo" > <td colspan="11" id="info${model.contract.id}"></td></tr>
       <tr id="stateLog${model.contract.contractNo}"> </tr>
       </#list>
       </#if>
@@ -191,5 +188,12 @@ function check(id){
 </div>
 <!-- 底部-->
 <@b.footer />
+<div class="viewer modal-wrap" style="display: none">
+									<div class="modal-header">
+										<span class="close">关闭</span>
+									</div>
+									<div id="viewer2" class="modal-body"></div>
+								</div>
+	<div class="maskdivgen" style="display: none"></div> 
 </body>
 <!-- InstanceEnd --></html>

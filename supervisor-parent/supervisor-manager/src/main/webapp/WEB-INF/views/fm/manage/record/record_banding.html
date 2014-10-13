@@ -37,7 +37,6 @@ function query(type){
 	console.log(memberIdB);
 	*/
 	$.post("queryRecordNo.htm",{recordType:type,memberIdA:memberIdA,memberIdB:memberIdB,contractNo:contractNo},function(data){
-		if (data.erro != "false"){
 			if (memberIdA != null && memberIdA !=""){
 				$("#memberNameB_edit").text(data.record.memberNameB);
 				$("#recordNoB_edit").text(data.record.recordNo);
@@ -50,10 +49,6 @@ function query(type){
 			if (data.refContractNo != null && data.refContractNo !=''){
 				$("#refContractNo").val(data.refContractNo);
 			}
-		}else{
-			alert("该合同不能重复绑定!");
-		}
-		
 	})
 }
 

@@ -1,11 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-        <td colspan="11">
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.imagecontainer.js" type="text/javascript"></script>
+
+<script>
+	jQuery(document).ready(function($) {
+		$('.demo-image').click(function() {
+			$('.maskdivgen').fadeIn(100);
+			$('.viewer').slideDown(200);
+		})
+		$('.modal-header .close').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.viewer').slideUp(200);
+		})
+	})
+	window.onload = function() {
+		$(".demo-image").click(function() {
+			var imageSource = $(this).attr("data-image");
+			$("#viewer2").iviewer({
+				src : imageSource,
+				mousewheel : true
+			});
+		});
+	}
+</script>
+
+       
         <div class="infoBox text-left">
           <ul class="ly-clearFix">
             <li>
@@ -341,6 +360,3 @@
             <div class="btnBox text-center"><a href="javascript:void(0)" class="button button-gray button-small" onclick="closeContract('${contractId}')">收起</a></div>
           </div>
          
-        </td>
-</body>
-</html>

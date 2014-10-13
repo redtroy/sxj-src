@@ -12,8 +12,35 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.imagecontainer.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
 
+	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+<script>
+	jQuery(document).ready(function($) {
+		$('.demo-image').click(function() {
+			$('.maskdivgen').fadeIn(100);
+			$('.viewer').slideDown(200);
+		})
+		$('.modal-header .close').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.viewer').slideUp(200);
+		})
+	})
+	window.onload = function() {
+		$(".demo-image").click(function() {
+			var imageSource = $(this).attr("data-image");
+			$("#viewer2").iviewer({
+				src : imageSource,
+				mousewheel : true
+			});
+		});
+	}
+</script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -155,8 +182,8 @@
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
-								<th>数量㎡/吨</th>
-								<th>单价<span class="money">&yen;</span>/㎡/吨
+								<th>数量<#if record.contractType.getId()==1>/㎡</#if><#if record.contractType.getId()==2>/吨</#if></th>
+								<th>单价<span class="money">&yen;</span><#if record.contractType.getId()==1>/㎡</#if><#if record.contractType.getId()==2>/吨</#if>
 								</th>
 								<th>金额<span class="money">&yen;</span></th>
 								<th>备注说明</th>
@@ -177,7 +204,7 @@
 							<tr id="total_tr">
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td><span id="quantitySum">0</span>吨</td>
+								<td><span id="quantitySum">0</span><#if record.contractType.getId()==1>/㎡</#if><#if record.contractType.getId()==2>/吨</#if></td>
 								<td>&nbsp;</td>
 								<td><span id="amountSum">0</span>元</td>
 								<td>&nbsp;</td>
@@ -204,30 +231,24 @@
 						<div class="contPic">
 							<label>合同扫描件</label>
 							<div class="rollBox">
-								<div class="LeftBotton" onmousedown="ISL_GoUp()"
-									onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-								<div class="Cont" id="ISL_Cont">
-									<div class="ScrCont">
-										<div id="List1">
-											<input type="hidden" value="${record.imgPath}"
-												name="contract.imgPath" />
-											<!-- 图片列表 begin -->
-											<#assign arr=(record.imgPath?split(","))> <#list arr as
-											imgPath>
-											<div class="pic">
-												<a href="#" target="_blank"><img
-													src="${b.imagePath}${imgPath}" /></a>
+										<div class="LeftBotton" onmousedown="ISL_GoUp()"
+											onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
+										<div class="Cont" id="ISL_Cont">
+											<div class="ScrCont">
+												<div id="List1">
+													<!-- 图片列表 begin -->
+													<#assign arr=(record.imgPath?split(","))> 
+													<#list arr as imgPath>
+													 <div class="pic"><a href="#" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}"  /></a></div>
+													</#list>
+													<!-- 图片列表 end -->
+												</div>
+												<div id="List2"></div>
 											</div>
-											</#list>
-
-											<!-- 图片列表 end -->
 										</div>
-										<div id="List2"></div>
+										<div class="RightBotton" onmousedown="ISL_GoDown()"
+											onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
 									</div>
-								</div>
-								<div class="RightBotton" onmousedown="ISL_GoDown()"
-									onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
-							</div>
 						</div>
 						<div>
 							<label>关联招标合同号</label><input type="text" value=""
@@ -247,6 +268,13 @@
 		</div>
 	</div>
 	<@b.footer />
+	<div class="viewer modal-wrap" style="display: none">
+									<div class="modal-header">
+										<span class="close">关闭</span>
+									</div>
+									<div id="viewer2" class="modal-body"></div>
+								</div>
+	<div class="maskdivgen" style="display: none"></div> 
 </body>
 <!-- InstanceEnd -->
 </html>
