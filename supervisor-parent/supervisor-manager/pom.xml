@@ -180,8 +180,12 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
+<<<<<<< HEAD
+				<configuration>
+=======
 				<configuration>
 				<!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
+>>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 				</configuration>
 			</plugin>
 		</plugins>
