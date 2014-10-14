@@ -13,38 +13,22 @@
 				<param-value>classpath:spring/mvc/mvc-config.xml</param-value>
 			</init-param>
 		</servlet>
-		<servlet-mapping>
+	  <servlet-mapping>
 	    <servlet-name>springmvc</servlet-name>
-	    <url-pattern>*.jpg</url-pattern>
+	    <url-pattern>*.JPG</url-pattern>
 	  </servlet-mapping>
 	  <servlet-mapping>
 	    <servlet-name>springmvc</servlet-name>
-	    <url-pattern>/</url-pattern>
+	    <url-pattern>*.JPEG</url-pattern>
 	  </servlet-mapping>
 	  <servlet-mapping>
 	    <servlet-name>springmvc</servlet-name>
-	    <url-pattern>*.jpeg</url-pattern>
+	    <url-pattern>*.PNG</url-pattern>
 	  </servlet-mapping>
 	  <servlet-mapping>
 	    <servlet-name>springmvc</servlet-name>
-	    <url-pattern>*.png</url-pattern>
+	    <url-pattern>*.GIF</url-pattern>
 	  </servlet-mapping>
-	  <servlet-mapping>
-	    <servlet-name>springmvc</servlet-name>
-	    <url-pattern>*.gif</url-pattern>
-	  </servlet-mapping>
-	  <filter>
-	    <filter-name>charset</filter-name>
-	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-	    <init-param>
-	      <param-name>encoding</param-name>
-	      <param-value>UTF-8</param-value>
-	    </init-param>
-	  </filter>
-	  <filter-mapping>
-	    <filter-name>charset</filter-name>
-	    <url-pattern>/*</url-pattern>
-	  </filter-mapping>
 	  <filter>
 	    <filter-name>CacheFilter</filter-name>
 	    <filter-class>com.tacitknowledge.filters.cache.CacheHeaderFilter</filter-class>
