@@ -117,6 +117,23 @@ jQuery(document).ready(function($) {
 		   alert("姓名不能为空，或特殊字符");
 		   return false;
 	   }
+	   //判断子会员帐号是否存在
+	   var flag=false;
+	   $.ajax({
+	         url: "check_account.htm",
+	         type: "POST",
+	         data: ({param:accountName}),
+	         async: false,
+	         success: function(data){
+	           if (data.status == "n"){
+	        	  alert('会员名称已存在！');
+	        	  flag=true;
+	           }
+	         }
+	       });
+	   if (flag){
+		   return false;
+	   }
 	  $("#edit_form").append(params.html());
 	  $.post("editAccount.htm",params,function(data){
 			if(data.isOK=='ok'){

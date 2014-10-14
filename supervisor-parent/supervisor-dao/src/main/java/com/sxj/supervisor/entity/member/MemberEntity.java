@@ -210,6 +210,14 @@ public class MemberEntity extends Pagable implements Serializable {
 	@Column(name = "FLAG")
 	private Boolean flag;
 
+	/**
+	 * 扫描设备号
+	 * 
+	 * @return
+	 */
+	@Column(name = "DEVICE_NUMBER")
+	private String deviceNumber;
+
 	public Boolean getFlag() {
 		return flag;
 	}
