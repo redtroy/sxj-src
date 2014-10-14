@@ -26,6 +26,7 @@
 		<result property="accountNum" column="ACCOUNT_NUM" jdbcType="INTEGER" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="deviceNumber" column="DEVICE_NUMBER" jdbcType="VARCHAR" />
 		<result property="bLicensePath" column="B_LICENSE_PATH"
 			jdbcType="VARCHAR" />
 		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
