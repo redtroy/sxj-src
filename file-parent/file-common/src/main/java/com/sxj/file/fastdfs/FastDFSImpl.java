@@ -4,9 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
-import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,39 +26,57 @@ public class FastDFSImpl implements IFileUpLoad {
 
 	private static final Log Logger = LogFactory.getLog(FastDFSImpl.class);
 
+	private DfsConfig config;
+
+	private String trackerHost;
+
+	private Integer trackerPort;
+
+	private long cacheTime = 10 * 24 * 3600 * 1000;
+
 	private TrackerClient tracker;
 
 	private TrackerServer trackerServer;
 
 	private StorageServer storageServer;
 
-	private static final long cacheTime = 10 * 24 * 3600 * 1000;
-
 	static {
-		try {
-			InputStream inputFile = FastDFSImpl.class
-					.getResourceAsStream("file_client.conf");
-			File file = new File("file_client_new.conf");
-			FileOutputStream out = new FileOutputStream(file);
-			int c = inputFile.read();
-			while (c != -1) {
-				out.write(c);
-				c = inputFile.read();
-			}
-			inputFile.close();
-			out.close();
-
-			ClientGlobal.init(file.getPath());
-			LocalFileUtil.delete(file);
-			Logger.info("文件系统初始化成功");
-		} catch (IOException e) {
-			Logger.error(e.toString());
-		} catch (Exception e) {
-			Logger.error(e.toString());
-		}
+		// try {
+		// InputStream inputFile = FastDFSImpl.class
+		// .getResourceAsStream("file_client.conf");
+		// File file = new File("file_client_new.conf");
+		// FileOutputStream out = new FileOutputStream(file);
+		// int c = inputFile.read();
+		// while (c != -1) {
+		// out.write(c);
+		// c = inputFile.read();
+		// }
+		// inputFile.close();
+		// out.close();
+		// ClientGlobal.init(file.getPath());
+		// LocalFileUtil.delete(file);
+		// Logger.info("文件系统初始化成功");
+		// } catch (IOException e) {
+		// Logger.error(e.toString());
+		// } catch (Exception e) {
+		// Logger.error(e.toString());
+		// }
 	}
 
-	public FastDFSImpl(TrackerGroup group) {
+	public void init() {
+		if ("no".equals(config.getAnti_steal_token())) {
+			ClientGlobal.setG_anti_steal_token(false);
+		} else {
+			ClientGlobal.setG_anti_steal_token(true);
+		}
+		ClientGlobal.setG_charset(config.getCharset());
+		ClientGlobal.setG_connect_timeout(config.getConnect_timeout());
+		ClientGlobal.setG_network_timeout(config.getNetwork_timeout());
+		ClientGlobal.setG_secret_key(config.getSecret_key());
+		ClientGlobal.setG_tracker_http_port(config.getTracker_http_port());
+		TrackerGroup group = new TrackerGroup(
+				new InetSocketAddress[] { new InetSocketAddress(trackerHost,
+						trackerPort) });
 		tracker = new TrackerClient(group);
 	}
 
@@ -207,58 +224,70 @@ public class FastDFSImpl implements IFileUpLoad {
 		}
 	}
 
-	public static void main(String[] args) {
-		try {
-			String aa = "sasa.gif";
-			boolean ac = aa.matches("[.]\\p{Punct}[.]");
-			System.out.println(ac);
-			long start = System.currentTimeMillis();
-			IFileUpLoad fileuplaod = UpLoadFactory.buildImageUpLoad();
-			for (int i = 0; i < 2; i++) {
-				byte[] ass = LocalFileUtil
-						.readByte("C:/Users/dujinxin/Desktop/adu/DSC_0357.JPG");
-				String id = fileuplaod.uploadFile(ass, "jpg");
-				System.out.println(id);
-				System.out.println(i);
-			}
-//			System.out.println(System.currentTimeMillis() - start);
-//			FastDFSImpl im = new FastDFSImpl();
-//			im.deleteFile("http://192.168.18.118/00/00/wKgSdkvFmcoAAAAAAAASoE3DieQ165.jpg");
-//			String file_id = "http://192.168.18.118/data/00/AB/wKgSdkvFfIsAAAAAAAASoF6t6Q8275.jpg";
-//
-//			if (StringUtil.isNotEmpty(file_id)) {
-//				file_id = file_id.substring(7, file_id.length());
-//				String[] aaa = file_id.split("/");
-//				String http = aaa[0] + "/" + aaa[1];
-//				file_id = file_id.substring(http.length(), file_id.length());
-//				http = properties.getProperty(http);
-//				file_id = http + file_id;
-//			}
-//			System.out.println(file_id);
-			String serviceUrl = "http://pay.5iding.com/eqtpayweb/paygetway/to_paygetway.htm?orderId=null&billId=BI201109062012170072;jsessionid=50E57794E5C6B4AE8CFC035372389162.node2&amount=null&returnUrl=null&type=2";
-			// String serviceUrl = constructServiceUrl(request, response);
-			//
-			// int index = serviceUrl.lastIndexOf("jsessionid");
-			// if (index == -1) {
-			// serviceUrl = URLDecoder.decode(serviceUrl, "utf-8");
-			// String[] serviceUrls = serviceUrl.split("[?]");
-			// serviceUrl = serviceUrls[0] + ";jsessionid="
-			// +"fsdfasdfasd.node4";
-			// if (serviceUrls.length == 2) {
-			// serviceUrl = serviceUrl + "?"
-			// + serviceUrls[serviceUrls.length - 1];
-			// }
-			// serviceUrl = URLEncoder.encode(serviceUrl, "utf-8");
-			// }
-			// Date aaa = new Date(System.currentTimeMillis() + (30 * 1000));
-			// Calendar calendar = Calendar.getInstance();
-			// calendar.add(Calendar.SECOND, 30);
-			// System.out.println(aaa);
-			// System.out.println(calendar.getTime());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public DfsConfig getConfig() {
+		return config;
 	}
+
+	public void setConfig(DfsConfig config) {
+		this.config = config;
+	}
+
+	public String getTrackerHost() {
+		return trackerHost;
+	}
+
+	public void setTrackerHost(String trackerHost) {
+		this.trackerHost = trackerHost;
+	}
+
+	public Integer getTrackerPort() {
+		return trackerPort;
+	}
+
+	public void setTrackerPort(Integer trackerPort) {
+		this.trackerPort = trackerPort;
+	}
+
+	public long getCacheTime() {
+		return cacheTime;
+	}
+
+	public void setCacheTime(long cacheTime) {
+		this.cacheTime = cacheTime;
+	}
+
+	/**
+	 * public static void main(String[] args) { try { String aa = "sasa.gif";
+	 * boolean ac = aa.matches("[.]\\p{Punct}[.]"); System.out.println(ac); long
+	 * start = System.currentTimeMillis(); IFileUpLoad fileuplaod =
+	 * UpLoadFactory.buildImageUpLoad(); for (int i = 0; i < 2; i++) { byte[]
+	 * ass = LocalFileUtil
+	 * .readByte("C:/Users/dujinxin/Desktop/adu/DSC_0357.JPG"); String id =
+	 * fileuplaod.uploadFile(ass, "jpg"); System.out.println(id);
+	 * System.out.println(i); } // System.out.println(System.currentTimeMillis()
+	 * - start); // FastDFSImpl im = new FastDFSImpl(); // im.deleteFile(
+	 * "http://192.168.18.118/00/00/wKgSdkvFmcoAAAAAAAASoE3DieQ165.jpg"); //
+	 * String file_id = //
+	 * "http://192.168.18.118/data/00/AB/wKgSdkvFfIsAAAAAAAASoF6t6Q8275.jpg"; //
+	 * // if (StringUtil.isNotEmpty(file_id)) { // file_id =
+	 * file_id.substring(7, file_id.length()); // String[] aaa =
+	 * file_id.split("/"); // String http = aaa[0] + "/" + aaa[1]; // file_id =
+	 * file_id.substring(http.length(), file_id.length()); // http =
+	 * properties.getProperty(http); // file_id = http + file_id; // } //
+	 * System.out.println(file_id); String serviceUrl =
+	 * "http://pay.5iding.com/eqtpayweb/paygetway/to_paygetway.htm?orderId=null&billId=BI201109062012170072;jsessionid=50E57794E5C6B4AE8CFC035372389162.node2&amount=null&returnUrl=null&type=2"
+	 * ; // String serviceUrl = constructServiceUrl(request, response); // //
+	 * int index = serviceUrl.lastIndexOf("jsessionid"); // if (index == -1) {
+	 * // serviceUrl = URLDecoder.decode(serviceUrl, "utf-8"); // String[]
+	 * serviceUrls = serviceUrl.split("[?]"); // serviceUrl = serviceUrls[0] +
+	 * ";jsessionid=" // +"fsdfasdfasd.node4"; // if (serviceUrls.length == 2) {
+	 * // serviceUrl = serviceUrl + "?" // + serviceUrls[serviceUrls.length -
+	 * 1]; // } // serviceUrl = URLEncoder.encode(serviceUrl, "utf-8"); // } //
+	 * Date aaa = new Date(System.currentTimeMillis() + (30 * 1000)); //
+	 * Calendar calendar = Calendar.getInstance(); //
+	 * calendar.add(Calendar.SECOND, 30); // System.out.println(aaa); //
+	 * System.out.println(calendar.getTime()); } catch (Exception e) { // TODO
+	 * Auto-generated catch block e.printStackTrace(); } }
+	 **/
 
 }
