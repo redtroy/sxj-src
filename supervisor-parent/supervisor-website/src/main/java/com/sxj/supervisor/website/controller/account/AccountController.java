@@ -117,11 +117,13 @@ public class AccountController extends BaseController {
 	 * 修改密码
 	 */
 	@RequestMapping("save_pwd")
-	public @ResponseBody Map<String, String> save_pwd(String id, String password) {
-		// if (StringUtils.isNotEmpty(account.getPassword())) {
-		//
-		// }
-		// accountService.modifyAccount(account, null);
+	public @ResponseBody Map<String, String> save_pwd(String id, String password)
+			throws WebException {
+		try {
+			accountService.edit_pwd(id, password);
+		} catch (Exception e) {
+			throw new WebException(e.getMessage());
+		}
 		return null;
 	}
 
