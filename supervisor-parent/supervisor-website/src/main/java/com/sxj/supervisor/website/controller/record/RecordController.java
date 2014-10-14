@@ -22,8 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import com.sxj.file.common.LocalFileUtil;
-import com.sxj.file.fastdfs.FastDFSImpl;
-import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -53,16 +51,19 @@ public class RecordController extends BaseController {
 	 * 合同service
 	 */
 	@Autowired
-	IContractService contractService;
+	private IContractService contractService;
 
 	/**
 	 * 备案service
 	 */
 	@Autowired
-	IRecordService recordService;
-	
+	private IRecordService recordService;
+
 	@Autowired
-	IMemberService memberService;
+	private IMemberService memberService;
+
+	@Autowired
+	private IFileUpLoad fastDfsClient;
 
 	@RequestMapping("/query")
 	public String to_query(ModelMap map, HttpSession session, RecordQuery query)
@@ -77,7 +78,7 @@ public class RecordController extends BaseController {
 			map.put("recordlist", list);
 			map.put("confirmState", rse);
 			map.put("query", query);
-			
+
 			registChannel(MessageChannel.RECORD_MESSAGE, RecordThread.class);
 			return "site/record/contract-list";
 		} catch (Exception e) {
@@ -128,8 +129,7 @@ public class RecordController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				IFileUpLoad dfs = new FastDFSImpl(FileGroup.imgGroup);
-				String fileId = dfs.uploadFile(myfile.getBytes(), LocalFileUtil
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(), LocalFileUtil
 						.getFileExtName(myfile.getOriginalFilename()));
 				fileIds.add(fileId);
 			}
@@ -173,20 +173,21 @@ public class RecordController extends BaseController {
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			MemberEntity member =memberService.memberInfo(record.getMemberIdB());
-			
+			MemberEntity member = memberService.memberInfo(record
+					.getMemberIdB());
+
 			record.setApplyId(userBean.getMember().getMemberNo());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
 			record.setType(RecordTypeEnum.contract);
 			record.setApplyDate(new Date());
 			record.setDelState(false);
-			if(member.getType().getId()==1){
+			if (member.getType().getId() == 1) {
 				record.setContractType(ContractTypeEnum.glass);// 合同类型
-			}else if(member.getType().getId()==2){
+			} else if (member.getType().getId() == 2) {
 				record.setContractType(ContractTypeEnum.extrusions);// 合同类型
 			}
-			
+
 			record.setFlag(RecordFlagEnum.A);
 			record.setConfirmState(RecordConfirmStateEnum.accepted);
 			recordService.addRecord(record);
@@ -246,16 +247,17 @@ public class RecordController extends BaseController {
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			MemberEntity member =memberService.memberInfo(record.getMemberIdB());
+			MemberEntity member = memberService.memberInfo(record
+					.getMemberIdB());
 			record.setApplyId(userBean.getMember().getMemberNo());
 			record.setApplyName(userBean.getMember().getName());
 			record.setState(RecordStateEnum.noBinding);
 			record.setType(RecordTypeEnum.contract);
 			record.setApplyDate(new Date());
 			record.setDelState(false);
-			if(member.getType().getId()==1){
+			if (member.getType().getId() == 1) {
 				record.setContractType(ContractTypeEnum.glass);// 合同类型
-			}else if(member.getType().getId()==2){
+			} else if (member.getType().getId() == 2) {
 				record.setContractType(ContractTypeEnum.extrusions);// 合同类型
 			}
 			record.setFlag(RecordFlagEnum.B);
@@ -376,17 +378,17 @@ public class RecordController extends BaseController {
 	}
 
 	@RequestMapping("confirmRecord")
-	public @ResponseBody Map<String, String> confirmRecord(String recordId,String contractId,
-			HttpSession session) throws WebException {
+	public @ResponseBody Map<String, String> confirmRecord(String recordId,
+			String contractId, HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			if (member.getMember().getType().getId() == 0) {
-				recordService.modifyState(contractId,recordId,
+				recordService.modifyState(contractId, recordId,
 						RecordConfirmStateEnum.confirmedA);
 			} else {
-				recordService.modifyState(contractId,recordId,
+				recordService.modifyState(contractId, recordId,
 						RecordConfirmStateEnum.confirmedB);
 			}
 			map.put("isOK", "ok");

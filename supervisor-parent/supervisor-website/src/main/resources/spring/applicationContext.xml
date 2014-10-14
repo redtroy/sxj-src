@@ -55,4 +55,33 @@
 		<!-- <property name="configFile" value="cache.properties"></property> -->
 		<property name="databaseId" value="1"></property>
 	</bean>
+
+	<!-- FastDfs配置 -->
+	<bean id="dfsConfig" class="com.sxj.file.fastdfs.DfsConfig">
+		<property name="connect_timeout">
+			<value>${dfs.connect_timeout}</value>
+		</property>
+		<property name="network_timeout">
+			<value>${dfs.network_timeout}</value>
+		</property>
+		<property name="charset">
+			<value>${dfs.charset}</value>
+		</property>
+		<property name="tracker_http_port">
+			<value>${dfs.http.tracker_http_port}</value>
+		</property>
+		<property name="anti_steal_token">
+			<value>${dfs.http.anti_steal_token}</value>
+		</property>
+		<property name="secret_key">
+			<value>${dfs.http.secret_key}</value>
+		</property>
+	</bean>
+
+	<bean id="fastDfsClient" class="com.sxj.file.fastdfs.FastDFSImpl"
+		init-method="init">
+		<property name="config" ref="dfsConfig" />
+		<property name="trackerHost" value="192.168.1.13" />
+		<property name="trackerPort" value="22122" />
+	</bean>
 </beans>

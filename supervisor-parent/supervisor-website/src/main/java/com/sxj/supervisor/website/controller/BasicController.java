@@ -24,8 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import com.sxj.file.common.LocalFileUtil;
-import com.sxj.file.fastdfs.FastDFSImpl;
-import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
@@ -56,6 +54,9 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IMemberRoleService roleService;
+	
+	@Autowired
+	private IFileUpLoad fastDfsClient;
 
 	@RequestMapping("index")
 	public String ToIndex(HttpServletRequest request) {
@@ -192,8 +193,7 @@ public class BasicController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				IFileUpLoad dfs = new FastDFSImpl(FileGroup.imgGroup);
-				String fileId = dfs.uploadFile(myfile.getBytes(), LocalFileUtil
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(), LocalFileUtil
 						.getFileExtName(myfile.getOriginalFilename()));
 				fileIds.add(fileId);
 			}

@@ -51,6 +51,9 @@ public class RecordController extends BaseController {
 	@Autowired
 	private IContractService contractService;
 
+	@Autowired
+	private IFileUpLoad fastDfsClient;
+
 	/**
 	 * 备案管理页面
 	 * 
@@ -206,8 +209,7 @@ public class RecordController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				IFileUpLoad dfs = new FastDFSImpl(FileGroup.imgGroup);
-				String fileId = dfs.uploadFile(myfile.getBytes(), LocalFileUtil
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(), LocalFileUtil
 						.getFileExtName(myfile.getOriginalFilename()));
 				fileIds.add(fileId);
 			}

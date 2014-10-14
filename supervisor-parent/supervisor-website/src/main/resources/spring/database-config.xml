@@ -11,6 +11,7 @@
 			<list>
 				<value>classpath*:config/database.properties</value>
 				<value>classpath*:config/mobile_message.properties</value>
+				<value>classpath*:config/dfs_config.properties</value>
 			</list>
 		</property>
 	</bean>
