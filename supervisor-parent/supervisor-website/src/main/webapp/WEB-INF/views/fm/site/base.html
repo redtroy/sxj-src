@@ -163,7 +163,7 @@ function classLoadUpload(text){
 	        buttonText:text,
 	        onUploadSuccess : function(file, data, response) {
 	        	var dataObj=eval("("+data+")");//转换为json对象 
-	        	$(this.button).parent(".uploadify").siblings(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+	        	$(this.button).parent(".uploadify").siblings(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.JPG' alt='' />");
 	        	  var hideVal= $(this.button).parent(".uploadify").siblings(".imgPathHide ").val();
 	        	    if(hideVal==""){
 	        	    	hideVal+=dataObj.fileIds;

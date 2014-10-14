@@ -20,7 +20,7 @@ $(document).ready(function() {
 function uploadLicense(data){
     var dataObj=eval("("+data+")");//转换为json对象
     if ($("#bLicensePath_img")!=null){
-    $("#bLicensePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.jpg")
+    $("#bLicensePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG")
     }else{
     	
     }
@@ -29,7 +29,7 @@ function uploadLicense(data){
 
 function uploadenergyPath(data){
     var dataObj=eval("("+data+")");//转换为json对象 
-    $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.jpg");
+    $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $("#energyPath_hidden").val(dataObj.fileIds);
 }
 

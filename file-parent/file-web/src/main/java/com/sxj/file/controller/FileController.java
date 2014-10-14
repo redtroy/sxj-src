@@ -73,6 +73,7 @@ public class FileController {
 			}
 			String url = request.getRequestURI();
 			String type = url.substring(url.lastIndexOf(".") + 1, url.length());
+			type=type.toLowerCase();
 			StringBuffer idbuff = new StringBuffer();
 			idbuff.append(group);
 			idbuff.append("/");

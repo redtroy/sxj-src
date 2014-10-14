@@ -68,7 +68,7 @@ $(document).ready(function() {
 function upload(data)
 {
     var dataObj=eval("("+data+")");//转换为json对象 
-    $("#BcgImageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.jpg' alt='' />");
+    $("#BcgImageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.JPG' alt='' />");
     //获取隐藏域
    var hideVal= $("#BcgImgPathHide").val();
     if(hideVal==""){

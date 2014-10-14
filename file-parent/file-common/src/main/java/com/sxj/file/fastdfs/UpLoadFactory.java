@@ -1,6 +1,5 @@
 package com.sxj.file.fastdfs;
 
-import com.sxj.file.common.MessageUtils;
 
 public class UpLoadFactory {
 
