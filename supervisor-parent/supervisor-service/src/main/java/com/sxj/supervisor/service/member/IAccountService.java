@@ -27,4 +27,6 @@ public interface IAccountService {
 	public String editState(String id, Integer state) throws ServiceException;
 
 	public String initializePwd(String id) throws ServiceException;
+
+	public String edit_pwd(String id, String pwd) throws ServiceException;
 }

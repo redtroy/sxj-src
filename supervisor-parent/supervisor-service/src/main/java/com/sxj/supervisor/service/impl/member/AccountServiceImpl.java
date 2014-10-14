@@ -256,4 +256,18 @@ public class AccountServiceImpl implements IAccountService {
 			throw new ServiceException("根据子账号查询信息错误", e.getMessage());
 		}
 	}
+
+	@Override
+	public String edit_pwd(String id, String pwd) throws ServiceException {
+		try {
+			AccountEntity account = new AccountEntity();
+			account.setId(id);
+			account.setPassword(EncryptUtil.md5Hex(pwd));
+			accountDao.updateAccount(account);
+		} catch (Exception e) {
+			SxjLogger.error("密码更新错误", e, this.getClass());
+			throw new ServiceException("密码更新错误", e.getMessage());
+		}
+		return null;
+	}
 }
