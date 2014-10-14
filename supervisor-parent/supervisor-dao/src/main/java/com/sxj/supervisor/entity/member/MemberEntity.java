@@ -218,6 +218,14 @@ public class MemberEntity extends Pagable implements Serializable {
 	@Column(name = "DEVICE_NUMBER")
 	private String deviceNumber;
 
+	public String getDeviceNumber() {
+		return deviceNumber;
+	}
+
+	public void setDeviceNumber(String deviceNumber) {
+		this.deviceNumber = deviceNumber;
+	}
+
 	public Boolean getFlag() {
 		return flag;
 	}
