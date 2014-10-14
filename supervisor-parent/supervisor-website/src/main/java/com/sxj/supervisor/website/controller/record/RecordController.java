@@ -26,6 +26,7 @@ import com.sxj.file.fastdfs.FastDFSImpl;
 import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
@@ -302,11 +303,13 @@ public class RecordController extends BaseController {
 			}
 			if (flag.equals("1")) {
 				record.setType(RecordTypeEnum.change);
+				record.setState(RecordStateEnum.nochange);
 			} else if (flag.equals("2")) {
 				record.setType(RecordTypeEnum.supplement);
+				record.setState(RecordStateEnum.nosupplement);
 			}
 			record.setConfirmState(RecordConfirmStateEnum.accepted);
-			recordService.addRecord(record);
+			recordService.sevaRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;
@@ -390,6 +393,46 @@ public class RecordController extends BaseController {
 						RecordConfirmStateEnum.confirmedB);
 			}
 			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
+		}
+	}
+	/**
+	 * 获取备案批次
+	 * @param recordId
+	 * @param contractId
+	 * @param session
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("getBatch")
+	public @ResponseBody Map<String, String> getBatch(String recordId) throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			String batch =recordService.getBatch(recordId);
+			if(batch!=""){
+				map.put("batch", batch);
+			}else{
+				map.put("batch", "");
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
+		}
+	}
+	@RequestMapping("getRfid")
+	public @ResponseBody Map<String, String> getRfid(String batchId) throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			String rfid =recordService.getRfid(batchId);
+			if(rfid!=""){
+				map.put("rfid", rfid);
+			}else{
+				map.put("rfid", "");
+			}
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认备案信息错误", e, this.getClass());

@@ -63,4 +63,10 @@ public interface IRecordService {
 	 * @param state
 	 */
 	public void modifyState(String contractId,String recordId, RecordConfirmStateEnum state);
+	
+	public String  getBatch(String recordId);
+	
+	public String  getRfid(String batchId);
+	
+	public void sevaRecord(RecordEntity record) throws ServiceException ;
 }

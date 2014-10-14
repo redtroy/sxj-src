@@ -6,28 +6,33 @@
 <title>私享家电子商贸平台</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
-<script src="${b.staticPath}js/jqueryui.js"></script>
 	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+	<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <@b.pageScript/>
 <@b.errorInfo/>
 <script>
 
 function loadInfo(id){
 	$("#info"+id).load("info.htm?contractId="+id);
+	$("#info"+id).show();
 }
 function closeContract(id){
 	$("#info"+id).html("");
+	$("#info"+id).hide();
 }
 function stateLog(contractNo){
 	$("#stateLog"+contractNo).load("stateLog.htm?contractNo="+contractNo);
+	$("#stateLog"+contractNo).show();
 }
 function closeStateLog(contractNo){
 	$("#stateLog"+contractNo).html("");
+	$("#stateLog"+contractNo).hide();
 }
 function query(page){
 	var params=$("#search_form").serialize();
@@ -179,8 +184,8 @@ function check(id){
         <#if model.contract.type.getId()==0><a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a><#else> <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a></#if>
         <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a></td>
       </tr>
-      <tr  class="tableInfo" > <td colspan="11" id="info${model.contract.id}"></td></tr>
-      <tr id="stateLog${model.contract.contractNo}"> </tr>
+      <tr  class="tableInfo" style="display: none;" id="info${model.contract.id}"> </tr>
+      <tr id="stateLog${model.contract.contractNo}" style="display: none;"> </tr>
       </#list>
       </#if>
     </table>

@@ -9,13 +9,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
+import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -36,6 +39,9 @@ public class RecordServiceImpl implements IRecordService {
 
 	@Autowired
 	private IContractDao contractDao;
+	
+	@Autowired
+	private IContractBatchDao batchDao;
 
 	/**
 	 * 新增备案
@@ -223,5 +229,69 @@ public class RecordServiceImpl implements IRecordService {
 			throw new ServiceException("", e);
 		}
 
+	}
+
+	/**
+	 * 获取批次
+	 * @param recordId
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public String getBatch(String recordId) {
+		try{
+			RecordEntity  re= recordDao.getRecord(recordId);
+			QueryCondition<ContractBatchEntity> query =new QueryCondition<ContractBatchEntity>();
+			query.addCondition("contractId", re.getContractNo());
+			List<ContractBatchEntity> batchList =batchDao.queryBacths(query);
+			String batch ="";
+			String batchId="";
+			for (ContractBatchEntity contractBatchEntity : batchList) {
+				batch+=contractBatchEntity.getBatchNo()+",";
+				batchId+=contractBatchEntity.getId()+",";
+			}
+			if(batch!=""){
+				batch=batch.substring(0,batch.length()-1);
+				batchId=batchId.substring(0,batchId.length()-1);
+				StringBuffer sb = new StringBuffer();
+				sb.append(batch).append("#").append(batchId);
+				return sb.toString();
+			}else{
+				return "";
+			}
+		} catch (Exception e) {
+			throw new ServiceException("查询批次信息错误", e);
+		}
+	}
+
+	@Override
+	public String getRfid(String batchId) {
+		try{
+			ContractBatchEntity batch = batchDao.getBatch(batchId);
+			return batch.getRfidNo();
+		} catch (Exception e) {
+			throw new ServiceException("查询rfid信息错误", e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public void sevaRecord(RecordEntity record) throws ServiceException {
+		try{
+		recordDao.addRecord(record);
+		//更改合同关联所有的备案状态
+		String contractNo=record.getContractNo();
+		contractService.getContractByContractNo(contractNo);
+		RecordQuery query = new RecordQuery();
+		query.setContractNo(contractNo);
+		query.setRecordType(RecordTypeEnum.contract.getId());
+		List<RecordEntity> list = queryRecord(query);
+		for (RecordEntity recordEntity : list) {
+			recordEntity.setConfirmState(RecordConfirmStateEnum.accepted);
+			recordDao.updateRecord(recordEntity);
+		}
+	} catch (Exception e) {
+		throw new ServiceException("更新备案错误", e);
+	}
 	}
 }
