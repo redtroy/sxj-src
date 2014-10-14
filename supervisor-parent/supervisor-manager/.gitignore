@@ -7,3 +7,4 @@ target/
 sjxlogs/
 
 *.orig
+/pom.xml
