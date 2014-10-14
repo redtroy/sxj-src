@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
 			var imgPaths =imgPath.split(",");
 			for (i=0;i<imgPaths.length ;i++ ) { 
 				var n =i+1;
-				$("#List1").append($("<div class='pic'><a href='#' class='demo-image' data-image='${b.imagePath}"+imgPaths[i]+"'><img src='${b.imagePath}"+imgPaths[i]+"80x100.jpg'  /></a>"+n+"</div>").click(function(){
+				$("#List1").append($("<div class='pic'><a href='#' class='demo-image' data-image='${b.imagePath}"+imgPaths[i]+"'><img src='${b.imagePath}"+imgPaths[i]+"80x100.JPG'  /></a>"+n+"</div>").click(function(){
 					var imageSource=$(this).children(".demo-image").attr("data-image");
 					$("#image-list").hide();
 					$("#viewer2").iviewer({

@@ -20,7 +20,7 @@
 	});
 	function upload(data){
 	    var dataObj=eval("("+data+")");//转换为json对象 
-	    $("#imageList").attr("src","${b.imagePath}"+dataObj.fileIds+"100x120.jpg");
+	    $("#imageList").attr("src","${b.imagePath}"+dataObj.fileIds+"100x120.JPG");
 	    var hideVal= $("#imgPathHide").val();
         if(hideVal==""){
         	hideVal+=dataObj.fileIds;
