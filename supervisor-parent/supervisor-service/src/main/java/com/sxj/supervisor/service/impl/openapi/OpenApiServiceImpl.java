@@ -9,7 +9,11 @@ public class OpenApiServiceImpl implements IOpenApiService {
 	@Override
 	public ContractBatchEntity getBatchInfo(String rfidNo)
 			throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return null;
 	}
 

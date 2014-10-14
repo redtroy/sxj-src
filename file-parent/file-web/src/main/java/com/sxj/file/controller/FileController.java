@@ -10,19 +10,22 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.file.fastdfs.IFileUpLoad;
-import com.sxj.file.fastdfs.UpLoadFactory;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
 public class FileController {
+
+	@Autowired
+	private IFileUpLoad fastDfsClient;
 
 	@RequestMapping(value = "{group}/{st}/{f1}/{f2}/{id}")
 	public void getImage(@PathVariable String group, @PathVariable String st,
@@ -91,7 +94,7 @@ public class FileController {
 			int index = id.lastIndexOf(".");
 			int index2 = id.indexOf(type);
 			if (index2 == index + 1) {
-				image = UpLoadFactory.buildImageUpLoad().downloadFile(id);
+				image = fastDfsClient.downloadFile(id);
 			} else {
 				String size = id.substring(index2 + type.length(), index);
 				id = id.substring(0, index2 + type.length());
@@ -102,8 +105,7 @@ public class FileController {
 					width = 500;
 					height = 500;
 				}
-				image = UpLoadFactory.buildImageUpLoad().getSmallImage(id,
-						width, height);
+				image = fastDfsClient.getSmallImage(id, width, height);
 			}
 			if (image != null && image.length > 0) {
 				ServletOutputStream output = response.getOutputStream();
