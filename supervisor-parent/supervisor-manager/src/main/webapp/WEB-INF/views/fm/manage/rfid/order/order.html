@@ -44,6 +44,9 @@ jQuery(document).ready(function($) {
   }
   //删除
   function del(id){
+	  if(!confirm('确实要删除吗?')){
+		  return false;
+	  }
 	 $.post("del_apply.htm",{id:id},function(data){
 		 if (data.isOk=="ok"){
 			 alert('删除成功！');

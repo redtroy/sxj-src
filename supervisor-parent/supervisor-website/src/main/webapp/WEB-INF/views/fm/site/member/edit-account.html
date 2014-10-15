@@ -59,12 +59,13 @@ jQuery(document).ready(function($) {
   function roleInfo(id,type){
 		$.get("${basePath}member/account/get_role_function.htm?accountId="+id+"&type="+type,function(data){
 			$("#roleInfo_div").empty();
-			$("#roleInfo_div").css("display","");
+			$("#roleInfo_div").show();
 			$("#roleInfo_div").append(data);
+			$('.maskdivgen').fadeIn(100);
 		});
 	}
   function closeDiv(divId){
-		//$("#"+divId).css("display","none");
+	  $('.maskdivgen').fadeOut(100);
 	  $("#"+divId).hide();
 	}
 //修改密码
@@ -232,9 +233,9 @@ jQuery(document).ready(function($) {
 	 <input id="id_hidden" type="hidden" name="id" value="${account.id}" />
       <td>${account.accountNo}</td>
       <td id="name_td">${account.name}</td>
-      <td id="name_td2" style="display: none"><input type="text" value="${account.name}" id="nameEdit" name="name"/></td>
+      <td id="name_td2" style="display: none"><input type="text" class="input" value="${account.name}" id="nameEdit" name="name"/></td>
       <td id="account_td">${account.accountName}</td>
-      <td id="account_td2" style="display: none"><input type="text" value="${account.accountName}" id="accountEdit" name="accountName"/></td>
+      <td id="account_td2" style="display: none"><input type="text" class="input" value="${account.accountName}" id="accountEdit" name="accountName"/></td>
       <td id="role_td" ><a href="javascript:roleInfo('${account.id}','get');" class="lnk-blue">查看</a></td>
       <td id="editrole_td" class="permission" style="display: none" onclick="roleInfo('${account.id}','edit');">
       	 <div class="dropMenu sltinput" id="district_cn"> <span>全部权限</span> <span class="icon"></span>
@@ -262,13 +263,14 @@ jQuery(document).ready(function($) {
               <button class="button button-gray" onclick="closeDiv('state_div');">取消</button>
             </div>
           </div>
-        </div>
-  <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;"></div>
+   </div>
+  
 </div>
 </div>
 </div>
 </div>
 <@b.footer />
+ <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;"></div>
 <div class="modal-wrap popDemo contPop passwordPop" style="display:none;" id="edit_pwd">
       <div class="modal-header"><span class="close">关闭</span></div>
       <div class="modal-body">

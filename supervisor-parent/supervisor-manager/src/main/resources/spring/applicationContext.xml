@@ -56,15 +56,6 @@
 		<!-- <property name="configFile" value="cache.properties"></property> -->
 		<property name="databaseId" value="2"></property>
 	</bean>
-	
-	<bean id="configBean"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath*:config/dfs_config.properties</value>
-			</list>
-		</property>
-	</bean>
 
 	<!-- FastDfs配置 -->
 	<bean id="dfsConfig" class="com.sxj.file.fastdfs.DfsConfig">
