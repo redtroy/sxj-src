@@ -59,12 +59,13 @@ jQuery(document).ready(function($) {
   function roleInfo(id,type){
 		$.get("${basePath}member/account/get_role_function.htm?accountId="+id+"&type="+type,function(data){
 			$("#roleInfo_div").empty();
-			$("#roleInfo_div").css("display","");
+			$("#roleInfo_div").show();
 			$("#roleInfo_div").append(data);
+			$('.maskdivgen').fadeIn(100);
 		});
 	}
   function closeDiv(divId){
-		//$("#"+divId).css("display","none");
+	  $('.maskdivgen').fadeOut(100);
 	  $("#"+divId).hide();
 	}
 //修改密码
@@ -262,13 +263,14 @@ jQuery(document).ready(function($) {
               <button class="button button-gray" onclick="closeDiv('state_div');">取消</button>
             </div>
           </div>
-        </div>
-  <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;"></div>
+   </div>
+  
 </div>
 </div>
 </div>
 </div>
 <@b.footer />
+ <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;"></div>
 <div class="modal-wrap popDemo contPop passwordPop" style="display:none;" id="edit_pwd">
       <div class="modal-header"><span class="close">关闭</span></div>
       <div class="modal-body">
