@@ -157,6 +157,7 @@ public class RecordController extends BaseController {
 		map.put("type", userBean.getMember().getType().getId());
 		map.put("name", userBean.getMember().getName());// name
 		map.put("id", userBean.getMember().getMemberNo());
+		map.put("state", userBean.getMember().getCheckState());
 		return "site/record/apply-record";
 	}
 

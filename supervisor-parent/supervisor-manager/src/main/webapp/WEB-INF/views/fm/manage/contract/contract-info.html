@@ -2,7 +2,6 @@
 
 <script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.imagecontainer.js" type="text/javascript"></script>
-
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
@@ -14,15 +13,6 @@
 			$('.viewer').slideUp(200);
 		})
 	})
-	window.onload = function() {
-		$(".demo-image").click(function() {
-			var imageSource = $(this).attr("data-image");
-			$("#viewer2").iviewer({
-				src : imageSource,
-				mousewheel : true
-			});
-		});
-	}
 </script>
 
        
@@ -182,9 +172,10 @@
             </div>
             <#if contractModel.modifyList?exists>
           <div class="infoBox producedBox changeBox text-left">
-            <h2 class="title">合同变更信息</h2>
+           
             <!-- 变更信息遍历begin -->
               <#list contractModel.modifyList as modifyList>
+               <h2 class="title">合同变更信息</h2>
             <div>
               <label>合同变更备案号</label>
               ${modifyList.modifyContract.recordNo}</div>

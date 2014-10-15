@@ -34,6 +34,16 @@ public class MemberQuery extends Pagable implements Serializable {
 	private String endDate;
 
 	private Integer checkState;
+	
+	private Integer memberTypeB;
+
+	public Integer getMemberTypeB() {
+		return memberTypeB;
+	}
+
+	public void setMemberTypeB(Integer memberTypeB) {
+		this.memberTypeB = memberTypeB;
+	}
 
 	public Integer getCheckState() {
 		return checkState;

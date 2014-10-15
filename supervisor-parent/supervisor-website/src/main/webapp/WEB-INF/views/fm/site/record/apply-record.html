@@ -28,7 +28,7 @@ $(document).ready(function(){
  * 甲方申请采购
  */
 function  AcgApplyRecord(){
-	var memberIdB = $("memberIdB").val();
+	var memberIdB = $("#memberIdB").val();
 	if(memberIdB==''){
 		alert('请选择系统自动感应的用户！');
 		return;
@@ -42,12 +42,12 @@ function  AcgApplyRecord(){
 	})
 }
 /**
- * 乙方申请招标
+ * 甲方申请招标
  */
 function  zbApplyRecord(){
-	var memberIdA = $("memberIdA").val();
+	var memberIdA = $("#memberIdA").val();
 	if(memberIdA==''){
-		alert('请选择系统自动感应的用户！');
+		alert('请输入甲方用户！');
 		return;
 	}
 	$.post("zbApplyRecord.htm",$("#zbForm").serialize(),function(data){
@@ -62,7 +62,7 @@ function  zbApplyRecord(){
  * 乙方申请采购
  */
 function  BzbApplyRecord(){
-	var memberIdA = $("memberIdA").val();
+	var memberIdA = $("#memberIdA").val();
 	if(memberIdA==''){
 		alert('请选择系统自动感应的用户！');
 		return;
@@ -83,7 +83,7 @@ $(document).ready(function() {
 function upload(data)
 {
     var dataObj=eval("("+data+")");//转换为json对象 
-    $("#BcgImageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.JPG' alt='' />");
+    $("#BcgImageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"80x100.JPG' alt='' />");
     //获取隐藏域
    var hideVal= $("#BcgImgPathHide").val();
     if(hideVal==""){
@@ -94,11 +94,12 @@ function upload(data)
     $("#BcgImgPathHide").val(hideVal);
 }
 $(function(){
-	var url_ = "${basePath}autoComple.htm";
-	$("#memberNameA").bigAutocomplete({url:url_,callback:function(data){
+	var urlA = "${basePath}autoCompleA.htm";
+	var urlB = "${basePath}autoCompleB.htm";
+	$("#memberNameA").bigAutocomplete({url:urlA,callback:function(data){
         $("#memberIdA").val(data.result);
     }});
-	$("#memberNameB").bigAutocomplete({url:url_,callback:function(data){
+	$("#memberNameB").bigAutocomplete({url:urlB,callback:function(data){
         $("#memberIdB").val(data.result);
     }});
 });
@@ -147,7 +148,6 @@ $(function(){
     <div class="item">
       <label>甲方</label>
       <input class="input input-w240h36" value="" id="memberNameA" name="memberNameA" />
-      <input type="hidden" name="memberIdA" id="memberIdA" value=""/>
     </div>
     <div class="item">
       <label>乙方</label>
@@ -159,7 +159,7 @@ $(function(){
 	  </div></div>
     <div class="item mt10">
       <label>&nbsp;</label>
-      <a href="javascript:zbApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
+      <a href="javascript:zbApplyRecord();" class="button button-orange mr15">确定</a><a href="${basePath}member/memberInfo.htm" class="button button-gray">取消</a></div>
   </div>
   </form>
 <form action="" id="cgForm" method="post">
@@ -173,7 +173,7 @@ $(function(){
 <input type="hidden" name="imgPath"  class="imgPathHide" value=""/>
 <input type="file" name="cgFile" id="cgFile"  multiple="true"/>
 </div></div>
-<div class="item mt10"><label>&nbsp;</label><a href="javascript:AcgApplyRecord();" class="button button-orange mr15">确定</a><a href="contract.html" class="button button-gray">取消</a></div>
+<div class="item mt10"><label>&nbsp;</label><a href="javascript:AcgApplyRecord();" class="button button-orange mr15">确定</a><a href="${basePath}member/memberInfo.htm" class="button button-gray">取消</a></div>
 </div>
 </form>
 
@@ -203,7 +203,7 @@ $(function(){
 	 </div>  
   <div class="item mt10">
     <label>&nbsp;</label>
-    <a class="button button-orange mr15" href="javascript:BzbApplyRecord();"  >确定</a><a class="button button-gray">取消</a></div>
+    <a class="button button-orange mr15" href="javascript:BzbApplyRecord();"  >确定</a><a href="${basePath}member/memberInfo.htm" class="button button-gray">取消</a></div>
 </form>
 </div> 
 </#if>
