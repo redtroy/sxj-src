@@ -5,12 +5,20 @@
   }
   $("#sub").Validform({
 		tiptype:3,
+		datatype:{
+			"f":/^[0-9]+([.]{1}[0-9]{1,2})?$/
+		 },
 		callback:function(form){
 			add_supplier();
 		}
 	});
   function add_supplier(){
 		var params=$("#sub").serialize();
+		var doorsPrice=$("#doorsPrice").val();
+		doorsPrice=parseFloat(doorsPrice)*100;
+		var batchPrice=$("#batchPrice").val();
+		batchPrice=parseFloat(batchPrice)*100;
+		params=params+"&doorsPrice="+doorsPrice+"&batchPrice="+batchPrice;
 		$.post("${basePath}rfid/supplier/save_supplier.htm",params,function(data){
 			if(data.isOk=="ok"){
 				alert("添加成功");
@@ -20,6 +28,7 @@
 				errorInfo(data);
 			}
 		});
+		
 	}
 </script>
     <!-- InstanceBeginEditable name="rightBar" -->
@@ -48,11 +57,11 @@
       </div>
       <div>
         <label>门窗标签采购价</label>
-        <input type="text" id="" name="doorsPrice" class="input-w30"title="填写该供应商门窗标签参考采购价格" datatype="n" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
+        <input type="text"  id="doorsPrice" class="input-w30"title="填写该供应商门窗标签参考采购价格" datatype="f" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
       </div>
       <div>
         <label>批次标签采购价</label>
-        <input type="text" id="" name="batchPrice" class="input-w30" title="填写该供应商批次标签参考爱狗价格" datatype="n" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
+        <input type="text"  id="batchPrice" class="input-w30" title="填写该供应商批次标签参考爱狗价格" datatype="f" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
       </div>
      
       <div class="btnBox"><a href="javascript:sub();" class="button button-orange button-small">新增</a><a href="javascript:query();" class="button button-gray button-small">返回</a> </div></div>
