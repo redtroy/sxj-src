@@ -213,7 +213,6 @@ public class BasicController extends BaseController {
 		out.close();
 	}
 
-<<<<<<< HEAD
 	/**
 	 * 甲方联想
 	 * @param request
@@ -224,48 +223,6 @@ public class BasicController extends BaseController {
 	 */
 	@RequestMapping("autoCompleA")
 	public @ResponseBody Map<String, String> autoCompleA(
-=======
-	@RequestMapping("filesort")
-	public @ResponseBody List<String> fileSort(String fileId)
-			throws IOException {
-		List<String> sortFile = new ArrayList<String>();
-		try {
-			String[] fileids = fileId.split(",");
-			Map<String, String> nameMap = new TreeMap<String, String>();
-			for (int i = 0; i < fileids.length; i++) {
-				List<NameValuePair> values = fastDfsClient
-						.getMetaList(fileids[i]);
-				String value = values.get(0).getValue();
-				nameMap.put(fileids[i], value);
-			}
-			List<Map.Entry<String, String>> mappingList = null;
-			// 通过ArrayList构造函数把map.entrySet()转换成list
-			mappingList = new ArrayList<Map.Entry<String, String>>(
-					nameMap.entrySet());
-			// 通过比较器实现比较排序
-			Collections.sort(mappingList,
-					new Comparator<Map.Entry<String, String>>() {
-						public int compare(Map.Entry<String, String> mapping1,
-								Map.Entry<String, String> mapping2) {
-							return mapping1.getValue().compareTo(
-									mapping2.getValue());
-						}
-					});
-			for (Map.Entry<String, String> mapping : mappingList) {
-				sortFile.add(mapping.getKey());
-			}
-			// Map<String, Object> map = new HashMap<String, Object>();
-			// map.put("", sortFile);
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-		}
-		return sortFile;
-
-	}
-
-	@RequestMapping("autoComple")
-	public @ResponseBody Map<String, String> autoComple(
->>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 			HttpServletRequest request, HttpServletResponse response,
 			String keyword) throws IOException {
 		MemberQuery mq = new MemberQuery();
@@ -323,5 +280,41 @@ public class BasicController extends BaseController {
 		out.close();
 		return null;
 	}
+	@RequestMapping("filesort")
+	public @ResponseBody List<String> fileSort(String fileId)
+			throws IOException {
+		List<String> sortFile = new ArrayList<String>();
+		try {
+			String[] fileids = fileId.split(",");
+			Map<String, String> nameMap = new TreeMap<String, String>();
+			for (int i = 0; i < fileids.length; i++) {
+				List<NameValuePair> values = fastDfsClient
+						.getMetaList(fileids[i]);
+				String value = values.get(0).getValue();
+				nameMap.put(fileids[i], value);
+			}
+			List<Map.Entry<String, String>> mappingList = null;
+			// 通过ArrayList构造函数把map.entrySet()转换成list
+			mappingList = new ArrayList<Map.Entry<String, String>>(
+					nameMap.entrySet());
+			// 通过比较器实现比较排序
+			Collections.sort(mappingList,
+					new Comparator<Map.Entry<String, String>>() {
+						public int compare(Map.Entry<String, String> mapping1,
+								Map.Entry<String, String> mapping2) {
+							return mapping1.getValue().compareTo(
+									mapping2.getValue());
+						}
+					});
+			for (Map.Entry<String, String> mapping : mappingList) {
+				sortFile.add(mapping.getKey());
+			}
+			// Map<String, Object> map = new HashMap<String, Object>();
+			// map.put("", sortFile);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+		}
+		return sortFile;
 
+	}
 }
