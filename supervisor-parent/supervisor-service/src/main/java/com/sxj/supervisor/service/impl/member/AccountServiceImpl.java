@@ -245,8 +245,8 @@ public class AccountServiceImpl implements IAccountService {
 			throws ServiceException {
 		try {
 			AccountQuery query = new AccountQuery();
-			query.setAccountName(accountName);
-			List<AccountEntity> list = queryAccounts(query);
+			List<AccountEntity> list = accountDao
+					.getAccountByAccountName(accountName);
 			if (list != null && list.size() > 0) {
 				return list.get(0);
 			}

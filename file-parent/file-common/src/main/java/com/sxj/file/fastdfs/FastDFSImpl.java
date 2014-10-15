@@ -1,14 +1,15 @@
 package com.sxj.file.fastdfs;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.csource.common.NameValuePair;
 import org.csource.fastdfs.ClientGlobal;
 import org.csource.fastdfs.StorageClient1;
 import org.csource.fastdfs.StorageServer;
@@ -92,7 +93,11 @@ public class FastDFSImpl implements IFileUpLoad {
 			}
 			byte[] file_buff = LocalFileUtil.readByte(file);
 			String file_ext_name = LocalFileUtil.getFileExtName(file.getName());
-			file_id = client.upload_file1(file_buff, file_ext_name.toUpperCase(), null);
+			List<NameValuePair> meta_list = new ArrayList<NameValuePair>();
+			meta_list.add(new NameValuePair("originalName", file.getName()));
+			file_id = client.upload_file1(file_buff,
+					file_ext_name.toUpperCase(),
+					meta_list.toArray(new NameValuePair[meta_list.size()]));
 			// storageServer.close();
 			// trackerServer.close();
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
@@ -106,14 +111,19 @@ public class FastDFSImpl implements IFileUpLoad {
 		return file_id;
 	}
 
-	public String uploadFile(byte[] file_buff, String file_ext_name) {
+	public String uploadFile(byte[] file_buff, String originalName) {
 		String file_id = null;
 		try {
 			trackerServer = tracker.getConnection();
 			storageServer = tracker.getStoreStorage(trackerServer);
 			StorageClient1 client = new StorageClient1(trackerServer,
 					storageServer);
-			file_id = client.upload_file1(file_buff, file_ext_name.toUpperCase(), null);
+			String file_ext_name = LocalFileUtil.getFileExtName(originalName);
+			List<NameValuePair> meta_list = new ArrayList<NameValuePair>();
+			meta_list.add(new NameValuePair("originalName", originalName));
+			file_id = client.upload_file1(file_buff,
+					file_ext_name.toUpperCase(),
+					meta_list.toArray(new NameValuePair[meta_list.size()]));
 			// storageServer.close();
 			// trackerServer.close();
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
@@ -173,6 +183,24 @@ public class FastDFSImpl implements IFileUpLoad {
 		return file_buff;
 	}
 
+	@Override
+	public List<NameValuePair> getMetaList(String file_Id) {
+		List<NameValuePair> list = null;
+		try {
+			trackerServer = tracker.getConnection();
+			storageServer = tracker.getStoreStorage(trackerServer);
+			StorageClient1 client = new StorageClient1(trackerServer,
+					storageServer);
+			NameValuePair[] values = client.get_metadata1(file_Id);
+			if (values != null) {
+				list = Arrays.asList(values);
+			}
+		} catch (Exception e) {
+			SxjLogger.error("获取图片元信息错误", e, this.getClass());
+		}
+		return list;
+	}
+
 	public byte[] getSmallImage(String file_id, int width, int height) {
 		try {
 			String file_ext_name = LocalFileUtil.getFileExtName(file_id);
@@ -220,6 +248,22 @@ public class FastDFSImpl implements IFileUpLoad {
 			return false;
 		} catch (Exception ex) {
 			Logger.error(ex.toString());
+			return false;
+		}
+	}
+
+	@Override
+	public boolean removeFile(String[] file_Urls) {
+		try {
+			if (file_Urls == null) {
+				return false;
+			}
+			for (int i = 0; i < file_Urls.length; i++) {
+				removeFile(file_Urls[i]);
+			}
+			return true;
+		} catch (Exception e) {
+			Logger.error(e.toString());
 			return false;
 		}
 	}

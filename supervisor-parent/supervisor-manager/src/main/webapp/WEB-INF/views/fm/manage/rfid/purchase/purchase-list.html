@@ -105,20 +105,29 @@ function edit(id){
 	    }});
 	  $("#edit_"+id).find(".editCount").html('<input type="text" class="count" name="count" value="'+$("#edit_"+id).find(".editCount").text()+'" />');
 	  $("#edit_"+id).find(".editPrice").html('<input type="text" class="price" name="price" value="'+$("#edit_"+id).find(".editPrice").text()+'" />');
-	  $("#edit_"+id).find(".operation").html('<a href="javascript:save(\''+id+'\');" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+	  $("#edit_"+id).find(".operation").html('<a href="javascript:void(0)" class="confirm lnk-yellow" onclick="save(\''+id+'\');return false;">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
 }
 function save(id){
 	var supplierName =$("#edit_"+id).find(".editName").find(".supplierName").val();
 	var supplierNo =$("#edit_"+id).find(".editName").find(".supplierNo").val();
 	var price = $("#edit_"+id).find(".editPrice").find(".price").val();
+	if (!price.match(/^[0-9]+([.]{1}[0-9]{1,2})?$/)){
+		alert('单价必须为数字并且最多保留两位小数');
+		return false;
+	}
+	price=price*100;
 	var count=$("#edit_"+id).find(".editCount").find(".count").val();
+	if (!count.match( /^[0-9]*[1-9][0-9]*$/)){
+		alert('采购数量必须为正整数！');
+		return false;
+	}
 	var o ={id:id,supplierName:supplierName,supplierNo:supplierNo,price:price,count:count};
 	$.post("modify.htm",o,function(data){
 		if(data.isOK=='ok'){
 			$("#edit_"+id).find(".editName").text(supplierName);
 			$("#edit_"+id).find(".supplierNo").val(supplierNo);
 			$("#edit_"+id).find(".editCount").html(count);
-			$("#edit_"+id).find(".editPrice").html(price);
+			$("#edit_"+id).find(".editPrice").html(price/100);
 			$("#edit_"+id).find(".operation").html('<a href="javascript:edit(\''+id+'\');" class="edit">修改</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
 		
 		}else{ 
@@ -214,7 +223,7 @@ function save(id){
           <td class="editName">${list.supplierName}</td>
           <td>${list.rfidType.getName()}</td>
 		  <td class="editCount">${list.count}</td>
-		  <td class="editPrice">${list.price}</td>
+		  <td class="editPrice">${list.price/100}</td>
 		  <td>${list.purchaseDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
           <td><#if list.payState.getId()==1><em class="state verified">已付款</em> <#else><button class="btn btn-gray" onclick="confirmPay('${list.id}');"><span>确认付款</span></button></#if></td>
 		  <td><#if list.receiptState.getId()==0><button class="btn btn-gray" onclick="confirmDelivery('${list.id}');"><span>确认发货</span></button><#elseif list.receiptState.getId()==1><button class="btn btn-orange" onclick="confirmReceipt('${list.id}');"><span>确认收货</span></button><#else> <em class="state verified">已收货</em></#if></td>

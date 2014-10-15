@@ -1,8 +1,6 @@
  
       <div class="modal-header"><span class="close" onclick="closeDiv('roleInfo_div');">关闭</span></div>
       <div class="modal-body dropBox">
-        <div class="perBox"><span>已选择权限</span>
-        </div>
         <#list allList as model>
         <div class="item"> <span id="parent_span_${model.function.id}">
         <#assign isCheck=false>
