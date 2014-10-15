@@ -92,7 +92,7 @@ public class FastDFSImpl implements IFileUpLoad {
 			}
 			byte[] file_buff = LocalFileUtil.readByte(file);
 			String file_ext_name = LocalFileUtil.getFileExtName(file.getName());
-			file_id = client.upload_file1(file_buff, file_ext_name.toLowerCase(), null);
+			file_id = client.upload_file1(file_buff, file_ext_name.toUpperCase(), null);
 			// storageServer.close();
 			// trackerServer.close();
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
@@ -113,7 +113,7 @@ public class FastDFSImpl implements IFileUpLoad {
 			storageServer = tracker.getStoreStorage(trackerServer);
 			StorageClient1 client = new StorageClient1(trackerServer,
 					storageServer);
-			file_id = client.upload_file1(file_buff, file_ext_name.toLowerCase(), null);
+			file_id = client.upload_file1(file_buff, file_ext_name.toUpperCase(), null);
 			// storageServer.close();
 			// trackerServer.close();
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
@@ -134,7 +134,7 @@ public class FastDFSImpl implements IFileUpLoad {
 				HierarchicalCacheManager.evict(LEVEL, CACHE_NAME, oldfile_id);
 				removeFile(oldfile_id);
 			}
-			newFileId = uploadFile(newfile_buff, newfile_ext_name.toLowerCase());
+			newFileId = uploadFile(newfile_buff, newfile_ext_name.toUpperCase());
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, newFileId,
 					newfile_buff);
 		} catch (Exception ex) {
