@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +20,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.csource.common.NameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -60,7 +64,7 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IRfidSupplierService supplierService;
-	
+
 	@Autowired
 	private IFileUpLoad fastDfsClient;
 
@@ -200,8 +204,8 @@ public class BasicController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(), LocalFileUtil
-						.getFileExtName(myfile.getOriginalFilename()));
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
+						myfile.getOriginalFilename());
 				fileIds.add(fileId);
 			}
 		}
@@ -212,6 +216,44 @@ public class BasicController extends BaseController {
 		out.print(res);
 		out.flush();
 		out.close();
+	}
+
+	@RequestMapping("filesort")
+	public @ResponseBody List<String> fileSort(String fileId)
+			throws IOException {
+		List<String> sortFile = new ArrayList<String>();
+		try {
+			String[] fileids = fileId.split(",");
+			Map<String, String> nameMap = new TreeMap<String, String>();
+			for (int i = 0; i < fileids.length; i++) {
+				List<NameValuePair> values = fastDfsClient
+						.getMetaList(fileids[i]);
+				String value = values.get(0).getValue();
+				nameMap.put(fileids[i], value);
+			}
+			List<Map.Entry<String, String>> mappingList = null;
+			// 通过ArrayList构造函数把map.entrySet()转换成list
+			mappingList = new ArrayList<Map.Entry<String, String>>(
+					nameMap.entrySet());
+			// 通过比较器实现比较排序
+			Collections.sort(mappingList,
+					new Comparator<Map.Entry<String, String>>() {
+						public int compare(Map.Entry<String, String> mapping1,
+								Map.Entry<String, String> mapping2) {
+							return mapping1.getValue().compareTo(
+									mapping2.getValue());
+						}
+					});
+			for (Map.Entry<String, String> mapping : mappingList) {
+				sortFile.add(mapping.getKey());
+			}
+			// Map<String, Object> map = new HashMap<String, Object>();
+			// map.put("", sortFile);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+		}
+		return sortFile;
+
 	}
 
 	/**

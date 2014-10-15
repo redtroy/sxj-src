@@ -14,12 +14,12 @@
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
 		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
 	</resultMap>
-    <select id="getAccountByAccountName" resultMap="AccountResultMap"
+    <select id="getAccountByAccountName" resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"
 		parameterType="String">
 		<![CDATA[SELECT * FROM M_MEMBER_ACCOUNT WHERE ACCOUNT_NAME=#{accountName}]]>
 	</select>
 	<!-- 子账户高级查询 -->
-	<select id="queryAccount" resultMap="AccountResultMap"
+	<select id="queryAccount" resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT A.ID,A.PARENT_ID,A.ACCOUNT_NAME,A.NAME,
 		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO 

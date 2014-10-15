@@ -130,8 +130,7 @@ public class RecordController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(), LocalFileUtil
-						.getFileExtName(myfile.getOriginalFilename()));
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),myfile.getOriginalFilename());
 				fileIds.add(fileId);
 			}
 		}
