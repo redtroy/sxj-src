@@ -252,6 +252,22 @@ public class FastDFSImpl implements IFileUpLoad {
 		}
 	}
 
+	@Override
+	public boolean removeFile(String[] file_Urls) {
+		try {
+			if (file_Urls == null) {
+				return false;
+			}
+			for (int i = 0; i < file_Urls.length; i++) {
+				removeFile(file_Urls[i]);
+			}
+			return true;
+		} catch (Exception e) {
+			Logger.error(e.toString());
+			return false;
+		}
+	}
+
 	public DfsConfig getConfig() {
 		return config;
 	}
