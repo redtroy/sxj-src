@@ -56,8 +56,9 @@ public interface IFileUpLoad {
 
 	/**
 	 * 获取文件元信息
+	 * 
 	 * @param file_Id文件路径
-	 * @return 
+	 * @return
 	 */
 	public List<NameValuePair> getMetaList(String file_Id);
 
@@ -82,5 +83,14 @@ public interface IFileUpLoad {
 	 * @return
 	 */
 	public boolean removeFile(String file_Url);
+
+	/**
+	 * 删除文件
+	 * 
+	 * @param file_Urls
+	 *            ：文件路径
+	 * @return
+	 */
+	public boolean removeFile(String[] file_Urls);
 
 }

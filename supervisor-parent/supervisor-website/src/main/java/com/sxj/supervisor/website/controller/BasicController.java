@@ -213,6 +213,18 @@ public class BasicController extends BaseController {
 		out.close();
 	}
 
+<<<<<<< HEAD
+	/**
+	 * 甲方联想
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("autoCompleA")
+	public @ResponseBody Map<String, String> autoCompleA(
+=======
 	@RequestMapping("filesort")
 	public @ResponseBody List<String> fileSort(String fileId)
 			throws IOException {
@@ -253,12 +265,48 @@ public class BasicController extends BaseController {
 
 	@RequestMapping("autoComple")
 	public @ResponseBody Map<String, String> autoComple(
+>>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 			HttpServletRequest request, HttpServletResponse response,
 			String keyword) throws IOException {
 		MemberQuery mq = new MemberQuery();
 		if (keyword != "" && keyword != null) {
 			mq.setMemberName(keyword);
 		}
+		mq.setMemberType(0);
+		List<MemberEntity> list = memberService.queryMembers(mq);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (MemberEntity memberEntity : list) {
+			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+					+ memberEntity.getMemberNo() + "\"}";
+			strlist.add(sb);
+		}
+		String json = "{\"data\":" + strlist.toString() + "}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null;
+	}
+	
+	/**
+	 * 乙方联想
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("autoCompleB")
+	public @ResponseBody Map<String, String> autoCompleB(
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword) throws IOException {
+		MemberQuery mq = new MemberQuery();
+		if (keyword != "" && keyword != null) {
+			mq.setMemberName(keyword);
+		}
+		mq.setMemberTypeB(0);
 		List<MemberEntity> list = memberService.queryMembers(mq);
 		List strlist = new ArrayList();
 		String sb = "";

@@ -20,6 +20,11 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>supervisor-dao</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>file-common</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<!-- springside -->
 		<dependency>
 			<groupId>com.sxj</groupId>

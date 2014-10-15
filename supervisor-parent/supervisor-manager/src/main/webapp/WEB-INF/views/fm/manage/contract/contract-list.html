@@ -14,12 +14,24 @@
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 	<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/intense.js"></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
+	
 <@b.pageScript/>
 <@b.errorInfo/>
 <script>
 
 function loadInfo(id){
-	$("#info"+id).load("info.htm?contractId="+id);
+	$("#info"+id).load("info.htm?contractId="+id,function(){
+		$(".demo-image").click(function() {
+			var imageSource = $(this).attr("data-image");
+			$("#viewer2").iviewer({
+				src : imageSource,
+				mousewheel : true
+			});
+		});
+	 }
+	);
 	$("#info"+id).show();
 }
 function closeContract(id){
