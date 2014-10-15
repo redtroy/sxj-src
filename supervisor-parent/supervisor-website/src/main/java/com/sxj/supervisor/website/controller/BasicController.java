@@ -240,7 +240,7 @@ public class BasicController extends BaseController {
 						}
 					});
 			for (Map.Entry<String, String> mapping : mappingList) {
-				sortFile.add(mapping.getValue());
+				sortFile.add(mapping.getKey());
 			}
 			// Map<String, Object> map = new HashMap<String, Object>();
 			// map.put("", sortFile);
