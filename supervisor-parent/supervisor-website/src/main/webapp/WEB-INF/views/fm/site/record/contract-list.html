@@ -26,6 +26,9 @@
 <script>
 
 jQuery(document).ready(function($) {
+	$('.modal-header .close').click(function(){
+		$('.popDemo').slideUp(200);
+	})
 	$('.lnk-view').live('click',function(){
 		var imgPath=$(this).attr("imgPath");
 		if(imgPath!=''){
@@ -410,7 +413,7 @@ function busunSeav(){
 <input type="hidden" name="imgPath" class="imgPathHide" id="bgImgPathHide" value=""/>
 <input type="file" name="bgFile" id="bgFile"  multiple="true"/>
    <div class="button-box">
-    <button class="button button-pop"  id="bgButton">确认</button>
+    <button class="button button-pop"   onclick="saveBiangeng()">确认</button>
 	<button class="button button-gray">取消</button>
   </div>
   </div>

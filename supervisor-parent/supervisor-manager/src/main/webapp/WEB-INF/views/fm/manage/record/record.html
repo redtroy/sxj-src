@@ -26,11 +26,14 @@
 	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 	<@b.pageScript/> <@b.errorInfo/> <script>
 jQuery(document).ready(function($) {
+	$('.modal-header .close').click(function(){
+		$('.popDemo').slideUp(200);
+	})
 	$('.lnk-view').live('click',function(){
 		var imgPath=$(this).attr("imgPath");
-		if(imgPath!=''){
-			$('.popDemo').slideDown(200);
        			$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
+       				if(imgPaths!=''){
+       				$('.popDemo').slideDown(200);
        				for (i=0;i<imgPaths.length ;i++ ) { 
        					var n =i+1;
        					$("#List1").append($("<div class='pic'><a href='#' class='demo-image' data-image='${b.imagePath}"+imgPaths[i]+"'><img src='${b.imagePath}"+imgPaths[i]+"80x100.JPG'  /></a>"+n+"</div>").click(function(){
@@ -60,11 +63,11 @@ jQuery(document).ready(function($) {
        						});
        						}));
        				}
-       				
+       				}else{
+       					alert("暂无合同副本!");
+       				}
        			});
-		}else{
-			alert("暂无合同副本!");
-		}
+		
 	});
 	
 	 JS.Engine.on({  
@@ -226,7 +229,7 @@ function del(id){
 					</table>
 					<div class="modal-wrap popDemo popView" id="image-list" style="display: none;">
 						<div class="modal-header">
-							<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a>
+							<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></span>
 						</div>
 						<div class="modal-body">
 							<div class="rollBox">

@@ -47,6 +47,16 @@ public class RecordQuery extends Pagable implements Serializable {
 	private String sort;//排序
 	
 	private String sortColumn;//排序字段
+	
+	private Integer flag;
+
+	public Integer getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Integer flag) {
+		this.flag = flag;
+	}
 
 	public String getSortColumn() {
 		return sortColumn;

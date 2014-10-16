@@ -228,8 +228,10 @@ public class BasicController extends BaseController {
 			for (int i = 0; i < fileids.length; i++) {
 				List<NameValuePair> values = fastDfsClient
 						.getMetaList(fileids[i]);
-				String value = values.get(0).getValue();
-				nameMap.put(fileids[i], value);
+				if(values!=null){
+					String value = values.get(0).getValue();
+					nameMap.put(fileids[i], value);
+				}
 			}
 			List<Map.Entry<String, String>> mappingList = null;
 			// 通过ArrayList构造函数把map.entrySet()转换成list

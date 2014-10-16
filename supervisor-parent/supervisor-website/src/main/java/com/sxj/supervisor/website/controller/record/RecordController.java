@@ -74,7 +74,7 @@ public class RecordController extends BaseController {
 			RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			query.setMemberId(userBean.getMember().getMemberNo());
+			query.setApplyId(userBean.getMember().getMemberNo());	
 			List<RecordEntity> list = recordService.queryRecord(query);
 			map.put("recordlist", list);
 			map.put("confirmState", rse);
