@@ -40,7 +40,8 @@ public interface IAccountDao {
 	 * @param accountName
 	 **/
 	@Get
-	public List<AccountEntity> getAccountByAccountName(String accountName);
+	public List<AccountEntity> getAccountByAccountName(String accountName,
+			String id);
 
 	/**
 	 * 删除子账户

@@ -54,7 +54,7 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IMemberRoleService roleService;
-	
+
 	@Autowired
 	private IFileUpLoad fastDfsClient;
 
@@ -101,8 +101,9 @@ public class BasicController extends BaseController {
 		SupervisorPrincipal userBean = null;
 		if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isNotEmpty(accountName)) {
-			AccountEntity account = accountService
-					.getAccountByName(accountName);
+			AccountEntity account = accountService.getAccountByName(
+					accountName, getLoginInfo(session).getMember()
+							.getMemberNo());
 			if (account == null) {
 				map.put("amessage", "会员子账户不存在");
 				return LOGIN;
@@ -165,8 +166,10 @@ public class BasicController extends BaseController {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
 		if (userBean.getMember() != null && userBean.getAccount() == null) {
-			if(userBean.getMember().getCheckState().equals(MemberCheckStateEnum.certified)){
-				List<MemberFunctionModel> list = functionService.queryFunctions();
+			if (userBean.getMember().getCheckState()
+					.equals(MemberCheckStateEnum.certified)) {
+				List<MemberFunctionModel> list = functionService
+						.queryFunctions();
 				map.put("list", list);
 			}
 		} else if (userBean.getMember() != null
@@ -193,8 +196,9 @@ public class BasicController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(), LocalFileUtil
-						.getFileExtName(myfile.getOriginalFilename()));
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
+						LocalFileUtil.getFileExtName(myfile
+								.getOriginalFilename()));
 				fileIds.add(fileId);
 			}
 		}

@@ -16,7 +16,7 @@
 	</resultMap>
     <select id="getAccountByAccountName" resultMap="AccountResultMap"
 		parameterType="String">
-		<![CDATA[SELECT * FROM M_MEMBER_ACCOUNT WHERE ACCOUNT_NAME=#{accountName}]]>
+		<![CDATA[SELECT * FROM M_MEMBER_ACCOUNT WHERE ACCOUNT_NAME=#{accountName} and PARENT_ID=#{id}]]>
 	</select>
 	<!-- 子账户高级查询 -->
 	<select id="queryAccount" resultMap="AccountResultMap"

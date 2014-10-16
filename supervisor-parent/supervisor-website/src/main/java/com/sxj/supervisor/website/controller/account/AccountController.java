@@ -192,9 +192,12 @@ public class AccountController extends BaseController {
 	 * 判断自会员帐号是否存在
 	 */
 	@RequestMapping("check_account")
-	public @ResponseBody Map<String, String> check_account(String param) {
+	public @ResponseBody Map<String, String> check_account(String param,
+			HttpSession session) {
 		Map<String, String> map = new HashMap<String, String>();
-		if (accountService.getAccountByName(param) == null) {
+		SupervisorPrincipal userBaen = getLoginInfo(session);
+		if (accountService.getAccountByName(param, userBaen.getMember()
+				.getMemberNo()) == null) {
 			map.put("status", "y");
 			map.put("info", "用户名还未被使用，可以注册！");
 			return map;
