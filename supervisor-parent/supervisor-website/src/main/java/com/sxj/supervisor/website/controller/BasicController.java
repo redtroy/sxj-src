@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import com.sxj.file.common.LocalFileUtil;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
@@ -201,12 +200,7 @@ public class BasicController extends BaseController {
 				System.err.println("文件未上传");
 			} else {
 				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
-<<<<<<< HEAD
-						LocalFileUtil.getFileExtName(myfile
-								.getOriginalFilename()));
-=======
 						myfile.getOriginalFilename());
->>>>>>> b6b6bdfa67cc93263999a3fba3f75416e9cc1816
 				fileIds.add(fileId);
 			}
 		}
@@ -221,6 +215,7 @@ public class BasicController extends BaseController {
 
 	/**
 	 * 甲方联想
+	 * 
 	 * @param request
 	 * @param response
 	 * @param keyword
@@ -252,9 +247,10 @@ public class BasicController extends BaseController {
 		out.close();
 		return null;
 	}
-	
+
 	/**
 	 * 乙方联想
+	 * 
 	 * @param request
 	 * @param response
 	 * @param keyword
@@ -286,6 +282,7 @@ public class BasicController extends BaseController {
 		out.close();
 		return null;
 	}
+
 	@RequestMapping("filesort")
 	public @ResponseBody List<String> fileSort(String fileId)
 			throws IOException {
