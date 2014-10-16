@@ -40,7 +40,6 @@ public interface IAccountDao {
 	 * @param accountName
 	 **/
 
-	@Get
 	public List<AccountEntity> getAccountByAccountName(String accountName,
 			String id);
 
