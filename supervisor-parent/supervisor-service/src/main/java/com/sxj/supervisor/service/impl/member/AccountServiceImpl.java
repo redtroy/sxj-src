@@ -44,8 +44,8 @@ public class AccountServiceImpl implements IAccountService {
 	public void addAccount(AccountEntity account, String[] functionIds)
 			throws ServiceException {
 		try {
-			AccountEntity oldAccount = getAccountByName(account
-					.getAccountName());
+			AccountEntity oldAccount = getAccountByName(
+					account.getAccountName(), account.getParentId());
 			if (oldAccount != null) {
 				throw new ServiceException("用户账户已存在");
 			}
@@ -241,12 +241,12 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public AccountEntity getAccountByName(String accountName)
+	public AccountEntity getAccountByName(String accountName, String id)
 			throws ServiceException {
 		try {
 			AccountQuery query = new AccountQuery();
-			List<AccountEntity> list = accountDao
-					.getAccountByAccountName(accountName);
+			List<AccountEntity> list = accountDao.getAccountByAccountName(
+					accountName, id);
 			if (list != null && list.size() > 0) {
 				return list.get(0);
 			}

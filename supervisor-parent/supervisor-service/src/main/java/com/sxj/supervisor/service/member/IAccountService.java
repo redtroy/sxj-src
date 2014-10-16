@@ -16,7 +16,7 @@ public interface IAccountService {
 
 	public AccountEntity getAccount(String id) throws ServiceException;
 
-	public AccountEntity getAccountByName(String accountName)
+	public AccountEntity getAccountByName(String accountName, String id)
 			throws ServiceException;
 
 	public List<AccountEntity> queryAccounts(AccountQuery query)

@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import com.sxj.file.common.LocalFileUtil;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
@@ -105,8 +104,9 @@ public class BasicController extends BaseController {
 		SupervisorPrincipal userBean = null;
 		if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isNotEmpty(accountName)) {
-			AccountEntity account = accountService
-					.getAccountByName(accountName);
+			AccountEntity account = accountService.getAccountByName(
+					accountName, getLoginInfo(session).getMember()
+							.getMemberNo());
 			if (account == null) {
 				map.put("amessage", "会员子账户不存在");
 				return LOGIN;
@@ -215,6 +215,7 @@ public class BasicController extends BaseController {
 
 	/**
 	 * 甲方联想
+	 * 
 	 * @param request
 	 * @param response
 	 * @param keyword
@@ -246,9 +247,10 @@ public class BasicController extends BaseController {
 		out.close();
 		return null;
 	}
-	
+
 	/**
 	 * 乙方联想
+	 * 
 	 * @param request
 	 * @param response
 	 * @param keyword
@@ -280,6 +282,7 @@ public class BasicController extends BaseController {
 		out.close();
 		return null;
 	}
+
 	@RequestMapping("filesort")
 	public @ResponseBody List<String> fileSort(String fileId)
 			throws IOException {
