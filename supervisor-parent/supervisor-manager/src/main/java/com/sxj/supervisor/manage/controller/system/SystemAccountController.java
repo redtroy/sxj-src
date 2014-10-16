@@ -27,6 +27,7 @@ import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.supervisor.service.system.IqueryOperation;
 import com.sxj.supervisor.validator.hibernate.AddGroup;
+import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -65,7 +66,7 @@ public class SystemAccountController extends BaseController {
 	}
 
 	@RequestMapping("account-info")
-	public String getgetSysAccount(String accountId, ModelMap map) {
+	public String getSysAccount(String accountId, ModelMap map) {
 		SystemAccountEntity account = accountService.getAccount(accountId);
 		map.put("account", account);
 		return "manage/system/account-info";
