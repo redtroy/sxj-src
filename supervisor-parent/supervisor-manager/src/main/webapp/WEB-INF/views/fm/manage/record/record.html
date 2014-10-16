@@ -8,8 +8,7 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
     <link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
-    <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
-		type="text/css" />
+    <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 	<script src="${b.staticPath}js/jquery.js"></script>
 	<script src="${b.staticPath}js/jqueryui.js"></script>
 	<script src="${b.staticPath}js/intense.js"></script>
@@ -22,9 +21,10 @@
 		type="text/javascript"></script>
 	<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 	<script src="${b.staticPath}js/jquery.paginate.js"></script>
-
 	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
-	<@b.pageScript/> <@b.errorInfo/> <script>
+	<@b.pageScript/> 
+	<@b.errorInfo/> 
+<script>
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
 		$('.popDemo').slideUp(200);
@@ -79,8 +79,6 @@ jQuery(document).ready(function($) {
  });  
  JS.Engine.start('${basePath}comet');
 })
-</script>
-<script>
 
 
 //按条件查找	

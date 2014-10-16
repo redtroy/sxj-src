@@ -45,8 +45,8 @@ function  AcgApplyRecord(){
  * 甲方申请招标
  */
 function  zbApplyRecord(){
-	var memberIdA = $("#memberIdA").val();
-	if(memberIdA==''){
+	var memberNameA = $("#memberNameA").val();
+	if(memberNameA==''){
 		alert('请输入甲方用户！');
 		return;
 	}
@@ -142,7 +142,7 @@ $(function(){
 <li id="tabz2"><a href="#">备案采购合同</a></li>
 </ul>
 <div class="contents">
-<form action="" id="zbForm" method="post">
+<form action="" id="zbForm" method="post" autocomplete="off">
 <input type="hidden" name="memberNameB" value="${name}" />
 <div id="content1" class="tabscontent">
     <div class="item">
@@ -162,7 +162,7 @@ $(function(){
       <a href="javascript:zbApplyRecord();" class="button button-orange mr15">确定</a><a href="${basePath}member/memberInfo.htm" class="button button-gray">取消</a></div>
   </div>
   </form>
-<form action="" id="cgForm" method="post">
+<form action="" id="cgForm" method="post" autocomplete="off">
 <input type="hidden" name="memberNameA" value="${name}" />
 <div id="content2" class="tabscontent">
 <div class="item"><label>甲方</label>${name}<input type="hidden" name="memberIdA" id="" value="${id}"/></div>
@@ -182,7 +182,7 @@ $(function(){
 </div>
 <#else>
 <div class="contBox" id="BcgDiv">
-<form action="" id="BcgForm" method="post">
+<form action="" id="BcgForm" method="post" autocomplete="off">
 <input type="hidden" name="memberNameB" value="${name}" />
   <div class="item">
     <label>甲方</label>

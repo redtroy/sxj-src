@@ -124,6 +124,38 @@
         	});
         	
         	}
+        
+        $(document).ready(function(){
+    		$(".myimagelist").each(function(){
+    			var imgPath='';
+    			$(this).children(".pic").children("a").each(function(i){
+    				imgPath+=$(this).attr("data-image")+',';
+    			});
+    			var $this=$(this);
+    			$.post("${basePath}filesort.htm",{fileId:imgPath},function(data,status){
+    				$this.children(".pic").children("a").each(function(i){
+    					$(this).attr("data-image","${b.imagePath}"+data[i]);
+    					$(this).find("img").attr("src","${b.imagePath}"+data[i]);
+    				})
+    			});
+    		});
+    		$(".recordImgList").each(function(){
+    			var imgPath='';
+    			$(this).children(".pic").children("a").each(function(i){
+    				imgPath+=$(this).attr("data-image")+',';
+    			});
+    			var $this=$(this);
+    			$.post("${basePath}filesort.htm",{fileId:imgPath},function(data){
+    				$this.children(".pic").children("a").each(function(i){
+    					$(this).attr("data-image","${b.imagePath}"+data[i]);
+    					$(this).find("img").attr("src","${b.imagePath}"+data[i]+"80x100.JPG");
+    				})
+    			});
+    		});
+    	
+    	
+    	}); 
+    	function addBa
     </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -319,11 +351,11 @@
 											onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
 										<div class="Cont" id="ISL_Cont">
 											<div class="ScrCont">
-												<div id="List1">
+												<div class="recordImgList">
 													<!-- 图片列表 begin -->
-													<#assign arr=(contractModel.contract.imgPath?split(","))>
+													<#assign arr=(record.imgPath?split(","))>
 													<#list arr as imgPath>
-													 <div class="pic"><a href="#" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}"  /></a></div>
+													 <div class="pic"><a href="#" class="demo-image" data-image="${imgPath}"><img src="${imgPath}"  /></a></div>
 													</#list>
 													<!-- 图片列表 end -->
 												</div>
