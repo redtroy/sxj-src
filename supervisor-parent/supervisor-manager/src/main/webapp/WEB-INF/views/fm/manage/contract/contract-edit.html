@@ -224,8 +224,8 @@ function modify(){
               </#list>
 					</table>
 					<div>
-						<label>本合同还有</label> <input name="contract.batchCount" type="<#if contractModel.batchList?exists> ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
-            <#else> ${contractModel.contract.batchCount} </#if>" value="2" class="input-w30" /> 批次待交付
+						<label>本合同还有</label> <input name="contract.batchCount" type="text" value="<#if contractModel.batchList?exists> ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
+            <#else> ${contractModel.contract.batchCount} </#if>" class="input-w30" /> 批次待交付
 					</div>
 					<div>
 						<label>合同定金</label> <input name="contract.deposit" type="text" value=" ${contractModel.contract.deposit}" />
@@ -276,8 +276,9 @@ function modify(){
 				</div>
 				<#if contractModel.modifyList?exists>
 				<div class="changeBox">
+				<#list contractModel.modifyList as modifyList>
 					<h2 class="title">合同变更信息</h2>
-					<#list contractModel.modifyList as modifyList>
+					
 					<input type="hidden" value="${modifyList.modifyContract.id}" name="modifyList[${modifyList_index}].modifyContract.id" />
 					<div class="infoBox producedBox f14">
 						<div>

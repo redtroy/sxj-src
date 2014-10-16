@@ -113,6 +113,7 @@ public class MemberServiceImpl implements IMemberService {
 			condition.addCondition("state", query.getMemberState());
 			condition.addCondition("startDate", query.getStartDate());// 开始时间
 			condition.addCondition("endDate", query.getEndDate());// 结束时间
+			condition.addCondition("typeB", query.getMemberTypeB());
 			condition.setPage(query);
 			List<MemberEntity> memberList = menberDao.queryMembers(condition);
 			query.setPage(condition);

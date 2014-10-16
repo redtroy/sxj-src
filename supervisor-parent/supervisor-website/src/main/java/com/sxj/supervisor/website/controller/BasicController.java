@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
+import org.csource.common.NameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -197,8 +201,12 @@ public class BasicController extends BaseController {
 				System.err.println("文件未上传");
 			} else {
 				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
+<<<<<<< HEAD
 						LocalFileUtil.getFileExtName(myfile
 								.getOriginalFilename()));
+=======
+						myfile.getOriginalFilename());
+>>>>>>> b6b6bdfa67cc93263999a3fba3f75416e9cc1816
 				fileIds.add(fileId);
 			}
 		}
@@ -211,14 +219,23 @@ public class BasicController extends BaseController {
 		out.close();
 	}
 
-	@RequestMapping("autoComple")
-	public @ResponseBody Map<String, String> autoComple(
+	/**
+	 * 甲方联想
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("autoCompleA")
+	public @ResponseBody Map<String, String> autoCompleA(
 			HttpServletRequest request, HttpServletResponse response,
 			String keyword) throws IOException {
 		MemberQuery mq = new MemberQuery();
 		if (keyword != "" && keyword != null) {
 			mq.setMemberName(keyword);
 		}
+		mq.setMemberType(0);
 		List<MemberEntity> list = memberService.queryMembers(mq);
 		List strlist = new ArrayList();
 		String sb = "";
@@ -235,5 +252,75 @@ public class BasicController extends BaseController {
 		out.close();
 		return null;
 	}
+	
+	/**
+	 * 乙方联想
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("autoCompleB")
+	public @ResponseBody Map<String, String> autoCompleB(
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword) throws IOException {
+		MemberQuery mq = new MemberQuery();
+		if (keyword != "" && keyword != null) {
+			mq.setMemberName(keyword);
+		}
+		mq.setMemberTypeB(0);
+		List<MemberEntity> list = memberService.queryMembers(mq);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (MemberEntity memberEntity : list) {
+			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+					+ memberEntity.getMemberNo() + "\"}";
+			strlist.add(sb);
+		}
+		String json = "{\"data\":" + strlist.toString() + "}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null;
+	}
+	@RequestMapping("filesort")
+	public @ResponseBody List<String> fileSort(String fileId)
+			throws IOException {
+		List<String> sortFile = new ArrayList<String>();
+		try {
+			String[] fileids = fileId.split(",");
+			Map<String, String> nameMap = new TreeMap<String, String>();
+			for (int i = 0; i < fileids.length; i++) {
+				List<NameValuePair> values = fastDfsClient
+						.getMetaList(fileids[i]);
+				String value = values.get(0).getValue();
+				nameMap.put(fileids[i], value);
+			}
+			List<Map.Entry<String, String>> mappingList = null;
+			// 通过ArrayList构造函数把map.entrySet()转换成list
+			mappingList = new ArrayList<Map.Entry<String, String>>(
+					nameMap.entrySet());
+			// 通过比较器实现比较排序
+			Collections.sort(mappingList,
+					new Comparator<Map.Entry<String, String>>() {
+						public int compare(Map.Entry<String, String> mapping1,
+								Map.Entry<String, String> mapping2) {
+							return mapping1.getValue().compareTo(
+									mapping2.getValue());
+						}
+					});
+			for (Map.Entry<String, String> mapping : mappingList) {
+				sortFile.add(mapping.getKey());
+			}
+			// Map<String, Object> map = new HashMap<String, Object>();
+			// map.put("", sortFile);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+		}
+		return sortFile;
 
+	}
 }

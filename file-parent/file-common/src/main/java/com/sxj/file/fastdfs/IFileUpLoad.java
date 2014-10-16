@@ -1,6 +1,9 @@
 package com.sxj.file.fastdfs;
 
 import java.io.File;
+import java.util.List;
+
+import org.csource.common.NameValuePair;
 
 public interface IFileUpLoad {
 
@@ -13,11 +16,11 @@ public interface IFileUpLoad {
 	 * 
 	 * @param file_buff
 	 *            :文件字节数组
-	 * @param file_name
+	 * @param originalName
 	 *            ：文件名
 	 * @return file_Url ：文件Url
 	 */
-	public String uploadFile(byte[] file_buff, String file_ext_name);
+	public String uploadFile(byte[] file_buff, String originalName);
 
 	/**
 	 * 上传文件
@@ -52,6 +55,14 @@ public interface IFileUpLoad {
 	public byte[] downloadFile(String file_Url);
 
 	/**
+	 * 获取文件元信息
+	 * 
+	 * @param file_Id文件路径
+	 * @return
+	 */
+	public List<NameValuePair> getMetaList(String file_Id);
+
+	/**
 	 * 获取缩略图
 	 * 
 	 * @param file_id
@@ -72,5 +83,14 @@ public interface IFileUpLoad {
 	 * @return
 	 */
 	public boolean removeFile(String file_Url);
+
+	/**
+	 * 删除文件
+	 * 
+	 * @param file_Urls
+	 *            ：文件路径
+	 * @return
+	 */
+	public boolean removeFile(String[] file_Urls);
 
 }

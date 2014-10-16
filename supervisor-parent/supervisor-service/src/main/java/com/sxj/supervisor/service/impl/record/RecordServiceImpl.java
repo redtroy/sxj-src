@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
@@ -23,6 +24,7 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -39,9 +41,12 @@ public class RecordServiceImpl implements IRecordService {
 
 	@Autowired
 	private IContractDao contractDao;
-	
+
 	@Autowired
 	private IContractBatchDao batchDao;
+
+	@Autowired
+	private IFileUpLoad fastDfsClient;
 
 	/**
 	 * 新增备案
@@ -75,20 +80,10 @@ public class RecordServiceImpl implements IRecordService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void modifyRecord(RecordEntity record) {
-		// RecordEntity re = getRecord(record.getId());
-		// re.setId(record.getId());
-		// re.setApplyName(record.getApplyName());
-		// re.setMemberNameA(record.getMemberNameA());
-		// re.setMemberNameB(record.getMemberNameB());
-		// re.setContractType(record.getContractType());
-		// re.setRecordNo(record.getRecordNo());
-		// re.setType(record.getType());
-		// if(record.getImgPath()!=null && record.getImgPath().length()>0){
-		// re.setImgPath(record.getImgPath());
-		// }
-		// if(record.getRfidNo()!=null && record.getRfidNo().length()>0){
-		// re.setRfidNo(record.getRfidNo());
-		// }
+		RecordEntity oldRe = getRecord(record.getId());
+		if (StringUtils.isNotEmpty(record.getImgPath())) {
+			fastDfsClient.removeFile(oldRe.getImgPath().split(","));
+		}
 		recordDao.updateRecord(record);
 	}
 
@@ -144,6 +139,7 @@ public class RecordServiceImpl implements IRecordService {
 			condition.addCondition("confirmState", query.getConfirmState());// 确认状态
 			condition.addCondition("sort", query.getSort());// 排序
 			condition.addCondition("sortColumn", query.getSortColumn());// 排序字段
+			condition.addCondition("flag", query.getFlag());// 备案方
 			condition.setPage(query);
 			List<RecordEntity> recordList = recordDao.queryRecord(condition);
 			query.setPage(condition);
@@ -206,22 +202,23 @@ public class RecordServiceImpl implements IRecordService {
 
 	@Override
 	@Transactional
-	public void modifyState(String contractId,String recordId, RecordConfirmStateEnum state) {
+	public void modifyState(String contractId, String recordId,
+			RecordConfirmStateEnum state) {
 		try {
-			
+
 			RecordEntity re = new RecordEntity();
 			re.setId(recordId);
 			re.setConfirmState(state);
 			recordDao.updateRecord(re);
-			ContractModel conModel =contractService.getContract(contractId);
+			ContractModel conModel = contractService.getContract(contractId);
 			ContractEntity con = conModel.getContract();
-			if(con.getConfirmState().getId()==0){
-				if(state.getId()==2){
+			if (con.getConfirmState().getId() == 0) {
+				if (state.getId() == 2) {
 					con.setConfirmState(ContractSureStateEnum.aaffirm);
-				}else if(state.getId()==3){
+				} else if (state.getId() == 3) {
 					con.setConfirmState(ContractSureStateEnum.baffirm);
 				}
-			}else {
+			} else {
 				con.setConfirmState(ContractSureStateEnum.filings);
 			}
 			contractDao.updateContract(con);
@@ -233,30 +230,31 @@ public class RecordServiceImpl implements IRecordService {
 
 	/**
 	 * 获取批次
+	 * 
 	 * @param recordId
 	 * @return
 	 */
 	@Override
 	@Transactional
 	public String getBatch(String recordId) {
-		try{
-			RecordEntity  re= recordDao.getRecord(recordId);
-			QueryCondition<ContractBatchEntity> query =new QueryCondition<ContractBatchEntity>();
+		try {
+			RecordEntity re = recordDao.getRecord(recordId);
+			QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
 			query.addCondition("contractId", re.getContractNo());
-			List<ContractBatchEntity> batchList =batchDao.queryBacths(query);
-			String batch ="";
-			String batchId="";
+			List<ContractBatchEntity> batchList = batchDao.queryBacths(query);
+			String batch = "";
+			String batchId = "";
 			for (ContractBatchEntity contractBatchEntity : batchList) {
-				batch+=contractBatchEntity.getBatchNo()+",";
-				batchId+=contractBatchEntity.getId()+",";
+				batch += contractBatchEntity.getBatchNo() + ",";
+				batchId += contractBatchEntity.getId() + ",";
 			}
-			if(batch!=""){
-				batch=batch.substring(0,batch.length()-1);
-				batchId=batchId.substring(0,batchId.length()-1);
+			if (batch != "") {
+				batch = batch.substring(0, batch.length() - 1);
+				batchId = batchId.substring(0, batchId.length() - 1);
 				StringBuffer sb = new StringBuffer();
 				sb.append(batch).append("#").append(batchId);
 				return sb.toString();
-			}else{
+			} else {
 				return "";
 			}
 		} catch (Exception e) {
@@ -266,7 +264,7 @@ public class RecordServiceImpl implements IRecordService {
 
 	@Override
 	public String getRfid(String batchId) {
-		try{
+		try {
 			ContractBatchEntity batch = batchDao.getBatch(batchId);
 			return batch.getRfidNo();
 		} catch (Exception e) {
@@ -277,21 +275,21 @@ public class RecordServiceImpl implements IRecordService {
 	@Override
 	@Transactional
 	public void sevaRecord(RecordEntity record) throws ServiceException {
-		try{
-		recordDao.addRecord(record);
-		//更改合同关联所有的备案状态
-		String contractNo=record.getContractNo();
-		contractService.getContractByContractNo(contractNo);
-		RecordQuery query = new RecordQuery();
-		query.setContractNo(contractNo);
-		query.setRecordType(RecordTypeEnum.contract.getId());
-		List<RecordEntity> list = queryRecord(query);
-		for (RecordEntity recordEntity : list) {
-			recordEntity.setConfirmState(RecordConfirmStateEnum.accepted);
-			recordDao.updateRecord(recordEntity);
+		try {
+			recordDao.addRecord(record);
+			// 更改合同关联所有的备案状态
+			String contractNo = record.getContractNo();
+			contractService.getContractByContractNo(contractNo);
+			RecordQuery query = new RecordQuery();
+			query.setContractNo(contractNo);
+			query.setRecordType(RecordTypeEnum.contract.getId());
+			List<RecordEntity> list = queryRecord(query);
+			for (RecordEntity recordEntity : list) {
+				recordEntity.setConfirmState(RecordConfirmStateEnum.accepted);
+				recordDao.updateRecord(recordEntity);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("更新备案错误", e);
 		}
-	} catch (Exception e) {
-		throw new ServiceException("更新备案错误", e);
-	}
 	}
 }

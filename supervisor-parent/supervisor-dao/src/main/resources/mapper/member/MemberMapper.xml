@@ -75,6 +75,9 @@
 		<if test="condition.type !=null">
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
+		<if test="condition.typeB !=null">
+			<![CDATA[AND TYPE != #{condition.typeB}]]>
+		</if>
 		<!-- 会员状态 -->
 		<if test="condition.checkState !=null">
 			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>

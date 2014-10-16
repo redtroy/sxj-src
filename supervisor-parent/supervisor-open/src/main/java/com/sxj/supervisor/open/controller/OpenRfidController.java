@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class OpenRfidController {
 
 	/**
-	 * 获取信息
+	 * 获取批次信息
 	 * @param rfidNo
 	 * @return
 	 */
@@ -30,6 +30,11 @@ public class OpenRfidController {
 		return null;
 	}
 	
+	/**
+	 * 获取合同规格信息
+	 * @param rfidNo
+	 * @return
+	 */
 	@RequestMapping(value = "info/contract/{rfidNo}")
 	public Map<String, Object> getRfidContractInfo(@PathVariable String rfidNo) {
 		return null;

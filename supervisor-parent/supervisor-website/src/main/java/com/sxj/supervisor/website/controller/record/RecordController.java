@@ -74,7 +74,7 @@ public class RecordController extends BaseController {
 			RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			query.setMemberId(userBean.getMember().getMemberNo());
+			query.setApplyId(userBean.getMember().getMemberNo());	
 			List<RecordEntity> list = recordService.queryRecord(query);
 			map.put("recordlist", list);
 			map.put("confirmState", rse);
@@ -130,8 +130,7 @@ public class RecordController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(), LocalFileUtil
-						.getFileExtName(myfile.getOriginalFilename()));
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),myfile.getOriginalFilename());
 				fileIds.add(fileId);
 			}
 		}
@@ -157,6 +156,7 @@ public class RecordController extends BaseController {
 		map.put("type", userBean.getMember().getType().getId());
 		map.put("name", userBean.getMember().getName());// name
 		map.put("id", userBean.getMember().getMemberNo());
+		map.put("state", userBean.getMember().getCheckState());
 		return "site/record/apply-record";
 	}
 
