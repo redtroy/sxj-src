@@ -60,16 +60,24 @@ jQuery(document).ready(function($) {
 function edit_pwd(id){
 	var pwd1=$("#pwd1").val();
 	var pwd2=$("#pwd2").val();
+	if (pwd1.length<6){
+		alert("密码长度至少为6位");
+		$("#pwd1").val("");
+		$("#pwd2").val("");
+		return false;
+	}
 	if (pwd1==pwd2){
 		$.post("edit_pwd.htm",{id:id,password:pwd1},function(data){
 			alert("修改成功！");
 			$('.maskdivgen').fadeOut(100);
 			$('.passwordPop').slideUp(200);
+			$("#pwd1").val("");
+			$("#pwd2").val("");
 		})
 	}else{
 		alert("两次密码输入不一样请重新输入!");
 		$("#pwd1").val("");
-		$("pwd2").val("");
+		$("#pwd2").val("");
 	}
 }
 function query(){
@@ -106,27 +114,21 @@ function query(){
 <div class="item certCont ly-clearFix">
 <label>企业资质</label>
 <div class="upload">
-<<<<<<< HEAD
 <p class="f12">${member.bLicenseNo}</p>
-=======
 <#if member.bLicensePath==null>
 <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 <a class="demo-image button button-blue f12" data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a>
 <#else>
->>>>>>> 6e8ac848a81ea1daa72375284d93a057cceec8f3
 <img src="${b.imagePath}${member.bLicensePath}" width="80" height="107" />
 <a class="demo-image button button-blue f12" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
 </#if>
 </div>
 <div class="upload">
-<<<<<<< HEAD
 <p class="f12">${member.energyNo}</p>
-=======
 <#if member.energyPath==null>
 <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 <a class="demo-image button button-blue f12" data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a>
 <#else>
->>>>>>> 6e8ac848a81ea1daa72375284d93a057cceec8f3
 <img src="${b.imagePath}${member.energyPath}" width="80" height="107" />
 <a class="demo-image button button-blue f12" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a>
 </#if>
