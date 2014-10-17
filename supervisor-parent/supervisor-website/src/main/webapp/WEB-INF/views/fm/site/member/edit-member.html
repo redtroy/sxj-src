@@ -112,8 +112,9 @@ function subForm(ids){
           </select>
         </div>
         <div class="item  ly-clearFix">
-          <label>企业资质编号</label>          
+          <label>企业资质</label>          
           <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="bLicenseNo" value="" ></input></p>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
 		   <#else>
@@ -125,6 +126,8 @@ function subForm(ids){
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
          <div class="ly-left editBox">
+                   <p><input class="input input-w140h30 mb5" id="energyNo" value=""></input></p>
+         
            <#if (member.bLicensePath??)>
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
           <#else>
@@ -153,15 +156,17 @@ function subForm(ids){
         </div>
         <div class="item">
           <label>联系人</label>
-          <input type="text" class="input input-w100h36" value="${member.contacts}" title="请输入联系人" name="input5" id="contacts" datatype="*2-30" nullmsg="请输入公司名" />
+          <!-- <input type="text" class="input input-w100h36" value="${member.contacts}" title="请输入联系人" name="input5" id="contacts" datatype="*2-30" nullmsg="请输入公司名" /> -->
+          ${member.contacts}
         </div>
         <div class="item">
           <label>联系人手机</label>
-          <input type="text" class="input input-w100h36" value="${member.phoneNo}" name="input3" id="phoneNo" datatype="n11-11" nullmsg="请输入手机号码" title="请输入手机号码"/>
+          <!-- <input type="text" class="input input-w100h36" value="${member.phoneNo}" name="input3" id="phoneNo" datatype="n11-11" nullmsg="请输入手机号码" title="请输入手机号码"/>-->
+          ${member.phoneNo}
         </div>
         <div class="item mt10">
           <label>&nbsp;</label>
-          <a class="button button-orange mr15" href="#" onclick="subForm('${member.id}')">确认会员资料</a><a class="button button-gray" href="javascript:history.go(-1)">取消
+          <a class="button button-orange mr15" href="#" onclick="subForm('${member.id}')">完善会员资料</a><a class="button button-gray" href="javascript:history.go(-1)">取消
           
           </a> </div>
           </form>
