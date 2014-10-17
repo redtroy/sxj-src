@@ -38,7 +38,9 @@ function  AcgApplyRecord(){
 			   $("#recordNo").html(data.recordNo);
 			   	 $("#contBox").show();
 				  $("#cgDiv").hide();
-			   }
+			}else if(data.isOK=='no'){
+				alert("您还没有通过认证,不能申请备案!");
+			}
 	})
 }
 /**
@@ -55,7 +57,9 @@ function  zbApplyRecord(){
 			   $("#recordNo").html(data.recordNo);
 			   	 $("#contBox").show();
 				  $("#cgDiv").hide();
-			   }
+		   }else if(data.isOK=='no'){
+				alert("您还没有通过认证,不能申请备案!");
+			}
 	})
 }
 /**
@@ -72,7 +76,9 @@ function  BzbApplyRecord(){
 			   $("#recordNo").html(data.recordNo);
 			   $("#contBox").show();
 			   $("#BcgDiv").hide();
-			   }
+		   }else if(data.isOK=='no'){
+				alert("您还没有通过认证,不能申请备案!");
+			}
 	})
 }
 

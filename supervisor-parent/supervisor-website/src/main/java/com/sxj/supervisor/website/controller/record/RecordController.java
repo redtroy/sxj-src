@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import com.sxj.file.common.LocalFileUtil;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
-import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
@@ -74,13 +72,14 @@ public class RecordController extends BaseController {
 			RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			query.setApplyId(userBean.getMember().getMemberNo());	
+			query.setApplyId(userBean.getMember().getMemberNo());
 			List<RecordEntity> list = recordService.queryRecord(query);
 			map.put("recordlist", list);
 			map.put("confirmState", rse);
 			map.put("query", query);
+			registChannel(MessageChannel.RECORD_MESSAGE, RecordThread.class,
+					userBean.getMember().getMemberNo());
 
-			registChannel(MessageChannel.RECORD_MESSAGE, RecordThread.class);
 			return "site/record/contract-list";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
@@ -130,7 +129,8 @@ public class RecordController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),myfile.getOriginalFilename());
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
+						myfile.getOriginalFilename());
 				fileIds.add(fileId);
 			}
 		}
@@ -172,29 +172,34 @@ public class RecordController extends BaseController {
 	public @ResponseBody Map<String, String> cgApplyRecord(RecordEntity record,
 			HttpSession session) throws WebException {
 		try {
+			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			MemberEntity member = memberService.memberInfo(record
-					.getMemberIdB());
+			if (userBean.getMember().getCheckState().getId() == 2) {
+				MemberEntity member = memberService.memberInfo(record
+						.getMemberIdB());
 
-			record.setApplyId(userBean.getMember().getMemberNo());
-			record.setApplyName(userBean.getMember().getName());
-			record.setState(RecordStateEnum.noBinding);
-			record.setType(RecordTypeEnum.contract);
-			record.setApplyDate(new Date());
-			record.setDelState(false);
-			if (member.getType().getId() == 1) {
-				record.setContractType(ContractTypeEnum.glass);// 合同类型
-			} else if (member.getType().getId() == 2) {
-				record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+				record.setApplyId(userBean.getMember().getMemberNo());
+				record.setApplyName(userBean.getMember().getName());
+				record.setState(RecordStateEnum.noBinding);
+				record.setType(RecordTypeEnum.contract);
+				record.setApplyDate(new Date());
+				record.setDelState(false);
+				if (member.getType().getId() == 1) {
+					record.setContractType(ContractTypeEnum.glass);// 合同类型
+				} else if (member.getType().getId() == 2) {
+					record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+				}
+
+				record.setFlag(RecordFlagEnum.A);
+				record.setConfirmState(RecordConfirmStateEnum.accepted);
+				recordService.addRecord(record);
+				map.put("isOK", "ok");
+				map.put("recordNo", record.getRecordNo());
+			} else {
+				map.put("isOK", "no");
 			}
 
-			record.setFlag(RecordFlagEnum.A);
-			record.setConfirmState(RecordConfirmStateEnum.accepted);
-			recordService.addRecord(record);
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("isOK", "ok");
-			map.put("recordNo", record.getRecordNo());
 			return map;
 		} catch (Exception e) {
 			throw new WebException(e);
@@ -213,21 +218,25 @@ public class RecordController extends BaseController {
 	public @ResponseBody Map<String, String> zbApplyRecord(RecordEntity record,
 			HttpSession session) throws WebException {
 		try {
+			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			record.setApplyId(userBean.getMember().getMemberNo());
-			record.setApplyName(userBean.getMember().getName());
-			record.setState(RecordStateEnum.noBinding);
-			record.setType(RecordTypeEnum.contract);
-			record.setApplyDate(new Date());
-			record.setDelState(false);
-			record.setConfirmState(RecordConfirmStateEnum.accepted);
-			record.setContractType(ContractTypeEnum.bidding);// 合同类型
-			record.setFlag(RecordFlagEnum.B);
-			recordService.addRecord(record);
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("isOK", "ok");
-			map.put("recordNo", record.getRecordNo());
+			if (userBean.getMember().getCheckState().getId() == 2) {
+				record.setApplyId(userBean.getMember().getMemberNo());
+				record.setApplyName(userBean.getMember().getName());
+				record.setState(RecordStateEnum.noBinding);
+				record.setType(RecordTypeEnum.contract);
+				record.setApplyDate(new Date());
+				record.setDelState(false);
+				record.setConfirmState(RecordConfirmStateEnum.accepted);
+				record.setContractType(ContractTypeEnum.bidding);// 合同类型
+				record.setFlag(RecordFlagEnum.B);
+				recordService.addRecord(record);
+				map.put("isOK", "ok");
+				map.put("recordNo", record.getRecordNo());
+			} else {
+				map.put("isOK", "no");
+			}
 			return map;
 		} catch (Exception e) {
 			throw new WebException(e);
@@ -246,27 +255,31 @@ public class RecordController extends BaseController {
 	public @ResponseBody Map<String, String> BzbApplyRecord(
 			RecordEntity record, HttpSession session) throws WebException {
 		try {
+			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			MemberEntity member = memberService.memberInfo(record
-					.getMemberIdB());
-			record.setApplyId(userBean.getMember().getMemberNo());
-			record.setApplyName(userBean.getMember().getName());
-			record.setState(RecordStateEnum.noBinding);
-			record.setType(RecordTypeEnum.contract);
-			record.setApplyDate(new Date());
-			record.setDelState(false);
-			if (member.getType().getId() == 1) {
-				record.setContractType(ContractTypeEnum.glass);// 合同类型
-			} else if (member.getType().getId() == 2) {
-				record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+			if (userBean.getMember().getCheckState().getId() == 2) {
+				MemberEntity member = memberService.memberInfo(record
+						.getMemberIdB());
+				record.setApplyId(userBean.getMember().getMemberNo());
+				record.setApplyName(userBean.getMember().getName());
+				record.setState(RecordStateEnum.noBinding);
+				record.setType(RecordTypeEnum.contract);
+				record.setApplyDate(new Date());
+				record.setDelState(false);
+				if (member.getType().getId() == 1) {
+					record.setContractType(ContractTypeEnum.glass);// 合同类型
+				} else if (member.getType().getId() == 2) {
+					record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+				}
+				record.setFlag(RecordFlagEnum.B);
+				record.setConfirmState(RecordConfirmStateEnum.accepted);
+				recordService.addRecord(record);
+				map.put("isOK", "ok");
+				map.put("recordNo", record.getRecordNo());
+			} else {
+				map.put("isOK", "no");
 			}
-			record.setFlag(RecordFlagEnum.B);
-			record.setConfirmState(RecordConfirmStateEnum.accepted);
-			recordService.addRecord(record);
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("isOK", "ok");
-			map.put("recordNo", record.getRecordNo());
 			return map;
 		} catch (Exception e) {
 			throw new WebException(e);
@@ -401,8 +414,10 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+
 	/**
 	 * 获取备案批次
+	 * 
 	 * @param recordId
 	 * @param contractId
 	 * @param session
@@ -410,13 +425,14 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("getBatch")
-	public @ResponseBody Map<String, String> getBatch(String recordId) throws WebException {
+	public @ResponseBody Map<String, String> getBatch(String recordId)
+			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			String batch =recordService.getBatch(recordId);
-			if(batch!=""){
+			String batch = recordService.getBatch(recordId);
+			if (batch != "") {
 				map.put("batch", batch);
-			}else{
+			} else {
 				map.put("batch", "");
 			}
 			return map;
@@ -425,14 +441,16 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+
 	@RequestMapping("getRfid")
-	public @ResponseBody Map<String, String> getRfid(String batchId) throws WebException {
+	public @ResponseBody Map<String, String> getRfid(String batchId)
+			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			String rfid =recordService.getRfid(batchId);
-			if(rfid!=""){
+			String rfid = recordService.getRfid(batchId);
+			if (rfid != "") {
 				map.put("rfid", rfid);
-			}else{
+			} else {
 				map.put("rfid", "");
 			}
 			return map;

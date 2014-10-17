@@ -90,19 +90,23 @@ public class RecordServiceImpl implements IRecordService {
 		if (StringUtils.isNotEmpty(record.getImgPath())) {
 			nowPath = record.getImgPath().split(",");
 		}
-		for (int i = 0; i < oldPath.length; i++) {
-			if (StringUtils.isNotEmpty(oldPath[i])) {
-				continue;
-			}
-			for (int j = 0; j < nowPath.length; j++) {
-				if (StringUtils.isNotEmpty(nowPath[j])) {
+		StringBuffer newPath = new StringBuffer();
+		if (oldPath != null && oldPath.length > 0  ) {
+			for (int i = 0; i < oldPath.length; i++) {
+				if (StringUtils.isNotEmpty(oldPath[i])) {
 					continue;
 				}
-				if(!oldPath[i].equals(nowPath[j])){
-					fastDfsClient.removeFile(oldPath[i]);
+				for (int j = 0; j < nowPath.length; j++) {
+					if (StringUtils.isNotEmpty(nowPath[j])) {
+						continue;
+					} 
+					if (!oldPath[i].equals(nowPath[j])) {
+						fastDfsClient.removeFile(oldPath[i]);
+					}
 				}
 			}
 		}
+		
 		recordDao.updateRecord(record);
 	}
 

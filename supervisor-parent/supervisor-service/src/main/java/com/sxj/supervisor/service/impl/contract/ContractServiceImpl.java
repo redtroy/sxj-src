@@ -407,7 +407,8 @@ public class ContractServiceImpl implements IContractService {
 							cmm.setModifyItemList(item);
 							QueryCondition<ModifyBatchEntity> query = new QueryCondition<ModifyBatchEntity>();
 							query.addCondition("modifyId", modify.getId());
-							List<ModifyBatchEntity> batch = contractModifyBatchDao.queryBacths(query);// 变更批次
+							List<ModifyBatchEntity> batch = contractModifyBatchDao
+									.queryBacths(query);// 变更批次
 							if (batch != null && batch.size() > 0) {
 								List<ModifyBatchModel> modifyBatchModelList = new ArrayList<ModifyBatchModel>();
 								for (int j = 0; j < batch.size(); j++) {
@@ -469,9 +470,10 @@ public class ContractServiceImpl implements IContractService {
 								.get(i);
 						contractReplenishModel
 								.setReplenishContract(replenishEntity);
-						QueryCondition<ReplenishBatchEntity> query=new QueryCondition<ReplenishBatchEntity>();
+						QueryCondition<ReplenishBatchEntity> query = new QueryCondition<ReplenishBatchEntity>();
 						query.addCondition("recordIds", replenishEntity.getId());
-						List<ReplenishBatchEntity> replenishBatchList = contractReplenishBatchDao.queryReplenishBatch(query);
+						List<ReplenishBatchEntity> replenishBatchList = contractReplenishBatchDao
+								.queryReplenishBatch(query);
 						List<ContractReplenishModel> crmList = new ArrayList<ContractReplenishModel>();
 						if (replenishBatchList != null) {
 							List<ReplenishBatchModel> ReplenishBatchModelList = new ArrayList<ReplenishBatchModel>();
@@ -615,9 +617,9 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	@Transactional
-	public void changeContract(String recordId,String contractId, ContractModifyModel model,
-			String recordNo, List<ContractItemEntity> itemList)
-			throws ServiceException {
+	public void changeContract(String recordId, String contractId,
+			ContractModifyModel model, String recordNo,
+			List<ContractItemEntity> itemList) throws ServiceException {
 		try {
 			ModifyContractEntity mec = model.getModifyContract();
 			if (itemList != null) {
@@ -672,7 +674,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 补损合同
 	 */
 	@Override
-	public void suppContract(String recordId,String contractId,
+	public void suppContract(String recordId, String contractId,
 			List<ReplenishBatchModel> batchList,
 			ReplenishContractEntity replenishContract) throws ServiceException {
 		try {
@@ -746,28 +748,55 @@ public class ContractServiceImpl implements IContractService {
 				ce.setState(state);
 				contractDao.updateContract(ce);
 			}
-			ContractEntity  centity=contractDao.getContract(contractId);
-			if(centity.getRecordNo()!=null){
-				String[] arr =centity.getRecordNo().split(",");
+			ContractEntity centity = contractDao.getContract(contractId);
+			if (centity.getRecordNo() != null) {
+				String[] arr = centity.getRecordNo().split(",");
 				for (String recordNo : arr) {
 					RecordEntity re = recordService.getRecordByNo(recordNo);
-					if(re!=null){
-					List<String> messageList = null;
-					Object cache = HierarchicalCacheManager.get(2,
-							"comet_record", "record_push_message");
-					if (cache instanceof ArrayList) {
-						messageList = (List<String>) cache;
-					} else {
-						messageList = new ArrayList<String>();
-					}
-					String message = re.getId() + "," + re.getType().getName()+","+centity.getContractNo();
-					messageList.add(message);
-					HierarchicalCacheManager.set(2, "comet_record",
-							"record_push_message", messageList);
+					if (re != null) {
+						if (re.getFlag().getId() == 0) {
+							List<String> messageList = null;
+							Object cache = HierarchicalCacheManager.get(2,
+									"comet_record",
+									"record_push_message_" + re.getMemberIdA());
+							if (cache instanceof ArrayList) {
+								messageList = (List<String>) cache;
+							} else {
+								messageList = new ArrayList<String>();
+							}
+							String message = re.getId() + ","
+									+ re.getType().getName() + ","
+									+ centity.getContractNo() + ','
+									+ re.getMemberIdA();
+							messageList.add(message);
+							HierarchicalCacheManager.set(2, "comet_record",
+									"record_push_message_" + re.getMemberIdA(),
+									messageList);
+						}
+						// 乙方
+						if (re.getFlag().getId() == 1) {
+							List<String> messageListB = null;
+							Object cacheB = HierarchicalCacheManager.get(2,
+									"comet_record",
+									"record_push_message_" + re.getMemberIdB());
+							if (cacheB instanceof ArrayList) {
+								messageListB = (List<String>) cacheB;
+							} else {
+								messageListB = new ArrayList<String>();
+							}
+							String messageB = re.getId() + ","
+									+ re.getType().getName() + ","
+									+ centity.getContractNo() + ','
+									+ re.getMemberIdB();
+							messageListB.add(messageB);
+							HierarchicalCacheManager.set(2, "comet_record",
+									"record_push_message_" + re.getMemberIdB(),
+									messageListB);
+						}
 					}
 				}
 			}
-			
+
 		} catch (Exception e) {
 			throw new ServiceException("审核合同错误", e);
 		}
@@ -839,7 +868,7 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException("获取合同信息错误", e);
 		}
 	}
-	
+
 	@Override
 	public List<ModifyBatchModel> getContractModifyBatch(String contractNo,
 			String rfid) {
@@ -1020,9 +1049,10 @@ public class ContractServiceImpl implements IContractService {
 		if (replenishList.size() > 0 && replenishList != null) {
 			ReplenishContractEntity replenish = replenishList.get(0);
 			if (replenish.getId() != null) {
-				QueryCondition<ReplenishBatchEntity> query2=new QueryCondition<ReplenishBatchEntity>();
+				QueryCondition<ReplenishBatchEntity> query2 = new QueryCondition<ReplenishBatchEntity>();
 				query2.addCondition("recordIds", replenish.getId());
-				List<ReplenishBatchEntity> replenisBatch = contractReplenishBatchDao.queryReplenishBatch(query2);
+				List<ReplenishBatchEntity> replenisBatch = contractReplenishBatchDao
+						.queryReplenishBatch(query2);
 				return replenisBatch.get(0).getNewRfidNo();
 			}
 		}

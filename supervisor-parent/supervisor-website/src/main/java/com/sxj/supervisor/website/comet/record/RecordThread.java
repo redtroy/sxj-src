@@ -7,6 +7,7 @@ import java.util.List;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.website.comet.MessageChannel;
 import com.sxj.supervisor.website.comet.MessageThread;
+import com.sxj.util.common.StringUtils;
 
 public class RecordThread extends MessageThread {
 
@@ -22,21 +23,29 @@ public class RecordThread extends MessageThread {
 			// 获取消息内容
 
 			List<String> messageList = null;
+			String key="record_push_message_";
+			if(StringUtils.isNotEmpty(getParam())){
+				key=key+getParam();
+			}
 			Object cache = HierarchicalCacheManager.get(2, "comet_record",
-					"record_push_message");
+					key);
 			if (cache instanceof ArrayList) {
 				messageList = (List<String>) cache;
 			}
-			System.out.println("--------------------" + messageList.size());
+			if (messageList != null) {
+				System.out.println("--------------------" + messageList.size());
+			}
+			System.out.println("##############" + messageList);
 			if (messageList != null) {
 				for (Iterator<String> iterator = messageList.iterator(); iterator
 						.hasNext();) {
 					String message = iterator.next();
 					// 开始发送
-					getEngine().sendToAll(MessageChannel.RECORD_MESSAGE, message);
+					getEngine().sendToAll(MessageChannel.RECORD_MESSAGE,
+							message);
 					iterator.remove();
 					HierarchicalCacheManager.set(2, "comet_record",
-							"record_push_message", messageList);
+							key, messageList);
 				}
 				// HierarchicalCacheManager.evict(2, "comet_record",
 				// "record_id");
