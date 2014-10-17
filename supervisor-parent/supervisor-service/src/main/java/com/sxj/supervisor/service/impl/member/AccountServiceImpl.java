@@ -241,12 +241,15 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public AccountEntity getAccountByName(String accountName, String id)
+	public AccountEntity getAccountByName(String accountName, String memberNo)
 			throws ServiceException {
 		try {
-			AccountQuery query = new AccountQuery();
-			List<AccountEntity> list = accountDao.getAccountByAccountName(
-					accountName, id);
+			QueryCondition<AccountEntity> condition = new QueryCondition<AccountEntity>();
+
+			condition.addCondition("parentId", memberNo);// 父会员号
+			condition.addCondition("accountName", accountName);// 子会员名称
+			List<AccountEntity> list = accountDao
+					.getAccountByAccountName(condition);
 			if (list != null && list.size() > 0) {
 				return list.get(0);
 			}

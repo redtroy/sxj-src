@@ -104,15 +104,7 @@ public class BasicController extends BaseController {
 		SupervisorPrincipal userBean = null;
 		if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isNotEmpty(accountName)) {
-			AccountEntity account = accountService.getAccountByName(
-					accountName, getLoginInfo(session).getMember()
-							.getMemberNo());
-			if (account == null) {
-				map.put("amessage", "会员子账户不存在");
-				return LOGIN;
-			}
-			String memberNo = account.getParentId();
-			MemberEntity member = memberService.memberInfo(memberNo);
+			MemberEntity member = memberService.getMemberByName(memberName);
 			if (member == null) {
 				map.put("message", "会员不存在");
 				return LOGIN;
@@ -121,6 +113,18 @@ public class BasicController extends BaseController {
 				map.put("message", "会员名错误");
 				return LOGIN;
 			}
+			if(MemberCheckStateEnum.unaudited.equals(member.getCheckState())){
+				map.put("message", "会员未审核");
+				return LOGIN;
+			}
+
+			AccountEntity account = accountService.getAccountByName(
+					accountName, member.getMemberNo());
+			if (account == null) {
+				map.put("amessage", "会员子账户不存在");
+				return LOGIN;
+			}
+
 			userBean = new SupervisorPrincipal();
 			userBean.setAccount(account);
 			userBean.setMember(member);
@@ -132,9 +136,17 @@ public class BasicController extends BaseController {
 				map.put("message", "会员不存在");
 				return LOGIN;
 			}
+			if(MemberCheckStateEnum.unaudited.equals(member.getCheckState())){
+				map.put("message", "会员未审核");
+				return LOGIN;
+			}
 			userBean = new SupervisorPrincipal();
 			userBean.setMember(member);
 			token = new SupervisorSiteToken(userBean, password);
+		} else {
+			map.put("message", "公司名称不能为空");
+			map.put("pmessage", "密码不能为空");
+			return LOGIN;
 		}
 		Subject currentUser = SecurityUtils.getSubject();
 		try {
