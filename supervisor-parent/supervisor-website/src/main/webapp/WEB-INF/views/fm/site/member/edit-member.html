@@ -125,7 +125,7 @@ function subForm(ids){
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
          <div class="ly-left editBox">
-           <#if (member.bLicensePath??)>
+           <#if (member.energyPath??)>
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
           <#else>
 		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg"> 

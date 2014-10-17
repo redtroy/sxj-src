@@ -15,8 +15,8 @@
 		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
 	</resultMap>
     <select id="getAccountByAccountName" resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"
-		parameterType="String">
-		<![CDATA[SELECT * FROM M_MEMBER_ACCOUNT WHERE ACCOUNT_NAME=#{accountName} and PARENT_ID=#{id}]]>
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_MEMBER_ACCOUNT WHERE ACCOUNT_NAME=#{condition.accountName} and PARENT_ID=#{condition.parentId}]]>
 	</select>
 	<!-- 子账户高级查询 -->
 	<select id="queryAccount" resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"

@@ -98,8 +98,8 @@ public class FastDFSImpl implements IFileUpLoad {
 			file_id = client.upload_file1(file_buff,
 					file_ext_name.toUpperCase(),
 					meta_list.toArray(new NameValuePair[meta_list.size()]));
-			// storageServer.close();
-			// trackerServer.close();
+			storageServer.close();
+			trackerServer.close();
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
 
 		} catch (SocketException e) {
@@ -124,8 +124,8 @@ public class FastDFSImpl implements IFileUpLoad {
 			file_id = client.upload_file1(file_buff,
 					file_ext_name.toUpperCase(),
 					meta_list.toArray(new NameValuePair[meta_list.size()]));
-			// storageServer.close();
-			// trackerServer.close();
+			storageServer.close();
+			trackerServer.close();
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
 
 		} catch (SocketException e) {
@@ -168,8 +168,8 @@ public class FastDFSImpl implements IFileUpLoad {
 			StorageClient1 client = new StorageClient1(trackerServer,
 					storageServer);
 			file_buff = client.download_file1(file_id);
-			// storageServer.close();
-			// trackerServer.close();
+			storageServer.close();
+			trackerServer.close();
 			if (file_buff != null && file_buff.length > 0) {
 				HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id,
 						file_buff);
@@ -236,8 +236,8 @@ public class FastDFSImpl implements IFileUpLoad {
 			StorageClient1 client = new StorageClient1(trackerServer,
 					storageServer);
 			int errno = client.delete_file1(file_id);
-			// storageServer.close();
-			// trackerServer.close();
+			storageServer.close();
+			trackerServer.close();
 			if (errno != 0) {
 				return false;
 			}
