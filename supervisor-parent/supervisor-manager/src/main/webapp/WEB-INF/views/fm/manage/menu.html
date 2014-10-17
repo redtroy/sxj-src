@@ -3,19 +3,22 @@
 	<ul>
 	    <#list model.children as mc>
 	    <#if Session.function==mc.id>
-		<li class="now"><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
+		<li id="${mc.id}_menu" onclick="changeClass(this);" class="now"><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
 		<#else>
-		<li><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
+		<li id="${mc.id}_menu" onclick="changeClass(this);" class=""><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
 		</#if>
 		</#list>
 	</ul>
 	</#list>
 <script>
-function changeClass(a)
-{
-    $("li").removeClass();
-    $(a).addClass("now");
-}
-
-
+$(document).ready(function($) {
+	var functionId=getUrlParam("function");
+	$("#leftList").find("li").removeClass("now");
+	$("#"+functionId+"_menu").addClass("now");
+	});
+function getUrlParam(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	if (r!=null) return unescape(r[2]); return null; //返回参数值
+} 
 </script>

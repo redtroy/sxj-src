@@ -81,8 +81,27 @@ public class RecordServiceImpl implements IRecordService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void modifyRecord(RecordEntity record) {
 		RecordEntity oldRe = getRecord(record.getId());
+		String[] oldPath = null;
+		String[] nowPath = null;
+		String oldImage = oldRe.getImgPath();
+		if (StringUtils.isNotEmpty(oldImage)) {
+			oldPath = oldImage.split(",");
+		}
 		if (StringUtils.isNotEmpty(record.getImgPath())) {
-			fastDfsClient.removeFile(oldRe.getImgPath().split(","));
+			nowPath = record.getImgPath().split(",");
+		}
+		for (int i = 0; i < oldPath.length; i++) {
+			if (StringUtils.isNotEmpty(oldPath[i])) {
+				continue;
+			}
+			for (int j = 0; j < nowPath.length; j++) {
+				if (StringUtils.isNotEmpty(nowPath[j])) {
+					continue;
+				}
+				if(!oldPath[i].equals(nowPath[j])){
+					fastDfsClient.removeFile(oldPath[i]);
+				}
+			}
 		}
 		recordDao.updateRecord(record);
 	}

@@ -25,8 +25,8 @@ jQuery(document).ready(function($) {
 	})
 	  $('#edit_pwd').css({
 		  position:'absolute',
-		  left: ($(window).width() - $('#edit_pwd').outerWidth())/2,
-		  top: ($(window).height() - $('#edit_pwd').outerHeight())/2 + $(document).scrollTop()
+		  left: "40%",
+		  top: "60%"
 		  });
 	})
 
@@ -106,14 +106,30 @@ function query(){
 <div class="item certCont ly-clearFix">
 <label>企业资质</label>
 <div class="upload">
+<<<<<<< HEAD
 <p class="f12">${member.bLicenseNo}</p>
+=======
+<#if member.bLicensePath==null>
+<img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+<a class="demo-image button button-blue f12" data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a>
+<#else>
+>>>>>>> 6e8ac848a81ea1daa72375284d93a057cceec8f3
 <img src="${b.imagePath}${member.bLicensePath}" width="80" height="107" />
 <a class="demo-image button button-blue f12" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
+</#if>
 </div>
 <div class="upload">
+<<<<<<< HEAD
 <p class="f12">${member.energyNo}</p>
+=======
+<#if member.energyPath==null>
+<img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+<a class="demo-image button button-blue f12" data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a>
+<#else>
+>>>>>>> 6e8ac848a81ea1daa72375284d93a057cceec8f3
 <img src="${b.imagePath}${member.energyPath}" width="80" height="107" />
 <a class="demo-image button button-blue f12" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a>
+</#if>
 </div></div>
 <div class="item"><label>公司电话</label>${member.telNum}</div>
 <div class="item">
