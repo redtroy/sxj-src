@@ -33,7 +33,7 @@
 ${type[0].getName()}</span>/
 <span>
 <input name="type" type="radio" value="${type[1].id}" />${type[1].getName()}</span>
-<span><input name="type" type="radio" value="${type[2].id}" />${type[2].getName()}</span></div>
+<span><input name="type" type="radio" value="${type[2].id}" />${type[2].getName()}</span> <div class="tipMsg msg-error" id="type_text" style="display:none;">请选择公司类型</div></div>
 <div class="item">
 <label><span class="color-red mr5 fb">*</span>公司所在地</label>
 <span class="mr10">江苏省</span><select name="area">
@@ -75,25 +75,32 @@ ${type[0].getName()}</span>/
  var reName=true;
  var intDiff = parseInt(59);//倒计时总秒数量
   function regist(){
+	 var flag=false;
 	 if ($("#contacts").val()=="" || $("#contacts").val()==null){
-		 alert("联系人不能为空！");
-		 return false;
+		 $("#ct").show();
+		 $("#ct").removeClass("msg-gray").removeClass("msg-suc");
+		 $("#ct").addClass("msg-error");
+		 $("#ct").text("联系人不能为空");
+		 flag=true;
 	 }
 	 
 	  if ($("input[name='type']:checked").val()==null){
-			 alert('请选择公司类型!');
-			 return false;
+			$("#type_text").show();
+			 flag=true;
 		 }
 	 if (!checkSubmitMobil()){
-		 return false;
+		 flag=true;
 	 }
 	 if($("#readme").attr("checked")!="checked"){
 		 $("#erro_text").show();
-		 return false;
+		 flag=true;
 	 }
 	 if (reName){
-		 alert('请检查用户名')
-		 return false;
+		 $("#name_text").show();
+		 $("#name_text").removeClass("msg-gray").removeClass("msg-suc");
+		 $("#name_text").addClass("msg-error");
+		 $("#name_text").text("公司名称不能为空");
+		 flag=true;
 	 }
 	 $("#sm_erro").show();
 	 if ($("#ms").val()==""){
@@ -102,7 +109,7 @@ ${type[0].getName()}</span>/
 		$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
 		 $("#sm_erro").addClass("msg-error");
 		 $("#sm_erro").text("请输入验证码");
-		 return false;
+		 flag=true;
 	 }
 	 if (!send_flag){
 		// alert("请先获取验证码！")
@@ -110,17 +117,20 @@ ${type[0].getName()}</span>/
 			$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
 		 $("#sm_erro").addClass("msg-error");
 		 $("#sm_erro").text("请先获取验证码");
-		 return false;
+		 flag=true;
 	 }
 	 if (!$("#ms").val().match(/^\d{6}$/)){
 		 //alert("验证码只能为6位数字！");
 		 // $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
 		 	$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
 		 $("#sm_erro").addClass("msg-error");
-		 $("#sm_erro").text("验证码只能为6位数字");
-		 return false;
+		 $("#sm_erro").text("请填写正确的验证码");
+		 flag=true;
 	 }
 	 var param=$("#ms").val();
+	 if (flag){
+		 return false;
+	 }
 	 $.get("${basePath}member/check_ms.htm?ms="+param,function(data){
 		 if(data.flag=="false"){
 			// $("#sm_erro").html('<span style="color:red">验证码错误</span>');
@@ -145,9 +155,25 @@ ${type[0].getName()}</span>/
 		$("#contacts").bind("focus",function(){
 			$("#ct").show();
 		})
+		$("#contacts").bind("blur",function(){
+			 if ($("#contacts").val()=="" || $("#contacts").val()==null){
+				 $("#ct").show();
+				 $("#ct").removeClass("msg-gray").removeClass("msg-suc");
+				 $("#ct").addClass("msg-error");
+				 $("#ct").text("联系人不能为空");
+			 }else{
+				 $("#ct").show();
+				 $("#ct").removeClass("msg-gray").removeClass("msg-error");
+				 $("#ct").addClass("msg-suc");
+				 $("#ct").text("验证通过");
+			 }
+		})
 		$("#phoneNo").bind("focus",function(){
 			$("#moileMsg").show();
 		})
+	  $("[name='type']").click(function(){
+		  $("#type_text").hide();
+	  })
 	  $("#name").blur(function(){
 		 var name=$("#name").val();
 		 if (name != ""){
