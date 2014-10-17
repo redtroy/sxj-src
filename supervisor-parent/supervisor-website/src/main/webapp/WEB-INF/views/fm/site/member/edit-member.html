@@ -16,7 +16,30 @@ var id;
 $(document).ready(function() { 
 	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
 	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
+	$("#bLicenseNo").click(function(){
+		$("#bLicenseNo_erro").hide();
+	})
+	$("#energyNo").click(function(){
+		$("#energyNo_erro").hide()
+	})
+	$('.btnPassword').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.passwordPop').slideDown(200);
+	})
+    $('#edit_pwd').css({
+		  position:'absolute',
+		  left: "40%",
+		  top: "60%"
+		  });
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.passwordPop').slideUp(200);
+	})
 }); 
+function close_div(){
+	$('.maskdivgen').fadeOut(100);
+	$('.passwordPop').slideUp(200);
+}
 function uploadLicense(data){
     var dataObj=eval("("+data+")");//转换为json对象
     if ($("#bLicensePath_img")!=null){
@@ -42,6 +65,24 @@ function save(){
     var contacts=$("#contacts").val();
     var phoneNo=$("#phoneNo").val();
     var area= $("#city  option:selected").val();
+    var bLicenseNo=$("#bLicenseNo").val()+"";
+    var energyNo=$("#energyNo").val()+"";
+    if (bLicensePath==""){
+    	alert("请上传营业执照图片");
+    	return false;
+    }
+    if (energyPath==""){
+    	alert("请上传节能标识图片");
+    	return false;
+    }
+    if (!bLicenseNo.match(/^[A-Za-z0-9]+$/)){
+    	$("#bLicenseNo_erro").show();
+    	return false;
+    }
+    if (!energyNo.match(/^[A-Za-z0-9]+$/)){
+    	$("#energyNo_erro").show();
+    	return false;
+    }
     $.post("save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
     	,energyPath:energyPath,area:area
     },function(data){
@@ -68,7 +109,29 @@ function subForm(ids){
 		});
 	 
  })
-	
+function edit_pwd(id){
+	var pwd1=$("#pwd1").val();
+	var pwd2=$("#pwd2").val();
+	if (pwd1.length<6){
+		alert("密码长度至少为6位");
+		$("#pwd1").val("");
+		$("#pwd2").val("");
+		return false;
+	}
+	if (pwd1==pwd2){
+		$.post("edit_pwd.htm",{id:id,password:pwd1},function(data){
+			alert("修改成功！");
+			$('.maskdivgen').fadeOut(100);
+			$('.passwordPop').slideUp(200);
+			$("#pwd1").val("");
+			$("#pwd2").val("");
+		})
+	}else{
+		alert("两次密码输入不一样请重新输入!");
+		$("#pwd1").val("");
+		$("#pwd2").val("");
+	}
+}	
 </script>
 </head>
 
@@ -114,7 +177,7 @@ function subForm(ids){
         <div class="item  ly-clearFix">
           <label>企业资质</label>          
           <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="bLicenseNo" value="" ></input></p>
+          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" placeholder="请输入营业执照号" ></input><span class="msg-error pa p5 ml5" style="display:none" id="bLicenseNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的营业执照号</span></p>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
 		   <#else>
@@ -126,13 +189,8 @@ function subForm(ids){
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
          <div class="ly-left editBox">
-<<<<<<< HEAD
-                   <p><input class="input input-w140h30 mb5" id="energyNo" value=""></input></p>
-         
+                   <p><input class="input input-w140h30 mb5" id="energyNo" placeholder="请输入节能标识号"></input><span class="msg-error pa p5 ml5" style="display:none" id="energyNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的节能标识号</span></p>
            <#if (member.bLicensePath??)>
-=======
-           <#if (member.energyPath??)>
->>>>>>> 6e8ac848a81ea1daa72375284d93a057cceec8f3
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
           <#else>
 		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg"> 
@@ -146,9 +204,9 @@ function subForm(ids){
         </div>
         <div class="item">
           <label>公司电话</label>
-          <input type="text" class="input input-w50h36" value="${member.telNum?split("-")[0]}" name="input" id="qh" datatype="n2-6">
+          <input type="text" class="input input-w50h36" value="${member.telNum?split("-")[0]}" name="input" id="qh" datatype="n2-6" errormsg="请填写正确的区号">
           --
-          <input type="text" class="input input-w100h36" value="${member.telNum?split("-")[1]}" name="input2" id="telNum" datatype="n5-10">
+          <input type="text" class="input input-w100h36" value="${member.telNum?split("-")[1]}" name="input2" id="telNum" datatype="n5-10" errormsg="请填写正确的电话号码">
         </div>
         <div class="item">
           <label>公司地址</label>
@@ -156,7 +214,7 @@ function subForm(ids){
         </div>
         <div class="item">
           <label>邮政编码</label>
-          <input type="text" class="input input-w100h36" value="${member.code}" title="请输入邮政编码" name="input4" id="code" datatype="n6-6" errormsg="区号为6位数字！" nullmsg="请输入邮政编码" />
+          <input type="text" class="input input-w100h36" value="${member.code}" title="请输入邮政编码" name="input4" id="code" datatype="n6-6" errormsg="邮政编码为6位数字！" nullmsg="请输入邮政编码" />
         </div>
         <div class="item">
           <label>联系人</label>
@@ -170,14 +228,20 @@ function subForm(ids){
         </div>
         <div class="item mt10">
           <label>&nbsp;</label>
-          <a class="button button-orange mr15" href="#" onclick="subForm('${member.id}')">完善会员资料</a><a class="button button-gray" href="javascript:history.go(-1)">取消
-          
-          </a> </div>
+          <a class="button button-orange mr15" href="#" onclick="subForm('${member.id}')">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
           </form>
       </div>
     </div>
 </div>
 </div>
+</div>
+<div class="modal-wrap popDemo contPop passwordPop" style="display:none;" id="edit_pwd">
+      <div class="modal-header"><span class="close">关闭</span></div>
+      <div class="modal-body">
+        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1"/></div>
+        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2"/></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="close_div();">取消</button></div>
+  </div>
 </div>
 <@b.footer /> 
 </body>
