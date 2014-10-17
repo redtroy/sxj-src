@@ -7,6 +7,8 @@ public abstract class MessageThread extends Thread {
 	private CometEngine engine;
 
 	private boolean flat = true;
+	
+	private String param;
 
 	public CometEngine getEngine() {
 		return engine;
@@ -23,4 +25,14 @@ public abstract class MessageThread extends Thread {
 	public void setFlat(boolean flat) {
 		this.flat = flat;
 	}
+
+	public String getParam() {
+		return param;
+	}
+
+	public void setParam(String param) {
+		this.param = param;
+	}
+	
+	
 }

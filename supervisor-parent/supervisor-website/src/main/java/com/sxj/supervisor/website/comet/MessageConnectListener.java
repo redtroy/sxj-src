@@ -13,11 +13,14 @@ public class MessageConnectListener extends ConnectListener {
 	private static int count = 0;
 
 	private CometEngine engine;
+	
+	private String param;
 
-	public MessageConnectListener(CometEngine engine, Class<?> threddClass) {
+	public MessageConnectListener(CometEngine engine, Class<?> threddClass,String param) {
 		super();
 		this.engine = engine;
 		this.threddClass = threddClass;
+		this.param=param;
 	}
 
 	public static MessageThread getAppModule() {
@@ -49,6 +52,7 @@ public class MessageConnectListener extends ConnectListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			appModule.setParam(param);
 			appModule.setEngine(engine);
 			appModule.setFlat(true);
 			appModule.setDaemon(true);

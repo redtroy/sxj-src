@@ -52,7 +52,7 @@
 	$(document)
 			.ready(
 					function() {
-						var hideVal = $("#imgPath").val();
+						
 						$(":file")
 								.uploadify(
 										{
@@ -67,9 +67,9 @@
 											onUploadSuccess : function(file,
 													data, response) {
 												var num = 0;
-												var dataObj = eval("(" + data
-														+ ")");//转换为json对象 
-												if (hideVal == null) {
+												var dataObj = eval("(" + data+ ")");//转换为json对象 
+												var hideVal = $("#imgPath").val();
+												if (hideVal == '') {
 													hideVal = dataObj.fileIds;
 												} else {
 													hideVal += ","
@@ -93,7 +93,7 @@
 														});
 														el.parent().children("li").removeClass("view");
 														el.addClass("view");
-														//$("#viewer2").children("img").attr("src",imageSource);
+														$("#viewer2").children("img").attr("src",imageSource);
 														$(".viewer").show();
 														$(".modal-header").show();
 														$(".maskdivgen").show();
@@ -108,6 +108,9 @@
 					});
 	$(document).ready(function() {
 		var imgPath = $("#imgPath").val();
+		$.ajaxSetup ({     
+		    cache: false 
+		}); 
 		$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
 			var j =0;
 			for (var i = 0; i < imgPaths.length; i++) {
@@ -129,15 +132,15 @@
 						onDelete:function(e){
 							var imgurl =$(this).children("img").attr("src");
 							var imgarr=imgurl.split("file-web/");
-							var delImg =$("#imgPath").val()+",";
-							delImg=delImg.replace(imgarr[1]+',','');
+							var delImg =$("#imgPath").val();
+							delImg=delImg.replace(new RegExp(imgarr[1]),'');
 							$("#imgPath").val(delImg);
-							var delImgPath =$("#delImgPath").val();
-							if(delImgPath==''){
-								$("#delImgPath").val(imgarr[1]);
-							}else{
-								$("#delImgPath").val(delImgPath+","+imgarr[1]);
-							}
+							//var delImgPath =$("#delImgPath").val();
+							//if(delImgPath==''){
+							//	$("#delImgPath").val(imgarr[1]);
+							//}else{
+							//	$("#delImgPath").val(delImgPath+","+imgarr[1]);
+							//}
 							$('.maskdivgen').fadeOut(100);
 							$('.viewer').slideUp(200);
 							el.remove();
@@ -145,7 +148,7 @@
 					});
 					el.parent().children("li").removeClass("view");
 					el.addClass("view");
-					//$("#viewer2").children("img").attr("src",imageSource);
+					$("#viewer2").children("img").attr("src",imageSource);
 					$(".viewer").show();
 					$(".modal-header").show();
 					$(".maskdivgen").show();

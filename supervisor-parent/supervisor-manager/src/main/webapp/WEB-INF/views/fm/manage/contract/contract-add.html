@@ -11,15 +11,16 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" />
 <script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/jqueryui.js"></script>
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
-<script src="${b.staticPath}js/jquery.imagecontainer.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
-
-	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+	<script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
+	<script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
@@ -33,19 +34,41 @@
 	})
 	$(document).ready(function() {
 		var imgPath = $("#imgId").val();
+		$.ajaxSetup ({     
+		    cache: false 
+		}); 
 		$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
+			var j =0;
 			for (var i = 0; i < imgPaths.length; i++) {
-				$("#List1").append('<div class="pic"><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+imgPaths[i]+'"><img src="${b.imagePath}'+imgPaths[i]+'"  /></a></div>');
+				j=i+1;
+				$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+imgPaths[i]+'"><img src="${b.imagePath}'+imgPaths[i]+'80x100.JPG" alt="" /></a><p>'+j+'</p></li>');
 			}
-		});
-		$('.demo-image').live('click', function() {
-			var imageSource = $(this).attr("data-image");
-			$("#viewer2").iviewer({
-				src : imageSource,
-				mousewheel : true
+			
+			$( '.elastislide-list' ).elastislide({
+				orientation : 'horizontal',
+				speed : 500,
+				easing : 'ease-in-out',
+				minItems : 3,
+				start : 0,
+				onClick : function( el, position, evt ) { 
+					var imageSource = el.find("a").attr("data-image");
+					$("#viewer2").iviewer({
+						src : imageSource,
+						mousewheel : true
+					});
+					el.parent().children("li").removeClass("view");
+					el.addClass("view");
+					$("#viewer2").children("img").attr("src",imageSource);
+					$(".viewer").show();
+					$(".modal-header").show();
+					$(".maskdivgen").show();
+					return false; 
+				},
+				onReady : function() { return false; },
+				onBeforeSlide : function() { return false; },
+				onAfterSlide : function() { return false; }
 			});
-			$(".viewer").show();
-			$(".modal-header").show();
+			
 		});
 	}); 
 </script>
@@ -150,7 +173,6 @@
 			<div id="leftList"><@b.leftMenu /></div>
 			<form action="addContract.htm" method="post" id="addForm">
 				<input type="hidden" name="recordId" value="${record.id}" />
-				<input type="hidden" name="contract.refContractNo" value="${record.refContractNo}" />
 				
 				<div id="rightBar">
 					<!-- InstanceBeginEditable name="rightBar" -->
@@ -239,22 +261,12 @@
 						<div class="contPic">
 							<label>合同扫描件</label>
 							<input type="hidden" value="${record.imgPath}" id="imgId" />
-							<div class="rollBox">
-										<div class="LeftBotton" onmousedown="ISL_GoUp()"
-											onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-										<div class="Cont" id="ISL_Cont">
-											<div class="ScrCont">
-												<div id="List1">
-												</div>
-												<div id="List2"></div>
-											</div>
-										</div>
-										<div class="RightBotton" onmousedown="ISL_GoDown()"
-											onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+									<div class="rollBox">
+										<ul id="carousel" class="elastislide-list"></ul>
 									</div>
-						</div>
+						</div>			
 						<div>
-							<label>关联招标合同号</label><input type="text" value=""
+							<label>关联招标合同号</label><input type="text" value="${record.refContractNo}"
 								name="contract.refContractNo" />
 						</div>
 						</ul>
