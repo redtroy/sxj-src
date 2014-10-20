@@ -23,5 +23,7 @@ public @interface Sn
     
     String sn() default "F_SN_NUMBER";
     
+    String stubValueProperty() default "";
+    
     String pattern() default "0000";
 }
