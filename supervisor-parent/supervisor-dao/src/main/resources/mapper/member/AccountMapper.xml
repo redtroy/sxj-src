@@ -12,7 +12,7 @@
 		<result property="regDate" column="REG_DATE" jdbcType="TIMESTAMP" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
-		<result property="lastLogin" column="LAST_LOGIN" jdbcType="DATE" />
+		<result property="lastLogin" column="LAST_LOGIN" jdbcType="TIMESTAMP" />
 	</resultMap>
     <select id="getAccountByAccountName" resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">

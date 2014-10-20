@@ -76,7 +76,8 @@ public class AccountController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("new_account")
-	public String new_account() {
+	public String new_account(String memberNo, ModelMap map) {
+		map.put("memberNo", memberNo);
 		return "site/member/add_account";
 	}
 
@@ -165,9 +166,12 @@ public class AccountController extends BaseController {
 	}
 
 	@RequestMapping("get_role_function")
-	public String getRloeFunctions(String accountId, String type, ModelMap map) {
+	public String getRloeFunctions(String memberNo, String accountId,
+			String type, ModelMap map) {
 		AccountEntity account = accountService.getAccount(accountId);
-		String memberNo = account.getParentId();
+		if(account!=null){
+			memberNo = account.getParentId();
+		}
 		MemberEntity member = memberService.memberInfo(memberNo);
 		int flag = 0;
 		if (MemberTypeEnum.DAWP.equals(member.getType())) {
