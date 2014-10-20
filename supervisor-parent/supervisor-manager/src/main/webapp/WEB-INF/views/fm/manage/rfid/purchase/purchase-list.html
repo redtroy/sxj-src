@@ -55,7 +55,7 @@ function confirmDelivery(id){
 		$.post("confirmDelivery.htm",{id:id},function(data){
 			if(data.isOK=='ok'){
 				alert("发货成功!");
-				window.location.href="query.htm";
+				query($("#pager").attr("currentPage"));
 			}else{
 				alert("发货失败!");	
 			}
@@ -67,7 +67,7 @@ function confirmPay(id){
 		$.post("confirmPay.htm",{id:id},function(data){
 			if(data.isOK=='ok'){
 				alert("确认付款成功!");
-				window.location.href="query.htm";
+				query($("#pager").attr("currentPage"));
 			}else{
 				alert("确认付款失败!");	
 			}
@@ -79,7 +79,7 @@ function confirmReceipt(id){
 		$.post("confirmReceipt.htm",{id:id},function(data){
 			if(data.isOK=='ok'){
 				alert("确认收货成功!");
-				window.location.href="query.htm";
+				query($("#pager").attr("currentPage"));
 			}else{
 				alert("确认收货失败!");	
 			}

@@ -12,7 +12,7 @@
 		<result property="regDate" column="REG_DATE" jdbcType="TIMESTAMP" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
-		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
+		<result property="lastLogin" column="LAST_LOGIN" jdbcType="DATE" />
 	</resultMap>
     <select id="getAccountByAccountName" resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
@@ -21,11 +21,11 @@
 	<!-- 子账户高级查询 -->
 	<select id="queryAccount" resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT A.ID,A.PARENT_ID,A.ACCOUNT_NAME,A.NAME,
-		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO 
-		 FROM M_MEMBER_ACCOUNT A  WHERE 1=1 ]]>
+		<![CDATA[SELECT DISTINCT A.ID,A.PARENT_ID,A.ACCOUNT_NAME,A.NAME,
+		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO,A.LAST_LOGIN  
+		 FROM M_MEMBER_ACCOUNT A LEFT JOIN M_MEMBER_ROLE r ON A.ID=r.ACCOUNT_ID WHERE 1=1]]>
 		<if test="condition.parentId != null and condition.parentId != ''">
-			<![CDATA[AND A.PARENT_ID LIKE CONCAT('%',#{condition.parentId},'%') ]]>
+			<![CDATA[AND A.PARENT_ID = #{condition.parentId} ]]>
 		</if>
 		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[AND A.NAME LIKE CONCAT('%',#{condition.name},'%')]]>
@@ -39,8 +39,9 @@
 		<if test="condition.state != null">
 			<![CDATA[AND A.STATE = #{condition.state}]]>
 		</if>
-		<if test="condition.delstate != null ">
-			<![CDATA[AND A.DEL_STATE = #{condition.delstate}]]>
+		<!-- 权限ID  -->
+		<if test="condition.functionId!= null  and condition.functionId!=''">
+			<![CDATA[ AND r.FUNCTION_ID=#{condition.functionId}]]>
 		</if>
 		<!-- 子会员注册时间段 -->
 		<if test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
