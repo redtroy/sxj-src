@@ -752,7 +752,7 @@ public class ContractServiceImpl implements IContractService {
 			if (centity.getRecordNo() != null) {
 				String[] arr = centity.getRecordNo().split(",");
 				for (String recordNo : arr) {
-					RecordEntity re = recordService.getRecordByNo(recordNo);
+					RecordEntity re = recordService.getRecordByNo(recordNo.trim());
 					if (re != null) {
 						if (re.getFlag().getId() == 0) {
 							List<String> messageList = null;
@@ -764,10 +764,20 @@ public class ContractServiceImpl implements IContractService {
 							} else {
 								messageList = new ArrayList<String>();
 							}
+							String msgName="";
+							if(re.getType().getId()==0){
+								if(re.getContractType().getId()==0){
+									msgName="开发商";
+								}
+							}else if(re.getType().getId()==1){
+								msgName="变更";
+							}else if(re.getType().getId()==2){
+								msgName="补损";
+							}
 							String message = re.getId() + ","
-									+ re.getType().getName() + ","
+									+ msgName + ","
 									+ centity.getContractNo() + ','
-									+ re.getMemberIdA();
+									+ re.getMemberIdA()+ ','+re.getType().getId();
 							messageList.add(message);
 							HierarchicalCacheManager.set(2, "comet_record",
 									"record_push_message_" + re.getMemberIdA(),
@@ -784,10 +794,20 @@ public class ContractServiceImpl implements IContractService {
 							} else {
 								messageListB = new ArrayList<String>();
 							}
+							String msgName="";
+							if(re.getType().getId()==0){
+								if(re.getContractType().getId()==0){
+									msgName="开发商";
+								}
+							}else if(re.getType().getId()==1){
+								msgName="变更";
+							}else if(re.getType().getId()==2){
+								msgName="补损";
+							}
 							String messageB = re.getId() + ","
-									+ re.getType().getName() + ","
+									+ msgName + ","
 									+ centity.getContractNo() + ','
-									+ re.getMemberIdB();
+									+ re.getMemberIdB()+ ','+re.getType().getId();;
 							messageListB.add(messageB);
 							HierarchicalCacheManager.set(2, "comet_record",
 									"record_push_message_" + re.getMemberIdB(),

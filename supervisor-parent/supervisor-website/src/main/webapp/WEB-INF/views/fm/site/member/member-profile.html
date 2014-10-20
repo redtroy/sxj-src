@@ -13,21 +13,21 @@
 <script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.imagecontainer.js" type="text/javascript"></script>
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
+<@b.validate/>
 <script>
+var validform;
 jQuery(document).ready(function($) {
 	$('.demo-image').click(function(){
 		$('.maskdivgen').fadeIn(100);
 		$('.viewer').slideDown(200);
-	})
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.viewer').slideUp(200);
 	})
 	  $('#edit_pwd').css({
 		  position:'absolute',
 		  left: "40%",
 		  top: "60%"
 		  });
+	validform=$("#edit_pwd").Validform({
+		tiptype:3});
 	})
 
 window.onload = function() {
@@ -44,6 +44,8 @@ window.onload = function() {
 }
 jQuery(document).ready(function($) {
 	$('.btnPassword').click(function(){
+		$("#edit_pwd").find("input").val("");
+		validform.resetForm();
 		$('.maskdivgen').fadeIn(100);
 		$('.passwordPop').slideDown(200);
 	})
@@ -52,37 +54,32 @@ jQuery(document).ready(function($) {
 		$('.passwordPop').slideUp(200);
 	})
 	
-	})
-	function close_div(){
+	})  
+function close_div(id){
 	$('.maskdivgen').fadeOut(100);
 	$('.passwordPop').slideUp(200);
+	//reset_edit_pwd();
 }
 function edit_pwd(id){
-	var pwd1=$("#pwd1").val();
-	var pwd2=$("#pwd2").val();
-	  if (pwd1 =="" || pwd2 =="" ){
-		  alert("密码不能为空！")
-		  return false;
-	  }
-	if (pwd1.length<6){
-		alert("密码长度至少为6位");
-		$("#pwd1").val("");
-		$("#pwd2").val("");
+	if (!validform.check()){
 		return false;
 	}
-	if (pwd1==pwd2){
+	var pwd1=$("#pwd1").val();
+	var pwd2=$("#pwd2").val();
 		$.post("edit_pwd.htm",{id:id,password:pwd1},function(data){
 			alert("修改成功！");
+			//reset_edit_pwd(id);
 			$('.maskdivgen').fadeOut(100);
 			$('.passwordPop').slideUp(200);
-			$("#pwd1").val("");
-			$("#pwd2").val("");
 		})
-	}else{
-		alert("两次密码输入不一样请重新输入!");
-		$("#pwd1").val("");
-		$("#pwd2").val("");
-	}
+	
+	
+}
+function reset_edit_pwd(id){
+	$("#edit_pwd").html('<div class="modal-header"><span class="close" onclick="close_div();">关闭</span></div><div class="modal-body">'+
+	'<div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>'+
+    '    <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>'+
+     ' <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd(\''+id+'\')">确认修改</button><button class="button button-gray " onclick="close_div();">取消</button></div> </div>')
 }
 function query(){
 
@@ -149,7 +146,7 @@ function query(){
   ${member.phoneNo}
 </div>
 <div class="item">
-  <label>子帐号</label><a href="sub-account.html" class="lnk-blue">${member.accountNum}个</a>
+  <label>子帐号</label><a href="account/accountList.htm" class="lnk-blue">${member.accountNum}个</a>
 </div>
 <div class="item">
   <label>帐号状态</label>
@@ -168,12 +165,12 @@ function query(){
 </div>
 </div>
 <@b.footer />
-<div class="modal-wrap popDemo contPop passwordPop" style="display:none;" id="edit_pwd">
-      <div class="modal-header"><span class="close">关闭</span></div>
+<div class="modal-wrap popDemo contPop passwordPop" style="display:none;width:550px;" id="edit_pwd">
+      <div class="modal-header"><span class="close" onclick="close_div('${member.id}');">关闭</span></div>
       <div class="modal-body">
-        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1"/></div>
-        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2"/></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="close_div();">取消</button></div>
+        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>
+        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="close_div('${member.id}');">取消</button></div>
   </div>
 </div>
     <div class="maskdivgen" style="display:none"></div>

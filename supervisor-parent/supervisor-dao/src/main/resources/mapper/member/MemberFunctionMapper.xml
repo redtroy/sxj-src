@@ -10,15 +10,19 @@
 		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
 		<result property="style" column="STYLE" jdbcType="VARCHAR" />
 		<result property="level" column="LEVEL" jdbcType="INTEGER" />
+		<result property="flag" column="FLAG" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 系统功能高级查询 --> 
 	<select id="queryFunctions" resultMap="MemberFunctionResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,TITLE,URL,PARENT_ID,LEVEL,STYLE 
+		<![CDATA[SELECT ID,TITLE,URL,PARENT_ID,LEVEL,STYLE,FLAG  
 		 FROM M_MEMBER_FUNCTION  WHERE 1=1 ]]>
 		 <if test="condition.parentId != null and condition.parentId!=''">
 			<![CDATA[ AND PARENT_ID=#{condition.parentId}]]>
+		</if>
+		 <if test="condition.flag != null and condition.flag!=''">
+			<![CDATA[ AND (FLAG=#{condition.flag} OR FLAG=0)]]>
 		</if>
 		<![CDATA[ ORDER BY 'DESC']]>
 	</select>

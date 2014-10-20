@@ -7,6 +7,9 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/comet4j.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
 <!-- InstanceEndEditable -->
@@ -118,7 +121,7 @@ jQuery(document).ready(function($) {
          </#list >
         </select></p>
        申请单时间段
-       <input type="text" name="starApplyDate" value="">-<input type="text" name="endApplyDate" value="">
+       <input type="text" name="starApplyDate" value="" datepicker />-<input type="text" name="endApplyDate" value="" datepicker />
         <a class="btn btn-blue" onclick="query();return false;"><span>查询</span></a>
         </form>
     </div>

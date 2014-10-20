@@ -99,19 +99,8 @@ public class AccountEntity extends Pagable implements Serializable {
 	@Length(max = 50, message = "子账户密码长度过长", groups = { AddGroup.class })
 	private String password;
 
-	/**
-	 * 逻辑删除标记
-	 **/
-	@Column(name = "DEL_STATE")
-	private Boolean delstate = false;
-
-	public Boolean getDelstate() {
-		return delstate;
-	}
-
-	public void setDelstate(Boolean delstate) {
-		this.delstate = delstate;
-	}
+	@Column(name = "LAST_LOGIN")
+	private Date lastLogin;
 
 	public String getId() {
 		return id;
@@ -176,4 +165,14 @@ public class AccountEntity extends Pagable implements Serializable {
 	public void setAccountNo(String accountNo) {
 		this.accountNo = accountNo;
 	}
+
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+	
+	
 }

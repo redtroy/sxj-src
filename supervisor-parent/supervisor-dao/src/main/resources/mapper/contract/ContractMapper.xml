@@ -64,8 +64,8 @@
 			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
 		</if>
 		<!-- 合同类型 -->
-		<if test="condition.type != null and condition.type != ''">
-			<![CDATA[AND TYPE = #{condition.type}]]>
+		<if test="condition.contractType != null and condition.contractType != ''">
+			<![CDATA[AND TYPE = #{condition.contractType}]]>
 		</if>
 		<!-- 关联招标合同号 -->
 		<if

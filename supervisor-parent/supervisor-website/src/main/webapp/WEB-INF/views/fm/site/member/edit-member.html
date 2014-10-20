@@ -12,7 +12,7 @@
 <@b.upload/>
 <@b.validate/>
 <script>
-var id;
+var edit_pwd_validform;
 $(document).ready(function() { 
 	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
 	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
@@ -23,6 +23,8 @@ $(document).ready(function() {
 		$("#energyNo_erro").hide()
 	})
 	$('.btnPassword').click(function(){
+		$("#edit_pwd").find("input").val("");
+		edit_pwd_validform.resetForm();
 		$('.maskdivgen').fadeIn(100);
 		$('.passwordPop').slideDown(200);
 	})
@@ -35,6 +37,10 @@ $(document).ready(function() {
 		$('.maskdivgen').fadeOut(100);
 		$('.passwordPop').slideUp(200);
 	})
+	$("#add_form").Validform({
+		tiptype:3});
+	edit_pwd_validform=$("#edit_pwd").Validform({
+		tiptype:3});
 }); 
 function close_div(){
 	$('.maskdivgen').fadeOut(100);
@@ -56,7 +62,12 @@ function uploadenergyPath(data){
     $("#energyPath_hidden").val(dataObj.fileIds);
 }
 
-function save(){
+function save(id){
+	var add_validform=$("#add_form").Validform({
+		tiptype:3});
+	if (!add_validform.check()){
+		return false;
+	}
 	var bLicensePath= $("#bLicensePath_hidden").val();
 	var energyPath= $("#energyPath_hidden").val();
 	var telNum=$("#qh").val()+'-'+$("#telNum").val();
@@ -84,7 +95,7 @@ function save(){
     	return false;
     }
     $.post("save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
-    	,energyPath:energyPath,area:area
+    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo
     },function(data){
     	if(data.isOK="ok"){
     		alert("修改成功！");
@@ -96,45 +107,17 @@ function save(){
     	
     })
 }
-function subForm(ids){
-	  id=ids;
-	  $("#add_form").submit();
- }
- $(function(){
-	 $("#add_form").Validform({
-			tiptype:3,
-			callback:function(form){
-				save();
-			}
-		});
-	 
- })
 function edit_pwd(id){
-	var pwd1=$("#pwd1").val();
-	var pwd2=$("#pwd2").val();
-	  if (pwd1 =="" || pwd2 =="" ){
-		  alert("密码不能为空！")
-		  return false;
-	  }
-	if (pwd1.length<6){
-		alert("密码长度至少为6位");
-		$("#pwd1").val("");
-		$("#pwd2").val("");
+	if (!edit_pwd_validform.check()){
 		return false;
 	}
-	if (pwd1==pwd2){
+	var pwd1=$("#pwd1").val();
+	var pwd2=$("#pwd2").val();
 		$.post("edit_pwd.htm",{id:id,password:pwd1},function(data){
 			alert("修改成功！");
 			$('.maskdivgen').fadeOut(100);
 			$('.passwordPop').slideUp(200);
-			$("#pwd1").val("");
-			$("#pwd2").val("");
 		})
-	}else{
-		alert("两次密码输入不一样请重新输入!");
-		$("#pwd1").val("");
-		$("#pwd2").val("");
-	}
 }	
 </script>
 </head>
@@ -154,7 +137,7 @@ function edit_pwd(id){
         <h1 class="ly-left"> <span class="title fontYH f20 fb">会员资料修改</span></h1>
       </div>
       <div class="contBox">
-      <form id="add_form" action="javascript:void(0);" method="post">
+      <form id="add_form" action="javascript:void(0)" method="post">
         <div class="item">
           <label>会员编号</label>
           <span class="color-blue">${member.memberNo}</span></div>
@@ -181,7 +164,7 @@ function edit_pwd(id){
         <div class="item  ly-clearFix">
           <label>企业资质</label>          
           <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" placeholder="请输入营业执照号" ></input><span class="msg-error pa p5 ml5" style="display:none" id="bLicenseNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的营业执照号</span></p>
+          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" placeholder="请输入营业执照号" ></input><span class="msg-error pa p5 ml5" style="display:none" id="bLicenseNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的营业执照号</span></p>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
 		   <#else>
@@ -193,7 +176,7 @@ function edit_pwd(id){
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
          <div class="ly-left editBox">
-                   <p><input class="input input-w140h30 mb5" id="energyNo" placeholder="请输入节能标识号"></input><span class="msg-error pa p5 ml5" style="display:none" id="energyNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的节能标识号</span></p>
+                   <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"></input><span class="msg-error pa p5 ml5" style="display:none" id="energyNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的节能标识号</span></p>
            <#if (member.bLicensePath??)>
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
           <#else>
@@ -232,19 +215,19 @@ function edit_pwd(id){
         </div>
         <div class="item mt10">
           <label>&nbsp;</label>
-          <a class="button button-orange mr15" href="#" onclick="subForm('${member.id}')">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
+          <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
           </form>
       </div>
     </div>
 </div>
 </div>
 </div>
-<div class="modal-wrap popDemo contPop passwordPop" style="display:none;" id="edit_pwd">
-      <div class="modal-header"><span class="close">关闭</span></div>
+<div class="modal-wrap popDemo contPop passwordPop" style="display:none;width:550px;" id="edit_pwd">
+      <div class="modal-header"><span class="close" onclick="close_div('${member.id}');">关闭</span></div>
       <div class="modal-body">
-        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1"/></div>
-        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2"/></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="close_div();">取消</button></div>
+        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>
+        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="close_div('${member.id}');">取消</button></div>
   </div>
 </div>
 <@b.footer /> 

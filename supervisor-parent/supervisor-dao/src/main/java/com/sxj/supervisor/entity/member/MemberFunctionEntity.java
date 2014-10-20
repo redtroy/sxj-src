@@ -56,6 +56,12 @@ public class MemberFunctionEntity extends Pagable implements Serializable {
 	@Column(name = "STYLE")
 	private String style;
 
+	/**
+	 * 所属方(0：all,1：甲方，2：乙方)
+	 */
+	@Column(name = "FLAG")
+	private Integer flag;
+
 	public String getId() {
 		return id;
 	}
@@ -102,6 +108,14 @@ public class MemberFunctionEntity extends Pagable implements Serializable {
 
 	public void setStyle(String style) {
 		this.style = style;
+	}
+
+	public Integer getFlag() {
+		return flag;
+	}
+
+	public void setFlag(Integer flag) {
+		this.flag = flag;
 	}
 
 }

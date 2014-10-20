@@ -383,10 +383,45 @@ public class RecordController extends BaseController {
 				contractModel = contractService.getContract(contract
 						.getContract().getId());
 			}
+			RecordEntity record= recordService.getRecord(recordId);
+			model.put("contractModel", contractModel);
+			model.put("recordId", recordId);
+			model.put("title", record.getType().getId());
+			model.put("type", member.getMember().getType().getId());
+			return "site/record/contract-confirm";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
+	}
+	
+	/**
+	 * 跳转确认合同
+	 * 
+	 * @param model
+	 * @param contractNo
+	 * @param recordNo
+	 * @param session
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("confirm-kfs")
+	public String confirmkfs(ModelMap model, String contractNo, String recordId,
+			HttpSession session) throws WebException {
+		try {
+			SupervisorPrincipal member = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
+			ContractModel contract = contractService
+					.getContractByContractNo(contractNo);
+			ContractModel contractModel = new ContractModel();
+			if (contract.getContract() != null) {
+				contractModel = contractService.getContract(contract
+						.getContract().getId());
+			}
 			model.put("contractModel", contractModel);
 			model.put("recordId", recordId);
 			model.put("type", member.getMember().getType().getId());
-			return "site/record/contract-confirm";
+			return "site/record/cont-developers";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");

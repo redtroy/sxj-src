@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.member;
  *
  */
 public enum AccountStatesEnum {
-	normal("已冻结", 0), stop("未冻结", 1);
+	normal("未冻结", 1), stop("已冻结", 0);
 
 	// 成员变量
 	private Integer id;

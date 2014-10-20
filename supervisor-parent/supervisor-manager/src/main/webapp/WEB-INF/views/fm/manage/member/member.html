@@ -12,6 +12,7 @@
 <script src="${b.staticPath}js/intense.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+
 <script>
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
@@ -79,7 +80,7 @@ jQuery(document).ready(function($) {
 		$.post("${basePath}member/editMember.htm",params,function(data){
 			if(data.isOK == 'ok'){
 				alert("修改成功");
-				query();
+				query($("#pager").attr("currentPage"));
 			}else{
 				errorInfo(data);
 			}
@@ -89,7 +90,7 @@ jQuery(document).ready(function($) {
    function editState(id,state){
 	  $.post("editState.htm",{id:id,state:state},function(data){
 		  if (data.isOK=='ok'){
-			  query();
+			  query($("#pager").attr("currentPage"));
 		   }else{
 				errorInfo(data);
 			}
@@ -118,7 +119,7 @@ jQuery(document).ready(function($) {
    function editCheckState(id,state){
 	  $.post("editCheckState.htm",{id:id,state:state},function(data){
 		  if (data.isOK=='ok'){
-			  query();
+			  query($("#pager").attr("currentPage"));
 		   }else{
 				errorInfo(data);
 			}
@@ -233,7 +234,11 @@ Intense( elements );
           <th class="rLine">操作</th>
         </tr>
         <#list memberList as member>
+        <#if member.state.id==0>
+        <tr class="bgColor-gray">
+        <#elseif member.state.id==1>
         <tr>
+         </#if>
           <td><a href="javascript:openDiv('${member.id}_info');" class="lnk-blue">${member.memberNo}</a></td>
           <td>${member.name}</td>
           <td>${member.contacts}</td>
@@ -250,9 +255,9 @@ Intense( elements );
            <td><em class="state verified">已认证</em></td>
           </#if>
           <#if member.state.id==0>
-          <td><a class="btn btn-green" onclick="editState('${member.id}',1)"><span>解冻</span></a></td>
+          <td><a class="btn btn-green" onclick="editState('${member.id}',1)"><span>冻结</span></a></td>
            <#elseif member.state.id==1>
-           <td><a class="btn btn-red" onclick="editState('${member.id}',0)"><span>冻结</span></a></td>
+           <td><a class="btn btn-red" onclick="editState('${member.id}',0)"><span>解冻</span></a></td>
           </#if>
           
           <td><a class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>

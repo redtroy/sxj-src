@@ -15,14 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.member.AccountQuery;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
+import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -40,6 +43,9 @@ public class AccountController extends BaseController {
 	@Autowired
 	private IMemberRoleService roleService;
 
+	@Autowired
+	private IMemberService memberService;
+
 	/**
 	 * 查询子账户列表
 	 * 
@@ -50,9 +56,6 @@ public class AccountController extends BaseController {
 	@RequestMapping("accountList")
 	public String accountList(AccountQuery query, HttpSession session,
 			ModelMap map) {
-		if (query != null) {
-			query.setPagable(true);
-		}
 		SupervisorPrincipal userBaen = getLoginInfo(session);
 		if (userBaen == null) {
 			return LOGIN;
@@ -163,6 +166,15 @@ public class AccountController extends BaseController {
 
 	@RequestMapping("get_role_function")
 	public String getRloeFunctions(String accountId, String type, ModelMap map) {
+		AccountEntity account = accountService.getAccount(accountId);
+		String memberNo = account.getParentId();
+		MemberEntity member = memberService.memberInfo(memberNo);
+		int flag = 0;
+		if (MemberTypeEnum.DAWP.equals(member.getType())) {
+			flag = 1;
+		} else {
+			flag = 2;
+		}
 		if ("get".equals(type)) {
 			List<MemberFunctionModel> list = roleService
 					.getRoleFunctions(accountId);
@@ -170,7 +182,7 @@ public class AccountController extends BaseController {
 			return "site/member/role_function";
 		} else if ("add".equals(type)) {
 			List<MemberFunctionModel> allList = functionService
-					.queryFunctions();
+					.queryFunctions(flag);
 			map.put("allList", allList);
 			return "site/member/edit_role";
 
@@ -178,7 +190,7 @@ public class AccountController extends BaseController {
 			List<MemberFunctionEntity> list = roleService
 					.getAllRoleFunction(accountId);
 			List<MemberFunctionModel> allList = functionService
-					.queryFunctions();
+					.queryFunctions(flag);
 			map.put("allList", allList);
 			map.put("roleList", list);
 			return "site/member/edit_role";
@@ -192,9 +204,16 @@ public class AccountController extends BaseController {
 	 * 判断自会员帐号是否存在
 	 */
 	@RequestMapping("check_account")
-	public @ResponseBody Map<String, String> check_account(String param,
-			HttpSession session) {
+	public @ResponseBody Map<String, String> check_account(String old,
+			String param, HttpSession session) {
 		Map<String, String> map = new HashMap<String, String>();
+		if (StringUtils.isNotEmpty(old)) {
+			if (old.equals(param)) {
+				map.put("status", "y");
+				map.put("info", "用户名还未被使用，可以注册！");
+				return map;
+			}
+		}
 		SupervisorPrincipal userBaen = getLoginInfo(session);
 		if (accountService.getAccountByName(param, userBaen.getMember()
 				.getMemberNo()) == null) {

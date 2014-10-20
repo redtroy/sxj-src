@@ -18,6 +18,8 @@ function saveAdd(){
 	var count =$("#count").val();
 	if(count!=0){
 		if(confirm('是否生成采购单?')){
+			var price =$("#price").val();
+			$("#price").val(parseFloat(price)*100);
 			$.post("add.htm",$("#add").serialize(),function(data){
 				if(data.isOK=='ok'){
 					alert("生成成功!");
@@ -35,10 +37,10 @@ function sum(){
 	var remaining = $("#remaining").val();
 	var price=$("#price").val();
 	var count =$("#count").val();
-	if(parseInt(count)>parseInt(remaining)){
+	if(parseFloat(count)>parseFloat(remaining)){
 		$("#count").val(remaining);
 	}
-	var ze=Number(price)*Number(count);
+	var ze=parseFloat(price)*parseFloat(count);
 	$("#ddze").html(ze+"元");
 }
 </script>
