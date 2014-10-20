@@ -12,6 +12,7 @@ import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.util.common.EncryptUtil;
@@ -57,6 +58,15 @@ public class MemberServiceImpl implements IMemberService {
 			MemberEntity oldMember = getMemberByName(member.getName());
 			if (oldMember != null) {
 				throw new ServiceException("会员名称已经存在");
+			}
+			if (MemberTypeEnum.DAWP.equals(member.getType())) {
+				member.setNoType("M");
+			} else if (MemberTypeEnum.glassFactory.equals(member.getType())) {
+				member.setNoType("B");
+			} else if (MemberTypeEnum.genresFactory.equals(member.getType())) {
+				member.setNoType("X");
+			} else {
+				member.setNoType("MEM");
 			}
 			menberDao.addMember(member);
 		} catch (Exception e) {

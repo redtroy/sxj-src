@@ -13,7 +13,7 @@
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
 		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
-		<result property="lastLogin" column="LAST_LOGIN" javaType="DATE" />
+		<result property="lastLogin" column="LAST_LOGIN" jdbcType="TIMESTAMP" />
 	</resultMap>
 
 	<!-- 条件查询用户 -->

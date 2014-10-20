@@ -60,8 +60,10 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 会员号
 	 **/
 	@Column(name = "MEMBER_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "MEM", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "000000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "noType")
 	private String memberNo;
+
+	private String noType;
 
 	/**
 	 * 会员密码
@@ -400,6 +402,14 @@ public class MemberEntity extends Pagable implements Serializable {
 
 	public void setType(MemberTypeEnum type) {
 		this.type = type;
+	}
+
+	public String getNoType() {
+		return noType;
+	}
+
+	public void setNoType(String noType) {
+		this.noType = noType;
 	}
 
 }
