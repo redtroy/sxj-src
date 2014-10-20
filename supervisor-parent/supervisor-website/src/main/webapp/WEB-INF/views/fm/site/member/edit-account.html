@@ -12,6 +12,7 @@
 <@b.errorInfo/>
 <Script>
 var editId;
+var pwd_validform;
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
 		$('.maskdivgen').fadeOut(100);
@@ -27,12 +28,14 @@ jQuery(document).ready(function($) {
 		  left: ($(window).width() - $('#edit_pwd').outerWidth())/2,
 		  top: ($(window).height() - $('#edit_pwd').outerHeight())/2 + $(document).scrollTop()
 		  });
+	  pwd_validform=$("#edit_pwd").Validform({
+			tiptype:3});
 	})
 	
  function close_pwd(){
 	$('.maskdivgen').fadeOut(100);
 	$('.passwordPop').slideUp(200);
-	reset_edit_pwd();
+	
 }
   //增加子账户
   function add_account(id){
@@ -64,6 +67,8 @@ jQuery(document).ready(function($) {
 	}
 //修改密码
   function edit_pwd(id){
+	 $("#edit_pwd").find("input").val("");
+	 pwd_validform.resetForm();
 	$('.maskdivgen').fadeIn(100);
 	$('.passwordPop').slideDown(200);
 	editId=id;
@@ -72,12 +77,10 @@ jQuery(document).ready(function($) {
   function close_div(){
 	$('.maskdivgen').fadeOut(100);
 	$('.passwordPop').slideUp(200);
-	reset_edit_pwd();
+	
 }
 //提交修改密码
   function save_pwd(){
-	var pwd_validform=$("#edit_pwd").Validform({
-			tiptype:3});
 	if (!pwd_validform.check()){
 		return false;
 	}
@@ -87,15 +90,8 @@ jQuery(document).ready(function($) {
 		  alert("修改成功！");
 		  $('.maskdivgen').fadeOut(100);
 		  $('.passwordPop').slideUp(200);
-		  reset_edit_pwd();
 	  })
   }
-  function reset_edit_pwd(){
-		$("#edit_pwd").html('<div class="modal-header"><span class="close" onclick="close_div();">关闭</span></div><div class="modal-body">'+
-		'<div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>'+
-	    '    <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>'+
-	     ' <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="save_pwd(\''+editId+'\')">确认修改</button><button class="button button-gray " onclick="close_div();">取消</button></div> </div>')
-	}
   //修改
   function edit_account(id){
 	   $("#"+id).find("#name_td").hide();

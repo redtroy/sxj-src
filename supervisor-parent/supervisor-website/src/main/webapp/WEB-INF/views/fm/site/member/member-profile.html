@@ -44,6 +44,7 @@ window.onload = function() {
 }
 jQuery(document).ready(function($) {
 	$('.btnPassword').click(function(){
+		$("#edit_pwd").find("input").val("");
 		validform.resetForm();
 		$('.maskdivgen').fadeIn(100);
 		$('.passwordPop').slideDown(200);

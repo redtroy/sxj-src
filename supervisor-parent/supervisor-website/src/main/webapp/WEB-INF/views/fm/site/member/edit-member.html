@@ -12,6 +12,7 @@
 <@b.upload/>
 <@b.validate/>
 <script>
+var edit_pwd_validform;
 $(document).ready(function() { 
 	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
 	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
@@ -22,6 +23,8 @@ $(document).ready(function() {
 		$("#energyNo_erro").hide()
 	})
 	$('.btnPassword').click(function(){
+		$("#edit_pwd").find("input").val("");
+		edit_pwd_validform.resetForm();
 		$('.maskdivgen').fadeIn(100);
 		$('.passwordPop').slideDown(200);
 	})
@@ -35,12 +38,13 @@ $(document).ready(function() {
 		$('.passwordPop').slideUp(200);
 	})
 	$("#add_form").Validform({
-		tiptype:3}).check();
+		tiptype:3});
+	edit_pwd_validform=$("#edit_pwd").Validform({
+		tiptype:3});
 }); 
 function close_div(){
 	$('.maskdivgen').fadeOut(100);
 	$('.passwordPop').slideUp(200);
-	reset_edit_pwd();
 }
 function uploadLicense(data){
     var dataObj=eval("("+data+")");//转换为json对象
@@ -104,26 +108,17 @@ function save(id){
     })
 }
 function edit_pwd(id){
-	var validform=$("#edit_pwd").Validform({
-			tiptype:3});
-	if (!validform.check()){
+	if (!edit_pwd_validform.check()){
 		return false;
 	}
 	var pwd1=$("#pwd1").val();
 	var pwd2=$("#pwd2").val();
 		$.post("edit_pwd.htm",{id:id,password:pwd1},function(data){
 			alert("修改成功！");
-			reset_edit_pwd(id);
 			$('.maskdivgen').fadeOut(100);
 			$('.passwordPop').slideUp(200);
 		})
 }	
- function reset_edit_pwd(id){
-		$("#edit_pwd").html('<div class="modal-header"><span class="close" onclick="close_div();">关闭</span></div><div class="modal-body">'+
-		'<div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>'+
-	    '    <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>'+
-	     ' <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd(\''+id+'\')">确认修改</button><button class="button button-gray " onclick="close_div();">取消</button></div> </div>')
-	}
 </script>
 </head>
 
