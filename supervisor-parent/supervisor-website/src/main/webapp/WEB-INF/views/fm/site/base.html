@@ -105,6 +105,8 @@ function dialogBox(confirm){
 <script>
 function loadPage(currentPage,totalPage,query){
 	if(totalPage>0){
+		$("#pager").attr("currentPage",currentPage);
+		$("#pager").attr("totalPage",totalPage);
 		$("#pager").paginate({
 			count 		: totalPage,
 			start 		: currentPage,
