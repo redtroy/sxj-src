@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,6 +192,7 @@ public class MemberServiceImpl implements IMemberService {
 				MemberEntity member = new MemberEntity();
 				member.setId(id);
 				member.setCheckState(MemberCheckStateEnum.getEnum(state));
+				member.setAuthorDate(new Date());
 				menberDao.updateMember(member);
 			}
 		} catch (Exception e) {

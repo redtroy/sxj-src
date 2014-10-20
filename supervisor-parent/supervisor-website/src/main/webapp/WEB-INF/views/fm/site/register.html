@@ -58,7 +58,7 @@ ${type[0].getName()}</span>/
   <em class="color-green f12" id="time" style="display:none;">60秒后重新获取验证码</em>
   <div id="sm_erro" class="tipMsg msg-error" style="display:none;"></div>
   </div>
-<div class="item f12"><label>&nbsp;</label><input type="checkbox" class="checkbox"  id="readme">我已阅读并同意<a href="protocal.html" target="_blank" class="lnk-blue"  >《私享家注册协议》</a><div class="tipMsg msg-error" style="display:none;" id="erro_text">请同意注册协议</div></div>
+<div class="item f12"><label>&nbsp;</label><input type="checkbox" class="checkbox"  checked="true" id="readme">我已阅读并同意<a href="protocal.html" target="_blank" class="lnk-blue"  >《私享家注册协议》</a><div class="tipMsg msg-error" style="display:none;" id="erro_text">请同意注册协议</div></div>
 <div class="item" disabled="none"><label>&nbsp;</label>
 <a href="#" class="button button-orange btn-regin" onclick="regist()">同意协议并注册</a>
 </div>
@@ -155,6 +155,7 @@ ${type[0].getName()}</span>/
 		$("#contacts").bind("focus",function(){
 			$("#ct").show();
 		})
+		/*
 		$("#contacts").bind("blur",function(){
 			 if ($("#contacts").val()=="" || $("#contacts").val()==null){
 				 $("#ct").show();
@@ -168,6 +169,7 @@ ${type[0].getName()}</span>/
 				 $("#ct").text("验证通过");
 			 }
 		})
+		*/
 		$("#phoneNo").bind("focus",function(){
 			$("#moileMsg").show();
 		})
@@ -191,6 +193,8 @@ ${type[0].getName()}</span>/
 				 reName=false;
 			 }
 		 })
+		 }else{
+			 reName=true;
 		 }
 		
 	  });
