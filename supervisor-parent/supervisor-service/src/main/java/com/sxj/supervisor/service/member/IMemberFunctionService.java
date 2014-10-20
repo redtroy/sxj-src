@@ -21,7 +21,6 @@ public interface IMemberFunctionService {
 	 * 
 	 * @return
 	 */
-	public List<MemberFunctionModel> queryFunctions() throws ServiceException;
-
+	public List<MemberFunctionModel> queryFunctions(Integer flag) throws ServiceException;
 
 }

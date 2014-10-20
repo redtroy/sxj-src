@@ -1,8 +1,10 @@
 package com.sxj.supervisor.service.impl.member;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.type.JdbcType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +51,7 @@ public class AccountServiceImpl implements IAccountService {
 			if (oldAccount != null) {
 				throw new ServiceException("用户账户已存在");
 			}
-			account.setState(AccountStatesEnum.stop);
+			account.setState(AccountStatesEnum.normal);
 			accountDao.addAccount(account);
 			MemberEntity member = memberService.memberInfo(account
 					.getParentId());
@@ -131,12 +133,13 @@ public class AccountServiceImpl implements IAccountService {
 	@Override
 	public AccountEntity getAccount(String id) throws ServiceException {
 		try {
-
+			AccountEntity account = accountDao.getAccount(id);
+			return account;
 		} catch (Exception e) {
-			// TODO: handle exception
+			SxjLogger.error("子会员查询错误", e, this.getClass());
+			throw new ServiceException("子会员查询错误错误", e);
 		}
-		AccountEntity account = accountDao.getAccount(id);
-		return account;
+
 	}
 
 	/**
@@ -179,7 +182,6 @@ public class AccountServiceImpl implements IAccountService {
 	public void reomveAccount(String id) {
 		try {
 			AccountEntity account = getAccount(id);
-			account.setDelstate(true);
 			accountDao.updateAccount(account);
 			MemberEntity member = memberService.memberInfo(account
 					.getParentId());
@@ -272,5 +274,19 @@ public class AccountServiceImpl implements IAccountService {
 			throw new ServiceException("密码更新错误", e.getMessage());
 		}
 		return null;
+	}
+
+	@Override
+	public void edit_Login(String id) throws ServiceException {
+		try {
+			AccountEntity account = new AccountEntity();
+			account.setId(id);
+			account.setLastLogin(new Date());
+			accountDao.updateAccount(account);
+		} catch (Exception e) {
+			SxjLogger.error("登陆时间更新错误", e, this.getClass());
+			throw new ServiceException("登陆时间更新错误", e.getMessage());
+		}
+
 	}
 }

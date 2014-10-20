@@ -120,14 +120,14 @@ function modify(){
 								type="text" value="${item.productName}" /></td>
 							<td>
 							<select name="itemList[${item_index}].windowType" style="width: 130px;">
-								<option value="">全部</option> 
+									<option value="">全部</option> 
 								<#list type as type> 
-								<#if type.getId()==item.windowType.getId()>
-							<option value="${type.id}" selected="selected">${type.getName()}</option>
-							<#else>
-							<option value="${type.id}">${type.getName()}</option>
-							 </#if>
-							</#list>
+									<#if type.getId()==item.windowType.getId()>
+										<option value="${type.id}" selected="selected">${type.getName()}</option>
+									<#else>
+										<option value="${type.id}">${type.getName()}</option>
+									</#if>
+								</#list>
 							</select></td>
 							<td><input
 								name="itemList[${item_index}].quantity" type="text"

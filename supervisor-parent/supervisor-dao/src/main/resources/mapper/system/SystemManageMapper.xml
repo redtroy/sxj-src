@@ -39,7 +39,7 @@
 		<if test="condition.name != null  and condition.name!=''">
 			<![CDATA[ AND a.NAME=#{condition.name}]]>
 		</if>
-		<!-- 用户姓名  -->
+		<!-- 权限ID  -->
 		<if test="condition.functionId!= null  and condition.functionId!=''">
 			<![CDATA[ AND r.FUNCTION_ID=#{condition.functionId}]]>
 		</if>

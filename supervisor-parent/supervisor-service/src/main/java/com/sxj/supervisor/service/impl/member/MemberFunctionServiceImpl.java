@@ -40,10 +40,11 @@ public class MemberFunctionServiceImpl implements IMemberFunctionService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MemberFunctionModel> queryFunctions() throws ServiceException {
+	public List<MemberFunctionModel> queryFunctions(Integer flag) throws ServiceException {
 		try {
 			QueryCondition<MemberFunctionEntity> query = new QueryCondition<MemberFunctionEntity>();
 			query.addCondition("parentId", "0");
+			query.addCondition("flag", flag);
 			List<MemberFunctionEntity> functionList = functionDao
 					.queryFunctions(query);
 			List<MemberFunctionModel> list = new ArrayList<MemberFunctionModel>();
@@ -53,6 +54,7 @@ public class MemberFunctionServiceImpl implements IMemberFunctionService {
 				}
 				QueryCondition<MemberFunctionEntity> childrenQuery = new QueryCondition<MemberFunctionEntity>();
 				childrenQuery.addCondition("parentId", functionEntity.getId());
+				query.addCondition("flag", flag);
 				List<MemberFunctionEntity> childrenList = functionDao
 						.queryFunctions(childrenQuery);
 				MemberFunctionModel model = new MemberFunctionModel();
