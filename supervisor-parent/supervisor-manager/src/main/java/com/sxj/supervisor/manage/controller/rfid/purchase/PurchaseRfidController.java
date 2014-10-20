@@ -243,4 +243,22 @@ public class PurchaseRfidController extends BaseController{
 			throw new WebException("新增采购单错误");
 		}
 	}
+	@RequestMapping("importRfid")
+	public @ResponseBody Map<String, String> importRfid(RfidPurchaseEntity purchase,String applyId,String hasNumber, ModelMap model)
+			throws WebException {
+		try {
+			purchase.setPurchaseDate(new Date());
+			purchase.setImportState(ImportStateEnum.not_imported);
+			purchase.setPayState(PayStateEnum.unpaid);
+			purchase.setReceiptState(DeliveryStateEnum.unfilled);
+			purchaseRfidService.addPurchase(purchase,applyId,hasNumber);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("isOK", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("新增采购单错误", e, this.getClass());
+			throw new WebException("新增采购单错误");
+		}
+	}
+	
 }

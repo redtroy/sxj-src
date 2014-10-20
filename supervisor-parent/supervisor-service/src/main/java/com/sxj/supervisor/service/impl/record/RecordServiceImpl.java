@@ -235,16 +235,18 @@ public class RecordServiceImpl implements IRecordService {
 			recordDao.updateRecord(re);
 			ContractModel conModel = contractService.getContract(contractId);
 			ContractEntity con = conModel.getContract();
+			ContractEntity newCon = new ContractEntity();
+			newCon.setId(con.getId());
 			if (con.getConfirmState().getId() == 0) {
 				if (state.getId() == 2) {
-					con.setConfirmState(ContractSureStateEnum.aaffirm);
+					newCon.setConfirmState(ContractSureStateEnum.aaffirm);
 				} else if (state.getId() == 3) {
-					con.setConfirmState(ContractSureStateEnum.baffirm);
+					newCon.setConfirmState(ContractSureStateEnum.baffirm);
 				}
 			} else {
-				con.setConfirmState(ContractSureStateEnum.filings);
+				newCon.setConfirmState(ContractSureStateEnum.filings);
 			}
-			contractDao.updateContract(con);
+			contractDao.updateContract(newCon);
 		} catch (Exception e) {
 			throw new ServiceException("", e);
 		}
