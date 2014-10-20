@@ -9,7 +9,6 @@
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.poshytip.min.js"></script>
 <@b.validate/>
-<@b.pageScript/>
 <@b.errorInfo/>
 <Script>
 var editId;
@@ -42,17 +41,10 @@ jQuery(document).ready(function($) {
  }
   function query(page){
 		var params=$("#search_form").serialize();
-		 if(page!=undefined){
-			   params=params+"&currentPage="+page;
-		   }
 		$.post("accountList.htm",params,function(data){
 			var res=$(data).find("#right_div");
-			var pager=$(data).find("#pager");
 			$("#right_div").empty();
 			$("#right_div").append(res.html());
-			var totalPage=pager.attr("totalPage");
-			var currentPage=pager.attr("currentPage");
-			loadPage(currentPage,totalPage,query);
 		});
   }
   
@@ -118,6 +110,7 @@ jQuery(document).ready(function($) {
   var regex =/^[\u4e00-\u9fa5a-zA-Z-0-9]{2,20}$/ ;
   function edit_save(id){
 	  var params=$("#"+id).find(":input");
+	  var old=$("#"+id).find("#old_hidden").val();
 	  var name=$("#"+id).find("#nameEdit").val();
 	  var accountName=$("#"+id).find("#accountEdit").val();
 	   if (!regex.test(accountName) || accountName==""){
@@ -130,40 +123,34 @@ jQuery(document).ready(function($) {
 	   }
 	   //判断子会员帐号是否存在
 	   var flag=false;
-	   $.ajax({
-	         url: "check_account.htm",
-	         type: "POST",
-	         data: ({param:accountName}),
-	         async: false,
-	         success: function(data){
-	           if (data.status == "n"){
+	   $.get("check_account.htm?old="+old+"&param="+accountName,function(data){
+		   if (data.status == "n"){
 	        	  alert('会员名称已存在！');
-	        	  flag=true;
-	           }
-	         }
-	       });
-	   if (flag){
-		   return false;
-	   }
-	  $("#edit_form").append(params.html());
-	  $.post("editAccount.htm",params,function(data){
-			if(data.isOK=='ok'){
-				//query();
-				 $("#"+id).find("#name_td").text(name);
-				 $("#"+id).find("#name_td").show();
-				 $("#"+id).find("#name_td2").hide();
-				 $("#"+id).find("#account_td").text(accountName);
-				 $("#"+id).find("#account_td").show();
-				 $("#"+id).find("#account_td2").hide();
-				 $("#"+id).find("#role_td").show();
-				 $("#"+id).find("#editrole_td").hide();
-				 $("#"+id).find("#edit_td").show();
-				 $("#"+id).find("#confim_td").hide();
-				alert("修改成功");
-			}else{
-				errorInfo(data);
-			}
-		});
+	        	  return false;
+		   }else{
+			   $("#edit_form").append(params.html());
+				  $.post("editAccount.htm",params,function(data){
+						if(data.isOK=='ok'){
+							//query();
+							 $("#"+id).find("#name_td").text(name);
+							 $("#"+id).find("#name_td").show();
+							 $("#"+id).find("#name_td2").hide();
+							 $("#"+id).find("#account_td").text(accountName);
+							 $("#"+id).find("#account_td").show();
+							 $("#"+id).find("#account_td2").hide();
+							 $("#"+id).find("#role_td").show();
+							 $("#"+id).find("#editrole_td").hide();
+							 $("#"+id).find("#edit_td").show();
+							 $("#"+id).find("#confim_td").hide();
+							alert("修改成功");
+						}else{
+							errorInfo(data);
+						}
+					});
+		   }
+	         
+	   });
+	 
   }
 //更改状态
   function checkState(id,stateId){
@@ -219,7 +206,6 @@ jQuery(document).ready(function($) {
 </form>
 </div>
 <form id="edit_form"></form>
-<@b.pager/>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
   <col width="9%" />
   <col width="12%" />
@@ -241,6 +227,7 @@ jQuery(document).ready(function($) {
     <tr id="${account.id}">
      <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
 	 <input id="id_hidden" type="hidden" name="id" value="${account.id}" />
+	  <input id="old_hidden" type="hidden" name="old" value="${account.accountName}" />
       <td>${account.accountNo}</td>
       <td id="name_td">${account.name}</td>
       <td id="name_td2" style="display: none"><input type="text" class="input" value="${account.name}" id="nameEdit" name="name"/></td>

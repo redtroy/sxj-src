@@ -148,7 +148,7 @@ public class MemberController extends BaseController {
 			return "site/register";
 		}
 		if (message.equals(ms)) {
-			member.setState(MemberStatesEnum.stop);
+			member.setState(MemberStatesEnum.normal);
 			member.setCheckState(MemberCheckStateEnum.unaudited);
 			member.setRegDate(new Date());
 			member.setFlag(false);

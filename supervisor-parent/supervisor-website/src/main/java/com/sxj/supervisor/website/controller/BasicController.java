@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,10 @@ import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
+import com.sxj.supervisor.enu.member.MemberStatesEnum;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.model.member.MemberQuery;
@@ -67,7 +71,16 @@ public class BasicController extends BaseController {
 		if (session == null || session.getAttribute("userinfo") == null) {
 			return LOGIN;
 		} else {
-			return "redirect:" + getBasePath(request) + "member/memberInfo.htm";
+			SupervisorPrincipal info = getLoginInfo(session);
+			if (info.getAccount() != null && info.getMember() != null) {
+				return "site/member/account-index";
+			} else if (info.getAccount() == null && info.getMember() != null) {
+				return "redirect:" + getBasePath(request)
+						+ "member/memberInfo.htm";
+			} else {
+				return LOGIN;
+			}
+
 		}
 
 	}
@@ -102,6 +115,7 @@ public class BasicController extends BaseController {
 		map.put("memberName", memberName);
 		SupervisorSiteToken token = null;
 		SupervisorPrincipal userBean = null;
+		AccountEntity account = null;
 		if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isNotEmpty(accountName)) {
 			MemberEntity member = memberService.getMemberByName(memberName);
@@ -113,15 +127,23 @@ public class BasicController extends BaseController {
 				map.put("message", "会员名错误");
 				return LOGIN;
 			}
-			if(MemberCheckStateEnum.unaudited.equals(member.getCheckState())){
+			if (MemberCheckStateEnum.unaudited.equals(member.getCheckState())) {
 				map.put("message", "会员未审核");
 				return LOGIN;
 			}
+			if (MemberStatesEnum.stop.equals(member.getState())) {
+				map.put("message", "会员已冻结");
+				return LOGIN;
+			}
 
-			AccountEntity account = accountService.getAccountByName(
-					accountName, member.getMemberNo());
+			account = accountService.getAccountByName(accountName,
+					member.getMemberNo());
 			if (account == null) {
 				map.put("amessage", "会员子账户不存在");
+				return LOGIN;
+			}
+			if (AccountStatesEnum.stop.equals(account.getState())) {
+				map.put("amessage", "会员子账户已冻结");
 				return LOGIN;
 			}
 
@@ -136,8 +158,12 @@ public class BasicController extends BaseController {
 				map.put("message", "会员不存在");
 				return LOGIN;
 			}
-			if(MemberCheckStateEnum.unaudited.equals(member.getCheckState())){
+			if (MemberCheckStateEnum.unaudited.equals(member.getCheckState())) {
 				map.put("message", "会员未审核");
+				return LOGIN;
+			}
+			if (MemberStatesEnum.stop.equals(member.getState())) {
+				map.put("message", "会员已冻结");
 				return LOGIN;
 			}
 			userBean = new SupervisorPrincipal();
@@ -159,7 +185,10 @@ public class BasicController extends BaseController {
 		}
 		if (currentUser.isAuthenticated()) {
 			session.setAttribute("userinfo", userBean);
-			return "redirect:" + getBasePath(request) + "member/memberInfo.htm";
+			if (account != null) {
+				accountService.edit_Login(account.getId());
+			}
+			return "redirect:" + getBasePath(request) + "index.htm";
 		} else {
 			map.put("message", "登陆失败");
 			return LOGIN;
@@ -183,8 +212,15 @@ public class BasicController extends BaseController {
 		if (userBean.getMember() != null && userBean.getAccount() == null) {
 			if (userBean.getMember().getCheckState()
 					.equals(MemberCheckStateEnum.certified)) {
+				MemberTypeEnum type = userBean.getMember().getType();
+				int flag = 0;
+				if (MemberTypeEnum.DAWP.equals(type)) {
+					flag = 1;
+				} else {
+					flag = 2;
+				}
 				List<MemberFunctionModel> list = functionService
-						.queryFunctions();
+						.queryFunctions(flag);
 				map.put("list", list);
 			}
 		} else if (userBean.getMember() != null
