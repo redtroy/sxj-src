@@ -51,5 +51,6 @@
 			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">
 			<![CDATA[AND IMPORT_DATE >=#{condition.startImportDate} AND IMPORT_DATE <= #{condition.endImportDate}]]>
 		</if>
+		<![CDATA[ ORDER BY ID DESC]]>
 	</select>
 </mapper>

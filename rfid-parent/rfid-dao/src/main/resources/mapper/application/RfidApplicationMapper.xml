@@ -51,5 +51,6 @@
 		<if test="condition.delstate != null ">
 			<![CDATA[AND DEL_STATE = #{condition.delstate}]]>
 		</if>
+		<![CDATA[ ORDER BY ID DESC]]>
 	</select>
 </mapper>

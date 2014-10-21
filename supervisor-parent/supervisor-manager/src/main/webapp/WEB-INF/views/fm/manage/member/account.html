@@ -14,7 +14,11 @@
 <!-- InstanceEndEditable -->
 <@b.pageScript/>
 <@b.errorInfo/>
+<<<<<<< HEAD
 <@b.dialogBox/>
+=======
+<@b.diy_alert/>
+>>>>>>> f99dec31dffff53b8b46df5ea6ed89133ac08956
 <script>
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
@@ -121,6 +125,7 @@ jQuery(document).ready(function($) {
    }
    //初始化密码
    function resetPwd(id){
+<<<<<<< HEAD
 	   dialogBox(function(){
 		   $.post("${basePath}member/account/initializePwd.htm",{id:id},function(data){
 			   if (data.isOK=='ok'){
@@ -149,6 +154,34 @@ jQuery(document).ready(function($) {
 	   },"是否确认修改状态");
 	  
 	  
+=======
+	   diy_alert("请确认是否初始化密码！",function(){
+		   $.post("${basePath}member/account/initializePwd.htm",{id:id},function(data){
+			   if (data.isOK=='ok'){
+				   alert('初始密码为:'+data.password+',谢谢!');
+			   }else{
+					errorInfo(data);
+				}
+		   })
+	   })
+   }
+   //更改状态
+   function checkState(id,stateId,obj){
+	  diy_alert("请确认是否更改子账户状态！",function(){
+		  $.post("${basePath}member/account/editState.htm",{id:id,state:stateId},function(data){
+			  if (data.isOK=='ok'){
+				  if (data.state=="已冻结"){
+					  $(obj).parent().html('<a class="btn btn-red" onclick="checkState(\''+id+'\',0,this)"><span>解冻</span></a>');
+				  }else{
+					  $(obj).parent().html('<a class="btn btn-green" onclick="checkState(\''+id+'\',1,this)"><span>冻结</span></a>');
+				  }
+				  
+			   }else{
+					errorInfo(data);
+				}
+		  })
+	  })
+>>>>>>> f99dec31dffff53b8b46df5ea6ed89133ac08956
    }
    function roleInfo(memberNo,id,type){
 		$.get("${basePath}member/account/get_role_function.htm?memberNo="+memberNo+"&accountId="+id+"&type="+type,function(data){
