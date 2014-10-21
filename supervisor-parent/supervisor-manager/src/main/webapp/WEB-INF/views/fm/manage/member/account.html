@@ -110,6 +110,18 @@
 	  })
 	  
    }
+   function roleInfo(memberNo,id,type){
+		$.get("${basePath}member/account/get_role_function.htm?memberNo="+memberNo+"&accountId="+id+"&type="+type,function(data){
+			$("#roleInfo_div").empty();
+			$("#roleInfo_div").show();
+			$("#roleInfo_div").append(data);
+			$('.maskdivgen').fadeIn(100);
+		});
+	}
+   function closeDiv(divId){
+		  $('.maskdivgen').fadeOut(100);
+		  $("#"+divId).hide();
+	}
 </script>
 </head>
 <body>
@@ -129,10 +141,15 @@
           子帐号ID<input type="text" name="accountNo" value="${query.accountNo}">
           子帐号名<input type="text" name="accountName" value="${query.accountName}">
           权限
-          <select>
-          <#list mas as ma>
-            <option value="${ma.getId()}">${ma.getName()}</option>
-          </#list>
+         <select name="functionId">
+          <option value="">-请选择-</option>
+           <#list functions as f>
+           <#if f.id==query.functionId>
+            <option value="${f.id}" selected="selected">${f.title}</option>
+            <#else>
+             <option value="${f.id}">${f.title}</option>
+            </#if>
+            </#list>
           </select>
 	状态
           <select name="state">
@@ -182,7 +199,11 @@
           <td>${account.parentId}</td>
           <td>${account.accountName}</td>
           <td>${account.name}</td>
-          <td>合同管理</td>
+          <td id="role_td" ><a href="javascript:roleInfo('${account.parentId}','${account.id}','get');" class="lnk-blue">查看</a></td>
+      	  <td id="editrole_td" class="permission" style="display: none" onclick="roleInfo('${account.parentId}','${account.id}','edit');">
+      	 	<div class="dropMenu sltinput" id="district_cn"> <span>全部权限</span> <span class="icon"></span>
+     		</div>
+      	  </td>
           <#if account.state.id==0>
           <td><a class="btn btn-green" onclick="checkState('${account.id}',0,this)"><span>解冻</span></a></td>
           <#elseif account.state.id==1>
@@ -197,5 +218,6 @@
     <!-- InstanceEndEditable --></div>
 </div>
 <@b.footer />
+<div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;"></div>
 </body>
 <!-- InstanceEnd --></html>

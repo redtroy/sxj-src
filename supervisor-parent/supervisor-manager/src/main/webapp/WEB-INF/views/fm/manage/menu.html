@@ -3,9 +3,9 @@
 	<ul>
 	    <#list model.children as mc>
 	    <#if Session.function==mc.id>
-		<li id="${mc.id}_menu" onclick="changeClass(this);" class="now"><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
+		<li id="${mc.id}_menu" onclick="changeClass(this);" class="now"><a href="javascript:clickFunction('${basePath}${mc.url}?function=${mc.id}');">${mc.title}</a></li>
 		<#else>
-		<li id="${mc.id}_menu" onclick="changeClass(this);" class=""><a href="${basePath}${mc.url}?function=${mc.id}">${mc.title}</a></li>
+		<li id="${mc.id}_menu" onclick="changeClass(this);" class=""><a href="javascript:clickFunction('${basePath}${mc.url}?function=${mc.id}');">${mc.title}</a></li>
 		</#if>
 		</#list>
 	</ul>
@@ -20,5 +20,9 @@ function getUrlParam(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 	var r = window.location.search.substr(1).match(reg);  //匹配目标参数
 	if (r!=null) return unescape(r[2]); return null; //返回参数值
-} 
+}
+function clickFunction(url){
+		url=url+"&"+Math.random();
+		window.location.href=url;
+}
 </script>
