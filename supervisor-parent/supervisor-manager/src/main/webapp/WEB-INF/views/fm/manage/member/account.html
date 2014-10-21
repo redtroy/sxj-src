@@ -14,11 +14,7 @@
 <!-- InstanceEndEditable -->
 <@b.pageScript/>
 <@b.errorInfo/>
-<<<<<<< HEAD
 <@b.dialogBox/>
-=======
-<@b.diy_alert/>
->>>>>>> f99dec31dffff53b8b46df5ea6ed89133ac08956
 <script>
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
@@ -77,6 +73,7 @@ jQuery(document).ready(function($) {
    //确认修改
   var regexName =/^[\u4e00-\u9fa5a-zA-Z-0-9]{2,20}$/ ;
   var redexAccount=/^[A-Za-z0-9]+$/;
+  
    function editOk(memerNo,id){
 	   var params=$("#"+id).find(":input");
 	   var old=$("#"+id).find("#old_hidden").val();
@@ -125,7 +122,6 @@ jQuery(document).ready(function($) {
    }
    //初始化密码
    function resetPwd(id){
-<<<<<<< HEAD
 	   dialogBox(function(){
 		   $.post("${basePath}member/account/initializePwd.htm",{id:id},function(data){
 			   if (data.isOK=='ok'){
@@ -140,49 +136,20 @@ jQuery(document).ready(function($) {
 	   
    }
    //更改状态
-   function checkState(id,stateId,obj){
+   function checkState(id,stateId){
 	   dialogBox(function(){
 		   $.post("${basePath}member/account/editState.htm",{id:id,state:stateId},function(data){
 				  if (data.isOK=='ok'){
 					 var page=$("#rightBar").children("#pager").attr("currentPage");
 					 query(page);
-					  
 				   }else{
 						errorInfo(data);
 					}
 			  });
 	   },"是否确认修改状态");
 	  
-	  
-=======
-	   diy_alert("请确认是否初始化密码！",function(){
-		   $.post("${basePath}member/account/initializePwd.htm",{id:id},function(data){
-			   if (data.isOK=='ok'){
-				   alert('初始密码为:'+data.password+',谢谢!');
-			   }else{
-					errorInfo(data);
-				}
-		   })
-	   })
    }
-   //更改状态
-   function checkState(id,stateId,obj){
-	  diy_alert("请确认是否更改子账户状态！",function(){
-		  $.post("${basePath}member/account/editState.htm",{id:id,state:stateId},function(data){
-			  if (data.isOK=='ok'){
-				  if (data.state=="已冻结"){
-					  $(obj).parent().html('<a class="btn btn-red" onclick="checkState(\''+id+'\',0,this)"><span>解冻</span></a>');
-				  }else{
-					  $(obj).parent().html('<a class="btn btn-green" onclick="checkState(\''+id+'\',1,this)"><span>冻结</span></a>');
-				  }
-				  
-			   }else{
-					errorInfo(data);
-				}
-		  })
-	  })
->>>>>>> f99dec31dffff53b8b46df5ea6ed89133ac08956
-   }
+  
    function roleInfo(memberNo,id,type){
 		$.get("${basePath}member/account/get_role_function.htm?memberNo="+memberNo+"&accountId="+id+"&type="+type,function(data){
 			$("#roleInfo_div").empty();
@@ -288,9 +255,9 @@ jQuery(document).ready(function($) {
      		</div>
       	  </td>
           <#if account.state.id==0>
-          <td><a class="btn btn-green" onclick="checkState('${account.id}',0,this)"><span>解冻</span></a></td>
+          <td><a class="btn btn-green" onclick="checkState('${account.id}',0)"><span>解冻</span></a></td>
           <#elseif account.state.id==1>
-          <td><a class="btn btn-red" onclick="checkState('${account.id}',1,this)"><span>冻结</span></a></td>
+          <td><a class="btn btn-red" onclick="checkState('${account.id}',1)"><span>冻结</span></a></td>
           </#if>
           <td>${account.regDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td id="edit_td" class="operation"><a class="edit" onclick="edit('${account.id}')">修改</a></td>

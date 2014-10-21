@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -73,13 +73,15 @@ jQuery(document).ready(function($) {
  
    //修改
    function edit(id){
-	//   var params=$("#"+id).find(":input");
-	var params=$("#"+id+"_form").serialize();
-	//	$("#edit_form").append(params.html());
-	var valid=$("#"+id).Validform({tiptype:1});
-	 if (valid.check()){
-	 var deviceNumber=$("#"+id).find("#deviceNumber").val();
-	 params=params+"&deviceNumber="+deviceNumber;
+	var params=$("#"+id).find(":input").serialize();
+	//var deviceNumber=$("#"+id).find("#deviceNumber").val();
+	//console.log(deviceNumber)
+	//var params=$("#"+id+"_form").serialize();
+	//$("#edit_form").html(params.html());
+	//console.log(params);
+	//var params2=$("#edit_form").serialize();
+	//console.log(params2);
+	params=params+"&deviceNumber="+deviceNumber;
 		$.post("${basePath}member/editMember.htm",params,function(data){
 			if(data.isOK == 'ok'){
 				alert("修改成功");
@@ -88,19 +90,20 @@ jQuery(document).ready(function($) {
 				errorInfo(data);
 			}
 		});
+		/*
+	var valid=$("#"+id).Validform({tiptype:1});
+	 if (valid.check()){
+	 
    }else{
 	   
-	   var alertMsg=''; 
-	   $("#"+id).find(".Validform_error").siblings(".Validform_wrong").each(function(){
+	   var alertMsg='';
+	   $("#"+id).find(".Validform_wrong").each(function(){
 		   $(this).hide();
 		   if($(this).html())
-			   alertMsg+=$(this).html()+"<br/>";
+			   alertMsg+=$(this).html()+"\n";
 	   });
-	   if(alertMsg){
-		   $("#Validform_msg").children(".Validform_info").empty();
-		   $("#Validform_msg").children(".Validform_info").append(alertMsg);
-		   $("#Validform_msg").show();
-	   }
+	   if(alertMsg)
+	   	alert(alertMsg);
    }
    }
    //更改账户状态
@@ -114,6 +117,7 @@ jQuery(document).ready(function($) {
 					}
 			  });
 	   })
+	   */
    }
    //状态验证
    function check(obj){
