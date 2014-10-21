@@ -1,12 +1,15 @@
 package com.sxj.supervisor.service.impl.contract;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +162,9 @@ public class ContractServiceImpl implements IContractService {
 					contract.setState(ContractStateEnum.approval);
 					contract.setConfirmState(ContractSureStateEnum.noaffirm);
 					contract.setCreateDate(new Date());
+					String year = new SimpleDateFormat("yy",Locale.CHINESE).format(Calendar.getInstance().getTime());
+					String month = new SimpleDateFormat("MM",Locale.CHINESE).format(Calendar.getInstance().getTime());
+			        contract.setDateNo("CT"+year+month);
 					contractDao.addContract(contract);
 
 					if (itemList != null) {
@@ -752,7 +758,12 @@ public class ContractServiceImpl implements IContractService {
 			if (centity.getRecordNo() != null) {
 				String[] arr = centity.getRecordNo().split(",");
 				for (String recordNo : arr) {
+					//变更备案状态
 					RecordEntity re = recordService.getRecordByNo(recordNo.trim());
+					RecordEntity rEntity = new RecordEntity();
+					rEntity.setId(re.getId());
+					rEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
+					recordDao.updateRecord(rEntity);
 					if (re != null) {
 						if (re.getFlag().getId() == 0) {
 							List<String> messageList = null;

@@ -23,7 +23,7 @@ public class RecordThread extends MessageThread {
 			if (cache instanceof Long) {
 				count = (Long) cache;
 			}
-			System.out.println("******************" + count);
+			//System.out.println("******************" + count);
 			if (count != null && count > 0) {
 				// 开始发送
 				getEngine().sendToAll(MessageChannel.RECORD_MESSAGE, count);

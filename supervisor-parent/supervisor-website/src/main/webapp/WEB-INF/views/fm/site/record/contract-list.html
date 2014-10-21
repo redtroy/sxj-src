@@ -3,28 +3,34 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link href="${b.staticPath}style/uploadify.css " rel="stylesheet" type="text/css" /> 
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗" />
+<meta name="description"
+	content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<link href="${b.staticPath}style/uploadify.css " rel="stylesheet"
+	type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
-	<script src="${b.staticPath}js/jqueryui.js"></script>
-	<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" />
-<script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${b.staticPath}style/elastislide.css" />
+<script src="${b.staticPath}js/tytabs.jquery.min.js"
+	type="text/javascript"></script>
 <script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/comet4j.js"></script>
-  <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
-		type="text/css" />
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
 <script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
-	<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
-	<script src="${b.staticPath}js/jquery.paginate.js"></script>
-	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
-			<script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
-	<script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
-	
-<@b.pageScript/>
-<@b.errorInfo/>
-<@b.upload/>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script type="text/javascript"
+	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+
+<@b.pageScript/> <@b.errorInfo/> <@b.upload/>
 <script>
 
 jQuery(document).ready(function($) {
@@ -34,6 +40,7 @@ jQuery(document).ready(function($) {
 	})
 	$('.lnk-view').live('click',function(){
 		var imgPath=$(this).attr("imgPath");
+		if(imgPath!=''){
        			$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
        				if(imgPaths!=''){
        				$('.popView').slideDown(200);
@@ -88,7 +95,9 @@ jQuery(document).ready(function($) {
        					alert("暂无合同副本!");
        				}
        			});
-		
+		}else{
+				alert("暂无合同副本!");
+			}
 	});
 });
 
@@ -267,229 +276,252 @@ function busunSeav(){
 		$("#info" + recordNo).html("");
 	}
 
-	function delRecord(id) {
-		if (confirm("确定删除备案吗?")) {
-			$.post("delRecord.htm", {
-				id : id
-			}, function(data) {
-				if (data.isOK == "ok") {
-					$("#" + id).remove();
-					window.location.href="query.htm";
-				} else {
-					alert("删除备案失败");
-				}
-			});
+	function delRecord(id,contractNo) {
+		if(contractNo!=''){
+			alert("该备案已被受理，不能删除!");
+			return;
+		}else{
+			if (confirm("确定删除备案吗?")) {
+				$.post("delRecord.htm", {
+					id : id
+				}, function(data) {
+					if (data.isOK == "ok") {
+						$("#" + id).remove();
+						window.location.href="query.htm";
+					} else {
+						alert("删除备案失败");
+					}
+				});
+			}
 		}
 	}
 </script>
 </head>
 
 <body>
-<div id="header" class="fence">
-<@b.header />
-</div>
-<div class="mainBg">
-  <div class="fence-wide ly-clearFix">
-    <div class="main pb20">
-      <div class="yard-190 ly-left leftMenu">
-       <@b.leftMenu />
-      </div>
-      <div class="yard-870 rightSide ly-left">
-        <div class="heading mb15 ly-clearFix">
-          <h1 class="ly-left"> <span class="title fontYH f20 fb">合同备案管理</span></h1>
-        </div>
-        <form id="search_form" action="javascript:void(0);" method="post">
-        <div class="contBox">
-          <div class="searBox f12 mb10"> 备案号
-            <input type="text" class="input" name="recordNo" value="${query.recordNo}">
-            合同号
-            <input type="text" class="input" name="contractNo" value="${query.contractNo}">
-            合同备案状态
-            <select name="confirmState">
-              <option selected="selected" value="">全部</option>
-               <#list confirmState as state>
-            <option value="${state.getId()}">${state.getName()}</option>
-           </#list>
-            </select>
-            <button class="button button-search" onclick="query();">查询</button>
-          </div>
-          </form>
-          <div id="message_div">
-          
-          </div>
-          <div class="msgBox msg-error msgTip tipRed" style="display: none"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有笔应付款的订单<span class="fb">未付款</span></div>
-          <div id="comet_div2" class="msgBox msg-info msgTip tipOge" style="display: none"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="#" class="lnk-blue" id="comet_div2_href">待确认</a>的合同信息</div>
-          <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
-            <col width="40px" />
-            <col width="40px" />
-            <col width="80px" />
-            <col width="80px" />
-            <col width="70px" />
-            <col width="70px" />
-            <col width="50px" />
-            <col width="70px" />
-            <col width="70px" />
-            <col width="90px" />
-            <col width="80px" />
-            <col width="130px" />
-            <tr>
-              <th>备案号</th>
-              <th>合同号</th>
-              <th>甲方</th>
-              <th>乙方</th>
-              <th>备案<br />
-                类型</th>
-              <th>合同<br />
-                类型</th>
-              <th>合同<br />
-                副本</th>
-              <th>申请<br />
-                时间</th>
-              <th>备案<br />
-                时间</th>
-              <th>备案<br />
-                状态</th>
-              <th>合同进度</th>
-              <th class="rLine">操作</th>
-            </tr>
-             <#if recordlist?exists>
-      			<#list recordlist as record>
-            <tr id="${record.id}">
-              <td>${record.recordNo}</td>
-              <td><a href="javascript:loadInfo('${record.contractNo}','${record.recordNo}');" class="lnk-blue">${record.contractNo}</a></td>
-              <td>${record.memberNameA}</td>
-              <td>${record.memberNameB}</td>
-              <td>${record.type.getName()}</td>
-              <td>${record.contractType.getName()}</td>
-              <td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgPath="${record.imgPath}">查看</a></td>
-              <td>${record.applyDate?string("yyyy-MM-dd HH:mm:ss")}</td>
-              <td><#if record.acceptDate?exists>${record.acceptDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
-              <td>
-              <#if record.confirmState.getId() ==0>
-              	<span class="state normal">受理中</span>
-              </#if>
-              <#if record.confirmState.getId() ==1>
-              	<span class="state frozen">未确认</span>
-              </#if>
-              <#if record.confirmState.getId() ==2>
-              	<span class="state process">甲方确认</span>
-              </#if>
-              <#if record.confirmState.getId() ==3>
-              	<span class="state process">乙方确认</span>
-              </#if>
-              <#if record.confirmState.getId() ==4>
-              	<span class="state verified">已备案</span>
-              </#if>
-              </td>
-              <td><div class="progressBar">
-                <div class="progre" style="width:20%"></div>
-              </div>
-                <div class="color-red">20%</div></td>
-              <td>
-              <#if record.confirmState.getId() ==0>
-              <a href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span class="icon icon16 icon-edit"></span>修改</a>
-              <a href="javascript:delRecord('${record.id}')" class="lnk-blue"><span class="icon icon16 icon-del" ></span>删除</a>
-             <#else>
-             <#if record.contractNo?exists>
-             <#if record.type.getId() ==0>
-               <a href="javascript:biangeng('${record.id}');" class="lnk-blue variContract mr10" recordId="${record.id}" >变更</a>
-              <a href="javascript:busun('${record.id}');" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
-              </#if>
-               </#if>
-              <#if record.confirmState.getId() ==1>
-             	<#if record.contractNo?exists>
-              		 <a href="confirm.htm?contractNo=${record.contractNo}&recordId=${record.id}" class="lnk-blue" >确认合同</a>
-              	</#if> 
-              </#if>
-             </#if>
-              </td>
-             
-            </tr>
-            <tr id="info${record.recordNo}">
-              <!-- 详细内容 -->
-            </tr>
-            </#list>
-            </#if>
-            <tr style="display: none;">
-              <td colspan="12"><div class="speedInfo tl">
-                  <ol>
-                    <li>第1批次 5+6A+5 双白中空 W779/H1176型号共1250件玻璃已出库，<span class="color-green">已付款</span>（支付单号：896237）</li>
-                    <li>第2批次5+9A+5 双钢中空 W323/H1176型号共586件玻璃已出库，<span class="color-red mr10">未付款</span><a href="#" class="button button-red">立即支付</a></li>
-                  </ol>
-                  <div class="item mb5">
-                    <label>&nbsp;</label>
-                    <button class="button button-gray" onclick="closeContract('${record.recordNo}');">收起</button>
-                  </div>
-                </div></td>
-            </tr>
-          </table>
-          <div class="ly-clearFix">
-          	<@b.pager/>
-  		  </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<@b.footer />
-<div class="modal-wrap popDemo contPop chanPop" style="display:none;">
-  <div class="modal-header"><span class="close">关闭</span></div>
-  <div class="modal-body">
-  <div class="imageList"></div>
-  <input type="hidden" name="" id="bgRecordId" value=""/>
-<input type="hidden" name="imgPath" class="imgPathHide" id="bgImgPathHide" value=""/>
-<input type="file" name="bgFile" id="bgFile"  multiple="true"/>
-   <div class="button-box">
-    <button class="button button-pop"   onclick="saveBiangeng()">确认</button>
-	<button class="button button-gray">取消</button>
-  </div>
-  </div>
-</div>
-<div class="modal-wrap popDemo contPop suppPop" style="display:none;">
-  <div class="modal-header"><span class="close">关闭</span></div>
-  <form action="" id="bsForm" method="post">
-  <div class="modal-body">
-    <div class="item">
-      <label>&nbsp;</label>
-      <div class="ly-left">
-        <div class="imageList"></div>
-  		<input type="hidden" name="" id="bsRecordId" value=""/>
-		<input type="hidden" name="imgPath" class="imgPathHide" id="bsImgPathHide" value=""/>
-		<input type="file" name="bsFile" id="bsFile"  multiple="true"/>
-	</div>
-	</div>
-    <div class="item">
-      <label>对应批次</label>
-      <select name="" id="batchId" class="batchSelect">
-        <option selected="selected">请选择批次</option>
-      </select><span class="color-green hand ml10" onclick="reselect();">重新选择</span>
-    </div>
-    <div class="item"> <label>需补损物流标签</label><span id="rfid"></span><input type="hidden" name="rfid" id="rfidHide" /></div>
-    <div class="item">
-      <label>&nbsp;</label>
-     <input type="button"  class="button button-pop" onclick="busunSeav();" value="确定补损" />
-      <button class="button button-gray">取消</button>
-    </div>
-    </form>
-  </div>
-</div>
-<div class="modal-wrap popDemo popView" id="image-list" style="display: none;">
-						<div class="modal-header">
-							<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a>
-						</div>
-						<div class="modal-body">
-							<div class="rollBox" id="rollBox">
+	<div id="header" class="fence"><@b.header /></div>
+	<div class="mainBg">
+		<div class="fence-wide ly-clearFix">
+			<div class="main pb20">
+				<div class="yard-190 ly-left leftMenu"><@b.leftMenu /></div>
+				<div class="yard-870 rightSide ly-left">
+					<div class="heading mb15 ly-clearFix">
+						<h1 class="ly-left">
+							<span class="title fontYH f20 fb">合同备案管理</span>
+						</h1>
+					</div>
+					<form id="search_form" action="javascript:void(0);" method="post">
+						<div class="contBox">
+							<div class="searBox f12 mb10">
+								备案号 <input type="text" class="input" name="recordNo"
+									value="${query.recordNo}"> 合同号 <input type="text"
+									class="input" name="contractNo" value="${query.contractNo}">
+										合同备案状态 <select name="confirmState">
+											<option selected="selected" value="">全部</option> <#list
+											confirmState as state>
+											<option value="${state.getId()}">${state.getName()}</option>
+											</#list>
+									</select>
+										<button class="button button-search" onclick="query();">查询</button>
 							</div>
-						</div>
-</div>
-<div class="maskdivgen" style="display:none"></div>
-<div class="viewer modal-wrap" style="display: none">
-									<div class="modal-header">
-										<span class="close">关闭</span>
+					</form>
+					<div id="message_div"></div>
+					<div class="msgBox msg-error msgTip tipRed" style="display: none">
+						<span class="icon icon16 icon-close ly-right">关闭</span><span
+							class="icon icon16 icon-16-info"></span>贵公司有笔应付款的订单<span
+							class="fb">未付款</span>
+					</div>
+					<div id="comet_div2" class="msgBox msg-info msgTip tipOge"
+						style="display: none">
+						<span class="icon icon16 icon-close ly-right">关闭</span><span
+							class="icon icon16 icon-notice"></span>贵公司有一条<a href="#"
+							class="lnk-blue" id="comet_div2_href">待确认</a>的合同信息
+					</div>
+					<table border="0" cellpadding="0" cellspacing="0" class="tabList"
+						id="res_table">
+						<col width="9%" />
+						<col width="9%" />
+						<col width="8%" />
+						<col width="8%" />
+						<col width="8%" />
+						<col width="8%" />
+						<col width="6%" />
+						<col width="7%" />
+						<col width="7%" />
+						<col width="11%" />
+						<col width="5%" />
+						<col width="14%" />
+						<tr>
+							<th>备案号</th>
+							<th>合同号</th>
+							<th>甲方</th>
+							<th>乙方</th>
+							<th>备案<br /> 类型
+							</th>
+							<th>合同<br /> 类型
+							</th>
+							<th>合同<br /> 副本
+							</th>
+							<th>申请<br /> 时间
+							</th>
+							<th>备案<br /> 时间
+							</th>
+							<th>备案<br /> 状态
+							</th>
+							<th>合同<br /> 进度</th>
+							<th class="rLine">操作</th>
+						</tr>
+						<#if recordlist?exists && recordlist?size!=0 > 
+							<#list recordlist as record>
+						<tr id="${record.id}">
+							<td>${record.recordNo}</td>
+							<td><a
+								href="javascript:loadInfo('${record.contractNo}','${record.recordNo}');"
+								class="lnk-blue">${record.contractNo}</a></td>
+							<td>${record.memberNameA}</td>
+							<td>${record.memberNameB}</td>
+							<td>${record.type.getName()}</td>
+							<td>${record.contractType.getName()}</td>
+							<td><a href="javascript:void(0);"
+								class="lnk-blue lnk-underline lnk-view"
+								imgPath="${record.imgPath}">查看</a></td>
+							<td>${record.applyDate?string("yyyy-MM-dd HH:mm:ss")}</td>
+							<td><#if
+								record.acceptDate?exists>${record.acceptDate?string("yyyy-MM-dd
+								HH:mm:ss")}</#if></td>
+							<td><#if record.confirmState.getId() ==0> <span
+								class="state normal">受理中</span> </#if> <#if
+								record.confirmState.getId() ==1> <span class="state frozen">未确认</span>
+								</#if> <#if record.confirmState.getId() ==2> <span
+								class="state process">甲方确认</span> </#if> <#if
+								record.confirmState.getId() ==3> <span class="state process">乙方确认</span>
+								</#if> <#if record.confirmState.getId() ==4> <span
+								class="state verified">已备案</span> </#if>
+							</td>
+							<td><#if record.contractType.getId()!=0> <div class="progressBar">
+									<div class="progre" style="width: 20%"></div>
 									</div>
-									<div id="viewer2" class="modal-body"></div>
-								</div>
-	<div class="maskdivgen" style="display: none"></div> 
-      
+								<div class="color-red">20%</div>
+								<#else>-</#if>
+								</td>
+							<td><#if record.confirmState.getId() ==0> <a
+								href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span
+									class="icon icon16 icon-edit"></span>修改</a> <a
+								href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue"><span
+									class="icon icon16 icon-del"></span>删除</a> <#else> <#if
+								record.contractNo?exists> <#if record.type.getId() ==0> <a
+								href="javascript:biangeng('${record.id}');"
+								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+								<a href="javascript:busun('${record.id}');"
+								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+								</#if> </#if> <#if record.confirmState.getId() ==1> <#if
+								record.contractNo?exists> <a
+								href="confirm.htm?contractNo=${record.contractNo}&recordId=${record.id}"
+								class="lnk-blue">确认合同</a> </#if> </#if> </#if>
+							</td>
+
+						</tr>
+						<tr id="info${record.recordNo}">
+							<!-- 详细内容 -->
+						</tr>
+						</#list>
+						<#else>
+						<tr>
+          					<td colspan="12" class="color-red">很抱歉，暂无数据！</td>
+        				</tr>
+						 </#if>
+						<tr style="display: none;">
+							<td colspan="12"><div class="speedInfo tl">
+									<ol>
+										<li>第1批次 5+6A+5 双白中空 W779/H1176型号共1250件玻璃已出库，<span
+											class="color-green">已付款</span>（支付单号：896237）
+										</li>
+										<li>第2批次5+9A+5 双钢中空 W323/H1176型号共586件玻璃已出库，<span
+											class="color-red mr10">未付款</span><a href="#"
+											class="button button-red">立即支付</a></li>
+									</ol>
+									<div class="item mb5">
+										<label>&nbsp;</label>
+										<button class="button button-gray"
+											onclick="closeContract('${record.recordNo}');">收起</button>
+									</div>
+								</div></td>
+						</tr>
+					</table>
+					<div class="ly-clearFix"><@b.pager/></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<@b.footer />
+	<div class="modal-wrap popDemo contPop chanPop" style="display: none;">
+		<div class="modal-header">
+			<span class="close">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div class="imageList"></div>
+			<input type="hidden" name="" id="bgRecordId" value="" /> <input
+				type="hidden" name="imgPath" class="imgPathHide" id="bgImgPathHide"
+				value="" /> <input type="file" name="bgFile" id="bgFile"
+				multiple="true" />
+			<div class="button-box">
+				<button class="button button-pop" onclick="saveBiangeng()">确认</button>
+				<button class="button button-gray">取消</button>
+			</div>
+		</div>
+	</div>
+	<div class="modal-wrap popDemo contPop suppPop" style="display: none;">
+		<div class="modal-header">
+			<span class="close">关闭</span>
+		</div>
+		<form action="" id="bsForm" method="post">
+			<div class="modal-body">
+				<div class="item">
+					<label>&nbsp;</label>
+					<div class="ly-left">
+						<div class="imageList"></div>
+						<input type="hidden" name="" id="bsRecordId" value="" /> <input
+							type="hidden" name="imgPath" class="imgPathHide"
+							id="bsImgPathHide" value="" /> <input type="file" name="bsFile"
+							id="bsFile" multiple="true" />
+					</div>
+				</div>
+				<div class="item">
+					<label>对应批次</label> <select name="" id="batchId"
+						class="batchSelect">
+						<option selected="selected">请选择批次</option>
+					</select><span class="color-green hand ml10" onclick="reselect();">重新选择</span>
+				</div>
+				<div class="item">
+					<label>需补损物流标签</label><span id="rfid"></span><input type="hidden"
+						name="rfid" id="rfidHide" />
+				</div>
+				<div class="item">
+					<label>&nbsp;</label> <input type="button"
+						class="button button-pop" onclick="busunSeav();" value="确定补损" />
+					<button class="button button-gray">取消</button>
+				</div>
+		</form>
+	</div>
+	</div>
+	<div class="modal-wrap popDemo popView" id="image-list"
+		style="display: none; width: 680px;">
+		<div class="modal-header">
+			<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a>
+		</div>
+		<div class="modal-body">
+			<div class="rollBox" id="rollBox" style="height: 150px;"></div>
+		</div>
+	</div>
+	<div class="maskdivgen" style="display: none"></div>
+	<div class="viewer modal-wrap" style="display: none">
+		<div class="modal-header">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body"></div>
+	</div>
+	<div class="maskdivgen" style="display: none"></div>
+
 </body>
 </html>

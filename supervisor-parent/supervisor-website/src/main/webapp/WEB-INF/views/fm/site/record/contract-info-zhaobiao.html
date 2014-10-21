@@ -1,0 +1,91 @@
+	
+	<!-- 合同详情 -->
+	<td colspan="12">
+		<div class="contInfo tl">
+                  <div class="info ly-clearFix">
+                    <div class="item">
+                      <label>合同号</label>
+                      ${contractModel.contract.contractNo}</div>
+                      <div class="item">
+                      <label>&nbsp;</label>
+                      &nbsp;</div>
+                    <div class="item">
+                      <label>工程名称</label>
+                     ${contractModel.contract.engName}</div>
+                     <div class="item">
+                      <label>工程地点</label>
+                     ${contractModel.contract.engAddress} </div>
+                    <div class="item">
+                      <label>甲方</label>
+                      ${contractModel.contract.memberNameA}</div>
+                    <div class="item">
+                      <label>乙方</label>
+                      ${contractModel.contract.memberNameB}</div>
+                    <div class="item">
+                      <label>签订地点</label>
+                     ${contractModel.contract.address}</div>
+                    <div class="item">
+                      <label>签订时间</label>
+                      ${contractModel.contract.signedDate?string("yyyy年MM月dd日")}</div>
+                  </div>
+                  <div class="item ly-clearFix">
+                    <label class="ly-left">&nbsp;</label>
+                    <table border="0" cellpadding="0" cellspacing="0" class="tabProd ly-left">
+                      <col width="15%" />
+                      <col width="25%" />
+                      <col width="15%" />
+                      <col width="12%" />
+                      <col width="13%" />
+                      <col width="30%" />
+                      <tr>
+                        <th>产品名称</th>
+                        <th>产品规格<span class="fontAR ml5">(mm)</span></th>
+                        <th>数量<span class="fontAR ml5">(m<sup>2</sup>)</span></th>
+                        <th>单价<span>（元）</span></th>
+                        <th>金额</th>
+                        <th>备注说明</th>
+                      </tr>
+                      	<#assign n = 0> 
+			            <#assign m = 0> 
+			            <#list contractModel.itemList as item>
+			            <#assign n = (n+item.quantity)?int > 
+			            <#assign m = (m+item.amount)?int > 
+                      <tr>
+                         <td>${item.productName}</td>
+			              <td>${item.productModel}</td>
+			              <td>${item.quantity}</td>
+			              <td>${item.price}</td>
+			              <td>${item.amount}</td>
+			              <td>${item.remarks}</td>
+                      </tr>
+                       </#list>
+                      <tr class="fb">
+                        <td>合计</td>
+                        <td>&nbsp;</td>
+                        <td>约${n}</td>
+                        <td>&nbsp;</td>
+                        <td>${m}元</td>
+                        <td class="tl">
+                        <#assign arr=(contractModel.contract.imgPath?split(","))>
+                 		本合同附件清单共${arr?size}页</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="item">
+                    <label>&nbsp;</label>
+                    ${contractModel.contract.remarks}</div>
+                  <div class="item">
+                    <label>&nbsp;</label>
+                   	</div>
+                  <div class="item">
+                    <label>&nbsp;</label>
+                     <#list arr  as imgPath>
+                    <img src="${b.imagePath}${imgPath}" alt="合同扫描件" width="80" height="107" />
+                    </#list>
+                    </div>
+                 
+                  <div class="item mt10">
+                    <label>&nbsp;</label>
+                    <button class="button button-gray" onclick="closeContract('${recordNo}')">收起</button>
+                  </div>
+                </div></td>

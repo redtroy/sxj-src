@@ -49,57 +49,62 @@
 	 loadUpload("img_path","${basePath}upload.htm",false,"上传合同扫描件",uploadLicense);
 	 }); 
 	 */
-	$(document).ready(function() {
-		$(":file").uploadify({
-							swf : '${basePath}upload/uploadify.swf',
-							uploader : "${basePath}upload.htm",
-							fileTypeExts : '*.gif; *.jpg; *.png',
-							auto : true,
-							multi : true,
-							height : 30,
-							width : 120,
-							buttonText : '上传合同扫描件',
-							onUploadSuccess : function(file,
-									data, response) {
-								var num = 0;
-								var dataObj = eval("(" + data+ ")");//转换为json对象 
-								var hideVal = $("#imgPath").val();
-								if (hideVal == '') {
-									hideVal = dataObj.fileIds;
-								} else {
-									hideVal += ","
-											+ dataObj.fileIds;
-									num=hideVal.split(",").length;
-								}
-								$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
+	$(document)
+			.ready(
+					function() {
+						
+						$(":file")
+								.uploadify(
+										{
+											swf : '${basePath}upload/uploadify.swf',
+											uploader : "${basePath}upload.htm",
+											fileTypeExts : '*.gif; *.jpg; *.png',
+											auto : true,
+											multi : true,
+											height : 30,
+											width : 120,
+											buttonText : '上传合同扫描件',
+											onUploadSuccess : function(file,
+													data, response) {
+												var num = 0;
+												var dataObj = eval("(" + data+ ")");//转换为json对象 
+												var hideVal = $("#imgPath").val();
+												if (hideVal == '') {
+													hideVal = dataObj.fileIds;
+												} else {
+													hideVal += ","
+															+ dataObj.fileIds;
+													num=hideVal.split(",").length;
+												}
+												$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
 
-								$("#imgPath").val(hideVal);
-								$( '.elastislide-list' ).elastislide({
-									orientation : 'horizontal',
-									speed : 500,
-									easing : 'ease-in-out',
-									minItems : 3,
-									start : 0,
-									onClick : function( el, position, evt ) { 
-										var imageSource = el.find("a").attr("data-image");
-										$("#viewer2").iviewer({
-											src : imageSource,
-											mousewheel : true
+												$("#imgPath").val(hideVal);
+												$( '.elastislide-list1' ).elastislide({
+													orientation : 'horizontal',
+													speed : 500,
+													easing : 'ease-in-out',
+													minItems : 3,
+													start : 0,
+													onClick : function( el, position, evt ) { 
+														var imageSource = el.find("a").attr("data-image");
+														$("#viewer2").iviewer({
+															src : imageSource,
+															mousewheel : true
+														});
+														el.parent().children("li").removeClass("view");
+														el.addClass("view");
+														$("#viewer2").children("img").attr("src",imageSource);
+														$(".viewer").show();
+														$(".modal-header").show();
+														$(".maskdivgen").show();
+														return false; 
+													},
+													onReady : function() { return false; },
+													onBeforeSlide : function() { return false; },
+													onAfterSlide : function() { return false; }
+												});
+											}
 										});
-										el.parent().children("li").removeClass("view");
-										el.addClass("view");
-										$("#viewer2").children("img").attr("src",imageSource);
-										$(".viewer").show();
-										$(".modal-header").show();
-										$(".maskdivgen").show();
-										return false; 
-									},
-									onReady : function() { return false; },
-									onBeforeSlide : function() { return false; },
-									onAfterSlide : function() { return false; }
-								});
-							}
-						});
 					});
 	$(document).ready(function() {
 		var imgPath = $("#imgPath").val();
@@ -175,23 +180,12 @@
 						<form action="record_save.htm?id=${record.id}" method="post"
 							id="record_save">
 							<li><label>备案号</label>${record.recordNo}</li>
-							<li><label>申请会员</label><input type="text"
-								value="${record.applyName}" id="applyName" name="applyName"
-								datatype="*2-50" nullmsg="请输入会员名称" /></li>
+							<li><label>申请会员</label>${record.applyName}</li>
 							<li><label>甲方名称</label><input type="text"
 								value="${record.memberNameA}" id="memberNameA"
 								name="memberNameA" datatype="*2-50" nullmsg="请输入甲方名称" /></li>
-							<li><label>乙方名称</label><input type="text"
-								value="${record.memberNameB}" id="memberNameB"
-								name="memberNameB" datatype="*2-50" nullmsg="请输入乙方名称" /></li>
-							<li><label>合同类型</label><select id="contractType"
-								name="contractType"> <#list cte as type> <#if
-									(type.id=record.contractType.id)>
-									<option selected="selected" value="${type.id}">${type.getName()}</option>
-									<#else>
-									<option value="${type.id}">${type.getName()}</option> </#if>
-									</#list>
-							</select></li>
+							<li><label>乙方名称</label>${record.memberNameB}</li>
+							<li><label>合同类型</label>${record.contractType.getName()}</li>
 							<li class="contPic ly-clearFix"><label>备案扫描件</label> <!--  <span class="ly-left"><button id="img_path" class="button button-green button-middle"></button><input type="hidden" id="imgPath" name="imgPath"></span>-->
 									<input type="hidden" value="${record.imgPath}" name="imgPath" id="imgPath" />
 									<input type="hidden" value="" name="delImgPath" id="delImgPath" />
@@ -204,16 +198,7 @@
 								<span class="ly-left"> 
 									 <input type="file" name="contractFile" id="contractFile" multiple="true" />
 							</span></li>
-							<li><label>关联招标合同</label><input type="text"
-								value="${record.refContractNo}" name="refContractNo"
-								datatype="*2-50" nullmsg="请输入招标合同" /></li>
-							<li><label>备案类型</label><select id="type" name="type">
-									<#list rte as type> <#if (type.id=record.type.id)>
-									<option selected="selected" value="${type.id}">${type.getName()}</option>
-									<#else>
-									<option value="${type.id}">${type.getName()}</option> </#if>
-									</#list>
-							</select></li>
+							<li><label>备案类型</label>${record.type.getName()}</li>
 							<li><label>申请备案时间</label> <#if (record.applyDate??)>
 								${record.applyDate?date}</li> </#if>
 							<li><label>受理时间</label> <#if (record.acceptDate??)>

@@ -41,6 +41,7 @@ jQuery(document).ready(function($) {
        				for (i=0;i<imgPaths.length;i++ ) { 
        					var n =i+1;
        					$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+imgPaths[i]+'"><img src="${b.imagePath}'+imgPaths[i]+'80x100.JPG" alt="" /></a><p>'+n+'</p></li>');
+       				}
        					$( '.elastislide-list' ).elastislide({
    							orientation : 'horizontal',
    							speed : 500,
@@ -82,7 +83,7 @@ jQuery(document).ready(function($) {
    							onBeforeSlide : function() { return false; },
    							onAfterSlide : function() { return false; }
    						});
-       				}
+       				
        				}else{
        					alert("暂无合同副本!");
        				}
@@ -119,13 +120,18 @@ function query(page){
 }
 
 //删除
-function del(id){
-	if(confirm('确实删除备案吗?')){
-	$.post("delRecord.htm",{id:id},function(data){
-		if (data.isOk=="ok"){
-			window.location.href="recordList.htm";
+function del(id,contractNo){
+	if(contractNo!=''){
+		alert("备案已绑定，不能删除!");
+		return;
+	}else{
+		if(confirm('确实删除备案吗?')){
+			$.post("delRecord.htm",{id:id},function(data){
+				if (data.isOk=="ok"){
+					window.location.href="recordList.htm";
+				}
+			})
 		}
-	})
 	}
 }
 </script>
@@ -219,9 +225,10 @@ function del(id){
 								${record.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 							<td><#if record.acceptDate?exists>
 								${record.acceptDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
-							<td class="operation"><a
-								href="record_edit.htm?id=${record.id}" class="edit">修改</a><a
-								href="#" class="del" onclick="del('${record.id}')">删除</a></td> <#if
+							<td class="operation"><#if record.contractType.id==0><a
+								href="record_edit_zhaobiao.htm?id=${record.id}" class="edit">修改</a><#else><a
+								href="record_edit.htm?id=${record.id}" class="edit">修改</a></#if><a
+								href="javascript:void(0);" class="del" onclick="del('${record.id}','${record.contractNo}')">删除</a></td> <#if
 							(record.state.id==0)>
 							<td class="contract"><#if (record.contractType??)> <#if
 								record.contractType.getId()!=0><a
@@ -246,7 +253,7 @@ function del(id){
 						</tr>
 						</#list>
 					</table>
-					<div class="modal-wrap popDemo popView" id="image-list" style="display: none;">
+					<div class="modal-wrap popDemo popView" id="image-list" style="display: none; width: 671px;">
 						<div class="modal-header">
 							<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></span>
 						</div>

@@ -1,7 +1,10 @@
 package com.sxj.supervisor.service.impl.record;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,6 +58,9 @@ public class RecordServiceImpl implements IRecordService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void addRecord(RecordEntity record) throws ServiceException {
 		try {
+			String year = new SimpleDateFormat("yy",Locale.CHINESE).format(Calendar.getInstance().getTime());
+			String month = new SimpleDateFormat("MM",Locale.CHINESE).format(Calendar.getInstance().getTime());
+			record.setDateNo("BA"+year+month);
 			recordDao.addRecord(record);
 			Long messageCount = null;
 			Object cache = HierarchicalCacheManager.get(2, "comet_record",
@@ -115,13 +121,14 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void deleteRecord(String id) {
-		RecordEntity record = getRecord(id);
-		record.setDelState(true);
-		recordDao.updateRecord(record);
-
+	public void deleteRecord(String id)throws ServiceException {
+		try {
+			recordDao.deleteRecord(id);
+	
+		} catch (Exception e) {
+			throw new ServiceException("查询备案信息错误", e);
+		}
 	}
-
 	/**
 	 * 查询备案
 	 */
@@ -229,12 +236,29 @@ public class RecordServiceImpl implements IRecordService {
 			RecordConfirmStateEnum state) {
 		try {
 
-			RecordEntity re = new RecordEntity();
-			re.setId(recordId);
-			re.setConfirmState(state);
-			recordDao.updateRecord(re);
+//			RecordEntity re = new RecordEntity();
+//			re.setId(recordId);
+//			re.setConfirmState(state);
+//			recordDao.updateRecord(re);
 			ContractModel conModel = contractService.getContract(contractId);
 			ContractEntity con = conModel.getContract();
+			//更改双方备案
+			String[] reArr=con.getRecordNo().split(",");
+			for (String recordNo : reArr) {
+				RecordEntity re = getRecordByNo(recordNo.trim());
+				RecordEntity rEntity = new RecordEntity();
+				rEntity.setId(re.getId());
+				if (con.getConfirmState().getId() == 0) {
+					if (state.getId() == 2) {
+						rEntity.setConfirmState(RecordConfirmStateEnum.confirmedA);
+					} else if (state.getId() == 3) {
+						rEntity.setConfirmState(RecordConfirmStateEnum.confirmedB);
+					}
+				} else {
+					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+				}
+				recordDao.updateRecord(rEntity);
+			}
 			ContractEntity newCon = new ContractEntity();
 			newCon.setId(con.getId());
 			if (con.getConfirmState().getId() == 0) {
