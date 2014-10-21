@@ -71,9 +71,7 @@ public class AccountController extends BaseController {
 		if ("get".equals(type)) {
 			List<MemberFunctionModel> list = roleService
 					.getRoleFunctions(accountId);
-			if (list != null) {
-				map.put("list", list);
-			}
+			map.put("list", list);
 			return "manage/member/role_function";
 		} else if ("add".equals(type)) {
 			List<MemberFunctionModel> allList = functionService
