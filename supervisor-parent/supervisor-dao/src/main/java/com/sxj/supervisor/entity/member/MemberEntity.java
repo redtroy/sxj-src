@@ -77,8 +77,7 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 会员名称
 	 **/
 	@Column(name = "NAME")
-	@NotEmpty(message = "会员名称不能为空", groups = { AddGroup.class,
-			UpdateGroup.class })
+	@NotEmpty(message = "会员名称不能为空", groups = { AddGroup.class })
 	@Length(max = 50, message = "会员名称长度过长")
 	private String name;
 

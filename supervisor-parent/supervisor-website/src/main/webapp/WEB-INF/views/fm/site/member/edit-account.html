@@ -104,17 +104,18 @@ jQuery(document).ready(function($) {
   }
   
   //确认修改
-  var regex =/^[\u4e00-\u9fa5a-zA-Z-0-9]{2,20}$/ ;
+  var redexAccount=/^[A-Za-z0-9]+$/;
+  var regexName =/^[\u4e00-\u9fa5a-zA-Z-0-9]{2,20}$/ ;
   function edit_save(id){
 	  var params=$("#"+id).find(":input");
 	  var old=$("#"+id).find("#old_hidden").val();
 	  var name=$("#"+id).find("#nameEdit").val();
 	  var accountName=$("#"+id).find("#accountEdit").val();
-	   if (!regex.test(accountName) || accountName==""){
-		   alert("子帐号不能为空，或特殊字符");
+	   if (!redexAccount.test(accountName) || accountName==""){
+		   alert("账号名只能用英文+数字");
 		   return false;
 	   }
-	   if (!regex.test(name) || name==""){
+	   if (!regexName.test(name) || name==""){
 		   alert("姓名不能为空，或特殊字符");
 		   return false;
 	   }

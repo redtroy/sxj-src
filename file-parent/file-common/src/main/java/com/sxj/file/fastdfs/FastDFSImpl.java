@@ -35,7 +35,7 @@ public class FastDFSImpl implements IFileUpLoad {
 
 	private Integer trackerPort;
 
-	private long cacheTime = 10 * 24 * 3600 * 1000;
+	private int cacheTime = 60;
 
 	private TrackerClient tracker;
 
@@ -108,7 +108,8 @@ public class FastDFSImpl implements IFileUpLoad {
 					meta_list.toArray(new NameValuePair[meta_list.size()]));
 			storageServer.close();
 			trackerServer.close();
-			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
+			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff,
+					cacheTime);
 
 		} catch (SocketException e) {
 			Logger.error(e.toString());
@@ -136,7 +137,8 @@ public class FastDFSImpl implements IFileUpLoad {
 			file_id = client.upload_file1(file_buff,
 					file_ext_name.toUpperCase(),
 					meta_list.toArray(new NameValuePair[meta_list.size()]));
-			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
+			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff,
+					cacheTime);
 
 		} catch (SocketException e) {
 			Logger.error(e.toString());
@@ -176,7 +178,7 @@ public class FastDFSImpl implements IFileUpLoad {
 						meta_list.toArray(new NameValuePair[meta_list.size()]));
 				file_ids.add(file_id);
 				HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id,
-						file_buff);
+						file_buff, cacheTime);
 				i++;
 			}
 			storageServer.close();
@@ -202,7 +204,7 @@ public class FastDFSImpl implements IFileUpLoad {
 			}
 			newFileId = uploadFile(newfile_buff, newfile_ext_name.toUpperCase());
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, newFileId,
-					newfile_buff);
+					newfile_buff, cacheTime);
 		} catch (Exception ex) {
 			Logger.error(ex.toString());
 		}
@@ -227,7 +229,7 @@ public class FastDFSImpl implements IFileUpLoad {
 			file_buff = client.download_file1(file_id);
 			if (file_buff != null && file_buff.length > 0) {
 				HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id,
-						file_buff);
+						file_buff, cacheTime);
 			}
 
 		} catch (SocketException e) {
@@ -279,7 +281,8 @@ public class FastDFSImpl implements IFileUpLoad {
 				byte[] smallBytes = ImageUtil.scaleFixed(file_buff, width,
 						height, file_ext_name, false);
 				if (smallBytes != null && smallBytes.length > 0) {
-					HierarchicalCacheManager.get(LEVEL, CACHE_NAME, key);
+					HierarchicalCacheManager.set(LEVEL, CACHE_NAME, key,
+							smallBytes, cacheTime);
 				}
 				return smallBytes;
 			} else {
@@ -355,11 +358,11 @@ public class FastDFSImpl implements IFileUpLoad {
 		this.trackerPort = trackerPort;
 	}
 
-	public long getCacheTime() {
+	public int getCacheTime() {
 		return cacheTime;
 	}
 
-	public void setCacheTime(long cacheTime) {
+	public void setCacheTime(int cacheTime) {
 		this.cacheTime = cacheTime;
 	}
 

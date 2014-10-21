@@ -29,19 +29,27 @@ function errorInfo(data){
 </#macro>
 <#macro dialogBox>
 <div id="diglog_div" style="display:none;">
-      <div  class="modal-wrap popDemo">
-        <div class="modal-header">
-          <span id="dialog_close_span" class="close" onclick="">关闭</span></div>
-        <div class="modal-body popbtnBox">
-          <button id="dialog_confirm_click" class="popBtn">确认</button><button class="popBtn btnGray" id="dialog_close_button">取消</button>
-        </div>
-      </div>
+<div class="modal-wrap popDemo">
+      <div class="modal-header">
+     	<div class="tit">确认提示</div><span id="dialog_close_span" class="close" onclick="">关闭</span>
+     </div>
+     <div class="modal-body">
+     <div class="tipBox ly-clearFix">
+     <span class="icon32 icon-32-info"></span>
+     <p class="color-blue fontYH f18" id="diglog_message">是否确认修改</p>
+     </div>
+     <button id="dialog_confirm_click" class="popBtn">确认</button>
+     <button class="popBtn" id="dialog_close_button">取消</button>
+     </div>
+   </div>
 </div>
+
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
 <script>
-function dialogBox(confirm){
+function dialogBox(confirm,message){
 	var data=$("#diglog_div");
+	$("#diglog_message").text(message);
 	 var pageii = $.layer({
 		    type: 1,
 		    title: false,
