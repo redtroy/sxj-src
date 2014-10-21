@@ -12,8 +12,10 @@
 <script src="${b.staticPath}js/intense.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
-
+<@b.diy_alert/>
+<@b.validate/>
 <script>
+var ck;
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
 		$('.popDemo').slideUp(200);
@@ -22,6 +24,7 @@ jQuery(document).ready(function($) {
 		$('.popDemo').slideUp(200);
 		
 	});
+    ck=$(".needValid").Validform({tiptype:3});
 });
     function query(page){
    	 	var params=$("#search_form").serialize();
@@ -41,16 +44,18 @@ jQuery(document).ready(function($) {
    //重置密码
    function resetPwd(id){
 	   var pwd;
-	   $.post("${basePath}member/initializePwd.htm",{id:id},function(data){
-		   if (data.isOK=='ok'){
-			   pwd=data.password
-			   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
-			   $('.popDemo').slideDown(200);
-		   }
-		   else{
-				errorInfo(data);
-			}
-	   });
+	   diy_alert("请确认是否初始化密码！",function(){
+		   $.post("${basePath}member/initializePwd.htm",{id:id},function(data){
+			   if (data.isOK=='ok'){
+				   pwd=data.password
+				   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
+				   $('.popDemo').slideDown(200);
+			   }
+			   else{
+					errorInfo(data);
+				}
+		   });
+	   })
    }
    //收起菜单
    function swallowing(lable){
@@ -67,13 +72,14 @@ jQuery(document).ready(function($) {
 	    
 	  
    }
+ 
    //修改
    function edit(id){
 	//   var params=$("#"+id).find(":input");
 	var params=$("#"+id+"_form").serialize();
 	//	$("#edit_form").append(params.html());
-	 if (check(id)){
-		 return false;
+	 if (!ck[0].check()){
+			return false;
 	 }
 	 var deviceNumber=$("#"+id).find("#deviceNumber").val();
 	 params=params+"&deviceNumber="+deviceNumber;
@@ -88,13 +94,15 @@ jQuery(document).ready(function($) {
    }
    //更改账户状态
    function editState(id,state){
-	  $.post("editState.htm",{id:id,state:state},function(data){
-		  if (data.isOK=='ok'){
-			  query($("#pager").attr("currentPage"));
-		   }else{
-				errorInfo(data);
-			}
-	  });
+	   diy_alert("请确认是否更改账户状态！",function(){
+		   $.post("editState.htm",{id:id,state:state},function(data){
+				  if (data.isOK=='ok'){
+					  query($("#pager").attr("currentPage"));
+				   }else{
+						errorInfo(data);
+					}
+			  });
+	   })
    }
    //状态验证
    function check(obj){
@@ -114,16 +122,26 @@ jQuery(document).ready(function($) {
          }
        });
 	   return flag;
+	   /*
+	   var bLicenseNo=$("#"+obj).find("#bLicenseNo").val();
+	   var energyNo=$("#"+obj).find("#energyNo").val();
+	   var contacts=$("#"+obj).find("#contacts").val();
+	   var phoneNo=$("#"+obj).find("#phoneNo").val();
+	   var address=$("#"+obj).find("#address").val();
+	   var telNum=$("#"+obj).find("#telNum").val();
+	   */
    }
  //更改审核状态
    function editCheckState(id,state){
-	  $.post("editCheckState.htm",{id:id,state:state},function(data){
-		  if (data.isOK=='ok'){
-			  query($("#pager").attr("currentPage"));
-		   }else{
-				errorInfo(data);
-			}
-	  });
+	 diy_alert("请确认是否更改审核状态！",function(){
+		 $.post("editCheckState.htm",{id:id,state:state},function(data){
+			  if (data.isOK=='ok'){
+				  query($("#pager").attr("currentPage"));
+			   }else{
+					errorInfo(data);
+				}
+		  });
+	 })
    }
 window.onload = function() {
 var elements = document.querySelectorAll( '.demo-image' );
@@ -262,13 +280,13 @@ Intense( elements );
           
           <td><a class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
         </tr>
-        <tr class="tableInfo" style="display:none;" id="${member.id}_info">
+        <tr class="tableInfo needValid" style="display:none;" id="${member.id}_info" index="">
         <form action="javascirpt:void(0)" id="${member.id}_info_form">
           <td colspan="11">
           <div class="infoBox">
           <ul class="ly-clearFix">
           <input type="hidden" name ="id" value="${member.id}"/>
-          <li><label>会员名称</label><input type="text" value="${member.name}" name="name"/></li>
+          <li><label>会员名称</label>${member.name}</li>
           <li><label>城市</label> 江苏省-
             <select name="area" id="city">
            	<option value="">-请选择-</option>
@@ -291,15 +309,15 @@ Intense( elements );
             </#list>
             </select>
           </li>
-          <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo" value="${member.getbLicenseNo()}" />
+          <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo" datatype="*2-30" nullmsg="营业执照号不能为空" value="${member.getbLicenseNo()}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p>
           </li>
-          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" value="${member.getEnergyNo()}" />
+          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30" nullmsg="节能标识推广证号不能为空" value="${member.getEnergyNo()}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p>
           </li>
-          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" name="contacts"/></li>
-          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" name="phoneNo"/></li>
-          <li><label>公司地址</label><input type="text" value="${member.address}" name="address"/></li>
+          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" datatype="*2-50" nullmsg="联系人不能为空" name="contacts"/></li>
+          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" datatype="m" nullmsg="手机号码不能为空" name="phoneNo"/></li>
+          <li><label>公司地址</label><input type="text" value="${member.address}" datatype="*2-50" nullmsg="地址不能为空" name="address"/></li>
           <li><label>固定电话</label><input type="text" value="${member.telNum}" name="telNum"/></li>
           <li><label>注册时间</label><#if (member.regDate??)>${member.regDate?date} </#if></li>
           <li><label>认证时间</label><#if (member.authorDate??)> ${member.authorDate?date} </#if></li>
@@ -309,7 +327,7 @@ Intense( elements );
           <li><label>总交易额</label>${member.totalAmount}元</li>
           <li><label>扫描设备号</label><textarea cols="" rows="3" class="textRfid" id="deviceNumber" >${member.deviceNumber}</textarea></li>
           </ul>
-          <div class="btnBox"><a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info')">确认修改</a><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
+          <div class="btnBox"><a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info');return false;">确认修改</a><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
           </div>
           </td>
           </form>
