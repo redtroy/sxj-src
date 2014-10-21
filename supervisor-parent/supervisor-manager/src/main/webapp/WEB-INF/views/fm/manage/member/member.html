@@ -235,9 +235,9 @@ Intense( elements );
         </tr>
         <#list memberList as member>
         <#if member.state.id==0>
-        <tr class="bgColor-gray">
+        <tr >
         <#elseif member.state.id==1>
-        <tr>
+        <tr class="bgColor-gray">
          </#if>
           <td><a href="javascript:openDiv('${member.id}_info');" class="lnk-blue">${member.memberNo}</a></td>
           <td>${member.name}</td>
