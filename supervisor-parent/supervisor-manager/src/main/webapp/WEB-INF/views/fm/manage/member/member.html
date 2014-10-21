@@ -15,7 +15,6 @@
 <@b.diy_alert/>
 <@b.validate/>
 <script>
-var ck;
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
 		$('.popDemo').slideUp(200);
@@ -24,7 +23,6 @@ jQuery(document).ready(function($) {
 		$('.popDemo').slideUp(200);
 		
 	});
-    ck=$(".needValid").Validform({tiptype:3});
 });
     function query(page){
    	 	var params=$("#search_form").serialize();
@@ -78,9 +76,10 @@ jQuery(document).ready(function($) {
 	//   var params=$("#"+id).find(":input");
 	var params=$("#"+id+"_form").serialize();
 	//	$("#edit_form").append(params.html());
-	 if (!ck[0].check()){
-			return false;
-	 }
+	var valid=$("#"+id).Validform({tiptype:3});
+	valid.resetForm();
+	 if (valid.check()){
+	 alert(12);
 	 var deviceNumber=$("#"+id).find("#deviceNumber").val();
 	 params=params+"&deviceNumber="+deviceNumber;
 		$.post("${basePath}member/editMember.htm",params,function(data){
@@ -91,6 +90,7 @@ jQuery(document).ready(function($) {
 				errorInfo(data);
 			}
 		});
+   }
    }
    //更改账户状态
    function editState(id,state){
@@ -280,8 +280,8 @@ Intense( elements );
           
           <td><a class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
         </tr>
-        <tr class="tableInfo needValid" style="display:none;" id="${member.id}_info" index="">
-        <form action="javascirpt:void(0)" id="${member.id}_info_form">
+        <tr class="tableInfo" style="display:none;" id="${member.id}_info" index="">
+        <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
           <td colspan="11">
           <div class="infoBox">
           <ul class="ly-clearFix">
