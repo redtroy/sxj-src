@@ -101,6 +101,21 @@ public class RecordController extends BaseController {
 		map.put("record", record);
 		return "manage/record/record_edit";
 	}
+	/**
+	 * 备案修改
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/record_edit_zhaobiao")
+	public String record_edit_zhaobiao(String id, ModelMap map) {
+		RecordEntity record = recordService.getRecord(id);
+		ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
+		RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
+		map.put("cte", cte);
+		map.put("rte", rte);
+		map.put("record", record);
+		return "manage/record/record_edit_zhaobiao";
+	}
 
 	/**
 	 * 保存备案修改
