@@ -13,10 +13,20 @@
  <@b.validate/>
 <script>
 jQuery(document).ready(function($) {
-	$('.modal-header .close').click(function(){
-		$('.popDemo').slideUp(200);
+	$('.sltinput').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.dropList').slideDown(200);
 	})
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+	$('.popBtn').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	});
 });
+
 
 function query(page){
 	var params=$("#search_form").serialize();
@@ -64,13 +74,15 @@ function accountInfo_page(page){
 function roleInfo(id,type){
 	$.get("${basePath}system/get_role_function.htm?accountId="+id+"&type="+type,function(data){
 		$("#roleInfo_div").empty();
-		$("#roleInfo_div").css("display","");
 		$("#roleInfo_div").append(data);
+		$("#roleInfo_div").show();
 	});
 }
 
 function closeDiv(divId){
-	$("#"+divId).css("display","none");
+	$('.maskdivgen').fadeOut(100);
+	$("#"+divId).hide();
+	$("#"+divId).empty();
 }
 
 function toAdd(id){
@@ -228,7 +240,7 @@ function toEdit(accountId){
 		          <td id="name_td2" style="display:none"><input type="text" name="name" value="${model.name}" /></td>
 		          <td id="account_td">${model.account}</td>
 		          <td id="account_td2" style="display:none"><input type="text" name="account" value="${model.account}" /></td>
-	          <td id="role_td"><a href="javascript:roleInfo('${model.id}','get');" class="lnk-blue lnk-underline">查询权限</a></td>
+	          <td id="role_td"><a href="javascript:roleInfo('${model.id}','get');" class="lnk-blue lnk-underline sltinput">查询权限</a></td>
 	          <td id="role_td2" class="permission" style="display:none" onclick="javascript:roleInfo('${model.id}','edit');"><div id="district_cn" class="dropMenu sltinput"> <span>全部权限</span> <span class="icon"></span> </div></td>
 	        
 	          <td><a href="javascript:accountInfo('${model.accountNo}');" class="lnk-blue lnk-underline">查询</a></td>
@@ -241,20 +253,21 @@ function toEdit(accountId){
 	        </tr>
         </#list>
       </table>
-      <div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;">
-	  </div>
-     <div id="password_div" class="modal-wrap popDemo passwordBox" style="display:none">
-	     <div class="modal-header"><span title="关闭" class="close">关闭</span></div>
-	     <div class="modal-body">
-	     <div class="tipBox ly-clearFix">
-	     <span class="icon32 icon-32-info"></span>
-	     <p class="color-blue fontYH f18"></p>
-	     </div>
-	     <button class="popBtn" onclick="closeDiv('password_div');">确认</button>
-	     </div>
-     </div>
     <!-- InstanceEndEditable --></div>
 </div>
+</div>
+<div id="roleInfo_div" class="modal-wrap popDemo dropList" style="display:none;"></div>
+<div id="password_div" class="modal-wrap popDemo passwordBox" style="display:none">
+	     <div class="modal-header"><span title="关闭" class="close">关闭</span></div>
+	     <div class="modal-body">
+		     <div class="tipBox ly-clearFix">
+		     <span class="icon32 icon-32-info"></span>
+		     <p class="color-blue fontYH f18"></p>
+		     </div>
+		     <button class="popBtn" onclick="closeDiv('password_div');">确认</button>
+	     </div>
+</div>
+<div class="maskdivgen" style="display:none"></div>
 <@b.footer />
 </body>
 <!-- InstanceEnd --></html>

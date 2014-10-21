@@ -239,17 +239,15 @@ public class BasicController extends BaseController {
 		Map<String, MultipartFile> fileMaps = re.getFileMap();
 		Collection<MultipartFile> files = fileMaps.values();
 		List<String> fileIds = new ArrayList<String>();
-		List<byte[]> fileBuffs = new ArrayList<byte[]>();
-		List<String> originalFilename = new ArrayList<String>();
 		for (MultipartFile myfile : files) {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				fileBuffs.add(myfile.getBytes());
-				originalFilename.add(myfile.getOriginalFilename());
+				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
+						myfile.getOriginalFilename());
+				fileIds.add(fileId);
 			}
 		}
-		fileIds = fastDfsClient.uploadFile(fileBuffs, originalFilename);
 		map.put("fileIds", fileIds);
 		String res = JsonMapper.nonDefaultMapper().toJson(map);
 		response.setContentType("text/plain;UTF-8");
