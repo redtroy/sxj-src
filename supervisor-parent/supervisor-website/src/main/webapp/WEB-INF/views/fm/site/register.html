@@ -119,6 +119,14 @@ ${type[0].getName()}</span>/
 		 $("#sm_erro").text("请先获取验证码");
 		 flag=true;
 	 }
+	 if ($("#ms").val()==""){
+		 //alert("验证码只能为6位数字！");
+		 // $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
+		 $("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
+		 $("#sm_erro").addClass("msg-error");
+		 $("#sm_erro").text("验证码不能为空");
+		 flag=true;
+	 }else 
 	 if (!$("#ms").val().match(/^\d{6}$/)){
 		 //alert("验证码只能为6位数字！");
 		 // $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
@@ -270,13 +278,33 @@ ${type[0].getName()}</span>/
 	 $("#moileMsg").text("手机号码格式不正确！请重新输入！");
 	  return false;
 	  }
+	  var phone_flag=false;
+	  $.ajax({
+		   type: "POST",
+		   async:false,
+		   url: "check_phone.htm",
+		   data: "phone="+$("#phoneNo").val(),
+		   success: function(msg){
+		     if (msg.flag=="true"){
+		    	 phone_flag=true;
+		     }
+		   }
+		 });
+	  if (phone_flag){
+		  $("#moileMsg").show();
+		  $("#moileMsg").removeClass("msg-gray").removeClass("msg-suc");
+		  $("#moileMsg").addClass("msg-error");
+		  $("#moileMsg").text("该手机号码已使用！");
+		  return false;
+	  }
 	  $("#moileMsg").show();
 	//  $("#moileMsg").html("<font color='green'>手机号输入正确！</font>");
 	 $("#moileMsg").removeClass("msg-gray").removeClass("msg-error");
 	 $("#moileMsg").addClass("msg-suc");
 	 $("#moileMsg").text("手机号输入正确！");
 	  return true;
-	  } 
+	  
+ } 
   
 </script>
 
