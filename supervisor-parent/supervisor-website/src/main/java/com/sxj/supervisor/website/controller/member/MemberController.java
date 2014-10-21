@@ -57,13 +57,12 @@ public class MemberController extends BaseController {
 				if (member.getAccountNum() == null) {
 					member.setAccountNum(0);
 				}
+				List<AreaEntity> cityList = areaService.getChildrenAreas("32");
+				map.put("cityList", cityList);
 				map.put("member", member);
 				if (member.getFlag()) {
 					return "site/member/member-profile";
 				} else {
-					List<AreaEntity> cityList = areaService
-							.getChildrenAreas("32");
-					map.put("cityList", cityList);
 					return "site/member/edit-member";
 				}
 			}

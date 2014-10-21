@@ -151,7 +151,7 @@ function edit_pwd(id){
           <label>公司所在地</label>
           江苏省-
           <select name="area" id="city">
-           	<option value="">-请选择-</option>
+           <!--  	<option value="">-请选择-</option> -->
           	<#list cityList as city>
           	<#if (("32:江苏省,"+city.id+":"+city.name)==member.area)>
           	 <option value="32:江苏省,${city.id}:${city.name}" selected="selected">${city.name}</option>
@@ -164,7 +164,11 @@ function edit_pwd(id){
         <div class="item  ly-clearFix">
           <label>企业资质</label>          
           <div class="ly-left editBox mr15">
+          <#if (member.flag)>
+          <p class="f12">${member.bLicenseNo}</p>
+          <#else>
           <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" placeholder="请输入营业执照号" ></input><span class="msg-error pa p5 ml5" style="display:none" id="bLicenseNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的营业执照号</span></p>
+          </#if>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
 		   <#else>
@@ -176,8 +180,12 @@ function edit_pwd(id){
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
          <div class="ly-left editBox">
-                   <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"></input><span class="msg-error pa p5 ml5" style="display:none" id="energyNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的节能标识号</span></p>
-           <#if (member.bLicensePath??)>
+          <#if (member.flag)>
+          <p class="f12">${member.energyNo}</p>
+          <#else>
+          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"></input><span class="msg-error pa p5 ml5" style="display:none" id="energyNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的节能标识号</span></p>
+          </#if>
+          <#if (member.bLicensePath??)>
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
           <#else>
 		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg"> 
@@ -197,7 +205,7 @@ function edit_pwd(id){
         </div>
         <div class="item">
           <label>公司地址</label>
-          <input type="text" class="input input-w270h36" value="${member.address}" title="请输入公司地址" name="input3" id="address" datatype="*2-30" nullmsg="请输入公司名" />
+          <input type="text" class="input input-w270h36" value="${member.address}" title="请输入公司地址" name="input3" id="address" datatype="*2-30" nullmsg="公司地址不能为空" />
         </div>
         <div class="item">
           <label>邮政编码</label>

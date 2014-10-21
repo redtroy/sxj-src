@@ -55,6 +55,9 @@ jQuery(document).ready(function($) {
 	})
 	
 	})  
+function close_img(){
+	$("#img_close").hide();
+}
 function close_div(id){
 	$('.maskdivgen').fadeOut(100);
 	$('.passwordPop').slideUp(200);
@@ -75,12 +78,7 @@ function edit_pwd(id){
 	
 	
 }
-function reset_edit_pwd(id){
-	$("#edit_pwd").html('<div class="modal-header"><span class="close" onclick="close_div();">关闭</span></div><div class="modal-body">'+
-	'<div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>'+
-    '    <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>'+
-     ' <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd(\''+id+'\')">确认修改</button><button class="button button-gray " onclick="close_div();">取消</button></div> </div>')
-}
+
 function query(){
 
 }
@@ -111,7 +109,10 @@ function query(){
 <div class="item">
   <label>会员类型</label>
  ${member.type.getName()}</div>
-<div class="item"><label>公司所在地</label>江苏省南京市</div>
+<div class="item"><label>公司所在地</label><#list cityList as city>
+          	<#if (("32:江苏省,"+city.id+":"+city.name)==member.area)>
+          	  江苏省${city.name}
+          	</#if></#list></div>
 <div class="item certCont ly-clearFix">
 <label>企业资质</label>
 <div class="upload">
@@ -174,8 +175,8 @@ function query(){
   </div>
 </div>
     <div class="maskdivgen" style="display:none"></div>
-   <div class="viewer modal-wrap" style="display:none">
-<div class="modal-header"><span class="close">关闭</span></div>
+   <div class="viewer modal-wrap" id="img_close" style="display:none">
+<div class="modal-header"><span class="close" onclick="close_img()">关闭</span></div>
 <div id="viewer2" class="modal-body"></div>
 </div>
 <div class="maskdivgen" style="display:none"></div>
