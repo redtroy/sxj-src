@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,19 +209,16 @@ public class BasicController extends BaseController {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
 		if (userBean.getMember() != null && userBean.getAccount() == null) {
-			if (userBean.getMember().getCheckState()
-					.equals(MemberCheckStateEnum.certified)) {
-				MemberTypeEnum type = userBean.getMember().getType();
-				int flag = 0;
-				if (MemberTypeEnum.DAWP.equals(type)) {
-					flag = 1;
-				} else {
-					flag = 2;
-				}
-				List<MemberFunctionModel> list = functionService
-						.queryFunctions(flag);
-				map.put("list", list);
+			MemberTypeEnum type = userBean.getMember().getType();
+			int flag = 0;
+			if (MemberTypeEnum.DAWP.equals(type)) {
+				flag = 1;
+			} else {
+				flag = 2;
 			}
+			List<MemberFunctionModel> list = functionService
+					.queryFunctions(flag);
+			map.put("list", list);
 		} else if (userBean.getMember() != null
 				&& userBean.getAccount() != null) {
 			List<MemberFunctionModel> list = roleService

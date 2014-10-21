@@ -1,11 +1,13 @@
 package com.sxj.file.fastdfs;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,6 +42,10 @@ public class FastDFSImpl implements IFileUpLoad {
 	private TrackerServer trackerServer;
 
 	private StorageServer storageServer;
+
+	private Integer maxThreads = 200;
+
+	private static Semaphore lock;
 
 	static {
 		// try {
@@ -79,11 +85,13 @@ public class FastDFSImpl implements IFileUpLoad {
 				new InetSocketAddress[] { new InetSocketAddress(trackerHost,
 						trackerPort) });
 		tracker = new TrackerClient(group);
+		lock = new Semaphore(getMaxThreads(), true);
 	}
 
 	public String uploadFile(File file) {
 		String file_id = null;
 		try {
+			lock.acquire();
 			trackerServer = tracker.getConnection();
 			storageServer = tracker.getStoreStorage(trackerServer);
 			StorageClient1 client = new StorageClient1(trackerServer,
@@ -106,14 +114,18 @@ public class FastDFSImpl implements IFileUpLoad {
 			Logger.error(e.toString());
 		} catch (Exception ex) {
 			Logger.error(ex.toString());
+		} finally {
+			lock.release();
 		}
 
 		return file_id;
 	}
 
-	public String uploadFile(byte[] file_buff, String originalName) {
+	public String uploadFile(byte[] file_buff, String originalName)
+			throws IOException {
 		String file_id = null;
 		try {
+			lock.acquire();
 			trackerServer = tracker.getConnection();
 			storageServer = tracker.getStoreStorage(trackerServer);
 			StorageClient1 client = new StorageClient1(trackerServer,
@@ -124,16 +136,60 @@ public class FastDFSImpl implements IFileUpLoad {
 			file_id = client.upload_file1(file_buff,
 					file_ext_name.toUpperCase(),
 					meta_list.toArray(new NameValuePair[meta_list.size()]));
-			storageServer.close();
-			trackerServer.close();
 			HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id, file_buff);
 
 		} catch (SocketException e) {
 			Logger.error(e.toString());
 		} catch (Exception ex) {
 			Logger.error(ex.toString());
+		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
+			lock.release();
 		}
 		return file_id;
+	}
+
+	@Override
+	public List<String> uploadFile(List<byte[]> file_buffs,
+			List<String> originalName) {
+		List<String> file_ids = new ArrayList<String>();
+		try {
+			// Thread.currentThread().sleep(
+			// new Double(Math.random() * 100).longValue());
+			lock.acquire();
+			trackerServer = tracker.getConnection();
+			storageServer = tracker.getStoreStorage(trackerServer);
+			StorageClient1 client = new StorageClient1(trackerServer,
+					storageServer);
+			int i = 0;
+			for (byte[] file_buff : file_buffs) {
+				String file_ext_name = LocalFileUtil
+						.getFileExtName(originalName.get(i));
+				List<NameValuePair> meta_list = new ArrayList<NameValuePair>();
+				meta_list.add(new NameValuePair("originalName", originalName
+						.get(i)));
+				String file_id = client.upload_file1(file_buff,
+						file_ext_name.toUpperCase(),
+						meta_list.toArray(new NameValuePair[meta_list.size()]));
+				file_ids.add(file_id);
+				HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id,
+						file_buff);
+				i++;
+			}
+			storageServer.close();
+			trackerServer.close();
+
+		} catch (SocketException e) {
+			Logger.error(e.toString());
+		} catch (Exception ex) {
+			Logger.error(ex.toString());
+		} finally {
+			lock.release();
+		}
+		return file_ids;
 	}
 
 	public String modfiyFile(String oldfile_id, byte[] newfile_buff,
@@ -153,9 +209,10 @@ public class FastDFSImpl implements IFileUpLoad {
 		return newFileId;
 	}
 
-	public byte[] downloadFile(String file_id) {
+	public byte[] downloadFile(String file_id) throws IOException {
 		byte[] file_buff = null;
 		try {
+			lock.acquire();
 			Object object = HierarchicalCacheManager.get(LEVEL, CACHE_NAME,
 					file_id);
 			if (object != null) {
@@ -168,8 +225,6 @@ public class FastDFSImpl implements IFileUpLoad {
 			StorageClient1 client = new StorageClient1(trackerServer,
 					storageServer);
 			file_buff = client.download_file1(file_id);
-			storageServer.close();
-			trackerServer.close();
 			if (file_buff != null && file_buff.length > 0) {
 				HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id,
 						file_buff);
@@ -179,6 +234,12 @@ public class FastDFSImpl implements IFileUpLoad {
 			SxjLogger.error("获取图片错误", e, this.getClass());
 		} catch (Exception ex) {
 			SxjLogger.error("获取图片错误", ex, this.getClass());
+		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
+			lock.release();
 		}
 		return file_buff;
 	}
@@ -195,6 +256,8 @@ public class FastDFSImpl implements IFileUpLoad {
 			if (values != null) {
 				list = Arrays.asList(values);
 			}
+			storageServer.close();
+			trackerServer.close();
 		} catch (Exception e) {
 			SxjLogger.error("获取图片元信息错误", e, this.getClass());
 		}
@@ -298,6 +361,14 @@ public class FastDFSImpl implements IFileUpLoad {
 
 	public void setCacheTime(long cacheTime) {
 		this.cacheTime = cacheTime;
+	}
+
+	public Integer getMaxThreads() {
+		return maxThreads;
+	}
+
+	public void setMaxThreads(Integer maxThreads) {
+		this.maxThreads = maxThreads;
 	}
 
 	/**

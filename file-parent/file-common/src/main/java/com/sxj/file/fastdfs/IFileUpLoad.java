@@ -1,6 +1,7 @@
 package com.sxj.file.fastdfs;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.csource.common.NameValuePair;
@@ -20,7 +21,20 @@ public interface IFileUpLoad {
 	 *            ：文件名
 	 * @return file_Url ：文件Url
 	 */
-	public String uploadFile(byte[] file_buff, String originalName);
+	public String uploadFile(byte[] file_buff, String originalNames)
+			throws IOException;
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param file_buffs
+	 *            :文件字节数组
+	 * @param originalName
+	 *            ：文件名
+	 * @return file_Url ：文件Url
+	 */
+	public List<String> uploadFile(List<byte[]> file_buffs,
+			List<String> originalName) throws IOException;
 
 	/**
 	 * 上传文件
@@ -52,7 +66,7 @@ public interface IFileUpLoad {
 	 *            ：文件路径
 	 * @return file_buff：文件字节数组
 	 */
-	public byte[] downloadFile(String file_Url);
+	public byte[] downloadFile(String file_Url) throws IOException;
 
 	/**
 	 * 获取文件元信息
