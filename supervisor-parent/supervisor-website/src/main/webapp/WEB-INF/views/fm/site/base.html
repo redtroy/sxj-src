@@ -1,5 +1,5 @@
 <#assign staticPath="http://61.132.53.150:81/sxj/supervisor-website/" />
-<#assign imagePath="http://61.132.53.150:8082/file-web/" />
+<#assign imagePath="http://127.0.0.1:8080/file-web/" />
 <#macro validate>
 <!--<script src="${staticPath}js/jquery.validate.js"></script>-->
 <script src="${staticPath}js/Validform_v5.3.2.js"></script>
@@ -143,7 +143,10 @@ function loadUpload(id,url,isMulti,text,fn){
 	        uploader: url,
 	        fileTypeExts: '*.gif; *.jpg; *.png',
 	        auto: true,
-	        multi: isMulti,
+	        multi: true,
+	        queueID:"multiQueue",
+	        simUploadLimit:256,
+	        timeoutuploadLimit:256,
 	        height:30,
 	        width:200,
 	        buttonText:text,
@@ -160,6 +163,8 @@ function classLoadUpload(text){
 	        fileTypeExts: '*.gif; *.jpg; *.png',
 	        auto: true,
 	        multi: true,
+	        simUploadLimit:256,
+	        timeoutuploadLimit:256,
 	        height:30,
 	        width:100,
 	        buttonText:text,

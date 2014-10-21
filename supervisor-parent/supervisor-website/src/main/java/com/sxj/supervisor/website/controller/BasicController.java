@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,19 +209,16 @@ public class BasicController extends BaseController {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
 		if (userBean.getMember() != null && userBean.getAccount() == null) {
-			if (userBean.getMember().getCheckState()
-					.equals(MemberCheckStateEnum.certified)) {
-				MemberTypeEnum type = userBean.getMember().getType();
-				int flag = 0;
-				if (MemberTypeEnum.DAWP.equals(type)) {
-					flag = 1;
-				} else {
-					flag = 2;
-				}
-				List<MemberFunctionModel> list = functionService
-						.queryFunctions(flag);
-				map.put("list", list);
+			MemberTypeEnum type = userBean.getMember().getType();
+			int flag = 0;
+			if (MemberTypeEnum.DAWP.equals(type)) {
+				flag = 1;
+			} else {
+				flag = 2;
 			}
+			List<MemberFunctionModel> list = functionService
+					.queryFunctions(flag);
+			map.put("list", list);
 		} else if (userBean.getMember() != null
 				&& userBean.getAccount() != null) {
 			List<MemberFunctionModel> list = roleService
@@ -243,15 +239,17 @@ public class BasicController extends BaseController {
 		Map<String, MultipartFile> fileMaps = re.getFileMap();
 		Collection<MultipartFile> files = fileMaps.values();
 		List<String> fileIds = new ArrayList<String>();
+		List<byte[]> fileBuffs = new ArrayList<byte[]>();
+		List<String> originalFilename = new ArrayList<String>();
 		for (MultipartFile myfile : files) {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
-						myfile.getOriginalFilename());
-				fileIds.add(fileId);
+				fileBuffs.add(myfile.getBytes());
+				originalFilename.add(myfile.getOriginalFilename());
 			}
 		}
+		fileIds = fastDfsClient.uploadFile(fileBuffs, originalFilename);
 		map.put("fileIds", fileIds);
 		String res = JsonMapper.nonDefaultMapper().toJson(map);
 		response.setContentType("text/plain;UTF-8");

@@ -136,6 +136,41 @@ public class FastDFSImpl implements IFileUpLoad {
 		return file_id;
 	}
 
+	@Override
+	public List<String> uploadFile(List<byte[]> file_buffs,
+			List<String> originalName) {
+		List<String> file_ids = new ArrayList<String>();
+		try {
+			trackerServer = tracker.getConnection();
+			storageServer = tracker.getStoreStorage(trackerServer);
+			StorageClient1 client = new StorageClient1(trackerServer,
+					storageServer);
+			int i = 0;
+			for (byte[] file_buff : file_buffs) {
+				String file_ext_name = LocalFileUtil
+						.getFileExtName(originalName.get(i));
+				List<NameValuePair> meta_list = new ArrayList<NameValuePair>();
+				meta_list.add(new NameValuePair("originalName", originalName
+						.get(i)));
+				String file_id = client.upload_file1(file_buff,
+						file_ext_name.toUpperCase(),
+						meta_list.toArray(new NameValuePair[meta_list.size()]));
+				file_ids.add(file_id);
+				HierarchicalCacheManager.set(LEVEL, CACHE_NAME, file_id,
+						file_buff);
+				i++;
+			}
+			storageServer.close();
+			trackerServer.close();
+
+		} catch (SocketException e) {
+			Logger.error(e.toString());
+		} catch (Exception ex) {
+			Logger.error(ex.toString());
+		}
+		return file_ids;
+	}
+
 	public String modfiyFile(String oldfile_id, byte[] newfile_buff,
 			String newfile_ext_name) {
 		String newFileId = null;
@@ -163,8 +198,12 @@ public class FastDFSImpl implements IFileUpLoad {
 					return (byte[]) object;
 				}
 			}
-			trackerServer = tracker.getConnection();
-			storageServer = tracker.getStoreStorage(trackerServer);
+			if (trackerServer == null) {
+				trackerServer = tracker.getConnection();
+			}
+			if (storageServer == null) {
+				storageServer = tracker.getStoreStorage(trackerServer);
+			}
 			StorageClient1 client = new StorageClient1(trackerServer,
 					storageServer);
 			file_buff = client.download_file1(file_id);
@@ -195,6 +234,8 @@ public class FastDFSImpl implements IFileUpLoad {
 			if (values != null) {
 				list = Arrays.asList(values);
 			}
+			storageServer.close();
+			trackerServer.close();
 		} catch (Exception e) {
 			SxjLogger.error("获取图片元信息错误", e, this.getClass());
 		}

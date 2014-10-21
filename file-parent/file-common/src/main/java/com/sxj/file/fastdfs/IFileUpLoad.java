@@ -20,7 +20,18 @@ public interface IFileUpLoad {
 	 *            ：文件名
 	 * @return file_Url ：文件Url
 	 */
-	public String uploadFile(byte[] file_buff, String originalName);
+	public String uploadFile(byte[] file_buff, String originalNames);
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param file_buffs
+	 *            :文件字节数组
+	 * @param originalName
+	 *            ：文件名
+	 * @return file_Url ：文件Url
+	 */
+	public List<String> uploadFile(List<byte[]> file_buffs, List<String> originalName);
 
 	/**
 	 * 上传文件
