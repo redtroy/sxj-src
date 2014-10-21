@@ -76,10 +76,8 @@ jQuery(document).ready(function($) {
 	//   var params=$("#"+id).find(":input");
 	var params=$("#"+id+"_form").serialize();
 	//	$("#edit_form").append(params.html());
-	var valid=$("#"+id).Validform({tiptype:3});
-	valid.resetForm();
+	var valid=$("#"+id).Validform({tiptype:1});
 	 if (valid.check()){
-	 alert(12);
 	 var deviceNumber=$("#"+id).find("#deviceNumber").val();
 	 params=params+"&deviceNumber="+deviceNumber;
 		$.post("${basePath}member/editMember.htm",params,function(data){
@@ -90,6 +88,19 @@ jQuery(document).ready(function($) {
 				errorInfo(data);
 			}
 		});
+   }else{
+	   
+	   var alertMsg=''; 
+	   $("#"+id).find(".Validform_error").siblings(".Validform_wrong").each(function(){
+		   $(this).hide();
+		   if($(this).html())
+			   alertMsg+=$(this).html()+"<br/>";
+	   });
+	   if(alertMsg){
+		   $("#Validform_msg").children(".Validform_info").empty();
+		   $("#Validform_msg").children(".Validform_info").append(alertMsg);
+		   $("#Validform_msg").show();
+	   }
    }
    }
    //更改账户状态
@@ -346,6 +357,6 @@ Intense( elements );
      </div>
      <!-- InstanceEndEditable --></div>
 </div>
-<@b.footer />
+		<@b.footer />
 </body>
 <!-- InstanceEnd --></html>
