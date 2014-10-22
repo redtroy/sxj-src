@@ -42,9 +42,9 @@ public class ContractEntity extends Pagable implements Serializable
      * 合同号
     **/
     @Column(name = "CONTRACT_NO")
-    @Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "CT", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+    @Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER",stubValueProperty="dateNo")
     private String contractNo;
-    
+    private String dateNo;
     /**
      * 签订地址
     **/
@@ -195,7 +195,15 @@ public class ContractEntity extends Pagable implements Serializable
     @Column(name = "IMG_PATH")
     private String imgPath;
     
-    public Boolean getDeleteState()
+    public String getDateNo() {
+		return dateNo;
+	}
+
+	public void setDateNo(String dateNo) {
+		this.dateNo = dateNo;
+	}
+
+	public Boolean getDeleteState()
     {
         return deleteState;
     }

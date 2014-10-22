@@ -73,6 +73,8 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			query.setApplyId(userBean.getMember().getMemberNo());
+			query.setSortColumn("RECORD_NO");
+			query.setSort("DESC");
 			List<RecordEntity> list = recordService.queryRecord(query);
 			map.put("recordlist", list);
 			map.put("confirmState", rse);
@@ -100,7 +102,11 @@ public class RecordController extends BaseController {
 			}
 			model.put("contractModel", contractModel);
 			model.put("recordNo", recordNo);
-			return "site/record/contract-info";
+			if(contractModel.getContract().getType().getId()==0){
+				return "site/record/contract-info-zhaobiao";
+			}else{
+				return "site/record/contract-info";
+			}
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");

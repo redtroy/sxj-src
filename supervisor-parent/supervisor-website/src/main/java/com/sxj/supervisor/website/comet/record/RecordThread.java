@@ -33,9 +33,9 @@ public class RecordThread extends MessageThread {
 				messageList = (List<String>) cache;
 			}
 			if (messageList != null) {
-				System.out.println("--------------------" + messageList.size());
+				//System.out.println("--------------------" + messageList.size());
 			}
-			System.out.println("##############" + messageList);
+			//System.out.println("##############" + messageList);
 			if (messageList != null) {
 				for (Iterator<String> iterator = messageList.iterator(); iterator
 						.hasNext();) {

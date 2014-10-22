@@ -43,9 +43,10 @@ public class RecordEntity extends Pagable implements Serializable {
 	 * 备案号
 	 **/
 	@Column(name = "RECORD_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "BA", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER",stubValueProperty="dateNo")
 	private String recordNo;
 
+	private String dateNo;
 	/**
 	 * 标记
 	 */
@@ -151,6 +152,14 @@ public class RecordEntity extends Pagable implements Serializable {
 	@Column(name = "RFID_NO")
 	private String rfidNo;
 	
+	public String getDateNo() {
+		return dateNo;
+	}
+
+	public void setDateNo(String dateNo) {
+		this.dateNo = dateNo;
+	}
+
 	public String getRfidNo() {
 		return rfidNo;
 	}

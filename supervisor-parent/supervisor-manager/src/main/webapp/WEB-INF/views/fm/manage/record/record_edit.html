@@ -49,62 +49,57 @@
 	 loadUpload("img_path","${basePath}upload.htm",false,"上传合同扫描件",uploadLicense);
 	 }); 
 	 */
-	$(document)
-			.ready(
-					function() {
-						
-						$(":file")
-								.uploadify(
-										{
-											swf : '${basePath}upload/uploadify.swf',
-											uploader : "${basePath}upload.htm",
-											fileTypeExts : '*.gif; *.jpg; *.png',
-											auto : true,
-											multi : true,
-											height : 30,
-											width : 120,
-											buttonText : '上传合同扫描件',
-											onUploadSuccess : function(file,
-													data, response) {
-												var num = 0;
-												var dataObj = eval("(" + data+ ")");//转换为json对象 
-												var hideVal = $("#imgPath").val();
-												if (hideVal == '') {
-													hideVal = dataObj.fileIds;
-												} else {
-													hideVal += ","
-															+ dataObj.fileIds;
-													num=hideVal.split(",").length;
-												}
-												$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
+	$(document).ready(function() {
+		$(":file").uploadify({
+							swf : '${basePath}upload/uploadify.swf',
+							uploader : "${basePath}upload.htm",
+							fileTypeExts : '*.gif; *.jpg; *.png',
+							auto : true,
+							multi : true,
+							height : 30,
+							width : 120,
+							buttonText : '上传合同扫描件',
+							onUploadSuccess : function(file,
+									data, response) {
+								var num = 0;
+								var dataObj = eval("(" + data+ ")");//转换为json对象 
+								var hideVal = $("#imgPath").val();
+								if (hideVal == '') {
+									hideVal = dataObj.fileIds;
+								} else {
+									hideVal += ","
+											+ dataObj.fileIds;
+									num=hideVal.split(",").length;
+								}
+								$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
 
-												$("#imgPath").val(hideVal);
-												$( '.elastislide-list1' ).elastislide({
-													orientation : 'horizontal',
-													speed : 500,
-													easing : 'ease-in-out',
-													minItems : 3,
-													start : 0,
-													onClick : function( el, position, evt ) { 
-														var imageSource = el.find("a").attr("data-image");
-														$("#viewer2").iviewer({
-															src : imageSource,
-															mousewheel : true
-														});
-														el.parent().children("li").removeClass("view");
-														el.addClass("view");
-														$("#viewer2").children("img").attr("src",imageSource);
-														$(".viewer").show();
-														$(".modal-header").show();
-														$(".maskdivgen").show();
-														return false; 
-													},
-													onReady : function() { return false; },
-													onBeforeSlide : function() { return false; },
-													onAfterSlide : function() { return false; }
-												});
-											}
+								$("#imgPath").val(hideVal);
+								$( '.elastislide-list' ).elastislide({
+									orientation : 'horizontal',
+									speed : 500,
+									easing : 'ease-in-out',
+									minItems : 3,
+									start : 0,
+									onClick : function( el, position, evt ) { 
+										var imageSource = el.find("a").attr("data-image");
+										$("#viewer2").iviewer({
+											src : imageSource,
+											mousewheel : true
 										});
+										el.parent().children("li").removeClass("view");
+										el.addClass("view");
+										$("#viewer2").children("img").attr("src",imageSource);
+										$(".viewer").show();
+										$(".modal-header").show();
+										$(".maskdivgen").show();
+										return false; 
+									},
+									onReady : function() { return false; },
+									onBeforeSlide : function() { return false; },
+									onAfterSlide : function() { return false; }
+								});
+							}
+						});
 					});
 	$(document).ready(function() {
 		var imgPath = $("#imgPath").val();

@@ -55,8 +55,7 @@ public class ContractController extends BaseController {
 						contractModel.getContract().setStateLog("乙方已申请备案");
 					}else{
 					if (recordEntity.getType().getId() == 0) {
-						if (recordEntity.getMemberIdA() == contractModel
-								.getContract().getMemberIdA()) {
+						if (recordEntity.getFlag().getId() ==0)  {
 							contractModel.getContract().setStateLog("甲方已申请备案");
 						} else {
 							contractModel.getContract().setStateLog("乙方已申请备案");
@@ -104,8 +103,7 @@ public class ContractController extends BaseController {
 					sl.setModifyDate(recordEntity.getApplyDate());
 				}else{
 				if (recordEntity.getType().getId() == 0) {
-					if (recordEntity.getMemberIdA() == contractModel
-							.getContract().getMemberIdA()) {
+					if (recordEntity.getFlag().getId() ==0) {
 						sl.setStateTitle("甲方已申请备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
 					} else {
@@ -137,7 +135,11 @@ public class ContractController extends BaseController {
 					.getContract(contractId);
 			model.put("contractModel", contractModel);
 			model.put("contractId", contractId);
-			return "manage/contract/contract-info";
+			if(contractModel.getContract().getType().getId()==0){
+				return "manage/contract/contract-info-zhaobiao";
+			}else{
+				return "manage/contract/contract-info";
+			}
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");

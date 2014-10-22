@@ -17,9 +17,8 @@
 	<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/intense.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
-	<script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
-	<script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
-	
+<script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
+<script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>	
 <@b.pageScript/>
 <@b.errorInfo/>
 <script>
@@ -214,7 +213,7 @@ function check(id){
         <td><#if model.contract.state.getId() ==1><em class="state verified">${model.contract.state.getName()}</em><#else><a class="btn" onclick="check('${model.contract.id}');"><span>审核</span></a></#if></td>
         <td class="operation">
         <#if model.contract.type.getId()==0><a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a><#else> <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a></#if>
-        <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a></td>
+        <!-- <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a> --></td>
       </tr>
       <tr  class="tableInfo" style="display: none;" id="info${model.contract.id}"> </tr>
       <tr id="stateLog${model.contract.contractNo}" style="display: none;"> </tr>
