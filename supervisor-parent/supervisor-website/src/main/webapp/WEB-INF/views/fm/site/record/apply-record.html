@@ -34,13 +34,14 @@ jQuery(document).ready(function($) {
 	
 })
 var initSlide=function(){
-	$( '.elastislide-list' ).elastislide({
+	$( '#zbcarousel' ).elastislide({
 		orientation : 'horizontal',
 		speed : 500,
 		easing : 'ease-in-out',
 		minItems : 2,
 		start : 0,
 		onClick : function( el, position, evt ) { 
+			alert(12);
 			var imageSource = el.find("a").attr("data-image");
 			$("#viewer2").iviewer({
 				src : imageSource,
