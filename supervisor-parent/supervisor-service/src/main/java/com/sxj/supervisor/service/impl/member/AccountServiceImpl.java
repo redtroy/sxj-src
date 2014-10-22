@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.ibatis.type.JdbcType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -202,14 +201,14 @@ public class AccountServiceImpl implements IAccountService {
 		try {
 			AccountEntity account = new AccountEntity();
 			account.setId(id);
-			if (state == AccountStatesEnum.normal.getId().intValue()) {
-				account.setState(AccountStatesEnum.stop);
-				accountDao.updateAccount(account);
-				return AccountStatesEnum.stop.getName();
-			} else if (state == AccountStatesEnum.stop.getId().intValue()) {
+			if (state == AccountStatesEnum.stop.getId().intValue()) {
 				account.setState(AccountStatesEnum.normal);
 				accountDao.updateAccount(account);
 				return AccountStatesEnum.normal.getName();
+			} else if (state == AccountStatesEnum.normal.getId().intValue()) {
+				account.setState(AccountStatesEnum.stop);
+				accountDao.updateAccount(account);
+				return AccountStatesEnum.stop.getName();
 			} else {
 				return null;
 			}
