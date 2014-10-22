@@ -10,7 +10,7 @@ import com.sxj.supervisor.website.comet.MessageThread;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.logger.SxjLogger;
 
-public class RecordThread extends MessageThread {
+public class RecordThreadB extends MessageThread {
 
 	private List<String> oldMessage;
 
@@ -22,7 +22,7 @@ public class RecordThread extends MessageThread {
 				oldMessage=new ArrayList<String>();
 			}
 			List<String> messageList = null;
-			String key = "record_push_message_a_";
+			String key = "record_push_message_b_";
 			if (StringUtils.isNotEmpty(getParam())) {
 				key = key + getParam();
 			}
@@ -47,7 +47,7 @@ public class RecordThread extends MessageThread {
 					// 开始发送
 					if(!flag){
 						SxjLogger.info("+++++++++++++++" + flag, this.getClass());
-					getEngine().sendToAll(MessageChannel.RECORD_MESSAGE_A,
+					getEngine().sendToAll(MessageChannel.RECORD_MESSAGE_B,
 								message);
 					oldMessage.add(message+key);
 					}
@@ -57,8 +57,9 @@ public class RecordThread extends MessageThread {
 				}
 				// HierarchicalCacheManager.evict(2, "comet_record",
 				// "record_id");
-			}
 
 		}
 
 	}
+
+}

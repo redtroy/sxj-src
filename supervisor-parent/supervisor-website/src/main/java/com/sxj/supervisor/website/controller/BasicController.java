@@ -337,6 +337,9 @@ public class BasicController extends BaseController {
 			for (int i = 0; i < fileids.length; i++) {
 				List<NameValuePair> values = fastDfsClient
 						.getMetaList(fileids[i]);
+				if (values == null) {
+					continue;
+				}
 				String value = values.get(0).getValue();
 				nameMap.put(fileids[i], value);
 			}

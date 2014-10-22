@@ -137,7 +137,7 @@
                     ${contractModel.contract.remarks}</div>
                   <div class="item">
                     <label>&nbsp;</label>
-                    乙方逾期送货，按银行同期贷款利率支付逾期利息, 并赔偿甲方的损失，支付1%的违约金。</div>
+					</div>
                   <div class="item">
                     <label>&nbsp;</label>
                      <#list arr  as imgPath>
@@ -148,8 +148,8 @@
                   <label>关联招标合同号</label>
                   ${contractModel.contract.refContractNo}</span>
                   <#if contractModel.modifyList?exists>
-                  <h2 class="titChange f14 fb">变更合同信息</h2>
                   <#list contractModel.modifyList as modifyList>
+                  <h2 class="titChange f14 fb">变更合同信息</h2>
                   <div class="item">
                     <label>合同变更备案号  ${modifyList.modifyContract.recordNo}</label>
                     </div>
@@ -235,8 +235,8 @@
                    </#if> 
                     
                     <#if contractModel.replenishList?exists>
-                    <h2 class="titChange f14 fb">补损合同信息</h2>
                     <#list contractModel.replenishList as replenishList>
+                     <h2 class="titChange f14 fb">补损合同信息</h2>
                     <div class="item">
                       <label>合同补损备案号</label>
                       ${replenishList.replenishContract.recordNo}</div>

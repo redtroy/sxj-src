@@ -161,4 +161,6 @@ public interface IContractService {
 
 	String getReplenish(String contractNo);
 
+	int getContractByZhaobiaoContractNo(String contractNo);
+
 }

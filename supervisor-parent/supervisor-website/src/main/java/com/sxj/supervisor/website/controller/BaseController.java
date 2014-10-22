@@ -26,6 +26,7 @@ import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.website.comet.MessageConnectListener;
 import com.sxj.supervisor.website.comet.MessageDropListener;
+import com.sxj.supervisor.website.comet.MessageThread;
 import com.sxj.util.exception.SystemException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -86,16 +87,24 @@ public class BaseController {
 
 	}
 
-	protected void registChannel(String channel, Class<?> threadClass,String param) {
-		CometContext cc = CometContext.getInstance();
+	static CometContext cc = CometContext.getInstance();
+	
+	static {
+		CometEngine engine = cc.getEngine();
+		MessageConnectListener lis = new MessageConnectListener(engine);
+		engine.addConnectListener(lis);
+		MessageDropListener drop = new MessageDropListener();
+		engine.addDropListener(drop);
+	}
+
+	protected void registChannel(String channel, String param,
+			HttpSession session) {
 		List<String> apps = cc.getAppModules();
 		int index = apps.indexOf(channel);
+		session.setAttribute("cometParam", param);
 		if (index < 0) {
 			cc.registChannel(channel);// 注册应用的channel
-			CometEngine engine = cc.getEngine();
-			engine.addConnectListener(new MessageConnectListener(engine,
-					threadClass,param));
-			engine.addDropListener(new MessageDropListener());
+
 		}
 	}
 

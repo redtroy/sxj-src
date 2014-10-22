@@ -152,13 +152,17 @@ public class ContractServiceImpl implements IContractService {
 		try {
 			if (contract != null) {
 				RecordEntity record = recordDao.getRecord(recordId);
+				
 				// 拼装实体
 				if (record != null) {
+					RecordEntity re = new RecordEntity();
+					re.setId(record.getId());
+					re.setConfirmState(RecordConfirmStateEnum.unconfirmed);
+					recordDao.updateRecord(re);
 					contract.setRecordDate(record.getAcceptDate()); // 备案时间就是受理时间?
 					contract.setRecordNo(record.getRecordNo());// 备案号
 					contract.setType(record.getContractType());
 					contract.setImgPath(record.getImgPath());
-
 					contract.setState(ContractStateEnum.approval);
 					contract.setConfirmState(ContractSureStateEnum.noaffirm);
 					contract.setCreateDate(new Date());
@@ -791,7 +795,7 @@ public class ContractServiceImpl implements IContractService {
 									+ re.getMemberIdA()+ ','+re.getType().getId();
 							messageList.add(message);
 							HierarchicalCacheManager.set(2, "comet_record",
-									"record_push_message_" + re.getMemberIdA(),
+									"record_push_message_a_" + re.getMemberIdA(),
 									messageList);
 						}
 						// 乙方
@@ -799,7 +803,7 @@ public class ContractServiceImpl implements IContractService {
 							List<String> messageListB = null;
 							Object cacheB = HierarchicalCacheManager.get(2,
 									"comet_record",
-									"record_push_message_" + re.getMemberIdB());
+									"record_push_message_b_" + re.getMemberIdB());
 							if (cacheB instanceof ArrayList) {
 								messageListB = (List<String>) cacheB;
 							} else {
@@ -1088,5 +1092,19 @@ public class ContractServiceImpl implements IContractService {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	@Transactional
+	public int getContractByZhaobiaoContractNo(String contractNo) {
+		try {
+			ContractQuery query = new ContractQuery();
+			query.setContractNo(contractNo);
+			query.setContractType(0);
+			List<ContractModel> res = queryContracts(query);
+			return res.size();
+		} catch (Exception e) {
+			throw new ServiceException("获取合同信息错误", e);
+		}
 	}
 }
