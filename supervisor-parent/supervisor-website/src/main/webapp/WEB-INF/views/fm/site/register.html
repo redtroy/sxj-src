@@ -78,8 +78,7 @@ ${type[0].getName()}</span>/
 	 var flag=false;
 	 if ($("#contacts").val()=="" || $("#contacts").val()==null){
 		 $("#ct").show();
-		 $("#ct").removeClass("msg-gray").removeClass("msg-suc");
-		 $("#ct").addClass("msg-error");
+		 wrong("#ct");
 		 $("#ct").text("联系人不能为空");
 		 flag=true;
 	 }
@@ -97,41 +96,28 @@ ${type[0].getName()}</span>/
 	 }
 	 if (reName){
 		 $("#name_text").show();
-		 $("#name_text").removeClass("msg-gray").removeClass("msg-suc");
-		 $("#name_text").addClass("msg-error");
+		 wrong("#name_text");
 		 $("#name_text").text("公司名称不能为空");
 		 flag=true;
 	 }
 	 $("#sm_erro").show();
 	 if ($("#ms").val()==""){
-		// alert("请输入验证码！");
-		//$("#sm_erro").html('<span style="color:red">请输入验证码</span>');
-		$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
-		 $("#sm_erro").addClass("msg-error");
+		 wrong("#sm_erro");
 		 $("#sm_erro").text("请输入验证码");
 		 flag=true;
 	 }
 	 if (!send_flag){
-		// alert("请先获取验证码！")
-		// $("#sm_erro").html('<span style="color:red">请先获取验证码</span>');
-			$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
-		 $("#sm_erro").addClass("msg-error");
+		 wrong("#sm_erro");
 		 $("#sm_erro").text("请先获取验证码");
 		 flag=true;
 	 }
 	 if ($("#ms").val()==""){
-		 //alert("验证码只能为6位数字！");
-		 // $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
-		 $("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
-		 $("#sm_erro").addClass("msg-error");
+		 wrong("#sm_erro");
 		 $("#sm_erro").text("验证码不能为空");
 		 flag=true;
 	 }else 
 	 if (!$("#ms").val().match(/^\d{6}$/)){
-		 //alert("验证码只能为6位数字！");
-		 // $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
-		 	$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
-		 $("#sm_erro").addClass("msg-error");
+		 wrong("#sm_erro");
 		 $("#sm_erro").text("请填写正确的验证码");
 		 flag=true;
 	 }
@@ -141,16 +127,12 @@ ${type[0].getName()}</span>/
 	 }
 	 $.get("${basePath}member/check_ms.htm?ms="+param,function(data){
 		 if(data.flag=="false"){
-			// $("#sm_erro").html('<span style="color:red">验证码错误</span>');
-			$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
-		 $("#sm_erro").addClass("msg-error");
-		 $("#sm_erro").text("验证码错误");
+			 wrong("#sm_erro");
+		     $("#sm_erro").text("验证码错误");
 			 return false;
 		 }
-		// $("#sm_erro").html('<span style="color:green">验证通过</span>');
-		$("#sm_erro").removeClass("msg-gray").removeClass("msg-error");
-		 $("#sm_erro").addClass("msg-suc");
-		 $("#sm_erro").text("验证通过");
+		 right("#sm_erro");
+		 $("#sm_erro").text("");
 		 $("#regist_box").submit();
 	 })
 	 
@@ -161,23 +143,44 @@ ${type[0].getName()}</span>/
 			$("#name_text").show();
 		})
 		$("#contacts").bind("focus",function(){
-			$("#ct").show();
+			     $("#ct").show();
 		})
-		/*
 		$("#contacts").bind("blur",function(){
 			 if ($("#contacts").val()=="" || $("#contacts").val()==null){
 				 $("#ct").show();
-				 $("#ct").removeClass("msg-gray").removeClass("msg-suc");
-				 $("#ct").addClass("msg-error");
+			     wrong("#ct")
 				 $("#ct").text("联系人不能为空");
 			 }else{
-				 $("#ct").show();
-				 $("#ct").removeClass("msg-gray").removeClass("msg-error");
-				 $("#ct").addClass("msg-suc");
-				 $("#ct").text("验证通过");
+				 $("#ct").text("");
+				 right("#ct");
 			 }
 		})
-		*/
+		$("#ms").bind("blur",function(){
+			$("#sm_erro").show();
+			if ($("#ms").val()==""){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请输入验证码");
+				 flag=true;
+			 }else
+			 if (!send_flag){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请先获取验证码");
+				 flag=true;
+			 }else
+			 if ($("#ms").val()==""){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("验证码不能为空");
+				 flag=true;
+			 }else 
+			 if (!$("#ms").val().match(/^\d{6}$/)){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请填写正确的验证码");
+				 flag=true;
+			 }else{
+				 right("#sm_erro");
+				 $("#sm_erro").text("");
+			 }
+		})
 		$("#phoneNo").bind("focus",function(){
 			$("#moileMsg").show();
 		})
@@ -189,20 +192,19 @@ ${type[0].getName()}</span>/
 		 if (name != ""){
 		 $.post("check_member.htm",{name:name},function(data){
 			 if (data.text != undefined){
-				// $("#name_text").html('<span style="color:red">'+data.text+'</span>');
-				 $("#name_text").removeClass("msg-gray").removeClass("msg-suc");
-				 $("#name_text").addClass("msg-error");
+				  wrong("#name_text")
 				 $("#name_text").text(data.text);
 			 }else{
-				 //$("#name_text").html('<span style="color:green">可以注册</span>');
-				 $("#name_text").removeClass("msg-gray").removeClass("msg-error");
-				 $("#name_text").addClass("msg-suc");
-				 $("#name_text").text("可以注册");
+				 right("#name_text");
+				 $("#name_text").text("");
 				 reName=false;
 			 }
 		 })
 		 }else{
 			 reName=true;
+			 $("#name_text").show();
+			 wrong("#name_text");
+			 $("#name_text").text("公司名称不能为空");
 		 }
 		
 	  });
@@ -262,9 +264,7 @@ ${type[0].getName()}</span>/
 	  if ($("#phoneNo").val() == "") {
 	//  alert("手机号码不能为空！");
 	  $("#moileMsg").show();
-	//  $("#moileMsg").html("<font color='red'>手机号码不能为空！请输入正确的手机号码！</font>");
-	 $("#moileMsg").removeClass("msg-gray").removeClass("msg-suc");
-	 $("#moileMsg").addClass("msg-error");
+	 wrong("#moileMsg");
 	 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
 	  return false;
 	  }
@@ -272,10 +272,8 @@ ${type[0].getName()}</span>/
 	  if (!$("#phoneNo").val().match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)) {
 	//  alert("手机号码格式不正确！");
 	  $("#moileMsg").show();
-	//  $("#moileMsg").html("<font color='red'>手机号码格式不正确！请重新输入！</font>");
-	 $("#moileMsg").removeClass("msg-gray").removeClass("msg-suc");
-	 $("#moileMsg").addClass("msg-error");
-	 $("#moileMsg").text("手机号码格式不正确！请重新输入！");
+	  wrong("#moileMsg");
+	  $("#moileMsg").text("手机号码格式不正确！请重新输入！");
 	  return false;
 	  }
 	  var phone_flag=false;
@@ -292,20 +290,27 @@ ${type[0].getName()}</span>/
 		 });
 	  if (phone_flag){
 		  $("#moileMsg").show();
-		  $("#moileMsg").removeClass("msg-gray").removeClass("msg-suc");
-		  $("#moileMsg").addClass("msg-error");
+		  wrong("#moileMsg");
 		  $("#moileMsg").text("该手机号码已使用！");
 		  return false;
 	  }
 	  $("#moileMsg").show();
 	//  $("#moileMsg").html("<font color='green'>手机号输入正确！</font>");
-	 $("#moileMsg").removeClass("msg-gray").removeClass("msg-error");
-	 $("#moileMsg").addClass("msg-suc");
-	 $("#moileMsg").text("手机号输入正确！");
+	 right("#moileMsg");
+	 $("#moileMsg").text("");
 	  return true;
 	  
  } 
-  
+ function wrong(obj){
+	 $(obj).removeClass("tipMsg msg-gray");
+	 $(obj).removeClass("icon icon16 icon-16-suc");
+	 $(obj).addClass("tipMsg msg-error");
+ }
+ function right(obj){
+	 $(obj).removeClass("tipMsg msg-gray");
+	 $(obj).removeClass("tipMsg msg-error");
+	 $(obj).addClass("icon icon16 icon-16-suc");
+ }
 </script>
 
 </html>
