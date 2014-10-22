@@ -52,7 +52,6 @@ var initSlide=function(ele){
 }
 var bindClick=function(el){
 	el.live("click",function(){
-		alert(12);
 		var imageSource = el.find("a").attr("data-image");
 		$("#viewer2").iviewer({
 			src : imageSource,
@@ -79,7 +78,7 @@ var bindClick=function(el){
 }
 $(document).ready(function() {
 	$("#zbcarousel").empty();
-	bindClick($("#zbcarousel"));
+	bindClick($("#zbcarousel li"));
 	$("#zbFile").uploadify({
 			swf : '${basePath}upload/uploadify.swf',
 			uploader : "${basePath}upload.htm",
