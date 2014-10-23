@@ -118,7 +118,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 				messageCount = 0l;
 			}
 			messageCount = messageCount + 1;
-			HierarchicalCacheManager.set(2, "comet_rfid_apply",
+			HierarchicalCacheManager.set(2, "comet_message",
 					"rfid_apply_message", messageCount);
 		} catch (Exception e) {
 			SxjLogger.error("新增申请单错误", e, this.getClass());
