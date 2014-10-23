@@ -184,7 +184,7 @@ var ul_validform;
 			}
 			$("#quantitySum").html(quantity);
 		});
-		$(".priceClass").keyup(function(){
+		$(".priceClass").change(function(){
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
 				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
