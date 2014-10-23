@@ -1,5 +1,6 @@
     <!-- InstanceBeginEditable name="rightBar" -->
  <@b.validate/>
+ <@b.errorInfo/>
     <h2 class="title">新增管理员</h2>
     <div class="adminBox f14">
     <form id="add_form" action="javascript:void(0);" method="post">
@@ -36,11 +37,13 @@
 		var params=$("#add_form").serialize();
 		$.post("${basePath}system/add_account.htm",params,function(data){
 			if(data.isOK==true){
-				alert("添加成功");
-				query();
+				succInfo(function(){
+					query();
+				},"添加成功！");
+				
 			}
 			else{
-				errorInfo(data);
+				errorInfo("添加失败！");
 			}
 		});
 	}

@@ -16,7 +16,7 @@ function errorInfo(message){
 		    closeBtn: [0, false], //去掉默认关闭按钮
 		    //shift: 'left', //从左动画弹出
 		    page: {
-		        html: data
+		        html: data.html()
 		    }
 		});
 	//自设关闭
@@ -112,6 +112,20 @@ function succInfo(confirm,message){
      <div class="tipBox ly-clearFix">
      <span class="icon32 icon-32-info"></span>
      <p class="color-blue fontYH f18" id="message_hint">一般性网站提示内容</p>
+     </div>
+     <button class="popBtn" id="dialog_close_button">确认</button>
+     </div>
+   </div>
+</div>
+<div id="succ_info_div" style="display:none;">
+<div class="modal-wrap popDemo">
+        <div class="modal-header">
+     <div class="tit">消息提示</div>
+     <span class="close" id="dialog_close_span">关闭</span></div>
+     <div class="modal-body">
+    <div class="tipBox ly-clearFix">
+     <span class="icon32 icon-32-suc"></span>
+     <p class="color-green fontYH f18" id="message_succ">成功提示内容</p>
      </div>
      <button class="popBtn" id="dialog_close_button">确认</button>
      </div>
