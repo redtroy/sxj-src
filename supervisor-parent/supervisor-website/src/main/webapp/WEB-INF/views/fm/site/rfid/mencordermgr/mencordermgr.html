@@ -28,6 +28,7 @@ jQuery(document).ready(function($) {
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.errorInfo/>
 <script>
  function query(page){
 		var params=$("#search_form").serialize();
@@ -55,7 +56,7 @@ jQuery(document).ready(function($) {
 			query();
 		}else{
 			$("#remove_div").hide();
-			alert("后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！");
+			messageInfo("后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！");
 		}
 	})
 	  })

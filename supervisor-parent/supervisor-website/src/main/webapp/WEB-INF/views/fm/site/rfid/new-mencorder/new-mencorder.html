@@ -7,6 +7,7 @@
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<@b.errorInfo/>
 <script>
 function check(contractNo,count){
 	/*
@@ -46,11 +47,11 @@ function sub(){
 	 var contractNo=$("#contractNo").val();
 	 var rfidType=${member.type.id};
 	 if (!count.match(/^[0-9]*$/)){
-		 alert("申请数量请输入有效数字！");
+		 messageInfo("申请数量请输入有效数字！");
 		 return false;
 	 }
 	 if (count=="" || count==null){
-		 alert('数量不能为空');
+		 messageInfo('数量不能为空');
 		 return false;
 	 }
 	 if (check(contractNo,count)){
@@ -58,8 +59,10 @@ function sub(){
 	 }else{
 		 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType,contractNo:contractNo},function(data){
 			 if (data.isOk="ok"){
-				 alert("添加成功！");
-				 window.location.href="${basePath}rfid/mencordermgr/mencordermgr_list.htm"; 
+				 succInfo(function(){
+					 window.location.href="${basePath}rfid/mencordermgr/mencordermgr_list.htm"; 
+				 },"添加成功！");
+				
 			 }
 		 })
 	 }

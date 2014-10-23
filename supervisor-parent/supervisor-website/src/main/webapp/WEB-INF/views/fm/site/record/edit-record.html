@@ -14,6 +14,7 @@
 <script src="${staticPath}/js/jquery.paginate.js"></script>
 <script src="${staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.upload/>
+<@b.errorInfo/>
 <script>
 jQuery(document).ready(function($) {
 	$('.demo-image').click(function() {
@@ -146,10 +147,12 @@ $(document).ready(function() {
 	function modify(){
 		$.post("modify.htm",$('form').serialize(),function(data){
 			if (data.isOK=='ok'){
-				alert("修改成功");
-				window.location.href="query.htm";
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"修改成功");
+				
 			}else{
-				alert("修改失败");
+				errorInfo("修改失败");
 			}
 		  });
 	}

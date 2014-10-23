@@ -10,6 +10,7 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<@b.errorInfo/>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#tabsholder").tytabs({
@@ -26,10 +27,11 @@ function  rfid(){
 	if(confirm('确实要补损吗?')){
 	$.post("rfid_loss.htm",$("#wlForm").serialize(),function(data){
 		if(data.isOK=='ok'){
-			alert("补损成功!");
-			window.location.href="queryList.htm";
+			succInfo(function(){
+				window.location.href="queryList.htm";
+			},"补损成功!");
 		}else{
-			alert("补损失败!");	
+			errorInfo("补损失败!");	
 		}
 	});
 	}
@@ -66,13 +68,13 @@ function getRecord(contractNo){
 }
 function  gysrfid(){
 	if($("#record").val()==''){
-		alert("没有补损备案号,不能补损!");
+		messageInfo("没有补损备案号,不能补损!");
 		return;
 	}
 	var flag=0;
 	$.post("getLoss.htm",$("#htForm").serialize(),function(data){
 		if(data.isOK=='no'){
-			alert("该合同已补损!");	
+			messageInfo("该合同已补损!");	
 			flag=1;
 			return;
 		}
@@ -81,15 +83,16 @@ function  gysrfid(){
 		if(confirm('确实要补损吗?')){
 		$.post("rfid_loss.htm",$("#htForm").serialize(),function(data){
 			if(data.isOK=='ok'){
-				alert("补损成功!");
-				window.location.href="queryList.htm";
+				succInfo(function(){
+					window.location.href="queryList.htm";
+				},"补损成功!");
 			}else{
-				alert("补损失败!");	
+				errorInfo("补损失败!");	
 			}
 		});
 		}
 	}else{
-		alert("该合同已补损!");
+		messageInfo("该合同已补损!");
 	}
 }
 

@@ -104,33 +104,25 @@ ${type[0].getName()}</span>/
 	 }
 	 $("#sm_erro").show();
 	 if ($("#ms").val()==""){
-		// alert("请输入验证码！");
-		//$("#sm_erro").html('<span style="color:red">请输入验证码</span>');
 		$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
 		 $("#sm_erro").addClass("msg-error");
 		 $("#sm_erro").text("请输入验证码");
 		 flag=true;
 	 }
 	 if (!send_flag){
-		// alert("请先获取验证码！")
-		// $("#sm_erro").html('<span style="color:red">请先获取验证码</span>');
-			$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
+		$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
 		 $("#sm_erro").addClass("msg-error");
 		 $("#sm_erro").text("请先获取验证码");
 		 flag=true;
 	 }
 	 if ($("#ms").val()==""){
-		 //alert("验证码只能为6位数字！");
-		 // $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
 		 $("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
 		 $("#sm_erro").addClass("msg-error");
 		 $("#sm_erro").text("验证码不能为空");
 		 flag=true;
 	 }else 
 	 if (!$("#ms").val().match(/^\d{6}$/)){
-		 //alert("验证码只能为6位数字！");
-		 // $("#sm_erro").html('<span style="color:red">验证码只能为6位数字</span>');
-		 	$("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
+		 $("#sm_erro").removeClass("msg-gray").removeClass("msg-suc");
 		 $("#sm_erro").addClass("msg-error");
 		 $("#sm_erro").text("请填写正确的验证码");
 		 flag=true;
@@ -215,7 +207,6 @@ ${type[0].getName()}</span>/
   function send_ms(obj){
 	  send_flag=true;
 	  var phoneNo=$("#phoneNo").val();
-	  //alert(phoneNo)
 	  if (!checkSubmitMobil()){
 		  return false;
 	  }
@@ -260,9 +251,7 @@ ${type[0].getName()}</span>/
   function checkSubmitMobil() {
 	  $("#moileMsg_hidden").hide();
 	  if ($("#phoneNo").val() == "") {
-	//  alert("手机号码不能为空！");
 	  $("#moileMsg").show();
-	//  $("#moileMsg").html("<font color='red'>手机号码不能为空！请输入正确的手机号码！</font>");
 	 $("#moileMsg").removeClass("msg-gray").removeClass("msg-suc");
 	 $("#moileMsg").addClass("msg-error");
 	 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
@@ -270,9 +259,7 @@ ${type[0].getName()}</span>/
 	  }
 
 	  if (!$("#phoneNo").val().match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)) {
-	//  alert("手机号码格式不正确！");
 	  $("#moileMsg").show();
-	//  $("#moileMsg").html("<font color='red'>手机号码格式不正确！请重新输入！</font>");
 	 $("#moileMsg").removeClass("msg-gray").removeClass("msg-suc");
 	 $("#moileMsg").addClass("msg-error");
 	 $("#moileMsg").text("手机号码格式不正确！请重新输入！");

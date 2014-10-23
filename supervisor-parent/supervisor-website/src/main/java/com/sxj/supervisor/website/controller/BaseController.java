@@ -86,7 +86,8 @@ public class BaseController {
 
 	}
 
-	protected void registChannel(String channel, Class<?> threadClass,String param) {
+	protected void registChannel(String channel, Class<?> threadClass,
+			String param) {
 		CometContext cc = CometContext.getInstance();
 		List<String> apps = cc.getAppModules();
 		int index = apps.indexOf(channel);
@@ -94,7 +95,7 @@ public class BaseController {
 			cc.registChannel(channel);// 注册应用的channel
 			CometEngine engine = cc.getEngine();
 			engine.addConnectListener(new MessageConnectListener(engine,
-					threadClass,param));
+					threadClass, param));
 			engine.addDropListener(new MessageDropListener());
 		}
 	}

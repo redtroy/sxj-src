@@ -14,6 +14,7 @@
 <script src="${b.staticPath}js/jquery.imagecontainer.js" type="text/javascript"></script>
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <@b.validate/>
+<@b.errorInfo/>
 <script>
 var validform;
 jQuery(document).ready(function($) {
@@ -32,7 +33,6 @@ jQuery(document).ready(function($) {
 
 window.onload = function() {
 	$(".demo-image").click(function(){
-		//alert($(this).siblings()[0])
 		var imageSource=$(this).attr("data-image");
 		
 		$("#viewer2").iviewer({
@@ -70,10 +70,11 @@ function edit_pwd(id){
 	var pwd1=$("#pwd1").val();
 	var pwd2=$("#pwd2").val();
 		$.post("edit_pwd.htm",{id:id,password:pwd1},function(data){
-			alert("修改成功！");
-			//reset_edit_pwd(id);
-			$('.maskdivgen').fadeOut(100);
-			$('.passwordPop').slideUp(200);
+			succInfo(function(){
+				$('.maskdivgen').fadeOut(100);
+				$('.passwordPop').slideUp(200);
+			},"修改成功！");
+			
 		})
 	
 	

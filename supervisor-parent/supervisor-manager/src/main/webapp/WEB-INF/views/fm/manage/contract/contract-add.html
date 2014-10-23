@@ -86,7 +86,6 @@
 		var vTrClone = vTr.clone(true);//创建第一行的副本对象vTrClone 
 		var id = "trDataRow" + vNum;
 		vTrClone[0].id = id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-		//alert(vTrClone.find("td :last").find('a').text());	
 		vTrClone.find("td :last").attr("onclick", "");
 		vTrClone.find("td :last").addClass("TrDel");
 		vTrClone.find("td :last").html("x");//更改按钮
