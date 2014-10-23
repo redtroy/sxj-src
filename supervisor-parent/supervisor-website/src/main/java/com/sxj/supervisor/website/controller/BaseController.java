@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
 import org.comet4j.core.CometContext;
 import org.comet4j.core.CometEngine;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -15,6 +16,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
@@ -92,33 +94,34 @@ public class BaseController
         
     }
     
-    protected void registChannel(String channel, String param,
-            HttpSession session)
+    static CometContext cc = CometContext.getInstance();
+    
+    static CometEngine engine = cc.getEngine();
+    static
     {
-        CometContext cc = CometContext.getInstance();
         
-        CometEngine engine = cc.getEngine();
-        {
-            
-            //启动 Comet Server Thread
-            RecordThread cometServer = RecordThread.newInstance(engine);
-            //        cometServer.setDaemon(true);
-            //        cometServer.setDelay(3);
-            //        cometServer.setPeriod(2);
-            cometServer.schedule();
-            //        MessageConnectListener lis = new MessageConnectListener();
-            
-        }
+        //启动 Comet Server Thread
+        RecordThread cometServer = RecordThread.newInstance(engine);
+        //        cometServer.setDaemon(true);
+        //        cometServer.setDelay(3);
+        //        cometServer.setPeriod(2);
+        cometServer.schedule();
+        //        MessageConnectListener lis = new MessageConnectListener();
         engine.addConnectListener(new MessageConnectListener());
         //        MessageDropListener drop = new MessageDropListener();
         engine.addDropListener(new MessageDropListener());
-        List<String> apps = cc.getAppModules();
-        int index = apps.indexOf(channel);
-        session.setAttribute("cometParam", param);
-        if (index < 0)
-        {
-            cc.registChannel(channel);// 注册应用的channel
-        }
+        
+    }
+    
+    protected void registChannel(HttpServletRequest request)
+    {
+        if (!SecurityUtils.getSubject().isAuthenticated())
+            return;
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        String memberId = (String) Reflections.invokeGetter(principal,
+                "memberNo");
+        if (!cc.getAppModules().contains(memberId))
+            cc.registChannel(memberId);// 注册应用的channel
     }
     
     protected void getValidError(BindingResult result) throws SystemException

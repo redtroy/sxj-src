@@ -1,10 +1,5 @@
 ﻿package com.sxj.supervisor.website.comet;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.concurrent.ExecutorService;
-
-import org.comet4j.core.CometEngine;
 import org.comet4j.core.event.ConnectEvent;
 import org.comet4j.core.listener.ConnectListener;
 

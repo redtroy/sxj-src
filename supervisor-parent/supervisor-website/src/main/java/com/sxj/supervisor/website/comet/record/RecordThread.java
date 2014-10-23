@@ -1,25 +1,21 @@
 package com.sxj.supervisor.website.comet.record;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.comet4j.core.CometConnection;
+import org.comet4j.core.CometContext;
 import org.comet4j.core.CometEngine;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
-import com.sxj.supervisor.website.comet.MessageChannel;
 import com.sxj.supervisor.website.comet.MessageThread;
-import com.sxj.util.common.StringUtils;
 import com.sxj.util.logger.SxjLogger;
 
 public class RecordThread extends MessageThread
 {
-    
-    private List<String> oldMessage;
     
     private static int period = 2;
     
@@ -28,6 +24,8 @@ public class RecordThread extends MessageThread
     private static volatile RecordThread _self = null;
     
     private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    
+    public static final String REDIS_KEY_PREFIX = "record_push_message_";
     
     private RecordThread(CometEngine engine)
     {
@@ -71,60 +69,19 @@ public class RecordThread extends MessageThread
     @Override
     public void run()
     {
-        // 获取消息内容
-        if (getCounter().get() > 0)
+        List<String> channels = CometContext.getInstance().getAppModules();
+        if (getCounter().get() > 0 && channels.size() > 0)
         {
-            if (oldMessage == null)
+            for (String channel : channels)
             {
-                oldMessage = new ArrayList<String>();
-            }
-            List<String> messageList = null;
-            String key = "record_push_message_a_";
-            if (StringUtils.isNotEmpty(getParam()))
-            {
-                key = key + getParam();
-            }
-            Object cache = HierarchicalCacheManager.get(2, "comet_record", key);
-            if (cache instanceof ArrayList)
-            {
-                messageList = (List<String>) cache;
-            }
-            if (messageList != null)
-            {
-                // System.out.println("--------------------" +
-                // messageList.size());
-            }
-            List<CometConnection> connections = getEngine().getConnections();
-            for (CometConnection connection : connections)
-            {
-                System.out.println(connection.getRequest().getSession().getId());
-            }
-            SxjLogger.info("key=" + key, this.getClass());
-            SxjLogger.info("##############" + messageList, this.getClass());
-            // System.out.println("##############" + messageList);
-            if (messageList != null)
-            {
-                for (Iterator<String> iterator = messageList.iterator(); iterator.hasNext();)
-                {
-                    String message = iterator.next();
-                    SxjLogger.info("------------" + message, this.getClass());
-                    boolean flag = oldMessage.contains(message + key);
-                    SxjLogger.info("=============" + flag, this.getClass());
-                    // 开始发送
-                    if (!flag)
-                    {
-                        SxjLogger.info("+++++++++++++++" + flag,
-                                this.getClass());
-                        getEngine().sendToAll(MessageChannel.RECORD_MESSAGE_A,
-                                message);
-                        oldMessage.add(message + key);
-                    }
-                    // iterator.remove();
-                    // HierarchicalCacheManager.set(2, "comet_record",
-                    // key, messageList);
-                }
-                // HierarchicalCacheManager.evict(2, "comet_record",
-                // "record_id");
+                String key = REDIS_KEY_PREFIX + channel;
+                List<String> cache = (List<String>) HierarchicalCacheManager.get(2,
+                        "comet_record",
+                        key);
+                SxjLogger.debug("Sending Message to Comet Client:" + cache,
+                        getClass());
+                if (cache != null)
+                    getEngine().sendToAll(channel, cache);
             }
         }
         
@@ -150,4 +107,12 @@ public class RecordThread extends MessageThread
         this.delay = delay;
     }
     
+    public static void main(String... strings)
+    {
+        
+        Set<String> set = new HashSet<String>();
+        set.add("1");
+        set.add("1");
+        System.out.println(set.size());
+    }
 }

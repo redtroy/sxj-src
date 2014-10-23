@@ -36,7 +36,6 @@ import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.record.IRecordService;
-import com.sxj.supervisor.website.comet.MessageChannel;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -65,8 +64,8 @@ public class RecordController extends BaseController
     private IFileUpLoad fastDfsClient;
     
     @RequestMapping("/query")
-    public String to_query(ModelMap map, HttpSession session, RecordQuery query)
-            throws WebException
+    public String to_query(ModelMap map, HttpSession session,
+            HttpServletRequest request, RecordQuery query) throws WebException
     {
         try
         {
@@ -81,17 +80,14 @@ public class RecordController extends BaseController
             map.put("confirmState", rse);
             map.put("query", query);
             map.put("type", userBean.getMember().getType().getId());
+            map.put("memberNo", userBean.getMember().getMemberNo());
             if (userBean.getMember().getType().getId() == 0)
             {
-                registChannel(MessageChannel.RECORD_MESSAGE_A,
-                        userBean.getMember().getMemberNo(),
-                        session);
+                registChannel(request);
             }
             else
             {
-                registChannel(MessageChannel.RECORD_MESSAGE_B,
-                        userBean.getMember().getMemberNo(),
-                        session);
+                registChannel(request);
             }
             
             return "site/record/contract-list";
