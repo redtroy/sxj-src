@@ -254,10 +254,10 @@ jQuery(document).ready(function($) {
       	 	<div class="dropMenu sltinput" id="district_cn"> <span>全部权限</span> <span class="icon"></span>
      		</div>
       	  </td>
-          <#if account.state.id==0>
-          <td><a class="btn btn-green" onclick="checkState('${account.id}',0)"><span>解冻</span></a></td>
-          <#elseif account.state.id==1>
-          <td><a class="btn btn-red" onclick="checkState('${account.id}',1)"><span>冻结</span></a></td>
+          <#if (account.state.id==0)>
+          <td><a class="btn btn-green" onclick="checkState('${account.id}',${account.state.id})"><span>解冻</span></a></td>
+          <#elseif (account.state.id==1)>
+          <td><a class="btn btn-red" onclick="checkState('${account.id}',${account.state.id})"><span>冻结</span></a></td>
           </#if>
           <td>${account.regDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td id="edit_td" class="operation"><a class="edit" onclick="edit('${account.id}')">修改</a></td>

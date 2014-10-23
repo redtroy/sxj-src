@@ -15,7 +15,6 @@
 <script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
 <@b.upload/>
-<@b.errorInfo/>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#tabsholder").tytabs({
@@ -137,11 +136,11 @@ function  AcgApplyRecord(){
 	var memberIdB = $("#memberIdB").val();
 	var memberNameB = $("#memberNameB").val();
 	if(memberIdB==''){
-		messageInfo('请选择系统自动感应的用户！');
+		alert('请选择系统自动感应的用户！');
 		return;
 	}
 	if(memberNameB==''){
-		messageInfo('请选择系统自动感应的用户！');
+		alert('请选择系统自动感应的用户！');
 		return;
 	}
 	$.post("AcgApplyRecord.htm",$("#cgForm").serialize(),function(data){
@@ -150,7 +149,7 @@ function  AcgApplyRecord(){
 			   	 $("#contBox").show();
 				  $("#cgDiv").hide();
 			}else if(data.isOK=='no'){
-				messageInfo("您还没有通过认证,不能申请备案!");
+				alert("您还没有通过认证,不能申请备案!");
 			}
 	})
 }
@@ -160,7 +159,7 @@ function  AcgApplyRecord(){
 function  zbApplyRecord(){
 	var memberNameA = $("#memberA").val();
 	if(memberNameA==''){
-		messageInfo('请输入甲方用户！');
+		alert('请输入甲方用户！');
 		return;
 	}
 	$.post("zbApplyRecord.htm",$("#zbForm").serialize(),function(data){
@@ -169,7 +168,7 @@ function  zbApplyRecord(){
 			   	 $("#contBox").show();
 				  $("#cgDiv").hide();
 		   }else if(data.isOK=='no'){
-			   messageInfo("您还没有通过认证,不能申请备案!");
+				alert("您还没有通过认证,不能申请备案!");
 			}
 	})
 }
@@ -180,11 +179,11 @@ function  BzbApplyRecord(){
 	var memberNameA = $("#memberNameA").val();
 	var memberIdA = $("#memberIdA").val();
 	if(memberIdA==''){
-		messageInfo('请选择系统自动感应的用户！');
+		alert('请选择系统自动感应的用户！');
 		return;
 	}
 	if(memberNameA==''){
-		messageInfo('请选择系统自动感应的用户！');
+		alert('请选择系统自动感应的用户！');
 		return;
 	}
 	$.post("BzbApplyRecord.htm",$("#BcgForm").serialize(),function(data){
@@ -193,7 +192,7 @@ function  BzbApplyRecord(){
 			   $("#contBox").show();
 			   $("#BcgDiv").hide();
 		   }else if(data.isOK=='no'){
-			   messageInfo("您还没有通过认证,不能申请备案!");
+				alert("您还没有通过认证,不能申请备案!");
 			}
 	})
 }

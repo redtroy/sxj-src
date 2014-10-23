@@ -29,10 +29,10 @@
 	type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
-<@b.pageScript/>
-<@b.errorInfo/>
-<@b.upload/>
+
+<@b.pageScript/> <@b.errorInfo/> <@b.upload/>
 <script>
+
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
 		$('.popView').slideUp(200);
@@ -92,11 +92,11 @@ jQuery(document).ready(function($) {
    						});
        				
        				}else{
-       					messageInfo("暂无合同副本!");
+       					alert("暂无合同副本!");
        				}
        			});
 		}else{
-			messageInfo("暂无合同副本!");
+				alert("暂无合同副本!");
 			}
 	});
 });
@@ -127,7 +127,7 @@ function busun(recordId){
 			}
 		}else{
 			$("#batchId").append('<option value="">没有批次</option>');
-			messageInfo("没有找到批次！");
+			alert("没有找到批次！");
 		}
 	});
 }
@@ -141,16 +141,14 @@ function saveBiangeng(){
 		if($("#bgImgPathHide").val()!='' ){
 		$.post("modifyRecord.htm", o, function(data) {
 			if (data.isOK == 'ok') {
-				succInfo(function(){
-					window.location.href = "query.htm";
-				},"上传变更扫描件成功");
-				
+				alert("上传变更扫描件成功");
+				window.location.href = "query.htm";
 			} else {
-				errorInfo("上传变更扫描件失败");
+				alert("上传变更扫描件失败");
 			}
 		});
 		}else{
-			messageInfo("请上传图片");
+			alert("请上传图片");
 		}
 }
 //重新选择
@@ -171,15 +169,14 @@ function busunSeav(){
 		if($("#bsImgPathHide").val()!='' ){
 		$.post("modifyRecord.htm", o, function(data) {
 			if (data.isOK == 'ok') {
-				succInfo(function(){
-					window.location.href = "query.htm";
-				},"上传补损扫描件成功");
+				alert("上传补损扫描件成功");
+				window.location.href = "query.htm";
 			} else {
-				errorInfo("上传补损扫描件失败");
+				alert("上传补损扫描件失败");
 			}
 		});
 	}else{
-		messageInfo("请上传图片");
+		alert("请上传图片");
 	}
 }
 
@@ -228,7 +225,7 @@ function busunSeav(){
 				$("#rfid").text(rfid);
 				$("#rfidHide").val(rfid);
 				} else {
-					messageInfo("没有找到批次相关的RFID!");
+					alert("没有找到批次相关的RFID!");
 				}
 			});
 		   }
@@ -281,7 +278,7 @@ function busunSeav(){
 
 	function delRecord(id,contractNo) {
 		if(contractNo!=''){
-			messageInfo("该备案已被受理，不能删除!");
+			alert("该备案已被受理，不能删除!");
 			return;
 		}else{
 			if (confirm("确定删除备案吗?")) {
@@ -289,13 +286,10 @@ function busunSeav(){
 					id : id
 				}, function(data) {
 					if (data.isOK == "ok") {
-						succInfo(function(){
-							$("#" + id).remove();
-							window.location.href="query.htm";
-						},"删除备案成功");
-						
+						$("#" + id).remove();
+						window.location.href="query.htm";
 					} else {
-						errorInfo("删除备案失败");
+						alert("删除备案失败");
 					}
 				});
 			}

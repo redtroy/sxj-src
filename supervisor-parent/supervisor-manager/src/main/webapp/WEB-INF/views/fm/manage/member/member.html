@@ -10,11 +10,30 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
+
+<script type="text/javascript" src="${b.staticPath}js/jqueryui.js" ></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
+<script src="${b.staticPath}js/jquery.imagecontainer.js" type="text/javascript"></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <@b.pageScript/>
 <@b.errorInfo/>
 <@b.diy_alert/>
 <@b.validate/>
 <script>
+window.onload = function() {
+	$(".demo-image").live("click",function(){
+		//alert($(this).siblings()[0])
+		var imageSource=$(this).attr("data-image");
+		
+		$("#viewer2").iviewer({
+                      src: imageSource,
+					  mousewheel: true
+        });
+		$("#viewer2 img").attr("src",imageSource);
+	});
+}
+
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function(){
 		$('.popDemo').slideUp(200);
@@ -23,7 +42,15 @@ jQuery(document).ready(function($) {
 		$('.popDemo').slideUp(200);
 		
 	});
+	$('.demo-image').live("click",function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.viewer').slideDown(200);
+	})
 });
+function close_img(){
+	$("#img_close").hide();
+	$(".maskdivgen").hide();
+}
     function query(page){
    	 	var params=$("#search_form").serialize();
 		if(page!=undefined){
@@ -74,37 +101,19 @@ jQuery(document).ready(function($) {
    //修改
    function edit(id){
 	var params=$("#"+id).find(":input").serialize();
-	//var deviceNumber=$("#"+id).find("#deviceNumber").val();
-	//console.log(deviceNumber)
-	//var params=$("#"+id+"_form").serialize();
-	//$("#edit_form").html(params.html());
-	//console.log(params);
-	//var params2=$("#edit_form").serialize();
-	//console.log(params2);
+	var deviceNumber=$("#"+id).find("#deviceNumber").val();
 	params=params+"&deviceNumber="+deviceNumber;
-		$.post("${basePath}member/editMember.htm",params,function(data){
-			if(data.isOK == 'ok'){
-				alert("修改成功");
-				query($("#pager").attr("currentPage"));
-			}else{
-				errorInfo(data);
-			}
-		});
-		/*
-	var valid=$("#"+id).Validform({tiptype:1});
-	 if (valid.check()){
-	 
-   }else{
-	   
-	   var alertMsg='';
-	   $("#"+id).find(".Validform_wrong").each(function(){
-		   $(this).hide();
-		   if($(this).html())
-			   alertMsg+=$(this).html()+"\n";
-	   });
-	   if(alertMsg)
-	   	alert(alertMsg);
+	if (check(id)){
+		return false;
    }
+	$.post("${basePath}member/editMember.htm",params,function(data){
+		if(data.isOK == 'ok'){
+			alert("修改成功");
+			query($("#pager").attr("currentPage"));
+		}else{
+			errorInfo(data);
+		}
+	});
    }
    //更改账户状态
    function editState(id,state){
@@ -117,10 +126,11 @@ jQuery(document).ready(function($) {
 					}
 			  });
 	   })
-	   */
+	   
    }
    //状态验证
    function check(obj){
+	   /*
 	   var name=$("#"+obj).find("[name='name']").val();
 	   var id=$("#"+obj).find("[name='id']").val();
 	   var flag=false;
@@ -137,14 +147,37 @@ jQuery(document).ready(function($) {
          }
        });
 	   return flag;
-	   /*
-	   var bLicenseNo=$("#"+obj).find("#bLicenseNo").val();
-	   var energyNo=$("#"+obj).find("#energyNo").val();
-	   var contacts=$("#"+obj).find("#contacts").val();
-	   var phoneNo=$("#"+obj).find("#phoneNo").val();
-	   var address=$("#"+obj).find("#address").val();
-	   var telNum=$("#"+obj).find("#telNum").val();
 	   */
+	   var bLicenseNo=$("#"+obj).find("[name='bLicenseNo']").val();
+	   var energyNo=$("#"+obj).find("[name='energyNo']").val();
+	   var contacts=$("#"+obj).find("[name='contacts']").val();
+	   var phoneNo=$("#"+obj).find("[name='phoneNo']").val();
+	   var address=$("#"+obj).find("[name='address']").val();
+	   var telNum=$("#"+obj).find("[name='telNum']").val();
+	   if (bLicenseNo==""){
+		   alert("营业执照号不能为空");
+		   return true;
+	   }
+	   if (energyNo==""){
+		   alert("营业执照号不能为空");
+		   return true;
+	   }
+	   if (contacts==""){
+		   alert("联系人不能为空");
+		   return true;
+	   }
+	   if (phoneNo==""){
+		   alert("手机号码不能为空");
+		   return true;
+	   }
+	   if (phoneNo.match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)){
+		   alert("手机号码格式错误！");
+		   return true;
+	   }
+	   if (address==""){
+		   alert("地址不能为空");
+		   return true;
+	   }
    }
  //更改审核状态
    function editCheckState(id,state){
@@ -158,10 +191,12 @@ jQuery(document).ready(function($) {
 		  });
 	 })
    }
+/*
 window.onload = function() {
 var elements = document.querySelectorAll( '.demo-image' );
 Intense( elements );
 }
+*/
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -361,6 +396,13 @@ Intense( elements );
      </div>
      <!-- InstanceEndEditable --></div>
 </div>
+   <div class="maskdivgen" style="display:none"></div>
+    <div class="viewer modal-wrap" id="img_close" style="display:none">
+      <div class="modal-header"><span class="close" onclick="close_img()">关闭</span></div>
+      <div id="viewer2" class="modal-body"></div>
+    </div>
+   <div class="maskdivgen" style="display:none"></div>
 <@b.footer />
+
 </body>
 <!-- InstanceEnd --></html>
