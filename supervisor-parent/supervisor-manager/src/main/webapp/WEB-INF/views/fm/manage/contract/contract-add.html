@@ -199,8 +199,9 @@ var ul_validform;
 					var $p=$("<p/>").addClass("Validform_checktip Validform_wrong").html(msg);
 					var left=o.obj.offset().left,
 					top=o.obj.offset().top;
+					var width=o.obj.width();
 					$div.append($p).css({
-						'left':left+170,
+						'left':left+width-32,
 						'top':top-45,
 						'position':'absolute'
 					}).show();
