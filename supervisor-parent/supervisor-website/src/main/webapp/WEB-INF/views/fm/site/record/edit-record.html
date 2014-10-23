@@ -69,6 +69,7 @@ $(document).ready(function() {
 							$(".rollBox").empty();
 							$(".rollBox").append(ul);
 							$("#imgPath").val(hideVal);
+							alert("hhhh");
 							$( '#carousel' ).elastislide({
 								orientation : 'horizontal',
 								speed : 500,
@@ -76,17 +77,6 @@ $(document).ready(function() {
 								minItems : 3,
 								start : 0,
 								onClick : function( el, position, evt ) { 
-									var imageSource = el.find("a").attr("data-image");
-									$("#viewer2").iviewer({
-										src : imageSource,
-										mousewheel : true
-									});
-									el.parent().children("li").removeClass("view");
-									el.addClass("view");
-									$("#viewer2").children("img").attr("src",imageSource);
-									$(".viewer").show();
-									$(".modal-header").show();
-									$(".maskdivgen").show();
 									return false; 
 								},
 								onReady : function() { return false; },
@@ -97,6 +87,20 @@ $(document).ready(function() {
 					});
 				});
 $(document).ready(function() {
+	$('#carousel').find("li").live("click",function(){
+		var el=$(this);
+		var imageSource = el.find("a").attr("data-image");
+		$("#viewer2").iviewer({
+			src : imageSource,
+			mousewheel : true
+		});
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+		$("#viewer2").children("img").attr("src",imageSource);
+		$(".viewer").show();
+		$(".modal-header").show();
+		$(".maskdivgen").show();
+	});
 	var imgPath = $("#imgPath").val();
 	$.ajaxSetup ({     
 	    cache: false 
