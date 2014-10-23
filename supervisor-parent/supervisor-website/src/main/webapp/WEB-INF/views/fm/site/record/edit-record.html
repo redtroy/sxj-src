@@ -116,7 +116,7 @@ $(document).ready(function() {
 		el.parent().children("li").removeClass("view");
 		el.addClass("view");
 		//$("#viewer2").children("img").attr("src",imageSource);
-		$(".viewer").show();
+		$("#viewer2").show();
 		$(".modal-header").show();
 	});
 	var imgPath = $("#imgPath").val();
@@ -377,7 +377,9 @@ $(document).ready(function() {
 	</div>
 	</div>
 	<@b.footer />
-		<div id="viewer2" class="modal-body iviewer"></div>
+	<div>
+		<div id="viewer2" class="modal-body iviewer" style="width: 100%;display: none;top: 0px"></div>
+		</div>
 	<div class="maskdivgen" style="display: none"></div>
 </body>
 </html>
