@@ -275,22 +275,41 @@ $(document).ready(function() {
 	    }});
 		//加载批次
 		if(${record.type.getId()}==2){
-			var batch =${batch};
+			var batch ='${batch}';
 			if(batch==''){
-				$("#batchId").empty();
-				$("#batchId").append('<option value="">没有批次</option>');	
+				$("#selectBatch").empty();
+				$("#selectBatch").append('<option value="">没有批次</option>');	
 			}else{
 				var batchArr =data.batch.split("#");
 				var batch0 =batchArr[0].split(",");
 				var batch1 =batchArr[1].split(",");
-				$("#batchId").empty();
+				$("#selectBatch").empty();
 				for(var i=0;i<batch0.length;i++){
-					$("#batchId").append('<option value="">请选择批次</option>');
-					$("#batchId").append('<option value="'+batch1[i]+'">第'+batch0[i]+'批次</option>');
+					$("#selectBatch").append('<option value="">请选择批次</option>');
+					$("#selectBatch").append('<option value="'+batch1[i]+'">第'+batch0[i]+'批次</option>');
 				}
 			}
 		}
-		
+		$('#selectBatch').change(function(){  
+			   var batchId=$(this).children('option:selected').val();  
+			   if(batchId!=''){
+			   $.post("getRfid.htm", {batchId:batchId}, function(data) {
+					if (data.rfid != '') {
+					var hide=$("#rfidHide").val();
+					var rfid ;
+					if(hide!=''){
+					 rfid =hide+','+data.rfid;
+					}else{
+						rfid=data.rfid;
+					}
+					$("#rfid").text(rfid);
+					$("#rfidHide").val(rfid);
+					} else {
+						errorInfo("没有找到批次相关的RFID!");
+					}
+				});
+			   }
+	   		}) 
 	});
 </script>
 </head>
@@ -477,7 +496,7 @@ $(document).ready(function() {
 								</select>
 							</div>
 							<div class="item">
-								<label>对应批次RFID编号</label> ${record.rfidNo}<span
+								<label>对应批次RFID编号</label> <input type="hidden" id="rfidHide" name="rfidNo" />${record.rfidNo}<span
 									class="icon icon-add"></span>
 
 							</div>
