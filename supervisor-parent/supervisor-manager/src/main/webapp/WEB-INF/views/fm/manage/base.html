@@ -175,9 +175,7 @@ $('#sure_alert').css({
      	<div class="tit">确认提示</div><span id="dialog_close_span" class="close" onclick="">关闭</span>
      </div>
      <div class="modal-body popbtnBox">
-     <div class="tipBox ly-clearFix">
-     <p class="fontYH f18" id="diglog_message">是否确认修改</p>
-     </div>
+     <p class="fontYH f18 mb10" id="diglog_message">是否确认修改</p>
      <button id="dialog_confirm_click" class="popBtn">确认</button>
      <button class="popBtn btnGray" id="dialog_close_button">取消</button>
      </div>
@@ -193,6 +191,7 @@ function dialogBox(confirm,message){
 	 var pageii = $.layer({
 		    type: 1,
 		    title: false,
+		    offset: ['192px', ''],
 		   	area: ['20%', '20%'],
 		    border: [0], //去掉默认边框
 		    shade: [0.5], //去掉遮罩

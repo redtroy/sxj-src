@@ -247,9 +247,10 @@ public class FastDFSImpl implements IFileUpLoad {
 	}
 
 	@Override
-	public List<NameValuePair> getMetaList(String file_Id) {
+	public List<NameValuePair> getMetaList(String file_Id) throws IOException {
 		List<NameValuePair> list = null;
 		try {
+			lock.acquire();
 			trackerServer = tracker.getConnection();
 			storageServer = tracker.getStoreStorage(trackerServer);
 			StorageClient1 client = new StorageClient1(trackerServer,
@@ -258,10 +259,14 @@ public class FastDFSImpl implements IFileUpLoad {
 			if (values != null) {
 				list = Arrays.asList(values);
 			}
-			storageServer.close();
-			trackerServer.close();
 		} catch (Exception e) {
 			SxjLogger.error("获取图片元信息错误", e, this.getClass());
+		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
+			lock.release();
 		}
 		return list;
 	}
