@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.contract.IContractPayDao">
+	<resultMap id="ContractPayResultMap"
+		type="com.sxj.supervisor.entity.pay.PayRecordEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="payNo" column="PAY_NO" jdbcType="VARCHAR"
+			javaType="String" />
+		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR"
+			javaType="String" />
+		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
+		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
+		<result property="content" column="CONTENT" jdbcType="VARCHAR" />
+		<result property="payAmount" column="PAY_AMOUNT" jdbcType="INTEGER" />
+		<result property="payDate" column="PAY_DATE" jdbcType="TIMESTAMP" />
+		<result property="state" column="STATE" jdbcType="INTEGER"/>
+		
+
+	</resultMap>
+
+	<!-- 条件查询合同 -->
+	<select id="queryPayContract" resultMap="ContractPayResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_CONTRACT_PAY WHERE 1=1
+	]]>
+		<!-- 根据会员号查询 -->
+		<if test="condition.memberNo != null and condition.memberNo != ''">
+			<![CDATA[ AND (MEMBER_NO_A = #{condition.memberNo} OR MEMBER_NO_B = #{condition.memberNo})]]>
+		</if>
+		<!-- 支付单号 -->
+		<if test="condition.payNo != null and condition.payNo != ''">
+			<![CDATA[ AND PAY_NO like CONCAT('%',#{condition.payNo},'%')]]>
+		</if>
+		<!-- 合同号 -->
+		<if test="condition.contractNo != null and condition.contractNo != ''">
+			<![CDATA[AND CONTRACT_NO like CONCAT('%',#{condition.contractNo},'%')]]>
+		</if>
+		<!-- RFID编号 -->
+		<if test="condition.rfidNo != null and condition.rfidNo != ''">
+			<![CDATA[AND RFID_NO like CONCAT('%',#{condition.rfidNo},'%')]]>
+		</if>
+	   <!-- 付款状态/收款状态 -->
+		<if test="condition.state != null">
+			<![CDATA[AND STATE =#{condition.state}]]>
+		</if>
+		<!-- 支付时间段-->
+		<if
+			test="condition.startPayDate != null and condition.endPayDate != null and  condition.startPayDate != '' and condition.endPayDate != ''">
+			<![CDATA[AND PAY_DATE >=#{condition.startPayDate} AND PAY_DATE <= #{condition.endPayDate}]]>
+		</if>
+		<![CDATA[ ORDER BY PAY_NO DESC
+		]]>
+	</select>
+</mapper>

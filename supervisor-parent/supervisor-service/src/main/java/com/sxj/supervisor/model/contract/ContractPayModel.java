@@ -1,89 +1,68 @@
-package com.sxj.supervisor.entity.pay;
+package com.sxj.supervisor.model.contract;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import com.sxj.mybatis.orm.annotations.Column;
-import com.sxj.mybatis.orm.annotations.Entity;
-import com.sxj.mybatis.orm.annotations.Id;
-import com.sxj.mybatis.orm.annotations.Table;
-import com.sxj.supervisor.dao.contract.IContractPayDao;
-import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.mybatis.pagination.Pagable;
 
-/**
- * 支付单
- * 
- * @author dujinxin
- *
- */
-@Entity(mapper = IContractPayDao.class)
-@Table(name = "M_CONTRACT_PAY")
-public class PayRecordEntity implements Serializable {
+public class ContractPayModel extends Pagable implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1316548893613242787L;
+	private static final long serialVersionUID = 6437430614715862144L;
 
 	/**
 	 * ID
 	 */
-	@Id(column = "ID")
 	private String id;
 
 	/**
 	 * 会员ID
 	 */
-	@Column(name = "MEMBER_NO")
 	private String memberNo;
 
 	/**
 	 * 支付单号
 	 */
-	@Column(name = "PAY_NO")
 	private String payNo;
 
 	/**
 	 * 合同号
 	 */
-	@Column(name = "CONTRACT_NO")
 	private String contractNo;
 
 	/**
 	 * 批次号
 	 */
-	@Column(name = "BATCH_NO")
 	private String batchNo;
 
 	/**
 	 * RFID编号
 	 */
-	@Column(name = "RFID_NO")
 	private String rfidNo;
 
 	/**
 	 * 支付金额
 	 */
-	@Column(name = "PAY_AMOUNT")
 	private Long payAmount;
 
 	/**
-	 * 支付日期
+	 * 支付开始日期
 	 */
-	@Column(name = "PAY_DATE")
-	private Date payDate;
+	private Date startPayDate;
 
 	/**
-	 * 支付内容
+	 * 支付结束日期
 	 */
-	@Column(name = "CONTENT")
+	private Date endPayDate;
+
 	private String content;
 
 	/**
 	 * 状态
 	 */
-	@Column(name = "STATE")
-	private PayStageEnum state;
+	private Integer state;
 
 	public String getContent() {
 		return content;
@@ -93,20 +72,20 @@ public class PayRecordEntity implements Serializable {
 		this.content = content;
 	}
 
-	public String getMemberNo() {
-		return memberNo;
-	}
-
-	public void setMemberNo(String memberNo) {
-		this.memberNo = memberNo;
-	}
-
 	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getMemberNo() {
+		return memberNo;
+	}
+
+	public void setMemberNo(String memberNo) {
+		this.memberNo = memberNo;
 	}
 
 	public String getPayNo() {
@@ -149,19 +128,27 @@ public class PayRecordEntity implements Serializable {
 		this.payAmount = payAmount;
 	}
 
-	public Date getPayDate() {
-		return payDate;
+	public Date getStartPayDate() {
+		return startPayDate;
 	}
 
-	public void setPayDate(Date payDate) {
-		this.payDate = payDate;
+	public void setStartPayDate(Date startPayDate) {
+		this.startPayDate = startPayDate;
 	}
 
-	public PayStageEnum getState() {
+	public Date getEndPayDate() {
+		return endPayDate;
+	}
+
+	public void setEndPayDate(Date endPayDate) {
+		this.endPayDate = endPayDate;
+	}
+
+	public Integer getState() {
 		return state;
 	}
 
-	public void setState(PayStageEnum state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 

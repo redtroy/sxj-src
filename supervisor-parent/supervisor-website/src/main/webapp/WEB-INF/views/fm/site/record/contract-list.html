@@ -421,10 +421,20 @@ function busunSeav(){
 	}
 
 	function loadInfo(contractNo, recordNo) {
-		$("#info" + recordNo).load("info.htm?contractNo=" + contractNo+"&recordNo="+recordNo);
+		var isopen=$("#info" + recordNo).attr("isopen");
+		if(isopen=="0"){
+			$("#info" + recordNo).load("info.htm?contractNo=" + contractNo+"&recordNo="+recordNo);
+			$("#info" + recordNo).attr("isopen","1");
+		}
+		else if(isopen=="1"){
+			$("#info" + recordNo).html("");
+			$("#info" + recordNo).attr("isopen","0");
+		}
+		
 	}
 	function closeContract(recordNo) {
 		$("#info" + recordNo).html("");
+		$("#info" + recordNo).attr("isopen","0");
 	}
 
 	function delRecord(id,contractNo) {
@@ -570,7 +580,7 @@ function busunSeav(){
 							</td>
 
 						</tr>
-						<tr id="info${record.recordNo}">
+						<tr id="info${record.recordNo}" isopen="0">
 							<!-- 详细内容 -->
 						</tr>
 						</#list>

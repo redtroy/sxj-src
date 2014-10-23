@@ -71,14 +71,9 @@
                         <td>约${n}</td>
                         <td>&nbsp;</td>
                         <td>${m}元</td>
-                        <#if contractModel.contract.imgPath!=null>
                         <td class="tl">
                         <#assign arr=(contractModel.contract.imgPath?split(","))>
                  		本合同附件清单共${arr?size}页</td>
-                 		<#else>
-                 		<td class="tl">
-                 		本合同附件清单共0页</td>
-                 		</#if>
                       </tr>
                     </table>
                   </div>
@@ -86,28 +81,23 @@
                     <label>交货地址</label>
                     ${contractModel.contract.deliveryAddress}</div>
                   <div class="item">
-                    <label>交货批次</label>
+                    <label>&nbsp;</label>
                     本合同共<span class="color-red fb ml5 mr5"><#if contractModel.batchList?exists>
             ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
             <#else>
             ${contractModel.contract.batchCount}
              </#if>个</span>交付批次</div>
                   <div class="item">
-                    <label>合同备注</label>
+                    <label>&nbsp;</label>
                     ${contractModel.contract.remarks}</div>
                   <div class="item">
-                    <label>违约提示</label>
+                    <label>&nbsp;</label>
                     乙方逾期送货，按银行同期贷款利率支付逾期利息, 并赔偿甲方的损失，支付1%的违约金。</div>
                   <div class="item">
-                    <label>合同扫描件</label>
-                    <#if arr??>
+                    <label>&nbsp;</label>
                      <#list arr  as imgPath>
-                    <img src="${b.imagePath}${imgPath}" width="80" height="107" />
+                    <img src="${b.imagePath}${imgPath}" alt="合同扫描件" width="80" height="107" />
                     </#list>
-                    <#else>
-                    <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-                    </#if>
-                    
                     </div>
                   <span class="item">
                   <label>关联招标合同号</label>
@@ -121,14 +111,10 @@
                     
                   <div class="item">
                     <label>合同变更扫描件</label>
-                    <#if modifyList.modifyContract.imgPath!=null>
                      <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
                       <#list imgArr  as modifyimgPath>
                       	 <img src="${b.imagePath}${imgPath}" alt="变更合同扫描件" width="80" height="107" />
                     </#list>
-                    <img src="${b.staticPath}images/nopic.jpg" alt="变更合同扫描件" width="80" height="107" />
-                    <#else>
-                    </#if>
                       </div>
                   <div class="item ly-clearFix">
                     <label class="ly-left">&nbsp;</label>
@@ -214,14 +200,10 @@
                        ${replenishList.replenishContract.batchRfidNo}</div>
                   <div class="item">
                       <label>合同补损扫描件</label>
-                      <#if replenishList.replenishContract.imgPath!=null>
-					 <#assign replenishArr=(replenishList.replenishContract.imgPath?split(","))>
+						<#assign replenishArr=(replenishList.replenishContract.imgPath?split(","))>
                       <#list replenishArr  as replenishImg>
                       	<img src="${b.imagePath}${imgPath}" alt="合同扫描件" width="80" height="107" />
                     </#list>
-                    <#else>
-                     <img src="${b.staticPath}images/nopic.jpg" alt="合同扫描件" width="80" height="107" />
-                    </#if>
 					</div>
                   <div class="item ly-clearFix">
                       <label class="ly-left">&nbsp;</label>
@@ -264,6 +246,6 @@
                      </#if>
                   <div class="item mt10">
                     <label>&nbsp;</label>
-                    <button class="button button-gray" onclick="closeContract('${recordNo}')">收起</button>
+                    <button class="button button-gray" onclick="closeDiv('${id}')">收起</button>
                   </div>
                 </div></td>
