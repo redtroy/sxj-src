@@ -12,6 +12,8 @@ public class SNCfg
     
     private String stubValue;
     
+    private String stubValueProperty;
+    
     private String sn;
     
     public String getTableName()
@@ -72,6 +74,16 @@ public class SNCfg
     public final void setCurrent(long current)
     {
         this.current = current;
+    }
+    
+    public String getStubValueProperty()
+    {
+        return stubValueProperty;
+    }
+    
+    public void setStubValueProperty(String stubValueProperty)
+    {
+        this.stubValueProperty = stubValueProperty;
     }
     
 }

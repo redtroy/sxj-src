@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -50,6 +50,32 @@ var initSlide=function(ele){
 		onAfterSlide : function() { return false; }
 	});
 }
+var bindClick=function(el){
+	el.live("click",function(){
+		var imageSource = el.find("a").attr("data-image");
+		$("#viewer2").iviewer({
+			src : imageSource,
+			mousewheel : true,
+			onDelete:function(e){
+				var imgurl =$(this).children("img").attr("src");
+				var imgarr=imgurl.split("file-web/");
+				var delImg =$("#imgPath").val();
+				delImg=delImg.replace(new RegExp(imgarr[1]),'');
+				$("#imgPath").val(delImg);
+				$('.maskdivgen').fadeOut(100);
+				$('.viewer').slideUp(200);
+				el.remove();
+			  }
+		});
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+		$("#viewer2").children("img").attr("src",imageSource);
+		$(".viewer").show();
+		$(".modal-header").show();
+		$(".maskdivgen").show();
+	});
+	
+}
 var bindClick=function(el,imgPath){
 	el.live("click",function(){
 		var imageSource = $(this).find("a").attr("data-image");
@@ -89,6 +115,7 @@ var bindClick=function(el,imgPath){
 }
 $(document).ready(function() {
 	$("#zbcarousel").empty();
+	bindClick($("#zbcarousel li"));
 	bindClick($("#zbcarousel li"),$("#zbimgPath"));
 	$("#zbFile").uploadify({
 			swf : '${basePath}upload/uploadify.swf',

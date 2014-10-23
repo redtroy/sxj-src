@@ -98,7 +98,16 @@ public class SnGenerator implements KeyGenerator
                 snPojo.setStep(sn.step());
                 snPojo.setSn(sn.sn());
                 snPojo.setStub(sn.stub());
-                snPojo.setStubValue(sn.stubValue());
+                String stubValueProperty = sn.stubValueProperty();
+                if (stubValueProperty != null
+                        && stubValueProperty.trim().length() > 0)
+                {
+                    String value = (String) Reflections.invokeGetter(parameter,
+                            stubValueProperty);
+                    snPojo.setStubValue(value);
+                }
+                else
+                    snPojo.setStubValue(sn.stubValue());
                 snPojo.setTableName(sn.table());
                 if (parameter instanceof SnStub)
                 {
