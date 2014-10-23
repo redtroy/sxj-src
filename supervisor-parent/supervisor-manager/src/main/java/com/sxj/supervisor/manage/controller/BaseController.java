@@ -29,6 +29,7 @@ import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.manage.comet.MessageConnectListener;
 import com.sxj.supervisor.manage.comet.MessageDropListener;
+import com.sxj.supervisor.manage.comet.MessageThread;
 import com.sxj.util.exception.SystemException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -91,17 +92,24 @@ public class BaseController {
 				+ request.getServerPort() + request.getContextPath() + "/";
 	}
 
-	protected void registChannel(String channel, Class<?> threadClass) {
-		CometContext cc = CometContext.getInstance();
-		List<String> apps = cc.getAppModules();
-		int index = apps.indexOf(channel);
-		if (index < 0) {
-			cc.registChannel(channel);// 注册应用的channel
-			CometEngine engine = cc.getEngine();
-			engine.addConnectListener(new MessageConnectListener(engine,
-					threadClass));
-			engine.addDropListener(new MessageDropListener());
-		}
+	static {
+		CometEngine engine = CometContext.getInstance().getEngine();
+		// 启动 Comet Server Thread
+		MessageThread cometServer = MessageThread.newInstance(engine);
+		// cometServer.setDaemon(true);
+		// cometServer.setDelay(3);
+		// cometServer.setPeriod(2);
+		cometServer.schedule();
+		// MessageConnectListener lis = new MessageConnectListener();
+		engine.addConnectListener(new MessageConnectListener());
+		// MessageDropListener drop = new MessageDropListener();
+		engine.addDropListener(new MessageDropListener());
+
+	}
+
+	protected void registChannel(String channelName) {
+		if (!CometContext.getInstance().getAppModules().contains(channelName))
+			CometContext.getInstance().registChannel(channelName);// 注册应用的channel
 	}
 
 	protected void getValidError(BindingResult result) throws SystemException {

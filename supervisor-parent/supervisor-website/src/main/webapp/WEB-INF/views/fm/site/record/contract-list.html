@@ -382,7 +382,7 @@ function busunSeav(){
    		//结束
    		 JS.Engine.start('${basePath}comet');
    			JS.Engine.on({  
-				 "${memberNo}" : function(data){//侦听一个channel
+				 "${channelName}" : function(data){//侦听一个channel
 					 $("#message_div").empty();
 				 for(var i=0;i<data.length;i++){
 	            	 var message = new Array();
@@ -393,7 +393,6 @@ function busunSeav(){
 	            	 }else{
 	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
 	            	 }
-	            	 //$("#message_div").empty();
 	            	 $("#message_div").append(bb);
 				 }
 	             },   

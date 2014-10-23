@@ -19,10 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
-import com.sxj.file.common.LocalFileUtil;
-import com.sxj.file.fastdfs.FastDFSImpl;
-import com.sxj.file.fastdfs.FileGroup;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.record.RecordEntity;
@@ -31,7 +27,6 @@ import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.manage.comet.MessageChannel;
-import com.sxj.supervisor.manage.comet.record.RecordThread;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
@@ -77,7 +72,7 @@ public class RecordController extends BaseController {
 			map.put("rte", rte);
 			map.put("list", list);
 			map.put("query", query);
-			registChannel(MessageChannel.RECORD_MESSAGE, RecordThread.class);
+			registChannel(MessageChannel.RECORD_MESSAGE);
 			return "manage/record/record";
 		} catch (Exception e) {
 			SxjLogger.error("查询备案信息错误", e, this.getClass());
@@ -101,6 +96,7 @@ public class RecordController extends BaseController {
 		map.put("record", record);
 		return "manage/record/record_edit";
 	}
+
 	/**
 	 * 备案修改
 	 * 

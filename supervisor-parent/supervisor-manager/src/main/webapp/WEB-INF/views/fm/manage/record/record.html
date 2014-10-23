@@ -92,7 +92,7 @@ jQuery(document).ready(function($) {
 	});
 	
 	 JS.Engine.on({  
-		 record_message : function(data){//侦听一个channel
+		 record_count_message : function(data){//侦听一个channel
 			 $("#message_div").empty();
         	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的备案申请！</div>";
         	 $("#message_div").append(bb);
