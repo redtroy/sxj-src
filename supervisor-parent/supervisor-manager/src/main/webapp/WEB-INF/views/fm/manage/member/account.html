@@ -80,11 +80,11 @@ jQuery(document).ready(function($) {
 	   var name=$("#"+id).find("#nameEdit").val();
 	   var accountName=$("#"+id).find("#accountEdit").val();
 	   if (!redexAccount.test(accountName) || accountName==""){
-		   alert("账号名只能用英文+数字");
+		   messageInfo("账号名只能用英文+数字");
 		   return false;
 	   }
 	   if (!regexName.test(name) || name==""){
-		   alert("姓名不能为空，或特殊字符");
+		   messageInfo("姓名不能为空，或特殊字符");
 		   return false;
 	   }
 	 //判断子会员帐号是否存在
@@ -92,26 +92,18 @@ jQuery(document).ready(function($) {
 		 var flag=false;
 		   $.get("check_account.htm?old="+old+"&param="+accountName+"&memerNo="+memerNo,function(data){
 			   if (data.status == "n"){
-		        	  alert('会员名称已存在！');
+				   	  messageInfo('会员名称已存在！');
 		        	  return false;
 			   }else{
 				   $("#edit_form").append(params.html());
 					  $.post("editAccount.htm",params,function(data){
 							if(data.isOK=='ok'){
-								//query();
-								 $("#"+id).find("#name_td").text(name);
-								 $("#"+id).find("#name_td").show();
-								 $("#"+id).find("#name_td2").hide();
-								 $("#"+id).find("#account_td").text(accountName);
-								 $("#"+id).find("#account_td").show();
-								 $("#"+id).find("#account_td2").hide();
-								 $("#"+id).find("#role_td").show();
-								 $("#"+id).find("#editrole_td").hide();
-								 $("#"+id).find("#edit_td").show();
-								 $("#"+id).find("#confim_td").hide();
-								alert("修改成功");
+								 succInfo(function(){
+									 var currentPage= $("#rightBar").find("#pager").attr("currentPage");
+									 query(currentPage);
+								 },"修改成功");
 							}else{
-								errorInfo(data);
+								errorInfo("修改失败！");
 							}
 						});
 			   }
@@ -132,7 +124,7 @@ jQuery(document).ready(function($) {
 					errorInfo(data);
 				}
 		   });
-	   },"是否确认初始化密码");
+	   },"是否确认初始化密码?");
 	   
    }
    //更改状态

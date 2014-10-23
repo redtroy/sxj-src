@@ -10,6 +10,7 @@
 <script src="${b.staticPath}js/jquery.poshytip.min.js"></script>
 <@b.validate/>
 <@b.errorInfo/>
+<@b.dialogBox/>
 <Script>
 var editId;
 var pwd_validform;
@@ -67,8 +68,8 @@ jQuery(document).ready(function($) {
 	}
 //修改密码
   function edit_pwd(id){
-	 $("#edit_pwd").find("input").val("");
-	 pwd_validform.resetForm();
+	$("#edit_pwd").find("input").val("");
+	pwd_validform.resetForm();
 	$('.maskdivgen').fadeIn(100);
 	$('.passwordPop').slideDown(200);
 	editId=id;
@@ -86,9 +87,11 @@ jQuery(document).ready(function($) {
 	  var pwd1=$("#pwd1").val();
 	  var pwd2=$("#pwd2").val();
 	  $.post("save_pwd.htm",{id:editId,password:pwd1},function(data){
-		  alert("修改成功！");
-		  $('.maskdivgen').fadeOut(100);
-		  $('.passwordPop').slideUp(200);
+		  succInfo(function(){
+			  $('.maskdivgen').fadeOut(100);
+			  $('.passwordPop').slideUp(200);
+		  },"修改成功！");
+		 
 	  })
   }
   //修改
@@ -112,62 +115,51 @@ jQuery(document).ready(function($) {
 	  var name=$("#"+id).find("#nameEdit").val();
 	  var accountName=$("#"+id).find("#accountEdit").val();
 	   if (!redexAccount.test(accountName) || accountName==""){
-		   alert("账号名只能用英文+数字");
+		   messageInfo("账号名只能用英文+数字");
 		   return false;
 	   }
 	   if (!regexName.test(name) || name==""){
-		   alert("姓名不能为空，或特殊字符");
+		   messageInfo("姓名不能为空，或特殊字符");
 		   return false;
 	   }
 	   //判断子会员帐号是否存在
-	   var flag=false;
-	   $.get("check_account.htm?old="+old+"&param="+accountName,function(data){
-		   if (data.status == "n"){
-	        	  alert('会员名称已存在！');
-	        	  return false;
-		   }else{
-			   $("#edit_form").append(params.html());
-				  $.post("editAccount.htm",params,function(data){
-						if(data.isOK=='ok'){
-							//query();
-							 $("#"+id).find("#name_td").text(name);
-							 $("#"+id).find("#name_td").show();
-							 $("#"+id).find("#name_td2").hide();
-							 $("#"+id).find("#account_td").text(accountName);
-							 $("#"+id).find("#account_td").show();
-							 $("#"+id).find("#account_td2").hide();
-							 $("#"+id).find("#role_td").show();
-							 $("#"+id).find("#editrole_td").hide();
-							 $("#"+id).find("#edit_td").show();
-							 $("#"+id).find("#confim_td").hide();
-							alert("修改成功");
-						}else{
-							errorInfo(data);
-						}
-					});
-		   }
-	         
-	   });
-	 
+	   dialogBox(function(){
+		   var flag=false;
+		   $.get("check_account.htm?old="+old+"&param="+accountName,function(data){
+			   if (data.status == "n"){
+				   	  messageInfo("会员名称已存在！");
+		        	  return false;
+			   }else{
+				   $("#edit_form").append(params.html());
+					  $.post("editAccount.htm",params,function(data){
+							if(data.isOK=='ok'){
+								succInfo(function(){
+									query();
+								},"修改成功")
+							}else{
+								errorInfo(data);
+							}
+						});
+			   }
+		         
+		   });
+	   },"是否确认修改？");
   }
 //更改状态
   function checkState(id,stateId){
-	
-	  $("#state_div").show();
-	  $("#state_div button:eq(0)").unbind("click");
-	  $("#state_div button:eq(0)").attr("value",id).attr("stateId",stateId).click(function(){
-		  $.post("editState.htm",{id:$(this).attr("value"),state:$(this).attr("stateId")},function(data){
+	  dialogBox(function(){
+		  $.post("editState.htm",{id:id,state:stateId},function(data){
 			  if (data.isOK=='ok'){
-				  query($("#pager").attr("currentPage"));
+				  query();
 				  $("#state_div").hide();
 			   }else{
 					errorInfo(data);
 				}
-		  })
-	  });
+		  });
+	  },"是否确认更改状态？");
 }
-	  //初始化函数
-	  $(window).resize(); 
+//初始化函数
+ $(window).resize(); 
 </Script>
 </head>
 
@@ -251,19 +243,6 @@ jQuery(document).ready(function($) {
     </tr>
     </#list>
   </table>
-  <div id="state_div" style="display:none;" class="modal-wrap popDemo popWin mb20">
-          <div class="modal-header">
-            <div class="tit">&nbsp;</div>
-            <span class="close" onclick="closeDiv('state_div');">关闭</span></div>
-          <div class="modal-body">
-            <p class="color-blue fontYH f18" style="margin-left:20%;">是否确认更改状态！</p>
-            <div class="button-box">
-              <button class="button button-pop btn-ok mr20" >确认</button>
-              <button class="button button-gray" onclick="closeDiv('state_div');">取消</button>
-            </div>
-          </div>
-   </div>
-  
 </div>
 </div>
 </div>

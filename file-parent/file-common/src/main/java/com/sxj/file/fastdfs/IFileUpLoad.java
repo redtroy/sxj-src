@@ -74,7 +74,7 @@ public interface IFileUpLoad {
 	 * @param file_Id文件路径
 	 * @return
 	 */
-	public List<NameValuePair> getMetaList(String file_Id);
+	public List<NameValuePair> getMetaList(String file_Id) throws IOException;
 
 	/**
 	 * 获取缩略图

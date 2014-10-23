@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -18,12 +18,11 @@
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <@b.pageScript/>
 <@b.errorInfo/>
-<@b.diy_alert/>
+<@b.dialogBox/>
 <@b.validate/>
 <script>
 window.onload = function() {
 	$(".demo-image").live("click",function(){
-		//alert($(this).siblings()[0])
 		var imageSource=$(this).attr("data-image");
 		
 		$("#viewer2").iviewer({
@@ -39,8 +38,8 @@ jQuery(document).ready(function($) {
 		$('.popDemo').slideUp(200);
 	});
 	$('.passwordBox .popBtn').click(function(){
-		$('.popDemo').slideUp(200);
-		
+		$('.maskdivgen').fadeOut(100);
+		$('.passwordBox').slideUp(200);
 	});
 	$('.demo-image').live("click",function(){
 		$('.maskdivgen').fadeIn(100);
@@ -69,7 +68,7 @@ function close_img(){
    //重置密码
    function resetPwd(id){
 	   var pwd;
-	   diy_alert("请确认是否初始化密码！",function(){
+	   dialogBox(function(){
 		   $.post("${basePath}member/initializePwd.htm",{id:id},function(data){
 			   if (data.isOK=='ok'){
 				   pwd=data.password
@@ -77,10 +76,10 @@ function close_img(){
 				   $('.popDemo').slideDown(200);
 			   }
 			   else{
-					errorInfo(data);
+					errorInfo("初始化失败！");
 				}
 		   });
-	   })
+	   },"请确认是否初始化密码！");
    }
    //收起菜单
    function swallowing(lable){
@@ -108,46 +107,32 @@ function close_img(){
    }
 	$.post("${basePath}member/editMember.htm",params,function(data){
 		if(data.isOK == 'ok'){
-			alert("修改成功");
-			query($("#pager").attr("currentPage"));
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"修改成功");
+			
 		}else{
-			errorInfo(data);
+			errorInfo("修改失败！");
 		}
 	});
    }
    //更改账户状态
    function editState(id,state){
-	   diy_alert("请确认是否更改账户状态！",function(){
+	   dialogBox(function(){
 		   $.post("editState.htm",{id:id,state:state},function(data){
 				  if (data.isOK=='ok'){
-					  query($("#pager").attr("currentPage"));
+					  succInfo(function(){
+						  query($("#pager").attr("currentPage"));
+					  },"修改状态成功！");
 				   }else{
-						errorInfo(data);
+						errorInfo("修改状态失败！");
 					}
 			  });
-	   })
+	   },"请确认是否更改账户状态！");
 	   
    }
    //状态验证
    function check(obj){
-	   /*
-	   var name=$("#"+obj).find("[name='name']").val();
-	   var id=$("#"+obj).find("[name='id']").val();
-	   var flag=false;
-	   $.ajax({
-         url: "check_member.htm",
-         type: "POST",
-         data: ({name:name,id:id}),
-         async: false,
-         success: function(data){
-           if (data.text !="" && data.text !=null){
-        	  alert('会员名称已存在！');
-        	  flag=true;
-           }
-         }
-       });
-	   return flag;
-	   */
 	   var bLicenseNo=$("#"+obj).find("[name='bLicenseNo']").val();
 	   var energyNo=$("#"+obj).find("[name='energyNo']").val();
 	   var contacts=$("#"+obj).find("[name='contacts']").val();
@@ -155,41 +140,44 @@ function close_img(){
 	   var address=$("#"+obj).find("[name='address']").val();
 	   var telNum=$("#"+obj).find("[name='telNum']").val();
 	   if (bLicenseNo==""){
-		   alert("营业执照号不能为空");
+		   messageInfo("营业执照号不能为空");
 		   return true;
 	   }
 	   if (energyNo==""){
-		   alert("营业执照号不能为空");
+		   messageInfo("营业执照号不能为空");
 		   return true;
 	   }
 	   if (contacts==""){
-		   alert("联系人不能为空");
+		   messageInfo("联系人不能为空");
 		   return true;
 	   }
 	   if (phoneNo==""){
-		   alert("手机号码不能为空");
+		   messageInfo("手机号码不能为空");
 		   return true;
 	   }
-	   if (phoneNo.match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)){
-		   alert("手机号码格式错误！");
+	   if (!phoneNo.match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)){
+		   messageInfo("手机号码格式错误！");
 		   return true;
 	   }
 	   if (address==""){
-		   alert("地址不能为空");
+		   messageInfo("地址不能为空");
 		   return true;
 	   }
    }
  //更改审核状态
    function editCheckState(id,state){
-	 diy_alert("请确认是否更改审核状态！",function(){
+	   dialogBox(function(){
 		 $.post("editCheckState.htm",{id:id,state:state},function(data){
 			  if (data.isOK=='ok'){
-				  query($("#pager").attr("currentPage"));
+				  succInfo(function(){
+					  query($("#pager").attr("currentPage"));
+				  },"修改审核状态成功！");
+				 
 			   }else{
-					errorInfo(data);
+					errorInfo("修改审核状态失败！");
 				}
 		  });
-	 })
+	 },"请确认是否更改审核状态！");
    }
 /*
 window.onload = function() {
@@ -328,7 +316,7 @@ Intense( elements );
            <td><a class="btn btn-red" onclick="editState('${member.id}',0)"><span>解冻</span></a></td>
           </#if>
           
-          <td><a class="btn btn-gray btn-password" href="javascript:;" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
+          <td><a class="btn btn-gray btn-password" href="javascript:void(0);" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
         </tr>
         <tr class="tableInfo" style="display:none;" id="${member.id}_info" index="">
         <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
@@ -384,14 +372,14 @@ Intense( elements );
         </tr>
         </#list>
       </table>
-    <div class="modal-wrap popDemo passwordBox" style="display:none">
+    <div id="res_password_div" class="modal-wrap popDemo passwordBox" style="display:none">
      <div class="modal-header"><span title="关闭" class="close">关闭</span></div>
      <div class="modal-body">
      <div class="tipBox ly-clearFix">
      <span class="icon32 icon-32-info"></span>
      <p class="color-blue fontYH f18" id="promptPwd"></p>
      </div>
-     <button class="popBtn">确认</button>
+     <button class="popBtn" id="pass_btn" >确认</button>
      </div>
      </div>
      <!-- InstanceEndEditable --></div>

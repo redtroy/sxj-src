@@ -27,7 +27,7 @@ function getUrlParam(name){
 function clickFunction(url){
 	var state="${Session.userinfo.member.checkState.id}";
 	if(state=='1'){
-		alert("会员未认证，请完善企业资料，通过认证后可以使用全部功能");
+		messageInfo("会员未认证，请完善资料！");
 	}else{
 		url=url+"&"+Math.random();
 		window.location.href=url;

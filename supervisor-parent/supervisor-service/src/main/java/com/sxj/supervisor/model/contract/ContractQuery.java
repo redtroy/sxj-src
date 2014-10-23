@@ -39,7 +39,7 @@ public class ContractQuery extends Pagable  implements Serializable {
 	/**
 	 * 合同类型
 	**/
-	private Integer contractType;
+	private String contractType;
 	
 	/**
 	 * 关联招标合同号
@@ -69,12 +69,13 @@ public class ContractQuery extends Pagable  implements Serializable {
 	/**
 	 * 确认状态
 	**/
-	private Integer confirmState;
+	private String confirmState;
 	
 	/**
 	 * 合同状态
 	**/
-	private Integer state;
+	private String state;
+	
 
 	public String getContractId() {
 		return contractId;
@@ -116,11 +117,11 @@ public class ContractQuery extends Pagable  implements Serializable {
 		this.memberId = memberId;
 	}
 
-	public Integer getContractType() {
+	public String getContractType() {
 		return contractType;
 	}
 
-	public void setContractType(Integer contractType) {
+	public void setContractType(String contractType) {
 		this.contractType = contractType;
 	}
 
@@ -132,19 +133,19 @@ public class ContractQuery extends Pagable  implements Serializable {
 		this.refContractNo = refContractNo;
 	}
 
-	public Integer getConfirmState() {
+	public String getConfirmState() {
 		return confirmState;
 	}
 
-	public void setConfirmState(Integer confirmState) {
+	public void setConfirmState(String confirmState) {
 		this.confirmState = confirmState;
 	}
 
-	public Integer getState() {
+	public String getState() {
 		return state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 

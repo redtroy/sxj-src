@@ -217,7 +217,6 @@ ${type[0].getName()}</span>/
   function send_ms(obj){
 	  send_flag=true;
 	  var phoneNo=$("#phoneNo").val();
-	  //alert(phoneNo)
 	  if (!checkSubmitMobil()){
 		  return false;
 	  }
@@ -262,7 +261,6 @@ ${type[0].getName()}</span>/
   function checkSubmitMobil() {
 	  $("#moileMsg_hidden").hide();
 	  if ($("#phoneNo").val() == "") {
-	//  alert("手机号码不能为空！");
 	  $("#moileMsg").show();
 	 wrong("#moileMsg");
 	 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
@@ -270,7 +268,6 @@ ${type[0].getName()}</span>/
 	  }
 
 	  if (!$("#phoneNo").val().match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)) {
-	//  alert("手机号码格式不正确！");
 	  $("#moileMsg").show();
 	  wrong("#moileMsg");
 	  $("#moileMsg").text("手机号码格式不正确！请重新输入！");

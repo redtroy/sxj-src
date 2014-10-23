@@ -1,18 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<#include "site/base.html"> 
+<#include "site/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。"/>
-<link href="${staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link href="${staticPath}style/uploadify.css " rel="stylesheet" type="text/css" /> 
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗" />
+<meta name="description"
+	content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。" />
+<link href="${staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<link href="${staticPath}style/uploadify.css " rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" type="text/css"
+	href="${b.staticPath}style/elastislide.css" />
 <script src="${staticPath}js/jquery.js" type="text/javascript"></script>
-<script src="${staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
+<script src="${staticPath}js/tytabs.jquery.min.js"
+	type="text/javascript"></script>
+	<script src="${b.staticPath}js/jqueryui.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
 <script src="${staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
 <script src="${staticPath}/js/jquery.paginate.js"></script>
-<script src="${staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+<@b.errorInfo/>
 <@b.upload/>
 <script>
 jQuery(document).ready(function($) {
@@ -37,37 +55,32 @@ $(document).ready(function() {
 						buttonText : '上传合同扫描件',
 						onUploadSuccess : function(file,
 								data, response) {
-							var num = 0;
+							var num = 1;
 							var dataObj = eval("(" + data+ ")");//转换为json对象 
 							var hideVal = $("#imgPath").val();
 							if (hideVal == '') {
 								hideVal = dataObj.fileIds;
 							} else {
-								hideVal += ","
-										+ dataObj.fileIds;
-								num=hideVal.split(",").length;
+								var arrays =hideVal.split(",");
+								for(var i=0;i<arrays.length;i++){
+									if(arrays[i]){
+										num+=1;
+									}
+								}
+								hideVal += ","+ dataObj.fileIds;
 							}
-							$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
-
+							var ul=$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
+							$(".rollBox").empty();
+							$(".rollBox").append(ul);
 							$("#imgPath").val(hideVal);
-							$( '.elastislide-list1' ).elastislide({
+							alert("hhhh");
+							$( '#carousel' ).elastislide({
 								orientation : 'horizontal',
 								speed : 500,
 								easing : 'ease-in-out',
 								minItems : 3,
 								start : 0,
 								onClick : function( el, position, evt ) { 
-									var imageSource = el.find("a").attr("data-image");
-									$("#viewer2").iviewer({
-										src : imageSource,
-										mousewheel : true
-									});
-									el.parent().children("li").removeClass("view");
-									el.addClass("view");
-									$("#viewer2").children("img").attr("src",imageSource);
-									$(".viewer").show();
-									$(".modal-header").show();
-									$(".maskdivgen").show();
 									return false; 
 								},
 								onReady : function() { return false; },
@@ -78,6 +91,20 @@ $(document).ready(function() {
 					});
 				});
 $(document).ready(function() {
+	$('#carousel').find("li").live("click",function(){
+		var el=$(this);
+		var imageSource = el.find("a").attr("data-image");
+		$("#viewer2").iviewer({
+			src : imageSource,
+			mousewheel : true
+		});
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+		$("#viewer2").children("img").attr("src",imageSource);
+		$(".viewer").show();
+		$(".modal-header").show();
+		$(".maskdivgen").show();
+	});
 	var imgPath = $("#imgPath").val();
 	$.ajaxSetup ({     
 	    cache: false 
@@ -97,6 +124,7 @@ $(document).ready(function() {
 			start : 0,
 			onClick : function( el, position, evt ) { 
 				var imageSource = el.find("a").attr("data-image");
+				var $parent=el.parent();
 				$("#viewer2").iviewer({
 					src : imageSource,
 					mousewheel : true,
@@ -106,15 +134,17 @@ $(document).ready(function() {
 						var delImg =$("#imgPath").val();
 						delImg=delImg.replace(new RegExp(imgarr[1]),'');
 						$("#imgPath").val(delImg);
-						//var delImgPath =$("#delImgPath").val();
-						//if(delImgPath==''){
-						//	$("#delImgPath").val(imgarr[1]);
-						//}else{
-						//	$("#delImgPath").val(delImgPath+","+imgarr[1]);
-						//}
 						$('.maskdivgen').fadeOut(100);
 						$('.viewer').slideUp(200);
 						el.remove();
+						var arrays=delImg.split(",");
+						var index=0;
+						for(var i=0;i<arrays.length;i++){
+							if(arrays[i]){
+								el.find("p:eq("+index+")").empty().html(index+1);
+								index+=1;
+							}
+						}
 					  }
 				});
 				el.parent().children("li").removeClass("view");
@@ -146,10 +176,11 @@ $(document).ready(function() {
 	function modify(){
 		$.post("modify.htm",$('form').serialize(),function(data){
 			if (data.isOK=='ok'){
-				alert("修改成功");
-				window.location.href="query.htm";
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"确认成功!");
 			}else{
-				alert("修改失败");
+				messageInfo("修改失败");
 			}
 		  });
 	}
@@ -167,193 +198,207 @@ $(document).ready(function() {
 </head>
 
 <body>
-<div id="header" class="fence">
-<@b.header />
-</div>
-<div class="mainBg">
-<div class="fence-wide ly-clearFix">
-<div class="main pb20">
-<div class="yard-190 ly-left leftMenu">
-<@b.leftMenu />
-</div>
-<div class="yard-870 rightSide ly-left">
-<div class="heading mb15 ly-clearFix">
-  <h1 class="ly-left">
-  <span class="title fontYH f20 fb">修改备案信息</span></h1>
-</div>
-<!-- 甲方--(门窗厂采购) -->
-<#if record.contractType!=0 && member.getMember().type==0>
-<form action="" method="post">
-<input type="hidden" name="" id="id" value="${record.id}"/>
-<div class="contBox">
-<div class="item">
-  <label>备案号</label>
-  ${record.recordNo} </div>
-<div class="item"><label>甲方</label>${record.memberNameA}</div>
-<div class="item"><label>乙方</label><input class="input input-w270h30" id="memberNameB" name="memberNameB" value="${record.memberNameB}" /></div>
-<div class="item"><label>&nbsp;</label>
-					<input type="hidden" value="${record.imgPath}" name="imgPath" id="imgPath" />
-									<div class="rollBox">
-										<ul id="carousel" class="elastislide-list"></ul>
-									</div>
-<div class="item ly-clearFix">
-  <label>上传合同扫描件</label>
-  <div class="ly-left">
-      <div class="imageList"></div>
-	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
-      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
-      </div>
-</div>
-<div class="item"><label>&nbsp;</label><a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
-</div>
-</form>
-</#if>
-<#if record.contractType!=0 && member.getMember().type!=0>
-<!-- 乙方(玻璃厂/型材厂 采购) -->
-<form action="" method="post">
-<div class="contBox">
-<div class="item">
-<label>备案号</label>${record.recordNo}
-</div>
-  <div class="item">
-    <label>甲方</label>
-    <input class="input input-w270h30" value="${record.memberNameA}" name="memberNameA" id="memberNameA"/>
-    <input type="hidden" name="id" id="id" value="${record.id}"/>
-  </div>
-  <div class="item">
-    <label>乙方</label>${record.memberNameB}
-  </div>
-  <div class="item">
-    <label>&nbsp;</label>
-    	<#assign arr=(record.imgPath?split(","))>
-                <#list arr as img>
-                   <img src="${b.imagePath}${img}" alt="采购合同扫描件" width="80" height="107" />
-                 </#list>
-                    </div>
-  <div class="item ly-clearFix">
-    <label>上传合同扫描件</label>
-    <div class="ly-left">
-     <div class="imageList"></div>
-	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
-      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
-      </div>
- </div>
-  <div class="item">
-    <label>&nbsp;</label>
-    <a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
-</div>
-</form>
-</#if>
-<#if record.contractType==0 && member.getMember().type==0>
-<!-- 甲方 门窗厂 招标 -->
-<form action="" method="post">
-<div class="contBox">
-  <div class="item">
-    <label>备案号</label>
-    ${record.recordNo} </div>
-  <div class="item">
-    <label>甲方</label>
-    <input class="input input-w270h30" value="${record.memberNameA}" name="memberNameA"  />
-  </div>
-  <div class="item">
-    <label>乙方</label>${record.memberNameB}
-  </div>
-  <div class="item">
-    <label>&nbsp;</label>
-   <#assign arr=(record.imgPath?split(","))>
-       <#list arr as img>
-         <img src="${b.imagePath}${img}" alt="合同扫描件" width="80" height="107" />
-      </#list>
+	<div id="header" class="fence"><@b.header /></div>
+	<div class="mainBg">
+		<div class="fence-wide ly-clearFix">
+			<div class="main pb20">
+				<div class="yard-190 ly-left leftMenu"><@b.leftMenu /></div>
+				<div class="yard-870 rightSide ly-left">
+					<div class="heading mb15 ly-clearFix">
+						<h1 class="ly-left">
+							<span class="title fontYH f20 fb">修改备案信息</span>
+						</h1>
+					</div>
+					<!-- 甲方--(门窗厂采购) -->
+					<#if record.contractType!=0 && member.getMember().type==0>
+					<form action="" method="post">
+						<input type="hidden" name="" id="id" value="${record.id}" />
+						<div class="contBox">
+							<div class="item">
+								<label>备案号</label> ${record.recordNo}
+							</div>
+							<div class="item">
+								<label>甲方</label>${record.memberNameA}
+							</div>
+							<div class="item">
+								<label>乙方</label><input class="input input-w270h30"
+									id="memberNameB" name="memberNameB"
+									value="${record.memberNameB}" />
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <input type="hidden"
+									value="${record.imgPath}" name="imgPath" id="imgPath" />
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
+							</div>
+							<div class="item ly-clearFix">
+								<label>上传合同扫描件</label>
+								<div class="ly-left">
+									<div class="imageList"></div>
+									 <input type="file" name="uploadFile"
+										id="uploadFile" multiple="true" />
+								</div>
+							</div>
+								<div class="item">
+									<label>&nbsp;</label><a href="javascript:modify();"
+										class="button button-orange mr15">确定修改</a><a
+										href="javascript:history.go(-1)" class="button button-gray">取消</a>
+								</div>
+							</div>
+					</form>
+					</#if> <#if record.contractType!=0 && member.getMember().type!=0>
+					<!-- 乙方(玻璃厂/型材厂 采购) -->
+					<form action="" method="post">
+						<div class="contBox">
+							<div class="item">
+								<label>备案号</label>${record.recordNo}
+							</div>
+							<div class="item">
+								<label>甲方</label> <input class="input input-w270h30"
+									value="${record.memberNameA}" name="memberNameA"
+									id="memberNameA" /> <input type="hidden" name="id" id="id"
+									value="${record.id}" />
+							</div>
+							<div class="item">
+								<label>乙方</label>${record.memberNameB}
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <input type="hidden"
+									value="${record.imgPath}" name="imgPath" id="imgPath" />
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
+							<div class="item ly-clearFix">
+								<label>上传合同扫描件</label>
+								<div class="ly-left">
+							 <input type="file" name="uploadFile" id="uploadFile" multiple="true" />
+								</div>
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <a href="javascript:modify();"
+									class="button button-orange mr15">确定修改</a><a
+									href="javascript:history.go(-1)" class="button button-gray">取消</a>
+							</div>
+						</div>
+					</form>
+					</#if> <#if record.contractType==0 && member.getMember().type==0>
+					<!-- 甲方 门窗厂 招标 -->
+					<form action="" method="post">
+						<div class="contBox">
+							<div class="item">
+								<label>备案号</label> ${record.recordNo}
+							</div>
+							<div class="item">
+								<label>甲方</label> <input class="input input-w270h30"
+									value="${record.memberNameA}" name="memberNameA" />
+							</div>
+							<div class="item">
+								<label>乙方</label>${record.memberNameB}
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <input type="hidden"
+									value="${record.imgPath}" name="imgPath" id="imgPath" />
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
+							<div class="item">
+								<label>上传合同扫描件</label>
+								<div class="ly-left">
+									 <input type="file" name="uploadFile" id="uploadFile" multiple="true" />
+								</div>
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <a href="javascript:modify();"
+									class="button button-orange mr15">确定修改</a><a
+									href="javascript:history.go(-1)" class="button button-gray">取消</a>
+							</div>
+						</div>
+					</form>
+					</#if>
+					<!-- 变更 -->
+					<#if record.type==1>
+					<form action="" method="post">
+						<div class="contBox">
+							<div class="item">
+								<label>备案号</label> ${record.recordNo}
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <input type="hidden"
+									value="${record.imgPath}" name="imgPath" id="imgPath" />
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
+							<div class="item">
+								<label>上传变更合同扫描件</label>
+								<div class="ly-left">
+									<input type="hidden" name="id" id="id" value="${record.id}" />
+									<input type="file" name="uploadFile" id="uploadFile" multiple="true" />
+								</div>
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <a href="javascript:modify();"
+									class="button button-orange mr15">确定修改</a><a
+									href="javascript:history.go(-1)" class="button button-gray">取消</a>
+							</div>
+						</div>
+					</form>
+					</#if>
+					<!-- 补损 -->
+					<#if record.type==2>
+					<form action="" method="post">
+						<div class="contBox">
+							<div class="item">
+								<label>备案号</label> ${record.recordNo}
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <input type="hidden"
+									value="${record.imgPath}" name="imgPath" id="imgPath" />
+									<input type="hidden" name="id" id="id" value="${record.id}" />
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
+							<div class="item">
+								<label>上传补损合同扫描件</label>
+								<div class="ly-left">
+									 <input type="file" name="uploadFile" id="uploadFile" multiple="true" />
+								</div>
+							</div>
+							<div class="item">
+								<label>合同号</label> ${record.contractNo}
+							</div>
+							<div class="item">
+								<label>对应批次</label><select name="">
+									<option>第一批次</option>
+									<option selected="selected">第二批次</option>
+									<option>第三批次</option>
+								</select>
+							</div>
+							<div class="item">
+								<label>对应批次RFID编号</label> ${record.rfidNo}<span
+									class="icon icon-add"></span>
 
-</div>
-  <div class="item">
-    <label>上传合同扫描件</label>
-    <div class="ly-left">
-     <div class="imageList"></div>
-	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
-      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
-    </div></div>
-  <div class="item">
-    <label>&nbsp;</label>
-    <a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
-</div>
-</form>
-</#if>
-<!-- 变更 -->
-<#if record.type==1>
-<form action="" method="post">
-<div class="contBox">
-  <div class="item">
-    <label>备案号</label>
-    ${record.recordNo} </div>
-  <div class="item">
-    <label>&nbsp;</label>
-       <#assign arr=(record.imgPath?split(","))>
-       <#list arr as img>
-         <img src="${b.imagePath}${img}" alt="合同扫描件" width="80" height="107" />
-      </#list>
-</div>
-  <div class="item">
-    <label>上传变更合同扫描件</label>
-    <div class="ly-left">
-    <div class="imageList"></div>
-  	  <input type="hidden" name="id" id="id" value="${record.id}"/>
-	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
-      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
-    </div></div>
-  <div class="item">
-    <label>&nbsp;</label>
-    <a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
-</div>
-</form>
-</#if>
-<!-- 补损 -->
-<#if record.type==2>
-<form action="" method="post">
-<div class="contBox">
-  <div class="item">
-    <label>备案号</label>
-    ${record.recordNo} </div>
-<div class="item">
-  <label>&nbsp;</label>
-   <#assign arr=(record.imgPath?split(","))>
-       <#list arr as img>
-         <img src="${b.imagePath}${img}" alt="合同扫描件" width="80" height="107" />
-      </#list>  
-</div>  
-    <div class="item">
-    <label>上传补损合同扫描件</label>
-    <div class="ly-left">
-    <div class="imageList"></div>
-  	  <input type="hidden" name="id" id="id" value="${record.id}"/>
-	  <input type="hidden" name="imgPath" class="imgPathHide" value=""/>
-      <input type="file" name="uploadFile" id="uploadFile"  multiple="true"/>
-    </div></div>
-    <div class="item">
-    <label>合同号</label>
-    ${record.contractNo}</div>
-  <div class="item">
-    <label>对应批次</label><select name="">
-      <option>第一批次</option>
-      <option selected="selected">第二批次</option>
-      <option>第三批次</option>
-    </select>
-  </div>
-  <div class="item">
-    <label>对应批次RFID编号</label> ${record.rfidNo}<span class="icon icon-add"></span>
-    
-  </div>
-  <div class="item">
-    <label>&nbsp;</label>
-    <a href="javascript:modify();" class="button button-orange mr15">确定修改</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
-</div>
-</form>
-</#if>
-</div>
-</div>
-</div>
-</div>
-</div>
-<@b.footer />
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <a href="javascript:modify();"
+									class="button button-orange mr15">确定修改</a><a
+									href="javascript:history.go(-1)" class="button button-gray">取消</a>
+							</div>
+						</div>
+					</form>
+					</#if>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<@b.footer />
+	<div class="viewer modal-wrap" style="display: none">
+		<div class="modal-header">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body"></div>
+	</div>
+	<div class="maskdivgen" style="display: none"></div>
 </body>
 </html>

@@ -9,6 +9,7 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<@b.errorInfo/>
 <script>
 var num =1;
 function addTable(){
@@ -37,10 +38,11 @@ $(function() {
 function startRfid() {
 	$.post("saveRfid.htm", $("#save_form").serialize(), function(data) {
 		if (data.isOK == 'ok') {
-			alert("启用成功");
-			window.location.href = "queryList.htm";
+			succInfo(function(){
+				window.location.href = "queryList.htm";
+			},"启用成功");
 		} else {
-			alert("启用失败");
+			errorInfo("启用失败");
 		}
 	});
 

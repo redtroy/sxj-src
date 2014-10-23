@@ -21,7 +21,20 @@
 <script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 <script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
+<@b.validate/>
+<style type="text/css">
+.checkinfo{
+	border:1px solid #ccc; 
+	padding:2px 20px 2px 5px; 
+	color:#666; 
+	position:absolute;
+	display:none;
+	line-height:20px;
+	background-color:#fff;
+}
+</style>
 <script>
+var ul_validform;
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
 			$('.maskdivgen').fadeIn(100);
@@ -122,6 +135,16 @@
 		});
 	});
 	function saveContract() {
+		if (!ul_validform.check()){
+			return false;
+		}
+			var size=$("#TbData tr").filter(".CaseRow").size();
+			for (var i=0;i<size;i++){
+				var num1=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val();
+				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val(parseFloat(num1)*100);
+				var num2=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
+				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(parseFloat(num2)*100);
+			}
 		$.post("addContract.htm", $("#addForm").serialize(), function(data) {
 			if (data.isOK == 'ok') {
 				alert("生成合同成功");
@@ -139,13 +162,14 @@
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
 				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val();
+				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val(getFloatStr(num));
 				if(num==''){
 					amount+=parseFloat(parseFloat(0));
 				}else{
 					amount+=parseFloat(parseFloat(num));
 				}
 			}
-			$("#amountSum").html(amount);
+			$("#amountSum").html(getFloatStr(amount));
 		});
 		$(".quantityClass").keyup(function(){
 			var quantity=0;
@@ -160,15 +184,56 @@
 			}
 			$("#quantitySum").html(quantity);
 		});
+		$(".priceClass").change(function(){
+			var size=$("#TbData tr").filter(".CaseRow").size();
+			for (var i=0;i<size;i++){
+				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
+				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(getFloatStr(num));
+			}
+		});
 		
+		//初始化验证
+		ul_validform=$("#contractUl").Validform({
+			tiptype:function(msg,o,cssctl){
+					var $div=$("<div/>").addClass("checkinfo");
+					var $p=$("<p/>").addClass("Validform_checktip Validform_wrong").html(msg);
+					var left=o.obj.offset().left,
+					top=o.obj.offset().top;
+					var width=o.obj.width();
+					$div.append($p).css({
+						'left':left+width-32,
+						'top':top-45,
+						'position':'absolute'
+					}).show();
+					o.obj.parent().append($div);
+			}});
+		$("#contractUl").find("[datatype]").each(function(){
+			$(this).focus(function(){
+				$(this).parent().children(".checkinfo").hide();
+			}); 
+			$(this).blur(function(){
+				var pass=ul_validform.check(true,$(this));
+				if(!pass)
+					$(this).parent().children(".checkinfo").show();
+			});
+		});
 	});
-	//function sum(){
-	//var amount =$("[attribute*=amount]");
-	//alert(amount.eq(0).name);
-	//		for (var i=0;i<=amount.size;i++){
-	//			alert(amount[i].val());onkeydown="sum();"s
-	//		}
-	//}
+	//将传入数据转换为字符串,并清除字符串中非数字与.的字符
+    //按数字格式补全字符串
+    var getFloatStr = function(num){
+        num += '';
+        num = num.replace(/[^0-9|\.]/g, ''); //清除字符串中的非数字非.字符
+        
+        if(/^0+/) //清除字符串开头的0
+            num = num.replace(/^0+/, '');
+        if(!/\./.test(num)) //为整数字符串在末尾添加.00
+            num += '.00';
+        if(/^\./.test(num)) //字符以.开头时,在开头添加0
+            num = '0' + num;
+        num += '00';        //在字符串末尾补零
+        num = num.match(/\d+\.\d{2}/)[0];
+        return num;
+    };
 </script>
 </head>
 <body>
@@ -185,12 +250,11 @@
 				<div id="rightBar">
 					<!-- InstanceBeginEditable name="rightBar" -->
 					<h2 class="title">生成合同确认书</h2>
-					<div class="infoBox producedBox f14">
-						<ul class="ly-clearFix">
-							<li><label>工程名称</label><input type="text" value=""
-								name="contract.engName" /></li>
+					<div class="infoBox producedBox f14" id="contractUl">
+						<ul class="ly-clearFix" >
+							<li><label>工程名称</label><input type="text" value="" name="contract.engName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入工程名称！" /></li>
 							<li><label>工程地址</label><input type="text" value=""
-								name="contract.engAddress" /></li>
+								name="contract.engAddress" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入工程地址！"/></li>
 							<li><label>甲方</label><span class="jquery-live-search-example"><input type="text" readonly="readonly" value="${record.memberNameA}" id="memberNameA"
 								class="batch-text" name="contract.memberNameA" /></span>
 								<input type="hidden" value="${record.memberIdA}" id="memberIdA" class="batch-text" name="contract.memberIdA" />
@@ -200,13 +264,13 @@
 								<input type="hidden" value="${record.memberIdB}" id="memberIdB" class="batch-text" name="contract.memberIdB" />
 								</li>
 							<li><label>签订地点</label><input type="text" value=""
-								name="contract.address" /></li>
+								name="contract.address" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入签订地点！" /></li>
 							<li><label>签订时间</label><input type="text" value=""
-								name="contract.signedDate" datepicker></li>
+								name="contract.signedDate" datepicker datatype="*1-100" readonly="readonly" errormsg="请选择正确的日期!" nullmsg="请选择签订时间！"  /></li>
 							<li><label>合同期限</label><input type="text" value=""
-								name="contract.validityDate" datepicker></li>
+								name="contract.validityDate" datepicker datatype="*1-100" readonly="readonly" errormsg="请选择正确的日期!" nullmsg="请选择合同期限！" /></li>
 							<li><label>生效时间</label><input type="text" value=""
-								name="contract.startDate" datepicker></li>
+								name="contract.startDate" datepicker datatype="*1-100" readonly="readonly" errormsg="请选择正确的日期!" nullmsg="请选择生效时间！" /></li>
 						</ul>
 						<table border="0" cellpadding="0" cellspacing="0" id="TbData"
 							class="tabList producedTable">
@@ -228,12 +292,12 @@
 								<th class="rLine">&nbsp;</th>
 							</tr>
 							<tr id="trDataRow1" class="CaseRow">
-								<td><input type="text" value="" name="items[0].productName" /></td>
-								<td><input type="text" value=""
-									name="items[0].productModel" /></td>
-								<td><input type="text" value="" name="items[0].quantity" class="quantityClass" /></td>
-								<td><input type="text" value="" name="items[0].price" /></td>
-								<td><input type="text" value="" name="items[0].amount" class="amountClass" /></td>
+								<td><input type="text" value="" name="items[0].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！" /></td>
+								<td><input type="text" value="" name="items[0].productModel" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！"/></td>
+								<td><input type="text" value="" name="items[0].quantity" class="quantityClass" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                    onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" datatype="n1-20" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
+								<td><input type="text" value="" name="items[0].price" class="priceClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" /></td>
+								<td><input type="text" value="" name="items[0].amount" class="amountClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
 								<td><textarea id="textarea" cols="45" rows="1"
 										name="items[0].remarks"></textarea></td>
 								<td><a href="javascript:void(0);" class="lnk-green"
@@ -251,15 +315,15 @@
 						</table>
 						<div>
 							<label>交货地址</label><input type="text" value=""
-								name="contract.deliveryAddress" />
+								name="contract.deliveryAddress" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入交货地址！" />
 						</div>
 						<div>
 							<label>合同总批次</label><input type="text" value=""
-								name="contract.batchCount" />
+								name="contract.batchCount" datatype="n1-10" errormsg="输入范围在1~10位数字之间！" nullmsg="请输入合同总批次！" />
 						</div>
 						<div>
 							<label>合同定金</label><input type="text" value=""
-								name="contract.deposit" /> 元
+								name="contract.deposit" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！" /> 元
 						</div>
 						<div>
 							<label>合同备注</label>
@@ -269,15 +333,14 @@
 						<div class="contPic">
 							<label>合同扫描件</label>
 							<input type="hidden" value="${record.imgPath}" id="imgId" />
-									<div class="rollBox">
-										<ul id="carousel" class="elastislide-list"></ul>
-									</div>
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
 						</div>			
 						<div>
 							<label>关联招标合同号</label><input type="text" value="${record.refContractNo}"
-								name="contract.refContractNo" />
+								name="contract.refContractNo" datatype="*1-10" errormsg="输入范围在1~10位之间！"   />
 						</div>
-						</ul>
 						<div class="btnBox">
 							<a href="javascript:void(0);"
 								class="button button-orange button-small"
@@ -285,7 +348,7 @@
 								href="javascript:history.go(-1);"
 								class="button button-gray button-small">返回</a>
 						</div>
-					</div>
+					</div></div>
 			</form>
 			<!-- InstanceEndEditable -->
 		</div>

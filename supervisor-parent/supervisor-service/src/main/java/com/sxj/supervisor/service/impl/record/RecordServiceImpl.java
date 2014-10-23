@@ -58,12 +58,14 @@ public class RecordServiceImpl implements IRecordService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void addRecord(RecordEntity record) throws ServiceException {
 		try {
-			String year = new SimpleDateFormat("yy",Locale.CHINESE).format(Calendar.getInstance().getTime());
-			String month = new SimpleDateFormat("MM",Locale.CHINESE).format(Calendar.getInstance().getTime());
-			record.setDateNo("BA"+year+month);
+			String year = new SimpleDateFormat("yy", Locale.CHINESE)
+					.format(Calendar.getInstance().getTime());
+			String month = new SimpleDateFormat("MM", Locale.CHINESE)
+					.format(Calendar.getInstance().getTime());
+			record.setDateNo("BA" + year + month);
 			recordDao.addRecord(record);
 			Long messageCount = null;
-			Object cache = HierarchicalCacheManager.get(2, "comet_record",
+			Object cache = HierarchicalCacheManager.get(2, "comet_message",
 					"record_count_message");
 			if (cache instanceof Long) {
 				messageCount = (Long) cache;
@@ -71,7 +73,7 @@ public class RecordServiceImpl implements IRecordService {
 				messageCount = 0l;
 			}
 			messageCount = messageCount + 1;
-			HierarchicalCacheManager.set(2, "comet_record",
+			HierarchicalCacheManager.set(2, "comet_message",
 					"record_count_message", messageCount);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -97,7 +99,7 @@ public class RecordServiceImpl implements IRecordService {
 			nowPath = record.getImgPath().split(",");
 		}
 		StringBuffer newPath = new StringBuffer();
-		if (oldPath != null && oldPath.length > 0  ) {
+		if (oldPath != null && oldPath.length > 0) {
 			for (int i = 0; i < oldPath.length; i++) {
 				if (StringUtils.isNotEmpty(oldPath[i])) {
 					continue;
@@ -105,14 +107,14 @@ public class RecordServiceImpl implements IRecordService {
 				for (int j = 0; j < nowPath.length; j++) {
 					if (StringUtils.isNotEmpty(nowPath[j])) {
 						continue;
-					} 
+					}
 					if (!oldPath[i].equals(nowPath[j])) {
 						fastDfsClient.removeFile(oldPath[i]);
 					}
 				}
 			}
 		}
-		
+
 		recordDao.updateRecord(record);
 	}
 
@@ -121,14 +123,15 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void deleteRecord(String id)throws ServiceException {
+	public void deleteRecord(String id) throws ServiceException {
 		try {
 			recordDao.deleteRecord(id);
-	
+
 		} catch (Exception e) {
 			throw new ServiceException("查询备案信息错误", e);
 		}
 	}
+
 	/**
 	 * 查询备案
 	 */
@@ -236,14 +239,14 @@ public class RecordServiceImpl implements IRecordService {
 			RecordConfirmStateEnum state) {
 		try {
 
-//			RecordEntity re = new RecordEntity();
-//			re.setId(recordId);
-//			re.setConfirmState(state);
-//			recordDao.updateRecord(re);
+			// RecordEntity re = new RecordEntity();
+			// re.setId(recordId);
+			// re.setConfirmState(state);
+			// recordDao.updateRecord(re);
 			ContractModel conModel = contractService.getContract(contractId);
 			ContractEntity con = conModel.getContract();
-			//更改双方备案
-			String[] reArr=con.getRecordNo().split(",");
+			// 更改双方备案
+			String[] reArr = con.getRecordNo().split(",");
 			for (String recordNo : reArr) {
 				RecordEntity re = getRecordByNo(recordNo.trim());
 				RecordEntity rEntity = new RecordEntity();

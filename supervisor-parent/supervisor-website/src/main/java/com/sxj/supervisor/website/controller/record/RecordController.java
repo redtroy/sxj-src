@@ -37,7 +37,6 @@ import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.website.comet.MessageChannel;
-import com.sxj.supervisor.website.comet.record.RecordThread;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -65,8 +64,8 @@ public class RecordController extends BaseController {
 	private IFileUpLoad fastDfsClient;
 
 	@RequestMapping("/query")
-	public String to_query(ModelMap map, HttpSession session, RecordQuery query)
-			throws WebException {
+	public String to_query(ModelMap map, HttpSession session,
+			HttpServletRequest request, RecordQuery query) throws WebException {
 		try {
 			query.setPagable(true);
 			RecordConfirmStateEnum[] rse = RecordConfirmStateEnum.values();// 备案状态
@@ -79,9 +78,12 @@ public class RecordController extends BaseController {
 			map.put("recordlist", list);
 			map.put("confirmState", rse);
 			map.put("query", query);
-			registChannel(MessageChannel.RECORD_MESSAGE, RecordThread.class,
-					userBean.getMember().getMemberNo());
-
+			map.put("type", userBean.getMember().getType().getId());
+			String channelName = MessageChannel.RECORD_MESSAGE
+					+ userBean.getMember().getMemberNo();
+			map.put("channelName", channelName);
+			// 注册监听
+			registChannel(channelName);
 			return "site/record/contract-list";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
@@ -102,9 +104,9 @@ public class RecordController extends BaseController {
 			}
 			model.put("contractModel", contractModel);
 			model.put("recordNo", recordNo);
-			if(contractModel.getContract().getType().getId()==0){
+			if (contractModel.getContract().getType().getId() == 0) {
 				return "site/record/contract-info-zhaobiao";
-			}else{
+			} else {
 				return "site/record/contract-info";
 			}
 		} catch (Exception e) {
@@ -389,7 +391,7 @@ public class RecordController extends BaseController {
 				contractModel = contractService.getContract(contract
 						.getContract().getId());
 			}
-			RecordEntity record= recordService.getRecord(recordId);
+			RecordEntity record = recordService.getRecord(recordId);
 			model.put("contractModel", contractModel);
 			model.put("recordId", recordId);
 			model.put("title", record.getType().getId());
@@ -400,7 +402,7 @@ public class RecordController extends BaseController {
 			throw new WebException("查询合同信息错误");
 		}
 	}
-	
+
 	/**
 	 * 跳转确认合同
 	 * 
@@ -412,8 +414,8 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("confirm-kfs")
-	public String confirmkfs(ModelMap model, String contractNo, String recordId,
-			HttpSession session) throws WebException {
+	public String confirmkfs(ModelMap model, String contractNo,
+			String recordId, HttpSession session) throws WebException {
 		try {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
@@ -500,4 +502,26 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+
+	@RequestMapping("getContract")
+	public @ResponseBody Map<String, String> getContract(String contractNo)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+
+			int size = contractService
+					.getContractByZhaobiaoContractNo(contractNo);
+			if (size == 0) {
+				map.put("isOK", "no");
+			} else {
+				map.put("isOK", "ok");
+			}
+
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
+		}
+	}
+
 }

@@ -92,24 +92,156 @@ jQuery(document).ready(function($) {
    						});
        				
        				}else{
-       					alert("暂无合同副本!");
+       					messageInfo("暂无合同副本!");
        				}
        			});
 		}else{
-				alert("暂无合同副本!");
+			messageInfo("暂无合同副本!");
 			}
 	});
 });
-
+//绑定图片滚动
+var initSlide=function(ele){
+	ele.elastislide({
+		orientation : 'horizontal',
+		speed : 500,
+		easing : 'ease-in-out', 
+		minItems : 2,
+		start : 0,
+		onReady : function() { return false; },
+		onBeforeSlide : function() { return false; },
+		onAfterSlide : function() { return false; }
+	});
+}
+//绑定图片事件
+var bindClick=function(el,imgPath){
+	el.live("click",function(){
+		var imageSource = $(this).find("a").attr("data-image");
+		var $li=$(this);
+		var $parent=$li.parent();
+		$("#viewer2").iviewer({
+			src : imageSource,
+			mousewheel : true,
+			onDelete:function(e){
+				var imgurl =$(this).children("img").attr("src");
+				var imgarr=imgurl.split("file-web/");
+				var delImg =imgPath.val();
+				delImg=delImg.replace(new RegExp(imgarr[1]),'');
+				imgPath.val(delImg);
+				$('.maskdivgen').fadeOut(100);
+				$('.viewer').slideUp(200);
+				$li.remove();
+				var arrays=delImg.split(",");
+				var index=0;
+				for(var i=0;i<arrays.length;i++){
+					if(arrays[i]){
+						$parent.find("p:eq("+index+")").empty().html(index+1);
+						index+=1;
+						
+					}
+				}
+			  }
+		});
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+		$("#viewer2").children("img").attr("src",imageSource);
+		$(".viewer").show();
+		$(".modal-header").show();
+		$(".maskdivgen").show();
+	});
+	
+}
+////上传图片
+$(document).ready(function() {
+	$("#bgcarousel").empty();
+	bindClick($("#bgcarousel li"),$("#bgimgPath"));
+	$("#bgFile").uploadify({
+			swf : '${basePath}upload/uploadify.swf',
+			uploader : "${basePath}upload.htm",
+			fileTypeExts : '*.gif; *.jpg; *.png',
+			auto : true,
+			multi : true,
+			height : 30,
+			width : 120,
+			buttonText : '上传变更扫描文件',
+			onUploadSuccess : function(file,
+					data, response) {
+				var num = 1;
+				var dataObj = eval("(" + data+ ")");//转换为json对象 
+				var hideVal = $("#bgimgPath").val();
+				if (hideVal == '') {
+					hideVal = dataObj.fileIds;
+				} else {
+					
+					var arrays =hideVal.split(",");
+					for(var i=0;i<arrays.length;i++){
+						if(arrays[i]){
+							num+=1;
+						}
+					}
+					hideVal += ","+ dataObj.fileIds;
+				}
+					 var carousel=$('#bgcarousel').append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
+					 $("#bgRollBox").empty().append(carousel);
+					 initSlide($('#bgcarousel'));
+					$("#bgimgPath").val(hideVal);
+					$("#bgimgShow").show();
+				
+			}
+		});
+	$("#bscarousel").empty();
+	bindClick($("#bscarousel li"),$("#bgimgPath"));
+	$("#bsFile").uploadify({
+			swf : '${basePath}upload/uploadify.swf',
+			uploader : "${basePath}upload.htm",
+			fileTypeExts : '*.gif; *.jpg; *.png',
+			auto : true,
+			multi : true,
+			height : 30,
+			width : 120,
+			buttonText : '上传变更扫描文件',
+			onUploadSuccess : function(file,
+					data, response) {
+				var num = 1;
+				var dataObj = eval("(" + data+ ")");//转换为json对象 
+				var hideVal = $("#bsimgPath").val();
+				if (hideVal == '') {
+					hideVal = dataObj.fileIds;
+				} else {
+					
+					var arrays =hideVal.split(",");
+					for(var i=0;i<arrays.length;i++){
+						if(arrays[i]){
+							num+=1;
+						}
+					}
+					hideVal += ","+ dataObj.fileIds;
+				}
+					 var carousel=$('#bscarousel').append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
+					 $("#bsRollBox").empty().append(carousel);
+					 initSlide($('#bscarousel'));
+					$("#bsimgPath").val(hideVal);
+					$("#bsimgShow").show();
+				
+			}
+		});
+})
 //显示变更记录
 function biangeng(recordId){
+	$("#bgimgPath").val("");
+	$('#bgcarousel').empty();
+	$("#bgRecordId").val("");
 	$('.maskdivgen').fadeIn(100);
-	$('.chanPop').slideDown(200);
+	$('.chanPic').slideDown(200);
 	$('#bgRecordId').val(recordId);
 	classLoadUpload("上传变更扫描文件");
+	
 }
 //补损
 function busun(recordId){
+	$("#bsimgPath").val("");
+	$('#bscarousel').empty();
+	$("#bsRecordId").val("");
 	$('.maskdivgen').fadeIn(100);
 	$('.suppPop').slideDown(200);
 	$('#bsRecordId').val(recordId);
@@ -126,8 +258,8 @@ function busun(recordId){
 				$("#batchId").append('<option value="'+batch1[i]+'">第'+batch0[i]+'批次</option>');
 			}
 		}else{
+			$("#batchId").empty();
 			$("#batchId").append('<option value="">没有批次</option>');
-			alert("没有找到批次！");
 		}
 	});
 }
@@ -135,10 +267,14 @@ function busun(recordId){
 function saveBiangeng(){
 	var o = {
 			"recordId" : $("#bgRecordId").val(),
-			"imgPath" : $("#bgImgPathHide").val(),
+			"imgPath" : $("#bgimgPath").val(),
 			"flag":"1"
 		};
-		if($("#bgImgPathHide").val()!='' ){
+		if($("#bgimgPath").val()==''){
+			messageInfo("请上传扫描件");
+			return false;
+		}
+		if($("#bgimgPath").val()!='' ){
 		$.post("modifyRecord.htm", o, function(data) {
 			if (data.isOK == 'ok') {
 				alert("上传变更扫描件成功");
@@ -148,7 +284,7 @@ function saveBiangeng(){
 			}
 		});
 		}else{
-			alert("请上传图片");
+			messageInfo("请上传图片");
 		}
 }
 //重新选择
@@ -162,21 +298,30 @@ function reselect(){
 function busunSeav(){
 	var o = {
 			"recordId" : $("#bsRecordId").val(),
-			"imgPath" : $("#bsImgPathHide").val(),
+			"imgPath" : $("#bsimgPath").val(),
 			"RFID" : $("input[name='rfid']").val(),
 			"flag":"2"
 		};
-		if($("#bsImgPathHide").val()!='' ){
+		if($("#bsimgPath").val()==''){
+			messageInfo("请上传扫描件");
+			return;
+		}
+		if($("input[name='rfid']").val()==''){
+			messageInfo("请选择补损批次");
+			return;
+		}
+		if($("#bsimgPath").val()!='' ){
 		$.post("modifyRecord.htm", o, function(data) {
 			if (data.isOK == 'ok') {
-				alert("上传补损扫描件成功");
-				window.location.href = "query.htm";
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"上传补损扫描件成功!");  
 			} else {
-				alert("上传补损扫描件失败");
+				errorInfo("上传补损扫描件失败");
 			}
 		});
 	}else{
-		alert("请上传图片");
+		messageInfo("请上传图片");
 	}
 }
 
@@ -195,19 +340,23 @@ function busunSeav(){
 		})
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
-			$('.chanPop').slideUp(200);
+			$('.chanPic').slideUp(200);
+			$("#bgimgShow").hide();
 		})
 		$('.button-box .button-gray').click(function() {
 			$('.maskdivgen').fadeOut(100);
-			$('.chanPop').slideUp(200);
+			$('.chanPic').slideUp(200);
+			$("#bgimgShow").hide();
 		})
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.suppPop').slideUp(200);
+			$("#bsimgShow").hide();
 		})
 		$('.item .button-gray').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.suppPop').slideUp(200);
+			$("#bsimgShow").hide();
 		})
 		//获取rfid
 		$('.batchSelect').change(function(){  
@@ -225,28 +374,30 @@ function busunSeav(){
 				$("#rfid").text(rfid);
 				$("#rfidHide").val(rfid);
 				} else {
-					alert("没有找到批次相关的RFID!");
+					errorInfo("没有找到批次相关的RFID!");
 				}
 			});
 		   }
    		}) 
    		//结束
-		 JS.Engine.on({  
-			 record_message : function(data){//侦听一个channel
-            	 var message = new Array();
-            	 message = data.split(",");
-            	 var bb="";
-            	 if(message[3]==0){
-            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
-            	 }else{
-            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
-            	 }
-            	 $("#message_div").append(bb);
-             },   
-     });  
-     JS.Engine.start('${basePath}comet');
-		
-		
+   		 JS.Engine.start('${basePath}comet');
+   			JS.Engine.on({  
+				 "${channelName}" : function(data){//侦听一个channel
+					 $("#message_div").empty();
+				 for(var i=0;i<data.length;i++){
+	            	 var message = new Array();
+	            	 message = data[i].split(",");
+	            	 var bb="";
+	            	 if(message[3]==0){
+	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
+	            	 }else{
+	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
+	            	 }
+	            	 $("#message_div").append(bb);
+				 }
+	             },   
+	     	});  
+    
 	});
 	
 	function closeMessage(obj){
@@ -278,7 +429,7 @@ function busunSeav(){
 
 	function delRecord(id,contractNo) {
 		if(contractNo!=''){
-			alert("该备案已被受理，不能删除!");
+			messageInfo("该备案已被受理，不能删除!");
 			return;
 		}else{
 			if (confirm("确定删除备案吗?")) {
@@ -289,7 +440,7 @@ function busunSeav(){
 						$("#" + id).remove();
 						window.location.href="query.htm";
 					} else {
-						alert("删除备案失败");
+						errorInfo("删除备案失败");
 					}
 				});
 			}
@@ -308,6 +459,7 @@ function busunSeav(){
 					<div class="heading mb15 ly-clearFix">
 						<h1 class="ly-left">
 							<span class="title fontYH f20 fb">合同备案管理</span>
+							<input type="hidden" value="${type}"  id="typeId"/>
 						</h1>
 					</div>
 					<form id="search_form" action="javascript:void(0);" method="post">
@@ -414,10 +566,7 @@ function busunSeav(){
 								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
 								<a href="javascript:busun('${record.id}');"
 								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
-								</#if> </#if> <#if record.confirmState.getId() ==1> <#if
-								record.contractNo?exists> <a
-								href="confirm.htm?contractNo=${record.contractNo}&recordId=${record.id}"
-								class="lnk-blue">确认合同</a> </#if> </#if> </#if>
+								</#if> </#if>  </#if>
 							</td>
 
 						</tr>
@@ -455,38 +604,52 @@ function busunSeav(){
 	</div>
 	</div>
 	<@b.footer />
-	<div class="modal-wrap popDemo contPop chanPop" style="display: none;">
+	<div class="modal-wrap popDemo chanPic" style="display: none; width:700px;">
 		<div class="modal-header">
 			<span class="close">关闭</span>
 		</div>
 		<div class="modal-body">
-			<div class="imageList"></div>
-			<input type="hidden" name="" id="bgRecordId" value="" /> <input
-				type="hidden" name="imgPath" class="imgPathHide" id="bgImgPathHide"
-				value="" /> <input type="file" name="bgFile" id="bgFile"
-				multiple="true" />
+		<div style="display:none" id="bgimgShow">
+		
+		<input type="hidden" value="" name="" id="bgRecordId" />
+			<input type="hidden" value="" name="imgPath" id="bgimgPath" />
+			<div class="rollBox" id="bgRollBox">
+				<ul id="bgcarousel" class="elastislide-list" style="height:140px">
+				
+				</ul>
+			</div>
+		</div>
+		<div class="button-box">
+			<input type="file" name="bgFile" id="bgFile"
+				multiple="true" /></div>
 			<div class="button-box">
 				<button class="button button-pop" onclick="saveBiangeng()">确认</button>
 				<button class="button button-gray">取消</button>
 			</div>
 		</div>
 	</div>
-	<div class="modal-wrap popDemo contPop suppPop" style="display: none;">
+	<div class="modal-wrap popDemo contPop suppPop" style="display: none;width:700px;">
 		<div class="modal-header">
 			<span class="close">关闭</span>
 		</div>
 		<form action="" id="bsForm" method="post">
 			<div class="modal-body">
-				<div class="item">
+				<div class="item" id="bsimgShow">
 					<label>&nbsp;</label>
 					<div class="ly-left">
-						<div class="imageList"></div>
-						<input type="hidden" name="" id="bsRecordId" value="" /> <input
-							type="hidden" name="imgPath" class="imgPathHide"
-							id="bsImgPathHide" value="" /> <input type="file" name="bsFile"
-							id="bsFile" multiple="true" />
+					<input type="hidden" value="" name="" id="bsRecordId" />
+						<input type="hidden" value="" name="imgPath" id="bsimgPath" />
+						<div class="rollBox" id="bsRollBox">
+							<ul id="bscarousel" class="elastislide-list" style="height:140px">
+							
+							</ul>
+						</div>
 					</div>
 				</div>
+				<div class="item">
+					<label>&nbsp;</label><div class="ly-left"><input type="file" name="bsFile" id="bsFile" multiple="true" /></div>
+				</div>
+				
 				<div class="item">
 					<label>对应批次</label> <select name="" id="batchId"
 						class="batchSelect">

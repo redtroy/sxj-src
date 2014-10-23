@@ -10,7 +10,7 @@
 <@b.pageScript/>
 <@b.errorInfo/>
 <@b.dialogBox/>
- <@b.validate/>
+<@b.validate/>
 <script>
 jQuery(document).ready(function($) {
 	$('.sltinput').click(function(){
@@ -24,6 +24,7 @@ jQuery(document).ready(function($) {
 	$('.popBtn').click(function(){
 		$('.maskdivgen').fadeOut(100);
 		$('.dropList').slideUp(200);
+		$(".passwordBox").slideUp(200);
 	});
 });
 
@@ -72,8 +73,8 @@ function accountInfo_page(page){
 }
 
 function roleInfo(id,type){
+	$("#roleInfo_div").empty();
 	$.get("${basePath}system/get_role_function.htm?accountId="+id+"&type="+type,function(data){
-		$("#roleInfo_div").empty();
 		$("#roleInfo_div").append(data);
 		$("#roleInfo_div").show();
 	});
@@ -97,10 +98,12 @@ function toRemove(id){
 	dialogBox(function(){
 		$.get("${basePath}system/remove.htm?accountId="+id,function(data){
 			if(data.isOK==true){
-				alert("删除成功");
-				query();
+				succInfo(function(){
+					query();
+				},"删除成功！");
+				
 			}else{
-				errorInfo(data);
+				errorInfo("删除失败！");
 			}
 		})
 	});
@@ -113,9 +116,11 @@ function edit(id){
 	var params2=$("#edit_form").serialize();
 	$.post("${basePath}system/edit_account.htm",params2,function(data){
 		if(data.isOK==true){
-			$("#edit_form").empty();
-			toInfo(id,data);
-			alert("修改成功");
+			succInfo(function(){
+				$("#edit_form").empty();
+				var currentPage= $("#rightBar").find("#pager").attr("currentPage");
+				query(currentPage);
+			},"修改成功！");
 		}else{
 			errorInfo(data);
 		}
@@ -123,18 +128,16 @@ function edit(id){
 }
 
 function initPassword(id){
-	var r=confirm("确认初始化密码吗?");
-    if (r==true){
-    	$.post("${basePath}system/init_password.htm?accountId="+id,function(data){
+	dialogBox(function(){
+		$.post("${basePath}system/init_password.htm?accountId="+id,function(data){
     		if(data.isOK==true){
-    			$("#password_div").css("display","");
+    			$("#password_div").show();
     			$("#password_div").children().find("p").text("初始密码为："+data.password+"，谢谢!");
     		}else{
-				errorInfo(data);
+				errorInfo("初始化密码失败！");
 			}
     	});
-    }
-	
+	},"确认初始化密码吗?");
 }
 function toInfo(accountId,data){
 	
@@ -264,7 +267,7 @@ function toEdit(accountId){
 		     <span class="icon32 icon-32-info"></span>
 		     <p class="color-blue fontYH f18"></p>
 		     </div>
-		     <button class="popBtn" onclick="closeDiv('password_div');">确认</button>
+		     <button class="popBtn">确认</button>
 	     </div>
 </div>
 <div class="maskdivgen" style="display:none"></div>

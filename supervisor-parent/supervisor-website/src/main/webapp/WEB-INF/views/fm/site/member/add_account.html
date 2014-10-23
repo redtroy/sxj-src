@@ -45,19 +45,20 @@
 	   var params=$("#add_form").serialize();
 		$.post("add_account.htm",params,function(data){
 			if(data.isOK=="ok"){
-				alert("添加成功");
-				$.post("accountList.htm",function(data){
-					var res=$(data).find("#right_div");
-					var pager=$(data).find("#pager");
-					$("#right_div").empty();
-					$("#right_div").append(res.html());
-					var totalPage=pager.attr("totalPage");
-					var currentPage=pager.attr("currentPage");
-					loadPage(currentPage,totalPage,query);
-				});
+				succInfo(function(){
+					$.post("accountList.htm",function(data){
+						var res=$(data).find("#right_div");
+						var pager=$(data).find("#pager");
+						$("#right_div").empty();
+						$("#right_div").append(res.html());
+						var totalPage=pager.attr("totalPage");
+						var currentPage=pager.attr("currentPage");
+						loadPage(currentPage,totalPage,query);
+					});
+				},"添加成功");
+				
 			}
 			else{
-				alert(data);
 				errorInfo(data);
 			}
 		});
