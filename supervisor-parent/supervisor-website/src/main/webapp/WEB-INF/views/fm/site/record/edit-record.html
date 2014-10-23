@@ -44,10 +44,6 @@
         </style>
 <script>
 jQuery(document).ready(function($) {
-	$('.demo-image').click(function() {
-		$('.maskdivgen').fadeIn(100);
-		$('.viewer').slideDown(200);
-	})
 	$('.modal-header .close').click(function() {
 		$('.maskdivgen').fadeOut(100);
 		$('.viewer').slideUp(200);
@@ -157,7 +153,23 @@ $(document).ready(function() {
         }
         $("#imgPathHide").val(hideVal);
 	}
-	function modify(){
+	//甲方采购
+	function AcgModify(){
+		var memberIdB = $("#memberIdB").val();
+		var memberNameB = $("#memberNameB").val();
+		if(memberIdB==''){
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		if(memberNameB==''){
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		var imgPath = $("#imgPath").val();
+		if(imgPath==''){
+			messageInfo('请上传扫描件！');
+			return;
+		}
 		$.post("modify.htm",$('form').serialize(),function(data){
 			if (data.isOK=='ok'){
 				succInfo(function(){
@@ -168,15 +180,124 @@ $(document).ready(function() {
 			}
 		  });
 	}
-	
+	//甲方招标
+	function zbmodify(){
+		var memberNameA = $("#memberNameA").val();
+		if(memberNameA==''){
+			messageInfo('请输入甲方用户！');
+			return;
+		}
+		var zbimgPath = $("#imgPath").val();
+		if(zbimgPath==''){
+			messageInfo('请上传扫描件！');
+			return;
+		}
+		$.post("modify.htm",$('form').serialize(),function(data){
+			if (data.isOK=='ok'){
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"确认成功!");
+			}else{
+				messageInfo("修改失败");
+			}
+		  });
+	}
+	//乙方采购
+	function BcgModify(){
+		var memberNameA = $("#memberNameA").val();
+		var memberIdA = $("#memberIdA").val();
+		if(memberIdA==''){
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		if(memberNameA==''){
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		var bcgimgPath = $("#imgPath").val();
+		if(bcgimgPath==''){
+			messageInfo('请上传扫描件！');
+			return;
+		}
+		$.post("modify.htm",$('form').serialize(),function(data){
+			if (data.isOK=='ok'){
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"确认成功!");
+			}else{
+				messageInfo("修改失败");
+			}
+		  });
+	}
+	//变更备案
+	function bgModify(){
+		var imgPath = $("#imgPath").val();
+		if(imgPath==''){
+			messageInfo('请上传扫描件！');
+			return;
+		}
+		$.post("modify.htm",$('form').serialize(),function(data){
+			if (data.isOK=='ok'){
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"确认成功!");
+			}else{
+				messageInfo("修改失败");
+			}
+		  });
+	}
 	$(function(){
-		var url_ = "${basePath}autoComple.htm";
-		$("#memberNameB").bigAutocomplete({url:url_,callback:function(data){
-            $("#memberIdB").val(data.result);
-        }});
-		$("#memberNameA").bigAutocomplete({url:url_,callback:function(data){
-			$("#memberIdA").val(data.result);
-        }});
+		var urlA = "${basePath}autoCompleA.htm";
+		var urlB = "${basePath}autoCompleB.htm";
+		$("#memberNameA").keydown(function(){
+			$("#memberIdA").val("");
+		})
+		$("#memberNameB").keydown(function(){
+			$("#memberIdB").val("");
+		})
+		$("#memberNameA").bigAutocomplete({url:urlA,callback:function(data){
+	        $("#memberIdA").val(data.result);
+	    }});
+		$("#memberNameB").bigAutocomplete({url:urlB,callback:function(data){
+	        $("#memberIdB").val(data.result);
+	    }});
+		//加载批次
+		if(${record.type.getId()}==2){
+			var batch ='${batch}';
+			if(batch==''){
+				$("#selectBatch").empty();
+				$("#selectBatch").append('<option value="">没有批次</option>');	
+			}else{
+				var batchArr =data.batch.split("#");
+				var batch0 =batchArr[0].split(",");
+				var batch1 =batchArr[1].split(",");
+				$("#selectBatch").empty();
+				for(var i=0;i<batch0.length;i++){
+					$("#selectBatch").append('<option value="">请选择批次</option>');
+					$("#selectBatch").append('<option value="'+batch1[i]+'">第'+batch0[i]+'批次</option>');
+				}
+			}
+		}
+		$('#selectBatch').change(function(){  
+			   var batchId=$(this).children('option:selected').val();  
+			   if(batchId!=''){
+			   $.post("getRfid.htm", {batchId:batchId}, function(data) {
+					if (data.rfid != '') {
+					var hide=$("#rfidHide").val();
+					var rfid ;
+					if(hide!=''){
+					 rfid =hide+','+data.rfid;
+					}else{
+						rfid=data.rfid;
+					}
+					$("#rfid").text(rfid);
+					$("#rfidHide").val(rfid);
+					} else {
+						errorInfo("没有找到批次相关的RFID!");
+					}
+				});
+			   }
+	   		}) 
 	});
 </script>
 </head>
@@ -194,7 +315,8 @@ $(document).ready(function() {
 						</h1>
 					</div>
 					<!-- 甲方--(门窗厂采购) -->
-					<#if record.contractType!=0 && member.getMember().type==0>
+					<#if type==0>
+					<#if record.contractType.getId()!=0>
 					<form action="" method="post">
 						<input type="hidden" name="" id="id" value="${record.id}" />
 						<div class="contBox">
@@ -208,6 +330,9 @@ $(document).ready(function() {
 								<label>乙方</label><input class="input input-w270h30"
 									id="memberNameB" name="memberNameB"
 									value="${record.memberNameB}" />
+									<input type="hidden"
+									id="memberNameB" name="memberIdB"
+									value="${record.memberIdB}" />
 							</div>
 							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"
@@ -225,13 +350,47 @@ $(document).ready(function() {
 								</div>
 							</div>
 								<div class="item">
-									<label>&nbsp;</label><a href="javascript:modify();"
+									<label>&nbsp;</label><a href="javascript:AcgModify();"
 										class="button button-orange mr15">确定修改</a><a
 										href="javascript:history.go(-1)" class="button button-gray">取消</a>
 								</div>
 							</div>
 					</form>
-					</#if> <#if record.contractType!=0 && member.getMember().type!=0>
+					<#else>
+					<!-- 甲方 门窗厂 招标 -->
+					<form action="" method="post">
+						<div class="contBox">
+							<div class="item">
+								<label>备案号</label> ${record.recordNo}
+							</div>
+							<div class="item">
+								<label>甲方</label> <input class="input input-w270h30"
+									value="${record.memberNameA}" name="memberNameA" id="memberNameA" />
+							</div>
+							<div class="item">
+								<label>乙方</label>${record.memberNameB}
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <input type="hidden"
+									value="${record.imgPath}" name="imgPath" id="imgPath" />
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
+							<div class="item">
+								<label>上传合同扫描件</label>
+								<div class="ly-left">
+									 <input type="file" name="uploadFile" id="uploadFile" multiple="true" />
+								</div>
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <a href="javascript:zbmodify();"
+									class="button button-orange mr15">确定修改</a><a
+									href="javascript:history.go(-1)" class="button button-gray">取消</a>
+							</div>
+						</div>
+					</form>
+					</#if> </#if> 
+					<#if type!=0>
 					<!-- 乙方(玻璃厂/型材厂 采购) -->
 					<form action="" method="post">
 						<div class="contBox">
@@ -241,7 +400,7 @@ $(document).ready(function() {
 							<div class="item">
 								<label>甲方</label> <input class="input input-w270h30"
 									value="${record.memberNameA}" name="memberNameA"
-									id="memberNameA" /> <input type="hidden" name="id" id="id"
+									id="memberNameA" /> <input type="hidden" name="id" id="memberIdA"
 									value="${record.id}" />
 							</div>
 							<div class="item">
@@ -260,48 +419,15 @@ $(document).ready(function() {
 								</div>
 							</div>
 							<div class="item">
-								<label>&nbsp;</label> <a href="javascript:modify();"
+								<label>&nbsp;</label> <a href="javascript:BcgModify();"
 									class="button button-orange mr15">确定修改</a><a
 									href="javascript:history.go(-1)" class="button button-gray">取消</a>
 							</div>
 						</div>
 					</form>
-					</#if> <#if record.contractType==0 && member.getMember().type==0>
-					<!-- 甲方 门窗厂 招标 -->
-					<form action="" method="post">
-						<div class="contBox">
-							<div class="item">
-								<label>备案号</label> ${record.recordNo}
-							</div>
-							<div class="item">
-								<label>甲方</label> <input class="input input-w270h30"
-									value="${record.memberNameA}" name="memberNameA" />
-							</div>
-							<div class="item">
-								<label>乙方</label>${record.memberNameB}
-							</div>
-							<div class="item">
-								<label>&nbsp;</label> <input type="hidden"
-									value="${record.imgPath}" name="imgPath" id="imgPath" />
-								<div class="rollBox">
-									<ul id="carousel" class="elastislide-list"></ul>
-								</div>
-							<div class="item">
-								<label>上传合同扫描件</label>
-								<div class="ly-left">
-									 <input type="file" name="uploadFile" id="uploadFile" multiple="true" />
-								</div>
-							</div>
-							<div class="item">
-								<label>&nbsp;</label> <a href="javascript:modify();"
-									class="button button-orange mr15">确定修改</a><a
-									href="javascript:history.go(-1)" class="button button-gray">取消</a>
-							</div>
-						</div>
-					</form>
-					</#if>
+					</#if> 
 					<!-- 变更 -->
-					<#if record.type==1>
+					<#if record.type.getId()==1>
 					<form action="" method="post">
 						<div class="contBox">
 							<div class="item">
@@ -316,12 +442,11 @@ $(document).ready(function() {
 							<div class="item">
 								<label>上传变更合同扫描件</label>
 								<div class="ly-left">
-									<input type="hidden" name="id" id="id" value="${record.id}" />
 									<input type="file" name="uploadFile" id="uploadFile" multiple="true" />
 								</div>
 							</div>
 							<div class="item">
-								<label>&nbsp;</label> <a href="javascript:modify();"
+								<label>&nbsp;</label> <a href="javascript:bgModify();"
 									class="button button-orange mr15">确定修改</a><a
 									href="javascript:history.go(-1)" class="button button-gray">取消</a>
 							</div>
@@ -329,7 +454,7 @@ $(document).ready(function() {
 					</form>
 					</#if>
 					<!-- 补损 -->
-					<#if record.type==2>
+					<#if record.type.getId()==2>
 					<form action="" method="post">
 						<div class="contBox">
 							<div class="item">
@@ -352,14 +477,14 @@ $(document).ready(function() {
 								<label>合同号</label> ${record.contractNo}
 							</div>
 							<div class="item">
-								<label>对应批次</label><select name="">
-									<option>第一批次</option>
-									<option selected="selected">第二批次</option>
+								<label>对应批次</label><select name="" id="selectBatch">
+									<option value="">请选择批次</option>
+									<option value="">第二批次</option>
 									<option>第三批次</option>
 								</select>
 							</div>
 							<div class="item">
-								<label>对应批次RFID编号</label> ${record.rfidNo}<span
+								<label>对应批次RFID编号</label> <input type="hidden" id="rfidHide" name="rfidNo" />${record.rfidNo}<span
 									class="icon icon-add"></span>
 
 							</div>

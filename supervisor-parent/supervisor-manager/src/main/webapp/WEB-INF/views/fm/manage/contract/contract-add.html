@@ -102,7 +102,7 @@ var ul_validform;
 		//alert(vTrClone.find("td :last").find('a').text());	
 		vTrClone.find("td :last").attr("onclick", "");
 		vTrClone.find("td :last").addClass("TrDel");
-		vTrClone.find("td :last").html("x");//更改按钮
+		vTrClone.find("td :last").html('<a class="lnk-green">x</a>');//更改按钮
 		//清空内容
 		vTrClone.find("td").eq(0).find("input").val("");
 		vTrClone.find("td").eq(1).find("input").val("");
@@ -131,7 +131,7 @@ var ul_validform;
 
 	$(function() {
 		$(".TrDel").live("click", function() {
-			$(this).parent().parent().remove();
+			$(this).parent().remove();
 		});
 	});
 	function saveContract() {
