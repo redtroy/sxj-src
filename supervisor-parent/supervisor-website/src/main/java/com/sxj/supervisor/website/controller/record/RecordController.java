@@ -301,6 +301,10 @@ public class RecordController extends BaseController {
 			RecordEntity record = recordService.getRecord(recordId);
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
+			if(record.getType().getId()==2){
+				String batch = recordService.getBatch(recordId);
+				map.put("batch", batch);
+			}
 			map.put("record", record);// 备案类型
 			map.put("type", member.getMember().getType().getId());// 会员类型
 			return "site/record/edit-record";
