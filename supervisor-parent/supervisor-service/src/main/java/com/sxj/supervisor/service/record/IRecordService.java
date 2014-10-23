@@ -11,28 +11,28 @@ public interface IRecordService {
 	/**
 	 * 新增备案
 	 **/
-	public void addRecord(RecordEntity record) throws ServiceException ;
+	public void addRecord(RecordEntity record) throws ServiceException;
 
 	/**
 	 * 修改备案
 	 *
 	 * @param record
 	 **/
-	public void modifyRecord(RecordEntity record) throws ServiceException ;
+	public void modifyRecord(RecordEntity record) throws ServiceException;
 
 	/**
 	 * 删除备案
 	 *
 	 * @param id
 	 **/
-	public void deleteRecord(String id) throws ServiceException ;
+	public void deleteRecord(String id) throws ServiceException;
 
 	/**
 	 * 获取备案详情
 	 *
 	 * @param id
 	 **/
-	public RecordEntity getRecord(String id) throws ServiceException ;
+	public RecordEntity getRecord(String id) throws ServiceException;
 
 	/**
 	 * 获取备案详情
@@ -46,7 +46,8 @@ public interface IRecordService {
 	 *
 	 * @param query
 	 **/
-	public List<RecordEntity> queryRecord(RecordQuery query) throws ServiceException ;
+	public List<RecordEntity> queryRecord(RecordQuery query)
+			throws ServiceException;
 
 	/**
 	 * 绑定合同
@@ -56,17 +57,21 @@ public interface IRecordService {
 	 * @param recordId
 	 **/
 	public void bindingContract(String contractNo, String refContractNo,
-			String recordNo, String recordNo2,String recordIdA,String recordIdB) throws ServiceException ;
+			String recordNo, String recordNo2, String recordIdA,
+			String recordIdB) throws ServiceException;
+
 	/**
 	 * 更改状态
+	 * 
 	 * @param contractId
 	 * @param state
 	 */
-	public void modifyState(String contractId,String recordId, RecordConfirmStateEnum state);
-	
-	public String  getBatch(String recordId);
-	
-	public String  getRfid(String batchId);
-	
-	public void sevaRecord(RecordEntity record) throws ServiceException ;
+	public void modifyState(String contractId, String recordId,
+			RecordConfirmStateEnum state);
+
+	public String getBatch(String recordId);
+
+	public String getRfid(String batchId);
+
+	public void saveRecord(RecordEntity record) throws ServiceException;
 }
