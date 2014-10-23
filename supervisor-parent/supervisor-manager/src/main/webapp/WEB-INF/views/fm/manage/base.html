@@ -11,6 +11,7 @@ function errorInfo(message){
 		    type: 1,
 		    title: false,
 		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
 		    border: [0], //去掉默认边框
 		    shade: [0.5], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
@@ -37,6 +38,7 @@ function messageInfo(message){
 		    type: 1,
 		    title: false,
 		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
 		    border: [0], //去掉默认边框
 		    shade: [0.5,'#000'], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
@@ -64,6 +66,7 @@ function succInfo(confirm,message){
 		    type: 1,
 		    title: false,
 		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
 		    border: [0], //去掉默认边框
 		    shade: [0.5], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
@@ -132,7 +135,7 @@ function succInfo(confirm,message){
    </div>
 </div>
 </#macro>
-<!-- 自定义弹窗 -->
+<!-- 自定义弹窗 
 <#macro diy_alert>
  <script>
 $(window).resize(); 
@@ -167,7 +170,7 @@ $('#sure_alert').css({
           <button class="popBtn">确认</button><button  class="popBtn btnGray">取消</button>
         </div>
 </div>
-</#macro>
+</#macro>-->
 <#macro dialogBox>
 <div id="diglog_div" style="display:none;">
 <div class="modal-wrap popDemo">
