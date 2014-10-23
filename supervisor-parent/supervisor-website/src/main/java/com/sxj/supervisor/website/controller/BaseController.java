@@ -26,7 +26,6 @@ import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.website.comet.MessageConnectListener;
 import com.sxj.supervisor.website.comet.MessageDropListener;
-import com.sxj.supervisor.website.comet.MessageThread;
 import com.sxj.util.exception.SystemException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -87,13 +86,8 @@ public class BaseController {
 
 	}
 
-<<<<<<< HEAD
-	protected void registChannel(String channel, Class<?> threadClass,
-			String param) {
-		CometContext cc = CometContext.getInstance();
-=======
 	static CometContext cc = CometContext.getInstance();
-	
+
 	static {
 		CometEngine engine = cc.getEngine();
 		MessageConnectListener lis = new MessageConnectListener(engine);
@@ -104,20 +98,11 @@ public class BaseController {
 
 	protected void registChannel(String channel, String param,
 			HttpSession session) {
->>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 		List<String> apps = cc.getAppModules();
 		int index = apps.indexOf(channel);
 		session.setAttribute("cometParam", param);
 		if (index < 0) {
 			cc.registChannel(channel);// 注册应用的channel
-<<<<<<< HEAD
-			CometEngine engine = cc.getEngine();
-			engine.addConnectListener(new MessageConnectListener(engine,
-					threadClass, param));
-			engine.addDropListener(new MessageDropListener());
-=======
-
->>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 		}
 	}
 
