@@ -171,8 +171,9 @@ function edit_pwd(id){
           <div class="ly-left editBox mr15">
           <#if (member.flag)>
           <p class="f12">${member.bLicenseNo}</p>
+          <input type="hidden" id="bLicenseNo" value="${member.bLicenseNo}"/>
           <#else>
-          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" placeholder="请输入营业执照号" ></input><span class="msg-error pa p5 ml5" style="display:none" id="bLicenseNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的营业执照号</span></p>
+          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" placeholder="请输入营业执照号" /><span class="msg-error pa p5 ml5" style="display:none" id="bLicenseNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的营业执照号</span></p>
           </#if>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
@@ -187,8 +188,9 @@ function edit_pwd(id){
          <div class="ly-left editBox">
           <#if (member.flag)>
           <p class="f12">${member.energyNo}</p>
+          <input type="hidden" id="energyNo" value="${member.energyNo}"/>
           <#else>
-          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"></input><span class="msg-error pa p5 ml5" style="display:none" id="energyNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的节能标识号</span></p>
+          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"/><span class="msg-error pa p5 ml5" style="display:none" id="energyNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的节能标识号</span></p>
           </#if>
           <#if (member.bLicensePath??)>
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">

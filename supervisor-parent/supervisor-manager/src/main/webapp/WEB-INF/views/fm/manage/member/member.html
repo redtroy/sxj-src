@@ -155,7 +155,7 @@ function close_img(){
 		   messageInfo("手机号码不能为空");
 		   return true;
 	   }
-	   if (phoneNo.match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)){
+	   if (!phoneNo.match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)){
 		   messageInfo("手机号码格式错误！");
 		   return true;
 	   }

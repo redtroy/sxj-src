@@ -112,7 +112,7 @@ function succInfo(confirm,message){
  }
 </script>
 <div id="error_info_div" style="display: none;">
-	<div class="modal-wrap popDemo popMsg mb20" style="width: 300px">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
 		<div class="modal-header">
 			<div class="tit">消息提示</div>
 			<span class="close" id="dialog_close_span">关闭</span>
@@ -130,7 +130,7 @@ function succInfo(confirm,message){
 </div>
 
 <div id="succ_info_div" style="display: none;">
-	<div class="modal-wrap popDemo popMsg mb20" style="width: 300px">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
 		<div class="modal-header">
 			<div class="tit">消息提示</div>
 			<span class="close" id="dialog_close_span">关闭</span>
@@ -148,7 +148,7 @@ function succInfo(confirm,message){
 </div>
 
 <div id="message_info_div" style="display: none;">
-	<div class="modal-wrap popDemo popMsg mb20" style="width: 300px">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
 		<div class="modal-header">
 			<div class="tit">消息提示</div>
 			<span class="close" id="dialog_close_span">关闭</span>
@@ -166,7 +166,7 @@ function succInfo(confirm,message){
 </div>
 </#macro> <#macro dialogBox>
 <div id="diglog_div" style="display: none;">
-	<div class="modal-wrap popDemo popWin mb20">
+	<div class="modal-wrap popDemo popWin mb20" style="width: 400px">
 		<div class="modal-header">
 			<div class="tit">&nbsp;</div>
 			<span id="dialog_close_span" class="close">关闭</span>
@@ -190,7 +190,7 @@ function dialogBox(confirm,message){
 	 var pageii = $.layer({
 		    type: 1,
 		    title: false,
-		   	area: ['20%', '20%'],
+		   	area: ['20%', '15%'],
 		    border: [0], //去掉默认边框
 		    shade: [0.5], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
