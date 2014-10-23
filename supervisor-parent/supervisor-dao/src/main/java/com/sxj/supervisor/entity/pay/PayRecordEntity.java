@@ -3,12 +3,21 @@ package com.sxj.supervisor.entity.pay;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.sxj.mybatis.orm.annotations.Column;
+import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Table;
+import com.sxj.supervisor.dao.contract.IContractPayDao;
+import com.sxj.supervisor.enu.contract.PayStageEnum;
+
 /**
  * 支付单
  * 
  * @author dujinxin
  *
  */
+@Entity(mapper = IContractPayDao.class)
+@Table(name = "M_CONTRACT_PAY")
 public class PayRecordEntity implements Serializable {
 
 	/**
@@ -19,42 +28,78 @@ public class PayRecordEntity implements Serializable {
 	/**
 	 * ID
 	 */
+	@Id(column = "ID")
 	private String id;
+
+	/**
+	 * 会员ID
+	 */
+	@Column(name = "MEMBER_NO")
+	private String memberNo;
 
 	/**
 	 * 支付单号
 	 */
+	@Column(name = "PAY_NO")
 	private String payNo;
 
 	/**
 	 * 合同号
 	 */
+	@Column(name = "CONTRACT_NO")
 	private String contractNo;
 
 	/**
 	 * 批次号
 	 */
+	@Column(name = "BATCH_NO")
 	private String batchNo;
 
 	/**
 	 * RFID编号
 	 */
+	@Column(name = "RFID_NO")
 	private String rfidNo;
 
 	/**
 	 * 支付金额
 	 */
+	@Column(name = "PAY_AMOUNT")
 	private Long payAmount;
 
 	/**
 	 * 支付日期
 	 */
+	@Column(name = "PAY_DATE")
 	private Date payDate;
+
+	/**
+	 * 支付内容
+	 */
+	@Column(name = "CONTENT")
+	private String content;
 
 	/**
 	 * 状态
 	 */
-	private Enum state;
+	@Column(name = "STATE")
+	private PayStageEnum state;
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getMemberNo() {
+		return memberNo;
+	}
+
+	public void setMemberNo(String memberNo) {
+		this.memberNo = memberNo;
+	}
 
 	public String getId() {
 		return id;
@@ -112,11 +157,11 @@ public class PayRecordEntity implements Serializable {
 		this.payDate = payDate;
 	}
 
-	public Enum getState() {
+	public PayStageEnum getState() {
 		return state;
 	}
 
-	public void setState(Enum state) {
+	public void setState(PayStageEnum state) {
 		this.state = state;
 	}
 

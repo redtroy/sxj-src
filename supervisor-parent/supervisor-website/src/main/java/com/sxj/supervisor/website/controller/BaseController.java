@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
@@ -55,6 +56,8 @@ public class BaseController {
 		binder.registerCustomEditor(MemberTypeEnum.class,
 				new EnumPropertyEditorSupport<MemberTypeEnum>(
 						MemberTypeEnum.class));
+		binder.registerCustomEditor(PayStageEnum.class,
+				new EnumPropertyEditorSupport<PayStageEnum>(PayStageEnum.class));
 		// RFID
 		binder.registerCustomEditor(RfidTypeEnum.class,
 				new EnumPropertyEditorSupport<RfidTypeEnum>(RfidTypeEnum.class));
@@ -86,7 +89,8 @@ public class BaseController {
 
 	}
 
-	protected void registChannel(String channel, Class<?> threadClass,String param) {
+	protected void registChannel(String channel, Class<?> threadClass,
+			String param) {
 		CometContext cc = CometContext.getInstance();
 		List<String> apps = cc.getAppModules();
 		int index = apps.indexOf(channel);
@@ -94,7 +98,7 @@ public class BaseController {
 			cc.registChannel(channel);// 注册应用的channel
 			CometEngine engine = cc.getEngine();
 			engine.addConnectListener(new MessageConnectListener(engine,
-					threadClass,param));
+					threadClass, param));
 			engine.addDropListener(new MessageDropListener());
 		}
 	}

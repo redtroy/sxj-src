@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
+<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script>
+jQuery(document).ready(function($) {
+	$('.btn-pay').click(function(){
+		$('.payPop').slideDown(200);
+	})
+	$('.btn-ok').click(function(){
+		$('.payPop').slideUp(200);
+	})
+});
+
+function loadInfo(contractNo,id) {
+	var temp= $("#info_"+id).is(":hidden");//是否隐藏 
+	if (temp){
+	  $("#info_" + id).show();
+	  $("#info_" + id).load("info.htm?contractNo=" + contractNo);
+	}else{
+	  $("#info_" + id).hide();
+	  $("#info_" + id).html('');
+	}
+}
+</script>
+</head>
+
+<body>
+<@b.header />
+<div class="mainBg">
+<div class="fence-wide ly-clearFix">
+<div class="main pb20">
+<@b.leftMenu />
+<div class="yard-870 rightSide ly-left">
+<div class="heading mb15 ly-clearFix">
+  <h1 class="ly-left">
+  <span class="title fontYH f20 fb">付款管理</span></h1>
+</div>
+<div class="contBox">
+  <div class="searBox f12 mb10">
+  <p class="pt0 mt0 mb5">
+    支付单号<input type="text" class="input" name="" value="">
+    合同号<input type="text" class="input" name="" value="">
+    RFID编号<input type="text" class="input" name="" value="">
+    支付时间段<input type="text" class="input input-time cal form-control" name="" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="" value="" datepicker>
+    </p>
+    <p class="mb0 pb0">
+  <#if (state=="a")>
+      付款状态<select name="select">
+		    <option selected="selected">全部</option>
+		    <#list payState as ps>
+            <option value="${ps.ordinal()}">${ps.getName_a()}</option>
+            </#list>
+          </select>
+   <#else>
+        付款状态<select name="select">
+		    <option selected="selected">全部</option>
+            <#list payState as ps>
+            <option value="${ps.ordinal()}">${ps.getName_b}</option>
+            </#list>
+          </select>
+   </#if>
+          <button class="button button-search">查询</button></p>
+</div>
+  <div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有一笔合同里有待支付的款项</div>
+  <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+  <col width="10%" />
+  <col width="10%" />
+  <col width="8%" />
+  <col width="10%" />
+  <col width="14%" />
+  <col width="13%" />
+  <col width="15%" />
+  <col width="20%" />
+    <tr>
+      <th>支付单号</th>
+      <th>合同号</th>
+      <th>批次</th>
+      <th>RFID编号</th>
+      <th>参考应付金额</th>
+      <th>支付时间</th>
+      <th>支付内容</th>
+      <th>付款状态</th>
+      </tr>
+    <#list list as model>
+    <tr class="bColor-red">
+      <td>${model.payNo}</td>
+      <td><a href="" class="lnk-blue">${model.contractNo}</a></td>
+      <td>${model.batchNo}</td>
+      <td>${model.rfidNo}</td>
+      <td>${model.payAmount}</td>
+      <#if (model.payDate??)>
+      <td>${model.payDate?date}</td>
+      <#else>
+      <td>-</td>
+      </#if>
+      <td>${model.payNo}</td>
+      <#if (model.state.ordinal()==0)>
+          <#if (state=="a")>
+           <td><button class="button button-orange btn-pay mr10">支付</button>
+           <button class="button button-orange">融资</button>
+           <div class="modal-wrap payPop" style="display:none;">
+              <div class="modal-body">
+                <div class="ly-clearFix">
+                 <label class="mr5">支付金额</label>
+                 <input name="input" type="text" value="" class="input" />
+                </div>
+              <div class="mt15">
+              <button class="button button-red btn-ok mr5">确认</button>
+              <button class="button button-gray">取消</button>
+              </div>
+            </div>
+            </div></td>
+          <#else>
+          <td><span class="state normal">等待付款</span></td>
+          </#if>
+       <#elseif (model.state.ordinal()==1)>
+            <#if (state=="a")>
+               <td><span class="state process">融资受理中</span></td>
+            <#else>
+                <td><span class="state normal">等待付款</span></td>
+            </#if>
+       <#elseif (model.state.ordinal()==2)>
+             <#if (state=="a")>
+                <td><span class="state normal">乙方确认中</span></td>
+            <#else>
+               <td><button class="button button-red btn-pay">确认收款</button>
+               <div style="display:none;" class="modal-wrap payPop">
+                 <div class="modal-body">
+                   <div class="ly-clearFix">
+                    <label class="mr5">支付金额</label>
+                   <span class="color-red fb">${model.payAmount/100}元</span>
+                  </div>
+                  <div class="mt15">
+                      <button class="button button-red btn-ok mr5">确认</button>
+                      <button class="button button-gray">取消</button>
+                   </div>
+                  </div>
+               </div></td>
+            </#if>
+       <#elseif (model.state.ordinal()==3)>
+            <td><span class="state verified">已完成支付</span></td>
+       </#if> 
+      </tr>
+    <tr style="disable:none">
+      <!-- 详细内容 -->
+    </tr>
+   </#list>
+  </table>
+  <div class="ly-clearFix">
+        <div id="pager" class="jPaginate"></div>
+  </div>  
+</div>
+</div>
+</div>
+</div>
+</div>
+<@b.footer />
+<script type="text/javascript">
+		$(function() {
+			$("#pager").paginate({
+				count 		: 50,
+				start 		: 1,
+				display     : 10,
+				border					: true,
+				border_color			: '#CCC',
+				text_color  			: '#333',
+				background_color    	: '#FFF',	
+				border_hover_color		: '#ff4400',
+				text_hover_color  		: '#ff4400',
+				background_hover_color	: '#fff', 
+				images					: false,
+				mouse					: 'press'
+			});
+});
+		</script>  
+</body>
+</html>
