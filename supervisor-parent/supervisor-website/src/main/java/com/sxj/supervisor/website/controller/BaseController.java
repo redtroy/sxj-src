@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
@@ -56,6 +57,8 @@ public class BaseController {
 		binder.registerCustomEditor(MemberTypeEnum.class,
 				new EnumPropertyEditorSupport<MemberTypeEnum>(
 						MemberTypeEnum.class));
+		binder.registerCustomEditor(PayStageEnum.class,
+				new EnumPropertyEditorSupport<PayStageEnum>(PayStageEnum.class));
 		// RFID
 		binder.registerCustomEditor(RfidTypeEnum.class,
 				new EnumPropertyEditorSupport<RfidTypeEnum>(RfidTypeEnum.class));

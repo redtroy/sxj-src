@@ -109,6 +109,7 @@ public class RecordController extends BaseController {
 			} else {
 				return "site/record/contract-info";
 			}
+			// contractModel.getContract().getImgPath().split(",");
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");
@@ -336,7 +337,7 @@ public class RecordController extends BaseController {
 				record.setState(RecordStateEnum.nosupplement);
 			}
 			record.setConfirmState(RecordConfirmStateEnum.accepted);
-			recordService.sevaRecord(record);
+			recordService.saveRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;

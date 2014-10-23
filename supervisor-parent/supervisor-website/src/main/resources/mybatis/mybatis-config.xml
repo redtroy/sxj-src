@@ -54,6 +54,9 @@
 			javaType="com.sxj.supervisor.enu.rfid.window.WindowTypeEnum" />
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.RfidTypeEnum" />
+			
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayStageEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.PayStageEnum" />
 		<!-- FRID -->
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"

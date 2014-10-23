@@ -64,35 +64,27 @@
                         <td>约${n}</td>
                         <td>&nbsp;</td>
                         <td>${m}元</td>
-                        <#if contractModel.contract.imgPath!=null>
                         <td class="tl">
                         <#assign arr=(contractModel.contract.imgPath?split(","))>
                  		本合同附件清单共${arr?size}页</td>
-                 		<#else>
-                 		<td class="tl">
-                 		本合同附件清单共0页</td>
-                 		</#if>
                       </tr>
                     </table>
                   </div>
                   <div class="item">
-                    <label>合同备注</label>
+                    <label>&nbsp;</label>
                     ${contractModel.contract.remarks}</div>
                   <div class="item">
-                    <label>合同扫描件</label>
+                    <label>&nbsp;</label>
                    	</div>
                   <div class="item">
                     <label>&nbsp;</label>
-                    <#if arr??>
                      <#list arr  as imgPath>
                     <img src="${b.imagePath}${imgPath}" alt="合同扫描件" width="80" height="107" />
                     </#list>
-                    <#else>
-                     <img src="${b.staticPath}images/nopic.jpg" alt="合同扫描件" width="80" height="107" />
-                    </#if>
                     </div>
+                 
                   <div class="item mt10">
                     <label>&nbsp;</label>
-                    <button class="button button-gray" onclick="closeContract('${recordNo}')">收起</button>
+                    <button class="button button-gray" onclick="closeDiv('${id}')">收起</button>
                   </div>
                 </div></td>

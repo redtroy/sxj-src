@@ -27,6 +27,7 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -326,8 +327,10 @@ public class RecordServiceImpl implements IRecordService {
 
 	@Override
 	@Transactional
-	public void sevaRecord(RecordEntity record) throws ServiceException {
+	public void saveRecord(RecordEntity record) throws ServiceException {
 		try {
+			record.setDateNo("BA"
+					+ DateTimeUtils.formateDate2Str(new Date(), "yyMM"));
 			recordDao.addRecord(record);
 			// 更改合同关联所有的备案状态
 			String contractNo = record.getContractNo();
