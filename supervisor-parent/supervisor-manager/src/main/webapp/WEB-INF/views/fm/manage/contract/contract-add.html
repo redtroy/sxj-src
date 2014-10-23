@@ -122,6 +122,14 @@
 		});
 	});
 	function saveContract() {
+		
+			var size=$("#TbData tr").filter(".CaseRow").size();
+			for (var i=0;i<size;i++){
+				var num1=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val();
+				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val(parseFloat(num1)*100);
+				var num2=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
+				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(parseFloat(num2)*100);
+			}
 		$.post("addContract.htm", $("#addForm").serialize(), function(data) {
 			if (data.isOK == 'ok') {
 				alert("生成合同成功");
@@ -139,13 +147,14 @@
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
 				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val();
+				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val(getFloatStr(num));
 				if(num==''){
 					amount+=parseFloat(parseFloat(0));
 				}else{
 					amount+=parseFloat(parseFloat(num));
 				}
 			}
-			$("#amountSum").html(amount);
+			$("#amountSum").html(getFloatStr(amount));
 		});
 		$(".quantityClass").keyup(function(){
 			var quantity=0;
@@ -160,15 +169,31 @@
 			}
 			$("#quantitySum").html(quantity);
 		});
+		$(".priceClass").keyup(function(){
+			var size=$("#TbData tr").filter(".CaseRow").size();
+			for (var i=0;i<size;i++){
+				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
+				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(getFloatStr(num));
+			}
+		});
 		
 	});
-	//function sum(){
-	//var amount =$("[attribute*=amount]");
-	//alert(amount.eq(0).name);
-	//		for (var i=0;i<=amount.size;i++){
-	//			alert(amount[i].val());onkeydown="sum();"s
-	//		}
-	//}
+	//将传入数据转换为字符串,并清除字符串中非数字与.的字符
+    //按数字格式补全字符串
+    var getFloatStr = function(num){
+        num += '';
+        num = num.replace(/[^0-9|\.]/g, ''); //清除字符串中的非数字非.字符
+        
+        if(/^0+/) //清除字符串开头的0
+            num = num.replace(/^0+/, '');
+        if(!/\./.test(num)) //为整数字符串在末尾添加.00
+            num += '.00';
+        if(/^\./.test(num)) //字符以.开头时,在开头添加0
+            num = '0' + num;
+        num += '00';        //在字符串末尾补零
+        num = num.match(/\d+\.\d{2}/)[0];
+        return num;
+    };
 </script>
 </head>
 <body>
@@ -231,8 +256,9 @@
 								<td><input type="text" value="" name="items[0].productName" /></td>
 								<td><input type="text" value=""
 									name="items[0].productModel" /></td>
-								<td><input type="text" value="" name="items[0].quantity" class="quantityClass" /></td>
-								<td><input type="text" value="" name="items[0].price" /></td>
+								<td><input type="text" value="" name="items[0].quantity" class="quantityClass" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                    onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" /></td>
+								<td><input type="text" value="" name="items[0].price" class="priceClass" /></td>
 								<td><input type="text" value="" name="items[0].amount" class="amountClass" /></td>
 								<td><textarea id="textarea" cols="45" rows="1"
 										name="items[0].remarks"></textarea></td>
@@ -269,15 +295,14 @@
 						<div class="contPic">
 							<label>合同扫描件</label>
 							<input type="hidden" value="${record.imgPath}" id="imgId" />
-									<div class="rollBox">
-										<ul id="carousel" class="elastislide-list"></ul>
-									</div>
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
 						</div>			
 						<div>
 							<label>关联招标合同号</label><input type="text" value="${record.refContractNo}"
 								name="contract.refContractNo" />
 						</div>
-						</ul>
 						<div class="btnBox">
 							<a href="javascript:void(0);"
 								class="button button-orange button-small"
@@ -285,7 +310,7 @@
 								href="javascript:history.go(-1);"
 								class="button button-gray button-small">返回</a>
 						</div>
-					</div>
+					</div></div>
 			</form>
 			<!-- InstanceEndEditable -->
 		</div>

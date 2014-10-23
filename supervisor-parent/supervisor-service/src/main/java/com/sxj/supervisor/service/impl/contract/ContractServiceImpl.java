@@ -155,10 +155,6 @@ public class ContractServiceImpl implements IContractService {
 				
 				// 拼装实体
 				if (record != null) {
-					RecordEntity re = new RecordEntity();
-					re.setId(record.getId());
-					re.setConfirmState(RecordConfirmStateEnum.unconfirmed);
-					recordDao.updateRecord(re);
 					contract.setRecordDate(record.getAcceptDate()); // 备案时间就是受理时间?
 					contract.setRecordNo(record.getRecordNo());// 备案号
 					contract.setType(record.getContractType());
@@ -766,6 +762,7 @@ public class ContractServiceImpl implements IContractService {
 					RecordEntity re = recordService.getRecordByNo(recordNo.trim());
 					RecordEntity rEntity = new RecordEntity();
 					rEntity.setId(re.getId());
+					// TODO 审核
 					rEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 					recordDao.updateRecord(rEntity);
 					if (re != null) {
@@ -795,7 +792,7 @@ public class ContractServiceImpl implements IContractService {
 									+ re.getMemberIdA()+ ','+re.getType().getId();
 							messageList.add(message);
 							HierarchicalCacheManager.set(2, "comet_record",
-									"record_push_message_a_" + re.getMemberIdA(),
+									"record_push_message_" + re.getMemberIdA(),
 									messageList);
 						}
 						// 乙方
@@ -803,7 +800,7 @@ public class ContractServiceImpl implements IContractService {
 							List<String> messageListB = null;
 							Object cacheB = HierarchicalCacheManager.get(2,
 									"comet_record",
-									"record_push_message_b_" + re.getMemberIdB());
+									"record_push_message_" + re.getMemberIdB());
 							if (cacheB instanceof ArrayList) {
 								messageListB = (List<String>) cacheB;
 							} else {

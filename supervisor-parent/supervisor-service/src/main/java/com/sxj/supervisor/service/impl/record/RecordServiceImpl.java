@@ -196,7 +196,6 @@ public class RecordServiceImpl implements IRecordService {
 			record.setContractNo(contractNo);
 			record.setState(RecordStateEnum.Binding);
 			record.setAcceptDate(new Date());
-			record.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 			recordDao.updateRecord(record);
 		}
 		if (record2 != null) {
@@ -204,7 +203,6 @@ public class RecordServiceImpl implements IRecordService {
 			record2.setContractNo(contractNo);
 			record2.setState(RecordStateEnum.Binding);
 			record2.setAcceptDate(new Date());
-			record2.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 			recordDao.updateRecord(record2);
 		}
 		// 插入合同

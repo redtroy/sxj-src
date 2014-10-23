@@ -92,11 +92,11 @@ jQuery(document).ready(function($) {
    						});
        				
        				}else{
-       					alert("暂无合同副本!");
+       					messageInfo("暂无合同副本!");
        				}
        			});
 		}else{
-				alert("暂无合同副本!");
+			messageInfo("暂无合同副本!");
 			}
 	});
 });
@@ -185,7 +185,7 @@ $(document).ready(function() {
 					 $("#bgRollBox").empty().append(carousel);
 					 initSlide($('#bgcarousel'));
 					$("#bgimgPath").val(hideVal);
-					$("#imgShow").show();
+					$("#bgimgShow").show();
 				
 			}
 		});
@@ -221,20 +221,27 @@ $(document).ready(function() {
 					 $("#bsRollBox").empty().append(carousel);
 					 initSlide($('#bscarousel'));
 					$("#bsimgPath").val(hideVal);
-					$("#imgShow").show();
+					$("#bsimgShow").show();
 				
 			}
 		});
 })
 //显示变更记录
 function biangeng(recordId){
+	$("#bgimgPath").val("");
+	$('#bgcarousel').empty();
+	$("#bgRecordId").val("");
 	$('.maskdivgen').fadeIn(100);
 	$('.chanPic').slideDown(200);
 	$('#bgRecordId').val(recordId);
 	classLoadUpload("上传变更扫描文件");
+	
 }
 //补损
 function busun(recordId){
+	$("#bsimgPath").val("");
+	$('#bscarousel').empty();
+	$("#bsRecordId").val("");
 	$('.maskdivgen').fadeIn(100);
 	$('.suppPop').slideDown(200);
 	$('#bsRecordId').val(recordId);
@@ -260,14 +267,14 @@ function busun(recordId){
 function saveBiangeng(){
 	var o = {
 			"recordId" : $("#bgRecordId").val(),
-			"imgPath" : $("#bgImgPathHide").val(),
+			"imgPath" : $("#bgimgPath").val(),
 			"flag":"1"
 		};
-		if($("#bgImgPathHide").val()==''){
-			alert("请上传扫描件");
-			return;
+		if($("#bgimgPath").val()==''){
+			messageInfo("请上传扫描件");
+			return false;
 		}
-		if($("#bgImgPathHide").val()!='' ){
+		if($("#bgimgPath").val()!='' ){
 		$.post("modifyRecord.htm", o, function(data) {
 			if (data.isOK == 'ok') {
 				alert("上传变更扫描件成功");
@@ -277,7 +284,7 @@ function saveBiangeng(){
 			}
 		});
 		}else{
-			alert("请上传图片");
+			messageInfo("请上传图片");
 		}
 }
 //重新选择
@@ -291,29 +298,30 @@ function reselect(){
 function busunSeav(){
 	var o = {
 			"recordId" : $("#bsRecordId").val(),
-			"imgPath" : $("#bsImgPathHide").val(),
+			"imgPath" : $("#bsimgPath").val(),
 			"RFID" : $("input[name='rfid']").val(),
 			"flag":"2"
 		};
-		if($("#bsImgPathHide").val()==''){
-			alert("请上传扫描件");
+		if($("#bsimgPath").val()==''){
+			messageInfo("请上传扫描件");
 			return;
 		}
 		if($("input[name='rfid']").val()==''){
-			alert("请选择补损批次");
+			messageInfo("请选择补损批次");
 			return;
 		}
-		if($("#bsImgPathHide").val()!='' ){
+		if($("#bsimgPath").val()!='' ){
 		$.post("modifyRecord.htm", o, function(data) {
 			if (data.isOK == 'ok') {
-				alert("上传补损扫描件成功");
-				window.location.href = "query.htm";
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"上传补损扫描件成功!");  
 			} else {
-				alert("上传补损扫描件失败");
+				errorInfo("上传补损扫描件失败");
 			}
 		});
 	}else{
-		alert("请上传图片");
+		messageInfo("请上传图片");
 	}
 }
 
@@ -333,18 +341,22 @@ function busunSeav(){
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.chanPic').slideUp(200);
+			$("#bgimgShow").hide();
 		})
 		$('.button-box .button-gray').click(function() {
 			$('.maskdivgen').fadeOut(100);
-			$('.chanPop').slideUp(200);
+			$('.chanPic').slideUp(200);
+			$("#bgimgShow").hide();
 		})
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.suppPop').slideUp(200);
+			$("#bsimgShow").hide();
 		})
 		$('.item .button-gray').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.suppPop').slideUp(200);
+			$("#bsimgShow").hide();
 		})
 		//获取rfid
 		$('.batchSelect').change(function(){  
@@ -362,44 +374,30 @@ function busunSeav(){
 				$("#rfid").text(rfid);
 				$("#rfidHide").val(rfid);
 				} else {
-					alert("没有找到批次相关的RFID!");
+					errorInfo("没有找到批次相关的RFID!");
 				}
 			});
 		   }
    		}) 
    		//结束
-   		var typeId = $("#typeId").val();
-   		if(typeId==0){
-   		 JS.Engine.start('${basePath}comet');
-			 JS.Engine.on({  
-				 record_message_a : function(data){//侦听一个channel
-	            	 var message = new Array();
-	            	 message = data.split(",");
-	            	 var bb="";
-	            	 if(message[3]==0){
-	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
-	            	 }else{
-	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
-	            	 }
-	            	 $("#message_div").append(bb);
-	             },   
-	     	});  
-   		}else{
    		 JS.Engine.start('${basePath}comet');
    			JS.Engine.on({  
-				 record_message_b : function(data){//侦听一个channel
+				 "${memberNo}" : function(data){//侦听一个channel
+					 $("#message_div").empty();
+				 for(var i=0;i<data.length;i++){
 	            	 var message = new Array();
-	            	 message = data.split(",");
+	            	 message = data[i].split(",");
 	            	 var bb="";
 	            	 if(message[3]==0){
 	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
 	            	 }else{
 	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue' id='comet_div2_href'>待确认</a>的"+message[1]+"信息</div>"; 
 	            	 }
+	            	 //$("#message_div").empty();
 	            	 $("#message_div").append(bb);
+				 }
 	             },   
 	     	});  
-   		}
     
 	});
 	
@@ -432,7 +430,7 @@ function busunSeav(){
 
 	function delRecord(id,contractNo) {
 		if(contractNo!=''){
-			alert("该备案已被受理，不能删除!");
+			messageInfo("该备案已被受理，不能删除!");
 			return;
 		}else{
 			if (confirm("确定删除备案吗?")) {
@@ -443,7 +441,7 @@ function busunSeav(){
 						$("#" + id).remove();
 						window.location.href="query.htm";
 					} else {
-						alert("删除备案失败");
+						errorInfo("删除备案失败");
 					}
 				});
 			}
@@ -612,7 +610,9 @@ function busunSeav(){
 			<span class="close">关闭</span>
 		</div>
 		<div class="modal-body">
-		<div style="display:none" id="imgShow">
+		<div style="display:none" id="bgimgShow">
+		
+		<input type="hidden" value="" name="" id="bgRecordId" />
 			<input type="hidden" value="" name="imgPath" id="bgimgPath" />
 			<div class="rollBox" id="bgRollBox">
 				<ul id="bgcarousel" class="elastislide-list" style="height:140px">
@@ -635,9 +635,10 @@ function busunSeav(){
 		</div>
 		<form action="" id="bsForm" method="post">
 			<div class="modal-body">
-				<div class="item">
+				<div class="item" id="bsimgShow">
 					<label>&nbsp;</label>
 					<div class="ly-left">
+					<input type="hidden" value="" name="" id="bsRecordId" />
 						<input type="hidden" value="" name="imgPath" id="bsimgPath" />
 						<div class="rollBox" id="bsRollBox">
 							<ul id="bscarousel" class="elastislide-list" style="height:140px">
