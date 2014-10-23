@@ -1097,7 +1097,7 @@ public class ContractServiceImpl implements IContractService {
 		try {
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
-			query.setContractType(0);
+			query.setContractType("0");
 			List<ContractModel> res = queryContracts(query);
 			return res.size();
 		} catch (Exception e) {
