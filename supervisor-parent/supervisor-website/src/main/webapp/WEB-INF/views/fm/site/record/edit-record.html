@@ -69,10 +69,11 @@ $(document).ready(function() {
 								}
 								hideVal += ","+ dataObj.fileIds;
 							}
-							$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
-
+							var ul=$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
+							$(".rollBox").empty();
+							$(".rollBox").append(ul);
 							$("#imgPath").val(hideVal);
-							$( '.elastislide-list1' ).elastislide({
+							$( '#carousel' ).elastislide({
 								orientation : 'horizontal',
 								speed : 500,
 								easing : 'ease-in-out',
