@@ -35,27 +35,29 @@ jQuery(document).ready(function($) {
 	  var pwd1=$("#pwd1").val();
 	  var pwd2=$("#pwd2").val();
 	  if (pwd1 =="" || pwd2 =="" ){
-		  alert("密码不能为空！")
+		  messageInfo("密码不能为空！");
 		  return false;
 	  }
 	  if (pwd1.length<6){
-			alert("密码长度至少为6位");
+		  	messageInfo("密码长度至少为6位");
 			$("#pwd1").val("");
 			$("#pwd2").val("");
 			return false;
 		}
 	  if (pwd1 !=pwd2){
-		  alert("两次密码输入不一样，请重新输入");
+		  messageInfo("两次密码输入不一样，请重新输入");
 		  $("#pwd1").val("");
 		  $("#pwd2").val("");
 		  return false;
 	  }
 	  $.post("${basePath}member/account/save_pwd.htm",{id:editId,password:pwd1},function(data){
-		  alert("修改成功！");
-		  $('.maskdivgen').fadeOut(100);
-		  $('.passwordPop').slideUp(200);
-		  $("#pwd1").val("");
-		  $("#pwd2").val("");
+		  succInfo(function(){
+			  $('.maskdivgen').fadeOut(100);
+			  $('.passwordPop').slideUp(200);
+			  $("#pwd1").val("");
+			  $("#pwd2").val("");
+		  },"修改成功！");
+		 
 	  })
   }
 </script>

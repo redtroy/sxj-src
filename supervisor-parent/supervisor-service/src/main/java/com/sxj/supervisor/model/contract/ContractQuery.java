@@ -75,6 +75,7 @@ public class ContractQuery extends Pagable  implements Serializable {
 	 * 合同状态
 	**/
 	private Integer state;
+	
 
 	public String getContractId() {
 		return contractId;

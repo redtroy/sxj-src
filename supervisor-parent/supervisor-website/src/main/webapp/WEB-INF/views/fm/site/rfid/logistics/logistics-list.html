@@ -11,6 +11,7 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <@b.pageScript/>
+<@b.errorInfo/>
 <script >
 
 function query(page){
@@ -32,10 +33,12 @@ function  del(id){
 	if(confirm('确实要删除吗?')){
 	$.post("delete.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			alert("删除成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				window.location.href="query.htm";
+			},"删除成功!");
+			
 		}else{
-			alert("删除失败!");	
+			errorInfo("删除失败!");	
 		}
 	});
 	}
@@ -44,10 +47,11 @@ function  disable(id){
 	if(confirm('确实要停用吗?')){
 	$.post("disable.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			alert("停用成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				window.location.href="query.htm";
+			},"停用成功!");
 		}else{
-			alert("停用失败!");	
+			errorInfo("停用失败!");	
 		}
 	});
 	}
