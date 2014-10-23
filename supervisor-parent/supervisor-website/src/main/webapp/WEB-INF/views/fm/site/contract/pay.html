@@ -20,16 +20,22 @@ jQuery(document).ready(function($) {
 		$('.payPop').slideUp(200);
 	})
 });
-
+function query(page){
+	
+}
 function loadInfo(contractNo,id) {
 	var temp= $("#info_"+id).is(":hidden");//是否隐藏 
 	if (temp){
 	  $("#info_" + id).show();
-	  $("#info_" + id).load("info.htm?contractNo=" + contractNo);
+	  $("#info_" + id).load("info.htm?contractNo=" + contractNo+"&id="+id);
 	}else{
 	  $("#info_" + id).hide();
 	  $("#info_" + id).html('');
 	}
+}
+function closeDiv(id){
+	 $("#info_" + id).hide();
+	 $("#info_" + id).html('');
 }
 </script>
 </head>
@@ -48,28 +54,28 @@ function loadInfo(contractNo,id) {
 <div class="contBox">
   <div class="searBox f12 mb10">
   <p class="pt0 mt0 mb5">
-    支付单号<input type="text" class="input" name="" value="">
-    合同号<input type="text" class="input" name="" value="">
-    RFID编号<input type="text" class="input" name="" value="">
-    支付时间段<input type="text" class="input input-time cal form-control" name="" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="" value="" datepicker>
+    支付单号<input type="text" class="input" name="payNo" value="">
+    合同号<input type="text" class="input" name="contractNo" value="">
+    RFID编号<input type="text" class="input" name="rfidNo" value="">
+    支付时间段<input type="text" class="input input-time cal form-control" name="startPayDate" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="endPayDate" value="" datepicker>
     </p>
     <p class="mb0 pb0">
   <#if (state=="a")>
       付款状态<select name="select">
-		    <option selected="selected">全部</option>
+		    <option selected="selected" name="state">全部</option>
 		    <#list payState as ps>
             <option value="${ps.ordinal()}">${ps.getName_a()}</option>
             </#list>
           </select>
    <#else>
         付款状态<select name="select">
-		    <option selected="selected">全部</option>
+		    <option selected="selected" name="state">全部</option>
             <#list payState as ps>
             <option value="${ps.ordinal()}">${ps.getName_b}</option>
             </#list>
           </select>
    </#if>
-          <button class="button button-search">查询</button></p>
+          <button class="button button-search" onclick="query();return false;">查询</button></p>
 </div>
   <div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有一笔合同里有待支付的款项</div>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList">
@@ -94,7 +100,7 @@ function loadInfo(contractNo,id) {
     <#list list as model>
     <tr class="bColor-red">
       <td>${model.payNo}</td>
-      <td><a href="" class="lnk-blue">${model.contractNo}</a></td>
+      <td><a href="javascript:loadInfo('${model.contractNo}','${model.id}')" class="lnk-blue">${model.contractNo}</a></td>
       <td>${model.batchNo}</td>
       <td>${model.rfidNo}</td>
       <td>${model.payAmount}</td>
@@ -151,37 +157,16 @@ function loadInfo(contractNo,id) {
             <td><span class="state verified">已完成支付</span></td>
        </#if> 
       </tr>
-    <tr style="disable:none">
+    <tr style="display:none;" id="info_${model.id}">
       <!-- 详细内容 -->
     </tr>
    </#list>
   </table>
-  <div class="ly-clearFix">
-        <div id="pager" class="jPaginate"></div>
-  </div>  
 </div>
 </div>
 </div>
 </div>
 </div>
 <@b.footer />
-<script type="text/javascript">
-		$(function() {
-			$("#pager").paginate({
-				count 		: 50,
-				start 		: 1,
-				display     : 10,
-				border					: true,
-				border_color			: '#CCC',
-				text_color  			: '#333',
-				background_color    	: '#FFF',	
-				border_hover_color		: '#ff4400',
-				text_hover_color  		: '#ff4400',
-				background_hover_color	: '#fff', 
-				images					: false,
-				mouse					: 'press'
-			});
-});
-		</script>  
 </body>
 </html>

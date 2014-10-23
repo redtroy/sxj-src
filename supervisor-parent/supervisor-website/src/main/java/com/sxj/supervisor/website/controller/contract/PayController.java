@@ -76,7 +76,7 @@ public class PayController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("info")
-	public String queryContractInfo(ModelMap model, String contractNo)
+	public String queryContractInfo(ModelMap model, String contractNo, String id)
 			throws WebException {
 		try {
 			ContractModel contract = contractService
@@ -87,10 +87,11 @@ public class PayController extends BaseController {
 						.getContract().getId());
 			}
 			model.put("contractModel", contractModel);
+			model.put("id", id);
 			if (contractModel.getContract().getType().getId() == 0) {
-				return "site/record/contract-info-zhaobiao";
+				return "site/contract/contract-info-zhaobiao";
 			} else {
-				return "site/record/contract-info";
+				return "site/contract/contract-info";
 			}
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
