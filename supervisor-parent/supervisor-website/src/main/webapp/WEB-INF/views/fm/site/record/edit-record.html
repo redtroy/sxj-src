@@ -168,7 +168,34 @@ $(document).ready(function() {
         }
         $("#imgPathHide").val(hideVal);
 	}
-	function modify(){
+	//甲方采购
+	function AcgModify(){
+		var memberIdB = $("#memberIdB").val();
+		var memberNameB = $("#memberNameB").val();
+		if(memberIdB==''){
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		if(memberNameB==''){
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		var imgPath = $("#imgPath").val();
+		if(imgPath==''){
+			messageInfo('请上传扫描件！');
+			return;
+		}
+		$.post("modify.htm",$('form').serialize(),function(data){
+			if (data.isOK=='ok'){
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"确认成功!");
+			}else{
+				messageInfo("修改失败");
+			}
+		  });
+	}
+	function zbmodify(){
 		$.post("modify.htm",$('form').serialize(),function(data){
 			if (data.isOK=='ok'){
 				succInfo(function(){
@@ -181,13 +208,20 @@ $(document).ready(function() {
 	}
 	
 	$(function(){
-		var url_ = "${basePath}autoComple.htm";
-		$("#memberNameB").bigAutocomplete({url:url_,callback:function(data){
-            $("#memberIdB").val(data.result);
-        }});
-		$("#memberNameA").bigAutocomplete({url:url_,callback:function(data){
-			$("#memberIdA").val(data.result);
-        }});
+		var urlA = "${basePath}autoCompleA.htm";
+		var urlB = "${basePath}autoCompleB.htm";
+		$("#memberNameA").keydown(function(){
+			$("#memberIdA").val("");
+		})
+		$("#memberNameB").keydown(function(){
+			$("#memberIdB").val("");
+		})
+		$("#memberNameA").bigAutocomplete({url:urlA,callback:function(data){
+	        $("#memberIdA").val(data.result);
+	    }});
+		$("#memberNameB").bigAutocomplete({url:urlB,callback:function(data){
+	        $("#memberIdB").val(data.result);
+	    }});
 	});
 </script>
 </head>
@@ -205,7 +239,8 @@ $(document).ready(function() {
 						</h1>
 					</div>
 					<!-- 甲方--(门窗厂采购) -->
-					<#if record.contractType!=0 && member.getMember().type==0>
+					<#if type==0>
+					<#if record.contractType.getId()!=0>
 					<form action="" method="post">
 						<input type="hidden" name="" id="id" value="${record.id}" />
 						<div class="contBox">
@@ -219,6 +254,9 @@ $(document).ready(function() {
 								<label>乙方</label><input class="input input-w270h30"
 									id="memberNameB" name="memberNameB"
 									value="${record.memberNameB}" />
+									<input type="hidden"
+									id="memberNameB" name="memberIdB"
+									value="${record.memberIdB}" />
 							</div>
 							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"
@@ -236,13 +274,47 @@ $(document).ready(function() {
 								</div>
 							</div>
 								<div class="item">
-									<label>&nbsp;</label><a href="javascript:modify();"
+									<label>&nbsp;</label><a href="javascript:AcgModify();"
 										class="button button-orange mr15">确定修改</a><a
 										href="javascript:history.go(-1)" class="button button-gray">取消</a>
 								</div>
 							</div>
 					</form>
-					</#if> <#if record.contractType!=0 && member.getMember().type!=0>
+					<#else>
+					<!-- 甲方 门窗厂 招标 -->
+					<form action="" method="post">
+						<div class="contBox">
+							<div class="item">
+								<label>备案号</label> ${record.recordNo}
+							</div>
+							<div class="item">
+								<label>甲方</label> <input class="input input-w270h30"
+									value="${record.memberNameA}" name="memberNameA" />
+							</div>
+							<div class="item">
+								<label>乙方</label>${record.memberNameB}
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <input type="hidden"
+									value="${record.imgPath}" name="imgPath" id="imgPath" />
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
+							<div class="item">
+								<label>上传合同扫描件</label>
+								<div class="ly-left">
+									 <input type="file" name="uploadFile" id="uploadFile" multiple="true" />
+								</div>
+							</div>
+							<div class="item">
+								<label>&nbsp;</label> <a href="javascript:zbmodify();"
+									class="button button-orange mr15">确定修改</a><a
+									href="javascript:history.go(-1)" class="button button-gray">取消</a>
+							</div>
+						</div>
+					</form>
+					</#if> </#if> 
+					<#if type!=0>
 					<!-- 乙方(玻璃厂/型材厂 采购) -->
 					<form action="" method="post">
 						<div class="contBox">
@@ -277,42 +349,9 @@ $(document).ready(function() {
 							</div>
 						</div>
 					</form>
-					</#if> <#if record.contractType==0 && member.getMember().type==0>
-					<!-- 甲方 门窗厂 招标 -->
-					<form action="" method="post">
-						<div class="contBox">
-							<div class="item">
-								<label>备案号</label> ${record.recordNo}
-							</div>
-							<div class="item">
-								<label>甲方</label> <input class="input input-w270h30"
-									value="${record.memberNameA}" name="memberNameA" />
-							</div>
-							<div class="item">
-								<label>乙方</label>${record.memberNameB}
-							</div>
-							<div class="item">
-								<label>&nbsp;</label> <input type="hidden"
-									value="${record.imgPath}" name="imgPath" id="imgPath" />
-								<div class="rollBox">
-									<ul id="carousel" class="elastislide-list"></ul>
-								</div>
-							<div class="item">
-								<label>上传合同扫描件</label>
-								<div class="ly-left">
-									 <input type="file" name="uploadFile" id="uploadFile" multiple="true" />
-								</div>
-							</div>
-							<div class="item">
-								<label>&nbsp;</label> <a href="javascript:modify();"
-									class="button button-orange mr15">确定修改</a><a
-									href="javascript:history.go(-1)" class="button button-gray">取消</a>
-							</div>
-						</div>
-					</form>
-					</#if>
+					</#if> 
 					<!-- 变更 -->
-					<#if record.type==1>
+					<#if record.type.getId()==1>
 					<form action="" method="post">
 						<div class="contBox">
 							<div class="item">
@@ -340,7 +379,7 @@ $(document).ready(function() {
 					</form>
 					</#if>
 					<!-- 补损 -->
-					<#if record.type==2>
+					<#if record.type.getId()==2>
 					<form action="" method="post">
 						<div class="contBox">
 							<div class="item">

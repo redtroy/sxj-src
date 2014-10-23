@@ -302,7 +302,7 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			map.put("record", record);// 备案类型
-			map.put("member", member);// 会员类型
+			map.put("type", member.getMember().getType().getId());// 会员类型
 			return "site/record/edit-record";
 		} catch (Exception e) {
 			throw new WebException(e);
