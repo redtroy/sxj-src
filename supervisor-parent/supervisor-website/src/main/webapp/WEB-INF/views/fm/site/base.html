@@ -287,6 +287,7 @@ var elastislideConfig={
 }
 var slideTimes=elastislideConfig.count;
 var refreshIviewer=function($viewer,src,$container){
+	$viewer.find("img").attr("src","");
 	if($viewer.children().length==0){
 		iviewer=$viewer.iviewer({
 			src : src,

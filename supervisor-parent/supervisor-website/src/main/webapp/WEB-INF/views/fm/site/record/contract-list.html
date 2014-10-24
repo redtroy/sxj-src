@@ -53,32 +53,15 @@ jQuery(document).ready(function($) {
 	
 	
 	
-	$('#linkcarousel').find("li").live("click",function(){
+	$('.elastislide-list').find("li").live("click",function(){
 		var el=$(this);
 		var imageSource = el.find("a").attr("data-image");
 		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
 		el.parent().children("li").removeClass("view");
-		el.addClass("view");
+		el.addClass("view"); 
 		preModal.hide();
 	});
 	
-	$('#bscarousel').find("li").live("click",function(){
-		var el=$(this);
-		var imageSource = el.find("a").attr("data-image");
-		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
-		el.parent().children("li").removeClass("view");
-		el.addClass("view");
-		preModal.hide();
-	});
-	
-	$('#bgcarousel').find("li").live("click",function(){
-		var el=$(this);
-		var imageSource = el.find("a").attr("data-image");
-		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
-		el.parent().children("li").removeClass("view");
-		el.addClass("view");
-		preModal.hide();
-	});
 	
 	$('.lnk-view').live('click',function(){
 		var imgPath=$(this).attr("imgPath");
