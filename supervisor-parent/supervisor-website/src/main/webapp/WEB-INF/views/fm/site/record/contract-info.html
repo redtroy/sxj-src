@@ -1,6 +1,6 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
-		
+		var start=0;
 		
 		$('.imagelist').each(function(){
 			var $this=$(this);
@@ -16,7 +16,7 @@
 				speed : 500,
 				easing : 'ease-in-out',
 				minItems : elastislideConfig.count,
-				start : 0,
+				start : start,
 				onClick : function( el, position, evt ) { 
 					return false; 
 				},
@@ -31,6 +31,14 @@
 					return false; },
 				onBeforeSlide : function() { return false; },
 				onAfterSlide : function() { 
+					if(start>0)
+						slideTimes=slideTimes+start;
+					$this.children("li:lt("+slideTimes+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					slideTimes=slideTimes+elastislideConfig.count;
 					return false; }
 			});
 		});
@@ -139,21 +147,25 @@
                   <div class="item">
                     <label>合同扫描件</label>
                     <#if arr??>
+                    <div class="rollBox">
                     <ul class="elastislide-list imagelist">
                     <#list arr  as imgPath>
                     <li><a href="javascript:void(0);" data-image="${b.imagePath}${imgPath}"><img data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
                     </#list>
                     </ul>
+                    </div>
                     <#else>
                     <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
                     </#if>
                     <!-- ---test -->
                     <#if arr??>
+                    <div class="rollBox">
                     <ul class="elastislide-list imagelist">
                     <#list arr  as imgPath>
                     <li><a href="javascript:void(0);" data-image="${b.imagePath}${imgPath}"><img data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
                     </#list>
                     </ul>
+                    </div>
                     <#else>
                     <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
                     </#if>
