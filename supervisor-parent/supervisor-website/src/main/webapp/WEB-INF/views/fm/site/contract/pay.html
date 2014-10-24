@@ -63,9 +63,11 @@ function pay(id){
 		 if (data.isOk=="ok"){
 			 alert("付款成功！")
 			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
 		 }else{
 			 alert("操作失败！")
 			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
 		 }
 	})
 }
@@ -75,9 +77,11 @@ function pay_ok(id){
 		 if (data.isOk=="ok"){
 			 alert("付款成功！")
 			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
 		 }else{
 			 alert("操作失败！")
 			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
 		 }
 	})
 }
