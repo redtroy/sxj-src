@@ -222,9 +222,11 @@ function dialogBox(confirm,message){
  }
 </script>
 </#macro> <#macro pageScript>
-<script src="${staticPath}js/jquery.paginate.js"></script>
+<!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
+<script src="${staticPath}js/jquery.pagination_2.js"></script>
+<link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
 <script>
-function loadPage(currentPage,totalPage,query){
+/**function loadPage(currentPage,totalPage,query){
 	if(totalPage>0){
 		$("#pager").attr("currentPage",currentPage);
 		$("#pager").attr("totalPage",totalPage);
@@ -251,12 +253,32 @@ function loadPage(currentPage,totalPage,query){
 }
 $("#pager").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage},query);
+});**/
+function loadPage(currentPage,totalPage) {
+	// 创建分页
+	$("#pager").attr("currentPage",currentPage);
+	$("#pager").attr("totalPage",totalPage);
+	$("#pager").pagination(totalPage, {
+		num_edge_entries: 1, //边缘页数
+		num_display_entries: 4, //主体页数
+		callback: function(page_index,jp){
+			query(page_index+1);
+			$("#pager").attr("currentPage",page_index+1);
+			return false;
+		},
+		current_page:currentPage-1,
+		items_per_page:1, //每页显示1项
+		prev_text: "前一页",
+		next_text: "后一页"
+	});
+ }
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage});
 });
 </script>
 </#macro> <#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
-<link href="${staticPath}style/uploadify.css" rel="stylesheet"
-	type="text/css" />
+<link href="${staticPath}style/uploadify.css" rel="stylesheet"ype="text/css" />
 <script>
 function loadUpload(id,url,isMulti,text,fn){
 	  $("#"+id).uploadify({
@@ -322,7 +344,7 @@ function classLoadUpload(text){
 	<script>$("#leftList").load("${basePath}menu.htm");</script>
 </div>
 </#macro> <#macro pager>
-<div id="pager" class="jPaginate" totalPage="${query.totalPage}"
+<div id="pager" class="pagination f12 mt10 ly-right" totalPage="${query.totalPage}"
 	currentPage="${query.currentPage}"></div>
 </#macro>
 

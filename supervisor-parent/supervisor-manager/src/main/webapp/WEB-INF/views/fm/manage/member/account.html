@@ -31,7 +31,6 @@ jQuery(document).ready(function($) {
    //根据ID删除子帐号
    function del(id){
 		var r=confirm("确认删除吗?");
-		
 	    if (r==true){
 	    	 $.post("${basePath}member/account/delAccount.htm",{id:id},function(data){
 	    		 if (data.isOK=='ok'){

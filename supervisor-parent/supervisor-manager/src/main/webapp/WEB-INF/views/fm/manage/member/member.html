@@ -50,9 +50,9 @@ function close_img(){
 	$("#img_close").hide();
 	$(".maskdivgen").hide();
 }
-    function query(page){
+   function query(page){
    	 	var params=$("#search_form").serialize();
-		if(page!=undefined){
+		if(page!=undefined||page!=null){
 		   params=params+"&currentPage="+page;
 	  	}
 		$.post("${basePath}member/memberList.htm",params,function(data){

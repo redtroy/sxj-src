@@ -36,7 +36,7 @@ function query(page){
 	   }
 	$.post("${basePath}system/account-list.htm",params,function(data){
 		var res=$(data).find("#rightBar");
-		var pager=$(data).find("#pager");
+		var pager=$(data).find("#rightBar").children("#pager");
 		$("#rightBar").empty();
 		$("#rightBar").append(res.html());
 		var totalPage=pager.attr("totalPage");
@@ -44,31 +44,11 @@ function query(page){
 		loadPage(currentPage,totalPage,query);
 	});
 }
-var page_account;
 function accountInfo(id){
-	page_account=id;
 	var params="accountNo="+id;
     $.get("${basePath}system/query_operation.htm",params,function(data){
 		$("#rightBar").empty();
 		$("#rightBar").html(data);
-		var pager=$(data).find("#pager");
-		var totalPage=pager.attr("totalPage");
-		var currentPage=pager.attr("currentPage");
-		loadPage(currentPage,totalPage,accountInfo_page);
-	});
-}
-function accountInfo_page(page){
-	var params="accountNo="+page_account;
-	 if(page!=undefined){
-		   params=params+"&currentPage="+page;
-	   }
-     $.get("${basePath}system/query_operation.htm",params,function(data){
-		$("#rightBar").empty();
-		$("#rightBar").html(data);
-		var pager=$(data).find("#pager");
-		var totalPage=pager.attr("totalPage");
-		var currentPage=pager.attr("currentPage");
-		loadPage(currentPage,totalPage,accountInfo_page);
 	});
 }
 
@@ -216,7 +196,7 @@ function toEdit(accountId){
     </div>
     <form id="edit_form" method="post" action="javascript:void(0);"></form>
     <@b.pager/>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+      <table id="res_table" border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%" />
         <col width="13%"/>
         <col width="15%"/>
