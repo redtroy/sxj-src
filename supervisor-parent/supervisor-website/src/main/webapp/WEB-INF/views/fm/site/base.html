@@ -52,7 +52,6 @@ function errorInfo(message){
 		    $("#dialog_close_span").die("click");
 		});
  }
- 
 function messageInfo(message){
 	var data=$("#message_info_div");
 	data.find("#message_hint").text(message);
@@ -80,7 +79,6 @@ function messageInfo(message){
 		    $("#dialog_close_span").die("click");
 		});
  }
- 
 function succInfo(confirm,message){
 	var data=$("#succ_info_div");
 	data.find("#message_succ").text(message);
@@ -221,7 +219,8 @@ function dialogBox(confirm,message){
 		});
  }
 </script>
-</#macro> <#macro pageScript>
+</#macro>
+<#macro pageScript>
 <!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
 <script src="${staticPath}js/jquery.pagination_2.js"></script>
 <link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
@@ -276,10 +275,67 @@ $("#pager").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage});
 });
 </script>
-</#macro> <#macro upload>
+</#macro>
+<#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet"ype="text/css" />
 <script>
+var refreshIviewer=function($viewer,src){
+	if($viewer.children().length==0){
+		iviewer=$viewer.iviewer({
+			src : src,
+			mousewheel : true
+		});
+	}else{
+		iviewer.iviewer('loadImage', src);
+	}
+	$(".modal-wrap").show();
+	$(".modal-header").show();
+	$("#viewer2").show();
+}
+
+var refreshElastislide=function($container,$carousel,data){
+	var start=0;
+	if(data instanceof Array){
+		for (var i = 0; i < data.length; i++) {
+			$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
+		}
+	}else{
+		$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a><p>'+$carousel.children().length+'</p></li>');
+		start=$carousel.children().length;
+	}
+	$container.empty();
+	$container.append($carousel);
+	$carousel.elastislide({
+		orientation : 'horizontal',
+		speed : 500,
+		easing : 'ease-in-out',
+		minItems : elastislideConfig.count,
+		start : start,
+		onClick : function( el, position, evt ) { 
+			return false; 
+		},
+		onReady : function() { 
+			$carousel.children("li:lt("+elastislideConfig.count+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			return false; },
+		onBeforeSlide : function() { return false; },
+		onAfterSlide : function() { 
+			if(start>0)
+				slideTimes=slideTimes+start;
+			$carousel.children("li:lt("+slideTimes+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			slideTimes=slideTimes+elastislideConfig.count;
+			return false; }
+	});
+}
+
 function loadUpload(id,url,isMulti,text,fn){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
