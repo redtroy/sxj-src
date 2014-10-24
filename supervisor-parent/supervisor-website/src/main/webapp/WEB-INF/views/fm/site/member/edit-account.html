@@ -150,7 +150,7 @@ jQuery(document).ready(function($) {
 	  dialogBox(function(){
 		  $.post("editState.htm",{id:id,state:stateId},function(data){
 			  if (data.isOK=='ok'){
-				  query();
+				  query($("#pager").attr("currentPage"));
 				  $("#state_div").hide();
 			   }else{
 					errorInfo(data);
