@@ -128,12 +128,8 @@ $(document).ready(function() {
 					}
 					hideVal += ","+ dataObj.fileIds;
 				}
-					 //var carousel=$('#bgcarousel').append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
-					 //$("#bgRollBox").empty().append(carousel);
-					// initSlide($('#bgcarousel'));
 					refreshElastislide($("#bgRollBox"),$("#bgcarousel"),dataObj);
 					$("#bgimgPath").val(hideVal);
-					//$("#bgimgShow").show();
 				
 			}
 		});
