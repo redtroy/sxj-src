@@ -178,9 +178,8 @@ function biangeng(recordId){
 	$('#bgRollBox').hide();
 	$("#bgRecordId").val("");
 	$('.maskdivgen').fadeIn(100);
-	$('.chanPic').slideDown(200);
+	$('#chanPic').slideDown(200);
 	$('#bgRecordId').val(recordId);
-	classLoadUpload("上传变更扫描文件");
 	
 }
 //补损
@@ -192,7 +191,6 @@ function busun(recordId){
 	$('.maskdivgen').fadeIn(100);
 	$('.suppPop').slideDown(200);
 	$('#bsRecordId').val(recordId);
-	classLoadUpload("上传补损扫描文件");
 	//获取批次
 	$.post("getBatch.htm", {recordId:recordId}, function(data) {
 		if (data.batch != '') {
