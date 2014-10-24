@@ -31,65 +31,64 @@
 
 <@b.pageScript/> <@b.errorInfo/> <@b.upload/>
 <script>
-
+var preModal;
 jQuery(document).ready(function($) {
-	$('.modal-header .close').click(function(){
-		$('.popView').slideUp(200);
-		$("#rollBox").empty();
-	})
+	$("#iviewerModal").find(".modal-header .close").click(function(){
+		$(this).parent().parent().hide();	
+		preModal.show();
+		
+	});
+	$("#chanPic").find(".modal-header .close").click(function(){
+		$(this).parent().parent().hide();
+		$(".maskdivgen").hide();
+	});
+	$("#bsModal").find(".modal-header .close").click(function(){
+		$(this).parent().parent().hide();
+		$(".maskdivgen").hide();
+	});
+	$("#linkModal").find(".modal-header .close").click(function(){
+		$(this).parent().parent().hide();
+		$(".maskdivgen").hide();
+	});
+	
+	
+	
+	$('#linkcarousel').find("li").live("click",function(){
+		var el=$(this);
+		var imageSource = el.find("a").attr("data-image");
+		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+		preModal.hide();
+	});
+	
+	$('#bscarousel').find("li").live("click",function(){
+		var el=$(this);
+		var imageSource = el.find("a").attr("data-image");
+		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+		preModal.hide();
+	});
+	
+	$('#bgcarousel').find("li").live("click",function(){
+		var el=$(this);
+		var imageSource = el.find("a").attr("data-image");
+		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+		preModal.hide();
+	});
+	
 	$('.lnk-view').live('click',function(){
 		var imgPath=$(this).attr("imgPath");
-		if(imgPath!=''){
+		if(imgPath){
        			$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
-       				if(imgPaths!=''){
-       				$('.popView').slideDown(200);
-       				$("#rollBox").append('<ul id="carousel" class="elastislide-list"></ul>');
-       				for (i=0;i<imgPaths.length;i++ ) { 
-       					var n =i+1;
-       					$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+imgPaths[i]+'"><img src="${b.imagePath}'+imgPaths[i]+'80x100.JPG" alt="" /></a><p>'+n+'</p></li>');
-       				}
-       					$( '.elastislide-list' ).elastislide({
-   							orientation : 'horizontal',
-   							speed : 500,
-   							easing : 'ease-in-out',
-   							minItems : 3,
-   							start : 0,
-   							onClick : function( el, position, evt ) { 
-   								$("#image-list").hide();
-   								var imageSource = el.find("a").attr("data-image");
-   								$("#viewer2").iviewer({
-   									src : imageSource,
-   									mousewheel : true
-   								});
-   								el.parent().children("li").removeClass("view");
-   								el.addClass("view");
-   								$("#viewer2").children("img").attr("src",imageSource);
-   	       						$(".viewer").show(function(){
-   	       							$('.modal-header .close').unbind("click");
-   	       							$('.modal-header .close').click(function(){
-   	       								$('.maskdivgen').fadeOut(100);
-   	       								$('.viewer').slideUp(200);
-   	       								$("#image-list").show(function(){
-   	       									$('.modal-header .close').unbind("click");
-   	       									$('.modal-header .close').click(function(){
-   	       										$('.popView').slideUp(200);
-   	       										$("#imgList").hide();
-   	       										$("#rollBox").empty();
-   	       									});
-   	       								});
-   	       							});
-   	       							
-   	       						});
-   								$(".viewer").show();
-   								$(".modal-header").show();
-   								$(".maskdivgen").show();
-   								return false; 
-   							},
-   							onReady : function() { return false; },
-   							onBeforeSlide : function() { return false; },
-   							onAfterSlide : function() { return false; }
-   						});
-       				
+       				if(imgPaths){
+       					refreshElastislide($("#linkRollBox"),$("#linkcarousel"),imgPaths);	
+       					$("#linkModal").show();
+       					$(".maskdivgen").show();
+       					preModal=$("#linkModal");
        				}else{
        					messageInfo("暂无合同副本!");
        				}
@@ -99,61 +98,10 @@ jQuery(document).ready(function($) {
 			}
 	});
 });
-//绑定图片滚动
-var initSlide=function(ele){
-	ele.elastislide({
-		orientation : 'horizontal',
-		speed : 500,
-		easing : 'ease-in-out', 
-		minItems : 2,
-		start : 0,
-		onReady : function() { return false; },
-		onBeforeSlide : function() { return false; },
-		onAfterSlide : function() { return false; }
-	});
-}
-//绑定图片事件
-var bindClick=function(el,imgPath){
-	el.live("click",function(){
-		var imageSource = $(this).find("a").attr("data-image");
-		var $li=$(this);
-		var $parent=$li.parent();
-		$("#viewer2").iviewer({
-			src : imageSource,
-			mousewheel : true,
-			onDelete:function(e){
-				var imgurl =$(this).children("img").attr("src");
-				var imgarr=imgurl.split("file-web/");
-				var delImg =imgPath.val();
-				delImg=delImg.replace(new RegExp(imgarr[1]),'');
-				imgPath.val(delImg);
-				$('.maskdivgen').fadeOut(100);
-				$('.viewer').slideUp(200);
-				$li.remove();
-				var arrays=delImg.split(",");
-				var index=0;
-				for(var i=0;i<arrays.length;i++){
-					if(arrays[i]){
-						$parent.find("p:eq("+index+")").empty().html(index+1);
-						index+=1;
-						
-					}
-				}
-			  }
-		});
-		el.parent().children("li").removeClass("view");
-		el.addClass("view");
-		$("#viewer2").children("img").attr("src",imageSource);
-		$(".viewer").show();
-		$(".modal-header").show();
-		$(".maskdivgen").show();
-	});
-	
-}
+
+
 ////上传图片
 $(document).ready(function() {
-	$("#bgcarousel").empty();
-	bindClick($("#bgcarousel li"),$("#bgimgPath"));
 	$("#bgFile").uploadify({
 			swf : '${basePath}upload/uploadify.swf',
 			uploader : "${basePath}upload.htm",
@@ -180,16 +128,15 @@ $(document).ready(function() {
 					}
 					hideVal += ","+ dataObj.fileIds;
 				}
-					 var carousel=$('#bgcarousel').append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
-					 $("#bgRollBox").empty().append(carousel);
-					 initSlide($('#bgcarousel'));
+					 //var carousel=$('#bgcarousel').append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
+					 //$("#bgRollBox").empty().append(carousel);
+					// initSlide($('#bgcarousel'));
+					refreshElastislide($("#bgRollBox"),$("#bgcarousel"),dataObj);
 					$("#bgimgPath").val(hideVal);
-					$("#bgimgShow").show();
+					//$("#bgimgShow").show();
 				
 			}
 		});
-	$("#bscarousel").empty();
-	bindClick($("#bscarousel li"),$("#bgimgPath"));
 	$("#bsFile").uploadify({
 			swf : '${basePath}upload/uploadify.swf',
 			uploader : "${basePath}upload.htm",
@@ -216,19 +163,19 @@ $(document).ready(function() {
 					}
 					hideVal += ","+ dataObj.fileIds;
 				}
-					 var carousel=$('#bscarousel').append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
-					 $("#bsRollBox").empty().append(carousel);
-					 initSlide($('#bscarousel'));
-					$("#bsimgPath").val(hideVal);
-					$("#bsimgShow").show();
+				refreshElastislide($("#bsRollBox"),$("#bscarousel"),dataObj);
+				$("#bsimgPath").val(hideVal);
+				$("#bscarousel").show();
 				
 			}
 		});
 })
 //显示变更记录
 function biangeng(recordId){
+	preModal=$("#chanPic");
 	$("#bgimgPath").val("");
 	$('#bgcarousel').empty();
+	$('#bgRollBox').hide();
 	$("#bgRecordId").val("");
 	$('.maskdivgen').fadeIn(100);
 	$('.chanPic').slideDown(200);
@@ -238,6 +185,7 @@ function biangeng(recordId){
 }
 //补损
 function busun(recordId){
+	preModal=$("#bsModal");
 	$("#bsimgPath").val("");
 	$('#bscarousel').empty();
 	$("#bsRecordId").val("");
@@ -337,20 +285,10 @@ function busunSeav(){
 				$("#rfid").text("");
 			}
 		})
-		$('.modal-header .close').click(function() {
-			$('.maskdivgen').fadeOut(100);
-			$('.chanPic').slideUp(200);
-			$("#bgimgShow").hide();
-		})
 		$('.button-box .button-gray').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.chanPic').slideUp(200);
 			$("#bgimgShow").hide();
-		})
-		$('.modal-header .close').click(function() {
-			$('.maskdivgen').fadeOut(100);
-			$('.suppPop').slideUp(200);
-			$("#bsimgShow").hide();
 		})
 		$('.item .button-gray').click(function() {
 			$('.maskdivgen').fadeOut(100);
@@ -613,12 +551,12 @@ function busunSeav(){
 	</div>
 	</div>
 	<@b.footer />
-	<div class="modal-wrap popDemo chanPic" style="display: none; width:700px;">
+	<div class="modal-wrap popDemo chanPic notViewer" id="chanPic" style="display: none; width:700px;">
 		<div class="modal-header">
 			<span class="close">关闭</span>
 		</div>
 		<div class="modal-body">
-		<div style="display:none" id="bgimgShow">
+		<div id="bgimgShow">
 		
 		<input type="hidden" value="" name="" id="bgRecordId" />
 			<input type="hidden" value="" name="imgPath" id="bgimgPath" />
@@ -637,7 +575,26 @@ function busunSeav(){
 			</div>
 		</div>
 	</div>
-	<div class="modal-wrap popDemo contPop suppPop" style="display: none;width:700px;">
+
+	<div class="modal-wrap popDemo chanPic notViewer" id="linkModal"
+		style="display: none; width: 700px;">
+		<div class="modal-header">
+			<span class="close">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="bgimgShow">
+				<div class="rollBox" id="linkRollBox">
+					<ul id="linkcarousel" class="elastislide-list"
+						style="height: 140px">
+
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal-wrap popDemo contPop suppPop notViewer" id="bsModal" style="display: none;width:700px;">
 		<div class="modal-header">
 			<span class="close">关闭</span>
 		</div>
@@ -677,7 +634,7 @@ function busunSeav(){
 		</form>
 	</div>
 	</div>
-	<div class="modal-wrap popDemo popView" id="image-list"
+	<div class="modal-wrap popDemo popView notViewer" id="image-list"
 		style="display: none; width: 680px;">
 		<div class="modal-header">
 			<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a>
@@ -687,11 +644,12 @@ function busunSeav(){
 		</div>
 	</div>
 	<div class="maskdivgen" style="display: none"></div>
-	<div class="viewer modal-wrap" style="display: none">
-		<div class="modal-header">
+	<div class="viewer modal-wrap" id="iviewerModal">
+		<div class="modal-header" style="display: none;">
 			<span class="close">关闭</span>
 		</div>
-		<div id="viewer2" class="modal-body"></div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
 	</div>
 	<div class="maskdivgen" style="display: none"></div>
 

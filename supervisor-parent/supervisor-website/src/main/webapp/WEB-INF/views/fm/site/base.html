@@ -280,7 +280,13 @@ $("#pager").ready(function(){
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet"ype="text/css" />
 <script>
-var refreshIviewer=function($viewer,src){
+var iviewer;
+
+var elastislideConfig={
+		count:6//当前显示数量
+}
+var slideTimes=elastislideConfig.count;
+var refreshIviewer=function($viewer,src,$container){
 	if($viewer.children().length==0){
 		iviewer=$viewer.iviewer({
 			src : src,
@@ -289,11 +295,15 @@ var refreshIviewer=function($viewer,src){
 	}else{
 		iviewer.iviewer('loadImage', src);
 	}
-	$(".modal-wrap").show();
-	$(".modal-header").show();
-	$("#viewer2").show();
+	if($container){
+		$container.show();
+		$container.find(".modal-header").show();
+	}else{
+		$(".modal-wrap").show();
+		$(".modal-header").show();
+	}
+	$viewer.show();
 }
-
 var refreshElastislide=function($container,$carousel,data){
 	var start=0;
 	if(data instanceof Array){
@@ -301,7 +311,10 @@ var refreshElastislide=function($container,$carousel,data){
 			$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
 		}
 	}else{
-		$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a><p>'+$carousel.children().length+'</p></li>');
+		var $li=$('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a></li>');
+		$carousel.append($li);
+		var $p=$('<p>'+$carousel.children().length+'</p>');
+		$li.append($p);
 		start=$carousel.children().length;
 	}
 	$container.empty();
@@ -321,6 +334,8 @@ var refreshElastislide=function($container,$carousel,data){
 				if($image.attr("data-image"))
 					$image.attr("src",$image.attr("data-image"));
 			});
+			if($carousel.children("li").length<elastislideConfig.count)
+				$(".elastislide-prev").hide();
 			return false; },
 		onBeforeSlide : function() { return false; },
 		onAfterSlide : function() { 
@@ -334,6 +349,8 @@ var refreshElastislide=function($container,$carousel,data){
 			slideTimes=slideTimes+elastislideConfig.count;
 			return false; }
 	});
+	$container.show();
+	
 }
 
 function loadUpload(id,url,isMulti,text,fn){
