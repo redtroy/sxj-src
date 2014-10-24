@@ -63,6 +63,7 @@ public class PayController extends BaseController {
 				map.put("state", "b");
 			}
 			map.put("payState", payState);
+			map.put("query", query);
 		} catch (Exception e) {
 			throw new WebException(e.getMessage());
 		}
