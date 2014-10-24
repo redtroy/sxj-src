@@ -43,12 +43,89 @@
 
         </style>
 <script>
+var iviewer;
+
+var elastislideConfig={
+		count:6//当前显示数量
+}
+var slideTimes=elastislideConfig.count;
 jQuery(document).ready(function($) {
+	$.ajaxSetup ({     
+	    cache: false 
+	}); 
+	
 	$('.modal-header .close').click(function() {
 		$('.maskdivgen').fadeOut(100);
 		$('.viewer').slideUp(200);
-	})
-})
+	});
+	
+	$('#carousel').find("li").live("click",function(){
+		var el=$(this);
+		var imageSource = el.find("a").attr("data-image");
+		refreshIviewer($("#viewer2"),imageSource);
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+	});
+	
+	$.post("${basePath}filesort.htm",{fileId:$("#imgPath").val()},function(imgPaths){
+		refreshElastislide($(".rollBox"),$("#carousel"),imgPaths);
+	});
+});
+var refreshIviewer=function($viewer,src){
+	if($viewer.children().length==0){
+		iviewer=$viewer.iviewer({
+			src : src,
+			mousewheel : true
+		});
+	}else{
+		iviewer.iviewer('loadImage', src);
+	}
+	$(".modal-wrap").show();
+	$(".modal-header").show();
+	$("#viewer2").show();
+}
+
+var refreshElastislide=function($container,$carousel,data){
+	var start=0;
+	if(data instanceof Array){
+		for (var i = 0; i < data.length; i++) {
+			$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
+		}
+	}else{
+		$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a><p>'+$carousel.children().length+'</p></li>');
+		start=$carousel.children().length;
+	}
+	$container.empty();
+	$container.append($carousel);
+	$carousel.elastislide({
+		orientation : 'horizontal',
+		speed : 500,
+		easing : 'ease-in-out',
+		minItems : elastislideConfig.count,
+		start : start,
+		onClick : function( el, position, evt ) { 
+			return false; 
+		},
+		onReady : function() { 
+			$carousel.children("li:lt("+elastislideConfig.count+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			return false; },
+		onBeforeSlide : function() { return false; },
+		onAfterSlide : function() { 
+			if(start>0)
+				slideTimes=slideTimes+start;
+			$carousel.children("li:lt("+slideTimes+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			slideTimes=slideTimes+elastislideConfig.count;
+			return false; }
+	});
+}
 $(document).ready(function() {
 	$(":file").uploadify({
 						swf : '${basePath}upload/uploadify.swf',
@@ -75,72 +152,12 @@ $(document).ready(function() {
 								}
 								hideVal += ","+ dataObj.fileIds;
 							}
-							var ul=$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>');
-							$(".rollBox").empty();
-							$(".rollBox").append(ul);
+							refreshElastislide($(".rollBox"),$("#carousel"),dataObj);
 							$("#imgPath").val(hideVal);
-							$( '#carousel' ).elastislide({
-								orientation : 'horizontal',
-								speed : 500,
-								easing : 'ease-in-out',
-								minItems : 3,
-								start : 0,
-								onClick : function( el, position, evt ) { 
-									return false; 
-								},
-								onReady : function() { return false; },
-								onBeforeSlide : function() { return false; },
-								onAfterSlide : function() { return false; }
-							});
 						}
 					});
 				});
-				var iviewer;
-$(document).ready(function() {
-	$('#carousel').find("li").live("click",function(){
-		var el=$(this);
-		var imageSource = el.find("a").attr("data-image");
-		if($("#viewer2").children().length==0){
-			iviewer=$("#viewer2").iviewer({
-				src : imageSource,
-				mousewheel : true
-			});
-		}else{
-			iviewer.iviewer('loadImage', imageSource);
-		}
-		el.parent().children("li").removeClass("view");
-		el.addClass("view");
-		//$("#viewer2").children("img").attr("src",imageSource);
-		$("#viewer2").show();
-		$(".modal-header").show();
-	});
-	var imgPath = $("#imgPath").val();
-	$.ajaxSetup ({     
-	    cache: false 
-	}); 
-	$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
-		var j =0;
-		for (var i = 0; i < imgPaths.length; i++) {
-			j=i+1;
-			$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+imgPaths[i]+'"><img src="${b.imagePath}'+imgPaths[i]+'80x100.JPG" alt="" /></a><p>'+j+'</p></li>');
-		}
-		
-		$( '.elastislide-list' ).elastislide({
-			orientation : 'horizontal',
-			speed : 500,
-			easing : 'ease-in-out',
-			minItems : 3,
-			start : 0,
-			onClick : function( el, position, evt ) { 
-				return false; 
-			},
-			onReady : function() { return false; },
-			onBeforeSlide : function() { return false; },
-			onAfterSlide : function() { return false; }
-		});
-		
-	});
-});
+				
 	function upload(data){
 	    var dataObj=eval("("+data+")");//转换为json对象 
 	    $("#imageList").attr("src","${b.imagePath}"+dataObj.fileIds+"100x120.JPG");
@@ -501,7 +518,10 @@ $(document).ready(function() {
 	</div>
 	</div>
 	<@b.footer />
-	<div>
+	<div class="viewer modal-wrap">
+	<div class="modal-header">
+				<span class="close">关闭</span>
+			</div>
 		<div id="viewer2" class="modal-body iviewer" style="width: 100%;display: none;top: 0px"></div>
 		</div>
 	<div class="maskdivgen" style="display: none"></div>
