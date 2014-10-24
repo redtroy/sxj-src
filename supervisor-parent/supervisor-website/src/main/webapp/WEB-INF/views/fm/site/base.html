@@ -52,7 +52,6 @@ function errorInfo(message){
 		    $("#dialog_close_span").die("click");
 		});
  }
- 
 function messageInfo(message){
 	var data=$("#message_info_div");
 	data.find("#message_hint").text(message);
@@ -80,7 +79,6 @@ function messageInfo(message){
 		    $("#dialog_close_span").die("click");
 		});
  }
- 
 function succInfo(confirm,message){
 	var data=$("#succ_info_div");
 	data.find("#message_succ").text(message);
@@ -221,10 +219,13 @@ function dialogBox(confirm,message){
 		});
  }
 </script>
-</#macro> <#macro pageScript>
-<script src="${staticPath}js/jquery.paginate.js"></script>
+</#macro>
+<#macro pageScript>
+<!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
+<script src="${staticPath}js/jquery.pagination_2.js"></script>
+<link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
 <script>
-function loadPage(currentPage,totalPage,query){
+/**function loadPage(currentPage,totalPage,query){
 	if(totalPage>0){
 		$("#pager").attr("currentPage",currentPage);
 		$("#pager").attr("totalPage",totalPage);
@@ -251,13 +252,90 @@ function loadPage(currentPage,totalPage,query){
 }
 $("#pager").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage},query);
+});**/
+function loadPage(currentPage,totalPage) {
+	// 创建分页
+	$("#pager").attr("currentPage",currentPage);
+	$("#pager").attr("totalPage",totalPage);
+	$("#pager").pagination(totalPage, {
+		num_edge_entries: 1, //边缘页数
+		num_display_entries: 4, //主体页数
+		callback: function(page_index,jp){
+			query(page_index+1);
+			$("#pager").attr("currentPage",page_index+1);
+			return false;
+		},
+		current_page:currentPage-1,
+		items_per_page:1, //每页显示1项
+		prev_text: "前一页",
+		next_text: "后一页"
+	});
+ }
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage});
 });
 </script>
-</#macro> <#macro upload>
+</#macro>
+<#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
-<link href="${staticPath}style/uploadify.css" rel="stylesheet"
-	type="text/css" />
+<link href="${staticPath}style/uploadify.css" rel="stylesheet"ype="text/css" />
 <script>
+var refreshIviewer=function($viewer,src){
+	if($viewer.children().length==0){
+		iviewer=$viewer.iviewer({
+			src : src,
+			mousewheel : true
+		});
+	}else{
+		iviewer.iviewer('loadImage', src);
+	}
+	$(".modal-wrap").show();
+	$(".modal-header").show();
+	$("#viewer2").show();
+}
+
+var refreshElastislide=function($container,$carousel,data){
+	var start=0;
+	if(data instanceof Array){
+		for (var i = 0; i < data.length; i++) {
+			$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
+		}
+	}else{
+		$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a><p>'+$carousel.children().length+'</p></li>');
+		start=$carousel.children().length;
+	}
+	$container.empty();
+	$container.append($carousel);
+	$carousel.elastislide({
+		orientation : 'horizontal',
+		speed : 500,
+		easing : 'ease-in-out',
+		minItems : elastislideConfig.count,
+		start : start,
+		onClick : function( el, position, evt ) { 
+			return false; 
+		},
+		onReady : function() { 
+			$carousel.children("li:lt("+elastislideConfig.count+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			return false; },
+		onBeforeSlide : function() { return false; },
+		onAfterSlide : function() { 
+			if(start>0)
+				slideTimes=slideTimes+start;
+			$carousel.children("li:lt("+slideTimes+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			slideTimes=slideTimes+elastislideConfig.count;
+			return false; }
+	});
+}
+
 function loadUpload(id,url,isMulti,text,fn){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
@@ -322,7 +400,7 @@ function classLoadUpload(text){
 	<script>$("#leftList").load("${basePath}menu.htm");</script>
 </div>
 </#macro> <#macro pager>
-<div id="pager" class="jPaginate" totalPage="${query.totalPage}"
+<div id="pager" class="pagination f12 mt10 ly-right" totalPage="${query.totalPage}"
 	currentPage="${query.currentPage}"></div>
 </#macro>
 

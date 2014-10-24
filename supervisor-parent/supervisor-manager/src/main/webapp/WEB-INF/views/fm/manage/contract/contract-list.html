@@ -102,8 +102,10 @@ function check(id){
 	if(confirm('确实要审核该合同吗?')){
 	$.post("check.htm",{contractId:id},function(data){
 		if (data.isOK == 'ok') {
-			  alert("成功")
-			  window.location.href="query.htm";
+			  alert("成功");
+			  var currentpage=$("#pager").attr("currentpage");
+			  query(currentpage);
+			  //window.location.href="query.htm";
 			}else{
 				alert("失败");
 			}	

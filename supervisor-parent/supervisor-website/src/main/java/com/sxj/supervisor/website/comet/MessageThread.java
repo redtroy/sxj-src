@@ -80,7 +80,8 @@ public class MessageThread extends Thread {
 				// messageList = (List<String>) cache;
 				// }
 				// }
-				SxjLogger.debug("Sending Message to Comet Client:" + cache,
+				SxjLogger.debug("Sending Message to Comet Client:" + cache
+						+ "Sending Message to Comet channel:" + channel,
 						getClass());
 				if (cache != null)
 					getEngine().sendToAll(channel, cache);

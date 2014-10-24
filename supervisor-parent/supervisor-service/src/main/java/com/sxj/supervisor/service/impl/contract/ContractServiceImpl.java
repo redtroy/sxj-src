@@ -754,6 +754,7 @@ public class ContractServiceImpl implements IContractService {
 			if (contractId != null) {
 				ce.setId(contractId);
 				ce.setState(state);
+				ce.setConfirmState(ContractSureStateEnum.noaffirm);
 				contractDao.updateContract(ce);
 			}
 			ContractEntity centity = contractDao.getContract(contractId);

@@ -22,17 +22,7 @@
 <script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
 <@b.validate/>
-<style type="text/css">
-.checkinfo{
-	border:1px solid #ccc; 
-	padding:2px 20px 2px 5px; 
-	color:#666; 
-	position:absolute;
-	display:none;
-	line-height:20px;
-	background-color:#fff;
-}
-</style>
+
 <script>
 var ul_validform;
 	jQuery(document).ready(function($) {
@@ -102,7 +92,7 @@ var ul_validform;
 		//alert(vTrClone.find("td :last").find('a').text());	
 		vTrClone.find("td :last").attr("onclick", "");
 		vTrClone.find("td :last").addClass("TrDel");
-		vTrClone.find("td :last").html("x");//更改按钮
+		vTrClone.find("td :last").html('<a class="lnk-green">x</a>');//更改按钮
 		//清空内容
 		vTrClone.find("td").eq(0).find("input").val("");
 		vTrClone.find("td").eq(1).find("input").val("");
@@ -131,7 +121,7 @@ var ul_validform;
 
 	$(function() {
 		$(".TrDel").live("click", function() {
-			$(this).parent().parent().remove();
+			$(this).parent().remove();
 		});
 	});
 	function saveContract() {

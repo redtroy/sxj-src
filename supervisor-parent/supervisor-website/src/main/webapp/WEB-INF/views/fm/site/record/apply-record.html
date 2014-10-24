@@ -115,7 +115,6 @@ var bindClick=function(el,imgPath){
 }
 $(document).ready(function() {
 	$("#zbcarousel").empty();
-	bindClick($("#zbcarousel li"));
 	bindClick($("#zbcarousel li"),$("#zbimgPath"));
 	$("#zbFile").uploadify({
 			swf : '${basePath}upload/uploadify.swf',
@@ -241,6 +240,11 @@ function  AcgApplyRecord(){
 		messageInfo('请输入招标合同号！');
 		return;
 	}
+	var cgimgPath = $("#cgimgPath").val();
+	if(cgimgPath==''){
+		messageInfo('请上传扫描件！');
+		return;
+	}
 	$.post("getContract.htm",{contractNo:refContractNo},function(data){
 		if(data.isOK=='ok'){
 			$.post("AcgApplyRecord.htm",$("#cgForm").serialize(),function(data){
@@ -267,6 +271,11 @@ function  zbApplyRecord(){
 		messageInfo('请输入甲方用户！');
 		return;
 	}
+	var zbimgPath = $("#zbimgPath").val();
+	if(zbimgPath==''){
+		messageInfo('请上传扫描件！');
+		return;
+	}
 	$.post("zbApplyRecord.htm",$("#zbForm").serialize(),function(data){
 		   if (data.isOK=='ok'){
 			   $("#recordNo").html(data.recordNo);
@@ -289,6 +298,11 @@ function  BzbApplyRecord(){
 	}
 	if(memberNameA==''){
 		messageInfo('请选择系统自动感应的用户！');
+		return;
+	}
+	var bcgimgPath = $("#bcgimgPath").val();
+	if(bcgimgPath==''){
+		messageInfo('请上传扫描件！');
 		return;
 	}
 	$.post("BzbApplyRecord.htm",$("#BcgForm").serialize(),function(data){
@@ -322,6 +336,12 @@ function upload(data)
 $(function(){
 	var urlA = "${basePath}autoCompleA.htm";
 	var urlB = "${basePath}autoCompleB.htm";
+	$("#memberNameA").keydown(function(){
+		$("#memberIdA").val("");
+	})
+	$("#memberNameB").keydown(function(){
+		$("#memberIdB").val("");
+	})
 	$("#memberNameA").bigAutocomplete({url:urlA,callback:function(data){
         $("#memberIdA").val(data.result);
     }});
