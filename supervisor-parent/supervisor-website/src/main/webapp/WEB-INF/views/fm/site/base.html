@@ -52,7 +52,6 @@ function errorInfo(message){
 		    $("#dialog_close_span").die("click");
 		});
  }
- 
 function messageInfo(message){
 	var data=$("#message_info_div");
 	data.find("#message_hint").text(message);
@@ -80,7 +79,6 @@ function messageInfo(message){
 		    $("#dialog_close_span").die("click");
 		});
  }
- 
 function succInfo(confirm,message){
 	var data=$("#succ_info_div");
 	data.find("#message_succ").text(message);
@@ -221,7 +219,8 @@ function dialogBox(confirm,message){
 		});
  }
 </script>
-</#macro> <#macro pageScript>
+</#macro>
+<#macro pageScript>
 <!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
 <script src="${staticPath}js/jquery.pagination_2.js"></script>
 <link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
@@ -276,10 +275,87 @@ $("#pager").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage});
 });
 </script>
-</#macro> <#macro upload>
+</#macro>
+<#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet"ype="text/css" />
 <script>
+var iviewer;
+
+var elastislideConfig={
+		count:6//当前显示数量
+}
+var slideTimes=elastislideConfig.count;
+var refreshIviewer=function($viewer,src,$container){
+	$viewer.find("img").attr("src","");
+	if($viewer.children().length==0){
+		iviewer=$viewer.iviewer({
+			src : src,
+			mousewheel : true
+		});
+	}else{
+		iviewer.iviewer('loadImage', src);
+	}
+	if($container){
+		$container.show();
+		$container.find(".modal-header").show();
+	}else{
+		$(".modal-wrap").show();
+		$(".modal-header").show();
+	}
+	$viewer.show();
+}
+var refreshElastislide=function($container,$carousel,data,empty){
+	var start=0;
+	if(empty)
+		$carousel.empty();
+	if(data instanceof Array){
+		for (var i = 0; i < data.length; i++) {
+			$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
+		}
+	}else{
+		var $li=$('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a></li>');
+		$carousel.append($li);
+		var $p=$('<p>'+$carousel.children().length+'</p>');
+		$li.append($p);
+		start=$carousel.children().length;
+	}
+	$container.empty();
+	$container.append($carousel);
+	$carousel.elastislide({
+		orientation : 'horizontal',
+		speed : 500,
+		easing : 'ease-in-out',
+		minItems : elastislideConfig.count,
+		start : start,
+		onClick : function( el, position, evt ) { 
+			return false; 
+		},
+		onReady : function() { 
+			$carousel.children("li:lt("+elastislideConfig.count+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			if($carousel.children("li").length<elastislideConfig.count)
+				$(".elastislide-prev").hide();
+			return false; },
+		onBeforeSlide : function() { return false; },
+		onAfterSlide : function() { 
+			if(start>0)
+				slideTimes=slideTimes+start;
+			$carousel.children("li:lt("+slideTimes+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			slideTimes=slideTimes+elastislideConfig.count;
+			return false; }
+	});
+	$container.show();
+	
+}
+
 function loadUpload(id,url,isMulti,text,fn){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
@@ -295,30 +371,6 @@ function loadUpload(id,url,isMulti,text,fn){
 	        	fn(data);
 	        }
 	        
-	    });
-} 
-function classLoadUpload(text){
-	  $(":file").uploadify({
-	        swf: '${basePath}upload/uploadify.swf',
-	        uploader: "${basePath}upload.htm",
-	        fileTypeExts: '*.gif; *.jpg; *.png',
-	        auto: true,
-	        multi: true,
-	        simUploadLimit:1,
-	        height:30,
-	        width:100,
-	        buttonText:text,
-	        onUploadSuccess : function(file, data, response) {
-	        	var dataObj=eval("("+data+")");//转换为json对象 
-	        	$(this.button).parent(".uploadify").siblings(".imageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"100x120.JPG' alt='' />");
-	        	  var hideVal= $(this.button).parent(".uploadify").siblings(".imgPathHide ").val();
-	        	    if(hideVal==""){
-	        	    	hideVal+=dataObj.fileIds;
-	        	    }else{
-	        	    	hideVal+=","+dataObj.fileIds;
-	        	    }
-	        	    $(this.button).parent(".uploadify").siblings(".imgPathHide ").val(hideVal);
-	        }
 	    });
 } 
 </script>

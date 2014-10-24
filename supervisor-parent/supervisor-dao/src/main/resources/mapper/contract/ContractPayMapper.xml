@@ -6,7 +6,8 @@
 	<resultMap id="ContractPayResultMap"
 		type="com.sxj.supervisor.entity.pay.PayRecordEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="memberNo_A" column="MEMBER_NO_A" jdbcType="VARCHAR" />
+		<result property="memberNo_B" column="MEMBER_NO_B" jdbcType="VARCHAR" />
 		<result property="payNo" column="PAY_NO" jdbcType="VARCHAR"
 			javaType="String" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR"
@@ -15,6 +16,7 @@
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 		<result property="content" column="CONTENT" jdbcType="VARCHAR" />
 		<result property="payAmount" column="PAY_AMOUNT" jdbcType="INTEGER" />
+		<result property="payReal" column="PAY_REAL" jdbcType="INTEGER" />
 		<result property="payDate" column="PAY_DATE" jdbcType="TIMESTAMP" />
 		<result property="state" column="STATE" jdbcType="INTEGER"/>
 		

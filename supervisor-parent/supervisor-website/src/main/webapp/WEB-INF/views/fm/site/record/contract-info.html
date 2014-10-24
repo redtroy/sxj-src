@@ -1,4 +1,51 @@
-	
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var start=0;
+		
+		$('.imagelist').each(function(){
+			var $this=$(this);
+			$this.find("li").live("click",function(){
+				var el=$(this);
+				var imageSource = el.find("a").attr("data-image");
+				refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+				el.parent().children("li").removeClass("view");
+				el.addClass("view");
+				preModal=null;
+			});
+			$(this).elastislide({
+				orientation : 'horizontal',
+				speed : 500,
+				easing : 'ease-in-out',
+				minItems : elastislideConfig.count,
+				start : start,
+				onClick : function( el, position, evt ) { 
+					return false; 
+				},
+				onReady : function() { 
+					$this.children("li:lt("+elastislideConfig.count+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					if($this.children("li").length<elastislideConfig.count)
+						$(".elastislide-prev").hide();
+					return false; },
+				onBeforeSlide : function() { return false; },
+				onAfterSlide : function() { 
+					if(start>0)
+						slideTimes=slideTimes+start;
+					$this.children("li:lt("+slideTimes+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					slideTimes=slideTimes+elastislideConfig.count;
+					return false; }
+			});
+		});
+		
+	});
+	</script>
 	<!-- 合同详情 -->
 	<td colspan="12">
 		<div class="contInfo tl">
@@ -101,15 +148,35 @@
                   <div class="item">
                     <label>合同扫描件</label>
                     <#if arr??>
+<<<<<<< HEAD
                    <#assign arr=(contractModel.contract.imgPath?split(","))>
                      <#list arr  as imgPath>
                     <img src="${b.imagePath}${imgPath}" width="80" height="107" />
+=======
+                    <div class="rollBox">
+                    <ul class="elastislide-list imagelist">
+                    <#list arr  as imgPath>
+                    <li><a href="javascript:void(0);" data-image="${b.imagePath}${imgPath}"><img data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+>>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
                     </#list>
+                    </ul>
+                    </div>
                     <#else>
                     <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
                     </#if>
-                    
+                    <!-- ---test -->
+                    <#if arr??>
+                    <div class="rollBox">
+                    <ul class="elastislide-list imagelist">
+                    <#list arr  as imgPath>
+                    <li><a href="javascript:void(0);" data-image="${b.imagePath}${imgPath}"><img data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+                    </#list>
+                    </ul>
                     </div>
+                    <#else>
+                    <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+                    </#if>
+                    <!-- end -->
                   <span class="item">
                   <label>关联招标合同号</label>
                   ${contractModel.contract.refContractNo}</span>

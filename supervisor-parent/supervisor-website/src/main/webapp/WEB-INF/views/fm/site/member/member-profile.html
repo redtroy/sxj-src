@@ -15,6 +15,7 @@
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <@b.validate/>
 <@b.errorInfo/>
+<@b.upload/>
 <script>
 var validform;
 jQuery(document).ready(function($) {
@@ -34,11 +35,7 @@ jQuery(document).ready(function($) {
 window.onload = function() {
 	$(".demo-image").click(function(){
 		var imageSource=$(this).attr("data-image");
-		$("#viewer2").iviewer({
-                      src: imageSource,
-					  mousewheel: true
-        });
-		$("#viewer2 img").attr("src",imageSource);
+		refreshIviewer($("#viewer2"),imageSource,$("#img_close"));
 	});
 }
 jQuery(document).ready(function($) {

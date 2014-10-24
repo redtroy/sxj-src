@@ -8,21 +8,39 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
-<script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.pageScript/>
 <script>
 jQuery(document).ready(function($) {
-	$('.btn-pay').click(function(){
-		$('.payPop').slideDown(200);
+	
+	$('.btn-pay').live("click",function(){
+		var obj=$(this).attr("pay_id");
+		$('#'+obj).slideDown(200);
 	})
-	$('.btn-ok').click(function(){
-		$('.payPop').slideUp(200);
+	$('.button-gray').live("click",function(){
+		var obj=$(this).attr("pay_id");
+		$('#'+obj).slideUp(200);
 	})
+	
 });
 function query(page){
+	var params=$("#serch_div").find(":input").serialize();
+	if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	}
+	$.post("paylist.htm",params,function(data){
+		var tableList=$(data).find(".tabList");
+		var pager=$(data).find("#pager");
+		$(".tabList").empty();
+		$(".tabList").append(tableList.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	})
 	
 }
+//读取详细信息
 function loadInfo(contractNo,id) {
 	var temp= $("#info_"+id).is(":hidden");//是否隐藏 
 	if (temp){
@@ -33,9 +51,39 @@ function loadInfo(contractNo,id) {
 	  $("#info_" + id).html('');
 	}
 }
-function closeDiv(id){
+function closeContract(id){
 	 $("#info_" + id).hide();
 	 $("#info_" + id).html('');
+}
+//支付
+function pay(id){
+	var payReal=$("#pay_info_"+id).find(":input").val();
+	payReal=payReal*100;
+	$.post("pay.htm",{id:id,payReal:payReal},function(data){
+		 if (data.isOk=="ok"){
+			 alert("付款成功！")
+			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
+		 }else{
+			 alert("操作失败！")
+			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
+		 }
+	})
+}
+//确认支付
+function pay_ok(id){
+	$.post("pay_ok.htm",{id:id},function(data){
+		 if (data.isOk=="ok"){
+			 alert("付款成功！")
+			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
+		 }else{
+			 alert("操作失败！")
+			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
+		 }
+	})
 }
 </script>
 </head>
@@ -52,7 +100,7 @@ function closeDiv(id){
   <span class="title fontYH f20 fb">付款管理</span></h1>
 </div>
 <div class="contBox">
-  <div class="searBox f12 mb10">
+  <div class="searBox f12 mb10" id="serch_div">
   <p class="pt0 mt0 mb5">
     支付单号<input type="text" class="input" name="payNo" value="">
     合同号<input type="text" class="input" name="contractNo" value="">
@@ -61,15 +109,15 @@ function closeDiv(id){
     </p>
     <p class="mb0 pb0">
   <#if (state=="a")>
-      付款状态<select name="select">
-		    <option selected="selected" name="state">全部</option>
+      付款状态<select name="state">
+		    <option selected="selected">全部</option>
 		    <#list payState as ps>
             <option value="${ps.ordinal()}">${ps.getName_a()}</option>
             </#list>
           </select>
    <#else>
-        付款状态<select name="select">
-		    <option selected="selected" name="state">全部</option>
+        付款状态<select name="state">
+		    <option selected="selected">全部</option>
             <#list payState as ps>
             <option value="${ps.ordinal()}">${ps.getName_b}</option>
             </#list>
@@ -78,6 +126,7 @@ function closeDiv(id){
           <button class="button button-search" onclick="query();return false;">查询</button></p>
 </div>
   <div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有一笔合同里有待支付的款项</div>
+  <@b.pager/>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList">
   <col width="10%" />
   <col width="10%" />
@@ -112,17 +161,17 @@ function closeDiv(id){
       <td>${model.payNo}</td>
       <#if (model.state.ordinal()==0)>
           <#if (state=="a")>
-           <td><button class="button button-orange btn-pay mr10">支付</button>
+           <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button>
            <button class="button button-orange">融资</button>
-           <div class="modal-wrap payPop" style="display:none;">
+           <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
               <div class="modal-body">
                 <div class="ly-clearFix">
                  <label class="mr5">支付金额</label>
                  <input name="input" type="text" value="" class="input" />
                 </div>
               <div class="mt15">
-              <button class="button button-red btn-ok mr5">确认</button>
-              <button class="button button-gray">取消</button>
+              <button class="button button-red btn-ok mr5" onclick="pay('${model.id}');return false;">确认</button>
+              <button class="button button-gray" pay_id="pay_info_${model.id}">取消</button>
               </div>
             </div>
             </div></td>
@@ -139,16 +188,16 @@ function closeDiv(id){
              <#if (state=="a")>
                 <td><span class="state normal">乙方确认中</span></td>
             <#else>
-               <td><button class="button button-red btn-pay">确认收款</button>
-               <div style="display:none;" class="modal-wrap payPop">
+               <td><button class="button button-red btn-pay" pay_id="pay_info_${model.id}" >确认收款</button>
+               <div style="display:none;" class="modal-wrap payPop" id="pay_info_${model.id}">
                  <div class="modal-body">
                    <div class="ly-clearFix">
                     <label class="mr5">支付金额</label>
-                   <span class="color-red fb">${model.payAmount/100}元</span>
+                   <span class="color-red fb">${model.payReal/100}元</span>
                   </div>
                   <div class="mt15">
-                      <button class="button button-red btn-ok mr5">确认</button>
-                      <button class="button button-gray">取消</button>
+                      <button class="button button-red btn-ok mr5" onclick="pay_ok('${model.id}');return false;">确认</button>
+                      <button class="button button-gray" pay_id="pay_info_${model.id}">取消</button>
                    </div>
                   </div>
                </div></td>

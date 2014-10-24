@@ -32,10 +32,16 @@ public class PayRecordEntity implements Serializable {
 	private String id;
 
 	/**
-	 * 会员ID
+	 * 甲方会员ID
 	 */
-	@Column(name = "MEMBER_NO")
-	private String memberNo;
+	@Column(name = "MEMBER_NO_A")
+	private String memberNo_A;
+
+	/**
+	 * 乙方会员ID
+	 */
+	@Column(name = "MEMBER_NO_B")
+	private String memberNo_B;
 
 	/**
 	 * 支付单号
@@ -68,6 +74,12 @@ public class PayRecordEntity implements Serializable {
 	private Long payAmount;
 
 	/**
+	 * 实际支付金额
+	 */
+	@Column(name = "PAY_REAL")
+	private Long payReal;
+
+	/**
 	 * 支付日期
 	 */
 	@Column(name = "PAY_DATE")
@@ -85,6 +97,14 @@ public class PayRecordEntity implements Serializable {
 	@Column(name = "STATE")
 	private PayStageEnum state;
 
+	public Long getPayReal() {
+		return payReal;
+	}
+
+	public void setPayReal(Long payReal) {
+		this.payReal = payReal;
+	}
+
 	public String getContent() {
 		return content;
 	}
@@ -93,12 +113,20 @@ public class PayRecordEntity implements Serializable {
 		this.content = content;
 	}
 
-	public String getMemberNo() {
-		return memberNo;
+	public String getMemberNo_A() {
+		return memberNo_A;
 	}
 
-	public void setMemberNo(String memberNo) {
-		this.memberNo = memberNo;
+	public void setMemberNo_A(String memberNo_A) {
+		this.memberNo_A = memberNo_A;
+	}
+
+	public String getMemberNo_B() {
+		return memberNo_B;
+	}
+
+	public void setMemberNo_B(String memberNo_B) {
+		this.memberNo_B = memberNo_B;
 	}
 
 	public String getId() {
