@@ -75,8 +75,9 @@
 	
 	function save(){
 		var id =$("#recordId").val();
+		var message = $("#message").val();
 		var contractId = $("#contractId").val();
-		$.post("confirmRecord.htm",{recordId:id,contractId:contractId},function(data){
+		$.post("confirmRecord.htm",{recordId:id,contractId:contractId,message:message},function(data){
 			   if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -105,6 +106,7 @@
 						<h2 class="fontYH f18 tc mb20">门窗招标合同</h2>
 						<input type="hidden" id="recordId" value="${recordId}" />
 						<input type="hidden" id="contractId" value="${contractModel.contract.id}" />
+						<input type="hidden" id="message" value="${message}" />
 						<div class="contInfo">
 							<div class="info ly-clearFix">
 								<div class="item">

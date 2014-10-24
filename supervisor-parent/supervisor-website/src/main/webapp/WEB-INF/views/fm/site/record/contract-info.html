@@ -101,6 +101,7 @@
                   <div class="item">
                     <label>合同扫描件</label>
                     <#if arr??>
+                   <#assign arr=(contractModel.contract.imgPath?split(","))>
                      <#list arr  as imgPath>
                     <img src="${b.imagePath}${imgPath}" width="80" height="107" />
                     </#list>

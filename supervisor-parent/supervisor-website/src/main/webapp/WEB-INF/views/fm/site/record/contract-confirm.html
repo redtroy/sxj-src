@@ -20,10 +20,17 @@
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
 <@b.errorInfo/>
 <script>
+jQuery(document).ready(function($) {
+	$('.modal-header .close').click(function() {
+		$('.maskdivgen').fadeOut(100);
+		$('.viewer').slideUp(200);
+	})
+})
 	function save(){
 		var id =$("#recordId").val();
 		var contractId = $("#contractId").val();
-		$.post("confirmRecord.htm",{recordId:id,contractId:contractId},function(data){
+		var message = $("#message").val();
+		$.post("confirmRecord.htm",{recordId:id,contractId:contractId,message:message},function(data){
 			   if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -96,6 +103,7 @@
 <div class="contInfo tl">
 <input type="hidden" id="recordId" value="${recordId}" />
 <input type="hidden" id="contractId" value="${contractModel.contract.id}" />
+<input type="hidden" id="message" value="${message}" />
 
                   <div class="info ly-clearFix">
                     <div class="item">
@@ -155,8 +163,8 @@
                          <td>${item.productName}</td>
 			              <td>${item.productModel}</td>
 			              <td>${item.quantity}</td>
-			              <td>${item.price}</td>
-			              <td>${item.amount}</td>
+			              <td>${item.price/100}</td>
+			              <td>${item.amount/100}</td>
 			              <td>${item.remarks}</td>
                       </tr>
                        </#list>
@@ -165,7 +173,7 @@
                         <td>&nbsp;</td>
                         <td>约${n}</td>
                         <td>&nbsp;</td>
-                        <td>${m}元</td>
+                        <td>${m/100}元</td>
                         <td class="tl">
                         <#assign arr=(contractModel.contract.imgPath?split(","))>
                  		本合同附件清单共${arr?size}页</td>
@@ -343,7 +351,7 @@
                 </div>
 <div class="item mt10">
   <label>&nbsp;</label>
-  <a href="javascript:save();" class="button button-orange mr15">确认合同信息</a><a href="#" class="button button-gray">取消</a></div>
+  <a href="javascript:save();" class="button button-orange mr15">确认合同信息</a><a href="query.htm" class="button button-gray">取消</a></div>
 </div>
 
 </div>

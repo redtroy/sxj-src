@@ -57,13 +57,9 @@ function closeContract(id){
 	$("#info"+id).html("");
 	$("#info"+id).hide();
 }
-function stateLog(contractNo){
-	$("#stateLog"+contractNo).load("stateLog.htm?contractNo="+contractNo);
-	$("#stateLog"+contractNo).show();
-}
-function closeStateLog(contractNo){
-	$("#stateLog"+contractNo).html("");
-	$("#stateLog"+contractNo).hide();
+function stateLog(id,contractNo){
+	$("#info"+id).load("stateLog.htm?contractNo="+contractNo+"&id="+id);
+	$("#info"+id).show();
 }
 function query(page){
 	var params=$("#search_form").serialize();
@@ -204,7 +200,7 @@ function check(id){
        <#if list?exists>
       <#list list as model>
         <td><a href="javascript:loadInfo('${model.contract.id}');"  class="lnk-blue">${model.contract.contractNo}</a></td>
-        <td><a href="javascript:stateLog('${model.contract.contractNo}')" class="lnk-blue">${model.contract.stateLog}</a></td>
+        <td><a href="javascript:stateLog('${model.contract.id}','${model.contract.contractNo}')" class="lnk-blue">${model.contract.stateLog}</a></td>
         <td>${model.contract.memberNameA}</td>
         <td>${model.contract.memberNameB}</td>
         <td>${model.contract.type.getName()}</td>

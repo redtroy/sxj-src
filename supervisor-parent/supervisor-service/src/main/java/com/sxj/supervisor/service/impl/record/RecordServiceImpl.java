@@ -19,6 +19,7 @@ import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
@@ -252,13 +253,17 @@ public class RecordServiceImpl implements IRecordService {
 				RecordEntity re = getRecordByNo(recordNo.trim());
 				RecordEntity rEntity = new RecordEntity();
 				rEntity.setId(re.getId());
-				if (con.getConfirmState().getId() == 0) {
-					if (state.getId() == 2) {
-						rEntity.setConfirmState(RecordConfirmStateEnum.confirmedA);
-					} else if (state.getId() == 3) {
-						rEntity.setConfirmState(RecordConfirmStateEnum.confirmedB);
-					}
-				} else {
+				if(re.getContractType().getId()!=0){
+					if (con.getConfirmState().getId() == 0) {
+						if (state.getId() == 2) {
+							rEntity.setConfirmState(RecordConfirmStateEnum.confirmedA);
+						} else if (state.getId() == 3) {
+							rEntity.setConfirmState(RecordConfirmStateEnum.confirmedB);
+						}
+					} else {
+						rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+					}	
+				}else{
 					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
 				}
 				recordDao.updateRecord(rEntity);
@@ -334,7 +339,7 @@ public class RecordServiceImpl implements IRecordService {
 			recordDao.addRecord(record);
 			// 更改合同关联所有的备案状态
 			String contractNo = record.getContractNo();
-			contractService.getContractByContractNo(contractNo);
+			ContractModel cm=contractService.getContractByContractNo(contractNo);
 			RecordQuery query = new RecordQuery();
 			query.setContractNo(contractNo);
 			query.setRecordType(RecordTypeEnum.contract.getId());
@@ -343,6 +348,16 @@ public class RecordServiceImpl implements IRecordService {
 				recordEntity.setConfirmState(RecordConfirmStateEnum.accepted);
 				recordDao.updateRecord(recordEntity);
 			}
+			if(cm!=null){
+				//变更合同状态
+				ContractEntity ce= cm.getContract();	
+				ContractEntity centity=new ContractEntity();
+				centity.setId(ce.getId());
+				centity.setState(ContractStateEnum.approval);
+				centity.setConfirmState(ContractSureStateEnum.noaffirm);
+				contractDao.updateContract(centity);
+			}
+			
 		} catch (Exception e) {
 			throw new ServiceException("更新备案错误", e);
 		}

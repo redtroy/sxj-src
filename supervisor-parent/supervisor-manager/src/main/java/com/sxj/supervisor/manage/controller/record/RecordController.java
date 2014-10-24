@@ -133,7 +133,7 @@ public class RecordController extends BaseController {
 	}
 
 	/**
-	 * 办绑定备案页面
+	 * 绑定备案页面
 	 * 
 	 * @param map
 	 * @param id
@@ -172,18 +172,48 @@ public class RecordController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/queryRecordNo")
-	public @ResponseBody Map<String, Object> queryRecordNo(RecordQuery query) {
+	public @ResponseBody Map<String, Object> queryRecordNo(RecordQuery query,String recordId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<RecordEntity> list = recordService.queryRecord(query);
-		ContractModel cm = contractService.getContractByContractNo(query
-				.getContractNo());
-		ContractQuery contractQuery = new ContractQuery();
-		contractQuery.setContractNo(query.getContractNo());
-		map.put("record", list.get(0));
-		map.put("refContractNo", cm.getContract().getRefContractNo());
+		
+		ContractModel cm =contractService.getContractByContractNo(query.getContractNo());
+		if(cm!=null){
+			RecordEntity re =recordService.getRecord(recordId);//申请绑定备案
+			String recordNo =cm.getContract().getRecordNo();
+			if (recordNo!=null) {
+				String[] recordNoArr=recordNo.split(",");
+				if(recordNoArr.length<2){
+					for (String record : recordNoArr) {
+						RecordEntity recordEntity=recordService.getRecordByNo(record.trim());
+						if(re.getFlag().getId()==0){
+							//甲方备案
+							if(recordEntity.getFlag().getId()==0){
+								map.put("ok", "jfyba");
+							}else{
+								map.put("ok", "ok");
+								map.put("record", recordEntity);
+							}
+						}else{
+							//乙方备案
+							if(recordEntity.getFlag().getId()==1){
+								map.put("ok", "yfyba");
+							}else{
+								map.put("ok", "ok");
+								map.put("record", recordEntity);
+							}
+						}	
+					}
+				}else{
+					map.put("ok", "htyba");
+				}
+			}
+			
+		}else{
+			map.put("ok", "no");
+		}
 		return map;
 	}
 
+	
 	/**
 	 * 根据ID删除备案
 	 * 

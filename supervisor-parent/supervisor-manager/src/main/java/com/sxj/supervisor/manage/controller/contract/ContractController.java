@@ -86,7 +86,7 @@ public class ContractController extends BaseController {
 	}
 
 	@RequestMapping("stateLog")
-	public String getStateLog(ModelMap model, String contractNo) {
+	public String getStateLog(ModelMap model, String contractNo,String id) {
 		RecordQuery rq = new RecordQuery();
 		rq.setContractNo(contractNo);
 		rq.setSort("desc");
@@ -122,6 +122,7 @@ public class ContractController extends BaseController {
 			}
 		}
 		model.put("stateLog", slList);
+		model.put("id", id);
 		model.put("contractNo", contractNo);
 
 		return "manage/contract/contract-stateLog";

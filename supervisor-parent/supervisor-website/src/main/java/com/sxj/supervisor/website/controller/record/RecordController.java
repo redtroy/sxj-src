@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -302,7 +303,7 @@ public class RecordController extends BaseController {
 			RecordEntity record = recordService.getRecord(recordId);
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			if(record.getType().getId()==2){
+			if (record.getType().getId() == 2) {
 				String batch = recordService.getBatch(recordId);
 				map.put("batch", batch);
 			}
@@ -385,7 +386,7 @@ public class RecordController extends BaseController {
 	 */
 	@RequestMapping("confirm")
 	public String confirm(ModelMap model, String contractNo, String recordId,
-			HttpSession session) throws WebException {
+			HttpSession session,String message) throws WebException {
 		try {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
@@ -399,6 +400,7 @@ public class RecordController extends BaseController {
 			RecordEntity record = recordService.getRecord(recordId);
 			model.put("contractModel", contractModel);
 			model.put("recordId", recordId);
+			model.put("message", message);
 			model.put("title", record.getType().getId());
 			model.put("type", member.getMember().getType().getId());
 			return "site/record/contract-confirm";
@@ -420,7 +422,7 @@ public class RecordController extends BaseController {
 	 */
 	@RequestMapping("confirm-kfs")
 	public String confirmkfs(ModelMap model, String contractNo,
-			String recordId, HttpSession session) throws WebException {
+			String recordId, HttpSession session,String message) throws WebException {
 		try {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
@@ -433,6 +435,7 @@ public class RecordController extends BaseController {
 			}
 			model.put("contractModel", contractModel);
 			model.put("recordId", recordId);
+			model.put("message", message);
 			model.put("type", member.getMember().getType().getId());
 			return "site/record/cont-developers";
 		} catch (Exception e) {
@@ -443,7 +446,7 @@ public class RecordController extends BaseController {
 
 	@RequestMapping("confirmRecord")
 	public @ResponseBody Map<String, String> confirmRecord(String recordId,
-			String contractId, HttpSession session) throws WebException {
+			String contractId, HttpSession session,String message) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
@@ -455,6 +458,20 @@ public class RecordController extends BaseController {
 				recordService.modifyState(contractId, recordId,
 						RecordConfirmStateEnum.confirmedB);
 			}
+			Object cache = HierarchicalCacheManager.get(2, "comet_message",
+					"record_push_message_" + member.getMember().getMemberNo());
+			List<String> messageList = null;
+			if (cache instanceof ArrayList) {
+				messageList = (List<String>) cache;
+			} else {
+				messageList = new ArrayList<String>();
+			}
+			if (messageList.contains(message)) {
+				messageList.remove(message);
+			}
+			HierarchicalCacheManager.set(2, "comet_message",
+					"record_push_message_" + member.getMember().getMemberNo(),
+					messageList);
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {

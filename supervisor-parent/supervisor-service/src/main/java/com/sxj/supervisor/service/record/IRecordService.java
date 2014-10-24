@@ -74,4 +74,5 @@ public interface IRecordService {
 	public String getRfid(String batchId);
 
 	public void saveRecord(RecordEntity record) throws ServiceException;
+	
 }

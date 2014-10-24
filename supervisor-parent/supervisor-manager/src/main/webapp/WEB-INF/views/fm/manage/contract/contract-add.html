@@ -186,7 +186,7 @@ var ul_validform;
 		ul_validform=$("#contractUl").Validform({
 			tiptype:function(msg,o,cssctl){
 					var $div=$("<div/>").addClass("checkinfo");
-					var $p=$("<p/>").addClass("Validform_checktip Validform_wrong").html(msg);
+					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
 					var left=o.obj.offset().left,
 					top=o.obj.offset().top;
 					var width=o.obj.width();

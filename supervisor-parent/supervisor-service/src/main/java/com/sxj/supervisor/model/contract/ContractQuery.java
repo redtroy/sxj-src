@@ -76,6 +76,25 @@ public class ContractQuery extends Pagable  implements Serializable {
 	**/
 	private String state;
 	
+	private String memberIdA;
+
+	private String memberIdB;
+
+	public String getMemberIdA() {
+		return memberIdA;
+	}
+
+	public void setMemberIdA(String memberIdA) {
+		this.memberIdA = memberIdA;
+	}
+
+	public String getMemberIdB() {
+		return memberIdB;
+	}
+
+	public void setMemberIdB(String memberIdB) {
+		this.memberIdB = memberIdB;
+	}
 
 	public String getContractId() {
 		return contractId;

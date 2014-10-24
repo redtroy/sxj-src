@@ -793,7 +793,7 @@ public class ContractServiceImpl implements IContractService {
 							String message = re.getId() + "," + msgName + ","
 									+ centity.getContractNo() + ','
 									+ re.getMemberIdA() + ','
-									+ re.getType().getId();
+									+ re.getContractType().getId();
 							messageList.add(message);
 							HierarchicalCacheManager.set(2, "comet_message",
 									"record_push_message_" + re.getMemberIdA(),
@@ -823,7 +823,7 @@ public class ContractServiceImpl implements IContractService {
 							String messageB = re.getId() + "," + msgName + ","
 									+ centity.getContractNo() + ','
 									+ re.getMemberIdB() + ','
-									+ re.getType().getId();
+									+ re.getContractType().getId();
 							messageListB.add(messageB);
 							HierarchicalCacheManager.set(2, "comet_message",
 									"record_push_message_" + re.getMemberIdB(),
