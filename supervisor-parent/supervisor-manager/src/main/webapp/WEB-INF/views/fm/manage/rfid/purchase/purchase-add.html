@@ -17,28 +17,40 @@ $(function($) {
 function saveAdd(){
 	var count =$("#count").val();
 	if(count!=0){
-		if(confirm('是否生成采购单?')){
+		dialogBox(function(){
 			var price =$("#price").val();
-			$("#price").val(parseFloat(price)*100);
+			var remaining = $("#remaining").val();
+			$("#price").val(parseFloat(price));
+			if(parseFloat(count)>parseFloat(remaining)){
+				$("#count").val(remaining);
+				messageInfo("最大采购数量为"+remaining);
+				return false;
+			}
 			$.post("add.htm",$("#add").serialize(),function(data){
 				if(data.isOK=='ok'){
-					alert("生成成功!");
-					window.location.href="query.htm";
+					succInfo(function(){
+						window.location.href="query.htm";
+					},"生成成功!");
 				}else{
-					alert("生成失败!");	
+					erroeInfo("生成失败!");	
 				}
 			});
-			}
+		},"是否生成采购单?");
 	}else{
-		alert("申请数量已用完!");
+		messageInfo("申请数量已用完!");
 	}
 }
 function sum(){
 	var remaining = $("#remaining").val();
 	var price=$("#price").val();
+	if(price==''){
+		messageInfo("请输入单价！");
+		price=0;
+	}
 	var count =$("#count").val();
 	if(parseFloat(count)>parseFloat(remaining)){
-		$("#count").val(remaining);
+		messageInfo("最大采购数量为"+remaining);
+		
 	}
 	var ze=parseFloat(price)*parseFloat(count);
 	$("#ddze").html(ze+"元");
@@ -49,6 +61,8 @@ function sum(){
 <!-- InstanceEndEditable -->
 </head>
 <body>
+<@b.errorInfo/>
+<@b.dialogBox/>
 <@b.header/>
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
@@ -58,10 +72,9 @@ function sum(){
     <div id="leftList">
       <@b.leftMenu />
     </div>
-    <form action="" method="post" id="add">
+    <form action="javascript:void(0);" method="post" id="add">
     <input type="hidden" name="contractNo" value="${app.contractNo}" />
     <input type="hidden" name="applyId" value="${app.id}" />
-    
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">生成RFID采购单</h2>
@@ -83,14 +96,19 @@ function sum(){
       </div>
       <div>
         <label>实际采购价格</label>
-        <input type="text" id="price" name="price" class="input-w30" value="" title="" onkeyup="value=value.replace(/[^\d.]/g,'');sum();" onafterpaste="value=value.replace(/[^\d.]/g,'');sum();" />元
+        <input type="text" id="price" name="price" class="input-w30" value="" title="" onkeyup="sum();"/>元
       </div>
       <div>
         <label>采购数量</label>
+        <input type="hidden" id="hasNumber" name="hasNumber" value="${app.hasNumber}" />
+        <#if app.count gt 0>
         <input type="hidden" id="remaining" value="${app.count-app.hasNumber}" />
-         <input type="hidden" id="hasNumber" name="hasNumber" value="${app.hasNumber}" />
-        
-        <input type="text" id="count" name="count" class="input-w80" value="${app.count-app.hasNumber}" title="" onkeyup="this.value=this.value.replace(/\D/g,'');sum();" onafterpaste="this.value=this.value.replace(/\D/g,'');sum();"/><span class="color-red f12">该申请单已采购${app.hasNumber}张RFID</span>
+        <input type="text" id="count" name="count" class="input-w80" value="${app.count-app.hasNumber}" title="" onkeyup="sum();"/>
+        <#else>
+         <input type="hidden" id="remaining" value="0" />
+         <input type="text" id="count" name="count" class="input-w80" value="0" title="" onkeyup="sum();"/>
+         </#if>
+        <span class="color-red f12">该申请单已采购${app.hasNumber}张RFID</span>
       </div>
       <div>
         <label>订单总额</label><span class="color-blue"><strong id="ddze">0元</strong></span></div>     

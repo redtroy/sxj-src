@@ -74,8 +74,9 @@ public class BasicController extends BaseController {
 			if (info.getAccount() != null && info.getMember() != null) {
 				return "site/member/account-index";
 			} else if (info.getAccount() == null && info.getMember() != null) {
+				String function = request.getParameter("function");
 				return "redirect:" + getBasePath(request)
-						+ "member/memberInfo.htm";
+						+ "member/memberInfo.htm?function=" + function;
 			} else {
 				return LOGIN;
 			}

@@ -103,9 +103,11 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "HAS_NUMBER")
 	private Long hasNumber;
-	
 
 	public Long getHasNumber() {
+		if (hasNumber == null) {
+			hasNumber = 0l;
+		}
 		return hasNumber;
 	}
 
@@ -162,6 +164,9 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	}
 
 	public Long getCount() {
+		if (count == null) {
+			count = 0l;
+		}
 		return count;
 	}
 

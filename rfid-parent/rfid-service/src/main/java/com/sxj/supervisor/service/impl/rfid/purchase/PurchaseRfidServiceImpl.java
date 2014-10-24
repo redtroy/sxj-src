@@ -21,21 +21,23 @@ import com.sxj.supervisor.service.rfid.sale.IRfidPriceService;
 import com.sxj.supervisor.service.rfid.sale.IRfidSaleStatisticalService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
+
 @Service
 @Transactional
 public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 
 	@Autowired
 	private IRfidPurchaseDao rfidPurchaseDao;
-	
+
 	@Autowired
 	private IRfidSaleStatisticalService saleStatisticalService;
-	
+
 	@Autowired
 	private IRfidPriceService rfidPriceService;
 
 	@Autowired
-	IRfidApplicationDao appDao; 
+	IRfidApplicationDao appDao;
+
 	@Override
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
 			throws ServiceException {
@@ -55,7 +57,8 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			condition.addCondition("startDate", query.getStartDate());
 			condition.addCondition("endDate", query.getEndDate());
 			condition.setPage(query);
-			List<RfidPurchaseEntity> rfidList=rfidPurchaseDao.queryList(condition);
+			List<RfidPurchaseEntity> rfidList = rfidPurchaseDao
+					.queryList(condition);
 			query.setPage(condition);
 			return rfidList;
 		} catch (Exception e) {
@@ -73,14 +76,14 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 		}
 
 	}
+
 	@Override
 	@Transactional
-	public void addPurchase(RfidPurchaseEntity purchase,String applyId,String hasNumber)
-			throws ServiceException {
+	public void addPurchase(RfidPurchaseEntity purchase, String applyId,
+			String hasNumber) throws ServiceException {
 		try {
-			RfidApplicationEntity app = new RfidApplicationEntity();
-			app.setId(applyId);
-			app.setHasNumber(Long.valueOf(hasNumber)+purchase.getCount());
+			RfidApplicationEntity app = appDao.getRfidApplication(applyId);
+			app.setHasNumber(Long.valueOf(hasNumber) + purchase.getCount());
 			rfidPurchaseDao.addRfidPurchase(purchase);
 			appDao.updateRfidApplication(app);
 		} catch (Exception e) {
@@ -90,14 +93,15 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	}
 
 	@Override
-	public RfidPurchaseEntity getRfidPurchase(String id) throws ServiceException {
+	public RfidPurchaseEntity getRfidPurchase(String id)
+			throws ServiceException {
 		try {
-			RfidPurchaseEntity purchase=rfidPurchaseDao.getRfidPurchase(id);
+			RfidPurchaseEntity purchase = rfidPurchaseDao.getRfidPurchase(id);
 			return purchase;
 		} catch (Exception e) {
 			throw new ServiceException("获取采购单错误", e);
 		}
-		
+
 	}
 
 	/**
@@ -107,7 +111,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	@Transactional
 	public void confirmDelivery(String id) throws ServiceException {
 		try {
-			RfidPurchaseEntity purchase= rfidPurchaseDao.getRfidPurchase(id);
+			RfidPurchaseEntity purchase = rfidPurchaseDao.getRfidPurchase(id);
 			purchase.setReceiptState(DeliveryStateEnum.receiving);
 			rfidPurchaseDao.updateRfidPurchase(purchase);
 			RfidSaleStatisticalEntity entity = new RfidSaleStatisticalEntity();
@@ -116,16 +120,16 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			entity.setSaleDate(new Date());
 			entity.setCount(purchase.getCount());
 			entity.setRfidType(purchase.getRfidType());
-			List<RfidPriceEntity> list= rfidPriceService.queryPrice();
-			if(list!=null && list.size()>0){
+			List<RfidPriceEntity> list = rfidPriceService.queryPrice();
+			if (list != null && list.size() > 0) {
 				RfidPriceEntity price = list.get(0);
-				if(purchase.getRfidType().getId()==0){
+				if (purchase.getRfidType().getId() == 0) {
 					entity.setPrice(price.getWindowPrice());
-				}else{
+				} else {
 					entity.setPrice(price.getLogisticsPrice());
 				}
-				
-			}else{
+
+			} else {
 				throw new ServiceException();
 			}
 			saleStatisticalService.add(entity);

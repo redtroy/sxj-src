@@ -11,8 +11,8 @@
 		<result property="supplierName" column="SUPPLIER_NAME" jdbcType="VARCHAR" />
 		<result property="rfidType" column="RFID_TYPE" jdbcType="INTEGER"/>
 		<result property="count" column="COUNT" jdbcType="INTEGER" />
-		<result property="price" column="PRICE" jdbcType="INTEGER" />
-		<result property="amount" column="AMOUNT" jdbcType="INTEGER" />
+		<result property="price" column="PRICE" jdbcType="DOUBLE" />
+		<result property="amount" column="AMOUNT" jdbcType="DOUBLE" />
 		<result property="purchaseDate" column="PURCHASE_DATE" jdbcType="TIMESTAMP" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="applyNo" column="APPLY_NO" jdbcType="VARCHAR" />
