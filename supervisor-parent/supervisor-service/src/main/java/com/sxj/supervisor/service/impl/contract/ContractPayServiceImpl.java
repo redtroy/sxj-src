@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
+import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.util.exception.ServiceException;
@@ -31,6 +32,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.addCondition("rfidNo", query.getRfidNo());// Rfid编号
 			condition.addCondition("startPayDate", query.getStartPayDate());// 开始时间
 			condition.addCondition("endPayDate", query.getEndPayDate());// 结束时间
+			condition.addCondition("state", query.getState());// 结束时间
 			condition.setPage(query);
 			List<PayRecordEntity> payList = payDao.queryPayContract(condition);
 			query.setPage(condition);
@@ -44,6 +46,47 @@ public class ContractPayServiceImpl implements IContractPayService {
 	public void update_state(String id, Integer state) throws ServiceException {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * 甲方付款
+	 */
+	@Override
+	public String pay(String id, Long payReal) throws ServiceException {
+		try {
+			PayRecordEntity re = payDao.getPayRecordEntity(id);
+			PayStageEnum[] payState = PayStageEnum.values();
+			if (re.getState().ordinal() == 0) {
+				re.setPayReal(payReal);
+				re.setState(payState[2]);
+				payDao.update_pay(re);
+				return "ok";
+			} else {
+				return "false";
+			}
+		} catch (Exception e) {
+			throw new ServiceException("甲方付款出错！", e);
+		}
+	}
+
+	/**
+	 * 乙方确认收款
+	 */
+	@Override
+	public String pay_ok(String id) throws ServiceException {
+		try {
+			PayRecordEntity re = payDao.getPayRecordEntity(id);
+			PayStageEnum[] payState = PayStageEnum.values();
+			if (re.getState().ordinal() == 3) {
+				re.setState(payState[3]);
+				payDao.update_pay(re);
+				return "ok";
+			} else {
+				return "false";
+			}
+		} catch (Exception e) {
+			throw new ServiceException("乙方确认付款出错！", e);
+		}
 	}
 
 }

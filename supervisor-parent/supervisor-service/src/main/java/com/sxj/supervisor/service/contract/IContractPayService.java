@@ -17,4 +17,14 @@ public interface IContractPayService {
 	 * 更改收款、付款状态
 	 */
 	public void update_state(String id, Integer state) throws ServiceException;
+
+	/**
+	 * 甲方付款
+	 */
+	public String pay(String id, Long payReal) throws ServiceException;
+
+	/**
+	 * 乙方确认收款
+	 */
+	public String pay_ok(String id) throws ServiceException;
 }
