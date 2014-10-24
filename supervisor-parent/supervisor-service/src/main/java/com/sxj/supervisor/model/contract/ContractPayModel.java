@@ -1,7 +1,6 @@
 package com.sxj.supervisor.model.contract;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import com.sxj.mybatis.pagination.Pagable;
 
@@ -48,21 +47,34 @@ public class ContractPayModel extends Pagable implements Serializable {
 	private Long payAmount;
 
 	/**
+	 * 实际支付金额
+	 */
+	private Long payReal;
+
+	/**
 	 * 支付开始日期
 	 */
-	private Date startPayDate;
+	private String startPayDate;
 
 	/**
 	 * 支付结束日期
 	 */
-	private Date endPayDate;
+	private String endPayDate;
 
 	private String content;
 
 	/**
 	 * 状态
 	 */
-	private Integer state;
+	private String state;
+
+	public Long getPayReal() {
+		return payReal;
+	}
+
+	public void setPayReal(Long payReal) {
+		this.payReal = payReal;
+	}
 
 	public String getContent() {
 		return content;
@@ -128,27 +140,27 @@ public class ContractPayModel extends Pagable implements Serializable {
 		this.payAmount = payAmount;
 	}
 
-	public Date getStartPayDate() {
+	public String getStartPayDate() {
 		return startPayDate;
 	}
 
-	public void setStartPayDate(Date startPayDate) {
+	public void setStartPayDate(String startPayDate) {
 		this.startPayDate = startPayDate;
 	}
 
-	public Date getEndPayDate() {
+	public String getEndPayDate() {
 		return endPayDate;
 	}
 
-	public void setEndPayDate(Date endPayDate) {
+	public void setEndPayDate(String endPayDate) {
 		this.endPayDate = endPayDate;
 	}
 
-	public Integer getState() {
+	public String getState() {
 		return state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 
