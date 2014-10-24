@@ -91,11 +91,11 @@ public class PayController extends BaseController {
 						.getContract().getId());
 			}
 			model.put("contractModel", contractModel);
-			model.put("id", id);
+			model.put("recordNo", id);
 			if (contractModel.getContract().getType().getId() == 0) {
-				return "site/contract/contract-info-zhaobiao";
+				return "site/record/contract-info-zhaobiao";
 			} else {
-				return "site/contract/contract-info";
+				return "site/record/contract-info";
 			}
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
