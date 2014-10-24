@@ -304,8 +304,10 @@ var refreshIviewer=function($viewer,src,$container){
 	}
 	$viewer.show();
 }
-var refreshElastislide=function($container,$carousel,data){
+var refreshElastislide=function($container,$carousel,data,empty){
 	var start=0;
+	if(empty)
+		$carousel.empty();
 	if(data instanceof Array){
 		for (var i = 0; i < data.length; i++) {
 			$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');

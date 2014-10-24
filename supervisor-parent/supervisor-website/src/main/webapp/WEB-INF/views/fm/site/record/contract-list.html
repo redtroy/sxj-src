@@ -85,7 +85,7 @@ jQuery(document).ready(function($) {
 		if(imgPath){
        			$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
        				if(imgPaths){
-       					refreshElastislide($("#linkRollBox"),$("#linkcarousel"),imgPaths);	
+       					refreshElastislide($("#linkRollBox"),$("#linkcarousel"),imgPaths,true);	
        					$("#linkModal").show();
        					$(".maskdivgen").show();
        					preModal=$("#linkModal");
