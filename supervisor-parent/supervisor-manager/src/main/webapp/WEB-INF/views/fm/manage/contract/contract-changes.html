@@ -5,37 +5,35 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${b.staticPath}style/style.css" rel="stylesheet"
-	type="text/css" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/jquery.js"></script>
-<script src="${b.staticPath}js/intense.js"></script>
-<link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
-<script src="${b.staticPath}js/jqueryui.js"></script>
-<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
-	type="text/css" />
-<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" /> 
+<link rel="stylesheet" href="${b.staticPath}style/jquery.iviewer.css" />
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
-
-	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
+<script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
+<@b.upload/>
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
 			$('.maskdivgen').fadeIn(100);
 			$('.viewer').slideDown(200);
 		})
-		$('.modal-header .close').click(function() {
-			$('.maskdivgen').fadeOut(100);
-			$('.viewer').slideUp(200);
-		})
 	})
-	$(document).ready(function(){
+		$(document).ready(function(){
 		var start=0;
 		
-		$('.imagelist').each(function(){
+		$('.elastislide-list').each(function(){
 			var $this=$(this);
 			$this.find("li").live("click",function(){
 				var el=$(this);
@@ -45,36 +43,7 @@
 				el.addClass("view");
 				preModal=null;
 			});
-			$(this).elastislide({
-				orientation : 'horizontal',
-				speed : 500,
-				easing : 'ease-in-out',
-				minItems : elastislideConfig.count,
-				start : start,
-				onClick : function( el, position, evt ) { 
-					return false; 
-				},
-				onReady : function() { 
-					$this.children("li:lt("+elastislideConfig.count+")").each(function(){
-						var $image=$(this).find("img");
-						if($image.attr("data-image"))
-							$image.attr("src",$image.attr("data-image"));
-					});
-					if($this.children("li").length<elastislideConfig.count)
-						$(".elastislide-prev").hide();
-					return false; },
-				onBeforeSlide : function() { return false; },
-				onAfterSlide : function() { 
-					if(start>0)
-						slideTimes=slideTimes+start;
-					$this.children("li:lt("+slideTimes+")").each(function(){
-						var $image=$(this).find("img");
-						if($image.attr("data-image"))
-							$image.attr("src",$image.attr("data-image"));
-					});
-					slideTimes=slideTimes+elastislideConfig.count;
-					return false; }
-			});
+			refreshElastislide($(this).parent(),$(this));
 		});
 		
 	});
@@ -84,6 +53,7 @@
 <!-- InstanceEndEditable -->
 <script>
 	function addTable(TrId) {
+		 $("#TbData").show();
 		var vTb = $("#TbData");//得到表格ID=TbData的jquery对象 
 		//var totalTr=$("#total_tr");
 		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
@@ -131,6 +101,7 @@
 		vTb.append(vTrClone);//把副本单元格对象添加到表格上方 
 	}
 	function addbatch(batchTrId, status) {
+		$("#batchTb").show();
 		var vTb = $("#batchTb");//得到表格ID=TbData的jquery对象 
 		//var totalTr=$("#total_tr");
 		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
@@ -525,32 +496,19 @@
 								</div>
 								<div class="contPic">
 									<label>合同变更扫描件</label>
+									<input type="hidden"
+										value="${record.imgPath}" name="modifyContract.imgPath" />
 									<div class="rollBox">
-										<div class="LeftBotton" onmousedown="ISL_GoUp()"
-											onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-										<div class="Cont" id="ISL_Cont">
-											<div class="ScrCont">
-												<div class="recordImgList">
-													<!-- 图片列表 begin -->
-													<#assign arr=(record.imgPath?split(","))> <#list arr as
-													imgPath>
-													<div class="pic">
-														<a href="#" class="demo-image"
-															data-image="${imgPath}"><img
-															src="${imgPath}" /></a>
-													</div>
+									<ul class="elastislide-list imagelist">
+													<#assign arr=(record.imgPath?split(","))> 
+													<#list arr as imgPath>
+													 <li><a href="javascript:void(0);" data-image="${b.imagePath}${imgPath}"><img data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
 													</#list>
-													<!-- 图片列表 end -->
-												</div>
-												<div id="List2"></div>
-											</div>
-										</div>
-										<div class="RightBotton" onmousedown="ISL_GoDown()"
-											onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+									</ul>
 									</div>
 								</div>
 								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabList producedTable" id="TbData">
+									class="tabList producedTable" id="TbData" style="display: none;">
 									<col width="15%" />
 									<col width="20%" />
 									<col width="15%" />
@@ -570,7 +528,7 @@
 
 								</table>
 								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabList producedTable" id="batchTb">
+									class="tabList producedTable" id="batchTb"  style="display: none;">
 									<col width="20%" />
 									<col width="25%" />
 									<col width="20%" />

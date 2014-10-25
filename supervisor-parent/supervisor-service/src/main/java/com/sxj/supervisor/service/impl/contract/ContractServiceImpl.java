@@ -263,16 +263,18 @@ public class ContractServiceImpl implements IContractService {
 								.getModifyItemList());
 					}
 					List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
-					for (int j = 0; j < cmm.getModifyBatchList().size(); j++) {
-						ModifyBatchModel mbm = cmm.getModifyBatchList().get(j);
-						if (mbm.getModifyBatchItems() != null) {
-							mbm.getModifyBatch().setBatchItems(
-									JsonMapper.nonEmptyMapper().toJson(
-											mbm.getModifyBatchItems()));
+					if(cmm.getModifyBatchList()!=null){
+						for (int j = 0; j < cmm.getModifyBatchList().size(); j++) {
+							ModifyBatchModel mbm = cmm.getModifyBatchList().get(j);
+							if (mbm.getModifyBatchItems() != null) {
+								mbm.getModifyBatch().setBatchItems(
+										JsonMapper.nonEmptyMapper().toJson(
+												mbm.getModifyBatchItems()));
+							}
+							mbeList.add(mbm.getModifyBatch());
 						}
-						mbeList.add(mbm.getModifyBatch());
+						contractModifyBatchDao.updateItems(mbeList);
 					}
-					contractModifyBatchDao.updateItems(mbeList);
 				}
 				contractModifyDao.updateModify(mceList);
 			}
