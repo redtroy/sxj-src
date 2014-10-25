@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-	<!--抛出的异常转到特定View -->
+	<!--抛出的异常转到特定View-->
 	<bean id="exceptionResolver"
 		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView" value="failure" />
@@ -16,19 +16,18 @@
 				<prop key="java.lang.Throwable">manage/error</prop>
 			</props>
 		</property>
-	</bean>
-	<!-- 定义freemark视图 -->
+	</bean> 
+	<!-- 定义freemark视图-->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<property name="viewClass"
-			value="com.sxj.supervisor.manage.view.MyFreeMarkerView" />
+			value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
 		<property name="requestContextAttribute" value="ctp" />
 		<property name="cache" value="true" />
-		<!-- <property name="prefix" value="/WEB-INF/views/fm/manage/" /> -->
 		<property name="suffix" value=".html" />
 		<property name="contentType" value="text/html;charset=UTF-8" />
 		<property name="order" value="1" />
-	</bean>
+	</bean> 
 	<!-- 定义freemark文件的位置 -->
 	<bean id="freemarkerConfiguration"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -40,12 +39,9 @@
 		<property name="templateLoaderPath" value="/WEB-INF/views/fm/" />
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="freemarkerSettings" ref="freemarkerConfiguration" />
-
-		<!-- <property name="freemarkerVariables"> <map> <entry key="shiro" value-ref="shiroTags" 
-			/> <entry key="xw" value-ref="xwTags"></entry> </map> </property> -->
 	</bean>
 
-	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
+	<!-- REST中根据URL后缀自动判定Content-Type及相应的View-->
 	<bean id="contentNegotiationManager"
 		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
 		<property name="favorPathExtension" value="false" />
@@ -59,10 +55,10 @@
 				*=*/*
 			</value>
 		</property>
-	</bean>
+	</bean> 
 
 	<bean
-		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
 				<!-- json转换器 -->
