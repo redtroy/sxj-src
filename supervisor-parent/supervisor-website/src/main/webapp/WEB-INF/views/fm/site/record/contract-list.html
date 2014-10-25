@@ -33,25 +33,16 @@
 <script>
 var preModal;
 jQuery(document).ready(function($) {
-	$("#iviewerModal").find(".modal-header .close").click(function(){
-		$(this).parent().parent().hide();	
-		preModal.show();
+	$(".modal-header .close").click(function(){
+		var $parent=$(this).parent().parent();
+		$parent.hide();
+		$(".maskdivgen").hide();
+		if($parent.attr("class").indexOf("notViewer")<0){
+			preModal.show();
+			$(".maskdivgen").show();
+		}
 		
 	});
-	$("#chanPic").find(".modal-header .close").click(function(){
-		$(this).parent().parent().hide();
-		$(".maskdivgen").hide();
-	});
-	$("#bsModal").find(".modal-header .close").click(function(){
-		$(this).parent().parent().hide();
-		$(".maskdivgen").hide();
-	});
-	$("#linkModal").find(".modal-header .close").click(function(){
-		$(this).parent().parent().hide();
-		$(".maskdivgen").hide();
-	});
-	
-	
 	
 	$('.elastislide-list').find("li").live("click",function(){
 		var el=$(this);
@@ -59,7 +50,10 @@ jQuery(document).ready(function($) {
 		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
 		el.parent().children("li").removeClass("view");
 		el.addClass("view"); 
-		preModal.hide();
+		$(".maskdivgen").show();
+		if(preModal)
+			preModal.hide();
+		
 	});
 	
 	
@@ -608,19 +602,18 @@ function busunSeav(){
 						class="button button-pop" onclick="busunSeav();" value="确定补损" />
 					<button class="button button-gray">取消</button>
 				</div>
+				</div>
 		</form>
-	</div>
 	</div>
 	<div class="modal-wrap popDemo popView notViewer" id="image-list"
 		style="display: none; width: 680px;">
 		<div class="modal-header">
-			<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a>
+			<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></span>
 		</div>
 		<div class="modal-body">
 			<div class="rollBox" id="rollBox" style="height: 150px;"></div>
 		</div>
 	</div>
-	<div class="maskdivgen" style="display: none"></div>
 	<div class="viewer modal-wrap" id="iviewerModal">
 		<div class="modal-header" style="display: none;">
 			<span class="close">关闭</span>
