@@ -326,19 +326,21 @@ var refreshIviewer=function($viewer,src,$container){
 }
 var refreshElastislide=function($container,$carousel,data){
 	var start=0;
-	if(data instanceof Array){
-		for (var i = 0; i < data.length; i++) {
-			$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
+	if(data){
+		if(data instanceof Array){
+			for (var i = 0; i < data.length; i++) {
+				$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
+			}
+		}else{
+			var $li=$('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a></li>');
+			$carousel.append($li);
+			var $p=$('<p>'+$carousel.children().length+'</p>');
+			$li.append($p);
+			start=$carousel.children().length;
 		}
-	}else{
-		var $li=$('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a></li>');
-		$carousel.append($li);
-		var $p=$('<p>'+$carousel.children().length+'</p>');
-		$li.append($p);
-		start=$carousel.children().length;
+		$container.empty();
+		$container.append($carousel);
 	}
-	$container.empty();
-	$container.append($carousel);
 	$carousel.elastislide({
 		orientation : 'horizontal',
 		speed : 500,

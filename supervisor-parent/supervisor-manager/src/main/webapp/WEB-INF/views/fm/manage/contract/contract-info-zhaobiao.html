@@ -1,11 +1,51 @@
-﻿<td colspan="11"><script>
-	jQuery(document).ready(function($) {
-		$('.modal-header .close').click(function() {
-			$('.maskdivgen').fadeOut(100);
-			$('.viewer').slideUp(200);
-		})
-	})
-</script>
+﻿<script type="text/javascript">
+	$(document).ready(function(){
+		var start=0;
+		
+		$('.imagelist').each(function(){
+			var $this=$(this);
+			$this.find("li").live("click",function(){
+				var el=$(this);
+				var imageSource = el.find("a").attr("data-image");
+				refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+				el.parent().children("li").removeClass("view");
+				el.addClass("view");
+				preModal=null;
+			});
+			$(this).elastislide({
+				orientation : 'horizontal',
+				speed : 500,
+				easing : 'ease-in-out',
+				minItems : elastislideConfig.count,
+				start : start,
+				onClick : function( el, position, evt ) { 
+					return false; 
+				},
+				onReady : function() { 
+					$this.children("li:lt("+elastislideConfig.count+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					if($this.children("li").length<elastislideConfig.count)
+						$(".elastislide-prev").hide();
+					return false; },
+				onBeforeSlide : function() { return false; },
+				onAfterSlide : function() { 
+					if(start>0)
+						slideTimes=slideTimes+start;
+					$this.children("li:lt("+slideTimes+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					slideTimes=slideTimes+elastislideConfig.count;
+					return false; }
+			});
+		});
+		
+	});
+	</script>
 	<div class="infoBox text-left">
 		<ul class="ly-clearFix">
 			<li><label>合同号</label> ${contractModel.contract.contractNo}</li>

@@ -1,8 +1,8 @@
-	<script type="text/javascript">
+﻿	<script type="text/javascript">
 	$(document).ready(function(){
 		var start=0;
 		
-		$('.imagelist').each(function(){
+		$('.elastislide-list').each(function(){
 			var $this=$(this);
 			$this.find("li").live("click",function(){
 				var el=$(this);
@@ -12,36 +12,7 @@
 				el.addClass("view");
 				preModal=null;
 			});
-			$(this).elastislide({
-				orientation : 'horizontal',
-				speed : 500,
-				easing : 'ease-in-out',
-				minItems : elastislideConfig.count,
-				start : start,
-				onClick : function( el, position, evt ) { 
-					return false; 
-				},
-				onReady : function() { 
-					$this.children("li:lt("+elastislideConfig.count+")").each(function(){
-						var $image=$(this).find("img");
-						if($image.attr("data-image"))
-							$image.attr("src",$image.attr("data-image"));
-					});
-					if($this.children("li").length<elastislideConfig.count)
-						$(".elastislide-prev").hide();
-					return false; },
-				onBeforeSlide : function() { return false; },
-				onAfterSlide : function() { 
-					if(start>0)
-						slideTimes=slideTimes+start;
-					$this.children("li:lt("+slideTimes+")").each(function(){
-						var $image=$(this).find("img");
-						if($image.attr("data-image"))
-							$image.attr("src",$image.attr("data-image"));
-					});
-					slideTimes=slideTimes+elastislideConfig.count;
-					return false; }
-			});
+			refreshElastislide($(this).parent(),$(this));
 		});
 		
 	});
@@ -147,7 +118,8 @@
                     乙方逾期送货，按银行同期贷款利率支付逾期利息, 并赔偿甲方的损失，支付1%的违约金。</div>
                   <div class="item">
                     <label>合同扫描件</label>
-                    <#if arr??>
+                    
+                     <#if arr??>
                     <div class="rollBox">
                     <ul class="elastislide-list imagelist">
                     <#list arr  as imgPath>
@@ -170,6 +142,7 @@
                     <#else>
                     <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
                     </#if>
+                    
                     <!-- end -->
                   <span class="item">
                   <label>关联招标合同号</label>
