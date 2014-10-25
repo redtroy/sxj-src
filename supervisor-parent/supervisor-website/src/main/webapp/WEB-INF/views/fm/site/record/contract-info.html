@@ -148,16 +148,10 @@
                   <div class="item">
                     <label>合同扫描件</label>
                     <#if arr??>
-<<<<<<< HEAD
-                   <#assign arr=(contractModel.contract.imgPath?split(","))>
-                     <#list arr  as imgPath>
-                    <img src="${b.imagePath}${imgPath}" width="80" height="107" />
-=======
                     <div class="rollBox">
                     <ul class="elastislide-list imagelist">
                     <#list arr  as imgPath>
                     <li><a href="javascript:void(0);" data-image="${b.imagePath}${imgPath}"><img data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
->>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
                     </#list>
                     </ul>
                     </div>

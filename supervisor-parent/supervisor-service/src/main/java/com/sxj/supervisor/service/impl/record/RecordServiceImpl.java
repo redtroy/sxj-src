@@ -200,14 +200,12 @@ public class RecordServiceImpl implements IRecordService {
 			record.setRefContractNo(refContractNo);
 			record.setContractNo(contractNo);
 			record.setState(RecordStateEnum.Binding);
-			record.setAcceptDate(new Date());
 			recordDao.updateRecord(record);
 		}
 		if (record2 != null) {
 			record2.setRefContractNo(refContractNo);
 			record2.setContractNo(contractNo);
 			record2.setState(RecordStateEnum.Binding);
-			record2.setAcceptDate(new Date());
 			recordDao.updateRecord(record2);
 		}
 		// 插入合同
