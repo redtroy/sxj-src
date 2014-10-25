@@ -479,12 +479,11 @@ function busunSeav(){
 									class="icon icon16 icon-edit"></span>修改</a> <a
 								href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue"><span
 									class="icon icon16 icon-del"></span>删除</a> <#else> <#if
-								record.contractNo?exists> <#if record.type.getId() ==0> <a
-								href="javascript:biangeng('${record.id}');"
-								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
-								<a href="javascript:busun('${record.id}');"
-								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
-								</#if> </#if>  </#if>
+								record.contractNo?exists> <#if record.type.getId() ==0><#if record.contractType.getId() !=0>
+								<#if type==0>
+ 							<a href="javascript:biangeng('${record.id}');" class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+								<a href="javascript:busun('${record.id}');" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+								<#else>-</#if><#else>-</#if></#if> </#if>  </#if>
 							</td>
 
 						</tr>

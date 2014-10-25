@@ -11,7 +11,6 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
-
 <link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" /> 
 <link rel="stylesheet" href="${b.staticPath}style/jquery.iviewer.css" />
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
@@ -409,7 +408,7 @@ var getFloatStr = function(num){
 					<div class="ly-left">
 						<div class="imageList">
 						</div>
-						<input type="hidden" name="modifyList[${modifyList_index}].modifyContract.imgPath" class="imgPathHide" value=""/>
+						<input type="hidden" name="modifyList[${modifyList_index}].modifyContract.imgPath" class="imgPathHide" value="${modifyList.modifyContract.imgPath}"/>
 						<input type="file" name="contractFile" id="contractFile"  multiple="true"/></div>
 					</div>
     					<div></div>

@@ -14,6 +14,6 @@
 	<select id="queryModify" resultMap="ModifyResultMap"
 		parameterType="String">
 		<![CDATA[ SELECT ID,CONTRACT_ID,RECORD_NO,IMG_PATH FROM M_CONTRACT_MODIFY
-					WHERE RECORD_NO in(#{condition.recordIds})]]>
+					WHERE RECORD_NO in(${condition.recordIds})]]>
 	</select>
 </mapper>

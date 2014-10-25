@@ -16,7 +16,7 @@
 	<!-- 条件查询合同批次 -->
 	<select id="queryBacths" resultMap="ModifyBacthResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID,MODIFY_ID,RFID_NO,AMOUNT,BATCH_ITEMS,RECORD_NO,BATCH_NO FROM M_CONTRACT_MODIFY_BATCH where 1=1 ]]>
+		<![CDATA[SELECT ID,MODIFY_ID,RFID_NO,AMOUNT,BATCH_ITEMS,BATCH_NO FROM M_CONTRACT_MODIFY_BATCH where 1=1 ]]>
 		<if test="condition.modifyId != null and condition.modifyId != ''">
 			<![CDATA[ AND MODIFY_ID=#{condition.modifyId}]]>
 		</if>

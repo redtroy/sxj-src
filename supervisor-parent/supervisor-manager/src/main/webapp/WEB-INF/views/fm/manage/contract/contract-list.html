@@ -100,14 +100,20 @@ $(function(){
         $("#memberId").val(data.result);
     }});
 });
-function check(id){
+function check(id,recordNo,contractType){
+	var recordNoArr = recordNo.split(",");
+	if(contractType!=0){
+		if(recordNoArr.length<2){
+			messageInfo("不能审核合同,请确认是否绑定双方备案!");
+			return;
+		}
+	}
 	if(confirm('确实要审核该合同吗?')){
 	$.post("check.htm",{contractId:id},function(data){
 		if (data.isOK == 'ok') {
 			  alert("成功");
 			  var currentpage=$("#pager").attr("currentpage");
 			  query(currentpage);
-			  //window.location.href="query.htm";
 			}else{
 				alert("失败");
 			}	
@@ -214,7 +220,7 @@ function check(id){
         <td>${model.contract.createDate?string("yyyy-MM-dd HH:mm:ss")}</td>
         <td><#if model.contract.recordDate?exists>${model.contract.recordDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
         <td><em class="state normal">${model.contract.confirmState.getName()}</em></td>
-        <td><#if model.contract.state.getId() ==1><em class="state verified">${model.contract.state.getName()}</em><#else><a class="btn" onclick="check('${model.contract.id}');"><span>审核</span></a></#if></td>
+        <td><#if model.contract.state.getId() ==1><em class="state verified">${model.contract.state.getName()}</em><#else><a class="btn" onclick="check('${model.contract.id}','${model.contract.recordNo}','${model.contract.type.getId()}');"><span>审核</span></a></#if></td>
         <td class="operation">
         <#if model.contract.type.getId()==0><a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a><#else> <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a></#if>
         <!-- <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a> --></td>
