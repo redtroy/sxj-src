@@ -28,7 +28,6 @@
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
-<@b.upload/>
 <script>
 function modify(){
 	var recordNo0 = $("#recordNo0").val();
@@ -97,13 +96,12 @@ var imgBinding=function(){
 		});
 	});
 }
-var uploadImg = function(){
-	$(":file").each(function(){
-		var elasticDiv=$(this).parent().parent().prev();
-		var $hidden=elasticDiv.find(":input");
-		var $carousel=elasticDiv.find(".elastislide-list");
+var uploadImg = function($file){
+		var $div=$file.parent().parent().parent();
+		var $carousel=$div.find(".elastislide-list");
 		var $container=$carousel.parent();
-		$(this).uploadify({
+		var $hidden=$container.parent().find(":input");
+		$file.uploadify({
 			swf : '${basePath}upload/uploadify.swf',
 			uploader : "${basePath}upload.htm",
 			fileTypeExts : '*.gif; *.jpg; *.png',
@@ -132,7 +130,6 @@ var uploadImg = function(){
 				refreshElastislide($container,$carousel,dataObj);
 			}
 		});
-	});
 }
 
 //合同扫描件
@@ -150,8 +147,10 @@ var uploadImg = function(){
 		$(".maskdivgen").show();
 		
 	});
+		uploadImg($("#contractFile"));
+		uploadImg($("#bgFile"));
+		uploadImg($("#bsFile"));
 		imgBinding();
-		uploadImg();
 	});
 	
 //金额处理
@@ -374,15 +373,15 @@ var getFloatStr = function(num){
 						<div class="contPic">
 							<label>合同备案扫描件</label>
 							<input type="hidden" value="${contractModel.contract.imgPath}" name="contractModel.contract.imgPath" id="contractImgPath" />
-							<div class="RollBox" id="contractRollBox">
+							<div class="rollBox" id="contractRollBox">
 								<ul id="contractUl" class="elastislide-list"></ul>
 							</div>
 						</div>
 						<div class="contPic">
 						<label>合同备案扫描件</label>
 						<div class="ly-left">
-						<input type="file" name="contractFile" id="contractFile"  multiple="true"/></div>
-					</div>
+						<input type="file" name="contractFile"   multiple="true" id="contractFile"/></div>
+						</div>
 					<div>
 						<label>关联招标合同号</label> <input name="contract.refContractNo" type="text"
 							value="${contractModel.contract.refContractNo}" />
@@ -398,20 +397,23 @@ var getFloatStr = function(num){
 						<div>
 							<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
 						</div>
-						<script>
-							$(document).ready(function() { 
-								loadUpload("modifyFile","upload.htm","modifyimageList","modifyContractHide${modifyList_index}");
-							});  
-						</script>
 						<div class="contPic">
 							<label>合同变更扫描件</label>
 					<div class="ly-left">
 						<div class="imageList">
 						</div>
+						<div class="rollBox" id="contractRollBox">
+								<ul id="contractUl" class="elastislide-list"></ul>
+						</div>
 						<input type="hidden" name="modifyList[${modifyList_index}].modifyContract.imgPath" class="imgPathHide" value="${modifyList.modifyContract.imgPath}"/>
-						<input type="file" name="contractFile" id="contractFile"  multiple="true"/></div>
 					</div>
-    					<div></div>
+					</div>
+					<div class="contPic">
+						<label>合同变更扫描件</label>
+						<div class="ly-left">
+						<input type="file" name="contractFile"   multiple="true" id="bgFile"/></div>
+					</div>
+					
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="20%" />
@@ -510,8 +512,9 @@ var getFloatStr = function(num){
 						<div class="imageList">
 						</div>
 						<input type="hidden" name="replenishList[${replenishList_index}].replenishContract.imgPath" class="imgPathHide" value=""/>
-						<input type="file" name="contractFile" id="contractFile"  multiple="true"/></div>
+						<input type="file" name="contractFile"   multiple="true" id="bsFile"/></div>
 						</div>
+						
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="10%" />
