@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,6 +46,22 @@ public class AccountController extends BaseController {
 
 	@Autowired
 	private IMemberService memberService;
+
+	/**
+	 * 发货
+	 * 
+	 * @param rfidNo
+	 * @return
+	 */
+	@RequestMapping(value = "send/{rfidNo}")
+	public @ResponseBody Map<String, String> sendGoods(
+			@PathVariable String rfidNo) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("state", "1");
+		map.put("contractNo", "CT1410250001");
+		map.put("batchNo", "00001");
+		return map;
+	}
 
 	/**
 	 * 查询子账户列表
@@ -169,7 +186,7 @@ public class AccountController extends BaseController {
 	public String getRloeFunctions(String memberNo, String accountId,
 			String type, ModelMap map) {
 		AccountEntity account = accountService.getAccount(accountId);
-		if(account!=null){
+		if (account != null) {
 			memberNo = account.getParentId();
 		}
 		MemberEntity member = memberService.memberInfo(memberNo);
