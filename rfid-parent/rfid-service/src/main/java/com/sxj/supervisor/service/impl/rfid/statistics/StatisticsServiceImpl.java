@@ -283,7 +283,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 			if (entity == null) {
 				continue;
 			}
-			count = count + (entity.getCount() * entity.getPrice());
+			// count = count + (entity.getCount() * entity.getPrice());
 			dateList.add(DateTimeUtils.formatPageDate(entity.getPurchaseDate()));
 			countList.add(new Double(NumberUtils.leftMove(
 					(entity.getCount() * entity.getPrice()) + "", 2)));
@@ -315,7 +315,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 			if (entity == null) {
 				continue;
 			}
-			count = count + (entity.getCount() * entity.getPrice());
+			// count = count + (entity.getCount() * entity.getPrice());
 			dateList.add(DateTimeUtils.formatPageDate(entity.getPurchaseDate()));
 			countList.add(new Double(NumberUtils.leftMove(
 					(entity.getCount() * entity.getPrice()) + "", 2)));

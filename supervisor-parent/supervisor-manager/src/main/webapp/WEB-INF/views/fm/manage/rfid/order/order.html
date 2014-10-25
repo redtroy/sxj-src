@@ -12,6 +12,7 @@
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<@b.dialogBox/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -29,29 +30,36 @@ jQuery(document).ready(function($) {
 //修改
   function edit(id){
 	  $("#edit_"+id).find("#count").html('<input type="text" id="count_val" name="input2" value="'+$("#edit_"+id).find("#count").text()+'" />');
-	  $("#edit_"+id).find(".operation").html('<a href="javascript:edid_save(\''+id+'\')" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+	  $("#edit_"+id).find(".operation").html('<a href="javascript:edit_save(\''+id+'\')" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
   }
   //保存修改
-  function edid_save(id){
+  function edit_save(id){
 	  var num =$("#edit_"+id).find("#count_val").val();
+	  dialogBox(function(){
 		  $.post("edit_apply.htm",{id:id,count:num},function(data){
 			  if (data.isOk=="ok"){
-					 $("#edit_"+id).find("#count").text(num);
-					 $("#edit_"+id).find(".operation").html('<a href="javascript:edit(\''+id+'\');" class="edit">修改</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+				  succInfo(function(){
+					  var page=$("#rightBar").find("#pager").attr("currentPage");
+					  query(page);
+				  },"修改成功");
 				 }
-		  })
+		  });
+	  },"是否确认修改？");
+		  
   }
   //删除
   function del(id){
-	  if(!confirm('确实要删除吗?')){
-		  return false;
-	  }
+	 dialogBox(function(){
 	 $.post("del_apply.htm",{id:id},function(data){
 		 if (data.isOk=="ok"){
-			 alert('删除成功！');
-			 $("#edit_"+id).remove();
-		 }
-	 })
+				 succInfo(function(){
+					 var page=$("#rightBar").find("#pager").attr("currentPage");
+					 query(page);
+				 },'删除成功！');
+				
+			 }
+	 });
+  },"是否确认删除？");
   }
   //确认收款
   function ok(id){
@@ -164,7 +172,13 @@ jQuery(document).ready(function($) {
 		  <#else>
 		  <td><em class="state verified">已收货</em></td>
 		  </#if>
-		  <td><a onclick="javascript:window.location.href='${basePath}rfid/purchase/toAdd.htm?id=${model.id}'" class="button button-green button-small"><span>生成采购单</span></a></td>
+		  <td>
+		   <#if (model.count-model.hasNumber) gt 0>
+		  <a onclick="javascript:window.location.href='${basePath}rfid/purchase/toAdd.htm?id=${model.id}'" class="button button-green button-small"><span>生成采购单</span></a>
+		 <#else>
+		 <a class="button button-small"><span>已全部生成采购</span></a>
+		  </#if>
+		  </td>
 		  <td class="operation"><a href="javascript:edit('${model.id}');" class="edit">修改</a><a href="javascript:del('${model.id}')" class="del">删除</a></td>
         </tr>
         </#list>
