@@ -185,7 +185,6 @@ public class ContractServiceImpl implements IContractService {
 					if (contract.getContractNo() != null) {
 						record.setContractNo(contract.getContractNo());
 						record.setState(RecordStateEnum.Binding);
-						record.setAcceptDate(new Date());
 						recordDao.updateRecord(record);
 					}
 				}
@@ -401,7 +400,8 @@ public class ContractServiceImpl implements IContractService {
 
 					// 变更合同主体
 					QueryCondition<ModifyBatchEntity> modifyCondition = new QueryCondition<ModifyBatchEntity>();
-					modifyCondition.addCondition("recordIds", modifyRecordIds);// 变更备案ID
+					modifyCondition.addCondition("recordIds", modifyRecordIds.trim());// 变更备案ID
+					modifyCondition.addCondition("contractId", contract.getContractNo());
 					List<ModifyContractEntity> modifyList = contractModifyDao
 							.queryModify(modifyCondition);
 					if (modifyList != null) {
@@ -554,9 +554,9 @@ public class ContractServiceImpl implements IContractService {
 		for (Iterator<RecordEntity> iterator = record.iterator(); iterator
 				.hasNext();) {
 			RecordEntity recordEntity = (RecordEntity) iterator.next();
-			recordIds += recordEntity.getRecordNo() + ",";
-			recordIds = recordIds.substring(0, recordIds.length() - 1);
+			recordIds += "'"+recordEntity.getRecordNo() + "',";
 		}
+		recordIds = recordIds.substring(0, recordIds.length() - 1);
 		return recordIds;
 
 	}
@@ -767,6 +767,7 @@ public class ContractServiceImpl implements IContractService {
 					RecordEntity rEntity = new RecordEntity();
 					rEntity.setId(re.getId());
 					// TODO 审核
+					rEntity.setAcceptDate(new Date());//受理时间
 					rEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 					recordDao.updateRecord(rEntity);
 					if (re != null) {

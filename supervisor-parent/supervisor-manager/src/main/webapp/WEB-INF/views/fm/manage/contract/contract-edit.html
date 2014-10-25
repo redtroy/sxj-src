@@ -11,7 +11,6 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
-
 <link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" /> 
 <link rel="stylesheet" href="${b.staticPath}style/jquery.iviewer.css" />
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
@@ -24,19 +23,11 @@
 <script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
 <@b.errorInfo/>
+<@b.upload/>
 <script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
-<script>
-	jQuery(document).ready(function($) {
-		$('.modal-header .close').click(function() {
-			$('.maskdivgen').fadeOut(100);
-			$('.viewer').slideUp(200);
-		})
-	})
-</script>
-<@b.upload/>
 <script>
 function modify(){
 	var recordNo0 = $("#recordNo0").val();
@@ -96,142 +87,70 @@ function modify(){
 	});
 //图片处理事件
 //加载绑定扫描件(默认图片地址,滚动UL)
-var imgBinding=function(img,ulobj){
-	var imgPath = img.val();
-	$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
-		var j =0;
-		for (var i = 0; i < imgPaths.length; i++) {
-			j=i+1;
-			ulobj.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+imgPaths[i]+'"><img src="${b.imagePath}'+imgPaths[i]+'80x100.JPG" alt="" /></a><p>'+j+'</p></li>');
-		}
-		
-		ulobj.elastislide({
-			orientation : 'horizontal',
-			speed : 500,
-			easing : 'ease-in-out',
-			minItems : 3,
-			start : 0,
-			onClick : function( el, position, evt ) { 
-				var imageSource = el.find("a").attr("data-image");
-				$("#viewer2").iviewer({
-					src : imageSource,
-					mousewheel : true,
-					onDelete:function(e){
-						var imgurl =$(this).children("img").attr("src");
-						var imgarr=imgurl.split("file-web/");
-						var delImg =img.val();
-						delImg=delImg.replace(new RegExp(imgarr[1]),'');
-						img.val(delImg);
-						$('.maskdivgen').fadeOut(100);
-						$('.viewer').slideUp(200);
-						el.remove();
-					  }
-				});
-				el.parent().children("li").removeClass("view");
-				el.addClass("view");
-				$("#viewer2").children("img").attr("src",imageSource);
-				$(".viewer").show();
-				$(".modal-header").show();
-				$(".maskdivgen").show();
-				return false; 
-			},
-			onReady : function() { return false; },
-			onBeforeSlide : function() { return false; },
-			onAfterSlide : function() { return false; }
+var imgBinding=function(){
+	$(".elastislide-list").each(function(){
+		var $this=$(this);
+		var imgPath = $(this).parent().siblings(":hidden").val();
+		$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
+			refreshElastislide($this.parent(),$this,imgPaths);
 		});
-		
 	});
 }
-//上传扫描件处理
-var ulBinding = function(ul){
-	ul.find("li").live("click",function(){
-		var el=$(this);
-		var imageSource = el.find("a").attr("data-image");
-		$("#viewer2").iviewer({
-			src : imageSource,
-			mousewheel : true
-		});
-		el.parent().children("li").removeClass("view");
-		el.addClass("view");
-		$("#viewer2").children("img").attr("src",imageSource);
-		$(".viewer").show();
-		$(".modal-header").show();
-		$(".maskdivgen").show();
-	});
-}
-var uploadImg = function(file,ul,imgPath,rollBox){
-	file.uploadify({
-		swf : '${basePath}upload/uploadify.swf',
-		uploader : "${basePath}upload.htm",
-		fileTypeExts : '*.gif; *.jpg; *.png',
-		auto : true,
-		multi : true,
-		height : 30,
-		width : 120,
-		buttonText : '上传合同扫描件',
-		onUploadSuccess : function(file,
-				data, response) {
-			var num = 1;
-			var dataObj = eval("(" + data+ ")");//转换为json对象 
-			var hideVal = imgPath.val();
-			if (hideVal == '') {
-				hideVal = dataObj.fileIds;
-			} else {
-				var arrays =hideVal.split(",");
-				for(var i=0;i<arrays.length;i++){
-					if(arrays[i]){
-						num+=1;
+var uploadImg = function($file){
+		var $div=$file.parent().parent().parent();
+		var $carousel=$div.find(".elastislide-list");
+		var $container=$carousel.parent();
+		var $hidden=$container.parent().find(":input");
+		$file.uploadify({
+			swf : '${basePath}upload/uploadify.swf',
+			uploader : "${basePath}upload.htm",
+			fileTypeExts : '*.gif; *.jpg; *.png',
+			auto : true,
+			multi : true,
+			height : 30,
+			width : 120,
+			buttonText : '上传合同扫描件',
+			onUploadSuccess : function(file,
+					data, response) {
+				var num = 1;
+				var dataObj = eval("(" + data+ ")");//转换为json对象 
+				var hideVal = $hidden.val();
+				if (hideVal == '') {
+					hideVal = dataObj.fileIds;
+				} else {
+					var arrays =hideVal.split(",");
+					for(var i=0;i<arrays.length;i++){
+						if(arrays[i]){
+							num+=1;
+						}
 					}
+					hideVal += ","+ dataObj.fileIds;
 				}
-				hideVal += ","+ dataObj.fileIds;
+				$hidden.val(hideVal);
+				refreshElastislide($container,$carousel,dataObj);
 			}
-			rollBox.empty();
-			rollBox.append(ul.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+dataObj.fileIds+'"><img src="${b.imagePath}'+dataObj.fileIds+'80x100.JPG" alt="" /></a><p>'+num+'</p></li>'));
-			imgPath.val(hideVal);
-			ulBinding(ul);
-			ul.elastislide({
-				orientation : 'horizontal',
-				speed : 500,
-				easing : 'ease-in-out',
-				minItems : 3,
-				start : 0,
-				onClick : function( el, position, evt ) { 
-					var imageSource = el.find("a").attr("data-image");
-					alert(imageSource);
-					$("#viewer2").iviewer({
-						src : imageSource,
-						mousewheel : true,
-						onDelete:function(e){
-							var imgurl =$(this).children("img").attr("src");
-							var imgarr=imgurl.split("file-web/");
-							var delImg =img.val();
-							delImg=delImg.replace(new RegExp(imgarr[1]),'');
-							img.val(delImg);
-							$('.maskdivgen').fadeOut(100);
-							$('.viewer').slideUp(200);
-							el.remove();
-						  }
-					});
-					el.parent().children("li").removeClass("view");
-					el.addClass("view");
-					$("#viewer2").children("img").attr("src",imageSource);
-					$(".viewer").show();
-					$(".modal-header").show();
-					$(".maskdivgen").show();
-					return false; 
-				},
-				onReady : function() { return false; },
-				onBeforeSlide : function() { return false; },
-				onAfterSlide : function() { return false; }
-			});
-		}
-	});
+		});
 }
 
 //合同扫描件
 	$(document).ready(function() {
-		imgBinding($("#contractImgPath"),$("#contractUl"));
-		uploadImg($("#contractFile"),$("#contractUl"),$("#contractImgPath"),$("#contractRollBox"));
+		$('.modal-header .close').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.viewer').slideUp(200);
+		})
+	$('.elastislide-list').find("li").live("click",function(){
+		var el=$(this);
+		var imageSource = el.find("a").attr("data-image");
+		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+		el.parent().children("li").removeClass("view");
+		el.addClass("view"); 
+		$(".maskdivgen").show();
+		
+	});
+		uploadImg($("#contractFile"));
+		uploadImg($("#bgFile"));
+		uploadImg($("#bsFile"));
+		imgBinding();
 	});
 	
 //金额处理
@@ -454,15 +373,15 @@ var getFloatStr = function(num){
 						<div class="contPic">
 							<label>合同备案扫描件</label>
 							<input type="hidden" value="${contractModel.contract.imgPath}" name="contractModel.contract.imgPath" id="contractImgPath" />
-							<div class="RollBox" id="contractRollBox">
+							<div class="rollBox" id="contractRollBox">
 								<ul id="contractUl" class="elastislide-list"></ul>
 							</div>
 						</div>
 						<div class="contPic">
 						<label>合同备案扫描件</label>
 						<div class="ly-left">
-						<input type="file" name="contractFile" id="contractFile"  multiple="true"/></div>
-					</div>
+						<input type="file" name="contractFile"   multiple="true" id="contractFile"/></div>
+						</div>
 					<div>
 						<label>关联招标合同号</label> <input name="contract.refContractNo" type="text"
 							value="${contractModel.contract.refContractNo}" />
@@ -478,20 +397,23 @@ var getFloatStr = function(num){
 						<div>
 							<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
 						</div>
-						<script>
-							$(document).ready(function() { 
-								loadUpload("modifyFile","upload.htm","modifyimageList","modifyContractHide${modifyList_index}");
-							});  
-						</script>
 						<div class="contPic">
 							<label>合同变更扫描件</label>
 					<div class="ly-left">
 						<div class="imageList">
 						</div>
-						<input type="hidden" name="modifyList[${modifyList_index}].modifyContract.imgPath" class="imgPathHide" value=""/>
-						<input type="file" name="contractFile" id="contractFile"  multiple="true"/></div>
+						<div class="rollBox" id="contractRollBox">
+								<ul id="contractUl" class="elastislide-list"></ul>
+						</div>
+						<input type="hidden" name="modifyList[${modifyList_index}].modifyContract.imgPath" class="imgPathHide" value="${modifyList.modifyContract.imgPath}"/>
 					</div>
-    					<div></div>
+					</div>
+					<div class="contPic">
+						<label>合同变更扫描件</label>
+						<div class="ly-left">
+						<input type="file" name="contractFile"   multiple="true" id="bgFile"/></div>
+					</div>
+					
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="20%" />
@@ -590,8 +512,9 @@ var getFloatStr = function(num){
 						<div class="imageList">
 						</div>
 						<input type="hidden" name="replenishList[${replenishList_index}].replenishContract.imgPath" class="imgPathHide" value=""/>
-						<input type="file" name="contractFile" id="contractFile"  multiple="true"/></div>
+						<input type="file" name="contractFile"   multiple="true" id="bsFile"/></div>
 						</div>
+						
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="10%" />
@@ -655,12 +578,13 @@ var getFloatStr = function(num){
 			</div>
 		</div>
 		<@b.footer />
-		<div class="viewer modal-wrap" style="display: none">
-									<div class="modal-header">
-										<span class="close">关闭</span>
-									</div>
-									<div id="viewer2" class="modal-body"></div>
-								</div>
+		<div class="viewer modal-wrap" id="iviewerModal">
+		<div class="modal-header" style="display: none;">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
+	</div>
 	<div class="maskdivgen" style="display: none"></div> 
 </body>
 <!-- InstanceEnd -->
