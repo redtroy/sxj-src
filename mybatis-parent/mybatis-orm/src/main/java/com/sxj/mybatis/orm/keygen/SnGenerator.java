@@ -114,13 +114,13 @@ public class SnGenerator implements KeyGenerator
                     snPojo.setStubValue((String) Reflections.invokeGetter(parameter,
                             "stubValue"));
                 }
-                String snSql = dialect.getSnIncrSQL(snPojo);
-                
                 initSn(dialect, statement, snPojo);
+                String snSql = dialect.getSnIncrSQL(snPojo);
                 
                 while (statement.executeUpdate(snSql) < 1)
                 {
                     snPojo.setCurrent(snPojo.getCurrent() + snPojo.getStep());
+                    snSql = dialect.getSnIncrSQL(snPojo);
                 }
                 DecimalFormat df = new DecimalFormat(sn.pattern());
                 Reflections.invokeSetter(parameter,

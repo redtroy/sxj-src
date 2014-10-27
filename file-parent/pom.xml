@@ -10,7 +10,6 @@
 		<module>file-web</module>
 		<module>file-common</module>
 		<module>file-client</module>
-		<module>fdfs-client</module>
 	</modules>
 	<name>file-parent</name>
 	<url>http://maven.apache.org</url>

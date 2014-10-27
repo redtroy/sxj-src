@@ -34,14 +34,18 @@ public class MySql5Dialect extends Dialect
         sb.append(" set ");
         sb.append(sn.getSn());
         sb.append(" = ");
-        sb.append(sn.getSn());
-        sb.append(" + ");
-        sb.append(sn.getStep());
+        sb.append(sn.getCurrent() + sn.getStep());
+        //        sb.append(" + ");
+        //        sb.append(sn.getStep());
         sb.append(" where ");
         sb.append(sn.getStub());
         sb.append(" = '");
         sb.append(sn.getStubValue());
         sb.append("'");
+        sb.append(" and ");
+        sb.append(sn.getSn());
+        sb.append("=");
+        sb.append(sn.getCurrent());
         return sb.toString();
     }
     
