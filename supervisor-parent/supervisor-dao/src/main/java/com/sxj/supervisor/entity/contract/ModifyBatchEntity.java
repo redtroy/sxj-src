@@ -53,7 +53,7 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
 	 * 金额
 	 **/
 	@Column(name = "AMOUNT")
-	private Long amount;
+	private Double amount;
 
 	/**
 	 * 批次条目JSON
@@ -106,11 +106,11 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
 		this.rfidNo = rfidNo;
 	}
 
-	public Long getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Long amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 

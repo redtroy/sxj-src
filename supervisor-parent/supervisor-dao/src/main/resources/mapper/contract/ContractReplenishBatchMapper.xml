@@ -9,7 +9,7 @@
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 		<result property="newRfidNo" column="NEW_RFID_NO" jdbcType="VARCHAR" />
-		<result property="amount" column="AMOUNT" jdbcType="INTEGER" />
+		<result property="amount" column="AMOUNT" jdbcType="DOUBLE" />
 		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
 	</resultMap>
 

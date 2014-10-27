@@ -79,13 +79,13 @@
 			</tr>
 			<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
 			item> <#assign n = (n+item.quantity)?number > <#assign m =
-			(m+item.amount/100)?number >
+			(m+item.amount)?number >
 			<tr>
 				<td>${item.productName}</td>
 				<td>${item.windowType.getName()}</td>
 				<td>${item.quantity}</td>
-				<td>${item.price/100}</td>
-				<td>${item.amount/100}</td>
+				<td>${item.price}</td>
+				<td>${item.amount}</td>
 				<td>${item.remarks}</td>
 				<td><#if item.updateState==1><span class="color-red">！</span></#if>
 				</td>

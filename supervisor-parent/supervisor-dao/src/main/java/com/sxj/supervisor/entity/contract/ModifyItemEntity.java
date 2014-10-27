@@ -59,13 +59,13 @@ public class ModifyItemEntity extends Pagable implements Serializable {
 	 * 单价
 	 **/
 	@Column(name = "PRICE")
-	private Long price;
+	private Double price;
 
 	/**
 	 * 金额
 	 **/
 	@Column(name = "AMOUNT")
-	private Long amount;
+	private Double amount;
 
 	/**
 	 * 备注
@@ -126,19 +126,19 @@ public class ModifyItemEntity extends Pagable implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public Long getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
-	public Long getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Long amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
