@@ -3,6 +3,7 @@ package com.sxj.file.fastdfs;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.csource.common.NameValuePair;
 
@@ -43,7 +44,7 @@ public interface IFileUpLoad {
 	 *            ：文件
 	 * @return file_Url ：文件Url
 	 */
-	public String uploadFile(File file);
+	public String uploadFile(File file) throws IOException;
 
 	/**
 	 * 修改服务器文件
@@ -57,7 +58,7 @@ public interface IFileUpLoad {
 	 * @return
 	 */
 	public String modfiyFile(String oldfile_Url, byte[] newfile_buff,
-			String newfile_ext_name);
+			String newfile_ext_name) throws IOException;
 
 	/**
 	 * 下载文件
@@ -75,6 +76,15 @@ public interface IFileUpLoad {
 	 * @return
 	 */
 	public List<NameValuePair> getMetaList(String file_Id) throws IOException;
+
+	/**
+	 * 获取文件元信息
+	 * 
+	 * @param file_Id文件路径
+	 * @return
+	 */
+	public Map<String, NameValuePair[]> getMetaList(String[] file_Ids)
+			throws IOException;
 
 	/**
 	 * 获取缩略图
@@ -96,7 +106,7 @@ public interface IFileUpLoad {
 	 *            ：文件路径
 	 * @return
 	 */
-	public boolean removeFile(String file_Url);
+	public boolean removeFile(String file_Url) throws IOException;
 
 	/**
 	 * 删除文件
@@ -105,6 +115,6 @@ public interface IFileUpLoad {
 	 *            ：文件路径
 	 * @return
 	 */
-	public boolean removeFile(String[] file_Urls);
+	public boolean removeFile(String[] file_Urls) throws IOException;
 
 }

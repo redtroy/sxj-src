@@ -1,5 +1,6 @@
 package com.sxj.supervisor.manage.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.csource.common.NameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,8 +29,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import com.sxj.file.common.LocalFileUtil;
-import com.sxj.file.fastdfs.IFileUpLoad;
+import third.rewrite.fastdfs.NameValuePair;
+import third.rewrite.fastdfs.StorePath;
+import third.rewrite.fastdfs.service.IStorageClientService;
+
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
@@ -44,6 +46,7 @@ import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
+import com.sxj.util.common.FileUtil;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -66,7 +69,7 @@ public class BasicController extends BaseController {
 	private IRfidSupplierService supplierService;
 
 	@Autowired
-	private IFileUpLoad fastDfsClient;
+	private IStorageClientService storageClientService;
 
 	@RequestMapping("footer")
 	public String ToFooter() {
@@ -191,47 +194,67 @@ public class BasicController extends BaseController {
 
 	@RequestMapping("upload")
 	public void uploadFile(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (!(request instanceof DefaultMultipartHttpServletRequest)) {
-			return;
-		}
-		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
-		Map<String, MultipartFile> fileMaps = re.getFileMap();
-		Collection<MultipartFile> files = fileMaps.values();
-		List<String> fileIds = new ArrayList<String>();
-		for (MultipartFile myfile : files) {
-			if (myfile.isEmpty()) {
-				System.err.println("文件未上传");
-			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
-						myfile.getOriginalFilename());
-				fileIds.add(fileId);
+			HttpServletResponse response) throws WebException {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			if (!(request instanceof DefaultMultipartHttpServletRequest)) {
+				return;
 			}
+			DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
+			Map<String, MultipartFile> fileMaps = re.getFileMap();
+			Collection<MultipartFile> files = fileMaps.values();
+			List<String> fileIds = new ArrayList<String>();
+			for (MultipartFile myfile : files) {
+				if (myfile.isEmpty()) {
+					System.err.println("文件未上传");
+				} else {
+					String originalName = myfile.getOriginalFilename();
+					String extName = FileUtil.getFileExtName(originalName);
+					// 上传文件
+					StorePath filePath = storageClientService.uploadFile(null,
+							new ByteArrayInputStream(myfile.getBytes()),
+							myfile.getBytes().length, extName.toUpperCase());
+					SxjLogger.info("##############" + filePath.getPath(),
+							this.getClass());
+					fileIds.add("group1/" + filePath.getPath());
+
+					// 上传元数据
+					NameValuePair[] metaList = new NameValuePair[1];
+					metaList[0] = new NameValuePair("originalName",
+							originalName);
+					storageClientService.overwriteMetadata("group1",
+							filePath.getPath(), metaList);
+				}
+			}
+			map.put("fileIds", fileIds);
+			String res = JsonMapper.nonDefaultMapper().toJson(map);
+			response.setContentType("text/plain;UTF-8");
+			PrintWriter out = response.getWriter();
+			out.print(res);
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new WebException("文件上传错误");
 		}
-		map.put("fileIds", fileIds);
-		String res = JsonMapper.nonDefaultMapper().toJson(map);
-		response.setContentType("text/plain;UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(res);
-		out.flush();
-		out.close();
+
 	}
 
 	@RequestMapping("filesort")
 	public @ResponseBody List<String> fileSort(String fileId)
-			throws IOException {
+			throws WebException {
 		List<String> sortFile = new ArrayList<String>();
 		try {
 			String[] fileids = fileId.split(",");
 			Map<String, String> nameMap = new TreeMap<String, String>();
-			for (int i = 0; i < fileids.length; i++) {
-				List<NameValuePair> values = fastDfsClient
-						.getMetaList(fileids[i]);
-				if(values!=null){
-					String value = values.get(0).getValue();
-					nameMap.put(fileids[i], value);
+			Map<String, NameValuePair[]> values = storageClientService
+					.getMetadata(fileids);
+			for (String key : values.keySet()) {
+				if (key == null) {
+					continue;
 				}
+				NameValuePair[] value = values.get(key);
+				nameMap.put(key, value[0].getValue());
 			}
 			List<Map.Entry<String, String>> mappingList = null;
 			// 通过ArrayList构造函数把map.entrySet()转换成list
@@ -251,6 +274,7 @@ public class BasicController extends BaseController {
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new WebException("获取文件元信息错误");
 		}
 		return sortFile;
 
@@ -274,7 +298,7 @@ public class BasicController extends BaseController {
 			mq.setMemberName(keyword);
 		}
 		List<MemberEntity> list = memberService.queryMembers(mq);
-		List strlist = new ArrayList();
+		List<String> strlist = new ArrayList<String>();
 		String sb = "";
 		for (MemberEntity memberEntity : list) {
 			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
@@ -308,7 +332,7 @@ public class BasicController extends BaseController {
 			query.setName(keyword);
 		}
 		List<RfidSupplierEntity> list = supplierService.querySupplier(query);
-		List strlist = new ArrayList();
+		List<String> strlist = new ArrayList<String>();
 		String sb = "";
 		for (RfidSupplierEntity supplier : list) {
 			sb = "{\"title\":\"" + supplier.getName() + "\",\"result\":\""

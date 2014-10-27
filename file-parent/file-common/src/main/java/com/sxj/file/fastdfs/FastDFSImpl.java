@@ -7,6 +7,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.Semaphore;
 
 import org.apache.commons.logging.Log;
@@ -37,7 +39,7 @@ public class FastDFSImpl implements IFileUpLoad {
 
 	private int cacheTime = 60;
 
-	private TrackerClient tracker;
+	private static TrackerClient tracker;
 
 	private TrackerServer trackerServer;
 
@@ -46,29 +48,6 @@ public class FastDFSImpl implements IFileUpLoad {
 	private Integer maxThreads = 200;
 
 	private static Semaphore lock;
-
-	static {
-		// try {
-		// InputStream inputFile = FastDFSImpl.class
-		// .getResourceAsStream("file_client.conf");
-		// File file = new File("file_client_new.conf");
-		// FileOutputStream out = new FileOutputStream(file);
-		// int c = inputFile.read();
-		// while (c != -1) {
-		// out.write(c);
-		// c = inputFile.read();
-		// }
-		// inputFile.close();
-		// out.close();
-		// ClientGlobal.init(file.getPath());
-		// LocalFileUtil.delete(file);
-		// Logger.info("文件系统初始化成功");
-		// } catch (IOException e) {
-		// Logger.error(e.toString());
-		// } catch (Exception e) {
-		// Logger.error(e.toString());
-		// }
-	}
 
 	public void init() {
 		if ("no".equals(config.getAnti_steal_token())) {
@@ -88,7 +67,7 @@ public class FastDFSImpl implements IFileUpLoad {
 		lock = new Semaphore(getMaxThreads(), true);
 	}
 
-	public String uploadFile(File file) {
+	public String uploadFile(File file) throws IOException {
 		String file_id = null;
 		try {
 			lock.acquire();
@@ -116,6 +95,10 @@ public class FastDFSImpl implements IFileUpLoad {
 		} catch (Exception ex) {
 			Logger.error(ex.toString());
 		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
 			lock.release();
 		}
 
@@ -147,8 +130,6 @@ public class FastDFSImpl implements IFileUpLoad {
 		} finally {
 			if (storageServer != null)
 				storageServer.close();
-			if (trackerServer != null)
-				trackerServer.close();
 			lock.release();
 		}
 		return file_id;
@@ -156,11 +137,9 @@ public class FastDFSImpl implements IFileUpLoad {
 
 	@Override
 	public List<String> uploadFile(List<byte[]> file_buffs,
-			List<String> originalName) {
+			List<String> originalName) throws IOException {
 		List<String> file_ids = new ArrayList<String>();
 		try {
-			// Thread.currentThread().sleep(
-			// new Double(Math.random() * 100).longValue());
 			lock.acquire();
 			trackerServer = tracker.getConnection();
 			storageServer = tracker.getStoreStorage(trackerServer);
@@ -189,13 +168,17 @@ public class FastDFSImpl implements IFileUpLoad {
 		} catch (Exception ex) {
 			Logger.error(ex.toString());
 		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
 			lock.release();
 		}
 		return file_ids;
 	}
 
 	public String modfiyFile(String oldfile_id, byte[] newfile_buff,
-			String newfile_ext_name) {
+			String newfile_ext_name) throws IOException {
 		String newFileId = null;
 		try {
 			if (StringUtils.isNotEmpty(oldfile_id)) {
@@ -207,6 +190,12 @@ public class FastDFSImpl implements IFileUpLoad {
 					newfile_buff, cacheTime);
 		} catch (Exception ex) {
 			Logger.error(ex.toString());
+		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
+			lock.release();
 		}
 		return newFileId;
 	}
@@ -250,6 +239,7 @@ public class FastDFSImpl implements IFileUpLoad {
 	public List<NameValuePair> getMetaList(String file_Id) throws IOException {
 		List<NameValuePair> list = null;
 		try {
+			Logger.info("获取元数据的ID=" + file_Id);
 			lock.acquire();
 			trackerServer = tracker.getConnection();
 			storageServer = tracker.getStoreStorage(trackerServer);
@@ -269,6 +259,38 @@ public class FastDFSImpl implements IFileUpLoad {
 			lock.release();
 		}
 		return list;
+	}
+
+	public Map<String, NameValuePair[]> getMetaList(String[] file_Ids)
+			throws IOException {
+		Map<String, NameValuePair[]> nameMap = new TreeMap<String, NameValuePair[]>();
+		try {
+			lock.acquire();
+			trackerServer = tracker.getConnection();
+			storageServer = tracker.getStoreStorage(trackerServer);
+			StorageClient1 client = new StorageClient1(trackerServer,
+					storageServer);
+			for (int i = 0; i < file_Ids.length; i++) {
+				if (file_Ids[i] == null) {
+					continue;
+				}
+				Logger.info("获取元数据的ID=" + file_Ids[i]);
+				NameValuePair[] values = client.get_metadata1(file_Ids[i]);
+				if (values != null) {
+					nameMap.put(file_Ids[i], values);
+				}
+			}
+
+		} catch (Exception e) {
+			SxjLogger.error("获取图片元信息错误", e, this.getClass());
+		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
+			lock.release();
+		}
+		return nameMap;
 	}
 
 	public byte[] getSmallImage(String file_id, int width, int height) {
@@ -300,7 +322,7 @@ public class FastDFSImpl implements IFileUpLoad {
 		}
 	}
 
-	public boolean removeFile(String file_id) {
+	public boolean removeFile(String file_id) throws IOException {
 		try {
 			trackerServer = tracker.getConnection();
 			storageServer = tracker.getStoreStorage(trackerServer);
@@ -320,11 +342,16 @@ public class FastDFSImpl implements IFileUpLoad {
 		} catch (Exception ex) {
 			Logger.error(ex.toString());
 			return false;
+		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
 		}
 	}
 
 	@Override
-	public boolean removeFile(String[] file_Urls) {
+	public boolean removeFile(String[] file_Urls) throws IOException {
 		try {
 			if (file_Urls == null) {
 				return false;
@@ -336,6 +363,11 @@ public class FastDFSImpl implements IFileUpLoad {
 		} catch (Exception e) {
 			Logger.error(e.toString());
 			return false;
+		} finally {
+			if (storageServer != null)
+				storageServer.close();
+			if (trackerServer != null)
+				trackerServer.close();
 		}
 	}
 
@@ -378,39 +410,4 @@ public class FastDFSImpl implements IFileUpLoad {
 	public void setMaxThreads(Integer maxThreads) {
 		this.maxThreads = maxThreads;
 	}
-
-	/**
-	 * public static void main(String[] args) { try { String aa = "sasa.gif";
-	 * boolean ac = aa.matches("[.]\\p{Punct}[.]"); System.out.println(ac); long
-	 * start = System.currentTimeMillis(); IFileUpLoad fileuplaod =
-	 * UpLoadFactory.buildImageUpLoad(); for (int i = 0; i < 2; i++) { byte[]
-	 * ass = LocalFileUtil
-	 * .readByte("C:/Users/dujinxin/Desktop/adu/DSC_0357.JPG"); String id =
-	 * fileuplaod.uploadFile(ass, "jpg"); System.out.println(id);
-	 * System.out.println(i); } // System.out.println(System.currentTimeMillis()
-	 * - start); // FastDFSImpl im = new FastDFSImpl(); // im.deleteFile(
-	 * "http://192.168.18.118/00/00/wKgSdkvFmcoAAAAAAAASoE3DieQ165.jpg"); //
-	 * String file_id = //
-	 * "http://192.168.18.118/data/00/AB/wKgSdkvFfIsAAAAAAAASoF6t6Q8275.jpg"; //
-	 * // if (StringUtil.isNotEmpty(file_id)) { // file_id =
-	 * file_id.substring(7, file_id.length()); // String[] aaa =
-	 * file_id.split("/"); // String http = aaa[0] + "/" + aaa[1]; // file_id =
-	 * file_id.substring(http.length(), file_id.length()); // http =
-	 * properties.getProperty(http); // file_id = http + file_id; // } //
-	 * System.out.println(file_id); String serviceUrl =
-	 * "http://pay.5iding.com/eqtpayweb/paygetway/to_paygetway.htm?orderId=null&billId=BI201109062012170072;jsessionid=50E57794E5C6B4AE8CFC035372389162.node2&amount=null&returnUrl=null&type=2"
-	 * ; // String serviceUrl = constructServiceUrl(request, response); // //
-	 * int index = serviceUrl.lastIndexOf("jsessionid"); // if (index == -1) {
-	 * // serviceUrl = URLDecoder.decode(serviceUrl, "utf-8"); // String[]
-	 * serviceUrls = serviceUrl.split("[?]"); // serviceUrl = serviceUrls[0] +
-	 * ";jsessionid=" // +"fsdfasdfasd.node4"; // if (serviceUrls.length == 2) {
-	 * // serviceUrl = serviceUrl + "?" // + serviceUrls[serviceUrls.length -
-	 * 1]; // } // serviceUrl = URLEncoder.encode(serviceUrl, "utf-8"); // } //
-	 * Date aaa = new Date(System.currentTimeMillis() + (30 * 1000)); //
-	 * Calendar calendar = Calendar.getInstance(); //
-	 * calendar.add(Calendar.SECOND, 30); // System.out.println(aaa); //
-	 * System.out.println(calendar.getTime()); } catch (Exception e) { // TODO
-	 * Auto-generated catch block e.printStackTrace(); } }
-	 **/
-
 }

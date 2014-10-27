@@ -1,26 +1,17 @@
 package com.sxj.supervisor.manage.controller.record;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import com.sxj.file.fastdfs.IFileUpLoad;
-import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
@@ -29,7 +20,6 @@ import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.manage.comet.MessageChannel;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
-import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
@@ -45,9 +35,6 @@ public class RecordController extends BaseController {
 
 	@Autowired
 	private IContractService contractService;
-
-	@Autowired
-	private IFileUpLoad fastDfsClient;
 
 	/**
 	 * 备案管理页面
@@ -172,48 +159,50 @@ public class RecordController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/queryRecordNo")
-	public @ResponseBody Map<String, Object> queryRecordNo(RecordQuery query,String recordId) {
+	public @ResponseBody Map<String, Object> queryRecordNo(RecordQuery query,
+			String recordId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
-		ContractModel cm =contractService.getContractByContractNo(query.getContractNo());
-		if(cm!=null){
-			RecordEntity re =recordService.getRecord(recordId);//申请绑定备案
-			String recordNo =cm.getContract().getRecordNo();
-			if (recordNo!=null) {
-				String[] recordNoArr=recordNo.split(",");
-				if(recordNoArr.length<2){
+
+		ContractModel cm = contractService.getContractByContractNo(query
+				.getContractNo());
+		if (cm != null) {
+			RecordEntity re = recordService.getRecord(recordId);// 申请绑定备案
+			String recordNo = cm.getContract().getRecordNo();
+			if (recordNo != null) {
+				String[] recordNoArr = recordNo.split(",");
+				if (recordNoArr.length < 2) {
 					for (String record : recordNoArr) {
-						RecordEntity recordEntity=recordService.getRecordByNo(record.trim());
-						if(re.getFlag().getId()==0){
-							//甲方备案
-							if(recordEntity.getFlag().getId()==0){
+						RecordEntity recordEntity = recordService
+								.getRecordByNo(record.trim());
+						if (re.getFlag().getId() == 0) {
+							// 甲方备案
+							if (recordEntity.getFlag().getId() == 0) {
 								map.put("ok", "jfyba");
-							}else{
+							} else {
 								map.put("ok", "ok");
 								map.put("record", recordEntity);
 							}
-						}else{
-							//乙方备案
-							if(recordEntity.getFlag().getId()==1){
+						} else {
+							// 乙方备案
+							if (recordEntity.getFlag().getId() == 1) {
 								map.put("ok", "yfyba");
-							}else{
+							} else {
 								map.put("ok", "ok");
 								map.put("record", recordEntity);
 							}
-						}	
+						}
 					}
-				}else{
+				} else {
 					map.put("ok", "htyba");
 				}
 			}
-			
-		}else{
+
+		} else {
 			map.put("ok", "no");
 		}
 		return map;
 	}
 
-	
 	/**
 	 * 根据ID删除备案
 	 * 
@@ -226,41 +215,5 @@ public class RecordController extends BaseController {
 		recordService.deleteRecord(id);
 		map.put("isOk", "ok");
 		return map;
-	}
-
-	/**
-	 * 上传图片
-	 * 
-	 * @param request
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping("upload")
-	public void uploadFile(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (!(request instanceof DefaultMultipartHttpServletRequest)) {
-			return;
-		}
-		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
-		Map<String, MultipartFile> fileMaps = re.getFileMap();
-		Collection<MultipartFile> files = fileMaps.values();
-		List<String> fileIds = new ArrayList<String>();
-		for (MultipartFile myfile : files) {
-			if (myfile.isEmpty()) {
-				System.err.println("文件未上传");
-			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
-						myfile.getOriginalFilename());
-				fileIds.add(fileId);
-			}
-		}
-		map.put("fileIds", fileIds);
-		String res = JsonMapper.nonDefaultMapper().toJson(map);
-		response.setContentType("text/plain;UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(res);
-		out.flush();
-		out.close();
 	}
 }
