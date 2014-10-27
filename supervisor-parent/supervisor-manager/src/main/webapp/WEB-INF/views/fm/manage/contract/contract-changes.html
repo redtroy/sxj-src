@@ -118,28 +118,7 @@
 		});
 	});
 
-	function addBatchItem() {
-		var vTb1 = $("#batchItem1");//得到表格ID=TbData的jquery对象 
-		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-		var vNum1 = $("#batchItem1 tr").filter(".batchItemClass").size() - 1;//表格有多少个数据行 
-		var vTr1 = $("#batchItem1 tr").eq(0); //得到表格中的第一行数据 
-		var vTrClone1 = vTr1.clone(true);//创建第一行的副本对象vTrClone 
-		var id = "BatchItemTrRowA" + vNum1 + 1;
-		vTrClone1[0].id = id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-		vTrClone1.insertAfter(vTr1);
-		vTrClone1.find("td").find("textarea").text("");
-		//第二个table
-		var vTb2 = $("#batchItem2");//得到表格ID=TbData的jquery对象 
-		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-		var vNum2 = $("#batchItem2 tr").filter(".batchItemClass").size() - 1;//表格有多少个数据行 
-		var vTr2 = $("#batchItem2 tr").eq(0); //得到表格中的第一行数据 
-		var vTrClone2 = vTr2.clone(true);//创建第一行的副本对象vTrClone 
-		var id = "BatchItemTrRowB" + vNum2 + 1;
-		vTrClone2[0].id = id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-		vTrClone2.insertAfter(vTr2);
-		vTrClone2.find("td").find("input").val("");
-		vTrClone2.find("td").find("a").remove();//更改按钮
-	}
+
 	function saveChenges() {
 		$("#saveId").live(
 				"click",

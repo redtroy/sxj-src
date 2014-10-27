@@ -338,6 +338,8 @@ public class RecordServiceImpl implements IRecordService {
 		try {
 			record.setDateNo("BA"
 					+ DateTimeUtils.formateDate2Str(new Date(), "yyMM"));
+			record.setApplyDate(new Date());//申請時間
+			record.setAcceptDate(null);
 			recordDao.addRecord(record);
 			// 更改合同关联所有的备案状态
 			String contractNo = record.getContractNo();
