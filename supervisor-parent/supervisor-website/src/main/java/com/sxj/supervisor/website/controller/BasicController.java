@@ -1,5 +1,6 @@
 package com.sxj.supervisor.website.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
-import org.csource.common.NameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import com.sxj.file.fastdfs.IFileUpLoad;
+import third.rewrite.fastdfs.NameValuePair;
+import third.rewrite.fastdfs.service.IStorageClientService;
+
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -43,6 +45,7 @@ import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
+import com.sxj.util.common.FileUtil;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.logger.SxjLogger;
 
@@ -62,7 +65,7 @@ public class BasicController extends BaseController {
 	private IMemberRoleService roleService;
 
 	@Autowired
-	private IFileUpLoad fastDfsClient;
+	private IStorageClientService storageClientService;
 
 	@RequestMapping("index")
 	public String ToIndex(HttpServletRequest request) {
@@ -244,9 +247,19 @@ public class BasicController extends BaseController {
 			if (myfile.isEmpty()) {
 				System.err.println("文件未上传");
 			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
-						myfile.getOriginalFilename());
-				fileIds.add(fileId);
+				String originalName = myfile.getOriginalFilename();
+				String extName = FileUtil.getFileExtName(originalName);
+				String filePath = storageClientService.uploadFile(null,
+						new ByteArrayInputStream(myfile.getBytes()),
+						myfile.getBytes().length, extName.toUpperCase());
+				SxjLogger.info("siteUploadFilePath=" + filePath,
+						this.getClass());
+				fileIds.add(filePath);
+
+				// 上传元数据
+				NameValuePair[] metaList = new NameValuePair[1];
+				metaList[0] = new NameValuePair("originalName", originalName);
+				storageClientService.overwriteMetadata(filePath, metaList);
 			}
 		}
 		map.put("fileIds", fileIds);
@@ -335,14 +348,14 @@ public class BasicController extends BaseController {
 		try {
 			String[] fileids = fileId.split(",");
 			Map<String, String> nameMap = new TreeMap<String, String>();
-			for (int i = 0; i < fileids.length; i++) {
-				List<NameValuePair> values = fastDfsClient
-						.getMetaList(fileids[i]);
-				if (values == null) {
+			Map<String, NameValuePair[]> values = storageClientService
+					.getMetadata(fileids);
+			for (String key : values.keySet()) {
+				if (key == null) {
 					continue;
 				}
-				String value = values.get(0).getValue();
-				nameMap.put(fileids[i], value);
+				NameValuePair[] value = values.get(key);
+				nameMap.put(key, value[0].getValue());
 			}
 			List<Map.Entry<String, String>> mappingList = null;
 			// 通过ArrayList构造函数把map.entrySet()转换成list
