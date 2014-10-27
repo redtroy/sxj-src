@@ -73,8 +73,9 @@ public interface IContractService {
 	 * @param batchList
 	 * @param recordNo
 	 **/
-	public void changeContract(String recordId,String contractId, ContractModifyModel model,
-			String recordNo, List<ContractItemEntity> itemList);
+	public void changeContract(String recordId, String contractId,
+			ContractModifyModel model, String recordNo,
+			List<ContractItemEntity> itemList);
 
 	/**
 	 * 补损合同
@@ -83,7 +84,8 @@ public interface IContractService {
 	 * @param list
 	 * @param recordNo
 	 **/
-	public void suppContract(String recordId,String contractId, List<ReplenishBatchModel> list,
+	public void suppContract(String recordId, String contractId,
+			List<ReplenishBatchModel> list,
 			ReplenishContractEntity replenishContract);
 
 	/**
@@ -120,31 +122,33 @@ public interface IContractService {
 
 	/**
 	 * 获取合同批次
+	 * 
 	 * @param contractNo
 	 * @param rfid
 	 * @return
 	 */
 	public List<ContractBatchModel> getContractBatch(String contractNo,
 			String rfid);
-	
+
 	/**
 	 * 获取合同变更批次
+	 * 
 	 * @param contractNo
 	 * @param rfid
 	 * @return
 	 */
 	public List<ModifyBatchModel> getContractModifyBatch(String contractNo,
 			String rfid);
-	
 
 	/**
 	 * 获取合同补损批次
+	 * 
 	 * @param contractNo
 	 * @param rfid
 	 * @return
 	 */
-	public List<ReplenishBatchModel> getContractReplenishBatch(String contractNo,
-			String rfid);
+	public List<ReplenishBatchModel> getContractReplenishBatch(
+			String contractNo, String rfid);
 
 	/**
 	 * 修改批次申请合同信息
@@ -154,13 +158,18 @@ public interface IContractService {
 	 */
 	public void modifyBatch(ContractBatchModel model) throws ServiceException;
 
-	void addBatch(ContractBatchModel model, String id,MemberEntity member) throws ServiceException;
+	void addBatch(ContractBatchModel model, String id, MemberEntity member)
+			throws ServiceException;
 
 	void updateRfid(String id, String rfidNo, String contractNo,
-			MemberEntity member,String newRfid) throws ServiceException;
+			MemberEntity member, String newRfid) throws ServiceException;
 
 	String getReplenish(String contractNo);
 
 	int getContractByZhaobiaoContractNo(String contractNo);
+
+	/**
+	 * 根据关联合同号取
+	 */
 
 }
