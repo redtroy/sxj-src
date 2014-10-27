@@ -35,10 +35,8 @@ public class CacheManagerTest
         //        result.add("c");
         //        result.add("d");
         //        result.add("e");
-        HierarchicalCacheManager.set(2, "L2List", "ListString", "demo");
-        System.out.println(HierarchicalCacheManager.get(2,
-                "comet_record",
-                "record_id"));
+        cacheManager.set(2, "L2List", "ListString", "demo");
+        System.out.println(cacheManager.get(2, "L2List", "ListString"));
         //        List<String> object = (List<String>) cacheManager.get(2,
         //                "L2List",
         //                "ListString");

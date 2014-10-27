@@ -18,6 +18,9 @@
 <!-- InstanceEndEditable -->
 <script>
 jQuery(document).ready(function($) {
+	$(".msgBox").live("click",function(){
+		window.location.href="${basePath}rfid/apply/appList.htm?isDelMes=true";
+	});
 	 JS.Engine.on({  
 		 rfid_apply_message : function(data){//侦听一个channel
 			 $("#message_div").empty();

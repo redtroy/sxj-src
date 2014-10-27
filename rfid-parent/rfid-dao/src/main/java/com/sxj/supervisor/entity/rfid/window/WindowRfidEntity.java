@@ -12,7 +12,6 @@ import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
-import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 
@@ -91,12 +90,6 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "RFID_STATE")
 	private RfidStateEnum rfidState;
-
-	/**
-	 * 进度状态
-	 */
-	@Column(name = "PROGRESS_STATE")
-	private LabelProgressEnum progressState;
 
 	/**
 	 * 执行日志
@@ -182,14 +175,6 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 
 	public void setRfidState(RfidStateEnum rfidState) {
 		this.rfidState = rfidState;
-	}
-
-	public LabelProgressEnum getProgressState() {
-		return progressState;
-	}
-
-	public void setProgressState(LabelProgressEnum progressState) {
-		this.progressState = progressState;
 	}
 
 	public String getLog() {

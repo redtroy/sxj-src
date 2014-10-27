@@ -31,6 +31,9 @@ jQuery(document).ready(function($) {
 		$('.popDemo').slideUp(200);
 		$(".rollBox").empty();
 	})
+	$(".msgBox").live("click",function(){
+		window.location.href="${basePath}record/recordList.htm?isDelMes=true";
+	});
 	$('.lnk-view').live('click',function(){
 		var imgPath=$(this).attr("imgPath");
        			$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){

@@ -66,6 +66,11 @@ public class RfidApplicationQuery extends Pagable implements Serializable {
 	 */
 	private Boolean delstate = false;
 
+	/**
+	 * 删除消息标记
+	 */
+	private String isDelMes;
+
 	public String getId() {
 		return id;
 	}
@@ -160,6 +165,14 @@ public class RfidApplicationQuery extends Pagable implements Serializable {
 
 	public void setDelstate(Boolean delstate) {
 		this.delstate = delstate;
+	}
+
+	public String getIsDelMes() {
+		return isDelMes;
+	}
+
+	public void setIsDelMes(String isDelMes) {
+		this.isDelMes = isDelMes;
 	}
 
 }

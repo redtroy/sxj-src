@@ -264,9 +264,10 @@ public class ContractServiceImpl implements IContractService {
 								.getModifyItemList());
 					}
 					List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
-					if(cmm.getModifyBatchList()!=null){
+					if (cmm.getModifyBatchList() != null) {
 						for (int j = 0; j < cmm.getModifyBatchList().size(); j++) {
-							ModifyBatchModel mbm = cmm.getModifyBatchList().get(j);
+							ModifyBatchModel mbm = cmm.getModifyBatchList()
+									.get(j);
 							if (mbm.getModifyBatchItems() != null) {
 								mbm.getModifyBatch().setBatchItems(
 										JsonMapper.nonEmptyMapper().toJson(
@@ -403,8 +404,10 @@ public class ContractServiceImpl implements IContractService {
 
 					// 变更合同主体
 					QueryCondition<ModifyBatchEntity> modifyCondition = new QueryCondition<ModifyBatchEntity>();
-					modifyCondition.addCondition("recordIds", modifyRecordIds.trim());// 变更备案ID
-					modifyCondition.addCondition("contractId", contract.getContractNo());
+					modifyCondition.addCondition("recordIds",
+							modifyRecordIds.trim());// 变更备案ID
+					modifyCondition.addCondition("contractId",
+							contract.getContractNo());
 					List<ModifyContractEntity> modifyList = contractModifyDao
 							.queryModify(modifyCondition);
 					if (modifyList != null) {
@@ -557,7 +560,7 @@ public class ContractServiceImpl implements IContractService {
 		for (Iterator<RecordEntity> iterator = record.iterator(); iterator
 				.hasNext();) {
 			RecordEntity recordEntity = (RecordEntity) iterator.next();
-			recordIds += "'"+recordEntity.getRecordNo() + "',";
+			recordIds += "'" + recordEntity.getRecordNo() + "',";
 		}
 		recordIds = recordIds.substring(0, recordIds.length() - 1);
 		return recordIds;
@@ -771,7 +774,7 @@ public class ContractServiceImpl implements IContractService {
 					RecordEntity rEntity = new RecordEntity();
 					rEntity.setId(record.getId());
 					// TODO 审核
-					rEntity.setAcceptDate(new Date());//受理时间
+					rEntity.setAcceptDate(new Date());// 受理时间
 					rEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 					recordDao.updateRecord(rEntity);
 					if (record != null) {
@@ -1112,5 +1115,19 @@ public class ContractServiceImpl implements IContractService {
 		} catch (Exception e) {
 			throw new ServiceException("获取合同信息错误", e);
 		}
+	}
+
+	@Override
+	public List<ContractEntity> getContractByRefContractNo(String refContractNo)
+			throws ServiceException {
+		try {
+			ContractQuery query = new ContractQuery();
+			query.setRefContractNo(refContractNo);
+			List<ContractModel> list = queryContracts(query);
+
+		} catch (Exception e) {
+			throw new ServiceException("获取合同信息错误", e);
+		}
+		return null;
 	}
 }
