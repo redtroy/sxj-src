@@ -83,12 +83,12 @@
 		<!-- 生成时间 -->
 		<if
 			test="condition.startCreateDate != null and condition.endCreateDate != null and  condition.startCreateDate != '' and condition.endCreateDate != ''">
-			<![CDATA[AND CREATE_DATE >=#{condition.startCreateDate} AND CREATE_DATE <= #{condition.endCreateDate}]]>
+			<![CDATA[AND CREATE_DATE >=#{condition.startCreateDate} AND CREATE_DATE < DATE_ADD(#{condition.endCreateDate},INTERVAL 1 DAY) ]]>
 		</if>
 		<!-- 备案时间 -->
 		<if
 			test="condition.startRecordDate != null and condition.endRecordDate != null and condition.startRecordDate != '' and condition.endRecordDate != ''">
-			<![CDATA[AND RECORD_DATE >=#{condition.startRecordDate} AND RECORD_DATE <= #{condition.endRecordDate}]]>
+			<![CDATA[AND RECORD_DATE >=#{condition.startRecordDate} AND RECORD_DATE < DATE_ADD(#{condition.endRecordDate},INTERVAL 1 DAY) ]]>
 		</if>
 		<![CDATA[ ORDER BY CREATE_DATE DESC
 		]]>

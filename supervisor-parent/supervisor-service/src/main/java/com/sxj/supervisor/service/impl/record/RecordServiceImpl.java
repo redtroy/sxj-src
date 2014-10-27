@@ -246,10 +246,11 @@ public class RecordServiceImpl implements IRecordService {
 			// recordDao.updateRecord(re);
 			ContractModel conModel = contractService.getContract(contractId);
 			ContractEntity con = conModel.getContract();
-			// 更改双方备案
-			String[] reArr = con.getRecordNo().split(",");
-			for (String recordNo : reArr) {
-				RecordEntity re = getRecordByNo(recordNo.trim());
+			// 更改合同关联所有备案状态
+			RecordQuery recordQuery = new RecordQuery();
+			recordQuery.setContractNo(con.getContractNo());
+			List<RecordEntity> recordList = queryRecord(recordQuery);
+			for (RecordEntity re : recordList) {
 				RecordEntity rEntity = new RecordEntity();
 				rEntity.setId(re.getId());
 				if (re.getContractType().getId() != 0) {
@@ -264,6 +265,7 @@ public class RecordServiceImpl implements IRecordService {
 					}
 				} else {
 					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+					
 				}
 				recordDao.updateRecord(rEntity);
 			}
@@ -277,6 +279,7 @@ public class RecordServiceImpl implements IRecordService {
 				}
 			} else {
 				newCon.setConfirmState(ContractSureStateEnum.filings);
+				newCon.setRecordDate(new Date());
 			}
 			contractDao.updateContract(newCon);
 		} catch (Exception e) {
