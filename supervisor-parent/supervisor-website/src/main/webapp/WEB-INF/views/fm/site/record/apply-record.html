@@ -1,397 +1,462 @@
-﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。"/>
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link href="${b.staticPath}style/uploadify.css " rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" /> 
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗" />
+<meta name="description"
+	content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<link href="${b.staticPath}style/uploadify.css " rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" type="text/css"
+	href="${b.staticPath}style/elastislide.css" />
 <link rel="stylesheet" href="${b.staticPath}style/jquery.iviewer.css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
-<script type="text/javascript" src="${b.staticPath}js/jqueryui.js" ></script>
-<script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
-<script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
+<script type="text/javascript" src="${b.staticPath}js/jqueryui.js"></script>
+<script src="${b.staticPath}js/tytabs.jquery.min.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.uploadify.js"
+	type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
-<script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
-<script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
-<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
-<script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+<script type="text/javascript"
+	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
 <@b.upload/>
 <script type="text/javascript">
-$(document).ready(function(){
-	$("#tabsholder").tytabs({
-							prefixtabs:"tabz",
-							prefixcontent:"content",
-							classcontent:"tabscontent",
-							tabinit:"3",
-							catchget:"tab2",
-							fadespeed:"normal"
-							});
-	$('.modal-header .close').click(function() {
-		$('.maskdivgen').fadeOut(100);
-		$('.viewer').slideUp(200);
-	});
-	
-	$('.rollBox').find("li").live("click",function(){
-		var el=$(this);
-		var imageSource = el.find("a").attr("data-image");
-		refreshIviewer($("#viewer2"),imageSource);
-		el.parent().children("li").removeClass("view");
-		el.addClass("view");
-	});
-	
-});
+	$(document).ready(function() {
+		$("#tabsholder").tytabs({
+			prefixtabs : "tabz",
+			prefixcontent : "content",
+			classcontent : "tabscontent",
+			tabinit : "3",
+			catchget : "tab2",
+			fadespeed : "normal"
+		});
+		$('.modal-header .close').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.viewer').slideUp(200);
+		});
 
-$(document).ready(function() {
-	$("#zbFile").uploadify({
-			swf : '${basePath}upload/uploadify.swf',
-			uploader : "${basePath}upload.htm",
-			fileTypeExts : '*.gif; *.jpg; *.png',
-			auto : true,
-			multi : true,
-			height : 30,
-			width : 120,
-			buttonText : '上传合同扫描件',
-			onUploadSuccess : function(file,
-					data, response) {
-				var num = 1;
-				var dataObj = eval("(" + data+ ")");//转换为json对象 
-				var hideVal = $("#zbimgPath").val();
-				if (hideVal == '') {
-					hideVal = dataObj.fileIds;
-				} else {
-					var arrays =hideVal.split(",");
-					for(var i=0;i<arrays.length;i++){
-						if(arrays[i]){
-							num+=1;
-						}
-					}
-					hideVal += ","+ dataObj.fileIds;
-				}
-					refreshElastislide($('#zbRollBox'),$('#zbcarousel'),dataObj);
-					$("#zbimgPath").val(hideVal);
-				
+		$('.rollBox').find("li").live("click", function() {
+			var el = $(this);
+			var imageSource = el.find("a").attr("data-image");
+			refreshIviewer($("#viewer2"), imageSource);
+			el.parent().children("li").removeClass("view");
+			el.addClass("view");
+		});
+
+	});
+
+	$(document).ready(
+			function() {
+				$("#zbFile").uploadify(
+						{
+							swf : '${basePath}upload/uploadify.swf',
+							uploader : "${basePath}upload.htm",
+							fileTypeExts : '*.gif; *.jpg; *.png',
+							auto : true,
+							multi : true,
+							height : 30,
+							width : 120,
+							buttonText : '上传合同扫描件',
+							onUploadSuccess : function(file, data, response) {
+								var num = 1;
+								var dataObj = eval("(" + data + ")");//转换为json对象 
+								var hideVal = $("#zbimgPath").val();
+								if (hideVal == '') {
+									hideVal = dataObj.fileIds;
+								} else {
+									var arrays = hideVal.split(",");
+									for (var i = 0; i < arrays.length; i++) {
+										if (arrays[i]) {
+											num += 1;
+										}
+									}
+									hideVal += "," + dataObj.fileIds;
+								}
+								refreshElastislide($('#zbRollBox'),
+										$('#zbcarousel'), dataObj);
+								$("#zbimgPath").val(hideVal);
+
+							}
+						});
+				$("#cgFile").uploadify(
+						{
+							swf : '${basePath}upload/uploadify.swf',
+							uploader : "${basePath}upload.htm",
+							fileTypeExts : '*.gif; *.jpg; *.png',
+							auto : true,
+							multi : true,
+							height : 30,
+							width : 120,
+							buttonText : '上传合同扫描件',
+							onUploadSuccess : function(file, data, response) {
+								var num = 1;
+								var dataObj = eval("(" + data + ")");//转换为json对象 
+								var hideVal = $("#cgimgPath").val();
+								if (hideVal == '') {
+									hideVal = dataObj.fileIds;
+								} else {
+									var arrays = hideVal.split(",");
+									for (var i = 0; i < arrays.length; i++) {
+										if (arrays[i]) {
+											num += 1;
+										}
+									}
+									hideVal += "," + dataObj.fileIds;
+								}
+								refreshElastislide($('#cgRollBox'),
+										$('#cgcarousel'), dataObj);
+								$("#cgimgPath").val(hideVal);
+
+							}
+						});
+				//乙方上传
+				$("#BcgFile").uploadify(
+						{
+							swf : '${basePath}upload/uploadify.swf',
+							uploader : "${basePath}upload.htm",
+							fileTypeExts : '*.gif; *.jpg; *.png',
+							auto : true,
+							multi : true,
+							height : 30,
+							width : 120,
+							buttonText : '上传合同扫描件',
+							onUploadSuccess : function(file, data, response) {
+								var num = 1;
+								var dataObj = eval("(" + data + ")");//转换为json对象 
+								var hideVal = $("#bcgimgPath").val();
+								if (hideVal == '') {
+									hideVal = dataObj.fileIds;
+								} else {
+									var arrays = hideVal.split(",");
+									for (var i = 0; i < arrays.length; i++) {
+										if (arrays[i]) {
+											num += 1;
+										}
+									}
+									hideVal += "," + dataObj.fileIds;
+								}
+								refreshElastislide($('#bcgRollBox'),
+										$('#bcgcarousel'), dataObj);
+								$("#bcgimgPath").val(hideVal);
+
+							}
+						});
+
+			});
+
+	/**
+	 * 甲方申请采购
+	 */
+	function AcgApplyRecord() {
+		var memberIdB = $("#memberIdB").val();
+		var memberNameB = $("#memberNameB").val();
+		if (memberIdB == '') {
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		if (memberNameB == '') {
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		var refContractNo = $("#refContractNo").val();
+		if (refContractNo == '') {
+			messageInfo('请输入招标合同号！');
+			return;
+		}
+		var cgimgPath = $("#cgimgPath").val();
+		if (cgimgPath == '') {
+			messageInfo('请上传扫描件！');
+			return;
+		}
+		$.post("getContract.htm", {
+			contractNo : refContractNo
+		}, function(data) {
+			if (data.isOK == 'ok') {
+				$.post("AcgApplyRecord.htm", $("#cgForm").serialize(),
+						function(data) {
+							if (data.isOK == 'ok') {
+								$("#recordNo").html(data.recordNo);
+								$("#contBox").show();
+								$("#cgDiv").hide();
+							} else if (data.isOK == 'no') {
+								messageInfo("您还没有通过认证,不能申请备案!");
+							}
+						});
+			} else {
+				messageInfo("请输入正确的招标合同号!");
+			}
+
+		});
+	}
+	/**
+	 * 甲方申请招标
+	 */
+	function zbApplyRecord() {
+		var memberNameA = $("#memberA").val();
+		if (memberNameA == '') {
+			messageInfo('请输入甲方用户！');
+			return;
+		}
+		var zbimgPath = $("#zbimgPath").val();
+		if (zbimgPath == '') {
+			messageInfo('请上传扫描件！');
+			return;
+		}
+		$.post("zbApplyRecord.htm", $("#zbForm").serialize(), function(data) {
+			if (data.isOK == 'ok') {
+				$("#recordNo").html(data.recordNo);
+				$("#contBox").show();
+				$("#cgDiv").hide();
+			} else if (data.isOK == 'no') {
+				messageInfo("您还没有通过认证,不能申请备案!");
+			}
+		})
+	}
+	/**
+	 * 乙方申请采购
+	 */
+	function BzbApplyRecord() {
+		var memberNameA = $("#memberNameA").val();
+		var memberIdA = $("#memberIdA").val();
+		if (memberIdA == '') {
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		if (memberNameA == '') {
+			messageInfo('请选择系统自动感应的用户！');
+			return;
+		}
+		var bcgimgPath = $("#bcgimgPath").val();
+		if (bcgimgPath == '') {
+			messageInfo('请上传扫描件！');
+			return;
+		}
+		$.post("BzbApplyRecord.htm", $("#BcgForm").serialize(), function(data) {
+			if (data.isOK == 'ok') {
+				$("#recordNo").html(data.recordNo);
+				$("#contBox").show();
+				$("#BcgDiv").hide();
+			} else if (data.isOK == 'no') {
+				messageInfo("您还没有通过认证,不能申请备案!");
+			}
+		})
+	}
+
+	function upload(data) {
+		var dataObj = eval("(" + data + ")");//转换为json对象 
+		$("#BcgImageList")
+				.append(
+						"<img src='${b.imagePath}"+dataObj.fileIds+"80x100.JPG' alt='' />");
+		//获取隐藏域
+		var hideVal = $("#BcgImgPathHide").val();
+		if (hideVal == "") {
+			hideVal += dataObj.fileIds;
+		} else {
+			hideVal += "," + dataObj.fileIds;
+		}
+		$("#BcgImgPathHide").val(hideVal);
+	}
+	$(function() {
+		var urlA = "${basePath}autoCompleA.htm";
+		var urlB = "${basePath}autoCompleB.htm";
+		$("#memberNameA").keydown(function() {
+			$("#memberIdA").val("");
+		})
+		$("#memberNameB").keydown(function() {
+			$("#memberIdB").val("");
+		})
+		$("#memberNameA").bigAutocomplete({
+			url : urlA,
+			callback : function(data) {
+				$("#memberIdA").val(data.result);
 			}
 		});
-	$("#cgFile").uploadify({
-		swf : '${basePath}upload/uploadify.swf',
-		uploader : "${basePath}upload.htm",
-		fileTypeExts : '*.gif; *.jpg; *.png',
-		auto : true,
-		multi : true,
-		height : 30,
-		width : 120,
-		buttonText : '上传合同扫描件',
-		onUploadSuccess : function(file,
-				data, response) {
-			var num = 1;
-			var dataObj = eval("(" + data+ ")");//转换为json对象 
-			var hideVal = $("#cgimgPath").val();
-			if (hideVal == '') {
-				hideVal = dataObj.fileIds;
-			} else {
-				var arrays =hideVal.split(",");
-				for(var i=0;i<arrays.length;i++){
-					if(arrays[i]){
-						num+=1;
-					}
-				}
-				hideVal += ","+ dataObj.fileIds;
+		$("#memberNameB").bigAutocomplete({
+			url : urlB,
+			callback : function(data) {
+				$("#memberIdB").val(data.result);
 			}
-				refreshElastislide($('#cgRollBox'),$('#cgcarousel'),dataObj);
-				$("#cgimgPath").val(hideVal);
-			
-		}
+		});
 	});
-	//乙方上传
-	$("#BcgFile").uploadify({
-		swf : '${basePath}upload/uploadify.swf',
-		uploader : "${basePath}upload.htm",
-		fileTypeExts : '*.gif; *.jpg; *.png',
-		auto : true,
-		multi : true,
-		height : 30,
-		width : 120,
-		buttonText : '上传合同扫描件',
-		onUploadSuccess : function(file,
-				data, response) {
-			var num = 1;
-			var dataObj = eval("(" + data+ ")");//转换为json对象 
-			var hideVal = $("#bcgimgPath").val();
-			if (hideVal == '') {
-				hideVal = dataObj.fileIds;
-			} else {
-				var arrays =hideVal.split(",");
-				for(var i=0;i<arrays.length;i++){
-					if(arrays[i]){
-						num+=1;
-					}
-				}
-				hideVal += ","+ dataObj.fileIds;
-			}
-				refreshElastislide($('#bcgRollBox'),$('#bcgcarousel'),dataObj);
-				$("#bcgimgPath").val(hideVal);
-			
-		}
-	});
-	
-});
-
-
-/**
- * 甲方申请采购
- */
-function  AcgApplyRecord(){
-	var memberIdB = $("#memberIdB").val();
-	var memberNameB = $("#memberNameB").val();
-	if(memberIdB==''){
-		messageInfo('请选择系统自动感应的用户！');
-		return;
-	}
-	if(memberNameB==''){
-		messageInfo('请选择系统自动感应的用户！');
-		return;
-	}
-	var refContractNo = $("#refContractNo").val();
-	if(refContractNo==''){
-		messageInfo('请输入招标合同号！');
-		return;
-	}
-	var cgimgPath = $("#cgimgPath").val();
-	if(cgimgPath==''){
-		messageInfo('请上传扫描件！');
-		return;
-	}
-	$.post("getContract.htm",{contractNo:refContractNo},function(data){
-		if(data.isOK=='ok'){
-			$.post("AcgApplyRecord.htm",$("#cgForm").serialize(),function(data){
-				   if (data.isOK=='ok'){
-					   $("#recordNo").html(data.recordNo);
-					   	 $("#contBox").show();
-						  $("#cgDiv").hide();
-					}else if(data.isOK=='no'){
-						messageInfo("您还没有通过认证,不能申请备案!");
-					}
-			});
-		}else{
-			messageInfo("请输入正确的招标合同号!");
-		}
-		
-	});
-}
-/**
- * 甲方申请招标
- */
-function  zbApplyRecord(){
-	var memberNameA = $("#memberA").val();
-	if(memberNameA==''){
-		messageInfo('请输入甲方用户！');
-		return;
-	}
-	var zbimgPath = $("#zbimgPath").val();
-	if(zbimgPath==''){
-		messageInfo('请上传扫描件！');
-		return;
-	}
-	$.post("zbApplyRecord.htm",$("#zbForm").serialize(),function(data){
-		   if (data.isOK=='ok'){
-			   $("#recordNo").html(data.recordNo);
-			   	 $("#contBox").show();
-				  $("#cgDiv").hide();
-		   }else if(data.isOK=='no'){
-			   messageInfo("您还没有通过认证,不能申请备案!");
-			}
-	})
-}
-/**
- * 乙方申请采购
- */
-function  BzbApplyRecord(){
-	var memberNameA = $("#memberNameA").val();
-	var memberIdA = $("#memberIdA").val();
-	if(memberIdA==''){
-		messageInfo('请选择系统自动感应的用户！');
-		return;
-	}
-	if(memberNameA==''){
-		messageInfo('请选择系统自动感应的用户！');
-		return;
-	}
-	var bcgimgPath = $("#bcgimgPath").val();
-	if(bcgimgPath==''){
-		messageInfo('请上传扫描件！');
-		return;
-	}
-	$.post("BzbApplyRecord.htm",$("#BcgForm").serialize(),function(data){
-		   if (data.isOK=='ok'){
-			   $("#recordNo").html(data.recordNo);
-			   $("#contBox").show();
-			   $("#BcgDiv").hide();
-		   }else if(data.isOK=='no'){
-			   messageInfo("您还没有通过认证,不能申请备案!");
-			}
-	})
-}
-
-function upload(data)
-{
-    var dataObj=eval("("+data+")");//转换为json对象 
-    $("#BcgImageList").append("<img src='${b.imagePath}"+dataObj.fileIds+"80x100.JPG' alt='' />");
-    //获取隐藏域
-   var hideVal= $("#BcgImgPathHide").val();
-    if(hideVal==""){
-    	hideVal+=dataObj.fileIds;
-    }else{
-    	hideVal+=","+dataObj.fileIds;
-    }
-    $("#BcgImgPathHide").val(hideVal);
-}
-$(function(){
-	var urlA = "${basePath}autoCompleA.htm";
-	var urlB = "${basePath}autoCompleB.htm";
-	$("#memberNameA").keydown(function(){
-		$("#memberIdA").val("");
-	})
-	$("#memberNameB").keydown(function(){
-		$("#memberIdB").val("");
-	})
-	$("#memberNameA").bigAutocomplete({url:urlA,callback:function(data){
-        $("#memberIdA").val(data.result);
-    }});
-	$("#memberNameB").bigAutocomplete({url:urlB,callback:function(data){
-        $("#memberIdB").val(data.result);
-    }});
-});
 </script>
 </head>
 
 <body>
-<@b.errorInfo/>
-<div id="header" class="fence">
-<@b.header /> 
-</div>
-<div class="mainBg">
-<div class="fence-wide ly-clearFix">
-<div class="main pb20">
-<div class="yard-190 ly-left leftMenu">
-<@b.leftMenu />
-</div>
-<div class="yard-870 rightSide ly-left">
-<div class="heading mb15 ly-clearFix">
-  <h1 class="ly-left">
-  <span class="title fontYH f20 fb">申请合同备案</span></h1>
-</div>
+	<@b.errorInfo/>
+	<div id="header" class="fence"><@b.header /></div>
+	<div class="mainBg">
+		<div class="fence-wide ly-clearFix">
+			<div class="main pb20">
+				<div class="yard-190 ly-left leftMenu"><@b.leftMenu /></div>
+				<div class="yard-870 rightSide ly-left">
+					<div class="heading mb15 ly-clearFix">
+						<h1 class="ly-left">
+							<span class="title fontYH f20 fb">申请合同备案</span>
+						</h1>
+					</div>
 
-<div class="contBox" id="contBox" style="display: none;" >
-<div class="msg-suc msgbar ly-clearFix p10">
-<div class="icon icon32 icon-32-suc ly-left">&nbsp;</div>
-<div class="msgCont ly-left">
-<dl>
-<dt class="fontYH f20 mb10">恭喜您已成功备案</dt>
-<dd class="mb5">您的备案号为：<span id="recordNo"></span></dd>
-<dd class="f12">现在就开始<a href="query.htm" class="lnk-underline ml5 mr5">管理您的合同</a>吧！</dd>
-</dl>
-</div>
-</div>
-</div>
-<#if type==0>
-<div class="contBox" id="cgDiv">
-<div id="tabsholder" style="width: 98%">
-<ul class="tabs">
-<li id="tabz1"><a href="#">备案招标合同</a></li>
-<li id="tabz2"><a href="#">备案采购合同</a></li>
-</ul>
-<div class="contents">
-<form action="" id="zbForm" method="post" autocomplete="off">
-<input type="hidden" name="memberNameB" value="${name}" />
-<div id="content1" class="tabscontent">
-    <div class="item">
-      <label>甲方</label>
-      <input class="input input-w240h36" value="" id="memberA" name="memberNameA" />
-    </div>
-    <div class="item">
-      <label>乙方</label>
-      ${name}<input type="hidden" name="memberIdB" id="" value="${id}"/></div>    
-       <div class="item"><label>&nbsp;</label>
-     	<input type="hidden" value="" name="imgPath" id="zbimgPath" />
-		<div class="rollBox" id="zbRollBox">
-			<ul id="zbcarousel" class="elastislide-list">
-			</ul>
+					<div class="contBox" id="contBox" style="display: none;">
+						<div class="msg-suc msgbar ly-clearFix p10">
+							<div class="icon icon32 icon-32-suc ly-left">&nbsp;</div>
+							<div class="msgCont ly-left">
+								<dl>
+									<dt class="fontYH f20 mb10">恭喜您已成功备案</dt>
+									<dd class="mb5">
+										您的备案号为：<span id="recordNo"></span>
+									</dd>
+									<dd class="f12">
+										现在就开始<a href="query.htm" class="lnk-underline ml5 mr5">管理您的合同</a>吧！
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<#if type==0>
+					<div class="contBox" id="cgDiv">
+						<div id="tabsholder" style="width: 98%">
+							<ul class="tabs">
+								<li id="tabz1"><a href="#">备案招标合同</a></li>
+								<li id="tabz2"><a href="#">备案采购合同</a></li>
+							</ul>
+							<div class="contents">
+								<form action="" id="zbForm" method="post" autocomplete="off">
+									<input type="hidden" name="memberNameB" value="${name}" />
+									<div id="content1" class="tabscontent">
+										<div class="item">
+											<label>甲方</label> <input class="input input-w240h36" value=""
+												id="memberA" name="memberNameA" />
+										</div>
+										<div class="item">
+											<label>乙方</label> ${name}<input type="hidden"
+												name="memberIdB" id="" value="${id}" />
+										</div>
+										<div class="item">
+											<label>&nbsp;</label> <input type="hidden" value=""
+												name="imgPath" id="zbimgPath" />
+											<div class="rollBox" id="zbRollBox">
+												<ul id="zbcarousel" class="elastislide-list">
+												</ul>
+											</div>
+										</div>
+										<div class="item">
+											<label>&nbsp;</label>
+											<div class="ly-left">
+												<input type="file" name="zbFile" id="zbFile" class="upload"
+													multiple="true" />
+											</div>
+										</div>
+										<div class="item mt10">
+											<label>&nbsp;</label> <a href="javascript:zbApplyRecord();"
+												class="button button-orange mr15">确定</a><a
+												href="${basePath}member/memberInfo.htm"
+												class="button button-gray">取消</a>
+										</div>
+									</div>
+								</form>
+								<form action="" id="cgForm" method="post" autocomplete="off">
+									<input type="hidden" name="memberNameA" value="${name}" />
+									<div id="content2" class="tabscontent">
+										<div class="item">
+											<label>甲方</label>${name}<input type="hidden" name="memberIdA"
+												id="" value="${id}" />
+										</div>
+										<div class="item">
+											<label>乙方</label><input class="input input-w240h36" value=""
+												id="memberNameB" name="memberNameB" /><input type="hidden"
+												id="memberIdB" name="memberIdB" id="" value="" />
+										</div>
+										<div class="item">
+											<label>关联招标合同号</label><input class="input input-w240h36"
+												value="" id="refContractNo" name="refContractNo" />
+										</div>
+										<div class="item">
+											<label>&nbsp;</label>
+											<div class="ly-left">
+												<input type="hidden" value="" name="imgPath" id="cgimgPath" />
+												<div class="rollBox" id="cgRollBox">
+													<ul id="cgcarousel" class="elastislide-list">
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="item">
+											<label>&nbsp;</label>
+											<div class="ly-left">
+												<input type="file" name="cgFile" id="cgFile" class="upload"
+													multiple="true" />
+											</div>
+										</div>
+										<div class="item mt10">
+											<label>&nbsp;</label><a href="javascript:AcgApplyRecord();"
+												class="button button-orange mr15">确定</a><a
+												href="${basePath}member/memberInfo.htm"
+												class="button button-gray">取消</a>
+										</div>
+									</div>
+								</form>
+
+							</div>
+						</div>
+					</div>
+					<#else>
+					<div class="contBox" id="BcgDiv">
+						<form action="" id="BcgForm" method="post" autocomplete="off">
+							<input type="hidden" name="memberNameB" value="${name}" />
+							<div class="item">
+								<label>甲方</label> <input class="input input-w240h36" value=""
+									id="memberNameA" name="memberNameA" /> <input type="hidden"
+									name="memberIdA" id="memberIdA" value="" />
+							</div>
+							<div class="item">
+								<label>乙方</label> ${name}<input type="hidden" name="memberIdB"
+									id="" value="${id}" />
+							</div>
+							<div class="item">
+								<label>&nbsp;</label>
+								<div class="ly-left">
+									<input type="hidden" value="" name="imgPath" id="bcgimgPath" />
+									<div class="rollBox" id="bcgRollBox">
+										<ul id="bcgcarousel" class="elastislide-list">
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="item">
+								<label>&nbsp;</label>
+								<div class="ly-left">
+									<input type="file" class="upload" name="BcgFile" id="BcgFile"
+										multiple="true" />
+								</div>
+							</div>
+							<div class="item mt10">
+								<label>&nbsp;</label> <a class="button button-orange mr15"
+									href="javascript:BzbApplyRecord();">确定</a><a
+									href="${basePath}member/memberInfo.htm"
+									class="button button-gray">取消</a>
+							</div>
+						</form>
+					</div>
+					</#if>
+				</div>
+			</div>
 		</div>
-	  </div>
-	  <div class="item">
-	   <label>&nbsp;</label>
-	  <div class="ly-left"><input type="file" name="zbFile" id="zbFile" class="upload"  multiple="true"/></div>
-	  </div>
-    <div class="item mt10">
-      <label>&nbsp;</label>
-      <a href="javascript:zbApplyRecord();" class="button button-orange mr15">确定</a><a href="${basePath}member/memberInfo.htm" class="button button-gray">取消</a></div>
-  </div>
-  </form>
-<form action="" id="cgForm" method="post" autocomplete="off">
-<input type="hidden" name="memberNameA" value="${name}" />
-<div id="content2" class="tabscontent">
-<div class="item"><label>甲方</label>${name}<input type="hidden" name="memberIdA" id="" value="${id}"/></div>
-<div class="item"><label>乙方</label><input class="input input-w240h36" value="" id="memberNameB" name="memberNameB" /><input type="hidden"  id="memberIdB"  name="memberIdB" id="" value=""/></div>
-<div class="item"><label>关联招标合同号</label><input class="input input-w240h36" value="" id="refContractNo" name="refContractNo"/></div>
- <div class="item"><label>&nbsp;</label><div class="ly-left">
-	<input type="hidden" value="" name="imgPath" id="cgimgPath" />
-		<div class="rollBox" id="cgRollBox">
-			<ul id="cgcarousel" class="elastislide-list">
-			</ul>
-</div>
-</div></div>
- <div class="item">
-	   <label>&nbsp;</label>
-	  <div class="ly-left"><input type="file" name="cgFile" id="cgFile" class="upload"  multiple="true"/></div>
-	  </div>
-<div class="item mt10"><label>&nbsp;</label><a href="javascript:AcgApplyRecord();" class="button button-orange mr15">确定</a><a href="${basePath}member/memberInfo.htm" class="button button-gray">取消</a></div>
-</div>
-</form>
-
-  </div>
-</div>
-</div>
-<#else>
-<div class="contBox" id="BcgDiv">
-<form action="" id="BcgForm" method="post" autocomplete="off">
-<input type="hidden" name="memberNameB" value="${name}" />
-  <div class="item">
-    <label>甲方</label>
-    <input class="input input-w240h36" value="" id="memberNameA"  name="memberNameA"/>
-    <input type="hidden" name="memberIdA" id="memberIdA" value=""/>
-  </div>
-  <div class="item">
-    <label>乙方</label>
-   ${name}<input type="hidden" name="memberIdB" id="" value="${id}"/></div>
-  <div class="item"><label>&nbsp;</label><div class="ly-left">
-	<input type="hidden" value="" name="imgPath" id="bcgimgPath" />
-		<div class="rollBox" id="bcgRollBox">
-			<ul id="bcgcarousel" class="elastislide-list">
-			</ul>
-</div>
-</div></div>
-	  <div class="item"><label>&nbsp;</label><div class="ly-left"><input type="file" class="upload" name="BcgFile" id="BcgFile"  multiple="true"/></div></div>
-  <div class="item mt10">
-    <label>&nbsp;</label>
-    <a class="button button-orange mr15" href="javascript:BzbApplyRecord();"  >确定</a><a href="${basePath}member/memberInfo.htm" class="button button-gray">取消</a></div>
-</form>
-</div> 
-</#if>
-</div>
-</div>
-</div>
-</div>
-<@b.footer />
-	<div class="viewer modal-wrap">
+	</div>
+	<@b.footer />
+	<div class="viewer modal-wrap" style="display: none">
 		<div class="modal-header">
 			<span class="close">关闭</span>
 		</div>
 		<div id="viewer2" class="modal-body iviewer"
 			style="width: 100%; display: none; top: 0px"></div>
 	</div>
-	<div class="maskdivgen" style="display: none"></div> 
+	<div class="maskdivgen" style="display: none"></div>
 </body>
 </html>

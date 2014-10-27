@@ -109,7 +109,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 			var trId=$(this).parent().parent().attr("id");
 			if($table){
 				$table.find(".addtr").remove();
-				var $tr=$("<tr>").append($(this).parent().parent().html());
+				var $tr=$("<tr>").addClass("formitem").append($(this).parent().parent().html());
 				var $hidden=$("<p>").addClass("mark").hide().html(trId);
 				$tr.append($hidden);
 				$table.append($tr);
@@ -136,27 +136,15 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 		$("#saveId").live(
 				"click",
 				function() {
-					var itemSize = $("#TbData tr").filter(".CaseRow").size();
-					for (var i = 0; i < parseInt(itemSize); i++) {
-						$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(
-								0).find("input").attr("name",
-								"modifyItemList[" + i + "].productName");
-						$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(
-								1).find("textarea").attr("name",
-								"modifyItemList[" + i + "].productModel");
-						$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(
-								2).find("input").attr("name",
-								"modifyItemList[" + i + "].quantity");
-						$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(
-								3).find("input").attr("name",
-								"modifyItemList[" + i + "].price");
-						$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(
-								4).find("input").attr("name",
-								"modifyItemList[" + i + "].amount");
-						$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(
-								5).find("textarea").attr("name",
-								"modifyItemList[" + i + "].remarks");
-					}
+					var $tr=$("#cptable").find(".formitem");
+					$tr.each(function(i){
+						$(this).find("td").each(function(){
+							if($(this).attr("name")){
+								var name=$(this).attr("name").replace("index",i);
+								$(this).find("input").attr("name",name);
+							}
+						})
+					});
 					var batchSize = $("#batchTb tr").filter(".batchClass")
 							.size();
 					var batchItemSize = $("#batchItem1 tr").filter(
@@ -264,13 +252,13 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								name="itemList[${item_index}].updateState" />
 							<input type="hidden" id="id${item.id}" value="${item.id}"
 								name="itemList[${item_index}].id" />
-							<tr id="item${item.id}">
-								<td class="editable">${item.productName}</td>
-								<td class="editable">${item.productModel}</td>
-								<td class="editable">${item.quantity}</td>
-								<td class="editable">${item.price}</td>
-								<td class="editable">${item.amount}</td>
-								<td class="editable">${item.remarks}</td>
+							<tr id="item${item.id}" class="formitem">
+								<td class="editable" name="modifyItemList[index].productName">${item.productName}</td>
+								<td class="editable" name="modifyItemList[index].productModel">${item.productModel}</td>
+								<td class="editable" name="modifyItemList[index].quantity">${item.quantity}</td>
+								<td class="editable" name="modifyItemList[index].price">${item.price}</td>
+								<td class="editable" name="modifyItemList[index].amount">${item.amount}</td>
+								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
 								<td><a href="javascript:void(0)" class="lnk-green"
 									 table="cptable">√</a></td>
 							</tr>
@@ -306,7 +294,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<th class="rLine"></th>
 							</tr>
 							<#list contractModel.batchList as batch>
-							<tr id="${batch.batch.id}">
+							<tr id="${batch.batch.id}" class="formitem">
 								<td class="editable">第${batch.batch.batchNo}批次</td>
 								<td><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
@@ -343,7 +331,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</div>
 						<div>
 							<label>合同备注</label>
-							<textarea name="textarea2" id="textarea2" cols="80" rows="3">${contractModel.contract.remarks}</textarea>
+							<textarea name="textarea2" id="textarea2" cols="80" rows="3" readonly="readonly">${contractModel.contract.remarks}</textarea>
 						</div>
 						<div class="contPic">
 							<label>合同备案扫描件</label>
@@ -363,12 +351,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</div>
 					</div>
 					<!-- 变更信息 -->
-					<#if contractModel.modifyList?exists> <#list
-					contractModel.modifyList as modifyList>
+					
 					<div class="changeBox">
 						<div id="chenges">
 							<h2 class="title">合同变更信息</h2>
-
+<#if contractModel.modifyList?exists> <#list
+					contractModel.modifyList as modifyList>
 							<div class="infoBox producedBox f14">
 								<div>
 									<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
@@ -406,14 +394,14 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<th class="rLine">&nbsp;</th>
 									</tr>
 									<#list modifyList.modifyItemList as modifyItem>
-									<tr id="${modifyItem.id}">
-										<td class="editable">${modifyItem.productName}</td>
-										<td class="editable">${modifyItem.productModel}</td>
-										<td class="editable">${modifyItem.quantity}</td>
-										<td class="editable">${modifyItem.price}</td>
-										<td class="editable">${modifyItem.amount}</td>
-										<td class="editable">${modifyItem.remarks}</td>
-										<td><#if modifyItem.updateState==0><a href="javascript:void(0)" class="lnk-green"
+									<tr id="${modifyItem.id}" class="formitem">
+										<td class="editable" name="modifyItemList[index].productName">${modifyItem.productName}</td>
+										<td class="editable" name="modifyItemList[index].productModel">${modifyItem.productModel}</td>
+										<td class="editable" name="modifyItemList[index].quantity">${modifyItem.quantity}</td>
+										<td class="editable" name="modifyItemList[index].price">${modifyItem.price}</td>
+										<td class="editable" name="modifyItemList[index].amount">${modifyItem.amount}</td>
+										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
+										<td><#if modifyItem.updateState?? ><a href="javascript:void(0)" class="lnk-green"
 									 table="cptable">√</a> <#else> <a href="javascript:void(0)" class="lnk-green"
 									 table="cptable">!</a>
 											</#if>
@@ -439,7 +427,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<th class="rLine">&nbsp;</th>
 									</tr>
 									<#list modifyList.modifyBatchList as modifyBatch>
-									<tr id="${modifyBatch.modifyBatch.id}">
+									<tr id="${modifyBatch.modifyBatch.id}" class="formitem">
 										<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
 										<td>
 											<table border="0" cellpadding="0" cellspacing="0"
@@ -468,10 +456,10 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								</table>
 								</#if>
 							</div>
-
+						</#list> </#if>
 						</div>
 					</div>
-					</#list> </#if>
+				
 					<!-- 变更信息结束 -->
 
 					<div class="changeBox">
