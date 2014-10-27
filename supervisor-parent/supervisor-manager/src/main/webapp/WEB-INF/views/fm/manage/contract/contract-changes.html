@@ -61,6 +61,9 @@
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script>
+var $plus=$("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+");
+var $right=$("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("√");
+var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);").html("-");	
 	$(function() {
 		$(".subtabletr").live("click",function(){
 			var $tr=$(this).parent().parent().parent().parent().parent().parent();
@@ -74,6 +77,8 @@
 		$(".addtr").live("click",function(){
 			var $table=$(this).parent().parent().parent();
 			var $new=$table.children("tr:last").clone();
+			var $hidden=$new.find(".mark");
+			$hidden.remove();
 			$new.find(".tabList").each(function(){
 				$last=$(this).find("tr:last");
 				$(this).empty().append($last);
@@ -86,6 +91,12 @@
 		$(".deltr").live("click",function(){
 			var $tr=$(this).parent().parent();
 			var $table=$tr.parent();
+			var trId=$tr.find(".mark").html();
+			if(trId){
+				var $td=$("#"+trId).children("td:last");
+				$td.empty();
+				$td.append($right.clone());
+			}
 			$tr.remove();
 			var $last=$table.children("tr:last").children("td:last");
 			if($last.children(".addtr").length==0)
@@ -95,13 +106,15 @@
 		$(".lnk-green").click(function(e) {
 			var target=$(this).attr("table");
 			var $table=$("#"+target)
+			var trId=$(this).parent().parent().attr("id");
 			if($table){
+				$table.find(".addtr").remove();
 				var $tr=$("<tr>").append($(this).parent().parent().html());
+				var $hidden=$("<p>").addClass("mark").hide().html(trId);
+				$tr.append($hidden);
 				$table.append($tr);
-				 var $plus=$("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+");
-		         var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);").html("-");	
 				$link=$tr.find(".lnk-green").parent().empty();
-	            $link.append($plus).append("&nbsp;").append($minus);
+	            $link.append($plus.clone()).append("&nbsp;").append($minus.clone());
 	            $tr.find(".editable").each(function(){
 					$(this).html($("<input/>").attr("value",$(this).html()));
 				});
@@ -293,7 +306,7 @@
 								<th class="rLine"></th>
 							</tr>
 							<#list contractModel.batchList as batch>
-							<tr id="batch${batch.batch.id}">
+							<tr id="${batch.batch.id}">
 								<td class="editable">第${batch.batch.batchNo}批次</td>
 								<td><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
@@ -393,15 +406,16 @@
 										<th class="rLine">&nbsp;</th>
 									</tr>
 									<#list modifyList.modifyItemList as modifyItem>
-									<tr>
+									<tr id="${modifyItem.id}">
 										<td class="editable">${modifyItem.productName}</td>
 										<td class="editable">${modifyItem.productModel}</td>
 										<td class="editable">${modifyItem.quantity}</td>
 										<td class="editable">${modifyItem.price}</td>
 										<td class="editable">${modifyItem.amount}</td>
 										<td class="editable">${modifyItem.remarks}</td>
-										<td><#if modifyItem.updateState==0><span
-											class="">√</span> <#else> <span class="lnk-red">!</span>
+										<td><#if modifyItem.updateState==0><a href="javascript:void(0)" class="lnk-green"
+									 table="cptable">√</a> <#else> <a href="javascript:void(0)" class="lnk-green"
+									 table="cptable">!</a>
 											</#if>
 										</td>
 									</tr>
@@ -425,7 +439,7 @@
 										<th class="rLine">&nbsp;</th>
 									</tr>
 									<#list modifyList.modifyBatchList as modifyBatch>
-									<tr>
+									<tr id="${modifyBatch.modifyBatch.id}">
 										<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
 										<td>
 											<table border="0" cellpadding="0" cellspacing="0"
@@ -447,7 +461,8 @@
 											</table></td>
 										<td>${modifyBatch.modifyBatch.amount}</td>
 										<td>${modifyBatch.modifyBatch.rfidNo}</td>
-										<td>&nbsp;</td>
+										<td><a href="javascript:void(0)" class="lnk-green"
+									 table="pctable">√</a></td>
 									</tr>
 									</#list>
 								</table>
@@ -482,7 +497,7 @@
 									</div>
 								</div>
 								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabList producedTable" id="TbData"
+									class="tabList producedTable" id="cptable"
 									style="display: none;">
 									<col width="15%" />
 									<col width="20%" />
