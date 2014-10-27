@@ -104,7 +104,9 @@
 			var $tr=$(this).parent().parent();
 			var $table=$tr.parent();
 			$tr.remove();
-			$table.children("tr:last").children("td:last").prepend($("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+"));
+			var $last=$table.children("tr:last").children("td:last");
+			if($last.children(".addtr").length==0)
+				$last.prepend($("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+"));
 		});
 		
 		$(".lnk-green").click(function(e) {
@@ -295,7 +297,7 @@
 								<td class="editable">${item.amount}</td>
 								<td class="editable">${item.remarks}</td>
 								<td><a href="javascript:void(0)" class="lnk-green"
-									onclick="addTable('${item.id}');" table="cptable">√</a></td>
+									 table="cptable">√</a></td>
 							</tr>
 							</#list>
 							<tr>
