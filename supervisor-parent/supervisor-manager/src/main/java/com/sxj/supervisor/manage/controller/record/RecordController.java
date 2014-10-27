@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
@@ -23,6 +24,7 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -59,6 +61,10 @@ public class RecordController extends BaseController {
 			map.put("rte", rte);
 			map.put("list", list);
 			map.put("query", query);
+			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
+				HierarchicalCacheManager.evict(2, "comet_message",
+						MessageChannel.RECORD_MESSAGE);
+			}
 			registChannel(MessageChannel.RECORD_MESSAGE);
 			return "manage/record/record";
 		} catch (Exception e) {

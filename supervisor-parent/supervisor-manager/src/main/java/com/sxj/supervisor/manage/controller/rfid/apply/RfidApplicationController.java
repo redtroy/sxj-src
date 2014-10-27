@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
@@ -18,6 +19,7 @@ import com.sxj.supervisor.manage.comet.MessageChannel;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -51,6 +53,10 @@ public class RfidApplicationController extends BaseController {
 			map.put("receiptStates", receiptStates);
 			map.put("types", types);
 			map.put("query", query);
+			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
+				HierarchicalCacheManager.evict(2, "comet_message",
+						MessageChannel.RFID_APPLY_MESSAGE);
+			}
 			registChannel(MessageChannel.RFID_APPLY_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
