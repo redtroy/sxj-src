@@ -79,52 +79,54 @@
 		$("#itemUpdateState" + TrId).val(1);
 	}
 	$(function() {
+		$(".subtabletr").live("click",function(){
+			var $tr=$(this).parent().parent().parent().parent().parent().parent().parent();
+			$tr.find(".tabList").each(function(){
+				var $new=$(this).find("tr:last").clone();
+				$new.find("input").attr("value","");
+				$(this).append($new);
+			});
+			$(this).remove();
+		});
+		$(".addtr").live("click",function(){
+			var $table=$(this).parent().parent().parent();
+			var $new=$table.children("tr:last").clone();
+			$new.find(".tabList").each(function(){
+				$last=$(this).find("tr:last");
+				$(this).empty().append($last);
+			});
+			$new.find("input").attr("value","");
+			$table.append($new);
+			$(this).remove(); 
+		});
+		
+		$(".deltr").live("click",function(){
+			var $tr=$(this).parent().parent();
+			var $table=$tr.parent();
+			$tr.remove();
+			$table.children("tr:last").children("td:last").prepend($("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+"));
+		});
+		
 		$(".lnk-green").click(function(e) {
-			var flag = $(this).attr("flag");
-			var addBatch = $(this).attr("addBatch");
-			if (flag != 1) {
-				$(this).parent().addClass("color-red");
-				$(this).parent().html("！");
+			var target=$(this).attr("table");
+			var $table=$("#"+target)
+			if($table){
+				var $tr=$("<tr>").append($(this).parent().parent().html());
+				$table.append($tr);
+				 var $plus=$("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+");
+		         var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);").html("-");	
+				$link=$tr.find(".lnk-green").parent().empty();
+	            $link.append($plus).append("&nbsp;").append($minus);
+	            $tr.find(".editable").each(function(){
+					$(this).html($("<input/>").attr("value",$(this).html()));
+				});
+	            $tr.find(".dynamictr:last").append($plus.clone().addClass("subtabletr"));
+ 				$table.show();
+				$(this).attr("class","lnk-red").html("!");
+				$(this).unbind("click");
 			}
-			//if(addBatch==1){
-			//var tab2=$(this).parent().parent().parent().parent().parent();
-			//	var vTrClone=tab2.find(".batchItemClass").clone(true);
-			// 	tab2.append(vTrClone);
-			// }
-
 		});
 	});
-	function addChenges() {
-		var vTb = $("#TbData");//得到表格ID=TbData的jquery对象 
-		var vTr = $("#displayTr"); //得到表格中的第一行数据 
-		var vTrClone = vTr.clone(true);//创建第一行的副本对象vTrClone 
-		vTrClone[0].id = "";
-		vTb.append(vTrClone);//把副本单元格对象添加到表格上方 
-	}
-	function addbatch(batchTrId, status) {
-		$("#batchTb").show();
-		var vTb = $("#batchTb");//得到表格ID=TbData的jquery对象 
-		//var totalTr=$("#total_tr");
-		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-		var vTr = $("#BatchDisplay"); //得到表格中的第一行数据 
-		var vTrClone = vTr.clone(true);//创建第一行的副本对象vTrClone 
-		vTrClone[0].id = "";//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-		//设置item[]
-		if (status == 1) {
-			var batchNo = $("#" + batchTrId).find("td").eq(0).html();
-			var productModel = $("#" + batchTrId).find("td").eq(2).html();
-			var quantity = $("#" + batchTrId).find("td").eq(4).html();
-			var amount = $("#" + batchTrId).find("td").eq(5).html();
-			var rfidNo = $("#" + batchTrId).find("td").eq(6).html();
-			vTrClone.find("td").eq(0).html(batchNo);
-			vTrClone.find("td").eq(2).eq(0).find("textarea").text(productModel);
-			vTrClone.find("td").eq(4).eq(0).find("input").val(quantity);
-			vTrClone.find("td").eq(5).find("input").val(amount);
-			vTrClone.find("td").eq(6).find("input").val(rfidNo);
-		}
-		vTb.append(vTrClone);
-
-	}
 	$(function() {
 		$(".TrDel").live("click", function() {
 			$(this).parent().parent().remove();
@@ -286,14 +288,14 @@
 							<input type="hidden" id="id${item.id}" value="${item.id}"
 								name="itemList[${item_index}].id" />
 							<tr id="item${item.id}">
-								<td>${item.productName}</td>
-								<td>${item.productModel}</td>
-								<td>${item.quantity}</td>
-								<td>${item.price}</td>
-								<td>${item.amount}</td>
-								<td>${item.remarks}</td>
+								<td class="editable">${item.productName}</td>
+								<td class="editable">${item.productModel}</td>
+								<td class="editable">${item.quantity}</td>
+								<td class="editable">${item.price}</td>
+								<td class="editable">${item.amount}</td>
+								<td class="editable">${item.remarks}</td>
 								<td><a href="javascript:void(0)" class="lnk-green"
-									onclick="addTable('${item.id}');">√</a></td>
+									onclick="addTable('${item.id}');" table="cptable">√</a></td>
 							</tr>
 							</#list>
 							<tr>
@@ -328,12 +330,12 @@
 							</tr>
 							<#list contractModel.batchList as batch>
 							<tr id="batch${batch.batch.id}">
-								<td>第${batch.batch.batchNo}批次</td>
+								<td class="editable">第${batch.batch.batchNo}批次</td>
 								<td><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td>${batchItem.productModel}</td>
+											<td class="editable">${batchItem.productModel}</td>
 										</tr>
 										</#list>
 									</table></td>
@@ -341,14 +343,14 @@
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td>${batchItem.quantity}</td>
+											<td class="editable dynamictr">${batchItem.quantity}</td>
 										</tr>
 										</#list>
 									</table></td>
-								<td>${batch.batch.amount}</td>
-								<td>${batch.batch.rfidNo}</td>
+								<td class="editable">${batch.batch.amount}</td>
+								<td class="editable">${batch.batch.rfidNo}</td>
 								<td><a href="javascript:void(0)" class="lnk-green"
-									onclick="addbatch('batch${batch.batch.id}','1');">√</a></td>
+									 table="pctable">√</a></td>
 							</tr>
 							</#list>
 						</table>
@@ -424,14 +426,14 @@
 									</tr>
 									<#list modifyList.modifyItemList as modifyItem>
 									<tr>
-										<td>${modifyItem.productName}</td>
-										<td>${modifyItem.productModel}</td>
-										<td>${modifyItem.quantity}</td>
-										<td>${modifyItem.price}</td>
-										<td>${modifyItem.amount}</td>
-										<td>${modifyItem.remarks}</td>
+										<td class="editable">${modifyItem.productName}</td>
+										<td class="editable">${modifyItem.productModel}</td>
+										<td class="editable">${modifyItem.quantity}</td>
+										<td class="editable">${modifyItem.price}</td>
+										<td class="editable">${modifyItem.amount}</td>
+										<td class="editable">${modifyItem.remarks}</td>
 										<td><#if modifyItem.updateState==0><span
-											class="lnk-green">√</span> <#else> <span class="lnk-red">!</span>
+											class="">√</span> <#else> <span class="lnk-red">!</span>
 											</#if>
 										</td>
 									</tr>
@@ -511,7 +513,7 @@
 									</div>
 								</div>
 								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabList producedTable" id="TbData" style="display: none;">
+									class="tabList producedTable" id="cptable" style="display: none;">
 									<col width="15%" />
 									<col width="20%" />
 									<col width="15%" />
@@ -531,7 +533,7 @@
 
 								</table>
 								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabList producedTable" id="batchTb"  style="display: none;">
+									class="tabList producedTable" id="pctable"  style="display: none;">
 									<col width="20%" />
 									<col width="25%" />
 									<col width="20%" />
@@ -562,19 +564,6 @@
 		</div>
 	</div>
 	<table style="display: none;">
-		<tr class="CaseRow" id="displayTr">
-			<td><input type="text" value="" name="" /></td>
-			<td><textarea name="" id="textarea9" cols="25" rows="1"></textarea></td>
-			<td><input type="text" value="" name="" /></td>
-			<td><input type="text" value="" name="" /></td>
-			<td><input type="text" value="" name="" /></td>
-			<td><textarea name="" id="textarea10" cols="25" rows="1"></textarea></td>
-			<td><a href="###" class="lnk-green" flag="1"
-				onclick="addChenges();">+</a>&nbsp;<a href="#" class="TrDel"
-				style="color: green;">×</a></td>
-		</tr>
-	</table>
-	<table style="display: none;">
 		<tr class="batchClass" id="BatchDisplay">
 			<td>第1批次</td>
 			<td>
@@ -592,7 +581,7 @@
 					<tr class="batchItemClass2">
 						<td><input type="text" value="" />&nbsp;<a
 							href="javascript:void(0)" onclick="addBatchItem();" addBatch="1"
-							flag="1" class="lnk-green addBatch">+</a></td>
+							flag="1" class=" addBatch">+</a></td>
 					</tr>
 				</table>
 			</td>
@@ -600,8 +589,8 @@
 			<td><input type="text" class="input-w80" value="" /></td>
 			<td>&nbsp;<a href="javascript:void(0)"
 				onclick="addbatch('batch${batch.batch.id}','2');" flag="1"
-				class="lnk-green">+</a>&nbsp;<a href="javascript:void(0)"
-				class="lnk-green">√</a>&nbsp;<a href="#" class="TrDel"
+				class="">+</a>&nbsp;<a href="javascript:void(0)"
+				class="">√</a>&nbsp;<a href="#" class="TrDel"
 				style="color: green;">X</a></td>
 		</tr>
 	</table>
