@@ -16,16 +16,12 @@
 		<result property="importDate" column="IMPORT_DATE" jdbcType="TIMESTAMP" />
 		<result property="replenishNo" column="REPLENISH_NO" jdbcType="VARCHAR" />
 		<result property="rfidState" column="RFID_STATE" jdbcType="INTEGER" />
-		<result property="progressState" column="PROGRESS_STATE"
-			jdbcType="INTEGER"  />
 		<result property="log" column="LOG" jdbcType="VARCHAR" />
 	</resultMap>
 	<!-- 按条件查询门窗 -->
 	<select id="queryLogisticsRfidList" resultMap="logisticsResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID, RFID_NO, PURCHASE_NO, TYPE, MEMBER_NO, MEMBER_NAME, CONTRACT_NO, BATCH_NO,
- 					IMPORT_DATE, REPLENISH_NO, RFID_STATE, PROGRESS_STATE, LOG FROM R_LOGISTICS_RFID
- 					WHERE RFID_STATE<>4 ]]>
+		<![CDATA[SELECT * FROM R_LOGISTICS_RFID WHERE RFID_STATE<>4 ]]>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">
 			<![CDATA[AND RFID_NO = #{condition.rfidNo}]]>
 		</if>
@@ -41,9 +37,6 @@
 		<if test="condition.type != null and condition.type !=''">
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
-		<if test="condition.progressState != null and condition.progressState !=''">
-			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
-		</if>
 		<if test="condition.rfidState != null and condition.rfidState !=''">
 			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>
 		</if>
@@ -51,6 +44,6 @@
 			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">
 			<![CDATA[AND IMPORT_DATE >=#{condition.startImportDate} AND IMPORT_DATE <= #{condition.endImportDate}]]>
 		</if>
-		<![CDATA[ ORDER BY ID DESC]]>
+		<![CDATA[ ORDER BY RFID_NO DESC]]>
 	</select>
 </mapper>

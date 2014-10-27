@@ -8,17 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
+import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.entity.rfid.sale.RfidPriceEntity;
 import com.sxj.supervisor.entity.rfid.sale.RfidSaleStatisticalEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
+import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
+import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.service.rfid.purchase.IPurchaseRfidService;
 import com.sxj.supervisor.service.rfid.sale.IRfidPriceService;
 import com.sxj.supervisor.service.rfid.sale.IRfidSaleStatisticalService;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -36,7 +43,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	private IRfidPriceService rfidPriceService;
 
 	@Autowired
-	IRfidApplicationDao appDao;
+	private IRfidApplicationService applyService;
 
 	@Override
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
@@ -82,10 +89,12 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	public void addPurchase(RfidPurchaseEntity purchase, String applyId,
 			String hasNumber) throws ServiceException {
 		try {
-			RfidApplicationEntity app = appDao.getRfidApplication(applyId);
+			RfidApplicationEntity app = applyService
+					.getApplicationInfo(applyId);
 			app.setHasNumber(Long.valueOf(hasNumber) + purchase.getCount());
+			purchase.setApplyNo(app.getApplyNo());
 			rfidPurchaseDao.addRfidPurchase(purchase);
-			appDao.updateRfidApplication(app);
+			applyService.updateApp(app);
 		} catch (Exception e) {
 			throw new ServiceException("新增采购单错误", e);
 		}
@@ -136,6 +145,48 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	@Transactional
+	public void importRfid(String purchaseId) throws ServiceException {
+		try {
+			RfidPurchaseEntity purchase = getRfidPurchase(purchaseId);
+			RfidApplicationEntity apply = applyService.getApplication(purchase
+					.getApplyNo());
+			RfidTypeEnum rfidType = purchase.getRfidType();
+			Long count = purchase.getCount();
+			for (int i = 0; i < count; i++) {
+				if (RfidTypeEnum.door.equals(rfidType)) {
+					WindowRfidEntity rfid = new WindowRfidEntity();
+					rfid.setPurchaseNo(purchase.getPurchaseNo());
+					rfid.setContractNo(purchase.getContractNo());
+					rfid.setImportDate(new Date());
+					rfid.setRfidState(RfidStateEnum.unused);
+					RfidLog log = new RfidLog();
+					log.setState(RfidStateEnum.unused.getName());
+					log.setDate(DateTimeUtils.getDateTime());
+					String jsonLog = JsonMapper.nonDefaultMapper().toJson(log);
+					rfid.setLog(jsonLog);
+				} else {
+					LogisticsRfidEntity rfid = new LogisticsRfidEntity();
+					rfid.setPurchaseNo(purchase.getPurchaseNo());
+					rfid.setContractNo(purchase.getContractNo());
+					rfid.setImportDate(new Date());
+					rfid.setRfidState(RfidStateEnum.unused);
+					rfid.setMemberNo(apply.getMemberNo());
+					rfid.setMemberName(apply.getMemberName());
+					RfidLog log = new RfidLog();
+					log.setState(RfidStateEnum.unused.getName());
+					log.setDate(DateTimeUtils.getDateTime());
+					String jsonLog = JsonMapper.nonDefaultMapper().toJson(log);
+					rfid.setLog(jsonLog);
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 	}
 
 }

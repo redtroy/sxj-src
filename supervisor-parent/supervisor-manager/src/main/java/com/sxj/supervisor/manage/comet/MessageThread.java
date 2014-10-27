@@ -74,12 +74,6 @@ public class MessageThread extends Thread {
 			for (String channel : channels) {
 				Object cache = HierarchicalCacheManager.get(2, "comet_message",
 						channel);
-				// List<String> messageList = new ArrayList<String>();
-				// if (cache != null) {
-				// if (cache instanceof List) {
-				// messageList = (List<String>) cache;
-				// }
-				// }
 				SxjLogger.debug("Sending Message to Comet Client:" + cache,
 						getClass());
 				if (cache != null)

@@ -269,6 +269,7 @@ public class PurchaseRfidController extends BaseController {
 			RfidPurchaseEntity purchase, String applyId, String hasNumber,
 			ModelMap model) throws WebException {
 		try {
+
 			purchase.setPurchaseDate(new Date());
 			purchase.setImportState(ImportStateEnum.not_imported);
 			purchase.setPayState(PayStateEnum.unpaid);
