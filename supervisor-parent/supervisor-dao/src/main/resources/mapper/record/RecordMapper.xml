@@ -84,11 +84,11 @@
 		</if>
 		<!-- 申请时间段 -->
  		<if test="condition.startApplyDate != null and condition.endApplyDate != null and condition.startApplyDate != ''  and condition.endApplyDate != ''"> -->
-			<![CDATA[AND APPLY_DATE >=#{condition.startApplyDate} AND APPLY_DATE <= #{condition.endApplyDate}]]>
+			<![CDATA[AND APPLY_DATE >=#{condition.startApplyDate} AND APPLY_DATE < DATE_ADD(#{condition.endApplyDate},INTERVAL 1 DAY)]]>
 		</if>
 		<!-- 受理时间段 -->
 		<if test="condition.startAcceptDate != null and condition.endAcceptDate != null and condition.startAcceptDate != '' and condition.endAcceptDate != ''">
-			<![CDATA[AND ACCEPT_DATE >=#{condition.startAcceptDate} AND ACCEPT_DATE <= #{condition.endAcceptDate}]]>
+			<![CDATA[AND ACCEPT_DATE >=#{condition.startAcceptDate} AND ACCEPT_DATE < DATE_ADD(#{condition.endAcceptDate},INTERVAL 1 DAY)]]>
 		</if>
 		<if test="condition.sortColumn != null and condition.sortColumn != null and condition.sort != '' and condition.sort != ''">
 		<![CDATA[ORDER BY ${condition.sortColumn} ${condition.sort}]]>

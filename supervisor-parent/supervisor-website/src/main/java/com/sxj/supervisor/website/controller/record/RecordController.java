@@ -422,7 +422,7 @@ public class RecordController extends BaseController {
 				messageList = new ArrayList<String>();
 			}
 			for (String message : messageList) {
-				if(recordId.contains(message)){
+				if(message.contains(recordId)){
 					messageList.remove(message)	;
 				}
 			}
