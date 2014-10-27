@@ -49,7 +49,7 @@ public class StorageClientService implements IStorageClientService {
 	}
 
 	@Override
-	public StorePath uploadFile(String groupName, InputStream ins, long size,
+	public String uploadFile(String groupName, InputStream ins, long size,
 			String ext) {
 		if (groupName == null) {
 			groupName = this.groupName;
@@ -61,7 +61,8 @@ public class StorageClientService implements IStorageClientService {
 		ICmdProtoHandler<StorePath> handler = new StorageUploadHandler(socket,
 				false, ins, size, storageClient.getStoreIndex(), ext,
 				storageClient.getCharset());
-		return process(socket, handler);
+		StorePath filePath = process(socket, handler);
+		return groupName + "/" + filePath.getPath();
 	}
 
 	@Override
@@ -237,6 +238,17 @@ public class StorageClientService implements IStorageClientService {
 				storageClient.getCharset());
 		process(socket, handler);
 
+	}
+
+	@Override
+	public void overwriteMetadata(String fileId, NameValuePair[] metaList) {
+		if (fileId == null) {
+			return;
+		}
+		int index = fileId.indexOf("/");
+		String groupName = fileId.substring(0, index);
+		String path = fileId.substring(index + 1, fileId.length());
+		overwriteMetadata(groupName, path, metaList);
 	}
 
 	@Override

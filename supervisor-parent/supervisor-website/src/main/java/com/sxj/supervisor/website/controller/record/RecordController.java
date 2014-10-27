@@ -1,16 +1,12 @@
 package com.sxj.supervisor.website.controller.record;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
-import com.sxj.file.fastdfs.IFileUpLoad;
-import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
@@ -60,9 +52,6 @@ public class RecordController extends BaseController {
 
 	@Autowired
 	private IMemberService memberService;
-
-	@Autowired
-	private IFileUpLoad fastDfsClient;
 
 	@RequestMapping("/query")
 	public String to_query(ModelMap map, HttpSession session,
@@ -115,42 +104,6 @@ public class RecordController extends BaseController {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");
 		}
-	}
-
-	/**
-	 * 上传图片
-	 * 
-	 * @param request
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping("upload")
-	public void uploadFile(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (!(request instanceof DefaultMultipartHttpServletRequest)) {
-			return;
-		}
-		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
-		Map<String, MultipartFile> fileMaps = re.getFileMap();
-		Collection<MultipartFile> files = fileMaps.values();
-		List<String> fileIds = new ArrayList<String>();
-		for (MultipartFile myfile : files) {
-			if (myfile.isEmpty()) {
-				System.err.println("文件未上传");
-			} else {
-				String fileId = fastDfsClient.uploadFile(myfile.getBytes(),
-						myfile.getOriginalFilename());
-				fileIds.add(fileId);
-			}
-		}
-		map.put("fileIds", fileIds);
-		String res = JsonMapper.nonDefaultMapper().toJson(map);
-		response.setContentType("text/plain;UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(res);
-		out.flush();
-		out.close();
 	}
 
 	/**
@@ -386,7 +339,7 @@ public class RecordController extends BaseController {
 	 */
 	@RequestMapping("confirm")
 	public String confirm(ModelMap model, String contractNo, String recordId,
-			HttpSession session,String message) throws WebException {
+			HttpSession session, String message) throws WebException {
 		try {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
@@ -422,8 +375,10 @@ public class RecordController extends BaseController {
 	 */
 	@RequestMapping("confirm-kfs")
 	public String confirmkfs(ModelMap model, String contractNo,
-			String recordId, HttpSession session,String message) throws WebException {
+			String recordId, HttpSession session, String message)
+			throws WebException {
 		try {
+			
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			ContractModel contract = contractService
@@ -446,7 +401,7 @@ public class RecordController extends BaseController {
 
 	@RequestMapping("confirmRecord")
 	public @ResponseBody Map<String, String> confirmRecord(String recordId,
-			String contractId, HttpSession session,String message) throws WebException {
+			String contractId, HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
@@ -466,8 +421,10 @@ public class RecordController extends BaseController {
 			} else {
 				messageList = new ArrayList<String>();
 			}
-			if (messageList.contains(message)) {
-				messageList.remove(message);
+			for (String message : messageList) {
+				if(recordId.contains(message)){
+					messageList.remove(message)	;
+				}
 			}
 			HierarchicalCacheManager.set(2, "comet_message",
 					"record_push_message_" + member.getMember().getMemberNo(),

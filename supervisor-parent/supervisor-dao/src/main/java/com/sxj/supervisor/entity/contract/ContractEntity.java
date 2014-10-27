@@ -115,7 +115,7 @@ public class ContractEntity extends Pagable implements Serializable
      * 合同定金
     **/
     @Column(name = "DEPOSIT")
-    private Long deposit;
+    private Double deposit;
     
     /**
      * 备注
@@ -373,12 +373,12 @@ public class ContractEntity extends Pagable implements Serializable
         this.startDate = startDate;
     }
     
-    public Long getDeposit()
+    public Double getDeposit()
     {
         return deposit;
     }
     
-    public void setDeposit(Long deposit)
+    public void setDeposit(Double deposit)
     {
         this.deposit = deposit;
     }

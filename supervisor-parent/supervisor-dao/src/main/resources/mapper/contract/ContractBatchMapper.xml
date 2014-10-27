@@ -7,7 +7,7 @@
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="contractId" column="CONTRACT_ID" jdbcType="VARCHAR" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
-		<result property="amount" column="AMOUNT" jdbcType="INTEGER" />
+		<result property="amount" column="AMOUNT" jdbcType="DOUBLE" />
 		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />

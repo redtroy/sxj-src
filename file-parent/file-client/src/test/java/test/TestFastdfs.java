@@ -38,14 +38,14 @@ public class TestFastdfs extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void testUploadFile() throws IOException {
-		byte[] bytes = FileUtils
-				.readFileToByteArray(new File(
-						"C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
-		StorePath storePath = storageClientService.uploadFile("image01",
-				new ByteArrayInputStream(bytes), bytes.length, "abcdef");
-		System.out.println(storePath);
-		System.out.println(storePath.getPath().length());
-		
+		// byte[] bytes = FileUtils
+		// .readFileToByteArray(new File(
+		// "C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
+		// StorePath storePath = storageClientService.uploadFile("image01",
+		// new ByteArrayInputStream(bytes), bytes.length, "abcdef");
+		// System.out.println(storePath);
+		// System.out.println(storePath.getPath().length());
+
 	}
 
 	@Test
@@ -57,14 +57,15 @@ public class TestFastdfs extends AbstractJUnit4SpringContextTests {
 				new ByteArrayInputStream(bytes), bytes.length, "!png", "jpg");
 		System.out.println(storePath);
 	}
-	
+
 	@Test
 	public void testDownloadFile() {
 		byte[] bytes = storageClientService.downloadFile("image01",
-				"M00/00/00/rBBynlPsiXeAdH8xASKM8lGiSWc346[png].jpg", new ByteArrayFdfsFileInputStreamHandler());
+				"M00/00/00/rBBynlPsiXeAdH8xASKM8lGiSWc346[png].jpg",
+				new ByteArrayFdfsFileInputStreamHandler());
 		System.out.println(bytes.length);
 	}
-	
+
 	@Test
 	public void testUploadMultiFile() throws IOException {
 		int totalCount = 1000;
@@ -83,9 +84,11 @@ public class TestFastdfs extends AbstractJUnit4SpringContextTests {
 						byte[] bytes = FileUtils
 								.readFileToByteArray(new File(
 										"C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
-						StorePath storePath = storageClientService.uploadFile(null,
-								new ByteArrayInputStream(bytes), bytes.length, "jpg");
-						System.out.println(storePath);
+						// StorePath storePath =
+						// storageClientService.uploadFile(
+						// null, new ByteArrayInputStream(bytes),
+						// bytes.length, "jpg");
+						// System.out.println(storePath);
 						// System.out.println(storePath.getPath().length());
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -107,8 +110,7 @@ public class TestFastdfs extends AbstractJUnit4SpringContextTests {
 		}
 		executor.destroy();
 		System.out.println("fail count: " + failCount.get());
-		
-		
+
 	}
 
 }

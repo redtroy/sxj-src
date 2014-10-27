@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import third.rewrite.fastdfs.NameValuePair;
-import third.rewrite.fastdfs.StorePath;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
@@ -211,19 +210,18 @@ public class BasicController extends BaseController {
 					String originalName = myfile.getOriginalFilename();
 					String extName = FileUtil.getFileExtName(originalName);
 					// 上传文件
-					StorePath filePath = storageClientService.uploadFile(null,
+					String filePath = storageClientService.uploadFile(null,
 							new ByteArrayInputStream(myfile.getBytes()),
 							myfile.getBytes().length, extName.toUpperCase());
-					SxjLogger.info("##############" + filePath.getPath(),
+					SxjLogger.info("manageUploadFilePath=" + filePath,
 							this.getClass());
-					fileIds.add("group1/" + filePath.getPath());
+					fileIds.add(filePath);
 
 					// 上传元数据
 					NameValuePair[] metaList = new NameValuePair[1];
 					metaList[0] = new NameValuePair("originalName",
 							originalName);
-					storageClientService.overwriteMetadata("group1",
-							filePath.getPath(), metaList);
+					storageClientService.overwriteMetadata(filePath, metaList);
 				}
 			}
 			map.put("fileIds", fileIds);

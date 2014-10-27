@@ -18,8 +18,7 @@ public interface IStorageClientService {
 	 * @param ext
 	 * @return
 	 */
-	StorePath uploadFile(String groupName, InputStream ins, long size,
-			String ext);
+	String uploadFile(String groupName, InputStream ins, long size, String ext);
 
 	/**
 	 * 上传可修改的文件
@@ -138,6 +137,14 @@ public interface IStorageClientService {
 	 */
 	void overwriteMetadata(String groupName, String path,
 			NameValuePair[] metaList);
+
+	/**
+	 * 修改文件元信息（覆盖）
+	 * 
+	 * @param fileId
+	 * @param metaList
+	 */
+	void overwriteMetadata(String fileId, NameValuePair[] metaList);
 
 	/**
 	 * 修改文件元信息（合并）
