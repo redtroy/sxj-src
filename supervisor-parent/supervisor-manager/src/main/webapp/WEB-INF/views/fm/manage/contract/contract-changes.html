@@ -53,31 +53,6 @@
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script>
-	function addTable(TrId) {
-		 $("#TbData").show();
-		var vTb = $("#TbData");//得到表格ID=TbData的jquery对象 
-		//var totalTr=$("#total_tr");
-		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-		var vNum = $("#TbData tr").filter(".CaseRow").size() - 1;//表格有多少个数据行 
-		var vTr = $("#displayTr"); //得到表格中的第一行数据 
-		var vTrClone = vTr.clone(true);//创建第一行的副本对象vTrClone 
-		vTrClone[0].id = "";
-		//放入数据
-		vTrClone.find("td").eq(0).find("input").val(
-				$("#item" + TrId).find("td").eq(0).html());
-		vTrClone.find("td").eq(1).find("textarea").val(
-				$("#item" + TrId).find("td").eq(1).html());
-		vTrClone.find("td").eq(2).find("input").val(
-				$("#item" + TrId).find("td").eq(2).html());
-		vTrClone.find("td").eq(3).find("input").val(
-				$("#item" + TrId).find("td").eq(3).html());
-		vTrClone.find("td").eq(4).find("input").val(
-				$("#item" + TrId).find("td").eq(4).html());
-		vTrClone.find("td").eq(5).find("textarea").val(
-				$("#item" + TrId).find("td").eq(5).html());
-		vTb.append(vTrClone);
-		$("#itemUpdateState" + TrId).val(1);
-	}
 	$(function() {
 		$(".subtabletr").live("click",function(){
 			var $tr=$(this).parent().parent().parent().parent().parent().parent();
