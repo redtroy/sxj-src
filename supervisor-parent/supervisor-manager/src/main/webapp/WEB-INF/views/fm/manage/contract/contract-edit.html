@@ -24,6 +24,7 @@
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
 <@b.errorInfo/>
 <@b.upload/>
+<@b.dialogBox/>
 <script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -41,6 +42,7 @@ function modify(){
 	var recordNo =$("#recordNo").val();
 	$.post("getRecordNo.htm",{recordNo:recordNo,contractId:contractId},function(data){
 		if(data.flag=='true'){
+			dialogBox(function(){
 			$.post("modify.htm",$("#modifyForm").serialize(),function(data){
 				if (data.isOK == 'ok') {
 					  alert("修改成功")
@@ -49,6 +51,7 @@ function modify(){
 						alert("修改失败");
 					}
 			})
+			},"是否修改合同?");
 		}else{
 			alert("请检查备案号是否正确!");
 		}

@@ -43,12 +43,14 @@
 		});
 	}
 </script>
+<@b.dialogBox/>
 <@b.upload/>
 <script>
 $(document).ready(function() { 
 	classLoadUpload("上传扫描件");
 });  
 function modify(){
+		dialogBox(function(){
 			$.post("modify.htm",$("#modifyForm").serialize(),function(data){
 				if (data.isOK == 'ok') {
 					  alert("修改成功")
@@ -56,7 +58,7 @@ function modify(){
 					}else{
 						alert("修改失败");
 					}
-			})
+			})},"是否修改合同?");
 }
 
 </script>

@@ -424,6 +424,7 @@ public class RecordController extends BaseController {
 	public String confirmkfs(ModelMap model, String contractNo,
 			String recordId, HttpSession session,String message) throws WebException {
 		try {
+			
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			ContractModel contract = contractService
@@ -446,7 +447,7 @@ public class RecordController extends BaseController {
 
 	@RequestMapping("confirmRecord")
 	public @ResponseBody Map<String, String> confirmRecord(String recordId,
-			String contractId, HttpSession session,String message) throws WebException {
+			String contractId, HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
@@ -466,8 +467,10 @@ public class RecordController extends BaseController {
 			} else {
 				messageList = new ArrayList<String>();
 			}
-			if (messageList.contains(message)) {
-				messageList.remove(message);
+			for (String message : messageList) {
+				if(recordId.contains(message)){
+					messageList.remove(message)	;
+				}
 			}
 			HierarchicalCacheManager.set(2, "comet_message",
 					"record_push_message_" + member.getMember().getMemberNo(),

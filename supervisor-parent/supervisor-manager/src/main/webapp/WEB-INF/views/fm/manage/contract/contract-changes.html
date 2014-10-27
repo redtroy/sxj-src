@@ -23,6 +23,7 @@
 <script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
 <@b.upload/>
+<@b.dialogBox/>
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
@@ -208,6 +209,7 @@
 													+ "].quantity");
 						}
 					}
+					dialogBox(function(){
 					$.post("saveChanges.htm", $("#changsForm").serialize(),
 							function(data) {
 								if (data.isOK == 'ok') {
@@ -218,6 +220,7 @@
 								}
 							})
 				});
+				},"是否变更合同?");
 
 	}
 </script>

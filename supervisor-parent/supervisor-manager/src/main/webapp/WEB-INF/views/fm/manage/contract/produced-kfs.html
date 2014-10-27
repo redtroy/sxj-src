@@ -73,6 +73,7 @@ $(document).ready(function() {
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
+<@b.dialogBox/>
 <script>
 	var num = 1;
 	function addTable() {
@@ -133,6 +134,7 @@ $(document).ready(function() {
 			var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
 			$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(parseFloat(num)*100);
 		}
+		dialogBox(function(){
 		$.post("addContract.htm", $("#addForm").serialize(), function(data) {
 			if (data.isOK == 'ok') {
 				alert("生成合同成功");
@@ -140,7 +142,7 @@ $(document).ready(function() {
 			} else {
 				alert("生成合同失败");
 			}
-		});
+		});},"是否生成招标合同?");
 
 	}
 	
