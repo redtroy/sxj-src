@@ -239,7 +239,7 @@ var getFloatStr = function(num){
 						<li><label>对应备案号</label> 
 						<#assign record=(contractModel.contract.recordNo?split(","))>
 						<#list record as recordNo>
-						<input name="" type="text" value="${recordNo}" id="recordNo${recordNo_index}" class="input-w80" />
+						<input name="" type="text" value="${recordNo?trim}" id="recordNo${recordNo_index}" class="input-w80" />
 						<#if record?size==1><input name="" type="text" value="" id="recordNo1" class="input-w80" /></#if>
 						</#list>
 						<input name="contract.recordNo" type="hidden" id="recordNo"
@@ -327,18 +327,18 @@ var getFloatStr = function(num){
 							<th class="rLine">对应批次RFID编号</th>
 						</tr>
 						<#list contractModel.batchList  as batchList>
-						<input name="batchList[${modifyBatch_index}].id" type="hidden" value="${modifyBatch.modifyBatch.id}" />
+						<input name="batchList[${batchList_index}].batch.id" type="hidden" value="${batchList.batch.id}" />
 						<tr>
-							<td>第 <input name="batchList[${batchList_index}].batchNo" type="text" value="${batchList.batch.batchNo}" class="input-w30" />
+							<td>第 <input name="batchList[${batchList_index}].batch.batchNo" type="text" value="${batchList.batch.batchNo}" class="input-w30" />
 								批次
 							</td>
 							<td><table border="0" cellpadding="0" cellspacing="0"
 									class="tabList prodIable">
-									 <#list batchList.modifyBatchItems  as modifyBatchItems>
+									 <#list batchList.batchItems  as modifyBatchItems>
 									<tr>
 										<td><input name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].productModel" type="text"
 											value="${modifyBatchItems.productModel}" />
-										<input name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].id" type="text"
+										<input name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].id" type="hidden"
 											value="${modifyBatchItems.id}" />	
 										</td>
 									</tr>
@@ -346,24 +346,24 @@ var getFloatStr = function(num){
 								</table></td>
 							<td><table border="0" cellpadding="0" cellspacing="0"
 									class="tabList prodIable">
-									  <#list batchList.modifyBatchItems  as modifyBatchItems>
+									  <#list batchList.batchItems  as modifyBatchItems>
 									<tr>
 										<td><input name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].quantity" type="text" value="${modifyBatchItems.quantity}" /> &nbsp;</td>
 									</tr>
 									 </#list>
 								</table></td>
-							<td><input name="batchList[${batchList_index}].amount" type="text" value="${batchList.batch.amount/100}" /></td>
-							<td><input name="batchList[${batchList_index}].rfidNo" type="text" value="${batchList.batch.rfidNo}" /></td>
+							<td><input name="batchList[${batchList_index}].batch.amount" type="text" value="${batchList.batch.amount/100}" /></td>
+							<td><input name="batchList[${batchList_index}].batch.rfidNo" type="text" value="${batchList.batch.rfidNo}" /></td>
 						</tr>
               </#list>
 					</table>
 					</#if>
 					<div>
-						<label>本合同还有</label> <input name="contractModel.contract.batchCount" type="text" value="<#if contractModel.batchList?exists> ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
-            <#else> ${contractModel.contract.batchCount} </#if>" class="input-w30" /> 批次待交付
+						<label>本合同还有</label> <input name="contractModel.contract.batchCount" type="text" value="<#if contractModel.batchList?exists>${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
+            <#else>${contractModel.contract.batchCount} </#if>" class="input-w30" /> 批次待交付
 					</div>
 					<div>
-						<label>合同定金</label> <input name="contractModel.contract.deposit" type="text" value=" ${contractModel.contract.deposit}" />
+						<label>合同定金</label> <input name="contractModel.contract.deposit" type="text" value="${contractModel.contract.deposit}" />
 						元
 					</div>
 					<div>
@@ -413,7 +413,7 @@ var getFloatStr = function(num){
 						<div class="ly-left">
 						<input type="file" name="contractFile"   multiple="true" id="bgFile"/></div>
 					</div>
-					
+					<#if modifyList.modifyItemList?exists>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="20%" />
@@ -434,7 +434,7 @@ var getFloatStr = function(num){
              			
 							<tr>
 								<td><input type="text" value="${modifyItem.productName}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productName" /></td>
-								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}]" id="textarea9" cols="25"
+								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productModel" id="textarea9" cols="25"
 										rows="1">${modifyItem.productModel}</textarea></td>
 								<td><input type="text" value="${modifyItem.quantity}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity" /></td>
 								<td><input type="text" value="${modifyItem.price/100}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" /></td>
@@ -445,6 +445,8 @@ var getFloatStr = function(num){
 							</tr>
 						 </#list>
 						</table>
+						</#if>
+						<#if modifyList.modifyBatchList?exists>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="20%" />
@@ -490,6 +492,7 @@ var getFloatStr = function(num){
 							</tr>
 							</#list>
 						</table>
+						</#if>
 					</div>
 					</#list>
 				</div>
