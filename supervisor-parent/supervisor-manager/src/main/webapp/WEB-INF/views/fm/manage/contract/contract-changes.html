@@ -80,7 +80,7 @@
 	}
 	$(function() {
 		$(".subtabletr").live("click",function(){
-			var $tr=$(this).parent().parent().parent().parent().parent().parent().parent();
+			var $tr=$(this).parent().parent().parent().parent().parent().parent();
 			$tr.find(".tabList").each(function(){
 				var $new=$(this).find("tr:last").clone();
 				$new.find("input").attr("value","");
@@ -563,37 +563,6 @@
 			<!-- InstanceEndEditable -->
 		</div>
 	</div>
-	<table style="display: none;">
-		<tr class="batchClass" id="BatchDisplay">
-			<td>第1批次</td>
-			<td>
-				<table border="0" id="batchItem1" cellpadding="0" cellspacing="0"
-					class="tabList prodIable">
-					<tr class="batchItemClass1">
-						<td><textarea name="" id="textarea15" cols="25" rows="1">
-	                </textarea></td>
-					</tr>
-				</table>
-			</td>
-			<td>
-				<table border="0" id="batchItem2" cellpadding="0" cellspacing="0"
-					class="tabList prodIable">
-					<tr class="batchItemClass2">
-						<td><input type="text" value="" />&nbsp;<a
-							href="javascript:void(0)" onclick="addBatchItem();" addBatch="1"
-							flag="1" class=" addBatch">+</a></td>
-					</tr>
-				</table>
-			</td>
-			<td><input type="text" value="" /></td>
-			<td><input type="text" class="input-w80" value="" /></td>
-			<td>&nbsp;<a href="javascript:void(0)"
-				onclick="addbatch('batch${batch.batch.id}','2');" flag="1"
-				class="">+</a>&nbsp;<a href="javascript:void(0)"
-				class="">√</a>&nbsp;<a href="#" class="TrDel"
-				style="color: green;">X</a></td>
-		</tr>
-	</table>
 	<@b.footer />
 	<div class="viewer modal-wrap" style="display: none">
 		<div class="modal-header">
