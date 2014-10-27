@@ -169,7 +169,9 @@ public interface IContractService {
 	int getContractByZhaobiaoContractNo(String contractNo);
 
 	/**
-	 * 根据关联合同号取
+	 * 根据关联合同号获取合同信息
 	 */
+	public List<ContractEntity> getContractByRefContractNo(String refContractNo)
+			throws ServiceException;
 
 }
