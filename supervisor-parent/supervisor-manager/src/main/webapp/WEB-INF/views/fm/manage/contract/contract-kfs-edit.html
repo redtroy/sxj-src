@@ -38,10 +38,9 @@
 </script>
 <@b.dialogBox/> <@b.upload/>
 <script>
-	$(document).ready(function() {
-		classLoadUpload("上传扫描件");
-	});
 	function modify() {
+		var length =$("#TbData tr").filter(".CaseRow").length;
+		alert(length);
 		dialogBox(function() {
 			$.post("modify.htm", $("#modifyForm").serialize(), function(data) {
 				if (data.isOK == 'ok') {
@@ -120,7 +119,48 @@
 		//uploadImg($("#bgFile"));
 		//uploadImg($("#bsFile"));
 		imgBinding();
+		$(function() {
+			$(".TrDel").live("click", function() {
+				$(this).parent().remove();
+			});
+		});
 	});
+	function addTable() {
+		var vTb = $("#TbData");//得到表格ID=TbData的jquery对象 
+		var totalTr = $("#total_tr");
+		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
+		var vNum = $("#TbData tr").filter(".CaseRow").size();//表格有多少个数据行 
+		var vTr = $("#TbData #trDataRow1"); //得到表格中的第一行数据 
+		var vTrClone = vTr.clone(true);//创建第一行的副本对象vTrClone 
+		var id = "trDataRow" + vNum;
+		vTrClone[0].id = id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
+		//alert(vTrClone.find("td :last").find('a').text());	
+		vTrClone.find("td :last").attr("onclick", "");
+		vTrClone.find("td :last").addClass("TrDel");
+		vTrClone.find("td :last").html('<a class="lnk-green" class="TrDel">x</a>');//更改按钮
+		//清空内容
+		vTrClone.find("td").eq(0).find("input").val("");
+		vTrClone.find("td").eq(1).find("input").val("");
+		vTrClone.find("td").eq(2).find("input").val("");
+		vTrClone.find("td").eq(3).find("input").val("");
+		vTrClone.find("td").eq(4).find("input").val("");
+		vTrClone.find("td").eq(5).find("input").val("");
+		//设置item[]
+		vTrClone.find("td").eq(0).find("input").attr("name",
+				"items[" + vNum + "].productName");
+		vTrClone.find("td").eq(1).find("select").attr("name",
+				"items[" + vNum + "].windowType");
+		vTrClone.find("td").eq(2).find("input").attr("name",
+				"items[" + vNum + "].quantity");
+		vTrClone.find("td").eq(3).find("input").attr("name",
+				"items[" + vNum + "].price");
+		vTrClone.find("td").eq(4).find("input").attr("name",
+				"items[" + vNum + "].amount");
+		vTrClone.find("td").eq(5).find("textarea").attr("name",
+				"items[" + vNum + "].remarks");
+
+		vTrClone.insertBefore(totalTr);//把副本单元格对象添加到表格上方 
+	}
 </script>
 </head>
 <body>
@@ -158,7 +198,7 @@
 								datepicker /></li>
 						</ul>
 						<table border="0" cellpadding="0" cellspacing="0"
-							class="tabList producedTable">
+							class="tabList producedTable" id="TbData">
 							<col width="20%" />
 							<col width="20%" />
 							<col width="15%" />
@@ -180,7 +220,7 @@
 							(m+item.amount)?int >
 							<input name="itemList[${item_index}].id" type="hidden"
 								value="${item.id}" />
-							<tr>
+							<tr class="CaseRow" id="trDataRow${item_index+1}">
 								<td><input name="itemList[${item_index}].productName"
 									type="text" value="${item.productName}" /></td>
 								<td><select name="itemList[${item_index}].windowType"
@@ -200,10 +240,11 @@
 									type="text" value="${item.amount}" /></td>
 								<td><textarea name="itemList[${item_index}].remarks"
 										cols="" rows="2">${item.remarks}</textarea></td>
-								<td class="color-red"></td>
+								<td><a href="javascript:void(0);" class="lnk-green"
+									name="add" onclick="addTable()">+</a></td>
 							</tr>
 							</#list>
-							<tr>
+							<tr id="total_tr">
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
 								<td>${n}</td>
