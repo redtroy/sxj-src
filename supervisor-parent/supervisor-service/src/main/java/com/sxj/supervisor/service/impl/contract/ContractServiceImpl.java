@@ -773,7 +773,8 @@ public class ContractServiceImpl implements IContractService {
 				String[] arr = centity.getRecordNo().split(",");
 				RecordQuery recordQuery = new RecordQuery();
 				recordQuery.setContractNo(centity.getContractNo());
-				List<RecordEntity> recordList = recordService.queryRecord(recordQuery);
+				List<RecordEntity> recordList = recordService
+						.queryRecord(recordQuery);
 				for (RecordEntity record : recordList) {
 					// 变更该合同所有备案状态
 					RecordEntity rEntity = new RecordEntity();
@@ -803,13 +804,16 @@ public class ContractServiceImpl implements IContractService {
 							} else if (record.getType().getId() == 2) {
 								msgName = "补损";
 							}
-							String message =record.getId()+ ","+msgName+ ","
-									+ centity.getContractNo() + ','
+							String message = record.getId() + "," + msgName
+									+ "," + centity.getContractNo() + ','
 									+ record.getMemberIdA() + ','
 									+ record.getContractType().getId();
 							messageList.add(message);
-							HierarchicalCacheManager.set(2, "comet_message",
-									"record_push_message_" + record.getMemberIdA(),
+							HierarchicalCacheManager.set(
+									2,
+									"comet_message",
+									"record_push_message_"
+											+ record.getMemberIdA(),
 									messageList);
 						}
 						// 乙方
@@ -833,13 +837,16 @@ public class ContractServiceImpl implements IContractService {
 							} else if (record.getType().getId() == 2) {
 								msgName = "补损";
 							}
-							String messageB =record.getId()+","+ msgName + ","
-									+ centity.getContractNo() + ','
+							String messageB = record.getId() + "," + msgName
+									+ "," + centity.getContractNo() + ','
 									+ record.getMemberIdB() + ','
 									+ record.getContractType().getId();
 							messageListB.add(messageB);
-							HierarchicalCacheManager.set(2, "comet_message",
-									"record_push_message_" + record.getMemberIdB(),
+							HierarchicalCacheManager.set(
+									2,
+									"comet_message",
+									"record_push_message_"
+											+ record.getMemberIdB(),
 									messageListB);
 						}
 					}
@@ -1129,10 +1136,13 @@ public class ContractServiceImpl implements IContractService {
 			ContractQuery query = new ContractQuery();
 			query.setRefContractNo(refContractNo);
 			List<ContractModel> list = queryContracts(query);
-
+			List<ContractEntity> ContractList = new ArrayList<ContractEntity>();
+			for (ContractModel contractModel : list) {
+				ContractList.add(contractModel.getContract());
+			}
+			return ContractList;
 		} catch (Exception e) {
 			throw new ServiceException("获取合同信息错误", e);
 		}
-		return null;
 	}
 }
