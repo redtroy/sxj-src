@@ -265,9 +265,11 @@ public class RecordServiceImpl implements IRecordService {
 						}
 					} else {
 						rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+						rEntity.setRecordDate(new Date());
 					}
 				} else {
 					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+					rEntity.setRecordDate(new Date());
 
 				}
 				recordDao.updateRecord(rEntity);
