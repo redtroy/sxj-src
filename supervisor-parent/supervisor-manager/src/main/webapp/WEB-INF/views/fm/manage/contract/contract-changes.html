@@ -133,6 +133,10 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 
 
 	function saveChenges() {
+<<<<<<< HEAD
+=======
+		$("#saveId").live("click",function() {
+>>>>>>> 73790240081767da3fa773e2b6a05200ded8ab37
 					$("#cptable").find(".formitem").each(function(i){
 						$(this).find("td").each(function(){
 							if($(this).attr("name")){
@@ -272,8 +276,13 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							</tr>
 							<#list contractModel.batchList as batch>
 							<tr id="${batch.batch.id}" class="formitem">
+<<<<<<< HEAD
 								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo">${batch.batch.batchNo}</td>
 								<td name="modifyBatchList[i].modifyBatchItems[j].productModel"><table border="0" cellpadding="0" cellspacing="0"
+=======
+								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo">第${batch.batch.batchNo}批次</td>
+								<td name="modifyBatchList[i].modifyBatch[j].productModel"><table border="0" cellpadding="0" cellspacing="0"
+>>>>>>> 73790240081767da3fa773e2b6a05200ded8ab37
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
@@ -281,7 +290,11 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										</tr>
 										</#list>
 									</table></td>
+<<<<<<< HEAD
 								<td name="modifyBatchList[i].modifyBatchItems[j].quantity"><table border="0" cellpadding="0" cellspacing="0"
+=======
+								<td name="modifyBatchList[i].modifyBatch[j].quantity"><table border="0" cellpadding="0" cellspacing="0"
+>>>>>>> 73790240081767da3fa773e2b6a05200ded8ab37
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
