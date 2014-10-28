@@ -306,6 +306,8 @@ var refreshIviewer=function($viewer,src,$container){
 	$viewer.show();
 }
 var refreshElastislide=function($container,$carousel,data,empty){
+	if(!data)
+		return;
 	var start=0;
 	if(empty)
 		$carousel.empty();
