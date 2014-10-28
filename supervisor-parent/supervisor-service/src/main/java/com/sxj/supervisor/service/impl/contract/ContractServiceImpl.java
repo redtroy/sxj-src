@@ -64,6 +64,7 @@ import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -251,8 +252,10 @@ public class ContractServiceImpl implements IContractService {
 					// 删除条目
 					contractItemDao.deleteItems(ids.split(","));
 				}
-				for (ContractItemEntity contractItemEntity : contract.getItemList()) {
-					contractItemEntity.setContractId(contract.getContract().getContractNo());
+				for (ContractItemEntity contractItemEntity : contract
+						.getItemList()) {
+					contractItemEntity.setContractId(contract.getContract()
+							.getContractNo());
 				}
 				contractItemDao.addItem(contract.getItemList());
 			}
@@ -880,6 +883,9 @@ public class ContractServiceImpl implements IContractService {
 	@Transactional(readOnly = true)
 	public ContractModel getContractByContractNo(String contractNo) {
 		try {
+			if (StringUtils.isEmpty(contractNo)) {
+				return null;
+			}
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
 			List<ContractModel> res = queryContracts(query);
@@ -896,6 +902,9 @@ public class ContractServiceImpl implements IContractService {
 	@Transactional(readOnly = true)
 	public ContractModel getContractModelByContractNo(String contractNo) {
 		try {
+			if (StringUtils.isEmpty(contractNo)) {
+				return null;
+			}
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
 			List<ContractModel> res = queryContracts(query);

@@ -192,7 +192,9 @@ public class MemberServiceImpl implements IMemberService {
 				MemberEntity member = new MemberEntity();
 				member.setId(id);
 				member.setCheckState(MemberCheckStateEnum.getEnum(state));
-				member.setAuthorDate(new Date());
+				if (state == 2) {
+					member.setAuthorDate(new Date());
+				}
 				menberDao.updateMember(member);
 			}
 		} catch (Exception e) {
@@ -206,6 +208,9 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	public MemberEntity memberInfo(String memberNo) throws ServiceException {
+		if (StringUtils.isEmpty(memberNo)) {
+			return null;
+		}
 		MemberQuery query = new MemberQuery();
 		query.setMemberNo(memberNo);
 		List<MemberEntity> list = queryMembers(query);
