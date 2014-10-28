@@ -3,6 +3,7 @@ package com.sxj.supervisor.website.controller.record;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -421,9 +422,10 @@ public class RecordController extends BaseController {
 			} else {
 				messageList = new ArrayList<String>();
 			}
-			for (String message : messageList) {
+			for (int i = 0; i < messageList.size(); i++) {
+				String message = messageList.get(i);
 				if(message.contains(recordId)){
-					messageList.remove(message)	;
+					messageList.remove(i);
 				}
 			}
 			HierarchicalCacheManager.set(2, "comet_message",
