@@ -280,7 +280,7 @@ $("#pager").ready(function(){
 </#macro>
 <#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
-<link href="${staticPath}style/uploadify.css" rel="stylesheet"ype="text/css" />
+<link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
 <script>
 var iviewer;
 
@@ -299,6 +299,7 @@ var refreshIviewer=function($viewer,src,$container){
 		iviewer.iviewer('loadImage', src);
 	}
 	if($container){
+		$container.css("top",$(window).scrollTop());
 		$container.show();
 		$container.find(".modal-header").show();
 	}else{
@@ -308,6 +309,8 @@ var refreshIviewer=function($viewer,src,$container){
 	$viewer.show();
 }
 var refreshElastislide=function($container,$carousel,data,empty){
+	if(!data)
+		return;
 	var start=0;
 	if(empty)
 		$carousel.empty();
@@ -376,7 +379,8 @@ function loadUpload(id,url,isMulti,text,fn){
 	    });
 } 
 </script>
-</#macro> <#macro header>
+</#macro> 
+<#macro header>
 <div class="fence" id="header">
 	<h1 class="fence-wide ly-clearFix">
 		<a class="logo" href="${staticPath}html/register.html"><img
@@ -388,7 +392,8 @@ function loadUpload(id,url,isMulti,text,fn){
 		</#if>
 	</h1>
 </div>
-</#macro> <#macro footer>
+</#macro> 
+<#macro footer>
 <div class="f12" id="footer">
 	&copy; 2014 私享家绿色门窗平台&nbsp;版权所有<span class="ml10"><a
 		target="_blank" href="http://www.miitbeian.gov.cn/">苏ICP备14040094号-1</a></span>

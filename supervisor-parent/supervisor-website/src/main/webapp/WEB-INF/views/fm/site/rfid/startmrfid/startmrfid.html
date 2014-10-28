@@ -11,8 +11,17 @@
 $(function(){
 	
 })
+var container=null;
 function query(){
-	
+	var refContractNo=$("#refContractNo").val();
+	$.post("query.htm",{refContractNo:refContractNo},function(data){
+		if (data.isOk=='ok'){
+			container=data.list;
+			console.log(container)
+		}else{
+			alert('查询失败！');
+		}
+	})
 }
 </Script>
 </head>
@@ -30,7 +39,7 @@ function query(){
 </div>
 <div class="contBox">
 <div class="item"><label>启用标签数量</label><input class="input input-w180h36"/></div>
-<div class="item"><label>招标合同号</label> <input class="input input-w180h36" value="" />&nbsp;&nbsp;<button class="button button-green" title="根据招标合同号和启用数量提取编号值最小的数量的标签区间在下方显示" onclick="query();return false;">获取标签编号区间</button></div>
+<div class="item"><label>招标合同号</label> <input class="input input-w180h36" value="" / id="refContractNo" >&nbsp;&nbsp;<button class="button button-green" title="根据招标合同号和启用数量提取编号值最小的数量的标签区间在下方显示" onclick="query();return false;">获取标签编号区间</button></div>
 <div class="item">
   <label>启用标签编号区间</label><span class="color-blue ml5">AAAA00001-AAAA00050</span></div>
 <div class="item">

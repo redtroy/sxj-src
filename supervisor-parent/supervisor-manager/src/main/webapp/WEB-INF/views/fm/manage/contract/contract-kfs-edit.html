@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
@@ -24,6 +24,7 @@
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
 <script type="text/javascript"
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
@@ -36,12 +37,27 @@
 		})
 	})
 </script>
-<@b.dialogBox/> <@b.upload/>
+<@b.dialogBox/> <@b.upload/>	<@b.validate/>
 <script>
-	$(document).ready(function() {
-		classLoadUpload("上传扫描件");
-	});
+var ul_validform;
 	function modify() {
+		if (!ul_validform.check()){
+			return false;
+		}
+		$("#formtable").find(".formtr").each(function(i){
+			$(this).find("input").each(function(){
+				var name=$(this).attr("name").replace("index",i);
+				$(this).attr("name",name);
+			});
+			$(this).find("select").each(function(){
+				var name=$(this).attr("name").replace("index",i);
+				$(this).attr("name",name);
+			});
+			$(this).find("textarea").each(function(){
+				var name=$(this).attr("name").replace("index",i);
+				$(this).attr("name",name);
+			});
+		});
 		dialogBox(function() {
 			$.post("modify.htm", $("#modifyForm").serialize(), function(data) {
 				if (data.isOK == 'ok') {
@@ -103,6 +119,33 @@
 
 	//合同扫描件
 	$(document).ready(function() {
+		
+		//初始化验证
+		ul_validform=$("#contractUl").Validform({
+			tiptype:function(msg,o,cssctl){
+					var $div=$("<div/>").addClass("checkinfo");
+					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
+					var left=o.obj.offset().left,
+					top=o.obj.offset().top;
+					var width=o.obj.width();
+					$div.append($p).css({
+						'left':left+width-32,
+						'top':top-45,
+						'position':'absolute'
+					}).show();
+					o.obj.parent().append($div);
+			}});
+		$("#contractUl").find("[datatype]").each(function(){
+			$(this).focus(function(){
+				$(this).parent().children(".checkinfo").hide();
+			}); 
+			$(this).blur(function(){
+				var pass=ul_validform.check(true,$(this));
+				if(!pass)
+					$(this).parent().children(".checkinfo").show();
+			});
+		});
+		
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.viewer').slideUp(200);
@@ -120,6 +163,40 @@
 		//uploadImg($("#bgFile"));
 		//uploadImg($("#bsFile"));
 		imgBinding();
+			$(".lnk-red").live("click", function() {
+				$(this).parent().parent().remove();
+			});
+		
+		$(".lnk-green").live("click",function(){
+			var $tr=$(this).parent().parent()
+			var $new=$tr.clone();
+			$new.find("input").attr("value","");
+			$new.find("select").val("");
+			$new.insertAfter($tr);
+			$(this).remove();
+		});
+		$(".number").live("keyup",function(){
+			var $quantity=$(this).parent().parent().find(".quantity");
+			var $price=$(this).parent().parent().find(".price");
+			var $amount=$(this).parent().parent().find(".amount");
+			if($price&&$quantity){
+				var amount=parseInt($quantity.val())*parseFloat($price.val());
+				if(amount)
+					$amount.val(amount.toFixed(2));
+			}
+			var tquantity=0;
+			var tamount=0;
+			$(".quantity").each(function(){
+				tquantity+=parseInt($(this).val());
+			});
+			$(".amount").each(function(){
+				tamount+=parseFloat($(this).val());
+			});
+			if(tquantity)
+				$(".tquantity").html(tquantity);
+			if(tamount)
+				$(".tamount").html(tamount.toFixed(2));
+		})
 	});
 </script>
 </head>
@@ -135,7 +212,7 @@
 				<form action="" id="modifyForm" method="post">
 					<h2 class="title">修改开发商门窗招标合同
 						合同号：${contractModel.contract.contractNo}</h2>
-					<div class="infoBox producedBox f14">
+					<div class="infoBox producedBox f14" id="contractUl">
 						<input type="hidden" value="${contractModel.contract.id}"
 							id="contractId" name="contract.id" /> <input type="hidden"
 							value="${contractModel.contract.contractNo}" id=""
@@ -147,18 +224,17 @@
 							<li><label>乙方</label> <input name="contract.memberNameB"
 								type="text" value="${contractModel.contract.memberNameB}" /></li>
 							<li><label>工程名称</label> <input name="contract.engName"
-								type="text" value="${contractModel.contract.engName}" /></li>
+								type="text" value="${contractModel.contract.engName}" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入工程名称！" /></li>
 							<li><label>工程地址</label> <input name="contract.engAddress"
-								type="text" value="${contractModel.contract.engAddress}" /></li>
+								type="text" value="${contractModel.contract.engAddress}" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入工程地址！" /></li>
 							<li><label>签订地点</label> <input name="contract.address"
-								type="text" value="${contractModel.contract.address}" /></li>
+								type="text" value="${contractModel.contract.address}" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入签订地点！"  /></li>
 							<li><label>签订时间</label> <input name="contract.signedDate"
-								type="text"
-								value="${contractModel.contract.signedDate?string('yyyy-MM-dd')}"
-								datepicker /></li>
+								type="text" value="${contractModel.contract.signedDate?string('yyyy-MM-dd')}"
+								datepicker datatype="*1-100" readonly="readonly" errormsg="请选择正确的日期!" nullmsg="请选择签订时间！"  /></li>
 						</ul>
 						<table border="0" cellpadding="0" cellspacing="0"
-							class="tabList producedTable">
+							class="tabList producedTable" id="formtable">
 							<col width="20%" />
 							<col width="20%" />
 							<col width="15%" />
@@ -178,13 +254,11 @@
 							<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
 							item> <#assign n = (n+item.price)?int > <#assign m =
 							(m+item.amount)?int >
-							<input name="itemList[${item_index}].id" type="hidden"
-								value="${item.id}" />
-							<tr>
-								<td><input name="itemList[${item_index}].productName"
-									type="text" value="${item.productName}" /></td>
-								<td><select name="itemList[${item_index}].windowType"
-									style="width: 130px;">
+							<tr class="formtr">
+								<td><input name="itemList[index].productName"
+									type="text" value="${item.productName}" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！" /></td>
+								<td><select name="itemList[index].windowType"
+									style="width: 130px;" datatype="*" nullmsg="请选择型号规格！" errormsg="请选择型号规格！">
 										<option value="">全部</option> <#list type as type> <#if
 										type.getId()==item.windowType.getId()>
 										<option value="${type.id}" selected="selected">${type.getName()}</option>
@@ -192,23 +266,25 @@
 										<option value="${type.id}">${type.getName()}</option> </#if>
 										</#list>
 								</select></td>
-								<td><input name="itemList[${item_index}].quantity"
-									type="text" value="${item.quantity}" /></td>
-								<td><input name="itemList[${item_index}].price" type="text"
-									value="${item.price}" /></td>
-								<td><input name="itemList[${item_index}].amount"
-									type="text" value="${item.amount}" /></td>
-								<td><textarea name="itemList[${item_index}].remarks"
+								<td><input name="itemList[index].quantity"
+									type="text" value="${item.quantity}" class="quantity number" datatype="n1-20" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
+								<td><input name="itemList[index].price" type="text"
+									value="${item.price}" class="price number" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"  errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" /></td>
+								<td><input name="itemList[index].amount"
+									type="text" value="${item.amount}" class="amount" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"  errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"/></td>
+								<td><textarea name="itemList[index].remarks"
 										cols="" rows="2">${item.remarks}</textarea></td>
-								<td class="color-red"></td>
+								<td class="color-red">
+									<a href="javascript:void(0);" class="lnk-green">+</a>&nbsp;&nbsp;<a href="javascript:void(0);" class="lnk-red">X</a>
+								</td>
 							</tr>
 							</#list>
 							<tr>
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td>${n}</td>
+								<td class="tquantity">${n}</td>
 								<td>&nbsp;</td>
-								<td>${m}</td>
+								<td class="tamount">${m}</td>
 								<td>&nbsp;</td>
 								<td>&nbsp;</td>
 							</tr>

@@ -8,53 +8,52 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <script>
-$(function($) {
-		 var url_ = "${basePath}autoSupplier.htm";
-		$("#supplierName").bigAutocomplete({url:url_,callback:function(data){
-			  $("#supplierNo").val(data.result);
-		 }});	
-});
-function saveAdd(){
-	var count =$("#count").val();
-	if(count!=0){
-		dialogBox(function(){
-			var price =$("#price").val();
-			var remaining = $("#remaining").val();
-			$("#price").val(parseFloat(price));
-			if(parseFloat(count)>parseFloat(remaining)){
-				$("#count").val(remaining);
-				messageInfo("最大采购数量为"+remaining);
-				return false;
+
+	$(function($) {
+
+		var url_ = "${basePath}autoSupplier.htm";
+		$("#supplierName").bigAutocomplete({
+			url : url_,
+			callback : function(data) {
+				$("#supplierNo").val(data.result);
 			}
-			$.post("add.htm",$("#add").serialize(),function(data){
-				if(data.isOK=='ok'){
-					succInfo(function(){
-						window.location.href="query.htm";
-					},"生成成功!");
-				}else{
-					erroeInfo("生成失败!");	
+		});
+		$(".number").keyup(function(){
+			var price=parseFloat($("#price").val());
+			var count=parseInt($("#count").val());
+			if(price&&count){
+				var amount=price*count;
+				$("#ddze").html(amount.toFixed(2)+"元");
+			}
+			
+		});
+	});
+	function saveAdd() {
+		var count = $("#count").val();
+		if (count != 0) {
+			dialogBox(function() {
+				var price = $("#price").val();
+				var remaining = $("#remaining").val();
+				$("#price").val(parseFloat(price));
+				if (parseFloat(count) > parseFloat(remaining)) {
+					$("#count").val(remaining);
+					messageInfo("最大采购数量为" + remaining);
+					return false;
 				}
-			});
-		},"是否生成采购单?");
-	}else{
-		messageInfo("申请数量已用完!");
+				$.post("add.htm", $("#add").serialize(), function(data) {
+					if (data.isOK == 'ok') {
+						succInfo(function() {
+							window.location.href = "query.htm";
+						}, "生成成功!");
+					} else {
+						erroeInfo("生成失败!");
+					}
+				});
+			}, "是否生成采购单?");
+		} else {
+			messageInfo("申请数量已用完!");
+		}
 	}
-}
-function sum(){
-	var remaining = $("#remaining").val();
-	var price=$("#price").val();
-	if(price==''){
-		messageInfo("请输入单价！");
-		price=0;
-	}
-	var count =$("#count").val();
-	if(parseFloat(count)>parseFloat(remaining)){
-		messageInfo("最大采购数量为"+remaining);
-		
-	}
-	var ze=parseFloat(price)*parseFloat(count);
-	$("#ddze").html(ze+"元");
-}
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -96,14 +95,14 @@ function sum(){
       </div>
       <div>
         <label>实际采购价格</label>
-        <input type="text" id="price" name="price" class="input-w30" value="" title="" onkeyup="sum();"/>元
+        <input type="text" id="price" name="price" class="input-w30 number" value="" title=""/>元
       </div>
       <div>
         <label>采购数量</label>
         <input type="hidden" id="hasNumber" name="hasNumber" value="${app.hasNumber}" />
         <#if app.count gt 0>
         <input type="hidden" id="remaining" value="${app.count-app.hasNumber}" />
-        <input type="text" id="count" name="count" class="input-w80" value="${app.count-app.hasNumber}" title="" onkeyup="sum();"/>
+        <input type="text" id="count" name="count" class="input-w80 number" value="${app.count-app.hasNumber}" title=""/>
         <#else>
          <input type="hidden" id="remaining" value="0" />
          <input type="text" id="count" name="count" class="input-w80" value="0" title="" onkeyup="sum();"/>

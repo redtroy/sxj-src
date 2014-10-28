@@ -199,6 +199,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 修改合同
 	 */
 	@Override
+	@Transactional
 	public void modifyContract(ContractModel contract) throws ServiceException {
 		try {
 			// 主体
@@ -235,7 +236,25 @@ public class ContractServiceImpl implements IContractService {
 			}
 			// 条目
 			if (contract.getItemList() != null) {
-				contractItemDao.updateItem(contract.getItemList());
+				List<ContractItemEntity> item = contractItemDao
+						.queryItems(contract.getContract().getContractNo());
+				if (item != null) {
+					String ids = "";
+					for (ContractItemEntity contractItemEntity : item) {
+						if (ids == "") {
+							ids += contractItemEntity.getId();
+						} else {
+							ids += "," + contractItemEntity.getId();
+						}
+
+					}
+					// 删除条目
+					contractItemDao.deleteItems(ids.split(","));
+				}
+				for (ContractItemEntity contractItemEntity : contract.getItemList()) {
+					contractItemEntity.setContractId(contract.getContract().getContractNo());
+				}
+				contractItemDao.addItem(contract.getItemList());
 			}
 			// 批次
 			if (contract.getBatchList() != null) {
@@ -557,18 +576,17 @@ public class ContractServiceImpl implements IContractService {
 		qc.setCondition(condition);
 		List<RecordEntity> record = recordDao.queryRecord(qc);
 		String recordIds = "";
-		if(record!=null && record.size()>0){
+		if (record != null && record.size() > 0) {
 			for (Iterator<RecordEntity> iterator = record.iterator(); iterator
 					.hasNext();) {
 				RecordEntity recordEntity = (RecordEntity) iterator.next();
 				recordIds += "'" + recordEntity.getRecordNo() + "',";
 			}
 			recordIds = recordIds.substring(0, recordIds.length() - 1);
-			return recordIds;	
-		}else{
+			return recordIds;
+		} else {
 			return "";
 		}
-		
 
 	}
 
@@ -773,7 +791,8 @@ public class ContractServiceImpl implements IContractService {
 				String[] arr = centity.getRecordNo().split(",");
 				RecordQuery recordQuery = new RecordQuery();
 				recordQuery.setContractNo(centity.getContractNo());
-				List<RecordEntity> recordList = recordService.queryRecord(recordQuery);
+				List<RecordEntity> recordList = recordService
+						.queryRecord(recordQuery);
 				for (RecordEntity record : recordList) {
 					// 变更该合同所有备案状态
 					RecordEntity rEntity = new RecordEntity();
@@ -803,13 +822,16 @@ public class ContractServiceImpl implements IContractService {
 							} else if (record.getType().getId() == 2) {
 								msgName = "补损";
 							}
-							String message =record.getId()+ ","+msgName+ ","
-									+ centity.getContractNo() + ','
+							String message = record.getId() + "," + msgName
+									+ "," + centity.getContractNo() + ','
 									+ record.getMemberIdA() + ','
 									+ record.getContractType().getId();
 							messageList.add(message);
-							HierarchicalCacheManager.set(2, "comet_message",
-									"record_push_message_" + record.getMemberIdA(),
+							HierarchicalCacheManager.set(
+									2,
+									"comet_message",
+									"record_push_message_"
+											+ record.getMemberIdA(),
 									messageList);
 						}
 						// 乙方
@@ -833,13 +855,16 @@ public class ContractServiceImpl implements IContractService {
 							} else if (record.getType().getId() == 2) {
 								msgName = "补损";
 							}
-							String messageB =record.getId()+","+ msgName + ","
-									+ centity.getContractNo() + ','
+							String messageB = record.getId() + "," + msgName
+									+ "," + centity.getContractNo() + ','
 									+ record.getMemberIdB() + ','
 									+ record.getContractType().getId();
 							messageListB.add(messageB);
-							HierarchicalCacheManager.set(2, "comet_message",
-									"record_push_message_" + record.getMemberIdB(),
+							HierarchicalCacheManager.set(
+									2,
+									"comet_message",
+									"record_push_message_"
+											+ record.getMemberIdB(),
 									messageListB);
 						}
 					}
@@ -1129,10 +1154,13 @@ public class ContractServiceImpl implements IContractService {
 			ContractQuery query = new ContractQuery();
 			query.setRefContractNo(refContractNo);
 			List<ContractModel> list = queryContracts(query);
-
+			List<ContractEntity> ContractList = new ArrayList<ContractEntity>();
+			for (ContractModel contractModel : list) {
+				ContractList.add(contractModel.getContract());
+			}
+			return ContractList;
 		} catch (Exception e) {
 			throw new ServiceException("获取合同信息错误", e);
 		}
-		return null;
 	}
 }

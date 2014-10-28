@@ -26,30 +26,6 @@
 
 function loadInfo(id){
 	$("#info"+id).load("info.htm?contractId="+id,function(){
-		$( '.elastislide-list' ).elastislide({
-			orientation : 'horizontal',
-			speed : 500,
-			easing : 'ease-in-out',
-			minItems : 3,
-			start : 0,
-			onClick : function( el, position, evt ) { 
-				var imageSource = el.find("a").attr("data-image");
-				$("#viewer2").iviewer({
-					src : imageSource,
-					mousewheel : true
-				});
-				el.parent().children("li").removeClass("view");
-				el.addClass("view");
-				$("#viewer2").children("img").attr("src",imageSource);
-				$(".viewer").show();
-				$(".modal-header").show();
-				$(".maskdivgen").show();
-				return false; 
-			},
-			onReady : function() { return false; },
-			onBeforeSlide : function() { return false; },
-			onAfterSlide : function() { return false; }
-		});
 	 }
 	);
 	$("#info"+id).show();

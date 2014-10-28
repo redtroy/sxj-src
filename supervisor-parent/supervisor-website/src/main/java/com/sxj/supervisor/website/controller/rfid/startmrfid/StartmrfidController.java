@@ -1,27 +1,52 @@
 package com.sxj.supervisor.website.controller.rfid.startmrfid;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
+import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/rfid")
 public class StartmrfidController extends BaseController {
+	@Autowired
+	private IContractService contractService;
 
 	@RequestMapping("startmrfid_list")
-	public String startmrfid_list() {
+	public String startmrfid_list(ModelMap map) {
+		WindowTypeEnum[] type = WindowTypeEnum.values();
+		map.put("type", type);
 		return "site/rfid/startmrfid/startmrfid";
 	}
 
 	@RequestMapping("query")
-	public @ResponseBody Map<String, String> query(String refContractNo)
+	public @ResponseBody Map<Object, Object> query(ContractQuery query)
 			throws WebException {
-
-		return null;
+		try {
+			List<ContractModel> list = contractService.queryContracts(query);
+			Map<Object, Object> map = new HashMap<Object, Object>();
+			if (list.size() > 0) {
+				map.put("isOk", "ok");
+				map.put("list", list);
+			} else {
+				map.put("isOk", "false");
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
 	}
 }
