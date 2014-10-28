@@ -210,7 +210,7 @@ public class RecordServiceImpl implements IRecordService {
 			recordDao.updateRecord(record2);
 		}
 		// 插入合同
-		ContractModel ce = contractService.getContractByContractNo(contractNo);
+		ContractModel ce = contractService.getContractModelByContractNo(contractNo);
 		if (ce != null) {
 			ContractEntity contract = ce.getContract();
 			contract.setRecordNo(recordNo + "," + recordNo2);
@@ -347,7 +347,7 @@ public class RecordServiceImpl implements IRecordService {
 			// 更改合同关联所有的备案状态
 			String contractNo = record.getContractNo();
 			ContractModel cm = contractService
-					.getContractByContractNo(contractNo);
+					.getContractModelByContractNo(contractNo);
 			RecordQuery query = new RecordQuery();
 			query.setContractNo(contractNo);
 			query.setRecordType(RecordTypeEnum.contract.getId());

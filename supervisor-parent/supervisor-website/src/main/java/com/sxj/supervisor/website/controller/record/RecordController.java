@@ -87,7 +87,7 @@ public class RecordController extends BaseController {
 			String recordNo) throws WebException {
 		try {
 			ContractModel contract = contractService
-					.getContractByContractNo(contractNo);
+					.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = new ContractModel();
 			if (contract.getContract() != null) {
 				contractModel = contractService.getContract(contract
@@ -345,7 +345,7 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			ContractModel contract = contractService
-					.getContractByContractNo(contractNo);
+					.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = new ContractModel();
 			if (contract.getContract() != null) {
 				contractModel = contractService.getContract(contract
@@ -383,7 +383,7 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			ContractModel contract = contractService
-					.getContractByContractNo(contractNo);
+					.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = new ContractModel();
 			if (contract.getContract() != null) {
 				contractModel = contractService.getContract(contract

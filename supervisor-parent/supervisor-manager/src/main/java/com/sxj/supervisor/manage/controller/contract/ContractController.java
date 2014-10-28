@@ -96,7 +96,7 @@ public class ContractController extends BaseController {
 		rq.setSort("desc");
 		rq.setSortColumn("APPLY_DATE");
 		ContractModel contractModel = contractService
-				.getContractByContractNo(contractNo);
+				.getContractModelByContractNo(contractNo);
 		List<RecordEntity> recordList = recordService.queryRecord(rq);
 		List<StateLogModel> slList = new ArrayList<StateLogModel>();
 		if (recordList.size() > 0) {

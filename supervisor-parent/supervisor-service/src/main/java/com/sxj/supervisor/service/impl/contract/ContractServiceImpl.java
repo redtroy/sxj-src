@@ -879,24 +879,6 @@ public class ContractServiceImpl implements IContractService {
 		}
 	}
 
-	@Override
-	@Transactional(readOnly = true)
-	public ContractModel getContractByContractNo(String contractNo) {
-		try {
-			if (StringUtils.isEmpty(contractNo)) {
-				return null;
-			}
-			ContractQuery query = new ContractQuery();
-			query.setContractNo(contractNo);
-			List<ContractModel> res = queryContracts(query);
-			if (res != null && res.size() > 0) {
-				return res.get(0);
-			}
-			return null;
-		} catch (Exception e) {
-			throw new ServiceException("获取合同信息错误", e);
-		}
-	}
 
 	@Override
 	@Transactional(readOnly = true)

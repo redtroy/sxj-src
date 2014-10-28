@@ -133,7 +133,7 @@ public class WindowRfidController extends BaseController {
 			String rfid) throws WebException {
 		try {
 			ContractModel cmodel = contractService
-					.getContractByContractNo(contractNo);
+					.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = contractService.getContract(cmodel
 					.getContract().getId());
 			model.put("contractModel", contractModel);

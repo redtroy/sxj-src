@@ -84,7 +84,7 @@ public class PayController extends BaseController {
 			throws WebException {
 		try {
 			ContractModel contract = contractService
-					.getContractByContractNo(contractNo);
+					.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = new ContractModel();
 			if (contract.getContract() != null) {
 				contractModel = contractService.getContract(contract

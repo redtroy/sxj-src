@@ -118,7 +118,7 @@ public class WindowRfidController extends BaseController {
 	public String queryContractInfo(ModelMap model, String contractNo,String rfid)
 			throws WebException {
 		try {
-			ContractModel cmodel=contractService.getContractByContractNo(contractNo);
+			ContractModel cmodel=contractService.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = contractService
 					.getContract(cmodel.getContract().getId());
 			model.put("contractModel", contractModel);
