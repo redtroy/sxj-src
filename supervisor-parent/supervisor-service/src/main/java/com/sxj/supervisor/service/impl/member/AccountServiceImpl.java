@@ -246,8 +246,10 @@ public class AccountServiceImpl implements IAccountService {
 	public AccountEntity getAccountByName(String accountName, String memberNo)
 			throws ServiceException {
 		try {
+			if (StringUtils.isEmpty(accountName)) {
+				return null;
+			}
 			QueryCondition<AccountEntity> condition = new QueryCondition<AccountEntity>();
-
 			condition.addCondition("parentId", memberNo);// 父会员号
 			condition.addCondition("accountName", accountName);// 子会员名称
 			List<AccountEntity> list = accountDao

@@ -157,10 +157,10 @@ public class OpenRfidController {
 			@PathVariable String rfidNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("contractNo", "CT1410250001");
-		String[] batchNos = new String[2];
-		batchNos[0] = "AAAA0001";
-		batchNos[1] = "AAAA0002";
-		map.put("batchNo", batchNos);
+		String[] batchNos=new String[2];
+		batchNos[0]="AAAA0001";
+		batchNos[1]="AAAA0002";
+		map.put("batchNo",batchNos);
 		return map;
 
 	}

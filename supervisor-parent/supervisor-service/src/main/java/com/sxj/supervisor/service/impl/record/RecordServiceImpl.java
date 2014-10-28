@@ -222,6 +222,9 @@ public class RecordServiceImpl implements IRecordService {
 	@Override
 	public RecordEntity getRecordByNo(String no) throws ServiceException {
 		try {
+			if (StringUtils.isEmpty(no)) {
+				return null;
+			}
 			RecordQuery query = new RecordQuery();
 			query.setRecordNo(no);
 			List<RecordEntity> list = queryRecord(query);
@@ -265,7 +268,7 @@ public class RecordServiceImpl implements IRecordService {
 					}
 				} else {
 					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
-					
+
 				}
 				recordDao.updateRecord(rEntity);
 			}
@@ -338,7 +341,7 @@ public class RecordServiceImpl implements IRecordService {
 		try {
 			record.setDateNo("BA"
 					+ DateTimeUtils.formateDate2Str(new Date(), "yyMM"));
-			record.setApplyDate(new Date());//申請時間
+			record.setApplyDate(new Date());// 申請時間
 			record.setAcceptDate(null);
 			recordDao.addRecord(record);
 			// 更改合同关联所有的备案状态

@@ -206,6 +206,9 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	public MemberEntity memberInfo(String memberNo) throws ServiceException {
+		if (StringUtils.isEmpty(memberNo)) {
+			return null;
+		}
 		MemberQuery query = new MemberQuery();
 		query.setMemberNo(memberNo);
 		List<MemberEntity> list = queryMembers(query);
