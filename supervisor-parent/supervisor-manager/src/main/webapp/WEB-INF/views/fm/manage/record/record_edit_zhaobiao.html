@@ -32,6 +32,17 @@
 			$('.maskdivgen').fadeOut(100);
 			$('.viewer').slideUp(200);
 		})
+		$('#carousel').find("li").live("click",function(){
+			var el=$(this);
+			var imageSource = el.find("a").attr("data-image");
+			refreshIviewer($("#viewer2"),imageSource);
+			el.parent().children("li").removeClass("view");
+			el.addClass("view");
+		});
+		
+		$.post("${basePath}filesort.htm",{fileId:$("#imgPath").val()},function(imgPaths){
+			refreshElastislide($(".rollBox"),$("#carousel"),imgPaths);
+		});
 	})
 </script>
 <@b.upload/> <@b.validate/>
@@ -106,61 +117,6 @@
 											}
 										});
 					});
-	$(document).ready(function() {
-		var imgPath = $("#imgPath").val();
-		$.ajaxSetup ({     
-		    cache: false 
-		}); 
-		$.post("${basePath}filesort.htm",{fileId:imgPath},function(imgPaths){
-			var j =0;
-			for (var i = 0; i < imgPaths.length; i++) {
-				j=i+1;
-				$("#carousel").append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+imgPaths[i]+'"><img src="${b.imagePath}'+imgPaths[i]+'80x100.JPG" alt="" /></a><p>'+j+'</p></li>');
-			}
-			
-			$( '.elastislide-list' ).elastislide({
-				orientation : 'horizontal',
-				speed : 500,
-				easing : 'ease-in-out',
-				minItems : 3,
-				start : 0,
-				onClick : function( el, position, evt ) { 
-					var imageSource = el.find("a").attr("data-image");
-					$("#viewer2").iviewer({
-						src : imageSource,
-						mousewheel : true,
-						onDelete:function(e){
-							var imgurl =$(this).children("img").attr("src");
-							var imgarr=imgurl.split("file-web/");
-							var delImg =$("#imgPath").val();
-							delImg=delImg.replace(new RegExp(imgarr[1]),'');
-							$("#imgPath").val(delImg);
-							//var delImgPath =$("#delImgPath").val();
-							//if(delImgPath==''){
-							//	$("#delImgPath").val(imgarr[1]);
-							//}else{
-							//	$("#delImgPath").val(delImgPath+","+imgarr[1]);
-							//}
-							$('.maskdivgen').fadeOut(100);
-							$('.viewer').slideUp(200);
-							el.remove();
-						  }
-					});
-					el.parent().children("li").removeClass("view");
-					el.addClass("view");
-					$("#viewer2").children("img").attr("src",imageSource);
-					$(".viewer").show();
-					$(".modal-header").show();
-					$(".maskdivgen").show();
-					return false; 
-				},
-				onReady : function() { return false; },
-				onBeforeSlide : function() { return false; },
-				onAfterSlide : function() { return false; }
-			});
-			
-		});
-	}); 
 	
 </script>
 </head>
@@ -221,7 +177,7 @@
 									<div class="modal-header">
 										<span class="close">关闭</span>
 									</div>
-									<div id="viewer2" class="modal-body iviewer"></div>
+									<div id="viewer2" class="modal-body iviewer" style="width: 100%;display: none;top: 0px"></div>
 								</div>
 	<div class="maskdivgen" style="display: none"></div> 
 </body>

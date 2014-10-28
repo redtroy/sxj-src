@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
+
+
+
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
@@ -209,7 +212,7 @@ public class BasicController extends BaseController {
 				} else {
 					String originalName = myfile.getOriginalFilename();
 					String extName = FileUtil.getFileExtName(originalName);
-					// 上传文件
+					// 上传文件 
 					String filePath = storageClientService.uploadFile(null,
 							new ByteArrayInputStream(myfile.getBytes()),
 							myfile.getBytes().length, extName.toUpperCase());
