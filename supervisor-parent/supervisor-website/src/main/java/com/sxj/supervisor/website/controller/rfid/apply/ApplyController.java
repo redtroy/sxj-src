@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;

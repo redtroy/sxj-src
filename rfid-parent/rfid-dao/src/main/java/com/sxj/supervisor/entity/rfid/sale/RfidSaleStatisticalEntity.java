@@ -11,7 +11,7 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.sale.IRfidSaleStatisticalDao;
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 
 /**
  * RFID销售管理

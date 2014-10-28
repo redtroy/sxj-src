@@ -1,3 +1,5 @@
+
+<td colspan="11" >
 <script type="text/javascript">
 	$(document).ready(function(){
 		var start=0;
@@ -46,7 +48,6 @@
 		
 	});
 	</script>
-<td colspan="11" >
         <div class="infoBox text-left">
           <ul class="ly-clearFix">
             <li>
@@ -187,7 +188,8 @@
                  <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
                  </#list>
 				</ul>
-			</div></div>
+			  </div>
+		</div>
           <div>
             <label>关联招标合同号</label>
             ${contractModel.contract.refContractNo} </div>
@@ -203,23 +205,14 @@
               ${modifyList.modifyContract.recordNo}</div>
             <div class="contPic">
               <label>合同变更扫描件</label>
-              <div class="rollBox">
-                <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-                <div class="Cont" id="ISL_Cont2">
-                  <div class="ScrCont">
-                    <div id="List3">
-                      <!-- 图片列表 begin -->
-                       <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
-                      <#list imgArr  as modifyimgPath>
-                      	<div class="pic"><a href="javascript:void(0);" target="_blank"><img src="${b.imagePath}${modifyimgPath}"  /></a></div>
-              		  </#list>
-                      <!-- 图片列表 end -->
-                    </div>
-                    <div id="List4"></div>
-                  </div>
-                </div>
-                <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
-              </div>
+               <div class="rollBox">
+				<ul  class="elastislide-list imagelist">
+					  <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
+                 <#list imgArr  as imgPath>
+                 <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
+                 </#list>
+				</ul>
+			  </div>
             </div>
             <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
               <col width="15%" />
@@ -250,6 +243,7 @@
               </tr>
               </#list>
             </table>
+            <#if modifyList.modifyBatchList?exists>
             <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
               <col width="20%" />
               <col width="25%" />
@@ -290,7 +284,7 @@
               </tr>
               </#list>
             </table>
-             	
+             	</#if>
              </#list>
             <!-- 变更信息遍历结束 -->
           </div>
@@ -308,22 +302,15 @@
             <div class="contPic">
               <label>合同补损扫描件</label>
               <div class="rollBox">
-                <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-                <div class="Cont" id="ISL_Cont3">
-                  <div class="ScrCont">
-                    <div id="List5">
-                      <!-- 图片列表 begin -->
-                      <#assign replenishArr=(replenishList.replenishContract.imgPath?split(","))>
-                      <#list replenishArr  as replenishImg>
-                      <div class="pic"><a href="javascript:void(0);" target="_blank"><img src="${b.imagePath}${replenishImg}"  /></a></div>
-                      </#list>
-                      <!-- 图片列表 end -->
-                    </div>
-                    <div id="List6"></div>
-                  </div>
-                </div>
-                <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
-              </div>
+				<ul  class="elastislide-list imagelist">
+				<#assign imgArr=(replenishList.replenishContract.imgPath?split(","))>
+                 <#list imgArr  as imgPath>
+                 <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
+                 </#list>
+				</ul>
+			  </div>
+              
+              
             </div>
             <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
               <col width="10%" />

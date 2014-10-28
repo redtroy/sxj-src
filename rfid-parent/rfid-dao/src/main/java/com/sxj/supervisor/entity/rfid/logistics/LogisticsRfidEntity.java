@@ -8,12 +8,12 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
-import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
-import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 
 /**
  * 物流认证标签
@@ -41,8 +41,10 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	 * RFID编号
 	 */
 	@Column(name = "RFID_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "AAAA", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String rfidNo;
+
+	@Column(name = "GENERATE_KEY")
+	private Long generateKey;
 
 	/**
 	 * 采购单号
@@ -97,6 +99,12 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "RFID_STATE")
 	private RfidStateEnum rfidState;
+
+	/**
+	 * 进度状态
+	 */
+	@Column(name = "PROGRESS_STATE")
+	private LabelStateEnum progressState;
 
 	/**
 	 * 执行日志
@@ -198,6 +206,22 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	public void setRfidState(RfidStateEnum rfidState) {
 		this.rfidState = rfidState;
+	}
+
+	public Long getGenerateKey() {
+		return generateKey;
+	}
+
+	public void setGenerateKey(Long generateKey) {
+		this.generateKey = generateKey;
+	}
+
+	public LabelStateEnum getProgressState() {
+		return progressState;
+	}
+
+	public void setProgressState(LabelStateEnum progressState) {
+		this.progressState = progressState;
 	}
 
 }

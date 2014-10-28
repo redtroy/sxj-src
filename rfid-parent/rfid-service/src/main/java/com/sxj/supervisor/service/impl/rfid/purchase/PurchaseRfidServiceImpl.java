@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.rfid.purchase;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -16,17 +17,24 @@ import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.entity.rfid.sale.RfidPriceEntity;
 import com.sxj.supervisor.entity.rfid.sale.RfidSaleStatisticalEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
+import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
+import com.sxj.supervisor.service.rfid.IRfidKeyService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
+import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.purchase.IPurchaseRfidService;
 import com.sxj.supervisor.service.rfid.sale.IRfidPriceService;
 import com.sxj.supervisor.service.rfid.sale.IRfidSaleStatisticalService;
+import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.persistent.CustomDecimal;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -44,6 +52,15 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 
 	@Autowired
 	private IRfidApplicationService applyService;
+
+	@Autowired
+	private IWindowRfidService winRfidService;
+
+	@Autowired
+	private ILogisticsRfidService logisticsRfidService;
+
+	@Autowired
+	private IRfidKeyService keyService;
 
 	@Override
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
@@ -156,19 +173,33 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					.getApplyNo());
 			RfidTypeEnum rfidType = purchase.getRfidType();
 			Long count = purchase.getCount();
-			for (int i = 0; i < count; i++) {
-				if (RfidTypeEnum.door.equals(rfidType)) {
+			if (RfidTypeEnum.door.equals(rfidType)) {
+				WindowRfidEntity[] winRfids = new WindowRfidEntity[count
+						.intValue()];
+				for (int i = 0; i < count; i++) {
 					WindowRfidEntity rfid = new WindowRfidEntity();
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					rfid.setContractNo(purchase.getContractNo());
 					rfid.setImportDate(new Date());
 					rfid.setRfidState(RfidStateEnum.unused);
+					rfid.setProgressState(LabelProgressEnum.unfilled);
 					RfidLog log = new RfidLog();
 					log.setState(RfidStateEnum.unused.getName());
 					log.setDate(DateTimeUtils.getDateTime());
 					String jsonLog = JsonMapper.nonDefaultMapper().toJson(log);
 					rfid.setLog(jsonLog);
-				} else {
+					Long key = keyService.getKey();
+					rfid.setGenerateKey(key);
+					String rfidNo = CustomDecimal.getDecimalString(4,
+							new BigDecimal(key));
+					rfid.setRfidNo(rfidNo);
+					winRfids[i] = rfid;
+				}
+				winRfidService.batchAddWindowRfid(winRfids);
+			} else {
+				LogisticsRfidEntity[] rfids = new LogisticsRfidEntity[count
+						.intValue()];
+				for (int i = 0; i < count; i++) {
 					LogisticsRfidEntity rfid = new LogisticsRfidEntity();
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					rfid.setContractNo(purchase.getContractNo());
@@ -176,17 +207,28 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					rfid.setRfidState(RfidStateEnum.unused);
 					rfid.setMemberNo(apply.getMemberNo());
 					rfid.setMemberName(apply.getMemberName());
+					rfid.setProgressState(com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum.unfilled);
+					rfid.setType(rfidType);
 					RfidLog log = new RfidLog();
 					log.setState(RfidStateEnum.unused.getName());
 					log.setDate(DateTimeUtils.getDateTime());
 					String jsonLog = JsonMapper.nonDefaultMapper().toJson(log);
 					rfid.setLog(jsonLog);
+					Long key = keyService.getKey();
+					rfid.setGenerateKey(key);
+					String rfidNo = CustomDecimal.getDecimalString(4,
+							new BigDecimal(key));
+					rfid.setRfidNo(rfidNo);
+					rfids[i] = rfid;
 				}
+				logisticsRfidService.batchAddLogistics(rfids);
 			}
+			purchase.setImportState(ImportStateEnum.imported);
+			updatePurchase(purchase);
 		} catch (Exception e) {
-			// TODO: handle exception
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("导入RFID错误", e);
 		}
 
 	}
-
 }

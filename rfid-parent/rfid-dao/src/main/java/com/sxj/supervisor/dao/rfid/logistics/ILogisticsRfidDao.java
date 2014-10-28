@@ -3,13 +3,16 @@ package com.sxj.supervisor.dao.rfid.logistics;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.util.persistent.QueryCondition;
+
 /**
  * 物流RFID Dao
+ * 
  * @author Ann
  *
  */
@@ -31,6 +34,15 @@ public interface ILogisticsRfidDao {
 	 **/
 	@Insert
 	public void addLogisticsRfid(LogisticsRfidEntity logistics)
+			throws SQLException;
+
+	/**
+	 * 新增物流RFID
+	 *
+	 * @param member
+	 **/
+	@BatchInsert
+	public void batchAddLogisticsRfid(LogisticsRfidEntity[] logistics)
 			throws SQLException;
 
 	/**

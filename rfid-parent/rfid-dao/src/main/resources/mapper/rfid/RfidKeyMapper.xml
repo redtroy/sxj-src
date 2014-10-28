@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.rfid.IRfidKeyDao">
+	<!-- 按条件查询门窗 -->
+	<insert id="getKey" parameterType="com.sxj.supervisor.entity.rfid.RfidKeyEntity"
+		useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[REPLACE INTO R_GLOBAL_KEY (NAME) values (#{name});]]>
+	</insert>
+</mapper>

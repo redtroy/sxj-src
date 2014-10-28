@@ -161,7 +161,11 @@ function closeLog(id){
           <td><a href="javascript:log('${win.id}');" class="lnk-blue">${win.rfidNo}</a></td>
           <td>${win.purchaseNo}</td>
           <td><a href="javascript:loadInfo('${win.id}','${win.contractNo}')" class="lnk-blue">${win.contractNo}</a></td>
+          <#if win.windowType??>
           <td>${win.windowType.getName()} </td>
+          <#else>
+          <td></td>
+          </#if>
 		  <td><a href="javascript:blBatch('${win.id}','${win.contractNo}','${win.glassRfid}')" class="lnk-blue">${win.glassRfid}</a></td>
 		  <td><a href="javascript:xcBatch('${win.id}','${win.contractNo}','${win.profileRfid}')" class="lnk-blue">${win.profileRfid}</a></td>
 		  <td>${win.importDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>

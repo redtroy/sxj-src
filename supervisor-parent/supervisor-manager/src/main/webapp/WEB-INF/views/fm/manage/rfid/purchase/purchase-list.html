@@ -11,6 +11,8 @@
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.pageScript/>
+<@b.dialogBox/>
+<@b.errorInfo/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -32,59 +34,72 @@ function query(page){
 }
 
 function  del(id){
-	if(confirm('确实要删除吗?')){
-	$.post("delete.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			alert("删除成功!");
-			window.location.href="query.htm";
-		}else{
-			alert("删除失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("delete.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"删除成功!");
+			}else{
+				errorInfo("删除失败!");	
+			}
+		});
+	},"确实要删除吗?");
 }
 
 function toImport(id){
-	$.post("toImport.htm",{id:id},function(data){
-		$("#rightBar").empty();
-		$("#rightBar").html(data);
-	});
+	dialogBox(function(){
+		$.post("importRfid.htm",{purchaseId:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"导入成功！");
+				
+			}else{
+				errorInfo("导入失败!");	
+			}
+		});
+	},"是否确认导入RFID？");
+	
 }
 function confirmDelivery(id){
-	if(confirm('是否确认发货?')){
+	dialogBox(function(){
 		$.post("confirmDelivery.htm",{id:id},function(data){
 			if(data.isOK=='ok'){
-				alert("发货成功!");
-				query($("#pager").attr("currentPage"));
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"发货成功!");
 			}else{
-				alert("发货失败!");	
+				errorInfo("发货失败!");	
 			}
 		});
-		}
+	},"是否确认发货?");
 }
 function confirmPay(id){
-	if(confirm('是否确认付款?')){
+	dialogBox(function(){
 		$.post("confirmPay.htm",{id:id},function(data){
 			if(data.isOK=='ok'){
-				alert("确认付款成功!");
-				query($("#pager").attr("currentPage"));
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"确认付款成功!");
 			}else{
-				alert("确认付款失败!");	
+				errorInfo("确认付款失败!");	
 			}
 		});
-		}
+	},"是否确认付款?");
 }
 function confirmReceipt(id){
-	if(confirm('是否确认收货?')){
+	dialogBox(function(){
 		$.post("confirmReceipt.htm",{id:id},function(data){
 			if(data.isOK=='ok'){
-				alert("确认收货成功!");
-				query($("#pager").attr("currentPage"));
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"确认收货成功!");
 			}else{
-				alert("确认收货失败!");	
+				errorInfo("确认收货失败!");	
 			}
 		});
-		}
+	},"是否确认收货?");
 }
 function loadInfo(id,applyNo){
 	if ($("#info"+id).html()==""){
