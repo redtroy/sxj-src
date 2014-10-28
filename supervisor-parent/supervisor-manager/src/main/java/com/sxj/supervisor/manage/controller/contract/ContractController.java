@@ -51,20 +51,24 @@ public class ContractController extends BaseController {
 				List<RecordEntity> recordList = recordService.queryRecord(rq);
 				if (recordList.size() > 0) {
 					RecordEntity recordEntity = recordList.get(0);
-					if(contractModel.getContract().getType().getId()==0){
+					if (contractModel.getContract().getType().getId() == 0) {
 						contractModel.getContract().setStateLog("乙方已申请备案");
-					}else{
-					if (recordEntity.getType().getId() == 0) {
-						if (recordEntity.getFlag().getId() ==0)  {
-							contractModel.getContract().setStateLog("甲方已申请备案");
-						} else {
-							contractModel.getContract().setStateLog("乙方已申请备案");
-						}
-					} else if (recordEntity.getType().getId() == 1) {
-						contractModel.getContract().setStateLog("甲方已申请变更备案");
 					} else {
-						contractModel.getContract().setStateLog("甲方已申请补损备案");
-					}
+						if (recordEntity.getType().getId() == 0) {
+							if (recordEntity.getFlag().getId() == 0) {
+								contractModel.getContract().setStateLog(
+										"甲方已申请备案");
+							} else {
+								contractModel.getContract().setStateLog(
+										"乙方已申请备案");
+							}
+						} else if (recordEntity.getType().getId() == 1) {
+							contractModel.getContract()
+									.setStateLog("甲方已申请变更备案");
+						} else {
+							contractModel.getContract()
+									.setStateLog("甲方已申请补损备案");
+						}
 					}
 				}
 			}
@@ -86,7 +90,7 @@ public class ContractController extends BaseController {
 	}
 
 	@RequestMapping("stateLog")
-	public String getStateLog(ModelMap model, String contractNo,String id) {
+	public String getStateLog(ModelMap model, String contractNo, String id) {
 		RecordQuery rq = new RecordQuery();
 		rq.setContractNo(contractNo);
 		rq.setSort("desc");
@@ -98,26 +102,26 @@ public class ContractController extends BaseController {
 		if (recordList.size() > 0) {
 			for (RecordEntity recordEntity : recordList) {
 				StateLogModel sl = new StateLogModel();
-				if(contractModel.getContract().getType().getId()==0){
+				if (contractModel.getContract().getType().getId() == 0) {
 					sl.setStateTitle("乙方已申请备案");
 					sl.setModifyDate(recordEntity.getApplyDate());
-				}else{
-				if (recordEntity.getType().getId() == 0) {
-					if (recordEntity.getFlag().getId() ==0) {
-						sl.setStateTitle("甲方已申请备案");
+				} else {
+					if (recordEntity.getType().getId() == 0) {
+						if (recordEntity.getFlag().getId() == 0) {
+							sl.setStateTitle("甲方已申请备案");
+							sl.setModifyDate(recordEntity.getApplyDate());
+						} else {
+							sl.setStateTitle("乙方已申请备案");
+							sl.setModifyDate(recordEntity.getApplyDate());
+						}
+					} else if (recordEntity.getType().getId() == 1) {
+						sl.setStateTitle("甲方已申请变更备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
 					} else {
-						sl.setStateTitle("乙方已申请备案");
+						sl.setStateTitle("甲方已申请补损备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
 					}
-				} else if (recordEntity.getType().getId() == 1) {
-					sl.setStateTitle("甲方已申请变更备案");
-					sl.setModifyDate(recordEntity.getApplyDate());
-				} else {
-					sl.setStateTitle("甲方已申请补损备案");
-					sl.setModifyDate(recordEntity.getApplyDate());
 				}
-			}
 				slList.add(sl);
 			}
 		}
@@ -136,9 +140,9 @@ public class ContractController extends BaseController {
 					.getContract(contractId);
 			model.put("contractModel", contractModel);
 			model.put("contractId", contractId);
-			if(contractModel.getContract().getType().getId()==0){
+			if (contractModel.getContract().getType().getId() == 0) {
 				return "manage/contract/contract-info-zhaobiao";
-			}else{
+			} else {
 				return "manage/contract/contract-info";
 			}
 		} catch (Exception e) {
@@ -153,6 +157,7 @@ public class ContractController extends BaseController {
 		model.put("record", record);
 		return "manage/contract/contract-add";
 	}
+
 	@RequestMapping("produced-kfs")
 	public String producedKfsContract(String recordId, ModelMap model) {
 		RecordEntity record = recordService.getRecord(recordId);
@@ -184,6 +189,7 @@ public class ContractController extends BaseController {
 		model.put("contractId", contractId);
 		return "manage/contract/contract-edit";
 	}
+
 	@RequestMapping("toKfsModify")
 	public String toKfsModify(String contractId, ModelMap model) {
 		ContractModel contractModel = contractService.getContract(contractId);
@@ -193,6 +199,7 @@ public class ContractController extends BaseController {
 		model.put("type", type);
 		return "manage/contract/contract-kfs-edit";
 	}
+
 	@RequestMapping("modify")
 	public @ResponseBody Map<String, Object> modifyContract(
 			ContractModel contractModel, ModelMap model) throws WebException {
@@ -238,15 +245,16 @@ public class ContractController extends BaseController {
 
 	@RequestMapping("saveChanges")
 	public @ResponseBody Map<String, Object> saveChanges(
-			ContractModifyControllerModel contractModifyModel,String recordId)
+			ContractModifyControllerModel contractModifyModel, String recordId)
 			throws WebException {
 		try {
 			ContractModifyModel model = new ContractModifyModel();
 			model.setModifyContract(contractModifyModel.getModifyContract());
 			model.setModifyBatchList(contractModifyModel.getModifyBatchList());
 			model.setModifyItemList(contractModifyModel.getModifyItemList());
-			contractService.changeContract(recordId,contractModifyModel.getContractId(),
-					model, contractModifyModel.getRecordNo(),
+			contractService.changeContract(recordId,
+					contractModifyModel.getContractId(), model,
+					contractModifyModel.getRecordNo(),
 					contractModifyModel.getItemList());
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
@@ -266,19 +274,19 @@ public class ContractController extends BaseController {
 			model.put("contractModel", conEntity);
 			model.put("record", record);
 			model.put("recordId", recordId);
-			
+
 		}
 		return "manage/contract/contract-replenish";
 	}
 
 	@RequestMapping("saveReplenish")
 	public @ResponseBody Map<String, Object> saveReplenish(
-			ContractReplenishControllerModel contractReplenish,String recordId)
+			ContractReplenishControllerModel contractReplenish, String recordId)
 			throws WebException {
 		try {
-			contractService.suppContract(recordId,contractReplenish.getReplenish()
-					.getContractId(), contractReplenish.getBatchList(),
-					contractReplenish.getReplenish());
+			contractService.suppContract(recordId, contractReplenish
+					.getReplenish().getContractId(), contractReplenish
+					.getBatchList(), contractReplenish.getReplenish());
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
 			return map;

@@ -47,7 +47,7 @@ public class AccountEntity extends Pagable implements Serializable {
 	 * 子账户ID
 	 **/
 	@Column(name = "ACCOUNT_NO")
-	@Sn(pattern = "0000", step = 1, table = "T_SN", stubValue = "0", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "noType")
 	private String accountNo;
 
 	/**
@@ -101,6 +101,8 @@ public class AccountEntity extends Pagable implements Serializable {
 
 	@Column(name = "LAST_LOGIN")
 	private Date lastLogin;
+
+	private String noType;
 
 	public String getId() {
 		return id;
@@ -173,6 +175,13 @@ public class AccountEntity extends Pagable implements Serializable {
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
 	}
-	
-	
+
+	public String getNoType() {
+		return noType;
+	}
+
+	public void setNoType(String noType) {
+		this.noType = noType;
+	}
+
 }
