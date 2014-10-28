@@ -60,6 +60,7 @@ var ul_validform;
 						src : imageSource,
 						mousewheel : true
 					});
+					$("#viewer2").show();
 					el.parent().children("li").removeClass("view");
 					el.addClass("view");
 					$("#viewer2").children("img").attr("src",imageSource);
@@ -326,7 +327,7 @@ var ul_validform;
 						</div>
 						<div class="contPic">
 							<label>合同扫描件</label>
-							<input type="hidden" value="${record.imgPath}" id="imgId" />
+								<input type="hidden" value="${record.imgPath}" id="imgId" />
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
 								</div>

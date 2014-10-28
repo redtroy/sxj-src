@@ -354,10 +354,10 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 					<!-- 变更信息 -->
 					
 					<div class="changeBox">
+					<#if contractModel.modifyList?exists>
 						<div id="chenges">
 							<h2 class="title">合同变更信息</h2>
-				<#if contractModel.modifyList?exists> <#list
-					contractModel.modifyList as modifyList>
+				 <#list contractModel.modifyList as modifyList>
 							<div class="infoBox producedBox f14">
 								<div>
 									<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
@@ -457,8 +457,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								</table>
 								</#if>
 							</div>
-						</#list> </#if>
+						</#list> 
 						</div>
+						</#if>
 					</div>
 				
 					<!-- 变更信息结束 -->
@@ -527,7 +528,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							</div>
 							<div class="btnBox">
 								<a href="javascript:void(0)" onclick="saveChenges()" id="saveId"
-									class="button button-orange button-small">确认</a><a
+									class="button button-orange button-small" style="color: #fff;">确认</a><a
 									href="javascript:history.go(-1);"
 									class="button button-gray button-small">返回</a>
 							</div>
