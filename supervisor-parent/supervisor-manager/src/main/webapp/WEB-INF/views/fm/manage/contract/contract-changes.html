@@ -133,7 +133,10 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 
 
 	function saveChenges() {
+<<<<<<< HEAD
+=======
 		$("#saveId").live("click",function() {
+>>>>>>> 73790240081767da3fa773e2b6a05200ded8ab37
 					$("#cptable").find(".formitem").each(function(i){
 						$(this).find("td").each(function(){
 							if($(this).attr("name")){
@@ -167,7 +170,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								})
 
 					}, "是否变更合同?");
-				});
 	}
 </script>
 </head>
@@ -274,8 +276,13 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							</tr>
 							<#list contractModel.batchList as batch>
 							<tr id="${batch.batch.id}" class="formitem">
+<<<<<<< HEAD
+								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo">${batch.batch.batchNo}</td>
+								<td name="modifyBatchList[i].modifyBatchItems[j].productModel"><table border="0" cellpadding="0" cellspacing="0"
+=======
 								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo">第${batch.batch.batchNo}批次</td>
 								<td name="modifyBatchList[i].modifyBatch[j].productModel"><table border="0" cellpadding="0" cellspacing="0"
+>>>>>>> 73790240081767da3fa773e2b6a05200ded8ab37
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
@@ -283,7 +290,11 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										</tr>
 										</#list>
 									</table></td>
+<<<<<<< HEAD
+								<td name="modifyBatchList[i].modifyBatchItems[j].quantity"><table border="0" cellpadding="0" cellspacing="0"
+=======
 								<td name="modifyBatchList[i].modifyBatch[j].quantity"><table border="0" cellpadding="0" cellspacing="0"
+>>>>>>> 73790240081767da3fa773e2b6a05200ded8ab37
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
@@ -310,7 +321,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</div>
 						<div>
 							<label>合同备注</label>
-							<textarea name="textarea2" id="textarea2" cols="80" rows="3" readonly="readonly">${contractModel.contract.remarks}</textarea>
+							<textarea cols="80" rows="3" readonly="readonly">${contractModel.contract.remarks}</textarea>
 						</div>
 						<div class="contPic">
 							<label>合同备案扫描件</label>
@@ -407,7 +418,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</tr>
 									<#list modifyList.modifyBatchList as modifyBatch>
 									<tr id="${modifyBatch.modifyBatch.id}" class="formitem">
-										<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
+										<td>${modifyBatch.modifyBatch.batchNo}</td>
 										<td>
 											<table border="0" cellpadding="0" cellspacing="0"
 												class="tabList prodIable">

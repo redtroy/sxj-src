@@ -685,15 +685,14 @@ public class ContractServiceImpl implements IContractService {
 					List<ModifyBatchModel> mbmList = model.getModifyBatchList();
 					List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
 					if (mbmList != null) {
-						for (Iterator iterator = mbmList.iterator(); iterator
-								.hasNext();) {
-							ModifyBatchModel modifyBatchModel = (ModifyBatchModel) iterator
-									.next();
-							ModifyBatchEntity mbe = modifyBatchModel
+						
+						for (ModifyBatchModel modifyBatchEntity : mbmList) {
+							ModifyBatchEntity mbe = modifyBatchEntity
 									.getModifyBatch();
 							String json = JsonMapper.nonEmptyMapper().toJson(
-									modifyBatchModel.getModifyBatchItems());
+									modifyBatchEntity.getModifyBatchItems());
 							mbe.setBatchItems(json);
+							mbe.setModifyId(mec.getId());
 							mbeList.add(mbe);
 						}
 						contractModifyBatchDao.addBatchs(mbeList);

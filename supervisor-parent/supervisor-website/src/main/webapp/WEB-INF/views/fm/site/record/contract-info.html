@@ -185,6 +185,7 @@
 			</div>
 			<div class="item ly-clearFix">
 				<label class="ly-left">&nbsp;</label>
+				<#if modifyList.modifyBatchList?exists>
 				<table border="0" cellpadding="0" cellspacing="0"
 					class="tabProd ly-left">
 					<col width="15%" />
@@ -221,6 +222,7 @@
 					</tr>
 					</#list>
 				</table>
+				</div></#if>
 			</div>
 			<div class="item">
 				<label>&nbsp;</label> 本合同还剩有<span class="color-red fb ml5 mr5">2个</span>交付批次

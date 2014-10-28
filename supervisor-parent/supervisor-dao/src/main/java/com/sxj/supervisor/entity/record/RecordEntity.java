@@ -139,6 +139,13 @@ public class RecordEntity extends Pagable implements Serializable {
 	 **/
 	@Column(name = "ACCEPT_DATE")
 	private Date acceptDate;
+	
+	/**
+	 * 备案时间
+	 **/
+	@Column(name = "RECORD_DATE")
+	private Date recordDate;
+
 
 	/**
 	 * 删除标记
@@ -152,6 +159,14 @@ public class RecordEntity extends Pagable implements Serializable {
 	@Column(name = "RFID_NO")
 	private String rfidNo;
 	
+	public Date getRecordDate() {
+		return recordDate;
+	}
+
+	public void setRecordDate(Date recordDate) {
+		this.recordDate = recordDate;
+	}
+
 	public String getDateNo() {
 		return dateNo;
 	}

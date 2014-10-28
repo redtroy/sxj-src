@@ -150,9 +150,9 @@
 							</li>
 							<li><label>备案类型</label>${record.type.getName()}</li>
 							<li><label>申请备案时间</label> <#if (record.applyDate??)>
-								${record.applyDate?date}</li> </#if>
+								${record.applyDate?string("yyyy-MM-dd HH:mm:ss")}</li> </#if>
 							<li><label>受理时间</label> <#if (record.acceptDate??)>
-								${record.acceptDate?date}</li> </#if>
+								${record.acceptDate?string("yyyy-MM-dd HH:mm:ss")}</li> </#if>
 					</ul>
 					</form>
 					<div class="btnBox">
