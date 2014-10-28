@@ -175,10 +175,12 @@ jQuery(document).ready(function($) {
          <select name="functionId">
           <option value="">-请选择-</option>
            <#list functions as f>
+           <#if f.parentId!=0>
            <#if f.id==query.functionId>
             <option value="${f.id}" selected="selected">${f.title}</option>
             <#else>
              <option value="${f.id}">${f.title}</option>
+            </#if>
             </#if>
             </#list>
           </select>
@@ -234,7 +236,7 @@ jQuery(document).ready(function($) {
        		<input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
 		 	<input id="id_hidden" type="hidden" name="id" value="${account.id}" />
 	  		<input id="old_hidden" type="hidden" name="old" value="${account.accountName}" />
-          <td>${account.parentId}-${account.accountNo}</td>
+          <td>${account.accountNo}</td>
           <td>${account.parentId}</td>
           <td id="account_td">${account.accountName}</td>
           <td id="account_td2" style="display: none"><input type="text" class="input" value="${account.accountName}" id="accountEdit" name="accountName"/></td>
@@ -246,9 +248,9 @@ jQuery(document).ready(function($) {
      		</div>
       	  </td>
           <#if (account.state.id==0)>
-          <td><a class="btn btn-green" onclick="checkState('${account.id}',${account.state.id})"><span>解冻</span></a></td>
+          <td><a class="btn btn-green" onclick="checkState('${account.id}','1')"><span>解冻</span></a></td>
           <#elseif (account.state.id==1)>
-          <td><a class="btn btn-red" onclick="checkState('${account.id}',${account.state.id})"><span>冻结</span></a></td>
+          <td><a class="btn btn-red" onclick="checkState('${account.id}','0')"><span>冻结</span></a></td>
           </#if>
           <td>${account.regDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td id="edit_td" class="operation"><a class="edit" onclick="edit('${account.id}')">修改</a></td>

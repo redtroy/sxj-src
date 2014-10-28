@@ -1,11 +1,13 @@
 package com.sxj.supervisor.enu.member;
+
 /**
  * 会员子帐号状态
+ * 
  * @author Administrator
  *
  */
 public enum AccountStatesEnum {
-	normal("未冻结", 1), stop("已冻结", 0);
+	stop("已冻结", 0), normal("未冻结", 1);
 
 	// 成员变量
 	private Integer id;
@@ -41,5 +43,14 @@ public enum AccountStatesEnum {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public static AccountStatesEnum getEnum(Integer id) {
+		for (AccountStatesEnum c : AccountStatesEnum.values()) {
+			if (c.getId() == id) {
+				return c;
+			}
+		}
+		return null;
 	}
 }

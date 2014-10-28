@@ -24,11 +24,12 @@ public class MemberFunctionServiceImpl implements IMemberFunctionService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MemberFunctionEntity> queryChildrenFunctions(String parentId)
-			throws ServiceException {
+	public List<MemberFunctionEntity> queryChildrenFunctions(String parentId,
+			Integer flag) throws ServiceException {
 		try {
 			QueryCondition<MemberFunctionEntity> query = new QueryCondition<MemberFunctionEntity>();
-			query.addCondition("parentid", parentId);
+			query.addCondition("parentId", parentId);
+			query.addCondition("flag", flag);
 			List<MemberFunctionEntity> list = functionDao.queryFunctions(query);
 			return list;
 		} catch (Exception e) {
@@ -40,7 +41,8 @@ public class MemberFunctionServiceImpl implements IMemberFunctionService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MemberFunctionModel> queryFunctions(Integer flag) throws ServiceException {
+	public List<MemberFunctionModel> queryFunctions(Integer flag)
+			throws ServiceException {
 		try {
 			QueryCondition<MemberFunctionEntity> query = new QueryCondition<MemberFunctionEntity>();
 			query.addCondition("parentId", "0");

@@ -38,6 +38,8 @@
 			if (data.isOK == "ok") {
 				$('.maskdivgen').fadeOut(100);
 				$('.modal-mask').slideUp(200);
+				 $("#loginpassword").val("");
+				 $("#newpassword").val("");
 				succInfo(function(){
 				},"修改成功！");
 			} else {
@@ -70,7 +72,7 @@
 						class="button button-green button-middle edit-password fontYH f14">修改登录密码</a>
 				</div>
 				<div class="modal-mask" style="display: none">
-					<div class="modal-wrap">
+					<div class="modal-wrap" style="display: none">
 						<div class="modal-header">
 							<span class="close">关闭</span>
 						</div>

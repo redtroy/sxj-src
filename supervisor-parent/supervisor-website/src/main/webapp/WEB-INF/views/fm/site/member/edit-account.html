@@ -186,10 +186,12 @@ jQuery(document).ready(function($) {
           <select name="functionId">
           <option value="">-请选择-</option>
            <#list functions as f>
+           <#if f.parentId!=0>
            <#if f.id==query.functionId>
             <option value="${f.id}" selected="selected">${f.title}</option>
             <#else>
              <option value="${f.id}">${f.title}</option>
+            </#if>
             </#if>
             </#list>
           </select><button class="button button-search" onclick="query();">查询</button>

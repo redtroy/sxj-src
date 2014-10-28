@@ -13,14 +13,15 @@ public interface IMemberFunctionService {
 	 * 
 	 * @return
 	 */
-	public List<MemberFunctionEntity> queryChildrenFunctions(String parentId)
-			throws ServiceException;
+	public List<MemberFunctionEntity> queryChildrenFunctions(String parentId,
+			Integer flag) throws ServiceException;
 
 	/**
 	 * 读取所有菜单(按照层级)
 	 * 
 	 * @return
 	 */
-	public List<MemberFunctionModel> queryFunctions(Integer flag) throws ServiceException;
+	public List<MemberFunctionModel> queryFunctions(Integer flag)
+			throws ServiceException;
 
 }

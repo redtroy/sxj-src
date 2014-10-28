@@ -223,6 +223,22 @@ function dialogBox(confirm,message){
 		    $("#dialog_confirm_click").die("click");
 		});
  }
+ 
+function dialogBoxout(confirm,html){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		    offset: ['192px', ''],
+		   	area: ['20%', '20%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: html;
+		    }
+		});
+ }
 </script>
 </#macro>
 <#macro validate>

@@ -1,21 +1,20 @@
     <!-- InstanceBeginEditable name="rightBar" -->
  <@b.validate/>
- <@b.errorInfo/>
     <h2 class="title">新增管理员</h2>
     <div class="adminBox f14">
     <form id="add_form" action="javascript:void(0);" method="post">
       <div>
         <label>姓名</label>
-        <input type="text" id="user_name" name="name" class="text tip" title="由中文组成" datatype="*2-20" nullmsg="请输入姓名"/>
+        <input type="text" id="name" name="name" class="text tip" title="由中文组成" datatype="*2-20" nullmsg="请输入姓名" errormsg="姓名只能使用中文"/>
         <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
       </div>
       <div>
         <label>帐号</label>
-        <input type="text" id="user_name" name="account" class="text tip" title="3-20位字符，可由中文、英文、数字及“_”、“-”组成" datatype="*2-20" nullmsg="请输入帐号"/>
+        <input type="text" id="user_name" name="account" class="text tip" title="3-20位字符，可由中文、英文、数字及“_”、“-”组成" datatype="ys" ajaxurl="check_account.htm" nullmsg="请输入帐号" errormsg="账号名只能用英文+数字"/>
       </div>
       <div>
         <label>密码</label>
-        <input type="password" id="password" name="password" class="text tip" title="6-16位字符，可由英文、数字及标点符号组成" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/>
+        <input type="password" id="password" name="password" class="text tip" title="6-15位字符，可由英文、数字及标点符号组成" datatype="*6-15" errormsg="密码范围在6~15位之间，可由英文、数字及标点符号组成" nullmsg="请设置密码！"/>
       </div>
       <div>
         <label>确认密码</label>
@@ -24,7 +23,7 @@
       <div class="permission">
         <label>权限</label>
         <div class="adminDrop dropMenu sltinput" onclick="javascript:roleInfo('','add');"> <span>全部权限</span> <span class="icon"></span> </div>
-      <div class="btnBox"><a href="javascript:add();" class="button button-orange button-small">新增</a>
+      <div class="btnBox"><a href="javascript:subForm();" class="button button-orange button-small">新增</a>
       <a id="test2" class="button button-gray button-small" onclick="query();">返回</a> </div>
       </div>
       </form>
@@ -52,6 +51,9 @@
   }
 	$("#add_form").Validform({
 		tiptype:3,
+		datatype:{
+			"ys":/^[A-Za-z0-9]+$/
+		},
 		callback:function(form){
 			add();
 		}

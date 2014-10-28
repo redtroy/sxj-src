@@ -45,14 +45,14 @@ public class AccountController extends BaseController {
 	private IMemberRoleService roleService;
 
 	@RequestMapping("accountList")
-	public String memberList(AccountQuery query, ModelMap map) {
+	public String accountList(AccountQuery query, ModelMap map) {
 		if (query != null) {
 			query.setPagable(true);
 		}
 		AccountStatesEnum[] states = AccountStatesEnum.values();
 		List<AccountEntity> list = accountService.queryAccounts(query);
 		List<MemberFunctionEntity> functionList = functionService
-				.queryChildrenFunctions("0");
+				.queryChildrenFunctions(null, null);
 		map.put("functions", functionList);
 		map.put("states", states);
 		map.put("list", list);

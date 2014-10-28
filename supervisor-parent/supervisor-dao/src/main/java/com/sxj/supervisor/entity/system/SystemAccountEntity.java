@@ -35,7 +35,7 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 	private String id;
 
 	@Column(name = "ACCOUNT_NO")
-	@Sn(pattern = "0000", step = 1, table = "T_SN", stubValue = "SYS", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "000", step = 1, table = "T_SN", stubValue = "0", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String accountNo;
 
 	@Column(name = "NAME")

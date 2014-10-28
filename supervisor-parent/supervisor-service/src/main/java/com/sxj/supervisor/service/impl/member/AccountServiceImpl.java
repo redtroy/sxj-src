@@ -203,17 +203,10 @@ public class AccountServiceImpl implements IAccountService {
 		try {
 			AccountEntity account = new AccountEntity();
 			account.setId(id);
-			if (state == AccountStatesEnum.stop.getId().intValue()) {
-				account.setState(AccountStatesEnum.normal);
-				accountDao.updateAccount(account);
-				return AccountStatesEnum.normal.getName();
-			} else if (state == AccountStatesEnum.normal.getId().intValue()) {
-				account.setState(AccountStatesEnum.stop);
-				accountDao.updateAccount(account);
-				return AccountStatesEnum.stop.getName();
-			} else {
-				return null;
-			}
+			account.setState(AccountStatesEnum.getEnum(state));
+			accountDao.updateAccount(account);
+			return AccountStatesEnum.getEnum(state).getName();
+
 		} catch (Exception e) {
 			SxjLogger.error("更新子账户状态错误", e, this.getClass());
 			throw new ServiceException("更新子账户状态错误", e);

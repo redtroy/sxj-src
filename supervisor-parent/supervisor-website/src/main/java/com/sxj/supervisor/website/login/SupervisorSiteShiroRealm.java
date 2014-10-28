@@ -73,7 +73,7 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 		List<String> permissions = new ArrayList<String>();
 		if (current instanceof MemberEntity) {
 			List<MemberFunctionEntity> functionList = functionService
-					.queryChildrenFunctions(null);
+					.queryChildrenFunctions(null, null);
 			if (functionList != null && functionList.size() > 0) {
 				for (MemberFunctionEntity functionEntity : functionList) {
 					if (functionEntity == null) {

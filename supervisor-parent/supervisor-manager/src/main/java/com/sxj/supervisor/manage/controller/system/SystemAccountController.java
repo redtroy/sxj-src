@@ -27,7 +27,6 @@ import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.supervisor.service.system.IqueryOperation;
 import com.sxj.supervisor.validator.hibernate.AddGroup;
-import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -199,5 +198,31 @@ public class SystemAccountController extends BaseController {
 		map.put("list", list);
 		map.put("query", query);
 		return "manage/system/admin-view";
+	}
+
+	/**
+	 * 判断自会员帐号是否存在
+	 */
+	@RequestMapping("check_account")
+	public @ResponseBody Map<String, String> check_account(String old,
+			String param, HttpSession session) {
+		Map<String, String> map = new HashMap<String, String>();
+		if (StringUtils.isNotEmpty(old)) {
+			if (old.equals(param)) {
+				map.put("status", "y");
+				map.put("info", "该帐号未被使用！");
+				return map;
+			}
+		}
+		SystemAccountEntity account = accountService.getAccountByAccount(param);
+		if (account == null) {
+			map.put("status", "y");
+			map.put("info", "该帐号未被使用！");
+			return map;
+		}
+		map.put("status", "n");
+		map.put("info", "该帐号已存在！");
+		return map;
+
 	}
 }

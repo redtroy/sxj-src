@@ -78,9 +78,15 @@ public class AccountController extends BaseController {
 			return LOGIN;
 		}
 		query.setMemberNo(userBaen.getMember().getMemberNo());
+		int flag = 0;
+		if (MemberTypeEnum.DAWP.equals(userBaen.getMember().getType())) {
+			flag = 1;
+		} else {
+			flag = 2;
+		}
 		List<AccountEntity> list = accountService.queryAccounts(query);
 		List<MemberFunctionEntity> functionList = functionService
-				.queryChildrenFunctions("0");
+				.queryChildrenFunctions(null, flag);
 		map.put("list", list);
 		map.put("functions", functionList);
 		map.put("query", query);

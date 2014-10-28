@@ -15,7 +15,7 @@
 	</settings>
 	<typeHandlers>
 		<typeHandler
-			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
+			handler="com.sxj.supervisor.typehandler.AccountStatesEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.member.AccountStatesEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
@@ -39,7 +39,7 @@
 			handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.record.RecordFlagEnum" />
 		<typeHandler
-			handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler"
+			handler="com.sxj.supervisor.typehandler.RecordConfirmStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.record.RecordConfirmStateEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractStateEnumTypeHandler"
@@ -47,10 +47,14 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractSureStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractSureStateEnum" />
-
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractWindowTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractWindowTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractUpdateStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.ContractUpdateStateEnum" />
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayStageEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.PayStageEnum" />
 
 		<!-- FRID -->
 		<typeHandler
@@ -60,6 +64,9 @@
 			javaType="com.sxj.supervisor.enu.rfid.RfidTypeEnum" />
 		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.apply.PayStateEnum" />
+
+		<typeHandler handler="com.sxj.supervisor.typehandler.M_PayStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.applyManager.M_PayStateEnum" />
 
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.RfidStateEnum" />
@@ -72,12 +79,12 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.DeliveryStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum" />
-		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateTypeHandler"
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.P_PayStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.purchase.PayStateEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ImportStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum" />
-
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.AssociationTypesEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum" />

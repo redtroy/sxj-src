@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -385,6 +386,36 @@ public class BasicController extends BaseController {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 		}
 		return sortFile;
+
+	}
+
+	@RequestMapping("enter")
+	@ResponseBody
+	public void enter(HttpSession session, HttpServletRequest request,
+			String url) {
+		Date enterTime = (Date) session.getAttribute("enterTime");
+
+		String currentUrl = (String) session.getAttribute("currentUrl");
+		String nextUrl = (String) session.getAttribute("nextUrl");
+		if (currentUrl == null) {
+			session.setAttribute("currentUrl", request.getHeader("Referer"));
+
+		}
+		session.setAttribute("previousUrl", currentUrl);
+		session.setAttribute("currentUrl", nextUrl);
+		session.setAttribute("nextUrl", url);
+
+		if (enterTime != null) {
+			MemberEntity principal = (MemberEntity) SecurityUtils.getSubject()
+					.getPrincipal();
+			System.out.println("Enter At: " + enterTime + "   Leave at: "
+					+ new Date());
+			System.out.println("Entering page: " + principal.getMemberNo()
+					+ "pre:   " + session.getAttribute("previousUrl")
+					+ "------current:    " + session.getAttribute("currentUrl")
+					+ "------next:     " + session.getAttribute("nextUrl"));
+		}
+		session.setAttribute("enterTime", new Date());
 
 	}
 }
