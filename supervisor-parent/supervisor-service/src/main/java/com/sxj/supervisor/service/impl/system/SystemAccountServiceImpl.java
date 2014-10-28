@@ -141,6 +141,9 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	public SystemAccountEntity getAccountByAccount(String account)
 			throws ServiceException {
 		try {
+			if (StringUtils.isEmpty(account)) {
+				return null;
+			}
 			QueryCondition<SystemAccountEntity> condition = new QueryCondition<SystemAccountEntity>();
 			condition.addCondition("account", account);
 			List<SystemAccountEntity> list = accountDao

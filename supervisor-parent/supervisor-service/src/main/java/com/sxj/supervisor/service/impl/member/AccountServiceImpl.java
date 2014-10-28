@@ -52,6 +52,7 @@ public class AccountServiceImpl implements IAccountService {
 			}
 			account.setState(AccountStatesEnum.normal);
 			account.setNoType(account.getParentId() + "-");
+			account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
 			accountDao.addAccount(account);
 			MemberEntity member = memberService.memberInfo(account
 					.getParentId());
