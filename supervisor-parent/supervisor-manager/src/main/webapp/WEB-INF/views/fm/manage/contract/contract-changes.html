@@ -133,9 +133,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 
 
 	function saveChenges() {
-		$("#saveId").live(
-				"click",
-				function() {
+		$("#saveId").live("click",function() {
 					var $tr=$("#cptable").find(".formitem");
 					$tr.each(function(i){
 						$(this).find("td").each(function(){
@@ -145,6 +143,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							}
 						})
 					});
+					
+					//"modifyBatchList[i].modifyBatch.amount
+					//"modifyBatchList[i].modifyBatchItems[j].productModel
 					var batchSize = $("#batchTb tr").filter(".batchClass")
 							.size();
 					var batchItemSize = $("#batchItem1 tr").filter(
