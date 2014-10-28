@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.impl.rfid;
+﻿package com.sxj.supervisor.service.impl.rfid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

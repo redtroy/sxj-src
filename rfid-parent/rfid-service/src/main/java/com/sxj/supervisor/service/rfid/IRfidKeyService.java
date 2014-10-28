@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.rfid;
+﻿package com.sxj.supervisor.service.rfid;
 
 import com.sxj.util.exception.ServiceException;
 

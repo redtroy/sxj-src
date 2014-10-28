@@ -214,11 +214,13 @@ function dialogBox(confirm,message){
 		$('#dialog_close_button').live('click', function(){
 		    layer.close(pageii);
 		    $("#dialog_close_button").die("click");
+		    $("#dialog_confirm_click").die("click");
 		});
 		
 		$('#dialog_close_span').live('click', function(){
 		    layer.close(pageii);
 		    $("#dialog_close_span").die("click");
+		    $("#dialog_confirm_click").die("click");
 		});
  }
 </script>

@@ -64,6 +64,7 @@ import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -199,6 +200,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 修改合同
 	 */
 	@Override
+	@Transactional
 	public void modifyContract(ContractModel contract) throws ServiceException {
 		try {
 			// 主体
@@ -235,7 +237,27 @@ public class ContractServiceImpl implements IContractService {
 			}
 			// 条目
 			if (contract.getItemList() != null) {
-				contractItemDao.updateItem(contract.getItemList());
+				List<ContractItemEntity> item = contractItemDao
+						.queryItems(contract.getContract().getContractNo());
+				if (item != null) {
+					String ids = "";
+					for (ContractItemEntity contractItemEntity : item) {
+						if (ids == "") {
+							ids += contractItemEntity.getId();
+						} else {
+							ids += "," + contractItemEntity.getId();
+						}
+
+					}
+					// 删除条目
+					contractItemDao.deleteItems(ids.split(","));
+				}
+				for (ContractItemEntity contractItemEntity : contract
+						.getItemList()) {
+					contractItemEntity.setContractId(contract.getContract()
+							.getContractNo());
+				}
+				contractItemDao.addItem(contract.getItemList());
 			}
 			// 批次
 			if (contract.getBatchList() != null) {
@@ -557,18 +579,17 @@ public class ContractServiceImpl implements IContractService {
 		qc.setCondition(condition);
 		List<RecordEntity> record = recordDao.queryRecord(qc);
 		String recordIds = "";
-		if(record!=null && record.size()>0){
+		if (record != null && record.size() > 0) {
 			for (Iterator<RecordEntity> iterator = record.iterator(); iterator
 					.hasNext();) {
 				RecordEntity recordEntity = (RecordEntity) iterator.next();
 				recordIds += "'" + recordEntity.getRecordNo() + "',";
 			}
 			recordIds = recordIds.substring(0, recordIds.length() - 1);
-			return recordIds;	
-		}else{
+			return recordIds;
+		} else {
 			return "";
 		}
-		
 
 	}
 
@@ -862,6 +883,9 @@ public class ContractServiceImpl implements IContractService {
 	@Transactional(readOnly = true)
 	public ContractModel getContractByContractNo(String contractNo) {
 		try {
+			if (StringUtils.isEmpty(contractNo)) {
+				return null;
+			}
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
 			List<ContractModel> res = queryContracts(query);
@@ -878,6 +902,9 @@ public class ContractServiceImpl implements IContractService {
 	@Transactional(readOnly = true)
 	public ContractModel getContractModelByContractNo(String contractNo) {
 		try {
+			if (StringUtils.isEmpty(contractNo)) {
+				return null;
+			}
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
 			List<ContractModel> res = queryContracts(query);

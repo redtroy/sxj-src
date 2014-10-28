@@ -85,8 +85,9 @@ public class BaseController {
 		if (object != null) {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) object;
 			return userBean;
+		} else {
+			return null;
 		}
-		return null;
 
 	}
 

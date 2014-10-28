@@ -184,12 +184,15 @@ public class AccountController extends BaseController {
 
 	@RequestMapping("get_role_function")
 	public String getRloeFunctions(String memberNo, String accountId,
-			String type, ModelMap map) {
+			String type, HttpSession session, ModelMap map) {
 		AccountEntity account = accountService.getAccount(accountId);
 		if (account != null) {
 			memberNo = account.getParentId();
 		}
 		MemberEntity member = memberService.memberInfo(memberNo);
+		if (member == null) {
+			member = getLoginInfo(session).getMember();
+		}
 		int flag = 0;
 		if (MemberTypeEnum.DAWP.equals(member.getType())) {
 			flag = 1;
