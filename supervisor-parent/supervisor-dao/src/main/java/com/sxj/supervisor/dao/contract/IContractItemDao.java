@@ -2,6 +2,9 @@ package com.sxj.supervisor.dao.contract;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.DeleteProvider;
+
+import com.sxj.mybatis.orm.annotations.BatchDelete;
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.BatchUpdate;
 import com.sxj.mybatis.orm.annotations.Delete;
@@ -33,8 +36,8 @@ public interface IContractItemDao {
 	 * 删除条目
 	 * @param contractId
 	 */
-	@Delete
-	public void deleteItems(String contractId);
+	@BatchDelete
+	public void deleteItems(String[] ids);
 	
 	/**
 	 * 更新合同条目
