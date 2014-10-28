@@ -39,6 +39,16 @@
 <@b.dialogBox/> <@b.upload/>
 <script>
 	function modify() {
+		$("#formtable").find(".formtr").each(function(i){
+			$(this).find("input").each(function(){
+				var name=$(this).attr("name").replace("index",i);
+				$(this).attr("name",name);
+			});
+			$(this).find("select").each(function(){
+				var name=$(this).attr("name").replace("index",i);
+				$(this).attr("name",name);
+			});
+		});
 		dialogBox(function() {
 			$.post("modify.htm", $("#modifyForm").serialize(), function(data) {
 				if (data.isOK == 'ok') {
@@ -185,7 +195,7 @@
 								datepicker /></li>
 						</ul>
 						<table border="0" cellpadding="0" cellspacing="0"
-							class="tabList producedTable">
+							class="tabList producedTable" id="formtable">
 							<col width="20%" />
 							<col width="20%" />
 							<col width="15%" />
@@ -205,12 +215,10 @@
 							<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
 							item> <#assign n = (n+item.price)?int > <#assign m =
 							(m+item.amount)?int >
-							<input name="itemList[${item_index}].id" type="hidden"
-								value="${item.id}" />
-							<tr>
-								<td><input name="itemList[${item_index}].productName"
+							<tr class="formtr">
+								<td><input name="itemList[index].productName"
 									type="text" value="${item.productName}" /></td>
-								<td><select name="itemList[${item_index}].windowType"
+								<td><select name="itemList[index].windowType"
 									style="width: 130px;">
 										<option value="">全部</option> <#list type as type> <#if
 										type.getId()==item.windowType.getId()>
@@ -219,13 +227,13 @@
 										<option value="${type.id}">${type.getName()}</option> </#if>
 										</#list>
 								</select></td>
-								<td><input name="itemList[${item_index}].quantity"
+								<td><input name="itemList[index].quantity"
 									type="text" value="${item.quantity}" class="quantity number"/></td>
-								<td><input name="itemList[${item_index}].price" type="text"
+								<td><input name="itemList[index].price" type="text"
 									value="${item.price}" class="price number"/></td>
-								<td><input name="itemList[${item_index}].amount"
+								<td><input name="itemList[index].amount"
 									type="text" value="${item.amount}" class="amount"/></td>
-								<td><textarea name="itemList[${item_index}].remarks"
+								<td><textarea name="itemList[index].remarks"
 										cols="" rows="2">${item.remarks}</textarea></td>
 								<td class="color-red">
 									<a href="javascript:void(0);" class="lnk-green">+</a>&nbsp;&nbsp;<a href="#" class="lnk-red">X</a>
