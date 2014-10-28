@@ -17,15 +17,26 @@ public interface ILogisticsRfidService {
 	 */
 	public List<LogisticsRfidEntity> queryLogistics(LogisticsRfidQuery query)
 			throws ServiceException;
+
 	/**
 	 * 更新
-	 * @param id
+	 * 
+	 * @param rfid
 	 * @throws ServiceException
 	 */
-	public void updateLogistics(LogisticsRfidEntity win) throws ServiceException;
-	
-	
+	public void updateLogistics(LogisticsRfidEntity rfid)
+			throws ServiceException;
+
+	/**
+	 * 更新
+	 * 
+	 * @param rfids
+	 * @throws ServiceException
+	 */
+	public void batchAddLogistics(LogisticsRfidEntity[] rfids)
+			throws ServiceException;
+
 	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
-	
-	public LogisticsRfidEntity getLogistics(String  id) throws ServiceException;
+
+	public LogisticsRfidEntity getLogistics(String id) throws ServiceException;
 }

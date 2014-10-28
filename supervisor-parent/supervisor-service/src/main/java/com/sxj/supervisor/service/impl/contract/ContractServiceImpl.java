@@ -47,10 +47,10 @@ import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -1031,7 +1031,7 @@ public class ContractServiceImpl implements IContractService {
 			if (member.getType().getId() == 1) {
 				ref.setRfidType(RfidTypeEnum.glass);
 			} else if (member.getType().getId() == 2) {
-				ref.setRfidType(RfidTypeEnum.profiles);
+				ref.setRfidType(RfidTypeEnum.extrusions);
 			}
 			ref.setType(AssociationTypesEnum.APPLY);
 			ref.setBatchNo(batch.getBatchNo());
@@ -1073,7 +1073,7 @@ public class ContractServiceImpl implements IContractService {
 				if (member.getType().getId() == 1) {
 					ref.setRfidType(RfidTypeEnum.glass);
 				} else if (member.getType().getId() == 2) {
-					ref.setRfidType(RfidTypeEnum.profiles);
+					ref.setRfidType(RfidTypeEnum.extrusions);
 				}
 				ref.setType(AssociationTypesEnum.RFID_ADD);
 				ref.setBatchNo(batch.getBatchNo());

@@ -2,7 +2,7 @@ package com.sxj.supervisor.model.rfid.sale;
 
 import java.io.Serializable;
 
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 
 public class RfidSaleQuery implements Serializable {
 
