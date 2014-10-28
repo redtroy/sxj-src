@@ -9,7 +9,18 @@
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <Script>
 $(function(){
-	
+	$("#contract_a").change(function(){
+		pc_a();
+	})
+	$("#contract_b").change(function(){
+		pc_b();
+	})
+	$("#pc_a").change(function(){
+		rfid_a($("#contract_a option:selected").val(),$("#pc_a option:selected").val());
+	})
+	$("#pc_b").change(function(){
+		rfid_a($("#contract_b option:selected").val(),$("#pc_b option:selected").val());
+	})
 })
 var container=null;
 function query(){
@@ -17,11 +28,58 @@ function query(){
 	$.post("query.htm",{refContractNo:refContractNo},function(data){
 		if (data.isOk=='ok'){
 			container=data.list;
-			console.log(container)
+			for (var i=0;i<container.length;i++){
+				console.log(container[i].contract.type)
+				if (container[i].contract.type=="glass"){
+					$("#contract_a").append("<option value='"+i+"'>"+container[i].contract.contractNo+"</option>");
+				}else if (container[i].contract.type=="extrusions"){
+					$("#contract_b").append("<option value='"+i+"'>"+container[i].contract.contractNo+"</option>");
+				}
+			}
+			pc_a();
+			pc_b();
 		}else{
 			alert('查询失败！');
 		}
 	})
+}
+
+function pc_a(){
+	var contractNo_id=$("#contract_a option:selected").val();
+	if (contractNo_id !=null){
+		if (container[contractNo_id].batchList!=null){
+		for (var i=0;i<container[contractNo_id].batchList.length;i++){
+			$("#pc_a").append("<option value='"+i+"'>"+container[contractNo_id].batchList[i].batch.batchNo+"</option>");
+		}
+		rfid_a(contractNo_id,$("#pc_a option:selected").val());
+		}else{
+			$("#pc_a").append("<option>该合同无补损批次</option>");
+		}
+	}else{
+		
+	}
+	  
+}
+function pc_b(){
+	var contractNo_id=$("#contract_b option:selected").val();
+	if (contractNo_id !=null){
+		if (container[contractNo_id].batchList!=null){
+		for (var i=0;i<container[contractNo_id].batchList.length;i++){
+			$("#pc_b").append("<option value='"+i+"'>"+container[contractNo_id].batchList[i].batch.batchNo+"</option>");
+		}
+		rfid_b(contractNo_id,$("#pc_b option:selected").val());
+		}else{
+			$("#pc_b").append("<option>该合同无补损批次</option>");
+		}
+	}else{
+		
+	}
+}
+function rfid_a(contractNo_id,pc_a_id){
+	$("#rfid_a").text(container[contractNo_id].batchList[pc_a_id].batch.rfidNo);
+}
+function rfid_b(contractNo_id,pc_b_id){
+	$("#rfid_b").text(container[contractNo_id].batchList[pc_b_id].batch.rfidNo);
 }
 </Script>
 </head>
@@ -41,45 +99,35 @@ function query(){
 <div class="item"><label>启用标签数量</label><input class="input input-w180h36"/></div>
 <div class="item"><label>招标合同号</label> <input class="input input-w180h36" value="" / id="refContractNo" >&nbsp;&nbsp;<button class="button button-green" title="根据招标合同号和启用数量提取编号值最小的数量的标签区间在下方显示" onclick="query();return false;">获取标签编号区间</button></div>
 <div class="item">
-  <label>启用标签编号区间</label><span class="color-blue ml5">AAAA00001-AAAA00050</span></div>
+  <label>启用标签编号区间</label><span class="color-blue ml5" >AAAA00001-AAAA00050</span></div>
 <div class="item">
-  <label>对应玻璃采购合同</label><select name="">
-    <option>CT14060021</option>
+  <label>对应玻璃采购合同</label><select name="" id="contract_a">
   </select></div>
 <div class="item">
   <label>对应玻璃合同批次</label>  
-    <select name="select2" id="select">
-      <option selected="selected">第一批次</option>
-      <option>第二批次</option>
-      <option>第三批次</option>
+    <select name="select2" id="pc_a">
     </select>
 </div>
 <div class="item">
-  <label>对应玻璃RFID</label><span class="color-blue ml5">AAAA00002</span>
+  <label>对应玻璃RFID</label><span class="color-blue ml5" id="rfid_a"></span>
 </div>
 <div class="item">
   <label>对应型材采购合同</label>
-  <select name="select3">
-    <option>CT14085001</option>
+  <select name="select3" id="contract_b">
   </select>
 </div>
 <div class="item">
   <label>对应型材合同批次</label>
-  <select name="select4" id="select2">
-    <option selected="selected">第一批次</option>
-    <option>第二批次</option>
-    <option>第三批次</option>
+  <select name="select4" id="pc_b">
   </select>
 </div>
 <div class="item">
   <label>对应玻璃RFID</label>
-  <span class="color-blue ml5">AAAA00078</span> </div>
+  <span class="color-blue ml5" id="rfid_b"></span> </div>
 <div class="item"><label>窗型代号</label><select name="select">
-            <option selected="selected">全部</option>
-            <option>C120 120X60</option>
-            <option>C120 120X80</option>
-			<option>C160 160X60</option>
-			<option>C180 180X60</option>
+            <#list type as t>
+			<option value="${t.id}">${t.getName()}</option>
+			</#list>
   </select></div>
 <div class="item"><label>&nbsp;</label><a href="mencrfidmgr.html" class="button button-orange mr15" title="当总启用数量超过招标合同号的门窗数量时需要报错提示">确定启用</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>

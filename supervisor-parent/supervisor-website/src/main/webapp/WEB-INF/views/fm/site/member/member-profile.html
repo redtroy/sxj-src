@@ -148,7 +148,12 @@ function query(){
 </div>
 <div class="item">
   <label>帐号状态</label>
-  <span class="state verified">${member.checkState.getName()}</span></div>
+  <#if (member.checkState.id==0)>
+  <span class="state normal">${member.checkState.getName()}</span>
+  <#elseif (member.checkState.id==1)>
+  <span class="state frozen">${member.checkState.getName()}</span>
+  <#else>
+  <span class="state verified">${member.checkState.getName()}</span> </#if></div>
 <div class="item">
   <label>总交易额</label><a href="finance.html" class="lnk-blue">查看明细</a> </div>
 <div class="item">

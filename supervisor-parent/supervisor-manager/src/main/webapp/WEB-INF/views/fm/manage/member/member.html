@@ -353,8 +353,8 @@ Intense( elements );
           <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" datatype="m" nullmsg="手机号码不能为空" name="phoneNo"/></li>
           <li><label>公司地址</label><input type="text" value="${member.address}" datatype="*2-50" nullmsg="地址不能为空" name="address"/></li>
           <li><label>固定电话</label><input type="text" value="${member.telNum}" name="telNum"/></li>
-          <li><label>注册时间</label><#if (member.regDate??)>${member.regDate?date} </#if></li>
-          <li><label>认证时间</label><#if (member.authorDate??)> ${member.authorDate?date} </#if></li>
+          <li><label>注册时间</label><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
+          <li><label>认证时间</label><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
           <li><label>审核状态</label><em class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
           <li><label>帐户状态</label><em class="state verified" id="state1">${member.state.getName()}</em></li>
           <li><label>子帐号</label>${member.getAccountNum()}</li>
