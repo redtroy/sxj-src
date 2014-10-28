@@ -557,13 +557,18 @@ public class ContractServiceImpl implements IContractService {
 		qc.setCondition(condition);
 		List<RecordEntity> record = recordDao.queryRecord(qc);
 		String recordIds = "";
-		for (Iterator<RecordEntity> iterator = record.iterator(); iterator
-				.hasNext();) {
-			RecordEntity recordEntity = (RecordEntity) iterator.next();
-			recordIds += "'" + recordEntity.getRecordNo() + "',";
+		if(record!=null && record.size()>0){
+			for (Iterator<RecordEntity> iterator = record.iterator(); iterator
+					.hasNext();) {
+				RecordEntity recordEntity = (RecordEntity) iterator.next();
+				recordIds += "'" + recordEntity.getRecordNo() + "',";
+			}
+			recordIds = recordIds.substring(0, recordIds.length() - 1);
+			return recordIds;	
+		}else{
+			return "";
 		}
-		recordIds = recordIds.substring(0, recordIds.length() - 1);
-		return recordIds;
+		
 
 	}
 
