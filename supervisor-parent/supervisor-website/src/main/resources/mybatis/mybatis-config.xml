@@ -48,7 +48,7 @@
 			javaType="com.sxj.supervisor.enu.contract.ContractStateEnum" />
 		<!-- RFID -->
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.window.RfidStateEnum" />
+			javaType="com.sxj.supervisor.enu.rfid.RfidStateEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.LabelProgressEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.LabelProgressEnum" />
@@ -56,7 +56,7 @@
 			handler="com.sxj.supervisor.typehandler.WindowTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.window.WindowTypeEnum" />
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.window.RfidTypeEnum" />
+			javaType="com.sxj.supervisor.enu.rfid.RfidTypeEnum" />
 
 		<typeHandler handler="com.sxj.supervisor.typehandler.PayStageEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.PayStageEnum" />
@@ -64,11 +64,8 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum" />
-		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum" />
 		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.apply.PayStateEnum" />
-
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.LabelStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />

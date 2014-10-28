@@ -3,13 +3,16 @@ package com.sxj.supervisor.dao.rfid.window;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.util.persistent.QueryCondition;
+
 /**
  * 门窗RFID管理Dao
+ * 
  * @author Ann
  *
  */
@@ -27,20 +30,27 @@ public interface IWindowRfidDao {
 	/**
 	 * 新增门窗RFID
 	 *
-	 * @param member
+	 * @param window
 	 **/
 	@Insert
-	public void addWindowRfid(WindowRfidEntity window)
+	public void addWindowRfid(WindowRfidEntity window) throws SQLException;
+
+	/**
+	 * 新增门窗RFID
+	 *
+	 * @param window
+	 **/
+	@BatchInsert
+	public void batchAddWindowRfid(WindowRfidEntity[] window)
 			throws SQLException;
 
 	/**
 	 * 更新门窗RFID
 	 *
-	 * @param member
+	 * @param window
 	 **/
 	@Update
-	public void updateWindowRfid(WindowRfidEntity window)
-			throws SQLException;
+	public void updateWindowRfid(WindowRfidEntity window) throws SQLException;
 
 	/**
 	 * 获取门窗RFID信息

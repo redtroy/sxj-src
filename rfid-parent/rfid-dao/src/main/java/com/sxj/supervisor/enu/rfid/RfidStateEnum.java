@@ -1,26 +1,26 @@
-package com.sxj.supervisor.enu.rfid.window;
+package com.sxj.supervisor.enu.rfid;
 
 /**
  * RFID状态
  * @author Ann
  *
  */
-public enum RfidTypeEnum {
-	glass("玻璃标签", 0), profiles("型材标签", 1),;
+public enum RfidStateEnum {
+	unused("未使用", 0), used("已使用", 1), damaged("已破损", 2),disable("已停用", 3),delete("已删除", 4);
 
 	// 成员变量
 	private Integer id;
 
 	private String name;
 
-	private RfidTypeEnum(String name, Integer id) {
+	private RfidStateEnum(String name, Integer id) {
 		this.name = name;
 		this.id = id;
 	}
 
 	// 普通方法
 	public static String getName(Integer id) {
-		for (RfidTypeEnum c : RfidTypeEnum.values()) {
+		for (RfidStateEnum c : RfidStateEnum.values()) {
 			if (c.getId() == id) {
 				return c.name;
 			}

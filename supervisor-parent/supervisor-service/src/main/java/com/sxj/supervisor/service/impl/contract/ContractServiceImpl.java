@@ -47,10 +47,10 @@ import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -263,9 +263,10 @@ public class ContractServiceImpl implements IContractService {
 								.getModifyItemList());
 					}
 					List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
-					if(cmm.getModifyBatchList()!=null){
+					if (cmm.getModifyBatchList() != null) {
 						for (int j = 0; j < cmm.getModifyBatchList().size(); j++) {
-							ModifyBatchModel mbm = cmm.getModifyBatchList().get(j);
+							ModifyBatchModel mbm = cmm.getModifyBatchList()
+									.get(j);
 							if (mbm.getModifyBatchItems() != null) {
 								mbm.getModifyBatch().setBatchItems(
 										JsonMapper.nonEmptyMapper().toJson(
@@ -402,8 +403,10 @@ public class ContractServiceImpl implements IContractService {
 
 					// 变更合同主体
 					QueryCondition<ModifyBatchEntity> modifyCondition = new QueryCondition<ModifyBatchEntity>();
-					modifyCondition.addCondition("recordIds", modifyRecordIds.trim());// 变更备案ID
-					modifyCondition.addCondition("contractId", contract.getContractNo());
+					modifyCondition.addCondition("recordIds",
+							modifyRecordIds.trim());// 变更备案ID
+					modifyCondition.addCondition("contractId",
+							contract.getContractNo());
 					List<ModifyContractEntity> modifyList = contractModifyDao
 							.queryModify(modifyCondition);
 					if (modifyList != null) {
@@ -556,7 +559,7 @@ public class ContractServiceImpl implements IContractService {
 		for (Iterator<RecordEntity> iterator = record.iterator(); iterator
 				.hasNext();) {
 			RecordEntity recordEntity = (RecordEntity) iterator.next();
-			recordIds += "'"+recordEntity.getRecordNo() + "',";
+			recordIds += "'" + recordEntity.getRecordNo() + "',";
 		}
 		recordIds = recordIds.substring(0, recordIds.length() - 1);
 		return recordIds;
@@ -769,7 +772,7 @@ public class ContractServiceImpl implements IContractService {
 					RecordEntity rEntity = new RecordEntity();
 					rEntity.setId(re.getId());
 					// TODO 审核
-					rEntity.setAcceptDate(new Date());//受理时间
+					rEntity.setAcceptDate(new Date());// 受理时间
 					rEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 					recordDao.updateRecord(rEntity);
 					if (re != null) {
@@ -1021,7 +1024,7 @@ public class ContractServiceImpl implements IContractService {
 			if (member.getType().getId() == 1) {
 				ref.setRfidType(RfidTypeEnum.glass);
 			} else if (member.getType().getId() == 2) {
-				ref.setRfidType(RfidTypeEnum.profiles);
+				ref.setRfidType(RfidTypeEnum.extrusions);
 			}
 			ref.setType(AssociationTypesEnum.APPLY);
 			ref.setBatchNo(batch.getBatchNo());
@@ -1063,7 +1066,7 @@ public class ContractServiceImpl implements IContractService {
 				if (member.getType().getId() == 1) {
 					ref.setRfidType(RfidTypeEnum.glass);
 				} else if (member.getType().getId() == 2) {
-					ref.setRfidType(RfidTypeEnum.profiles);
+					ref.setRfidType(RfidTypeEnum.extrusions);
 				}
 				ref.setType(AssociationTypesEnum.RFID_ADD);
 				ref.setBatchNo(batch.getBatchNo());

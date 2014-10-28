@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.PayStateEnum;
@@ -265,22 +265,16 @@ public class PurchaseRfidController extends BaseController {
 	}
 
 	@RequestMapping("importRfid")
-	public @ResponseBody Map<String, String> importRfid(
-			RfidPurchaseEntity purchase, String applyId, String hasNumber,
+	public @ResponseBody Map<String, String> importRfid(String purchaseId,
 			ModelMap model) throws WebException {
 		try {
-
-			purchase.setPurchaseDate(new Date());
-			purchase.setImportState(ImportStateEnum.not_imported);
-			purchase.setPayState(PayStateEnum.unpaid);
-			purchase.setReceiptState(DeliveryStateEnum.unfilled);
-			purchaseRfidService.addPurchase(purchase, applyId, hasNumber);
+			purchaseRfidService.importRfid(purchaseId);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
-			SxjLogger.error("新增采购单错误", e, this.getClass());
-			throw new WebException("新增采购单错误");
+			SxjLogger.error("导入RFID错误", e, this.getClass());
+			throw new WebException("导入RFID错误");
 		}
 	}
 

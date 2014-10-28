@@ -17,15 +17,27 @@ public interface IWindowRfidService {
 	 */
 	public List<WindowRfidEntity> queryWindowRfid(WindowRfidQuery query)
 			throws ServiceException;
+
 	/**
 	 * 更新
+	 * 
 	 * @param id
 	 * @throws ServiceException
 	 */
 	public void updateWindowRfid(WindowRfidEntity win) throws ServiceException;
-	
-	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
-	
-	public WindowRfidEntity getWindowRfid(String id)
+
+	/**
+	 * 批量新增
+	 * 
+	 * @param rfids
+	 * @throws ServiceException
+	 */
+	public void batchAddWindowRfid(WindowRfidEntity[] rfids)
 			throws ServiceException;
+
+	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
+
+	public WindowRfidEntity getWindowRfid(String id) throws ServiceException;
+
+	public void getMaxRfidNo() throws ServiceException;
 }
