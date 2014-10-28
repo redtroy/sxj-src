@@ -45,19 +45,19 @@
 		 FROM M_MEMBER WHERE 1=1]]>
 		<!-- 会员号 -->
 		<if test="condition.memberNo != null and condition.memberNo !=''">
-			<![CDATA[AND MEMBER_NO = #{condition.memberNo}]]>
+			<![CDATA[AND MEMBER_NO LIKE CONCAT('%',#{condition.memberNo},'%')]]>
 		</if>
 		<!-- 会员名称 -->
 		<if test="condition.name != null and condition.name != ''">
-			<![CDATA[AND NAME  like "%"#{condition.name}"%"]]>
+			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
 		</if>
 		<!-- 联系人 -->
 		<if test="condition.contacts != null and condition.contacts != ''">
-			<![CDATA[AND CONTACTS = #{condition.contacts}]]>
+			<![CDATA[AND CONTACTS LIKE CONCAT('%',#{condition.contacts},'%') ]]>
 		</if>
 		<!-- 联系人电话 -->
 		<if test="condition.phoneNo != null and condition.phoneNo != ''">
-			<![CDATA[AND PHONE_NO = #{condition.phoneNo}]]>
+			<![CDATA[AND PHONE_NO LIKE CONCAT('%',#{condition.phoneNo},'%')]]>
 		</if>
 		<!-- 地理位置 -->
 		<if test="condition.area != null and condition.area != ''">
@@ -65,11 +65,11 @@
 		</if>
 		<!-- 营业执照号码 -->
 		<if test="condition.bLicenseNo != null and condition.bLicenseNo != ''">
-			<![CDATA[AND B_LICENSE_NO = #{condition.bLicenseNo}]]>
+			<![CDATA[AND B_LICENSE_NO LIKE CONCAT('%',#{condition.bLicenseNo},'%') ]]>
 		</if>
 		<!-- 节能标识 -->
 		<if test="condition.energyNo != null and condition.energyNo != ''">
-			<![CDATA[AND ENERGY_NO = #{condition.energyNo}]]>
+			<![CDATA[AND ENERGY_NO LIKE CONCAT('%',#{condition.energyNo},'%')]]>
 		</if>
 		<!-- 会员类型 -->
 		<if test="condition.type !=null">
@@ -89,7 +89,7 @@
 		<!-- 会员注册时间段 -->
 		<if
 			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
-			<![CDATA[AND REG_DATE >=#{condition.startDate} AND REG_DATE <= #{condition.endTime}]]>
+			<![CDATA[AND REG_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) AND REG_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
 		</if>
 		<![CDATA[ ORDER BY STATE,MEMBER_NO DESC]]>
 	</select>

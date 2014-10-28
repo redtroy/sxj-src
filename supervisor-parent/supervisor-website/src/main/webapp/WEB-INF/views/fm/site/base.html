@@ -392,6 +392,17 @@ function loadUpload(id,url,isMulti,text,fn){
 		</#if>
 	</h1>
 </div>
+<#if Session.userinfo?exists>
+<script>
+$(document).ready(function(){
+	var currentUrl=window.location.href;
+	$.get("${basePath}member/enter.htm?url="+currentUrl);
+});
+$(window).bind('beforeunload',function(){ 
+	$.get("${basePath}member/leave.htm");
+}); 
+</script>
+</#if>
 </#macro> 
 <#macro footer>
 <div class="f12" id="footer">

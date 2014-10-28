@@ -64,35 +64,39 @@ function uploadenergyPath(data){
 }
 
 function save(id){
+	var bLicensePath= $("#bLicensePath_hidden").val();
+	var energyPath= $("#energyPath_hidden").val();
+	var bLicenseNo=$("#bLicenseNo").val()+"";
+    var energyNo=$("#energyNo").val()+"";
+	var erro_flag=false;
+	if (!bLicenseNo.match(/^[A-Za-z0-9]+$/)){
+    	$("#energyNo_erro").show();
+    	erro_flag=true;
+    }
+    if (!energyNo.match(/^[A-Za-z0-9]+$/)){
+    	$("#energyNo_erro").show();
+    	erro_flag=true;
+    }
 	var add_validform=$("#add_form").Validform({
 		tiptype:3});
 	if (!add_validform.check()){
 		return false;
 	}
-	var bLicensePath= $("#bLicensePath_hidden").val();
-	var energyPath= $("#energyPath_hidden").val();
+	if (erro_flag){
+		return false;
+	}
 	var telNum=$("#qh").val()+'-'+$("#telNum").val();
 	var address=$("#address").val();
     var code=$("#code").val();	
     var contacts=$("#contacts").val();
     var phoneNo=$("#phoneNo").val();
     var area= $("#city  option:selected").val();
-    var bLicenseNo=$("#bLicenseNo").val()+"";
-    var energyNo=$("#energyNo").val()+"";
     if (bLicensePath==""){
     	messageInfo("请上传营业执照图片");
     	return false;
     }
     if (energyPath==""){
     	messageInfo("请上传节能标识图片");
-    	return false;
-    }
-    if (!bLicenseNo.match(/^[A-Za-z0-9]+$/)){
-    	$("#bLicenseNo_erro").show();
-    	return false;
-    }
-    if (!energyNo.match(/^[A-Za-z0-9]+$/)){
-    	$("#energyNo_erro").show();
     	return false;
     }
     $.post("save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
@@ -169,36 +173,30 @@ function edit_pwd(id){
         <div class="item  ly-clearFix">
           <label>企业资质</label>          
           <div class="ly-left editBox mr15">
-          <#if (member.flag)>
-          <p class="f12">${member.bLicenseNo}</p>
-          <input type="hidden" id="bLicenseNo" value="${member.bLicenseNo}"/>
-          <#else>
-          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" placeholder="请输入营业执照号" /><span class="msg-error pa p5 ml5" style="display:none" id="bLicenseNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的营业执照号</span></p>
-          </#if>
+          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" placeholder="请输入营业执照号" /></p>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
 		   <#else>
 		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg">  
 		</#if>
+		<#if (!member.flag)>
           <div class="uploadify">
           <input type="file" class="input-w180h30" id="bLicensePath_File" name="input5" />
            </div>
+         </#if>
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
          <div class="ly-left editBox">
-          <#if (member.flag)>
-          <p class="f12">${member.energyNo}</p>
-          <input type="hidden" id="energyNo" value="${member.energyNo}"/>
-          <#else>
-          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"/><span class="msg-error pa p5 ml5" style="display:none" id="energyNo_erro"><span class="icon icon16 icon-16-error" ></span>请输入正确的节能标识号</span></p>
-          </#if>
+          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"/><span class="msg-error pa p5 ml5 f12" style="display:none" id="energyNo_erro">请输入正确的营业执照号和节能标识号</span></p>
           <#if (member.bLicensePath??)>
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
           <#else>
 		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg"> 
          </#if>
-         <div class="uploadify"> 
+         <div class="uploadify">
+         <#if (!member.flag)>
             <input type="file" class="input-w180h30" id="energyPath_File" name="input6">
+          </#if>
             <input type="hidden" class="input-w180h30" id="energyPath_hidden" name="energyPath" value="${member.energyPath}">
           </div>
          </div>

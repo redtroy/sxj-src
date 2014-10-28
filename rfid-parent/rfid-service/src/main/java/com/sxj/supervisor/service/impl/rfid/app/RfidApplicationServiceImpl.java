@@ -16,6 +16,7 @@ import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.util.common.DateTimeUtils;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -134,6 +135,9 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	public RfidApplicationEntity getApplication(String no)
 			throws ServiceException {
 		try {
+			if (StringUtils.isEmpty(no)) {
+				return null;
+			}
 			RfidApplicationQuery query = new RfidApplicationQuery();
 			query.setApplyNo(no);
 			List<RfidApplicationEntity> res = query(query);
