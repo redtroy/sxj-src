@@ -3,9 +3,9 @@ package com.sxj.supervisor.model.rfid.ref;
 import java.io.Serializable;
 
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 
 public class LogisticsRefQuery extends Pagable implements Serializable {
 

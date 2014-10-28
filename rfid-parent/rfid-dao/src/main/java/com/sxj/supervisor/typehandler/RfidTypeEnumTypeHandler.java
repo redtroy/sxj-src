@@ -2,7 +2,7 @@ package com.sxj.supervisor.typehandler;
 
 import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 
 public class RfidTypeEnumTypeHandler extends
 		EnumOrdinalTypeHandler<RfidTypeEnum> {

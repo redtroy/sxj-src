@@ -6,8 +6,8 @@ import java.util.Date;
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 
 public class WindowRfidQuery extends Pagable implements Serializable {

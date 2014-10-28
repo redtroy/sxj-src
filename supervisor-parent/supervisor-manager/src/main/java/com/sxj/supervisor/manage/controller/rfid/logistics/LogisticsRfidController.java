@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidStateEnum;
-import com.sxj.supervisor.enu.rfid.window.RfidTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
@@ -27,11 +27,13 @@ import com.sxj.util.logger.SxjLogger;
 public class LogisticsRfidController extends BaseController {
 	@Autowired
 	private ILogisticsRfidService logisticsRfidService;
-	
+
 	@Autowired
 	private IContractService contractService;
+
 	/**
 	 * 查询列表
+	 * 
 	 * @param query
 	 * @param model
 	 * @return
@@ -42,7 +44,8 @@ public class LogisticsRfidController extends BaseController {
 			throws WebException {
 		try {
 			query.setPagable(true);
-			List<LogisticsRfidEntity> list = logisticsRfidService.queryLogistics(query);
+			List<LogisticsRfidEntity> list = logisticsRfidService
+					.queryLogistics(query);
 			LabelProgressEnum[] Label = LabelProgressEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();
@@ -57,8 +60,10 @@ public class LogisticsRfidController extends BaseController {
 			throw new WebException("查询门窗RFID错误");
 		}
 	}
+
 	/**
 	 * 删除
+	 * 
 	 * @param id
 	 * @param model
 	 * @return
@@ -80,8 +85,10 @@ public class LogisticsRfidController extends BaseController {
 			throw new WebException("删除物流RFID错误");
 		}
 	}
+
 	/**
 	 * 停用
+	 * 
 	 * @param id
 	 * @param model
 	 * @return
@@ -103,18 +110,19 @@ public class LogisticsRfidController extends BaseController {
 			throw new WebException("停用物流RFID错误");
 		}
 	}
+
 	/**
 	 * 获取log动态
+	 * 
 	 * @param model
 	 * @param id
 	 * @return
 	 * @throws WebException
 	 */
 	@RequestMapping("stateLog")
-	public String getStateLog(ModelMap model,String id)
-			throws WebException {
+	public String getStateLog(ModelMap model, String id) throws WebException {
 		try {
-			List<LogModel> logList=logisticsRfidService.getRfidStateLog(id);
+			List<LogModel> logList = logisticsRfidService.getRfidStateLog(id);
 			model.put("id", id);
 			model.put("logList", logList);
 			return "manage/rfid/window/stateLog";

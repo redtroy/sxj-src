@@ -12,7 +12,7 @@ import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.entity.rfid.sale.RfidPriceEntity;
 import com.sxj.supervisor.entity.rfid.sale.RfidSaleStatisticalEntity;
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
 import com.sxj.supervisor.model.rfid.sale.RfidSaleQuery;

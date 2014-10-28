@@ -18,6 +18,7 @@ import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -103,5 +104,26 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 		} catch (Exception e) {
 			throw new ServiceException("获取门窗RFID错误", e);
 		}
+	}
+
+	@Override
+	public void getMaxRfidNo() throws ServiceException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	@Transactional
+	public void batchAddWindowRfid(WindowRfidEntity[] rfids)
+			throws ServiceException {
+		try {
+			if (rfids != null) {
+				windowRfidDao.batchAddWindowRfid(rfids);
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("批量新增门窗RFID错误", e);
+		}
+
 	}
 }

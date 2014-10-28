@@ -12,9 +12,9 @@ import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
 
 /**
  * RFID申请单

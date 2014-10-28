@@ -3,7 +3,7 @@ package com.sxj.supervisor.model.rfid.purchase;
 import java.io.Serializable;
 
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.enu.rfid.apply.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 
 public class PurchaseRfidQuery extends Pagable implements Serializable {
 
