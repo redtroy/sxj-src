@@ -134,49 +134,27 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 
 	function saveChenges() {
 		$("#saveId").live("click",function() {
-					var $tr=$("#cptable").find(".formitem");
-					$tr.each(function(i){
+					$("#cptable").find(".formitem").each(function(i){
 						$(this).find("td").each(function(){
 							if($(this).attr("name")){
-								var name=$(this).attr("name").replace("index",i);
+								var name=$(this).attr("name").replace("[index]","["+i+"]");
 								$(this).find("input").attr("name",name);
 							}
 						})
 					});
 					
-					//"modifyBatchList[i].modifyBatch.amount
-					//"modifyBatchList[i].modifyBatchItems[j].productModel
-					var batchSize = $("#batchTb tr").filter(".batchClass")
-							.size();
-					var batchItemSize = $("#batchItem1 tr").filter(
-							".batchItemClass1").size();
-					for (var i = 0; i < parseInt(batchSize); i++) {
-						$("#batchTb tr").filter(".batchClass").eq(i).find("td")
-								.eq(5).find("input").attr(
-										"name",
-										"modifyBatchList[" + i
-												+ "].modifyBatch.amount");
-						$("#batchTb tr").filter(".batchClass").eq(i).find("td")
-								.eq(6).find("input").attr(
-										"name",
-										"modifyBatchList[" + i
-												+ "].modifyBatch.rfidNo");
-						for (var j = 0; j < parseInt(batchItemSize); j++) {
-							$("#batchItem1 tr").filter(".batchItemClass1")
-									.eq(j).find("td").eq(0).find("textarea")
-									.attr(
-											"name",
-											"modifyBatchList[" + i
-													+ "].modifyBatchItems[" + j
-													+ "].productModel");
-							$("#batchItem2 tr").filter(".batchItemClass2")
-									.eq(j).find("td").eq(0).find("input").attr(
-											"name",
-											"modifyBatchList[" + i
-													+ "].modifyBatchItems[" + j
-													+ "].quantity");
-						}
-					}
+					$("#pctable").find(".formitem").each(function(i){
+						$(this).children("td").each(function(){
+							if($(this).attr("name")){
+								var $name=$(this).attr("name");
+								$(this).find("input").each(function(j){
+										var name=$name.replace("[i]","["+i+"]");
+										name=name.replace("[j]","["+j+"]");
+										$(this).attr("name",name);
+								});
+							}
+						});
+					});
 					dialogBox(function() {
 						$.post("saveChanges.htm", $("#changsForm").serialize(),
 								function(data) {
@@ -296,8 +274,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							</tr>
 							<#list contractModel.batchList as batch>
 							<tr id="${batch.batch.id}" class="formitem">
-								<td class="editable">第${batch.batch.batchNo}批次</td>
-								<td><table border="0" cellpadding="0" cellspacing="0"
+								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo">第${batch.batch.batchNo}批次</td>
+								<td name="modifyBatchList[i].modifyBatch[j].productModel"><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
@@ -305,16 +283,16 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										</tr>
 										</#list>
 									</table></td>
-								<td><table border="0" cellpadding="0" cellspacing="0"
+								<td name="modifyBatchList[i].modifyBatch[j].quantity"><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td class="editable dynamictr">${batchItem.quantity}</td>
+											<td class="editable dynamictr" name="">${batchItem.quantity}</td>
 										</tr>
 										</#list>
 									</table></td>
-								<td class="editable">${batch.batch.amount}</td>
-								<td class="editable">${batch.batch.rfidNo}</td>
+								<td class="editable" name="modifyBatchList[i].modifyBatch.amount">${batch.batch.amount}</td>
+								<td class="editable" name="modifyBatchList[i].modifyBatch.rfidNo">${batch.batch.rfidNo}</td>
 								<td><a href="javascript:void(0)" class="lnk-green"
 									 table="pctable">√</a></td>
 							</tr>
