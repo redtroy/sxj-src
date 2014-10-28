@@ -9,6 +9,8 @@
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 		<result property="generateKey" column="GENERATE_KEY" jdbcType="INTEGER" />
 		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR"/>
+		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="windowType" column="WINDOW_TYPE" jdbcType="INTEGER" />
 		<result property="glassRfid" column="GLASS_RFID" jdbcType="VARCHAR" />
@@ -35,6 +37,9 @@
 		</if>
 		<if test="condition.rfid != null and condition.rfid !=''">
 			<![CDATA[AND (GLASS_RFID = #{condition.rfid} or PROFILE_RFID = #{condition.rfid}) ]]>
+		</if>
+		<if test="condition.memberNo != null and condition.memberNo !=''">
+			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
 		</if>
 		<if test="condition.windowType != null and condition.windowType !=''">
 			<![CDATA[AND WINDOW_TYPE = #{condition.windowType}]]>

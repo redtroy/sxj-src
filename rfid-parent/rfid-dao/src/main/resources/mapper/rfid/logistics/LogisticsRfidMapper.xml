@@ -10,7 +10,7 @@
 		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
 		<result property="generateKey" column="GENERATE_KEY" jdbcType="INTEGER" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
-		<result property="memberNo" column="MEMBER_NO" jdbcType="INTEGER"/>
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR"/>
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />

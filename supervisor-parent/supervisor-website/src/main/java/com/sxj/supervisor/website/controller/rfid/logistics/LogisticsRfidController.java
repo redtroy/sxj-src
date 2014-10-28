@@ -57,10 +57,13 @@ public class LogisticsRfidController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("query")
-	public String queryLogistics(LogisticsRfidQuery query, ModelMap model)
-			throws WebException {
+	public String queryLogistics(LogisticsRfidQuery query, HttpSession session,
+			ModelMap model) throws WebException {
 		try {
 			query.setPagable(true);
+			SupervisorPrincipal loginInfo = getLoginInfo(session);
+			String memberNo = loginInfo.getMember().getMemberNo();
+			query.setMemberNo(memberNo);
 			List<LogisticsRfidEntity> list = logisticsRfidService
 					.queryLogistics(query);
 			LabelStateEnum[] Label = LabelStateEnum.values();
