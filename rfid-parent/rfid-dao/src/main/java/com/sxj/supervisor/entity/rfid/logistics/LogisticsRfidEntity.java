@@ -8,7 +8,6 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
-import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
@@ -42,7 +41,6 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	 * RFID编号
 	 */
 	@Column(name = "RFID_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "AAAA", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
 	private String rfidNo;
 
 	@Column(name = "GENERATE_KEY")

@@ -143,7 +143,7 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 联系电话
 	 **/
 	@Column(name = "TEL_NUM")
-	@Length(max = 12, message = "联系电话", groups = { AddGroup.class,
+	@Length(max = 13, message = "联系电话", groups = { AddGroup.class,
 			UpdateGroup.class })
 	private String telNum;
 

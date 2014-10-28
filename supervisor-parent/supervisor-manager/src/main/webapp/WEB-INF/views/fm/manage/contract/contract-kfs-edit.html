@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
@@ -119,11 +119,36 @@
 		//uploadImg($("#bgFile"));
 		//uploadImg($("#bsFile"));
 		imgBinding();
-		$(function() {
-			$(".TrDel").live("click", function() {
-				$(this).parent().remove();
-			});
+		$(".lnk-green").live("click",function(){
+			var $tr=$(this).parent().parent()
+			var $new=$tr.clone();
+			$new.find("input").attr("value","");
+			$new.find("select").val("");
+			$new.insertAfter($tr);
+			$(this).remove();
 		});
+		$(".number").live("keyup",function(){
+			var $quantity=$(this).parent().parent().find(".quantity");
+			var $price=$(this).parent().parent().find(".price");
+			var $amount=$(this).parent().parent().find(".amount");
+			if($price&&$quantity){
+				var amount=parseInt($quantity.val())*parseFloat($price.val());
+				if(amount)
+					$amount.val(amount.toFixed(2));
+			}
+			var tquantity=0;
+			var tamount=0;
+			$(".quantity").each(function(){
+				tquantity+=parseInt($(this).val());
+			});
+			$(".amount").each(function(){
+				tamount+=parseFloat($(this).val());
+			});
+			if(tquantity)
+				$(".tquantity").html(tquantity);
+			if(tamount)
+				$(".tamount").html(tamount.toFixed(2));
+		})
 	});
 	function addTable() {
 		var vTb = $("#TbData");//得到表格ID=TbData的jquery对象 
@@ -233,23 +258,24 @@
 										</#list>
 								</select></td>
 								<td><input name="itemList[${item_index}].quantity"
-									type="text" value="${item.quantity}" /></td>
+									type="text" value="${item.quantity}" class="quantity number"/></td>
 								<td><input name="itemList[${item_index}].price" type="text"
-									value="${item.price}" /></td>
+									value="${item.price}" class="price number"/></td>
 								<td><input name="itemList[${item_index}].amount"
-									type="text" value="${item.amount}" /></td>
+									type="text" value="${item.amount}" class="amount"/></td>
 								<td><textarea name="itemList[${item_index}].remarks"
 										cols="" rows="2">${item.remarks}</textarea></td>
-								<td><a href="javascript:void(0);" class="lnk-green"
-									name="add" onclick="addTable()">+</a></td>
+								<td class="color-red">
+									<a href="javascript:void(0);" class="lnk-green">+</a>&nbsp;&nbsp;<a href="#" class="lnk-red">X</a>
+								</td>
 							</tr>
 							</#list>
 							<tr id="total_tr">
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td>${n}</td>
+								<td class="tquantity">${n}</td>
 								<td>&nbsp;</td>
-								<td>${m}</td>
+								<td class="tamount">${m}</td>
 								<td>&nbsp;</td>
 								<td>&nbsp;</td>
 							</tr>

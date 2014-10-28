@@ -1,14 +1,8 @@
 package com.sxj.supervisor.model.rfid.window;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import com.sxj.mybatis.orm.annotations.Column;
-import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.enu.rfid.RfidStateEnum;
-import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
-import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 
 public class WindowRfidQuery extends Pagable implements Serializable {
 
@@ -27,6 +21,11 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	private String purchaseNo;
 
 	/**
+	 * 申请会员号
+	 */
+	private String memberNo;
+
+	/**
 	 * 采购合同号
 	 */
 	private String contractNo;
@@ -40,7 +39,7 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	 * RFID
 	 */
 	private String rfid;
-	
+
 	/**
 	 * 玻璃RFID
 	 */
@@ -50,7 +49,7 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	 * 型材RFID
 	 */
 	private String profileRfid;
-	
+
 	/**
 	 * 导入日期开始
 	 */
@@ -156,6 +155,14 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 
 	public void setProfileRfid(String profileRfid) {
 		this.profileRfid = profileRfid;
+	}
+
+	public String getMemberNo() {
+		return memberNo;
+	}
+
+	public void setMemberNo(String memberNo) {
+		this.memberNo = memberNo;
 	}
 
 }

@@ -104,7 +104,7 @@ function succInfo(confirm,message){
      </div>
      <button class="popBtn" id="dialog_close_button">确认</button>
      </div>
-   </div>
+</div>
 </div>
 <div id="message_info_div" style="display:none;">
 <div class="modal-wrap popDemo">
@@ -316,6 +316,7 @@ var refreshIviewer=function($viewer,src,$container){
 		iviewer.iviewer('loadImage', src);
 	}
 	if($container){
+		$container.css("top",$(window).scrollTop());
 		$container.show();
 		$container.find(".modal-header").show();
 	}else{
