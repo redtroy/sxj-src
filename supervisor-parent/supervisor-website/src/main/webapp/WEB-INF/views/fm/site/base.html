@@ -297,6 +297,7 @@ var refreshIviewer=function($viewer,src,$container){
 		iviewer.iviewer('loadImage', src);
 	}
 	if($container){
+		$container.css("top",$(window).scrollTop());
 		$container.show();
 		$container.find(".modal-header").show();
 	}else{
