@@ -398,9 +398,6 @@ $(document).ready(function(){
 	var currentUrl=window.location.href;
 	$.get("${basePath}member/enter.htm?url="+currentUrl);
 });
-$(window).bind('beforeunload',function(){ 
-	$.get("${basePath}member/leave.htm");
-}); 
 </script>
 </#if>
 </#macro> 
