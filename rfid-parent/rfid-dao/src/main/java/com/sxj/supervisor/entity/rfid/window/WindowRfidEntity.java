@@ -59,6 +59,18 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	private String contractNo;
 
 	/**
+	 * 申请会员号
+	 */
+	@Column(name = "MEMBER_NO")
+	private String memberNo;
+
+	/**
+	 * 申请会员名称
+	 */
+	@Column(name = "MEMBER_NAME")
+	private String memberName;
+
+	/**
 	 * 窗型代号
 	 */
 	@Column(name = "WINDOW_TYPE")
@@ -207,6 +219,22 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 
 	public void setProgressState(LabelProgressEnum progressState) {
 		this.progressState = progressState;
+	}
+
+	public String getMemberNo() {
+		return memberNo;
+	}
+
+	public void setMemberNo(String memberNo) {
+		this.memberNo = memberNo;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
 	}
 
 }

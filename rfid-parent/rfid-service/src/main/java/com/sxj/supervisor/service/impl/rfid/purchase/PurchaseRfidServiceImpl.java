@@ -188,7 +188,8 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					log.setDate(DateTimeUtils.getDateTime());
 					String jsonLog = JsonMapper.nonDefaultMapper().toJson(log);
 					rfid.setLog(jsonLog);
-					Long key = keyService.getKey("rfid");
+					Long key = keyService.getKey();
+					rfid.setGenerateKey(key);
 					String rfidNo = CustomDecimal.getDecimalString(4,
 							new BigDecimal(key));
 					rfid.setRfidNo(rfidNo);
@@ -213,7 +214,8 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					log.setDate(DateTimeUtils.getDateTime());
 					String jsonLog = JsonMapper.nonDefaultMapper().toJson(log);
 					rfid.setLog(jsonLog);
-					Long key = keyService.getKey("rfid");
+					Long key = keyService.getKey();
+					rfid.setGenerateKey(key);
 					String rfidNo = CustomDecimal.getDecimalString(4,
 							new BigDecimal(key));
 					rfid.setRfidNo(rfidNo);
