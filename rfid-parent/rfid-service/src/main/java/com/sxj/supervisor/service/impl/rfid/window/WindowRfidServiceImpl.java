@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.impl.rfid.window;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.persistent.CustomDecimal;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -108,8 +110,23 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	}
 
 	@Override
-	public void getMaxRfidNo() throws ServiceException {
-		// TODO Auto-generated method stub
+	@Transactional
+	public String[] getMaxRfidNo(String contractNo, Long count)
+			throws ServiceException {
+		try {
+			String[] arr = new String[2];
+			Long nowMax = windowRfidDao.getMaxRfidNo(contractNo);
+			String minNo = CustomDecimal.getDecimalString(4, new BigDecimal(
+					nowMax));
+			String maxMo = CustomDecimal.getDecimalString(4, new BigDecimal(
+					(nowMax + 1) + count));
+			arr[0] = minNo;
+			arr[1] = maxMo;
+			return arr;
+		} catch (Exception e) {
+			SxjLogger.error("计算RFID号区间错误", e, this.getClass());
+			throw new ServiceException("计算RFID号区间错误", e);
+		}
 
 	}
 

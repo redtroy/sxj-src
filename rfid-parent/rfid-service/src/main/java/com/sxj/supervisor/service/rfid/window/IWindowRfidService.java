@@ -39,5 +39,6 @@ public interface IWindowRfidService {
 
 	public WindowRfidEntity getWindowRfid(String id) throws ServiceException;
 
-	public void getMaxRfidNo() throws ServiceException;
+	public String[] getMaxRfidNo(String contractNo, Long count)
+			throws ServiceException;
 }
