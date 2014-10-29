@@ -26,7 +26,7 @@
 <script type="text/javascript"
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
-<@b.errorInfo/><@b.upload/>
+<@b.errorInfo/><@b.upload/><@b.dialogBox/>
 <script>
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function() {
@@ -38,6 +38,7 @@ jQuery(document).ready(function($) {
 		var id =$("#recordId").val();
 		var contractId = $("#contractId").val();
 		var message = $("#message").val();
+		dialogBox(function(){
 		$.post("confirmRecord.htm",{recordId:id,contractId:contractId,message:message},function(data){
 			   if (data.isOK=='ok'){
 				succInfo(function(){
@@ -46,7 +47,7 @@ jQuery(document).ready(function($) {
 			   }else{
 				   messageInfo("确认失败!");  
 			   }
-		})
+		})},"是否确认合同?");
 	}
 	
 $(document).ready(function(){

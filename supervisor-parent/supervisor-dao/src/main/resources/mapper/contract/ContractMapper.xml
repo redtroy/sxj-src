@@ -57,11 +57,11 @@
 		</if>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
-			<![CDATA[AND RECORD_NO like "%"#{condition.recordNo}"%"]]>
+			<![CDATA[AND RECORD_NO LIKE CONCAT('%',#{condition.recordNo},'%')]]>
 		</if>
 		<!-- 合同签订者 -->
-		<if test="condition.memberId != null and condition.memberId != ''">
-			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
+		<if test="condition.memberName != null and condition.memberName != ''">
+			<![CDATA[AND (MEMBER_NAME_A LIKE CONCAT('%',#{condition.memberName},'%') or MEMBER_NAME_B LIKE CONCAT('%',#{condition.memberName},'%'))]]>
 		</if>
 		<!-- 合同类型 -->
 		<if test="condition.contractType != null and condition.contractType != ''">

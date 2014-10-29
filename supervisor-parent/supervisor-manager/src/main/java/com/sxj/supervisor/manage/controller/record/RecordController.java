@@ -117,7 +117,7 @@ public class RecordController extends BaseController {
 	public String record_save(HttpServletRequest request, RecordEntity record,
 			ModelMap map) throws WebException {
 		try {
-			recordService.updateRecordAndContract(record, null);
+			recordService.modifyRecord(record);
 			return "redirect:" + getBasePath(request) + "record/recordList.htm";
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());

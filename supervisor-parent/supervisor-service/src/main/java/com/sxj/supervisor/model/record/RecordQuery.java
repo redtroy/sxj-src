@@ -24,8 +24,10 @@ public class RecordQuery extends Pagable implements Serializable {
 	private String confirmState;
 
 	private Integer recordType;
+	
+	private String  type;
 
-	private Integer state;
+	private String state;
 
 	private String memberIdA;
 
@@ -50,6 +52,14 @@ public class RecordQuery extends Pagable implements Serializable {
 	private Integer flag;
 
 	private String isDelMes;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public Integer getFlag() {
 		return flag;
@@ -163,11 +173,11 @@ public class RecordQuery extends Pagable implements Serializable {
 		this.recordType = recordType;
 	}
 
-	public Integer getState() {
+	public String getState() {
 		return state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(String state) {
 		this.state = state;
 	}
 

@@ -607,6 +607,7 @@ public class ContractServiceImpl implements IContractService {
 			condition.addCondition("contractNo", query.getContractNo());// 合同号
 			condition.addCondition("recordNo", query.getRecordNo());// 备案号
 			condition.addCondition("memberId", query.getMemberId());// 签订会员ＩＤ
+			condition.addCondition("memberName", query.getMemberName());// 签订会员名称
 			condition.addCondition("contractType", query.getContractType());// 合同类型
 			condition.addCondition("refContractNo", query.getRefContractNo());// 关联合同号
 			condition.addCondition("startCreateDate",

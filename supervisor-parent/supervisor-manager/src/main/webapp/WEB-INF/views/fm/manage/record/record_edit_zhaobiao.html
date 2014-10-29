@@ -20,8 +20,7 @@
 <script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
-	
-
+<@b.dialogBox/>
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {n
@@ -37,7 +36,9 @@
 <@b.upload/> <@b.validate/>
 <script type="text/javascript">
 	function edit() {
+		dialogBox(function(){
 		$("#record_save").submit();
+		},"是否修改备案?");
 	}
 	$(function() {
 		$("#record_save").Validform({
@@ -130,6 +131,8 @@
 					<ul>
 						<form action="record_save.htm?id=${record.id}" method="post"
 							id="record_save">
+							<input type="hidden" value="${record.contractType.getId()}" name="contractType" />
+							<input type="hidden" name="contractNo" value="${record.contractNo}" />
 							<li><label>备案号</label>${record.recordNo}</li>
 							<li><label>申请会员</label>${record.applyName}</li>
 							<li><label>甲方名称</label><input type="text"

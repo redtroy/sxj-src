@@ -25,18 +25,33 @@
 <script>
 
 function loadInfo(id){
-	$("#info"+id).load("info.htm?contractId="+id,function(){
-	 }
-	);
+	var isopen=$("#info" + id).attr("isopen");
+	if(isopen=="0"){
+	$("#info"+id).load("info.htm?contractId="+id);
 	$("#info"+id).show();
+	$("#info" + id).attr("isopen","1");
+	}
+	else if(isopen=="1"){
+		$("#info" + id).html("");
+		$("#info" + id).attr("isopen","0");
+	}
 }
 function closeContract(id){
 	$("#info"+id).html("");
 	$("#info"+id).hide();
+	$("#info" + recordNo).attr("isopen","0");
 }
 function stateLog(id,contractNo){
+	var isopen=$("#info" + id).attr("isopen");
+	if(isopen=="0"){
 	$("#info"+id).load("stateLog.htm?contractNo="+contractNo+"&id="+id);
 	$("#info"+id).show();
+	$("#info" + id).attr("isopen","1");
+	}
+	else if(isopen=="1"){
+		$("#info" + id).html("");
+		$("#info" + id).attr("isopen","0");
+	}
 }
 function query(page){
 	var params=$("#search_form").serialize();
@@ -71,10 +86,6 @@ $(function(){
 		$parent.hide();
 		$(".maskdivgen").hide();
 	})
-	var url_ = "${basePath}autoComple.htm";
-	$("#memberName").bigAutocomplete({url:url_,callback:function(data){
-        $("#memberId").val(data.result);
-    }});
 });
 function check(id,recordNo,contractType){
 	var recordNoArr = recordNo.split(",");
@@ -120,8 +131,7 @@ function check(id,recordNo,contractType){
         备案号
         <input type="text" name="recordNo" value="${query.recordNo}" />
         合同签订者
-        <input type="text" name="memberName" id="memberName" value="${query.memberName}" AUTOCOMPLETE="off" />
-        <input type="hidden" name="memberId" id="memberId" value="${query.memberId}" />
+        <input type="text" name="memberName"  value="${query.memberName}"/>
         合同类型
         <select name="contractType" >
         <option value="">--请选择--</option>
@@ -187,6 +197,7 @@ function check(id,recordNo,contractType){
       </tr>
        <#if list?exists>
       <#list list as model>
+      <tr>
         <td><a href="javascript:loadInfo('${model.contract.id}');"  class="lnk-blue">${model.contract.contractNo}</a></td>
         <td><a href="javascript:stateLog('${model.contract.id}','${model.contract.contractNo}')" class="lnk-blue">${model.contract.stateLog}</a></td>
         <td>${model.contract.memberNameA}</td>
@@ -201,8 +212,7 @@ function check(id,recordNo,contractType){
         <#if model.contract.type.getId()==0><a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a><#else> <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a></#if>
         <!-- <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a> --></td>
       </tr>
-      <tr  class="tableInfo" style="display: none;" id="info${model.contract.id}"> </tr>
-      <tr id="stateLog${model.contract.contractNo}" style="display: none;"> </tr>
+      <tr  class="tableInfo" style="display: none;" id="info${model.contract.id}" isopen="0"> </tr>
       </#list>
       </#if>
     </table>

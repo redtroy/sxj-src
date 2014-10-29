@@ -379,4 +379,74 @@ public class BasicController extends BaseController {
 		session.setAttribute("enterTime", new Date());
 
 	}
+	/**
+	 * 甲方联想
+	 * 
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("autoCompleA")
+	public @ResponseBody Map<String, String> autoCompleA(
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword) throws IOException {
+		MemberQuery mq = new MemberQuery();
+		if (keyword != "" && keyword != null) {
+			mq.setMemberName(keyword);
+		}
+		mq.setMemberType(0);
+		List<MemberEntity> list = memberService.queryMembers(mq);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (MemberEntity memberEntity : list) {
+			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+					+ memberEntity.getMemberNo() + "\"}";
+			strlist.add(sb);
+		}
+		String json = "{\"data\":" + strlist.toString() + "}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null;
+	}
+
+	/**
+	 * 乙方联想
+	 * 
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("autoCompleB")
+	public @ResponseBody Map<String, String> autoCompleB(
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword) throws IOException {
+		MemberQuery mq = new MemberQuery();
+		if (keyword != "" && keyword != null) {
+			mq.setMemberName(keyword);
+		}
+		mq.setMemberTypeB(0);
+		List<MemberEntity> list = memberService.queryMembers(mq);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (MemberEntity memberEntity : list) {
+			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+					+ memberEntity.getMemberNo() + "\"}";
+			strlist.add(sb);
+		}
+		String json = "{\"data\":" + strlist.toString() + "}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null;
+	}
+
 }

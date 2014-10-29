@@ -7,25 +7,27 @@
 <title>私享家电子商贸平台</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
-    <link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
-    <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
-	<script src="${b.staticPath}js/jquery.js"></script>
-	<script src="${b.staticPath}js/jqueryui.js"></script>
-	<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" />
-	<script src="${b.staticPath}js/intense.js"></script>
-	<script src="${b.staticPath}js/datepicker.js"></script>
-	<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
-	<script src="${b.staticPath}js/comet4j.js"></script>
-	<script src="${b.staticPath}js/jquery.iviewer.js"
-		type="text/javascript"></script>
-	<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
-	<script src="${b.staticPath}js/jquery.paginate.js"></script>
-	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
-		<script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
-	<script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
-	<@b.pageScript/> 
-	<@b.errorInfo/> 
-	<@b.upload/> 
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${b.staticPath}style/elastislide.css" />
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script type="text/javascript"
+	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+<@b.pageScript/> <@b.errorInfo/> <@b.upload/>
 <script>
 var previous;
 jQuery(document).ready(function($) {
@@ -106,146 +108,151 @@ function del(id,contractNo){
 }
 </script>
 </head>
-	<body>
-		<@b.header />
-		<div id="main" class="fence-wide">
-			<!-- InstanceBeginEditable name="local" -->
-			<!-- InstanceEndEditable -->
-			<@b.menuPath/>
-			<div id="mainBg" class="ly-clearFix yard-1200">
-				<div id="leftList"><@b.leftMenu /></div>
-				<div id="rightBar">
-					<!-- InstanceBeginEditable name="rightBar" -->
-					<h2 class="title">备案管理</h2>
-					<div id="searchBox">
-						<form id="search_box" action="javascript:void(0);">
-							<p>
-								备案号<input type="text" name="recordNo" value="" /> 申请会员ID<input
-									type="text" name="applyId" value="" /> 合同签订者<input type="text"
-									name="contractPepole " value="" /> 合同类型<select
-									name="contractType">
-									<option value="">-请选择-</option> <#list cte as type>
-									<option value="${type.id}">${type.getName()}</option> </#list>
-								</select> 对应合同号<input type="text" name="contractNo" value="" />
-							</p>
-							<p>
-								备案类型<select name="type">
-									<option value="">-请选择-</option> <#list rte as state>
-									<option value="${state.id}">${state.getName()}</option>
-									</#list>
-								</select> 状态<select name="state">
-									<option value="">-请选择-</option> <#list rse as type>
-									<option value="${type.id}">${type.getName()}</option> </#list>
-								</select> 申请备案时间段 <input type="text" name="startApplyDate" datepicker
-									id="time1" value="" /> - <input type="text"
-									name="endApplyDate" datepicker id="time2" value="" /> 受理时间段 <input
-									type="text" name="startAcceptDate" datepicker id="time3"
-									value="" /> - <input type="text" name="endAcceptDate"
-									datepicker id="time4" value="" /> <a class="btn btn-blue"
-									onclick="query();"><span>查询</span></a>
-							</p>
-						</form>
-					</div>
-					<div id="message_div"></div>
-					<@b.pager/>
-					<table border="0" cellpadding="0" cellspacing="0"
-						class="tabList recordTable" id="res_table">
-						<col width="7%" />
-						<col width="7%" />
-						<col width="8%" />
-						<col width="8%" />
-						<col width="7%" />
-						<col width="5%" />
-						<col width="5%" />
-						<col width="7%" />
-						<col width="7%" />
-						<col width="7%" />
-						<col width="13%" />
-						<col width="13%" />
-						<tr>
-							<th>备案号</th>
-							<th>申请会员ID</th>
-							<th>甲方名称</th>
-							<th>乙方名称</th>
-							<th>合同<br /> 类型
-							</th>
-							<th>合同<br /> 副本
-							</th>
-							<th>对应合同号</th>
-							<th>备案类型</th>
-							<th>申请备案</br>时间
-							</th>
-							<th>受理时间</th>
-							<th>操作</th>
-							<th class="rLine">状态</th>
-						</tr>
-						<#list list as record>
-						<tr id="${record.id}">
-							<td>${record.recordNo}</td>
-							<td>${record.applyId}</td>
-							<td>${record.memberNameA}</td>
-							<td>${record.memberNameB}</td>
-							<td><#if
-								(record.contractType??)>${record.contractType.getName()}</#if></td>
-							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view"
-								imgPath="${record.imgPath}">查看</a></td>
-							<td>${record.contractNo}</td>
-							<td><#if (record.type??)> ${record.type.getName()} </#if></td>
-							<td><#if (record.applyDate??)>
-								${record.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
-							<td><#if record.acceptDate?exists>
-								${record.acceptDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
-							<td class="operation"><#if record.contractType.id==0><a
-								href="record_edit_zhaobiao.htm?id=${record.id}" class="edit">修改</a><#else><a
-								href="record_edit.htm?id=${record.id}" class="edit">修改</a></#if><a
-								href="javascript:void(0);" class="del" onclick="del('${record.id}','${record.contractNo}')">删除</a></td> <#if
-							(record.state.id==0)>
-							<td class="contract"><#if (record.contractType??)> <#if
-								record.contractType.getId()!=0><a
-								href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a
-								href="${basePath}contract/produced.htm?recordId=${record.id}"
-								class="lnk-green">生成合同</a><#else><a
-								href="${basePath}contract/produced-kfs.htm?recordId=${record.id}"
-								class="lnk-green">生成招标合同</a></#if></#if>
-							</td> <#elseif (record.state.id==1)>
-							<td class="contract"><em class="state verified">已绑定</em></td>
-							<#elseif (record.state.id==2)>
-							<td class="contract"><a
-								href="${basePath}contract/changes.htm?recordId=${record.id}"
-								class="lnk-green">变更当前合同</a></td> <#elseif (record.state.id==3)>
-							<td class="contract"><em class="state verified">已变更</em></td>
-							<#elseif (record.state.id==4)>
-							<td class="contract"><a
-								href="${basePath}contract/replenish.htm?recordId=${record.id}"
-								class="lnk-green">补损当前合同</a></td> <#elseif (record.state.id==5)>
-							<td class="contract"><em class="state verified">已补损</em></td>
-							</#if>
-						</tr>
-						</#list>
-					</table>
-					<div class="modal-wrap popDemo popView" id="image-list" style="display: none; width: 671px;">
-						<div class="modal-header">
-							<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></span>
-						</div>
-						<div class="modal-body">
-							<div class="rollBox">
-								<ul id="carousel" class="elastislide-list"></ul>
-							</div>
-						</div>
-					</div>
-					<!-- InstanceEndEditable -->
+<body>
+	<@b.header />
+	<div id="main" class="fence-wide">
+		<!-- InstanceBeginEditable name="local" -->
+		<!-- InstanceEndEditable -->
+		<@b.menuPath/>
+		<div id="mainBg" class="ly-clearFix yard-1200">
+			<div id="leftList"><@b.leftMenu /></div>
+			<div id="rightBar">
+				<!-- InstanceBeginEditable name="rightBar" -->
+				<h2 class="title">备案管理</h2>
+				<div id="searchBox">
+					<form id="search_box" action="javascript:void(0);">
+						<p>
+							备案号<input type="text" name="recordNo" value="" /> 
+							申请会员ID<input type="text" name="applyId" value="" /> 
+							合同签订者<input type="text" name="contractPepole" value="" /> 
+							合同类型<select name="contractType">
+										<option value="">-请选择-</option> <#list cte as type>
+										<option value="${type.id}">${type.getName()}</option> </#list>
+								</select> 
+							对应合同号<input type="text" name="contractNo" value="" />
+						</p>
+						<p>
+							备案类型<select name="type">
+								<option value="">-请选择-</option> <#list rte as state>
+								<option value="${state.id}">${state.getName()}</option> </#list>
+							</select> 
+							状态<select name="state">
+								<option value="">-请选择-</option> <#list rse as type>
+								<option value="${type.id}">${type.getName()}</option> </#list>
+							</select> 
+							申请备案时间段 <input type="text" name="startApplyDate" datepicker id="time1" value="" /> - 
+							<input type="text" name="endApplyDate" datepicker id="time2" value="" /> 
+							受理时间段 <input type="text" name="startAcceptDate" datepicker id="time3" value="" /> - 
+							<input type="text" name="endAcceptDate" datepicker id="time4" value="" />
+							<a class="btn btn-blue" onclick="query();"><span>查询</span></a>
+						</p>
+					</form>
 				</div>
+				<div id="message_div"></div>
+				<@b.pager/>
+				<table border="0" cellpadding="0" cellspacing="0"
+					class="tabList recordTable" id="res_table">
+					<col width="7%" />
+					<col width="7%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="7%" />
+					<col width="5%" />
+					<col width="5%" />
+					<col width="7%" />
+					<col width="7%" />
+					<col width="7%" />
+					<col width="13%" />
+					<col width="13%" />
+					<tr>
+						<th>备案号</th>
+						<th>申请会员ID</th>
+						<th>甲方名称</th>
+						<th>乙方名称</th>
+						<th>合同<br /> 类型
+						</th>
+						<th>合同<br /> 副本
+						</th>
+						<th>对应合同号</th>
+						<th>备案类型</th>
+						<th>申请备案</br>时间
+						</th>
+						<th>受理时间</th>
+						<th>操作</th>
+						<th class="rLine">状态</th>
+					</tr>
+					<#list list as record>
+					<tr id="${record.id}">
+						<td>${record.recordNo}</td>
+						<td>${record.applyId}</td>
+						<td>${record.memberNameA}</td>
+						<td>${record.memberNameB}</td>
+						<td><#if
+							(record.contractType??)>${record.contractType.getName()}</#if></td>
+						<td><a href="javascript:void(0);"
+							class="lnk-blue lnk-underline lnk-view"
+							imgPath="${record.imgPath}">查看</a></td>
+						<td>${record.contractNo}</td>
+						<td><#if (record.type??)> ${record.type.getName()} </#if></td>
+						<td><#if (record.applyDate??)>
+							${record.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
+						<td><#if record.acceptDate?exists>
+							${record.acceptDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
+						<td class="operation"><#if record.state.id==3 ||
+							record.state.id==1 || record.state.id==5>-<#else><#if
+							record.contractType.id==0><a
+							href="record_edit_zhaobiao.htm?id=${record.id}" class="edit">修改</a><#else><a
+							href="record_edit.htm?id=${record.id}" class="edit">修改</a></#if><a
+							href="javascript:void(0);" class="del"
+							onclick="del('${record.id}','${record.contractNo}')">删除</a></#if>
+						</td> <#if (record.state.id==0)>
+						<td class="contract"><#if (record.contractType??)> <#if
+							record.contractType.getId()!=0><a
+							href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a
+							href="${basePath}contract/produced.htm?recordId=${record.id}"
+							class="lnk-green">生成合同</a><#else><a
+							href="${basePath}contract/produced-kfs.htm?recordId=${record.id}"
+							class="lnk-green">生成招标合同</a></#if></#if>
+						</td> <#elseif (record.state.id==1)>
+						<td class="contract"><em class="state verified">已绑定</em></td>
+						<#elseif (record.state.id==2)>
+						<td class="contract"><a
+							href="${basePath}contract/changes.htm?recordId=${record.id}"
+							class="lnk-green">变更当前合同</a></td> <#elseif (record.state.id==3)>
+						<td class="contract"><em class="state verified">已变更</em></td>
+						<#elseif (record.state.id==4)>
+						<td class="contract"><a
+							href="${basePath}contract/replenish.htm?recordId=${record.id}"
+							class="lnk-green">补损当前合同</a></td> <#elseif (record.state.id==5)>
+						<td class="contract"><em class="state verified">已补损</em></td>
+						</#if>
+					</tr>
+					</#list>
+				</table>
+				<div class="modal-wrap popDemo popView" id="image-list"
+					style="display: none; width: 671px;">
+					<div class="modal-header">
+						<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></span>
+					</div>
+					<div class="modal-body">
+						<div class="rollBox">
+							<ul id="carousel" class="elastislide-list"></ul>
+						</div>
+					</div>
+				</div>
+				<!-- InstanceEndEditable -->
 			</div>
 		</div>
-		<@b.footer />
-		<div class="viewer modal-wrap" id="iviewerModal">
+	</div>
+	<@b.footer />
+	<div class="viewer modal-wrap" id="iviewerModal">
 		<div class="modal-header" style="display: none;">
 			<span class="close">关闭</span>
 		</div>
 		<div id="viewer2" class="modal-body iviewer"
 			style="width: 100%; display: none; top: 0px"></div>
 	</div>
-		<div class="maskdivgen" style="display: none"></div>
-	</body>
-	<!-- InstanceEnd -->
+	<div class="maskdivgen" style="display: none"></div>
+</body>
+<!-- InstanceEnd -->
 </html>

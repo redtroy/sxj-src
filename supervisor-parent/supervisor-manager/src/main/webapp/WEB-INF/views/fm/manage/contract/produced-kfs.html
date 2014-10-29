@@ -164,7 +164,7 @@ $(document).ready(function() {
 	}
 	
 	$(function(){
-		$(".amountClass").keyup(function(){
+		$(".amountClass").change(function(){
 			var amount=0;
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
@@ -178,7 +178,7 @@ $(document).ready(function() {
 			}
 			$("#amountSum").html(getFloatStr(amount));
 		});
-		$(".quantityClass").keyup(function(){
+		$(".quantityClass").change(function(){
 			var quantity=0;
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
@@ -191,7 +191,7 @@ $(document).ready(function() {
 			}
 			$("#quantitySum").html(quantity);
 		});
-		$(".priceClass").keyup(function(){
+		$(".priceClass").change(function(){
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
 				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
@@ -297,7 +297,7 @@ $(document).ready(function() {
 								<td><input type="text" value="" name="items[0].quantity" class="quantityClass" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
                                     onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" datatype="n1-20" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！"  /></td>
 								<td><input type="text" value="" name="items[0].price" class="priceClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"  errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
-								<td><input type="text" value="" name="items[0].amount" class="amountClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"  errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" /></td>
+								<td><input type="text" value="" name="items[0].amount" class="amountClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"  errormsg="输入范围在1~20位之间！" nullmsg="请输入产品合价！" /></td>
 								<td><textarea id="textarea" cols="45" rows="1"
 										name="items[0].remarks"></textarea></td>
 								<td><a href="javascript:void(0);" class="lnk-green"

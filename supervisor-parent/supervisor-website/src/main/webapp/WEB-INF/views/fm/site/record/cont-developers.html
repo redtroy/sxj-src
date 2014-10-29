@@ -25,7 +25,7 @@
 	type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
-<@b.errorInfo/><@b.upload/>
+<@b.errorInfo/><@b.upload/><@b.dialogBox/>
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
@@ -89,6 +89,7 @@
 		var id = $("#recordId").val();
 		var message = $("#message").val();
 		var contractId = $("#contractId").val();
+		dialogBox(function(){
 		$.post("confirmRecord.htm", {
 			recordId : id,
 			contractId : contractId,
@@ -101,7 +102,7 @@
 			} else {
 				errorInfo("确认失败!");
 			}
-		})
+		})},"是否确认合同?");
 	}
 </script>
 </head>

@@ -9,10 +9,12 @@
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <@b.validate/>
 <@b.errorInfo/>
-
+<@b.dialogBox/>
 <SCRIPT>
 function edit(){
+	dialogBox(function(){
 	$("#record_save").submit();
+	},"是否绑定备案?");
 }
 $(function(){
 	$("#record_save").Validform({
