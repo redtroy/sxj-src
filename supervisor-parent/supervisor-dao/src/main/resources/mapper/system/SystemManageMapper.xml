@@ -12,7 +12,6 @@
 		<result property="account" column="ACCOUNT" jdbcType="VARCHAR" />
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
-		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
 		<result property="lastLogin" column="LAST_LOGIN" jdbcType="TIMESTAMP" />
 	</resultMap>
 
@@ -27,9 +26,6 @@
 		</if>
 		<if test="condition.accountNo != null and condition.accountNo!=''">
 			<![CDATA[ AND a.ACCOUNT_NO = #{condition.accountNo}]]>
-		</if>
-		<if test="condition.delState != null">
-			<![CDATA[ AND a.DEL_STATE = #{condition.delState}]]>
 		</if>
 		<!-- 用户账户 -->
 		<if test="condition.account != null  and condition.account!=''">

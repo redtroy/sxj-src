@@ -9,14 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sxj.supervisor.dao.system.IOperatorLogDao;
 import com.sxj.supervisor.entity.system.OperatorLogEntity;
 import com.sxj.supervisor.model.system.LogQuery;
-import com.sxj.supervisor.service.system.IqueryOperation;
+import com.sxj.supervisor.service.system.IQueryOperation;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
 @Transactional
-public class QueryOperation implements IqueryOperation {
+public class QueryOperation implements IQueryOperation {
 	@Autowired
 	private IOperatorLogDao opreatorlog;
 
@@ -35,6 +35,18 @@ public class QueryOperation implements IqueryOperation {
 			SxjLogger.error(e.getMessage(), this.getClass());
 			throw new ServiceException(e.getMessage(), e);
 		}
+	}
+
+	@Override
+	@Transactional
+	public void addOperatorLog(OperatorLogEntity log) throws ServiceException {
+		try {
+			opreatorlog.addLogs(log);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), this.getClass());
+			throw new ServiceException(e.getMessage(), e);
+		}
+
 	}
 
 }

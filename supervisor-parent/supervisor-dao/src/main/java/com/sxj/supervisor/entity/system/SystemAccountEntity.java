@@ -58,9 +58,6 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 			UpdateGroup.class })
 	private String password;
 
-	@Column(name = "DEL_STATE")
-	private Boolean delState = false;
-
 	@Column(name = "LAST_LOGIN")
 	private Date lastLogin;
 
@@ -102,14 +99,6 @@ public class SystemAccountEntity extends Pagable implements Serializable {
 
 	public void setAccountNo(String accountNo) {
 		this.accountNo = accountNo;
-	}
-
-	public Boolean getDelState() {
-		return delState;
-	}
-
-	public void setDelState(Boolean delState) {
-		this.delState = delState;
 	}
 
 	public Date getLastLogin() {
