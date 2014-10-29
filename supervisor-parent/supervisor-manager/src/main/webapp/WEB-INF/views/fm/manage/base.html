@@ -224,20 +224,21 @@ function dialogBox(confirm,message){
 		});
  }
  
-function dialogBoxout(confirm,html){
+function dialogBoxOut(html){
 	 var pageii = $.layer({
 		    type: 1,
 		    title: false,
-		    offset: ['192px', ''],
+		    offset: ['200px', ''],
 		   	area: ['20%', '20%'],
 		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
+		    shade: [0.5,'#000'], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
 		    //shift: 'left', //从左动画弹出
 		    page: {
-		        html: html;
+		        html: html
 		    }
 		});
+	 return pageii;
  }
 </script>
 </#macro>
@@ -443,7 +444,14 @@ function classLoadUpload(text){
     </h1>
     <div class="border-header"></div>
 </div>
-
+<#if Session.userinfo?exists>
+<script>
+$(document).ready(function(){
+	var currentUrl=window.location.href;
+	$.get("${basePath}/enter.htm?url="+currentUrl);
+});
+</script>
+</#if>
 </#macro>
 <#macro leftMenu>
 <script>$("#leftList").load("${basePath}menu.htm");</script>

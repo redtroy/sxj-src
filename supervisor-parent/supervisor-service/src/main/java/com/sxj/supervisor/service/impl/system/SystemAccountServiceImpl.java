@@ -116,10 +116,7 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	@Transactional
 	public void deleteAccount(String id) throws ServiceException {
 		try {
-			SystemAccountEntity account = new SystemAccountEntity();
-			account.setId(id);
-			account.setDelState(true);
-			accountDao.updateSystemAccount(account);
+			accountDao.deleteSystemAccount(id);
 			roleServce.removeRoles(id);
 		} catch (Exception e) {
 			throw new ServiceException("删除系统用户信息错误", e);
@@ -165,7 +162,6 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			if (query != null) {
 				condition.addCondition("id", query.getId());
 				condition.addCondition("accountNo", query.getAccountNo());
-				condition.addCondition("delState", query.getDelState());
 				condition.addCondition("name", query.getName());
 				condition.addCondition("account", query.getAccount());
 				condition.addCondition("functionId", query.getFunctionId());

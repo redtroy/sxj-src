@@ -235,9 +235,9 @@ jQuery(document).ready(function($) {
      	 </div>
       </td>
       <#if (account.state.id == 1)>
-      <td><button class="button button-red" onclick="checkState('${account.id}','${account.state.id}')" >停用</button></td>
+      <td><button class="button button-red" onclick="checkState('${account.id}','0')" >停用</button></td>
       <#elseif (account.state.id == 0)>
-      <td><button class="button button-green" onclick="checkState('${account.id}','${account.state.id}')" >恢复</button></td>
+      <td><button class="button button-green" onclick="checkState('${account.id}','1')" >恢复</button></td>
       </#if>
       <td>${account.regDate?string("yyyy-MM-dd HH:mm:ss")}</td>
       <td id="edit_td"><a href="javascript:void(0);" class="lnk-blue mr20" onclick="edit_account('${account.id}')"><span class="icon icon16 icon-edit"></span>修改</a><a href="javascript:void(0);" class="lnk-blue btnPassword" onclick="edit_pwd('${account.id}')"><span class="icon icon16 icon-password" ></span>修改密码</a></td>

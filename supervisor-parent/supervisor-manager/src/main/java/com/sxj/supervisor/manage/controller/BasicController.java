@@ -29,9 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-
-
-
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
@@ -39,6 +36,7 @@ import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.system.FunctionEntity;
+import com.sxj.supervisor.entity.system.OperatorLogEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
@@ -46,6 +44,7 @@ import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.supervisor.service.system.IFunctionService;
+import com.sxj.supervisor.service.system.IQueryOperation;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.util.common.FileUtil;
@@ -72,6 +71,9 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IStorageClientService storageClientService;
+
+	@Autowired
+	private IQueryOperation operatorService;
 
 	@RequestMapping("footer")
 	public String ToFooter() {
@@ -212,7 +214,7 @@ public class BasicController extends BaseController {
 				} else {
 					String originalName = myfile.getOriginalFilename();
 					String extName = FileUtil.getFileExtName(originalName);
-					// 上传文件 
+					// 上传文件
 					String filePath = storageClientService.uploadFile(null,
 							new ByteArrayInputStream(myfile.getBytes()),
 							myfile.getBytes().length, extName.toUpperCase());
@@ -347,5 +349,34 @@ public class BasicController extends BaseController {
 		out.flush();
 		out.close();
 		return null;
+	}
+
+	@RequestMapping("enter")
+	@ResponseBody
+	public void enter(HttpSession session, HttpServletRequest request,
+			String url) {
+		Date enterTime = (Date) session.getAttribute("enterTime");
+		String currentUrl = (String) session.getAttribute("currentUrl");
+		String nextUrl = (String) session.getAttribute("nextUrl");
+		if (currentUrl == null) {
+			session.setAttribute("currentUrl", request.getHeader("Referer"));
+
+		}
+		session.setAttribute("previousUrl", currentUrl);
+		session.setAttribute("currentUrl", nextUrl);
+		session.setAttribute("nextUrl", url);
+
+		if (enterTime != null) {
+			SystemAccountEntity account = getLoginInfo(session);
+			OperatorLogEntity log = new OperatorLogEntity();
+			log.setAccountNo(account.getAccountNo());
+			log.setOperatorTime(new Date());
+			log.setLogs("Entering page" + session.getAttribute("previousUrl")
+					+ "------current:    " + session.getAttribute("currentUrl")
+					+ "------next:     " + session.getAttribute("nextUrl"));
+			operatorService.addOperatorLog(log);
+		}
+		session.setAttribute("enterTime", new Date());
+
 	}
 }

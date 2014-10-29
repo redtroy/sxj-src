@@ -21,8 +21,6 @@ public class SysAccountQuery extends Pagable implements Serializable {
 
 	private String functionId;
 
-	private Boolean delState=false;
-
 	public String getId() {
 		return id;
 	}
@@ -62,15 +60,5 @@ public class SysAccountQuery extends Pagable implements Serializable {
 	public void setFunctionId(String functionId) {
 		this.functionId = functionId;
 	}
-
-	public Boolean getDelState() {
-		return delState;
-	}
-
-	public void setDelState(Boolean delState) {
-		this.delState = delState;
-	}
-	
-	
 
 }
