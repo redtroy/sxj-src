@@ -120,8 +120,10 @@
 					var trId = $(this).parent().parent().attr("id");
 					if ($table) {
 						$table.find(".addtr").remove();
-						var $tr = $("<tr>").addClass("formitem").append(
-								$(this).parent().parent().html());
+						var $oldtr=$(this).parent().parent().clone();
+						var $td=$("<td class='editable'/>");
+						$td.insertBefore($oldtr.children("td:last"));
+						var $tr = $("<tr>").addClass("formitem").append($oldtr.html());
 						var $hidden = $("<p>").addClass("mark").hide().html(
 								trId);
 						$tr.append($hidden);
