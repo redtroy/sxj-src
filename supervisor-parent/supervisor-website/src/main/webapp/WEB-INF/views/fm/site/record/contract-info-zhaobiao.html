@@ -46,7 +46,26 @@
 					return false; }
 			});
 		});
-		
+		var quantity=0;
+		var amount=0;
+		$(".quantity").each(function(){
+			if($(this).html()){
+				quantity+=parseInt($(this).html());
+			}
+		});
+		$(".price").each(function(){
+			if($(this).html()){
+				$(this).html(parseFloat($(this).html()).toFixed(2));
+			}
+		});
+		$(".amount").each(function(){
+			if($(this).html()){
+				amount+=parseFloat($(this).html());
+				$(this).html(parseFloat($(this).html()).toFixed(2));
+			}
+		});
+		$(".tquantity").html(quantity+"镗");
+		$(".tamount").html(amount.toFixed(2)+"元");
 	});
 	</script>
 		<div class="contInfo tl">
@@ -93,26 +112,22 @@
                         <th>金额</th>
                         <th>备注说明</th>
                       </tr>
-                      	<#assign n = 0> 
-			            <#assign m = 0> 
 			            <#list contractModel.itemList as item>
-			            <#assign n = (n+item.quantity)?int > 
-			            <#assign m = (m+item.amount)?int > 
                       <tr>
                          <td>${item.productName}</td>
 			              <td>${item.windowType.getName()}</td>
-			              <td>${item.quantity}</td>
-			              <td>${item.price}</td>
-			              <td>${item.amount}</td>
+			              <td class="quantity">${item.quantity}</td>
+			              <td class="price">${item.price}</td>
+			              <td class="amount">${item.amount}</td>
 			              <td>${item.remarks}</td>
                       </tr>
                        </#list>
                       <tr class="fb">
                         <td>合计</td>
                         <td>&nbsp;</td>
-                        <td>约${n}</td>
+                        <td class="tquantity"></td>
                         <td>&nbsp;</td>
-                        <td>${m}元</td>
+                        <td class="tamount"></td>
                         <#if contractModel.contract.imgPath!=null>
                         <td class="tl">
                         <#assign arr=(contractModel.contract.imgPath?split(","))>

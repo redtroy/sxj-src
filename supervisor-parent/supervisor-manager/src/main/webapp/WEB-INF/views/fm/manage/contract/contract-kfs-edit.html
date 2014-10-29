@@ -219,10 +219,10 @@ var ul_validform;
 							name="contract.contractNo" />
 						<ul class="ly-clearFix">
 
-							<li><label>甲方</label> <input name="contract.memberNameA"
-								type="text" value="${contractModel.contract.memberNameA}" /></li>
-							<li><label>乙方</label> <input name="contract.memberNameB"
-								type="text" value="${contractModel.contract.memberNameB}" /></li>
+							<li><label>甲方</label> <input 
+								type="text" value="${contractModel.contract.memberNameA}" readonly="readonly"  /></li>
+							<li><label>乙方</label> <input 
+								type="text" value="${contractModel.contract.memberNameB}"  readonly="readonly" /></li>
 							<li><label>工程名称</label> <input name="contract.engName"
 								type="text" value="${contractModel.contract.engName}" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入工程名称！" /></li>
 							<li><label>工程地址</label> <input name="contract.engAddress"

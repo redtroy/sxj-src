@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.record;
 import java.util.List;
 
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -77,5 +78,8 @@ public interface IRecordService {
 	public void saveRecord(RecordEntity record) throws ServiceException;
 
 	public List<ContractBatchEntity> getBatchList(String recordId);
+
+	void updateRecordAndContract(RecordEntity record, ContractEntity contract)
+			throws ServiceException;
 	
 }

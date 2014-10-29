@@ -26,6 +26,7 @@ import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
@@ -396,4 +397,41 @@ public class RecordServiceImpl implements IRecordService {
 			throw new ServiceException("更新备案错误", e);
 		}
 	}
+	/**
+	 * 同步合同与备案信息
+	 */
+	@Override
+	@Transactional
+	public void updateRecordAndContract(RecordEntity record,ContractEntity contract) throws ServiceException {
+		try{
+			if(record!=null){
+				recordDao.updateRecord(record);	
+				ContractModel cm=contractService.getContractModelByContractNo(record.getContractNo());
+				 contract = cm.getContract();
+				 contract.setMemberIdA(record.getMemberIdA());
+				 contract.setMemberIdB(record.getMemberIdB());
+				 contract.setMemberNameA(record.getMemberNameA());
+				 contract.setMemberNameB(record.getMemberNameB());
+				 contract.setType(record.getContractType());
+				 contract.setRefContractNo(record.getRefContractNo());
+				 contractDao.updateContract(contract);
+				 //更新所有备案信息
+				 QueryCondition<RecordEntity> query = new QueryCondition<RecordEntity>();
+				 query.addCondition("contractNo",record.getContractNo());
+				 List<RecordEntity> recordList = recordDao.queryRecord(query);
+				 for (RecordEntity recordEntity : recordList) {
+					 if(recordEntity.getContractType().getId()!=0){
+						 recordEntity.setMemberIdA(record.getMemberIdA());
+						 recordEntity.setMemberIdB(record.getMemberIdB());
+						 recordEntity.setMemberNameA(record.getMemberNameA());
+						 recordEntity.setMemberNameB(record.getMemberNameB()); 
+					 }
+					 recordDao.updateRecord(recordEntity);
+				}
+			}
+		} catch (Exception e) {
+			throw new ServiceException("更新合同备案出错!", e);
+		}
+	}
+	
 }

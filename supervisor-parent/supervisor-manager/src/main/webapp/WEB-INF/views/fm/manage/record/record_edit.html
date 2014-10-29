@@ -135,9 +135,7 @@
 						<form action="record_save.htm?id=${record.id}" method="post"
 							id="record_save">
 							<li><label>备案号</label>${record.recordNo}</li>
-							<li><label>申请会员</label><input type="text"
-								value="${record.applyName}" id="applyName" name="applyName"
-								datatype="*2-50" nullmsg="请输入会员名称" /></li>
+							<li><label>申请会员</label>${record.applyName}</li>
 							<li><label>甲方名称</label><input type="text"
 								value="${record.memberNameA}" id="memberNameA"
 								name="memberNameA" datatype="*2-50" nullmsg="请输入甲方名称" /></li>
