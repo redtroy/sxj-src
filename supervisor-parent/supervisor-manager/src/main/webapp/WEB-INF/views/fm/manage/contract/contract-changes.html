@@ -343,8 +343,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<div class="rollBox">
 										<ul class="elastislide-list imagelist">
 											<#assign
-											imgArr=(modifyList.modifyContract.imgPath?split(","))> <#list
-											imgArr as modifyimgPath>
+											imgArr=(modifyList.modifyContract.imgPath?split(","))> 
+										<#list imgArr as modifyimgPath>
 											<li><a href="javascript:void(0);"
 												data-image="${b.imagePath}${imgPath}"><img
 													data-image="${b.imagePath}${imgPath}" width="80"
