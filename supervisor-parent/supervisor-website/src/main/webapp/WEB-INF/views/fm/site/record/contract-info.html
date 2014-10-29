@@ -1,23 +1,52 @@
 ﻿
 <!-- 合同详情 -->
 <td colspan="12"><script type="text/javascript">
-	$(document).ready(function() {
-		var start = 0;
-
-		$('.elastislide-list').each(function() {
-			var $this = $(this);
-			$this.find("li").live("click", function() {
-				var el = $(this);
-				var imageSource = el.find("a").attr("data-image");
-				refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
-				el.parent().children("li").removeClass("view");
-				el.addClass("view");
-				preModal = null;
-			});
-			refreshElastislide($(this).parent(), $(this));
+$(document).ready(function(){
+	var start=0;
+	
+	$('.elastislide-list').each(function(){
+		var $this=$(this);
+		$this.find("li").live("click",function(){
+			var el=$(this);
+			var imageSource = el.find("a").attr("data-image");
+			refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+			el.parent().children("li").removeClass("view");
+			el.addClass("view");
+			preModal=null;
 		});
-
+		$(this).elastislide({
+			orientation : 'horizontal',
+			speed : 500,
+			easing : 'ease-in-out',
+			minItems : elastislideConfig.count,
+			start : start,
+			onClick : function( el, position, evt ) { 
+				return false; 
+			},
+			onReady : function() { 
+				$this.children("li:lt("+elastislideConfig.count+")").each(function(){
+					var $image=$(this).find("img");
+					if($image.attr("data-image"))
+						$image.attr("src",$image.attr("data-image"));
+				});
+				if($this.children("li").length<elastislideConfig.count)
+					$(".elastislide-prev").hide();
+				return false; },
+			onBeforeSlide : function() { return false; },
+			onAfterSlide : function() { 
+				if(start>0)
+					slideTimes=slideTimes+start;
+				$this.children("li:lt("+slideTimes+")").each(function(){
+					var $image=$(this).find("img");
+					if($image.attr("data-image"))
+						$image.attr("src",$image.attr("data-image"));
+				});
+				slideTimes=slideTimes+elastislideConfig.count;
+				return false; }
+		});
 	});
+	
+});
 </script>
 	<div class="contInfo tl">
 		<div class="info ly-clearFix">
