@@ -119,7 +119,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			String minNo = CustomDecimal.getDecimalString(4, new BigDecimal(
 					nowMax));
 			String maxMo = CustomDecimal.getDecimalString(4, new BigDecimal(
-					(nowMax + 1) + count));
+					nowMax + (count - 1)));
 			arr[0] = minNo;
 			arr[1] = maxMo;
 			return arr;

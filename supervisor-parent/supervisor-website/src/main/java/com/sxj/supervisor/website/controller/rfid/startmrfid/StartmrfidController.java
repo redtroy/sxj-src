@@ -16,6 +16,7 @@ import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -26,6 +27,9 @@ public class StartmrfidController extends BaseController {
 	@Autowired
 	private IContractService contractService;
 
+	@Autowired
+	private IWindowRfidService wind;
+
 	@RequestMapping("startmrfid_list")
 	public String startmrfid_list(ModelMap map) {
 		WindowTypeEnum[] type = WindowTypeEnum.values();
@@ -34,13 +38,15 @@ public class StartmrfidController extends BaseController {
 	}
 
 	@RequestMapping("query")
-	public @ResponseBody Map<Object, Object> query(ContractQuery query)
+	public @ResponseBody Map<Object, Object> query(ContractQuery query, Long num)
 			throws WebException {
 		try {
 			List<ContractModel> list = contractService.queryContracts(query);
 			Map<Object, Object> map = new HashMap<Object, Object>();
 			if (list.size() > 0) {
+				String[] bq = wind.getMaxRfidNo(query.getRefContractNo(), num);
 				map.put("isOk", "ok");
+				map.put("bq", bq);
 				map.put("list", list);
 			} else {
 				map.put("isOk", "false");

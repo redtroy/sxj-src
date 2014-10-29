@@ -55,11 +55,8 @@
 			<![CDATA[AND IMPORT_DATE >=#{condition.startImportDate} AND IMPORT_DATE <= #{condition.endImportDate}]]>
 		</if>
 	</select>
-	<select id="getMaxRfidNo" resultType="String"
-		parameterType="String">
-		<![CDATA[SELECT MAX(GENERATE_KEY) FROM R_WINDOW_RFID WHERE RFID_STATE<>4]]>
-		<if test="contractNo!= null and contractNo !=''">
-			<![CDATA[AND CONTRACT_NO = #{contractNo}]]>
-		</if>
+	<select id="getMaxRfidNo" resultType="Long">
+		<![CDATA[SELECT MIN(GENERATE_KEY) FROM R_WINDOW_RFID WHERE RFID_STATE<>4]]>
+		<![CDATA[AND CONTRACT_NO = #{contractNo}]]>
 	</select>
 </mapper>

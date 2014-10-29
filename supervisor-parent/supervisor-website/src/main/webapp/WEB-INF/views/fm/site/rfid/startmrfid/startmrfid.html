@@ -34,7 +34,8 @@ var container_a=null;
 var container_b=null;
 function query(){
 	var refContractNo=$("#refContractNo").val();
-	$.post("query.htm",{refContractNo:refContractNo},function(data){
+	var num=$("#num").val();
+	$.post("query.htm",{refContractNo:refContractNo,num:num},function(data){
 		if (data.isOk=='ok'){
 			$("#contract_a option").remove();
 			$("#contract_b option").remove();
@@ -45,6 +46,7 @@ function query(){
 					$("#contract_b").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
 				}
 			}
+			console.log(data.bq);
 			pc_a();
 			pc_b();
 		}else{
@@ -117,7 +119,7 @@ function star(){
   <span class="title fontYH f20 fb">启用认证标签</span></h1>
 </div>
 <div class="contBox">
-<div class="item"><label>启用标签数量</label><input class="input input-w180h36"/></div>
+<div class="item"><label>启用标签数量</label><input class="input input-w180h36" id="num"/></div>
 <div class="item"><label>招标合同号</label> <input class="input input-w180h36" value="" / id="refContractNo" >&nbsp;&nbsp;<button class="button button-green" title="根据招标合同号和启用数量提取编号值最小的数量的标签区间在下方显示" onclick="query();return false;">获取标签编号区间</button></div>
 <div class="item">
   <label>启用标签编号区间</label><span class="color-blue ml5" >AAAA00001-AAAA00050</span></div>
