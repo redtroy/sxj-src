@@ -39,6 +39,6 @@
 		<if test="condition.functionId!= null  and condition.functionId!=''">
 			<![CDATA[ AND r.FUNCTION_ID=#{condition.functionId}]]>
 		</if>
-		<![CDATA[ ORDER BY a.ACCOUNT_NO ASC]]>
+		<![CDATA[ ORDER BY a.ACCOUNT_NO DESC]]>
 	</select>
 </mapper>

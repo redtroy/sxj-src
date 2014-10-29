@@ -202,7 +202,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				for (int i = 0; i < count; i++) {
 					LogisticsRfidEntity rfid = new LogisticsRfidEntity();
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
-					rfid.setContractNo(purchase.getContractNo());
+					// rfid.setContractNo(purchase.getContractNo());
 					rfid.setImportDate(new Date());
 					rfid.setRfidState(RfidStateEnum.unused);
 					rfid.setMemberNo(apply.getMemberNo());

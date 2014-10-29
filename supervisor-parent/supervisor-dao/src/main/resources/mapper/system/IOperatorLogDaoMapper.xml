@@ -8,8 +8,6 @@
 		<result property="OperatorTime" column="OPER_TIME" javaType="DATE" />
 		<result property="logs" column="LOGS" jdbcType="VARCHAR" />
 	</resultMap>
-
-
 	<!-- 高级查询 -->
 	<select id="queryLogs" resultMap="LogMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">

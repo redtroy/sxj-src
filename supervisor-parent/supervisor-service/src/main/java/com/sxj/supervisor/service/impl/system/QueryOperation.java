@@ -26,8 +26,10 @@ public class QueryOperation implements IQueryOperation {
 			throws ServiceException {
 		try {
 			QueryCondition<OperatorLogEntity> condition = new QueryCondition<OperatorLogEntity>();
-			condition.addCondition("accountNo", query.getAccountNo());
-			condition.setPage(query);
+			if (query != null) {
+				condition.addCondition("accountNo", query.getAccountNo());
+				condition.setPage(query);
+			}
 			List<OperatorLogEntity> list = opreatorlog.queryLogs(condition);
 			query.setPage(condition);
 			return list;

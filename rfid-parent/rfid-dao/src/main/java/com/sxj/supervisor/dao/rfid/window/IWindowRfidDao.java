@@ -28,6 +28,14 @@ public interface IWindowRfidDao {
 			QueryCondition<WindowRfidEntity> query) throws SQLException;
 
 	/**
+	 * 
+	 * @param contract
+	 * @return
+	 * @throws SQLException
+	 */
+	public Long getMaxRfidNo(String contractNo) throws SQLException;
+
+	/**
 	 * 新增门窗RFID
 	 *
 	 * @param window

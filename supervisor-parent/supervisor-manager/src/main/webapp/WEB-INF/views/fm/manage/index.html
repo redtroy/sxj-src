@@ -15,9 +15,14 @@
 var pageii;
 	var to_edit_pwd=function() {
 		var editPage=$("#edit_password").html();
-		pageii=dialogBoxOut(editPage)
+		pageii=dialogBoxOut(editPage);
 	}
 	function edit_pwd(){
+		var validform=$(".xubox_page").Validform({
+			tiptype:3});
+		if (!validform.check()){
+			return false;
+		}
 		var pwd1 = $(".xubox_page").find("#loginpassword").val();
 		var pwd2 =  $(".xubox_page").find("#newpassword").val();
 		if (pwd1 == "" || pwd2 == "") {
@@ -80,12 +85,16 @@ var pageii;
 							<div class="form-group">
 								<label>新密码</label> <input type="password" name="loginpassword"
 									id="loginpassword" tabindex="1" class="input input-w270h36"
-									placeholder="请输入新密码">
+									placeholder="请输入新密码" title="6-15位字符，可由英文、数字及标点符号组成" 
+									datatype="*6-15" errormsg="6~15位，可由英文、数字及标点符号组成" 
+									nullmsg="请设置密码！"/>
 							</div>
 							<div class="form-group">
 								<label>确认密码</label> <input type="password" name="newpassword"
 									id="newpassword" tabindex="1" class="input input-w270h36"
-									placeholder="请确认新密码">
+									placeholder="请确认新密码" title="请再次输入您的密码" datatype="*6-15" 
+									errormsg="您两次输入的账号密码不一致！" recheck="loginpassword" 
+									nullmsg="请设置密码！"/>
 							</div>
 							<button class="popBtn" onclick="edit_pwd();">确认修改</button>
 						</div>

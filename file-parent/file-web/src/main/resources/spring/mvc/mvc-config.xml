@@ -23,7 +23,7 @@
 	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
 		lazy-init="false" init-method="initCacheProvider">
 		<!-- <property name="configFile" value="cache.properties"></property> -->
-		<property name="databaseId" value="3"></property>
+		<property name="databaseId" value="2"></property>
 	</bean>
 
 	<bean id="configBean"

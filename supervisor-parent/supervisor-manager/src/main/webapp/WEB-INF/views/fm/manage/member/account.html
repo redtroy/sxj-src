@@ -70,20 +70,27 @@ jQuery(document).ready(function($) {
 	   $("#"+id).find("#confim_td").show();
    }
    //确认修改
-  var regexName =/^[\u4e00-\u9fa5a-zA-Z-0-9]{2,20}$/ ;
-  var redexAccount=/^[A-Za-z0-9]+$/;
-  
+   var redexAccount=/^[A-Za-z0-9]{1,15}$/;
+   var regexName =/^[a-zA-Z\u4e00-\u9fa5]{1,20}$/;
    function editOk(memerNo,id){
 	   var params=$("#"+id).find(":input");
 	   var old=$("#"+id).find("#old_hidden").val();
 	   var name=$("#"+id).find("#nameEdit").val();
 	   var accountName=$("#"+id).find("#accountEdit").val();
-	   if (!redexAccount.test(accountName) || accountName==""){
-		   messageInfo("账号名只能用英文+数字");
+	   if(accountName==""){
+			messageInfo("账号名不能为空");
+			   return false;
+		}
+		if(name==""){
+			messageInfo("姓名不能为空");
+			   return false;
+		}
+	   if (!redexAccount.test(accountName)){
+		   messageInfo("账号名只能用1-15位的英文+数字");
 		   return false;
 	   }
-	   if (!regexName.test(name) || name==""){
-		   messageInfo("姓名不能为空，或特殊字符");
+	   if (!regexName.test(name)){
+		   messageInfo("姓名只能用1-20位的中文或英文字符");
 		   return false;
 	   }
 	 //判断子会员帐号是否存在

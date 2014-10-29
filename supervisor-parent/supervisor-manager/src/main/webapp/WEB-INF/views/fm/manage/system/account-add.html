@@ -3,20 +3,20 @@
     <h2 class="title">新增管理员</h2>
     <div class="adminBox f14">
     <form id="add_form" action="javascript:void(0);" method="post">
-      <div>
+      <div class="item">
         <label>姓名</label>
         <input type="text" id="name" name="name" class="text tip" title="由中文组成" datatype="*2-20" nullmsg="请输入姓名" errormsg="姓名只能使用中文"/>
         <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
       </div>
-      <div>
+      <div class="item">
         <label>帐号</label>
         <input type="text" id="user_name" name="account" class="text tip" title="3-20位字符，可由中文、英文、数字及“_”、“-”组成" datatype="ys" ajaxurl="check_account.htm" nullmsg="请输入帐号" errormsg="账号名只能用英文+数字"/>
       </div>
-      <div>
+      <div class="item">
         <label>密码</label>
         <input type="password" id="password" name="password" class="text tip" title="6-15位字符，可由英文、数字及标点符号组成" datatype="*6-15" errormsg="密码范围在6~15位之间，可由英文、数字及标点符号组成" nullmsg="请设置密码！"/>
       </div>
-      <div>
+      <div class="item">
         <label>确认密码</label>
         <input type="password" id="password_confirm" name="password_confirm" class="text tip" title="请再次输入您的密码" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="password" nullmsg="请设置密码！"/>
       </div>
