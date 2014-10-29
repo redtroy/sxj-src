@@ -2,6 +2,7 @@ package com.sxj.supervisor.service.record;
 
 import java.util.List;
 
+import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -74,5 +75,7 @@ public interface IRecordService {
 	public String getRfid(String batchId);
 
 	public void saveRecord(RecordEntity record) throws ServiceException;
+
+	public List<ContractBatchEntity> getBatchList(String recordId);
 	
 }

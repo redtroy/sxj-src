@@ -130,14 +130,6 @@ var ul_validform;
 		if (!ul_validform.check()){
 			return false;
 		}
-			var size=$("#TbData tr").filter(".CaseRow").size();
-			for (var i=0;i<size;i++){
-				var num1=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val();
-				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val(parseFloat(num1)*100);
-				var num2=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
-				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(parseFloat(num2)*100);
-			}
-			
 		dialogBox(function(){
 			$.post("addContract.htm", $("#addForm").serialize(), function(data) {
 				if (data.isOK == 'ok') {
