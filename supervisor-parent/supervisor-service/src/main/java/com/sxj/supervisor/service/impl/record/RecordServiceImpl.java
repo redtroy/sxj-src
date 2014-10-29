@@ -94,30 +94,31 @@ public class RecordServiceImpl implements IRecordService {
 		RecordEntity oldRe = getRecord(record.getId());
 		String[] oldPath = null;
 		String[] nowPath = null;
-		String oldImage = oldRe.getImgPath();
-		if (StringUtils.isNotEmpty(oldImage)) {
-			oldPath = oldImage.split(",");
-		}
-		if (StringUtils.isNotEmpty(record.getImgPath())) {
-			nowPath = record.getImgPath().split(",");
-		}
-		StringBuffer newPath = new StringBuffer();
-		if (oldPath != null && oldPath.length > 0) {
-			for (int i = 0; i < oldPath.length; i++) {
-				if (StringUtils.isNotEmpty(oldPath[i])) {
-					continue;
-				}
-				for (int j = 0; j < nowPath.length; j++) {
-					if (StringUtils.isNotEmpty(nowPath[j])) {
+		if(oldRe!=null){
+			String oldImage = oldRe.getImgPath();
+			if (StringUtils.isNotEmpty(oldImage)) {
+				oldPath = oldImage.split(",");
+			}
+			if (StringUtils.isNotEmpty(record.getImgPath())) {
+				nowPath = record.getImgPath().split(",");
+			}
+			StringBuffer newPath = new StringBuffer();
+			if (oldPath != null && oldPath.length > 0) {
+				for (int i = 0; i < oldPath.length; i++) {
+					if (StringUtils.isNotEmpty(oldPath[i])) {
 						continue;
 					}
-					if (!oldPath[i].equals(nowPath[j])) {
-						storageClientService.deleteFile(oldPath[i]);
+					for (int j = 0; j < nowPath.length; j++) {
+						if (StringUtils.isNotEmpty(nowPath[j])) {
+							continue;
+						}
+						if (!oldPath[i].equals(nowPath[j])) {
+							storageClientService.deleteFile(oldPath[i]);
+						}
 					}
 				}
-			}
+			}	
 		}
-
 		recordDao.updateRecord(record);
 	}
 
@@ -327,6 +328,29 @@ public class RecordServiceImpl implements IRecordService {
 		}
 	}
 
+	/**
+	 * 获取批次
+	 * 
+	 * @param recordId
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public List<ContractBatchEntity> getBatchList(String recordId) {
+		try {
+			RecordEntity re = recordDao.getRecord(recordId);
+			QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
+			query.addCondition("contractId", re.getContractNo());
+			List<ContractBatchEntity> batchList = batchDao.queryBacths(query);
+			if (batchList != null) {
+				return batchList;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			throw new ServiceException("查询批次信息错误", e);
+		}
+	}
 	@Override
 	public String getRfid(String batchId) {
 		try {

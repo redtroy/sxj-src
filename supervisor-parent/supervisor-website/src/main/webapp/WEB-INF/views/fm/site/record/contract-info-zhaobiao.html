@@ -87,8 +87,8 @@
                       <col width="30%" />
                       <tr>
                         <th>产品名称</th>
-                        <th>产品规格<span class="fontAR ml5">(mm)</span></th>
-                        <th>数量<span class="fontAR ml5">(m<sup>2</sup>)</span></th>
+                        <th>型号规格<span class="fontAR ml5">(mm)</span></th>
+                        <th>数量<span class="fontAR ml5">镗</span></th>
                         <th>单价<span>（元）</span></th>
                         <th>金额</th>
                         <th>备注说明</th>
@@ -100,7 +100,7 @@
 			            <#assign m = (m+item.amount)?int > 
                       <tr>
                          <td>${item.productName}</td>
-			              <td>${item.productModel}</td>
+			              <td>${item.windowType.getName()}</td>
 			              <td>${item.quantity}</td>
 			              <td>${item.price}</td>
 			              <td>${item.amount}</td>
@@ -133,18 +133,6 @@
                   <div class="item">
                     <label>&nbsp;</label>
                      <#if arr??>
-                    <div class="rollBox">
-                    <ul class="elastislide-list imagelist">
-                    <#list arr  as imgPath>
-                    <li><a href="javascript:void(0);" data-image="${b.imagePath}${imgPath}"><img data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
-                    </#list>
-                    </ul>
-                    </div>
-                    <#else>
-                    <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-                    </#if>
-                    <!-- ---test -->
-                    <#if arr??>
                     <div class="rollBox">
                     <ul class="elastislide-list imagelist">
                     <#list arr  as imgPath>

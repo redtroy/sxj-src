@@ -183,7 +183,7 @@
               <label>合同备案扫描件</label>
                <div class="rollBox">
 				<ul  class="elastislide-list imagelist">
-					 <#assign arr=(contractModel.contract.imgPath?split(","))>
+				<#assign arr=(contractModel.contract.imgPath?split(","))>
                  <#list arr  as imgPath>
                  <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
                  </#list>

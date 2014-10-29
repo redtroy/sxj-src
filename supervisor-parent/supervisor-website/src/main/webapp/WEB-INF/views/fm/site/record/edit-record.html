@@ -219,23 +219,6 @@ $(document).ready(function() {
 		$("#memberNameB").bigAutocomplete({url:urlB,callback:function(data){
 	        $("#memberIdB").val(data.result);
 	    }});
-		//加载批次
-		if(${record.type.getId()}==2){
-			var batch ='${batch}';
-			if(batch==''){
-				$("#selectBatch").empty();
-				$("#selectBatch").append('<option value="">没有批次</option>');	
-			}else{
-				var batchArr =data.batch.split("#");
-				var batch0 =batchArr[0].split(",");
-				var batch1 =batchArr[1].split(",");
-				$("#selectBatch").empty();
-				for(var i=0;i<batch0.length;i++){
-					$("#selectBatch").append('<option value="">请选择批次</option>');
-					$("#selectBatch").append('<option value="'+batch1[i]+'">第'+batch0[i]+'批次</option>');
-				}
-			}
-		}
 		$('#selectBatch').change(function(){  
 			   var batchId=$(this).children('option:selected').val();  
 			   if(batchId!=''){
@@ -273,6 +256,7 @@ $(document).ready(function() {
 						</h1>
 					</div>
 					<!-- 甲方--(门窗厂采购) -->
+					<#if record.type.getId()==0>
 					<#if type==0>
 					<#if record.contractType.getId()!=0>
 					<form action="" method="post">
@@ -384,6 +368,7 @@ $(document).ready(function() {
 						</div>
 					</form>
 					</#if> 
+					<#else> 
 					<!-- 变更 -->
 					<#if record.type.getId()==1>
 					<form action="" method="post">
@@ -436,9 +421,14 @@ $(document).ready(function() {
 							</div>
 							<div class="item">
 								<label>对应批次</label><select name="" id="selectBatch">
+									<#if batch??>
 									<option value="">请选择批次</option>
-									<option value="">第二批次</option>
-									<option>第三批次</option>
+									<#list batch as batch>
+									<option value="${batch.id}">第${batch.batchNo}批次</option>
+									</#list>
+									<#else>
+									<option>没有批次</option>
+									</#if>
 								</select>
 							</div>
 							<div class="item">
@@ -454,6 +444,7 @@ $(document).ready(function() {
 						</div>
 					</form>
 					</#if>
+		</#if> 
 				</div>
 			</div>
 		</div>

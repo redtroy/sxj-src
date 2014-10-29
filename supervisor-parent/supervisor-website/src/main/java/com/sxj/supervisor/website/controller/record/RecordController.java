@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
@@ -258,7 +259,7 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			if (record.getType().getId() == 2) {
-				String batch = recordService.getBatch(recordId);
+				List<ContractBatchEntity> batch = recordService.getBatchList(recordId);
 				map.put("batch", batch);
 			}
 			map.put("record", record);// 备案类型

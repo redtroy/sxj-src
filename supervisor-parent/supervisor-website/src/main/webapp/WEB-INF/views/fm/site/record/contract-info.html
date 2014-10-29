@@ -103,9 +103,11 @@ $(document).ready(function(){
 					<th>金额</th>
 					<th>备注说明</th>
 				</tr>
-				<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
-				item> <#assign n = (n+item.quantity)?int > <#assign m =
-				(m+item.amount)?int >
+				<#assign n = 0> 
+				<#assign m = 0> 
+				<#list contractModel.itemList as item> 
+				<#assign n = (n+item.quantity)?int > 
+				<#assign m = (m+item.amount)?int >
 				<tr>
 					<td>${item.productName}</td>
 					<td>${item.productModel}</td>
