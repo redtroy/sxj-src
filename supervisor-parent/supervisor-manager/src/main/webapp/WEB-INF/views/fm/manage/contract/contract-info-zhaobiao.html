@@ -44,6 +44,20 @@
 					return false; }
 			});
 		});
+		var quantity=0;
+		var amount=0;
+		$(".quantity").each(function(){
+			if($(this).html()){
+				quantity+=parseInt($(this).html());
+			}
+		});
+		$(".amount").each(function(){
+			if($(this).html()){
+				amount+=parseFloat($(this).html());
+			}
+		});
+		$(".tquantity").html(quantity+"镗");
+		$(".tamount").html(amount.toFixed(2)+"元");
 		
 	});
 	</script>
@@ -78,15 +92,14 @@
 				<th>备注说明</th>
 				<th class="rLine">&nbsp;</th>
 			</tr>
-			<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
-			item> <#assign n = (n+item.quantity)?number > <#assign m =
-			(m+item.amount)?number >
+			<#list contractModel.itemList as
+			item> 
 			<tr>
 				<td>${item.productName}</td>
 				<td>${item.windowType.getName()}</td>
-				<td>${item.quantity}</td>
+				<td class="quantity">${item.quantity}</td>
 				<td>${item.price}</td>
-				<td>${item.amount}</td>
+				<td class="amount">${item.amount}</td>
 				<td>${item.remarks}</td>
 				<td><#if item.updateState==1><span class="color-red">！</span></#if>
 				</td>
@@ -95,9 +108,9 @@
 			<tr>
 				<td><strong>合计</strong></td>
 				<td>&nbsp;</td>
-				<td>${n}镗</td>
+				<td class="tquantity">${n}镗</td>
 				<td>&nbsp;</td>
-				<td>${m}元</td>
+				<td class="tamount">${m}元</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 			</tr>
