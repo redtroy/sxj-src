@@ -10,6 +10,7 @@
 	<modules>
 		<module>rfid-dao</module>
 		<module>rfid-service</module>
+		<module>rfid-website</module>
 	</modules>
 	<properties>
 		<com.sxj.spring>4.2.3</com.sxj.spring>

@@ -79,14 +79,15 @@ function toRemove(id){
 		$.get("${basePath}system/remove.htm?accountId="+id,function(data){
 			if(data.isOK==true){
 				succInfo(function(){
-					query();
+					var currentPage= $("#rightBar").find("#pager").attr("currentPage");
+					query(currentPage);
 				},"删除成功！");
 				
 			}else{
 				errorInfo("删除失败！");
 			}
 		})
-	});
+	},"是否确认删除？");
 }
 
 function edit(id){

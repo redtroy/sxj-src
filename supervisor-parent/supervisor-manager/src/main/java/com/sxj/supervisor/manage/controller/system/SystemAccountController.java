@@ -25,7 +25,7 @@ import com.sxj.supervisor.model.system.SysAccountQuery;
 import com.sxj.supervisor.service.system.IFunctionService;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
-import com.sxj.supervisor.service.system.IqueryOperation;
+import com.sxj.supervisor.service.system.IQueryOperation;
 import com.sxj.supervisor.validator.hibernate.AddGroup;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -46,7 +46,7 @@ public class SystemAccountController extends BaseController {
 	private IRoleService roleService;
 
 	@Autowired
-	private IqueryOperation queryOpreation;
+	private IQueryOperation queryOpreation;
 
 	@RequestMapping("account-list")
 	public String getSysAccountList(SysAccountQuery query, ModelMap map) {
