@@ -49,4 +49,24 @@ public class StartmrfidController extends BaseController {
 			throw new WebException("查询合同信息错误");
 		}
 	}
+
+	@RequestMapping("query_contractNo")
+	public @ResponseBody Map<Object, Object> query_contractNo(String contractNo)
+			throws WebException {
+		try {
+			Map<Object, Object> map = new HashMap<Object, Object>();
+			ContractModel cm = contractService
+					.getContractModelByContractNo(contractNo);
+			if (cm != null) {
+				map.put("isOk", "ok");
+				map.put("cm", cm);
+			} else {
+				map.put("isOk", "false");
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("根据合同号查询合同信息错误", e, this.getClass());
+			throw new WebException("根据合同号查询合同信息错误");
+		}
+	}
 }
