@@ -1,8 +1,42 @@
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家电子商贸平台</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<@b.pageScript/>
+<script>
+function query(page){
+	var params="accountNo=${query.accountNo}";
+	 if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+	$.post("${basePath}system/query_operation.htm",params,function(data){
+		var res=$(data).find("#rightBar");
+		var pager=$(data).find("#rightBar").find("#pager");
+		$("#rightBar").empty();
+		$("#rightBar").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+</script>
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<@b.menuPath/>
+<div id="mainBg" class="ly-clearFix yard-1200">
+ 	<div id="leftList"><@b.leftMenu /></div>
     <!-- InstanceBeginEditable name="rightBar" -->
+    <div id="rightBar">
     <div class="producedBox">
       <h2 class="title">管理员操作记录</h2>
-      <div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div> 
+       <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList viewTable">
         <col width="30%" />
         <col width="70%" />
@@ -21,6 +55,11 @@
         </tr>
         </#list>
       </table>
-      <div class="btnBox"><a href="javascript:query();" class="button button-gray button-small">返回</a></div>
+      <div class="btnBox"><a href="javascript:history.go(-1)" class="button button-gray button-small">返回</a></div>
      </div>
-
+</div>
+</div>
+</div>
+<@b.footer />
+</body>
+</html>

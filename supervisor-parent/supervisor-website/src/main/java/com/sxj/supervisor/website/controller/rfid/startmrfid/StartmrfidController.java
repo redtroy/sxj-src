@@ -1,5 +1,6 @@
 package com.sxj.supervisor.website.controller.rfid.startmrfid;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +11,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -24,6 +27,9 @@ public class StartmrfidController extends BaseController {
 	@Autowired
 	private IContractService contractService;
 
+	@Autowired
+	private IWindowRfidService wind;
+
 	@RequestMapping("startmrfid_list")
 	public String startmrfid_list(ModelMap map) {
 		WindowTypeEnum[] type = WindowTypeEnum.values();
@@ -32,13 +38,15 @@ public class StartmrfidController extends BaseController {
 	}
 
 	@RequestMapping("query")
-	public @ResponseBody Map<Object, Object> query(ContractQuery query)
+	public @ResponseBody Map<Object, Object> query(ContractQuery query, Long num)
 			throws WebException {
 		try {
 			List<ContractModel> list = contractService.queryContracts(query);
 			Map<Object, Object> map = new HashMap<Object, Object>();
 			if (list.size() > 0) {
+				String[] bq = wind.getMaxRfidNo(query.getRefContractNo(), num);
 				map.put("isOk", "ok");
+				map.put("bq", bq);
 				map.put("list", list);
 			} else {
 				map.put("isOk", "false");
@@ -67,6 +75,30 @@ public class StartmrfidController extends BaseController {
 		} catch (Exception e) {
 			SxjLogger.error("根据合同号查询合同信息错误", e, this.getClass());
 			throw new WebException("根据合同号查询合同信息错误");
+		}
+	}
+
+	/**
+	 * 通过合同号联想查询
+	 */
+	@RequestMapping("lx_query")
+	public @ResponseBody Map<Object, Object> lx_query(String keyword)
+			throws WebException {
+		try {
+			Map<Object, Object> map = new HashMap<Object, Object>();
+			List<ContractEntity> list = contractService
+					.getContractByRefContractNo(keyword);
+			List<Map<String, String>> addlist = new ArrayList<Map<String, String>>();
+			for (ContractEntity contractEntity : list) {
+				Map<String, String> cmap = new HashMap<String, String>();
+				cmap.put("title", contractEntity.getRefContractNo());
+				addlist.add(cmap);
+			}
+			map.put("data", addlist);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("联想查询错误", e, this.getClass());
+			throw new WebException("联想查询错误");
 		}
 	}
 }

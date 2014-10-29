@@ -459,7 +459,10 @@ $(document).ready(function(){
 </#if>
 </#macro>
 <#macro leftMenu>
-<script>$("#leftList").load("${basePath}menu.htm");</script>
+<script>
+var account="${Session.userinfo.accountNo}";
+$("#leftList").load("${basePath}menu.htm?account="+account);
+</script>
 </#macro>
 <#macro pager>
 <!--<div id="pager" class="jPaginate" totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div>  -->

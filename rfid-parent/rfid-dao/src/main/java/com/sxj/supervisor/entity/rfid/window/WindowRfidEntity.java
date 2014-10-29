@@ -53,7 +53,7 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	private String purchaseNo;
 
 	/**
-	 * 采购合同号
+	 * 招标合同号
 	 */
 	@Column(name = "CONTRACT_NO")
 	private String contractNo;
