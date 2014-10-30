@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.rfid.window;
 import java.util.List;
 
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.util.exception.ServiceException;
@@ -34,6 +35,14 @@ public interface IWindowRfidService {
 	 */
 	public void updateWindowRfid(List<WindowRfidEntity> wins)
 			throws ServiceException;
+
+	/**
+	 * 启用RFID
+	 * 
+	 * @throws ServiceException
+	 */
+	public void startWindowRfid(String minRfid, String maxRfid, String gRfid,
+			String lRfid, WindowTypeEnum windowType) throws ServiceException;
 
 	/**
 	 * 批量新增
