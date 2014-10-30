@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.IMemberLogDao">
+	<resultMap id="MemberLogResultMap"
+		type="com.sxj.supervisor.entity.member.MemberLogEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
+		<result property="nowPage" column="NOW_PAGE" jdbcType="VARCHAR" />
+		<result property="prePage" column="PRE_PAGE" jdbcType="VARCHAR" />
+		<result property="nextpage" column="NEXT_PAGE" jdbcType="VARCHAR" />
+		<result property="waitTime" column="SITE_TIME" jdbcType="VARCHAR" />
+		<result property="callTime" column="CALL_TIME" jdbcType="VARCHAR" />
+		<result property="ip" column="IP" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 条件查询 -->
+	<select id="queryLogs" resultMap="MemberLogResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_MEMBER_LOG WHERE 1=1]]>
+		<!-- 会员号 -->
+		<if test="condition.memberNo != null and condition.memberNo !=''">
+			<![CDATA[AND MEMBER_NO=#{condition.memberNo}]]>
+		</if>
+		<![CDATA[ ORDER BY callTime DESC]]>
+	</select>
+</mapper>
