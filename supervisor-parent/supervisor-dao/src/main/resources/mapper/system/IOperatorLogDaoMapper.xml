@@ -16,5 +16,6 @@
 		<if test="condition.accountNo != null and condition.accountNo!=''">
 			<![CDATA[ AND ACCOUNT_NO=#{condition.accountNo}]]>
 		</if>
+		<![CDATA[ ORDER BY OPER_TIME DESC]]>
 	</select>
 </mapper>

@@ -83,7 +83,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 				condition.addCondition("applyNo", applyNo);
 				List<RfidPurchaseEntity> list = purchaseDao
 						.queryList(condition);
-				if (list.size() == 0) {
+				if (list.size() > 0) {
 					return false;
 				}
 			}

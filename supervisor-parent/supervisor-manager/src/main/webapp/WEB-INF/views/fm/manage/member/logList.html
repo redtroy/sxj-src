@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<@b.pageScript/>
+<script>
+function query(page){
+	var params=$("#search_form").serialize();
+	if(page!=undefined||page!=null){
+	   params=params+"&currentPage="+page;
+  	}
+	$.post("${basePath}member/log/query.htm",params,function(data){
+		var res=$(data).find("#rightBar").children("#res_table");
+		var pager=$(data).find("#rightBar").children("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+</script>
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<@b.menuPath/>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+ 	<div id="leftList"><@b.leftMenu /></div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">会员行为跟踪管理</h2>
+      <div id="searchBox">
+     	 <form action="javascript:void(0);" id="search_form">
+     		  会员ID<input type="text" name="memberNo" value="${query.memberNo}">
+     	 	 停留页面<input type="text" name="nowPage" value="">
+      		 上游页面<input type="text" name="prePage" value="">
+       		下游页面<input type="text" name="nextpage" value="">
+     	 	 访问时间段
+      		 <input type="text" name="startTime" datepicker id="time1" value="">-
+      		 <input type="text" name="endTime" datepicker id="time2" value="">
+       		 <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+        </form>
+    </div>
+     <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
+        <col width="10%"/>
+        <col width="15%"/>
+        <col width="15%" />
+        <col width="15%" />
+        <col width="15%" />
+		<col width="15%" />
+		<col width="15%" />
+        <tr>
+          <th>会员ID</th>
+          <th>停留页面</th>
+          <th>上游页面</th>
+          <th>下游页面</th>
+          <th>停留时间</th>
+		  <th>访问时间</th>
+          <th class="rLine">访问IP</th>
+        </tr>
+        <#list list as log>
+        <tr>
+          <td>${log.memberNo}</td>
+          <td>${log.nowPage}</td>
+          <td>${log.prePage}</td>
+          <td>${log.nextpage}</td>
+		  <td>${log.waitTime}</td>
+		  <td><#if (log.callTime??)>${log.callTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+          <td>${log.ip}</td>
+        </tr>
+        </#list>
+      </table>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>

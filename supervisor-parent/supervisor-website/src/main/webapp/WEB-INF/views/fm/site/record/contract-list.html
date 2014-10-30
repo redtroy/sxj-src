@@ -488,14 +488,14 @@ function busunSeav(){
 									</#if>
 								<#else>
 									<#if record.type.getId()==0>
-										<#if record.contractNo??>
+										<#if record.contractNo?exists>
+											<a href="javascript:biangeng('${record.id}');" class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+											<a href="javascript:busun('${record.id}');" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+										<#else>
 											 <a href="to_modify.htm?recordId=${record.id}" class="lnk-blue">
 											 	<span class="icon icon16 icon-edit"></span>修改</a>
 											 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
 											 <span class="icon icon16 icon-del"></span>删除</a> 
-										<#else>
-											<a href="javascript:biangeng('${record.id}');" class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
-											<a href="javascript:busun('${record.id}');" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
 										</#if>
 									<#elseif record.type.getId()==1>
 										<#if record.state.getId()==3>
@@ -520,7 +520,7 @@ function busunSeav(){
 									</#if>
 								</#if>
 							<#else>
-								<#if record.contractNo??>
+								<#if record.contractNo?exists>
 								-
 								<#else>
 								<a href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span

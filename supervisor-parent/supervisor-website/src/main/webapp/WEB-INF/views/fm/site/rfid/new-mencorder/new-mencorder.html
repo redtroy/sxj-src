@@ -54,6 +54,10 @@ function sub(){
 		 messageInfo('数量不能为空');
 		 return false;
 	 }
+	 if (count<=0){
+		 messageInfo('数量不能小于等于0');
+		 return false;
+	 }
 	 if (check(contractNo,count)){
 		 return false;
 	 }else{
@@ -61,7 +65,7 @@ function sub(){
 			 if (data.isOk="ok"){
 				 succInfo(function(){
 					 window.location.href="${basePath}rfid/mencordermgr/mencordermgr_list.htm"; 
-				 },"添加成功！");
+				 },"申请成功！");
 				
 			 }
 		 })
@@ -97,7 +101,7 @@ function sub(){
           <input class="input input-w180h36" name="count" id="count" value=""/>
         </div>
        <div class="item mt10">
-          <label>&nbsp;</label><a href="" onclick="sub();return false;" class="button button-orange mr15" title="点申请时需要判断该笔招标合同关联的RFID数量是否已经达到合同里的门窗数量，如果超过门窗数量不可申请，提示错误信息">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
+          <label>&nbsp;</label><a href="javascript:void(0);" onclick="sub();" class="button button-orange mr15" title="点申请时需要判断该笔招标合同关联的RFID数量是否已经达到合同里的门窗数量，如果超过门窗数量不可申请，提示错误信息">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
         </div>
       </div>
     </div>

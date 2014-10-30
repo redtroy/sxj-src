@@ -389,35 +389,6 @@ public class ContractServiceImpl implements IContractService {
 							bmList));
 					contractModel.setBatchList(newBatchModelLIst);
 				}
-				// // 时间轴
-				// if (contract.getStateLog() != null
-				// && contract.getStateLog().length() > 0) {
-				// List<StateLogModel> stateLogModel = null;
-				// try {
-				// stateLogModel = JsonMapper
-				// .nonEmptyMapper()
-				// .getMapper()
-				// .readValue(contract.getStateLog(),
-				// new TypeReference<List<StateLogModel>>() {
-				// });
-				// } catch (JsonParseException e) {
-				// e.printStackTrace();
-				// } catch (JsonMappingException e) {
-				// e.printStackTrace();
-				// } catch (IOException e) {
-				// e.printStackTrace();
-				// }
-				// // 时间排序
-				// Collections.sort(stateLogModel,
-				// new Comparator<StateLogModel>() {
-				// public int compare(StateLogModel arg0,
-				// StateLogModel arg1) {
-				// return arg0.getModifyDate().compareTo(
-				// arg1.getModifyDate());
-				// }
-				// });
-				// contractModel.setStateLogList(stateLogModel);// 时间轴
-				// }
 				// 变更信息
 
 				String modifyRecordIds = this.recordIdArr(
@@ -432,7 +403,7 @@ public class ContractServiceImpl implements IContractService {
 							contract.getContractNo());
 					List<ModifyContractEntity> modifyList = contractModifyDao
 							.queryModify(modifyCondition);
-					if (modifyList != null) {
+					if (modifyList != null && modifyList.size()>0) {
 						List<ContractModifyModel> modifymodelList = new ArrayList<ContractModifyModel>();
 						for (int i = 0; i < modifyList.size(); i++) {
 							ContractModifyModel cmm = new ContractModifyModel();
@@ -486,6 +457,8 @@ public class ContractServiceImpl implements IContractService {
 							modifymodelList.add(cmm);
 						}
 						contractModel.setModifyList(modifymodelList);
+					}else{
+						contractModel.setModifyList(null);
 					}
 
 				}
@@ -555,6 +528,8 @@ public class ContractServiceImpl implements IContractService {
 						contractModel.setReplenishList(crmList);
 					}
 
+				}else{
+					contractModel.setReplenishList(null);
 				}
 			}
 			return contractModel;
@@ -618,6 +593,7 @@ public class ContractServiceImpl implements IContractService {
 			condition.addCondition("endRecordDate", query.getEndRecordDate());// 结束备案时间
 			condition.addCondition("confirmState", query.getConfirmState());// 确认状态
 			condition.addCondition("state", query.getState());// 合同状态
+			condition.addCondition("memberIdB", query.getMemberIdB());// 签订会员ＩＤ
 			condition.setPage(query);
 
 			List<ContractEntity> contractList = contractDao
@@ -1126,10 +1102,11 @@ public class ContractServiceImpl implements IContractService {
 
 	@Override
 	@Transactional
-	public int getContractByZhaobiaoContractNo(String contractNo) {
+	public int getContractByZhaobiaoContractNo(String contractNo,MemberEntity member) {
 		try {
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
+			query.setMemberIdB(member.getMemberNo());
 			query.setContractType("0");
 			List<ContractModel> res = queryContracts(query);
 			return res.size();

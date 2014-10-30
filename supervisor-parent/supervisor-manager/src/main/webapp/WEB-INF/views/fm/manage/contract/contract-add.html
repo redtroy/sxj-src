@@ -133,10 +133,10 @@ var ul_validform;
 		dialogBox(function(){
 			$.post("addContract.htm", $("#addForm").serialize(), function(data) {
 				if (data.isOK == 'ok') {
-					alert("生成合同成功");
+					messageInfo("生成合同成功");
 					window.location.href = "${basePath}record/recordList.htm";
 				} else {
-					alert("生成合同失败");
+					messageInfo("生成合同失败");
 				}
 			});
 		},"是否生成合同?");
@@ -149,7 +149,9 @@ var ul_validform;
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
 				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val();
+				if(num!=''){
 				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val(getFloatStr(num));
+				}
 				if(num==''){
 					amount+=parseFloat(parseFloat(0));
 				}else{
@@ -163,19 +165,24 @@ var ul_validform;
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
 				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(2).find("input").val();
+				if(num!=''){
+					$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(2).find("input").val(getFloatStr(num));
+				}
 				if(num==''){
 					quantity+=parseFloat(0);
 				}else{
 					quantity+=parseFloat(num);
 				}
 			}
-			$("#quantitySum").html(quantity);
+			$("#quantitySum").html(getFloatStr(quantity));
 		});
 		$(".priceClass").change(function(){
 			var size=$("#TbData tr").filter(".CaseRow").size();
 			for (var i=0;i<size;i++){
 				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
+				if(num!=''){
 				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(getFloatStr(num));
+				}
 			}
 		});
 		
@@ -257,7 +264,7 @@ var ul_validform;
 							<li><label>合同期限</label><input type="text" value=""
 								name="contract.validityDate" datepicker datatype="*1-100" readonly="readonly" errormsg="请选择正确的日期!" nullmsg="请选择合同期限！" /></li>
 							<li><label>生效时间</label><input type="text" value=""
-								name="contract.startDate" datepicker datatype="*1-100" readonly="readonly" errormsg="请选择正确的日期!" nullmsg="请选择生效时间！" /></li>
+								readonly="readonly"/></li>
 						</ul>
 						<table border="0" cellpadding="0" cellspacing="0" id="TbData"
 							class="tabList producedTable">
@@ -281,10 +288,9 @@ var ul_validform;
 							<tr id="trDataRow1" class="CaseRow">
 								<td><input type="text" value="" name="items[0].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！" /></td>
 								<td><input type="text" value="" name="items[0].productModel" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！"/></td>
-								<td><input type="text" value="" name="items[0].quantity" class="quantityClass" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                                    onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" datatype="n1-20" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
+								<td><input type="text" value="" name="items[0].quantity" class="quantityClass"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
 								<td><input type="text" value="" name="items[0].price" class="priceClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" /></td>
-								<td><input type="text" value="" name="items[0].amount" class="amountClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
+								<td><input type="text" value="" name="items[0].amount" class="amountClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  /></td>
 								<td><textarea id="textarea" cols="45" rows="1"
 										name="items[0].remarks"></textarea></td>
 								<td><a href="javascript:void(0);" class="lnk-green"

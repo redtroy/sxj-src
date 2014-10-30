@@ -19,16 +19,18 @@ import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
-import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
@@ -51,6 +53,9 @@ public class RecordServiceImpl implements IRecordService {
 
 	@Autowired
 	private IContractBatchDao batchDao;
+	
+	@Autowired
+	private IMemberService memberService;
 
 	@Autowired
 	private IStorageClientService storageClientService;
@@ -103,7 +108,6 @@ public class RecordServiceImpl implements IRecordService {
 			if (StringUtils.isNotEmpty(record.getImgPath())) {
 				nowPath = record.getImgPath().split(",");
 			}
-			StringBuffer newPath = new StringBuffer();
 			if (oldPath != null && oldPath.length > 0) {
 				for (int i = 0; i < oldPath.length; i++) {
 					if (StringUtils.isNotEmpty(oldPath[i])) {
@@ -120,6 +124,18 @@ public class RecordServiceImpl implements IRecordService {
 				}
 			}
 		}
+		//更改用户---修改备案状态
+		if(oldRe.getContractType().getId()!=0){
+			MemberEntity member = memberService.memberInfo(record.getMemberIdB());
+			if(member!=null){
+				if(member.getType().getId()==1){
+					record.setContractType(ContractTypeEnum.glass);
+				}else if(member.getType().getId()==2){
+					record.setContractType(ContractTypeEnum.extrusions);
+				}
+			}
+		}
+		
 		recordDao.updateRecord(record);
 	}
 

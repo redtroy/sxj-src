@@ -34,6 +34,7 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberLogEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
@@ -43,6 +44,7 @@ import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
+import com.sxj.supervisor.service.member.IMemberLogService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
@@ -64,6 +66,9 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IMemberRoleService roleService;
+
+	@Autowired
+	private IMemberLogService logService;
 
 	@Autowired
 	private IStorageClientService storageClientService;
@@ -394,7 +399,7 @@ public class BasicController extends BaseController {
 	public void enter(HttpSession session, HttpServletRequest request,
 			String url) {
 		Date enterTime = (Date) session.getAttribute("enterTime");
-
+		Date nowTime = new Date();
 		String currentUrl = (String) session.getAttribute("currentUrl");
 		String nextUrl = (String) session.getAttribute("nextUrl");
 		if (currentUrl == null) {
@@ -405,17 +410,24 @@ public class BasicController extends BaseController {
 		session.setAttribute("currentUrl", nextUrl);
 		session.setAttribute("nextUrl", url);
 
-		if (enterTime != null) {
-			MemberEntity principal = (MemberEntity) SecurityUtils.getSubject()
-					.getPrincipal();
-			System.out.println("Enter At: " + enterTime + "   Leave at: "
-					+ new Date());
-			System.out.println("Entering page: " + principal.getMemberNo()
-					+ "pre:   " + session.getAttribute("previousUrl")
-					+ "------current:    " + session.getAttribute("currentUrl")
-					+ "------next:     " + session.getAttribute("nextUrl"));
+		MemberEntity principal = (MemberEntity) SecurityUtils.getSubject()
+				.getPrincipal();
+		if (principal != null) {
+			MemberLogEntity log = new MemberLogEntity();
+			log.setMemberNo(principal.getMemberNo());
+			log.setMemberName(principal.getName());
+			log.setNowPage(nextUrl);
+			log.setNextpage(url);
+			log.setPrePage(currentUrl);
+			log.setCallTime(enterTime);
+			log.setIp(request.getRemoteHost());
+			if (enterTime != null) {
+				long waitTime = (nowTime.getTime() - enterTime.getTime()) / 1000;
+				log.setWaitTime(waitTime + "");
+			}
+			logService.addLog(log);
 		}
-		session.setAttribute("enterTime", new Date());
+		session.setAttribute("enterTime", nowTime);
 
 	}
 }
