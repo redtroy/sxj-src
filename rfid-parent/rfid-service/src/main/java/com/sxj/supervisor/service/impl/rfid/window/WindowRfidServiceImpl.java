@@ -144,4 +144,11 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 		}
 
 	}
+
+	@Override
+	public void updateWindowRfid(List<WindowRfidEntity> wins)
+			throws ServiceException {
+		// TODO Auto-generated method stub
+
+	}
 }

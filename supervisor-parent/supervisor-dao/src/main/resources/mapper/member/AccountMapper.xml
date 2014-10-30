@@ -51,6 +51,6 @@
 			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
 			<![CDATA[AND A.REG_DATE >=#{condition.startDate} AND A.REG_DATE <= #{condition.endDate}]]>
 		</if>
-		<![CDATA[ ORDER BY A.ACCOUNT_NO,A.STATE DESC]]>
+		<![CDATA[ ORDER BY A.STATE desc,A.ACCOUNT_NO DESC]]>
 	</select>
 </mapper>
