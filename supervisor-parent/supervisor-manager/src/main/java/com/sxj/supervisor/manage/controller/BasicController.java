@@ -379,6 +379,7 @@ public class BasicController extends BaseController {
 		session.setAttribute("enterTime", new Date());
 
 	}
+
 	/**
 	 * 甲方联想
 	 * 

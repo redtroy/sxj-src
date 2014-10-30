@@ -29,6 +29,7 @@ jQuery(document).ready(function($) {
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <@b.errorInfo/>
+<@b.dialogBox/>
 <script>
  function query(page){
 		var params=$("#search_form").serialize();
@@ -46,21 +47,19 @@ jQuery(document).ready(function($) {
 		})
  }
  function del(id,applyNo){
-	 $("#remove_div").show();
-	 
-	  $("#remove_div button:eq(0)").unbind("click");
-	  $("#remove_div button:eq(0)").attr("value",id).attr("stateId",applyNo).click(function(){
-	  $.post("del.htm",{id:$(this).attr("value"),applyNo:$(this).attr("stateId")},function(data){
-		if (data.flag=='ok'){
-			$("#remove_div").hide();
-			query();
-		}else{
-			$("#remove_div").hide();
-			messageInfo("后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！");
-		}
-	})
-	  })
-	 
+	 dialogBox(function(){
+		 $.post("del.htm",{id:id,applyNo:applyNo},function(data){
+				if (data.flag=='ok'){
+					//$("#remove_div").hide();
+					succInfo(function(){
+						query($("#pager").attr("currentPage"));
+					},"删除成功！");
+				}else{
+					//$("#remove_div").hide();
+					messageInfo("该笔申请单已生成采购单，不能删除！");
+				}
+			});
+	 },"是否确认删除？"); 
 }
 function closeDiv(divId){
 	$("#"+divId).css("display","none");

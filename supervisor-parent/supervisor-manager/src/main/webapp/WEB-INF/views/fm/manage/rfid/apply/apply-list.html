@@ -129,7 +129,7 @@ jQuery(document).ready(function($) {
         </select></p>
        申请单时间段
        <input type="text" name="starApplyDate" value="" datepicker />-<input type="text" name="endApplyDate" value="" datepicker />
-        <a class="btn btn-blue" onclick="query();return false;"><span>查询</span></a>
+        <a class="btn btn-blue" onclick="query();"><span>查询</span></a>
         </form>
     </div>
     <div id="message_div"></div>
@@ -164,7 +164,7 @@ jQuery(document).ready(function($) {
           <td>${model.rfidType.getName()}</td>
           <td>${model.contractNo}</td>
 		  <td id="count">${model.count}</td>
-		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <#if (model.payState.id==1)>
           <td id="pay"><button class="btn btn-gray" onclick="ok('${model.id}');return false;"><span>确认收款</span></button></td>
           <#else>

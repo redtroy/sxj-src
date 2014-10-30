@@ -13,11 +13,15 @@
 	 var memberNo= "${member.memberNo}";
 	 var memberName="${member.name}";
 	 var count=$("#count").val();
+	 if (count=="" || count==null){
+		 messageInfo('数量不能为空');
+		 return false;
+	 }
 	 if (!count.match(/^[0-9]*$/)){
 		 messageInfo("请输入有效数字！");
 		 return false;
 	 }
-	 if (count=="" || count==null){
+	 if (count<=0){
 		 messageInfo('数量不能为空');
 		 return false;
 	 }

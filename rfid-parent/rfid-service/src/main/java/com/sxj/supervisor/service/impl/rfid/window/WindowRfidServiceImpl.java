@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
@@ -148,6 +149,13 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	@Override
 	public void updateWindowRfid(List<WindowRfidEntity> wins)
 			throws ServiceException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void startWindowRfid(String minRfid, String maxRfid, String gRfid,
+			String lRfid, WindowTypeEnum windowType) throws ServiceException {
 		// TODO Auto-generated method stub
 
 	}

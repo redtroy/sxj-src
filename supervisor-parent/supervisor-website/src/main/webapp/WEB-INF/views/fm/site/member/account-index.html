@@ -38,13 +38,13 @@ function closeDiv(divId){
 	//editId=id;
   }
   //提交修改密码
-  function save_pwd(){
+  function save_pwd(id){
 	  if (!pwd_validform.check()){
 			return false;
 		}
 	  var pwd1=$("#pwd1").val();
 	  var pwd2=$("#pwd2").val();
-	  $.post("${basePath}member/account/save_pwd.htm",{id:editId,password:pwd1},function(data){
+	  $.post("${basePath}member/account/save_pwd.htm",{id:id,password:pwd1},function(data){
 		  succInfo(function(){
 			  $('.maskdivgen').fadeOut(100);
 			  $('.passwordPop').slideUp(200);
@@ -88,11 +88,11 @@ function closeDiv(divId){
 </div>
 <@b.footer />
 <div class="modal-wrap popDemo contPop passwordPop" style="display:none;width:550px;" id="edit_pwd">
-      <div class="modal-header"><span class="close" onclick="closeDiv('${member.id}');">关闭</span></div>
+      <div class="modal-header"><span class="close" onclick="closeDiv('edit_pwd');">关闭</span></div>
       <div class="modal-body">
         <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>
         <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="save_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="closeDiv('edit_pwd');">取消</button></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="save_pwd('${Session.userinfo.account.id}')">确认修改</button><button class="button button-gray " onclick="closeDiv('edit_pwd');">取消</button></div>
   </div>
 </div>
     <div class="maskdivgen" style="display:none"></div>

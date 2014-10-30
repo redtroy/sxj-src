@@ -46,7 +46,7 @@ function query(){
 					$("#contract_b").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
 				}
 			}
-			console.log(data.bq);
+			$("#bq_qj").text(data.bq[0]+"-"+data.bq[1])
 			pc_a();
 			pc_b();
 		}else{
@@ -122,7 +122,7 @@ function star(){
 <div class="item"><label>启用标签数量</label><input class="input input-w180h36" id="num"/></div>
 <div class="item"><label>招标合同号</label> <input class="input input-w180h36" value="" / id="refContractNo" >&nbsp;&nbsp;<button class="button button-green" title="根据招标合同号和启用数量提取编号值最小的数量的标签区间在下方显示" onclick="query();return false;">获取标签编号区间</button></div>
 <div class="item">
-  <label>启用标签编号区间</label><span class="color-blue ml5" >AAAA00001-AAAA00050</span></div>
+  <label>启用标签编号区间</label><span class="color-blue ml5" id="bq_qj"></span></div>
 <div class="item">
   <label>对应玻璃采购合同</label><select name="" id="contract_a">
   </select></div>
