@@ -130,7 +130,7 @@ $(document).ready(function() {
 			return;
 		}
 		dialogBox(function(){
-		$.post("modify.htm",$('form').serialize(),function(data){
+		$.post("modify.htm",$('#form').serialize(),function(data){
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -153,7 +153,7 @@ $(document).ready(function() {
 			return;
 		}
 		dialogBox(function(){
-		$.post("modify.htm",$('form').serialize(),function(data){
+		$.post("modify.htm",$('#form').serialize(),function(data){
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -181,7 +181,7 @@ $(document).ready(function() {
 			return;
 		}
 		dialogBox(function(){
-		$.post("modify.htm",$('form').serialize(),function(data){
+		$.post("modify.htm",$('#form').serialize(),function(data){
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -199,7 +199,7 @@ $(document).ready(function() {
 			return;
 		}
 		dialogBox(function(){
-		$.post("modify.htm",$('form').serialize(),function(data){
+		$.post("modify.htm",$('#form').serialize(),function(data){
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -264,8 +264,8 @@ $(document).ready(function() {
 					<#if record.type.getId()==0>
 					<#if type==0>
 					<#if record.contractType.getId()!=0>
-					<form action="" method="post">
-						<input type="hidden" name="" id="id" value="${record.id}" />
+					<form id="form" action="" method="post">
+						<input type="hidden" name="id" id="id" value="${record.id}" />
 						<div class="contBox">
 							<div class="item">
 								<label>备案号</label> ${record.recordNo}
@@ -278,7 +278,7 @@ $(document).ready(function() {
 									id="memberNameB" name="memberNameB"
 									value="${record.memberNameB}" />
 									<input type="hidden"
-									id="memberNameB" name="memberIdB"
+									id="memberIdB" name="memberIdB"
 									value="${record.memberIdB}" />
 							</div>
 							<div class="item">
@@ -305,7 +305,8 @@ $(document).ready(function() {
 					</form>
 					<#else>
 					<!-- 甲方 门窗厂 招标 -->
-					<form action="" method="post">
+					<form id="form"  action="" method="post">
+					<input type="hidden" name="id" id="id" value="${record.id}" />
 						<div class="contBox">
 							<div class="item">
 								<label>备案号</label> ${record.recordNo}
@@ -339,7 +340,8 @@ $(document).ready(function() {
 					</#if> </#if> 
 					<#if type!=0>
 					<!-- 乙方(玻璃厂/型材厂 采购) -->
-					<form action="" method="post">
+					<form id="form"  action="" method="post">
+					<input type="hidden" name="id" id="id" value="${record.id}" />
 						<div class="contBox">
 							<div class="item">
 								<label>备案号</label>${record.recordNo}
@@ -347,8 +349,8 @@ $(document).ready(function() {
 							<div class="item">
 								<label>甲方</label> <input class="input input-w270h30"
 									value="${record.memberNameA}" name="memberNameA"
-									id="memberNameA" /> <input type="hidden" name="id" id="memberIdA"
-									value="${record.id}" />
+									id="memberNameA" /> <input type="hidden" name="memberIdB" id="memberIdB"
+									value="${record.memberIdA}" />
 							</div>
 							<div class="item">
 								<label>乙方</label>${record.memberNameB}
@@ -376,7 +378,8 @@ $(document).ready(function() {
 					<#else> 
 					<!-- 变更 -->
 					<#if record.type.getId()==1>
-					<form action="" method="post">
+					<form id="form" action="" method="post">
+					<input type="hidden" name="id" id="id" value="${record.id}" />
 						<div class="contBox">
 							<div class="item">
 								<label>备案号</label> ${record.recordNo}
@@ -403,7 +406,8 @@ $(document).ready(function() {
 					</#if>
 					<!-- 补损 -->
 					<#if record.type.getId()==2>
-					<form action="" method="post">
+					<form id="form" action="" method="post">
+					<input type="hidden" name="id" id="id" value="${record.id}" />
 						<div class="contBox">
 							<div class="item">
 								<label>备案号</label> ${record.recordNo}
