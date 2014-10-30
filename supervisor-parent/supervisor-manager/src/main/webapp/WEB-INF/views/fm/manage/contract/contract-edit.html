@@ -147,6 +147,7 @@ var caculateRow=function($tr){
 		});
 		$(".lnk-red").live("click",function(){
 			$(this).parent().parent().remove();
+			caculate();
 		})
 	});
 //将传入数据转换为字符串,并清除字符串中非数字与.的字符
