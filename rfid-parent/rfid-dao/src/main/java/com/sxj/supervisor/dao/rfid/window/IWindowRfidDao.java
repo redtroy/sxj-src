@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
+import com.sxj.mybatis.orm.annotations.BatchUpdate;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
@@ -59,6 +60,15 @@ public interface IWindowRfidDao {
 	 **/
 	@Update
 	public void updateWindowRfid(WindowRfidEntity window) throws SQLException;
+
+	/**
+	 * 更新门窗RFID
+	 *
+	 * @param window
+	 **/
+	@BatchUpdate
+	public void batchUpdateWindowRfid(WindowRfidEntity[] windows)
+			throws SQLException;
 
 	/**
 	 * 获取门窗RFID信息

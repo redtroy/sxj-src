@@ -51,6 +51,10 @@
 			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
 		</if>
 		<if
+			test="condition.minRfidNo != null and condition.maxRfidNo != null and  condition.minRfidNo != '' and condition.maxRfidNo != ''">
+			<![CDATA[AND RFID_NO BETWEEN #{condition.minRfidNo} AND #{condition.maxRfidNo}]]>
+		</if>
+		<if
 			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">
 			<![CDATA[AND IMPORT_DATE >=#{condition.startImportDate} AND IMPORT_DATE <= #{condition.endImportDate}]]>
 		</if>

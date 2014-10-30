@@ -153,6 +153,7 @@ function biangeng(recordId){
 	$('.maskdivgen').fadeIn(100);
 	$('#chanPic').slideDown(200);
 	$('#bgRecordId').val(recordId);
+	$('#bgimgShow').show();	
 	
 }
 //补损
@@ -346,10 +347,7 @@ function busunSeav(){
 	}
 
 	function delRecord(id,contractNo) {
-		if(contractNo!=''){
-			messageInfo("该备案已被受理，不能删除!");
-			return;
-		}else{
+		
 			if (confirm("确定删除备案吗?")) {
 				$.post("delRecord.htm", {
 					id : id
@@ -362,7 +360,6 @@ function busunSeav(){
 					}
 				});
 			}
-		}
 	}
 </script>
 </head>

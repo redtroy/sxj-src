@@ -28,15 +28,6 @@ public interface IWindowRfidService {
 	public void updateWindowRfid(WindowRfidEntity win) throws ServiceException;
 
 	/**
-	 * 更新
-	 * 
-	 * @param id
-	 * @throws ServiceException
-	 */
-	public void updateWindowRfid(List<WindowRfidEntity> wins)
-			throws ServiceException;
-
-	/**
 	 * 启用RFID
 	 * 
 	 * @throws ServiceException
