@@ -16,10 +16,7 @@
 
 	<bean id="myShiroRealmService"
 		class="com.sxj.supervisor.manage.login.SupervisorManagerShiroRealm">
-		<property name="rolePermissionResolver" ref="myRolePermissionResolver"></property>
 	</bean>
-	<bean id="myRolePermissionResolver"
-		class="com.sxj.supervisor.manage.login.SupervisorManagerRolePermissionResolver"></bean>
 		
 	<bean id="authenticationFilter"
 		class="com.sxj.supervisor.manage.login.SupervisorManagerPermissionsAuthorizationFilter" />
