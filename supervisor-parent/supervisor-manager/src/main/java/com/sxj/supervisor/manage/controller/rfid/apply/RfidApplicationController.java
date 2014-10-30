@@ -62,7 +62,7 @@ public class RfidApplicationController extends BaseController {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
 			throw new WebException("申请单查询错误");
 		}
-		return "manage/rfid/order/order";
+		return "manage/rfid/apply/apply-list";
 	}
 
 	/**

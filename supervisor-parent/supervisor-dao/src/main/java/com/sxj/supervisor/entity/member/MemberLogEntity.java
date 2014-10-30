@@ -43,7 +43,7 @@ public class MemberLogEntity extends Pagable implements Serializable {
 	@Column(name = "NEXT_PAGE")
 	private String nextpage;
 
-	@Column(name = "SITE_TIME")
+	@Column(name = "WAIT_TIME")
 	private String waitTime;
 
 	@Column(name = "CALL_TIME")
@@ -66,6 +66,14 @@ public class MemberLogEntity extends Pagable implements Serializable {
 
 	public void setMemberNo(String memberNo) {
 		this.memberNo = memberNo;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
 	}
 
 	public String getNowPage() {

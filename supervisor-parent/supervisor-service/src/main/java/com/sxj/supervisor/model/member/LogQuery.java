@@ -1,7 +1,6 @@
 package com.sxj.supervisor.model.member;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import com.sxj.mybatis.pagination.Pagable;
 
@@ -20,9 +19,9 @@ public class LogQuery extends Pagable implements Serializable {
 
 	private String nextpage;
 
-	private Date startTime;
+	private String startTime;
 
-	private Date endTime;
+	private String endTime;
 
 	public String getMemberNo() {
 		return memberNo;
@@ -56,19 +55,19 @@ public class LogQuery extends Pagable implements Serializable {
 		this.nextpage = nextpage;
 	}
 
-	public Date getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 

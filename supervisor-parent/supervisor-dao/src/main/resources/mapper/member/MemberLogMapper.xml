@@ -11,8 +11,8 @@
 		<result property="nowPage" column="NOW_PAGE" jdbcType="VARCHAR" />
 		<result property="prePage" column="PRE_PAGE" jdbcType="VARCHAR" />
 		<result property="nextpage" column="NEXT_PAGE" jdbcType="VARCHAR" />
-		<result property="waitTime" column="SITE_TIME" jdbcType="VARCHAR" />
-		<result property="callTime" column="CALL_TIME" jdbcType="VARCHAR" />
+		<result property="waitTime" column="WAIT_TIME" jdbcType="VARCHAR" />
+		<result property="callTime" column="CALL_TIME" jdbcType="TIMESTAMP" />
 		<result property="ip" column="IP" jdbcType="VARCHAR" />
 	</resultMap>
 	<!-- 条件查询 -->
@@ -23,6 +23,10 @@
 		<if test="condition.memberNo != null and condition.memberNo !=''">
 			<![CDATA[AND MEMBER_NO=#{condition.memberNo}]]>
 		</if>
-		<![CDATA[ ORDER BY callTime DESC]]>
+		<if
+			test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">
+			<![CDATA[AND CALL_TIME >=CONCAT(#{condition.startTime}," 00:00:00" ) AND CALL_TIME <= CONCAT(#{condition.endTime}," 23:59:59")]]>
+		</if>
+		<![CDATA[ ORDER BY CALL_TIME DESC]]>
 	</select>
 </mapper>
