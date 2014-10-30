@@ -60,7 +60,6 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm
         }
         
         SystemAccountEntity current = (SystemAccountEntity) principals.getPrimaryPrincipal();
-        
         String username = current.getAccount();
         
         if (username != null)
@@ -86,6 +85,7 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm
             {
                 SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
                 info.addStringPermissions(permissions);
+                info.addRole(current.getAccountNo());
                 return info;
             }
         }
