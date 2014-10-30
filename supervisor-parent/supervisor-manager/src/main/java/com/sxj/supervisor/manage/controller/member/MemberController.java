@@ -23,6 +23,7 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 import com.sxj.util.common.StringUtils;
+import com.sxj.util.exception.SystemException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -99,17 +100,20 @@ public class MemberController extends BaseController {
 	public @ResponseBody Map<String, String> editMember(
 			@Validated({ UpdateGroup.class }) MemberEntity member,
 			BindingResult result) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			getValidError(result);
 			memberService.modifyMember(member);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
+		} catch (SystemException e) {
+			SxjLogger.error("修改会员信息错误", e, this.getClass());
+			map.put("error", e.getMessage());
+			// throw new WebException(e.getMessage());
 		} catch (Exception e) {
 			SxjLogger.error("修改会员信息错误", e, this.getClass());
 			throw new WebException(e.getMessage());
 		}
-
+		return map;
 	}
 
 	/**

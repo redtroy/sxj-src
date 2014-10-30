@@ -112,9 +112,9 @@ public class BaseController {
 			CometContext.getInstance().registChannel(channelName);// 注册应用的channel
 	}
 
-	protected void getValidError(BindingResult result) throws SystemException {
+	protected String getValidError(BindingResult result) throws SystemException {
+		String message = "";
 		if (result.hasErrors()) {
-			String message = "";
 			List<ObjectError> errors = result.getAllErrors();
 			for (ObjectError error : errors) {
 				if (error == null) {
@@ -126,6 +126,7 @@ public class BaseController {
 					+ "] has errors [" + message + "]", this.getClass());
 			throw new SystemException(message);
 		}
+		return message;
 	}
 
 	protected SystemAccountEntity getLoginInfo(HttpSession session) {

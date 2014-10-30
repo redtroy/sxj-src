@@ -110,7 +110,8 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 联系人名称
 	 **/
 	@Column(name = "CONTACTS")
-	@NotEmpty(message = "联系人名称", groups = { AddGroup.class, UpdateGroup.class })
+	@NotEmpty(message = "联系人名称不能 为空", groups = { AddGroup.class,
+			UpdateGroup.class })
 	@Length(max = 20, message = "联系人名称长度过长", groups = { AddGroup.class,
 			UpdateGroup.class })
 	private String contacts;
@@ -143,7 +144,7 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 联系电话
 	 **/
 	@Column(name = "TEL_NUM")
-	@Length(max = 13, message = "联系电话", groups = { AddGroup.class,
+	@Length(max = 13, message = "联系电话长度过长", groups = { AddGroup.class,
 			UpdateGroup.class })
 	private String telNum;
 
