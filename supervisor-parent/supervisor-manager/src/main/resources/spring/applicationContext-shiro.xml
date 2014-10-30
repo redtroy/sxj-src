@@ -17,6 +17,7 @@
 	<bean id="myShiroRealmService"
 		class="com.sxj.supervisor.manage.login.SupervisorManagerShiroRealm">
 	</bean>
+		
 	<bean id="authenticationFilter"
 		class="com.sxj.supervisor.manage.login.SupervisorManagerPermissionsAuthorizationFilter" />
 
@@ -51,11 +52,13 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="sessionListener" class="com.sxj.spring.modules.security.shiro.ShiroSessionListener">
+	<bean id="sessionListener"
+		class="com.sxj.spring.modules.security.shiro.ShiroSessionListener">
 		<property name="securityManager" ref="securityManager"></property>
 	</bean>
- 
-	<bean id="shiroCacheManager" class="com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager">
+
+	<bean id="shiroCacheManager"
+		class="com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager">
 		<property name="level" value="2"></property>
 	</bean>
 
