@@ -99,22 +99,17 @@ var tquantity=0;
 var tamount=0;
 var caculate=function(){
 	tquantity=0;
-	tamount=0;
 	$("#TbData").find(".CaseRow").each(function(){
 		caculateRow($(this));
 	});
 	$("#quantitySum").html(tquantity.toFixed(2));
-	$("#amountSum").html(tamount.toFixed(2));
+	
 }
 
 var caculateRow=function($tr){
 	var quantity=$tr.find(".quantityClass").attr("value");
-	var price=$tr.find(".priceClass").attr("value");
-	if(quantity&&price){
-		var amount=parseFloat(quantity)*parseFloat(price);
-		tamount+=amount;
+	if(quantity){
 		tquantity+=parseFloat(quantity);
-		$tr.find(".amountClass").attr("value",amount.toFixed(2));
 	}
 }
 //合同扫描件
@@ -135,6 +130,16 @@ var caculateRow=function($tr){
 		$(".unit").live("keyup",function(){
 			caculate();
 		});
+		$(".amountClass").live("keyup",function(){
+			tamount=0;
+			$(this).parent().parent().parent().find(".amountClass").each(function(){
+				var value=$(this).attr("value");
+				if(value){
+					tamount+=parseFloat(value)
+				}
+			});
+			$("#amountSum").html(tamount.toFixed(2));
+		})
 		$("[type='file']").each(function(){
 			uploadImg($(this));
 		});
