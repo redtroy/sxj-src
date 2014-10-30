@@ -16,6 +16,16 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	private String rfidNo;
 
 	/**
+	 * 最小RFID编号
+	 */
+	private String minRfidNo;
+
+	/**
+	 * 最大RFID编号
+	 */
+	private String maxRfidNo;
+
+	/**
 	 * 采购单号
 	 */
 	private String purchaseNo;
@@ -163,6 +173,22 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 
 	public void setMemberNo(String memberNo) {
 		this.memberNo = memberNo;
+	}
+
+	public String getMinRfidNo() {
+		return minRfidNo;
+	}
+
+	public void setMinRfidNo(String minRfidNo) {
+		this.minRfidNo = minRfidNo;
+	}
+
+	public String getMaxRfidNo() {
+		return maxRfidNo;
+	}
+
+	public void setMaxRfidNo(String maxRfidNo) {
+		this.maxRfidNo = maxRfidNo;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.impl.rfid.window;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
@@ -40,6 +42,8 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			}
 			QueryCondition<WindowRfidEntity> condition = new QueryCondition<WindowRfidEntity>();
 			condition.addCondition("rfidNo", query.getRfidNo());
+			condition.addCondition("minRfidNo", query.getMinRfidNo());
+			condition.addCondition("maxRfidNo", query.getMaxRfidNo());
 			condition.addCondition("contractNo", query.getContractNo());
 			condition.addCondition("purchaseNo", query.getPurchaseNo());
 			condition.addCondition("windowType", query.getWindowType());
@@ -147,16 +151,31 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	}
 
 	@Override
-	public void updateWindowRfid(List<WindowRfidEntity> wins)
-			throws ServiceException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
+	@Transactional
 	public void startWindowRfid(String minRfid, String maxRfid, String gRfid,
 			String lRfid, WindowTypeEnum windowType) throws ServiceException {
-		// TODO Auto-generated method stub
+		try {
+			WindowRfidQuery query = new WindowRfidQuery();
+			query.setMinRfidNo(minRfid);
+			query.setMaxRfidNo(maxRfid);
+			List<WindowRfidEntity> list = queryWindowRfid(query);
+			for (Iterator<WindowRfidEntity> iterator = list.iterator(); iterator
+					.hasNext();) {
+				WindowRfidEntity windowRfid = iterator.next();
+				if (windowRfid == null) {
+					continue;
+				}
+				windowRfid.setGlassRfid(gRfid);
+				windowRfid.setProfileRfid(lRfid);
+				windowRfid.setWindowType(windowType);
+				windowRfid.setRfidState(RfidStateEnum.used);
+			}
+			windowRfidDao.batchUpdateWindowRfid(list
+					.toArray(new WindowRfidEntity[list.size()]));
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("批量启用RFID失败", e);
+		}
 
 	}
 }
