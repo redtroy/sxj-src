@@ -43,30 +43,6 @@ function modify(){
 			},"是否修改合同?");
 }
 
-//添加表格
-	function addTable() {
-		var vTb = $("#TbData");//得到表格ID=TbData的jquery对象 
-		var totalTr = $("#total_tr");
-		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-		var vNum = $("#TbData tr").filter(".CaseRow").size() + 1;//表格有多少个数据行 
-		var vTr = $("#TbData #trDataRow1"); //得到表格中的第一行数据 
-		var vTrClone = vTr.clone(true);//创建第一行的副本对象vTrClone 
-		var id = "trDataRow" + vNum;
-		vTrClone[0].id = id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-		//alert(vTrClone.find("td :last").find('a').text());	
-		vTrClone.find("td :last").attr("onclick", "");
-		vTrClone.find("td :last").addClass("TrDel");
-		vTrClone.find("td :last").html('<a class="lnk-green">x</a>');//更改按钮
-		//清空内容
-		vTrClone.find("td").eq(0).find("input").val("");
-		vTrClone.find("td").eq(1).find("input").val("");
-		vTrClone.find("td").eq(2).find("input").val("");
-		vTrClone.find("td").eq(3).find("input").val("");
-		vTrClone.find("td").eq(4).find("input").val("");
-		vTrClone.find("td").eq(5).find("textarea ").text("");
-		//设置item[]
-		vTrClone.insertBefore(totalTr);//把副本单元格对象添加到表格上方 
-	}
 
 	$(function() {
 		$(".TrDel").live("click", function() {
@@ -119,65 +95,66 @@ var uploadImg = function($file){
 			}
 		});
 }
+var tquantity=0;
+var tamount=0;
+var caculate=function(){
+	tquantity=0;
+	$("#TbData").find(".CaseRow").each(function(){
+		caculateRow($(this));
+	});
+	$("#quantitySum").html(tquantity.toFixed(2));
+	
+}
 
+var caculateRow=function($tr){
+	var quantity=$tr.find(".quantityClass").attr("value");
+	if(quantity){
+		tquantity+=parseFloat(quantity);
+	}
+}
 //合同扫描件
 	$(document).ready(function() {
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.viewer').slideUp(200);
 		})
-	$('.elastislide-list').find("li").live("click",function(){
-		var el=$(this);
-		var imageSource = el.find("a").attr("data-image");
-		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
-		el.parent().children("li").removeClass("view");
-		el.addClass("view"); 
-		$(".maskdivgen").show();
-		
-	});
+		$('.elastislide-list').find("li").live("click",function(){
+			var el=$(this);
+			var imageSource = el.find("a").attr("data-image");
+			refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+			el.parent().children("li").removeClass("view");
+			el.addClass("view"); 
+			$(".maskdivgen").show();
+			 
+		});
+		$(".unit").live("keyup",function(){
+			caculate();
+		});
+		$(".amountClass").live("keyup",function(){
+			tamount=0;
+			$(this).parent().parent().parent().find(".amountClass").each(function(){
+				var value=$(this).attr("value");
+				if(value){
+					tamount+=parseFloat(value)
+				}
+			});
+			$("#amountSum").html(tamount.toFixed(2));
+		})
 		$("[type='file']").each(function(){
 			uploadImg($(this));
 		});
 		imgBinding();
+		$(".lnk-green").live("click",function(){
+			var $tr=$(this).parent().parent().clone();
+			$tr.children("td:last").children(".lnk-green").remove();
+			$tr.children("td").children("input").attr("value","");
+			$tr.insertAfter($(this).parent().parent().parent().children(".CaseRow:last"));
+		});
+		$(".lnk-red").live("click",function(){
+			$(this).parent().parent().remove();
+			caculate();
+		})
 	});
-	
-//金额处理
-$(function(){
-		$(".amountClass").change(function(){
-			var amount=0;
-			var size=$("#TbData tr").filter(".CaseRow").size();
-			for (var i=0;i<size;i++){
-				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val();
-				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val(getFloatStr(num));
-				if(num==''){
-					amount+=parseFloat(parseFloat(0));
-				}else{
-					amount+=parseFloat(parseFloat(num));
-				}
-			}
-			$("#amountSum").html(getFloatStr(amount));
-		});
-		$(".quantityClass").keyup(function(){
-			var quantity=0;
-			var size=$("#TbData tr").filter(".CaseRow").size();
-			for (var i=0;i<size;i++){
-				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(2).find("input").val();
-				if(num==''){
-					quantity+=parseFloat(0);
-				}else{
-					quantity+=parseFloat(num);
-				}
-			}
-			$("#quantitySum").html(quantity);
-		});
-		$(".priceClass").change(function(){
-			var size=$("#TbData tr").filter(".CaseRow").size();
-			for (var i=0;i<size;i++){
-				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
-				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(getFloatStr(num));
-			}
-		});
-})
 //将传入数据转换为字符串,并清除字符串中非数字与.的字符
 //按数字格式补全字符串
 var getFloatStr = function(num){
@@ -255,9 +232,10 @@ var getFloatStr = function(num){
 						 <#list contractModel.itemList as item>
 						  <#assign n = (n+item.price)?int > 
 						  <#assign m = (m+item.amount)?int >
-						  <input name="itemList[${item_index}].id"
-								type="hidden" value="${item.id}" />
+						  
 						<tr id="trDataRow${item_index}" class="CaseRow">
+						<input name="itemList[${item_index}].id"
+								type="hidden" value="${item.id}" />
 							<td><input
 								name="itemList[${item_index}].productName"
 								type="text" value="${item.productName}" /></td>
@@ -266,9 +244,9 @@ var getFloatStr = function(num){
 								type="text" value="${item.productModel}" /></td>
 							<td><input
 								name="itemList[${item_index}].quantity" type="text"
-								value="${item.quantity}" class="quantityClass" /></td>
+								value="${item.quantity}" class="quantityClass unit" /></td>
 							<td><input name="itemList[${item_index}].price"
-								type="text" value="${item.price}" class="priceClass"/></td>
+								type="text" value="${item.price}" class="priceClass unit"/></td>
 							<td><input
 								name="itemList[${item_index}].amount" type="text"
 								value="${item.amount}" class="amountClass" /></td>
@@ -276,7 +254,8 @@ var getFloatStr = function(num){
 									name="itemList[${item_index}].remarks" cols=""
 									rows="2">${item.remarks}</textarea></td>
 							<td><a href="javascript:void(0);" class="lnk-green"
-									name="add" onclick="addTable()">+</a></td>
+									name="add" >+</a>&nbsp;&nbsp;<a href="javascript:void(0);" class="lnk-red"
+									name="add">-</a></td>
 						</tr>
 						</#list>
 						<tr id="total_tr">

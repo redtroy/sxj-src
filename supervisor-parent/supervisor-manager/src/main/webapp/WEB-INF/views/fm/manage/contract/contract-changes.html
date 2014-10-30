@@ -26,7 +26,7 @@
 <script type="text/javascript"
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
-<@b.upload/>
+<@b.upload/><@b.errorInfo/>
 <@b.dialogBox/>
 <script>
 	jQuery(document).ready(function($) {
@@ -155,6 +155,11 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							}
 						});
 					});
+					var leng=$("#cptable .formitem").length;
+					if(leng==0){
+						messageInfo("请选择变更记录!");
+						return false;
+					}
 					dialogBox(function() {
 						$.post("saveChanges.htm", $("#changsForm").serialize(),
 								function(data) {
@@ -202,7 +207,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<li><label>合同期限</label>
 								${contractModel.contract.validityDate?string("yyyy年MM月dd日")}</li>
 							<li><label>生效时间</label>
-								${contractModel.contract.startDate?string("yyyy年MM月dd日")}</li>
+								<#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if></li>
 						</ul>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
@@ -216,8 +221,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
-								<th>数量<span>（㎡/吨）</span></th>
-								<th>单价<span>(元/㎡/吨)</span></th>
+								<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
+								<th>单价<span>(元<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
 								<th>金额<span>(元)</span></th>
 								<th>备注说明</th>
 								<th class="rLine">&nbsp;</th>
@@ -266,7 +271,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<tr>
 								<th>交货批次</th>
 								<th>产品规格</th>
-								<th>数量<span>（㎡/吨）</span></th>
+								<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 								<th>应付货款<span>（元）</span></th>
 								<th class="rLine">对应批次RFID编号</th>
 								<th class="rLine"></th>
@@ -329,9 +334,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</div>
 					</div>
 					<!-- 变更信息 -->
-					
-					<div class="changeBox">
 					<#if contractModel.modifyList?exists>
+					<div class="changeBox">
 						<div id="chenges">
 							<h2 class="title">合同变更信息</h2>
 				 <#list contractModel.modifyList as modifyList>
@@ -365,8 +369,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<tr>
 										<th>产品名称</th>
 										<th>产品规格</th>
-										<th>数量<span>（㎡/吨）</span></th>
-										<th>单价<span>(元/㎡/吨)</span></th>
+										<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
+										<th>单价<span>(元<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
 										<th>金额<span>(元)</span></th>
 										<th>备注说明</th>
 										<th class="rLine">&nbsp;</th>
@@ -399,7 +403,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<tr>
 										<th>交货批次</th>
 										<th>产品规格</th>
-										<th>数量<span>（㎡/吨）</span></th>
+										<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 										<th>应付货款<span>（元）</span></th>
 										<th>对应批次RFID编号</th>
 										<th class="rLine">&nbsp;</th>
@@ -436,9 +440,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							</div>
 						</#list> 
 						</div>
-						</#if>
 					</div>
-				
+				</#if>
 					<!-- 变更信息结束 -->
 
 					<div class="changeBox">
@@ -476,8 +479,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<tr>
 										<th>产品名称</th>
 										<th>产品规格</th>
-										<th>数量<span>（㎡/吨）</span></th>
-										<th>单价<span>(元/㎡/吨)</span></th>
+										<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
+										<th>单价<span>(元<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
 										<th>金额<span>(元)</span></th>
 										<th>备注说明</th>
 										<th class="rLine">&nbsp;</th>
@@ -495,7 +498,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<tr>
 										<th>交货批次</th>
 										<th>产品规格</th>
-										<th>数量<span>（㎡/吨）</span></th>
+										<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 										<th>应付货款<span>（元）</span></th>
 										<th>对应批次RFID编号</th>
 										<th class="rLine">&nbsp;</th>

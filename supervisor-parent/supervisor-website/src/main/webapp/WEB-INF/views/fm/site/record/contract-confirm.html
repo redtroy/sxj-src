@@ -151,7 +151,7 @@ $(document).ready(function(){
                      ${contractModel.contract.validityDate?string("yyyy年MM月dd日")} </div>
                     <div class="item">
                       <label>生效时间</label>
-                      ${contractModel.contract.startDate?string("yyyy年MM月dd日")}</div>
+                     <#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if></div>
                   </div>
                   <div class="item ly-clearFix">
                     <label class="ly-left">&nbsp;</label>
@@ -288,6 +288,7 @@ $(document).ready(function(){
                   </div>
                   <div class="item ly-clearFix">
                     <label class="ly-left">&nbsp;</label>
+                    <#if modifyList.modifyBatchList?exists>
                     <table border="0" cellpadding="0" cellspacing="0" class="tabProd ly-left">
                       <col width="15%" />
                       <col width="45%" />
@@ -321,6 +322,7 @@ $(document).ready(function(){
                       </tr>
                       </#list>
                     </table>
+                    </#if>
                   </div>
                   <div class="item">
                     <label>&nbsp;</label>
