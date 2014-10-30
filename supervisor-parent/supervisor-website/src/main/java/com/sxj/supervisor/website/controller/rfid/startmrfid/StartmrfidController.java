@@ -101,4 +101,22 @@ public class StartmrfidController extends BaseController {
 			throw new WebException("联想查询错误");
 		}
 	}
+
+	/**
+	 * 启用标签
+	 */
+	@RequestMapping("start_lable")
+	public @ResponseBody Map<Object, Object> start_lable(String minRfid,
+			String maxRfid, String gRfid, String lRfid,
+			WindowTypeEnum windowType) throws WebException {
+		try {
+			wind.startWindowRfid(minRfid, maxRfid, gRfid, lRfid, windowType);
+			Map<Object, Object> map = new HashMap<Object, Object>();
+			map.put("isOk", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("启用标签错误", e, this.getClass());
+			throw new WebException("启用标签错误");
+		}
+	}
 }

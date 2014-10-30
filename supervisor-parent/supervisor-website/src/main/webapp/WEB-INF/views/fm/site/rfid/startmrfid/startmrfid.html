@@ -32,6 +32,7 @@ $(function(){
 })
 var container_a=null;
 var container_b=null;
+var lable=null;
 function query(){
 	var refContractNo=$("#refContractNo").val();
 	var num=$("#num").val();
@@ -46,6 +47,7 @@ function query(){
 					$("#contract_b").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
 				}
 			}
+			lable=data.bq;
 			$("#bq_qj").text(data.bq[0]+"-"+data.bq[1])
 			pc_a();
 			pc_b();
@@ -102,7 +104,22 @@ function rfid_b(pc_b_id){
 }
 //启用标签
 function star(){
-	
+	var gRfid=$("#rfid_a").text();
+	var lRfid=$("#rfid_b").text();
+	var windowType=$("#windowType option:selected").val();
+	if (gRfid=="" || gRfid== null){
+		alert('玻璃采购合同缺失，无法提交');
+	}
+	if (lRfid=="" || lRfid== null){
+		alert('型材采购合同缺失，无法提交');
+	}
+	$.post("start_lable.htm",{minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
+		if (data.isOk=="ok"){
+			alert("启用成功");
+		}else{
+			alert("启用失败");
+		}
+	})
 }
 </Script>
 </head>
@@ -147,7 +164,7 @@ function star(){
 <div class="item">
   <label>对应玻璃RFID</label>
   <span class="color-blue ml5" id="rfid_b"></span> </div>
-<div class="item"><label>窗型代号</label><select name="select">
+<div class="item"><label>窗型代号</label><select name="select" id="windowType">
             <#list type as t>
 			<option value="${t.id}">${t.getName()}</option>
 			</#list>
