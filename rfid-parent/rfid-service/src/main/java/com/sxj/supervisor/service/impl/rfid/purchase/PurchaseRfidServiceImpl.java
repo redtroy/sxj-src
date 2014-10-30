@@ -181,6 +181,8 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					rfid.setContractNo(purchase.getContractNo());
 					rfid.setImportDate(new Date());
+					rfid.setMemberNo(apply.getMemberNo());
+					rfid.setMemberName(apply.getMemberName());
 					rfid.setRfidState(RfidStateEnum.unused);
 					rfid.setProgressState(LabelProgressEnum.unfilled);
 					RfidLog log = new RfidLog();
