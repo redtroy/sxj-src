@@ -79,7 +79,7 @@
              <#if contractModel.contract.validityDate?exists> ${contractModel.contract.validityDate?string("yyyy年MM月dd日")}</#if> </li>
             <li>
               <label>生效时间</label>
-             <#if contractModel.contract.validityDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if> </li>
+             <#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if> </li>
           </ul>
           <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
             <col width="20%" />
@@ -92,8 +92,8 @@
             <tr>
               <th>产品名称</th>
               <th>产品规格</th>
-              <th>数量<span>（㎡/吨）</span></th>
-              <th>单价<span>(元/㎡/吨)</span></th>
+              <th>数量<span>（<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
+              <th>单价<span>(元<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if><)</span></th>
               <th>金额<span>(元)</span></th>
               <th>备注说明</th>
               <th class="rLine">&nbsp;</th>
@@ -135,7 +135,7 @@
             <tr>
               <th>交货批次</th>
               <th>产品规格</th>
-              <th>数量<span>（㎡/吨）</span></th>
+              <th>数量<span>（<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
               <th>应付货款<span>（元）</span></th>
               <th class="rLine">对应批次RFID编号</th>
               <th class="rLine"></th>
@@ -225,8 +225,8 @@
               <tr>
                 <th>产品名称</th>
                 <th>产品规格</th>
-                <th>数量<span>（㎡/吨）</span></th>
-                <th>单价<span>(元/㎡/吨)</span></th>
+                <th>数量<span>（<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
+                <th>单价<span>(元<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
                 <th>金额<span>(元)</span></th>
                 <th>备注说明</th>
                 <th class="rLine">&nbsp;</th>
@@ -254,7 +254,7 @@
               <tr>
                 <th>交货批次</th>
                 <th>产品规格</th>
-                <th>数量<span>（㎡/吨）</span></th>
+                <th>数量<span>（<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
                 <th>应付货款<span>（元）</span></th>
                 <th>对应批次RFID编号</th>
                 <th class="rLine">&nbsp;</th>
@@ -323,7 +323,7 @@
               <tr>
                 <th>交货批次</th>
                 <th>产品规格</th>
-                <th>数量<span>（㎡/吨）</span></th>
+                <th>数量<span>（<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
                 <th>应付货款<span>（元）</span></th>
                 <th>对应批次RFID编号</th>
                 <th>新RFID编号</th>

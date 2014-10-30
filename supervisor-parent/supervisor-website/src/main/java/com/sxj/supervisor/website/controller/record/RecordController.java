@@ -486,13 +486,14 @@ public class RecordController extends BaseController {
 	}
 
 	@RequestMapping("getContract")
-	public @ResponseBody Map<String, String> getContract(String contractNo)
+	public @ResponseBody Map<String, String> getContract(String contractNo, HttpSession session)
 			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-
+			SupervisorPrincipal member = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
 			int size = contractService
-					.getContractByZhaobiaoContractNo(contractNo);
+					.getContractByZhaobiaoContractNo(contractNo,member.getMember());
 			if (size == 0) {
 				map.put("isOK", "no");
 			} else {

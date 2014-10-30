@@ -31,25 +31,25 @@ function query(type){
 	var contractNo=$("#contractNo").val();
 	var recordId=$("#recordId").val();
 	if (contractNo==""){
-		alert("合同号不能为空！");
+		messageInfo("合同号不能为空！");
 		return false;
 	}
 	$.post("queryRecordNo.htm",{recordType:type,recordId:recordId,contractNo:contractNo},function(data){
 			
 		if(data.ok=="htyba"){
-			alert("合同已经绑定甲乙双方!");
+			messageInfo("合同已经绑定甲乙双方!");
 			isOk=false;
 			return;
 		}else if(data.ok=="yfyba"){
-			alert("该合同已绑定乙方");
+			messageInfo("该合同已绑定乙方");
 			isOk=false;
 			return;
 		}else if(data.ok=="jfyba"){
-			alert("该合同已绑定甲方");
+			messageInfo("该合同已绑定甲方");
 			isOk=false;
 			return;
 		}else if(data.ok=="no"){
-			alert("找不到该合同!");
+			messageInfo("找不到该合同!");
 			isOk=false;
 			return;
 		}else if(data.ok=="ok"){
@@ -76,11 +76,11 @@ function query(type){
   function bind_save(){
 	  var contractNo=$("#contractNo").val();
 	  if(contractNo==""){
-		  alert("请输入合同号!");  
+		  messageInfo("请输入合同号!");  
 			return; 
 	  }
 	  if(!isOk){
-		alert("请输入正确合同号!");  
+		  messageInfo("请输入正确合同号!");  
 		return;
 	  }
 	
@@ -92,10 +92,10 @@ function query(type){
 	  $.post("banding_save.htm",{contractNo:contractNo,refContractNo:refContractNo,
 		  recordNo:recordNo,recordNo2:recordNo2,recordIdB:recordIdB,recordIdA:recordIdA},function(data){
 		  if (data.isOK=='ok'){
-			  alert("绑定成功!");
+			  messageInfo("绑定成功!");
 			  window.location.href="recordList.htm";
 		  }else{
-			  alert("绑定失败!");
+			  messageInfo("绑定失败!");
 		  }
 	  })
   }

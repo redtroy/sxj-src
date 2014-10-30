@@ -81,7 +81,7 @@ $(document).ready(function(){
 			</div>
 			<div class="item">
 				<label>生效时间</label>
-				${contractModel.contract.startDate?string("yyyy年MM月dd日")}
+				 <#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if>
 			</div>
 		</div>
 		<div class="item ly-clearFix">
@@ -96,8 +96,8 @@ $(document).ready(function(){
 				<col width="30%" />
 				<tr>
 					<th>产品名称</th>
-					<th>产品规格<span class="fontAR ml5">(mm)</span></th>
-					<th>数量<span class="fontAR ml5">(m<sup>2</sup>)
+					<th>产品规格<span class="fontAR ml5"></span></th>
+					<th>数量<span class="fontAR ml5"><#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>
 					</span></th>
 					<th>单价<span>（元）</span></th>
 					<th>金额</th>
@@ -160,7 +160,8 @@ $(document).ready(function(){
 			<#else> <img src="${b.staticPath}images/nopic.jpg" width="80"
 				height="107" /> </#if> <span class="item"> <label>关联招标合同号</label>
 				${contractModel.contract.refContractNo}
-			</span> <#if contractModel.modifyList?exists>
+			</span>
+			 <#if contractModel.modifyList?exists>
 			<h2 class="titChange f14 fb">变更合同信息</h2>
 			<#list contractModel.modifyList as modifyList>
 			<div class="item">
@@ -194,8 +195,8 @@ $(document).ready(function(){
 					<col width="30%" />
 					<tr>
 						<th>产品名称</th>
-						<th>产品规格<span class="fontAR ml5">(mm)</span></th>
-						<th>数量<span class="fontAR ml5">(m<sup>2</sup>)
+						<th>产品规格<span class="fontAR ml5"></span></th>
+						<th>数量<span class="fontAR ml5"><#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>
 						</span></th>
 						<th>单价<span>（元）</span></th>
 						<th>金额</th>
@@ -236,8 +237,8 @@ $(document).ready(function(){
 						<td><table border="0" cellspacing="0" cellpadding="0"
 								class="tabProd tabBatch">
 								<tr>
-									<th>产品规格<span class="fontAR ml5">(mm)</span></th>
-									<th>数量<span class="fontAR ml5">(m<sup>2</sup>)
+									<th>产品规格<span class="fontAR ml5"></span></th>
+									<th>数量<span class="fontAR ml5"><#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>
 									</span></th>
 								</tr>
 
@@ -306,8 +307,8 @@ $(document).ready(function(){
 						<td><table border="0" cellspacing="0" cellpadding="0"
 								class="tabProd tabBatch">
 								<tr>
-									<th>产品规格<span class="fontAR ml5">(mm)</span></th>
-									<th>数量<span class="fontAR ml5">(m<sup>2</sup>)
+									<th>产品规格<span class="fontAR ml5"></span></th>
+									<th>数量<span class="fontAR ml5"><#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>
 									</span></th>
 								</tr>
 								<#list replenishItem.replenishBatchItems as replenishBatchItems>

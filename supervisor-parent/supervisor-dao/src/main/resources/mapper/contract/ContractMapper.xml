@@ -63,6 +63,9 @@
 		<if test="condition.memberName != null and condition.memberName != ''">
 			<![CDATA[AND (MEMBER_NAME_A LIKE CONCAT('%',#{condition.memberName},'%') or MEMBER_NAME_B LIKE CONCAT('%',#{condition.memberName},'%'))]]>
 		</if>
+		<if test="condition.memberIdB != null and condition.memberIdB != ''">
+			<![CDATA[AND  MEMBER_ID_B  =#{condition.memberIdB}]]>
+		</if>
 		<!-- 合同类型 -->
 		<if test="condition.contractType != null and condition.contractType != ''">
 			<![CDATA[AND TYPE = #{condition.contractType}]]>

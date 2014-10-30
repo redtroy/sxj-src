@@ -176,11 +176,12 @@
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function(){
+		
 		$.post("getContract.htm", {
 			contractNo : refContractNo
 		}, function(data) {
 			if (data.isOK == 'ok') {
+				dialogBox(function(){
 				$.post("AcgApplyRecord.htm", $("#cgForm").serialize(),
 						function(data) {
 							if (data.isOK == 'ok') {
@@ -190,12 +191,12 @@
 							} else if (data.isOK == 'no') {
 								messageInfo("您还没有通过认证,不能申请备案!");
 							}
-						});
+						});},"是否生成备案?");
 			} else {
 				messageInfo("请输入正确的招标合同号!");
 			}
 
-		});},"是否生成备案?");
+		});
 	}
 	/**
 	 * 甲方申请招标
