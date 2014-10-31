@@ -271,6 +271,9 @@ public class RecordServiceImpl implements IRecordService {
 			ContractModel conModel = contractService.getContract(contractId);
 			ContractEntity con = conModel.getContract();
 			// 更改合同关联所有备案状态
+			RecordEntity rentity=recordDao.getRecord(recordId);
+			rentity.setRecordDate(new Date());
+			recordDao.updateRecord(rentity);
 			RecordQuery recordQuery = new RecordQuery();
 			recordQuery.setContractNo(con.getContractNo());
 			List<RecordEntity> recordList = queryRecord(recordQuery);
@@ -286,11 +289,14 @@ public class RecordServiceImpl implements IRecordService {
 						}
 					} else {
 						rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
-						rEntity.setRecordDate(new Date());
+						if(re.getType().getId()==1){
+							rEntity.setState(RecordStateEnum.change);
+						}else if(re.getType().getId()==2){
+							rEntity.setState(RecordStateEnum.supplement);
+						}
 					}
 				} else {
 					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
-					rEntity.setRecordDate(new Date());
 
 				}
 				recordDao.updateRecord(rEntity);

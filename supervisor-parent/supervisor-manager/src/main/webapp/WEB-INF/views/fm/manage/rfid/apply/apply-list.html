@@ -66,11 +66,19 @@ jQuery(document).ready(function($) {
   }
   //确认收款
   function ok(id){
-	  $.post("edit_apply.htm",{id:id,payState:0},function(data){
-		  if (data.isOk=="ok"){
-				 $("#edit_"+id).find("#pay").html('<em class="state verified">已收款</em>');
-			 }
-	  })
+	  dialogBox(function(){
+		  $.post("edit_apply.htm",{id:id,payState:0},function(data){
+			  if (data.isOk=="ok"){
+				  succInfo(function(){
+					  var currentPage=$("#pager").attr("currentPage");
+					  query(currentPage);
+				  },"确认收款成功！");
+				 }else{
+					 errorInfo(" 确认收款失败！");
+				 }
+		  });
+	  },"是否确认收款？");
+	  
   }
   function query(page){
 		var params=$("#search_form").serialize();
