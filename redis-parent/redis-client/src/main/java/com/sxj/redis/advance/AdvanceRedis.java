@@ -57,7 +57,7 @@ import com.sxj.redis.advance.pubsub.RedisTopic;
  * @author Nikita Koksharov
  *
  */
-public class Redis implements RedisClient
+public class AdvanceRedis implements RedisClient
 {
     
     private final ConnectionManager connectionManager;
@@ -66,7 +66,7 @@ public class Redis implements RedisClient
     
     private final UUID id = UUID.randomUUID();
     
-    Redis(Config config)
+    AdvanceRedis(Config config)
     {
         this.config = config;
         Config configCopy = new Config(config);
@@ -102,7 +102,7 @@ public class Redis implements RedisClient
      *
      * @return Redisson instance
      */
-    public static Redis create()
+    public static AdvanceRedis create()
     {
         Config config = new Config();
         config.useSingleServer().setAddress("127.0.0.1:6379");
@@ -117,9 +117,9 @@ public class Redis implements RedisClient
      * @param config
      * @return Redisson instance
      */
-    public static Redis create(Config config)
+    public static AdvanceRedis create(Config config)
     {
-        return new Redis(config);
+        return new AdvanceRedis(config);
     }
     
     /**
