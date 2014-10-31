@@ -27,8 +27,11 @@
 <script type="text/javascript"
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
-<@b.upload/><@b.dialogBox/><@b.errorInfo/>
+<@b.upload/><@b.dialogBox/><@b.errorInfo/><@b.validate/>
 <script type="text/javascript">
+var b_validform;
+var zb_validform;
+var cg_validform
 	$(document).ready(function() {
 		$("#tabsholder").tytabs({
 			prefixtabs : "tabz",
@@ -50,7 +53,15 @@
 			el.parent().children("li").removeClass("view");
 			el.addClass("view");
 		});
-
+		b_validform=$("#BcgForm").Validform({
+			tiptype : 3
+		});
+		zb_validform=$("#zbForm").Validform({
+			tiptype : 3
+		});
+		cg_validform=$("#cgForm").Validform({
+			tiptype : 3
+		});
 	});
 
 	$(document).ready(
@@ -156,6 +167,9 @@
 	 * 甲方申请采购
 	 */
 	function AcgApplyRecord() {
+		if (!cg_validform.check()){
+			return;
+		}
 		var memberIdB = $("#memberIdB").val();
 		var memberNameB = $("#memberNameB").val();
 		if (memberIdB == '') {
@@ -202,6 +216,9 @@
 	 * 甲方申请招标
 	 */
 	function zbApplyRecord() {
+		if (!zb_validform.check()){
+			return;
+		}
 		var memberNameA = $("#memberA").val();
 		if (memberNameA == '') {
 			messageInfo('请输入甲方用户！');
@@ -227,6 +244,9 @@
 	 * 乙方申请采购
 	 */
 	function BzbApplyRecord() {
+		if (!b_validform.check()){
+			return;
+		}
 		var memberNameA = $("#memberNameA").val();
 		var memberIdA = $("#memberIdA").val();
 		if (memberIdA == '') {
@@ -344,14 +364,14 @@
 									<div id="content1" class="tabscontent">
 										<div class="item">
 											<label>甲方</label> <input class="input input-w240h36" value=""
-												id="memberA" name="memberNameA" />
+												id="memberA" name="memberNameA" datatype="*1-50" nullmsg="请输入甲方名称" />
 										</div>
 										<div class="item">
 											<label>乙方</label> ${name}<input type="hidden"
 												name="memberIdB" id="" value="${id}" />
 										</div>
 										<div class="item">
-											<label>&nbsp;</label> <input type="hidden" value=""
+											<label>&nbsp;</label> <input type="hidden" value="" 
 												name="imgPath" id="zbimgPath" />
 											<div class="rollBox" id="zbRollBox">
 												<ul id="zbcarousel" class="elastislide-list">
@@ -381,18 +401,18 @@
 												id="" value="${id}" />
 										</div>
 										<div class="item">
-											<label>乙方</label><input class="input input-w240h36" value=""
+											<label>乙方</label><input class="input input-w240h36" value="" datatype="*1-50" nullmsg="请输入正确的乙方名称" 
 												id="memberNameB" name="memberNameB" /><input type="hidden"
-												id="memberIdB" name="memberIdB" id="" value="" />
+												id="memberIdB" name="memberIdB" id="" value="" datatype="*1-50" nullmsg="请输入正确的乙方名称"  />
 										</div>
 										<div class="item">
 											<label>关联招标合同号</label><input class="input input-w240h36"
-												value="" id="refContractNo" name="refContractNo" />
+												value="" id="refContractNo" name="refContractNo" datatype="*" nullmsg="请输入招标合同号" />
 										</div>
 										<div class="item">
 											<label>&nbsp;</label>
 											<div class="ly-left">
-												<input type="hidden" value="" name="imgPath" id="cgimgPath" />
+												<input type="hidden" value="" name="imgPath" id="cgimgPath"   />
 												<div class="rollBox" id="cgRollBox">
 													<ul id="cgcarousel" class="elastislide-list">
 													</ul>
@@ -423,8 +443,8 @@
 						<form action="" id="BcgForm" method="post" autocomplete="off">
 							<input type="hidden" name="memberNameB" value="${name}" />
 							<div class="item">
-								<label>甲方</label> <input class="input input-w240h36" value=""
-									id="memberNameA" name="memberNameA" /> <input type="hidden"
+								<label>甲方</label> <input class="input input-w240h36" value="" datatype="*1-50" nullmsg="请输入甲方名称" 
+									id="memberNameA" name="memberNameA" /> <input type="hidden" datatype="*1-50" nullmsg="请输入甲方名称" 
 									name="memberIdA" id="memberIdA" value="" />
 							</div>
 							<div class="item">
@@ -434,7 +454,7 @@
 							<div class="item">
 								<label>&nbsp;</label>
 								<div class="ly-left">
-									<input type="hidden" value="" name="imgPath" id="bcgimgPath" />
+									<input type="hidden" value="" name="imgPath" id="bcgimgPath"   />
 									<div class="rollBox" id="bcgRollBox">
 										<ul id="bcgcarousel" class="elastislide-list">
 										</ul>
