@@ -314,7 +314,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
                 while (true)
                 {
                     conn.watch(getName());
-                    V prev = (V) conn.lindex(getName(), index);
+                    V prev = conn.lindex(getName(), index);
                     
                     conn.multi();
                     conn.lset(getName(), index, element);
@@ -574,6 +574,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         });
     }
     
+    @Override
     public String toString()
     {
         Iterator<V> it = iterator();

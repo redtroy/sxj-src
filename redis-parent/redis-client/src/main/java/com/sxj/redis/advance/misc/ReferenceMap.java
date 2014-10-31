@@ -228,17 +228,20 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
         delegate.clear();
     }
     
+    @Override
     public V putIfAbsent(K key, V value)
     {
         return execute(PutStrategy.PUT_IF_ABSENT, key, value);
     }
     
+    @Override
     public boolean remove(Object key, Object value)
     {
         return delegate.remove(makeKeyReferenceAware(key),
                 makeValueReferenceAware(value));
     }
     
+    @Override
     public boolean replace(K key, V oldValue, V newValue)
     {
         Object keyReference = referenceKey(key);
@@ -248,6 +251,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
                 referenceValue(keyReference, newValue));
     }
     
+    @Override
     public V replace(K key, V value)
     {
         return execute(PutStrategy.REPLACE, key, value);
@@ -485,6 +489,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
             this.hashCode = System.identityHashCode(key);
         }
         
+        @Override
         public void finalizeReferent()
         {
             delegate.remove(this);
@@ -514,6 +519,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
             this.hashCode = System.identityHashCode(key);
         }
         
+        @Override
         public void finalizeReferent()
         {
             delegate.remove(this);
@@ -543,6 +549,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
             this.keyReference = keyReference;
         }
         
+        @Override
         public void finalizeReferent()
         {
             delegate.remove(keyReference, this);
@@ -566,6 +573,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
             this.keyReference = keyReference;
         }
         
+        @Override
         public void finalizeReferent()
         {
             delegate.remove(keyReference, this);
@@ -653,6 +661,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
     {
         PUT
         {
+            @Override
             public Object execute(ReferenceMap map, Object keyReference,
                     Object valueReference)
             {
@@ -663,6 +672,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
         
         REPLACE
         {
+            @Override
             public Object execute(ReferenceMap map, Object keyReference,
                     Object valueReference)
             {
@@ -696,6 +706,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
         
         PUT_IF_ABSENT
         {
+            @Override
             public Object execute(ReferenceMap map, Object keyReference,
                     Object valueReference)
             {
@@ -727,16 +738,19 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
             this.value = value;
         }
         
+        @Override
         public K getKey()
         {
             return this.key;
         }
         
+        @Override
         public V getValue()
         {
             return this.value;
         }
         
+        @Override
         public V setValue(V newValue)
         {
             value = newValue;
@@ -853,11 +867,13 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
             nextEntry = null;
         }
         
+        @Override
         public boolean hasNext()
         {
             return nextEntry != null;
         }
         
+        @Override
         public Map.Entry<K, V> next()
         {
             if (nextEntry == null)
@@ -869,6 +885,7 @@ public class ReferenceMap<K, V> extends AbstractMap<K, V> implements
             return lastReturned;
         }
         
+        @Override
         public void remove()
         {
             ReferenceMap.this.remove(lastReturned.getKey());

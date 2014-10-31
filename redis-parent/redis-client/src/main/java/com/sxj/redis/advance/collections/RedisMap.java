@@ -734,6 +734,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         return result;
     }
     
+    @Override
     public Map<K, V> filterEntries(Predicate<Map.Entry<K, V>> predicate)
     {
         Map<K, V> result = new HashMap<K, V>();

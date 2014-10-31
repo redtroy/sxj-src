@@ -58,6 +58,7 @@ public class RedisSortedSet<V> extends RedisObject implements RSortedSet<V>
         
         static final NaturalComparator NATURAL_ORDER = new NaturalComparator();
         
+        @Override
         public int compare(V c1, V c2)
         {
             Comparable<Object> c1co = (Comparable<Object>) c1;
@@ -230,6 +231,7 @@ public class RedisSortedSet<V> extends RedisObject implements RSortedSet<V>
         });
     }
     
+    @Override
     public Iterator<V> iterator()
     {
         final int ind = 0;
@@ -407,6 +409,7 @@ public class RedisSortedSet<V> extends RedisObject implements RSortedSet<V>
         });
     }
     
+    @Override
     public Future<Boolean> addAsync(final V value)
     {
         EventLoop loop = getConnectionManager().getGroup().next();
@@ -687,7 +690,7 @@ public class RedisSortedSet<V> extends RedisObject implements RSortedSet<V>
         boolean changed = false;
         for (Iterator iterator = iterator(); iterator.hasNext();)
         {
-            Object object = (Object) iterator.next();
+            Object object = iterator.next();
             if (!c.contains(object))
             {
                 iterator.remove();
@@ -893,6 +896,7 @@ public class RedisSortedSet<V> extends RedisObject implements RSortedSet<V>
         //        return element.getScore();
     }
     
+    @Override
     public String toString()
     {
         Iterator<V> it = iterator();

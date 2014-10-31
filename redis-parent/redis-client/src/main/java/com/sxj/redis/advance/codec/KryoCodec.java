@@ -42,6 +42,7 @@ public class KryoCodec implements RedissonCodec
         
         private final Queue<Kryo> objects = new ConcurrentLinkedQueue<Kryo>();
         
+        @Override
         public Kryo get()
         {
             Kryo kryo;
@@ -52,6 +53,7 @@ public class KryoCodec implements RedissonCodec
             return kryo;
         }
         
+        @Override
         public void yield(Kryo kryo)
         {
             objects.offer(kryo);

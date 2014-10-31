@@ -172,6 +172,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
         return getAndAdd(1);
     }
     
+    @Override
     public long getAndDecrement()
     {
         return getAndAdd(-1);
@@ -191,6 +192,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
         });
     }
     
+    @Override
     public String toString()
     {
         return Long.toString(get());

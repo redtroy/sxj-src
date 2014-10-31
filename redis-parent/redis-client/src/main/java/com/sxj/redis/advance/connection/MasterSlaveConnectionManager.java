@@ -135,6 +135,7 @@ public class MasterSlaveConnectionManager implements ConnectionManager
         };
     }
     
+    @Override
     public <V, T> Future<T> writeAllAsync(AsyncOperation<V, T> asyncOperation)
     {
         Promise<T> mainPromise = getGroup().next().newPromise();
@@ -230,6 +231,7 @@ public class MasterSlaveConnectionManager implements ConnectionManager
         });
     }
     
+    @Override
     public <V, T> Future<T> writeAsync(AsyncOperation<V, T> asyncOperation)
     {
         Promise<T> mainPromise = getGroup().next().newPromise();
@@ -316,6 +318,7 @@ public class MasterSlaveConnectionManager implements ConnectionManager
         });
     }
     
+    @Override
     public <V, R> R write(SyncOperation<V, R> operation)
     {
         return write(-1, operation, 0);
@@ -367,6 +370,7 @@ public class MasterSlaveConnectionManager implements ConnectionManager
         }
     }
     
+    @Override
     public <V, R> R read(SyncOperation<V, R> operation)
     {
         return read(-1, operation, 0);
@@ -418,11 +422,13 @@ public class MasterSlaveConnectionManager implements ConnectionManager
         }
     }
     
+    @Override
     public <V, R> R write(AsyncOperation<V, R> asyncOperation)
     {
         return writeAsync(asyncOperation).awaitUninterruptibly().getNow();
     }
     
+    @Override
     public <V> V get(Future<V> future)
     {
         future.awaitUninterruptibly();
@@ -433,11 +439,13 @@ public class MasterSlaveConnectionManager implements ConnectionManager
         throw ((RedisException) future.cause());
     }
     
+    @Override
     public <V, T> T read(AsyncOperation<V, T> asyncOperation)
     {
         return readAsync(asyncOperation).awaitUninterruptibly().getNow();
     }
     
+    @Override
     public <V, T> Future<T> readAsync(AsyncOperation<V, T> asyncOperation)
     {
         Promise<T> mainPromise = getGroup().next().newPromise();
@@ -782,6 +790,7 @@ public class MasterSlaveConnectionManager implements ConnectionManager
         getEntry(slot).releaseWrite(connection);
     }
     
+    @Override
     public void releaseRead(int slot, RedisConnection connection)
     {
         getEntry(slot).releaseRead(connection);

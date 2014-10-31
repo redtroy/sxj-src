@@ -47,11 +47,13 @@ public abstract class RedisObject implements RObject
         return connectionManager.getGroup().next().<V> newPromise();
     }
     
+    @Override
     public String getName()
     {
         return name;
     }
     
+    @Override
     public void delete()
     {
         delete(getName());

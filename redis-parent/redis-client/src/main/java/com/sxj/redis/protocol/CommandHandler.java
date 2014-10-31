@@ -4,8 +4,6 @@ package com.sxj.redis.protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
-import io.netty.util.CharsetUtil;
-
 import java.util.concurrent.BlockingQueue;
 
 /**

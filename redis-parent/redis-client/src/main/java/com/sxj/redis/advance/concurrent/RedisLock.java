@@ -341,7 +341,7 @@ public class RedisLock extends RedisObject implements RLock
                 Boolean res = connection.setnx(getName(), currentLock);
                 if (!res)
                 {
-                    LockValue lock = (LockValue) connection.get(getName());
+                    LockValue lock = connection.get(getName());
                     if (lock != null && lock.equals(currentLock))
                     {
                         lock.incCounter();
@@ -391,6 +391,7 @@ public class RedisLock extends RedisObject implements RLock
         });
     }
     
+    @Override
     public boolean tryLock(long waitTime, long leaseTime, TimeUnit unit)
             throws InterruptedException
     {

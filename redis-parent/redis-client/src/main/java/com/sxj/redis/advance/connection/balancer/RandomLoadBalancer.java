@@ -25,6 +25,7 @@ public class RandomLoadBalancer extends BaseLoadBalancer
     
     private final Random random = new Random();
     
+    @Override
     int getIndex(List<SubscribesConnectionEntry> clientsCopy)
     {
         return random.nextInt(clientsCopy.size());

@@ -55,6 +55,7 @@ public class JsonJacksonCodec implements RedissonCodec
         TypeResolverBuilder<?> mapTyper = new DefaultTypeResolverBuilder(
                 DefaultTyping.NON_FINAL)
         {
+            @Override
             public boolean useForType(JavaType t)
             {
                 switch (_appliesFor)

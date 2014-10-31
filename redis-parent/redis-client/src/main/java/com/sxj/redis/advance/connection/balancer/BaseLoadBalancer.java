@@ -47,18 +47,21 @@ abstract class BaseLoadBalancer implements LoadBalancer
     
     final Queue<SubscribesConnectionEntry> clients = new ConcurrentLinkedQueue<SubscribesConnectionEntry>();
     
+    @Override
     public void init(RedisCodec codec, MasterSlaveServersConfig config)
     {
         this.codec = codec;
         this.config = config;
     }
     
+    @Override
     public synchronized void add(SubscribesConnectionEntry entry)
     {
         clients.add(entry);
         clientsEmpty.open();
     }
     
+    @Override
     public synchronized void unfreeze(String host, int port)
     {
         InetSocketAddress addr = new InetSocketAddress(host, port);
@@ -75,6 +78,7 @@ abstract class BaseLoadBalancer implements LoadBalancer
         throw new IllegalStateException("Can't find " + addr + " in slaves!");
     }
     
+    @Override
     public synchronized Collection<RedisPubSubConnection> freeze(String host,
             int port)
     {
@@ -136,6 +140,7 @@ abstract class BaseLoadBalancer implements LoadBalancer
         return Collections.emptyList();
     }
     
+    @Override
     @SuppressWarnings("unchecked")
     public RedisPubSubConnection nextPubSubConnection()
     {
@@ -196,6 +201,7 @@ abstract class BaseLoadBalancer implements LoadBalancer
         }
     }
     
+    @Override
     public RedisConnection nextConnection()
     {
         clientsEmpty.awaitUninterruptibly();
@@ -256,6 +262,7 @@ abstract class BaseLoadBalancer implements LoadBalancer
     
     abstract int getIndex(List<SubscribesConnectionEntry> clientsCopy);
     
+    @Override
     public void returnSubscribeConnection(RedisPubSubConnection connection)
     {
         for (SubscribesConnectionEntry entry : clients)
@@ -276,6 +283,7 @@ abstract class BaseLoadBalancer implements LoadBalancer
         }
     }
     
+    @Override
     public void returnConnection(RedisConnection connection)
     {
         for (SubscribesConnectionEntry entry : clients)
@@ -296,6 +304,7 @@ abstract class BaseLoadBalancer implements LoadBalancer
         }
     }
     
+    @Override
     public void shutdown()
     {
         for (SubscribesConnectionEntry entry : clients)

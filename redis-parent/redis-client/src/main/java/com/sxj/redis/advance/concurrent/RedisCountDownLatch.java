@@ -167,6 +167,7 @@ public class RedisCountDownLatch extends RedisObject implements RCountDownLatch
         }
     }
     
+    @Override
     public void await() throws InterruptedException
     {
         Future<Boolean> promise = subscribe();
