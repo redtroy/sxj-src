@@ -20,7 +20,7 @@
 <script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>	
 <@b.pageScript/>
-<@b.errorInfo/>
+<@b.errorInfo/><@b.dialogBox/>
 <@b.upload/>
 <script>
 
@@ -69,16 +69,17 @@ function query(page){
 	});
 }
 function delContract(id){
-	if(confirm('确实要删除该合同吗?')){
+	dialogBox(function() {
 	$.post("delete.htm",{id:id},function(data){
 		if (data.isOK == 'ok') {
-			  alert("成功")
-			  window.location.href="query.htm";
+			succInfo(function(){
+				 var currentpage=$("#pager").attr("currentpage");
+				  query(currentpage);
+			 },"删除成功"); 
 			}else{
-				alert("失败");
+				messageInfo("失败");
 			}	
-	});
-	}
+	});}, "确实要删除该合同吗?");
 }
 $(function(){
 	$(".modal-header .close").live("click",function(){
@@ -95,17 +96,18 @@ function check(id,recordNo,contractType){
 			return;
 		}
 	}
-	if(confirm('确实要审核该合同吗?')){
+	dialogBox(function() {
 	$.post("check.htm",{contractId:id},function(data){
 		if (data.isOK == 'ok') {
-			  alert("成功");
-			  var currentpage=$("#pager").attr("currentpage");
-			  query(currentpage);
+			succInfo(function(){
+				 var currentpage=$("#pager").attr("currentpage");
+				  query(currentpage);
+			 },"审核成功");
+			 
 			}else{
-				alert("失败");
+				messageInfo("审核失败");
 			}	
-	});
-	}
+	});}, "确定审核该合同吗?");
 }
 </script>
 <!-- InstanceEndEditable -->

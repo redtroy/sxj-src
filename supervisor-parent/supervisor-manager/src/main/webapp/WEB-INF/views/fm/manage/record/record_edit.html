@@ -40,13 +40,17 @@
 </script>
 <@b.upload/> <@b.validate/>
 <script type="text/javascript">
+var validform;
 	function edit() {
+		if (!validform.check()){
+			return false;
+		}
 	dialogBox(function(){
 		$("#record_save").submit();
 	},"是否修改备案?");
 	}
 	$(function() {
-		$("#record_save").Validform({
+		validform=$("#record_save").Validform({
 			tiptype : 3
 		});
 	})

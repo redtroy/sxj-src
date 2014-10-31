@@ -164,8 +164,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						$.post("saveChanges.htm", $("#changsForm").serialize(),
 								function(data) {
 									if (data.isOK == 'ok') {
-										messageInfo("变更成功")
-										window.location.href = "query.htm";
+										succInfo(function(){
+											window.location.href = "query.htm";
+										 },"变更成功");
 									} else {
 										messageInfo("变更失败");
 									}

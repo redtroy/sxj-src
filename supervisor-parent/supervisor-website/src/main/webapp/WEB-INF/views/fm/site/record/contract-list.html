@@ -29,7 +29,7 @@
 <script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
 
-<@b.pageScript/> <@b.errorInfo/> <@b.upload/>
+<@b.pageScript/> <@b.errorInfo/> <@b.upload/><@b.dialogBox/>
 <script>
 var preModal;
 jQuery(document).ready(function($) {
@@ -194,14 +194,17 @@ function saveBiangeng(){
 			return false;
 		}
 		if($("#bgimgPath").val()!='' ){
-		$.post("modifyRecord.htm", o, function(data) {
-			if (data.isOK == 'ok') {
-				alert("上传变更扫描件成功");
-				window.location.href = "query.htm";
-			} else {
-				alert("上传变更扫描件失败");
-			}
-		});
+			dialogBox(function(){
+				$.post("modifyRecord.htm", o, function(data) {
+					if (data.isOK == 'ok') {
+						succInfo(function(){
+							window.location.href="query.htm";
+						},"上传变更扫描件成功!");  
+					} else {
+						errorInfo("上传变更扫描件失败");
+					}
+				});
+			},"是否变更合同?");
 		}else{
 			messageInfo("请上传图片");
 		}
@@ -230,15 +233,17 @@ function busunSeav(){
 			return;
 		}
 		if($("#bsimgPath").val()!='' ){
-		$.post("modifyRecord.htm", o, function(data) {
-			if (data.isOK == 'ok') {
-				succInfo(function(){
-					window.location.href="query.htm";
-				},"上传补损扫描件成功!");  
-			} else {
-				errorInfo("上传补损扫描件失败");
-			}
-		});
+			dialogBox(function(){
+			$.post("modifyRecord.htm", o, function(data) {
+				if (data.isOK == 'ok') {
+					succInfo(function(){
+						window.location.href="query.htm";
+					},"上传补损扫描件成功!");  
+				} else {
+					errorInfo("上传补损扫描件失败");
+				}
+			});
+		},"是否补损合同?");
 	}else{
 		messageInfo("请上传图片");
 	}
@@ -347,19 +352,19 @@ function busunSeav(){
 	}
 
 	function delRecord(id,contractNo) {
-		
-			if (confirm("确定删除备案吗?")) {
+		dialogBox(function(){
 				$.post("delRecord.htm", {
 					id : id
 				}, function(data) {
 					if (data.isOK == "ok") {
-						$("#" + id).remove();
-						window.location.href="query.htm";
+						succInfo(function(){
+							window.location.href="query.htm";
+						},"删除备案成功!");  
+						
 					} else {
 						errorInfo("删除备案失败");
 					}
-				});
-			}
+				});},"是否删除备案?");
 	}
 </script>
 </head>
@@ -475,13 +480,13 @@ function busunSeav(){
 							<#if type==0>
 								<#if record.contractType.getId()==0>
 									<#if record.contractNo??>
-									-
-									<#else>
 									<a href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span
 										class="icon icon16 icon-edit"></span>修改</a>
 									 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
 									 <span
 										class="icon icon16 icon-del"></span>删除</a> 
+									<#else>
+									-
 									</#if>
 								<#else>
 									<#if record.type.getId()==0>
@@ -517,7 +522,7 @@ function busunSeav(){
 									</#if>
 								</#if>
 							<#else>
-								<#if record.contractNo?exists>
+								<#if record.contractNo??>
 								-
 								<#else>
 								<a href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span
@@ -525,6 +530,7 @@ function busunSeav(){
 								 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
 								 <span
 									class="icon icon16 icon-del"></span>删除</a> 
+								
 								</#if>
 							</#if>
 							

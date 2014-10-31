@@ -35,13 +35,17 @@
 </script>
 <@b.upload/> <@b.validate/>
 <script type="text/javascript">
+var validform;
 	function edit() {
+		if (!validform.check()){
+			return false;
+		}
 		dialogBox(function(){
 		$("#record_save").submit();
 		},"是否修改备案?");
 	}
 	$(function() {
-		$("#record_save").Validform({
+		validform=$("#record_save").Validform({
 			tiptype : 3
 		});
 	})
@@ -131,7 +135,6 @@
 					<ul>
 						<form action="record_save.htm?id=${record.id}" method="post"
 							id="record_save">
-							<input type="hidden" value="${record.contractType.getId()}" name="contractType" />
 							<input type="hidden" name="contractNo" value="${record.contractNo}" />
 							<li><label>备案号</label>${record.recordNo}</li>
 							<li><label>申请会员</label>${record.applyName}</li>

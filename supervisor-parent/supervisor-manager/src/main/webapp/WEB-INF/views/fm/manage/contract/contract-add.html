@@ -133,8 +133,9 @@ var ul_validform;
 		dialogBox(function(){
 			$.post("addContract.htm", $("#addForm").serialize(), function(data) {
 				if (data.isOK == 'ok') {
-					messageInfo("生成合同成功");
-					window.location.href = "${basePath}record/recordList.htm";
+					succInfo(function(){
+						window.location.href = "${basePath}record/recordList.htm";
+					 },"生成合同成功");
 				} else {
 					messageInfo("生成合同失败");
 				}
