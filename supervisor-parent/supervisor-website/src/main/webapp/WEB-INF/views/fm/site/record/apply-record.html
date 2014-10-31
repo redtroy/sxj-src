@@ -281,12 +281,19 @@
 			url : urlA,
 			callback : function(data) {
 				$("#memberIdA").val(data.result);
+			},
+			beforeShow:function(data){
+				alert(data[0].title);
 			}
 		});
 		$("#memberNameB").bigAutocomplete({
 			url : urlB,
 			callback : function(data) {
+				if(data)
 				$("#memberIdB").val(data.result);
+			},
+			beforeShow:function(data){
+				alert(data[0].result);
 			}
 		});
 	});

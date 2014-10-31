@@ -368,12 +368,18 @@ public class RedisLock extends RedisObject implements RLock
             @Override
             public Long execute(RedisConnection<Object, Object> connection)
             {
-                long time = unit.toMillis(leaseTime);
-                String res = connection.setexnx(getName(), currentLock, time);
-                if ("OK".equals(res))
-                {
+                long time = unit.toSeconds(leaseTime);
+                connection.multi();
+                connection.setnx(getName(), currentLock);
+                connection.expire(getName(), unit.toSeconds(leaseTime));
+                List<Object> exec = connection.exec();
+                if (exec.size() > 0)
                     return null;
-                }
+                //                String res = connection.setexnx(getName(), currentLock, time);
+                //                if ("OK".equals(res))
+                //                {
+                //                    return null;
+                //                }
                 else
                 {
                     LockValue lock = (LockValue) connection.get(getName());
