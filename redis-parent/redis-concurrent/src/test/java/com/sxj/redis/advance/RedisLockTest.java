@@ -14,12 +14,12 @@ import com.sxj.redis.advance.core.RLock;
 public class RedisLockTest
 {
     
-    AdvanceRedis redis;
+    RedisConcurrent redis;
     
     @Before
     public void before()
     {
-        redis = AdvanceRedis.create();
+        redis = RedisConcurrent.create();
     }
     
     @After
