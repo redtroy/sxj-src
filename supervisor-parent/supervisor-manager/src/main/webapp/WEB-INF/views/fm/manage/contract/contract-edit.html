@@ -31,13 +31,25 @@
 <!-- InstanceEndEditable -->
 <script>
 function modify(){
+	$("#TbData").find(".CaseRow").each(function(i){
+		$(this).find("td").each(function(){
+			if($(this).attr("name")){
+				var name=$(this).attr("name").replace("[index]","["+i+"]");
+				$(this).find("input").attr("name",name);
+				$(this).find("textarea").attr("name",name);
+			}
+		})
+	});
+	
 			dialogBox(function(){
 			$.post("modify.htm",$("#modifyForm").serialize(),function(data){
 				if (data.isOK == 'ok') {
-					  alert("修改成功")
-					  window.location.href="query.htm";
+					
+					succInfo(function(){
+						window.location.href="query.htm";
+					 },"修改成功");
 					}else{
-						alert("修改失败");
+						messageInfo("修改失败");
 					}
 			})
 			},"是否修改合同?");
@@ -154,6 +166,27 @@ var caculateRow=function($tr){
 			$(this).parent().parent().remove();
 			caculate();
 		})
+		
+		var quantity=0;
+		var amount=0;
+		$(".quantityClass").each(function(){
+			if($(this).val()){
+				quantity+=parseInt($(this).val());
+			}
+		});
+		$(".priceClass").each(function(){
+			if($(this).val()){
+				$(this).val(parseFloat($(this).val()).toFixed(2));
+			}
+		});
+		$(".amountClass").each(function(){
+			if($(this).val()){
+				amount+=parseFloat($(this).val());
+				$(this).val(parseFloat($(this).val()).toFixed(2));
+			}
+		});
+		$("#quantitySum").html(quantity);
+		$("#amountSum").html(amount.toFixed(2));
 	});
 //将传入数据转换为字符串,并清除字符串中非数字与.的字符
 //按数字格式补全字符串
@@ -234,25 +267,12 @@ var getFloatStr = function(num){
 						  <#assign m = (m+item.amount)?int >
 						  
 						<tr id="trDataRow${item_index}" class="CaseRow">
-						<input name="itemList[${item_index}].id"
-								type="hidden" value="${item.id}" />
-							<td><input
-								name="itemList[${item_index}].productName"
-								type="text" value="${item.productName}" /></td>
-							<td><input
-								name="itemList[${item_index}].productModel"
-								type="text" value="${item.productModel}" /></td>
-							<td><input
-								name="itemList[${item_index}].quantity" type="text"
-								value="${item.quantity}" class="quantityClass unit" /></td>
-							<td><input name="itemList[${item_index}].price"
-								type="text" value="${item.price}" class="priceClass unit"/></td>
-							<td><input
-								name="itemList[${item_index}].amount" type="text"
-								value="${item.amount}" class="amountClass" /></td>
-							<td><textarea
-									name="itemList[${item_index}].remarks" cols=""
-									rows="2">${item.remarks}</textarea></td>
+							<td name="itemList[index].productName"><input  type="text" value="${item.productName}" /></td>
+							<td name="itemList[index].productModel"><input type="text" value="${item.productModel}" /></td>
+							<td name="itemList[index].quantity"><input type="text" value="${item.quantity}" class="quantityClass unit" /></td>
+							<td name="itemList[index].price"><input  type="text" value="${item.price}" class="priceClass unit"/></td>
+							<td name="itemList[index].amount"><input  type="text" value="${item.amount}" class="amountClass" /></td>
+							<td name="itemList[index].remarks"><textarea  cols="" rows="2">${item.remarks}</textarea></td>
 							<td><a href="javascript:void(0);" class="lnk-green"
 									name="add" >+</a>&nbsp;&nbsp;<a href="javascript:void(0);" class="lnk-red"
 									name="add">-</a></td>
@@ -261,15 +281,15 @@ var getFloatStr = function(num){
 						<tr id="total_tr">
 							<td><strong>合计</strong></td>
 							<td>&nbsp;</td>
-							<td><span id="quantitySum">${n}</span></td>
+							<td><span id="quantitySum"></span></td>
 							<td>&nbsp;</td>
-							<td><span id="amountSum">${m}</span></td>
+							<td><span id="amountSum"></span></td>
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
 						</tr>
 					</table>
 					<div>
-						<label>交货地址</label> <input name="contractModel.contract.deliveryAddress" type="text"
+						<label>交货地址</label> <input name="contract.deliveryAddress" type="text"
 							value="${contractModel.contract.deliveryAddress}" />
 					</div>
 					<#if contractModel.batchList?exists >
@@ -320,20 +340,20 @@ var getFloatStr = function(num){
 					</table>
 					</#if>
 					<div>
-						<label>本合同还有</label> <input name="contractModel.contract.batchCount" type="text" value="<#if contractModel.batchList?exists>${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
+						<label>本合同还有</label> <input name="contract.batchCount" type="text" value="<#if contractModel.batchList?exists>${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
             <#else>${contractModel.contract.batchCount} </#if>" class="input-w30" /> 批次待交付
 					</div>
 					<div>
-						<label>合同定金</label> <input name="contractModel.contract.deposit" type="text" value="${contractModel.contract.deposit}" />
+						<label>合同定金</label> <input name="contract.deposit" type="text" value="${contractModel.contract.deposit}" />
 						元
 					</div>
 					<div>
 						<label>合同备注</label>
-						<textarea name="contractModel.contract.remarks" id="textarea2" cols="80" rows="3">${contractModel.contract.remarks}</textarea>
+						<textarea name="contract.remarks" id="textarea2" cols="80" rows="3">${contractModel.contract.remarks}</textarea>
 					</div>
 						<div class="contPic">
 							<label>合同备案扫描件</label>
-							<input type="hidden" value="${contractModel.contract.imgPath}" name="contractModel.contract.imgPath" id="contractImgPath" />
+							<input type="hidden" value="${contractModel.contract.imgPath}" name="contract.imgPath" id="contractImgPath" />
 							<div class="rollBox" id="contractRollBox">
 								<ul id="contractUl" class="elastislide-list"></ul>
 							</div>
@@ -381,7 +401,8 @@ var getFloatStr = function(num){
 							<col width="15%" />
 							<col width="10%" />
 							<col width="10%" />
-							<col width="25%" />
+							<col width="15%" />
+							<col width="10%" />
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
@@ -389,6 +410,8 @@ var getFloatStr = function(num){
 								<th>单价<span>(元<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
 								<th>金额<span>(元)</span></th>
 								<th class="rLine">备注说明</th>
+								<th><a href="javascript:void(0);" class="lnk-green"
+									name="add" >+</a></th>
 							</tr>
              			<#list modifyList.modifyItemList  as modifyItem>
              			
@@ -401,7 +424,8 @@ var getFloatStr = function(num){
 								<td><input type="text" value="${modifyItem.amount}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" /></td>
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].remarks" id="textarea10" cols="25"
 										rows="1">${modifyItem.remarks}</textarea> 
-										&nbsp;&nbsp;<a href="#" class="lnk-green">X</a><input type="hidden" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].id" value="${modifyItem.id}" /> </td>
+										&nbsp;&nbsp; </td>
+										<td><a href="javascript:void(0);" class="lnk-red">X</a></td>
 							</tr>
 						 </#list>
 						</table>
