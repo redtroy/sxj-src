@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
@@ -62,6 +63,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	 * 申请单更新
 	 */
 	@Override
+	@Transactional
 	public void updateApp(RfidApplicationEntity app) throws ServiceException {
 		try {
 			appDao.updateRfidApplication(app);

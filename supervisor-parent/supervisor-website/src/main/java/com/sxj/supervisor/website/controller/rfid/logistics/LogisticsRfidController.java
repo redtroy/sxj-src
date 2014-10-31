@@ -130,8 +130,8 @@ public class LogisticsRfidController extends BaseController {
 			model.put("list", list);
 			return "site/rfid/logisticsB/logistics-list";
 		} catch (Exception e) {
-			SxjLogger.error("查询门窗RFID错误", e, this.getClass());
-			throw new WebException("查询门窗RFID错误");
+			SxjLogger.error("查询物流RFID错误", e, this.getClass());
+			throw new WebException("查询物流RFID错误");
 		}
 	}
 
