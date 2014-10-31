@@ -7,10 +7,12 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<@b.errorInfo/>
+<@b.dialogBox/>
+<@b.validate/>
+<@b.header/>
 <script>
-
-	$(function($) {
-
+	$(function($){
 		var url_ = "${basePath}autoSupplier.htm";
 		$("#supplierName").bigAutocomplete({
 			url : url_,
@@ -28,11 +30,28 @@
 			
 		});
 	});
+	function subForm(){
+		  $("#add").submit();
+	  }
+		$("#add").Validform({
+			tiptype:3,
+			datatype:{
+				"price":/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+				"count":/^[0-9]*$/
+			},
+			callback:function(form){
+				saveAdd();
+			}
+		});
 	function saveAdd() {
 		var count = $("#count").val();
 		if (count != 0) {
 			dialogBox(function() {
 				var price = $("#price").val();
+				if(price<=0){
+					erroeInfo("单价必须大于0");
+					return false;
+				}
 				var remaining = $("#remaining").val();
 				$("#price").val(parseFloat(price));
 				if (parseFloat(count) > parseFloat(remaining)) {
@@ -60,9 +79,6 @@
 <!-- InstanceEndEditable -->
 </head>
 <body>
-<@b.errorInfo/>
-<@b.dialogBox/>
-<@b.header/>
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
 <@b.menuPath/>
@@ -90,32 +106,31 @@
       </div>
       <div>
         <label>RFID供应商</label>
-        <input type="text" id="supplierName" name="supplierName" class="text tip" title="" />
-        <input type="hidden" id="supplierNo" name="supplierNo" class="text tip" title="" />
+        <input type="text" id="supplierName" name="supplierName" class="text tip" title="RFID供应商名称" />
+        <input type="hidden" id="supplierNo" name="supplierNo" class="text tip" title="RFID供应商" />
       </div>
       <div>
         <label>实际采购价格</label>
-        <input type="text" id="price" name="price" class="input-w30 number" value="" title=""/>元
+        <input type="text" id="price" name="price" class="input-w30" title="实际采购价格" datatype="price" nullmsg="请输入采购价格！" errormsg="价格不合法" />元
       </div>
       <div>
         <label>采购数量</label>
         <input type="hidden" id="hasNumber" name="hasNumber" value="${app.hasNumber}" />
         <#if app.count gt 0>
         <input type="hidden" id="remaining" value="${app.count-app.hasNumber}" />
-        <input type="text" id="count" name="count" class="input-w80 number" value="${app.count-app.hasNumber}" title=""/>
+        <input type="text" id="count" name="count" class="input-w80 number" value="${app.count-app.hasNumber}" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入数字"/>
         <#else>
          <input type="hidden" id="remaining" value="0" />
-         <input type="text" id="count" name="count" class="input-w80" value="0" title="" onkeyup="sum();"/>
+         <input type="text" id="count" name="count" class="input-w80" value="0" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入数字" onkeyup="sum();"/>
          </#if>
         <span class="color-red f12">该申请单已采购${app.hasNumber}张RFID</span>
       </div>
       <div>
         <label>订单总额</label><span class="color-blue"><strong id="ddze">0元</strong></span></div>     
-    <div class="btnBox"><a href="javascript:saveAdd()" class="button button-orange button-small">生成</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div></div>
+    <div class="btnBox"><a href="javascript:subForm();" class="button button-orange button-small">生成</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div></div>
     <!-- InstanceEndEditable --></div>
     </form>
 </div>
-
 <@b.footer />
 </body>
 <!-- InstanceEnd --></html>

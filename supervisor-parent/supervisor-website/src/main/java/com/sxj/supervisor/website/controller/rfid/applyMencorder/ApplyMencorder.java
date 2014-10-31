@@ -15,6 +15,7 @@ import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -75,7 +76,7 @@ public class ApplyMencorder extends BaseController {
 	 */
 	@RequestMapping("check_contract")
 	public @ResponseBody Map<String, String> check_contract(String contractNo,
-			Integer count) throws WebException {
+			Long count, HttpSession session) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			ContractModel cm = contractService
@@ -85,21 +86,30 @@ public class ApplyMencorder extends BaseController {
 				map.put("erro", "没有找到相匹配的合同");
 				return map;
 			}
+			String memberIdA = cm.getContract().getMemberIdA();
+			String memberIdB = cm.getContract().getMemberIdB();
+			SupervisorPrincipal userInfo = getLoginInfo(session);
+			String memberId = userInfo.getMember().getMemberNo();
+			if (!memberId.equals(memberIdA) && !memberId.equals(memberIdB)) {
+				map.put("flag", "false");
+				map.put("erro", "该合同号不属于当前会员");
+				return map;
+			}
 			if (cm.getContract().getType().getId() != 0) {
 				map.put("flag", "false");
 				map.put("erro", "合同类型不匹配");
 				return map;
 			}
-			float Total = 0;
-			int num = cm.getItemList().size();
-			for (int i = 0; i < num; i++) {
-				Total = Total + cm.getItemList().get(i).getQuantity();
-			}
-			if (count > Total) {
-				map.put("flag", "false");
-				map.put("erro", "超过额定发放数量，额定发放数量为" + Total);
-				return map;
-			}
+			// float Total = 0;
+			// int num = cm.getItemList().size();
+			// for (int i = 0; i < num; i++) {
+			// Total = Total + cm.getItemList().get(i).getQuantity();
+			// }
+			// if (count > Total) {
+			// map.put("flag", "false");
+			// map.put("erro", "超过额定发放数量，额定发放数量为" + Total);
+			// return map;
+			// }
 			map.put("flag", "true");
 			return map;
 		} catch (Exception e) {
