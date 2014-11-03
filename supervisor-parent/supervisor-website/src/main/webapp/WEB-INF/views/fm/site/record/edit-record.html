@@ -56,66 +56,83 @@ jQuery(document).ready(function($) {
 		$('.maskdivgen').fadeOut(100);
 		$('.viewer').slideUp(200);
 	});
-	
-	$('#carousel').find("li").live("click",function(){
-		var el=$(this);
-		var imageSource = el.find("a").attr("data-image");
-		refreshIviewer($("#viewer2"),imageSource);
-		el.parent().children("li").removeClass("view");
-		el.addClass("view");
-	});
-	
-	$.post("${basePath}filesort.htm",{fileId:$("#imgPath").val()},function(imgPaths){
-		refreshElastislide($(".rollBox"),$("#carousel"),imgPaths);
-	});
 	validform=$("#form").Validform({
 		tiptype : 3
 	});
 });
-
+//图片处理事件
+//加载绑定扫描件(默认图片地址,滚动UL)
+var imgBinding = function() {
+	$(".elastislide-list").each(function() {
+		var $this = $(this);
+		var imgPath = $(this).parent().siblings(":hidden").val();
+		$.post("${basePath}filesort.htm", {
+			fileId : imgPath
+		}, function(imgPaths) {
+			refreshElastislide($this.parent(), $this, imgPaths);
+		});
+	});
+}
+closeViewer =function(){
+	$('.maskdivgen').fadeOut(100);
+	$('.viewer').slideUp(200);
+}
+var uploadImg = function($file) {
+	var $div = $file.parent().parent().parent();
+	var $carousel = $div.find(".elastislide-list");
+	var $container = $carousel.parent();
+	var $hidden = $container.parent().find(":input");
+	$file.uploadify({
+		swf : '${basePath}upload/uploadify.swf',
+		uploader : "${basePath}upload.htm",
+		fileTypeExts : '*.gif; *.jpg; *.png',
+		auto : true,
+		multi : true,
+		height : 30,
+		width : 120,
+		buttonText : '上传合同扫描件',
+		onUploadSuccess : function(file, data, response) {
+			var num = 1;
+			var dataObj = eval("(" + data + ")");//转换为json对象 
+			var hideVal = $hidden.val();
+			if (hideVal == '') {
+				hideVal = dataObj.fileIds;
+			} else {
+				var arrays = hideVal.split(",");
+				for (var i = 0; i < arrays.length; i++) {
+					if (arrays[i]) {
+						num += 1;
+					}
+				}
+				hideVal += "," + dataObj.fileIds;
+			}
+			$hidden.val(hideVal);
+			refreshElastislide($container, $carousel, dataObj);
+		}
+	});
+}
 $(document).ready(function() {
-	$(":file").uploadify({
-						swf : '${basePath}upload/uploadify.swf',
-						uploader : "${basePath}upload.htm",
-						fileTypeExts : '*.gif; *.jpg; *.png',
-						auto : true,
-						multi : true,
-						height : 30,
-						width : 120,
-						buttonText : '上传合同扫描件',
-						onUploadSuccess : function(file,
-								data, response) {
-							var num = 1;
-							var dataObj = eval("(" + data+ ")");//转换为json对象 
-							var hideVal = $("#imgPath").val();
-							if (hideVal == '') {
-								hideVal = dataObj.fileIds;
-							} else {
-								var arrays =hideVal.split(",");
-								for(var i=0;i<arrays.length;i++){
-									if(arrays[i]){
-										num+=1;
-									}
-								}
-								hideVal += ","+ dataObj.fileIds;
-							}
-							refreshElastislide($(".rollBox"),$("#carousel"),dataObj);
-							$("#imgPath").val(hideVal);
-						}
-					});
-				});
+	$('.modal-header .close').click(function() {
+		$('.maskdivgen').fadeOut(100);
+		$('.viewer').slideUp(200);
+	})
+	$('.elastislide-list').find("li").live("click", function() {
+		var el = $(this);
+		var imageSource = el.find("a").attr("data-image");
+		currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
+		currentLi=$(this);
+		refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
+		el.parent().children("li").removeClass("view");
+		el.addClass("view");
+		$(".maskdivgen").show();
+		$(".viewer").show();
+	});
+	uploadImg($("#uploadFile"));
+	//uploadImg($("#bgFile"));
+	//uploadImg($("#bsFile"));
+	imgBinding();
+});
 				
-	function upload(data){
-	    var dataObj=eval("("+data+")");//转换为json对象 
-	    $("#imageList").attr("src","${b.imagePath}"+dataObj.fileIds+"100x120.JPG");
-	    var hideVal= $("#imgPathHide").val();
-        if(hideVal==""){
-        	hideVal+=dataObj.fileIds;
-        }else{
-        	hideVal+=","+dataObj.fileIds;
-        }
-        $("#imgPathHide").val(hideVal);
-	}
 	//甲方采购
 	function AcgModify(){
 		if (!validform.check()){
@@ -343,6 +360,7 @@ $(document).ready(function() {
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
 								</div>
+								</div>
 							<div class="item">
 								<label>上传合同扫描件</label>
 								<div class="ly-left">
@@ -380,6 +398,7 @@ $(document).ready(function() {
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
 								</div>
+								</div>
 							<div class="item ly-clearFix">
 								<label>上传合同扫描件</label>
 								<div class="ly-left">
@@ -409,6 +428,7 @@ $(document).ready(function() {
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
 								</div>
+								</div>
 							<div class="item">
 								<label>上传变更合同扫描件</label>
 								<div class="ly-left">
@@ -437,6 +457,7 @@ $(document).ready(function() {
 									<input type="hidden" name="id" id="id" value="${record.id}" />
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
+								</div>
 								</div>
 							<div class="item">
 								<label>上传补损合同扫描件</label>
