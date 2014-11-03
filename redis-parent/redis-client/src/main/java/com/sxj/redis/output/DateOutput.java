@@ -12,13 +12,16 @@ import java.util.Date;
  *
  * @author Will Glozer
  */
-public class DateOutput<K, V> extends CommandOutput<K, V, Date> {
-    public DateOutput(RedisCodec<K, V> codec) {
+public class DateOutput<K, V> extends CommandOutput<K, V, Date>
+{
+    public DateOutput(RedisCodec<K, V> codec)
+    {
         super(codec, null);
     }
-
+    
     @Override
-    public void set(long time) {
+    public void set(long time)
+    {
         output = new Date(time * 1000);
     }
 }

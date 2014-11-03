@@ -14,13 +14,16 @@ import static java.lang.Double.parseDouble;
  *
  * @author Will Glozer
  */
-public class DoubleOutput<K, V> extends CommandOutput<K, V, Double> {
-    public DoubleOutput(RedisCodec<K, V> codec) {
+public class DoubleOutput<K, V> extends CommandOutput<K, V, Double>
+{
+    public DoubleOutput(RedisCodec<K, V> codec)
+    {
         super(codec, null);
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
+    public void set(ByteBuffer bytes)
+    {
         output = (bytes == null) ? null : parseDouble(decodeAscii(bytes));
     }
 }

@@ -15,39 +15,41 @@
  */
 package com.sxj.redis.advance;
 
-
-class BaseConfig<T extends BaseConfig<T>> {
-
+class BaseConfig<T extends BaseConfig<T>>
+{
+    
     /**
      * Redis operation execution timeout.
      * Then amount is reached exception will be thrown in case of <b>sync</b> operation usage
      * or <code>Future</code> callback fails in case of <b>async</b> operation.
      */
     private int timeout = 60000;
-
+    
     private int retryAttempts = 5;
-
+    
     private int retryInterval = 1000;
-
+    
     /**
      * Database index used for Redis connection
      */
     private int database = 0;
-
+    
     /**
      * Password for Redis authentication. Should be null if not needed
      */
     private String password;
-
+    
     /**
      * Subscriptions per Redis connection limit
      */
     private int subscriptionsPerConnection = 5;
-
-    BaseConfig() {
+    
+    BaseConfig()
+    {
     }
-
-    BaseConfig(T config) {
+    
+    BaseConfig(T config)
+    {
         setPassword(config.getPassword());
         setSubscriptionsPerConnection(config.getSubscriptionsPerConnection());
         setRetryAttempts(config.getRetryAttempts());
@@ -55,35 +57,41 @@ class BaseConfig<T extends BaseConfig<T>> {
         setDatabase(config.getDatabase());
         setTimeout(config.getTimeout());
     }
-
+    
     /**
      * Subscriptions per Redis connection limit
      * Default is 5
      *
      * @param subscriptionsPerConnection
      */
-    public T setSubscriptionsPerConnection(int subscriptionsPerConnection) {
+    public T setSubscriptionsPerConnection(int subscriptionsPerConnection)
+    {
         this.subscriptionsPerConnection = subscriptionsPerConnection;
         return (T) this;
     }
-    public int getSubscriptionsPerConnection() {
+    
+    public int getSubscriptionsPerConnection()
+    {
         return subscriptionsPerConnection;
     }
-
+    
     /**
      * Password for Redis authentication. Should be null if not needed
      * Default is <code>null</code>
      *
      * @param password
      */
-    public T setPassword(String password) {
+    public T setPassword(String password)
+    {
         this.password = password;
         return (T) this;
     }
-    public String getPassword() {
+    
+    public String getPassword()
+    {
         return password;
     }
-
+    
     /**
      * Reconnection attempts amount.
      * Then amount is reached exception will be thrown in case of <b>sync</b> operation usage
@@ -93,14 +101,17 @@ class BaseConfig<T extends BaseConfig<T>> {
      *
      * @param retryAttempts
      */
-    public T setRetryAttempts(int retryAttempts) {
+    public T setRetryAttempts(int retryAttempts)
+    {
         this.retryAttempts = retryAttempts;
         return (T) this;
     }
-    public int getRetryAttempts() {
+    
+    public int getRetryAttempts()
+    {
         return retryAttempts;
     }
-
+    
     /**
      * Time pause before next reconnection attempt.
      *
@@ -108,28 +119,34 @@ class BaseConfig<T extends BaseConfig<T>> {
      *
      * @param retryInterval - time in milliseconds
      */
-    public T setRetryInterval(int retryInterval) {
+    public T setRetryInterval(int retryInterval)
+    {
         this.retryInterval = retryInterval;
         return (T) this;
     }
-    public int getRetryInterval() {
+    
+    public int getRetryInterval()
+    {
         return retryInterval;
     }
-
+    
     /**
      * Database index used for Redis connection
      * Default is <code>0</code>
      *
      * @param database
      */
-    public T setDatabase(int database) {
+    public T setDatabase(int database)
+    {
         this.database = database;
         return (T) this;
     }
-    public int getDatabase() {
+    
+    public int getDatabase()
+    {
         return database;
     }
-
+    
     /**
      * Redis operation execution timeout.
      * Then amount is reached exception will be thrown in case of <b>sync</b> operation usage
@@ -137,12 +154,15 @@ class BaseConfig<T extends BaseConfig<T>> {
      *
      * @param timeout in milliseconds
      */
-    public T setTimeout(int timeout) {
+    public T setTimeout(int timeout)
+    {
         this.timeout = timeout;
         return (T) this;
     }
-    public int getTimeout() {
+    
+    public int getTimeout()
+    {
         return timeout;
     }
-
+    
 }

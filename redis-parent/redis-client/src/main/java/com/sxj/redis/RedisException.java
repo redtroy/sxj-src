@@ -9,16 +9,20 @@ package com.sxj.redis;
  * @author Will Glozer
  */
 @SuppressWarnings("serial")
-public class RedisException extends RuntimeException {
+public class RedisException extends RuntimeException
+{
     
-    public RedisException() {
+    public RedisException()
+    {
     }
     
-    public RedisException(String msg) {
+    public RedisException(String msg)
+    {
         super(msg);
     }
-
-    public RedisException(String msg, Throwable e) {
+    
+    public RedisException(String msg, Throwable e)
+    {
         super(msg, e);
     }
 }

@@ -3,27 +3,37 @@ package com.sxj.redis.output;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MapScanResult<K, V> {
-
+public class MapScanResult<K, V>
+{
+    
     private Long pos;
+    
     private K lastKey;
+    
     private Map<K, V> values = new LinkedHashMap<K, V>();
     
-    public void setPos(Long pos) {
+    public void setPos(Long pos)
+    {
         this.pos = pos;
     }
-    public Long getPos() {
+    
+    public Long getPos()
+    {
         return pos;
     }
     
-    public void addKey(K key) {
+    public void addKey(K key)
+    {
         lastKey = key;
     }
     
-    public void addValue(V value) {
+    public void addValue(V value)
+    {
         values.put(lastKey, value);
     }
-    public Map<K, V> getMap() {
+    
+    public Map<K, V> getMap()
+    {
         return values;
     }
     

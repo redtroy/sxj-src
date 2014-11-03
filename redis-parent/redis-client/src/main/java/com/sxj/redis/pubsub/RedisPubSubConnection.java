@@ -39,11 +39,14 @@ import com.sxj.redis.protocol.CommandArgs;
  *
  * @author Will Glozer
  */
-public class RedisPubSubConnection<K, V> extends RedisAsyncConnection<K, V> {
+public class RedisPubSubConnection<K, V> extends RedisAsyncConnection<K, V>
+{
     private final Queue<RedisPubSubListener<V>> listeners = new ConcurrentLinkedQueue<RedisPubSubListener<V>>();
+    
     private Set<String> channels;
+    
     private Set<String> patterns;
-
+    
     /**
      * Initialize a new connection.
      *
@@ -53,72 +56,93 @@ public class RedisPubSubConnection<K, V> extends RedisAsyncConnection<K, V> {
      * @param unit      Unit of time for the timeout.
      * @param eventLoopGroup
      */
-    public RedisPubSubConnection(RedisCli client, BlockingQueue<Command<K, V, ?>> queue, RedisCodec<K, V> codec, long timeout, TimeUnit unit, EventLoopGroup eventLoopGroup) {
+    public RedisPubSubConnection(RedisCli client,
+            BlockingQueue<Command<K, V, ?>> queue, RedisCodec<K, V> codec,
+            long timeout, TimeUnit unit, EventLoopGroup eventLoopGroup)
+    {
         super(client, queue, codec, timeout, unit, eventLoopGroup);
-        channels  = new HashSet<String>();
-        patterns  = new HashSet<String>();
+        channels = new HashSet<String>();
+        patterns = new HashSet<String>();
     }
-
+    
     /**
      * Add a new listener.
      *
      * @param listener Listener.
      */
-    public void addListener(RedisPubSubListener<V> listener) {
+    public void addListener(RedisPubSubListener<V> listener)
+    {
         listeners.add(listener);
     }
-
+    
     /**
      * Remove an existing listener.
      *
      * @param listener Listener.
      */
-    public void removeListener(RedisPubSubListener<V> listener) {
+    public void removeListener(RedisPubSubListener<V> listener)
+    {
         listeners.remove(listener);
     }
-
-    public void psubscribe(String... patterns) {
+    
+    public void psubscribe(String... patterns)
+    {
         dispatch(PSUBSCRIBE, new PubSubOutput<K, V>(codec), args(patterns));
     }
-
-    public void punsubscribe(String... patterns) {
+    
+    public void punsubscribe(String... patterns)
+    {
         dispatch(PUNSUBSCRIBE, new PubSubOutput<K, V>(codec), args(patterns));
     }
-
-    public void subscribe(String... channels) {
+    
+    public void subscribe(String... channels)
+    {
         dispatch(SUBSCRIBE, new PubSubOutput<K, V>(codec), args(channels));
     }
-
-    public Future<V> unsubscribe(String... channels) {
-        return dispatch(UNSUBSCRIBE, new PubSubOutput<K, V>(codec), args(channels));
+    
+    public Future<V> unsubscribe(String... channels)
+    {
+        return dispatch(UNSUBSCRIBE,
+                new PubSubOutput<K, V>(codec),
+                args(channels));
     }
-
+    
     @Override
-    public synchronized void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public synchronized void channelActive(ChannelHandlerContext ctx)
+            throws Exception
+    {
         super.channelActive(ctx);
-
-        if (channels.size() > 0) {
+        
+        if (channels.size() > 0)
+        {
             subscribe(channels.toArray(new String[channels.size()]));
             channels.clear();
         }
-
-        if (patterns.size() > 0) {
+        
+        if (patterns.size() > 0)
+        {
             psubscribe(toArray(patterns));
             patterns.clear();
         }
     }
-
+    
     @Override
     @SuppressWarnings("unchecked")
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg)
+            throws Exception
+    {
         PubSubOutput<K, V> output = (PubSubOutput<K, V>) msg;
-        for (RedisPubSubListener<V> listener : listeners) {
-            switch (output.type()) {
+        for (RedisPubSubListener<V> listener : listeners)
+        {
+            switch (output.type())
+            {
                 case message:
                     listener.message(output.channel(), output.get());
                     break;
                 case pmessage:
-                    listener.message(output.pattern(), output.channel(), output.get());
+                    listener.message(output.pattern(),
+                            output.channel(),
+                            output.get());
                     break;
                 case psubscribe:
                     patterns.add(output.pattern());
@@ -139,17 +163,20 @@ public class RedisPubSubConnection<K, V> extends RedisAsyncConnection<K, V> {
             }
         }
     }
-
-    private CommandArgs<K, V> args(String... keys) {
+    
+    private CommandArgs<K, V> args(String... keys)
+    {
         CommandArgs<K, V> args = new CommandArgs<K, V>(codec);
-        for (String key : keys) {
+        for (String key : keys)
+        {
             args.add(key.toString());
         }
         return args;
     }
-
+    
     @SuppressWarnings("unchecked")
-    private <T> T[] toArray(Collection<T> c) {
+    private <T> T[] toArray(Collection<T> c)
+    {
         Class<T> cls = (Class<T>) c.iterator().next().getClass();
         T[] array = (T[]) Array.newInstance(cls, c.size());
         return c.toArray(array);

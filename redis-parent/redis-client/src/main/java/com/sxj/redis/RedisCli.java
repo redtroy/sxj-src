@@ -35,23 +35,29 @@ import com.sxj.redis.pubsub.RedisPubSubConnection;
  *
  * @author Will Glozer
  */
-public class RedisCli {
-
+public class RedisCli
+{
+    
     private Bootstrap bootstrap;
+    
     private ChannelGroup channels;
+    
     private long timeout;
+    
     private TimeUnit unit;
+    
     private InetSocketAddress addr;
-
+    
     /**
      * Create a new client that connects to the supplied host on the default port.
      *
      * @param host    Server hostname.
      */
-    public RedisCli(EventLoopGroup group, String host) {
+    public RedisCli(EventLoopGroup group, String host)
+    {
         this(group, host, 6379, 60000);
     }
-
+    
     /**
      * Create a new client that connects to the supplied host and port. Connection
      * attempts and non-blocking commands will {@link #setDefaultTimeout timeout}
@@ -60,16 +66,19 @@ public class RedisCli {
      * @param host    Server hostname.
      * @param port    Server port.
      */
-    public RedisCli(EventLoopGroup group, String host, int port, int timeout) {
+    public RedisCli(EventLoopGroup group, String host, int port, int timeout)
+    {
         addr = new InetSocketAddress(host, port);
-
-        bootstrap = new Bootstrap().channel(NioSocketChannel.class).group(group).remoteAddress(addr);
-
+        
+        bootstrap = new Bootstrap().channel(NioSocketChannel.class)
+                .group(group)
+                .remoteAddress(addr);
+        
         setDefaultTimeout(timeout, TimeUnit.MILLISECONDS);
-
+        
         channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     }
-
+    
     /**
      * Set the default timeout for {@link RedisConnection connections} created by
      * this client. The timeout applies to connection attempts and non-blocking
@@ -78,42 +87,47 @@ public class RedisCli {
      * @param timeout   Default connection timeout.
      * @param unit      Unit of time for the timeout.
      */
-    public void setDefaultTimeout(long timeout, TimeUnit unit) {
+    public void setDefaultTimeout(long timeout, TimeUnit unit)
+    {
         this.timeout = timeout;
-        this.unit    = unit;
-        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int) unit.toMillis(timeout));
+        this.unit = unit;
+        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
+                (int) unit.toMillis(timeout));
     }
-
+    
     /**
      * Open a new synchronous connection to the redis server that treats
      * keys and values as UTF-8 strings.
      *
      * @return A new connection.
      */
-    public RedisConnection<String, String> connect() {
+    public RedisConnection<String, String> connect()
+    {
         return connect(new Utf8StringCodec());
     }
-
+    
     /**
      * Open a new asynchronous connection to the redis server that treats
      * keys and values as UTF-8 strings.
      *
      * @return A new connection.
      */
-    public RedisAsyncConnection<String, String> connectAsync() {
+    public RedisAsyncConnection<String, String> connectAsync()
+    {
         return connectAsync(new Utf8StringCodec());
     }
-
+    
     /**
      * Open a new pub/sub connection to the redis server that treats
      * keys and values as UTF-8 strings.
      *
      * @return A new connection.
      */
-    public RedisPubSubConnection<String, String> connectPubSub() {
+    public RedisPubSubConnection<String, String> connectPubSub()
+    {
         return connectPubSub(new Utf8StringCodec());
     }
-
+    
     /**
      * Open a new synchronous connection to the redis server. Use the supplied
      * {@link RedisCodec codec} to encode/decode keys and values.
@@ -122,10 +136,11 @@ public class RedisCli {
      *
      * @return A new connection.
      */
-    public <K, V> RedisConnection<K, V> connect(RedisCodec<K, V> codec) {
+    public <K, V> RedisConnection<K, V> connect(RedisCodec<K, V> codec)
+    {
         return new RedisConnection<K, V>(connectAsync(codec));
     }
-
+    
     /**
      * Open a new asynchronous connection to the redis server. Use the supplied
      * {@link RedisCodec codec} to encode/decode keys and values.
@@ -134,15 +149,17 @@ public class RedisCli {
      *
      * @return A new connection.
      */
-    public <K, V> RedisAsyncConnection<K, V> connectAsync(RedisCodec<K, V> codec) {
+    public <K, V> RedisAsyncConnection<K, V> connectAsync(RedisCodec<K, V> codec)
+    {
         BlockingQueue<Command<K, V, ?>> queue = new LinkedBlockingQueue<Command<K, V, ?>>();
-
+        
         CommandHandler<K, V> handler = new CommandHandler<K, V>(queue);
-        RedisAsyncConnection<K, V> connection = new RedisAsyncConnection<K, V>(this, queue, codec, timeout, unit, bootstrap.group());
-
+        RedisAsyncConnection<K, V> connection = new RedisAsyncConnection<K, V>(
+                this, queue, codec, timeout, unit, bootstrap.group());
+        
         return connect(handler, connection);
     }
-
+    
     /**
      * Open a new pub/sub connection to the redis server. Use the supplied
      * {@link RedisCodec codec} to encode/decode keys and values.
@@ -151,45 +168,60 @@ public class RedisCli {
      *
      * @return A new pub/sub connection.
      */
-    public <K, V> RedisPubSubConnection<K, V> connectPubSub(RedisCodec<K, V> codec) {
+    public <K, V> RedisPubSubConnection<K, V> connectPubSub(
+            RedisCodec<K, V> codec)
+    {
         BlockingQueue<Command<K, V, ?>> queue = new LinkedBlockingQueue<Command<K, V, ?>>();
-
-        PubSubCommandHandler<K, V> handler = new PubSubCommandHandler<K, V>(queue, codec);
-        RedisPubSubConnection<K, V> connection = new RedisPubSubConnection<K, V>(this, queue, codec, timeout, unit, bootstrap.group());
-
+        
+        PubSubCommandHandler<K, V> handler = new PubSubCommandHandler<K, V>(
+                queue, codec);
+        RedisPubSubConnection<K, V> connection = new RedisPubSubConnection<K, V>(
+                this, queue, codec, timeout, unit, bootstrap.group());
+        
         return connect(handler, connection);
     }
-
-    private <K, V, T extends RedisAsyncConnection<K, V>> T connect(final CommandHandler<K, V> handler, final T connection) {
-        try {
-            final ConnectionWatchdog watchdog = new ConnectionWatchdog(bootstrap, channels);
-
+    
+    private <K, V, T extends RedisAsyncConnection<K, V>> T connect(
+            final CommandHandler<K, V> handler, final T connection)
+    {
+        try
+        {
+            final ConnectionWatchdog watchdog = new ConnectionWatchdog(
+                    bootstrap, channels);
+            
             ChannelFuture connect = null;
             // TODO use better concurrent workaround
-            synchronized (bootstrap) {
-                connect = bootstrap.handler(new ChannelInitializer<Channel>() {
+            synchronized (bootstrap)
+            {
+                connect = bootstrap.handler(new ChannelInitializer<Channel>()
+                {
                     @Override
-                    protected void initChannel(Channel ch) throws Exception {
+                    protected void initChannel(Channel ch) throws Exception
+                    {
                         ch.pipeline().addLast(watchdog, handler, connection);
                     }
                 }).connect();
             }
             connect.sync();
-
+            
             connection.setReconnect(true);
-
+            
             return connection;
-        } catch (Throwable e) {
+        }
+        catch (Throwable e)
+        {
             throw new RedisConnectionException("Unable to connect " + addr, e);
         }
     }
-
+    
     /**
      * Shutdown this client and close all open connections. The client should be
      * discarded after calling shutdown.
      */
-    public void shutdown() {
-        for (Channel c : channels) {
+    public void shutdown()
+    {
+        for (Channel c : channels)
+        {
             ChannelPipeline pipeline = c.pipeline();
             RedisAsyncConnection<?, ?> connection = pipeline.get(RedisAsyncConnection.class);
             connection.close();
@@ -197,15 +229,16 @@ public class RedisCli {
         ChannelGroupFuture future = channels.close();
         future.awaitUninterruptibly();
     }
-
-    public InetSocketAddress getAddr() {
+    
+    public InetSocketAddress getAddr()
+    {
         return addr;
     }
-
+    
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "RedisClient [addr=" + addr + "]";
     }
-
+    
 }
-

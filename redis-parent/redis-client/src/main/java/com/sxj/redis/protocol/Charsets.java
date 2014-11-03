@@ -10,10 +10,12 @@ import java.nio.charset.Charset;
  *
  * @author Will Glozer
  */
-public class Charsets {
+public class Charsets
+{
     public static final Charset ASCII = Charset.forName("US-ASCII");
-
-    public static ByteBuffer buffer(String s) {
+    
+    public static ByteBuffer buffer(String s)
+    {
         return ByteBuffer.wrap(s.getBytes(ASCII));
     }
 }

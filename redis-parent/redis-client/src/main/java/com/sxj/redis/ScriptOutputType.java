@@ -15,7 +15,7 @@ package com.sxj.redis;
  *
  * @author Will Glozer
  */
-public enum ScriptOutputType {
+public enum ScriptOutputType
+{
     BOOLEAN, INTEGER, MULTI, STATUS, VALUE
 }
-

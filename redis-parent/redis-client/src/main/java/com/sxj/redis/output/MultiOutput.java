@@ -15,49 +15,64 @@ import java.util.*;
  *
  * @author Will Glozer
  */
-public class MultiOutput<K, V> extends CommandOutput<K, V, List<Object>> {
+public class MultiOutput<K, V> extends CommandOutput<K, V, List<Object>>
+{
     private Queue<Command<K, V, ?>> queue;
-
-    public MultiOutput(RedisCodec<K, V> codec) {
+    
+    public MultiOutput(RedisCodec<K, V> codec)
+    {
         super(codec, new ArrayList<Object>());
         queue = new LinkedList<Command<K, V, ?>>();
     }
-
-    public void add(Command<K, V, ?> cmd) {
+    
+    public void add(Command<K, V, ?> cmd)
+    {
         queue.add(cmd);
     }
-
-    public void cancel() {
-        for (Command<K, V, ?> c : queue) {
+    
+    public void cancel()
+    {
+        for (Command<K, V, ?> c : queue)
+        {
             c.cancel();
         }
     }
-
+    
     @Override
-    public void set(long integer) {
+    public void set(long integer)
+    {
         queue.peek().getOutput().set(integer);
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
+    public void set(ByteBuffer bytes)
+    {
         queue.peek().getOutput().set(bytes);
     }
-
+    
     @Override
-    public void setError(ByteBuffer error) {
-        CommandOutput<K, V, ?> output = queue.isEmpty() ? this : queue.peek().getOutput();
+    public void setError(ByteBuffer error)
+    {
+        CommandOutput<K, V, ?> output = queue.isEmpty() ? this : queue.peek()
+                .getOutput();
         output.setError(decodeAscii(error));
     }
-
+    
     @Override
-    public void complete(int depth) {
-        if (depth == 1) {
+    public void complete(int depth)
+    {
+        if (depth == 1)
+        {
             Command<K, V, ?> cmd = queue.remove();
             CommandOutput<K, V, ?> o = cmd.getOutput();
-            output.add(!o.hasError() ? o.get() : new RedisException(o.getError()));
+            output.add(!o.hasError() ? o.get() : new RedisException(
+                    o.getError()));
             cmd.complete();
-        } else if (depth == 0 && !queue.isEmpty()) {
-            for (Command<K, V, ?> cmd : queue) {
+        }
+        else if (depth == 0 && !queue.isEmpty())
+        {
+            for (Command<K, V, ?> cmd : queue)
+            {
                 cmd.complete();
             }
         }

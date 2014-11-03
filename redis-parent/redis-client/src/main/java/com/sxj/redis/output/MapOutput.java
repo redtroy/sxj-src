@@ -17,20 +17,24 @@ import java.util.Map;
  *
  * @author Will Glozer
  */
-public class MapOutput<K, V> extends CommandOutput<K, V, Map<K, V>> {
+public class MapOutput<K, V> extends CommandOutput<K, V, Map<K, V>>
+{
     private K key;
-
-    public MapOutput(RedisCodec<K, V> codec) {
+    
+    public MapOutput(RedisCodec<K, V> codec)
+    {
         super(codec, new HashMap<K, V>());
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
-        if (key == null) {
+    public void set(ByteBuffer bytes)
+    {
+        if (key == null)
+        {
             key = codec.decodeMapKey(bytes);
             return;
         }
-
+        
         V value = (bytes == null) ? null : codec.decodeMapValue(bytes);
         output.put(key, value);
         key = null;

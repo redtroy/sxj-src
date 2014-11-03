@@ -16,19 +16,26 @@ import java.nio.ByteBuffer;
  *
  * @author Will Glozer
  */
-public class KeyValueOutput<K, V> extends CommandOutput<K, V, KeyValue<K, V>> {
+public class KeyValueOutput<K, V> extends CommandOutput<K, V, KeyValue<K, V>>
+{
     private K key;
-
-    public KeyValueOutput(RedisCodec<K, V> codec) {
+    
+    public KeyValueOutput(RedisCodec<K, V> codec)
+    {
         super(codec, null);
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
-        if (bytes != null) {
-            if (key == null) {
+    public void set(ByteBuffer bytes)
+    {
+        if (bytes != null)
+        {
+            if (key == null)
+            {
                 key = codec.decodeKey(bytes);
-            } else {
+            }
+            else
+            {
                 V value = codec.decodeValue(bytes);
                 output = new KeyValue<K, V>(key, value);
             }

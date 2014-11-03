@@ -11,31 +11,39 @@ import java.util.Map;
 import com.sxj.redis.codec.RedisCodec;
 import com.sxj.redis.protocol.CommandOutput;
 
-public class ListMapOutput<K, V> extends CommandOutput<K, V, List<Map<K, V>>> {
+public class ListMapOutput<K, V> extends CommandOutput<K, V, List<Map<K, V>>>
+{
     private K key;
+    
     private int index = 0;
-
-    public ListMapOutput(RedisCodec<K, V> codec) {
+    
+    public ListMapOutput(RedisCodec<K, V> codec)
+    {
         super(codec, new ArrayList<Map<K, V>>());
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
-        if (key == null) {
+    public void set(ByteBuffer bytes)
+    {
+        if (key == null)
+        {
             key = codec.decodeMapKey(bytes);
             return;
         }
-
+        
         V value = (bytes == null) ? null : codec.decodeMapValue(bytes);
-        if (output.isEmpty()) {
+        if (output.isEmpty())
+        {
             output.add(new HashMap<K, V>());
         }
         Map<K, V> map = output.get(index);
-        if (map == null) {
+        if (map == null)
+        {
             map = new HashMap<K, V>();
             output.add(map);
         }
-        if (map.get(key) != null) {
+        if (map.get(key) != null)
+        {
             index++;
             map = new HashMap<K, V>();
             output.add(map);

@@ -13,75 +13,91 @@ import static java.nio.charset.CoderResult.OVERFLOW;
  *
  * @author Will Glozer
  */
-public class Utf8StringCodec extends RedisCodec<String, String> {
+public class Utf8StringCodec extends RedisCodec<String, String>
+{
     private Charset charset;
+    
     private CharsetDecoder decoder;
+    
     private CharBuffer chars;
-
+    
     /**
      * Initialize a new instance that encodes and decodes strings using
      * the UTF-8 charset;
      */
-    public Utf8StringCodec() {
+    public Utf8StringCodec()
+    {
         charset = Charset.forName("UTF-8");
         decoder = charset.newDecoder();
-        chars   = CharBuffer.allocate(1024);
+        chars = CharBuffer.allocate(1024);
     }
-
+    
     @Override
-    public String decodeKey(ByteBuffer bytes) {
+    public String decodeKey(ByteBuffer bytes)
+    {
         return decode(bytes);
     }
-
+    
     @Override
-    public String decodeValue(ByteBuffer bytes) {
+    public String decodeValue(ByteBuffer bytes)
+    {
         return decode(bytes);
     }
-
+    
     @Override
-    public byte[] encodeKey(String key) {
+    public byte[] encodeKey(String key)
+    {
         return encode(key);
     }
-
+    
     @Override
-    public byte[] encodeValue(String value) {
+    public byte[] encodeValue(String value)
+    {
         return encode(value);
     }
-
-    private String decode(ByteBuffer bytes) {
+    
+    private String decode(ByteBuffer bytes)
+    {
         chars.clear();
         bytes.mark();
-
+        
         decoder.reset();
-        while (decoder.decode(bytes, chars, true) == OVERFLOW || decoder.flush(chars) == OVERFLOW) {
+        while (decoder.decode(bytes, chars, true) == OVERFLOW
+                || decoder.flush(chars) == OVERFLOW)
+        {
             chars = CharBuffer.allocate(chars.capacity() * 2);
             bytes.reset();
         }
-
+        
         return chars.flip().toString();
     }
-
-    private byte[] encode(String string) {
+    
+    private byte[] encode(String string)
+    {
         return string.getBytes(charset);
     }
-
+    
     @Override
-    public byte[] encodeMapValue(String value) {
+    public byte[] encodeMapValue(String value)
+    {
         return encodeValue(value);
     }
-
+    
     @Override
-    public byte[] encodeMapKey(String key) {
+    public byte[] encodeMapKey(String key)
+    {
         return encodeKey(key);
     }
-
+    
     @Override
-    public String decodeMapValue(ByteBuffer bytes) {
+    public String decodeMapValue(ByteBuffer bytes)
+    {
         return decodeValue(bytes);
     }
-
+    
     @Override
-    public String decodeMapKey(ByteBuffer bytes) {
+    public String decodeMapKey(ByteBuffer bytes)
+    {
         return decodeKey(bytes);
     }
 }

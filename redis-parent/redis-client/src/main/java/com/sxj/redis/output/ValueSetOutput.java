@@ -16,13 +16,16 @@ import java.util.Set;
  *
  * @author Will Glozer
  */
-public class ValueSetOutput<K, V> extends CommandOutput<K, V, Set<V>> {
-    public ValueSetOutput(RedisCodec<K, V> codec) {
+public class ValueSetOutput<K, V> extends CommandOutput<K, V, Set<V>>
+{
+    public ValueSetOutput(RedisCodec<K, V> codec)
+    {
         super(codec, new HashSet<V>());
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
+    public void set(ByteBuffer bytes)
+    {
         output.add(bytes == null ? null : codec.decodeMapValue(bytes));
     }
 }

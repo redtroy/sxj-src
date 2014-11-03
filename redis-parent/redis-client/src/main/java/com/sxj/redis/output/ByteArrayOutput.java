@@ -12,14 +12,18 @@ import java.nio.ByteBuffer;
  *
  * @author Will Glozer
  */
-public class ByteArrayOutput<K, V> extends CommandOutput<K, V, byte[]> {
-    public ByteArrayOutput(RedisCodec<K, V> codec) {
+public class ByteArrayOutput<K, V> extends CommandOutput<K, V, byte[]>
+{
+    public ByteArrayOutput(RedisCodec<K, V> codec)
+    {
         super(codec, null);
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
-        if (bytes != null) {
+    public void set(ByteBuffer bytes)
+    {
+        if (bytes != null)
+        {
             output = new byte[bytes.remaining()];
             bytes.get(output);
         }

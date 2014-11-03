@@ -16,7 +16,8 @@ import java.nio.ByteBuffer;
  *
  * @author Will Glozer
  */
-public abstract class RedisCodec<K, V> {
+public abstract class RedisCodec<K, V>
+{
     /**
      * Decode the key output by redis.
      *
@@ -25,7 +26,7 @@ public abstract class RedisCodec<K, V> {
      * @return The decoded key.
      */
     public abstract K decodeKey(ByteBuffer bytes);
-
+    
     /**
      * Decode the value output by redis.
      *
@@ -34,7 +35,7 @@ public abstract class RedisCodec<K, V> {
      * @return The decoded value.
      */
     public abstract V decodeValue(ByteBuffer bytes);
-
+    
     /**
      * Encode the key for output to redis.
      *
@@ -43,7 +44,7 @@ public abstract class RedisCodec<K, V> {
      * @return The encoded key.
      */
     public abstract byte[] encodeKey(K key);
-
+    
     /**
      * Encode the value for output to redis.
      *
@@ -52,15 +53,13 @@ public abstract class RedisCodec<K, V> {
      * @return The encoded value.
      */
     public abstract byte[] encodeValue(V value);
-
-
+    
     public abstract byte[] encodeMapValue(V value);
-
+    
     public abstract byte[] encodeMapKey(K key);
-
+    
     public abstract V decodeMapValue(ByteBuffer bytes);
-
+    
     public abstract K decodeMapKey(ByteBuffer bytes);
-
-
+    
 }

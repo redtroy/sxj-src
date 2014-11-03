@@ -9,7 +9,8 @@ package com.sxj.redis.pubsub;
  *
  * @author Will Glozer
  */
-public interface RedisPubSubListener<V> {
+public interface RedisPubSubListener<V>
+{
     /**
      * Message received from a channel subscription.
      *
@@ -17,7 +18,7 @@ public interface RedisPubSubListener<V> {
      * @param message   Message.
      */
     void message(String channel, V message);
-
+    
     /**
      * Message received from a pattern subscription.
      *
@@ -26,7 +27,7 @@ public interface RedisPubSubListener<V> {
      * @param message   Message.
      */
     void message(String pattern, String channel, V message);
-
+    
     /**
      * Subscribed to a channel.
      *
@@ -34,7 +35,7 @@ public interface RedisPubSubListener<V> {
      * @param count     Subscription count.
      */
     void subscribed(String channel, long count);
-
+    
     /**
      * Subscribed to a pattern.
      *
@@ -42,7 +43,7 @@ public interface RedisPubSubListener<V> {
      * @param count     Subscription count.
      */
     void psubscribed(String pattern, long count);
-
+    
     /**
      * Unsubscribed from a channel.
      *
@@ -50,7 +51,7 @@ public interface RedisPubSubListener<V> {
      * @param count     Subscription count.
      */
     void unsubscribed(String channel, long count);
-
+    
     /**
      * Unsubscribed from a pattern.
      *

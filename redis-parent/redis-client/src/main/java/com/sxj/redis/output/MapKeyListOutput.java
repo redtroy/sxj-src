@@ -17,13 +17,16 @@ import com.sxj.redis.protocol.CommandOutput;
  *
  * @author Will Glozer
  */
-public class MapKeyListOutput<K, V> extends CommandOutput<K, V, Set<K>> {
-    public MapKeyListOutput(RedisCodec<K, V> codec) {
+public class MapKeyListOutput<K, V> extends CommandOutput<K, V, Set<K>>
+{
+    public MapKeyListOutput(RedisCodec<K, V> codec)
+    {
         super(codec, new LinkedHashSet<K>());
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
+    public void set(ByteBuffer bytes)
+    {
         output.add(codec.decodeMapKey(bytes));
     }
 }

@@ -9,8 +9,10 @@ package com.sxj.redis;
  * @author Will Glozer
  */
 @SuppressWarnings("serial")
-public class RedisCommandInterruptedException extends RedisException {
-    public RedisCommandInterruptedException(Throwable e) {
+public class RedisCommandInterruptedException extends RedisException
+{
+    public RedisCommandInterruptedException(Throwable e)
+    {
         super("Command interrupted", e);
     }
 }

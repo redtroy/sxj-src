@@ -18,49 +18,55 @@ package com.sxj.redis.advance;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class SingleServerConfig extends BaseConfig<SingleServerConfig> {
-
+public class SingleServerConfig extends BaseConfig<SingleServerConfig>
+{
+    
     /**
      * Redis server address
      *
      */
     private URI address;
-
+    
     /**
      * Redis subscription connection pool size
      *
      */
     private int subscriptionConnectionPoolSize = 25;
-
+    
     /**
      * Redis connection pool size
      */
     private int connectionPoolSize = 100;
-
-    SingleServerConfig() {
+    
+    SingleServerConfig()
+    {
     }
-
-    SingleServerConfig(SingleServerConfig config) {
+    
+    SingleServerConfig(SingleServerConfig config)
+    {
         super(config);
         setAddress(config.getAddress());
         setConnectionPoolSize(config.getConnectionPoolSize());
         setSubscriptionConnectionPoolSize(config.getSubscriptionConnectionPoolSize());
     }
-
+    
     /**
      * Redis connection pool size
      * Default is 100
      *
      * @param connectionPoolSize
      */
-    public SingleServerConfig setConnectionPoolSize(int connectionPoolSize) {
+    public SingleServerConfig setConnectionPoolSize(int connectionPoolSize)
+    {
         this.connectionPoolSize = connectionPoolSize;
         return this;
     }
-    public int getConnectionPoolSize() {
+    
+    public int getConnectionPoolSize()
+    {
         return connectionPoolSize;
     }
-
+    
     /**
      * Redis subscription-connection pool size limit
      * Default is 25
@@ -68,32 +74,44 @@ public class SingleServerConfig extends BaseConfig<SingleServerConfig> {
      * @param connectionPoolSize
      * @return
      */
-    public SingleServerConfig setSubscriptionConnectionPoolSize(int subscriptionConnectionPoolSize) {
+    public SingleServerConfig setSubscriptionConnectionPoolSize(
+            int subscriptionConnectionPoolSize)
+    {
         this.subscriptionConnectionPoolSize = subscriptionConnectionPoolSize;
         return this;
     }
-    public int getSubscriptionConnectionPoolSize() {
+    
+    public int getSubscriptionConnectionPoolSize()
+    {
         return subscriptionConnectionPoolSize;
     }
-
+    
     /**
      * Set server address. Use follow format -- host:port
      *
      * @param address
      */
-    public SingleServerConfig setAddress(String address) {
-        try {
+    public SingleServerConfig setAddress(String address)
+    {
+        try
+        {
             this.address = new URI("//" + address);
-        } catch (URISyntaxException e) {
+        }
+        catch (URISyntaxException e)
+        {
             throw new IllegalArgumentException("Can't parse " + address);
         }
         return this;
     }
-    public URI getAddress() {
+    
+    public URI getAddress()
+    {
         return address;
     }
-    void setAddress(URI address) {
+    
+    void setAddress(URI address)
+    {
         this.address = address;
     }
-
+    
 }

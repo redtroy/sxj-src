@@ -14,13 +14,16 @@ import java.util.List;
  *
  * @author Will Glozer
  */
-public class StringListOutput<K, V> extends CommandOutput<K, V, List<String>> {
-    public StringListOutput(RedisCodec<K, V> codec) {
+public class StringListOutput<K, V> extends CommandOutput<K, V, List<String>>
+{
+    public StringListOutput(RedisCodec<K, V> codec)
+    {
         super(codec, new ArrayList<String>());
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
+    public void set(ByteBuffer bytes)
+    {
         output.add(bytes == null ? null : decodeAscii(bytes));
     }
 }

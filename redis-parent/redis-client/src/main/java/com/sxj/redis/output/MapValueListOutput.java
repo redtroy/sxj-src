@@ -16,13 +16,16 @@ import java.util.List;
  *
  * @author Will Glozer
  */
-public class MapValueListOutput<K, V> extends CommandOutput<K, V, List<V>> {
-    public MapValueListOutput(RedisCodec<K, V> codec) {
+public class MapValueListOutput<K, V> extends CommandOutput<K, V, List<V>>
+{
+    public MapValueListOutput(RedisCodec<K, V> codec)
+    {
         super(codec, new ArrayList<V>());
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
+    public void set(ByteBuffer bytes)
+    {
         output.add(bytes == null ? null : codec.decodeMapValue(bytes));
     }
 }

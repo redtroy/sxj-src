@@ -20,44 +20,60 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SentinelServersConfig extends BaseMasterSlaveServersConfig<SentinelServersConfig> {
-
+public class SentinelServersConfig extends
+        BaseMasterSlaveServersConfig<SentinelServersConfig>
+{
+    
     private List<URI> sentinelAddresses = new ArrayList<URI>();
-
+    
     private String masterName;
-
-    public SentinelServersConfig() {
+    
+    public SentinelServersConfig()
+    {
     }
-
-    SentinelServersConfig(SentinelServersConfig config) {
+    
+    SentinelServersConfig(SentinelServersConfig config)
+    {
         super(config);
         setSentinelAddresses(config.getSentinelAddresses());
         setMasterName(config.getMasterName());
     }
-
-    public SentinelServersConfig setMasterName(String masterName) {
+    
+    public SentinelServersConfig setMasterName(String masterName)
+    {
         this.masterName = masterName;
         return this;
     }
-    public String getMasterName() {
+    
+    public String getMasterName()
+    {
         return masterName;
     }
-
-    public SentinelServersConfig addSentinelAddress(String ... addresses) {
-        for (String address : addresses) {
-            try {
+    
+    public SentinelServersConfig addSentinelAddress(String... addresses)
+    {
+        for (String address : addresses)
+        {
+            try
+            {
                 sentinelAddresses.add(new URI("//" + address));
-            } catch (URISyntaxException e) {
+            }
+            catch (URISyntaxException e)
+            {
                 throw new IllegalArgumentException("Can't parse " + address);
             }
         }
         return this;
     }
-    public List<URI> getSentinelAddresses() {
+    
+    public List<URI> getSentinelAddresses()
+    {
         return sentinelAddresses;
     }
-    void setSentinelAddresses(List<URI> sentinelAddresses) {
+    
+    void setSentinelAddresses(List<URI> sentinelAddresses)
+    {
         this.sentinelAddresses = sentinelAddresses;
     }
-
+    
 }

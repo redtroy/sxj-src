@@ -15,57 +15,77 @@ import java.nio.ByteBuffer;
  *
  * @author Will Glozer
  */
-public class PubSubOutput<K, V> extends CommandOutput<K, V, V> {
-    enum Type { message, pmessage, psubscribe, punsubscribe, subscribe, unsubscribe }
-
+public class PubSubOutput<K, V> extends CommandOutput<K, V, V>
+{
+    enum Type
+    {
+        message, pmessage, psubscribe, punsubscribe, subscribe, unsubscribe
+    }
+    
     private Type type;
+    
     private String channel;
+    
     private String pattern;
+    
     private long count;
-
-    public PubSubOutput(RedisCodec<K, V> codec) {
+    
+    public PubSubOutput(RedisCodec<K, V> codec)
+    {
         super(codec, null);
     }
-
-    public Type type() {
+    
+    public Type type()
+    {
         return type;
     }
-
-    public String channel() {
+    
+    public String channel()
+    {
         return channel;
     }
-
-    public String pattern() {
+    
+    public String pattern()
+    {
         return pattern;
     }
-
-    public long count() {
+    
+    public long count()
+    {
         return count;
     }
-
+    
     @Override
     @SuppressWarnings("fallthrough")
-    public void set(ByteBuffer bytes) {
-        if (type == null) {
+    public void set(ByteBuffer bytes)
+    {
+        if (type == null)
+        {
             type = Type.valueOf(decodeAscii(bytes));
             return;
         }
-
-        switch (type) {
+        
+        switch (type)
+        {
             case pmessage:
-                if (pattern == null) {
+                if (pattern == null)
+                {
                     pattern = decodeAscii(bytes);
                     break;
                 }
             case message:
-                if (channel == null) {
+                if (channel == null)
+                {
                     channel = decodeAscii(bytes);
                     break;
                 }
                 if (channel.startsWith("__keyspace@")
-                        || channel.startsWith("__keyevent@")) {
-                    output = (V)decodeAscii(bytes);
-                } else {
+                        || channel.startsWith("__keyevent@"))
+                {
+                    output = (V) decodeAscii(bytes);
+                }
+                else
+                {
                     output = codec.decodeValue(bytes);
                 }
                 break;
@@ -79,9 +99,10 @@ public class PubSubOutput<K, V> extends CommandOutput<K, V, V> {
                 break;
         }
     }
-
+    
     @Override
-    public void set(long integer) {
+    public void set(long integer)
+    {
         count = integer;
     }
 }

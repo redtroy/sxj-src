@@ -20,33 +20,46 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClusterServersConfig extends BaseMasterSlaveServersConfig<ClusterServersConfig> {
-
+public class ClusterServersConfig extends
+        BaseMasterSlaveServersConfig<ClusterServersConfig>
+{
+    
     private List<URI> nodeAddresses = new ArrayList<URI>();
-
-    public ClusterServersConfig() {
+    
+    public ClusterServersConfig()
+    {
     }
-
-    ClusterServersConfig(ClusterServersConfig config) {
+    
+    ClusterServersConfig(ClusterServersConfig config)
+    {
         super(config);
         setNodeAddresses(config.getNodeAddresses());
     }
-
-    public ClusterServersConfig addNodeAddress(String ... addresses) {
-        for (String address : addresses) {
-            try {
+    
+    public ClusterServersConfig addNodeAddress(String... addresses)
+    {
+        for (String address : addresses)
+        {
+            try
+            {
                 nodeAddresses.add(new URI("//" + address));
-            } catch (URISyntaxException e) {
+            }
+            catch (URISyntaxException e)
+            {
                 throw new IllegalArgumentException("Can't parse " + address);
             }
         }
         return this;
     }
-    public List<URI> getNodeAddresses() {
+    
+    public List<URI> getNodeAddresses()
+    {
         return nodeAddresses;
     }
-    void setNodeAddresses(List<URI> nodeAddresses) {
+    
+    void setNodeAddresses(List<URI> nodeAddresses)
+    {
         this.nodeAddresses = nodeAddresses;
     }
-
+    
 }

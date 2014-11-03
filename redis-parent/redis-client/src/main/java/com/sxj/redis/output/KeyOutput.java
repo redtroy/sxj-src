@@ -14,13 +14,16 @@ import java.nio.ByteBuffer;
  *
  * @author Will Glozer
  */
-public class KeyOutput<K, V> extends CommandOutput<K, V, K> {
-    public KeyOutput(RedisCodec<K, V> codec) {
+public class KeyOutput<K, V> extends CommandOutput<K, V, K>
+{
+    public KeyOutput(RedisCodec<K, V> codec)
+    {
         super(codec, null);
     }
-
+    
     @Override
-    public void set(ByteBuffer bytes) {
+    public void set(ByteBuffer bytes)
+    {
         output = (bytes == null) ? null : codec.decodeKey(bytes);
     }
 }
