@@ -2,6 +2,7 @@ package com.sxj.supervisor.website.controller.rfid.startmrfid;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
@@ -106,12 +108,35 @@ public class StartmrfidController extends BaseController {
 	 * 启用标签
 	 */
 	@RequestMapping("start_lable")
-	public @ResponseBody Map<Object, Object> start_lable(String minRfid,
-			String maxRfid, String gRfid, String lRfid,
+	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,
+			String minRfid, String maxRfid, String gRfid, String lRfid,
 			WindowTypeEnum windowType) throws WebException {
 		try {
-			wind.startWindowRfid(minRfid, maxRfid, gRfid, lRfid, windowType);
 			Map<Object, Object> map = new HashMap<Object, Object>();
+			ContractModel refContract = contractService
+					.getContractModelByContractNo(refContractNo);
+			if (refContract == null) {
+				map.put("isOk", "no");
+				return map;
+			}
+			List<ContractItemEntity> items = refContract.getItemList();
+			if (items == null || items.size() == 0) {
+				map.put("isOk", "no");
+				return map;
+			}
+			float quantity = 0f;
+			for (Iterator<ContractItemEntity> iterator = items.iterator(); iterator
+					.hasNext();) {
+				ContractItemEntity item = iterator.next();
+				if (item == null) {
+					continue;
+				}
+				quantity = quantity + item.getQuantity();
+
+			}
+			long count = Long.parseLong(quantity + "");
+			wind.startWindowRfid(count, refContractNo, minRfid, maxRfid, gRfid,
+					lRfid, windowType);
 			map.put("isOk", "ok");
 			return map;
 		} catch (Exception e) {

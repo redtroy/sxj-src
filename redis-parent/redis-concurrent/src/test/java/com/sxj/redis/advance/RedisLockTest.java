@@ -1,7 +1,6 @@
 package com.sxj.redis.advance;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 import org.junit.After;
@@ -14,12 +13,12 @@ import com.sxj.redis.advance.core.RLock;
 public class RedisLockTest
 {
     
-    RedisConcurrent redis;
+    RedisConcurrent concurrent;
     
     @Before
     public void before()
     {
-        redis = RedisConcurrent.create();
+        concurrent = RedisConcurrent.create();
     }
     
     @After
@@ -31,37 +30,60 @@ public class RedisLockTest
         }
         finally
         {
-            redis.shutdown();
+            //redis.shutdown();
         }
     }
     
     @Test
     public void testExpire() throws InterruptedException
     {
-        RLock lock = redis.getLock("lock1");
-        lock.lock(5, TimeUnit.SECONDS);
-        Thread.currentThread().sleep(5000);
+        final RLock lock = concurrent.getLock("lock1");
+        lock.lock();
+        System.out.println("Gain Lock Name: " + lock.getName() + "By Thread: "
+                + Thread.currentThread().getId());
         final long startTime = System.currentTimeMillis();
-        final CountDownLatch latch = new CountDownLatch(1);
         new Thread()
         {
             public void run()
             {
-                RLock lock1 = redis.getLock("lock2");
+                RLock lock1 = concurrent.getLock("lock1");
                 lock1.lock();
-                long spendTime = System.currentTimeMillis() - startTime;
-                Assert.assertTrue(spendTime < 2005);
-                //                lock1.unlock();
-                latch.countDown();
+                System.out.println("-------Gain Lock Name: " + lock.getName()
+                        + "By Thread: " + Thread.currentThread().getId());
+                lock1.unlock();
+                System.out.println("--------Trying Unlock "
+                        + concurrent.getLock("lock1").getName() + "By Thread:"
+                        + currentThread().getId());
             };
         }.start();
-        latch.await();
+        Thread.currentThread().sleep(1000);
+        new Thread()
+        {
+            
+            @Override
+            public void run()
+            {
+                System.out.println("Trying Unlock "
+                        + concurrent.getLock("lock1").getName() + "By Thread:"
+                        + Thread.currentThread().getId());
+                concurrent.getLock("lock1").unlock();
+            }
+            
+        }.start();
         lock.unlock();
+        System.out.println("Trying Unlock "
+                + concurrent.getLock("lock1").getName() + "By Thread:"
+                + Thread.currentThread().getId());
+        //        lock.unlock();
+        while (true)
+        {
+            
+        }
     }
     
     public void testGetHoldCount()
     {
-        RLock lock = redis.getLock("lock");
+        RLock lock = concurrent.getLock("lock");
         Assert.assertEquals(0, lock.getHoldCount());
         lock.lock();
         Assert.assertEquals(1, lock.getHoldCount());
@@ -80,7 +102,7 @@ public class RedisLockTest
     public void testIsHeldByCurrentThreadOtherThread()
             throws InterruptedException
     {
-        RLock lock = redis.getLock("lock");
+        RLock lock = concurrent.getLock("lock");
         lock.lock();
         
         final CountDownLatch latch = new CountDownLatch(1);
@@ -88,7 +110,7 @@ public class RedisLockTest
         {
             public void run()
             {
-                RLock lock = redis.getLock("lock");
+                RLock lock = concurrent.getLock("lock");
                 Assert.assertFalse(lock.isHeldByCurrentThread());
                 latch.countDown();
             };
@@ -102,7 +124,7 @@ public class RedisLockTest
         {
             public void run()
             {
-                RLock lock = redis.getLock("lock");
+                RLock lock = concurrent.getLock("lock");
                 Assert.assertFalse(lock.isHeldByCurrentThread());
                 latch2.countDown();
             };
@@ -113,7 +135,7 @@ public class RedisLockTest
     
     public void testIsHeldByCurrentThread()
     {
-        RLock lock = redis.getLock("lock");
+        RLock lock = concurrent.getLock("lock");
         Assert.assertFalse(lock.isHeldByCurrentThread());
         lock.lock();
         Assert.assertTrue(lock.isHeldByCurrentThread());
@@ -123,7 +145,7 @@ public class RedisLockTest
     
     public void testIsLockedOtherThread() throws InterruptedException
     {
-        RLock lock = redis.getLock("lock");
+        RLock lock = concurrent.getLock("lock");
         lock.lock();
         
         final CountDownLatch latch = new CountDownLatch(1);
@@ -131,7 +153,7 @@ public class RedisLockTest
         {
             public void run()
             {
-                RLock lock = redis.getLock("lock");
+                RLock lock = concurrent.getLock("lock");
                 Assert.assertTrue(lock.isLocked());
                 latch.countDown();
             };
@@ -145,7 +167,7 @@ public class RedisLockTest
         {
             public void run()
             {
-                RLock lock = redis.getLock("lock");
+                RLock lock = concurrent.getLock("lock");
                 Assert.assertFalse(lock.isLocked());
                 latch2.countDown();
             };
@@ -156,7 +178,7 @@ public class RedisLockTest
     
     public void testIsLocked()
     {
-        RLock lock = redis.getLock("lock");
+        RLock lock = concurrent.getLock("lock");
         Assert.assertFalse(lock.isLocked());
         lock.lock();
         Assert.assertTrue(lock.isLocked());
@@ -173,7 +195,7 @@ public class RedisLockTest
     //
     public void testLockUnlock()
     {
-        Lock lock = redis.getLock("lock1");
+        Lock lock = concurrent.getLock("lock1");
         lock.lock();
         lock.unlock();
         
@@ -183,7 +205,7 @@ public class RedisLockTest
     
     public void testReentrancy()
     {
-        Lock lock = redis.getLock("lock1");
+        Lock lock = concurrent.getLock("lock1");
         lock.lock();
         lock.lock();
         lock.unlock();

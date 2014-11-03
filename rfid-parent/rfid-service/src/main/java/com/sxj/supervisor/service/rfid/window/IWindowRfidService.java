@@ -28,12 +28,13 @@ public interface IWindowRfidService {
 	public void updateWindowRfid(WindowRfidEntity win) throws ServiceException;
 
 	/**
-	 * 启用RFID
+	 * 启用门窗RFID
 	 * 
 	 * @throws ServiceException
 	 */
-	public void startWindowRfid(String minRfid, String maxRfid, String gRfid,
-			String lRfid, WindowTypeEnum windowType) throws ServiceException;
+	public void startWindowRfid(Long refContractCount, String refContractNo,
+			String minRfid, String maxRfid, String gRfid, String lRfid,
+			WindowTypeEnum windowType) throws ServiceException;
 
 	/**
 	 * 批量新增

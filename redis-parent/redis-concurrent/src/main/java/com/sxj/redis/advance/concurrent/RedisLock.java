@@ -352,6 +352,7 @@ public class RedisLock extends RedisObject implements RLock
                     Long ttl = connection.pttl(getName());
                     return ttl;
                 }
+                System.out.println(res);
                 return null;
             }
         });
@@ -373,7 +374,7 @@ public class RedisLock extends RedisObject implements RLock
                 connection.setnx(getName(), currentLock);
                 connection.expire(getName(), unit.toSeconds(leaseTime));
                 List<Object> exec = connection.exec();
-                if (exec.size() > 0)
+                if (exec.size() == 2)
                     return null;
                 //                String res = connection.setexnx(getName(), currentLock, time);
                 //                if ("OK".equals(res))
@@ -386,7 +387,9 @@ public class RedisLock extends RedisObject implements RLock
                     if (lock != null && lock.equals(currentLock))
                     {
                         lock.incCounter();
-                        connection.psetex(getName(), time, lock);
+                        connection.psetex(getName(),
+                                unit.toMillis(leaseTime),
+                                lock);
                         return null;
                     }
                     

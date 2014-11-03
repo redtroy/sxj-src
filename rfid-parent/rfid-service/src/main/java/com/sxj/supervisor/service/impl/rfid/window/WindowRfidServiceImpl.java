@@ -152,10 +152,16 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Override
 	@Transactional
-	public void startWindowRfid(String minRfid, String maxRfid, String gRfid,
-			String lRfid, WindowTypeEnum windowType) throws ServiceException {
+	public void startWindowRfid(Long refContractCount, String refContractNo,
+			String minRfid, String maxRfid, String gRfid, String lRfid,
+			WindowTypeEnum windowType) throws ServiceException {
 		try {
 			WindowRfidQuery query = new WindowRfidQuery();
+			query.setContractNo(refContractNo);
+			// query.setRfidState(rfidState);
+			List<WindowRfidEntity> hasStartList = queryWindowRfid(query);
+
+			WindowRfidQuery query2 = new WindowRfidQuery();
 			query.setMinRfidNo(minRfid);
 			query.setMaxRfidNo(maxRfid);
 			List<WindowRfidEntity> list = queryWindowRfid(query);
