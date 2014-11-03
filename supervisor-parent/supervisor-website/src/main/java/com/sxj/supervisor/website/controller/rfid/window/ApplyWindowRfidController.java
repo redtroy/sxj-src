@@ -1,6 +1,7 @@
-package com.sxj.supervisor.website.controller.rfid.applyMencorder;
+package com.sxj.supervisor.website.controller.rfid.window;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -14,8 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
+import com.sxj.supervisor.enu.rfid.applyManager.M_PayStateEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
+import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -23,13 +27,64 @@ import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-@RequestMapping("/rfid/applyMencorder")
-public class ApplyMencorder extends BaseController {
+@RequestMapping("/rfid/window")
+public class ApplyWindowRfidController extends BaseController {
 	@Autowired
 	private IRfidApplicationService applyService;
 
 	@Autowired
 	private IContractService contractService;
+
+	/**
+	 * 物流标签申请管理列表
+	 * 
+	 * @param map
+	 * @param query
+	 * @return
+	 */
+	@RequestMapping("apply_list")
+	public String applyManager_list(ModelMap map, RfidApplicationQuery query,
+			HttpSession session) throws WebException {
+		try {
+			if (query != null) {
+				query.setPagable(true);
+			}
+			MemberEntity member = getLoginInfo(session).getMember();
+			query.setMemberNo(member.getMemberNo());
+			List<RfidApplicationEntity> list = applyService.query(query);
+			ReceiptStateEnum[] receipt_states = ReceiptStateEnum.values();
+			M_PayStateEnum[] m_pay_states = M_PayStateEnum.values();
+			map.put("receipt_states", receipt_states);
+			map.put("m_pay_states", m_pay_states);
+			map.put("list", list);
+			map.put("query", query);
+		} catch (Exception e) {
+			SxjLogger.error("物流标签申请管理列表错误", e, this.getClass());
+			throw new WebException("物流标签申请管理列表错误");
+		}
+		return "site/rfid/window/apply/apply-list";
+	}
+
+	/**
+	 * 删除
+	 */
+	@RequestMapping("del_apply")
+	public @ResponseBody Map<String, String> del(String id, String applyNo)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			Boolean flag = applyService.delApp(id, applyNo);
+			if (flag) {
+				map.put("flag", "ok");
+			} else {
+				map.put("flag", "no");
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("物流标签申请管理列表删除错误", e, this.getClass());
+			throw new WebException("物流标签申请管理列表删除错误");
+		}
+	}
 
 	/**
 	 * 认证标签申请状态
@@ -39,7 +94,7 @@ public class ApplyMencorder extends BaseController {
 	 * @return
 	 * @throws WebException
 	 */
-	@RequestMapping("applyMencorder_view")
+	@RequestMapping("to_apply")
 	public String applyMencorder_view(ModelMap map, HttpSession session)
 			throws WebException {
 		try {
@@ -51,7 +106,7 @@ public class ApplyMencorder extends BaseController {
 			SxjLogger.error("认证标签申请页面错误", e, this.getClass());
 			throw new WebException("认证标签申请页面错误");
 		}
-		return "site/rfid/new-mencorder/new-mencorder";
+		return "site/rfid/window/apply/apply-rfid";
 	}
 
 	/**
@@ -100,16 +155,6 @@ public class ApplyMencorder extends BaseController {
 				map.put("erro", "合同类型不匹配");
 				return map;
 			}
-			// float Total = 0;
-			// int num = cm.getItemList().size();
-			// for (int i = 0; i < num; i++) {
-			// Total = Total + cm.getItemList().get(i).getQuantity();
-			// }
-			// if (count > Total) {
-			// map.put("flag", "false");
-			// map.put("erro", "超过额定发放数量，额定发放数量为" + Total);
-			// return map;
-			// }
 			map.put("flag", "true");
 			return map;
 		} catch (Exception e) {

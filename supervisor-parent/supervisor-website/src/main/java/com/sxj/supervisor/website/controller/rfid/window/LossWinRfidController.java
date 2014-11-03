@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.controller.rfid.lossMenc;
+package com.sxj.supervisor.website.controller.rfid.window;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sxj.supervisor.website.controller.BaseController;
 
 @Controller
-@RequestMapping("/rfid")
-public class LossMencController extends BaseController {
+@RequestMapping("/rfid/window")
+public class LossWinRfidController extends BaseController {
 
-	@RequestMapping("lossMen")
+	@RequestMapping("to_loss")
 	public String lossMen() {
-		return "site/rfid/loss-menc/loss-menc";
+		return "site/rfid/window/lossrfid";
 	}
 }

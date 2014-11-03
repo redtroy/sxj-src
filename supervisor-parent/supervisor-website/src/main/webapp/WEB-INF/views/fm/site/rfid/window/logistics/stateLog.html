@@ -1,0 +1,15 @@
+
+<td colspan="11"><div class="planBox text-left f14">
+		<#list logList as log>
+		<div class="item">
+			<label class="time">${log.logDate}</label> ${log.logTitle}&nbsp;&nbsp;<em
+				class="color-blue">TID号码:12345689985</em>
+		</div>
+		<#if log_has_next>
+		<div class="line"></div>
+		</#if> </#list>
+		<div class="btnBox">
+			<a href="javascript:closeLog('${id}')"
+				class="button button-gray button-small">收起</a>
+		</div>
+	</div></td>

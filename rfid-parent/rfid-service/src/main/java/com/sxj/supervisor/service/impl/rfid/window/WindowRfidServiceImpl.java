@@ -158,13 +158,21 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 		try {
 			WindowRfidQuery query = new WindowRfidQuery();
 			query.setContractNo(refContractNo);
-			// query.setRfidState(rfidState);
+			query.setRfidState(RfidStateEnum.used.getId());
 			List<WindowRfidEntity> hasStartList = queryWindowRfid(query);
+			float hasStartCount = 0;
+			if (hasStartList != null) {
+				hasStartCount = hasStartList.size();
+			}
+			if (hasStartCount >= refContractCount) {
+				throw new ServiceException("此招标合同已经全部启用完毕");
+			}
 
 			WindowRfidQuery query2 = new WindowRfidQuery();
-			query.setMinRfidNo(minRfid);
-			query.setMaxRfidNo(maxRfid);
-			List<WindowRfidEntity> list = queryWindowRfid(query);
+			query2.setMinRfidNo(minRfid);
+			query2.setMaxRfidNo(maxRfid);
+			query2.setRfidState(RfidStateEnum.unused.getId());
+			List<WindowRfidEntity> list = queryWindowRfid(query2);
 			for (Iterator<WindowRfidEntity> iterator = list.iterator(); iterator
 					.hasNext();) {
 				WindowRfidEntity windowRfid = iterator.next();

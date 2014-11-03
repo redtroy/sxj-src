@@ -772,14 +772,15 @@ public class ContractServiceImpl implements IContractService {
 						.queryRecord(recordQuery);
 				// 变更该合同所有备案状态
 				for (RecordEntity recordEntity : recordList) {
-					recordEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
+					recordEntity
+							.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 					recordDao.updateRecord(recordEntity);
 				}
 				if (recordList != null) {
 					RecordEntity record = recordList.get(0);
-//					if(record.getImgPath()){
-//						
-//					}
+					// if(record.getImgPath()){
+					//
+					// }
 					record.setAcceptDate(new Date());
 					recordDao.updateRecord(record);
 					List<String> messageList = null;
@@ -993,12 +994,30 @@ public class ContractServiceImpl implements IContractService {
 	public void addBatch(ContractBatchModel model, String id,
 			MemberEntity member) throws ServiceException {
 		try {
+			if (model == null) {
+				throw new ServiceException("系统错误");
+			}
+			ContractBatchEntity batch = model.getBatch();
+			// 判断是否能启用
+			int oldBatchCount = 0;
+			ContractModel contract = getContractModelByContractNo(batch
+					.getContractId());
+			if (contract == null) {
+				throw new ServiceException("系统错误");
+			}
+			if (contract.getBatchList() != null) {
+				oldBatchCount = contract.getBatchList().size();
+			}
+			if (contract.getContract().getBatchCount() <= oldBatchCount) {
+				throw new ServiceException("本合同批次已经全部启用完毕！");
+			}
+
+			// 执行启用
 			String batchItems = null;
 			if (model.getBatchItems() != null) {
 				batchItems = JsonMapper.nonEmptyMapper().toJson(
 						model.getBatchItems());
 			}
-			ContractBatchEntity batch = model.getBatch();
 			batch.setBatchItems(batchItems);
 			List<ContractBatchEntity> list = new ArrayList<ContractBatchEntity>();
 			list.add(batch);
@@ -1028,7 +1047,8 @@ public class ContractServiceImpl implements IContractService {
 			ref.setState(AuditStateEnum.approval);
 			logisticsRefDao.add(ref);
 		} catch (Exception e) {
-			throw new ServiceException("添加批次错误错误", e);
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("启用rfid错误", e);
 		}
 
 	}
@@ -1125,6 +1145,19 @@ public class ContractServiceImpl implements IContractService {
 			}
 			return ContractList;
 		} catch (Exception e) {
+			throw new ServiceException("获取合同信息错误", e);
+		}
+	}
+
+	@Override
+	public List<ContractItemEntity> getContractItem(String contractNo)
+			throws ServiceException {
+		try {
+			List<ContractItemEntity> itemList = contractItemDao
+					.queryItems(contractNo);// 产品条目
+			return itemList;
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取合同信息错误", e);
 		}
 	}

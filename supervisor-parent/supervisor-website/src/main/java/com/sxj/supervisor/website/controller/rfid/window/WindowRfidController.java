@@ -62,7 +62,7 @@ public class WindowRfidController extends BaseController {
 			model.put("winType", winType);
 			model.put("query", query);
 			model.put("winList", winList);
-			return "site/rfid/window/windowRfid-list";
+			return "site/rfid/window/manage/windowRfid-list";
 		} catch (Exception e) {
 			SxjLogger.error("查询认证信息错误", e, this.getClass());
 			throw new WebException("查询门认证信息错误");
@@ -138,7 +138,7 @@ public class WindowRfidController extends BaseController {
 					.getContract().getId());
 			model.put("contractModel", contractModel);
 			model.put("rfid", rfid);
-			return "site/rfid/window/contract-info";
+			return "site/rfid/window/manage/contract-info";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");
@@ -154,7 +154,7 @@ public class WindowRfidController extends BaseController {
 			model.put("conBatch", conBatch);
 			model.put("id", id);
 			model.put("contractNo", contractNo);
-			return "site/rfid/window/contract-batch";
+			return "site/rfid/window/manage/contract-batch";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");
@@ -175,7 +175,7 @@ public class WindowRfidController extends BaseController {
 			List<LogModel> logList = windowRfidService.getRfidStateLog(id);
 			model.put("id", id);
 			model.put("logList", logList);
-			return "site/rfid/window/stateLog";
+			return "site/rfid/window/manage/stateLog";
 		} catch (Exception e) {
 			SxjLogger.error("查询log动态信息错误", e, this.getClass());
 			throw new WebException("查询log动态信息错误");
@@ -196,7 +196,7 @@ public class WindowRfidController extends BaseController {
 			WindowRfidEntity windowRfid = windowRfidService.getWindowRfid(id);
 			model.put("id", id);
 			model.put("windowRfid", windowRfid);
-			return "site/rfid/window/lable-losses";
+			return "site/rfid/window/manage/lable-losses";
 		} catch (Exception e) {
 			SxjLogger.error("查询标签补损错误", e, this.getClass());
 			throw new WebException("查询标签补损错误");

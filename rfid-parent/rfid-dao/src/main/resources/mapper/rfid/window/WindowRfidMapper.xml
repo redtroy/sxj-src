@@ -61,7 +61,7 @@
 			<![CDATA[ ORDER BY IMPORT_DATE DESC]]>
 	</select>
 	<select id="getMaxRfidNo" resultType="Long">
-		<![CDATA[SELECT MIN(GENERATE_KEY) FROM R_WINDOW_RFID WHERE RFID_STATE<>4]]>
+		<![CDATA[SELECT MIN(GENERATE_KEY) FROM R_WINDOW_RFID WHERE RFID_STATE=0]]>
 		<![CDATA[AND CONTRACT_NO = #{contractNo}]]>
 	</select>
 </mapper>

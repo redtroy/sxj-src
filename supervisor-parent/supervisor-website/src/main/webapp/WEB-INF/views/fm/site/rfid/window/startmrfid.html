@@ -37,7 +37,15 @@ var lable=null;
 function query(){
 	var refContractNo=$("#refContractNo").val();
 	var num=$("#num").val();
-	$.post("query.htm",{refContractNo:refContractNo,num:num},function(data){
+	if(refContractNo==null||refContractNo==''){
+		messageInfo("请输入招标合同号");
+		return false;
+	}
+	if(num==null||num==''){
+		messageInfo("请输入启用数量");
+		return false;
+	}
+	$.post("queryRefContract.htm",{refContractNo:refContractNo,num:num},function(data){
 		if (data.isOk=='ok'){
 			$("#contract_a option").remove();
 			$("#contract_b option").remove();
@@ -53,7 +61,7 @@ function query(){
 			pc_a();
 			pc_b();
 		}else{
-			alert('查询失败！');
+			errorInfo(data.error);
 		}
 	})
 }
@@ -63,6 +71,7 @@ function pc_a(){
 	if (contractNo !=null){
 		$.post("query_contractNo.htm",{contractNo:contractNo},function(data){
 			if (data.isOk=="ok" && data.cm.batchList !=null){
+				$("#pc_a option").remove();
 				container_a=data.cm.batchList;
 				for (var i=0;i<container_a.length;i++){
 				 $("#pc_a").append("<option value='"+i+"'>"+container_a[i].batch.batchNo+"</option>")
@@ -82,6 +91,7 @@ function pc_b(){
 	if (contractNo !=null){
 		$.post("query_contractNo.htm",{contractNo:contractNo},function(data){
 			if (data.isOk=="ok" && data.cm.batchList !=null){
+				$("#pc_b option").remove();
 				container_b=data.cm.batchList;
 				for (var i=0;i<container_b.length;i++){
 				 $("#pc_b").append("<option value='"+i+"'>"+container_b[i].batch.batchNo+"</option>")
@@ -94,7 +104,7 @@ function pc_b(){
 			
 		})
 	}else{
-		
+		errorInfo(data.error);
 	}
 }
 function rfid_a(pc_a_id){
@@ -105,21 +115,23 @@ function rfid_b(pc_b_id){
 }
 //启用标签
 function star(){
+	var refContractNo=$("#refContractNo").val();
 	var gRfid=$("#rfid_a").text();
 	var lRfid=$("#rfid_b").text();
 	var windowType=$("#windowType option:selected").val();
-	/*
 	if (gRfid=="" || gRfid== null){
-		alert('玻璃采购合同缺失，无法提交');
-	}*/
-	if (lRfid=="" || lRfid== null){
-		alert('型材采购合同缺失，无法提交');
+		messageInfo('玻璃采购合同缺失，无法提交');
 	}
-	$.post("start_lable.htm",{minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
+	if (lRfid=="" || lRfid== null){
+		messageInfo('型材采购合同缺失，无法提交');
+	}
+	$.post("start_lable.htm",{refContractNo:refContractNo,minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
 		if (data.isOk=="ok"){
-			alert("启用成功");
+			succInfo(function(){
+				
+			},"启用成功");
 		}else{
-			alert("启用失败");
+			errorInfo(data.error);
 		}
 	})
 }
@@ -171,7 +183,7 @@ function star(){
 			<option value="${t.id}">${t.getName()}</option>
 			</#list>
   </select></div>
-<div class="item"><label>&nbsp;</label><a href="" class="button button-orange mr15" title="当总启用数量超过招标合同号的门窗数量时需要报错提示" onckick="star();return false;">确定启用</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+<div class="item"><label>&nbsp;</label><a href="javascript:star();" class="button button-orange mr15" title="当总启用数量超过招标合同号的门窗数量时需要报错提示">确定启用</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </div>
 </div>
