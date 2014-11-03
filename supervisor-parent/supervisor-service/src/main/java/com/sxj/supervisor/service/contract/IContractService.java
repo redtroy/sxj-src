@@ -44,7 +44,6 @@ public interface IContractService {
 	 **/
 	public ContractModel getContract(String id);
 
-
 	/**
 	 * 查询合同列表
 	 *
@@ -115,6 +114,15 @@ public interface IContractService {
 	public ContractModel getContractModelByContractNo(String contractNo);
 
 	/**
+	 * 根据合同号获取合同条目
+	 * 
+	 * @param contractNo
+	 * @return
+	 */
+	public List<ContractItemEntity> getContractItem(String contractNo)
+			throws ServiceException;
+
+	/**
 	 * 获取合同批次
 	 * 
 	 * @param contractNo
@@ -160,7 +168,7 @@ public interface IContractService {
 
 	String getReplenish(String contractNo);
 
-	int getContractByZhaobiaoContractNo(String contractNo,MemberEntity member);
+	int getContractByZhaobiaoContractNo(String contractNo, MemberEntity member);
 
 	/**
 	 * 根据关联合同号获取合同信息

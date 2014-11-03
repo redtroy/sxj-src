@@ -72,12 +72,12 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	/**
 	 * RFID状态
 	 */
-	private String rfidState;
+	private Integer rfidState;
 
 	/**
 	 * 进度状态
 	 */
-	private String progressState;
+	private Integer progressState;
 
 	public String getRfidNo() {
 		return rfidNo;
@@ -135,19 +135,19 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 		this.endImportDate = endImportDate;
 	}
 
-	public String getRfidState() {
+	public Integer getRfidState() {
 		return rfidState;
 	}
 
-	public void setRfidState(String rfidState) {
+	public void setRfidState(Integer rfidState) {
 		this.rfidState = rfidState;
 	}
 
-	public String getProgressState() {
+	public Integer getProgressState() {
 		return progressState;
 	}
 
-	public void setProgressState(String progressState) {
+	public void setProgressState(Integer progressState) {
 		this.progressState = progressState;
 	}
 

@@ -49,60 +49,6 @@ public class LogisticsRfidController extends BaseController {
 	private IRecordService recordService;
 
 	/**
-	 * 查询列表
-	 * 
-	 * @param query
-	 * @param model
-	 * @return
-	 * @throws WebException
-	 */
-	@RequestMapping("query")
-	public String queryLogistics(LogisticsRfidQuery query, HttpSession session,
-			ModelMap model) throws WebException {
-		try {
-			query.setPagable(true);
-			SupervisorPrincipal loginInfo = getLoginInfo(session);
-			String memberNo = loginInfo.getMember().getMemberNo();
-			query.setMemberNo(memberNo);
-			List<LogisticsRfidEntity> list = logisticsRfidService
-					.queryLogistics(query);
-			LabelStateEnum[] Label = LabelStateEnum.values();
-			RfidStateEnum[] rfid = RfidStateEnum.values();
-			RfidTypeEnum[] type = RfidTypeEnum.values();
-			model.put("Label", Label);
-			model.put("rfid", rfid);
-			model.put("type", type);
-			model.put("query", query);
-			model.put("list", list);
-			return "site/rfid/logistics/logistics-list";
-		} catch (Exception e) {
-			SxjLogger.error("查询门窗RFID错误", e, this.getClass());
-			throw new WebException("查询门窗RFID错误");
-		}
-	}
-
-	/**
-	 * 获取log动态
-	 * 
-	 * @param model
-	 * @param id
-	 * @return
-	 * @throws WebException
-	 */
-	@RequestMapping("stateLog")
-	public String getStateLog(ModelMap model, String id) throws WebException {
-		try {
-			List<LogModel> logList = logisticsRfidService.getRfidStateLog(id);
-			model.put("id", id);
-			model.put("logList", logList);
-			return "site/rfid/window/stateLog";
-		} catch (Exception e) {
-			SxjLogger.error("查询log动态信息错误", e, this.getClass());
-			throw new WebException("查询log动态信息错误");
-		}
-	}
-
-	/**
 	 * 物流标签管理(乙方)
 	 * 
 	 * @param query
@@ -128,10 +74,31 @@ public class LogisticsRfidController extends BaseController {
 			model.put("type", type);
 			model.put("query", query);
 			model.put("list", list);
-			return "site/rfid/logisticsB/logistics-list";
+			return "site/rfid/logistics/manage/logistics-list";
 		} catch (Exception e) {
 			SxjLogger.error("查询物流RFID错误", e, this.getClass());
 			throw new WebException("查询物流RFID错误");
+		}
+	}
+
+	/**
+	 * 获取log动态
+	 * 
+	 * @param model
+	 * @param id
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("stateLog")
+	public String getStateLog(ModelMap model, String id) throws WebException {
+		try {
+			List<LogModel> logList = logisticsRfidService.getRfidStateLog(id);
+			model.put("id", id);
+			model.put("logList", logList);
+			return "site/rfid/logistics/manage/stateLog";
+		} catch (Exception e) {
+			SxjLogger.error("查询log动态信息错误", e, this.getClass());
+			throw new WebException("查询log动态信息错误");
 		}
 	}
 
@@ -149,7 +116,7 @@ public class LogisticsRfidController extends BaseController {
 			LogisticsRfidEntity logistics = logisticsRfidService
 					.getLogistics(id);
 			model.put("logistics", logistics);
-			return "site/rfid/logisticsB/start-rfid";
+			return "site/rfid/logistics/manage/start-rfid";
 		} catch (Exception e) {
 			SxjLogger.error("查询门窗RFID错误", e, this.getClass());
 			throw new WebException("查询门窗RFID错误");
@@ -167,17 +134,17 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("saveRfid")
 	public @ResponseBody Map<String, String> saveRfid(ContractBatchModel batch,
 			String logisticsId, HttpSession session) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			contractService.addBatch(batch, logisticsId, userBean.getMember());
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("启用物流错误", e, this.getClass());
-			throw new WebException("启用物流错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -234,7 +201,7 @@ public class LogisticsRfidController extends BaseController {
 			} else {
 				int oldBatchCount = list.size();
 				if (sumBatch > oldBatchCount) {
-					map.put("batchNo", sumBatch - oldBatchCount);
+					map.put("batchNo", oldBatchCount + 1);
 				}
 			}
 			return map;
@@ -267,7 +234,7 @@ public class LogisticsRfidController extends BaseController {
 			}
 			model.put("logistics", logistics);
 
-			return "site/rfid/logisticsB/loss-gysrfid";
+			return "site/rfid/logistics/manage/loss-gysrfid";
 		} catch (Exception e) {
 			SxjLogger.error("查询物流错误", e, this.getClass());
 			throw new WebException("查询物流错误");

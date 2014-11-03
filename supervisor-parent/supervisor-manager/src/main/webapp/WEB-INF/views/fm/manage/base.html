@@ -325,6 +325,22 @@ var elastislideConfig={
 		count:6//当前显示数量
 }
 var slideTimes=elastislideConfig.count;
+var currentHiddenImages;
+var currentLi;
+$(document).ready(function(){
+	$(".iviewer_del").live("click",function(){
+		var url=$(this).siblings("img").attr("src");
+		var prefix="${b.imagePath}";
+		var image=url.substring(url.indexOf(prefix)+prefix.length);
+		var images=currentHiddenImages.attr("value");
+		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
+		alert(result);
+		currentHiddenImages.attr("value",result)
+		currentLi.remove();
+	});
+});
+
+
 var refreshIviewer=function($viewer,src,$container){
 	if($viewer.children().length==0){
 		iviewer=$viewer.iviewer({
