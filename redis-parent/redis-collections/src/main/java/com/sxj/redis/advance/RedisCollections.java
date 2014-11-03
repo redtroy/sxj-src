@@ -99,6 +99,8 @@ public class RedisCollections implements CollectionsRedisClient
     public static RedisCollections create()
     {
         Config config = new Config();
+        //        new SingleServerConfig();
+        
         config.useSingleServer().setAddress("127.0.0.1:6379");
         //        config.useMasterSlaveConnection().setMasterAddress("127.0.0.1:6379").addSlaveAddress("127.0.0.1:6389").addSlaveAddress("127.0.0.1:6399");
         //        config.useSentinelConnection().setMasterName("mymaster").addSentinelAddress("127.0.0.1:26389", "127.0.0.1:26379");
