@@ -21,7 +21,7 @@ public class MessageThread extends Thread
     
     private CometEngine engine;
     
-    private static int period = 2;
+    private static int period = 4;
     
     private static int delay = 3;
     
@@ -83,6 +83,8 @@ public class MessageThread extends Thread
         List<String> channels = CometContext.getInstance().getAppModules();
         SxjLogger.debug("Now Comet Connection Count: "
                 + getEngine().getConnections().size(), getClass());
+        SxjLogger.debug("Now Comet Channel Size: " + channels.size(),
+                getClass());
         if (getCounter().get() > 0 && channels.size() > 0)
         {
             for (String channel : channels)
@@ -94,6 +96,16 @@ public class MessageThread extends Thread
                         getClass());
                 if (cache != null)
                     getEngine().sendToAll(channel, cache);
+                long sleep = (long) (Math.random() * 100);
+                
+                try
+                {
+                    Thread.currentThread().sleep(sleep);
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
         
