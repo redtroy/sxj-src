@@ -9,6 +9,10 @@ import third.rewrite.fastdfs.StorePath;
 
 public interface IStorageClientService {
 
+	public static int LEVEL = 2;
+
+	public static String CACHE_NAME = "FAST_DFS_CACHE";
+
 	/**
 	 * 上传不可修改的文件
 	 * 
@@ -94,6 +98,18 @@ public interface IStorageClientService {
 	 */
 	<T> T downloadFile(String groupName, String path,
 			IFdfsFileInputStreamHandler<T> handling);
+
+	/**
+	 * 下载图片缩率图
+	 * 
+	 * 
+	 * @param groupName
+	 * @param path
+	 * @param handling
+	 * @return
+	 */
+	byte[] downloadSmallImage(String groupName, String path, int width,
+			int height);
 
 	/**
 	 * 下载文件片段

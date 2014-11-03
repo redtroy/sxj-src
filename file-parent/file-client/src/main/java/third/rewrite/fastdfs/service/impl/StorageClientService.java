@@ -32,6 +32,10 @@ import third.rewrite.fastdfs.socket.FdfsSocket;
 import third.rewrite.fastdfs.socket.FdfsSocketService;
 import third.rewrite.fastdfs.socket.PooledFdfsSocket;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.file.common.ImageUtil;
+import com.sxj.file.common.LocalFileUtil;
+
 public class StorageClientService implements IStorageClientService {
 
 	private FdfsSocketService fdfsSocketService;
@@ -39,6 +43,8 @@ public class StorageClientService implements IStorageClientService {
 	private ITrackerClientService trackerClientService;
 
 	private String groupName;
+
+	private int cacheTime = 60;
 
 	private <T> T process(FdfsSocket socket, ICmdProtoHandler<T> handler) {
 		try {
@@ -158,8 +164,42 @@ public class StorageClientService implements IStorageClientService {
 			IFdfsFileInputStreamHandler<T> handling) {
 		long offset = 0;
 		long size = 0;
-
+		String file_id = groupName + "/" + path;
+		Object object = HierarchicalCacheManager
+				.get(LEVEL, CACHE_NAME, file_id);
+		if (object != null) {
+			if (object instanceof byte[]) {
+				return (T) object;
+			}
+		}
 		return downloadFile(groupName, path, offset, size, handling);
+	}
+
+	@Override
+	public byte[] downloadSmallImage(String groupName, String path, int width,
+			int height) {
+		String file_id = groupName + "/" + path;
+		String file_ext_name = LocalFileUtil.getFileExtName(file_id);
+		String key = file_id + width + "x" + height + "." + file_ext_name;
+		Object small = HierarchicalCacheManager.get(LEVEL, CACHE_NAME, key);
+		if (small != null) {
+			if (small instanceof byte[]) {
+				return (byte[]) small;
+			}
+		}
+		byte[] file_buff = downloadFile(groupName, path,
+				new ByteArrayFdfsFileInputStreamHandler());
+		if (file_buff != null) {
+			byte[] smallBytes = ImageUtil.scaleFixed(file_buff, width, height,
+					file_ext_name, false);
+			if (smallBytes != null && smallBytes.length > 0) {
+				HierarchicalCacheManager.set(LEVEL, CACHE_NAME, key,
+						smallBytes, cacheTime);
+			}
+			return smallBytes;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -299,6 +339,14 @@ public class StorageClientService implements IStorageClientService {
 
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
+	}
+
+	public int getCacheTime() {
+		return cacheTime;
+	}
+
+	public void setCacheTime(int cacheTime) {
+		this.cacheTime = cacheTime;
 	}
 
 }
