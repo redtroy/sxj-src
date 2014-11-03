@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sxj.supervisor.dao.contract.IAccountingDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.contract.ContractPayModel;
+import com.sxj.supervisor.model.statistics.AccountingModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
@@ -17,6 +19,9 @@ import com.sxj.util.persistent.QueryCondition;
 public class ContractPayServiceImpl implements IContractPayService {
 	@Autowired
 	private IContractPayDao payDao;
+
+	@Autowired
+	private IAccountingDao accountingDao;
 
 	@Override
 	public List<PayRecordEntity> queryPayList(ContractPayModel query)
@@ -89,4 +94,23 @@ public class ContractPayServiceImpl implements IContractPayService {
 		}
 	}
 
+	@Override
+	public List<AccountingModel> query_finance(AccountingModel query,
+			String startDate, String endDate) throws ServiceException {
+		try {
+			QueryCondition<AccountingModel> condition = new QueryCondition<AccountingModel>();
+			condition.addCondition("recordNo", query.getRecordNo());// 备案号
+			condition.addCondition("contractNo", query.getContractNo());// 合同号
+			condition.addCondition("contractType", query.getContractType());// 合同类型
+			condition.addCondition("startDate", startDate);// 开始时间
+			condition.addCondition("endDate", endDate);// 结束时间
+			condition.setPage(query);
+			List<AccountingModel> list = accountingDao.query(condition);
+			query.setPage(condition);
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException("财务统计查询出错！", e);
+		}
+	}
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.contract.IAccountingDao">
+	<resultMap id="AccountingResultMap"
+		type="com.sxj.supervisor.model.statistics.AccountingModel">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNameA" column="MEMBER_NAME_A" jdbcType="VARCHAR" />
+		<result property="memberNameB" column="MEMBER_NAME_B" jdbcType="VARCHAR" />
+		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="signDate" column="SIGNED_DATE" jdbcType="TIMESTAMP" />
+		<result property="amount" column="PAY_AMOUNT" jdbcType="DOUBLE" />
+		<result property="payAmount" column="PAY_REAL" jdbcType="DOUBLE" />
+		<result property="noPayAmount" column="NO_PAY_AMOUNT" jdbcType="DOUBLE" />
+	</resultMap>
+
+	<!-- 条件查询财务统计 -->
+	<select id="query" resultMap="AccountingResultMap"
+		parameterType="String">
+		<![CDATA[SELECT mp.`ID` AS ID,mc.CONTRACT_NO,mc.`RECORD_NO` AS RECORD_NO,mc.`MEMBER_NAME_A`,mc.`MEMBER_NAME_B`,
+		mc.`TYPE`,mc.`SIGNED_DATE`,mp.`PAY_AMOUNT`,mp.`PAY_REAL`,
+		(mp.`PAY_AMOUNT`-mp.`PAY_REAL`) AS NO_PAY_AMOUNT FROM M_CONTRACT_PAY mp 
+		LEFT JOIN M_CONTRACT mc ON mp.CONTRACT_No=mc.CONTRACT_NO WHERE 1=1 ]]>
+
+		<if test="condition.recordNo != null and condition.recordNo != ''">
+			<![CDATA[AND mc.RECORD_NO LIKE CONCAT('%',#{condition.recordNo},'%')]]>
+		</if>
+		<if test="condition.contractNo!= null and condition.contractNo != ''">
+			<![CDATA[AND mc.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%')]]>
+		</if>
+		<if test="condition.contractType != '' and condition.contractType !=null ">
+			<![CDATA[AND mc.TYPE =#{condition.contractType}]]>
+		</if>
+		<if
+			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
+			<![CDATA[AND mc.SIGNED_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) AND mc.SIGNED_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
+		</if>
+	</select>
+</mapper>
