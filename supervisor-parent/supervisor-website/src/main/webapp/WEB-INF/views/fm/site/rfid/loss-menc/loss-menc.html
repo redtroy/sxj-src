@@ -8,7 +8,121 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 </head>
+<script>
+$(function(){
+	$("#contract_a").change(function(){
+		$("#pc_a option").remove();
+		pc_a();
+	})
+	$("#contract_b").change(function(){
+		$("#pc_b option").remove();
+		pc_b();
+	})
+	$("#pc_a").change(function(){
+		if (container_a!=null)
+		rfid_a($("#pc_a option:selected").val());
+	})
+	$("#pc_b").change(function(){
+		if (container_b!=null)
+		rfid_b($("#pc_b option:selected").val());
+	})
+	$("#refContractNo").bigAutocomplete({url:"lx_query.htm",callback:function(data){
+        $("#refContractNo").val(data.title);
+    }});
+})
+var container_a=null;
+var container_b=null;
+var lable=null;
+function query(){
+	var refContractNo=$("#refContractNo").val();
+	var num=$("#num").val();
+	$.post("query.htm",{refContractNo:refContractNo,num:num},function(data){
+		if (data.isOk=='ok'){
+			$("#contract_a option").remove();
+			$("#contract_b option").remove();
+			for (var i=0;i<data.list.length;i++){
+				if (data.list[i].contract.type=="glass"){
+					$("#contract_a").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
+				}else if (data.list[i].contract.type=="extrusions"){
+					$("#contract_b").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
+				}
+			}
+			lable=data.bq;
+			$("#bq_qj").text(data.bq[0]+"-"+data.bq[1])
+			pc_a();
+			pc_b();
+		}else{
+			alert('查询失败！');
+		}
+	})
+}
 
+function pc_a(){
+	var contractNo=$("#contract_a option:selected").text();
+	if (contractNo !=null){
+		$.post("query_contractNo.htm",{contractNo:contractNo},function(data){
+			if (data.isOk=="ok" && data.cm.batchList !=null){
+				container_a=data.cm.batchList;
+				for (var i=0;i<container_a.length;i++){
+				 $("#pc_a").append("<option value='"+i+"'>"+container_a[i].batch.batchNo+"</option>")
+				}
+				rfid_a($("#pc_a option:selected").val());
+				}else{
+					$("#pc_a").append("<option>该合同无批次</option>");
+				}
+		})
+	}else{
+		
+	}
+	  
+}
+function pc_b(){
+	var contractNo=$("#contract_b option:selected").text();
+	if (contractNo !=null){
+		$.post("query_contractNo.htm",{contractNo:contractNo},function(data){
+			if (data.isOk=="ok" && data.cm.batchList !=null){
+				container_b=data.cm.batchList;
+				for (var i=0;i<container_b.length;i++){
+				 $("#pc_b").append("<option value='"+i+"'>"+container_b[i].batch.batchNo+"</option>")
+				}
+				rfid_b($("#pc_b option:selected").val());
+				}else{
+					$("#pc_b").append("<option>该合同无批次</option>");
+				}
+			
+			
+		})
+	}else{
+		
+	}
+}
+function rfid_a(pc_a_id){
+	$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
+}
+function rfid_b(pc_b_id){
+	$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
+}
+//启用标签
+function star(){
+	var gRfid=$("#rfid_a").text();
+	var lRfid=$("#rfid_b").text();
+	var windowType=$("#windowType option:selected").val();
+	/*
+	if (gRfid=="" || gRfid== null){
+		alert('玻璃采购合同缺失，无法提交');
+	}*/
+	if (lRfid=="" || lRfid== null){
+		alert('型材采购合同缺失，无法提交');
+	}
+	$.post("start_lable.htm",{minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
+		if (data.isOk=="ok"){
+			alert("启用成功");
+		}else{
+			alert("启用失败");
+		}
+	})
+}
+</script>
 <body>
 <@b.header />
 <div class="mainBg">
@@ -23,52 +137,42 @@
 <div class="contBox">
 <div class="item">
   <label>补损标签数量</label>
-  <input class="input input-w180h36"/></div>
-<div class="item"><label>招标合同号</label> <input class="input input-w180h36" value="" />&nbsp;&nbsp;<button class="button button-green" title="根据招标合同号和启用数量提取编号值最小的数量的标签区间在下方显示">获取标签编号区间</button></div>
+  <input class="input input-w180h36" id="num"/></div>
+<div class="item"><label>招标合同号</label> <input class="input input-w180h36" value=""  id="refContractNo"/>&nbsp;&nbsp;<button class="button button-green" title="根据招标合同号和启用数量提取编号值最小的数量的标签区间在下方显示" onclick="query();return false;">获取标签编号区间</button></div>
 <div class="item">
   <label>补损标签编号区间</label>
-  &nbsp;&nbsp;<span class="color-blue">AAAA00001-AAAA00050</span></div>
+  &nbsp;&nbsp;<span class="color-blue" id="bq_qj">AAAA00001-AAAA00050</span></div>
 <div class="item">
   <label>需补损的认证标签</label>
   <input class="input input-w180h36" value="" />
   &nbsp;&nbsp;<a href="#" class="lnk-green">+</a></div>
 <div class="item">
   <label>对应玻璃采购合同</label>
-  <select name="select">
-    <option>CT14060021</option>
+  <select name="select" id="contract_a">
   </select>
 </div>
 <div class="item">
   <label>对应玻璃补损批次</label>
-  <select name="select2" id="select">
-    <option selected="selected">该合同无补损批次</option>
-    <option>补损第一批次</option>
-    <option>补损第二批次</option>
-    <option>补损第三批次</option>
+  <select name="select2" id="pc_a">
   </select>
 </div>
 <div class="item">
   <label>玻璃补损物流标签</label>
-  <span class="color-blue ml5">AAAA526987</span></div>
+  <span class="color-blue ml5" id="rfid_a"></span></div>
 <div class="item">
   <label>对应型材采购合同</label>
-  <select name="select3">
-    <option>CT14060021</option>
+  <select name="select3" id="contract_b">
   </select>
 </div>
 <div class="item">
   <label>对应型材补损批次</label>
-  <select name="select4" id="select2">
-    <option>该合同无补损批次</option>
-    <option selected="selected">补损第一批次</option>
-    <option>补损第二批次</option>
-    <option>补损第三批次</option>
+  <select name="select4" id="pc_b">
   </select>
 </div>
 <div class="item">
   <label>玻璃补损物流标签</label>
-  <span class="color-blue ml5">AAAA236854</span></div>
-<div class="item"><label>&nbsp;</label><a href="mencrfidmgr.html" class="button button-orange mr15" title="当用来补损的标签数量不够时需要提示，并且引导转向认证标签申请页面，当用来补损的标签数量和填写的被补损的RFID数量不符时，需要报错提示">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+  <span class="color-blue ml5" id="rfid_b"></span></div>
+<div class="item"><label>&nbsp;</label><a href="" class="button button-orange mr15" onckick="star();return false;" title="当用来补损的标签数量不够时需要提示，并且引导转向认证标签申请页面，当用来补损的标签数量和填写的被补损的RFID数量不符时，需要报错提示">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </div>
 </div>
