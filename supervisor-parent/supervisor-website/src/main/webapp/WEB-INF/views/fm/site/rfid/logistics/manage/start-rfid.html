@@ -41,7 +41,6 @@ $(function() {
         $("#batchNo").val(data.batchCount);
         if(data.batchCount==0){
 			 messageInfo("该合同的所有批次已经启用完毕！");
-			 $("#batchNo").val("");
 			 $("#batchNo_span").text("");
 			 return false;
 		 }
@@ -90,7 +89,7 @@ function startRfid() {
 				window.location.href = "queryList.htm";
 			},"启用成功");
 		} else {
-			errorInfo("启用失败");
+			errorInfo(data.error);
 		}
 	});
 

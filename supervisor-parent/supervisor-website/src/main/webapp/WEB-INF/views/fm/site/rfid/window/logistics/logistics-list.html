@@ -3,23 +3,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
-<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
-<script src="${b.staticPath}js/datepicker.js"></script>
-<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
 <script >
-
 function query(page){
 	var params=$("#search_form").serialize();
 	 if(page!=undefined){
 		   params=params+"&currentPage="+page;
 	   }
-	$.post("queryList.htm",params,function(data){
+	$.post("query.htm",params,function(data){
 		var res=$(data).find("#res_table");
 		var pager=$(data).find("#pager");
 		$("#res_table").empty();
@@ -50,31 +46,24 @@ function  disable(id){
 			succInfo(function(){
 				window.location.href="query.htm";
 			},"停用成功!");
-			
 		}else{
-			messageInfo("停用失败!");	
+			errorInfo("停用失败!");	
 		}
 	});
 	}
 }
-$(function(){
-	var url_ = "${basePath}autoComple.htm";
-	$("#memberName").bigAutocomplete({url:url_,callback:function(data){
-        $("#memberNo").val(data.result);
-    }});
-});
-function loadInfo(id,rfidNo,contractNo){
-	$("#info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+function loadInfo(id,contractNo){
+	$("#info"+id).load("${basePath}/rfid/window/contractInfo.htm?contractNo="+contractNo+"&rfid="+id);
 }
-function close(id){
+function closeContract(id){
 	$("#info"+id).html("");
 }
 
 function log(id){
-	$("#info"+id).load("stateLog.htm?id="+id);
+	$("#log"+id).load("stateLog.htm?id="+id);
 }
 function closeLog(id){
-	$("#info"+id).html("");
+	$("#log"+id).html("");
 }
 </script>
 </head>
@@ -123,9 +112,8 @@ function closeLog(id){
   <col width="15%" />
   <col width="15%" />
   <col width="10%" />
-  <col width="10%" />
-  <col width="10%" />
-  <col width="10%" />
+  <col width="15%" />
+  <col width="15%" />
   <col width="15%" />
     <tr>
       <th>标签编号</th>
@@ -134,15 +122,14 @@ function closeLog(id){
       <th>执行批次</th>
       <th>补损标签</th>
 	  <th>标签进度</th>
-	  <th >标签状态</th>
-	   <th class="rLine">操作</th>
+	  <th class="rLine">标签状态</th>
       </tr>
        <#list list as list>
         <tr>
           <td><a href="javascript:log('${list.id}');" class="lnk-blue">${list.rfidNo}</a></td>
           <td>${list.purchaseNo}</td>
-          <td>${list.contractNo}</td>
-		  <td><a href="javascript:loadInfo('${list.id}','${list.rfidNo}','${list.contractNo}')" class="lnk-blue">${list.batchNo}</a></td>
+          <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
+		  <td>${list.batchNo}</td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
 		  <td><em class="state frozen">${list.progressState.getName()}</em></td>
 		  <td> <#if list.rfidState.getId()==0>
@@ -157,7 +144,6 @@ function closeLog(id){
 		   <#if list.rfidState.getId()==3>
 		   <em class="state frozen">${list.rfidState.getName()}</em>
 		  </#if></td>
-		  <td><#if list.rfidState.getId()==0><a href="to_start.htm?id=${list.id}" class="lnk-blue" title=""><span class="icon icon16 icon-ok"></span>启用</a> &nbsp;&nbsp;<a href="to_loss.htm?id=${list.id}" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>补损</a></#if></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}"> </tr>
         <tr id="log${list.id}"> </tr>

@@ -29,7 +29,7 @@
 	 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType},function(data){
 		 if (data.isOk="ok"){
 			 succInfo(function(){
-				 window.location.href="${basePath}rfid/applyManager/applyManager_list.htm"; 
+				 window.location.href="${basePath}rfid/logistics/apply_list.htm"; 
 			 },"添加成功！");
 		 }else{
 			 errorInfo("添加失败！");
