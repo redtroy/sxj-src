@@ -9,6 +9,7 @@
   	<module>redis-client</module>
     <module>redis-concurrent</module>
     <module>redis-collections</module>
+    <module>redis-spring</module>
   </modules>
   <properties>
   	<netty.version>4.0.21.Final</netty.version>
