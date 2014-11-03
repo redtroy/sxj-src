@@ -35,6 +35,10 @@
 </script>
 <@b.upload/> <@b.validate/>
 <script type="text/javascript">
+closeViewer =function(){
+	$('.maskdivgen').fadeOut(100);
+	$('.viewer').slideUp(200);
+}
 var validform;
 	function edit() {
 		if (!validform.check()){
@@ -96,7 +100,6 @@ var validform;
 			}
 		});
 	}
-
 	//合同扫描件
 	$(document).ready(function() {
 		$('.modal-header .close').click(function() {
@@ -106,6 +109,8 @@ var validform;
 		$('.elastislide-list').find("li").live("click", function() {
 			var el = $(this);
 			var imageSource = el.find("a").attr("data-image");
+			currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
+			currentLi=$(this);
 			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
 			el.parent().children("li").removeClass("view");
 			el.addClass("view");

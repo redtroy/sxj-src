@@ -445,7 +445,17 @@ public class RecordServiceImpl implements IRecordService {
 				centity.setConfirmState(ContractSureStateEnum.noaffirm);
 				contractDao.updateContract(centity);
 			}
-
+			Long messageCount = null;
+			Object cache = HierarchicalCacheManager.get(2, "comet_message",
+					"record_count_message");
+			if (cache instanceof Long) {
+				messageCount = (Long) cache;
+			} else {
+				messageCount = 0l;
+			}
+			messageCount = messageCount + 1;
+			HierarchicalCacheManager.set(2, "comet_message",
+					"record_count_message", messageCount);
 		} catch (Exception e) {
 			throw new ServiceException("更新备案错误", e);
 		}

@@ -459,7 +459,7 @@ var getFloatStr = function(num){
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].remarks" id="textarea10" cols="25"
 										rows="1">${modifyItem.remarks}</textarea> 
 										&nbsp;&nbsp; </td>
-										<td><a href="javascript:void(0);" class="lnk-red">X</a></td>
+										<td><a href="javascript:void(0);" class="lnk-red">X</a><input type="hidden" value="${modifyItem.id}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].id"/></td>
 							</tr>
 						 </#list>
 						</table>

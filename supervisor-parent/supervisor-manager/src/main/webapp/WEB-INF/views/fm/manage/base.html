@@ -327,6 +327,7 @@ var elastislideConfig={
 var slideTimes=elastislideConfig.count;
 var currentHiddenImages;
 var currentLi;
+var closeViewer;
 $(document).ready(function(){
 	$(".iviewer_del").live("click",function(){
 		var url=$(this).siblings("img").attr("src");
@@ -334,9 +335,9 @@ $(document).ready(function(){
 		var image=url.substring(url.indexOf(prefix)+prefix.length);
 		var images=currentHiddenImages.attr("value");
 		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
-		alert(result);
 		currentHiddenImages.attr("value",result)
 		currentLi.remove();
+		closeViewer();
 	});
 });
 

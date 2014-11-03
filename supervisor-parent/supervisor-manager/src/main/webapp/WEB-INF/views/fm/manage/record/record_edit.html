@@ -37,6 +37,10 @@
 		})
 
 	})
+	closeViewer =function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.viewer').slideUp(200);
+	}
 </script>
 <@b.upload/> <@b.validate/>
 <script type="text/javascript">
@@ -111,6 +115,8 @@
 		$('.elastislide-list').find("li").live("click", function() {
 			var el = $(this);
 			var imageSource = el.find("a").attr("data-image");
+			currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
+			currentLi=$(this);
 			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
 			el.parent().children("li").removeClass("view");
 			el.addClass("view");
@@ -188,8 +194,7 @@
 									</#if> </#list>
 							</select></li>
 							<li class="contPic ly-clearFix"><label>备案扫描件</label> <!--  <span class="ly-left"><button id="img_path" class="button button-green button-middle"></button><input type="hidden" id="imgPath" name="imgPath"></span>-->
-								<input type="hidden" value="${record.imgPath}" name="imgPath"
-								id="contractImgPath" />
+								<input type="hidden" value="${record.imgPath}" name="imgPath" id="contractImgPath" />
 								<div class="rollBox" id="contractRollBox">
 									<ul id="contractUl" class="elastislide-list"></ul>
 								</div></li>

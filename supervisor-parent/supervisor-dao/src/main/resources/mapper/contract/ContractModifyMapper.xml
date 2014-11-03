@@ -13,7 +13,7 @@
 	<!-- 条件查询变更合同 -->
 	<select id="queryModify" resultMap="ModifyResultMap"
 		parameterType="String">
-		<![CDATA[ SELECT ID,CONTRACT_ID,RECORD_NO,IMG_PATH FROM M_CONTRACT_MODIFY
-					WHERE RECORD_NO in(${condition.recordIds})]]>
+		<![CDATA[SELECT M.* FROM M_CONTRACT_MODIFY M ,M_CONTRACT_RECORD R
+		 WHERE M.RECORD_NO=R.RECORD_NO AND M.RECORD_NO in(${condition.recordIds}) ORDER BY R.APPLY_DATE ASC ]]>
 	</select>
 </mapper>
