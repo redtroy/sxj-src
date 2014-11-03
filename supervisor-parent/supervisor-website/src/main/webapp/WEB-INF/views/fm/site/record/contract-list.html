@@ -366,6 +366,17 @@ function busunSeav(){
 					}
 				});},"是否删除备案?");
 	}
+	function to_modify(id){
+		$.post("getRecordState.htm", {
+			id : id
+		}, function(data) {
+			if (data.isOK == "ok") {
+					window.location.href="to_modify.htm?recordId="+id;
+			} else {
+				errorInfo("不能修改");
+			}
+		});
+	}
 </script>
 </head>
 
@@ -480,7 +491,7 @@ function busunSeav(){
 							<#if type==0>
 								<#if record.contractType.getId()==0>
 									<#if record.contractNo??>
-									<a href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span
+									<a href="javascript:to_modify('${record.id}')" class="lnk-blue"><span
 										class="icon icon16 icon-edit"></span>修改</a>
 									 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
 									 <span
