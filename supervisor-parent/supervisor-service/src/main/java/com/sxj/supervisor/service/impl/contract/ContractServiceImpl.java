@@ -770,15 +770,12 @@ public class ContractServiceImpl implements IContractService {
 				recordQuery.setSortColumn("APPLY_DATE");
 				List<RecordEntity> recordList = recordService
 						.queryRecord(recordQuery);
-<<<<<<< .mine				// 变更该合同所有备案状态
-
-=======					// 变更该合同所有备案状态
+				// 变更该合同所有备案状态
 				for (RecordEntity recordEntity : recordList) {
 					recordEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 					recordDao.updateRecord(recordEntity);
 				}
-				
->>>>>>> .theirs				if (recordList != null) {
+				if (recordList != null) {
 					RecordEntity record = recordList.get(0);
 //					if(record.getImgPath()){
 //						
