@@ -64,7 +64,7 @@ function sub(){
 		 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType,contractNo:contractNo},function(data){
 			 if (data.isOk="ok"){
 				 succInfo(function(){
-					 window.location.href="${basePath}rfid/mencordermgr/mencordermgr_list.htm"; 
+					 window.location.href="apply_list.htm"; 
 				 },"申请成功！");
 				
 			 }

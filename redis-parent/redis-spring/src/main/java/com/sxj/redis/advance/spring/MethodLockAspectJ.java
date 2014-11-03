@@ -32,6 +32,9 @@ public class MethodLockAspectJ
     public Object methodLockHold(ProceedingJoinPoint joinPoint)
             throws Throwable
     {
+        if (redisConcurrent == null)
+            throw new RuntimeException(
+                    "No RedisConcurrent Defined in this Context!!!!!!!!");
         RLock lock = null;
         Object result = null;
         try

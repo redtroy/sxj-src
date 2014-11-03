@@ -12,9 +12,20 @@ public class MethodLockAspectJTest
     @Autowired
     private DemoServiceImpl service;
     
-    @Test
     public void test()
     {
         service.sayHello("abc");
+    }
+    
+    @Test
+    public void testAdd()
+    {
+        service.add("a");
+        service.add("b");
+        service.add("c");
+        service.add("d");
+        service.print();
+        service.remove("a");
+        service.print();
     }
 }

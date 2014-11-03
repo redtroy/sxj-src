@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.controller.rfid.startmrfid;
+package com.sxj.supervisor.website.controller.rfid.window;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -24,29 +27,66 @@ import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-@RequestMapping("/rfid")
-public class StartmrfidController extends BaseController {
+@RequestMapping("/rfid/window")
+public class StartWRfidController extends BaseController {
+	@Autowired
+	private IWindowRfidService windowRfidService;
+
 	@Autowired
 	private IContractService contractService;
 
-	@Autowired
-	private IWindowRfidService wind;
-
+	/**
+	 * 跳转标签启用
+	 * 
+	 * @param map
+	 * @return
+	 */
 	@RequestMapping("startmrfid_list")
 	public String startmrfid_list(ModelMap map) {
 		WindowTypeEnum[] type = WindowTypeEnum.values();
 		map.put("type", type);
-		return "site/rfid/startmrfid/startmrfid";
+		return "site/rfid/window/startmrfid";
 	}
 
-	@RequestMapping("query")
+	@RequestMapping("queryRefContract")
 	public @ResponseBody Map<Object, Object> query(ContractQuery query, Long num)
 			throws WebException {
+		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
+			List<ContractItemEntity> items = contractService
+					.getContractItem(query.getRefContractNo());
+			if (items == null || items.size() == 0) {
+				throw new WebException("招标合同不存在");
+			}
+			float quantity = 0f;
+			float hasStartQuantity = 0f;
+			for (ContractItemEntity item : items) {
+				if (item == null) {
+					continue;
+				}
+				quantity = quantity + item.getQuantity();
+			}
+
+			WindowRfidQuery winQuery = new WindowRfidQuery();
+			winQuery.setContractNo(query.getRefContractNo());
+			winQuery.setRfidState(RfidStateEnum.used.getId());
+			List<WindowRfidEntity> winList = windowRfidService
+					.queryWindowRfid(winQuery);
+			if (winList != null) {
+				hasStartQuantity = winList.size();
+			}
+			if (hasStartQuantity >= quantity) {
+				throw new WebException("此招标合同已经全部启用完毕");
+			}
+			if (num > (quantity - hasStartQuantity)) {
+				throw new WebException("此招标合同未启用数量为："
+						+ (quantity - hasStartQuantity));
+			}
+
 			List<ContractModel> list = contractService.queryContracts(query);
-			Map<Object, Object> map = new HashMap<Object, Object>();
 			if (list.size() > 0) {
-				String[] bq = wind.getMaxRfidNo(query.getRefContractNo(), num);
+				String[] bq = windowRfidService.getMaxRfidNo(
+						query.getRefContractNo(), num);
 				map.put("isOk", "ok");
 				map.put("bq", bq);
 				map.put("list", list);
@@ -55,16 +95,17 @@ public class StartmrfidController extends BaseController {
 			}
 			return map;
 		} catch (Exception e) {
-			SxjLogger.error("查询合同信息错误", e, this.getClass());
-			throw new WebException("查询合同信息错误");
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	@RequestMapping("query_contractNo")
 	public @ResponseBody Map<Object, Object> query_contractNo(String contractNo)
 			throws WebException {
+		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			Map<Object, Object> map = new HashMap<Object, Object>();
 			ContractModel cm = contractService
 					.getContractModelByContractNo(contractNo);
 			if (cm != null) {
@@ -73,11 +114,12 @@ public class StartmrfidController extends BaseController {
 			} else {
 				map.put("isOk", "false");
 			}
-			return map;
+
 		} catch (Exception e) {
 			SxjLogger.error("根据合同号查询合同信息错误", e, this.getClass());
-			throw new WebException("根据合同号查询合同信息错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -86,8 +128,8 @@ public class StartmrfidController extends BaseController {
 	@RequestMapping("lx_query")
 	public @ResponseBody Map<Object, Object> lx_query(String keyword)
 			throws WebException {
+		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			Map<Object, Object> map = new HashMap<Object, Object>();
 			List<ContractEntity> list = contractService
 					.getContractByRefContractNo(keyword);
 			List<Map<String, String>> addlist = new ArrayList<Map<String, String>>();
@@ -97,11 +139,12 @@ public class StartmrfidController extends BaseController {
 				addlist.add(cmap);
 			}
 			map.put("data", addlist);
-			return map;
+
 		} catch (Exception e) {
 			SxjLogger.error("联想查询错误", e, this.getClass());
-			throw new WebException("联想查询错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -111,18 +154,16 @@ public class StartmrfidController extends BaseController {
 	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,
 			String minRfid, String maxRfid, String gRfid, String lRfid,
 			WindowTypeEnum windowType) throws WebException {
+		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			Map<Object, Object> map = new HashMap<Object, Object>();
 			ContractModel refContract = contractService
 					.getContractModelByContractNo(refContractNo);
 			if (refContract == null) {
-				map.put("isOk", "no");
-				return map;
+				throw new WebException("招标合同不存在");
 			}
 			List<ContractItemEntity> items = refContract.getItemList();
 			if (items == null || items.size() == 0) {
-				map.put("isOk", "no");
-				return map;
+				throw new WebException("招标合同条目不存在");
 			}
 			float quantity = 0f;
 			for (Iterator<ContractItemEntity> iterator = items.iterator(); iterator
@@ -132,16 +173,15 @@ public class StartmrfidController extends BaseController {
 					continue;
 				}
 				quantity = quantity + item.getQuantity();
-
 			}
-			long count = Long.parseLong(quantity + "");
-			wind.startWindowRfid(count, refContractNo, minRfid, maxRfid, gRfid,
-					lRfid, windowType);
+			long count = (long) quantity;
+			windowRfidService.startWindowRfid(count, refContractNo, minRfid,
+					maxRfid, gRfid, lRfid, windowType);
 			map.put("isOk", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("启用标签错误", e, this.getClass());
-			throw new WebException("启用标签错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 }

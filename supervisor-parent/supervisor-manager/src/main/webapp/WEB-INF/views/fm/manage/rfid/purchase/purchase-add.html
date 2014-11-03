@@ -74,18 +74,6 @@
 			messageInfo("申请数量已用完!");
 		}
 	}
-	function sum(){
-		var remaining = $("#remaining").val();
-		var price=$("#price").val();
-		var count =$("#count").val();
-		if(!isNaN(price)&&!isNaN(count)){ 
-			if(parseInt(count)>parseInt(remaining)){
-				$("#count").val(remaining);
-			}
-			var ze=Number(price)*Number(count);
-			$("#ddze").html(ze+"元");
-		} 
-	}
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -128,17 +116,17 @@
       </div>
       <div>
         <label>实际采购价格</label>
-        <input type="text" id="price" name="price" class="input-w30" title="实际采购价格" datatype="price" nullmsg="请输入采购价格！" errormsg="价格不合法"  onkeyup="sum();"/>元
+        <input type="text" id="price" name="price" class="input-w30 number" title="实际采购价格" datatype="price" nullmsg="请输入采购价格！" errormsg="价格不合法"/>元
       </div>
       <div>
         <label>采购数量</label>
         <input type="hidden" id="hasNumber" name="hasNumber" value="${app.hasNumber}" />
         <#if app.count??>
         <input type="hidden" id="remaining" value="${app.count-app.hasNumber}" />
-        <input type="text" id="count" name="count" class="input-w80 number" value="${app.count-app.hasNumber}" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入整数" onkeyup="sum();"/>
+        <input type="text" id="count" name="count" class="input-w80 number" value="${app.count-app.hasNumber}" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入整数"/>
         <#else>
          <input type="hidden" id="remaining" value="0" />
-         <input type="text" id="count" name="count" class="input-w80" value="0" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入整数" onkeyup="sum();"/>
+         <input type="text" id="count" name="count" class="input-w80 number" value="0" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入整数"/>
          </#if>
         <span class="color-red f12">该申请单已采购${app.hasNumber}张RFID</span>
       </div>

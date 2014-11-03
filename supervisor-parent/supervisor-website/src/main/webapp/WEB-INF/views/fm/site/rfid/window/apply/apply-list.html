@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -6,9 +6,8 @@
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.js"></script>
 <@b.pageScript/>
-<@b.errorInfo/>
 <script>
 jQuery(document).ready(function($) {
 	$('.btnPassword').click(function(){
@@ -24,29 +23,48 @@ jQuery(document).ready(function($) {
 		$('.passwordPop').slideUp(200);
 	})
 	})
-	
-function del(id,applyNo){
-	 $("#remove_div").show();
-	 
-	  $("#remove_div button:eq(0)").unbind("click");
-	  $("#remove_div button:eq(0)").attr("value",id).attr("stateId",applyNo).click(function(){
-	  $.post("del.htm",{id:$(this).attr("value"),applyNo:$(this).attr("stateId")},function(data){
-		if (data.flag=='ok'){
-			$("#remove_div").hide();
-			query();
-		}else{
-			$("#remove_div").hide();
-			messageInfo("后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！");
-		}
-	})
-	  })
-	 
+</script>
+<link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.errorInfo/>
+<@b.dialogBox/>
+<script>
+ function query(page){
+		var params=$("#search_form").serialize();
+		if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	  	}
+		$.post("apply_list.htm",params,function(data){
+			var tableList=$(data).find(".tabList");
+			var pager=$(data).find("#pager");
+			$(".tabList").empty();
+			$(".tabList").append(tableList.html());
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		})
+ }
+ function del(id,applyNo){
+	 dialogBox(function(){
+		 $.post("del_apply.htm",{id:id,applyNo:applyNo},function(data){
+				if (data.flag=='ok'){
+					//$("#remove_div").hide();
+					succInfo(function(){
+						query($("#pager").attr("currentPage"));
+					},"删除成功！");
+				}else{
+					//$("#remove_div").hide();
+					messageInfo("该笔申请单已生成采购单，不能删除！");
+				}
+			});
+	 },"是否确认删除？"); 
 }
 function closeDiv(divId){
 	$("#"+divId).css("display","none");
 }
 </script>
-
 <Script>
 $(window).resize(); 
 jQuery(document).ready(function($) {
@@ -57,27 +75,6 @@ jQuery(document).ready(function($) {
 		  });
 	})
 </Script>
-<link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
-<script src="${b.staticPath}js/jquery.paginate.js"></script>
-<script src="${b.staticPath}js/datepicker.js"></script>
-<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
-<script>
- function query(page){
-		var params=$("#search_form").serialize();
-		if(page!=undefined){
-		   params=params+"&currentPage="+page;
-	  	}
-		$.post("applyManager_list.htm",params,function(data){
-			var tableList=$(data).find(".tabList");
-			var pager=$(data).find("#pager");
-			$(".tabList").empty();
-			$(".tabList").append(tableList.html());
-			var totalPage=pager.attr("totalPage");
-			var currentPage=pager.attr("currentPage");
-			loadPage(currentPage,totalPage,query);
-		})
- }
-</script>
 </head>
 
 <body>
@@ -165,14 +162,6 @@ jQuery(document).ready(function($) {
           </div>
   </div>
 <@b.footer />
-<div class="modal-wrap popDemo contPop passwordPop" style="display:none;">
-      <div class="modal-header"><span class="close">关闭</span></div>
-      <div class="modal-body">
-        <div class="item"><label>新密码</label><input class="input input-w180h30" /></div>
-        <div class="item"><label>确认密码</label><input class="input input-w180h30" /></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop">确认修改</button><button class="button button-gray">取消</button></div>
-  </div>
-
-    <div class="maskdivgen" style="display:none"></div>
+<div class="maskdivgen" style="display:none"></div>
 </body>
 </html>
