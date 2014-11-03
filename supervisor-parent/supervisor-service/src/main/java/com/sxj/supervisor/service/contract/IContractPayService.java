@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.model.contract.ContractPayModel;
+import com.sxj.supervisor.model.statistics.AccountingModel;
 import com.sxj.util.exception.ServiceException;
 
 public interface IContractPayService {
@@ -27,4 +28,10 @@ public interface IContractPayService {
 	 * 乙方确认收款
 	 */
 	public String pay_ok(String id) throws ServiceException;
+
+	/**
+	 * 财务统计查询
+	 */
+	public List<AccountingModel> query_finance(AccountingModel query,
+			String startDate, String endDate) throws ServiceException;
 }

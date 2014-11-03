@@ -1,10 +1,19 @@
-package com.sxj.supervisor.model.rfid.statistics;
+package com.sxj.supervisor.model.statistics;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 
-public class AccountingModel extends Pagable {
+public class AccountingModel extends Pagable implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1740563758638710001L;
+
+	private String id;
 
 	private String contractNo;
 
@@ -15,6 +24,8 @@ public class AccountingModel extends Pagable {
 	private String memberNameB;
 
 	private String contractType;
+
+	private ContractTypeEnum type;
 
 	private Date signDate;
 
@@ -66,6 +77,14 @@ public class AccountingModel extends Pagable {
 		this.contractType = contractType;
 	}
 
+	public ContractTypeEnum getType() {
+		return type;
+	}
+
+	public void setType(ContractTypeEnum type) {
+		this.type = type;
+	}
+
 	public Date getSignDate() {
 		return signDate;
 	}
@@ -80,6 +99,14 @@ public class AccountingModel extends Pagable {
 
 	public void setAmount(Double amount) {
 		this.amount = amount;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Double getPayAmount() {
