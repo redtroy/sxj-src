@@ -25,12 +25,17 @@
 <@b.errorInfo/>
 <@b.upload/>
 <@b.dialogBox/>
+<@b.validate/>
 <script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script>
+var ul_validform;
 function modify(){
+	if (!ul_validform.check()){
+		return false;
+	}
 	$("#TbData").find(".CaseRow").each(function(i){
 		$(this).find("td").each(function(){
 			if($(this).attr("name")){
@@ -40,7 +45,6 @@ function modify(){
 			}
 		})
 	});
-	
 			dialogBox(function(){
 			$.post("modify.htm",$("#modifyForm").serialize(),function(data){
 				if (data.isOK == 'ok') {
@@ -126,6 +130,31 @@ var caculateRow=function($tr){
 }
 //合同扫描件
 	$(document).ready(function() {
+		//初始化验证
+		ul_validform=$("#modifyForm").Validform({
+			tiptype:function(msg,o,cssctl){
+					var $div=$("<div/>").addClass("checkinfo");
+					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
+					var left=o.obj.offset().left,
+					top=o.obj.offset().top;
+					var width=o.obj.width();
+					$div.append($p).css({
+						'left':left+width-32,
+						'top':top-45,
+						'position':'absolute'
+					}).show();
+					o.obj.parent().append($div);
+			}});
+		$("#modifyForm").find("[datatype]").each(function(){
+			$(this).focus(function(){
+				$(this).parent().children(".checkinfo").hide();
+			}); 
+			$(this).blur(function(){
+				var pass=ul_validform.check(true,$(this));
+				if(!pass)
+					$(this).parent().children(".checkinfo").show();
+			});
+		});
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.viewer').slideUp(200);
@@ -224,21 +253,21 @@ var getFloatStr = function(num){
 				<input type="hidden" value="${contractModel.contract.contractNo}" id=""  name="contract.contractNo" />
 					<ul class="ly-clearFix">
 						<li><label>合同号</label> ${contractModel.contract.contractNo}</li>
-						<li><label>签订地点</label> <input name="contract.address" type="text"
+						<li><label>签订地点</label> <input name="contract.address" type="text" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入签订地点！" 
 							value="${contractModel.contract.address}" /></li>
 						<li><label>甲方</label> <input name="contract.memberNameA" type="text"
 							value="${contractModel.contract.memberNameA}" readonly="readonly" /></li>
 						<li><label>乙方</label> <input name="contract.memberNameB" type="text"
 							value="${contractModel.contract.memberNameB}" readonly="readonly" /></li>
-						<li><label>工程名称</label> <input name="contract.engName" type="text"
+						<li><label>工程名称</label> <input name="contract.engName" type="text" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入工程名称！" 
 							value="${contractModel.contract.engName}" /></li>
-						<li><label>工程地址</label> <input name="contract.engAddress" type="text"
+						<li><label>工程地址</label> <input name="contract.engAddress" type="text" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入工程地址！"
 							value="${contractModel.contract.engAddress}" /></li>
 						<li><label>对应备案号</label> 
 						${contractModel.contract.recordNo}
 						</li>
-						<li><label>签订时间</label> <input name="contract.signedDate" type="text" value="${contractModel.contract.signedDate?string('yyyy-MM-dd')}" datepicker /> </li>
-						<li><label>合同期限</label> <input name="contract.validityDate" type="text" value="${contractModel.contract.validityDate?string('yyyy-MM-dd')}" datepicker /></li>
+						<li><label>签订时间</label> <input name="contract.signedDate" type="text" value="${contractModel.contract.signedDate?string('yyyy-MM-dd')}" datepicker datatype="*1-100" readonly="readonly" errormsg="请选择正确的日期!" nullmsg="请选择签订时间！" /> </li>
+						<li><label>合同期限</label> <input name="contract.validityDate" type="text" value="${contractModel.contract.validityDate?string('yyyy-MM-dd')}" datepicker datatype="*1-100" readonly="readonly" errormsg="请选择正确的日期!" nullmsg="请选择合同期限！" /></li>
 						<li><label>生效时间</label>
 							<#if contractModel.contract.startDate??>${contractModel.contract.startDate?string("yyyy-MM-dd")}</#if></li>
 					</ul>
@@ -267,11 +296,11 @@ var getFloatStr = function(num){
 						  <#assign m = (m+item.amount)?int >
 						  
 						<tr id="trDataRow${item_index}" class="CaseRow">
-							<td name="itemList[index].productName"><input  type="text" value="${item.productName}" /></td>
-							<td name="itemList[index].productModel"><input type="text" value="${item.productModel}" /></td>
-							<td name="itemList[index].quantity"><input type="text" value="${item.quantity}" class="quantityClass unit" /></td>
-							<td name="itemList[index].price"><input  type="text" value="${item.price}" class="priceClass unit"/></td>
-							<td name="itemList[index].amount"><input  type="text" value="${item.amount}" class="amountClass" /></td>
+							<td name="itemList[index].productName"><input  type="text" value="${item.productName}" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！" /></td>
+							<td name="itemList[index].productModel"><input type="text" value="${item.productModel}" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" /></td>
+							<td name="itemList[index].quantity"><input type="text" value="${item.quantity}" class="quantityClass unit" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
+							<td name="itemList[index].price"><input  type="text" value="${item.price}" class="priceClass unit" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"/></td>
+							<td name="itemList[index].amount"><input  type="text" value="${item.amount}" class="amountClass"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  /></td>
 							<td name="itemList[index].remarks"><textarea  cols="" rows="2">${item.remarks}</textarea></td>
 							<td><a href="javascript:void(0);" class="lnk-green"
 									name="add" >+</a>&nbsp;&nbsp;<a href="javascript:void(0);" class="lnk-red"
@@ -290,7 +319,7 @@ var getFloatStr = function(num){
 					</table>
 					<div>
 						<label>交货地址</label> <input name="contract.deliveryAddress" type="text"
-							value="${contractModel.contract.deliveryAddress}" />
+							value="${contractModel.contract.deliveryAddress}" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入交货地址！"  />
 					</div>
 					<#if contractModel.batchList?exists >
 					<table border="0" cellpadding="0" cellspacing="0"
@@ -341,10 +370,10 @@ var getFloatStr = function(num){
 					</#if>
 					<div>
 						<label>本合同还有</label> <input name="contract.batchCount" type="text" value="<#if contractModel.batchList?exists>${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
-            <#else>${contractModel.contract.batchCount} </#if>" class="input-w30" /> 批次待交付
+            <#else>${contractModel.contract.batchCount} </#if>" class="input-w30" datatype="n1-10" errormsg="输入范围在1~10位数字之间！" nullmsg="请输入合同总批次！" /> 批次待交付
 					</div>
 					<div>
-						<label>合同定金</label> <input name="contract.deposit" type="text" value="${contractModel.contract.deposit}" />
+						<label>合同定金</label> <input name="contract.deposit" type="text" value="${contractModel.contract.deposit}" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！"  />
 						元
 					</div>
 					<div>
@@ -416,12 +445,12 @@ var getFloatStr = function(num){
              			<#list modifyList.modifyItemList  as modifyItem>
              			
 							<tr>
-								<td><input type="text" value="${modifyItem.productName}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productName" /></td>
-								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productModel" id="textarea9" cols="25"
+								<td><input type="text" value="${modifyItem.productName}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！"  /></td>
+								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productModel" id="textarea9" cols="25" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！"
 										rows="1">${modifyItem.productModel}</textarea></td>
-								<td><input type="text" value="${modifyItem.quantity}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity" /></td>
-								<td><input type="text" value="${modifyItem.price}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" /></td>
-								<td><input type="text" value="${modifyItem.amount}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" /></td>
+								<td><input type="text" value="${modifyItem.quantity}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
+								<td><input type="text" value="${modifyItem.price}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
+								<td><input type="text" value="${modifyItem.amount}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"/></td>
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].remarks" id="textarea10" cols="25"
 										rows="1">${modifyItem.remarks}</textarea> 
 										&nbsp;&nbsp; </td>

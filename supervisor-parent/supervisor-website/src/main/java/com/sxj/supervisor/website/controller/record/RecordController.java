@@ -33,6 +33,7 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.website.comet.MessageChannel;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -506,5 +507,47 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+	/**
+	 * 备案是否可修改
+	 * @param contractNo
+	 * @param session
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("getRecordState")
+	public @ResponseBody Map<String, String> getRecordState(String id, HttpSession session)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			RecordEntity re= recordService.getRecord(id);
+			if(re.getType().getId()==0){
+				if(StringUtils.isEmpty(re.getContractNo())){
+					map.put("isOK", "ok");
+				}else{
+					map.put("isOK", "no");
+				}
+			}else if(re.getType().getId()==1){
+				if(re.getState().getId()==2){
+					map.put("isOK", "ok");
+				}else{
+					map.put("isOK", "no");
+				}
+			}else if(re.getType().getId()==2){
+				if(re.getState().getId()==4){
+					map.put("isOK", "ok");
+				}else{
+					map.put("isOK", "no");
+				}
+			}
+			
+			
+
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
+		}
+	}
+	
 
 }

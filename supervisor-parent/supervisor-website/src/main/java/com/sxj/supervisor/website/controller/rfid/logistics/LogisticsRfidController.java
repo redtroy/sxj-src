@@ -181,6 +181,70 @@ public class LogisticsRfidController extends BaseController {
 	}
 
 	/**
+	 * 通过合同号联想查询
+	 */
+	@RequestMapping("lx_query")
+	public @ResponseBody Map<Object, Object> lx_query(String contractNo)
+			throws WebException {
+		try {
+			Map<Object, Object> map = new HashMap<Object, Object>();
+			ContractQuery query = new ContractQuery();
+			query.setContractNo(contractNo);
+			List<ContractModel> list = contractService.queryContracts(query);
+			if (list == null) {
+				return map;
+			}
+			List<Map<String, Object>> addlist = new ArrayList<Map<String, Object>>();
+			for (ContractModel contract : list) {
+				Map<String, Object> cmap = new HashMap<String, Object>();
+				cmap.put("title", contract.getContract().getContractNo());
+				if (contract.getContract().getBatchCount() == null) {
+					cmap.put("batchCount", 0);
+				} else {
+					cmap.put("batchCount", contract.getContract()
+							.getBatchCount());
+				}
+				addlist.add(cmap);
+			}
+			map.put("data", addlist);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("联想查询错误", e, this.getClass());
+			throw new WebException("联想查询错误");
+		}
+	}
+
+	/**
+	 * 通过合同号查询批次号
+	 */
+	@RequestMapping("getBatchNo")
+	public @ResponseBody Map<Object, Object> getBatch(String contractNo,
+			Integer sumBatch) throws WebException {
+		try {
+			Map<Object, Object> map = new HashMap<Object, Object>();
+			map.put("batchNo", 0);
+			ContractQuery query = new ContractQuery();
+			query.setContractNo(contractNo);
+			List<ContractBatchModel> list = contractService.getContractBatch(
+					contractNo, null);
+			if (list == null || list.size() == 0) {
+				if (sumBatch > 0) {
+					map.put("batchNo", 1);
+				}
+			} else {
+				int oldBatchCount = list.size();
+				if (sumBatch > oldBatchCount) {
+					map.put("batchNo", sumBatch - oldBatchCount);
+				}
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("查询批次号错误", e, this.getClass());
+			throw new WebException("查询批次号错误");
+		}
+	}
+
+	/**
 	 * 跳转补损
 	 * 
 	 * @param id
