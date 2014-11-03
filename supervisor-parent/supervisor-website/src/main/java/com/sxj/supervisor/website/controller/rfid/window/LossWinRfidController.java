@@ -43,7 +43,7 @@ public class LossWinRfidController extends BaseController {
 		return "site/rfid/window/lossrfid";
 	}
 
-	@RequestMapping("queryRefContract")
+	@RequestMapping("queryLossContract")
 	public @ResponseBody Map<Object, Object> query(ContractQuery query, Long num)
 			throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
@@ -96,7 +96,7 @@ public class LossWinRfidController extends BaseController {
 		return map;
 	}
 
-	@RequestMapping("query_contractNo")
+	@RequestMapping("query_loss_contractNo")
 	public @ResponseBody Map<Object, Object> query_contractNo(String contractNo)
 			throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
@@ -120,7 +120,7 @@ public class LossWinRfidController extends BaseController {
 	/**
 	 * 通过合同号联想查询
 	 */
-	@RequestMapping("lx_query")
+	@RequestMapping("lx_loss_query")
 	public @ResponseBody Map<Object, Object> lx_query(String keyword)
 			throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
@@ -145,7 +145,7 @@ public class LossWinRfidController extends BaseController {
 	/**
 	 * 启用标签
 	 */
-	@RequestMapping("start_lable")
+	@RequestMapping("start_loss_lable")
 	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,
 			String minRfid, String maxRfid, String gRfid, String lRfid,
 			WindowTypeEnum windowType) throws WebException {
