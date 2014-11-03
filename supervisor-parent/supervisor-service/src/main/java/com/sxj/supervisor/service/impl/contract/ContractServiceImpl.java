@@ -770,73 +770,67 @@ public class ContractServiceImpl implements IContractService {
 				recordQuery.setSortColumn("APPLY_DATE");
 				List<RecordEntity> recordList = recordService
 						.queryRecord(recordQuery);
-					// 变更该合同所有备案状态
-				
+				// 变更该合同所有备案状态
+
 				if (recordList != null) {
-					RecordEntity record =  recordList.get(0);
+					RecordEntity record = recordList.get(0);
 					record.setAcceptDate(new Date());
 					recordDao.updateRecord(record);
-						List<String> messageList = null;
-						Object cache = HierarchicalCacheManager.get(2,
-								"comet_message", "record_push_message_"
-										+ record.getMemberIdA());
-						if (cache instanceof ArrayList) {
-							messageList = (List<String>) cache;
-						} else {
-							messageList = new ArrayList<String>();
+					List<String> messageList = null;
+					Object cache = HierarchicalCacheManager.get(2,
+							"comet_message",
+							"record_push_message_" + record.getMemberIdA());
+					if (cache instanceof ArrayList) {
+						messageList = (List<String>) cache;
+					} else {
+						messageList = new ArrayList<String>();
+					}
+					String msgName = "";
+					if (record.getType().getId() == 0) {
+						if (record.getContractType().getId() == 0) {
+							msgName = "开发商";
 						}
-						String msgName = "";
-						if (record.getType().getId() == 0) {
-							if (record.getContractType().getId() == 0) {
-								msgName = "开发商";
-							}
-						} else if (record.getType().getId() == 1) {
-							msgName = "变更";
-						} else if (record.getType().getId() == 2) {
-							msgName = "补损";
-						}
-						String message = record.getId() + "," + msgName
-								+ "," + centity.getContractNo() + ','
-								+ record.getMemberIdA() + ','
-								+ record.getContractType().getId();
-						messageList.add(message);
-						HierarchicalCacheManager.set(
-								2,
-								"comet_message",
-								"record_push_message_"
-										+ record.getMemberIdA(),
-								messageList);
+					} else if (record.getType().getId() == 1) {
+						msgName = "变更";
+					} else if (record.getType().getId() == 2) {
+						msgName = "补损";
+					}
+					String message = record.getId() + "," + msgName + ","
+							+ centity.getContractNo() + ','
+							+ record.getMemberIdA() + ','
+							+ record.getContractType().getId();
+					messageList.add(message);
+					HierarchicalCacheManager.set(2, "comet_message",
+							"record_push_message_" + record.getMemberIdA(),
+							messageList);
 					// 乙方
-						List<String> messageListB = null;
-						Object cacheB = HierarchicalCacheManager.get(2,
-								"comet_message", "record_push_message_"
-										+ record.getMemberIdB());
-						if (cacheB instanceof ArrayList) {
-							messageListB = (List<String>) cacheB;
-						} else {
-							messageListB = new ArrayList<String>();
+					List<String> messageListB = null;
+					Object cacheB = HierarchicalCacheManager.get(2,
+							"comet_message",
+							"record_push_message_" + record.getMemberIdB());
+					if (cacheB instanceof ArrayList) {
+						messageListB = (List<String>) cacheB;
+					} else {
+						messageListB = new ArrayList<String>();
+					}
+					String msgNameB = "";
+					if (record.getType().getId() == 0) {
+						if (record.getContractType().getId() == 0) {
+							msgNameB = "开发商";
 						}
-						String msgNameB = "";
-						if (record.getType().getId() == 0) {
-							if (record.getContractType().getId() == 0) {
-								msgNameB = "开发商";
-							}
-						} else if (record.getType().getId() == 1) {
-							msgNameB = "变更";
-						} else if (record.getType().getId() == 2) {
-							msgNameB = "补损";
-						}
-						String messageB = record.getId() + "," + msgNameB
-								+ "," + centity.getContractNo() + ','
-								+ record.getMemberIdB() + ','
-								+ record.getContractType().getId();
-						messageListB.add(messageB);
-						HierarchicalCacheManager.set(
-								2,
-								"comet_message",
-								"record_push_message_"
-										+ record.getMemberIdB(),
-								messageListB);
+					} else if (record.getType().getId() == 1) {
+						msgNameB = "变更";
+					} else if (record.getType().getId() == 2) {
+						msgNameB = "补损";
+					}
+					String messageB = record.getId() + "," + msgNameB + ","
+							+ centity.getContractNo() + ','
+							+ record.getMemberIdB() + ','
+							+ record.getContractType().getId();
+					messageListB.add(messageB);
+					HierarchicalCacheManager.set(2, "comet_message",
+							"record_push_message_" + record.getMemberIdB(),
+							messageListB);
 				}
 			}
 
@@ -871,8 +865,12 @@ public class ContractServiceImpl implements IContractService {
 			String rfidNo) {
 		try {
 			QueryCondition<ContractBatchEntity> condition = new QueryCondition<ContractBatchEntity>();
-			condition.addCondition("contractId", contractNo);// 合同号
-			condition.addCondition("rfidNo", rfidNo);// 备案号
+			if (StringUtils.isNotEmpty(contractNo)) {
+				condition.addCondition("contractId", contractNo);// 合同号
+			}
+			if (StringUtils.isNotEmpty(rfidNo)) {
+				condition.addCondition("rfidNo", rfidNo);// RFID号
+			}
 			List<ContractBatchEntity> batchList = contractBatchDao
 					.queryBacths(condition);// 批次
 			List<ContractBatchModel> newBatchModelLIst = new ArrayList<ContractBatchModel>();
@@ -999,11 +997,14 @@ public class ContractServiceImpl implements IContractService {
 			List<ContractBatchEntity> list = new ArrayList<ContractBatchEntity>();
 			list.add(batch);
 			contractBatchDao.addBatchs(list);
+
 			LogisticsRfidEntity logistics = new LogisticsRfidEntity();
 			logistics.setId(id);
+			logistics.setContractNo(batch.getContractId());
 			logistics.setRfidState(RfidStateEnum.used);
 			logistics.setBatchNo(batch.getBatchNo());
 			logisticsRfidService.updateLogistics(logistics);
+
 			// 申请关联
 			LogisticsRefEntity ref = new LogisticsRefEntity();
 			ref.setRfidNo(batch.getRfidNo());
