@@ -300,13 +300,21 @@ var cg_validform
 		$("#memberNameA").bigAutocomplete({
 			url : urlA,
 			callback : function(data) {
+				if(data)
 				$("#memberIdA").val(data.result);
+			},
+			beforeShow:function(data){
+				$("#memberIdA").val(data[0].result);
 			}
 		});
 		$("#memberNameB").bigAutocomplete({
 			url : urlB,
 			callback : function(data) {
-				$("#memberIdB").val(data.result);
+				if(data)
+					$("#memberIdB").val(data.result);
+			},
+			beforeShow:function(data){
+				$("#memberIdB").val(data[0].result);
 			}
 		});
 	});

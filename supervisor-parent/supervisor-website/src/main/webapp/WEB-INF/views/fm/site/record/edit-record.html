@@ -33,6 +33,7 @@
 <@b.errorInfo/>
 <@b.upload/>
 <@b.dialogBox/>
+<@b.validate/>
 <style>
             .iviewer
             {
@@ -44,7 +45,7 @@
 
         </style>
 <script>
-
+var validform;
 
 jQuery(document).ready(function($) {
 	$.ajaxSetup ({     
@@ -66,6 +67,9 @@ jQuery(document).ready(function($) {
 	
 	$.post("${basePath}filesort.htm",{fileId:$("#imgPath").val()},function(imgPaths){
 		refreshElastislide($(".rollBox"),$("#carousel"),imgPaths);
+	});
+	validform=$("#form").Validform({
+		tiptype : 3
 	});
 });
 
@@ -114,6 +118,9 @@ $(document).ready(function() {
 	}
 	//甲方采购
 	function AcgModify(){
+		if (!validform.check()){
+			return;
+		}
 		var memberIdB = $("#memberIdB").val();
 		var memberNameB = $("#memberNameB").val();
 		if(memberIdB==''){
@@ -142,6 +149,9 @@ $(document).ready(function() {
 	}
 	//甲方招标
 	function zbmodify(){
+		if (!validform.check()){
+			return false;
+		}
 		var memberNameA = $("#memberNameA").val();
 		if(memberNameA==''){
 			messageInfo('请输入甲方用户！');
@@ -165,6 +175,9 @@ $(document).ready(function() {
 	}
 	//乙方采购
 	function BcgModify(){
+		if (!validform.check()){
+			return false;
+		}
 		var memberNameA = $("#memberNameA").val();
 		var memberIdA = $("#memberIdA").val();
 		if(memberIdA==''){
@@ -220,10 +233,16 @@ $(document).ready(function() {
 		})
 		$("#memberNameA").bigAutocomplete({url:urlA,callback:function(data){
 	        $("#memberIdA").val(data.result);
-	    }});
+	    },beforeShow:function(data){
+			$("#memberIdA").val(data[0].result);
+		}
+		});
 		$("#memberNameB").bigAutocomplete({url:urlB,callback:function(data){
 	        $("#memberIdB").val(data.result);
-	    }});
+	    },beforeShow:function(data){
+			$("#memberIdB").val(data[0].result);
+		}
+		});
 		$('#selectBatch').change(function(){  
 			   var batchId=$(this).children('option:selected').val();  
 			   if(batchId!=''){
@@ -275,15 +294,15 @@ $(document).ready(function() {
 							</div>
 							<div class="item">
 								<label>乙方</label><input class="input input-w270h30"
-									id="memberNameB" name="memberNameB"
-									value="${record.memberNameB}" />
+									id="memberNameB" name="memberNameB" autocomplete="off"
+									value="${record.memberNameB}" datatype="*1-50" nullmsg="请输入正确的乙方名称" />
 									<input type="hidden"
 									id="memberIdB" name="memberIdB"
-									value="${record.memberIdB}" />
+									value="${record.memberIdB}" datatype="*1-50" nullmsg="请输入正确的乙方名称" />
 							</div>
 							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"
-									value="${record.imgPath}" name="imgPath" id="imgPath" />
+									value="${record.imgPath}" name="imgPath" id="imgPath" datatype="*" nullmsg="请上传扫描件" />
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
 								</div>
@@ -313,7 +332,7 @@ $(document).ready(function() {
 							</div>
 							<div class="item">
 								<label>甲方</label> <input class="input input-w270h30"
-									value="${record.memberNameA}" name="memberNameA" id="memberNameA" />
+									value="${record.memberNameA}" name="memberNameA" id="memberNameA" datatype="*1-50" nullmsg="请输入甲方名称" />
 							</div>
 							<div class="item">
 								<label>乙方</label>${record.memberNameB}
@@ -347,9 +366,9 @@ $(document).ready(function() {
 								<label>备案号</label>${record.recordNo}
 							</div>
 							<div class="item">
-								<label>甲方</label> <input class="input input-w270h30"
-									value="${record.memberNameA}" name="memberNameA"
-									id="memberNameA" /> <input type="hidden" name="memberIdB" id="memberIdB"
+								<label>甲方</label> <input class="input input-w270h30" datatype="*1-50" nullmsg="请输入甲方名称"
+									value="${record.memberNameA}" name="memberNameA" autocomplete="off"
+									id="memberNameA" /> <input type="hidden" name="memberIdB" id="memberIdB" datatype="*" nullmsg="请输入甲方名称"
 									value="${record.memberIdA}" />
 							</div>
 							<div class="item">
@@ -357,7 +376,7 @@ $(document).ready(function() {
 							</div>
 							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"
-									value="${record.imgPath}" name="imgPath" id="imgPath" />
+									value="${record.imgPath}" name="imgPath" id="imgPath"  />
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
 								</div>
@@ -386,7 +405,7 @@ $(document).ready(function() {
 							</div>
 							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"
-									value="${record.imgPath}" name="imgPath" id="imgPath" />
+									value="${record.imgPath}" name="imgPath" id="imgPath"   />
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
 								</div>

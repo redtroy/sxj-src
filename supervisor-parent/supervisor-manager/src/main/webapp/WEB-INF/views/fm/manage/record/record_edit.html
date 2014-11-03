@@ -40,17 +40,17 @@
 </script>
 <@b.upload/> <@b.validate/>
 <script type="text/javascript">
-var validform;
+	var validform;
 	function edit() {
-		if (!validform.check()){
+		if (!validform.check()) {
 			return false;
 		}
-	dialogBox(function(){
-		$("#record_save").submit();
-	},"是否修改备案?");
+		dialogBox(function() {
+			$("#record_save").submit();
+		}, "是否修改备案?");
 	}
 	$(function() {
-		validform=$("#record_save").Validform({
+		validform = $("#record_save").Validform({
 			tiptype : 3
 		});
 	})
@@ -161,27 +161,31 @@ var validform;
 					<ul>
 						<form action="record_save.htm?id=${record.id}" method="post"
 							id="record_save">
-							<input type="hidden" name="contractNo" value="${record.contractNo}" />
-							<input type="hidden" name="applyId" value="${record.applyId}" />
+							<input type="hidden" name="contractNo"
+								value="${record.contractNo}" /> <input type="hidden"
+								name="applyId" value="${record.applyId}" />
 							<li><label>备案号</label>${record.recordNo}</li>
 							<li><label>申请会员</label>${record.applyName}</li>
-							<li><label>甲方名称</label><#if record.applyId ==record.memberIdA>${record.memberNameA}<#else></else><input type="text" value="${record.memberNameA}" id="memberNameA" AUTOCOMPLETE="off"  name="memberNameA" datatype="*2-50" nullmsg="请输入甲方名称" />
-							<input type="hidden" value="${record.memberIdA}" id="memberIdA" name="memberIdA" />
-							</#if></li>
-							<li><label>乙方名称</label><#if record.applyId ==record.memberIdB>${record.memberNameB}<#else><input type="text"
-								value="${record.memberNameB}" id="memberNameB"
-								name="memberNameB" datatype="*2-50" nullmsg="请输入乙方名称" AUTOCOMPLETE="off"  /><input type="hidden" value="${record.memberIdB}" id="memberIdB" name="memberIdB" /></#if></li>
+							<li><label>甲方名称</label><#if record.applyId
+								==record.memberIdA>${record.memberNameA}<#else></else><input
+								type="text" value="${record.memberNameA}" id="memberNameA"
+								AUTOCOMPLETE="off" name="memberNameA" datatype="*2-50"
+								nullmsg="请输入甲方名称" /> <input type="hidden"
+								value="${record.memberIdA}" id="memberIdA" name="memberIdA" />
+								</#if></li>
+							<li><label>乙方名称</label><#if record.applyId
+								==record.memberIdB>${record.memberNameB}<#else><input
+								type="text" value="${record.memberNameB}" id="memberNameB"
+								name="memberNameB" datatype="*2-50" nullmsg="请输入乙方名称"
+								AUTOCOMPLETE="off" /><input type="hidden"
+								value="${record.memberIdB}" id="memberIdB" name="memberIdB" /></#if></li>
 							<li><label>合同类型</label><select id="contractType"
-								name="contractType"> 
-								<#list cte as type>
-								 <#if type_index!=0>
-									<#if (type.id=record.contractType.id)>
-										<option selected="selected" value="${type.id}">${type.getName()}</option>
+								name="contractType"> <#list cte as type> <#if
+									type_index!=0> <#if (type.id=record.contractType.id)>
+									<option selected="selected" value="${type.id}">${type.getName()}</option>
 									<#else>
-										<option value="${type.id}">${type.getName()}</option>
-									</#if>
-								</#if>
-								</#list>
+									<option value="${type.id}">${type.getName()}</option> </#if>
+									</#if> </#list>
 							</select></li>
 							<li class="contPic ly-clearFix"><label>备案扫描件</label> <!--  <span class="ly-left"><button id="img_path" class="button button-green button-middle"></button><input type="hidden" id="imgPath" name="imgPath"></span>-->
 								<input type="hidden" value="${record.imgPath}" name="imgPath"
@@ -192,8 +196,7 @@ var validform;
 							<li class="ly-clearFix"><label class="ly-left">&nbsp;</label>
 								<span class="ly-left"> <input type="file"
 									name="contractFile" id="contractFile" multiple="true" />
-								</span>
-							</li>
+							</span></li>
 							<li><label>关联招标合同</label><input type="text"
 								value="${record.refContractNo}" name="refContractNo"
 								datatype="*2-50" nullmsg="请输入招标合同" /></li>

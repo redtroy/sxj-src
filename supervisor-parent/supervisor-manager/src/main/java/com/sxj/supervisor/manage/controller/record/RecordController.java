@@ -168,11 +168,11 @@ public class RecordController extends BaseController {
 	public @ResponseBody Map<String, Object> queryRecordNo(RecordQuery query,
 			String recordId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-
 		ContractModel cm = contractService.getContractModelByContractNo(query
 				.getContractNo());
 		if (cm != null) {
 			RecordEntity re = recordService.getRecord(recordId);// 申请绑定备案
+			if(cm.getContract().getType().getId()!=0){
 			String recordNo = cm.getContract().getRecordNo();
 			if (recordNo != null) {
 				String[] recordNoArr = recordNo.split(",");
@@ -202,7 +202,7 @@ public class RecordController extends BaseController {
 					map.put("ok", "htyba");
 				}
 			}
-
+			}
 		} else {
 			map.put("ok", "no");
 		}
