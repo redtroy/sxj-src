@@ -72,6 +72,8 @@ public class RecordServiceImpl implements IRecordService {
 			String month = new SimpleDateFormat("MM", Locale.CHINESE)
 					.format(Calendar.getInstance().getTime());
 			record.setDateNo("BA" + year + month);
+			record.setAcceptState(0);
+			record.setRecordState(0);
 			recordDao.addRecord(record);
 			Long messageCount = null;
 			Object cache = HierarchicalCacheManager.get(2, "comet_message",
@@ -235,6 +237,7 @@ public class RecordServiceImpl implements IRecordService {
 		if (ce != null) {
 			ContractEntity contract = ce.getContract();
 			contract.setRecordNo(recordNo + "," + recordNo2);
+			contract.setRefContractNo(refContractNo);
 			contractDao.updateContract(contract);
 		}
 
@@ -271,9 +274,6 @@ public class RecordServiceImpl implements IRecordService {
 			ContractModel conModel = contractService.getContract(contractId);
 			ContractEntity con = conModel.getContract();
 			// 更改合同关联所有备案状态
-			RecordEntity rentity=recordDao.getRecord(recordId);
-			rentity.setRecordDate(new Date());
-			recordDao.updateRecord(rentity);
 			RecordQuery recordQuery = new RecordQuery();
 			recordQuery.setContractNo(con.getContractNo());
 			List<RecordEntity> recordList = queryRecord(recordQuery);
@@ -289,14 +289,33 @@ public class RecordServiceImpl implements IRecordService {
 						}
 					} else {
 						rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+						if(re.getFlag().getId()==1){
+							rEntity.setRecordState(1);
+							rEntity.setRecordDate(new Date());//备案时间
+						}
 						if(re.getType().getId()==1){
 							rEntity.setState(RecordStateEnum.change);
+							if(re.getRecordState()==0){
+								rEntity.setRecordState(1);
+								rEntity.setRecordDate(new Date());//备案时间
+							}
 						}else if(re.getType().getId()==2){
 							rEntity.setState(RecordStateEnum.supplement);
+							if(re.getRecordState()==0){
+								rEntity.setRecordState(1);
+								rEntity.setRecordDate(new Date());//备案时间
+							}
+						}else{
+							rEntity.setState(RecordStateEnum.Binding);
+							if(re.getRecordState()==0){
+								rEntity.setRecordState(1);
+								rEntity.setRecordDate(new Date());//备案时间
+							}
 						}
 					}
 				} else {
 					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+					rEntity.setRecordDate(new Date());//备案时间
 
 				}
 				recordDao.updateRecord(rEntity);
@@ -401,6 +420,9 @@ public class RecordServiceImpl implements IRecordService {
 					+ DateTimeUtils.formateDate2Str(new Date(), "yyMM"));
 			record.setApplyDate(new Date());// 申請時間
 			record.setAcceptDate(null);
+			record.setAcceptState(0);
+			record.setRecordState(0);
+			record.setRecordDate(null);
 			recordDao.addRecord(record);
 			// 更改合同关联所有的备案状态
 			String contractNo = record.getContractNo();

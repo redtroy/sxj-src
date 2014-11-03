@@ -159,6 +159,34 @@ public class RecordEntity extends Pagable implements Serializable {
 	@Column(name = "RFID_NO")
 	private String rfidNo;
 	
+	/**
+	 * 受理状态(0未受理,1已受理 新增受理时间)
+	 */
+	@Column(name = "ACCEPT_STATE")
+	private Integer acceptState;
+	
+	/**
+	 * 备案时间状态
+	 */
+	@Column(name = "RECORD_STATE")
+	private Integer recordState;
+
+	public Integer getRecordState() {
+		return recordState;
+	}
+
+	public void setRecordState(Integer recordState) {
+		this.recordState = recordState;
+	}
+
+	public Integer getAcceptState() {
+		return acceptState;
+	}
+
+	public void setAcceptState(Integer acceptState) {
+		this.acceptState = acceptState;
+	}
+
 	public Date getRecordDate() {
 		return recordDate;
 	}

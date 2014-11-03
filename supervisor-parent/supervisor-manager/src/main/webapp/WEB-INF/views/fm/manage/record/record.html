@@ -93,17 +93,12 @@ function query(page){
 
 //删除
 function del(id,contractNo){
-	if(contractNo!=''){
-		messageInfo("备案已绑定，不能删除!");
-		return;
-	}else{
 		dialogBox(function() {
 			$.post("delRecord.htm",{id:id},function(data){
 				if (data.isOk=="ok"){
 					window.location.href="recordList.htm";
 				}
 			})}, "确实删除备案吗?");
-	}
 }
 </script>
 </head>

@@ -27,8 +27,9 @@
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
 <@b.upload/><@b.errorInfo/>
-<@b.dialogBox/>
+<@b.dialogBox/> <@b.validate/>
 <script>
+var validform;
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
 			$('.maskdivgen').fadeIn(100);
@@ -54,7 +55,32 @@
 			});
 			refreshElastislide($(this).parent(), $(this));
 		});
-
+		
+		//初始化验证
+		validform=$("#changsForm").Validform({
+			tiptype:function(msg,o,cssctl){
+					var $div=$("<div/>").addClass("checkinfo");
+					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
+					var left=o.obj.offset().left,
+					top=o.obj.offset().top;
+					var width=o.obj.width();
+					$div.append($p).css({
+						'left':left+width-32,
+						'top':top-45,
+						'position':'absolute'
+					}).show();
+					o.obj.parent().append($div);
+			}});
+		$("#changsForm").find("[datatype]").each(function(){
+			$(this).focus(function(){
+				$(this).parent().children(".checkinfo").hide();
+			}); 
+			$(this).blur(function(){
+				var pass=ul_validform.check(true,$(this));
+				if(!pass)
+					$(this).parent().children(".checkinfo").show();
+			});
+		});
 	});
 </script>
 <!-- InstanceEndEditable -->
@@ -117,8 +143,23 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 				$table.append($tr);
 				$link=$tr.find(".lnk-green").parent().empty();
 	            $link.append($plus.clone()).append("&nbsp;").append($minus.clone());
-	            $tr.find(".editable").each(function(){
-					$(this).html($("<input/>").attr("value",$(this).html()));
+	            $tr.find(".editable").each(function(i){
+	            	var message;
+	            	if(i==0){
+	            		message="产品名称";
+	            	}else if(i==1){
+	            		message="产品规格";
+	            	}else if(i==2){
+	            		message="数量";
+	            	}else if(i==3){
+	            		message="单价";
+	            	}else if(i==4){
+	            		message="金额";
+	            	}else{
+	            		message="备注";
+	            	}
+	            		
+					$(this).html($("<input datatype='*1-100' errormsg='输入范围在1~100位之间！' nullmsg='请输入"+message+"！'/>").attr("value",$(this).html()));
 				});
 	            $tr.find(".dynamictr:last").append($plus.clone().addClass("subtabletr"));
  				$table.show();
@@ -160,6 +201,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						messageInfo("请选择变更记录!");
 						return false;
 					}
+					if (!validform.check()){
+						return false;
+					}
 					dialogBox(function() {
 						$.post("saveChanges.htm", $("#changsForm").serialize(),
 								function(data) {
@@ -174,6 +218,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 
 					}, "是否变更合同?");
 	}
+	
+	
 </script>
 </head>
 <body>

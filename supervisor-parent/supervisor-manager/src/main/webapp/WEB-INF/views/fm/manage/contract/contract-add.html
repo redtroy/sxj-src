@@ -332,8 +332,9 @@ var ul_validform;
 								</div>
 						</div>			
 						<div>
-							<label>关联招标合同号</label><input type="text" value="${record.refContractNo}"
-								name="contract.refContractNo" datatype="*1-10" errormsg="输入范围在1~10位之间！"   />
+							<label>关联招标合同号</label><#if record.flag.getId()==0><input type="text" value="${record.refContractNo}"
+								name="contract.refContractNo" datatype="*1-10" errormsg="输入范围在1~10位之间！"   /><#else><input type="text" value="${record.refContractNo}"
+								name="contract.refContractNo"   /> </#if>
 						</div>
 						<div class="btnBox">
 							<a href="javascript:void(0);"

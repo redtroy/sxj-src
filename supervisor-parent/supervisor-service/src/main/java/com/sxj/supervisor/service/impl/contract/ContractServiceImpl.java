@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.mysql.fabric.xmlrpc.base.Data;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
@@ -682,6 +683,11 @@ public class ContractServiceImpl implements IContractService {
 
 				}
 			}
+			RecordEntity re =new RecordEntity();
+			re.setId(recordId);
+			re.setState(RecordStateEnum.change);
+			recordDao.updateRecord(re);
+			
 		} catch (Exception e) {
 			throw new ServiceException("变更合同信息错误", e);
 		}
@@ -771,17 +777,20 @@ public class ContractServiceImpl implements IContractService {
 				List<RecordEntity> recordList = recordService
 						.queryRecord(recordQuery);
 				// 变更该合同所有备案状态
-				for (RecordEntity recordEntity : recordList) {
-					recordEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
-					recordDao.updateRecord(recordEntity);
-				}
 				if (recordList != null) {
+					for (RecordEntity recordEntity : recordList) {
+						recordEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
+						if(recordEntity.getFlag().getId()==0){
+							if(recordEntity.getAcceptState()==0){
+								recordEntity.setAcceptDate(new Date());//受理时间
+								recordEntity.setAcceptState(1);
+							}
+						}else{
+							recordEntity.setAcceptDate(new Date());
+						}
+						recordDao.updateRecord(recordEntity);
+					}
 					RecordEntity record = recordList.get(0);
-//					if(record.getImgPath()){
-//						
-//					}
-					record.setAcceptDate(new Date());
-					recordDao.updateRecord(record);
 					List<String> messageList = null;
 					Object cache = HierarchicalCacheManager.get(2,
 							"comet_message",

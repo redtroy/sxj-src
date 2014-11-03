@@ -291,7 +291,17 @@ var cg_validform
 	$(function() {
 		var urlA = "${basePath}autoCompleA.htm";
 		var urlB = "${basePath}autoCompleB.htm";
-		$("#memberNameA").keydown(function() {
+		//$("#memberNameA").blur(function() {
+		//	$.post("getMember.htm",{memberName:$(this).val()}, function(data) {
+		//		$("#memberIdA").val(data.memberNo);
+		//	})
+		//})
+		//$("#memberNameB").blur(function() {
+		//	$.post("getMember.htm",{memberName:$(this).val()}, function(data) {
+		//		$("#memberIdB").val(data.memberNo);
+		//	})
+	//})
+	$("#memberNameA").keydown(function() {
 			$("#memberIdA").val("");
 		})
 		$("#memberNameB").keydown(function() {
@@ -314,7 +324,7 @@ var cg_validform
 					$("#memberIdB").val(data.result);
 			},
 			beforeShow:function(data){
-				$("#memberIdB").val(data[0].result);
+						$("#memberIdB").val(data[i].result);	
 			}
 		});
 	});

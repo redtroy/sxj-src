@@ -25,14 +25,15 @@
 		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 		<result property="recordDate" column="RECORD_DATE" jdbcType="TIMESTAMP" />
-		
+		<result property="acceptState" column="ACCEPT_STATE" jdbcType="INTEGER" />
+		<result property="recordState" column="RECORD_STATE" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 条件查询备案 -->
 	<select id="queryRecord" resultMap="RecordResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,RECORD_NO,APPLY_ID,APPLY_NAME,MEMBER_ID_A,RECORD_FLAG,MEMBER_NAME_A,MEMBER_ID_B,MEMBER_NAME_B,
-		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE,CONFIRM_STATE,RFID_NO,RECORD_DATE
+		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,RECORD_STATE,ACCEPT_STATE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE,CONFIRM_STATE,RFID_NO,RECORD_DATE
 		 FROM M_CONTRACT_RECORD WHERE DEL_STATE=0]]>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">

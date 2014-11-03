@@ -169,7 +169,7 @@ public class RecordController extends BaseController {
 			String recordId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		ContractModel cm = contractService.getContractModelByContractNo(query
-				.getContractNo());
+				.getContractNo().trim());
 		if (cm != null) {
 			RecordEntity re = recordService.getRecord(recordId);// 申请绑定备案
 			if(cm.getContract().getType().getId()!=0){
@@ -202,6 +202,8 @@ public class RecordController extends BaseController {
 					map.put("ok", "htyba");
 				}
 			}
+			}else{
+				map.put("ok", "no");
 			}
 		} else {
 			map.put("ok", "no");

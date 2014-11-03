@@ -192,7 +192,12 @@ var caculateRow=function($tr){
 			$tr.insertAfter($(this).parent().parent().parent().children(".CaseRow:last"));
 		});
 		$(".lnk-red").live("click",function(){
-			$(this).parent().parent().remove();
+			var leng=$(this).parents("table").find("tr").length;
+			if(leng>2){
+				$(this).parent().parent().remove();
+			}else{
+				messageInfo("不能删除变更条目!");
+			}
 			caculate();
 		})
 		
@@ -430,8 +435,8 @@ var getFloatStr = function(num){
 							<col width="15%" />
 							<col width="10%" />
 							<col width="10%" />
-							<col width="15%" />
-							<col width="10%" />
+							<col width="20%" />
+							<col width="5%" />
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
@@ -439,8 +444,7 @@ var getFloatStr = function(num){
 								<th>单价<span>(元<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
 								<th>金额<span>(元)</span></th>
 								<th class="rLine">备注说明</th>
-								<th><a href="javascript:void(0);" class="lnk-green"
-									name="add" >+</a></th>
+								<th></th>
 							</tr>
              			<#list modifyList.modifyItemList  as modifyItem>
              			

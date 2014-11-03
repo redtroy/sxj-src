@@ -352,19 +352,27 @@ function busunSeav(){
 	}
 
 	function delRecord(id,contractNo) {
-		dialogBox(function(){
-				$.post("delRecord.htm", {
-					id : id
-				}, function(data) {
-					if (data.isOK == "ok") {
-						succInfo(function(){
-							window.location.href="query.htm";
-						},"删除备案成功!");  
-						
-					} else {
-						errorInfo("删除备案失败");
-					}
-				});},"是否删除备案?");
+		$.post("getRecordState.htm", {
+			id : id
+		}, function(data) {
+			if (data.isOK == "ok") {
+					dialogBox(function(){
+							$.post("delRecord.htm", {
+								id : id
+							}, function(data) {
+								if (data.isOK == "ok") {
+									succInfo(function(){
+										window.location.href="query.htm";
+									},"删除备案成功!");  
+									
+								} else {
+									errorInfo("删除备案失败");
+								}
+					});},"是否删除备案?");
+			} else {
+				errorInfo("不能刪除");
+			}	
+		});
 	}
 	function to_modify(id){
 		$.post("getRecordState.htm", {
@@ -389,8 +397,8 @@ function busunSeav(){
 				<div class="yard-870 rightSide ly-left">
 					<div class="heading mb15 ly-clearFix">
 						<h1 class="ly-left">
-							<span class="title fontYH f20 fb">合同备案管理</span>
-							<input type="hidden" value="${type}"  id="typeId"/>
+							<span class="title fontYH f20 fb">合同备案管理</span> <input
+								type="hidden" value="${type}" id="typeId" />
 						</h1>
 					</div>
 					<form id="search_form" action="javascript:void(0);" method="post">
@@ -451,11 +459,12 @@ function busunSeav(){
 							</th>
 							<th>备案<br /> 状态
 							</th>
-							<th>合同<br /> 进度</th>
+							<th>合同<br /> 进度
+							</th>
 							<th class="rLine">操作</th>
 						</tr>
-						<#if recordlist?exists && recordlist?size!=0 > 
-							<#list recordlist as record>
+						<#if recordlist?exists && recordlist?size!=0 > <#list recordlist
+						as record>
 						<tr id="${record.id}">
 							<td>${record.recordNo}</td>
 							<td><a
@@ -481,82 +490,68 @@ function busunSeav(){
 								</#if> <#if record.confirmState.getId() ==4> <span
 								class="state verified">已备案</span> </#if>
 							</td>
-							<td><#if record.contractType.getId()!=0> <div class="progressBar">
+							<td><#if record.contractType.getId()!=0>
+								<div class="progressBar">
 									<div class="progre" style="width: 20%"></div>
-									</div>
-								<div class="color-red">20%</div>
-								<#else>-</#if>
-								</td>
-							<td>
-							<#if type==0>
-								<#if record.contractType.getId()==0>
-									<#if record.contractNo??>
-									<a href="javascript:to_modify('${record.id}')" class="lnk-blue"><span
-										class="icon icon16 icon-edit"></span>修改</a>
-									 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
-									 <span
-										class="icon icon16 icon-del"></span>删除</a> 
-									<#else>
-									-
-									</#if>
-								<#else>
-									<#if record.type.getId()==0>
-										<#if record.contractNo?exists>
-											<a href="javascript:biangeng('${record.id}');" class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
-											<a href="javascript:busun('${record.id}');" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
-										<#else>
-											 <a href="to_modify.htm?recordId=${record.id}" class="lnk-blue">
-											 	<span class="icon icon16 icon-edit"></span>修改</a>
-											 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
-											 <span class="icon icon16 icon-del"></span>删除</a> 
-										</#if>
-									<#elseif record.type.getId()==1>
-										<#if record.state.getId()==3>
-										<a href="javascript:biangeng('${record.id}');" class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
-											<a href="javascript:busun('${record.id}');" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
-										<#else>
-										 <a href="to_modify.htm?recordId=${record.id}" class="lnk-blue">
-											 	<span class="icon icon16 icon-edit"></span>修改</a>
-											 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
-											 <span class="icon icon16 icon-del"></span>删除</a> 
-										</#if>
-									<#else>
-									<#if record.state.getId()==5>
-										<a href="javascript:biangeng('${record.id}');" class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
-											<a href="javascript:busun('${record.id}');" class="lnk-blue suppContract" recordId="${record.id}">补损</a>
-										<#else>
-										 <a href="to_modify.htm?recordId=${record.id}" class="lnk-blue">
-											 	<span class="icon icon16 icon-edit"></span>修改</a>
-											 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
-											 <span class="icon icon16 icon-del"></span>删除</a> 
-										</#if>
-									</#if>
-								</#if>
-							<#else>
-								<#if record.contractNo??>
-								-
-								<#else>
-								<a href="to_modify.htm?recordId=${record.id}" class="lnk-blue"><span
-									class="icon icon16 icon-edit"></span>修改</a>
-								 <a href="javascript:delRecord('${record.id}','${record.contractNo}')" class="lnk-blue">
-								 <span
-									class="icon icon16 icon-del"></span>删除</a> 
-								
-								</#if>
-							</#if>
-							
+								</div>
+								<div class="color-red">20%</div> <#else>-</#if>
+							</td>
+							<td><#if type==0> <#if record.contractType.getId()==0> <#if
+								record.contractNo??> - <#else> <a
+								href="javascript:to_modify('${record.id}')" class="lnk-blue"><span
+									class="icon icon16 icon-edit"></span>修改</a> <a
+								href="javascript:delRecord('${record.id}','${record.contractNo}')"
+								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
+							</a> </#if> <#else> <#if record.type.getId()==0> <#if
+								record.contractNo?exists> <a
+								href="javascript:biangeng('${record.id}');"
+								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+								<a href="javascript:busun('${record.id}');"
+								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+								<#else> <a href="javascript:to_modify('${record.id}')"
+								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
+							</a> <a
+								href="javascript:delRecord('${record.id}','${record.contractNo}')"
+								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
+							</a> </#if> <#elseif record.type.getId()==1> <#if
+								record.state.getId()==3> <a
+								href="javascript:biangeng('${record.id}');"
+								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+								<a href="javascript:busun('${record.id}');"
+								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+								<#else> <a href="javascript:to_modify('${record.id}')"
+								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
+							</a> <a
+								href="javascript:delRecord('${record.id}','${record.contractNo}')"
+								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
+							</a> </#if> <#else> <#if record.state.getId()==5> <a
+								href="javascript:biangeng('${record.id}');"
+								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+								<a href="javascript:busun('${record.id}');"
+								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+								<#else> <a href="javascript:to_modify('${record.id}')"
+								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
+							</a> <a
+								href="javascript:delRecord('${record.id}','${record.contractNo}')"
+								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
+							</a> </#if> </#if> </#if> <#else> <#if record.contractNo??> - <#else>
+								<a href="javascript:to_modify('${record.id}')" class="lnk-blue"><span
+									class="icon icon16 icon-edit"></span>修改</a> <a
+								href="javascript:delRecord('${record.id}','${record.contractNo}')"
+								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
+							</a> </#if> </#if>
+
 							</td>
 
 						</tr>
 						<tr id="info${record.recordNo}" isopen="0">
 							<!-- 详细内容 -->
 						</tr>
-						</#list>
-						<#else>
+						</#list> <#else>
 						<tr>
-          					<td colspan="12" class="color-red">很抱歉，暂无数据！</td>
-        				</tr>
-						 </#if>
+							<td colspan="12" class="color-red">很抱歉，暂无数据！</td>
+						</tr>
+						</#if>
 						<tr style="display: none;">
 							<td colspan="12"><div class="speedInfo tl">
 									<ol>
@@ -582,24 +577,25 @@ function busunSeav(){
 	</div>
 	</div>
 	<@b.footer />
-	<div class="modal-wrap popDemo chanPic notViewer" id="chanPic" style="display: none; width:700px;">
+	<div class="modal-wrap popDemo chanPic notViewer" id="chanPic"
+		style="display: none; width: 700px;">
 		<div class="modal-header">
 			<span class="close">关闭</span>
 		</div>
 		<div class="modal-body">
-		<div id="bgimgShow">
-		
-		<input type="hidden" value="" name="" id="bgRecordId" />
-			<input type="hidden" value="" name="imgPath" id="bgimgPath" />
-			<div class="rollBox" id="bgRollBox">
-				<ul id="bgcarousel" class="elastislide-list" style="height:140px">
-				
-				</ul>
+			<div id="bgimgShow">
+
+				<input type="hidden" value="" name="" id="bgRecordId" /> <input
+					type="hidden" value="" name="imgPath" id="bgimgPath" />
+				<div class="rollBox" id="bgRollBox">
+					<ul id="bgcarousel" class="elastislide-list" style="height: 140px">
+
+					</ul>
+				</div>
 			</div>
-		</div>
-		<div class="button-box">
-			<input type="file" name="bgFile" id="bgFile"
-				multiple="true" /></div>
+			<div class="button-box">
+				<input type="file" name="bgFile" id="bgFile" multiple="true" />
+			</div>
 			<div class="button-box">
 				<button class="button button-pop" onclick="saveBiangeng()">确认</button>
 				<button class="button button-gray">取消</button>
@@ -625,7 +621,8 @@ function busunSeav(){
 	</div>
 
 
-	<div class="modal-wrap popDemo contPop suppPop notViewer" id="bsModal" style="display: none;width:700px;">
+	<div class="modal-wrap popDemo contPop suppPop notViewer" id="bsModal"
+		style="display: none; width: 700px;">
 		<div class="modal-header">
 			<span class="close">关闭</span>
 		</div>
@@ -634,19 +631,23 @@ function busunSeav(){
 				<div class="item" id="bsimgShow">
 					<label>&nbsp;</label>
 					<div class="ly-left">
-					<input type="hidden" value="" name="" id="bsRecordId" />
-						<input type="hidden" value="" name="imgPath" id="bsimgPath" />
+						<input type="hidden" value="" name="" id="bsRecordId" /> <input
+							type="hidden" value="" name="imgPath" id="bsimgPath" />
 						<div class="rollBox" id="bsRollBox">
-							<ul id="bscarousel" class="elastislide-list" style="height:140px">
-							
+							<ul id="bscarousel" class="elastislide-list"
+								style="height: 140px">
+
 							</ul>
 						</div>
 					</div>
 				</div>
 				<div class="item">
-					<label>&nbsp;</label><div class="ly-left"><input type="file" name="bsFile" id="bsFile" multiple="true" /></div>
+					<label>&nbsp;</label>
+					<div class="ly-left">
+						<input type="file" name="bsFile" id="bsFile" multiple="true" />
+					</div>
 				</div>
-				
+
 				<div class="item">
 					<label>对应批次</label> <select name="" id="batchId"
 						class="batchSelect">
@@ -662,7 +663,7 @@ function busunSeav(){
 						class="button button-pop" onclick="busunSeav();" value="确定补损" />
 					<button class="button button-gray">取消</button>
 				</div>
-				</div>
+			</div>
 		</form>
 	</div>
 	<div class="modal-wrap popDemo popView notViewer" id="image-list"

@@ -494,7 +494,7 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			int size = contractService
-					.getContractByZhaobiaoContractNo(contractNo,member.getMember());
+					.getContractByZhaobiaoContractNo(contractNo.trim(),member.getMember());
 			if (size == 0) {
 				map.put("isOK", "no");
 			} else {
@@ -539,8 +539,6 @@ public class RecordController extends BaseController {
 					map.put("isOK", "no");
 				}
 			}
-			
-			
 
 			return map;
 		} catch (Exception e) {
@@ -549,5 +547,21 @@ public class RecordController extends BaseController {
 		}
 	}
 	
-
+	@RequestMapping("getMember")
+	public @ResponseBody Map<String, String> getMember(String memberName, HttpSession session)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			MemberEntity member =memberService.getMemberByName(memberName);
+			if(member!=null){
+				map.put("memberNo", member.getMemberNo());
+			}else{
+				map.put("memberNo", "");
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("查询会员信息错误", e, this.getClass());
+			throw new WebException("查询会员信息错误");
+		}
+	}
 }

@@ -197,9 +197,10 @@
 								<span class="ly-left"> <input type="file"
 									name="contractFile" id="contractFile" multiple="true" />
 							</span></li>
-							<li><label>关联招标合同</label><input type="text"
+							<li><label>关联招标合同</label><#if record.flag.getId()==0><input type="text"
 								value="${record.refContractNo}" name="refContractNo"
-								datatype="*2-50" nullmsg="请输入招标合同" /></li>
+								 datatype="*2-50" nullmsg="请输入招标合同" /><#else><input type="text"
+								value="${record.refContractNo}" name="refContractNo" /></#if></li>
 							<li><label>备案类型</label><select id="type" name="type">
 									<#list rte as type> <#if (type.id=record.type.id)>
 									<option selected="selected" value="${type.id}">${type.getName()}</option>
@@ -214,7 +215,7 @@
 					</ul>
 					</form>
 					<div class="btnBox">
-						<a href="#" class="button button-orange button-small"
+						<a href="javascript:void(0);" class="button button-orange button-small"
 							onclick="edit()">修改</a> <a href="javascript:history.go(-1);"
 							class="button button-gray button-small">返回</a>
 					</div>

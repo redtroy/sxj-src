@@ -11,17 +11,10 @@
 <@b.errorInfo/>
 <@b.dialogBox/>
 <SCRIPT>
-function edit(){
-	dialogBox(function(){
-	$("#record_save").submit();
-	},"是否绑定备案?");
-}
+var validform;
 $(function(){
-	$("#record_save").Validform({
-		tiptype:3,
-		callback:function(form){
-			bind_save();
-		}
+	 validform=$("#record_save").Validform({
+		tiptype:3
 	});
 	
 })
@@ -74,6 +67,9 @@ function query(type){
 }
 
   function bind_save(){
+	  if (!validform.check()) {
+			return false;
+		}
 	  var contractNo=$("#contractNo").val();
 	  if(contractNo==""){
 		  messageInfo("请输入合同号!");  
@@ -89,15 +85,17 @@ function query(type){
 	  var recordNo2=$("#recordNoB_edit").text();
 	  var recordIdB = $("#recordId_edit").val();
  	  var recordIdA = $("#recordId").val();
+ 	 dialogBox(function() {
 	  $.post("banding_save.htm",{contractNo:contractNo,refContractNo:refContractNo,
 		  recordNo:recordNo,recordNo2:recordNo2,recordIdB:recordIdB,recordIdA:recordIdA},function(data){
 		  if (data.isOK=='ok'){
-			  messageInfo("绑定成功!");
-			  window.location.href="recordList.htm";
+			  succInfo(function(){
+				  window.location.href="recordList.htm";
+			  },"绑定成功!");
 		  }else{
 			  messageInfo("绑定失败!");
 		  }
-	  })
+	  })}, "是否修改备案?");
   }
 </SCRIPT>
 <body>
@@ -121,7 +119,7 @@ function query(type){
       <li><label id="recordNoB">乙方备案号</label><span id="recordNoB_edit"><#if (record.flag.id==flag[1].id)> ${record.recordNo}   </#if></span><input type="hidden" id="recordId_edit" value=""/></li>
       <li><label>关联招标合同</label><span id="refContractNo_edit">${record.refContractNo}</span><input type="hidden" id="refContractNo" value="${record.refContractNo}"/></li>
       </ul>
-      <div class="btnBox"><a href="javascript:void(0);" class="button button-orange button-small" onclick="edit();return false;">绑定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>
+      <div class="btnBox"><a href="javascript:bind_save();" class="button button-orange button-small" >绑定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div>
       </div>
       </form>
     <!-- InstanceEndEditable --></div>
