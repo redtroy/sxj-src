@@ -62,6 +62,11 @@
 			<version>3.2.11.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>file-common</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	
 	<build>

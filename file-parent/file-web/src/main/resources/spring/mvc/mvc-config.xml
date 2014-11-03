@@ -30,38 +30,35 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath*:config/dfs_config.properties</value>
+				<value>classpath*:config/fdfs_client.properties</value>
 			</list>
 		</property>
 	</bean>
-
-	<!-- FastDfs配置 -->
-	<bean id="dfsConfig" class="com.sxj.file.fastdfs.DfsConfig">
-		<property name="connect_timeout">
-			<value>${dfs.connect_timeout}</value>
+	<bean id="fdfsSocketService" class="third.rewrite.fastdfs.socket.FdfsSocketService"
+		init-method="init" destroy-method="destroy">
+		<property name="poolConfig">
+			<bean class="third.rewrite.fastdfs.socket.FdfsPoolConfig">
+				<property name="maxTotal" value="20" />
+			</bean>
 		</property>
-		<property name="network_timeout">
-			<value>${dfs.network_timeout}</value>
-		</property>
-		<property name="charset">
-			<value>${dfs.charset}</value>
-		</property>
-		<property name="tracker_http_port">
-			<value>${dfs.http.tracker_http_port}</value>
-		</property>
-		<property name="anti_steal_token">
-			<value>${dfs.http.anti_steal_token}</value>
-		</property>
-		<property name="secret_key">
-			<value>${dfs.http.secret_key}</value>
-		</property>
+		<property name="borrowSockectErrorPolicy" ref="borrowSockectErrorCreateNotPooledPolicy" />
 	</bean>
 
-	<bean id="fastDfsClient" class="com.sxj.file.fastdfs.FastDFSImpl"
+	<bean id="borrowSockectErrorCreateNotPooledPolicy"
+		class="third.rewrite.fastdfs.socket.BorrowSockectErrorCreateNotPooledPolicy">
+	</bean>
+
+	<bean class="third.rewrite.fastdfs.service.impl.StorageClientService">
+		<property name="trackerClientService" ref="trackerClientService" />
+		<property name="fdfsSocketService" ref="fdfsSocketService" />
+		<property name="groupName" value="${dfs.group_name}" />
+	</bean>
+
+	<bean id="trackerClientService" class="third.rewrite.fastdfs.service.impl.TrackerClientService"
 		init-method="init">
-		<property name="config" ref="dfsConfig" />
-		<property name="trackerHost" value="192.168.1.13" />
-		<property name="trackerPort" value="22122" />
+		<property name="fdfsSocketService" ref="fdfsSocketService" />
+		<property name="trackerServerValues" value="${dfs.tracker_server}" />
 	</bean>
+
 
 </beans>
