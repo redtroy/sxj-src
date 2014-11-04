@@ -24,14 +24,12 @@ public class DemoServiceImpl {
 	}
 
 	@Lock(name = "messageChannel1")
-    public void add(String ele)
-    {
-    	RedisConcurrent.create().getLock(name)
-    	RAtomicLong atomicLong = RedisConcurrent.create().getAtomicLong("sdd");
-    	long incrementAndGet = atomicLong.incrementAndGet();
-        RSet<String> set = collections.getSet(SETNAME);
-        set.add(ele);
-    }
+	public void add(String ele) {
+		RAtomicLong atomicLong = RedisConcurrent.create().getAtomicLong("sdd");
+		long incrementAndGet = atomicLong.incrementAndGet();
+		RSet<String> set = collections.getSet(SETNAME);
+		set.add(ele);
+	}
 
 	@Lock(name = "messageChannel1")
 	public void remove(String ele) {
