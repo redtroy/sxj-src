@@ -112,8 +112,8 @@ $(document).ready(function(){
 					<td>${item.productName}</td>
 					<td>${item.productModel}</td>
 					<td>${item.quantity}</td>
-					<td>${item.price}</td>
-					<td>${item.amount}</td>
+					<td>${item.price?string('0.00')}</td>
+					<td>${item.amount?string('0.00')}</td>
 					<td>${item.remarks}</td>
 				</tr>
 				</#list>
@@ -122,7 +122,7 @@ $(document).ready(function(){
 					<td>&nbsp;</td>
 					<td>约${n}</td>
 					<td>&nbsp;</td>
-					<td>${m}元</td> <#if contractModel.contract.imgPath!=null>
+					<td>${m?string('0.00')}元</td> <#if contractModel.contract.imgPath!=null>
 					<td class="tl"><#assign
 						arr=(contractModel.contract.imgPath?split(","))>
 						本合同附件清单共${arr?size}页</td> <#else>
@@ -208,8 +208,8 @@ $(document).ready(function(){
 						<td>${modifyItem.productName}</td>
 						<td>${modifyItem.productModel}</td>
 						<td>${modifyItem.quantity}</td>
-						<td>${modifyItem.price}</td>
-						<td>${modifyItem.amount}</td>
+						<td>${modifyItem.price?string('0.00')}</td>
+						<td>${modifyItem.amount?string('0.00')}</td>
 						<td>${modifyItem.remarks}</td>
 					</tr>
 					</#list>
@@ -245,11 +245,11 @@ $(document).ready(function(){
 								<#list modifyBatch.modifyBatchItems as modifyBatchItems>
 								<tr>
 									<td>${modifyBatchItems.productModel}</td>
-									<td>${modifyBatchItems.quantity}</td>
+									<td>${modifyBatchItems.quantity?string('0.00')}</td>
 								</tr>
 								</#list>
 							</table></td>
-						<td>${modifyBatch.modifyBatch.amount}元</td>
+						<td>${modifyBatch.modifyBatch.amount?string('0.00')}元</td>
 						<td>${modifyBatch.modifyBatch.rfidNo}</td>
 					</tr>
 					</#list>
