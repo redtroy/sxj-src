@@ -12,14 +12,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
-import com.sxj.supervisor.manage.comet.MessageChannel;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -62,8 +62,7 @@ public class RecordController extends BaseController {
 			map.put("list", list);
 			map.put("query", query);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
-				HierarchicalCacheManager.evict(2, "comet_message",
-						MessageChannel.RECORD_MESSAGE);
+				CometServiceImpl.delCount(MessageChannel.RECORD_MESSAGE);
 			}
 			registChannel(MessageChannel.RECORD_MESSAGE);
 			return "manage/record/record";
@@ -172,37 +171,37 @@ public class RecordController extends BaseController {
 				.getContractNo().trim());
 		if (cm != null) {
 			RecordEntity re = recordService.getRecord(recordId);// 申请绑定备案
-			if(cm.getContract().getType().getId()!=0){
-			String recordNo = cm.getContract().getRecordNo();
-			if (recordNo != null) {
-				String[] recordNoArr = recordNo.split(",");
-				if (recordNoArr.length < 2) {
-					for (String record : recordNoArr) {
-						RecordEntity recordEntity = recordService
-								.getRecordByNo(record.trim());
-						if (re.getFlag().getId() == 0) {
-							// 甲方备案
-							if (recordEntity.getFlag().getId() == 0) {
-								map.put("ok", "jfyba");
+			if (cm.getContract().getType().getId() != 0) {
+				String recordNo = cm.getContract().getRecordNo();
+				if (recordNo != null) {
+					String[] recordNoArr = recordNo.split(",");
+					if (recordNoArr.length < 2) {
+						for (String record : recordNoArr) {
+							RecordEntity recordEntity = recordService
+									.getRecordByNo(record.trim());
+							if (re.getFlag().getId() == 0) {
+								// 甲方备案
+								if (recordEntity.getFlag().getId() == 0) {
+									map.put("ok", "jfyba");
+								} else {
+									map.put("ok", "ok");
+									map.put("record", recordEntity);
+								}
 							} else {
-								map.put("ok", "ok");
-								map.put("record", recordEntity);
-							}
-						} else {
-							// 乙方备案
-							if (recordEntity.getFlag().getId() == 1) {
-								map.put("ok", "yfyba");
-							} else {
-								map.put("ok", "ok");
-								map.put("record", recordEntity);
+								// 乙方备案
+								if (recordEntity.getFlag().getId() == 1) {
+									map.put("ok", "yfyba");
+								} else {
+									map.put("ok", "ok");
+									map.put("record", recordEntity);
+								}
 							}
 						}
+					} else {
+						map.put("ok", "htyba");
 					}
-				} else {
-					map.put("ok", "htyba");
 				}
-			}
-			}else{
+			} else {
 				map.put("ok", "no");
 			}
 		} else {

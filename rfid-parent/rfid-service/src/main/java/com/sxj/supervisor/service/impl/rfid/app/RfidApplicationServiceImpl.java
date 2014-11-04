@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
+import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.util.common.DateTimeUtils;
@@ -112,17 +113,9 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			app.setApplyDate(date);
 			app.setReceiptState(ReceiptStateEnum.shipments);
 			appDao.addRfidApplication(app);
-			Long messageCount = null;
-			Object cache = HierarchicalCacheManager.get(2, "comet_rfid_apply",
-					"rfid_apply_message");
-			if (cache instanceof Long) {
-				messageCount = (Long) cache;
-			} else {
-				messageCount = 0l;
-			}
-			messageCount = messageCount + 1;
-			HierarchicalCacheManager.set(2, "comet_message",
-					"rfid_apply_message", messageCount);
+
+			CometServiceImpl.takeCount(RfidChannel.RFID_APPLY_MESSAGE);
+			RfidChannel.initTopic().publish(RfidChannel.RFID_APPLY_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error("新增申请单错误", e, this.getClass());
 			throw new ServiceException("申请单错误");

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,6 +22,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.comet4j.core.CometContext;
+import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,12 +35,16 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
+import com.sxj.redis.advance.core.RTopic;
+import com.sxj.redis.advance.topic.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.OperatorLogEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
+import com.sxj.supervisor.manage.comet.CometMessageListener;
+import com.sxj.supervisor.manage.comet.MessageThread;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
 import com.sxj.supervisor.model.system.FunctionModel;
@@ -74,6 +81,16 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IQueryOperation operatorService;
+
+	@PostConstruct
+	public void init() {
+		CometEngine engine = CometContext.getInstance().getEngine();
+		// 启动 Comet Server Thread
+		MessageThread cometServer = MessageThread.newInstance(engine);
+		RedisTopics redis = RedisTopics.create();
+		RTopic<String> topic1 = redis.getTopic("topic1");
+		topic1.addListener(new CometMessageListener(cometServer));
+	}
 
 	@RequestMapping("footer")
 	public String ToFooter() {

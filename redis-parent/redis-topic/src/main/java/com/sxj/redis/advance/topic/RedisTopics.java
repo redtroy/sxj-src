@@ -32,122 +32,104 @@ import com.sxj.redis.advance.core.RTopic;
 import com.sxj.redis.advance.pubsub.RedisTopic;
 
 /**
- * Main infrastructure class allows to get access
- * to all Redisson objects on top of Redis server.
+ * Main infrastructure class allows to get access to all Redisson objects on top
+ * of Redis server.
  *
  * @author Nikita Koksharov
  *
  */
-public class RedisTopics implements TopicRedisClient
-{
-    
-    private final ConnectionManager connectionManager;
-    
-    private final Config config;
-    
-    private final UUID id = UUID.randomUUID();
-    
-    RedisTopics(Config config)
-    {
-        this.config = config;
-        Config configCopy = new Config(config);
-        if (configCopy.getMasterSlaveServersConfig() != null)
-        {
-            connectionManager = new MasterSlaveConnectionManager(
-                    configCopy.getMasterSlaveServersConfig(), configCopy);
-        }
-        else if (configCopy.getSingleServerConfig() != null)
-        {
-            connectionManager = new SingleConnectionManager(
-                    configCopy.getSingleServerConfig(), configCopy);
-        }
-        else if (configCopy.getSentinelServersConfig() != null)
-        {
-            connectionManager = new SentinelConnectionManager(
-                    configCopy.getSentinelServersConfig(), configCopy);
-        }
-        else if (configCopy.getClusterServersConfig() != null)
-        {
-            connectionManager = new ClusterConnectionManager(
-                    configCopy.getClusterServersConfig(), configCopy);
-        }
-        else
-        {
-            throw new IllegalArgumentException(
-                    "server(s) address(es) not defined!");
-        }
-    }
-    
-    /**
-     * Creates an Redisson instance
-     *
-     * @return Redisson instance
-     */
-    public static RedisTopics create()
-    {
-        Config config = new Config();
-        //        new SingleServerConfig();
-        
-        config.useSingleServer().setAddress("127.0.0.1:6379");
-        //        config.useMasterSlaveConnection().setMasterAddress("127.0.0.1:6379").addSlaveAddress("127.0.0.1:6389").addSlaveAddress("127.0.0.1:6399");
-        //        config.useSentinelConnection().setMasterName("mymaster").addSentinelAddress("127.0.0.1:26389", "127.0.0.1:26379");
-        return create(config);
-    }
-    
-    /**
-     * Creates an Redisson instance with configuration
-     *
-     * @param config
-     * @return Redisson instance
-     */
-    public static RedisTopics create(Config config)
-    {
-        return new RedisTopics(config);
-    }
-    
-    /**
-     * Returns distributed topic instance by name.
-     *
-     * @param name of the distributed topic
-     * @return distributed topic
-     */
-    @Override
-    public <M> RTopic<M> getTopic(String name)
-    {
-        return new RedisTopic<M>(connectionManager, name);
-    }
-    
-    /**
-     * Shuts down Redisson instance <b>NOT</b> Redis server
-     */
-    public void shutdown()
-    {
-        connectionManager.shutdown();
-    }
-    
-    /**
-     * Allows to get configuration provided
-     * during Redisson instance creation. Further changes on
-     * this object not affect Redisson instance.
-     *
-     * @return Config object
-     */
-    public Config getConfig()
-    {
-        return config;
-    }
-    
-    public void flushdb()
-    {
-        connectionManager.write(new ResultOperation<String, Object>()
-        {
-            @Override
-            protected Future<String> execute(
-                    RedisAsyncConnection<Object, Object> conn)
-            {
-                return conn.flushdb();
-            }
-        });
-    }
-    
+public class RedisTopics implements TopicRedisClient {
+
+	private final ConnectionManager connectionManager;
+
+	private final Config config;
+
+	private final UUID id = UUID.randomUUID();
+
+	RedisTopics(Config config) {
+		this.config = config;
+		Config configCopy = new Config(config);
+		if (configCopy.getMasterSlaveServersConfig() != null) {
+			connectionManager = new MasterSlaveConnectionManager(
+					configCopy.getMasterSlaveServersConfig(), configCopy);
+		} else if (configCopy.getSingleServerConfig() != null) {
+			connectionManager = new SingleConnectionManager(
+					configCopy.getSingleServerConfig(), configCopy);
+		} else if (configCopy.getSentinelServersConfig() != null) {
+			connectionManager = new SentinelConnectionManager(
+					configCopy.getSentinelServersConfig(), configCopy);
+		} else if (configCopy.getClusterServersConfig() != null) {
+			connectionManager = new ClusterConnectionManager(
+					configCopy.getClusterServersConfig(), configCopy);
+		} else {
+			throw new IllegalArgumentException(
+					"server(s) address(es) not defined!");
+		}
+	}
+
+	/**
+	 * Creates an Redisson instance
+	 *
+	 * @return Redisson instance
+	 */
+	public static RedisTopics create() {
+		Config config = new Config();
+		// new SingleServerConfig();
+
+		config.useSingleServer().setAddress("192.168.1.13:6379");
+		// config.useMasterSlaveConnection().setMasterAddress("127.0.0.1:6379").addSlaveAddress("127.0.0.1:6389").addSlaveAddress("127.0.0.1:6399");
+		// config.useSentinelConnection().setMasterName("mymaster").addSentinelAddress("127.0.0.1:26389",
+		// "127.0.0.1:26379");
+		return create(config);
+	}
+
+	/**
+	 * Creates an Redisson instance with configuration
+	 *
+	 * @param config
+	 * @return Redisson instance
+	 */
+	public static RedisTopics create(Config config) {
+		return new RedisTopics(config);
+	}
+
+	/**
+	 * Returns distributed topic instance by name.
+	 *
+	 * @param name
+	 *            of the distributed topic
+	 * @return distributed topic
+	 */
+	@Override
+	public <M> RTopic<M> getTopic(String name) {
+		return new RedisTopic<M>(connectionManager, name);
+	}
+
+	/**
+	 * Shuts down Redisson instance <b>NOT</b> Redis server
+	 */
+	public void shutdown() {
+		connectionManager.shutdown();
+	}
+
+	/**
+	 * Allows to get configuration provided during Redisson instance creation.
+	 * Further changes on this object not affect Redisson instance.
+	 *
+	 * @return Config object
+	 */
+	public Config getConfig() {
+		return config;
+	}
+
+	public void flushdb() {
+		connectionManager.write(new ResultOperation<String, Object>() {
+			@Override
+			protected Future<String> execute(
+					RedisAsyncConnection<Object, Object> conn) {
+				return conn.flushdb();
+			}
+		});
+	}
+
 }
