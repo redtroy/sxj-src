@@ -146,12 +146,10 @@ var caculateRow=function($tr){
 					o.obj.parent().append($div);
 			}});
 		$("[datatype]").live("focus",function(){
-			alert(1)
 			$(this).parent().children(".checkinfo").hide();
 		});
 		$("[datatype]").live("blur",function(){
 			var pass=ul_validform.check(true,$(this));
-			alert(pass);
 			if(!pass)
 				$(this).parent().children(".checkinfo").show();
 		});
@@ -183,7 +181,29 @@ var caculateRow=function($tr){
 				}
 			});
 			$("#amountSum").html(tamount.toFixed(2));
+			
+		});
+		$(".amountClass").live("blur",function(){
+			tamount=0;
+			$(this).parent().parent().parent().find(".amountClass").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
 		})
+		$(".priceClass").live("blur",function(){
+			tamount=0;
+			$(this).parent().parent().parent().find(".priceClass").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
+		})
+		
 		$("[type='file']").each(function(){
 			uploadImg($(this));
 		});
