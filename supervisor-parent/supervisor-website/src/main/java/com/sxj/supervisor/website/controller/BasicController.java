@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
+import org.comet4j.core.CometContext;
+import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,6 +34,9 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
+import com.sxj.redis.advance.core.RTopic;
+import com.sxj.redis.advance.topic.RedisTopics;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -47,6 +53,8 @@ import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberLogService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.website.comet.CometMessageListener;
+import com.sxj.supervisor.website.comet.MessageThread;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.common.FileUtil;
 import com.sxj.util.common.StringUtils;
@@ -72,6 +80,21 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IStorageClientService storageClientService;
+
+	@PostConstruct
+	public void init() {
+		CometEngine engine = CometContext.getInstance().getEngine();
+		// 启动 Comet Server Thread
+		MessageThread cometServer = MessageThread.newInstance(engine);
+		RedisTopics redis = RedisTopics.create();
+		RTopic<String> topic1 = redis.getTopic("topic1");
+		topic1.addListener(new CometMessageListener(cometServer));
+	}
+
+	@RequestMapping("notifyComet")
+	public @ResponseBody void notifyComet(String channelName) {
+		CometServiceImpl.sendMessage("topic1", channelName);
+	}
 
 	@RequestMapping("index")
 	public String ToIndex(HttpServletRequest request) {

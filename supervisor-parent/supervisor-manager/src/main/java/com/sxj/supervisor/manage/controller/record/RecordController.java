@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +61,7 @@ public class RecordController extends BaseController {
 			map.put("rte", rte);
 			map.put("list", list);
 			map.put("query", query);
+			map.put("channelName", MessageChannel.RECORD_MESSAGE);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
 				CometServiceImpl.delCount(MessageChannel.RECORD_MESSAGE);
 			}
@@ -87,12 +87,12 @@ public class RecordController extends BaseController {
 		map.put("cte", cte);
 		map.put("rte", rte);
 		map.put("record", record);
-		if(record.getContractType().getId()!=0){
+		if (record.getContractType().getId() != 0) {
 			return "manage/record/record_edit";
-		}else{
+		} else {
 			return "manage/record/record_edit_zhaobiao";
 		}
-		
+
 	}
 
 	/**
@@ -103,7 +103,8 @@ public class RecordController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/record_save")
-	public @ResponseBody Map<String, String> record_save(RecordEntity record) throws WebException {
+	public @ResponseBody Map<String, String> record_save(RecordEntity record)
+			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			recordService.modifyRecord(record);
@@ -214,7 +215,7 @@ public class RecordController extends BaseController {
 		map.put("isOk", "ok");
 		return map;
 	}
-	
+
 	/**
 	 * 备案是否可修改
 	 * 
@@ -224,32 +225,32 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("getRecordState")
-	public @ResponseBody Map<String, String> getRecordState(String id, HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> getRecordState(String id,
+			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			RecordEntity re= recordService.getRecord(id);
-			if(re!=null){
-			if(re.getType().getId()==0){
-				if(StringUtils.isEmpty(re.getContractNo())){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
+			RecordEntity re = recordService.getRecord(id);
+			if (re != null) {
+				if (re.getType().getId() == 0) {
+					if (StringUtils.isEmpty(re.getContractNo())) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
+				} else if (re.getType().getId() == 1) {
+					if (re.getState().getId() == 2) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
+				} else if (re.getType().getId() == 2) {
+					if (re.getState().getId() == 4) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
 				}
-			}else if(re.getType().getId()==1){
-				if(re.getState().getId()==2){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
-				}
-			}else if(re.getType().getId()==2){
-				if(re.getState().getId()==4){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
-				}
-			}
-			}else{
+			} else {
 				map.put("isOK", "del");
 			}
 			return map;

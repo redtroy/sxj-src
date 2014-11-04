@@ -37,6 +37,7 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.sxj.redis.advance.core.RTopic;
 import com.sxj.redis.advance.topic.RedisTopics;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
@@ -90,6 +91,11 @@ public class BasicController extends BaseController {
 		RedisTopics redis = RedisTopics.create();
 		RTopic<String> topic1 = redis.getTopic("topic1");
 		topic1.addListener(new CometMessageListener(cometServer));
+	}
+
+	@RequestMapping("notifyComet")
+	public @ResponseBody void notifyComet(String channelName) {
+		CometServiceImpl.sendMessage("topic1", channelName);
 	}
 
 	@RequestMapping("footer")

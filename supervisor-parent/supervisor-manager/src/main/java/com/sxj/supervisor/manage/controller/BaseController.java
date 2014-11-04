@@ -14,8 +14,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
-import com.sxj.redis.advance.core.RTopic;
-import com.sxj.redis.advance.topic.RedisTopics;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
@@ -107,15 +105,12 @@ public class BaseController {
 	// // MessageDropListener drop = new MessageDropListener();
 	// engine.addDropListener(new MessageDropListener());
 	//
-	// }
+	// }''
 
-	protected void registChannel(String channelName) {
+	protected void registChannel(final String channelName) {
 		if (!CometContext.getInstance().getAppModules().contains(channelName)) {
 			CometContext.getInstance().registChannel(channelName);// 注册应用的channel
 		}
-		RedisTopics redis = RedisTopics.create();
-		RTopic<String> topic1 = redis.getTopic("topic1");
-		topic1.publish(channelName);
 	}
 
 	protected String getValidError(BindingResult result) throws SystemException {

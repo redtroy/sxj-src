@@ -7,6 +7,8 @@ public class MessageChannel {
 
 	public static final String RECORD_MESSAGE = "record_count_message";
 
+	public static final String WEBSITE_RECORD_MESSAGE = "record_push_message_";
+
 	public static RTopic<String> initTopic() {
 		RedisTopics redis = RedisTopics.create();
 		RTopic<String> topic1 = redis.getTopic("topic1");

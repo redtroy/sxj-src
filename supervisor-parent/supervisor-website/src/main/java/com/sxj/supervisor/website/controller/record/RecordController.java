@@ -1,9 +1,7 @@
 package com.sxj.supervisor.website.controller.record;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
@@ -25,13 +23,13 @@ import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.record.IRecordService;
-import com.sxj.supervisor.website.comet.MessageChannel;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -72,7 +70,7 @@ public class RecordController extends BaseController {
 			map.put("confirmState", rse);
 			map.put("query", query);
 			map.put("type", userBean.getMember().getType().getId());
-			String channelName = MessageChannel.RECORD_MESSAGE
+			String channelName = MessageChannel.WEBSITE_RECORD_MESSAGE
 					+ userBean.getMember().getMemberNo();
 			map.put("channelName", channelName);
 			// 注册监听
@@ -417,23 +415,17 @@ public class RecordController extends BaseController {
 				recordService.modifyState(contractId, recordId,
 						RecordConfirmStateEnum.confirmedB);
 			}
-			Object cache = HierarchicalCacheManager.get(2, "comet_message",
-					"record_push_message_" + member.getMember().getMemberNo());
-			List<String> messageList = null;
-			if (cache instanceof ArrayList) {
-				messageList = (List<String>) cache;
-			} else {
-				messageList = new ArrayList<String>();
-			}
-			for (int i = 0; i < messageList.size(); i++) {
-				String message = messageList.get(i);
-				if (message.contains(recordId)) {
-					messageList.remove(i);
+			String key = MessageChannel.WEBSITE_RECORD_MESSAGE
+					+ member.getMember().getMemberNo();
+			List<String> messageList = CometServiceImpl.get(key);
+			if (messageList != null && messageList.size() > 0) {
+				for (int i = 0; i < messageList.size(); i++) {
+					String message = messageList.get(i);
+					if (message.contains(recordId)) {
+						CometServiceImpl.remove(key, message);
+					}
 				}
 			}
-			HierarchicalCacheManager.set(2, "comet_message",
-					"record_push_message_" + member.getMember().getMemberNo(),
-					messageList);
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
@@ -518,32 +510,32 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("getRecordState")
-	public @ResponseBody Map<String, String> getRecordState(String id, HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> getRecordState(String id,
+			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			RecordEntity re= recordService.getRecord(id);
-			if(re!=null){
-			if(re.getType().getId()==0){
-				if(StringUtils.isEmpty(re.getContractNo())){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
+			RecordEntity re = recordService.getRecord(id);
+			if (re != null) {
+				if (re.getType().getId() == 0) {
+					if (StringUtils.isEmpty(re.getContractNo())) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
+				} else if (re.getType().getId() == 1) {
+					if (re.getState().getId() == 2) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
+				} else if (re.getType().getId() == 2) {
+					if (re.getState().getId() == 4) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
 				}
-			}else if(re.getType().getId()==1){
-				if(re.getState().getId()==2){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
-				}
-			}else if(re.getType().getId()==2){
-				if(re.getState().getId()==4){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
-				}
-			}
-			}else{
+			} else {
 				map.put("isOK", "del");
 			}
 			return map;

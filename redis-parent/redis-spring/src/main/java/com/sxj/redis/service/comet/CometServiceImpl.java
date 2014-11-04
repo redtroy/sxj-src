@@ -13,6 +13,8 @@ import com.sxj.redis.advance.RedisConcurrent;
 import com.sxj.redis.advance.core.RAtomicLong;
 import com.sxj.redis.advance.core.RLock;
 import com.sxj.redis.advance.core.RSet;
+import com.sxj.redis.advance.core.RTopic;
+import com.sxj.redis.advance.topic.RedisTopics;
 
 public class CometServiceImpl implements BeanFactoryPostProcessor {
 
@@ -20,11 +22,14 @@ public class CometServiceImpl implements BeanFactoryPostProcessor {
 
 	private static RedisConcurrent redisConcurrent;
 
+	private static RedisTopics redisTopics;
+
 	@Override
 	public void postProcessBeanFactory(
 			ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		collections = beanFactory.getBean(RedisCollections.class);
 		redisConcurrent = beanFactory.getBean(RedisConcurrent.class);
+		redisTopics = beanFactory.getBean(RedisTopics.class);
 	}
 
 	public static void add(String key, String obj) {
@@ -88,4 +93,8 @@ public class CometServiceImpl implements BeanFactoryPostProcessor {
 
 	}
 
+	public static void sendMessage(String channel, Object message) {
+		RTopic<Object> topic = redisTopics.getTopic(channel);
+		topic.publish(message);
+	}
 }
