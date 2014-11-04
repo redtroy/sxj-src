@@ -117,7 +117,19 @@ var ul_validform;
 			}
 		});
 	}
-
+var resetValidForm=function(){
+	$(".checkinfo").each(function(){
+		var $input=$(this).siblings("input");
+		var left=$input.offset().left;
+		var top=$input.offset().top;
+		var width=$input.width();
+		$(this).css({
+			'left':left+width-32,
+			'top':top-45,
+			'position':'absolute'
+		}).show();
+	})
+}
 	//合同扫描件
 	$(document).ready(function() {
 		
@@ -138,7 +150,8 @@ var ul_validform;
 			}});
 		
 		$("#contractUl").find("[datatype]").live("focus",function(){
-			$(this).parent().children(".checkinfo").remove();
+			$(this).parent().children(".checkinfo").hide();
+			$(this).removeClass("Validform_error");
 			//$(this).parent().children(".checkinfo").hide();
 		});
 		$("#contractUl").find("[datatype]").live("blur",function(){
@@ -169,7 +182,7 @@ var ul_validform;
 				var leng=$("#formtable").find(".formtr").length;
 				if(leng>1){
 					$(this).parent().parent().remove();
-					$(".checkinfo").remove();
+					resetValidForm();
 				}else{
 					messageInfo("不能删除变更条目!");
 				}
@@ -182,6 +195,8 @@ var ul_validform;
 			$new.find("input").attr("value","");
 			$new.find("select").val("");
 			$new.insertAfter($tr);
+			$new.find(".checkinfo").remove();
+			$new.find(".Validform_error").removeClass("Validform_error");
 			$(this).remove();
 		});
 		$(".number").live("keyup",function(){
@@ -202,7 +217,7 @@ var ul_validform;
 		$(".amount").live("blur",function(){
 			$(this).parent().parent().parent().find(".amount").each(function(){
 				var value=$(this).attr("value");
-				if(isNumber(value)){
+				if(value&&isNumber(value)){
 					$(this).attr("value",parseFloat(value).toFixed(2))
 				}
 			});
