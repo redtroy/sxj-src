@@ -53,6 +53,7 @@ public class RfidApplicationController extends BaseController {
 			map.put("receiptStates", receiptStates);
 			map.put("types", types);
 			map.put("query", query);
+			map.put("channelName", RfidChannel.RFID_APPLY_MESSAGE);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
 				CometServiceImpl.delCount(RfidChannel.RFID_APPLY_MESSAGE);
 			}
