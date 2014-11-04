@@ -120,21 +120,13 @@ function star(){
 		if (data.isOk=="ok"){
 			alert("启用成功");
 		}else{
-			alert("启用失败");
+			errorInfo(data.error);
 		}
 	})
 }
+}
 function add_rfid(){
 	$("#add_rfid").append('<div class="item"> <label>&nbsp;</label> <input class="input input-w180h36" name="addRfid" value="" /> </div>');
-}
-function array(mc){
-	 var arr=new Array();
-	 var i=0;
-	 mc.each(function(){
-        arr[i]=$(this).val();
-        i++;
-        })
-    return arr;
 }
 </script>
 <body>
