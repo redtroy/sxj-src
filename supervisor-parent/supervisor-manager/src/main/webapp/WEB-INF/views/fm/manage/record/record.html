@@ -93,12 +93,38 @@ function query(page){
 
 //删除
 function del(id,contractNo){
-		dialogBox(function() {
-			$.post("delRecord.htm",{id:id},function(data){
-				if (data.isOk=="ok"){
-					window.location.href="recordList.htm";
-				}
-			})}, "确实删除备案吗?");
+	$.post("getRecordState.htm", {
+		id : id
+	}, function(data) {
+		if (data.isOK == "ok") {
+			dialogBox(function() {
+				$.post("delRecord.htm",{id:id},function(data){
+					if (data.isOk=="ok"){
+						window.location.href="recordList.htm";
+					}
+				})
+			}, "确实删除备案吗?");
+		} else if(data.isOK == "no"){
+			errorInfo("该备案已处理,不能刪除！");
+		}else{
+			errorInfo("该备案已刪除！");
+		}
+	});
+	query($("#pager").attr("currentPage"));
+}
+function to_modify(id){
+	$.post("getRecordState.htm", {
+		id : id
+	}, function(data) {
+		if (data.isOK == "ok") {
+				window.location.href="record_edit.htm?id="+id;
+		}else if(data.isOK == "no"){
+			errorInfo("该备案已处理,不能刪除！");
+		}else{
+			errorInfo("该备案已刪除！");
+		}
+	});
+	query($("#pager").attr("currentPage"));
 }
 </script>
 </head>
@@ -126,7 +152,7 @@ function del(id,contractNo){
 							对应合同号<input type="text" name="contractNo" value="" />
 						</p>
 						<p>
-							备案类型<select name="type">
+							备案类型<select name="recordType">
 								<option value="">-请选择-</option> <#list rte as state>
 								<option value="${state.id}">${state.getName()}</option> </#list>
 							</select> 
@@ -195,8 +221,8 @@ function del(id,contractNo){
 						<td class="operation"><#if record.state.id==3 ||
 							record.state.id==1 || record.state.id==5>-<#else><#if
 							record.contractType.id==0><a
-							href="record_edit_zhaobiao.htm?id=${record.id}" class="edit">修改</a><#else><a
-							href="record_edit.htm?id=${record.id}" class="edit">修改</a></#if><a
+							href="javascript:to_modify('${record.id}');" class="edit">修改</a><#else><a
+							href="javascript:to_modify('${record.id}');" class="edit">修改</a></#if><a
 							href="javascript:void(0);" class="del"
 							onclick="del('${record.id}','${record.contractNo}')">删除</a></#if>
 						</td> <#if (record.state.id==0)>

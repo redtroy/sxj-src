@@ -105,23 +105,28 @@ function rfid_b(pc_b_id){
 }
 //启用标签
 function star(){
+	var refContractNo=$("#refContractNo").val();
+	var lable=new Array();
 	var gRfid=$("#rfid_a").text();
 	var lRfid=$("#rfid_b").text();
-	var windowType=$("#windowType option:selected").val();
+	var rfids=$("#add_rfid").find("[name='addRfid']").serialize();
 	/*
 	if (gRfid=="" || gRfid== null){
 		alert('玻璃采购合同缺失，无法提交');
 	}*/
 	if (lRfid=="" || lRfid== null){
 		alert('型材采购合同缺失，无法提交');
-	}
-	$.post("start_lable.htm",{minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
+	$.post("start_loss_lable.htm?"+rfids,{refContractNo:refContractNo,minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid},function(data){
 		if (data.isOk=="ok"){
 			alert("启用成功");
 		}else{
-			alert("启用失败");
+			errorInfo(data.error);
 		}
 	})
+}
+}
+function add_rfid(){
+	$("#add_rfid").append('<div class="item"> <label>&nbsp;</label> <input class="input input-w180h36" name="addRfid" value="" /> </div>');
 }
 </script>
 <body>
@@ -143,10 +148,14 @@ function star(){
 <div class="item">
   <label>补损标签编号区间</label>
   &nbsp;&nbsp;<span class="color-blue" id="bq_qj"></span></div>
+  <div class="item" id="add_rfid">
 <div class="item">
   <label>需补损的认证标签</label>
-  <input class="input input-w180h36" value="" />
-  &nbsp;&nbsp;<a href="#" class="lnk-green">+</a></div>
+  <input class="input input-w180h36" value="" name="addRfid"/>
+  &nbsp;&nbsp;<a href="" class="lnk-green" onclick="add_rfid();return false;">+</a>
+  </div>
+  
+  </div>
 <div class="item">
   <label>对应玻璃采购合同</label>
   <select name="select" id="contract_a">
@@ -173,7 +182,7 @@ function star(){
 <div class="item">
   <label>玻璃补损物流标签</label>
   <span class="color-blue ml5" id="rfid_b"></span></div>
-<div class="item"><label>&nbsp;</label><a href="" class="button button-orange mr15" onckick="star();return false;" title="当用来补损的标签数量不够时需要提示，并且引导转向认证标签申请页面，当用来补损的标签数量和填写的被补损的RFID数量不符时，需要报错提示">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+<div class="item"><label>&nbsp;</label><a href="" class="button button-orange mr15" onclick="star();return false;" title="当用来补损的标签数量不够时需要提示，并且引导转向认证标签申请页面，当用来补损的标签数量和填写的被补损的RFID数量不符时，需要报错提示">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </div>
 </div>

@@ -16,7 +16,6 @@ import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
-import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
@@ -38,8 +37,6 @@ public class LossWinRfidController extends BaseController {
 
 	@RequestMapping("to_loss")
 	public String lossMen(ModelMap map) {
-		WindowTypeEnum[] type = WindowTypeEnum.values();
-		map.put("type", type);
 		return "site/rfid/window/lossrfid";
 	}
 
@@ -148,7 +145,7 @@ public class LossWinRfidController extends BaseController {
 	@RequestMapping("start_loss_lable")
 	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,
 			String minRfid, String maxRfid, String gRfid, String lRfid,
-			WindowTypeEnum windowType) throws WebException {
+			String[] addRfid) throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
 			ContractModel refContract = contractService
@@ -160,6 +157,21 @@ public class LossWinRfidController extends BaseController {
 			if (items == null || items.size() == 0) {
 				throw new WebException("招标合同条目不存在");
 			}
+			WindowRfidQuery query = new WindowRfidQuery();
+			for (String rfid : addRfid) {
+				query.setRfidNo(rfid);
+				List<WindowRfidEntity> list = windowRfidService
+						.queryWindowRfid(query);
+				if (list.size() == 1) {
+					if (list.get(0).getRfidState().getId() == 1) {
+						continue;
+					} else {
+						throw new WebException(rfid + "补损标签状态错误");
+					}
+				} else {
+					throw new WebException(rfid + "补损标签不存在，或者重复");
+				}
+			}
 			float quantity = 0f;
 			for (Iterator<ContractItemEntity> iterator = items.iterator(); iterator
 					.hasNext();) {
@@ -170,8 +182,8 @@ public class LossWinRfidController extends BaseController {
 				quantity = quantity + item.getQuantity();
 			}
 			long count = (long) quantity;
-			windowRfidService.startWindowRfid(count, refContractNo, minRfid,
-					maxRfid, gRfid, lRfid, windowType);
+			windowRfidService.lossWindowRfid(refContractNo, minRfid, maxRfid,
+					gRfid, lRfid, addRfid, count);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("启用标签错误", e, this.getClass());

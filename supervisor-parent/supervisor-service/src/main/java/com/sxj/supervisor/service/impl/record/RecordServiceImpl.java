@@ -425,7 +425,7 @@ public class RecordServiceImpl implements IRecordService {
 					.getContractModelByContractNo(contractNo);
 			RecordQuery query = new RecordQuery();
 			query.setContractNo(contractNo);
-			query.setRecordType(RecordTypeEnum.contract.getId());
+			query.setRecordType("0");
 			List<RecordEntity> list = queryRecord(query);
 			for (RecordEntity recordEntity : list) {
 				recordEntity.setConfirmState(RecordConfirmStateEnum.accepted);

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IAccountDao;
+import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberRoleEntity;
@@ -30,6 +31,9 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Autowired
 	private IAccountDao accountDao;
+
+	@Autowired
+	private IMemberDao memberDao;
 
 	@Autowired
 	private IMemberRoleService roleServce;
@@ -54,13 +58,14 @@ public class AccountServiceImpl implements IAccountService {
 			account.setNoType(account.getParentId() + "-");
 			account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
 			accountDao.addAccount(account);
-			MemberEntity member = memberService.memberInfo(account
-					.getParentId());
-			if (member.getAccountNum() == null) {
-				member.setAccountNum(0);
-			}
-			member.setAccountNum(member.getAccountNum() + 1);
-			memberService.modifyMember(member);
+			// MemberEntity member = memberService.memberInfo(account
+			// .getParentId());
+			// if (member.getAccountNum() == null) {
+			// member.setAccountNum(0);
+			// }
+			// member.setAccountNum(member.getAccountNum() + 1);
+			// memberService.modifyMember(member);
+			memberDao.add_account_num(account.getParentId());
 			if (functionIds != null && functionIds.length > 0) {
 				List<MemberRoleEntity> roles = new ArrayList<MemberRoleEntity>();
 				for (int i = 0; i < functionIds.length; i++) {

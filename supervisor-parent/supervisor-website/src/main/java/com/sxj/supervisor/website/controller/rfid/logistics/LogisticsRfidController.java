@@ -294,7 +294,7 @@ public class LogisticsRfidController extends BaseController {
 		try {
 			RecordQuery rq = new RecordQuery();
 			rq.setContractNo(contractNo);
-			rq.setRecordType(2);
+			rq.setRecordType("2");
 			List<RecordEntity> reList = recordService.queryRecord(rq);
 			String str = "";
 			for (RecordEntity recordEntity : reList) {

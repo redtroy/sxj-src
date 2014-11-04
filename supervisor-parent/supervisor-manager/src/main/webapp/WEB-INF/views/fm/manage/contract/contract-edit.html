@@ -145,16 +145,16 @@ var caculateRow=function($tr){
 					}).show();
 					o.obj.parent().append($div);
 			}});
-		$("#modifyForm").find("[datatype]").each(function(){
-			$(this).focus(function(){
-				$(this).parent().children(".checkinfo").hide();
-			}); 
-			$(this).blur(function(){
-				var pass=ul_validform.check(true,$(this));
-				if(!pass)
-					$(this).parent().children(".checkinfo").show();
-			});
+		$("[datatype]").live("focus",function(){
+			$(this).parent().children(".checkinfo").hide();
 		});
+		$("[datatype]").live("blur",function(){
+			var pass=ul_validform.check(true,$(this));
+			if(!pass)
+				$(this).parent().children(".checkinfo").show();
+		});
+		
+		
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.viewer').slideUp(200);
@@ -181,7 +181,29 @@ var caculateRow=function($tr){
 				}
 			});
 			$("#amountSum").html(tamount.toFixed(2));
+			
+		});
+		$(".amountClass").live("blur",function(){
+			tamount=0;
+			$(this).parent().parent().parent().find(".amountClass").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
 		})
+		$(".priceClass").live("blur",function(){
+			tamount=0;
+			$(this).parent().parent().parent().find(".priceClass").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
+		})
+		
 		$("[type='file']").each(function(){
 			uploadImg($(this));
 		});
@@ -197,7 +219,7 @@ var caculateRow=function($tr){
 			if(leng>2){
 				$(this).parent().parent().remove();
 			}else{
-				messageInfo("不能删除变更条目!");
+				messageInfo("不能删除条目!");
 			}
 			caculate();
 		})

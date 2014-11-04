@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -86,23 +87,12 @@ public class RecordController extends BaseController {
 		map.put("cte", cte);
 		map.put("rte", rte);
 		map.put("record", record);
-		return "manage/record/record_edit";
-	}
-
-	/**
-	 * 备案修改
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/record_edit_zhaobiao")
-	public String record_edit_zhaobiao(String id, ModelMap map) {
-		RecordEntity record = recordService.getRecord(id);
-		ContractTypeEnum[] cte = ContractTypeEnum.values(); // 合同类型
-		RecordTypeEnum[] rte = RecordTypeEnum.values();// 备案类型
-		map.put("cte", cte);
-		map.put("rte", rte);
-		map.put("record", record);
-		return "manage/record/record_edit_zhaobiao";
+		if(record.getContractType().getId()!=0){
+			return "manage/record/record_edit";
+		}else{
+			return "manage/record/record_edit_zhaobiao";
+		}
+		
 	}
 
 	/**
@@ -113,11 +103,12 @@ public class RecordController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/record_save")
-	public String record_save(HttpServletRequest request, RecordEntity record,
-			ModelMap map) throws WebException {
+	public @ResponseBody Map<String, String> record_save(RecordEntity record) throws WebException {
 		try {
+			Map<String, String> map = new HashMap<String, String>();
 			recordService.modifyRecord(record);
-			return "redirect:" + getBasePath(request) + "record/recordList.htm";
+			map.put("isOK", "ok");
+			return map;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new WebException("新增备案错误", e);
@@ -222,5 +213,49 @@ public class RecordController extends BaseController {
 		recordService.deleteRecord(id);
 		map.put("isOk", "ok");
 		return map;
+	}
+	
+	/**
+	 * 备案是否可修改
+	 * 
+	 * @param contractNo
+	 * @param session
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("getRecordState")
+	public @ResponseBody Map<String, String> getRecordState(String id, HttpSession session)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			RecordEntity re= recordService.getRecord(id);
+			if(re!=null){
+			if(re.getType().getId()==0){
+				if(StringUtils.isEmpty(re.getContractNo())){
+					map.put("isOK", "ok");
+				}else{
+					map.put("isOK", "no");
+				}
+			}else if(re.getType().getId()==1){
+				if(re.getState().getId()==2){
+					map.put("isOK", "ok");
+				}else{
+					map.put("isOK", "no");
+				}
+			}else if(re.getType().getId()==2){
+				if(re.getState().getId()==4){
+					map.put("isOK", "ok");
+				}else{
+					map.put("isOK", "no");
+				}
+			}
+			}else{
+				map.put("isOK", "del");
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
+		}
 	}
 }

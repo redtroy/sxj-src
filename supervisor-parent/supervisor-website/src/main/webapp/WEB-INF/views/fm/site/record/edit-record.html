@@ -158,7 +158,7 @@ $(document).ready(function() {
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
-				},"确认成功!");
+				},"修改成功!");
 			}else{
 				messageInfo("修改失败");
 			}
@@ -184,7 +184,7 @@ $(document).ready(function() {
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
-				},"确认成功!");
+				},"修改成功!");
 			}else{
 				messageInfo("修改失败");
 			}
@@ -215,7 +215,7 @@ $(document).ready(function() {
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
-				},"确认成功!");
+				},"修改成功!");
 			}else{
 				messageInfo("修改失败");
 			}
@@ -233,7 +233,7 @@ $(document).ready(function() {
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
-				},"确认成功!");
+				},"修改成功!");
 			}else{
 				messageInfo("修改失败");
 			}
@@ -360,7 +360,7 @@ $(document).ready(function() {
 							</div>
 							<div class="item">
 								<label>甲方</label> <input class="input input-w270h30"
-									value="${record.memberNameA}" name="memberNameA" id="memberNameA" datatype="*1-50" nullmsg="请输入甲方名称" />
+									value="${record.memberNameA}" AUTOCOMPLETE="off" name="memberNameA" id="" datatype="*1-50" nullmsg="请输入甲方名称" />
 							</div>
 							<div class="item">
 								<label>乙方</label>${record.memberNameB}
