@@ -81,9 +81,9 @@ public class CometServiceImpl implements BeanFactoryPostProcessor {
 		return atomicLong.get();
 	}
 
-	public static void delCount(String key) {
+	public static void setCount(String key, Long count) {
 		RAtomicLong atomicLong = redisConcurrent.getAtomicLong(key);
-		atomicLong.decrementAndGet();
+		atomicLong.set(count);
 	}
 
 	public static Long takeCount(String key) {

@@ -63,7 +63,7 @@ public class RecordController extends BaseController {
 			map.put("query", query);
 			map.put("channelName", MessageChannel.RECORD_MESSAGE);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
-				CometServiceImpl.delCount(MessageChannel.RECORD_MESSAGE);
+				CometServiceImpl.setCount(MessageChannel.RECORD_MESSAGE, 0l);
 			}
 			registChannel(MessageChannel.RECORD_MESSAGE);
 			return "manage/record/record";
