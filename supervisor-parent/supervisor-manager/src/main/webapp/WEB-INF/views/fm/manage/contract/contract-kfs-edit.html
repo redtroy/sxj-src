@@ -136,6 +136,7 @@ var resetValidForm=function(){
 		//初始化验证
 		ul_validform=$("#contractUl").Validform({
 			tiptype:function(msg,o,cssctl){
+					o.obj.parent().children(".checkinfo").remove();
 					var $div=$("<div/>").addClass("checkinfo");
 					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
 					var left=o.obj.offset().left,
