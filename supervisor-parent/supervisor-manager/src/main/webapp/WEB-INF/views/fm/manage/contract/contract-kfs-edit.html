@@ -147,6 +147,15 @@ var ul_validform;
 			});
 		});
 		
+		$("#contractUl").find("[datatype]").live("focus",function(){
+			$(this).parent().children(".checkinfo").hide();
+		});
+		$("#contractUl").find("[datatype]").live("blur",function(){
+			var pass=ul_validform.check(true,$(this));
+			if(!pass)
+				$(this).parent().children(".checkinfo").show();
+		});
+		
 		$('.modal-header .close').click(function() {
 			$('.maskdivgen').fadeOut(100);
 			$('.viewer').slideUp(200);

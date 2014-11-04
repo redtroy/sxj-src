@@ -148,8 +148,12 @@ public class RedisTopicTest
             }
         });
         topic2.publish(new Message("测试消息"));
-        redis.shutdown();
-        redis2.shutdown();
+        while (true)
+        {
+            // System.out.println();
+        }
+        //        redis.shutdown();
+        //        redis2.shutdown();
     }
     
     public void testListenerRemove() throws InterruptedException
