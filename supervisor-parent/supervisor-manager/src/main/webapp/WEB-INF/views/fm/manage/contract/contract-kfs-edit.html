@@ -167,10 +167,11 @@ var ul_validform;
 				var leng=$("#formtable").find(".formtr").length;
 				if(leng>1){
 					$(this).parent().parent().remove();
+					$(".checkinfo").remove();
 				}else{
 					messageInfo("不能删除变更条目!");
 				}
-				
+
 			});
 		
 		$(".lnk-green").live("click",function(){
