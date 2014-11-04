@@ -44,9 +44,17 @@ var validform;
 		if (!validform.check()){
 			return false;
 		}
-		dialogBox(function(){
-		$("#record_save").submit();
-		},"是否修改备案?");
+		dialogBox(function() {
+			$.post("record_save.htm",$("#record_save").serialize(),function(data){
+				if (data.isOK=='ok'){
+					succInfo(function(){
+						window.location.href="recordList.htm";
+					},"修改成功!");
+				}else{
+					messageInfo("修改失败");
+				}
+			  });
+		}, "是否修改备案?");
 	}
 	$(function() {
 		validform=$("#record_save").Validform({
@@ -138,8 +146,9 @@ var validform;
 				<h2 class="title">备案修改</h2>
 				<div class="infoBox binBox f14">
 					<ul>
-						<form action="record_save.htm?id=${record.id}" method="post"
+						<form action="" method="post"
 							id="record_save">
+							<input type="hidden" name="id" value="${record.id}" />
 							<input type="hidden" name="contractNo" value="${record.contractNo}" />
 							<li><label>备案号</label>${record.recordNo}</li>
 							<li><label>申请会员</label>${record.applyName}</li>
@@ -167,7 +176,7 @@ var validform;
 					</ul>
 					</form>
 					<div class="btnBox">
-						<a href="#" class="button button-orange button-small"
+						<a href="javascript:void(0);" class="button button-orange button-small"
 							onclick="edit()">修改</a> <a href="javascript:history.go(-1);"
 							class="button button-gray button-small">返回</a>
 					</div>

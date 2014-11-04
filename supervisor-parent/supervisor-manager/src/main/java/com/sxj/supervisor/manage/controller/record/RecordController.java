@@ -114,11 +114,12 @@ public class RecordController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/record_save")
-	public String record_save(HttpServletRequest request, RecordEntity record,
-			ModelMap map) throws WebException {
+	public @ResponseBody Map<String, String> record_save(RecordEntity record) throws WebException {
 		try {
+			Map<String, String> map = new HashMap<String, String>();
 			recordService.modifyRecord(record);
-			return "redirect:" + getBasePath(request) + "record/recordList.htm";
+			map.put("isOK", "ok");
+			return map;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new WebException("新增备案错误", e);

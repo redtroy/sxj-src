@@ -50,7 +50,15 @@
 			return false;
 		}
 		dialogBox(function() {
-			$("#record_save").submit();
+			$.post("record_save.htm",$("#record_save").serialize(),function(data){
+				if (data.isOK=='ok'){
+					succInfo(function(){
+						window.location.href="recordList.htm";
+					},"修改成功!");
+				}else{
+					messageInfo("修改失败");
+				}
+			  });
 		}, "是否修改备案?");
 	}
 	$(function() {
@@ -165,8 +173,11 @@
 				<h2 class="title">备案修改</h2>
 				<div class="infoBox binBox f14">
 					<ul>
-						<form action="record_save.htm?id=${record.id}" method="post"
+						<form action="" method="post"
 							id="record_save">
+							
+							<input type="hidden" name="id"
+								value="${record.id}" />
 							<input type="hidden" name="contractNo"
 								value="${record.contractNo}" /> <input type="hidden"
 								name="applyId" value="${record.applyId}" />
@@ -175,16 +186,17 @@
 							<li><label>甲方名称</label><#if record.applyId
 								==record.memberIdA>${record.memberNameA}<#else></else><input
 								type="text" value="${record.memberNameA}" id="memberNameA"
-								AUTOCOMPLETE="off" name="memberNameA" datatype="*2-50"
+								AUTOCOMPLETE="off" name="memberNameA" datatype="*1-50"
 								nullmsg="请输入甲方名称" /> <input type="hidden"
-								value="${record.memberIdA}" id="memberIdA" name="memberIdA" />
+								value="${record.memberIdA}" datatype="*"
+								nullmsg="请输入甲方名称"  id="memberIdA" name="memberIdA" />
 								</#if></li>
 							<li><label>乙方名称</label><#if record.applyId
 								==record.memberIdB>${record.memberNameB}<#else><input
 								type="text" value="${record.memberNameB}" id="memberNameB"
-								name="memberNameB" datatype="*2-50" nullmsg="请输入乙方名称"
+								name="memberNameB" datatype="*1-50" nullmsg="请输入乙方名称"
 								AUTOCOMPLETE="off" /><input type="hidden"
-								value="${record.memberIdB}" id="memberIdB" name="memberIdB" /></#if></li>
+								value="${record.memberIdB}" id="memberIdB" name="memberIdB" datatype="*" nullmsg="请输入乙方名称" /></#if></li>
 							<li><label>合同类型</label><select id="contractType"
 								name="contractType"> <#list cte as type> <#if
 									type_index!=0> <#if (type.id=record.contractType.id)>
