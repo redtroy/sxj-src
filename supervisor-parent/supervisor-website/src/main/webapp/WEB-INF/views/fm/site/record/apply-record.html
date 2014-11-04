@@ -63,105 +63,78 @@ var cg_validform
 			tiptype : 3
 		});
 	});
-
-	$(document).ready(
-			function() {
-				$("#zbFile").uploadify(
-						{
-							swf : '${basePath}upload/uploadify.swf',
-							uploader : "${basePath}upload.htm",
-							fileTypeExts : '*.gif; *.jpg; *.png',
-							auto : true,
-							multi : true,
-							height : 30,
-							width : 120,
-							buttonText : '上传合同扫描件',
-							onUploadSuccess : function(file, data, response) {
-								var num = 1;
-								var dataObj = eval("(" + data + ")");//转换为json对象 
-								var hideVal = $("#zbimgPath").val();
-								if (hideVal == '') {
-									hideVal = dataObj.fileIds;
-								} else {
-									var arrays = hideVal.split(",");
-									for (var i = 0; i < arrays.length; i++) {
-										if (arrays[i]) {
-											num += 1;
-										}
-									}
-									hideVal += "," + dataObj.fileIds;
-								}
-								refreshElastislide($('#zbRollBox'),
-										$('#zbcarousel'), dataObj);
-								$("#zbimgPath").val(hideVal);
-
-							}
-						});
-				$("#cgFile").uploadify(
-						{
-							swf : '${basePath}upload/uploadify.swf',
-							uploader : "${basePath}upload.htm",
-							fileTypeExts : '*.gif; *.jpg; *.png',
-							auto : true,
-							multi : true,
-							height : 30,
-							width : 120,
-							buttonText : '上传合同扫描件',
-							onUploadSuccess : function(file, data, response) {
-								var num = 1;
-								var dataObj = eval("(" + data + ")");//转换为json对象 
-								var hideVal = $("#cgimgPath").val();
-								if (hideVal == '') {
-									hideVal = dataObj.fileIds;
-								} else {
-									var arrays = hideVal.split(",");
-									for (var i = 0; i < arrays.length; i++) {
-										if (arrays[i]) {
-											num += 1;
-										}
-									}
-									hideVal += "," + dataObj.fileIds;
-								}
-								refreshElastislide($('#cgRollBox'),
-										$('#cgcarousel'), dataObj);
-								$("#cgimgPath").val(hideVal);
-
-							}
-						});
-				//乙方上传
-				$("#BcgFile").uploadify(
-						{
-							swf : '${basePath}upload/uploadify.swf',
-							uploader : "${basePath}upload.htm",
-							fileTypeExts : '*.gif; *.jpg; *.png',
-							auto : true,
-							multi : true,
-							height : 30,
-							width : 120,
-							buttonText : '上传合同扫描件',
-							onUploadSuccess : function(file, data, response) {
-								var num = 1;
-								var dataObj = eval("(" + data + ")");//转换为json对象 
-								var hideVal = $("#bcgimgPath").val();
-								if (hideVal == '') {
-									hideVal = dataObj.fileIds;
-								} else {
-									var arrays = hideVal.split(",");
-									for (var i = 0; i < arrays.length; i++) {
-										if (arrays[i]) {
-											num += 1;
-										}
-									}
-									hideVal += "," + dataObj.fileIds;
-								}
-								refreshElastislide($('#bcgRollBox'),
-										$('#bcgcarousel'), dataObj);
-								$("#bcgimgPath").val(hideVal);
-
-							}
-						});
-
-			});
+//图片处理事件
+//加载绑定扫描件(默认图片地址,滚动UL)
+var imgBinding = function() {
+	$(".elastislide-list").each(function() {
+		var $this = $(this);
+		var imgPath = $(this).parent().siblings(":hidden").val();
+		$.post("${basePath}filesort.htm", {
+			fileId : imgPath
+		}, function(imgPaths) {
+			refreshElastislide($this.parent(), $this, imgPaths);
+		});
+	});
+}
+closeViewer =function(){
+	$('.maskdivgen').fadeOut(100);
+	$('.viewer').slideUp(200);
+}
+var uploadImg = function($file) {
+	var $div = $file.parent().parent().parent();
+	var $carousel = $div.find(".elastislide-list");
+	var $container = $carousel.parent();
+	var $hidden = $container.parent().find(":input");
+	$file.uploadify({
+		swf : '${basePath}upload/uploadify.swf',
+		uploader : "${basePath}upload.htm",
+		fileTypeExts : '*.gif; *.jpg; *.png',
+		auto : true,
+		multi : true,
+		height : 30,
+		width : 120,
+		buttonText : '上传合同扫描件',
+		onUploadSuccess : function(file, data, response) {
+			var num = 1;
+			var dataObj = eval("(" + data + ")");//转换为json对象 
+			var hideVal = $hidden.val();
+			if (hideVal == '') {
+				hideVal = dataObj.fileIds;
+			} else {
+				var arrays = hideVal.split(",");
+				for (var i = 0; i < arrays.length; i++) {
+					if (arrays[i]) {
+						num += 1;
+					}
+				}
+				hideVal += "," + dataObj.fileIds;
+			}
+			$hidden.val(hideVal);
+			refreshElastislide($container, $carousel, dataObj);
+		}
+	});
+}
+	$(document).ready(function() {
+		$('.modal-header .close').click(function() {
+			$('.maskdivgen').fadeOut(100);
+			$('.viewer').slideUp(200);
+		})
+		$('.elastislide-list').find("li").live("click", function() {
+			var el = $(this);
+			var imageSource = el.find("a").attr("data-image");
+			currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
+			currentLi=$(this);
+			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
+			el.parent().children("li").removeClass("view");
+			el.addClass("view");
+			$(".maskdivgen").show();
+			$(".viewer").show();
+		});
+		uploadImg($("#zbFile"));
+		uploadImg($("#cgFile"));
+		uploadImg($("#BcgFile"));
+		imgBinding();		
+	});
 
 	/**
 	 * 甲方申请采购
@@ -314,7 +287,13 @@ var cg_validform
 				$("#memberIdA").val(data.result);
 			},
 			beforeShow:function(data){
-				$("#memberIdA").val(data[0].result);
+				var memberNameA = $("#memberNameA").val();
+				for (var i = 0; i < data.length; i++) {
+					if(data[i].title==memberNameA){
+						$("#memberIdA").val(data[i].result);
+					}
+				}
+				
 			}
 		});
 		$("#memberNameB").bigAutocomplete({
@@ -324,7 +303,13 @@ var cg_validform
 					$("#memberIdB").val(data.result);
 			},
 			beforeShow:function(data){
+				var memberNameB = $("#memberNameB").val();
+				for (var i = 0; i < data.length; i++) {
+					if(data[i].title==memberNameB){
 						$("#memberIdB").val(data[i].result);	
+					}
+				}
+						
 			}
 		});
 	});

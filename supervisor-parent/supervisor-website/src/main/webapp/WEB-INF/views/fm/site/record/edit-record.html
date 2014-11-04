@@ -251,13 +251,24 @@ $(document).ready(function() {
 		$("#memberNameA").bigAutocomplete({url:urlA,callback:function(data){
 	        $("#memberIdA").val(data.result);
 	    },beforeShow:function(data){
-			$("#memberIdA").val(data[0].result);
+			var memberNameA = $("#memberNameA").val();
+			for (var i = 0; i < data.length; i++) {
+				if(data[i].title==memberNameA){
+					$("#memberIdA").val(data[i].result);
+				}
+			}
+			
 		}
 		});
 		$("#memberNameB").bigAutocomplete({url:urlB,callback:function(data){
 	        $("#memberIdB").val(data.result);
 	    },beforeShow:function(data){
-			$("#memberIdB").val(data[0].result);
+	    	var memberNameB = $("#memberNameB").val();
+			for (var i = 0; i < data.length; i++) {
+				if(data[i].title==memberNameB){
+					$("#memberIdB").val(data[i].result);	
+				}
+			}
 		}
 		});
 		$('#selectBatch').change(function(){  
@@ -386,7 +397,7 @@ $(document).ready(function() {
 							<div class="item">
 								<label>甲方</label> <input class="input input-w270h30" datatype="*1-50" nullmsg="请输入甲方名称"
 									value="${record.memberNameA}" name="memberNameA" autocomplete="off"
-									id="memberNameA" /> <input type="hidden" name="memberIdB" id="memberIdB" datatype="*" nullmsg="请输入甲方名称"
+									id="memberNameA" /> <input type="hidden" name="memberIdA" id="memberIdA" datatype="*" nullmsg="请输入甲方名称"
 									value="${record.memberIdA}" />
 							</div>
 							<div class="item">
