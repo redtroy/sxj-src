@@ -17,13 +17,13 @@ public class RecordQuery extends Pagable implements Serializable {
 
 	private String applyId;
 
-	private Integer contractType;
+	private String contractType;
 
 	private String contractNo;
 
 	private String confirmState;
 
-	private Integer recordType;
+	private String recordType;
 	
 	private String  type;
 
@@ -149,11 +149,11 @@ public class RecordQuery extends Pagable implements Serializable {
 		this.applyId = applyId;
 	}
 
-	public Integer getContractType() {
+	public String getContractType() {
 		return contractType;
 	}
 
-	public void setContractType(Integer contractType) {
+	public void setContractType(String contractType) {
 		this.contractType = contractType;
 	}
 
@@ -165,11 +165,11 @@ public class RecordQuery extends Pagable implements Serializable {
 		this.contractNo = contractNo;
 	}
 
-	public Integer getRecordType() {
+	public String getRecordType() {
 		return recordType;
 	}
 
-	public void setRecordType(Integer recordType) {
+	public void setRecordType(String recordType) {
 		this.recordType = recordType;
 	}
 

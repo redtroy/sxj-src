@@ -136,16 +136,6 @@ var ul_validform;
 					}).show();
 					o.obj.parent().append($div);
 			}});
-		$("#contractUl").find("[datatype]").each(function(){
-			$(this).focus(function(){
-				$(this).parent().children(".checkinfo").hide();
-			}); 
-			$(this).blur(function(){
-				var pass=ul_validform.check(true,$(this));
-				if(!pass)
-					$(this).parent().children(".checkinfo").show();
-			});
-		});
 		
 		$("#contractUl").find("[datatype]").live("focus",function(){
 			$(this).parent().children(".checkinfo").hide();
@@ -174,7 +164,13 @@ var ul_validform;
 		//uploadImg($("#bsFile"));
 		imgBinding();
 			$(".lnk-red").live("click", function() {
-				$(this).parent().parent().remove();
+				var leng=$("#formtable").find(".formtr").length;
+				if(leng>1){
+					$(this).parent().parent().remove();
+				}else{
+					messageInfo("不能删除变更条目!");
+				}
+				
 			});
 		
 		$(".lnk-green").live("click",function(){
@@ -198,6 +194,25 @@ var ul_validform;
 				$(".tquantity").html(tquantity+"镗");
 			if(tamount)
 				$(".tamount").html(tamount.toFixed(2)+"元");
+		})
+		
+		$(".amount").live("blur",function(){
+			$(this).parent().parent().parent().find(".amount").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value) ){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
+		})
+		$(".price").live("blur",function(){
+			$(this).parent().parent().parent().find(".price").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
 		})
 		var quantity=0;
 		var amount=0;

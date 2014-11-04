@@ -140,6 +140,9 @@ $(document).ready(function(){
 				<#else> ${contractModel.contract.batchCount} </#if>个</span>交付批次
 		</div>
 		<div class="item">
+			<label>合同定金</label> ${contractModel.contract.deposit}
+		</div>
+		<div class="item">
 			<label>合同备注</label> ${contractModel.contract.remarks}
 		</div>
 		<div class="item">
@@ -252,9 +255,6 @@ $(document).ready(function(){
 					</#list>
 				</table>
 				</div></#if>
-			</div>
-			<div class="item">
-				<label>&nbsp;</label> 本合同还剩有<span class="color-red fb ml5 mr5">2个</span>交付批次
 			</div>
 			</#list> </#if> <#if contractModel.replenishList?exists>
 			<h2 class="titChange f14 fb">补损合同信息</h2>

@@ -4,6 +4,9 @@
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
 <script>
+var isNumber=function(a){
+	return typeof a === 'number';
+}
 function errorInfo(message){
 	var data=$("#error_info_div");
 	data.find("#message_error").text(message);

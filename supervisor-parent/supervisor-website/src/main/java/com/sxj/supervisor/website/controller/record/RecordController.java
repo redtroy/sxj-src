@@ -42,7 +42,7 @@ import com.sxj.util.logger.SxjLogger;
 public class RecordController extends BaseController {
 
 	/**
-	 * 合同service
+	 * getRecordState 合同service
 	 */
 	@Autowired
 	private IContractService contractService;
@@ -260,7 +260,8 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			if (record.getType().getId() == 2) {
-				List<ContractBatchEntity> batch = recordService.getBatchList(recordId);
+				List<ContractBatchEntity> batch = recordService
+						.getBatchList(recordId);
 				map.put("batch", batch);
 			}
 			map.put("record", record);// 备案类型
@@ -381,7 +382,7 @@ public class RecordController extends BaseController {
 			String recordId, HttpSession session, String message)
 			throws WebException {
 		try {
-			
+
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			ContractModel contract = contractService
@@ -426,7 +427,7 @@ public class RecordController extends BaseController {
 			}
 			for (int i = 0; i < messageList.size(); i++) {
 				String message = messageList.get(i);
-				if(message.contains(recordId)){
+				if (message.contains(recordId)) {
 					messageList.remove(i);
 				}
 			}
@@ -487,14 +488,14 @@ public class RecordController extends BaseController {
 	}
 
 	@RequestMapping("getContract")
-	public @ResponseBody Map<String, String> getContract(String contractNo, HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> getContract(String contractNo,
+			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			int size = contractService
-					.getContractByZhaobiaoContractNo(contractNo.trim(),member.getMember());
+			int size = contractService.getContractByZhaobiaoContractNo(
+					contractNo.trim(), member.getMember());
 			if (size == 0) {
 				map.put("isOK", "no");
 			} else {
@@ -507,8 +508,10 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+
 	/**
 	 * 备案是否可修改
+	 * 
 	 * @param contractNo
 	 * @param session
 	 * @return
@@ -520,6 +523,7 @@ public class RecordController extends BaseController {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			RecordEntity re= recordService.getRecord(id);
+			if(re!=null){
 			if(re.getType().getId()==0){
 				if(StringUtils.isEmpty(re.getContractNo())){
 					map.put("isOK", "ok");
@@ -539,23 +543,25 @@ public class RecordController extends BaseController {
 					map.put("isOK", "no");
 				}
 			}
-
+			}else{
+				map.put("isOK", "del");
+			}
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认备案信息错误", e, this.getClass());
 			throw new WebException("确认备案信息错误");
 		}
 	}
-	
+
 	@RequestMapping("getMember")
-	public @ResponseBody Map<String, String> getMember(String memberName, HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> getMember(String memberName,
+			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			MemberEntity member =memberService.getMemberByName(memberName);
-			if(member!=null){
+			MemberEntity member = memberService.getMemberByName(memberName);
+			if (member != null) {
 				map.put("memberNo", member.getMemberNo());
-			}else{
+			} else {
 				map.put("memberNo", "");
 			}
 			return map;

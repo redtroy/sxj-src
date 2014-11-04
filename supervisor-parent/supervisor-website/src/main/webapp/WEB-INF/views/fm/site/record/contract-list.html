@@ -361,18 +361,21 @@ function busunSeav(){
 								id : id
 							}, function(data) {
 								if (data.isOK == "ok") {
-									succInfo(function(){
-										window.location.href="query.htm";
-									},"删除备案成功!");  
+									 succInfo(function(){
+										  query($("#pager").attr("currentPage"));
+									  },"刪除备案成功！");
 									
 								} else {
 									errorInfo("删除备案失败");
 								}
 					});},"是否删除备案?");
-			} else {
-				errorInfo("不能刪除");
-			}	
+			} else if(data.isOK == "no"){
+				errorInfo("该备案已处理,不能刪除！");
+			}else{
+				errorInfo("该备案已刪除！");
+			}
 		});
+		query($("#pager").attr("currentPage"));
 	}
 	function to_modify(id){
 		$.post("getRecordState.htm", {
@@ -380,10 +383,13 @@ function busunSeav(){
 		}, function(data) {
 			if (data.isOK == "ok") {
 					window.location.href="to_modify.htm?recordId="+id;
-			} else {
-				errorInfo("不能修改");
+			}else if(data.isOK == "no"){
+				errorInfo("该备案已处理,不能刪除！");
+			}else{
+				errorInfo("该备案已刪除！");
 			}
 		});
+		query($("#pager").attr("currentPage"));
 	}
 </script>
 </head>
