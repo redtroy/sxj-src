@@ -95,6 +95,6 @@
 	</select>
 	<select id="add_account_num" resultMap="MemberResultMap"
 		parameterType="String">
-		<![CDATA[UPDATE M_MEMBER SET ACCOUNT_NUM=ACCOUNT_NUM+1  WHERE ID=#{id}]]>
+		<![CDATA[UPDATE M_MEMBER SET ACCOUNT_NUM=ACCOUNT_NUM+1  WHERE MEMBER_NO=#{id}]]>
 	</select>
 </mapper>

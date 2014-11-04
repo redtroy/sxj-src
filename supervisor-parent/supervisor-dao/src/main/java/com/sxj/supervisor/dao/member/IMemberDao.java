@@ -71,7 +71,7 @@ public interface IMemberDao {
 	public List<MemberEntity> queryMembers(QueryCondition<MemberEntity> query);
 
 	/**
-	 * 增加会员子帐号数目信息
+	 * 增加会员子帐号数目信息 id 是MEMBER 表的 MEMBER_NO
 	 */
 	public void add_account_num(String id);
 }
