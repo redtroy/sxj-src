@@ -77,4 +77,9 @@ public interface IWindowRfidDao {
 	 **/
 	@Get
 	public WindowRfidEntity getWindowRfid(String id);
+
+	/**
+	 * 更新门窗RFID 状态
+	 */
+	public void update_rfid(String[] rfids);
 }

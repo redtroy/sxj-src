@@ -51,4 +51,11 @@ public interface IWindowRfidService {
 
 	public String[] getMaxRfidNo(String contractNo, Long count)
 			throws ServiceException;
+
+	/**
+	 * 补损RFID标签
+	 */
+	public void lossWindowRfid(String refContractNo, String minRfid,
+			String maxRfid, String gRfid, String lRfid, String[] addRfid,
+			Long count) throws ServiceException;
 }
