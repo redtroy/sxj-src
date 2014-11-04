@@ -13,34 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sxj.redis.advance;
+package com.sxj.redis.advance.topic;
 
 import io.netty.util.concurrent.Future;
 
 import java.util.UUID;
 
 import com.sxj.redis.RedisAsyncConnection;
+import com.sxj.redis.advance.Config;
+import com.sxj.redis.advance.TopicRedisClient;
 import com.sxj.redis.advance.async.ResultOperation;
-import com.sxj.redis.advance.collections.RedisBucket;
-import com.sxj.redis.advance.collections.RedisDeque;
-import com.sxj.redis.advance.collections.RedisList;
-import com.sxj.redis.advance.collections.RedisMap;
-import com.sxj.redis.advance.collections.RedisQueue;
-import com.sxj.redis.advance.collections.RedisSet;
-import com.sxj.redis.advance.collections.RedisSortedSet;
 import com.sxj.redis.advance.connection.ClusterConnectionManager;
 import com.sxj.redis.advance.connection.ConnectionManager;
 import com.sxj.redis.advance.connection.MasterSlaveConnectionManager;
 import com.sxj.redis.advance.connection.SentinelConnectionManager;
 import com.sxj.redis.advance.connection.SingleConnectionManager;
-import com.sxj.redis.advance.core.RBucket;
-import com.sxj.redis.advance.core.RDeque;
-import com.sxj.redis.advance.core.RHyperLogLog;
-import com.sxj.redis.advance.core.RList;
-import com.sxj.redis.advance.core.RMap;
-import com.sxj.redis.advance.core.RQueue;
-import com.sxj.redis.advance.core.RSet;
-import com.sxj.redis.advance.core.RSortedSet;
+import com.sxj.redis.advance.core.RTopic;
+import com.sxj.redis.advance.pubsub.RedisTopic;
 
 /**
  * Main infrastructure class allows to get access
@@ -49,7 +38,7 @@ import com.sxj.redis.advance.core.RSortedSet;
  * @author Nikita Koksharov
  *
  */
-public class RedisCollections implements CollectionsRedisClient
+public class RedisTopics implements TopicRedisClient
 {
     
     private final ConnectionManager connectionManager;
@@ -58,7 +47,7 @@ public class RedisCollections implements CollectionsRedisClient
     
     private final UUID id = UUID.randomUUID();
     
-    RedisCollections(Config config)
+    RedisTopics(Config config)
     {
         this.config = config;
         Config configCopy = new Config(config);
@@ -94,7 +83,7 @@ public class RedisCollections implements CollectionsRedisClient
      *
      * @return Redisson instance
      */
-    public static RedisCollections create()
+    public static RedisTopics create()
     {
         Config config = new Config();
         //        new SingleServerConfig();
@@ -111,105 +100,21 @@ public class RedisCollections implements CollectionsRedisClient
      * @param config
      * @return Redisson instance
      */
-    public static RedisCollections create(Config config)
+    public static RedisTopics create(Config config)
     {
-        return new RedisCollections(config);
+        return new RedisTopics(config);
     }
     
     /**
-     * Returns object holder by name
+     * Returns distributed topic instance by name.
      *
-     * @param name of object
-     * @return
+     * @param name of the distributed topic
+     * @return distributed topic
      */
     @Override
-    public <V> RBucket<V> getBucket(String name)
+    public <M> RTopic<M> getTopic(String name)
     {
-        return new RedisBucket<V>(connectionManager, name);
-    }
-    
-    /**
-     * Returns HyperLogLog object
-     *
-     * @param name of object
-     * @return
-     */
-    @Override
-    public <V> RHyperLogLog<V> getHyperLogLog(String name)
-    {
-        return new RedisHyperLogLog<V>(connectionManager, name);
-    }
-    
-    /**
-     * Returns distributed list instance by name.
-     *
-     * @param name of the distributed list
-     * @return distributed list
-     */
-    @Override
-    public <V> RList<V> getList(String name)
-    {
-        return new RedisList<V>(connectionManager, name);
-    }
-    
-    /**
-     * Returns distributed map instance by name.
-     *
-     * @param name of the distributed map
-     * @return distributed map
-     */
-    @Override
-    public <K, V> RMap<K, V> getMap(String name)
-    {
-        return new RedisMap<K, V>(connectionManager, name);
-    }
-    
-    /**
-     * Returns distributed set instance by name.
-     *
-     * @param name of the distributed set
-     * @return distributed set
-     */
-    @Override
-    public <V> RSet<V> getSet(String name)
-    {
-        return new RedisSet<V>(connectionManager, name);
-    }
-    
-    /**
-     * Returns distributed sorted set instance by name.
-     *
-     * @param name of the distributed set
-     * @return distributed set
-     */
-    @Override
-    public <V> RSortedSet<V> getSortedSet(String name)
-    {
-        return new RedisSortedSet<V>(connectionManager, name);
-    }
-    
-    /**
-     * Returns distributed queue instance by name.
-     *
-     * @param name of the distributed queue
-     * @return distributed queue
-     */
-    @Override
-    public <V> RQueue<V> getQueue(String name)
-    {
-        return new RedisQueue<V>(connectionManager, name);
-    }
-    
-    /**
-     * Returns distributed deque instance by name.
-     *
-     * @param name of the distributed queue
-     * @return distributed queue
-     */
-    @Override
-    public <V> RDeque<V> getDeque(String name)
-    {
-        return new RedisDeque<V>(connectionManager, name);
+        return new RedisTopic<M>(connectionManager, name);
     }
     
     /**

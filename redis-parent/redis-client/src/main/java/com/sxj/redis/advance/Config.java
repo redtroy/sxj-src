@@ -49,7 +49,7 @@ public class Config
     {
     }
     
-    Config(Config oldConf)
+    public Config(Config oldConf)
     {
         if (oldConf.getCodec() == null)
         {
@@ -111,7 +111,7 @@ public class Config
         return clusterServersConfig;
     }
     
-    ClusterServersConfig getClusterServersConfig()
+    public ClusterServersConfig getClusterServersConfig()
     {
         return clusterServersConfig;
     }
@@ -135,7 +135,7 @@ public class Config
         return singleServerConfig;
     }
     
-    SingleServerConfig getSingleServerConfig()
+    public SingleServerConfig getSingleServerConfig()
     {
         return singleServerConfig;
     }
@@ -158,7 +158,7 @@ public class Config
         return sentinelServersConfig;
     }
     
-    SentinelServersConfig getSentinelServersConfig()
+    public SentinelServersConfig getSentinelServersConfig()
     {
         return sentinelServersConfig;
     }
@@ -182,7 +182,7 @@ public class Config
         return masterSlaveServersConfig;
     }
     
-    MasterSlaveServersConfig getMasterSlaveServersConfig()
+    public MasterSlaveServersConfig getMasterSlaveServersConfig()
     {
         return masterSlaveServersConfig;
     }

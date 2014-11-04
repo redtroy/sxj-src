@@ -8,7 +8,6 @@ import com.sxj.redis.advance.core.RMap;
 import com.sxj.redis.advance.core.RQueue;
 import com.sxj.redis.advance.core.RSet;
 import com.sxj.redis.advance.core.RSortedSet;
-import com.sxj.redis.advance.core.RTopic;
 
 public interface CollectionsRedisClient
 {
@@ -59,14 +58,6 @@ public interface CollectionsRedisClient
      * @return
      */
     <V> RSortedSet<V> getSortedSet(String name);
-    
-    /**
-     * Returns topic instance by name.
-     *
-     * @param name of the distributed topic
-     * @return
-     */
-    <M> RTopic<M> getTopic(String name);
     
     /**
      * Returns queue instance by name.
