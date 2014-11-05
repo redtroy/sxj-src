@@ -239,8 +239,18 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 					if (!validform.check()){
 						return false;
 					}
+					
+					var values='';
+					var values1='';
+					$(".ocptable").find(".lnk-red").each(function(i){
+						values+=$(this).parent().attr("value")+",";
+					});
+					$(".otable").find(".lnk-red").each(function(){
+						values1+=$(this).parent().attr("value")+",";
+					});
+					alert($("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1);
 					dialogBox(function() {
-						$.post("saveChanges.htm", $("#changsForm").serialize(),
+						$.post("saveChanges.htm", $("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1,
 								function(data) {
 									if (data.isOK == 'ok') {
 										succInfo(function(){
@@ -292,7 +302,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if></li>
 						</ul>
 						<table border="0" cellpadding="0" cellspacing="0"
-							class="tabList producedTable">
+							class="tabList producedTable ocptable" parameter="contractId[i]">
 							<col width="20%" />
 							<col width="20%" />
 							<col width="15%" />
@@ -321,8 +331,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td class="editable priceClass" name="modifyItemList[index].price"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" >${item.price?string("0.00")}</td>
 								<td class="editable amountClass" name="modifyItemList[index].amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！" >${item.amount?string("0.00")}</td>
 								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
-								<td><a href="javascript:void(0)" class="lnk-green copyRow"
-									 table="cptable">√</a></td>
+								<td value="${item.id}"><a href="javascript:void(0)" class="lnk-green copyRow"
+									 table="cptable">√</a>
+									 </td>
 							</tr>
 							</#list>
 							<tr>
@@ -376,7 +387,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</table></td>
 								<td class="editable amountClass" name="modifyBatchList[i].modifyBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" >${batch.batch.amount?string("0.00")}</td>
 								<td class="editable" name="modifyBatchList[i].modifyBatch.rfidNo" readonly="readonly">${batch.batch.rfidNo}</td>
-								<td><a href="javascript:void(0)" class="lnk-green copyRow"
+								<td value="${batchItem.id}"><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="pctable">√</a></td>
 							</tr>
 							</#list>
@@ -437,7 +448,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</div>
 								</div>
 								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabList producedTable">
+									class="tabList producedTable otable" parameter="changeId[i]">
 									<col width="15%" />
 									<col width="20%" />
 									<col width="15%" />
@@ -462,7 +473,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable priceClass" name="modifyItemList[index].price" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
 										<td class="editable amountClass" name="modifyItemList[index].amount"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  >${modifyItem.amount?string("0.00")}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
-										<td><#if modifyItem.updateState?? ><a href="javascript:void(0)" class="lnk-green copyRow"
+										<td value="${modifyItem.id}"><#if modifyItem.updateState?? ><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="cptable">√</a> <#else> <a href="javascript:void(0)" class="lnk-green"
 									 table="cptable">!</a>
 											</#if>
@@ -472,7 +483,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								</table>
 								<#if modifyList.modifyBatchList?exists>
 								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabList producedTable">
+									class="tabList producedTable" id="opctable">
 									<col width="20%" />
 									<col width="25%" />
 									<col width="20%" />
