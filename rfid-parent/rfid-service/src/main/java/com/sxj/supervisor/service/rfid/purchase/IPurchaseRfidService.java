@@ -38,12 +38,12 @@ public interface IPurchaseRfidService {
 			throws ServiceException;
 
 	/**
-	 * 确认
+	 * 确认收货
 	 * 
 	 * @param id
 	 * @throws ServiceException
 	 */
-	public void confirmDelivery(String id) throws ServiceException;
+	public void confirmReceipt(String id) throws ServiceException;
 
 	/**
 	 * 添加采购单

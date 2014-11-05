@@ -1,5 +1,7 @@
 package com.sxj.supervisor.manage.login;
 
+import java.util.List;
+
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -37,16 +39,17 @@ public class ShiroEventListener implements BeanFactoryPostProcessor
             @Override
             public void onMessage(Object msg)
             {
-                PrincipalCollection principals = (PrincipalCollection) collections.getMap(Constraints.SHIRO_MAP_KEY)
+                List<PrincipalCollection> principals = (List<PrincipalCollection>) collections.getMap(Constraints.SHIRO_MAP_KEY)
                         .get((String) msg);
                 Cache<Object, Object> cache = cacheManager.getCache(Constraints.MANAGER_CACHE_NAME);
-                Object object = cache.get(principals);
-                cache.put(principals, new SimpleAuthorizationInfo());
+                //                Object object = cache.get(principals);
+                //                cache.put(principals, new SimpleAuthorizationInfo());
                 //
-                System.out.println(principals);
+                for (PrincipalCollection principal : principals)
+                    cache.put(principal, new SimpleAuthorizationInfo());
+                System.out.println(principals.size());
             }
         });
         
     }
-    
 }

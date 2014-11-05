@@ -1,5 +1,8 @@
 package com.sxj.supervisor.manage.login;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.shiro.cache.CacheException;
 
 import com.sxj.redis.advance.RedisCollections;
@@ -38,7 +41,13 @@ public class SupervisorShiroRedisCache<K, V> extends ShiroRedisCache<K, V>
     public static void addToMap(String accountNo, Object authorizationKey)
     {
         RMap<Object, Object> map = collections.getMap(Constraints.SHIRO_MAP_KEY);
-        map.put(accountNo, authorizationKey);
+        List<Object> object = (List<Object>) map.get(accountNo);
+        if (object == null)
+        {
+            object = new ArrayList<Object>();
+        }
+        object.add(authorizationKey);
+        map.put(accountNo, object);
     }
     
     @Override

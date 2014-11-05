@@ -45,10 +45,38 @@ public interface IWindowRfidService {
 	public void batchAddWindowRfid(WindowRfidEntity[] rfids)
 			throws ServiceException;
 
+	/**
+	 * 批量更新
+	 * 
+	 * @param rfids
+	 * @throws ServiceException
+	 */
+	public void batchUpdateWindowRfid(WindowRfidEntity[] rfids)
+			throws ServiceException;
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
 	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
 	public WindowRfidEntity getWindowRfid(String id) throws ServiceException;
 
+	/**
+	 * 
+	 * @param contractNo
+	 * @param count
+	 * @return
+	 * @throws ServiceException
+	 */
 	public String[] getMaxRfidNo(String contractNo, Long count)
 			throws ServiceException;
 

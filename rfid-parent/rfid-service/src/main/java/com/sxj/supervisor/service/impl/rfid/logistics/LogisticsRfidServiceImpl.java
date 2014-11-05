@@ -121,4 +121,18 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 		}
 
 	}
+
+	@Override
+	public void batchUpdateLogistics(LogisticsRfidEntity[] rfids)
+			throws ServiceException {
+		try {
+			if (rfids != null) {
+				logisticsRfidDao.batchUpdateLogisticsRfid(rfids);
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("批量更新物流RFID错误", e);
+		}
+
+	}
 }
