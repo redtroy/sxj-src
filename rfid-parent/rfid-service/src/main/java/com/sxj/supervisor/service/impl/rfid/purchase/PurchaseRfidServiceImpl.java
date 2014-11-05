@@ -19,11 +19,14 @@ import com.sxj.supervisor.entity.rfid.sale.RfidSaleStatisticalEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.model.rfid.RfidLog;
+import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
+import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.rfid.IRfidKeyService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
@@ -131,15 +134,45 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	}
 
 	/**
-	 * 确认发货
+	 * 确认收货
 	 */
 	@Override
 	@Transactional
-	public void confirmDelivery(String id) throws ServiceException {
+	public void confirmReceipt(String id) throws ServiceException {
 		try {
 			RfidPurchaseEntity purchase = rfidPurchaseDao.getRfidPurchase(id);
 			purchase.setReceiptState(DeliveryStateEnum.receiving);
 			rfidPurchaseDao.updateRfidPurchase(purchase);
+			// 修改RFID状态
+			if (purchase.getRfidType().equals(RfidTypeEnum.door)) {
+				WindowRfidQuery query = new WindowRfidQuery();
+				query.setPurchaseNo(purchase.getPurchaseNo());
+				List<WindowRfidEntity> listRfid = winRfidService
+						.queryWindowRfid(query);
+				for (WindowRfidEntity windowRfid : listRfid) {
+					if (windowRfid == null) {
+						continue;
+					}
+					windowRfid.setProgressState(LabelProgressEnum.hasReceipt);
+				}
+				winRfidService.batchUpdateWindowRfid(listRfid
+						.toArray(new WindowRfidEntity[listRfid.size()]));
+			} else {
+				LogisticsRfidQuery query = new LogisticsRfidQuery();
+				query.setPurchaseNo(purchase.getPurchaseNo());
+				List<LogisticsRfidEntity> listRfid = logisticsRfidService
+						.queryLogistics(query);
+				for (LogisticsRfidEntity rfidEntity : listRfid) {
+					if (rfidEntity == null) {
+						continue;
+					}
+					rfidEntity.setProgressState(LabelStateEnum.hasReceipt);
+				}
+				logisticsRfidService.batchAddLogistics(listRfid
+						.toArray(new LogisticsRfidEntity[listRfid.size()]));
+			}
+
+			// 插入销售记录
 			RfidSaleStatisticalEntity entity = new RfidSaleStatisticalEntity();
 			entity.setApplyNo(purchase.getApplyNo());
 			entity.setPurchaseNo(purchase.getPurchaseNo());

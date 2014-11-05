@@ -151,6 +151,20 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	}
 
 	@Override
+	public void batchUpdateWindowRfid(WindowRfidEntity[] rfids)
+			throws ServiceException {
+		try {
+			if (rfids != null) {
+				windowRfidDao.batchUpdateWindowRfid(rfids);
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("批量修改门窗RFID错误", e);
+		}
+
+	}
+
+	@Override
 	@Transactional
 	public void startWindowRfid(Long refContractCount, String refContractNo,
 			String minRfid, String maxRfid, String gRfid, String lRfid,

@@ -28,12 +28,21 @@ public interface ILogisticsRfidService {
 			throws ServiceException;
 
 	/**
-	 * 更新
+	 * 批量添加
 	 * 
 	 * @param rfids
 	 * @throws ServiceException
 	 */
 	public void batchAddLogistics(LogisticsRfidEntity[] rfids)
+			throws ServiceException;
+
+	/**
+	 * 批量更新
+	 * 
+	 * @param rfids
+	 * @throws ServiceException
+	 */
+	public void batchUpdateLogistics(LogisticsRfidEntity[] rfids)
 			throws ServiceException;
 
 	public List<LogModel> getRfidStateLog(String id) throws ServiceException;

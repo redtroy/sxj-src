@@ -68,7 +68,7 @@ public class LossWinRfidController extends BaseController {
 				unStartQuantity = winList.size();
 			}
 			if (unStartQuantity < num) {
-				throw new WebException("此招标合同为启用的RFID数量为：" + unStartQuantity);
+				throw new WebException("此招标合同未启用的RFID数量为：" + unStartQuantity);
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {

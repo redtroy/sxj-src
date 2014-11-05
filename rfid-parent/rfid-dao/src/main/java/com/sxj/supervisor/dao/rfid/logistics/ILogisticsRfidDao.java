@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
+import com.sxj.mybatis.orm.annotations.BatchUpdate;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
@@ -43,6 +44,15 @@ public interface ILogisticsRfidDao {
 	 **/
 	@BatchInsert
 	public void batchAddLogisticsRfid(LogisticsRfidEntity[] logistics)
+			throws SQLException;
+
+	/**
+	 * 更新物流RFID
+	 *
+	 * @param member
+	 **/
+	@BatchUpdate
+	public void batchUpdateLogisticsRfid(LogisticsRfidEntity[] logistics)
 			throws SQLException;
 
 	/**

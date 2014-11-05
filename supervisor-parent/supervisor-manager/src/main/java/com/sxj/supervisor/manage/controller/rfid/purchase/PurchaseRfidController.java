@@ -132,7 +132,7 @@ public class PurchaseRfidController extends BaseController {
 	public @ResponseBody Map<String, String> confirmReceipt(String id,
 			ModelMap model) throws WebException {
 		try {
-			purchaseRfidService.confirmDelivery(id);
+			purchaseRfidService.confirmReceipt(id);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;
