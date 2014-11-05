@@ -121,9 +121,11 @@ function star(){
 	var windowType=$("#windowType option:selected").val();
 	if (gRfid=="" || gRfid== null){
 		messageInfo('玻璃采购合同缺失，无法提交');
+		return false;
 	}
 	if (lRfid=="" || lRfid== null){
 		messageInfo('型材采购合同缺失，无法提交');
+		return false;
 	}
 	$.post("start_lable.htm",{refContractNo:refContractNo,minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
 		if (data.isOk=="ok"){
