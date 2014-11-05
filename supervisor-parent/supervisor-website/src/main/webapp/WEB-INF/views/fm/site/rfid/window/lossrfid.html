@@ -9,6 +9,7 @@
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 </head>
+<@b.errorInfo/>
 <script>
 $(function(){
 	$("#contract_a").change(function(){
@@ -53,7 +54,7 @@ function query(){
 			pc_a();
 			pc_b();
 		}else{
-			alert('查询失败！');
+			errorInfo(data.error);
 		}
 	})
 }
@@ -62,14 +63,14 @@ function pc_a(){
 	var contractNo=$("#contract_a option:selected").text();
 	if (contractNo !=null){
 		$.post("query_loss_contractNo.htm",{contractNo:contractNo},function(data){
-			if (data.isOk=="ok" && data.cm.batchList !=null){
-				container_a=data.cm.batchList;
+			if (data.isOk=="ok" && data.cm.replenishList !=null){
+				container_a=data.cm.replenishList;
 				for (var i=0;i<container_a.length;i++){
-				 $("#pc_a").append("<option value='"+i+"'>"+container_a[i].batch.batchNo+"</option>")
+				 $("#pc_a").append("<option value='"+i+"'>"+container_a[i].replenishContract.batchRfidNo+"</option>")
 				}
 				rfid_a($("#pc_a option:selected").val());
 				}else{
-					$("#pc_a").append("<option>该合同无批次</option>");
+					$("#pc_a").append("<option>该合同无补损批次</option>");
 				}
 		})
 	}else{
@@ -81,14 +82,14 @@ function pc_b(){
 	var contractNo=$("#contract_b option:selected").text();
 	if (contractNo !=null){
 		$.post("query_loss_contractNo.htm",{contractNo:contractNo},function(data){
-			if (data.isOk=="ok" && data.cm.batchList !=null){
-				container_b=data.cm.batchList;
+			if (data.isOk=="ok" && data.cm.replenishList !=null){
+				container_b=data.cm.replenishList;
 				for (var i=0;i<container_b.length;i++){
-				 $("#pc_b").append("<option value='"+i+"'>"+container_b[i].batch.batchNo+"</option>")
+				 $("#pc_b").append("<option value='"+i+"'>"+container_b[i].replenishContract.batchRfidNo+"</option>")
 				}
 				rfid_b($("#pc_b option:selected").val());
 				}else{
-					$("#pc_b").append("<option>该合同无批次</option>");
+					$("#pc_b").append("<option>该合同无补损批次</option>");
 				}
 			
 			
@@ -110,20 +111,21 @@ function star(){
 	var gRfid=$("#rfid_a").text();
 	var lRfid=$("#rfid_b").text();
 	var rfids=$("#add_rfid").find("[name='addRfid']").serialize();
-	/*
 	if (gRfid=="" || gRfid== null){
-		alert('玻璃采购合同缺失，无法提交');
-	}*/
+		messageInfo('玻璃采购合同缺失，无法提交');
+		return false;
+	}
 	if (lRfid=="" || lRfid== null){
-		alert('型材采购合同缺失，无法提交');
+		messageInfo('型材采购合同缺失，无法提交');
+		return false;
+	}
 	$.post("start_loss_lable.htm?"+rfids,{refContractNo:refContractNo,minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid},function(data){
 		if (data.isOk=="ok"){
-			alert("启用成功");
+			messageInfo("启用成功");
 		}else{
 			errorInfo(data.error);
 		}
 	})
-}
 }
 function add_rfid(){
 	$("#add_rfid").append('<div class="item"> <label>&nbsp;</label> <input class="input input-w180h36" name="addRfid" value="" /> </div>');

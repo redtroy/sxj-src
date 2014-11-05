@@ -58,8 +58,9 @@
 	</bean>
 
 	<bean id="shiroCacheManager"
-		class="com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager">
+		class="com.sxj.supervisor.manage.login.SupervisorShiroRedisCacheManager">
 		<property name="level" value="2"></property>
+		<property name="collections" ref="redisCollections"></property>
 	</bean>
 
 	<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
