@@ -6,7 +6,15 @@ public interface Constraints
     
     public static final String MANAGER = "manager";
     
-    public static final String SHIRO_CHANNEL_NAME = "shiro-channel";
+    public static final String MANAGER_CHANNEL_NAME = MANAGER
+            + "-shiro-channel";
+    
+    public static final String WEBSITE_CHANNEL_NAME = WEBSITE
+            + "-shiro-channel";
     
     public static final String SHIRO_MAP_KEY = "shiro_map";
+    
+    public static final String MANAGER_CACHE_NAME = MANAGER + "-shiroCache";
+    
+    public static final String WEBSITE_CACHE_NAME = WEBSITE + "-shiroCache";
 }

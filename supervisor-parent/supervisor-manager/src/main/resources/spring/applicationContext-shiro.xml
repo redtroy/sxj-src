@@ -17,6 +17,7 @@
 	<bean id="myShiroRealmService"
 		class="com.sxj.supervisor.manage.login.SupervisorManagerShiroRealm">
 	</bean>
+	<bean class="com.sxj.supervisor.manage.login.ShiroEventListener"></bean>
 		
 	<bean id="authenticationFilter"
 		class="com.sxj.supervisor.manage.login.SupervisorManagerPermissionsAuthorizationFilter" />
