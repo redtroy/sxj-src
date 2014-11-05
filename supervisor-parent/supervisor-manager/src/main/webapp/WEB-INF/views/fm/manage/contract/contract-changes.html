@@ -287,7 +287,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<li><label>签订时间</label>
 								${contractModel.contract.signedDate?string("yyyy-MM-dd")}</li>
 							<li><label>合同期限</label>
-								${contractModel.contract.validityDate?string("yyyy年MM月dd日")}</li>
+								${contractModel.contract.validityDate?string("yyyy-MM-dd")}</li>
 							<li><label>生效时间</label>
 								<#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if></li>
 						</ul>
@@ -312,15 +312,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
 							item> <#assign n = (n+item.quantity)?int > <#assign m =
 							(m+item.amount)?int >
-							<input type="hidden" id="itemUpdateState${item.id}"
-								value="${item.updateState}"
-								name="itemList[${item_index}].updateState" />
-							<input type="hidden" id="id${item.id}" value="${item.id}"
-								name="itemList[${item_index}].id" />
+							<input type="hidden"  value="${item.updateState}" name="itemModel[${item_index}].updateState" />
+							<input type="hidden" value="${item.id}" name="itemModel[${item_index}].id" />
 							<tr id="item${item.id}" class="formitem">
 								<td class="editable" name="modifyItemList[index].productName" data="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！">${item.productName}</td>
 								<td class="editable" name="modifyItemList[index].productModel" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${item.productModel}</td>
-								<td class="editable" name="modifyItemList[index].quantity"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" >${item.quantity}</td>
+								<td class="editable amountClass" name="modifyItemList[index].quantity"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" >${item.quantity?string('0.00')}</td>
 								<td class="editable priceClass" name="modifyItemList[index].price"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" >${item.price?string("0.00")}</td>
 								<td class="editable amountClass" name="modifyItemList[index].amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！" >${item.amount?string("0.00")}</td>
 								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
@@ -331,7 +328,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<tr>
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td>${n}</td>
+								<td>${n?string("0.00")}</td>
 								<td>&nbsp;</td>
 								<td>${m?string("0.00")}</td>
 								<td>&nbsp;</td>
@@ -461,7 +458,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<tr id="${modifyItem.id}" class="formitem">
 										<td class="editable" name="modifyItemList[index].productName" data="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！">${modifyItem.productName}</td>
 										<td class="editable" name="modifyItemList[index].productModel" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${modifyItem.productModel}</td>
-										<td class="editable" name="modifyItemList[index].quantity" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity}</td>
+										<td class="editable amountClass" name="modifyItemList[index].quantity" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity?string("0.00")}</td>
 										<td class="editable priceClass" name="modifyItemList[index].price" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
 										<td class="editable amountClass" name="modifyItemList[index].amount"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  >${modifyItem.amount?string("0.00")}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>

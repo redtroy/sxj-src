@@ -229,7 +229,7 @@ public class ContractController extends BaseController {
 	}
 
 	@RequestMapping("changes")
-	public String changesContract(ModelMap model, String contractId,
+	public String changesContract(ModelMap model, String contractId,ModifyItemModel itemModel,
 			String recordId) {
 		RecordEntity record = recordService.getRecord(recordId);
 		if (record != null) {

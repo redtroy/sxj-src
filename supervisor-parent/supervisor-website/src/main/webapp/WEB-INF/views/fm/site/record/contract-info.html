@@ -111,7 +111,7 @@ $(document).ready(function(){
 				<tr>
 					<td>${item.productName}</td>
 					<td>${item.productModel}</td>
-					<td>${item.quantity}</td>
+					<td>${item.quantity?string('0.00')}</td>
 					<td>${item.price?string('0.00')}</td>
 					<td>${item.amount?string('0.00')}</td>
 					<td>${item.remarks}</td>
@@ -120,7 +120,7 @@ $(document).ready(function(){
 				<tr class="fb">
 					<td>合计</td>
 					<td>&nbsp;</td>
-					<td>约${n}</td>
+					<td>约${n?string('0.00')}</td>
 					<td>&nbsp;</td>
 					<td>${m?string('0.00')}元</td> <#if contractModel.contract.imgPath!=null>
 					<td class="tl"><#assign
@@ -207,7 +207,7 @@ $(document).ready(function(){
 					<tr>
 						<td>${modifyItem.productName}</td>
 						<td>${modifyItem.productModel}</td>
-						<td>${modifyItem.quantity}</td>
+						<td>${modifyItem.quantity?string('0.00')}</td>
 						<td>${modifyItem.price?string('0.00')}</td>
 						<td>${modifyItem.amount?string('0.00')}</td>
 						<td>${modifyItem.remarks}</td>

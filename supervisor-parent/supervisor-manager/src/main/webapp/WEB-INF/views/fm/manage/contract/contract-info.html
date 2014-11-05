@@ -73,13 +73,13 @@
               ${contractModel.contract.recordNo} </li>
             <li>
               <label>签订时间</label>
-              <#if contractModel.contract.signedDate?exists> ${contractModel.contract.signedDate?string("yyyy年MM月dd日")}</#if> </li>
+              <#if contractModel.contract.signedDate?exists> ${contractModel.contract.signedDate?string("yyyy-MM-dd")}</#if> </li>
             <li>
               <label>合同期限</label>
-             <#if contractModel.contract.validityDate?exists> ${contractModel.contract.validityDate?string("yyyy年MM月dd日")}</#if> </li>
+             <#if contractModel.contract.validityDate?exists> ${contractModel.contract.validityDate?string("yyyy-MM-dd")}</#if> </li>
             <li>
               <label>生效时间</label>
-             <#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if> </li>
+             <#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy-MM-dd")}</#if> </li>
           </ul>
           <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
             <col width="20%" />
@@ -106,7 +106,7 @@
             <tr>
               <td>${item.productName}</td>
               <td>${item.productModel}</td>
-              <td>${item.quantity}</td>
+              <td>${item.quantity?string('0.00')}</td>
               <td>${item.price?string('0.00')}</td>
               <td>${item.amount?string('0.00')}</td>
               <td>${item.remarks}</td>
@@ -236,7 +236,7 @@
               <tr>
                 <td>${modifyItem.productName}</td>
                 <td>${modifyItem.productModel}</td>
-                <td>${modifyItem.quantity}</td>
+                <td>${modifyItem.quantity?string('0.00')}</td>
                 <td>${modifyItem.price?string('0.00')}</td>
                 <td>${modifyItem.amount?string('0.00')}</td>
                 <td>${modifyItem.remarks}</td>
@@ -348,7 +348,7 @@
                     </tr>
                  </#list>
                   </table></td>
-                <td>${replenishItem.replenishBatch.amount}</td>
+                <td>${replenishItem.replenishBatch.amount?string('0.00')}</td>
                 <td>${replenishItem.replenishBatch.rfidNo}</td>
                 <td>${replenishItem.replenishBatch.newRfidNo}</td>
                 <td>&nbsp;</td>
