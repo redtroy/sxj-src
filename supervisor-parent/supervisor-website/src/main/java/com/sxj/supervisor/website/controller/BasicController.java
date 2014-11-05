@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.comet4j.core.CometContext;
 import org.comet4j.core.CometEngine;
@@ -55,6 +56,7 @@ import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.comet.CometMessageListener;
 import com.sxj.supervisor.website.comet.MessageThread;
+import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.common.FileUtil;
 import com.sxj.util.common.StringUtils;
@@ -81,13 +83,15 @@ public class BasicController extends BaseController {
 	@Autowired
 	private IStorageClientService storageClientService;
 
+	@Autowired
+	private RedisTopics topics;
+
 	@PostConstruct
 	public void init() {
 		CometEngine engine = CometContext.getInstance().getEngine();
 		// 启动 Comet Server Thread
 		MessageThread cometServer = MessageThread.newInstance(engine);
-		RedisTopics redis = RedisTopics.create();
-		RTopic<String> topic1 = redis.getTopic("topic1");
+		RTopic<String> topic1 = topics.getTopic("topic1");
 		topic1.addListener(new CometMessageListener(cometServer));
 	}
 
@@ -104,6 +108,21 @@ public class BasicController extends BaseController {
 		} else {
 			SupervisorPrincipal info = getLoginInfo(session);
 			if (info.getAccount() != null && info.getMember() != null) {
+				AccountEntity newAccount = accountService.getAccount(info
+						.getAccount().getId());
+				if (newAccount == null) {
+					return LOGIN;
+				}
+				if (newAccount.getState().equals(AccountStatesEnum.stop)) {
+					return LOGIN;
+				}
+				if (StringUtils.isEmpty(newAccount.getPassword())) {
+					return LOGIN;
+				}
+				if (!newAccount.getPassword().equals(
+						info.getAccount().getPassword())) {
+					return LOGIN;
+				}
 				return "site/member/account-index";
 			} else if (info.getAccount() == null && info.getMember() != null) {
 				String function = request.getParameter("function");
@@ -215,6 +234,14 @@ public class BasicController extends BaseController {
 		Subject currentUser = SecurityUtils.getSubject();
 		try {
 			currentUser.login(token);
+			PrincipalCollection principals = currentUser.getPrincipals();
+			if (userBean.getAccount() != null) {
+				SupervisorShiroRedisCache.addToMap(userBean.getAccount()
+						.getId(), principals);
+			} else {
+				SupervisorShiroRedisCache.addToMap(userBean.getMember()
+						.getMemberNo(), principals);
+			}
 		} catch (AuthenticationException e) {
 			SxjLogger.error("登陆失败", e, this.getClass());
 			map.put("pmessage", "密码错误");

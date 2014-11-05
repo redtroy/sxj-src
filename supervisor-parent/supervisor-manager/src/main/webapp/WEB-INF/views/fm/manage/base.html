@@ -485,10 +485,16 @@ $(document).ready(function(){
 </script>
 </#if>
 </#macro>
-<#macro leftMenu>
+<#macro leftMenu isLoad>
 <script>
 var account="${Session.userinfo.accountNo}";
-$("#leftList").load("${basePath}menu.htm?account="+account);
+var isLoad="${isLoad}";
+if(isLoad=="true"){
+	$("#leftList").load("${basePath}menu.htm?account="+account+"&"+ Math.random());
+}else{
+	$("#leftList").load("${basePath}menu.htm?account="+account);
+}
+
 </script>
 </#macro>
 <#macro pager>

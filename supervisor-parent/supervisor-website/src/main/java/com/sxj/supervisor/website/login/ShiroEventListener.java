@@ -1,4 +1,4 @@
-package com.sxj.supervisor.manage.login;
+package com.sxj.supervisor.website.login;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class ShiroEventListener implements BeanFactoryPostProcessor {
 		cacheManager = beanFactory
 				.getBean(SupervisorShiroRedisCacheManager.class);
 		RTopic<Object> topic = topics
-				.getTopic(Constraints.MANAGER_CHANNEL_NAME);
+				.getTopic(Constraints.WEBSITE_CHANNEL_NAME);
 		topic.addListener(new MessageListener<Object>() {
 			@Override
 			public void onMessage(Object msg) {
@@ -55,7 +55,7 @@ public class ShiroEventListener implements BeanFactoryPostProcessor {
 				List<PrincipalCollection> principals = (List<PrincipalCollection>) map
 						.get(accountId);
 				Cache<Object, Object> cache = cacheManager
-						.getCache(Constraints.MANAGER_CACHE_NAME);
+						.getCache(Constraints.WEBSITE_CACHE_NAME);
 				for (PrincipalCollection principal : principals) {
 					if ("del".equals(type)) {
 						cache.put(principal, new SimpleAuthorizationInfo());

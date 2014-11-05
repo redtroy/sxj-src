@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.cache.manager.CacheLevel;
-import com.sxj.cache.spring.annotation.Cached;
 import com.sxj.supervisor.dao.system.ISystemAccountDao;
 import com.sxj.supervisor.entity.system.RoleEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
@@ -134,7 +132,6 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 	}
 
 	@Override
-	@Cached(level = CacheLevel.REDIS, name = "serviceCache", timeToLive = 30)
 	public SystemAccountEntity getAccountByAccount(String account)
 			throws ServiceException {
 		try {
@@ -143,6 +140,26 @@ public class SystemAccountServiceImpl implements ISystemAccountService {
 			}
 			QueryCondition<SystemAccountEntity> condition = new QueryCondition<SystemAccountEntity>();
 			condition.addCondition("account", account);
+			List<SystemAccountEntity> list = accountDao
+					.querySystemAccount(condition);
+			if (list != null && list.size() > 0) {
+				return list.get(0);
+			}
+			return null;
+		} catch (Exception e) {
+			throw new ServiceException("查询系统用户信息失败", e);
+		}
+	}
+
+	@Override
+	public SystemAccountEntity getAccountByAccountNo(String accountNo)
+			throws ServiceException {
+		try {
+			if (StringUtils.isEmpty(accountNo)) {
+				return null;
+			}
+			QueryCondition<SystemAccountEntity> condition = new QueryCondition<SystemAccountEntity>();
+			condition.addCondition("accountNo", accountNo);
 			List<SystemAccountEntity> list = accountDao
 					.querySystemAccount(condition);
 			if (list != null && list.size() > 0) {

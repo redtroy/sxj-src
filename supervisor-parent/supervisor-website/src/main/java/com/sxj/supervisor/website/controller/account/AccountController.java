@@ -10,11 +10,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.redis.advance.topic.RedisTopics;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
@@ -28,6 +28,7 @@ import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.Constraints;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 
@@ -47,21 +48,8 @@ public class AccountController extends BaseController {
 	@Autowired
 	private IMemberService memberService;
 
-	/**
-	 * 发货
-	 * 
-	 * @param rfidNo
-	 * @return
-	 */
-	@RequestMapping(value = "send/{rfidNo}")
-	public @ResponseBody Map<String, String> sendGoods(
-			@PathVariable String rfidNo) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("state", "1");
-		map.put("contractNo", "CT1410250001");
-		map.put("batchNo", "00001");
-		return map;
-	}
+	@Autowired
+	private RedisTopics topics;
 
 	/**
 	 * 查询子账户列表
@@ -148,6 +136,8 @@ public class AccountController extends BaseController {
 			throws WebException {
 		try {
 			accountService.edit_pwd(id, password);
+			topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish(
+					"del," + id);
 		} catch (Exception e) {
 			throw new WebException(e.getMessage());
 		}
@@ -170,6 +160,8 @@ public class AccountController extends BaseController {
 		accountService.modifyAccount(account, ids);
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
+		topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish(
+				"update," + account.getId());
 		return map;
 	}
 
@@ -185,6 +177,10 @@ public class AccountController extends BaseController {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		map.put("state", stateName);
+		if (state == AccountStatesEnum.stop.getId()) {
+			topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish(
+					"del," + id);
+		}
 		return map;
 	}
 

@@ -29,6 +29,9 @@ public interface ISystemAccountService {
 	public SystemAccountEntity getAccountByAccount(String account)
 			throws ServiceException;
 
+	public SystemAccountEntity getAccountByAccountNo(String accountNo)
+			throws ServiceException;
+
 	public ResultList<SystemAccountEntity> queryAccounts(SysAccountQuery query)
 			throws ServiceException;
 
