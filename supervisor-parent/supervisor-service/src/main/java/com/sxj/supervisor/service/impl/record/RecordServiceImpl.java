@@ -143,8 +143,25 @@ public class RecordServiceImpl implements IRecordService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void deleteRecord(String id) throws ServiceException {
 		try {
+			RecordEntity re = recordDao.getRecord(id);
 			recordDao.deleteRecord(id);
-
+			//如果是变更或者补损备案,删除后需要把状态重置已备案
+			if(re.getType().getId()!=0){
+				ContractModel cm = contractService.getContractModelByContractNo(re.getContractNo());
+				ContractEntity ce = cm.getContract();
+				ce.setConfirmState(ContractSureStateEnum.filings);//已备案
+				ce.setState(ContractStateEnum.noapproval);//已审核
+				contractDao.updateContract(ce);
+				//变更所有备案状态为已备案
+				RecordQuery query = new RecordQuery();
+				query.setContractNo(re.getContractNo());
+				List<RecordEntity> reList= this.queryRecord(query);
+				for (RecordEntity recordEntity : reList) {
+					recordEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+					recordDao.updateRecord(recordEntity);
+				}
+			}
+			
 		} catch (Exception e) {
 			throw new ServiceException("查询备案信息错误", e);
 		}
@@ -440,17 +457,8 @@ public class RecordServiceImpl implements IRecordService {
 				centity.setConfirmState(ContractSureStateEnum.noaffirm);
 				contractDao.updateContract(centity);
 			}
-			Long messageCount = null;
-			Object cache = HierarchicalCacheManager.get(2, "comet_message",
-					"record_count_message");
-			if (cache instanceof Long) {
-				messageCount = (Long) cache;
-			} else {
-				messageCount = 0l;
-			}
-			messageCount = messageCount + 1;
-			HierarchicalCacheManager.set(2, "comet_message",
-					"record_count_message", messageCount);
+			CometServiceImpl.takeCount(MessageChannel.RECORD_MESSAGE);
+			MessageChannel.initTopic().publish(MessageChannel.RECORD_MESSAGE);
 		} catch (Exception e) {
 			throw new ServiceException("更新备案错误", e);
 		}

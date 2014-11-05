@@ -242,12 +242,6 @@ $(document).ready(function() {
 	$(function(){
 		var urlA = "${basePath}autoCompleA.htm";
 		var urlB = "${basePath}autoCompleB.htm";
-		$("#memberNameA").keydown(function() {
-			$("#memberIdA").val("");
-		})
-		$("#memberNameB").keydown(function() {
-			$("#memberIdB").val("");
-		})
 		$("#memberNameA").bigAutocomplete({
 			url : urlA,
 			callback : function(data) {
@@ -264,6 +258,7 @@ $(document).ready(function() {
 					}
 				}
 				if (!match) {
+					$("#memberIdA").val("");
 					var pass = validform.check(false, $("#memberIdA"));
 					if (!pass)
 						$(this).parent().children(".Validform_wrong").show();
@@ -295,6 +290,7 @@ $(document).ready(function() {
 					}
 				}
 				if (!match) {
+					$("#memberIdB").val("");
 					var pass = validform.check(false, $("#memberIdB"));
 					if (!pass)
 						$(this).parent().children(".Validform_wrong").show();

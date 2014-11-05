@@ -276,12 +276,6 @@
 		//		$("#memberIdB").val(data.memberNo);
 		//	})
 		//})
-		$("#memberNameA").keydown(function() {
-			$("#memberIdA").val("");
-		})
-		$("#memberNameB").keydown(function() {
-			$("#memberIdB").val("");
-		})
 		$("#memberNameA").bigAutocomplete({
 			url : urlA,
 			callback : function(data) {
@@ -301,6 +295,7 @@
 					}
 				}
 				if (!match) {
+					$("#memberIdA").val("");
 					var pass = b_validform.check(false, $("#memberIdA"));
 					if (!pass)
 						$(this).parent().children(".Validform_wrong").show();
@@ -332,6 +327,7 @@
 					}
 				}
 				if (!match) {
+					$("#memberIdB").val("");
 					var pass = cg_validform.check(false, $("#memberIdB"));
 					if (!pass)
 						$(this).parent().children(".Validform_wrong").show();

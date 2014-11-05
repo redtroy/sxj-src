@@ -56,7 +56,7 @@ public class RfidApplicationController extends BaseController {
 			map.put("channelName", RfidChannel.RFID_APPLY_MESSAGE);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
 				CometServiceImpl.setCount(RfidChannel.RFID_APPLY_MESSAGE, 0l);
-			}
+			} 
 			registChannel(RfidChannel.RFID_APPLY_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
