@@ -51,7 +51,7 @@ public class LossWinRfidController extends BaseController {
 				throw new WebException("招标合同不存在");
 			}
 			float quantity = 0f;
-			float hasStartQuantity = 0f;
+			float unStartQuantity = 0f;
 			for (ContractItemEntity item : items) {
 				if (item == null) {
 					continue;
@@ -61,20 +61,15 @@ public class LossWinRfidController extends BaseController {
 
 			WindowRfidQuery winQuery = new WindowRfidQuery();
 			winQuery.setContractNo(query.getRefContractNo());
-			winQuery.setRfidState(RfidStateEnum.used.getId());
+			winQuery.setRfidState(RfidStateEnum.unused.getId());
 			List<WindowRfidEntity> winList = windowRfidService
 					.queryWindowRfid(winQuery);
 			if (winList != null) {
-				hasStartQuantity = winList.size();
+				unStartQuantity = winList.size();
 			}
-			if (hasStartQuantity >= quantity) {
-				throw new WebException("此招标合同已经全部启用完毕");
+			if (unStartQuantity < num) {
+				throw new WebException("此招标合同为启用的RFID数量为：" + unStartQuantity);
 			}
-			if (num > (quantity - hasStartQuantity)) {
-				throw new WebException("此招标合同未启用数量为："
-						+ (quantity - hasStartQuantity));
-			}
-
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {
 				String[] bq = windowRfidService.getMaxRfidNo(
