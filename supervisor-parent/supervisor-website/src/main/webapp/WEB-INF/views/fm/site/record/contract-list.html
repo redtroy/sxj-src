@@ -144,43 +144,56 @@ $(document).ready(function() {
 		});
 })
 //显示变更记录
-function biangeng(recordId){
-	preModal=$("#chanPic");
-	$("#bgimgPath").val("");
-	$('#bgcarousel').empty();
-	$('#bgRollBox').hide();
-	$("#bgRecordId").val("");
-	$('.maskdivgen').fadeIn(100);
-	$('#chanPic').slideDown(200);
-	$('#bgRecordId').val(recordId);
-	$('#bgimgShow').show();	
+function biangeng(recordId,contractNo){
+	$.post("getRecord.htm", {contractNo:contractNo}, function(data) {
+		if(data.isOK =='ok'){
+			preModal=$("#chanPic");
+			$("#bgimgPath").val("");
+			$('#bgcarousel').empty();
+			$('#bgRollBox').hide();
+			$("#bgRecordId").val("");
+			$('.maskdivgen').fadeIn(100);
+			$('#chanPic').slideDown(200);
+			$('#bgRecordId').val(recordId);
+			$('#bgimgShow').show();	
+		}else{
+			messageInfo("还有一笔申请未备案,不能进行该操作!");	
+		}
+	})
+	
 	
 }
 //补损
-function busun(recordId){
-	preModal=$("#bsModal");
-	$("#bsimgPath").val("");
-	$('#bscarousel').empty();
-	$("#bsRecordId").val("");
-	$('.maskdivgen').fadeIn(100);
-	$('.suppPop').slideDown(200);
-	$('#bsRecordId').val(recordId);
-	//获取批次
-	$.post("getBatch.htm", {recordId:recordId}, function(data) {
-		if (data.batch != '') {
-			var batch =data.batch.split("#");
-			var batch0 =batch[0].split(",");
-			var batch1 =batch[1].split(",");
-			$("#batchId").empty();
-			for(var i=0;i<batch0.length;i++){
-				$("#batchId").append('<option value="">请选择批次</option>');
-				$("#batchId").append('<option value="'+batch1[i]+'">第'+batch0[i]+'批次</option>');
-			}
+function busun(recordId,contractNo){
+	$.post("getRecord.htm", {contractNo:contractNo}, function(data) {
+		if(data.isOK =='ok'){
+			preModal=$("#bsModal");
+			$("#bsimgPath").val("");
+			$('#bscarousel').empty();
+			$("#bsRecordId").val("");
+			$('.maskdivgen').fadeIn(100);
+			$('.suppPop').slideDown(200);
+			$('#bsRecordId').val(recordId);
+			//获取批次
+			$.post("getBatch.htm", {recordId:recordId}, function(data) {
+				if (data.batch != '') {
+					var batch =data.batch.split("#");
+					var batch0 =batch[0].split(",");
+					var batch1 =batch[1].split(",");
+					$("#batchId").empty();
+					for(var i=0;i<batch0.length;i++){
+						$("#batchId").append('<option value="">请选择批次</option>');
+						$("#batchId").append('<option value="'+batch1[i]+'">第'+batch0[i]+'批次</option>');
+					}
+				}else{
+					$("#batchId").empty();
+					$("#batchId").append('<option value="">没有批次</option>');
+				}
+			});
 		}else{
-			$("#batchId").empty();
-			$("#batchId").append('<option value="">没有批次</option>');
+			messageInfo("还有一笔申请未备案,不能进行该操作!");	
 		}
-	});
+	})
 }
 //保存变更记录
 function saveBiangeng(){
@@ -387,7 +400,7 @@ function busunSeav(){
 			if (data.isOK == "ok") {
 					window.location.href="to_modify.htm?recordId="+id;
 			}else if(data.isOK == "no"){
-				errorInfo("该备案已处理,不能刪除！");
+				errorInfo("该备案已处理,不能修改！");
 			}else{
 				errorInfo("该备案已刪除！");
 			}
@@ -513,9 +526,10 @@ function busunSeav(){
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
 							</a> </#if> <#else> <#if record.type.getId()==0> <#if
 								record.contractNo?exists> <a
-								href="javascript:biangeng('${record.id}');"
+								href="javascript:biangeng('${record.id}','${record.contractNo}');"
 								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
-								<a href="javascript:busun('${record.id}');"
+								<a
+								href="javascript:busun('${record.id}','${record.contractNo}');"
 								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
 								<#else> <a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
@@ -524,9 +538,10 @@ function busunSeav(){
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
 							</a> </#if> <#elseif record.type.getId()==1> <#if
 								record.state.getId()==3> <a
-								href="javascript:biangeng('${record.id}');"
+								href="javascript:biangeng('${record.id}','${record.contractNo}');"
 								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
-								<a href="javascript:busun('${record.id}');"
+								<a
+								href="javascript:busun('${record.id}','${record.contractNo}');"
 								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
 								<#else> <a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
@@ -534,9 +549,10 @@ function busunSeav(){
 								href="javascript:delRecord('${record.id}','${record.contractNo}')"
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
 							</a> </#if> <#else> <#if record.state.getId()==5> <a
-								href="javascript:biangeng('${record.id}');"
+								href="javascript:biangeng('${record.id}','${record.contractNo}');"
 								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
-								<a href="javascript:busun('${record.id}');"
+								<a
+								href="javascript:busun('${record.id}','${record.contractNo}');"
 								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
 								<#else> <a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改

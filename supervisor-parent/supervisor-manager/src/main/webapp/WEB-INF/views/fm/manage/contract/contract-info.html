@@ -174,7 +174,7 @@
             	批次待交付 </div>
           <div>
             <label>合同定金</label>
-            ${contractModel.contract.deposit}元 </div>
+            ${contractModel.contract.deposit?string('0.00')}元 </div>
           <div>
             <label>合同备注</label>
             <textarea name="textarea2" id="textarea2" cols="80" rows="3" readonly="readonly">${contractModel.contract.remarks}</textarea>

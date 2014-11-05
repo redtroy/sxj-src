@@ -140,7 +140,7 @@ $(document).ready(function(){
 				<#else> ${contractModel.contract.batchCount} </#if>个</span>交付批次
 		</div>
 		<div class="item">
-			<label>合同定金</label> ${contractModel.contract.deposit}
+			<label>合同定金</label> ${contractModel.contract.deposit?string('0.00')}元
 		</div>
 		<div class="item">
 			<label>合同备注</label> ${contractModel.contract.remarks}
@@ -165,7 +165,7 @@ $(document).ready(function(){
 			<h2 class="titChange f14 fb">变更合同信息</h2>
 			<#list contractModel.modifyList as modifyList>
 			<div class="item">
-				<label>合同变更备案号 ${modifyList.modifyContract.recordNo}</label>
+				<label>合同变更备案号 </label>${modifyList.modifyContract.recordNo}
 			</div>
 
 			<div class="item">

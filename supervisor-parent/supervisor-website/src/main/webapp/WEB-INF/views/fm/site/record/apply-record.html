@@ -1,4 +1,5 @@
-﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -29,9 +30,9 @@
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
 <@b.upload/><@b.dialogBox/><@b.errorInfo/><@b.validate/>
 <script type="text/javascript">
-var b_validform;
-var zb_validform;
-var cg_validform
+	var b_validform;
+	var zb_validform;
+	var cg_validform
 	$(document).ready(function() {
 		$("#tabsholder").tytabs({
 			prefixtabs : "tabz",
@@ -53,94 +54,100 @@ var cg_validform
 			el.parent().children("li").removeClass("view");
 			el.addClass("view");
 		});
-		b_validform=$("#BcgForm").Validform({
+		b_validform = $("#BcgForm").Validform({
 			tiptype : 3
 		});
-		zb_validform=$("#zbForm").Validform({
+		zb_validform = $("#zbForm").Validform({
 			tiptype : 3
 		});
-		cg_validform=$("#cgForm").Validform({
+		cg_validform = $("#cgForm").Validform({
 			tiptype : 3
 		});
 	});
-//图片处理事件
-//加载绑定扫描件(默认图片地址,滚动UL)
-var imgBinding = function() {
-	$(".elastislide-list").each(function() {
-		var $this = $(this);
-		var imgPath = $(this).parent().siblings(":hidden").val();
-		$.post("${basePath}filesort.htm", {
-			fileId : imgPath
-		}, function(imgPaths) {
-			refreshElastislide($this.parent(), $this, imgPaths);
+	//图片处理事件
+	//加载绑定扫描件(默认图片地址,滚动UL)
+	var imgBinding = function() {
+		$(".elastislide-list").each(function() {
+			var $this = $(this);
+			var imgPath = $(this).parent().siblings(":hidden").val();
+			$.post("${basePath}filesort.htm", {
+				fileId : imgPath
+			}, function(imgPaths) {
+				refreshElastislide($this.parent(), $this, imgPaths);
+			});
 		});
-	});
-}
-closeViewer =function(){
-	$('.maskdivgen').fadeOut(100);
-	$('.viewer').slideUp(200);
-}
-var uploadImg = function($file) {
-	var $div = $file.parent().parent().parent();
-	var $carousel = $div.find(".elastislide-list");
-	var $container = $carousel.parent();
-	var $hidden = $container.parent().find(":input");
-	$file.uploadify({
-		swf : '${basePath}upload/uploadify.swf',
-		uploader : "${basePath}upload.htm",
-		fileTypeExts : '*.gif; *.jpg; *.png',
-		auto : true,
-		multi : true,
-		height : 30,
-		width : 120,
-		buttonText : '上传合同扫描件',
-		onUploadSuccess : function(file, data, response) {
-			var num = 1;
-			var dataObj = eval("(" + data + ")");//转换为json对象 
-			var hideVal = $hidden.val();
-			if (hideVal == '') {
-				hideVal = dataObj.fileIds;
-			} else {
-				var arrays = hideVal.split(",");
-				for (var i = 0; i < arrays.length; i++) {
-					if (arrays[i]) {
-						num += 1;
+	}
+	closeViewer = function() {
+		$('.maskdivgen').fadeOut(100);
+		$('.viewer').slideUp(200);
+	}
+	var uploadImg = function($file) {
+		var $div = $file.parent().parent().parent();
+		var $carousel = $div.find(".elastislide-list");
+		var $container = $carousel.parent();
+		var $hidden = $container.parent().find(":input");
+		$file.uploadify({
+			swf : '${basePath}upload/uploadify.swf',
+			uploader : "${basePath}upload.htm",
+			fileTypeExts : '*.gif; *.jpg; *.png',
+			auto : true,
+			multi : true,
+			height : 30,
+			width : 120,
+			buttonText : '上传合同扫描件',
+			onUploadSuccess : function(file, data, response) {
+				var num = 1;
+				var dataObj = eval("(" + data + ")");//转换为json对象 
+				var hideVal = $hidden.val();
+				if (hideVal == '') {
+					hideVal = dataObj.fileIds;
+				} else {
+					var arrays = hideVal.split(",");
+					for (var i = 0; i < arrays.length; i++) {
+						if (arrays[i]) {
+							num += 1;
+						}
 					}
+					hideVal += "," + dataObj.fileIds;
 				}
-				hideVal += "," + dataObj.fileIds;
+				$hidden.val(hideVal);
+				refreshElastislide($container, $carousel, dataObj);
 			}
-			$hidden.val(hideVal);
-			refreshElastislide($container, $carousel, dataObj);
-		}
-	});
-}
-	$(document).ready(function() {
-		$('.modal-header .close').click(function() {
-			$('.maskdivgen').fadeOut(100);
-			$('.viewer').slideUp(200);
-		})
-		$('.elastislide-list').find("li").live("click", function() {
-			var el = $(this);
-			var imageSource = el.find("a").attr("data-image");
-			currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
-			currentLi=$(this);
-			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
-			el.parent().children("li").removeClass("view");
-			el.addClass("view");
-			$(".maskdivgen").show();
-			$(".viewer").show();
 		});
-		uploadImg($("#zbFile"));
-		uploadImg($("#cgFile"));
-		uploadImg($("#BcgFile"));
-		imgBinding();		
-	});
+	}
+	$(document).ready(
+			function() {
+				$('.modal-header .close').click(function() {
+					$('.maskdivgen').fadeOut(100);
+					$('.viewer').slideUp(200);
+				})
+				$('.elastislide-list').find("li").live(
+						"click",
+						function() {
+							var el = $(this);
+							var imageSource = el.find("a").attr("data-image");
+							currentHiddenImages = $(this).parent().parent()
+									.parent().parent().siblings(":hidden");
+							currentLi = $(this);
+							refreshIviewer($("#viewer2"), imageSource,
+									$("#iviewerModal"));
+							el.parent().children("li").removeClass("view");
+							el.addClass("view");
+							$(".maskdivgen").show();
+							$(".viewer").show();
+						});
+				uploadImg($("#zbFile"));
+				uploadImg($("#cgFile"));
+				uploadImg($("#BcgFile"));
+				imgBinding();
+			});
 
 	/**
 	 * 甲方申请采购
 	 */
 	function AcgApplyRecord() {
-		if (!cg_validform.check()){
+		if (!cg_validform.check()) {
+			$("#Validform_checktip").show();
 			return;
 		}
 		var memberIdB = $("#memberIdB").val();
@@ -163,33 +170,24 @@ var uploadImg = function($file) {
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		
-		$.post("getContract.htm", {
-			contractNo : refContractNo
-		}, function(data) {
-			if (data.isOK == 'ok') {
-				dialogBox(function(){
-				$.post("AcgApplyRecord.htm", $("#cgForm").serialize(),
-						function(data) {
-							if (data.isOK == 'ok') {
-								$("#recordNo").html(data.recordNo);
-								$("#contBox").show();
-								$("#cgDiv").hide();
-							} else if (data.isOK == 'no') {
-								messageInfo("您还没有通过认证,不能申请备案!");
-							}
-						});},"是否生成备案?");
-			} else {
-				messageInfo("请输入正确的招标合同号!");
-			}
-
-		});
+				dialogBox(function() {
+					$.post("AcgApplyRecord.htm", $("#cgForm").serialize(),
+							function(data) {
+								if (data.isOK == 'ok') {
+									$("#recordNo").html(data.recordNo);
+									$("#contBox").show();
+									$("#cgDiv").hide();
+								} else if (data.isOK == 'no') {
+									messageInfo("您还没有通过认证,不能申请备案!");
+								}
+							});
+				}, "是否生成备案?");
 	}
 	/**
 	 * 甲方申请招标
 	 */
 	function zbApplyRecord() {
-		if (!zb_validform.check()){
+		if (!zb_validform.check()) {
 			return;
 		}
 		var memberNameA = $("#memberA").val();
@@ -202,22 +200,24 @@ var uploadImg = function($file) {
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function(){
-		$.post("zbApplyRecord.htm", $("#zbForm").serialize(), function(data) {
-			if (data.isOK == 'ok') {
-				$("#recordNo").html(data.recordNo);
-				$("#contBox").show();
-				$("#cgDiv").hide();
-			} else if (data.isOK == 'no') {
-				messageInfo("您还没有通过认证,不能申请备案!");
-			}
-		})},"是否生成备案?");
+		dialogBox(function() {
+			$.post("zbApplyRecord.htm", $("#zbForm").serialize(),
+					function(data) {
+						if (data.isOK == 'ok') {
+							$("#recordNo").html(data.recordNo);
+							$("#contBox").show();
+							$("#cgDiv").hide();
+						} else if (data.isOK == 'no') {
+							messageInfo("您还没有通过认证,不能申请备案!");
+						}
+					})
+		}, "是否生成备案?");
 	}
 	/**
 	 * 乙方申请采购
 	 */
 	function BzbApplyRecord() {
-		if (!b_validform.check()){
+		if (!b_validform.check()) {
 			return;
 		}
 		var memberNameA = $("#memberNameA").val();
@@ -235,16 +235,18 @@ var uploadImg = function($file) {
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function(){
-		$.post("BzbApplyRecord.htm", $("#BcgForm").serialize(), function(data) {
-			if (data.isOK == 'ok') {
-				$("#recordNo").html(data.recordNo);
-				$("#contBox").show();
-				$("#BcgDiv").hide();
-			} else if (data.isOK == 'no') {
-				messageInfo("您还没有通过认证,不能申请备案!");
-			}
-		})},"是否生成备案?");
+		dialogBox(function() {
+			$.post("BzbApplyRecord.htm", $("#BcgForm").serialize(), function(
+					data) {
+				if (data.isOK == 'ok') {
+					$("#recordNo").html(data.recordNo);
+					$("#contBox").show();
+					$("#BcgDiv").hide();
+				} else if (data.isOK == 'no') {
+					messageInfo("您还没有通过认证,不能申请备案!");
+				}
+			})
+		}, "是否生成备案?");
 	}
 
 	function upload(data) {
@@ -273,45 +275,71 @@ var uploadImg = function($file) {
 		//	$.post("getMember.htm",{memberName:$(this).val()}, function(data) {
 		//		$("#memberIdB").val(data.memberNo);
 		//	})
-	//})
-	$("#memberNameA").keydown(function() {
-			$("#memberIdA").val("");
-		})
-		$("#memberNameB").keydown(function() {
-			$("#memberIdB").val("");
-		})
+		//})
 		$("#memberNameA").bigAutocomplete({
 			url : urlA,
 			callback : function(data) {
-				if(data)
-				$("#memberIdA").val(data.result);
+				if(data){
+					$("#memberIdA").val(data.result);
+					var pass = b_validform.check(false, $("#memberIdA"));
+					$(this).parent().children(".Validform_wrong").hide();
+				}
 			},
-			beforeShow:function(data){
+			beforeShow : function(data) {
 				var memberNameA = $("#memberNameA").val();
+				var match = false;
 				for (var i = 0; i < data.length; i++) {
-					if(data[i].title==memberNameA){
+					if (data[i].title == memberNameA) {
 						$("#memberIdA").val(data[i].result);
+						match = true;
 					}
 				}
-				
+				if (!match) {
+					$("#memberIdA").val("");
+					var pass = b_validform.check(false, $("#memberIdA"));
+					if (!pass)
+						$(this).parent().children(".Validform_wrong").show();
+				}
+
 			}
 		});
+		$("#memberNameA").blur(function() {
+			var pass = b_validform.check(false, $("#memberIdA"));
+			if (!pass)
+				$(this).parent().children(".Validform_wrong").show();
+		})
 		$("#memberNameB").bigAutocomplete({
 			url : urlB,
 			callback : function(data) {
-				if(data)
+				if (data){
 					$("#memberIdB").val(data.result);
+					var pass = cg_validform.check(false, $("#memberIdB"));
+					$(this).parent().children(".Validform_wrong").hide();
+				}
 			},
-			beforeShow:function(data){
+			beforeShow : function(data) {
 				var memberNameB = $("#memberNameB").val();
+				var match = false;
 				for (var i = 0; i < data.length; i++) {
-					if(data[i].title==memberNameB){
-						$("#memberIdB").val(data[i].result);	
+					if (data[i].title == memberNameB) {
+						$("#memberIdB").val(data[i].result);
+						match = true;
 					}
 				}
-						
+				if (!match) {
+					$("#memberIdB").val("");
+					var pass = cg_validform.check(false, $("#memberIdB"));
+					if (!pass)
+						$(this).parent().children(".Validform_wrong").show();
+				}
+
 			}
 		});
+		$("#memberNameB").blur(function() {
+			var pass = cg_validform.check(false, $("#memberIdB"));
+			if (!pass)
+				$(this).parent().children(".Validform_wrong").show();
+		})
 	});
 </script>
 <@b.upload/><@b.errorInfo/>
@@ -360,14 +388,15 @@ var uploadImg = function($file) {
 									<div id="content1" class="tabscontent">
 										<div class="item">
 											<label>甲方</label> <input class="input input-w240h36" value=""
-												id="memberA" name="memberNameA" datatype="*1-50" nullmsg="请输入甲方名称" />
+												id="memberA" name="memberNameA" datatype="*1-50"
+												nullmsg="请输入甲方名称" />
 										</div>
 										<div class="item">
 											<label>乙方</label> ${name}<input type="hidden"
 												name="memberIdB" id="" value="${id}" />
 										</div>
 										<div class="item">
-											<label>&nbsp;</label> <input type="hidden" value="" 
+											<label>&nbsp;</label> <input type="hidden" value=""
 												name="imgPath" id="zbimgPath" />
 											<div class="rollBox" id="zbRollBox">
 												<ul id="zbcarousel" class="elastislide-list">
@@ -397,18 +426,21 @@ var uploadImg = function($file) {
 												id="" value="${id}" />
 										</div>
 										<div class="item">
-											<label>乙方</label><input class="input input-w240h36" value="" datatype="*1-50" nullmsg="请输入正确的乙方名称" 
-												id="memberNameB" name="memberNameB" /><input type="hidden"
-												id="memberIdB" name="memberIdB" id="" value="" datatype="*1-50" nullmsg="请输入正确的乙方名称"  />
+											<label>乙方</label><input class="input input-w240h36" value=""
+												datatype="*1-50" nullmsg="请输入正确的乙方名称" id="memberNameB"
+												name="memberNameB" /><input type="hidden" id="memberIdB"
+												name="memberIdB" id="" value="" datatype="*1-50"
+												nullmsg="请输入正确的乙方名称" />
 										</div>
 										<div class="item">
 											<label>关联招标合同号</label><input class="input input-w240h36"
-												value="" id="refContractNo" name="refContractNo" datatype="*" nullmsg="请输入招标合同号" />
+												value="" id="refContractNo" name="refContractNo"
+												datatype="*" nullmsg="请输入招标合同号"  ajaxurl="getContract.htm"/>
 										</div>
 										<div class="item">
 											<label>&nbsp;</label>
 											<div class="ly-left">
-												<input type="hidden" value="" name="imgPath" id="cgimgPath"   />
+												<input type="hidden" value="" name="imgPath" id="cgimgPath" />
 												<div class="rollBox" id="cgRollBox">
 													<ul id="cgcarousel" class="elastislide-list">
 													</ul>
@@ -439,9 +471,10 @@ var uploadImg = function($file) {
 						<form action="" id="BcgForm" method="post" autocomplete="off">
 							<input type="hidden" name="memberNameB" value="${name}" />
 							<div class="item">
-								<label>甲方</label> <input class="input input-w240h36" value="" datatype="*1-50" nullmsg="请输入甲方名称" 
-									id="memberNameA" name="memberNameA" /> <input type="hidden" datatype="*1-50" nullmsg="请输入甲方名称" 
-									name="memberIdA" id="memberIdA" value="" />
+								<label>甲方</label> <input class="input input-w240h36" value=""
+									datatype="*1-50" nullmsg="请输入甲方名称" id="memberNameA"
+									name="memberNameA" /> <input type="hidden" datatype="*1-50"
+									nullmsg="请输入甲方名称" name="memberIdA" id="memberIdA" value="" />
 							</div>
 							<div class="item">
 								<label>乙方</label> ${name}<input type="hidden" name="memberIdB"
@@ -450,7 +483,7 @@ var uploadImg = function($file) {
 							<div class="item">
 								<label>&nbsp;</label>
 								<div class="ly-left">
-									<input type="hidden" value="" name="imgPath" id="bcgimgPath"   />
+									<input type="hidden" value="" name="imgPath" id="bcgimgPath" />
 									<div class="rollBox" id="bcgRollBox">
 										<ul id="bcgcarousel" class="elastislide-list">
 										</ul>

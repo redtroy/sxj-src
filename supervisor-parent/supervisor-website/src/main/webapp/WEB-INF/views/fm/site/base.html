@@ -54,7 +54,7 @@ function errorInfo(message){
  }
 function messageInfo(message){
 	var data=$("#message_info_div");
-	data.find("#message_hint").text(message);
+	data.find("#message_hint").html(message);
 	 var pageii = $.layer({
 		    type: 1,
 		    title: false,
@@ -411,7 +411,7 @@ function loadUpload(id,url,isMulti,text,fn){
 <script>
 $(document).ready(function(){
 	var currentUrl=window.location.href;
-	$.get("${basePath}/enter.htm?url="+currentUrl);
+	$.get("${basePath}enter.htm?url="+currentUrl);
 });
 </script>
 </#if>

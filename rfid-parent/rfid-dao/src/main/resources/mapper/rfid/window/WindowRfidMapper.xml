@@ -44,10 +44,10 @@
 		<if test="condition.windowType != null and condition.windowType !=''">
 			<![CDATA[AND WINDOW_TYPE = #{condition.windowType}]]>
 		</if>
-		<if test="condition.rfidState != null and condition.rfidState !=''">
+		<if test="condition.rfidState != null">
 			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>
 		</if>
-		<if test="condition.progressState != null and condition.progressState !=''">
+		<if test="condition.progressState != null">
 			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
 		</if>
 		<if

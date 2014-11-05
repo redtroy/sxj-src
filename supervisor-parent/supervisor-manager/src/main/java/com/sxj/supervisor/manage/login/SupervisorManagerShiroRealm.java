@@ -290,6 +290,7 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm
             {
                 permissions.addAll(perms);
             }
+
             //=============================此处检查权限是否变动==============================//
             
             //=============================end==========================================//
