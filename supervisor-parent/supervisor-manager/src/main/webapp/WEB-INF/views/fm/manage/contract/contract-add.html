@@ -212,6 +212,12 @@ var ul_validform;
 					$(this).parent().children(".checkinfo").show();
 			});
 		});
+		$("#deposit").blur(function() {
+			var value=$(this).val();
+			if(value&&isNumber(value)){
+	    	$(this).val(parseFloat(value).toFixed(2));
+			}
+	    })
 	});
 	//将传入数据转换为字符串,并清除字符串中非数字与.的字符
     //按数字格式补全字符串
@@ -317,7 +323,7 @@ var ul_validform;
 						</div>
 						<div>
 							<label>合同定金</label><input type="text" value=""
-								name="contract.deposit" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！" /> 元
+								name="contract.deposit" id="deposit" datatype="*n1-20" errormsg="输入范围在1~20位之间！" nullmsg="请输入合同定金！" /> 元
 						</div>
 						<div>
 							<label>合同备注</label>
@@ -332,9 +338,7 @@ var ul_validform;
 								</div>
 						</div>			
 						<div>
-							<label>关联招标合同号</label><#if record.flag.getId()==0><input type="text" value="${record.refContractNo}"
-								name="contract.refContractNo" datatype="*1-10" errormsg="输入范围在1~10位之间！"   /><#else><input type="text" value="${record.refContractNo}"
-								name="contract.refContractNo"   /> </#if>
+							<label>关联招标合同号</label>${record.refContractNo}
 						</div>
 						<div class="btnBox">
 							<a href="javascript:void(0);"

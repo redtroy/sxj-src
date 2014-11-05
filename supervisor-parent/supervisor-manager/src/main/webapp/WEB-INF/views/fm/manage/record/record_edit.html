@@ -148,15 +148,62 @@
 		$("#memberNameA").bigAutocomplete({
 			url : urlA,
 			callback : function(data) {
-				$("#memberIdA").val(data.result);
+				if (data)
+					$("#memberIdA").val(data.result);
+			},
+			beforeShow : function(data) {
+				var memberNameA = $("#memberNameA").val();
+				var match = false;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].title == memberNameA) {
+						$("#memberIdA").val(data[i].result);
+						match = true;
+					}
+				}
+				if (!match) {
+					var pass = validform.check(false, $("#memberIdA"));
+					if (!pass)
+						$(this).parent().children(".Validform_wrong").show();
+				}
+
 			}
 		});
+		$("#memberNameA").blur(function() {
+			var pass = validform.check(false, $("#memberIdA"));
+			if (!pass)
+				$(this).parent().children(".Validform_wrong").show();
+		})
 		$("#memberNameB").bigAutocomplete({
 			url : urlB,
 			callback : function(data) {
-				$("#memberIdB").val(data.result);
+				if (data){
+					$("#memberIdB").val(data.result);
+					var pass = validform.check(false, $("#memberIdB"));
+					$(this).parent().children(".Validform_wrong").hide();
+				}
+			},
+			beforeShow : function(data) {
+				var memberNameB = $("#memberNameB").val();
+				var match = false;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].title == memberNameB) {
+						$("#memberIdB").val(data[i].result);
+						match = true;
+					}
+				}
+				if (!match) {
+					var pass = validform.check(false, $("#memberIdB"));
+					if (!pass)
+						$(this).parent().children(".Validform_wrong").show();
+				}
+
 			}
 		});
+		$("#memberNameB").blur(function() {
+			var pass = validform.check(false, $("#memberIdB"));
+			if (!pass)
+				$(this).parent().children(".Validform_wrong").show();
+		})
 	});
 </script>
 </head>
@@ -216,7 +263,7 @@
 							</span></li>
 							<li><label>关联招标合同</label><#if record.flag.getId()==0><input type="text"
 								value="${record.refContractNo}" name="refContractNo"
-								 datatype="*2-50" nullmsg="请输入招标合同" /><#else><input type="text"
+								 datatype="*2-50" nullmsg="请输入招标合同" ajaxurl="getContract.htm?id=${record.id}" /><#else><input type="text"
 								value="${record.refContractNo}" name="refContractNo" /></#if></li>
 							<li><label>备案类型</label><select id="type" name="type">
 									<#list rte as type> <#if (type.id=record.type.id)>

@@ -1127,11 +1127,11 @@ public class ContractServiceImpl implements IContractService {
 	@Override
 	@Transactional
 	public int getContractByZhaobiaoContractNo(String contractNo,
-			MemberEntity member) {
+			String  memberId) {
 		try {
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
-			query.setMemberIdB(member.getMemberNo());
+			query.setMemberIdB(memberId);
 			query.setContractType("0");
 			List<ContractModel> res = queryContracts(query);
 			return res.size();

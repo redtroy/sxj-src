@@ -488,18 +488,19 @@ public class RecordController extends BaseController {
 	}
 
 	@RequestMapping("getContract")
-	public @ResponseBody Map<String, String> getContract(String contractNo,
+	public @ResponseBody Map<String, String> getContract(String param,
 			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			int size = contractService.getContractByZhaobiaoContractNo(
-					contractNo.trim(), member.getMember());
+					param.trim(), member.getMember().getMemberNo());
 			if (size == 0) {
-				map.put("isOK", "no");
+				map.put("status", "n");
+				map.put("info", "请输入正确的招标合同号");
 			} else {
-				map.put("isOK", "ok");
+				map.put("status", "y");
 			}
 
 			return map;

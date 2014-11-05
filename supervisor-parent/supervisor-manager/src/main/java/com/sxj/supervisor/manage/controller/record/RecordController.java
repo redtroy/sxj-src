@@ -22,6 +22,7 @@ import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.manage.comet.MessageChannel;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
@@ -253,6 +254,26 @@ public class RecordController extends BaseController {
 			}else{
 				map.put("isOK", "del");
 			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
+		}
+	}
+	@RequestMapping("getContract")
+	public @ResponseBody Map<String, String> getContract(String param,String id) throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			RecordEntity re =recordService.getRecord(id);
+			int size = contractService.getContractByZhaobiaoContractNo(
+					param.trim(), re.getMemberIdA());
+			if (size == 0) {
+				map.put("status", "n");
+				map.put("info", "请输入正确的招标合同号");
+			} else {
+				map.put("status", "y");
+			}
+
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认备案信息错误", e, this.getClass());

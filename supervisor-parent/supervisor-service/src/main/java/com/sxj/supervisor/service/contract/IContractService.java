@@ -168,7 +168,7 @@ public interface IContractService {
 
 	String getReplenish(String contractNo);
 
-	int getContractByZhaobiaoContractNo(String contractNo, MemberEntity member);
+	int getContractByZhaobiaoContractNo(String contractNo, String  memberId);
 
 	/**
 	 * 根据关联合同号获取合同信息
