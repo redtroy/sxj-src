@@ -22,16 +22,20 @@ import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.authz.permission.PermissionResolver;
 import org.apache.shiro.authz.permission.RolePermissionResolver;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.util.common.StringUtils;
+import com.sxj.util.logger.SxjLogger;
 
 public class SupervisorManagerShiroRealm extends AuthorizingRealm
 {
@@ -157,6 +161,72 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm
         return false;
     }
     
+    public AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals)
+    {
+        
+        if (principals == null)
+        {
+            return null;
+        }
+        
+        AuthorizationInfo info = null;
+        
+        SxjLogger.debug("Retrieving AuthorizationInfo for principals ["
+                + principals + "]", getClass());
+        
+        Cache<Object, AuthorizationInfo> cache = getAvailableAuthorizationCache();
+        if (cache != null)
+        {
+            Object key = getAuthorizationCacheKey(principals);
+            info = cache.get(key);
+        }
+        
+        if (info == null)
+        {
+            // Call template method if the info was not found in a cache
+            info = doGetAuthorizationInfo(principals);
+            // If the info is not null and the cache has been created, then cache the authorization info.
+            if (info != null && cache != null)
+            {
+                Object key = getAuthorizationCacheKey(principals);
+                cache.put(key, info);
+            }
+        }
+        
+        return info;
+    }
+    
+    private Cache<Object, AuthorizationInfo> getAvailableAuthorizationCache()
+    {
+        Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
+        if (cache == null && isAuthorizationCachingEnabled())
+        {
+            cache = getAuthorizationCacheLazy();
+        }
+        return cache;
+    }
+    
+    private Cache<Object, AuthorizationInfo> getAuthorizationCacheLazy()
+    {
+        
+        if (getAuthorizationCache() == null)
+        {
+            
+            CacheManager cacheManager = getCacheManager();
+            
+            if (cacheManager != null)
+            {
+                String cacheName = getAuthorizationCacheName();
+                //setAuthorizationCache(cacheManager.getCache(cacheName));
+                Reflections.setFieldValue(this,
+                        "authorizationCache",
+                        cacheManager.getCache(cacheName));
+            }
+        }
+        
+        return getAuthorizationCache();
+    }
+    
     @Override
     public boolean isPermitted(PrincipalCollection principals,
             Permission permission)
@@ -220,7 +290,6 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm
             {
                 permissions.addAll(perms);
             }
-            
             //=============================此处检查权限是否变动==============================//
             
             //=============================end==========================================//
