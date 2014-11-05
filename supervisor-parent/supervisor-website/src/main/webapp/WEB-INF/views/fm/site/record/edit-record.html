@@ -158,7 +158,7 @@ $(document).ready(function() {
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
-				},"确认成功!");
+				},"修改成功!");
 			}else{
 				messageInfo("修改失败");
 			}
@@ -184,7 +184,7 @@ $(document).ready(function() {
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
-				},"确认成功!");
+				},"修改成功!");
 			}else{
 				messageInfo("修改失败");
 			}
@@ -215,7 +215,7 @@ $(document).ready(function() {
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
-				},"确认成功!");
+				},"修改成功!");
 			}else{
 				messageInfo("修改失败");
 			}
@@ -233,7 +233,7 @@ $(document).ready(function() {
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
-				},"确认成功!");
+				},"修改成功!");
 			}else{
 				messageInfo("修改失败");
 			}
@@ -242,35 +242,67 @@ $(document).ready(function() {
 	$(function(){
 		var urlA = "${basePath}autoCompleA.htm";
 		var urlB = "${basePath}autoCompleB.htm";
-		$("#memberNameA").keydown(function(){
-			$("#memberIdA").val("");
-		})
-		$("#memberNameB").keydown(function(){
-			$("#memberIdB").val("");
-		})
-		$("#memberNameA").bigAutocomplete({url:urlA,callback:function(data){
-	        $("#memberIdA").val(data.result);
-	    },beforeShow:function(data){
-			var memberNameA = $("#memberNameA").val();
-			for (var i = 0; i < data.length; i++) {
-				if(data[i].title==memberNameA){
-					$("#memberIdA").val(data[i].result);
+		$("#memberNameA").bigAutocomplete({
+			url : urlA,
+			callback : function(data) {
+				if (data)
+					$("#memberIdA").val(data.result);
+			},
+			beforeShow : function(data) {
+				var memberNameA = $("#memberNameA").val();
+				var match = false;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].title == memberNameA) {
+						$("#memberIdA").val(data[i].result);
+						match = true;
+					}
 				}
-			}
-			
-		}
-		});
-		$("#memberNameB").bigAutocomplete({url:urlB,callback:function(data){
-	        $("#memberIdB").val(data.result);
-	    },beforeShow:function(data){
-	    	var memberNameB = $("#memberNameB").val();
-			for (var i = 0; i < data.length; i++) {
-				if(data[i].title==memberNameB){
-					$("#memberIdB").val(data[i].result);	
+				if (!match) {
+					$("#memberIdA").val("");
+					var pass = validform.check(false, $("#memberIdA"));
+					if (!pass)
+						$(this).parent().children(".Validform_wrong").show();
 				}
+
 			}
-		}
 		});
+		$("#memberNameA").blur(function() {
+			var pass = validform.check(false, $("#memberIdA"));
+			if (!pass)
+				$(this).parent().children(".Validform_wrong").show();
+		})
+		$("#memberNameB").bigAutocomplete({
+			url : urlB,
+			callback : function(data) {
+				if (data){
+					$("#memberIdB").val(data.result);
+					var pass = validform.check(false, $("#memberIdB"));
+					$(this).parent().children(".Validform_wrong").hide();
+				}
+			},
+			beforeShow : function(data) {
+				var memberNameB = $("#memberNameB").val();
+				var match = false;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].title == memberNameB) {
+						$("#memberIdB").val(data[i].result);
+						match = true;
+					}
+				}
+				if (!match) {
+					$("#memberIdB").val("");
+					var pass = validform.check(false, $("#memberIdB"));
+					if (!pass)
+						$(this).parent().children(".Validform_wrong").show();
+				}
+
+			}
+		});
+		$("#memberNameB").blur(function() {
+			var pass = validform.check(false, $("#memberIdB"));
+			if (!pass)
+				$(this).parent().children(".Validform_wrong").show();
+		})
 		$('#selectBatch').change(function(){  
 			   var batchId=$(this).children('option:selected').val();  
 			   if(batchId!=''){
@@ -329,6 +361,11 @@ $(document).ready(function() {
 									value="${record.memberIdB}" datatype="*1-50" nullmsg="请输入正确的乙方名称" />
 							</div>
 							<div class="item">
+								<label>招标合同号</label><input class="input input-w240h36"
+												value="${record.refContractNo}" id="refContractNo" name="refContractNo"
+												datatype="*" nullmsg="请输入招标合同号"  ajaxurl="getContract.htm"/>
+							</div>
+							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"
 									value="${record.imgPath}" name="imgPath" id="imgPath" datatype="*" nullmsg="请上传扫描件" />
 								<div class="rollBox">
@@ -360,7 +397,7 @@ $(document).ready(function() {
 							</div>
 							<div class="item">
 								<label>甲方</label> <input class="input input-w270h30"
-									value="${record.memberNameA}" name="memberNameA" id="memberNameA" datatype="*1-50" nullmsg="请输入甲方名称" />
+									value="${record.memberNameA}" AUTOCOMPLETE="off" name="memberNameA" id="" datatype="*1-50" nullmsg="请输入甲方名称" />
 							</div>
 							<div class="item">
 								<label>乙方</label>${record.memberNameB}

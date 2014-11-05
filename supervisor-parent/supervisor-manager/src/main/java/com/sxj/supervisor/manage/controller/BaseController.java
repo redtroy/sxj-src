@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.comet4j.core.CometContext;
-import org.comet4j.core.CometEngine;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -27,9 +26,6 @@ import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
-import com.sxj.supervisor.manage.comet.MessageConnectListener;
-import com.sxj.supervisor.manage.comet.MessageDropListener;
-import com.sxj.supervisor.manage.comet.MessageThread;
 import com.sxj.util.exception.SystemException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -92,24 +88,29 @@ public class BaseController {
 				+ request.getServerPort() + request.getContextPath() + "/";
 	}
 
-	static {
-		CometEngine engine = CometContext.getInstance().getEngine();
-		// 启动 Comet Server Thread
-		MessageThread cometServer = MessageThread.newInstance(engine);
-		// cometServer.setDaemon(true);
-		// cometServer.setDelay(3);
-		// cometServer.setPeriod(2);
-		cometServer.schedule();
-		// MessageConnectListener lis = new MessageConnectListener();
-		engine.addConnectListener(new MessageConnectListener());
-		// MessageDropListener drop = new MessageDropListener();
-		engine.addDropListener(new MessageDropListener());
+	// static {
+	// CometEngine engine = CometContext.getInstance().getEngine();
+	// // 启动 Comet Server Thread
+	// MessageThread cometServer = MessageThread.newInstance(engine);
+	// RedisTopics redis = RedisTopics.create();
+	// RTopic<String> topic1 = redis.getTopic("topic1");
+	//
+	// // cometServer.run();
+	// // cometServer.setDaemon(true);
+	// // cometServer.setDelay(3);
+	// // cometServer.setPeriod(2);
+	// // cometServer.schedule();
+	// // MessageConnectListener lis = new MessageConnectListener();
+	// engine.addConnectListener(new MessageConnectListener());
+	// // MessageDropListener drop = new MessageDropListener();
+	// engine.addDropListener(new MessageDropListener());
+	//
+	// }''
 
-	}
-
-	protected void registChannel(String channelName) {
-		if (!CometContext.getInstance().getAppModules().contains(channelName))
+	protected void registChannel(final String channelName) {
+		if (!CometContext.getInstance().getAppModules().contains(channelName)) {
 			CometContext.getInstance().registChannel(channelName);// 注册应用的channel
+		}
 	}
 
 	protected String getValidError(BindingResult result) throws SystemException {

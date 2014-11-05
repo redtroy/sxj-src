@@ -90,6 +90,10 @@ public class MessageThread extends Thread {
 
 	}
 
+	public void send(String channel, Object message) {
+		getEngine().sendToAll(channel, message);
+	}
+
 	public int getPeriod() {
 		return period;
 	}

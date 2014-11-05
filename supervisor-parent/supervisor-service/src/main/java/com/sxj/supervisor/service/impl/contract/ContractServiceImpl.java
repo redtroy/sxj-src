@@ -19,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.mysql.fabric.xmlrpc.base.Data;
-import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
@@ -52,6 +51,7 @@ import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -683,11 +683,11 @@ public class ContractServiceImpl implements IContractService {
 
 				}
 			}
-			RecordEntity re =new RecordEntity();
+			RecordEntity re = new RecordEntity();
 			re.setId(recordId);
 			re.setState(RecordStateEnum.change);
 			recordDao.updateRecord(re);
-			
+
 		} catch (Exception e) {
 			throw new ServiceException("变更合同信息错误", e);
 		}
@@ -779,27 +779,26 @@ public class ContractServiceImpl implements IContractService {
 				// 变更该合同所有备案状态
 				if (recordList != null) {
 					for (RecordEntity recordEntity : recordList) {
-						recordEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
-						if(recordEntity.getFlag().getId()==0){
-							if(recordEntity.getAcceptState()==0){
-								recordEntity.setAcceptDate(new Date());//受理时间
+						recordEntity
+								.setConfirmState(RecordConfirmStateEnum.unconfirmed);
+						if (recordEntity.getFlag().getId() == 0) {
+							if (recordEntity.getAcceptState() == 0) {
+								recordEntity.setAcceptDate(new Date());// 受理时间
 								recordEntity.setAcceptState(1);
 							}
-						}else{
+						} else {
 							recordEntity.setAcceptDate(new Date());
 						}
 						recordDao.updateRecord(recordEntity);
 					}
 					RecordEntity record = recordList.get(0);
-					List<String> messageList = null;
-					Object cache = HierarchicalCacheManager.get(2,
-							"comet_message",
-							"record_push_message_" + record.getMemberIdA());
-					if (cache instanceof ArrayList) {
-						messageList = (List<String>) cache;
-					} else {
-						messageList = new ArrayList<String>();
-					}
+
+					String key_a = MessageChannel.WEBSITE_RECORD_MESSAGE
+							+ record.getMemberIdA();
+					// List<String> messageList = CometServiceImpl.get(key_a);
+					// if (messageList == null || messageList.size() == 0) {
+					// messageList = new ArrayList<String>();
+					// }
 					String msgName = "";
 					if (record.getType().getId() == 0) {
 						if (record.getContractType().getId() == 0) {
@@ -814,20 +813,24 @@ public class ContractServiceImpl implements IContractService {
 							+ centity.getContractNo() + ','
 							+ record.getMemberIdA() + ','
 							+ record.getContractType().getId();
-					messageList.add(message);
-					HierarchicalCacheManager.set(2, "comet_message",
-							"record_push_message_" + record.getMemberIdA(),
-							messageList);
+					// messageList.add(message);
+					CometServiceImpl.add(key_a, message);
+					MessageChannel.initTopic().publish(key_a);
+					// HierarchicalCacheManager.set(2, "comet_message",
+					// "record_push_message_" + record.getMemberIdA(),
+					// messageList);
 					// 乙方
-					List<String> messageListB = null;
-					Object cacheB = HierarchicalCacheManager.get(2,
-							"comet_message",
-							"record_push_message_" + record.getMemberIdB());
-					if (cacheB instanceof ArrayList) {
-						messageListB = (List<String>) cacheB;
-					} else {
-						messageListB = new ArrayList<String>();
-					}
+					String key_b = MessageChannel.WEBSITE_RECORD_MESSAGE
+							+ record.getMemberIdB();
+					// List<String> messageListB = null;
+					// Object cacheB = HierarchicalCacheManager.get(2,
+					// "comet_message",
+					// "record_push_message_" + record.getMemberIdB());
+					// if (cacheB instanceof ArrayList) {
+					// messageListB = (List<String>) cacheB;
+					// } else {
+					// messageListB = new ArrayList<String>();
+					// }
 					String msgNameB = "";
 					if (record.getType().getId() == 0) {
 						if (record.getContractType().getId() == 0) {
@@ -842,10 +845,12 @@ public class ContractServiceImpl implements IContractService {
 							+ centity.getContractNo() + ','
 							+ record.getMemberIdB() + ','
 							+ record.getContractType().getId();
-					messageListB.add(messageB);
-					HierarchicalCacheManager.set(2, "comet_message",
-							"record_push_message_" + record.getMemberIdB(),
-							messageListB);
+					CometServiceImpl.add(key_b, messageB);
+					MessageChannel.initTopic().publish(key_b);
+					// messageListB.add(messageB);
+					// HierarchicalCacheManager.set(2, "comet_message",
+					// "record_push_message_" + record.getMemberIdB(),
+					// messageListB);
 				}
 			}
 
@@ -1127,11 +1132,11 @@ public class ContractServiceImpl implements IContractService {
 	@Override
 	@Transactional
 	public int getContractByZhaobiaoContractNo(String contractNo,
-			MemberEntity member) {
+			String  memberId) {
 		try {
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
-			query.setMemberIdB(member.getMemberNo());
+			query.setMemberIdB(memberId);
 			query.setContractType("0");
 			List<ContractModel> res = queryContracts(query);
 			return res.size();

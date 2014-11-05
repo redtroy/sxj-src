@@ -117,13 +117,26 @@ var ul_validform;
 			}
 		});
 	}
-
+var resetValidForm=function(){
+	$(".checkinfo").each(function(){
+		var $input=$(this).siblings("input");
+		var left=$input.offset().left;
+		var top=$input.offset().top;
+		var width=$input.width();
+		$(this).css({
+			'left':left+width-32,
+			'top':top-45,
+			'position':'absolute'
+		}).show();
+	})
+}
 	//合同扫描件
 	$(document).ready(function() {
 		
 		//初始化验证
 		ul_validform=$("#contractUl").Validform({
 			tiptype:function(msg,o,cssctl){
+					o.obj.parent().children(".checkinfo").remove();
 					var $div=$("<div/>").addClass("checkinfo");
 					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
 					var left=o.obj.offset().left,
@@ -136,21 +149,14 @@ var ul_validform;
 					}).show();
 					o.obj.parent().append($div);
 			}});
-		$("#contractUl").find("[datatype]").each(function(){
-			$(this).focus(function(){
-				$(this).parent().children(".checkinfo").hide();
-			}); 
-			$(this).blur(function(){
-				var pass=ul_validform.check(true,$(this));
-				if(!pass)
-					$(this).parent().children(".checkinfo").show();
-			});
-		});
 		
 		$("#contractUl").find("[datatype]").live("focus",function(){
 			$(this).parent().children(".checkinfo").hide();
+			$(this).removeClass("Validform_error");
+			//$(this).parent().children(".checkinfo").hide();
 		});
 		$("#contractUl").find("[datatype]").live("blur",function(){
+			
 			var pass=ul_validform.check(true,$(this));
 			if(!pass)
 				$(this).parent().children(".checkinfo").show();
@@ -174,7 +180,14 @@ var ul_validform;
 		//uploadImg($("#bsFile"));
 		imgBinding();
 			$(".lnk-red").live("click", function() {
-				$(this).parent().parent().remove();
+				var leng=$("#formtable").find(".formtr").length;
+				if(leng>1){
+					$(this).parent().parent().remove();
+					resetValidForm();
+				}else{
+					messageInfo("不能删除条目!");
+				}
+
 			});
 		
 		$(".lnk-green").live("click",function(){
@@ -183,6 +196,8 @@ var ul_validform;
 			$new.find("input").attr("value","");
 			$new.find("select").val("");
 			$new.insertAfter($tr);
+			$new.find(".checkinfo").remove();
+			$new.find(".Validform_error").removeClass("Validform_error");
 			$(this).remove();
 		});
 		$(".number").live("keyup",function(){
@@ -198,6 +213,25 @@ var ul_validform;
 				$(".tquantity").html(tquantity+"镗");
 			if(tamount)
 				$(".tamount").html(tamount.toFixed(2)+"元");
+		})
+		
+		$(".amount").live("blur",function(){
+			$(this).parent().parent().parent().find(".amount").each(function(){
+				var value=$(this).attr("value");
+				if(value&&isNumber(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
+		})
+		$(".price").live("blur",function(){
+			$(this).parent().parent().parent().find(".price").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
 		})
 		var quantity=0;
 		var amount=0;

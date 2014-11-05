@@ -4,6 +4,16 @@
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
 <script>
+var isNumber=function(str){
+	for(i=0;i<str.length;i++){
+		if(str.charAt(i)>='0'&&str.charAt(i)<='9'||str.charAt(i)=='-'&&i==0){
+		continue;
+		}else{
+		return false;
+		}
+		}
+		return true;
+}
 function errorInfo(message){
 	var data=$("#error_info_div");
 	data.find("#message_error").text(message);

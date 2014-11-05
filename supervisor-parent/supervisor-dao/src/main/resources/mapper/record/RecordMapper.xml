@@ -48,7 +48,7 @@
 			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
 		</if>
 		<!-- 合同类型-->
-		<if test="condition.contractType != null ">
+		<if test="condition.contractType != null  and condition.contractType != ''">
 			<![CDATA[AND CONTRACT_TYPE = #{condition.contractType}]]>
 		</if>
 		<!-- 对应合同号-->

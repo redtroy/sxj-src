@@ -93,7 +93,7 @@
               <th>产品名称</th>
               <th>产品规格</th>
               <th>数量<span>（<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
-              <th>单价<span>(元<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if><)</span></th>
+              <th>单价<span>(元<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
               <th>金额<span>(元)</span></th>
               <th>备注说明</th>
               <th class="rLine">&nbsp;</th>
@@ -107,8 +107,8 @@
               <td>${item.productName}</td>
               <td>${item.productModel}</td>
               <td>${item.quantity}</td>
-              <td>${item.price}</td>
-              <td>${item.amount}</td>
+              <td>${item.price?string('0.00')}</td>
+              <td>${item.amount?string('0.00')}</td>
               <td>${item.remarks}</td>
               <td><#if item.updateState==1><span class="color-red">！</span></#if></td>
             </tr>
@@ -118,7 +118,7 @@
               <td>&nbsp;</td>
               <td>${n}</td>
               <td>&nbsp;</td>
-              <td>${m}</td>
+              <td>${m?string('0.00')}</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
             </tr>
@@ -174,7 +174,7 @@
             	批次待交付 </div>
           <div>
             <label>合同定金</label>
-            ${contractModel.contract.deposit}元 </div>
+            ${contractModel.contract.deposit?string('0.00')}元 </div>
           <div>
             <label>合同备注</label>
             <textarea name="textarea2" id="textarea2" cols="80" rows="3" readonly="readonly">${contractModel.contract.remarks}</textarea>
@@ -236,8 +236,8 @@
                 <td>${modifyItem.productName}</td>
                 <td>${modifyItem.productModel}</td>
                 <td>${modifyItem.quantity}</td>
-                <td>${modifyItem.price}</td>
-                <td>${modifyItem.amount}</td>
+                <td>${modifyItem.price?string('0.00')}</td>
+                <td>${modifyItem.amount?string('0.00')}</td>
                 <td>${modifyItem.remarks}</td>
                 <td>&nbsp;</td>
               </tr>

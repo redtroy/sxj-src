@@ -117,8 +117,8 @@
                          <td>${item.productName}</td>
 			              <td>${item.windowType.getName()}</td>
 			              <td class="quantity">${item.quantity}</td>
-			              <td class="price">${item.price}</td>
-			              <td class="amount">${item.amount}</td>
+			              <td class="price">${item.price?string('0.00')}</td>
+			              <td class="amount">${item.amount?string('0.00')}</td>
 			              <td>${item.remarks}</td>
                       </tr>
                        </#list>

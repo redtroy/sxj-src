@@ -1,9 +1,7 @@
 package com.sxj.supervisor.website.controller.record;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +14,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
@@ -25,13 +24,13 @@ import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.record.IRecordService;
-import com.sxj.supervisor.website.comet.MessageChannel;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -42,7 +41,7 @@ import com.sxj.util.logger.SxjLogger;
 public class RecordController extends BaseController {
 
 	/**
-	 * 合同service
+	 * getRecordState 合同service
 	 */
 	@Autowired
 	private IContractService contractService;
@@ -72,7 +71,7 @@ public class RecordController extends BaseController {
 			map.put("confirmState", rse);
 			map.put("query", query);
 			map.put("type", userBean.getMember().getType().getId());
-			String channelName = MessageChannel.RECORD_MESSAGE
+			String channelName = MessageChannel.WEBSITE_RECORD_MESSAGE
 					+ userBean.getMember().getMemberNo();
 			map.put("channelName", channelName);
 			// 注册监听
@@ -260,7 +259,8 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			if (record.getType().getId() == 2) {
-				List<ContractBatchEntity> batch = recordService.getBatchList(recordId);
+				List<ContractBatchEntity> batch = recordService
+						.getBatchList(recordId);
 				map.put("batch", batch);
 			}
 			map.put("record", record);// 备案类型
@@ -381,7 +381,7 @@ public class RecordController extends BaseController {
 			String recordId, HttpSession session, String message)
 			throws WebException {
 		try {
-			
+
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			ContractModel contract = contractService
@@ -416,23 +416,17 @@ public class RecordController extends BaseController {
 				recordService.modifyState(contractId, recordId,
 						RecordConfirmStateEnum.confirmedB);
 			}
-			Object cache = HierarchicalCacheManager.get(2, "comet_message",
-					"record_push_message_" + member.getMember().getMemberNo());
-			List<String> messageList = null;
-			if (cache instanceof ArrayList) {
-				messageList = (List<String>) cache;
-			} else {
-				messageList = new ArrayList<String>();
-			}
-			for (int i = 0; i < messageList.size(); i++) {
-				String message = messageList.get(i);
-				if(message.contains(recordId)){
-					messageList.remove(i);
+			String key = MessageChannel.WEBSITE_RECORD_MESSAGE
+					+ member.getMember().getMemberNo();
+			List<String> messageList = CometServiceImpl.get(key);
+			if (messageList != null && messageList.size() > 0) {
+				for (int i = 0; i < messageList.size(); i++) {
+					String message = messageList.get(i);
+					if (message.contains(recordId)) {
+						CometServiceImpl.remove(key, message);
+					}
 				}
 			}
-			HierarchicalCacheManager.set(2, "comet_message",
-					"record_push_message_" + member.getMember().getMemberNo(),
-					messageList);
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
@@ -487,18 +481,19 @@ public class RecordController extends BaseController {
 	}
 
 	@RequestMapping("getContract")
-	public @ResponseBody Map<String, String> getContract(String contractNo, HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> getContract(String param,
+			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			int size = contractService
-					.getContractByZhaobiaoContractNo(contractNo.trim(),member.getMember());
+			int size = contractService.getContractByZhaobiaoContractNo(
+					param.trim(), member.getMember().getMemberNo());
 			if (size == 0) {
-				map.put("isOK", "no");
+				map.put("status", "n");
+				map.put("info", "请输入正确的招标合同号");
 			} else {
-				map.put("isOK", "ok");
+				map.put("status", "y");
 			}
 
 			return map;
@@ -507,61 +502,87 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+
 	/**
 	 * 备案是否可修改
+	 * 
 	 * @param contractNo
 	 * @param session
 	 * @return
 	 * @throws WebException
 	 */
 	@RequestMapping("getRecordState")
-	public @ResponseBody Map<String, String> getRecordState(String id, HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> getRecordState(String id,
+			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			RecordEntity re= recordService.getRecord(id);
-			if(re.getType().getId()==0){
-				if(StringUtils.isEmpty(re.getContractNo())){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
+			RecordEntity re = recordService.getRecord(id);
+			if (re != null) {
+				if (re.getType().getId() == 0) {
+					if (StringUtils.isEmpty(re.getContractNo())) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
+				} else if (re.getType().getId() == 1) {
+					if (re.getState().getId() == 2) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
+				} else if (re.getType().getId() == 2) {
+					if (re.getState().getId() == 4) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
 				}
-			}else if(re.getType().getId()==1){
-				if(re.getState().getId()==2){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
-				}
-			}else if(re.getType().getId()==2){
-				if(re.getState().getId()==4){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
-				}
+			} else {
+				map.put("isOK", "del");
 			}
-
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认备案信息错误", e, this.getClass());
 			throw new WebException("确认备案信息错误");
 		}
 	}
-	
+
 	@RequestMapping("getMember")
-	public @ResponseBody Map<String, String> getMember(String memberName, HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> getMember(String memberName,
+			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			MemberEntity member =memberService.getMemberByName(memberName);
-			if(member!=null){
+			MemberEntity member = memberService.getMemberByName(memberName);
+			if (member != null) {
 				map.put("memberNo", member.getMemberNo());
-			}else{
+			} else {
 				map.put("memberNo", "");
 			}
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("查询会员信息错误", e, this.getClass());
 			throw new WebException("查询会员信息错误");
+		}
+	}
+	@RequestMapping("getRecord")
+	public @ResponseBody Map<String, String> getRecord(String contractNo) throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			ContractModel cm = contractService.getContractModelByContractNo(contractNo.trim());
+			if(cm!=null){
+				ContractEntity ce=cm.getContract();
+				if(ce.getConfirmState().getId()==3){
+					map.put("isOK", "ok");
+				}else{
+					map.put("isOK", "no");
+				}
+			}else{
+				map.put("isOK", "no");
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
 		}
 	}
 }

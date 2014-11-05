@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
@@ -27,6 +28,7 @@ import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -53,7 +55,7 @@ public class RecordServiceImpl implements IRecordService {
 
 	@Autowired
 	private IContractBatchDao batchDao;
-	
+
 	@Autowired
 	private IMemberService memberService;
 
@@ -75,17 +77,9 @@ public class RecordServiceImpl implements IRecordService {
 			record.setAcceptState(0);
 			record.setRecordState(0);
 			recordDao.addRecord(record);
-			Long messageCount = null;
-			Object cache = HierarchicalCacheManager.get(2, "comet_message",
-					"record_count_message");
-			if (cache instanceof Long) {
-				messageCount = (Long) cache;
-			} else {
-				messageCount = 0l;
-			}
-			messageCount = messageCount + 1;
-			HierarchicalCacheManager.set(2, "comet_message",
-					"record_count_message", messageCount);
+
+			CometServiceImpl.takeCount(MessageChannel.RECORD_MESSAGE);
+			MessageChannel.initTopic().publish(MessageChannel.RECORD_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("新增备案信息错误", e);
@@ -126,18 +120,19 @@ public class RecordServiceImpl implements IRecordService {
 				}
 			}
 		}
-		//更改用户---修改备案状态
-		if(oldRe.getContractType().getId()!=0){
-			MemberEntity member = memberService.memberInfo(record.getMemberIdB());
-			if(member!=null){
-				if(member.getType().getId()==1){
+		// 更改用户---修改备案状态
+		if (oldRe.getContractType().getId() != 0) {
+			MemberEntity member = memberService.memberInfo(record
+					.getMemberIdB());
+			if (member != null) {
+				if (member.getType().getId() == 1) {
 					record.setContractType(ContractTypeEnum.glass);
-				}else if(member.getType().getId()==2){
+				} else if (member.getType().getId() == 2) {
 					record.setContractType(ContractTypeEnum.extrusions);
 				}
 			}
 		}
-		
+
 		recordDao.updateRecord(record);
 	}
 
@@ -148,8 +143,25 @@ public class RecordServiceImpl implements IRecordService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void deleteRecord(String id) throws ServiceException {
 		try {
+			RecordEntity re = recordDao.getRecord(id);
 			recordDao.deleteRecord(id);
-
+			//如果是变更或者补损备案,删除后需要把状态重置已备案
+			if(re.getType().getId()!=0){
+				ContractModel cm = contractService.getContractModelByContractNo(re.getContractNo());
+				ContractEntity ce = cm.getContract();
+				ce.setConfirmState(ContractSureStateEnum.filings);//已备案
+				ce.setState(ContractStateEnum.noapproval);//已审核
+				contractDao.updateContract(ce);
+				//变更所有备案状态为已备案
+				RecordQuery query = new RecordQuery();
+				query.setContractNo(re.getContractNo());
+				List<RecordEntity> reList= this.queryRecord(query);
+				for (RecordEntity recordEntity : reList) {
+					recordEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+					recordDao.updateRecord(recordEntity);
+				}
+			}
+			
 		} catch (Exception e) {
 			throw new ServiceException("查询备案信息错误", e);
 		}
@@ -197,7 +209,7 @@ public class RecordServiceImpl implements IRecordService {
 			condition.addCondition("sortColumn", query.getSortColumn());// 排序字段
 			condition.addCondition("flag", query.getFlag());// 备案方
 			condition.addCondition("type", query.getType());// 备案类型
-			
+
 			condition.setPage(query);
 			List<RecordEntity> recordList = recordDao.queryRecord(condition);
 			query.setPage(condition);
@@ -289,33 +301,33 @@ public class RecordServiceImpl implements IRecordService {
 						}
 					} else {
 						rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
-						if(re.getFlag().getId()==1){
+						if (re.getFlag().getId() == 1) {
 							rEntity.setRecordState(1);
-							rEntity.setRecordDate(new Date());//备案时间
+							rEntity.setRecordDate(new Date());// 备案时间
 						}
-						if(re.getType().getId()==1){
+						if (re.getType().getId() == 1) {
 							rEntity.setState(RecordStateEnum.change);
-							if(re.getRecordState()==0){
+							if (re.getRecordState() == 0) {
 								rEntity.setRecordState(1);
-								rEntity.setRecordDate(new Date());//备案时间
+								rEntity.setRecordDate(new Date());// 备案时间
 							}
-						}else if(re.getType().getId()==2){
+						} else if (re.getType().getId() == 2) {
 							rEntity.setState(RecordStateEnum.supplement);
-							if(re.getRecordState()==0){
+							if (re.getRecordState() == 0) {
 								rEntity.setRecordState(1);
-								rEntity.setRecordDate(new Date());//备案时间
+								rEntity.setRecordDate(new Date());// 备案时间
 							}
-						}else{
+						} else {
 							rEntity.setState(RecordStateEnum.Binding);
-							if(re.getRecordState()==0){
+							if (re.getRecordState() == 0) {
 								rEntity.setRecordState(1);
-								rEntity.setRecordDate(new Date());//备案时间
+								rEntity.setRecordDate(new Date());// 备案时间
 							}
 						}
 					}
 				} else {
 					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
-					rEntity.setRecordDate(new Date());//备案时间
+					rEntity.setRecordDate(new Date());// 备案时间
 
 				}
 				recordDao.updateRecord(rEntity);
@@ -323,17 +335,17 @@ public class RecordServiceImpl implements IRecordService {
 			ContractEntity newCon = new ContractEntity();
 			newCon.setId(con.getId());
 			if (con.getType().getId() != 0) {
-			if (con.getConfirmState().getId() == 0) {
-				if (state.getId() == 2) {
-					newCon.setConfirmState(ContractSureStateEnum.aaffirm);
-				} else if (state.getId() == 3) {
-					newCon.setConfirmState(ContractSureStateEnum.baffirm);
+				if (con.getConfirmState().getId() == 0) {
+					if (state.getId() == 2) {
+						newCon.setConfirmState(ContractSureStateEnum.aaffirm);
+					} else if (state.getId() == 3) {
+						newCon.setConfirmState(ContractSureStateEnum.baffirm);
+					}
+				} else {
+					newCon.setConfirmState(ContractSureStateEnum.filings);
+					newCon.setRecordDate(new Date());
 				}
 			} else {
-				newCon.setConfirmState(ContractSureStateEnum.filings);
-				newCon.setRecordDate(new Date());
-			}
-			}else{
 				newCon.setConfirmState(ContractSureStateEnum.filings);
 				newCon.setRecordDate(new Date());
 			}
@@ -430,7 +442,7 @@ public class RecordServiceImpl implements IRecordService {
 					.getContractModelByContractNo(contractNo);
 			RecordQuery query = new RecordQuery();
 			query.setContractNo(contractNo);
-			query.setRecordType(RecordTypeEnum.contract.getId());
+			query.setRecordType("0");
 			List<RecordEntity> list = queryRecord(query);
 			for (RecordEntity recordEntity : list) {
 				recordEntity.setConfirmState(RecordConfirmStateEnum.accepted);
@@ -445,17 +457,8 @@ public class RecordServiceImpl implements IRecordService {
 				centity.setConfirmState(ContractSureStateEnum.noaffirm);
 				contractDao.updateContract(centity);
 			}
-			Long messageCount = null;
-			Object cache = HierarchicalCacheManager.get(2, "comet_message",
-					"record_count_message");
-			if (cache instanceof Long) {
-				messageCount = (Long) cache;
-			} else {
-				messageCount = 0l;
-			}
-			messageCount = messageCount + 1;
-			HierarchicalCacheManager.set(2, "comet_message",
-					"record_count_message", messageCount);
+			CometServiceImpl.takeCount(MessageChannel.RECORD_MESSAGE);
+			MessageChannel.initTopic().publish(MessageChannel.RECORD_MESSAGE);
 		} catch (Exception e) {
 			throw new ServiceException("更新备案错误", e);
 		}
@@ -469,47 +472,48 @@ public class RecordServiceImpl implements IRecordService {
 	public void updateRecordAndContract(RecordEntity record,
 			ContractEntity contract) throws ServiceException {
 		try {
-//			if (record != null) {
-//				if (record.getContractType().getId() == 0) {
-//					recordDao.updateRecord(record);
-//					ContractModel cm = contractService
-//							.getContractModelByContractNo(record
-//									.getContractNo());
-//					contract = cm.getContract();
-//					contract.setMemberNameA(record.getMemberNameA());
-//					contractDao.updateContract(contract);
-//				} else {
-//					recordDao.updateRecord(record);
-//					ContractModel cm = contractService
-//							.getContractModelByContractNo(record
-//									.getContractNo());
-//					contract = cm.getContract();
-//					contract.setMemberIdA(record.getMemberIdA());
-//					contract.setMemberIdB(record.getMemberIdB());
-//					contract.setMemberNameA(record.getMemberNameA());
-//					contract.setMemberNameB(record.getMemberNameB());
-//					contract.setType(record.getContractType());
-//					contract.setRefContractNo(record.getRefContractNo());
-//					contractDao.updateContract(contract);
-//					// 更新所有备案信息
-//					QueryCondition<RecordEntity> query = new QueryCondition<RecordEntity>();
-//					query.addCondition("contractNo", record.getContractNo());
-//					query.addCondition("applyId", record.getApplyId());
-//					List<RecordEntity> recordList = recordDao
-//							.queryRecord(query);
-//					for (RecordEntity recordEntity : recordList) {
-//						if (recordEntity.getContractType().getId() != 0) {
-//							recordEntity.setMemberIdA(record.getMemberIdA());
-//							recordEntity.setMemberIdB(record.getMemberIdB());
-//							recordEntity
-//									.setMemberNameA(record.getMemberNameA());
-//							recordEntity
-//									.setMemberNameB(record.getMemberNameB());
-//						}
-//						recordDao.updateRecord(recordEntity);
-//					}
-//				}
-//			}
+			// if (record != null) {
+			// if (record.getContractType().getId() == 0) {
+			// recordDao.updateRecord(record);
+			// ContractModel cm = contractService
+			// .getContractModelByContractNo(record
+			// .getContractNo());
+			// contract = cm.getContract();
+			// contract.setMemberNameA(record.getMemberNameA());
+			// contractDao.updateContract(contract);
+			// } else {
+			// recordDao.updateRecord(record);
+			// ContractModel cm = contractService
+			// .getContractModelByContractNo(record
+			// .getContractNo());
+			// contract = cm.getContract();
+			// contract.setMemberIdA(record.getMemberIdA());
+			// contract.setMemberIdB(record.getMemberIdB());
+			// contract.setMemberNameA(record.getMemberNameA());
+			// contract.setMemberNameB(record.getMemberNameB());
+			// contract.setType(record.getContractType());
+			// contract.setRefContractNo(record.getRefContractNo());
+			// contractDao.updateContract(contract);
+			// // 更新所有备案信息
+			// QueryCondition<RecordEntity> query = new
+			// QueryCondition<RecordEntity>();
+			// query.addCondition("contractNo", record.getContractNo());
+			// query.addCondition("applyId", record.getApplyId());
+			// List<RecordEntity> recordList = recordDao
+			// .queryRecord(query);
+			// for (RecordEntity recordEntity : recordList) {
+			// if (recordEntity.getContractType().getId() != 0) {
+			// recordEntity.setMemberIdA(record.getMemberIdA());
+			// recordEntity.setMemberIdB(record.getMemberIdB());
+			// recordEntity
+			// .setMemberNameA(record.getMemberNameA());
+			// recordEntity
+			// .setMemberNameB(record.getMemberNameB());
+			// }
+			// recordDao.updateRecord(recordEntity);
+			// }
+			// }
+			// }
 		} catch (Exception e) {
 			throw new ServiceException("更新合同备案出错!", e);
 		}
