@@ -63,15 +63,18 @@ jQuery(document).ready(function($) {
 		previous.hide();
 	});
 	
-	 JS.Engine.on({  
-		 record_count_message : function(data){//侦听一个channel
+	 JS.Engine.on({
+		 start : function(cId, channelList, engine){  
+		      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+		    },  
+		 "${channelName}" : function(data){//侦听一个channel
 			 $("#message_div").empty();
         	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的备案申请！</div>";
         	 $("#message_div").append(bb);
          },   
  });  
  JS.Engine.start('${basePath}comet');
-})
+});
 
 
 //按条件查找	

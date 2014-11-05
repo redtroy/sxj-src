@@ -35,6 +35,7 @@ import third.rewrite.fastdfs.socket.PooledFdfsSocket;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.file.common.ImageUtil;
 import com.sxj.file.common.LocalFileUtil;
+import com.sxj.util.common.StringUtils;
 
 public class StorageClientService implements IStorageClientService {
 
@@ -256,6 +257,9 @@ public class StorageClientService implements IStorageClientService {
 			return map;
 		}
 		for (int i = 0; i < fileids.length; i++) {
+			if (StringUtils.isEmpty(fileids[i])) {
+				continue;
+			}
 			int index = fileids[i].indexOf("/");
 			String groupName = fileids[i].substring(0, index);
 			String path = fileids[i].substring(index + 1, fileids[i].length());

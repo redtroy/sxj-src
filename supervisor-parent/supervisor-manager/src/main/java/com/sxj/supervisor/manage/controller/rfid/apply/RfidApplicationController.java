@@ -10,13 +10,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
-import com.sxj.supervisor.manage.comet.MessageChannel;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.util.common.StringUtils;
@@ -27,7 +27,7 @@ import com.sxj.util.logger.SxjLogger;
 @RequestMapping("/rfid/apply")
 public class RfidApplicationController extends BaseController {
 	@Autowired
-	IRfidApplicationService sppService;
+	private IRfidApplicationService sppService;
 
 	/**
 	 * 获取申请单列表
@@ -53,11 +53,11 @@ public class RfidApplicationController extends BaseController {
 			map.put("receiptStates", receiptStates);
 			map.put("types", types);
 			map.put("query", query);
+			map.put("channelName", RfidChannel.RFID_APPLY_MESSAGE);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
-				HierarchicalCacheManager.evict(2, "comet_message",
-						MessageChannel.RFID_APPLY_MESSAGE);
+				CometServiceImpl.setCount(RfidChannel.RFID_APPLY_MESSAGE, 0l);
 			}
-			registChannel(MessageChannel.RFID_APPLY_MESSAGE);
+			registChannel(RfidChannel.RFID_APPLY_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
 			throw new WebException("申请单查询错误");

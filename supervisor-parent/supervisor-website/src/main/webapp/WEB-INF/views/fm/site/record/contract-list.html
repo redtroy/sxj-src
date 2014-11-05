@@ -295,7 +295,10 @@ function busunSeav(){
    		}) 
    		//结束
    		 JS.Engine.start('${basePath}comet');
-   			JS.Engine.on({  
+   			JS.Engine.on({
+   				start : function(cId, channelList, engine){  
+   			      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+   			    }, 
 				 "${channelName}" : function(data){//侦听一个channel
 					 $("#message_div").empty();
 				 for(var i=0;i<data.length;i++){

@@ -22,7 +22,10 @@ jQuery(document).ready(function($) {
 		window.location.href="${basePath}rfid/apply/appList.htm?isDelMes=true";
 	});
 	 JS.Engine.on({  
-		 rfid_apply_message : function(data){//侦听一个channel
+		 start : function(cId, channelList, engine){  
+		      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+		    }, 
+		    "${channelName}" : function(data){//侦听一个channel
 			 $("#message_div").empty();
         	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的RFID申请！</div>";
         	 $("#message_div").append(bb);

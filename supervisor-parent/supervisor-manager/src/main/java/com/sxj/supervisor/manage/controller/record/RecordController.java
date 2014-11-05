@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +12,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
-import com.sxj.supervisor.manage.comet.MessageChannel;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -63,9 +62,9 @@ public class RecordController extends BaseController {
 			map.put("rte", rte);
 			map.put("list", list);
 			map.put("query", query);
+			map.put("channelName", MessageChannel.RECORD_MESSAGE);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
-				HierarchicalCacheManager.evict(2, "comet_message",
-						MessageChannel.RECORD_MESSAGE);
+				CometServiceImpl.setCount(MessageChannel.RECORD_MESSAGE, 0l);
 			}
 			registChannel(MessageChannel.RECORD_MESSAGE);
 			return "manage/record/record";
@@ -89,12 +88,12 @@ public class RecordController extends BaseController {
 		map.put("cte", cte);
 		map.put("rte", rte);
 		map.put("record", record);
-		if(record.getContractType().getId()!=0){
+		if (record.getContractType().getId() != 0) {
 			return "manage/record/record_edit";
-		}else{
+		} else {
 			return "manage/record/record_edit_zhaobiao";
 		}
-		
+
 	}
 
 	/**
@@ -105,7 +104,8 @@ public class RecordController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/record_save")
-	public @ResponseBody Map<String, String> record_save(RecordEntity record) throws WebException {
+	public @ResponseBody Map<String, String> record_save(RecordEntity record)
+			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			recordService.modifyRecord(record);
@@ -164,37 +164,37 @@ public class RecordController extends BaseController {
 				.getContractNo().trim());
 		if (cm != null) {
 			RecordEntity re = recordService.getRecord(recordId);// 申请绑定备案
-			if(cm.getContract().getType().getId()!=0){
-			String recordNo = cm.getContract().getRecordNo();
-			if (recordNo != null) {
-				String[] recordNoArr = recordNo.split(",");
-				if (recordNoArr.length < 2) {
-					for (String record : recordNoArr) {
-						RecordEntity recordEntity = recordService
-								.getRecordByNo(record.trim());
-						if (re.getFlag().getId() == 0) {
-							// 甲方备案
-							if (recordEntity.getFlag().getId() == 0) {
-								map.put("ok", "jfyba");
+			if (cm.getContract().getType().getId() != 0) {
+				String recordNo = cm.getContract().getRecordNo();
+				if (recordNo != null) {
+					String[] recordNoArr = recordNo.split(",");
+					if (recordNoArr.length < 2) {
+						for (String record : recordNoArr) {
+							RecordEntity recordEntity = recordService
+									.getRecordByNo(record.trim());
+							if (re.getFlag().getId() == 0) {
+								// 甲方备案
+								if (recordEntity.getFlag().getId() == 0) {
+									map.put("ok", "jfyba");
+								} else {
+									map.put("ok", "ok");
+									map.put("record", recordEntity);
+								}
 							} else {
-								map.put("ok", "ok");
-								map.put("record", recordEntity);
-							}
-						} else {
-							// 乙方备案
-							if (recordEntity.getFlag().getId() == 1) {
-								map.put("ok", "yfyba");
-							} else {
-								map.put("ok", "ok");
-								map.put("record", recordEntity);
+								// 乙方备案
+								if (recordEntity.getFlag().getId() == 1) {
+									map.put("ok", "yfyba");
+								} else {
+									map.put("ok", "ok");
+									map.put("record", recordEntity);
+								}
 							}
 						}
+					} else {
+						map.put("ok", "htyba");
 					}
-				} else {
-					map.put("ok", "htyba");
 				}
-			}
-			}else{
+			} else {
 				map.put("ok", "no");
 			}
 		} else {
@@ -216,7 +216,7 @@ public class RecordController extends BaseController {
 		map.put("isOk", "ok");
 		return map;
 	}
-	
+
 	/**
 	 * 备案是否可修改
 	 * 
@@ -226,32 +226,32 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("getRecordState")
-	public @ResponseBody Map<String, String> getRecordState(String id, HttpSession session)
-			throws WebException {
+	public @ResponseBody Map<String, String> getRecordState(String id,
+			HttpSession session) throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			RecordEntity re= recordService.getRecord(id);
-			if(re!=null){
-			if(re.getType().getId()==0){
-				if(StringUtils.isEmpty(re.getContractNo())){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
+			RecordEntity re = recordService.getRecord(id);
+			if (re != null) {
+				if (re.getType().getId() == 0) {
+					if (StringUtils.isEmpty(re.getContractNo())) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
+				} else if (re.getType().getId() == 1) {
+					if (re.getState().getId() == 2) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
+				} else if (re.getType().getId() == 2) {
+					if (re.getState().getId() == 4) {
+						map.put("isOK", "ok");
+					} else {
+						map.put("isOK", "no");
+					}
 				}
-			}else if(re.getType().getId()==1){
-				if(re.getState().getId()==2){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
-				}
-			}else if(re.getType().getId()==2){
-				if(re.getState().getId()==4){
-					map.put("isOK", "ok");
-				}else{
-					map.put("isOK", "no");
-				}
-			}
-			}else{
+			} else {
 				map.put("isOK", "del");
 			}
 			return map;
