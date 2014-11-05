@@ -227,8 +227,9 @@ $(document).ready(function(){
                   <span class="item">
                   <label>关联招标合同号</label> ${contractModel.contract.refContractNo}</span>
                   <#if contractModel.modifyList?exists>
+                   <h2 class="titChange f14 fb">变更合同信息</h2>
                   <#list contractModel.modifyList as modifyList>
-                  <h2 class="titChange f14 fb">变更合同信息</h2>
+                 
                   <div class="item">
                     <label>合同变更备案号  </label>${modifyList.modifyContract.recordNo}
                     </div>
