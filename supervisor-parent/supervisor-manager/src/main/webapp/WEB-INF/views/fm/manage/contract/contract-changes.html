@@ -126,7 +126,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 				var right=$right.clone().attr("table",table).removeClass("addtr");
 				$td.append(right);
 			}
+			
 			$tr.remove();
+			var tableLength =$table.parent().find(".formitem").length;
+			if(tableLength==0){
+				$table.parent().hide();
+			}
 			var $last=$table.children("tr:last").children("td:last");
 			if($last.children(".addtr").length==0)
 				$last.prepend($("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+"));
@@ -155,11 +160,13 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 	            		message="单价";
 	            	}else if(i==4){
 	            		message="金额";
-	            	}else{
-	            		message="备注";
 	            	}
-	            		
-					$(this).html($("<input datatype='*1-100' errormsg='输入范围在1~100位之间！' nullmsg='请输入"+message+"！'/>").attr("value",$(this).html()));
+	            	if(i!=5){
+	            		$(this).html($("<input datatype='*1-100' errormsg='输入范围在1~100位之间！' nullmsg='请输入"+message+"！'/>").attr("value",$(this).html()));
+	            	}else{
+	            		$(this).html($("<input />").attr("value",$(this).html()));
+	            	}
+					
 				});
 	            $tr.find(".dynamictr:last").append($plus.clone().addClass("subtabletr"));
  				$table.show();
@@ -196,8 +203,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							}
 						});
 					});
-					var leng=$("#cptable .formitem").length;
-					if(leng==0){
+					var cptable=$("#cptable .formitem").length;
+					var pctable=$("#pctable .formitem").length;
+					if(cptable==0&&pctable==0){
 						messageInfo("请选择变更记录!");
 						return false;
 					}
@@ -286,8 +294,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td class="editable" name="modifyItemList[index].productName">${item.productName}</td>
 								<td class="editable" name="modifyItemList[index].productModel">${item.productModel}</td>
 								<td class="editable" name="modifyItemList[index].quantity">${item.quantity}</td>
-								<td class="editable" name="modifyItemList[index].price">${item.price}</td>
-								<td class="editable" name="modifyItemList[index].amount">${item.amount}</td>
+								<td class="editable" name="modifyItemList[index].price">${item.price?string("0.00")}</td>
+								<td class="editable" name="modifyItemList[index].amount">${item.amount?string("0.00")}</td>
 								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
 								<td><a href="javascript:void(0)" class="lnk-green"
 									 table="cptable">√</a></td>
@@ -298,7 +306,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td>&nbsp;</td>
 								<td>${n}</td>
 								<td>&nbsp;</td>
-								<td>${m}</td>
+								<td>${m?string("0.00")}</td>
 								<td>&nbsp;</td>
 								<td>&nbsp;</td>
 							</tr>
@@ -357,7 +365,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</div>
 						<div>
 							<label>合同定金</label>
-							&nbsp;${contractModel.contract.deposit}&nbsp;元
+							&nbsp;${contractModel.contract.deposit?string("0.00")}&nbsp;元
 						</div>
 						<div>
 							<label>合同备注</label>
@@ -427,8 +435,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable" name="modifyItemList[index].productName">${modifyItem.productName}</td>
 										<td class="editable" name="modifyItemList[index].productModel">${modifyItem.productModel}</td>
 										<td class="editable" name="modifyItemList[index].quantity">${modifyItem.quantity}</td>
-										<td class="editable" name="modifyItemList[index].price">${modifyItem.price}</td>
-										<td class="editable" name="modifyItemList[index].amount">${modifyItem.amount}</td>
+										<td class="editable" name="modifyItemList[index].price">${modifyItem.price?string("0.00")}</td>
+										<td class="editable" name="modifyItemList[index].amount">${modifyItem.amount?string("0.00")}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
 										<td><#if modifyItem.updateState?? ><a href="javascript:void(0)" class="lnk-green"
 									 table="cptable">√</a> <#else> <a href="javascript:void(0)" class="lnk-green"

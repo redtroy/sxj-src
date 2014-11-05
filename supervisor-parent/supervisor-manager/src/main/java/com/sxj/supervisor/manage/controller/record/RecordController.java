@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.redis.service.comet.CometServiceImpl;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
@@ -274,6 +275,28 @@ public class RecordController extends BaseController {
 				map.put("status", "y");
 			}
 
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
+		}
+	}
+	
+	@RequestMapping("getRecord")
+	public @ResponseBody Map<String, String> getRecord(String contractNo) throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			ContractModel cm = contractService.getContractModelByContractNo(contractNo.trim());
+			if(cm!=null){
+				ContractEntity ce=cm.getContract();
+				if(ce.getConfirmState().getId()==3){
+					map.put("isOK", "ok");
+				}else{
+					map.put("isOK", "no");
+				}
+			}else{
+				map.put("isOK", "no");
+			}
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认备案信息错误", e, this.getClass());

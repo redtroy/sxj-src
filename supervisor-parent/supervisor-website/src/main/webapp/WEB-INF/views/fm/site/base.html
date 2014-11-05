@@ -54,7 +54,7 @@ function errorInfo(message){
  }
 function messageInfo(message){
 	var data=$("#message_info_div");
-	data.find("#message_hint").text(message);
+	data.find("#message_hint").html(message);
 	 var pageii = $.layer({
 		    type: 1,
 		    title: false,
