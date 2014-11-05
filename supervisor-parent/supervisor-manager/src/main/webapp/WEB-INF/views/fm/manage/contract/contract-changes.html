@@ -91,14 +91,29 @@ var $plus=$("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);"
 var $right=$("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("√");
 var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);").html("-");	
 	$(function() {
+		$(".delsubtabletr").live("click",function(){
+			var index=$(this).parent().parent().parent().index();
+			$(this).parent().parent().parent().parent().parent().parent().parent().find(".tabList:first").find("tr:eq("+index+")").remove();
+			$(this).parent().parent().parent().remove(); 
+		});
+		
+		
 		$(".subtabletr").live("click",function(){
-			var $tr=$(this).parent().parent().parent().parent().parent().parent();
+			var $tr=$(this).parent().parent().parent().parent().parent().parent().parent();
 			$tr.find(".tabList").each(function(){
 				var $new=$(this).find("tr:last").clone();
 				$new.find("input").attr("value","");
 				$(this).append($new);
+				
 			});
-			$(this).remove();
+			$tr.find(".tabList:last").each(function(){
+				$(this).find(".dynamictr").children("span").remove();
+				var $span=$("<span>").append($plus.clone().removeClass("addtr").addClass("subtabletr")).append("&nbsp;").append($minus.clone().removeClass("deltr").addClass("delsubtabletr"));
+				$span.css("margin","0");
+				$(this).find(".dynamictr").append($span);
+				$(this).find(".dynamictr:last").find(".lnk-red").remove();
+			})
+			//$(this).remove();
 		});
 		$(".addtr").live("click",function(){
 			var $table=$(this).parent().parent().parent();
@@ -136,7 +151,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 			if($last.children(".addtr").length==0)
 				$last.prepend($("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+"));
 		});
-		$(".lnk-green").live("click",function(){
+		$(".copyRow").live("click",function(){
 			var target=$(this).attr("table");
 			var $table=$("#"+target)
 			var trId=$(this).parent().parent().attr("id");
@@ -162,13 +177,22 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 	            		message="金额";
 	            	}
 	            	if(i!=5){
-	            		$(this).html($("<input datatype='*1-100' errormsg='输入范围在1~100位之间！' nullmsg='请输入"+message+"！'/>").attr("value",$(this).html()));
+            			$(this).html($("<input datatype='*1-100' errormsg='输入范围在1~100位之间！' nullmsg='请输入"+message+"！'/>").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly")));
 	            	}else{
-	            		$(this).html($("<input />").attr("value",$(this).html()));
+	            		$(this).html($("<input />").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly")));
 	            	}
+
 					
 				});
-	            $tr.find(".dynamictr:last").append($plus.clone().addClass("subtabletr"));
+	            $table.find(".dynamictr").each(function(){
+	            	$(this).children("span").remove();
+	            	var $span=$("<span>").append($plus.clone().removeClass("addtr").addClass("subtabletr")).append("&nbsp;").append($minus.clone().removeClass("deltr").addClass("delsubtabletr"));
+	            	$span.css("margin","0");
+	            	$(this).append($span);
+	            });
+	            $table.find(".formitem").each(function(){
+	            	$(this).find(".dynamictr:last").find(".lnk-red").remove();
+	            })
  				$table.show();
 				$(this).attr("class","lnk-red").html("!");
 		}
@@ -297,7 +321,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td class="editable" name="modifyItemList[index].price">${item.price?string("0.00")}</td>
 								<td class="editable" name="modifyItemList[index].amount">${item.amount?string("0.00")}</td>
 								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
-								<td><a href="javascript:void(0)" class="lnk-green"
+								<td><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="cptable">√</a></td>
 							</tr>
 							</#list>
@@ -333,7 +357,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							</tr>
 							<#list contractModel.batchList as batch>
 							<tr id="${batch.batch.id}" class="formitem">
-								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo">第${batch.batch.batchNo}批次</td>
+								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo" readonly="readonly">第${batch.batch.batchNo}批次</td>
 								<td name="modifyBatchList[i].modifyBatchItems[j].productModel"><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
@@ -351,8 +375,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										</#list>
 									</table></td>
 								<td class="editable" name="modifyBatchList[i].modifyBatch.amount">${batch.batch.amount?string("0.00")}</td>
-								<td class="editable" name="modifyBatchList[i].modifyBatch.rfidNo">${batch.batch.rfidNo}</td>
-								<td><a href="javascript:void(0)" class="lnk-green"
+								<td class="editable" name="modifyBatchList[i].modifyBatch.rfidNo" readonly="readonly">${batch.batch.rfidNo}</td>
+								<td><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="pctable">√</a></td>
 							</tr>
 							</#list>
@@ -438,7 +462,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable" name="modifyItemList[index].price">${modifyItem.price?string("0.00")}</td>
 										<td class="editable" name="modifyItemList[index].amount">${modifyItem.amount?string("0.00")}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
-										<td><#if modifyItem.updateState?? ><a href="javascript:void(0)" class="lnk-green"
+										<td><#if modifyItem.updateState?? ><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="cptable">√</a> <#else> <a href="javascript:void(0)" class="lnk-green"
 									 table="cptable">!</a>
 											</#if>
@@ -486,7 +510,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 											</table></td>
 										<td>${modifyBatch.modifyBatch.amount?string("0.00")}</td>
 										<td>${modifyBatch.modifyBatch.rfidNo}</td>
-										<td><a href="javascript:void(0)" class="lnk-green"
+										<td><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="pctable">√</a></td>
 									</tr>
 									</#list>
