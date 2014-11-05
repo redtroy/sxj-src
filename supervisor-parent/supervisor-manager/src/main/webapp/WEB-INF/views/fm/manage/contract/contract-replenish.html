@@ -154,37 +154,19 @@
 		$("#saveId").live(
 				"click",
 				function() {
-					var batchSize = $("#batchTb tr").filter(".batchClass")
-							.size();
-					var batchItemSize = $("#batchItem1 tr").filter(
-							".batchItemClass1").size();
-					for (var i = 0; i < parseInt(batchSize); i++) {
-						$("#batchTb tr").filter(".batchClass").eq(i).find("td")
-								.eq(5).find("input").attr(
-										"name",
-										"batchList[" + i
-												+ "].replenishBatch.amount");
-						$("#batchTb tr").filter(".batchClass").eq(i).find("td")
-								.eq(7).find("input").attr(
-										"name",
-										"batchList[" + i
-												+ "].replenishBatch.rfidNo");
-						for (var j = 0; j < parseInt(batchItemSize); j++) {
-							$("#batchItem1 tr").filter(".batchItemClass1")
-									.eq(j).find("td").eq(0).find("textarea")
-									.attr(
-											"name",
-											"batchList[" + i
-													+ "].replenishBatchItems["
-													+ j + "].productModel");
-							$("#batchItem2 tr").filter(".batchItemClass2")
-									.eq(j).find("td").eq(0).find("input").attr(
-											"name",
-											"batchList[" + i
-													+ "].replenishBatchItems["
-													+ j + "].quantity");
-						}
-					}
+					$("#pctable").find(".formitem").each(function(i){
+						var $tr=$(this);
+						$tr.children("td").each(function(){
+							var name=$(this).attr("name")
+							if(name)
+								$(this).children("input").attr("name",name.replace("[i]","["+i+"]"));
+							$(this).find(".editable").each(function(j){
+								var name1=$(this).attr("name");
+								if(name1)
+									$(this).children("input").attr("name",name1.replace("[i]","["+i+"]").replace("[j]","["+j+"]"));
+							})
+						})
+					});
 					if (confirm("确定补损合同吗?")) {
 						$.post("saveReplenish.htm", $("#changsForm")
 								.serialize(), function(data) {
@@ -196,6 +178,7 @@
 							}
 						})
 					}
+					
 				});
 
 	}
@@ -309,7 +292,7 @@
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td class="editable">${batchItem.productModel}</td>
+											<td class="editable" name="batchList[i].replenishBatchItems[j].productModel">${batchItem.productModel}</td>
 										</tr>
 										</#list>
 									</table></td>
@@ -318,7 +301,7 @@
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td class="editable dynamictr">${batchItem.quantity}</td>
+											<td class="editable dynamictr" name="batchList[i].replenishBatchItems[j].quantity">${batchItem.quantity}</td>
 										</tr>
 										</#list>
 									</table></td>
@@ -374,7 +357,7 @@
 							</div>
 							<div>
 								<label>补损批次RFID</label>${record.rfidNo}<input
-									type="hidden" value="${record.recordNo}"
+									type="hidden" value="${record.rfidNo}"
 									name="replenish.batchRfidNo" />
 							</div>
 							<div class="contPic">
