@@ -322,8 +322,8 @@ $(document).ready(function(){
                    </#if> 
                     
                     <#if contractModel.replenishList?exists>
-                    <#list contractModel.replenishList as replenishList>
                      <h2 class="titChange f14 fb">补损合同信息</h2>
+                    <#list contractModel.replenishList as replenishList>
                     <div class="item">
                       <label>合同补损备案号</label>
                       ${replenishList.replenishContract.recordNo}</div>

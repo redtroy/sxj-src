@@ -177,7 +177,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 	            		message="金额";
 	            	}
 	            	if(i!=5){
-            			$(this).html($("<input datatype='*1-100' errormsg='输入范围在1~100位之间！' nullmsg='请输入"+message+"！'/>").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly")));
+            			$(this).html($("<input/>").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly")));
 	            	}else{
 	            		$(this).html($("<input />").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly")));
 	            	}
@@ -318,8 +318,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td class="editable" name="modifyItemList[index].productName">${item.productName}</td>
 								<td class="editable" name="modifyItemList[index].productModel">${item.productModel}</td>
 								<td class="editable" name="modifyItemList[index].quantity">${item.quantity}</td>
-								<td class="editable" name="modifyItemList[index].price">${item.price?string("0.00")}</td>
-								<td class="editable" name="modifyItemList[index].amount">${item.amount?string("0.00")}</td>
+								<td class="editable" name="modifyItemList[index].price" price="price">${item.price?string("0.00")}</td>
+								<td class="editable" name="modifyItemList[index].amount" amount="amount">${item.amount?string("0.00")}</td>
 								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
 								<td><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="cptable">√</a></td>
