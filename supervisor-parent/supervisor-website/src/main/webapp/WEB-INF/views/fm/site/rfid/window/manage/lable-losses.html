@@ -16,7 +16,10 @@
 			<label>门窗招标合同号</label>${windowRfid.contractNo}
 		</div>
 		<div class="item">
-			<label>窗型代号</label>${windowRfid.windowType.getName()}
+			<label>窗型代号</label>
+			<#if windowRfid.windowType??>
+				${windowRfid.windowType.getName()}
+			</#if>
 		</div>
 		<div class="item">
 			<label>&nbsp;</label><a href="javascript:lableLosses();"
