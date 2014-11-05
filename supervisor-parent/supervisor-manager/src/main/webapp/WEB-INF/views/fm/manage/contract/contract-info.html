@@ -214,6 +214,7 @@
 				</ul>
 			  </div>
             </div>
+            <#if modifyList.modifyItemList?exists>
             <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
               <col width="15%" />
               <col width="20%" />
@@ -243,6 +244,7 @@
               </tr>
               </#list>
             </table>
+            </#if>
             <#if modifyList.modifyBatchList?exists>
             <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
               <col width="20%" />
@@ -278,7 +280,7 @@
                     </tr>
                   </#list>
                   </table></td>
-                <td>${modifyBatch.modifyBatch.amount}</td>
+                <td>${modifyBatch.modifyBatch.amount?string("0.00")}</td>
                 <td>${modifyBatch.modifyBatch.rfidNo}</td>
                 <td>&nbsp;</td>
               </tr>

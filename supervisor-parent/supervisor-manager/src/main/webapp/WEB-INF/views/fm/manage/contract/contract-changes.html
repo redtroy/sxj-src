@@ -55,10 +55,10 @@ var validform;
 			});
 			refreshElastislide($(this).parent(), $(this));
 		});
-		
 		//初始化验证
 		validform=$("#changsForm").Validform({
 			tiptype:function(msg,o,cssctl){
+					o.obj.parent().children(".checkinfo").remove();
 					var $div=$("<div/>").addClass("checkinfo");
 					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
 					var left=o.obj.offset().left,
@@ -71,15 +71,17 @@ var validform;
 					}).show();
 					o.obj.parent().append($div);
 			}});
-		$("#changsForm").find("[datatype]").each(function(){
-			$(this).focus(function(){
-				$(this).parent().children(".checkinfo").hide();
-			}); 
-			$(this).blur(function(){
-				var pass=ul_validform.check(true,$(this));
-				if(!pass)
-					$(this).parent().children(".checkinfo").show();
-			});
+		
+		$("#changsForm").find("[datatype]").live("focus",function(){
+			$(this).parent().children(".checkinfo").hide();
+			$(this).removeClass("Validform_error");
+			//$(this).parent().children(".checkinfo").hide();
+		});
+		$("#changsForm").find("[datatype]").live("blur",function(){
+			
+			var pass=validform.check(true,$(this));
+			if(!pass)
+				$(this).parent().children(".checkinfo").show();
 		});
 	});
 </script>
@@ -138,7 +140,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 				var $td=$("#"+trId).children("td:last");
 				$td.empty();
 				var table=$table.parent().attr("id");
-				var right=$right.clone().attr("table",table).removeClass("addtr");
+				var right=$right.clone().attr("table",table).removeClass("addtr").addClass("copyRow");
 				$td.append(right);
 			}
 			
@@ -162,31 +164,19 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 				$tr.append($hidden);
 				$table.append($tr);
 				$link=$tr.find(".lnk-green").parent().empty();
-	            $link.append($plus.clone()).append("&nbsp;").append($minus.clone());
+				if(target!='pctable')
+	            	$link.append($plus.clone()).append("&nbsp;").append($minus.clone());
+				else
+					$link.append($minus.clone());
 	            $tr.find(".editable").each(function(i){
-	            	var message;
-	            	if(i==0){
-	            		message="产品名称";
-	            	}else if(i==1){
-	            		message="产品规格";
-	            	}else if(i==2){
-	            		message="数量";
-	            	}else if(i==3){
-	            		message="单价";
-	            	}else if(i==4){
-	            		message="金额";
-	            	}
-	            	if(i!=5){
-            			$(this).html($("<input/>").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly")));
-	            	}else{
-	            		$(this).html($("<input />").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly")));
-	            	}
+            			$(this).html($("<input />").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly"))
+            					.attr("datatype",$(this).attr("data")).attr("errormsg",$(this).attr("errormsg")).attr("nullmsg",$(this).attr("nullmsg")));
 
 					
 				});
 	            $table.find(".dynamictr").each(function(){
 	            	$(this).children("span").remove();
-	            	var $span=$("<span>").append($plus.clone().removeClass("addtr").addClass("subtabletr")).append("&nbsp;").append($minus.clone().removeClass("deltr").addClass("delsubtabletr"));
+	            	var	$span=$("<span>").append($plus.clone().removeClass("addtr").addClass("subtabletr")).append("&nbsp;").append($minus.clone().removeClass("deltr").addClass("delsubtabletr"));
 	            	$span.css("margin","0");
 	            	$(this).append($span);
 	            });
@@ -196,6 +186,19 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
  				$table.show();
 				$(this).attr("class","lnk-red").html("!");
 		}
+		});
+		
+		$(".priceClass").live("blur", function() {
+			var value = $(this).find("input").val();
+			if(value&&isNumber(value)){
+				$(this).find("input").val(parseFloat(value).toFixed(2));
+			}
+		});
+		$(".amountClass").live("blur", function() {
+			var value = $(this).find("input").val();
+			if(value&&isNumber(value)){
+				$(this).find("input").val(parseFloat(value).toFixed(2));
+			}
 		});
 	});
 	$(function() {
@@ -315,11 +318,11 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<input type="hidden" id="id${item.id}" value="${item.id}"
 								name="itemList[${item_index}].id" />
 							<tr id="item${item.id}" class="formitem">
-								<td class="editable" name="modifyItemList[index].productName">${item.productName}</td>
-								<td class="editable" name="modifyItemList[index].productModel">${item.productModel}</td>
-								<td class="editable" name="modifyItemList[index].quantity">${item.quantity}</td>
-								<td class="editable" name="modifyItemList[index].price" price="price">${item.price?string("0.00")}</td>
-								<td class="editable" name="modifyItemList[index].amount" amount="amount">${item.amount?string("0.00")}</td>
+								<td class="editable" name="modifyItemList[index].productName" data="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！">${item.productName}</td>
+								<td class="editable" name="modifyItemList[index].productModel" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${item.productModel}</td>
+								<td class="editable" name="modifyItemList[index].quantity"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" >${item.quantity}</td>
+								<td class="editable priceClass" name="modifyItemList[index].price"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" >${item.price?string("0.00")}</td>
+								<td class="editable amountClass" name="modifyItemList[index].amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！" >${item.amount?string("0.00")}</td>
 								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
 								<td><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="cptable">√</a></td>
@@ -357,24 +360,24 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							</tr>
 							<#list contractModel.batchList as batch>
 							<tr id="${batch.batch.id}" class="formitem">
-								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo" readonly="readonly">第${batch.batch.batchNo}批次</td>
-								<td name="modifyBatchList[i].modifyBatchItems[j].productModel"><table border="0" cellpadding="0" cellspacing="0"
+								<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo" readonly="readonly" >${batch.batch.batchNo}</td>
+								<td name="modifyBatchList[i].modifyBatchItems[j].productModel"  ><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td class="editable">${batchItem.productModel}</td>
+											<td class="editable"  data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" >${batchItem.productModel}</td>
 										</tr>
 										</#list>
 									</table></td>
-								<td name="modifyBatchList[i].modifyBatchItems[j].quantity"><table border="0" cellpadding="0" cellspacing="0"
+								<td name="modifyBatchList[i].modifyBatchItems[j].quantity"  ><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td class="editable dynamictr" name="">${batchItem.quantity}</td>
+											<td class="editable dynamictr" name="" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${batchItem.quantity}</td>
 										</tr>
 										</#list>
 									</table></td>
-								<td class="editable" name="modifyBatchList[i].modifyBatch.amount">${batch.batch.amount?string("0.00")}</td>
+								<td class="editable amountClass" name="modifyBatchList[i].modifyBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" >${batch.batch.amount?string("0.00")}</td>
 								<td class="editable" name="modifyBatchList[i].modifyBatch.rfidNo" readonly="readonly">${batch.batch.rfidNo}</td>
 								<td><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="pctable">√</a></td>
@@ -456,11 +459,11 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</tr>
 									<#list modifyList.modifyItemList as modifyItem>
 									<tr id="${modifyItem.id}" class="formitem">
-										<td class="editable" name="modifyItemList[index].productName">${modifyItem.productName}</td>
-										<td class="editable" name="modifyItemList[index].productModel">${modifyItem.productModel}</td>
-										<td class="editable" name="modifyItemList[index].quantity">${modifyItem.quantity}</td>
-										<td class="editable" name="modifyItemList[index].price">${modifyItem.price?string("0.00")}</td>
-										<td class="editable" name="modifyItemList[index].amount">${modifyItem.amount?string("0.00")}</td>
+										<td class="editable" name="modifyItemList[index].productName" data="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！">${modifyItem.productName}</td>
+										<td class="editable" name="modifyItemList[index].productModel" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${modifyItem.productModel}</td>
+										<td class="editable" name="modifyItemList[index].quantity" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity}</td>
+										<td class="editable priceClass" name="modifyItemList[index].price" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
+										<td class="editable amountClass" name="modifyItemList[index].amount"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  >${modifyItem.amount?string("0.00")}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
 										<td><#if modifyItem.updateState?? ><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="cptable">√</a> <#else> <a href="javascript:void(0)" class="lnk-green"
@@ -489,7 +492,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</tr>
 									<#list modifyList.modifyBatchList as modifyBatch>
 									<tr id="${modifyBatch.modifyBatch.id}" class="formitem">
-										<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
+										<td>${modifyBatch.modifyBatch.batchNo}</td>
 										<td>
 											<table border="0" cellpadding="0" cellspacing="0"
 												class="tabList prodIable">
