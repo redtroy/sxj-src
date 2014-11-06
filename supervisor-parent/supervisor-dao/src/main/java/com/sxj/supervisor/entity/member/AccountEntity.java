@@ -109,6 +109,14 @@ public class AccountEntity extends Pagable implements Serializable {
 
 	private String noType;
 
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
 	public String getId() {
 		return id;
 	}
