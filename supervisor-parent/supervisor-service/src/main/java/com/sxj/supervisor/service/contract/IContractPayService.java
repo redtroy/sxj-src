@@ -34,4 +34,10 @@ public interface IContractPayService {
 	 */
 	public List<AccountingModel> query_finance(AccountingModel query,
 			String startDate, String endDate) throws ServiceException;
+
+	/**
+	 * 根据ID 查询
+	 */
+	public PayRecordEntity getPayRecordEntity(String id)
+			throws ServiceException;
 }

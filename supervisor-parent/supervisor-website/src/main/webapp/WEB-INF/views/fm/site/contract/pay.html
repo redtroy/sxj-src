@@ -10,6 +10,7 @@
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
 <@b.pageScript/>
 <script>
 jQuery(document).ready(function($) {
@@ -17,13 +18,35 @@ jQuery(document).ready(function($) {
 	$('.btn-pay').live("click",function(){
 		var obj=$(this).attr("pay_id");
 		$('#'+obj).slideDown(200);
-	})
+	});
 	$('.button-gray').live("click",function(){
 		var obj=$(this).attr("pay_id");
 		$('#'+obj).slideUp(200);
-	})
+	});
+	
+	JS.Engine.start('${basePath}comet');
+		JS.Engine.on({
+			start : function(cId, channelList, engine){  
+		      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+		    }, 
+		 "${channelName}" : function(data){//侦听一个channel
+			 $("#message_div").empty();
+		  if (data>0){
+			if (${state}=="a"){
+			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" onclick="query();return false;"></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
+			}else{
+			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" onclick="query();return false;"></span>贵公司有'+data+'笔合同里有待确认的款项</div>';
+			}
+			$("#message_div").html(bb);
+		  }
+         },   
+ 	}); 
 	
 });
+
+function closeMessage(obj){
+	$(obj).parent().remove();
+}
 function query(page){
 	var params=$("#serch_div").find(":input").serialize();
 	if(page!=undefined){
@@ -123,10 +146,9 @@ function pay_ok(id){
             </#list>
           </select>
    </#if>
-          <button class="button button-search" onclick="query();return false;">查询</button></p>
+          <button class="button button-search" onclick="query();return false;">查询</button> <a class="button button-search"  href="test.htm">测试</a></p>
 </div>
-  <div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有一笔合同里有待支付的款项</div>
-  <@b.pager/>
+  <div id="message_div"></div>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList">
   <col width="10%" />
   <col width="10%" />
@@ -211,6 +233,7 @@ function pay_ok(id){
     </tr>
    </#list>
   </table>
+  <@b.pager/>
 </div>
 </div>
 </div>
