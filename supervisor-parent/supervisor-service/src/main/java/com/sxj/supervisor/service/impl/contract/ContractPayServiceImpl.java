@@ -113,4 +113,16 @@ public class ContractPayServiceImpl implements IContractPayService {
 			throw new ServiceException("财务统计查询出错！", e);
 		}
 	}
+
+	@Override
+	public PayRecordEntity getPayRecordEntity(String id)
+			throws ServiceException {
+		try {
+			PayRecordEntity pay = payDao.getPayRecordEntity(id);
+			return pay;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

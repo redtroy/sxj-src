@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
@@ -46,7 +49,8 @@ public class PayController extends BaseController {
 	 */
 	@RequestMapping("paylist")
 	public String paylist(ModelMap map, ContractPayModel query,
-			HttpSession session) throws WebException {
+			HttpServletRequest request, HttpSession session)
+			throws WebException {
 		try {
 			if (query != null) {
 				query.setPagable(true);
@@ -64,6 +68,11 @@ public class PayController extends BaseController {
 			}
 			map.put("payState", payState);
 			map.put("query", query);
+			String channelName = MessageChannel.WEBSITE_PAY_MESSAGE + memberNo;
+			map.put("channelName", channelName);
+			// 注册监听
+
+			registChannel(channelName);
 		} catch (Exception e) {
 			throw new WebException(e.getMessage());
 		}
@@ -113,6 +122,19 @@ public class PayController extends BaseController {
 			String flag = payService.pay(id, payReal);
 			Map<String, String> map = new HashMap<String, String>();
 			if (flag.equals("ok")) {
+				PayRecordEntity pay = payService.getPayRecordEntity(id);
+				// 甲方
+				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
+						+ pay.getMemberNo_A());
+				MessageChannel.initTopic().publish(
+						MessageChannel.WEBSITE_PAY_MESSAGE
+								+ pay.getMemberNo_A());
+				// 乙方
+				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
+						+ pay.getMemberNo_B());
+				MessageChannel.initTopic().publish(
+						MessageChannel.WEBSITE_PAY_MESSAGE
+								+ pay.getMemberNo_B());
 				map.put("isOk", "ok");
 			} else {
 				map.put("isOk", "false");
@@ -133,6 +155,13 @@ public class PayController extends BaseController {
 			String flag = payService.pay_ok(id);
 			Map<String, String> map = new HashMap<String, String>();
 			if (flag.equals("ok")) {
+				PayRecordEntity pay = payService.getPayRecordEntity(id);
+				// 乙方
+				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
+						+ pay.getMemberNo_B());
+				MessageChannel.initTopic().publish(
+						MessageChannel.WEBSITE_PAY_MESSAGE
+								+ pay.getMemberNo_B());
 				map.put("isOk", "ok");
 			} else {
 				map.put("isOk", "false");
@@ -141,5 +170,19 @@ public class PayController extends BaseController {
 		} catch (Exception e) {
 			throw new WebException("乙方确认付款错误");
 		}
+	}
+
+	/**
+	 * 测试
+	 */
+	@RequestMapping("test")
+	public @ResponseBody Map<String, String> test(HttpSession session) {
+		SupervisorPrincipal info = getLoginInfo(session);
+		String memberNo = info.getMember().getMemberNo();
+		CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
+				+ memberNo);
+		MessageChannel.initTopic().publish(
+				MessageChannel.WEBSITE_PAY_MESSAGE + memberNo);
+		return null;
 	}
 }
