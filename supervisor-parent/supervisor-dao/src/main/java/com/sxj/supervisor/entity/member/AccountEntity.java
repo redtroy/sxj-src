@@ -15,6 +15,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
+import com.sxj.mybatis.orm.annotations.Version;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IAccountDao;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
@@ -101,6 +102,10 @@ public class AccountEntity extends Pagable implements Serializable {
 
 	@Column(name = "LAST_LOGIN")
 	private Date lastLogin;
+
+	@Column(name = "VERSION")
+	@Version
+	private Long version;
 
 	private String noType;
 
