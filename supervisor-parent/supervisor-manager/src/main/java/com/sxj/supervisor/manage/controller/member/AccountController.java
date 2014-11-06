@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.redis.advance.topic.RedisTopics;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
@@ -25,6 +26,7 @@ import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.util.Constraints;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -43,6 +45,9 @@ public class AccountController extends BaseController {
 
 	@Autowired
 	private IMemberRoleService roleService;
+
+	@Autowired
+	private RedisTopics topics;
 
 	@RequestMapping("accountList")
 	public String accountList(AccountQuery query, ModelMap map) {
@@ -131,6 +136,8 @@ public class AccountController extends BaseController {
 			accountService.modifyAccount(account, ids);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
+			topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish(
+					"update," + account.getId());
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -151,6 +158,10 @@ public class AccountController extends BaseController {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		map.put("state", stateName);
+		if (state == AccountStatesEnum.stop.getId()) {
+			topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish(
+					"del," + id);
+		}
 		return map;
 	}
 
@@ -166,6 +177,7 @@ public class AccountController extends BaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("isOK", "ok");
 		map.put("password", password);
+		topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish("del," + id);
 		return map;
 	}
 

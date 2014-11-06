@@ -421,14 +421,21 @@ $(document).ready(function(){
 	&copy; 2014 私享家绿色门窗平台&nbsp;版权所有<span class="ml10"><a
 		target="_blank" href="http://www.miitbeian.gov.cn/">苏ICP备14040094号-1</a></span>
 </div>
-</#macro> <#macro leftMenu>
+</#macro>
+<#macro leftMenu isLoad>
 <div class="yard-190 ly-left leftMenu" id="leftList">
 	<script>
+	var isLoad="${isLoad}";
 	var account="${Session.userinfo.account.accountNo}";
 	if(account==""){
 		account="${Session.userinfo.member.memberNo}"
 	}
-	$("#leftList").load("${basePath}menu.htm?account="+account);
+	if(isLoad=="true"){
+		$("#leftList").load("${basePath}menu.htm?account="+account+"&"+ Math.random());
+	}else{
+		$("#leftList").load("${basePath}menu.htm?account="+account);
+	}
+	
 	</script>
 </div>
 </#macro> <#macro pager>

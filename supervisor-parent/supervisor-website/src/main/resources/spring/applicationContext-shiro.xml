@@ -14,12 +14,15 @@
 		http://www.springframework.org/schema/aop/spring-aop.xsd"
 	default-lazy-init="false">
 	<!-- 配置多级缓存 -->
-	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager" lazy-init="false"></bean>
+	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
+		lazy-init="false"></bean>
 	<bean id="myShiroRealmService"
 		class="com.sxj.supervisor.website.login.SupervisorSiteShiroRealm">
 	</bean>
 	<bean id="authenticationFilter"
 		class="com.sxj.supervisor.website.login.SupervisorSiteAuthenticationFilter" />
+
+	<bean class="com.sxj.supervisor.website.login.ShiroEventListener"></bean>
 
 
 	<!-- 权限管理器 -->
@@ -58,8 +61,9 @@
 	</bean>
 
 	<bean id="shiroCacheManager"
-		class="com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager">
+		class="com.sxj.supervisor.website.login.SupervisorShiroRedisCacheManager">
 		<property name="level" value="2"></property>
+		<property name="collections" ref="redisCollections"></property>
 	</bean>
 
 	<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
@@ -94,7 +98,7 @@
 		<!-- 登陆成功后跳转的url -->
 		<property name="successUrl" value="/index.htm" />
 		<!-- 没有权限跳转的url -->
-		<property name="unauthorizedUrl" value="/to_login.htm" />
+		<property name="unauthorizedUrl" value="/index.htm" />
 		<!-- 访问地址的过滤规则,从上至下的优先级,如果有匹配的规则,就会返回,不会再进行匹配 -->
 		<property name="filterChainDefinitions">
 			<value>
