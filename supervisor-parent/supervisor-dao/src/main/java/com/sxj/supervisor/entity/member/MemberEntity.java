@@ -27,6 +27,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
+import com.sxj.mybatis.orm.annotations.Version;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -219,6 +220,18 @@ public class MemberEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "DEVICE_NUMBER")
 	private String deviceNumber;
+
+	@Column(name = "VERSION_LOCK")
+	@Version
+	private Long version;
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 
 	public String getDeviceNumber() {
 		return deviceNumber;

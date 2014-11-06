@@ -32,7 +32,7 @@ jQuery(document).ready(function($) {
 		 "${channelName}" : function(data){//侦听一个channel
 			 $("#message_div").empty();
 		  if (data>0){
-			if (${state}=="a"){
+			if ("${state}"=="a"){
 			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" onclick="query();return false;"></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
 			}else{
 			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" onclick="query();return false;"></span>贵公司有'+data+'笔合同里有待确认的款项</div>';
@@ -146,7 +146,7 @@ function pay_ok(id){
             </#list>
           </select>
    </#if>
-          <button class="button button-search" onclick="query();return false;">查询</button> <a class="button button-search"  href="test.htm">测试</a></p>
+          <button class="button button-search" onclick="query();return false;">查询</button> </p>
 </div>
   <div id="message_div"></div>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList">
