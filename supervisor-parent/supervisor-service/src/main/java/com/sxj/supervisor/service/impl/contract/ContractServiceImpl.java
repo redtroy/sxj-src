@@ -642,7 +642,7 @@ public class ContractServiceImpl implements IContractService {
 	@Transactional
 	public void changeContract(String recordId, String contractId,
 			ContractModifyModel model, String recordNo,
-			List<ContractItemEntity> itemList) throws ServiceException {
+			List<ContractItemEntity> itemList,String contractIds,String changeIds) throws ServiceException {
 		try {
 			ModifyContractEntity mec = model.getModifyContract();
 			if (itemList != null) {
@@ -687,7 +687,31 @@ public class ContractServiceImpl implements IContractService {
 			re.setId(recordId);
 			re.setState(RecordStateEnum.change);
 			recordDao.updateRecord(re);
-
+			//更新变更信息
+			if(StringUtils.isNotEmpty(contractIds)){
+				contractIds=contractIds.substring(0,contractIds.length()-1);
+				String[] contractIdArr=contractIds.split(",");
+				List<ContractItemEntity> cilist = new ArrayList<ContractItemEntity>();
+				for (String string : contractIdArr) {
+					ContractItemEntity ci = new ContractItemEntity();
+					ci.setId(string);
+					ci.setUpdateState(1);
+					cilist.add(ci);
+				}
+				contractItemDao.updateItem(cilist);
+			}
+			if(StringUtils.isNotEmpty(changeIds)){
+				changeIds=changeIds.substring(0,changeIds.length()-1);
+				String[] changeIdsArr=changeIds.split(",");
+				List<ModifyItemEntity> milist = new ArrayList<ModifyItemEntity>();
+				for (String string : changeIdsArr) {
+					ModifyItemEntity ci = new ModifyItemEntity();
+					ci.setId(string);
+					ci.setUpdateState(1);
+					milist.add(ci);
+				}
+				contractModifyItemDao.updateItems(milist);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("变更合同信息错误", e);
 		}

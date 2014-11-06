@@ -93,7 +93,8 @@ $(document).ready(function(){
 				<col width="15%" />
 				<col width="12%" />
 				<col width="13%" />
-				<col width="30%" />
+				<col width="22%" />
+					<col width="8%" />
 				<tr>
 					<th>产品名称</th>
 					<th>产品规格<span class="fontAR ml5"></span></th>
@@ -102,6 +103,7 @@ $(document).ready(function(){
 					<th>单价<span>（元）</span></th>
 					<th>金额</th>
 					<th>备注说明</th>
+					<th>&nbsp;&nbsp;&nbsp;</th>
 				</tr>
 				<#assign n = 0> 
 				<#assign m = 0> 
@@ -115,6 +117,7 @@ $(document).ready(function(){
 					<td>${item.price?string('0.00')}</td>
 					<td>${item.amount?string('0.00')}</td>
 					<td>${item.remarks}</td>
+					<td><#if item.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 				</tr>
 				</#list>
 				<tr class="fb">
@@ -127,6 +130,7 @@ $(document).ready(function(){
 						arr=(contractModel.contract.imgPath?split(","))>
 						本合同附件清单共${arr?size}页</td> <#else>
 					<td class="tl">本合同附件清单共0页</td> </#if>
+					<td></td> 
 				</tr>
 			</table>
 		</div>
@@ -192,7 +196,8 @@ $(document).ready(function(){
 					<col width="15%" />
 					<col width="12%" />
 					<col width="13%" />
-					<col width="30%" />
+					<col width="22%" />
+					<col width="8%" />
 					<tr>
 						<th>产品名称</th>
 						<th>产品规格<span class="fontAR ml5"></span></th>
@@ -201,6 +206,7 @@ $(document).ready(function(){
 						<th>单价<span>（元）</span></th>
 						<th>金额</th>
 						<th>备注说明</th>
+						<th>&nbsp;&nbsp;&nbsp;</th>
 					</tr>
 
 					<#list modifyList.modifyItemList as modifyItem>
@@ -211,6 +217,7 @@ $(document).ready(function(){
 						<td>${modifyItem.price?string('0.00')}</td>
 						<td>${modifyItem.amount?string('0.00')}</td>
 						<td>${modifyItem.remarks}</td>
+						<td><#if modifyItem.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 					</tr>
 					</#list>
 				</table>
@@ -223,12 +230,14 @@ $(document).ready(function(){
 					<col width="15%" />
 					<col width="45%" />
 					<col width="20%" />
-					<col width="20%" />
+					<col width="12%" />
+					<col width="8%" />
 					<tr>
 						<th>批次</th>
 						<th>表格</th>
 						<th>应付货款</th>
 						<th>对应批次RFID编号</th>
+						<th>&nbsp;&nbsp;&nbsp;</th>
 					</tr>
 
 					<#list modifyList.modifyBatchList as modifyBatch>
@@ -251,6 +260,7 @@ $(document).ready(function(){
 							</table></td>
 						<td>${modifyBatch.modifyBatch.amount?string('0.00')}元</td>
 						<td>${modifyBatch.modifyBatch.rfidNo}</td>
+						<td><#if modifyBatch.modifyBatch.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 					</tr>
 					</#list>
 				</table>
@@ -290,13 +300,15 @@ $(document).ready(function(){
 					<col width="42%" />
 					<col width="12%" />
 					<col width="17%" />
-					<col width="17%" />
+					<col width="9%" />
+					<col width="8%" />
 					<tr>
 						<th>批次</th>
 						<th>表格</th>
 						<th>应付货款</th>
 						<th>对应批次RFID编号</th>
 						<th>新RFID编号</th>
+						<th>&nbsp;&nbsp;&nbsp;</th>
 					</tr>
 					<#list replenishList.batchItems as replenishItem>
 					<tr>
@@ -318,6 +330,7 @@ $(document).ready(function(){
 						<td>${replenishItem.replenishBatch.amount}</td>
 						<td>${replenishItem.replenishBatch.rfidNo}</td>
 						<td>${replenishItem.replenishBatch.newRfidNo}</td>
+						<td><#if replenishItem.replenishBatch.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 					</tr>
 					</#list>
 				</table>

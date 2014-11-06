@@ -68,7 +68,7 @@ public interface IContractService {
 	 **/
 	public void changeContract(String recordId, String contractId,
 			ContractModifyModel model, String recordNo,
-			List<ContractItemEntity> itemList);
+			List<ContractItemEntity> itemList,String contractIds,String changeIds);
 
 	/**
 	 * 补损合同
