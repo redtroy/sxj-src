@@ -974,6 +974,11 @@ public class GenericStatementBuilder extends BaseBuilder
             contents.add(new IfSqlNode(new MixedSqlNode(sqlNodes),
                     getTestByField(null, field)));
         }
+        if (versionField != null)
+        {
+            contents.add(new TextSqlNode(getColumnNameByField(versionField)
+                    + "=" + getColumnNameByField(versionField) + "+1"));
+        }
         
         return new SetSqlNode(configuration, new MixedSqlNode(contents));
     }
