@@ -103,7 +103,7 @@ public class AccountEntity extends Pagable implements Serializable {
 	@Column(name = "LAST_LOGIN")
 	private Date lastLogin;
 
-	@Column(name = "VERSION")
+	@Column(name = "VERSION_LOCK")
 	@Version
 	private Long version;
 
