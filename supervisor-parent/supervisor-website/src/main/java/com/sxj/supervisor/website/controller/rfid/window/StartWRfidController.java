@@ -2,7 +2,6 @@ package com.sxj.supervisor.website.controller.rfid.window;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -165,16 +164,17 @@ public class StartWRfidController extends BaseController {
 			if (items == null || items.size() == 0) {
 				throw new WebException("招标合同条目不存在");
 			}
-			float quantity = 0f;
-			for (Iterator<ContractItemEntity> iterator = items.iterator(); iterator
-					.hasNext();) {
-				ContractItemEntity item = iterator.next();
-				if (item == null) {
-					continue;
-				}
-				quantity = quantity + item.getQuantity();
-			}
-			long count = (long) quantity;
+			float itemQuantity = refContract.getContract().getItemQuantity();
+			// for (Iterator<ContractItemEntity> iterator = items.iterator();
+			// iterator
+			// .hasNext();) {
+			// ContractItemEntity item = iterator.next();
+			// if (item == null) {
+			// continue;
+			// }
+			// quantity = quantity + item.getQuantity();
+			// }
+			long count = (long) itemQuantity;
 			windowRfidService.startWindowRfid(count, refContractNo, minRfid,
 					maxRfid, gRfid, lRfid, windowType);
 			map.put("isOk", "ok");

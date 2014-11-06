@@ -93,6 +93,13 @@ public class CometServiceImpl implements BeanFactoryPostProcessor {
 
 	}
 
+	public static Long subCount(String key) {
+		RAtomicLong atomicLong = redisConcurrent.getAtomicLong(key);
+		long incrementAndGet = atomicLong.decrementAndGet();
+		return incrementAndGet;
+
+	}
+
 	public static void sendMessage(String channel, Object message) {
 		RTopic<Object> topic = redisTopics.getTopic(channel);
 		topic.publish(message);

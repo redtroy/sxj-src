@@ -168,9 +168,25 @@ function closeLog(id){
           </#if>
 		  <td><a href="javascript:blBatch('${win.id}','${win.contractNo}','${win.glassRfid}')" class="lnk-blue">${win.glassRfid}</a></td>
 		  <td><a href="javascript:xcBatch('${win.id}','${win.contractNo}','${win.profileRfid}')" class="lnk-blue">${win.profileRfid}</a></td>
-		  <td>${win.importDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
+		  <td>${win.importDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td><#if win.replenishNo?exists>${win.replenishNo}<#else>-</#if></td>
-		  <td><em class="state frozen">${win.progressState.getName()}</em></td>
+		  <td>
+		   <#if win.progressState.getId()==0>
+		  <em class="state frozen">${win.progressState.getName()}</em>
+		  </#if>
+		   <#if win.progressState.getId()==1>
+		  <em class="state normal">${win.progressState.getName()}</em>
+		  </#if>
+		   <#if win.progressState.getId()==2>
+		  <em class="state process">${win.progressState.getName()}</em>
+		  </#if>
+		   <#if win.progressState.getId()==3>
+		  <em class="state normal">${win.progressState.getName()}</em>
+		  </#if>
+		   <#if win.progressState.getId()==4>
+		  <em class="state verified">${win.progressState.getName()}</em>
+		  </#if>
+		  </td>
 		  <td>
 		  <#if win.rfidState.getId()==0>
 		  <em class="state normal">${win.rfidState.getName()}</em>

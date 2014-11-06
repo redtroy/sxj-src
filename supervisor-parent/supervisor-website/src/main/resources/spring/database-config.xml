@@ -6,12 +6,13 @@
 	default-lazy-init="false">
 
 	<bean id="configBean"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		class="com.sxj.spring.modules.beanfactory.CustomizedPropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath*:config/database.properties</value>
 				<value>classpath*:config/mobile_message.properties</value>
 				<value>classpath*:config/fdfs_client.properties</value>
+				<value>classpath*:config/shiro.properties</value>
 			</list>
 		</property>
 	</bean>

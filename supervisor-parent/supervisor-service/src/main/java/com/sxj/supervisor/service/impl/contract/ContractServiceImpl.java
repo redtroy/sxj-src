@@ -173,21 +173,25 @@ public class ContractServiceImpl implements IContractService {
 					String month = new SimpleDateFormat("MM", Locale.CHINESE)
 							.format(Calendar.getInstance().getTime());
 					contract.setDateNo("CT" + year + month);
+					contract.setUseQuantity(0f);
 					contractDao.addContract(contract);
 
+					float itemQuantity = 0f;
 					if (itemList != null) {
 						List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
 						for (int i = 0; i < itemList.size(); i++) {
 							ContractItemEntity ci = itemList.get(i);
+							itemQuantity = itemQuantity + ci.getQuantity();
 							if (ci.getAmount() != null && ci.getPrice() != null) {
 								ci.setContractId(contract.getContractNo());
 								newList.add(ci);
-
 							}
 
 						}
 						contractItemDao.addItem(newList);// 新增条目
 					}
+					contract.setItemQuantity(itemQuantity);
+					contractDao.updateContract(contract);
 					if (contract.getContractNo() != null) {
 						record.setContractNo(contract.getContractNo());
 						record.setState(RecordStateEnum.Binding);
@@ -642,7 +646,8 @@ public class ContractServiceImpl implements IContractService {
 	@Transactional
 	public void changeContract(String recordId, String contractId,
 			ContractModifyModel model, String recordNo,
-			List<ContractItemEntity> itemList,String contractIds,String changeIds) throws ServiceException {
+			List<ContractItemEntity> itemList, String contractIds,
+			String changeIds) throws ServiceException {
 		try {
 			ModifyContractEntity mec = model.getModifyContract();
 			if (itemList != null) {
@@ -687,10 +692,11 @@ public class ContractServiceImpl implements IContractService {
 			re.setId(recordId);
 			re.setState(RecordStateEnum.change);
 			recordDao.updateRecord(re);
-			//更新变更信息
-			if(StringUtils.isNotEmpty(contractIds)){
-				contractIds=contractIds.substring(0,contractIds.length()-1);
-				String[] contractIdArr=contractIds.split(",");
+			// 更新变更信息
+			if (StringUtils.isNotEmpty(contractIds)) {
+				contractIds = contractIds
+						.substring(0, contractIds.length() - 1);
+				String[] contractIdArr = contractIds.split(",");
 				List<ContractItemEntity> cilist = new ArrayList<ContractItemEntity>();
 				for (String string : contractIdArr) {
 					ContractItemEntity ci = new ContractItemEntity();
@@ -700,9 +706,9 @@ public class ContractServiceImpl implements IContractService {
 				}
 				contractItemDao.updateItem(cilist);
 			}
-			if(StringUtils.isNotEmpty(changeIds)){
-				changeIds=changeIds.substring(0,changeIds.length()-1);
-				String[] changeIdsArr=changeIds.split(",");
+			if (StringUtils.isNotEmpty(changeIds)) {
+				changeIds = changeIds.substring(0, changeIds.length() - 1);
+				String[] changeIdsArr = changeIds.split(",");
 				List<ModifyItemEntity> milist = new ArrayList<ModifyItemEntity>();
 				for (String string : changeIdsArr) {
 					ModifyItemEntity ci = new ModifyItemEntity();
@@ -1156,7 +1162,7 @@ public class ContractServiceImpl implements IContractService {
 	@Override
 	@Transactional
 	public int getContractByZhaobiaoContractNo(String contractNo,
-			String  memberId) {
+			String memberId) {
 		try {
 			ContractQuery query = new ContractQuery();
 			query.setContractNo(contractNo);
