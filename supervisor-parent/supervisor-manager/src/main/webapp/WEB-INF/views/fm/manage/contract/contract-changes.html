@@ -242,14 +242,23 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 					
 					var values='';
 					var values1='';
-					$(".ocptable").find(".lnk-red").each(function(i){
+					var batchId='';
+					var batchId1='';
+					$(".ocptable").find(".lnk-red").each(function(i){//合同条目
 						values+=$(this).parent().attr("value")+",";
 					});
-					$(".otable").find(".lnk-red").each(function(){
+					$(".otable").find(".lnk-red").each(function(){//变更条目
 						values1+=$(this).parent().attr("value")+",";
 					});
+					$(".cpctable").find(".lnk-red").each(function(){//变更批次
+						batchId1+=$(this).parent().attr("value")+",";
+					});
+					$(".opctable").find(".lnk-red").each(function(){//合同批次
+						batchId+=$(this).parent().attr("value")+",";
+					});
 					dialogBox(function() {
-						$.post("saveChanges.htm", $("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1,
+						$.post("saveChanges.htm", 
+								$("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1+"$contractBatchIds="+batchId+"?changeBatchIds="+batchId1,
 								function(data) {
 									if (data.isOK == 'ok') {
 										succInfo(function(){
@@ -350,7 +359,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</div>
 						<#if contractModel.batchList?exists>
 						<table border="0" cellpadding="0" cellspacing="0"
-							class="tabList producedTable">
+							class="tabList producedTable opctable">
 							<col width="20%" />
 							<col width="30%" />
 							<col width="20%" />
@@ -386,7 +395,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</table></td>
 								<td class="editable amountClass" name="modifyBatchList[i].modifyBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" >${batch.batch.amount?string("0.00")}</td>
 								<td class="editable" name="modifyBatchList[i].modifyBatch.rfidNo" readonly="readonly">${batch.batch.rfidNo}</td>
-								<td value="${batchItem.id}"><#if item.updateState==1><span style="color: red;">!</span><#else><a href="javascript:void(0)" class="lnk-green copyRow"
+								<td value="${batch.batch.id}"><#if item.updateState==1><span style="color: red;">!</span><#else><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="pctable">√</a></#if></td>
 							</tr>
 							</#list>
@@ -481,7 +490,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								</table>
 								<#if modifyList.modifyBatchList?exists>
 								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabList producedTable" id="opctable">
+									class="tabList producedTable cpctable" id="opctable">
 									<col width="20%" />
 									<col width="25%" />
 									<col width="20%" />
@@ -498,28 +507,28 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</tr>
 									<#list modifyList.modifyBatchList as modifyBatch>
 									<tr id="${modifyBatch.modifyBatch.id}" class="formitem">
-										<td>${modifyBatch.modifyBatch.batchNo}</td>
-										<td>
+										<td class="editable" name="modifyBatchList[i].modifyBatch.batchNo" readonly="readonly" >${modifyBatch.modifyBatch.batchNo}</td>
+										<td name="modifyBatchList[i].modifyBatchItems[j].productModel" >
 											<table border="0" cellpadding="0" cellspacing="0"
 												class="tabList prodIable">
 												<#list modifyBatch.modifyBatchItems as modifyBatchItems>
 												<tr>
-													<td>${modifyBatchItems.productModel}</td>
+													<td class="editable" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${modifyBatchItems.productModel}</td>
 												</tr>
 												</#list>
 											</table>
 										</td>
-										<td><table border="0" cellpadding="0" cellspacing="0"
+										<td name="modifyBatchList[i].modifyBatchItems[j].quantity"  ><table border="0" cellpadding="0" cellspacing="0"
 												class="tabList prodIable">
 												<#list modifyBatch.modifyBatchItems as modifyBatchItems>
 												<tr>
-													<td>${modifyBatchItems.quantity}</td>
+													<td class="editable dynamictr" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${modifyBatchItems.quantity}</td>
 												</tr>
 												</#list>
 											</table></td>
-										<td>${modifyBatch.modifyBatch.amount?string("0.00")}</td>
-										<td>${modifyBatch.modifyBatch.rfidNo}</td>
-										<td><a href="javascript:void(0)" class="lnk-green copyRow"
+										<td class="editable amountClass" name="modifyBatchList[i].modifyBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" >${modifyBatch.modifyBatch.amount?string("0.00")}</td>
+										<td class="editable" name="modifyBatchList[i].modifyBatch.rfidNo" readonly="readonly">${modifyBatch.modifyBatch.rfidNo}</td>
+										<td value="${modifyBatch.modifyBatch.id}"><a href="javascript:void(0)" class="lnk-green copyRow"
 									 table="pctable">√</a></td>
 									</tr>
 									</#list>
