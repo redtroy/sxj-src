@@ -116,9 +116,14 @@ function rfid_b(pc_b_id){
 //启用标签
 function star(){
 	var refContractNo=$("#refContractNo").val();
+	var num=$("#num").val();
 	var gRfid=$("#rfid_a").text();
 	var lRfid=$("#rfid_b").text();
 	var windowType=$("#windowType option:selected").val();
+	if (num=="" || num== null){
+		messageInfo('请输入启用数量');
+		return false;
+	}
 	if (gRfid=="" || gRfid== null){
 		messageInfo('玻璃采购合同缺失，无法提交');
 		return false;
@@ -127,10 +132,10 @@ function star(){
 		messageInfo('型材采购合同缺失，无法提交');
 		return false;
 	}
-	$.post("start_lable.htm",{refContractNo:refContractNo,minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
+	$.post("start_lable.htm",{startNum:num,refContractNo:refContractNo,minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
 		if (data.isOk=="ok"){
 			succInfo(function(){
-				
+				window.location.href="${basePath}rfid/window/query.htm";
 			},"启用成功");
 		}else{
 			errorInfo(data.error);

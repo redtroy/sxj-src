@@ -131,13 +131,13 @@ public class StartWRfidController extends BaseController {
 	 * 启用标签
 	 */
 	@RequestMapping("start_lable")
-	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,
-			String minRfid, String maxRfid, String gRfid, String lRfid,
-			WindowTypeEnum windowType) throws WebException {
+	public @ResponseBody Map<Object, Object> start_lable(Integer startNum,
+			String refContractNo, String minRfid, String maxRfid, String gRfid,
+			String lRfid, WindowTypeEnum windowType) throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			contractService.startWindowRfid(refContractNo, minRfid, maxRfid,
-					gRfid, lRfid, windowType);
+			contractService.startWindowRfid(startNum, refContractNo, minRfid,
+					maxRfid, gRfid, lRfid, windowType);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("启用标签错误", e, this.getClass());

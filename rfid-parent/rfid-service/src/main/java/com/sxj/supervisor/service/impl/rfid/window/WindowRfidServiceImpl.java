@@ -212,8 +212,8 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			WindowRfidQuery query = new WindowRfidQuery();
 			query.setRfidNo(addRfid[0]);
 			List<WindowRfidEntity> list = queryWindowRfid(query);
-			startWindowRfid(count, refContractNo, minRfid, maxRfid, gRfid,
-					lRfid, list.get(0).getWindowType());
+			// startWindowRfid(count, refContractNo, minRfid, maxRfid, gRfid,
+			// lRfid, list.get(0).getWindowType());
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("批量补损RFID失败", e);
