@@ -3,13 +3,13 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.mybatis.orm.mapper.FunctionMapper">
-	<parameterMap type="com.sxj.mybatis.orm.model.Function" id="function">
-		<parameter property="functionId" jdbcType="VARCHAR"/>
-		<parameter property="functionName" jdbcType="VARCHAR"/>
-	</parameterMap>
+	<resultMap type="com.sxj.mybatis.orm.model.Function" id="funciton">
+		<result property="functionId" column="ID" />
+		<result property="functionName" column="TITLE" />
+	</resultMap>
 	<cache type="com.sxj.mybatis.cache.HierarchicalCache">
-		<property name="level" value="2"/>
+		<property name="level" value="2" />
 		<!-- 默认存活5s -->
-		<property name="timeToLive" value="10"/>
+		<property name="timeToLive" value="10" />
 	</cache>
 </mapper>
