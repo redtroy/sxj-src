@@ -51,6 +51,7 @@ import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
+import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
@@ -65,6 +66,7 @@ import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
+import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -143,6 +145,9 @@ public class ContractServiceImpl implements IContractService {
 
 	@Autowired
 	private ILogisticsRefDao logisticsRefDao;
+
+	@Autowired
+	private IWindowRfidService windowRfidService;
 
 	/**
 	 * 新增合同
@@ -245,6 +250,21 @@ public class ContractServiceImpl implements IContractService {
 				}
 				contractDao.updateContract(contract.getContract());
 			}
+			List<ContractItemEntity> insertList = new ArrayList<ContractItemEntity>();
+			for (ContractItemEntity contractItemEntity : contract
+					.getItemList()) {
+				if(StringUtils.isNotEmpty(contractItemEntity.getId()) ){
+					ContractItemEntity ci=contractItemDao.getItems(contractItemEntity.getId());
+					if(ci.getUpdateState()!=null&& ci.getUpdateState()!=0){
+						contractItemEntity.setUpdateState(1);
+						contractItemEntity.setId(null);
+					}
+					
+				}
+				contractItemEntity.setContractId(contract.getContract()
+						.getContractNo());
+				insertList.add(contractItemEntity);
+			}
 			// 条目
 			if (contract.getItemList() != null) {
 				List<ContractItemEntity> item = contractItemDao
@@ -262,12 +282,8 @@ public class ContractServiceImpl implements IContractService {
 					// 删除条目
 					contractItemDao.deleteItems(ids.split(","));
 				}
-				for (ContractItemEntity contractItemEntity : contract
-						.getItemList()) {
-					contractItemEntity.setContractId(contract.getContract()
-							.getContractNo());
-				}
-				contractItemDao.addItem(contract.getItemList());
+				
+					contractItemDao.addItem(insertList);
 			}
 			// 批次
 			if (contract.getBatchList() != null) {
@@ -751,6 +767,10 @@ public class ContractServiceImpl implements IContractService {
 					}
 
 				}
+				RecordEntity re = new RecordEntity();
+				re.setId(recordId);
+				re.setState(RecordStateEnum.supplement);
+				recordDao.updateRecord(re);
 
 			}
 		} catch (Exception e) {
@@ -1203,5 +1223,32 @@ public class ContractServiceImpl implements IContractService {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取合同信息错误", e);
 		}
+	}
+
+	@Override
+	@Transactional
+	public void startWindowRfid(String refContractNo, String minRfid,
+			String maxRfid, String gRfid, String lRfid,
+			WindowTypeEnum windowType) throws ServiceException {
+		try {
+			ContractModel refContract = getContractModelByContractNo(refContractNo);
+			if (refContract == null) {
+				throw new ServiceException("招标合同不存在");
+			}
+			List<ContractItemEntity> items = refContract.getItemList();
+			if (items == null || items.size() == 0) {
+				throw new ServiceException("招标合同条目不存在");
+			}
+			float itemQuantity = refContract.getContract().getItemQuantity();
+			float useQuantity = refContract.getContract().getUseQuantity();
+			long count = (long) itemQuantity;
+			long useCount = (long) useQuantity;
+			windowRfidService.startWindowRfid(count, useCount, refContractNo,
+					minRfid, maxRfid, gRfid, lRfid, windowType);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage(), e);
+		}
+
 	}
 }

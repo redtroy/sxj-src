@@ -221,7 +221,10 @@
 								</table>
 							</div>
 							<div class="item">
-								<label>&nbsp;</label> 
+								<label>合同备注</label> ${contractModel.contract.remarks}
+							</div>
+							<div class="item">
+								<label>合同扫描件</label> 
 								<#assign arr=(contractModel.contract.imgPath?split(","))> 
 	                   		 <#if arr??>
 							<div class="rollBox">

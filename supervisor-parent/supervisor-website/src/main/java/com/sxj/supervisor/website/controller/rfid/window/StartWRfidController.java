@@ -12,13 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.contract.ContractEntity;
-import com.sxj.supervisor.entity.contract.ContractItemEntity;
-import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
-import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
-import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -52,36 +48,21 @@ public class StartWRfidController extends BaseController {
 			throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			List<ContractItemEntity> items = contractService
-					.getContractItem(query.getRefContractNo());
-			if (items == null || items.size() == 0) {
+			ContractModel contract = contractService
+					.getContractModelByContractNo(query.getRefContractNo());
+			if (contract == null) {
 				throw new WebException("招标合同不存在");
 			}
-			float quantity = 0f;
-			float hasStartQuantity = 0f;
-			for (ContractItemEntity item : items) {
-				if (item == null) {
-					continue;
-				}
-				quantity = quantity + item.getQuantity();
-			}
+			float itemQuantity = contract.getContract().getItemQuantity();
+			float hasStartQuantity = contract.getContract().getUseQuantity();
 
-			WindowRfidQuery winQuery = new WindowRfidQuery();
-			winQuery.setContractNo(query.getRefContractNo());
-			winQuery.setRfidState(RfidStateEnum.used.getId());
-			List<WindowRfidEntity> winList = windowRfidService
-					.queryWindowRfid(winQuery);
-			if (winList != null) {
-				hasStartQuantity = winList.size();
-			}
-			if (hasStartQuantity >= quantity) {
+			if (hasStartQuantity >= itemQuantity) {
 				throw new WebException("此招标合同已经全部启用完毕");
 			}
-			if (num > (quantity - hasStartQuantity)) {
+			if (num > (itemQuantity - hasStartQuantity)) {
 				throw new WebException("此招标合同未启用数量为："
-						+ (quantity - hasStartQuantity));
+						+ (itemQuantity - hasStartQuantity));
 			}
-
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {
 				String[] bq = windowRfidService.getMaxRfidNo(
@@ -155,28 +136,8 @@ public class StartWRfidController extends BaseController {
 			WindowTypeEnum windowType) throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			ContractModel refContract = contractService
-					.getContractModelByContractNo(refContractNo);
-			if (refContract == null) {
-				throw new WebException("招标合同不存在");
-			}
-			List<ContractItemEntity> items = refContract.getItemList();
-			if (items == null || items.size() == 0) {
-				throw new WebException("招标合同条目不存在");
-			}
-			float itemQuantity = refContract.getContract().getItemQuantity();
-			// for (Iterator<ContractItemEntity> iterator = items.iterator();
-			// iterator
-			// .hasNext();) {
-			// ContractItemEntity item = iterator.next();
-			// if (item == null) {
-			// continue;
-			// }
-			// quantity = quantity + item.getQuantity();
-			// }
-			long count = (long) itemQuantity;
-			windowRfidService.startWindowRfid(count, refContractNo, minRfid,
-					maxRfid, gRfid, lRfid, windowType);
+			contractService.startWindowRfid(refContractNo, minRfid, maxRfid,
+					gRfid, lRfid, windowType);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("启用标签错误", e, this.getClass());

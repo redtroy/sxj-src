@@ -37,6 +37,10 @@ function modify(){
 		return false;
 	}
 	$("#TbData").find(".CaseRow").each(function(i){
+		if($(this).children(":input").length==1){
+			var idName=$(this).children(":input").attr("name").replace("[index]","["+i+"]");
+			$(this).children(":input").attr("name",idName);
+		}
 		$(this).find("td").each(function(){
 			if($(this).attr("name")){
 				var name=$(this).attr("name").replace("[index]","["+i+"]");
@@ -231,13 +235,15 @@ var caculateRow=function($tr){
 		imgBinding();
 		$(".lnk-green").live("click",function(){
 			var $tr=$(this).parent().parent().clone();
-			$tr.children("td:last").children(".lnk-green").remove();
+			$tr.children(":input").remove();
+			//$tr.children("td:last").children(".lnk-green").remove();
 			$tr.children("td").children("input").attr("value","");
+			$tr.children("td").children("textarea").text("");
 			$tr.insertAfter($(this).parent().parent().parent().children(".CaseRow:last"));
 		});
 		$(".lnk-red").live("click",function(){
-			var leng=$(this).parents("table").find("tr").length;
-			if(leng>2){
+			var leng=$(this).parents("table").find(".lnk-red").length;
+			if(leng>1){
 				$(this).parent().parent().remove();
 			}else{
 				messageInfo("不能删除条目!");
@@ -286,23 +292,6 @@ var caculateRow=function($tr){
 		$("#quantitySum").html(quantity.toFixed(2));
 		$("#amountSum").html(amount.toFixed(2));
 	});
-//将传入数据转换为字符串,并清除字符串中非数字与.的字符
-//按数字格式补全字符串
-var getFloatStr = function(num){
-    num += '';
-    num = num.replace(/[^0-9|\.]/g, ''); //清除字符串中的非数字非.字符
-    
-    if(/^0+/) //清除字符串开头的0
-        num = num.replace(/^0+/, '');
-    if(!/\./.test(num)) //为整数字符串在末尾添加.00
-        num += '.00';
-    if(/^\./.test(num)) //字符以.开头时,在开头添加0
-        num = '0' + num;
-    num += '00';        //在字符串末尾补零
-    num = num.match(/\d+\.\d{2}/)[0];
-    return num;
-};
-
 
 </script>
 </head>
@@ -365,7 +354,8 @@ var getFloatStr = function(num){
 						  <#assign m = (m+item.amount)?int >
 						  
 						<tr id="trDataRow${item_index}" class="CaseRow">
-							<td name="itemList[index].productName"><input  type="text" value="${item.productName}" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！" /></td>
+							<input type="hidden" value="${item.id}" name="itemList[index].id"/>
+							<td  name="itemList[index].productName"><input  type="text" value="${item.productName}" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！" /></td>
 							<td name="itemList[index].productModel"><input type="text" value="${item.productModel}" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" /></td>
 							<td name="itemList[index].quantity"><input type="text" value="${item.quantity}" class="quantityClass unit" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
 							<td name="itemList[index].price"><input  type="text" value="${item.price}" class="priceClass unit" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"/></td>

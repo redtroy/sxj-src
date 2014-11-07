@@ -27,8 +27,11 @@
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
 <@b.upload/>
-<@b.dialogBox/><@b.errorInfo/>
+<@b.dialogBox/>
+<@b.errorInfo/>
+<@b.validate/>
 <script>
+var validform;
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
 			$('.maskdivgen').fadeIn(100);
@@ -54,106 +57,161 @@
 			});
 			refreshElastislide($(this).parent(), $(this));
 		});
-
+		//初始化验证
+		validform=$("#changsForm").Validform({
+			tiptype:function(msg,o,cssctl){
+					o.obj.parent().children(".checkinfo").remove();
+					var $div=$("<div/>").addClass("checkinfo");
+					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
+					var left=o.obj.offset().left,
+					top=o.obj.offset().top;
+					var width=o.obj.width();
+					$div.append($p).css({
+						'left':left+width-32,
+						'top':top-45,
+						'position':'absolute'
+					}).show();
+					o.obj.parent().append($div);
+			}});
+		
+		$("#changsForm").find("[datatype]").live("focus",function(){
+			$(this).parent().children(".checkinfo").hide();
+			$(this).removeClass("Validform_error");
+			//$(this).parent().children(".checkinfo").hide();
+		});
+		$("#changsForm").find("[datatype]").live("blur",function(){
+			
+			var pass=validform.check(true,$(this));
+			if(!pass)
+				$(this).parent().children(".checkinfo").show();
+		});
 	});
 </script>
 
 <script type="text/javascript">
-	var $plus = $("<a>").addClass("lnk-green addtr").attr("href",
-			"javascript:void(0);").html("+");
-	var $right = $("<a>").addClass("lnk-green addtr").attr("href",
-			"javascript:void(0);").html("√");
-	var $minus = $("<a>").addClass("lnk-red deltr").attr("href",
-			"javascript:void(0);").html("-");
+var $plus=$("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+");
+var $right=$("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("√");
+var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);").html("-");	
 	$(function() {
-		$(".subtabletr").live(
-				"click",
-				function() {
-					var $tr = $(this).parent().parent().parent().parent()
-							.parent().parent();
-					$tr.find(".tabList").each(function() {
-						var $new = $(this).find("tr:last").clone();
-						$new.find("input").attr("value", "");
-						$(this).append($new);
-					});
-					$(this).remove();
-				});
-		$(".addtr").live("click", function() {
-			var $table = $(this).parent().parent().parent();
-			var $new = $table.children("tr:last").clone();
-			var $hidden = $new.find(".mark");
+		$(".delsubtabletr").live("click",function(){
+			var index=$(this).parent().parent().parent().index();
+			$(this).parent().parent().parent().parent().parent().parent().parent().find(".tabList:first").find("tr:eq("+index+")").remove();
+			$(this).parent().parent().parent().remove(); 
+		});
+		
+		
+		$(".subtabletr").live("click",function(){
+			var $tr=$(this).parent().parent().parent().parent().parent().parent().parent();
+			$tr.find(".tabList").each(function(){
+				var $new=$(this).find("tr:last").clone();
+				$new.find("input").attr("value","");
+				$(this).append($new);
+				
+			});
+			$tr.find(".tabList:last").each(function(){
+				$(this).find(".dynamictr").children("span").remove();
+				var $span=$("<span>").append($plus.clone().removeClass("addtr").addClass("subtabletr")).append("&nbsp;").append($minus.clone().removeClass("deltr").addClass("delsubtabletr"));
+				$span.css("margin","0");
+				$(this).find(".dynamictr").append($span);
+				$(this).find(".dynamictr:last").find(".lnk-red").remove();
+			})
+			//$(this).remove();
+		});
+		$(".addtr").live("click",function(){
+			var $table=$(this).parent().parent().parent();
+			var $new=$table.children("tr:last").clone();
+			var $hidden=$new.find(".mark");
 			$hidden.remove();
-			$new.find(".tabList").each(function() {
-				$last = $(this).find("tr:last");
+			$new.find(".tabList").each(function(){
+				$last=$(this).find("tr:last");
 				$(this).empty().append($last);
 			});
-			$new.find("input").attr("value", "");
+			$new.find("input").attr("value","");
 			$table.append($new);
-			$(this).remove();
+			$(this).remove(); 
 		});
+		
+		$(".deltr").live("click",function(){
+			var $tr=$(this).parent().parent();
+			var $table=$tr.parent();
+			var trId=$tr.find(".mark").html();
+			
+			if(trId){
+				var $td=$("#"+trId).children("td:last");
+				$td.empty();
+				var table=$table.parent().attr("id");
+				var right=$right.clone().attr("table",table).removeClass("addtr").addClass("copyRow");
+				$td.append(right);
+			}
+			
+			$tr.remove();
+			var tableLength =$table.parent().find(".formitem").length;
+			if(tableLength==0){
+				$table.parent().hide();
+			}
+			var $last=$table.children("tr:last").children("td:last");
+			if($last.children(".addtr").length==0)
+				$last.prepend($("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+"));
+		});
+		$(".copyRow").live("click",function(){
+			var target=$(this).attr("table");
+			var $table=$("#"+target)
+			var trId=$(this).parent().parent().attr("id");
+			if($table){
+				$table.find(".addtr").remove();
+				var $tr=$("<tr>").addClass("formitem").append($(this).parent().parent().html());
+				var $hidden=$("<p>").addClass("mark").hide().html(trId);
+				$tr.append($hidden);
+				$table.append($tr);
+				$link=$tr.find(".lnk-green").parent().empty();
+				if(target!='pctable')
+	            	$link.append($plus.clone()).append("&nbsp;").append($minus.clone());
+				else
+					$link.append($minus.clone());
+	            $tr.find(".editable").each(function(i){
+            			$(this).html($("<input />").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly"))
+            					.attr("datatype",$(this).attr("data")).attr("errormsg",$(this).attr("errormsg")).attr("nullmsg",$(this).attr("nullmsg")));
 
-		$(".deltr")
-				.live(
-						"click",
-						function() {
-							var $tr = $(this).parent().parent();
-							var $table = $tr.parent();
-							var trId = $tr.find(".mark").html();
-							if (trId) {
-								var $td = $("#" + trId).children("td:last");
-								$td.empty();
-								$td.append($right.clone());
-							}
-							$tr.remove();
-							var $last = $table.children("tr:last").children(
-									"td:last");
-							if ($last.children(".addtr").length == 0)
-								$last.prepend($("<a>").addClass(
-										"lnk-green addtr").attr("href",
-										"javascript:void(0);").html("+"));
-						});
-
-		$(".lnk-green").click(
-				function(e) {
-					var target = $(this).attr("table");
-					var $table = $("#" + target)
-					var trId = $(this).parent().parent().attr("id");
-					if ($table) {
-						$table.find(".addtr").remove();
-						var $oldtr=$(this).parent().parent().clone();
-						var $td=$("<td class='editable'/>");
-						$td.insertBefore($oldtr.children("td:last"));
-						var $tr = $("<tr>").addClass("formitem").append($oldtr.html());
-						var $hidden = $("<p>").addClass("mark").hide().html(
-								trId);
-						$tr.append($hidden);
-						$table.append($tr);
-						$link = $tr.find(".lnk-green").parent().empty();
-						$link.append($plus.clone()).append("&nbsp;").append(
-								$minus.clone());
-						$tr.find(".editable").each(
-								function() {
-									$(this).html(
-											$("<input/>").attr("value",
-													$(this).html()));
-								});
-						$tr.find(".dynamictr:last").append(
-								$plus.clone().addClass("subtabletr"));
-						$table.show();
-						$(this).attr("class", "lnk-red").html("!");
-						$(this).unbind("click");
-					}
+					
 				});
+	            $table.find(".dynamictr").each(function(){
+	            	$(this).children("span").remove();
+	            	var	$span=$("<span>").append($plus.clone().removeClass("addtr").addClass("subtabletr")).append("&nbsp;").append($minus.clone().removeClass("deltr").addClass("delsubtabletr"));
+	            	$span.css("margin","0");
+	            	$(this).append($span);
+	            });
+	            $table.find(".formitem").each(function(){
+	            	$(this).find(".dynamictr:last").find(".lnk-red").remove();
+	            })
+ 				$table.show();
+				$(this).attr("class","lnk-red").html("!");
+		}
+		});
+		
+		$(".priceClass").live("blur", function() {
+			var value = $(this).find("input").val();
+			if(value&&isNumber(value)){
+				$(this).find("input").val(parseFloat(value).toFixed(2));
+			}
+		});
+		$(".amountClass").live("blur", function() {
+			var value = $(this).find("input").val();
+			if(value&&isNumber(value)){
+				$(this).find("input").val(parseFloat(value).toFixed(2));
+			}
+		});
 	});
 	$(function() {
 		$(".TrDel").live("click", function() {
 			$(this).parent().parent().remove();
 		});
 	});
+
+
 	function saveReplenish() {
-		$("#saveId").live(
-				"click",
-				function() {
+		if (!validform.check()){
+			return false;
+		}
 					$("#pctable").find(".formitem").each(function(i){
 						var $tr=$(this);
 						$tr.children("td").each(function(){
@@ -179,7 +237,6 @@
 						})
 					}
 					
-				});
 
 	}
 </script>
@@ -203,7 +260,7 @@
 					<div class="infoBox producedBox f14">
 						<ul class="ly-clearFix">
 							<li><label>合同号</label> <input type="hidden"
-								value="${contractModel.contract.id}" name="replenish.contractId" />
+								value="${contractModel.contract.contractNo}" name="replenish.contractId" />
 								${contractModel.contract.contractNo}</li>
 							<li><label>签订地点</label> ${contractModel.contract.address}</li>
 							<li><label>甲方</label> ${contractModel.contract.memberNameA}</li>
@@ -248,18 +305,18 @@
 							<tr id="item${item.id}">
 								<td>${item.productName}</td>
 								<td>${item.productModel}</td>
-								<td>${item.quantity}</td>
-								<td>${item.price}</td>
-								<td>${item.amount}</td>
+								<td>${item.quantity?string("0.00")}</td>
+								<td>${item.price?string("0.00")}</td>
+								<td>${item.amount?string("0.00")}</td>
 								<td>${item.remarks}</td>
 							</tr>
 							</#list>
 							<tr>
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td>${n}</td>
+								<td>${n?string("0.00")}</td>
 								<td>&nbsp;</td>
-								<td>${m}</td>
+								<td>${m?string("0.00")}</td>
 								<td>&nbsp;</td>
 							</tr>
 						</table>
@@ -286,13 +343,13 @@
 							<#list contractModel.batchList as batch>
 							<tr id="batch${batch.batch.id}" class="formitem">
 								<td class="editable"
-									name="batchList[i].replenishBatch.batchNo">${batch.batch.batchNo}</td>
+									name="batchList[i].replenishBatch.batchNo" readonly="readonly">${batch.batch.batchNo}</td>
 								<td name="batchList[i].replenishBatchItems[j].productModel"><table
 										border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td class="editable" name="batchList[i].replenishBatchItems[j].productModel">${batchItem.productModel}</td>
+											<td class="editable" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" >${batchItem.productModel}</td>
 										</tr>
 										</#list>
 									</table></td>
@@ -301,15 +358,15 @@
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td class="editable dynamictr" name="batchList[i].replenishBatchItems[j].quantity">${batchItem.quantity}</td>
+											<td class="editable dynamictr" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！">${batchItem.quantity}</td>
 										</tr>
 										</#list>
 									</table></td>
 								<td class="editable"
-									name="batchList[i].replenishBatch.amount">${batch.batch.amount}</td>
+									name="batchList[i].replenishBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${batch.batch.amount}</td>
 								<td class="editable"
-									name="batchList[i].replenishBatch.rfidNo">${batch.batch.rfidNo}</td>
-								<td><a href="javascript:void(0)" class="lnk-green"
+									name="batchList[i].replenishBatch.rfidNo" readonly="readonly">${batch.batch.rfidNo}</td>
+								<td><a href="javascript:void(0)" class="lnk-green copyRow"
 									table="pctable">√</a></td>
 							</tr>
 							</#list>
@@ -348,6 +405,85 @@
 							</div>
 						</div>
 					</div>
+					<!-- 变更信息 -->
+					<#if contractModel.replenishList?exists>
+					<div class="changeBox">
+						<div id="chenges">
+							<h2 class="title">合同变更信息</h2>
+				 <#list contractModel.replenishList as replenishList>
+							<div class="infoBox producedBox f14">
+								<div>
+									<label>合同补损备案号</label> ${replenishList.replenishContract.recordNo}
+								</div>
+								<div >
+								<label>补损批次RFID</label>
+								${replenishList.replenishContract.batchRfidNo}
+							</div>
+								<div class="contPic">
+									<label>合同补损扫描件</label>
+									<div class="rollBox">
+										<ul class="elastislide-list imagelist">
+											<#assign imgArr=(replenishList.replenishContract.imgPath?split(","))> 
+										<#list imgArr as imgPath>
+											<li><a href="javascript:void(0);"
+												data-image="${b.imagePath}${imgPath}"><img
+													data-image="${b.imagePath}${imgPath}" width="80"
+													height="107" /></a></li> </#list>
+										</ul>
+									</div>
+								</div>
+								<#if replenishList.batchItems?exists>
+								<table border="0" cellpadding="0" cellspacing="0"
+									class="tabList producedTable" id="opctable">
+									<col width="20%" />
+									<col width="25%" />
+									<col width="20%" />
+									<col width="10%" />
+									<col width="20%" />
+									<col width="5%" />
+									<tr>
+										<th>交货批次</th>
+										<th>产品规格</th>
+										<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
+										<th>应付货款<span>（元）</span></th>
+										<th>对应批次RFID编号</th>
+										<th class="rLine">&nbsp;</th>
+									</tr>
+									<#list replenishList.batchItems as replenishItem>
+									<tr id="${modifyBatch.modifyBatch.id}" class="formitem">
+										<td>${replenishItem.replenishBatch.batchNo}</td>
+										<td>
+											<table border="0" cellpadding="0" cellspacing="0"
+												class="tabList prodIable">
+												<#list replenishItem.replenishBatchItems as replenishBatchItems>
+												<tr>
+													<td>${replenishBatchItems.productModel}</td>
+												</tr>
+												</#list>
+											</table>
+										</td>
+										<td><table border="0" cellpadding="0" cellspacing="0"
+												class="tabList prodIable">
+												<#list replenishItem.replenishBatchItems as replenishBatchItems>
+												<tr>
+													<td>${replenishBatchItems.quantity}</td>
+												</tr>
+												</#list>
+											</table></td>
+										<td>${replenishItem.replenishBatch.amount?string("0.00")}</td>
+										<td>${replenishItem.replenishBatch.rfidNo}</td>
+										<td><a href="javascript:void(0)" class="lnk-green copyRow"
+									 table="pctable">√</a></td>
+									</tr>
+									</#list>
+								</table>
+								</#if>
+							</div>
+						</#list> 
+						</div>
+					</div>
+				</#if>
+					
 					<div class="changeBox">
 						<h2 class="title">合同补损信息</h2>
 						<div class="infoBox producedBox f14">
@@ -359,6 +495,7 @@
 								<label>补损批次RFID</label>${record.rfidNo}<input
 									type="hidden" value="${record.rfidNo}"
 									name="replenish.batchRfidNo" />
+									<input type="hidden" value="${record.imgPath}" name="replenish.imgPath" />
 							</div>
 							<div class="contPic">
 								<label>合同补损扫描件</label>
@@ -378,17 +515,15 @@
 								<col width="10%" />
 								<col width="25%" />
 								<col width="20%" />
+								<col width="15%" />
+								<col width="20%" />
 								<col width="10%" />
-								<col width="15%" />
-								<col width="15%" />
-								<col width="5%" />
 								<tr>
 									<th>交货批次</th>
 									<th>产品规格</th>
-									<th>数量<span>（㎡/吨）</span></th>
+									<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 									<th>应付货款<span>（元）</span></th>
 									<th>对应批次RFID编号</th>
-									<th>新RFID编号</th>
 									<th class="rLine">&nbsp;</th>
 								</tr>
 							</table>

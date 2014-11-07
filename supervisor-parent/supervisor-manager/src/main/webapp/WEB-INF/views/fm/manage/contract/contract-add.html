@@ -81,55 +81,25 @@ var ul_validform;
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script>
-	var num = 1;
-	function addTable() {
-		var vTb = $("#TbData");//得到表格ID=TbData的jquery对象 
-		var totalTr = $("#total_tr");
-		//所有的数据行有一个.CaseRow的Class,得到数据行的大小 
-		var vNum = $("#TbData tr").filter(".CaseRow").size() + 1;//表格有多少个数据行 
-		var vTr = $("#TbData #trDataRow1"); //得到表格中的第一行数据 
-		var vTrClone = vTr.clone(true);//创建第一行的副本对象vTrClone 
-		var id = "trDataRow" + vNum;
-		vTrClone[0].id = id;//設置 第一個Id為當前獲取索引；防止重複添加多個ID為trDataRow1的數據行；一次添加一個；
-		//alert(vTrClone.find("td :last").find('a').text());	
-		vTrClone.find("td :last").attr("onclick", "");
-		vTrClone.find("td :last").addClass("TrDel");
-		vTrClone.find("td :last").html('<a class="lnk-green">x</a>');//更改按钮
-		//清空内容
-		vTrClone.find("td").eq(0).find("input").val("");
-		vTrClone.find("td").eq(1).find("input").val("");
-		vTrClone.find("td").eq(2).find("input").val("");
-		vTrClone.find("td").eq(3).find("input").val("");
-		vTrClone.find("td").eq(4).find("input").val("");
-		vTrClone.find("td").eq(5).find("input").val("");
-		//设置item[]
-
-		vTrClone.find("td").eq(0).find("input").attr("name",
-				"items[" + num + "].productName");
-		vTrClone.find("td").eq(1).find("input").attr("name",
-				"items[" + num + "].productModel");
-		vTrClone.find("td").eq(2).find("input").attr("name",
-				"items[" + num + "].quantity");
-		vTrClone.find("td").eq(3).find("input").attr("name",
-				"items[" + num + "].price");
-		vTrClone.find("td").eq(4).find("input").attr("name",
-				"items[" + num + "].amount");
-		vTrClone.find("td").eq(5).find("textarea").attr("name",
-				"items[" + num + "].remarks");
-		num++;
-
-		vTrClone.insertBefore(totalTr);//把副本单元格对象添加到表格上方 
-	}
-
-	$(function() {
-		$(".TrDel").live("click", function() {
-			$(this).parent().remove();
-		});
-	});
+	
 	function saveContract() {
 		if (!ul_validform.check()){
 			return false;
 		}
+		$("#formtable").find(".formtr").each(function(i){
+			$(this).find("input").each(function(){
+				var name=$(this).attr("name").replace("index",i);
+				$(this).attr("name",name);
+			});
+			$(this).find("select").each(function(){
+				var name=$(this).attr("name").replace("index",i);
+				$(this).attr("name",name);
+			});
+			$(this).find("textarea").each(function(){
+				var name=$(this).attr("name").replace("index",i);
+				$(this).attr("name",name);
+			});
+		});
 		dialogBox(function(){
 			$.post("addContract.htm", $("#addForm").serialize(), function(data) {
 				if (data.isOK == 'ok') {
@@ -145,51 +115,52 @@ var ul_validform;
 	}
 	
 	$(function(){
-		$(".amountClass").change(function(){
-			var amount=0;
-			var size=$("#TbData tr").filter(".CaseRow").size();
-			for (var i=0;i<size;i++){
-				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val();
-				if(num!=''){
-				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(4).find("input").val(getFloatStr(num));
+	$(".amountClass").live("blur",function(){
+			$(this).parent().parent().parent().find(".amountClass").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
 				}
-				if(num==''){
-					amount+=parseFloat(parseFloat(0));
-				}else{
-					amount+=parseFloat(parseFloat(num));
+			});
+			
+		})
+		$(".quantityClass").live("blur",function(){
+			$(this).parent().parent().parent().find(".quantityClass").each(function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
 				}
-			}
-			$("#amountSum").html(getFloatStr(amount));
-		});
-		$(".quantityClass").change(function(){
-			var quantity=0;
-			var size=$("#TbData tr").filter(".CaseRow").size();
-			for (var i=0;i<size;i++){
-				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(2).find("input").val();
-				if(num!=''){
-					$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(2).find("input").val(getFloatStr(num));
+			});
+			
+		})
+		$(".priceClass").live("blur",function(){
+				var value=$(this).attr("value");
+				if(parseFloat(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
 				}
-				if(num==''){
-					quantity+=parseFloat(0);
-				}else{
-					quantity+=parseFloat(num);
-				}
-			}
-			$("#quantitySum").html(getFloatStr(quantity));
-		});
-		$(".priceClass").change(function(){
-			var size=$("#TbData tr").filter(".CaseRow").size();
-			for (var i=0;i<size;i++){
-				var num=$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val();
-				if(num!=''){
-				$("#TbData tr").filter(".CaseRow").eq(i).find("td").eq(3).find("input").val(getFloatStr(num));
-				}
-			}
-		});
+		})
+		$(".quantityClass").live("keyup",function(){
+			var tquantity=0;
+			var tamount=0;
+			$(this).parent().parent().parent().find(".quantityClass").each(function(){
+				tquantity+=parseInt($(this).val());
+			});
+			if(parseFloat(tquantity))
+				$("#quantitySum").html(tquantity.toFixed(2));
+		})
+		$(".amountClass").live("keyup",function(){
+			var tamount=0;
+			$(this).parent().parent().parent().find(".amountClass").each(function(){
+				tamount+=parseInt($(this).val());
+			});
+			if(parseFloat(tamount))
+				$("#amountSum").html(tamount.toFixed(2)+"元");
+		})
 		
 		//初始化验证
 		ul_validform=$("#contractUl").Validform({
 			tiptype:function(msg,o,cssctl){
+					o.obj.parent().children(".checkinfo").remove();
 					var $div=$("<div/>").addClass("checkinfo");
 					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
 					var left=o.obj.offset().left,
@@ -202,15 +173,17 @@ var ul_validform;
 					}).show();
 					o.obj.parent().append($div);
 			}});
-		$("#contractUl").find("[datatype]").each(function(){
-			$(this).focus(function(){
-				$(this).parent().children(".checkinfo").hide();
-			}); 
-			$(this).blur(function(){
-				var pass=ul_validform.check(true,$(this));
-				if(!pass)
-					$(this).parent().children(".checkinfo").show();
-			});
+		
+		$("#contractUl").find("[datatype]").live("focus",function(){
+			$(this).parent().children(".checkinfo").hide();
+			$(this).removeClass("Validform_error");
+			//$(this).parent().children(".checkinfo").hide();
+		});
+		$("#contractUl").find("[datatype]").live("blur",function(){
+			
+			var pass=ul_validform.check(true,$(this));
+			if(!pass)
+				$(this).parent().children(".checkinfo").show();
 		});
 		$("#deposit").blur(function() {
 			var value=$(this).val();
@@ -218,23 +191,27 @@ var ul_validform;
 	    	$(this).val(parseFloat(value).toFixed(2));
 			}
 	    })
+	    $(".lnk-green").live("click",function(){
+			var $tr=$(this).parent().parent()
+			var $new=$tr.clone();
+			$new.find("input").attr("value","");
+			$new.find("select").val("");
+			$new.insertAfter($tr);
+			$new.find(".checkinfo").remove();
+			$new.find(".Validform_error").removeClass("Validform_error");
+			//$(this).remove();
+		});
+		$(".lnk-red").live("click", function() {
+			var leng=$("#formtable").find(".formtr").length;
+			if(leng>1){
+				$(this).parent().parent().remove();
+				resetValidForm();
+			}else{
+				messageInfo("不能删除条目!");
+			}
+
+		});
 	});
-	//将传入数据转换为字符串,并清除字符串中非数字与.的字符
-    //按数字格式补全字符串
-    var getFloatStr = function(num){
-        num += '';
-        num = num.replace(/[^0-9|\.]/g, ''); //清除字符串中的非数字非.字符
-        
-        if(/^0+/) //清除字符串开头的0
-            num = num.replace(/^0+/, '');
-        if(!/\./.test(num)) //为整数字符串在末尾添加.00
-            num += '.00';
-        if(/^\./.test(num)) //字符以.开头时,在开头添加0
-            num = '0' + num;
-        num += '00';        //在字符串末尾补零
-        num = num.match(/\d+\.\d{2}/)[0];
-        return num;
-    };
 </script>
 </head>
 <body>
@@ -273,8 +250,8 @@ var ul_validform;
 							<li><label>生效时间</label><input type="text" value=""
 								readonly="readonly"/></li>
 						</ul>
-						<table border="0" cellpadding="0" cellspacing="0" id="TbData"
-							class="tabList producedTable">
+						<table border="0" cellpadding="0" cellspacing="0"
+							class="tabList producedTable" id="formtable">
 							<col width="20%" />
 							<col width="20%" />
 							<col width="15%" />
@@ -292,16 +269,17 @@ var ul_validform;
 								<th>备注说明</th>
 								<th class="rLine">&nbsp;</th>
 							</tr>
-							<tr id="trDataRow1" class="CaseRow">
-								<td><input type="text" value="" name="items[0].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！" /></td>
-								<td><input type="text" value="" name="items[0].productModel" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！"/></td>
-								<td><input type="text" value="" name="items[0].quantity" class="quantityClass"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
-								<td><input type="text" value="" name="items[0].price" class="priceClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" /></td>
-								<td><input type="text" value="" name="items[0].amount" class="amountClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  /></td>
+							<tr  class="formtr">
+								<td><input type="text" value="" name="items[index].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！" /></td>
+								<td><input type="text" value="" name="items[index].productModel" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！"/></td>
+								<td><input type="text" value="" name="items[index].quantity" class="quantityClass number"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
+								<td><input type="text" value="" name="items[index].price" class="priceClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！" /></td>
+								<td><input type="text" value="" name="items[index].amount" class="amountClass number" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  /></td>
 								<td><textarea id="textarea" cols="45" rows="1"
 										name="items[0].remarks"></textarea></td>
-								<td><a href="javascript:void(0);" class="lnk-green"
-									name="add" onclick="addTable()">+</a></td>
+									<td class="color-red">
+									<a href="javascript:void(0);" class="lnk-green">+</a>&nbsp;&nbsp;<a href="javascript:void(0);" class="lnk-red">X</a>
+								</td>
 							</tr>
 							<tr id="total_tr">
 								<td><strong>合计</strong></td>
@@ -338,7 +316,7 @@ var ul_validform;
 								</div>
 						</div>			
 						<div>
-							<label>关联招标合同号</label>${record.refContractNo}
+							<label>关联招标合同号</label>${record.refContractNo}<input type="hidden" value="${record.refContractNo}" name="contract.refContractNo"  />
 						</div>
 						<div class="btnBox">
 							<a href="javascript:void(0);"

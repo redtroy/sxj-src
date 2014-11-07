@@ -9,6 +9,7 @@ import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
+import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
@@ -68,7 +69,8 @@ public interface IContractService {
 	 **/
 	public void changeContract(String recordId, String contractId,
 			ContractModifyModel model, String recordNo,
-			List<ContractItemEntity> itemList,String contractIds,String changeIds);
+			List<ContractItemEntity> itemList, String contractIds,
+			String changeIds);
 
 	/**
 	 * 补损合同
@@ -168,12 +170,21 @@ public interface IContractService {
 
 	String getReplenish(String contractNo);
 
-	int getContractByZhaobiaoContractNo(String contractNo, String  memberId);
+	int getContractByZhaobiaoContractNo(String contractNo, String memberId);
 
 	/**
 	 * 根据关联合同号获取合同信息
 	 */
 	public List<ContractEntity> getContractByRefContractNo(String refContractNo)
 			throws ServiceException;
+
+	/**
+	 * 启用门窗RFID
+	 * 
+	 * @throws ServiceException
+	 */
+	public void startWindowRfid(String refContractNo, String minRfid,
+			String maxRfid, String gRfid, String lRfid,
+			WindowTypeEnum windowType) throws ServiceException;
 
 }

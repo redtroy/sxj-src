@@ -58,6 +58,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.MultiGet;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.annotations.Transient;
@@ -275,6 +276,7 @@ public class GenericStatementBuilder extends BaseBuilder
         String selectStatementId = "get";
         String batchInsertStatementId = "batchinsert";
         String batchDeleteStatementId = "batchDelete";
+        String multiGetStatementId = "multiGet";
         
         if (!mapperType.isAssignableFrom(Void.class))
         {
@@ -390,6 +392,22 @@ public class GenericStatementBuilder extends BaseBuilder
                             getCollection(batchUpdateMethods.get(0)));
                 }
             }
+            List<Method> multiGetMethods = ReflectUtils.findMethodsAnnotatedWith(mapperType,
+                    MultiGet.class);
+            if (Collections3.isNotEmpty(multiGetMethods))
+            {
+                if (multiGetMethods.size() > 1)
+                {
+                    throw new RuntimeException("有多个@MultiGet方法");
+                }
+                multiGetStatementId = multiGetMethods.get(0).getName();
+                if (!super.getConfiguration().hasCache(namespace + "."
+                        + multiGetStatementId))
+                {
+                    buildMultiGet(namespace + "." + multiGetStatementId,
+                            getCollection(multiGetMethods.get(0)));
+                }
+            }
             
         }
         
@@ -407,6 +425,54 @@ public class GenericStatementBuilder extends BaseBuilder
             return "list";
         else
             return "array";
+    }
+    
+    private void buildMultiGet(String statementId, String collection)
+    {
+        Integer fetchSize = null;
+        Integer timeout = null;
+        Class<?> resultType = entityClass;
+        //~~~~~~~~~~~~~~~~~~~~~~~
+        boolean flushCache = true;
+        boolean useCache = false;
+        boolean resultOrdered = false;
+        KeyGenerator keyGenerator = new NoKeyGenerator();
+        
+        SqlSource sqlSource = new DynamicSqlSource(configuration,
+                getMultiGetSql(collection));
+        
+        String resultMap = null;
+        Iterator<String> resultMapNames = configuration.getResultMapNames()
+                .iterator();
+        while (resultMapNames.hasNext())
+        {
+            String name = resultMapNames.next();
+            ResultMap temp = configuration.getResultMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                resultMap = temp.getId();
+                break;
+            }
+        }
+        assistant.addMappedStatement(statementId,
+                sqlSource,
+                StatementType.PREPARED,
+                SqlCommandType.SELECT,
+                fetchSize,
+                timeout,
+                null,
+                idField.getType(),
+                resultMap,
+                resultType,
+                null,
+                flushCache,
+                useCache,
+                resultOrdered,
+                keyGenerator,
+                null,
+                null,
+                databaseId,
+                lang);
     }
     
     private void buildBatchDelete(String statementId, String collection)
@@ -654,6 +720,32 @@ public class GenericStatementBuilder extends BaseBuilder
                 + getIdColumnName() + " in "));
         contents.add(getBatchDeleteFields(collection));
         return new MixedSqlNode(contents);
+    }
+    
+    private SqlNode getMultiGetSql(String collection)
+    {
+        String sql = "SELECT " + getIdColumnName() + " AS " + getIdFieldName();
+        
+        for (Field field : columnFields)
+        {
+            if (!getColumnNameByField(field).equals(getIdColumnName()))
+                sql += "," + getColumnNameByField(field) + " AS "
+                        + getColumnNameByField(field);
+        }
+        
+        sql += " FROM " + tableName + " WHERE " + getIdColumnName() + " in";
+        List<SqlNode> contents = new ArrayList<SqlNode>();
+        contents.add(new TextSqlNode(sql));
+        contents.add(getMultiGetFields(collection));
+        return new MixedSqlNode(contents);
+    }
+    
+    private SqlNode getMultiGetFields(String collection)
+    {
+        TextSqlNode fieldSqlNode = new TextSqlNode("#{" + ITEM + "}");
+        ForEachSqlNode forEachSqlNode = new ForEachSqlNode(configuration,
+                fieldSqlNode, collection, "index", ITEM, "(", ")", ",");
+        return forEachSqlNode;
     }
     
     private SqlNode getBatchDeleteFields(String collection)
@@ -947,6 +1039,9 @@ public class GenericStatementBuilder extends BaseBuilder
             contents.add(new IfSqlNode(new MixedSqlNode(sqlNodes),
                     getTestByField(ITEM, field)));
         }
+        if (versionField != null)
+            contents.add(new TextSqlNode(getColumnNameByField(versionField)
+                    + "=" + getColumnNameByField(versionField) + "+1"));
         
         return new SetSqlNode(configuration, new MixedSqlNode(contents));
     }
