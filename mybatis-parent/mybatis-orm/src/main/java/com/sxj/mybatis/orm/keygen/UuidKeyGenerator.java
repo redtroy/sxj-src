@@ -93,7 +93,7 @@ public class UuidKeyGenerator implements KeyGenerator
     {
         for (int i = 0; i < keyProperties.length; i++)
         {
-            if (metaParam.getValue(keyProperties[i]) != null)
+            if (metaParam.getValue(keyProperties[i]) == null)
                 metaParam.setValue(keyProperties[i],
                         Identities.randomBase62(length));
         }

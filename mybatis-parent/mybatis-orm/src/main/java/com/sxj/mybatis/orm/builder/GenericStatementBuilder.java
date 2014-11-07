@@ -1060,7 +1060,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 sqlNodes.add(new TextSqlNode(getColumnNameByField(field)
                         + " = now(),"));
             }
-            else
+            else if (!field.isAnnotationPresent(Version.class))
             {
                 sqlNodes.add(new TextSqlNode(getColumnNameByField(field)
                         + " = #{" + field.getName() + "},"));
