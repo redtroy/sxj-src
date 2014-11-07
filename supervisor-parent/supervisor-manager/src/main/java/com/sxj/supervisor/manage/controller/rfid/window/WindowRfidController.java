@@ -115,14 +115,14 @@ public class WindowRfidController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("contractInfo")
-	public String queryContractInfo(ModelMap model, String contractNo,String rfid)
+	public String queryContractInfo(ModelMap model, String contractNo,String id)
 			throws WebException {
 		try {
 			ContractModel cmodel=contractService.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = contractService
 					.getContract(cmodel.getContract().getId());
 			model.put("contractModel", contractModel);
-			model.put("rfid", rfid);
+			model.put("id", id);
 			return "manage/rfid/window/contract-info";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());

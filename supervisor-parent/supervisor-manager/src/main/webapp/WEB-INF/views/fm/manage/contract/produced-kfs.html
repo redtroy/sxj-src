@@ -116,7 +116,7 @@ $(document).ready(function() {
 		//alert(vTrClone.find("td :last").find('a').text());	
 		vTrClone.find("td :last").attr("onclick", "");
 		vTrClone.find("td :last").addClass("TrDel");
-		vTrClone.find("td :last").html('<a class="lnk-green">x</a>');//更改按钮
+		vTrClone.find("td :last").html('<a href="javascript:void(0);" class="lnk-green" name="add" onclick="addTable()">+</a>&nbsp;<a class="lnk-green">x</a>');//更改按钮
 		//清空内容
 		vTrClone.find("td").eq(0).find("input").val("");
 		vTrClone.find("td").eq(1).find("input").val("");

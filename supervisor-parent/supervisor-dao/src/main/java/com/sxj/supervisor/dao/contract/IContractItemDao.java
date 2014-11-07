@@ -8,6 +8,7 @@ import com.sxj.mybatis.orm.annotations.BatchDelete;
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.BatchUpdate;
 import com.sxj.mybatis.orm.annotations.Delete;
+import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
@@ -46,4 +47,7 @@ public interface IContractItemDao {
 	**/
 	@BatchUpdate
 	public void updateItem(List<ContractItemEntity> items);
+	
+	@Get
+	public ContractItemEntity getItems(String id);
 }

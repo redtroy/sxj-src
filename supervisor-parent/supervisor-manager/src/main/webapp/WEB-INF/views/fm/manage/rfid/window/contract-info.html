@@ -1,331 +1,139 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-        <td colspan="11">
-        <div class="infoBox text-left">
-          <ul class="ly-clearFix">
-            
-               <li>
-              <label>工程名称</label>
-             ${contractModel.contract.engName}</li>
-            <li>
-              <label>工程地址</label>
-              ${contractModel.contract.engAddress} </li>
-            <li>
-              <label>甲方</label>
-              ${contractModel.contract.memberNameA}</li>
-            <li>
-              <label>乙方</label>
-              ${contractModel.contract.memberNameB} </li>
-           <li>
-              <label>签订地点</label>
-              ${contractModel.contract.address}</li>
-            <li>
-              <label>签订时间</label>
-              ${contractModel.contract.signedDate?string("yyyy年MM月dd日")} </li>
-          </ul>
-          <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-            <col width="20%" />
-            <col width="20%" />
-            <col width="15%" />
-            <col width="10%" />
-            <col width="10%" />
-            <col width="20%" />
-            <col width="5%" />
-            <tr>
-              <th>产品名称</th>
-              <th>产品规格</th>
-              <th>数量<span>（㎡/吨）</span></th>
-              <th>单价<span>(元/㎡/吨)</span></th>
-              <th>金额<span>(元)</span></th>
-              <th>备注说明</th>
-            </tr>
-            <#assign n = 0> 
-            <#assign m = 0> 
-            <#list contractModel.itemList as item>
-            <#assign n = (n+item.quantity)?int > 
-            <#assign m = (m+item.amount)?int > 
-            <tr>
-              <td>${item.productName}</td>
-              <td>${item.productModel}</td>
-              <td>${item.quantity}</td>
-              <td>${item.price}</td>
-              <td>${item.amount}</td>
-              <td>${item.remarks}</td>
-            </tr>
-            </#list>
-            <tr>
-              <td><strong>合计</strong></td>
-              <td>&nbsp;</td>
-              <td>${n}</td>
-              <td>&nbsp;</td>
-              <td>${m}</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-          </table>
-          <div><label>交货地址</label>${contractModel.contract.deliveryAddress} </div>
-          <#if contractModel.batchList?exists>
-          <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-            <col width="20%" />
-            <col width="30%" />
-            <col width="20%" />
-            <col width="10%" />
-            <col width="15%" />
-            <col width="5%" />
-            <tr>
-              <th>交货批次</th>
-              <th>产品规格</th>
-              <th>数量<span>（㎡/吨）</span></th>
-              <th>应付货款<span>（元）</span></th>
-              <th class="rLine">对应批次RFID编号</th>
-            </tr>
-            <#list contractModel.batchList as batch>
-            <tr>
-              <td>第${batch.batch.batchNo}批次</td>
-              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                <#list batch.batchItems as batchItem>
-                  <tr>
-                    <td>${batchItem.productModel}</td>
-                  </tr>
-                </#list>
-                </table></td>
-              <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                 <#list batch.batchItems as batchItem>
-                  <tr>
-                    <td>${batchItem.quantity}</td>
-                  </tr>
-                  </#list>
-                </table></td>
-              <td>${batch.batch.amount}</td>
-              <td>${batch.batch.rfidNo}</td>
-            </tr>
-              </#list>
-          </table>
-          </#if>
-          <div>
-            <label>本合同还有</label>
-            <#if contractModel.batchList?exists>
-            ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
-            <#else>
-            ${contractModel.contract.batchCount}
-             </#if>
-            	批次待交付 </div>
-          <div>
-            <label>合同定金</label>
-            ${contractModel.contract.deposit}元 </div>
-          <div>
-            <label>合同备注</label>
-            <textarea name="textarea2" id="textarea2" cols="80" rows="3" readonly="readonly">${contractModel.contract.remarks}</textarea>
-          </div>
-          <div class="contPic">
-              <label>合同备案扫描件</label>
-              <div class="rollBox">
-      <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-      <div class="Cont" id="ISL_Cont">
-      <div class="ScrCont">
-       <div id="List1">
-                  <!-- 图片列表 begin -->
-                  <#assign arr=(contractModel.contract.imgPath?split(","))>
-                 <#list arr  as imgPath>
-                 	 <div class="pic"><a href="#" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}"  /></a></div>
-                 </#list>
-                  <!-- 图片列表 end -->
-                </div>
-       <div id="List2"></div>
-      </div>
-     </div>
-     <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
-   </div></div>
-          <div>
-            <label>关联招标合同号</label>
-            ${contractModel.contract.refContractNo} </div>
-            </div>
-            <#if contractModel.modifyList?exists>
-          <div class="infoBox producedBox changeBox text-left">
-            <h2 class="title">合同变更信息</h2>
-            <!-- 变更信息遍历begin -->
-              <#list contractModel.modifyList as modifyList>
-            <div>
-              <label>合同变更备案号</label>
-              ${modifyList.modifyContract.recordNo}</div>
-            <div class="contPic">
-              <label>合同变更扫描件</label>
-              <div class="rollBox">
-                <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-                <div class="Cont" id="ISL_Cont2">
-                  <div class="ScrCont">
-                    <div id="List3">
-                      <!-- 图片列表 begin -->
-                       <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
-                      <#list imgArr  as modifyimgPath>
-                      	<div class="pic"><a href="#" target="_blank"><img src="${b.imagePath}${modifyimgPath}"  /></a></div>
-              		  </#list>
-                      <!-- 图片列表 end -->
-                    </div>
-                    <div id="List4"></div>
-                  </div>
-                </div>
-                <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
-              </div>
-            </div>
-            <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-              <col width="15%" />
-              <col width="20%" />
-              <col width="15%" />
-              <col width="10%" />
-              <col width="10%" />
-              <col width="25%" />
-              <col width="5%" />
-              <tr>
-                <th>产品名称</th>
-                <th>产品规格</th>
-                <th>数量<span>（㎡/吨）</span></th>
-                <th>单价<span>(元/㎡/吨)</span></th>
-                <th>金额<span>(元)</span></th>
-                <th>备注说明</th>
-                <th class="rLine">&nbsp;</th>
-              </tr>
-              <#list modifyList.modifyItemList  as modifyItem>
-              <tr>
-                <td>${modifyItem.productName}</td>
-                <td>${modifyItem.productModel}</td>
-                <td>${modifyItem.quantity}</td>
-                <td>${modifyItem.price}</td>
-                <td>${modifyItem.amount}</td>
-                <td>${modifyItem.remarks}</td>
-                <td>&nbsp;</td>
-              </tr>
-              </#list>
-            </table>
-            <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-              <col width="20%" />
-              <col width="25%" />
-              <col width="20%" />
-              <col width="10%" />
-              <col width="20%" />
-              <col width="5%" />
-              <tr>
-                <th>交货批次</th>
-                <th>产品规格</th>
-                <th>数量<span>（㎡/吨）</span></th>
-                <th>应付货款<span>（元）</span></th>
-                <th>对应批次RFID编号</th>
-                <th class="rLine">&nbsp;</th>
-              </tr>
-              <#list modifyList.modifyBatchList  as modifyBatch>
-              <tr>
-                <td>第${modifyBatch.modifyBatch.batchNo}批次</td>
-                <td>
-                <table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                 <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
-                    <tr>
-                      <td>${modifyBatchItems.productModel}</td>
-                    </tr>
-                  </#list>
-                  </table>
-                  </td>
-                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                   <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
-                    <tr>
-                      <td>${modifyBatchItems.quantity}</td>
-                    </tr>
-                  </#list>
-                  </table></td>
-                <td>${modifyBatch.modifyBatch.amount}</td>
-                <td>${modifyBatch.modifyBatch.rfidNo}</td>
-                <td>&nbsp;</td>
-              </tr>
-              </#list>
-            </table>
-             	
-             </#list>
-            <!-- 变更信息遍历结束 -->
-          </div>
-          </#if>
-          <#if contractModel.replenishList?exists>
-          <div class="infoBox producedBox changeBox text-left">
-            <h2 class="title">合同补损信息</h2>
-            <#list contractModel.replenishList as replenishList>
-            <div>
-              <label>合同补损备案号</label>
-              ${replenishList.replenishContract.recordNo}</div>
-            <div>
-              <label>补损批次RFID</label>
-              ${replenishList.replenishContract.batchRfidNo}</div>
-            <div class="contPic">
-              <label>合同补损扫描件</label>
-              <div class="rollBox">
-                <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
-                <div class="Cont" id="ISL_Cont3">
-                  <div class="ScrCont">
-                    <div id="List5">
-                      <!-- 图片列表 begin -->
-                      <#assign replenishArr=(replenishList.replenishContract.imgPath?split(","))>
-                      <#list replenishArr  as replenishImg>
-                      <div class="pic"><a href="#" target="_blank"><img src="${b.imagePath}${replenishImg}"  /></a></div>
-                      </#list>
-                      <!-- 图片列表 end -->
-                    </div>
-                    <div id="List6"></div>
-                  </div>
-                </div>
-                <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
-              </div>
-            </div>
-            <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
-              <col width="10%" />
-              <col width="25%" />
-              <col width="20%" />
-              <col width="10%" />
-              <col width="15%" />
-              <col width="15%" />
-              <col width="5%" />
-              <tr>
-                <th>交货批次</th>
-                <th>产品规格</th>
-                <th>数量<span>（㎡/吨）</span></th>
-                <th>应付货款<span>（元）</span></th>
-                <th>对应批次RFID编号</th>
-                <th>新RFID编号</th>
-                <th class="rLine">&nbsp;</th>
-              </tr>
-              <#list replenishList.batchItems as replenishItem>
-              <tr>
-                <td>第${replenishItem.replenishBatch.batchNo}批次</td>
-                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                 <#list replenishItem.replenishBatchItems as replenishBatchItems>
-                    <tr>
-                      <td>${replenishBatchItems.productModel}</td>
-                    </tr>
-                 </#list>
-                  </table></td>
-                <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
-                     <#list replenishItem.replenishBatchItems as replenishBatchItems>
-                    <tr>
-                      <td>${replenishBatchItems.quantity}</td>
-                    </tr>
-                 </#list>
-                  </table></td>
-                <td>${replenishItem.replenishBatch.amount}</td>
-                <td>${replenishItem.replenishBatch.rfidNo}</td>
-                <td>${replenishItem.replenishBatch.newRfidNo}</td>
-                <td>&nbsp;</td>
-              </tr>
-               </#list>
-            </table>
-            <div>
-              <label>RFID订单号</label>
-              ${replenishList.replenishContract.rfidOrderNo}</div>
-              </#list>
-               </#if>
-            <div class="btnBox text-center"><a href="javascript:void(0)" class="button button-gray button-small" onclick="closeContract('${rfid}')">收起</a></div>
-          </div>
-         
-        </td>
-</body>
-</html>
+﻿<td colspan="11" >
+<script type="text/javascript">
+	$(document).ready(function(){
+		var start=0;
+		
+		$('.elastislide-list').each(function(){
+			var $this=$(this);
+			$this.find("li").live("click",function(){
+				var el=$(this);
+				var imageSource = el.find("a").attr("data-image");
+				refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+				el.parent().children("li").removeClass("view");
+				el.addClass("view");
+				preModal=null;
+			});
+			$(this).elastislide({
+				orientation : 'horizontal',
+				speed : 500,
+				easing : 'ease-in-out',
+				minItems : elastislideConfig.count,
+				start : start,
+				onClick : function( el, position, evt ) { 
+					return false; 
+				},
+				onReady : function() { 
+					$this.children("li:lt("+elastislideConfig.count+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					if($this.children("li").length<elastislideConfig.count)
+						$(".elastislide-prev").hide();
+					return false; },
+				onBeforeSlide : function() { return false; },
+				onAfterSlide : function() { 
+					if(start>0)
+						slideTimes=slideTimes+start;
+					$this.children("li:lt("+slideTimes+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					slideTimes=slideTimes+elastislideConfig.count;
+					return false; }
+			});
+		});
+		var quantity=0;
+		var amount=0;
+		$(".quantity").each(function(){
+			if($(this).html()){
+				quantity+=parseInt($(this).html());
+			}
+		});
+		$(".amount").each(function(){
+			if($(this).html()){
+				amount+=parseFloat($(this).html());
+			}
+		});
+		$(".tquantity").html(quantity+"镗");
+		$(".tamount").html(amount.toFixed(2)+"元");
+		
+	});
+	</script>
+	<div class="infoBox text-left">
+		<ul class="ly-clearFix">
+			<li><label>合同号</label> ${contractModel.contract.contractNo}</li>
+			<li><label>&nbsp;</label> &nbsp;</li>
+			<li><label>工程名称</label> ${contractModel.contract.engName}</li>
+			<li><label>工程地址</label> ${contractModel.contract.engAddress}</li>
+			<li><label>甲方</label> ${contractModel.contract.memberNameA}</li>
+			<li><label>乙方</label> ${contractModel.contract.memberNameB}</li>
+			<li><label>签订地点</label> ${contractModel.contract.address}</li>
+			<li><label>签订时间</label> <#if
+				contractModel.contract.signedDate?exists>
+				${contractModel.contract.signedDate?string("yyyy-MM-dd")}</#if></li>
+		</ul>
+		<table border="0" cellpadding="0" cellspacing="0"
+			class="tabList producedTable">
+			<col width="20%" />
+			<col width="20%" />
+			<col width="15%" />
+			<col width="10%" />
+			<col width="10%" />
+			<col width="20%" />
+			<col width="5%" />
+			<tr>
+				<th>产品名称</th>
+				<th>型号规格</th>
+				<th>数量</th>
+				<th>单价<span>￥</span></th>
+				<th>合价<span>￥</span></th>
+				<th>备注说明</th>
+				<th class="rLine">&nbsp;</th>
+			</tr>
+			<#list contractModel.itemList as
+			item> 
+			<tr>
+				<td>${item.productName}</td>
+				<td>${item.windowType.getName()}</td>
+				<td class="quantity">${item.quantity}</td>
+				<td>${item.price?string('0.00')}</td>
+				<td class="amount">${item.amount?string('0.00')}</td>
+				<td>${item.remarks}</td>
+				<td><#if item.updateState==1><span class="color-red">！</span></#if>
+				</td>
+			</tr>
+			</#list>
+			<tr>
+				<td><strong>合计</strong></td>
+				<td>&nbsp;</td>
+				<td class="tquantity">${n}镗</td>
+				<td>&nbsp;</td>
+				<td class="tamount">${m}元</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		<div>
+			<label>合同备注</label>
+			<textarea name="textarea2" id="textarea2" cols="80" rows="3"
+				readonly="readonly">${contractModel.contract.remarks}</textarea>
+		</div>
+		<div class="contPic">
+			<label>合同备案扫描件</label>
+			<div class="rollBox">
+				<ul class="elastislide-list">
+					<#assign arr=(contractModel.contract.imgPath?split(","))> <#list
+					arr as imgPath>
+					<li><a href="javascript:void(0);" class="demo-image"
+						data-image="${b.imagePath}${imgPath}"><img
+							src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a>
+					<p>${imgPath_index+1}</p></li> </#list>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="btnBox text-center">
+		<a href="javascript:close('${id}')" class="button button-gray button-small" >收起</a>
+	</div></td>

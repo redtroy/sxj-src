@@ -166,19 +166,15 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Override
 	@Transactional
-	public void startWindowRfid(Long refContractCount, String refContractNo,
-			String minRfid, String maxRfid, String gRfid, String lRfid,
-			WindowTypeEnum windowType) throws ServiceException {
+	public void startWindowRfid(Long itemQuantity, Long useQuantity,
+			String refContractNo, String minRfid, String maxRfid, String gRfid,
+			String lRfid, WindowTypeEnum windowType) throws ServiceException {
 		try {
 			WindowRfidQuery query = new WindowRfidQuery();
 			query.setContractNo(refContractNo);
 			query.setRfidState(RfidStateEnum.used.getId());
-			List<WindowRfidEntity> hasStartList = queryWindowRfid(query);
-			float hasStartCount = 0;
-			if (hasStartList != null) {
-				hasStartCount = hasStartList.size();
-			}
-			if (hasStartCount >= refContractCount) {
+
+			if (useQuantity >= itemQuantity) {
 				throw new ServiceException("此招标合同已经全部启用完毕");
 			}
 
