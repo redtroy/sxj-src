@@ -84,6 +84,7 @@ public class MemberServiceImpl implements IMemberService {
 	@Transactional
 	public void modifyMember(MemberEntity member) {
 		try {
+			member.setVersion(menberDao.getMember(member.getId()).getVersion());
 			menberDao.updateMember(member);
 		} catch (Exception e) {
 			throw new ServiceException("会员信息更新失败！", e);
@@ -155,6 +156,7 @@ public class MemberServiceImpl implements IMemberService {
 			String password = StringUtils.getLengthStr(rondom + "", 6, '0');
 			String md5Passwrod = EncryptUtil.md5Hex(password);
 			member.setPassword(md5Passwrod);
+			member.setVersion(menberDao.getMember(memberId).getVersion());
 			menberDao.updateMember(member);
 			return password;
 		} catch (Exception e) {
@@ -232,6 +234,7 @@ public class MemberServiceImpl implements IMemberService {
 			String md5Passwrod = EncryptUtil.md5Hex(pwd);
 			member.setId(id);
 			member.setPassword(md5Passwrod);
+			member.setVersion(menberDao.getMember(id).getVersion());
 			menberDao.updateMember(member);
 		} catch (Exception e) {
 			SxjLogger.error("修改会员超级密码错误", e, this.getClass());

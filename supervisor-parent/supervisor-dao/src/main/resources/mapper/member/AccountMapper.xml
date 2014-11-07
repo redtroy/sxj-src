@@ -14,6 +14,7 @@
 		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
 		<result property="lastLogin" column="LAST_LOGIN" jdbcType="TIMESTAMP" />
+		<result property="version" column="VERSION_LOCK" jdbcType="INTEGER"/>
 	</resultMap>
 	<select id="getAccountByAccountName"
 		resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"

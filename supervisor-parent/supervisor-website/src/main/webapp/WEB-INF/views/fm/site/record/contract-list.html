@@ -519,12 +519,12 @@ function busunSeav(){
 								<div class="color-red">20%</div> <#else>-</#if>
 							</td>
 							<td><#if type==0> <#if record.contractType.getId()==0> <#if
-								record.contractNo??> - <#else> <a
+								record.contractNo?exists>- <#else> <a
 								href="javascript:to_modify('${record.id}')" class="lnk-blue"><span
 									class="icon icon16 icon-edit"></span>修改</a> <a
 								href="javascript:delRecord('${record.id}','${record.contractNo}')"
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
-							</a> </#if> <#else> <#if record.type.getId()==0> <#if
+							</a>  </#if> <#else> <#if record.type.getId()==0> <#if
 								record.contractNo?exists> <a
 								href="javascript:biangeng('${record.id}','${record.contractNo}');"
 								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
@@ -559,7 +559,7 @@ function busunSeav(){
 							</a> <a
 								href="javascript:delRecord('${record.id}','${record.contractNo}')"
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
-							</a> </#if> </#if> </#if> <#else> <#if record.contractNo??> - <#else>
+							</a> </#if> </#if> </#if> <#else> <#if record.contractNo?exists> - <#else>
 								<a href="javascript:to_modify('${record.id}')" class="lnk-blue"><span
 									class="icon icon16 icon-edit"></span>修改</a> <a
 								href="javascript:delRecord('${record.id}','${record.contractNo}')"
