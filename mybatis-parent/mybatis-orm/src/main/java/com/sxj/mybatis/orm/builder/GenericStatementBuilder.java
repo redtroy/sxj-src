@@ -867,8 +867,9 @@ public class GenericStatementBuilder extends BaseBuilder
                 + " WHERE " + getIdColumnName() + " = #{" + getIdFieldName()
                 + "} ");
         contents.add(sqlNode);
-        contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
-                getTestByField(null, versionField)));
+        if (versionField != null)
+            contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
+                    getTestByField(null, versionField)));
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
         
@@ -1003,8 +1004,9 @@ public class GenericStatementBuilder extends BaseBuilder
         
         contents.add(new TextSqlNode(" WHERE " + getIdColumnName() + " = #{"
                 + getIdFieldName() + "}"));
-        contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
-                getTestByField(null, versionField)));
+        if (versionField != null)
+            contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
+                    getTestByField(null, versionField)));
         return new MixedSqlNode(contents);
     }
     
@@ -1016,8 +1018,9 @@ public class GenericStatementBuilder extends BaseBuilder
         
         contents.add(new TextSqlNode(" WHERE " + getIdColumnName() + " = #{"
                 + ITEM + "." + getIdFieldName() + "}"));
-        contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
-                getTestByField(null, versionField)));
+        if (versionField != null)
+            contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
+                    getTestByField(null, versionField)));
         MixedSqlNode mixedSqlNode = new MixedSqlNode(contents);
         return new ForEachSqlNode(configuration, mixedSqlNode, collection,
                 "index", ITEM, "", "", ";");
