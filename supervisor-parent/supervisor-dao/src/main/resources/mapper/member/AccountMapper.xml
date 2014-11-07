@@ -26,7 +26,7 @@
 		resultMap="com.sxj.supervisor.dao.member.IAccountDao.AccountResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT DISTINCT A.ID,A.PARENT_ID,A.ACCOUNT_NAME,A.NAME,
-		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO,A.LAST_LOGIN  
+		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO,A.LAST_LOGIN,A.VERSION_LOCK  
 		 FROM M_MEMBER_ACCOUNT A LEFT JOIN M_MEMBER_ROLE r ON A.ID=r.ACCOUNT_ID WHERE 1=1]]>
 		<if test="condition.parentId != null and condition.parentId != ''">
 			<![CDATA[AND A.PARENT_ID = #{condition.parentId} ]]>
