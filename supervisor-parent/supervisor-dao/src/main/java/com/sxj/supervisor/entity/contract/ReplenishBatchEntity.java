@@ -7,6 +7,7 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
@@ -35,8 +36,10 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	 * 批次号
 	 */
 	@Column(name = "BATCH_NO")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "noType")
 	private String batchNo;
 
+	private String noType;
 	/**
 	 * 变更ID
 	 **/
@@ -97,7 +100,6 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 		this.id = id;
 	}
 
-
 	public String getRfidNo() {
 		return rfidNo;
 	}
@@ -120,5 +122,13 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 
 	public void setBatchItems(String batchItems) {
 		this.batchItems = batchItems;
+	}
+
+	public String getNoType() {
+		return noType;
+	}
+
+	public void setNoType(String noType) {
+		this.noType = noType;
 	}
 }
