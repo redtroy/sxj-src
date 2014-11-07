@@ -175,6 +175,7 @@ public class MemberServiceImpl implements IMemberService {
 				MemberEntity member = new MemberEntity();
 				member.setId(id);
 				member.setState(MemberStatesEnum.getEnum(state));
+				member.setVersion(menberDao.getMember(id).getVersion());
 				menberDao.updateMember(member);
 			}
 		} catch (Exception e) {
@@ -197,6 +198,7 @@ public class MemberServiceImpl implements IMemberService {
 				if (state == 2) {
 					member.setAuthorDate(new Date());
 				}
+				member.setVersion(menberDao.getMember(id).getVersion());
 				menberDao.updateMember(member);
 			}
 		} catch (Exception e) {
