@@ -862,12 +862,15 @@ public class GenericStatementBuilder extends BaseBuilder
         boolean useCache = false;
         boolean resultOrdered = false;
         KeyGenerator keyGenerator = new NoKeyGenerator();
-        
+        List<SqlNode> contents = new ArrayList<SqlNode>();
         SqlNode sqlNode = new TextSqlNode("DELETE FROM " + tableName
                 + " WHERE " + getIdColumnName() + " = #{" + getIdFieldName()
-                + "} " + getVersionSQL());
-        
-        SqlSource sqlSource = new DynamicSqlSource(configuration, sqlNode);
+                + "} ");
+        contents.add(sqlNode);
+        contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
+                getTestByField(null, versionField)));
+        SqlSource sqlSource = new DynamicSqlSource(configuration,
+                new MixedSqlNode(contents));
         
         assistant.addMappedStatement(statementId,
                 sqlSource,
@@ -999,7 +1002,9 @@ public class GenericStatementBuilder extends BaseBuilder
         contents.add(getUpdateColumns());
         
         contents.add(new TextSqlNode(" WHERE " + getIdColumnName() + " = #{"
-                + getIdFieldName() + "}" + getVersionSQL()));
+                + getIdFieldName() + "}"));
+        contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
+                getTestByField(null, versionField)));
         return new MixedSqlNode(contents);
     }
     
@@ -1010,8 +1015,9 @@ public class GenericStatementBuilder extends BaseBuilder
         contents.add(getBatchUpdateColumns());
         
         contents.add(new TextSqlNode(" WHERE " + getIdColumnName() + " = #{"
-                + ITEM + "." + getIdFieldName() + "}" + getVersionSQL()));
-        
+                + ITEM + "." + getIdFieldName() + "}"));
+        contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
+                getTestByField(null, versionField)));
         MixedSqlNode mixedSqlNode = new MixedSqlNode(contents);
         return new ForEachSqlNode(configuration, mixedSqlNode, collection,
                 "index", ITEM, "", "", ";");
