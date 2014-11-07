@@ -91,4 +91,7 @@
 		</if>
 		<![CDATA[ ORDER BY CREATE_DATE DESC]]>
 	</select>
+	<update id="updateContractRfid" parameterType="java.util.Map">
+	<![CDATA[update M_CONTRACT c set c.USE_QUANTITY=#{usequantity} where c.ITEM_QUANTITY>=#{usequantity} and c.USE_QUANTITY=#{oldUseQuantity}]]>
+	</update>
 </mapper>

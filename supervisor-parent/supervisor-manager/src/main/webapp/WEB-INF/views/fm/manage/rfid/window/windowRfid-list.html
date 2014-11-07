@@ -19,7 +19,9 @@
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
 <script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>	
-<@b.pageScript/><@b.upload/>
+<@b.pageScript/>
+<@b.upload/>
+<@b.errorInfo/>
 <script>
 function query(page){
 	var params=$("#search_form").serialize();

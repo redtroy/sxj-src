@@ -218,13 +218,48 @@ public class ContractServiceImpl implements IContractService {
 	@Transactional
 	public void modifyContract(ContractModel contract) throws ServiceException {
 		try {
+			List<ContractItemEntity> insertList = new ArrayList<ContractItemEntity>();
+			Float itemQuantity = 0f;
+			for (ContractItemEntity contractItemEntity : contract.getItemList()) {
+				if (StringUtils.isNotEmpty(contractItemEntity.getId())) {
+					ContractItemEntity ci = contractItemDao
+							.getItems(contractItemEntity.getId());
+					if (ci.getUpdateState() != null && ci.getUpdateState() != 0) {
+						contractItemEntity.setUpdateState(1);
+						contractItemEntity.setId(null);
+					}
+
+				}
+				contractItemEntity.setContractId(contract.getContract()
+						.getContractNo());
+				itemQuantity = itemQuantity + contractItemEntity.getQuantity();
+				insertList.add(contractItemEntity);
+			}
+			// 条目
+			if (contract.getItemList() != null) {
+				List<ContractItemEntity> item = contractItemDao
+						.queryItems(contract.getContract().getContractNo());
+				if (item != null) {
+					String ids = "";
+					for (ContractItemEntity contractItemEntity : item) {
+						if (ids == "") {
+							ids += contractItemEntity.getId();
+						} else {
+							ids += "," + contractItemEntity.getId();
+						}
+					}
+					// 删除条目
+					contractItemDao.deleteItems(ids.split(","));
+				}
+
+				contractItemDao.addItem(insertList);
+			}
+
 			// 主体
 			if (contract.getContract() != null) {
-
 				ContractEntity ce = contractDao.getContract(contract
 						.getContract().getId());
 				String[] arr = ce.getRecordNo().split(",");
-
 				String recordNo = contract.getContract().getRecordNo();
 				if (recordNo != null && recordNo.length() > 0) {
 					String[] recordNoArr = recordNo.split(",");
@@ -248,43 +283,10 @@ public class ContractServiceImpl implements IContractService {
 						}
 					}
 				}
+				contract.getContract().setItemQuantity(itemQuantity);
 				contractDao.updateContract(contract.getContract());
 			}
-			List<ContractItemEntity> insertList = new ArrayList<ContractItemEntity>();
-			for (ContractItemEntity contractItemEntity : contract
-					.getItemList()) {
-				if(StringUtils.isNotEmpty(contractItemEntity.getId()) ){
-					ContractItemEntity ci=contractItemDao.getItems(contractItemEntity.getId());
-					if(ci.getUpdateState()!=null&& ci.getUpdateState()!=0){
-						contractItemEntity.setUpdateState(1);
-						contractItemEntity.setId(null);
-					}
-					
-				}
-				contractItemEntity.setContractId(contract.getContract()
-						.getContractNo());
-				insertList.add(contractItemEntity);
-			}
-			// 条目
-			if (contract.getItemList() != null) {
-				List<ContractItemEntity> item = contractItemDao
-						.queryItems(contract.getContract().getContractNo());
-				if (item != null) {
-					String ids = "";
-					for (ContractItemEntity contractItemEntity : item) {
-						if (ids == "") {
-							ids += contractItemEntity.getId();
-						} else {
-							ids += "," + contractItemEntity.getId();
-						}
 
-					}
-					// 删除条目
-					contractItemDao.deleteItems(ids.split(","));
-				}
-				
-					contractItemDao.addItem(insertList);
-			}
 			// 批次
 			if (contract.getBatchList() != null) {
 				List<ContractBatchEntity> cbelist = new ArrayList<ContractBatchEntity>();
@@ -1227,8 +1229,8 @@ public class ContractServiceImpl implements IContractService {
 
 	@Override
 	@Transactional
-	public void startWindowRfid(String refContractNo, String minRfid,
-			String maxRfid, String gRfid, String lRfid,
+	public void startWindowRfid(Integer startNum, String refContractNo,
+			String minRfid, String maxRfid, String gRfid, String lRfid,
 			WindowTypeEnum windowType) throws ServiceException {
 		try {
 			ContractModel refContract = getContractModelByContractNo(refContractNo);
@@ -1245,6 +1247,13 @@ public class ContractServiceImpl implements IContractService {
 			long useCount = (long) useQuantity;
 			windowRfidService.startWindowRfid(count, useCount, refContractNo,
 					minRfid, maxRfid, gRfid, lRfid, windowType);
+			Map<String, Float> map = new HashMap<>();
+			map.put("usequantity", (float) startNum + useQuantity);
+			map.put("oldUseQuantity", useQuantity);
+			int index = contractDao.updateContractRfid(map);
+			if (index <= 0) {
+				throw new ServiceException("请求超时，请重新启用");
+			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage(), e);

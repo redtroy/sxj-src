@@ -1,7 +1,7 @@
 package com.sxj.supervisor.dao.contract;
 
 import java.util.List;
-
+import java.util.Map;
 
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
@@ -14,38 +14,48 @@ public interface IContractDao {
 	/**
 	 * 添加合同
 	 *
-	 * @param    contract  添加合同
-	**/
+	 * @param contract
+	 *            添加合同
+	 **/
 	@Insert
 	public void addContract(ContractEntity contract);
-	
+
 	/**
 	 * 修改合同
 	 *
-	 * @param    contract
-	**/
+	 * @param contract
+	 **/
 	@Update
 	public void updateContract(ContractEntity contract);
-	
+
 	/**
 	 * 获取合同信息
 	 *
-	 * @param    id
-	**/
+	 * @param id
+	 **/
 	@Get
 	public ContractEntity getContract(String id);
-	
+
 	/**
 	 * 查询合同
 	 *
-	 * @param    query
-	**/
-	public List<ContractEntity> queryContract(QueryCondition<ContractEntity> query);
-	
+	 * @param query
+	 **/
+	public List<ContractEntity> queryContract(
+			QueryCondition<ContractEntity> query);
+
 	/**
 	 * 删除合同
+	 * 
 	 * @param id
 	 */
 	@Delete
 	public void deleteContract(String id);
+
+	/**
+	 * 更新合同RFID数量
+	 * 
+	 * @param id
+	 */
+	public int updateContractRfid(Map<String, Float> map);
 }

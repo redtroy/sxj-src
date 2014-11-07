@@ -70,7 +70,7 @@ function confirmDelivery(id){
 					query($("#pager").attr("currentPage"));
 				},"发货成功!");
 			}else{
-				errorInfo("发货失败!");	
+				errorInfo(data.error);	
 			}
 		});
 	},"是否确认发货?");
@@ -96,7 +96,7 @@ function confirmReceipt(id){
 					query($("#pager").attr("currentPage"));
 				},"确认收货成功!");
 			}else{
-				errorInfo("确认收货失败!");	
+				errorInfo(data.error);	
 			}
 		});
 	},"是否确认收货?");

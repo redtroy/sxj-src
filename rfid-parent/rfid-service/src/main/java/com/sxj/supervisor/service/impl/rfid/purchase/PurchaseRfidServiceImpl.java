@@ -1,7 +1,6 @@
 package com.sxj.supervisor.service.impl.rfid.purchase;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -149,6 +148,12 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				query.setPurchaseNo(purchase.getPurchaseNo());
 				List<WindowRfidEntity> listRfid = winRfidService
 						.queryWindowRfid(query);
+				if (listRfid == null) {
+					throw new ServiceException("未导入RFID标签，不能收货！");
+				}
+				if (listRfid.size() < purchase.getCount()) {
+					throw new ServiceException("未完全导入RFID标签，不能收货！");
+				}
 				for (WindowRfidEntity windowRfid : listRfid) {
 					if (windowRfid == null) {
 						continue;
@@ -162,6 +167,12 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				query.setPurchaseNo(purchase.getPurchaseNo());
 				List<LogisticsRfidEntity> listRfid = logisticsRfidService
 						.queryLogistics(query);
+				if (listRfid == null) {
+					throw new ServiceException("未导入RFID标签，不能收货！");
+				}
+				if (listRfid.size() < purchase.getCount()) {
+					throw new ServiceException("未完全导入RFID标签，不能收货！");
+				}
 				for (LogisticsRfidEntity rfidEntity : listRfid) {
 					if (rfidEntity == null) {
 						continue;
@@ -192,8 +203,8 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				throw new ServiceException();
 			}
 			saleStatisticalService.add(entity);
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage(), e);
 		}
 	}
 
@@ -217,7 +228,16 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					rfid.setMemberNo(apply.getMemberNo());
 					rfid.setMemberName(apply.getMemberName());
 					rfid.setRfidState(RfidStateEnum.unused);
-					rfid.setProgressState(LabelProgressEnum.unfilled);
+					if (purchase.getReceiptState().equals(
+							DeliveryStateEnum.unfilled)) {
+						rfid.setProgressState(LabelProgressEnum.unfilled);
+					} else if (purchase.getReceiptState().equals(
+							DeliveryStateEnum.shipped)) {
+						rfid.setProgressState(LabelProgressEnum.shipped);
+					} else if (purchase.getReceiptState().equals(
+							DeliveryStateEnum.receiving)) {
+						rfid.setProgressState(LabelProgressEnum.hasReceipt);
+					}
 					RfidLog log = new RfidLog();
 					log.setState(RfidStateEnum.unused.getName());
 					log.setDate(DateTimeUtils.getDateTime());
@@ -242,7 +262,16 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					rfid.setRfidState(RfidStateEnum.unused);
 					rfid.setMemberNo(apply.getMemberNo());
 					rfid.setMemberName(apply.getMemberName());
-					rfid.setProgressState(com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum.unfilled);
+					if (purchase.getReceiptState().equals(
+							DeliveryStateEnum.unfilled)) {
+						rfid.setProgressState(LabelStateEnum.unfilled);
+					} else if (purchase.getReceiptState().equals(
+							DeliveryStateEnum.shipped)) {
+						rfid.setProgressState(LabelStateEnum.shipped);
+					} else if (purchase.getReceiptState().equals(
+							DeliveryStateEnum.receiving)) {
+						rfid.setProgressState(LabelStateEnum.hasReceipt);
+					}
 					rfid.setType(rfidType);
 					RfidLog log = new RfidLog();
 					log.setState(RfidStateEnum.unused.getName());
