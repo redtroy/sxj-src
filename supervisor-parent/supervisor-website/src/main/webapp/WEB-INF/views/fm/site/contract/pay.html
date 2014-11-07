@@ -23,6 +23,9 @@ jQuery(document).ready(function($) {
 		var obj=$(this).attr("pay_id");
 		$('#'+obj).slideUp(200);
 	});
+	$("#message_div").live("click",function(){
+		window.location.href="paylist.htm"; 
+	})
 	
 	JS.Engine.start('${basePath}comet');
 		JS.Engine.on({
@@ -33,9 +36,9 @@ jQuery(document).ready(function($) {
 			 $("#message_div").empty();
 		  if (data>0){
 			if ("${state}"=="a"){
-			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" onclick="query();return false;"></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
+			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
 			}else{
-			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" onclick="query();return false;"></span>贵公司有'+data+'笔合同里有待确认的款项</div>';
+			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有'+data+'笔合同里有待确认的款项</div>';
 			}
 			$("#message_div").html(bb);
 		  }
@@ -133,14 +136,14 @@ function pay_ok(id){
     <p class="mb0 pb0">
   <#if (state=="a")>
       付款状态<select name="state">
-		    <option selected="selected">全部</option>
+		    <option selected="selected" value="">全部</option>
 		    <#list payState as ps>
             <option value="${ps.ordinal()}">${ps.getName_a()}</option>
             </#list>
           </select>
    <#else>
         付款状态<select name="state">
-		    <option selected="selected">全部</option>
+		    <option selected="selected" value="">全部</option>
             <#list payState as ps>
             <option value="${ps.ordinal()}">${ps.getName_b}</option>
             </#list>

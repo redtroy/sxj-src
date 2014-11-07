@@ -59,7 +59,6 @@ $(document).ready(function() {
 					el.parent().children("li").removeClass("view");
 					el.addClass("view");
 					$("#viewer2").children("img").attr("src",imageSource);
-					$(".viewer").show();
 					$(".modal-header").show();
 					$(".maskdivgen").show();
 					return false; 
@@ -308,7 +307,7 @@ $(document).ready(function() {
 							<tr id="total_tr">
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td><span id="quantitySum">0</span>镗</td>
+								<td><span id="quantitySum">0</span>樘</td>
 								<td>&nbsp;</td>
 								<td><span id="amountSum">0</span>元</td>
 								<td>&nbsp;</td>
@@ -340,13 +339,14 @@ $(document).ready(function() {
 		</div>
 	</div>
 	<@b.footer />
-	<div class="viewer modal-wrap" style="display: none">
-									<div class="modal-header">
-										<span class="close">关闭</span>
-									</div>
-									<div id="viewer2" class="modal-body iviewer" style="width: 100%;display: none;top: 0px"></div>
-								</div>
-	<div class="maskdivgen"  style="display: none"></div> 
+	<div class="viewer modal-wrap" id="iviewerModal">
+		<div class="modal-header" style="display: none;">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
+	</div>
+	<div class="maskdivgen" style="display: none"></div> 
 </body>
 <!-- InstanceEnd -->
 </html>

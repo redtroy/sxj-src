@@ -15,12 +15,11 @@
 
 	<!-- 条件查询合同批次 -->
 	<select id="queryReplenish" resultMap="ReplenishResultMap"
-		parameterType="String">
-		<![CDATA[SELECT ID,CONTRACT_ID,RECORD_NO,BATCH_RFID_NO,RFID_ORDER_NO,IMG_PATH
-					FROM M_CONTRACT_REPLENISH WHERE 1=1 ]]>
+			parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_CONTRACT_REPLENISH WHERE 1=1 ]]>
 
 		<if test="condition.recordIds != null and condition.recordIds != ''">
-			<![CDATA[AND RECORD_NO in(#{condition.recordIds})]]>
+			<![CDATA[AND RECORD_NO in(${condition.recordIds})]]>
 		</if>
 		<if test="condition.contractId != null and condition.contractId != ''">
 			<![CDATA[AND CONTRACT_ID =#{condition.contractId}]]>
