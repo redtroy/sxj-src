@@ -1261,4 +1261,45 @@ public class ContractServiceImpl implements IContractService {
 		}
 
 	}
+
+	/**
+	 * 跟据rfid 获取补损批次
+	 */
+	@Override
+	public ContractReplenishModel getReplenishByRfid(String rfid){
+		if(StringUtils.isEmpty(rfid)){
+			return null;
+		}
+		ContractReplenishModel cModel= new ContractReplenishModel();
+		QueryCondition<ReplenishBatchEntity> query =new QueryCondition<ReplenishBatchEntity>();
+		query.addCondition("rfid", rfid);
+		List<ReplenishBatchEntity> batchList = contractReplenishBatchDao.queryReplenishBatch(query);
+		List<ReplenishBatchModel> replenishBatchList = new ArrayList<ReplenishBatchModel>();
+		ReplenishBatchModel rbm=new ReplenishBatchModel();
+		if (batchList != null && batchList.size() > 0) {
+			ReplenishBatchEntity rce =batchList.get(0);
+			List<BatchItemModel> bimList = new ArrayList<BatchItemModel>(0);
+			rbm.setReplenishBatch(rce);
+			rbm.setReplenishBatchItems(bimList);
+			replenishBatchList.add(rbm);
+			try {
+				bimList = JsonMapper.nonEmptyMapper().getMapper().readValue(
+								rce .getBatchItems(),new TypeReference<List<BatchItemModel>>() {});
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ReplenishContractEntity  rcentity= contractReplenishDao.getReplenish(rce.getReplenishId());
+			cModel.setReplenishContract(rcentity);
+			cModel.setBatchItems(replenishBatchList);
+		}
+		return cModel;
+	}
+	
 }

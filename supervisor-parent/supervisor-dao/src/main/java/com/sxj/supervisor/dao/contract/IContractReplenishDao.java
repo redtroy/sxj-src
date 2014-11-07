@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.BatchUpdate;
+import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.contract.ModifyItemEntity;
@@ -37,4 +38,7 @@ public interface IContractReplenishDao {
 	 */
 	public List<ReplenishContractEntity> queryReplenish(QueryCondition<ReplenishContractEntity> query);
 	
+	
+	@Get
+	public ReplenishContractEntity getReplenish(String id);
 }

@@ -14,6 +14,7 @@ import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.ContractReplenishModel;
 import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.contract.StateLogModel;
@@ -186,5 +187,12 @@ public interface IContractService {
 	public void startWindowRfid(Integer startNum, String refContractNo,
 			String minRfid, String maxRfid, String gRfid, String lRfid,
 			WindowTypeEnum windowType) throws ServiceException;
+
+	/**
+	 * 跟据rfid 获取补损批次
+	 * @param rfid
+	 * @return
+	 */
+	ContractReplenishModel getReplenishByRfid(String rfid);
 
 }
