@@ -241,6 +241,21 @@ public class ContractServiceImpl implements IContractService {
 				}
 				contractDao.updateContract(contract.getContract());
 			}
+			List<ContractItemEntity> insertList = new ArrayList<ContractItemEntity>();
+			for (ContractItemEntity contractItemEntity : contract
+					.getItemList()) {
+				if(StringUtils.isNotEmpty(contractItemEntity.getId()) ){
+					ContractItemEntity ci=contractItemDao.getItems(contractItemEntity.getId());
+					if(ci.getUpdateState()!=null&& ci.getUpdateState()!=0){
+						contractItemEntity.setUpdateState(1);
+						contractItemEntity.setId(null);
+					}
+					
+				}
+				contractItemEntity.setContractId(contract.getContract()
+						.getContractNo());
+				insertList.add(contractItemEntity);
+			}
 			// 条目
 			if (contract.getItemList() != null) {
 				List<ContractItemEntity> item = contractItemDao
@@ -258,12 +273,8 @@ public class ContractServiceImpl implements IContractService {
 					// 删除条目
 					contractItemDao.deleteItems(ids.split(","));
 				}
-				for (ContractItemEntity contractItemEntity : contract
-						.getItemList()) {
-					contractItemEntity.setContractId(contract.getContract()
-							.getContractNo());
-				}
-				contractItemDao.addItem(contract.getItemList());
+				
+					contractItemDao.addItem(insertList);
 			}
 			// 批次
 			if (contract.getBatchList() != null) {
@@ -745,6 +756,10 @@ public class ContractServiceImpl implements IContractService {
 					}
 
 				}
+				RecordEntity re = new RecordEntity();
+				re.setId(recordId);
+				re.setState(RecordStateEnum.supplement);
+				recordDao.updateRecord(re);
 
 			}
 		} catch (Exception e) {

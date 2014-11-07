@@ -6,10 +6,20 @@
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" />
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
-<@b.pageScript/>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+	<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/intense.js"></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
+<script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>	
+<@b.pageScript/><@b.upload/>
 <script>
 function query(page){
 	var params=$("#search_form").serialize();
@@ -51,33 +61,28 @@ function  disable(id){
 	}
 }
 function loadInfo(id,contractNo){
-	$("#info"+id).load("contractInfo.htm?contractNo="+contractNo+"&rfid="+id);
-	$("#blBatch"+id).html("");
-	$("#xcBatch"+id).html("");
+	$("#info"+id).load("contractInfo.htm?contractNo="+contractNo+"&id="+id);
 }
-function closeContract(id){
+function close(id){
 	$("#info"+id).html("");
 }
 
 function blBatch(id,contractNo,rfidNo){
-	$("#blBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=blBatch"+id);
-	$("#xcBatch"+id).html("");
-	$("#info"+id).html("");
+	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
 }
 function xcBatch(id,contractNo,rfidNo){
-	$("#xcBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=xcBatch"+id);
-	$("#blBatch"+id).html("");
-	$("#info"+id).html("");
-}
-function close(id){
-	$("#"+id).html("");
+	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
 }
 function log(id){
-	$("#log"+id).load("stateLog.htm?id="+id);
+	$("#info"+id).load("stateLog.htm?id="+id);
 }
-function closeLog(id){
-	$("#log"+id).html("");
-}
+$(function(){
+	$(".modal-header .close").live("click",function(){
+		var $parent=$(this).parent().parent();
+		$parent.hide();
+		$(".maskdivgen").hide();
+	})
+});
 </script>
 </head>
 <body>
@@ -188,14 +193,19 @@ function closeLog(id){
 		  <td class="operation"> <#if win.rfidState.getId()!=3><a href="javascript:disable('${win.id}');" class="stop">停用</a> </#if><a href="javascript:del('${win.id}');" class="del">删除</a></td>
         </tr>
         <tr class="tableInfo"  id="info${win.id}"></tr>
-        <tr class="tableInfo" id="blBatch${win.id}"> </tr> 
-         <tr class="tableInfo" id="xcBatch${win.id}"> </tr> 
-         <tr id="log${win.id}"></tr>
         </#list>
 	
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
 <@b.footer />
+<div class="viewer modal-wrap" id="iviewerModal">
+		<div class="modal-header" style="display: none;">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
+	</div>
+	<div class="maskdivgen" style="display: none"></div> 
 </body>
 <!-- InstanceEnd --></html>
