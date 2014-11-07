@@ -46,7 +46,7 @@
 	<!-- 条件查询合同 -->
 	<select id="queryContract" resultMap="ContractResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT *FROM M_CONTRACT where DELETE_STATE=0 ]]>
+		<![CDATA[SELECT * FROM M_CONTRACT where DELETE_STATE=0 ]]>
 		<!-- 合同号 -->
 		<if test="condition.contractNo != null and condition.contractNo != ''">
 			<![CDATA[ AND CONTRACT_NO =#{condition.contractNo}]]>
@@ -91,4 +91,7 @@
 		</if>
 		<![CDATA[ ORDER BY CREATE_DATE DESC]]>
 	</select>
+	<update id="updateContractRfid" parameterType="java.util.Map">
+	<![CDATA[update M_CONTRACT c set c.USE_QUANTITY=#{usequantity} where c.ITEM_QUANTITY>=#{usequantity} and c.USE_QUANTITY=#{oldUseQuantity}]]>
+	</update>
 </mapper>

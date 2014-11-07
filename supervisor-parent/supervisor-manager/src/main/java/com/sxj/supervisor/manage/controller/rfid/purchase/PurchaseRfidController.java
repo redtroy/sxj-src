@@ -131,15 +131,15 @@ public class PurchaseRfidController extends BaseController {
 	@RequestMapping("confirmReceipt")
 	public @ResponseBody Map<String, String> confirmReceipt(String id,
 			ModelMap model) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			purchaseRfidService.confirmReceipt(id);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认收货错误", e, this.getClass());
-			throw new WebException("确认收货错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**

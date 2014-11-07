@@ -183,8 +183,8 @@ public interface IContractService {
 	 * 
 	 * @throws ServiceException
 	 */
-	public void startWindowRfid(String refContractNo, String minRfid,
-			String maxRfid, String gRfid, String lRfid,
+	public void startWindowRfid(Integer startNum, String refContractNo,
+			String minRfid, String maxRfid, String gRfid, String lRfid,
 			WindowTypeEnum windowType) throws ServiceException;
 
 }
