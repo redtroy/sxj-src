@@ -211,6 +211,7 @@ public class AccountServiceImpl implements IAccountService {
 			AccountEntity account = new AccountEntity();
 			account.setId(id);
 			account.setState(AccountStatesEnum.getEnum(state));
+			account.setVersion(accountDao.getAccount(id).getVersion());
 			accountDao.updateAccount(account);
 			return AccountStatesEnum.getEnum(state).getName();
 
@@ -287,6 +288,7 @@ public class AccountServiceImpl implements IAccountService {
 			AccountEntity account = new AccountEntity();
 			account.setId(id);
 			account.setLastLogin(new Date());
+			account.setVersion(accountDao.getAccount(id).getVersion());
 			accountDao.updateAccount(account);
 		} catch (Exception e) {
 			SxjLogger.error("登陆时间更新错误", e, this.getClass());
