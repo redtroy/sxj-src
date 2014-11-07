@@ -14,6 +14,7 @@ import com.sxj.redis.advance.core.MessageListener;
 import com.sxj.redis.advance.core.RMap;
 import com.sxj.redis.advance.core.RTopic;
 import com.sxj.redis.advance.topic.RedisTopics;
+import com.sxj.spring.modules.beanfactory.CustomizedPropertyPlaceholderConfigurer;
 import com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager;
 import com.sxj.util.Constraints;
 
@@ -25,6 +26,8 @@ public class ShiroEventListener implements BeanFactoryPostProcessor {
 
 	private static ShiroRedisCacheManager cacheManager;
 
+	private static String cacheName;
+
 	@Override
 	public void postProcessBeanFactory(
 			final ConfigurableListableBeanFactory beanFactory)
@@ -33,6 +36,8 @@ public class ShiroEventListener implements BeanFactoryPostProcessor {
 		collections = beanFactory.getBean(RedisCollections.class);
 		cacheManager = beanFactory
 				.getBean(SupervisorShiroRedisCacheManager.class);
+		cacheName = CustomizedPropertyPlaceholderConfigurer
+				.getContextProperty("webmanage.authorization.cache.name");
 		RTopic<Object> topic = topics
 				.getTopic(Constraints.MANAGER_CHANNEL_NAME);
 		topic.addListener(new MessageListener<Object>() {
@@ -54,8 +59,7 @@ public class ShiroEventListener implements BeanFactoryPostProcessor {
 				}
 				List<PrincipalCollection> principals = (List<PrincipalCollection>) map
 						.get(accountId);
-				Cache<Object, Object> cache = cacheManager
-						.getCache(Constraints.MANAGER_CACHE_NAME);
+				Cache<Object, Object> cache = cacheManager.getCache(cacheName);
 				for (PrincipalCollection principal : principals) {
 					if ("del".equals(type)) {
 						cache.put(principal, new SimpleAuthorizationInfo());

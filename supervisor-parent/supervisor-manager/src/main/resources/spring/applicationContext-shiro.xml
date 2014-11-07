@@ -16,9 +16,11 @@
 
 	<bean id="myShiroRealmService"
 		class="com.sxj.supervisor.manage.login.SupervisorManagerShiroRealm">
+		<property name="authorizationCacheName" value="${webmanage.authorization.cache.name}"></property>
+		<property name="authenticationCacheName" value="${webmanage.authentication.cache.name}"></property>
 	</bean>
 	<bean class="com.sxj.supervisor.manage.login.ShiroEventListener"></bean>
-		
+	
 	<bean id="authenticationFilter"
 		class="com.sxj.supervisor.manage.login.SupervisorManagerPermissionsAuthorizationFilter" />
 

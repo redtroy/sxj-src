@@ -291,6 +291,8 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 					Iterator<String> iterator = info.getRoles().iterator();
 					String accountId = iterator.next();
 					if (StringUtils.isNotEmpty(accountId)) {
+						SxjLogger.info("执行重新加载权限---accountId=" + accountId,
+								this.getClass());
 						List<MemberFunctionEntity> functionList = roleService
 								.getAllRoleFunction(accountId);
 						if (functionList != null && functionList.size() > 0) {

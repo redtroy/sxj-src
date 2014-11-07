@@ -18,6 +18,8 @@
 		lazy-init="false"></bean>
 	<bean id="myShiroRealmService"
 		class="com.sxj.supervisor.website.login.SupervisorSiteShiroRealm">
+		<property name="authorizationCacheName" value="${website.authorization.cache.name}"></property>
+		<property name="authenticationCacheName" value="${website.authentication.cache.name}"></property>
 	</bean>
 	<bean id="authenticationFilter"
 		class="com.sxj.supervisor.website.login.SupervisorSiteAuthenticationFilter" />
@@ -108,6 +110,17 @@
 				/member/account/accountList.htm=user,frameperms
 				/record/to_apply.htm=user,frameperms
 				/record/query.htm=user,frameperms
+				/contract/finance.htm=user,frameperms
+				/contract/paylist.htm=user,frameperms
+				/rfid/logistics/to_apply.htm=user,frameperms
+				/rfid/logistics/apply_list.htm=user,frameperms
+				/rfid/logistics/queryList.htm=user,frameperms
+				/rfid/window/to_apply.htm=user,frameperms
+				/rfid/window/apply_list.htm=user,frameperms
+				/rfid/window/query.htm=user,frameperms
+				/rfid/window/logistics/query.htm=user,frameperms
+				/rfid/window/startmrfid_list.htm=user,frameperms
+				/rfid/window/to_loss.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->

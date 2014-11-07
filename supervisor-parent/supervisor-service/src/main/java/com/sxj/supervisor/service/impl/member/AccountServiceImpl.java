@@ -125,6 +125,8 @@ public class AccountServiceImpl implements IAccountService {
 			} else {
 				roleServce.removeRoles(account.getId());
 			}
+			account.setVersion(accountDao.getAccount(account.getId())
+					.getVersion());
 			accountDao.updateAccount(account);
 		} catch (Exception e) {
 			SxjLogger.error("更新子账户信息错误", e, this.getClass());
@@ -232,6 +234,7 @@ public class AccountServiceImpl implements IAccountService {
 			AccountEntity account = new AccountEntity();
 			account.setId(id);
 			account.setPassword(EncryptUtil.md5Hex(password));
+			account.setVersion(accountDao.getAccount(id).getVersion());
 			accountDao.updateAccount(account);
 			return password;
 		} catch (Exception e) {
@@ -269,6 +272,7 @@ public class AccountServiceImpl implements IAccountService {
 			AccountEntity account = new AccountEntity();
 			account.setId(id);
 			account.setPassword(EncryptUtil.md5Hex(pwd));
+			account.setVersion(accountDao.getAccount(id).getVersion());
 			accountDao.updateAccount(account);
 		} catch (Exception e) {
 			SxjLogger.error("密码更新错误", e, this.getClass());
