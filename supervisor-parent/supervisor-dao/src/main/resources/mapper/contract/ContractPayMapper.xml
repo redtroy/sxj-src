@@ -45,7 +45,7 @@
 			<![CDATA[AND RFID_NO like CONCAT('%',#{condition.rfidNo},'%')]]>
 		</if>
 	   <!-- 付款状态/收款状态 -->
-		<if test="condition.state != null">
+		<if test="condition.state != null and condition.state !=''">
 			<![CDATA[AND STATE =#{condition.state}]]>
 		</if>
 		<!-- 支付时间段-->
