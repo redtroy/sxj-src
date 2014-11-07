@@ -763,6 +763,7 @@ public class ContractServiceImpl implements IContractService {
 									.getReplenishBatch();
 							rb.setBatchItems(json);
 							rb.setReplenishId(replenishContract.getId());
+							rb.setNoType(contractId+"-");
 							list.add(rb);
 						}
 						contractReplenishBatchDao.addReplenishBatch(list);
@@ -834,7 +835,7 @@ public class ContractServiceImpl implements IContractService {
 						recordEntity
 								.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 						if (recordEntity.getFlag().getId() == 0) {
-							if (recordEntity.getAcceptState() == 0) {
+							if (recordEntity.getAcceptState()==null|| recordEntity.getAcceptState() == 0) {
 								recordEntity.setAcceptDate(new Date());// 受理时间
 								recordEntity.setAcceptState(1);
 							}
