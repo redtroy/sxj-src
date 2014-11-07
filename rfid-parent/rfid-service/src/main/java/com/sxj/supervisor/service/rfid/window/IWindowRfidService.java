@@ -32,9 +32,9 @@ public interface IWindowRfidService {
 	 * 
 	 * @throws ServiceException
 	 */
-	public void startWindowRfid(Long refContractCount, String refContractNo,
-			String minRfid, String maxRfid, String gRfid, String lRfid,
-			WindowTypeEnum windowType) throws ServiceException;
+	public void startWindowRfid(Long itemQuantity, Long useQuantity,
+			String refContractNo, String minRfid, String maxRfid, String gRfid,
+			String lRfid, WindowTypeEnum windowType) throws ServiceException;
 
 	/**
 	 * 批量新增
