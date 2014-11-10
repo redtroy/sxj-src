@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.impl.contract;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1307,8 +1308,6 @@ public class ContractServiceImpl implements IContractService {
 			ReplenishBatchEntity rce = batchList.get(0);
 			List<BatchItemModel> bimList = new ArrayList<BatchItemModel>(0);
 			rbm.setReplenishBatch(rce);
-			rbm.setReplenishBatchItems(bimList);
-			replenishBatchList.add(rbm);
 			try {
 				bimList = JsonMapper
 						.nonEmptyMapper()
@@ -1326,12 +1325,15 @@ public class ContractServiceImpl implements IContractService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ReplenishContractEntity rcentity = contractReplenishDao
+<<<<<<< .mine			ReplenishContractEntity rcentity = contractReplenishDao
 					.getReplenish(rce.getReplenishId());
-			cModel.setReplenishContract(rcentity);
+=======			rbm.setReplenishBatchItems(bimList);
+			replenishBatchList.add(rbm);
+			ReplenishContractEntity  rcentity= contractReplenishDao.getReplenish(rce.getReplenishId());
+>>>>>>> .theirs			cModel.setReplenishContract(rcentity);
 			cModel.setBatchItems(replenishBatchList);
 		}
 		return cModel;
 	}
-
-}
+<<<<<<< .mine
+=======>>>>>>> .theirs}

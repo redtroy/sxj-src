@@ -564,19 +564,22 @@ public class RecordController extends BaseController {
 			throw new WebException("查询会员信息错误");
 		}
 	}
+
 	@RequestMapping("getRecord")
-	public @ResponseBody Map<String, String> getRecord(String contractNo) throws WebException {
+	public @ResponseBody Map<String, String> getRecord(String contractNo)
+			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			ContractModel cm = contractService.getContractModelByContractNo(contractNo.trim());
-			if(cm!=null){
-				ContractEntity ce=cm.getContract();
-				if(ce.getConfirmState().getId()==3){
+			ContractModel cm = contractService
+					.getContractModelByContractNo(contractNo.trim());
+			if (cm != null) {
+				ContractEntity ce = cm.getContract();
+				if (ce.getConfirmState().getId() == 3) {
 					map.put("isOK", "ok");
-				}else{
+				} else {
 					map.put("isOK", "no");
 				}
-			}else{
+			} else {
 				map.put("isOK", "no");
 			}
 			return map;

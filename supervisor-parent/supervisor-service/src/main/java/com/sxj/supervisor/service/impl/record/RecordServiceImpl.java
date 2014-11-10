@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
@@ -27,7 +26,6 @@ import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
-import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -145,23 +143,25 @@ public class RecordServiceImpl implements IRecordService {
 		try {
 			RecordEntity re = recordDao.getRecord(id);
 			recordDao.deleteRecord(id);
-			//如果是变更或者补损备案,删除后需要把状态重置已备案
-			if(re.getType().getId()!=0){
-				ContractModel cm = contractService.getContractModelByContractNo(re.getContractNo());
+			// 如果是变更或者补损备案,删除后需要把状态重置已备案
+			if (re.getType().getId() != 0) {
+				ContractModel cm = contractService
+						.getContractModelByContractNo(re.getContractNo());
 				ContractEntity ce = cm.getContract();
-				ce.setConfirmState(ContractSureStateEnum.filings);//已备案
-				ce.setState(ContractStateEnum.noapproval);//已审核
+				ce.setConfirmState(ContractSureStateEnum.filings);// 已备案
+				ce.setState(ContractStateEnum.noapproval);// 已审核
 				contractDao.updateContract(ce);
-				//变更所有备案状态为已备案
+				// 变更所有备案状态为已备案
 				RecordQuery query = new RecordQuery();
 				query.setContractNo(re.getContractNo());
-				List<RecordEntity> reList= this.queryRecord(query);
+				List<RecordEntity> reList = this.queryRecord(query);
 				for (RecordEntity recordEntity : reList) {
-					recordEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+					recordEntity
+							.setConfirmState(RecordConfirmStateEnum.hasRecord);
 					recordDao.updateRecord(recordEntity);
 				}
 			}
-			
+
 		} catch (Exception e) {
 			throw new ServiceException("查询备案信息错误", e);
 		}

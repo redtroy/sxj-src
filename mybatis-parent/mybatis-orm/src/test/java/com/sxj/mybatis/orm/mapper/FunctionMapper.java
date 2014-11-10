@@ -7,6 +7,7 @@ import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.BatchUpdate;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.MultiGet;
 import com.sxj.mybatis.orm.model.Function;
 
 public interface FunctionMapper
@@ -31,4 +32,7 @@ public interface FunctionMapper
     void batchUpdate(List<Function> functions);
     
     void batchUpdate(Function[] functions);
+    
+    @MultiGet
+    List<Function> multiGet(String[] functionIds);
 }

@@ -22,7 +22,6 @@ import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
-import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
@@ -261,11 +260,13 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+
 	@RequestMapping("getContract")
-	public @ResponseBody Map<String, String> getContract(String param,String id) throws WebException {
+	public @ResponseBody Map<String, String> getContract(String param, String id)
+			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			RecordEntity re =recordService.getRecord(id);
+			RecordEntity re = recordService.getRecord(id);
 			int size = contractService.getContractByZhaobiaoContractNo(
 					param.trim(), re.getMemberIdA());
 			if (size == 0) {
@@ -281,20 +282,22 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
-	
+
 	@RequestMapping("getRecord")
-	public @ResponseBody Map<String, String> getRecord(String contractNo) throws WebException {
+	public @ResponseBody Map<String, String> getRecord(String contractNo)
+			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			ContractModel cm = contractService.getContractModelByContractNo(contractNo.trim());
-			if(cm!=null){
-				ContractEntity ce=cm.getContract();
-				if(ce.getConfirmState().getId()==3){
+			ContractModel cm = contractService
+					.getContractModelByContractNo(contractNo.trim());
+			if (cm != null) {
+				ContractEntity ce = cm.getContract();
+				if (ce.getConfirmState().getId() == 3) {
 					map.put("isOK", "ok");
-				}else{
+				} else {
 					map.put("isOK", "no");
 				}
-			}else{
+			} else {
 				map.put("isOK", "no");
 			}
 			return map;
