@@ -27,5 +27,8 @@
 		<if test="condition.rfidNo != null and condition.rfidNo != ''">
 			<![CDATA[ AND RFID_NO = #{condition.rfidNo}]]>
 		</if>
+		<if test="condition.newRfidNo != null and condition.newRfidNo != ''">
+			<![CDATA[AND NEW_RFID_NO = #{condition.newRfidNo}]]>
+		</if>
 	</select>
 </mapper>

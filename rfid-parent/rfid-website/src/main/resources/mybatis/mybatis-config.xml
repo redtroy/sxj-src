@@ -72,7 +72,7 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.DeliveryStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum" />
-		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateTypeHandler"
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.purchase.PayStateEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ImportStateEnumTypeHandler"
