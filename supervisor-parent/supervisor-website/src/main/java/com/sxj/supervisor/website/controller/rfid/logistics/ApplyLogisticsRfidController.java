@@ -105,7 +105,7 @@ public class ApplyLogisticsRfidController extends BaseController {
 			throws WebException {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			Boolean flag = applyService.delApp(id, applyNo);
+			Boolean flag = applyService.delApp(id);
 			if (flag) {
 				map.put("flag", "ok");
 			} else {

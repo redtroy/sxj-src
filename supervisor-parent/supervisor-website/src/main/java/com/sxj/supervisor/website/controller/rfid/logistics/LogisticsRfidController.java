@@ -148,6 +148,41 @@ public class LogisticsRfidController extends BaseController {
 	}
 
 	/**
+	 * 通过批次号联想查询批次详情
+	 */
+	@RequestMapping("lx_batchInfo")
+	public @ResponseBody Map<Object, Object> queryBatchInfo(String rfidNo)
+			throws WebException {
+		try {
+			Map<Object, Object> map = new HashMap<Object, Object>();
+			ContractQuery query = new ContractQuery();
+			// query.setContractNo(contractNo);
+			// contractService.get
+			List<ContractModel> list = contractService.queryContracts(query);
+			if (list == null) {
+				return map;
+			}
+			List<Map<String, Object>> addlist = new ArrayList<Map<String, Object>>();
+			for (ContractModel contract : list) {
+				Map<String, Object> cmap = new HashMap<String, Object>();
+				cmap.put("title", contract.getContract().getContractNo());
+				if (contract.getContract().getBatchCount() == null) {
+					cmap.put("batchCount", 0);
+				} else {
+					cmap.put("batchCount", contract.getContract()
+							.getBatchCount());
+				}
+				addlist.add(cmap);
+			}
+			map.put("data", addlist);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("联想查询错误", e, this.getClass());
+			throw new WebException("联想查询错误");
+		}
+	}
+
+	/**
 	 * 通过合同号联想查询
 	 */
 	@RequestMapping("lx_query")

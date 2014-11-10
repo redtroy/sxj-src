@@ -62,7 +62,8 @@ jQuery(document).ready(function($) {
 					 var page=$("#rightBar").find("#pager").attr("currentPage");
 					 query(page);
 				 },'删除成功！');
-				
+			 }else{
+				 errorInfo(data.error);
 			 }
 	 });
   },"是否确认删除？");
@@ -187,13 +188,15 @@ jQuery(document).ready(function($) {
 		  <td><em class="state verified">已收货</em></td>
 		  </#if>
 		  <td>
-		   <#if (model.count-model.hasNumber) gt 0>
+		  <#if (model.count-model.hasNumber) gt 0>
 		  <a onclick="javascript:window.location.href='${basePath}rfid/purchase/toAdd.htm?id=${model.id}'" class="button button-green button-small"><span>生成采购单</span></a>
 		 <#else>
-		 <a class="button button-small"><span>已全部生成采购</span></a>
+		 <em>已全部生成采购单</em>
 		  </#if>
 		  </td>
-		  <td class="operation"><a href="javascript:edit('${model.id}');" class="edit">修改</a><a href="javascript:del('${model.id}')" class="del">删除</a></td>
+		  <td class="operation">
+		  <a href="javascript:edit('${model.id}');" class="edit">修改</a><#if model.hasNumber == 0><#if (model.payState.id==1)><a href="javascript:del('${model.id}')" class="del">删除</a></#if></#if>
+		  </td>
         </tr>
         </#list>
       </table>

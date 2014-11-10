@@ -8,28 +8,33 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.errorInfo/>
+<@b.validate/>
 <script>
-function check(contractNo,count){
-	/*
-	$.post("check_contract.htm",{contractNo:contractNo,count:count},function(data){
-		if (data.flag=="false"){
-			$("#erro_text").text(data.erro);
-			return true;
-		}else{
-			return false;
+$(function($){
+	$("#add").Validform({
+		tiptype:3,
+		datatype:{
+			"ys":/^[A-Za-z0-9]+$/,
+			"count":/^[0-9]*$/
+		},
+		callback:function(form){
+			save();
 		}
-		
-	})
-	*/
+	});
+});
+function subForm(){
+	  $("#add").submit();
+}
+function check(contractNo){
 	var flag=true;
     $.ajax({  
         async:false,//使用同步的Ajax请求  
         type: "POST",  
         url: "check_contract.htm",  
-        data: {contractNo:contractNo,count:count},
+        data: {param:contractNo},
         success: function(data){  
-        	if (data.flag=="false"){
-    			$("#erro_text").text(data.erro);
+        	if (data.status=="n"){
+    			$("#erro_text").text(data.info);
     			flag= true;
     		}else{
     			flag= false;
@@ -39,8 +44,7 @@ function check(contractNo,count){
     return flag;
 }
 
-
-function sub(){
+function save(){
 	 var memberNo= "${member.memberNo}";
 	 var memberName="${member.name}";
 	 var count=$("#count").val();
@@ -58,7 +62,8 @@ function sub(){
 		 messageInfo('数量不能小于等于0');
 		 return false;
 	 }
-	 if (check(contractNo,count)){
+	 if (check(contractNo)){
+		 messageInfo('招标合同不存在');
 		 return false;
 	 }else{
 		 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType,contractNo:contractNo},function(data){
@@ -66,11 +71,9 @@ function sub(){
 				 succInfo(function(){
 					 window.location.href="apply_list.htm"; 
 				 },"申请成功！");
-				
 			 }
-		 })
+		 });
 	 }
-	 
 }
 </script>
 </head>
@@ -84,6 +87,7 @@ function sub(){
       <div class="heading mb15 ly-clearFix">
         <h1 class="ly-left"> <span class="title fontYH f20 fb">认证标签申请</span></h1>
       </div>
+      <form id="add" action="javascript:void(0);" method="post">
       <div class="contBox">
 	  <div class="item">
           <label>申请会员名称</label>
@@ -95,15 +99,18 @@ function sub(){
         </div>
 	    <div class="item">
           <label>对应门窗招标合同</label>
-          <input class="input input-w180h36 mr5" name="contractNo" id="contractNo" value=""/><em class="color-red" id="erro_text">认证标签与门窗合同绑定，定额定量发放！如无需要，请勿自助申请！</em></div>
+          <input class="input input-w180h36 mr5" name="contractNo" id="contractNo" value=""  title="请输入招标合同号" datatype="ys"  nullmsg="请输入招标合同号" ajaxurl="check_contract.htm" errormsg="招标合同号只能用英文+数字"/>
+          <em class="color-red" id="erro_text">标签与合同绑定，如无需要，请勿自助申请！</em>
+          </div>
         <div class="item">
           <label>申请数量</label>
-          <input class="input input-w180h36" name="count" id="count" value=""/>
+          <input class="input input-w180h36" name="count" id="count" value="" title="申请数量" datatype="count" nullmsg="请输入申请数量！" errormsg="申请数量只能输入整数"/>
         </div>
        <div class="item mt10">
-          <label>&nbsp;</label><a href="javascript:void(0);" onclick="sub();" class="button button-orange mr15" title="点申请时需要判断该笔招标合同关联的RFID数量是否已经达到合同里的门窗数量，如果超过门窗数量不可申请，提示错误信息">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
+          <label>&nbsp;</label><a href="javascript:void(0);" onclick="subForm()" class="button button-orange mr15" title="点申请时需要判断该笔招标合同关联的RFID数量是否已经达到合同里的门窗数量，如果超过门窗数量不可申请，提示错误信息">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
         </div>
       </div>
+      </form>
     </div>
   </div>
 </div>

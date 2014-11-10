@@ -56,7 +56,7 @@ public class RfidApplicationController extends BaseController {
 			map.put("channelName", RfidChannel.RFID_APPLY_MESSAGE);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
 				CometServiceImpl.setCount(RfidChannel.RFID_APPLY_MESSAGE, 0l);
-			} 
+			}
 			registChannel(RfidChannel.RFID_APPLY_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error("申请单查询错误", e, this.getClass());
@@ -81,7 +81,7 @@ public class RfidApplicationController extends BaseController {
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("修改RFID申请单错误", e, this.getClass());
-			throw new WebException("修改RFID申请单错误");
+			map.put("error", e.getMessage());
 		}
 		return map;
 	}
@@ -97,11 +97,11 @@ public class RfidApplicationController extends BaseController {
 	public @ResponseBody Map<String, String> del(String id) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			sppService.delApp(id, null);
+			sppService.delApp(id);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("修改RFID申请单错误", e, this.getClass());
-			throw new WebException("修改RFID申请单错误");
+			map.put("error", e.getMessage());
 		}
 		return map;
 	}

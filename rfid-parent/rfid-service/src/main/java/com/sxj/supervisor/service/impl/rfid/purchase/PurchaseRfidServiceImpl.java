@@ -209,7 +209,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(timeout = 30)
 	public void importRfid(String purchaseId) throws ServiceException {
 		try {
 			RfidPurchaseEntity purchase = getRfidPurchase(purchaseId);

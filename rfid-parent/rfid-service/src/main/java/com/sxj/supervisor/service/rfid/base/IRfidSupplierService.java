@@ -27,6 +27,16 @@ public interface IRfidSupplierService {
 	public RfidSupplierEntity getSupplier(String id) throws ServiceException;
 
 	/**
+	 * 根据No查询
+	 * 
+	 * @param no
+	 * @return
+	 * @throws ServiceException
+	 */
+	public RfidSupplierEntity getSupplierByNo(String no)
+			throws ServiceException;
+
+	/**
 	 * 更新
 	 * 
 	 * @param Supplier
