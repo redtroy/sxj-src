@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.open.BatchModel;
@@ -27,6 +28,7 @@ import com.sxj.supervisor.model.open.WinTypeModel;
 import com.sxj.supervisor.rfid.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.rfid.login.SupervisorSiteToken;
 import com.sxj.supervisor.service.open.member.IAccountService;
+import com.sxj.supervisor.service.open.member.IMemberService;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
@@ -41,7 +43,10 @@ public class OpenRfidController
     private IAccountService accountService;
     
     @Autowired
-    IOpenRfidService openRfidService;
+    private IOpenRfidService openRfidService;
+    
+    @Autowired
+    private IMemberService memServive;
     
     /**
      * 登陆
@@ -73,6 +78,8 @@ public class OpenRfidController
                 
                 userBean = new SupervisorPrincipal();
                 userBean.setAccount(account);
+                MemberEntity member = memServive.memberInfo(account.getParentId());
+                userBean.setMember(member);
                 token = new SupervisorSiteToken(userBean, password);
             }
             else
@@ -278,14 +285,22 @@ public class OpenRfidController
      * @throws ServiceException
      */
     @RequestMapping(value = "info/address/{contractNo}")
-	public @ResponseBody Map<String, Object> getAddress(
-			@PathVariable String contractNo) throws ServiceException,
-			SQLException {
-		try {
-			Map<String, Object> map = new HashMap<String, Object>();
-			String address = openRfidService.getAddress(contractNo);
-			map.put("address", address);
-			return map;
-		}
-	}
+    public @ResponseBody Map<String, Object> getAddress(
+            @PathVariable String contractNo) throws ServiceException,
+            SQLException
+    {
+        try
+        {
+            Map<String, Object> map = new HashMap<String, Object>();
+            String address = openRfidService.getAddress(contractNo);
+            map.put("address", address);
+            return map;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            return null;
+        }
+    }
+    
 }
