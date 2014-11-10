@@ -1,10 +1,11 @@
 package com.sxj.supervisor.open.controller;
 
-import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
@@ -17,20 +18,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.supervisor.entity.contract.ContractBatchEntity;
-import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
-import com.sxj.supervisor.model.contract.BatchItemModel;
-import com.sxj.supervisor.model.contract.ContractBatchModel;
-import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
+import com.sxj.supervisor.model.open.BatchModel;
+import com.sxj.supervisor.model.open.WinTypeModel;
 import com.sxj.supervisor.rfid.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.rfid.login.SupervisorSiteToken;
 import com.sxj.supervisor.service.open.member.IAccountService;
 import com.sxj.supervisor.service.open.member.IMemberService;
+import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.common.StringUtils;
+import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -40,6 +41,8 @@ public class OpenRfidController {
 	@Autowired
 	private IAccountService accountService;
 
+	@Autowired
+	private IOpenRfidService openRfidService;
 	@Autowired
 	private IMemberService memServive;
 
@@ -127,57 +130,24 @@ public class OpenRfidController {
 	 * 
 	 * @param rfidNo
 	 * @return
+	 * @throws SQLException
 	 */
 	@RequestMapping(value = "info/batch/{rfidNo}")
-	public @ResponseBody Map<String, Object> getRfidBatchInfo(
-			@PathVariable String rfidNo) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		ContractModel model = new ContractModel();
-		ContractEntity contract = new ContractEntity();
-		contract.setContractNo("CT000001");
-		model.setContract(contract);
-		List<ContractBatchModel> batchList = new ArrayList<>();
-
-		ContractBatchModel batch1 = new ContractBatchModel();
-		ContractBatchEntity batchEn1 = new ContractBatchEntity();
-		List<BatchItemModel> batchItems1 = new ArrayList<BatchItemModel>();
-		BatchItemModel item1 = new BatchItemModel();
-		item1.setProductModel("中空玻璃0001");
-		item1.setQuantity(new Float("2211.22"));
-		batchItems1.add(item1);
-
-		BatchItemModel item2 = new BatchItemModel();
-		item2.setProductModel("中空玻璃0002");
-		item2.setQuantity(new Float("1000"));
-		batchItems1.add(item2);
-
-		batchEn1.setBatchNo("1");
-		batch1.setBatch(batchEn1);
-		batch1.setBatchItems(batchItems1);
-
-		ContractBatchModel batch2 = new ContractBatchModel();
-		ContractBatchEntity batchEn2 = new ContractBatchEntity();
-		List<BatchItemModel> batchItems2 = new ArrayList<BatchItemModel>();
-		BatchItemModel item11 = new BatchItemModel();
-		item11.setProductModel("型材玻璃0001");
-		item11.setQuantity(new Float("1111.11"));
-		batchItems2.add(item11);
-
-		BatchItemModel item12 = new BatchItemModel();
-		item12.setProductModel("型材玻璃0002");
-		item12.setQuantity(new Float("2000"));
-		batchItems2.add(item12);
-
-		batchEn2.setBatchNo("2");
-		batch2.setBatch(batchEn2);
-		batch2.setBatchItems(batchItems2);
-
-		batchList.add(batch1);
-		batchList.add(batch2);
-
-		model.setBatchList(batchList);
-		map.put("model", model);
-		return map;
+	public @ResponseBody BatchModel getRfidBatchInfo(
+			@PathVariable String rfidNo, HttpServletResponse response)
+			throws SQLException {
+		try {
+			BatchModel model = openRfidService.getBatchByRfid(rfidNo);
+			response.setContentType("application/json; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.print(JsonMapper.nonEmptyMapper().toJson(model));
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return null;
+		}
+		return null;
 	}
 
 	/**
@@ -185,15 +155,26 @@ public class OpenRfidController {
 	 * 
 	 * @param rfidNo
 	 * @return
+	 * @throws SQLException
+	 * @throws ServiceException
 	 */
 	@RequestMapping(value = "info/contract/{rfidNo}")
-	public @ResponseBody Map<String, Object> getRfidContractInfo(
-			@PathVariable String rfidNo) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("contratcNo", "CT000001");
-		map.put("rfidNo", "AAAA00001");
-		map.put("winType", "C120 60*120");
-		return map;
+	public @ResponseBody WinTypeModel getRfidContractInfo(
+			@PathVariable String rfidNo, HttpServletResponse response)
+			throws ServiceException, SQLException {
+
+		try {
+			WinTypeModel win = openRfidService.getWinTypeByRfid(rfidNo);
+			response.setContentType("application/json; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.print(JsonMapper.nonEmptyMapper().toJson(win));
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return null;
+		}
+		return null;
 	}
 
 	/**
@@ -259,6 +240,29 @@ public class OpenRfidController {
 		map.put("batchNo", "00001");
 		return map;
 
+	}
+
+	/**
+	 * 获取合同地址信息
+	 * 
+	 * @param rfidNo
+	 * @return
+	 * @throws SQLException
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "info/address/{contractNo}")
+	public @ResponseBody Map<String, Object> getAddress(
+			@PathVariable String contractNo) throws ServiceException,
+			SQLException {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			String address = openRfidService.getAddress(contractNo);
+			map.put("address", address);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return null;
+		}
 	}
 
 }
