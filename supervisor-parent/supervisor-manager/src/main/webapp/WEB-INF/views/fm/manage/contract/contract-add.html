@@ -112,7 +112,19 @@ var ul_validform;
 		},"是否生成合同?");
 
 	}
-	
+	var resetValidForm=function(){
+		$(".checkinfo").each(function(){
+			var $input=$(this).siblings("input");
+			var left=$input.offset().left;
+			var top=$input.offset().top;
+			var width=$input.width();
+			$(this).css({
+				'left':left+width-32,
+				'top':top-45,
+				'position':'absolute'
+			}).show();
+		})
+	}
 	$(function(){
 	$(".amountClass").live("blur",function(){
 			$(this).parent().parent().parent().find(".amountClass").each(function(){
