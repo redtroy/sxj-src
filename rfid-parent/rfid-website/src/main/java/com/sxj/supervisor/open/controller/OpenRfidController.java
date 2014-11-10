@@ -44,8 +44,8 @@ import com.sxj.util.exception.ServiceException;
 public class OpenRfidController {
     @Autowired
     private IAccountService accountService;
-	IOpenRfidService openRfidService;
-	
+    IOpenRfidService openRfidService;
+    
     
     
     /**
@@ -140,34 +140,29 @@ public class OpenRfidController {
      * @return
      */ 
     @RequestMapping(value = "info/batch/{rfidNo}")
-	public @ResponseBody BatchModel getRfidBatchInfo(
-			@PathVariable String rfidNo, HttpServletResponse response){
-		Map<String, Object> map = new HashMap<String, Object>();
+    public @ResponseBody BatchModel getRfidBatchInfo(
+            @PathVariable String rfidNo, HttpServletResponse response){
+        Map<String, Object> map = new HashMap<String, Object>();
 
-		BatchItemModel item1 = new BatchItemModel();
-		item1.setProductModel("中空玻璃0001");
-		item1.setQuantity(new Float("2211.22"));
-		batchItems1.add(item1);
 
-		BatchItemModel item2 = new BatchItemModel();
-		item2.setProductModel("中空玻璃0002");
+        BatchItemModel item2 = new BatchItemModel();
+        item2.setProductModel("中空玻璃0002");
 
-		batchEn1.setBatchNo("1");
-		batch1.setBatch(batchEn1);
-		}
-		BatchItemModel item11 = new BatchItemModel();
-		item11.setProductModel("型材玻璃0001");
-		item11.setQuantity(new Float("1111.11"));
-		batchItems2.add(item11);
+        batchEn1.setBatchNo("1");
+        batch1.setBatch(batchEn1);
+        BatchItemModel item11 = new BatchItemModel();
+        item11.setProductModel("型材玻璃0001");
+        item11.setQuantity(new Float("1111.11"));
+        batchItems2.add(item11);
             out.print(JsonMapper.nonEmptyMapper().toJson(model));
-		BatchItemModel item12 = new BatchItemModel();
-		item12.setProductModel("型材玻璃0002");
+        BatchItemModel item12 = new BatchItemModel();
+        item12.setProductModel("型材玻璃0002");
 
-		batchEn2.setBatchNo("2");
+        batchEn2.setBatchNo("2");
 
-		batchList.add(batch1);
+        batchList.add(batch1);
         }
-		return map;
+        return map;
     }
     
     /**
@@ -177,25 +172,25 @@ public class OpenRfidController {
      * @return
      */
     @RequestMapping(value = "info/contract/{rfidNo}")
-	public @ResponseBody WinTypeModel getRfidContractInfo(
-			@PathVariable String rfidNo) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("contratcNo", "CT000001");
-		map.put("rfidNo", "AAAA00001");
-		map.put("winType", "C120 60*120");
+    public @ResponseBody WinTypeModel getRfidContractInfo(
+            @PathVariable String rfidNo) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("contratcNo", "CT000001");
+        map.put("rfidNo", "AAAA00001");
+        map.put("winType", "C120 60*120");
         {
             WinTypeModel win = openRfidService.getWinTypeByRfid(rfidNo);
             response.setContentType("application/json; charset=utf-8");
-			PrintWriter out = response.getWriter();
-			System.err.println(JsonMapper.nonEmptyMapper().toJson(win));
-			out.print(JsonMapper.nonEmptyMapper().toJson(win));
-			out.flush();
-			out.close();
+            PrintWriter out = response.getWriter();
+            System.err.println(JsonMapper.nonEmptyMapper().toJson(win));
+            out.print(JsonMapper.nonEmptyMapper().toJson(win));
+            out.flush();
+            out.close();
         }
         {
-			return null;
-		}
-		return null;
+            return null;
+        }
+        return null;
         }
         return null;
     }
@@ -287,22 +282,22 @@ public class OpenRfidController {
         map.put("address", address);
         return map;
     }
-	
-	/**
-	 * 获取合同地址信息
-	 * 
-	 * @param rfidNo
-	 * @return
-	 * @throws SQLException 
-	 * @throws ServiceException 
-	 */
-	@RequestMapping(value = "info/address/{contractNo}")
-	public @ResponseBody Map<String, Object> getAddress(
-			@PathVariable String contractNo) throws ServiceException, SQLException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		String address =openRfidService.getAddress(contractNo);
-		map.put("address", address);
-		return map;
-	}
+    
+    /**
+     * 获取合同地址信息
+     * 
+     * @param rfidNo
+     * @return
+     * @throws SQLException 
+     * @throws ServiceException 
+     */
+    @RequestMapping(value = "info/address/{contractNo}")
+    public @ResponseBody Map<String, Object> getAddress(
+            @PathVariable String contractNo) throws ServiceException, SQLException {
+        Map<String, Object> map = new HashMap<String, Object>();
+        String address =openRfidService.getAddress(contractNo);
+        map.put("address", address);
+        return map;
+    }
     
 }
