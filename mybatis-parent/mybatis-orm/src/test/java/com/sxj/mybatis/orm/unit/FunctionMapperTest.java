@@ -71,7 +71,6 @@ public class FunctionMapperTest
         System.out.println("==============" + function.getFunctionId());
     }
     
-    @Test
     public void testGet()
     {
         Function function = mapper.getFunction("A6D7ZXo6oDMKbOtbY5vp6RF6nJXSbAK");
@@ -117,6 +116,17 @@ public class FunctionMapperTest
         functions.add(function2);
         functions.add(function);
         mapper.batchUpdate(functions);
+    }
+    
+    @Test
+    public void testMultiGet()
+    {
+        String[] funcitonIds = new String[] {
+                "GQhduZZ00zKdGrKjJ8uML3uGo5nm360",
+                "iznukncL33vvg6s0KzQVea49thDyUDy" };
+        List<Function> functions = mapper.multiGet(funcitonIds);
+        for (Function function : functions)
+            System.out.println(function.getFunctionName());
     }
     
     public void testBatchUpdateArray()

@@ -14,7 +14,86 @@
 		<setting name="cacheEnabled" value="true" />
 	</settings>
 	<typeHandlers>
+<<<<<<< HEAD
 		
+=======
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.AccountStatesEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.MemberTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberStatesEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.MemberStatesEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MemberCheckStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.MemberCheckStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.ContractTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordFlagEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.RecordFlagEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.record.RecordConfirmStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.ContractStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractSureStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.ContractSureStateEnum" />
+
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ContractWindowTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.ContractWindowTypeEnum" />
+
+		<!-- FRID -->
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum" />
+		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.RfidTypeEnum" />
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.apply.PayStateEnum" />
+
+		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.RfidStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.LabelProgressEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.window.LabelProgressEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.WindowTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.window.WindowTypeEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.DeliveryStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum" />
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.purchase.PayStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.ImportStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum" />
+
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.AssociationTypesEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.AuditStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.ref.AuditStateEnum" />
+
+		<typeHandler handler="com.sxj.supervisor.typehandler.LinkStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum" />
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.LabelStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />
+>>>>>>> 5770d2c3ae6d77b593b2808b7959675d154c237a
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
