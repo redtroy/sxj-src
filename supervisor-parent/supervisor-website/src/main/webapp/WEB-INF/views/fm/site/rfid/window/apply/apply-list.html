@@ -8,22 +8,6 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.pageScript/>
-<script>
-jQuery(document).ready(function($) {
-	$('.btnPassword').click(function(){
-		$('.maskdivgen').fadeIn(100);
-		$('.passwordPop').slideDown(200);
-	})
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.passwordPop').slideUp(200);
-	})
-	$('.button-pop').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.passwordPop').slideUp(200);
-	})
-	})
-</script>
 <link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
@@ -46,17 +30,15 @@ jQuery(document).ready(function($) {
 			loadPage(currentPage,totalPage,query);
 		})
  }
- function del(id,applyNo){
+ function del(id){
 	 dialogBox(function(){
-		 $.post("del_apply.htm",{id:id,applyNo:applyNo},function(data){
+		 $.post("del_apply.htm",{id:id},function(data){
 				if (data.flag=='ok'){
-					//$("#remove_div").hide();
 					succInfo(function(){
 						query($("#pager").attr("currentPage"));
 					},"删除成功！");
 				}else{
-					//$("#remove_div").hide();
-					messageInfo("该笔申请单已生成采购单，不能删除！");
+					messageInfo(data.error);
 				}
 			});
 	 },"是否确认删除？"); 
@@ -65,18 +47,7 @@ function closeDiv(divId){
 	$("#"+divId).css("display","none");
 }
 </script>
-<Script>
-$(window).resize(); 
-jQuery(document).ready(function($) {
-	  $('#remove_div').css({
-		  position:'absolute',
-		  left: ($(window).width() - $('#remove_div').outerWidth())/2,
-		  top: ($(window).height() - $('#remove_div').outerHeight())/2 + $(document).scrollTop()
-		  });
-	})
-</Script>
 </head>
-
 <body>
 <@b.header />
 <div class="mainBg">
@@ -141,7 +112,11 @@ jQuery(document).ready(function($) {
       <#else>
       <td><span class="state verified">已收货</span></td>
       </#if>
-	  <td><a href="" class="lnk-blue" title="后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！" onclick="del('${model.id}','${model.applyNo}');return false;"><span class="icon icon16 icon-del"></span>删除</a></td>
+	  <td>
+	  <#if (model.payState.id==1)>
+	  <a href="" class="lnk-blue" title="后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！" onclick="del('${model.id}');return false;"><span class="icon icon16 icon-del"></span>删除</a>
+	  </#if>
+	  </td>
     </tr>
     </#list>
   </table>
@@ -149,18 +124,6 @@ jQuery(document).ready(function($) {
 </div>
 </div>
 </div>
-  <div id="remove_div" style="display:none;" class="modal-wrap popDemo popWin mb20">
-          <div class="modal-header">
-            <div class="tit">&nbsp;</div>
-            <span class="close" onclick="closeDiv('remove_div');">关闭</span></div>
-          <div class="modal-body">
-            <p class="color-blue fontYH f18" style="margin-left:20%;">是否确认删除！</p>
-            <div class="button-box">
-              <button class="button button-pop btn-ok mr20" >确认</button>
-              <button class="button button-gray" onclick="closeDiv('remove_div');">取消</button>
-            </div>
-          </div>
-  </div>
 <@b.footer />
 <div class="maskdivgen" style="display:none"></div>
 </body>

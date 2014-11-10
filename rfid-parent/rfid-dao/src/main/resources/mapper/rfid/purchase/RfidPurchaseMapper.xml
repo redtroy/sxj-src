@@ -36,6 +36,9 @@
 		<if test="condition.supplierNo != null and condition.supplierNo !=''">
 			<![CDATA[AND SUPPLIER_NO = #{condition.supplierNo}]]>
 		</if>
+		<if test="condition.supplierName != null and condition.supplierName !=''">
+			<![CDATA[AND SUPPLIER_NAME = #{condition.supplierName}]]>
+		</if>
 		<if test="condition.rfidType != null and condition.rfidType !=''">
 			<![CDATA[AND RFID_TYPE = #{condition.rfidType} ]]>
 		</if>

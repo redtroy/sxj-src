@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
+import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
@@ -22,6 +23,7 @@ import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
+import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.supervisor.service.rfid.purchase.IPurchaseRfidService;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -37,6 +39,9 @@ public class PurchaseRfidController extends BaseController {
 
 	@Autowired
 	private IMemberService memberService;
+
+	@Autowired
+	private IRfidSupplierService supplierService;
 
 	/**
 	 * 查询列表
@@ -206,15 +211,15 @@ public class PurchaseRfidController extends BaseController {
 	@RequestMapping("modify")
 	public @ResponseBody Map<String, String> modify(
 			RfidPurchaseEntity purchase, ModelMap model) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			purchaseRfidService.updatePurchase(purchase);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("修改采购单错误", e, this.getClass());
-			throw new WebException("修改采购单错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -262,6 +267,28 @@ public class PurchaseRfidController extends BaseController {
 			SxjLogger.error("新增采购单错误", e, this.getClass());
 			throw new WebException("新增采购单错误");
 		}
+	}
+
+	@RequestMapping("getSupplierPrice")
+	public @ResponseBody Map<String, Object> getSupplierPrice(String supplierNo)
+			throws WebException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			RfidSupplierEntity supplier = supplierService
+					.getSupplierByNo(supplierNo);
+			if (supplier != null) {
+				Double doorPrice = supplier.getDoorsPrice();
+				Double batchPrice = supplier.getBatchPrice();
+				map.put("doorPrice", doorPrice);
+				map.put("batchPrice", batchPrice);
+			} else {
+				map.put("error", "供应商不存在");
+			}
+		} catch (Exception e) {
+			SxjLogger.error("获取价格错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
 	}
 
 	@RequestMapping("importRfid")

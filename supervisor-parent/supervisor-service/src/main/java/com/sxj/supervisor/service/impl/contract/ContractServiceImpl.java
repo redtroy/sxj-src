@@ -41,14 +41,18 @@ import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
@@ -65,8 +69,10 @@ import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
+import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -148,6 +154,9 @@ public class ContractServiceImpl implements IContractService {
 
 	@Autowired
 	private IWindowRfidService windowRfidService;
+
+	@Autowired
+	private IRfidApplicationService appRfidService;
 
 	/**
 	 * 新增合同
@@ -763,7 +772,7 @@ public class ContractServiceImpl implements IContractService {
 									.getReplenishBatch();
 							rb.setBatchItems(json);
 							rb.setReplenishId(replenishContract.getId());
-							rb.setNoType(contractId+"-");
+							rb.setNoType(contractId + "-");
 							list.add(rb);
 						}
 						contractReplenishBatchDao.addReplenishBatch(list);
@@ -822,6 +831,22 @@ public class ContractServiceImpl implements IContractService {
 				contractDao.updateContract(ce);
 			}
 			ContractEntity centity = contractDao.getContract(contractId);
+			// 生成RFID申请单
+			if (centity.getType().equals(ContractTypeEnum.bidding)) {
+				RfidApplicationEntity app = new RfidApplicationEntity();
+				app.setDateNo(DateTimeUtils.getTime("yyMM"));
+				app.setMemberNo(centity.getMemberIdB());
+				app.setMemberName(centity.getMemberNameB());
+				app.setRfidType(RfidTypeEnum.door);
+				app.setContractNo(centity.getContractNo());
+				int count = (int) (centity.getItemQuantity() + 100);
+				app.setCount(new Long(count));
+				app.setApplyDate(new Date());
+				app.setPayState(PayStateEnum.non_payment);
+				app.setReceiptState(ReceiptStateEnum.shipments);
+				app.setHasNumber(0l);
+				appRfidService.addApp(app);
+			}
 			if (centity.getRecordNo() != null) {
 				RecordQuery recordQuery = new RecordQuery();
 				recordQuery.setContractNo(centity.getContractNo());
@@ -835,7 +860,8 @@ public class ContractServiceImpl implements IContractService {
 						recordEntity
 								.setConfirmState(RecordConfirmStateEnum.unconfirmed);
 						if (recordEntity.getFlag().getId() == 0) {
-							if (recordEntity.getAcceptState()==null|| recordEntity.getAcceptState() == 0) {
+							if (recordEntity.getAcceptState() == null
+									|| recordEntity.getAcceptState() == 0) {
 								recordEntity.setAcceptDate(new Date());// 受理时间
 								recordEntity.setAcceptState(1);
 							}
@@ -1266,25 +1292,30 @@ public class ContractServiceImpl implements IContractService {
 	 * 跟据rfid 获取补损批次
 	 */
 	@Override
-	public ContractReplenishModel getReplenishByRfid(String rfid){
-		if(StringUtils.isEmpty(rfid)){
+	public ContractReplenishModel getReplenishByRfid(String rfid) {
+		if (StringUtils.isEmpty(rfid)) {
 			return null;
 		}
-		ContractReplenishModel cModel= new ContractReplenishModel();
-		QueryCondition<ReplenishBatchEntity> query =new QueryCondition<ReplenishBatchEntity>();
+		ContractReplenishModel cModel = new ContractReplenishModel();
+		QueryCondition<ReplenishBatchEntity> query = new QueryCondition<ReplenishBatchEntity>();
 		query.addCondition("rfid", rfid);
-		List<ReplenishBatchEntity> batchList = contractReplenishBatchDao.queryReplenishBatch(query);
+		List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+				.queryReplenishBatch(query);
 		List<ReplenishBatchModel> replenishBatchList = new ArrayList<ReplenishBatchModel>();
-		ReplenishBatchModel rbm=new ReplenishBatchModel();
+		ReplenishBatchModel rbm = new ReplenishBatchModel();
 		if (batchList != null && batchList.size() > 0) {
-			ReplenishBatchEntity rce =batchList.get(0);
+			ReplenishBatchEntity rce = batchList.get(0);
 			List<BatchItemModel> bimList = new ArrayList<BatchItemModel>(0);
 			rbm.setReplenishBatch(rce);
 			rbm.setReplenishBatchItems(bimList);
 			replenishBatchList.add(rbm);
 			try {
-				bimList = JsonMapper.nonEmptyMapper().getMapper().readValue(
-								rce .getBatchItems(),new TypeReference<List<BatchItemModel>>() {});
+				bimList = JsonMapper
+						.nonEmptyMapper()
+						.getMapper()
+						.readValue(rce.getBatchItems(),
+								new TypeReference<List<BatchItemModel>>() {
+								});
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1295,11 +1326,12 @@ public class ContractServiceImpl implements IContractService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			ReplenishContractEntity  rcentity= contractReplenishDao.getReplenish(rce.getReplenishId());
+			ReplenishContractEntity rcentity = contractReplenishDao
+					.getReplenish(rce.getReplenishId());
 			cModel.setReplenishContract(rcentity);
 			cModel.setBatchItems(replenishBatchList);
 		}
 		return cModel;
 	}
-	
+
 }

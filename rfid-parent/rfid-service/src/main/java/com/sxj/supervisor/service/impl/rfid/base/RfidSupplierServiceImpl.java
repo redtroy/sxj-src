@@ -1,15 +1,16 @@
 package com.sxj.supervisor.service.impl.rfid.base;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.rfid.base.IRfidSupplierDao;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
 import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -44,41 +45,59 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 	}
 
 	@Override
+	public RfidSupplierEntity getSupplierByNo(String no)
+			throws ServiceException {
+		try {
+			if (StringUtils.isEmpty(no)) {
+				return null;
+			}
+			RfidSupplierQuery query = new RfidSupplierQuery();
+			query.setSupplierNo(no);
+			List<RfidSupplierEntity> list = querySupplier(query);
+			if (list != null && list.size() > 0) {
+				return list.get(0);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
+	}
+
+	@Override
 	public RfidSupplierEntity getSupplier(String id) throws ServiceException {
-		// TODO Auto-generated method stub
 		try {
 			RfidSupplierEntity supplier = supplierDao.getRfidSupplier(id);
 			return supplier;
 		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 
 	@Override
+	@Transactional
 	public void modifySupplier(RfidSupplierEntity Supplier)
 			throws ServiceException {
-		// TODO Auto-generated method stub
 		try {
 			supplierDao.updateRfidSupplier(Supplier);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
 	@Override
+	@Transactional
 	public void add(RfidSupplierEntity Supplier) throws ServiceException {
 		try {
 			supplierDao.addRfidSupplier(Supplier);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
 
 	@Override
+	@Transactional
 	public void delSupplier(String id) throws ServiceException {
 		try {
 			RfidSupplierEntity supplier = new RfidSupplierEntity();
@@ -90,4 +109,5 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 			throw new ServiceException("逻辑删除供应商ID错误");
 		}
 	}
+
 }

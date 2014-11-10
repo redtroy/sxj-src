@@ -72,13 +72,13 @@ public class RfidSupplierEntity extends Pagable implements Serializable {
 	 * 门窗标签采购价
 	 */
 	@Column(name = "DOORS_PRICE")
-	private Long doorsPrice;
+	private Double doorsPrice;
 
 	/**
 	 * 批次标签采购价
 	 */
 	@Column(name = "BATCH_PRICE")
-	private Long batchPrice;
+	private Double batchPrice;
 
 	/**
 	 * 逻辑删除
@@ -150,19 +150,19 @@ public class RfidSupplierEntity extends Pagable implements Serializable {
 		this.telNum = telNum;
 	}
 
-	public Long getDoorsPrice() {
+	public Double getDoorsPrice() {
 		return doorsPrice;
 	}
 
-	public void setDoorsPrice(Long doorsPrice) {
+	public void setDoorsPrice(Double doorsPrice) {
 		this.doorsPrice = doorsPrice;
 	}
 
-	public Long getBatchPrice() {
+	public Double getBatchPrice() {
 		return batchPrice;
 	}
 
-	public void setBatchPrice(Long batchPrice) {
+	public void setBatchPrice(Double batchPrice) {
 		this.batchPrice = batchPrice;
 	}
 
