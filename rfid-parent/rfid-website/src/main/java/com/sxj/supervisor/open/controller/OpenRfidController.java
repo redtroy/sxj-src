@@ -5,15 +5,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,30 +21,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
-import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.WinTypeModel;
 import com.sxj.supervisor.rfid.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.rfid.login.SupervisorSiteToken;
 import com.sxj.supervisor.service.open.member.IAccountService;
+import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
-import com.sxj.spring.modules.mapper.JsonMapper;
-import com.sxj.supervisor.model.open.BatchModel;
-import com.sxj.supervisor.model.open.WinTypeModel;
-import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
-import com.sxj.util.exception.ServiceException;
 
 @Controller
 @RequestMapping("/rfid")
-public class OpenRfidController {
+public class OpenRfidController
+{
     @Autowired
     private IAccountService accountService;
+    
+    @Autowired
     IOpenRfidService openRfidService;
-    
-    
     
     /**
      * 登陆
@@ -138,31 +132,27 @@ public class OpenRfidController {
      * 
      * @param rfidNo
      * @return
-     */ 
+     * @throws SQLException
+     */
     @RequestMapping(value = "info/batch/{rfidNo}")
     public @ResponseBody BatchModel getRfidBatchInfo(
-            @PathVariable String rfidNo, HttpServletResponse response){
-        Map<String, Object> map = new HashMap<String, Object>();
-
-
-        BatchItemModel item2 = new BatchItemModel();
-        item2.setProductModel("中空玻璃0002");
-
-        batchEn1.setBatchNo("1");
-        batch1.setBatch(batchEn1);
-        BatchItemModel item11 = new BatchItemModel();
-        item11.setProductModel("型材玻璃0001");
-        item11.setQuantity(new Float("1111.11"));
-        batchItems2.add(item11);
+            @PathVariable String rfidNo, HttpServletResponse response)
+            throws SQLException
+    {
+        try
+        {
+            BatchModel model = openRfidService.getBatchByRfid(rfidNo);
+            response.setContentType("application/json; charset=utf-8");
+            PrintWriter out = response.getWriter();
             out.print(JsonMapper.nonEmptyMapper().toJson(model));
-        BatchItemModel item12 = new BatchItemModel();
-        item12.setProductModel("型材玻璃0002");
-
-        batchEn2.setBatchNo("2");
-
-        batchList.add(batch1);
+            out.flush();
+            out.close();
         }
-        return map;
+        catch (Exception e)
+        {
+            return null;
+        }
+        return null;
     }
     
     /**
@@ -173,24 +163,22 @@ public class OpenRfidController {
      */
     @RequestMapping(value = "info/contract/{rfidNo}")
     public @ResponseBody WinTypeModel getRfidContractInfo(
-            @PathVariable String rfidNo) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("contratcNo", "CT000001");
-        map.put("rfidNo", "AAAA00001");
-        map.put("winType", "C120 60*120");
+            @PathVariable String rfidNo, HttpServletResponse response)
+            throws ServiceException, SQLException
+    {
+        
+        try
         {
             WinTypeModel win = openRfidService.getWinTypeByRfid(rfidNo);
             response.setContentType("application/json; charset=utf-8");
             PrintWriter out = response.getWriter();
-            System.err.println(JsonMapper.nonEmptyMapper().toJson(win));
             out.print(JsonMapper.nonEmptyMapper().toJson(win));
             out.flush();
             out.close();
         }
+        catch (Exception e)
         {
             return null;
-        }
-        return null;
         }
         return null;
     }
@@ -279,23 +267,6 @@ public class OpenRfidController {
     {
         Map<String, Object> map = new HashMap<String, Object>();
         String address = openRfidService.getAddress(contractNo);
-        map.put("address", address);
-        return map;
-    }
-    
-    /**
-     * 获取合同地址信息
-     * 
-     * @param rfidNo
-     * @return
-     * @throws SQLException 
-     * @throws ServiceException 
-     */
-    @RequestMapping(value = "info/address/{contractNo}")
-    public @ResponseBody Map<String, Object> getAddress(
-            @PathVariable String contractNo) throws ServiceException, SQLException {
-        Map<String, Object> map = new HashMap<String, Object>();
-        String address =openRfidService.getAddress(contractNo);
         map.put("address", address);
         return map;
     }
