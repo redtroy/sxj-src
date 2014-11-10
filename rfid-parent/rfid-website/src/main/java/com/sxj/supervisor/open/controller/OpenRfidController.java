@@ -11,10 +11,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-=======
+
 import javax.servlet.http.HttpServletResponse;
 
->>>>>>> 5770d2c3ae6d77b593b2808b7959675d154c237a
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
+import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.WinTypeModel;
@@ -33,27 +33,20 @@ import com.sxj.supervisor.service.open.member.IAccountService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
-=======
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.WinTypeModel;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.exception.ServiceException;
->>>>>>> 5770d2c3ae6d77b593b2808b7959675d154c237a
 
 @Controller
 @RequestMapping("/rfid")
 public class OpenRfidController {
-{
     @Autowired
-<<<<<<< HEAD
     private IAccountService accountService;
-=======
 	IOpenRfidService openRfidService;
 	
->>>>>>> 5770d2c3ae6d77b593b2808b7959675d154c237a
     
-    IOpenRfidService openRfidService;
     
     /**
      * 登陆
@@ -145,10 +138,10 @@ public class OpenRfidController {
      * 
      * @param rfidNo
      * @return
-     */
+     */ 
     @RequestMapping(value = "info/batch/{rfidNo}")
 	public @ResponseBody BatchModel getRfidBatchInfo(
-			@PathVariable String rfidNo, HttpServletResponse response)
+			@PathVariable String rfidNo, HttpServletResponse response){
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		BatchItemModel item1 = new BatchItemModel();
