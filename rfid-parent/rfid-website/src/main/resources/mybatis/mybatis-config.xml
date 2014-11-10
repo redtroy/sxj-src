@@ -14,9 +14,6 @@
 		<setting name="cacheEnabled" value="true" />
 	</settings>
 	<typeHandlers>
-<<<<<<< HEAD
-		
-=======
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.MemberTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.member.AccountStatesEnum" />
@@ -93,7 +90,6 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.LabelStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />
->>>>>>> 5770d2c3ae6d77b593b2808b7959675d154c237a
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
