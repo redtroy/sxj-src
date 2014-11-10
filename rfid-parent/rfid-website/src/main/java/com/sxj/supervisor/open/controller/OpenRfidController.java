@@ -43,6 +43,7 @@ public class OpenRfidController {
 
 	@Autowired
 	private IOpenRfidService openRfidService;
+
 	@Autowired
 	private IMemberService memServive;
 
@@ -56,7 +57,6 @@ public class OpenRfidController {
 	public @ResponseBody int login(String userId, String password,
 			HttpSession session) throws WebException {
 		try {
-
 			SupervisorSiteToken token = null;
 			SupervisorPrincipal userBean = null;
 			AccountEntity account = null;
@@ -68,7 +68,6 @@ public class OpenRfidController {
 				if (AccountStatesEnum.stop.equals(account.getState())) {
 					return 0;
 				}
-
 				userBean = new SupervisorPrincipal();
 				userBean.setAccount(account);
 				MemberEntity member = memServive.memberInfo(account

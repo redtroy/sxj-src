@@ -1,7 +1,6 @@
 package com.sxj.supervisor.service.impl.contract;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1294,46 +1293,39 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public ContractReplenishModel getReplenishByRfid(String rfid) {
-		if (StringUtils.isEmpty(rfid)) {
-			return null;
-		}
-		ContractReplenishModel cModel = new ContractReplenishModel();
-		QueryCondition<ReplenishBatchEntity> query = new QueryCondition<ReplenishBatchEntity>();
-		query.addCondition("rfid", rfid);
-		List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
-				.queryReplenishBatch(query);
-		List<ReplenishBatchModel> replenishBatchList = new ArrayList<ReplenishBatchModel>();
-		ReplenishBatchModel rbm = new ReplenishBatchModel();
-		if (batchList != null && batchList.size() > 0) {
-			ReplenishBatchEntity rce = batchList.get(0);
-			List<BatchItemModel> bimList = new ArrayList<BatchItemModel>(0);
-			rbm.setReplenishBatch(rce);
-			try {
+		try {
+			if (StringUtils.isEmpty(rfid)) {
+				return null;
+			}
+			ContractReplenishModel cModel = new ContractReplenishModel();
+			QueryCondition<ReplenishBatchEntity> query = new QueryCondition<ReplenishBatchEntity>();
+			query.addCondition("rfid", rfid);
+			List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+					.queryReplenishBatch(query);
+			List<ReplenishBatchModel> replenishBatchList = new ArrayList<ReplenishBatchModel>();
+			ReplenishBatchModel rbm = new ReplenishBatchModel();
+			if (batchList != null && batchList.size() > 0) {
+				ReplenishBatchEntity rce = batchList.get(0);
+				List<BatchItemModel> bimList = new ArrayList<BatchItemModel>(0);
+				rbm.setReplenishBatch(rce);
 				bimList = JsonMapper
 						.nonEmptyMapper()
 						.getMapper()
 						.readValue(rce.getBatchItems(),
 								new TypeReference<List<BatchItemModel>>() {
 								});
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ReplenishContractEntity rcentity = contractReplenishDao
+						.getReplenish(rce.getReplenishId());
+				rbm.setReplenishBatchItems(bimList);
+				replenishBatchList.add(rbm);
+				cModel.setReplenishContract(rcentity);
+				cModel.setBatchItems(replenishBatchList);
 			}
-<<<<<<< .mine			ReplenishContractEntity rcentity = contractReplenishDao
-					.getReplenish(rce.getReplenishId());
-=======			rbm.setReplenishBatchItems(bimList);
-			replenishBatchList.add(rbm);
-			ReplenishContractEntity  rcentity= contractReplenishDao.getReplenish(rce.getReplenishId());
->>>>>>> .theirs			cModel.setReplenishContract(rcentity);
-			cModel.setBatchItems(replenishBatchList);
+			return cModel;
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		}
-		return cModel;
+
 	}
-<<<<<<< .mine
-=======>>>>>>> .theirs}
+}
