@@ -31,6 +31,7 @@ import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/rfid")
@@ -49,59 +50,70 @@ public class OpenRfidController
      * @return
      */
     @RequestMapping(value = "login")
-    public int login(String userId, String password, HttpSession session)
-            throws WebException
+    public @ResponseBody int login(String userId, String password,
+            HttpSession session) throws WebException
     {
-        SupervisorSiteToken token = null;
-        SupervisorPrincipal userBean = null;
-        AccountEntity account = null;
-        if (StringUtils.isNotEmpty(userId))
-        {
-            account = accountService.getAccountByAccountNo(userId);
-            if (account == null)
-            {
-                return 0;
-            }
-            if (AccountStatesEnum.stop.equals(account.getState()))
-            {
-                return 0;
-            }
-            
-            userBean = new SupervisorPrincipal();
-            userBean.setAccount(account);
-            token = new SupervisorSiteToken(userBean, password);
-        }
-        else
-        {
-            return 0;
-        }
-        Subject currentUser = SecurityUtils.getSubject();
         try
         {
-            currentUser.login(token);
-            PrincipalCollection principals = currentUser.getPrincipals();
-            if (userBean.getAccount() != null)
-            {
-                SupervisorShiroRedisCache.addToMap(userBean.getAccount()
-                        .getId(), principals);
-            }
-        }
-        catch (AuthenticationException e)
-        {
-            return -1;
             
-        }
-        if (currentUser.isAuthenticated())
-        {
-            session.setAttribute("userinfo", userBean);
-            if (account != null)
+            SupervisorSiteToken token = null;
+            SupervisorPrincipal userBean = null;
+            AccountEntity account = null;
+            if (StringUtils.isNotEmpty(userId))
             {
-                accountService.edit_Login(account.getId());
+                account = accountService.getAccountByAccountNo(userId);
+                if (account == null)
+                {
+                    return 0;
+                }
+                if (AccountStatesEnum.stop.equals(account.getState()))
+                {
+                    return 0;
+                }
+                
+                userBean = new SupervisorPrincipal();
+                userBean.setAccount(account);
+                token = new SupervisorSiteToken(userBean, password);
             }
-            return 1;
+            else
+            {
+                return 0;
+            }
+            
+            Subject currentUser = SecurityUtils.getSubject();
+            try
+            {
+                currentUser.login(token);
+                PrincipalCollection principals = currentUser.getPrincipals();
+                if (userBean.getAccount() != null)
+                {
+                    SupervisorShiroRedisCache.addToMap(userBean.getAccount()
+                            .getId(), principals);
+                }
+            }
+            catch (AuthenticationException e)
+            {
+                SxjLogger.error(e.getMessage(), e, this.getClass());
+                return -1;
+                
+            }
+            if (currentUser.isAuthenticated())
+            {
+                session.setAttribute("userinfo", userBean);
+                if (account != null)
+                {
+                    accountService.edit_Login(account.getId());
+                }
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
-        else
+        catch (Exception e)
         {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
             return 0;
         }
     }
@@ -119,11 +131,12 @@ public class OpenRfidController
         {
             Subject currentUser = SecurityUtils.getSubject();
             currentUser.logout();
-            return 0;
+            return 1;
         }
         catch (Exception e)
         {
-            return 1;
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            return 0;
         }
     }
     
@@ -150,6 +163,7 @@ public class OpenRfidController
         }
         catch (Exception e)
         {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
             return null;
         }
         return null;
@@ -160,6 +174,8 @@ public class OpenRfidController
      * 
      * @param rfidNo
      * @return
+     * @throws SQLException
+     * @throws ServiceException
      */
     @RequestMapping(value = "info/contract/{rfidNo}")
     public @ResponseBody WinTypeModel getRfidContractInfo(
@@ -178,6 +194,7 @@ public class OpenRfidController
         }
         catch (Exception e)
         {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
             return null;
         }
         return null;
@@ -257,18 +274,18 @@ public class OpenRfidController
      * 
      * @param rfidNo
      * @return
-     * @throws SQLException 
-     * @throws ServiceException 
+     * @throws SQLException
+     * @throws ServiceException
      */
     @RequestMapping(value = "info/address/{contractNo}")
-    public @ResponseBody Map<String, Object> getAddress(
-            @PathVariable String contractNo) throws ServiceException,
-            SQLException
-    {
-        Map<String, Object> map = new HashMap<String, Object>();
-        String address = openRfidService.getAddress(contractNo);
-        map.put("address", address);
-        return map;
-    }
-    
+	public @ResponseBody Map<String, Object> getAddress(
+			@PathVariable String contractNo) throws ServiceException,
+			SQLException {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			String address = openRfidService.getAddress(contractNo);
+			map.put("address", address);
+			return map;
+		}
+	}
 }
