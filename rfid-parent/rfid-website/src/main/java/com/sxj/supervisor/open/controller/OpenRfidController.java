@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
@@ -28,14 +29,19 @@ import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.rfid.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.rfid.login.SupervisorSiteToken;
 import com.sxj.supervisor.service.open.member.IAccountService;
+import com.sxj.supervisor.service.open.member.IMemberService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/rfid")
 public class OpenRfidController {
 	@Autowired
 	private IAccountService accountService;
+
+	@Autowired
+	private IMemberService memServive;
 
 	/**
 	 * 登陆
@@ -44,45 +50,56 @@ public class OpenRfidController {
 	 * @return
 	 */
 	@RequestMapping(value = "login")
-	public int login(String userId, String password, HttpSession session)
-			throws WebException {
-		SupervisorSiteToken token = null;
-		SupervisorPrincipal userBean = null;
-		AccountEntity account = null;
-		if (StringUtils.isNotEmpty(userId)) {
-			account = accountService.getAccountByAccountNo(userId);
-			if (account == null) {
-				return 0;
-			}
-			if (AccountStatesEnum.stop.equals(account.getState())) {
-				return 0;
-			}
-
-			userBean = new SupervisorPrincipal();
-			userBean.setAccount(account);
-			token = new SupervisorSiteToken(userBean, password);
-		} else {
-			return 0;
-		}
-		Subject currentUser = SecurityUtils.getSubject();
+	public @ResponseBody int login(String userId, String password,
+			HttpSession session) throws WebException {
 		try {
-			currentUser.login(token);
-			PrincipalCollection principals = currentUser.getPrincipals();
-			if (userBean.getAccount() != null) {
-				SupervisorShiroRedisCache.addToMap(userBean.getAccount()
-						.getId(), principals);
-			}
-		} catch (AuthenticationException e) {
-			return -1;
 
-		}
-		if (currentUser.isAuthenticated()) {
-			session.setAttribute("userinfo", userBean);
-			if (account != null) {
-				accountService.edit_Login(account.getId());
+			SupervisorSiteToken token = null;
+			SupervisorPrincipal userBean = null;
+			AccountEntity account = null;
+			if (StringUtils.isNotEmpty(userId)) {
+				account = accountService.getAccountByAccountNo(userId);
+				if (account == null) {
+					return 0;
+				}
+				if (AccountStatesEnum.stop.equals(account.getState())) {
+					return 0;
+				}
+
+				userBean = new SupervisorPrincipal();
+				userBean.setAccount(account);
+				MemberEntity member = memServive.memberInfo(account
+						.getParentId());
+				userBean.setMember(member);
+				token = new SupervisorSiteToken(userBean, password);
+			} else {
+				return 0;
 			}
-			return 1;
-		} else {
+
+			Subject currentUser = SecurityUtils.getSubject();
+			try {
+				currentUser.login(token);
+				PrincipalCollection principals = currentUser.getPrincipals();
+				if (userBean.getAccount() != null) {
+					SupervisorShiroRedisCache.addToMap(userBean.getAccount()
+							.getId(), principals);
+				}
+			} catch (AuthenticationException e) {
+				SxjLogger.error(e.getMessage(), e, this.getClass());
+				return -1;
+
+			}
+			if (currentUser.isAuthenticated()) {
+				session.setAttribute("userinfo", userBean);
+				if (account != null) {
+					accountService.edit_Login(account.getId());
+				}
+				return 1;
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			return 0;
 		}
 	}
@@ -98,9 +115,10 @@ public class OpenRfidController {
 		try {
 			Subject currentUser = SecurityUtils.getSubject();
 			currentUser.logout();
-			return 0;
-		} catch (Exception e) {
 			return 1;
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return 0;
 		}
 	}
 

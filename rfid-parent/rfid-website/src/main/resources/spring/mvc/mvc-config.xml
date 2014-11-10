@@ -16,7 +16,7 @@
 			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 
-	<!-- webflow配置 -->
+	<!-- webflow配置 
 	<bean id="viewMappings"
 		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 		<property name="mappings">
@@ -26,10 +26,6 @@
 			<bean class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
 		</property>
 		<property name="order" value="1"></property>
-	</bean>
-	<bean id="flowController" class="org.springframework.webflow.mvc.servlet.FlowController">
-		<property name="flowExecutor" ref="flowExecutor" />
-	</bean>
+	</bean>-->
 	<import resource="classpath*:spring/mvc/view-config.xml" />
-	<import resource="classpath*:spring/webflow/webflow-config.xml" />
 </beans>

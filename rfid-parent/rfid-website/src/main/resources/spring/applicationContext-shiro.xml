@@ -15,10 +15,10 @@
 	default-lazy-init="false">
 
 	<bean id="myShiroRealmService"
-		class="com.sxj.supervisor.manage.login.SupervisorManagerShiroRealm">
+		class="com.sxj.supervisor.rfid.login.SupervisorSiteShiroRealm">
 	</bean>
 	<bean id="authenticationFilter"
-		class="com.sxj.supervisor.manage.login.SupervisorManagerPermissionsAuthorizationFilter" />
+		class="com.sxj.supervisor.rfid.login.SupervisorSiteAuthenticationFilter" />
 
 
 	<!-- 权限管理器 -->
@@ -87,25 +87,12 @@
 		<!-- 安全管理器 -->
 		<property name="securityManager" ref="securityManager" />
 		<!-- 默认的登陆访问url -->
-		<property name="loginUrl" value="/to_login.htm" />
 		<!-- 登陆成功后跳转的url -->
-		<property name="successUrl" value="/index.htm" />
 		<!-- 没有权限跳转的url -->
 		<property name="unauthorizedUrl" value="/to_login.htm" />
 		<!-- 访问地址的过滤规则,从上至下的优先级,如果有匹配的规则,就会返回,不会再进行匹配 -->
 		<property name="filterChainDefinitions">
 			<value>
-				/index.htm=user
-				/unauth.htm = anon
-				/contract/query.htm=user,frameperms
-				/member/account/accountList.htm=user,frameperms
-				/member/memberList.htm=user,frameperms
-				/record/recordList.htm=user,frameperms
-				/system/account-list.htm=user,frameperms
-				/rfid/apply/appList.htm=user,frameperms
-				/rfid/window/query.htm=user,frameperms
-				/rfid/logistics/query.htm=user,frameperms
-				/rfid/supplier/supplier_list.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->
