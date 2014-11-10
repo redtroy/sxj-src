@@ -5,6 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,13 +19,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
+import com.sxj.supervisor.rfid.login.SupervisorShiroRedisCache;
+import com.sxj.supervisor.rfid.login.SupervisorSiteToken;
+import com.sxj.supervisor.service.open.member.IAccountService;
+import com.sxj.util.common.StringUtils;
+import com.sxj.util.exception.WebException;
 
 @Controller
 @RequestMapping("/rfid")
 public class OpenRfidController {
+	@Autowired
+	private IAccountService accountService;
 
 	/**
 	 * 登陆
@@ -27,9 +44,47 @@ public class OpenRfidController {
 	 * @return
 	 */
 	@RequestMapping(value = "login")
-	public @ResponseBody Map<String, Object> login(String userId,
-			String password) {
-		return null;
+	public int login(String userId, String password, HttpSession session)
+			throws WebException {
+		SupervisorSiteToken token = null;
+		SupervisorPrincipal userBean = null;
+		AccountEntity account = null;
+		if (StringUtils.isNotEmpty(userId)) {
+			account = accountService.getAccountByAccountNo(userId);
+			if (account == null) {
+				return 0;
+			}
+			if (AccountStatesEnum.stop.equals(account.getState())) {
+				return 0;
+			}
+
+			userBean = new SupervisorPrincipal();
+			userBean.setAccount(account);
+			token = new SupervisorSiteToken(userBean, password);
+		} else {
+			return 0;
+		}
+		Subject currentUser = SecurityUtils.getSubject();
+		try {
+			currentUser.login(token);
+			PrincipalCollection principals = currentUser.getPrincipals();
+			if (userBean.getAccount() != null) {
+				SupervisorShiroRedisCache.addToMap(userBean.getAccount()
+						.getId(), principals);
+			}
+		} catch (AuthenticationException e) {
+			return -1;
+
+		}
+		if (currentUser.isAuthenticated()) {
+			session.setAttribute("userinfo", userBean);
+			if (account != null) {
+				accountService.edit_Login(account.getId());
+			}
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	/**
@@ -39,8 +94,14 @@ public class OpenRfidController {
 	 * @return
 	 */
 	@RequestMapping(value = "logout")
-	public @ResponseBody Map<String, Object> logout(String userId) {
-		return null;
+	public int logout(String userId) {
+		try {
+			Subject currentUser = SecurityUtils.getSubject();
+			currentUser.logout();
+			return 0;
+		} catch (Exception e) {
+			return 1;
+		}
 	}
 
 	/**
@@ -157,10 +218,10 @@ public class OpenRfidController {
 			@PathVariable String rfidNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("contractNo", "CT1410250001");
-		String[] batchNos=new String[2];
-		batchNos[0]="AAAA0001";
-		batchNos[1]="AAAA0002";
-		map.put("batchNo",batchNos);
+		String[] batchNos = new String[2];
+		batchNos[0] = "AAAA0001";
+		batchNos[1] = "AAAA0002";
+		map.put("batchNo", batchNos);
 		return map;
 
 	}
