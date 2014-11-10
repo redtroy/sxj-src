@@ -31,6 +31,7 @@ import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/rfid")
@@ -40,6 +41,7 @@ public class OpenRfidController {
 
 	@Autowired
 	IOpenRfidService openRfidService;
+
 	/**
 	 * 登陆
 	 * 
@@ -126,6 +128,7 @@ public class OpenRfidController {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			return null;
 		}
 		return null;
@@ -136,21 +139,23 @@ public class OpenRfidController {
 	 * 
 	 * @param rfidNo
 	 * @return
-	 * @throws SQLException 
-	 * @throws ServiceException 
+	 * @throws SQLException
+	 * @throws ServiceException
 	 */
 	@RequestMapping(value = "info/contract/{rfidNo}")
 	public @ResponseBody WinTypeModel getRfidContractInfo(
-			@PathVariable String rfidNo,HttpServletResponse response) throws ServiceException, SQLException {
-		
+			@PathVariable String rfidNo, HttpServletResponse response)
+			throws ServiceException, SQLException {
+
 		try {
-			WinTypeModel win=openRfidService.getWinTypeByRfid(rfidNo);
+			WinTypeModel win = openRfidService.getWinTypeByRfid(rfidNo);
 			response.setContentType("application/json; charset=utf-8");
 			PrintWriter out = response.getWriter();
 			out.print(JsonMapper.nonEmptyMapper().toJson(win));
 			out.flush();
 			out.close();
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			return null;
 		}
 		return null;
@@ -220,21 +225,28 @@ public class OpenRfidController {
 		return map;
 
 	}
+
 	/**
 	 * 获取合同地址信息
 	 * 
 	 * @param rfidNo
 	 * @return
-	 * @throws SQLException 
-	 * @throws ServiceException 
+	 * @throws SQLException
+	 * @throws ServiceException
 	 */
 	@RequestMapping(value = "info/address/{contractNo}")
 	public @ResponseBody Map<String, Object> getAddress(
-			@PathVariable String contractNo) throws ServiceException, SQLException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		String address =openRfidService.getAddress(contractNo);
-		map.put("address", address);
-		return map;
+			@PathVariable String contractNo) throws ServiceException,
+			SQLException {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			String address = openRfidService.getAddress(contractNo);
+			map.put("address", address);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return null;
+		}
 	}
 
 }
