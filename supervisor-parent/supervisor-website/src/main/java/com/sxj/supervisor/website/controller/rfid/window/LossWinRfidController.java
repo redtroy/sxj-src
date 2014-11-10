@@ -18,6 +18,8 @@ import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.ContractReplenishModel;
+import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
@@ -101,7 +103,19 @@ public class LossWinRfidController extends BaseController {
 			} else {
 				map.put("isOk", "false");
 			}
-
+			List<ReplenishBatchModel> itemList = new ArrayList<>();
+			List<ContractReplenishModel> replenishList = cm.getReplenishList();
+			if (replenishList != null && replenishList.size() > 0) {
+				for (ContractReplenishModel replenishModel : replenishList) {
+					List<ReplenishBatchModel> item = replenishModel
+							.getBatchItems();
+					if (item == null) {
+						continue;
+					}
+					itemList.addAll(item);
+				}
+			}
+			map.put("batchItems", itemList);
 		} catch (Exception e) {
 			SxjLogger.error("根据合同号查询合同信息错误", e, this.getClass());
 			map.put("error", e.getMessage());

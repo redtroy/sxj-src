@@ -149,14 +149,12 @@ public class MemberServiceImpl implements IMemberService {
 	@Transactional
 	public String initializePwd(String memberId) throws ServiceException {
 		try {
-			MemberEntity member = new MemberEntity();
-			member.setId(memberId);
+			MemberEntity member = menberDao.getMember(memberId);
 			// 随机密码
 			int rondom = NumberUtils.getRandomIntInMax(999999);
 			String password = StringUtils.getLengthStr(rondom + "", 6, '0');
 			String md5Passwrod = EncryptUtil.md5Hex(password);
 			member.setPassword(md5Passwrod);
-			member.setVersion(menberDao.getMember(memberId).getVersion());
 			menberDao.updateMember(member);
 			return password;
 		} catch (Exception e) {

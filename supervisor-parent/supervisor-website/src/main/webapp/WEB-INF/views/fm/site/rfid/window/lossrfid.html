@@ -64,9 +64,9 @@ function pc_a(){
 	if (contractNo !=null){
 		$.post("query_loss_contractNo.htm",{contractNo:contractNo},function(data){
 			if (data.isOk=="ok" && data.cm.replenishList !=null){
-				container_a=data.cm.replenishList;
+				container_a=data.batchItems;
 				for (var i=0;i<container_a.length;i++){
-				 $("#pc_a").append("<option value='"+i+"'>"+container_a[i].replenishContract.batchRfidNo+"</option>")
+				 $("#pc_a").append("<option value='"+i+"'>"+container_a[i].replenishBatch.batchNo+"</option>")
 				}
 				rfid_a($("#pc_a option:selected").val());
 				}else{
@@ -83,9 +83,9 @@ function pc_b(){
 	if (contractNo !=null){
 		$.post("query_loss_contractNo.htm",{contractNo:contractNo},function(data){
 			if (data.isOk=="ok" && data.cm.replenishList !=null){
-				container_b=data.cm.replenishList;
+				container_b=data.batchItems;
 				for (var i=0;i<container_b.length;i++){
-				 $("#pc_b").append("<option value='"+i+"'>"+container_b[i].replenishContract.batchRfidNo+"</option>")
+				 $("#pc_b").append("<option value='"+i+"'>"+container_b[i].replenishBatch.batchNo+"</option>")
 				}
 				rfid_b($("#pc_b option:selected").val());
 				}else{
@@ -99,10 +99,10 @@ function pc_b(){
 	}
 }
 function rfid_a(pc_a_id){
-	$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
+	$("#rfid_a").text(container_a[pc_a_id].replenishBatch.newRfidNo);
 }
 function rfid_b(pc_b_id){
-	$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
+	$("#rfid_b").text(container_b[pc_b_id].replenishBatch.newRfidNo);
 }
 //启用标签
 function star(){
