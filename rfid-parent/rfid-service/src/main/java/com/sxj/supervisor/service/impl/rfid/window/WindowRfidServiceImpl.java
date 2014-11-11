@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
@@ -219,5 +221,28 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			throw new ServiceException("批量补损RFID失败", e);
 		}
 
+	}
+
+	/**
+	 * 安装
+	 */
+	@Override
+	public int stepWindow(String rfidNo) throws ServiceException {
+		try {
+			WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
+			List<Map<String, String>> list = JsonMapper
+					.nonEmptyMapper()
+					.getMapper()
+					.readValue(wind.getLog(),
+							new TypeReference<List<Map<String, String>>>() {
+							});
+			LogModel l = new LogModel();
+			LabelProgressEnum[] label = LabelProgressEnum.values();
+
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("批量补损RFID失败", e);
+		}
+		return 0;
 	}
 }
