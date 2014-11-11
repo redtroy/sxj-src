@@ -6,7 +6,8 @@
   $("#sub").Validform({
 		tiptype:3,
 		datatype:{
-			"f":/^[0-9]+([.]{1}[0-9]{1,2})?$/
+			"f":/^[0-9]+([.]{1}[0-9]{1,2})?$/,
+			"phone":/^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$/
 		 },
 		callback:function(form){
 			add_supplier();
@@ -25,7 +26,7 @@
 				query();
 			}
 			else{
-				errorInfo(data);
+				errorInfo(data.error);
 			}
 		});
 		
@@ -37,11 +38,11 @@
     <div class="infoBox f14">
       <div>
         <label>供应商名称</label>
-        <input type="text" id="" name="name" class="text tip" title="由中文组成" datatype="s4-16" errormsg="供应商名称至少4个字符,最多50个字符！" nullmsg="请输入供应商名称" />
+        <input type="text" id="" name="name" class="text tip" title="由中文组成" datatype="s1-50" errormsg="供应商名称至少1个字符,最多50个字符！" nullmsg="请输入供应商名称" />
       </div>
       <div>
         <label>联系人姓名</label>
-        <input type="text" id="" name="contactName" class="text tip" title="由中文组成" datatype="s4-16" errormsg="联系人名称至少4个字符,最多16个字符！" nullmsg="请输入联系人名称"/>
+        <input type="text" id="" name="contactName" class="text tip" title="由中文组成" datatype="s2-15" errormsg="联系人名称至少4个字符,最多15个字符！" nullmsg="请输入联系人名称"/>
       </div>
       <div>
         <label>联系电话</label>
@@ -49,7 +50,7 @@
       </div>
       <div>
         <label>固定电话</label>
-        <input type="text" id="" name="telNum" class="text tip" title="填写公司固定电话号码" />
+        <input type="text" id="" name="telNum" class="text tip" datatype="phone" title="填写公司固定电话号码" errormsg="固定电话格式为区号-电话-分机号"/>
       </div>
       <div>
         <label>公司地址</label>

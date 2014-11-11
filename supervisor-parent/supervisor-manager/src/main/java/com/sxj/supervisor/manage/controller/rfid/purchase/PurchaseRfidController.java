@@ -86,18 +86,15 @@ public class PurchaseRfidController extends BaseController {
 	@RequestMapping("delete")
 	public @ResponseBody Map<String, String> delete(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
-			purchase.setId(id);
-			purchase.setDelstate(true);
-			purchaseRfidService.updatePurchase(purchase);
-			Map<String, String> map = new HashMap<String, String>();
+			purchaseRfidService.deletePurchase(id);
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("删除采购单错误", e, this.getClass());
-			throw new WebException("删除采购单错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**

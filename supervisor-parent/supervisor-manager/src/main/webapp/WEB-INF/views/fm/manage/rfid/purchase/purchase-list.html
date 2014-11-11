@@ -41,7 +41,7 @@ function  del(id){
 					query($("#pager").attr("currentPage"));
 				},"删除成功!");
 			}else{
-				errorInfo("删除失败!");	
+				errorInfo(data.error);	
 			}
 		});
 	},"确实要删除吗?");
@@ -120,7 +120,8 @@ function edit(id){
 	    }});
 	  $("#edit_"+id).find(".editCount").html('<input type="text" class="count" name="count" value="'+$("#edit_"+id).find(".editCount").text()+'" />');
 	  $("#edit_"+id).find(".editPrice").html('<input type="text" class="price" name="price" value="'+$("#edit_"+id).find(".editPrice").text()+'" />');
-	  $("#edit_"+id).find(".operation").html('<a href="javascript:void(0)" class="confirm lnk-yellow" onclick="save(\''+id+'\');return false;">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+	  $("#edit_"+id).find("#update_"+id).hide();
+	  $("#edit_"+id).find("#confirm_"+id).show();
 }
 function save(id){
 	var supplierName =$("#edit_"+id).find(".editName").find(".supplierName").val();
@@ -165,7 +166,8 @@ function save(id){
 				$("#edit_"+id).find(".supplierNo").val(supplierNo);
 				$("#edit_"+id).find(".editCount").html(count);
 				$("#edit_"+id).find(".editPrice").html(price);
-				$("#edit_"+id).find(".operation").html('<a href="javascript:edit(\''+id+'\');" class="edit">修改</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+				$("#edit_"+id).find("#update_"+id).show();
+				 $("#edit_"+id).find("#confirm_"+id).hide();
 			},"修改成功！");
 		}else{ 
 			errorInfo(data.error);	
@@ -267,7 +269,12 @@ function save(id){
           <td><#if list.payState.getId()==1><em class="state verified">已付款</em> <#else><button class="btn btn-gray" onclick="confirmPay('${list.id}');"><span>确认付款</span></button></#if></td>
 		  <td><#if list.receiptState.getId()==0><button class="btn btn-gray" onclick="confirmDelivery('${list.id}');"><span>确认发货</span></button><#elseif list.receiptState.getId()==1><button class="btn btn-orange" onclick="confirmReceipt('${list.id}');"><span>确认收货</span></button><#else> <em class="state verified">已收货</em></#if></td>
 		  <td><#if list.importState.getId()==0><button onclick="javascript:toImport('${list.id}')" class="btn btn-gray"><span>导入</span></button><#else><em class="state verified">已导入</em></#if></td>
-		  <td class="operation"><a href="javascript:edit('${list.id}');" class="edit">修改</a><a href="javascript:del('${list.id}');" class="del">删除</a></td>
+		  <td class="operation"><a id="update_${list.id}" href="javascript:edit('${list.id}');" class="edit">修改</a>
+		  <#if list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
+		  <a id="del_${list.id}" href="javascript:del('${list.id}');" class="del">删除</a>
+		  </#if>
+		  <a id="confirm_${list.id}" href="javascript:void(0)" class="confirm lnk-yellow" onclick="save('${list.id}');return false;" style="display: none">确认</a>
+		  </td>
         </tr>
         <tr class="tableInfo" id="info${list.id}">
 	   </tr>

@@ -53,11 +53,10 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			List<RfidApplicationEntity> list = appDao.queryList(condition);
 			query.setPage(condition);
 			return list;
-
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 
 	/**
@@ -127,6 +126,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	public void addApp(RfidApplicationEntity app) throws ServiceException {
 		try {
 			Date date = DateTimeUtils.parse(System.currentTimeMillis());
+			app.setDateNo(DateTimeUtils.getTime("yyMM"));
 			app.setPayState(PayStateEnum.non_payment);
 			app.setApplyDate(date);
 			app.setReceiptState(ReceiptStateEnum.shipments);
