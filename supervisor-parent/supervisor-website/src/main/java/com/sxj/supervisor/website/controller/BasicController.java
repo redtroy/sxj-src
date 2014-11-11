@@ -20,6 +20,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.comet4j.core.CometContext;
@@ -35,7 +37,6 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
-import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.redis.advance.RedisCollections;
 import com.sxj.redis.advance.core.RSet;
 import com.sxj.redis.advance.core.RTopic;
@@ -94,6 +95,9 @@ public class BasicController extends BaseController
     @Autowired
     RedisCollections collections;
     
+    @Autowired
+    private CachingSessionDAO sessionDAO;
+    
     @PostConstruct
     public void init()
     {
@@ -112,7 +116,7 @@ public class BasicController extends BaseController
     
     @RequestMapping("checkEditState")
     @ResponseBody
-    public String checkEditState(HttpSession session)
+    public String checkEditState(Session session)
     {
         if (session.getAttribute("userinfo") == null)
             return "0";
@@ -122,10 +126,7 @@ public class BasicController extends BaseController
         {
             MemberEntity newMember = memberService.getMember(member.getId());
             session.setAttribute("userinfo", newMember);
-            HierarchicalCacheManager.set(2,
-                    Constraints.WEBSITE_CACHE_NAME,
-                    session.getId(),
-                    session);
+            sessionDAO.getActiveSessionsCache().put(session.getId(), session);
             return "1";
         }
         else

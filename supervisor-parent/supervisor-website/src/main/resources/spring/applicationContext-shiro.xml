@@ -78,6 +78,7 @@
 	<!-- session存储的实现 -->
 	<bean id="shiroSessionDao"
 		class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+		<property name="activeSessionsCacheName" value="${website.session.cache.name}"></property>
 	</bean>
 
 	<!-- 单机session -->

@@ -67,12 +67,12 @@ public class ShiroEventListener implements BeanFactoryPostProcessor
                 {
                     if ("del".equals(type))
                     {
-                        SxjLogger.info("del认证信息" + accountId, this.getClass());
+                        SxjLogger.info("del授权信息" + accountId, this.getClass());
                         cache.put(principal, new SimpleAuthorizationInfo());
                     }
                     else if ("update".equals(type))
                     {
-                        SxjLogger.info("update认证信息" + accountId,
+                        SxjLogger.info("update授权信息" + accountId,
                                 this.getClass());
                         SimpleAuthorizationInfo old = (SimpleAuthorizationInfo) cache.get(principal);
                         if (old == null)
