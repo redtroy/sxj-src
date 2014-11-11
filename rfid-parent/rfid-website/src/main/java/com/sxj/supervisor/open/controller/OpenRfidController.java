@@ -199,18 +199,19 @@ public class OpenRfidController {
 			@PathVariable String rfidNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			
-			int state= openRfidService.shipped(rfidNo);
-			if(state==1){
+
+			int state = openRfidService.shipped(rfidNo);
+			if (state == 1) {
 				map.put("state", 1);
 				map.put("message", "发货成功");
-			}else{
+			} else {
 				map.put("state", 0);
 				map.put("message", "发货失败");
 			}
 		} catch (ServiceException | SQLException | IOException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			return null;
+			map.put("state", 0);
+			map.put("message", "发货失败");
 		}
 		return map;
 
@@ -227,18 +228,19 @@ public class OpenRfidController {
 			@PathVariable String rfidNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			
-			int state= openRfidService.accepting(rfidNo);
-			if(state==1){
+
+			int state = openRfidService.accepting(rfidNo);
+			if (state == 1) {
 				map.put("state", 1);
-				map.put("message", "发货成功");
-			}else{
+				map.put("message", "验收成功");
+			} else {
 				map.put("state", 0);
-				map.put("message", "发货失败");
+				map.put("message", "验收失败");
 			}
 		} catch (ServiceException | SQLException | IOException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			return null;
+			map.put("state", 0);
+			map.put("message", "验收失败");
 		}
 
 		return map;
