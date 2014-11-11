@@ -15,6 +15,11 @@ public class Bacth implements Serializable{
 
 	private BatchNo batch;
 	
+	/**
+	 * 状态(0:失败1:成功2:未启用3:未审核4:已发货)
+	 */
+	private String state;
+	
 	private List<BatchItemModel> batchItems;
 
 	public BatchNo getBatch() {
@@ -31,6 +36,14 @@ public class Bacth implements Serializable{
 
 	public void setBatchItems(List<BatchItemModel> batchItems) {
 		this.batchItems = batchItems;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 	
 }
