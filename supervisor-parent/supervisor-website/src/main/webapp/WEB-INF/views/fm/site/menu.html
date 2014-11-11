@@ -27,7 +27,14 @@ function getUrlParam(name){
 function clickFunction(url){
 	var state="${Session.userinfo.member.checkState.id}";
 	if(state=='1'){
-		messageInfo("会员未认证，请完善资料！");
+		$.get("checkEditState.htm",function(data){
+			if(data=='1'){
+				url=url+"&"+Math.random();
+				window.location.href=url;
+			}else
+				messageInfo("会员未认证，请完善资料！");
+		});
+		
 	}else{
 		url=url+"&"+Math.random();
 		window.location.href=url;

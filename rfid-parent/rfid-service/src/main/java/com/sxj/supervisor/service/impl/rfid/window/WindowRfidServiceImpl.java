@@ -257,6 +257,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	 * 安装
 	 */
 	@Override
+	@Transactional
 	public int stepWindow(String rfidNo) throws ServiceException {
 		try {
 			WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);

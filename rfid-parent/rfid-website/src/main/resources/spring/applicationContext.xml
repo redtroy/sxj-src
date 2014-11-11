@@ -14,7 +14,7 @@
 
 	<import resource="classpath*:spring/database-config.xml" />
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
-	<!--<import resource="classpath*:spring/rpc/jsonrpc-config.xml" />-->
+	<!--<import resource="classpath*:spring/rpc/jsonrpc-config.xml" /> -->
 	<task:annotation-driven />
 	<context:annotation-config />
 
@@ -85,5 +85,17 @@
 		<property name="config" ref="dfsConfig" />
 		<property name="trackerHost" value="192.168.1.13" />
 		<property name="trackerPort" value="22122" />
+	</bean>
+	<bean id="redisCollections" class="com.sxj.redis.advance.RedisCollections">
+		<constructor-arg index="0">
+			<bean class="com.sxj.redis.advance.Config">
+				<property name="singleServerConfig">
+					<bean class="com.sxj.redis.advance.SingleServerConfig">
+						<property name="address" value="192.168.1.13:6379"></property>
+						<property name="database" value="0"></property>
+					</bean>
+				</property>
+			</bean>
+		</constructor-arg>
 	</bean>
 </beans>

@@ -12,7 +12,7 @@ import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 
 import com.sxj.util.common.StringUtils;
 
-public class SupervisorSiteAuthenticationFilter extends
+public class ApiAuthenticationFilter extends
 		PermissionsAuthorizationFilter {
 
 	// @Resource
