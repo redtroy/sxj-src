@@ -18,6 +18,7 @@ import com.sxj.supervisor.entity.rfid.sale.RfidSaleStatisticalEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
@@ -292,6 +293,41 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("导入RFID错误", e);
+		}
+
+	}
+
+	@Override
+	@Transactional
+	public void deletePurchase(String id) throws ServiceException {
+		try {
+			RfidPurchaseEntity purchase = rfidPurchaseDao.getRfidPurchase(id);
+			if (purchase == null) {
+				throw new ServiceException("采购单不存在");
+			}
+			if (purchase.isDelstate()) {
+				throw new ServiceException("采购单已经被删除");
+			}
+			if (purchase.getImportState().equals(ImportStateEnum.imported)) {
+				throw new ServiceException("采购单已经导入RFID，不能被删除");
+			}
+			if (purchase.getPayState().equals(PayStateEnum.payment)) {
+				throw new ServiceException("采购单已经付款，不能被删除");
+			}
+			if (purchase.getReceiptState().equals(DeliveryStateEnum.shipped)) {
+				throw new ServiceException("采购单已发货，不能被删除");
+			}
+			if (purchase.getReceiptState().equals(DeliveryStateEnum.receiving)) {
+				throw new ServiceException("采购单已收货，不能被删除");
+			}
+			purchase.setDelstate(true);
+			rfidPurchaseDao.updateRfidPurchase(purchase);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("删除采购单错误！");
 		}
 
 	}

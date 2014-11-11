@@ -28,6 +28,14 @@ public interface IPurchaseRfidService {
 			throws ServiceException;
 
 	/**
+	 * 删除
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void deletePurchase(String id) throws ServiceException;
+
+	/**
 	 * 获取采购单详情
 	 * 
 	 * @param id

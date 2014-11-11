@@ -83,12 +83,13 @@ function save(){
 <div class="fence-wide ly-clearFix">
   <div class="main pb20">
      <@b.leftMenu />
-    <div class="yard-870 rightSide ly-left" title="认证标签都是客户在前台申请招标合同备案完成时提示客户会自动帮助客户定额定量申请认证标签，并且申请单会在招标合同通过审核后正式生成，需要在申请招标合同备案和招标合同确认页面都要加相应的提示和链接通知客户，写进文档">
+    <div class="yard-870 rightSide ly-left">
       <div class="heading mb15 ly-clearFix">
         <h1 class="ly-left"> <span class="title fontYH f20 fb">认证标签申请</span></h1>
       </div>
       <form id="add" action="javascript:void(0);" method="post">
       <div class="contBox">
+      <div class="color-red ml20 mb10" id="erro_text">标签与合同绑定，如无需要，请勿自助申请！</div>
 	  <div class="item">
           <label>申请会员名称</label>
           ${member.name}
@@ -100,14 +101,13 @@ function save(){
 	    <div class="item">
           <label>对应门窗招标合同</label>
           <input class="input input-w180h36 mr5" name="contractNo" id="contractNo" value=""  title="请输入招标合同号" datatype="ys"  nullmsg="请输入招标合同号" ajaxurl="check_contract.htm" errormsg="招标合同号只能用英文+数字"/>
-          <em class="color-red" id="erro_text">标签与合同绑定，如无需要，请勿自助申请！</em>
           </div>
         <div class="item">
           <label>申请数量</label>
           <input class="input input-w180h36" name="count" id="count" value="" title="申请数量" datatype="count" nullmsg="请输入申请数量！" errormsg="申请数量只能输入整数"/>
         </div>
        <div class="item mt10">
-          <label>&nbsp;</label><a href="javascript:void(0);" onclick="subForm()" class="button button-orange mr15" title="点申请时需要判断该笔招标合同关联的RFID数量是否已经达到合同里的门窗数量，如果超过门窗数量不可申请，提示错误信息">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
+          <label>&nbsp;</label><a href="javascript:void(0);" onclick="subForm()" class="button button-orange mr15">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
         </div>
       </div>
       </form>
