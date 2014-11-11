@@ -181,7 +181,7 @@ public class RecordServiceImpl implements IRecordService {
 	 * 条件查询备案
 	 */
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<RecordEntity> queryRecord(RecordQuery query)
 			throws ServiceException {
 		try {
@@ -415,6 +415,7 @@ public class RecordServiceImpl implements IRecordService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public String getRfid(String batchId) {
 		try {
 			ContractBatchEntity batch = batchDao.getBatch(batchId);

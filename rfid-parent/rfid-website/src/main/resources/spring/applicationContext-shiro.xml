@@ -16,6 +16,8 @@
 
 	<bean id="myShiroRealmService"
 		class="com.sxj.supervisor.rfid.login.SupervisorSiteShiroRealm">
+		<property name="authenticationCacheName" value="${api.authentication.cache.name}"></property>
+		
 	</bean>
 	<bean id="authenticationFilter"
 		class="com.sxj.supervisor.rfid.login.SupervisorSiteAuthenticationFilter" />
@@ -55,8 +57,9 @@
 		<property name="securityManager" ref="securityManager"></property>
 	</bean>
  
-	<bean id="shiroCacheManager" class="com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager">
+	<bean id="shiroCacheManager" class="com.sxj.supervisor.rfid.login.SupervisorShiroRedisCacheManager">
 		<property name="level" value="2"></property>
+		<property name="collections" ref="redisCollections"></property>
 	</bean>
 
 	<!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->

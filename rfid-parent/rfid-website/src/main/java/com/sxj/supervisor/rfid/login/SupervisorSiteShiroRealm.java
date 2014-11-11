@@ -75,15 +75,11 @@ public class SupervisorSiteShiroRealm extends AuthenticatingRealm {
 		return null;
 	}
 
-	/**
-	 * 设定Password校验的Hash算法与迭代次数.
-	 */
-	@PostConstruct
-	public void initCredentialsMatcher() {
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(
-				HASH_ALGORITHM);
-		matcher.setHashIterations(HASH_INTERATIONS);
-		setCredentialsMatcher(matcher);
+	@Override
+	public void setAuthenticationCacheName(String authenticationCacheName) {
+		// TODO Auto-generated method stub
+		super.setAuthenticationCacheName(authenticationCacheName);
 	}
+
 
 }
