@@ -435,6 +435,7 @@ public class RecordServiceImpl implements IRecordService {
 			record.setAcceptState(0);
 			record.setRecordState(0);
 			record.setRecordDate(null);
+			record.setId(null);
 			recordDao.addRecord(record);
 			// 更改合同关联所有的备案状态
 			String contractNo = record.getContractNo();

@@ -1,4 +1,4 @@
-package com.sxj.supervisor.open.controller;
+﻿package com.sxj.supervisor.open.controller;
 
 import java.io.PrintWriter;
 import java.sql.SQLException;
