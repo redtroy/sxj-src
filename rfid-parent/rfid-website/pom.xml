@@ -182,7 +182,10 @@
 				<version>2.2</version>
 				<configuration>
 					<!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
+<<<<<<< HEAD
 					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+=======
+>>>>>>> 90f39303479770baf84a941cd4d8d0f01c75f477
 				</configuration>
 			</plugin>
 		</plugins>

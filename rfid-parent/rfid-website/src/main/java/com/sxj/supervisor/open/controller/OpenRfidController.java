@@ -30,6 +30,7 @@ import com.sxj.supervisor.rfid.login.SupervisorSiteToken;
 import com.sxj.supervisor.service.open.member.IAccountService;
 import com.sxj.supervisor.service.open.member.IMemberService;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
+import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
@@ -46,6 +47,9 @@ public class OpenRfidController {
 
 	@Autowired
 	private IMemberService memServive;
+
+	@Autowired
+	private IWindowRfidService windowRfid;
 
 	/**
 	 * 登陆
@@ -185,6 +189,7 @@ public class OpenRfidController {
 	@RequestMapping(value = "send/{rfidNo}")
 	public @ResponseBody Map<String, Object> sendGoods(
 			@PathVariable String rfidNo) {
+
 		return null;
 
 	}
@@ -211,17 +216,25 @@ public class OpenRfidController {
 	 * @param rfidNo
 	 * @return
 	 */
-	@RequestMapping(value = "test/{rfidNo}")
-	public @ResponseBody Map<String, Object> testRfid(
-			@PathVariable String rfidNo) {
+	@RequestMapping(value = "test")
+	public @ResponseBody Map<String, Object> testRfid(String contractNo,
+			String[] rfidNos) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("contractNo", "CT1410250001");
-		String[] batchNos = new String[2];
-		batchNos[0] = "AAAA0001";
-		batchNos[1] = "AAAA0002";
-		map.put("batchNo", batchNos);
+		try {
+			int stepState = windowRfid.testWindow(contractNo, rfidNos);
+			if (stepState == 1) {
+				map.put("state", "1");
+				map.put("message", "质检成功");
+			} else {
+				map.put("state", "0");
+				map.put("message", "质检失败");
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			map.put("state", "0");
+			map.put("message", "质检失败");
+		}
 		return map;
-
 	}
 
 	/**
@@ -234,9 +247,21 @@ public class OpenRfidController {
 	public @ResponseBody Map<String, Object> setupRfid(
 			@PathVariable String rfidNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("state", 1);
-		map.put("contractNo", "CT1410250001");
-		map.put("batchNo", "00001");
+		try {
+			int stepState = windowRfid.stepWindow(rfidNo);
+			if (stepState == 1) {
+				map.put("state", "1");
+				map.put("message", "安装成功");
+			} else {
+				map.put("state", "0");
+				map.put("message", "安装失败");
+			}
+
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			map.put("state", "0");
+			map.put("message", "安装失败");
+		}
 		return map;
 
 	}
