@@ -8,7 +8,7 @@ import com.sxj.mybatis.pagination.Pagable;
  * @author Ann
  *
  */
-public class LogModel extends Pagable implements Serializable {
+public class LogModel implements Serializable {
 
 	/**
 	 * 

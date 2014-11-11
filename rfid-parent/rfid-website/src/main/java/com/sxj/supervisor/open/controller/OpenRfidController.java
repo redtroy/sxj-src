@@ -1,5 +1,6 @@
 ﻿package com.sxj.supervisor.open.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -185,12 +188,31 @@ public class OpenRfidController {
 	 * 
 	 * @param rfidNo
 	 * @return
+	 * @throws IOException
+	 * @throws SQLException
+	 * @throws ServiceException
+	 * @throws JsonMappingException
+	 * @throws JsonParseException
 	 */
 	@RequestMapping(value = "send/{rfidNo}")
 	public @ResponseBody Map<String, Object> sendGoods(
 			@PathVariable String rfidNo) {
-
-		return null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			
+			int state= openRfidService.shipped(rfidNo);
+			if(state==1){
+				map.put("state", 1);
+				map.put("message", "发货成功");
+			}else{
+				map.put("state", 0);
+				map.put("message", "发货失败");
+			}
+		} catch (ServiceException | SQLException | IOException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return null;
+		}
+		return map;
 
 	}
 
@@ -204,10 +226,23 @@ public class OpenRfidController {
 	public @ResponseBody Map<String, Object> checkAndAccept(
 			@PathVariable String rfidNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("state", 1);
-		map.put("contractNo", "CT1410250001");
-		map.put("batchNo", "00001");
+		try {
+			
+			int state= openRfidService.accepting(rfidNo);
+			if(state==1){
+				map.put("state", 1);
+				map.put("message", "发货成功");
+			}else{
+				map.put("state", 0);
+				map.put("message", "发货失败");
+			}
+		} catch (ServiceException | SQLException | IOException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return null;
+		}
+
 		return map;
+
 	}
 
 	/**

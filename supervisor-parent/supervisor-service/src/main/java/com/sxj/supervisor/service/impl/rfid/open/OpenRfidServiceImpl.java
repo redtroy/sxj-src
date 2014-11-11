@@ -3,8 +3,11 @@ package com.sxj.supervisor.service.impl.rfid.open;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,16 +27,18 @@ import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
-import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.open.Bacth;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.BatchNo;
 import com.sxj.supervisor.model.open.ContractNo;
 import com.sxj.supervisor.model.open.WinTypeModel;
+import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -57,10 +62,10 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 
 	@Autowired
 	private ILogisticsRfidDao logisticsDao;
-	
+
 	@Autowired
 	private IWindowRfidDao windowRfidDao;
-	
+
 	@Autowired
 	private IContractDao contractDao;
 
@@ -68,60 +73,72 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	public BatchModel getBatchByRfid(String rfid) throws ServiceException,
 			SQLException {
 		BatchModel batchModel = new BatchModel();
+		Bacth batch = new Bacth();
 		QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
-		List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
+		logisticsQuery.addCondition("rfidNo", rfid);
+		List<LogisticsRfidEntity> ref = logisticsDao
+				.queryLogisticsRfidList(logisticsQuery);
 		if (ref != null && ref.size() > 0) {
 			LogisticsRfidEntity le = ref.get(0);
 			ContractNo contract = new ContractNo();
 			contract.setContractNo(le.getContractNo());
 			batchModel.setContract(contract);// 封装合同号
+			if (le.getProgressState().getId() == 0) {
+
+				QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
+				query.addCondition("rfidNo", rfid);
+				query.addCondition("state", 1);// 是否已变更
+				List<ContractBatchEntity> cbatchList = contractBatchDao
+						.queryBacths(query);// 合同批次
+				QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
+				modifyQuery.addCondition("rfidNo", rfid);
+				modifyQuery.addCondition("state", 1);// 是否已变更
+				List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao
+						.queryBacths(modifyQuery);// 变更批次
+				QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
+				replenishQuery.addCondition("newRfidNo", rfid);
+				// 补损批次
+				List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+						.queryReplenishBatch(replenishQuery);
+
+				if (cbatchList != null && cbatchList.size() > 0) {
+					ContractBatchEntity cbe = cbatchList.get(0);
+					BatchNo BatchNo = new BatchNo();
+					BatchNo.setBatchNo(cbe.getBatchNo());
+					batch.setBatch(BatchNo);
+					List<BatchItemModel> batchModelList = this
+							.jsonChangeList(cbe.getBatchItems());
+					batch.setBatchItems(batchModelList);
+				}
+				if (modifyBatch != null && modifyBatch.size() > 0) {
+					ModifyBatchEntity modiy = modifyBatch.get(0);
+					Bacth bacth = new Bacth();
+					BatchNo BatchNo = new BatchNo();
+					BatchNo.setBatchNo(modiy.getBatchNo());
+					bacth.setBatch(BatchNo);
+					List<BatchItemModel> batchModelList = this
+							.jsonChangeList(modiy.getBatchItems());
+					batch.setBatchItems(batchModelList);
+				}
+				if (batchList != null && batchList.size() > 0) {
+					ReplenishBatchEntity rbe = batchList.get(0);
+					Bacth bacth = new Bacth();
+					BatchNo BatchNo = new BatchNo();
+					BatchNo.setBatchNo(rbe.getBatchNo());
+					bacth.setBatch(BatchNo);
+					List<BatchItemModel> batchModelList = this
+							.jsonChangeList(rbe.getBatchItems());
+					batch.setBatchItems(batchModelList);
+				}
+			}else{
+				batch.setState("4");
+			}
+			if(batch.getBatchItems()==null){
+				batch.setState("2");
+			}
+			batchModel.setBatchList(batch);
+
 		}
-		QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
-		query.addCondition("rfidNo", rfid);
-		query.addCondition("state", 1);// 是否已变更
-		List<ContractBatchEntity> cbatchList = contractBatchDao
-				.queryBacths(query);// 合同批次
-		QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
-		modifyQuery.addCondition("rfidNo", rfid);
-		modifyQuery.addCondition("state", 1);// 是否已变更
-		List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao
-				.queryBacths(modifyQuery);// 变更批次
-		QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
-		replenishQuery.addCondition("newRfidNo", rfid);
-		// 补损批次
-		List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
-				.queryReplenishBatch(replenishQuery);
-		Bacth batch = new Bacth();
-		if (cbatchList != null && cbatchList.size() > 0) {
-			ContractBatchEntity cbe = cbatchList.get(0);
-			BatchNo BatchNo = new BatchNo();
-			BatchNo.setBatchNo(cbe.getBatchNo());
-			batch.setBatch(BatchNo);
-			List<BatchItemModel> batchModelList = this.jsonChangeList(cbe
-					.getBatchItems());
-			batch.setBatchItems(batchModelList);
-		}
-		if (modifyBatch != null && modifyBatch.size() > 0) {
-			ModifyBatchEntity modiy = modifyBatch.get(0);
-			Bacth bacth = new Bacth();
-			BatchNo BatchNo = new BatchNo();
-			BatchNo.setBatchNo(modiy.getBatchNo());
-			bacth.setBatch(BatchNo);
-			List<BatchItemModel> batchModelList = this.jsonChangeList(modiy
-					.getBatchItems());
-			batch.setBatchItems(batchModelList);
-		}
-		if (batchList != null && batchList.size() > 0) {
-			ReplenishBatchEntity rbe = batchList.get(0);
-			Bacth bacth = new Bacth();
-			BatchNo BatchNo = new BatchNo();
-			BatchNo.setBatchNo(rbe.getBatchNo());
-			bacth.setBatch(BatchNo);
-			List<BatchItemModel> batchModelList = this.jsonChangeList(rbe
-					.getBatchItems());
-			batch.setBatchItems(batchModelList);
-		}
-		batchModel.setBatchList(batch);
 		return batchModel;
 	}
 
@@ -150,51 +167,112 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		return bacthList;
 
 	}
+
 	/**
 	 * 获取门窗
 	 */
 	@Override
-	public WinTypeModel getWinTypeByRfid(String rfid) throws ServiceException, SQLException{
+	public WinTypeModel getWinTypeByRfid(String rfid) throws ServiceException,
+			SQLException {
 		QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
 		query.addCondition("rfidNo", rfid);
-		
-		List<WindowRfidEntity> win=windowRfidDao.queryWindowRfidList(query);
+
+		List<WindowRfidEntity> win = windowRfidDao.queryWindowRfidList(query);
 		WinTypeModel wtm = new WinTypeModel();
-		if(win!=null&&win.size()>0){
-			WindowRfidEntity  wre=win.get(0);
+		if (win != null && win.size() > 0) {
+			WindowRfidEntity wre = win.get(0);
 			wtm.setContratcNo(wre.getContractNo());
 			wtm.setRfidNo(wre.getRfidNo());
-			if(wre.getWindowType()!=null){
+			if (wre.getWindowType() != null) {
 				return null;
 			}
 			wtm.setWinType(wre.getWindowType().getName());
-			
+
 		}
 		return wtm;
 	}
+
 	/**
 	 * 获取合同地址
 	 */
 	@Override
-	public String  getAddress(String contractNo) throws ServiceException, SQLException{
+	public String getAddress(String contractNo) throws ServiceException,
+			SQLException {
 		QueryCondition<ContractEntity> query = new QueryCondition<ContractEntity>();
 		query.addCondition("contractNo", contractNo);
-		List<ContractEntity> ceList= contractDao.queryContract(query);
-		String address="";
-		if(ceList!=null&&ceList.size()>0){
-			address =ceList.get(0).getEngAddress();
+		List<ContractEntity> ceList = contractDao.queryContract(query);
+		String address = "";
+		if (ceList != null && ceList.size() > 0) {
+			address = ceList.get(0).getEngAddress();
 		}
 		return address;
 	}
-	
-	public String  shipped(String rfid) throws ServiceException, SQLException{
+
+	@Override
+	@Transactional
+	public int shipped(String rfid) throws ServiceException, SQLException,
+			JsonParseException, JsonMappingException, IOException {
 		QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
-		List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
+		logisticsQuery.addCondition("rfidNo", rfid);
+		List<LogisticsRfidEntity> ref = logisticsDao
+				.queryLogisticsRfidList(logisticsQuery);
+		List<LogModel> logList = new ArrayList<LogModel>();
 		if (ref != null && ref.size() > 0) {
 			LogisticsRfidEntity le = ref.get(0);
-			le.getLog();
+			logList = JsonMapper
+					.nonEmptyMapper()
+					.getMapper()
+					.readValue(le.getLog(),
+							new TypeReference<List<LogModel>>() {
+							});
+			if (le.getProgressState().getId() == 0) {
+				le.setProgressState(LabelStateEnum.shipped);
+				LogModel log = new LogModel();
+				log.setState(LabelStateEnum.shipped.getName());
+				log.setDate(DateFormatUtils.format(new Date(),
+						"yyyy-MM-dd HH:mm:ss"));
+				logList.add(log);
+				String josn = JsonMapper.nonEmptyMapper().toJson(logList);
+				le.setLog(josn);
+				logisticsDao.updateLogisticsRfid(le);
+				return 1;
+			}
+			
 		}
-		return "";
+		return 0;
 	}
-	
+
+	@Override
+	@Transactional
+	public int accepting(String rfid) throws ServiceException, SQLException,
+			JsonParseException, JsonMappingException, IOException {
+		QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
+		logisticsQuery.addCondition("rfidNo", rfid);
+		List<LogisticsRfidEntity> ref = logisticsDao
+				.queryLogisticsRfidList(logisticsQuery);
+		List<LogModel> logList = new ArrayList<LogModel>();
+		if (ref != null && ref.size() > 0) {
+			LogisticsRfidEntity le = ref.get(0);
+			logList = JsonMapper
+					.nonEmptyMapper()
+					.getMapper()
+					.readValue(le.getLog(),
+							new TypeReference<List<LogModel>>() {
+							});
+			if (le.getProgressState().getId() == 3) {
+				le.setProgressState(LabelStateEnum.hasQuality);
+				LogModel log = new LogModel();
+				log.setState(LabelStateEnum.hasQuality.getName());
+				log.setDate(DateFormatUtils.format(new Date(),
+						"yyyy-MM-dd HH:mm:ss"));
+				logList.add(log);
+				String josn = JsonMapper.nonEmptyMapper().toJson(logList);
+				le.setLog(josn);
+				logisticsDao.updateLogisticsRfid(le);
+				return 1;
+			}
+			
+		}
+		return 0;
+	}
 }
