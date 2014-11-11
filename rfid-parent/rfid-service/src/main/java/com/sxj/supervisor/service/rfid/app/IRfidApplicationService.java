@@ -38,10 +38,9 @@ public interface IRfidApplicationService {
 	/**
 	 * 逻辑删除
 	 * 
-	 * @param app
 	 * @throws ServiceException
 	 */
-	public Boolean delApp(String id, String applyNo) throws ServiceException;
+	public Boolean delApp(String id) throws ServiceException;
 
 	/**
 	 * 新增申请单

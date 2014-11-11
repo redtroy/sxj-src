@@ -39,6 +39,7 @@ function  rfid(){
 $(function(){
 	var url_ = "autoContract.htm";
 	$("#contractNo").bigAutocomplete({url:url_,callback:function(data){
+		alert("fdf");
 		getRecord(data.result);
        // $("#memberId").val(data.result);
     }});
@@ -132,7 +133,6 @@ function  gysrfid(){
 <div class="item"><label>采购合同号</label>${logistics.contractNo}</div>
 <div class="item"><label>批次</label>${logistics.batchNo}</div>
 <div class="item ly-clearFix"><label>批次详情</label>
-
 <table border="" cellpadding="0" cellspacing="0" class="tabProdpc ly-left">
                       <col width="45%" />
                       <col width="40%" />

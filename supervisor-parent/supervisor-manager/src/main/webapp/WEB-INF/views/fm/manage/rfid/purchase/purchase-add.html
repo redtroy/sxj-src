@@ -13,16 +13,31 @@
 <@b.validate/>
 <@b.header/>
 <script>
+var rfidType="${app.rfidType.getId()}";
+var su_price="";
 	$(function($){
 		var url_ = "${basePath}autoSupplier.htm";
 		$("#supplierName").bigAutocomplete({
 			url : url_,
 			callback : function(data) {
-				$("#supplierNo").val(data.result);
+				$("#supplierId").val(data.result);
+				$.post("getSupplierPrice.htm?supplierNo="+data.result,function(data){
+					if(rfidType="0"){
+						$("#price").val(data.doorPrice);
+						su_price=data.doorPrice;
+					}else{
+						$("#price").val(data.batchPrice);
+						su_price=data.batchPrice;
+					}
+				});
 			}
 		});
 		$(".number").keyup(function(){
 			var price=parseFloat($("#price").val());
+			if(price>su_price){
+				//messageInfo("单价不能大于供应商协议价");
+				//return false;
+			}
 			var count=parseInt($("#count").val());
 			if(price&&count){
 				var amount=price*count;
@@ -33,8 +48,23 @@
 		$("#add").Validform({
 			tiptype:3,
 			datatype:{
-				"price":/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
-				"count":/^[0-9]*$/
+				"count":/^[0-9]*$/,
+				"price":function(gets,obj,curform,regxp){
+					/*参数gets是获取到的表单元素值，
+					  obj为当前表单元素，
+					  curform为当前验证的表单，
+					  regxp为内置的一些正则表达式的引用。*/
+					var reg1=/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/;
+					if(reg1.test($(obj).val())){
+						var price=parseFloat($(obj).val());
+						if(price<=su_price){
+							alert(price);
+							return true;
+						}
+					}
+					return false;
+				}
+				
 			},
 			callback:function(form){
 				saveAdd();
@@ -112,11 +142,11 @@
       <div>
         <label>RFID供应商</label>
         <input type="text" id="supplierName" name="supplierName" class="text tip" title="RFID供应商名称" datatype="*1-20" nullmsg="供应商不能为空！" errormsg="供应商不能为空！"/>
-        <input type="hidden" id="supplierNo" name="supplierNo" class="text tip" title="RFID供应商" datatype="*1-20" nullmsg="供应商不合法！"/>
+        <input type="hidden" id="supplierId" name="supplierId" class="text tip" title="RFID供应商" datatype="*1-20" nullmsg="供应商不存在！"/>
       </div>
       <div>
         <label>实际采购价格</label>
-        <input type="text" id="price" name="price" class="input-w30 number" title="实际采购价格" datatype="price" nullmsg="请输入采购价格！" errormsg="价格不合法"/>元
+        <input type="text" id="price" name="price" class="input-w30 number" title="实际采购价格" datatype="price" nullmsg="请输入采购价格！" errormsg="请输入正确价格，且不能大于供应商协议价"/>元
       </div>
       <div>
         <label>采购数量</label>

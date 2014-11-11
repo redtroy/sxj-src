@@ -16,24 +16,24 @@ public class LogModel extends Pagable implements Serializable {
 	private static final long serialVersionUID = -7798252563282819437L;
 
 	
-	private String logTitle;
+	private String date;
 	
-	private String logDate;
+	private String state;
 
-	public String getLogTitle() {
-		return logTitle;
+	public String getDate() {
+		return date;
 	}
 
-	public void setLogTitle(String logTitle) {
-		this.logTitle = logTitle;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
-	public String getLogDate() {
-		return logDate;
+	public String getState() {
+		return state;
 	}
 
-	public void setLogDate(String logDate) {
-		this.logDate = logDate;
+	public void setState(String state) {
+		this.state = state;
 	}
-	
+
 }

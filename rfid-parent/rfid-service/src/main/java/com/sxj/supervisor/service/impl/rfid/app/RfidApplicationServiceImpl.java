@@ -53,11 +53,10 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			List<RfidApplicationEntity> list = appDao.queryList(condition);
 			query.setPage(condition);
 			return list;
-
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 
 	/**
@@ -67,10 +66,18 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	@Transactional
 	public void updateApp(RfidApplicationEntity app) throws ServiceException {
 		try {
+			if (app == null) {
+				throw new ServiceException("RFID申请单不存在");
+			}
+			RfidApplicationEntity oldApp = appDao.getRfidApplication(app
+					.getId());
+			if (oldApp.getDelstate()) {
+				throw new ServiceException("RFID申请单已经被删除");
+			}
 			appDao.updateRfidApplication(app);
 		} catch (Exception e) {
 			SxjLogger.error("申请单更新错误", e, this.getClass());
-			throw new ServiceException("申请单更新错误");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -79,25 +86,35 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	 * 根据ID逻辑删除
 	 */
 	@Override
-	public Boolean delApp(String id, String applyNo) throws ServiceException {
+	@Transactional
+	public Boolean delApp(String id) throws ServiceException {
 		try {
-			if (applyNo != null) {
-				QueryCondition<RfidPurchaseEntity> condition = new QueryCondition<RfidPurchaseEntity>();
-				condition.addCondition("applyNo", applyNo);
-				List<RfidPurchaseEntity> list = purchaseDao
-						.queryList(condition);
-				if (list.size() > 0) {
-					return false;
-				}
+			RfidApplicationEntity app = appDao.getRfidApplication(id);
+			if (app == null) {
+				throw new ServiceException("RFID申请单不存在");
 			}
-			RfidApplicationEntity app = new RfidApplicationEntity();
+			if (app.getDelstate()) {
+				throw new ServiceException("RFID申请单已经被删除");
+			}
+			if (app.getPayState().equals(PayStateEnum.payment)) {
+				throw new ServiceException("RFID申请单已收款，不能被删除");
+			}
+			if (app.getHasNumber() > 0) {
+				throw new ServiceException("RFID申请单已生成采购单，不能被删除");
+			}
+
+			QueryCondition<RfidPurchaseEntity> condition = new QueryCondition<RfidPurchaseEntity>();
+			condition.addCondition("applyNo", app.getApplyNo());
+			List<RfidPurchaseEntity> list = purchaseDao.queryList(condition);
+			if (list.size() > 0) {
+				throw new ServiceException("RFID申请单已生成采购单");
+			}
 			app.setDelstate(true);
-			app.setId(id);
 			appDao.updateRfidApplication(app);
 			return true;
 		} catch (Exception e) {
-			SxjLogger.error("逻辑删除申请单错误", e, this.getClass());
-			throw new ServiceException("逻辑删除申请单错误");
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -109,6 +126,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	public void addApp(RfidApplicationEntity app) throws ServiceException {
 		try {
 			Date date = DateTimeUtils.parse(System.currentTimeMillis());
+			app.setDateNo(DateTimeUtils.getTime("yyMM"));
 			app.setPayState(PayStateEnum.non_payment);
 			app.setApplyDate(date);
 			app.setReceiptState(ReceiptStateEnum.shipments);

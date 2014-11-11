@@ -18,6 +18,7 @@ public class RfidKeyServiceImpl implements IRfidKeyService {
 	private IRfidKeyDao dao;
 
 	@Override
+	@Transactional(timeout = 30)
 	public Long getKey() throws ServiceException {
 		try {
 			RfidKeyEntity entity = new RfidKeyEntity();

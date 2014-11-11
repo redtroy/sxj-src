@@ -419,7 +419,7 @@ public class GenericStatementBuilder extends BaseBuilder
         //        Method method = methods.get(0);
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length != 1)
-            throw new RuntimeException("@BatchInsert有且仅能有一个参数");
+            throw new RuntimeException("@Batch有且仅能有一个参数");
         Class<?> parameterType = parameterTypes[0];
         if (parameterType.equals(List.class))
             return "list";

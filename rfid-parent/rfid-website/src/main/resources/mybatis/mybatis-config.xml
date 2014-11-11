@@ -50,24 +50,6 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractWindowTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractWindowTypeEnum" />
-		<typeHandler
-			handler="com.sxj.supervisor.typehandler.ContractUpdateStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.contract.ContractUpdateStateEnum" />
-		<typeHandler handler="com.sxj.supervisor.typehandler.PayStageEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.contract.PayStageEnum" />
-
-		<!-- FRID -->
-		<typeHandler
-			handler="com.sxj.supervisor.typehandler.ReceiptStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum" />
-		<typeHandler handler="com.sxj.supervisor.typehandler.RfidTypeEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.RfidTypeEnum" />
-		<typeHandler handler="com.sxj.supervisor.typehandler.PayStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.apply.PayStateEnum" />
-
-		<typeHandler
-			handler="com.sxj.supervisor.typehandler.M_PayStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.applyManager.M_PayStateEnum" />
 
 		<typeHandler handler="com.sxj.supervisor.typehandler.RfidStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.RfidStateEnum" />

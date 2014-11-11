@@ -17,16 +17,16 @@ import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.contract.IContractModifyBatchDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
-import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
+import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
+import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.model.contract.BatchItemModel;
-import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.open.Bacth;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.BatchNo;
@@ -56,7 +56,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	private IContractReplenishBatchDao contractReplenishBatchDao;
 
 	@Autowired
-	private ILogisticsRefDao logisticsRefDao;
+	private ILogisticsRfidDao logisticsDao;
 	
 	@Autowired
 	private IWindowRfidDao windowRfidDao;
@@ -68,11 +68,10 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	public BatchModel getBatchByRfid(String rfid) throws ServiceException,
 			SQLException {
 		BatchModel batchModel = new BatchModel();
-		QueryCondition<LogisticsRefEntity> logisticsQuery = new QueryCondition<LogisticsRefEntity>();
-		List<LogisticsRefEntity> ref = logisticsRefDao
-				.queryList(logisticsQuery);
+		QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
+		List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
 		if (ref != null && ref.size() > 0) {
-			LogisticsRefEntity le = ref.get(0);
+			LogisticsRfidEntity le = ref.get(0);
 			ContractNo contract = new ContractNo();
 			contract.setContractNo(le.getContractNo());
 			batchModel.setContract(contract);// 封装合同号
@@ -173,6 +172,9 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		}
 		return wtm;
 	}
+	/**
+	 * 获取合同地址
+	 */
 	@Override
 	public String  getAddress(String contractNo) throws ServiceException, SQLException{
 		QueryCondition<ContractEntity> query = new QueryCondition<ContractEntity>();
@@ -184,4 +186,15 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		}
 		return address;
 	}
+	
+	public String  shipped(String rfid) throws ServiceException, SQLException{
+		QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
+		List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
+		if (ref != null && ref.size() > 0) {
+			LogisticsRfidEntity le = ref.get(0);
+			le.getLog();
+		}
+		return "";
+	}
+	
 }

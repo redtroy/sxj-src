@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.applyManager.M_PayStateEnum;
@@ -69,21 +70,23 @@ public class ApplyWindowRfidController extends BaseController {
 	 * 删除
 	 */
 	@RequestMapping("del_apply")
-	public @ResponseBody Map<String, String> del(String id, String applyNo)
-			throws WebException {
+	public @ResponseBody Map<String, String> del(String id) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			Map<String, String> map = new HashMap<String, String>();
-			Boolean flag = applyService.delApp(id, applyNo);
+			Boolean flag = applyService.delApp(id);
 			if (flag) {
 				map.put("flag", "ok");
 			} else {
 				map.put("flag", "no");
+				map.put("error", "删除失败");
 			}
-			return map;
+
 		} catch (Exception e) {
 			SxjLogger.error("物流标签申请管理列表删除错误", e, this.getClass());
-			throw new WebException("物流标签申请管理列表删除错误");
+			map.put("flag", "no");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -130,15 +133,20 @@ public class ApplyWindowRfidController extends BaseController {
 	 * 根据合同号检查合同，做合同匹配认证，数量认证
 	 */
 	@RequestMapping("check_contract")
-	public @ResponseBody Map<String, String> check_contract(String contractNo,
-			Long count, HttpSession session) throws WebException {
+	public @ResponseBody Map<String, String> check_contract(String param,
+			HttpSession session) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			ContractModel cm = contractService
-					.getContractModelByContractNo(contractNo);
+					.getContractModelByContractNo(param);
 			if (cm == null) {
-				map.put("flag", "false");
-				map.put("erro", "没有找到相匹配的合同");
+				map.put("status", "n");
+				map.put("info", "没有找到相匹配的合同");
+				return map;
+			}
+			if (!cm.getContract().getType().equals(ContractTypeEnum.bidding)) {
+				map.put("status", "n");
+				map.put("info", "合同不是招标合同");
 				return map;
 			}
 			String memberIdA = cm.getContract().getMemberIdA();
@@ -146,20 +154,17 @@ public class ApplyWindowRfidController extends BaseController {
 			SupervisorPrincipal userInfo = getLoginInfo(session);
 			String memberId = userInfo.getMember().getMemberNo();
 			if (!memberId.equals(memberIdA) && !memberId.equals(memberIdB)) {
-				map.put("flag", "false");
-				map.put("erro", "该合同号不属于当前会员");
+				map.put("status", "n");
+				map.put("info", "该合同号不属于当前会员");
 				return map;
 			}
-			if (cm.getContract().getType().getId() != 0) {
-				map.put("flag", "false");
-				map.put("erro", "合同类型不匹配");
-				return map;
-			}
-			map.put("flag", "true");
-			return map;
+
+			map.put("status", "y");
+
 		} catch (Exception e) {
-			SxjLogger.error("合同检查错误", e, this.getClass());
-			throw new WebException("合同检查错误");
+			map.put("status", "n");
+			map.put("info", "获取合同错误");
 		}
+		return map;
 	}
 }

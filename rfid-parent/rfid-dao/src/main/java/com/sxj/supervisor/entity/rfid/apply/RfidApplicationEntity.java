@@ -42,8 +42,10 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	 * RFID申请单编号
 	 */
 	@Column(name = "APPLY_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "RF", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "dateNo")
 	private String applyNo;
+
+	private String dateNo;
 
 	/**
 	 * 申请会员ID
@@ -204,6 +206,14 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 
 	public void setDelstate(Boolean delstate) {
 		this.delstate = delstate;
+	}
+
+	public String getDateNo() {
+		return dateNo;
+	}
+
+	public void setDateNo(String dateNo) {
+		this.dateNo = dateNo;
 	}
 
 }

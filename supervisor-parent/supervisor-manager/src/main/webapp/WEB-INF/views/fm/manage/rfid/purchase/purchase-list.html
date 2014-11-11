@@ -41,7 +41,7 @@ function  del(id){
 					query($("#pager").attr("currentPage"));
 				},"删除成功!");
 			}else{
-				errorInfo("删除失败!");	
+				errorInfo(data.error);	
 			}
 		});
 	},"确实要删除吗?");
@@ -56,7 +56,7 @@ function toImport(id){
 				},"导入成功！");
 				
 			}else{
-				errorInfo("导入失败!");	
+				errorInfo(data.error);	
 			}
 		});
 	},"是否确认导入RFID？");
@@ -120,33 +120,57 @@ function edit(id){
 	    }});
 	  $("#edit_"+id).find(".editCount").html('<input type="text" class="count" name="count" value="'+$("#edit_"+id).find(".editCount").text()+'" />');
 	  $("#edit_"+id).find(".editPrice").html('<input type="text" class="price" name="price" value="'+$("#edit_"+id).find(".editPrice").text()+'" />');
-	  $("#edit_"+id).find(".operation").html('<a href="javascript:void(0)" class="confirm lnk-yellow" onclick="save(\''+id+'\');return false;">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+	  $("#edit_"+id).find("#update_"+id).hide();
+	  $("#edit_"+id).find("#confirm_"+id).show();
 }
 function save(id){
 	var supplierName =$("#edit_"+id).find(".editName").find(".supplierName").val();
 	var supplierNo =$("#edit_"+id).find(".editName").find(".supplierNo").val();
-	var price = $("#edit_"+id).find(".editPrice").find(".price").val();
-	if (!price.match(/^[0-9]+([.]{1}[0-9]{1,2})?$/)){
-		alert('单价必须为数字并且最多保留两位小数');
+	if(supplierNo==""||supplierNo=="undefined"){
+		messageInfo('供应商不存在');
 		return false;
 	}
-	price=price*100;
+	if(supplierName==""){
+		messageInfo('供应商名称不能为空');
+		return false;
+	}
+	var rfidType=$("#edit_"+id).find("#editType").val();
+	var price = $("#edit_"+id).find(".editPrice").find(".price").val();
+	$.get("getSupplierPrice.htm?supplierNo="+supplierNo,function(data){
+		if(rfidType="0"){
+		    if(price>data.doorPrice){
+		    	messageInfo("单价不能大于供应商协议价："+data.doorPrice);
+		    	return false;
+		    }
+		}else{
+			 if(price>data.batchPrice){
+				 messageInfo("单价不能大于供应商协议价："+data.batchPrice);	
+				 return false;
+			 }
+		}
+	});
+	if (!price.match(/^[0-9]+([.]{1}[0-9]{1,2})?$/)){
+		messageInfo('单价必须为数字并且最多保留两位小数');
+		return false;
+	}
 	var count=$("#edit_"+id).find(".editCount").find(".count").val();
 	if (!count.match( /^[0-9]*[1-9][0-9]*$/)){
-		alert('采购数量必须为正整数！');
+		messageInfo('采购数量必须为正整数！');
 		return false;
 	}
 	var o ={id:id,supplierName:supplierName,supplierNo:supplierNo,price:price,count:count};
 	$.post("modify.htm",o,function(data){
 		if(data.isOK=='ok'){
-			$("#edit_"+id).find(".editName").text(supplierName);
-			$("#edit_"+id).find(".supplierNo").val(supplierNo);
-			$("#edit_"+id).find(".editCount").html(count);
-			$("#edit_"+id).find(".editPrice").html(price/100);
-			$("#edit_"+id).find(".operation").html('<a href="javascript:edit(\''+id+'\');" class="edit">修改</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
-		
+			succInfo(function(){
+				$("#edit_"+id).find(".editName").text(supplierName);
+				$("#edit_"+id).find(".supplierNo").val(supplierNo);
+				$("#edit_"+id).find(".editCount").html(count);
+				$("#edit_"+id).find(".editPrice").html(price);
+				$("#edit_"+id).find("#update_"+id).show();
+				 $("#edit_"+id).find("#confirm_"+id).hide();
+			},"修改成功！");
 		}else{ 
-			errorInfo("确认收货失败!");	
+			errorInfo(data.error);	
 		}
 	});
 }
@@ -236,14 +260,21 @@ function save(id){
 		  <td>${list.purchaseNo}</td>
           <td><a href="javascript:loadInfo('${list.id}','${list.applyNo}');" class="lnk-blue">${list.applyNo}</a></td>
           <td class="editName">${list.supplierName}</td>
-          <td>${list.rfidType.getName()}</td>
+          <td>${list.rfidType.getName()}
+          <input type="hidden"  id="editType" value="${list.rfidType.getId()}" />
+          </td>
 		  <td class="editCount">${list.count}</td>
 		  <td class="editPrice">${list.price}</td>
 		  <td>${list.purchaseDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td><#if list.payState.getId()==1><em class="state verified">已付款</em> <#else><button class="btn btn-gray" onclick="confirmPay('${list.id}');"><span>确认付款</span></button></#if></td>
 		  <td><#if list.receiptState.getId()==0><button class="btn btn-gray" onclick="confirmDelivery('${list.id}');"><span>确认发货</span></button><#elseif list.receiptState.getId()==1><button class="btn btn-orange" onclick="confirmReceipt('${list.id}');"><span>确认收货</span></button><#else> <em class="state verified">已收货</em></#if></td>
 		  <td><#if list.importState.getId()==0><button onclick="javascript:toImport('${list.id}')" class="btn btn-gray"><span>导入</span></button><#else><em class="state verified">已导入</em></#if></td>
-		  <td class="operation"><a href="javascript:edit('${list.id}');" class="edit">修改</a><a href="javascript:del('${list.id}');" class="del">删除</a></td>
+		  <td class="operation"><a id="update_${list.id}" href="javascript:edit('${list.id}');" class="edit">修改</a>
+		  <#if list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
+		  <a id="del_${list.id}" href="javascript:del('${list.id}');" class="del">删除</a>
+		  </#if>
+		  <a id="confirm_${list.id}" href="javascript:void(0)" class="confirm lnk-yellow" onclick="save('${list.id}');return false;" style="display: none">确认</a>
+		  </td>
         </tr>
         <tr class="tableInfo" id="info${list.id}">
 	   </tr>

@@ -11,8 +11,8 @@
 		<result property="contactName" column="CONTRACT_NAME" jdbcType="VARCHAR" />
 		<result property="contactTel" column="CONTRACT_TEL" jdbcType="VARCHAR" />
 		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
-		<result property="doorsPrice" column="DOORS_PRICE" jdbcType="INTEGER" />
-		<result property="batchPrice" column="BATCH_PRICE" jdbcType="INTEGER" />
+		<result property="doorsPrice" column="DOORS_PRICE" jdbcType="DOUBLE" />
+		<result property="batchPrice" column="BATCH_PRICE" jdbcType="DOUBLE" />
 		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
 	</resultMap>
 	<!-- 按条件查询供应商 -->
