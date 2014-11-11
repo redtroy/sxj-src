@@ -174,8 +174,8 @@ public class MemberController extends BaseController
             memberService.editCheckState(id, state);
             Map<String, String> map = new HashMap<String, String>();
             map.put("isOK", "ok");
-            topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish("del,"
-                    + id);
+            topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)
+                    .publish("editCheckState," + id);
             return map;
         }
         catch (Exception e)

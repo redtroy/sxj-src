@@ -17,4 +17,6 @@ public interface Constraints
     public static final String MANAGER_CACHE_NAME = MANAGER + "-shiroCache";
     
     public static final String WEBSITE_CACHE_NAME = WEBSITE + "-shiroCache";
+    
+    public static final String EDIT_CHECK_STATE_SET = "editCheckState";
 }
