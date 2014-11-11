@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.redis.advance.topic.RedisTopics;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
-import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
@@ -175,11 +174,8 @@ public class MemberController extends BaseController
             memberService.editCheckState(id, state);
             Map<String, String> map = new HashMap<String, String>();
             map.put("isOK", "ok");
-            if (state == AccountStatesEnum.stop.getId())
-            {
-                topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)
-                        .publish("del," + id);
-            }
+            topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish("del,"
+                    + id);
             return map;
         }
         catch (Exception e)
