@@ -70,7 +70,7 @@
                         #{rfids}
       </foreach>
 	</update>
-	<select id="selectByRfidNo">
+	<select id="selectByRfidNo" resultMap="windowRfidResultMap">
 	  <![CDATA[ SELECT * FROM R_WINDOW_RFID WHERE RFID_NO=#{rfidNo}]]>
 	</select>
 </mapper>

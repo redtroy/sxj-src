@@ -189,8 +189,7 @@ public class OpenRfidController {
 	@RequestMapping(value = "send/{rfidNo}")
 	public @ResponseBody Map<String, Object> sendGoods(
 			@PathVariable String rfidNo) {
-		
-		
+
 		return null;
 
 	}
@@ -217,17 +216,25 @@ public class OpenRfidController {
 	 * @param rfidNo
 	 * @return
 	 */
-	@RequestMapping(value = "test/{rfidNo}")
-	public @ResponseBody Map<String, Object> testRfid(
-			@PathVariable String rfidNo) {
+	@RequestMapping(value = "test")
+	public @ResponseBody Map<String, Object> testRfid(String contractNo,
+			String[] rfidNos) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("contractNo", "CT1410250001");
-		String[] batchNos = new String[2];
-		batchNos[0] = "AAAA0001";
-		batchNos[1] = "AAAA0002";
-		map.put("batchNo", batchNos);
+		try {
+			int stepState = windowRfid.testWindow(contractNo, rfidNos);
+			if (stepState == 1) {
+				map.put("state", "1");
+				map.put("message", "质检成功");
+			} else {
+				map.put("state", "0");
+				map.put("message", "质检失败");
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			map.put("state", "0");
+			map.put("message", "质检失败");
+		}
 		return map;
-
 	}
 
 	/**
