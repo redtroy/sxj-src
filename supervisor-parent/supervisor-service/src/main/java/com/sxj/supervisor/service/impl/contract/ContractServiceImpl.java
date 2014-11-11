@@ -408,7 +408,6 @@ public class ContractServiceImpl implements IContractService {
 											batch.getBatchItems(),
 											new TypeReference<List<BatchItemModel>>() {
 											});
-
 						} catch (JsonParseException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

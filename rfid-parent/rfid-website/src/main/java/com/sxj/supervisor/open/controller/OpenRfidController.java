@@ -185,6 +185,8 @@ public class OpenRfidController {
 	@RequestMapping(value = "send/{rfidNo}")
 	public @ResponseBody Map<String, Object> sendGoods(
 			@PathVariable String rfidNo) {
+		
+		
 		return null;
 
 	}
