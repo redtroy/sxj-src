@@ -1,4 +1,4 @@
-<@b.validate/>
+
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">修改RFID供应商</h2>
     <div class="infoBox f14">
@@ -9,11 +9,11 @@
       </div>
       <div>
         <label>供应商名称</label>
-        <input type="text" class="text tip" value="${supplier.name}" name="name" datatype="s4-16" errormsg="供应商名称至少4个字符,最多50个字符！" nullmsg="请输入供应商名称"/>
+        <input type="text" class="text tip" value="${supplier.name}" name="name" datatype="s1-50" errormsg="供应商名称至少1个字符,最多50个字符！" nullmsg="请输入供应商名称"/>
       </div>
       <div>
         <label>联系人姓名</label>
-        <input type="text" id="" name="contactName" class="text tip" value="${supplier.contactName}" datatype="s4-16" errormsg="联系人名称至少4个字符,最多16个字符！" nullmsg="请输入联系人名称"/>
+        <input type="text" id="" name="contactName" class="text tip" value="${supplier.contactName}" datatype="s2-15" errormsg="联系人名称至少2个字符,最多15个字符！" nullmsg="请输入联系人名称"/>
       </div>
       <div>
         <label>联系电话</label>
@@ -21,19 +21,19 @@
       </div>
       <div>
         <label>固定电话</label>
-        <input type="text" id="" name="telNum" class="text tip" value="${supplier.telNum}"/>
+        <input type="text" id="" name="telNum" class="text tip" value="${supplier.telNum}" datatype="phone" errormsg="固定电话格式为区号-电话-分机号"  nullmsg="固定电话不能为空"/>
       </div>
       <div>
         <label>公司地址</label>
-        <input type="text" id="" name="address" class="text tip" value="${supplier.address}" datatype="s10-50" errormsg="供应商名称至少10个字符,最多50个字符！" nullmsg="联系人地址不能为空"/>
+        <input type="text" id="" name="address" class="text tip" value="${supplier.address}" datatype="s0-50" errormsg="地址最多50个字符"/>
       </div>
       <div>
         <label>门窗标签采购价</label>
-        <input type="text" id="doorsPrice" name="" class="input-w30" value="${supplier.doorsPrice/100}" datatype="f" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
+        <input type="text" id="doorsPrice" name="" class="input-w30" value="${supplier.doorsPrice}" datatype="f" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
       </div>
       <div>
         <label>批次标签采购价</label>
-        <input type="text" id="batchPrice" name="" class="input-w30" value="${supplier.batchPrice/100}" datatype="f" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
+        <input type="text" id="batchPrice" name="" class="input-w30" value="${supplier.batchPrice}" datatype="f" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
       </div>
      
       <div class="btnBox"><a href="javascript:sub();" class="button button-orange button-small">修改</a><a href="javascript:query();" class="button button-gray button-small">返回</a> </div>
@@ -46,28 +46,33 @@
   $("#sub_form").Validform({
 		tiptype:3,
 		datatype:{
-			"f":/^[0-9]+([.]{1}[0-9]{1,2})?$/
+			"f":/^[0-9]+([.]{1}[0-9]{1,2})?$/,
+			"phone":/^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$/
 		 },
 		callback:function(form){
 			add_edit();
 		}
 	});
   function add_edit(){
-		var params=$("#sub_form").serialize();
-		var doorsPrice=$("#doorsPrice").val();
-		doorsPrice=parseFloat(doorsPrice)*100;
-		var batchPrice=$("#batchPrice").val();
-		batchPrice=parseFloat(batchPrice)*100;
-		params=params+"&doorsPrice="+doorsPrice+"&batchPrice="+batchPrice;
-		$.post("${basePath}rfid/supplier/update_supplier.htm",params,function(data){
-			if(data.isOk=="ok"){
-				alert("添加成功");
-				query();
-			}
-			else{
-				errorInfo(data);
-			}
-		});
+	  dialogBox(function(){
+		  var params=$("#sub_form").serialize();
+			var doorsPrice=$("#doorsPrice").val();
+			doorsPrice=parseFloat(doorsPrice);
+			var batchPrice=$("#batchPrice").val();
+			batchPrice=parseFloat(batchPrice);
+			params=params+"&doorsPrice="+doorsPrice+"&batchPrice="+batchPrice;
+			$.post("${basePath}rfid/supplier/update_supplier.htm",params,function(data){
+				if(data.isOk=="ok"){
+					succInfo(function(){
+						query();
+					},"修改成功！")
+				}
+				else{
+					errorInfo(data.error);
+				}
+			});
+	  },"是否确认修改？");
+		
 		
 	}
  </Script>

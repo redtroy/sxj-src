@@ -155,7 +155,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>supervisor-manager</finalName>
+		<finalName>rfid-website</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -182,10 +182,7 @@
 				<version>2.2</version>
 				<configuration>
 					<!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
-<<<<<<< HEAD
 					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
-=======
->>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
 				</configuration>
 			</plugin>
 		</plugins>

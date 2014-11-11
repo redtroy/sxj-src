@@ -616,6 +616,7 @@ public class ContractServiceImpl implements IContractService {
 				return null;
 			}
 			QueryCondition<ContractEntity> condition = new QueryCondition<ContractEntity>();
+			condition.addCondition("keyword", query.getKeyword());
 			condition.addCondition("contractNo", query.getContractNo());// 合同号
 			condition.addCondition("recordNo", query.getRecordNo());// 备案号
 			condition.addCondition("memberId", query.getMemberId());// 签订会员ＩＤ

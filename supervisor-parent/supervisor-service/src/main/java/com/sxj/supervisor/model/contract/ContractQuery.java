@@ -1,12 +1,10 @@
 package com.sxj.supervisor.model.contract;
 
-
 import java.io.Serializable;
-import java.util.Date;
 
 import com.sxj.mybatis.pagination.Pagable;
 
-public class ContractQuery extends Pagable  implements Serializable {
+public class ContractQuery extends Pagable implements Serializable {
 	/**
 	 * 
 	 */
@@ -14,68 +12,73 @@ public class ContractQuery extends Pagable  implements Serializable {
 
 	/**
 	 * 合同号
-	**/
+	 **/
 	private String contractId;
-	
+
 	/**
 	 * 合同号
-	**/
+	 **/
 	private String contractNo;
-	
+
+	/**
+	 * 动态感应关键字
+	 */
+	private String keyword;
+
 	/**
 	 * 备案号
-	**/
+	 **/
 	private String recordNo;
-	
+
 	/**
 	 * 签订者会员ID
-	**/
+	 **/
 	private String memberId;
-	
+
 	/**
 	 * 签订者会员名称
-	**/
-	private String  memberName;
+	 **/
+	private String memberName;
 	/**
 	 * 合同类型
-	**/
+	 **/
 	private String contractType;
-	
+
 	/**
 	 * 关联招标合同号
-	**/
+	 **/
 	private String refContractNo;
-	
+
 	/**
 	 * 开始生成日期
-	**/
+	 **/
 	private String startCreateDate;
-	
+
 	/**
 	 * 结束生成日期
-	**/
+	 **/
 	private String endCreateDate;
-	
+
 	/**
 	 * 开始备案日期
-	**/
+	 **/
 	private String startRecordDate;
-	
+
 	/**
 	 * 结束备案日期
-	**/
+	 **/
 	private String endRecordDate;
-	
+
 	/**
 	 * 确认状态
-	**/
+	 **/
 	private String confirmState;
-	
+
 	/**
 	 * 合同状态
-	**/
+	 **/
 	private String state;
-	
+
 	private String memberIdA;
 
 	private String memberIdB;
@@ -199,4 +202,13 @@ public class ContractQuery extends Pagable  implements Serializable {
 	public void setEndRecordDate(String endRecordDate) {
 		this.endRecordDate = endRecordDate;
 	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
 }

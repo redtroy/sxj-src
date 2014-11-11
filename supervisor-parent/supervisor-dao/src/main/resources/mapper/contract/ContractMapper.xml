@@ -51,6 +51,9 @@
 		<if test="condition.contractNo != null and condition.contractNo != ''">
 			<![CDATA[ AND CONTRACT_NO =#{condition.contractNo}]]>
 		</if>
+		<if test="condition.keyword != null and condition.keyword != ''">
+			<![CDATA[ AND CONTRACT_NO LIKE CONCAT('%',#{condition.keyword},'%')]]>
+		</if>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
 			<![CDATA[AND RECORD_NO LIKE CONCAT('%',#{condition.recordNo},'%')]]>

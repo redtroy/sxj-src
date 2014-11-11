@@ -16,12 +16,14 @@ import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
+@Transactional
 public class RfidSupplierServiceImpl implements IRfidSupplierService {
 
 	@Autowired
 	private IRfidSupplierDao supplierDao;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<RfidSupplierEntity> querySupplier(RfidSupplierQuery query)
 			throws ServiceException {
 		try {
@@ -37,14 +39,14 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 			List<RfidSupplierEntity> list = supplierDao.queryList(condition);
 			query.setPage(condition);
 			return list;
-
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("查询供应商错误");
 		}
-		return null;
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public RfidSupplierEntity getSupplierByNo(String no)
 			throws ServiceException {
 		try {
@@ -60,17 +62,20 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 				return null;
 			}
 		} catch (Exception e) {
-			throw new ServiceException(e.getMessage());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("查询供应商错误");
 		}
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public RfidSupplierEntity getSupplier(String id) throws ServiceException {
 		try {
 			RfidSupplierEntity supplier = supplierDao.getRfidSupplier(id);
 			return supplier;
 		} catch (Exception e) {
-			throw new ServiceException(e.getMessage());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("查询供应商错误");
 		}
 	}
 
@@ -81,17 +86,19 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 		try {
 			supplierDao.updateRfidSupplier(Supplier);
 		} catch (Exception e) {
-			throw new ServiceException(e.getMessage());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("修改供应商错误");
 		}
 	}
 
 	@Override
 	@Transactional
-	public void add(RfidSupplierEntity Supplier) throws ServiceException {
+	public void add(RfidSupplierEntity supplier) throws ServiceException {
 		try {
-			supplierDao.addRfidSupplier(Supplier);
+			supplierDao.addRfidSupplier(supplier);
 		} catch (Exception e) {
-			throw new ServiceException(e.getMessage());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("保存供应商错误");
 		}
 
 	}
@@ -105,8 +112,8 @@ public class RfidSupplierServiceImpl implements IRfidSupplierService {
 			supplier.setId(id);
 			supplierDao.updateRfidSupplier(supplier);
 		} catch (Exception e) {
-			SxjLogger.error("逻辑删除供应商ID错误", e, this.getClass());
-			throw new ServiceException("逻辑删除供应商ID错误");
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("删除供应商错误");
 		}
 	}
 

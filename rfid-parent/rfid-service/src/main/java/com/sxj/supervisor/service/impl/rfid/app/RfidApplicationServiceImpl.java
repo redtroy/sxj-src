@@ -126,7 +126,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	public void addApp(RfidApplicationEntity app) throws ServiceException {
 		try {
 			Date date = DateTimeUtils.parse(System.currentTimeMillis());
-			app.setDateNo(DateTimeUtils.getTime("yyMM"));
+			app.setDateNo("RF" + DateTimeUtils.getTime("yyMM"));
 			app.setPayState(PayStateEnum.non_payment);
 			app.setApplyDate(date);
 			app.setReceiptState(ReceiptStateEnum.shipments);
