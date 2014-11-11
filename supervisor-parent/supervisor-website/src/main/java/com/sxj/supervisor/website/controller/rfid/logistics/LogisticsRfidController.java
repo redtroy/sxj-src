@@ -186,12 +186,12 @@ public class LogisticsRfidController extends BaseController {
 	 * 通过合同号联想查询
 	 */
 	@RequestMapping("lx_query")
-	public @ResponseBody Map<Object, Object> lx_query(String contractNo)
+	public @ResponseBody Map<Object, Object> lx_query(String keyword)
 			throws WebException {
 		try {
 			Map<Object, Object> map = new HashMap<Object, Object>();
 			ContractQuery query = new ContractQuery();
-			query.setContractNo(contractNo);
+			query.setKeyword(keyword);
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list == null) {
 				return map;

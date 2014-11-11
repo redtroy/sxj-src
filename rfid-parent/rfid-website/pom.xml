@@ -155,7 +155,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>supervisor-manager</finalName>
+		<finalName>rfid-website</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-dependency-plugin</artifactId>

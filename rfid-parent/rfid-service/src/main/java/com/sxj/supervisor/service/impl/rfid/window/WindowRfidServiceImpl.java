@@ -3,11 +3,15 @@ package com.sxj.supervisor.service.impl.rfid.window;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -17,6 +21,7 @@ import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
@@ -219,5 +224,80 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			throw new ServiceException("批量补损RFID失败", e);
 		}
 
+	}
+
+	/**
+	 * 安装
+	 */
+	@Override
+	public int stepWindow(String rfidNo) throws ServiceException {
+		try {
+			WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
+			LabelProgressEnum[] label = LabelProgressEnum.values();
+			if (!wind.getProgressState().equals(LabelProgressEnum.installed)) {
+				List<List<Map<String, String>>> list = JsonMapper
+						.nonEmptyMapper()
+						.getMapper()
+						.readValue(wind.getLog(),
+								new TypeReference<List<Map<String, String>>>() {
+								});
+				// LogModel l = new LogModel();
+				Map<String, String> map = new HashMap<String, String>();
+				List<Map<String, String>> modelList = new ArrayList<Map<String, String>>();
+				map.put("date", (new Date()).toString());
+				map.put("state", label[3].getName());
+				modelList.add(map);
+				list.add(modelList);
+				String log = JsonMapper.nonEmptyMapper().toJson(list);
+				wind.setLog(log);
+				wind.setProgressState(LabelProgressEnum.installed);
+				updateWindowRfid(wind);
+				return 1;
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return 0;
+		}
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public int testWindow(String contractNo, String[] rfidNos)
+			throws ServiceException {
+		try {
+			for (String rfidNo : rfidNos) {
+				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
+				if (contractNo.equals(wind.getContractNo())
+						&& (!wind.getProgressState().equals(
+								LabelProgressEnum.hasQuality))) {
+					List<List<Map<String, String>>> list = JsonMapper
+							.nonEmptyMapper()
+							.getMapper()
+							.readValue(
+									wind.getLog(),
+									new TypeReference<List<Map<String, String>>>() {
+									});
+					LabelProgressEnum[] label = LabelProgressEnum.values();
+					Map<String, String> map = new HashMap<String, String>();
+					List<Map<String, String>> modelList = new ArrayList<Map<String, String>>();
+					map.put("date", (new Date()).toString());
+					map.put("state", label[4].getName());
+					modelList.add(map);
+					list.add(modelList);
+					String log = JsonMapper.nonEmptyMapper().toJson(list);
+					wind.setLog(log);
+					wind.setProgressState(LabelProgressEnum.hasQuality);
+					updateWindowRfid(wind);
+				} else {
+					return 0;
+				}
+			}
+			return 1;
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return 0;
+		}
 	}
 }

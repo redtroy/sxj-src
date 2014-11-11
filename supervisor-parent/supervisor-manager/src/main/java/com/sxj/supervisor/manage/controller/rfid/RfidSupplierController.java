@@ -51,11 +51,6 @@ public class RfidSupplierController extends BaseController {
 	 */
 	@RequestMapping("add_supplier")
 	public String add_supplier() throws WebException {
-		try {
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return "manage/rfid/supplier/supplier-add";
 	}
 
@@ -63,15 +58,15 @@ public class RfidSupplierController extends BaseController {
 	 * 保存供应商
 	 */
 	@RequestMapping("save_supplier")
-	public @ResponseBody Map save_supplier(RfidSupplierEntity supplier)
-			throws WebException {
+	public @ResponseBody Map<String, String> save_supplier(
+			RfidSupplierEntity supplier) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			supplierService.add(supplier);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("保存供应商错误", e, this.getClass());
-			throw new WebException("保存供应商错误");
+			map.put("error", e.getMessage());
 		}
 		return map;
 	}
@@ -88,7 +83,7 @@ public class RfidSupplierController extends BaseController {
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("删除供应商错误", e, this.getClass());
-			throw new WebException("删除供应商错误");
+			map.put("error", e.getMessage());
 		}
 		return map;
 	}
@@ -120,7 +115,7 @@ public class RfidSupplierController extends BaseController {
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("删除供应商错误", e, this.getClass());
-			throw new WebException("删除供应商错误");
+			map.put("error", e.getMessage());
 		}
 		return map;
 	}

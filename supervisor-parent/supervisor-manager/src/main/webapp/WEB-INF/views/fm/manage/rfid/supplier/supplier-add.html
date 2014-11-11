@@ -1,4 +1,3 @@
- <@b.validate/>
 <script>
   function sub(){
 	 $("#sub").submit();
@@ -14,22 +13,24 @@
 		}
 	});
   function add_supplier(){
-		var params=$("#sub").serialize();
-		var doorsPrice=$("#doorsPrice").val();
-		doorsPrice=parseFloat(doorsPrice)*100;
-		var batchPrice=$("#batchPrice").val();
-		batchPrice=parseFloat(batchPrice)*100;
-		params=params+"&doorsPrice="+doorsPrice+"&batchPrice="+batchPrice;
-		$.post("${basePath}rfid/supplier/save_supplier.htm",params,function(data){
-			if(data.isOk=="ok"){
-				alert("添加成功");
-				query();
-			}
-			else{
-				errorInfo(data.error);
-			}
-		});
-		
+	  dialogBox(function(){
+		  var params=$("#sub").serialize();
+			var doorsPrice=$("#doorsPrice").val();
+			doorsPrice=parseFloat(doorsPrice);
+			var batchPrice=$("#batchPrice").val();
+			batchPrice=parseFloat(batchPrice);
+			params=params+"&doorsPrice="+doorsPrice+"&batchPrice="+batchPrice;
+			$.post("${basePath}rfid/supplier/save_supplier.htm",params,function(data){
+				if(data.isOk=="ok"){
+					succInfo(function(){
+						query();
+					},"添加成功");
+				}
+				else{
+					errorInfo(data.error);
+				}
+			});
+	  },"是否确认保存！");
 	}
 </script>
     <!-- InstanceBeginEditable name="rightBar" -->
@@ -50,11 +51,11 @@
       </div>
       <div>
         <label>固定电话</label>
-        <input type="text" id="" name="telNum" class="text tip" datatype="phone" title="填写公司固定电话号码" errormsg="固定电话格式为区号-电话-分机号"/>
+        <input type="text" id="" name="telNum" class="text tip" datatype="phone" errormsg="固定电话格式为区号-电话-分机号"  nullmsg="固定电话不能为空"/>
       </div>
       <div>
         <label>公司地址</label>
-        <input type="text" id="" name="address" class="text tip" title="填写公司地址" datatype="s10-50" errormsg="供应商名称至少10个字符,最多50个字符！" nullmsg="联系人地址不能为空"/>
+        <input type="text" id="" name="address" class="text tip" title="填写地址" datatype="s0-50" errormsg="地址最多50个字符！"/>
       </div>
       <div>
         <label>门窗标签采购价</label>

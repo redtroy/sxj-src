@@ -65,7 +65,7 @@ public class RfidSupplierEntity extends Pagable implements Serializable {
 	/**
 	 * 固定电话
 	 */
-	@Column(name = "TEL_NAME")
+	@Column(name = "TEL_NUM")
 	private String telNum;
 
 	/**
