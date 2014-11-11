@@ -4,7 +4,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 
-public class SupervisorSiteToken extends UsernamePasswordToken {
+public class ApiToken extends UsernamePasswordToken {
 
 	/**
 	 * 
@@ -13,11 +13,11 @@ public class SupervisorSiteToken extends UsernamePasswordToken {
 
 	private SupervisorPrincipal userBean;
 
-	public SupervisorSiteToken() {
+	public ApiToken() {
 
 	}
 
-	public SupervisorSiteToken(final SupervisorPrincipal userBean,
+	public ApiToken(final SupervisorPrincipal userBean,
 			final String password, final boolean rememberMe, final String host) {
 		this.userBean = userBean;
 		super.setPassword(password.toCharArray());
@@ -34,7 +34,7 @@ public class SupervisorSiteToken extends UsernamePasswordToken {
 		}
 	}
 
-	public SupervisorSiteToken(final SupervisorPrincipal userBean,
+	public ApiToken(final SupervisorPrincipal userBean,
 			final String password) {
 		this(userBean, password, false, null);
 	}

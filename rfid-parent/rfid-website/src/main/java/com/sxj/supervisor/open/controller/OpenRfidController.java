@@ -28,8 +28,8 @@ import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.WinTypeModel;
-import com.sxj.supervisor.rfid.login.SupervisorShiroRedisCache;
-import com.sxj.supervisor.rfid.login.SupervisorSiteToken;
+import com.sxj.supervisor.rfid.login.ApiShiroRedisCache;
+import com.sxj.supervisor.rfid.login.ApiToken;
 import com.sxj.supervisor.service.open.member.IAccountService;
 import com.sxj.supervisor.service.open.member.IMemberService;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
@@ -68,7 +68,7 @@ public class OpenRfidController
         Map<String, Integer> retVal = new HashMap<String, Integer>();
         try
         {
-            SupervisorSiteToken token = null;
+            ApiToken token = null;
             SupervisorPrincipal userBean = null;
             AccountEntity account = null;
             
@@ -87,7 +87,7 @@ public class OpenRfidController
                 userBean.setAccount(account);
                 MemberEntity member = memServive.memberInfo(account.getParentId());
                 userBean.setMember(member);
-                token = new SupervisorSiteToken(userBean, password);
+                token = new ApiToken(userBean, password);
             }
             else
             {
@@ -101,7 +101,7 @@ public class OpenRfidController
                 PrincipalCollection principals = currentUser.getPrincipals();
                 if (userBean.getAccount() != null)
                 {
-                    SupervisorShiroRedisCache.addToMap(userBean.getAccount()
+                    ApiShiroRedisCache.addToMap(userBean.getAccount()
                             .getId(), principals);
                 }
             }
