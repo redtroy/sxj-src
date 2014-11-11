@@ -37,13 +37,13 @@ public class RfidPriceEntity extends Pagable implements Serializable {
 	 * 门窗RFID价格
 	 */
 	@Column(name = "WINDOW_PRICE")
-	private Long windowPrice;
+	private Double windowPrice;
 
 	/**
 	 * 物流批次RFID价格
 	 */
 	@Column(name = "LOGISTICS_PRICE")
-	private Long logisticsPrice;
+	private Double logisticsPrice;
 
 	public String getId() {
 		return id;
@@ -53,19 +53,19 @@ public class RfidPriceEntity extends Pagable implements Serializable {
 		this.id = id;
 	}
 
-	public Long getWindowPrice() {
+	public Double getWindowPrice() {
 		return windowPrice;
 	}
 
-	public void setWindowPrice(Long windowPrice) {
+	public void setWindowPrice(Double windowPrice) {
 		this.windowPrice = windowPrice;
 	}
 
-	public Long getLogisticsPrice() {
+	public Double getLogisticsPrice() {
 		return logisticsPrice;
 	}
 
-	public void setLogisticsPrice(Long logisticsPrice) {
+	public void setLogisticsPrice(Double logisticsPrice) {
 		this.logisticsPrice = logisticsPrice;
 	}
 

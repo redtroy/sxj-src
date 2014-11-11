@@ -42,14 +42,22 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	 * RFID关联申请号
 	 */
 	@Column(name = "RFID_REF_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "GL", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "dateNo")
 	private String rfidRefNo;
+
+	private String dateNo;
 
 	/**
 	 * RFID编号区间
 	 */
-	@Column(name = "RFID_RANGE")
-	private String rfidRange;
+	@Column(name = "MIN_RFID_NO")
+	private String minRfidNo;
+
+	/**
+	 * RFID编号区间
+	 */
+	@Column(name = "MAX_RFID_NO")
+	private String maxRfidNo;
 
 	/**
 	 * 申请人
@@ -117,7 +125,7 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "STATE")
 	private AuditStateEnum state;
-	
+
 	public WindowTypeEnum getWindowsNo() {
 		return windowsNo;
 	}
@@ -158,12 +166,20 @@ public class WindowRefEntity extends Pagable implements Serializable {
 		this.rfidRefNo = rfidRefNo;
 	}
 
-	public String getRfidRange() {
-		return rfidRange;
+	public String getMinRfidNo() {
+		return minRfidNo;
 	}
 
-	public void setRfidRange(String rfidRange) {
-		this.rfidRange = rfidRange;
+	public void setMinRfidNo(String minRfidNo) {
+		this.minRfidNo = minRfidNo;
+	}
+
+	public String getMaxRfidNo() {
+		return maxRfidNo;
+	}
+
+	public void setMaxRfidNo(String maxRfidNo) {
+		this.maxRfidNo = maxRfidNo;
 	}
 
 	public String getMemberNo() {
@@ -228,6 +244,14 @@ public class WindowRefEntity extends Pagable implements Serializable {
 
 	public void setContractNo(String contractNo) {
 		this.contractNo = contractNo;
+	}
+
+	public String getDateNo() {
+		return dateNo;
+	}
+
+	public void setDateNo(String dateNo) {
+		this.dateNo = dateNo;
 	}
 
 }

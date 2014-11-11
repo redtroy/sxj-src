@@ -35,7 +35,23 @@ function addTable(){
 $(function() {
 	$(".TrDel").live("click", function() {
 		$(this).parent().parent().remove();
+	});/**
+	$("#contractNo").change(function(){
+		var contractNo=$("#contractNo").val();
+		 $.get("getBatchNo.htm?contractNo="+contractNo,function(data){
+				if(data.batchNo==0){
+					//$("#contractNo").after("<span class='Validform_checktip Validform_wrong' style='display: inline;'>"+data.error+"</span>");
+					//messageInfo(data.error);
+					$("#batchNo").val("0");
+					$("#batchNo_span").text("");
+					return false;
+				}else{
+					$("#batchNo").val(data.batchNo);
+					$("#batchNo_span").text(data.batchNo);
+				}
+			});
 	});
+	
 	$("#contractNo").bigAutocomplete({url:"lx_query.htm",callback:function(data){
 		$("#contractNo").val(data.title);
 	    $("#batchNo").val(data.batchCount);
@@ -43,12 +59,27 @@ $(function() {
 			 $("#batchNo_span").text("");
 			 messageInfo("该合同的所有批次已经启用完毕！");
 			 return false;
-		 }
+		}
+	    $.get("getBatchNo.htm?contractNo="+data.title+"&sumBatch="+data.batchCount,function(data2){
+			if(data2.batchNo==0){
+				messageInfo("该合同的所有批次已经启用完毕！");
+				$("#batchNo").val("0");
+				$("#batchNo_span").text("");
+				return false;
+			}
+			$("#batchNo").val(data2.batchNo);
+			$("#batchNo_span").text(data2.batchNo);
+		});
     },
 	beforeShow : function(data) {
 		var contractNo = $("#contractNo").val();
-		alert(data);
-		//var match = false;
+		var match = false;
+		if(data.length==0){
+			$("#batchNo").val("0");
+			$("#batchNo_span").text("");
+			messageInfo("该合同不存在！");
+			return false;
+		}
 		for (var i = 0; i < data.length; i++) {
 			if (data[i].title == contractNo) {
 				$("#contractNo").val(data[i].title);
@@ -58,39 +89,52 @@ $(function() {
 					 messageInfo("该合同的所有批次已经启用完毕！");
 					 return false;
 				}
-				//match = true;
+				 $.get("getBatchNo.htm?contractNo="+data[i].title+"&sumBatch="+data[i].batchCount,function(data2){
+						if(data2.batchNo==0){
+							messageInfo("该合同的所有批次已经启用完毕！");
+							$("#batchNo").val("0");
+							$("#batchNo_span").text("");
+							return false;
+						}
+						$("#batchNo").val(data2.batchNo);
+						$("#batchNo_span").text(data2.batchNo);
+					});
 			}
 		}
 	}
-	});
-	$("#contractNo").blur(function (){
-		 var coutractNo=$(this).val();
-		 if(coutractNo==''){
-			 messageInfo("请输入合同号！");
-			 return false;
-		 }
-		 var sumBatch= $("#batchNo").val();
-		 //if(!sumBatch){
-		//	 messageInfo("该合同的所有批次已经启用完毕！");
-		//	 return false;
-		// }
-		$.get("getBatchNo.htm?contractNo="+coutractNo+"&sumBatch="+sumBatch,function(data){
-			if(data.batchNo==0){
-				messageInfo("该合同的所有批次已经启用完毕！");
-				$("#batchNo").val("0");
-				$("#batchNo_span").text("");
-				return false;
-			}
-			$("#batchNo").val(data.batchNo);
-			$("#batchNo_span").text(data.batchNo);
-		});
-	});
+	});**/
 	$("#save_form").Validform({
 		tiptype:3,
 		datatype:{
 			"ys":/^[A-Za-z0-9]+$/,
 			"price":/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
-			"count":/^[-+]?\d+(\.\d+)?$/
+			"count":/^[-+]?\d+(\.\d+)?$/,
+			"contractNov":function(gets,obj,curform,regxp){
+				var message="";
+				var isPass=false;
+				$.ajax({
+					  url: "getBatchNo.htm?contractNo="+gets,
+					  cache: false,
+					  async: false,
+					  success: function(data){
+						  if(data.batchNo==0){
+								$("#batchNo").val("0");
+								$("#batchNo_span").text("");
+								message= data.error;
+							}else{
+								$("#batchNo").val(data.batchNo);
+								$("#batchNo_span").text(data.batchNo);
+								isPass= true;
+							}
+					  }
+					});
+				 if(isPass){
+					 return isPass;
+				 }else{
+					 return message;
+				 }
+				
+			}
 		},
 		callback:function(form){
 			startRfid();
@@ -135,7 +179,7 @@ function subForm(){
 						</div>
 						<div class="item">
 							<label>合同号</label>
-							<input class="input input-w240h30" id="contractNo" autocomplete="off" name="batch.contractId" value="${logistics.contractNo}" title="请输入合同号！" datatype="ys" nullmsg="请输入合同号" errormsg="合同号只能用英文+数字"/>
+							<input class="input input-w240h30" id="contractNo" name="batch.contractId" value="${logistics.contractNo}" title="请输入合同号！" datatype="contractNov" nullmsg="请输入合同号" errormsg="昵称为2-6位字符，中文字符算两个字符！"/>
 						</div>
 						<div class="item">
 							<label>批次</label><span id="batchNo_span"></span><input id="batchNo" name="batch.batchNo" type="hidden" value="0" />

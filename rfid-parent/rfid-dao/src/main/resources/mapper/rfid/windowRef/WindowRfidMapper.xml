@@ -7,7 +7,8 @@
 		type="com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="rfidRefNo" column="RFID_REF_NO" jdbcType="VARCHAR" />
-		<result property="rfidRange" column="RFID_RANGE" jdbcType="VARCHAR" />
+		<result property="minRfidNo" column="MIN_RFID_NO" jdbcType="VARCHAR" />
+		<result property="maxRfidNo" column="MAX_RFID_NO" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR"/>
 		<result property="type" column="TYPE" jdbcType="INTEGER" />

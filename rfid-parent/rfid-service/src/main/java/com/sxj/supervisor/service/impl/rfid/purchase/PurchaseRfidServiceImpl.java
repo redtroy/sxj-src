@@ -19,6 +19,7 @@ import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
+import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
@@ -113,9 +114,11 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					.getApplicationInfo(applyId);
 			app.setHasNumber(Long.valueOf(hasNumber) + purchase.getCount());
 			purchase.setApplyNo(app.getApplyNo());
+			purchase.setDateNo("CG" + DateTimeUtils.getTime("yyMM"));
 			rfidPurchaseDao.addRfidPurchase(purchase);
 			applyService.updateApp(app);
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("新增采购单错误", e);
 		}
 
@@ -184,6 +187,29 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 						.toArray(new LogisticsRfidEntity[listRfid.size()]));
 			}
 
+			// 修改申请单状态
+			String appNo = purchase.getApplyNo();
+			RfidApplicationEntity apply = applyService.getApplication(appNo);
+			if (apply != null) {
+				PurchaseRfidQuery query = new PurchaseRfidQuery();
+				query.setApplyNo(appNo);
+				query.setReceiptState(DeliveryStateEnum.receiving.getId());
+				Long hasReceCount = 0l;
+				List<RfidPurchaseEntity> list = queryPurchase(query);
+				if (list != null) {
+					for (RfidPurchaseEntity rePurchase : list) {
+						if (rePurchase == null) {
+							continue;
+						}
+						hasReceCount = hasReceCount + rePurchase.getCount();
+					}
+				}
+				// hasReceCount = hasReceCount + purchase.getCount();
+				if (apply.getCount() == hasReceCount) {
+					apply.setReceiptState(ReceiptStateEnum.Goods_receipt);
+					applyService.updateApp(apply);
+				}
+			}
 			// 插入销售记录
 			RfidSaleStatisticalEntity entity = new RfidSaleStatisticalEntity();
 			entity.setApplyNo(purchase.getApplyNo());

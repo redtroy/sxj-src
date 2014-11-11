@@ -23,9 +23,24 @@ public interface IWindowRfidRefService {
 	 * @param id
 	 * @throws ServiceException
 	 */
-	public void updateWindowRfidRef(WindowRefEntity win) throws ServiceException;
+	public void updateWindowRfidRef(WindowRefEntity win)
+			throws ServiceException;
 
+	/**
+	 * 新增
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void addWindowRfidRef(WindowRefEntity win) throws ServiceException;
 
+	/**
+	 * 获取
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
 	public WindowRefEntity getWindowRfidRef(String id) throws ServiceException;
 
 }

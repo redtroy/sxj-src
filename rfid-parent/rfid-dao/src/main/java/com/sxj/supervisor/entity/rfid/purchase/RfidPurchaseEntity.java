@@ -37,8 +37,10 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 	 * 采购单编号
 	 */
 	@Column(name = "PURCHASE_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "CG", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "dateNo")
 	private String purchaseNo;
+
+	private String dateNo;
 
 	/**
 	 * 供应商编号
@@ -236,6 +238,14 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 
 	public void setImportState(ImportStateEnum importState) {
 		this.importState = importState;
+	}
+
+	public String getDateNo() {
+		return dateNo;
+	}
+
+	public void setDateNo(String dateNo) {
+		this.dateNo = dateNo;
 	}
 
 }

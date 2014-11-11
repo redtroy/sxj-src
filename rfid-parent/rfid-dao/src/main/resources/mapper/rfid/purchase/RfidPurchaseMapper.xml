@@ -39,16 +39,16 @@
 		<if test="condition.supplierName != null and condition.supplierName !=''">
 			<![CDATA[AND SUPPLIER_NAME = #{condition.supplierName}]]>
 		</if>
-		<if test="condition.rfidType != null and condition.rfidType !=''">
+		<if test="condition.rfidType != null">
 			<![CDATA[AND RFID_TYPE = #{condition.rfidType} ]]>
 		</if>
-		<if test="condition.payState != null and condition.payState !=''">
+		<if test="condition.payState != null">
 			<![CDATA[AND PAY_STATE= #{condition.payState}]]>
 		</if>
-		<if test="condition.receiptState != null and condition.receiptState !=''">
+		<if test="condition.receiptState != null">
 			<![CDATA[AND RECEIPT_STATE = #{condition.receiptState}]]>
 		</if>
-		<if test="condition.importState != null and condition.importState !=''">
+		<if test="condition.importState != null">
 			<![CDATA[AND IMPORT_STATE = #{condition.importState}]]>
 		</if>
 		<if

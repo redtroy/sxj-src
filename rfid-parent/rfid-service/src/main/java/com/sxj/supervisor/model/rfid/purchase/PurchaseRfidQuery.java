@@ -3,7 +3,6 @@ package com.sxj.supervisor.model.rfid.purchase;
 import java.io.Serializable;
 
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 
 public class PurchaseRfidQuery extends Pagable implements Serializable {
 
@@ -29,7 +28,7 @@ public class PurchaseRfidQuery extends Pagable implements Serializable {
 	/**
 	 * RFID类型
 	 */
-	private RfidTypeEnum rfidType;
+	private Integer rfidType;
 
 	/**
 	 * 数量
@@ -66,17 +65,16 @@ public class PurchaseRfidQuery extends Pagable implements Serializable {
 	/**
 	 * 导入状态
 	 */
-	private String importState;
+	private Integer importState;
 	/**
 	 * 支付状态
 	 */
-	private String payState;
+	private Integer payState;
 
 	/**
 	 * 收货状态
 	 */
-	private String receiptState;
-
+	private Integer receiptState;
 
 	public String getPurchaseNo() {
 		return purchaseNo;
@@ -102,11 +100,11 @@ public class PurchaseRfidQuery extends Pagable implements Serializable {
 		this.supplierName = supplierName;
 	}
 
-	public RfidTypeEnum getRfidType() {
+	public Integer getRfidType() {
 		return rfidType;
 	}
 
-	public void setRfidType(RfidTypeEnum rfidType) {
+	public void setRfidType(Integer rfidType) {
 		this.rfidType = rfidType;
 	}
 
@@ -166,27 +164,27 @@ public class PurchaseRfidQuery extends Pagable implements Serializable {
 		this.applyNo = applyNo;
 	}
 
-	public String getImportState() {
+	public Integer getImportState() {
 		return importState;
 	}
 
-	public void setImportState(String importState) {
+	public void setImportState(Integer importState) {
 		this.importState = importState;
 	}
 
-	public String getPayState() {
+	public Integer getPayState() {
 		return payState;
 	}
 
-	public void setPayState(String payState) {
+	public void setPayState(Integer payState) {
 		this.payState = payState;
 	}
 
-	public String getReceiptState() {
+	public Integer getReceiptState() {
 		return receiptState;
 	}
 
-	public void setReceiptState(String receiptState) {
+	public void setReceiptState(Integer receiptState) {
 		this.receiptState = receiptState;
 	}
 
