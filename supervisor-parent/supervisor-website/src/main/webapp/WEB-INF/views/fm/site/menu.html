@@ -28,7 +28,7 @@ function clickFunction(url){
 	var state="${Session.userinfo.member.checkState.id}";
 	if(state=='1'){
 		$.get("checkEditState.htm",function(data){
-			if(data){
+			if(data=='1'){
 				url=url+"&"+Math.random();
 				window.location.href=url;
 			}else
