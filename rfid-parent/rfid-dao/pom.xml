@@ -64,5 +64,9 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
 	</dependencies>
 </project>

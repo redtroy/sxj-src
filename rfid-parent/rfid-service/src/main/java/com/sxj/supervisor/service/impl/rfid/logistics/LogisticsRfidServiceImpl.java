@@ -135,4 +135,15 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 		}
 
 	}
+
+	@Override
+	public LogisticsRfidEntity getLogisticsByNo(String rfidNo)
+			throws ServiceException {
+		try {
+			// JsonMapper
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
 }

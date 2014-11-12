@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
@@ -14,12 +15,14 @@ import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
+@Transactional
 public class LogisticsRefServiceImpl implements ILogisticsRefService {
 
 	@Autowired
 	private ILogisticsRefDao refDao;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<LogisticsRefEntity> query(LogisticsRefQuery query)
 			throws ServiceException {
 		try {
@@ -44,17 +47,18 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 			query.setPage(condition);
 			return list;
 		} catch (Exception e) {
-			SxjLogger.error("物流RFID关联申请管理查询错误", e, this.getClass());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("物流RFID关联申请管理查询错误");
 		}
 	}
 
 	@Override
+	@Transactional
 	public void update(LogisticsRefEntity model) throws ServiceException {
 		try {
 			refDao.update(model);
 		} catch (Exception e) {
-			SxjLogger.error("物流RFID关联申请管理更新错误", e, this.getClass());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("物流RFID关联申请管理更新错误");
 		}
 
@@ -64,6 +68,7 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 	 * 逻辑删除
 	 */
 	@Override
+	@Transactional
 	public void del(String id) throws ServiceException {
 		try {
 			LogisticsRefEntity model = new LogisticsRefEntity();
@@ -71,8 +76,20 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 			model.setDelstate(true);
 			refDao.update(model);
 		} catch (Exception e) {
-			SxjLogger.error("物流RFID关联申请管理删除错误", e, this.getClass());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("物流RFID关联申请管理删除错误");
+		}
+
+	}
+
+	@Override
+	@Transactional
+	public void add(LogisticsRefEntity model) throws ServiceException {
+		try {
+			refDao.add(model);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("物流RFID关联申请管理新增错误");
 		}
 
 	}

@@ -45,7 +45,28 @@ public interface ILogisticsRfidService {
 	public void batchUpdateLogistics(LogisticsRfidEntity[] rfids)
 			throws ServiceException;
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
 	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
 	public LogisticsRfidEntity getLogistics(String id) throws ServiceException;
+
+	/**
+	 * 
+	 * @param rfidNo
+	 * @return
+	 * @throws ServiceException
+	 */
+	public LogisticsRfidEntity getLogisticsByNo(String rfidNo)
+			throws ServiceException;
 }

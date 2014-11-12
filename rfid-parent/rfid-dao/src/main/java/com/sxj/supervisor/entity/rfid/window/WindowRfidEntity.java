@@ -1,8 +1,11 @@
 package com.sxj.supervisor.entity.rfid.window;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
@@ -10,6 +13,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
@@ -116,6 +120,8 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "LOG")
 	private String log;
+
+	private List<Object> logList = new ArrayList<Object>();
 
 	public String getId() {
 		return id;
@@ -237,4 +243,17 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 		this.memberName = memberName;
 	}
 
+	public List<Object> getLogList() throws Exception {
+		logList = JsonMapper.nonEmptyMapper().getMapper()
+				.readValue(getLog(), new TypeReference<List<Object>>() {
+				});
+		return logList;
+	}
+
+	public void setLogList(Object log) throws Exception {
+		getLogList().add(log);
+		String json = JsonMapper.nonEmptyMapper().toJson(getLogList());
+		setLog(json);
+
+	}
 }

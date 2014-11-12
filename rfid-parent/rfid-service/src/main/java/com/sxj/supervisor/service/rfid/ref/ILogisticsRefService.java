@@ -14,6 +14,14 @@ public interface ILogisticsRefService {
 			throws ServiceException;
 
 	/**
+	 * 新增
+	 * 
+	 * @param app
+	 * @throws ServiceException
+	 */
+	public void add(LogisticsRefEntity model) throws ServiceException;
+
+	/**
 	 * 更新
 	 * 
 	 * @param app
