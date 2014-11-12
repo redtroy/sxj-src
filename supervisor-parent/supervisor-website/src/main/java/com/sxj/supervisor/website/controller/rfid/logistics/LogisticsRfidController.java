@@ -26,6 +26,8 @@ import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.contract.ContractReplenishModel;
+import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.model.rfid.base.LogModel;
@@ -35,6 +37,7 @@ import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.StringUtils;
+import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -152,36 +155,30 @@ public class LogisticsRfidController extends BaseController {
 	/**
 	 * 通过批次号联想查询批次详情
 	 */
-	@RequestMapping("lx_batchInfo")
-	public @ResponseBody Map<Object, Object> queryBatchInfo(String rfidNo)
+	@RequestMapping("batchInfo")
+	public @ResponseBody Map<String, Object> queryBatchInfo(String rfidNo)
 			throws WebException {
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			Map<Object, Object> map = new HashMap<Object, Object>();
-			ContractQuery query = new ContractQuery();
-			// query.setContractNo(contractNo);
-			// contractService.get
-			List<ContractModel> list = contractService.queryContracts(query);
-			if (list == null) {
-				return map;
+			ContractReplenishModel replenish = contractService
+					.getReplenishByRfid(rfidNo);
+			if (replenish == null) {
+				throw new ServiceException("该RFID没有对应的批次！");
 			}
-			List<Map<String, Object>> addlist = new ArrayList<Map<String, Object>>();
-			for (ContractModel contract : list) {
-				Map<String, Object> cmap = new HashMap<String, Object>();
-				cmap.put("title", contract.getContract().getContractNo());
-				if (contract.getContract().getBatchCount() == null) {
-					cmap.put("batchCount", 0);
-				} else {
-					cmap.put("batchCount", contract.getContract()
-							.getBatchCount());
-				}
-				addlist.add(cmap);
+			List<ReplenishBatchModel> replenishList = replenish.getBatchItems();
+			if (replenishList == null || replenishList.size() == 0) {
+				throw new ServiceException("该RFID没有对应的批次信息！");
 			}
-			map.put("data", addlist);
-			return map;
+			if (replenishList.size() > 1) {
+				throw new ServiceException("该RFID对应的批次信息大于一条！");
+			}
+			map.put("contratct", replenish.getReplenishContract());
+			map.put("batch", replenishList.get(0));
 		} catch (Exception e) {
-			SxjLogger.error("联想查询错误", e, this.getClass());
-			throw new WebException("联想查询错误");
+			SxjLogger.error("联想查询RFID对应批次错误", e, this.getClass());
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -281,18 +278,7 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("to_loss")
 	public String to_loss(String id, ModelMap model) throws WebException {
 		try {
-			LogisticsRfidEntity logistics = logisticsRfidService
-					.getLogistics(id);
-			List<ContractBatchModel> conBatch = contractService
-					.getContractBatch(logistics.getContractNo(),
-							logistics.getRfidNo());
-			if (conBatch != null && conBatch.size() > 0) {
-				model.put("batch", conBatch.get(0).getBatchItems());
-			} else {
-				model.put("batch", null);
-			}
-			model.put("logistics", logistics);
-
+			model.put("newRfidNo", id);
 			return "site/rfid/logistics/manage/loss-gysrfid";
 		} catch (Exception e) {
 			SxjLogger.error("查询物流错误", e, this.getClass());

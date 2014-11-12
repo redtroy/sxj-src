@@ -11,6 +11,7 @@
 <script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.errorInfo/>
+<@b.validate/>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#tabsholder").tytabs({
@@ -23,7 +24,7 @@ $(document).ready(function(){
 							});
 });
 
-function  rfid(){
+function rfid(){
 	if(confirm('确实要补损吗?')){
 	$.post("rfid_loss.htm",$("#wlForm").serialize(),function(data){
 		if(data.isOK=='ok'){
@@ -48,6 +49,45 @@ $(function(){
 			$("#rfid").text(data.str);
 		});
 	});
+	
+	$("#rfid_form").Validform({
+		tiptype:3,
+		datatype:{
+			"ys":/^[A-Za-z0-9]+$/,
+			"price":/^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/,
+			"count":/^[-+]?\d+(\.\d+)?$/,
+			"rfidNov":function(gets,obj,curform,regxp){
+				var message="";
+				var isPass=false;
+				$.ajax({
+					  url: "batchInfo.htm?rfidNo="+gets,
+					  cache: false,
+					  async: false,
+					  success: function(data){
+						  if(data.batch==null){
+								//$("#batchNo").val("0");
+								//$("#batchNo_span").text("");
+								message= data.error;
+							}else{
+								$("#contract_div").text(data.contratct.contractId);
+								//$("#batchNo_span").text(data.batchNo);
+								isPass= true;
+							}
+					  }
+					});
+				 if(isPass){
+					 return isPass;
+				 }else{
+					 return message;
+				 }
+				
+			}
+		},
+		callback:function(form){
+			gysrfid();
+		}
+	});
+	
 });
 function getRecord(contractNo){
 	$.post("getRecord.htm",{"contractNo":contractNo},function(data){
@@ -96,7 +136,9 @@ function  gysrfid(){
 		messageInfo("该合同已补损!");
 	}
 }
-
+function subForm1(){
+	  $("#rfid_form").submit();
+}
 </script>
 </head>
 
@@ -123,17 +165,18 @@ function  gysrfid(){
 </ul>
 
 <div class="contents">
-<form action="" method="post" id="wlForm">
+<form action="javascript:void(0);" id="rfid_form" method="post">
 <input type="hidden" name="id" value="${logistics.id}" /> 
 <input type="hidden" name="contractNo" value="${logistics.contractNo}" /> 
 <input type="hidden" name="newRfid" value="${logistics.rfidNo}" /> 
 <div id="content1" class="tabscontent">
-<div class="item"><label>物流标签编号</label>${logistics.rfidNo}</div>
-<div class="item" title=""><label>破损物流标签编号</label><input class="input input-w180h36" type="text" name="rfidNo" value="" /></div>
-<div class="item"><label>采购合同号</label>${logistics.contractNo}</div>
-<div class="item"><label>批次</label>${logistics.batchNo}</div>
+<div class="item"><label>物流标签编号</label>${newRfidNo}</div>
+<input id="newRfIdNo" type="hidden" name="newRfIdNo" value="${newRfidNo}"/>
+<div class="item"><label>破损物流标签编号</label><input class="input input-w180h36" type="text" id="rfidNo" name="rfidNo" value="" datatype="rfidNov" nullmsg="请输入RFID编号" errormsg="输入错误"/></div>
+<div class="item" id="contract_div"><label>采购合同号</label></div>
+<div class="item" id="batchNo_div"><label>批次</label></div>
 <div class="item ly-clearFix"><label>批次详情</label>
-<table border="" cellpadding="0" cellspacing="0" class="tabProdpc ly-left">
+<table id="batch_table" border="" cellpadding="0" cellspacing="0" class="tabProdpc ly-left">
                       <col width="45%" />
                       <col width="40%" />
                       <col width="15%" />
@@ -142,17 +185,19 @@ function  gysrfid(){
                         <th>数量（m&sup2;/吨）</th>
                         <th></th>
                       </tr>
-                      <#list batch as batch>
+                  <#list batch as batch>
                   <tr>
                     <td>${batch.productModel}</td>
 					<td>${batch.quantity}</td>
 					<td></td>
                   </tr>
                   </#list>
-                </table></div>				
+</table>
+</div>				
 <div class="item mt10">
       <label>&nbsp;</label>
-      <a href="javascript:rfid();" class="button button-orange mr15">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
+      <a href="javascript:rfid();" class="button button-orange mr15">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a>
+</div>
 </div>
 </form>
 <form action="" method="post" id="htForm">
