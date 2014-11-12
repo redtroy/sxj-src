@@ -11,12 +11,12 @@
 				<th>合同号</th>
 				<th>交货批次</th>
 				<th>产品规格</th>
-				<th>数量<span>（m&sup2;/吨）</span></th>
+				<th>数量<span>（<#if type==1 >/m&sup2;<#elseif type==2>/吨<#/if>）</span></th>
 				<th class="rLine">应付货款<span>（元）</span></th>
 			</tr>
 			<#list conBatch as batch>
 			<tr>
-				<td>${contractNo}</td>
+				<td>${batch.batch.contractId}</td>
 				<td>第${batch.batch.batchNo}批次</td>
 				<td><table border="0" cellpadding="0" cellspacing="0"
 						class="tabList prodTable">

@@ -59,4 +59,11 @@ public interface IContractBatchDao
     **/
     @Update
     public void updateBatch(ContractBatchEntity batch);
+    
+    /**
+     * 根据RFID获取批次
+     * @param rfidNo
+     * @return
+     */
+    public ContractBatchEntity  getBacthsByRfid(String rfidNo);
 }

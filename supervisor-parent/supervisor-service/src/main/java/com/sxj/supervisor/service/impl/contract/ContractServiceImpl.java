@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.impl.contract;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +31,7 @@ import com.sxj.supervisor.dao.contract.IContractModifyItemDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
+import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
@@ -67,6 +69,7 @@ import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.model.record.RecordQuery;
+import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
@@ -95,6 +98,8 @@ public class ContractServiceImpl implements IContractService {
 	@Autowired
 	private IContractDao contractDao;
 
+	@Autowired
+	private ILogisticsRfidDao logisticsDao;
 	/**
 	 * 批次DAO
 	 */
@@ -1368,6 +1373,56 @@ public class ContractServiceImpl implements IContractService {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());
 		}
+
+	}
+
+	/**
+	 * 根据RFID获取批次
+	 */
+	@Override
+	public ContractBatchModel getBatchByRfid(String rfidNo)
+			throws ServiceException, SQLException {
+		ContractBatchModel batchModel = new ContractBatchModel();
+		ContractBatchEntity batch=contractBatchDao.getBacthsByRfid(rfidNo);
+		LogisticsRfidQuery query =  new LogisticsRfidQuery();
+		query.setRfidNo(rfidNo);
+		 List<LogisticsRfidEntity> lr=logisticsRfidService.queryLogistics(query);
+		if(batch!=null){
+			if(lr!=null && lr.size()>0){
+				LogisticsRfidEntity logistics= lr.get(0);
+				batch.setContractId(logistics.getContractNo());
+			}
+			batchModel.setBatch(batch);
+			List<BatchItemModel> batchList=this.jsonChangeList(batch.getBatchItems());
+			batchModel.setBatchItems(batchList);
+		}
+		
+		return batchModel;
+	}
+
+	/**
+	 * json转化list
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public List<BatchItemModel> jsonChangeList(String json) {
+		List<BatchItemModel> bacthList = new ArrayList<BatchItemModel>();
+		try {
+			bacthList = JsonMapper.nonEmptyMapper().getMapper()
+					.readValue(json, new TypeReference<List<BatchItemModel>>() {
+					});
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return bacthList;
 
 	}
 }

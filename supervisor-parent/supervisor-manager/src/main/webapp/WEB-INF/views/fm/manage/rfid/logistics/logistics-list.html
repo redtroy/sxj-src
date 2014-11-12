@@ -11,6 +11,8 @@
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.pageScript/>
+<@b.errorInfo/>
+<@b.dialogBox/>
 <script >
 
 function query(page){
@@ -59,17 +61,34 @@ $(function(){
     }});
 });
 function loadInfo(id,contractNo){
+	var isopen=$("#info" + id).attr("isopen");
+	if(isopen=="0"){
 	$("#info"+id).load("${basePath}/rfid/window/contractInfo.htm?contractNo="+contractNo+"&rfid="+id);
+	$("#info" + id).attr("isopen","1");
+	}
+	else if(isopen=="1"){
+		$("#info" + id).html("");
+		$("#info" + id).attr("isopen","0");
+	}
+	
 }
 function closeContract(id){
 	$("#info"+id).html("");
 }
-
 function log(id){
-	$("#log"+id).load("stateLog.htm?id="+id);
+	var isopen=$("#info" + id).attr("isopen");
+	if(isopen=="0"){
+	$("#info"+id).load("stateLog.htm?id="+id);
+	$("#info" + id).attr("isopen","1");
+	}
+	else if(isopen=="1"){
+		$("#info" + id).html("");
+		$("#info" + id).attr("isopen","0");
+	}
+	
 }
 function closeLog(id){
-	$("#log"+id).html("");
+	$("#info"+id).html("");
 }
 </script>
 </head>
@@ -194,8 +213,7 @@ function closeLog(id){
 		  </#if></td>
 		  <td class="operation"><#if list.rfidState.getId()!=3><a href="javascript:disable('${list.id}');" class="stop">停用</a></#if><a href="javascript:del('${list.id}');" class="del">删除</a></td>
         </tr>
-        <tr class="tableInfo" id="info${list.id}"></tr>
-        <tr id="log${list.id}"></tr>
+        <tr class="tableInfo" id="info${list.id}" isopen="0"></tr>
         </#list>
       </table>
     <!-- InstanceEndEditable --></div>

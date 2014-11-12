@@ -147,12 +147,12 @@ public class WindowRfidController extends BaseController {
 
 	@RequestMapping("contractBatch")
 	public String getContractBatch(ModelMap model, String contractNo,
-			String rfidNo, String id) throws WebException {
+			String rfidNo, String id,String type) throws WebException {
 		try {
-			List<ContractBatchModel> conBatch = contractService
-					.getContractBatch(contractNo, rfidNo);
+			ContractBatchModel conBatch = contractService.getBatchByRfid(rfidNo);
 			model.put("conBatch", conBatch);
 			model.put("id", id);
+			model.put("type", type);
 			model.put("contractNo", contractNo);
 			return "site/rfid/window/manage/contract-batch";
 		} catch (Exception e) {

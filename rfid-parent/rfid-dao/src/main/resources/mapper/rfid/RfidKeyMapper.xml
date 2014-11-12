@@ -12,12 +12,12 @@
 		<![CDATA[REPLACE INTO R_GLOBAL_KEY (NAME) values (#{name});]]>
 	</insert>
 	<select id="getKeyEntity" parameterType="String" resultMap="RfidKeyEntity">
-		SELECT ID,NAME FROM R_GLOBAL_KEY WHERE NAME=#{name};
+		SELECT ID,NAME FROM TEST_R_GLOBAL_KEY WHERE NAME=#{name};
 	</select>
 	<update id="updateKeyEntity" parameterType="com.sxj.supervisor.entity.rfid.RfidKeyEntity">
-		UPDATE R_GLOBAL_KEY SET ID=ID+#{step} where NAME=#{name} AND ID=#{id};
+		UPDATE TEST_R_GLOBAL_KEY SET ID=ID+#{step} where NAME=#{name} AND ID=#{id};
 	</update>
 	<insert id="insertKeyEntity" parameterType="com.sxj.supervisor.entity.rfid.RfidKeyEntity">
-		INSERT INTO R_GLOBAL_KEY(ID,NAME) values (#{id},#{name});
+		INSERT INTO TEST_R_GLOBAL_KEY(ID,NAME) values (#{id},#{name});
 	</insert>
 </mapper>
