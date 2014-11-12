@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.rfid.sale.RfidPriceEntity;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.service.rfid.sale.IRfidPriceService;
-import com.sxj.util.common.NumberUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -35,9 +34,6 @@ public class PricemgrController extends BaseController {
 			List<RfidPriceEntity> list = priceService.queryPrice();
 			if (list.size() > 0) {
 				RfidPriceEntity price = list.get(0);
-				// price.setWindowPrice((list.get(0).getWindowPrice() / 100));
-				// price.setLogisticsPrice((list.get(0).getLogisticsPrice() /
-				// 100));
 				map.put("model", price);
 			} else {
 				map.put("model", null);
@@ -53,16 +49,13 @@ public class PricemgrController extends BaseController {
 	 * 新增价格
 	 */
 	@RequestMapping("add")
-	public @ResponseBody Map<String, String> add(float windowPrice,
-			float logisticsPrice) throws WebException {
+	public @ResponseBody Map<String, String> add(Double windowPrice,
+			Double logisticsPrice) throws WebException {
 		try {
 			RfidPriceEntity price = new RfidPriceEntity();
 			Map<String, String> map = new HashMap<String, String>();
-			Long w = Long.parseLong(NumberUtils.rightMove(windowPrice + "", 2));
-			price.setWindowPrice(w);
-			Long l = Long.parseLong(NumberUtils.rightMove(logisticsPrice + "",
-					2));
-			price.setLogisticsPrice(l);
+			price.setWindowPrice(windowPrice);
+			price.setLogisticsPrice(logisticsPrice);
 			priceService.addPrice(price);
 			map.put("isOk", "ok");
 			return map;
@@ -76,16 +69,13 @@ public class PricemgrController extends BaseController {
 	 * 更新价格
 	 */
 	@RequestMapping("update")
-	public @ResponseBody Map<String, String> update(float windowPrice,
-			float logisticsPrice, String id) throws WebException {
+	public @ResponseBody Map<String, String> update(Double windowPrice,
+			Double logisticsPrice, String id) throws WebException {
 		try {
 			RfidPriceEntity price = new RfidPriceEntity();
 			Map<String, String> map = new HashMap<String, String>();
-			Long w = Long.parseLong(NumberUtils.rightMove(windowPrice + "", 2));
-			price.setWindowPrice(w);
-			Long l = Long.parseLong(NumberUtils.rightMove(logisticsPrice + "",
-					2));
-			price.setLogisticsPrice(l);
+			price.setWindowPrice(windowPrice);
+			price.setLogisticsPrice(logisticsPrice);
 			price.setId(id);
 			priceService.modifyPrice(price);
 			map.put("isOk", "ok");

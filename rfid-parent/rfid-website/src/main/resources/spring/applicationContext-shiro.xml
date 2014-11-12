@@ -15,12 +15,12 @@
 	default-lazy-init="false">
 
 	<bean id="myShiroRealmService"
-		class="com.sxj.supervisor.rfid.login.SupervisorSiteShiroRealm">
+		class="com.sxj.supervisor.rfid.login.ApiShiroRealm">
 		<property name="authenticationCacheName" value="${api.authentication.cache.name}"></property>
 		
 	</bean>
 	<bean id="authenticationFilter"
-		class="com.sxj.supervisor.rfid.login.SupervisorSiteAuthenticationFilter" />
+		class="com.sxj.supervisor.rfid.login.ApiAuthenticationFilter" />
 
 
 	<!-- 权限管理器 -->
@@ -57,7 +57,7 @@
 		<property name="securityManager" ref="securityManager"></property>
 	</bean>
  
-	<bean id="shiroCacheManager" class="com.sxj.supervisor.rfid.login.SupervisorShiroRedisCacheManager">
+	<bean id="shiroCacheManager" class="com.sxj.supervisor.rfid.login.ApiShiroRedisCacheManager">
 		<property name="level" value="2"></property>
 		<property name="collections" ref="redisCollections"></property>
 	</bean>
@@ -72,6 +72,7 @@
 	<!-- session存储的实现 -->
 	<bean id="shiroSessionDao"
 		class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+		<property name="activeSessionsCacheName"  value="${api.session.cache.name}"/>
 	</bean>
 
 	<!-- 单机session -->

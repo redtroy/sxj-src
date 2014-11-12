@@ -18,7 +18,7 @@ import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 
-public class SupervisorSiteShiroRealm extends AuthenticatingRealm {
+public class ApiShiroRealm extends AuthenticatingRealm {
 
 	// 用于获取用户信息及用户权限信息的业务接口
 	@Autowired
@@ -39,7 +39,7 @@ public class SupervisorSiteShiroRealm extends AuthenticatingRealm {
 
 	private static final int SALT_SIZE = 8;
 
-	public SupervisorSiteShiroRealm() {
+	public ApiShiroRealm() {
 		// 认证
 		super.setAuthenticationCachingEnabled(false);
 		// 授权
@@ -49,7 +49,7 @@ public class SupervisorSiteShiroRealm extends AuthenticatingRealm {
 	// 获取认证信息
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken authcToken) throws AuthenticationException {
-		SupervisorSiteToken token = (SupervisorSiteToken) authcToken;
+		ApiToken token = (ApiToken) authcToken;
 		// 通过表单接收的用户
 		SupervisorPrincipal userBean = token.getUserBean();
 		if (userBean == null) {

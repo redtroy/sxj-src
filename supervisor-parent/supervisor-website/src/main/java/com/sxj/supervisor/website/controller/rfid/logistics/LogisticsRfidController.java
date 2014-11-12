@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
@@ -33,6 +34,7 @@ import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -221,29 +223,51 @@ public class LogisticsRfidController extends BaseController {
 	 */
 	@RequestMapping("getBatchNo")
 	public @ResponseBody Map<Object, Object> getBatch(String contractNo,
-			Integer sumBatch) throws WebException {
+			HttpSession session) throws WebException {
+		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			Map<Object, Object> map = new HashMap<Object, Object>();
+			SupervisorPrincipal userInfo = getLoginInfo(session);
+			if (userInfo == null) {
+				throw new WebException("登陆超时，请重新登陆！");
+			}
 			map.put("batchNo", 0);
-			ContractQuery query = new ContractQuery();
-			query.setContractNo(contractNo);
-			List<ContractBatchModel> list = contractService.getContractBatch(
-					contractNo, null);
+			if (StringUtils.isEmpty(contractNo)) {
+				throw new WebException("请输入合同号！");
+			}
+			ContractModel contract = contractService
+					.getContractModelByContractNo(contractNo.trim());
+			if (contract == null || contract.getContract() == null) {
+				throw new WebException("合同不存在！");
+			}
+			if (contract.getContract().getType()
+					.equals(ContractTypeEnum.bidding)) {
+				throw new WebException("该合同不是采购合同！");
+			}
+			if (!contract.getContract().getMemberIdB()
+					.equals(userInfo.getMember().getMemberNo())) {
+				throw new WebException("该合同不属于当前会员！");
+			}
+			if (contract.getContract().getBatchCount() == null
+					|| contract.getContract().getBatchCount() == 0) {
+				throw new WebException("该合同没有可启用的批次！");
+			}
+			map.put("sumBatch", contract.getContract().getBatchCount());
+			List<ContractBatchModel> list = contract.getBatchList();
 			if (list == null || list.size() == 0) {
-				if (sumBatch > 0) {
-					map.put("batchNo", 1);
-				}
+				map.put("batchNo", 1);
 			} else {
 				int oldBatchCount = list.size();
-				if (sumBatch > oldBatchCount) {
+				if (contract.getContract().getBatchCount() == oldBatchCount) {
+					throw new WebException("该合同所有的批次已经启用完毕！");
+				} else {
 					map.put("batchNo", oldBatchCount + 1);
 				}
 			}
-			return map;
 		} catch (Exception e) {
-			SxjLogger.error("查询批次号错误", e, this.getClass());
-			throw new WebException("查询批次号错误");
+			SxjLogger.error("查询启用批次号错误", e, this.getClass());
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**

@@ -20,12 +20,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
+import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
+import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.CustomDecimal;
@@ -37,6 +41,9 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Autowired
 	private IWindowRfidDao windowRfidDao;
+
+	@Autowired
+	private IWindowRfidRefService winRefService;
 
 	@Override
 	public List<WindowRfidEntity> queryWindowRfid(WindowRfidQuery query)
@@ -188,12 +195,16 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			query2.setMaxRfidNo(maxRfid);
 			query2.setRfidState(RfidStateEnum.unused.getId());
 			List<WindowRfidEntity> list = queryWindowRfid(query2);
+			String memberNo = null;
+			String memberName = null;
 			for (Iterator<WindowRfidEntity> iterator = list.iterator(); iterator
 					.hasNext();) {
 				WindowRfidEntity windowRfid = iterator.next();
 				if (windowRfid == null) {
 					continue;
 				}
+				memberNo = windowRfid.getMemberNo();
+				memberName = windowRfid.getMemberName();
 				windowRfid.setGlassRfid(gRfid);
 				windowRfid.setProfileRfid(lRfid);
 				windowRfid.setWindowType(windowType);
@@ -201,6 +212,22 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			}
 			windowRfidDao.batchUpdateWindowRfid(list
 					.toArray(new WindowRfidEntity[list.size()]));
+
+			// 生成关联单
+			WindowRefEntity winRef = new WindowRefEntity();
+			winRef.setMinRfidNo(minRfid);
+			winRef.setMaxRfidNo(maxRfid);
+			winRef.setMemberNo(memberNo);
+			winRef.setMemberName(memberName);
+			winRef.setType(LinkStateEnum.windowApply);
+			winRef.setWindowsNo(windowType);
+			winRef.setGlassBatchNo(gRfid);
+			winRef.setProfileBatchNo(lRfid);
+			winRef.setApplyDate(new Date());
+			// winRef.setReplenishRfid(replenishRfid);
+			winRef.setContractNo(refContractNo);
+			winRef.setState(AuditStateEnum.noapproval);
+			winRefService.addWindowRfidRef(winRef);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("批量启用RFID失败", e);
