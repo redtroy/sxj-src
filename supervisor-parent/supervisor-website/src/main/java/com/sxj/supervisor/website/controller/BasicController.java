@@ -127,6 +127,7 @@ public class BasicController extends BaseController
             MemberEntity newMember = memberService.getMember(member.getId());
             session.setAttribute("userinfo", newMember);
             sessionDAO.getActiveSessionsCache().put(session.getId(), session);
+            set.remove(member.getId());
             return "1";
         }
         else
