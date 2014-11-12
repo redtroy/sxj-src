@@ -151,7 +151,7 @@ function batch(id,contractNo,rfidNo){
         <#list winList as win>
         <tr>
           <td><a href="javascript:loadInfo('${win.id}','${win.type.getId()}');" class="lnk-blue">${win.rfidRefNo}</a></td>
-          <td>${win.rfidRange}</td>
+          <td>${win.minRfidNo}-${win.maxRfidNo}</td>
           <td>${win.memberName}</td>
           <td>${win.type.getName()}</td>
 		  <td>${win.windowsNo.getName()}</td>

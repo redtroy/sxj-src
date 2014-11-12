@@ -608,6 +608,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 查询合同列表
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<ContractModel> queryContracts(ContractQuery query)
 			throws ServiceException {
 		try {
@@ -754,6 +755,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 补损合同
 	 */
 	@Override
+	@Transactional
 	public void suppContract(String recordId, String contractId,
 			List<ReplenishBatchModel> batchList,
 			ReplenishContractEntity replenishContract) throws ServiceException {
@@ -997,6 +999,7 @@ public class ContractServiceImpl implements IContractService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ModifyBatchModel> getContractModifyBatch(String contractNo,
 			String rfid) {
 		try {
@@ -1030,6 +1033,7 @@ public class ContractServiceImpl implements IContractService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ReplenishBatchModel> getContractReplenishBatch(
 			String contractNo, String rfid) {
 		try {
@@ -1063,6 +1067,7 @@ public class ContractServiceImpl implements IContractService {
 	}
 
 	@Override
+	@Transactional
 	public void modifyBatch(ContractBatchModel model) throws ServiceException {
 		try {
 			String batchItems = JsonMapper.nonEmptyMapper().toJson(
@@ -1225,6 +1230,7 @@ public class ContractServiceImpl implements IContractService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ContractEntity> getContractByRefContractNo(String refContractNo)
 			throws ServiceException {
 		try {
@@ -1242,6 +1248,7 @@ public class ContractServiceImpl implements IContractService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ContractItemEntity> getContractItem(String contractNo)
 			throws ServiceException {
 		try {
@@ -1292,6 +1299,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 跟据rfid 获取补损批次
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public ContractReplenishModel getReplenishByRfid(String rfid) {
 		try {
 			if (StringUtils.isEmpty(rfid)) {

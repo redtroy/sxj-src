@@ -6,8 +6,8 @@
 	<resultMap id="PriceResultMap"
 		type="com.sxj.supervisor.entity.rfid.sale.RfidPriceEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="windowPrice" column="WINDOW_PRICE" jdbcType="INTEGER" />
-		<result property="logisticsPrice" column="LOGISTICS_PRICE" jdbcType="INTEGER" />
+		<result property="windowPrice" column="WINDOW_PRICE" jdbcType="DOUBLE" />
+		<result property="logisticsPrice" column="LOGISTICS_PRICE" jdbcType="DOUBLE" />
 	</resultMap>
 	<!-- 按条件查询 -->
 	<select id="queryPrice" resultMap="PriceResultMap"

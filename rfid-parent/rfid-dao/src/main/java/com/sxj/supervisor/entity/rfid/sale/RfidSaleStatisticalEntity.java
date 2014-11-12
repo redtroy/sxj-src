@@ -57,7 +57,7 @@ public class RfidSaleStatisticalEntity extends Pagable implements Serializable {
 	 * 销售价格
 	 */
 	@Column(name = "PRICE")
-	private Long price;
+	private Double price;
 
 	/**
 	 * 销售数量
@@ -95,11 +95,11 @@ public class RfidSaleStatisticalEntity extends Pagable implements Serializable {
 		this.purchaseNo = purchaseNo;
 	}
 
-	public Long getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 

@@ -7,21 +7,9 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.validate/>
+<@b.errorInfo/>
+<@b.dialogBox/>
 <script>
-jQuery(document).ready(function($) {
-	$('.sltinput').click(function(){
-		$('.maskdivgen').fadeIn(100);
-		$('.dropList').slideDown(200);
-	})
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.dropList').slideUp(200);
-	})
-	$('.popBtn').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.dropList').slideUp(200);
-	})
-})
 var validform;
 $(function(){
 	 validform=$("#sub_form").Validform({
@@ -37,11 +25,14 @@ function update(id){
 	if(!validform.check()){
 		return false;
 	}
+	dialogBox(function(){
+		$.post("update.htm?id="+id,params,function(data){
+			succInfo(function(){
+				query();
+			},"修改成功！");
+		})
+	},"是否确认修改？");
 	
-	$.post("update.htm?id="+id,params,function(data){
-		alert('修改成功！');
-		query();
-	})
 	
 }
 function add(){
@@ -49,16 +40,18 @@ function add(){
 	if(!validform.check()){
 		return false;
 	}
-	$.post("add.htm",params,function(data){
-		alert('修改成功！');
-		query();
-	})
+	dialogBox(function(){
+		$.post("add.htm",params,function(data){
+			succInfo(function(){
+				query();
+			},"修改成功！");
+		})
+	},"是否确认修改？");
+	
 }
 function query(){
-	$.post("pricemgr_view.htm",function(data){
-		$("#rightBar").html($(data).find("#rightBar").html());
-	})
-	}	
+	window.location.href="${basePath}rfid/pricemgr/pricemgr_view.htm";
+}	
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -82,11 +75,11 @@ function query(){
     <div class="infoBox f14">
       <div>
         <label>门窗RFID销售价</label>
-        <#if (model??)> ${model.windowPrice/100}  <#else>0.00元  </#if>
+        <#if (model??)> ${model.windowPrice?string('0.00')} <#else>0.00元  </#if>
       </div>
       <div>
         <label>批次RFID销售价</label>
-         <#if (model??)> ${model.logisticsPrice/100 } <#else>0.00元  </#if>
+         <#if (model??)> ${model.logisticsPrice?string('0.00')} <#else>0.00元  </#if>
       </div>
       <form action="javascript:void(0)" id="sub_form">
       <div>

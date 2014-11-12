@@ -29,15 +29,17 @@ var su_price="";
 						$("#price").val(data.batchPrice);
 						su_price=data.batchPrice;
 					}
+					var price=parseFloat($("#price").val());
+					var count=parseInt($("#count").val());
+					if(price&&count){
+						var amount=price*count;
+						$("#ddze").html(amount.toFixed(2)+"元");
+					}
 				});
 			}
 		});
-		$(".number").keyup(function(){
+		$(".number").change(function(){
 			var price=parseFloat($("#price").val());
-			if(price>su_price){
-				//messageInfo("单价不能大于供应商协议价");
-				//return false;
-			}
 			var count=parseInt($("#count").val());
 			if(price&&count){
 				var amount=price*count;
@@ -58,7 +60,6 @@ var su_price="";
 					if(reg1.test($(obj).val())){
 						var price=parseFloat($(obj).val());
 						if(price<=su_price){
-							alert(price);
 							return true;
 						}
 					}

@@ -10,7 +10,9 @@ import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.supervisor.model.rfid.windowRef.WindowRefQuery;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -43,16 +45,19 @@ public class WindowRfidRefServiceImpl implements IWindowRfidRefService {
 			query.setPage(condition);
 			return rfidList;
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("查询门窗RFID关联错误", e);
 		}
 	}
 
 	@Override
+	@Transactional
 	public void updateWindowRfidRef(WindowRefEntity win)
 			throws ServiceException {
 		try {
 			windowRfidRefDao.updateWindowRfidRef(win);
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("更新门窗RFID关联错误", e);
 		}
 	}
@@ -60,11 +65,27 @@ public class WindowRfidRefServiceImpl implements IWindowRfidRefService {
 	@Override
 	public WindowRefEntity getWindowRfidRef(String id) throws ServiceException {
 		try {
-			WindowRefEntity window =windowRfidRefDao.getWindowRfidRef(id);
+			WindowRefEntity window = windowRfidRefDao.getWindowRfidRef(id);
 			return window;
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取门窗RFID关联错误", e);
 		}
+	}
+
+	@Override
+	public void addWindowRfidRef(WindowRefEntity win) throws ServiceException {
+		try {
+			if (win != null) {
+				win.setDateNo("GL" + DateTimeUtils.getTime("yyMM"));
+				windowRfidRefDao.addWindowRfidRef(win);
+			}
+
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("新增门窗RFID关联错误", e);
+		}
+
 	}
 
 }
