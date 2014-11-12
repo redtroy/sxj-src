@@ -573,11 +573,22 @@ public class NumberUtils
     public static void main(String[] args)
     {
         //System.out.println(NumberUtils.rightMove("-0.014", 2));
-        int number = 101;
-        int range = 5;
-        for (Integer[] ret : NumberUtils.split(number, range))
+        int number = 4;
+        int range = 3;
+        List<Integer[]> split = NumberUtils.split(number, range);
+        for (Integer[] ret : split)
         {
             System.out.println(ret[0] + "------" + ret[1]);
+        }
+        List<String> sample = new ArrayList<String>();
+        sample.add("a");
+        sample.add("b");
+        sample.add("c");
+        sample.add("d");
+        List<String> subList = sample.subList(split.get(1)[0], split.get(1)[1]);
+        for (String ret : subList)
+        {
+            System.out.println(ret);
         }
     }
     
