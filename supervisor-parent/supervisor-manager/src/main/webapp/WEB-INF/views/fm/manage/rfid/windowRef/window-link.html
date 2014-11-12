@@ -90,7 +90,7 @@ function batch(id,contractNo,rfidNo){
       <p>RFID关联申请号
         <input type="text" name="rfidRefNo" value=""/>
        RFID编号
-       <input type="text" name="rfidRange" value=""/>
+       <input type="text" name="rfidNo" value=""/>
        申请人名称
        <input type="text" name="" value=""/>
 	   相关批次RFID
@@ -118,7 +118,7 @@ function batch(id,contractNo,rfidNo){
         </select>	
        关联申请时间段
        <input type="text" name="" value="" datepicker />-<input type="text" name="" value="" datepicker />
-        <a class="btn btn-blue"><span>查询</span></a>
+        <a class="btn btn-blue" href="javascript:query();"><span>查询</span></a>
     </div>
     </form>
 	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的门窗RFID关联申请！</div>
