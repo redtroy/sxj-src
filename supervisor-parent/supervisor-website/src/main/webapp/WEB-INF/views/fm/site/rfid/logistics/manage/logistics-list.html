@@ -148,7 +148,7 @@ function closeLog(id){
 		   <#if list.rfidState.getId()==3>
 		   <em class="state frozen">${list.rfidState.getName()}</em>
 		  </#if></td>
-		  <td><#if list.rfidState.getId()==0><a href="to_start.htm?id=${list.id}" class="lnk-blue" title=""><span class="icon icon16 icon-ok"></span>启用</a> &nbsp;&nbsp;<a href="to_loss.htm?id=${list.id}" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>补损</a></#if></td>
+		  <td><#if list.rfidState.getId()==0><a href="to_start.htm?id=${list.id}" class="lnk-blue" title=""><span class="icon icon16 icon-ok"></span>启用</a> &nbsp;&nbsp;<a href="to_loss.htm?id=${list.rfidNo}" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>补损</a></#if></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}"> </tr>
         <tr id="log${list.id}"> </tr>
