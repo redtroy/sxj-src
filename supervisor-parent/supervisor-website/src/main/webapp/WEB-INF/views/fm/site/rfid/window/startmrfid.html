@@ -87,10 +87,15 @@ function query(){
 	if (flag){
 		return false;
 	}
+	$("#contract_a option").remove();
+	$("#contract_b option").remove();
+	$("#pc_a option").remove();
+	$("#pc_b option").remove();
+	$("#bq_qj").text("");
+	$("#rfid_a").text("");
+	$("#rfid_b").text("");
 	$.post("queryRefContract.htm",{refContractNo:refContractNo,num:num},function(data){
 		if (data.isOk=='ok'){
-			$("#contract_a option").remove();
-			$("#contract_b option").remove();
 			for (var i=0;i<data.list.length;i++){
 				if (data.list[i].contract.type=="glass"){
 					$("#contract_a").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");

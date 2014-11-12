@@ -3,6 +3,7 @@ package com.sxj.supervisor.dao.rfid.ref;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
@@ -43,4 +44,10 @@ public interface ILogisticsRefDao {
 	 **/
 	@Get
 	public LogisticsRefEntity get(String id);
+
+	/**
+	 * 根据ID进行删除
+	 */
+	@Delete
+	public void delete(String id);
 }

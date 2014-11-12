@@ -244,10 +244,15 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	}
 
 	public List<Object> getLogList() throws Exception {
-		logList = JsonMapper.nonEmptyMapper().getMapper()
-				.readValue(getLog(), new TypeReference<List<Object>>() {
-				});
-		return logList;
+		if (getLog() == null) {
+			return logList;
+		} else {
+			logList = JsonMapper.nonEmptyMapper().getMapper()
+					.readValue(getLog(), new TypeReference<List<Object>>() {
+					});
+			return logList;
+		}
+
 	}
 
 	public void setLogList(Object log) throws Exception {
