@@ -10,6 +10,7 @@
 	<settings>
 		<!-- changes from the defaults -->
 		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="localCacheScope" value="STATEMENT"/>
 	</settings>
 
 	<typeHandlers>

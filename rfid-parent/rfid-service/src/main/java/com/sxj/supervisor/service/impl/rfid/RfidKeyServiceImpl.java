@@ -2,8 +2,12 @@
 
 import java.sql.SQLException;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.rfid.IRfidKeyDao;
@@ -19,6 +23,17 @@ public class RfidKeyServiceImpl implements IRfidKeyService
     
     @Autowired
     private IRfidKeyDao dao;
+    
+    @Autowired
+    private ApplicationContext context;
+    
+    private IRfidKeyService self;
+    
+    @PostConstruct
+    public void post()
+    {
+        self = context.getBean(IRfidKeyService.class);
+    }
     
     @Override
     @Transactional(timeout = 30)
@@ -39,6 +54,7 @@ public class RfidKeyServiceImpl implements IRfidKeyService
     }
     
     @Override
+    @Transactional
     public Long getKey(Integer step) throws ServiceException
     {
         if (step == null || step <= 0)
@@ -55,8 +71,7 @@ public class RfidKeyServiceImpl implements IRfidKeyService
             oldKey.setStep(step);
             while (dao.updateKeyEntity(oldKey) < 1)
             {
-                oldKey = dao.getKeyEntity("rfidNo");
-                oldKey.setStep(step);
+                oldKey = self.refetchKey(step);
             }
             return oldKey.getId() + step;
         }
@@ -65,6 +80,14 @@ public class RfidKeyServiceImpl implements IRfidKeyService
             SxjLogger.error(sqle.getMessage(), sqle, this.getClass());
             throw new ServiceException(sqle.getMessage(), sqle);
         }
+    }
+    
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public RfidKeyEntity refetchKey(Integer step) throws SQLException
+    {
+        RfidKeyEntity key = dao.getKeyEntity("rfidNo");
+        key.setStep(step);
+        return key;
     }
     
 }
