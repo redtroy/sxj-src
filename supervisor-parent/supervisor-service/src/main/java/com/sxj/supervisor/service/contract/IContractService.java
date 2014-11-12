@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.contract;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.jsonrpc.annotation.JsonRpcService;
@@ -194,5 +195,8 @@ public interface IContractService {
 	 * @return
 	 */
 	ContractReplenishModel getReplenishByRfid(String rfid);
+
+	ContractBatchModel getBatchByRfid(String rfidNo) throws ServiceException,
+			SQLException;
 
 }
