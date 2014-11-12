@@ -62,7 +62,7 @@ public class RfidKeyServiceImpl implements IRfidKeyService
         try
         {
             
-            RfidKeyEntity oldKey = dao.getKeyEntity("rfidNo");
+            RfidKeyEntity oldKey = self.refetchKey(step);
             if (oldKey == null)
             {
                 oldKey = new RfidKeyEntity(0L, "rfidNo");
@@ -86,6 +86,8 @@ public class RfidKeyServiceImpl implements IRfidKeyService
     public RfidKeyEntity refetchKey(Integer step) throws SQLException
     {
         RfidKeyEntity key = dao.getKeyEntity("rfidNo");
+        if (key == null)
+            return null;
         key.setStep(step);
         return key;
     }
