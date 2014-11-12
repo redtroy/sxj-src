@@ -12,6 +12,7 @@
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.errorInfo/>
 <@b.validate/>
+<@b.dialogBox/>
 <script>
 var num =1;
 function addTable(){
@@ -124,6 +125,12 @@ $(function() {
 							}else{
 								$("#batchNo").val(data.batchNo);
 								$("#batchNo_span").text(data.batchNo);
+								if(data.type==1){
+									$("#unit").html("/㎡");
+								}else if(data.type==2){
+									$("#unit").html("/吨");
+								}
+								
 								isPass= true;
 							}
 					  }
@@ -140,8 +147,21 @@ $(function() {
 			startRfid();
 		}
 	});
+	$(".quantity").live("blur",function(){
+			var value=$(this).attr("value");
+			if(parseFloat(value)){
+				$(this).attr("value",parseFloat(value).toFixed(2))
+			}
+	})
+	$("#batchAmount").live("blur",function(){
+			var value=$(this).attr("value");
+			if(parseFloat(value)){
+				$(this).attr("value",parseFloat(value).toFixed(2))
+			}
+	})
 });
 function startRfid() {
+	dialogBox(function(){
 	$.post("saveRfid.htm", $("#save_form").serialize(), function(data) {
 		if (data.isOK == 'ok') {
 			succInfo(function(){
@@ -151,10 +171,7 @@ function startRfid() {
 			errorInfo(data.error);
 		}
 	});
-
-}
-function subForm(){
-	  $("#save_form").submit();
+	},"是否启用标签?");
 }
 </script>
 </head>
@@ -193,14 +210,14 @@ function subForm(){
 								<col width="15%" />
 								<tr>
 									<th>产品规格</th>
-									<th>数量（m&sup2;/吨）</th>
+									<th>数量（<span id="unit"></span>）</th>
 									<th>操作</th>
 								</tr>
 								<tr class="CaseRow" id="trDataRow1">
 									<td><input type="text" name="batchItems[0].productModel" value=""
 										class="input input-w270h30" datatype="*1-20" nullmsg="请输入产品规格！" errormsg="产品规格不合法"/></td>
 									<td><input type="text" name="batchItems[0].quantity" value=""
-										class="input input-w140h30" datatype="count" nullmsg="数量！" errormsg="数量不合法"/></td>
+										class="input input-w140h30 quantity" datatype="count" nullmsg="数量！" errormsg="数量不合法"/></td>
 									<td><a href="javascript:addTable();" class="lnk-green">+</a></td>
 								</tr>
 							</table>

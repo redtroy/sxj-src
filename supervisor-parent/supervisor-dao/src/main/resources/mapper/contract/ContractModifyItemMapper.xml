@@ -18,6 +18,6 @@
 <!-- 条件查询合同变更批次 -->
 	<select id="queryItems" resultMap="ModifyItemResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID,MODIFY_ID,PRODUCT_NAME,PRODUCT_MODEL,QUANTITY,PRICE,AMOUNT,REMARKS,UPDATE_STATE FROM M_CONTRACT_MODIFY_ITEM WHERE MODIFY_ID =#{condition.recordIds}]]>
+		<![CDATA[SELECT *  FROM M_CONTRACT_MODIFY_ITEM WHERE MODIFY_ID =#{condition.recordIds}]]>
 	</select>
 </mapper>
