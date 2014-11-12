@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IMemberRoleDao;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
@@ -22,6 +23,7 @@ public class MemberRoleServiceImpl implements IMemberRoleService {
 	private IMemberRoleDao roleDao;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<MemberFunctionEntity> getAllRoleFunction(String accountId)
 			throws ServiceException {
 		try {
@@ -35,6 +37,7 @@ public class MemberRoleServiceImpl implements IMemberRoleService {
 	}
 
 	@Override
+	@Transactional
 	public List<MemberFunctionModel> getRoleFunctions(String accountId)
 			throws ServiceException {
 		try {
@@ -65,6 +68,7 @@ public class MemberRoleServiceImpl implements IMemberRoleService {
 	}
 
 	@Override
+	@Transactional
 	public void addRoles(List<MemberRoleEntity> roles) throws ServiceException {
 		try {
 			int size = roles.size();
@@ -79,6 +83,7 @@ public class MemberRoleServiceImpl implements IMemberRoleService {
 	}
 
 	@Override
+	@Transactional
 	public void removeRoles(String accountId) throws ServiceException {
 		try {
 			roleDao.deleteRolesByAccount(accountId);

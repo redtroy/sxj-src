@@ -140,6 +140,7 @@ public class MemberServiceImpl implements IMemberService {
 	 * 删除会员
 	 */
 	@Override
+	@Transactional
 	public void removeMember(String id) {
 		menberDao.deleteMember(id);
 
@@ -167,6 +168,7 @@ public class MemberServiceImpl implements IMemberService {
 	 * 更改账户状态
 	 */
 	@Override
+	@Transactional
 	public void editState(String id, Integer state) throws ServiceException {
 		try {
 			if (state != null && StringUtils.isNotEmpty(id)) {
@@ -186,6 +188,7 @@ public class MemberServiceImpl implements IMemberService {
 	 * 更改审核状态
 	 */
 	@Override
+	@Transactional
 	public void editCheckState(String id, Integer state)
 			throws ServiceException {
 		try {
@@ -209,6 +212,7 @@ public class MemberServiceImpl implements IMemberService {
 	 * 根据会员号，查询会员信息
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public MemberEntity memberInfo(String memberNo) throws ServiceException {
 		if (StringUtils.isEmpty(memberNo)) {
 			return null;
@@ -244,6 +248,7 @@ public class MemberServiceImpl implements IMemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public MemberEntity getMemberByName(String name) throws ServiceException {
 		try {
 			return menberDao.getMemberByName(name);
