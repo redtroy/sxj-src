@@ -8,6 +8,10 @@ import com.sxj.util.exception.ServiceException;
 
 public interface IPurchaseRfidService {
 
+	public static final Integer executeCount = 1000;
+
+	public static final Integer threadCount = 15;
+
 	/**
 	 * 根据条件高级查询
 	 * 

@@ -1,8 +1,12 @@
 package com.sxj.supervisor.service.impl.rfid.purchase;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +39,7 @@ import com.sxj.supervisor.service.rfid.sale.IRfidPriceService;
 import com.sxj.supervisor.service.rfid.sale.IRfidSaleStatisticalService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.common.DateTimeUtils;
+import com.sxj.util.common.NumberUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.CustomDecimal;
@@ -238,15 +243,16 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	@Transactional(timeout = 30)
 	public void importRfid(String purchaseId) throws ServiceException {
 		try {
+			long statrTime = System.currentTimeMillis();
 			RfidPurchaseEntity purchase = getRfidPurchase(purchaseId);
 			RfidApplicationEntity apply = applyService.getApplication(purchase
 					.getApplyNo());
 			RfidTypeEnum rfidType = purchase.getRfidType();
 			Long count = purchase.getCount();
+			Long lastkey = keyService.getKey(count.intValue());
 			if (RfidTypeEnum.door.equals(rfidType)) {
-				WindowRfidEntity[] winRfids = new WindowRfidEntity[count
-						.intValue()];
-				for (int i = 0; i < count; i++) {
+				List<WindowRfidEntity> winRfids = new ArrayList<>();
+				for (Long i = lastkey; i > lastkey - count; i--) {
 					WindowRfidEntity rfid = new WindowRfidEntity();
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					rfid.setContractNo(purchase.getContractNo());
@@ -267,20 +273,38 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					RfidLog log = new RfidLog();
 					log.setState(RfidStateEnum.unused.getName());
 					log.setDate(DateTimeUtils.getDateTime());
-
 					rfid.setLogList(log);
-					Long key = keyService.getKey();
-					rfid.setGenerateKey(key);
+					rfid.setGenerateKey(i);
 					String rfidNo = CustomDecimal.getDecimalString(4,
-							new BigDecimal(key));
+							new BigDecimal(i));
 					rfid.setRfidNo(rfidNo);
-					winRfids[i] = rfid;
+					winRfids.add(rfid);
 				}
-				winRfidService.batchAddWindowRfid(winRfids);
+				// 执行线程
+				ExecutorService pool = Executors
+						.newFixedThreadPool(threadCount);
+				List<Future<Integer>> futures = new ArrayList<>();
+				List<Integer[]> splits = NumberUtils.split(count.intValue(),
+						executeCount);
+				for (Integer[] split : splits) {
+					List<WindowRfidEntity> subList = winRfids.subList(split[0],
+							split[1]);
+					WindowRfidThread thread1 = new WindowRfidThread(subList,
+							winRfidService);
+					Future<Integer> submit = pool.submit(thread1);
+					futures.add(submit);
+				}
+				Integer threadCount = 0;
+				for (Future<Integer> future : futures) {
+					Integer submitCount = future.get();
+					threadCount = threadCount + submitCount;
+				}
+				if (threadCount.intValue() != count.intValue())
+					throw new ServiceException("导入RFID失败！");
+
 			} else {
-				LogisticsRfidEntity[] rfids = new LogisticsRfidEntity[count
-						.intValue()];
-				for (int i = 0; i < count; i++) {
+				List<LogisticsRfidEntity> rfids = new ArrayList<>();
+				for (Long i = lastkey; i > lastkey - count; i--) {
 					LogisticsRfidEntity rfid = new LogisticsRfidEntity();
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					// rfid.setContractNo(purchase.getContractNo());
@@ -303,17 +327,44 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					log.setState(RfidStateEnum.unused.getName());
 					log.setDate(DateTimeUtils.getDateTime());
 					rfid.setLogList(log);
-					Long key = keyService.getKey();
-					rfid.setGenerateKey(key);
+					rfid.setGenerateKey(i);
 					String rfidNo = CustomDecimal.getDecimalString(4,
-							new BigDecimal(key));
+							new BigDecimal(i));
 					rfid.setRfidNo(rfidNo);
-					rfids[i] = rfid;
+					rfids.add(rfid);
 				}
-				logisticsRfidService.batchAddLogistics(rfids);
+
+				// 执行线程
+				ExecutorService pool = Executors
+						.newFixedThreadPool(threadCount);
+				List<Future<Integer>> futures = new ArrayList<>();
+				List<Integer[]> splits = NumberUtils.split(count.intValue(),
+						executeCount);
+				for (Integer[] split : splits) {
+					List<LogisticsRfidEntity> subList = rfids.subList(split[0],
+							split[1]);
+					LogisticsRfidThread thread1 = new LogisticsRfidThread(
+							subList, logisticsRfidService);
+					Future<Integer> submit = pool.submit(thread1);
+					futures.add(submit);
+
+				}
+				Integer threadCount = 0;
+				for (Future<Integer> future : futures) {
+					Integer submitCount = future.get();
+					threadCount = threadCount + submitCount;
+				}
+				if (threadCount.intValue() != count.intValue())
+					throw new ServiceException("导入RFID失败！");
 			}
 			purchase.setImportState(ImportStateEnum.imported);
 			updatePurchase(purchase);
+			long endTime = System.currentTimeMillis();
+			System.out.println("--------------------------------"
+					+ (endTime - statrTime));
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage(), e);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("导入RFID错误", e);

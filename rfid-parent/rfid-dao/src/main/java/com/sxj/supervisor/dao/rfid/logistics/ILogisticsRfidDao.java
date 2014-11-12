@@ -43,7 +43,7 @@ public interface ILogisticsRfidDao {
 	 * @param member
 	 **/
 	@BatchInsert
-	public void batchAddLogisticsRfid(LogisticsRfidEntity[] logistics)
+	public Integer batchAddLogisticsRfid(LogisticsRfidEntity[] logistics)
 			throws SQLException;
 
 	/**

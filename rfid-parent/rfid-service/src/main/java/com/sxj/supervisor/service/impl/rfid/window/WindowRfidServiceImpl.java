@@ -151,11 +151,13 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Override
 	@Transactional
-	public void batchAddWindowRfid(WindowRfidEntity[] rfids)
+	public Integer batchAddWindowRfid(WindowRfidEntity[] rfids)
 			throws ServiceException {
 		try {
 			if (rfids != null) {
-				windowRfidDao.batchAddWindowRfid(rfids);
+				return windowRfidDao.batchAddWindowRfid(rfids);
+			} else {
+				return 0;
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());

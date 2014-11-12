@@ -33,7 +33,7 @@ public interface ILogisticsRfidService {
 	 * @param rfids
 	 * @throws ServiceException
 	 */
-	public void batchAddLogistics(LogisticsRfidEntity[] rfids)
+	public Integer batchAddLogistics(LogisticsRfidEntity[] rfids)
 			throws ServiceException;
 
 	/**

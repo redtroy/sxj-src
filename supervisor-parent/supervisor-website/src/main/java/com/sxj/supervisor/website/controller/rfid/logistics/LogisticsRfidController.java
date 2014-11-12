@@ -341,8 +341,9 @@ public class LogisticsRfidController extends BaseController {
 	}
 
 	@RequestMapping("getRecord")
-	public @ResponseBody Map<String, String> getRecord(String contractNo,
+	public @ResponseBody Map<String, Object> getRecord(String contractNo,
 			HttpSession session) throws WebException {
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			if (StringUtils.isEmpty(contractNo)) {
 				throw new WebException("采购合同号不能为空！");
@@ -351,24 +352,15 @@ public class LogisticsRfidController extends BaseController {
 			rq.setContractNo(contractNo);
 			rq.setRecordType(RecordTypeEnum.supplement.getId());
 			List<RecordEntity> reList = recordService.queryRecord(rq);
-			if (reList == null) {
-
+			if (reList == null || reList.size() == 0) {
+				throw new WebException("该合同没有补损备案！");
 			}
-			String str = "";
-			for (RecordEntity recordEntity : reList) {
-				str += recordEntity.getRecordNo() + ",";
-			}
-			if (str != "") {
-				str = str.substring(0, str.length() - 1);
-			}
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("isOK", "ok");
-			map.put("str", str);
-			return map;
+			map.put("record", reList);
 		} catch (Exception e) {
 			SxjLogger.error("查询备案错误", e, this.getClass());
-			throw new WebException("查询备案错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	@RequestMapping("getRecordInfo")

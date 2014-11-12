@@ -114,11 +114,13 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 
 	@Override
 	@Transactional
-	public void batchAddLogistics(LogisticsRfidEntity[] rfids)
+	public Integer batchAddLogistics(LogisticsRfidEntity[] rfids)
 			throws ServiceException {
 		try {
 			if (rfids != null) {
-				logisticsRfidDao.batchAddLogisticsRfid(rfids);
+				return logisticsRfidDao.batchAddLogisticsRfid(rfids);
+			} else {
+				return 0;
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());

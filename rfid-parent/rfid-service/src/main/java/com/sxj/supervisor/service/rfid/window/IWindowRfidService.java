@@ -42,7 +42,7 @@ public interface IWindowRfidService {
 	 * @param rfids
 	 * @throws ServiceException
 	 */
-	public void batchAddWindowRfid(WindowRfidEntity[] rfids)
+	public Integer batchAddWindowRfid(WindowRfidEntity[] rfids)
 			throws ServiceException;
 
 	/**
