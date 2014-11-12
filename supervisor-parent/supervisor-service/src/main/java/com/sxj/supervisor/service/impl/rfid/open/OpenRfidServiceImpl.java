@@ -22,6 +22,7 @@ import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
+import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
@@ -29,6 +30,7 @@ import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.open.Bacth;
@@ -71,6 +73,9 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 
 	@Autowired
 	private IContractDao contractDao;
+
+	@Autowired
+	private IWindowRfidRefDao windowRfidRefDao;
 
 	@Override
 	public BatchModel getBatchByRfid(String rfid) throws ServiceException,
@@ -142,21 +147,20 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 						}
 						if (batch.getBatchItems() != null) {
 							batch.setState("1");
-						}else{
+						} else {
 							batch.setState("2");
 						}
 					} else {
 						batch.setState("4");
 					}
-					
+
 				}
-			}else{
+			} else {
 				batch.setState("3");
 			}
 			batchModel.setBatchList(batch);
 		}
 
-		
 		return batchModel;
 	}
 
@@ -196,20 +200,31 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		query.addCondition("rfidNo", rfid);
 
 		List<WindowRfidEntity> win = windowRfidDao.queryWindowRfidList(query);
+		QueryCondition<WindowRefEntity> refQuery = new QueryCondition<WindowRefEntity>();
+		refQuery.addCondition("rfidNo", rfid);
+		List<WindowRefEntity> winRef = windowRfidRefDao
+				.queryWindowRfidRefList(refQuery);
+
 		WinTypeModel wtm = new WinTypeModel();
-		if (win != null && win.size() > 0) {
-//			if(){
-//				
-//			}
-			WindowRfidEntity wre = win.get(0);
-			wtm.setContratcNo(wre.getContractNo());
-			wtm.setRfidNo(wre.getRfidNo());
-			if (wre.getWindowType() != null) {
-				wtm.setWinType(wre.getWindowType().getName());
+		if (winRef != null && winRef.size() > 0) {
+			WindowRefEntity windowRef = winRef.get(0);
+			if (windowRef.getState().getId() == 1) {
+				if (win != null && win.size() > 0) {
+					WindowRfidEntity wre = win.get(0);
+					wtm.setContratcNo(wre.getContractNo());
+					wtm.setRfidNo(wre.getRfidNo());
+					if (wre.getWindowType() != null) {
+						wtm.setWinType(wre.getWindowType().getName());
+					}
+					wtm.setState("1");// 成功
+				} else {
+					wtm.setState("2");// 未启用
+				}
+			} else {
+				wtm.setState("3");// 未审核
 			}
-			wtm.setState("1");//成功
-		}else{
-			wtm.setState("2");//未启用
+		}else {
+			wtm.setState("2");// 未启用
 		}
 		return wtm;
 	}
