@@ -198,14 +198,18 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		List<WindowRfidEntity> win = windowRfidDao.queryWindowRfidList(query);
 		WinTypeModel wtm = new WinTypeModel();
 		if (win != null && win.size() > 0) {
+//			if(){
+//				
+//			}
 			WindowRfidEntity wre = win.get(0);
 			wtm.setContratcNo(wre.getContractNo());
 			wtm.setRfidNo(wre.getRfidNo());
 			if (wre.getWindowType() != null) {
-				return null;
+				wtm.setWinType(wre.getWindowType().getName());
 			}
-			wtm.setWinType(wre.getWindowType().getName());
-
+			wtm.setState("1");//成功
+		}else{
+			wtm.setState("2");//未启用
 		}
 		return wtm;
 	}
@@ -217,6 +221,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	public String getAddress(String contractNo) throws ServiceException,
 			SQLException {
 		QueryCondition<ContractEntity> query = new QueryCondition<ContractEntity>();
+		query.addCondition("contractType", "0");
 		query.addCondition("contractNo", contractNo);
 		List<ContractEntity> ceList = contractDao.queryContract(query);
 		String address = "";

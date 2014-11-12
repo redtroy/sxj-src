@@ -168,7 +168,6 @@ public class OpenRfidController {
 	public @ResponseBody WinTypeModel getRfidContractInfo(
 			@PathVariable String rfidNo, HttpServletResponse response)
 			throws ServiceException, SQLException {
-
 		try {
 			WinTypeModel win = openRfidService.getWinTypeByRfid(rfidNo);
 			response.setContentType("application/json; charset=utf-8");
