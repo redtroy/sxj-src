@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
@@ -183,7 +182,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					}
 					rfidEntity.setProgressState(LabelStateEnum.hasReceipt);
 				}
-				logisticsRfidService.batchAddLogistics(listRfid
+				logisticsRfidService.batchUpdateLogistics(listRfid
 						.toArray(new LogisticsRfidEntity[listRfid.size()]));
 			}
 
@@ -268,8 +267,8 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					RfidLog log = new RfidLog();
 					log.setState(RfidStateEnum.unused.getName());
 					log.setDate(DateTimeUtils.getDateTime());
-					String jsonLog = JsonMapper.nonDefaultMapper().toJson(log);
-					rfid.setLog(jsonLog);
+
+					rfid.setLogList(log);
 					Long key = keyService.getKey();
 					rfid.setGenerateKey(key);
 					String rfidNo = CustomDecimal.getDecimalString(4,
@@ -303,8 +302,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					RfidLog log = new RfidLog();
 					log.setState(RfidStateEnum.unused.getName());
 					log.setDate(DateTimeUtils.getDateTime());
-					String jsonLog = JsonMapper.nonDefaultMapper().toJson(log);
-					rfid.setLog(jsonLog);
+					rfid.setLogList(log);
 					Long key = keyService.getKey();
 					rfid.setGenerateKey(key);
 					String rfidNo = CustomDecimal.getDecimalString(4,

@@ -2,8 +2,11 @@
 
 import com.sxj.util.exception.ServiceException;
 
-public interface IRfidKeyService {
-
-	public Long getKey() throws ServiceException;
-
+public interface IRfidKeyService
+{
+    
+    public Long getKey() throws ServiceException;
+    
+    public Long getKey(Integer step) throws ServiceException;
+    
 }
