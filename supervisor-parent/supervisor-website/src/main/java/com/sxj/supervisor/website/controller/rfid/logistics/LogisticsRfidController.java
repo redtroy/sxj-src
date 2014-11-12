@@ -252,6 +252,8 @@ public class LogisticsRfidController extends BaseController {
 				throw new WebException("该合同没有可启用的批次！");
 			}
 			map.put("sumBatch", contract.getContract().getBatchCount());
+			map.put("type", contract.getContract().getType().getId());
+			
 			List<ContractBatchModel> list = contract.getBatchList();
 			if (list == null || list.size() == 0) {
 				map.put("batchNo", 1);

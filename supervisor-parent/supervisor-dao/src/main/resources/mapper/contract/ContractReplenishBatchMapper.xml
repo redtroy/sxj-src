@@ -5,7 +5,7 @@
 <mapper namespace="com.sxj.supervisor.dao.contract.IContractReplenishBatchDao">
 	<resultMap id="ReplenishBatchResultMap" type="com.sxj.supervisor.entity.contract.ReplenishBatchEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="modifyId" column="MODIFY_ID" jdbcType="VARCHAR" />
+		<result property="replenishId" column="REPLENISH_ID" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 		<result property="newRfidNo" column="NEW_RFID_NO" jdbcType="VARCHAR" />
@@ -16,8 +16,7 @@
 	<!-- 条件查询合同补损批次 -->
 	<select id="queryReplenishBatch" resultMap="ReplenishBatchResultMap"
 		parameterType="String">
-		<![CDATA[ SELECT ID,BATCH_NO,REPLENISH_ID,RFID_NO,AMOUNT,BATCH_ITEMS,NEW_RFID_NO
-		FROM M_CONTRACT_REPLENISH_BATCH WHERE 1=1 ]]>
+		<![CDATA[ SELECT  * FROM M_CONTRACT_REPLENISH_BATCH WHERE 1=1 ]]>
 		<if test="condition.recordIds != null and condition.recordIds != ''">
 			<![CDATA[ AND REPLENISH_ID=#{condition.recordIds}]]>
 		</if>
