@@ -15,6 +15,7 @@ import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -54,7 +55,8 @@ public class LableManageController extends BaseController {
 			map.put("rfidtypes", rfidtypes);
 			map.put("query", query);
 			map.put("list", list);
-
+			map.put("channelName", RfidChannel.RFID_APPLY_MESSAGE);
+			registChannel(RfidChannel.RFID_APPLY_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error("查询错误", e, this.getClass());
 			throw new WebException("查询错误");

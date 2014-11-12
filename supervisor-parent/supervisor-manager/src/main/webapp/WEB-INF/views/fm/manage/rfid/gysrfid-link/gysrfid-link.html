@@ -6,28 +6,56 @@
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <@b.pageScript/>
+<@b.dialogBox/>
 <script>
+  $(function(){
+	  JS.Engine.start('${basePath}comet');
+		JS.Engine.on({
+			start : function(cId, channelList, engine){  
+		      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+		    }, 
+		 "${channelName}" : function(data){//侦听一个channel
+			 $("#message_div").empty();
+		  if (data>0){
+			var bb='<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>'+data+'</strong>条新的物流RFID关联申请！</div>';
+			$("#message_div").html(bb);
+		  }
+         },   
+ 	}); 
+  })
   function open_1(id,rfidNo,contractNo,batchNo){
 	// var obj=$("#edit_1_"+id);
     // alert(obj.children().eq(0).html())
 	//  obj.show();
-	  
+	   var temp= $("#edit_1_"+id).is(":hidden");//是否隐藏 
+	   if (temp){
 	  $.post("query_contract.htm",{id:id,rfidNo:rfidNo,contractNo:contractNo,batchNo:batchNo},function(data){
 		  var obj=$("#edit_1_"+id);
 		  obj.children().eq(0).html(data);
 		  obj.show();
 	  })
+	   }else{
+		   var obj=$("#edit_1_"+id);
+		   obj.hide();
+	   } 
 	 
   }
   function swallowing(obj){
 	  $("#"+obj).hide();
   }
   function open_2(obj){
-	  $("#"+obj).show();
+	  var temp= $("#"+obj).is(":hidden");//是否隐藏 
+	  if (temp){
+		  $("#"+obj).show();
+	  }else{
+		  $("#"+obj).hide();
+	  }
+	  
   }
   function save_1(model_id,id){
 	var pare=$("#sub_form_"+id).serialize();
@@ -50,15 +78,14 @@
   }
   //审核
   function review(id,obj){
+	  dialogBox(function(){
 	  $.post("review.htm",{id:id,state:1},function(data){
 		  if (data.isOk=="ok"){
-			  alert('修改成功！');
 			  $(obj).parent().html('<em class="state verified">已审核</em>');
-			  
 		  }
 	  })
+  },"请确认是否更改审核状态！");
   }
-
   function query(page){
  	 	var params=$("#search_form").serialize();
 		if(page!=undefined){
@@ -143,7 +170,7 @@ function closeDiv(divId){
         <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
          </form >
     </div>
-	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的物流RFID关联申请！</div>
+	<div id="message_div"></div>
       <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="tabList">
         <col width="10%"/>
@@ -188,11 +215,14 @@ function closeDiv(divId){
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
+		  <#if (model.state.id==0)>
 		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
+          <#else>
+           <td class="operation">-</td>
+          </#if>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
           <td colspan="11">
-          1234
 		  </td>
 	    </tr> 
 	    <#elseif (model.type.id==1)>
@@ -211,7 +241,11 @@ function closeDiv(divId){
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
+		   <#if (model.state.id==0)>
 		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del">删除</a></td>
+           <#else>
+           <td class="operation">-</td>
+          </#if>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_2_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
@@ -243,7 +277,11 @@ function closeDiv(divId){
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
+		  <#if (model.state.id==0)>
 		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del">删除</a></td>
+          <#else>
+           <td class="operation">-</td>
+          </#if>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_2_${model.id}">
         <td colspan="11"><div class="infoBox text-left">

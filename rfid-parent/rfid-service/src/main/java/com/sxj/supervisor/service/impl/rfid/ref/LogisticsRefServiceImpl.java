@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
+import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.service.rfid.ref.ILogisticsRefService;
 import com.sxj.util.exception.ServiceException;
@@ -57,6 +59,8 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 	public void update(LogisticsRefEntity model) throws ServiceException {
 		try {
 			refDao.update(model);
+			CometServiceImpl.subCount(RfidChannel.RFID_APPLY_MESSAGE);
+			RfidChannel.initTopic().publish(RfidChannel.RFID_APPLY_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("物流RFID关联申请管理更新错误");

@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -268,21 +266,25 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 			LabelProgressEnum[] label = LabelProgressEnum.values();
 			if (!wind.getProgressState().equals(LabelProgressEnum.installed)) {
-				List<List<Map<String, String>>> list = JsonMapper
-						.nonEmptyMapper()
-						.getMapper()
-						.readValue(wind.getLog(),
-								new TypeReference<List<Map<String, String>>>() {
-								});
-				// LogModel l = new LogModel();
-				Map<String, String> map = new HashMap<String, String>();
-				List<Map<String, String>> modelList = new ArrayList<Map<String, String>>();
-				map.put("date", (new Date()).toString());
-				map.put("state", label[3].getName());
-				modelList.add(map);
-				list.add(modelList);
-				String log = JsonMapper.nonEmptyMapper().toJson(list);
-				wind.setLog(log);
+				// List<LogModel> list = JsonMapper
+				// .nonEmptyMapper()
+				// .getMapper()
+				// .readValue(wind.getLog(),
+				// new TypeReference<List<LogModel>>() {
+				// });
+
+				// Map<String, String> map = new HashMap<String, String>();
+				// List<Map<String, String>> modelList = new
+				// ArrayList<Map<String, String>>();
+				// map.put("date", (new Date()).toString());
+				// map.put("state", label[3].getName());
+				// modelList.add(map);
+				LogModel l = new LogModel();
+				l.setDate((new Date()).toString());
+				l.setState(label[3].getName());
+				// list.add(l);
+				// String log = JsonMapper.nonEmptyMapper().toJson(list);
+				wind.setLogList(l);
 				wind.setProgressState(LabelProgressEnum.installed);
 				updateWindowRfid(wind);
 				return 1;
@@ -305,22 +307,26 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				if (contractNo.equals(wind.getContractNo())
 						&& (!wind.getProgressState().equals(
 								LabelProgressEnum.hasQuality))) {
-					List<List<Map<String, String>>> list = JsonMapper
-							.nonEmptyMapper()
-							.getMapper()
-							.readValue(
-									wind.getLog(),
-									new TypeReference<List<Map<String, String>>>() {
-									});
+					// List<List<Map<String, String>>> list = JsonMapper
+					// .nonEmptyMapper()
+					// .getMapper()
+					// .readValue(
+					// wind.getLog(),
+					// new TypeReference<List<Map<String, String>>>() {
+					// });
 					LabelProgressEnum[] label = LabelProgressEnum.values();
-					Map<String, String> map = new HashMap<String, String>();
-					List<Map<String, String>> modelList = new ArrayList<Map<String, String>>();
-					map.put("date", (new Date()).toString());
-					map.put("state", label[4].getName());
-					modelList.add(map);
-					list.add(modelList);
-					String log = JsonMapper.nonEmptyMapper().toJson(list);
-					wind.setLog(log);
+					// Map<String, String> map = new HashMap<String, String>();
+					// List<Map<String, String>> modelList = new
+					// ArrayList<Map<String, String>>();
+					// map.put("date", (new Date()).toString());
+					// map.put("state", label[4].getName());
+					// modelList.add(map);
+					// list.add(modelList);
+					// String log = JsonMapper.nonEmptyMapper().toJson(list);
+					LogModel l = new LogModel();
+					l.setDate((new Date()).toString());
+					l.setState(label[4].getName());
+					wind.setLogList(l);
 					wind.setProgressState(LabelProgressEnum.hasQuality);
 					updateWindowRfid(wind);
 				} else {
