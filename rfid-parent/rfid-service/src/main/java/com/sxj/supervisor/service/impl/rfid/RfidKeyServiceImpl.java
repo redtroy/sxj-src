@@ -1,6 +1,8 @@
 ﻿package com.sxj.supervisor.service.impl.rfid;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -90,6 +92,13 @@ public class RfidKeyServiceImpl implements IRfidKeyService
             return null;
         key.setStep(step);
         return key;
+    }
+    
+    public static void main(String... args)
+    {
+        List<String> test = new ArrayList<String>();
+        test.add("a");
+        System.out.println(test.subList(0, 1));
     }
     
 }

@@ -584,10 +584,8 @@ public class NumberUtils
     public static List<Integer[]> split(Integer number, Integer range)
     {
         Integer start = 0;
-        Integer end = 0;
         List<Integer[]> ret = new ArrayList<Integer[]>();
         boolean isLast = number % range == 0;
-        int times = isLast ? number / range : number / range + 1;
         
         for (int i = 0; i < number / range; i++)
         {
