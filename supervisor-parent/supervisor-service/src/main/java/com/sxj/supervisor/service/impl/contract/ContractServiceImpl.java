@@ -1425,4 +1425,13 @@ public class ContractServiceImpl implements IContractService {
 		return bacthList;
 
 	}
+	
+	public void deleteBatch(String rfidNo){
+		try{
+			
+		}catch(Exception e){
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("删除批次出错", e);
+		}
+	}
 }

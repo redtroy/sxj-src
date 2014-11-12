@@ -27,7 +27,7 @@
 		<if test="condition.rfidRefNo != null and condition.rfidRefNo !=''">
 			<![CDATA[AND RFID_REF_NO = #{condition.rfidRefNo}]]>
 		</if>
-		<if test="condition.condition.rfidNo != null and condition.rfidNo !=''">
+		<if test="condition.rfidNo != null and condition.rfidNo !=''">
 			<![CDATA[AND #{condition.rfidNo} BETWEEN MIN_RFID_NO AND MAX_RFID_NO]]>
 		</if>
 		<if test="condition.contractNo != null and condition.contractNo !=''">
