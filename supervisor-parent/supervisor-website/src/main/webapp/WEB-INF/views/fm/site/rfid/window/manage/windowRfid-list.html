@@ -69,13 +69,13 @@ function closeContract(id){
 }
 
 function blBatch(id,contractNo,rfidNo){
-	$("#blBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=blBatch"+id);
+	$("#blBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=blBatch"+id+"&type=1");
 	$("#xcBatch"+id).html("");
 	$("#info"+id).html("");
 	$("#log"+id).html("");
 }
 function xcBatch(id,contractNo,rfidNo){
-	$("#xcBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=xcBatch"+id);
+	$("#xcBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=xcBatch"+id+"&type=2");
 	$("#blBatch"+id).html("");
 	$("#info"+id).html("");
 	$("#log"+id).html("");

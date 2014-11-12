@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.contract;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.jsonrpc.annotation.JsonRpcService;
@@ -166,8 +167,8 @@ public interface IContractService {
 	void addBatch(ContractBatchModel model, String id, MemberEntity member)
 			throws ServiceException;
 
-	void updateRfid(String id, String rfidNo, String contractNo,
-			MemberEntity member, String newRfid) throws ServiceException;
+	void updateRfid(String rfidNo, String contractNo, MemberEntity member,
+			String newRfid) throws ServiceException;
 
 	String getReplenish(String contractNo);
 
@@ -190,9 +191,13 @@ public interface IContractService {
 
 	/**
 	 * 跟据rfid 获取补损批次
+	 * 
 	 * @param rfid
 	 * @return
 	 */
 	ContractReplenishModel getReplenishByRfid(String rfid);
+
+	ContractBatchModel getBatchByRfid(String rfidNo) throws ServiceException,
+			SQLException;
 
 }
