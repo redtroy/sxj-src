@@ -46,6 +46,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	private IWindowRfidRefService winRefService;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<WindowRfidEntity> queryWindowRfid(WindowRfidQuery query)
 			throws ServiceException {
 		try {
@@ -77,6 +78,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	}
 
 	@Override
+	@Transactional
 	public void updateWindowRfid(WindowRfidEntity win) throws ServiceException {
 		try {
 			windowRfidDao.updateWindowRfid(win);
@@ -87,6 +89,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<LogModel> getRfidStateLog(String id) throws ServiceException {
 		try {
 			List<LogModel> logList = new ArrayList<LogModel>();
@@ -117,6 +120,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public WindowRfidEntity getWindowRfid(String id) throws ServiceException {
 		try {
 			WindowRfidEntity windowRfid = windowRfidDao.getWindowRfid(id);
@@ -163,6 +167,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	}
 
 	@Override
+	@Transactional
 	public void batchUpdateWindowRfid(WindowRfidEntity[] rfids)
 			throws ServiceException {
 		try {

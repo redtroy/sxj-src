@@ -139,6 +139,7 @@ public class AccountServiceImpl implements IAccountService {
 	 * 查询子会员
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public AccountEntity getAccount(String id) throws ServiceException {
 		try {
 			AccountEntity account = accountDao.getAccount(id);
@@ -268,6 +269,7 @@ public class AccountServiceImpl implements IAccountService {
 	}
 
 	@Override
+	@Transactional
 	public String edit_pwd(String id, String pwd) throws ServiceException {
 		try {
 			AccountEntity account = new AccountEntity();
@@ -283,6 +285,7 @@ public class AccountServiceImpl implements IAccountService {
 	}
 
 	@Override
+	@Transactional
 	public void edit_Login(String id) throws ServiceException {
 		try {
 			AccountEntity account = new AccountEntity();
