@@ -166,8 +166,8 @@ public interface IContractService {
 	void addBatch(ContractBatchModel model, String id, MemberEntity member)
 			throws ServiceException;
 
-	void updateRfid(String id, String rfidNo, String contractNo,
-			MemberEntity member, String newRfid) throws ServiceException;
+	void updateRfid(String rfidNo, String contractNo, MemberEntity member,
+			String newRfid) throws ServiceException;
 
 	String getReplenish(String contractNo);
 
@@ -190,6 +190,7 @@ public interface IContractService {
 
 	/**
 	 * 跟据rfid 获取补损批次
+	 * 
 	 * @param rfid
 	 * @return
 	 */

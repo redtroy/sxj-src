@@ -29,6 +29,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 	private ILogisticsRfidDao logisticsRfidDao;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<LogisticsRfidEntity> queryLogistics(LogisticsRfidQuery query)
 			throws ServiceException {
 		try {
@@ -57,6 +58,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 	}
 
 	@Override
+	@Transactional
 	public void updateLogistics(LogisticsRfidEntity logistics)
 			throws ServiceException {
 		try {
@@ -68,6 +70,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<LogModel> getRfidStateLog(String id) throws ServiceException {
 		try {
 			List<LogModel> logList = new ArrayList<LogModel>();
@@ -99,6 +102,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public LogisticsRfidEntity getLogistics(String id) throws ServiceException {
 		try {
 			LogisticsRfidEntity entity = logisticsRfidDao.getLogisticsRfid(id);
@@ -109,6 +113,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 	}
 
 	@Override
+	@Transactional
 	public void batchAddLogistics(LogisticsRfidEntity[] rfids)
 			throws ServiceException {
 		try {
@@ -123,6 +128,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 	}
 
 	@Override
+	@Transactional
 	public void batchUpdateLogistics(LogisticsRfidEntity[] rfids)
 			throws ServiceException {
 		try {
@@ -137,13 +143,21 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public LogisticsRfidEntity getLogisticsByNo(String rfidNo)
 			throws ServiceException {
 		try {
-			// JsonMapper
+			LogisticsRfidQuery query = new LogisticsRfidQuery();
+			query.setRfidNo(rfidNo);
+			List<LogisticsRfidEntity> list = queryLogistics(query);
+			if (list != null && list.size() > 0) {
+				return list.get(0);
+			} else {
+				return null;
+			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更急rfid获取信息错误", e);
 		}
-		return null;
 	}
 }

@@ -182,7 +182,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					}
 					rfidEntity.setProgressState(LabelStateEnum.hasReceipt);
 				}
-				logisticsRfidService.batchAddLogistics(listRfid
+				logisticsRfidService.batchUpdateLogistics(listRfid
 						.toArray(new LogisticsRfidEntity[listRfid.size()]));
 			}
 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
@@ -37,7 +38,6 @@ import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.StringUtils;
-import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -160,17 +160,20 @@ public class LogisticsRfidController extends BaseController {
 			throws WebException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
+			if (StringUtils.isEmpty(rfidNo)) {
+				throw new WebException("RFID编号不能为空！");
+			}
 			ContractReplenishModel replenish = contractService
 					.getReplenishByRfid(rfidNo);
 			if (replenish == null) {
-				throw new ServiceException("该RFID没有对应的批次！");
+				throw new WebException("该RFID没有对应的批次！");
 			}
 			List<ReplenishBatchModel> replenishList = replenish.getBatchItems();
 			if (replenishList == null || replenishList.size() == 0) {
-				throw new ServiceException("该RFID没有对应的批次信息！");
+				throw new WebException("该RFID没有对应的批次信息！");
 			}
 			if (replenishList.size() > 1) {
-				throw new ServiceException("该RFID对应的批次信息大于一条！");
+				throw new WebException("该RFID对应的批次信息大于一条！");
 			}
 			map.put("contratct", replenish.getReplenishContract());
 			map.put("batch", replenishList.get(0));
@@ -250,7 +253,7 @@ public class LogisticsRfidController extends BaseController {
 			}
 			map.put("sumBatch", contract.getContract().getBatchCount());
 			map.put("type", contract.getContract().getType().getId());
-			
+
 			List<ContractBatchModel> list = contract.getBatchList();
 			if (list == null || list.size() == 0) {
 				map.put("batchNo", 1);
@@ -278,9 +281,11 @@ public class LogisticsRfidController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("to_loss")
-	public String to_loss(String id, ModelMap model) throws WebException {
+	public String to_loss(String id, String rfidNo, ModelMap model)
+			throws WebException {
 		try {
-			model.put("newRfidNo", id);
+			model.put("id", id);
+			model.put("newRfidNo", rfidNo);
 			return "site/rfid/logistics/manage/loss-gysrfid";
 		} catch (Exception e) {
 			SxjLogger.error("查询物流错误", e, this.getClass());
@@ -289,21 +294,21 @@ public class LogisticsRfidController extends BaseController {
 	}
 
 	@RequestMapping("rfid_loss")
-	public @ResponseBody Map<String, String> rfidLoss(String id, String rfidNo,
-			String newRfid, String contractNo, HttpSession session)
+	public @ResponseBody Map<String, String> rfidLoss(String contractNo,
+			String newRfidNo, String rfidNo, HttpSession session)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			contractService.updateRfid(id, rfidNo, contractNo,
-					userBean.getMember(), newRfid);
-			Map<String, String> map = new HashMap<String, String>();
+			contractService.updateRfid(rfidNo, contractNo,
+					userBean.getMember(), newRfidNo);
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("启用物流错误", e, this.getClass());
-			throw new WebException("启用物流错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	@RequestMapping("autoContract")
@@ -339,10 +344,16 @@ public class LogisticsRfidController extends BaseController {
 	public @ResponseBody Map<String, String> getRecord(String contractNo,
 			HttpSession session) throws WebException {
 		try {
+			if (StringUtils.isEmpty(contractNo)) {
+				throw new WebException("采购合同号不能为空！");
+			}
 			RecordQuery rq = new RecordQuery();
 			rq.setContractNo(contractNo);
-			rq.setRecordType("2");
+			rq.setRecordType(RecordTypeEnum.supplement.getId());
 			List<RecordEntity> reList = recordService.queryRecord(rq);
+			if (reList == null) {
+
+			}
 			String str = "";
 			for (RecordEntity recordEntity : reList) {
 				str += recordEntity.getRecordNo() + ",";
