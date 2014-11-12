@@ -55,8 +55,9 @@ public class LableManageController extends BaseController {
 			map.put("rfidtypes", rfidtypes);
 			map.put("query", query);
 			map.put("list", list);
-			map.put("channelName", RfidChannel.RFID_APPLY_MESSAGE);
-			registChannel(RfidChannel.RFID_APPLY_MESSAGE);
+			map.put("channelName",
+					RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
+			registChannel(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
 		} catch (Exception e) {
 			SxjLogger.error("查询错误", e, this.getClass());
 			throw new WebException("查询错误");
