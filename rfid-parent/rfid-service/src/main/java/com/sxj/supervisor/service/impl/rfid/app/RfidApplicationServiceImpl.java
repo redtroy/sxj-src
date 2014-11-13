@@ -112,9 +112,12 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			app.setDelstate(true);
 			appDao.updateRfidApplication(app);
 			return true;
-		} catch (Exception e) {
+		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("删除申请单错误");
 		}
 
 	}

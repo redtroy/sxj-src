@@ -62,7 +62,7 @@ public class ApplyLogisticsRfidController extends BaseController {
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error("提交物流标签申请", e, this.getClass());
-			throw new WebException("提交物流标签申请错误");
+			map.put("error", e.getMessage());
 		}
 		return map;
 	}
@@ -101,21 +101,21 @@ public class ApplyLogisticsRfidController extends BaseController {
 	 * 删除
 	 */
 	@RequestMapping("del_apply")
-	public @ResponseBody Map<String, String> del(String id, String applyNo)
-			throws WebException {
+	public @ResponseBody Map<String, String> del(String id) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			Map<String, String> map = new HashMap<String, String>();
 			Boolean flag = applyService.delApp(id);
 			if (flag) {
 				map.put("flag", "ok");
 			} else {
 				map.put("flag", "no");
+				map.put("error", "删除失败");
 			}
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("物流标签申请管理列表删除错误", e, this.getClass());
-			throw new WebException("物流标签申请管理列表删除错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 }

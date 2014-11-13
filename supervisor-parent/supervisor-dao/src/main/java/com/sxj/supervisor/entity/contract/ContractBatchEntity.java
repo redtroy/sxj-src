@@ -69,6 +69,8 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 	@Column(name = "UPDATE_STATE")
 	private Integer updateState;
 
+	private Integer type;
+
 	public Integer getUpdateState() {
 		return updateState;
 	}
@@ -123,6 +125,14 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 
 	public void setBatchItems(String batchItems) {
 		this.batchItems = batchItems;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 }

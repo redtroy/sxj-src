@@ -72,6 +72,15 @@ public interface IWindowRfidService {
 
 	/**
 	 * 
+	 * @param no
+	 * @return
+	 * @throws ServiceException
+	 */
+	public WindowRfidEntity getWindowRfidByNo(String rfidNo)
+			throws ServiceException;
+
+	/**
+	 * 
 	 * @param contractNo
 	 * @param count
 	 * @return

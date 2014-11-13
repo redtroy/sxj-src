@@ -51,6 +51,12 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	private Long generateKey;
 
 	/**
+	 * 申请单号
+	 */
+	@Column(name = "APPLY_NO")
+	private String applyNo;
+
+	/**
 	 * 采购单号
 	 */
 	@Column(name = "PURCHASE_NO")
@@ -230,6 +236,14 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		this.progressState = progressState;
 	}
 
+	public String getApplyNo() {
+		return applyNo;
+	}
+
+	public void setApplyNo(String applyNo) {
+		this.applyNo = applyNo;
+	}
+
 	public List<Object> getLogList() throws Exception {
 		if (getLog() == null) {
 			return logList;
@@ -243,7 +257,7 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	}
 
 	public void setLogList(Object log) throws Exception {
-		getLogList().add(log);
+		logList.add(log);
 		String json = JsonMapper.nonEmptyMapper().toJson(getLogList());
 		setLog(json);
 

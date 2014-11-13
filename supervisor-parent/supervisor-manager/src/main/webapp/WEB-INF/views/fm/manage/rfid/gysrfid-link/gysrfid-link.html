@@ -7,6 +7,9 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/comet4j.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -166,7 +169,7 @@ function closeDiv(divId){
          </#list>
         </select>
        关联申请时间段
-       <input type="text" name="starApplyDate" value="">-<input type="text" name="endApplyDate" value="">
+       <input type="text" name="starApplyDate" datepicker value="">-<input type="text"  datepicker name="endApplyDate" value="">
         <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
          </form >
     </div>

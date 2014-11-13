@@ -3,9 +3,6 @@ package com.sxj.supervisor.model.rfid.ref;
 import java.io.Serializable;
 
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
-import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
-import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 
 public class LogisticsRefQuery extends Pagable implements Serializable {
 
@@ -42,12 +39,12 @@ public class LogisticsRefQuery extends Pagable implements Serializable {
 	/**
 	 * RFID类型
 	 */
-	private RfidTypeEnum rfidType;
+	private Integer rfidType;
 
 	/**
 	 * 关联类型
 	 */
-	private AssociationTypesEnum type;
+	private Integer type;
 
 	/**
 	 * 批次
@@ -79,7 +76,7 @@ public class LogisticsRefQuery extends Pagable implements Serializable {
 	 * 
 	 * @return
 	 */
-	private AuditStateEnum state;
+	private Integer state;
 
 	/**
 	 * 逻辑删除标记
@@ -126,22 +123,6 @@ public class LogisticsRefQuery extends Pagable implements Serializable {
 		this.memberName = memberName;
 	}
 
-	public RfidTypeEnum getRfidType() {
-		return rfidType;
-	}
-
-	public void setRfidType(RfidTypeEnum rfidType) {
-		this.rfidType = rfidType;
-	}
-
-	public AssociationTypesEnum getType() {
-		return type;
-	}
-
-	public void setType(AssociationTypesEnum type) {
-		this.type = type;
-	}
-
 	public String getBatchNo() {
 		return batchNo;
 	}
@@ -182,11 +163,27 @@ public class LogisticsRefQuery extends Pagable implements Serializable {
 		this.contractNo = contractNo;
 	}
 
-	public AuditStateEnum getState() {
+	public Integer getRfidType() {
+		return rfidType;
+	}
+
+	public void setRfidType(Integer rfidType) {
+		this.rfidType = rfidType;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Integer getState() {
 		return state;
 	}
 
-	public void setState(AuditStateEnum state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 

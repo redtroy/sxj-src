@@ -123,11 +123,16 @@ public class SnGenerator implements KeyGenerator
                     snSql = dialect.getSnIncrSQL(snPojo);
                 }
                 DecimalFormat df = new DecimalFormat(sn.pattern());
-                Reflections.invokeSetter(parameter,
-                        field.getName(),
-                        snPojo.getStubValue()
-                                + df.format(snPojo.getCurrent()
-                                        + snPojo.getStep()));
+                if (sn.appendStubValue())
+                    Reflections.invokeSetter(parameter,
+                            field.getName(),
+                            snPojo.getStubValue()
+                                    + df.format(snPojo.getCurrent()
+                                            + snPojo.getStep()));
+                else
+                    Reflections.invokeSetter(parameter,
+                            field.getName(),
+                            df.format(snPojo.getCurrent() + snPojo.getStep()));
                 
             }
         }

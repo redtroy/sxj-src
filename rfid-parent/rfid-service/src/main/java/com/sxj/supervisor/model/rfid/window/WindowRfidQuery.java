@@ -31,6 +31,11 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	private String purchaseNo;
 
 	/**
+	 * 申请单号
+	 */
+	private String applyNo;
+
+	/**
 	 * 申请会员号
 	 */
 	private String memberNo;
@@ -78,6 +83,21 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	 * 进度状态
 	 */
 	private Integer progressState;
+
+	/**
+	 * 标记前台登录
+	 * 
+	 * @return
+	 */
+	private Integer websiteFlag;
+
+	public Integer getWebsiteFlag() {
+		return websiteFlag;
+	}
+
+	public void setWebsiteFlag(Integer websiteFlag) {
+		this.websiteFlag = websiteFlag;
+	}
 
 	public String getRfidNo() {
 		return rfidNo;
@@ -189,6 +209,14 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 
 	public void setMaxRfidNo(String maxRfidNo) {
 		this.maxRfidNo = maxRfidNo;
+	}
+
+	public String getApplyNo() {
+		return applyNo;
+	}
+
+	public void setApplyNo(String applyNo) {
+		this.applyNo = applyNo;
 	}
 
 }

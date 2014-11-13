@@ -24,6 +24,7 @@ import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -52,6 +53,7 @@ public class WindowRfidController extends BaseController {
 			SupervisorPrincipal loginInfo = getLoginInfo(session);
 			String memberNo = loginInfo.getMember().getMemberNo();
 			query.setMemberNo(memberNo);
+			query.setWebsiteFlag(1);
 			List<WindowRfidEntity> winList = windowRfidService
 					.queryWindowRfid(query);
 			LabelProgressEnum[] Label = LabelProgressEnum.values();
@@ -145,11 +147,23 @@ public class WindowRfidController extends BaseController {
 		}
 	}
 
+	/**
+	 * 获取 合同批次信息
+	 * 
+	 * @param model
+	 * @param contractNo
+	 * @param rfidNo
+	 * @param id
+	 * @param type
+	 * @return
+	 * @throws WebException
+	 */
 	@RequestMapping("contractBatch")
 	public String getContractBatch(ModelMap model, String contractNo,
-			String rfidNo, String id,String type) throws WebException {
+			String rfidNo, String id, String type) throws WebException {
 		try {
-			ContractBatchModel conBatch = contractService.getBatchByRfid(rfidNo);
+			ContractBatchModel conBatch = contractService
+					.getBatchByRfid(rfidNo);
 			model.put("conBatch", conBatch);
 			model.put("id", id);
 			model.put("type", type);
@@ -201,6 +215,32 @@ public class WindowRfidController extends BaseController {
 			SxjLogger.error("查询标签补损错误", e, this.getClass());
 			throw new WebException("查询标签补损错误");
 		}
+	}
+
+	@RequestMapping("replenishRfidInfo")
+	public @ResponseBody Map<String, Object> replenishRfidInfo(
+			String replenishNo) throws WebException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			if (StringUtils.isEmpty(replenishNo)) {
+				throw new WebException("补损标签号不能为空");
+			}
+			WindowRfidEntity windowRfid = windowRfidService
+					.getWindowRfidByNo(replenishNo);
+			if (windowRfid == null) {
+				throw new WebException("补损标签不存在");
+			}
+			if (!windowRfid.getRfidState().equals(RfidStateEnum.used)) {
+				throw new WebException("标签不是正在使用中的标签，不能被补损！");
+			}
+			map.put("contratcNo", windowRfid.getContractNo());
+			map.put("winTypeId", windowRfid.getWindowType().getId());
+			map.put("winTypeName", windowRfid.getWindowType().getName());
+		} catch (Exception e) {
+			SxjLogger.error("标签补损错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
 	}
 
 	/**

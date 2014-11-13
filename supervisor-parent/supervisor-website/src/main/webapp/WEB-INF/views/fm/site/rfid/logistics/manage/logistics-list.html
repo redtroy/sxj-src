@@ -2,13 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<title>私享家绿色门窗平</title>
+<meta name="keywords" content="私享家绿色门窗平�门窗,型材�玻璃�门窗"/>
+<meta name="description" content="私享家绿色门窗平�为门窗行业的玻璃�型材厂提供产品盘�物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业"/>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<!-- 供应链物流管-->
 <script >
 
 function query(page){
@@ -17,10 +18,10 @@ function query(page){
 		   params=params+"&currentPage="+page;
 	   }
 	$.post("queryList.htm",params,function(data){
-		var res=$(data).find("#res_table");
+		var res=$(data).find(".tabList");
 		var pager=$(data).find("#pager");
-		$("#res_table").empty();
-		$("#res_table").append(res.html());
+		$(".tabList").empty();
+		$(".tabList").append(res.html());
 		var totalPage=pager.attr("totalPage");
 		var currentPage=pager.attr("currentPage");
 		loadPage(currentPage,totalPage,query);
@@ -55,7 +56,22 @@ function  disable(id){
 	}
 }
 function loadInfo(id,rfidNo,contractNo){
-	$("#info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+	if ($("#info"+id).html()==""){
+		$("#info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+		$("#log"+id).html("");
+	}else{
+		close(id);
+	}
+	
+}
+
+function loadContractInfo(id,contractNo){
+	if ($("#info"+id).html()==""){
+		$("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo);
+		$("#log"+id).html("");
+	}else{
+		close(id);
+	}
 }
 function close(id){
 	$("#info"+id).html("");
@@ -86,18 +102,22 @@ function closeLog(id){
   <span class="title fontYH f20 fb">物流标签管理</span></h1>
 </div>
 <div class="contBox f12">
-<form action="" method="post" id="search_form">
+<form action="javascript:void(0);" method="post" id="search_form">
 <div class="searBox mb10">
   标签编号<input type="text" name="rfidNo" value="${query.rfidNo}"/>
-  申请单号<input type="text" name="purchaseNo" value="${query.purchaseNo}"/>
-  采购合同号<input type="text" name="contractNo" value="${query.contractNo}"/>
+  申请单号<input type="text" name="applyNo" value="${query.applyNo}"/>
+  采购合同<input type="text" name="contractNo" value="${query.contractNo}"/>
   标签进度<select name="progressState" class="selectx">
           <option value="" selected="selected">全部</option>
 		  <#list Label as label> 
-          <option value="${label.getId()}">${label.getName()}</option>
+           <#if (label.id==0)>
+		    <option value="${label.getId()}">标签发货中</option>
+		    <#elseif (label.id>1)>
+            <option value="${label.getId()}">${label.getName()}</option>
+            </#if>
           </#list>
         </select>
-  标签状态 <select name="rfidState">
+  标签状态<select name="rfidState">
 		<option value="" selected="selected">全部</option>
            <#list rfid as rfid>
            <#if !rfid_has_next>
@@ -105,37 +125,47 @@ function closeLog(id){
            </#if>
           <option value="${rfid.getId()}">${rfid.getName()}</option>
           </#list>
-        </select><button class="button button-search" onclick="query();">查询</button>
+        </select><button class="button button-search" onclick="query();return false;">查询</button>
 </div>
 </form>
    <@b.pager/>
-  <table border="0" cellpadding="0" cellspacing="0" class="tabList">
-  <col width="15%" />
-  <col width="15%" />
-  <col width="15%" />
-  <col width="10%" />
-  <col width="10%" />
-  <col width="10%" />
-  <col width="10%" />
-  <col width="15%" />
+  <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
+  <col width="12%">
+<col width="12%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="14%">
+<col width="12%">
+<col width="18%">
     <tr>
       <th>标签编号</th>
       <th>申请单号</th>
-      <th>采购合同号</th>
+      <th>采购合同</th>
       <th>执行批次</th>
       <th>补损标签</th>
 	  <th>标签进度</th>
-	  <th >标签状态</th>
+	  <th>标签状态</th>
 	   <th class="rLine">操作</th>
       </tr>
        <#list list as list>
         <tr>
           <td><a href="javascript:log('${list.id}');" class="lnk-blue">${list.rfidNo}</a></td>
-          <td>${list.purchaseNo}</td>
-          <td>${list.contractNo}</td>
+          <td>${list.applyNo}</td>
+          <td><a href="javascript:loadContractInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
 		  <td><a href="javascript:loadInfo('${list.id}','${list.rfidNo}','${list.contractNo}')" class="lnk-blue">${list.batchNo}</a></td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
-		  <td><em class="state frozen">${list.progressState.getName()}</em></td>
+		   <#if (list.progressState.getId()==0)>
+		  <td><em class="state frozen">标签发货中</em></td>
+		  <#elseif ((list.progressState.getId()==1))>
+		  <td><em class="state frozen">标签发货中</em></td>
+		  <#elseif ((list.progressState.getId()==2))>
+		  <td><em class="state process">${list.progressState.getName()}</em></td>
+		  <#elseif ((list.progressState.getId()==3))>
+		  <td><em class="state normal">${list.progressState.getName()}</em></td>
+		  <#elseif ((list.progressState.getId()==4))>
+		  <td><em class="state verified">${list.progressState.getName()}</em></td>
+		  </#if>
 		  <td> <#if list.rfidState.getId()==0>
 		  <em class="state normal">${list.rfidState.getName()}</em>
 		  </#if>

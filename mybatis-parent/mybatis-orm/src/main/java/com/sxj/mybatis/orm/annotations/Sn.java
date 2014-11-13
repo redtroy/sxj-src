@@ -26,4 +26,6 @@ public @interface Sn
     String stubValueProperty() default "";
     
     String pattern() default "0000";
+    
+    boolean appendStubValue() default true;
 }

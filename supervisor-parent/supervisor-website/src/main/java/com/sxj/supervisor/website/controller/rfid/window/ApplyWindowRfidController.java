@@ -80,7 +80,6 @@ public class ApplyWindowRfidController extends BaseController {
 				map.put("flag", "no");
 				map.put("error", "删除失败");
 			}
-
 		} catch (Exception e) {
 			SxjLogger.error("物流标签申请管理列表删除错误", e, this.getClass());
 			map.put("flag", "no");

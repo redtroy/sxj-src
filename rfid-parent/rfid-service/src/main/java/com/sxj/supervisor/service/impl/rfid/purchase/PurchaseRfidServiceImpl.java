@@ -254,6 +254,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				List<WindowRfidEntity> winRfids = new ArrayList<>();
 				for (Long i = lastkey; i > lastkey - count; i--) {
 					WindowRfidEntity rfid = new WindowRfidEntity();
+					rfid.setApplyNo(purchase.getApplyNo());
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					rfid.setContractNo(purchase.getContractNo());
 					rfid.setImportDate(new Date());
@@ -300,13 +301,13 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					threadCount = threadCount + submitCount;
 				}
 				if (threadCount.intValue() != count.intValue())
-					// winRfidService.
 					throw new ServiceException("导入RFID失败！");
 
 			} else {
 				List<LogisticsRfidEntity> rfids = new ArrayList<>();
 				for (Long i = lastkey; i > lastkey - count; i--) {
 					LogisticsRfidEntity rfid = new LogisticsRfidEntity();
+					rfid.setApplyNo(purchase.getApplyNo());
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					// rfid.setContractNo(purchase.getContractNo());
 					rfid.setImportDate(new Date());
@@ -395,6 +396,12 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			}
 			if (purchase.getReceiptState().equals(DeliveryStateEnum.receiving)) {
 				throw new ServiceException("采购单已收货，不能被删除");
+			}
+			RfidApplicationEntity apply = applyService.getApplication(purchase
+					.getApplyNo());
+			if (apply != null) {
+				apply.setHasNumber(apply.getHasNumber() - purchase.getCount());
+				applyService.updateApp(apply);
 			}
 			purchase.setDelstate(true);
 			rfidPurchaseDao.updateRfidPurchase(purchase);

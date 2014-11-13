@@ -36,7 +36,7 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 		try {
 			QueryCondition<LogisticsRefEntity> condition = new QueryCondition<LogisticsRefEntity>();
 			if (query != null) {
-				condition.addCondition("rfidRefNo", query.getRfidNo());
+				condition.addCondition("rfidRefNo", query.getRfidRefNo());
 				condition.addCondition("rfidNo", query.getRfidNo());
 				condition.addCondition("memberName", query.getMemberName());
 				condition.addCondition("contractNo", query.getContractNo());

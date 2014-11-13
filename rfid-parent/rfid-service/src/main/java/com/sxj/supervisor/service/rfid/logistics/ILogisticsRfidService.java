@@ -19,6 +19,26 @@ public interface ILogisticsRfidService {
 			throws ServiceException;
 
 	/**
+	 * 根据条件高级查询 后台 乙方（供应链物流管理）
+	 * 
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */
+	public List<LogisticsRfidEntity> queryLogistics_A(LogisticsRfidQuery query)
+			throws ServiceException;
+
+	/**
+	 * 根据条件高级查询 后台 甲方（供应链物流管理）
+	 * 
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */
+	public List<LogisticsRfidEntity> queryLogistics_B(LogisticsRfidQuery query)
+			throws ServiceException;
+
+	/**
 	 * 更新
 	 * 
 	 * @param rfid
