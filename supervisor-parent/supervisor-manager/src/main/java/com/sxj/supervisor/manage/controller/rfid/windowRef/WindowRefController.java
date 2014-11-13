@@ -104,7 +104,7 @@ public class WindowRefController extends BaseController {
 		try {
 			WindowRefEntity win = new WindowRefEntity();
 			win.setId(id);
-			win.setState(AuditStateEnum.noapproval);
+			win.setState(AuditStateEnum.approval);
 			windowRefService.updateWindowRfidRef(win);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");

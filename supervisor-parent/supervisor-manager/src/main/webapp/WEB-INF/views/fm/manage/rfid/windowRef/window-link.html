@@ -12,6 +12,7 @@
 <script src="${b.staticPath}js/comet4j.js"></script>
 <@b.pageScript/>
 <@b.dialogBox/>
+<@b.errorInfo/>
 <script>
 $(function(){
 	  JS.Engine.start('${basePath}comet');
@@ -44,29 +45,29 @@ function query(page){
 	});
 }
 function  del(id){
-	if(confirm('确实要删除吗?')){
+	 dialogBox(function(){
 	$.post("delete.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			alert("删除成功!");
+			messageInfo("删除成功!");
 			window.location.href="query.htm";
 		}else{
-			alert("删除失败!");	
+			messageInfo("删除失败!");	
 		}
 	});
-	}
+	},"请确定是否删除")
 }
 
 function  audit(id){
-	if(confirm('确实要审核吗?')){
+	 dialogBox(function(){
 	$.post("audit.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			alert("审核成功!");
+			messageInfo("审核成功!");
 			window.location.href="query.htm";
 		}else{
-			alert("审核失败!");	
+			messageInfo("审核失败!");	
 		}
 	});
-	}
+	},"是否确认进行审核")
 }
 function loadInfo(id,type){
 	$("#info"+id).load("info.htm?id="+id+"&type="+type);
@@ -77,10 +78,10 @@ function closeContract(id){
 function saveModify(id){
 	$.post("saveModify.htm",$("#form"+id).serialize(),function(data){
 		if(data.isOK=='ok'){
-			alert("修改成功!");
+			messageInfo("修改成功!");
 			window.location.href="query.htm";
 		}else{
-			alert("修改失败!");	
+			messageInfo("修改失败!");	
 		}
 	});
 }
