@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>私享家绿色门窗平�/title>
+<title>私享家绿色门窗平</title>
 <meta name="keywords" content="私享家绿色门窗平�门窗,型材�玻璃�门窗"/>
-<meta name="description" content="私享家绿色门窗平�为门窗行业的玻璃�型材厂提供产品盘�物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业�>
+<meta name="description" content="私享家绿色门窗平�为门窗行业的玻璃�型材厂提供产品盘�物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业"/>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
-<!-- 供应链物流管�-->
+<!-- 供应链物流管-->
 <script >
 
 function query(page){
@@ -111,7 +111,7 @@ function closeLog(id){
           <option value="" selected="selected">全部</option>
 		  <#list Label as label> 
            <#if (label.id==0)>
-		    <option value="${label.getId()}">标签发货</option>
+		    <option value="${label.getId()}">标签发货中</option>
 		    <#elseif (label.id>1)>
             <option value="${label.getId()}">${label.getName()}</option>
             </#if>
@@ -156,9 +156,9 @@ function closeLog(id){
 		  <td><a href="javascript:loadInfo('${list.id}','${list.rfidNo}','${list.contractNo}')" class="lnk-blue">${list.batchNo}</a></td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
 		   <#if (list.progressState.getId()==0)>
-		  <td><em class="state frozen">标签发货</em></td>
+		  <td><em class="state frozen">标签发货中</em></td>
 		  <#elseif ((list.progressState.getId()==1))>
-		  <td><em class="state frozen">标签发货</em></td>
+		  <td><em class="state frozen">标签发货中</em></td>
 		  <#elseif ((list.progressState.getId()==2))>
 		  <td><em class="state process">${list.progressState.getName()}</em></td>
 		  <#elseif ((list.progressState.getId()==3))>
