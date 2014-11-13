@@ -55,7 +55,22 @@ function  disable(id){
 	}
 }
 function loadInfo(id,rfidNo,contractNo){
-	$("#info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+	if ($("#info"+id).html()==""){
+		$("#info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+		$("#log"+id).html("");
+	}else{
+		close(id);
+	}
+	
+}
+
+function loadContractInfo(id,contractNo){
+	if ($("#info"+id).html()==""){
+		$("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo);
+		$("#log"+id).html("");
+	}else{
+		close(id);
+	}
 }
 function close(id){
 	$("#info"+id).html("");
@@ -86,10 +101,10 @@ function closeLog(id){
   <span class="title fontYH f20 fb">物流标签管理</span></h1>
 </div>
 <div class="contBox f12">
-<form action="" method="post" id="search_form">
+<form action="javascript:void(0);" method="post" id="search_form">
 <div class="searBox mb10">
   标签编号<input type="text" name="rfidNo" value="${query.rfidNo}"/>
-  申请单号<input type="text" name="purchaseNo" value="${query.purchaseNo}"/>
+  申请单号<input type="text" name="applyNo" value="${query.applyNo}"/>
   采购合同号<input type="text" name="contractNo" value="${query.contractNo}"/>
   标签进度<select name="progressState" class="selectx">
           <option value="" selected="selected">全部</option>
@@ -109,7 +124,7 @@ function closeLog(id){
 </div>
 </form>
    <@b.pager/>
-  <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+  <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
   <col width="15%" />
   <col width="15%" />
   <col width="15%" />
@@ -131,8 +146,8 @@ function closeLog(id){
        <#list list as list>
         <tr>
           <td><a href="javascript:log('${list.id}');" class="lnk-blue">${list.rfidNo}</a></td>
-          <td>${list.purchaseNo}</td>
-          <td>${list.contractNo}</td>
+          <td>${list.applyNo}</td>
+          <td><a href="javascript:loadContractInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
 		  <td><a href="javascript:loadInfo('${list.id}','${list.rfidNo}','${list.contractNo}')" class="lnk-blue">${list.batchNo}</a></td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
 		  <td><em class="state frozen">${list.progressState.getName()}</em></td>

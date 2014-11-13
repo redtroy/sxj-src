@@ -8,6 +8,7 @@
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
 		<result property="generateKey" column="GENERATE_KEY" jdbcType="INTEGER" />
+		<result property="applyNo" column="APPLY_NO" jdbcType="VARCHAR" />
 		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR"/>
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
@@ -28,6 +29,9 @@
 		<![CDATA[SELECT * FROM R_WINDOW_RFID WHERE RFID_STATE<>4]]>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">
 			<![CDATA[AND RFID_NO = #{condition.rfidNo}]]>
+		</if>
+		<if test="condition.applyNo != null and condition.applyNo !=''">
+			<![CDATA[AND APPLY_NO = #{condition.applyNo}]]>
 		</if>
 		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
 			<![CDATA[AND PURCHASE_NO = #{condition.purchaseNo}]]>

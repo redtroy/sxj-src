@@ -31,6 +31,11 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	private String purchaseNo;
 
 	/**
+	 * 申请单号
+	 */
+	private String applyNo;
+
+	/**
 	 * 申请会员号
 	 */
 	private String memberNo;
@@ -204,6 +209,14 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 
 	public void setMaxRfidNo(String maxRfidNo) {
 		this.maxRfidNo = maxRfidNo;
+	}
+
+	public String getApplyNo() {
+		return applyNo;
+	}
+
+	public void setApplyNo(String applyNo) {
+		this.applyNo = applyNo;
 	}
 
 }

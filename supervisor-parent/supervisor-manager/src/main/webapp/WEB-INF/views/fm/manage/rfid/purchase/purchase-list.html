@@ -113,7 +113,7 @@ function closeInfo(id){
 }
 
 function edit(id){
-	  $("#edit_"+id).find(".editName").html('<input type="text" class="supplierName" name="supplierName" value="'+$("#edit_"+id).find(".editName").text()+'" /><input type="hidden" class="supplierNo" name="supplierNo" value="'+$("#edit_"+id).find("#supplierNo").val()+'" />');
+	  $("#edit_"+id).find(".editName").html('<input type="text" class="supplierName" name="supplierName" value="'+$("#edit_"+id).find(".editName").text()+'" />');
 	  var url_ = "${basePath}autoSupplier.htm";
 	  $("#edit_"+id).find(".editName").find(".supplierName").bigAutocomplete({url:url_,callback:function(data){
 		  $("#edit_"+id).find(".supplierNo").val(data.result);

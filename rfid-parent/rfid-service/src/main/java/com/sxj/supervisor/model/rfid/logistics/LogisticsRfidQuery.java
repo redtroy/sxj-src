@@ -1,187 +1,194 @@
 package com.sxj.supervisor.model.rfid.logistics;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import com.sxj.mybatis.orm.annotations.Column;
-import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.enu.rfid.RfidStateEnum;
-import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 
 public class LogisticsRfidQuery extends Pagable implements Serializable {
 
-		/**
+	/**
 		 * 
 		 */
-		private static final long serialVersionUID = 5870553555521406581L;
-		/**
-		 * 导入日期开始
-		 */
-		private String startImportDate;
-		/**
-		 * 导入日期结束
-		 */
-		private String endImportDate;
+	private static final long serialVersionUID = 5870553555521406581L;
+	/**
+	 * 导入日期开始
+	 */
+	private String startImportDate;
+	/**
+	 * 导入日期结束
+	 */
+	private String endImportDate;
 
-		/**
-		 * RFID编号
-		 */
-		private String rfidNo;
+	/**
+	 * RFID编号
+	 */
+	private String rfidNo;
 
-		/**
-		 * 采购单号
-		 */
-		private String purchaseNo;
+	/**
+	 * 采购单号
+	 */
+	private String purchaseNo;
 
-		/**
-		 * RFID类型
-		 */
-		private String type;
+	/**
+	 * 申请单号
+	 */
+	private String applyNo;
 
-		/**
-		 * 申请会员号
-		 */
-		private String memberNo;
+	/**
+	 * RFID类型
+	 */
+	private String type;
 
-		/**
-		 * 申请会员名称
-		 */
-		private String memberName;
+	/**
+	 * 申请会员号
+	 */
+	private String memberNo;
 
-		/**
-		 * 采购合同号
-		 */
-		private String contractNo;
+	/**
+	 * 申请会员名称
+	 */
+	private String memberName;
 
-		/**
-		 * 执行批次号
-		 */
-		private String batchNo;
+	/**
+	 * 采购合同号
+	 */
+	private String contractNo;
 
-		/**
-		 * 关联补损单
-		 */
-		private String replenishNo;
+	/**
+	 * 执行批次号
+	 */
+	private String batchNo;
 
-		/**
-		 * RFID状态
-		 */
-		private String rfidState;
+	/**
+	 * 关联补损单
+	 */
+	private String replenishNo;
 
-		/**
-		 * 进度状态
-		 */
-		private String progressState;
+	/**
+	 * RFID状态
+	 */
+	private String rfidState;
 
-		/**
-		 * 执行日志
-		 */
-		private String log;
+	/**
+	 * 进度状态
+	 */
+	private String progressState;
 
-		public String getStartImportDate() {
-			return startImportDate;
-		}
+	/**
+	 * 执行日志
+	 */
+	private String log;
 
-		public void setStartImportDate(String startImportDate) {
-			this.startImportDate = startImportDate;
-		}
+	public String getStartImportDate() {
+		return startImportDate;
+	}
 
-		public String getEndImportDate() {
-			return endImportDate;
-		}
+	public void setStartImportDate(String startImportDate) {
+		this.startImportDate = startImportDate;
+	}
 
-		public void setEndImportDate(String endImportDate) {
-			this.endImportDate = endImportDate;
-		}
+	public String getEndImportDate() {
+		return endImportDate;
+	}
 
-		public String getRfidNo() {
-			return rfidNo;
-		}
+	public void setEndImportDate(String endImportDate) {
+		this.endImportDate = endImportDate;
+	}
 
-		public void setRfidNo(String rfidNo) {
-			this.rfidNo = rfidNo;
-		}
+	public String getRfidNo() {
+		return rfidNo;
+	}
 
-		public String getPurchaseNo() {
-			return purchaseNo;
-		}
+	public void setRfidNo(String rfidNo) {
+		this.rfidNo = rfidNo;
+	}
 
-		public void setPurchaseNo(String purchaseNo) {
-			this.purchaseNo = purchaseNo;
-		}
+	public String getPurchaseNo() {
+		return purchaseNo;
+	}
 
-		public String getMemberNo() {
-			return memberNo;
-		}
+	public void setPurchaseNo(String purchaseNo) {
+		this.purchaseNo = purchaseNo;
+	}
 
-		public void setMemberNo(String memberNo) {
-			this.memberNo = memberNo;
-		}
+	public String getMemberNo() {
+		return memberNo;
+	}
 
-		public String getMemberName() {
-			return memberName;
-		}
+	public void setMemberNo(String memberNo) {
+		this.memberNo = memberNo;
+	}
 
-		public void setMemberName(String memberName) {
-			this.memberName = memberName;
-		}
+	public String getMemberName() {
+		return memberName;
+	}
 
-		public String getContractNo() {
-			return contractNo;
-		}
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
 
-		public void setContractNo(String contractNo) {
-			this.contractNo = contractNo;
-		}
+	public String getContractNo() {
+		return contractNo;
+	}
 
-		public String getBatchNo() {
-			return batchNo;
-		}
+	public void setContractNo(String contractNo) {
+		this.contractNo = contractNo;
+	}
 
-		public void setBatchNo(String batchNo) {
-			this.batchNo = batchNo;
-		}
+	public String getBatchNo() {
+		return batchNo;
+	}
 
-		public String getReplenishNo() {
-			return replenishNo;
-		}
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
+	}
 
-		public void setReplenishNo(String replenishNo) {
-			this.replenishNo = replenishNo;
-		}
+	public String getReplenishNo() {
+		return replenishNo;
+	}
 
-		public String getLog() {
-			return log;
-		}
+	public void setReplenishNo(String replenishNo) {
+		this.replenishNo = replenishNo;
+	}
 
-		public void setLog(String log) {
-			this.log = log;
-		}
+	public String getLog() {
+		return log;
+	}
 
-		public String getType() {
-			return type;
-		}
+	public void setLog(String log) {
+		this.log = log;
+	}
 
-		public void setType(String type) {
-			this.type = type;
-		}
+	public String getType() {
+		return type;
+	}
 
-		public String getRfidState() {
-			return rfidState;
-		}
+	public void setType(String type) {
+		this.type = type;
+	}
 
-		public void setRfidState(String rfidState) {
-			this.rfidState = rfidState;
-		}
+	public String getRfidState() {
+		return rfidState;
+	}
 
-		public String getProgressState() {
-			return progressState;
-		}
+	public void setRfidState(String rfidState) {
+		this.rfidState = rfidState;
+	}
 
-		public void setProgressState(String progressState) {
-			this.progressState = progressState;
-		}
-		
+	public String getProgressState() {
+		return progressState;
+	}
+
+	public void setProgressState(String progressState) {
+		this.progressState = progressState;
+	}
+
+	public String getApplyNo() {
+		return applyNo;
+	}
+
+	public void setApplyNo(String applyNo) {
+		this.applyNo = applyNo;
+	}
 
 }

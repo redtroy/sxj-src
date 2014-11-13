@@ -63,7 +63,7 @@ $(function(){
 function loadInfo(id,contractNo){
 	var isopen=$("#info" + id).attr("isopen");
 	if(isopen=="0"){
-	$("#info"+id).load("${basePath}/rfid/window/contractInfo.htm?contractNo="+contractNo+"&rfid="+id);
+	$("#info"+id).load("${basePath}rfid/window/contractInfo.htm?contractNo="+contractNo+"&id="+id);
 	$("#info" + id).attr("isopen","1");
 	}
 	else if(isopen=="1"){

@@ -1,5 +1,52 @@
- <form action="" id="modify_form" method="post">
-  <input class="input input-w240h30" type="hidden" name="id" value="${windowRfid.id}" />
+<script type="text/javascript">
+$(function(){
+	$("#loss_form").Validform({
+		tiptype:3,
+		datatype:{
+			"replenishNov":function(gets,obj,curform,regxp){
+				var message="";
+				var isPass=false;
+				$.ajax({
+					  url: "replenishRfidInfo.htm?replenishNo="+gets,
+					  cache: false,
+					  async: false,
+					  success: function(data){
+						  if(data.replenish==null){
+								$("#winType_span").empty();
+								$("#winType").empty();
+								message= data.error;
+							}else{
+								$("#winType_span").empty();
+								$("#winType").empty();
+								var contractNo=$("#contractNo").val();
+								if(contractNo!=data.contractNo){
+									message="新RFID标签对应的采购合同号与被补损的不一致！";
+								}
+								$("#winType_span").text(data.winTypeName);
+								$("#winType").val(data.winTypeId);
+								isPass= true;
+							}
+					  }
+					});
+				 if(isPass){
+					 return isPass;
+				 }else{
+					 return message;
+				 }
+				
+			}
+		},
+		callback:function(form){
+			rfidLoss();
+		}
+	});
+});
+</script>
+ <form action="javascript:void(0);" id="loss_form" method="post">
+  <input type="hidden" name="id" value="${windowRfid.id}" />
+  <input id="rfidNo" type="hidden" name="rfidNo" value="${windowRfid.rfidNo}" />
+  <input id="contractNo" type="hidden" name="contractNo" value="${windowRfid.contractNo}" />
+  <input id="winType" type="hidden" name="winType" value="" />
 	<div class="heading mb15 ly-clearFix">
 		<h1 class="ly-left">
 			<span class="title fontYH f20 fb">认证标签补损</span>
@@ -10,16 +57,14 @@
 			<label>标签编号</label>${windowRfid.rfidNo}
 		</div>
 		<div class="item">
-			<label>需补损标签编号</label> <input class="input input-w240h30" value="" name="replenishNo" />
+			<label>需补损标签编号</label> <input class="input input-w240h30"  id="replenishNo" name="replenishNo" value="" datatype="replenishNov" nullmsg="请输入RFID编号" errormsg="输入错误"/>
 		</div>
 		<div class="item">
 			<label>门窗招标合同号</label>${windowRfid.contractNo}
 		</div>
 		<div class="item">
 			<label>窗型代号</label>
-			<#if windowRfid.windowType??>
-				${windowRfid.windowType.getName()}
-			</#if>
+			<span id="winType_span"></span>
 		</div>
 		<div class="item">
 			<label>&nbsp;</label><a href="javascript:lableLosses();"

@@ -13,6 +13,8 @@
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<@b.dialogBox/>
+<@b.validate/>
 <script>
 function query(page){
 	var params=$("#search_form").serialize();
@@ -116,7 +118,7 @@ function toLableLosses(id){
 	});
 }
 
-	function lableLosses() {
+function lableLosses() {
 		$.post("lableLosses.htm", $("#modify_form").serialize(),
 				function(data) {
 					if (data.isOK == 'ok') {
@@ -151,7 +153,7 @@ function toLableLosses(id){
  <form action="javascript:void(0);" id="search_form" method="post">
 <div class="searBox mb10"><P>
   标签编号<input type="text" name="rfidNo" class="input" value="${query.rfidNo}" />
-  申请单号 <input type="text" name="purchaseNo" class="input" value="${query.purchaseNo}" />  
+  申请单号 <input type="text" name="applyNo" class="input" value="${query.applyNo}" />  
   招标合同号<input type="text" name="contractNo" class="input" value="${query.contractNo}" />
   玻璃标签<input type="text" name="blRfid" class="input" value="${query.blRfid}" />
   型材标签<input type="text" name="xcRfid" class="input" value="${query.xcRfid}" /></P>
@@ -210,7 +212,7 @@ function toLableLosses(id){
 <#list winList as win>
         <tr>
           <td><a href="javascript:log('${win.id}');" class="lnk-blue">${win.rfidNo}</a></td>
-          <td>${win.purchaseNo}</td>
+          <td>${win.applyNo}</td>
           <td><a href="javascript:loadInfo('${win.id}','${win.contractNo}')" class="lnk-blue">${win.contractNo}</a></td>
           <#if win.windowType??>
           <td>${win.windowType.getName()} </td>

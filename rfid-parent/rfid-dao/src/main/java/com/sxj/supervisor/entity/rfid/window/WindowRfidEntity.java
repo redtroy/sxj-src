@@ -51,6 +51,12 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	private Long generateKey;
 
 	/**
+	 * 申请单号
+	 */
+	@Column(name = "APPLY_NO")
+	private String applyNo;
+
+	/**
 	 * 采购单号
 	 */
 	@Column(name = "PURCHASE_NO")
@@ -241,6 +247,14 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 
 	public void setMemberName(String memberName) {
 		this.memberName = memberName;
+	}
+
+	public String getApplyNo() {
+		return applyNo;
+	}
+
+	public void setApplyNo(String applyNo) {
+		this.applyNo = applyNo;
 	}
 
 	public List<Object> getLogList() throws Exception {

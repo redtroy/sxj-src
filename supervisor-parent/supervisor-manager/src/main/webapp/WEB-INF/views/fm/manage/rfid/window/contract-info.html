@@ -96,7 +96,11 @@
 			item> 
 			<tr>
 				<td>${item.productName}</td>
+				<#if item.windowType??>
 				<td>${item.windowType.getName()}</td>
+				<#else>
+				<td></td>
+				</#if>
 				<td class="quantity">${item.quantity}</td>
 				<td>${item.price?string('0.00')}</td>
 				<td class="amount">${item.amount?string('0.00')}</td>

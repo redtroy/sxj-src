@@ -39,6 +39,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 			QueryCondition<LogisticsRfidEntity> condition = new QueryCondition<LogisticsRfidEntity>();
 			condition.addCondition("rfidNo", query.getRfidNo());
 			condition.addCondition("contractNo", query.getContractNo());
+			condition.addCondition("applyNo", query.getApplyNo());
 			condition.addCondition("purchaseNo", query.getPurchaseNo());
 			condition.addCondition("type", query.getType());
 			condition.addCondition("memberNo", query.getMemberNo());

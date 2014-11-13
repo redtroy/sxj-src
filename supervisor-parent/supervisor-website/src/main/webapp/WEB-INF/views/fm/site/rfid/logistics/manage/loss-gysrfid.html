@@ -60,11 +60,11 @@ $(function(){
 								$("#batchNo_div").empty();
 								$(".tableClass").remove();
 								
-								$("#contract_div").text(data.contratct.contractId);
-								$("#batchNo_div").text(data.batch.replenishBatch.batchNo);
-								$("#rfid_form").find("#contractNo").val(data.contratct.contractId);
+								$("#contract_div").text(data.batch.contractId);
+								$("#batchNo_div").text(data.batch.batchNo);
+								$("#rfid_form").find("#contractNo").val(data.batch.contractId);
 								
-								var items=data.batch.replenishBatchItems;
+								var items=data.batchItem;
 								for(var i=0;i<items.length;i++){
 									$("#batch_table").append("<tr class='tableClass'><td>"+items[i].productModel+"</td><td>"+items[i].quantity+"</td><td></td></tr>");
 								}
@@ -81,7 +81,7 @@ $(function(){
 			}
 		},
 		callback:function(form){
-			startRfid("rfid_form");
+			rfidLoss();
 		}
 	});
 	
@@ -127,14 +127,14 @@ $(function(){
 			}
 		},
 		callback:function(form){
-			startRfid("ht_form");
+			htLoss();
 		}
 	});
 	
 });
-function startRfid(formId){
+function rfidLoss(formId){
 	dialogBox(function(){
-		$.post("rfid_loss.htm",$("#"+formId).serialize(),function(data){
+		$.post("rfid_loss.htm",$("#rfid_form").serialize(),function(data){
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="queryList.htm";
@@ -145,34 +145,18 @@ function startRfid(formId){
 		});
 	},"是否确认补损？");
 }
-function  gysrfid(){
-	if($("#record").val()==''){
-		messageInfo("没有补损备案号,不能补损!");
-		return;
-	}
-	var flag=0;
-	$.post("getLoss.htm",$("#htForm").serialize(),function(data){
-		if(data.isOK=='no'){
-			messageInfo("该合同已补损!");	
-			flag=1;
-			return;
-		}
-	})
-	if(flag==0){
-		if(confirm('确实要补损吗?')){
-		$.post("rfid_loss.htm",$("#htForm").serialize(),function(data){
+function  htLoss(){
+	dialogBox(function(){
+		$.post("contratc_loss.htm",$("#ht_form").serialize(),function(data){
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="queryList.htm";
 				},"补损成功!");
 			}else{
-				errorInfo("补损失败!");	
+				errorInfo(data.error);	
 			}
 		});
-		}
-	}else{
-		messageInfo("该合同已补损!");
-	}
+	},"是否确认补损？");
 }
 function subForm1(){
 	  $("#rfid_form").submit();
@@ -235,13 +219,13 @@ function subForm2(){
 </div>				
 <div class="item mt10">
       <label>&nbsp;</label>
-      <a href="javascript:subForm1();return false;" class="button button-orange mr15">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a>
+      <a href="javascript:subForm1();" class="button button-orange mr15">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a>
 </div>
 </div>
 </form>
 <form action="javascript:void(0);" method="post" id="ht_form">
 <input id="newRfidNo" type="hidden" name="newRfidNo" value="${newRfidNo}" />
-<input id="rfidNo" type="hidden" name="rfidNo" value="" /> 
+<input id="rfidNo" type="hidden" name="rfidNos" value="" /> 
 <div id="content2" class="tabscontent">
 <div class="item">
       <label>补损物流标签编号</label>${newRfidNo}</div>

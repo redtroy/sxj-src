@@ -28,6 +28,7 @@ import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.CustomDecimal;
@@ -52,6 +53,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				return null;
 			}
 			QueryCondition<WindowRfidEntity> condition = new QueryCondition<WindowRfidEntity>();
+			condition.addCondition("applyNo", query.getApplyNo());
 			condition.addCondition("rfidNo", query.getRfidNo());
 			condition.addCondition("minRfidNo", query.getMinRfidNo());
 			condition.addCondition("maxRfidNo", query.getMaxRfidNo());
@@ -125,8 +127,30 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			WindowRfidEntity windowRfid = windowRfidDao.getWindowRfid(id);
 			return windowRfid;
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取门窗RFID错误", e);
 		}
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public WindowRfidEntity getWindowRfidByNo(String rfidNo)
+			throws ServiceException {
+		try {
+			if (StringUtils.isEmpty(rfidNo)) {
+				return null;
+			}
+			WindowRfidQuery query = new WindowRfidQuery();
+			query.setRfidNo(rfidNo);
+			List<WindowRfidEntity> list = queryWindowRfid(query);
+			if (list != null && list.size() > 0) {
+				return list.get(0);
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取门窗RFID错误", e);
+		}
+		return null;
 	}
 
 	@Override

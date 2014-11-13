@@ -291,15 +291,16 @@ public class PurchaseRfidController extends BaseController {
 	@RequestMapping("importRfid")
 	public @ResponseBody Map<String, String> importRfid(String purchaseId,
 			ModelMap model) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			purchaseRfidService.importRfid(purchaseId);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
+
 		} catch (Exception e) {
 			SxjLogger.error("导入RFID错误", e, this.getClass());
-			throw new WebException("导入RFID错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 }
