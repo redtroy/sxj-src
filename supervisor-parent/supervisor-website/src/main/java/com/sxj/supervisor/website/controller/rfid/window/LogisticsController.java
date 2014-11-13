@@ -52,7 +52,7 @@ public class LogisticsController extends BaseController {
 			String memberNo = loginInfo.getMember().getMemberNo();
 			query.setMemberNo(memberNo);
 			List<LogisticsRfidEntity> list = logisticsRfidService
-					.queryLogistics(query);
+					.queryLogistics_A(query);
 			LabelStateEnum[] Label = LabelStateEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();

@@ -57,6 +57,66 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 		}
 	}
 
+	// 甲方
+	@Override
+	@Transactional(readOnly = true)
+	public List<LogisticsRfidEntity> queryLogistics_A(LogisticsRfidQuery query)
+			throws ServiceException {
+		try {
+			if (query == null) {
+				return null;
+			}
+			QueryCondition<LogisticsRfidEntity> condition = new QueryCondition<LogisticsRfidEntity>();
+			condition.addCondition("rfidNo", query.getRfidNo());
+			condition.addCondition("contractNo", query.getContractNo());
+			condition.addCondition("purchaseNo", query.getPurchaseNo());
+			condition.addCondition("type", query.getType());
+			condition.addCondition("memberNo", query.getMemberNo());
+			condition.addCondition("startImportDate",
+					query.getStartImportDate());
+			condition.addCondition("endImportDate", query.getEndImportDate());
+			condition.addCondition("rfidState", query.getRfidState());
+			condition.addCondition("progressState", query.getProgressState());
+			condition.setPage(query);
+			List<LogisticsRfidEntity> rfidList = logisticsRfidDao
+					.queryLogisticsRfidList_A(condition);
+			query.setPage(condition);
+			return rfidList;
+		} catch (Exception e) {
+			throw new ServiceException("查询物流RFID错误", e);
+		}
+	}
+
+	// 乙方
+	@Override
+	@Transactional(readOnly = true)
+	public List<LogisticsRfidEntity> queryLogistics_B(LogisticsRfidQuery query)
+			throws ServiceException {
+		try {
+			if (query == null) {
+				return null;
+			}
+			QueryCondition<LogisticsRfidEntity> condition = new QueryCondition<LogisticsRfidEntity>();
+			condition.addCondition("rfidNo", query.getRfidNo());
+			condition.addCondition("contractNo", query.getContractNo());
+			condition.addCondition("purchaseNo", query.getPurchaseNo());
+			condition.addCondition("type", query.getType());
+			condition.addCondition("memberNo", query.getMemberNo());
+			condition.addCondition("startImportDate",
+					query.getStartImportDate());
+			condition.addCondition("endImportDate", query.getEndImportDate());
+			condition.addCondition("rfidState", query.getRfidState());
+			condition.addCondition("progressState", query.getProgressState());
+			condition.setPage(query);
+			List<LogisticsRfidEntity> rfidList = logisticsRfidDao
+					.queryLogisticsRfidList_B(condition);
+			query.setPage(condition);
+			return rfidList;
+		} catch (Exception e) {
+			throw new ServiceException("查询物流RFID错误", e);
+		}
+	}
+
 	@Override
 	@Transactional
 	public void updateLogistics(LogisticsRfidEntity logistics)

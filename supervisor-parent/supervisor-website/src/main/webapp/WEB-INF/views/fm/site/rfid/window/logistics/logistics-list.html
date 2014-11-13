@@ -9,6 +9,7 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<!-- 认证标签管理 -->
 <script >
 function query(page){
 	var params=$("#search_form").serialize();
@@ -101,7 +102,9 @@ function closeLog(id){
   标签进度<select name="progressState" class="selectx">
           <option value="" selected="selected">全部</option>
 		  <#list Label as label> 
+		  <#if (label.getId()>=2)>
           <option value="${label.getId()}">${label.getName()}</option>
+          </#if>
           </#list>
         </select>
   标签状态 <select name="rfidState">
@@ -140,7 +143,17 @@ function closeLog(id){
           <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
 		  <td>${list.batchNo}</td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
-		  <td><em class="state frozen">${list.progressState.getName()}</em></td>
+		   <#if (list.progressState.getId()==0)>
+		  <td><em class="state frozen">标签发货中</em></td>
+		  <#elseif ((list.progressState.getId()==1))>
+		  <td><em class="state frozen">标签发货中</em></td>
+		  <#elseif ((list.progressState.getId()==2))>
+		  <td><em class="state process">${list.progressState.getName()}</em></td>
+		  <#elseif ((list.progressState.getId()==3))>
+		  <td><em class="state normal">${list.progressState.getName()}</em></td>
+		  <#elseif ((list.progressState.getId()==4))>
+		  <td><em class="state verified">${list.progressState.getName()}</em></td>
+		  </#if>
 		  <td> <#if list.rfidState.getId()==0>
 		  <em class="state normal">${list.rfidState.getName()}</em>
 		  </#if>

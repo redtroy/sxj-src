@@ -29,6 +29,26 @@ public interface ILogisticsRfidDao {
 			QueryCondition<LogisticsRfidEntity> query) throws SQLException;
 
 	/**
+	 * 查询物流RFID列表 乙方
+	 * 
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<LogisticsRfidEntity> queryLogisticsRfidList_B(
+			QueryCondition<LogisticsRfidEntity> query) throws SQLException;
+
+	/**
+	 * 查询物流RFID列表 甲方
+	 * 
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<LogisticsRfidEntity> queryLogisticsRfidList_A(
+			QueryCondition<LogisticsRfidEntity> query) throws SQLException;
+
+	/**
 	 * 新增物流RFID
 	 *
 	 * @param member
