@@ -300,6 +300,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					threadCount = threadCount + submitCount;
 				}
 				if (threadCount.intValue() != count.intValue())
+					// winRfidService.
 					throw new ServiceException("导入RFID失败！");
 
 			} else {
