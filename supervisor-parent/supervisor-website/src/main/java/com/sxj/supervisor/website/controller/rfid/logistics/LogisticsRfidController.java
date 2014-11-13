@@ -69,7 +69,7 @@ public class LogisticsRfidController extends BaseController {
 					.getAttribute("userinfo");
 			query.setMemberNo(userBean.getMember().getMemberNo());
 			List<LogisticsRfidEntity> list = logisticsRfidService
-					.queryLogistics(query);
+					.queryLogistics_B(query);
 			LabelStateEnum[] Label = LabelStateEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();
