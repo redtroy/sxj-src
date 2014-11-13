@@ -407,6 +407,9 @@ function busunSeav(){
 		});
 		query($("#pager").attr("currentPage"));
 	}
+	function openBatch(){
+		$("#batch-list").show();
+	}
 </script>
 </head>
 
@@ -677,7 +680,7 @@ function busunSeav(){
 					<label>对应批次</label> <select name="" id="batchId"
 						class="batchSelect">
 						<option selected="selected">请选择批次</option>
-					</select><span class="color-green hand ml10" onclick="reselect();">重新选择</span>
+					</select><span class="color-green hand ml10" onclick="openBatch();">重新选择</span>
 				</div>
 				<div class="item">
 					<label>需补损物流标签</label><span id="rfid"></span><input type="hidden"
@@ -700,6 +703,17 @@ function busunSeav(){
 			<div class="rollBox" id="rollBox" style="height: 150px;"></div>
 		</div>
 	</div>
+	<!-- 批次选择 -->
+	<div class="modal-wrap popDemo popView notViewer" id="batch-list"
+		style="display: none; width: 680px;">
+		<div class="modal-header">
+			<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></span>
+		</div>
+		<div class="modal-body">
+			<div class="rollBox" id="rollBox" style="height: 150px;"></div>
+		</div>
+	</div>
+	
 	<div class="viewer modal-wrap" id="iviewerModal">
 		<div class="modal-header" style="display: none;">
 			<span class="close">关闭</span>
