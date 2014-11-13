@@ -65,6 +65,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			condition.addCondition("endImportDate", query.getEndImportDate());
 			condition.addCondition("rfidState", query.getRfidState());
 			condition.addCondition("progressState", query.getProgressState());
+			condition.addCondition("webFlag", query.getWebsiteFlag());
 			condition.setPage(query);
 			List<WindowRfidEntity> rfidList = windowRfidDao
 					.queryWindowRfidList(condition);

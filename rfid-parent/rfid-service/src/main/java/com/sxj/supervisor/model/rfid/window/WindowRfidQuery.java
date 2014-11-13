@@ -79,6 +79,21 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	 */
 	private Integer progressState;
 
+	/**
+	 * 标记前台登录
+	 * 
+	 * @return
+	 */
+	private Integer websiteFlag;
+
+	public Integer getWebsiteFlag() {
+		return websiteFlag;
+	}
+
+	public void setWebsiteFlag(Integer websiteFlag) {
+		this.websiteFlag = websiteFlag;
+	}
+
 	public String getRfidNo() {
 		return rfidNo;
 	}

@@ -47,8 +47,14 @@
 		<if test="condition.rfidState != null">
 			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>
 		</if>
-		<if test="condition.progressState != null">
-			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
+		<if test="condition.progressState != null and condition.webFlag!=null and (condition.progressState==1 or condition.progressState==0)">
+			<![CDATA[AND PROGRESS_STATE <= 1]]>
+		</if>
+		<if test="condition.progressState != null and condition.webFlag!=null and (condition.progressState&gt;1)">
+		     <![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
+		</if>
+		<if test="condition.progressState != null and condition.webFlag==null">
+		    <![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
 		</if>
 		<if
 			test="condition.minRfidNo != null and condition.maxRfidNo != null and  condition.minRfidNo != '' and condition.maxRfidNo != ''">

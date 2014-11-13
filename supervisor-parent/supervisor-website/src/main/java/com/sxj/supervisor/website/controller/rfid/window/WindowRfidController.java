@@ -52,6 +52,7 @@ public class WindowRfidController extends BaseController {
 			SupervisorPrincipal loginInfo = getLoginInfo(session);
 			String memberNo = loginInfo.getMember().getMemberNo();
 			query.setMemberNo(memberNo);
+			query.setWebsiteFlag(1);
 			List<WindowRfidEntity> winList = windowRfidService
 					.queryWindowRfid(query);
 			LabelProgressEnum[] Label = LabelProgressEnum.values();
@@ -147,9 +148,10 @@ public class WindowRfidController extends BaseController {
 
 	@RequestMapping("contractBatch")
 	public String getContractBatch(ModelMap model, String contractNo,
-			String rfidNo, String id,String type) throws WebException {
+			String rfidNo, String id, String type) throws WebException {
 		try {
-			ContractBatchModel conBatch = contractService.getBatchByRfid(rfidNo);
+			ContractBatchModel conBatch = contractService
+					.getBatchByRfid(rfidNo);
 			model.put("conBatch", conBatch);
 			model.put("id", id);
 			model.put("type", type);
