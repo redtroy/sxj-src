@@ -32,33 +32,32 @@ function query(page){
 	});
 }
 function  del(id){
-	if(confirm('确实要删除吗?')){
-	$.post("delete.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			succInfo(function(){
-				var currentPage= $("#pager").attr("currentPage");
-				query(currentPage);
-			},"删除成功!");
-			
-		}else{
-			errorInfo("删除失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("delete.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					var currentPage= $("#pager").attr("currentPage");
+					query(currentPage);
+				},"删除成功！");
+			}else{
+				errorInfo(data.error);	
+			}
+		});
+	},"是否确认删除？");
 }
 function  disable(id){
-	if(confirm('确实要停用吗?')){
-	$.post("disable.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			succInfo(function(){
-				var currentPage= $("#pager").attr("currentPage");
-				query(currentPage);
-			},"停用成功!");
-		}else{
-			errorInfo("停用失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("disable.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					var currentPage= $("#pager").attr("currentPage");
+					query(currentPage);
+				},"停用成功!");
+			}else{
+				errorInfo(data.error);	
+			}
+		});
+	},"确实要停用吗?");
 }
 function loadInfo(id,contractNo){
 	if ($("#info"+id).html()==""){
@@ -117,20 +116,6 @@ function toLableLosses(id){
 		$("#listInfo").html(data);
 	});
 }
-
-function lableLosses() {
-		$.post("lableLosses.htm", $("#modify_form").serialize(),
-				function(data) {
-					if (data.isOK == 'ok') {
-						succInfo(function(){
-							var currentPage= $("#pager").attr("currentPage");
-							query(currentPage);
-						},"补损成功!");
-					} else {
-						errorInfo("补损失败!");
-					}
-				});
-	}
 </script>
 </head>
 

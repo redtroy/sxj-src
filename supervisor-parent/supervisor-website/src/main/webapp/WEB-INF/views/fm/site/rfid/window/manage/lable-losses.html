@@ -11,7 +11,7 @@ $(function(){
 					  cache: false,
 					  async: false,
 					  success: function(data){
-						  if(data.replenish==null){
+						  if(data.error!=null){
 								$("#winType_span").empty();
 								$("#winType").empty();
 								message= data.error;
@@ -19,8 +19,10 @@ $(function(){
 								$("#winType_span").empty();
 								$("#winType").empty();
 								var contractNo=$("#contractNo").val();
+								
 								if(contractNo!=data.contractNo){
-									message="新RFID标签对应的采购合同号与被补损的不一致！";
+									message= "新RFID标签对应的采购合同号与被补损的不一致！";
+									return;
 								}
 								$("#winType_span").text(data.winTypeName);
 								$("#winType").val(data.winTypeId);
@@ -41,12 +43,28 @@ $(function(){
 		}
 	});
 });
+function subForm(){
+	  $("#loss_form").submit();
+}
+function rfidLoss() {
+	dialogBox(function(){
+		$.post("lableLosses.htm", $("#loss_form").serialize(),
+				function(data) {
+					if (data.isOK == 'ok') {
+						succInfo(function(){
+							window.location.href="query.htm";
+						},"补损成功!");
+					} else {
+						errorInfo(data.error);
+					}
+				});
+	},"是否确认补损？");
+}
 </script>
  <form action="javascript:void(0);" id="loss_form" method="post">
   <input type="hidden" name="id" value="${windowRfid.id}" />
   <input id="rfidNo" type="hidden" name="rfidNo" value="${windowRfid.rfidNo}" />
   <input id="contractNo" type="hidden" name="contractNo" value="${windowRfid.contractNo}" />
-  <input id="winType" type="hidden" name="winType" value="" />
 	<div class="heading mb15 ly-clearFix">
 		<h1 class="ly-left">
 			<span class="title fontYH f20 fb">认证标签补损</span>
@@ -67,7 +85,7 @@ $(function(){
 			<span id="winType_span"></span>
 		</div>
 		<div class="item">
-			<label>&nbsp;</label><a href="javascript:lableLosses();"
+			<label>&nbsp;</label><a href="javascript:subForm();"
 				class="button button-orange mr15">确定补损</a><a
 				href="javascript:window.location.href='query.htm';" class="button button-gray">取消</a>
 		</div>

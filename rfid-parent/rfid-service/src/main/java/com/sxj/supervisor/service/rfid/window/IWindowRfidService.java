@@ -93,8 +93,14 @@ public interface IWindowRfidService {
 	 * 补损RFID标签
 	 */
 	public void lossWindowRfid(String refContractNo, String minRfid,
-			String maxRfid, String gRfid, String lRfid, String[] addRfid,
-			Long count) throws ServiceException;
+			String maxRfid, String gRfid, String lRfid, String[] addRfid)
+			throws ServiceException;
+
+	/**
+	 * 补损RFID标签
+	 */
+	public void lossWindowRfid(String rfidNo, String newRfidNo)
+			throws ServiceException;
 
 	/**
 	 * 安装

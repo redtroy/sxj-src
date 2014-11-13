@@ -2,7 +2,6 @@ package com.sxj.supervisor.website.controller.rfid.window;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -166,36 +165,36 @@ public class LossWinRfidController extends BaseController {
 			if (items == null || items.size() == 0) {
 				throw new WebException("招标合同条目不存在");
 			}
-			WindowRfidQuery query = new WindowRfidQuery();
-			for (String rfid : addRfid) {
-				query.setRfidNo(rfid);
-				List<WindowRfidEntity> list = windowRfidService
-						.queryWindowRfid(query);
-				if (list.size() == 1) {
-					if (list.get(0).getRfidState().getId() == 1) {
-						continue;
-					} else {
-						throw new WebException(rfid + "补损标签状态错误");
-					}
-				} else {
-					throw new WebException(rfid + "补损标签不存在，或者重复");
-				}
-			}
-			float quantity = 0f;
-			for (Iterator<ContractItemEntity> iterator = items.iterator(); iterator
-					.hasNext();) {
-				ContractItemEntity item = iterator.next();
-				if (item == null) {
-					continue;
-				}
-				quantity = quantity + item.getQuantity();
-			}
-			long count = (long) quantity;
+			// WindowRfidQuery query = new WindowRfidQuery();
+			// for (String rfid : addRfid) {
+			// query.setRfidNo(rfid);
+			// List<WindowRfidEntity> list = windowRfidService
+			// .queryWindowRfid(query);
+			// if (list.size() == 1) {
+			// if (list.get(0).getRfidState().getId() == 1) {
+			// continue;
+			// } else {
+			// throw new WebException(rfid + "补损标签状态错误");
+			// }
+			// } else {
+			// throw new WebException(rfid + "补损标签不存在，或者重复");
+			// }
+			// }
+			// float quantity = 0f;
+			// for (Iterator<ContractItemEntity> iterator = items.iterator();
+			// iterator
+			// .hasNext();) {
+			// ContractItemEntity item = iterator.next();
+			// if (item == null) {
+			// continue;
+			// }
+			// quantity = quantity + item.getQuantity();
+			// }
 			windowRfidService.lossWindowRfid(refContractNo, minRfid, maxRfid,
-					gRfid, lRfid, addRfid, count);
+					gRfid, lRfid, addRfid);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
-			SxjLogger.error("启用标签错误", e, this.getClass());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			map.put("error", e.getMessage());
 		}
 		return map;

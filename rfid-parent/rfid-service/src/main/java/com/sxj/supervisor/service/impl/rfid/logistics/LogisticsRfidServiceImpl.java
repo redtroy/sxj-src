@@ -14,9 +14,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -123,8 +126,37 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 	public void updateLogistics(LogisticsRfidEntity logistics)
 			throws ServiceException {
 		try {
+			if (logistics == null) {
+				throw new ServiceException("物流RFID不存在");
+			}
+			LogisticsRfidEntity oldLogistics = logisticsRfidDao
+					.getLogisticsRfid(logistics.getId());
+			if (oldLogistics == null) {
+				throw new ServiceException("物流RFID不存在");
+			}
+			if (logistics.getProgressState() != null) {
+				if (!logistics.getProgressState().equals(
+						oldLogistics.getProgressState())) {
+					RfidLog log = new RfidLog();
+					log.setDate(DateTimeUtils.getDateTime());
+					log.setState(logistics.getProgressState().getName());
+					logistics.setLogList(log);
+				}
+			}
+			if (logistics.getRfidState() != null) {
+				if (!logistics.getRfidState().equals(RfidStateEnum.damaged)) {
+					RfidLog log = new RfidLog();
+					log.setDate(DateTimeUtils.getDateTime());
+					log.setState(logistics.getRfidState().getName());
+					logistics.setLogList(log);
+				}
+			}
 			logisticsRfidDao.updateLogisticsRfid(logistics);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("更新物流RFID错误", e);
 		}
 
