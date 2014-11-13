@@ -66,4 +66,11 @@ public interface IContractBatchDao
      * @return
      */
     public ContractBatchEntity  getBacthsByRfid(String rfidNo);
+    
+    /**
+     * 根据合同号获取批次
+     * @param rfidNo
+     * @return
+     */
+    public List<ContractBatchEntity>  getBacthsByContractNo(String contractNo);
 }

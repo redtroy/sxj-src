@@ -36,7 +36,7 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	 * 批次号
 	 */
 	@Column(name = "BATCH_NO")
-	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "noType")
+	@Sn(pattern = "0000", step = 1,appendStubValue=false, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "noType")
 	private String batchNo;
 
 	private String noType;
@@ -85,6 +85,7 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	}
 
 	public String getBatchNo() {
+		
 		return batchNo;
 	}
 

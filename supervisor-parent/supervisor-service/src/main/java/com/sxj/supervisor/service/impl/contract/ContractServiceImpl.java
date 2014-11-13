@@ -515,6 +515,7 @@ public class ContractServiceImpl implements IContractService {
 							replenishRecordIds);// 补损备案ID
 					List<ReplenishContractEntity> replenishList = contractReplenishDao
 							.queryReplenish(replenishCondition);
+					List<ContractReplenishModel> crmList = new ArrayList<ContractReplenishModel>();
 					for (int i = 0; i < replenishList.size(); i++) {
 						ContractReplenishModel contractReplenishModel = new ContractReplenishModel();
 						ReplenishContractEntity replenishEntity = replenishList
@@ -525,7 +526,6 @@ public class ContractServiceImpl implements IContractService {
 						query.addCondition("recordIds", replenishEntity.getId());
 						List<ReplenishBatchEntity> replenishBatchList = contractReplenishBatchDao
 								.queryReplenishBatch(query);
-						List<ContractReplenishModel> crmList = new ArrayList<ContractReplenishModel>();
 						if (replenishBatchList != null) {
 							List<ReplenishBatchModel> ReplenishBatchModelList = new ArrayList<ReplenishBatchModel>();
 							for (int j = 0; j < replenishBatchList.size(); j++) {
@@ -562,14 +562,15 @@ public class ContractServiceImpl implements IContractService {
 								}
 								ReplenishBatchModelList
 										.add(replenishBatchModel);
+								contractReplenishModel
+								.setBatchItems(ReplenishBatchModelList);
+						
 							}
-							contractReplenishModel
-									.setBatchItems(ReplenishBatchModelList);
 							crmList.add(contractReplenishModel);
 						}
-						contractModel.setReplenishList(crmList);
+						
 					}
-
+					contractModel.setReplenishList(crmList);
 				} else {
 					contractModel.setReplenishList(null);
 				}
@@ -590,10 +591,8 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	public String recordIdArr(String contractNo, String type) {
 		QueryCondition<RecordEntity> qc = new QueryCondition<RecordEntity>();
-		Map<String, Object> condition = new HashMap<String, Object>();
-		condition.put("contractNo", contractNo);// 合同号
-		condition.put("type", type);// 备案状态
-		qc.setCondition(condition);
+		qc.addCondition("contractNo", contractNo);// 合同号
+		qc.addCondition("recordType", type);// 备案状态
 		List<RecordEntity> record = recordDao.queryRecord(qc);
 		String recordIds = "";
 		if (record != null && record.size() > 0) {

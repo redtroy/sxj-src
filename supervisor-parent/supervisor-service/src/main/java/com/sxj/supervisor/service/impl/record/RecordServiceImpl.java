@@ -364,27 +364,11 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	@Transactional
-	public String getBatch(String recordId) {
+	public List<ContractBatchEntity> getBatch(String recordId) {
 		try {
 			RecordEntity re = recordDao.getRecord(recordId);
-			QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
-			query.addCondition("contractId", re.getContractNo());
-			List<ContractBatchEntity> batchList = batchDao.queryBacths(query);
-			String batch = "";
-			String batchId = "";
-			for (ContractBatchEntity contractBatchEntity : batchList) {
-				batch += contractBatchEntity.getBatchNo() + ",";
-				batchId += contractBatchEntity.getId() + ",";
-			}
-			if (batch != "") {
-				batch = batch.substring(0, batch.length() - 1);
-				batchId = batchId.substring(0, batchId.length() - 1);
-				StringBuffer sb = new StringBuffer();
-				sb.append(batch).append("#").append(batchId);
-				return sb.toString();
-			} else {
-				return "";
-			}
+			List<ContractBatchEntity> batchList = batchDao.getBacthsByContractNo(re.getContractNo());
+			return batchList;
 		} catch (Exception e) {
 			throw new ServiceException("查询批次信息错误", e);
 		}

@@ -137,6 +137,7 @@ var caculateRow=function($tr){
 		//初始化验证
 		ul_validform=$("#modifyForm").Validform({
 			tiptype:function(msg,o,cssctl){
+					o.obj.parent().children(".checkinfo").remove();
 					var $div=$("<div/>").addClass("checkinfo");
 					var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
 					var left=o.obj.offset().left,
@@ -149,6 +150,18 @@ var caculateRow=function($tr){
 					}).show();
 					o.obj.parent().append($div);
 			}});
+		
+		$("#modifyForm").find("[datatype]").live("focus",function(){
+			$(this).parent().children(".checkinfo").hide();
+			$(this).removeClass("Validform_error");
+			//$(this).parent().children(".checkinfo").hide();
+		});
+		$("#modifyForm").find("[datatype]").live("blur",function(){
+			
+			var pass=ul_validform.check(true,$(this));
+			if(!pass)
+				$(this).parent().children(".checkinfo").show();
+		});
 		$("[datatype]").live("focus",function(){
 			$(this).parent().children(".checkinfo").hide();
 		});
@@ -256,6 +269,16 @@ var caculateRow=function($tr){
 		$(".quantityClass").each(function(){
 			if($(this).val()){
 				quantity+=parseInt($(this).val());
+				$(this).val(parseFloat($(this).val()).toFixed(2));
+			}
+		});
+		$(".bgquantity").each(function(){
+			if($(this).val()){
+				$(this).val(parseFloat($(this).val()).toFixed(2));
+			}
+		});
+		$(".bgamount").each(function(){
+			if($(this).val()){
 				$(this).val(parseFloat($(this).val()).toFixed(2));
 			}
 		});
@@ -398,14 +421,13 @@ var caculateRow=function($tr){
 						<#list contractModel.batchList  as batchList>
 						<input name="batchList[${batchList_index}].batch.id" type="hidden" value="${batchList.batch.id}" />
 						<tr>
-							<td>第 <input name="batchList[${batchList_index}].batch.batchNo" type="text" value="${batchList.batch.batchNo}" class="input-w30" />
-								批次
+							<td>第 ${batchList.batch.batchNo}批次
 							</td>
 							<td><table border="0" cellpadding="0" cellspacing="0"
 									class="tabList prodIable">
 									 <#list batchList.batchItems  as modifyBatchItems>
 									<tr>
-										<td><input name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].productModel" type="text"
+										<td><input  datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].productModel" type="text"
 											value="${modifyBatchItems.productModel}" />
 										<input name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].id" type="hidden"
 											value="${modifyBatchItems.id}" />	
@@ -417,19 +439,18 @@ var caculateRow=function($tr){
 									class="tabList prodIable">
 									  <#list batchList.batchItems  as modifyBatchItems>
 									<tr>
-										<td><input name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].quantity" type="text" value="${modifyBatchItems.quantity}" /> &nbsp;</td>
+										<td><input class="bgquantity"  name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].quantity" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！" type="text" value="${modifyBatchItems.quantity}" /> &nbsp;</td>
 									</tr>
 									 </#list>
 								</table></td>
-							<td><input name="batchList[${batchList_index}].batch.amount" type="text" value="${batchList.batch.amount}" /></td>
-							<td><input name="batchList[${batchList_index}].batch.rfidNo" type="text" value="${batchList.batch.rfidNo}" /></td>
+							<td><input name="batchList[${batchList_index}].batch.amount" class="bgamount"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"type="text" value="${batchList.batch.amount}" /></td>
+							<td>${batchList.batch.rfidNo}</td>
 						</tr>
               </#list>
 					</table>
 					</#if>
 					<div>
-						<label>本合同还有</label> <input name="contract.batchCount" type="text" value="<#if contractModel.batchList?exists>${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
-            <#else>${contractModel.contract.batchCount} </#if>" class="input-w30" datatype="n1-10" errormsg="输入范围在1~10位数字之间！" nullmsg="请输入合同总批次！" /> 批次待交付
+						<label>本合同还有</label> <#if contractModel.batchList?exists>${(contractModel.contract.batchCount-contractModel.batchList?size)?int}<#else>${contractModel.contract.batchCount} </#if> 批次待交付
 					</div>
 					<div>
 						<label>合同定金</label> <input name="contract.deposit" class="deposit" type="text" value="${contractModel.contract.deposit?string('0.00')}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！"  />
@@ -503,7 +524,7 @@ var caculateRow=function($tr){
              			<#list modifyList.modifyItemList  as modifyItem>
              			
 							<tr>
-								<td><input type="text" value="${modifyItem.productName}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！"  /></td>
+								<td><input type="text" value="${modifyItem.productName}"  name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！"  /></td>
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productModel" id="textarea9" cols="25" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！"
 										rows="1">${modifyItem.productModel}</textarea></td>
 								<td><input type="text" class="bgquantity" value="${modifyItem.quantity?string('0.00')}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
@@ -540,7 +561,7 @@ var caculateRow=function($tr){
 										class="tabList prodIable">
                   					<#list modifyBatch.modifyBatchItems  as modifyBatchItems>
 										<tr>
-											<td><textarea name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].productModel" id="textarea15"
+											<td><textarea datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].productModel" id="textarea15"
 													cols="25" rows="1">${modifyBatchItems.productModel}</textarea>
 											<input type="hidden" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].id" value="${modifyBatchItems.id}" /> 
 													
@@ -552,14 +573,13 @@ var caculateRow=function($tr){
 										class="tabList prodIable">
 										<#list modifyBatch.modifyBatchItems  as modifyBatchItems>
 										<tr>
-											<td><input type="text" value="${modifyBatchItems.quantity}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].quantity" /> &nbsp;<a
+											<td><input type="text" value="${modifyBatchItems.quantity}"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！"  class="bgquantity" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].quantity" /> &nbsp;<a
 												href="#" class="lnk-green">+</a></td>
 										</tr>
 										 </#list>
 									</table></td>
-								<td><input type="text" value="${modifyBatch.modifyBatch.amount?string('0.00')}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.amount" /></td>
-								<td><input type="text" class="input-w80" value="${modifyBatch.modifyBatch.rfidNo}" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.rfidNo" />
-									<a href="#" class="lnk-green">X</a></td>
+								<td><input type="text" value="${modifyBatch.modifyBatch.amount}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"  class="bgamount"  name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.amount" /></td>
+								<td>${modifyBatch.modifyBatch.rfidNo}></td>
 							</tr>
 							</#list>
 						</table>
@@ -583,11 +603,19 @@ var caculateRow=function($tr){
 						<div class="contPic">
 							<label>合同补损扫描件</label>
 						<div class="ly-left">
-						<div class="imageList">
-						</div>
 						<input type="hidden" name="replenishList[${replenishList_index}].replenishContract.imgPath" class="imgPathHide" value=""/>
-						<input type="file" name="contractFile"   multiple="true" id="${replenishList.replenishContract.id}"/></div>
+						<div class="rollBox">
+								<ul class="elastislide-list"></ul>
 						</div>
+						</div>
+						</div>
+						<div class="contPic">
+						<label>合同补损扫描件</label>
+						<div class="ly-left">
+									<input type="file" name="contractFile" multiple="true"
+										id="${replenishList.replenishContract.id}" />
+								</div>
+					</div>
 						
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
@@ -614,7 +642,7 @@ var caculateRow=function($tr){
 										class="tabList prodIable">
 										 <#list replenishItem.replenishBatchItems as replenishBatchItems>
 										<tr>
-											<td><textarea name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatchItems[${replenishBatchItems_index}].productModel" id="textarea14"
+											<td><textarea datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatchItems[${replenishBatchItems_index}].productModel" id="textarea14"
 													cols="25" rows="1">${replenishBatchItems.productModel}</textarea></td>
 										</tr>
 										</#list>
@@ -623,21 +651,17 @@ var caculateRow=function($tr){
 										class="tabList prodIable">
 										<#list replenishItem.replenishBatchItems as replenishBatchItems>
 										<tr>
-											<td><input type="text" value="${replenishBatchItems.quantity}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatchItems[${replenishBatchItems_index}].quantity" />
+											<td><input type="text" value="${replenishBatchItems.quantity}"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！"class="bgquantity" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatchItems[${replenishBatchItems_index}].quantity" />
 											</td>
 										</tr>
 										</#list>
 									</table></td>
-								<td><input type="text" value="${replenishItem.replenishBatch.amount?string('0.00')}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.amount" /></td>
-								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.rfidNo}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.rfidNo" /></td>
-								<td><input type="text" class="input-w80" value="${replenishItem.replenishBatch.newRfidNo}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.newRfidNo" />
-									&nbsp;<a href="#" class="lnk-green">X</a></td>
+								<td><input type="text" value="${replenishItem.replenishBatch.amount}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"  class="bgamount" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.amount" /></td>
+								<td>${replenishItem.replenishBatch.rfidNo}</td>
+								<td>${replenishItem.replenishBatch.newRfidNo}</td>
 							</tr>
 							</#list>
 						</table>
-						<div>
-							<label>RFID订单号</label><input type="text" value="${replenishList.replenishContract.rfidOrderNo}" name="replenishList[${replenishList_index}].replenishContract.rfidOrderNo" />
-						</div>
 					</#list>	
 					</#if>
 					<div class="btnBox">

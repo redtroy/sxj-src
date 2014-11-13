@@ -36,10 +36,10 @@ jQuery(document).ready(function($) {
 	$(".modal-header .close").click(function(){
 		var $parent=$(this).parent().parent();
 		$parent.hide();
-		$(".maskdivgen").hide();
+		$(".maskdivgen1").hide();
 		if($parent.attr("class").indexOf("notViewer")<0){
 			preModal.show();
-			$(".maskdivgen").show();
+			$(".maskdivgen1").show();
 		}
 		
 	});
@@ -50,7 +50,7 @@ jQuery(document).ready(function($) {
 		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
 		el.parent().children("li").removeClass("view");
 		el.addClass("view"); 
-		$(".maskdivgen").show();
+		$(".maskdivgen1").show();
 		if(preModal)
 			preModal.hide();
 		
@@ -64,7 +64,7 @@ jQuery(document).ready(function($) {
        				if(imgPaths){
        					refreshElastislide($("#linkRollBox"),$("#linkcarousel"),imgPaths,true);	
        					$("#linkModal").show();
-       					$(".maskdivgen").show();
+       					$(".maskdivgen1").show();
        					preModal=$("#linkModal");
        				}else{
        					messageInfo("暂无合同副本!");
@@ -152,7 +152,7 @@ function biangeng(recordId,contractNo){
 			$('#bgcarousel').empty();
 			$('#bgRollBox').hide();
 			$("#bgRecordId").val("");
-			$('.maskdivgen').fadeIn(100);
+			$('.maskdivgen1').fadeIn(100);
 			$('#chanPic').slideDown(200);
 			$('#bgRecordId').val(recordId);
 			$('#bgimgShow').show();	
@@ -171,25 +171,9 @@ function busun(recordId,contractNo){
 			$("#bsimgPath").val("");
 			$('#bscarousel').empty();
 			$("#bsRecordId").val("");
-			$('.maskdivgen').fadeIn(100);
+			$('.maskdivgen1').fadeIn(100);
 			$('.suppPop').slideDown(200);
 			$('#bsRecordId').val(recordId);
-			//获取批次
-			$.post("getBatch.htm", {recordId:recordId}, function(data) {
-				if (data.batch != '') {
-					var batch =data.batch.split("#");
-					var batch0 =batch[0].split(",");
-					var batch1 =batch[1].split(",");
-					$("#batchId").empty();
-					for(var i=0;i<batch0.length;i++){
-						$("#batchId").append('<option value="">请选择批次</option>');
-						$("#batchId").append('<option value="'+batch1[i]+'">第'+batch0[i]+'批次</option>');
-					}
-				}else{
-					$("#batchId").empty();
-					$("#batchId").append('<option value="">没有批次</option>');
-				}
-			});
 		}else{
 			messageInfo("还有一笔申请未备案,不能进行该操作!");	
 		}
@@ -221,13 +205,6 @@ function saveBiangeng(){
 		}else{
 			messageInfo("请上传图片");
 		}
-}
-//重新选择
-function reselect(){
-	$("#batchId").children("option").removeAttr("disabled");
-	$("#batchId").prop('selectedIndex', 0);
-	$("#rfidHide").val("");
-	$("#rfid").text("");
 }
 //保存补损
 function busunSeav(){
@@ -275,13 +252,30 @@ function busunSeav(){
 				$("#rfid").text("");
 			}
 		})
+		//获取选中的值
+		$('#batchBtn').click(function() {
+			var strSel='';
+			$("[name='batchRfidNo']:checked").each(function(index, element) {
+                strSel += $(this).val() + ",";
+            });
+			if(strSel!='')
+				strSel = strSel.substring(0, strSel.length - 1);
+			$("#rfid").text(strSel);
+			$("#rfidHide").val(strSel);
+			$("#batch-list").slideUp(200);
+			$('.maskdivgen2').fadeOut(100);
+		})
+		$('.closeBatch').click(function() {
+			$("#batch-list").slideUp(200);
+			$('.maskdivgen2').fadeOut(100);
+		})
 		$('.button-box .button-gray').click(function() {
-			$('.maskdivgen').fadeOut(100);
+			$('.maskdivgen1').fadeOut(100);
 			$('.chanPic').slideUp(200);
 			$("#bgimgShow").hide();
 		})
 		$('.item .button-gray').click(function() {
-			$('.maskdivgen').fadeOut(100);
+			$('.maskdivgen1').fadeOut(100);
 			$('.suppPop').slideUp(200);
 			$("#bsimgShow").hide();
 		})
@@ -408,7 +402,20 @@ function busunSeav(){
 		query($("#pager").attr("currentPage"));
 	}
 	function openBatch(){
-		$("#batch-list").show();
+		var recordId =$("#bsRecordId").val(); 
+		$("#batchUl").empty();
+		$.post("getBatch.htm", {recordId:recordId}, function(data) {
+			if (data.batch.length>0) {
+				$("#batch-list").slideDown(200);
+				$('.maskdivgen2').fadeIn(100);
+				var batch =data.batch;
+				for(var i =0;i<batch.length;i++){
+					$("#batchUl").append('<li><input  type="checkbox" name="batchRfidNo"  title="'+batch[i].batchNo+'" value="'+batch[i].rfidNo+'" />第'+batch[i].batchNo+'批次</li>');
+				}
+			}else{
+				errorInfo("没有找到相关批次!");
+			}
+		});
 	}
 </script>
 </head>
@@ -677,10 +684,7 @@ function busunSeav(){
 				</div>
 
 				<div class="item">
-					<label>对应批次</label> <select name="" id="batchId"
-						class="batchSelect">
-						<option selected="selected">请选择批次</option>
-					</select><span class="color-green hand ml10" onclick="openBatch();">重新选择</span>
+					<label>选择补损批次</label><span class="color-green hand ml10" onclick="openBatch();">请选择批次</span>
 				</div>
 				<div class="item">
 					<label>需补损物流标签</label><span id="rfid"></span><input type="hidden"
@@ -704,14 +708,19 @@ function busunSeav(){
 		</div>
 	</div>
 	<!-- 批次选择 -->
-	<div class="modal-wrap popDemo popView notViewer" id="batch-list"
-		style="display: none; width: 680px;">
+	<div class="modal-wrap popDemo dropList"  id="batch-list"
+		style="display: none; width: 680px; height: 300px;z-index: 10011;">
 		<div class="modal-header">
-			<span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></span>
+			<span class="close closeBatch"><a>关闭窗口</a></span>
 		</div>
-		<div class="modal-body">
-			<div class="rollBox" id="rollBox" style="height: 150px;"></div>
-		</div>
+		 <div class="modal-body dropBox">
+		 <div class="item"> <span>
+          </span>
+          <ul id="batchUl">
+          </ul>
+        </div>
+		 <button class="button button-pop" id="batchBtn">确认</button>
+		 </div>
 	</div>
 	
 	<div class="viewer modal-wrap" id="iviewerModal">
@@ -721,7 +730,7 @@ function busunSeav(){
 		<div id="viewer2" class="modal-body iviewer"
 			style="width: 100%; display: none; top: 0px"></div>
 	</div>
-	<div class="maskdivgen" style="display: none"></div>
-
+	<div class="maskdivgen maskdivgen1" style="display: none"></div>
+	<div class="maskdivgen maskdivgen2" style="display: none;z-index: 10010;" ></div>
 </body>
 </html>
