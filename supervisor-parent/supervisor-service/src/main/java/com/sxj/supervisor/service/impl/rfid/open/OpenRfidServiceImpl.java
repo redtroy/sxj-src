@@ -277,6 +277,8 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 				le.setLog(josn);
 				logisticsDao.updateLogisticsRfid(le);
 				return 1;
+			}else{
+				return 2;
 			}
 
 		}
@@ -297,24 +299,24 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		List<LogModel> logList = new ArrayList<LogModel>();
 		if (ref != null && ref.size() > 0) {
 			LogisticsRfidEntity le = ref.get(0);
-			logList = JsonMapper
-					.nonEmptyMapper()
-					.getMapper()
-					.readValue(le.getLog(),
-							new TypeReference<List<LogModel>>() {
-							});
-			if (le.getProgressState().getId() == 3) {
+//			logList = JsonMapper
+//					.nonEmptyMapper()
+//					.getMapper()
+//					.readValue(le.getLog(),
+//							new TypeReference<List<LogModel>>() {
+//							});
+			//if (le.getProgressState().getId() == 3) {
 				le.setProgressState(LabelStateEnum.hasQuality);
 				LogModel log = new LogModel();
 				log.setState(LabelStateEnum.hasQuality.getName());
 				log.setDate(DateFormatUtils.format(new Date(),
 						"yyyy-MM-dd HH:mm:ss"));
-				logList.add(log);
+				//logList.add(log);
 				String josn = JsonMapper.nonEmptyMapper().toJson(logList);
 				le.setLog(josn);
 				logisticsDao.updateLogisticsRfid(le);
 				return 1;
-			}
+			//}
 
 		}
 		return 0;

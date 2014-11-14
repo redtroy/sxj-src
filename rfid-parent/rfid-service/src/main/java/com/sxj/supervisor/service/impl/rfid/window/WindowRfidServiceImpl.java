@@ -458,7 +458,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				l.setState(label[3].getName());
 				// list.add(l);
 				// String log = JsonMapper.nonEmptyMapper().toJson(list);
-				wind.setLogList(l);
+			//	wind.setLogList(l);
 				wind.setProgressState(LabelProgressEnum.installed);
 				updateWindowRfid(wind);
 				return 1;
