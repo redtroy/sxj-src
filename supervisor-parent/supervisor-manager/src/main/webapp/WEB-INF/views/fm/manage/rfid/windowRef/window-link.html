@@ -134,7 +134,7 @@ function batch(id,contractNo,rfidNo){
        窗型代号<select name="windowsNo">
 	   <option selected="selected" value="">全部</option>
           <#list winType as type> 
-          <#if type.getId()==query.windowsNo >
+          <#if type.getId()==query.windowsNo>
           <option value="${type.getId()}" selected="selected">${type.getName()}</option>
           <#else>
            <option value="${type.getId()}">${type.getName()}</option>
@@ -145,7 +145,7 @@ function batch(id,contractNo,rfidNo){
        <select name="type">
           <option selected="selected" value="">全部</option>
 		   <#list type as type> 
-		  <#if type.getId()==query.type >
+		  <#if type.getId()==query.type>
           <option value="${type.getId()}" selected="selected">${type.getName()}</option>
           <#else>
            <option value="${type.getId()}">${type.getName()}</option>
@@ -155,7 +155,7 @@ function batch(id,contractNo,rfidNo){
 		审核状态<select name="state">
 		<option selected="selected" value="">全部</option>
         <#list state as type> 
-        <#if type.getId()==query.state >
+        <#if type.getId()==query.state>
           <option value="${type.getId()}" selected="selected">${type.getName()}</option>
            <#else>
            <option value="${type.getId()}">${type.getName()}</option>
