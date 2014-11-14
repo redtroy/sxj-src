@@ -25,7 +25,7 @@
 	<!-- 按条件查询门窗 -->
 	<select id="queryLogisticsRfidList" resultMap="logisticsResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr,M_CONTRACT c WHERE rlr.RFID_STATE<>4 AND rlr.CONTRACT_NO=c.CONTRACT_NO]]>
+		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr  WHERE rlr.RFID_STATE<>4 ]]>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">
 			<![CDATA[AND rlr.RFID_NO LIKE CONCAT('%',#{condition.rfidNo},'%') ]]>
 		</if>
@@ -39,7 +39,7 @@
 			<![CDATA[AND rlr.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
 		</if>
 		<if test="condition.memberNo != null and condition.memberNo !=''">
-			<![CDATA[AND (c.MEMBER_ID_A = #{condition.memberNo} or c.MEMBER_ID_B = #{condition.memberNo})]]>
+			<![CDATA[AND rlr.MEMBER_NO = #{condition.memberNo}]]>
 		</if>
 		<if test="condition.type != null and condition.type !=''">
 			<![CDATA[AND rlr.TYPE = #{condition.type}]]>
@@ -88,7 +88,7 @@
 	</select>
 	<select id="queryLogisticsRfidList_B" resultMap="logisticsResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr,M_CONTRACT c WHERE rlr.RFID_STATE<>4 AND rlr.CONTRACT_NO=c.CONTRACT_NO]]>
+		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr WHERE rlr.RFID_STATE<>4]]>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">
 			<![CDATA[AND rlr.RFID_NO LIKE CONCAT('%',#{condition.rfidNo},'%') ]]>
 		</if>
@@ -99,7 +99,7 @@
 			<![CDATA[AND rlr.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
 		</if>
 		<if test="condition.memberNo != null and condition.memberNo !=''">
-			<![CDATA[AND (c.MEMBER_ID_A = #{condition.memberNo} or c.MEMBER_ID_B = #{condition.memberNo})]]>
+			<![CDATA[AND rlr.MEMBER_NO = #{condition.memberNo} ]]>
 		</if>
 		<if test="condition.type != null and condition.type !=''">
 			<![CDATA[AND rlr.TYPE = #{condition.type}]]>
