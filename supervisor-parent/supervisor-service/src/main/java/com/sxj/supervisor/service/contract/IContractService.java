@@ -189,7 +189,8 @@ public interface IContractService {
 	 * @throws ServiceException
 	 */
 	public void updateContractLoss(String rfidNos, String contractNo,
-			MemberEntity member, String newRfid) throws ServiceException;
+			String recordNo, MemberEntity member, String newRfid)
+			throws ServiceException;
 
 	public String getReplenish(String contractNo);
 

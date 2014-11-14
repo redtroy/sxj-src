@@ -56,6 +56,8 @@ jQuery(document).ready(function($) {
 				  },"修改成功");
 				}else{
 					 errorInfo(data.error);
+					 var page=$("#rightBar").find("#pager").attr("currentPage");
+					 query(page);
 				}
 		  });
 	  },"是否确认修改？");
@@ -72,6 +74,8 @@ jQuery(document).ready(function($) {
 				 },'删除成功！');
 			 }else{
 				 errorInfo(data.error);
+				 var page=$("#rightBar").find("#pager").attr("currentPage");
+				 query(page);
 			 }
 	 });
   },"是否确认删除？");
@@ -86,7 +90,9 @@ jQuery(document).ready(function($) {
 					  query(currentPage);
 				  },"确认收款成功！");
 				 }else{
-					 errorInfo(" 确认收款失败！");
+					 errorInfo(data.error);
+					 var page=$("#rightBar").find("#pager").attr("currentPage");
+					 query(page);
 				 }
 		  });
 	  },"是否确认收款？");

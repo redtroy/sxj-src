@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -60,13 +63,25 @@ public class StartWRfidController extends BaseController {
 			}
 			float itemQuantity = contract.getContract().getItemQuantity();
 			float hasStartQuantity = contract.getContract().getUseQuantity();
-
+			float unStartQuantity = 0f;
 			if (hasStartQuantity >= itemQuantity) {
 				throw new WebException("此招标合同已经全部启用完毕");
 			}
 			if (num > (itemQuantity - hasStartQuantity)) {
-				throw new WebException("此招标合同未启用数量为："
+				throw new WebException("此招标合同可以启用的最大数量为："
 						+ (itemQuantity - hasStartQuantity));
+			}
+			WindowRfidQuery winQuery = new WindowRfidQuery();
+			winQuery.setContractNo(query.getRefContractNo());
+			winQuery.setRfidState(RfidStateEnum.unused.getId());
+			List<WindowRfidEntity> winList = windowRfidService
+					.queryWindowRfid(winQuery);
+			if (winList != null) {
+				unStartQuantity = winList.size();
+			}
+			if (unStartQuantity < num) {
+				throw new WebException("此招标合同未启用的RFID数量为：" + unStartQuantity
+						+ "，请申请足够的RFID数量");
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {

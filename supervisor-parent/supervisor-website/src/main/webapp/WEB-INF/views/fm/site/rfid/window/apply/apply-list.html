@@ -39,6 +39,7 @@
 					},"删除成功！");
 				}else{
 					messageInfo(data.error);
+					query($("#pager").attr("currentPage"));
 				}
 			});
 	 },"是否确认删除？"); 
@@ -55,7 +56,7 @@
 <div class="yard-870 rightSide ly-left" id="rightBar">
 <div class="heading mb15 ly-clearFix">
   <h1 class="ly-left">
-  <span class="title fontYH f20 fb">物流标签申请管理</span></h1>
+  <span class="title fontYH f20 fb">认证标签申请管理</span></h1>
 </div>
 <div class="contBox f12">
 <div class="searBox mb10">

@@ -563,12 +563,12 @@ public class ContractServiceImpl implements IContractService {
 								ReplenishBatchModelList
 										.add(replenishBatchModel);
 								contractReplenishModel
-								.setBatchItems(ReplenishBatchModelList);
-						
+										.setBatchItems(ReplenishBatchModelList);
+
 							}
 							crmList.add(contractReplenishModel);
 						}
-						
+
 					}
 					contractModel.setReplenishList(crmList);
 				} else {
@@ -1240,9 +1240,13 @@ public class ContractServiceImpl implements IContractService {
 		}
 	}
 
+	/**
+	 * 采购合同补损
+	 */
 	@Override
 	public void updateContractLoss(String rfidNos, String contractNo,
-			MemberEntity member, String newRfid) throws ServiceException {
+			String recordNo, MemberEntity member, String newRfid)
+			throws ServiceException {
 		try {
 			if (StringUtils.isEmpty(rfidNos)) {
 				throw new ServiceException("rfid编号不能为空");

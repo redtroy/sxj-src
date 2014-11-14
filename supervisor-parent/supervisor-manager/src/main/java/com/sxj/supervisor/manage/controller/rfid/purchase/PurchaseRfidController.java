@@ -109,10 +109,7 @@ public class PurchaseRfidController extends BaseController {
 	public @ResponseBody Map<String, String> confirmPay(String id,
 			ModelMap model) throws WebException {
 		try {
-			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
-			purchase.setId(id);
-			purchase.setPayState(PayStateEnum.paid);
-			purchaseRfidService.updatePurchase(purchase);
+			purchaseRfidService.updatePayState(id, PayStateEnum.paid);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;
@@ -279,6 +276,24 @@ public class PurchaseRfidController extends BaseController {
 			} else {
 				map.put("error", "供应商不存在");
 			}
+		} catch (Exception e) {
+			SxjLogger.error("获取价格错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
+	}
+
+	@RequestMapping("getMaxCount")
+	public @ResponseBody Map<String, Object> getMaxCount(String applyNo,
+			Long oldCount) throws WebException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			RfidApplicationEntity apply = appService.getApplication(applyNo);
+			if (apply == null) {
+				throw new WebException("对应的申请单不存在");
+			}
+			long max = apply.getCount() - (apply.getHasNumber() - oldCount);
+			map.put("maxCount", max);
 		} catch (Exception e) {
 			SxjLogger.error("获取价格错误", e, this.getClass());
 			map.put("error", e.getMessage());

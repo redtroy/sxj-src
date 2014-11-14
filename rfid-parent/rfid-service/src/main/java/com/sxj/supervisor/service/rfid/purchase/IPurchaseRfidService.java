@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.rfid.purchase;
 import java.util.List;
 
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
+import com.sxj.supervisor.enu.rfid.purchase.PayStateEnum;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
 import com.sxj.util.exception.ServiceException;
 
@@ -29,6 +30,15 @@ public interface IPurchaseRfidService {
 	 * @throws ServiceException
 	 */
 	public void updatePurchase(RfidPurchaseEntity purchase)
+			throws ServiceException;
+
+	/**
+	 * 更新支付状态
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void updatePayState(String id, PayStateEnum state)
 			throws ServiceException;
 
 	/**

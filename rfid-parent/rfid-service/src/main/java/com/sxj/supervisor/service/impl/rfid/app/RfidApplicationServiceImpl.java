@@ -97,17 +97,17 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 				throw new ServiceException("RFID申请单已经被删除");
 			}
 			if (app.getPayState().equals(PayStateEnum.payment)) {
-				throw new ServiceException("RFID申请单已收款，不能被删除");
+				throw new ServiceException("该申请单已受理，不能删除");
 			}
 			if (app.getHasNumber() > 0) {
-				throw new ServiceException("RFID申请单已生成采购单，不能被删除");
+				throw new ServiceException("该申请单已受理，不能删除");
 			}
 
 			QueryCondition<RfidPurchaseEntity> condition = new QueryCondition<RfidPurchaseEntity>();
 			condition.addCondition("applyNo", app.getApplyNo());
 			List<RfidPurchaseEntity> list = purchaseDao.queryList(condition);
 			if (list.size() > 0) {
-				throw new ServiceException("RFID申请单已生成采购单");
+				throw new ServiceException("该申请单已受理，不能删除");
 			}
 			app.setDelstate(true);
 			appDao.updateRfidApplication(app);

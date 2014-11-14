@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
@@ -46,18 +47,19 @@ public class LossWinRfidController extends BaseController {
 			throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			List<ContractItemEntity> items = contractService
-					.getContractItem(query.getRefContractNo());
-			if (items == null || items.size() == 0) {
+			ContractModel contract = contractService
+					.getContractModelByContractNo(query.getRefContractNo());
+			if (contract == null) {
 				throw new WebException("招标合同不存在");
 			}
-			float quantity = 0f;
+			if (!contract.getContract().getType()
+					.equals(ContractTypeEnum.bidding)) {
+				throw new WebException("此合同不是招标合同");
+			}
+			float hasStartQuantity = contract.getContract().getUseQuantity();
 			float unStartQuantity = 0f;
-			for (ContractItemEntity item : items) {
-				if (item == null) {
-					continue;
-				}
-				quantity = quantity + item.getQuantity();
+			if (num > hasStartQuantity) {
+				throw new WebException("此招标合同可以补损的最大数量为：" + hasStartQuantity);
 			}
 
 			WindowRfidQuery winQuery = new WindowRfidQuery();
@@ -69,7 +71,8 @@ public class LossWinRfidController extends BaseController {
 				unStartQuantity = winList.size();
 			}
 			if (unStartQuantity < num) {
-				throw new WebException("此招标合同未启用的RFID数量为：" + unStartQuantity);
+				throw new WebException("此招标合同未启用的RFID数量为：" + unStartQuantity
+						+ "，请申请足够的RFID数量");
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {

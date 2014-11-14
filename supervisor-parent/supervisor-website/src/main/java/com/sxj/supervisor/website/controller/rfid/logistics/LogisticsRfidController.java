@@ -309,13 +309,13 @@ public class LogisticsRfidController extends BaseController {
 
 	@RequestMapping("contratc_loss")
 	public @ResponseBody Map<String, String> contractLoss(String contractNo,
-			String newRfidNo, String rfidNos, HttpSession session)
-			throws WebException {
+			String recordNo, String newRfidNo, String rfidNos,
+			HttpSession session) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			contractService.updateContractLoss(rfidNos, contractNo,
+			contractService.updateContractLoss(rfidNos, contractNo, recordNo,
 					userBean.getMember(), newRfidNo);
 			map.put("isOK", "ok");
 		} catch (Exception e) {
