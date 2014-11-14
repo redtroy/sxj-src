@@ -85,7 +85,11 @@ function  audit(id){
 	},"是否确认进行审核")
 }
 function loadInfo(id,type){
+	if ($("#info"+id).children().length==0){
 	$("#info"+id).load("info.htm?id="+id+"&type="+type);
+	}else{
+		closeContract(id)
+	}
 }
 function closeContract(id){
 	$("#info"+id).html("");
@@ -102,7 +106,11 @@ function saveModify(id){
 	});
 }
 function batch(id,contractNo,rfidNo){
-	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+	if ($("#bathinfo"+id).children().length==0){
+	$("#bathinfo"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+	}else{
+		$("#bathinfo"+id).html("");
+	}
 }
 </script>
 </head>
@@ -197,6 +205,7 @@ function batch(id,contractNo,rfidNo){
 		  <td class="operation"><a href="javascript:del('${win.id}');" class="del">删除</a></td>
         </tr>
         <tr class="tableInfo" id="info${win.id}"></tr>
+        <tr class="tableInfo" id="bathinfo${win.id}"></tr>
         </#list>
 		 
       </table>
