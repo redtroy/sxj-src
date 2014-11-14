@@ -36,7 +36,7 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	 * 批次号
 	 */
 	@Column(name = "BATCH_NO")
-	@Sn(pattern = "0000", step = 1,appendStubValue=false, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "noType")
+	@Sn(pattern = "0000", step = 1, appendStubValue = false, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "noType")
 	private String batchNo;
 
 	private String noType;
@@ -68,6 +68,12 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	@Column(name = "BATCH_ITEMS")
 	private String batchItems;
 
+	/**
+	 * 补损状态
+	 */
+	@Column(name = "REPLENISH_STATE")
+	private Integer replenishState;
+
 	public String getNewRfidNo() {
 		return newRfidNo;
 	}
@@ -85,7 +91,7 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 	}
 
 	public String getBatchNo() {
-		
+
 		return batchNo;
 	}
 
@@ -131,5 +137,13 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 
 	public void setNoType(String noType) {
 		this.noType = noType;
+	}
+
+	public Integer getReplenishState() {
+		return replenishState;
+	}
+
+	public void setReplenishState(Integer replenishState) {
+		this.replenishState = replenishState;
 	}
 }

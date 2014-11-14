@@ -116,76 +116,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 			})
 			//$(this).remove();
 		});
-		$(".addtr").live("click",function(){
-			var $table=$(this).parent().parent().parent();
-			var $new=$table.children("tr:last").clone();
-			var $hidden=$new.find(".mark");
-			$hidden.remove();
-			$new.find(".tabList").each(function(){
-				$last=$(this).find("tr:last");
-				$(this).empty().append($last);
-			});
-			$new.find("input").attr("value","");
-			$table.append($new);
-			$(this).remove(); 
-		});
-		
-		$(".deltr").live("click",function(){
-			var $tr=$(this).parent().parent();
-			var $table=$tr.parent();
-			var trId=$tr.find(".mark").html();
-			
-			if(trId){
-				var $td=$("#"+trId).children("td:last");
-				$td.empty();
-				var table=$table.parent().attr("id");
-				var right=$right.clone().attr("table",table).removeClass("addtr").addClass("copyRow");
-				$td.append(right);
-			}
-			
-			$tr.remove();
-			var tableLength =$table.parent().find(".formitem").length;
-			if(tableLength==0){
-				$table.parent().hide();
-			}
-			var $last=$table.children("tr:last").children("td:last");
-			if($last.children(".addtr").length==0)
-				$last.prepend($("<a>").addClass("lnk-green addtr").attr("href","javascript:void(0);").html("+"));
-		});
-		$(".copyRow").live("click",function(){
-			var target=$(this).attr("table");
-			var $table=$("#"+target)
-			var trId=$(this).parent().parent().attr("id");
-			if($table){
-				$table.find(".addtr").remove();
-				var $tr=$("<tr>").addClass("formitem").append($(this).parent().parent().html());
-				var $hidden=$("<p>").addClass("mark").hide().html(trId);
-				$tr.append($hidden);
-				$table.append($tr);
-				$link=$tr.find(".lnk-green").parent().empty();
-				if(target!='pctable')
-	            	$link.append($plus.clone()).append("&nbsp;").append($minus.clone());
-				else
-					$link.append($minus.clone());
-	            $tr.find(".editable").each(function(i){
-            			$(this).html($("<input />").attr("value",$(this).html()).attr("readonly",$(this).attr("readonly"))
-            					.attr("datatype",$(this).attr("data")).attr("errormsg",$(this).attr("errormsg")).attr("nullmsg",$(this).attr("nullmsg")));
-
-					
-				});
-	            $table.find(".dynamictr").each(function(){
-	            	$(this).children("span").remove();
-	            	var	$span=$("<span>").append($plus.clone().removeClass("addtr").addClass("subtabletr")).append("&nbsp;").append($minus.clone().removeClass("deltr").addClass("delsubtabletr"));
-	            	$span.css("margin","0");
-	            	$(this).append($span);
-	            });
-	            $table.find(".formitem").each(function(){
-	            	$(this).find(".dynamictr:last").find(".lnk-red").remove();
-	            })
- 				$table.show();
-				$(this).attr("class","lnk-red").html("!");
-		}
-		});
 		
 		$(".priceClass").live("blur", function() {
 			var value = $(this).find("input").val();
@@ -198,11 +128,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 			if(value&&isNumber(value)){
 				$(this).find("input").val(parseFloat(value).toFixed(2));
 			}
-		});
-	});
-	$(function() {
-		$(".TrDel").live("click", function() {
-			$(this).parent().parent().remove();
 		});
 	});
 
@@ -330,17 +255,15 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<col width="20%" />
 							<col width="10%" />
 							<col width="15%" />
-							<col width="5%" />
 							<tr>
 								<th>交货批次</th>
 								<th>产品规格</th>
 								<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 								<th>应付货款<span>（元）</span></th>
 								<th class="rLine">对应批次RFID编号</th>
-								<th class="rLine"></th>
 							</tr>
 							<#list contractModel.batchList as batch>
-							<tr id="batch${batch.batch.id}" class="formitem">
+							<tr id="${batch.batch.id}" class="formitem">
 								<td class="editable" name="batchList[i].replenishBatch.batchNo"
 									readonly="readonly">${batch.batch.batchNo}</td>
 								<td name="batchList[i].replenishBatchItems[j].productModel"><table
@@ -369,8 +292,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${batch.batch.amount}</td>
 								<td class="editable" name="batchList[i].replenishBatch.rfidNo"
 									readonly="readonly">${batch.batch.rfidNo}</td>
-								<td><a href="javascript:void(0)" class="lnk-green copyRow"
-									table="pctable">√</a></td>
 							</tr>
 							</#list>
 						</table>
@@ -458,8 +379,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable priceClass" name="modifyItemList[index].price" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
 										<td class="editable amountClass" name="modifyItemList[index].amount"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  >${modifyItem.amount?string("0.00")}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
-										<td value="${modifyItem.id}"><#if modifyItem.updateState==1><span style="color: red;">!</span><#else><a href="javascript:void(0)" class="lnk-green copyRow"
-									 table="cptable">√</a>
+										<td value="${modifyItem.id}"><#if modifyItem.updateState==1><span style="color: red;">!</span>
 											</#if>
 										</td>
 									</tr>
@@ -473,14 +393,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<col width="20%" />
 									<col width="10%" />
 									<col width="20%" />
-									<col width="5%" />
 									<tr>
 										<th>交货批次</th>
 										<th>产品规格</th>
 										<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 										<th>应付货款<span>（元）</span></th>
 										<th>对应批次RFID编号</th>
-										<th class="rLine">&nbsp;</th>
 									</tr>
 									<#list modifyList.modifyBatchList as modifyBatch>
 									<tr id="${modifyBatch.modifyBatch.id}" class="formitem">
@@ -505,8 +423,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 											</table></td>
 										<td class="editable amountClass" name="batchList[i].replenishBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" >${modifyBatch.modifyBatch.amount?string("0.00")}</td>
 										<td class="editable" name="batchList[i].replenishBatch.rfidNo" readonly="readonly">${modifyBatch.modifyBatch.rfidNo}</td>
-										<td value="${modifyBatch.modifyBatch.id}"><a href="javascript:void(0)" class="lnk-green copyRow"
-									 table="pctable">√</a></td>
 									</tr>
 									</#list>
 								</table>
@@ -553,7 +469,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<col width="20%" />
 									<col width="10%" />
 									<col width="20%" />
-									<col width="5%" />
 									<tr>
 										<th>交货批次</th>
 										<th>产品规格</th>
@@ -562,7 +477,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 												contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 										<th>应付货款<span>（元）</span></th>
 										<th>对应批次RFID编号</th>
-										<th class="rLine">&nbsp;</th>
 									</tr>
 									<#list replenishList.batchItems as replenishItem>
 									<tr id="${replenishItem.replenishBatch.id}" class="formitem">
@@ -589,8 +503,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 											</table></td>
 										<td class="editable amountClass" name="batchList[i].replenishBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" >${replenishItem.replenishBatch.amount?string("0.00")}</td>
 										<td class="editable" name="batchList[i].replenishBatch.rfidNo" readonly="readonly">${replenishItem.replenishBatch.rfidNo}</td>
-										<td><a href="javascript:void(0)"
-											class="lnk-green copyRow" table="pctable">√</a></td>
 									</tr>
 									</#list>
 								</table>
@@ -628,24 +540,32 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								</div>
 							</div>
 							<table border="0" cellpadding="0" cellspacing="0"
-								class="tabList producedTable" id="pctable"
-								style="display: none;">
-								<col width="10%" />
+								class="tabList producedTable" id="pctable">
 								<col width="25%" />
 								<col width="20%" />
 								<col width="15%" />
-								<col width="20%" />
-								<col width="10%" />
 								<tr>
-									<th>交货批次</th>
 									<th>产品规格</th>
 									<th>数量<span>（<#if
 											contractModel.contract.type.getId()==1>/㎡</#if><#if
 											contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 									<th>应付货款<span>（元）</span></th>
-									<th>对应批次RFID编号</th>
-									<th class="rLine">&nbsp;</th>
 								</tr>
+								<tr class="formitem">
+										<td name="batchList[i].replenishBatchItems[j].productModel">
+											<table cellspacing="0" cellpadding="0" border="0" class="tabList prodIable">
+												<tbody><tr>
+													<td nullmsg="请输入产品规格！" errormsg="输入范围在1~100位之间！" data="*1-100" class="editable"><input datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" ></td>
+												</tr>
+											</tbody></table>
+										</td>
+										<td name="batchList[i].replenishBatchItems[j].quantity"><table cellspacing="0" cellpadding="0" border="0" class="tabList prodIable">
+												<tbody><tr>
+													<td nullmsg="请输入数量！" errormsg="输入范围在1~20位之间！" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" class="editable dynamictr"><input datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！" class="priceClass" /><span style="margin: 0px;"><a class="lnk-green subtabletr" href="javascript:void(0);">+</a>&nbsp;</span></td>
+												</tr>
+											</tbody></table></td>
+										<td nullmsg="请输入应付货款！" errormsg="输入范围在1~20位之间！" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" name="batchList[i].replenishBatch.amount" class="editable amountClass"><input datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" /></td>
+										</tr>
 							</table>
 							<div class="btnBox">
 								<a href="javascript:void(0)" onclick="saveReplenish();"

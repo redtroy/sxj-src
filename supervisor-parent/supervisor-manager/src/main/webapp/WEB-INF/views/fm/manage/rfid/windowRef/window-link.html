@@ -122,36 +122,48 @@ function batch(id,contractNo,rfidNo){
     <form action="" id="search_form" method="post">
       <div id="searchBox">
       <p>RFID关联申请号
-        <input type="text" name="rfidRefNo" value=""/>
+        <input type="text" name="rfidRefNo" value="${query.rfidRefNo}"/>
        RFID编号
-       <input type="text" name="rfidNo" value=""/>
+       <input type="text" name="rfidNo" value="${query.rfidNo}"/>
        申请人名称
-       <input type="text" name="" value=""/>
+       <input type="text" name="memberName" value="${query.memberName}"/>
 	   相关批次RFID
-       <input type="text" name="batchNo" value=""/>
+       <input type="text" name="batchNo" value="${query.batchNo}"/>
 	   被补损RFID编号
-       <input type="text" name="replenishRfid" value=""/></p>
+       <input type="text" name="replenishRfid" value="${query.replenishRfid}"/></p>
        窗型代号<select name="windowsNo">
 	   <option selected="selected" value="">全部</option>
           <#list winType as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
+          <#if type.getId()==query.windowsNo >
+          <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+          <#else>
+           <option value="${type.getId()}">${type.getName()}</option>
+          </#if>
           </#list>
         </select>
        关联类型
        <select name="type">
           <option selected="selected" value="">全部</option>
 		   <#list type as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
+		  <#if type.getId()==query.type >
+          <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+          <#else>
+           <option value="${type.getId()}">${type.getName()}</option>
+          </#if>
           </#list>
         </select>
 		审核状态<select name="state">
 		<option selected="selected" value="">全部</option>
         <#list state as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
+        <#if type.getId()==query.state >
+          <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+           <#else>
+           <option value="${type.getId()}">${type.getName()}</option>
+          </#if>
           </#list>
         </select>	
        关联申请时间段
-       <input type="text" name="" value="" datepicker />-<input type="text" name="" value="" datepicker />
+       <input type="text" name="startDate" value="${query.startDate}" datepicker />-<input type="text" name="endDate" value="${query.endDate}" datepicker />
         <a class="btn btn-blue" href="javascript:query();"><span>查询</span></a>
     </div>
     </form>

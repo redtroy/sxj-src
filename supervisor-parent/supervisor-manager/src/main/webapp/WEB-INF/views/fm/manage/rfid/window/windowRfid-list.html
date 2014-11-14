@@ -103,23 +103,31 @@ $(function(){
       <form action="" id="search_form" method="post">
       <div id="searchBox">
       <p>RFID编号
-        <input type="text" name="rfidNo" value="" />
+        <input type="text" name="rfidNo" value="${query.rfidNo}" />
        采购单号
-       <input type="text" name="purchaseNo" value="" />
-       招标合同号<input type="text" name="contractNo" value="" />
-	   对应RFID编号<input type="text" name="rfid" value="" />
+       <input type="text" name="purchaseNo" value="${query.purchaseNo}" />
+       招标合同号<input type="text" name="contractNo" value="${query.contractNo}" />
+	   对应RFID编号<input type="text" name="rfid" value="${query.rfid}" />
        窗型代号
        <select name="windowType" class="selectx">
 	   <option value="" selected="selected">全部</option>
 	   <#list winType as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
+	   <#if type.getId() == query.windowType>
+          <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+       <#else>
+        <option value="${type.getId()}">${type.getName()}</option>
+       </#if>
           </#list>
         </select></p>
 	   进度状态
 	   <select name="progressState" class="selectx">
           <option value="" selected="selected">全部</option>
 		  <#list Label as label> 
-          <option value="${label.getId()}">${label.getName()}</option>
+		   <#if label.getId() == query.progressState>
+          <option value="${label.getId()}" selected="selected">${label.getName()}</option>
+          <#else>
+            <option value="${label.getId()}" >${label.getName()}</option>
+          </#if>
           </#list>
         </select>
 		RFID状态<select name="rfidState">
@@ -128,12 +136,16 @@ $(function(){
             <#if !rfid_has_next>
            <#break>
            </#if>
-          <option value="${rfid.getId()}">${rfid.getName()}</option>
+            <#if rfid.getId() == query.rfidState>
+          <option value="${rfid.getId()}" selected="selected">${rfid.getName()}</option>
+           <#else>
+            <option value="${rfid.getId()}">${rfid.getName()}</option>
+            </#if>
           </#list>
 		  
         </select>
        采购单时间段
-       <input type="text" name="startImportDate" value="" datepicker/>-<input type="text" name="endImportDate" value="" datepicker/>
+       <input type="text" name="startImportDate" value="${query.startImportDate}" datepicker/>-<input type="text" name="endImportDate" value="${query.endImportDate}" datepicker/>
         <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
     </div>
     </form>
