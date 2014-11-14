@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
@@ -40,8 +41,8 @@ public class LogisticsRefController extends BaseController {
 	private IContractService contractService;
 
 	@RequestMapping("lable_list")
-	public String lable_list(ModelMap map, LogisticsRefQuery query)
-			throws WebException {
+	public String lable_list(ModelMap map, LogisticsRefQuery query,
+			String removeMessge) throws WebException {
 		try {
 			if (query != null) {
 				query.setPagable(true);
@@ -58,6 +59,11 @@ public class LogisticsRefController extends BaseController {
 			map.put("channelName",
 					RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
 			registChannel(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
+			if ("true".equals(removeMessge)) {
+				CometServiceImpl.setCount(
+						RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF, 0l);
+			}
+
 		} catch (Exception e) {
 			SxjLogger.error("查询错误", e, this.getClass());
 			throw new WebException("查询错误");

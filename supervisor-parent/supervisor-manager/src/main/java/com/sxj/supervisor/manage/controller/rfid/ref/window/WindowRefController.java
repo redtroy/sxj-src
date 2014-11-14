@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
@@ -41,8 +42,8 @@ public class WindowRefController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("query")
-	public String queryWindowRfid(WindowRefQuery query, ModelMap model)
-			throws WebException {
+	public String queryWindowRfid(WindowRefQuery query, String removeMessge,
+			ModelMap model) throws WebException {
 		try {
 			query.setPagable(true);
 			List<WindowRefEntity> winList = windowRefService
@@ -58,6 +59,10 @@ public class WindowRefController extends BaseController {
 			model.put("channelName",
 					RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
 			registChannel(RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
+			if ("true".equals(removeMessge)) {
+				CometServiceImpl.setCount(
+						RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF, 0l);
+			}
 			return "manage/rfid/windowref/window-link";
 		} catch (Exception e) {
 			SxjLogger.error("查询门窗RFID关联错误", e, this.getClass());
