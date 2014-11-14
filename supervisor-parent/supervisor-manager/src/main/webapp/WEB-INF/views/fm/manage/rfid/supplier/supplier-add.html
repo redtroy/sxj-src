@@ -32,6 +32,17 @@
 			});
 	  },"是否确认保存！");
 	}
+  $(function(){
+	  $(".amount").live("blur",function(){
+			$(this).parent().parent().parent().find(".amount").each(function(){
+				var value=$(this).attr("value");
+				if(value&&isNumber(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
+		})
+  })
 </script>
     <!-- InstanceBeginEditable name="rightBar" -->
     <h2 class="title">新增RFID供应商</h2>
@@ -59,11 +70,11 @@
       </div>
       <div>
         <label>门窗标签采购价</label>
-        <input type="text"  id="doorsPrice" class="input-w30"title="填写该供应商门窗标签参考采购价格" datatype="f" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
+        <input type="text"  id="doorsPrice" class="input-w30 amount"title="填写该供应商门窗标签参考采购价格" datatype="f" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
       </div>
       <div>
         <label>批次标签采购价</label>
-        <input type="text"  id="batchPrice" class="input-w30" title="填写该供应商批次标签参考爱狗价格" datatype="f" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
+        <input type="text"  id="batchPrice" class="input-w30 amount" title="填写该供应商批次标签参考爱狗价格" datatype="f" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
       </div>
      
       <div class="btnBox"><a href="javascript:sub();" class="button button-orange button-small">新增</a><a href="javascript:query();" class="button button-gray button-small">返回</a> </div></div>
