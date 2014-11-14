@@ -103,6 +103,17 @@
 			loadPage(currentPage,totalPage,query);
 		})
  }
+  function removeMessge(){
+	  $.post("lable_list.htm",{removeMessge:"true"},function(data){
+			var tableList=$(data).find("#tabList").html();
+			$("#rightBar").find("#tabList").html(tableList);
+			var pager=$(data).find("#rightBar").children("#pager");
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		})
+		$("#message_div").html("");
+	}
   //根据ID 删除
  function del(){
 	 var id=$("#remove_div").attr("accountId");
@@ -173,7 +184,7 @@ function closeDiv(divId){
         <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
          </form >
     </div>
-	<div id="message_div"></div>
+	<div id="message_div" onclick="removeMessge()"></div>
       <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="tabList">
         <col width="10%"/>

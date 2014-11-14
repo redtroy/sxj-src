@@ -11,6 +11,8 @@ public class RfidChannel {
 
 	public static final String WIND_MANAGER_LOGISTICS_MESSGAGE = "wind_manager_logistics_message";
 
+	public static final String WIND_MANAGER_WINDOW_MESSGAGE_REF = "wind_manager_window_message_ref";
+
 	public static RTopic<String> initTopic() {
 		RedisTopics redis = RedisTopics.create();
 		RTopic<String> topic1 = redis.getTopic("topic1");
