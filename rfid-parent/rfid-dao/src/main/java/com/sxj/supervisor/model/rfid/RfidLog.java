@@ -9,9 +9,19 @@ public class RfidLog implements Serializable {
 	 */
 	private static final long serialVersionUID = 8476956461963902070L;
 
-	private String date;
+	private Integer id;
 
 	private String state;
+
+	private String date;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getDate() {
 		return date;

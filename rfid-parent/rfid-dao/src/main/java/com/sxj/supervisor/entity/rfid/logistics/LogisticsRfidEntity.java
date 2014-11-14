@@ -221,6 +221,7 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		this.rfidState = rfidState;
 		if (RfidStateEnum.damaged.equals(getRfidState())) {
 			RfidLog log = new RfidLog();
+			log.setId(getRfidState().getId());
 			log.setState(getRfidState().getName());
 			log.setDate(DateTimeUtils.getDateTime());
 			setLogList(log);
@@ -243,6 +244,7 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		this.progressState = progressState;
 		if (getProgressState() != null) {
 			RfidLog log = new RfidLog();
+			log.setId(getProgressState().getId());
 			log.setState(getProgressState().getName());
 			log.setDate(DateTimeUtils.getDateTime());
 			setLogList(log);
