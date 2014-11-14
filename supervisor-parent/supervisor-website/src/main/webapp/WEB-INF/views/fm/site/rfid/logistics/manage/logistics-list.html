@@ -3,12 +3,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平</title>
-<meta name="keywords" content="私享家绿色门窗平�门窗,型材�玻璃�门窗"/>
-<meta name="description" content="私享家绿色门窗平�为门窗行业的玻璃�型材厂提供产品盘�物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业"/>
+<meta name="keywords" content="私享家绿色门窗平门窗,型材玻璃门窗"/>
+<meta name="description" content="私享家绿色门窗平为门窗行业的玻璃型材厂提供产品盘物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业"/>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<@b.dialogBox/>
 <!-- 供应链物流管-->
 <script >
 
@@ -27,61 +28,43 @@ function query(page){
 		loadPage(currentPage,totalPage,query);
 	});
 }
-function  del(id){
-	if(confirm('确实要删除吗?')){
-	$.post("delete.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			succInfo(function(){
-				window.location.href="query.htm";
-			},"删除成功!");
-			
-		}else{
-			errorInfo("删除失败!");	
-		}
-	});
-	}
-}
-function  disable(id){
-	if(confirm('确实要停用吗?')){
-	$.post("disable.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			succInfo(function(){
-				window.location.href="query.htm";
-			},"停用成功!");
-			
-		}else{
-			messageInfo("停用失败!");	
-		}
-	});
-	}
-}
 function loadInfo(id,rfidNo,contractNo){
-	if ($("#info"+id).html()==""){
-		$("#info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+	if ($("#bath_info"+id).children().length==0){
+		$("#bath_info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+		$("#info"+id).html("");
 		$("#log"+id).html("");
 	}else{
-		close(id);
+		$("#bath_info"+id).html("");
 	}
 	
 }
 
 function loadContractInfo(id,contractNo){
-	if ($("#info"+id).html()==""){
-		$("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo);
+	if ($("#info"+id).children().length==0){
+		$("#info"+id).load("${basePath}record/info.htm?contractNo=" + contractNo+"&recordNo="+id);
+		$("#bath_info"+id).html("");
 		$("#log"+id).html("");
 	}else{
-		close(id);
+		$("#info"+id).html("");
 	}
 }
 function close(id){
+	$("#bath_info"+id).html("");
+}
+function closeContract(id){
 	$("#info"+id).html("");
 }
-
 function log(id){
-	$("#info"+id).load("stateLog.htm?id="+id);
+	if ($("#log"+id).children().length==0){
+	$("#log"+id).load("stateLog.htm?id="+id);
+	$("#bath_info"+id).html("");
+	$("#info"+id).html("");
+	}else{
+		closeLog(id)
+	}
 }
 function closeLog(id){
-	$("#info"+id).html("");
+	$("#log"+id).html("");
 }
 </script>
 </head>
@@ -181,6 +164,7 @@ function closeLog(id){
 		  <td><#if list.rfidState.getId()==0><a href="to_start.htm?id=${list.id}" class="lnk-blue" title=""><span class="icon icon16 icon-ok"></span>启用</a> &nbsp;&nbsp;<a href="to_loss.htm?rfidNo=${list.rfidNo}" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>补损</a></#if></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}"> </tr>
+        <tr class="tableInfo" id="bath_info${list.id}"> </tr>
         <tr id="log${list.id}"> </tr>
         </#list>
   </table>

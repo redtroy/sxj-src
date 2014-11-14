@@ -48,8 +48,10 @@ function  del(id){
 	 dialogBox(function(){
 	$.post("delete.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			messageInfo("删除成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"删除成功");
+			
 		}else{
 			messageInfo("删除失败!");	
 		}
@@ -61,8 +63,9 @@ function  audit(id){
 	 dialogBox(function(){
 	$.post("audit.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			messageInfo("审核成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"审核成功");
 		}else{
 			messageInfo("审核失败!");	
 		}
@@ -78,8 +81,9 @@ function closeContract(id){
 function saveModify(id){
 	$.post("saveModify.htm",$("#form"+id).serialize(),function(data){
 		if(data.isOK=='ok'){
-			messageInfo("修改成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"修改成功");
 		}else{
 			messageInfo("修改失败!");	
 		}
