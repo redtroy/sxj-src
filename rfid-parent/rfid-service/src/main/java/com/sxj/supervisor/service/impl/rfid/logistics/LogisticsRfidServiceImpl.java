@@ -1,25 +1,16 @@
 package com.sxj.supervisor.service.impl.rfid.logistics;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
-import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.model.rfid.RfidLog;
-import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
-import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -129,28 +120,6 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 			if (logistics == null) {
 				throw new ServiceException("物流RFID不存在");
 			}
-			LogisticsRfidEntity oldLogistics = logisticsRfidDao
-					.getLogisticsRfid(logistics.getId());
-			if (oldLogistics == null) {
-				throw new ServiceException("物流RFID不存在");
-			}
-			if (logistics.getProgressState() != null) {
-				if (!logistics.getProgressState().equals(
-						oldLogistics.getProgressState())) {
-					RfidLog log = new RfidLog();
-					log.setDate(DateTimeUtils.getDateTime());
-					log.setState(logistics.getProgressState().getName());
-					logistics.setLogList(log);
-				}
-			}
-			if (logistics.getRfidState() != null) {
-				if (!logistics.getRfidState().equals(RfidStateEnum.damaged)) {
-					RfidLog log = new RfidLog();
-					log.setDate(DateTimeUtils.getDateTime());
-					log.setState(logistics.getRfidState().getName());
-					logistics.setLogList(log);
-				}
-			}
 			logisticsRfidDao.updateLogisticsRfid(logistics);
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -164,30 +133,13 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<LogModel> getRfidStateLog(String id) throws ServiceException {
+	public List<RfidLog> getRfidStateLog(String id) throws ServiceException {
 		try {
-			List<LogModel> logList = new ArrayList<LogModel>();
 			LogisticsRfidEntity log = logisticsRfidDao.getLogisticsRfid(id);
-			if (log.getLog() != null) {
-				try {
-					logList = JsonMapper
-							.nonEmptyMapper()
-							.getMapper()
-							.readValue(log.getLog(),
-									new TypeReference<List<LogModel>>() {
-									});
-				} catch (JsonParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if (log == null) {
+				return null;
 			}
-			return logList;
+			return log.getLogList();
 		} catch (Exception e) {
 			throw new ServiceException("获取stateLog错误", e);
 		}

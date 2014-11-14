@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
-import com.sxj.supervisor.model.rfid.base.LogModel;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.util.exception.ServiceException;
 
@@ -60,7 +60,7 @@ public interface IWindowRfidService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
+	public List<RfidLog> getRfidStateLog(String id) throws ServiceException;
 
 	/**
 	 * 

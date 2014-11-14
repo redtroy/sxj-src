@@ -76,7 +76,8 @@ public class RfidSupplierController extends BaseController {
 	 * 
 	 */
 	@RequestMapping("del_supplier")
-	public @ResponseBody Map del_supplier(String id) throws WebException {
+	public @ResponseBody Map<String, String> del_supplier(String id)
+			throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			supplierService.delSupplier(id);

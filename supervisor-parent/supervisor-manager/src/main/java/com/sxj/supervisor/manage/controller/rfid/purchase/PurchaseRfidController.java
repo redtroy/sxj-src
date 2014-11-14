@@ -155,18 +155,16 @@ public class PurchaseRfidController extends BaseController {
 	@RequestMapping("confirmDelivery")
 	public @ResponseBody Map<String, String> confirmDelivery(String id,
 			ModelMap model) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
-			purchase.setId(id);
-			purchase.setReceiptState(DeliveryStateEnum.shipped);
-			purchaseRfidService.updatePurchase(purchase);
-			Map<String, String> map = new HashMap<String, String>();
+			purchaseRfidService.confirmDelivery(id);
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认发货错误", e, this.getClass());
-			throw new WebException("确认发货错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**

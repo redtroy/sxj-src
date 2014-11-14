@@ -74,11 +74,6 @@ public class LogisticsRfidQuery extends Pagable implements Serializable {
 	 */
 	private String progressState;
 
-	/**
-	 * 执行日志
-	 */
-	private String log;
-
 	public String getStartImportDate() {
 		return startImportDate;
 	}
@@ -149,14 +144,6 @@ public class LogisticsRfidQuery extends Pagable implements Serializable {
 
 	public void setReplenishNo(String replenishNo) {
 		this.replenishNo = replenishNo;
-	}
-
-	public String getLog() {
-		return log;
-	}
-
-	public void setLog(String log) {
-		this.log = log;
 	}
 
 	public String getType() {

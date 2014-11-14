@@ -58,6 +58,14 @@ public interface IPurchaseRfidService {
 	public void confirmReceipt(String id) throws ServiceException;
 
 	/**
+	 * 确认发货
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void confirmDelivery(String id) throws ServiceException;
+
+	/**
 	 * 添加采购单
 	 * 
 	 * @param purchase
