@@ -19,6 +19,7 @@ import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.util.common.DateTimeUtils;
+import com.sxj.util.common.StringUtils;
 
 /**
  * 物流认证标签
@@ -261,13 +262,16 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	}
 
 	public List<RfidLog> getLogList() {
-		if (getLog() == null) {
+		if (StringUtils.isEmpty(getLog())) {
 			return logList;
 		} else {
 			logList = JsonMapper.nonEmptyMapper().fromJson(
 					getLog(),
 					new JsonMapper().contructCollectionType(ArrayList.class,
 							RfidLog.class));
+			if (logList == null) {
+				logList = new ArrayList<RfidLog>();
+			}
 			return logList;
 		}
 	}

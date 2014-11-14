@@ -1,4 +1,4 @@
-package com.sxj.supervisor.manage.controller.rfid.windowRef;
+package com.sxj.supervisor.manage.controller.rfid.ref.window;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-@RequestMapping("/rfid/window-link")
+@RequestMapping("/rfid/windowRef")
 public class WindowRefController extends BaseController {
 	@Autowired
 	private IWindowRfidRefService windowRefService;
@@ -42,8 +42,8 @@ public class WindowRefController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("query")
-	public String queryWindowRfid(WindowRefQuery query, ModelMap model,
-			String removeMessge) throws WebException {
+	public String queryWindowRfid(WindowRefQuery query, String removeMessge,
+			ModelMap model) throws WebException {
 		try {
 			query.setPagable(true);
 			List<WindowRefEntity> winList = windowRefService
@@ -57,13 +57,13 @@ public class WindowRefController extends BaseController {
 			model.put("query", query);
 			model.put("winList", winList);
 			model.put("channelName",
-					RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
-			registChannel(RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
+					RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
+			registChannel(RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
 			if ("true".equals(removeMessge)) {
 				CometServiceImpl.setCount(
 						RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF, 0l);
 			}
-			return "manage/rfid/windowRef/window-link";
+			return "manage/rfid/windowref/window-link";
 		} catch (Exception e) {
 			SxjLogger.error("查询门窗RFID关联错误", e, this.getClass());
 			throw new WebException("查询门窗RFID关联错误");
@@ -138,11 +138,11 @@ public class WindowRefController extends BaseController {
 			model.put("win", win);
 			model.put("id", id);
 			if (type == 0) {
-				return "manage/rfid/windowRef/window-link-info";
+				return "manage/rfid/windowref/window-link-info";
 			} else if (type == 1) {
-				return "manage/rfid/windowRef/rfid-modify";
+				return "manage/rfid/windowref/rfid-modify";
 			} else {
-				return "manage/rfid/windowRef/window-rfid-modify";
+				return "manage/rfid/windowref/window-rfid-modify";
 			}
 
 		} catch (Exception e) {
@@ -182,7 +182,7 @@ public class WindowRefController extends BaseController {
 			model.put("conBatch", conBatch);
 			model.put("id", id);
 			model.put("contractNo", contractNo);
-			return "manage/rfid/windowRef/contract-batch";
+			return "manage/rfid/windowref/contract-batch";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");

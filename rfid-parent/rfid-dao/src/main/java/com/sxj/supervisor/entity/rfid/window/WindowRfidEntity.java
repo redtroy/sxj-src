@@ -19,6 +19,7 @@ import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.util.common.DateTimeUtils;
+import com.sxj.util.common.StringUtils;
 
 /**
  * 门窗RFID管理
@@ -273,13 +274,16 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	}
 
 	public List<RfidLog> getLogList() {
-		if (getLog() == null) {
+		if (StringUtils.isEmpty(getLog())) {
 			return logList;
 		} else {
 			logList = JsonMapper.nonEmptyMapper().fromJson(
 					getLog(),
 					new JsonMapper().contructCollectionType(ArrayList.class,
 							RfidLog.class));
+			if (logList == null) {
+				logList = new ArrayList<RfidLog>();
+			}
 			return logList;
 		}
 	}

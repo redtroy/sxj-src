@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
-import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
+import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
@@ -46,7 +46,7 @@ public class LogisticsRfidController extends BaseController {
 			query.setPagable(true);
 			List<LogisticsRfidEntity> list = logisticsRfidService
 					.queryLogistics(query);
-			LabelProgressEnum[] Label = LabelProgressEnum.values();
+			LabelStateEnum[] Label = LabelStateEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();
 			model.put("Label", Label);

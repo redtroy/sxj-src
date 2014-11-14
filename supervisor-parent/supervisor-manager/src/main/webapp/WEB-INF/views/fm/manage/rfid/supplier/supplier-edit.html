@@ -25,15 +25,15 @@
       </div>
       <div>
         <label>公司地址</label>
-        <input type="text" id="" name="address" class="text tip" value="${supplier.address}" datatype="s0-50" errormsg="地址最多50个字符"/>
+        <input type="text" id="" name="address" class="text tip" value="${supplier.address}" datatype="s1-50" nullmsg="地址不能为空" errormsg="地址最多50个字符"/>
       </div>
       <div>
         <label>门窗标签采购价</label>
-        <input type="text" id="doorsPrice" name="" class="input-w30" value="${supplier.doorsPrice}" datatype="f" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
+        <input type="text" id="doorsPrice" name="" class="input-w30 amount" value="${supplier.doorsPrice}" datatype="f" errormsg="必须为数字类型！" nullmsg="门窗标签采购价不能为空"/>元
       </div>
       <div>
         <label>批次标签采购价</label>
-        <input type="text" id="batchPrice" name="" class="input-w30" value="${supplier.batchPrice}" datatype="f" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
+        <input type="text" id="batchPrice" name="" class="input-w30 amount" value="${supplier.batchPrice}" datatype="f" errormsg="必须为数字类型！" nullmsg="批次标签采购价不能为空"/>元
       </div>
      
       <div class="btnBox"><a href="javascript:sub();" class="button button-orange button-small">修改</a><a href="javascript:query();" class="button button-gray button-small">返回</a> </div>
@@ -75,5 +75,16 @@
 		
 		
 	}
+  $(function(){
+	  $(".amount").live("blur",function(){
+			$(this).parent().parent().parent().find(".amount").each(function(){
+				var value=$(this).attr("value");
+				if(value&&isNumber(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
+		})
+  })
  </Script>
  
