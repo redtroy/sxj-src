@@ -12,12 +12,13 @@
 		<result property="amount" column="AMOUNT" jdbcType="DOUBLE" />
 		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
 		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
+		<result property="replenishState" column="REPLENISH_STATE" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
 	<select id="queryBacths" resultMap="ModifyBacthResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID,MODIFY_ID,RFID_NO,AMOUNT,BATCH_ITEMS,BATCH_NO FROM M_CONTRACT_MODIFY_BATCH where 1=1 ]]>
+		<![CDATA[SELECT *  FROM M_CONTRACT_MODIFY_BATCH where 1=1 ]]>
 		<if test="condition.modifyId != null and condition.modifyId != ''">
 			<![CDATA[ AND MODIFY_ID=#{condition.modifyId}]]>
 		</if>

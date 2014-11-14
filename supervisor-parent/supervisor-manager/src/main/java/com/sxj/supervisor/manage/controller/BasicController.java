@@ -2,7 +2,11 @@ package com.sxj.supervisor.manage.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -586,4 +590,31 @@ public class BasicController extends BaseController
         return null;
     }
     
+    public static void main(String... args)
+    {
+        try
+        {
+            java.net.HttpURLConnection connection = (HttpURLConnection) new URL(
+                    "http://192.168.1.115:8080/rfid-website/rfid/test").openConnection();
+            connection.setDoOutput(true);
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write("contractNo=1233&rfidNos=1".getBytes());
+            outputStream.flush();
+            connection.getInputStream();
+            while (true)
+            {
+                
+            }
+        }
+        catch (MalformedURLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }

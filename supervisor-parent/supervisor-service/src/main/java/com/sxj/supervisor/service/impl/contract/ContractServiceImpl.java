@@ -713,6 +713,7 @@ public class ContractServiceImpl implements IContractService {
 							String json = JsonMapper.nonEmptyMapper().toJson(
 									modifyBatchEntity.getModifyBatchItems());
 							mbe.setBatchItems(json);
+							mbe.setReplenishState(0);
 							mbe.setModifyId(mec.getId());
 							mbeList.add(mbe);
 						}
@@ -766,6 +767,31 @@ public class ContractServiceImpl implements IContractService {
 			ReplenishContractEntity replenishContract) throws ServiceException {
 		try {
 			if (replenishContract != null) {
+				RecordEntity record =recordDao.getRecord(recordId);
+				if(record.getRfidNo()!=null){
+					//更新补损状态
+					String[] rfidNoArr=record.getRfidNo().split(",");
+					for (String rfidNo : rfidNoArr) {
+						ContractBatchEntity batch= contractBatchDao.getBacthsByRfid(rfidNo);
+						if(batch!=null){
+							if(batch.getType()==1){
+								ContractBatchEntity cb = new ContractBatchEntity();
+								cb.setId(batch.getId());
+								cb.setReplenishState(1);
+								contractBatchDao.updateBatch(batch);
+							}else if(batch.getType()==2){
+								ModifyBatchEntity  mb = new ModifyBatchEntity();
+								mb.setId(batch.getId());
+								mb.setReplenishState(1);
+								contractModifyBatchDao.updateBatch(mb);
+							}else if(batch.getType()==3){
+								ReplenishBatchEntity rb = new ReplenishBatchEntity();
+								rb.setId(batch.getId());
+								rb.setReplenishState(1);
+								contractReplenishBatchDao.updateBatch(rb);
+							}
+						}
+					}
 				contractReplenishDao.addReplenish(replenishContract);
 				if (replenishContract.getId() != null) {
 					// 补损批次
@@ -778,6 +804,7 @@ public class ContractServiceImpl implements IContractService {
 							ReplenishBatchEntity rb = replenishBatchModel
 									.getReplenishBatch();
 							rb.setBatchItems(json);
+							rb.setReplenishState(0);
 							rb.setReplenishId(replenishContract.getId());
 							rb.setNoType(contractId + "-");
 							list.add(rb);
@@ -790,7 +817,7 @@ public class ContractServiceImpl implements IContractService {
 				re.setId(recordId);
 				re.setState(RecordStateEnum.supplement);
 				recordDao.updateRecord(re);
-
+				}
 			}
 		} catch (Exception e) {
 			throw new ServiceException("补损合同信息错误", e);

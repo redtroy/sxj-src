@@ -18,6 +18,15 @@ $(function(){
 			"f":/^[0-9]+([.]{1}[0-9]{1,2})?$/
 		 }
 	 });
+	 $(".amount").live("blur",function(){
+			$(this).parent().parent().parent().find(".amount").each(function(){
+				var value=$(this).attr("value");
+				if(value&&isNumber(value)){
+					$(this).attr("value",parseFloat(value).toFixed(2))
+				}
+			});
+			
+		})
 })
 
 function update(id){
@@ -84,11 +93,11 @@ function query(){
       <form action="javascript:void(0)" id="sub_form">
       <div>
         <label>新门窗RFID单价</label>
-        <input type="text" id="windowPrice" name="windowPrice" value=""  class="input-w30" datatype="f" errormsg="请填写正确的数据类型"/>元
+        <input type="text" id="windowPrice" name="windowPrice" value=""  class="input-w30 amount" datatype="f" errormsg="请填写正确的数据类型"/>元
       </div>
       <div>
         <label>新批次RFID单价</label>
-        <input type="text" id="logisticsPrice" name="logisticsPrice" value="" class="input-w30" datatype="f" errormsg="请填写正确的数据类型" />元
+        <input type="text" id="logisticsPrice" name="logisticsPrice" value="" class="input-w30 amount" datatype="f" errormsg="请填写正确的数据类型" />元
       </div> 
       </form>
       <#if (model??)>  
