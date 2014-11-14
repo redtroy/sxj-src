@@ -63,11 +63,12 @@ public class OpenRfidController
      */
     @RequestMapping(value = "login")
     public @ResponseBody Map<String, Integer> login(String userId,
-            String password, HttpSession session) throws WebException
+            String password, HttpSession session)
     {
         Map<String, Integer> retVal = new HashMap<String, Integer>();
         try
         {
+        	System.err.println(userId+"++++"+password);
             ApiToken token = null;
             SupervisorPrincipal userBean = null;
             AccountEntity account = null;
@@ -78,10 +79,12 @@ public class OpenRfidController
                 if (account == null)
                 {
                     retVal.put("state", 0);
+                    return retVal;
                 }
                 if (AccountStatesEnum.stop.equals(account.getState()))
                 {
                     retVal.put("state", 0);
+                    return retVal;
                 }
                 userBean = new SupervisorPrincipal();
                 userBean.setAccount(account);
@@ -92,6 +95,7 @@ public class OpenRfidController
             else
             {
                 retVal.put("state", 0);
+                return retVal;
             }
             
             Subject currentUser = SecurityUtils.getSubject();
@@ -109,6 +113,7 @@ public class OpenRfidController
             {
                 SxjLogger.error(e.getMessage(), e, this.getClass());
                 retVal.put("state", -1);
+                return retVal;
                 
             }
             if (currentUser.isAuthenticated())
@@ -129,6 +134,7 @@ public class OpenRfidController
         {
             SxjLogger.error(e.getMessage(), e, this.getClass());
             retVal.put("state", -1);
+            return retVal;
         }
         return retVal;
     }
@@ -168,7 +174,6 @@ public class OpenRfidController
     @RequestMapping(value = "info/batch/{rfidNo}")
     public @ResponseBody BatchModel getRfidBatchInfo(
             @PathVariable String rfidNo, HttpServletResponse response)
-            throws SQLException
     {
         try
         {
@@ -198,7 +203,6 @@ public class OpenRfidController
     @RequestMapping(value = "info/contract/{rfidNo}")
     public @ResponseBody WinTypeModel getRfidContractInfo(
             @PathVariable String rfidNo, HttpServletResponse response)
-            throws ServiceException, SQLException
     {
         
         try
@@ -242,6 +246,10 @@ public class OpenRfidController
             {
                 map.put("state", 1);
                 map.put("message", "发货成功");
+            }else  if (state == 2)
+            {
+                map.put("state", 2);
+                map.put("message", "不能重复发货");
             }
             else
             {
@@ -306,6 +314,7 @@ public class OpenRfidController
     public @ResponseBody Map<String, Object> testRfid(String contractNo,
             String[] rfidNos)
     {
+    	System.err.println(contractNo+"++++"+rfidNos.toString());
         Map<String, Object> map = new HashMap<String, Object>();
         try
         {

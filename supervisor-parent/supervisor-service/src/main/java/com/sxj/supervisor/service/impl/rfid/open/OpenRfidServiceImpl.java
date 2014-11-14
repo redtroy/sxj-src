@@ -260,6 +260,8 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 				le.setProgressState(LabelStateEnum.shipped);
 				logisticsDao.updateLogisticsRfid(le);
 				return 1;
+			}else{
+				return 2;
 			}
 		}
 		return 0;
