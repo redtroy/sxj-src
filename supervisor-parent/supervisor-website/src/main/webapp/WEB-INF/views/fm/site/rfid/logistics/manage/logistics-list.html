@@ -9,6 +9,7 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<@b.dialogBox/>
 <!-- 供应链物流管-->
 <script >
 
@@ -28,7 +29,7 @@ function query(page){
 	});
 }
 function  del(id){
-	if(confirm('确实要删除吗?')){
+	dialogBox(function(){
 	$.post("delete.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
 			succInfo(function(){
@@ -39,10 +40,10 @@ function  del(id){
 			errorInfo("删除失败!");	
 		}
 	});
-	}
+	},"确实要删除吗？")
 }
 function  disable(id){
-	if(confirm('确实要停用吗?')){
+	dialogBox(function(){
 	$.post("disable.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
 			succInfo(function(){
@@ -53,35 +54,39 @@ function  disable(id){
 			messageInfo("停用失败!");	
 		}
 	});
-	}
+	},"确实要停用吗？");
 }
 function loadInfo(id,rfidNo,contractNo){
-	if ($("#info"+id).html()==""){
-		$("#info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
-		$("#log"+id).html("");
+	if ($("#bath_info"+id).children().length==0){
+		$("#bath_info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
 	}else{
-		close(id);
+		$("#bath_info"+id).html("");
 	}
 	
 }
 
 function loadContractInfo(id,contractNo){
-	if ($("#info"+id).html()==""){
-		$("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo);
-		$("#log"+id).html("");
+	if ($("#info"+id).children().length==0){
+		$("#info"+id).load("${basePath}record/info.htm?contractNo=" + contractNo+"&recordNo="+id);
 	}else{
-		close(id);
+		$("#info"+id).html("");
 	}
 }
 function close(id){
+	$("#bath_info"+id).html("");
+}
+function closeContract(id){
 	$("#info"+id).html("");
 }
-
 function log(id){
-	$("#info"+id).load("stateLog.htm?id="+id);
+	if ($("#log"+id).children().length==0){
+	$("#log"+id).load("stateLog.htm?id="+id);
+	}else{
+		closeLog(id)
+	}
 }
 function closeLog(id){
-	$("#info"+id).html("");
+	$("#log"+id).html("");
 }
 </script>
 </head>
@@ -181,6 +186,7 @@ function closeLog(id){
 		  <td><#if list.rfidState.getId()==0><a href="to_start.htm?id=${list.id}" class="lnk-blue" title=""><span class="icon icon16 icon-ok"></span>启用</a> &nbsp;&nbsp;<a href="to_loss.htm?rfidNo=${list.rfidNo}" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>补损</a></#if></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}"> </tr>
+        <tr class="tableInfo" id="bath_info${list.id}"> </tr>
         <tr id="log${list.id}"> </tr>
         </#list>
   </table>
