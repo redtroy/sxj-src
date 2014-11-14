@@ -1,8 +1,6 @@
 package com.sxj.supervisor.service.impl.rfid.window;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -12,10 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
@@ -25,11 +19,9 @@ import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
 import com.sxj.supervisor.model.rfid.RfidLog;
-import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
-import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -87,26 +79,6 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			if (win == null) {
 				throw new ServiceException("门窗RFID不存在");
 			}
-			WindowRfidEntity oldWin = windowRfidDao.getWindowRfid(win.getId());
-			if (oldWin == null) {
-				throw new ServiceException("门窗RFID不存在");
-			}
-			if (win.getProgressState() != null) {
-				if (!win.getProgressState().equals(oldWin.getProgressState())) {
-					RfidLog log = new RfidLog();
-					log.setDate(DateTimeUtils.getDateTime());
-					log.setState(win.getProgressState().getName());
-					win.setLogList(log);
-				}
-			}
-			if (win.getRfidState() != null) {
-				if (!win.getRfidState().equals(RfidStateEnum.damaged)) {
-					RfidLog log = new RfidLog();
-					log.setDate(DateTimeUtils.getDateTime());
-					log.setState(win.getRfidState().getName());
-					win.setLogList(log);
-				}
-			}
 			windowRfidDao.updateWindowRfid(win);
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -120,30 +92,13 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<LogModel> getRfidStateLog(String id) throws ServiceException {
+	public List<RfidLog> getRfidStateLog(String id) throws ServiceException {
 		try {
-			List<LogModel> logList = new ArrayList<LogModel>();
 			WindowRfidEntity win = windowRfidDao.getWindowRfid(id);
-			if (win.getLog() != null) {
-				try {
-					logList = JsonMapper
-							.nonEmptyMapper()
-							.getMapper()
-							.readValue(win.getLog(),
-									new TypeReference<List<LogModel>>() {
-									});
-				} catch (JsonParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if (win == null) {
+				return null;
 			}
-			return logList;
+			return win.getLogList();
 		} catch (Exception e) {
 			throw new ServiceException("获取stateLog错误", e);
 		}
@@ -438,27 +393,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	public int stepWindow(String rfidNo) throws ServiceException {
 		try {
 			WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
-			LabelProgressEnum[] label = LabelProgressEnum.values();
 			if (!wind.getProgressState().equals(LabelProgressEnum.installed)) {
-				// List<LogModel> list = JsonMapper
-				// .nonEmptyMapper()
-				// .getMapper()
-				// .readValue(wind.getLog(),
-				// new TypeReference<List<LogModel>>() {
-				// });
-
-				// Map<String, String> map = new HashMap<String, String>();
-				// List<Map<String, String>> modelList = new
-				// ArrayList<Map<String, String>>();
-				// map.put("date", (new Date()).toString());
-				// map.put("state", label[3].getName());
-				// modelList.add(map);
-				LogModel l = new LogModel();
-				l.setDate((new Date()).toString());
-				l.setState(label[3].getName());
-				// list.add(l);
-				// String log = JsonMapper.nonEmptyMapper().toJson(list);
-			//	wind.setLogList(l);
 				wind.setProgressState(LabelProgressEnum.installed);
 				updateWindowRfid(wind);
 				return 1;
@@ -481,26 +416,6 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				if (contractNo.equals(wind.getContractNo())
 						&& (!wind.getProgressState().equals(
 								LabelProgressEnum.hasQuality))) {
-					// List<List<Map<String, String>>> list = JsonMapper
-					// .nonEmptyMapper()
-					// .getMapper()
-					// .readValue(
-					// wind.getLog(),
-					// new TypeReference<List<Map<String, String>>>() {
-					// });
-					LabelProgressEnum[] label = LabelProgressEnum.values();
-					// Map<String, String> map = new HashMap<String, String>();
-					// List<Map<String, String>> modelList = new
-					// ArrayList<Map<String, String>>();
-					// map.put("date", (new Date()).toString());
-					// map.put("state", label[4].getName());
-					// modelList.add(map);
-					// list.add(modelList);
-					// String log = JsonMapper.nonEmptyMapper().toJson(list);
-					LogModel l = new LogModel();
-					l.setDate((new Date()).toString());
-					l.setState(label[4].getName());
-					wind.setLogList(l);
 					wind.setProgressState(LabelProgressEnum.hasQuality);
 					updateWindowRfid(wind);
 				} else {

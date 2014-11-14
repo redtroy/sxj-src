@@ -27,7 +27,6 @@ import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
-import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
@@ -106,7 +105,6 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 		} catch (Exception e) {
 			throw new ServiceException("更新采购单错误", e);
 		}
-
 	}
 
 	@Override
@@ -136,6 +134,65 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			return purchase;
 		} catch (Exception e) {
 			throw new ServiceException("获取采购单错误", e);
+		}
+
+	}
+
+	/**
+	 * 确认发货
+	 */
+	@Override
+	public void confirmDelivery(String id) throws ServiceException {
+		try {
+			RfidPurchaseEntity purchase = rfidPurchaseDao.getRfidPurchase(id);
+			purchase.setReceiptState(DeliveryStateEnum.shipped);
+			rfidPurchaseDao.updateRfidPurchase(purchase);
+			// 修改RFID状态
+			if (purchase.getRfidType().equals(RfidTypeEnum.door)) {
+				WindowRfidQuery query = new WindowRfidQuery();
+				query.setPurchaseNo(purchase.getPurchaseNo());
+				List<WindowRfidEntity> listRfid = winRfidService
+						.queryWindowRfid(query);
+				if (listRfid == null) {
+					throw new ServiceException("未导入RFID标签，不能发货！");
+				}
+				if (listRfid.size() < purchase.getCount()) {
+					throw new ServiceException("未完全导入RFID标签，不能发货！");
+				}
+				for (WindowRfidEntity windowRfid : listRfid) {
+					if (windowRfid == null) {
+						continue;
+					}
+					windowRfid.setProgressState(LabelProgressEnum.shipped);
+				}
+				winRfidService.batchUpdateWindowRfid(listRfid
+						.toArray(new WindowRfidEntity[listRfid.size()]));
+			} else {
+				LogisticsRfidQuery query = new LogisticsRfidQuery();
+				query.setPurchaseNo(purchase.getPurchaseNo());
+				List<LogisticsRfidEntity> listRfid = logisticsRfidService
+						.queryLogistics(query);
+				if (listRfid == null) {
+					throw new ServiceException("未导入RFID标签，不能发货！");
+				}
+				if (listRfid.size() < purchase.getCount()) {
+					throw new ServiceException("未完全导入RFID标签，不能发货！");
+				}
+				for (LogisticsRfidEntity rfidEntity : listRfid) {
+					if (rfidEntity == null) {
+						continue;
+					}
+					rfidEntity.setProgressState(LabelStateEnum.shipped);
+				}
+				logisticsRfidService.batchUpdateLogistics(listRfid
+						.toArray(new LogisticsRfidEntity[listRfid.size()]));
+			}
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage(), e);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("确认发货失败", e);
 		}
 
 	}
@@ -208,7 +265,6 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 						hasReceCount = hasReceCount + rePurchase.getCount();
 					}
 				}
-				// hasReceCount = hasReceCount + purchase.getCount();
 				if (apply.getCount() == hasReceCount) {
 					apply.setReceiptState(ReceiptStateEnum.Goods_receipt);
 					applyService.updateApp(apply);
@@ -234,8 +290,12 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				throw new ServiceException();
 			}
 			saleStatisticalService.add(entity);
-		} catch (Exception e) {
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage(), e);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("确认收货失败", e);
 		}
 	}
 
@@ -271,10 +331,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 							DeliveryStateEnum.receiving)) {
 						rfid.setProgressState(LabelProgressEnum.hasReceipt);
 					}
-					RfidLog log = new RfidLog();
-					log.setState(RfidStateEnum.unused.getName());
-					log.setDate(DateTimeUtils.getDateTime());
-					rfid.setLogList(log);
+
 					rfid.setGenerateKey(i);
 					String rfidNo = CustomDecimal.getDecimalString(4,
 							new BigDecimal(i));
@@ -325,10 +382,6 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 						rfid.setProgressState(LabelStateEnum.hasReceipt);
 					}
 					rfid.setType(rfidType);
-					RfidLog log = new RfidLog();
-					log.setState(RfidStateEnum.unused.getName());
-					log.setDate(DateTimeUtils.getDateTime());
-					rfid.setLogList(log);
 					rfid.setGenerateKey(i);
 					String rfidNo = CustomDecimal.getDecimalString(4,
 							new BigDecimal(i));
@@ -414,4 +467,5 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 		}
 
 	}
+
 }

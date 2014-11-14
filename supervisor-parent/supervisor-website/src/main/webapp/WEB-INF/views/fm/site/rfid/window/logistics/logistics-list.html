@@ -9,6 +9,7 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<@b.dialogBox/>
 <!-- 认证标签管理 -->
 <script >
 function query(page){
@@ -27,7 +28,7 @@ function query(page){
 	});
 }
 function  del(id){
-	if(confirm('确实要删除吗?')){
+	dialogBox(function(){
 	$.post("delete.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
 			succInfo(function(){
@@ -38,10 +39,10 @@ function  del(id){
 			errorInfo("删除失败!");	
 		}
 	});
-	}
+	},"确实要删除吗？")
 }
 function  disable(id){
-	if(confirm('确实要停用吗?')){
+	dialogBox(function(){
 	$.post("disable.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
 			succInfo(function(){
@@ -51,12 +52,12 @@ function  disable(id){
 			errorInfo("停用失败!");	
 		}
 	});
-	}
+	},"确实要停用吗？")
 }
 function loadInfo(id,contractNo){
-	console.log('kk')
 	if ($("#info"+id).children().length==0){
 	    $("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo+"&recordNo="+id);
+	    closeLog(id)
 	}else{
 		closeContract(id);
 	}
@@ -68,6 +69,7 @@ function closeContract(id){
 function log(id){
 	if ($("#log"+id).children().length==0){
 	$("#log"+id).load("stateLog.htm?id="+id);
+	closeContract(id)
 	}else{
 		closeLog(id);
 	}

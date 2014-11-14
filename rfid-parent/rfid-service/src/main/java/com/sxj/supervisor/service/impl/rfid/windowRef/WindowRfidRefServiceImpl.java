@@ -86,9 +86,9 @@ public class WindowRfidRefServiceImpl implements IWindowRfidRefService {
 				win.setDateNo("GL" + DateTimeUtils.getTime("yyMM"));
 				windowRfidRefDao.addWindowRfidRef(win);
 				CometServiceImpl
-						.takeCount(RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
+						.takeCount(RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
 				RfidChannel.initTopic().publish(
-						RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
+						RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
 			}
 
 		} catch (Exception e) {

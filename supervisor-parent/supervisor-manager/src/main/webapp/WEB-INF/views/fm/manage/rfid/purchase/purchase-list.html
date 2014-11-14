@@ -83,7 +83,7 @@ function confirmPay(id){
 					query($("#pager").attr("currentPage"));
 				},"确认付款成功!");
 			}else{
-				errorInfo("确认付款失败!");	
+				errorInfo(data.error);	
 			}
 		});
 	},"是否确认付款?");
@@ -279,7 +279,6 @@ function save(id){
         <tr class="tableInfo" id="info${list.id}">
 	   </tr>
          </#list>
-		
       </table>
     <!-- InstanceEndEditable --></div>
 </div>

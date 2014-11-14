@@ -62,428 +62,528 @@ import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-public class BasicController extends BaseController {
-
-	@Autowired
-	private IRoleService roleService;
-
-	@Autowired
-	private ISystemAccountService accountService;
-
-	@Autowired
-	private IFunctionService functionService;
-
-	@Autowired
-	private IMemberService memberService;
-
-	@Autowired
-	private IRfidSupplierService supplierService;
-
-	@Autowired
-	private IStorageClientService storageClientService;
-
-	@Autowired
-	private IQueryOperation operatorService;
-
-	@Autowired
-	private RedisTopics topics;
-
-	@PostConstruct
-	public void init() {
-		CometEngine engine = CometContext.getInstance().getEngine();
-		// 启动 Comet Server Thread
-		MessageThread cometServer = MessageThread.newInstance(engine);
-		RTopic<String> topic1 = topics.getTopic("topic1");
-		topic1.addListener(new CometMessageListener(cometServer));
-	}
-
-	@RequestMapping("notifyComet")
-	public @ResponseBody void notifyComet(String channelName) {
-		CometServiceImpl.sendMessage("topic1", channelName);
-	}
-
-	@RequestMapping("footer")
-	public String ToFooter() {
-		return "manage/footer";
-	}
-
-	@RequestMapping("head")
-	public String ToHeader() {
-		return "manage/head";
-	}
-
-	@RequestMapping("error")
-	public String ToError() {
-		return "manage/500";
-	}
-
-	@RequestMapping("404")
-	public String To404() {
-		return "manage/404";
-	}
-
-	@RequestMapping("index")
-	public String ToIndex() {
-		Subject user = SecurityUtils.getSubject();
-		SystemAccountEntity userName = (SystemAccountEntity) user
-				.getPrincipal();
-		if (userName == null) {
-			return LOGIN;
-		} else {
-			SystemAccountEntity newAccount = accountService
-					.getAccountByAccount(userName.getAccount());
-			if (newAccount == null) {
-				return LOGIN;
-			}
-			return INDEX;
-		}
-	}
-
-	@RequestMapping("to_login")
-	public String ToLogin() {
-		return LOGIN;
-	}
-
-	@RequestMapping("login")
-	public String login(String account, String password, HttpSession session,
-			HttpServletRequest request, ModelMap map) {
-		SystemAccountEntity user = accountService.getAccountByAccount(account);
-		if (user == null) {
-			map.put("message", "用户名不存在");
-			return LOGIN;
-		}
-		Subject currentUser = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(account,
-				password);
-		try {
-			currentUser.login(token);
-			PrincipalCollection principals = SecurityUtils.getSubject()
-					.getPrincipals();
-			String accountNo = user.getAccountNo();
-			SupervisorShiroRedisCache.addToMap(accountNo, principals);
-		} catch (AuthenticationException e) {
-			map.put("account", account);
-			map.put("message", "用户名或密码错误");
-			return LOGIN;
-
-		}
-		if (currentUser.isAuthenticated()) {
-			session.setAttribute("userinfo", user);
-			user.setLastLogin(new Date());
-			accountService.updateLoginTime(user.getId());
-			return "redirect:" + getBasePath(request) + "index.htm";
-		} else {
-			map.put("account", account);
-			map.put("message", "登陆失败");
-			return LOGIN;
-		}
-	}
-
-	@RequestMapping("logout")
-	public String logout(HttpServletRequest request) {
-		Subject currentUser = SecurityUtils.getSubject();
-		currentUser.logout();
-		return "redirect:" + getBasePath(request) + "to_login.htm";
-
-	}
-
-	/**
-	 * 左侧菜单
-	 * 
-	 * @param map
-	 * @return
-	 */
-	@RequestMapping("menu")
-	public String toMenu(ModelMap map) {
-		Subject user = SecurityUtils.getSubject();
-		SystemAccountEntity userName = (SystemAccountEntity) user
-				.getPrincipal();
-		if (userName == null) {
-			return LOGIN;
-		}
-		List<FunctionModel> list = roleService
-				.getRoleFunction(userName.getId());
-		map.put("list", list);
-		return "manage/menu";
-	}
-
-	@RequestMapping("menu_path")
-	public String menuPath(HttpServletRequest request, ModelMap map)
-			throws WebException {
-		try {
-			HttpSession session = request.getSession(false);
-			if (session.getAttribute("function") != null) {
-				String functionId = (String) session.getAttribute("function");
-				FunctionEntity function = functionService
-						.getFunction(functionId);
-				if (function != null) {
-					if (!function.getParentId().equals("0")) {
-						FunctionEntity parent = functionService
-								.getFunction(function.getParentId());
-						map.put("parentTitle", parent.getTitle());
-					}
-					map.put("title", function.getTitle());
-				}
-			}
-			return "manage/menu-path";
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new WebException("系统错误");
-		}
-	}
-
-	@RequestMapping("upload")
-	public void uploadFile(HttpServletRequest request,
-			HttpServletResponse response) throws WebException {
-		try {
-			Map<String, Object> map = new HashMap<String, Object>();
-			if (!(request instanceof DefaultMultipartHttpServletRequest)) {
-				return;
-			}
-			DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
-			Map<String, MultipartFile> fileMaps = re.getFileMap();
-			Collection<MultipartFile> files = fileMaps.values();
-			List<String> fileIds = new ArrayList<String>();
-			for (MultipartFile myfile : files) {
-				if (myfile.isEmpty()) {
-					System.err.println("文件未上传");
-				} else {
-					String originalName = myfile.getOriginalFilename();
-					String extName = FileUtil.getFileExtName(originalName);
-					// 上传文件
-					String filePath = storageClientService.uploadFile(null,
-							new ByteArrayInputStream(myfile.getBytes()),
-							myfile.getBytes().length, extName.toUpperCase());
-					SxjLogger.info("manageUploadFilePath=" + filePath,
-							this.getClass());
-					fileIds.add(filePath);
-
-					// 上传元数据
-					NameValuePair[] metaList = new NameValuePair[1];
-					metaList[0] = new NameValuePair("originalName",
-							originalName);
-					storageClientService.overwriteMetadata(filePath, metaList);
-				}
-			}
-			map.put("fileIds", fileIds);
-			String res = JsonMapper.nonDefaultMapper().toJson(map);
-			response.setContentType("text/plain;UTF-8");
-			PrintWriter out = response.getWriter();
-			out.print(res);
-			out.flush();
-			out.close();
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new WebException("文件上传错误");
-		}
-
-	}
-
-	@RequestMapping("filesort")
-	public @ResponseBody List<String> fileSort(String fileId)
-			throws WebException {
-		List<String> sortFile = new ArrayList<String>();
-		try {
-			String[] fileids = fileId.split(",");
-			Map<String, String> nameMap = new TreeMap<String, String>();
-			Map<String, NameValuePair[]> values = storageClientService
-					.getMetadata(fileids);
-			for (String key : values.keySet()) {
-				if (key == null) {
-					continue;
-				}
-				NameValuePair[] value = values.get(key);
-				nameMap.put(key, value[0].getValue());
-			}
-			List<Map.Entry<String, String>> mappingList = null;
-			// 通过ArrayList构造函数把map.entrySet()转换成list
-			mappingList = new ArrayList<Map.Entry<String, String>>(
-					nameMap.entrySet());
-			// 通过比较器实现比较排序
-			Collections.sort(mappingList,
-					new Comparator<Map.Entry<String, String>>() {
-						public int compare(Map.Entry<String, String> mapping1,
-								Map.Entry<String, String> mapping2) {
-							return mapping1.getValue().compareTo(
-									mapping2.getValue());
-						}
-					});
-			for (Map.Entry<String, String> mapping : mappingList) {
-				sortFile.add(mapping.getKey());
-			}
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new WebException("获取文件元信息错误");
-		}
-		return sortFile;
-
-	}
-
-	/**
-	 * 自动感应会员
-	 * 
-	 * @param request
-	 * @param response
-	 * @param keyword
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping("autoComple")
-	public @ResponseBody Map<String, String> autoComple(
-			HttpServletRequest request, HttpServletResponse response,
-			String keyword) throws IOException {
-		MemberQuery mq = new MemberQuery();
-		if (keyword != "" && keyword != null) {
-			mq.setMemberName(keyword);
-		}
-		List<MemberEntity> list = memberService.queryMembers(mq);
-		List<String> strlist = new ArrayList<String>();
-		String sb = "";
-		for (MemberEntity memberEntity : list) {
-			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
-					+ memberEntity.getMemberNo() + "\"}";
-			strlist.add(sb);
-		}
-		String json = "{\"data\":" + strlist.toString() + "}";
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(json);
-		out.flush();
-		out.close();
-		return null;
-	}
-
-	/**
-	 * 自动感应供应商
-	 * 
-	 * @param request
-	 * @param response
-	 * @param keyword
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping("autoSupplier")
-	public @ResponseBody Map<String, String> autoSupplier(
-			HttpServletRequest request, HttpServletResponse response,
-			String keyword) throws IOException {
-		RfidSupplierQuery query = new RfidSupplierQuery();
-		if (keyword != "" && keyword != null) {
-			query.setName(keyword);
-		}
-		List<RfidSupplierEntity> list = supplierService.querySupplier(query);
-		List<String> strlist = new ArrayList<String>();
-		String sb = "";
-		for (RfidSupplierEntity supplier : list) {
-			sb = "{\"title\":\"" + supplier.getName() + "\",\"result\":\""
-					+ supplier.getSupplierNo() + "\"}";
-			strlist.add(sb);
-		}
-		String json = "{\"data\":" + strlist.toString() + "}";
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(json);
-		out.flush();
-		out.close();
-		return null;
-	}
-
-	@RequestMapping("enter")
-	@ResponseBody
-	public void enter(HttpSession session, HttpServletRequest request,
-			String url) {
-		Date enterTime = (Date) session.getAttribute("enterTime");
-		String currentUrl = (String) session.getAttribute("currentUrl");
-		String nextUrl = (String) session.getAttribute("nextUrl");
-		if (currentUrl == null) {
-			session.setAttribute("currentUrl", request.getHeader("Referer"));
-
-		}
-		session.setAttribute("previousUrl", currentUrl);
-		session.setAttribute("currentUrl", nextUrl);
-		session.setAttribute("nextUrl", url);
-
-		if (enterTime != null) {
-			SystemAccountEntity account = getLoginInfo(session);
-			OperatorLogEntity log = new OperatorLogEntity();
-			log.setAccountNo(account.getAccountNo());
-			log.setOperatorTime(new Date());
-			log.setLogs("Entering page" + session.getAttribute("previousUrl")
-					+ "------current:    " + session.getAttribute("currentUrl")
-					+ "------next:     " + session.getAttribute("nextUrl"));
-			operatorService.addOperatorLog(log);
-		}
-		session.setAttribute("enterTime", new Date());
-
-	}
-
-	/**
-	 * 甲方联想
-	 * 
-	 * @param request
-	 * @param response
-	 * @param keyword
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping("autoCompleA")
-	public @ResponseBody Map<String, String> autoCompleA(
-			HttpServletRequest request, HttpServletResponse response,
-			String keyword) throws IOException {
-		MemberQuery mq = new MemberQuery();
-		if (keyword != "" && keyword != null) {
-			mq.setMemberName(keyword);
-		}
-		mq.setMemberType(0);
-		List<MemberEntity> list = memberService.queryMembers(mq);
-		List strlist = new ArrayList();
-		String sb = "";
-		for (MemberEntity memberEntity : list) {
-			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
-					+ memberEntity.getMemberNo() + "\"}";
-			strlist.add(sb);
-		}
-		String json = "{\"data\":" + strlist.toString() + "}";
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(json);
-		out.flush();
-		out.close();
-		return null;
-	}
-
-	/**
-	 * 乙方联想
-	 * 
-	 * @param request
-	 * @param response
-	 * @param keyword
-	 * @return
-	 * @throws IOException
-	 */
-	@RequestMapping("autoCompleB")
-	public @ResponseBody Map<String, String> autoCompleB(
-			HttpServletRequest request, HttpServletResponse response,
-			String keyword) throws IOException {
-		MemberQuery mq = new MemberQuery();
-		if (keyword != "" && keyword != null) {
-			mq.setMemberName(keyword);
-		}
-		mq.setMemberTypeB(0);
-		List<MemberEntity> list = memberService.queryMembers(mq);
-		List strlist = new ArrayList();
-		String sb = "";
-		for (MemberEntity memberEntity : list) {
-			sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
-					+ memberEntity.getMemberNo() + "\"}";
-			strlist.add(sb);
-		}
-		String json = "{\"data\":" + strlist.toString() + "}";
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
-		out.print(json);
-		out.flush();
-		out.close();
-		return null;
-	}
-
+public class BasicController extends BaseController
+{
+    
+    @Autowired
+    private IRoleService roleService;
+    
+    @Autowired
+    private ISystemAccountService accountService;
+    
+    @Autowired
+    private IFunctionService functionService;
+    
+    @Autowired
+    private IMemberService memberService;
+    
+    @Autowired
+    private IRfidSupplierService supplierService;
+    
+    @Autowired
+    private IStorageClientService storageClientService;
+    
+    @Autowired
+    private IQueryOperation operatorService;
+    
+    @Autowired
+    private RedisTopics topics;
+    
+    @PostConstruct
+    public void init()
+    {
+        CometEngine engine = CometContext.getInstance().getEngine();
+        // 启动 Comet Server Thread
+        MessageThread cometServer = MessageThread.newInstance(engine);
+        RTopic<String> topic1 = topics.getTopic("topic1");
+        topic1.addListener(new CometMessageListener(cometServer));
+    }
+    
+    @RequestMapping("notifyComet")
+    public @ResponseBody void notifyComet(String channelName)
+    {
+        CometServiceImpl.sendMessage("topic1", channelName);
+    }
+    
+    @RequestMapping("footer")
+    public String ToFooter()
+    {
+        return "manage/footer";
+    }
+    
+    @RequestMapping("head")
+    public String ToHeader()
+    {
+        return "manage/head";
+    }
+    
+    @RequestMapping("error")
+    public String ToError()
+    {
+        return "manage/500";
+    }
+    
+    @RequestMapping("404")
+    public String To404()
+    {
+        return "manage/404";
+    }
+    
+    @RequestMapping("index")
+    public String ToIndex()
+    {
+        Subject user = SecurityUtils.getSubject();
+        SystemAccountEntity userName = (SystemAccountEntity) user.getPrincipal();
+        if (userName == null)
+        {
+            return LOGIN;
+        }
+        else
+        {
+            SystemAccountEntity newAccount = accountService.getAccountByAccount(userName.getAccount());
+            if (newAccount == null)
+            {
+                return LOGIN;
+            }
+            return INDEX;
+        }
+    }
+    
+    @RequestMapping("to_login")
+    public String ToLogin()
+    {
+        return LOGIN;
+    }
+    
+    @RequestMapping("login")
+    public String login(String account, String password, HttpSession session,
+            HttpServletRequest request, ModelMap map)
+    {
+        SystemAccountEntity user = accountService.getAccountByAccount(account);
+        if (user == null)
+        {
+            map.put("message", "用户名不存在");
+            return LOGIN;
+        }
+        Subject currentUser = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(account,
+                password);
+        try
+        {
+            currentUser.login(token);
+            PrincipalCollection principals = SecurityUtils.getSubject()
+                    .getPrincipals();
+            String accountNo = user.getAccountNo();
+            SupervisorShiroRedisCache.addToMap(accountNo, principals);
+        }
+        catch (AuthenticationException e)
+        {
+            map.put("account", account);
+            map.put("message", "用户名或密码错误");
+            return LOGIN;
+            
+        }
+        if (currentUser.isAuthenticated())
+        {
+            session.setAttribute("userinfo", user);
+            user.setLastLogin(new Date());
+            accountService.updateLoginTime(user.getId());
+            return "redirect:" + getBasePath(request) + "index.htm";
+        }
+        else
+        {
+            map.put("account", account);
+            map.put("message", "登陆失败");
+            return LOGIN;
+        }
+    }
+    
+    @RequestMapping("logout")
+    public String logout(HttpServletRequest request)
+    {
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();
+        return "redirect:" + getBasePath(request) + "to_login.htm";
+        
+    }
+    
+    /**
+     * 左侧菜单
+     * 
+     * @param map
+     * @return
+     */
+    @RequestMapping("menu")
+    public String toMenu(ModelMap map)
+    {
+        Subject user = SecurityUtils.getSubject();
+        SystemAccountEntity userName = (SystemAccountEntity) user.getPrincipal();
+        if (userName == null)
+        {
+            return LOGIN;
+        }
+        List<FunctionModel> list = roleService.getRoleFunction(userName.getId());
+        map.put("list", list);
+        return "manage/menu";
+    }
+    
+    @RequestMapping("menu_path")
+    public String menuPath(HttpServletRequest request, ModelMap map)
+            throws WebException
+    {
+        try
+        {
+            HttpSession session = request.getSession(false);
+            if (session.getAttribute("function") != null)
+            {
+                String functionId = (String) session.getAttribute("function");
+                FunctionEntity function = functionService.getFunction(functionId);
+                if (function != null)
+                {
+                    if (!function.getParentId().equals("0"))
+                    {
+                        FunctionEntity parent = functionService.getFunction(function.getParentId());
+                        map.put("parentTitle", parent.getTitle());
+                    }
+                    map.put("title", function.getTitle());
+                }
+            }
+            return "manage/menu-path";
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new WebException("系统错误");
+        }
+    }
+    
+    @RequestMapping("upload")
+    public void uploadFile(HttpServletRequest request,
+            HttpServletResponse response) throws WebException
+    {
+        try
+        {
+            Map<String, Object> map = new HashMap<String, Object>();
+            if (!(request instanceof DefaultMultipartHttpServletRequest))
+            {
+                return;
+            }
+            DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
+            Map<String, MultipartFile> fileMaps = re.getFileMap();
+            Collection<MultipartFile> files = fileMaps.values();
+            List<String> fileIds = new ArrayList<String>();
+            for (MultipartFile myfile : files)
+            {
+                if (myfile.isEmpty())
+                {
+                    System.err.println("文件未上传");
+                }
+                else
+                {
+                    String originalName = myfile.getOriginalFilename();
+                    String extName = FileUtil.getFileExtName(originalName);
+                    // 上传文件
+                    String filePath = storageClientService.uploadFile(null,
+                            new ByteArrayInputStream(myfile.getBytes()),
+                            myfile.getBytes().length,
+                            extName.toUpperCase());
+                    SxjLogger.info("manageUploadFilePath=" + filePath,
+                            this.getClass());
+                    fileIds.add(filePath);
+                    
+                    // 上传元数据
+                    NameValuePair[] metaList = new NameValuePair[1];
+                    metaList[0] = new NameValuePair("originalName",
+                            originalName);
+                    storageClientService.overwriteMetadata(filePath, metaList);
+                }
+            }
+            map.put("fileIds", fileIds);
+            String res = JsonMapper.nonDefaultMapper().toJson(map);
+            response.setContentType("text/plain;UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print(res);
+            out.flush();
+            out.close();
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new WebException("文件上传错误");
+        }
+        
+    }
+    
+    @RequestMapping("filesort")
+    public @ResponseBody List<String> fileSort(String fileId)
+            throws WebException
+    {
+        List<String> sortFile = new ArrayList<String>();
+        try
+        {
+            String[] fileids = fileId.split(",");
+            Map<String, String> nameMap = new TreeMap<String, String>();
+            Map<String, NameValuePair[]> values = storageClientService.getMetadata(fileids);
+            for (String key : values.keySet())
+            {
+                if (key == null)
+                {
+                    continue;
+                }
+                NameValuePair[] value = values.get(key);
+                nameMap.put(key, value[0].getValue());
+            }
+            List<Map.Entry<String, String>> mappingList = null;
+            // 通过ArrayList构造函数把map.entrySet()转换成list
+            mappingList = new ArrayList<Map.Entry<String, String>>(
+                    nameMap.entrySet());
+            // 通过比较器实现比较排序
+            Collections.sort(mappingList,
+                    new Comparator<Map.Entry<String, String>>()
+                    {
+                        public int compare(Map.Entry<String, String> mapping1,
+                                Map.Entry<String, String> mapping2)
+                        {
+                            return mapping1.getValue()
+                                    .compareTo(mapping2.getValue());
+                        }
+                    });
+            for (Map.Entry<String, String> mapping : mappingList)
+            {
+                sortFile.add(mapping.getKey());
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new WebException("获取文件元信息错误");
+        }
+        return sortFile;
+        
+    }
+    
+    /**
+     * 自动感应会员
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoComple")
+    public @ResponseBody Map<String, String> autoComple(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        MemberQuery mq = new MemberQuery();
+        if (keyword != "" && keyword != null)
+        {
+            mq.setMemberName(keyword);
+        }
+        List<MemberEntity> list = memberService.queryMembers(mq);
+        List<String> strlist = new ArrayList<String>();
+        String sb = "";
+        for (MemberEntity memberEntity : list)
+        {
+            sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+                    + memberEntity.getMemberNo() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 自动感应供应商
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoSupplier")
+    public @ResponseBody Map<String, String> autoSupplier(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        RfidSupplierQuery query = new RfidSupplierQuery();
+        if (keyword != "" && keyword != null)
+        {
+            query.setName(keyword);
+        }
+        List<RfidSupplierEntity> list = supplierService.querySupplier(query);
+        List<String> strlist = new ArrayList<String>();
+        String sb = "";
+        for (RfidSupplierEntity supplier : list)
+        {
+            sb = "{\"title\":\"" + supplier.getName() + "\",\"result\":\""
+                    + supplier.getSupplierNo() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    public static String getIpAddr(HttpServletRequest request)
+    {
+        String strUserIp = null;
+        /** * */
+        // Apache 代理 解决IP地址问题
+        strUserIp = request.getHeader("X-Forwarded-For");
+        if (strUserIp == null || strUserIp.length() == 0
+                || "unknown".equalsIgnoreCase(strUserIp))
+        {
+            strUserIp = request.getHeader("Proxy-Client-IP");
+        }
+        if (strUserIp == null || strUserIp.length() == 0
+                || "unknown".equalsIgnoreCase(strUserIp))
+        {
+            strUserIp = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (strUserIp == null || strUserIp.length() == 0
+                || "unknown".equalsIgnoreCase(strUserIp))
+        {
+            strUserIp = request.getRemoteAddr();
+        }
+        // 解决获取多网卡的IP地址问题
+        if (strUserIp != null)
+        {
+            strUserIp = strUserIp.split(",")[0];
+        }
+        else
+        {
+            strUserIp = "127.0.0.1";
+        }
+        // 解决获取IPv6地址 暂时改为本机地址模式
+        if (strUserIp.length() > 16)
+        {
+            strUserIp = "127.0.0.1";
+        }
+        return strUserIp;
+        // 没有IP Apache 代理 解决IP地址问题
+        // strUserIp=request.getRemoteAddr();
+        // if (strUserIp != null) {strUserIp = strUserIp.split(",")[0];}
+        // return strUserIp;
+    }
+    
+    @RequestMapping("enter")
+    @ResponseBody
+    public void enter(HttpSession session, HttpServletRequest request,
+            String url)
+    {
+        Date enterTime = (Date) session.getAttribute("enterTime");
+        String currentUrl = (String) session.getAttribute("currentUrl");
+        String nextUrl = (String) session.getAttribute("nextUrl");
+        if (currentUrl == null)
+        {
+            session.setAttribute("currentUrl", request.getHeader("Referer"));
+            
+        }
+        session.setAttribute("previousUrl", currentUrl);
+        session.setAttribute("currentUrl", nextUrl);
+        session.setAttribute("nextUrl", url);
+        
+        if (enterTime != null)
+        {
+            SystemAccountEntity account = getLoginInfo(session);
+            OperatorLogEntity log = new OperatorLogEntity();
+            log.setAccountNo(account.getAccountNo());
+            log.setOperatorTime(new Date());
+            log.setLogs("Entering page" + session.getAttribute("previousUrl")
+                    + "------current:    " + session.getAttribute("currentUrl")
+                    + "------next:     " + session.getAttribute("nextUrl"));
+            operatorService.addOperatorLog(log);
+        }
+        session.setAttribute("enterTime", new Date());
+        
+    }
+    
+    /**
+     * 甲方联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCompleA")
+    public @ResponseBody Map<String, String> autoCompleA(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        MemberQuery mq = new MemberQuery();
+        if (keyword != "" && keyword != null)
+        {
+            mq.setMemberName(keyword);
+        }
+        mq.setMemberType(0);
+        List<MemberEntity> list = memberService.queryMembers(mq);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (MemberEntity memberEntity : list)
+        {
+            sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+                    + memberEntity.getMemberNo() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 乙方联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCompleB")
+    public @ResponseBody Map<String, String> autoCompleB(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        MemberQuery mq = new MemberQuery();
+        if (keyword != "" && keyword != null)
+        {
+            mq.setMemberName(keyword);
+        }
+        mq.setMemberTypeB(0);
+        List<MemberEntity> list = memberService.queryMembers(mq);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (MemberEntity memberEntity : list)
+        {
+            sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+                    + memberEntity.getMemberNo() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
 }

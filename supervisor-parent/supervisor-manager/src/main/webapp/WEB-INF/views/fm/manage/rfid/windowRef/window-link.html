@@ -44,12 +44,26 @@ function query(page){
 		loadPage(currentPage,totalPage,query);
 	});
 }
+function removeMessge(){
+	$.post("query.htm",{removeMessge:"true"},function(data){
+		var res=$(data).find("#res_table");
+		var pager=$(data).find("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+	$("#message_div").html("");
+}
 function  del(id){
 	 dialogBox(function(){
 	$.post("delete.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			messageInfo("删除成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"删除成功");
+			
 		}else{
 			messageInfo("删除失败!");	
 		}
@@ -61,8 +75,9 @@ function  audit(id){
 	 dialogBox(function(){
 	$.post("audit.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			messageInfo("审核成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"审核成功");
 		}else{
 			messageInfo("审核失败!");	
 		}
@@ -78,8 +93,9 @@ function closeContract(id){
 function saveModify(id){
 	$.post("saveModify.htm",$("#form"+id).serialize(),function(data){
 		if(data.isOK=='ok'){
-			messageInfo("修改成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"修改成功");
 		}else{
 			messageInfo("修改失败!");	
 		}
@@ -139,7 +155,7 @@ function batch(id,contractNo,rfidNo){
         <a class="btn btn-blue" href="javascript:query();"><span>查询</span></a>
     </div>
     </form>
-	  <div id="message_div"></div>
+	  <div id="message_div" onclick="removeMessge()"></div>
       <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="12%"/>

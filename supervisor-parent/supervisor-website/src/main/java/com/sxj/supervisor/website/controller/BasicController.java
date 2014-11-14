@@ -551,6 +551,48 @@ public class BasicController extends BaseController
         
     }
     
+    public static String getIpAddr(HttpServletRequest request)
+    {
+        String strUserIp = null;
+        /** * */
+        // Apache 代理 解决IP地址问题
+        strUserIp = request.getHeader("X-Forwarded-For");
+        if (strUserIp == null || strUserIp.length() == 0
+                || "unknown".equalsIgnoreCase(strUserIp))
+        {
+            strUserIp = request.getHeader("Proxy-Client-IP");
+        }
+        if (strUserIp == null || strUserIp.length() == 0
+                || "unknown".equalsIgnoreCase(strUserIp))
+        {
+            strUserIp = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (strUserIp == null || strUserIp.length() == 0
+                || "unknown".equalsIgnoreCase(strUserIp))
+        {
+            strUserIp = request.getRemoteAddr();
+        }
+        // 解决获取多网卡的IP地址问题
+        if (strUserIp != null)
+        {
+            strUserIp = strUserIp.split(",")[0];
+        }
+        else
+        {
+            strUserIp = "127.0.0.1";
+        }
+        // 解决获取IPv6地址 暂时改为本机地址模式
+        if (strUserIp.length() > 16)
+        {
+            strUserIp = "127.0.0.1";
+        }
+        return strUserIp;
+        // 没有IP Apache 代理 解决IP地址问题
+        // strUserIp=request.getRemoteAddr();
+        // if (strUserIp != null) {strUserIp = strUserIp.split(",")[0];}
+        // return strUserIp;
+    }
+    
     @RequestMapping("enter")
     @ResponseBody
     public void enter(HttpSession session, HttpServletRequest request,
@@ -580,7 +622,7 @@ public class BasicController extends BaseController
             log.setNextpage(url);
             log.setPrePage(currentUrl);
             log.setCallTime(enterTime);
-            log.setIp(request.getRemoteHost());
+            log.setIp(getIpAddr(request));
             if (enterTime != null)
             {
                 long waitTime = (nowTime.getTime() - enterTime.getTime()) / 1000;

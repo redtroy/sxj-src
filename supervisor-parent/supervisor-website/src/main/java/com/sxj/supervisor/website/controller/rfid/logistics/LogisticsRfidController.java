@@ -30,7 +30,7 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
-import com.sxj.supervisor.model.rfid.base.LogModel;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
@@ -96,7 +96,7 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("stateLog")
 	public String getStateLog(ModelMap model, String id) throws WebException {
 		try {
-			List<LogModel> logList = logisticsRfidService.getRfidStateLog(id);
+			List<RfidLog> logList = logisticsRfidService.getRfidStateLog(id);
 			model.put("id", id);
 			model.put("logList", logList);
 			return "site/rfid/logistics/manage/stateLog";
