@@ -35,10 +35,20 @@ jQuery(document).ready(function($) {
 })
 //修改
   function edit(id){
-	  $("#edit_"+id).find("#count_input").show();
-	  $("#edit_"+id).find("#count_td").hide();
-	  $("#edit_"+id).find(".operation").find("#edit_conf").show();
-	  $("#edit_"+id).find(".operation").find("#edit_href").hide();
+	 
+		 $.post("checkApply.htm",{id:id},function(data){
+			 if (data.isOk=="ok"){
+				 $("#edit_"+id).find("#count_input").show();
+				  $("#edit_"+id).find("#count_td").hide();
+				  $("#edit_"+id).find(".operation").find("#edit_conf").show();
+				  $("#edit_"+id).find(".operation").find("#edit_href").hide();
+				 }else{
+					 errorInfo(data.error);
+					 var page=$("#rightBar").find("#pager").attr("currentPage");
+					 query(page);
+				 }
+		 });
+	 
   }
   //保存修改
   function edit_save(id){
@@ -80,6 +90,21 @@ jQuery(document).ready(function($) {
 	 });
   },"是否确认删除？");
   }
+  //删除
+  function to_purchase(id){
+	 dialogBox(function(){
+	 $.post("checkApply.htm",{id:id},function(data){
+		 if (data.isOk=="ok"){
+				 window.location.href="${basePath}rfid/purchase/toAdd.htm?id="+id;
+			 }else{
+				 errorInfo(data.error);
+				 var page=$("#rightBar").find("#pager").attr("currentPage");
+				 query(page);
+			 }
+	 });
+  },"是否确认生成采购单");
+  }
+  
   //确认收款
   function ok(id){
 	  dialogBox(function(){
@@ -204,7 +229,7 @@ jQuery(document).ready(function($) {
 		  </#if>
 		  <td>
 		  <#if (model.count-model.hasNumber) gt 0>
-		  <a onclick="javascript:window.location.href='${basePath}rfid/purchase/toAdd.htm?id=${model.id}'" class="button button-green button-small"><span>生成采购单</span></a>
+		  <a onclick="javascript:to_purchase('${model.id}');" class="button button-green button-small"><span>生成采购单</span></a>
 		 <#else>
 		 <em>已全部生成采购单</em>
 		  </#if>

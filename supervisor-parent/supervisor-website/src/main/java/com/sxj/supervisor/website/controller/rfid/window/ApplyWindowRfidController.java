@@ -129,6 +129,33 @@ public class ApplyWindowRfidController extends BaseController {
 	}
 
 	/**
+	 * 验证申请单是否存在
+	 * 
+	 * @param apply
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("checkApply")
+	public @ResponseBody Map<String, String> checkApply(String id)
+			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			RfidApplicationEntity apply = applyService.getApplicationInfo(id);
+			if (apply == null) {
+				throw new WebException("申请单不存在！");
+			}
+			if (apply.getDelstate()) {
+				throw new WebException("申请单不存在！");
+			}
+			map.put("isOk", "ok");
+		} catch (Exception e) {
+			SxjLogger.error("验证RFID申请单错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
+	}
+
+	/**
 	 * 根据合同号检查合同，做合同匹配认证，数量认证
 	 */
 	@RequestMapping("check_contract")

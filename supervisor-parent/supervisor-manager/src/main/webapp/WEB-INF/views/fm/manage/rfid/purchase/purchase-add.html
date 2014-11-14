@@ -50,10 +50,10 @@ var su_price="";
 						match = true;
 						$.post("getSupplierPrice.htm?supplierNo="+data[i].result,function(data){
 							if(rfidType="0"){
-								$("#price").val(data.doorPrice);
+								$("#price").val(data.doorPrice.toFixed(2));
 								su_price=data.doorPrice;
 							}else{
-								$("#price").val(data.batchPrice);
+								$("#price").val(data.batchPrice.toFixed(2));
 								su_price=data.batchPrice;
 							}
 							var price=parseFloat($("#price").val());
