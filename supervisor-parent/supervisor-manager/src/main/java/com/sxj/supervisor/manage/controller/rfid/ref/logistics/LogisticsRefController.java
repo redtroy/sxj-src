@@ -1,4 +1,4 @@
-package com.sxj.supervisor.manage.controller.rfid.lableManage;
+package com.sxj.supervisor.manage.controller.rfid.ref.logistics;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +30,8 @@ import com.sxj.util.logger.SxjLogger;
  *
  */
 @Controller
-@RequestMapping("/rfid/lableManage")
-public class LableManageController extends BaseController {
+@RequestMapping("/rfid/logisticsRef")
+public class LogisticsRefController extends BaseController {
 
 	@Autowired
 	private ILogisticsRefService refService;
@@ -62,7 +62,7 @@ public class LableManageController extends BaseController {
 			SxjLogger.error("查询错误", e, this.getClass());
 			throw new WebException("查询错误");
 		}
-		return "manage/rfid/gysrfid-link/gysrfid-link";
+		return "manage/rfid/logisticsref/gysrfid-link";
 	}
 
 	@RequestMapping("del")
@@ -120,7 +120,7 @@ public class LableManageController extends BaseController {
 			SxjLogger.error("批次合同查询错误", e, this.getClass());
 			throw new WebException("批次合同查询错误");
 		}
-		return "manage/rfid/gysrfid-link/edit";
+		return "manage/rfid/logisticsref/edit";
 	}
 
 	/**

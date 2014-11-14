@@ -182,7 +182,7 @@ function batch(id,contractNo,rfidNo){
 		  <td>${win.applyDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
 		  <td><#if win.replenishRfid?exists>${win.replenishRfid}<#else>-</#if></td>
 		  <td><#if win.state.getId()==0><button class="btn btn-gray" onclick="audit('${win.id}');"><span>审核</span></button><#else><em class="state verified">已审核</em></#if></td>
-		  <td class="operation"><a href="javascript:del('${win.id}');" class="del">删除</a></td>
+		  <td class="operation"><#if win.state.getId()==0><a href="javascript:del('${win.id}');" class="del">删除</a><#else></#if></td>
         </tr>
         <tr class="tableInfo" id="info${win.id}"></tr>
         </#list>
