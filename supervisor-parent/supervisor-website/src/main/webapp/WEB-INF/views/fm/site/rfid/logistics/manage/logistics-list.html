@@ -59,6 +59,8 @@ function  disable(id){
 function loadInfo(id,rfidNo,contractNo){
 	if ($("#bath_info"+id).children().length==0){
 		$("#bath_info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+		$("#info"+id).html("");
+		$("#log"+id).html("");
 	}else{
 		$("#bath_info"+id).html("");
 	}
@@ -68,6 +70,8 @@ function loadInfo(id,rfidNo,contractNo){
 function loadContractInfo(id,contractNo){
 	if ($("#info"+id).children().length==0){
 		$("#info"+id).load("${basePath}record/info.htm?contractNo=" + contractNo+"&recordNo="+id);
+		$("#bath_info"+id).html("");
+		$("#log"+id).html("");
 	}else{
 		$("#info"+id).html("");
 	}
@@ -81,6 +85,8 @@ function closeContract(id){
 function log(id){
 	if ($("#log"+id).children().length==0){
 	$("#log"+id).load("stateLog.htm?id="+id);
+	$("#bath_info"+id).html("");
+	$("#info"+id).html("");
 	}else{
 		closeLog(id)
 	}

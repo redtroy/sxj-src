@@ -57,6 +57,7 @@ function  disable(id){
 function loadInfo(id,contractNo){
 	if ($("#info"+id).children().length==0){
 	    $("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo+"&recordNo="+id);
+	    closeLog(id)
 	}else{
 		closeContract(id);
 	}
@@ -68,6 +69,7 @@ function closeContract(id){
 function log(id){
 	if ($("#log"+id).children().length==0){
 	$("#log"+id).load("stateLog.htm?id="+id);
+	closeContract(id)
 	}else{
 		closeLog(id);
 	}
