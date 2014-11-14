@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
@@ -53,6 +54,10 @@ public class StartWRfidController extends BaseController {
 			if (contract == null) {
 				throw new WebException("招标合同不存在");
 			}
+			if (!contract.getContract().getType()
+					.equals(ContractTypeEnum.bidding)) {
+				throw new WebException("此合同不是招标合同");
+			}
 			float itemQuantity = contract.getContract().getItemQuantity();
 			float hasStartQuantity = contract.getContract().getUseQuantity();
 
@@ -72,6 +77,7 @@ public class StartWRfidController extends BaseController {
 				map.put("list", list);
 			} else {
 				map.put("isOk", "false");
+				map.put("error", "此招标合同没有关联的采购合同");
 			}
 			return map;
 		} catch (Exception e) {

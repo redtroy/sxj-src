@@ -24,10 +24,12 @@ import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -82,8 +84,35 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	@Transactional
 	public void updateWindowRfid(WindowRfidEntity win) throws ServiceException {
 		try {
+			if (win == null) {
+				throw new ServiceException("门窗RFID不存在");
+			}
+			WindowRfidEntity oldWin = windowRfidDao.getWindowRfid(win.getId());
+			if (oldWin == null) {
+				throw new ServiceException("门窗RFID不存在");
+			}
+			if (win.getProgressState() != null) {
+				if (!win.getProgressState().equals(oldWin.getProgressState())) {
+					RfidLog log = new RfidLog();
+					log.setDate(DateTimeUtils.getDateTime());
+					log.setState(win.getProgressState().getName());
+					win.setLogList(log);
+				}
+			}
+			if (win.getRfidState() != null) {
+				if (!win.getRfidState().equals(RfidStateEnum.damaged)) {
+					RfidLog log = new RfidLog();
+					log.setDate(DateTimeUtils.getDateTime());
+					log.setState(win.getRfidState().getName());
+					win.setLogList(log);
+				}
+			}
 			windowRfidDao.updateWindowRfid(win);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("更新门窗RFID错误", e);
 		}
 
@@ -266,19 +295,137 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	}
 
 	@Override
+	@Transactional
 	public void lossWindowRfid(String refContractNo, String minRfid,
-			String maxRfid, String gRfid, String lRfid, String[] addRfid,
-			Long count) throws ServiceException {
+			String maxRfid, String gRfid, String lRfid, String[] addRfid)
+			throws ServiceException {
 		try {
-			windowRfidDao.update_rfid(addRfid);
-			WindowRfidQuery query = new WindowRfidQuery();
-			query.setRfidNo(addRfid[0]);
-			List<WindowRfidEntity> list = queryWindowRfid(query);
-			// startWindowRfid(count, refContractNo, minRfid, maxRfid, gRfid,
-			// lRfid, list.get(0).getWindowType());
+			if (addRfid == null || addRfid.length == 0) {
+				throw new ServiceException("没有输入需要被补损的RFID");
+			}
+			WindowRfidQuery query2 = new WindowRfidQuery();
+			query2.setMinRfidNo(minRfid);
+			query2.setMaxRfidNo(maxRfid);
+			query2.setContractNo(refContractNo);
+			query2.setRfidState(RfidStateEnum.unused.getId());
+			List<WindowRfidEntity> list = queryWindowRfid(query2);
+			if (list == null || list.size() == 0) {
+				throw new ServiceException("补损的RFID不存在");
+			}
+			if (list.size() != addRfid.length) {
+				throw new ServiceException("补损的RFID数量与需要被补损的RFID数量不一致");
+			}
+			String memberNo = null;
+			String memberName = null;
+			WindowTypeEnum windowsNo = null;
+			String replenishRfid = null;
+			for (int i = 0; i < addRfid.length; i++) {
+				WindowRfidEntity oldRfid = getWindowRfidByNo(addRfid[i]);
+				if (oldRfid == null) {
+					throw new ServiceException("编号为：" + addRfid[i]
+							+ "的被补损RFID不存在");
+				}
+				WindowRfidEntity newRfid = list.get(i);
+				if (newRfid == null) {
+					throw new ServiceException("补损的RFID不存在");
+				}
+				if (!newRfid.getContractNo().equals(oldRfid.getContractNo())) {
+					throw new ServiceException("编号为：" + addRfid[i]
+							+ "的被补损RFID与编号为：" + newRfid.getRfidNo()
+							+ "的新RFID招标合同不一致");
+				}
+				memberNo = newRfid.getMemberNo();
+				memberName = newRfid.getMemberName();
+				windowsNo = newRfid.getWindowType();
+				if (i < addRfid.length - 1) {
+					replenishRfid = replenishRfid + oldRfid.getRfidNo() + ",";
+				} else {
+					replenishRfid = replenishRfid + oldRfid.getRfidNo();
+				}
+				// 更新旧RFID
+				oldRfid.setReplenishNo(newRfid.getRfidNo());
+				oldRfid.setRfidState(RfidStateEnum.damaged);
+				updateWindowRfid(oldRfid);
+
+				// 设置新RFID
+				newRfid.setGlassRfid(gRfid);
+				newRfid.setProfileRfid(lRfid);
+				newRfid.setWindowType(oldRfid.getWindowType());
+				newRfid.setRfidState(RfidStateEnum.used);
+				updateWindowRfid(newRfid);
+			}
+			// windowRfidDao.batchUpdateWindowRfid(list
+			// .toArray(new WindowRfidEntity[list.size()]));
+			// 生成关联单
+			WindowRefEntity winRef = new WindowRefEntity();
+			winRef.setMinRfidNo(minRfid);
+			winRef.setMaxRfidNo(maxRfid);
+			winRef.setMemberNo(memberNo);
+			winRef.setMemberName(memberName);
+			winRef.setType(LinkStateEnum.windowLoss);
+			winRef.setWindowsNo(windowsNo);
+			winRef.setGlassBatchNo(gRfid);
+			winRef.setProfileBatchNo(lRfid);
+			winRef.setApplyDate(new Date());
+			winRef.setReplenishRfid(replenishRfid);
+			winRef.setContractNo(refContractNo);
+			winRef.setState(AuditStateEnum.noapproval);
+			winRefService.addWindowRfidRef(winRef);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("批量补损RFID失败", e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public void lossWindowRfid(String rfidNo, String newRfidNo)
+			throws ServiceException {
+		try {
+			WindowRfidEntity rfid = getWindowRfidByNo(rfidNo);
+			if (rfid == null) {
+				throw new ServiceException("被补损的RFID不存在");
+			}
+			WindowRfidEntity newRfid = getWindowRfidByNo(newRfidNo);
+			if (newRfid == null) {
+				throw new ServiceException("补损的RFID不存在");
+			}
+			rfid.setReplenishNo(newRfidNo);
+			rfid.setRfidState(RfidStateEnum.damaged);
+			updateWindowRfid(rfid);
+
+			newRfid.setRfidState(RfidStateEnum.used);
+			newRfid.setWindowType(rfid.getWindowType());
+			newRfid.setContractNo(rfid.getContractNo());
+			newRfid.setGlassRfid(rfid.getGlassRfid());
+			newRfid.setProfileRfid(rfid.getProfileRfid());
+			updateWindowRfid(newRfid);
+
+			// 生成关联单
+			WindowRefEntity winRef = new WindowRefEntity();
+			winRef.setMinRfidNo(newRfidNo);
+			winRef.setMaxRfidNo(newRfidNo);
+			winRef.setMemberNo(newRfid.getMemberNo());
+			winRef.setMemberName(newRfid.getMemberName());
+			winRef.setType(LinkStateEnum.rfidLoss);
+			winRef.setWindowsNo(newRfid.getWindowType());
+			winRef.setGlassBatchNo(newRfid.getGlassRfid());
+			winRef.setProfileBatchNo(newRfid.getProfileRfid());
+			winRef.setApplyDate(new Date());
+			winRef.setReplenishRfid(rfidNo);
+			winRef.setContractNo(newRfid.getContractNo());
+			winRef.setState(AuditStateEnum.noapproval);
+			winRefService.addWindowRfidRef(winRef);
+
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("补损RFID失败", e);
 		}
 
 	}
@@ -366,4 +513,5 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			return 0;
 		}
 	}
+
 }

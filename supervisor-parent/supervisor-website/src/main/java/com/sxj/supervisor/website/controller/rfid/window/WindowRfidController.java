@@ -82,18 +82,18 @@ public class WindowRfidController extends BaseController {
 	@RequestMapping("delete")
 	public @ResponseBody Map<String, String> delete(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			WindowRfidEntity win = new WindowRfidEntity();
 			win.setId(id);
 			win.setRfidState(RfidStateEnum.delete);
 			windowRfidService.updateWindowRfid(win);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("删除认证信息错误", e, this.getClass());
-			throw new WebException("删除认证信息错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -107,18 +107,18 @@ public class WindowRfidController extends BaseController {
 	@RequestMapping("disable")
 	public @ResponseBody Map<String, String> disable(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			WindowRfidEntity win = new WindowRfidEntity();
 			win.setId(id);
 			win.setRfidState(RfidStateEnum.disable);
 			windowRfidService.updateWindowRfid(win);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("停用认证信息错误", e, this.getClass());
-			throw new WebException("停用认证信息错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -231,9 +231,9 @@ public class WindowRfidController extends BaseController {
 				throw new WebException("补损标签不存在");
 			}
 			if (!windowRfid.getRfidState().equals(RfidStateEnum.used)) {
-				throw new WebException("标签不是正在使用中的标签，不能被补损！");
+				throw new WebException("标签不是正在使用中的标签，不能用于补损！");
 			}
-			map.put("contratcNo", windowRfid.getContractNo());
+			map.put("contractNo", windowRfid.getContractNo());
 			map.put("winTypeId", windowRfid.getWindowType().getId());
 			map.put("winTypeName", windowRfid.getWindowType().getName());
 		} catch (Exception e) {
@@ -252,18 +252,16 @@ public class WindowRfidController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("lableLosses")
-	public @ResponseBody Map<String, String> lableLosses(String id,
+	public @ResponseBody Map<String, String> lableLosses(String rfidNo,
 			String replenishNo) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			WindowRfidEntity windowRfid = windowRfidService.getWindowRfid(id);
-			windowRfid.setReplenishNo(replenishNo);
-			windowRfidService.updateWindowRfid(windowRfid);
-			Map<String, String> map = new HashMap<String, String>();
+			windowRfidService.lossWindowRfid(replenishNo, rfidNo);
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("标签补损错误", e, this.getClass());
-			throw new WebException("标签补损错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 }
