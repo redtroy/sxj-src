@@ -60,7 +60,7 @@ function  disable(id){
 	},"确实要停用吗?");
 }
 function loadInfo(id,contractNo){
-	if ($("#info"+id).html()==""){
+	if($("#info"+id).children().length==0){
 	$("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo+"&recordNo="+id);
 	$("#blBatch"+id).html("");
 	$("#xcBatch"+id).html("");
@@ -74,7 +74,7 @@ function closeContract(id){
 }
 
 function blBatch(id,contractNo,rfidNo){
-	if ($("#blBatch"+id).html()==""){
+	if ($("#blBatch"+id).children().length==0){
 	$("#blBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=blBatch"+id+"&type=1");
 	$("#xcBatch"+id).html("");
 	$("#info"+id).html("");
@@ -84,7 +84,7 @@ function blBatch(id,contractNo,rfidNo){
 	}
 }
 function xcBatch(id,contractNo,rfidNo){
-	if ($("#xcBatch"+id).html()==""){
+	if ($("#xcBatch"+id).children().length==0){
 	$("#xcBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=xcBatch"+id+"&type=2");
 	$("#blBatch"+id).html("");
 	$("#info"+id).html("");
@@ -97,7 +97,7 @@ function close(id){
 	$("#"+id).html("");
 }
 function log(id){
-	if ($("#log"+id).html()==""){
+	if ($("#log"+id).children().length==0){
 	$("#log"+id).load("stateLog.htm?id="+id);
 	$("#blBatch"+id).html("");
 	$("#xcBatch"+id).html("");

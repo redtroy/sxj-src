@@ -53,6 +53,10 @@ jQuery(document).ready(function($) {
   //保存修改
   function edit_save(id){
 	  var num =$("#edit_"+id).find("#count_val").val();
+	  if (num==''){
+			messageInfo('请输入申请数量！');
+			return false;
+	  }
 	  if (!num.match( /^[0-9]*[1-9][0-9]*$/)){
 			messageInfo('数量必须为正整数！');
 			return false;

@@ -11,6 +11,7 @@ import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
@@ -84,6 +85,12 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 	public void del(String id) throws ServiceException {
 		try {
 			LogisticsRefEntity model = refDao.get(id);
+			if (model == null) {
+				throw new ServiceException("物流RFID关联申请不存在");
+			}
+			if (model.getType().equals(AssociationTypesEnum.APPLY)) {
+
+			}
 			refDao.delete(id);
 			// model.setId(id);
 			// model.setDelstate(true);

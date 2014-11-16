@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,6 +20,7 @@ import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
@@ -48,10 +51,11 @@ public class StartWRfidController extends BaseController {
 	}
 
 	@RequestMapping("queryRefContract")
-	public @ResponseBody Map<Object, Object> query(ContractQuery query, Long num)
-			throws WebException {
+	public @ResponseBody Map<Object, Object> query(ContractQuery query,
+			Long num, HttpSession session) throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
+			SupervisorPrincipal userInfo = getLoginInfo(session);
 			ContractModel contract = contractService
 					.getContractModelByContractNo(query.getRefContractNo());
 			if (contract == null) {
@@ -60,6 +64,10 @@ public class StartWRfidController extends BaseController {
 			if (!contract.getContract().getType()
 					.equals(ContractTypeEnum.bidding)) {
 				throw new WebException("此合同不是招标合同");
+			}
+			if (!userInfo.getMember().getMemberNo()
+					.equals(contract.getContract().getMemberIdB())) {
+				throw new WebException("此合同属于其他会员");
 			}
 			float itemQuantity = contract.getContract().getItemQuantity();
 			float hasStartQuantity = contract.getContract().getUseQuantity();
