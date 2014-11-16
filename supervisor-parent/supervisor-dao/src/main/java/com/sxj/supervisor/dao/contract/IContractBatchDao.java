@@ -42,7 +42,7 @@ public interface IContractBatchDao
     public List<ContractBatchEntity> queryBacths(QueryCondition<ContractBatchEntity> query);
     
     @Delete
-    public void deleteBatchs(String contractId);
+    public void deleteBatchs(String id);
     
     /**
      * 批量修改批次信息
