@@ -1530,9 +1530,28 @@ public class ContractServiceImpl implements IContractService {
 
 	}
 
-	public void deleteBatch(String rfidNo) {
+	/**
+	 * 根据RFID删除批次
+	 */
+	@Override
+	@Transactional
+	public void deleteBatch(String rfidNo)throws ServiceException{
 		try {
-
+			QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
+			query.addCondition("rfidNo", rfidNo);
+			List<ContractBatchEntity>   batchList=contractBatchDao.queryBacths(query);
+			if(batchList!=null && batchList.size()>0){
+				ContractBatchEntity batch = batchList.get(0);
+				if(batch.getUpdateState()==1){
+					throw new ServiceException("该批次已被变更,不能删除!");
+				}
+				if(batch.getReplenishState()==1){
+					throw new ServiceException("该批次已被补损,不能删除!");
+				}
+				contractBatchDao.deleteBatchs(batch.getId());
+			}else{
+				throw new ServiceException("找不到该批次");
+			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("删除批次出错", e);

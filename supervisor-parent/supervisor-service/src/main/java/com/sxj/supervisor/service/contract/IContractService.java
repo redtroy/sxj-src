@@ -223,4 +223,6 @@ public interface IContractService {
 	public ContractBatchModel getBatchByRfid(String rfidNo)
 			throws ServiceException, SQLException;
 
+	void deleteBatch(String rfidNo);
+
 }
