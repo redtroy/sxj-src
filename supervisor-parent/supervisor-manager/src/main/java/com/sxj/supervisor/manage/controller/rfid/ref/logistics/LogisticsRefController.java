@@ -73,15 +73,15 @@ public class LogisticsRefController extends BaseController {
 
 	@RequestMapping("del")
 	public @ResponseBody Map<String, String> del(String id) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			Map<String, String> map = new HashMap<String, String>();
-			refService.del(id);
+			contractService.deleteLogisticsRef(id);
 			map.put("isOk", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("删除错误", e, this.getClass());
-			throw new WebException("删除错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**

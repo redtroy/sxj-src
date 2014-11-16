@@ -8,10 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
-import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
-import com.sxj.supervisor.enu.rfid.RfidStateEnum;
-import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
@@ -84,23 +81,7 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 	@Transactional
 	public void del(String id) throws ServiceException {
 		try {
-			LogisticsRefEntity model = refDao.get(id);
-			if (model == null) {
-				throw new ServiceException("物流RFID关联申请不存在");
-			}
-			if (model.getType().equals(AssociationTypesEnum.APPLY)) {
-
-			}
 			refDao.delete(id);
-			// model.setId(id);
-			// model.setDelstate(true);
-			// refDao.update(model);
-			// 修改状态
-			LogisticsRfidEntity l = rfidService.getLogisticsByNo(model
-					.getRfidNo());
-			l.setRfidState(RfidStateEnum.unused);
-			rfidService.updateLogistics(l);
-
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("物流RFID关联申请管理删除错误");
@@ -121,7 +102,16 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("物流RFID关联申请管理新增错误");
 		}
+	}
 
+	@Override
+	public LogisticsRefEntity getRef(String id) throws ServiceException {
+		try {
+			return refDao.get(id);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取物流RFID关联申请错误");
+		}
 	}
 
 }

@@ -127,6 +127,8 @@ function removeMessge(){
 				 succInfo(function(){
 					 query($("#pager").attr("currentPage"));
 				 },"删除成功！")
+			 }else{
+				 errorInfo(data.error);
 			 }
 		 });
 	 },"是否确认删除？");
@@ -229,7 +231,7 @@ function removeMessge(){
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
 		  <#if (model.state.id==0)>
-		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del">删除</a></td>
+		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
           <#else>
            <td class="operation">-</td>
           </#if>

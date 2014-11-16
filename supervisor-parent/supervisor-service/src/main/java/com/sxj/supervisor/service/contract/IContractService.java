@@ -164,6 +164,14 @@ public interface IContractService {
 	 */
 	public void modifyBatch(ContractBatchModel model) throws ServiceException;
 
+	/**
+	 * 新增批次
+	 * 
+	 * @param model
+	 * @param id
+	 * @param member
+	 * @throws ServiceException
+	 */
 	public void addBatch(ContractBatchModel model, String id,
 			MemberEntity member) throws ServiceException;
 
@@ -220,9 +228,24 @@ public interface IContractService {
 	 */
 	public ContractReplenishModel getReplenishByRfid(String rfid);
 
+	/**
+	 * 根据RFID获取批次
+	 * 
+	 * @param rfidNo
+	 * @return
+	 * @throws ServiceException
+	 * @throws SQLException
+	 */
 	public ContractBatchModel getBatchByRfid(String rfidNo)
 			throws ServiceException, SQLException;
 
-	void deleteBatch(String rfidNo);
+	/**
+	 * 根据RFID删除批次信息
+	 * 
+	 * @param rfidNo
+	 */
+	public void deleteBatch(String rfidNo);
+
+	public void deleteLogisticsRef(String id) throws ServiceException;
 
 }
