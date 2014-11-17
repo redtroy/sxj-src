@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.service.impl.rfid;
+package com.sxj.supervisor.service.impl.rfid;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.website.comet;
+package com.sxj.supervisor.website.comet;
 
 import org.comet4j.core.event.ConnectEvent;
 import org.comet4j.core.listener.ConnectListener;

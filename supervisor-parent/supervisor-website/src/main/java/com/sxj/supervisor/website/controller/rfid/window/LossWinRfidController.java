@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,6 +22,7 @@ import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.ContractReplenishModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
@@ -43,10 +46,11 @@ public class LossWinRfidController extends BaseController {
 	}
 
 	@RequestMapping("queryLossContract")
-	public @ResponseBody Map<Object, Object> query(ContractQuery query, Long num)
-			throws WebException {
+	public @ResponseBody Map<Object, Object> query(ContractQuery query,
+			Long num, HttpSession session) throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
+			SupervisorPrincipal userInfo = getLoginInfo(session);
 			ContractModel contract = contractService
 					.getContractModelByContractNo(query.getRefContractNo());
 			if (contract == null) {
@@ -56,10 +60,15 @@ public class LossWinRfidController extends BaseController {
 					.equals(ContractTypeEnum.bidding)) {
 				throw new WebException("此合同不是招标合同");
 			}
+			if (!userInfo.getMember().getMemberNo()
+					.equals(contract.getContract().getMemberIdB())) {
+				throw new WebException("此合同属于其他会员");
+			}
 			float hasStartQuantity = contract.getContract().getUseQuantity();
 			float unStartQuantity = 0f;
 			if (num > hasStartQuantity) {
-				throw new WebException("此招标合同可以补损的最大数量为：" + hasStartQuantity);
+				throw new WebException("此招标合同可以补损的最大数量为："
+						+ (long) hasStartQuantity);
 			}
 
 			WindowRfidQuery winQuery = new WindowRfidQuery();
@@ -71,8 +80,8 @@ public class LossWinRfidController extends BaseController {
 				unStartQuantity = winList.size();
 			}
 			if (unStartQuantity < num) {
-				throw new WebException("此招标合同未启用的RFID数量为：" + unStartQuantity
-						+ "，请申请足够的RFID数量");
+				throw new WebException("此招标合同未启用的RFID数量为："
+						+ (long) unStartQuantity + "，请申请足够的RFID数量");
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {
@@ -151,7 +160,7 @@ public class LossWinRfidController extends BaseController {
 	}
 
 	/**
-	 * 启用标签
+	 * 补损标签
 	 */
 	@RequestMapping("start_loss_lable")
 	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,

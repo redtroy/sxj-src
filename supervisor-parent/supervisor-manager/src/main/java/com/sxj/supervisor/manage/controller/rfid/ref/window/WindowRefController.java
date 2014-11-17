@@ -57,8 +57,8 @@ public class WindowRefController extends BaseController {
 			model.put("query", query);
 			model.put("winList", winList);
 			model.put("channelName",
-					RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
-			registChannel(RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
+					RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
+			registChannel(RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
 			if ("true".equals(removeMessge)) {
 				CometServiceImpl.setCount(
 						RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF, 0l);
@@ -81,18 +81,15 @@ public class WindowRefController extends BaseController {
 	@RequestMapping("delete")
 	public @ResponseBody Map<String, String> delete(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			WindowRefEntity win = new WindowRefEntity();
-			win.setId(id);
-			win.setDelState(true);
-			windowRefService.updateWindowRfidRef(win);
-			Map<String, String> map = new HashMap<String, String>();
+			contractService.deleteWindowRef(id);
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("删除门窗RFID关联错误", e, this.getClass());
-			throw new WebException("删除门窗RFID关联错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**

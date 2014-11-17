@@ -43,4 +43,12 @@ public interface IWindowRfidRefService {
 	 */
 	public WindowRefEntity getWindowRfidRef(String id) throws ServiceException;
 
+	/**
+	 * 删除门窗RFID关联
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void deleteRef(String id) throws ServiceException;
+
 }

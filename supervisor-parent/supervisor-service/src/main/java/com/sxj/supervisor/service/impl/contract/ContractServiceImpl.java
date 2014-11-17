@@ -1697,6 +1697,10 @@ public class ContractServiceImpl implements IContractService {
 					if (windowRfid == null) {
 						continue;
 					}
+					if (!windowRfid.getRfidState().equals(RfidStateEnum.used)) {
+						throw new ServiceException("编号为："
+								+ windowRfid.getRfidNo() + "的门窗RFID不是已使用状态");
+					}
 					windowRfid.setGlassRfid("");
 					windowRfid.setProfileRfid("");
 					windowRfid.setWindowType(null);
@@ -1711,10 +1715,18 @@ public class ContractServiceImpl implements IContractService {
 				if (rfid == null) {
 					throw new ServiceException("补损的RFID不存在");
 				}
+				if (!rfid.getRfidState().equals(RfidStateEnum.used)) {
+					throw new ServiceException("补损的" + rfid.getRfidNo()
+							+ "RFID不是已使用状态");
+				}
 				WindowRfidEntity replenishRfid = windowRfidService
 						.getWindowRfidByNo(ref.getReplenishRfid());
 				if (replenishRfid == null) {
 					throw new ServiceException("被补损的RFID不存在");
+				}
+				if (!replenishRfid.getRfidState().equals(RfidStateEnum.damaged)) {
+					throw new ServiceException("被补损的"
+							+ replenishRfid.getRfidNo() + "RFID不是已破损状态");
 				}
 				// 还原被补损的RFID
 				replenishRfid.setReplenishNo("");
@@ -1729,8 +1741,65 @@ public class ContractServiceImpl implements IContractService {
 				rfid.setProfileRfid("");
 				windowRfidService.updateWindowRfid(rfid);
 			} else if (ref.getType().equals(LinkStateEnum.windowLoss)) {
+				String replenishRfids = ref.getReplenishRfid();
+				WindowRfidQuery query = new WindowRfidQuery();
+				query.setMinRfidNo(ref.getMinRfidNo());
+				query.setMaxRfidNo(ref.getMaxRfidNo());
+				query.setContractNo(ref.getContractNo());
+				query.setRfidState(RfidStateEnum.unused.getId());
+				List<WindowRfidEntity> list = windowRfidService
+						.queryWindowRfid(query);
+				if (list == null || list.size() == 0) {
+					throw new ServiceException("补损的RFID不存在");
+				}
+				if (StringUtils.isNotEmpty(replenishRfids)) {
+					String[] replenishRfidArr = replenishRfids.split(",");
+					if (list.size() != replenishRfidArr.length) {
+						throw new ServiceException("补损的RFID数量与需要被补损的RFID数量不一致");
+					}
+					for (int i = 0; i < replenishRfidArr.length; i++) {
+						WindowRfidEntity replenishRfid = windowRfidService
+								.getWindowRfidByNo(replenishRfidArr[i]);
+						if (replenishRfid == null) {
+							throw new ServiceException("编号为："
+									+ replenishRfidArr[i] + "的被补损RFID不存在");
+						}
+						if (!replenishRfid.getRfidState().equals(
+								RfidStateEnum.damaged)) {
+							throw new ServiceException("被补损的"
+									+ replenishRfid.getRfidNo()
+									+ "的RFID不是已破损状态");
+						}
+						WindowRfidEntity newRfid = list.get(i);
+						if (newRfid == null) {
+							throw new ServiceException("补损的RFID不存在");
+						}
+						if (!newRfid.getRfidState().equals(RfidStateEnum.used)) {
+							throw new ServiceException("补损的"
+									+ newRfid.getRfidNo() + "RFID不是已使用状态");
+						}
+						if (!newRfid.getContractNo().equals(
+								replenishRfid.getContractNo())) {
+							throw new ServiceException("编号为："
+									+ replenishRfidArr[i] + "的被补损RFID与编号为："
+									+ newRfid.getRfidNo() + "的新RFID招标合同不一致");
+						}
+						// 更新旧RFID
+						replenishRfid.setReplenishNo("");
+						replenishRfid.setRfidState(RfidStateEnum.used);
+						windowRfidService.updateWindowRfid(replenishRfid);
 
+						// 设置新RFID
+						newRfid.setGlassRfid(ref.getGlassBatchNo());
+						newRfid.setProfileRfid(ref.getProfileBatchNo());
+						newRfid.setWindowType(null);
+						newRfid.setRfidState(RfidStateEnum.unused);
+						windowRfidService.updateWindowRfid(newRfid);
+					}
+				}
 			}
+			// 删除关联
+			windowRefService.deleteRef(id);
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());

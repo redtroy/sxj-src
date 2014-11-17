@@ -11,7 +11,7 @@
 		<result property="rfidType" column="RFID_TYPE" jdbcType="INTEGER" /> <!-- 枚举 -->
 		<result property="type" column="TYPE" jdbcType="INTEGER" /> <!-- 枚举 -->
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
-		<result property="applyDate" column="APPLY_DATE" jdbcType="DATE" />
+		<result property="applyDate" column="APPLY_DATE" jdbcType="TIMESTAMP" />
 		<result property="replenishRfid" column="REPLENISH_RFID" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" /> <!-- 枚举 -->
