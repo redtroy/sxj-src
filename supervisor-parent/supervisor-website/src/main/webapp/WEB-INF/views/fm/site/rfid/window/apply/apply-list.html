@@ -100,7 +100,7 @@
       <td>${model.applyNo}</td>
       <td>${model.rfidType.getName()}</td>
       <td>${model.count}</td>
-      <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+      <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
       <#if (model.payState.id==1)>
       <td><span class="state frozen">未付款</span></td>
       <#else>
