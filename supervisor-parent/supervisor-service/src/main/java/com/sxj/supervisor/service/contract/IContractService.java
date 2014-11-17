@@ -246,6 +246,20 @@ public interface IContractService {
 	 */
 	public void deleteBatch(String rfidNo);
 
+	/**
+	 * 删除物流RFID关联
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
 	public void deleteLogisticsRef(String id) throws ServiceException;
+
+	/**
+	 * 删除门窗RFID关联
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void deleteWindowRef(String id) throws ServiceException;
 
 }

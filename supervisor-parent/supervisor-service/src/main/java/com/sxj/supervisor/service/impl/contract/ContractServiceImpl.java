@@ -45,6 +45,8 @@ import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
@@ -58,6 +60,7 @@ import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
+import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
@@ -70,12 +73,14 @@ import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
+import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.ref.ILogisticsRefService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
+import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
@@ -160,6 +165,9 @@ public class ContractServiceImpl implements IContractService {
 
 	@Autowired
 	private IWindowRfidService windowRfidService;
+
+	@Autowired
+	private IWindowRfidRefService windowRefService;
 
 	@Autowired
 	private IRfidApplicationService appRfidService;
@@ -1549,7 +1557,7 @@ public class ContractServiceImpl implements IContractService {
 						&& batch.getUpdateState() == 1) {
 					throw new ServiceException("该批次已被变更,不能删除!");
 				}
-				if (batch.getUpdateState() != null
+				if (batch.getReplenishState() != null
 						&& batch.getReplenishState() == 1) {
 					throw new ServiceException("该批次已被补损,不能删除!");
 				}
@@ -1570,6 +1578,9 @@ public class ContractServiceImpl implements IContractService {
 			LogisticsRefEntity ref = logisticsRefService.getRef(id);
 			if (ref == null) {
 				throw new ServiceException("物流RFID关联申请不存在");
+			}
+			if (ref.getState().equals(AuditStateEnum.approval)) {
+				throw new ServiceException("物流RFID关联已审核");
 			}
 			if (ref.getType().equals(AssociationTypesEnum.APPLY)) {
 				deleteBatch(ref.getRfidNo());
@@ -1617,35 +1628,33 @@ public class ContractServiceImpl implements IContractService {
 				logistics.setReplenishNo("");
 				logisticsRfidService.updateLogistics(logistics);
 				// 更新新的RFID
-				LogisticsRfidEntity newLogisRfid = logisticsRfidService
+				LogisticsRfidEntity replenishRfid = logisticsRfidService
 						.getLogisticsByNo(ref.getReplenishRfid());
-				if (newLogisRfid == null) {
-					throw new ServiceException("被补损的RFID信息不存在");
+				if (replenishRfid == null) {
+					throw new ServiceException("被补损的RFID信息已不存在");
 				}
-				// if
-				// (!newLogisRfid.getRfidState().equals(RfidStateEnum.unused)) {
-				// throw new ServiceException("新RFID状态不是未使用状态，不能用于补损");
-				// }
-				newLogisRfid.setContractNo(ref.getContractNo());
-				newLogisRfid.setRfidState(RfidStateEnum.used);
-				newLogisRfid.setBatchNo(batchModel.getBatch().getBatchNo());
-				logisticsRfidService.updateLogistics(newLogisRfid);
+				if (!replenishRfid.getRfidState().equals(RfidStateEnum.damaged)) {
+					throw new ServiceException("被补损的RFID已不是作废状态");
+				}
+				replenishRfid.setContractNo(ref.getContractNo());
+				replenishRfid.setRfidState(RfidStateEnum.used);
+				replenishRfid.setBatchNo(batchModel.getBatch().getBatchNo());
+				logisticsRfidService.updateLogistics(replenishRfid);
 			} else if (ref.getType()
 					.equals(AssociationTypesEnum.CONTRACTOR_ADD)) {
 				// 更新新的RFID
-				LogisticsRfidEntity newLogisRfid = logisticsRfidService
+				LogisticsRfidEntity logisRfid = logisticsRfidService
 						.getLogisticsByNo(ref.getRfidNo());
-				if (newLogisRfid == null) {
+				if (logisRfid == null) {
 					throw new ServiceException("RFID信息不存在");
 				}
-				// if
-				// (!newLogisRfid.getRfidState().equals(RfidStateEnum.unused)) {
-				// throw new ServiceException("RFID状态不是未使用状态，不能用于补损");
-				// }
-				newLogisRfid.setContractNo(ref.getContractNo());
-				newLogisRfid.setRfidState(RfidStateEnum.unused);
+				if (!logisRfid.getRfidState().equals(RfidStateEnum.used)) {
+					throw new ServiceException("RFID状态不是已使用状态");
+				}
+				logisRfid.setContractNo(ref.getContractNo());
+				logisRfid.setRfidState(RfidStateEnum.unused);
 				// newLogisRfid.setBatchNo(batchModel.getBatch().getBatchNo());
-				logisticsRfidService.updateLogistics(newLogisRfid);
+				logisticsRfidService.updateLogistics(logisRfid);
 			}
 			// 删除关联
 			logisticsRefService.del(id);
@@ -1654,7 +1663,77 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException(e.getMessage());
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("删除物流关联错误", e);
+			throw new ServiceException("删除物流RFID关联错误", e);
+		}
+
+	}
+
+	@Override
+	@Transactional
+	public void deleteWindowRef(String id) throws ServiceException {
+		try {
+			WindowRefEntity ref = windowRefService.getWindowRfidRef(id);
+			if (ref == null) {
+				throw new ServiceException("门窗RFID关联申请不存在");
+			}
+			if (ref.getState().equals(AuditStateEnum.approval)) {
+				throw new ServiceException("门窗RFID关联已审核");
+			}
+			if (ref.getType().equals(LinkStateEnum.windowApply)) {
+				String minRfidNo = ref.getMinRfidNo();
+				String maxRfidNo = ref.getMaxRfidNo();
+				WindowRfidQuery query = new WindowRfidQuery();
+				query.setMinRfidNo(minRfidNo);
+				query.setMaxRfidNo(maxRfidNo);
+				query.setRfidState(RfidStateEnum.used.getId());
+				List<WindowRfidEntity> list = windowRfidService
+						.queryWindowRfid(query);
+				for (Iterator<WindowRfidEntity> iterator = list.iterator(); iterator
+						.hasNext();) {
+					WindowRfidEntity windowRfid = iterator.next();
+					if (windowRfid == null) {
+						continue;
+					}
+					windowRfid.setGlassRfid("");
+					windowRfid.setProfileRfid("");
+					windowRfid.setWindowType(null);
+					windowRfid.setRfidState(RfidStateEnum.unused);
+				}
+				windowRfidService.batchUpdateWindowRfid(list
+						.toArray(new WindowRfidEntity[list.size()]));
+
+			} else if (ref.getType().equals(LinkStateEnum.rfidLoss)) {
+				WindowRfidEntity rfid = windowRfidService.getWindowRfidByNo(ref
+						.getMinRfidNo());
+				if (rfid == null) {
+					throw new ServiceException("补损的RFID不存在");
+				}
+				WindowRfidEntity replenishRfid = windowRfidService
+						.getWindowRfidByNo(ref.getReplenishRfid());
+				if (replenishRfid == null) {
+					throw new ServiceException("被补损的RFID不存在");
+				}
+				// 还原被补损的RFID
+				replenishRfid.setReplenishNo("");
+				replenishRfid.setRfidState(RfidStateEnum.used);
+				windowRfidService.updateWindowRfid(replenishRfid);
+
+				// 还原补损的RFID
+				rfid.setRfidState(RfidStateEnum.unused);
+				rfid.setWindowType(null);
+				rfid.setContractNo("");
+				rfid.setGlassRfid("");
+				rfid.setProfileRfid("");
+				windowRfidService.updateWindowRfid(rfid);
+			} else if (ref.getType().equals(LinkStateEnum.windowLoss)) {
+
+			}
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("删除门窗RFID关联错误", e);
 		}
 
 	}
