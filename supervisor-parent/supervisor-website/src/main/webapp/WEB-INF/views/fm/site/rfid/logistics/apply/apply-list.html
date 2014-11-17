@@ -61,20 +61,28 @@
 <div class="contBox f12">
 <div class="searBox mb10">
 <form action="javascript:void(0)" id="search_form">
-标签申请单号<input type="text" name="applyNo" value="" class="input">
+标签申请单号<input type="text" name="applyNo" value="${query.applyNo}" class="input">
          付款状态<select name="payState">
          <option selected="selected" value="">全部</option>
             <#list m_pay_states as m_pay_state>
-            <option value="${m_pay_state.id}">${m_pay_state.getName()}</option>
+            <#if m_pay_state.getId()==query.payState>
+            <option value="${m_pay_state.id}" selected="selected">${m_pay_state.getName()}</option>
+            <#else>
+             <option value="${m_pay_state.id}">${m_pay_state.getName()}</option>
+            </#if>
             </#list>
             </select>
             收货状态<select name="receiptState">
             <option selected="selected" value="">全部</option>
             <#list receipt_states as receipt_state>
+             <#if receipt_state.getId()==query.receiptState>
             <option value="${receipt_state.id}">${receipt_state.getName()}</option>
+             <#else>
+             <option value="${receipt_state.id}">${receipt_state.getName()}</option>
+            </#if>
             </#list>
             </select>
-            申请时间段<input type="text" class="input input-time cal form-control" name="starApplyDate" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="endApplyDate" value="" datepicker><button class="button button-search" onclick="query();return false;">查询</button>
+            申请时间段<input type="text" class="input input-time cal form-control" name="starApplyDate" value="${query.starApplyDate}" datepicker />-<input type="text" class="input input-time cal form-control" name="endApplyDate" value="${query.endApplyDate}" datepicker><button class="button button-search" onclick="query();return false;" />查询</button>
 </form>
 </div>
  <@b.pager/>
