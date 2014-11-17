@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -171,6 +174,16 @@ public class ContractServiceImpl implements IContractService {
 
 	@Autowired
 	private IRfidApplicationService appRfidService;
+
+	private IContractService self;
+
+	@Autowired
+	private ApplicationContext context;
+
+	@PostConstruct
+	public void init() {
+		self = context.getBean(IContractService.class);
+	}
 
 	/**
 	 * 新增合同
@@ -1006,21 +1019,22 @@ public class ContractServiceImpl implements IContractService {
 	public List<ContractBatchModel> getContractBatch(String contractNo,
 			String rfidNo) {
 		try {
-			ContractBatchEntity batch = contractBatchDao.getBacthsByRfid(rfidNo);
+			ContractBatchEntity batch = contractBatchDao
+					.getBacthsByRfid(rfidNo);
 			List<ContractBatchModel> newBatchModelLIst = new ArrayList<ContractBatchModel>();
 			if (batch != null) {
-					ContractBatchModel batchModel = new ContractBatchModel();
-					batchModel.setBatch(batch);
-					List<BatchItemModel> beanList = null;
-					beanList = JsonMapper
-							.nonEmptyMapper()
-							.getMapper()
-							.readValue(batch.getBatchItems(),
-									new TypeReference<List<BatchItemModel>>() {
-									});
-					batchModel.setBatchItems(beanList);
-					newBatchModelLIst.add(batchModel);
-				}
+				ContractBatchModel batchModel = new ContractBatchModel();
+				batchModel.setBatch(batch);
+				List<BatchItemModel> beanList = null;
+				beanList = JsonMapper
+						.nonEmptyMapper()
+						.getMapper()
+						.readValue(batch.getBatchItems(),
+								new TypeReference<List<BatchItemModel>>() {
+								});
+				batchModel.setBatchItems(beanList);
+				newBatchModelLIst.add(batchModel);
+			}
 			return newBatchModelLIst;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -1572,7 +1586,7 @@ public class ContractServiceImpl implements IContractService {
 				throw new ServiceException("物流RFID关联已审核");
 			}
 			if (ref.getType().equals(AssociationTypesEnum.APPLY)) {
-				deleteBatch(ref.getRfidNo());
+				self.deleteBatch(ref.getRfidNo());
 				LogisticsRfidEntity l = logisticsRfidService
 						.getLogisticsByNo(ref.getRfidNo());
 				l.setRfidState(RfidStateEnum.unused);

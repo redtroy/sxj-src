@@ -9,7 +9,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,14 +68,6 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 
 	@Autowired
 	private IRfidKeyService keyService;
-
-	private IPurchaseRfidService self;
-	@Autowired
-	private ApplicationContext context;
-
-	public void init() {
-		self = context.getBean(IPurchaseRfidService.class);
-	}
 
 	@Override
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
