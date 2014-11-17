@@ -62,21 +62,46 @@ function  disable(id){
 	});
 	}
 }
+var pdflag=0;
 function loadInfo(id,contractNo){
+	if (pdflag!=1){
 	$("#info"+id).load("contractInfo.htm?contractNo="+contractNo+"&id="+id);
+	pdflag=1;
+	}else{
+		close(id);
+		flag=0;
+	}
 }
 function close(id){
 	$("#info"+id).html("");
 }
 
 function blBatch(id,contractNo,rfidNo){
+	if (pdflag!=2){
 	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=1");
+	pdflag=2;
+	}else{
+		pdflag=0;
+		close(id);
+	}
 }
 function xcBatch(id,contractNo,rfidNo){
+	if (pdflag!=3){
 	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=2");
+	pdflag=3;
+	}else{
+		pdflag=0;
+		close(id);
+	}
 }
 function log(id){
+	if (pdflag!=4){
 	$("#info"+id).load("stateLog.htm?id="+id);
+	pdflag=4;
+	}else{
+		close(id);
+		pdflag=0;
+	}
 }
 $(function(){
 	$(".modal-header .close").live("click",function(){
