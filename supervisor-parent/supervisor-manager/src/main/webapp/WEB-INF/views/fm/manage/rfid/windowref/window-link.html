@@ -87,12 +87,17 @@ function  audit(id){
 function loadInfo(id,type){
 	if ($("#info"+id).children().length==0){
 	$("#info"+id).load("info.htm?id="+id+"&type="+type);
+	$("#bathinfo"+id).html("");
+	$("#bathinfo2"+id).html("");
 	}else{
+		$("#info"+id).html("");
 		closeContract(id)
 	}
 }
 function closeContract(id){
 	$("#info"+id).html("");
+	$("#bathinfo"+id).html("");
+	$("#bathinfo2"+id).html("");
 }
 function saveModify(id){
 	$.post("saveModify.htm",$("#form"+id).serialize(),function(data){
@@ -106,10 +111,21 @@ function saveModify(id){
 	});
 }
 function batch(id,contractNo,rfidNo,type){
-	if ($("#info"+id).children().length==0){
-	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type="+type);
+	if ($("#bathinfo"+id).children().length==0){
+	$("#bathinfo"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type="+type);
+	$("#info"+id).html("");
+	$("#bathinfo2"+id).html("");
 	}else{
-		$("#info"+id).html("");
+		$("#bathinfo"+id).html("");
+	}
+}
+function batch2(id,contractNo,rfidNo,type){
+	if ($("#bathinfo2"+id).children().length==0){
+	$("#bathinfo2"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type="+type);
+	$("#info"+id).html("");
+	$("#bathinfo"+id).html("");
+	}else{
+		$("#bathinfo2"+id).html("");
 	}
 }
 </script>
@@ -210,7 +226,7 @@ function batch(id,contractNo,rfidNo,type){
           <td>${win.type.getName()}</td>
 		  <td>${win.windowsNo.getName()}</td>
 		  <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.glassBatchNo}','1')" class="lnk-blue">${win.glassBatchNo}</a></td>
-          <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.profileBatchNo}','2')" class="lnk-blue">${win.profileBatchNo}</a></td>
+          <td><a href="javascript:batch2('${win.id}','${win.contractNo}','${win.profileBatchNo}','2')" class="lnk-blue">${win.profileBatchNo}</a></td>
 		  <td>${win.applyDate?string("yyyy-MM-dd hh:mm:ss")}</td>
 		  <td><#if win.replenishRfid?exists>${win.replenishRfid}<#else>-</#if></td>
 		  <td><#if win.state.getId()==0><button class="btn btn-gray" onclick="audit('${win.id}');"><span>审核</span></button><#else><em class="state verified">已审核</em></#if></td>
@@ -218,6 +234,7 @@ function batch(id,contractNo,rfidNo,type){
         </tr>
         <tr class="tableInfo" id="info${win.id}"></tr>
         <tr class="tableInfo" id="bathinfo${win.id}"></tr>
+         <tr class="tableInfo" id="bathinfo2${win.id}"></tr>
         </#list>
 		 
       </table>
