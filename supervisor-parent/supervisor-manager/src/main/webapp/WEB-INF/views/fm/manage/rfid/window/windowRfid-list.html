@@ -70,10 +70,10 @@ function close(id){
 }
 
 function blBatch(id,contractNo,rfidNo){
-	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=1");
 }
 function xcBatch(id,contractNo,rfidNo){
-	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=2");
 }
 function log(id){
 	$("#info"+id).load("stateLog.htm?id="+id);

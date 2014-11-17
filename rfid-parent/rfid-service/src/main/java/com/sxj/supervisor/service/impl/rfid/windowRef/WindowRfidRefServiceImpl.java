@@ -33,7 +33,7 @@ public class WindowRfidRefServiceImpl implements IWindowRfidRefService {
 			QueryCondition<WindowRefEntity> condition = new QueryCondition<WindowRefEntity>();
 			condition.addCondition("rfidRefNo", query.getRfidRefNo());
 			condition.addCondition("rfidNo", query.getRfidNo());
-			condition.addCondition("memberNo", query.getMemberNo());
+			condition.addCondition("memberName", query.getMemberName());
 			condition.addCondition("type", query.getType());
 			condition.addCondition("windowsNo", query.getWindowsNo());
 			condition.addCondition("batchNo", query.getBatchNo());
