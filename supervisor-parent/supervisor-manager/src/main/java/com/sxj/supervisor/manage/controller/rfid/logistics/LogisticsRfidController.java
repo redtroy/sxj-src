@@ -72,18 +72,18 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("delete")
 	public @ResponseBody Map<String, String> delete(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			LogisticsRfidEntity win = new LogisticsRfidEntity();
 			win.setId(id);
 			win.setRfidState(RfidStateEnum.delete);
 			logisticsRfidService.updateLogistics(win);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("删除物流RFID错误", e, this.getClass());
-			throw new WebException("删除物流RFID错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -97,18 +97,18 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("disable")
 	public @ResponseBody Map<String, String> disable(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			LogisticsRfidEntity win = new LogisticsRfidEntity();
 			win.setId(id);
 			win.setRfidState(RfidStateEnum.disable);
 			logisticsRfidService.updateLogistics(win);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("停用物流RFID错误", e, this.getClass());
-			throw new WebException("停用物流RFID错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**

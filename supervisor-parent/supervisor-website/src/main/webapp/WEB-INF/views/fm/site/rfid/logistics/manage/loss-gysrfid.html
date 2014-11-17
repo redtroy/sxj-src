@@ -30,7 +30,6 @@ $(function(){
 	});
 	var url_ = "autoContract.htm";
 	$("#contractNo").bigAutocomplete({url:url_,callback:function(data){
-		alert("fdf");
 		getRecord(data.result);
     }});
 	$("#record").change(function() {

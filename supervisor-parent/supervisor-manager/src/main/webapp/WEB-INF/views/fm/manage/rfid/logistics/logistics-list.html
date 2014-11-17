@@ -41,28 +41,30 @@ function query(page){
 	});
 }
 function  del(id){
-	if(confirm('确实要删除吗?')){
-	$.post("delete.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			alert("删除成功!");
-			window.location.href="query.htm";
-		}else{
-			alert("删除失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("delete.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"删除成功!");
+			}else{
+				errorInfo(data.error);	
+			}
+		});
+	},"确实要删除吗?");
 }
 function  disable(id){
-	if(confirm('确实要停用吗?')){
-	$.post("disable.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			alert("停用成功!");
-			window.location.href="query.htm";
-		}else{
-			alert("停用失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("disable.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"停用成功!");
+			}else{
+				errorInfo(data.error);	
+			}
+		});
+	},"确实要停用吗?");
 }
 $(function(){
 	var url_ = "${basePath}autoComple.htm";
