@@ -62,14 +62,14 @@ function  disable(id){
 	});
 	}
 }
-var pdflag=0;
 function loadInfo(id,contractNo){
+	var pdflag=$("#info"+id).attr("pdflag");
 	if (pdflag!=1){
 	$("#info"+id).load("contractInfo.htm?contractNo="+contractNo+"&id="+id);
-	pdflag=1;
+	$("#info"+id).attr("pdflag","1");
 	}else{
 		close(id);
-		pdflag=0;
+		$("#info"+id).attr("pdflag","0");
 	}
 }
 function close(id){
@@ -77,30 +77,33 @@ function close(id){
 }
 
 function blBatch(id,contractNo,rfidNo){
+	var pdflag=$("#info"+id).attr("pdflag");
 	if (pdflag!=2){
 	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=1");
-	pdflag=2;
+	$("#info"+id).attr("pdflag","2");
 	}else{
-		pdflag=0;
+		$("#info"+id).attr("pdflag","0");
 		close(id);
 	}
 }
 function xcBatch(id,contractNo,rfidNo){
+	var pdflag=$("#info"+id).attr("pdflag");
 	if (pdflag!=3){
 	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=2");
-	pdflag=3;
+	$("#info"+id).attr("pdflag","3");
 	}else{
-		pdflag=0;
+		$("#info"+id).attr("pdflag","0");
 		close(id);
 	}
 }
 function log(id){
+	var pdflag=$("#info"+id).attr("pdflag");
 	if (pdflag!=4){
 	$("#info"+id).load("stateLog.htm?id="+id);
-	pdflag=4;
+	$("#info"+id).attr("pdflag","4");
 	}else{
 		close(id);
-		pdflag=0;
+		$("#info"+id).attr("pdflag","0");
 	}
 }
 $(function(){
@@ -247,7 +250,7 @@ $(function(){
 		 </td>
 		  <td class="operation"> <#if win.rfidState.getId()!=3><a href="javascript:disable('${win.id}');" class="stop">停用</a> </#if><a href="javascript:del('${win.id}');" class="del">删除</a></td>
         </tr>
-        <tr class="tableInfo"  id="info${win.id}"></tr>
+        <tr class="tableInfo"  id="info${win.id}" pdflag="0"></tr>
         </#list>
 	
       </table>
