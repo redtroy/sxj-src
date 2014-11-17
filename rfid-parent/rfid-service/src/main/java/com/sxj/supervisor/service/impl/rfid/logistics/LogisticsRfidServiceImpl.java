@@ -65,6 +65,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 			condition.addCondition("rfidNo", query.getRfidNo());
 			condition.addCondition("contractNo", query.getContractNo());
 			condition.addCondition("purchaseNo", query.getPurchaseNo());
+			condition.addCondition("applyNo", query.getApplyNo());
 			condition.addCondition("type", query.getType());
 			condition.addCondition("memberNo", query.getMemberNo());
 			condition.addCondition("startImportDate",
@@ -95,6 +96,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService {
 			condition.addCondition("rfidNo", query.getRfidNo());
 			condition.addCondition("contractNo", query.getContractNo());
 			condition.addCondition("purchaseNo", query.getPurchaseNo());
+			condition.addCondition("applyNo", query.getApplyNo());
 			condition.addCondition("type", query.getType());
 			condition.addCondition("memberNo", query.getMemberNo());
 			condition.addCondition("startImportDate",

@@ -65,6 +65,9 @@
 		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
 			<![CDATA[AND rlr.PURCHASE_NO LIKE CONCAT('%',#{condition.purchaseNo},'%') ]]>
 		</if>
+		<if test="condition.applyNo != null and condition.applyNo !=''">
+			<![CDATA[AND APPLY_NO = #{condition.applyNo}]]>
+		</if>
 		<if test="condition.contractNo != null and condition.contractNo !=''">
 			<![CDATA[AND rlr.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
 		</if>
@@ -94,6 +97,9 @@
 		</if>
 		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
 			<![CDATA[AND rlr.PURCHASE_NO LIKE CONCAT('%',#{condition.purchaseNo},'%') ]]>
+		</if>
+		<if test="condition.applyNo != null and condition.applyNo !=''">
+			<![CDATA[AND APPLY_NO = #{condition.applyNo}]]>
 		</if>
 		<if test="condition.contractNo != null and condition.contractNo !=''">
 			<![CDATA[AND rlr.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
