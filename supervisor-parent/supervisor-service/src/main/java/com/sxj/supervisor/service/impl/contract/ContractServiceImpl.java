@@ -1006,19 +1006,9 @@ public class ContractServiceImpl implements IContractService {
 	public List<ContractBatchModel> getContractBatch(String contractNo,
 			String rfidNo) {
 		try {
-			QueryCondition<ContractBatchEntity> condition = new QueryCondition<ContractBatchEntity>();
-			if (StringUtils.isNotEmpty(contractNo)) {
-				condition.addCondition("contractId", contractNo);// 合同号
-			}
-			if (StringUtils.isNotEmpty(rfidNo)) {
-				condition.addCondition("rfidNo", rfidNo);// RFID号
-			}
-			List<ContractBatchEntity> batchList = contractBatchDao
-					.queryBacths(condition);// 批次
+			ContractBatchEntity batch = contractBatchDao.getBacthsByRfid(rfidNo);
 			List<ContractBatchModel> newBatchModelLIst = new ArrayList<ContractBatchModel>();
-			if (batchList != null && batchList.size() > 0) {
-				for (int i = 0; i < batchList.size(); i++) {
-					ContractBatchEntity batch = batchList.get(i);
+			if (batch != null) {
 					ContractBatchModel batchModel = new ContractBatchModel();
 					batchModel.setBatch(batch);
 					List<BatchItemModel> beanList = null;
@@ -1031,7 +1021,6 @@ public class ContractServiceImpl implements IContractService {
 					batchModel.setBatchItems(beanList);
 					newBatchModelLIst.add(batchModel);
 				}
-			}
 			return newBatchModelLIst;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
