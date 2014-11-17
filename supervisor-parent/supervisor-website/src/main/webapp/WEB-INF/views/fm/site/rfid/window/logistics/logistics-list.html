@@ -99,7 +99,7 @@ function closeLog(id){
 <form action="javascript:void(0)" method="post" id="search_form">
 <div class="searBox mb10">
   标签编号<input type="text" name="rfidNo" value="${query.rfidNo}"/>
-  申请单号<input type="text" name="purchaseNo" value="${query.purchaseNo}"/>
+  申请单号<input type="text" name="applyNo" value="${query.purchaseNo}"/>
   采购合同号<input type="text" name="contractNo" value="${query.contractNo}"/>
   标签进度<select name="progressState" class="selectx">
           <option value="" selected="selected">全部</option>
@@ -141,7 +141,7 @@ function closeLog(id){
        <#list list as list>
         <tr>
           <td><a href="javascript:log('${list.id}');" class="lnk-blue">${list.rfidNo}</a></td>
-          <td>${list.purchaseNo}</td>
+          <td>${list.applyNo}</td>
           <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
 		  <td>${list.batchNo}</td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
