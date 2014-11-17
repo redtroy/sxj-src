@@ -5,7 +5,7 @@ public enum WindowTypeEnum {
 			"C120 150B*120H", 2), type3("C150 60B*150H", 3), type4(
 			"C150 120B*150H", 4), type5("C150 150B*150H", 5), type6(
 			"C150 180B*150H", 6), type7("C180 60B*180H", 7), type8(
-			"C180 150B*180H", 8), type9("C180 180B*180H", 9), type10("", 10);
+			"C180 150B*180H", 8), type9("C180 180B*180H", 9);
 
 	// 成员变量
 	private Integer id;

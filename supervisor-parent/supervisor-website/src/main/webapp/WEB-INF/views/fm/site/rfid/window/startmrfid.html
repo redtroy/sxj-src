@@ -38,6 +38,8 @@ $(function(){
    // }});
 	
 	$(".input-w180h36").keyup(function(event){
+		$("#contract_text").hide();
+		$("#num_text").hide();
 		if(event.ctrlKey){
 			return false;
 		}
@@ -59,7 +61,7 @@ $(function(){
 			$("#num_text").show();
 			$("#num_text").text("请输入启用数量")
 			wrong("#num_text");
-			 return false;
+			return false;
 		}
 		if (!num.match(reg)){
 			$("#num_text").show();

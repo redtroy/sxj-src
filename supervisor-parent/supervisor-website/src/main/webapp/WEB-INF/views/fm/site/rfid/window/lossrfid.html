@@ -35,6 +35,8 @@ $(function(){
 		rfid_b($("#pc_b option:selected").val());
 	});
 	$(".ourinput").keyup(function(event){
+		$("#contract_text").hide();
+		$("#num_text").hide();
 		if(event.ctrlKey){
 			return false;
 		}
