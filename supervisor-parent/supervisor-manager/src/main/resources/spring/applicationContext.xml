@@ -64,7 +64,7 @@
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">
 					<bean class="com.sxj.redis.advance.SingleServerConfig">
-						<property name="address" value="192.168.1.13:6379"></property>
+						<property name="address" value="${redis.host}:${redis.port}"></property>
 						<property name="database" value="0"></property>
 					</bean>
 				</property>
@@ -76,7 +76,7 @@
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">
 					<bean class="com.sxj.redis.advance.SingleServerConfig">
-						<property name="address" value="192.168.1.13:6379"></property>
+						<property name="address" value="${redis.host}:${redis.port}"></property>
 						<property name="database" value="0"></property>
 					</bean>
 				</property>
@@ -89,7 +89,7 @@
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">
 					<bean class="com.sxj.redis.advance.SingleServerConfig">
-						<property name="address" value="192.168.1.13:6379"></property>
+						<property name="address" value="${redis.host}:${redis.port}"></property>
 						<property name="database" value="0"></property>
 					</bean>
 				</property>

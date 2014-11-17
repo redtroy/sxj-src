@@ -13,6 +13,7 @@ import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.ref.ILogisticsRefService;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -93,11 +94,14 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 	@Transactional
 	public void add(LogisticsRefEntity model) throws ServiceException {
 		try {
-			refDao.add(model);
-			CometServiceImpl
-					.takeCount(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
-			RfidChannel.initTopic().publish(
-					RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
+			if (model != null) {
+				model.setDateNo("GL" + DateTimeUtils.getTime("yyMM"));
+				refDao.add(model);
+				CometServiceImpl
+						.takeCount(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
+				RfidChannel.initTopic().publish(
+						RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
+			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("物流RFID关联申请管理新增错误");

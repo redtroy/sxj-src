@@ -98,4 +98,16 @@ public class WindowRfidRefServiceImpl implements IWindowRfidRefService {
 
 	}
 
+	@Override
+	@Transactional
+	public void deleteRef(String id) throws ServiceException {
+		try {
+			windowRfidRefDao.deleteRfidRef(id);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("门窗RFID关联申请管理删除错误");
+		}
+
+	}
+
 }

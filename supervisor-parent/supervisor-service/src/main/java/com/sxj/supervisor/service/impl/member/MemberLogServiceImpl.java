@@ -49,8 +49,9 @@ public class MemberLogServiceImpl implements IMemberLogService {
 				condition.addCondition("prePage", query.getPrePage());
 				condition.setPage(query);
 			}
+			List<MemberLogEntity> list = dao.queryLogs(condition);
 			query.setPage(condition);
-			return dao.queryLogs(condition);
+			return list;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage(), e);

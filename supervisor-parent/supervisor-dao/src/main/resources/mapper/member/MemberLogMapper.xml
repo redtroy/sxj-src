@@ -21,11 +21,11 @@
 		<![CDATA[SELECT * FROM M_MEMBER_LOG WHERE 1=1]]>
 		<!-- 会员号 -->
 		<if test="condition.memberNo != null and condition.memberNo !=''">
-			<![CDATA[AND MEMBER_NO=#{condition.memberNo}]]>
+			<![CDATA[ AND MEMBER_NO=#{condition.memberNo}]]>
 		</if>
 		<if
 			test="condition.startTime != null and condition.endTime != null and condition.startTime != '' and condition.endTime != ''">
-			<![CDATA[AND CALL_TIME >=CONCAT(#{condition.startTime}," 00:00:00" ) AND CALL_TIME <= CONCAT(#{condition.endTime}," 23:59:59")]]>
+			<![CDATA[ AND CALL_TIME >=CONCAT(#{condition.startTime}," 00:00:00" ) AND CALL_TIME <= CONCAT(#{condition.endTime}," 23:59:59")]]>
 		</if>
 		<![CDATA[ ORDER BY CALL_TIME DESC]]>
 	</select>

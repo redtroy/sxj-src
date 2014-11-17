@@ -3,14 +3,16 @@ package com.sxj.supervisor.dao.rfid.windowRef;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
-import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.util.persistent.QueryCondition;
+
 /**
  * 门窗RFID关联Dao
+ * 
  * @author Ann
  *
  */
@@ -31,8 +33,7 @@ public interface IWindowRfidRefDao {
 	 * @param member
 	 **/
 	@Insert
-	public void addWindowRfidRef(WindowRefEntity window)
-			throws SQLException;
+	public void addWindowRfidRef(WindowRefEntity window) throws SQLException;
 
 	/**
 	 * 更新门窗RFID关联
@@ -40,8 +41,7 @@ public interface IWindowRfidRefDao {
 	 * @param member
 	 **/
 	@Update
-	public void updateWindowRfidRef(WindowRefEntity window)
-			throws SQLException;
+	public void updateWindowRfidRef(WindowRefEntity window) throws SQLException;
 
 	/**
 	 * 获取门窗RFID关联信息
@@ -50,4 +50,12 @@ public interface IWindowRfidRefDao {
 	 **/
 	@Get
 	public WindowRefEntity getWindowRfidRef(String id);
+
+	/**
+	 * 获取门窗RFID关联信息
+	 *
+	 * @param id
+	 **/
+	@Delete
+	public void deleteRfidRef(String id);
 }

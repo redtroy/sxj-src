@@ -77,7 +77,7 @@ public class StartWRfidController extends BaseController {
 			}
 			if (num > (itemQuantity - hasStartQuantity)) {
 				throw new WebException("此招标合同可以启用的最大数量为："
-						+ (itemQuantity - hasStartQuantity));
+						+ (long) (itemQuantity - hasStartQuantity));
 			}
 			WindowRfidQuery winQuery = new WindowRfidQuery();
 			winQuery.setContractNo(query.getRefContractNo());
@@ -88,8 +88,8 @@ public class StartWRfidController extends BaseController {
 				unStartQuantity = winList.size();
 			}
 			if (unStartQuantity < num) {
-				throw new WebException("此招标合同未启用的RFID数量为：" + unStartQuantity
-						+ "，请申请足够的RFID数量");
+				throw new WebException("此招标合同未启用的RFID数量为："
+						+ (long) unStartQuantity + "，请申请足够的RFID数量");
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {

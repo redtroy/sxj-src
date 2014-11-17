@@ -65,7 +65,7 @@ function  del(id){
 			},"删除成功");
 			
 		}else{
-			messageInfo("删除失败!");	
+			errorInfo(data.error);	
 		}
 	});
 	},"请确定是否删除")
@@ -79,7 +79,7 @@ function  audit(id){
 				query($("#pager").attr("currentPage"));
 			},"审核成功");
 		}else{
-			messageInfo("审核失败!");	
+			errorInfo("审核失败!");	
 		}
 	});
 	},"是否确认进行审核")
@@ -101,7 +101,7 @@ function saveModify(id){
 				query($("#pager").attr("currentPage"));
 			},"修改成功");
 		}else{
-			messageInfo("修改失败!");	
+			errorInfo("修改失败!");	
 		}
 	});
 }

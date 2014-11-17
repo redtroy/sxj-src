@@ -10,7 +10,12 @@
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.errorInfo/>
 <@b.dialogBox/>
-<Script>
+<script>
+var reg=/^[0-9]*[1-9][0-9]*$/;
+var contractReg=/^CT[0-9]{8}/;
+var container_a=null;
+var container_b=null;
+var lable=null;
 $(function(){
 	$("#contract_a").change(function(){
 		$("#pc_a option").remove();
@@ -32,17 +37,73 @@ $(function(){
      //   $("#refContractNo").val(data.title);
    // }});
 	
-	$("#refContractNo").blur(function(){
+	$(".input-w180h36").keyup(function(event){
+		if(event.ctrlKey){
+			return false;
+		}
 		var refContractNo=$("#refContractNo").val();
+		var num=$("#num").val();
 		if(refContractNo==null||refContractNo==''){
-			    $("#contract_text").show();
-			    $("#contract_text").text("请输入正确的招标合同号");
-			    wrong("#contract_text");
-			}else{
-				 $("#contract_text").hide();
-			}
+		    $("#contract_text").show();
+		    $("#contract_text").text("请输入正确的招标合同号");
+		    wrong("#contract_text");
+		    return false;
+		}
+		if(!refContractNo.match(contractReg)){
+		    $("#contract_text").show();
+		    $("#contract_text").text("请输入正确的招标合同号");
+		    wrong("#contract_text");
+		    return false;
+		}
+		if(num==null||num==''){
+			$("#num_text").show();
+			$("#num_text").text("请输入启用数量")
+			wrong("#num_text");
+			 return false;
+		}
+		if (!num.match(reg)){
+			$("#num_text").show();
+			$("#num_text").text("数量必须是整数")
+			wrong("#num_text");
+			return false;
+		}
+		$("#contract_a option").remove();
+		$("#contract_b option").remove();
+		$("#pc_a option").remove();
+		$("#pc_b option").remove();
+		$("#bq_qj").text("");
+		$("#rfid_a").text("");
+		$("#rfid_b").text("");
+		$.ajax({
+			  url: "queryRefContract.htm?refContractNo="+refContractNo+"&num="+num,
+			  cache: false,
+			  async: true,
+			  success: function(data){
+				  if (data.isOk=='ok'){
+						for (var i=0;i<data.list.length;i++){
+							if (data.list[i].contract.type=="glass"){
+								$("#contract_a").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
+							}else if (data.list[i].contract.type=="extrusions"){
+								$("#contract_b").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
+							}
+						}
+						lable=data.bq;
+						$("#bq_qj").text(data.bq[0]+"-"+data.bq[1])
+						pc_a();
+						pc_b();
+						$("#cont_div").show();
+						$("#contract_text").hide();
+						$("#num_text").hide();
+					}else{
+						 $("#contract_text").show();
+						 $("#contract_text").text(data.error);
+						 wrong("#contract_text");
+						 $("#cont_div").hide();
+					}
+			  }
+			});
 	});
-	$("#num").blur(function(){
+	/**$("#num").blur(function(){
 		var num=$("#num").val();
 		if(num==null||num==''){
 			$("#num_text").show();
@@ -55,12 +116,8 @@ $(function(){
 		}else{
 			$("#num_text").hide();
 		}
-	});
-})
-var reg=/^[0-9]*[1-9][0-9]*$/;
-var container_a=null;
-var container_b=null;
-var lable=null;
+	});**/
+});
 function query(){
 	var refContractNo=$("#refContractNo").val();
 	var num=$("#num").val();
@@ -110,7 +167,7 @@ function query(){
 			errorInfo(data.error);
 			$("#cont_div").hide();
 		}
-	})
+	});
 }
 
 function pc_a(){
@@ -202,9 +259,8 @@ function right(obj){
 	 $(obj).removeClass("tipMsg msg-error");
 	 $(obj).addClass("icon icon16 icon-16-suc");
 }
-</Script>
+</script>
 </head>
-
 <body>
 <@b.header />
 <div class="mainBg">
@@ -218,7 +274,8 @@ function right(obj){
 </div>
 <div class="contBox">
 <div class="item"><label>启用标签数量</label><input class="input input-w180h36" id="num"/>&nbsp;&nbsp;<div class="tipMsg msg-gray" id="num_text" style="display:none;">请输入启用数量</div></div>
-<div class="item"><label>招标合同号</label> <input class="input input-w180h36" value=""  id="refContractNo" >&nbsp;&nbsp;<button class="button button-green" onclick="query();return false;">获取标签编号区间</button>&nbsp;&nbsp;<div class="tipMsg msg-gray" id="contract_text" style="display:none;">请输入正确的招标合同号</div></div>
+<div class="item"><label>招标合同号</label> <input class="input input-w180h36" value=""  id="refContractNo" />&nbsp;&nbsp;<div class="tipMsg msg-gray" id="contract_text" style="display:none;">请输入正确的招标合同号</div></div> 
+<!--<button class="button button-green" onclick="query();return false;">获取标签编号区间</button>&nbsp;&nbsp; -->
 <div id="cont_div" style="display: none">
 <div class="item">
   <label>启用标签编号区间</label><span class="color-blue ml5" id="bq_qj"></span></div>
