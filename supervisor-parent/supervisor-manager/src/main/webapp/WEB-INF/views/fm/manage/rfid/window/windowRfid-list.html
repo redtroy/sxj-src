@@ -74,6 +74,7 @@ function loadInfo(id,contractNo){
 }
 function close(id){
 	$("#info"+id).html("");
+	$("#info"+id).attr("pdflag","0");
 }
 
 function blBatch(id,contractNo,rfidNo){
