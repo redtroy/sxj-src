@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +69,14 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 
 	@Autowired
 	private IRfidKeyService keyService;
+
+	private IPurchaseRfidService self;
+	@Autowired
+	private ApplicationContext context;
+
+	public void init() {
+		self = context.getBean(IPurchaseRfidService.class);
+	}
 
 	@Override
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
@@ -462,7 +471,8 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					throw new ServiceException("导入RFID失败！");
 			}
 			purchase.setImportState(ImportStateEnum.imported);
-			updatePurchase(purchase);
+			rfidPurchaseDao.updateRfidPurchase(purchase);
+			// updatePurchase(purchase);
 			long endTime = System.currentTimeMillis();
 			System.out.println("--------------------------------"
 					+ (endTime - statrTime));
