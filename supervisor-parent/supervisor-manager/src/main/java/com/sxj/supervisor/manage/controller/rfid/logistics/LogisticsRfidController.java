@@ -15,6 +15,7 @@ import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -129,6 +130,31 @@ public class LogisticsRfidController extends BaseController {
 		} catch (Exception e) {
 			SxjLogger.error("查询log动态信息错误", e, this.getClass());
 			throw new WebException("查询log动态信息错误");
+		}
+	}
+	/**
+	 * 获取合同详细
+	 * 
+	 * @param model
+	 * @param contractNo
+	 * @param rfid
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("contractInfo")
+	public String queryContractInfo(ModelMap model, String contractNo, String id)
+			throws WebException {
+		try {
+			ContractModel cmodel = contractService
+					.getContractModelByContractNo(contractNo);
+			ContractModel contractModel = contractService.getContract(cmodel
+					.getContract().getId());
+			model.put("contractModel", contractModel);
+			model.put("contractId", id);
+			return "manage/contract/contract-info";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
 		}
 	}
 }

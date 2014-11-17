@@ -131,8 +131,8 @@ public class WindowRfidController extends BaseController {
 			ContractModel contractModel = contractService.getContract(cmodel
 					.getContract().getId());
 			model.put("contractModel", contractModel);
-			model.put("id", id);
-			return "manage/rfid/window/contract-info";
+			model.put("contractId", id);
+			return "manage/contract/contract-info-zhaobiao";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");
