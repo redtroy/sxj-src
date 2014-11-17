@@ -1566,13 +1566,13 @@ public class ContractServiceImpl implements IContractService {
 					throw new ServiceException("该批次已被补损,不能删除!");
 				}
 				QueryCondition<ContractBatchEntity> batchQuery = new QueryCondition<ContractBatchEntity>();
-				query.addCondition("contractNo", contractNo);
-				query.addCondition("batchNo",
+				batchQuery.addCondition("contractId", contractNo);
+				batchQuery.addCondition("batchNo",
 						Integer.valueOf(batch.getBatchNo()) + 1);
 				List<ContractBatchEntity> list = contractBatchDao
 						.queryBacths(batchQuery);
 				if (list != null && list.size() > 0) {
-					throw new ServiceException("该批次已被补损,不能删除!");
+					throw new ServiceException("该批次之后已存在新的批次，不能删除");
 				}
 				contractBatchDao.deleteBatchs(batch.getId());
 			} else {
@@ -1599,7 +1599,7 @@ public class ContractServiceImpl implements IContractService {
 				throw new ServiceException("物流RFID关联已审核");
 			}
 			if (ref.getType().equals(AssociationTypesEnum.APPLY)) {
-				self.deleteBatch(ref.getRfidNo());
+				self.deleteBatch(ref.getRfidNo(), ref.getContractNo());
 				LogisticsRfidEntity l = logisticsRfidService
 						.getLogisticsByNo(ref.getRfidNo());
 				l.setRfidState(RfidStateEnum.unused);
@@ -1822,4 +1822,5 @@ public class ContractServiceImpl implements IContractService {
 		}
 
 	}
+
 }

@@ -244,7 +244,7 @@ public interface IContractService {
 	 * 
 	 * @param rfidNo
 	 */
-	public void deleteBatch(String rfidNo);
+	public void deleteBatch(String rfidNo, String contractNo);
 
 	/**
 	 * 删除物流RFID关联
@@ -261,7 +261,5 @@ public interface IContractService {
 	 * @throws ServiceException
 	 */
 	public void deleteWindowRef(String id) throws ServiceException;
-
-	void deleteBatch(String rfidNo, String contractNo) throws ServiceException;
 
 }
