@@ -262,4 +262,6 @@ public interface IContractService {
 	 */
 	public void deleteWindowRef(String id) throws ServiceException;
 
+	void deleteBatch(String rfidNo, String contractNo) throws ServiceException;
+
 }

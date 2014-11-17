@@ -603,7 +603,7 @@ var caculateRow=function($tr){
 						<div class="contPic">
 							<label>合同补损扫描件</label>
 						<div class="ly-left">
-						<input type="hidden" name="replenishList[${replenishList_index}].replenishContract.imgPath" class="imgPathHide" value=""/>
+						<input type="hidden" name="replenishList[${replenishList_index}].replenishContract.imgPath" class="imgPathHide" value="${replenishList.replenishContract.imgPath}"/>
 						<div class="rollBox">
 								<ul class="elastislide-list"></ul>
 						</div>
@@ -635,7 +635,7 @@ var caculateRow=function($tr){
 							</tr>
 							<#list replenishList.batchItems as replenishItem>
 							<tr>
-								<td>第${replenishItem.replenishBatch.batchNo}批次
+								<td>补第${replenishItem.replenishBatch.batchNo}批次
 								<input type="hidden" value="${replenishItem.replenishBatch.id}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.id" />
 								</td>
 								<td><table border="0" cellpadding="0" cellspacing="0"
