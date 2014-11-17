@@ -172,12 +172,13 @@ public class WindowRefController extends BaseController {
 
 	@RequestMapping("contractBatch")
 	public String getContractBatch(ModelMap model, String contractNo,
-			String rfidNo, String id) throws WebException {
+			String rfidNo, String id,String type) throws WebException {
 		try {
 			List<ContractBatchModel> conBatch = contractService
 					.getContractBatch(contractNo, rfidNo);
 			model.put("conBatch", conBatch);
 			model.put("id", id);
+			model.put("type", type);
 			model.put("contractNo", contractNo);
 			return "manage/rfid/windowref/contract-batch";
 		} catch (Exception e) {

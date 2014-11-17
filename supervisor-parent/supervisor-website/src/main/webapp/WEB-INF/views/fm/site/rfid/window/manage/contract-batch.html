@@ -30,11 +30,11 @@
 						class="tabList prodTable">
 						<#list batch.batchItems as batchItem>
 						<tr>
-							<td>${batchItem.quantity}</td>
+							<td>${batchItem.quantity?string("0.00")}</td>
 						</tr>
 						</#list>
 					</table></td>
-				<td>${batch.batch.amount}</td>
+				<td>${batch.batch.amount?string("0.00")}</td>
 			</tr>
 			</#list>
 		</table>

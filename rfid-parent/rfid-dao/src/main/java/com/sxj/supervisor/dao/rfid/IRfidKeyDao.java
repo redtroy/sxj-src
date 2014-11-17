@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.dao.rfid;
+package com.sxj.supervisor.dao.rfid;
 
 import java.sql.SQLException;
 

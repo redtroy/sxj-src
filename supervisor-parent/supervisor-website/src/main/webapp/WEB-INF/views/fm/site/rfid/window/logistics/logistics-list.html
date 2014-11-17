@@ -54,10 +54,11 @@ function  disable(id){
 	});
 	},"确实要停用吗？")
 }
-function loadInfo(id,contractNo){
+function loadContractInfo(id,contractNo){
 	if ($("#info"+id).children().length==0){
 	    $("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo+"&recordNo="+id);
-	    closeLog(id)
+	    closeLog(id);
+	    $("#bath_info"+id).html("");
 	}else{
 		closeContract(id);
 	}
@@ -65,10 +66,23 @@ function loadInfo(id,contractNo){
 function closeContract(id){
 	$("#info"+id).html("");
 }
-
+function loadInfo(id,rfidNo,contractNo){
+	if ($("#bath_info"+id).children().length==0){
+		$("#bath_info"+id).load("${basePath}/rfid/window/contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+		$("#info"+id).html("");
+		$("#log"+id).html("");
+	}else{
+		$("#bath_info"+id).html("");
+	}
+	
+}
+function close(id){
+	$("#bath_info"+id).html("");
+}
 function log(id){
 	if ($("#log"+id).children().length==0){
 	$("#log"+id).load("stateLog.htm?id="+id);
+	$("#bath_info"+id).html("");
 	closeContract(id)
 	}else{
 		closeLog(id);
@@ -142,8 +156,8 @@ function closeLog(id){
         <tr>
           <td><a href="javascript:log('${list.id}');" class="lnk-blue">${list.rfidNo}</a></td>
           <td>${list.applyNo}</td>
-          <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
-		  <td>${list.batchNo}</td>
+          <td><a href="javascript:loadContractInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
+		  <td><a href="javascript:loadInfo('${list.id}','${list.rfidNo}','${list.contractNo}')" class="lnk-blue">${list.batchNo}</a></td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
 		   <#if (list.progressState.getId()==0)>
 		  <td><em class="state frozen">标签发货中</em></td>
@@ -170,6 +184,7 @@ function closeLog(id){
 		  </#if></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}"> </tr>
+        <tr class="tableInfo" id="bath_info${list.id}"> </tr>
         <tr id="log${list.id}"> </tr>
         </#list>
   </table>
