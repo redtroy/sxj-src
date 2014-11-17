@@ -30,5 +30,6 @@
 		<if test="condition.newRfidNo != null and condition.newRfidNo != ''">
 			<![CDATA[AND NEW_RFID_NO = #{condition.newRfidNo}]]>
 		</if>
+		<![CDATA[ ORDER BY BATCH_NO DESC ]]>
 	</select>
 </mapper>

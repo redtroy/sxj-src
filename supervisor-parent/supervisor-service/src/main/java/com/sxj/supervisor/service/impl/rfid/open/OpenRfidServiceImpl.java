@@ -136,7 +136,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 							ReplenishBatchEntity rbe = batchList.get(0);
 							Bacth bacth = new Bacth();
 							BatchNo BatchNo = new BatchNo();
-							BatchNo.setBatchNo(rbe.getBatchNo());
+							//BatchNo.setBatchNo(rbe.getBatchNo());
 							bacth.setBatch(BatchNo);
 							List<BatchItemModel> batchModelList = this
 									.jsonChangeList(rbe.getBatchItems());

@@ -11,13 +11,13 @@ public class BatchNo  implements Serializable{
 	 */
 	private static final long serialVersionUID = 200787019183580808L;
 
-	private String batchNo;
+	private Long batchNo;
 
-	public String getBatchNo() {
+	public Long getBatchNo() {
 		return batchNo;
 	}
 
-	public void setBatchNo(String batchNo) {
+	public void setBatchNo(String Long) {
 		this.batchNo = batchNo;
 	}
 	

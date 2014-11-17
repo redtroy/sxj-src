@@ -1548,7 +1548,8 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	@Transactional
-	public void deleteBatch(String rfidNo) throws ServiceException {
+	public void deleteBatch(String rfidNo, String contractNo)
+			throws ServiceException {
 		try {
 			QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
 			query.addCondition("rfidNo", rfidNo);
@@ -1564,13 +1565,25 @@ public class ContractServiceImpl implements IContractService {
 						&& batch.getReplenishState() == 1) {
 					throw new ServiceException("该批次已被补损,不能删除!");
 				}
+				QueryCondition<ContractBatchEntity> batchQuery = new QueryCondition<ContractBatchEntity>();
+				query.addCondition("contractNo", contractNo);
+				query.addCondition("batchNo",
+						Integer.valueOf(batch.getBatchNo()) + 1);
+				List<ContractBatchEntity> list = contractBatchDao
+						.queryBacths(batchQuery);
+				if (list != null && list.size() > 0) {
+					throw new ServiceException("该批次已被补损,不能删除!");
+				}
 				contractBatchDao.deleteBatchs(batch.getId());
 			} else {
 				throw new ServiceException("找不到该批次");
 			}
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("删除批次出错", e);
+			throw new ServiceException("删除批次失败!", e);
 		}
 	}
 
