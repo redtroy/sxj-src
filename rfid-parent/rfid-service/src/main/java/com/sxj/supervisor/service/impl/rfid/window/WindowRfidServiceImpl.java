@@ -220,21 +220,21 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			String refContractNo, String minRfid, String maxRfid, String gRfid,
 			String lRfid, WindowTypeEnum windowType) throws ServiceException {
 		try {
-			WindowRfidQuery query = new WindowRfidQuery();
-			query.setContractNo(refContractNo);
-			query.setRfidState(RfidStateEnum.used.getId());
-
 			if (useQuantity >= itemQuantity) {
 				throw new ServiceException("此招标合同已经全部启用完毕");
 			}
-
 			WindowRfidQuery query2 = new WindowRfidQuery();
+			query2.setContractNo(refContractNo);
 			query2.setMinRfidNo(minRfid);
 			query2.setMaxRfidNo(maxRfid);
 			query2.setRfidState(RfidStateEnum.unused.getId());
 			List<WindowRfidEntity> list = queryWindowRfid(query2);
 			String memberNo = null;
 			String memberName = null;
+			if (list == null || list.size() == 0) {
+				throw new ServiceException("此区间没有未启用的RFID");
+			}
+			int nowQuantity = list.size();
 			for (Iterator<WindowRfidEntity> iterator = list.iterator(); iterator
 					.hasNext();) {
 				WindowRfidEntity windowRfid = iterator.next();
@@ -250,6 +250,24 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			}
 			windowRfidDao.batchUpdateWindowRfid(list
 					.toArray(new WindowRfidEntity[list.size()]));
+
+			// 判断是否去全部启用，如全部启用剩下未启用的设置为停用
+			if (nowQuantity + useQuantity == itemQuantity) {
+				WindowRfidQuery query3 = new WindowRfidQuery();
+				query3.setContractNo(refContractNo);
+				query2.setRfidState(RfidStateEnum.unused.getId());
+				List<WindowRfidEntity> otherList = queryWindowRfid(query3);
+				if (otherList != null && otherList.size() > 0) {
+					for (WindowRfidEntity otherRfid : otherList) {
+						if (otherRfid == null) {
+							continue;
+						}
+						otherRfid.setRfidState(RfidStateEnum.disable);
+					}
+					windowRfidDao.batchUpdateWindowRfid(otherList
+							.toArray(new WindowRfidEntity[otherList.size()]));
+				}
+			}
 
 			// 生成关联单
 			WindowRefEntity winRef = new WindowRefEntity();

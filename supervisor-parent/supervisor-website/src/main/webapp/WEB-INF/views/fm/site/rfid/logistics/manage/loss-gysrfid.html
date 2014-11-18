@@ -227,17 +227,17 @@ function subForm2(){
 <input id="rfidNo" type="hidden" name="rfidNos" value="" /> 
 <div id="content2" class="tabscontent">
 <div class="item">
-      <label>补损物流标签编号</label>${newRfidNo}</div>
+      <label>物流标签编号</label>${newRfidNo}</div>
     <div class="item" title="">
-      <label>需补损的合同号</label>
+      <label>需补损的合同</label>
       <input class="input input-w180h36" id="contractNo" name="contractNo" value="" datatype="contractNov" nullmsg="请输入采购合同编号" errormsg="输入错误"/>
     </div>
     <div class="item" title="">
-      <label>补损备案号</label> <select name="recordNo" id="record_select">
+      <label>补损的批次</label> <select name="recordNo" id="record_select">
             <option selected="selected" value="">该合同无补损备案</option>
             </select></div>
     <div class="item" title="">
-      <label>需补损标签编号</label><span id="rfid"></span></div>
+      <label>补损关联的标签</label><span id="rfid"></span></div>
     <div class="item mt10">
       <label>&nbsp;</label>
       <a href="javascript:subForm2();" class="button button-orange mr15" title="">确定补损</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
