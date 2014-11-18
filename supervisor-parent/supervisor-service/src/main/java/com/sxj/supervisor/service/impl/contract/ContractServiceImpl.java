@@ -830,6 +830,7 @@ public class ContractServiceImpl implements IContractService {
 								ReplenishBatchEntity rb = replenishBatchModel
 										.getReplenishBatch();
 								rb.setBatchItems(json);
+								rb.setRfidNo(record.getRfidNo());//添加补损RFID到批次
 								rb.setReplenishState(0);
 								rb.setReplenishId(replenishContract.getId());
 								rb.setNoType(contractId + "-");
