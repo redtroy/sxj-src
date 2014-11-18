@@ -48,6 +48,9 @@
 		<if test="condition.type != null and condition.type !=''">
 			<![CDATA[AND TYPE = #{condition.type}]]>
 		</if>
+		<if test="condition.state != null and condition.state !=''">
+			<![CDATA[AND STATE = #{condition.state}]]>
+		</if>
 		<if test="condition.replenishRfid != null and condition.replenishRfid !=''">
 			<![CDATA[AND REPLENISH_RFID = #{condition.replenishRfid}]]>
 		</if>
