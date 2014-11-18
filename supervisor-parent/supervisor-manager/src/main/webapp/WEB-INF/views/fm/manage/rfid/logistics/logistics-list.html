@@ -230,7 +230,7 @@ $(function(){
 		   <#if list.rfidState.getId()==3>
 		   <em class="state frozen">${list.rfidState.getName()}</em>
 		  </#if></td>
-		  <td class="operation"><#if list.rfidState.getId()!=3><a href="javascript:disable('${list.id}');" class="stop">停用</a></#if><a href="javascript:del('${list.id}');" class="del">删除</a></td>
+		  <td class="operation"><#if list.rfidState.getId()==0||list.rfidState.getId()==1><a href="javascript:disable('${list.id}');" class="stop">停用</a></#if><#if list.rfidState.getId()==0><a href="javascript:del('${list.id}');" class="del">删除</a></#if></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}" isopen="0"></tr>
         </#list>

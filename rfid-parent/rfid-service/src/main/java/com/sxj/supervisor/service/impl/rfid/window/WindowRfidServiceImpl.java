@@ -87,6 +87,30 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("更新门窗RFID错误", e);
 		}
+	}
+
+	@Override
+	@Transactional
+	public void deleteWindowRfid(String id) throws ServiceException {
+		try {
+			WindowRfidEntity rfid = getWindowRfid(id);
+			if (rfid == null) {
+				throw new ServiceException("RFID不存在");
+			}
+			if (!rfid.getRfidState().equals(RfidStateEnum.unused)) {
+				throw new ServiceException("RFID不是未使用状态，不可删除");
+			}
+			WindowRfidEntity win = new WindowRfidEntity();
+			win.setId(id);
+			win.setRfidState(RfidStateEnum.delete);
+			updateWindowRfid(win);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("删除门窗RFID错误");
+		}
 
 	}
 
