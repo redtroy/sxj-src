@@ -74,32 +74,45 @@ $(function(){
 });
 function loadInfo(id,contractNo){
 	var isopen=$("#info" + id).attr("isopen");
-	if(isopen=="0"){
+	if(isopen !="1"){
 	$("#info"+id).load("contractInfo.htm?contractNo="+contractNo+"&id="+id);
 	$("#info" + id).attr("isopen","1");
 	}
-	else if(isopen=="1"){
+	else{
 		$("#info" + id).html("");
 		$("#info" + id).attr("isopen","0");
 	}
 	
 }
 function closeContract(id){
+	$("#info" + id).attr("isopen","0");
 	$("#info"+id).html("");
 }
 function log(id){
 	var isopen=$("#info" + id).attr("isopen");
-	if(isopen=="0"){
+	if(isopen!="2"){
 	$("#info"+id).load("stateLog.htm?id="+id);
-	$("#info" + id).attr("isopen","1");
+	$("#info" + id).attr("isopen","2");
 	}
-	else if(isopen=="1"){
+	else{
+		$("#info" + id).html("");
+		$("#info" + id).attr("isopen","0");
+	}
+	
+}
+function loadInfoBatch(id,rfidNo,type){
+	var isopen=$("#info" + id).attr("isopen");
+	if (isopen!=3){
+		$("#info"+id).load("contractBatch.htm?type="+type+"&rfidNo="+rfidNo+"&id="+id);
+		$("#info" + id).attr("isopen","3");
+	}else{
 		$("#info" + id).html("");
 		$("#info" + id).attr("isopen","0");
 	}
 	
 }
 function closeLog(id){
+	$("#info" + id).attr("isopen","0");
 	$("#info"+id).html("");
 }
 $(function(){
@@ -196,7 +209,11 @@ $(function(){
           <td>${list.type.getName()}</td>
 		  <td>${list.memberName}</td>
           <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
-		  <td>${list.batchNo}</td>
+		  <#if list.replenishNo?exists>
+		  <td><a href="javascript:loadInfoBatch('${list.id}','${list.replenishNo}',${list.type.id})" class="lnk-blue">${list.batchNo}</a></td>
+		  <#else>
+		  <td><a href="javascript:loadInfoBatch('${list.id}','${list.rfidNo}',${list.type.id})" class="lnk-blue">${list.batchNo}</a></td>
+		  </#if>
 		  <td>${list.importDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>
 		  <td>
