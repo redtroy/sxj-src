@@ -232,7 +232,7 @@ function toLableLosses(id){
 		   <em class="state frozen">${win.rfidState.getName()}</em>
 		  </#if>
 		 </td>
-		  <td class="operation"> <#if win.rfidState.getId()==0><a href="javascript:toLableLosses('${win.id}');" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>标签补损</a> </#if></td>
+		  <td class="operation"> <#if win.rfidState.getId()==0||win.rfidState.getId()==3><a href="javascript:toLableLosses('${win.id}');" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>标签补损</a> </#if></td>
         </tr>
         <tr class="tableInfo"  id="info${win.id}"></tr>
         <tr class="tableInfo" id="blBatch${win.id}"> </tr> 

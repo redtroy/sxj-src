@@ -32,4 +32,11 @@
 		</if>
 		<![CDATA[ ORDER BY BATCH_NO DESC ]]>
 	</select>
+	<select id="getReplenishBatch" resultMap="ReplenishBatchResultMap"
+		parameterType="String">
+		<![CDATA[SELECT RB.* FROM M_CONTRACT_REPLENISH_BATCH RB LEFT JOIN M_CONTRACT_REPLENISH R 
+			ON RB.REPLENISH_ID=R.ID WHERE R.CONTRACT_ID=#{condition.contractId}
+  			AND  RB.NEW_RFID_NO IS NULL ORDER BY RB.BATCH_NO ASC ]]>
+	</select>
+	
 </mapper>

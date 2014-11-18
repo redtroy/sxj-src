@@ -320,7 +320,6 @@
               <col width="20%" />
               <col width="10%" />
               <col width="15%" />
-              <col width="15%" />
               <col width="5%" />
               <tr>
                 <th>交货批次</th>
@@ -328,7 +327,6 @@
                 <th>数量<span>（<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
                 <th>应付货款<span>（元）</span></th>
                 <th>对应批次RFID编号</th>
-                <th>新RFID编号</th>
                 <th class="rLine">&nbsp;</th>
               </tr>
               <#list replenishList.batchItems as replenishItem>
@@ -349,7 +347,6 @@
                  </#list>
                   </table></td>
                 <td>${replenishItem.replenishBatch.amount?string('0.00')}</td>
-                <td>${replenishItem.replenishBatch.rfidNo}</td>
                 <td>${replenishItem.replenishBatch.newRfidNo}</td>
                 <td><#if replenishItem.replenishBatch.updateState==1><span class="color-red">！</span></#if></td>
               </tr>

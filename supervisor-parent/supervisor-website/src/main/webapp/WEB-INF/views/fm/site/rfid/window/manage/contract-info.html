@@ -339,14 +339,12 @@ $(document).ready(function(){
 					<col width="42%" />
 					<col width="12%" />
 					<col width="17%" />
-					<col width="9%" />
 					<col width="8%" />
 					<tr>
 						<th>批次</th>
 						<th>表格</th>
 						<th>应付货款</th>
-						<th>对应批次RFID编号</th>
-						<th>新RFID编号</th>
+						<th>RFID编号</th>
 						<th>&nbsp;&nbsp;&nbsp;</th>
 					</tr>
 					<#list replenishList.batchItems as replenishItem>
@@ -367,7 +365,6 @@ $(document).ready(function(){
 								</#list>
 							</table></td>
 						<td>${replenishItem.replenishBatch.amount}</td>
-						<td>${replenishItem.replenishBatch.rfidNo}</td>
 						<td>${replenishItem.replenishBatch.newRfidNo}</td>
 						<td><#if replenishItem.replenishBatch.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 					</tr>
