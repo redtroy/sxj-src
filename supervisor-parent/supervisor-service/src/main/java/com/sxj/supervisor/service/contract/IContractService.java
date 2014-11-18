@@ -6,6 +6,7 @@ import java.util.List;
 import com.sxj.jsonrpc.annotation.JsonRpcService;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
+import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
@@ -246,5 +247,7 @@ public interface IContractService {
 	 * @throws ServiceException
 	 */
 	public void deleteWindowRef(String id) throws ServiceException;
+
+	List<ReplenishBatchEntity> getReplenishBatch(String contractNo);
 
 }

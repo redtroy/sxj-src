@@ -503,15 +503,13 @@
 									<col width="14%" />
 									<col width="42%" />
 									<col width="12%" />
-									<col width="15%" />
 									<col width="10%" />
 									<col width="9%" />
 									<tr>
 										<th>批次</th>
 										<th>表格</th>
 										<th>应付货款</th>
-										<th>对应批次RFID编号</th>
-										<th>新RFID编号</th>
+										<th>RFID编号</th>
 										<th>&nbsp;&nbsp;&nbsp;</th>
 									</tr>
 									<#list replenishList.batchItems as replenishItem>
@@ -535,7 +533,6 @@
 												</#list>
 											</table></td>
 										<td>${replenishItem.replenishBatch.amount?string('0.00')}</td>
-										<td>${replenishItem.replenishBatch.rfidNo}</td>
 										<td>${replenishItem.replenishBatch.newRfidNo}</td>
 										<td><#if replenishItem.replenishBatch.updateState==1><span
 											class="color-red">！</span></#if>&nbsp;
