@@ -73,7 +73,6 @@ import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.ContractReplenishModel;
 import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
-import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
@@ -853,7 +852,6 @@ public class ContractServiceImpl implements IContractService {
 		}
 	}
 
-
 	/**
 	 * 变更确认状态
 	 */
@@ -1272,14 +1270,19 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	public void updateContractLoss(String rfidNos, String contractNo,
-			String recordNo, MemberEntity member, String newRfid)
+			String batchId, MemberEntity member, String newRfid)
 			throws ServiceException {
 		try {
 			if (StringUtils.isEmpty(rfidNos)) {
 				throw new ServiceException("rfid编号不能为空");
 			}
-			String[] rfidList = rfidNos.split(",");
+			ReplenishBatchEntity batch = new ReplenishBatchEntity();
+			batch.setId(batchId);
+			batch.setNewRfidNo(newRfid);
+			contractReplenishBatchDao.updateBatch(batch);
+			//
 			// 更新旧的RFID
+			// String[] rfidList = rfidNos.split(",");
 			// for (int i = 0; i < rfidList.length; i++) {
 			// if (StringUtils.isEmpty(rfidList[i])) {
 			// continue;
@@ -1737,7 +1740,7 @@ public class ContractServiceImpl implements IContractService {
 				// 还原补损的RFID
 				rfid.setRfidState(RfidStateEnum.unused);
 				rfid.setWindowType(null);
-				rfid.setContractNo("");
+				// rfid.setContractNo("");
 				rfid.setGlassRfid("");
 				rfid.setProfileRfid("");
 				windowRfidService.updateWindowRfid(rfid);
