@@ -393,6 +393,7 @@ public class ContractServiceImpl implements IContractService {
 				contractReplenishDao.updateReplenish(mceList);
 			}
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("修改合同出错", e);
 		}
 	}
@@ -598,6 +599,7 @@ public class ContractServiceImpl implements IContractService {
 			}
 			return contractModel;
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("查询合同信息错误", e);
 		}
 	}
@@ -673,6 +675,7 @@ public class ContractServiceImpl implements IContractService {
 			}
 			return contractModelList;
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("查询合同信息错误", e);
 		}
 
@@ -689,6 +692,7 @@ public class ContractServiceImpl implements IContractService {
 			ce.setDeleteState(true);
 			contractDao.updateContract(ce);
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("删除合同出错", e);
 		}
 	}
@@ -774,6 +778,7 @@ public class ContractServiceImpl implements IContractService {
 				contractModifyItemDao.updateItems(milist);
 			}
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("变更合同信息错误", e);
 		}
 	}
@@ -842,34 +847,11 @@ public class ContractServiceImpl implements IContractService {
 				}
 			}
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("补损合同信息错误", e);
 		}
 	}
 
-	/**
-	 * 更新合同
-	 */
-	@Override
-	public void modifyState(String contractId, RecordConfirmStateEnum state)
-			throws ServiceException {
-		// try {
-		// ContractEntity ce = new ContractEntity();
-		// ce.setId(contractId);
-		// ce.setConfirmState(state);
-		// contractDao.updateContract(ce);
-		// } catch (Exception e) {
-		// throw new ServiceException("更改合同状态出错", e);
-		// }
-	}
-
-	/**
-	 * 新增合同状态变更记录
-	 */
-	@Override
-	public void addStateLog(StateLogModel stateLog, String contractId) {
-		// TODO Auto-generated method stub
-
-	}
 
 	/**
 	 * 变更确认状态
@@ -990,6 +972,7 @@ public class ContractServiceImpl implements IContractService {
 			}
 
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("审核合同错误", e);
 		}
 	}
@@ -1010,6 +993,7 @@ public class ContractServiceImpl implements IContractService {
 			}
 			return null;
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取合同信息错误", e);
 		}
 	}
@@ -1122,6 +1106,7 @@ public class ContractServiceImpl implements IContractService {
 			list.add(batch);
 			contractBatchDao.updateBatchs(list);
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("批次修改错误", e);
 		}
 
@@ -1379,6 +1364,7 @@ public class ContractServiceImpl implements IContractService {
 			List<ContractModel> res = queryContracts(query);
 			return res.size();
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取合同信息错误", e);
 		}
 	}
@@ -1397,6 +1383,7 @@ public class ContractServiceImpl implements IContractService {
 			}
 			return ContractList;
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取合同信息错误", e);
 		}
 	}

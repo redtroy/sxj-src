@@ -32,6 +32,7 @@
 		<if test="condition.state != null and condition.state != ''">
 			<![CDATA[AND UPDATE_STATE != #{condition.state}]]>
 		</if>
+		<![CDATA[ ORDER BY BATCH_NO DESC ]]>
 	</select>
 	<!-- 根据rfid号获取批次 -->
 	<select id="getBacthsByRfid" resultMap="BacthResultMap"
