@@ -73,9 +73,9 @@ function closeContract(id){
 	$("#info"+id).html("");
 }
 
-function blBatch(id,contractNo,rfidNo){
+function blBatch(id,rfidNo){
 	if ($("#blBatch"+id).children().length==0){
-	$("#blBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=blBatch"+id+"&type=1");
+	$("#blBatch"+id).load("contractBatch.htm?rfidNo="+rfidNo+"&id=blBatch"+id+"&type=1");
 	$("#xcBatch"+id).html("");
 	$("#info"+id).html("");
 	$("#log"+id).html("");
@@ -83,9 +83,9 @@ function blBatch(id,contractNo,rfidNo){
 		$("#blBatch"+id).html("");
 	}
 }
-function xcBatch(id,contractNo,rfidNo){
+function xcBatch(id,rfidNo){
 	if ($("#xcBatch"+id).children().length==0){
-	$("#xcBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=xcBatch"+id+"&type=2");
+	$("#xcBatch"+id).load("contractBatch.htm?rfidNo="+rfidNo+"&id=xcBatch"+id+"&type=2");
 	$("#blBatch"+id).html("");
 	$("#info"+id).html("");
 	$("#log"+id).html("");
@@ -204,8 +204,8 @@ function toLableLosses(id){
           <#else>
           <td></td>
           </#if>
-		  <td><a href="javascript:blBatch('${win.id}','${win.contractNo}','${win.glassRfid}')" class="lnk-blue">${win.glassRfid}</a></td>
-		  <td><a href="javascript:xcBatch('${win.id}','${win.contractNo}','${win.profileRfid}')" class="lnk-blue">${win.profileRfid}</a></td>
+		  <td><a href="javascript:blBatch('${win.id}','${win.glassRfid}')" class="lnk-blue">${win.glassRfid}</a></td>
+		  <td><a href="javascript:xcBatch('${win.id}','${win.profileRfid}')" class="lnk-blue">${win.profileRfid}</a></td>
           <td><#if win.replenishNo?exists>${win.replenishNo}<#else>-</#if></td>
           <#if (win.progressState.getId()==0)>
 		  <td><em class="state frozen">标签发货中</em></td>

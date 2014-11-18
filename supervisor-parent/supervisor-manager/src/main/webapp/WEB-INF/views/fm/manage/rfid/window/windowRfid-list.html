@@ -73,7 +73,7 @@ function loadInfo(id,contractNo){
 	$("#info"+id).load("contractInfo.htm?contractNo="+contractNo+"&id="+id);
 	$("#info"+id).attr("pdflag","1");
 	}else{
-		close(id);
+		closeContract(id);
 		$("#info"+id).attr("pdflag","0");
 	}
 }
@@ -89,7 +89,7 @@ function blBatch(id,contractNo,rfidNo){
 	$("#info"+id).attr("pdflag","2");
 	}else{
 		$("#info"+id).attr("pdflag","0");
-		close(id);
+		closeContract(id);
 	}
 }
 function xcBatch(id,contractNo,rfidNo){
@@ -99,7 +99,7 @@ function xcBatch(id,contractNo,rfidNo){
 	$("#info"+id).attr("pdflag","3");
 	}else{
 		$("#info"+id).attr("pdflag","0");
-		close(id);
+		closeContract(id);
 	}
 }
 function log(id){
@@ -108,7 +108,7 @@ function log(id){
 	$("#info"+id).load("stateLog.htm?id="+id);
 	$("#info"+id).attr("pdflag","4");
 	}else{
-		close(id);
+		closeContract(id);
 		$("#info"+id).attr("pdflag","0");
 	}
 }
