@@ -15,6 +15,7 @@ import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
@@ -59,6 +60,34 @@ public class LogisticsRfidController extends BaseController {
 		} catch (Exception e) {
 			SxjLogger.error("查询门窗RFID错误", e, this.getClass());
 			throw new WebException("查询门窗RFID错误");
+		}
+	}
+
+	/**
+	 * 获取 合同批次信息
+	 * 
+	 * @param model
+	 * @param contractNo
+	 * @param rfidNo
+	 * @param id
+	 * @param type
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("contractBatch")
+	public String getContractBatch(ModelMap model, String rfidNo, String id,
+			String type) throws WebException {
+		try {
+			ContractBatchModel conBatch = contractService
+					.getBatchByRfid(rfidNo);
+			model.put("conBatch", conBatch);
+			model.put("id", id);
+			model.put("type", type);
+			// model.put("contractNo", contractNo);
+			return "manage/rfid/windowref/contract-batch";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
 		}
 	}
 
@@ -132,6 +161,7 @@ public class LogisticsRfidController extends BaseController {
 			throw new WebException("查询log动态信息错误");
 		}
 	}
+
 	/**
 	 * 获取合同详细
 	 * 

@@ -50,4 +50,6 @@ public interface IContractReplenishBatchDao {
 	 */
 	public List<ReplenishBatchEntity> queryReplenishBatch(
 			QueryCondition<ReplenishBatchEntity> query);
+	
+	public List<ReplenishBatchEntity> getReplenishBatch(String contractNo);
 }

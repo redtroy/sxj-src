@@ -623,15 +623,13 @@ var caculateRow=function($tr){
 							<col width="25%" />
 							<col width="20%" />
 							<col width="10%" />
-							<col width="15%" />
 							<col width="20%" />
 							<tr>
 								<th>交货批次</th>
 								<th>产品规格</th>
 								<th>数量<span>（<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
 								<th>应付货款<span>（元）</span></th>
-								<th>对应批次RFID编号</th>
-								<th class="rLine">新RFID编号</th>
+								<th class="rLine">对应批次RFID编号</th>
 							</tr>
 							<#list replenishList.batchItems as replenishItem>
 							<tr>
@@ -657,7 +655,6 @@ var caculateRow=function($tr){
 										</#list>
 									</table></td>
 								<td><input type="text" value="${replenishItem.replenishBatch.amount}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"  class="bgamount" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.amount" /></td>
-								<td>${replenishItem.replenishBatch.rfidNo}</td>
 								<td>${replenishItem.replenishBatch.newRfidNo}</td>
 							</tr>
 							</#list>

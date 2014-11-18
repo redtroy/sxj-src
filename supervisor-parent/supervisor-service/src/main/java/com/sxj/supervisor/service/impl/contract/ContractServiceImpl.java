@@ -1812,5 +1812,23 @@ public class ContractServiceImpl implements IContractService {
 		}
 
 	}
-
+	
+	/**
+	 * 获取待补损批次
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public List<ReplenishBatchEntity> getReplenishBatch(String contractNo){
+		try{
+		 List<ReplenishBatchEntity>  batchList=contractReplenishBatchDao.getReplenishBatch(contractNo);
+		 return batchList;
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("查询补损批次错误", e);
+		}
+		
+	}
 }
