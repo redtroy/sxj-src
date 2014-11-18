@@ -22,6 +22,7 @@
 <@b.pageScript/>
 <@b.upload/>
 <@b.errorInfo/>
+<@b.dialogBox/>
 <script>
 function query(page){
 	var params=$("#search_form").serialize();
@@ -39,28 +40,32 @@ function query(page){
 	});
 }
 function  del(id){
-	if(confirm('确实要删除吗?')){
-	$.post("delete.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			alert("删除成功!");
-			window.location.href="query.htm";
-		}else{
-			alert("删除失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("delete.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"删除成功!");
+			}else{
+				errorInfo(data.error);	
+			}
+		});
+	},"是否确认删除？");
+	
 }
 function  disable(id){
-	if(confirm('确实要停用吗?')){
-	$.post("disable.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			alert("停用成功!");
-			window.location.href="query.htm";
-		}else{
-			alert("停用失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("disable.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					query($("#pager").attr("currentPage"));
+				},"停用成功!");
+			}else{
+				errorInfo(data.error);	
+			}
+		});
+	},"是否确认停用？");
+	
 }
 function loadInfo(id,contractNo){
 	var pdflag=$("#info"+id).attr("pdflag");
@@ -249,7 +254,7 @@ $(function(){
 		   <em class="state frozen">${win.rfidState.getName()}</em>
 		  </#if>
 		 </td>
-		  <td class="operation"> <#if win.rfidState.getId()!=3><a href="javascript:disable('${win.id}');" class="stop">停用</a> </#if><a href="javascript:del('${win.id}');" class="del">删除</a></td>
+		  <td class="operation"><#if win.rfidState.getId()==0||win.rfidState.getId()==1><a href="javascript:disable('${win.id}');" class="stop">停用</a> </#if><#if win.rfidState.getId()==0><a href="javascript:del('${win.id}');" class="del">删除</a></#if></td>
         </tr>
         <tr class="tableInfo"  id="info${win.id}" pdflag="0"></tr>
         </#list>
