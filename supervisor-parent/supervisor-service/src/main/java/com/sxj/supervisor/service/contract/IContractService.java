@@ -85,21 +85,6 @@ public interface IContractService {
 			List<ReplenishBatchModel> list,
 			ReplenishContractEntity replenishContract);
 
-	/**
-	 * 更新状态
-	 * 
-	 * @param contractId
-	 * @param state
-	 */
-	public void modifyState(String contractId, RecordConfirmStateEnum state);
-
-	/**
-	 * 新增合同状态变更记录
-	 * 
-	 * @param stateLog
-	 * @param contractId
-	 */
-	public void addStateLog(StateLogModel stateLog, String contractId);
 
 	/**
 	 * 变更确认状态

@@ -221,11 +221,6 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
 							item> <#assign n = (n+item.quantity)?int > <#assign m =
 							(m+item.amount)?int >
-							<input type="hidden" id="itemUpdateState${item.id}"
-								value="${item.updateState}"
-								name="itemList[${item_index}].updateState" />
-							<input type="hidden" id="id${item.id}" value="${item.id}"
-								name="itemList[${item_index}].id" />
 							<tr id="item${item.id}">
 								<td>${item.productName}</td>
 								<td>${item.productModel}</td>
