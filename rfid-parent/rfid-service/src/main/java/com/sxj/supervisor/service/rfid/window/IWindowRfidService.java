@@ -28,6 +28,14 @@ public interface IWindowRfidService {
 	public void updateWindowRfid(WindowRfidEntity win) throws ServiceException;
 
 	/**
+	 * 删除
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void deleteWindowRfid(String id) throws ServiceException;
+
+	/**
 	 * 启用门窗RFID
 	 * 
 	 * @throws ServiceException

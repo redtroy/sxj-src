@@ -74,18 +74,15 @@ public class WindowRfidController extends BaseController {
 	@RequestMapping("delete")
 	public @ResponseBody Map<String, String> delete(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			WindowRfidEntity win = new WindowRfidEntity();
-			win.setId(id);
-			win.setRfidState(RfidStateEnum.delete);
-			windowRfidService.updateWindowRfid(win);
-			Map<String, String> map = new HashMap<String, String>();
+			windowRfidService.deleteWindowRfid(id);
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("删除门窗RFID错误", e, this.getClass());
-			throw new WebException("删除门窗RFID错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -99,18 +96,18 @@ public class WindowRfidController extends BaseController {
 	@RequestMapping("disable")
 	public @ResponseBody Map<String, String> disable(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			WindowRfidEntity win = new WindowRfidEntity();
 			win.setId(id);
 			win.setRfidState(RfidStateEnum.disable);
 			windowRfidService.updateWindowRfid(win);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("停用门窗RFID错误", e, this.getClass());
-			throw new WebException("停用门窗RFID错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -141,7 +138,7 @@ public class WindowRfidController extends BaseController {
 
 	@RequestMapping("contractBatch")
 	public String getContractBatch(ModelMap model, String contractNo,
-			String rfidNo, String id,String type) throws WebException {
+			String rfidNo, String id, String type) throws WebException {
 		try {
 			List<ContractBatchModel> conBatch = contractService
 					.getContractBatch(contractNo, rfidNo);
