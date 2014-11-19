@@ -10,16 +10,13 @@ import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
-import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractModifyModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
-import com.sxj.supervisor.model.contract.ContractReplenishModel;
 import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
-import com.sxj.supervisor.model.contract.StateLogModel;
 import com.sxj.util.exception.ServiceException;
 
 @JsonRpcService("api/service/contract.json")
@@ -85,7 +82,6 @@ public interface IContractService {
 	public void suppContract(String recordId, String contractId,
 			List<ReplenishBatchModel> list,
 			ReplenishContractEntity replenishContract);
-
 
 	/**
 	 * 变更确认状态
@@ -184,7 +180,7 @@ public interface IContractService {
 	 */
 	public void updateContractLoss(String rfidNos, String contractNo,
 			String recordNo, MemberEntity member, String newRfid)
-			throws ServiceException;
+			throws RuntimeException;
 
 	public String getReplenish(String contractNo);
 
@@ -212,7 +208,8 @@ public interface IContractService {
 	 * @param rfid
 	 * @return
 	 */
-	public ContractReplenishModel getReplenishByRfid(String rfid);
+	public List<ReplenishBatchEntity> getReplenishByNewRfid(String batchNo,
+			String newRfid);
 
 	/**
 	 * 根据RFID获取批次

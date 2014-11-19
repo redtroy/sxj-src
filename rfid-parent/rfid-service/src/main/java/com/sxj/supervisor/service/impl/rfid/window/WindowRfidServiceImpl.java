@@ -168,12 +168,12 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 		try {
 			String[] arr = new String[2];
 			Long nowMax = windowRfidDao.getMaxRfidNo(contractNo);
-			String minNo = CustomDecimal.getDecimalString(4, new BigDecimal(
+			String maxNo = CustomDecimal.getDecimalString(4, new BigDecimal(
 					nowMax));
-			String maxMo = CustomDecimal.getDecimalString(4, new BigDecimal(
-					nowMax + (count - 1)));
-			arr[0] = minNo;
-			arr[1] = maxMo;
+			String minMo = CustomDecimal.getDecimalString(4, new BigDecimal(
+					nowMax - (count - 1)));
+			arr[0] = minMo;
+			arr[1] = maxNo;
 			return arr;
 		} catch (Exception e) {
 			SxjLogger.error("计算RFID号区间错误", e, this.getClass());
