@@ -396,17 +396,15 @@ function loadUpload(id,url,isMulti,text,fn){
 </script>
 </#macro> 
 <#macro header>
-<div class="fence" id="header">
-	<h1 class="fence-wide ly-clearFix">
-		<a class="logo" href="${staticPath}html/register.html"><img
-			title="私享家绿色门窗平台" alt="私享家绿色门窗平台" src="${staticPath}images/logo.jpg"></a>
-		<#if Session.userinfo?exists>
-		<div class=" topBan pr">
-			<span class="pa logOut"><a href="${basePath}logout.htm">注销帐户并退出</a></span>
-		</div>
-		</#if>
-	</h1>
+<div id="header">
+<div class="fence-wide">
+<#if Session.userinfo?exists>
+<div class="logOut ly-right"><a href="${basePath}logout.htm">退出当前帐户</a></div>
+</#if>
 </div>
+<h1 class="fence-wide"><a href="${staticPath}html/register.html" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
+</div>
+
 <#if Session.userinfo?exists>
 <script>
 $(document).ready(function(){
@@ -423,7 +421,7 @@ $(document).ready(function(){
 </div>
 </#macro>
 <#macro leftMenu isLoad>
-<div class="yard-190 ly-left leftMenu" id="leftList">
+<div class="yard-190 ly-left" id="leftList">
 	<script>
 	var isLoad="${isLoad}";
 	var account="${Session.userinfo.account.accountNo}";
