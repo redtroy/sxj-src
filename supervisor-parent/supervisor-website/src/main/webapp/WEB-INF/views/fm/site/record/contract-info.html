@@ -45,10 +45,24 @@ $(document).ready(function(){
 				return false; }
 		});
 	});
-	
+	$("#tabsholder").tytabs({
+		prefixtabs:"tabz",
+		prefixcontent:"content",
+		classcontent:"tabscontent",
+		tabinit:"1",
+		catchget:"tab2",
+		fadespeed:"normal"
+		});
 });
 </script>
-	<div class="contInfo tl">
+	<div id="tabsholder" class="tabmenuBar contInfo tl">
+	 <ul class="tabMenu tabs">
+              <li id="tabz1">合同信息</li>
+              <#if contractModel.modifyList?exists> <li id="tabz2">变更合同信息</li></#if>
+              <#if contractModel.replenishList?exists><li id="tabz3">补损合同信息</li></#if>
+     </ul>
+     <div class="contents">
+     <div  id="content1" class="tabscontent">
 		<div class="info ly-clearFix">
 			<div class="item">
 				<label>合同号</label> ${contractModel.contract.contractNo}
@@ -204,8 +218,10 @@ $(document).ready(function(){
 				height="107" /> </#if> <span class="item"> <label>关联招标合同号</label>
 				${contractModel.contract.refContractNo}
 			</span>
+			</div>
+			</div>
+			<div id="content2" class="tabscontent">
 			 <#if contractModel.modifyList?exists>
-			<h2 class="titChange f14 fb">变更合同信息</h2>
 			<#list contractModel.modifyList as modifyList>
 			<div class="item">
 				<label>合同变更备案号 </label>${modifyList.modifyContract.recordNo}
@@ -304,9 +320,10 @@ $(document).ready(function(){
 					</#list>
 				</table>
 				</div></#if>
+			</#list> </#if> 
 			</div>
-			</#list> </#if> <#if contractModel.replenishList?exists>
-			<h2 class="titChange f14 fb">补损合同信息</h2>
+			 <div id="content3" class="tabscontent">
+			<#if contractModel.replenishList?exists>
 			<#list contractModel.replenishList as replenishList>
 			<div class="item">
 				<label>合同补损备案号</label> ${replenishList.replenishContract.recordNo}
@@ -372,6 +389,8 @@ $(document).ready(function(){
 				</table>
 			</div>
 			</#list> </#if>
+			</div>
+			</div>
 			<div class="item mt10">
 				<label>&nbsp;</label>
 				<button class="button button-gray"
