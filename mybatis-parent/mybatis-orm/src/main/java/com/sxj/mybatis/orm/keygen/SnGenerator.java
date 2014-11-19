@@ -69,11 +69,11 @@ public class SnGenerator implements KeyGenerator
             {
                 process(statement, parameter, dialect);
             }
-            connection.commit();
+            //connection.commit();
         }
         catch (SQLException e)
         {
-            connection.rollback();
+            throw e;
         }
         finally
         {

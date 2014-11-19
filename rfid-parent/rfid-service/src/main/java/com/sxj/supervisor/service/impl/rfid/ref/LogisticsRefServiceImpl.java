@@ -19,7 +19,6 @@ import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
-@Transactional
 public class LogisticsRefServiceImpl implements ILogisticsRefService
 {
     
@@ -109,6 +108,7 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService
     {
         try
         {
+            System.out.println(Thread.currentThread());
             if (model != null)
             {
                 model.setDateNo("GL" + DateTimeUtils.getTime("yyMM"));
@@ -120,7 +120,7 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService
         }
         catch (Exception e)
         {
-            SxjLogger.error(e.getMessage(), e, this.getClass());
+            SxjLogger.error(e.getMessage(), e, LogisticsRefServiceImpl.class);
             throw new ServiceException();
         }
     }
