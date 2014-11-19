@@ -1,5 +1,5 @@
-<#assign staticPath="http://61.132.53.150:81/sxj/supervisor-website/" />
-<#assign imagePath="http://61.132.53.150:8082/file-web/" />
+﻿<#assign staticPath="http://static.menchuang.org.cn/supervisor-website/" />
+<#assign imagePath="http://storage.menchuang.org.cn/" />
 <#macro validate>
 <!--<script src="${staticPath}js/jquery.validate.js"></script>-->
 <script src="${staticPath}js/Validform_v5.3.2.js"></script>
@@ -380,7 +380,7 @@ function loadUpload(id,url,isMulti,text,fn){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
-	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        fileTypeExts: '*.jpg',
 	        auto: true,
 	        multi: false,
 	        simUploadLimit:1,
@@ -403,18 +403,11 @@ function loadUpload(id,url,isMulti,text,fn){
 </#if>
 </div>
 <h1 class="fence-wide"><a href="javascript:void(0);" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
+<h1 class="fence-wide"><a href="${staticPath}html/register.html" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
 </div>
 <!--<div class="fence" id="header">
-	<h1 class="fence-wide ly-clearFix">
-		<a class="logo" href="${staticPath}html/register.html"><img
-			title="私享家绿色门窗平台" alt="私享家绿色门窗平台" src="${staticPath}images/logo.jpg"></a>
-		<#if Session.userinfo?exists>
-		<div class=" topBan pr">
-			<span class="pa logOut"><a href="${basePath}logout.htm">注销帐户并退出</a></span>
-		</div>
-		</#if>
-	</h1>
-</div>-->
+</div>
+
 <#if Session.userinfo?exists>
 <script>
 $(document).ready(function(){
@@ -431,7 +424,7 @@ $(document).ready(function(){
 </div>
 </#macro>
 <#macro leftMenu isLoad>
-<div class="yard-190 ly-left leftMenu" id="leftList">
+<div class="yard-190 ly-left" id="leftList">
 	<script>
 	var isLoad="${isLoad}";
 	var account="${Session.userinfo.account.accountNo}";

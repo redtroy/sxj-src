@@ -1,5 +1,5 @@
-<#assign staticPath="http://61.132.53.150:81/sxj/supervisor-manager/" />
-<#assign imagePath="http://61.132.53.150:8082/file-web/" />
+<#assign staticPath="http://static.menchuang.org.cn/supervisor-manager/" />
+<#assign imagePath="http://storage.menchuang.org.cn/" />
 <#macro errorInfo>
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
@@ -431,7 +431,7 @@ function loadUpload(id,url,multi,text,fn){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
-	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        fileTypeExts: '*.jpg',
 	        auto: true,
 	        multi: false,
 	        height:30,
@@ -446,7 +446,7 @@ function classLoadUpload(text){
 	  $(":file").uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: "${basePath}upload.htm",
-	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        fileTypeExts: '*.jpg',
 	        auto: true,
 	        multi: false,
 	        height:30,

@@ -85,7 +85,7 @@ var uploadImg = function($file) {
 	$file.uploadify({
 		swf : '${basePath}upload/uploadify.swf',
 		uploader : "${basePath}upload.htm",
-		fileTypeExts : '*.gif; *.jpg; *.png',
+		 fileTypeExts: '*.jpg',
 		auto : true,
 		multi : true,
 		height : 30,
@@ -329,13 +329,11 @@ $(document).ready(function() {
 
 <body>
 	<div id="header" class="fence"><@b.header /></div>
-	<div class="mainBg">
-		<div class="fence-wide ly-clearFix">
-			<div class="main pb20">
-				<div class="yard-190 ly-left leftMenu"><@b.leftMenu /></div>
+	<div class="fence-wide ly-clearFix">
+			<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
 				<div class="yard-870 rightSide ly-left">
 					<div class="heading mb15 ly-clearFix">
-						<h1 class="ly-left">
+						<h1>
 							<span class="title fontYH f20 fb">修改备案信息</span>
 						</h1>
 					</div>
@@ -545,8 +543,6 @@ $(document).ready(function() {
 				</div>
 			</div>
 		</div>
-	</div>
-	</div>
 	<@b.footer />
 	<div class="viewer modal-wrap">
 	<div class="modal-header">
