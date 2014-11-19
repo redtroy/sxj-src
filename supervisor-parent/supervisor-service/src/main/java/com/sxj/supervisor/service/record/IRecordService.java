@@ -71,7 +71,7 @@ public interface IRecordService {
 	public void modifyState(String contractId, String recordId,
 			RecordConfirmStateEnum state);
 
-	public String getBatch(String recordId);
+	public List<ContractBatchEntity> getBatch(String recordId);
 
 	public String getRfid(String batchId);
 

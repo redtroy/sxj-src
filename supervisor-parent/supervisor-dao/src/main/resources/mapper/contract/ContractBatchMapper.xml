@@ -11,13 +11,14 @@
 		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
+		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="replenishState" column="REPLENISH_STATE" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
 	<select id="queryBacths" resultMap="BacthResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID, CONTRACT_ID, RFID_NO, AMOUNT, BATCH_ITEMS,BATCH_NO,UPDATE_STATE FROM M_CONTRACT_BATCH
-			WHERE 1=1 ]]>
+		<![CDATA[SELECT * FROM M_CONTRACT_BATCH WHERE 1=1 ]]>
 			<!-- 合同号 -->
 		<if test="condition.contractId != null and condition.contractId != ''">
 			<![CDATA[AND CONTRACT_ID = #{condition.contractId}]]>
@@ -25,8 +26,31 @@
 		<if test="condition.rfidNo != null and condition.rfidNo != ''">
 			<![CDATA[AND RFID_NO = #{condition.rfidNo}]]>
 		</if>
+		<if test="condition.batchNo != null and condition.batchNo != ''">
+			<![CDATA[AND BATCH_NO = #{condition.batchNo}]]>
+		</if>
 		<if test="condition.state != null and condition.state != ''">
 			<![CDATA[AND UPDATE_STATE != #{condition.state}]]>
 		</if>
+		<![CDATA[ ORDER BY BATCH_NO DESC ]]>
 	</select>
+	<!-- 根据rfid号获取批次 -->
+	<select id="getBacthsByRfid" resultMap="BacthResultMap"
+		parameterType="String">
+		<![CDATA[
+			SELECT C.ID,C.BATCH_NO,C.AMOUNT,C.BATCH_ITEMS,C.RFID_NO,1 as TYPE FROM M_CONTRACT_BATCH C WHERE C.UPDATE_STATE !=1 AND C.RFID_NO=#{condition.rfidNo} UNION ALL 
+ 			SELECT M.ID,M.BATCH_NO,M.AMOUNT,M.BATCH_ITEMS,M.RFID_NO, 2 as TYPE FROM M_CONTRACT_MODIFY_BATCH M   WHERE M.UPDATE_STATE !=1 AND M.RFID_NO=#{condition.rfidNo} UNION ALL 
+			SELECT R.ID,R.BATCH_NO,R.AMOUNT,R.BATCH_ITEMS,R.NEW_RFID_NO AS RFID_NO,3 AS TYPE FROM M_CONTRACT_REPLENISH_BATCH R WHERE R.NEW_RFID_NO=#{condition.rfidNo} 
+		]]>
+	</select>
+	<!-- 根据合同号获取批次 -->
+	<select id="getBacthsByContractNo" resultMap="BacthResultMap"
+		parameterType="String">
+		<![CDATA[
+			SELECT  C.BATCH_NO,C.RFID_NO FROM M_CONTRACT_BATCH C WHERE C.CONTRACT_ID=#{condition.contractNo} AND C.UPDATE_STATE!=1 UNION ALL 
+			SELECT  MB.BATCH_NO,MB.RFID_NO FROM M_CONTRACT_MODIFY_BATCH MB LEFT JOIN M_CONTRACT_MODIFY M ON MB.MODIFY_ID=M.ID WHERE M.CONTRACT_ID=#{condition.contractNo} AND MB.UPDATE_STATE!=1 UNION ALL 
+			SELECT 	RB.BATCH_NO,RB.NEW_RFID_NO AS RFID_NO FROM M_CONTRACT_REPLENISH_BATCH RB LEFT JOIN M_CONTRACT_REPLENISH R ON RB.REPLENISH_ID=R.ID WHERE R.CONTRACT_ID=#{condition.contractNo} AND RB.NEW_RFID_NO IS NOT NULL
+		]]>
+	</select>
+	
 </mapper>

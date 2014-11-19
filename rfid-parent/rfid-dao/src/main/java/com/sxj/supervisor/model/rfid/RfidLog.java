@@ -1,24 +1,27 @@
-package com.sxj.supervisor.model.rfid.base;
+package com.sxj.supervisor.model.rfid;
 
 import java.io.Serializable;
 
-import com.sxj.mybatis.pagination.Pagable;
-/**
- * RFID 动态
- * @author Ann
- *
- */
-public class LogModel implements Serializable {
+public class RfidLog implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7798252563282819437L;
+	private static final long serialVersionUID = 8476956461963902070L;
 
-	
-	private String date;
-	
+	private Integer id;
+
 	private String state;
+
+	private String date;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getDate() {
 		return date;

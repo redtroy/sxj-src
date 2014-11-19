@@ -11,7 +11,7 @@
 		<result property="rfidType" column="RFID_TYPE" jdbcType="INTEGER" /> <!-- 枚举 -->
 		<result property="type" column="TYPE" jdbcType="INTEGER" /> <!-- 枚举 -->
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
-		<result property="applyDate" column="APPLY_DATE" jdbcType="DATE" />
+		<result property="applyDate" column="APPLY_DATE" jdbcType="TIMESTAMP" />
 		<result property="replenishRfid" column="REPLENISH_RFID" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" /> <!-- 枚举 -->
@@ -56,7 +56,7 @@
 		<!-- 申请时间段 -->
 		<if
 			test="condition.starApplyDate != null and condition.endApplyDate != null and condition.starApplyDate != '' and condition.endApplyDate != ''">
-			<![CDATA[AND APPLY_DATE >=#{condition.starApplyDate} AND APPLY_DATE <= #{condition.endApplyDate}]]>
+			<![CDATA[AND APPLY_DATE >=CONCAT(#{condition.starApplyDate}," 00:00:00" ) AND APPLY_DATE <= CONCAT(#{condition.endApplyDate}," 23:59:59")]]>
 		</if>
 		<!-- 逻辑删除 -->
 		<if test="condition.delstate != null ">

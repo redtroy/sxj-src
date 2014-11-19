@@ -1,12 +1,22 @@
 
 <td colspan="11"><div class="planBox text-left f14">
-		<#list logList as log>
+			<#list logList as log>
+		<#if (log.id==0)>
 		<div class="item">
-			<label class="time">${log.date}</label> ${log.state}&nbsp;&nbsp;
+			<label class="time">${log.date}</label>标签发货中&nbsp;&nbsp;
 		</div>
 		<#if log_has_next>
 		<div class="line"></div>
-		</#if> </#list>
+		</#if> 
+		<#elseif (log.id>1)>
+		<div class="item">
+			<label class="time">${log.date}</label>${log.state}&nbsp;&nbsp;
+		</div>
+		<#if log_has_next>
+		<div class="line"></div>
+		</#if> 
+		</#if>
+		</#list>
 		<div class="btnBox">
 			<a href="javascript:closeLog('${id}')"
 				class="button button-gray button-small">收起</a>

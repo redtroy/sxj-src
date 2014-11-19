@@ -153,7 +153,7 @@
               <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                  <#list batch.batchItems as batchItem>
                   <tr>
-                    <td>${batchItem.quantity}</td>
+                    <td>${batchItem.quantity?string('0.00')}</td>
                   </tr>
                   </#list>
                 </table></td>
@@ -276,7 +276,7 @@
                 <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                    <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
                     <tr>
-                      <td>${modifyBatchItems.quantity}</td>
+                      <td>${modifyBatchItems.quantity?string('0.00')}</td>
                     </tr>
                   </#list>
                   </table></td>
@@ -320,7 +320,6 @@
               <col width="20%" />
               <col width="10%" />
               <col width="15%" />
-              <col width="15%" />
               <col width="5%" />
               <tr>
                 <th>交货批次</th>
@@ -328,12 +327,11 @@
                 <th>数量<span>（<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>）</span></th>
                 <th>应付货款<span>（元）</span></th>
                 <th>对应批次RFID编号</th>
-                <th>新RFID编号</th>
                 <th class="rLine">&nbsp;</th>
               </tr>
               <#list replenishList.batchItems as replenishItem>
               <tr>
-                <td>第${replenishItem.replenishBatch.batchNo}批次</td>
+                <td>补第${replenishItem.replenishBatch.batchNo}批次</td>
                 <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                  <#list replenishItem.replenishBatchItems as replenishBatchItems>
                     <tr>
@@ -344,20 +342,16 @@
                 <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                      <#list replenishItem.replenishBatchItems as replenishBatchItems>
                     <tr>
-                      <td>${replenishBatchItems.quantity}</td>
+                      <td>${replenishBatchItems.quantity?string('0.00')}</td>
                     </tr>
                  </#list>
                   </table></td>
                 <td>${replenishItem.replenishBatch.amount?string('0.00')}</td>
-                <td>${replenishItem.replenishBatch.rfidNo}</td>
                 <td>${replenishItem.replenishBatch.newRfidNo}</td>
                 <td><#if replenishItem.replenishBatch.updateState==1><span class="color-red">！</span></#if></td>
               </tr>
                </#list>
             </table>
-            <div>
-              <label>RFID订单号</label>
-              ${replenishList.replenishContract.rfidOrderNo}</div>
               </#list>
                </#if>
             <div class="btnBox text-center"><a href="javascript:void(0)" class="button button-gray button-small" onclick="closeContract('${contractId}')">收起</a></div>

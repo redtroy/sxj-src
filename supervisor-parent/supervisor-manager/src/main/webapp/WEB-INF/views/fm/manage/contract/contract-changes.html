@@ -389,7 +389,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										class="tabList prodIable">
 										<#list batch.batchItems as batchItem>
 										<tr>
-											<td class="editable dynamictr" name="" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${batchItem.quantity}</td>
+											<td class="editable dynamictr" name="" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！">${batchItem.quantity}</td>
 										</tr>
 										</#list>
 									</table></td>

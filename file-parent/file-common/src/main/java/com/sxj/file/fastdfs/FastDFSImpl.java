@@ -1,4 +1,4 @@
-﻿package com.sxj.file.fastdfs;
+package com.sxj.file.fastdfs;
 
 import java.io.File;
 import java.io.IOException;

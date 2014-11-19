@@ -3,10 +3,8 @@ package com.sxj.supervisor.service.impl.rfid.open;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +36,6 @@ import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.BatchNo;
 import com.sxj.supervisor.model.open.ContractNo;
 import com.sxj.supervisor.model.open.WinTypeModel;
-import com.sxj.supervisor.model.rfid.base.LogModel;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
@@ -139,7 +136,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 							ReplenishBatchEntity rbe = batchList.get(0);
 							Bacth bacth = new Bacth();
 							BatchNo BatchNo = new BatchNo();
-							BatchNo.setBatchNo(rbe.getBatchNo());
+							//BatchNo.setBatchNo(rbe.getBatchNo());
 							bacth.setBatch(BatchNo);
 							List<BatchItemModel> batchModelList = this
 									.jsonChangeList(rbe.getBatchItems());
@@ -223,7 +220,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			} else {
 				wtm.setState("3");// 未审核
 			}
-		}else {
+		} else {
 			wtm.setState("2");// 未启用
 		}
 		return wtm;
@@ -257,28 +254,15 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		logisticsQuery.addCondition("rfidNo", rfid);
 		List<LogisticsRfidEntity> ref = logisticsDao
 				.queryLogisticsRfidList(logisticsQuery);
-		List<LogModel> logList = new ArrayList<LogModel>();
 		if (ref != null && ref.size() > 0) {
 			LogisticsRfidEntity le = ref.get(0);
-			logList = JsonMapper
-					.nonEmptyMapper()
-					.getMapper()
-					.readValue(le.getLog(),
-							new TypeReference<List<LogModel>>() {
-							});
 			if (le.getProgressState().getId() == 0) {
 				le.setProgressState(LabelStateEnum.shipped);
-				LogModel log = new LogModel();
-				log.setState(LabelStateEnum.shipped.getName());
-				log.setDate(DateFormatUtils.format(new Date(),
-						"yyyy-MM-dd HH:mm:ss"));
-				logList.add(log);
-				String josn = JsonMapper.nonEmptyMapper().toJson(logList);
-				le.setLog(josn);
 				logisticsDao.updateLogisticsRfid(le);
 				return 1;
+			}else{
+				return 2;
 			}
-
 		}
 		return 0;
 	}
@@ -294,24 +278,10 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		logisticsQuery.addCondition("rfidNo", rfid);
 		List<LogisticsRfidEntity> ref = logisticsDao
 				.queryLogisticsRfidList(logisticsQuery);
-		List<LogModel> logList = new ArrayList<LogModel>();
 		if (ref != null && ref.size() > 0) {
 			LogisticsRfidEntity le = ref.get(0);
-			logList = JsonMapper
-					.nonEmptyMapper()
-					.getMapper()
-					.readValue(le.getLog(),
-							new TypeReference<List<LogModel>>() {
-							});
 			if (le.getProgressState().getId() == 3) {
 				le.setProgressState(LabelStateEnum.hasQuality);
-				LogModel log = new LogModel();
-				log.setState(LabelStateEnum.hasQuality.getName());
-				log.setDate(DateFormatUtils.format(new Date(),
-						"yyyy-MM-dd HH:mm:ss"));
-				logList.add(log);
-				String josn = JsonMapper.nonEmptyMapper().toJson(logList);
-				le.setLog(josn);
 				logisticsDao.updateLogisticsRfid(le);
 				return 1;
 			}

@@ -7,6 +7,7 @@
 		type="com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
+		<result property="applyNo" column="APPLY_NO" jdbcType="VARCHAR" />
 		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
 		<result property="generateKey" column="GENERATE_KEY" jdbcType="INTEGER" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
@@ -24,32 +25,104 @@
 	<!-- 按条件查询门窗 -->
 	<select id="queryLogisticsRfidList" resultMap="logisticsResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM R_LOGISTICS_RFID WHERE RFID_STATE<>4 ]]>
+		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr  WHERE rlr.RFID_STATE<>4 ]]>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">
-			<![CDATA[AND RFID_NO = #{condition.rfidNo}]]>
+			<![CDATA[AND rlr.RFID_NO LIKE CONCAT('%',#{condition.rfidNo},'%') ]]>
+		</if>
+		<if test="condition.applyNo != null and condition.applyNo !=''">
+			<![CDATA[AND APPLY_NO = #{condition.applyNo}]]>
 		</if>
 		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
-			<![CDATA[AND PURCHASE_NO = #{condition.purchaseNo}]]>
+			<![CDATA[AND rlr.PURCHASE_NO LIKE CONCAT('%',#{condition.purchaseNo},'%') ]]>
 		</if>
 		<if test="condition.contractNo != null and condition.contractNo !=''">
-			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
+			<![CDATA[AND rlr.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
 		</if>
 		<if test="condition.memberNo != null and condition.memberNo !=''">
-			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
+			<![CDATA[AND rlr.MEMBER_NO = #{condition.memberNo}]]>
 		</if>
 		<if test="condition.type != null and condition.type !=''">
-			<![CDATA[AND TYPE = #{condition.type}]]>
+			<![CDATA[AND rlr.TYPE = #{condition.type}]]>
 		</if>
 		<if test="condition.progressState != null and condition.progressState !=''">
-			<![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
+			<![CDATA[AND rlr.PROGRESS_STATE = #{condition.progressState}]]>
 		</if>
 		<if test="condition.rfidState != null and condition.rfidState !=''">
-			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>
+			<![CDATA[AND rlr.RFID_STATE = #{condition.rfidState}]]>
 		</if>
 		<if
 			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">
-			<![CDATA[AND IMPORT_DATE >=#{condition.startImportDate} AND IMPORT_DATE <= #{condition.endImportDate}]]>
+			<![CDATA[AND rlr.IMPORT_DATE >=CONCAT(#{condition.startImportDate}," 00:00:00" ) AND rlr.IMPORT_DATE <= CONCAT(#{condition.endImportDate}," 23:59:59" )]]>
 		</if>
-		<![CDATA[ ORDER BY IMPORT_DATE DESC]]>
+		<![CDATA[ ORDER BY rlr.RFID_NO DESC]]>
+	</select>
+	<select id="queryLogisticsRfidList_A" resultMap="logisticsResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr,M_CONTRACT c WHERE rlr.RFID_STATE<>4 AND rlr.CONTRACT_NO=c.CONTRACT_NO AND rlr.PROGRESS_STATE>=2]]>
+		<if test="condition.rfidNo != null and condition.rfidNo !=''">
+			<![CDATA[AND rlr.RFID_NO LIKE CONCAT('%',#{condition.rfidNo},'%') ]]>
+		</if>
+		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
+			<![CDATA[AND rlr.PURCHASE_NO LIKE CONCAT('%',#{condition.purchaseNo},'%') ]]>
+		</if>
+		<if test="condition.applyNo != null and condition.applyNo !=''">
+			<![CDATA[AND APPLY_NO = #{condition.applyNo}]]>
+		</if>
+		<if test="condition.contractNo != null and condition.contractNo !=''">
+			<![CDATA[AND rlr.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
+		</if>
+		<if test="condition.memberNo != null and condition.memberNo !=''">
+			<![CDATA[AND (c.MEMBER_ID_A = #{condition.memberNo} or c.MEMBER_ID_B = #{condition.memberNo})]]>
+		</if>
+		<if test="condition.type != null and condition.type !=''">
+			<![CDATA[AND rlr.TYPE = #{condition.type}]]>
+		</if>
+		<if test="condition.progressState != null and condition.progressState !=''">
+			<![CDATA[AND rlr.PROGRESS_STATE = #{condition.progressState}]]>
+		</if>
+		<if test="condition.rfidState != null and condition.rfidState !=''">
+			<![CDATA[AND rlr.RFID_STATE = #{condition.rfidState}]]>
+		</if>
+		<if
+			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">
+			<![CDATA[AND rlr.IMPORT_DATE >=#{condition.startImportDate} AND rlr.IMPORT_DATE <= #{condition.endImportDate}]]>
+		</if>
+		<![CDATA[ ORDER BY rlr.RFID_NO DESC]]>
+	</select>
+	<select id="queryLogisticsRfidList_B" resultMap="logisticsResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr WHERE rlr.RFID_STATE<>4]]>
+		<if test="condition.rfidNo != null and condition.rfidNo !=''">
+			<![CDATA[AND rlr.RFID_NO LIKE CONCAT('%',#{condition.rfidNo},'%') ]]>
+		</if>
+		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
+			<![CDATA[AND rlr.PURCHASE_NO LIKE CONCAT('%',#{condition.purchaseNo},'%') ]]>
+		</if>
+		<if test="condition.applyNo != null and condition.applyNo !=''">
+			<![CDATA[AND APPLY_NO = #{condition.applyNo}]]>
+		</if>
+		<if test="condition.contractNo != null and condition.contractNo !=''">
+			<![CDATA[AND rlr.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%') ]]>
+		</if>
+		<if test="condition.memberNo != null and condition.memberNo !=''">
+			<![CDATA[AND rlr.MEMBER_NO = #{condition.memberNo} ]]>
+		</if>
+		<if test="condition.type != null and condition.type !=''">
+			<![CDATA[AND rlr.TYPE = #{condition.type}]]>
+		</if>
+		<if test="condition.progressState != null and condition.progressState !='' and condition.progressState &lt;=1">
+			<![CDATA[AND rlr.PROGRESS_STATE <=1]]>
+		</if>
+		<if test="condition.progressState != null and condition.progressState !='' and condition.progressState &gt;1">
+			<![CDATA[AND rlr.PROGRESS_STATE = #{condition.progressState}]]>
+		</if>
+		<if test="condition.rfidState != null and condition.rfidState !=''">
+			<![CDATA[AND rlr.RFID_STATE = #{condition.rfidState}]]>
+		</if>
+		<if
+			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">
+			<![CDATA[AND rlr.IMPORT_DATE >=#{condition.startImportDate} AND rlr.IMPORT_DATE <= #{condition.endImportDate}]]>
+		</if>
+		<![CDATA[ ORDER BY rlr.RFID_NO DESC]]>
 	</select>
 </mapper>

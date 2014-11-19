@@ -7,60 +7,13 @@
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
-<@b.pageScript/>
-<@b.errorInfo/>
-<script>
-jQuery(document).ready(function($) {
-	$('.btnPassword').click(function(){
-		$('.maskdivgen').fadeIn(100);
-		$('.passwordPop').slideDown(200);
-	})
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.passwordPop').slideUp(200);
-	})
-	$('.button-pop').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.passwordPop').slideUp(200);
-	})
-	})
-	
-function del(id,applyNo){
-	 $("#remove_div").show();
-	 
-	  $("#remove_div button:eq(0)").unbind("click");
-	  $("#remove_div button:eq(0)").attr("value",id).attr("stateId",applyNo).click(function(){
-	  $.post("del_apply.htm",{id:$(this).attr("value"),applyNo:$(this).attr("stateId")},function(data){
-		if (data.flag=='ok'){
-			$("#remove_div").hide();
-			query();
-		}else{
-			$("#remove_div").hide();
-			messageInfo("后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！");
-		}
-	})
-	  })
-	 
-}
-function closeDiv(divId){
-	$("#"+divId).css("display","none");
-}
-</script>
-
-<Script>
-$(window).resize(); 
-jQuery(document).ready(function($) {
-	  $('#remove_div').css({
-		  position:'absolute',
-		  left: ($(window).width() - $('#remove_div').outerWidth())/2,
-		  top: ($(window).height() - $('#remove_div').outerHeight())/2 + $(document).scrollTop()
-		  });
-	})
-</Script>
 <link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.pageScript/>
+<@b.errorInfo/>
+<@b.dialogBox/>
 <script>
  function query(page){
 		var params=$("#search_form").serialize();
@@ -75,11 +28,25 @@ jQuery(document).ready(function($) {
 			var totalPage=pager.attr("totalPage");
 			var currentPage=pager.attr("currentPage");
 			loadPage(currentPage,totalPage,query);
-		})
+		});
  }
+ function del(id){
+		dialogBox(function(){
+			  $.get("del_apply.htm?id="+id,function(data){
+					if (data.flag=='ok'){
+						succInfo(function(){
+							query($("#pager").attr("currentPage"));
+						},"删除成功！");
+					}else{
+						messageInfo(data.error);
+						 var page=$("#pager").attr("currentPage");
+						 query(page);
+					}
+				});
+		},"是否确认删除？");
+	}
 </script>
 </head>
-
 <body>
 <@b.header />
 <div class="fence-wide ly-clearFix">
@@ -92,21 +59,29 @@ jQuery(document).ready(function($) {
 </div>
 <div class="contBox f12">
 <div class="searBox mb10">
-<form action="javascript:void(0)" id="search_form">
-标签申请单号<input type="text" name="applyNo" value="" class="input">
+<form action="javascript:void(0);" id="search_form">
+标签申请单号<input type="text" name="applyNo" value="${query.applyNo}" class="input">
          付款状态<select name="payState">
          <option selected="selected" value="">全部</option>
             <#list m_pay_states as m_pay_state>
-            <option value="${m_pay_state.id}">${m_pay_state.getName()}</option>
+            <#if m_pay_state.getId()==query.payState>
+            <option value="${m_pay_state.id}" selected="selected">${m_pay_state.getName()}</option>
+            <#else>
+             <option value="${m_pay_state.id}">${m_pay_state.getName()}</option>
+            </#if>
             </#list>
             </select>
             收货状态<select name="receiptState">
             <option selected="selected" value="">全部</option>
             <#list receipt_states as receipt_state>
+             <#if receipt_state.getId()==query.receiptState>
             <option value="${receipt_state.id}">${receipt_state.getName()}</option>
+             <#else>
+             <option value="${receipt_state.id}">${receipt_state.getName()}</option>
+            </#if>
             </#list>
             </select>
-            申请时间段<input type="text" class="input input-time cal form-control" name="starApplyDate" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="endApplyDate" value="" datepicker><button class="button button-search" onclick="query();return false;">查询</button>
+            申请时间段<input type="text" class="input input-time cal form-control" name="starApplyDate" value="${query.starApplyDate}" datepicker />-<input type="text" class="input input-time cal form-control" name="endApplyDate" value="${query.endApplyDate}" datepicker><button class="button button-search" onclick="query();return false;" />查询</button>
 </form>
 </div>
  <@b.pager/>
@@ -132,7 +107,7 @@ jQuery(document).ready(function($) {
       <td>${model.applyNo}</td>
       <td>${model.rfidType.getName()}</td>
       <td>${model.count}</td>
-      <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+      <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
       <#if (model.payState.id==1)>
       <td><span class="state frozen">未付款</span></td>
       <#else>
@@ -143,7 +118,7 @@ jQuery(document).ready(function($) {
       <#else>
       <td><span class="state verified">已收货</span></td>
       </#if>
-	  <td><a href="" class="lnk-blue" title="后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！" onclick="del('${model.id}','${model.applyNo}');return false;"><span class="icon icon16 icon-del"></span>删除</a></td>
+	  <td><a href="" class="lnk-blue"  onclick="del('${model.id}');return false;"><span class="icon icon16 icon-del"></span>删除</a></td>
     </tr>
     </#list>
   </table>
@@ -151,6 +126,7 @@ jQuery(document).ready(function($) {
 </div>
 </div>
 </div>
+<<<<<<< HEAD
   <div id="remove_div" style="display:none;" class="modal-wrap popDemo popWin mb20">
           <div class="modal-header">
             <div class="tit">&nbsp;</div>
@@ -162,6 +138,9 @@ jQuery(document).ready(function($) {
               <button class="button button-gray" onclick="closeDiv('remove_div');">取消</button>
             </div>
           <@b.footer />
+=======
+<@b.footer />
+>>>>>>> 71e95cf8a190237e62eb56620f6852c3826771aa
 <div class="maskdivgen" style="display:none"></div>
 </body>
 </html>

@@ -6,28 +6,57 @@
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <@b.pageScript/>
+<@b.dialogBox/>
+<@b.errorInfo/>
 <script>
+  $(function(){
+	  JS.Engine.start('${basePath}comet');
+		JS.Engine.on({
+			start : function(cId, channelList, engine){  
+		      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+		    }, 
+		 "${channelName}" : function(data){//侦听一个channel
+			 $("#message_div").empty();
+		  if (data>0){
+			var bb='<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>'+data+'</strong>条新的物流RFID关联申请！</div>';
+			$("#message_div").html(bb);
+		  }
+         },   
+ 	}); 
+  })
   function open_1(id,rfidNo,contractNo,batchNo){
-	// var obj=$("#edit_1_"+id);
-    // alert(obj.children().eq(0).html())
-	//  obj.show();
-	  
+	   var temp= $("#edit_1_"+id).is(":hidden");//是否隐藏 
+	   if (temp){
 	  $.post("query_contract.htm",{id:id,rfidNo:rfidNo,contractNo:contractNo,batchNo:batchNo},function(data){
 		  var obj=$("#edit_1_"+id);
 		  obj.children().eq(0).html(data);
 		  obj.show();
 	  })
+	   }else{
+		   var obj=$("#edit_1_"+id);
+		   obj.hide();
+	   } 
 	 
   }
   function swallowing(obj){
 	  $("#"+obj).hide();
   }
   function open_2(obj){
-	  $("#"+obj).show();
+	  var temp= $("#"+obj).is(":hidden");//是否隐藏 
+	  if (temp){
+		  $("#"+obj).show();
+	  }else{
+		  $("#"+obj).hide();
+	  }
+	  
   }
   function save_1(model_id,id){
 	var pare=$("#sub_form_"+id).serialize();
@@ -41,24 +70,29 @@
   function edit_2(id){
 	  var obj=$("#edit_2_"+id);
 	  var replenishRfid=$(obj).find("#replenishRfid").val();
-	  $.post("edit_2.htm",{id:id,replenishRfid:replenishRfid},function(data){
-		  if (data.isOk=="ok"){
-			  alert("修改成功!");
-			  query();
-		  }
-	  })
+	  dialogBox(function(){
+		  $.post("edit_2.htm",{id:id,replenishRfid:replenishRfid},function(data){
+			  if (data.isOk=="ok"){
+				  succInfo(function(){
+					  query($("#pager").attr("currentPage"));
+				  },"修改成功！")
+			  }
+		  });
+	  },"是否确认修改？");
+	 
   }
   //审核
   function review(id,obj){
+	  dialogBox(function(){
 	  $.post("review.htm",{id:id,state:1},function(data){
 		  if (data.isOk=="ok"){
-			  alert('修改成功！');
-			  $(obj).parent().html('<em class="state verified">已审核</em>');
-			  
+			  succInfo(function(){
+				  query($("#pager").attr("currentPage"));
+			  },"审核成功")
 		  }
 	  })
+  },"请确认是否更改审核状态！");
   }
-
   function query(page){
  	 	var params=$("#search_form").serialize();
 		if(page!=undefined){
@@ -73,25 +107,33 @@
 			loadPage(currentPage,totalPage,query);
 		})
  }
+function removeMessge(){
+	  $.post("lable_list.htm",{removeMessge:"true"},function(data){
+			var tableList=$(data).find("#tabList").html();
+			$("#rightBar").find("#tabList").html(tableList);
+			var pager=$(data).find("#rightBar").children("#pager");
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		})
+		$("#message_div").html("");
+	}
+ 
   //根据ID 删除
- function del(){
-	 var id=$("#remove_div").attr("accountId");
-	 $.post("del.htm",{id:id},function(data){
-		 if (data.isOk=="ok"){
-			 alert('删除成功！');
-			 closeDiv('remove_div');
-			 query();
-		 }
-	 }) 
+ function del(id){
+	 dialogBox(function(){
+		 $.post("del.htm",{id:id},function(data){
+			 if (data.isOk=="ok"){
+				 succInfo(function(){
+					 query($("#pager").attr("currentPage"));
+				 },"删除成功！")
+			 }else{
+				 errorInfo(data.error);
+			 }
+		 });
+	 },"是否确认删除？");
+	
   }
-function toRemove(id){
-		$('#remove_div').css("display","");
-		$('#remove_div').slideDown(300);
-		$("#remove_div").attr("accountId",id)
-	}
-function closeDiv(divId){
-		$("#"+divId).css("display","none");
-	}
 </script>
 </head>
 <body>
@@ -112,11 +154,11 @@ function closeDiv(divId){
       <div id="searchBox">
       <form action="javascript:void(0)" id="search_form">
       <p>RFID关联申请号
-        <input type="text" name="rfidRefNo" value="">
-	  RFID编号<input type="text" name="rfidNo" value="">
-       申请人名称<input type="text" name="memberName" value="">
-       采购合同号<input type="text" name="contractNo" value="">
-	   被补损RFID编号<input type="text" name="replenishRfid" value=""></p>
+        <input type="text" name="rfidRefNo" value=""/>
+	  RFID编号<input type="text" name="rfidNo" value=""/>
+       申请人名称<input type="text" name="memberName" value=""/>
+       采购合同号<input type="text" name="contractNo" value=""/>
+	   被补损RFID编号<input type="text" name="replenishRfid" value=""/></p>
        RFID类型
        <select name="rfidType">
          <option selected="selected" value="">全部</option>
@@ -139,11 +181,11 @@ function closeDiv(divId){
          </#list>
         </select>
        关联申请时间段
-       <input type="text" name="starApplyDate" value="">-<input type="text" name="endApplyDate" value="">
+       <input type="text" name="starApplyDate" datepicker value=""/>-<input type="text"  datepicker name="endApplyDate" value=""/>
         <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
          </form >
     </div>
-	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的物流RFID关联申请！</div>
+	<div id="message_div" onclick="removeMessge();"></div>
       <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="tabList">
         <col width="10%"/>
@@ -181,18 +223,21 @@ function closeDiv(divId){
 		  <td>${model.type.getName()}</td>
 		  <td>${model.contractNo}</td>
           <td>${model.batchNo}</td>
-		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>-</td>
 		  <#if (model.state.id==0)>
 		  <td><a class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
-		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del" title="删除后该条关联申请单被删除，并且对应的RFID的批次信息清空，状态置为未使用">删除</a></td>
+		  <#if (model.state.id==0)>
+		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
+          <#else>
+           <td class="operation">-</td>
+          </#if>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_1_${model.id}">
           <td colspan="11">
-          1234
 		  </td>
 	    </tr> 
 	    <#elseif (model.type.id==1)>
@@ -204,14 +249,18 @@ function closeDiv(divId){
 		  <td>${model.type.getName()}</td>
 		  <td>${model.contractNo}</td>
           <td>${model.batchNo}</td>
-		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>${model.replenishRfid}</td>
-		    <#if (model.state.id==0)>
+		   <#if (model.state.id==0)>
 		  <td><a class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
-		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del">删除</a></td>
+		   <#if (model.state.id==0)>
+		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
+           <#else>
+           <td class="operation">-</td>
+          </#if>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_2_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
@@ -220,10 +269,10 @@ function closeDiv(divId){
                 ${model.rfidNo}</li>
 			  <li>
                 <label>被补损RFID编号</label>
-                <input type="text" id="replenishRfid" value="${model.replenishRfid}">
+                <!-- <input type="text" id="replenishRfid" value="${model.replenishRfid}"/> -->${model.replenishRfid}
 			  </li>
 			  </ul>
-			  <div class="btnBox text-center"><a href="" class="button button-orange button-small" onclick="edit_2('${model.id}');return false;">修改</a><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
+			  <div class="btnBox text-center"><!--  <a href="" class="button button-orange button-small" onclick="edit_2('${model.id}');return false;">修改</a>--><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
 			  </div>
 	     </td> 
         </tr>
@@ -236,14 +285,18 @@ function closeDiv(divId){
 		  <td>${model.type.getName()}</td>
 		  <td>${model.contractNo}</td>
           <td>${model.batchNo}</td>
-		  <td><#if (model.applyDate??)> ${model.applyDate?date} </#if></td>
+		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>${model.replenishRfid}</td>
 		    <#if (model.state.id==0)>
 		  <td><a class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
-		  <td class="operation"><a href="" onclick="toRemove('${model.id}');return false;" class="del">删除</a></td>
+		  <#if (model.state.id==0)>
+		  <td class="operation"><a href="" onclick="del('${model.id}');return false;" class="del">删除</a></td>
+          <#else>
+           <td class="operation">-</td>
+          </#if>
         </tr>
 		<tr class="tableInfo" style="display:none;" id="edit_2_${model.id}">
         <td colspan="11"><div class="infoBox text-left">
@@ -252,10 +305,10 @@ function closeDiv(divId){
                 ${model.rfidNo}</li>
 			  <li>
                 <label>被补损RFID编号</label>
-                <input type="text" id="replenishRfid" value="${model.replenishRfid}">
+                <!--  <input type="text" id="replenishRfid" value="${model.replenishRfid}"/>-->${model.replenishRfid}
 			  </li>
 			  </ul>
-			  <div class="btnBox text-center"><a href=""  class="button button-orange button-small"  onclick="edit_2('${model.id}');return false;">修改</a><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
+			  <div class="btnBox text-center"><!-- <a href=""  class="button button-orange button-small"  onclick="edit_2('${model.id}');return false;">修改</a> --><a href="" onclick="swallowing('edit_2_${model.id}');return false;" class="button button-gray button-small">收起</a></div>
 			  </div>
 	     </td> 
         </tr>
@@ -264,15 +317,6 @@ function closeDiv(divId){
       </table>
     <!-- InstanceEndEditable --></div>
 </div>
-<div id="remove_div" style="display:none;" class="modal-wrap popDemo" accountId="">
-        <div class="modal-header">
-          <span class="close" onclick="closeDiv('remove_div');">关闭</span></div>
-        <div class="modal-body popbtnBox">
-          <button class="popBtn" onclick="del();">确认删除</button><button class="popBtn btnGray" onclick="closeDiv('remove_div');">取消</button>
-        </div>
-</div>
-<div id="footer" class="fence-wide">
-  <@b.footer /> 
-</div>
+<@b.footer /> 
 </body>
 <!-- InstanceEnd --></html>

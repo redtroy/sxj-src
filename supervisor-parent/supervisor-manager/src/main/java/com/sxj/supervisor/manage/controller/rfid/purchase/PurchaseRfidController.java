@@ -109,10 +109,7 @@ public class PurchaseRfidController extends BaseController {
 	public @ResponseBody Map<String, String> confirmPay(String id,
 			ModelMap model) throws WebException {
 		try {
-			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
-			purchase.setId(id);
-			purchase.setPayState(PayStateEnum.paid);
-			purchaseRfidService.updatePurchase(purchase);
+			purchaseRfidService.updatePayState(id, PayStateEnum.paid);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;
@@ -155,18 +152,16 @@ public class PurchaseRfidController extends BaseController {
 	@RequestMapping("confirmDelivery")
 	public @ResponseBody Map<String, String> confirmDelivery(String id,
 			ModelMap model) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
-			purchase.setId(id);
-			purchase.setReceiptState(DeliveryStateEnum.shipped);
-			purchaseRfidService.updatePurchase(purchase);
-			Map<String, String> map = new HashMap<String, String>();
+			purchaseRfidService.confirmDelivery(id);
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认发货错误", e, this.getClass());
-			throw new WebException("确认发货错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -288,18 +283,37 @@ public class PurchaseRfidController extends BaseController {
 		return map;
 	}
 
+	@RequestMapping("getMaxCount")
+	public @ResponseBody Map<String, Object> getMaxCount(String applyNo,
+			Long oldCount) throws WebException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			RfidApplicationEntity apply = appService.getApplication(applyNo);
+			if (apply == null) {
+				throw new WebException("对应的申请单不存在");
+			}
+			long max = apply.getCount() - (apply.getHasNumber() - oldCount);
+			map.put("maxCount", max);
+		} catch (Exception e) {
+			SxjLogger.error("获取价格错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
+	}
+
 	@RequestMapping("importRfid")
 	public @ResponseBody Map<String, String> importRfid(String purchaseId,
 			ModelMap model) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			purchaseRfidService.importRfid(purchaseId);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
+
 		} catch (Exception e) {
 			SxjLogger.error("导入RFID错误", e, this.getClass());
-			throw new WebException("导入RFID错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 }

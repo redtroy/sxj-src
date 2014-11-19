@@ -68,6 +68,14 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "UPDATE_STATE")
 	private Integer updateState;
+	
+	/**
+	 * 补损状态
+	 */
+	@Column(name = "REPLENISH_STATE")
+	private Integer replenishState;
+	
+	private Integer type;
 
 	public Integer getUpdateState() {
 		return updateState;
@@ -123,6 +131,22 @@ public class ContractBatchEntity extends Pagable implements Serializable {
 
 	public void setBatchItems(String batchItems) {
 		this.batchItems = batchItems;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Integer getReplenishState() {
+		return replenishState;
+	}
+
+	public void setReplenishState(Integer replenishState) {
+		this.replenishState = replenishState;
 	}
 
 }

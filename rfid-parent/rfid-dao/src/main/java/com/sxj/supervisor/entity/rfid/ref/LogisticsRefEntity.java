@@ -42,8 +42,10 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 	 * RFID关联申请号
 	 */
 	@Column(name = "RFID_REF_NO")
-	@Sn(pattern = "000000", step = 1, table = "T_SN", stubValue = "GL", stub = "F_SN_NAME", sn = "F_SN_NUMBER")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "dateNo")
 	private String rfidRefNo;
+
+	private String dateNo;
 
 	/**
 	 * RFID编号
@@ -215,6 +217,14 @@ public class LogisticsRefEntity extends Pagable implements Serializable {
 
 	public void setState(AuditStateEnum state) {
 		this.state = state;
+	}
+
+	public String getDateNo() {
+		return dateNo;
+	}
+
+	public void setDateNo(String dateNo) {
+		this.dateNo = dateNo;
 	}
 
 }

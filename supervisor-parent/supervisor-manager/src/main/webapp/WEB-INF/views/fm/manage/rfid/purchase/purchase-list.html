@@ -83,7 +83,7 @@ function confirmPay(id){
 					query($("#pager").attr("currentPage"));
 				},"确认付款成功!");
 			}else{
-				errorInfo("确认付款失败!");	
+				errorInfo(data.error);	
 			}
 		});
 	},"是否确认付款?");
@@ -102,7 +102,7 @@ function confirmReceipt(id){
 	},"是否确认收货?");
 }
 function loadInfo(id,applyNo){
-	if ($("#info"+id).html()==""){
+	if ($("#info"+id).children().length==0){
 	$("#info"+id).load("purchaseInfo.htm?id="+id+"&applyNo="+applyNo);
 	}else{
 		$("#info"+id).html("");
@@ -113,11 +113,27 @@ function closeInfo(id){
 }
 
 function edit(id){
-	  $("#edit_"+id).find(".editName").html('<input type="text" class="supplierName" name="supplierName" value="'+$("#edit_"+id).find(".editName").text()+'" /><input type="hidden" class="supplierNo" name="supplierNo" value="'+$("#edit_"+id).find("#supplierNo").val()+'" />');
+	  $("#edit_"+id).find(".editName").html('<input type="text" class="supplierName" name="supplierName" value="'+$("#edit_"+id).find(".editName").text()+'" />');
 	  var url_ = "${basePath}autoSupplier.htm";
-	  $("#edit_"+id).find(".editName").find(".supplierName").bigAutocomplete({url:url_,callback:function(data){
-		  $("#edit_"+id).find(".supplierNo").val(data.result);
-	    }});
+	  $("#edit_"+id).find(".editName").find(".supplierName").bigAutocomplete({
+		  url:url_,
+		  callback:function(data){
+		  	$("#edit_"+id).find(".supplierNo").val(data.result);
+	    },
+		beforeShow : function(data) {
+			var supplierName = $("#edit_"+id).find(".editName").find(".supplierName").val();
+			var match = false;
+			for (var i = 0; i < data.length; i++) {
+				if (data[i].title == supplierName) {
+					$("#edit_"+id).find(".supplierNo").val(data[i].result);
+					match = true;
+				}
+			}
+			if (!match) {
+				$("#edit_"+id).find(".supplierNo").val("");
+			}
+		}
+	  });
 	  $("#edit_"+id).find(".editCount").html('<input type="text" class="count" name="count" value="'+$("#edit_"+id).find(".editCount").text()+'" />');
 	  $("#edit_"+id).find(".editPrice").html('<input type="text" class="price" name="price" value="'+$("#edit_"+id).find(".editPrice").text()+'" />');
 	  $("#edit_"+id).find("#update_"+id).hide();
@@ -125,7 +141,21 @@ function edit(id){
 }
 function save(id){
 	var supplierName =$("#edit_"+id).find(".editName").find(".supplierName").val();
-	var supplierNo =$("#edit_"+id).find(".editName").find(".supplierNo").val();
+	var supplierNo =$("#edit_"+id).find(".supplierNo").val();
+	var applyNo =$("#edit_"+id).find(".applyNo").val();
+	var count=$("#edit_"+id).find(".editCount").find(".count").val();
+	var oldCount=$("#edit_"+id).find(".oldCount").val();
+	var rfidType=$("#edit_"+id).find("#editType").val();
+	var price = $("#edit_"+id).find(".editPrice").find(".price").val();
+	var isPass=true;
+	if (!price.match(/^[0-9]+([.]{1}[0-9]{1,2})?$/)){
+		messageInfo('单价必须为数字并且最多保留两位小数');
+		return false;
+	}
+	if (!count.match( /^[0-9]*[1-9][0-9]*$/)){
+		messageInfo('采购数量必须为正整数！');
+		return false;
+	}
 	if(supplierNo==""||supplierNo=="undefined"){
 		messageInfo('供应商不存在');
 		return false;
@@ -134,43 +164,52 @@ function save(id){
 		messageInfo('供应商名称不能为空');
 		return false;
 	}
-	var rfidType=$("#edit_"+id).find("#editType").val();
-	var price = $("#edit_"+id).find(".editPrice").find(".price").val();
-	$.get("getSupplierPrice.htm?supplierNo="+supplierNo,function(data){
-		if(rfidType="0"){
-		    if(price>data.doorPrice){
-		    	messageInfo("单价不能大于供应商协议价："+data.doorPrice);
-		    	return false;
-		    }
-		}else{
-			 if(price>data.batchPrice){
-				 messageInfo("单价不能大于供应商协议价："+data.batchPrice);	
-				 return false;
+	$.ajax({
+		  url: "getSupplierPrice.htm?supplierNo="+supplierNo,
+		  cache: false,
+		  async: false,
+		  success: function(data){
+			  if(rfidType="0"){
+				    if(price>data.doorPrice){
+				    	messageInfo("单价不能大于供应商协议价："+data.doorPrice.toFixed(2));
+				    	isPass=false;
+				    }
+				}else{
+					 if(price>data.batchPrice){
+						 messageInfo("单价不能大于供应商协议价："+data.batchPrice.toFixed(2));	
+						 isPass=false;
+					 }
+				}
+		  }
+		});
+	$.ajax({
+		  url: "getMaxCount.htm?applyNo="+applyNo+"&oldCount="+oldCount,
+		  cache: false,
+		  async: false,
+		  success: function(data){
+			 if(data.maxCount>0){
+				 if(count>data.maxCount){
+					 messageInfo("数量不能大于申请单剩余数量："+data.maxCount);	
+					 isPass=false;
+				 }
+			 }else{
+				 messageInfo(data.error)
+				 isPass=false;
 			 }
-		}
-	});
-	if (!price.match(/^[0-9]+([.]{1}[0-9]{1,2})?$/)){
-		messageInfo('单价必须为数字并且最多保留两位小数');
-		return false;
-	}
-	var count=$("#edit_"+id).find(".editCount").find(".count").val();
-	if (!count.match( /^[0-9]*[1-9][0-9]*$/)){
-		messageInfo('采购数量必须为正整数！');
+		  }
+		});
+	if(isPass==false){
 		return false;
 	}
 	var o ={id:id,supplierName:supplierName,supplierNo:supplierNo,price:price,count:count};
 	$.post("modify.htm",o,function(data){
 		if(data.isOK=='ok'){
 			succInfo(function(){
-				$("#edit_"+id).find(".editName").text(supplierName);
-				$("#edit_"+id).find(".supplierNo").val(supplierNo);
-				$("#edit_"+id).find(".editCount").html(count);
-				$("#edit_"+id).find(".editPrice").html(price);
-				$("#edit_"+id).find("#update_"+id).show();
-				 $("#edit_"+id).find("#confirm_"+id).hide();
+				query($("#pager").attr("currentPage"));
 			},"修改成功！");
 		}else{ 
-			errorInfo(data.error);	
+			errorInfo(data.error);
+			query($("#pager").attr("currentPage"));
 		}
 	});
 }
@@ -257,6 +296,7 @@ function save(id){
         <#list list as list>
         <tr id="edit_${list.id}">
         <input type="hidden" value="${list.supplierNo}" class="supplierNo" name="supplierNo"/>
+        <input type="hidden" value="${list.applyNo}" class="applyNo" name="applyNo"/>
 		  <td>${list.purchaseNo}</td>
           <td><a href="javascript:loadInfo('${list.id}','${list.applyNo}');" class="lnk-blue">${list.applyNo}</a></td>
           <td class="editName">${list.supplierName}</td>
@@ -264,12 +304,16 @@ function save(id){
           <input type="hidden"  id="editType" value="${list.rfidType.getId()}" />
           </td>
 		  <td class="editCount">${list.count}</td>
-		  <td class="editPrice">${list.price}</td>
+		  <input type="hidden" class="oldCount" value="${list.count}" />
+		  <td class="editPrice">${list.price?string('0.00')}</td>
 		  <td>${list.purchaseDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td><#if list.payState.getId()==1><em class="state verified">已付款</em> <#else><button class="btn btn-gray" onclick="confirmPay('${list.id}');"><span>确认付款</span></button></#if></td>
 		  <td><#if list.receiptState.getId()==0><button class="btn btn-gray" onclick="confirmDelivery('${list.id}');"><span>确认发货</span></button><#elseif list.receiptState.getId()==1><button class="btn btn-orange" onclick="confirmReceipt('${list.id}');"><span>确认收货</span></button><#else> <em class="state verified">已收货</em></#if></td>
 		  <td><#if list.importState.getId()==0><button onclick="javascript:toImport('${list.id}')" class="btn btn-gray"><span>导入</span></button><#else><em class="state verified">已导入</em></#if></td>
-		  <td class="operation"><a id="update_${list.id}" href="javascript:edit('${list.id}');" class="edit">修改</a>
+		  <td class="operation">
+		  <#if list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
+		  <a id="update_${list.id}" href="javascript:edit('${list.id}');" class="edit">修改</a>
+		  </#if>
 		  <#if list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
 		  <a id="del_${list.id}" href="javascript:del('${list.id}');" class="del">删除</a>
 		  </#if>
@@ -279,7 +323,6 @@ function save(id){
         <tr class="tableInfo" id="info${list.id}">
 	   </tr>
          </#list>
-		
       </table>
     <!-- InstanceEndEditable --></div>
 </div>

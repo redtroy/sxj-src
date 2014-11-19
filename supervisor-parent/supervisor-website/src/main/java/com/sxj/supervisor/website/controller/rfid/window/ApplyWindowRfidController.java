@@ -80,7 +80,6 @@ public class ApplyWindowRfidController extends BaseController {
 				map.put("flag", "no");
 				map.put("error", "删除失败");
 			}
-
 		} catch (Exception e) {
 			SxjLogger.error("物流标签申请管理列表删除错误", e, this.getClass());
 			map.put("flag", "no");
@@ -125,6 +124,33 @@ public class ApplyWindowRfidController extends BaseController {
 		} catch (Exception e) {
 			SxjLogger.error("提交物流标签申请", e, this.getClass());
 			throw new WebException("提交物流标签申请错误");
+		}
+		return map;
+	}
+
+	/**
+	 * 验证申请单是否存在
+	 * 
+	 * @param apply
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("checkApply")
+	public @ResponseBody Map<String, String> checkApply(String id)
+			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			RfidApplicationEntity apply = applyService.getApplicationInfo(id);
+			if (apply == null) {
+				throw new WebException("申请单不存在！");
+			}
+			if (apply.getDelstate()) {
+				throw new WebException("申请单不存在！");
+			}
+			map.put("isOk", "ok");
+		} catch (Exception e) {
+			SxjLogger.error("验证RFID申请单错误", e, this.getClass());
+			map.put("error", e.getMessage());
 		}
 		return map;
 	}

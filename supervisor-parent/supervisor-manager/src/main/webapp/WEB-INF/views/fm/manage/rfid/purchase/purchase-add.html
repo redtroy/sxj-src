@@ -20,13 +20,16 @@ var su_price="";
 		$("#supplierName").bigAutocomplete({
 			url : url_,
 			callback : function(data) {
-				$("#supplierId").val(data.result);
+				if(data){
+				$("#supplierNo").val(data.result);
+				var pass = b_validform.check(false, $("#supplierNo"));
+				$(this).parent().children(".Validform_wrong").hide();
 				$.post("getSupplierPrice.htm?supplierNo="+data.result,function(data){
 					if(rfidType="0"){
-						$("#price").val(data.doorPrice);
+						$("#price").val(data.doorPrice.toFixed(2));
 						su_price=data.doorPrice;
 					}else{
-						$("#price").val(data.batchPrice);
+						$("#price").val(data.batchPrice.toFixed(2));
 						su_price=data.batchPrice;
 					}
 					var price=parseFloat($("#price").val());
@@ -34,9 +37,50 @@ var su_price="";
 					if(price&&count){
 						var amount=price*count;
 						$("#ddze").html(amount.toFixed(2)+"元");
+						}
+					});
+				}
+			},
+			beforeShow : function(data) {
+				var supplierName = $("#supplierName").val();
+				var match = false;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].title == supplierName) {
+						$("#supplierNo").val(data[i].result);
+						match = true;
+						$.post("getSupplierPrice.htm?supplierNo="+data[i].result,function(data){
+							if(rfidType="0"){
+								$("#price").val(data.doorPrice.toFixed(2));
+								su_price=data.doorPrice;
+							}else{
+								$("#price").val(data.batchPrice.toFixed(2));
+								su_price=data.batchPrice;
+							}
+							var price=parseFloat($("#price").val());
+							var count=parseInt($("#count").val());
+							if(price&&count){
+								var amount=price*count;
+								$("#ddze").html(amount.toFixed(2)+"元");
+							}
+						});
 					}
-				});
+				}
+				if (!match) {
+					$("#supplierNo").val("");
+					$("#price").val("");
+					$("#ddze").html("");
+					var pass = b_validform.check(false, $("#supplierNo"));
+					if (!pass)
+						$(this).parent().children(".Validform_wrong").show();
+				}
+				
+
 			}
+		});
+		$("#supplierName").blur(function() {
+			var pass = b_validform.check(false, $("#supplierNo"));
+			if (!pass)
+				$(this).parent().children(".Validform_wrong").show();
 		});
 		$(".number").change(function(){
 			var price=parseFloat($("#price").val());
@@ -47,10 +91,21 @@ var su_price="";
 			}
 			
 		});
-		$("#add").Validform({
+		var b_validform=$("#add").Validform({
 			tiptype:3,
 			datatype:{
-				"count":/^[0-9]*$/,
+				"count":function(gets,obj,curform,regxp){
+					var reg=/^[0-9]+$/;
+					var count=$(obj).val();
+					var remaining = $("#remaining").val();
+					if(!reg.test(count)){
+						return false;
+					}
+					if (parseFloat(count) > parseFloat(remaining)) {
+						return "最大采购数量为" + remaining;
+					}
+					
+				},
 				"price":function(gets,obj,curform,regxp){
 					/*参数gets是获取到的表单元素值，
 					  obj为当前表单元素，
@@ -143,7 +198,7 @@ var su_price="";
       <div>
         <label>RFID供应商</label>
         <input type="text" id="supplierName" name="supplierName" class="text tip" title="RFID供应商名称" datatype="*1-20" nullmsg="供应商不能为空！" errormsg="供应商不能为空！"/>
-        <input type="hidden" id="supplierId" name="supplierId" class="text tip" title="RFID供应商" datatype="*1-20" nullmsg="供应商不存在！"/>
+        <input type="hidden" id="supplierNo" name="supplierNo" class="text tip" title="RFID供应商" datatype="*1-20" nullmsg="供应商不存在！"/>
       </div>
       <div>
         <label>实际采购价格</label>
@@ -157,7 +212,7 @@ var su_price="";
         <input type="text" id="count" name="count" class="input-w80 number" value="${app.count-app.hasNumber}" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入整数"/>
         <#else>
          <input type="hidden" id="remaining" value="0" />
-         <input type="text" id="count" name="count" class="input-w80 number" value="0" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入整数"/>
+         <input type="text" id="count" name="count" class="input-w80 number" value="0" title="采购数量" datatype="count" nullmsg="请输入采购数量！" errormsg="采购数量只能输入整数"></input>
          </#if>
         <span class="color-red f12">该申请单已采购${app.hasNumber}张RFID</span>
       </div>

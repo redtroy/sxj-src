@@ -35,12 +35,32 @@ jQuery(document).ready(function($) {
 })
 //修改
   function edit(id){
-	  $("#edit_"+id).find("#count").html('<input type="text" id="count_val" name="input2" value="'+$("#edit_"+id).find("#count").text()+'" />');
-	  $("#edit_"+id).find(".operation").html('<a href="javascript:edit_save(\''+id+'\')" class="confirm lnk-yellow">确认</a><a href="javascript:del(\''+id+'\')" class="del">删除</a>');
+	 
+		 $.post("checkApply.htm",{id:id},function(data){
+			 if (data.isOk=="ok"){
+				 $("#edit_"+id).find("#count_input").show();
+				  $("#edit_"+id).find("#count_td").hide();
+				  $("#edit_"+id).find(".operation").find("#edit_conf").show();
+				  $("#edit_"+id).find(".operation").find("#edit_href").hide();
+				 }else{
+					 errorInfo(data.error);
+					 var page=$("#rightBar").find("#pager").attr("currentPage");
+					 query(page);
+				 }
+		 });
+	 
   }
   //保存修改
   function edit_save(id){
 	  var num =$("#edit_"+id).find("#count_val").val();
+	  if (num==''){
+			messageInfo('请输入申请数量！');
+			return false;
+	  }
+	  if (!num.match( /^[0-9]*[1-9][0-9]*$/)){
+			messageInfo('数量必须为正整数！');
+			return false;
+	  }
 	  dialogBox(function(){
 		  $.post("edit_apply.htm",{id:id,count:num},function(data){
 			  if (data.isOk=="ok"){
@@ -48,7 +68,11 @@ jQuery(document).ready(function($) {
 					  var page=$("#rightBar").find("#pager").attr("currentPage");
 					  query(page);
 				  },"修改成功");
-				 }
+				}else{
+					 errorInfo(data.error);
+					 var page=$("#rightBar").find("#pager").attr("currentPage");
+					 query(page);
+				}
 		  });
 	  },"是否确认修改？");
 		  
@@ -64,10 +88,27 @@ jQuery(document).ready(function($) {
 				 },'删除成功！');
 			 }else{
 				 errorInfo(data.error);
+				 var page=$("#rightBar").find("#pager").attr("currentPage");
+				 query(page);
 			 }
 	 });
   },"是否确认删除？");
   }
+  //删除
+  function to_purchase(id){
+	 dialogBox(function(){
+	 $.post("checkApply.htm",{id:id},function(data){
+		 if (data.isOk=="ok"){
+				 window.location.href="${basePath}rfid/purchase/toAdd.htm?id="+id;
+			 }else{
+				 errorInfo(data.error);
+				 var page=$("#rightBar").find("#pager").attr("currentPage");
+				 query(page);
+			 }
+	 });
+  },"是否确认生成采购单");
+  }
+  
   //确认收款
   function ok(id){
 	  dialogBox(function(){
@@ -78,7 +119,9 @@ jQuery(document).ready(function($) {
 					  query(currentPage);
 				  },"确认收款成功！");
 				 }else{
-					 errorInfo(" 确认收款失败！");
+					 errorInfo(data.error);
+					 var page=$("#rightBar").find("#pager").attr("currentPage");
+					 query(page);
 				 }
 		  });
 	  },"是否确认收款？");
@@ -175,7 +218,8 @@ jQuery(document).ready(function($) {
           <td>${model.memberName}</td>
           <td>${model.rfidType.getName()}</td>
           <td>${model.contractNo}</td>
-		  <td id="count">${model.count}</td>
+		  <td id="count_td">${model.count}</td>
+		  <td id="count_input" style="display: none;"><input id="count_val"  type="text" name="count" value="${model.count}" /></td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <#if (model.payState.id==1)>
           <td id="pay"><button class="btn btn-gray" onclick="ok('${model.id}');return false;"><span>确认收款</span></button></td>
@@ -189,13 +233,14 @@ jQuery(document).ready(function($) {
 		  </#if>
 		  <td>
 		  <#if (model.count-model.hasNumber) gt 0>
-		  <a onclick="javascript:window.location.href='${basePath}rfid/purchase/toAdd.htm?id=${model.id}'" class="button button-green button-small"><span>生成采购单</span></a>
+		  <a onclick="javascript:to_purchase('${model.id}');" class="button button-green button-small"><span>生成采购单</span></a>
 		 <#else>
 		 <em>已全部生成采购单</em>
 		  </#if>
 		  </td>
 		  <td class="operation">
-		  <a href="javascript:edit('${model.id}');" class="edit">修改</a><#if model.hasNumber == 0><#if (model.payState.id==1)><a href="javascript:del('${model.id}')" class="del">删除</a></#if></#if>
+		  <a id="edit_conf" style="display: none;" onclick="edit_save('${model.id}');" href='javascript:void(0);' class='confirm lnk-yellow'>确认</a>
+		  <a id="edit_href" href="javascript:edit('${model.id}');" class="edit">修改</a><#if model.hasNumber == 0><#if (model.payState.id==1)><a href="javascript:del('${model.id}')" class="del">删除</a></#if></#if>
 		  </td>
         </tr>
         </#list>

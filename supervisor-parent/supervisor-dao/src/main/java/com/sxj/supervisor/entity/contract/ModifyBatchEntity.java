@@ -66,6 +66,12 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
     @Column(name = "UPDATE_STATE")
     private Integer updateState;
     
+    /**
+	 * 补损状态
+	 */
+	@Column(name = "REPLENISH_STATE")
+	private Integer replenishState;
+	
 	public Integer getUpdateState() {
 		return updateState;
 	}
@@ -120,5 +126,13 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
 
 	public void setBatchItems(String batchItems) {
 		this.batchItems = batchItems;
+	}
+
+	public Integer getReplenishState() {
+		return replenishState;
+	}
+
+	public void setReplenishState(Integer replenishState) {
+		this.replenishState = replenishState;
 	}
 }

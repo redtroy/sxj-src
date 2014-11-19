@@ -445,16 +445,12 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("getBatch")
-	public @ResponseBody Map<String, String> getBatch(String recordId)
+	public @ResponseBody Map<String, List<ContractBatchEntity>> getBatch(String recordId)
 			throws WebException {
 		try {
-			Map<String, String> map = new HashMap<String, String>();
-			String batch = recordService.getBatch(recordId);
-			if (batch != "") {
-				map.put("batch", batch);
-			} else {
-				map.put("batch", "");
-			}
+			Map<String, List<ContractBatchEntity>> map = new HashMap<String, List<ContractBatchEntity>>();
+			List<ContractBatchEntity> batch = recordService.getBatch(recordId);
+			map.put("batch", batch);
 			return map;
 		} catch (Exception e) {
 			SxjLogger.error("确认备案信息错误", e, this.getClass());

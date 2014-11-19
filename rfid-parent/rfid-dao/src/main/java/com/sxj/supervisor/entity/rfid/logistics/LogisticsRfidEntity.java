@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
@@ -18,6 +17,9 @@ import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
+import com.sxj.supervisor.model.rfid.RfidLog;
+import com.sxj.util.common.DateTimeUtils;
+import com.sxj.util.common.StringUtils;
 
 /**
  * 物流认证标签
@@ -49,6 +51,12 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	@Column(name = "GENERATE_KEY")
 	private Long generateKey;
+
+	/**
+	 * 申请单号
+	 */
+	@Column(name = "APPLY_NO")
+	private String applyNo;
 
 	/**
 	 * 采购单号
@@ -116,7 +124,7 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	@Column(name = "LOG")
 	private String log;
 
-	private List<Object> logList = new ArrayList<Object>();
+	private List<RfidLog> logList = new ArrayList<RfidLog>();
 
 	public String getId() {
 		return id;
@@ -212,6 +220,13 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	public void setRfidState(RfidStateEnum rfidState) {
 		this.rfidState = rfidState;
+		if (RfidStateEnum.damaged.equals(getRfidState())) {
+			RfidLog log = new RfidLog();
+			log.setId(getRfidState().getId());
+			log.setState(getRfidState().getName());
+			log.setDate(DateTimeUtils.getDateTime());
+			setLogList(log);
+		}
 	}
 
 	public Long getGenerateKey() {
@@ -228,18 +243,42 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	public void setProgressState(LabelStateEnum progressState) {
 		this.progressState = progressState;
+		if (getProgressState() != null) {
+			RfidLog log = new RfidLog();
+			log.setId(getProgressState().getId());
+			log.setState(getProgressState().getName());
+			log.setDate(DateTimeUtils.getDateTime());
+			setLogList(log);
+		}
+
 	}
 
-	public List<Object> getLogList() throws Exception {
-		logList = JsonMapper.nonEmptyMapper().getMapper()
-				.readValue(getLog(), new TypeReference<List<Object>>() {
-				});
-		return logList;
+	public String getApplyNo() {
+		return applyNo;
 	}
 
-	public void setLogList(Object log) throws Exception {
+	public void setApplyNo(String applyNo) {
+		this.applyNo = applyNo;
+	}
+
+	public List<RfidLog> getLogList() {
+		if (StringUtils.isEmpty(getLog())) {
+			return logList;
+		} else {
+			logList = JsonMapper.nonEmptyMapper().fromJson(
+					getLog(),
+					new JsonMapper().contructCollectionType(ArrayList.class,
+							RfidLog.class));
+			if (logList == null) {
+				logList = new ArrayList<RfidLog>();
+			}
+			return logList;
+		}
+	}
+
+	private void setLogList(RfidLog log) {
 		getLogList().add(log);
-		String json = JsonMapper.nonEmptyMapper().toJson(getLogList());
+		String json = JsonMapper.nonEmptyMapper().toJson(logList);
 		setLog(json);
 
 	}

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
-import com.sxj.supervisor.model.rfid.base.LogModel;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.util.exception.ServiceException;
 
@@ -28,6 +28,14 @@ public interface IWindowRfidService {
 	public void updateWindowRfid(WindowRfidEntity win) throws ServiceException;
 
 	/**
+	 * 删除
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void deleteWindowRfid(String id) throws ServiceException;
+
+	/**
 	 * 启用门窗RFID
 	 * 
 	 * @throws ServiceException
@@ -42,7 +50,7 @@ public interface IWindowRfidService {
 	 * @param rfids
 	 * @throws ServiceException
 	 */
-	public void batchAddWindowRfid(WindowRfidEntity[] rfids)
+	public Integer batchAddWindowRfid(WindowRfidEntity[] rfids)
 			throws ServiceException;
 
 	/**
@@ -60,7 +68,7 @@ public interface IWindowRfidService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<LogModel> getRfidStateLog(String id) throws ServiceException;
+	public List<RfidLog> getRfidStateLog(String id) throws ServiceException;
 
 	/**
 	 * 
@@ -69,6 +77,15 @@ public interface IWindowRfidService {
 	 * @throws ServiceException
 	 */
 	public WindowRfidEntity getWindowRfid(String id) throws ServiceException;
+
+	/**
+	 * 
+	 * @param no
+	 * @return
+	 * @throws ServiceException
+	 */
+	public WindowRfidEntity getWindowRfidByNo(String rfidNo)
+			throws ServiceException;
 
 	/**
 	 * 
@@ -84,8 +101,14 @@ public interface IWindowRfidService {
 	 * 补损RFID标签
 	 */
 	public void lossWindowRfid(String refContractNo, String minRfid,
-			String maxRfid, String gRfid, String lRfid, String[] addRfid,
-			Long count) throws ServiceException;
+			String maxRfid, String gRfid, String lRfid, String[] addRfid)
+			throws ServiceException;
+
+	/**
+	 * 补损RFID标签
+	 */
+	public void lossWindowRfid(String rfidNo, String newRfidNo)
+			throws ServiceException;
 
 	/**
 	 * 安装

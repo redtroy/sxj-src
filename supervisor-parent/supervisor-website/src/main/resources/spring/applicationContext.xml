@@ -20,7 +20,8 @@
 	<task:annotation-driven />
 	<context:annotation-config />
 	<aop:aspectj-autoproxy />
-
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="false" />
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="com.sxj.supervisor.service">
 		<context:exclude-filter type="annotation"
@@ -35,8 +36,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager"
-		proxy-target-class="false" />
+
 
 	<!-- MyBatis配置 -->
 	<bean id="sqlSessionFactory" class="com.sxj.mybatis.orm.ActiveSQLSessionFactoryBean">
@@ -64,7 +64,7 @@
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">
 					<bean class="com.sxj.redis.advance.SingleServerConfig">
-						<property name="address" value="192.168.1.13:6379"></property>
+						<property name="address" value="${redis.host}:${redis.port}"></property>
 						<property name="database" value="0"></property>
 					</bean>
 				</property>
@@ -76,7 +76,7 @@
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">
 					<bean class="com.sxj.redis.advance.SingleServerConfig">
-						<property name="address" value="192.168.1.13:6379"></property>
+						<property name="address" value="${redis.host}:${redis.port}"></property>
 						<property name="database" value="0"></property>
 					</bean>
 				</property>
@@ -88,7 +88,7 @@
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">
 					<bean class="com.sxj.redis.advance.SingleServerConfig">
-						<property name="address" value="192.168.1.13:6379"></property>
+						<property name="address" value="${redis.host}:${redis.port}"></property>
 						<property name="database" value="0"></property>
 					</bean>
 				</property>

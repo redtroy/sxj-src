@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,9 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
+import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -44,24 +51,45 @@ public class StartWRfidController extends BaseController {
 	}
 
 	@RequestMapping("queryRefContract")
-	public @ResponseBody Map<Object, Object> query(ContractQuery query, Long num)
-			throws WebException {
+	public @ResponseBody Map<Object, Object> query(ContractQuery query,
+			Long num, HttpSession session) throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
+			SupervisorPrincipal userInfo = getLoginInfo(session);
 			ContractModel contract = contractService
 					.getContractModelByContractNo(query.getRefContractNo());
 			if (contract == null) {
 				throw new WebException("招标合同不存在");
 			}
+			if (!contract.getContract().getType()
+					.equals(ContractTypeEnum.bidding)) {
+				throw new WebException("此合同不是招标合同");
+			}
+			if (!userInfo.getMember().getMemberNo()
+					.equals(contract.getContract().getMemberIdB())) {
+				throw new WebException("此合同属于其他会员");
+			}
 			float itemQuantity = contract.getContract().getItemQuantity();
 			float hasStartQuantity = contract.getContract().getUseQuantity();
-
+			float unStartQuantity = 0f;
 			if (hasStartQuantity >= itemQuantity) {
 				throw new WebException("此招标合同已经全部启用完毕");
 			}
 			if (num > (itemQuantity - hasStartQuantity)) {
-				throw new WebException("此招标合同未启用数量为："
-						+ (itemQuantity - hasStartQuantity));
+				throw new WebException("此招标合同可以启用的最大数量为："
+						+ (long) (itemQuantity - hasStartQuantity));
+			}
+			WindowRfidQuery winQuery = new WindowRfidQuery();
+			winQuery.setContractNo(query.getRefContractNo());
+			winQuery.setRfidState(RfidStateEnum.unused.getId());
+			List<WindowRfidEntity> winList = windowRfidService
+					.queryWindowRfid(winQuery);
+			if (winList != null) {
+				unStartQuantity = winList.size();
+			}
+			if (unStartQuantity < num) {
+				throw new WebException("此招标合同未启用的RFID数量为："
+						+ (long) unStartQuantity + "，请申请足够的RFID数量");
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {
@@ -72,6 +100,7 @@ public class StartWRfidController extends BaseController {
 				map.put("list", list);
 			} else {
 				map.put("isOk", "false");
+				map.put("error", "此招标合同没有关联的采购合同");
 			}
 			return map;
 		} catch (Exception e) {

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -122,12 +123,25 @@ public class SnGenerator implements KeyGenerator
                     snPojo.setCurrent(snPojo.getCurrent() + snPojo.getStep());
                     snSql = dialect.getSnIncrSQL(snPojo);
                 }
-                DecimalFormat df = new DecimalFormat(sn.pattern());
-                Reflections.invokeSetter(parameter,
-                        field.getName(),
-                        snPojo.getStubValue()
-                                + df.format(snPojo.getCurrent()
+                if (StringUtils.isEmpty(sn.pattern()))
+                    Reflections.invokeSetter(parameter,
+                            field.getName(),
+                            (snPojo.getCurrent() + snPojo.getStep()));
+                else
+                {
+                    DecimalFormat df = new DecimalFormat(sn.pattern());
+                    if (sn.appendStubValue())
+                        Reflections.invokeSetter(parameter,
+                                field.getName(),
+                                snPojo.getStubValue()
+                                        + df.format(snPojo.getCurrent()
+                                                + snPojo.getStep()));
+                    else
+                        Reflections.invokeSetter(parameter,
+                                field.getName(),
+                                df.format(snPojo.getCurrent()
                                         + snPojo.getStep()));
+                }
                 
             }
         }
@@ -199,6 +213,12 @@ public class SnGenerator implements KeyGenerator
             Statement stmt, Object parameter)
     {
         
+    }
+    
+    public static void main(String... strings)
+    {
+        DecimalFormat df = new DecimalFormat("");
+        System.out.println(df.format(1));
     }
     
 }

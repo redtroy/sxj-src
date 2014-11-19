@@ -483,6 +483,48 @@ public class NumberUtils {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(NumberUtils.rightMove("-0.014", 2));
+		// System.out.println(NumberUtils.rightMove("-0.014", 2));
+		int number = 13;
+		int range = 1000;
+		List<Integer[]> split = NumberUtils.split(number, range);
+		for (Integer[] ret : split) {
+			System.out.println(ret[0] + "------" + ret[1]);
+		}
+		List<String> sample = new ArrayList<String>();
+		sample.add("a");
+		sample.add("b");
+		sample.add("c");
+		sample.add("d");
+		List<String> subList = sample.subList(split.get(0)[0], split.get(0)[1]);
+		for (String ret : subList) {
+			System.out.println(ret);
+		}
+	}
+
+	public static List<Integer[]> split(Integer number, Integer range) {
+		List<Integer[]> ret = new ArrayList<Integer[]>();
+		if (number <= range) {
+			ret.add(new Integer[] { 0, number });
+			return ret;
+		}
+		Integer start = 0;
+
+		boolean isLast = number % range == 0;
+
+		for (int i = 0; i < number / range; i++) {
+			Integer[] temp = new Integer[2];
+			temp[0] = start;
+			temp[1] = start = (i + 1) * range;
+			ret.add(temp);
+		}
+		if (!isLast) {
+			int left = number % range;
+			Integer[] integers = ret.get(ret.size() - 1);
+			Integer[] temp = new Integer[2];
+			temp[0] = integers[1];
+			temp[1] = integers[1] + left;
+			ret.add(temp);
+		}
+		return ret;
 	}
 }

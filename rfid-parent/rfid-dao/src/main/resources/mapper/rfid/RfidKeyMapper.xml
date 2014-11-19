@@ -2,9 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sxj.supervisor.dao.rfid.IRfidKeyDao">
+	<resultMap type="com.sxj.supervisor.entity.rfid.RfidKeyEntity" id="RfidKeyEntity">
+		<result property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+	</resultMap>
 	<!-- 按条件查询门窗 -->
 	<insert id="getKey" parameterType="com.sxj.supervisor.entity.rfid.RfidKeyEntity"
 		useGeneratedKeys="true" keyProperty="id">
 		<![CDATA[REPLACE INTO R_GLOBAL_KEY (NAME) values (#{name});]]>
+	</insert>
+	<select id="getKeyEntity" parameterType="String" resultMap="RfidKeyEntity">
+		SELECT ID,NAME FROM R_GLOBAL_KEY WHERE NAME=#{name};
+	</select>
+	<update id="updateKeyEntity" parameterType="com.sxj.supervisor.entity.rfid.RfidKeyEntity">
+		UPDATE R_GLOBAL_KEY SET ID=ID+#{step} where NAME=#{name} AND ID=#{id};
+	</update>
+	<insert id="insertKeyEntity" parameterType="com.sxj.supervisor.entity.rfid.RfidKeyEntity">
+		INSERT INTO R_GLOBAL_KEY(ID,NAME) values (#{id},#{name});
 	</insert>
 </mapper>

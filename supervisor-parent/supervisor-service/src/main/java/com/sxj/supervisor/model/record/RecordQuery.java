@@ -17,17 +17,15 @@ public class RecordQuery extends Pagable implements Serializable {
 
 	private String applyId;
 
-	private String contractType;
+	private Integer contractType;
 
 	private String contractNo;
 
-	private String confirmState;
+	private Integer confirmState;
 
-	private String recordType;
-	
-	private String  type;
+	private Integer recordType;
 
-	private String state;
+	private Integer state;
 
 	private String memberIdA;
 
@@ -53,14 +51,6 @@ public class RecordQuery extends Pagable implements Serializable {
 
 	private String isDelMes;
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public Integer getFlag() {
 		return flag;
 	}
@@ -85,11 +75,11 @@ public class RecordQuery extends Pagable implements Serializable {
 		this.sort = sort;
 	}
 
-	public String getConfirmState() {
+	public Integer getConfirmState() {
 		return confirmState;
 	}
 
-	public void setConfirmState(String confirmState) {
+	public void setConfirmState(Integer confirmState) {
 		this.confirmState = confirmState;
 	}
 
@@ -149,11 +139,11 @@ public class RecordQuery extends Pagable implements Serializable {
 		this.applyId = applyId;
 	}
 
-	public String getContractType() {
+	public Integer getContractType() {
 		return contractType;
 	}
 
-	public void setContractType(String contractType) {
+	public void setContractType(Integer contractType) {
 		this.contractType = contractType;
 	}
 
@@ -165,19 +155,19 @@ public class RecordQuery extends Pagable implements Serializable {
 		this.contractNo = contractNo;
 	}
 
-	public String getRecordType() {
+	public Integer getRecordType() {
 		return recordType;
 	}
 
-	public void setRecordType(String recordType) {
+	public void setRecordType(Integer recordType) {
 		this.recordType = recordType;
 	}
 
-	public String getState() {
+	public Integer getState() {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 

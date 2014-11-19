@@ -10,10 +10,23 @@
 <@b.errorInfo/>
 <@b.validate/>
 <Script>
- function sub(){
+var check;
+$(function($){
+	 check=$("#add").Validform({
+		tiptype:3,
+		datatype:{
+			"count":/^[0-9]*$/
+		}
+	});
+});
+function subForm(){
+	  $("#add").submit();
+}
+ function save(){
 	 var memberNo= "${member.memberNo}";
 	 var memberName="${member.name}";
 	 var count=$("#count").val();
+	 /*
 	 if (count=="" || count==null){
 		 messageInfo('数量不能为空');
 		 return false;
@@ -25,15 +38,18 @@
 	 if (count<=0){
 		 messageInfo('数量不能为空');
 		 return false;
+	 }*/
+	 if (!check.check()){
+		 return false;
 	 }
 	 var rfidType=${member.type.id};
 	 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType},function(data){
 		 if (data.isOk="ok"){
 			 succInfo(function(){
 				 window.location.href="${basePath}rfid/logistics/apply_list.htm"; 
-			 },"添加成功！");
+			 },"申请成功！");
 		 }else{
-			 errorInfo("添加失败！");
+			 errorInfo(data.error);
 		 }
 	 })
  }
@@ -49,6 +65,7 @@
         <h1>
 							<span class="title fontYH f20 fb">物流标签申请</span></h1>
       </div>
+      <form id="add" action="javascript:void(0);" method="post">
       <div class="contBox">
 	  <div class="item">
           <label>申请会员名称</label>
@@ -60,12 +77,13 @@
         </div>
         <div class="item">
           <label>申请数量</label>
-          <input class="input input-w180h36" id="count" />
+          <input class="input input-w180h36" id="count" name="count" title="申请数量" datatype="n"  nullmsg="请输入申请数量！" errormsg="申请数量只能输入整数"  />
         </div>
        <div class="item mt10">
-          <label>&nbsp;</label><a href="" onclick="sub();return false;" class="button button-orange mr15">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
+          <label>&nbsp;</label><a href="" onclick="save();return false;" class="button button-orange mr15">申请</a><a href="javascript:history.go(-1);" class="button button-gray">取消</a>
         </div>
       </div>
+      </form>
     </div>
   <@b.footer />
 </div>

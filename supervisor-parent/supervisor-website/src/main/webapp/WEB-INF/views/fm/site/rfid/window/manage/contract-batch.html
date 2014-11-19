@@ -1,4 +1,4 @@
-
+﻿
 <td colspan="10"><div class="infoBox text-left">
 		<table border="0" cellpadding="0" cellspacing="0"
 			class="tabList prodTable">
@@ -11,12 +11,15 @@
 				<th>合同号</th>
 				<th>交货批次</th>
 				<th>产品规格</th>
-				<th>数量<span>（m&sup2;/吨）</span></th>
+				<th>数量<span><#if type==1 >/m&sup2;<#elseif type==2>/吨</#if></span></th>
 				<th class="rLine">应付货款<span>（元）</span></th>
 			</tr>
+			<#if conBatch?exists>
 			<#list conBatch as batch>
+			<#if batch?exists>
 			<tr>
-				<td>${contractNo}</td>
+			   <#if batch.batch?exists>
+				<td>${batch.batch.contractId}</td>
 				<td>第${batch.batch.batchNo}批次</td>
 				<td><table border="0" cellpadding="0" cellspacing="0"
 						class="tabList prodTable">
@@ -30,13 +33,16 @@
 						class="tabList prodTable">
 						<#list batch.batchItems as batchItem>
 						<tr>
-							<td>${batchItem.quantity}</td>
+							<td>${batchItem.quantity?string("0.00")}</td>
 						</tr>
 						</#list>
 					</table></td>
-				<td>${batch.batch.amount}</td>
+				<td>${batch.batch.amount?string("0.00")}</td>
+				</#if>
 			</tr>
+			</#if>
 			</#list>
+			</#if>
 		</table>
 		<div class="btnBox pb10">
 			<a href="javascript:close('${id}');" class="button button-gray">收起</a>

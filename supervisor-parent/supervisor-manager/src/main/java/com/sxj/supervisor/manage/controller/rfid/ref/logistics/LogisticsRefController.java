@@ -1,4 +1,4 @@
-package com.sxj.supervisor.manage.controller.rfid.lableManage;
+package com.sxj.supervisor.manage.controller.rfid.ref.logistics;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +10,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -29,8 +31,8 @@ import com.sxj.util.logger.SxjLogger;
  *
  */
 @Controller
-@RequestMapping("/rfid/lableManage")
-public class LableManageController extends BaseController {
+@RequestMapping("/rfid/logisticsRef")
+public class LogisticsRefController extends BaseController {
 
 	@Autowired
 	private ILogisticsRefService refService;
@@ -39,8 +41,8 @@ public class LableManageController extends BaseController {
 	private IContractService contractService;
 
 	@RequestMapping("lable_list")
-	public String lable_list(ModelMap map, LogisticsRefQuery query)
-			throws WebException {
+	public String lable_list(ModelMap map, LogisticsRefQuery query,
+			String removeMessge) throws WebException {
 		try {
 			if (query != null) {
 				query.setPagable(true);
@@ -54,25 +56,32 @@ public class LableManageController extends BaseController {
 			map.put("rfidtypes", rfidtypes);
 			map.put("query", query);
 			map.put("list", list);
+			map.put("channelName",
+					RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
+			registChannel(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
+			if ("true".equals(removeMessge)) {
+				CometServiceImpl.setCount(
+						RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF, 0l);
+			}
 
 		} catch (Exception e) {
 			SxjLogger.error("查询错误", e, this.getClass());
 			throw new WebException("查询错误");
 		}
-		return "manage/rfid/gysrfid-link/gysrfid-link";
+		return "manage/rfid/logisticsref/gysrfid-link";
 	}
 
 	@RequestMapping("del")
 	public @ResponseBody Map<String, String> del(String id) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			Map<String, String> map = new HashMap<String, String>();
-			refService.del(id);
+			contractService.deleteLogisticsRef(id);
 			map.put("isOk", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("删除错误", e, this.getClass());
-			throw new WebException("删除错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -117,7 +126,7 @@ public class LableManageController extends BaseController {
 			SxjLogger.error("批次合同查询错误", e, this.getClass());
 			throw new WebException("批次合同查询错误");
 		}
-		return "manage/rfid/gysrfid-link/edit";
+		return "manage/rfid/logisticsref/edit";
 	}
 
 	/**

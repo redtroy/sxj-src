@@ -13,6 +13,8 @@
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.pageScript/>
 <@b.errorInfo/>
+<@b.dialogBox/>
+<@b.validate/>
 <script>
 function query(page){
 	var params=$("#search_form").serialize();
@@ -30,64 +32,79 @@ function query(page){
 	});
 }
 function  del(id){
-	if(confirm('确实要删除吗?')){
-	$.post("delete.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			succInfo(function(){
-				var currentPage= $("#pager").attr("currentPage");
-				query(currentPage);
-			},"删除成功!");
-			
-		}else{
-			errorInfo("删除失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("delete.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					var currentPage= $("#pager").attr("currentPage");
+					query(currentPage);
+				},"删除成功！");
+			}else{
+				errorInfo(data.error);	
+			}
+		});
+	},"是否确认删除？");
 }
 function  disable(id){
-	if(confirm('确实要停用吗?')){
-	$.post("disable.htm",{id:id},function(data){
-		if(data.isOK=='ok'){
-			succInfo(function(){
-				var currentPage= $("#pager").attr("currentPage");
-				query(currentPage);
-			},"停用成功!");
-		}else{
-			errorInfo("停用失败!");	
-		}
-	});
-	}
+	dialogBox(function(){
+		$.post("disable.htm",{id:id},function(data){
+			if(data.isOK=='ok'){
+				succInfo(function(){
+					var currentPage= $("#pager").attr("currentPage");
+					query(currentPage);
+				},"停用成功!");
+			}else{
+				errorInfo(data.error);	
+			}
+		});
+	},"确实要停用吗?");
 }
 function loadInfo(id,contractNo){
-	$("#info"+id).load("contractInfo.htm?contractNo="+contractNo+"&rfid="+id);
+	if($("#info"+id).children().length==0){
+	$("#info"+id).load("${basePath}record/info.htm?contractNo="+contractNo+"&recordNo="+id);
 	$("#blBatch"+id).html("");
 	$("#xcBatch"+id).html("");
 	$("#log"+id).html("");
+	}else{
+		closeContract(id);
+	}
 }
 function closeContract(id){
 	$("#info"+id).html("");
 }
 
-function blBatch(id,contractNo,rfidNo){
-	$("#blBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=blBatch"+id);
+function blBatch(id,rfidNo){
+	if ($("#blBatch"+id).children().length==0){
+	$("#blBatch"+id).load("contractBatch.htm?rfidNo="+rfidNo+"&id=blBatch"+id+"&type=1");
 	$("#xcBatch"+id).html("");
 	$("#info"+id).html("");
 	$("#log"+id).html("");
+	}else{
+		$("#blBatch"+id).html("");
+	}
 }
-function xcBatch(id,contractNo,rfidNo){
-	$("#xcBatch"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id=xcBatch"+id);
+function xcBatch(id,rfidNo){
+	if ($("#xcBatch"+id).children().length==0){
+	$("#xcBatch"+id).load("contractBatch.htm?rfidNo="+rfidNo+"&id=xcBatch"+id+"&type=2");
 	$("#blBatch"+id).html("");
 	$("#info"+id).html("");
 	$("#log"+id).html("");
+	}else{
+		$("#xcBatch"+id).html("");
+	}
 }
 function close(id){
 	$("#"+id).html("");
 }
 function log(id){
+	if ($("#log"+id).children().length==0){
 	$("#log"+id).load("stateLog.htm?id="+id);
 	$("#blBatch"+id).html("");
 	$("#xcBatch"+id).html("");
 	$("#info"+id).html("");
+	}else{
+		closeLog(id);
+	}
 }
 function closeLog(id){
 	$("#log"+id).html("");
@@ -99,20 +116,6 @@ function toLableLosses(id){
 		$("#listInfo").html(data);
 	});
 }
-
-	function lableLosses() {
-		$.post("lableLosses.htm", $("#modify_form").serialize(),
-				function(data) {
-					if (data.isOK == 'ok') {
-						succInfo(function(){
-							var currentPage= $("#pager").attr("currentPage");
-							query(currentPage);
-						},"补损成功!");
-					} else {
-						errorInfo("补损失败!");
-					}
-				});
-	}
 </script>
 </head>
 
@@ -133,7 +136,7 @@ function toLableLosses(id){
  <form action="javascript:void(0);" id="search_form" method="post">
 <div class="searBox mb10"><P>
   标签编号<input type="text" name="rfidNo" class="input" value="${query.rfidNo}" />
-  申请单号 <input type="text" name="purchaseNo" class="input" value="${query.purchaseNo}" />  
+  申请单号 <input type="text" name="applyNo" class="input" value="${query.applyNo}" />  
   招标合同号<input type="text" name="contractNo" class="input" value="${query.contractNo}" />
   玻璃标签<input type="text" name="blRfid" class="input" value="${query.blRfid}" />
   型材标签<input type="text" name="xcRfid" class="input" value="${query.xcRfid}" /></P>
@@ -146,7 +149,11 @@ function toLableLosses(id){
   标签进度 <select name="progressState" class="selectx">
           <option value="" selected="selected">全部</option>
 		  <#list Label as label> 
-          <option value="${label.getId()}">${label.getName()}</option>
+		    <#if (label.id==0)>
+		    <option value="${label.getId()}">标签发货中</option>
+		    <#elseif (label.id>1)>
+            <option value="${label.getId()}">${label.getName()}</option>
+            </#if>
           </#list>
         </select>
   标签状态<select name="rfidState">
@@ -188,17 +195,27 @@ function toLableLosses(id){
 <#list winList as win>
         <tr>
           <td><a href="javascript:log('${win.id}');" class="lnk-blue">${win.rfidNo}</a></td>
-          <td>${win.purchaseNo}</td>
+          <td>${win.applyNo}</td>
           <td><a href="javascript:loadInfo('${win.id}','${win.contractNo}')" class="lnk-blue">${win.contractNo}</a></td>
           <#if win.windowType??>
           <td>${win.windowType.getName()} </td>
           <#else>
           <td></td>
           </#if>
-		  <td><a href="javascript:blBatch('${win.id}','${win.contractNo}','${win.glassRfid}')" class="lnk-blue">${win.glassRfid}</a></td>
-		  <td><a href="javascript:xcBatch('${win.id}','${win.contractNo}','${win.profileRfid}')" class="lnk-blue">${win.profileRfid}</a></td>
+		  <td><a href="javascript:blBatch('${win.id}','${win.glassRfid}')" class="lnk-blue">${win.glassRfid}</a></td>
+		  <td><a href="javascript:xcBatch('${win.id}','${win.profileRfid}')" class="lnk-blue">${win.profileRfid}</a></td>
           <td><#if win.replenishNo?exists>${win.replenishNo}<#else>-</#if></td>
-		  <td><em class="state frozen">${win.progressState.getName()}</em></td>
+          <#if (win.progressState.getId()==0)>
+		  <td><em class="state frozen">标签发货中</em></td>
+		  <#elseif ((win.progressState.getId()==1))>
+		  <td><em class="state frozen">标签发货中</em></td>
+		  <#elseif ((win.progressState.getId()==2))>
+		  <td><em class="state process">${win.progressState.getName()}</em></td>
+		  <#elseif ((win.progressState.getId()==3))>
+		  <td><em class="state normal">${win.progressState.getName()}</em></td>
+		  <#elseif ((win.progressState.getId()==4))>
+		  <td><em class="state verified">${win.progressState.getName()}</em></td>
+		  </#if>
 		  <td>
 		  <#if win.rfidState.getId()==0>
 		  <em class="state normal">${win.rfidState.getName()}</em>
@@ -213,7 +230,7 @@ function toLableLosses(id){
 		   <em class="state frozen">${win.rfidState.getName()}</em>
 		  </#if>
 		 </td>
-		  <td class="operation"> <#if win.rfidState.getId()==0><a href="javascript:toLableLosses('${win.id}');" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>标签补损</a> </#if></td>
+		  <td class="operation"> <#if win.rfidState.getId()==0||win.rfidState.getId()==3><a href="javascript:toLableLosses('${win.id}');" class="lnk-blue" title=""><span class="icon icon16 icon-relat"></span>标签补损</a> </#if></td>
         </tr>
         <tr class="tableInfo"  id="info${win.id}"></tr>
         <tr class="tableInfo" id="blBatch${win.id}"> </tr> 

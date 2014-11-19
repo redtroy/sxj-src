@@ -19,7 +19,7 @@ public class WindowRefQuery extends Pagable implements Serializable {
 	/**
 	 * RFID编号区间
 	 */
-	private String rfidRange;
+	private String rfidNo;
 
 	/**
 	 * 申请人
@@ -41,13 +41,12 @@ public class WindowRefQuery extends Pagable implements Serializable {
 	 */
 	private String windowsNo;
 
-
 	/**
 	 * 型材批次
 	 */
 	private String batchNo;
 
-	private String state;
+	private Integer state;
 	/**
 	 * 关联申请时间
 	 */
@@ -60,21 +59,12 @@ public class WindowRefQuery extends Pagable implements Serializable {
 	 */
 	private String replenishRfid;
 
-
 	public String getRfidRefNo() {
 		return rfidRefNo;
 	}
 
 	public void setRfidRefNo(String rfidRefNo) {
 		this.rfidRefNo = rfidRefNo;
-	}
-
-	public String getRfidRange() {
-		return rfidRange;
-	}
-
-	public void setRfidRange(String rfidRange) {
-		this.rfidRange = rfidRange;
 	}
 
 	public String getMemberNo() {
@@ -133,7 +123,6 @@ public class WindowRefQuery extends Pagable implements Serializable {
 		this.replenishRfid = replenishRfid;
 	}
 
-
 	public String getBatchNo() {
 		return batchNo;
 	}
@@ -142,11 +131,19 @@ public class WindowRefQuery extends Pagable implements Serializable {
 		this.batchNo = batchNo;
 	}
 
-	public String getState() {
+	public Integer getState() {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(Integer state) {
 		this.state = state;
+	}
+
+	public String getRfidNo() {
+		return rfidNo;
+	}
+
+	public void setRfidNo(String rfidNo) {
+		this.rfidNo = rfidNo;
 	}
 }

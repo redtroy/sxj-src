@@ -9,8 +9,26 @@
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
 <@b.pageScript/>
+<@b.dialogBox/>
+<@b.errorInfo/>
 <script>
+$(function(){
+	  JS.Engine.start('${basePath}comet');
+		JS.Engine.on({
+			start : function(cId, channelList, engine){  
+		      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+		    }, 
+		 "${channelName}" : function(data){//侦听一个channel
+			 $("#message_div").empty();
+		  if (data>0){
+			var bb='<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>'+data+'</strong>条新的门窗RFID关联申请！</div>';
+			$("#message_div").html(bb);
+		  }
+       },   
+	}); 
+})
 function query(page){
 	var params=$("#search_form").serialize();
 	 if(page!=undefined){
@@ -26,49 +44,89 @@ function query(page){
 		loadPage(currentPage,totalPage,query);
 	});
 }
+function removeMessge(){
+	$.post("query.htm",{removeMessge:"true"},function(data){
+		var res=$(data).find("#res_table");
+		var pager=$(data).find("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+	$("#message_div").html("");
+}
 function  del(id){
-	if(confirm('确实要删除吗?')){
+	 dialogBox(function(){
 	$.post("delete.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			alert("删除成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"删除成功");
+			
 		}else{
-			alert("删除失败!");	
+			errorInfo(data.error);	
 		}
 	});
-	}
+	},"请确定是否删除")
 }
 
 function  audit(id){
-	if(confirm('确实要审核吗?')){
+	 dialogBox(function(){
 	$.post("audit.htm",{id:id},function(data){
 		if(data.isOK=='ok'){
-			alert("审核成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"审核成功");
 		}else{
-			alert("审核失败!");	
+			errorInfo("审核失败!");	
 		}
 	});
-	}
+	},"是否确认进行审核")
 }
 function loadInfo(id,type){
+	if ($("#info"+id).children().length==0){
 	$("#info"+id).load("info.htm?id="+id+"&type="+type);
+	$("#bathinfo"+id).html("");
+	$("#bathinfo2"+id).html("");
+	}else{
+		$("#info"+id).html("");
+		closeContract(id)
+	}
 }
 function closeContract(id){
 	$("#info"+id).html("");
+	$("#bathinfo"+id).html("");
+	$("#bathinfo2"+id).html("");
 }
 function saveModify(id){
 	$.post("saveModify.htm",$("#form"+id).serialize(),function(data){
 		if(data.isOK=='ok'){
-			alert("修改成功!");
-			window.location.href="query.htm";
+			succInfo(function(){
+				query($("#pager").attr("currentPage"));
+			},"修改成功");
 		}else{
-			alert("修改失败!");	
+			errorInfo("修改失败!");	
 		}
 	});
 }
-function batch(id,contractNo,rfidNo){
-	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id);
+function batch(id,contractNo,rfidNo,type){
+	if ($("#bathinfo"+id).children().length==0){
+	$("#bathinfo"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type="+type);
+	$("#info"+id).html("");
+	$("#bathinfo2"+id).html("");
+	}else{
+		$("#bathinfo"+id).html("");
+	}
+}
+function batch2(id,contractNo,rfidNo,type){
+	if ($("#bathinfo2"+id).children().length==0){
+	$("#bathinfo2"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type="+type);
+	$("#info"+id).html("");
+	$("#bathinfo"+id).html("");
+	}else{
+		$("#bathinfo2"+id).html("");
+	}
 }
 </script>
 </head>
@@ -88,40 +146,52 @@ function batch(id,contractNo,rfidNo){
     <form action="" id="search_form" method="post">
       <div id="searchBox">
       <p>RFID关联申请号
-        <input type="text" name="rfidRefNo" value=""/>
+        <input type="text" name="rfidRefNo" value="${query.rfidRefNo}"/>
        RFID编号
-       <input type="text" name="rfidRange" value=""/>
+       <input type="text" name="rfidNo" value="${query.rfidNo}"/>
        申请人名称
-       <input type="text" name="" value=""/>
+       <input type="text" name="memberName" value="${query.memberName}"/>
 	   相关批次RFID
-       <input type="text" name="batchNo" value=""/>
+       <input type="text" name="batchNo" value="${query.batchNo}"/>
 	   被补损RFID编号
-       <input type="text" name="replenishRfid" value=""/></p>
+       <input type="text" name="replenishRfid" value="${query.replenishRfid}"/></p>
        窗型代号<select name="windowsNo">
 	   <option selected="selected" value="">全部</option>
           <#list winType as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
+          <#if type.getId()==query.windowsNo>
+          <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+          <#else>
+           <option value="${type.getId()}">${type.getName()}</option>
+          </#if>
           </#list>
         </select>
        关联类型
        <select name="type">
           <option selected="selected" value="">全部</option>
 		   <#list type as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
+		  <#if type.getId()==query.type>
+          <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+          <#else>
+           <option value="${type.getId()}">${type.getName()}</option>
+          </#if>
           </#list>
         </select>
 		审核状态<select name="state">
 		<option selected="selected" value="">全部</option>
         <#list state as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
+        <#if type.getId()==query.state>
+          <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+           <#else>
+           <option value="${type.getId()}">${type.getName()}</option>
+          </#if>
           </#list>
         </select>	
        关联申请时间段
-       <input type="text" name="" value="" datepicker />-<input type="text" name="" value="" datepicker />
-        <a class="btn btn-blue"><span>查询</span></a>
+       <input type="text" name="startDate" value="${query.startDate}" datepicker />-<input type="text" name="endDate" value="${query.endDate}" datepicker />
+        <a class="btn btn-blue" href="javascript:query();"><span>查询</span></a>
     </div>
     </form>
-	<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>1</strong>条新的门窗RFID关联申请！</div>
+	  <div id="message_div" onclick="removeMessge()"></div>
       <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="12%"/>
@@ -155,14 +225,16 @@ function batch(id,contractNo,rfidNo){
           <td>${win.memberName}</td>
           <td>${win.type.getName()}</td>
 		  <td>${win.windowsNo.getName()}</td>
-		  <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.glassBatchNo}')" class="lnk-blue">${win.glassBatchNo}</a></td>
-          <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.profileBatchNo}')" class="lnk-blue">${win.profileBatchNo}</a></td>
-		  <td>${win.applyDate?string("yyyy年MM月dd日 hh:mm:ss")}</td>
+		  <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.glassBatchNo}','1')" class="lnk-blue">${win.glassBatchNo}</a></td>
+          <td><a href="javascript:batch2('${win.id}','${win.contractNo}','${win.profileBatchNo}','2')" class="lnk-blue">${win.profileBatchNo}</a></td>
+		  <td>${win.applyDate?string("yyyy-MM-dd HH:mm:ss")}</td>
 		  <td><#if win.replenishRfid?exists>${win.replenishRfid}<#else>-</#if></td>
 		  <td><#if win.state.getId()==0><button class="btn btn-gray" onclick="audit('${win.id}');"><span>审核</span></button><#else><em class="state verified">已审核</em></#if></td>
-		  <td class="operation"><a href="javascript:del('${win.id}');" class="del">删除</a></td>
+		  <td class="operation"><#if win.state.getId()==0><a href="javascript:del('${win.id}');" class="del">删除</a></#if></td>
         </tr>
         <tr class="tableInfo" id="info${win.id}"></tr>
+        <tr class="tableInfo" id="bathinfo${win.id}"></tr>
+         <tr class="tableInfo" id="bathinfo2${win.id}"></tr>
         </#list>
 		 
       </table>

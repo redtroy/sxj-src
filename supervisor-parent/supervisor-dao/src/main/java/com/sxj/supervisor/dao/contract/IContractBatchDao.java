@@ -42,7 +42,7 @@ public interface IContractBatchDao
     public List<ContractBatchEntity> queryBacths(QueryCondition<ContractBatchEntity> query);
     
     @Delete
-    public void deleteBatchs(String contractId);
+    public void deleteBatchs(String id);
     
     /**
      * 批量修改批次信息
@@ -59,4 +59,18 @@ public interface IContractBatchDao
     **/
     @Update
     public void updateBatch(ContractBatchEntity batch);
+    
+    /**
+     * 根据RFID获取批次
+     * @param rfidNo
+     * @return
+     */
+    public ContractBatchEntity  getBacthsByRfid(String rfidNo);
+    
+    /**
+     * 根据合同号获取批次
+     * @param rfidNo
+     * @return
+     */
+    public List<ContractBatchEntity>  getBacthsByContractNo(String contractNo);
 }

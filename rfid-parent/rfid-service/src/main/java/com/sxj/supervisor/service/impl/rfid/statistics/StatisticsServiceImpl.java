@@ -24,7 +24,6 @@ import com.sxj.supervisor.service.rfid.sale.IRfidPriceService;
 import com.sxj.supervisor.service.rfid.sale.IRfidSaleStatisticalService;
 import com.sxj.supervisor.service.rfid.statistics.IStatisticsService;
 import com.sxj.util.common.DateTimeUtils;
-import com.sxj.util.common.NumberUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -216,7 +215,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		query.setEndDate(endDate);
 		query.setRfidType(RfidTypeEnum.door);
 		List<RfidSaleStatisticalEntity> list = saleService.queryList(query);
-		Long count = 0l;
+		Double count = 0d;
 		StatisticsItemModel item = new StatisticsItemModel();
 		List<String> dateList = new ArrayList<String>();
 		List<Double> countList = new ArrayList<Double>();
@@ -224,14 +223,13 @@ public class StatisticsServiceImpl implements IStatisticsService {
 			if (entity == null) {
 				continue;
 			}
-			// count = count + (entity.getCount() * entity.getPrice());
+			count = count + (entity.getCount() * entity.getPrice());
 			dateList.add(DateTimeUtils.formatPageDate(entity.getSaleDate()));
-			countList.add(new Double(NumberUtils.leftMove(
-					(entity.getCount() * entity.getPrice()) + "", 2)));
+			countList.add((entity.getCount() * entity.getPrice()));
 		}
 		item.setCountList(countList);
 		item.setDateList(dateList);
-		item.setCountSum(new Double(NumberUtils.leftMove(count + "", 2)));
+		item.setCountSum(count);
 		return item;
 
 	}
@@ -249,7 +247,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 			list1 = new ArrayList<RfidSaleStatisticalEntity>();
 		}
 		list1.addAll(list2);
-		Long count = 0l;
+		Double count = 0d;
 		StatisticsItemModel item = new StatisticsItemModel();
 		List<String> dateList = new ArrayList<String>();
 		List<Double> countList = new ArrayList<Double>();
@@ -257,14 +255,13 @@ public class StatisticsServiceImpl implements IStatisticsService {
 			if (entity == null) {
 				continue;
 			}
-			// count = count + (entity.getCount() * entity.getPrice());
+			count = count + (entity.getCount() * entity.getPrice());
 			dateList.add(DateTimeUtils.formatPageDate(entity.getSaleDate()));
-			countList.add(new Double(NumberUtils.leftMove(
-					(entity.getCount() * entity.getPrice()) + "", 2)));
+			countList.add(entity.getCount() * entity.getPrice());
 		}
 		item.setCountList(countList);
 		item.setDateList(dateList);
-		item.setCountSum(new Double(NumberUtils.leftMove(count + "", 2)));
+		item.setCountSum(count);
 		return item;
 	}
 
@@ -273,9 +270,9 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		PurchaseRfidQuery query = new PurchaseRfidQuery();
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
-		// query.setRfidType(RfidTypeEnum.door);
+		query.setRfidType(RfidTypeEnum.door.getId());
 		List<RfidPurchaseEntity> list = purchaseService.queryPurchase(query);
-		Long count = 0l;
+		Double count = 0d;
 		StatisticsItemModel item = new StatisticsItemModel();
 		List<String> dateList = new ArrayList<String>();
 		List<Double> countList = new ArrayList<Double>();
@@ -283,14 +280,13 @@ public class StatisticsServiceImpl implements IStatisticsService {
 			if (entity == null) {
 				continue;
 			}
-			// count = count + (entity.getCount() * entity.getPrice());
+			count = count + (entity.getCount() * entity.getPrice());
 			dateList.add(DateTimeUtils.formatPageDate(entity.getPurchaseDate()));
-			countList.add(new Double(NumberUtils.leftMove(
-					(entity.getCount() * entity.getPrice()) + "", 2)));
+			countList.add((entity.getCount() * entity.getPrice()));
 		}
 		item.setCountList(countList);
 		item.setDateList(dateList);
-		item.setCountSum(new Double(NumberUtils.leftMove(count + "", 2)));
+		item.setCountSum(count);
 		return item;
 	}
 
@@ -299,15 +295,15 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		PurchaseRfidQuery query = new PurchaseRfidQuery();
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
-		// query.setRfidType(RfidTypeEnum.glass);
+		query.setRfidType(RfidTypeEnum.glass.getId());
 		List<RfidPurchaseEntity> list1 = purchaseService.queryPurchase(query);
-		// query.setRfidType(RfidTypeEnum.extrusions);
+		query.setRfidType(RfidTypeEnum.extrusions.getId());
 		List<RfidPurchaseEntity> list2 = purchaseService.queryPurchase(query);
 		if (list1 == null) {
 			list1 = new ArrayList<RfidPurchaseEntity>();
 		}
 		list1.addAll(list2);
-		Long count = 0l;
+		Double count = 0d;
 		StatisticsItemModel item = new StatisticsItemModel();
 		List<String> dateList = new ArrayList<String>();
 		List<Double> countList = new ArrayList<Double>();
@@ -315,14 +311,13 @@ public class StatisticsServiceImpl implements IStatisticsService {
 			if (entity == null) {
 				continue;
 			}
-			// count = count + (entity.getCount() * entity.getPrice());
+			count = count + (entity.getCount() * entity.getPrice());
 			dateList.add(DateTimeUtils.formatPageDate(entity.getPurchaseDate()));
-			countList.add(new Double(NumberUtils.leftMove(
-					(entity.getCount() * entity.getPrice()) + "", 2)));
+			countList.add(entity.getCount() * entity.getPrice());
 		}
 		item.setCountList(countList);
 		item.setDateList(dateList);
-		item.setCountSum(new Double(NumberUtils.leftMove(count + "", 2)));
+		item.setCountSum(count);
 		return item;
 	}
 
@@ -333,7 +328,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		query.setStarApplyDate(startDate);
 		query.setEndApplyDate(endDate);
 		List<RfidApplicationEntity> appList = appService.query(query);
-		Long appCount = 0l;
+		Double appCount = 0d;
 		StatisticsItemModel item = new StatisticsItemModel();
 		List<String> dateList = new ArrayList<String>();
 		List<Double> countList = new ArrayList<Double>();
@@ -346,24 +341,20 @@ public class StatisticsServiceImpl implements IStatisticsService {
 				.hasNext();) {
 			RfidApplicationEntity entity = iterator.next();
 			if (entity.getRfidType().getId() == RfidTypeEnum.door.getId()) {
-				// appCount = appCount
-				// + (entity.getCount() * price.getWindowPrice());
-				countList.add(new Double(NumberUtils.leftMove(
-						(entity.getCount() * price.getWindowPrice()) + "", 2)));
+				appCount = appCount
+						+ (entity.getCount() * price.getWindowPrice());
+				countList.add((entity.getCount() * price.getWindowPrice()));
 			} else {
-				// appCount = appCount
-				// + (entity.getCount() * price.getLogisticsPrice());
-				countList.add(new Double(
-						NumberUtils.leftMove(
-								(entity.getCount() * price.getLogisticsPrice())
-										+ "", 2)));
+				appCount = appCount
+						+ (entity.getCount() * price.getLogisticsPrice());
+				countList.add(entity.getCount() * price.getLogisticsPrice());
 			}
 			dateList.add(DateTimeUtils.formatPageDate(entity.getApplyDate()));
 
 		}
 		item.setCountList(countList);
 		item.setDateList(dateList);
-		item.setCountSum(new Double(NumberUtils.leftMove(appCount + "", 2)));
+		item.setCountSum(appCount);
 		return item;
 	}
 
@@ -373,7 +364,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
 		List<RfidSaleStatisticalEntity> list = saleService.queryList(query);
-		Long count = 0l;
+		Double count = 0d;
 		StatisticsItemModel item = new StatisticsItemModel();
 		List<String> dateList = new ArrayList<String>();
 		List<Double> countList = new ArrayList<Double>();
@@ -381,14 +372,13 @@ public class StatisticsServiceImpl implements IStatisticsService {
 			if (entity == null) {
 				continue;
 			}
-			// count = count + (entity.getCount() * entity.getPrice());
+			count = count + (entity.getCount() * entity.getPrice());
 			dateList.add(DateTimeUtils.formatPageDate(entity.getSaleDate()));
-			countList.add(new Double(NumberUtils.leftMove(
-					(entity.getCount() * entity.getPrice()) + "", 2)));
+			countList.add((entity.getCount() * entity.getPrice()));
 		}
 		item.setCountList(countList);
 		item.setDateList(dateList);
-		item.setCountSum(new Double(NumberUtils.leftMove(count + "", 2)));
+		item.setCountSum(count);
 		return item;
 
 	}

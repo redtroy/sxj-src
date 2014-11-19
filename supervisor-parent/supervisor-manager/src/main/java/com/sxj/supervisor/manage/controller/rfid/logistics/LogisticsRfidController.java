@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
-import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
+import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
-import com.sxj.supervisor.model.rfid.base.LogModel;
+import com.sxj.supervisor.model.contract.ContractBatchModel;
+import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
@@ -46,7 +48,7 @@ public class LogisticsRfidController extends BaseController {
 			query.setPagable(true);
 			List<LogisticsRfidEntity> list = logisticsRfidService
 					.queryLogistics(query);
-			LabelProgressEnum[] Label = LabelProgressEnum.values();
+			LabelStateEnum[] Label = LabelStateEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();
 			model.put("Label", Label);
@@ -62,6 +64,34 @@ public class LogisticsRfidController extends BaseController {
 	}
 
 	/**
+	 * 获取 合同批次信息
+	 * 
+	 * @param model
+	 * @param contractNo
+	 * @param rfidNo
+	 * @param id
+	 * @param type
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("contractBatch")
+	public String getContractBatch(ModelMap model, String rfidNo, String id,
+			String type) throws WebException {
+		try {
+			ContractBatchModel conBatch = contractService
+					.getBatchByRfid(rfidNo);
+			model.put("conBatch", conBatch);
+			model.put("id", id);
+			model.put("type", type);
+			// model.put("contractNo", contractNo);
+			return "manage/rfid/windowref/contract-batch";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
+	}
+
+	/**
 	 * 删除
 	 * 
 	 * @param id
@@ -72,18 +102,18 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("delete")
 	public @ResponseBody Map<String, String> delete(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			LogisticsRfidEntity win = new LogisticsRfidEntity();
 			win.setId(id);
 			win.setRfidState(RfidStateEnum.delete);
 			logisticsRfidService.updateLogistics(win);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("删除物流RFID错误", e, this.getClass());
-			throw new WebException("删除物流RFID错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -97,18 +127,18 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("disable")
 	public @ResponseBody Map<String, String> disable(String id, ModelMap model)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			LogisticsRfidEntity win = new LogisticsRfidEntity();
 			win.setId(id);
 			win.setRfidState(RfidStateEnum.disable);
 			logisticsRfidService.updateLogistics(win);
-			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("停用物流RFID错误", e, this.getClass());
-			throw new WebException("停用物流RFID错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	/**
@@ -122,13 +152,39 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("stateLog")
 	public String getStateLog(ModelMap model, String id) throws WebException {
 		try {
-			List<LogModel> logList = logisticsRfidService.getRfidStateLog(id);
+			List<RfidLog> logList = logisticsRfidService.getRfidStateLog(id);
 			model.put("id", id);
 			model.put("logList", logList);
 			return "manage/rfid/window/stateLog";
 		} catch (Exception e) {
 			SxjLogger.error("查询log动态信息错误", e, this.getClass());
 			throw new WebException("查询log动态信息错误");
+		}
+	}
+
+	/**
+	 * 获取合同详细
+	 * 
+	 * @param model
+	 * @param contractNo
+	 * @param rfid
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("contractInfo")
+	public String queryContractInfo(ModelMap model, String contractNo, String id)
+			throws WebException {
+		try {
+			ContractModel cmodel = contractService
+					.getContractModelByContractNo(contractNo);
+			ContractModel contractModel = contractService.getContract(cmodel
+					.getContract().getId());
+			model.put("contractModel", contractModel);
+			model.put("contractId", id);
+			return "manage/contract/contract-info";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
 		}
 	}
 }

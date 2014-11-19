@@ -14,7 +14,7 @@ import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
-import com.sxj.supervisor.model.rfid.base.LogModel;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
@@ -52,7 +52,7 @@ public class LogisticsController extends BaseController {
 			String memberNo = loginInfo.getMember().getMemberNo();
 			query.setMemberNo(memberNo);
 			List<LogisticsRfidEntity> list = logisticsRfidService
-					.queryLogistics(query);
+					.queryLogistics_A(query);
 			LabelStateEnum[] Label = LabelStateEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();
@@ -79,7 +79,7 @@ public class LogisticsController extends BaseController {
 	@RequestMapping("stateLog")
 	public String getStateLog(ModelMap model, String id) throws WebException {
 		try {
-			List<LogModel> logList = logisticsRfidService.getRfidStateLog(id);
+			List<RfidLog> logList = logisticsRfidService.getRfidStateLog(id);
 			model.put("id", id);
 			model.put("logList", logList);
 			return "site/rfid/window/logistics/stateLog";

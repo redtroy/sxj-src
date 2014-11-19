@@ -2,9 +2,10 @@ package com.sxj.supervisor.website.controller.rfid.window;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.ContractReplenishModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
@@ -43,22 +46,29 @@ public class LossWinRfidController extends BaseController {
 	}
 
 	@RequestMapping("queryLossContract")
-	public @ResponseBody Map<Object, Object> query(ContractQuery query, Long num)
-			throws WebException {
+	public @ResponseBody Map<Object, Object> query(ContractQuery query,
+			Long num, HttpSession session) throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			List<ContractItemEntity> items = contractService
-					.getContractItem(query.getRefContractNo());
-			if (items == null || items.size() == 0) {
+			SupervisorPrincipal userInfo = getLoginInfo(session);
+			ContractModel contract = contractService
+					.getContractModelByContractNo(query.getRefContractNo());
+			if (contract == null) {
 				throw new WebException("招标合同不存在");
 			}
-			float quantity = 0f;
+			if (!contract.getContract().getType()
+					.equals(ContractTypeEnum.bidding)) {
+				throw new WebException("此合同不是招标合同");
+			}
+			if (!userInfo.getMember().getMemberNo()
+					.equals(contract.getContract().getMemberIdB())) {
+				throw new WebException("此合同属于其他会员");
+			}
+			float hasStartQuantity = contract.getContract().getUseQuantity();
 			float unStartQuantity = 0f;
-			for (ContractItemEntity item : items) {
-				if (item == null) {
-					continue;
-				}
-				quantity = quantity + item.getQuantity();
+			if (num > hasStartQuantity) {
+				throw new WebException("此招标合同可以补损的最大数量为："
+						+ (long) hasStartQuantity);
 			}
 
 			WindowRfidQuery winQuery = new WindowRfidQuery();
@@ -70,7 +80,8 @@ public class LossWinRfidController extends BaseController {
 				unStartQuantity = winList.size();
 			}
 			if (unStartQuantity < num) {
-				throw new WebException("此招标合同未启用的RFID数量为：" + unStartQuantity);
+				throw new WebException("此招标合同未启用的RFID数量为："
+						+ (long) unStartQuantity + "，请申请足够的RFID数量");
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {
@@ -149,7 +160,7 @@ public class LossWinRfidController extends BaseController {
 	}
 
 	/**
-	 * 启用标签
+	 * 补损标签
 	 */
 	@RequestMapping("start_loss_lable")
 	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,
@@ -166,36 +177,36 @@ public class LossWinRfidController extends BaseController {
 			if (items == null || items.size() == 0) {
 				throw new WebException("招标合同条目不存在");
 			}
-			WindowRfidQuery query = new WindowRfidQuery();
-			for (String rfid : addRfid) {
-				query.setRfidNo(rfid);
-				List<WindowRfidEntity> list = windowRfidService
-						.queryWindowRfid(query);
-				if (list.size() == 1) {
-					if (list.get(0).getRfidState().getId() == 1) {
-						continue;
-					} else {
-						throw new WebException(rfid + "补损标签状态错误");
-					}
-				} else {
-					throw new WebException(rfid + "补损标签不存在，或者重复");
-				}
-			}
-			float quantity = 0f;
-			for (Iterator<ContractItemEntity> iterator = items.iterator(); iterator
-					.hasNext();) {
-				ContractItemEntity item = iterator.next();
-				if (item == null) {
-					continue;
-				}
-				quantity = quantity + item.getQuantity();
-			}
-			long count = (long) quantity;
+			// WindowRfidQuery query = new WindowRfidQuery();
+			// for (String rfid : addRfid) {
+			// query.setRfidNo(rfid);
+			// List<WindowRfidEntity> list = windowRfidService
+			// .queryWindowRfid(query);
+			// if (list.size() == 1) {
+			// if (list.get(0).getRfidState().getId() == 1) {
+			// continue;
+			// } else {
+			// throw new WebException(rfid + "补损标签状态错误");
+			// }
+			// } else {
+			// throw new WebException(rfid + "补损标签不存在，或者重复");
+			// }
+			// }
+			// float quantity = 0f;
+			// for (Iterator<ContractItemEntity> iterator = items.iterator();
+			// iterator
+			// .hasNext();) {
+			// ContractItemEntity item = iterator.next();
+			// if (item == null) {
+			// continue;
+			// }
+			// quantity = quantity + item.getQuantity();
+			// }
 			windowRfidService.lossWindowRfid(refContractNo, minRfid, maxRfid,
-					gRfid, lRfid, addRfid, count);
+					gRfid, lRfid, addRfid);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
-			SxjLogger.error("启用标签错误", e, this.getClass());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			map.put("error", e.getMessage());
 		}
 		return map;

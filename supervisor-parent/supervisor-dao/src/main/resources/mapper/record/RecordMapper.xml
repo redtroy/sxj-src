@@ -32,9 +32,7 @@
 	<!-- 条件查询备案 -->
 	<select id="queryRecord" resultMap="RecordResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,RECORD_NO,APPLY_ID,APPLY_NAME,MEMBER_ID_A,RECORD_FLAG,MEMBER_NAME_A,MEMBER_ID_B,MEMBER_NAME_B,
-		TYPE,IMG_PATH,STATE,CONTRACT_TYPE,RECORD_STATE,ACCEPT_STATE,CONTRACT_NO,REF_CONTRACT_NO,APPLY_DATE,ACCEPT_DATE,CONFIRM_STATE,RFID_NO,RECORD_DATE
-		 FROM M_CONTRACT_RECORD WHERE DEL_STATE=0]]>
+		<![CDATA[SELECT  * FROM M_CONTRACT_RECORD WHERE DEL_STATE=0]]>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
 			<![CDATA[AND RECORD_NO = #{condition.recordNo}]]>
@@ -48,7 +46,7 @@
 			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
 		</if>
 		<!-- 合同类型-->
-		<if test="condition.contractType != null  and condition.contractType != ''">
+		<if test="condition.contractType != null">
 			<![CDATA[AND CONTRACT_TYPE = #{condition.contractType}]]>
 		</if>
 		<!-- 对应合同号-->
@@ -68,17 +66,17 @@
 			<![CDATA[AND MEMBER_ID_B = #{condition.memberIdB}]]>
 		</if>
 		<!-- 备案状态-->
-		<if test="condition.state != null and condition.state != ''">
+		<if test="condition.state != null">
 			<![CDATA[AND STATE = #{condition.state}]]>
 		</if>
 		<if test="condition.flag != null and condition.flag != ''">
 			<![CDATA[AND RECORD_FLAG = #{condition.flag}]]>
 		</if>
 		<!-- 备案类型-->
-		<if test="condition.recordType != null and condition.recordType != ''">
+		<if test="condition.recordType != null">
 			<![CDATA[AND TYPE = #{condition.recordType}]]>
 		</if>
-		<if test="condition.confirmState != null and condition.confirmState != ''">
+		<if test="condition.confirmState != null">
 			<![CDATA[AND CONFIRM_STATE = #{condition.confirmState}]]>
 		</if>
 		<!-- 申请时间段 -->

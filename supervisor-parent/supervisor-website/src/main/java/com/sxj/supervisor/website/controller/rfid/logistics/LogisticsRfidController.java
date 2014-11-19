@@ -20,24 +20,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
+import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
-import com.sxj.supervisor.model.contract.ContractReplenishModel;
-import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
-import com.sxj.supervisor.model.rfid.base.LogModel;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.StringUtils;
-import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -70,7 +69,7 @@ public class LogisticsRfidController extends BaseController {
 					.getAttribute("userinfo");
 			query.setMemberNo(userBean.getMember().getMemberNo());
 			List<LogisticsRfidEntity> list = logisticsRfidService
-					.queryLogistics(query);
+					.queryLogistics_B(query);
 			LabelStateEnum[] Label = LabelStateEnum.values();
 			RfidStateEnum[] rfid = RfidStateEnum.values();
 			RfidTypeEnum[] type = RfidTypeEnum.values();
@@ -97,7 +96,7 @@ public class LogisticsRfidController extends BaseController {
 	@RequestMapping("stateLog")
 	public String getStateLog(ModelMap model, String id) throws WebException {
 		try {
-			List<LogModel> logList = logisticsRfidService.getRfidStateLog(id);
+			List<RfidLog> logList = logisticsRfidService.getRfidStateLog(id);
 			model.put("id", id);
 			model.put("logList", logList);
 			return "site/rfid/logistics/manage/stateLog";
@@ -160,20 +159,20 @@ public class LogisticsRfidController extends BaseController {
 			throws WebException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			ContractReplenishModel replenish = contractService
-					.getReplenishByRfid(rfidNo);
-			if (replenish == null) {
-				throw new ServiceException("该RFID没有对应的批次！");
+			if (StringUtils.isEmpty(rfidNo)) {
+				throw new WebException("RFID编号不能为空！");
 			}
-			List<ReplenishBatchModel> replenishList = replenish.getBatchItems();
-			if (replenishList == null || replenishList.size() == 0) {
-				throw new ServiceException("该RFID没有对应的批次信息！");
+			ContractBatchModel batchModel = contractService
+					.getBatchByRfid(rfidNo);
+			if (batchModel == null) {
+				throw new WebException("该RFID没有对应的批次！");
 			}
-			if (replenishList.size() > 1) {
-				throw new ServiceException("该RFID对应的批次信息大于一条！");
+			List<BatchItemModel> batchList = batchModel.getBatchItems();
+			if (batchList == null || batchList.size() == 0) {
+				throw new WebException("该RFID没有对应的批次信息！");
 			}
-			map.put("contratct", replenish.getReplenishContract());
-			map.put("batch", replenishList.get(0));
+			map.put("batch", batchModel.getBatch());
+			map.put("batchItem", batchList);
 		} catch (Exception e) {
 			SxjLogger.error("联想查询RFID对应批次错误", e, this.getClass());
 			map.put("error", e.getMessage());
@@ -250,7 +249,7 @@ public class LogisticsRfidController extends BaseController {
 			}
 			map.put("sumBatch", contract.getContract().getBatchCount());
 			map.put("type", contract.getContract().getType().getId());
-			
+
 			List<ContractBatchModel> list = contract.getBatchList();
 			if (list == null || list.size() == 0) {
 				map.put("batchNo", 1);
@@ -278,9 +277,11 @@ public class LogisticsRfidController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("to_loss")
-	public String to_loss(String id, ModelMap model) throws WebException {
+	public String to_loss(String id, String rfidNo, ModelMap model)
+			throws WebException {
 		try {
-			model.put("newRfidNo", id);
+			model.put("id", id);
+			model.put("newRfidNo", rfidNo);
 			return "site/rfid/logistics/manage/loss-gysrfid";
 		} catch (Exception e) {
 			SxjLogger.error("查询物流错误", e, this.getClass());
@@ -289,21 +290,39 @@ public class LogisticsRfidController extends BaseController {
 	}
 
 	@RequestMapping("rfid_loss")
-	public @ResponseBody Map<String, String> rfidLoss(String id, String rfidNo,
-			String newRfid, String contractNo, HttpSession session)
+	public @ResponseBody Map<String, String> rfidLoss(String contractNo,
+			String newRfidNo, String rfidNo, HttpSession session)
 			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			contractService.updateRfid(id, rfidNo, contractNo,
-					userBean.getMember(), newRfid);
-			Map<String, String> map = new HashMap<String, String>();
+			contractService.updateRfidLoss(rfidNo, contractNo,
+					userBean.getMember(), newRfidNo);
 			map.put("isOK", "ok");
-			return map;
 		} catch (Exception e) {
 			SxjLogger.error("启用物流错误", e, this.getClass());
-			throw new WebException("启用物流错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
+	}
+
+	@RequestMapping("contratc_loss")
+	public @ResponseBody Map<String, String> contractLoss(String contractNo,
+			String recordNo, String newRfidNo, String rfidNos,
+			HttpSession session) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			SupervisorPrincipal userBean = (SupervisorPrincipal) session
+					.getAttribute("userinfo");
+			contractService.updateContractLoss(rfidNos, contractNo, recordNo,
+					userBean.getMember(), newRfidNo);
+			map.put("isOK", "ok");
+		} catch (Exception e) {
+			SxjLogger.error("启用物流错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
 	}
 
 	@RequestMapping("autoContract")
@@ -336,28 +355,26 @@ public class LogisticsRfidController extends BaseController {
 	}
 
 	@RequestMapping("getRecord")
-	public @ResponseBody Map<String, String> getRecord(String contractNo,
+	public @ResponseBody Map<String, Object> getRecord(String contractNo,
 			HttpSession session) throws WebException {
+		Map<String, Object> map = new HashMap<String, Object>();
 		try {
+			if (StringUtils.isEmpty(contractNo)) {
+				throw new WebException("采购合同号不能为空！");
+			}
 			RecordQuery rq = new RecordQuery();
 			rq.setContractNo(contractNo);
-			rq.setRecordType("2");
+			rq.setRecordType(RecordTypeEnum.supplement.getId());
 			List<RecordEntity> reList = recordService.queryRecord(rq);
-			String str = "";
-			for (RecordEntity recordEntity : reList) {
-				str += recordEntity.getRecordNo() + ",";
+			if (reList == null || reList.size() == 0) {
+				throw new WebException("该合同没有补损备案！");
 			}
-			if (str != "") {
-				str = str.substring(0, str.length() - 1);
-			}
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("isOK", "ok");
-			map.put("str", str);
-			return map;
+			map.put("record", reList);
 		} catch (Exception e) {
 			SxjLogger.error("查询备案错误", e, this.getClass());
-			throw new WebException("查询备案错误");
+			map.put("error", e.getMessage());
 		}
+		return map;
 	}
 
 	@RequestMapping("getRecordInfo")

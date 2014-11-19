@@ -1,10 +1,12 @@
 package com.sxj.supervisor.service.contract;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.jsonrpc.annotation.JsonRpcService;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
+import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
@@ -84,21 +86,6 @@ public interface IContractService {
 			List<ReplenishBatchModel> list,
 			ReplenishContractEntity replenishContract);
 
-	/**
-	 * 更新状态
-	 * 
-	 * @param contractId
-	 * @param state
-	 */
-	public void modifyState(String contractId, RecordConfirmStateEnum state);
-
-	/**
-	 * 新增合同状态变更记录
-	 * 
-	 * @param stateLog
-	 * @param contractId
-	 */
-	public void addStateLog(StateLogModel stateLog, String contractId);
 
 	/**
 	 * 变更确认状态
@@ -163,15 +150,46 @@ public interface IContractService {
 	 */
 	public void modifyBatch(ContractBatchModel model) throws ServiceException;
 
-	void addBatch(ContractBatchModel model, String id, MemberEntity member)
-			throws ServiceException;
+	/**
+	 * 新增批次
+	 * 
+	 * @param model
+	 * @param id
+	 * @param member
+	 * @throws ServiceException
+	 */
+	public void addBatch(ContractBatchModel model, String id,
+			MemberEntity member) throws ServiceException;
 
-	void updateRfid(String id, String rfidNo, String contractNo,
+	/**
+	 * RFID标签补损
+	 * 
+	 * @param rfidNo
+	 * @param contractNo
+	 * @param member
+	 * @param newRfid
+	 * @throws ServiceException
+	 */
+	public void updateRfidLoss(String rfidNo, String contractNo,
 			MemberEntity member, String newRfid) throws ServiceException;
 
-	String getReplenish(String contractNo);
+	/**
+	 * 采购合同物流补损
+	 * 
+	 * @param rfidNos
+	 * @param contractNo
+	 * @param member
+	 * @param newRfid
+	 * @throws ServiceException
+	 */
+	public void updateContractLoss(String rfidNos, String contractNo,
+			String recordNo, MemberEntity member, String newRfid)
+			throws ServiceException;
 
-	int getContractByZhaobiaoContractNo(String contractNo, String memberId);
+	public String getReplenish(String contractNo);
+
+	public int getContractByZhaobiaoContractNo(String contractNo,
+			String memberId);
 
 	/**
 	 * 根据关联合同号获取合同信息
@@ -190,9 +208,46 @@ public interface IContractService {
 
 	/**
 	 * 跟据rfid 获取补损批次
+	 * 
 	 * @param rfid
 	 * @return
 	 */
-	ContractReplenishModel getReplenishByRfid(String rfid);
+	public ContractReplenishModel getReplenishByRfid(String rfid);
+
+	/**
+	 * 根据RFID获取批次
+	 * 
+	 * @param rfidNo
+	 * @return
+	 * @throws ServiceException
+	 * @throws SQLException
+	 */
+	public ContractBatchModel getBatchByRfid(String rfidNo)
+			throws ServiceException, SQLException;
+
+	/**
+	 * 根据RFID删除批次信息
+	 * 
+	 * @param rfidNo
+	 */
+	public void deleteBatch(String rfidNo, String contractNo);
+
+	/**
+	 * 删除物流RFID关联
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void deleteLogisticsRef(String id) throws ServiceException;
+
+	/**
+	 * 删除门窗RFID关联
+	 * 
+	 * @param id
+	 * @throws ServiceException
+	 */
+	public void deleteWindowRef(String id) throws ServiceException;
+
+	List<ReplenishBatchEntity> getReplenishBatch(String contractNo);
 
 }
