@@ -49,14 +49,12 @@
 </head>
 <body>
 <@b.header />
-<div class="mainBg">
 <div class="fence-wide ly-clearFix">
-<div class="main pb20">
 <@b.leftMenu />
 <div class="yard-870 rightSide ly-left" id="rightBar">
 <div class="heading mb15 ly-clearFix">
-  <h1 class="ly-left">
-  <span class="title fontYH f20 fb">认证标签申请管理</span></h1>
+<h1>
+<span class="title fontYH f20 fb">物流标签申请管理</span></h1>
 </div>
 <div class="contBox f12">
 <div class="searBox mb10">
@@ -121,7 +119,7 @@
       </#if>
 	  <td>
 	  <#if (model.payState.id==1)>
-	  <a href="" class="lnk-blue" title="后台该笔申请生成采购单后就不可以删除，点删除后提示私享家已受理该申请，不能删除！" onclick="del('${model.id}');return false;"><span class="icon icon16 icon-del"></span>删除</a>
+	  <a href="" class="lnk-blue" title="" onclick="del('${model.id}');return false;"><span class="icon icon16 icon-del"></span>删除</a>
 	  </#if>
 	  </td>
     </tr>
@@ -130,8 +128,6 @@
 </div>
 </div>
 </div>
-</div>
 <@b.footer />
-<div class="maskdivgen" style="display:none"></div>
 </body>
 </html>

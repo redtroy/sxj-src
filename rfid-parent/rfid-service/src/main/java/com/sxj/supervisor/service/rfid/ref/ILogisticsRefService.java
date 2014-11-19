@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.rfid.ref;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
@@ -19,7 +20,8 @@ public interface ILogisticsRefService {
 	 * @param app
 	 * @throws ServiceException
 	 */
-	public void add(LogisticsRefEntity model) throws ServiceException;
+	public void add(LogisticsRefEntity model) throws ServiceException,
+			SQLException;
 
 	/**
 	 * 更新

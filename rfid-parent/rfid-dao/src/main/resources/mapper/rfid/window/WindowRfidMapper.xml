@@ -74,7 +74,7 @@
 			<![CDATA[ ORDER BY RFID_NO DESC]]>
 	</select>
 	<select id="getMaxRfidNo" resultType="Long">
-		<![CDATA[SELECT MIN(GENERATE_KEY) FROM R_WINDOW_RFID WHERE RFID_STATE=0]]>
+		<![CDATA[SELECT MAX(GENERATE_KEY) FROM R_WINDOW_RFID WHERE RFID_STATE=0]]>
 		<![CDATA[AND CONTRACT_NO = #{contractNo}]]>
 	</select>
 	<update id="update_rfid">

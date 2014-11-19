@@ -18,6 +18,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -35,6 +36,7 @@ import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
+import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
@@ -178,6 +180,9 @@ public class ContractServiceImpl implements IContractService {
 
 	@Autowired
 	private ApplicationContext context;
+
+	@Autowired
+	private ILogisticsRefDao refDao;
 
 	@PostConstruct
 	public void init() {
@@ -830,7 +835,7 @@ public class ContractServiceImpl implements IContractService {
 								ReplenishBatchEntity rb = replenishBatchModel
 										.getReplenishBatch();
 								rb.setBatchItems(json);
-								rb.setRfidNo(record.getRfidNo());//添加补损RFID到批次
+								rb.setRfidNo(record.getRfidNo());// 添加补损RFID到批次
 								rb.setReplenishState(0);
 								rb.setReplenishId(replenishContract.getId());
 								rb.setNoType(contractId + "-");
@@ -1269,15 +1274,20 @@ public class ContractServiceImpl implements IContractService {
 	 * 采购合同补损
 	 */
 	@Override
+	@Transactional
 	public void updateContractLoss(String rfidNos, String contractNo,
 			String batchId, MemberEntity member, String newRfid)
 			throws ServiceException {
 		try {
+			// member = null;
 			if (StringUtils.isEmpty(rfidNos)) {
 				throw new ServiceException("rfid编号不能为空");
 			}
-			ReplenishBatchEntity batch = new ReplenishBatchEntity();
-			batch.setId(batchId);
+			ReplenishBatchEntity batch = contractReplenishBatchDao
+					.getBatch(batchId);
+			if (batch == null) {
+				throw new ServiceException("补损批次不存在");
+			}
 			batch.setNewRfidNo(newRfid);
 			contractReplenishBatchDao.updateBatch(batch);
 			//
@@ -1295,20 +1305,6 @@ public class ContractServiceImpl implements IContractService {
 			// logistics.setReplenishNo(newRfid);
 			// logisticsRfidService.updateLogistics(logistics);
 			// }
-			// 更新新的RFID
-			LogisticsRfidEntity newLogisRfid = logisticsRfidService
-					.getLogisticsByNo(newRfid);
-			if (newLogisRfid == null) {
-				throw new ServiceException("新RFID信息不存在");
-			}
-			if (!newLogisRfid.getRfidState().equals(RfidStateEnum.unused)) {
-				throw new ServiceException("新RFID状态不是未使用状态，不能用于补损");
-			}
-			newLogisRfid.setContractNo(contractNo);
-			newLogisRfid.setRfidState(RfidStateEnum.used);
-			// newLogisRfid.setBatchNo(batchModel.getBatch().getBatchNo());
-			logisticsRfidService.updateLogistics(newLogisRfid);
-
 			// 申请关联
 			LogisticsRefEntity ref = new LogisticsRefEntity();
 			ref.setRfidNo(newRfid);
@@ -1320,12 +1316,27 @@ public class ContractServiceImpl implements IContractService {
 				ref.setRfidType(RfidTypeEnum.extrusions);
 			}
 			ref.setType(AssociationTypesEnum.CONTRACTOR_ADD);
-			// ref.setBatchNo(batchModel.getBatch().getBatchNo());
+			ref.setBatchNo(batch.getBatchNo() + "");
 			ref.setApplyDate(new Date());
 			ref.setContractNo(contractNo);
 			ref.setState(AuditStateEnum.noapproval);
 			ref.setReplenishRfid(rfidNos);
 			logisticsRefService.add(ref);
+
+			// 更新新的RFID
+			LogisticsRfidEntity newLogisRfid = logisticsRfidService
+					.getLogisticsByNo(newRfid);
+			if (newLogisRfid == null) {
+				throw new ServiceException("新RFID信息不存在");
+			}
+			if (!newLogisRfid.getRfidState().equals(RfidStateEnum.unused)) {
+				throw new ServiceException("新RFID状态不是未使用状态，不能用于补损");
+			}
+			newLogisRfid.setContractNo(contractNo);
+			newLogisRfid.setRfidState(RfidStateEnum.used);
+			newLogisRfid.setBatchNo(batch.getBatchNo() + "");
+			logisticsRfidService.updateLogistics(newLogisRfid);
+
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage(), e);
@@ -1444,37 +1455,19 @@ public class ContractServiceImpl implements IContractService {
 	 * 跟据rfid 获取补损批次
 	 */
 	@Override
-	@Transactional(readOnly = true)
-	public ContractReplenishModel getReplenishByRfid(String rfid) {
+	@Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+	public List<ReplenishBatchEntity> getReplenishByNewRfid(String batchNo,
+			String newRfid) {
 		try {
-			if (StringUtils.isEmpty(rfid)) {
+			if (StringUtils.isEmpty(newRfid)) {
 				return null;
 			}
-			ContractReplenishModel cModel = new ContractReplenishModel();
 			QueryCondition<ReplenishBatchEntity> query = new QueryCondition<ReplenishBatchEntity>();
-			query.addCondition("rfidNo", rfid);
+			query.addCondition("newRfid", newRfid);
+			query.addCondition("batchNo", batchNo);
 			List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
 					.queryReplenishBatch(query);
-			List<ReplenishBatchModel> replenishBatchList = new ArrayList<ReplenishBatchModel>();
-			ReplenishBatchModel rbm = new ReplenishBatchModel();
-			if (batchList != null && batchList.size() > 0) {
-				ReplenishBatchEntity rce = batchList.get(0);
-				List<BatchItemModel> bimList = new ArrayList<BatchItemModel>(0);
-				rbm.setReplenishBatch(rce);
-				bimList = JsonMapper
-						.nonEmptyMapper()
-						.getMapper()
-						.readValue(rce.getBatchItems(),
-								new TypeReference<List<BatchItemModel>>() {
-								});
-				ReplenishContractEntity rcentity = contractReplenishDao
-						.getReplenish(rce.getReplenishId());
-				rbm.setReplenishBatchItems(bimList);
-				replenishBatchList.add(rbm);
-				cModel.setReplenishContract(rcentity);
-				cModel.setBatchItems(replenishBatchList);
-			}
-			return cModel;
+			return batchList;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());
@@ -1590,7 +1583,9 @@ public class ContractServiceImpl implements IContractService {
 				throw new ServiceException("物流RFID关联已审核");
 			}
 			if (ref.getType().equals(AssociationTypesEnum.APPLY)) {
+				// 删除批次
 				self.deleteBatch(ref.getRfidNo(), ref.getContractNo());
+				// 回滚RFID
 				LogisticsRfidEntity l = logisticsRfidService
 						.getLogisticsByNo(ref.getRfidNo());
 				l.setRfidState(RfidStateEnum.unused);
@@ -1633,6 +1628,8 @@ public class ContractServiceImpl implements IContractService {
 				}
 				logistics.setRfidState(RfidStateEnum.unused);
 				logistics.setReplenishNo("");
+				logistics.setContractNo("");
+				logistics.setBatchNo("");
 				logisticsRfidService.updateLogistics(logistics);
 				// 更新新的RFID
 				LogisticsRfidEntity replenishRfid = logisticsRfidService
@@ -1645,6 +1642,7 @@ public class ContractServiceImpl implements IContractService {
 				}
 				replenishRfid.setContractNo(ref.getContractNo());
 				replenishRfid.setRfidState(RfidStateEnum.used);
+				replenishRfid.setReplenishNo("");
 				replenishRfid.setBatchNo(batchModel.getBatch().getBatchNo());
 				logisticsRfidService.updateLogistics(replenishRfid);
 			} else if (ref.getType()
@@ -1658,10 +1656,23 @@ public class ContractServiceImpl implements IContractService {
 				if (!logisRfid.getRfidState().equals(RfidStateEnum.used)) {
 					throw new ServiceException("RFID状态不是已使用状态");
 				}
-				logisRfid.setContractNo(ref.getContractNo());
+				logisRfid.setContractNo("");
 				logisRfid.setRfidState(RfidStateEnum.unused);
-				// newLogisRfid.setBatchNo(batchModel.getBatch().getBatchNo());
+				logisRfid.setBatchNo("");
 				logisticsRfidService.updateLogistics(logisRfid);
+				// 回滚批次
+				List<ReplenishBatchEntity> batchList = getReplenishByNewRfid(
+						ref.getBatchNo(), ref.getRfidNo());
+				if (batchList == null || batchList.size() == 0) {
+					throw new ServiceException("补损批次不存在");
+				}
+				for (ReplenishBatchEntity replenishBatch : batchList) {
+					if (replenishBatch == null) {
+						continue;
+					}
+					replenishBatch.setNewRfidNo("");
+				}
+				contractReplenishBatchDao.updateReplenishBatch(batchList);
 			}
 			// 删除关联
 			logisticsRefService.del(id);
@@ -1813,16 +1824,17 @@ public class ContractServiceImpl implements IContractService {
 		}
 
 	}
-	
+
 	/**
 	 * 获取待补损批次
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<ReplenishBatchEntity> getReplenishBatch(String contractNo){
-		try{
-		 List<ReplenishBatchEntity>  batchList=contractReplenishBatchDao.getReplenishBatch(contractNo);
-		 return batchList;
+	public List<ReplenishBatchEntity> getReplenishBatch(String contractNo) {
+		try {
+			List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+					.getReplenishBatch(contractNo);
+			return batchList;
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());
@@ -1830,6 +1842,6 @@ public class ContractServiceImpl implements IContractService {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("查询补损批次错误", e);
 		}
-		
+
 	}
 }

@@ -17,10 +17,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
-import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
@@ -29,7 +29,6 @@ import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
-import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -309,13 +308,13 @@ public class LogisticsRfidController extends BaseController {
 
 	@RequestMapping("contratc_loss")
 	public @ResponseBody Map<String, String> contractLoss(String contractNo,
-			String recordNo, String newRfidNo, String rfidNos,
-			HttpSession session) throws WebException {
+			String rfidId, String newRfidNo, String rfidNos, HttpSession session)
+			throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			contractService.updateContractLoss(rfidNos, contractNo, recordNo,
+			contractService.updateContractLoss(rfidNos, contractNo, rfidId,
 					userBean.getMember(), newRfidNo);
 			map.put("isOK", "ok");
 		} catch (Exception e) {
@@ -362,14 +361,19 @@ public class LogisticsRfidController extends BaseController {
 			if (StringUtils.isEmpty(contractNo)) {
 				throw new WebException("采购合同号不能为空！");
 			}
-			RecordQuery rq = new RecordQuery();
-			rq.setContractNo(contractNo);
-			rq.setRecordType(RecordTypeEnum.supplement.getId());
-			List<RecordEntity> reList = recordService.queryRecord(rq);
-			if (reList == null || reList.size() == 0) {
-				throw new WebException("该合同没有补损备案！");
+			List<ReplenishBatchEntity> list = contractService
+					.getReplenishBatch(contractNo);
+			if (list == null || list.size() == 0) {
+				throw new WebException("该合同没有补损批次！");
 			}
-			map.put("record", reList);
+			// RecordQuery rq = new RecordQuery();
+			// rq.setContractNo(contractNo);
+			// rq.setRecordType(RecordTypeEnum.supplement.getId());
+			// List<RecordEntity> reList = recordService.queryRecord(rq);
+			// if (reList == null || reList.size() == 0) {
+			// throw new WebException("该合同没有补损备案！");
+			// }
+			map.put("batchList", list);
 		} catch (Exception e) {
 			SxjLogger.error("查询备案错误", e, this.getClass());
 			map.put("error", e.getMessage());

@@ -21,9 +21,6 @@
 		<if test="condition.recordIds != null and condition.recordIds != ''">
 			<![CDATA[ AND REPLENISH_ID=#{condition.recordIds}]]>
 		</if>
-		<if test="condition.contractId != null and condition.contractId != ''">
-			<![CDATA[ AND CONTRACT_ID = #{condition.contractId}]]>
-		</if>
 		<if test="condition.rfidNo != null and condition.rfidNo != ''">
 			<![CDATA[ AND RFID_NO = #{condition.rfidNo}]]>
 		</if>
