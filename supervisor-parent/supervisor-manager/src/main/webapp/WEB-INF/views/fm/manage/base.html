@@ -431,7 +431,7 @@ function loadUpload(id,url,multi,text,fn){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
-	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        fileTypeExts: '*.jpg',
 	        auto: true,
 	        multi: false,
 	        height:30,
@@ -446,7 +446,7 @@ function classLoadUpload(text){
 	  $(":file").uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: "${basePath}upload.htm",
-	        fileTypeExts: '*.gif; *.jpg; *.png',
+	        fileTypeExts: '*.jpg',
 	        auto: true,
 	        multi: false,
 	        height:30,
