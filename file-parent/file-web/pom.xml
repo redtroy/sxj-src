@@ -96,7 +96,7 @@
 					<includeTypes>jar</includeTypes>
 					<overWriteSnapshots>true</overWriteSnapshots>
 					<type>jar</type>
-					<outputDirectory>${project.build.directory}/extlib</outputDirectory>
+					<outputDirectory>${project.build.directory}/extlib-fileweb</outputDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
