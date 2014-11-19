@@ -167,7 +167,8 @@ public interface IContractService {
 	 * @throws ServiceException
 	 */
 	public void updateRfidLoss(String rfidNo, String contractNo,
-			MemberEntity member, String newRfid) throws ServiceException;
+			String batchNo, MemberEntity member, String newRfid)
+			throws ServiceException;
 
 	/**
 	 * 采购合同物流补损

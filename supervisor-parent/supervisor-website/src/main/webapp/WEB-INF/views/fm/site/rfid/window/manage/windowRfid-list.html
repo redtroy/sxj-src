@@ -5,14 +5,32 @@
 <title>私享家绿色门窗平台</title>
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link href="${b.staticPath}style/uploadify.css " rel="stylesheet" type="text/css" /> 
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<link href="${b.staticPath}style/uploadify.css " rel="stylesheet"
+	type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
-<script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
-<script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${b.staticPath}style/elastislide.css" />
+<script src="${b.staticPath}js/tytabs.jquery.min.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script type="text/javascript"
+	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+	<script src="${b.staticPath}/js/tytabs.jquery.min.js" type="text/javascript"></script>
+	<script src="${b.staticPath}/js/jquery.paginate.js"></script>
 <@b.pageScript/>
-<@b.errorInfo/>
+<@b.errorInfo/> <@b.upload/>
 <@b.dialogBox/>
 <@b.validate/>
 <script>
@@ -116,6 +134,12 @@ function toLableLosses(id){
 		$("#listInfo").html(data);
 	});
 }
+$(document).ready(function() {
+	$('.modal-header .close').click(function() {
+		$('.maskdivgen').fadeOut(100);
+		$('.viewer').slideUp(200);
+	});
+});
 </script>
 </head>
 
@@ -138,8 +162,8 @@ function toLableLosses(id){
   标签编号<input type="text" name="rfidNo" class="input" value="${query.rfidNo}" />
   申请单号 <input type="text" name="applyNo" class="input" value="${query.applyNo}" />  
   招标合同号<input type="text" name="contractNo" class="input" value="${query.contractNo}" />
-  玻璃标签<input type="text" name="blRfid" class="input" value="${query.blRfid}" />
-  型材标签<input type="text" name="xcRfid" class="input" value="${query.xcRfid}" /></P>
+  玻璃标签<input type="text" name="glassRfid" class="input" value="${query.glassRfid}" />
+  型材标签<input type="text" name="profileRfid" class="input" value="${query.profileRfid}" /></P>
   窗型代号 <select name="windowType" class="selectx">
 	   		<option value="" selected="selected">全部</option>
 	   		<#list winType as type> 
@@ -241,5 +265,12 @@ function toLableLosses(id){
 </div>
 </div>
 <@b.footer />
+	<div class="viewer modal-wrap" id="iviewerModal">
+		<div class="modal-header" style="display: none;">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
+	</div>
 </body>
 </html>

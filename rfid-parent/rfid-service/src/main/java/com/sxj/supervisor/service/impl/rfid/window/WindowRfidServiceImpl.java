@@ -54,6 +54,8 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			condition.addCondition("contractNo", query.getContractNo());
 			condition.addCondition("purchaseNo", query.getPurchaseNo());
 			condition.addCondition("windowType", query.getWindowType());
+			condition.addCondition("glassRfid", query.getGlassRfid());
+			condition.addCondition("profileRfid", query.getProfileRfid());
 			condition.addCondition("memberNo", query.getMemberNo());
 			condition.addCondition("rfid", query.getRfid());
 			condition.addCondition("startImportDate",

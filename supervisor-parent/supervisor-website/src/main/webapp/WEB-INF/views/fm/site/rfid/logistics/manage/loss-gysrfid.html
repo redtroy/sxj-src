@@ -7,11 +7,30 @@
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
-<script src="${b.staticPath}js/jquery.js"></script>
-<script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
+<link href="${b.staticPath}style/uploadify.css " rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${b.staticPath}style/elastislide.css" />
+<script src="${b.staticPath}js/tytabs.jquery.min.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script type="text/javascript"
+	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+	<script src="${b.staticPath}/js/tytabs.jquery.min.js" type="text/javascript"></script>
+	<script src="${b.staticPath}/js/jquery.paginate.js"></script>
 <@b.errorInfo/>
-<@b.validate/>
+<@b.validate/> <@b.upload/>
 <@b.dialogBox/>
 <script type="text/javascript">
 $(function(){
@@ -25,6 +44,9 @@ $(function(){
 	});
 	$("#record_select").live("change",function(){
 		var rfidNo=$(this).find(":selected").attr("rfidNo");
+		if(rfidNo==null){
+			rfidNo="";
+		}
 		$("#ht_form").find("#rfid").text(rfidNo);
 		$("#ht_form").find("#rfidNo").val(rfidNo);
 	});
@@ -65,6 +87,7 @@ $(function(){
 								$("#contract_div").text(data.batch.contractId);
 								$("#batchNo_div").text(data.batch.batchNo);
 								$("#rfid_form").find("#contractNo").val(data.batch.contractId);
+								$("#rfid_form").find("#batchNo").val(data.batch.batchNo);
 								
 								var items=data.batchItem;
 								for(var i=0;i<items.length;i++){
@@ -110,20 +133,22 @@ $(function(){
 								var items=data.batchList;
 								var selectVal=$("#record_select").find(":selected").val();
 								$("#record_select").empty();
+								var rfidNo="";
 								for(var i=0;i<items.length;i++){
+									if(items[i].rfidNo!=null){
+										rfidNo=items[i].rfidNo;
+									}
 									if(selectVal==items[i].id){
-										$("#record_select").append("<option selected='selected' value='"+items[i].id+"' rfidNo='"+items[i].rfidNo+"'>补"+items[i].batchNo+"</option>");
-										$("#ht_form").find("#rfid").text(items[i].rfidNo);
-										$("#ht_form").find("#rfidNo").val(items[i].rfidNo);
+										$("#record_select").append("<option selected='selected' value='"+items[i].id+"' rfidNo='"+rfidNo+"'>补"+items[i].batchNo+"</option>");
+										$("#ht_form").find("#rfid").text(rfidNo);
+										$("#ht_form").find("#rfidNo").val(rfidNo);
 									}
 									else{
-										$("#record_select").append("<option value='"+items[i].id+"' rfidNo='"+items[i].rfidNo+"'>补"+items[i].batchNo+"</option>");
+										$("#record_select").append("<option value='"+items[i].id+"' rfidNo='"+rfidNo+"'>补"+items[i].batchNo+"</option>");
 										if(i==0){
-											$("#ht_form").find("#rfid").text(items[i].rfidNo);
-											$("#ht_form").find("#rfidNo").val(items[i].rfidNo);
+											$("#ht_form").find("#rfid").text(rfidNo);
+											$("#ht_form").find("#rfidNo").val(rfidNo);
 										}
-										
-										//alert(items[i].rfidNo);
 									}
 								}
 								isPass= true;
@@ -142,7 +167,10 @@ $(function(){
 			htLoss();
 		}
 	});
-	
+	$('.modal-header .close').click(function() {
+		$('.maskdivgen').fadeOut(100);
+		$('.viewer').slideUp(200);
+	});
 });
 function rfidLoss(formId){
 	dialogBox(function(){
@@ -201,6 +229,7 @@ function subForm2(){
 
 <div class="contents">
 <form action="javascript:void(0);" id="rfid_form" method="post">
+<input id="batchNo" type="hidden" name="batchNo" value="" />
 <input id="contractNo" type="hidden" name="contractNo" value="" /> 
 <input id="newRfidNo" type="hidden" name="newRfidNo" value="${newRfidNo}" /> 
 <div id="content1" class="tabscontent">
@@ -259,5 +288,14 @@ function subForm2(){
 </div>
 </div>
 </div>
-<@b.footer /></body>
+<@b.footer />
+
+	<div class="viewer modal-wrap" id="iviewerModal">
+		<div class="modal-header" style="display: none;">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
+	</div>
+</body>
 </html>

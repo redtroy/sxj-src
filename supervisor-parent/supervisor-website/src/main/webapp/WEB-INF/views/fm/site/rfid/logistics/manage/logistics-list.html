@@ -134,7 +134,7 @@ function closeLog(id){
           <td><a href="javascript:log('${list.id}');" class="lnk-blue">${list.rfidNo}</a></td>
           <td>${list.applyNo}</td>
           <td><a href="javascript:loadContractInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
-		  <#if list.replenishNo?exists>
+		  <#if (list.replenishNo?exists&&list.replenishNo!="")>
 		  <td><a href="javascript:loadInfo('${list.id}','${list.replenishNo}',${list.type.id})" class="lnk-blue">${list.batchNo}</a></td>
           <#else>
            <td><a href="javascript:loadInfo('${list.id}','${list.rfidNo}',${list.type.id})" class="lnk-blue">${list.batchNo}</a></td>
