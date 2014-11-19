@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
+import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
@@ -31,9 +33,13 @@ import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
+import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
+import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
+import com.sxj.supervisor.service.rfid.ref.ILogisticsRefService;
+import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -44,6 +50,12 @@ import com.sxj.util.logger.SxjLogger;
 public class LogisticsRfidController extends BaseController {
 	@Autowired
 	private ILogisticsRfidService logisticsRfidService;
+
+	@Autowired
+	private IWindowRfidService winRfidService;
+
+	@Autowired
+	private ILogisticsRefService logisticsRefService;
 
 	@Autowired
 	private IContractService contractService;
@@ -160,6 +172,28 @@ public class LogisticsRfidController extends BaseController {
 		try {
 			if (StringUtils.isEmpty(rfidNo)) {
 				throw new WebException("RFID编号不能为空！");
+			}
+			LogisticsRfidEntity rfid = logisticsRfidService
+					.getLogisticsByNo(rfidNo);
+			if (rfid == null) {
+				throw new WebException("该RFID不存在！");
+			}
+			if (!rfid.getRfidState().equals(RfidStateEnum.used)) {
+				throw new WebException("该RFID不是已使用状态！");
+			}
+			WindowRfidQuery query = new WindowRfidQuery();
+			query.setRfid(rfidNo);
+			List<WindowRfidEntity> winRfidList = winRfidService
+					.queryWindowRfid(query);
+			if (winRfidList != null && winRfidList.size() > 0) {
+				throw new WebException("该物流RFID已被门窗标签关联！");
+			}
+			LogisticsRefQuery refQuery = new LogisticsRefQuery();
+			refQuery.setReplenishRfid(rfidNo);
+			List<LogisticsRefEntity> refList = logisticsRefService
+					.query(refQuery);
+			if (refList != null && refList.size() > 0) {
+				throw new WebException("该物流RFID已被采购合同补损过！");
 			}
 			ContractBatchModel batchModel = contractService
 					.getBatchByRfid(rfidNo);
@@ -290,13 +324,13 @@ public class LogisticsRfidController extends BaseController {
 
 	@RequestMapping("rfid_loss")
 	public @ResponseBody Map<String, String> rfidLoss(String contractNo,
-			String newRfidNo, String rfidNo, HttpSession session)
+			String batchNo, String newRfidNo, String rfidNo, HttpSession session)
 			throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			contractService.updateRfidLoss(rfidNo, contractNo,
+			contractService.updateRfidLoss(rfidNo, contractNo, batchNo,
 					userBean.getMember(), newRfidNo);
 			map.put("isOK", "ok");
 		} catch (Exception e) {
