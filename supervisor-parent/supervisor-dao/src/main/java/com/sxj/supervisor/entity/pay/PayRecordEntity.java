@@ -5,7 +5,10 @@ import java.util.Date;
 
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.GeneratedValue;
+import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
@@ -29,6 +32,7 @@ public class PayRecordEntity implements Serializable {
 	 * ID
 	 */
 	@Id(column = "ID")
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	/**
@@ -47,7 +51,9 @@ public class PayRecordEntity implements Serializable {
 	 * 支付单号
 	 */
 	@Column(name = "PAY_NO")
+	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "dateNo")
 	private String payNo;
+	private String dateNo;
 
 	/**
 	 * 合同号
@@ -131,6 +137,14 @@ public class PayRecordEntity implements Serializable {
 
 	public String getId() {
 		return id;
+	}
+
+	public String getDateNo() {
+		return dateNo;
+	}
+
+	public void setDateNo(String dateNo) {
+		this.dateNo = dateNo;
 	}
 
 	public void setId(String id) {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.contract.IAccountingDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
@@ -24,6 +25,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	private IAccountingDao accountingDao;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<PayRecordEntity> queryPayList(ContractPayModel query)
 			throws ServiceException {
 		try {
@@ -57,6 +59,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	 * 甲方付款
 	 */
 	@Override
+	@Transactional
 	public String pay(String id, Long payReal) throws ServiceException {
 		try {
 			PayRecordEntity re = payDao.getPayRecordEntity(id);
@@ -78,6 +81,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	 * 乙方确认收款
 	 */
 	@Override
+	@Transactional
 	public String pay_ok(String id) throws ServiceException {
 		try {
 			PayRecordEntity re = payDao.getPayRecordEntity(id);
@@ -95,6 +99,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<AccountingModel> query_finance(AccountingModel query,
 			String startDate, String endDate) throws ServiceException {
 		try {
@@ -115,6 +120,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	}
 
 	@Override
+	@Transactional
 	public PayRecordEntity getPayRecordEntity(String id)
 			throws ServiceException {
 		try {
@@ -124,5 +130,17 @@ public class ContractPayServiceImpl implements IContractPayService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	@Transactional
+	public void addPayRecordEntity(PayRecordEntity pay) throws ServiceException {
+		try {
+			payDao.addPay(pay);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException("新增付款管理出错！", e);
+		}
+
 	}
 }

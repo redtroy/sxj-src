@@ -3,6 +3,7 @@ package com.sxj.supervisor.dao.contract;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.Get;
+import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.util.persistent.QueryCondition;
@@ -28,4 +29,10 @@ public interface IContractPayDao {
 	 */
 	@Get
 	public PayRecordEntity getPayRecordEntity(String id);
+
+	/**
+	 * 新增付款单
+	 */
+	@Insert
+	public void addPay(PayRecordEntity pay);
 }
