@@ -248,4 +248,6 @@ public interface IContractService {
 
 	List<ReplenishBatchEntity> getReplenishBatch(String contractNo);
 
+	void modifyBatchPayState(String contractNo, String rfidNo);
+
 }

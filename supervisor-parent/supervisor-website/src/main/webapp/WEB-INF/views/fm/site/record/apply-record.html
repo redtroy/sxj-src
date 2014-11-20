@@ -60,7 +60,13 @@
 			tiptype : 3
 		});
 		cg_validform = $("#cgForm").Validform({
-			tiptype : 3
+			tiptype : 3,
+			datatype:{
+				"ys":/^[A-Za-z0-9]+$/
+			},
+			callback:function(form){
+				AcgApplyRecord();
+			}
 		});
 	});
 	//图片处理事件
@@ -145,10 +151,7 @@
 	 * 甲方申请采购
 	 */
 	function AcgApplyRecord() {
-		if (!cg_validform.check()) {
-			$("#Validform_checktip").show();
-			return;
-		}
+		alert(memberIdB);
 		var memberIdB = $("#memberIdB").val();
 		var memberNameB = $("#memberNameB").val();
 		if (memberIdB == '') {
@@ -181,6 +184,10 @@
 								}
 							});
 				}, "是否生成备案?");
+	}
+	
+	function subForm(){
+		  $("#cgForm").submit();
 	}
 	/**
 	 * 甲方申请招标
@@ -415,7 +422,7 @@
 										</div>
 									</div>
 								</form>
-								<form action="" id="cgForm" method="post" autocomplete="off">
+								<form action="javascript:void(0);" id="cgForm" method="post" autocomplete="off">
 									<input type="hidden" name="memberNameA" value="${name}" />
 									<div id="content2" class="tabscontent">
 										<div class="item">
@@ -432,7 +439,7 @@
 										<div class="item">
 											<label>关联招标合同号</label><input class="input input-w240h36"
 												value="" id="refContractNo" name="refContractNo"
-												datatype="*" nullmsg="请输入招标合同号"  ajaxurl="getContract.htm"/>
+												datatype="ys" nullmsg="请输入招标合同号" errormsg="招标合同号只能用英文+数字"  ajaxurl="getContract.htm"/>
 										</div>
 										<div class="item">
 											<label>&nbsp;</label>
@@ -452,8 +459,8 @@
 											</div>
 										</div>
 										<div class="item mt10">
-											<label>&nbsp;</label><a href="javascript:AcgApplyRecord();"
-												class="button button-orange mr15">确定</a><a
+											<label>&nbsp;</label><a href="javascript:void(0);"
+												class="button button-orange mr15" onclick="subForm();">确定</a><a
 												href="${basePath}member/memberInfo.htm"
 												class="button button-gray">取消</a>
 										</div>

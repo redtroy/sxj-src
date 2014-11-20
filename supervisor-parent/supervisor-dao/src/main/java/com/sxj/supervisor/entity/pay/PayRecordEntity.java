@@ -51,7 +51,7 @@ public class PayRecordEntity implements Serializable {
 	 * 支付单号
 	 */
 	@Column(name = "PAY_NO")
-	@Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "dateNo")
+	@Sn(pattern = "00", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "dateNo")
 	private String payNo;
 	private String dateNo;
 
@@ -77,7 +77,7 @@ public class PayRecordEntity implements Serializable {
 	 * 支付金额
 	 */
 	@Column(name = "PAY_AMOUNT")
-	private Long payAmount;
+	private Double payAmount;
 
 	/**
 	 * 实际支付金额
@@ -183,11 +183,11 @@ public class PayRecordEntity implements Serializable {
 		this.rfidNo = rfidNo;
 	}
 
-	public Long getPayAmount() {
+	public Double getPayAmount() {
 		return payAmount;
 	}
 
-	public void setPayAmount(Long payAmount) {
+	public void setPayAmount(Double payAmount) {
 		this.payAmount = payAmount;
 	}
 

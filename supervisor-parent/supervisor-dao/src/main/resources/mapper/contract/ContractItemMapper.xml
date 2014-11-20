@@ -19,7 +19,6 @@
 <!-- 条件查询合同批次 -->
 	<select id="queryItems" resultMap="ItemResultMap"
 		parameterType="String">
-		<![CDATA[SELECT ID, CONTRACT_ID, PRODUCT_NAME, PRODUCT_MODEL, QUANTITY, PRICE,
- 		AMOUNT, REMARKS,UPDATE_STATE,WINDOW_TYPE FROM M_CONTRACT_ITEM WHERE CONTRACT_ID=#{contractId}]]>
+		<![CDATA[SELECT * FROM M_CONTRACT_ITEM WHERE CONTRACT_ID=#{contractId}]]>
 	</select>
 </mapper>

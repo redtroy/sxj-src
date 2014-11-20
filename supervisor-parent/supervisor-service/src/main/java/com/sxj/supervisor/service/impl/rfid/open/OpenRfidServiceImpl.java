@@ -25,17 +25,22 @@ import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
+import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
+import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
+import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.open.Bacth;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.BatchNo;
 import com.sxj.supervisor.model.open.ContractNo;
 import com.sxj.supervisor.model.open.WinTypeModel;
+import com.sxj.supervisor.service.contract.IContractPayService;
+import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
@@ -70,6 +75,12 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 
 	@Autowired
 	private IContractDao contractDao;
+	
+	@Autowired
+	private IContractService contractService;
+	@Autowired
+	private IContractPayService contractPayService;
+
 
 	@Autowired
 	private IWindowRfidRefDao windowRfidRefDao;
@@ -256,8 +267,8 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 				.queryLogisticsRfidList(logisticsQuery);
 		if (ref != null && ref.size() > 0) {
 			LogisticsRfidEntity le = ref.get(0);
-			if (le.getProgressState().getId() == 0) {
-				le.setProgressState(LabelStateEnum.shipped);
+			if (le.getProgressState().getId() == 2) {
+				le.setProgressState(LabelStateEnum.installed);
 				logisticsDao.updateLogisticsRfid(le);
 				return 1;
 			}else{
@@ -283,9 +294,32 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			if (le.getProgressState().getId() == 3) {
 				le.setProgressState(LabelStateEnum.hasQuality);
 				logisticsDao.updateLogisticsRfid(le);
-				return 1;
+				//获取合同信息
+				ContractModel cm=contractService.getContractModelByContractNo(le.getContractNo());
+				if(cm!=null){
+					//获取批次信息
+					ContractBatchEntity cb=contractBatchDao.getBacthsByRfid(rfid);
+					//生成支付单
+					PayRecordEntity pay = new PayRecordEntity();
+					pay.setMemberNo_A(cm.getContract().getMemberIdA());
+					pay.setMemberNo_B(cm.getContract().getMemberIdB());
+					pay.setContractNo(cm.getContract().getContractNo());
+					pay.setRfidNo(rfid);
+					pay.setDateNo(cm.getContract().getContractNo()+"P");//编号
+					pay.setBatchNo(cb.getBatchNo());
+					pay.setPayAmount(cb.getAmount());
+					if(cm.getContract().getType().getId()==1){
+						pay.setContent("玻璃货款");	
+					}else if(cm.getContract().getType().getId()==2){
+						pay.setContent("型材货款");	
+					}
+					pay.setState(PayStageEnum.Stage1);
+					contractPayService.addPayRecordEntity(pay);//生成支付单
+					return 1;
+				}
+				
 			}
-
+			
 		}
 		return 0;
 	}

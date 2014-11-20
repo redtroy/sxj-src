@@ -46,9 +46,6 @@
 <script type="text/javascript">
 	var validform;
 	function edit() {
-		if (!validform.check()) {
-			return false;
-		}
 		dialogBox(function() {
 			$.post("record_save.htm",$("#record_save").serialize(),function(data){
 				if (data.isOK=='ok'){
@@ -63,9 +60,15 @@
 	}
 	$(function() {
 		validform = $("#record_save").Validform({
-			tiptype : 3
+			tiptype : 3,
+			callback:function(form){
+				edit();
+			}
 		});
 	})
+	function record_save(){
+		$('#record_save').submit();
+	}
 	//图片处理事件
 	//加载绑定扫描件(默认图片地址,滚动UL)
 	var imgBinding = function() {
@@ -216,7 +219,7 @@
 				<h2 class="title">备案修改</h2>
 				<div class="infoBox binBox f14">
 					<ul>
-						<form action="" method="post"
+						<form action="javascript:void(0);" method="post"
 							id="record_save">
 							
 							<input type="hidden" name="id"
@@ -251,8 +254,8 @@
 							</span></li>
 							<li><label>关联招标合同</label><#if record.flag.getId()==0><input type="text"
 								value="${record.refContractNo}" name="refContractNo"
-								 datatype="*2-50" nullmsg="请输入招标合同" ajaxurl="getContract.htm?id=${record.id}" /><#else><input type="text"
-								value="${record.refContractNo}" name="refContractNo" /></#if></li>
+								 datatype="*1-50" nullmsg="请输入招标合同" ajaxurl="getContract.htm?id=${record.id}" /><#else><input type="text"
+								value="${record.refContractNo}" name="refContractNo" datatype="/^[A-Za-z0-9]+$/" ignore="ignore"  ajaxurl="getContract.htm?id=${record.id}" errormsg="招标合同号只能用英文+数字"  /></#if></li>
 							<li><label>备案类型</label>${record.type.getName()}</li>
 							<li><label>申请备案时间</label> <#if (record.applyDate??)>
 								${record.applyDate?string("yyyy-MM-dd HH:mm:ss")}</li> </#if>
@@ -262,7 +265,7 @@
 					</form>
 					<div class="btnBox">
 						<a href="javascript:void(0);" class="button button-orange button-small"
-							onclick="edit()">修改</a> <a href="javascript:history.go(-1);"
+							onclick="record_save()">修改</a> <a href="javascript:history.go(-1);"
 							class="button button-gray button-small">返回</a>
 					</div>
 				</div>
