@@ -12,6 +12,7 @@
 		<result property="amount" column="AMOUNT" jdbcType="DOUBLE" />
 		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
 		<result property="replenishState" column="REPLENISH_STATE" jdbcType="INTEGER" />
+		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 条件查询合同补损批次 -->
@@ -27,7 +28,7 @@
 		<if test="condition.newRfidNo != null and condition.newRfidNo != ''">
 			<![CDATA[AND NEW_RFID_NO = #{condition.newRfidNo}]]>
 		</if>
-		<![CDATA[ ORDER BY BATCH_NO DESC ]]>
+		<![CDATA[ ORDER BY BATCH_NO ASC ]]>
 	</select>
 	<select id="getReplenishBatch" resultMap="ReplenishBatchResultMap"
 		parameterType="String">

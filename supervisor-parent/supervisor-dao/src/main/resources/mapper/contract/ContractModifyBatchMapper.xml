@@ -13,6 +13,7 @@
 		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
 		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
 		<result property="replenishState" column="REPLENISH_STATE" jdbcType="INTEGER" />
+		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
@@ -31,5 +32,6 @@
 		<if test="condition.state != null and condition.state != ''">
 			<![CDATA[AND UPDATE_STATE != #{condition.state}]]>
 		</if>
+		<![CDATA[ ORDER BY BATCH_NO ASC ]]>
 	</select>
 </mapper>

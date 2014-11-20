@@ -1886,4 +1886,38 @@ public class ContractServiceImpl implements IContractService {
 		}
 
 	}
+
+	/**
+	 * 更新批次支付狀態
+	 */
+	@Override
+	public void modifyBatchPayState(String contractNo, String rfidNo) {
+		try {
+			ContractBatchEntity contractBatch = contractBatchDao.getBacthsByRfid(rfidNo);
+			if (contractBatch != null) {
+				if (contractBatch.getType() == 1) {
+					ContractBatchEntity cbe = new ContractBatchEntity();
+					cbe.setId(contractBatch.getId());
+					cbe.setPayState(1);
+					contractBatchDao.updateBatch(contractBatch);
+				} else if (contractBatch.getType() == 2) {
+					ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
+					modifyBatch.setId(contractBatch.getId());
+					modifyBatch.setPayState(1);
+					contractModifyBatchDao.updateBatch(modifyBatch);
+				} else if (contractBatch.getType() == 3) {
+					ReplenishBatchEntity replenishBatch = new ReplenishBatchEntity();
+					replenishBatch.setId(contractBatch.getId());
+					replenishBatch.setPayState(1);
+					contractReplenishBatchDao.updateBatch(replenishBatch);
+				}
+			}
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新批次错误", e);
+		}
+	}
 }
