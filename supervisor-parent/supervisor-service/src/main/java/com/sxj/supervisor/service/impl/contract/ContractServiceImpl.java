@@ -76,6 +76,7 @@ import com.sxj.supervisor.model.contract.ContractReplenishModel;
 import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
 import com.sxj.supervisor.model.record.RecordQuery;
+import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
@@ -1665,7 +1666,7 @@ public class ContractServiceImpl implements IContractService {
 				logistics.setContractNo("");
 				logistics.setBatchNo("");
 				logisticsRfidService.updateLogistics(logistics);
-				// 更新新的RFID
+				// 更新被补损的RFID
 				LogisticsRfidEntity replenishRfid = logisticsRfidService
 						.getLogisticsByNo(ref.getReplenishRfid());
 				if (replenishRfid == null) {
@@ -1678,6 +1679,10 @@ public class ContractServiceImpl implements IContractService {
 				replenishRfid.setRfidState(RfidStateEnum.used);
 				replenishRfid.setReplenishNo("");
 				replenishRfid.setBatchNo(batchModel.getBatch().getBatchNo());
+				RfidLog log = new RfidLog();
+				log.setId(RfidStateEnum.damaged.getId());
+				log.setState(RfidStateEnum.damaged.getName());
+				replenishRfid.removeLog(log);
 				logisticsRfidService.updateLogistics(replenishRfid);
 			} else if (ref.getType()
 					.equals(AssociationTypesEnum.CONTRACTOR_ADD)) {
@@ -1780,12 +1785,15 @@ public class ContractServiceImpl implements IContractService {
 				// 还原被补损的RFID
 				replenishRfid.setReplenishNo("");
 				replenishRfid.setRfidState(RfidStateEnum.used);
+				RfidLog log = new RfidLog();
+				log.setId(RfidStateEnum.damaged.getId());
+				log.setState(RfidStateEnum.damaged.getName());
+				replenishRfid.removeLog(log);
 				windowRfidService.updateWindowRfid(replenishRfid);
 
 				// 还原补损的RFID
 				rfid.setRfidState(RfidStateEnum.unused);
 				rfid.setWindowType(null);
-				// rfid.setContractNo("");
 				rfid.setGlassRfid("");
 				rfid.setProfileRfid("");
 				windowRfidService.updateWindowRfid(rfid);

@@ -33,9 +33,6 @@ $(function(){
 		if (container_b!=null)
 		rfid_b($("#pc_b option:selected").val());
 	})
-	//$("#refContractNo").bigAutocomplete({url:"lx_query.htm",callback:function(data){
-     //   $("#refContractNo").val(data.title);
-   // }});
 	
 	$(".input-w180h36").keyup(function(event){
 		$("#contract_text").hide();
@@ -228,8 +225,40 @@ function rfid_b(pc_b_id){
 	}
 	
 }
+function validation(){
+	var refContractNo=$("#refContractNo").val();
+	var num=$("#num").val();
+	if(refContractNo==null||refContractNo==''){
+	    $("#contract_text").show();
+	    $("#contract_text").text("请输入正确的招标合同号");
+	    wrong("#contract_text");
+	    return false;
+	}
+	if(!refContractNo.match(contractReg)){
+	    $("#contract_text").show();
+	    $("#contract_text").text("请输入正确的招标合同号");
+	    wrong("#contract_text");
+	    return false;
+	}
+	if(num==null||num==''){
+		$("#num_text").show();
+		$("#num_text").text("请输入启用数量")
+		wrong("#num_text");
+		return false;
+	}
+	if (!num.match(reg)){
+		$("#num_text").show();
+		$("#num_text").text("数量必须是整数")
+		wrong("#num_text");
+		return false;
+	}
+	return true;
+}
 //启用标签
 function star(){
+	if(!validation()){
+		return false;
+	}
 	var refContractNo=$("#refContractNo").val();
 	var num=$("#num").val();
 	var gRfid=$("#rfid_a").text();

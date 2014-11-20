@@ -399,7 +399,14 @@ function loadUpload(id,url,isMulti,text,fn){
 <div id="header">
 <div class="fence-wide">
 <#if Session.userinfo?exists>
-<div class="logOut ly-right"><a href="${basePath}logout.htm">退出当前帐户</a></div>
+<div class="logOut ly-right">
+	<#if Session.userinfo.account?exists>
+	<span class="mr10">${Session.userinfo.account.name}，您好！</span>
+	<#else>
+	<span class="mr10">${Session.userinfo.member.name}，您好！</span>
+	</#if>
+	<a href="${basePath}logout.htm">退出当前帐户</a>
+</div>
 </#if>
 </div>
 <h1 class="fence-wide"><a href="javascript:void(0);" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
