@@ -166,7 +166,7 @@ function pay_ok(id){
         付款状态<select name="state">
 		    <option selected="selected" value="">全部</option>
             <#list payState as ps>
-            <option value="${ps.ordinal()}">${ps.getName_b}</option>
+            <option value="${ps.ordinal()}">${ps.getName_b()}</option>
             </#list>
           </select>
    </#if>

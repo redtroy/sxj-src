@@ -40,4 +40,10 @@ public interface IContractPayService {
 	 */
 	public PayRecordEntity getPayRecordEntity(String id)
 			throws ServiceException;
+
+	/**
+	 * 新增付款单
+	 */
+	public void addPayRecordEntity(PayRecordEntity pay) throws ServiceException;
+
 }
