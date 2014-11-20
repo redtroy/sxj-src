@@ -214,10 +214,19 @@ function pc_b(){
 	}
 }
 function rfid_a(pc_a_id){
-	$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
+	if(container_a[pc_a_id].batch.rfidNo==null){
+		$("#rfid_a").text("");
+	}else{
+		$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
+	}
 }
 function rfid_b(pc_b_id){
-	$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
+	if(container_b[pc_b_id].batch.rfidNo==null){
+		$("#rfid_b").text("");
+	}else{
+		$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
+	}
+	
 }
 //启用标签
 function star(){
