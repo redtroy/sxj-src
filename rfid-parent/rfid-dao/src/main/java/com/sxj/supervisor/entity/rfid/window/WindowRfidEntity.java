@@ -3,6 +3,7 @@ package com.sxj.supervisor.entity.rfid.window;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.Column;
@@ -286,6 +287,25 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 			}
 			return logList;
 		}
+	}
+
+	public void removeLog(RfidLog log) {
+		if (getLogList() != null) {
+			for (Iterator<RfidLog> iterator = logList.iterator(); iterator
+					.hasNext();) {
+				RfidLog rfidLog = iterator.next();
+				if (rfidLog == null) {
+					continue;
+				}
+				if (rfidLog.getId() == log.getId()
+						&& log.getState().equals(rfidLog.getState())) {
+					iterator.remove();
+				}
+			}
+
+		}
+		String json = JsonMapper.nonEmptyMapper().toJson(logList);
+		setLog(json);
 	}
 
 	private void setLogList(RfidLog log) {
