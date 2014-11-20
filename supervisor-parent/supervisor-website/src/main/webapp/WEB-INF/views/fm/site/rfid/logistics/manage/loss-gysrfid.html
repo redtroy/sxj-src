@@ -54,14 +54,6 @@ $(function(){
 	$("#contractNo").bigAutocomplete({url:url_,callback:function(data){
 		getRecord(data.result);
     }});
-	//$("#record").change(function() {
-	//	var rfidNo=$(this).attr("rfidNo");
-	//	$("#rfid").text(rfidNo);
-		
-		//$.post("getRecordInfo.htm",{"recordNo":this.val()},function(data){
-		//	$("#rfid").text(data.str);
-		//});
-	//});
 	
 	$("#rfid_form").Validform({
 		tiptype:3,

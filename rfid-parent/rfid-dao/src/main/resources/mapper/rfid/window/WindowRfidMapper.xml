@@ -83,12 +83,6 @@
 		<![CDATA[SELECT MAX(GENERATE_KEY) FROM R_WINDOW_RFID WHERE RFID_STATE=0]]>
 		<![CDATA[AND CONTRACT_NO = #{contractNo}]]>
 	</select>
-	<update id="update_rfid">
-	  <![CDATA[ UPDATE R_WINDOW_RFID SET RFID_STATE=2 WHERE RFID_NO IN]]>
-	   <foreach item="item" index="index" collection="array"  open="(" separator="," close=")">
-                        #{rfids}
-      </foreach>
-	</update>
 	<select id="selectByRfidNo" resultMap="windowRfidResultMap">
 	  <![CDATA[ SELECT * FROM R_WINDOW_RFID WHERE RFID_NO=#{rfidNo}]]>
 	</select>
