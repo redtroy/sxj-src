@@ -54,6 +54,8 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			condition.addCondition("contractNo", query.getContractNo());
 			condition.addCondition("purchaseNo", query.getPurchaseNo());
 			condition.addCondition("windowType", query.getWindowType());
+			condition.addCondition("glassRfid", query.getGlassRfid());
+			condition.addCondition("profileRfid", query.getProfileRfid());
 			condition.addCondition("memberNo", query.getMemberNo());
 			condition.addCondition("rfid", query.getRfid());
 			condition.addCondition("startImportDate",
@@ -321,6 +323,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				if (oldRfid == null) {
 					throw new ServiceException("编号为：" + addRfid[i]
 							+ "的被补损RFID不存在");
+				}
+				if (!oldRfid.getRfidState().equals(RfidStateEnum.used)) {
+					throw new ServiceException("编号为：" + addRfid[i]
+							+ "的被补损RFID不是已使用状态");
 				}
 				WindowRfidEntity newRfid = list.get(i);
 				if (newRfid == null) {

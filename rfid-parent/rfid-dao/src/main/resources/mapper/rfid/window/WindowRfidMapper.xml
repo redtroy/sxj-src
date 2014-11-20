@@ -45,6 +45,12 @@
 		<if test="condition.rfid != null and condition.rfid !=''">
 			<![CDATA[AND (GLASS_RFID = #{condition.rfid} or PROFILE_RFID = #{condition.rfid}) ]]>
 		</if>
+		<if test="condition.glassRfid != null and condition.glassRfid !=''">
+			<![CDATA[AND GLASS_RFID = #{condition.glassRfid}]]>
+		</if>
+		<if test="condition.profileRfid != null and condition.profileRfid !=''">
+			<![CDATA[AND  PROFILE_RFID = #{condition.profileRfid}]]>
+		</if>
 		<if test="condition.memberNo != null and condition.memberNo !=''">
 			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
 		</if>

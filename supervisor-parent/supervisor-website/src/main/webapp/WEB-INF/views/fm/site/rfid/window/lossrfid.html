@@ -195,10 +195,20 @@ function pc_b(){
 	}
 }
 function rfid_a(pc_a_id){
-	$("#rfid_a").text(container_a[pc_a_id].replenishBatch.newRfidNo);
+	if(container_a[pc_a_id].replenishBatch.newRfidNo==null){
+		$("#rfid_a").text("");
+	}else{
+		$("#rfid_a").text(container_a[pc_a_id].replenishBatch.newRfidNo);
+	}
+	
 }
 function rfid_b(pc_b_id){
-	$("#rfid_b").text(container_b[pc_b_id].replenishBatch.newRfidNo);
+	if(container_b[pc_b_id].replenishBatch.newRfidNo==null){
+		$("#rfid_b").text("");
+	}else{
+		$("#rfid_b").text(container_b[pc_b_id].replenishBatch.newRfidNo);
+	}
+	
 }
 //启用标签
 function star(){
@@ -217,7 +227,9 @@ function star(){
 	dialogBox(function(){
 		$.post("start_loss_lable.htm?"+rfids,{refContractNo:refContractNo,minRfid:lable[0],maxRfid:lable[1],gRfid:gRfid,lRfid:lRfid},function(data){
 			if (data.isOk=="ok"){
-				messageInfo("补损成功！");
+				succInfo(function(){
+					window.location.href="${basePath}rfid/window/query.htm";
+				},"补损成功！");
 			}else{
 				errorInfo(data.error);
 			}

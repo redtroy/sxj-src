@@ -3,7 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.contract.IContractBatchDao">
-	<resultMap id="BacthResultMap" type="com.sxj.supervisor.entity.contract.ContractBatchEntity">
+	<resultMap id="BacthResultMap"
+		type="com.sxj.supervisor.entity.contract.ContractBatchEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="contractId" column="CONTRACT_ID" jdbcType="VARCHAR" />
 		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
@@ -12,14 +13,15 @@
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
-		<result property="replenishState" column="REPLENISH_STATE" jdbcType="INTEGER" />
+		<result property="replenishState" column="REPLENISH_STATE"
+			jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 条件查询合同批次 -->
 	<select id="queryBacths" resultMap="BacthResultMap"
 		parameterType="String">
 		<![CDATA[SELECT * FROM M_CONTRACT_BATCH WHERE 1=1 ]]>
-			<!-- 合同号 -->
+		<!-- 合同号 -->
 		<if test="condition.contractId != null and condition.contractId != ''">
 			<![CDATA[AND CONTRACT_ID = #{condition.contractId}]]>
 		</if>
@@ -33,6 +35,14 @@
 			<![CDATA[AND UPDATE_STATE != #{condition.state}]]>
 		</if>
 		<![CDATA[ ORDER BY BATCH_NO DESC ]]>
+	</select>
+	<select id="getAllBacthsByRfid" resultMap="BacthResultMap"
+		parameterType="String">
+		<![CDATA[
+			SELECT C.ID,C.BATCH_NO,C.AMOUNT,C.BATCH_ITEMS,C.RFID_NO,1 as TYPE FROM M_CONTRACT_BATCH C WHERE  C.RFID_NO=#{condition.rfidNo} UNION ALL 
+ 			SELECT M.ID,M.BATCH_NO,M.AMOUNT,M.BATCH_ITEMS,M.RFID_NO, 2 as TYPE FROM M_CONTRACT_MODIFY_BATCH M  WHERE  M.RFID_NO=#{condition.rfidNo} UNION ALL 
+			SELECT R.ID,R.BATCH_NO,R.AMOUNT,R.BATCH_ITEMS,R.NEW_RFID_NO AS RFID_NO,3 AS TYPE FROM M_CONTRACT_REPLENISH_BATCH R WHERE R.NEW_RFID_NO=#{condition.rfidNo} 
+		]]>
 	</select>
 	<!-- 根据rfid号获取批次 -->
 	<select id="getBacthsByRfid" resultMap="BacthResultMap"
@@ -53,5 +63,5 @@
 			  AND length(RB.NEW_RFID_NO)>0 
 		]]>
 	</select>
-	
+
 </mapper>
