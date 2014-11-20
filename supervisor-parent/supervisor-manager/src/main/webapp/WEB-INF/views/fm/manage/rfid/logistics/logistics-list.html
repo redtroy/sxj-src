@@ -40,19 +40,6 @@ function query(page){
 		loadPage(currentPage,totalPage,query);
 	});
 }
-function  del(id){
-	dialogBox(function(){
-		$.post("delete.htm",{id:id},function(data){
-			if(data.isOK=='ok'){
-				succInfo(function(){
-					query($("#pager").attr("currentPage"));
-				},"删除成功!");
-			}else{
-				errorInfo(data.error);	
-			}
-		});
-	},"确实要删除吗?");
-}
 function  disable(id){
 	dialogBox(function(){
 		$.post("disable.htm",{id:id},function(data){
@@ -247,7 +234,7 @@ $(function(){
 		   <#if list.rfidState.getId()==3>
 		   <em class="state frozen">${list.rfidState.getName()}</em>
 		  </#if></td>
-		  <td class="operation"><#if list.rfidState.getId()==0||list.rfidState.getId()==1><a href="javascript:disable('${list.id}');" class="stop">停用</a></#if><#if list.rfidState.getId()==0><a href="javascript:del('${list.id}');" class="del">删除</a></#if></td>
+		  <td class="operation"><#if list.rfidState.getId()==0||list.rfidState.getId()==1><a href="javascript:disable('${list.id}');" class="stop">停用</a></#if><!--<#if list.rfidState.getId()==0><a href="javascript:del('${list.id}');" class="del">删除</a></#if>  --></td>
         </tr>
         <tr class="tableInfo" id="info${list.id}" isopen="0"></tr>
         </#list>
