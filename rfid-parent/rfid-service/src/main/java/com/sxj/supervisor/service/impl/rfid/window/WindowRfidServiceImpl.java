@@ -324,6 +324,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 					throw new ServiceException("编号为：" + addRfid[i]
 							+ "的被补损RFID不存在");
 				}
+				if (!oldRfid.getRfidState().equals(RfidStateEnum.used)) {
+					throw new ServiceException("编号为：" + addRfid[i]
+							+ "的被补损RFID不是已使用状态");
+				}
 				WindowRfidEntity newRfid = list.get(i);
 				if (newRfid == null) {
 					throw new ServiceException("补损的RFID不存在");
