@@ -5,16 +5,37 @@
 <title>私享家绿色门窗平台</title>
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<link href="${b.staticPath}style/uploadify.css " rel="stylesheet"
+	type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
-<script src="${b.staticPath}js/datepicker.js"></script>
-<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${b.staticPath}style/elastislide.css" />
+<script src="${b.staticPath}js/tytabs.jquery.min.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/comet4j.js"></script>
-<@b.pageScript/>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script type="text/javascript"
+	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+	<script src="${b.staticPath}/js/tytabs.jquery.min.js" type="text/javascript"></script>
+	<script src="${b.staticPath}/js/jquery.paginate.js"></script>
+<@b.pageScript/><@b.upload/>
 <script>
 jQuery(document).ready(function($) {
-	
+	$('.modal-header .close').click(function() {
+		$('.maskdivgen').fadeOut(100);
+		$('.viewer').slideUp(200);
+	});
 	$('.btn-pay').live("click",function(){
 		var obj=$(this).attr("pay_id");
 		$('#'+obj).slideDown(200);
@@ -241,5 +262,13 @@ function pay_ok(id){
 </div>
 </div>
 <@b.footer />
+<div class="viewer modal-wrap" id="iviewerModal">
+		<div class="modal-header" style="display: none;">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
+	</div>
+	<div class="maskdivgen maskdivgen1" style="display: none"></div>
 </body>
 </html>
