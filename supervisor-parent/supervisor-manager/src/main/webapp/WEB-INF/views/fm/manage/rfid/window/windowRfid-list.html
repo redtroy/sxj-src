@@ -215,7 +215,7 @@ $(function(){
           <td>${win.purchaseNo}</td>
           <td><a href="javascript:loadInfo('${win.id}','${win.contractNo}')" class="lnk-blue">${win.contractNo}</a></td>
           <#if win.windowType??>
-          <td>${win.windowType.getName()} </td>
+          <td><#if win.rfidState.getId()!=0>${win.windowType.getName()}</#if></td>
           <#else>
           <td></td>
           </#if>

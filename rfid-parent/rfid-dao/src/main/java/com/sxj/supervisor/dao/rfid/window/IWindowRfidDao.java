@@ -79,11 +79,6 @@ public interface IWindowRfidDao {
 	public WindowRfidEntity getWindowRfid(String id);
 
 	/**
-	 * 更新门窗RFID 状态
-	 */
-	public void update_rfid(String[] rfids);
-
-	/**
 	 * 根据RFID_NO 查询窗户信息
 	 */
 	public WindowRfidEntity selectByRfidNo(String rfidNo);
