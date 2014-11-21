@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>支付管理<span>&gt;</span>支付管理</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <div id="leftList"><@b.leftMenu /></div>
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">支付管理</h2>
+      <div id="searchBox">
+      <p>
+       支付单号<input type="text" name="" value="">
+       合同号<input type="text" name="" value="">
+       类型<select name="select">
+	   <option selected="selected" value="">全部</option>
+          <#list payTypes as model>
+          <option value="${model.id}">${model.getName()}</option>
+          </#list>
+        </select>
+       付款会员ID<input type="text" name="" value="">
+       RFID编号<input type="text" name="" value="">
+       支付内容<select name="select">
+	   <option selected="selected" value="">全部</option>
+         <#list payStates as model>
+          <option value="${model.id}">${model.getName()}</option>
+          </#list>
+        </select>
+        </p>
+       <p>
+       支付时间段
+       <input type="text" name="" value="">-<input type="text" name="" value="">       
+        付款状态<select name="select">
+	   <option selected="selected">全部</option>
+          <option>已完成</option>
+          <option>未完成</option>
+        </select>
+        付款方式<select name="select">
+	   <option selected="selected">全部</option>
+         <#list payModes as model>
+          <option value="${model.id}">${model.getName()}</option>
+          </#list>
+        </select>
+        <button class="btn btn-blue"><span>查询</span></button>
+        </p>
+    </div>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+        <col width="10%"/>
+        <col width="8%"/>
+        <col width="5%"/>
+        <col width="5%" />
+        <col width="10%" />
+        <col width="8%" />
+        <col width="8%" />
+        <col width="10%" />
+        <col width="12%" />
+        <col width="8%" />
+        <col width="10%" />
+        <tr>
+          <th>支付单号</th>
+          <th>合同号</th>
+          <th>批次</th>
+          <th>类型</th>
+          <th>付款会员ID</th>
+          <th>RFID编号</th>
+          <th>参考应付金额</th>
+          <th>支付时间</th>
+          <th>支付内容</th>
+          <th>付款状态</th>
+          <th class="rLine">付款方式</th>
+        </tr>
+        <#list list as model>
+        <tr>
+          <td>${model.payNo}</td>
+          <td><a href="#" class="lnk-blue">${model.contractNo}</a></td>
+          <td>${model.batchNo}</td>
+          <td><#if (model.type??)>${model.type.getName()}</#if></td>
+          <td>${model.memberName_A}</td>
+          <td><a href="#">${model.rfidNo}</a></td>
+          <td>${model.payAmount}</td>
+          <td><#if (model.payDate??)>${model.payDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+          <td>${model.content}</td>
+          <td><em class="state frozen">${model.state.name_a}</em></td>
+          <td><em class="state process"><#if (model.payMode??)>${model.payMode.getName()}</#if></em></td>
+        </tr>
+        <tr class="tableInfo" style="display:;">
+        </tr>
+        </#list>
+        <tr>
+          <td><strong>合计</strong></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td><strong>366201元</strong></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>

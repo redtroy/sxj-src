@@ -22,7 +22,7 @@ public interface IContractPayService {
 	/**
 	 * 甲方付款
 	 */
-	public String pay(String id, Long payReal) throws ServiceException;
+	public String pay(String id, Double payReal) throws ServiceException;
 
 	/**
 	 * 乙方确认收款

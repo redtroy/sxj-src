@@ -105,7 +105,7 @@ function closeContract(id){
 //支付
 function pay(id){
 	var payReal=$("#pay_info_"+id).find(":input").val();
-	payReal=payReal*100;
+	//payReal=payReal*100;
 	$.post("pay.htm",{id:id,payReal:payReal},function(data){
 		 if (data.isOk=="ok"){
 			 alert("付款成功！")

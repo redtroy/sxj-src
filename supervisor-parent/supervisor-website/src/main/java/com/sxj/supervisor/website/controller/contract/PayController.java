@@ -116,7 +116,7 @@ public class PayController extends BaseController {
 	 * 甲方付款
 	 */
 	@RequestMapping("pay")
-	public @ResponseBody Map<String, String> pay(String id, Long payReal)
+	public @ResponseBody Map<String, String> pay(String id, Double payReal)
 			throws WebException {
 		try {
 			String flag = payService.pay(id, payReal);
