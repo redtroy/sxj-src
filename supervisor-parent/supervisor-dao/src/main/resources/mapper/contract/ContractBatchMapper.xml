@@ -13,6 +13,8 @@
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" />
+		<result property="warehouseState" column="WAREHOUSE_STATE" jdbcType="INTEGER" />
 		<result property="replenishState" column="REPLENISH_STATE"
 			jdbcType="INTEGER" />
 	</resultMap>
@@ -34,7 +36,7 @@
 		<if test="condition.state != null and condition.state != ''">
 			<![CDATA[AND UPDATE_STATE != #{condition.state}]]>
 		</if>
-		<![CDATA[ ORDER BY BATCH_NO DESC ]]>
+		<![CDATA[ ORDER BY BATCH_NO ASC ]]>
 	</select>
 	<select id="getAllBacthsByRfid" resultMap="BacthResultMap"
 		parameterType="String">

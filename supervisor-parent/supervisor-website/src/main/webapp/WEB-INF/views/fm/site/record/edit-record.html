@@ -46,7 +46,7 @@
         </style>
 <script>
 var validform;
-
+var cg_validform;
 jQuery(document).ready(function($) {
 	$.ajaxSetup ({     
 	    cache: false 
@@ -59,7 +59,16 @@ jQuery(document).ready(function($) {
 	validform=$("#form").Validform({
 		tiptype : 3
 	});
+	cg_validform=$("#cg_form").Validform({
+		tiptype : 3,
+		callback:function(form){
+			AcgModify();
+		}
+	});
 });
+function cg_form(){
+	$('#cg_form').submit();
+}
 //图片处理事件
 //加载绑定扫描件(默认图片地址,滚动UL)
 var imgBinding = function() {
@@ -135,9 +144,6 @@ $(document).ready(function() {
 				
 	//甲方采购
 	function AcgModify(){
-		if (!validform.check()){
-			return;
-		}
 		var memberIdB = $("#memberIdB").val();
 		var memberNameB = $("#memberNameB").val();
 		if(memberIdB==''){
@@ -154,7 +160,7 @@ $(document).ready(function() {
 			return;
 		}
 		dialogBox(function(){
-		$.post("modify.htm",$('#form').serialize(),function(data){
+		$.post("modify.htm",$('#cg_form').serialize(),function(data){
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -341,7 +347,7 @@ $(document).ready(function() {
 					<#if record.type.getId()==0>
 					<#if type==0>
 					<#if record.contractType.getId()!=0>
-					<form id="form" action="" method="post">
+					<form id="cg_form" action="javascript:void(0);" method="post">
 						<input type="hidden" name="id" id="id" value="${record.id}" />
 						<div class="contBox">
 							<div class="item">
@@ -379,8 +385,8 @@ $(document).ready(function() {
 								</div>
 							</div>
 								<div class="item">
-									<label>&nbsp;</label><a href="javascript:AcgModify();"
-										class="button button-orange mr15">确定修改</a><a
+									<label>&nbsp;</label><a href="javascript:void(0);"
+										class="button button-orange mr15" onclick="cg_form();">确定修改</a><a
 										href="javascript:history.go(-1)" class="button button-gray">取消</a>
 								</div>
 							</div>
