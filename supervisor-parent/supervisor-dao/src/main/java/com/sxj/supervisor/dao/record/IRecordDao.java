@@ -45,4 +45,11 @@ public interface IRecordDao {
 	 * @return
 	 */
 	public List<RecordEntity> queryRecord(QueryCondition<RecordEntity> query);
+	
+	/**
+	 * 合同进度
+	 * @param contractNo
+	 * @return
+	 */
+	public String getProgress(String contractNo);
 }
