@@ -83,6 +83,7 @@ public class FunctionMapperTest
         mapper.batchInsert(buildFunctions());
     }
     
+    @Test
     public void testBatchInsertArray()
     {
         mapper.batchInsert(buildArrayFunctions());
@@ -118,7 +119,6 @@ public class FunctionMapperTest
         mapper.batchUpdate(functions);
     }
     
-    @Test
     public void testMultiGet()
     {
         String[] funcitonIds = new String[] {

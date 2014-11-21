@@ -93,10 +93,10 @@ public class StartWRfidController extends BaseController {
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {
-				String[] bq = windowRfidService.getMaxRfidNo(
-						query.getRefContractNo(), num);
+				// String[] bq = windowRfidService.getStartMaxRfidNo(
+				// query.getRefContractNo(), num);
 				map.put("isOk", "ok");
-				map.put("bq", bq);
+				// map.put("bq", bq);
 				map.put("list", list);
 			} else {
 				map.put("isOk", "false");

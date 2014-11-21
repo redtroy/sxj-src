@@ -46,6 +46,16 @@ public interface IContractService {
 	public ContractModel getContract(String id);
 
 	/**
+	 * 根据合同号获取合同实体
+	 * 
+	 * @param contractNo
+	 * @return
+	 * @throws ServiceException
+	 */
+	public ContractEntity getContractEntityByNo(String contractNo)
+			throws ServiceException;
+
+	/**
 	 * 查询合同列表
 	 *
 	 * @param query
@@ -115,8 +125,8 @@ public interface IContractService {
 	 * @param rfid
 	 * @return
 	 */
-	public List<ContractBatchModel> getContractBatch(String contractNo,
-			String rfid);
+	public ContractBatchModel getContractBatch(String contractNo, String rfid,
+			Integer type);
 
 	/**
 	 * 获取合同变更批次
@@ -246,8 +256,20 @@ public interface IContractService {
 	 */
 	public void deleteWindowRef(String id) throws ServiceException;
 
-	List<ReplenishBatchEntity> getReplenishBatch(String contractNo);
+	/**
+	 * 获取合同补损批次实体列表
+	 * 
+	 * @param contractNo
+	 * @return
+	 */
+	public List<ReplenishBatchEntity> getReplenishBatch(String contractNo);
 
-	void modifyBatchPayState(String contractNo, String rfidNo);
+	/**
+	 * 修改批次支付状态
+	 * 
+	 * @param contractNo
+	 * @param rfidNo
+	 */
+	public void modifyBatchPayState(String contractNo, String rfidNo);
 
 }

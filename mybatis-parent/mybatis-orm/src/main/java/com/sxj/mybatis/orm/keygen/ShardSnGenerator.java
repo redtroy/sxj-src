@@ -53,20 +53,17 @@ public class ShardSnGenerator implements ShardKeyGenerator
             }
             for (Object object : list)
                 process(statement, object, dialect);
-            connection.commit();
+            //connection.commit();
         }
         catch (SQLException sqle)
         {
-            if (connection != null)
-                connection.rollback();
-            
+            throw sqle;
         }
         finally
         {
             if (statement != null)
                 statement.close();
-            if (connection != null)
-                connection.close();
+            
         }
     }
     

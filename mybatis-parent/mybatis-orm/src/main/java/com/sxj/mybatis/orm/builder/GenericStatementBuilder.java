@@ -28,7 +28,6 @@ import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
 import org.apache.ibatis.mapping.ParameterMap;
 import org.apache.ibatis.mapping.ResultMap;
-import org.apache.ibatis.mapping.ResultSetType;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.mapping.StatementType;
@@ -595,7 +594,7 @@ public class GenericStatementBuilder extends BaseBuilder
                 parameterType,
                 null,
                 null,
-                ResultSetType.FORWARD_ONLY,
+                null,
                 flushCache,
                 useCache,
                 resultOrdered,
@@ -609,7 +608,6 @@ public class GenericStatementBuilder extends BaseBuilder
     private void buildInsert(String statementId)
     {
         //
-        Integer fetchSize = null;
         Integer timeout = null;
         Class<?> parameterType = entityClass;
         
@@ -682,18 +680,30 @@ public class GenericStatementBuilder extends BaseBuilder
         contents.add(this.getInsertSql());
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
-        
+        String parameterMap = null;
+        Iterator<String> parameterMapNames = configuration.getParameterMapNames()
+                .iterator();
+        while (parameterMapNames.hasNext())
+        {
+            String name = parameterMapNames.next();
+            ParameterMap temp = configuration.getParameterMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                parameterMap = temp.getId();
+                break;
+            }
+        }
         assistant.addMappedStatement(statementId,
                 sqlSource,
                 StatementType.PREPARED,
                 SqlCommandType.INSERT,
-                fetchSize,
-                timeout,
                 null,
+                timeout,
+                parameterMap,
                 parameterType,
                 null,
                 null,
-                ResultSetType.FORWARD_ONLY,
+                null,
                 flushCache,
                 useCache,
                 resultOrdered,

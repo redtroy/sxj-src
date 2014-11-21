@@ -32,10 +32,10 @@
          },   
  	}); 
   })
-  function open_1(id,rfidNo,contractNo,batchNo){
+  function open_1(id,contractNo,rfidNo){
 	   var temp= $("#edit_1_"+id).is(":hidden");//是否隐藏 
 	   if (temp){
-	  $.post("query_contract.htm",{id:id,rfidNo:rfidNo,contractNo:contractNo,batchNo:batchNo},function(data){
+	  $.post("query_contract.htm",{contractNo:contractNo,rfidNo:rfidNo},function(data){
 		  var obj=$("#edit_1_"+id);
 		  obj.children().eq(0).html(data);
 		  obj.show();
@@ -216,7 +216,7 @@ function removeMessge(){
         <#list list as model>
 		<#if (model.type.id==0)>
         <tr>
-          <td><a href="" class="lnk-blue" onclick="open_1('${model.id}','${model.rfidNo}','${model.contractNo}','${model.batchNo}');return false;">${model.rfidRefNo}</a></td>
+          <td><a href="" class="lnk-blue" onclick="open_1('${model.id}','${model.contractNo}','${model.rfidNo}');return false;">${model.rfidRefNo}</a></td>
           <td>${model.rfidNo}</td>
           <td>${model.memberName}</td>
           <td>${model.rfidType.getName()}</td>

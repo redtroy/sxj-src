@@ -59,6 +59,9 @@ public class WindowRefEntity extends Pagable implements Serializable {
 	@Column(name = "MAX_RFID_NO")
 	private String maxRfidNo;
 
+	@Column(name = "RFID_NOS")
+	private String rfidNos;
+
 	/**
 	 * 申请人
 	 */
@@ -252,6 +255,14 @@ public class WindowRefEntity extends Pagable implements Serializable {
 
 	public void setDateNo(String dateNo) {
 		this.dateNo = dateNo;
+	}
+
+	public String getRfidNos() {
+		return rfidNos;
+	}
+
+	public void setRfidNos(String rfidNos) {
+		this.rfidNos = rfidNos;
 	}
 
 }

@@ -207,7 +207,7 @@ function batch2(id,contractNo,rfidNo,type){
 		<col width="10%" />
         <tr>
           <th>RFID关联申请号</th>
-          <th>RFID编号区间</th>
+          <th>RFID编号</th>
           <th>申请人名称</th>
           <th>关联类型</th>
           <th>窗型代号</th>
@@ -221,7 +221,7 @@ function batch2(id,contractNo,rfidNo,type){
         <#list winList as win>
         <tr>
           <td><a href="javascript:loadInfo('${win.id}','${win.type.getId()}');" class="lnk-blue">${win.rfidRefNo}</a></td>
-          <td>${win.minRfidNo}-${win.maxRfidNo}</td>
+          <td title="${win.rfidNos}">${win.minRfidNo}-${win.maxRfidNo}</td>
           <td>${win.memberName}</td>
           <td>${win.type.getName()}</td>
 		  <td>${win.windowsNo.getName()}</td>

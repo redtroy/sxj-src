@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.impl.rfid.window;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -49,6 +50,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			QueryCondition<WindowRfidEntity> condition = new QueryCondition<WindowRfidEntity>();
 			condition.addCondition("applyNo", query.getApplyNo());
 			condition.addCondition("rfidNo", query.getRfidNo());
+			condition.addCondition("rfidNos", query.getRfidNos());
 			condition.addCondition("minRfidNo", query.getMinRfidNo());
 			condition.addCondition("maxRfidNo", query.getMaxRfidNo());
 			condition.addCondition("contractNo", query.getContractNo());
@@ -165,11 +167,11 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Override
 	@Transactional
-	public String[] getMaxRfidNo(String contractNo, Long count)
+	public String[] getStartMaxRfidNo(String contractNo, Long count)
 			throws ServiceException {
 		try {
 			String[] arr = new String[2];
-			Long nowMax = windowRfidDao.getMaxRfidNo(contractNo);
+			Long nowMax = windowRfidDao.getStartMaxRfidNo(contractNo);
 			String maxNo = CustomDecimal.getDecimalString(4, new BigDecimal(
 					nowMax));
 			String minMo = CustomDecimal.getDecimalString(4, new BigDecimal(
@@ -182,6 +184,26 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			throw new ServiceException("计算RFID号区间错误", e);
 		}
 
+	}
+
+	@Override
+	@Transactional
+	public String[] getLossMaxRfidNo(String contractNo, Long count)
+			throws ServiceException {
+		try {
+			String[] arr = new String[2];
+			Long nowMax = windowRfidDao.getLossMaxRfidNo(contractNo);
+			String maxNo = CustomDecimal.getDecimalString(4, new BigDecimal(
+					nowMax));
+			String minMo = CustomDecimal.getDecimalString(4, new BigDecimal(
+					nowMax - (count - 1)));
+			arr[0] = minMo;
+			arr[1] = maxNo;
+			return arr;
+		} catch (Exception e) {
+			SxjLogger.error("计算RFID号区间错误", e, this.getClass());
+			throw new ServiceException("计算RFID号区间错误", e);
+		}
 	}
 
 	@Override
@@ -219,24 +241,32 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	@Override
 	@Transactional
 	public void startWindowRfid(Long itemQuantity, Long useQuantity,
-			String refContractNo, String minRfid, String maxRfid, String gRfid,
-			String lRfid, WindowTypeEnum windowType) throws ServiceException {
+			String refContractNo, Integer count, String gRfid, String lRfid,
+			WindowTypeEnum windowType) throws ServiceException {
 		try {
 			if (useQuantity >= itemQuantity) {
 				throw new ServiceException("此招标合同已经全部启用完毕");
 			}
+			Long nowMax = windowRfidDao.getStartMaxRfidNo(refContractNo);
+			String maxRfid = CustomDecimal.getDecimalString(4, new BigDecimal(
+					nowMax));
 			WindowRfidQuery query2 = new WindowRfidQuery();
+			query2.setPagable(true);
 			query2.setContractNo(refContractNo);
-			query2.setMinRfidNo(minRfid);
+			// query2.setMinRfidNo(minRfid);
 			query2.setMaxRfidNo(maxRfid);
+			query2.setShowCount(count);
 			query2.setRfidState(RfidStateEnum.unused.getId());
 			List<WindowRfidEntity> list = queryWindowRfid(query2);
 			String memberNo = null;
 			String memberName = null;
+			String startRfidNos = "";
+			WindowRefEntity winRef = new WindowRefEntity();
 			if (list == null || list.size() == 0) {
 				throw new ServiceException("此区间没有未启用的RFID");
 			}
 			int nowQuantity = list.size();
+			int i = 1;
 			for (Iterator<WindowRfidEntity> iterator = list.iterator(); iterator
 					.hasNext();) {
 				WindowRfidEntity windowRfid = iterator.next();
@@ -249,6 +279,16 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				windowRfid.setProfileRfid(lRfid);
 				windowRfid.setWindowType(windowType);
 				windowRfid.setRfidState(RfidStateEnum.used);
+				if (i == 1) {
+					winRef.setMinRfidNo((windowRfid.getRfidNo()));
+				}
+				if (i == list.size()) {
+					startRfidNos = startRfidNos + windowRfid.getRfidNo();
+					winRef.setMaxRfidNo(windowRfid.getRfidNo());
+				} else {
+					startRfidNos = startRfidNos + windowRfid.getRfidNo() + ",";
+				}
+				i++;
 			}
 			windowRfidDao.batchUpdateWindowRfid(list
 					.toArray(new WindowRfidEntity[list.size()]));
@@ -257,7 +297,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			if (nowQuantity + useQuantity == itemQuantity) {
 				WindowRfidQuery query3 = new WindowRfidQuery();
 				query3.setContractNo(refContractNo);
-				query2.setRfidState(RfidStateEnum.unused.getId());
+				query3.setRfidState(RfidStateEnum.unused.getId());
 				List<WindowRfidEntity> otherList = queryWindowRfid(query3);
 				if (otherList != null && otherList.size() > 0) {
 					for (WindowRfidEntity otherRfid : otherList) {
@@ -270,11 +310,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 							.toArray(new WindowRfidEntity[otherList.size()]));
 				}
 			}
-
 			// 生成关联单
-			WindowRefEntity winRef = new WindowRefEntity();
-			winRef.setMinRfidNo(minRfid);
-			winRef.setMaxRfidNo(maxRfid);
+			winRef.setRfidNos(startRfidNos);
+			// winRef.setMinRfidNo(minRfid);
+			// winRef.setMaxRfidNo(maxRfid);
 			winRef.setMemberNo(memberNo);
 			winRef.setMemberName(memberName);
 			winRef.setType(LinkStateEnum.windowApply);
@@ -295,29 +334,65 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Override
 	@Transactional
-	public void lossWindowRfid(String refContractNo, String minRfid,
-			String maxRfid, String gRfid, String lRfid, String[] addRfid)
+	public void lossWindowRfid(String refContractNo, Integer count,
+			String gRfid, String lRfid, String[] addRfid)
 			throws ServiceException {
 		try {
 			if (addRfid == null || addRfid.length == 0) {
 				throw new ServiceException("没有输入需要被补损的RFID");
 			}
+			if (count != addRfid.length) {
+				throw new ServiceException("补损的RFID数量与需要被补损的RFID数量不一致");
+			}
+			for (int i = 0; i < addRfid.length - 1; i++) { // 循环开始元素
+				for (int j = i + 1; j < addRfid.length; j++) { // 循环后续所有元素
+					// 如果相等，则重复
+					if (addRfid[i].equals(addRfid[j])) {
+						throw new ServiceException("编号为：" + addRfid[i]
+								+ "的RFID重复输入！");
+					}
+				}
+			}
+			Long nowMax = windowRfidDao.getLossMaxRfidNo(refContractNo);
+			String maxRfid = CustomDecimal.getDecimalString(4, new BigDecimal(
+					nowMax));
+			// List<WindowRfidEntity> list = new ArrayList<>();
 			WindowRfidQuery query2 = new WindowRfidQuery();
-			query2.setMinRfidNo(minRfid);
-			query2.setMaxRfidNo(maxRfid);
+			query2.setPagable(true);
 			query2.setContractNo(refContractNo);
+			query2.setMaxRfidNo(maxRfid);
+			query2.setShowCount(count);
 			query2.setRfidState(RfidStateEnum.unused.getId());
-			List<WindowRfidEntity> list = queryWindowRfid(query2);
+			// query2.setRfidState(RfidStateEnum.unused.getId());
+			// query2.setMinRfidNo(minRfid);
+			// query2.setMinRfidNo(minRfid);
+			// query2.setMaxRfidNo(maxRfid);
+			List<WindowRfidEntity> list = new ArrayList<>();
+			List<WindowRfidEntity> unUserList = queryWindowRfid(query2);
+			query2.setRfidState(RfidStateEnum.disable.getId());
+			query2.setDisableType(true);
+			List<WindowRfidEntity> disableList = queryWindowRfid(query2);
+			if (unUserList != null && unUserList.size() > 0) {
+				list.addAll(unUserList);
+			}
+			if (disableList != null && disableList.size() > 0) {
+				list.addAll(disableList);
+			}
 			if (list == null || list.size() == 0) {
 				throw new ServiceException("补损的RFID不存在");
 			}
-			if (list.size() != addRfid.length) {
-				throw new ServiceException("补损的RFID数量与需要被补损的RFID数量不一致");
+			if (list.size() < count) {
+				throw new ServiceException(
+						"可以用来补损的RFID数量不足，,<a href='rfid/window/to_apply.htm'>请申请足够的认证标签</a>");
+			}
+			if (list.size() > count) {
+				list = list.subList(0, count);
 			}
 			String memberNo = null;
 			String memberName = null;
 			WindowTypeEnum windowsNo = null;
 			String replenishRfid = null;
+			WindowRefEntity winRef = new WindowRefEntity();
 			for (int i = 0; i < addRfid.length; i++) {
 				WindowRfidEntity oldRfid = getWindowRfidByNo(addRfid[i]);
 				if (oldRfid == null) {
@@ -331,6 +406,12 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				WindowRfidEntity newRfid = list.get(i);
 				if (newRfid == null) {
 					throw new ServiceException("补损的RFID不存在");
+				}
+				if (!newRfid.getRfidState().equals(RfidStateEnum.unused)
+						&& !newRfid.getRfidState()
+								.equals(RfidStateEnum.disable)) {
+					throw new ServiceException("编号为：" + newRfid.getRfidNo()
+							+ "的补损RFID不是未使用或已停用状态");
 				}
 				if (!newRfid.getContractNo().equals(oldRfid.getContractNo())) {
 					throw new ServiceException("编号为：" + addRfid[i]
@@ -355,14 +436,18 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				newRfid.setProfileRfid(lRfid);
 				newRfid.setWindowType(oldRfid.getWindowType());
 				newRfid.setRfidState(RfidStateEnum.used);
+				// newRfid.setReplenishNo(addRfid[i]);
 				updateWindowRfid(newRfid);
+				if (i == 0) {
+					winRef.setMinRfidNo(newRfid.getRfidNo());
+				}
+				if (i + 1 == addRfid.length) {
+					winRef.setMaxRfidNo(newRfid.getRfidNo());
+				}
 			}
 			// windowRfidDao.batchUpdateWindowRfid(list
 			// .toArray(new WindowRfidEntity[list.size()]));
 			// 生成关联单
-			WindowRefEntity winRef = new WindowRefEntity();
-			winRef.setMinRfidNo(minRfid);
-			winRef.setMaxRfidNo(maxRfid);
 			winRef.setMemberNo(memberNo);
 			winRef.setMemberName(memberName);
 			winRef.setType(LinkStateEnum.windowLoss);
@@ -411,6 +496,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			WindowRefEntity winRef = new WindowRefEntity();
 			winRef.setMinRfidNo(newRfidNo);
 			winRef.setMaxRfidNo(newRfidNo);
+			winRef.setRfidNos(newRfidNo);
 			winRef.setMemberNo(newRfid.getMemberNo());
 			winRef.setMemberName(newRfid.getMemberName());
 			winRef.setType(LinkStateEnum.rfidLoss);
@@ -476,5 +562,4 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			return 0;
 		}
 	}
-
 }
