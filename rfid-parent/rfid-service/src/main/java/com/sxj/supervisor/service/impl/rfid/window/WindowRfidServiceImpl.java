@@ -391,7 +391,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			String memberNo = null;
 			String memberName = null;
 			WindowTypeEnum windowsNo = null;
-			String replenishRfid = null;
+			String replenishRfid = "";
 			WindowRefEntity winRef = new WindowRefEntity();
 			for (int i = 0; i < addRfid.length; i++) {
 				WindowRfidEntity oldRfid = getWindowRfidByNo(addRfid[i]);
