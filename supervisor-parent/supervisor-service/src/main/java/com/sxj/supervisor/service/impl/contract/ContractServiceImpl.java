@@ -745,6 +745,9 @@ public class ContractServiceImpl implements IContractService {
 									modifyBatchEntity.getModifyBatchItems());
 							mbe.setBatchItems(json);
 							mbe.setReplenishState(0);
+							mbe.setUpdateState(0);
+							mbe.setPayState(0);
+							mbe.setWarehouseState(0);
 							mbe.setModifyId(mec.getId());
 							mbeList.add(mbe);
 						}
@@ -839,6 +842,8 @@ public class ContractServiceImpl implements IContractService {
 								rb.setBatchItems(json);
 								rb.setRfidNo(record.getRfidNo());// 添加补损RFID到批次
 								rb.setReplenishState(0);
+								rb.setPayState(0);
+								rb.setWarehouseState(0);
 								rb.setReplenishId(replenishContract.getId());
 								rb.setNoType(contractId + "-");
 								list.add(rb);
@@ -1150,9 +1155,11 @@ public class ContractServiceImpl implements IContractService {
 				batchItems = JsonMapper.nonEmptyMapper().toJson(
 						model.getBatchItems());
 			}
+			batch.setWarehouseState(0);
 			batch.setBatchItems(batchItems);
 			batch.setUpdateState(0);
 			batch.setReplenishState(0);
+			batch.setPayState(0);
 			List<ContractBatchEntity> list = new ArrayList<ContractBatchEntity>();
 			list.add(batch);
 			contractBatchDao.addBatchs(list);

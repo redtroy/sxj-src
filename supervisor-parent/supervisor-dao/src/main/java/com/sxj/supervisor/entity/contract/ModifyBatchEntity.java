@@ -77,6 +77,11 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
     @Column(name = "PAY_STATE")
     private Integer payState;
 	
+    /**出库标识状态
+     */
+    @Column(name = "WAREHOUSE_STATE")
+    private Integer warehouseState;
+    
 	public Integer getUpdateState() {
 		return updateState;
 	}
@@ -147,5 +152,13 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
 
 	public void setPayState(Integer payState) {
 		this.payState = payState;
+	}
+
+	public Integer getWarehouseState() {
+		return warehouseState;
+	}
+
+	public void setWarehouseState(Integer warehouseState) {
+		this.warehouseState = warehouseState;
 	}
 }
