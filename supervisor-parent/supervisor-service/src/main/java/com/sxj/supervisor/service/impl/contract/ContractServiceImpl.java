@@ -1980,15 +1980,14 @@ public class ContractServiceImpl implements IContractService {
 
 	}
 
-<<<<<<< HEAD
-=======
 	/**
 	 * 更新批次支付狀態
 	 */
 	@Override
 	public void modifyBatchPayState(String contractNo, String rfidNo) {
 		try {
-			ContractBatchEntity contractBatch = contractBatchDao.getBacthsByRfid(rfidNo);
+			ContractBatchEntity contractBatch = contractBatchDao
+					.getBacthsByRfid(rfidNo);
 			if (contractBatch != null) {
 				if (contractBatch.getType() == 1) {
 					ContractBatchEntity cbe = new ContractBatchEntity();
@@ -2015,5 +2014,4 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException("更新批次错误", e);
 		}
 	}
->>>>>>> 3ccda4fcf719f5191d0a0d183d7e89c5ce4bc81d
 }
