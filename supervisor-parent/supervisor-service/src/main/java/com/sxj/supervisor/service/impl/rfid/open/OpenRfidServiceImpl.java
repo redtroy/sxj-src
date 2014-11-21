@@ -278,17 +278,17 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 						if (contractBatch.getType() == 1) {
 							ContractBatchEntity cbe = new ContractBatchEntity();
 							cbe.setId(contractBatch.getId());
-							cbe.setPayState(1);
+							cbe.setWarehouseState(1);
 							contractBatchDao.updateBatch(contractBatch);
 						} else if (contractBatch.getType() == 2) {
 							ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
 							modifyBatch.setId(contractBatch.getId());
-							modifyBatch.setPayState(1);
+							modifyBatch.setWarehouseState(1);
 							contractModifyBatchDao.updateBatch(modifyBatch);
 						} else if (contractBatch.getType() == 3) {
 							ReplenishBatchEntity replenishBatch = new ReplenishBatchEntity();
 							replenishBatch.setId(contractBatch.getId());
-							replenishBatch.setPayState(1);
+							replenishBatch.setWarehouseState(1);
 							contractReplenishBatchDao
 									.updateBatch(replenishBatch);
 						}
@@ -342,9 +342,9 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 					pay.setBatchNo(cb.getBatchNo());
 					pay.setPayAmount(cb.getAmount());
 					if (cm.getContract().getType().getId() == 1) {
-						pay.setContent("玻璃货款");
+						pay.setContent("第"+cb.getBatchNo()+"批次玻璃货款");
 					} else if (cm.getContract().getType().getId() == 2) {
-						pay.setContent("型材货款");
+						pay.setContent("第"+cb.getBatchNo()+"批次型材货款");
 					}
 					pay.setState(PayStageEnum.Stage1);
 					contractPayService.addPayRecordEntity(pay);// 生成支付单
