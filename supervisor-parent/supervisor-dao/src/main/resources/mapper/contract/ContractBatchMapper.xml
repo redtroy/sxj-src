@@ -14,6 +14,7 @@
 		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
 		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" />
+		<result property="warehouseState" column="WAREHOUSE_STATE" jdbcType="INTEGER" />
 		<result property="replenishState" column="REPLENISH_STATE"
 			jdbcType="INTEGER" />
 	</resultMap>

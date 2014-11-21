@@ -15,6 +15,7 @@
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
+		<result property="isLossBatch" column="IS_LOSS_BATCH" jdbcType="BOOLEAN" />
 		<result property="importDate" column="IMPORT_DATE" jdbcType="TIMESTAMP" />
 		<result property="replenishNo" column="REPLENISH_NO" jdbcType="VARCHAR" />
 		<result property="rfidState" column="RFID_STATE" jdbcType="INTEGER" />

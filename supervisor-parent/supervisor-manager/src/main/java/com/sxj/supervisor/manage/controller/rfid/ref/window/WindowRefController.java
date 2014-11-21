@@ -172,15 +172,16 @@ public class WindowRefController extends BaseController {
 
 	@RequestMapping("contractBatch")
 	public String getContractBatch(ModelMap model, String contractNo,
-			String rfidNo, String id,String type) throws WebException {
+			String rfidNo, String id, Integer type) throws WebException {
 		try {
-			List<ContractBatchModel> conBatch = contractService
-					.getContractBatch(contractNo, rfidNo);
-			model.put("conBatch", conBatch);
+			ContractBatchModel conBatch = contractService.getContractBatch(
+					contractNo, rfidNo, type);
+			model.put("batch", conBatch);
 			model.put("id", id);
 			model.put("type", type);
 			model.put("contractNo", contractNo);
-			return "manage/rfid/windowref/contract-batch";
+			//return "manage/rfid/windowref/contract-batch";
+			return "manage/rfid/window/contract-batch";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
 			throw new WebException("查询合同信息错误");

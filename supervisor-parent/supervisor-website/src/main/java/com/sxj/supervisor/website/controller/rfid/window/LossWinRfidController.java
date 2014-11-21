@@ -27,6 +27,8 @@ import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.common.StringUtils;
+import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -77,7 +79,12 @@ public class LossWinRfidController extends BaseController {
 			List<WindowRfidEntity> winList = windowRfidService
 					.queryWindowRfid(winQuery);
 			if (winList != null) {
-				unStartQuantity = winList.size();
+				unStartQuantity = unStartQuantity + winList.size();
+			}
+			winQuery.setRfidState(RfidStateEnum.disable.getId());
+			winList = windowRfidService.queryWindowRfid(winQuery);
+			if (winList != null) {
+				unStartQuantity = unStartQuantity + winList.size();
 			}
 			if (unStartQuantity < num) {
 				throw new WebException("此招标合同未启用的RFID数量为："
@@ -85,15 +92,42 @@ public class LossWinRfidController extends BaseController {
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {
-				String[] bq = windowRfidService.getMaxRfidNo(
-						query.getRefContractNo(), num);
+				// String[] bq = windowRfidService.getLossMaxRfidNo(
+				// query.getRefContractNo(), num);
+				// map.put("bq", bq);
 				map.put("isOk", "ok");
-				map.put("bq", bq);
 				map.put("list", list);
 			} else {
 				map.put("isOk", "false");
 			}
 			return map;
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
+	}
+
+	@RequestMapping("queryLossRfid")
+	public @ResponseBody Map<Object, Object> queryLossRfid(String rfidNo,
+			String refContractNo) throws WebException {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		try {
+			if (StringUtils.isEmpty(rfidNo)) {
+				throw new ServiceException("请输入被补损的RFID号");
+			}
+			WindowRfidEntity oldRfid = windowRfidService
+					.getWindowRfidByNo(rfidNo);
+			if (oldRfid == null) {
+				throw new ServiceException("该标签不是认证标签");
+			}
+			if (!oldRfid.getRfidState().equals(RfidStateEnum.used)) {
+				throw new ServiceException("该被补损RFID不是已使用状态");
+			}
+			if (!oldRfid.getContractNo().equals(refContractNo)) {
+				throw new ServiceException("该被补损RFID不属于该招标合同");
+			}
+			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			map.put("error", e.getMessage());
@@ -164,8 +198,8 @@ public class LossWinRfidController extends BaseController {
 	 */
 	@RequestMapping("start_loss_lable")
 	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,
-			String minRfid, String maxRfid, String gRfid, String lRfid,
-			String[] addRfid) throws WebException {
+			Integer count, String gRfid, String lRfid, String[] addRfid)
+			throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
 			ContractModel refContract = contractService
@@ -202,8 +236,8 @@ public class LossWinRfidController extends BaseController {
 			// }
 			// quantity = quantity + item.getQuantity();
 			// }
-			windowRfidService.lossWindowRfid(refContractNo, minRfid, maxRfid,
-					gRfid, lRfid, addRfid);
+			windowRfidService.lossWindowRfid(refContractNo, count, gRfid,
+					lRfid, addRfid);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());

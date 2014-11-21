@@ -76,6 +76,9 @@
 		<property name="numTestsPerEvictionRun">
 			<value>50</value>
 		</property>
+		<property name="defaultAutoCommit">
+			<value>false</value>
+		</property>
 		<!-- <property name="proxyFilters"> <list> <ref bean="stat-filter" /> </list> 
 			</property> -->
 	</bean>
