@@ -180,7 +180,7 @@ public class WindowRefController extends BaseController {
 			model.put("id", id);
 			model.put("type", type);
 			model.put("contractNo", contractNo);
-			// return "manage/rfid/windowref/contract-batch";
+			//return "manage/rfid/windowref/contract-batch";
 			return "manage/rfid/window/contract-batch";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());

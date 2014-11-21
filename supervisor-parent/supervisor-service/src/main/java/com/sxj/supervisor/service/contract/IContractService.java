@@ -256,8 +256,20 @@ public interface IContractService {
 	 */
 	public void deleteWindowRef(String id) throws ServiceException;
 
-	List<ReplenishBatchEntity> getReplenishBatch(String contractNo);
+	/**
+	 * 获取合同补损批次实体列表
+	 * 
+	 * @param contractNo
+	 * @return
+	 */
+	public List<ReplenishBatchEntity> getReplenishBatch(String contractNo);
 
-	void modifyBatchPayState(String contractNo, String rfidNo);
+	/**
+	 * 修改批次支付状态
+	 * 
+	 * @param contractNo
+	 * @param rfidNo
+	 */
+	public void modifyBatchPayState(String contractNo, String rfidNo);
 
 }
