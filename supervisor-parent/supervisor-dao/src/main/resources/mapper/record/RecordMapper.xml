@@ -91,7 +91,7 @@
 		<![CDATA[ORDER BY ${condition.sortColumn} ${condition.sort}]]>
 		</if>
 	</select>
-	<select id="getProgress" resultMap="String"
+	<select id="getProgress" resultType="java.lang.String"
 		parameterType="String">
 		<![CDATA[SELECT (SUM(A) / SUM(B) * 100) AS PROGRESS FROM ( ]]>
 		<![CDATA[SELECT COUNT(*) AS A FROM M_CONTRACT_BATCH C WHERE C.CONTRACT_ID = #{condition.contractNo} AND C.UPDATE_STATE != 1 AND C.PAY_STATE = 1 UNION ALL 
