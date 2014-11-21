@@ -10,7 +10,7 @@
 		<result property="generateKey" column="GENERATE_KEY" jdbcType="INTEGER" />
 		<result property="applyNo" column="APPLY_NO" jdbcType="VARCHAR" />
 		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
-		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR"/>
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="windowType" column="WINDOW_TYPE" jdbcType="INTEGER" />
@@ -60,18 +60,32 @@
 		<if test="condition.rfidState != null">
 			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>
 		</if>
-		<if test="condition.progressState != null and condition.webFlag!=null and (condition.progressState==1 or condition.progressState==0)">
+		<if
+			test="condition.progressState != null and condition.webFlag!=null and (condition.progressState==1 or condition.progressState==0)">
 			<![CDATA[AND PROGRESS_STATE <= 1]]>
 		</if>
-		<if test="condition.progressState != null and condition.webFlag!=null and (condition.progressState&gt;1)">
+		<if
+			test="condition.progressState != null and condition.webFlag!=null and (condition.progressState&gt;1)">
 		     <![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
 		</if>
 		<if test="condition.progressState != null and condition.webFlag==null">
 		    <![CDATA[AND PROGRESS_STATE = #{condition.progressState}]]>
 		</if>
-		<if
-			test="condition.minRfidNo != null and condition.maxRfidNo != null and  condition.minRfidNo != '' and condition.maxRfidNo != ''">
-			<![CDATA[AND RFID_NO BETWEEN #{condition.minRfidNo} AND #{condition.maxRfidNo}]]>
+		<if test="condition.disableType != null and condition.disableType==true">
+		    <![CDATA[ AND GLASS_RFID IS NOT NULL AND GLASS_RFID !='']]>
+		</if>
+		<!-- <if test="condition.minRfidNo != null and condition.maxRfidNo != null 
+			and condition.minRfidNo != '' and condition.maxRfidNo != ''"> <![CDATA[AND 
+			RFID_NO BETWEEN #{condition.minRfidNo} AND #{condition.maxRfidNo}]]> </if> -->
+		<if test="condition.rfidNos!=null">
+		 <![CDATA[ AND RFID_NO in ]]>
+			<foreach collection="condition.rfidNos" item="item" index="index"
+				open="(" separator="," close=")">
+				<![CDATA[ #{item,jdbcType=VARCHAR} ]]>
+			</foreach>
+		</if>
+		<if test="condition.maxRfidNo!=null and condition.maxRfidNo!=''">
+			<![CDATA[ AND RFID_NO <=#{condition.maxRfidNo}]]>
 		</if>
 		<if
 			test="condition.startImportDate != null and condition.endImportDate != null and  condition.startImportDate != '' and condition.endImportDate != ''">
@@ -79,8 +93,12 @@
 		</if>
 			<![CDATA[ ORDER BY RFID_NO DESC]]>
 	</select>
-	<select id="getMaxRfidNo" resultType="Long">
+	<select id="getStartMaxRfidNo" resultType="Long">
 		<![CDATA[SELECT MAX(GENERATE_KEY) FROM R_WINDOW_RFID WHERE RFID_STATE=0]]>
+		<![CDATA[AND CONTRACT_NO = #{contractNo}]]>
+	</select>
+	<select id="getLossMaxRfidNo" resultType="Long">
+		<![CDATA[SELECT MAX(GENERATE_KEY) FROM R_WINDOW_RFID WHERE (RFID_STATE=0 OR RFID_STATE=3)]]>
 		<![CDATA[AND CONTRACT_NO = #{contractNo}]]>
 	</select>
 	<select id="selectByRfidNo" resultMap="windowRfidResultMap">

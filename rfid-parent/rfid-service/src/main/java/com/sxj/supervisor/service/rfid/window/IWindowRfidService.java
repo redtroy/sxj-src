@@ -41,8 +41,8 @@ public interface IWindowRfidService {
 	 * @throws ServiceException
 	 */
 	public void startWindowRfid(Long itemQuantity, Long useQuantity,
-			String refContractNo, String minRfid, String maxRfid, String gRfid,
-			String lRfid, WindowTypeEnum windowType) throws ServiceException;
+			String refContractNo, Integer count, String gRfid, String lRfid,
+			WindowTypeEnum windowType) throws ServiceException;
 
 	/**
 	 * 批量新增
@@ -94,14 +94,24 @@ public interface IWindowRfidService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public String[] getMaxRfidNo(String contractNo, Long count)
+	public String[] getStartMaxRfidNo(String contractNo, Long count)
+			throws ServiceException;
+
+	/**
+	 * 
+	 * @param contractNo
+	 * @param count
+	 * @return
+	 * @throws ServiceException
+	 */
+	public String[] getLossMaxRfidNo(String contractNo, Long count)
 			throws ServiceException;
 
 	/**
 	 * 补损RFID标签
 	 */
-	public void lossWindowRfid(String refContractNo, String minRfid,
-			String maxRfid, String gRfid, String lRfid, String[] addRfid)
+	public void lossWindowRfid(String refContractNo, Integer count,
+			String gRfid, String lRfid, String[] addRfid)
 			throws ServiceException;
 
 	/**

@@ -34,7 +34,15 @@ public interface IWindowRfidDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public Long getMaxRfidNo(String contractNo) throws SQLException;
+	public Long getStartMaxRfidNo(String contractNo) throws SQLException;
+
+	/**
+	 * 
+	 * @param contract
+	 * @return
+	 * @throws SQLException
+	 */
+	public Long getLossMaxRfidNo(String contractNo) throws SQLException;
 
 	/**
 	 * 新增门窗RFID

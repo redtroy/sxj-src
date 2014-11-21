@@ -223,7 +223,7 @@ public class OpenRfidController
     }
     
     /**
-     * 发货
+     * 发货(出库)
      * 
      * @param rfidNo
      * @return

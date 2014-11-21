@@ -80,6 +80,11 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
     private Integer payState;
 	
 	
+    /**出库标识状态
+     */
+    @Column(name = "WAREHOUSE_STATE")
+    private Integer warehouseState;
+    
 	public String getNewRfidNo() {
 		return newRfidNo;
 	}
@@ -159,5 +164,13 @@ public class ReplenishBatchEntity extends Pagable implements Serializable {
 
 	public void setPayState(Integer payState) {
 		this.payState = payState;
+	}
+
+	public Integer getWarehouseState() {
+		return warehouseState;
+	}
+
+	public void setWarehouseState(Integer warehouseState) {
+		this.warehouseState = warehouseState;
 	}
 }
