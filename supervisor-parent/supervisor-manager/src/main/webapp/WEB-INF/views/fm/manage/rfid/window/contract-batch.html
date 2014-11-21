@@ -1,5 +1,5 @@
 <td colspan="11"><div class="infoBox text-left">
-		<div class="color-blue f16">${contractNo}</div>
+		<div class="color-blue f16">${batch.batch.contractId}</div>
 		<table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
             <col width="20%" />
             <col width="30%" />
@@ -12,10 +12,9 @@
               <th>数量<span>（<#if type==1 >/m&sup2;<#elseif type==2>/吨</#if>）</span></th>
               <th>应付货款<span>（元）</span></th>
               <th class="rLine">对应批次RFID编号</th>
-              
             </tr>
-            <#list conBatch as batch>
             <tr>
+            <#if batch?exists>
               <td>第${batch.batch.batchNo}批次</td>
               <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                 <#list batch.batchItems as batchItem>
@@ -33,8 +32,8 @@
                 </table></td>
               <td>${batch.batch.amount?string("0.00")}</td>
               <td>${batch.batch.rfidNo}</td>
+              </#if>
             </tr>
-              </#list>
           </table>
 		   <div class="btnBox text-center"><a href="javascript:closeContract('${id}');" class="button button-gray button-small close">收起</a></div>
 		  </td>

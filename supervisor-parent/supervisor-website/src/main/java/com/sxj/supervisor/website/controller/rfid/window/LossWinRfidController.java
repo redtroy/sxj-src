@@ -77,7 +77,12 @@ public class LossWinRfidController extends BaseController {
 			List<WindowRfidEntity> winList = windowRfidService
 					.queryWindowRfid(winQuery);
 			if (winList != null) {
-				unStartQuantity = winList.size();
+				unStartQuantity = unStartQuantity + winList.size();
+			}
+			winQuery.setRfidState(RfidStateEnum.disable.getId());
+			winList = windowRfidService.queryWindowRfid(winQuery);
+			if (winList != null) {
+				unStartQuantity = unStartQuantity + winList.size();
 			}
 			if (unStartQuantity < num) {
 				throw new WebException("此招标合同未启用的RFID数量为："
@@ -85,7 +90,7 @@ public class LossWinRfidController extends BaseController {
 			}
 			List<ContractModel> list = contractService.queryContracts(query);
 			if (list.size() > 0) {
-				String[] bq = windowRfidService.getMaxRfidNo(
+				String[] bq = windowRfidService.getLossMaxRfidNo(
 						query.getRefContractNo(), num);
 				map.put("isOk", "ok");
 				map.put("bq", bq);
@@ -164,8 +169,8 @@ public class LossWinRfidController extends BaseController {
 	 */
 	@RequestMapping("start_loss_lable")
 	public @ResponseBody Map<Object, Object> start_lable(String refContractNo,
-			String minRfid, String maxRfid, String gRfid, String lRfid,
-			String[] addRfid) throws WebException {
+			Integer count, String gRfid, String lRfid, String[] addRfid)
+			throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
 			ContractModel refContract = contractService
@@ -202,8 +207,8 @@ public class LossWinRfidController extends BaseController {
 			// }
 			// quantity = quantity + item.getQuantity();
 			// }
-			windowRfidService.lossWindowRfid(refContractNo, minRfid, maxRfid,
-					gRfid, lRfid, addRfid);
+			windowRfidService.lossWindowRfid(refContractNo, count, gRfid,
+					lRfid, addRfid);
 			map.put("isOk", "ok");
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());

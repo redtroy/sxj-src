@@ -96,6 +96,12 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	private String batchNo;
 
 	/**
+	 * 是否补损批次
+	 */
+	@Column(name = "IS_LOSS_BATCH")
+	private Boolean isLossBatch;
+
+	/**
 	 * 导入日期
 	 */
 	@Column(name = "IMPORT_DATE")
@@ -217,6 +223,14 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	public RfidStateEnum getRfidState() {
 		return rfidState;
+	}
+
+	public Boolean getIsLossBatch() {
+		return isLossBatch;
+	}
+
+	public void setIsLossBatch(Boolean isLossBatch) {
+		this.isLossBatch = isLossBatch;
 	}
 
 	public void setRfidState(RfidStateEnum rfidState) {

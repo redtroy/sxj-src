@@ -26,6 +26,16 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 	private String maxRfidNo;
 
 	/**
+	 * RFID标签数组
+	 */
+	private String[] rfidNos;
+
+	/**
+	 * 停用状态查询标记（true为查询物流标签为空）
+	 */
+	private Boolean disableType;
+
+	/**
 	 * 采购单号
 	 */
 	private String purchaseNo;
@@ -217,6 +227,22 @@ public class WindowRfidQuery extends Pagable implements Serializable {
 
 	public void setApplyNo(String applyNo) {
 		this.applyNo = applyNo;
+	}
+
+	public String[] getRfidNos() {
+		return rfidNos;
+	}
+
+	public void setRfidNos(String[] rfidNos) {
+		this.rfidNos = rfidNos;
+	}
+
+	public Boolean getDisableType() {
+		return disableType;
+	}
+
+	public void setDisableType(Boolean disableType) {
+		this.disableType = disableType;
 	}
 
 }
