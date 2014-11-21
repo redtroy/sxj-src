@@ -17,6 +17,7 @@ var contractReg=/^CT[0-9]{8}/;
 var container_a=null;
 var container_b=null;
 var lable=null;
+var isPass=false;
 $(function(){
 	$("#contract_a").change(function(){
 		$("#pc_a option").remove();
@@ -34,7 +35,35 @@ $(function(){
 		if (container_b!=null)
 		rfid_b($("#pc_b option:selected").val());
 	});
+	$(".lossRfid").live("keyup",function(event){
+		isPass=false;
+		var refContractNo=$("#refContractNo").val();
+		var rfidNo=$(this).val();
+		var index=$(this).attr("index");
+		$("#lossrfid_text_"+index).hide();
+		if(event.ctrlKey){
+			return false;
+		}
+		if(rfidNo==null||rfidNo==''){
+		   $("#lossrfid_text_"+index).show();
+		    $("#lossrfid_text_"+index).text("请输入需要被补损的RFID");
+		    wrong("#lossrfid_text_"+index);
+		    return false;
+		}
+		$.post("queryLossRfid.htm",{refContractNo:refContractNo,rfidNo:rfidNo},function(data){
+			if (data.isOk=='ok'){
+				$("#lossrfid_text_"+index).hide();
+				isPass=true;
+			}else{
+				$("#lossrfid_text_"+index).show();
+			    $("#lossrfid_text_"+index).text(data.error);
+			    wrong("#lossrfid_text_"+index);
+			}
+		});
+		
+	});
 	$(".ourinput").keyup(function(event){
+		isPass=false;
 		$("#contract_text").hide();
 		$("#num_text").hide();
 		if(event.ctrlKey){
@@ -58,7 +87,7 @@ $(function(){
 			$("#num_text").show();
 			$("#num_text").text("请输入启用数量")
 			wrong("#num_text");
-			 return false;
+			return false;
 		}
 		if (!num.match(reg)){
 			$("#num_text").show();
@@ -73,6 +102,7 @@ $(function(){
 		//$("#bq_qj").text("");
 		$("#rfid_a").text("");
 		$("#rfid_b").text("");
+		isPass=true;
 		$.post("queryLossContract.htm",{refContractNo:refContractNo,num:num},function(data){
 			if (data.isOk=='ok'){
 				$("#contract_a option").remove();
@@ -115,10 +145,10 @@ function query(){
 		flag=true;
 	}
 	if(num==null||num==''){
-	$("#num_text").show();
-	$("#num_text").text("请输入补损数量")
-	wrong("#num_text");
-	flag=true;
+		$("#num_text").show();
+		$("#num_text").text("请输入补损数量")
+		wrong("#num_text");
+		flag=true;
 	}else if(!num.match(reg)){
 		$("#num_text").show();
 		$("#num_text").text("请输入正确的数据")
@@ -162,17 +192,14 @@ function pc_a(){
 			if (data.isOk=="ok" && data.cm.replenishList !=null){
 				container_a=data.batchItems;
 				for (var i=0;i<container_a.length;i++){
-				 $("#pc_a").append("<option value='"+i+"'>"+container_a[i].replenishBatch.batchNo+"</option>")
+				 $("#pc_a").append("<option value='"+i+"'>补"+container_a[i].replenishBatch.batchNo+"</option>")
 				}
 				rfid_a($("#pc_a option:selected").val());
 				}else{
 					$("#pc_a").append("<option value=''>该合同无补损批次</option>");
 				}
 		})
-	}else{
-		
 	}
-	  
 }
 function pc_b(){
 	var contractNo=$("#contract_b option:selected").text();
@@ -181,17 +208,13 @@ function pc_b(){
 			if (data.isOk=="ok" && data.cm.replenishList !=null){
 				container_b=data.batchItems;
 				for (var i=0;i<container_b.length;i++){
-				 $("#pc_b").append("<option value='"+i+"'>"+container_b[i].replenishBatch.batchNo+"</option>")
+				 $("#pc_b").append("<option value='"+i+"'>补"+container_b[i].replenishBatch.batchNo+"</option>")
 				}
 				rfid_b($("#pc_b option:selected").val());
 				}else{
 					$("#pc_b").append("<option value=''>该合同无补损批次</option>");
 				}
-			
-			
 		})
-	}else{
-		
 	}
 }
 function rfid_a(pc_a_id){
@@ -238,24 +261,21 @@ function validation(){
 		wrong("#num_text");
 		return false;
 	}
-	var addIsPass=true;
-	$("input[name='addRfid']", document.forms[0]).each(function(i){
-		$("#lossrfid_text_"+i).hide();
-		if($(this).val()==''){
-			$("#lossrfid_text_"+i).show();
-			$("#lossrfid_text_"+i).text("请输入需要被补损的RFID")
-			wrong("#lossrfid_text_"+i);
-			addIsPass=false;
-		}
-	}); 
-	if(!addIsPass){
-		return false 
-	}
+	
 	return true;
 }
 //启用标签
 function star(){
-	if(!validation()){
+	$("input[name='addRfid']", document.forms[0]).each(function(i){
+		//$("#lossrfid_text_"+i).hide();
+		if($(this).val()==''){
+			$("#lossrfid_text_"+i).show();
+			$("#lossrfid_text_"+i).text("请输入需要被补损的RFID")
+			wrong("#lossrfid_text_"+i);
+			isPass=false;
+		}
+	}); 
+	if(isPass==false){
 		return false;
 	}
 	var refContractNo=$("#refContractNo").val();
@@ -287,9 +307,9 @@ function star(){
 function add_rfid(num){
 	for (var i = 0; i < num; i++) {
 		if(i==0){
-			$("#add_rfid").append("<div class='item'><label>需补损的认证标签</label><input class='input input-w180h36' name='addRfid' value=''/><div class='tipMsg msg-gray' id='lossrfid_text_"+i+"' style='display:none;'>请输入补损RFID</div></div>");
+			$("#add_rfid").append("<div class='item'><label>需补损的认证标签</label><input index='"+i+"' class='input input-w180h36 lossRfid' name='addRfid' value=''/><div class='tipMsg msg-gray' id='lossrfid_text_"+i+"' style='display:none;'>请输入补损RFID</div></div>");
 		}else{
-			$("#add_rfid").append("<div class='item'> <label>&nbsp;</label> <input class='input input-w180h36' name='addRfid' value='' /><div class='tipMsg msg-gray' id='lossrfid_text_"+i+"' style='display:none;'>请输入补损RFID</div></div>");
+			$("#add_rfid").append("<div class='item'> <label>&nbsp;</label> <input index='"+i+"' class='input input-w180h36 lossRfid' name='addRfid' value='' /><div class='tipMsg msg-gray' id='lossrfid_text_"+i+"' style='display:none;'>请输入补损RFID</div></div>");
 		}
 	}
 }

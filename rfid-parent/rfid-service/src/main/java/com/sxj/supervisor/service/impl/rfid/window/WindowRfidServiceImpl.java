@@ -344,6 +344,15 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			if (count != addRfid.length) {
 				throw new ServiceException("补损的RFID数量与需要被补损的RFID数量不一致");
 			}
+			for (int i = 0; i < addRfid.length - 1; i++) { // 循环开始元素
+				for (int j = i + 1; j < addRfid.length; j++) { // 循环后续所有元素
+					// 如果相等，则重复
+					if (addRfid[i].equals(addRfid[j])) {
+						throw new ServiceException("编号为：" + addRfid[i]
+								+ "的RFID重复输入！");
+					}
+				}
+			}
 			Long nowMax = windowRfidDao.getLossMaxRfidNo(refContractNo);
 			String maxRfid = CustomDecimal.getDecimalString(4, new BigDecimal(
 					nowMax));
@@ -371,6 +380,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			}
 			if (list == null || list.size() == 0) {
 				throw new ServiceException("补损的RFID不存在");
+			}
+			if (list.size() < count) {
+				throw new ServiceException(
+						"可以用来补损的RFID数量不足，,<a href='rfid/window/to_apply.htm'>请申请足够的认证标签</a>");
 			}
 			if (list.size() > count) {
 				list = list.subList(0, count);
