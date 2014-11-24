@@ -45,6 +45,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			query.setPage(condition);
 			return payList;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServiceException("查询付款管理出错", e);
 		}
 	}

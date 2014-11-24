@@ -43,6 +43,7 @@ public class PayController extends BaseController {
 			map.put("payStages", payStages);
 			map.put("query", query);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new WebException(e.getMessage());
 		}
 		return "manage/pay/pay-list";
