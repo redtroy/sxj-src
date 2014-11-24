@@ -25,6 +25,7 @@ import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
+import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -598,15 +599,17 @@ public class RecordController extends BaseController {
 		}
 	}
 	@RequestMapping("getBatchPay")
-	public String getBatchPay(String contractNo,ModelMap map)
+	public String getBatchPay(String contractNo,String recordNo,String type,ModelMap map)
 			throws WebException {
 		try {
-			List<ContractBatchEntity> batchList=contractService.getBacthsByContractNo(contractNo);
+			List<ContractBatchModel> batchList=contractService.getBacthsByContractNo(contractNo);
 			map.put("batchList", batchList);
+			map.put("recordNo", recordNo);
+			map.put("type", type);
 			return "site/record/progress";
 		} catch (Exception e) {
-			SxjLogger.error("获取合同进度错误", e, this.getClass());
-			throw new WebException("获取合同进度错误");
+			SxjLogger.error("获取合同批次错误", e, this.getClass());
+			throw new WebException("获取合同批次错误");
 		}
 	}
 }
