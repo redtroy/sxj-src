@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.jsonrpc.annotation.JsonRpcService;
+import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
@@ -271,5 +272,7 @@ public interface IContractService {
 	 * @param rfidNo
 	 */
 	public void modifyBatchPayState(String contractNo, String rfidNo);
+
+	List<ContractBatchEntity> getBacthsByContractNo(String contractNo);
 
 }
