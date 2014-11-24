@@ -1,14 +1,15 @@
  <td colspan="12">
  <div class="speedInfo tl">
+ <#if batchList?exists && (batchList?size>0)>
       <ol>
       <#list batchList as batchList>
-        <li>第${batchList.batchNo}批次${batchList.batchNo}型号共1250件玻璃已出库，<span class="color-green">已付款</span>（支付单号：896237）</li>
-        <li>第2批次5+9A+5 双钢中空 W323/H1176型号共586件玻璃已出库，<span class="color-red mr10">未付款</span><a href="#" class="button button-red">立即支付</a></li>
+        <li>第${batchList.batch.batchNo}批次${batchList.batchItems[0].productModel},等型号共${batchList.batchItems[0].quantity}件<#if type==1>玻璃<#elseif type==2>型材</#if><#if batchList.batch.warehouseState==0>未出库!<#else>已出库，<#if batchList.batch.payState==0><span class="color-red mr10">未付款</span><a href="#" class="button button-red">立即支付</a><#else><span class="color-green">已付款</span>（支付单号：896237）</#if></#if></li>
       </#list>
       </ol>
+ <#else><div class="msgBox msg-info"><span class="icon icon16 icon-16-info"></span>暂无数据!</div></#if>
      <div class="item mb5">
        <label>&nbsp;</label>
-       <button class="button button-gray">收起</button>
+       <button class="button button-gray" onclick="closeContract('${recordNo}')">收起</button>
      </div>
    </div>
 </td>

@@ -733,7 +733,7 @@ public class ContractServiceImpl implements IContractService {
 	public void changeContract(String recordId, String contractId,
 			ContractModifyModel model, String recordNo,
 			List<ContractItemEntity> itemList, String contractIds,
-			String changeIds) throws ServiceException {
+			String changeIds,String contractBatchIds,String changeBatchIds) throws ServiceException {
 		try {
 			ModifyContractEntity mec = model.getModifyContract();
 			if (itemList != null) {
@@ -807,6 +807,32 @@ public class ContractServiceImpl implements IContractService {
 					milist.add(ci);
 				}
 				contractModifyItemDao.updateItems(milist);
+			}
+			//批次变更状态
+			if (StringUtils.isNotEmpty(changeBatchIds)) {//变更批次
+				changeBatchIds = changeBatchIds.substring(0, changeBatchIds.length() - 1);
+				String[] batchId1sArr = changeBatchIds.split(",");
+				List<ModifyBatchEntity> milist = new ArrayList<ModifyBatchEntity>();
+				for (String string : batchId1sArr) {
+					ModifyBatchEntity mb = new ModifyBatchEntity(); 
+					mb.setId(string);
+					mb.setUpdateState(1);
+					milist.add(mb);
+				}
+				contractModifyBatchDao.updateItems(milist);
+			}
+			//批次变更状态
+			if (StringUtils.isNotEmpty(contractBatchIds)) {//合同批次
+				contractBatchIds = contractBatchIds.substring(0, changeIds.length() - 1);
+				String[] batchIdArr = contractBatchIds.split(",");
+				List<ContractBatchEntity> cblist = new ArrayList<ContractBatchEntity>();
+				for (String string : batchIdArr) {
+					ContractBatchEntity cb = new ContractBatchEntity();
+					cb.setId(string);
+					cb.setUpdateState(1);
+					cblist.add(cb);
+				}
+				contractBatchDao.updateBatchs(cblist);
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -2019,11 +2045,21 @@ public class ContractServiceImpl implements IContractService {
 	 * 获取所有批次
 	 */
 	@Override
-	public List<ContractBatchEntity> getBacthsByContractNo(String contractNo) {
+	public List<ContractBatchModel> getBacthsByContractNo(String contractNo) {
 		try {
 			List<ContractBatchEntity> batchList = contractBatchDao
 					.getBacthsByContractNo(contractNo);
-			return batchList;
+			List<ContractBatchModel> cbList =new ArrayList<ContractBatchModel>();
+			if(batchList!=null && batchList.size()>0){
+				for (ContractBatchEntity contractBatchEntity : batchList) {
+					ContractBatchModel cb =new ContractBatchModel();
+					cb.setBatch(contractBatchEntity);
+					List<BatchItemModel> itemList =this.jsonChangeList(contractBatchEntity.getBatchItems());
+					cb.setBatchItems(itemList);
+					cbList.add(cb);
+				}
+			}
+			return cbList;
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());

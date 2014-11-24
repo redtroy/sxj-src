@@ -81,7 +81,7 @@ public interface IContractService {
 	public void changeContract(String recordId, String contractId,
 			ContractModifyModel model, String recordNo,
 			List<ContractItemEntity> itemList, String contractIds,
-			String changeIds);
+			String changeIds,String contractBatchIds,String changeBatchIds);
 
 	/**
 	 * 补损合同
@@ -273,6 +273,6 @@ public interface IContractService {
 	 */
 	public void modifyBatchPayState(String contractNo, String rfidNo);
 
-	List<ContractBatchEntity> getBacthsByContractNo(String contractNo);
+	List<ContractBatchModel> getBacthsByContractNo(String contractNo);
 
 }
