@@ -21,6 +21,10 @@ public class ContractPayModel extends Pagable implements Serializable {
 	 */
 	private String memberNo;
 
+	private String memberName_A;
+
+	private String memberName_B;
+
 	/**
 	 * 支付单号
 	 */
@@ -67,6 +71,56 @@ public class ContractPayModel extends Pagable implements Serializable {
 	 * 状态
 	 */
 	private String state;
+
+	/**
+	 * 支付内容状态
+	 * 
+	 */
+	private String PayContentState;
+
+	private String type;
+
+	private String payMode;
+
+	public String getPayContentState() {
+		return PayContentState;
+	}
+
+	public String getMemberName_A() {
+		return memberName_A;
+	}
+
+	public void setMemberName_A(String memberName_A) {
+		this.memberName_A = memberName_A;
+	}
+
+	public String getMemberName_B() {
+		return memberName_B;
+	}
+
+	public void setMemberName_B(String memberName_B) {
+		this.memberName_B = memberName_B;
+	}
+
+	public void setPayContentState(String payContentState) {
+		PayContentState = payContentState;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(String payMode) {
+		this.payMode = payMode;
+	}
 
 	public Long getPayReal() {
 		return payReal;

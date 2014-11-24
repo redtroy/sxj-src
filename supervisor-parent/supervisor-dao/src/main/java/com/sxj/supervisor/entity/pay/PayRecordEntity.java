@@ -11,7 +11,10 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
+import com.sxj.supervisor.enu.contract.PayContentStateEnum;
+import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.supervisor.enu.contract.PayTypeEnum;
 
 /**
  * 支付单
@@ -42,10 +45,22 @@ public class PayRecordEntity implements Serializable {
 	private String memberNo_A;
 
 	/**
+	 * 甲方会员名称
+	 */
+	@Column(name = "MEMBER_NAME_A")
+	private String memberName_A;
+
+	/**
 	 * 乙方会员ID
 	 */
 	@Column(name = "MEMBER_NO_B")
 	private String memberNo_B;
+
+	/**
+	 * 乙方会员名称
+	 */
+	@Column(name = "MEMBER_NAME_B")
+	private String memberName_B;
 
 	/**
 	 * 支付单号
@@ -83,7 +98,7 @@ public class PayRecordEntity implements Serializable {
 	 * 实际支付金额
 	 */
 	@Column(name = "PAY_REAL")
-	private Long payReal;
+	private Double payReal;
 
 	/**
 	 * 支付日期
@@ -103,16 +118,64 @@ public class PayRecordEntity implements Serializable {
 	@Column(name = "STATE")
 	private PayStageEnum state;
 
-	public Long getPayReal() {
-		return payReal;
-	}
+	/**
+	 * 支付内容状态
+	 * 
+	 * @return
+	 */
+	@Column(name = "PAY_CONTENT_STATE")
+	private PayContentStateEnum PayContentState;
 
-	public void setPayReal(Long payReal) {
-		this.payReal = payReal;
-	}
+	/**
+	 * 类型
+	 * 
+	 * @return
+	 */
+	@Column(name = "TYPE")
+	private PayTypeEnum type;
+
+	/**
+	 * 付款方式
+	 * 
+	 * @return
+	 */
+	@Column(name = "PAY_MODE")
+	private PayModeEnum payMode;
 
 	public String getContent() {
 		return content;
+	}
+
+	public Double getPayReal() {
+		return payReal;
+	}
+
+	public void setPayReal(Double payReal) {
+		this.payReal = payReal;
+	}
+
+	public PayContentStateEnum getPayContentState() {
+		return PayContentState;
+	}
+
+	public void setPayContentState(PayContentStateEnum payContentState) {
+		PayContentState = payContentState;
+	}
+
+	public PayTypeEnum getType() {
+		return type;
+	}
+
+	public void setType(PayTypeEnum type) {
+		this.type = type;
+	}
+
+	public PayModeEnum getPayMode() {
+		return payMode;
+	}
+
+	public void setPayMode(PayModeEnum payMode) {
+		this.payMode = payMode;
 	}
 
 	public void setContent(String content) {

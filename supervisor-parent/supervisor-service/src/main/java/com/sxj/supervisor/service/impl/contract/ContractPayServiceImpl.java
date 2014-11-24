@@ -45,6 +45,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			query.setPage(condition);
 			return payList;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServiceException("查询付款管理出错", e);
 		}
 	}
@@ -60,7 +61,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	 */
 	@Override
 	@Transactional
-	public String pay(String id, Long payReal) throws ServiceException {
+	public String pay(String id, Double payReal) throws ServiceException {
 		try {
 			PayRecordEntity re = payDao.getPayRecordEntity(id);
 			PayStageEnum[] payState = PayStageEnum.values();
