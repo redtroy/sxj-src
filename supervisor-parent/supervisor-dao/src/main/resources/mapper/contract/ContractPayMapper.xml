@@ -37,6 +37,10 @@
 		<if test="condition.memberNo != null and condition.memberNo != ''">
 			<![CDATA[ AND (MEMBER_NO_A = #{condition.memberNo} OR MEMBER_NO_B = #{condition.memberNo})]]>
 		</if>
+		<!-- 甲方会员名称 -->
+		<if test="condition.memberName_A != null and condition.memberName_A != ''">
+			<![CDATA[ AND  MEMBER_NAME_A like CONCAT('%',#{condition.memberName_A},'%')]]>
+		</if>
 		<!-- 支付单号 -->
 		<if test="condition.payNo != null and condition.payNo != ''">
 			<![CDATA[ AND PAY_NO like CONCAT('%',#{condition.payNo},'%')]]>
@@ -50,8 +54,28 @@
 			<![CDATA[AND RFID_NO like CONCAT('%',#{condition.rfidNo},'%')]]>
 		</if>
 	   <!-- 付款状态/收款状态 -->
-		<if test="condition.state != null and condition.state !=''">
+		<if test="condition.state != null and condition.state !='' and condition.memberType != 1 and condition.memberType != 2">
 			<![CDATA[AND STATE =#{condition.state}]]>
+		</if>
+		<if test="condition.state != null and condition.state !='' and condition.memberType != null and condition.memberType !='' and condition.memberType !=0">
+			<if test="condition.state &lt;4">
+			<![CDATA[AND STATE <4 ]]>
+			</if>
+			<if test="condition.state &gt;3">
+			<![CDATA[AND STATE =#{condition.state}]]>
+			</if>
+		</if>
+		 <!-- 支付内容状态 -->
+		<if test="condition.PayContentState != null and condition.PayContentState !=''">
+			<![CDATA[AND PAY_CONTENT_STATE =#{condition.PayContentState}]]>
+		</if>
+		 <!-- 付款方式 -->
+		<if test="condition.payMode != null and condition.payMode !=''">
+			<![CDATA[AND PAY_MODE =#{condition.payMode}]]>
+		</if>
+		 <!-- 类型 -->
+		<if test="condition.type != null and condition.type !=''">
+			<![CDATA[AND TYPE =#{condition.type}]]>
 		</if>
 		<!-- 支付时间段-->
 		<if

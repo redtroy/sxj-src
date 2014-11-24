@@ -98,6 +98,19 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.LabelStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />
+			
+			<typeHandler
+			handler="com.sxj.supervisor.typehandler.PayContentStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.PayContentStateEnum" />
+				<typeHandler
+			handler="com.sxj.supervisor.typehandler.PayModeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.PayModeEnum" />
+				<typeHandler
+			handler="com.sxj.supervisor.typehandler.PayStageEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.PayStageEnum" />
+				<typeHandler
+			handler="com.sxj.supervisor.typehandler.PayTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.PayTypeEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

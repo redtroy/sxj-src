@@ -58,6 +58,7 @@ public class PayController extends BaseController {
 			SupervisorPrincipal info = getLoginInfo(session);
 			String memberNo = info.getMember().getMemberNo();
 			query.setMemberNo(memberNo);
+			query.setMemberType(info.getMember().getType().getId().toString());
 			List<PayRecordEntity> list = payService.queryPayList(query);
 			PayStageEnum[] payState = PayStageEnum.values();
 			map.put("list", list);

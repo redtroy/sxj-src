@@ -34,12 +34,18 @@ public class ContractPayServiceImpl implements IContractPayService {
 			}
 			QueryCondition<PayRecordEntity> condition = new QueryCondition<PayRecordEntity>();
 			condition.addCondition("memberNo", query.getMemberNo());// 会员号
+			condition.addCondition("memberType", query.getMemberType());// 会员号
 			condition.addCondition("payNo", query.getPayNo());// 支付单号
 			condition.addCondition("contractNo", query.getContractNo());// 合同号
 			condition.addCondition("rfidNo", query.getRfidNo());// Rfid编号
 			condition.addCondition("startPayDate", query.getStartPayDate());// 开始时间
 			condition.addCondition("endPayDate", query.getEndPayDate());// 结束时间
-			condition.addCondition("state", query.getState());// 结束时间
+			condition.addCondition("state", query.getState());//
+			condition.addCondition("memberName_A", query.getMemberName_A());//
+			condition.addCondition("payMode", query.getPayMode());//
+			condition.addCondition("type", query.getType());//
+			condition.addCondition("PayContentState",
+					query.getPayContentState());//
 			condition.setPage(query);
 			List<PayRecordEntity> payList = payDao.queryPayContract(condition);
 			query.setPage(condition);
@@ -65,9 +71,9 @@ public class ContractPayServiceImpl implements IContractPayService {
 		try {
 			PayRecordEntity re = payDao.getPayRecordEntity(id);
 			PayStageEnum[] payState = PayStageEnum.values();
-			if (re.getState().ordinal() == 0) {
+			if (re.getState().ordinal() < 4) {
 				re.setPayReal(payReal);
-				re.setState(payState[2]);
+				re.setState(payState[4]);
 				payDao.update_pay(re);
 				return "ok";
 			} else {
@@ -87,8 +93,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 		try {
 			PayRecordEntity re = payDao.getPayRecordEntity(id);
 			PayStageEnum[] payState = PayStageEnum.values();
-			if (re.getState().ordinal() == 3) {
-				re.setState(payState[3]);
+			if (re.getState().ordinal() == 4) {
+				re.setState(payState[5]);
 				payDao.update_pay(re);
 				return "ok";
 			} else {

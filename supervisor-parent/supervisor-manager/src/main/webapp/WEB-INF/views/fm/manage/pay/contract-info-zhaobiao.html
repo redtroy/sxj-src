@@ -1,0 +1,166 @@
+﻿
+		<!-- 合同详情 -->
+	<td colspan="12">
+		<script type="text/javascript">
+	$(document).ready(function(){
+		var start=0;
+		
+		$('.imagelist').each(function(){
+			var $this=$(this);
+			$this.find("li").live("click",function(){
+				var el=$(this);
+				var imageSource = el.find("a").attr("data-image");
+				refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+				el.parent().children("li").removeClass("view");
+				el.addClass("view");
+				preModal=null;
+			});
+			$(this).elastislide({
+				orientation : 'horizontal',
+				speed : 500,
+				easing : 'ease-in-out',
+				minItems : elastislideConfig.count,
+				start : start,
+				onClick : function( el, position, evt ) { 
+					return false; 
+				},
+				onReady : function() { 
+					$this.children("li:lt("+elastislideConfig.count+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					if($this.children("li").length<elastislideConfig.count)
+						$(".elastislide-prev").hide();
+					return false; },
+				onBeforeSlide : function() { return false; },
+				onAfterSlide : function() { 
+					if(start>0)
+						slideTimes=slideTimes+start;
+					$this.children("li:lt("+slideTimes+")").each(function(){
+						var $image=$(this).find("img");
+						if($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					slideTimes=slideTimes+elastislideConfig.count;
+					return false; }
+			});
+		});
+		var quantity=0;
+		var amount=0;
+		$(".quantity").each(function(){
+			if($(this).html()){
+				quantity+=parseInt($(this).html());
+			}
+		});
+		$(".price").each(function(){
+			if($(this).html()){
+				$(this).html(parseFloat($(this).html()).toFixed(2));
+			}
+		});
+		$(".amount").each(function(){
+			if($(this).html()){
+				amount+=parseFloat($(this).html());
+				$(this).html(parseFloat($(this).html()).toFixed(2));
+			}
+		});
+		$(".tquantity").html(quantity+"樘");
+		$(".tamount").html(amount.toFixed(2)+"元");
+	});
+	</script>
+		<div class="contInfo tl">
+                  <div class="info ly-clearFix">
+                    <div class="item">
+                      <label>合同号</label>
+                      ${contractModel.contract.contractNo}</div>
+                      <div class="item">
+                      <label>&nbsp;</label>
+                      &nbsp;</div>
+                    <div class="item">
+                      <label>工程名称</label>
+                     ${contractModel.contract.engName}</div>
+                     <div class="item">
+                      <label>工程地点</label>
+                     ${contractModel.contract.engAddress} </div>
+                    <div class="item">
+                      <label>甲方</label>
+                      ${contractModel.contract.memberNameA}</div>
+                    <div class="item">
+                      <label>乙方</label>
+                      ${contractModel.contract.memberNameB}</div>
+                    <div class="item">
+                      <label>签订地点</label>
+                     ${contractModel.contract.address}</div>
+                    <div class="item">
+                      <label>签订时间</label>
+                      ${contractModel.contract.signedDate?string("yyyy年MM月dd日")}</div>
+                  </div>
+                  <div class="item ly-clearFix">
+                    <label class="ly-left">&nbsp;</label>
+                    <table border="0" cellpadding="0" cellspacing="0" class="tabProd ly-left">
+                      <col width="15%" />
+                      <col width="25%" />
+                      <col width="15%" />
+                      <col width="12%" />
+                      <col width="13%" />
+                      <col width="30%" />
+                      <tr>
+                        <th>产品名称</th>
+                        <th>型号规格<span class="fontAR ml5">(mm)</span></th>
+                        <th>数量<span class="fontAR ml5">樘</span></th>
+                        <th>单价<span>（元）</span></th>
+                        <th>金额</th>
+                        <th>备注说明</th>
+                      </tr>
+			            <#list contractModel.itemList as item>
+                      <tr>
+                         <td>${item.productName}</td>
+			              <td>${item.windowType.getName()}</td>
+			              <td class="quantity">${item.quantity}</td>
+			              <td class="price">${item.price?string('0.00')}</td>
+			              <td class="amount">${item.amount?string('0.00')}</td>
+			              <td>${item.remarks}</td>
+                      </tr>
+                       </#list>
+                      <tr class="fb">
+                        <td>合计</td>
+                        <td>&nbsp;</td>
+                        <td class="tquantity"></td>
+                        <td>&nbsp;</td>
+                        <td class="tamount"></td>
+                        <#if contractModel.contract.imgPath!=null>
+                        <td class="tl">
+                        <#assign arr=(contractModel.contract.imgPath?split(","))>
+                 		本合同附件清单共${arr?size}页</td>
+                 		<#else>
+                 		<td class="tl">
+                 		本合同附件清单共0页</td>
+                 		</#if>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="item">
+                    <label>合同备注</label>
+                    ${contractModel.contract.remarks}</div>
+                  <div class="item">
+                    <label>合同扫描件</label>
+                   	</div>
+                  <div class="item">
+                    <label>&nbsp;</label>
+                     <#if arr??>
+                    <div class="rollBox">
+                    <ul class="elastislide-list imagelist">
+                    <#list arr  as imgPath>
+                    <li><a href="javascript:void(0);" data-image="${b.imagePath}${imgPath}"><img data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+                    </#list>
+                    </ul>
+                    </div>
+                    <#else>
+                    <img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+                    </#if>
+                    </div>
+                  <div class="item mt10">
+                    <label>&nbsp;</label>
+                    <button class="button button-gray" onclick="closeContract('${recordNo}')">收起</button>
+                  </div>
+                </div></td>
