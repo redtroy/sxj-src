@@ -183,7 +183,7 @@ $(document).ready(function() {
 				tamount+=parseInt($(this).val());
 			});
 			if(parseFloat(tamount))
-				$("#amountSum").html(tamount.toFixed(2)+"元");
+				$("#amountSum").html(tamount.toFixed(2));
 		})
 		
 	});
@@ -302,7 +302,7 @@ $(document).ready(function() {
 								<td><input type="text" value="" name="items[index].price" class="priceClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"  errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
 								<td><input type="text" value="" name="items[index].amount" class="amountClass" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"  errormsg="输入范围在1~20位之间！" nullmsg="请输入产品合价！" /></td>
 								<td><textarea id="textarea" cols="45" rows="1"
-										name="items[0].remarks"></textarea></td>
+										name="items[index].remarks"></textarea></td>
 								<td><a href="javascript:void(0);" class="lnk-green">+</a>&nbsp;&nbsp;<a href="javascript:void(0);" class="lnk-red">X</a></td>
 							</tr>
 							<tr id="total_tr">

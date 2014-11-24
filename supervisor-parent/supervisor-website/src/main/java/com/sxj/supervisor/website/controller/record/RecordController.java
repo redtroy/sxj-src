@@ -584,4 +584,29 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+	@RequestMapping("getProgress")
+	public @ResponseBody Map<String, String> getProgress(String contractNo)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			String progress=recordService.getProgress(contractNo);
+			map.put("progress", progress);
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("获取合同进度错误", e, this.getClass());
+			throw new WebException("获取合同进度错误");
+		}
+	}
+	@RequestMapping("getBatchPay")
+	public String getBatchPay(String contractNo,ModelMap map)
+			throws WebException {
+		try {
+			List<ContractBatchEntity> batchList=contractService.getBacthsByContractNo(contractNo);
+			map.put("batchList", batchList);
+			return "site/record/progress";
+		} catch (Exception e) {
+			SxjLogger.error("获取合同进度错误", e, this.getClass());
+			throw new WebException("获取合同进度错误");
+		}
+	}
 }
