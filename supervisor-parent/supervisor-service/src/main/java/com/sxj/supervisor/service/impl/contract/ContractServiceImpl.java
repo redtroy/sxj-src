@@ -2014,4 +2014,22 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException("更新批次错误", e);
 		}
 	}
+
+	/**
+	 * 获取所有批次
+	 */
+	@Override
+	public List<ContractBatchEntity> getBacthsByContractNo(String contractNo) {
+		try {
+			List<ContractBatchEntity> batchList = contractBatchDao
+					.getBacthsByContractNo(contractNo);
+			return batchList;
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新批次错误", e);
+		}
+	}
 }

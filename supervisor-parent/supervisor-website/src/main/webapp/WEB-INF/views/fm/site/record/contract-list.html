@@ -325,9 +325,27 @@ function busunSeav(){
 				 }
 	             },   
 	     	});  
+   			//合同进度
+   			progressBar();
    			
 	});
-	
+	var progressBar=function(){
+		$(".progressBarClass").each(function(){
+			var contractNo=$(this).attr("value");
+			if(contractNo!=null && contractNo!=''){
+				var $this=$(this);
+				$.post("getProgress.htm", {contractNo:contractNo}, function(data) {
+					if(data.progress!=null && data.progress<100){
+						$this.find(".progre").width(data.progress+"%");
+						$this.find(".color-red").html(data.progress+"%");
+					}else if(data.progress==100){
+						$this.find(".progre").attr("class","progre100").width("100%");
+						$this.find(".color-red").html("100%").attr("class","color-green");
+					}
+				});
+			}
+		});
+	}
 	function closeMessage(obj){
 		$(obj).parent().remove();
 	}
@@ -345,6 +363,7 @@ function busunSeav(){
 			var totalPage = pager.attr("totalPage");
 			var currentPage = pager.attr("currentPage");
 			loadPage(currentPage, totalPage, query);
+			progressBar();
 		});
 	}
 
@@ -525,10 +544,13 @@ function busunSeav(){
 								class="state verified">已备案</span> </#if>
 							</td>
 							<td><#if record.contractType.getId()!=0>
+							<div class="progressBarClass" value="${record.contractNo}">
 								<div class="progressBar">
-									<div class="progre" style="width: 20%"></div>
+									<div class="progre" style="width: 0%"></div>
 								</div>
-								<div class="color-red">20%</div> <#else>-</#if>
+								<div class="color-red">0%</div> 
+							</div>
+								<#else>-</#if>
 							</td>
 							<td><#if type==0> <#if record.contractType.getId()==0> <#if
 								record.contractNo?exists>- <#else> <a

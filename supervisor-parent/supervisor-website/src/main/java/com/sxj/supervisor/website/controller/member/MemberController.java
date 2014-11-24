@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.advance.RedisCollections;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -38,6 +40,12 @@ public class MemberController extends BaseController {
 
 	@Autowired
 	private IAreaService areaService;
+
+	@Autowired
+	RedisCollections collections;
+
+	@Autowired
+	private CachingSessionDAO sessionDAO;
 
 	/**
 	 * 根据会员号获取会员信息
@@ -250,5 +258,40 @@ public class MemberController extends BaseController {
 			map.put("flag", "false");
 		}
 		return map;
+	}
+
+	@RequestMapping("checkEditState")
+	@ResponseBody
+	public Boolean checkEditState(HttpSession session) {
+		if (session.getAttribute("userinfo") == null)
+			return false;
+		SupervisorPrincipal member = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		// RSet<Object> set =
+		// collections.getSet(Constraints.EDIT_CHECK_STATE_SET);
+		// if (set.contains(member.getId())) {
+		if (member.getMember().getCheckState()
+				.equals(MemberCheckStateEnum.unrecognized)) {
+			MemberEntity newMember = memberService.getMember(member.getMember()
+					.getId());
+			if (newMember.getCheckState()
+					.equals(MemberCheckStateEnum.certified)) {
+				member.setMember(newMember);
+				session.setAttribute("userinfo", member);
+				return true;
+			} else {
+				return false;
+			}
+			// sessionDAO.getActiveSessionsCache().put(session.getId(),
+			// session);
+			// set.remove(member.getId());
+			// return "1";
+			// } else {
+			//
+			// }
+		} else {
+			return true;
+		}
+
 	}
 }
