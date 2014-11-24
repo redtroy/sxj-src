@@ -314,7 +314,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 						hasReceCount = hasReceCount + rePurchase.getCount();
 					}
 				}
-				if (apply.getCount() == hasReceCount) {
+				if (apply.getCount().intValue() == hasReceCount.intValue()) {
 					apply.setReceiptState(ReceiptStateEnum.Goods_receipt);
 					applyService.updateApp(apply);
 				}
