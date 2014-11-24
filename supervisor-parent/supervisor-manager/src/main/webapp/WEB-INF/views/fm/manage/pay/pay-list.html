@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -9,6 +9,39 @@
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
+<@b.pageScript/>
+<script>
+//读取详细信息
+function loadInfo(contractNo,id) {
+	var temp= $("#info_"+id).is(":hidden");//是否隐藏 
+	if (temp){
+	  $("#info_" + id).show();
+	  $("#info_" + id).load("info.htm?contractNo=" + contractNo+"&recordNo="+id);
+	}else{
+	  $("#info_" + id).hide();
+	  $("#info_" + id).html('');
+	}
+}
+function closeContract(id){
+	 $("#info_" + id).hide();
+	 $("#info_" + id).html('');
+}
+function query(page){
+	var params=$("#searchBox").find(":input").serialize();
+	if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	}
+	$.post("payList.htm",params,function(data){
+		var tableList=$(data).find(".tabList");
+		var pager=$(data).find("#pager");
+		$(".tabList").empty();
+		$(".tabList").append(tableList.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	})
+}
+</script>
 </head>
 <body>
 <@b.header />
@@ -23,17 +56,17 @@
       <h2 class="title">支付管理</h2>
       <div id="searchBox">
       <p>
-       支付单号<input type="text" name="" value="">
-       合同号<input type="text" name="" value="">
-       类型<select name="select">
+       支付单号<input type="text" name="payNo" value="">
+       合同号<input type="text" name="contractNo" value="">
+       类型<select name="type">
 	   <option selected="selected" value="">全部</option>
           <#list payTypes as model>
           <option value="${model.id}">${model.getName()}</option>
           </#list>
         </select>
-       付款会员ID<input type="text" name="" value="">
-       RFID编号<input type="text" name="" value="">
-       支付内容<select name="select">
+       付款会员<input type="text" name="memberName_A" value="">
+       RFID编号<input type="text" name="rfidNo" value="">
+       支付内容<select name="PayContentState">
 	   <option selected="selected" value="">全部</option>
          <#list payStates as model>
           <option value="${model.id}">${model.getName()}</option>
@@ -42,21 +75,23 @@
         </p>
        <p>
        支付时间段
-       <input type="text" name="" value="">-<input type="text" name="" value="">       
-        付款状态<select name="select">
-	   <option selected="selected">全部</option>
-          <option>已完成</option>
-          <option>未完成</option>
+       <input type="text" name="startPayDate" value="">-<input type="text" name="endPayDate" value="">       
+        付款状态<select name="state">
+	   <option selected="selected" value="">全部</option>
+          <#list payStages as model>
+          <option value="${model.ordinal()}">${model.getName_a()}</option>
+          </#list>
         </select>
-        付款方式<select name="select">
-	   <option selected="selected">全部</option>
+        付款方式<select name="payMode">
+	   <option selected="selected" value="">全部</option>
          <#list payModes as model>
           <option value="${model.id}">${model.getName()}</option>
           </#list>
         </select>
-        <button class="btn btn-blue"><span>查询</span></button>
+        <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
         </p>
     </div>
+    <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList">
         <col width="10%"/>
         <col width="8%"/>
@@ -82,22 +117,36 @@
           <th>付款状态</th>
           <th class="rLine">付款方式</th>
         </tr>
+        <#assign num=0>
         <#list list as model>
         <tr>
           <td>${model.payNo}</td>
-          <td><a href="#" class="lnk-blue">${model.contractNo}</a></td>
+          <td><a href="javascript:loadInfo('${model.contractNo}','${model.id}')" class="lnk-blue">${model.contractNo}</a></td>
           <td>${model.batchNo}</td>
           <td><#if (model.type??)>${model.type.getName()}</#if></td>
           <td>${model.memberName_A}</td>
-          <td><a href="#">${model.rfidNo}</a></td>
+          <td>${model.rfidNo}</td>
           <td>${model.payAmount}</td>
           <td><#if (model.payDate??)>${model.payDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <td>${model.content}</td>
+          <#if (model.state.ordinal()==0)>
           <td><em class="state frozen">${model.state.name_a}</em></td>
+          <#elseif (model.state.ordinal()==1)>
+          <td><em class="state process">${model.state.name_a}</em></td>
+          <#elseif (model.state.ordinal()==2)>
+          <td><em class="state verified">${model.state.name_a}</em></td>
+          <#elseif (model.state.ordinal()==3)>
+          <td><em class="state frozen">${model.state.name_a}</em></td>
+          <#elseif (model.state.ordinal()==4)>
+           <td><em class="state normal">${model.state.name_a}</em></td>
+          <#elseif (model.state.ordinal()==5)>
+          <td><em class="state verified">${model.state.name_a}</em></td>
+          </#if>
           <td><em class="state process"><#if (model.payMode??)>${model.payMode.getName()}</#if></em></td>
         </tr>
-        <tr class="tableInfo" style="display:;">
+        <tr class="tableInfo" id="info_${model.id}" style="display:none;">
         </tr>
+        <#assign num=num+model.payAmount>
         </#list>
         <tr>
           <td><strong>合计</strong></td>
@@ -106,7 +155,7 @@
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
-          <td><strong>366201元</strong></td>
+          <td><strong>${num}元</strong></td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td>&nbsp;</td>

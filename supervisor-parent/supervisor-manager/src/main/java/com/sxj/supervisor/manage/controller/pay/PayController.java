@@ -13,9 +13,12 @@ import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
+import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("pay")
@@ -23,6 +26,9 @@ public class PayController extends BaseController {
 
 	@Autowired
 	private IContractPayService payService;
+
+	@Autowired
+	private IContractService contractService;
 
 	@RequestMapping("payList")
 	public String payList(ModelMap map, ContractPayModel query)
@@ -47,5 +53,30 @@ public class PayController extends BaseController {
 			throw new WebException(e.getMessage());
 		}
 		return "manage/pay/pay-list";
+	}
+
+	@RequestMapping("info")
+	public String queryContractInfo(ModelMap model, String contractNo,
+			String recordNo) throws WebException {
+		try {
+			ContractModel contract = contractService
+					.getContractModelByContractNo(contractNo);
+			ContractModel contractModel = new ContractModel();
+			if (contract.getContract() != null) {
+				contractModel = contractService.getContract(contract
+						.getContract().getId());
+			}
+			model.put("contractModel", contractModel);
+			model.put("recordNo", recordNo);
+			if (contractModel.getContract().getType().getId() == 0) {
+				return "manage/pay/contract-info-zhaobiao";
+			} else {
+				return "manage/pay/contract-info";
+			}
+			// contractModel.getContract().getImgPath().split(",");
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
 	}
 }

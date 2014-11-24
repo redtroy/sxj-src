@@ -1,0 +1,399 @@
+﻿
+<!-- 合同详情 -->
+<td colspan="12"><script type="text/javascript">
+$(document).ready(function(){
+	var start=0;
+	
+	$('.elastislide-list').each(function(){
+		var $this=$(this);
+		$this.find("li").live("click",function(){
+			var el=$(this);
+			var imageSource = el.find("a").attr("data-image");
+			refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+			el.parent().children("li").removeClass("view");
+			el.addClass("view");
+			preModal=null;
+		});
+		$(this).elastislide({
+			orientation : 'horizontal',
+			speed : 500,
+			easing : 'ease-in-out',
+			minItems : elastislideConfig.count,
+			start : start,
+			onClick : function( el, position, evt ) { 
+				return false; 
+			},
+			onReady : function() { 
+				$this.children("li:lt("+elastislideConfig.count+")").each(function(){
+					var $image=$(this).find("img");
+					if($image.attr("data-image"))
+						$image.attr("src",$image.attr("data-image"));
+				});
+				if($this.children("li").length<elastislideConfig.count)
+					$(".elastislide-prev").hide();
+				return false; },
+			onBeforeSlide : function() { return false; },
+			onAfterSlide : function() { 
+				if(start>0)
+					slideTimes=slideTimes+start;
+				$this.children("li:lt("+slideTimes+")").each(function(){
+					var $image=$(this).find("img");
+					if($image.attr("data-image"))
+						$image.attr("src",$image.attr("data-image"));
+				});
+				slideTimes=slideTimes+elastislideConfig.count;
+				return false; }
+		});
+	});
+	$("#tabsholder").tytabs({
+		prefixtabs:"tabz",
+		prefixcontent:"content",
+		classcontent:"tabscontent",
+		tabinit:"1",
+		catchget:"tab2",
+		fadespeed:"normal"
+		});
+});
+</script>
+	<div id="tabsholder" class="tabmenuBar contInfo tl">
+	 <ul class="tabMenu tabs">
+              <li id="tabz1">合同信息</li>
+              <#if contractModel.modifyList?exists> <li id="tabz2">变更合同信息</li></#if>
+              <#if contractModel.replenishList?exists><li id="tabz3">补损合同信息</li></#if>
+     </ul>
+     <div class="contents">
+     <div  id="content1" class="tabscontent">
+		<div class="info ly-clearFix">
+			<div class="item">
+				<label>合同号</label> ${contractModel.contract.contractNo}
+			</div>
+			<div class="item">
+				<label>工程名称</label> ${contractModel.contract.engName}
+			</div>
+			<div class="item">
+				<label>工程地点</label> ${contractModel.contract.engAddress}
+			</div>
+			<div class="item">
+				<label>对应备案号</label> ${contractModel.contract.recordNo}
+			</div>
+			<div class="item">
+				<label>甲方</label> ${contractModel.contract.memberNameA}
+			</div>
+			<div class="item">
+				<label>乙方</label> ${contractModel.contract.memberNameB}
+			</div>
+			<div class="item">
+				<label>签订地点</label> ${contractModel.contract.address}
+			</div>
+			<div class="item">
+				<label>签订时间</label>
+				${contractModel.contract.signedDate?string("yyyy年MM月dd日")}
+			</div>
+			<div class="item">
+				<label>合同期限</label>
+				${contractModel.contract.validityDate?string("yyyy年MM月dd日")}
+			</div>
+			<div class="item">
+				<label>生效时间</label>
+				 <#if contractModel.contract.startDate?exists>${contractModel.contract.startDate?string("yyyy年MM月dd日")}</#if>
+			</div>
+		</div>
+		<div class="item ly-clearFix">
+			<label class="ly-left">&nbsp;</label>
+			<table border="0" cellpadding="0" cellspacing="0"
+				class="tabProd ly-left">
+				<col width="15%" />
+				<col width="25%" />
+				<col width="15%" />
+				<col width="12%" />
+				<col width="13%" />
+				<col width="22%" />
+					<col width="8%" />
+				<tr>
+					<th>产品名称</th>
+					<th>产品规格<span class="fontAR ml5"></span></th>
+					<th>数量<span class="fontAR ml5"><#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>
+					</span></th>
+					<th>单价<span>（元）</span></th>
+					<th>金额</th>
+					<th>备注说明</th>
+					<th>&nbsp;&nbsp;&nbsp;</th>
+				</tr>
+				<#assign n = 0> 
+				<#assign m = 0> 
+				<#list contractModel.itemList as item> 
+				<#assign n = (n+item.quantity)?int > 
+				<#assign m = (m+item.amount)?int >
+				<tr>
+					<td>${item.productName}</td>
+					<td>${item.productModel}</td>
+					<td>${item.quantity?string('0.00')}</td>
+					<td>${item.price?string('0.00')}</td>
+					<td>${item.amount?string('0.00')}</td>
+					<td>${item.remarks}</td>
+					<td><#if item.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
+				</tr>
+				</#list>
+				<tr class="fb">
+					<td>合计</td>
+					<td>&nbsp;</td>
+					<td>约${n?string('0.00')}</td>
+					<td>&nbsp;</td>
+					<td>${m?string('0.00')}元</td> <#if contractModel.contract.imgPath!=null>
+					<td class="tl"><#assign
+						arr=(contractModel.contract.imgPath?split(","))>
+						本合同附件清单共${arr?size}页</td> <#else>
+					<td class="tl">本合同附件清单共0页</td> </#if>
+					<td></td> 
+				</tr>
+			</table>
+		</div>
+		<div class="item">
+			<label>交货地址</label> ${contractModel.contract.deliveryAddress}
+		</div>
+		<#if contractModel.batchList?exists>
+		<div class="item ly-clearFix">
+                    <label class="ly-left">&nbsp;</label>
+                    <table border="0" cellpadding="0" cellspacing="0" class="tabProd ly-left">
+                      <col width="15%" />
+                      <col width="40%" />
+                      <col width="20%" />
+                      <col width="15%" />
+                       <col width="10%" />
+                      <tr>
+                        <th>批次</th>
+                        <th>表格</th>
+                        <th>应付货款</th>
+                        <th>对应物流标签</th>
+                        <th>&nbsp;&nbsp;&nbsp;</th>
+                      </tr>
+                      <#list contractModel.batchList as batch>
+                      <tr>
+                        <td>第${batch.batch.batchNo}批次</td>
+                        <td><table border="0" cellspacing="0" cellpadding="0" class="tabProd tabBatch">
+                          <tr>
+                            <th>产品规格<span class="fontAR ml5">(mm)</span></th>
+                            <th>数量<span class="fontAR ml5">(<#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
+                          </tr>
+                           <#list batch.batchItems as batchItem>
+                          <tr>
+                            <td>${batchItem.productModel}</td>
+                            <td>${batchItem.quantity}</td>
+                          </tr>
+                           </#list>
+                        </table></td>
+                        <td>${batch.batch.amount?string("0.00")}元</td>
+                        <td>${batch.batch.rfidNo}</td>
+                       <td><#if batch.batch.updateState==1><span class="color-red">！</span></#if></td>
+                      </tr>
+                      </#list>
+                    </table>
+                  </div>
+                  </#if>
+		<div class="item">
+			<label>交货批次</label> 本合同共<span class="color-red fb ml5 mr5"><#if
+				contractModel.batchList?exists>
+				${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
+				<#else> ${contractModel.contract.batchCount} </#if>个</span>交付批次
+		</div>
+		<div class="item">
+			<label>合同定金</label> ${contractModel.contract.deposit?string('0.00')}元
+		</div>
+		<div class="item">
+			<label>合同备注</label> ${contractModel.contract.remarks}
+		</div>
+		<div class="item">
+			<label>合同扫描件</label> <#assign
+			arr=(contractModel.contract.imgPath?split(","))> <#if arr??>
+			<div class="rollBox">
+				<ul class="elastislide-list imagelist">
+					<#list arr as imgPath>
+					<li><a href="javascript:void(0);"
+						data-image="${b.imagePath}${imgPath}"><img
+							data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+					</#list>
+				</ul>
+			</div>
+			<#else> <img src="${b.staticPath}images/nopic.jpg" width="80"
+				height="107" /> </#if> <span class="item"> <label>关联招标合同号</label>
+				${contractModel.contract.refContractNo}
+			</span>
+			</div>
+			</div>
+			<div id="content2" class="tabscontent">
+			 <#if contractModel.modifyList?exists>
+			<#list contractModel.modifyList as modifyList>
+			<div class="item">
+				<label>合同变更备案号 </label>${modifyList.modifyContract.recordNo}
+			</div>
+
+			<div class="item">
+				<label>合同变更扫描件</label> <#assign
+				arr=(modifyList.modifyContract.imgPath?split(","))> <#if arr??>
+				<div class="rollBox">
+					<ul class="elastislide-list imagelist">
+						<#list arr as imgPath>
+						<li><a href="javascript:void(0);"
+							data-image="${b.imagePath}${imgPath}"><img
+								data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+						</#list>
+					</ul>
+				</div>
+				<#else> <img src="${b.staticPath}images/nopic.jpg" width="80"
+					height="107" /> </#if>
+			</div>
+			<div class="item ly-clearFix">
+				<label class="ly-left">&nbsp;</label>
+				<table border="0" cellpadding="0" cellspacing="0"
+					class="tabProd f12 ly-left">
+					<col width="15%" />
+					<col width="25%" />
+					<col width="15%" />
+					<col width="12%" />
+					<col width="13%" />
+					<col width="22%" />
+					<col width="8%" />
+					<tr>
+						<th>产品名称</th>
+						<th>产品规格<span class="fontAR ml5"></span></th>
+						<th>数量<span class="fontAR ml5"><#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>
+						</span></th>
+						<th>单价<span>（元）</span></th>
+						<th>金额</th>
+						<th>备注说明</th>
+						<th>&nbsp;&nbsp;&nbsp;</th>
+					</tr>
+
+					<#list modifyList.modifyItemList as modifyItem>
+					<tr>
+						<td>${modifyItem.productName}</td>
+						<td>${modifyItem.productModel}</td>
+						<td>${modifyItem.quantity?string('0.00')}</td>
+						<td>${modifyItem.price?string('0.00')}</td>
+						<td>${modifyItem.amount?string('0.00')}</td>
+						<td>${modifyItem.remarks}</td>
+						<td><#if modifyItem.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
+					</tr>
+					</#list>
+				</table>
+			</div>
+			<div class="item ly-clearFix">
+				<label class="ly-left">&nbsp;</label>
+				<#if modifyList.modifyBatchList?exists>
+				<table border="0" cellpadding="0" cellspacing="0"
+					class="tabProd ly-left">
+					<col width="15%" />
+					<col width="45%" />
+					<col width="20%" />
+					<col width="12%" />
+					<col width="8%" />
+					<tr>
+						<th>批次</th>
+						<th>表格</th>
+						<th>应付货款</th>
+						<th>对应批次RFID编号</th>
+						<th>&nbsp;&nbsp;&nbsp;</th>
+					</tr>
+
+					<#list modifyList.modifyBatchList as modifyBatch>
+					<tr>
+						<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
+						<td><table border="0" cellspacing="0" cellpadding="0"
+								class="tabProd tabBatch">
+								<tr>
+									<th>产品规格<span class="fontAR ml5"></span></th>
+									<th>数量<span class="fontAR ml5"><#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>
+									</span></th>
+								</tr>
+
+								<#list modifyBatch.modifyBatchItems as modifyBatchItems>
+								<tr>
+									<td>${modifyBatchItems.productModel}</td>
+									<td>${modifyBatchItems.quantity?string('0.00')}</td>
+								</tr>
+								</#list>
+							</table></td>
+						<td>${modifyBatch.modifyBatch.amount?string('0.00')}元</td>
+						<td>${modifyBatch.modifyBatch.rfidNo}</td>
+						<td><#if modifyBatch.modifyBatch.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
+					</tr>
+					</#list>
+				</table>
+				</div></#if>
+			</#list> </#if> 
+			</div>
+			 <div id="content3" class="tabscontent">
+			<#if contractModel.replenishList?exists>
+			<#list contractModel.replenishList as replenishList>
+			<div class="item">
+				<label>合同补损备案号</label> ${replenishList.replenishContract.recordNo}
+			</div>
+			<div class="item">
+				<label>补损批次RFID</label>
+				${replenishList.replenishContract.batchRfidNo}
+			</div>
+			<div class="item">
+				<label>合同补损扫描件</label> <#assign
+				arr=(replenishList.replenishContract.imgPath?split(","))> <#if
+				arr??>
+				<div class="rollBox">
+					<ul class="elastislide-list imagelist">
+						<#list arr as imgPath>
+						<li><a href="javascript:void(0);"
+							data-image="${b.imagePath}${imgPath}"><img
+								data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+						</#list>
+					</ul>
+				</div>
+				<#else> <img src="${b.staticPath}images/nopic.jpg" width="80"
+					height="107" /> </#if>
+			</div>
+			<div class="item ly-clearFix">
+				<label class="ly-left">&nbsp;</label>
+				<table border="0" cellpadding="0" cellspacing="0"
+					class="tabProd ly-left">
+					<col width="14%" />
+					<col width="42%" />
+					<col width="12%" />
+					<col width="17%" />
+					<col width="8%" />
+					<tr>
+						<th>批次</th>
+						<th>表格</th>
+						<th>应付货款</th>
+						<th>RFID编号</th>
+						<th>&nbsp;&nbsp;&nbsp;</th>
+					</tr>
+					<#list replenishList.batchItems as replenishItem>
+					<tr>
+						<td>补第${replenishItem.replenishBatch.batchNo}批次</td>
+						<td><table border="0" cellspacing="0" cellpadding="0"
+								class="tabProd tabBatch">
+								<tr>
+									<th>产品规格<span class="fontAR ml5"></span></th>
+									<th>数量<span class="fontAR ml5"><#if contractModel.contract.type.getId()==1> /㎡<#elseif  contractModel.contract.type.getId()==2>/吨</#if>
+									</span></th>
+								</tr>
+								<#list replenishItem.replenishBatchItems as replenishBatchItems>
+								<tr>
+									<td>${replenishBatchItems.productModel}</td>
+									<td>${replenishBatchItems.quantity}</td>
+								</tr>
+								</#list>
+							</table></td>
+						<td>${replenishItem.replenishBatch.amount}</td>
+						<td>${replenishItem.replenishBatch.newRfidNo}</td>
+						<td><#if replenishItem.replenishBatch.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
+					</tr>
+					</#list>
+				</table>
+			</div>
+			</#list> </#if>
+			</div>
+			</div>
+			<div class="item mt10">
+				<label>&nbsp;</label>
+				<button class="button button-gray"
+					onclick="closeContract('${recordNo}')">收起</button>
+			</div>
+		</div></td>

@@ -21,6 +21,11 @@ public class ContractPayModel extends Pagable implements Serializable {
 	 */
 	private String memberNo;
 
+	/**
+	 * 会员类型，区分会员是甲方还是乙方
+	 */
+	private String memberType;
+
 	private String memberName_A;
 
 	private String memberName_B;
@@ -81,6 +86,14 @@ public class ContractPayModel extends Pagable implements Serializable {
 	private String type;
 
 	private String payMode;
+
+	public String getMemberType() {
+		return memberType;
+	}
+
+	public void setMemberType(String memberType) {
+		this.memberType = memberType;
+	}
 
 	public String getPayContentState() {
 		return PayContentState;

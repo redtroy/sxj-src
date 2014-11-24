@@ -11,8 +11,28 @@
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
 <@b.pageScript/>
 <Script>
+$(function(){
+	JS.Engine.start('${basePath}comet');
+		JS.Engine.on({
+			start : function(cId, channelList, engine){  
+		      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+		    }, 
+		 "${channelName}" : function(data){//侦听一个channel
+			 $("#message_div").empty();
+		  if (data>0){
+			if ("${state}"=="a"){
+			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
+			}else{
+			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有'+data+'笔合同里有待确认的款项</div>';
+			}
+			$("#message_div").html(bb);
+		  }
+         },   
+ 	}); 
+})
  function query(page){
 	 var params=$("#serch_div").find(":input").serialize();
 		if(page!=undefined){
@@ -74,7 +94,7 @@
           </select>
           <button class="button button-search" onclick="query();return false;">查询</button>
 </div>
-  <div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有一笔合同里有待支付的款项</div>
+  <div id="message_div"></div>
     <@b.pager/>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList">
   <col width="7%" />
