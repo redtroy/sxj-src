@@ -17,6 +17,7 @@ package com.sxj.redis.advance;
 
 import io.netty.util.concurrent.Future;
 
+import java.util.Date;
 import java.util.UUID;
 
 import com.sxj.redis.RedisAsyncConnection;
@@ -120,6 +121,11 @@ public class RedisConcurrent implements ConcurrentRedisClient {
 	@Override
 	public RAtomicLong getAtomicLong(String name, long second) {
 		return new RedisAtomicLong(connectionManager, name, second);
+	}
+
+	@Override
+	public RAtomicLong getAtomicLong(String name, Date time) {
+		return new RedisAtomicLong(connectionManager, name, time);
 	}
 
 	/**

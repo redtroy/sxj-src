@@ -17,6 +17,8 @@ package com.sxj.redis.advance.atomic;
 
 import io.netty.util.concurrent.Future;
 
+import java.util.Date;
+
 import com.sxj.redis.RedisAsyncConnection;
 import com.sxj.redis.RedisConnection;
 import com.sxj.redis.advance.RedisExpirable;
@@ -41,16 +43,37 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong {
 	public RedisAtomicLong(ConnectionManager connectionManager, String name,
 			long second) {
 		super(connectionManager, name);
-		initExpirea(second);
+		initExpire(second);
 	}
 
-	private void initExpirea(final long second) {
+	public RedisAtomicLong(ConnectionManager connectionManager, String name,
+			Date time) {
+		super(connectionManager, name);
+		initExpireat(time);
+	}
+
+	private void initExpire(final long second) {
 		getConnectionManager().writeAsync(
 				new ResultOperation<Boolean, Object>() {
 					@Override
 					protected Future<Boolean> execute(
 							RedisAsyncConnection<Object, Object> async) {
-						return async.expireat(getName(), second);
+						Future<Boolean> setnx = async.setnx(getName(), 0);
+						setnx.getNow();
+						return async.expire(getName(), second);
+					}
+				});
+	}
+
+	private void initExpireat(final Date timestamp) {
+		getConnectionManager().writeAsync(
+				new ResultOperation<Boolean, Object>() {
+					@Override
+					protected Future<Boolean> execute(
+							RedisAsyncConnection<Object, Object> async) {
+						Future<Boolean> setnx = async.setnx(getName(), 0);
+						setnx.getNow();
+						return async.expireat(getName(), timestamp);
 					}
 				});
 	}

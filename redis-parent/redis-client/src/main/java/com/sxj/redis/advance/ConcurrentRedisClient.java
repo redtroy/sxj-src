@@ -15,6 +15,8 @@
  */
 package com.sxj.redis.advance;
 
+import java.util.Date;
+
 import com.sxj.redis.advance.core.RAtomicLong;
 import com.sxj.redis.advance.core.RCountDownLatch;
 import com.sxj.redis.advance.core.RLock;
@@ -37,6 +39,14 @@ public interface ConcurrentRedisClient {
 	 * @return
 	 */
 	RAtomicLong getAtomicLong(String name, long second);
+
+	/**
+	 * 
+	 * @param name
+	 * @param time
+	 * @return
+	 */
+	RAtomicLong getAtomicLong(String name, Date time);
 
 	/**
 	 * Returns "count down latch" instance by name.
