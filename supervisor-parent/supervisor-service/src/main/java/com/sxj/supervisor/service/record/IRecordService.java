@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -83,5 +84,7 @@ public interface IRecordService {
 			throws ServiceException;
 
 	String getProgress(String contractNo);
+
+	String getRecordNo(String contractNo, MemberEntity menber);
 	
 }

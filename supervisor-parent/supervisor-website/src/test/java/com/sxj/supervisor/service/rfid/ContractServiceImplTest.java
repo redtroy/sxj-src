@@ -16,31 +16,25 @@ import com.sxj.supervisor.service.contract.IContractService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-public class ContractServiceImplTest
-{
-    @Autowired
-    IContractService service;
-    
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception
-    {
-    }
-    
-    @After
-    public void tearDown() throws Exception
-    {
-    }
-    
-    @Test
-    public void test()
-    {
-        MemberEntity member = new MemberEntity();
-        member.setType(MemberTypeEnum.genresFactory);
-        service.updateContractLoss("AAAB13634,AAAB52969,AAAB52967",
-                "CT14110098",
-                "33b5XLlND7L0EA62c5qm0HYast3RJnXl",
-                member,
-                "AAAB52903");
-    }
-    
+public class ContractServiceImplTest {
+	@Autowired
+	IContractService service;
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void test() {
+		MemberEntity member = new MemberEntity();
+		member.setType(MemberTypeEnum.genresFactory);
+		service.updateContractLoss("AAAB13634,AAAB52969,AAAB52967",
+				"CT14110098", "33b5XLlND7L0EA62c5qm0HYast3RJnXl", member,
+				"AAAB52903");
+	}
+
 }
