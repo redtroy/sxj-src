@@ -438,12 +438,14 @@ function busunSeav(){
 		var recordId =$("#bsRecordId").val(); 
 		$("#batchUl").empty();
 		$.post("getBatch.htm", {recordId:recordId}, function(data) {
-			if (data.batch.length>0) {
+			if (data.batch != undefined && data.batch.length>0) {
 				$("#batch-list").slideDown(200);
 				$('.maskdivgen2').fadeIn(100);
 				var batch =data.batch;
 				for(var i =0;i<batch.length;i++){
-					$("#batchUl").append('<li><input  type="checkbox" name="batchRfidNo"  title="'+batch[i].batchNo+'" value="'+batch[i].rfidNo+'" />第'+batch[i].batchNo+'批次</li>');
+					var bu='';
+					if(batch[i].type==3){bu='补'}
+					$("#batchUl").append('<li><input  type="checkbox" name="batchRfidNo"  title="'+batch[i].batchNo+'" value="'+batch[i].rfidNo+'" />'+bu+'第'+batch[i].batchNo+'批次</li>');
 				}
 			}else{
 				errorInfo("没有找到相关批次!");

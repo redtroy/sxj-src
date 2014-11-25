@@ -646,6 +646,22 @@ public class DateTimeUtils {
 	}
 
 	/**
+	 * 秒偏移
+	 *
+	 * @param date
+	 *            指定日期
+	 * @param timeNum
+	 *            偏移小时数
+	 * @return 加上偏移小时数后的日期
+	 */
+	public static Date getSecondOffset(Date date, int second) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.SECOND, second);
+		return cal.getTime();
+	}
+
+	/**
 	 * 取得指定格式的当前时间字符串
 	 *
 	 * @param pattern
@@ -757,7 +773,7 @@ public class DateTimeUtils {
 	public static Date getNextZeroTime() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(getCurrentZeroTime());
-		calendar.add(Calendar.DATE, 1);
+		calendar.add(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);

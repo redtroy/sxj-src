@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2014 Nikita Koksharov, Nickolay Borbit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,8 @@
 package com.sxj.redis.advance.atomic;
 
 import io.netty.util.concurrent.Future;
+
+import java.util.Date;
 
 import com.sxj.redis.RedisAsyncConnection;
 import com.sxj.redis.RedisConnection;
@@ -47,6 +49,13 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
         initExpire(second);
     }
     
+    public RedisAtomicLong(ConnectionManager connectionManager, String name,
+            Date time)
+    {
+        super(connectionManager, name);
+        initExpireat(time);
+    }
+    
     private void initExpire(final long second)
     {
         getConnectionManager().writeAsync(new ResultOperation<Boolean, Object>()
@@ -58,6 +67,21 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
                 Future<Boolean> setnx = async.setnx(getName(), 0);
                 setnx.getNow();
                 return async.expire(getName(), second);
+            }
+        });
+    }
+    
+    private void initExpireat(final Date timestamp)
+    {
+        getConnectionManager().writeAsync(new ResultOperation<Boolean, Object>()
+        {
+            @Override
+            protected Future<Boolean> execute(
+                    RedisAsyncConnection<Object, Object> async)
+            {
+                Future<Boolean> setnx = async.setnx(getName(), 0);
+                setnx.getNow();
+                return async.expireat(getName(), timestamp);
             }
         });
     }

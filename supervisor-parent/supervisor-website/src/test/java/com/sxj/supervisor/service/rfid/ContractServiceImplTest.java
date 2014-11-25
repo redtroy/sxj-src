@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.rfid;
+﻿package com.sxj.supervisor.service.rfid;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,42 +18,25 @@ import com.sxj.supervisor.service.contract.IContractService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-public class ContractServiceImplTest
-{
-    @Autowired
-    IContractService service;
-    
-    @Autowired
-    RedisConcurrent concurrent;
-    
-    @Test
-    public void testAutomaticLong() throws InterruptedException
-    {
-        RAtomicLong atomicLong = concurrent.getAtomicLong("abcd", 1);
-        Thread.currentThread().sleep(1000);
-        Long l = atomicLong.get();
-        System.out.println(l);
-    }
-    
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception
-    {
-    }
-    
-    @After
-    public void tearDown() throws Exception
-    {
-    }
-    
-    public void test()
-    {
-        MemberEntity member = new MemberEntity();
-        member.setType(MemberTypeEnum.genresFactory);
-        service.updateContractLoss("AAAB13634,AAAB52969,AAAB52967",
-                "CT14110098",
-                "33b5XLlND7L0EA62c5qm0HYast3RJnXl",
-                member,
-                "AAAB52903");
-    }
-    
+public class ContractServiceImplTest {
+	@Autowired
+	IContractService service;
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void test() {
+		MemberEntity member = new MemberEntity();
+		member.setType(MemberTypeEnum.genresFactory);
+		service.updateContractLoss("AAAB13634,AAAB52969,AAAB52967",
+				"CT14110098", "33b5XLlND7L0EA62c5qm0HYast3RJnXl", member,
+				"AAAB52903");
+	}
+
 }
