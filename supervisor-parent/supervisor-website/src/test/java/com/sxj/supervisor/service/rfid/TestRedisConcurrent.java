@@ -16,20 +16,23 @@ import com.sxj.util.common.DateTimeUtils;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-public class TestRedisConcurrent {
-
-	@Autowired
-	RedisConcurrent redisConcurrent;
-
-	@Test
-	public void test() {
-		RAtomicLong lon = redisConcurrent.getAtomicLong("test222",
-				DateTimeUtils.getSecondOffset(new Date(), 5));
-		System.out.println(lon.get());
-		long compareAndSet = lon.incrementAndGet();
-		System.out.println(compareAndSet);
-		System.out.println(DateTimeUtils.getSecondOffset(new Date(), 5)
-				.getTime());
-	}
-
+public class TestRedisConcurrent
+{
+    
+    @Autowired
+    RedisConcurrent redisConcurrent;
+    
+    @Test
+    public void test()
+    {
+        Date secondOffset = DateTimeUtils.getSecondOffset(new Date(), 5);
+        System.out.println(secondOffset);
+        RAtomicLong lon = redisConcurrent.getAtomicLong("test111", secondOffset);
+        System.out.println(lon.get());
+        long compareAndSet = lon.incrementAndGet();
+        System.out.println(compareAndSet);
+        System.out.println(DateTimeUtils.getSecondOffset(new Date(), 5)
+                .getTime());
+    }
+    
 }
