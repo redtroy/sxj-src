@@ -23,8 +23,8 @@ public class TestRedisConcurrent {
 
 	@Test
 	public void test() {
-		RAtomicLong lon = redisConcurrent.getAtomicLong("test222",
-				DateTimeUtils.getSecondOffset(new Date(), 5));
+		RAtomicLong lon = redisConcurrent.getAtomicLong("test333",
+				DateTimeUtils.getSecondOffset(new Date(), 50));
 		System.out.println(lon.get());
 		long compareAndSet = lon.incrementAndGet();
 		System.out.println(compareAndSet);
