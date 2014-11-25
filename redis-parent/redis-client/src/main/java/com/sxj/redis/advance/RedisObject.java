@@ -29,52 +29,43 @@ import com.sxj.redis.advance.core.RObject;
  * @author Nikita Koksharov
  * 
  */
-public abstract class RedisObject implements RObject
-{
-    
-    private final ConnectionManager connectionManager;
-    
-    private final String name;
-    
-    public RedisObject(ConnectionManager connectionManager, String name)
-    {
-        this.connectionManager = connectionManager;
-        this.name = name;
-    }
-    
-    protected <V> Promise<V> newPromise()
-    {
-        return connectionManager.getGroup().next().<V> newPromise();
-    }
-    
-    @Override
-    public String getName()
-    {
-        return name;
-    }
-    
-    @Override
-    public void delete()
-    {
-        delete(getName());
-    }
-    
-    void delete(String name)
-    {
-        connectionManager.write(new ResultOperation<Long, Object>()
-        {
-            @Override
-            protected Future<Long> execute(
-                    RedisAsyncConnection<Object, Object> async)
-            {
-                return async.del(getName());
-            }
-        });
-    }
-    
-    public ConnectionManager getConnectionManager()
-    {
-        return connectionManager;
-    }
-    
+public abstract class RedisObject implements RObject {
+
+	private final ConnectionManager connectionManager;
+
+	private final String name;
+
+	public RedisObject(ConnectionManager connectionManager, String name) {
+		this.connectionManager = connectionManager;
+		this.name = name;
+	}
+
+	protected <V> Promise<V> newPromise() {
+		return connectionManager.getGroup().next().<V> newPromise();
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void delete() {
+		delete(getName());
+	}
+
+	void delete(String name) {
+		connectionManager.write(new ResultOperation<Long, Object>() {
+			@Override
+			protected Future<Long> execute(
+					RedisAsyncConnection<Object, Object> async) {
+				return async.del(getName());
+			}
+		});
+	}
+
+	public ConnectionManager getConnectionManager() {
+		return connectionManager;
+	}
+
 }
