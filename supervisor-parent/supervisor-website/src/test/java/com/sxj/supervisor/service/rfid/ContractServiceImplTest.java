@@ -9,6 +9,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import com.sxj.redis.advance.RedisConcurrent;
+import com.sxj.redis.advance.core.RAtomicLong;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -21,6 +23,17 @@ public class ContractServiceImplTest
     @Autowired
     IContractService service;
     
+    @Autowired
+    RedisConcurrent concurrent;
+    
+    @Test
+    public void testAutomaticLong()
+    {
+        RAtomicLong atomicLong = concurrent.getAtomicLong("abcd", 5);
+        long l = atomicLong.get();
+        System.out.println(l);
+    }
+    
     @AfterClass
     public static void tearDownAfterClass() throws Exception
     {
@@ -31,7 +44,6 @@ public class ContractServiceImplTest
     {
     }
     
-    @Test
     public void test()
     {
         MemberEntity member = new MemberEntity();

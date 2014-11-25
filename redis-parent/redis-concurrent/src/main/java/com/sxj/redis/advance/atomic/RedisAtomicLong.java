@@ -44,10 +44,10 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
             long second)
     {
         super(connectionManager, name);
-        initExpirea(second);
+        initExpire(second);
     }
     
-    private void initExpirea(final long second)
+    private void initExpire(final long second)
     {
         getConnectionManager().writeAsync(new ResultOperation<Boolean, Object>()
         {
@@ -57,7 +57,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
             {
                 Future<Boolean> setnx = async.setnx(getName(), 0);
                 setnx.getNow();
-                return async.expireat(getName(), second);
+                return async.expire(getName(), second);
             }
         });
     }
