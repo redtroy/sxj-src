@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.redis.advance.RedisCollections;
+import com.sxj.redis.advance.RedisConcurrent;
+import com.sxj.redis.advance.core.RAtomicLong;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -27,6 +29,7 @@ import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -42,7 +45,10 @@ public class MemberController extends BaseController {
 	private IAreaService areaService;
 
 	@Autowired
-	RedisCollections collections;
+	private RedisCollections collections;
+
+	@Autowired
+	private RedisConcurrent redisConcurrent;
 
 	@Autowired
 	private CachingSessionDAO sessionDAO;
@@ -232,11 +238,23 @@ public class MemberController extends BaseController {
 	@RequestMapping("send_ms")
 	public @ResponseBody Map<String, String> send_ms(HttpSession session,
 			String phoneNo) {
-		String message = "123456";
-		message = memberService.createvalidata(phoneNo, message);
 		Map<String, String> map = new HashMap<String, String>();
-		HierarchicalCacheManager.set(2, "checkMs",
-				session.getId() + "_checkMs", message);
+
+		RAtomicLong num = redisConcurrent.getAtomicLong("num_" + phoneNo, 59);// 记录次数59秒只能发送一次
+		if (num.get() < 1) {
+			RAtomicLong sendMax = redisConcurrent.getAtomicLong("sendMax_"
+					+ phoneNo, DateTimeUtils.getNextZeroTime());
+			if (sendMax.get() < 5) {
+
+				String message = "123456";
+				message = memberService.createvalidata(phoneNo, message);
+				HierarchicalCacheManager.set(2, "checkMs", session.getId()
+						+ "_checkMs", message);
+
+				sendMax.incrementAndGet();
+			}
+			num.incrementAndGet();
+		}
 		return map;
 	}
 
