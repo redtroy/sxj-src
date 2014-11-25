@@ -31,159 +31,190 @@ import com.sxj.redis.advance.core.RAtomicLong;
  * @author Nikita Koksharov
  *
  */
-public class RedisAtomicLong extends RedisExpirable implements RAtomicLong {
-
-	public RedisAtomicLong(ConnectionManager connectionManager, String name) {
-		super(connectionManager, name);
-		init();
-	}
-
-	public RedisAtomicLong(ConnectionManager connectionManager, String name,
-			long second) {
-		super(connectionManager, name);
-		initExpirea(second);
-	}
-
-	private void initExpirea(final long second) {
-		getConnectionManager().writeAsync(
-				new ResultOperation<Boolean, Object>() {
-					@Override
-					protected Future<Boolean> execute(
-							RedisAsyncConnection<Object, Object> async) {
-						return async.expireat(getName(), second);
-					}
-				});
-	}
-
-	private void init() {
-		getConnectionManager().writeAsync(
-				new ResultOperation<Boolean, Object>() {
-					@Override
-					protected Future<Boolean> execute(
-							RedisAsyncConnection<Object, Object> async) {
-						return async.setnx(getName(), 0);
-					}
-				});
-	}
-
-	@Override
-	public long addAndGet(final long delta) {
-		return getConnectionManager().write(
-				new ResultOperation<Long, Object>() {
-					@Override
-					protected Future<Long> execute(
-							RedisAsyncConnection<Object, Object> async) {
-						return async.incrby(getName(), delta);
-					}
-				});
-	}
-
-	@Override
-	public boolean compareAndSet(final long expect, final long update) {
-		return getConnectionManager().write(
-				new SyncOperation<Object, Boolean>() {
-					@Override
-					public Boolean execute(RedisConnection<Object, Object> conn) {
-						while (true) {
-							conn.watch(getName());
-							Long value = ((Number) conn.get(getName()))
-									.longValue();
-							if (value != expect) {
-								conn.unwatch();
-								return false;
-							}
-							conn.multi();
-							conn.set(getName(), update);
-							if (conn.exec().size() == 1) {
-								return true;
-							}
-						}
-					}
-				});
-	}
-
-	@Override
-	public long decrementAndGet() {
-		return getConnectionManager().write(
-				new ResultOperation<Long, Object>() {
-					@Override
-					protected Future<Long> execute(
-							RedisAsyncConnection<Object, Object> async) {
-						return async.decr(getName());
-					}
-				});
-	}
-
-	@Override
-	public long get() {
-		Number res = getConnectionManager().read(
-				new ResultOperation<Number, Number>() {
-					@Override
-					protected Future<Number> execute(
-							RedisAsyncConnection<Object, Number> async) {
-						return async.get(getName());
-					}
-				});
-		return res.longValue();
-	}
-
-	@Override
-	public long getAndAdd(long delta) {
-		while (true) {
-			long current = get();
-			long next = current + delta;
-			if (compareAndSet(current, next))
-				return current;
-		}
-	}
-
-	@Override
-	public long getAndSet(final long newValue) {
-		Number res = getConnectionManager().write(
-				new ResultOperation<Number, Number>() {
-					@Override
-					protected Future<Number> execute(
-							RedisAsyncConnection<Object, Number> async) {
-						return async.getset(getName(), newValue);
-					}
-				});
-		return res.longValue();
-	}
-
-	@Override
-	public long incrementAndGet() {
-		return getConnectionManager().write(
-				new ResultOperation<Long, Object>() {
-					@Override
-					protected Future<Long> execute(
-							RedisAsyncConnection<Object, Object> async) {
-						return async.incr(getName());
-					}
-				});
-	}
-
-	@Override
-	public long getAndIncrement() {
-		return getAndAdd(1);
-	}
-
-	public long getAndDecrement() {
-		return getAndAdd(-1);
-	}
-
-	@Override
-	public void set(final long newValue) {
-		getConnectionManager().write(new ResultOperation<String, Object>() {
-			@Override
-			protected Future<String> execute(
-					RedisAsyncConnection<Object, Object> async) {
-				return async.set(getName(), newValue);
-			}
-		});
-	}
-
-	public String toString() {
-		return Long.toString(get());
-	}
-
+public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
+{
+    
+    public RedisAtomicLong(ConnectionManager connectionManager, String name)
+    {
+        super(connectionManager, name);
+        init();
+    }
+    
+    public RedisAtomicLong(ConnectionManager connectionManager, String name,
+            long second)
+    {
+        super(connectionManager, name);
+        initExpirea(second);
+    }
+    
+    private void initExpirea(final long second)
+    {
+        getConnectionManager().writeAsync(new ResultOperation<Boolean, Object>()
+        {
+            @Override
+            protected Future<Boolean> execute(
+                    RedisAsyncConnection<Object, Object> async)
+            {
+                Future<Boolean> setnx = async.setnx(getName(), 0);
+                setnx.getNow();
+                return async.expireat(getName(), second);
+            }
+        });
+    }
+    
+    private void init()
+    {
+        getConnectionManager().writeAsync(new ResultOperation<Boolean, Object>()
+        {
+            @Override
+            protected Future<Boolean> execute(
+                    RedisAsyncConnection<Object, Object> async)
+            {
+                return async.setnx(getName(), 0);
+            }
+        });
+    }
+    
+    @Override
+    public long addAndGet(final long delta)
+    {
+        return getConnectionManager().write(new ResultOperation<Long, Object>()
+        {
+            @Override
+            protected Future<Long> execute(
+                    RedisAsyncConnection<Object, Object> async)
+            {
+                return async.incrby(getName(), delta);
+            }
+        });
+    }
+    
+    @Override
+    public boolean compareAndSet(final long expect, final long update)
+    {
+        return getConnectionManager().write(new SyncOperation<Object, Boolean>()
+        {
+            @Override
+            public Boolean execute(RedisConnection<Object, Object> conn)
+            {
+                while (true)
+                {
+                    conn.watch(getName());
+                    Long value = ((Number) conn.get(getName())).longValue();
+                    if (value != expect)
+                    {
+                        conn.unwatch();
+                        return false;
+                    }
+                    conn.multi();
+                    conn.set(getName(), update);
+                    if (conn.exec().size() == 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+        });
+    }
+    
+    @Override
+    public long decrementAndGet()
+    {
+        return getConnectionManager().write(new ResultOperation<Long, Object>()
+        {
+            @Override
+            protected Future<Long> execute(
+                    RedisAsyncConnection<Object, Object> async)
+            {
+                return async.decr(getName());
+            }
+        });
+    }
+    
+    @Override
+    public long get()
+    {
+        Number res = getConnectionManager().read(new ResultOperation<Number, Number>()
+        {
+            @Override
+            protected Future<Number> execute(
+                    RedisAsyncConnection<Object, Number> async)
+            {
+                return async.get(getName());
+            }
+        });
+        return res.longValue();
+    }
+    
+    @Override
+    public long getAndAdd(long delta)
+    {
+        while (true)
+        {
+            long current = get();
+            long next = current + delta;
+            if (compareAndSet(current, next))
+                return current;
+        }
+    }
+    
+    @Override
+    public long getAndSet(final long newValue)
+    {
+        Number res = getConnectionManager().write(new ResultOperation<Number, Number>()
+        {
+            @Override
+            protected Future<Number> execute(
+                    RedisAsyncConnection<Object, Number> async)
+            {
+                return async.getset(getName(), newValue);
+            }
+        });
+        return res.longValue();
+    }
+    
+    @Override
+    public long incrementAndGet()
+    {
+        return getConnectionManager().write(new ResultOperation<Long, Object>()
+        {
+            @Override
+            protected Future<Long> execute(
+                    RedisAsyncConnection<Object, Object> async)
+            {
+                return async.incr(getName());
+            }
+        });
+    }
+    
+    @Override
+    public long getAndIncrement()
+    {
+        return getAndAdd(1);
+    }
+    
+    public long getAndDecrement()
+    {
+        return getAndAdd(-1);
+    }
+    
+    @Override
+    public void set(final long newValue)
+    {
+        getConnectionManager().write(new ResultOperation<String, Object>()
+        {
+            @Override
+            protected Future<String> execute(
+                    RedisAsyncConnection<Object, Object> async)
+            {
+                return async.set(getName(), newValue);
+            }
+        });
+    }
+    
+    public String toString()
+    {
+        return Long.toString(get());
+    }
+    
 }
