@@ -132,7 +132,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     }
     
     @Override
-    public long get()
+    public Long get()
     {
         Number res = getConnectionManager().read(new ResultOperation<Number, Number>()
         {
@@ -143,6 +143,8 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
                 return async.get(getName());
             }
         });
+        if (res == null)
+            return null;
         return res.longValue();
     }
     

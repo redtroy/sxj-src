@@ -27,10 +27,11 @@ public class ContractServiceImplTest
     RedisConcurrent concurrent;
     
     @Test
-    public void testAutomaticLong()
+    public void testAutomaticLong() throws InterruptedException
     {
-        RAtomicLong atomicLong = concurrent.getAtomicLong("abcd", 5);
-        long l = atomicLong.get();
+        RAtomicLong atomicLong = concurrent.getAtomicLong("abcd", 1);
+        Thread.currentThread().sleep(1000);
+        Long l = atomicLong.get();
         System.out.println(l);
     }
     
