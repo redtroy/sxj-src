@@ -3,7 +3,8 @@
 <td colspan="12"><script type="text/javascript">
 $(document).ready(function(){
 	var start=0;
-	
+	$uls=new Array($('.elastislide-list').length);
+	var index=0;
 	$('.elastislide-list').each(function(){
 		var $this=$(this);
 		$this.find("li").live("click",function(){
@@ -14,7 +15,7 @@ $(document).ready(function(){
 			el.addClass("view");
 			preModal=null;
 		});
-		$(this).elastislide({
+		var $viewer=$(this).elastislide({
 			orientation : 'horizontal',
 			speed : 500,
 			easing : 'ease-in-out',
@@ -44,15 +45,11 @@ $(document).ready(function(){
 				slideTimes=slideTimes+elastislideConfig.count;
 				return false; }
 		});
+		$uls[index]=$this;
+		index++;
 	});
-	$("#tabsholder").tytabs({
-		prefixtabs:"tabz",
-		prefixcontent:"content",
-		classcontent:"tabscontent",
-		tabinit:"1",
-		catchget:"tab2",
-		fadespeed:"normal"
-		});
+
+	
 });
 </script>
 	<div id="tabsholder" class="tabmenuBar contInfo tl">
@@ -206,7 +203,7 @@ $(document).ready(function(){
 			<label>合同扫描件</label> <#assign
 			arr=(contractModel.contract.imgPath?split(","))> <#if arr??>
 			<div class="rollBox">
-				<ul class="elastislide-list imagelist">
+				<ul class="elastislide-list imagelist" tab="content1">
 					<#list arr as imgPath>
 					<li><a href="javascript:void(0);"
 						data-image="${b.imagePath}${imgPath}"><img
@@ -399,3 +396,22 @@ $(document).ready(function(){
 					onclick="closeContract('${recordNo}')">收起</button>
 			</div>
 		</div></td>
+<script>
+$(".tabscontent").show();
+$("#tabsholder li").click(function(){
+	var $id=$(this).attr("id");
+	var id=($id.substring($id.indexOf("tabz")+"tabz".length));
+	var $content=$("#content"+id);
+	$content.find(".elastislide-list").each(function(){
+		refreshElastislide($(this).parent().parent(),$(this));
+	});
+});
+$("#tabsholder").tytabs({
+	prefixtabs:"tabz",
+	prefixcontent:"content",
+	classcontent:"tabscontent",
+	tabinit:"1",
+	catchget:"tab2",
+	fadespeed:"0"
+	});
+</script>
