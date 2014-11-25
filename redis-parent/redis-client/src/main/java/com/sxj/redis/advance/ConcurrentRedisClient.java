@@ -19,31 +19,41 @@ import com.sxj.redis.advance.core.RAtomicLong;
 import com.sxj.redis.advance.core.RCountDownLatch;
 import com.sxj.redis.advance.core.RLock;
 
-public interface ConcurrentRedisClient
-{
-    
-    /**
-     * Returns "atomic long" instance by name.
-     *
-     * @param name of the "atomic long"
-     * @return
-     */
-    RAtomicLong getAtomicLong(String name);
-    
-    /**
-     * Returns "count down latch" instance by name.
-     *
-     * @param name of the "count down latch"
-     * @return
-     */
-    RCountDownLatch getCountDownLatch(String name);
-    
-    /**
-     * Returns lock instance by name.
-     *
-     * @param name of lock
-     * @return
-     */
-    RLock getLock(String name);
-    
+public interface ConcurrentRedisClient {
+
+	/**
+	 * Returns "atomic long" instance by name.
+	 *
+	 * @param name
+	 *            of the "atomic long"
+	 * @return
+	 */
+	RAtomicLong getAtomicLong(String name);
+
+	/**
+	 * 
+	 * @param name
+	 * @param second
+	 * @return
+	 */
+	RAtomicLong getAtomicLong(String name, long second);
+
+	/**
+	 * Returns "count down latch" instance by name.
+	 *
+	 * @param name
+	 *            of the "count down latch"
+	 * @return
+	 */
+	RCountDownLatch getCountDownLatch(String name);
+
+	/**
+	 * Returns lock instance by name.
+	 *
+	 * @param name
+	 *            of lock
+	 * @return
+	 */
+	RLock getLock(String name);
+
 }

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 日期/时间工具类
@@ -718,6 +719,23 @@ public class DateTimeUtils {
 	}
 
 	/**
+	 * 求两个日期的秒数之差
+	 *
+	 * @param beginTime
+	 *            开始时间
+	 * @param endTime
+	 *            结束时间
+	 * @return 两个日期的天数之差
+	 */
+	public static long getOddDateSecond(Date beginTime, Date endTime) {
+		if (beginTime == null || endTime == null) {
+			return 0;
+		}
+		return TimeUnit.SECONDS.toSeconds(endTime.getTime()
+				- beginTime.getTime());
+	}
+
+	/**
 	 * 取系统时间零点
 	 *
 	 * @return 当前时间所在天的零点时间
@@ -725,6 +743,21 @@ public class DateTimeUtils {
 	public static Date getCurrentZeroTime() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 取下一天的系统时间零点
+	 *
+	 * @return 当前时间下一天的系统时间零点
+	 */
+	public static Date getNextZeroTime() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(getCurrentZeroTime());
+		calendar.add(Calendar.DATE, 1);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
@@ -880,7 +913,7 @@ public class DateTimeUtils {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(DateTimeUtils.getTime("yyMM"));
+		System.out.println(getNextZeroTime());
 	}
 
 }

@@ -25,82 +25,71 @@ import com.sxj.redis.advance.async.ResultOperation;
 import com.sxj.redis.advance.connection.ConnectionManager;
 import com.sxj.redis.advance.core.RExpirable;
 
-public abstract class RedisExpirable extends RedisObject implements RExpirable
-{
-    
-    public RedisExpirable(ConnectionManager connectionManager, String name)
-    {
-        super(connectionManager, name);
-    }
-    
-    @Override
-    public boolean expire(final long timeToLive, final TimeUnit timeUnit)
-    {
-        return getConnectionManager().write(new ResultOperation<Boolean, Object>()
-        {
-            @Override
-            protected Future<Boolean> execute(
-                    RedisAsyncConnection<Object, Object> async)
-            {
-                return async.expire(getName(), timeUnit.toSeconds(timeToLive));
-            }
-        });
-    }
-    
-    @Override
-    public boolean expireAt(final long timestamp)
-    {
-        return getConnectionManager().write(new ResultOperation<Boolean, Object>()
-        {
-            @Override
-            protected Future<Boolean> execute(
-                    RedisAsyncConnection<Object, Object> async)
-            {
-                return async.expireat(getName(), timestamp);
-            }
-        });
-    }
-    
-    @Override
-    public boolean expireAt(final Date timestamp)
-    {
-        return getConnectionManager().write(new ResultOperation<Boolean, Object>()
-        {
-            @Override
-            protected Future<Boolean> execute(
-                    RedisAsyncConnection<Object, Object> async)
-            {
-                return async.expireat(getName(), timestamp);
-            }
-        });
-    }
-    
-    @Override
-    public boolean clearExpire()
-    {
-        return getConnectionManager().write(new ResultOperation<Boolean, Object>()
-        {
-            @Override
-            protected Future<Boolean> execute(
-                    RedisAsyncConnection<Object, Object> async)
-            {
-                return async.persist(getName());
-            }
-        });
-    }
-    
-    @Override
-    public long remainTimeToLive()
-    {
-        return getConnectionManager().write(new ResultOperation<Long, Object>()
-        {
-            @Override
-            protected Future<Long> execute(
-                    RedisAsyncConnection<Object, Object> async)
-            {
-                return async.ttl(getName());
-            }
-        });
-    }
-    
+public abstract class RedisExpirable extends RedisObject implements RExpirable {
+
+	public RedisExpirable(ConnectionManager connectionManager, String name) {
+		super(connectionManager, name);
+	}
+
+	@Override
+	public boolean expire(final long timeToLive, final TimeUnit timeUnit) {
+		return getConnectionManager().write(
+				new ResultOperation<Boolean, Object>() {
+					@Override
+					protected Future<Boolean> execute(
+							RedisAsyncConnection<Object, Object> async) {
+						return async.expire(getName(),
+								timeUnit.toSeconds(timeToLive));
+					}
+				});
+	}
+
+	@Override
+	public boolean expireAt(final long timestamp) {
+		return getConnectionManager().write(
+				new ResultOperation<Boolean, Object>() {
+					@Override
+					protected Future<Boolean> execute(
+							RedisAsyncConnection<Object, Object> async) {
+						return async.expireat(getName(), timestamp);
+					}
+				});
+	}
+
+	@Override
+	public boolean expireAt(final Date timestamp) {
+		return getConnectionManager().write(
+				new ResultOperation<Boolean, Object>() {
+					@Override
+					protected Future<Boolean> execute(
+							RedisAsyncConnection<Object, Object> async) {
+						return async.expireat(getName(), timestamp);
+					}
+				});
+	}
+
+	@Override
+	public boolean clearExpire() {
+		return getConnectionManager().write(
+				new ResultOperation<Boolean, Object>() {
+					@Override
+					protected Future<Boolean> execute(
+							RedisAsyncConnection<Object, Object> async) {
+						return async.persist(getName());
+					}
+				});
+	}
+
+	@Override
+	public long remainTimeToLive() {
+		return getConnectionManager().write(
+				new ResultOperation<Long, Object>() {
+					@Override
+					protected Future<Long> execute(
+							RedisAsyncConnection<Object, Object> async) {
+						return async.ttl(getName());
+					}
+				});
+	}
+
 }
