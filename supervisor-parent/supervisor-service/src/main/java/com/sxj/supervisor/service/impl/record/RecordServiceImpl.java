@@ -367,7 +367,8 @@ public class RecordServiceImpl implements IRecordService {
 	public List<ContractBatchEntity> getBatch(String recordId) {
 		try {
 			RecordEntity re = recordDao.getRecord(recordId);
-			List<ContractBatchEntity> batchList = batchDao.getBacthsByContractNo(re.getContractNo());
+			List<ContractBatchEntity> batchList = batchDao
+					.getBacthsByContractNo(re.getContractNo());
 			return batchList;
 		} catch (Exception e) {
 			throw new ServiceException("查询批次信息错误", e);
@@ -503,11 +504,13 @@ public class RecordServiceImpl implements IRecordService {
 			throw new ServiceException("更新合同备案出错!", e);
 		}
 	}
+
 	@Override
-	public String getProgress(String contractNo){
-		String progress="";
-		try{
-			 progress=recordDao.getProgress(contractNo);
+	public String getProgress(String contractNo) {
+		String progress = "";
+		try {
+			progress = recordDao.getProgress(contractNo);
+			return progress;
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());
@@ -515,7 +518,46 @@ public class RecordServiceImpl implements IRecordService {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取合同进度错误", e);
 		}
-		return progress;
+		
 	}
 
+	/**
+	 * 获取当前的用户的备案号
+	 */
+	@Override
+	public String getRecordNo(String contractNo, MemberEntity menber) {
+		try {
+			String recordNo="";
+			ContractModel cm=contractService.getContractModelByContractNo(contractNo);
+			if(cm!=null){
+				String records=cm.getContract().getRecordNo();
+				if(StringUtils.isNotEmpty(records)){
+					String[] recordArr =records.split(",");
+					for (String string : recordArr) {
+						RecordEntity recordEntity=this.getRecordByNo(string);
+						if(recordEntity!=null){
+							if(menber.getType().getId()==0){
+								if(recordEntity.getFlag().getId()==0){
+									recordNo=recordEntity.getRecordNo();
+								}
+							}else{
+								if(recordEntity.getFlag().getId()==1){
+									recordNo=recordEntity.getRecordNo();
+								}
+							}
+						}
+					}
+				}
+			}
+			return recordNo;
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取备案号错误", e);
+		}
+		
+
+	}
 }

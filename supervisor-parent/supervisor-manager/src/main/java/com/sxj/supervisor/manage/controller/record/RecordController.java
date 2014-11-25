@@ -176,17 +176,25 @@ public class RecordController extends BaseController {
 								// 甲方备案
 								if (recordEntity.getFlag().getId() == 0) {
 									map.put("ok", "jfyba");
-								} else {
-									map.put("ok", "ok");
-									map.put("record", recordEntity);
+								}else{
+									if(cm.getContract().getMemberIdB()==re.getMemberIdB() && cm.getContract().getMemberIdA()==re.getMemberIdA()){
+										map.put("ok", "ok");
+										map.put("record", recordEntity);
+									}else{
+										map.put("ok", "false");
+									}
 								}
 							} else {
 								// 乙方备案
 								if (recordEntity.getFlag().getId() == 1) {
 									map.put("ok", "yfyba");
-								} else {
-									map.put("ok", "ok");
-									map.put("record", recordEntity);
+								}else {
+									if(cm.getContract().getMemberIdB()==re.getMemberIdB() && cm.getContract().getMemberIdA()==re.getMemberIdA()){
+										map.put("ok", "ok");
+										map.put("record", recordEntity);
+									}else{
+										map.put("ok", "false");
+									}
 								}
 							}
 						}

@@ -45,6 +45,10 @@ function query(type){
 			messageInfo("找不到该合同!");
 			isOk=false;
 			return;
+		}else if(data.ok=="false"){
+			messageInfo("请核实合同是否与该备案有关!");
+			isOk=false;
+			return;
 		}else if(data.ok=="ok"){
 			isOk=true;
 			var flag = $("#flag").val();

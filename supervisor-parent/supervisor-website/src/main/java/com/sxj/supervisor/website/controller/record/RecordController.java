@@ -355,8 +355,10 @@ public class RecordController extends BaseController {
 						.getContract().getId());
 			}
 			RecordEntity record = recordService.getRecord(recordId);
+			String recordNo =recordService.getRecordNo(contractNo, member.getMember());
 			model.put("contractModel", contractModel);
 			model.put("recordId", recordId);
+			model.put("recordNo", recordNo);
 			model.put("message", message);
 			model.put("title", record.getType().getId());
 			model.put("type", member.getMember().getType().getId());
