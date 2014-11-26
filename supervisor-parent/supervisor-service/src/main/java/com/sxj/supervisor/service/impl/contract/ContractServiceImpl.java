@@ -904,6 +904,14 @@ public class ContractServiceImpl implements IContractService {
 					re.setId(recordId);
 					re.setState(RecordStateEnum.supplement);
 					recordDao.updateRecord(re);
+					//更新合同有效批次条目
+					ContractModel cm=this.getContractModelByContractNo(contractId);
+					if(cm!=null){
+						ContractEntity ce= new ContractEntity();
+						ce.setId(cm.getContract().getId());
+						ce.setEffectiveBatch(cm.getContract().getEffectiveBatch()+1);
+						contractDao.updateContract(ce);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -2031,6 +2039,12 @@ public class ContractServiceImpl implements IContractService {
 					replenishBatch.setPayState(1);
 					contractReplenishBatchDao.updateBatch(replenishBatch);
 				}
+				//更新合同支付批次条目
+				ContractModel cm=this.getContractModelByContractNo(contractNo);
+				ContractEntity ce= new ContractEntity();
+				ce.setId(cm.getContract().getId());
+				ce.setPayBatch(cm.getContract().getPayBatch()+1);
+				contractDao.updateContract(ce);
 			}
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());

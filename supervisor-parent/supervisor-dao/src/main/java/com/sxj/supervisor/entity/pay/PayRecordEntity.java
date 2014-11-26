@@ -270,4 +270,20 @@ public class PayRecordEntity implements Serializable {
 		this.state = state;
 	}
 
+	public String getMemberName_A() {
+		return memberName_A;
+	}
+
+	public void setMemberName_A(String memberName_A) {
+		this.memberName_A = memberName_A;
+	}
+
+	public String getMemberName_B() {
+		return memberName_B;
+	}
+
+	public void setMemberName_B(String memberName_B) {
+		this.memberName_B = memberName_B;
+	}
+
 }
