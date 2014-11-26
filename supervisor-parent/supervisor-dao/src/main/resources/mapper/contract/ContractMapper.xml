@@ -40,7 +40,8 @@
 			jdbcType="DOUBLE" />
 		<result property="useQuantity" column="USE_QUANTITY" jdbcType="DOUBLE" />
 		<result property="deleteState" column="DELETE_STATE" jdbcType="BOOLEAN" />
-
+		<result property="effectiveBatch" column="EFFECTIVE_BATCH" jdbcType="INTEGER" />
+		<result property="payBatch" column="PAY_BATCH" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 条件查询合同 -->
