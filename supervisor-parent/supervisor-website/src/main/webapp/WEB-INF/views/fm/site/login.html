@@ -37,10 +37,13 @@ function login()
 </div>
 <div class="fence signCont">
 <div class="fence-wide">
-<div class="signBox">
+<div class="signBox fontYH">
 <form id="login_form" action="${basePath}login.htm" method="post">
   <div class="regInfo">
-  <div class="join pa"><a href="${basePath}member/regist.htm" title="免费注册私享家帐号" class="fontYH f16 tc ly-right" tabindex="6">现在注册免费会员</a><span class="color-gray9 f12 ly-right">还不是私享家会员？</span></div>
+  <div class="join tc">
+  <span class="fb">还不是私享家会员？</span>
+  <a href="${basePath}member/regist.htm" title="免费注册私享家帐号" class="f16" tabindex="6">申请会员>></a>
+  </div>
     <div class="regCont">
     <div class="item">
     <label>公司名称</label>
@@ -57,8 +60,8 @@ function login()
   <input class="input input-error input-w240h36" type="password" name="password" autocomplete="off" placeholder=""  value=""/>
   <div id="pmessage_div" class="tip msg-error f12" style="display:none;">${pmessage}</div>
 </div>
-<p class="tr pr15 f12"><a href="${basePath}member/find_pwd.htm">忘记密码？</a></p>
-<a href="javascript:login();" class="button button-orange btn-regin mt5">登录</a>
+<p class="tr pr5 f12"><a href="${basePath}member/find_pwd.htm">忘记密码？</a></p>
+<a href="javascript:login();" class="button btn-regin mt5 f18">登&nbsp;录</a>
 </div>
 </div>
 </form>
