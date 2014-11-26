@@ -177,7 +177,7 @@ public class RecordController extends BaseController {
 								if (recordEntity.getFlag().getId() == 0) {
 									map.put("ok", "jfyba");
 								}else{
-									if(cm.getContract().getMemberIdB()==re.getMemberIdB() && cm.getContract().getMemberIdA()==re.getMemberIdA()){
+									if(cm.getContract().getMemberIdB().equals(re.getMemberIdB()) && cm.getContract().getMemberIdA().equals(re.getMemberIdA())){
 										map.put("ok", "ok");
 										map.put("record", recordEntity);
 									}else{
@@ -189,7 +189,7 @@ public class RecordController extends BaseController {
 								if (recordEntity.getFlag().getId() == 1) {
 									map.put("ok", "yfyba");
 								}else {
-									if(cm.getContract().getMemberIdB()==re.getMemberIdB() && cm.getContract().getMemberIdA()==re.getMemberIdA()){
+									if(cm.getContract().getMemberIdB().equals(re.getMemberIdB()) && cm.getContract().getMemberIdA().equals(re.getMemberIdA())){
 										map.put("ok", "ok");
 										map.put("record", recordEntity);
 									}else{

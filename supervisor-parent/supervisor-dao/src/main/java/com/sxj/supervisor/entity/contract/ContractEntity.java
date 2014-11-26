@@ -207,6 +207,19 @@ public class ContractEntity extends Pagable implements Serializable {
 	@Column(name = "DELETE_STATE")
 	private Boolean deleteState = false;
 
+	/**
+	 * 有效批次
+	 */
+	@Column(name = "EFFECTIVE_BATCH")
+	private Integer effectiveBatch;
+	
+	/**
+	 * 已支付批次
+	 */
+	@Column(name = "PAY_BATCH")
+	private Integer payBatch;
+	
+	
 	public String getDateNo() {
 		return dateNo;
 	}
@@ -463,6 +476,22 @@ public class ContractEntity extends Pagable implements Serializable {
 				+ memberNameA + ", memberNameB=" + memberNameB + ", stateLog="
 				+ stateLog + ", batchCount=" + batchCount + ", nowRecordNo="
 				+ nowRecordNo + ", imgPath=" + imgPath + "]";
+	}
+
+	public Integer getEffectiveBatch() {
+		return effectiveBatch;
+	}
+
+	public void setEffectiveBatch(Integer effectiveBatch) {
+		this.effectiveBatch = effectiveBatch;
+	}
+
+	public Integer getPayBatch() {
+		return payBatch;
+	}
+
+	public void setPayBatch(Integer payBatch) {
+		this.payBatch = payBatch;
 	}
 
 }

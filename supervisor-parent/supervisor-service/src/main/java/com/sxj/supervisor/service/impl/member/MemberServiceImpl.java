@@ -294,9 +294,10 @@ public class MemberServiceImpl implements IMemberService {
 		try {
 			message = Identities.randomNumber(6);
 			SendMessage.getInstance(sOpenUrl, sDataUrl, account, authkey, cgid,
-					csid).sendMessage(phoneNo, message);
+					csid).sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
 		} catch (Exception e) {
-			// TODO: handle exception
+			SxjLogger.error("发送验证码错误", e, this.getClass());
+			throw new ServiceException("发送验证码错误", e);
 		}
 		return message;
 	}
