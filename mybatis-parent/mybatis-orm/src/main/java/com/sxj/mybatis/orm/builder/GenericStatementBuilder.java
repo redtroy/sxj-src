@@ -877,9 +877,9 @@ public class GenericStatementBuilder extends BaseBuilder
                 + " WHERE " + getIdColumnName() + " = #{" + getIdFieldName()
                 + "} ");
         contents.add(sqlNode);
-        if (versionField != null)
-            contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
-                    getTestByField(null, versionField)));
+        //        if (versionField != null)
+        //            contents.add(new IfSqlNode(new TextSqlNode(getVersionSQL()),
+        //                    getTestByField(null, versionField)));
         SqlSource sqlSource = new DynamicSqlSource(configuration,
                 new MixedSqlNode(contents));
         
