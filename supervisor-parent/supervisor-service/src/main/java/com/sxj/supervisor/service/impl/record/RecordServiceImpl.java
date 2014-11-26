@@ -534,7 +534,7 @@ public class RecordServiceImpl implements IRecordService {
 				if(StringUtils.isNotEmpty(records)){
 					String[] recordArr =records.split(",");
 					for (String string : recordArr) {
-						RecordEntity recordEntity=this.getRecordByNo(string);
+						RecordEntity recordEntity=this.getRecordByNo(string.trim());
 						if(recordEntity!=null){
 							if(menber.getType().getId()==0){
 								if(recordEntity.getFlag().getId()==0){

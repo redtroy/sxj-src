@@ -235,13 +235,13 @@
 									<col width="10%" />
 									<tr>
 										<th>产品名称</th>
-										<th>产品规格<span class="fontAR ml5">(<#if
-												contractModel.contract.type.getId()==1> ㎡<#elseif
-												contractModel.contract.type.getId()==2>mm</#if>)</span></th>
+										<th>产品规格</th>
 										<th>数量<span class="fontAR ml5">(<#if
-												contractModel.contract.type.getId()==1> /㎡<#elseif
-												contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
-										<th>单价<span>（元）</span></th>
+												contractModel.contract.type.getId()==1>㎡<#elseif
+												contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+										<th>单价<span>（元/<#if
+												contractModel.contract.type.getId()==1>㎡<#elseif
+												contractModel.contract.type.getId()==2>吨</#if>）</span></th>
 										<th>金额</th>
 										<th>备注说明</th>
 										<td>&nbsp;&nbsp;&nbsp;</td>
@@ -299,10 +299,10 @@
 										<td><table border="0" cellspacing="0" cellpadding="0"
 												class="tabProd tabBatch">
 												<tr>
-													<th>产品规格<span class="fontAR ml5">(mm)</span></th>
+													<th>产品规格</th>
 													<th>数量<span class="fontAR ml5">(<#if
-															contractModel.contract.type.getId()==1> /㎡<#elseif
-															contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
+															contractModel.contract.type.getId()==1>㎡<#elseif
+															contractModel.contract.type.getId()==2>吨</#if>)</span></th>
 												</tr>
 												<#list batch.batchItems as batchItem>
 												<tr>
@@ -390,13 +390,12 @@
 									<col width="10%" />
 									<tr>
 										<th>产品名称</th>
-										<th>产品规格<span class="fontAR ml5">(<#if
-												contractModel.contract.type.getId()==1>㎡<#elseif
-												contractModel.contract.type.getId()==2>mm</#if>)</span></th>
+										<th>产品规格</th>
 										<th>数量<span class="fontAR ml5">(<#if
-												contractModel.contract.type.getId()==1> /㎡<#elseif
-												contractModel.contract.type.getId()==2>/吨</#if>)</span></th>
-										<th>单价<span>（元）</span></th>
+												contractModel.contract.type.getId()==1>㎡<#elseif
+												contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+										<th>单价<span>（元/<#if contractModel.contract.type.getId()==1>㎡<#elseif
+											contractModel.contract.type.getId()==2>吨</#if>）</span></th>
 										<th>金额</th>
 										<th>备注说明</th>
 										<td>&nbsp;&nbsp;&nbsp;</td>
@@ -442,10 +441,10 @@
 										<td><table border="0" cellspacing="0" cellpadding="0"
 												class="tabProd tabBatch">
 												<tr>
-													<th>产品规格<span class="fontAR ml5">(<#if
+													<th>产品规格</th>
+													<th>数量<span class="fontAR ml5">(<#if
 															contractModel.contract.type.getId()==1>㎡<#elseif
-															contractModel.contract.type.getId()==2>mm</#if>)</span></th>
-													<th>数量<span class="fontAR ml5">(m<sup>2</sup>)
+															contractModel.contract.type.getId()==2>吨</#if>)
 													</span></th>
 												</tr>
 
@@ -515,10 +514,10 @@
 										<td><table border="0" cellspacing="0" cellpadding="0"
 												class="tabProd tabBatch">
 												<tr>
-													<th>产品规格<span class="fontAR ml5">(<#if
+													<th>产品规格</th>
+													<th>数量<span class="fontAR ml5">(<#if
 															contractModel.contract.type.getId()==1>㎡<#elseif
-															contractModel.contract.type.getId()==2>mm</#if>)</span></th>
-													<th>数量<span class="fontAR ml5">(m<sup>2</sup>)
+															contractModel.contract.type.getId()==2>吨</#if>)
 													</span></th>
 												</tr>
 												<#list replenishItem.replenishBatchItems as

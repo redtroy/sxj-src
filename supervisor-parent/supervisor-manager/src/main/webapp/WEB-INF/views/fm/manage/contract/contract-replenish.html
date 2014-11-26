@@ -348,7 +348,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										</ul>
 									</div>
 								</div>
-								<table border="0" cellpadding="0" cellspacing="0"
+								<#if  modifyList.modifyItemList?exists &&(modifyList.modifyItemList?size>0)>								<table border="0" cellpadding="0" cellspacing="0"
 									class="tabList producedTable otable" parameter="changeId[i]">
 									<col width="15%" />
 									<col width="20%" />
@@ -380,6 +380,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</tr>
 									</#list>
 								</table>
+							</#if>
 								<#if modifyList.modifyBatchList?exists>
 								<table border="0" cellpadding="0" cellspacing="0"
 									class="tabList producedTable cpctable" id="opctable">
@@ -576,13 +577,13 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 		</div>
 		<@b.footer />
 		<div class="viewer modal-wrap" style="display: none" id="iviewerModal">
-			<div class="modal-header">
-				<span class="close">关闭</span>
-			</div>
-			<div id="viewer2" class="modal-body iviewer"
-				style="width: 100%; display: none; top: 0px"></div>
+		<div class="modal-header">
+			<span class="close">关闭</span>
 		</div>
-		<div class="maskdivgen" style="display: none"></div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
+	</div>
+	<div class="maskdivgen" style="display: none"></div>
 </body>
 <!-- InstanceEnd -->
 </html>
