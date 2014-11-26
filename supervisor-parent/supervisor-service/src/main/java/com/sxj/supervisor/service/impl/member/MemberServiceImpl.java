@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.spring.modules.util.Identities;
+import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -84,9 +86,37 @@ public class MemberServiceImpl implements IMemberService {
 	@Transactional
 	public void modifyMember(MemberEntity member) {
 		try {
-			member.setVersion(menberDao.getMember(member.getId()).getVersion());
-			menberDao.updateMember(member);
+			MemberEntity m = menberDao.getMember(member.getId());
+			if (member.getType().equals(m.getType())) {
+				member.setVersion(m.getVersion());
+				menberDao.updateMember(member);
+			} else {
+				if (MemberTypeEnum.DAWP.equals(member.getType())) {
+					m.setNoType("M");
+				} else if (MemberTypeEnum.glassFactory.equals(member.getType())) {
+					m.setNoType("B");
+				} else if (MemberTypeEnum.genresFactory
+						.equals(member.getType())) {
+					m.setNoType("X");
+				} else {
+					m.setNoType("MEM");
+				}
+				Class c = member.getClass();
+				Field field[] = c.getDeclaredFields();
+				for (Field f : field) {
+					if ((!f.getName().equals("id"))
+							&& (!"serialVersionUID".equals(f.getName()))
+							&& Reflections.getFieldValue(member, f.getName()) != null) {
+						Reflections.setFieldValue(m, f.getName(),
+								Reflections.getFieldValue(member, f.getName()));
+					}
+				}
+				m.setId(null);
+				menberDao.addMember(m);
+				menberDao.deleteMember(member.getId());
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServiceException("会员信息更新失败！", e);
 		}
 	}
