@@ -733,7 +733,8 @@ public class ContractServiceImpl implements IContractService {
 	public void changeContract(String recordId, String contractId,
 			ContractModifyModel model, String recordNo,
 			List<ContractItemEntity> itemList, String contractIds,
-			String changeIds,String contractBatchIds,String changeBatchIds) throws ServiceException {
+			String changeIds, String contractBatchIds, String changeBatchIds)
+			throws ServiceException {
 		try {
 			ModifyContractEntity mec = model.getModifyContract();
 			if (itemList != null) {
@@ -808,22 +809,24 @@ public class ContractServiceImpl implements IContractService {
 				}
 				contractModifyItemDao.updateItems(milist);
 			}
-			//批次变更状态
-			if (StringUtils.isNotEmpty(changeBatchIds)) {//变更批次
-				changeBatchIds = changeBatchIds.substring(0, changeBatchIds.length() - 1);
+			// 批次变更状态
+			if (StringUtils.isNotEmpty(changeBatchIds)) {// 变更批次
+				changeBatchIds = changeBatchIds.substring(0,
+						changeBatchIds.length() - 1);
 				String[] batchId1sArr = changeBatchIds.split(",");
 				List<ModifyBatchEntity> milist = new ArrayList<ModifyBatchEntity>();
 				for (String string : batchId1sArr) {
-					ModifyBatchEntity mb = new ModifyBatchEntity(); 
+					ModifyBatchEntity mb = new ModifyBatchEntity();
 					mb.setId(string);
 					mb.setUpdateState(1);
 					milist.add(mb);
 				}
 				contractModifyBatchDao.updateItems(milist);
 			}
-			//批次变更状态
-			if (StringUtils.isNotEmpty(contractBatchIds)) {//合同批次
-				contractBatchIds = contractBatchIds.substring(0, changeIds.length() - 1);
+			// 批次变更状态
+			if (StringUtils.isNotEmpty(contractBatchIds)) {// 合同批次
+				contractBatchIds = contractBatchIds.substring(0,
+						changeIds.length() - 1);
 				String[] batchIdArr = contractBatchIds.split(",");
 				List<ContractBatchEntity> cblist = new ArrayList<ContractBatchEntity>();
 				for (String string : batchIdArr) {
@@ -904,6 +907,14 @@ public class ContractServiceImpl implements IContractService {
 					re.setId(recordId);
 					re.setState(RecordStateEnum.supplement);
 					recordDao.updateRecord(re);
+					//更新合同有效批次条目
+					ContractModel cm=this.getContractModelByContractNo(contractId);
+					if(cm!=null){
+						ContractEntity ce= new ContractEntity();
+						ce.setId(cm.getContract().getId());
+						ce.setEffectiveBatch(cm.getContract().getEffectiveBatch()+1);
+						contractDao.updateContract(ce);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -1222,6 +1233,11 @@ public class ContractServiceImpl implements IContractService {
 			List<ContractBatchEntity> list = new ArrayList<ContractBatchEntity>();
 			list.add(batch);
 			contractBatchDao.addBatchs(list);
+
+			// 更新当前合同的有效批次
+			ContractEntity contractEn = contract.getContract();
+			contractEn.setEffectiveBatch(contractEn.getEffectiveBatch() + 1);
+			contractDao.updateContract(contractEn);
 
 			LogisticsRfidEntity logistics = new LogisticsRfidEntity();
 			logistics.setId(id);
@@ -1692,6 +1708,11 @@ public class ContractServiceImpl implements IContractService {
 			if (ref.getType().equals(AssociationTypesEnum.APPLY)) {
 				// 删除批次
 				self.deleteBatch(ref.getRfidNo(), ref.getContractNo());
+				ContractEntity contract = getContractEntityByNo(ref
+						.getContractNo());
+				contract.setEffectiveBatch(contract.getEffectiveBatch() - 1);
+				contractDao.updateContract(contract);
+
 				// 回滚RFID
 				LogisticsRfidEntity l = logisticsRfidService
 						.getLogisticsByNo(ref.getRfidNo());
@@ -2031,6 +2052,12 @@ public class ContractServiceImpl implements IContractService {
 					replenishBatch.setPayState(1);
 					contractReplenishBatchDao.updateBatch(replenishBatch);
 				}
+				//更新合同支付批次条目
+				ContractModel cm=this.getContractModelByContractNo(contractNo);
+				ContractEntity ce= new ContractEntity();
+				ce.setId(cm.getContract().getId());
+				ce.setPayBatch(cm.getContract().getPayBatch()+1);
+				contractDao.updateContract(ce);
 			}
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -2049,12 +2076,13 @@ public class ContractServiceImpl implements IContractService {
 		try {
 			List<ContractBatchEntity> batchList = contractBatchDao
 					.getBacthsByContractNo(contractNo);
-			List<ContractBatchModel> cbList =new ArrayList<ContractBatchModel>();
-			if(batchList!=null && batchList.size()>0){
+			List<ContractBatchModel> cbList = new ArrayList<ContractBatchModel>();
+			if (batchList != null && batchList.size() > 0) {
 				for (ContractBatchEntity contractBatchEntity : batchList) {
-					ContractBatchModel cb =new ContractBatchModel();
+					ContractBatchModel cb = new ContractBatchModel();
 					cb.setBatch(contractBatchEntity);
-					List<BatchItemModel> itemList =this.jsonChangeList(contractBatchEntity.getBatchItems());
+					List<BatchItemModel> itemList = this
+							.jsonChangeList(contractBatchEntity.getBatchItems());
 					cb.setBatchItems(itemList);
 					cbList.add(cb);
 				}

@@ -339,6 +339,7 @@ Intense( elements );
             </#list>
           </select>
            	 会员类型
+           	<#if (member.checkState.getId() != 2)>
             <select name="type">
               <#list types as type>
                 <#if (type.getId()==member.type.getId())>
@@ -348,6 +349,9 @@ Intense( elements );
                 </#if>
             </#list>
             </select>
+            <#else>
+               &nbsp; ${member.type.getName()}<input type="hidden" name="type" value="${member.type.getId()}" />
+            </#if>
           </li>
           <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo" datatype="*2-30" nullmsg="营业执照号不能为空" value="${member.getbLicenseNo()}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p>

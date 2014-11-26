@@ -144,7 +144,7 @@ function edit_pwd(id){
         <h1>
 							<span class="title fontYH f20 fb">会员资料修改</span></h1>
       </div>
-      <div class="contBox">
+      <div class="contBox tableMem">
       <form id="add_form" action="javascript:void(0)" method="post">
         <div class="item">
           <label>会员编号</label>
@@ -225,8 +225,7 @@ function edit_pwd(id){
           <!-- <input type="text" class="input input-w100h36" value="${member.phoneNo}" name="input3" id="phoneNo" datatype="n11-11" nullmsg="请输入手机号码" title="请输入手机号码"/>-->
           ${member.phoneNo}
         </div>
-        <div class="item mt10">
-          <label>&nbsp;</label>
+        <div class="mt15 mb20 tc">
           <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
           </form>
       </div>
