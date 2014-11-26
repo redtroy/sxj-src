@@ -30,7 +30,10 @@ import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
+import com.sxj.supervisor.enu.contract.PayContentStateEnum;
+import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.supervisor.enu.contract.PayTypeEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -335,18 +338,24 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 					// 生成支付单
 					PayRecordEntity pay = new PayRecordEntity();
 					pay.setMemberNo_A(cm.getContract().getMemberIdA());
+					pay.setMemberName_A(cm.getContract().getMemberNameA());
 					pay.setMemberNo_B(cm.getContract().getMemberIdB());
+					pay.setMemberName_B(cm.getContract().getMemberNameB());
 					pay.setContractNo(cm.getContract().getContractNo());
 					pay.setRfidNo(rfid);
 					pay.setDateNo(cm.getContract().getContractNo() + "P");// 编号
 					pay.setBatchNo(cb.getBatchNo());
 					pay.setPayAmount(cb.getAmount());
 					if (cm.getContract().getType().getId() == 1) {
+						pay.setType(PayTypeEnum.glass);
 						pay.setContent("第"+cb.getBatchNo()+"批次玻璃货款");
 					} else if (cm.getContract().getType().getId() == 2) {
+						pay.setType(PayTypeEnum.extruders);
 						pay.setContent("第"+cb.getBatchNo()+"批次型材货款");
 					}
 					pay.setState(PayStageEnum.Stage1);
+					pay.setPayMode(PayModeEnum.cash);
+					pay.setPayContentState(PayContentStateEnum.payment);
 					contractPayService.addPayRecordEntity(pay);// 生成支付单
 					return 1;
 				}
