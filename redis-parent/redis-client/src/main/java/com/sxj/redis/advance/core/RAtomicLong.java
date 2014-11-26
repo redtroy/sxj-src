@@ -62,7 +62,7 @@ public interface RAtomicLong extends RExpirable
      *
      * @return the current value
      */
-    long get();
+    Long get();
     
     /**
      * Atomically adds the given value to the current value.
