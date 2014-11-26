@@ -350,7 +350,7 @@ Intense( elements );
             </#list>
             </select>
             <#else>
-               &nbsp; ${member.type.getName()}
+               &nbsp; ${member.type.getName()}<input type="hidden" name="type" value="${member.type.getId()}" />
             </#if>
           </li>
           <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo" datatype="*2-30" nullmsg="营业执照号不能为空" value="${member.getbLicenseNo()}" />
