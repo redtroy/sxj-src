@@ -53,10 +53,10 @@ public class SendMessage {
 		// 取帐户余额
 		BalanceResultBean br = OpenApi.getBalance();
 		if (br.getResult() < 1) {
-			SxjLogger.error("获取短信可用余额失败: " + br.getErrMsg(), this.getClass());
+			SxjLogger.info("获取短信可用余额失败: " + br.getErrMsg(), this.getClass());
 			throw new SystemException("获取短信可用余额失败: " + br.getErrMsg());
 		}
-		SxjLogger.error("可用条数: " + br.getRemain(), this.getClass());
+		SxjLogger.info("可用条数: " + br.getRemain(), this.getClass());
 
 		List<SendResultBean> listItem = OpenApi.sendOnce(mobiles, message,
 				cgid, csid, null);
@@ -67,7 +67,7 @@ public class SendMessage {
 							this.getClass());
 					throw new SystemException("短信发送提交失败: " + t.getErrMsg());
 				}
-				SxjLogger.error(
+				SxjLogger.info(
 						"发送成功: 消息编号<" + t.getMsgId() + "> 总数<" + t.getTotal()
 								+ "> 余额<" + t.getRemain() + ">",
 						this.getClass());

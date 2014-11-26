@@ -215,12 +215,18 @@ ${type[0].getName()}</span>/
 	  if (!checkSubmitMobil()){
 		  return false;
 	  }
-	  $("#time").show();
 	  $.post("send_ms.htm",{phoneNo:phoneNo},function(data){
-		 $(obj).attr("disabled", "disabled"); 
-		 $(obj).addClass("button-disable");
-	      timer(intDiff,obj)
-	  })
+	     if(data.error){
+	    	 $("#moileMsg").show();
+			 wrong("#moileMsg");
+			$("#moileMsg").text(data.error); 
+	     }else{
+	    	 $(obj).attr("disabled", "disabled"); 
+			 $(obj).addClass("button-disable");
+			 $("#time").show();
+		     timer(intDiff,obj)
+	     }
+	  });
   }
   var timer1;
   function timer(intDiff,obj){
@@ -248,6 +254,7 @@ ${type[0].getName()}</span>/
 	    	 $(obj).removeAttr("disabled", "disabled");
 	    	 $(obj).removeClass("button-disable");
 	    	 clearInterval(timer1);
+	    	 $("#time").text("")
 	    }
 	    intDiff--;
 	    }, 1000);
