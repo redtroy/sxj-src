@@ -10,6 +10,8 @@
     <module>finance-manager</module>
     <module>finance-demo</module>
     <module>demo</module>
+    <module>finance-dao</module>
+    <module>finance-service</module>
   </modules>
   <properties>
 		<com.sxj.spring>4.2.3</com.sxj.spring>
