@@ -2042,7 +2042,7 @@ public class ContractServiceImpl implements IContractService {
 					ContractBatchEntity cbe = new ContractBatchEntity();
 					cbe.setId(contractBatch.getId());
 					cbe.setPayState(1);
-					contractBatchDao.updateBatch(contractBatch);
+					contractBatchDao.updateBatch(cbe);
 				} else if (contractBatch.getType() == 2) {
 					ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
 					modifyBatch.setId(contractBatch.getId());
