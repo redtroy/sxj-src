@@ -156,4 +156,16 @@ public class ContractPayServiceImpl implements IContractPayService {
 		}
 
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public String getPayNoByRfidNo(String rfidNo) throws ServiceException {
+		try {
+			PayRecordEntity pay = payDao.getEntityByRfidNo(rfidNo);
+			return pay.getPayNo();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException("查询支付单号出错！", e);
+		}
+	}
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -323,29 +323,8 @@ function busunSeav(){
 	            	 $("#message_div").append(bb);
 				 }
 	             },   
-	     	});
-		 	JS.Engine.start('${basePath}comet');
-   			//合同进度
-   			progressBar();
-   			
+	     	});  
 	});
-	var progressBar=function(){
-		$(".progressBarClass").each(function(){
-			var contractNo=$(this).attr("value");
-			if(contractNo!=null && contractNo!=''){
-				var $this=$(this);
-				$.post("getProgress.htm", {contractNo:contractNo}, function(data) {
-					if(data.progress!=null && data.progress<100){
-						$this.find(".progre").width(data.progress+"%");
-						$this.find(".color-red").html(data.progress+"%");
-					}else if(data.progress==100){
-						$this.find(".progre").attr("class","progre100").width("100%");
-						$this.find(".color-red").html("100%").attr("class","color-green");
-					}
-				});
-			}
-		});
-	}
 	function closeMessage(obj){
 		$(obj).parent().remove();
 	}
@@ -363,7 +342,6 @@ function busunSeav(){
 			var totalPage = pager.attr("totalPage");
 			var currentPage = pager.attr("currentPage");
 			loadPage(currentPage, totalPage, query);
-			progressBar();
 		});
 	}
 
@@ -557,10 +535,17 @@ function busunSeav(){
 							</td>
 							<td><#if record.contractType.getId()!=0>
 							<div class="progressBarClass" value="${record.contractNo}" onclick="loadBatch('${record.contractNo}','${record.recordNo}','${record.contractType.getId()}');">
+								<#if record.progress<100>
 								<div class="progressBar">
-									<div class="progre" style="width: 0%"></div>
+									<div class="progre" style="width:${record.progress}%"></div>
 								</div>
-								<div class="color-red">0%</div> 
+								<div class="color-red">${record.progress}%</div> 
+								<#else>
+								<div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+                				<div class="color-green">100%</div></td>
+								</#if>
 							</div>
 								<#else>-</#if>
 							</td>

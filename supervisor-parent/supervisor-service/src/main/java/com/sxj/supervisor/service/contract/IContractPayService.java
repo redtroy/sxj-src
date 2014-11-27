@@ -46,4 +46,8 @@ public interface IContractPayService {
 	 */
 	public void addPayRecordEntity(PayRecordEntity pay) throws ServiceException;
 
+	/**
+	 * 根据RFIDNO查询支付单号
+	 */
+	public String getPayNoByRfidNo(String rfidNo) throws ServiceException;
 }

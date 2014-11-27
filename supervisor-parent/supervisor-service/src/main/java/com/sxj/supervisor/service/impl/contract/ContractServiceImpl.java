@@ -961,7 +961,7 @@ public class ContractServiceImpl implements IContractService {
 				RecordQuery recordQuery = new RecordQuery();
 				recordQuery.setContractNo(centity.getContractNo());
 				recordQuery.setSort("DESC");
-				recordQuery.setSortColumn("APPLY_DATE");
+				recordQuery.setSortColumn("R.APPLY_DATE");
 				List<RecordEntity> recordList = recordService
 						.queryRecord(recordQuery);
 				// 变更该合同所有备案状态
@@ -2042,7 +2042,7 @@ public class ContractServiceImpl implements IContractService {
 					ContractBatchEntity cbe = new ContractBatchEntity();
 					cbe.setId(contractBatch.getId());
 					cbe.setPayState(1);
-					contractBatchDao.updateBatch(contractBatch);
+					contractBatchDao.updateBatch(cbe);
 				} else if (contractBatch.getType() == 2) {
 					ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
 					modifyBatch.setId(contractBatch.getId());
