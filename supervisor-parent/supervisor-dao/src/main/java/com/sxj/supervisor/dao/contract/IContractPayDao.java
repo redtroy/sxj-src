@@ -35,4 +35,9 @@ public interface IContractPayDao {
 	 */
 	@Insert
 	public void addPay(PayRecordEntity pay);
+
+	/**
+	 * 根据RFIDNO查询实体
+	 */
+	public PayRecordEntity getEntityByRfidNo(String rfidNo);
 }

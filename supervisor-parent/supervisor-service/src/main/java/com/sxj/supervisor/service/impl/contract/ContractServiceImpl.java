@@ -907,12 +907,14 @@ public class ContractServiceImpl implements IContractService {
 					re.setId(recordId);
 					re.setState(RecordStateEnum.supplement);
 					recordDao.updateRecord(re);
-					//更新合同有效批次条目
-					ContractModel cm=this.getContractModelByContractNo(contractId);
-					if(cm!=null){
-						ContractEntity ce= new ContractEntity();
+					// 更新合同有效批次条目
+					ContractModel cm = this
+							.getContractModelByContractNo(contractId);
+					if (cm != null) {
+						ContractEntity ce = new ContractEntity();
 						ce.setId(cm.getContract().getId());
-						ce.setEffectiveBatch(cm.getContract().getEffectiveBatch()+1);
+						ce.setEffectiveBatch(cm.getContract()
+								.getEffectiveBatch() + 1);
 						contractDao.updateContract(ce);
 					}
 				}
@@ -2040,7 +2042,7 @@ public class ContractServiceImpl implements IContractService {
 					ContractBatchEntity cbe = new ContractBatchEntity();
 					cbe.setId(contractBatch.getId());
 					cbe.setPayState(1);
-					contractBatchDao.updateBatch(contractBatch);
+					contractBatchDao.updateBatch(cbe);
 				} else if (contractBatch.getType() == 2) {
 					ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
 					modifyBatch.setId(contractBatch.getId());
@@ -2052,11 +2054,12 @@ public class ContractServiceImpl implements IContractService {
 					replenishBatch.setPayState(1);
 					contractReplenishBatchDao.updateBatch(replenishBatch);
 				}
-				//更新合同支付批次条目
-				ContractModel cm=this.getContractModelByContractNo(contractNo);
-				ContractEntity ce= new ContractEntity();
+				// 更新合同支付批次条目
+				ContractModel cm = this
+						.getContractModelByContractNo(contractNo);
+				ContractEntity ce = new ContractEntity();
 				ce.setId(cm.getContract().getId());
-				ce.setPayBatch(cm.getContract().getPayBatch()+1);
+				ce.setPayBatch(cm.getContract().getPayBatch() + 1);
 				contractDao.updateContract(ce);
 			}
 		} catch (ServiceException e) {

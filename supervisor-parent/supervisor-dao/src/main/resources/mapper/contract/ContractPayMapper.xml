@@ -27,7 +27,10 @@
 		
 
 	</resultMap>
-
+    <select id="getEntityByRfidNo" resultMap="ContractPayResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_CONTRACT_PAY WHERE RFID_NO=#{rfidNo}]]>
+	</select>
 	<!-- 条件查询合同 -->
 	<select id="queryPayContract" resultMap="ContractPayResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">

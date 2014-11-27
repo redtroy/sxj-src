@@ -13,6 +13,7 @@ import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.model.statistics.AccountingModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
+import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -23,6 +24,9 @@ public class ContractPayServiceImpl implements IContractPayService {
 
 	@Autowired
 	private IAccountingDao accountingDao;
+
+	@Autowired
+	private IContractService contractService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -96,6 +100,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 			if (re.getState().ordinal() == 4) {
 				re.setState(payState[5]);
 				payDao.update_pay(re);
+				contractService.modifyBatchPayState(re.getContractNo(),
+						re.getRfidNo());
 				return "ok";
 			} else {
 				return "false";
@@ -149,5 +155,17 @@ public class ContractPayServiceImpl implements IContractPayService {
 			throw new ServiceException("新增付款管理出错！", e);
 		}
 
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public String getPayNoByRfidNo(String rfidNo) throws ServiceException {
+		try {
+			PayRecordEntity pay = payDao.getEntityByRfidNo(rfidNo);
+			return pay.getPayNo();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException("查询支付单号出错！", e);
+		}
 	}
 }
