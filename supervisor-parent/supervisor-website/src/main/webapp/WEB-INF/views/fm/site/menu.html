@@ -28,7 +28,7 @@ function getUrlParam(name){
 function clickFunction(url){
 	var state="${Session.userinfo.member.checkState.id}";
 	if(state=='1'){
-		$.get("${basePath}member/checkEditState.htm",function(data){
+		$.get("${basePath}member/checkEditState.htm?"+Math.random(),function(data){
 			if(data){
 				url=url+"&"+Math.random();
 				window.location.href=url;
