@@ -83,7 +83,6 @@ public interface IRecordService {
 	void updateRecordAndContract(RecordEntity record, ContractEntity contract)
 			throws ServiceException;
 
-	String getProgress(String contractNo);
 
 	String getRecordNo(String contractNo, MemberEntity menber);
 	

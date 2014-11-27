@@ -84,7 +84,7 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	@Transactional
-	public void modifyMember(MemberEntity member) {
+	public void modifyMember(MemberEntity member) throws ServiceException {
 		try {
 			MemberEntity m = menberDao.getMember(member.getId());
 			if (member.getType() == null
@@ -116,8 +116,11 @@ public class MemberServiceImpl implements IMemberService {
 				menberDao.addMember(m);
 				menberDao.deleteMember(member.getId());
 			}
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("会员信息更新失败！", e);
 		}
 	}

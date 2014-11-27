@@ -505,21 +505,6 @@ public class RecordServiceImpl implements IRecordService {
 		}
 	}
 
-	@Override
-	public String getProgress(String contractNo) {
-		String progress = "";
-		try {
-			progress = recordDao.getProgress(contractNo);
-			return progress;
-		} catch (ServiceException e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException(e.getMessage());
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("获取合同进度错误", e);
-		}
-		
-	}
 
 	/**
 	 * 获取当前的用户的备案号

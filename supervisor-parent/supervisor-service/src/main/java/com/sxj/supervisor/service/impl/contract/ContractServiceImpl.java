@@ -961,7 +961,7 @@ public class ContractServiceImpl implements IContractService {
 				RecordQuery recordQuery = new RecordQuery();
 				recordQuery.setContractNo(centity.getContractNo());
 				recordQuery.setSort("DESC");
-				recordQuery.setSortColumn("APPLY_DATE");
+				recordQuery.setSortColumn("R.APPLY_DATE");
 				List<RecordEntity> recordList = recordService
 						.queryRecord(recordQuery);
 				// 变更该合同所有备案状态
