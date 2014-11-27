@@ -173,7 +173,6 @@ public class RecordEntity extends Pagable implements Serializable {
 	/**
 	 * 合同进度
 	 */
-	@Column(name = "PROGRESS")
 	private Integer progress=0;
 
 	public Integer getRecordState() {
