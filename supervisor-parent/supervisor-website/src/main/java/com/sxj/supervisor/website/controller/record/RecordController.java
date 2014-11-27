@@ -65,7 +65,7 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal userBean = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			query.setApplyId(userBean.getMember().getMemberNo());
-			query.setSortColumn("RECORD_NO");
+			query.setSortColumn("R.RECORD_NO");
 			query.setSort("DESC");
 			List<RecordEntity> list = recordService.queryRecord(query);
 			map.put("recordlist", list);
@@ -585,19 +585,6 @@ public class RecordController extends BaseController {
 		} catch (Exception e) {
 			SxjLogger.error("确认备案信息错误", e, this.getClass());
 			throw new WebException("确认备案信息错误");
-		}
-	}
-	@RequestMapping("getProgress")
-	public @ResponseBody Map<String, String> getProgress(String contractNo)
-			throws WebException {
-		try {
-			Map<String, String> map = new HashMap<String, String>();
-			String progress=recordService.getProgress(contractNo);
-			map.put("progress", progress);
-			return map;
-		} catch (Exception e) {
-			SxjLogger.error("获取合同进度错误", e, this.getClass());
-			throw new WebException("获取合同进度错误");
 		}
 	}
 	@RequestMapping("getBatchPay")

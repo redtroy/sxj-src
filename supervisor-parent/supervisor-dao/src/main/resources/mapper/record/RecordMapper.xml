@@ -27,82 +27,69 @@
 		<result property="recordDate" column="RECORD_DATE" jdbcType="TIMESTAMP" />
 		<result property="acceptState" column="ACCEPT_STATE" jdbcType="INTEGER" />
 		<result property="recordState" column="RECORD_STATE" jdbcType="INTEGER" />
+		<result property="progress" column="PROGRESS" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 条件查询备案 -->
 	<select id="queryRecord" resultMap="RecordResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT  * FROM M_CONTRACT_RECORD WHERE DEL_STATE=0]]>
+		<![CDATA[SELECT  R.*,round(C.PAY_BATCH/C.EFFECTIVE_BATCH*100) AS PROGRESS  FROM M_CONTRACT_RECORD R,M_CONTRACT C WHERE R.DEL_STATE=0 AND R.CONTRACT_NO=C.CONTRACT_NO ]]>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
-			<![CDATA[AND RECORD_NO = #{condition.recordNo}]]>
+			<![CDATA[AND R.RECORD_NO = #{condition.recordNo}]]>
 		</if>
 		<!-- 申请会员ID -->
 		<if test="condition.applyId != null and condition.applyId != ''">
-			<![CDATA[AND APPLY_ID = #{condition.applyId}]]>
+			<![CDATA[AND R.APPLY_ID = #{condition.applyId}]]>
 		</if>
 		<!-- 查询当前会员所关联的备案 -->
 		<if test="condition.memberId != null and condition.memberId != ''">
-			<![CDATA[AND (MEMBER_ID_A=#{condition.memberId} or MEMBER_ID_B=#{condition.memberId})]]>
+			<![CDATA[AND (R.MEMBER_ID_A=#{condition.memberId} or R.MEMBER_ID_B=#{condition.memberId})]]>
 		</if>
 		<!-- 合同类型-->
 		<if test="condition.contractType != null">
-			<![CDATA[AND CONTRACT_TYPE = #{condition.contractType}]]>
+			<![CDATA[AND R.CONTRACT_TYPE = #{condition.contractType}]]>
 		</if>
 		<!-- 对应合同号-->
 		<if test="condition.contractNo != null and condition.contractNo != ''">
-			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
+			<![CDATA[AND R.CONTRACT_NO = #{condition.contractNo}]]>
 		</if>
 		<!-- 对应甲方会员ID-->
 		<if test="condition.memberIdA != null and condition.memberIdA != ''">
-			<![CDATA[AND MEMBER_ID_A = #{condition.memberIdA}]]>
+			<![CDATA[AND R.MEMBER_ID_A = #{condition.memberIdA}]]>
 		</if>
 		<!-- 合同签订人-->
 		<if test="condition.contractPepole != null and condition.contractPepole != ''">
-			<![CDATA[AND (MEMBER_NAME_A LIKE CONCAT('%',#{condition.contractPepole},'%') OR MEMBER_NAME_B LIKE CONCAT('%',#{condition.contractPepole},'%'))]]>
+			<![CDATA[AND (R.MEMBER_NAME_A LIKE CONCAT('%',#{condition.contractPepole},'%') OR R.MEMBER_NAME_B LIKE CONCAT('%',#{condition.contractPepole},'%'))]]>
 		</if>
 		<!-- 对应乙方会员ID-->
 		<if test="condition.memberIdB != null and condition.memberIdB != ''">
-			<![CDATA[AND MEMBER_ID_B = #{condition.memberIdB}]]>
+			<![CDATA[AND R.MEMBER_ID_B = #{condition.memberIdB}]]>
 		</if>
 		<!-- 备案状态-->
 		<if test="condition.state != null">
-			<![CDATA[AND STATE = #{condition.state}]]>
+			<![CDATA[AND R.STATE = #{condition.state}]]>
 		</if>
 		<if test="condition.flag != null and condition.flag != ''">
-			<![CDATA[AND RECORD_FLAG = #{condition.flag}]]>
+			<![CDATA[AND R.RECORD_FLAG = #{condition.flag}]]>
 		</if>
 		<!-- 备案类型-->
 		<if test="condition.recordType != null">
-			<![CDATA[AND TYPE = #{condition.recordType}]]>
+			<![CDATA[AND R.TYPE = #{condition.recordType}]]>
 		</if>
 		<if test="condition.confirmState != null">
-			<![CDATA[AND CONFIRM_STATE = #{condition.confirmState}]]>
+			<![CDATA[AND R.CONFIRM_STATE = #{condition.confirmState}]]>
 		</if>
 		<!-- 申请时间段 -->
  		<if test="condition.startApplyDate != null and condition.endApplyDate != null and condition.startApplyDate != ''  and condition.endApplyDate != ''"> 
-			<![CDATA[AND APPLY_DATE >=#{condition.startApplyDate} AND APPLY_DATE < DATE_ADD(#{condition.endApplyDate},INTERVAL 1 DAY)]]>
+			<![CDATA[AND R.APPLY_DATE >=#{condition.startApplyDate} AND R.APPLY_DATE < DATE_ADD(#{condition.endApplyDate},INTERVAL 1 DAY)]]>
 		</if>
 		<!-- 受理时间段 -->
 		<if test="condition.startAcceptDate != null and condition.endAcceptDate != null and condition.startAcceptDate != '' and condition.endAcceptDate != ''">
-			<![CDATA[AND ACCEPT_DATE >=#{condition.startAcceptDate} AND ACCEPT_DATE < DATE_ADD(#{condition.endAcceptDate},INTERVAL 1 DAY)]]>
+			<![CDATA[AND R.ACCEPT_DATE >=#{condition.startAcceptDate} AND R.ACCEPT_DATE < DATE_ADD(#{condition.endAcceptDate},INTERVAL 1 DAY)]]>
 		</if>
 		<if test="condition.sortColumn != null and condition.sortColumn != null and condition.sort != '' and condition.sort != ''">
 		<![CDATA[ORDER BY ${condition.sortColumn} ${condition.sort}]]>
 		</if>
-	</select>
-	<select id="getProgress" resultType="java.lang.String"
-		parameterType="String">
-		<![CDATA[SELECT round((SUM(A) / SUM(B) * 100)) AS PROGRESS FROM ( ]]>
-		<![CDATA[SELECT COUNT(*) AS A FROM M_CONTRACT_BATCH C WHERE C.CONTRACT_ID = #{contractNo} AND C.UPDATE_STATE != 1 AND C.PAY_STATE = 1 UNION ALL 
-				 SELECT COUNT(*) AS A FROM M_CONTRACT_MODIFY_BATCH MB LEFT JOIN M_CONTRACT_MODIFY M ON MB.MODIFY_ID = M.ID WHERE M.CONTRACT_ID = #{contractNo}
-				 AND MB.UPDATE_STATE != 1 AND MB.PAY_STATE = 1 UNION ALL SELECT COUNT(*) AS A FROM M_CONTRACT_REPLENISH_BATCH RB
-				LEFT JOIN M_CONTRACT_REPLENISH R ON RB.REPLENISH_ID = R.ID WHERE R.CONTRACT_ID = #{contractNo} AND RB.PAY_STATE = 1 AND RB.NEW_RFID_NO IS NOT NULL
-				AND LENGTH(RB.NEW_RFID_NO) > 0 ) AS ATBL,]]>
-		<![CDATA[ (SELECT COUNT(*) AS B FROM M_CONTRACT_BATCH C WHERE C.CONTRACT_ID = #{contractNo} AND C.UPDATE_STATE != 1 
-				   UNION ALL SELECT COUNT(*) AS B FROM M_CONTRACT_MODIFY_BATCH MB LEFT JOIN M_CONTRACT_MODIFY M ON MB.MODIFY_ID = M.ID
-					WHERE M.CONTRACT_ID = #{contractNo} AND MB.UPDATE_STATE != 1 
-				 	UNION ALL SELECT COUNT(*) AS B FROM M_CONTRACT_REPLENISH_BATCH RB LEFT JOIN M_CONTRACT_REPLENISH R ON RB.REPLENISH_ID = R.ID
-				WHERE R.CONTRACT_ID = #{contractNo}  AND RB.NEW_RFID_NO IS NOT NULL AND LENGTH(RB.NEW_RFID_NO) > 0 ) AS BTBL]]>
 	</select>
 </mapper>
