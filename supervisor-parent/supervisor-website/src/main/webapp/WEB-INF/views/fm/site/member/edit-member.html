@@ -175,9 +175,9 @@ function edit_pwd(id){
           <div class="ly-left editBox mr15">
           <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" placeholder="请输入营业执照号" /></p>
            <#if (member.bLicensePath??)>
-		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}">
+		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}" onerror="errorImage(this)" times="0"/>
 		   <#else>
-		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg">  
+		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/>  
 		</#if>
 		<#if (!member.flag)>
           <div class="uploadify">
@@ -189,9 +189,9 @@ function edit_pwd(id){
          <div class="ly-left editBox">
           <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"/><span class="msg-error pa p5 ml5 f12" style="display:none" id="energyNo_erro">请输入正确的营业执照号和节能标识号</span></p>
           <#if (member.bLicensePath??)>
-         <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}">
+         <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="energyPath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg"> 
+		 <img id="energyPath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
