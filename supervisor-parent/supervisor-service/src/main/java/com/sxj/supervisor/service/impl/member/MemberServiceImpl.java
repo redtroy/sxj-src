@@ -87,7 +87,8 @@ public class MemberServiceImpl implements IMemberService {
 	public void modifyMember(MemberEntity member) {
 		try {
 			MemberEntity m = menberDao.getMember(member.getId());
-			if (member.getType().equals(m.getType())) {
+			if (member.getType().equals(m.getType())
+					|| member.getType() == null) {
 				member.setVersion(m.getVersion());
 				menberDao.updateMember(member);
 			} else {
