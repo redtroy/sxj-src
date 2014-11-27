@@ -80,7 +80,6 @@ ${type[0].getName()}</span>/
 		 $("#ct").text("联系人不能为空");
 		 flag=true;
 	 }
-	 
 	  if ($("input[name='type']:checked").val()==null){
 			$("#type_text").show();
 			 flag=true;
@@ -96,6 +95,12 @@ ${type[0].getName()}</span>/
 		 $("#name_text").show();
 		 wrong("#name_text");
 		 $("#name_text").text("公司名称不能为空");
+		 flag=true;
+	 }
+	 if($("#phoneNo").val()==""){
+		 $("#moileMsg").show();
+		 wrong("#moileMsg");
+		 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
 		 flag=true;
 	 }
 	 $("#sm_erro").show();
@@ -123,19 +128,19 @@ ${type[0].getName()}</span>/
 	 if (flag){
 		 return false;
 	 }
-	 $.get("${basePath}member/check_ms.htm?ms="+param,function(data){
+	 $.get("${basePath}member/check_ms.htm?ms="+param+"&phoneNo="+$("#phoneNo").val(),function(data){
 		 if(data.flag=="false"){
 			 wrong("#sm_erro");
 		     $("#sm_erro").text("验证码错误");
 			 return false;
+		 }else{
+			 right("#sm_erro");
+			 $("#sm_erro").text("");
+			 $("#regist_box").submit();
 		 }
-		 right("#sm_erro");
-		 $("#sm_erro").text("");
-		 $("#regist_box").submit();
-	 })
-	 
-	
+	 });
   }
+ 
   $(function(){
 		$("#name").bind("focus",function(){
 			$("#name_text").show();
@@ -211,7 +216,8 @@ ${type[0].getName()}</span>/
 	  })
   });
   //发送短信
-  var send_flag=false;;
+  var send_flag=false;
+  
   function send_ms(obj){
 	  send_flag=true;
 	  var phoneNo=$("#phoneNo").val();

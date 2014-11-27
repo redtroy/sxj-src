@@ -305,10 +305,9 @@ function busunSeav(){
 		   }
    		}) 
    		//结束
-   		 JS.Engine.start('${basePath}comet');
    			JS.Engine.on({
-   				start : function(cId, channelList, engine){  
-   			      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+   				start : function(cId, channelList, engine){ 
+   			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random());
    			    }, 
 				 "${channelName}" : function(data){//侦听一个channel
 					 $("#message_div").empty();
@@ -324,7 +323,8 @@ function busunSeav(){
 	            	 $("#message_div").append(bb);
 				 }
 	             },   
-	     	});  
+	     	});
+		 	JS.Engine.start('${basePath}comet');
    			//合同进度
    			progressBar();
    			
