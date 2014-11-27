@@ -453,8 +453,11 @@ $(document).ready(function(){
 </div>
 </#macro>
 <#macro leftMenu isLoad>
+
 <div id="leftList">
-	<script>
+	
+</div>
+<script type="text/javascript">
 	var isLoad="${isLoad}";
 	var account="${Session.userinfo.account.accountNo}";
 	if(account==""){
@@ -467,7 +470,6 @@ $(document).ready(function(){
 	}
 	
 	</script>
-</div>
 </#macro> <#macro pager>
 <div id="pager" class="pagination f12 mt10 ly-right" totalPage="${query.totalPage}"
 	currentPage="${query.currentPage}"></div>
