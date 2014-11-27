@@ -39,12 +39,13 @@
 		var id = $("#recordId").val();
 		var contractId = $("#contractId").val();
 		var message = $("#message").val();
-		dialogBox(function() {
+		dialogBox(function(index) {
 			$.post("confirmRecord.htm", {
 				recordId : id,
 				contractId : contractId,
 				message : message
 			}, function(data) {
+				layer.close(index);
 				if (data.isOK == 'ok') {
 					succInfo(function() {
 						window.location.href = "query.htm";

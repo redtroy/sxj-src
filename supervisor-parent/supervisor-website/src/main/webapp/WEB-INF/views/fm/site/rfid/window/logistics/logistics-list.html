@@ -51,8 +51,9 @@ function query(page){
 	});
 }
 function  del(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 	$.post("delete.htm",{id:id},function(data){
+		layer.close(index);
 		if(data.isOK=='ok'){
 			succInfo(function(){
 				window.location.href="query.htm";
@@ -65,8 +66,9 @@ function  del(id){
 	},"确实要删除吗？")
 }
 function  disable(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 	$.post("disable.htm",{id:id},function(data){
+		layer.close(index);
 		if(data.isOK=='ok'){
 			succInfo(function(){
 				window.location.href="query.htm";

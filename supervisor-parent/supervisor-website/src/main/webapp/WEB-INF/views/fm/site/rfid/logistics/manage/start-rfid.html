@@ -161,8 +161,9 @@ $(function() {
 	})
 });
 function startRfid() {
-	dialogBox(function(){
+	dialogBox(function(index){
 	$.post("saveRfid.htm", $("#save_form").serialize(), function(data) {
+		layer.close(index);
 		if (data.isOK == 'ok') {
 			succInfo(function(){
 				window.location.href = "queryList.htm";

@@ -159,8 +159,9 @@ $(document).ready(function() {
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function(){
+		dialogBox(function(index){
 		$.post("modify.htm",$('#cg_form').serialize(),function(data){
+			layer.close(index);
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -185,8 +186,9 @@ $(document).ready(function() {
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function(){
+		dialogBox(function(index){
 		$.post("modify.htm",$('#form').serialize(),function(data){
+			layer.close(index);
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -216,8 +218,9 @@ $(document).ready(function() {
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function(){
+		dialogBox(function(index){
 		$.post("modify.htm",$('#form').serialize(),function(data){
+			layer.close(index);
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";
@@ -234,8 +237,9 @@ $(document).ready(function() {
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function(){
+		dialogBox(function(index){
 		$.post("modify.htm",$('#form').serialize(),function(data){
+			layer.close(index);
 			if (data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="query.htm";

@@ -31,8 +31,9 @@
 		})
  }
  function del(id){
-	 dialogBox(function(){
+	 dialogBox(function(index){
 		 $.post("del_apply.htm",{id:id},function(data){
+			 layer.close(index);
 				if (data.flag=='ok'){
 					succInfo(function(){
 						query($("#pager").attr("currentPage"));

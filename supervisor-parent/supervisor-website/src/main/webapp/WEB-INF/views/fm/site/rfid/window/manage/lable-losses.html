@@ -47,9 +47,11 @@ function subForm(){
 	  $("#loss_form").submit();
 }
 function rfidLoss() {
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("lableLosses.htm", $("#loss_form").serialize(),
 				function(data) {
+			alert(index);
+					layer.close(index);
 					if (data.isOK == 'ok') {
 						succInfo(function(){
 							window.location.href="query.htm";

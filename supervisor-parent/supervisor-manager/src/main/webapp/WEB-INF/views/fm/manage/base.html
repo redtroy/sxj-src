@@ -486,6 +486,7 @@ $(document).ready(function(){
 </#if>
 </#macro>
 <#macro leftMenu isLoad>
+<div id="leftList"></div>
 <script>
 var account="${Session.userinfo.accountNo}";
 var isLoad="${isLoad}";
@@ -494,7 +495,6 @@ if(isLoad=="true"){
 }else{
 	$("#leftList").load("${basePath}menu.htm?account="+account);
 }
-
 </script>
 </#macro>
 <#macro pager>

@@ -50,8 +50,9 @@ function query(page){
 	});
 }
 function  del(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("delete.htm",{id:id},function(data){
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					var currentPage= $("#pager").attr("currentPage");
@@ -64,8 +65,9 @@ function  del(id){
 	},"是否确认删除？");
 }
 function  disable(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("disable.htm",{id:id},function(data){
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					var currentPage= $("#pager").attr("currentPage");

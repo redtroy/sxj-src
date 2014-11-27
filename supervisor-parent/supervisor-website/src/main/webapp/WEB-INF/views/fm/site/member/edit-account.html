@@ -122,9 +122,10 @@ jQuery(document).ready(function($) {
 		   return false;
 	   }
 	   //判断子会员帐号是否存在
-	   dialogBox(function(){
+	   dialogBox(function(index){
 		   var flag=false;
 		   $.get("check_account.htm?old="+old+"&param="+accountName,function(data){
+			   layer.close(index);
 			   if (data.status == "n"){
 				   	  messageInfo("会员名称已存在！");
 		        	  return false;
@@ -146,8 +147,9 @@ jQuery(document).ready(function($) {
   }
 //更改状态
   function checkState(id,stateId){
-	  dialogBox(function(){
+	  dialogBox(function(index){
 		  $.post("editState.htm",{id:id,state:stateId},function(data){
+			  layer.close(index);
 			  if (data.isOK=='ok'){
 				  query($("#pager").attr("currentPage"));
 				  $("#state_div").hide();
