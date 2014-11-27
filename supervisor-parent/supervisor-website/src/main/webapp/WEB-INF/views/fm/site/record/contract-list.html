@@ -323,7 +323,8 @@ function busunSeav(){
 	            	 $("#message_div").append(bb);
 				 	}
 	             },   
-	     	});  
+	     	});
+		JS.Engine.start('${basePath}comet');
 	});
 	function closeMessage(obj){
 		$(obj).parent().remove();
