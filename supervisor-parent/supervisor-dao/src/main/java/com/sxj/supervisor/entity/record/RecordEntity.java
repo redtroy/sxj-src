@@ -170,6 +170,10 @@ public class RecordEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "RECORD_STATE")
 	private Integer recordState;
+	/**
+	 * 合同进度
+	 */
+	private Integer progress=0;
 
 	public Integer getRecordState() {
 		return recordState;
@@ -361,6 +365,14 @@ public class RecordEntity extends Pagable implements Serializable {
 
 	public void setFlag(RecordFlagEnum flag) {
 		this.flag = flag;
+	}
+
+	public Integer getProgress() {
+		return progress;
+	}
+
+	public void setProgress(Integer progress) {
+		this.progress = progress;
 	}
 
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -305,10 +305,9 @@ function busunSeav(){
 		   }
    		}) 
    		//结束
-   		 JS.Engine.start('${basePath}comet');
    			JS.Engine.on({
-   				start : function(cId, channelList, engine){  
-   			      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+   				start : function(cId, channelList, engine){ 
+   			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random());
    			    }, 
 				 "${channelName}" : function(data){//侦听一个channel
 					 $("#message_div").empty();
@@ -322,30 +321,11 @@ function busunSeav(){
 	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?message="+data[i]+"&recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue message' data-message='"+data[i]+"' id=''>待确认</a>的"+message[1]+"信息</div>"; 
 	            	 }
 	            	 $("#message_div").append(bb);
-				 }
+				 	}
 	             },   
-	     	});  
-   			//合同进度
-   			progressBar();
-   			
+	     	});
+		JS.Engine.start('${basePath}comet');
 	});
-	var progressBar=function(){
-		$(".progressBarClass").each(function(){
-			var contractNo=$(this).attr("value");
-			if(contractNo!=null && contractNo!=''){
-				var $this=$(this);
-				$.post("getProgress.htm", {contractNo:contractNo}, function(data) {
-					if(data.progress!=null && data.progress<100){
-						$this.find(".progre").width(data.progress+"%");
-						$this.find(".color-red").html(data.progress+"%");
-					}else if(data.progress==100){
-						$this.find(".progre").attr("class","progre100").width("100%");
-						$this.find(".color-red").html("100%").attr("class","color-green");
-					}
-				});
-			}
-		});
-	}
 	function closeMessage(obj){
 		$(obj).parent().remove();
 	}
@@ -363,7 +343,6 @@ function busunSeav(){
 			var totalPage = pager.attr("totalPage");
 			var currentPage = pager.attr("currentPage");
 			loadPage(currentPage, totalPage, query);
-			progressBar();
 		});
 	}
 
@@ -557,10 +536,17 @@ function busunSeav(){
 							</td>
 							<td><#if record.contractType.getId()!=0>
 							<div class="progressBarClass" value="${record.contractNo}" onclick="loadBatch('${record.contractNo}','${record.recordNo}','${record.contractType.getId()}');">
+								<#if record.progress<100>
 								<div class="progressBar">
-									<div class="progre" style="width: 0%"></div>
+									<div class="progre" style="width:${record.progress}%"></div>
 								</div>
-								<div class="color-red">0%</div> 
+								<div class="color-red">${record.progress}%</div> 
+								<#else>
+								<div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+                				<div class="color-green">100%</div></td>
+								</#if>
 							</div>
 								<#else>-</#if>
 							</td>

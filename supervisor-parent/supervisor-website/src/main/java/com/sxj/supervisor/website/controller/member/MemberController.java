@@ -158,7 +158,7 @@ public class MemberController extends BaseController {
 	public String regist_save(MemberEntity member, ModelMap map, String ms,
 			HttpSession session) {
 		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
-				session.getId() + "_checkMs");
+				member.getPhoneNo() + "_checkMs");
 		if (StringUtils.isEmpty(message)) {
 			MemberTypeEnum[] type = MemberTypeEnum.values();
 			List<AreaEntity> list = areaService.getChildrenAreas("32");
@@ -173,6 +173,8 @@ public class MemberController extends BaseController {
 			member.setRegDate(new Date());
 			member.setFlag(false);
 			memberService.addMember(member);
+			HierarchicalCacheManager.evict(2, "checkMs", member.getPhoneNo()
+					+ "_checkMs");
 			return "redirect:/member/regist_succ.htm";
 		} else {
 			MemberTypeEnum[] type = MemberTypeEnum.values();
@@ -246,8 +248,8 @@ public class MemberController extends BaseController {
 			if (num.incrementAndGet() == 1) {
 				String message = "";
 				message = memberService.createvalidata(phoneNo, message);
-				HierarchicalCacheManager.set(2, "checkMs", session.getId()
-						+ "_checkMs", message, 600);
+				HierarchicalCacheManager.set(2, "checkMs",
+						phoneNo + "_checkMs", message, 600);
 			}
 		} else {
 			map.put("error", "每个号码每天限制发送5次");
@@ -260,10 +262,10 @@ public class MemberController extends BaseController {
 	 */
 	@RequestMapping("check_ms")
 	public @ResponseBody Map<String, String> check_ms(HttpSession session,
-			String ms) throws WebException {
+			String phoneNo, String ms) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		String message = (String) HierarchicalCacheManager.get(2, "checkMs",
-				session.getId() + "_checkMs");
+				phoneNo + "_checkMs");
 		if (StringUtils.isEmpty(message)) {
 			map.put("flag", "false");
 		}

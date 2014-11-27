@@ -47,7 +47,7 @@ public class ContractController extends BaseController {
 				RecordQuery rq = new RecordQuery();
 				rq.setContractNo(contractModel.getContract().getContractNo());
 				rq.setSort("desc");
-				rq.setSortColumn("APPLY_DATE");
+				rq.setSortColumn("R.APPLY_DATE");
 				List<RecordEntity> recordList = recordService.queryRecord(rq);
 				if (recordList.size() > 0) {
 					RecordEntity recordEntity = recordList.get(0);
@@ -94,7 +94,7 @@ public class ContractController extends BaseController {
 		RecordQuery rq = new RecordQuery();
 		rq.setContractNo(contractNo);
 		rq.setSort("desc");
-		rq.setSortColumn("APPLY_DATE");
+		rq.setSortColumn("R.APPLY_DATE");
 		ContractModel contractModel = contractService
 				.getContractModelByContractNo(contractNo);
 		List<RecordEntity> recordList = recordService.queryRecord(rq);
