@@ -18,7 +18,7 @@ $(function(){
 	  JS.Engine.start('${basePath}comet');
 		JS.Engine.on({
 			start : function(cId, channelList, engine){  
-		      $.get("${basePath}notifyComet.htm?channelName=${channelName}"); 
+		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
 		    }, 
 		 "${channelName}" : function(data){//侦听一个channel
 			 $("#message_div").empty();
