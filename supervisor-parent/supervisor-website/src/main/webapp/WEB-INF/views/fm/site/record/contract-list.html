@@ -195,8 +195,9 @@ function saveBiangeng(){
 			return false;
 		}
 		if($("#bgimgPath").val()!='' ){
-			dialogBox(function(){
+			dialogBox(function(index){
 				$.post("modifyRecord.htm", o, function(data) {
+					layer.close(index);
 					if (data.isOK == 'ok') {
 						succInfo(function(){
 							window.location.href="query.htm";
@@ -227,8 +228,9 @@ function busunSeav(){
 			return;
 		}
 		if($("#bsimgPath").val()!='' ){
-			dialogBox(function(){
+			dialogBox(function(index){
 			$.post("modifyRecord.htm", o, function(data) {
+				layer.close(index);
 				if (data.isOK == 'ok') {
 					succInfo(function(){
 						window.location.href="query.htm";
@@ -378,10 +380,11 @@ function busunSeav(){
 			id : id
 		}, function(data) {
 			if (data.isOK == "ok") {
-					dialogBox(function(){
+					dialogBox(function(index){
 							$.post("delRecord.htm", {
 								id : id
 							}, function(data) {
+								layer.close(index);
 								if (data.isOK == "ok") {
 									 succInfo(function(){
 										  query($("#pager").attr("currentPage"));

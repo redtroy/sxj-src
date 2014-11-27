@@ -165,8 +165,9 @@ $(function(){
 	});
 });
 function rfidLoss(formId){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("rfid_loss.htm",$("#rfid_form").serialize(),function(data){
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="queryList.htm";
@@ -178,8 +179,9 @@ function rfidLoss(formId){
 	},"是否确认补损？");
 }
 function  htLoss(){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("contratc_loss.htm",$("#ht_form").serialize(),function(data){
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					window.location.href="queryList.htm";

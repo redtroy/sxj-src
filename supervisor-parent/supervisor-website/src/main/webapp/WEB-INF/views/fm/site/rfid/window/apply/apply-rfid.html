@@ -9,6 +9,7 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.errorInfo/>
 <@b.validate/>
+<@b.dialogBox/>
 <script>
 $(function($){
 	$("#add").Validform({
@@ -66,13 +67,17 @@ function save(){
 		 messageInfo('招标合同不存在');
 		 return false;
 	 }else{
-		 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType,contractNo:contractNo},function(data){
-			 if (data.isOk="ok"){
-				 succInfo(function(){
-					 window.location.href="apply_list.htm"; 
-				 },"申请成功！");
-			 }
-		 });
+		 dialogBox(function(index){
+			 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType,contractNo:contractNo},function(data){
+				 layer.close(index);
+				 if (data.isOk="ok"){
+					 succInfo(function(){
+						 window.location.href="apply_list.htm"; 
+					 },"申请成功！");
+				 }
+			 }); 
+		 },"是否确认申请");
+		 
 	 }
 }
 </script>

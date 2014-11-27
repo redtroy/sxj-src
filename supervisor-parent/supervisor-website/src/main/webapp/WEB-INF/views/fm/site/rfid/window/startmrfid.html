@@ -276,8 +276,9 @@ function star(){
 		messageInfo('型材采购合同物流标签缺失，无法启用');
 		return false;
 	}
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("start_lable.htm",{startNum:num,refContractNo:refContractNo,gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
+			layer.close(index);
 			if (data.isOk=="ok"){
 				succInfo(function(){
 					window.location.href="${basePath}rfid/window/query.htm";

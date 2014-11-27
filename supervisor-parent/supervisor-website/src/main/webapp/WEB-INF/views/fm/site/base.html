@@ -185,6 +185,22 @@ function succInfo(confirm,message){
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
 <script>
+function loadInfo(){
+	var loadInfoIndex = $.layer({
+		    type: 3,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['35%', '52%'],
+		    border: [10, 0.3, '#000'], //去掉默认边框
+		    shade: [0.5, '#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    loading: {
+   				type: 2
+			}
+		});
+	return loadInfoIndex;
+}
 function dialogBox(confirm,message){
 	var data=$("#diglog_div");
 	$("#diglog_div").find("#dialog_message").text(message);
@@ -204,8 +220,10 @@ function dialogBox(confirm,message){
 	 
 	 	$("#dialog_confirm_click").live('click', function(){
 	 		layer.close(pageii);
-			confirm();
+	 		var loadInfoIndex=loadInfo();
+			confirm(loadInfoIndex);
 			$("#dialog_confirm_click").die("click");
+			//layer.close(loadInfoIndex);
 		});
 		//自设关闭
 		$('#dialog_close_button').live('click', function(){
@@ -220,6 +238,24 @@ function dialogBox(confirm,message){
 		    $("#dialog_confirm_click").die("click");
 		});
  }
+ 
+function dialogBoxOut(html){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		    offset: ['200px', ''],
+		   	area: ['20%', '20%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: html
+		    }
+		});
+	 return pageii;
+}
+ 
 </script>
 </#macro>
 <#macro pageScript>
@@ -432,7 +468,8 @@ $(document).ready(function(){
 </#macro>
 <#macro leftMenu isLoad>
 <div id="leftList">
-	<script>
+</div>
+<script>
 	var isLoad="${isLoad}";
 	var account="${Session.userinfo.account.accountNo}";
 	if(account==""){
@@ -443,9 +480,8 @@ $(document).ready(function(){
 	}else{
 		$("#leftList").load("${basePath}menu.htm?account="+account);
 	}
-	
-	</script>
-</div>
+</script>
+
 </#macro> <#macro pager>
 <div id="pager" class="pagination f12 mt10 ly-right" totalPage="${query.totalPage}"
 	currentPage="${query.currentPage}"></div>

@@ -174,9 +174,10 @@
 			messageInfo('请上传扫描件！');
 			return;
 		}
-				dialogBox(function() {
+				dialogBox(function(index) {
 					$.post("AcgApplyRecord.htm", $("#cgForm").serialize(),
 							function(data) {
+								layer.close(index);
 								if (data.isOK == 'ok') {
 									$("#recordNo").html(data.recordNo);
 									$("#contBox").show();
@@ -208,9 +209,10 @@
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function() {
+		dialogBox(function(index) {
 			$.post("zbApplyRecord.htm", $("#zbForm").serialize(),
 					function(data) {
+						layer.close(index);
 						if (data.isOK == 'ok') {
 							$("#recordNo").html(data.recordNo);
 							$("#contBox").show();
@@ -218,7 +220,7 @@
 						} else if (data.isOK == 'no') {
 							messageInfo("您还没有通过认证,不能申请备案!");
 						}
-					})
+					});
 		}, "是否生成备案?");
 	}
 	/**
@@ -243,9 +245,9 @@
 			messageInfo('请上传扫描件！');
 			return;
 		}
-		dialogBox(function() {
-			$.post("BzbApplyRecord.htm", $("#BcgForm").serialize(), function(
-					data) {
+		dialogBox(function(index) {
+			$.post("BzbApplyRecord.htm", $("#BcgForm").serialize(), function(data) {
+				layer.close(index);
 				if (data.isOK == 'ok') {
 					$("#recordNo").html(data.recordNo);
 					$("#contBox").show();

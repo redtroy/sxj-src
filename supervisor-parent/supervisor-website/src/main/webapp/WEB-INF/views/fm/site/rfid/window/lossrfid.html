@@ -291,8 +291,9 @@ function star(){
 		messageInfo('型材采购合同的补损物流标签缺失，无法进行补损');
 		return false;
 	}
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("start_loss_lable.htm?"+rfids,{refContractNo:refContractNo,count:num,gRfid:gRfid,lRfid:lRfid},function(data){
+			layer.close(index);
 			if (data.isOk=="ok"){
 				succInfo(function(){
 					window.location.href="${basePath}rfid/window/query.htm";
