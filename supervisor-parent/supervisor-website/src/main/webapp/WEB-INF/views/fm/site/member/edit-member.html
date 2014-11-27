@@ -99,8 +99,9 @@ function save(id){
     	messageInfo("请上传节能标识图片");
     	return false;
     }
+    var type="${member.type.getId()}";
     $.post("save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
-    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo
+    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type
     },function(data){
     	if(data.isOK="ok"){
     		 succInfo(function(){
