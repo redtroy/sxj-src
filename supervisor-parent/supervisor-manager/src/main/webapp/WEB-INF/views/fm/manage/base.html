@@ -242,41 +242,16 @@ $(function(){
 <script src="${staticPath}js/jquery.pagination_2.js"></script>
 <link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
 <script>
-/**function loadPage(currentPage,totalPage,query){
-	if(totalPage>0){
-		$("#pager").attr("currentPage",currentPage);
-		$("#pager").attr("totalPage",totalPage);
-		$("#pager").paginate({
-			count 		: totalPage,
-			start 		: currentPage,
-			display     : 10,
-			border					: true,
-			border_color			: '#CCC',
-			text_color  			: '#333',
-			background_color    	: '#FFF',	
-			border_hover_color		: '#ff4400',
-			text_hover_color  		: '#ff4400',
-			background_hover_color	: '#fff', 
-			images					: false,
-			mouse					: 'press',
-			onChange				: function(page){
-				query(page);
-			}
-		});
-	}else{
-		$("#pager").empty();
-	}
-}**/
 function loadPage(currentPage,totalPage) {
 	// 创建分页
-	$("#pager").attr("currentPage",currentPage);
-	$("#pager").attr("totalPage",totalPage);
-	$("#pager").pagination(totalPage, {
+	$(".pagination").attr("currentPage",currentPage);
+	$(".pagination").attr("totalPage",totalPage);
+	$(".pagination").pagination(totalPage, {
 		num_edge_entries: 1, //边缘页数
 		num_display_entries: 4, //主体页数
 		callback: function(page_index,jp){
 			query(page_index+1);
-			$("#pager").attr("currentPage",page_index+1);
+			$(".pagination").attr("currentPage",page_index+1);
 			return false;
 		},
 		current_page:currentPage-1,
@@ -285,7 +260,7 @@ function loadPage(currentPage,totalPage) {
 		next_text: "后一页"
 	});
  }
-$("#pager").ready(function(){
+$(".pagination").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage});
 });
 </script>

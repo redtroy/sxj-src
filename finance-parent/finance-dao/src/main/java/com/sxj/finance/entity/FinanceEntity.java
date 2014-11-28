@@ -2,6 +2,7 @@ package com.sxj.finance.entity;
 
 import java.io.Serializable;
 
+import com.sxj.finance.enu.finance.PayStageEnum;
 import com.sxj.mybatis.pagination.Pagable;
 
 public class FinanceEntity extends Pagable implements Serializable {
@@ -27,7 +28,7 @@ public class FinanceEntity extends Pagable implements Serializable {
 
 	private String content;
 
-	private Enum state;
+	private PayStageEnum state;
 
 	public String getId() {
 		return id;
@@ -93,11 +94,11 @@ public class FinanceEntity extends Pagable implements Serializable {
 		this.content = content;
 	}
 
-	public Enum getState() {
+	public PayStageEnum getState() {
 		return state;
 	}
 
-	public void setState(Enum state) {
+	public void setState(PayStageEnum state) {
 		this.state = state;
 	}
 
