@@ -13,9 +13,7 @@ public class MyFreeMarkerView extends FreeMarkerView {
 	@Override
 	protected void exposeHelpers(Map<String, Object> model,
 			HttpServletRequest request) throws Exception {
-		String path = request.getScheme() + "://" + request.getServerName()
-				+ ":" + request.getServerPort() + request.getContextPath()
-				+ "/";
+		String path = request.getContextPath() + "/";
 		model.put(CONTEXT_PATH, path);
 		super.exposeHelpers(model, request);
 	}
