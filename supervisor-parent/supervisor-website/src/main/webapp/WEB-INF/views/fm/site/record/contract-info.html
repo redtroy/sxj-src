@@ -427,4 +427,21 @@ $("#tabsholder").tytabs({
 	catchget:"tab2",
 	fadespeed:"0"
 	});
+	var length=$(".rollBox img").length;
+	var index=0;
+	$(".rollBox img").each(function(){
+		$(this).load(function(){
+			index=index+1;
+			
+			if(index==1){
+				$(".tabscontent:gt(0)").hide();
+			}
+		});
+		$(this).error(function(){
+			index=index+1;
+			if(index==1){
+				$(".tabscontent:gt(0)").hide();
+			}
+		});
+	});
 </script>
