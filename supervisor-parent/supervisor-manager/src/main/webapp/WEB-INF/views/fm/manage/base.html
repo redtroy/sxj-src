@@ -145,42 +145,6 @@ function succInfo(confirm,message){
    </div>
 </div>
 </#macro>
-<!-- 自定义弹窗 
-<#macro diy_alert>
- <script>
-$(window).resize(); 
-$('#sure_alert').css({
-	  position:'absolute',
-	  left: ($(window).width() - $('#sure_alert').outerWidth())/2,
-	  top: ($(window).height() - $('#sure_alert').outerHeight())/2 + $(document).scrollTop()
-});
-  function diy_alert(text,obj){
-	  $("#sure_alert").show();
-	  $("#sure_alert").find("#alert_text").text(text);
-	  $("#sure_alert button:eq(0)").unbind("click");
-	  $("#sure_alert button:eq(1)").unbind("click");
-	  $("#sure_alert").find("#close_sure").unbind("click");
-	  $("#sure_alert button:eq(0)").click(function(){
-		  obj();
-		  $("#sure_alert").hide();
-	  })
-	  $("#sure_alert button:eq(1)").click(function(){
-		  $("#sure_alert").hide();
-	  })
-	  $("#sure_alert").find("#close_sure").click(function(){
-		  $("#sure_alert").hide();
-	  })
-  }
-</script>
-<div id="sure_alert" style="display:none;" class="modal-wrap popDemo" accountId="">
-        <div class="modal-header">
-          <span class="close" id="close_sure" >关闭</span></div>
-         <div class="modal-body popbtnBox">
-        <p class="fontYH f18 mb10" id="alert_text"></p>
-          <button class="popBtn">确认</button><button  class="popBtn btnGray">取消</button>
-        </div>
-</div>
-</#macro>-->
 <#macro dialogBox>
 <div id="diglog_div" style="display:none;">
 <div class="modal-wrap popDemo">
@@ -239,7 +203,7 @@ function dialogBoxOut(html){
 		    type: 1,
 		    title: false,
 		    offset: ['200px', ''],
-		   	area: ['20%', '20%'],
+		   	area: ['10%', '10%'],
 		    border: [0], //去掉默认边框
 		    shade: [0.5,'#000'], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮

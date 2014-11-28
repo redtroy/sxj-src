@@ -1,4 +1,4 @@
- 
+ <div id="roleEdit_div" style="width:800px;margin-left:-200px;margin-top:-30px;"> 
       <div class="modal-header"><span class="close" onclick="closeDiv('roleInfo_div');">关闭</span></div>
       <div class="modal-body dropBox">
         <#list allList as model>
@@ -37,7 +37,7 @@
         </#list>
         <button class="button button-pop" onclick="confim();">确认</button>
       </div>
-      
+ </div>     
    <script>
    $(":checkbox").change( function () {
 	   var thisId=$(this).attr("id");

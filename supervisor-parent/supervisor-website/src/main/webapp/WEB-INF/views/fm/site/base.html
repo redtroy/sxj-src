@@ -1,6 +1,6 @@
-﻿<#assign staticPath="http://static.menchuang.org.cn/supervisor-website/" />
-<#assign imagePath="http://storage.menchuang.org.cn/" />
-<#macro validate>
+﻿<#assign staticPath="http://static.menchuang.org.cn/supervisor-website/"
+/> <#assign imagePath="http://storage.menchuang.org.cn/" /> <#macro
+validate>
 <!--<script src="${staticPath}js/jquery.validate.js"></script>-->
 <script src="${staticPath}js/Validform_v5.3.2.js"></script>
 <script src="${staticPath}js/jquery.poshytip.min.js"></script>
@@ -20,8 +20,7 @@ $(function(){
 	});
 });
 </script>
-</#macro>
-<#macro errorInfo>
+</#macro> <#macro errorInfo>
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
 <script>
@@ -191,7 +190,7 @@ function loadInfo(){
 		    title: false,
 		   	area: ['20%', '20%'],
 		    offset: ['35%', '52%'],
-		    border: [10, 0.3, '#000'], //去掉默认边框
+		    border: [0], //去掉默认边框
 		    shade: [0.5, '#000'], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
 		    //shift: 'left', //从左动画弹出
@@ -244,7 +243,7 @@ function dialogBoxOut(html){
 		    type: 1,
 		    title: false,
 		    offset: ['200px', ''],
-		   	area: ['20%', '20%'],
+		   	area: ['10%', '10%'],
 		    border: [0], //去掉默认边框
 		    shade: [0.5,'#000'], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
@@ -257,40 +256,11 @@ function dialogBoxOut(html){
 }
  
 </script>
-</#macro>
-<#macro pageScript>
+</#macro> <#macro pageScript>
 <!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
 <script src="${staticPath}js/jquery.pagination_2.js"></script>
 <link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
 <script>
-/**function loadPage(currentPage,totalPage,query){
-	if(totalPage>0){
-		$("#pager").attr("currentPage",currentPage);
-		$("#pager").attr("totalPage",totalPage);
-		$("#pager").paginate({
-			count 		: totalPage,
-			start 		: currentPage,
-			display     : 10,
-			border					: true,
-			border_color			: '#CCC',
-			text_color  			: '#333',
-			background_color    	: '#FFF',	
-			border_hover_color		: '#ff4400',
-			text_hover_color  		: '#ff4400',
-			background_hover_color	: '#fff', 
-			images					: false,
-			mouse					: 'press',
-			onChange				: function(page){
-				query(page);
-			}
-		});
-	}else{
-		$("#pager").empty();
-	}
-}
-$("#pager").ready(function(){
-	loadPage(${query.currentPage},${query.totalPage},query);
-});**/
 function loadPage(currentPage,totalPage) {
 	// 创建分页
 	$("#pager").attr("currentPage",currentPage);
@@ -313,10 +283,10 @@ $("#pager").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage});
 });
 </script>
-</#macro>
-<#macro upload>
+</#macro> <#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
-<link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
+<link href="${staticPath}style/uploadify.css" rel="stylesheet"
+	type="text/css" />
 <script>
 var iviewer;
 
@@ -454,23 +424,24 @@ function loadUpload(id,url,isMulti,text,fn){
 	    });
 } 
 </script>
-</#macro> 
-<#macro header>
+</#macro> <#macro header>
 <div id="header">
-<div class="fence-wide">
-<#if Session.userinfo?exists>
-<div class="logOut ly-right">
-	<#if Session.userinfo.account?exists>
-	<span class="mr10">${Session.userinfo.account.name}，您好！</span>
-	<#else>
-	<span class="mr10">${Session.userinfo.member.name}，您好！</span>
-	</#if>
-	<a href="${basePath}logout.htm">退出当前帐户</a>
-</div>
-</#if>
-</div>
-<h1 class="fence-wide"><a href="javascript:void(0);" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
-<h1 class="fence-wide"><a href="${staticPath}html/register.html" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
+	<div class="fence-wide">
+		<#if Session.userinfo?exists>
+		<div class="logOut ly-right">
+			<#if Session.userinfo.account?exists> <span class="mr10">${Session.userinfo.account.name}，您好！</span>
+			<#else> <span class="mr10">${Session.userinfo.member.name}，您好！</span>
+			</#if> <a href="${basePath}logout.htm">退出当前帐户</a>
+		</div>
+		</#if>
+	</div>
+	<h1 class="fence-wide">
+		<a href="javascript:void(0);" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a>
+	</h1>
+	<h1 class="fence-wide">
+		<a href="${staticPath}html/register.html" class="logo"
+			title="私享家绿色门窗平台">私享家绿色门窗平台</a>
+	</h1>
 </div>
 <#if Session.userinfo?exists>
 <script>
@@ -479,18 +450,13 @@ $(document).ready(function(){
 	$.get("${basePath}enter.htm?url="+currentUrl);
 });
 </script>
-</#if>
-</#macro> 
-
-<#macro footer>
+</#if> </#macro> <#macro footer>
 <div class="f12" id="footer">
 	&copy; 2014 私享家绿色门窗平台&nbsp;版权所有<span class="ml10"><a
 		target="_blank" href="http://www.miitbeian.gov.cn/">苏ICP备14040094号-1</a></span>
 </div>
-</#macro>
-<#macro leftMenu isLoad>
-<div id="leftList">
-</div>
+</#macro> <#macro leftMenu isLoad>
+<div id="leftList"></div>
 <script>
 	var isLoad="${isLoad}";
 	var account="${Session.userinfo.account.accountNo}";
@@ -505,8 +471,8 @@ $(document).ready(function(){
 </script>
 
 </#macro> <#macro pager>
-<div id="pager" class="pagination f12 mt10 ly-right" totalPage="${query.totalPage}"
-	currentPage="${query.currentPage}"></div>
+<div id="pager" class="pagination f12 mt10 ly-right"
+	totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div>
 </#macro>
 
 

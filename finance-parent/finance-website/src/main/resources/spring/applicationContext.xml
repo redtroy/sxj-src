@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task"
@@ -56,7 +56,19 @@
 		<!-- <property name="configFile" value="cache.properties"></property> -->
 		<property name="databaseId" value="2"></property>
 	</bean>
-	<bean id="redisConcurrent" class="com.sxj.redis.advance.RedisConcurrent">
+	<bean id="redisCollections" class="com.sxj.redis.advance.RedisCollections">
+		<constructor-arg index="0">
+			<bean class="com.sxj.redis.advance.Config">
+				<property name="singleServerConfig">
+					<bean class="com.sxj.redis.advance.SingleServerConfig">
+						<property name="address" value="${redis.host}:${redis.port}"></property>
+						<property name="database" value="0"></property>
+					</bean>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="redisTopics" class="com.sxj.redis.advance.topic.RedisTopics">
 		<constructor-arg index="0">
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">
