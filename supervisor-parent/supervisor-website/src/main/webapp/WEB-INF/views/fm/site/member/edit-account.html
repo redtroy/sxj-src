@@ -13,12 +13,6 @@
 <Script>
 var editId;
 var pwd_validform;
-jQuery(document).ready(function($) {
-	  pwd_validform=$("#edit_pwd").Validform({
-			tiptype:3});
-	});
-
-
   //增加子账户
   function add_account(memberNo){
 	$.get("new_account.htm?memberNo="+memberNo,function(data){
@@ -46,26 +40,28 @@ jQuery(document).ready(function($) {
 //修改密码
   function edit_pwd(id){
 	$("#edit_pwd").find("input").val("");
-	pwd_validform.resetForm();
-	dialogBoxOut($("#edit_pwd").html());
+	if(pwd_validform!=undefined){
+		pwd_validform.resetForm();
+	}
+	dialogBoxOut($("#password_div").html());
 	editId=id;
   }
-
 //提交修改密码
   function save_pwd(){
-	if (!pwd_validform.check()){
-		alert("11111");
-		return false;
-	}
-	  var pwd1=$("#pwd1").val();
-	  var pwd2=$("#pwd2").val();
-	  $.post("save_pwd.htm",{id:editId,password:pwd1},function(data){
-		  succInfo(function(){
-			  closeDiv("");
-		  },"修改成功！");
-		 
-	  })
+	var pwd_validform=$(".xuboxPageHtml").find("#edit_pwd").Validform({
+			tiptype:3});
+  	if (!pwd_validform.check()){
+  		return false;
+  	}
+  	  var pwd1=$(".xuboxPageHtml").find("#pwd1").val();
+  	  var pwd2=$(".xuboxPageHtml").find("#pwd2").val();
+  	  $.post("save_pwd.htm",{id:editId,password:pwd1},function(data){
+  		  succInfo(function(){
+  			  closeDiv("");
+  		  },"修改成功！");
+  	  })
   }
+
   //修改
   function edit_account(id){
 	   $("#"+id).find("#name_td").hide();
@@ -125,7 +121,6 @@ jQuery(document).ready(function($) {
 			  layer.close(index);
 			  if (data.isOK=='ok'){
 				  query($("#pager").attr("currentPage"));
-				  $("#state_div").hide();
 			   }else{
 					errorInfo(data);
 				}
@@ -220,13 +215,13 @@ jQuery(document).ready(function($) {
 </div>
 </div>
 <@b.footer />
-<div id="edit_pwd" style="width:600px;margin-left:-200px;margin-top:-30px;display:none;">
-<div class="modal-wrap popDemo contPop passwordPop">
+<div id="password_div" style="width:800px;margin-left:-200px;margin-top:-30px;display:none;">
+<div class="modal-wrap popDemo contPop passwordPop" id="edit_pwd" style="width:600px;">
       <div class="modal-header"><span class="close" onclick="closeDiv('${member.id}');">关闭</span></div>
       <div class="modal-body">
         <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>
         <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="save_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="closeDiv('${member.id}');">取消</button></div>
+      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="save_pwd();">确认修改</button><button class="button button-gray " onclick="closeDiv('${member.id}');">取消</button></div>
   </div>
 </div>
 </div>
