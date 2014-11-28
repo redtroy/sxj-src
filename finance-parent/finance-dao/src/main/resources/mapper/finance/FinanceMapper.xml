@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sxj.supervisor.dao.contract.IContractPayDao">
-	<resultMap id="ContractPayResultMap"
-		type="com.sxj.supervisor.entity.pay.PayRecordEntity">
+<mapper namespace="com.sxj.finance.dao.finance.FinanceDao">
+	<resultMap id="financeResultMap"
+		type="com.sxj.finance.entity.FinanceEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="memberNo_A" column="MEMBER_NO_A" jdbcType="VARCHAR" />
 		<result property="memberName_A" column="MEMBER_NAME_A" jdbcType="VARCHAR" />
