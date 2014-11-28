@@ -24,7 +24,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
 
 import com.sxj.spring.modules.util.Reflections;
-import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.util.logger.SxjLogger;
 
 public class SupervisorManagerShiroRealm extends AuthorizingRealm {
@@ -53,9 +52,9 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm {
 			return null;
 		}
 
-		SystemAccountEntity current = (SystemAccountEntity) principals
-				.getPrimaryPrincipal();
-		String username = current.getAccount();
+		// SystemAccountEntity current = (SystemAccountEntity) principals
+		// .getPrimaryPrincipal();
+		// String username = current.getAccount();
 
 		return null;
 	}
