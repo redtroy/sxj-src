@@ -8,7 +8,7 @@ import com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager;
 
 public class SupervisorShiroRedisCacheManager extends ShiroRedisCacheManager {
 	private RedisCollections collections;
-
+ 
 	@Override
 	protected Cache createCache(String cacheName) throws CacheException {
 		// TODO Auto-generated method stub

@@ -12,7 +12,7 @@ import com.sxj.util.Constraints;
 
 public class SupervisorShiroRedisCache<K, V> extends ShiroRedisCache<K, V>
 {
-    
+     
     private static RedisCollections collections;
     
     public void setCollections(RedisCollections collections)
