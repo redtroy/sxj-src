@@ -452,8 +452,8 @@ function busunSeav(){
 						<div class="contBox">
 							<div class="searBox f12 mb10">
 								备案号 <input type="text" class="input" name="recordNo"
-									value="${query.recordNo}"> 合同号 <input type="text"
-									class="input" name="contractNo" value="${query.contractNo}">
+									value="${query.recordNo}"/> 合同号 <input type="text"
+									class="input" name="contractNo" value="${query.contractNo}"/>
 										合同备案状态 <select name="confirmState">
 											<option selected="selected" value="">全部</option> <#list
 											confirmState as state>
@@ -475,6 +475,7 @@ function busunSeav(){
 							class="icon icon16 icon-notice"></span>贵公司有一条<a href="#"
 							class="lnk-blue" id="comet_div2_href">待确认</a>的合同信息
 					</div>
+					<@b.pager/>
 					<table border="0" cellpadding="0" cellspacing="0" class="tabList"
 						id="res_table">
 						<col width="9%" />
