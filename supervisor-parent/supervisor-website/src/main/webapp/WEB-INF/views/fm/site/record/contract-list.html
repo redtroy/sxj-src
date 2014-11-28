@@ -360,6 +360,10 @@ function busunSeav(){
 		}
 	}
 	function loadInfo(contractNo, recordNo) {
+		$("#res_table").find(".infoTr").each(function(){
+			if($(this).attr("isopen")==1)
+				$(this).html("");
+		});
 		var isopen=$("#info" + recordNo).attr("isopen");
 		if(isopen=="0"){
 			$("#info" + recordNo).load("info.htm?contractNo=" + contractNo+"&recordNo="+recordNo);
@@ -605,7 +609,7 @@ function busunSeav(){
 							</td>
 
 						</tr>
-						<tr id="info${record.recordNo}" isopen="0">
+						<tr id="info${record.recordNo}" class="infoTr" isopen="0">
 							<!-- 详细内容 -->
 						</tr>
 						</#list> <#else>
