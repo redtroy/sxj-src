@@ -1,10 +1,494 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+﻿<#assign staticPath="http://static.menchuang.org.cn/supervisor-website/" />
+<#assign imagePath="http://storage.menchuang.org.cn/" />
+<#macro validate>
+<!--<script src="${staticPath}js/jquery.validate.js"></script>-->
+<script src="${staticPath}js/Validform_v5.3.2.js"></script>
+<script src="${staticPath}js/jquery.poshytip.min.js"></script>
+<script>
+$(function(){
+	$(":input").each(function(){
+		if($(this).attr("title"))
+			$(this).poshytip({
+		className: 'tipMsg msg-gray ml5',
+		showOn: 'focus',
+		alignTo: 'target',
+		alignX: 'right',
+		alignY: 'center',
+		offsetX: 5
+	});
+	
+	});
+});
+</script>
+</#macro>
+<#macro errorInfo>
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
+<script>
+function errorInfo(message){
+	var data=$("#error_info_div");
+	data.find("#message_error").text(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		});
+		
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		});
+ }
+function messageInfo(message){
+	var data=$("#message_info_div");
+	data.find("#message_hint").html(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		});
+		
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		});
+ }
+function succInfo(confirm,message){
+	var data=$("#succ_info_div");
+	data.find("#message_succ").text(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		    if (confirm != undefined) {
+		    	confirm();
+			}
+		});
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		    if (confirm != undefined) {
+		    	confirm();
+			}
+		});
+ }
+</script>
+<div id="error_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit">消息提示</div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-error"></span>
+				<p class="color-red fontYH f18" id="message_error">错误提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
 
-</body>
-</html>
+<div id="succ_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit">消息提示</div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="message_succ_div" class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-suc"></span>
+				<p class="color-green  fontYH f18" id="message_succ">成功提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="message_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit">消息提示</div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="message_hint_div" class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-info"></span>
+				<p class="fontYH f18" id="message_hint">一般性网站提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+</#macro> <#macro dialogBox>
+<div id="diglog_div" style="display: none;">
+	<div class="modal-wrap popDemo popWin mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit">&nbsp;</div>
+			<span id="dialog_close_span" class="close">关闭</span>
+		</div>
+		<div class="modal-body">
+			<p class=" fontYH f18" style="margin-left: 20%;" id="dialog_message">是否确认更改！</p>
+			<div class="button-box">
+				<button id="dialog_confirm_click"
+					class="button button-pop btn-ok mr20">确认</button>
+				<button id="dialog_close_button" class="button button-gray">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
+<script>
+function loadInfo(){
+	var loadInfoIndex = $.layer({
+		    type: 3,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['35%', '52%'],
+		    border: [10, 0.3, '#000'], //去掉默认边框
+		    shade: [0.5, '#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    loading: {
+   				type: 2
+			}
+		});
+	return loadInfoIndex;
+}
+function dialogBox(confirm,message){
+	var data=$("#diglog_div");
+	$("#diglog_div").find("#dialog_message").text(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '15%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+	 
+	 	$("#dialog_confirm_click").live('click', function(){
+	 		layer.close(pageii);
+	 		var loadInfoIndex=loadInfo();
+			confirm(loadInfoIndex);
+			$("#dialog_confirm_click").die("click");
+			//layer.close(loadInfoIndex);
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		    $("#dialog_confirm_click").die("click");
+		});
+		
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		    $("#dialog_confirm_click").die("click");
+		});
+ }
+ 
+function dialogBoxOut(html){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		    offset: ['200px', ''],
+		   	area: ['20%', '20%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: html
+		    }
+		});
+	 return pageii;
+}
+ 
+</script>
+</#macro>
+<#macro pageScript>
+<!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
+<script src="${staticPath}js/jquery.pagination_2.js"></script>
+<link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
+<script>
+/**function loadPage(currentPage,totalPage,query){
+	if(totalPage>0){
+		$("#pager").attr("currentPage",currentPage);
+		$("#pager").attr("totalPage",totalPage);
+		$("#pager").paginate({
+			count 		: totalPage,
+			start 		: currentPage,
+			display     : 10,
+			border					: true,
+			border_color			: '#CCC',
+			text_color  			: '#333',
+			background_color    	: '#FFF',	
+			border_hover_color		: '#ff4400',
+			text_hover_color  		: '#ff4400',
+			background_hover_color	: '#fff', 
+			images					: false,
+			mouse					: 'press',
+			onChange				: function(page){
+				query(page);
+			}
+		});
+	}else{
+		$("#pager").empty();
+	}
+}
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage},query);
+});**/
+function loadPage(currentPage,totalPage) {
+	// 创建分页
+	$("#pager").attr("currentPage",currentPage);
+	$("#pager").attr("totalPage",totalPage);
+	$("#pager").pagination(totalPage, {
+		num_edge_entries: 1, //边缘页数
+		num_display_entries: 4, //主体页数
+		callback: function(page_index,jp){
+			query(page_index+1);
+			$("#pager").attr("currentPage",page_index+1);
+			return false;
+		},
+		current_page:currentPage-1,
+		items_per_page:1, //每页显示1项
+		prev_text: "前一页",
+		next_text: "后一页"
+	});
+ }
+$("#pager").ready(function(){
+	loadPage(${query.currentPage},${query.totalPage});
+});
+</script>
+</#macro>
+<#macro upload>
+<script src="${staticPath}js/jquery.uploadify.js"></script>
+<link href="${staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
+<script>
+var iviewer;
+
+var elastislideConfig={
+		count:6//当前显示数量
+}
+var slideTimes=elastislideConfig.count;
+var currentHiddenImages;
+var currentLi;
+var closeViewer;
+$(document).ready(function(){
+	$(".iviewer_del").live("click",function(){
+		var url=$(this).siblings("img").attr("src");
+		var prefix="${b.imagePath}";
+		var image=url.substring(url.indexOf(prefix)+prefix.length);
+		var images=currentHiddenImages.attr("value");
+		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
+		currentHiddenImages.attr("value",result)
+		currentLi.remove();
+		closeViewer();
+	});
+});
+var refreshIviewer=function($viewer,src,$container){
+	$viewer.find("img").attr("src","");
+	if($viewer.children().length==0){
+		iviewer=$viewer.iviewer({
+			src : src,
+			mousewheel : true
+		});
+	}else{
+		iviewer.iviewer('loadImage', src);
+	}
+	if($container){
+		$container.css("top",$(window).scrollTop());
+		$container.show();
+		$container.find(".modal-header").show();
+	}else{
+		$(".modal-wrap").show();
+		$(".modal-header").show();
+	}
+	$viewer.show();
+}
+var errorImage=function($this){
+	var times=parseInt($($this).attr("times"));
+	if(times<3){
+		$($this).attr("src", $($this).attr("src")+'&'+Math.random());
+		$($this).attr("times",times+1);
+	}else if(times==3){
+		$($this).attr("src", "http://static.menchuang.org.cn/supervisor-website/images/bg404.jpg");
+		$($this).attr("times",times+1);
+	}
+}
+var refreshElastislide=function($container,$carousel,data,empty){
+	if(!data)
+		return;
+	var start=0;
+	if(empty)
+		$carousel.empty();
+	if(data){
+		if(data instanceof Array){
+			for (var i = 0; i < data.length; i++) {
+				var $img=$('<img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" mouseover="errorImage(this)" times="0"/>');
+				var $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"></a>');
+				$a.append($img);
+				var $p=$('<p>'+(i+1)+'</p>');
+				var $li=$('<li></li>');
+				$li.append($a);
+				$li.append($p);
+				$carousel.append($li);
+			}
+		}else{
+			var $img=$('<img src="${b.imagePath}'+data.fileIds+'80x100.JPG"  onerror="errorImage(this)" times="0"/>');
+			var $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"></a>');
+			$a.append($img);
+			var $li=$('<li></li>');
+			$li.append($a);
+			
+			$carousel.append($li);
+			var $p=$('<p>'+$carousel.children().length+'</p>');
+			$li.append($p);
+			start=$carousel.children().length;
+		}
+	}
+	$container.empty();
+	$container.append($carousel);
+	$carousel.elastislide({
+		orientation : 'horizontal',
+		speed : 500,
+		easing : 'ease-in-out',
+		minItems : elastislideConfig.count,
+		start : start,
+		onClick : function( el, position, evt ) { 
+			return false; 
+		},
+		onReady : function() { 
+			$carousel.children("li:lt("+elastislideConfig.count+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			if($carousel.children("li").length<elastislideConfig.count)
+				$(".elastislide-prev").hide();
+			return false; },
+		onBeforeSlide : function() { return false; },
+		onAfterSlide : function() { 
+			if(start>0)
+				slideTimes=slideTimes+start;
+			$carousel.children("li:lt("+slideTimes+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			slideTimes=slideTimes+elastislideConfig.count;
+			return false; }
+	});
+	$container.show();
+	
+}
+
+function loadUpload(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:200,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+} 
+</script>
+</#macro> 
+<#macro header>
+<div id="header" class="fence">
+<div class="fence-wide topBox"></div>
+</div>
+<#if Session.userinfo?exists>
+<script>
+$(document).ready(function(){
+	var currentUrl=window.location.href;
+	$.get("${basePath}enter.htm?url="+currentUrl);
+});
+</script>
+</#if>
+</#macro> 
+
+<#macro footer>
+<div id="footer" class="fence">
+  <div class="fence-wide color-gray6">© 2014 江苏紫金财富金融信息服务有限公司&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14047993号-1</a></span></div>
+</div>
+</#macro>
+<#macro leftMenu isLoad>
+<div class="leftMenu pt5 pb5">
+<h2 class="pl15 fb">会员中心</h2>
+<ul class="pl10 pr10">
+<li class="on"><a href="member-center.html">会员中心</a></li>
+</ul>
+<h2 class="pl15 pt5 fb">融资管理</h2>
+<ul class="pl10 pr10">
+<li><a href="pay-list.html">融资管理</a></li>
+</ul>
+</div>
+</#macro> 
+<#macro pager>
+<div id="pager" class="pagination f12 mt10 ly-right" totalPage="${query.totalPage}"
+	currentPage="${query.currentPage}"></div>
+</#macro>
+
+
