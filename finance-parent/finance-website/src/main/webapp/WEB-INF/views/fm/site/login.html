@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${b.staticPath}style/regin.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script>
+$(function(){
+	if("${message}"!=""){
+		$("#message_div").show();
+	}
+	if("${amessage}"!=""){
+		$("#amessage_div").show();
+	}
+	if("${pmessage}"!=""){
+		$("#pmessage_div").show();
+	}
+});
+$(document).keyup(function(event){
+	  if(event.keyCode ==13){
+		  login();
+	  }
+	});
+function login()
+{
+	$("#login_form").submit();
+	
+}
+</script>
+</head>
+<body id="signBox">
+<div id="header">
+  <h1 class="fence-wide"><a href="javascirpt:void(0);" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
+</div>
+<div class="fence signCont">
+<div class="fence-wide">
+<div class="signBox fontYH">
+<form id="login_form" action="${basePath}login.htm" method="post">
+  <div class="regInfo">
+  <div class="join tr">
+  <span class="fb">还不是私享家会员？</span>
+  <a href="${basePath}member/regist.htm" title="免费注册私享家帐号" class="f16" tabindex="6">&nbsp;</a>
+  </div>
+    <div class="regCont">
+    <div class="item">
+    <label>公司名称</label>
+    <input class="input" type="text" autocomplete="off" placeholder=""  name="memberName" value="${memberName}"/>
+    <div id="message_div" style="display:none;" class="tip msg-error f12">${message}</div>
+  </div>
+<div class="item">
+    <label>登录帐户</label>
+    <input class="input input-w240h36" type="text" autocomplete="off" placeholder=""  name="accountName" value="${accountName}"/>
+    <div id="amessage_div" class="tip msg-error f12" style="display:none;">${amessage}</div>
+  </div>
+<div class="item">
+  <label>登录密码</label>
+  <input class="input input-error input-w240h36" type="password" name="password" autocomplete="off" placeholder=""  value=""/>
+  <div id="pmessage_div" class="tip msg-error f12" style="display:none;">${pmessage}</div>
+</div>
+<p class="tr pr5 f12"><a href="${basePath}member/find_pwd.htm">忘记密码？</a></p>
+<a href="javascript:login();" class="button btn-regin mt5 f18">登&nbsp;录</a>
+</div>
+</div>
+</form>
+<div class="pt10 color-gray9 tc fireDown">建议下载<a href="http://www.firefox.com.cn/" class="lnk-blue ml5 mr5" target="_blank">火狐浏览器</a>访问使用平台，谢谢！</div>
+</div>
+</div>
+</div>
+<@b.footer />
+</body>
+</html>

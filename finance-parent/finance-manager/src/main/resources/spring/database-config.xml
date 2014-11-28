@@ -10,8 +10,6 @@
 		<property name="locations">
 			<list>
 				<value>classpath*:config/database.properties</value>
-				<value>classpath*:config/mobile_message.properties</value>
-				<value>classpath*:config/fdfs_client.properties</value>
 				<value>classpath*:config/shiro.properties</value>
 				<value>classpath*:cache.properties</value>
 			</list>

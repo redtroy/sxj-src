@@ -153,7 +153,7 @@ function query(){
   <#else>
   <span class="state verified">${member.checkState.getName()}</span> </#if></div>
 <div class="item">
-  <label>总交易额</label><a href="finance.html" class="lnk-blue">查看明细</a> </div>
+  <label>总交易额</label><a href="${basePath}contract/finance.htm" class="lnk-blue">查看明细</a> </div>
 <div class="item">
   <label>注册时间</label>
   ${member.regDate?string("yyyy-MM-dd HH:mm:ss")}</div>

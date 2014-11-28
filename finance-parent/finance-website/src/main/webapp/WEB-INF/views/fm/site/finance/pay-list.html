@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>紫金财富金融服务平台</title>
+<meta name="keywords" content="紫金财富金融服务平台">
+<meta name="description" content="紫金财富金融服务平台">
+<link href="../style/style.css" rel="stylesheet" type="text/css" />
+<script src="../js/jquery.js"></script>
+<script>
+jQuery(document).ready(function($) {
+	$('.btn-financle').click(function(){
+		$('.payPop').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.payPop').slideUp(200);
+	})
+	$('.btn-ok').click(function(){
+		$('.payPop').slideUp(200);
+	})
+})
+</script>
+
+</head>
+
+<body>
+<div id="header" class="fence">
+<div class="fence-wide topBox"></div>
+</div>
+<div class="fence-wide pb20 ly-clearFix">
+<div class="yard-200 ly-left">
+<div class="leftMenu pt5 pb5">
+<h2 class="pl15 fb">会员中心</h2>
+<ul class="pl10 pr10">
+<li><a href="member-center.html">会员中心</a></li>
+</ul>
+<h2 class="pl15 pt5 fb">融资管理</h2>
+<ul class="pl10 pr10">
+<li class="on"><a href="pay-list.html">融资管理</a></li>
+</ul>
+</div>
+</div>
+<div class="yard-880 rightSide ly-left">
+<div class="heading fontYH f22">融资管理</div>
+<div class="searBox f12 mt10 mb10">
+  <p class="pt0 mt0 mb5"> 支付单号
+    <input type="text" class="input" name="input" value="" />
+    合同号
+    <input type="text" class="input" name="input" value="" />
+    
+    支付时间段
+    <input type="text" class="input input-time cal form-control" name="input" value="" datepicker="datepicker" />
+    -
+    <input type="text" class="input input-time cal form-control" name="input" value="" datepicker="datepicker" />
+   付款状态
+    <select name="select">
+      <option selected="selected">全部</option>
+      <option>未付款</option>
+      <option>已付款</option>
+    </select>
+    <button class="button button-search">查询</button>
+  </p>
+</div>
+<table border="0" cellpadding="0" cellspacing="0" class="tabList">
+   <col width="10%" />
+    <col width="10%" />
+    <col width="9%" />
+    <col width="12%" />
+    <col width="12%" />
+    <col width="12%" />
+    <col width="10%" />
+    <col width="15%" />
+  <tr>
+    <th>支付单号</th>
+    <th>合同号</th>
+    <th>批次</th>
+    <th>参考应付金额</th>
+    <th>融资金额</th>
+    <th>放款金额</th>
+    <th>支付内容</th>
+    <th class="rLine">付款状态</th>
+  </tr>
+  <tr>
+    <td>CT14070001P02</td>
+    <td><a href="#" class="lnk-blue">CT14070001</a></td>
+    <td>第二批次</td>
+    <td>71327.98元</td>
+    <td>71327.98元</td>
+    <td class="color-orange">71327.98元</td>
+    <td>玻璃货款</td>
+    <td><a class="button btn-link btn-financle">我要融资</a>
+      <div class="modal-wrap payPop" style="display:none;">
+      <div class="tipGray"><span class="icon icon16 icon-close ly-right">关闭</span>
+</div>
+        <div class="modal-body">
+          <div class="ly-clearFix">
+            <label class="mr5">融资金额</label>
+            <input name="input2" type="text" value="" class="input" />
+          </div>
+          <div class="mt15">
+            <button class="button button-red btn-ok mr5">确认</button>
+            <button class="button button-gray">取消</button>
+          </div>
+        </div>
+      </div></td>
+  </tr>
+  <tr>
+    <td>CT14070129P03</td>
+    <td><a href="#" class="lnk-blue">CT14070129</a></td>
+    <td>第三批次</td>
+    <td>378520.78元</td>
+    <td>100.00元</td>
+    <td class="color-orange">100.00元</td>
+    <td>型材货款</td>
+    <td><span class="state process">融资受理中</span></td>
+  </tr>
+  <tr>
+    <td>CT14060033P01</td>
+    <td><a href="#" class="lnk-blue">CT14060033</a></td>
+    <td>第一批次</td>
+    <td>45896.55元</td>
+    <td>2500.00元</td>
+     <td class="color-orange">2500.00元</td>
+    <td>玻璃货款</td>
+    <td><span class="state process">融资受理中</span></td>
+  </tr>
+  <tr>
+    <td>CT14060033P01</td>
+    <td><a href="#" class="lnk-blue">CT14060033</a></td>
+    <td>-</td>
+    <td>45896.55元</td>
+    <td>3800.00元</td>
+     <td class="color-orange">3800.00元</td>
+    <td>合同定金</td>
+    <td><span class="state verified">融资已放款</span></td>
+  </tr>
+  <tr>
+    <td>CT14060021P02</td>
+    <td><a href="#" class="lnk-blue">CT14060021</a></td>
+    <td>第二批次</td>
+    <td>259,874.78元</td>
+    <td>200,000.00元</td>
+     <td class="color-orange">150,000.00元</td>
+    <td>型材货款</td>
+    <td><span class="state verified">融资已放款</span></td>
+  </tr>
+  <tr class="fb">
+    <td>合计</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>638832.00元</td>
+    <td class="color-green">638832.00元</td>
+    <td class="color-orange">25553.00元</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</div>
+</div>
+<div id="footer" class="fence">
+  <div class="fence-wide color-gray6">&copy; 2014 江苏紫金财富金融信息服务有限公司&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14047993号-1</a></span></div>
+</div>
+</body>
+</html>

@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
@@ -227,7 +226,7 @@ function edit_pwd(id){
           ${member.phoneNo}
         </div>
         <div class="mt15 mb20 tc">
-          <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
+          <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">修改会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
           </form>
       </div>
     </div>
@@ -240,6 +239,8 @@ function edit_pwd(id){
         <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>
         <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
       <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="close_div('${member.id}');">取消</button></div>
+	</div>
+</div>
   <@b.footer /> 
 </body>
 </html>
