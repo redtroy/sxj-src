@@ -36,7 +36,7 @@ function roleInfo(id,type){
 }
 
 function closeDiv(divId){
-	 layer.close(pageii);
+	 layer.closeAll();
 }
 
 function toAdd(id){
@@ -199,7 +199,7 @@ function toEdit(accountId){
           <th class="rLine">&nbsp;</th>
         </tr>
          <#list list as model>
-	        <tr id="${model.id}_tr" >
+	        <tr id="${model.id}_tr"  style="height: 49px;">
 	         <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
 		     <input id="id_hidden" type="hidden" name="id" value="${model.id}" />
 		     <input id="account_hidden" type="hidden" name="accountNo" value="${model.accountNo}" />
