@@ -20,7 +20,7 @@
 <script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
-<@b.dialogBox/><@b.errorInfo/>
+<@b.dialogBox/>
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {n
@@ -44,8 +44,9 @@ var validform;
 		if (!validform.check()){
 			return false;
 		}
-		dialogBox(function() {
+		dialogBox(function(index) {
 			$.post("record_save.htm",$("#record_save").serialize(),function(data){
+				layer.close(index);
 				if (data.isOK=='ok'){
 					succInfo(function(){
 						window.location.href="recordList.htm";

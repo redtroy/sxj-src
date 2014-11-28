@@ -370,7 +370,7 @@ public class LogisticsRfidController extends BaseController {
 		}
 		cm.setMemberId(userBean.getMember().getMemberNo());
 		List<ContractModel> cmList = contractService.queryContracts(cm);
-		List strlist = new ArrayList();
+		List<String> strlist = new ArrayList<String>();
 		String sb = "";
 		for (ContractModel cmModel : cmList) {
 			sb = "{\"title\":\"" + cmModel.getContract().getContractNo()

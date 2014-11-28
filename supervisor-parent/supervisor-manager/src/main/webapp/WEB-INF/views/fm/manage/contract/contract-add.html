@@ -23,7 +23,6 @@
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
 <@b.validate/>
 <@b.dialogBox/>
-<@b.errorInfo/>
 <script>
 var ul_validform;
 	jQuery(document).ready(function($) {
@@ -99,8 +98,9 @@ var ul_validform;
 				$(this).attr("name",name);
 			});
 		});
-		dialogBox(function(){
+		dialogBox(function(index){
 			$.post("addContract.htm", $("#addForm").serialize(), function(data) {
+				layer.close(index);
 				if (data.isOK == 'ok') {
 					succInfo(function(){
 						window.location.href = "${basePath}record/recordList.htm";

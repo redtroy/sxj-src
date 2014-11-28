@@ -13,7 +13,6 @@
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <@b.pageScript/>
-<@b.errorInfo/>
 <@b.dialogBox/>
 <script>
    //根据ID删除子帐号
@@ -82,9 +81,10 @@
 		   return false;
 	   }
 	 //判断子会员帐号是否存在
-	 dialogBox(function(){
+	 dialogBox(function(index){
 		 var flag=false;
 		   $.get("check_account.htm?old="+old+"&param="+accountName+"&memerNo="+memerNo,function(data){
+			   layer.close(index);
 			   if (data.status == "n"){
 				   	  messageInfo('会员名称已存在！');
 		        	  return false;
@@ -108,8 +108,9 @@
    }
    //初始化密码
    function resetPwd(id){
-	   dialogBox(function(){
+	   dialogBox(function(index){
 		   $.post("${basePath}member/account/initializePwd.htm",{id:id},function(data){
+			   layer.close(index);
 			   if (data.isOK=='ok'){
 				   $("#promptPwd").text("初始密码为："+data.password+"，谢谢!");
 				   $('.passwordBox').slideDown(200);
@@ -123,8 +124,9 @@
    }
    //更改状态
    function checkState(id,stateId){
-	   dialogBox(function(){
+	   dialogBox(function(index){
 		   $.post("${basePath}member/account/editState.htm",{id:id,state:stateId},function(data){
+			  	layer.close(index);
 				  if (data.isOK=='ok'){
 					 var page=$("#rightBar").children("#pager").attr("currentPage");
 					 query(page);
