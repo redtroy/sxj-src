@@ -16,18 +16,6 @@
 <@b.errorInfo/>
 <@b.dialogBox/>
 <script>
-jQuery(document).ready(function($) {
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.popDemo').slideUp(200);
-	});
-	$('.passwordBox .popBtn').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.passwordBox').slideUp(200);
-	});
-	
-});
-
    //根据ID删除子帐号
    function del(id){
 		var r=confirm("确认删除吗?");
@@ -147,18 +135,18 @@ jQuery(document).ready(function($) {
 	   },"是否确认修改状态");
 	  
    }
-  
+   var pageii
    function roleInfo(memberNo,id,type){
 		$.get("${basePath}member/account/get_role_function.htm?memberNo="+memberNo+"&accountId="+id+"&type="+type,function(data){
-			$("#roleInfo_div").empty();
-			$("#roleInfo_div").show();
-			$("#roleInfo_div").append(data);
-			$('.maskdivgen').fadeIn(100);
+			//$("#roleInfo_div").empty();
+			//$("#roleInfo_div").show();
+			//$("#roleInfo_div").append(data);
+			//$('.maskdivgen').fadeIn(100);
+			pageii=dialogBoxOut(data);
 		});
 	}
    function closeDiv(divId){
-		  $('.maskdivgen').fadeOut(100);
-		  $("#"+divId).hide();
+	   layer.closeAll();
 	}
 </script>
 </head>

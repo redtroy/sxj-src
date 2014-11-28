@@ -68,4 +68,28 @@
 			</bean>
 		</constructor-arg>
 	</bean>
+	<bean id="redisCollections" class="com.sxj.redis.advance.RedisCollections">
+		<constructor-arg index="0">
+			<bean class="com.sxj.redis.advance.Config">
+				<property name="singleServerConfig">
+					<bean class="com.sxj.redis.advance.SingleServerConfig">
+						<property name="address" value="${redis.host}:${redis.port}"></property>
+						<property name="database" value="0"></property>
+					</bean>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="redisTopics" class="com.sxj.redis.advance.topic.RedisTopics">
+		<constructor-arg index="0">
+			<bean class="com.sxj.redis.advance.Config">
+				<property name="singleServerConfig">
+					<bean class="com.sxj.redis.advance.SingleServerConfig">
+						<property name="address" value="${redis.host}:${redis.port}"></property>
+						<property name="database" value="0"></property>
+					</bean>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
 </beans>
