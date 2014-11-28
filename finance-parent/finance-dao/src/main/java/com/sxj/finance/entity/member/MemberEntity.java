@@ -15,11 +15,11 @@ package com.sxj.finance.entity.member;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
+
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
+import com.sxj.finance.dao.member.IMemberDao;
 import com.sxj.finance.enu.member.MemberCheckStateEnum;
 import com.sxj.finance.enu.member.MemberStatesEnum;
 import com.sxj.finance.enu.member.MemberTypeEnum;
@@ -39,6 +39,7 @@ import com.sxj.mybatis.pagination.Pagable;
  * @author Administrator
  *
  */
+@Entity(mapper = IMemberDao.class)
 @Table(name = "M_MEMBER")
 public class MemberEntity extends Pagable implements Serializable {
 	/**
@@ -197,6 +198,9 @@ public class MemberEntity extends Pagable implements Serializable {
 	@Version
 	private Long version;
 
+	@Column(name = "FINANCE_STATE")
+	private String financeState;
+	
 	public Long getVersion() {
 		return version;
 	}
@@ -395,6 +399,14 @@ public class MemberEntity extends Pagable implements Serializable {
 
 	public void setNoType(String noType) {
 		this.noType = noType;
+	}
+
+	public String getFinanceState() {
+		return financeState;
+	}
+
+	public void setFinanceState(String financeState) {
+		this.financeState = financeState;
 	}
 
 }
