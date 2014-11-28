@@ -14,7 +14,7 @@ public class FinanceController extends BaseController {
 	@RequestMapping("financeList")
 	public String financeList(ModelMap map) throws WebException {
 		try {
-
+			System.out.println("a");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
