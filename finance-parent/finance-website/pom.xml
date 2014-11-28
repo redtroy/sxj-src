@@ -7,9 +7,7 @@
     <artifactId>finance-parent</artifactId>
     <version>1.0</version>
   </parent>
-  <groupId>com.sxj</groupId>
   <artifactId>finance-website</artifactId>
-  <version>1.0</version>
   <packaging>war</packaging>
   <name>finance-website Maven Webapp</name>
   <url>http://maven.apache.org</url>
@@ -46,11 +44,7 @@
 		<!-- sxj -->
 		<dependency>
 			<groupId>com.sxj</groupId>
-			<artifactId>supervisor-service</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>rfid-service</artifactId>
+			<artifactId>finance-service</artifactId>
 			<version>1.0</version>
 		</dependency>
 
