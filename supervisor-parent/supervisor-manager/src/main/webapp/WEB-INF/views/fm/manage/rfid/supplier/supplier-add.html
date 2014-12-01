@@ -13,14 +13,15 @@
 		}
 	});
   function add_supplier(){
-	  dialogBox(function(){
-		  var params=$("#sub").serialize();
+	  dialogBox(function(index){
+		    var params=$("#sub").serialize();
 			var doorsPrice=$("#doorsPrice").val();
 			doorsPrice=parseFloat(doorsPrice);
 			var batchPrice=$("#batchPrice").val();
 			batchPrice=parseFloat(batchPrice);
 			params=params+"&doorsPrice="+doorsPrice+"&batchPrice="+batchPrice;
 			$.post("${basePath}rfid/supplier/save_supplier.htm",params,function(data){
+				layer.close(index);
 				if(data.isOk=="ok"){
 					succInfo(function(){
 						query();

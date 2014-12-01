@@ -15,7 +15,6 @@
 <!-- InstanceEndEditable -->
 <@b.pageScript/>
 <@b.dialogBox/>
-<@b.errorInfo/>
 <script>
   $(function(){
 	  JS.Engine.start('${basePath}comet');
@@ -60,18 +59,23 @@
   }
   function save_1(model_id,id){
 	var pare=$("#sub_form_"+id).serialize();
-	$.post("edit_1.htm?batch.id="+id,pare,function(data){
-		if (data.isOk=="ok"){
-			  alert("修改成功!");
-			  query();
-		  }
-	})
+	dialogBox(function(index){
+		$.post("edit_1.htm?batch.id="+id,pare,function(data){
+			layer.close(index);
+			if (data.isOk=="ok"){
+				  succInfo(function(){
+					  query($("#pager").attr("currentPage"));
+				  },"修改成功!");
+			  }
+		})
+	},"是否确认保存");
   }
   function edit_2(id){
 	  var obj=$("#edit_2_"+id);
 	  var replenishRfid=$(obj).find("#replenishRfid").val();
-	  dialogBox(function(){
+	  dialogBox(function(index){
 		  $.post("edit_2.htm",{id:id,replenishRfid:replenishRfid},function(data){
+			  layer.close(index);
 			  if (data.isOk=="ok"){
 				  succInfo(function(){
 					  query($("#pager").attr("currentPage"));
@@ -83,8 +87,9 @@
   }
   //审核
   function review(id,obj){
-	  dialogBox(function(){
+	  dialogBox(function(index){
 	  $.post("review.htm",{id:id,state:1},function(data){
+		  layer.close(index);
 		  if (data.isOk=="ok"){
 			  succInfo(function(){
 				  query($("#pager").attr("currentPage"));
@@ -121,8 +126,9 @@ function removeMessge(){
  
   //根据ID 删除
  function del(id){
-	 dialogBox(function(){
+	 dialogBox(function(index){
 		 $.post("del.htm",{id:id},function(data){
+			 layer.close(index);
 			 if (data.isOk=="ok"){
 				 succInfo(function(){
 					 query($("#pager").attr("currentPage"));

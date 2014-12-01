@@ -26,8 +26,9 @@
 <script type="text/javascript"
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
-<@b.upload/><@b.errorInfo/>
-<@b.dialogBox/> <@b.validate/>
+<@b.upload/>
+<@b.dialogBox/> 
+<@b.validate/>
 <script>
 var validform;
 	jQuery(document).ready(function($) {
@@ -256,10 +257,11 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 					$(".opctable").find(".lnk-red").each(function(){//合同批次
 						batchId+=$(this).parent().attr("value")+",";
 					});
-					dialogBox(function() {
+					dialogBox(function(index) {
 						$.post("saveChanges.htm", 
 								$("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1+"&$contractBatchIds="+batchId+"&changeBatchIds="+batchId1,
 								function(data) {
+									layer.close(index);
 									if (data.isOK == 'ok') {
 										succInfo(function(){
 											window.location.href = "query.htm";

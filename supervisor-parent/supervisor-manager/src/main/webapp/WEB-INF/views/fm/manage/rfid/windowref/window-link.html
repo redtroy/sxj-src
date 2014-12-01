@@ -12,7 +12,6 @@
 <script src="${b.staticPath}js/comet4j.js"></script>
 <@b.pageScript/>
 <@b.dialogBox/>
-<@b.errorInfo/>
 <script>
 $(function(){
 	  JS.Engine.start('${basePath}comet');
@@ -57,8 +56,9 @@ function removeMessge(){
 	$("#message_div").html("");
 }
 function  del(id){
-	 dialogBox(function(){
+	 dialogBox(function(index){
 	$.post("delete.htm",{id:id},function(data){
+		layer.close(index);
 		if(data.isOK=='ok'){
 			succInfo(function(){
 				query($("#pager").attr("currentPage"));
@@ -72,8 +72,9 @@ function  del(id){
 }
 
 function  audit(id){
-	 dialogBox(function(){
+	 dialogBox(function(index){
 	$.post("audit.htm",{id:id},function(data){
+		layer.close(index);
 		if(data.isOK=='ok'){
 			succInfo(function(){
 				query($("#pager").attr("currentPage"));

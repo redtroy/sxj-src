@@ -108,8 +108,8 @@ public class RfidSupplierController extends BaseController {
 	 * 更新供应商
 	 */
 	@RequestMapping("update_supplier")
-	public @ResponseBody Map update_supplier(RfidSupplierEntity supplier)
-			throws WebException {
+	public @ResponseBody Map<String, String> update_supplier(
+			RfidSupplierEntity supplier) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			supplierService.modifySupplier(supplier);

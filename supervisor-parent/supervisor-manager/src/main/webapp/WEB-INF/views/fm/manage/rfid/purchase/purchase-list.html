@@ -12,11 +12,15 @@
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.pageScript/>
 <@b.dialogBox/>
-<@b.errorInfo/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script>
+$(document).ready(function(){
+	$(document).click(function(){
+		loadInfo();
+	});
+});
 function query(page){
 	var params=$("#search_form").serialize();
 	 if(page!=undefined){
@@ -34,8 +38,9 @@ function query(page){
 }
 
 function  del(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("delete.htm",{id:id},function(data){
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					query($("#pager").attr("currentPage"));
@@ -48,8 +53,10 @@ function  del(id){
 }
 
 function toImport(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("importRfid.htm",{purchaseId:id},function(data){
+			
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					query($("#pager").attr("currentPage"));
@@ -63,8 +70,9 @@ function toImport(id){
 	
 }
 function confirmDelivery(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("confirmDelivery.htm",{id:id},function(data){
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					query($("#pager").attr("currentPage"));
@@ -76,8 +84,9 @@ function confirmDelivery(id){
 	},"是否确认发货?");
 }
 function confirmPay(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("confirmPay.htm",{id:id},function(data){
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					query($("#pager").attr("currentPage"));
@@ -89,8 +98,9 @@ function confirmPay(id){
 	},"是否确认付款?");
 }
 function confirmReceipt(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("confirmReceipt.htm",{id:id},function(data){
+			layer.close(index);
 			if(data.isOK=='ok'){
 				succInfo(function(){
 					query($("#pager").attr("currentPage"));

@@ -7,7 +7,6 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.validate/>
-<@b.errorInfo/>
 <@b.dialogBox/>
 <script>
 var validform;
@@ -34,8 +33,9 @@ function update(id){
 	if(!validform.check()){
 		return false;
 	}
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("update.htm?id="+id,params,function(data){
+			layer.close(index);
 			succInfo(function(){
 				query();
 			},"修改成功！");
@@ -49,8 +49,9 @@ function add(){
 	if(!validform.check()){
 		return false;
 	}
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("add.htm",params,function(data){
+			layer.close(index);
 			succInfo(function(){
 				query();
 			},"修改成功！");

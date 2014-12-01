@@ -22,7 +22,6 @@
 <script src="${b.staticPath}js/jquery.elastislide.js" type="text/javascript"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
-<@b.errorInfo/>
 <@b.upload/>
 <@b.dialogBox/>
 <@b.validate/>
@@ -49,8 +48,9 @@ function modify(){
 			}
 		})
 	});
-			dialogBox(function(){
+			dialogBox(function(index){
 			$.post("modify.htm",$("#modifyForm").serialize(),function(data){
+				layer.close(index);
 				if (data.isOK == 'ok') {
 					
 					succInfo(function(){
