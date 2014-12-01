@@ -423,6 +423,9 @@ public class BasicController extends BaseController {
 			throws IOException {
 		List<String> sortFile = new ArrayList<String>();
 		try {
+			if(StringUtils.isEmpty(fileId)){
+				return sortFile;
+			}
 			String[] fileids = fileId.split(",");
 			Map<String, String> nameMap = new TreeMap<String, String>();
 			Map<String, NameValuePair[]> values = storageClientService

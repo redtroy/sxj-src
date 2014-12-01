@@ -62,6 +62,7 @@ import com.sxj.supervisor.service.system.IQueryOperation;
 import com.sxj.supervisor.service.system.IRoleService;
 import com.sxj.supervisor.service.system.ISystemAccountService;
 import com.sxj.util.common.FileUtil;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -325,6 +326,9 @@ public class BasicController extends BaseController
         List<String> sortFile = new ArrayList<String>();
         try
         {
+        	if(StringUtils.isEmpty(fileId)){
+				return sortFile;
+			}
             String[] fileids = fileId.split(",");
             Map<String, String> nameMap = new TreeMap<String, String>();
             Map<String, NameValuePair[]> values = storageClientService.getMetadata(fileids);
