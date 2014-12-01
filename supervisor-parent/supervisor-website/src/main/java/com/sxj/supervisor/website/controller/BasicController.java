@@ -35,6 +35,7 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.redis.advance.core.RTopic;
 import com.sxj.redis.advance.topic.RedisTopics;
 import com.sxj.redis.service.comet.CometServiceImpl;
@@ -56,6 +57,7 @@ import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.comet.CometMessageListener;
 import com.sxj.supervisor.website.comet.MessageThread;
+import com.sxj.supervisor.website.login.LoginToken;
 import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.common.FileUtil;
@@ -171,6 +173,7 @@ public class BasicController extends BaseController {
 		map.put("accountName", accountName);
 		map.put("memberName", memberName);
 		SupervisorSiteToken token = null;
+		LoginToken loginToken = new LoginToken();
 		SupervisorPrincipal userBean = null;
 		AccountEntity account = null;
 		if (StringUtils.isNotEmpty(memberName)
@@ -208,6 +211,9 @@ public class BasicController extends BaseController {
 			userBean.setAccount(account);
 			userBean.setMember(member);
 			token = new SupervisorSiteToken(userBean, password);
+			loginToken.setMemberNo(member.getMemberNo());
+			loginToken.setMemberName(member.getName());
+			loginToken.setPassword(password);
 		} else if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isEmpty(accountName)) {
 			MemberEntity member = memberService.getMemberByName(memberName);
@@ -226,6 +232,9 @@ public class BasicController extends BaseController {
 			userBean = new SupervisorPrincipal();
 			userBean.setMember(member);
 			token = new SupervisorSiteToken(userBean, password);
+			loginToken.setMemberNo(member.getMemberNo());
+			loginToken.setMemberName(member.getName());
+			loginToken.setPassword(password);
 		} else {
 			map.put("message", "公司名称不能为空");
 			map.put("pmessage", "密码不能为空");
@@ -253,6 +262,12 @@ public class BasicController extends BaseController {
 			if (account != null) {
 				accountService.edit_Login(account.getId());
 			}
+			// loginToken.setMemberNo(userBean.getMember().getMemberNo());
+			// //loginToken.setMemberName(userBean.getMember().getName());
+			// loginToken.setPassword(userBean.getMember().getPassword());
+			loginToken.setSessioId(session.getId());
+			HierarchicalCacheManager.set(2, "login_cache_token",
+					session.getId(), loginToken);
 			return "redirect:" + getBasePath(request) + "index.htm";
 		} else {
 			map.put("message", "登陆失败");

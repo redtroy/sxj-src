@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.spring.modules.util.Identities;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.dao.member.IMemberDao;
@@ -16,6 +17,7 @@ import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.util.common.EncryptUtil;
@@ -72,6 +74,8 @@ public class MemberServiceImpl implements IMemberService {
 				member.setNoType("MEM");
 			}
 			menberDao.addMember(member);
+			CometServiceImpl.takeCount(MessageChannel.MEMBER_MESSAGE);
+			MessageChannel.initTopic().publish(MessageChannel.MEMBER_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage(), e);
