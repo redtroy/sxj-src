@@ -99,20 +99,20 @@ $(document).ready(function(){
 			<label class="ly-left">&nbsp;</label>
 			<table border="0" cellpadding="0" cellspacing="0"
 				class="tabProd ly-left">
-				<col width="15%" />
-				<col width="25%" />
-				<col width="15%" />
-				<col width="12%" />
+				<col width="10%" />
+				<col width="20%" />
 				<col width="13%" />
-				<col width="22%" />
-					<col width="8%" />
+				<col width="15%" />
+				<col width="14%" />
+				<col width="20%" />
+				<col width="8%" />
 				<tr>
 					<th>产品名称</th>
-					<th>产品规格<span class="fontAR ml5"></span></th>
-					<th>数量<span class="fontAR ml5">（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨）</#if>
+					<th>产品规格</th>
+					<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）
 					</span></th>
 					<th>单价<span>（元/<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
-					<th>金额</th>
+					<th>金额<span>（元）</span></th>
 					<th>备注说明</th>
 					<th>&nbsp;&nbsp;&nbsp;</th>
 				</tr>
@@ -161,7 +161,7 @@ $(document).ready(function(){
                       <tr>
                         <th>批次</th>
                         <th>产品规格</th>
-                        <th>数量<span class="fontAR ml5">（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+                        <th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
                         <th>应付货款</th>
                         <th>对应物流标签</th>
                         <th>&nbsp;&nbsp;&nbsp;</th>
@@ -250,20 +250,20 @@ $(document).ready(function(){
 				<#if modifyList.modifyItemList?exists && (modifyList.modifyItemList?size>0)>
 				<table border="0" cellpadding="0" cellspacing="0"
 					class="tabProd f12 ly-left">
-					<col width="15%" />
-					<col width="25%" />
-					<col width="15%" />
-					<col width="12%" />
-					<col width="13%" />
-					<col width="22%" />
-					<col width="8%" />
+					<col width="10%">
+					<col width="20%">
+					<col width="13%">
+					<col width="15%">
+					<col width="14%">
+					<col width="20%">
+					<col width="8%">
 					<tr>
 						<th>产品名称</th>
-						<th>产品规格<span class="fontAR ml5"></span></th>
+						<th>产品规格</th>
 						<th>数量<span >（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）
 						</span></th>
 						<th>单价<span>（元/<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
-						<th>金额</th>
+						<th>金额<span >（元）</span></th>
 						<th>备注说明</th>
 						<th>&nbsp;&nbsp;&nbsp;</th>
 					</tr>
@@ -296,7 +296,7 @@ $(document).ready(function(){
 					<tr>
 					 <th>批次</th>
                         <th>产品规格</th>
-                        <th>数量<span class="fontAR ml5">（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+                        <th>数量（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
                         <th>应付货款</th>
                         <th>对应物流标签</th>
                         <th>&nbsp;&nbsp;&nbsp;</th>
@@ -369,7 +369,7 @@ $(document).ready(function(){
 					<tr>
 					 <th>批次</th>
                         <th>产品规格</th>
-                        <th>数量<span class="fontAR ml5">（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+                        <th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
                         <th>应付货款</th>
                         <th>对应物流标签</th>
                         <th>&nbsp;&nbsp;&nbsp;</th>
@@ -432,7 +432,6 @@ $(".tabmenuBar").tytabs({
 	$(".rollBox img").each(function(){
 		$(this).load(function(){
 			index=index+1;
-			
 			if(index==1){
 				$(".tabscontent:gt(0)").hide();
 			}

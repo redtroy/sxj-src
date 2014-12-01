@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -36,6 +36,10 @@
 <script>
 var preModal;
 jQuery(document).ready(function($) {
+	var top=$(window).height()*0.2;
+	$(window).scroll(function(){
+		$(".notViewer").css("top",parseInt($(window).scrollTop())+top);
+	})
 	$(".modal-header .close").click(function(){
 		var $parent=$(this).parent().parent();
 		$parent.hide();
@@ -46,6 +50,8 @@ jQuery(document).ready(function($) {
 		}
 		
 	});
+	
+	
 	
 	$('.elastislide-list').find("li").live("click",function(){
 		var el=$(this);
@@ -737,7 +743,7 @@ function busunSeav(){
 		</div>
 	</div>
 	<!-- 批次选择 -->
-	<div class="modal-wrap popDemo dropList"  id="batch-list"
+	<div class="modal-wrap popDemo dropList notViewer"  id="batch-list"
 		style="display: none; width: 680px; height: 300px;z-index: 10011;">
 		<div class="modal-header">
 			<span class="close closeBatch"><a>关闭窗口</a></span>

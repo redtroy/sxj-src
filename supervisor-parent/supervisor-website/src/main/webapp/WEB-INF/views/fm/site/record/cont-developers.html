@@ -25,8 +25,7 @@
 	type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
-<@b.upload/>
-<@b.dialogBox/>
+<@b.upload/> <@b.dialogBox/>
 <script>
 	jQuery(document).ready(function($) {
 		$('.demo-image').click(function() {
@@ -39,94 +38,163 @@
 		})
 	})
 
-	$(document).ready(function(){
-		var start=0;
-		
-		$('.elastislide-list').each(function(){
-			var $this=$(this);
-			$this.find("li").live("click",function(){
-				var el=$(this);
-				var imageSource = el.find("a").attr("data-image");
-				refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
-				el.parent().children("li").removeClass("view");
-				el.addClass("view");
-				preModal=null;
-			});
-			$(this).elastislide({
-				orientation : 'horizontal',
-				speed : 500,
-				easing : 'ease-in-out',
-				minItems : elastislideConfig.count,
-				start : start,
-				onClick : function( el, position, evt ) { 
-					return false; 
-				},
-				onReady : function() { 
-					$this.children("li:lt("+elastislideConfig.count+")").each(function(){
-						var $image=$(this).find("img");
-						if($image.attr("data-image"))
-							$image.attr("src",$image.attr("data-image"));
+	$(document)
+			.ready(
+					function() {
+						var start = 0;
+
+						$('.elastislide-list')
+								.each(
+										function() {
+											var $this = $(this);
+											$this
+													.find("li")
+													.live(
+															"click",
+															function() {
+																var el = $(this);
+																var imageSource = el
+																		.find(
+																				"a")
+																		.attr(
+																				"data-image");
+																refreshIviewer(
+																		$("#viewer2"),
+																		imageSource,
+																		$("#iviewerModal"));
+																el
+																		.parent()
+																		.children(
+																				"li")
+																		.removeClass(
+																				"view");
+																el
+																		.addClass("view");
+																preModal = null;
+															});
+											$(this)
+													.elastislide(
+															{
+																orientation : 'horizontal',
+																speed : 500,
+																easing : 'ease-in-out',
+																minItems : elastislideConfig.count,
+																start : start,
+																onClick : function(
+																		el,
+																		position,
+																		evt) {
+																	return false;
+																},
+																onReady : function() {
+																	$this
+																			.children(
+																					"li:lt("
+																							+ elastislideConfig.count
+																							+ ")")
+																			.each(
+																					function() {
+																						var $image = $(
+																								this)
+																								.find(
+																										"img");
+																						if ($image
+																								.attr("data-image"))
+																							$image
+																									.attr(
+																											"src",
+																											$image
+																													.attr("data-image"));
+																					});
+																	if ($this
+																			.children("li").length < elastislideConfig.count)
+																		$(
+																				".elastislide-prev")
+																				.hide();
+																	return false;
+																},
+																onBeforeSlide : function() {
+																	return false;
+																},
+																onAfterSlide : function() {
+																	if (start > 0)
+																		slideTimes = slideTimes
+																				+ start;
+																	$this
+																			.children(
+																					"li:lt("
+																							+ slideTimes
+																							+ ")")
+																			.each(
+																					function() {
+																						var $image = $(
+																								this)
+																								.find(
+																										"img");
+																						if ($image
+																								.attr("data-image"))
+																							$image
+																									.attr(
+																											"src",
+																											$image
+																													.attr("data-image"));
+																					});
+																	slideTimes = slideTimes
+																			+ elastislideConfig.count;
+																	return false;
+																}
+															});
+										});
+						var quantity = 0;
+						var amount = 0;
+						$(".quantity").each(function() {
+							if ($(this).html()) {
+								quantity += parseInt($(this).html());
+							}
+						});
+						$(".price").each(
+								function() {
+									if ($(this).html()) {
+										$(this).html(
+												parseFloat($(this).html())
+														.toFixed(2));
+									}
+								});
+						$(".amount").each(
+								function() {
+									if ($(this).html()) {
+										amount += parseFloat($(this).html());
+										$(this).html(
+												parseFloat($(this).html())
+														.toFixed(2));
+									}
+								});
+						$(".tquantity").html(quantity);
+						$(".tamount").html(amount.toFixed(2) + "元");
+						$("#zamount").html(amount.toFixed(2));
+
 					});
-					if($this.children("li").length<elastislideConfig.count)
-						$(".elastislide-prev").hide();
-					return false; },
-				onBeforeSlide : function() { return false; },
-				onAfterSlide : function() { 
-					if(start>0)
-						slideTimes=slideTimes+start;
-					$this.children("li:lt("+slideTimes+")").each(function(){
-						var $image=$(this).find("img");
-						if($image.attr("data-image"))
-							$image.attr("src",$image.attr("data-image"));
-					});
-					slideTimes=slideTimes+elastislideConfig.count;
-					return false; }
-			});
-		});
-		var quantity=0;
-		var amount=0;
-		$(".quantity").each(function(){
-			if($(this).html()){
-				quantity+=parseInt($(this).html());
-			}
-		});
-		$(".price").each(function(){
-			if($(this).html()){
-				$(this).html(parseFloat($(this).html()).toFixed(2));
-			}
-		});
-		$(".amount").each(function(){
-			if($(this).html()){
-				amount+=parseFloat($(this).html());
-				$(this).html(parseFloat($(this).html()).toFixed(2));
-			}
-		});
-		$(".tquantity").html(quantity);
-		$(".tamount").html(amount.toFixed(2)+"元");
-		$("#zamount").html(amount.toFixed(2));
-		
-		
-	});
 
 	function save() {
 		var id = $("#recordId").val();
 		var message = $("#message").val();
 		var contractId = $("#contractId").val();
-		dialogBox(function(index){
-		$.post("confirmRecord.htm", {
-			recordId : id,
-			contractId : contractId,
-			message : message
-		}, function(data) {
-			layer.close(index);
-			if (data.isOK == 'ok') {
-				succInfo(function() {
-					window.location.href = "query.htm";
-				}, "私享家将根据招标合同门窗数量自动定额发放门窗认证标签，请到认证标签申请管理查询申请单！");
-			} else {
-				errorInfo("确认失败!");
-			}
-		})},"是否确认合同?");
+		dialogBox(function(index) {
+			$.post("confirmRecord.htm", {
+				recordId : id,
+				contractId : contractId,
+				message : message
+			}, function(data) {
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function() {
+						window.location.href = "query.htm";
+					}, "私享家将根据招标合同门窗数量自动定额发放门窗认证标签，请到认证标签申请管理查询申请单！");
+				} else {
+					errorInfo("确认失败!");
+				}
+			})
+		}, "是否确认合同?");
 	}
 </script>
 </head>
@@ -134,120 +202,119 @@
 <body>
 	<div id="header" class="fence"><@b.header /></div>
 	<div class="fence-wide ly-clearFix">
-			<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
-				<div class="yard-870 rightSide ly-left">
-					<div class="heading mb15 ly-clearFix">
-						<h1>
-							<span class="title fontYH f20 fb">合同备案管理</span>
-						</h1>
-					</div>
-					<div class="contBox">
-						<h2 class="fontYH f18 tc mb20">门窗招标合同</h2>
-						<input type="hidden" id="recordId" value="${recordId}" /> <input
-							type="hidden" id="contractId"
-							value="${contractModel.contract.id}" /> <input type="hidden"
-							id="message" value="${message}" />
-						<div class="contInfo">
-							<div class="info ly-clearFix">
-								<div class="item">
-									<label>合同号</label> ${contractModel.contract.contractNo}
-								</div>
-								<div class="item">
-									<label>工程名称</label> ${contractModel.contract.engName}
-								</div>
-								<div class="item">
-									<label>工程地点</label> ${contractModel.contract.engAddress}
-								</div>
-								<div class="item">
-									<label>对应备案号</label> ${contractModel.contract.recordNo}
-								</div>
-								<div class="item">
-									<label>甲方</label> ${contractModel.contract.memberNameA}
-								</div>
-								<div class="item">
-									<label>乙方</label> ${contractModel.contract.memberNameB}
-								</div>
-								<div class="item">
-									<label>签订地点</label> ${contractModel.contract.address}
-								</div>
-								<div class="item">
-									<label>签订时间</label>
-									${contractModel.contract.signedDate?string("yyyy-MM-dd")}
-								</div>
-								<div class="item">
-									<label>工程总价</label> <span id="zamount"></span>
-								</div>
-							</div>
-							<div class="item">
-								<label>&nbsp;</label>
-								<table border="0" cellpadding="0" cellspacing="0"
-									class="tabProd ly-left">
-									<col width="10%" />
-									<col width="15%" />
-									<col width="30%" />
-									<col width="10%" />
-									<col width="12%" />
-									<col width="10%" />
-									<col width="13%" />
-									<tr>
-										<th>序号</th>
-										<th>产品名称</th>
-										<th>型号规格</th>
-										<th>单位</th>
-										<th>单价<span>（元）</span></th>
-										<th>数量</th>
-										<th>合价<span>（元）</span></th>
-									</tr>
-									<#list contractModel.itemList as item> 
-									<tr>
-										<td>${item_index+1}</td>
-										<td>${item.productName}</td>
-										<td>${item.windowType.getName()}</td>
-										<td><span class="fontAR ml5">樘</span></td>
-										<td class="price">${item.price}</td>
-										<td class="quantity">${item.quantity}</td>
-										<td class="amount">${item.amount}</td>
-									</tr>
-									</#list>
-									<tr class="fb">
-										<td>合计</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td>&nbsp;</td>
-										<td class="tquantity"></td>
-										<td class="tamount"></td>
-									</tr>
-								</table>
-							</div>
-							<div class="item">
-								<label>合同备注</label> ${contractModel.contract.remarks}
-							</div>
-							<div class="item">
-								<label>合同扫描件</label> 
-								<#assign arr=(contractModel.contract.imgPath?split(","))> 
-	                   		 <#if arr??>
-							<div class="rollBox">
-								<ul class="elastislide-list imagelist">
-									<#list arr as imgPath>
-									<li><a href="javascript:void(0);"
-										data-image="${b.imagePath}${imgPath}"><img
-											data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
-									</#list>
-								</ul>
-							</div>
-						<#else> 
-						<img src="${b.staticPath}images/nopic.jpg" width="80" height="107" /> 
-						</#if> 
-							</div>
+		<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
+		<div class="yard-870 rightSide ly-left">
+			<div class="heading mb15 ly-clearFix">
+				<h1>
+					<span class="title fontYH f20 fb">合同备案管理</span>
+				</h1>
+			</div>
+			<div class="contBox">
+				<h2 class="fontYH f18 tc mb20">门窗招标合同</h2>
+				<input type="hidden" id="recordId" value="${recordId}" /> <input
+					type="hidden" id="contractId" value="${contractModel.contract.id}" />
+				<input type="hidden" id="message" value="${message}" />
+				<div class="contInfo">
+					<div class="info ly-clearFix">
+						<div class="item">
+							<label>合同号</label> ${contractModel.contract.contractNo}
+						</div>
+						<div class="item">
+							<label>工程名称</label> ${contractModel.contract.engName}
+						</div>
+						<div class="item">
+							<label>工程地点</label> ${contractModel.contract.engAddress}
+						</div>
+						<div class="item">
+							<label>对应备案号</label> ${contractModel.contract.recordNo}
+						</div>
+						<div class="item">
+							<label>甲方</label> ${contractModel.contract.memberNameA}
+						</div>
+						<div class="item">
+							<label>乙方</label> ${contractModel.contract.memberNameB}
+						</div>
+						<div class="item">
+							<label>签订地点</label> ${contractModel.contract.address}
+						</div>
+						<div class="item">
+							<label>签订时间</label>
+							${contractModel.contract.signedDate?string("yyyy-MM-dd")}
+						</div>
+						<div class="item">
+							<label>工程总价</label> <span id="zamount"></span>
 						</div>
 					</div>
-					<div class="item mt10">
-						<label>&nbsp;</label><a href="javascript:save();"
-							class="button button-orange mr15">确认合同备案信息</a><a href="query.htm"
-							class="button button-gray">取消</a>
+					<div class="item">
+						<label>&nbsp;</label>
+						<table border="0" cellpadding="0" cellspacing="0"
+							class="tabProd ly-left">
+							<col width="8%" />
+							<col width="15%" />
+							<col width="20%" />
+							<col width="10%" />
+							<col width="10%" />
+							<col width="10%" />
+							<col width="12%" />
+							<col width="15%" />
+							<tr>
+								<th>序号</th>
+								<th>产品名称</th>
+								<th>型号规格</th>
+								<th>单位</th>
+								<th>单价<span>（元）</span></th>
+								<th>数量</th>
+								<th>合价<span>（元）</span></th>
+								<th>备注说明</th>
+							</tr>
+							<#list contractModel.itemList as item>
+							<tr>
+								<td>${item_index+1}</td>
+								<td>${item.productName}</td>
+								<td>${item.windowType.getName()}</td>
+								<td><span class="fontAR ml5">樘</span></td>
+								<td class="price">${item.price}</td>
+								<td class="quantity">${item.quantity}</td>
+								<td class="amount">${item.amount}</td>
+								<td>${item.remarks}</td>
+							</tr>
+							</#list>
+							<tr class="fb">
+								<td>合计</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<td class="tquantity"></td>
+								<td class="tamount"></td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+					<div class="item">
+						<label>合同备注</label> ${contractModel.contract.remarks}
+					</div>
+					<div class="item" style="overflow:hidden;zoom:1;">
+						<label>合同扫描件</label> <#assign
+						arr=(contractModel.contract.imgPath?split(","))> <#if arr??>
+						<div class="rollBox">
+							<ul class="elastislide-list imagelist">
+								<#list arr as imgPath>
+								<li><a href="javascript:void(0);"
+									data-image="${b.imagePath}${imgPath}"><img
+										data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+								</#list>
+							</ul>
+						</div>
+						<#else> <img src="${b.staticPath}images/nopic.jpg" width="80"
+							height="107" /> </#if>
 					</div>
 				</div>
+			</div>
+			<div class="item mt10">
+				<label>&nbsp;</label><a href="javascript:save();"
+					class="button button-orange mr15">确认合同备案信息</a><a href="query.htm"
+					class="button button-gray">取消</a>
 			</div>
 		</div>
 	</div>
