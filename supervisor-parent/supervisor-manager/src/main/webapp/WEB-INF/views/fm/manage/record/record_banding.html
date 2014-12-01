@@ -8,7 +8,6 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <@b.validate/>
-<@b.errorInfo/>
 <@b.dialogBox/>
 <SCRIPT>
 var validform;
@@ -89,9 +88,10 @@ function query(type){
 	  var recordNo2=$("#recordNoB_edit").text();
 	  var recordIdB = $("#recordId_edit").val();
  	  var recordIdA = $("#recordId").val();
- 	 dialogBox(function() {
+ 	 dialogBox(function(index) {
 	  $.post("banding_save.htm",{contractNo:contractNo,refContractNo:refContractNo,
 		  recordNo:recordNo,recordNo2:recordNo2,recordIdB:recordIdB,recordIdA:recordIdA},function(data){
+			  layer.close(index);
 		  if (data.isOK=='ok'){
 			  succInfo(function(){
 				  window.location.href="recordList.htm";

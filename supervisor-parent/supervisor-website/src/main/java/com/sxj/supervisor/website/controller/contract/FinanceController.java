@@ -28,7 +28,7 @@ public class FinanceController extends BaseController {
 			String startDate, String endDate, HttpSession session)
 			throws WebException {
 		try {
-			if (query == null) {
+			if (query != null) {
 				query.setPagable(true);
 			}
 			SupervisorPrincipal info = getLoginInfo(session);

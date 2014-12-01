@@ -50,7 +50,6 @@ function rfidLoss() {
 	dialogBox(function(index){
 		$.post("lableLosses.htm", $("#loss_form").serialize(),
 				function(data) {
-			alert(index);
 					layer.close(index);
 					if (data.isOK == 'ok') {
 						succInfo(function(){

@@ -8,7 +8,6 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
 <@b.pageScript/>
-<@b.errorInfo/>
 <@b.dialogBox/>
 <@b.validate/>
 <script>
@@ -47,8 +46,9 @@ function toAdd(id){
 	});
 }
 function toRemove(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.get("${basePath}system/remove.htm?accountId="+id,function(data){
+			layer.close(index);
 			if(data.isOK==true){
 				succInfo(function(){
 					var currentPage= $("#rightBar").find("#pager").attr("currentPage");
@@ -85,9 +85,10 @@ function edit(id){
 		   messageInfo("姓名只能用1-20位的中文或英文字符");
 		   return false;
 	 }
-	dialogBox(function(){
+	dialogBox(function(index){
 		var flag=false;
 		$.get("check_account.htm?old="+old+"&param="+accountName,function(data){
+			layer.close(index);
 		   if (data.status == "n"){
 			   	  messageInfo('账号已存在！');
 	        	  return false;
@@ -115,8 +116,9 @@ function edit(id){
 }
 
 function initPassword(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("${basePath}system/init_password.htm?accountId="+id,function(data){
+			layer.close(index);
     		if(data.isOK==true){
     			//$("#password_div").show();
     			$("#password_div").children().find("p").text("初始密码为："+data.password+"，谢谢!");

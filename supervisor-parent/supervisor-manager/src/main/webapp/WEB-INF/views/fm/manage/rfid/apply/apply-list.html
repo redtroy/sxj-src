@@ -11,7 +11,6 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <@b.pageScript/>
-<@b.errorInfo/>
 <@b.dialogBox/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -61,8 +60,9 @@ jQuery(document).ready(function($) {
 			messageInfo('数量必须为正整数！');
 			return false;
 	  }
-	  dialogBox(function(){
+	  dialogBox(function(index){
 		  $.post("edit_apply.htm",{id:id,count:num},function(data){
+			  layer.close(index);
 			  if (data.isOk=="ok"){
 				  succInfo(function(){
 					  var page=$("#rightBar").find("#pager").attr("currentPage");
@@ -79,8 +79,9 @@ jQuery(document).ready(function($) {
   }
   //删除
   function del(id){
-	 dialogBox(function(){
+	 dialogBox(function(index){
 	 $.post("del_apply.htm",{id:id},function(data){
+		 layer.close(index);
 		 if (data.isOk=="ok"){
 				 succInfo(function(){
 					 var page=$("#rightBar").find("#pager").attr("currentPage");
@@ -96,8 +97,9 @@ jQuery(document).ready(function($) {
   }
   //删除
   function to_purchase(id){
-	 dialogBox(function(){
+	 dialogBox(function(index){
 	 $.post("checkApply.htm",{id:id},function(data){
+		 layer.close(index);
 		 if (data.isOk=="ok"){
 				 window.location.href="${basePath}rfid/purchase/toAdd.htm?id="+id;
 			 }else{
@@ -111,8 +113,9 @@ jQuery(document).ready(function($) {
   
   //确认收款
   function ok(id){
-	  dialogBox(function(){
+	  dialogBox(function(index){
 		  $.post("edit_apply.htm",{id:id,payState:0},function(data){
+			  layer.close(index);
 			  if (data.isOk=="ok"){
 				  succInfo(function(){
 					  var currentPage=$("#pager").attr("currentPage");

@@ -37,7 +37,9 @@
 		})
 	})
 </script>
-<@b.dialogBox/> <@b.upload/><@b.errorInfo/>	<@b.validate/>
+<@b.dialogBox/>
+<@b.upload/>
+<@b.validate/>
 <script>
 var ul_validform;
 	function modify() {
@@ -58,8 +60,9 @@ var ul_validform;
 				$(this).attr("name",name);
 			});
 		});
-		dialogBox(function() {
+		dialogBox(function(index) {
 			$.post("modify.htm", $("#modifyForm").serialize(), function(data) {
+				layer.close(index);
 				if (data.isOK == 'ok') {
 					succInfo(function(){
 						window.location.href="query.htm";

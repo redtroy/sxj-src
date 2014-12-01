@@ -8,7 +8,6 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
-<@b.errorInfo/>
 <@b.dialogBox/>
 <@b.validate/>
 <@b.header/>
@@ -133,20 +132,21 @@ var su_price="";
 	function saveAdd() {
 		var count = $("#count").val();
 		if (count != 0) {
-			dialogBox(function() {
-				var price = $("#price").val();
-				if(price<=0){
-					erroeInfo("单价必须大于0");
-					return false;
-				}
-				var remaining = $("#remaining").val();
-				$("#price").val(parseFloat(price));
-				if (parseFloat(count) > parseFloat(remaining)) {
-					$("#count").val(remaining);
-					messageInfo("最大采购数量为" + remaining);
-					return false;
-				}
+			var price = $("#price").val();
+			if(price<=0){
+				erroeInfo("单价必须大于0");
+				return false;
+			}
+			var remaining = $("#remaining").val();
+			$("#price").val(parseFloat(price));
+			if (parseFloat(count) > parseFloat(remaining)) {
+				$("#count").val(remaining);
+				messageInfo("最大采购数量为" + remaining);
+				return false;
+			}
+			dialogBox(function(index) {
 				$.post("add.htm", $("#add").serialize(), function(data) {
+					layer.close(index);
 					if (data.isOK == 'ok') {
 						succInfo(function() {
 							window.location.href = "query.htm";

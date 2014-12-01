@@ -1,6 +1,6 @@
-﻿﻿<#assign staticPath="http://static.menchuang.org.cn/supervisor-website/"
-/> <#assign imagePath="http://storage.menchuang.org.cn/" /> <#macro
-validate>
+﻿﻿<#assign staticPath="http://static.menchuang.org.cn/supervisor-website/"/>
+<#assign imagePath="http://storage.menchuang.org.cn/" />
+<#macro validate>
 <!--<script src="${staticPath}js/jquery.validate.js"></script>-->
 <script src="${staticPath}js/Validform_v5.3.2.js"></script>
 <script src="${staticPath}js/jquery.poshytip.min.js"></script>
@@ -20,10 +20,159 @@ $(function(){
 	});
 });
 </script>
-</#macro> <#macro errorInfo>
+</#macro>
+<#macro errorInfo>
+<script>
+
+</script>
+
+</#macro>
+<#macro dialogBox>
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
+<div id="diglog_div" style="display: none;">
+	<div class="modal-wrap popDemo popWin mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit">&nbsp;</div>
+			<span id="dialog_close_span" class="close">关闭</span>
+		</div>
+		<div class="modal-body">
+			<p class=" fontYH f18" style="margin-left: 20%;" id="dialog_message">是否确认更改！</p>
+			<div class="button-box">
+				<button id="dialog_confirm_click"
+					class="button button-pop btn-ok mr20">确认</button>
+				<button id="dialog_close_button" class="button button-gray">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="error_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit">消息提示</div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-error"></span>
+				<p class="color-red fontYH f18" id="message_error">错误提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="succ_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit">消息提示</div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="message_succ_div" class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-suc"></span>
+				<p class="color-green  fontYH f18" id="message_succ">成功提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="message_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit">消息提示</div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="message_hint_div" class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-info"></span>
+				<p class="fontYH f18" id="message_hint">一般性网站提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script>
+function loadingImg(){
+	var loadInfoIndex = $.layer({
+		    type: 3,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['35%', '52%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5, '#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    loading: {
+   				type: 1
+			}
+		});
+	return loadInfoIndex;
+}
+function dialogBox(confirm,message){
+	var data=$("#diglog_div");
+	$("#diglog_div").find("#dialog_message").text(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '15%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+	 
+	 	$("#dialog_confirm_click").live('click', function(){
+	 		layer.close(pageii);
+	 		var loadInfoIndex=loadingImg();
+			confirm(loadInfoIndex);
+			$("#dialog_confirm_click").die("click");
+			//layer.close(loadInfoIndex);
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		    $("#dialog_confirm_click").die("click");
+		});
+		
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		    $("#dialog_confirm_click").die("click");
+		});
+ }
+ 
+function dialogBoxOut(html){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		    offset: ['200px', ''],
+		   	area: ['10%', '10%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: html
+		    }
+		});
+	 return pageii;
+}
+ 
 function errorInfo(message){
 	var data=$("#error_info_div");
 	data.find("#message_error").text(message);
@@ -111,152 +260,8 @@ function succInfo(confirm,message){
 		});
  }
 </script>
-<div id="error_info_div" style="display: none;">
-	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
-		<div class="modal-header">
-			<div class="tit">消息提示</div>
-			<span class="close" id="dialog_close_span">关闭</span>
-		</div>
-		<div class="modal-body">
-			<div class="tipBox ly-clearFix">
-				<span class="icon icon32 icon-32-error"></span>
-				<p class="color-red fontYH f18" id="message_error">错误提示内容</p>
-			</div>
-			<div class="button-box">
-				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="succ_info_div" style="display: none;">
-	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
-		<div class="modal-header">
-			<div class="tit">消息提示</div>
-			<span class="close" id="dialog_close_span">关闭</span>
-		</div>
-		<div class="modal-body">
-			<div id="message_succ_div" class="tipBox ly-clearFix">
-				<span class="icon icon32 icon-32-suc"></span>
-				<p class="color-green  fontYH f18" id="message_succ">成功提示内容</p>
-			</div>
-			<div class="button-box">
-				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="message_info_div" style="display: none;">
-	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
-		<div class="modal-header">
-			<div class="tit">消息提示</div>
-			<span class="close" id="dialog_close_span">关闭</span>
-		</div>
-		<div class="modal-body">
-			<div id="message_hint_div" class="tipBox ly-clearFix">
-				<span class="icon icon32 icon-32-info"></span>
-				<p class="fontYH f18" id="message_hint">一般性网站提示内容</p>
-			</div>
-			<div class="button-box">
-				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
-			</div>
-		</div>
-	</div>
-</div>
-</#macro> <#macro dialogBox>
-<div id="diglog_div" style="display: none;">
-	<div class="modal-wrap popDemo popWin mb20" style="width: 400px">
-		<div class="modal-header">
-			<div class="tit">&nbsp;</div>
-			<span id="dialog_close_span" class="close">关闭</span>
-		</div>
-		<div class="modal-body">
-			<p class=" fontYH f18" style="margin-left: 20%;" id="dialog_message">是否确认更改！</p>
-			<div class="button-box">
-				<button id="dialog_confirm_click"
-					class="button button-pop btn-ok mr20">确认</button>
-				<button id="dialog_close_button" class="button button-gray">取消</button>
-			</div>
-		</div>
-	</div>
-</div>
-<script src="${staticPath}js/layer.min.js"></script>
-<script src="${staticPath}js/layer.ext.js"></script>
-<script>
-function loadInfo(){
-	var loadInfoIndex = $.layer({
-		    type: 3,
-		    title: false,
-		   	area: ['20%', '20%'],
-		    offset: ['35%', '52%'],
-		    border: [0], //去掉默认边框
-		    shade: [0.5, '#000'], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    loading: {
-   				type: 2
-			}
-		});
-	return loadInfoIndex;
-}
-function dialogBox(confirm,message){
-	var data=$("#diglog_div");
-	$("#diglog_div").find("#dialog_message").text(message);
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		   	area: ['20%', '15%'],
-		    offset: ['192px', ''],
-		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
-		});
-	 
-	 	$("#dialog_confirm_click").live('click', function(){
-	 		layer.close(pageii);
-	 		var loadInfoIndex=loadInfo();
-			confirm(loadInfoIndex);
-			$("#dialog_confirm_click").die("click");
-			//layer.close(loadInfoIndex);
-		});
-		//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		    $("#dialog_confirm_click").die("click");
-		});
-		
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		    $("#dialog_confirm_click").die("click");
-		});
- }
- 
-function dialogBoxOut(html){
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		    offset: ['200px', ''],
-		   	area: ['10%', '10%'],
-		    border: [0], //去掉默认边框
-		    shade: [0.5,'#000'], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: html
-		    }
-		});
-	 return pageii;
-}
- 
-</script>
-</#macro> <#macro pageScript>
+</#macro>
+<#macro pageScript>
 <!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
 <script src="${staticPath}js/jquery.pagination_2.js"></script>
 <link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
@@ -283,7 +288,8 @@ $(".pagination").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage});
 });
 </script>
-</#macro> <#macro upload>
+</#macro>
+<#macro upload>
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet"
 	type="text/css" />
@@ -424,7 +430,8 @@ function loadUpload(id,url,isMulti,text,fn){
 	    });
 } 
 </script>
-</#macro> <#macro header>
+</#macro>
+<#macro header>
 <div id="header">
 	<div class="fence-wide">
 		<#if Session.userinfo?exists>
@@ -470,7 +477,8 @@ $(document).ready(function(){
 	}
 </script>
 
-</#macro> <#macro pager>
+</#macro>
+<#macro pager>
 <div id="pager" class="pagination f12 mt10 ly-right"
 	totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div>
 </#macro>

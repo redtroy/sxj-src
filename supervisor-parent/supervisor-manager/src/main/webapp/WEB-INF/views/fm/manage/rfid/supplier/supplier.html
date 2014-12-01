@@ -8,7 +8,6 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.validate/>
 <@b.pageScript/>
-<@b.errorInfo/>
 <@b.dialogBox/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -36,8 +35,9 @@ function query(page){
 	})
 }
 function del(id){
-	dialogBox(function(){
+	dialogBox(function(index){
 		$.post("del_supplier.htm",{id:id},function(data){
+			layer.close(index);
 			if(data.isOk=="ok"){
 				succInfo(function(){
 					query($("#pager").attr("currentPage"));

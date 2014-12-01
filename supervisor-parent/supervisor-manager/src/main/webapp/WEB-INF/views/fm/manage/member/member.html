@@ -16,7 +16,6 @@
 <script src="${b.staticPath}js/jquery.imagecontainer.js" type="text/javascript"></script>
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <@b.pageScript/>
-<@b.errorInfo/>
 <@b.dialogBox/>
 <@b.validate/>
 <@b.upload/>
@@ -63,8 +62,9 @@ function close_img(){
    //重置密码
    function resetPwd(id){
 	   var pwd;
-	   dialogBox(function(){
+	   dialogBox(function(index){
 		   $.post("${basePath}member/initializePwd.htm",{id:id},function(data){
+			   layer.close(index);
 			   if (data.isOK=='ok'){
 				   pwd=data.password
 				   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
@@ -113,8 +113,9 @@ function close_img(){
    }
    //更改账户状态
    function editState(id,state){
-	   dialogBox(function(){
+	   dialogBox(function(index){
 		   $.post("editState.htm",{id:id,state:state},function(data){
+			   layer.close(index);
 				  if (data.isOK=='ok'){
 					  succInfo(function(){
 						  query($("#pager").attr("currentPage"));
@@ -170,8 +171,9 @@ function close_img(){
    }
  //更改审核状态
    function editCheckState(id,state){
-	   dialogBox(function(){
+	   dialogBox(function(index){
 		 $.post("editCheckState.htm",{id:id,state:state},function(data){
+			 layer.close(index);
 			  if (data.isOK=='ok'){
 				  succInfo(function(){
 					  query($("#pager").attr("currentPage"));
