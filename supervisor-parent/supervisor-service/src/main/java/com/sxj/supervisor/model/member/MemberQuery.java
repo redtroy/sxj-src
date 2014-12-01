@@ -34,8 +34,10 @@ public class MemberQuery extends Pagable implements Serializable {
 	private String endDate;
 
 	private Integer checkState;
-	
+
 	private Integer memberTypeB;
+
+	private String isDelMes;
 
 	public Integer getMemberTypeB() {
 		return memberTypeB;
@@ -139,6 +141,14 @@ public class MemberQuery extends Pagable implements Serializable {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getIsDelMes() {
+		return isDelMes;
+	}
+
+	public void setIsDelMes(String isDelMes) {
+		this.isDelMes = isDelMes;
 	}
 
 }

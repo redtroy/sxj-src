@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.redis.advance.topic.RedisTopics;
+import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
@@ -71,6 +73,11 @@ public class MemberController extends BaseController {
 			map.put("memberList", list);
 			map.put("cityList", cityList);
 			map.put("query", query);
+			map.put("channelName", MessageChannel.MEMBER_MESSAGE);
+			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
+				CometServiceImpl.setCount(MessageChannel.MEMBER_MESSAGE, 0l);
+			}
+			registChannel(MessageChannel.MEMBER_MESSAGE);
 			return "manage/member/member";
 		} catch (Exception e) {
 			SxjLogger.error("查询会员信息错误", e, this.getClass());

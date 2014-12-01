@@ -5,8 +5,8 @@
 <title>紫金财富金融服务平台</title>
 <meta name="keywords" content="紫金财富金融服务平台">
 <meta name="description" content="紫金财富金融服务平台">
-<link href="../style/style.css" rel="stylesheet" type="text/css" />
-<script src="../js/jquery.js"></script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
 <script>
 jQuery(document).ready(function($) {
 	$('.btn-financle').click(function(){
@@ -19,6 +19,21 @@ jQuery(document).ready(function($) {
 		$('.payPop').slideUp(200);
 	})
 })
+function query(){
+	var params=$("#serch_div").find(":input").serialize();
+	if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	}
+	$.post("paylist.htm",params,function(data){
+		var tableList=$(data).find(".tabList");
+		var pager=$(data).find("#pager");
+		$(".tabList").empty();
+		$(".tabList").append(tableList.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	})
+}
 </script>
 
 </head>
@@ -103,46 +118,6 @@ jQuery(document).ready(function($) {
           </div>
         </div>
       </div></td>
-  </tr>
-  <tr>
-    <td>CT14070129P03</td>
-    <td><a href="#" class="lnk-blue">CT14070129</a></td>
-    <td>第三批次</td>
-    <td>378520.78元</td>
-    <td>100.00元</td>
-    <td class="color-orange">100.00元</td>
-    <td>型材货款</td>
-    <td><span class="state process">融资受理中</span></td>
-  </tr>
-  <tr>
-    <td>CT14060033P01</td>
-    <td><a href="#" class="lnk-blue">CT14060033</a></td>
-    <td>第一批次</td>
-    <td>45896.55元</td>
-    <td>2500.00元</td>
-     <td class="color-orange">2500.00元</td>
-    <td>玻璃货款</td>
-    <td><span class="state process">融资受理中</span></td>
-  </tr>
-  <tr>
-    <td>CT14060033P01</td>
-    <td><a href="#" class="lnk-blue">CT14060033</a></td>
-    <td>-</td>
-    <td>45896.55元</td>
-    <td>3800.00元</td>
-     <td class="color-orange">3800.00元</td>
-    <td>合同定金</td>
-    <td><span class="state verified">融资已放款</span></td>
-  </tr>
-  <tr>
-    <td>CT14060021P02</td>
-    <td><a href="#" class="lnk-blue">CT14060021</a></td>
-    <td>第二批次</td>
-    <td>259,874.78元</td>
-    <td>200,000.00元</td>
-     <td class="color-orange">150,000.00元</td>
-    <td>型材货款</td>
-    <td><span class="state verified">融资已放款</span></td>
   </tr>
   <tr class="fb">
     <td>合计</td>
