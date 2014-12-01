@@ -91,17 +91,21 @@ public class RecordController extends BaseController {
 			ContractModel contract = contractService
 					.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = new ContractModel();
-			if (contract.getContract() != null) {
+
+			if (contract != null && contract.getContract() != null) {
 				contractModel = contractService.getContract(contract
 						.getContract().getId());
-			}
-			model.put("contractModel", contractModel);
-			model.put("recordNo", recordNo);
-			if (contractModel.getContract().getType().getId() == 0) {
-				return "site/record/contract-info-zhaobiao";
+				model.put("contractModel", contractModel);
+				model.put("recordNo", recordNo);
+				if (contractModel.getContract().getType().getId() == 0) {
+					return "site/record/contract-info-zhaobiao";
+				} else {
+					return "site/record/contract-info";
+				}
 			} else {
 				return "site/record/contract-info";
 			}
+
 			// contractModel.getContract().getImgPath().split(",");
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());
@@ -280,27 +284,30 @@ public class RecordController extends BaseController {
 			if (recordId != "" && recordId != null) {
 				record = recordService.getRecord(recordId);
 				record.setId("");
+				if (imgPath != "" && imgPath != null) {
+					record.setImgPath(imgPath);
+				}
+				if (RFID != "" && RFID != null) {
+					record.setRfidNo(RFID);
+				}
+				if (flag.equals("1")) {
+					record.setType(RecordTypeEnum.change);
+					record.setState(RecordStateEnum.nochange);
+				} else if (flag.equals("2")) {
+					record.setType(RecordTypeEnum.supplement);
+					record.setState(RecordStateEnum.nosupplement);
+				}
+				record.setConfirmState(RecordConfirmStateEnum.accepted);
+				recordService.saveRecord(record);
+			} else {
+				throw new WebException("生成备案出错");
 			}
-			if (imgPath != "" && imgPath != null) {
-				record.setImgPath(imgPath);
-			}
-			if (RFID != "" && RFID != null) {
-				record.setRfidNo(RFID);
-			}
-			if (flag.equals("1")) {
-				record.setType(RecordTypeEnum.change);
-				record.setState(RecordStateEnum.nochange);
-			} else if (flag.equals("2")) {
-				record.setType(RecordTypeEnum.supplement);
-				record.setState(RecordStateEnum.nosupplement);
-			}
-			record.setConfirmState(RecordConfirmStateEnum.accepted);
-			recordService.saveRecord(record);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
-			throw new WebException(e);
+			SxjLogger.error("生成备案错误", e, this.getClass());
+			throw new WebException("生成备案错误");
 		}
 	}
 
@@ -313,7 +320,8 @@ public class RecordController extends BaseController {
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
-			throw new WebException(e);
+			SxjLogger.error("修改备案错误", e, this.getClass());
+			throw new WebException("修改备案错误");
 		}
 	}
 
@@ -355,7 +363,8 @@ public class RecordController extends BaseController {
 						.getContract().getId());
 			}
 			RecordEntity record = recordService.getRecord(recordId);
-			String recordNo =recordService.getRecordNo(contractNo, member.getMember());
+			String recordNo = recordService.getRecordNo(contractNo,
+					member.getMember());
 			model.put("contractModel", contractModel);
 			model.put("recordId", recordId);
 			model.put("recordNo", recordNo);
@@ -448,8 +457,8 @@ public class RecordController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("getBatch")
-	public @ResponseBody Map<String, List<ContractBatchEntity>> getBatch(String recordId)
-			throws WebException {
+	public @ResponseBody Map<String, List<ContractBatchEntity>> getBatch(
+			String recordId) throws WebException {
 		try {
 			Map<String, List<ContractBatchEntity>> map = new HashMap<String, List<ContractBatchEntity>>();
 			List<ContractBatchEntity> batch = recordService.getBatch(recordId);
@@ -487,7 +496,7 @@ public class RecordController extends BaseController {
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
 			int size = contractService.getContractByZhaobiaoContractNo(
-					param.trim(), member.getMember().getMemberNo());
+					param, member.getMember().getMemberNo());
 			if (size == 0) {
 				map.put("status", "n");
 				map.put("info", "请输入正确的招标合同号");
@@ -570,7 +579,7 @@ public class RecordController extends BaseController {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			ContractModel cm = contractService
-					.getContractModelByContractNo(contractNo.trim());
+					.getContractModelByContractNo(contractNo);
 			if (cm != null) {
 				ContractEntity ce = cm.getContract();
 				if (ce.getConfirmState().getId() == 3) {
@@ -587,11 +596,13 @@ public class RecordController extends BaseController {
 			throw new WebException("确认备案信息错误");
 		}
 	}
+
 	@RequestMapping("getBatchPay")
-	public String getBatchPay(String contractNo,String recordNo,String type,ModelMap map)
-			throws WebException {
+	public String getBatchPay(String contractNo, String recordNo, String type,
+			ModelMap map) throws WebException {
 		try {
-			List<ContractBatchModel> batchList=contractService.getBacthsByContractNo(contractNo);
+			List<ContractBatchModel> batchList = contractService
+					.getBacthsByContractNo(contractNo);
 			map.put("batchList", batchList);
 			map.put("recordNo", recordNo);
 			map.put("type", type);

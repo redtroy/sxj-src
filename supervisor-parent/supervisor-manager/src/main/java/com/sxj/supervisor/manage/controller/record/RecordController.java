@@ -161,7 +161,7 @@ public class RecordController extends BaseController {
 			String recordId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		ContractModel cm = contractService.getContractModelByContractNo(query
-				.getContractNo().trim());
+				.getContractNo());
 		if (cm != null) {
 			RecordEntity re = recordService.getRecord(recordId);// 申请绑定备案
 			if (cm.getContract().getType().getId() != 0) {
@@ -276,7 +276,7 @@ public class RecordController extends BaseController {
 			Map<String, String> map = new HashMap<String, String>();
 			RecordEntity re = recordService.getRecord(id);
 			int size = contractService.getContractByZhaobiaoContractNo(
-					param.trim(), re.getMemberIdA());
+					param, re.getMemberIdA());
 			if (size == 0) {
 				map.put("status", "n");
 				map.put("info", "请输入正确的招标合同号");

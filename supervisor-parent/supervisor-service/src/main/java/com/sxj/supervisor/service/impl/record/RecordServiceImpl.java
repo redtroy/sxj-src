@@ -227,32 +227,35 @@ public class RecordServiceImpl implements IRecordService {
 	@Transactional
 	public void bindingContract(String contractNo, String refContractNo,
 			String recordNo, String recordNo2, String recordIdA,
-			String recordIdB) {
-
-		RecordEntity record = recordDao.getRecord(recordIdA);
-		RecordEntity record2 = recordDao.getRecord(recordIdB);
-		if (record != null) {
-			record.setRefContractNo(refContractNo);
-			record.setContractNo(contractNo);
-			record.setState(RecordStateEnum.Binding);
-			recordDao.updateRecord(record);
+			String recordIdB)throws ServiceException{
+		try {
+			RecordEntity record = recordDao.getRecord(recordIdA);
+			RecordEntity record2 = recordDao.getRecord(recordIdB);
+			if (record != null) {
+				record.setRefContractNo(refContractNo);
+				record.setContractNo(contractNo);
+				record.setState(RecordStateEnum.Binding);
+				recordDao.updateRecord(record);
+			}
+			if (record2 != null) {
+				record2.setRefContractNo(refContractNo);
+				record2.setContractNo(contractNo);
+				record2.setState(RecordStateEnum.Binding);
+				recordDao.updateRecord(record2);
+			}
+			// 插入合同
+			ContractModel ce = contractService
+					.getContractModelByContractNo(contractNo);
+			if (ce != null) {
+				ContractEntity contract = ce.getContract();
+				contract.setRecordNo(recordNo + "," + recordNo2);
+				contract.setRefContractNo(refContractNo);
+				contractDao.updateContract(contract);
+			}
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("绑定备案错误", e);
 		}
-		if (record2 != null) {
-			record2.setRefContractNo(refContractNo);
-			record2.setContractNo(contractNo);
-			record2.setState(RecordStateEnum.Binding);
-			recordDao.updateRecord(record2);
-		}
-		// 插入合同
-		ContractModel ce = contractService
-				.getContractModelByContractNo(contractNo);
-		if (ce != null) {
-			ContractEntity contract = ce.getContract();
-			contract.setRecordNo(recordNo + "," + recordNo2);
-			contract.setRefContractNo(refContractNo);
-			contractDao.updateContract(contract);
-		}
-
 	}
 
 	@Override
@@ -505,29 +508,30 @@ public class RecordServiceImpl implements IRecordService {
 		}
 	}
 
-
 	/**
 	 * 获取当前的用户的备案号
 	 */
 	@Override
 	public String getRecordNo(String contractNo, MemberEntity menber) {
 		try {
-			String recordNo="";
-			ContractModel cm=contractService.getContractModelByContractNo(contractNo);
-			if(cm!=null){
-				String records=cm.getContract().getRecordNo();
-				if(StringUtils.isNotEmpty(records)){
-					String[] recordArr =records.split(",");
+			String recordNo = "";
+			ContractModel cm = contractService
+					.getContractModelByContractNo(contractNo);
+			if (cm != null) {
+				String records = cm.getContract().getRecordNo();
+				if (StringUtils.isNotEmpty(records)) {
+					String[] recordArr = records.split(",");
 					for (String string : recordArr) {
-						RecordEntity recordEntity=this.getRecordByNo(string.trim());
-						if(recordEntity!=null){
-							if(menber.getType().getId()==0){
-								if(recordEntity.getFlag().getId()==0){
-									recordNo=recordEntity.getRecordNo();
+						RecordEntity recordEntity = this.getRecordByNo(string
+								.trim());
+						if (recordEntity != null) {
+							if (menber.getType().getId() == 0) {
+								if (recordEntity.getFlag().getId() == 0) {
+									recordNo = recordEntity.getRecordNo();
 								}
-							}else{
-								if(recordEntity.getFlag().getId()==1){
-									recordNo=recordEntity.getRecordNo();
+							} else {
+								if (recordEntity.getFlag().getId() == 1) {
+									recordNo = recordEntity.getRecordNo();
 								}
 							}
 						}
@@ -542,7 +546,6 @@ public class RecordServiceImpl implements IRecordService {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取备案号错误", e);
 		}
-		
 
 	}
 }

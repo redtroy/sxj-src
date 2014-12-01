@@ -35,15 +35,18 @@
 <@b.dialogBox/>
 <script>
 var preModal;
+var diglogIndex;
 jQuery(document).ready(function($) {
 	$(".modal-header .close").click(function(){
-		var $parent=$(this).parent().parent();
-		$parent.hide();
-		$(".maskdivgen1").hide();
-		if($parent.attr("class").indexOf("notViewer")<0){
-			preModal.show();
-			$(".maskdivgen1").show();
-		}
+		//var $parent=$(this).parent().parent();
+		//$parent.hide();
+		//$(".maskdivgen1").hide();
+		////if($parent.attr("class").indexOf("notViewer")<0){
+		//	preModal.show();
+		//	$(".maskdivgen1").show();
+		//}
+		alert($(this).attr("index"));
+		layer.closeAll();
 		
 	});
 	
@@ -146,6 +149,13 @@ $(document).ready(function() {
 			}
 		});
 })
+
+function closeAll()
+{
+	layer.closeAll();
+}
+
+
 //显示变更记录
 function biangeng(recordId,contractNo){
 	$.post("getRecord.htm", {contractNo:contractNo}, function(data) {
@@ -155,10 +165,11 @@ function biangeng(recordId,contractNo){
 			$('#bgcarousel').empty();
 			$('#bgRollBox').hide();
 			$("#bgRecordId").val("");
-			$('.maskdivgen1').fadeIn(100);
-			$('#chanPic').slideDown(200);
+			//$('.maskdivgen1').fadeIn(100);
+			//$('#chanPic').slideDown(200);
 			$('#bgRecordId').val(recordId);
 			$('#bgimgShow').show();	
+			dialogBoxOutId("#chanPic");
 		}else{
 			messageInfo("还有一笔申请未备案,不能进行该操作!");	
 		}
@@ -174,11 +185,12 @@ function busun(recordId,contractNo){
 			$("#bsimgPath").val("");
 			$('#bscarousel').empty();
 			$("#bsRecordId").val("");
-			$('.maskdivgen1').fadeIn(100);
-			$('.suppPop').slideDown(200);
+			//$('.maskdivgen1').fadeIn(100);
+			//$('.suppPop').slideDown(200);
 			$('#bsRecordId').val(recordId);
 			$("#rfidHide").val("");
 			$("#rfid").text("");
+			dialogBoxOutId("#bsModal");
 		}else{
 			messageInfo("还有一笔申请未备案,不能进行该操作!");	
 		}
@@ -273,13 +285,16 @@ function busunSeav(){
 			$('.maskdivgen2').fadeOut(100);
 		})
 		$('.closeBatch').click(function() {
-			$("#batch-list").slideUp(200);
-			$('.maskdivgen2').fadeOut(100);
+			//$("#batch-list").slideUp(200);
+			//$('.maskdivgen2').fadeOut(100);
+			alert(diglogIndex);
+			layer.close(diglogIndex);
 		})
 		$('.button-box .button-gray').click(function() {
-			$('.maskdivgen1').fadeOut(100);
-			$('.chanPic').slideUp(200);
-			$("#bgimgShow").hide();
+			//$('.maskdivgen1').fadeOut(100);
+			//$('.chanPic').slideUp(200);
+			//$("#bgimgShow").hide();
+			layer.closeAll();
 		})
 		$('.item .button-gray').click(function() {
 			$('.maskdivgen1').fadeOut(100);
@@ -426,14 +441,13 @@ function busunSeav(){
 		$("#batchUl").empty();
 		$.post("getBatch.htm", {recordId:recordId}, function(data) {
 			if (data.batch != undefined && data.batch.length>0) {
-				$("#batch-list").slideDown(200);
-				$('.maskdivgen2').fadeIn(100);
 				var batch =data.batch;
 				for(var i =0;i<batch.length;i++){
 					var bu='';
 					if(batch[i].type==3){bu='补'}
 					$("#batchUl").append('<li><input  type="checkbox" name="batchRfidNo"  title="'+batch[i].batchNo+'" value="'+batch[i].rfidNo+'" />'+bu+'第'+batch[i].batchNo+'批次</li>');
 				}
+				diglogIndex=dialogBoxOutId("#batch-list");
 			}else{
 				errorInfo("没有找到相关批次!");
 			}
@@ -642,7 +656,7 @@ function busunSeav(){
 		</div>
 	<@b.footer />
 	<div class="modal-wrap popDemo chanPic notViewer" id="chanPic"
-		style="display: none; width: 700px;">
+		style="display: none;width: 700px;margin-left:-200px;margin-top:-30px;">
 		<div class="modal-header">
 			<span class="close">关闭</span>
 		</div>
@@ -740,7 +754,7 @@ function busunSeav(){
 	<div class="modal-wrap popDemo dropList"  id="batch-list"
 		style="display: none; width: 680px; height: 300px;z-index: 10011;">
 		<div class="modal-header">
-			<span class="close closeBatch"><a>关闭窗口</a></span>
+			<span class="close closeBatch" onclick=""><a>关闭窗口</a></span>
 		</div>
 		 <div class="modal-body dropBox">
 		 <div class="item"> <span>
