@@ -1,5 +1,5 @@
-﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
@@ -29,7 +29,6 @@
 <script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
 	<script src="${b.staticPath}/js/tytabs.jquery.min.js" type="text/javascript"></script>
-	<script src="${b.staticPath}/js/jquery.paginate.js"></script>
 <@b.pageScript/>
 <@b.upload/>
 <@b.dialogBox/>
@@ -455,12 +454,12 @@ function busunSeav(){
 				<div class="yard-870 rightSide ly-left">
 					<div class="heading mb15 ly-clearFix">
 						<h1>
-							<span class="title fontYH f20 fb">合同备案管理</span> <input
-								type="hidden" value="${type}" id="typeId" />
+							<span class="title fontYH f20 fb">合同备案管理</span> <input type="hidden" value="${type}" id="typeId" />
 						</h1>
 					</div>
+					<div class="contBox">
 					<form id="search_form" action="javascript:void(0);" method="post">
-						<div class="contBox">
+						
 							<div class="searBox f12 mb10">
 								备案号 <input type="text" class="input" name="recordNo"
 									value="${query.recordNo}"/> 合同号 <input type="text"
@@ -645,8 +644,8 @@ function busunSeav(){
 					<div class="ly-clearFix"><@b.pager/></div>
 				</div>
 			</div>
-		</div>
-	<@b.footer />
+			</div>
+			<@b.footer />
 	<div class="modal-wrap popDemo chanPic notViewer" id="chanPic"
 		style="display: none; width: 700px;">
 		<div class="modal-header">
@@ -758,7 +757,7 @@ function busunSeav(){
 		 </div>
 	</div>
 	
-	<div class="viewer modal-wrap" id="iviewerModal">
+	<div class="viewer modal-wrap" id="iviewerModal" style="display: none;">
 		<div class="modal-header" style="display: none;">
 			<span class="close">关闭</span>
 		</div>
@@ -767,5 +766,6 @@ function busunSeav(){
 	</div>
 	<div class="maskdivgen maskdivgen1" style="display: none"></div>
 	<div class="maskdivgen maskdivgen2" style="display: none;z-index: 10010;" ></div>
+
 </body>
 </html>
