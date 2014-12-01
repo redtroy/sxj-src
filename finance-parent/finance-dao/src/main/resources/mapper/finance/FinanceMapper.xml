@@ -18,7 +18,7 @@
 		<result property="state" column="STATE" jdbcType="INTEGER"/>
 	</resultMap>
 	<!-- 条件查询合同 -->
-	<select id="queryPayContract" resultMap="ContractPayResultMap"
+	<select id="query" resultMap="financeResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM F_FINANCE WHERE 1=1
 	]]>
@@ -30,7 +30,6 @@
 		<if test="condition.contractNo != null and condition.contractNo != ''">
 			<![CDATA[AND CONTRACT_NO like CONCAT('%',#{condition.contractNo},'%')]]>
 		</if>
-		<![CDATA[ ORDER BY PAY_NO DESC
-		]]>
+		<![CDATA[ ORDER BY PAY_NO DESC]]>
 	</select>
 </mapper>

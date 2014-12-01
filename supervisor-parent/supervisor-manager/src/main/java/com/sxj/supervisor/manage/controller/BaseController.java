@@ -81,6 +81,8 @@ public class BaseController {
 		binder.registerCustomEditor(WindowTypeEnum.class,
 				new EnumPropertyEditorSupport<WindowTypeEnum>(
 						WindowTypeEnum.class));
+		binder.registerCustomEditor(String.class,
+				new TrimStringPropertyEditorSupport());
 	}
 
 	protected String getBasePath(HttpServletRequest request) {
