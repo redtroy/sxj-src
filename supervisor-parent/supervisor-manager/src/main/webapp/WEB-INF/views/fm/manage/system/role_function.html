@@ -1,7 +1,7 @@
  <div id="roleInfo_div" style="width:800px;margin-left:-200px;margin-top:-55px;">
       <div class="modal-header"><span class="close" onclick="closeDiv('roleInfo_div');">关闭</span></div>
       <div class="modal-body dropBox">
-       
+        <#if (list?size>0)>
         <#list list as model>
         <div class="item"> <span>
           <input  type="checkbox"  title="${model.function.title}" value="593" checked="checked" disabled="disabled"/>
@@ -16,6 +16,9 @@
           </ul>
         </div>
         </#list>
+         <#else>
+        <script type="text/javascript">closeDiv('roleInfo_div');messageInfo("没有权限");</script>
+        </#if>
         <button class="popBtn" onclick="closeDiv('roleInfo_div');">确认</button>
       </div>
       </div>

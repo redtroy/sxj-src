@@ -24,7 +24,7 @@
 	<bean id="authenticationFilter"
 		class="com.sxj.finance.website.login.SupervisorSiteAuthenticationFilter" />
 
-	<bean class="com.sxj.finance.website.login.ShiroEventListener"></bean>
+	<!-- <bean class="com.sxj.finance.website.login.ShiroEventListener"></bean> -->
 
 
 	<!-- 权限管理器 -->

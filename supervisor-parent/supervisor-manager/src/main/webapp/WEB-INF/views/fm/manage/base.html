@@ -145,42 +145,6 @@ function succInfo(confirm,message){
    </div>
 </div>
 </#macro>
-<!-- 自定义弹窗 
-<#macro diy_alert>
- <script>
-$(window).resize(); 
-$('#sure_alert').css({
-	  position:'absolute',
-	  left: ($(window).width() - $('#sure_alert').outerWidth())/2,
-	  top: ($(window).height() - $('#sure_alert').outerHeight())/2 + $(document).scrollTop()
-});
-  function diy_alert(text,obj){
-	  $("#sure_alert").show();
-	  $("#sure_alert").find("#alert_text").text(text);
-	  $("#sure_alert button:eq(0)").unbind("click");
-	  $("#sure_alert button:eq(1)").unbind("click");
-	  $("#sure_alert").find("#close_sure").unbind("click");
-	  $("#sure_alert button:eq(0)").click(function(){
-		  obj();
-		  $("#sure_alert").hide();
-	  })
-	  $("#sure_alert button:eq(1)").click(function(){
-		  $("#sure_alert").hide();
-	  })
-	  $("#sure_alert").find("#close_sure").click(function(){
-		  $("#sure_alert").hide();
-	  })
-  }
-</script>
-<div id="sure_alert" style="display:none;" class="modal-wrap popDemo" accountId="">
-        <div class="modal-header">
-          <span class="close" id="close_sure" >关闭</span></div>
-         <div class="modal-body popbtnBox">
-        <p class="fontYH f18 mb10" id="alert_text"></p>
-          <button class="popBtn">确认</button><button  class="popBtn btnGray">取消</button>
-        </div>
-</div>
-</#macro>-->
 <#macro dialogBox>
 <div id="diglog_div" style="display:none;">
 <div class="modal-wrap popDemo">
@@ -239,7 +203,7 @@ function dialogBoxOut(html){
 		    type: 1,
 		    title: false,
 		    offset: ['200px', ''],
-		   	area: ['20%', '20%'],
+		   	area: ['10%', '10%'],
 		    border: [0], //去掉默认边框
 		    shade: [0.5,'#000'], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
@@ -278,41 +242,16 @@ $(function(){
 <script src="${staticPath}js/jquery.pagination_2.js"></script>
 <link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
 <script>
-/**function loadPage(currentPage,totalPage,query){
-	if(totalPage>0){
-		$("#pager").attr("currentPage",currentPage);
-		$("#pager").attr("totalPage",totalPage);
-		$("#pager").paginate({
-			count 		: totalPage,
-			start 		: currentPage,
-			display     : 10,
-			border					: true,
-			border_color			: '#CCC',
-			text_color  			: '#333',
-			background_color    	: '#FFF',	
-			border_hover_color		: '#ff4400',
-			text_hover_color  		: '#ff4400',
-			background_hover_color	: '#fff', 
-			images					: false,
-			mouse					: 'press',
-			onChange				: function(page){
-				query(page);
-			}
-		});
-	}else{
-		$("#pager").empty();
-	}
-}**/
 function loadPage(currentPage,totalPage) {
 	// 创建分页
-	$("#pager").attr("currentPage",currentPage);
-	$("#pager").attr("totalPage",totalPage);
-	$("#pager").pagination(totalPage, {
+	$(".pagination").attr("currentPage",currentPage);
+	$(".pagination").attr("totalPage",totalPage);
+	$(".pagination").pagination(totalPage, {
 		num_edge_entries: 1, //边缘页数
 		num_display_entries: 4, //主体页数
 		callback: function(page_index,jp){
 			query(page_index+1);
-			$("#pager").attr("currentPage",page_index+1);
+			$(".pagination").attr("currentPage",page_index+1);
 			return false;
 		},
 		current_page:currentPage-1,
@@ -321,7 +260,7 @@ function loadPage(currentPage,totalPage) {
 		next_text: "后一页"
 	});
  }
-$("#pager").ready(function(){
+$(".pagination").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage});
 });
 </script>

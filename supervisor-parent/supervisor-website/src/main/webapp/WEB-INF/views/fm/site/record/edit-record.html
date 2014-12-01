@@ -75,7 +75,7 @@ var imgBinding = function() {
 	$(".elastislide-list").each(function() {
 		var $this = $(this);
 		var imgPath = $(this).parent().siblings(":hidden").val();
-		$.post("${basePath}filesort.htm", {
+		$.post("${basePath}filesort.htm?random="+Math.random(), {
 			fileId : imgPath
 		}, function(imgPaths) {
 			refreshElastislide($this.parent(), $this, imgPaths);
@@ -347,7 +347,7 @@ $(document).ready(function() {
 							<span class="title fontYH f20 fb">修改备案信息</span>
 						</h1>
 					</div>
-					<!-- 甲方--(门窗厂采购) -->
+					<!-- 甲方(门窗厂采购) -->
 					<#if record.type.getId()==0>
 					<#if type==0>
 					<#if record.contractType.getId()!=0>

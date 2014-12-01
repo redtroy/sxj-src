@@ -152,14 +152,16 @@ $(document).ready(function(){
 		<div class="item ly-clearFix">
                     <label class="ly-left">&nbsp;</label>
                     <table border="0" cellpadding="0" cellspacing="0" class="tabProd ly-left">
-                      <col width="15%" />
-                      <col width="40%" />
-                      <col width="20%" />
-                      <col width="15%" />
-                       <col width="10%" />
+                      <col width="15%">
+                      <col width="35%">
+                      <col width="15%">
+                      <col width="15%">
+                      <col width="15%">
+                       <col width="5%" />
                       <tr>
                         <th>批次</th>
-                        <th>表格</th>
+                        <th>产品规格</th>
+                        <th>数量<span class="fontAR ml5">（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
                         <th>应付货款</th>
                         <th>对应物流标签</th>
                         <th>&nbsp;&nbsp;&nbsp;</th>
@@ -168,17 +170,21 @@ $(document).ready(function(){
                       <tr>
                         <td>第${batch.batch.batchNo}批次</td>
                         <td><table border="0" cellspacing="0" cellpadding="0" class="tabProd tabBatch">
-                          <tr>
-                            <th>产品规格</th>
-                            <th>数量<span class="fontAR ml5">(<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>)</span></th>
-                          </tr>
                            <#list batch.batchItems as batchItem>
                           <tr>
                             <td>${batchItem.productModel}</td>
-                            <td>${batchItem.quantity}</td>
                           </tr>
                            </#list>
-                        </table></td>
+                        </table>
+                        </td>
+                        <td><table border="0" cellspacing="0" cellpadding="0" class="tabProd tabBatch">
+                           <#list batch.batchItems as batchItem>
+                          <tr>
+                            <td>${batchItem.quantity?string('0.00')}</td>
+                          </tr>
+                           </#list>
+                        </table>
+                        </td>
                         <td>${batch.batch.amount?string("0.00")}元</td>
                         <td>${batch.batch.rfidNo}</td>
                        <td><#if batch.batch.updateState==1><span class="color-red">！</span></#if></td>
@@ -281,17 +287,19 @@ $(document).ready(function(){
 				<#if modifyList.modifyBatchList?exists >
 				<table border="0" cellpadding="0" cellspacing="0"
 					class="tabProd ly-left">
-					<col width="15%" />
-					<col width="45%" />
-					<col width="20%" />
-					<col width="12%" />
-					<col width="8%" />
+					 <col width="15%">
+                      <col width="35%">
+                      <col width="15%">
+                      <col width="15%">
+                      <col width="15%">
+                       <col width="5%" />
 					<tr>
-						<th>批次</th>
-						<th>表格</th>
-						<th>应付货款</th>
-						<th>对应批次RFID编号</th>
-						<th>&nbsp;&nbsp;&nbsp;</th>
+					 <th>批次</th>
+                        <th>产品规格</th>
+                        <th>数量<span class="fontAR ml5">（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+                        <th>应付货款</th>
+                        <th>对应物流标签</th>
+                        <th>&nbsp;&nbsp;&nbsp;</th>
 					</tr>
 
 					<#list modifyList.modifyBatchList as modifyBatch>
@@ -299,15 +307,16 @@ $(document).ready(function(){
 						<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
 						<td><table border="0" cellspacing="0" cellpadding="0"
 								class="tabProd tabBatch">
-								<tr>
-									<th>产品规格</th>
-									<th>数量<span >（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）
-									</span></th>
-								</tr>
-
 								<#list modifyBatch.modifyBatchItems as modifyBatchItems>
 								<tr>
 									<td>${modifyBatchItems.productModel}</td>
+								</tr>
+								</#list>
+							</table></td>
+							<td><table border="0" cellspacing="0" cellpadding="0"
+								class="tabProd tabBatch">
+								<#list modifyBatch.modifyBatchItems as modifyBatchItems>
+								<tr>
 									<td>${modifyBatchItems.quantity?string('0.00')}</td>
 								</tr>
 								</#list>
@@ -351,36 +360,40 @@ $(document).ready(function(){
 				<label class="ly-left">&nbsp;</label>
 				<table border="0" cellpadding="0" cellspacing="0"
 					class="tabProd ly-left">
-					<col width="14%" />
-					<col width="42%" />
-					<col width="12%" />
-					<col width="17%" />
-					<col width="8%" />
+					 <col width="15%">
+                      <col width="35%">
+                      <col width="15%">
+                      <col width="15%">
+                      <col width="15%">
+                       <col width="5%" />
 					<tr>
-						<th>批次</th>
-						<th>表格</th>
-						<th>应付货款</th>
-						<th>RFID编号</th>
-						<th>&nbsp;&nbsp;&nbsp;</th>
+					 <th>批次</th>
+                        <th>产品规格</th>
+                        <th>数量<span class="fontAR ml5">（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+                        <th>应付货款</th>
+                        <th>对应物流标签</th>
+                        <th>&nbsp;&nbsp;&nbsp;</th>
 					</tr>
 					<#list replenishList.batchItems as replenishItem>
 					<tr>
 						<td>补第${replenishItem.replenishBatch.batchNo}批次</td>
 						<td><table border="0" cellspacing="0" cellpadding="0"
 								class="tabProd tabBatch">
-								<tr>
-									<th>产品规格</th>
-									<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡<#elseif  contractModel.contract.type.getId()==2>吨</#if>）
-									</span></th>
-								</tr>
 								<#list replenishItem.replenishBatchItems as replenishBatchItems>
 								<tr>
 									<td>${replenishBatchItems.productModel}</td>
-									<td>${replenishBatchItems.quantity}</td>
 								</tr>
 								</#list>
 							</table></td>
-						<td>${replenishItem.replenishBatch.amount}</td>
+						<td><table border="0" cellspacing="0" cellpadding="0"
+								class="tabProd tabBatch">
+								<#list replenishItem.replenishBatchItems as replenishBatchItems>
+								<tr>
+									<td>${replenishBatchItems.quantity?string('0.00')}</td>
+								</tr>
+								</#list>
+							</table></td>
+						<td>${replenishItem.replenishBatch.amount?string('0.00')}</td>
 						<td>${replenishItem.replenishBatch.newRfidNo}</td>
 						<td><#if replenishItem.replenishBatch.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 					</tr>
