@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
@@ -22,6 +23,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
 
+import com.sxj.finance.entity.member.AccountEntity;
+import com.sxj.finance.entity.member.MemberEntity;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.util.logger.SxjLogger;
 
@@ -52,7 +55,29 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 	// 获取认证信息
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken authcToken) throws AuthenticationException {
-
+		SupervisorSiteToken token = (SupervisorSiteToken) authcToken;
+		// 通过表单接收的用户
+		SupervisorPrincipal userBean = token.getUserBean();
+		if (userBean == null) {
+			return null;
+		}
+		if (userBean.getMember() == null && userBean.getAccount() != null) {
+			return null;
+		}
+		if (userBean.getMember() != null && userBean.getAccount() == null) {
+			MemberEntity member = userBean.getMember();
+			if (member != null) {
+				return new SimpleAuthenticationInfo(member,
+						member.getPassword(), getName());
+			}
+		} else if (userBean.getMember() != null
+				&& userBean.getAccount() != null) {
+			AccountEntity account = userBean.getAccount();
+			if (account != null) {
+				return new SimpleAuthenticationInfo(account,
+						account.getPassword(), getName());
+			}
+		}
 		return null;
 	}
 
@@ -188,9 +213,7 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 			if (!CollectionUtils.isEmpty(perms)) {
 				permissions.addAll(perms);
 			}
-
 		}
-
 		if (permissions.isEmpty()) {
 			return Collections.emptySet();
 		} else {
