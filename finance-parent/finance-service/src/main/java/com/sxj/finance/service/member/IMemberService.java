@@ -14,5 +14,7 @@ public interface IMemberService {
 
 	MemberEntity getMember(String id);
 
+	void editCheckState(String id, Integer state) throws ServiceException;
+
 	
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>紫金财富金融服务平台</title>
+<meta name="keywords" content="紫金财富金融服务平台"/>
+<meta name="description" content="紫金财富金融服务平台"/>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="header" class="fence">
+<div class="fence-wide topBox"></div>
+</div>
+<div class="fence-wide pb20 ly-clearFix">
+<div class="yard-200 ly-left">
+<div class="leftMenu pt5 pb5">
+<h2 class="pl15 fb">会员中心</h2>
+<ul class="pl10 pr10">
+<li class="on"><a href="member-center.html">会员中心</a></li>
+</ul>
+<h2 class="pl15 pt5 fb">融资管理</h2>
+<ul class="pl10 pr10">
+<li><a href="pay-list.html">融资管理</a></li>
+</ul>
+</div>
+</div>
+<div class="yard-880 rightSide ly-left">
+<div class="heading fontYH f22">会员中心<div class="mt5 color-gray9 ly-right f14"><span class="icon icon-secret mr10">&nbsp;</span>对于您的隐私信息，我们会严格保密</div></div>
+<div class="mainBox">
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone mb20">
+<caption class="fontYH f16 mb10 ly-hide">基本资料</caption>
+  <tr>
+    <th>企业名称</th>
+    <td>${member.name}</td>
+  </tr>
+  <tr>
+    <th>企业类型</th>
+    <td>${member.type.getName()}</td>
+  </tr>
+  <tr>
+    <th>公司所在地</th>
+    <td>${member.area}</td>
+  </tr>
+  <tr>
+    <th>企业资质</th>
+    <td>${member.bLicenseNo}<span class="ml20">${member.energyNo}</span></td>
+  </tr>
+  <tr>
+    <th>公司电话</th>
+    <td><span class="item">${member.telNum}</span></td>
+  </tr>
+  <tr>
+    <th>公司地址</th>
+    <td><span class="item">${member.address}</span></td>
+  </tr>
+  <tr>
+    <th>联系人</th>
+    <td>${member.contacts}</td>
+  </tr>
+  <tr>
+    <th>联系人手机</th>
+    <td><span class="item">${member.phoneNo}</span></td>
+  </tr>
+  <tr>
+    <th>主要产品</th>
+    <td>${member.name}</td>
+  </tr>
+</table>
+<div class="buttonBox memBtn">
+  <a href="member-center.html" class="button button-red">确认会员信息</a></div>
+</div>
+</div>
+</div>
+<div id="footer" class="fence">
+  <div class="fence-wide color-gray6">&copy; 2014 江苏紫金财富金融信息服务有限公司&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14047993号-1</a></span></div>
+</div>
+</body>
+</html>

@@ -73,7 +73,6 @@ public class MemberEntity extends Pagable implements Serializable {
 	 * 会员名称
 	 **/
 	@Column(name = "NAME")
-	@Length(max = 50, message = "会员名称长度过长")
 	private String name;
 
 	/**

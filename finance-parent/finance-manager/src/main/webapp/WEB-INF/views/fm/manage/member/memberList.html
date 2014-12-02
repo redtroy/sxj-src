@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>紫金财富金融服务平台</title>
+<meta name="keywords" content="紫金财富金融服务平台"/>
+<meta name="description" content="紫金财富金融服务平台"/>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script>
+jQuery(document).ready(function($) {
+	$(".tabList .lnk-blue").click(function(){
+		var contractId=$(this).html();
+		$("#"+contractId).toggle();
+	});
+})
+</script>
+</head>
+
+<body>
+<div id="header" class="fence">
+<div class="logo">
+<h1 class="fontYH fence-wide fb">紫金财富金融服务平台<span class="f24 ml10">后台系统</span></h1>
+</div>
+</div>
+<div class="fence mainBg">
+<div class="fence-wide pt10 pb10 mainCont ly-clearFix">
+<div class="yard-200 ly-left">
+<div class="leftMenu pt5 pb5">
+<h2 class="pl15 fb">会员中心</h2>
+<ul>
+<li class="on"><a href="member-center.html">会员管理</a></li>
+</ul>
+<h2 class="pl15 pt5 fb">融资管理</h2>
+<ul>
+<li><a href="pay-list.html">融资管理</a></li>
+</ul>
+</div>
+</div>
+<div class="yard-880 ly-left">
+<div class="rightSide">
+<div class="heading fontYH f20">会员管理</div>
+<div class="mainBox">
+  <div class="searBox f12 mt10 mb10">
+    <p> 会员ID
+      <input class="input" type="text" name="memberNo" value="${query.memberNo}" />
+      会员名称
+      <input type="text" class="input" name="name" value="${query.name}" />
+      联系人名称
+      <input type="text" class="input" name="contacts" value="${query.contacts}" />
+      联系人手机
+      <input type="text" class="input" name="phoneNo" value="${query.phoneNo}" />      
+      </p>
+      <p>
+      营业执照号码
+      <input type="text" class="input" name="bLicenseNo" value="${query.bLicenseNo}" />
+      节能标识推广证号
+      <input type="text" class="input" name="energyNo" value="${query.energyNo}" />
+      <button class="button button-search">查询</button>
+    </p>
+  </div>
+  <table border="0" cellspacing="0" cellpadding="0" class="tabList">
+  <col width="10%" />
+  <col width="20%" />
+  <col width="10%" />
+  <col width="15%" />
+  <col width="15%" />
+  <col width="15%" />
+  <col width="15%" />  
+    <tr>
+      <th>会员ID</th>
+      <th>会员名称</th>
+      <th>联系人名称</th>
+      <th>联系人手机</th>
+      <th>营业执照号码</th>
+      <th>节能标识推广证号</th>
+	  <th>操作</th>
+    </tr>
+    <#list memberList member>
+    <tr class="bColor-hover">
+      <td><a href="#" class="lnk-blue">${member.memberNo}</a></td>
+      <td>${member.name}</td>
+      <td>${member.contacts}</td>
+      <td>${member.phoneNo}</td>
+      <td>${member.bLicenseNo}</td>
+      <td>${member.energyNo}</td>
+	  <td><a href="#" class="lnk-blue">审核</a></td>
+    </tr>
+    </#list>
+    <tr id="M005" style="display:none">
+      <td colspan="7" class="tl"><table border="0" cellpadding="0" cellspacing="0" class="table tableMember mb15">
+        <caption class="fontYH f14">
+          基本资料
+          </caption>
+        <tr>
+          <th>企业名称</th>
+          <td>德国伦茨门控有限公司</td>
+        </tr>
+        <tr>
+          <th>企业类型</th>
+          <td>门窗厂</td>
+        </tr>
+        <tr>
+          <th>公司所在地</th>
+          <td>江苏省 南京市 浦口区 </td>
+        </tr>
+        <tr>
+          <th>企业资质</th>
+          <td>营业执照号<span class="ml20">节能环保标签</span></td>
+        </tr>
+        <tr>
+          <th>公司电话</th>
+          <td><span class="item">+86 25 66026268</span></td>
+        </tr>
+        <tr>
+          <th>公司地址</th>
+          <td>江苏省南京市南京高新技术开发区西墩子109号</td>
+        </tr>
+        <tr>
+          <th>联系人</th>
+          <td>杨先生</td>
+        </tr>
+        <tr>
+          <th>联系人手机</th>
+          <td><span class="item">+86 133 5783 5399</span></td>
+        </tr>
+        <tr>
+          <th>主要产品</th>
+          <td>二翼旋转门、车库门、伸缩门</td>
+        </tr>
+      </table>
+        <div class="buttonBox mt15 mb10 tc"><a href="#" class="button button-orange btn-hide">收起</a> </div></td>
+      </tr>
+    <tr>
+      <td>M004</td>
+      <td>海安镇洋电动伸缩门窗厂</td>
+      <td>朱先生</td>
+      <td><span class="item">+86 189 4897 5536 </span></td>
+      <td>JNTG14101701</td>
+      <td>JNTG14101701</td>
+	  <td><a href="#" class="lnk-blue">审核</a></td>
+    </tr>
+    <tr>
+      <td>M003</td>
+      <td>南京市德朗斯格门窗有限公司</td>
+      <td>余先生</td>
+      <td>+86 136 0515 7894</td>
+      <td>JNTG14101701</td>
+      <td>JNTG14101701</td>
+	  <td><a href="#" class="lnk-blue">审核</a></td>
+    </tr>
+    <tr>
+      <td>M002</td>
+      <td>恒通门业有限公司</td>
+      <td>贺女士</td>
+      <td><span class="item">+86 133 6587 1258 </span></td>
+      <td>JNTG14101701</td>
+      <td>JNTG14101701</td>
+	  <td><span class="state verified">已审核</span></td>
+    </tr>
+    <tr>
+      <td>M001</td>
+      <td>南京沃尔美门窗有限公司</td>
+      <td>杨先生</td>
+      <td>+86 137 7092 4039</td>
+      <td>JNTG14101701</td>
+      <td>JNTG14101701s</td>
+	  <td><span class="state verified">已审核</span></td>
+    </tr>
+</table>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="footer" class="fence">
+  <div class="fence-wide">&copy; 2014 江苏紫金财富金融信息服务有限公司&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14047993号-1</a></span></div>
+</div>
+</body>
+</html>

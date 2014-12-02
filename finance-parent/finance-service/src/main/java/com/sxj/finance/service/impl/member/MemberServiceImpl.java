@@ -1,5 +1,6 @@
 package com.sxj.finance.service.impl.member;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.finance.dao.member.IMemberDao;
 import com.sxj.finance.entity.member.MemberEntity;
+import com.sxj.finance.enu.member.MemberCheckStateEnum;
 import com.sxj.finance.model.member.MemberQuery;
 import com.sxj.finance.service.member.IMemberService;
 import com.sxj.util.common.StringUtils;
@@ -84,5 +86,29 @@ public class MemberServiceImpl implements IMemberService {
 			return member;
 		}
 		return null;
+	}
+	
+	/**
+	 * 更改审核状态
+	 */
+	@Override
+	@Transactional
+	public void editCheckState(String id, Integer state)
+			throws ServiceException {
+		try {
+			if (state != null && StringUtils.isNotEmpty(id)) {
+				MemberEntity member = new MemberEntity();
+				member.setId(id);
+				member.setCheckState(MemberCheckStateEnum.getEnum(state));
+				if (state == 2) {
+					member.setAuthorDate(new Date());
+				}
+				member.setVersion(menberDao.getMember(id).getVersion());
+				menberDao.updateMember(member);
+			}
+		} catch (Exception e) {
+			throw new ServiceException("更改审核状态错误", e);
+		}
+
 	}
 }
