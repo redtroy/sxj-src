@@ -138,7 +138,7 @@
 			<artifactId>shiro-all</artifactId>
 			<version>1.2.3</version>
 		</dependency>
-	</dependencies>
+  </dependencies>
   <build>
     <finalName>finance-website</finalName>
     <plugins>

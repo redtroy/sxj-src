@@ -123,6 +123,8 @@
 				/rfid/window/logistics/query.htm=user,frameperms
 				/rfid/window/startmrfid_list.htm=user,frameperms
 				/rfid/window/to_loss.htm=user,frameperms
+				/finance/finance.htm=user,frameperms
+				/pay/paylist.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->

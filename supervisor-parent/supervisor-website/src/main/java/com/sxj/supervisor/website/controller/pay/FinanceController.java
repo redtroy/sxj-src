@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.controller.contract;
+package com.sxj.supervisor.website.controller.pay;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 
 @Controller
-@RequestMapping("contract")
+@RequestMapping("finance")
 public class FinanceController extends BaseController {
 	@Autowired
 	private IContractPayService payService;
@@ -47,6 +47,6 @@ public class FinanceController extends BaseController {
 		} catch (Exception e) {
 			throw new WebException(e.getMessage());
 		}
-		return "site/contract/finance";
+		return "site/pay/finance";
 	}
 }
