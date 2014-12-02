@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.controller.contract;
+package com.sxj.supervisor.website.controller.pay;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +23,13 @@ import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.LoginToken;
+import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-@RequestMapping("/contract")
+@RequestMapping("/pay")
 public class PayController extends BaseController {
 	@Autowired
 	private IContractPayService payService;
@@ -77,7 +79,7 @@ public class PayController extends BaseController {
 		} catch (Exception e) {
 			throw new WebException(e.getMessage());
 		}
-		return "site/contract/pay";
+		return "site/pay/pay";
 	}
 
 	/**
@@ -176,14 +178,24 @@ public class PayController extends BaseController {
 	/**
 	 * 测试
 	 */
-	@RequestMapping("test")
-	public @ResponseBody Map<String, String> test(HttpSession session) {
-		SupervisorPrincipal info = getLoginInfo(session);
-		String memberNo = info.getMember().getMemberNo();
-		CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
-				+ memberNo);
-		MessageChannel.initTopic().publish(
-				MessageChannel.WEBSITE_PAY_MESSAGE + memberNo);
+	@RequestMapping("tofinance")
+	public String tofinance(HttpSession session) {
+		try {
+			SupervisorPrincipal loginInfo = getLoginInfo(session);
+			if (loginInfo == null) {
+				return LOGIN;
+			}
+			LoginToken loginToken = new LoginToken();
+			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
+			loginToken.setMemberName(loginInfo.getMember().getName());
+			loginToken.setPassword(loginInfo.getMember().getPassword());
+			return "redirect:http://127.0.0.1:8080/finance-website/to_login.htm?member="
+					+ loginToken.getMemberNo()
+					+ "&token="
+					+ EncryptUtil.md5Hex(loginToken.toString());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return null;
 	}
 }

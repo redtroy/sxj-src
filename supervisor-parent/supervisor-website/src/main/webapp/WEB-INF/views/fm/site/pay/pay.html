@@ -27,12 +27,13 @@
 	type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
-	<script src="${b.staticPath}/js/tytabs.jquery.min.js" type="text/javascript"></script>
-	<script src="${b.staticPath}/js/jquery.paginate.js"></script>
-	<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}/js/tytabs.jquery.min.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
-<@b.pageScript/><@b.upload/>
+<@b.pageScript/>
+<@b.upload/>
+<@b.dialogBox/>
 <script>
 jQuery(document).ready(function($) {
 	$('.modal-header .close').click(function() {
@@ -111,13 +112,14 @@ function pay(id){
 	//payReal=payReal*100;
 	$.post("pay.htm",{id:id,payReal:payReal},function(data){
 		 if (data.isOk=="ok"){
-			 alert("付款成功！")
-			 $("#pay_info_"+id).slideUp(200);
-			 query($("#pager").attr("currentPage"));
+			 succInfo(function(){
+				 $("#pay_info_"+id).slideUp(200);
+				 query($("#pager").attr("currentPage"));
+			 },"付款成功！");
+			
 		 }else{
-			 alert("操作失败！")
+			 errorInfo(data.error);
 			 $("#pay_info_"+id).slideUp(200);
-			 query($("#pager").attr("currentPage"));
 		 }
 	})
 }
@@ -125,15 +127,19 @@ function pay(id){
 function pay_ok(id){
 	$.post("pay_ok.htm",{id:id},function(data){
 		 if (data.isOk=="ok"){
-			 alert("付款成功！")
-			 $("#pay_info_"+id).slideUp(200);
-			 query($("#pager").attr("currentPage"));
+			 succInfo(function(){
+				 $("#pay_info_"+id).slideUp(200);
+				 query($("#pager").attr("currentPage"));
+			 },"确认成功！");
 		 }else{
-			 alert("操作失败！")
+			 errorInfo(data.error);
 			 $("#pay_info_"+id).slideUp(200);
-			 query($("#pager").attr("currentPage"));
 		 }
 	})
+}
+
+function to_finance(){
+	window.location.href="${basePath}pay/tofinance.htm";
 }
 </script>
 </head>
@@ -217,7 +223,7 @@ function pay_ok(id){
       <#if (model.state.ordinal()==0)>
           <#if (state=="a")>
            <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button>
-           <button class="button button-orange">融资</button>
+           <button class="button button-orange" onclick="to_finance();">融资</button>
            <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
               <div class="modal-body">
                 <div class="ly-clearFix">

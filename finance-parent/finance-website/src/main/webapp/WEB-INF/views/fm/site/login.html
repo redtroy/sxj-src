@@ -1,71 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
-<link href="${b.staticPath}style/regin.css" rel="stylesheet" type="text/css" />
-<script src="${b.staticPath}js/jquery.js"></script>
-<script>
-$(function(){
-	if("${message}"!=""){
-		$("#message_div").show();
-	}
-	if("${amessage}"!=""){
-		$("#amessage_div").show();
-	}
-	if("${pmessage}"!=""){
-		$("#pmessage_div").show();
-	}
-});
-$(document).keyup(function(event){
-	  if(event.keyCode ==13){
-		  login();
-	  }
-	});
-function login()
-{
-	$("#login_form").submit();
-	
-}
-</script>
+<title>紫金财富金融服务平台</title>
+<meta name="keywords" content="紫金财富金融服务平台">
+<meta name="description" content="紫金财富金融服务平台">
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 </head>
-<body id="signBox">
-<div id="header">
-  <h1 class="fence-wide"><a href="javascirpt:void(0);" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
+
+<body id="regin">
+<div class="loginBox">
+<div class="logo mt10 ml20 mb20 tc">
+<img src="${b.staticPath}images/login-home.jpg" alt="紫金财富金融服务平台" title="紫金财富金融服务平台" width="660" height="70" />
 </div>
-<div class="fence signCont">
-<div class="fence-wide">
-<div class="signBox fontYH">
-<form id="login_form" action="${basePath}login.htm" method="post">
-  <div class="regInfo">
-  <div class="join tr">
-  <span class="fb">还不是私享家会员？</span>
-  <a href="${basePath}member/regist.htm" title="免费注册私享家帐号" class="f16" tabindex="6">&nbsp;</a>
-  </div>
-    <div class="regCont">
-    <div class="item">
+<div class="loginInfo">
+<div class="loginModern">
+<h2 class="loginTitle fontYH f20 ly-hide">登录紫金财富</h2>
+  <div class="item pr">
     <label>公司名称</label>
-    <input class="input" type="text" autocomplete="off" placeholder=""  name="memberName" value="${memberName}"/>
-    <div id="message_div" style="display:none;" class="tip msg-error f12">${message}</div>
+    <input class="input" type="text" autocomplete="off" placeholder="" title="" id="" name="" value="" />
   </div>
 <div class="item">
     <label>登录帐户</label>
-    <input class="input input-w240h36" type="text" autocomplete="off" placeholder=""  name="accountName" value="${accountName}"/>
-    <div id="amessage_div" class="tip msg-error f12" style="display:none;">${amessage}</div>
+    <input class="input" type="text" autocomplete="off" placeholder="" title="" id="" name="" value="" />
   </div>
 <div class="item">
-  <label>登录密码</label>
-  <input class="input input-error input-w240h36" type="password" name="password" autocomplete="off" placeholder=""  value=""/>
-  <div id="pmessage_div" class="tip msg-error f12" style="display:none;">${pmessage}</div>
+  <label><a href="find-password.html" class="ly-right mr10">忘记密码？</a>登录密码</label>
+  <input class="input" type="password" autocomplete="off" placeholder="" title="" />
+  <div class="tip msg-error f12 ly-hide">请输入正确的密码</div>
 </div>
-<p class="tr pr5 f12"><a href="${basePath}member/find_pwd.htm">忘记密码？</a></p>
-<a href="javascript:login();" class="button btn-regin mt5 f18">登&nbsp;录</a>
+<div class="buttonBox mt15 tc">
+<a href="member-profile.html" class="button button-red">登录</a>
+<a href="${basePath}/autoLogin.htm" class="button button-key">一键登录</a>
 </div>
-</div>
-</form>
-<div class="pt10 color-gray9 tc fireDown">建议下载<a href="http://www.firefox.com.cn/" class="lnk-blue ml5 mr5" target="_blank">火狐浏览器</a>访问使用平台，谢谢！</div>
 </div>
 </div>
 </div>
