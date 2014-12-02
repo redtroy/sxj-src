@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.service.rfid;
+package com.sxj.supervisor.service.rfid;
 
 import org.junit.After;
 import org.junit.AfterClass;

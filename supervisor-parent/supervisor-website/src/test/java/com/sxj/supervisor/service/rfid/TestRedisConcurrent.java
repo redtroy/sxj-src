@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.service.rfid;
+package com.sxj.supervisor.service.rfid;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
