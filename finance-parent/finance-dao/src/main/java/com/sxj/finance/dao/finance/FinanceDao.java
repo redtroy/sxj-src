@@ -12,11 +12,19 @@ import com.sxj.util.persistent.QueryCondition;
 public interface FinanceDao {
 
 	/**
-	 * 根据条件查询
+	 * 根据条件查询 前台
 	 * 
 	 * @return
 	 */
-	public List<FinanceEntity> query(QueryCondition<FinanceEntity> query)
+	public List<FinanceEntity> queryWebSite(QueryCondition<FinanceEntity> query)
+			throws SQLException;
+
+	/**
+	 * 根据条件查询 后台
+	 * 
+	 * @return
+	 */
+	public List<FinanceEntity> queryManage(QueryCondition<FinanceEntity> query)
 			throws SQLException;
 
 	/**

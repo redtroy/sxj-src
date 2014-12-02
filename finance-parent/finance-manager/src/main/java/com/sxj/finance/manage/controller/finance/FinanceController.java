@@ -33,7 +33,7 @@ public class FinanceController extends BaseController {
 				query.setPagable(true);
 			}
 			PayStageEnum[] states = PayStageEnum.values();
-			List<FinanceEntity> fe = financeService.query(query);
+			List<FinanceEntity> fe = financeService.queryManage(query);
 			map.put("list", fe);
 			map.put("query", query);
 			map.put("states", states);
@@ -70,6 +70,21 @@ public class FinanceController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			SxjLogger.error("融资搁置错误", e, this.getClass());
+		}
+		return map;
+	}
+
+	@RequestMapping("accept")
+	public @ResponseBody Map<String, String> accept(FinanceEntity fe)
+			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			if (financeService.accept(fe)) {
+				map.put("isOk", "ok");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			SxjLogger.error("融资受理错误", e, this.getClass());
 		}
 		return map;
 	}

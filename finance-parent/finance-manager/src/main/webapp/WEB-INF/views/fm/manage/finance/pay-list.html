@@ -5,20 +5,70 @@
 <title>紫金财富金融服务平台</title>
 <meta name="keywords" content="紫金财富金融服务平台">
 <meta name="description" content="紫金财富金融服务平台">
-<link href="../style/style.css" rel="stylesheet" type="text/css" />
-<script src="../js/jquery.js"></script>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
 <script>
 jQuery(document).ready(function($) {
-	$('.btn-financle').click(function(){
-		$('.payPop').slideDown(200);
-	})
-	$('.modal-header .close').click(function(){
-		$('.payPop').slideUp(200);
-	})
-	$('.btn-ok').click(function(){
-		$('.payPop').slideUp(200);
-	})
+	$('.btn-financle').live("click",function(){
+		var obj=$(this).attr("pay_id");
+		$('#'+obj).slideDown(200);
+	});
+	$('.button-gray').live("click",function(){
+		var obj=$(this).attr("pay_id");
+		$('#'+obj).slideUp(200);
+	});
 })
+function query(page){
+	var params=$("#serch_div").find(":input").serialize();
+	if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	}
+	$.post("financeList.htm",params,function(data){
+		var tableList=$(data).find(".tabList");
+		var pager=$(data).find("#pager");
+		$(".tabList").empty();
+		$(".tabList").append(tableList.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+	//	loadPage(currentPage,totalPage,query);
+	})
+}
+//受理
+function accept(id){
+	$.post("accept.htm",{id:id},function(data){
+		 if (data.isOk=="ok"){
+			 query($("#pager").attr("currentPage"));
+		 }else{
+			 alert("操作失败！")
+			 query($("#pager").attr("currentPage"));
+		 }
+	})
+}
+//搁置
+function shelve(id){
+	$.post("shelve.htm",{id:id},function(data){
+		 if (data.isOk=="ok"){
+			 query($("#pager").attr("currentPage"));
+		 }else{
+			 alert("操作失败！")
+			 query($("#pager").attr("currentPage"));
+		 }
+	})
+}
+//支付
+function pay(id){
+	var creditAmount=$("#pay_info_"+id).find(":input").val();
+	$.post("pay.htm",{id:id,creditAmount:creditAmount},function(data){
+		 if (data.isOk=="ok"){
+			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
+		 }else{
+			 alert("操作失败！")
+			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
+		 }
+	})
+}
 </script>
 </head>
 
@@ -44,22 +94,24 @@ jQuery(document).ready(function($) {
 <div class="rightSide">
 <div class="heading fontYH f20">融资管理</div>
 <div class="mainBox">
-  <div class="searBox f12 mt10 mb10">
+  <div class="searBox f12 mt10 mb10" id="serch_div">
     <p class="pt0 mt0 mb5"> 支付单号
-      <input type="text" class="input" name="input" value="" />
+      <input type="text" class="input" name="payNo" value="" />
       合同号
-      <input type="text" class="input" name="input" value="" />
+      <input type="text" class="input" name="contractNo" value="" />
       支付时间段
-      <input type="text" class="input input-time cal form-control" name="input" value="" datepicker="datepicker" />
+      <input type="text" class="input input-time cal form-control" name="startDate" value="" datepicker="datepicker" />
       -
-      <input type="text" class="input input-time cal form-control" name="input" value="" datepicker="datepicker" />
+      <input type="text" class="input input-time cal form-control" name="endDate" value="" datepicker="datepicker" />
     付款状态
-      <select name="select">
-        <option selected="selected">全部</option>
-        <option>未付款</option>
-        <option>已付款</option>
+      <select name="state">
+        <option selected="selected" value="">全部</option>
+        <option value="1">${states[1].getName_b()}</option>
+        <option value="2">${states[2].getName_b()}</option>
+        <option value="3">${states[3].getName_b()}</option>
+        <option value="4">${states[4].getName_b()}</option>
       </select>
-      <button class="button button-search">查询</button>
+      <button class="button button-search" onclick="query()">查询</button>
     </p>
   </div>
   <table border="0" cellpadding="0" cellspacing="0" class="tabList">
@@ -81,78 +133,54 @@ jQuery(document).ready(function($) {
       <th>支付内容</th>
       <th class="rLine">付款状态</th>
       </tr>
+      <#assign num1=0>
+      <#assign num2=0>
+      <#assign num3=0>
+     <#list list as model>
     <tr>
-      <td>CT14070001P02</td>
-      <td><a href="#" class="lnk-blue">CT14070001</a></td>
-      <td>第二批次</td>
-      <td>71327.98元</td>
-      <td>71327.98元</td>
-      <td class="color-orange">71327.98元</td>
-      <td>玻璃货款</td>
-      <td><a class="button btn-link btn-pay mr10">受理</a> <a class="button btn-link btn-financle">搁置</a></td>
-      </tr>
-    <tr>
-      <td>CT14070129P03</td>
-      <td><a href="#" class="lnk-blue">CT14070129</a></td>
-      <td>第三批次</td>
-      <td>378520.78元</td>
-      <td>378520.78元</td>
-      <td><span class="color-orange">300000元</span></td>
-      <td>型材货款</td>
-      <td><a class="button btn-link btn-financle">确认放款</a>
-      <div class="modal-wrap payPop" style="display:none;">
+      <td>${model.payNo}</td>
+      <td><a href="#" class="lnk-blue">${model.contractNo}</a></td>
+      <td>${model.batchNo}</td>
+      <td>${model.payAmount?string("0.00")}元</td>
+      <td>${model.financeAmount?string("0.00")}元</td>
+      <td class="color-orange">${model.creditAmount?string("0.00")}元</td>
+      <td>${model.content}</td>
+      <#if (model.state.ordinal()==1)>
+      <td><a class="button btn-link btn-pay mr10" onclick="accept('${model.id}')">受理</a> <a class="button btn-link btn-financle" onclick="shelve('${model.id}')">搁置</a></td>
+      <#elseif (model.state.ordinal()==2)>
+      <td><a class="button btn-link btn-financle" pay_id="pay_info_${model.id}">确认放款</a>
+      <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
       <div class="tipGray"><span class="icon icon16 icon-close ly-right">关闭</span>
-</div>
+      </div>
         <div class="modal-body">
           <div class="ly-clearFix">
             <label class="mr5">放款金额</label>
             <input name="input2" type="text" value="" class="input" />
           </div>
           <div class="mt15">
-            <button class="button button-red btn-ok mr5">确认</button>
-            <button class="button button-gray">取消</button>
+            <button class="button button-red btn-ok mr5" onclick="pay('${model.id}');return false;">确认</button>
+            <button class="button button-gray" pay_id="pay_info_${model.id}">取消</button>
           </div>
         </div>
       </div>
       </td>
-      </tr>
-    <tr>
-      <td>CT14060033P01</td>
-      <td><a href="#" class="lnk-blue">CT14060033</a></td>
-      <td>第一批次</td>
-      <td>45896.55元</td>
-      <td>45896.55元</td>
-      <td><span class="color-orange">350000元</span></td>
-      <td>玻璃货款</td>
+      <#elseif (model.state.ordinal()==3)>
+       <td><span class="state verified">已放款</span></td>
+      <#elseif (model.state.ordinal()==4)>
       <td><span class="state frozen">已搁置</span></td>
+      </#if>
       </tr>
-    <tr>
-      <td>CT14060033P01</td>
-      <td><a href="#" class="lnk-blue">CT14060033</a></td>
-      <td>-</td>
-      <td>45896.55元</td>
-      <td>45896.55元</td>
-      <td><span class="color-orange">45896.55元</span></td>
-      <td>合同定金</td>
-      <td><span class="state verified">已放款</span></td>
-      </tr>
-    <tr>
-      <td>CT14060021P02</td>
-      <td><a href="#" class="lnk-blue">CT14060021</a></td>
-      <td>第二批次</td>
-      <td>259874.78元</td>
-      <td>259874.78元</td>
-      <td><span class="color-orange">259874.78元</span></td>
-      <td>型材货款</td>
-      <td><span class="state verified">已放款</span></td>
-      </tr>
+      <#assign num1=num1+model.payAmount>
+      <#assign num2=num2+model.financeAmount>
+      <#assign num3=num3+model.creditAmount>
+      </#list>
     <tr class="fb">
       <td>合计</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
-      <td>638832.00元</td>
-      <td class="color-green">638832.00元</td>
-      <td class="color-orange">538832.00元</td>
+      <td>${num1?string("0.00")}元</td>
+      <td class="color-green">${num2?string("0.00")}元</td>
+      <td class="color-orange">${num3?string("0.00")}元</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       </tr>

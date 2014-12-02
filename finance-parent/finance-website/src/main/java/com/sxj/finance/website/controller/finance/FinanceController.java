@@ -33,7 +33,7 @@ public class FinanceController extends BaseController {
 				query.setPagable(true);
 			}
 			PayStageEnum[] states = PayStageEnum.values();
-			List<FinanceEntity> fe = financeService.query(query);
+			List<FinanceEntity> fe = financeService.queryWebSite(query);
 			map.put("list", fe);
 			map.put("query", query);
 			map.put("states", states);

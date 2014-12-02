@@ -1,6 +1,7 @@
 package com.sxj.finance.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.sxj.finance.dao.finance.FinanceDao;
 import com.sxj.finance.enu.finance.PayStageEnum;
@@ -76,6 +77,36 @@ public class FinanceEntity extends Pagable implements Serializable {
 	@Column(name = "STATE")
 	private PayStageEnum state;
 
+	/**
+	 * 申请融资时间
+	 */
+	@Column(name = "APPLY_DATE")
+	private Date applyDate;
+
+	/**
+	 * 付款时间
+	 */
+	@Column(name = "PAY_DATE")
+	private Date payDate;
+
+	/**
+	 * 受理时间
+	 */
+	@Column(name = "ACCEPT_DATE")
+	private Date acceptDate;
+
+	/**
+	 * 搁置时间
+	 */
+	@Column(name = "SHELVE_DATE")
+	private Date shelveDate;
+
+	/**
+	 * 创建时间
+	 */
+	@Column(name = "CREAT_DATE")
+	private Date creatDate;
+
 	public String getId() {
 		return id;
 	}
@@ -146,6 +177,46 @@ public class FinanceEntity extends Pagable implements Serializable {
 
 	public void setState(PayStageEnum state) {
 		this.state = state;
+	}
+
+	public Date getApplyDate() {
+		return applyDate;
+	}
+
+	public void setApplyDate(Date applyDate) {
+		this.applyDate = applyDate;
+	}
+
+	public Date getPayDate() {
+		return payDate;
+	}
+
+	public void setPayDate(Date payDate) {
+		this.payDate = payDate;
+	}
+
+	public Date getAcceptDate() {
+		return acceptDate;
+	}
+
+	public void setAcceptDate(Date acceptDate) {
+		this.acceptDate = acceptDate;
+	}
+
+	public Date getShelveDate() {
+		return shelveDate;
+	}
+
+	public void setShelveDate(Date shelveDate) {
+		this.shelveDate = shelveDate;
+	}
+
+	public Date getCreatDate() {
+		return creatDate;
+	}
+
+	public void setCreatDate(Date creatDate) {
+		this.creatDate = creatDate;
 	}
 
 }

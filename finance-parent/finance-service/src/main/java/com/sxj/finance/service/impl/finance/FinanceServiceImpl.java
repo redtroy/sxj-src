@@ -1,5 +1,6 @@
 ﻿package com.sxj.finance.service.impl.finance;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class FinanceServiceImpl implements IFinanceService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<FinanceEntity> query(FinanceModel query)
+	public List<FinanceEntity> queryWebSite(FinanceModel query)
 			throws ServiceException {
 		try {
 			QueryCondition<FinanceEntity> condition = new QueryCondition<FinanceEntity>();
@@ -33,7 +34,29 @@ public class FinanceServiceImpl implements IFinanceService {
 				condition.addCondition("state", query.getState());
 				condition.setPage(query);
 			}
-			List<FinanceEntity> list = financeDao.query(condition);
+			List<FinanceEntity> list = financeDao.queryWebSite(condition);
+			query.setPage(condition);
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<FinanceEntity> queryManage(FinanceModel query)
+			throws ServiceException {
+		try {
+			QueryCondition<FinanceEntity> condition = new QueryCondition<FinanceEntity>();
+			if (query != null) {
+				condition.addCondition("payNo", query.getPayNo());// 供应商ID
+				condition.addCondition("contractNo", query.getContractNo());// 供应商名称
+				condition.addCondition("state", query.getState());
+				condition.setPage(query);
+			}
+			List<FinanceEntity> list = financeDao.queryManage(condition);
 			query.setPage(condition);
 			return list;
 		} catch (Exception e) {
@@ -50,6 +73,7 @@ public class FinanceServiceImpl implements IFinanceService {
 			FinanceEntity f = financeDao.getFinanceEntityById(fe.getId());
 			if (f.getState().ordinal() == 0) {
 				fe.setState(PayStageEnum.Stage2_0);
+				fe.setApplyDate(new Date());
 				financeDao.update(fe);
 			} else {
 				return false;
@@ -66,8 +90,9 @@ public class FinanceServiceImpl implements IFinanceService {
 	public Boolean pay(FinanceEntity fe) throws ServiceException {
 		try {
 			FinanceEntity f = financeDao.getFinanceEntityById(fe.getId());
-			if (f.getState().ordinal() == 1) {
-				fe.setState(PayStageEnum.Stage2_1);
+			if (f.getState().ordinal() == 2) {
+				fe.setState(PayStageEnum.Stage2_2);
+				fe.setPayDate(new Date());
 				financeDao.update(fe);
 			} else {
 				return false;
@@ -85,7 +110,27 @@ public class FinanceServiceImpl implements IFinanceService {
 		try {
 			FinanceEntity f = financeDao.getFinanceEntityById(fe.getId());
 			if (f.getState().ordinal() == 1) {
-				fe.setState(PayStageEnum.Stage2_2);
+				fe.setState(PayStageEnum.Stage2_3);
+				fe.setShelveDate(new Date());
+				financeDao.update(fe);
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean accept(FinanceEntity fe) throws ServiceException {
+		try {
+			FinanceEntity f = financeDao.getFinanceEntityById(fe.getId());
+			if (f.getState().ordinal() == 1) {
+				fe.setState(PayStageEnum.Stage2_1);
+				fe.setAcceptDate(new Date());
 				financeDao.update(fe);
 			} else {
 				return false;

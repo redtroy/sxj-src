@@ -9,13 +9,23 @@ import com.sxj.util.exception.ServiceException;
 public interface IFinanceService {
 
 	/**
-	 * 查询
+	 * 查询 前台
 	 * 
 	 * @param query
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<FinanceEntity> query(FinanceModel query)
+	public List<FinanceEntity> queryWebSite(FinanceModel query)
+			throws ServiceException;
+
+	/**
+	 * 查询 前台
+	 * 
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */
+	public List<FinanceEntity> queryManage(FinanceModel query)
 			throws ServiceException;
 
 	/**
@@ -25,6 +35,11 @@ public interface IFinanceService {
 	 * @throws ServiceException
 	 */
 	public Boolean apply(FinanceEntity fe) throws ServiceException;
+
+	/**
+	 * 受理
+	 */
+	public Boolean accept(FinanceEntity fe) throws ServiceException;
 
 	/**
 	 * 支付
