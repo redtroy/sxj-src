@@ -14,6 +14,9 @@
 	</settings>
 
 	<typeHandlers>
+	  <typeHandler
+			handler="com.sxj.finance.typeHandler.PayStageEnumTypeHandler"
+			javaType="com.sxj.finance.enu.finance.PayStageEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

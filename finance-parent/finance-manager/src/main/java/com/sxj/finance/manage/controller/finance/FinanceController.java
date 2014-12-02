@@ -1,4 +1,4 @@
-package com.sxj.finance.website.controller.finance;
+package com.sxj.finance.manage.controller.finance;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.finance.entity.FinanceEntity;
 import com.sxj.finance.enu.finance.PayStageEnum;
+import com.sxj.finance.manage.controller.BaseController;
 import com.sxj.finance.model.finance.FinanceModel;
 import com.sxj.finance.service.finance.IFinanceService;
-import com.sxj.finance.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -41,20 +41,35 @@ public class FinanceController extends BaseController {
 			e.printStackTrace();
 			SxjLogger.error("查询融资列表错误", e, this.getClass());
 		}
-		return "site/finance/pay-list";
+		return "manage/finance/pay-list";
 	}
 
-	@RequestMapping("financing")
-	public @ResponseBody Map<String, String> financing(FinanceEntity fe)
+	@RequestMapping("pay")
+	public @ResponseBody Map<String, String> pay(FinanceEntity fe)
 			throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			if (financeService.apply(fe)) {
+			if (financeService.pay(fe)) {
 				map.put("isOk", "ok");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			SxjLogger.error("融资申请错误", e, this.getClass());
+			SxjLogger.error("融资支付错误", e, this.getClass());
+		}
+		return map;
+	}
+
+	@RequestMapping("shelve")
+	public @ResponseBody Map<String, String> shelve(FinanceEntity fe)
+			throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			if (financeService.shelve(fe)) {
+				map.put("isOk", "ok");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			SxjLogger.error("融资搁置错误", e, this.getClass());
 		}
 		return map;
 	}
