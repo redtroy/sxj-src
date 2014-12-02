@@ -19,7 +19,7 @@ jQuery(document).ready(function($) {
 		$('.payPop').slideUp(200);
 	})
 })
-function query(){
+function query(page){
 	var params=$("#serch_div").find(":input").serialize();
 	if(page!=undefined){
 		   params=params+"&currentPage="+page;
@@ -32,6 +32,22 @@ function query(){
 		var totalPage=pager.attr("totalPage");
 		var currentPage=pager.attr("currentPage");
 		loadPage(currentPage,totalPage,query);
+	})
+}
+//支付
+function pay(id){
+	var payReal=$("#pay_info_"+id).find(":input").val();
+	//payReal=payReal*100;
+	$.post("pay.htm",{id:id,payReal:payReal},function(data){
+		 if (data.isOk=="ok"){
+			 alert("付款成功！")
+			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
+		 }else{
+			 alert("操作失败！")
+			 $("#pay_info_"+id).slideUp(200);
+			 query($("#pager").attr("currentPage"));
+		 }
 	})
 }
 </script>
@@ -96,15 +112,16 @@ function query(){
     <th class="rLine">付款状态</th>
   </tr>
   <tr>
-    <td>CT14070001P02</td>
-    <td><a href="#" class="lnk-blue">CT14070001</a></td>
-    <td>第二批次</td>
-    <td>71327.98元</td>
-    <td>71327.98元</td>
-    <td class="color-orange">71327.98元</td>
-    <td>玻璃货款</td>
+    <td>${model.payNo}</td>
+    <td><a href="#" class="lnk-blue">${model.contractNo}</a></td>
+    <td>${model.batchNo}</td>
+    <td>${model.payAmount}元</td>
+    <td>${model.financeAmount}元</td>
+    <td class="color-orange">${model.creditAmount}元</td>
+    <td>${model.content}</td>
+    <#if (model.state.ordinal()==0)>
     <td><a class="button btn-link btn-financle">我要融资</a>
-      <div class="modal-wrap payPop" style="display:none;">
+      <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
       <div class="tipGray"><span class="icon icon16 icon-close ly-right">关闭</span>
 </div>
         <div class="modal-body">
@@ -113,11 +130,18 @@ function query(){
             <input name="input2" type="text" value="" class="input" />
           </div>
           <div class="mt15">
-            <button class="button button-red btn-ok mr5">确认</button>
-            <button class="button button-gray">取消</button>
+            <button class="button button-red btn-ok mr5" onclick="pay('${model.id}');return false;">确认</button>
+            <button class="button button-gray" pay_id="pay_info_${model.id}">取消</button>
           </div>
         </div>
       </div></td>
+      <#elseif (model.state.ordinal()==1)>
+        <span class="state process">融资受理中</span>
+      <#elseif (model.state.ordinal()==2)>
+        <span class="state verified">融资已放款</span>
+      <#elseif (model.state.ordinal()==3)>
+        <span class="state frozen">融资已搁置</span>
+      </#if>
   </tr>
   <tr class="fb">
     <td>合计</td>
