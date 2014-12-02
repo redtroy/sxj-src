@@ -14,6 +14,7 @@ import com.sxj.finance.model.member.MemberQuery;
 import com.sxj.finance.service.member.IMemberService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 
@@ -110,5 +111,16 @@ public class MemberServiceImpl implements IMemberService {
 			throw new ServiceException("更改审核状态错误", e);
 		}
 
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public MemberEntity getMemberByName(String name) throws ServiceException {
+		try {
+			return menberDao.getMemberByName(name);
+		} catch (Exception e) {
+			SxjLogger.error("根据会员名称查询会员错误", e, this.getClass());
+			throw new ServiceException("根据会员名称查询会员错误", e);
+		}
 	}
 }

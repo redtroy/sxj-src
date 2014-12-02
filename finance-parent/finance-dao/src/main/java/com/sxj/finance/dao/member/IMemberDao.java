@@ -33,4 +33,11 @@ public interface IMemberDao {
 	 * @param memberList
 	 **/
 	public List<MemberEntity> queryMembers(QueryCondition<MemberEntity> query);
+	
+	/**
+	 * 获取会员信息
+	 *
+	 * @param id
+	 **/
+	public MemberEntity getMemberByName(String name);
 }
