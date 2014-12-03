@@ -33,7 +33,7 @@
 	<!-- 条件查询备案 -->
 	<select id="queryRecord" resultMap="RecordResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT  R.*,round(C.PAY_BATCH/C.EFFECTIVE_BATCH*100) AS PROGRESS  FROM M_CONTRACT_RECORD R LEFT JOIN M_CONTRACT C ON R.CONTRACT_NO=C.CONTRACT_NO  WHERE R.DEL_STATE=0  ]]>
+		<![CDATA[SELECT  R.*,round(C.PAY_BATCH/C.BATCH_COUNT*100) AS PROGRESS  FROM M_CONTRACT_RECORD R LEFT JOIN M_CONTRACT C ON R.CONTRACT_NO=C.CONTRACT_NO  WHERE R.DEL_STATE=0  ]]>
 		<!-- 备案号 -->
 		<if test="condition.recordNo != null and condition.recordNo != ''">
 			<![CDATA[AND R.RECORD_NO = #{condition.recordNo}]]>
