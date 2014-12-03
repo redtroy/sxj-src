@@ -461,24 +461,20 @@ public class HttpClientUtil {
 		// 初始化安全套接字
 		SSLContext sslContext = SSLContext.getInstance("SSL");
 		sslContext.init(kmf.getKeyManagers(), trustManagers, null);
-
 		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-				sslContext);
-
-		// socketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-		// SSLSocketFactory socketFactory = new SSLSocketFactory(sslContext);
+				sslContext,
+				SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 		HttpClientBuilder clientBuilder = HttpClients.custom();
 		clientBuilder.setSSLSocketFactory(sslsf);
 		clientBuilder.setSslcontext(sslContext);
 		return clientBuilder.build();
-		// return new Scheme("https", sslPort, socketFactory);
 	}
 
 	public static void main(String[] args) {
 		String sas = HttpClientUtil.get("http://www.baidu.com");
 		System.out.println(sas);
 		String sdsds = HttpClientUtil.sslGet("https://www.menchuang.org.cn",
-				"jks", "E:/t.jks", "123456", "");
+				"jks", "F:/t.jks", "123456", "");
 		System.out.println(sdsds);
 	}
 }
