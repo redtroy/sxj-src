@@ -17,7 +17,7 @@
 	<import resource="classpath*:spring/database-config.xml" />
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 	<task:annotation-driven />
-	<context:annotation-config /> 
+	<context:annotation-config />
 	<aop:aspectj-autoproxy />
 	<tx:annotation-driven transaction-manager="transactionManager"
 		proxy-target-class="false" />
@@ -79,5 +79,11 @@
 				</property>
 			</bean>
 		</constructor-arg>
+	</bean>
+	<bean id="httpClient" class="com.sxj.util.common.SxjHttpClientImpl">
+		<property name="charset" value="${httpclient.charset}" />
+		<property name="keyStoreType" value="${httpclient.keyStoreType}" />
+		<property name="keyStorePath" value="${httpclient.keyStorePath}" />
+		<property name="keyPassword" value="${httpclient.keyPassword}" />
 	</bean>
 </beans>

@@ -12,6 +12,7 @@
 				<value>classpath*:config/database.properties</value>
 				<value>classpath*:config/shiro.properties</value>
 				<value>classpath*:cache.properties</value>
+				<value>classpath*:httpclient.properties</value>
 			</list>
 		</property>
 	</bean>
