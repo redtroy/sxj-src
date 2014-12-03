@@ -21,6 +21,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -51,8 +52,8 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 	 * @param url
 	 *            请求url
 	 * @return 响应内容实体
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
+	 * @throws IOException
+	 * @throws ClientProtocolException
 	 */
 	public String get(String url) throws ClientProtocolException, IOException {
 		return get(url, getCharset());
@@ -66,10 +67,11 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 	 * @param params
 	 *            请求参数
 	 * @return 响应内容实体
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
+	 * @throws IOException
+	 * @throws ClientProtocolException
 	 */
-	public String post(String url, Map<String, String> params) throws ClientProtocolException, IOException {
+	public String post(String url, Map<String, String> params)
+			throws ClientProtocolException, IOException {
 		return post(url, params, getCharset(), getCharset());
 	}
 
@@ -81,10 +83,11 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 	 * @param xml
 	 *            XML格式请求内容
 	 * @return 响应内容实体
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
+	 * @throws IOException
+	 * @throws ClientProtocolException
 	 */
-	public String postXml(String url, String xml) throws ClientProtocolException, IOException {
+	public String postXml(String url, String xml)
+			throws ClientProtocolException, IOException {
 		return postXml(url, xml, getCharset(), getCharset());
 	}
 
@@ -96,10 +99,11 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 	 * @param json
 	 *            JSON格式请求内容
 	 * @return 响应内容实体
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
+	 * @throws IOException
+	 * @throws ClientProtocolException
 	 */
-	public String postJson(String url, String json) throws ClientProtocolException, IOException {
+	public String postJson(String url, String json)
+			throws ClientProtocolException, IOException {
 		return postJson(url, json, getCharset(), getCharset());
 	}
 
@@ -420,11 +424,10 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 		TrustManager[] trustManagers = { new MyX509TrustManager() };
 
 		// 初始化安全套接字
-		SSLContext sslContext = SSLContext.getInstance("SSL");
+		SSLContext sslContext = SSLContexts.custom().build();
 		sslContext.init(kmf.getKeyManagers(), trustManagers, null);
 		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-				sslContext,
-				SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+				sslContext, SSLConnectionSocketFactory.STRICT_HOSTNAME_VERIFIER);
 		HttpClientBuilder clientBuilder = HttpClients.custom();
 		clientBuilder.setSSLSocketFactory(sslsf);
 		clientBuilder.setSslcontext(sslContext);
@@ -461,6 +464,14 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 
 	public void setKeyPassword(String keyPassword) {
 		this.keyPassword = keyPassword;
+	}
+
+	public static void main(String[] args) throws Exception {
+		SxjHttpClientImpl im = new SxjHttpClientImpl();
+		String aa = im.sslGet("https://www.menchuang.org.cn", "jks",
+				"E:/t.jks", "123456", "");
+		System.out.println(aa);
+
 	}
 
 }
