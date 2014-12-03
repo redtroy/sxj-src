@@ -6,13 +6,10 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.PermissionResolver;
@@ -84,13 +81,13 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 	/**
 	 * 设定Password校验的Hash算法与迭代次数.
 	 */
-	@PostConstruct
-	public void initCredentialsMatcher() {
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(
-				HASH_ALGORITHM);
-		matcher.setHashIterations(HASH_INTERATIONS);
-		setCredentialsMatcher(matcher);
-	}
+	// @PostConstruct
+	// public void initCredentialsMatcher() {
+	// HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(
+	// HASH_ALGORITHM);
+	// matcher.setHashIterations(HASH_INTERATIONS);
+	// setCredentialsMatcher(matcher);
+	// }
 
 	private boolean isPermitted(Permission permission, AuthorizationInfo info) {
 		Collection<Permission> perms = getPermissions(info);
@@ -107,7 +104,6 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 	}
 
 	public AuthorizationInfo getAuthorizationInfo(PrincipalCollection principals) {
-
 		if (principals == null) {
 			return null;
 		}

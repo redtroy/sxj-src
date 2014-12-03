@@ -6,34 +6,63 @@
 <meta name="keywords" content="紫金财富金融服务平台">
 <meta name="description" content="紫金财富金融服务平台">
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script>
+$(function(){
+	if("${message}"!=""){
+		$("#message_div").show();
+	}
+	if("${amessage}"!=""){
+		$("#amessage_div").show();
+	}
+	if("${pmessage}"!=""){
+		$("#pmessage_div").show();
+	}
+});
+$(document).keyup(function(event){
+	  if(event.keyCode ==13){
+		  if($("#memberName_input").val()!=""&&$("#password_input").val()!=""){
+			  login();
+		  }
+	  }
+	});
+function login()
+{
+	$("#login_form").submit();
+	
+}
+</script>
 </head>
-
 <body id="regin">
 <div class="loginBox">
 <div class="logo mt10 ml20 mb20 tc">
 <img src="${b.staticPath}images/login-home.jpg" alt="紫金财富金融服务平台" title="紫金财富金融服务平台" width="660" height="70" />
 </div>
 <div class="loginInfo">
+<form id="login_form" action="${basePath}login.htm" method="post">
 <div class="loginModern">
 <h2 class="loginTitle fontYH f20 ly-hide">登录紫金财富</h2>
   <div class="item pr">
     <label>公司名称</label>
-    <input class="input" type="text" autocomplete="off" placeholder="" title="" id="" name="" value="" />
+    <input id="memberName_input" class="input" type="text" autocomplete="off" placeholder=""  name="memberName" value="${memberName}"/>
+    <div id="message_div" style="display:none;" class="tip msg-error f12">${message}</div>
   </div>
 <div class="item">
     <label>登录帐户</label>
-    <input class="input" type="text" autocomplete="off" placeholder="" title="" id="" name="" value="" />
+    <input class="input" type="text" autocomplete="off" placeholder=""  name="accountName" value="${accountName}"/>
+    <div id="amessage_div" class="tip msg-error f12" style="display:none;">${amessage}</div>
   </div>
 <div class="item">
   <label><a href="find-password.html" class="ly-right mr10">忘记密码？</a>登录密码</label>
-  <input class="input" type="password" autocomplete="off" placeholder="" title="" />
-  <div class="tip msg-error f12 ly-hide">请输入正确的密码</div>
+  <input id="password_input" class="input" type="password" name="password" autocomplete="off" placeholder=""  value=""/>
+  <div id="pmessage_div" class="tip msg-error f12" style="display:none;">${pmessage}</div>
 </div>
 <div class="buttonBox mt15 tc">
-<a href="member-profile.html" class="button button-red">登录</a>
-<a href="${basePath}/autoLogin.htm" class="button button-key">一键登录</a>
+<a href="javascript:login();" class="button button-red">登录</a>
+<a href="${basePath}autoLogin.htm?member=${member}&token=${token}" class="button button-key">一键登录</a>
 </div>
 </div>
+</form>
 </div>
 </div>
 <@b.footer />
