@@ -21,7 +21,9 @@ $(function(){
 });
 $(document).keyup(function(event){
 	  if(event.keyCode ==13){
-		  login();
+		  if($("#memberName_input").val()!=""&&$("#password_input").val()!=""){
+			  login();
+		  }
 	  }
 	});
 function login()
@@ -47,7 +49,7 @@ function login()
     <div class="regCont">
     <div class="item">
     <label>公司名称</label>
-    <input class="input" type="text" autocomplete="off" placeholder=""  name="memberName" value="${memberName}"/>
+    <input id="memberName_input" class="input" type="text" autocomplete="off" placeholder=""  name="memberName" value="${memberName}"/>
     <div id="message_div" style="display:none;" class="tip msg-error f12">${message}</div>
   </div>
 <div class="item">
@@ -57,7 +59,7 @@ function login()
   </div>
 <div class="item">
   <label>登录密码</label>
-  <input class="input input-error input-w240h36" type="password" name="password" autocomplete="off" placeholder=""  value=""/>
+  <input id="password_input" class="input input-error input-w240h36" type="password" name="password" autocomplete="off" placeholder=""  value=""/>
   <div id="pmessage_div" class="tip msg-error f12" style="display:none;">${pmessage}</div>
 </div>
 <p class="tr pr5 f12"><a href="${basePath}member/find_pwd.htm">忘记密码？</a></p>
