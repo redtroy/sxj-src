@@ -1,7 +1,9 @@
 ﻿package com.sxj.finance.service.impl.finance;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import com.sxj.finance.entity.FinanceEntity;
 import com.sxj.finance.enu.finance.PayStageEnum;
 import com.sxj.finance.model.finance.FinanceModel;
 import com.sxj.finance.service.finance.IFinanceService;
+import com.sxj.util.common.ISxjHttpClient;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -19,8 +22,13 @@ import com.sxj.util.persistent.QueryCondition;
 @Service
 public class FinanceServiceImpl implements IFinanceService {
 
+	private final String url = "http://127.0.0.1:8080/supervisor-website/pay/changeState.htm";
+
 	@Autowired
 	private FinanceDao financeDao;
+
+	@Autowired
+	private ISxjHttpClient cl;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -94,6 +102,10 @@ public class FinanceServiceImpl implements IFinanceService {
 				fe.setState(PayStageEnum.Stage2_2);
 				fe.setPayDate(new Date());
 				financeDao.update(fe);
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("payNo", f.getPayNo());
+				map.put("state", "2");
+				cl.sslPost(url, map, "");
 			} else {
 				return false;
 			}
@@ -113,6 +125,10 @@ public class FinanceServiceImpl implements IFinanceService {
 				fe.setState(PayStageEnum.Stage2_3);
 				fe.setShelveDate(new Date());
 				financeDao.update(fe);
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("payNo", f.getPayNo());
+				map.put("state", "3");
+				cl.sslPost(url, map, "");
 			} else {
 				return false;
 			}
