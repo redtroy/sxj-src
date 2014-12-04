@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.redis.service.comet.CometServiceImpl;
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
@@ -185,6 +186,12 @@ public class PayController extends BaseController {
 			if (loginInfo == null) {
 				return LOGIN;
 			}
+			PayRecordEntity pay = payService.getPayRecordEntity(payId);
+			if (pay == null) {
+				throw new WebException("付款记录不存在");
+			}
+			String payjson = JsonMapper.nonDefaultMapper().toJson(pay);
+
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
@@ -211,8 +218,8 @@ public class PayController extends BaseController {
 			String flag = payService.changeState(payNo, state);
 			map.put("flag", flag);
 		} catch (Exception e) {
-			e.printStackTrace();
 			SxjLogger.error("更改状态出错", e, this.getClass());
+			map.put("flag", "0");
 		}
 		return map;
 	}

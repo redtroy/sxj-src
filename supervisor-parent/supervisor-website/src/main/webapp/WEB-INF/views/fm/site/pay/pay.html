@@ -138,8 +138,8 @@ function pay_ok(id){
 	})
 }
 
-function to_finance(){
-	window.location.href="${basePath}pay/tofinance.htm";
+function to_finance(payId){
+	window.location.href="${basePath}pay/tofinance.htm?payId="+payId;
 }
 </script>
 </head>
@@ -223,7 +223,7 @@ function to_finance(){
       <#if (model.state.ordinal()==0)>
           <#if (state=="a")>
            <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button>
-           <button class="button button-orange" onclick="to_finance();">融资</button>
+           <button class="button button-orange" onclick="to_finance('${model.id}');">融资</button>
            <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
               <div class="modal-body">
                 <div class="ly-clearFix">
