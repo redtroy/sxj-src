@@ -1,0 +1,43 @@
+<td colspan="7" class="tl"><table border="0" cellpadding="0"
+		cellspacing="0" class="table tableMember mb15">
+		<caption class="fontYH f14">基本资料</caption>
+		<tr>
+			<th>企业名称</th>
+			<td>${member.name}</td>
+		</tr>
+		<tr>
+			<th>企业类型</th>
+			<td>${member.type.getName()}</td>
+		</tr>
+		<tr>
+			<th>公司所在地</th>
+			<td>${member.area} </td>
+		</tr>
+		<tr>
+			<th>企业资质</th>
+			<td>营业执照号:${member.bLicenseNo}<span class="ml20">节能环保标签:${member.energyNo}</span></td>
+		</tr>
+		<tr>
+			<th>公司电话</th>
+			<td><span class="item">${member.telNum}</span></td>
+		</tr>
+		<tr>
+			<th>公司地址</th>
+			<td>${member.address}</td>
+		</tr>
+		<tr>
+			<th>联系人</th>
+			<td>${member.contacts}</td>
+		</tr>
+		<tr>
+			<th>联系人手机</th>
+			<td><span class="item">${member.phoneNo}</span></td>
+		</tr>
+		<tr>
+			<th>主要产品</th>
+			<td>${member.type.getName()}</td>
+		</tr>
+	</table>
+	<div class="buttonBox mt15 mb10 tc">
+		<a href="javascript:void(0);" class="button button-orange btn-hide" onclick="closeInfo('${id}');">收起</a>
+	</div></td>
