@@ -37,11 +37,20 @@ public class MemberLogEntity extends Pagable implements Serializable {
 	@Column(name = "NOW_PAGE")
 	private String nowPage;
 
+	@Column(name = "NOW_NAME")
+	private String nowName;
+
 	@Column(name = "PRE_PAGE")
 	private String prePage;
 
+	@Column(name = "PRE_NAME")
+	private String preName;
+
 	@Column(name = "NEXT_PAGE")
 	private String nextpage;
+
+	@Column(name = "NEXT_NAME")
+	private String nextName;
 
 	@Column(name = "WAIT_TIME")
 	private String waitTime;
@@ -122,6 +131,30 @@ public class MemberLogEntity extends Pagable implements Serializable {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+
+	public String getNowName() {
+		return nowName;
+	}
+
+	public void setNowName(String nowName) {
+		this.nowName = nowName;
+	}
+
+	public String getPreName() {
+		return preName;
+	}
+
+	public void setPreName(String preName) {
+		this.preName = preName;
+	}
+
+	public String getNextName() {
+		return nextName;
+	}
+
+	public void setNextName(String nextName) {
+		this.nextName = nextName;
 	}
 
 }
