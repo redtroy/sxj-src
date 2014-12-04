@@ -2,6 +2,8 @@ package com.sxj.supervisor.dao.contract;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
@@ -40,4 +42,10 @@ public interface IContractPayDao {
 	 * 根据RFIDNO查询实体
 	 */
 	public PayRecordEntity getEntityByRfidNo(String rfidNo);
+
+	/**
+	 * 根据支付单号修改融资状态
+	 */
+	public void changeState(@Param("payNo") String payNo,
+			@Param("state") String state);
 }
