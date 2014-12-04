@@ -24,4 +24,13 @@ public interface IMemberFunctionService {
 	public List<MemberFunctionModel> queryFunctions(Integer flag)
 			throws ServiceException;
 
+	/**
+	 * 
+	 * @param functionId
+	 * @return
+	 * @throws ServiceException
+	 */
+	public MemberFunctionEntity getFunction(String functionId)
+			throws ServiceException;
+
 }

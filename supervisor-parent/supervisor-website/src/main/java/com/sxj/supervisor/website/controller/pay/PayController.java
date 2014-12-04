@@ -179,7 +179,7 @@ public class PayController extends BaseController {
 	 * 测试
 	 */
 	@RequestMapping("tofinance")
-	public String tofinance(HttpSession session) {
+	public String tofinance(String payId, HttpSession session) {
 		try {
 			SupervisorPrincipal loginInfo = getLoginInfo(session);
 			if (loginInfo == null) {
@@ -189,6 +189,7 @@ public class PayController extends BaseController {
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
 			loginToken.setPassword(loginInfo.getMember().getPassword());
+
 			return "redirect:http://127.0.0.1:8080/finance-website/to_login.htm?member="
 					+ loginToken.getMemberNo()
 					+ "&token="

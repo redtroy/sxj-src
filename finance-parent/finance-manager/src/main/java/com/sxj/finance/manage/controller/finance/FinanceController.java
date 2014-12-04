@@ -29,7 +29,7 @@ public class FinanceController extends BaseController {
 	public String financeList(ModelMap map, FinanceModel query)
 			throws WebException {
 		try {
-			if (query == null) {
+			if (query != null) {
 				query.setPagable(true);
 			}
 			PayStageEnum[] states = PayStageEnum.values();

@@ -41,6 +41,7 @@ import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.entity.member.MemberLogEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -483,12 +484,15 @@ public class BasicController extends BaseController {
 
 	@RequestMapping("enter")
 	@ResponseBody
-	public void enter(HttpSession session, HttpServletRequest request,
-			String url) {
+	public void enter(String functionId, String url, HttpSession session,
+			HttpServletRequest request) {
 		Date enterTime = (Date) session.getAttribute("enterTime");
 		Date nowTime = new Date();
 		String currentUrl = (String) session.getAttribute("currentUrl");
+		String currentFunction = (String) session
+				.getAttribute("currentFunction");
 		String nextUrl = (String) session.getAttribute("nextUrl");
+		String nextFunction = (String) session.getAttribute("nextFunction");
 		if (currentUrl == null) {
 			session.setAttribute("currentUrl", request.getHeader("Referer"));
 
@@ -496,6 +500,10 @@ public class BasicController extends BaseController {
 		session.setAttribute("previousUrl", currentUrl);
 		session.setAttribute("currentUrl", nextUrl);
 		session.setAttribute("nextUrl", url);
+
+		session.setAttribute("previousFunction", currentFunction);
+		session.setAttribute("currentFunction", nextFunction);
+		session.setAttribute("nextFunction", functionId);
 
 		MemberEntity principal = (MemberEntity) SecurityUtils.getSubject()
 				.getPrincipal();
@@ -506,6 +514,23 @@ public class BasicController extends BaseController {
 			log.setNowPage(nextUrl);
 			log.setNextpage(url);
 			log.setPrePage(currentUrl);
+
+			MemberFunctionEntity function = functionService
+					.getFunction(nextFunction);
+			if (function != null) {
+				log.setNowName(function.getTitle());
+			}
+
+			function = functionService.getFunction(functionId);
+			if (function != null) {
+				log.setNextName(function.getTitle());
+			}
+
+			function = functionService.getFunction(currentFunction);
+			if (function != null) {
+				log.setPreName(function.getTitle());
+			}
+
 			log.setCallTime(enterTime);
 			log.setIp(getIpAddr(request));
 			if (enterTime != null) {
