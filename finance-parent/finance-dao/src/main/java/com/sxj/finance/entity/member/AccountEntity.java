@@ -1,4 +1,4 @@
-package com.sxj.finance.entity.member;
+﻿package com.sxj.finance.entity.member;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -28,7 +28,7 @@ public class AccountEntity extends Pagable implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7970981306803065289L;
+	private static final long serialVersionUID = 67779520871345440L;
 
 	/**
 	 * 主键标识
