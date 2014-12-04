@@ -9,11 +9,11 @@
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="nowPage" column="NOW_PAGE" jdbcType="VARCHAR" />
-		<result property="nowName" column="NOW_NAME" jdbcType="VARCHAR" />
-		<result property="nextpage" column="NEXT_PAGE" jdbcType="VARCHAR" />
-		<result property="nowPage" column="NOW_PAGE" jdbcType="VARCHAR" />
 		<result property="prePage" column="PRE_PAGE" jdbcType="VARCHAR" />
 		<result property="nextpage" column="NEXT_PAGE" jdbcType="VARCHAR" />
+		<result property="nowName" column="NOW_NAME" jdbcType="VARCHAR" />
+		<result property="preName" column="PRE_NAME" jdbcType="VARCHAR" />
+		<result property="nextName" column="NEXT_NAME" jdbcType="VARCHAR" />
 		<result property="waitTime" column="WAIT_TIME" jdbcType="VARCHAR" />
 		<result property="callTime" column="CALL_TIME" jdbcType="TIMESTAMP" />
 		<result property="ip" column="IP" jdbcType="VARCHAR" />
