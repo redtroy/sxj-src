@@ -76,8 +76,19 @@ public interface ISxjHttpClient {
 	 * @throws Exception
 	 */
 
-	public String sslGet(String url, String keyType, String keyPath,
-			String keyPassword, String authString) throws Exception;
+	public String sslGet(String url, String authString) throws Exception;
+
+	/**
+	 * SSLPOST
+	 * 
+	 * @param url
+	 * @param params
+	 * @param authString
+	 * @return
+	 * @throws Exception
+	 */
+	public String sslPost(String url, Map<String, String> params,
+			String authString) throws Exception;
 
 	/**
 	 * SSL Post XML（使用默认字符集）
@@ -99,8 +110,7 @@ public interface ISxjHttpClient {
 	 * @return 响应内容实体
 	 * @throws Exception
 	 */
-	public String sslPostXml(String url, String xml, String keyType,
-			String keyPath, String keyPassword, String authString)
+	public String sslPostXml(String url, String xml, String authString)
 			throws Exception;
 
 	/**
@@ -123,7 +133,6 @@ public interface ISxjHttpClient {
 	 * @return 响应内容实体
 	 * @throws Exception
 	 */
-	public String sslPostJson(String url, String json, String keyType,
-			String keyPath, String keyPassword, String authString)
+	public String sslPostJson(String url, String json, String authString)
 			throws Exception;
 }

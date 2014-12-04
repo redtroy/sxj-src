@@ -364,6 +364,14 @@ var errorImage=function($this){
 		$($this).attr("times",times+1);
 	}
 }
+
+var imageSrc=function(src){
+	if($.browser.msie) {
+		return src;
+	} 
+	return "";
+}
+
 var refreshElastislide=function($container,$carousel,data,empty){
 	if(!data)
 		return;
@@ -373,7 +381,7 @@ var refreshElastislide=function($container,$carousel,data,empty){
 	if(data){
 		if(data instanceof Array){
 			for (var i = 0; i < data.length; i++) {
-				var $img=$('<img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" onerror="errorImage(this)" times="0"/>');
+				var $img=$('<img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" src="'+imageSrc(data[i])+'" onerror="errorImage(this)" times="0"/>');
 				var $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"></a>');
 				$a.append($img);
 				var $p=$('<p>'+(i+1)+'</p>');
@@ -383,7 +391,7 @@ var refreshElastislide=function($container,$carousel,data,empty){
 				$carousel.append($li);
 			}
 		}else{
-			var $img=$('<img src="${b.imagePath}'+data.fileIds+'80x100.JPG"  onerror="errorImage(this)" times="0"/>');
+			var $img=$('<img src="${b.imagePath}'+data.fileIds+'80x100.JPG" src="'+imageSrc(data.fileIds)+'"  onerror="errorImage(this)" times="0"/>');
 			var $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"></a>');
 			$a.append($img);
 			var $li=$('<li></li>');
@@ -473,8 +481,15 @@ function loadUpload(id,url,isMulti,text,fn){
 <script>
 $(document).ready(function(){
 	var currentUrl=window.location.href;
-	$.get("${basePath}enter.htm?url="+currentUrl);
+	var functionId=getUrlParam("function");
+	$.get("${basePath}enter.htm?url="+currentUrl+"&functionId="+functionId);
 });
+
+function getUrlParam(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	if (r!=null) return unescape(r[2]); return null; //返回参数值
+}
 </script>
 </#if>
 </#macro>

@@ -50,4 +50,10 @@ public interface IContractPayService {
 	 * 根据RFIDNO查询支付单号
 	 */
 	public String getPayNoByRfidNo(String rfidNo) throws ServiceException;
+
+	/**
+	 * 更改融资状态
+	 */
+	public String changeState(String payNo, String state)
+			throws ServiceException;
 }

@@ -1,4 +1,4 @@
-package com.sxj.finance.service.impl.member;
+﻿package com.sxj.finance.service.impl.member;
 
 import java.util.Date;
 import java.util.List;
@@ -50,7 +50,7 @@ public class MemberServiceImpl implements IMemberService {
 			condition.addCondition("memberNo", query.getMemberNo());// 会员号
 			condition.addCondition("name", query.getMemberName());// 会员名称
 			condition.addCondition("contacts", query.getContacts());// 联系人名称
-			condition.addCondition("phoneNo", query.getContactsPhone());// 联系人电话
+			condition.addCondition("phoneNo", query.getPhoneNo());// 联系人电话
 			condition.addCondition("area", query.getArea());// 地理区域
 			condition.addCondition("bLicenseNo", query.getbLicenseNo());// 营业执照号
 			condition.addCondition("energyNo", query.getEnergyNo());// 节能标识号
@@ -100,10 +100,7 @@ public class MemberServiceImpl implements IMemberService {
 			if (state != null && StringUtils.isNotEmpty(id)) {
 				MemberEntity member = new MemberEntity();
 				member.setId(id);
-				member.setCheckState(MemberCheckStateEnum.getEnum(state));
-				if (state == 2) {
-					member.setAuthorDate(new Date());
-				}
+				member.setFinanceState(state);
 				member.setVersion(menberDao.getMember(id).getVersion());
 				menberDao.updateMember(member);
 			}

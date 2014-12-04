@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
@@ -73,7 +73,7 @@
 		<!-- cookie的name,对应的默认是 JSESSIONID -->
 		<constructor-arg name="name" value="SHAREJSESSIONID_FINANCE_WEBSITE" />
 		<!-- jsessionId的path为 / 用于多个系统共享jsessionId -->
-		<!-- <property name="path" value="/" /> -->
+		<!--<property name="path" value="/" />  -->
 		<!-- <property name="domain" value="www.menchuang.org.cn"></property> -->
 	</bean>
 	<!-- session存储的实现 -->

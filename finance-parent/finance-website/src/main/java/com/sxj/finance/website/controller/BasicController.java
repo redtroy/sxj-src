@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,6 @@ import com.sxj.finance.enu.member.MemberStatesEnum;
 import com.sxj.finance.service.member.IAccountService;
 import com.sxj.finance.service.member.IMemberService;
 import com.sxj.finance.website.login.SupervisorPrincipal;
-import com.sxj.finance.website.login.SupervisorShiroRedisCache;
 import com.sxj.finance.website.login.SupervisorSiteToken;
 import com.sxj.util.LoginToken;
 import com.sxj.util.common.EncryptUtil;
@@ -182,14 +180,6 @@ public class BasicController extends BaseController {
 		Subject currentUser = SecurityUtils.getSubject();
 		try {
 			currentUser.login(token);
-			PrincipalCollection principals = currentUser.getPrincipals();
-			if (userBean.getAccount() != null) {
-				SupervisorShiroRedisCache.addToMap(userBean.getAccount()
-						.getId(), principals);
-			} else {
-				SupervisorShiroRedisCache.addToMap(userBean.getMember()
-						.getMemberNo(), principals);
-			}
 		} catch (AuthenticationException e) {
 			SxjLogger.error("登陆失败", e, this.getClass());
 			map.put("pmessage", "密码错误");

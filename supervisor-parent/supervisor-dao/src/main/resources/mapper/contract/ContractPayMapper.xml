@@ -31,6 +31,9 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM M_CONTRACT_PAY WHERE RFID_NO=#{rfidNo}]]>
 	</select>
+	 <update id="changeState">
+		<![CDATA[UPDATE M_CONTRACT_PAY SET STATE=#{state} where PAY_NO=#{payNo}]]>
+	</update>
 	<!-- 条件查询合同 -->
 	<select id="queryPayContract" resultMap="ContractPayResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">

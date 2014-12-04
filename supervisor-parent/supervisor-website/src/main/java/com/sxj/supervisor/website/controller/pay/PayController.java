@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.redis.service.comet.CometServiceImpl;
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
@@ -179,16 +180,23 @@ public class PayController extends BaseController {
 	 * 测试
 	 */
 	@RequestMapping("tofinance")
-	public String tofinance(HttpSession session) {
+	public String tofinance(String payId, HttpSession session) {
 		try {
 			SupervisorPrincipal loginInfo = getLoginInfo(session);
 			if (loginInfo == null) {
 				return LOGIN;
 			}
+			PayRecordEntity pay = payService.getPayRecordEntity(payId);
+			if (pay == null) {
+				throw new WebException("付款记录不存在");
+			}
+			String payjson = JsonMapper.nonDefaultMapper().toJson(pay);
+
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
 			loginToken.setPassword(loginInfo.getMember().getPassword());
+
 			return "redirect:http://127.0.0.1:8080/finance-website/to_login.htm?member="
 					+ loginToken.getMemberNo()
 					+ "&token="
@@ -197,5 +205,22 @@ public class PayController extends BaseController {
 			// TODO: handle exception
 		}
 		return null;
+	}
+
+	/**
+	 * 更改融资状态
+	 */
+	@RequestMapping("changeState")
+	public @ResponseBody Map<String, String> changeState(String payNo,
+			String state) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			String flag = payService.changeState(payNo, state);
+			map.put("flag", flag);
+		} catch (Exception e) {
+			SxjLogger.error("更改状态出错", e, this.getClass());
+			map.put("flag", "0");
+		}
+		return map;
 	}
 }

@@ -121,12 +121,39 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 	 * @throws Exception
 	 */
 
-	public String sslGet(String url, String keyType, String keyPath,
-			String keyPassword, String authString) throws Exception {
-		CloseableHttpClient sslClient = getSslHttpClient(keyType, keyPath,
-				keyPassword);
+	public String sslGet(String url, String authString) throws Exception {
+		CloseableHttpClient sslClient = getSslHttpClient(getKeyStoreType(),
+				getKeyStorePath(), getKeyPassword());
 		return sslGet(url, sslClient, authString);
 
+	}
+
+	/**
+	 * SSLHTTP Post
+	 * 
+	 * @param url
+	 *            请求url
+	 * @param params
+	 *            请求参数
+	 * @return 响应内容实体
+	 * @throws Exception
+	 */
+	public String sslPost(String url, Map<String, String> params,
+			String authString) throws Exception {
+		CloseableHttpClient client = getSslHttpClient(getKeyStoreType(),
+				getKeyStorePath(), getKeyPassword());
+		HttpPost post = new HttpPost(url);
+		if (params != null) {
+			List<NameValuePair> paramList = new ArrayList<NameValuePair>();
+			for (String key : params.keySet()) {
+				paramList.add(new BasicNameValuePair(key, params.get(key)));
+			}
+			UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+					paramList, getCharset());
+			post.setEntity(formEntity);
+		}
+		HttpResponse response = client.execute(post);
+		return consumeResponseEntity(response, getCharset());
 	}
 
 	/**
@@ -149,11 +176,10 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 	 * @return 响应内容实体
 	 * @throws Exception
 	 */
-	public String sslPostXml(String url, String xml, String keyType,
-			String keyPath, String keyPassword, String authString)
+	public String sslPostXml(String url, String xml, String authString)
 			throws Exception {
-		CloseableHttpClient sch = getSslHttpClient(keyType, keyPath,
-				keyPassword);
+		CloseableHttpClient sch = getSslHttpClient(getKeyStoreType(),
+				getKeyStorePath(), getKeyPassword());
 		return sslPost(url, xml, "text/xml; charset=" + getCharset(),
 				"text/xml", getCharset(), getCharset(), sch, authString);
 
@@ -179,11 +205,10 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 	 * @return 响应内容实体
 	 * @throws Exception
 	 */
-	public String sslPostJson(String url, String json, String keyType,
-			String keyPath, String keyPassword, String authString)
+	public String sslPostJson(String url, String json, String authString)
 			throws Exception {
-		CloseableHttpClient sch = getSslHttpClient(keyType, keyPath,
-				keyPassword);
+		CloseableHttpClient sch = getSslHttpClient(getKeyStoreType(),
+				getKeyStorePath(), getKeyPassword());
 		return sslPost(url, json, "application/json; charset=" + getCharset(),
 				"application/json", getCharset(), getCharset(), sch, authString);
 
@@ -468,10 +493,12 @@ public class SxjHttpClientImpl implements ISxjHttpClient {
 
 	public static void main(String[] args) throws Exception {
 		SxjHttpClientImpl im = new SxjHttpClientImpl();
-		String aa = im.sslGet("https://www.menchuang.org.cn", "jks",
-				"E:/t.jks", "123456", "");
+		im.setCharset("UTF-8");
+		im.setKeyPassword("123456");
+		im.setKeyStorePath("E:/t.jks");
+		im.setKeyStoreType("jks");
+		String aa = im.sslGet("https://www.menchuang.org.cn", "");
 		System.out.println(aa);
 
 	}
-
 }

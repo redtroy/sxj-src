@@ -1,4 +1,4 @@
-package com.sxj.finance.manage.controller.member;
+﻿package com.sxj.finance.manage.controller.member;
 
 
 import java.util.HashMap;
@@ -48,16 +48,8 @@ public class MemberController extends BaseController {
 				areaId = "32:江苏省," + areaId;
 				query.setArea(areaId);
 			}
-			MemberTypeEnum[] types = MemberTypeEnum.values();
-			MemberCheckStateEnum[] checkStates = MemberCheckStateEnum.values();
-			MemberStatesEnum[] states = MemberStatesEnum.values();
-			//List<AreaEntity> cityList = areaService.getChildrenAreas("32");
 			List<MemberEntity> list = memberService.queryMembers(query);
-			map.put("types", types);
-			map.put("checkStates", checkStates);
-			map.put("states", states);
 			map.put("memberList", list);
-			//map.put("cityList", cityList);
 			map.put("query", query);
 			return "manage/member/memberList";
 		} catch (Exception e) {
@@ -82,7 +74,27 @@ public class MemberController extends BaseController {
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
-			throw new WebException(e);
+			SxjLogger.error("审核会员信息错误", e, this.getClass());
+			throw new WebException("审核会员信息错误");
+		}
+
+	}
+	/**
+	 * 修改审核状态
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("memberInfo")
+	public String getMemberInfo(String id,ModelMap map) throws WebException {
+		try {
+			MemberEntity member = memberService.getMember(id);
+			map.put("member", member);
+			map.put("id", id);
+			return "manage/member/memberInfo";
+		} catch (Exception e) {
+			SxjLogger.error("审核会员信息错误", e, this.getClass());
+			throw new WebException("审核会员信息错误");
 		}
 
 	}
