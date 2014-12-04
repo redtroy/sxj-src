@@ -6,6 +6,8 @@
 	<resultMap id="financeResultMap"
 		type="com.sxj.finance.entity.FinanceEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR"
+			javaType="String" />
 		<result property="payNo" column="PAY_NO" jdbcType="VARCHAR"
 			javaType="String" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR"
@@ -30,6 +32,10 @@
 		<!-- 支付单号 -->
 		<if test="condition.payNo != null and condition.payNo != ''">
 			<![CDATA[ AND PAY_NO like CONCAT('%',#{condition.payNo},'%')]]>
+		</if>
+		<!-- 会员号 -->
+		<if test="condition.memberNo != null and condition.memberNo != ''">
+			<![CDATA[ AND MEMBER_NO =#{condition.memberNo} ]]>
 		</if>
 		<!-- 合同号 -->
 		<if test="condition.contractNo != null and condition.contractNo != ''">

@@ -14,6 +14,8 @@ public class FinanceModel extends Pagable implements Serializable {
 
 	private String payNo;
 
+	private String memberNo;
+
 	private String contractNo;
 
 	private String batchNo;
@@ -31,6 +33,14 @@ public class FinanceModel extends Pagable implements Serializable {
 	private String startDate;
 
 	private String endDate;
+
+	public String getMemberNo() {
+		return memberNo;
+	}
+
+	public void setMemberNo(String memberNo) {
+		this.memberNo = memberNo;
+	}
 
 	public String getStartDate() {
 		return startDate;
