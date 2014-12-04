@@ -43,7 +43,6 @@
 		<property name="typeAliasesPackage" value="com.sxj.finance.entity" />
 		<!-- 显式指定Mapper文件位置 -->
 		<property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" />
-
 	</bean>
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

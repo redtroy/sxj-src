@@ -253,9 +253,6 @@ public class BasicController extends BaseController {
 			if (account != null) {
 				accountService.edit_Login(account.getId());
 			}
-			// loginToken.setMemberNo(userBean.getMember().getMemberNo());
-			// loginToken.setMemberName(userBean.getMember().getName());
-			// loginToken.setPassword(userBean.getMember().getPassword());
 			return "redirect:" + getBasePath(request) + "index.htm";
 		} else {
 			map.put("message", "登陆失败");

@@ -15,10 +15,6 @@ package com.sxj.finance.entity.member;
 import java.io.Serializable;
 import java.util.Date;
 
-
-
-import org.hibernate.validator.constraints.Length;
-
 import com.sxj.finance.dao.member.IMemberDao;
 import com.sxj.finance.enu.member.MemberCheckStateEnum;
 import com.sxj.finance.enu.member.MemberStatesEnum;
@@ -42,10 +38,11 @@ import com.sxj.mybatis.pagination.Pagable;
 @Entity(mapper = IMemberDao.class)
 @Table(name = "M_MEMBER")
 public class MemberEntity extends Pagable implements Serializable {
+
 	/**
-     * 
-     */
-	private static final long serialVersionUID = 8851524763229466282L;
+	 * 
+	 */
+	private static final long serialVersionUID = 420909608351630992L;
 
 	/**
 	 * 标识
@@ -199,7 +196,7 @@ public class MemberEntity extends Pagable implements Serializable {
 
 	@Column(name = "FINANCE_STATE")
 	private String financeState;
-	
+
 	public Long getVersion() {
 		return version;
 	}
