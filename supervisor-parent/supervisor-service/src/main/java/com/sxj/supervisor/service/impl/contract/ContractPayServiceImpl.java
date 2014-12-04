@@ -177,9 +177,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 			payDao.changeState(payNo, state);
 			return "1";
 		} catch (Exception e) {
-			e.printStackTrace();
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			return "0";
+			throw new ServiceException();
 		}
 	}
 }

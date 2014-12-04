@@ -75,9 +75,9 @@ function query(page){
         <#list list as log>
         <tr>
           <td>${log.memberNo}</td>
-          <td>${log.nowPage}</td>
-          <td>${log.prePage}</td>
-          <td>${log.nextpage}</td>
+          <td>${log.nowName}</td>
+          <td>${log.preName}</td>
+          <td>${log.nextName}</td>
 		  <td>${log.waitTime}</td>
 		  <td><#if (log.callTime??)>${log.callTime?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <td>${log.ip}</td>

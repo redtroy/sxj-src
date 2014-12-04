@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.member.IMemberFunctionDao;
@@ -16,14 +17,13 @@ import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
-@Transactional
 public class MemberFunctionServiceImpl implements IMemberFunctionService {
 
 	@Autowired
 	private IMemberFunctionDao functionDao;
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
 	public List<MemberFunctionEntity> queryChildrenFunctions(String parentId,
 			Integer flag) throws ServiceException {
 		try {
@@ -40,7 +40,7 @@ public class MemberFunctionServiceImpl implements IMemberFunctionService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
 	public List<MemberFunctionModel> queryFunctions(Integer flag)
 			throws ServiceException {
 		try {
@@ -69,6 +69,19 @@ public class MemberFunctionServiceImpl implements IMemberFunctionService {
 		} catch (Exception e) {
 			SxjLogger.error("查询所有会员菜单错误", e, this.getClass());
 			throw new ServiceException("查询所有会员菜单错误", e);
+		}
+	}
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
+	public MemberFunctionEntity getFunction(String functionId)
+			throws ServiceException {
+		try {
+			MemberFunctionEntity function = functionDao.getFunction(functionId);
+			return function;
+		} catch (Exception e) {
+			SxjLogger.error("查询会员菜单错误", e, this.getClass());
+			throw new ServiceException("查询会员菜单错误", e);
 		}
 	}
 
