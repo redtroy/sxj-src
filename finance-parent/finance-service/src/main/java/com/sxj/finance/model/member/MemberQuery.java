@@ -38,6 +38,10 @@ public class MemberQuery extends Pagable implements Serializable {
 	private Integer memberTypeB;
 
 	private String isDelMes;
+	
+	private String phoneNo;
+	
+	
 
 	public Integer getMemberTypeB() {
 		return memberTypeB;
@@ -149,6 +153,14 @@ public class MemberQuery extends Pagable implements Serializable {
 
 	public void setIsDelMes(String isDelMes) {
 		this.isDelMes = isDelMes;
+	}
+
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 
 }

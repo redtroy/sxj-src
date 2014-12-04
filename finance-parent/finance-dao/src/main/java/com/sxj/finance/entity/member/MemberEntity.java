@@ -39,6 +39,7 @@ import com.sxj.mybatis.pagination.Pagable;
 @Table(name = "M_MEMBER")
 public class MemberEntity extends Pagable implements Serializable {
 
+
 	/**
 	 * 
 	 */
@@ -195,7 +196,7 @@ public class MemberEntity extends Pagable implements Serializable {
 	private Long version;
 
 	@Column(name = "FINANCE_STATE")
-	private String financeState;
+	private Integer financeState;
 
 	public Long getVersion() {
 		return version;
@@ -397,11 +398,11 @@ public class MemberEntity extends Pagable implements Serializable {
 		this.noType = noType;
 	}
 
-	public String getFinanceState() {
+	public Integer getFinanceState() {
 		return financeState;
 	}
 
-	public void setFinanceState(String financeState) {
+	public void setFinanceState(Integer financeState) {
 		this.financeState = financeState;
 	}
 
