@@ -15,6 +15,7 @@ import com.sxj.supervisor.model.statistics.AccountingModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -166,6 +167,19 @@ public class ContractPayServiceImpl implements IContractPayService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceException("查询支付单号出错！", e);
+		}
+	}
+
+	@Override
+	public String changeState(String payNo, String state)
+			throws ServiceException {
+		try {
+			payDao.changeState(payNo, state);
+			return "1";
+		} catch (Exception e) {
+			e.printStackTrace();
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			return "0";
 		}
 	}
 }

@@ -199,4 +199,21 @@ public class PayController extends BaseController {
 		}
 		return null;
 	}
+
+	/**
+	 * 更改融资状态
+	 */
+	@RequestMapping("changeState")
+	public @ResponseBody Map<String, String> changeState(String payNo,
+			String state) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			String flag = payService.changeState(payNo, state);
+			map.put("flag", flag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			SxjLogger.error("更改状态出错", e, this.getClass());
+		}
+		return map;
+	}
 }
