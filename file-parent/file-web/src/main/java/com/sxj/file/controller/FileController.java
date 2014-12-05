@@ -24,148 +24,128 @@ import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 
 @Controller
-public class FileController
-{
-    
-    @Autowired
-    private IStorageClientService storageClientService;
-    
-    @RequestMapping(value = "{group}/{st}/{f1}/{f2}/{id}")
-    public void getImage(@PathVariable String group, @PathVariable String st,
-            @PathVariable String f1, @PathVariable String f2,
-            @PathVariable String id, HttpServletRequest request,
-            HttpServletResponse response) throws WebException
-    {
-        try
-        {
-            response.setDateHeader("expries",
-                    System.currentTimeMillis() + 1000 * 3600);
-            StringBuffer modifyId = new StringBuffer();
-            modifyId.append(group);
-            modifyId.append("/");
-            modifyId.append(st);
-            modifyId.append("/");
-            modifyId.append(f1);
-            modifyId.append("/");
-            modifyId.append(f2);
-            modifyId.append("/");
-            modifyId.append(id);
-            modifyId.append("-LastModified");
-            SimpleDateFormat dataformat = new SimpleDateFormat(
-                    "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-            dataformat.setTimeZone(new SimpleTimeZone(0, "GMT"));
-            
-            Object lastModified = HierarchicalCacheManager.get(IFileUpLoad.LEVEL,
-                    IFileUpLoad.CACHE_NAME,
-                    modifyId.toString());
-            if (lastModified == null)
-            {
-                Date nowdate = new Date();
-                lastModified = dataformat.format(nowdate);
-                HierarchicalCacheManager.set(IFileUpLoad.LEVEL,
-                        IFileUpLoad.CACHE_NAME,
-                        modifyId.toString(),
-                        lastModified.toString());
-                response.addHeader("Last-Modified", lastModified.toString());
-            }
-            else
-            {
-                String ifmodify = request.getHeader("If-Modified-Since");
-                response.addHeader("Last-Modified", lastModified.toString());
-                if (StringUtils.isNotEmpty(ifmodify))
-                {
-                    Date ifmodifydate = dataformat.parse(ifmodify);
-                    Date lastmodifydate = dataformat.parse(lastModified.toString());
-                    if (ifmodifydate.getTime() == lastmodifydate.getTime())
-                    {
-                        // response.setStatus(304);
-                        // return;
-                    }
-                }
-            }
-            String url = request.getRequestURI();
-            String type = url.substring(url.lastIndexOf(".") + 1, url.length());
-            // type=type.toLowerCase();
-            StringBuffer idbuff = new StringBuffer();
-            // idbuff.append(group);
-            // idbuff.append("/");
-            idbuff.append(st);
-            idbuff.append("/");
-            idbuff.append(f1);
-            idbuff.append("/");
-            idbuff.append(f2);
-            idbuff.append("/");
-            idbuff.append(id);
-            id = idbuff.append(".").append(type).toString();
-            // id = id.replace("-", "/") + "." + type;
-            byte[] image = null;
-            if (StringUtils.isEmpty(id))
-            {
-                response.setStatus(404);
-                return;
-            }
-            // id = id.substring("/upload/".length(), id.length());
-            int index = id.lastIndexOf(".");
-            int index2 = id.indexOf(type);
-            if (index2 == index + 1)
-            {
-                image = storageClientService.downloadFile(group,
-                        id,
-                        new ByteArrayFdfsFileInputStreamHandler());
-                // image = fastDfsClient.downloadFile(id);
-            }
-            else
-            {
-                String size = id.substring(index2 + type.length(), index);
-                id = id.substring(0, index2 + type.length());
-                String[] sizes = size.split("[x]");
-                int width = Integer.parseInt(sizes[0]);
-                int height = Integer.parseInt(sizes[1]);
-                if (width > 500 || height > 500)
-                {
-                    width = 500;
-                    height = 500;
-                }
-                image = storageClientService.downloadSmallImage(group,
-                        id,
-                        width,
-                        height);
-            }
-            if (image != null && image.length > 0)
-            {
-                ServletOutputStream output = response.getOutputStream();
-                
-                type = "image/" + "*";
-                response.setContentType(type);
-                output.write(image);
-                output.flush();
-                output.close();
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            // SxjLogger.error("获取图片错误", e, this.getClass());
-            
-        }
-        
-    }
-    
-    public static void main(String[] args) throws ParseException
-    {
-        SimpleDateFormat dataf = new SimpleDateFormat(
-                "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-        dataf.setTimeZone(new SimpleTimeZone(0, "GMT"));
-        String ifmodify = "Mon, 29 Aug 2011 07:34:33 GMT";
-        long time = System.currentTimeMillis();
-        
-        System.out.println("time=" + dataf.format(new Date()));
-        
-        Date date = dataf.parse(ifmodify);
-        System.out.println("time2=" + date.getTime());
-        ifmodify = ifmodify.substring(ifmodify.indexOf(",") + 1,
-                ifmodify.length());
-        System.out.println(ifmodify);
-        
-    }
+public class FileController {
+
+	@Autowired
+	private IStorageClientService storageClientService;
+
+	@RequestMapping(value = "{group}/{st}/{f1}/{f2}/{id}")
+	public void getImage(@PathVariable String group, @PathVariable String st,
+			@PathVariable String f1, @PathVariable String f2,
+			@PathVariable String id, HttpServletRequest request,
+			HttpServletResponse response) throws WebException {
+		try {
+			response.setDateHeader("expries",
+					System.currentTimeMillis() + 1000 * 3600);
+			StringBuffer modifyId = new StringBuffer();
+			modifyId.append(group);
+			modifyId.append("/");
+			modifyId.append(st);
+			modifyId.append("/");
+			modifyId.append(f1);
+			modifyId.append("/");
+			modifyId.append(f2);
+			modifyId.append("/");
+			modifyId.append(id);
+			modifyId.append("-LastModified");
+			SimpleDateFormat dataformat = new SimpleDateFormat(
+					"EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+			dataformat.setTimeZone(new SimpleTimeZone(0, "GMT"));
+
+			Object lastModified = HierarchicalCacheManager.get(
+					IFileUpLoad.LEVEL, IFileUpLoad.CACHE_NAME,
+					modifyId.toString());
+			if (lastModified == null) {
+				Date nowdate = new Date();
+				lastModified = dataformat.format(nowdate);
+				HierarchicalCacheManager.set(IFileUpLoad.LEVEL,
+						IFileUpLoad.CACHE_NAME, modifyId.toString(),
+						lastModified.toString());
+				response.addHeader("Last-Modified", lastModified.toString());
+			} else {
+				String ifmodify = request.getHeader("If-Modified-Since");
+				response.addHeader("Last-Modified", lastModified.toString());
+				if (StringUtils.isNotEmpty(ifmodify)) {
+					Date ifmodifydate = dataformat.parse(ifmodify);
+					Date lastmodifydate = dataformat.parse(lastModified
+							.toString());
+					if (ifmodifydate.getTime() == lastmodifydate.getTime()) {
+						// response.setStatus(304);
+						// return;
+					}
+				}
+			}
+			String url = request.getRequestURI();
+			String type = url.substring(url.lastIndexOf(".") + 1, url.length());
+			// type=type.toLowerCase();
+			StringBuffer idbuff = new StringBuffer();
+			// idbuff.append(group);
+			// idbuff.append("/");
+			idbuff.append(st);
+			idbuff.append("/");
+			idbuff.append(f1);
+			idbuff.append("/");
+			idbuff.append(f2);
+			idbuff.append("/");
+			idbuff.append(id);
+			id = idbuff.append(".").append(type).toString();
+			// id = id.replace("-", "/") + "." + type;
+			byte[] image = null;
+			if (StringUtils.isEmpty(id)) {
+				response.setStatus(404);
+				return;
+			}
+			// id = id.substring("/upload/".length(), id.length());
+			int index = id.lastIndexOf(".");
+			int index2 = id.indexOf(type);
+			if (index2 == index + 1) {
+				image = storageClientService.downloadFile(group, id,
+						new ByteArrayFdfsFileInputStreamHandler());
+				// image = fastDfsClient.downloadFile(id);
+			} else {
+				String size = id.substring(index2 + type.length(), index);
+				id = id.substring(0, index2 + type.length());
+				String[] sizes = size.split("[x]");
+				int width = Integer.parseInt(sizes[0]);
+				int height = Integer.parseInt(sizes[1]);
+				if (width > 500 || height > 500) {
+					width = 500;
+					height = 500;
+				}
+				image = storageClientService.downloadSmallImage(group, id,
+						width, height);
+			}
+			if (image != null && image.length > 0) {
+				ServletOutputStream output = response.getOutputStream();
+
+				type = "image/" + "*";
+				response.setContentType(type);
+				output.write(image);
+				output.flush();
+				output.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// SxjLogger.error("获取图片错误", e, this.getClass());
+
+		}
+
+	}
+
+	public static void main(String[] args) throws ParseException {
+		SimpleDateFormat dataf = new SimpleDateFormat(
+				"EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+		dataf.setTimeZone(new SimpleTimeZone(0, "GMT"));
+		String ifmodify = "Mon, 29 Aug 2011 07:34:33 GMT";
+		long time = System.currentTimeMillis();
+
+		System.out.println("time=" + dataf.format(new Date()));
+
+		Date date = dataf.parse(ifmodify);
+		System.out.println("time2=" + date.getTime());
+		ifmodify = ifmodify.substring(ifmodify.indexOf(",") + 1,
+				ifmodify.length());
+		System.out.println(ifmodify);
+
+	}
 }
