@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.finance.dao.system.ISystemAccountDao">
+<!-- <cache type="com.sxj.mybatis.cache.HierarchicalCache">
+		<property name="level" value="2"/>
+		<property name="timeToLive" value="10"/>
+</cache> -->
+	<resultMap id="SystemAccountResultMap" type="com.sxj.finance.entity.system.SystemAccountEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="account" column="ACCOUNT" jdbcType="VARCHAR" />
+		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
+		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
+		<result property="lastLogin" column="LAST_LOGIN" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<!-- 条件查询用户 -->
+	<select id="querySystemAccount" resultMap="SystemAccountResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT DISTINCT a.ID,a.NAME,a.ACCOUNT,a.PASSWORD,a.ACCOUNT_NO,a.LAST_LOGIN FROM M_SYS_ACCOUNT a  WHERE 1=1]]>
+		<!-- 用户ID -->
+		<if test="condition.id != null and condition.id!=''">
+			<![CDATA[ AND a.ID = #{condition.id}]]>
+		</if>
+		<if test="condition.accountNo != null and condition.accountNo!=''">
+			<![CDATA[ AND a.ACCOUNT_NO = #{condition.accountNo}]]>
+		</if>
+		<!-- 用户账户 -->
+		<if test="condition.account != null  and condition.account!=''">
+			<![CDATA[ AND a.ACCOUNT = #{condition.account}]]>
+		</if>
+		<!-- 用户姓名  -->
+		<if test="condition.name != null  and condition.name!=''">
+			<![CDATA[ AND a.NAME=#{condition.name}]]>
+		</if>
+		<![CDATA[ ORDER BY a.ACCOUNT_NO DESC]]>
+	</select>
+</mapper>

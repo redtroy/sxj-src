@@ -17,8 +17,8 @@ import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 
-@Controller
-@RequestMapping("finance")
+@Controller("suFinanceController")
+@RequestMapping("/finance")
 public class FinanceController extends BaseController {
 	@Autowired
 	private IContractPayService payService;
