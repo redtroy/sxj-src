@@ -111,7 +111,6 @@ public class FinanceServiceImpl implements IFinanceService {
 				return false;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			return false;
 		}
@@ -172,7 +171,12 @@ public class FinanceServiceImpl implements IFinanceService {
 			fe.setContent(map.get("content").toString());
 			fe.setState(PayStageEnum.Stage1);
 			fe.setCreatDate(new Date());
-			financeDao.add(fe);
+			FinanceModel query = new FinanceModel();
+			query.setPayNo(fe.getPayNo());
+			List<FinanceEntity> list = queryManage(query);
+			if (list == null || list.size() == 0) {
+				financeDao.add(fe);
+			}
 			return "1";
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());

@@ -19,7 +19,7 @@ import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-@RequestMapping("finance")
+@RequestMapping("/finance")
 public class FinanceController extends BaseController {
 
 	@Autowired

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.LoginToken;
 import com.sxj.util.common.EncryptUtil;
+import com.sxj.util.common.ISxjHttpClient;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -40,6 +42,12 @@ public class PayController extends BaseController {
 	 */
 	@Autowired
 	private IContractService contractService;
+
+	@Autowired
+	private ISxjHttpClient httpClient;
+
+	@Value("${httpclient.financeUrl}")
+	private String webUrl;
 
 	/**
 	 * 获取付款信息列表
@@ -178,9 +186,12 @@ public class PayController extends BaseController {
 
 	/**
 	 * 测试
+	 * 
+	 * @throws WebException
 	 */
 	@RequestMapping("tofinance")
-	public String tofinance(String payId, HttpSession session) {
+	public String tofinance(String payId, HttpSession session)
+			throws WebException {
 		try {
 			SupervisorPrincipal loginInfo = getLoginInfo(session);
 			if (loginInfo == null) {
@@ -190,21 +201,26 @@ public class PayController extends BaseController {
 			if (pay == null) {
 				throw new WebException("付款记录不存在");
 			}
-			String payjson = JsonMapper.nonDefaultMapper().toJson(pay);
-
+			Map<String, Object> map = new HashMap<>();
+			map.put("memberNo_A", pay.getMemberNo_A());
+			map.put("payNo", pay.getPayNo());
+			map.put("contractNo", pay.getContractNo());
+			map.put("batchNo", pay.getBatchNo());
+			map.put("payAmount", pay.getPayAmount());
+			map.put("content", pay.getContent());
+			String payjson = JsonMapper.nonDefaultMapper().toJson(map);
+			httpClient.postJson(webUrl + "/finance/getModel.htm", payjson);
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
 			loginToken.setPassword(loginInfo.getMember().getPassword());
 
-			return "redirect:http://127.0.0.1:8080/finance-website/to_login.htm?member="
-					+ loginToken.getMemberNo()
-					+ "&token="
+			return "redirect:" + webUrl + "/to_login.htm?member="
+					+ loginToken.getMemberNo() + "&token="
 					+ EncryptUtil.md5Hex(loginToken.toString());
 		} catch (Exception e) {
-			// TODO: handle exception
+			throw new WebException(e.getMessage());
 		}
-		return null;
 	}
 
 	/**

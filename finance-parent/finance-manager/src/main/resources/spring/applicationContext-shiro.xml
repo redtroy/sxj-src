@@ -106,6 +106,8 @@
 			<value>
 				/index.htm=user
 				/unauth.htm = anon
+				/finance/financeList.htm=user
+				/member/memberList.htm=user
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->

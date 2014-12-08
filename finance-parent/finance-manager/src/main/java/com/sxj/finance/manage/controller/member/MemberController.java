@@ -1,6 +1,5 @@
 ﻿package com.sxj.finance.manage.controller.member;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.finance.entity.member.MemberEntity;
-import com.sxj.finance.enu.member.MemberCheckStateEnum;
-import com.sxj.finance.enu.member.MemberStatesEnum;
-import com.sxj.finance.enu.member.MemberTypeEnum;
 import com.sxj.finance.manage.controller.BaseController;
 import com.sxj.finance.model.member.MemberQuery;
 import com.sxj.finance.service.member.IMemberService;
-import com.sxj.redis.advance.topic.RedisTopics;
-import com.sxj.util.Constraints;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -27,9 +21,10 @@ import com.sxj.util.logger.SxjLogger;
 @RequestMapping("/member")
 @Controller
 public class MemberController extends BaseController {
-	
+
 	@Autowired
 	private IMemberService memberService;
+
 	/**
 	 * 会员管理列表
 	 * 
@@ -58,7 +53,7 @@ public class MemberController extends BaseController {
 		}
 
 	}
-	
+
 	/**
 	 * 修改审核状态
 	 * 
@@ -79,6 +74,7 @@ public class MemberController extends BaseController {
 		}
 
 	}
+
 	/**
 	 * 修改审核状态
 	 * 
@@ -86,7 +82,7 @@ public class MemberController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("memberInfo")
-	public String getMemberInfo(String id,ModelMap map) throws WebException {
+	public String getMemberInfo(String id, ModelMap map) throws WebException {
 		try {
 			MemberEntity member = memberService.getMember(id);
 			map.put("member", member);

@@ -41,7 +41,8 @@ public class BasicController extends BaseController {
 			if (newAccount == null) {
 				return LOGIN;
 			}
-			return "redirect:" + getBasePath(request) + "member/memberList.htm";
+			return "redirect:" + getBasePath(request)
+					+ "member/memberList.htm?function=1";
 		}
 	}
 

@@ -5,8 +5,14 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-
-
+	<bean id="configBean"
+		class="com.sxj.spring.modules.beanfactory.CustomizedPropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:config/httpclient.properties</value>
+			</list>
+		</property>
+	</bean>
 	<!-- 自动扫描且只扫描@Controller -->
 	<context:component-scan base-package="com.sxj.supervisor.website.controller"
 		use-default-filters="false">
