@@ -1,5 +1,9 @@
 package com.sxj.supervisor.manage.controller.rfid.purchase;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,21 +14,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
+import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.PayStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
+import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
+import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.purchase.IPurchaseRfidService;
+import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -42,6 +55,18 @@ public class PurchaseRfidController extends BaseController {
 
 	@Autowired
 	private IRfidSupplierService supplierService;
+	
+	/**
+	 * 门窗RFID 
+	 */
+	@Autowired
+	private IWindowRfidService windowRfidService;
+	
+	/**
+	 * 物流RFID
+	 */
+	@Autowired
+	private ILogisticsRfidService logisticsRfidService;
 
 	/**
 	 * 查询列表
@@ -308,6 +333,54 @@ public class PurchaseRfidController extends BaseController {
 		try {
 			purchaseRfidService.importRfid(purchaseId);
 			map.put("isOK", "ok");
+
+		} catch (Exception e) {
+			SxjLogger.error("导入RFID错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
+	}
+	
+	/**
+	 * 导出RFID CSV文件
+	 * @param purchaseId
+	 * @param model
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("exportRfid")
+	public @ResponseBody Map<String, String> exportRfid(String applyNo,Integer type,
+			ModelMap model) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			OutputStreamWriter fwriter = new OutputStreamWriter(
+					new FileOutputStream(new File("csv/"+applyNo+".csv")), "GB2312");
+			
+
+			ICsvBeanWriter writer = new CsvBeanWriter(fwriter,
+					CsvPreference.EXCEL_PREFERENCE);
+			//输出头部
+			String headers[] = {"rfidNo"};		
+			writer.writeHeader(headers);
+
+			if(type==0){
+				//门窗RFID
+				WindowRfidQuery winQuery = new WindowRfidQuery();
+				winQuery.setApplyNo(applyNo);
+				List<WindowRfidEntity> window=windowRfidService.queryWindowRfid(winQuery);
+				for (WindowRfidEntity windowRfidEntity : window) {
+					writer.write(windowRfidEntity, headers);
+				}
+			}else{
+				LogisticsRfidQuery lQuery = new LogisticsRfidQuery();
+				lQuery.setApplyNo(applyNo);
+				List<LogisticsRfidEntity> logisticsList=logisticsRfidService.queryLogistics(lQuery);
+			    for (LogisticsRfidEntity logisticsRfidEntity : logisticsList) {
+			    	writer.write(logisticsRfidEntity, headers);
+				}
+			}
+			writer.close();
+
 
 		} catch (Exception e) {
 			SxjLogger.error("导入RFID错误", e, this.getClass());
