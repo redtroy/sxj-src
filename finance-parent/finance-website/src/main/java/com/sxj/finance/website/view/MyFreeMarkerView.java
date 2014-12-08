@@ -3,6 +3,7 @@ package com.sxj.finance.website.view;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 
@@ -13,6 +14,10 @@ public class MyFreeMarkerView extends FreeMarkerView {
 	@Override
 	protected void exposeHelpers(Map<String, Object> model,
 			HttpServletRequest request) throws Exception {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpSession session = req.getSession(false);
+		String function = req.getParameter("function");
+		session.setAttribute("function", function);
 		String path = request.getContextPath() + "/";
 		model.put(CONTEXT_PATH, path);
 		super.exposeHelpers(model, request);
