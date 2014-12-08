@@ -314,7 +314,7 @@ $(".pagination").ready(function(){
 	type="text/css" />
 <script>
 var iviewer;
-
+var msie=$.browser.msie
 var elastislideConfig={
 		count:6//当前显示数量
 }
@@ -357,7 +357,7 @@ var refreshIviewer=function($viewer,src,$container){
 var errorImage=function($this){
 	var times=parseInt($($this).attr("times"));
 	if(times<3){
-		$($this).attr("src", $($this).attr("src")+'&'+Math.random());
+		$($this).attr("src", $($this).attr("src"));
 		$($this).attr("times",times+1);
 	}else if(times==3){
 		$($this).attr("src", "http://static.menchuang.org.cn/supervisor-website/images/bg404.jpg");

@@ -152,6 +152,11 @@
 			<artifactId>redis-spring</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>net.sf.supercsv</groupId>
+			<artifactId>super-csv</artifactId>
+			<version>2.2.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

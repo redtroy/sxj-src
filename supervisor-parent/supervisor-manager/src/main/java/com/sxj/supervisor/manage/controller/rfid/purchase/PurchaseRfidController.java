@@ -1,30 +1,48 @@
 package com.sxj.supervisor.manage.controller.rfid.purchase;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
+import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.purchase.DeliveryStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.ImportStateEnum;
 import com.sxj.supervisor.enu.rfid.purchase.PayStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.model.rfid.purchase.PurchaseRfidQuery;
+import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
+import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.purchase.IPurchaseRfidService;
+import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
+import com.sxj.util.common.NumberUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -42,6 +60,18 @@ public class PurchaseRfidController extends BaseController {
 
 	@Autowired
 	private IRfidSupplierService supplierService;
+
+	/**
+	 * 门窗RFID
+	 */
+	@Autowired
+	private IWindowRfidService windowRfidService;
+
+	/**
+	 * 物流RFID
+	 */
+	@Autowired
+	private ILogisticsRfidService logisticsRfidService;
 
 	/**
 	 * 查询列表
@@ -314,6 +344,61 @@ public class PurchaseRfidController extends BaseController {
 			map.put("error", e.getMessage());
 		}
 		return map;
+	}
+
+	/**
+	 * 导出RFID CSV文件
+	 * 
+	 * @param purchaseId
+	 * @param model
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("exportRfid")
+	public void exportRfid(String applyNo, Integer type, ModelMap model,
+			HttpServletResponse response) throws WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			String name = "私享家rfid-{" + applyNo + "}.csv";
+			name =new String(name.getBytes("UTF-8"),"iso-8859-1");
+			response.addHeader("Content-Disposition", "attachment;filename="  
+	                + new String(name.getBytes()));  
+			response.setContentType("application/-excel");
+			PrintWriter www=new PrintWriter(response.getOutputStream());
+			ICsvBeanWriter writer = new CsvBeanWriter(www,
+					CsvPreference.STANDARD_PREFERENCE);
+			
+			// 输出头部
+			String headers[] = { "rfidNo" };
+			writer.writeHeader(headers);
+			if (type == 0) {
+				// 门窗RFID
+				WindowRfidQuery winQuery = new WindowRfidQuery();
+				winQuery.setApplyNo(applyNo);
+				List<WindowRfidEntity> window = windowRfidService
+						.queryWindowRfid(winQuery);
+				for (WindowRfidEntity windowRfidEntity : window) {
+					writer.write(windowRfidEntity, headers);
+				}
+			} else {
+				LogisticsRfidQuery lQuery = new LogisticsRfidQuery();
+				lQuery.setApplyNo(applyNo);
+				List<LogisticsRfidEntity> logisticsList = logisticsRfidService
+						.queryLogistics(lQuery);
+				for (LogisticsRfidEntity logisticsRfidEntity : logisticsList) {
+					writer.write(logisticsRfidEntity, headers);
+				}
+			}
+			writer.close();
+			www.flush();
+			www.close();
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+			
+		} catch (Exception e) {
+			SxjLogger.error("导入RFID错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
 	}
 
 }
