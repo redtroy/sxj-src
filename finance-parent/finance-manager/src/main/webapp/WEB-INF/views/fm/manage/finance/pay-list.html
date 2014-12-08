@@ -128,9 +128,21 @@ function pay(id){
       <td>${model.payNo}</td>
       <td><a href="#" class="lnk-blue">${model.contractNo}</a></td>
       <td>${model.batchNo}</td>
+      <#if model.payAmount??>
       <td>${model.payAmount?string("0.00")}元</td>
+      <#else>
+      <td></td>
+      </#if>
+      <#if model.financeAmount??>
       <td>${model.financeAmount?string("0.00")}元</td>
+      <#else>
+      <td></td>
+      </#if>
+      <#if model.creditAmount??>
       <td class="color-orange">${model.creditAmount?string("0.00")}元</td>
+      <#else>
+      <td></td>
+      </#if>
       <td>${model.content}</td>
       <#if (model.state.ordinal()==1)>
       <td><a class="button btn-link btn-pay mr10" onclick="accept('${model.id}')">受理</a> <a class="button btn-link btn-financle" onclick="shelve('${model.id}')">搁置</a></td>
@@ -155,11 +167,19 @@ function pay(id){
        <td><span class="state verified">已放款</span></td>
       <#elseif (model.state.ordinal()==4)>
       <td><span class="state frozen">已搁置</span></td>
+      <#else>
+      <td></td>
       </#if>
       </tr>
+      <#if model.payAmount??>
       <#assign num1=num1+model.payAmount>
+      </#if>
+       <#if model.financeAmount??>
       <#assign num2=num2+model.financeAmount>
+       </#if>
+       <#if model.creditAmount??>
       <#assign num3=num3+model.creditAmount>
+       </#if>
       </#list>
     <tr class="fb">
       <td>合计</td>

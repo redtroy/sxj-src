@@ -60,8 +60,7 @@
 	<!-- 条件查询  后台-->
 	<select id="queryManage" resultMap="financeResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM F_FINANCE WHERE STATE>0
-	]]>
+		<![CDATA[SELECT * FROM F_FINANCE WHERE 1=1]]>
 		<!-- 支付单号 -->
 		<if test="condition.payNo != null and condition.payNo != ''">
 			<![CDATA[ AND PAY_NO like CONCAT('%',#{condition.payNo},'%')]]>

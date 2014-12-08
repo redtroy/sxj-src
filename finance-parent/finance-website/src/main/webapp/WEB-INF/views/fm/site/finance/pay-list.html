@@ -61,22 +61,9 @@ function pay(id){
 </head>
 
 <body>
-<div id="header" class="fence">
-<div class="fence-wide topBox"></div>
-</div>
+<@b.header/>
 <div class="fence-wide pb20 ly-clearFix">
-<div class="yard-200 ly-left">
-<div class="leftMenu pt5 pb5">
-<h2 class="pl15 fb">会员中心</h2>
-<ul class="pl10 pr10">
-<li><a href="member-center.html">会员中心</a></li>
-</ul>
-<h2 class="pl15 pt5 fb">融资管理</h2>
-<ul class="pl10 pr10">
-<li class="on"><a href="pay-list.html">融资管理</a></li>
-</ul>
-</div>
-</div>
+<@b.leftMenu/>
 <div class="yard-880 rightSide ly-left">
 <div class="heading fontYH f22">融资管理</div>
 <div class="searBox f12 mt10 mb10" id="serch_div">
@@ -127,9 +114,21 @@ function pay(id){
     <td>${model.payNo}</td>
     <td><a href="#" class="lnk-blue">${model.contractNo}</a></td>
     <td>${model.batchNo}</td>
+    <#if model.payAmount??>
     <td>${model.payAmount?string("0.00")}元</td>
+    <#else>
+    <td></td>
+    </#if>
+    <#if model.financeAmount??>
     <td>${model.financeAmount?string("0.00")}元</td>
+    <#else>
+    <td></td>
+    </#if>
+    <#if model.creditAmount??>
     <td class="color-orange">${model.creditAmount?string("0.00")}元</td>
+    <#else>
+    <td></td>
+    </#if>
     <td>${model.content}</td>
     <td>
    <#if (model.state.ordinal()==0)>
@@ -154,12 +153,20 @@ function pay(id){
         <span class="state verified">融资已放款</span>
       <#elseif (model.state.ordinal()==3)>
         <span class="state frozen">融资已搁置</span>
+        <#else>
+        <span></span>
       </#if>
       </td>
   </tr>
-  <#assign num1=num1+model.payAmount>
-  <#assign num2=num2+model.financeAmount>
-  <#assign num3=num3+model.creditAmount>
+  <#if model.payAmount??>
+  	<#assign num1=num1+model.payAmount>
+  </#if>
+  <#if model.financeAmount??>
+  	<#assign num2=num2+model.financeAmount>
+  </#if>
+  <#if model.creditAmount??>
+  	<#assign num3=num3+model.creditAmount>
+  </#if>
   </#list>
   <tr class="fb">
     <td>合计</td>
@@ -174,8 +181,6 @@ function pay(id){
 </table>
 </div>
 </div>
-<div id="footer" class="fence">
-  <div class="fence-wide color-gray6">&copy; 2014 江苏紫金财富金融信息服务有限公司&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14047993号-1</a></span></div>
-</div>
+<@b.footer/>
 </body>
 </html>

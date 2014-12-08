@@ -10,7 +10,7 @@ import com.sxj.util.exception.ServiceException;
 public interface IFinanceService {
 
 	/**
-	 * 查询 前台
+	 * 查询
 	 * 
 	 * @param query
 	 * @return
@@ -20,7 +20,7 @@ public interface IFinanceService {
 			throws ServiceException;
 
 	/**
-	 * 查询 前台
+	 * 查询
 	 * 
 	 * @param query
 	 * @return

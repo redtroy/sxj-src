@@ -48,7 +48,7 @@ public class BasicController extends BaseController {
 							+ "member/info.htm?function=" + function;
 				} else {
 					return "redirect:" + getBasePath(request)
-							+ "member/info.htm";
+							+ "member/info.htm?function=1";
 				}
 			} else {
 				return LOGIN;
@@ -56,6 +56,16 @@ public class BasicController extends BaseController {
 
 		}
 
+	}
+
+	@RequestMapping("error")
+	public String ToError() {
+		return "site/500";
+	}
+
+	@RequestMapping("404")
+	public String To404() {
+		return "site/404";
 	}
 
 	@RequestMapping("to_login")
