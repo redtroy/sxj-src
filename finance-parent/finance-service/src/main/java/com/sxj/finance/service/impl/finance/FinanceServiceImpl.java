@@ -37,6 +37,7 @@ public class FinanceServiceImpl implements IFinanceService {
 		try {
 			QueryCondition<FinanceEntity> condition = new QueryCondition<FinanceEntity>();
 			if (query != null) {
+				condition.addCondition("memberNo", query.getMemberNo());// 会员号
 				condition.addCondition("payNo", query.getPayNo());// 供应商ID
 				condition.addCondition("contractNo", query.getContractNo());// 供应商名称
 				condition.addCondition("state", query.getState());
@@ -157,5 +158,25 @@ public class FinanceServiceImpl implements IFinanceService {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String setModel(Map<String, Object> map) throws ServiceException {
+		try {
+			FinanceEntity fe = new FinanceEntity();
+			fe.setMemberNo(map.get("memberNo_A").toString());
+			fe.setPayNo(map.get("payNo").toString());
+			fe.setContractNo(map.get("contractNo").toString());
+			fe.setBatchNo(map.get("batchNo").toString());
+			fe.setPayAmount(Double.valueOf(map.get("payAmount").toString()));
+			fe.setContent(map.get("content").toString());
+			fe.setState(PayStageEnum.Stage1);
+			fe.setCreatDate(new Date());
+			financeDao.add(fe);
+			return "1";
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("增加数据出错", e);
+		}
 	}
 }

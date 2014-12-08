@@ -1,6 +1,7 @@
 ﻿package com.sxj.finance.service.finance;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sxj.finance.entity.FinanceEntity;
 import com.sxj.finance.model.finance.FinanceModel;
@@ -50,4 +51,9 @@ public interface IFinanceService {
 	 * 搁置
 	 */
 	public Boolean shelve(FinanceEntity fe) throws ServiceException;
+
+	/**
+	 * 插入数据
+	 */
+	public String setModel(Map<String, Object> map) throws ServiceException;
 }

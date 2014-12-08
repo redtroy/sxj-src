@@ -12,6 +12,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
@@ -22,13 +24,19 @@ import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sxj.finance.entity.system.SystemAccountEntity;
+import com.sxj.finance.service.system.ISystemAccountService;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.util.logger.SxjLogger;
 
 public class SupervisorManagerShiroRealm extends AuthorizingRealm {
 
 	// 用于获取用户信息及用户权限信息的业务接口
+
+	@Autowired
+	private ISystemAccountService accountService;
 
 	public static final String HASH_ALGORITHM = "MD5";
 
@@ -43,7 +51,6 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm {
 	// 获取授权信息
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
-
 		// 因为非正常退出，即没有显式调用 SecurityUtils.getSubject().logout()
 		// (可能是关闭浏览器，或超时)，但此时缓存依旧存在(principals)，所以会自己跑到授权方法里。
 		if (!SecurityUtils.getSubject().isAuthenticated()) {
@@ -51,17 +58,24 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm {
 			SecurityUtils.getSubject().logout();
 			return null;
 		}
-
-		// SystemAccountEntity current = (SystemAccountEntity) principals
-		// .getPrimaryPrincipal();
-		// String username = current.getAccount();
-
 		return null;
 	}
 
 	// 获取认证信息
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken authcToken) throws AuthenticationException {
+		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+		// 通过表单接收的用户名
+		String username = token.getUsername();
+		//
+		if (username != null && !"".equals(username)) {
+			SystemAccountEntity account = accountService
+					.getAccountByAccount(username);
+			if (account != null) {
+				return new SimpleAuthenticationInfo(account,
+						account.getPassword(), getName());
+			}
+		}
 		return null;
 	}
 
@@ -73,7 +87,6 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm {
 		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(
 				HASH_ALGORITHM);
 		matcher.setHashIterations(HASH_INTERATIONS);
-
 		setCredentialsMatcher(matcher);
 	}
 
@@ -99,7 +112,6 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm {
 		if (principals == null) {
 			return null;
 		}
-
 		AuthorizationInfo info = null;
 
 		SxjLogger.debug("Retrieving AuthorizationInfo for principals ["

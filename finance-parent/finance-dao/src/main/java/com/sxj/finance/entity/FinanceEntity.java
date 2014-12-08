@@ -30,6 +30,12 @@ public class FinanceEntity extends Pagable implements Serializable {
 	private String id;
 
 	/**
+	 * 会员号
+	 */
+	@Column(name = "MEMBER_NO")
+	private String memberNo;
+
+	/**
 	 * 支付单号
 	 */
 	@Column(name = "PAY_NO")
@@ -106,6 +112,14 @@ public class FinanceEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "CREAT_DATE")
 	private Date creatDate;
+
+	public String getMemberNo() {
+		return memberNo;
+	}
+
+	public void setMemberNo(String memberNo) {
+		this.memberNo = memberNo;
+	}
 
 	public String getId() {
 		return id;

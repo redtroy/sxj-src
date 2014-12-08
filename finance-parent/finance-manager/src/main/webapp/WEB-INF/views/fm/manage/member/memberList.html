@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -8,7 +9,9 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
-<@b.pageScript/> <@b.dialogBox/> <@b.validate/>
+<@b.pageScript/>
+<@b.dialogBox/>
+<@b.validate/>
 <script>
 	jQuery(document).ready(function($) {
 		$(".tabList .lnk-blue").click(function() {
@@ -61,27 +64,10 @@
 </head>
 
 <body>
-	<div id="header" class="fence">
-		<div class="logo">
-			<h1 class="fontYH fence-wide fb">
-				紫金财富金融服务平台<span class="f24 ml10">后台系统</span>
-			</h1>
-		</div>
-	</div>
+	<@b.header/>
 	<div class="fence mainBg">
 		<div class="fence-wide pt10 pb10 mainCont ly-clearFix">
-			<div class="yard-200 ly-left">
-				<div class="leftMenu pt5 pb5">
-					<h2 class="pl15 fb">会员中心</h2>
-					<ul>
-						<li class="on"><a href="${basePath}member/memberList.htm">会员管理</a></li>
-					</ul>
-					<h2 class="pl15 pt5 fb">融资管理</h2>
-					<ul>
-						<li><a href="pay-list.html">融资管理</a></li>
-					</ul>
-				</div>
-			</div>
+			<@b.leftMenu/>
 			<div class="yard-880 ly-left">
 				<div class="rightSide">
 					<div class="heading fontYH f20">会员管理</div>
@@ -146,12 +132,6 @@
 			</div>
 		</div>
 	</div>
-
-	<div id="footer" class="fence">
-		<div class="fence-wide">
-			&copy; 2014 江苏紫金财富金融信息服务有限公司&nbsp;版权所有<span class="ml10"><a
-				href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14047993号-1</a></span>
-		</div>
-	</div>
+<@b.footer/>
 </body>
 </html>

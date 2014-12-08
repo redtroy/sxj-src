@@ -19,7 +19,7 @@
 		<property name="authorizationCacheName" value="${webmanage.authorization.cache.name}"></property>
 		<property name="authenticationCacheName" value="${webmanage.authentication.cache.name}"></property>
 	</bean>
-	<bean class="com.sxj.finance.manage.login.ShiroEventListener"></bean>
+	<!--<bean class="com.sxj.finance.manage.login.ShiroEventListener"></bean>  -->
 	
 	<bean id="authenticationFilter"
 		class="com.sxj.finance.manage.login.SupervisorManagerPermissionsAuthorizationFilter" />
@@ -106,22 +106,6 @@
 			<value>
 				/index.htm=user
 				/unauth.htm = anon
-				/contract/query.htm=user,frameperms
-				/member/account/accountList.htm=user,frameperms
-				/member/memberList.htm=user,frameperms
-				/member/log/query.htm=user,frameperms
-				/record/recordList.htm=user,frameperms
-				/system/account-list.htm=user,frameperms
-				/rfid/apply/appList.htm=user,frameperms
-				/rfid/purchase/query.htm=user,frameperms
-				/rfid/window/query.htm=user,frameperms
-				/rfid/logistics/query.htm=user,frameperms
-				/rfid/supplier/supplier_list.htm=user,frameperms
-				/rfid/windowRef/query.htm=user,frameperms
-				/rfid/logisticsRef/lable_list.htm=user,frameperms
-				/rfid/pricemgr/pricemgr_view.htm=user,frameperms
-				/rfid/statistics/query.htm=user,frameperms
-				/member/log/query.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->
