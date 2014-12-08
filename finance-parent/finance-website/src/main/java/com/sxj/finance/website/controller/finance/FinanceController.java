@@ -11,17 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.sxj.finance.entity.FinanceEntity;
 import com.sxj.finance.enu.finance.PayStageEnum;
 import com.sxj.finance.model.finance.FinanceModel;
 import com.sxj.finance.service.finance.IFinanceService;
 import com.sxj.finance.website.controller.BaseController;
-import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
-@RequestMapping("finance")
+@RequestMapping("/finance")
 @Controller
 public class FinanceController extends BaseController {
 
@@ -32,7 +30,7 @@ public class FinanceController extends BaseController {
 	public String financeList(ModelMap map, FinanceModel query)
 			throws WebException {
 		try {
-			if (query == null) {
+			if (query != null) {
 				query.setPagable(true);
 			}
 			PayStageEnum[] states = PayStageEnum.values();
@@ -41,8 +39,8 @@ public class FinanceController extends BaseController {
 			map.put("query", query);
 			map.put("states", states);
 		} catch (Exception e) {
-			e.printStackTrace();
 			SxjLogger.error("查询融资列表错误", e, this.getClass());
+			throw new WebException(e.getMessage());
 		}
 		return "site/finance/pay-list";
 	}
@@ -70,24 +68,18 @@ public class FinanceController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("getModel")
-	public @ResponseBody Map<String, String> getModel(@RequestBody String json)
-			throws WebException {
-		Map<String, String> map = new HashMap<String, String>();
+	public @ResponseBody Map<String, String> getModel(
+			@RequestBody Map<String, Object> map) throws WebException {
+		Map<String, String> map2 = new HashMap<String, String>();
 		try {
-			List<Map<String, Object>> list = JsonMapper
-					.nonEmptyMapper()
-					.getMapper()
-					.readValue(json,
-							new TypeReference<List<Map<String, Object>>>() {
-							});
-			String flag = financeService.setModel(list.get(0));
+			String flag = financeService.setModel(map);
 			map.put("flag", flag);
-			return map;
+			return map2;
 		} catch (Exception e) {
 			e.printStackTrace();
 			SxjLogger.error("获取支付单数据", e, this.getClass());
 			map.put("flag", "0");
-			return map;
+			return map2;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <#assign staticPath="http://static.menchuang.org.cn/finance-manager/" />
 <#assign imagePath="http://storage.menchuang.org.cn/" />
-<#macro errorInfo>
+<#macro dialogBox>
 <script src="${staticPath}js/layer.min.js"></script>
 <script src="${staticPath}js/layer.ext.js"></script>
 <script>
@@ -15,223 +15,42 @@ var isNumber=function(str){
 		return true;
 }
 function errorInfo(message){
-	var data=$("#error_info_div");
-	data.find("#message_error").text(message);
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		   	area: ['20%', '20%'],
-		    offset: ['192px', ''],
-		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
-		});
-	//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		});
-		
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		});
- }
+	layer.alert(message,3);
+}
 function messageInfo(message){
-	var data=$("#message_info_div");
-	data.find("#message_hint").text(message);
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		   	area: ['20%', '20%'],
-		    offset: ['192px', ''],
-		    border: [0], //去掉默认边框
-		    shade: [0.5,'#000'], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
-		});
-		//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		});
-		
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		});
+	layer.alert(message,5);
  }
  
 function succInfo(confirm,message){
-	var data=$("#succ_info_div");
-	data.find("#message_succ").text(message);
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		   	area: ['20%', '20%'],
-		    offset: ['192px', ''],
-		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
-		});
-		//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		    if (confirm != undefined) {
-		    	confirm();
-			}
-		});
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		    if (confirm != undefined) {
-		    	confirm();
-			}
-		});
+	layer.alert(message,1,function(index){
+		layer.close(index);
+		confirm();
+	});
  }
-</script>
-<div id="error_info_div" style="display:none;">
-<div class="modal-wrap popDemo">
-        <div class="modal-header">
-     <div class="tit">消息提示</div>
-     <span class="close" id="dialog_close_span">关闭</span></div>
-     <div class="modal-body">
-     <div class="tipBox ly-clearFix">
-     <span class="icon32 icon-32-error"></span>
-     <p class="color-red fontYH f18" id="message_error">错误提示内容</p>
-     </div>
-     <button class="popBtn" id="dialog_close_button">确认</button>
-     </div>
-</div>
-</div>
-<div id="message_info_div" style="display:none;">
-<div class="modal-wrap popDemo">
-        <div class="modal-header">
-     <div class="tit">消息提示</div>
-     <span class="close" id="dialog_close_span">关闭</span></div>
-     <div class="modal-body">
-     <div class="tipBox ly-clearFix">
-     <span class="icon32 icon-32-info"></span>
-     <p class="color-blue fontYH f18" id="message_hint">一般性网站提示内容</p>
-     </div>
-     <button class="popBtn" id="dialog_close_button">确认</button>
-     </div>
-   </div>
-</div>
-<div id="succ_info_div" style="display:none;">
-<div class="modal-wrap popDemo">
-        <div class="modal-header">
-     <div class="tit">消息提示</div>
-     <span class="close" id="dialog_close_span">关闭</span></div>
-     <div class="modal-body">
-    <div class="tipBox ly-clearFix">
-     <span class="icon32 icon-32-suc"></span>
-     <p class="color-green fontYH f18" id="message_succ">成功提示内容</p>
-     </div>
-     <button class="popBtn" id="dialog_close_button">确认</button>
-     </div>
-   </div>
-</div>
-</#macro>
-<!-- 自定义弹窗 
-<#macro diy_alert>
- <script>
-$(window).resize(); 
-$('#sure_alert').css({
-	  position:'absolute',
-	  left: ($(window).width() - $('#sure_alert').outerWidth())/2,
-	  top: ($(window).height() - $('#sure_alert').outerHeight())/2 + $(document).scrollTop()
-});
-  function diy_alert(text,obj){
-	  $("#sure_alert").show();
-	  $("#sure_alert").find("#alert_text").text(text);
-	  $("#sure_alert button:eq(0)").unbind("click");
-	  $("#sure_alert button:eq(1)").unbind("click");
-	  $("#sure_alert").find("#close_sure").unbind("click");
-	  $("#sure_alert button:eq(0)").click(function(){
-		  obj();
-		  $("#sure_alert").hide();
-	  })
-	  $("#sure_alert button:eq(1)").click(function(){
-		  $("#sure_alert").hide();
-	  })
-	  $("#sure_alert").find("#close_sure").click(function(){
-		  $("#sure_alert").hide();
-	  })
-  }
-</script>
-<div id="sure_alert" style="display:none;" class="modal-wrap popDemo" accountId="">
-        <div class="modal-header">
-          <span class="close" id="close_sure" >关闭</span></div>
-         <div class="modal-body popbtnBox">
-        <p class="fontYH f18 mb10" id="alert_text"></p>
-          <button class="popBtn">确认</button><button  class="popBtn btnGray">取消</button>
-        </div>
-</div>
-</#macro>-->
-<#macro dialogBox>
-<div id="diglog_div" style="display:none;">
-<div class="modal-wrap popDemo">
-      <div class="modal-header">
-     	<div class="tit">确认提示</div><span id="dialog_close_span" class="close" onclick="">关闭</span>
-     </div>
-     <div class="modal-body popbtnBox">
-     <p class="fontYH f18 mb10" id="diglog_message">是否确认修改</p>
-     <button id="dialog_confirm_click" class="popBtn">确认</button>
-     <button class="popBtn btnGray" id="dialog_close_button">取消</button>
-     </div>
-   </div>
-</div>
 
-<script src="${staticPath}js/layer.min.js"></script>
-<script src="${staticPath}js/layer.ext.js"></script>
-<script>
-function dialogBox(confirm,message){
-	var data=$("#diglog_div");
-	$("#diglog_message").text(message);
-	 var pageii = $.layer({
-		    type: 1,
+function loadingImg(){
+	var loadInfoIndex = $.layer({
+		    type: 3,
 		    title: false,
-		    offset: ['192px', ''],
 		   	area: ['20%', '20%'],
+		    offset: ['35%', '52%'],
 		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
+		    shade: [0.1, '#000'], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
 		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
+		    loading: {
+   				type: 1
+			}
 		});
-	 
-	 	$("#dialog_confirm_click").live('click', function(){
-	 		layer.close(pageii);
-			confirm();
-			$("#dialog_confirm_click").die("click");
-		});
-		//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		    $("#dialog_confirm_click").die("click");
-		});
-		
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		    $("#dialog_confirm_click").die("click");
-		});
+	return loadInfoIndex;
+}
+
+function dialogBox(confirm,message){
+	layer.confirm(message,function(index){
+		layer.close(index);
+		var loadInfoIndex=loadingImg();
+		confirm(loadInfoIndex);
+	});
  }
  
 function dialogBoxOut(html){
@@ -316,9 +135,8 @@ function loadPage(currentPage,totalPage) {
 			return false;
 		},
 		current_page:currentPage-1,
-		items_per_page:1, //每页显示1项
-		prev_text: "前一页",
-		next_text: "后一页"
+		items_per_page:1, //每页显示1�		prev_text: "前一�,
+		next_text: "后一�
 	});
  }
 $("#pager").ready(function(){
@@ -481,9 +299,17 @@ function classLoadUpload(text){
 <div class="leftMenu pt5 pb5">
 <h2 class="pl15 fb">会员中心</h2>
 <ul>
-<li><a href="${basePath}member/memberList.htm">会员管理</a></li>
+<#if Session.function==1>
+<li class="on"><a href="${basePath}member/memberList.htm?function=1">会员管理</a></li>
+<#else>
+<li><a href="${basePath}member/memberList.htm?function=1">会员管理</a></li>
+</#if>
 <h2 class="pl15 pt5 fb">融资管理</h2>
-<li class="on"><a href="pay-list.html">融资管理</a></li>
+<#if Session.function==2>
+<li class="on"><a href="${basePath}finance/financeList.htm?function=2">融资管理</a></li>
+<#else>
+<li><a href="${basePath}finance/financeList.htm?function=2">融资管理</a></li>
+</#if>
 </ul>
 </div>
 </div>
@@ -495,7 +321,7 @@ function classLoadUpload(text){
 
 <#macro footer>
 <div id="footer" class="fence">
-  <div class="fence-wide">© 2014 江苏紫金财富金融信息服务有限公司&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14047993号-1</a></span></div>
+  <div class="fence-wide">© 2014 江苏紫金财富金融信息服务有限公司&nbsp;版权所�span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP�4047993�1</a></span></div>
 </div>
 </#macro>
 
