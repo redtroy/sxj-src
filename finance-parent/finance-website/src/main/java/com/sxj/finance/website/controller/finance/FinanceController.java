@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +18,7 @@ import com.sxj.finance.enu.finance.PayStageEnum;
 import com.sxj.finance.model.finance.FinanceModel;
 import com.sxj.finance.service.finance.IFinanceService;
 import com.sxj.finance.website.controller.BaseController;
+import com.sxj.finance.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -27,12 +30,15 @@ public class FinanceController extends BaseController {
 	private IFinanceService financeService;
 
 	@RequestMapping("financeList")
-	public String financeList(ModelMap map, FinanceModel query)
-			throws WebException {
+	public String financeList(ModelMap map, FinanceModel query,
+			HttpSession session) throws WebException {
 		try {
 			if (query != null) {
 				query.setPagable(true);
 			}
+			SupervisorPrincipal info = getLoginInfo(session);
+			String memberNo = info.getMember().getMemberNo();
+			query.setMemberNo(memberNo);
 			PayStageEnum[] states = PayStageEnum.values();
 			List<FinanceEntity> fe = financeService.queryWebSite(query);
 			map.put("list", fe);

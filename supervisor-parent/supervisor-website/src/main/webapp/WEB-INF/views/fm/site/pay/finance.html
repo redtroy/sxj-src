@@ -48,6 +48,19 @@ $(function(){
          },   
  	}); 
 })
+ function  loadBatch(contractNo,id,type){
+		var isopen=$("#info1_" + id).attr("isopen");
+		if(isopen=="0"){
+			$("#info1_" + id).load("${basePath}/record/getBatchPay.htm?contractNo=" + contractNo+"&recordNo="+id)+"&type="+type;
+			$("#info1_" + id).attr("isopen","1");
+			$("#info_" + id).hide();
+		 	$("#info_" + id).html('');
+		}
+		else if(isopen=="1"){
+			$("#info1_" + id).html("");
+			$("#info1_" + id).attr("isopen","0");
+		}
+	}
  function query(page){
 	 var params=$("#serch_div").find(":input").serialize();
 		if(page!=undefined){
@@ -69,6 +82,8 @@ $(function(){
  	if (temp){
  	  $("#info_" + id).show();
  	  $("#info_" + id).load("${basePath}record/info.htm?contractNo=" + contractNo+"&recordNo="+id);
+ 	  $("#info1_" + id).html("");
+	  $("#info1_" + id).attr("isopen","0");
  	}else{
  	  $("#info_" + id).hide();
  	  $("#info_" + id).html('');
@@ -77,6 +92,8 @@ $(function(){
  function closeContract(id){
  	 $("#info_" + id).hide();
  	 $("#info_" + id).html('');
+ 	 $("#info1_" + id).html("");
+	 $("#info1_" + id).attr("isopen","0");
  }
 </Script>
 </head>
@@ -145,13 +162,21 @@ $(function(){
       <td>${model.amount}元</td>
       <td class="color-green">${model.payAmount}元</td>
       <td class="color-red">${model.noPayAmount}元</td>
-      <td><div class="progressBar">
-        <div class="progre" style="width:20%"></div>
-        </div>
-        <div class="color-red">20%</div></td>
+      <td><div class="progressBarClass" value="${model.contractNo}" onclick="loadBatch('${model.contractNo}','${model.id}','1','${model.payNo}');">
+								<#if record.progress<100>
+								<div class="progressBar">
+									<div class="progre" style="width:${model.progress}%"></div>
+								</div>
+								<div class="color-red">${model.progress}%</div> 
+								<#else>
+								<div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+                				<div class="color-green">100%</div></#if></div></td>
       </tr>
       <tr id="info_${model.id}" style="display:none;">
       </tr>
+       <tr id="info1_${model.id}" isopen="0"></tr>
      </#list>
   </table>
   <div class="ly-clearFix">

@@ -36,6 +36,28 @@ public class AccountingModel extends Pagable implements Serializable {
 	private Double noPayAmount;
 
 	private Float speed;
+	/**
+	 * 合同进度
+	 */
+	private Integer progress = 0;
+
+	private String payNo;
+
+	public String getPayNo() {
+		return payNo;
+	}
+
+	public void setPayNo(String payNo) {
+		this.payNo = payNo;
+	}
+
+	public Integer getProgress() {
+		return progress;
+	}
+
+	public void setProgress(Integer progress) {
+		this.progress = progress;
+	}
 
 	public String getContractNo() {
 		return contractNo;
