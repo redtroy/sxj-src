@@ -27,7 +27,15 @@
   </tr>
   <tr>
     <th>公司所在地</th>
-    <td>${member.area}</td>
+    <td>
+    <#assign areaArr=(member.area?split(","))>
+    <#list areaArr as areaArr>
+    	<#assign area=(areaArr?split(":"))>
+    	<#list area as area>
+    		<#if !area_has_next>${area}</#if>
+    	</#list>
+    </#list>
+    </td>
   </tr>
   <tr>
     <th>企业资质</th>
@@ -54,9 +62,9 @@
     <td>${member.type.getName()}</td>
   </tr>
 </table>
-<div class="buttonBox memBtn">
+<!-- <div class="buttonBox memBtn">
   <a href="member-center.html" class="button button-red">确认会员信息</a></div>
-</div>
+</div> -->
 </div>
 </div>
 <@b.footer/>

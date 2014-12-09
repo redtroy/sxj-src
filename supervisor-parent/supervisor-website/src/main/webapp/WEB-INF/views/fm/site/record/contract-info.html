@@ -2,6 +2,11 @@
 <!-- 合同详情 -->
 <td colspan="12"><script type="text/javascript">
 $(document).ready(function(){
+	if($.browser.msie) {
+		$(".imagelist").find("img").each(function(){
+			$(this).attr("src",$(this).attr("data-image"))
+		})
+	}
 	var start=0;
 	$uls=new Array($('.elastislide-list').length);
 	var index=0;
@@ -238,7 +243,7 @@ $(document).ready(function(){
 						<#list arr as imgPath>
 						<li><a href="javascript:void(0);"
 							data-image="${b.imagePath}${imgPath}"><img
-								data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+								data-image="${b.imagePath}${imgPath}" src="${b.imagePath}${imgPath}"width="80" height="107" /></a></li>
 						</#list>
 					</ul>
 				</div>

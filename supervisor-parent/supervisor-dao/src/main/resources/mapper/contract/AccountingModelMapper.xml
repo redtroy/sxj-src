@@ -15,12 +15,14 @@
 		<result property="amount" column="PAY_AMOUNT" jdbcType="DOUBLE" />
 		<result property="payAmount" column="PAY_REAL" jdbcType="DOUBLE" />
 		<result property="noPayAmount" column="NO_PAY_AMOUNT" jdbcType="DOUBLE" />
+		<result property="progress" column="PROGRESS" jdbcType="VARCHAR" />
+		<result property="payNo" column="PAY_NO" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 条件查询财务统计 -->
 	<select id="query" resultMap="AccountingResultMap"
 		parameterType="String">
-		<![CDATA[SELECT mp.`ID` AS ID,mc.CONTRACT_NO,mc.`RECORD_NO` AS RECORD_NO,mc.`MEMBER_NAME_A`,mc.`MEMBER_NAME_B`,
+		<![CDATA[SELECT mp.`ID` AS ID,mc.CONTRACT_NO,mc.`RECORD_NO` AS RECORD_NO,mc.`MEMBER_NAME_A`,mc.`MEMBER_NAME_B`,round(mc.PAY_BATCH/mc.BATCH_COUNT*100) AS PROGRESS,mp.PAY_NO,
 		mc.`TYPE`,mc.`SIGNED_DATE`,(SUM((CASE WHEN mi.`AMOUNT` IS NULL THEN 0 ELSE mi.`AMOUNT` END)) +SUM((CASE  WHEN a.AMOUNT IS NULL THEN 0 ELSE a.AMOUNT END))) AS PAY_AMOUNT,mp.`PAY_REAL` AS PAY_REAL,
 		(SUM((CASE WHEN mi.`AMOUNT` IS NULL THEN 0 ELSE mi.`AMOUNT` END)) +SUM((CASE  WHEN a.AMOUNT IS NULL THEN 0 ELSE a.AMOUNT END))-SUM((CASE WHEN mp.`PAY_REAL` IS NULL THEN 0 ELSE mp.`PAY_REAL` END))) AS NO_PAY_AMOUNT FROM M_CONTRACT_PAY mp 
 		LEFT JOIN M_CONTRACT mc ON mp.CONTRACT_No=mc.CONTRACT_NO 
