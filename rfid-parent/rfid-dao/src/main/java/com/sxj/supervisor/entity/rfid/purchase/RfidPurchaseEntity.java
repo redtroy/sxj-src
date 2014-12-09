@@ -119,6 +119,13 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "DEL_STATE")
 	private boolean delstate = false;
+	
+	/**
+	 * GID状态
+	 */
+	@Column(name = "GID_STATE")
+	private Integer gidState;
+
 
 	public boolean isDelstate() {
 		return delstate;
@@ -247,5 +254,14 @@ public class RfidPurchaseEntity extends Pagable implements Serializable {
 	public void setDateNo(String dateNo) {
 		this.dateNo = dateNo;
 	}
+
+	public Integer getGidState() {
+		return gidState;
+	}
+
+	public void setGidState(Integer gidState) {
+		this.gidState = gidState;
+	}
+
 
 }

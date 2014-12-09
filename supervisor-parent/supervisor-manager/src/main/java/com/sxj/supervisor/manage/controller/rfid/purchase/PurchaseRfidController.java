@@ -358,11 +358,11 @@ public class PurchaseRfidController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("exportRfid")
-	public void exportRfid(String applyNo, Integer type, ModelMap model,
+	public void exportRfid(String purchaseNo, Integer type, ModelMap model,
 			HttpServletResponse response) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			String name = "私享家rfid-{" + applyNo + "}-"+type+".csv";
+			String name = "私享家rfid-{" + purchaseNo + "}-"+type+".csv";
 			name =new String(name.getBytes("UTF-8"),"iso-8859-1");
 			response.addHeader("Content-Disposition", "attachment;filename="  
 	                + new String(name.getBytes()));  
@@ -377,7 +377,7 @@ public class PurchaseRfidController extends BaseController {
 			if (type == 0) {
 				// 门窗RFID
 				WindowRfidQuery winQuery = new WindowRfidQuery();
-				winQuery.setApplyNo(applyNo);
+				winQuery.setPurchaseNo(purchaseNo);
 				List<WindowRfidEntity> window = windowRfidService
 						.queryWindowRfid(winQuery);
 				for (WindowRfidEntity windowRfidEntity : window) {
@@ -385,7 +385,7 @@ public class PurchaseRfidController extends BaseController {
 				}
 			} else {
 				LogisticsRfidQuery lQuery = new LogisticsRfidQuery();
-				lQuery.setApplyNo(applyNo);
+				lQuery.setPurchaseNo(purchaseNo);
 				List<LogisticsRfidEntity> logisticsList = logisticsRfidService
 						.queryLogistics(lQuery);
 				for (LogisticsRfidEntity logisticsRfidEntity : logisticsList) {
@@ -405,7 +405,7 @@ public class PurchaseRfidController extends BaseController {
 	}
 	@RequestMapping("importFile")  
     public  @ResponseBody Map<String, String> importFile(HttpServletRequest request,  
-            HttpServletResponse response) throws  WebException {
+            HttpServletResponse response,String id) throws  WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try{
 		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
@@ -432,7 +432,7 @@ public class PurchaseRfidController extends BaseController {
 				windowList.add(bean);
 			}
 			if(windowList!=null && windowList.size()>0){
-				windowRfidService.updateGid(windowList);
+				windowRfidService.updateGid(windowList,id);
 			}else{
 				throw  new WebException("文件内容错误");
 			}
@@ -449,7 +449,7 @@ public class PurchaseRfidController extends BaseController {
 				logisticsList.add(bean);
 			}
 			if(logisticsList!=null && logisticsList.size()>0){
-				logisticsRfidService.updateGid(logisticsList);
+				logisticsRfidService.updateGid(logisticsList,id);
 			}else{
 				throw  new WebException("文件内容错误");
 			}

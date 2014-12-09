@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
+import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
+import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
@@ -23,6 +25,9 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
     
     @Autowired
     private ILogisticsRfidDao logisticsRfidDao;
+    
+	@Autowired
+	private IRfidPurchaseDao rfidPurchaseDao;
     
     @Override
     @Transactional(readOnly = true)
@@ -261,9 +266,13 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
     }
     @Override
 	@Transactional
-	public void updateGid(List<LogisticsRfidEntity> list)throws ServiceException {
+	public void updateGid(List<LogisticsRfidEntity> list,String id)throws ServiceException {
 		try{
 			logisticsRfidDao.updateGid(list);
+			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
+			purchase.setId(id);
+			purchase.setGidState(1);
+			rfidPurchaseDao.updateRfidPurchase(purchase);
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());

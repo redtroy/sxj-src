@@ -90,5 +90,5 @@ public interface ILogisticsRfidService {
 	public LogisticsRfidEntity getLogisticsByNo(String rfidNo)
 			throws ServiceException;
 
-	void updateGid(List<LogisticsRfidEntity> list) throws ServiceException;
+	void updateGid(List<LogisticsRfidEntity> list,String id) throws ServiceException;
 }

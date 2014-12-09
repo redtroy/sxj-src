@@ -265,14 +265,15 @@
 		});
 	}
 
-	function exportRfid(applyNo, type) {
+	function exportRfid(purchaseNo, type) {
 		dialogBox(function(index) {
 			layer.close(index);
-			window.location.href = "exportRfid.htm?applyNo=" + applyNo
+			window.location.href = "exportRfid.htm?purchaseNo=" + purchaseNo
 					+ "&type=" + type;
 		}, "是否导出RFID?");
 	}
-	function showDialog() {
+	function showDialog(id) {
+		$("#hideId").val(id);
 		var file = $("#fileId")
 		file.after(file.clone().val(""));
 		file.remove();
@@ -426,15 +427,18 @@
 							class="edit">修改</a> </#if> <#if
 							list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
 							<a id="del_${list.id}" href="javascript:del('${list.id}');"
-							class="del">删除</a> </#if> <#if list.importState.getId()==1>
+							class="del">删除</a> </#if> 
+							<#if list.importState.getId()==1 && list.gidState!=1>
 							<button
-								onclick="javascript:exportRfid('${list.applyNo}','${list.rfidType.getId()}')"
+								onclick="javascript:exportRfid('${list.purchaseNo}','${list.rfidType.getId()}')"
 								class="btn btn-gray">
 								<span>导出</span>
 							</button>
-							<button onclick="javascript:showDialog();" class="btn btn-gray">
+							<button onclick="javascript:showDialog('${list.id}');" class="btn btn-gray">
 								<span>导入</span>
-							</button> </#if> <a id="confirm_${list.id}" href="javascript:void(0)"
+							</button> 
+							</#if> 
+							<a id="confirm_${list.id}" href="javascript:void(0)"
 							class="confirm lnk-yellow"
 							onclick="save('${list.id}');return false;" style="display: none">确认</a>
 						</td>
@@ -460,6 +464,7 @@
 						<span>请选择导入文件:</span> <input type="file" name="fileName" accept="text/comma-separated-values"
 							id="fileId" />
 					</div>
+					<input type="hidden" id="hideId" name="id" />
 				</form>
 				<button class="popBtn" id="fileBtn" onclick="importFile();">导入文件</button>
 			</div>
