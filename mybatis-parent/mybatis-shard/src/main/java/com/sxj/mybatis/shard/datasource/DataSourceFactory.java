@@ -20,7 +20,7 @@ import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
 public class DataSourceFactory
 {
     
-    private static List<DataSourceNode> nodes;
+    private static List<DataSourceNode> dataNodes;
     
     private static List<DataSource> keyGeneratorDs;
     
@@ -35,25 +35,26 @@ public class DataSourceFactory
         initDataSources();
     }
     
-    public static List<DataSourceNode> getNodes()
+    public static List<DataSourceNode> getDataNodes()
     {
-        if (nodes == null)
+        if (dataNodes == null)
         {
             initDataSources();
         }
-        return nodes;
+        return dataNodes;
     }
     
-    public static List<DataSourceNode> getNodes(String tableName, String command)
+    public static List<DataSourceNode> getDataNodes(String tableName,
+            String command)
     {
-        if (nodes == null)
+        if (dataNodes == null)
             initDataSources();
         return filter(tableName, command);
     }
     
-    public static List<DataSourceNode> getNodes(String tableName)
+    public static List<DataSourceNode> getDataNodes(String tableName)
     {
-        if (nodes == null)
+        if (dataNodes == null)
             initDataSources();
         return filter(tableName, null);
     }
@@ -61,9 +62,9 @@ public class DataSourceFactory
     private static List<DataSourceNode> filter(String tableName, String command)
     {
         if (StringUtils.isEmpty(tableName))
-            return nodes;
+            return dataNodes;
         List<DataSourceNode> result = new ArrayList<DataSourceNode>();
-        for (DataSourceNode node : nodes)
+        for (DataSourceNode node : dataNodes)
         {
             String tables = node.getTables();
             if (StringUtils.isEmpty(tables))
@@ -115,7 +116,7 @@ public class DataSourceFactory
             //                dataSourceMap.put(entry.getValue().getName(), ds);
             //            }
             
-            nodes = new ArrayList<DataSourceNode>();
+            dataNodes = new ArrayList<DataSourceNode>();
             keyGeneratorDs = new ArrayList<DataSource>();
             for (KeyNodeCfg keyNodeCfg : keyNodeCfgs)
             {
@@ -156,7 +157,7 @@ public class DataSourceFactory
                 dsNode.setTables(cfg.getTables());
                 dsNode.setWriteTables(cfg.getWriteTables());
                 dsNode.setReadTables(cfg.getReadTables());
-                nodes.add(dsNode);
+                dataNodes.add(dsNode);
             }
             
             for (Map.Entry<String, ShardRuleCfg> entry : ruleCfgs.entrySet())
@@ -275,7 +276,7 @@ public class DataSourceFactory
     
     public static List<DataSource> getKeyGeneratorDs()
     {
-        if (nodes == null)
+        if (dataNodes == null)
         {
             initDataSources();
         }
@@ -284,7 +285,7 @@ public class DataSourceFactory
     
     public static List<DataSource> getSnGeneratorDs()
     {
-        if (nodes == null)
+        if (dataNodes == null)
         {
             initDataSources();
         }

@@ -124,7 +124,7 @@ public class DataSourceRouter
         // don't need to shard, return the first dataSourceNode
         if (columnRule == null)
         {
-            targetNode = DataSourceFactory.getNodes().get(0);
+            targetNode = DataSourceFactory.getDataNodes().get(0);
         }
         else
         {
@@ -202,7 +202,7 @@ public class DataSourceRouter
             
             if (shardValueIndex == -1)
             {
-                targetNode = DataSourceFactory.getNodes(tblName).get(0);
+                targetNode = DataSourceFactory.getDataNodes(tblName).get(0);
                 //                throw new UnsupportedOperationException(
                 //                        "need shard param in where case for column:"
                 //                                + columnRule);
@@ -232,10 +232,8 @@ public class DataSourceRouter
                     throw new UnsupportedOperationException(
                             "shard value must be int or long");
                 }
-                List<DataSourceNode> availableNodes = DataSourceFactory.getNodes(tblName);
-                
+                List<DataSourceNode> availableNodes = DataSourceFactory.getDataNodes(tblName);
                 int nodeIndex = (int) (value % availableNodes.size());
-                
                 targetNode = availableNodes.get(nodeIndex);
             }
         }
