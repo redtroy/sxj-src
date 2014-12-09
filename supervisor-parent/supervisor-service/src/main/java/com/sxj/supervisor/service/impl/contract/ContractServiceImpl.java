@@ -2033,7 +2033,7 @@ public class ContractServiceImpl implements IContractService {
 	 * 更新批次支付狀態
 	 */
 	@Override
-	public void modifyBatchPayState(String contractNo, String rfidNo) {
+	public void modifyBatchPayState(String contractNo, String rfidNo,String payNo) {
 		try {
 			ContractBatchEntity contractBatch = contractBatchDao
 					.getBacthsByRfid(rfidNo);
@@ -2042,16 +2042,19 @@ public class ContractServiceImpl implements IContractService {
 					ContractBatchEntity cbe = new ContractBatchEntity();
 					cbe.setId(contractBatch.getId());
 					cbe.setPayState(1);
+					cbe.setPayNo(payNo);
 					contractBatchDao.updateBatch(cbe);
 				} else if (contractBatch.getType() == 2) {
 					ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
 					modifyBatch.setId(contractBatch.getId());
 					modifyBatch.setPayState(1);
+					modifyBatch.setPayNo(payNo);
 					contractModifyBatchDao.updateBatch(modifyBatch);
 				} else if (contractBatch.getType() == 3) {
 					ReplenishBatchEntity replenishBatch = new ReplenishBatchEntity();
 					replenishBatch.setId(contractBatch.getId());
 					replenishBatch.setPayState(1);
+					replenishBatch.setPayNo(payNo);
 					contractReplenishBatchDao.updateBatch(replenishBatch);
 				}
 				// 更新合同支付批次条目

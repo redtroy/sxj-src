@@ -18,7 +18,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		destroy-method="close">
 		<property name="driverClassName">
@@ -44,6 +44,12 @@
 		</property>
 		<property name="minIdle">
 			<value>5</value>
+		</property>
+		<property name="poolPreparedStatements">
+			<value>true</value>
+		</property>
+		<property name="maxOpenPreparedStatements">
+			<value>10</value>
 		</property>
 		<property name="removeAbandoned">
 			<value>true</value>
@@ -74,9 +80,6 @@
 		<property name="timeBetweenEvictionRunsMillis">
 			<value>120000</value>
 		</property>
-		<!-- <property name="numTestsPerEvictionRun">
-			<value>50</value>
-		</property> -->
 		<property name="defaultAutoCommit">
 			<value>false</value>
 		</property>

@@ -14,6 +14,7 @@
 		<result property="replenishState" column="REPLENISH_STATE" jdbcType="INTEGER" />
 		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" />
 		<result property="warehouseState" column="WAREHOUSE_STATE" jdbcType="INTEGER" />
+		<result property="payNo" column="PAY_NO" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 条件查询合同补损批次 -->

@@ -82,6 +82,12 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
     @Column(name = "WAREHOUSE_STATE")
     private Integer warehouseState;
     
+    /**
+	 *支付单号
+	 */
+	@Column(name = "PAY_NO")
+	private String payNo;
+	
 	public Integer getUpdateState() {
 		return updateState;
 	}
@@ -160,5 +166,13 @@ public class ModifyBatchEntity extends Pagable implements Serializable {
 
 	public void setWarehouseState(Integer warehouseState) {
 		this.warehouseState = warehouseState;
+	}
+
+	public String getPayNo() {
+		return payNo;
+	}
+
+	public void setPayNo(String payNo) {
+		this.payNo = payNo;
 	}
 }

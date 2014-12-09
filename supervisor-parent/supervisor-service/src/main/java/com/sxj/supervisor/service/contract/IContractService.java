@@ -271,8 +271,10 @@ public interface IContractService {
 	 * @param contractNo
 	 * @param rfidNo
 	 */
-	public void modifyBatchPayState(String contractNo, String rfidNo);
+	public void modifyBatchPayState(String contractNo, String rfidNo, String payNo);
 
 	List<ContractBatchModel> getBacthsByContractNo(String contractNo);
+
+	
 
 }

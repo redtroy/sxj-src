@@ -117,7 +117,6 @@ public class FileController {
 			}
 			if (image != null && image.length > 0) {
 				ServletOutputStream output = response.getOutputStream();
-
 				type = "image/" + "*";
 				response.setContentType(type);
 				output.write(image);
