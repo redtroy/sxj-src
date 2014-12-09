@@ -230,6 +230,10 @@ function save(id){
 				window.location.href="exportRfid.htm?applyNo="+applyNo+"&type="+type;	
 		},"是否导出RFID?");
 	}
+	function  importFile(){
+		dialogBoxOutId("#importFile");
+	}
+	
 </script>
 </head>
 <body>
@@ -334,6 +338,7 @@ function save(id){
 		  </#if>
 		  <#if list.importState.getId()==1>
 		  <button onclick="javascript:exportRfid('${list.applyNo}','${list.rfidType.getId()}')" class="btn btn-gray"><span>导出</span></button>
+		  <button onclick="javascript:importFile();" class="btn btn-gray"><span>导入</span></button>
 		  </#if>
 		  <a id="confirm_${list.id}" href="javascript:void(0)" class="confirm lnk-yellow" onclick="save('${list.id}');return false;" style="display: none">确认</a>
 		  </td>
@@ -346,5 +351,18 @@ function save(id){
     <!-- InstanceEndEditable --></div>
 </div>
 <@b.footer />
+<div class="modal-wrap popDemo dropList notViewer"  id="importFile"
+		style="display: none; width: 680px; height: 300px;">
+		<div class="modal-header">
+			<span class="close closeBatch"><a>关闭窗口</a></span>
+		</div>
+		 <div class="modal-body dropBox">
+		 <div class="item"> <span>请选择导入文件:
+          </span>
+          <input type="file" name="fileName" /> 
+        </div>
+		 <button class="button button-pop" id="batchBtn">导入文件</button>
+		 </div>
+	</div>
 </body>
 <!-- InstanceEnd --></html>

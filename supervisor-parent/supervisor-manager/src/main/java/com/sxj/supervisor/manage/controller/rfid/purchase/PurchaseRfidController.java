@@ -359,7 +359,7 @@ public class PurchaseRfidController extends BaseController {
 			HttpServletResponse response) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			String name = "私享家rfid-{" + applyNo + "}.csv";
+			String name = "私享家rfid-{" + applyNo + "}-"+type+".csv";
 			name =new String(name.getBytes("UTF-8"),"iso-8859-1");
 			response.addHeader("Content-Disposition", "attachment;filename="  
 	                + new String(name.getBytes()));  
@@ -396,7 +396,7 @@ public class PurchaseRfidController extends BaseController {
 			response.getOutputStream().close();
 			
 		} catch (Exception e) {
-			SxjLogger.error("导入RFID错误", e, this.getClass());
+			SxjLogger.error("导出RFID错误", e, this.getClass());
 			map.put("error", e.getMessage());
 		}
 	}
