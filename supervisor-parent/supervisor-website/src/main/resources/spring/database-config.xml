@@ -72,11 +72,11 @@
 			<value>300000</value>
 		</property>
 		<property name="timeBetweenEvictionRunsMillis">
-			<value>60000</value>
+			<value>120000</value>
 		</property>
-		<property name="numTestsPerEvictionRun">
+		<!-- <property name="numTestsPerEvictionRun">
 			<value>50</value>
-		</property>
+		</property> -->
 		<property name="defaultAutoCommit">
 			<value>false</value>
 		</property>
