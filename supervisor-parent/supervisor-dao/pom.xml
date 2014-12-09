@@ -29,7 +29,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sxj</groupId>
-			<artifactId>mybatis-cache</artifactId>
+			<artifactId>mybatis-orm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>mybatis-shard</artifactId>
 			<version>3.2.2</version>
 		</dependency>
 		<dependency>
