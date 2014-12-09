@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
@@ -258,4 +259,17 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
             throw new ServiceException("更急rfid获取信息错误", e);
         }
     }
+    @Override
+	@Transactional
+	public void updateGid(List<LogisticsRfidEntity> list)throws ServiceException {
+		try{
+			logisticsRfidDao.updateGid(list);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新GID失败", e);
+		}
+	}
 }

@@ -1,368 +1,468 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家绿色门窗平台管理系统</title>
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
-<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
-<@b.pageScript/>
-<@b.dialogBox/>
+<script src="${b.staticPath}js/jquery.form.js"></script>
+<@b.pageScript/> <@b.dialogBox/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <script>
-$(document).ready(function(){
-	$(document).click(function(){
-		loadInfo();
+	$(document).ready(function() {
+		$(document).click(function() {
+			loadInfo();
+		});
+		$("#importFile_close").click(function() {
+			var li = $("#importFile").attr("index");
+			layer.close(li)
+		});
 	});
-});
-function query(page){
-	var params=$("#search_form").serialize();
-	 if(page!=undefined){
-		   params=params+"&currentPage="+page;
-	   }
-	$.post("query.htm",params,function(data){
-		var res=$(data).find("#res_table");
-		var pager=$(data).find("#pager");
-		$("#res_table").empty();
-		$("#res_table").append(res.html());
-		var totalPage=pager.attr("totalPage");
-		var currentPage=pager.attr("currentPage");
-		loadPage(currentPage,totalPage,query);
-	});
-}
-
-function  del(id){
-	dialogBox(function(index){
-		$.post("delete.htm",{id:id},function(data){
-			layer.close(index);
-			if(data.isOK=='ok'){
-				succInfo(function(){
-					query($("#pager").attr("currentPage"));
-				},"删除成功!");
-			}else{
-				errorInfo(data.error);	
-			}
-		});
-	},"确实要删除吗?");
-}
-
-function toImport(id){
-	dialogBox(function(index){
-		$.post("importRfid.htm",{purchaseId:id},function(data){
-			
-			layer.close(index);
-			if(data.isOK=='ok'){
-				succInfo(function(){
-					query($("#pager").attr("currentPage"));
-				},"导入成功！");
-				
-			}else{
-				errorInfo(data.error);	
-			}
-		});
-	},"是否确认导入RFID？");
-	
-}
-function confirmDelivery(id){
-	dialogBox(function(index){
-		$.post("confirmDelivery.htm",{id:id},function(data){
-			layer.close(index);
-			if(data.isOK=='ok'){
-				succInfo(function(){
-					query($("#pager").attr("currentPage"));
-				},"发货成功!");
-			}else{
-				errorInfo(data.error);	
-			}
-		});
-	},"是否确认发货?");
-}
-function confirmPay(id){
-	dialogBox(function(index){
-		$.post("confirmPay.htm",{id:id},function(data){
-			layer.close(index);
-			if(data.isOK=='ok'){
-				succInfo(function(){
-					query($("#pager").attr("currentPage"));
-				},"确认付款成功!");
-			}else{
-				errorInfo(data.error);	
-			}
-		});
-	},"是否确认付款?");
-}
-function confirmReceipt(id){
-	dialogBox(function(index){
-		$.post("confirmReceipt.htm",{id:id},function(data){
-			layer.close(index);
-			if(data.isOK=='ok'){
-				succInfo(function(){
-					query($("#pager").attr("currentPage"));
-				},"确认收货成功!");
-			}else{
-				errorInfo(data.error);	
-			}
-		});
-	},"是否确认收货?");
-}
-function loadInfo(id,applyNo){
-	if ($("#info"+id).children().length==0){
-	$("#info"+id).load("purchaseInfo.htm?id="+id+"&applyNo="+applyNo);
-	}else{
-		$("#info"+id).html("");
-	}
-}
-function closeInfo(id){
-	$("#info"+id).html("");
-}
-
-function edit(id){
-	  $("#edit_"+id).find(".editName").html('<input type="text" class="supplierName" name="supplierName" value="'+$("#edit_"+id).find(".editName").text()+'" />');
-	  var url_ = "${basePath}autoSupplier.htm";
-	  $("#edit_"+id).find(".editName").find(".supplierName").bigAutocomplete({
-		  url:url_,
-		  callback:function(data){
-		  	$("#edit_"+id).find(".supplierNo").val(data.result);
-	    },
-		beforeShow : function(data) {
-			var supplierName = $("#edit_"+id).find(".editName").find(".supplierName").val();
-			var match = false;
-			for (var i = 0; i < data.length; i++) {
-				if (data[i].title == supplierName) {
-					$("#edit_"+id).find(".supplierNo").val(data[i].result);
-					match = true;
-				}
-			}
-			if (!match) {
-				$("#edit_"+id).find(".supplierNo").val("");
-			}
+	function query(page) {
+		var params = $("#search_form").serialize();
+		if (page != undefined) {
+			params = params + "&currentPage=" + page;
 		}
-	  });
-	  $("#edit_"+id).find(".editCount").html('<input type="text" class="count" name="count" value="'+$("#edit_"+id).find(".editCount").text()+'" />');
-	  $("#edit_"+id).find(".editPrice").html('<input type="text" class="price" name="price" value="'+$("#edit_"+id).find(".editPrice").text()+'" />');
-	  $("#edit_"+id).find("#update_"+id).hide();
-	  $("#edit_"+id).find("#confirm_"+id).show();
-}
-function save(id){
-	var supplierName =$("#edit_"+id).find(".editName").find(".supplierName").val();
-	var supplierNo =$("#edit_"+id).find(".supplierNo").val();
-	var applyNo =$("#edit_"+id).find(".applyNo").val();
-	var count=$("#edit_"+id).find(".editCount").find(".count").val();
-	var oldCount=$("#edit_"+id).find(".oldCount").val();
-	var rfidType=$("#edit_"+id).find("#editType").val();
-	var price = $("#edit_"+id).find(".editPrice").find(".price").val();
-	var isPass=true;
-	if (!price.match(/^[0-9]+([.]{1}[0-9]{1,2})?$/)){
-		messageInfo('单价必须为数字并且最多保留两位小数');
-		return false;
-	}
-	if (!count.match( /^[0-9]*[1-9][0-9]*$/)){
-		messageInfo('采购数量必须为正整数！');
-		return false;
-	}
-	if(supplierNo==""||supplierNo=="undefined"){
-		messageInfo('供应商不存在');
-		return false;
-	}
-	if(supplierName==""){
-		messageInfo('供应商名称不能为空');
-		return false;
-	}
-	$.ajax({
-		  url: "getSupplierPrice.htm?supplierNo="+supplierNo,
-		  cache: false,
-		  async: false,
-		  success: function(data){
-			  if(rfidType="0"){
-				    if(price>data.doorPrice){
-				    	messageInfo("单价不能大于供应商协议价："+data.doorPrice.toFixed(2));
-				    	isPass=false;
-				    }
-				}else{
-					 if(price>data.batchPrice){
-						 messageInfo("单价不能大于供应商协议价："+data.batchPrice.toFixed(2));	
-						 isPass=false;
-					 }
-				}
-		  }
+		$.post("query.htm", params, function(data) {
+			var res = $(data).find("#res_table");
+			var pager = $(data).find("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
 		});
-	$.ajax({
-		  url: "getMaxCount.htm?applyNo="+applyNo+"&oldCount="+oldCount,
-		  cache: false,
-		  async: false,
-		  success: function(data){
-			 if(data.maxCount>0){
-				 if(count>data.maxCount){
-					 messageInfo("数量不能大于申请单剩余数量："+data.maxCount);	
-					 isPass=false;
-				 }
-			 }else{
-				 messageInfo(data.error)
-				 isPass=false;
-			 }
-		  }
-		});
-	if(isPass==false){
-		return false;
 	}
-	var o ={id:id,supplierName:supplierName,supplierNo:supplierNo,price:price,count:count};
-	$.post("modify.htm",o,function(data){
-		if(data.isOK=='ok'){
-			succInfo(function(){
-				query($("#pager").attr("currentPage"));
-			},"修改成功！");
-		}else{ 
-			errorInfo(data.error);
-			query($("#pager").attr("currentPage"));
-		}
-	});
-}
 
-	function exportRfid(applyNo,type){
-		dialogBox(function(index){
+	function del(id) {
+		dialogBox(function(index) {
+			$.post("delete.htm", {
+				id : id
+			}, function(data) {
 				layer.close(index);
-				window.location.href="exportRfid.htm?applyNo="+applyNo+"&type="+type;	
-		},"是否导出RFID?");
+				if (data.isOK == 'ok') {
+					succInfo(function() {
+						query($("#pager").attr("currentPage"));
+					}, "删除成功!");
+				} else {
+					errorInfo(data.error);
+				}
+			});
+		}, "确实要删除吗?");
 	}
-	function  importFile(){
+
+	function toImport(id) {
+		dialogBox(function(index) {
+			$.post("importRfid.htm", {
+				purchaseId : id
+			}, function(data) {
+
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function() {
+						query($("#pager").attr("currentPage"));
+					}, "导入成功！");
+
+				} else {
+					errorInfo(data.error);
+				}
+			});
+		}, "是否确认导入RFID？");
+
+	}
+	function confirmDelivery(id) {
+		dialogBox(function(index) {
+			$.post("confirmDelivery.htm", {
+				id : id
+			}, function(data) {
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function() {
+						query($("#pager").attr("currentPage"));
+					}, "发货成功!");
+				} else {
+					errorInfo(data.error);
+				}
+			});
+		}, "是否确认发货?");
+	}
+	function confirmPay(id) {
+		dialogBox(function(index) {
+			$.post("confirmPay.htm", {
+				id : id
+			}, function(data) {
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function() {
+						query($("#pager").attr("currentPage"));
+					}, "确认付款成功!");
+				} else {
+					errorInfo(data.error);
+				}
+			});
+		}, "是否确认付款?");
+	}
+	function confirmReceipt(id) {
+		dialogBox(function(index) {
+			$.post("confirmReceipt.htm", {
+				id : id
+			}, function(data) {
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function() {
+						query($("#pager").attr("currentPage"));
+					}, "确认收货成功!");
+				} else {
+					errorInfo(data.error);
+				}
+			});
+		}, "是否确认收货?");
+	}
+	function loadInfo(id, applyNo) {
+		if ($("#info" + id).children().length == 0) {
+			$("#info" + id).load(
+					"purchaseInfo.htm?id=" + id + "&applyNo=" + applyNo);
+		} else {
+			$("#info" + id).html("");
+		}
+	}
+	function closeInfo(id) {
+		$("#info" + id).html("");
+	}
+
+	function edit(id) {
+		$("#edit_" + id).find(".editName").html(
+				'<input type="text" class="supplierName" name="supplierName" value="'
+						+ $("#edit_" + id).find(".editName").text() + '" />');
+		var url_ = "${basePath}autoSupplier.htm";
+		$("#edit_" + id).find(".editName").find(".supplierName")
+				.bigAutocomplete(
+						{
+							url : url_,
+							callback : function(data) {
+								$("#edit_" + id).find(".supplierNo").val(
+										data.result);
+							},
+							beforeShow : function(data) {
+								var supplierName = $("#edit_" + id).find(
+										".editName").find(".supplierName")
+										.val();
+								var match = false;
+								for (var i = 0; i < data.length; i++) {
+									if (data[i].title == supplierName) {
+										$("#edit_" + id).find(".supplierNo")
+												.val(data[i].result);
+										match = true;
+									}
+								}
+								if (!match) {
+									$("#edit_" + id).find(".supplierNo")
+											.val("");
+								}
+							}
+						});
+		$("#edit_" + id).find(".editCount").html(
+				'<input type="text" class="count" name="count" value="'
+						+ $("#edit_" + id).find(".editCount").text() + '" />');
+		$("#edit_" + id).find(".editPrice").html(
+				'<input type="text" class="price" name="price" value="'
+						+ $("#edit_" + id).find(".editPrice").text() + '" />');
+		$("#edit_" + id).find("#update_" + id).hide();
+		$("#edit_" + id).find("#confirm_" + id).show();
+	}
+	function save(id) {
+		var supplierName = $("#edit_" + id).find(".editName").find(
+				".supplierName").val();
+		var supplierNo = $("#edit_" + id).find(".supplierNo").val();
+		var applyNo = $("#edit_" + id).find(".applyNo").val();
+		var count = $("#edit_" + id).find(".editCount").find(".count").val();
+		var oldCount = $("#edit_" + id).find(".oldCount").val();
+		var rfidType = $("#edit_" + id).find("#editType").val();
+		var price = $("#edit_" + id).find(".editPrice").find(".price").val();
+		var isPass = true;
+		if (!price.match(/^[0-9]+([.]{1}[0-9]{1,2})?$/)) {
+			messageInfo('单价必须为数字并且最多保留两位小数');
+			return false;
+		}
+		if (!count.match(/^[0-9]*[1-9][0-9]*$/)) {
+			messageInfo('采购数量必须为正整数！');
+			return false;
+		}
+		if (supplierNo == "" || supplierNo == "undefined") {
+			messageInfo('供应商不存在');
+			return false;
+		}
+		if (supplierName == "") {
+			messageInfo('供应商名称不能为空');
+			return false;
+		}
+		$
+				.ajax({
+					url : "getSupplierPrice.htm?supplierNo=" + supplierNo,
+					cache : false,
+					async : false,
+					success : function(data) {
+						if (rfidType = "0") {
+							if (price > data.doorPrice) {
+								messageInfo("单价不能大于供应商协议价："
+										+ data.doorPrice.toFixed(2));
+								isPass = false;
+							}
+						} else {
+							if (price > data.batchPrice) {
+								messageInfo("单价不能大于供应商协议价："
+										+ data.batchPrice.toFixed(2));
+								isPass = false;
+							}
+						}
+					}
+				});
+		$.ajax({
+			url : "getMaxCount.htm?applyNo=" + applyNo + "&oldCount="
+					+ oldCount,
+			cache : false,
+			async : false,
+			success : function(data) {
+				if (data.maxCount > 0) {
+					if (count > data.maxCount) {
+						messageInfo("数量不能大于申请单剩余数量：" + data.maxCount);
+						isPass = false;
+					}
+				} else {
+					messageInfo(data.error)
+					isPass = false;
+				}
+			}
+		});
+		if (isPass == false) {
+			return false;
+		}
+		var o = {
+			id : id,
+			supplierName : supplierName,
+			supplierNo : supplierNo,
+			price : price,
+			count : count
+		};
+		$.post("modify.htm", o, function(data) {
+			if (data.isOK == 'ok') {
+				succInfo(function() {
+					query($("#pager").attr("currentPage"));
+				}, "修改成功！");
+			} else {
+				errorInfo(data.error);
+				query($("#pager").attr("currentPage"));
+			}
+		});
+	}
+
+	function exportRfid(applyNo, type) {
+		dialogBox(function(index) {
+			layer.close(index);
+			window.location.href = "exportRfid.htm?applyNo=" + applyNo
+					+ "&type=" + type;
+		}, "是否导出RFID?");
+	}
+	function showDialog() {
+		var file = $("#fileId")
+		file.after(file.clone().val(""));
+		file.remove();
 		dialogBoxOutId("#importFile");
 	}
-	
+	function importFile(){
+		var file =$("#fileId").val();
+		if(file==''){
+			errorInfo("请选择上传文件");
+			return;
+		}
+		$("#fileForm").ajaxSubmit({
+			url : "importFile.htm", 
+			type : "post",
+			dataType : "json",
+			async :true, 
+			success : function(data){
+				if(data.isOk=='ok'){
+					succInfo(function(){
+						var li = $("#importFile").attr("index");
+						layer.close(li)
+						query($("#pager").attr("currentPage"));
+					},"导入成功");
+				} else {
+					errorInfo(data.error);
+				}
+			},
+			error : function(){
+				errorInfo("数据加载失败！");
+			}
+		})
+	}
 </script>
 </head>
 <body>
-<@b.header/>
-<div id="main" class="fence-wide">
-<!-- InstanceBeginEditable name="local" -->
-<@b.menuPath/>
-<!-- InstanceEndEditable -->
-<div id="mainBg" class="ly-clearFix yard-1200">
-    <@b.leftMenu />
-    <div id="rightBar">
-    <!-- InstanceBeginEditable name="rightBar" -->
-      <h2 class="title">RFID采购单管理</h2>
-      <form action="javascript:void(0);" method="post" id="search_form">
-      <div id="searchBox">
-      <p>RFID采购单号
-        <input type="text" name="purchaseNo" value="${query.purchaseNo}" />
-       RFID申请单号
-       <input type="text" name="applyNo" value="${query.applyNo}" />
-       供应商名称
-       <input type="text" name="supplierName" value="${qunery.supplierName}" />
-       RFID类型<select name="rfidType">
-	   <option selected="selected" value="">全部</option>
-          <#list type as type> 
-          <option value="${type.getId()}">${type.getName()}</option>
-          </#list>
-        </select>
-	   付款状态<select name="payState">
-          <option selected="selected" value="">全部</option>
-		   <#list payState as payState> 
-          <option value="${payState.getId()}">${payState.getName()}</option>
-          </#list>
-        </select>
-		发货状态
-		<select name="receiptState">
-		<option selected="selected" value="">全部</option>
-           <#list delivery as delivery> 
-          <option value="${delivery.getId()}">${delivery.getName()}</option>
-          </#list>
-        </select></p>
-		导入状态
-		<select name="importState">
-		<option selected="selected" value="">全部</option>
-          <#list importState as importState> 
-          <option value="${importState.getId()}">${importState.getName()}</option>
-          </#list>
-        </select>
-       采购单时间段
-       <input type="text" name="startDate" value="${query.startDate}" datepicker/>-<input type="text" name="endDate" value="${query.endDate}" datepicker/>
-        <a class="btn btn-blue"><span onclick="query();">查询</span></a>
-    </div>
-    </form>
-    <@b.pager/>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
-        <col width="9%"/>
-		<col width="9%"/>
-        <col width="15%"/>
-        <col width="7%" />
-        <col width="7%" />
-		<col width="5%" />
-		<col width="12%" />
-		<col width="8%" />
-		<col width="8%" />
-		<col width="8%" />
-		<col width="12%" />
-        <tr>
-		  <th>RFID采购单号</th>
-          <th>RFID申请单号</th>
-          <th>供应商名称</th>
-          <th>RFID类型</th>
-          <th>采购数量</th>
-		  <th>单价</th>
-		  <th>采购单时间</th>
-		  <th>付款状态</th>
-		  <th>收货状态</th>
-		  <th>导入状态</th>
-          <th class="rLine">操作</th>
-        </tr>
-        <#list list as list>
-        <tr id="edit_${list.id}">
-        <input type="hidden" value="${list.supplierNo}" class="supplierNo" name="supplierNo"/>
-        <input type="hidden" value="${list.applyNo}" class="applyNo" name="applyNo"/>
-		  <td>${list.purchaseNo}</td>
-          <td><a href="javascript:loadInfo('${list.id}','${list.applyNo}');" class="lnk-blue">${list.applyNo}</a></td>
-          <td class="editName">${list.supplierName}</td>
-          <td>${list.rfidType.getName()}
-          <input type="hidden"  id="editType" value="${list.rfidType.getId()}" />
-          </td>
-		  <td class="editCount">${list.count}</td>
-		  <input type="hidden" class="oldCount" value="${list.count}" />
-		  <td class="editPrice">${list.price?string('0.00')}</td>
-		  <td>${list.purchaseDate?string("yyyy-MM-dd HH:mm:ss")}</td>
-          <td><#if list.payState.getId()==1><em class="state verified">已付款</em> <#else><button class="btn btn-gray" onclick="confirmPay('${list.id}');"><span>确认付款</span></button></#if></td>
-		  <td><#if list.receiptState.getId()==0><button class="btn btn-gray" onclick="confirmDelivery('${list.id}');"><span>确认发货</span></button><#elseif list.receiptState.getId()==1><button class="btn btn-orange" onclick="confirmReceipt('${list.id}');"><span>确认收货</span></button><#else> <em class="state verified">已收货</em></#if></td>
-		  <td><#if list.importState.getId()==0><button onclick="javascript:toImport('${list.id}')" class="btn btn-gray"><span>导入</span></button><#else><em class="state verified">已导入</em></#if></td>
-		  <td class="operation">
-		  <#if list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
-		  <a id="update_${list.id}" href="javascript:edit('${list.id}');" class="edit">修改</a>
-		  </#if>
-		  <#if list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
-		  <a id="del_${list.id}" href="javascript:del('${list.id}');" class="del">删除</a>
-		  </#if>
-		  <#if list.importState.getId()==1>
-		  <button onclick="javascript:exportRfid('${list.applyNo}','${list.rfidType.getId()}')" class="btn btn-gray"><span>导出</span></button>
-		  <button onclick="javascript:importFile();" class="btn btn-gray"><span>导入</span></button>
-		  </#if>
-		  <a id="confirm_${list.id}" href="javascript:void(0)" class="confirm lnk-yellow" onclick="save('${list.id}');return false;" style="display: none">确认</a>
-		  </td>
-        </tr>
-        <tr class="tableInfo" id="info${list.id}">
-	   </tr>
-         </#list>
-      </table>
-      <@b.pager/>
-    <!-- InstanceEndEditable --></div>
-</div>
-<@b.footer />
-<div class="modal-wrap popDemo dropList notViewer"  id="importFile"
-		style="display: none; width: 680px; height: 300px;">
-		<div class="modal-header">
-			<span class="close closeBatch"><a>关闭窗口</a></span>
+	<@b.header/>
+	<div id="main" class="fence-wide">
+		<!-- InstanceBeginEditable name="local" -->
+		<@b.menuPath/>
+		<!-- InstanceEndEditable -->
+		<div id="mainBg" class="ly-clearFix yard-1200">
+			<@b.leftMenu />
+			<div id="rightBar">
+				<!-- InstanceBeginEditable name="rightBar" -->
+				<h2 class="title">RFID采购单管理</h2>
+				<form action="javascript:void(0);" method="post" id="search_form">
+					<div id="searchBox">
+						<p>
+							RFID采购单号 <input type="text" name="purchaseNo"
+								value="${query.purchaseNo}" /> RFID申请单号 <input type="text"
+								name="applyNo" value="${query.applyNo}" /> 供应商名称 <input
+								type="text" name="supplierName" value="${qunery.supplierName}" />
+							RFID类型<select name="rfidType">
+								<option selected="selected" value="">全部</option> <#list type as
+								type>
+								<option value="${type.getId()}">${type.getName()}</option>
+								</#list>
+							</select> 付款状态<select name="payState">
+								<option selected="selected" value="">全部</option> <#list payState
+								as payState>
+								<option value="${payState.getId()}">${payState.getName()}</option>
+								</#list>
+							</select> 发货状态 <select name="receiptState">
+								<option selected="selected" value="">全部</option> <#list delivery
+								as delivery>
+								<option value="${delivery.getId()}">${delivery.getName()}</option>
+								</#list>
+							</select>
+						</p>
+						导入状态 <select name="importState">
+							<option selected="selected" value="">全部</option> <#list
+							importState as importState>
+							<option value="${importState.getId()}">${importState.getName()}</option>
+							</#list>
+						</select> 采购单时间段 <input type="text" name="startDate"
+							value="${query.startDate}" datepicker />-<input type="text"
+							name="endDate" value="${query.endDate}" datepicker /> <a
+							class="btn btn-blue"><span onclick="query();">查询</span></a>
+					</div>
+				</form>
+				<@b.pager/>
+				<table border="0" cellpadding="0" cellspacing="0" class="tabList"
+					id="res_table">
+					<col width="9%" />
+					<col width="9%" />
+					<col width="15%" />
+					<col width="7%" />
+					<col width="7%" />
+					<col width="5%" />
+					<col width="12%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="12%" />
+					<tr>
+						<th>RFID采购单号</th>
+						<th>RFID申请单号</th>
+						<th>供应商名称</th>
+						<th>RFID类型</th>
+						<th>采购数量</th>
+						<th>单价</th>
+						<th>采购单时间</th>
+						<th>付款状态</th>
+						<th>收货状态</th>
+						<th>导入状态</th>
+						<th class="rLine">操作</th>
+					</tr>
+					<#list list as list>
+					<tr id="edit_${list.id}">
+						<input type="hidden" value="${list.supplierNo}" class="supplierNo"
+							name="supplierNo" />
+						<input type="hidden" value="${list.applyNo}" class="applyNo"
+							name="applyNo" />
+						<td>${list.purchaseNo}</td>
+						<td><a
+							href="javascript:loadInfo('${list.id}','${list.applyNo}');"
+							class="lnk-blue">${list.applyNo}</a></td>
+						<td class="editName">${list.supplierName}</td>
+						<td>${list.rfidType.getName()} <input type="hidden"
+							id="editType" value="${list.rfidType.getId()}" />
+						</td>
+						<td class="editCount">${list.count}</td>
+						<input type="hidden" class="oldCount" value="${list.count}" />
+						<td class="editPrice">${list.price?string('0.00')}</td>
+						<td>${list.purchaseDate?string("yyyy-MM-dd HH:mm:ss")}</td>
+						<td><#if list.payState.getId()==1><em class="state verified">已付款</em>
+							<#else>
+							<button class="btn btn-gray" onclick="confirmPay('${list.id}');">
+								<span>确认付款</span>
+							</button></#if>
+						</td>
+						<td><#if list.receiptState.getId()==0>
+							<button class="btn btn-gray"
+								onclick="confirmDelivery('${list.id}');">
+								<span>确认发货</span>
+							</button><#elseif list.receiptState.getId()==1>
+							<button class="btn btn-orange"
+								onclick="confirmReceipt('${list.id}');">
+								<span>确认收货</span>
+							</button><#else> <em class="state verified">已收货</em></#if>
+						</td>
+						<td><#if list.importState.getId()==0>
+							<button onclick="javascript:toImport('${list.id}')"
+								class="btn btn-gray">
+								<span>导入</span>
+							</button><#else><em class="state verified">已导入</em></#if>
+						</td>
+						<td class="operation"><#if
+							list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
+							<a id="update_${list.id}" href="javascript:edit('${list.id}');"
+							class="edit">修改</a> </#if> <#if
+							list.payState.getId()==0&&list.importState.getId()==0&&list.receiptState.getId()==0>
+							<a id="del_${list.id}" href="javascript:del('${list.id}');"
+							class="del">删除</a> </#if> <#if list.importState.getId()==1>
+							<button
+								onclick="javascript:exportRfid('${list.applyNo}','${list.rfidType.getId()}')"
+								class="btn btn-gray">
+								<span>导出</span>
+							</button>
+							<button onclick="javascript:showDialog();" class="btn btn-gray">
+								<span>导入</span>
+							</button> </#if> <a id="confirm_${list.id}" href="javascript:void(0)"
+							class="confirm lnk-yellow"
+							onclick="save('${list.id}');return false;" style="display: none">确认</a>
+						</td>
+					</tr>
+					<tr class="tableInfo" id="info${list.id}">
+					</tr>
+					</#list>
+				</table>
+				<@b.pager/>
+				<!-- InstanceEndEditable -->
+			</div>
 		</div>
-		 <div class="modal-body dropBox">
-		 <div class="item"> <span>请选择导入文件:
-          </span>
-          <input type="file" name="fileName" /> 
-        </div>
-		 <button class="button button-pop" id="batchBtn">导入文件</button>
-		 </div>
-	</div>
+		<@b.footer />
+		<div class="modal-wrap popDemo passwordBox" id="importFile"
+			style="display: none; width: 550px; height: 180px; margin-left: -174px; margin-top: -30px;">
+			<div class="modal-header">
+				<span class="close" id="importFile_close"><a>关闭窗口</a></span>
+			</div>
+			<div class="modal-body">
+				<form action="importFile.htm" method="post" id="fileForm"
+					enctype="multipart/form-data">
+					<div class="item">
+						<span>请选择导入文件:</span> <input type="file" name="fileName" accept="text/comma-separated-values"
+							id="fileId" />
+					</div>
+				</form>
+				<button class="popBtn" id="fileBtn" onclick="importFile();">导入文件</button>
+			</div>
+		</div>
 </body>
-<!-- InstanceEnd --></html>
+</html>

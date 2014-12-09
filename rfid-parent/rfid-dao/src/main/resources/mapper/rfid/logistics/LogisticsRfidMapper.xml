@@ -22,6 +22,7 @@
 		<result property="progressState" column="PROGRESS_STATE"
 			jdbcType="INTEGER"  />
 		<result property="log" column="LOG" jdbcType="VARCHAR" />
+		<result property="gid" column="GID" jdbcType="CHAR" />
 	</resultMap>
 	<!-- 按条件查询门窗 -->
 	<select id="queryLogisticsRfidList" resultMap="logisticsResultMap"
@@ -126,4 +127,9 @@
 		</if>
 		<![CDATA[ ORDER BY rlr.RFID_NO DESC]]>
 	</select>
+	<update id="updateGid" parameterType="java.util.List">
+		<foreach item="item" collection="list" >
+		UPDATE R_LOGISTICS_RFID SET GID=#{item.gid} WHERE RFID_NO=#{item.rfidNo};
+		</foreach>
+	</update>
 </mapper>

@@ -562,4 +562,17 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			return 0;
 		}
 	}
+	@Override
+	@Transactional
+	public void updateGid(List<WindowRfidEntity> winList)throws ServiceException {
+		try{
+			windowRfidDao.updateGid(winList);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新GID失败", e);
+		}
+	}
 }

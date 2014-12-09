@@ -130,7 +130,11 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "LOG")
 	private String log;
-
+	/**
+	 * gid
+	 */
+	@Column(name = "GID")
+	private String gid;
 	private List<RfidLog> logList = new ArrayList<RfidLog>();
 
 	public String getId() {
@@ -315,6 +319,14 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		String json = JsonMapper.nonEmptyMapper().toJson(logList);
 		setLog(json);
 
+	}
+
+	public String getGid() {
+		return gid;
+	}
+
+	public void setGid(String gid) {
+		this.gid = gid;
 	}
 
 }
