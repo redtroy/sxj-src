@@ -46,6 +46,9 @@ public class XmlReader {
 			DocumentBuilder db = factory.newDocumentBuilder();
 			InputStream is = XmlReader.class
 					.getResourceAsStream("/shard-config.xml");
+			if (is == null)
+				is = Thread.currentThread().getContextClassLoader()
+						.getResourceAsStream("/shard-config.xml");
 			Document xmldoc = db.parse(is);
 			root = xmldoc.getDocumentElement();
 

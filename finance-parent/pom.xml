@@ -8,8 +8,6 @@
   <modules>
   	<module>finance-website</module>
     <module>finance-manager</module>
-    <module>finance-demo</module>
-    <module>demo</module>
     <module>finance-dao</module>
     <module>finance-service</module>
   </modules>
@@ -91,7 +89,7 @@
 				<artifactId>mybatis-pagination</artifactId>
 				<version>${mybatis.orm.version}</version>
 			</dependency>
-			<!-- 数据库连�?-->
+			<!-- 数据库连�?-->
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>
