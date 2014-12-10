@@ -14,6 +14,11 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>redis-collections</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>4.0.6.RELEASE</version>
@@ -76,6 +81,21 @@
 			<artifactId>file-client</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-all</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>4.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>cache.core</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>file-web</finalName>
@@ -105,7 +125,6 @@
 				<version>2.2</version>
 				<configuration>
 					<!-- <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
-					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
 				</configuration>
 			</plugin>
 		</plugins>

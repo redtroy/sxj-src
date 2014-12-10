@@ -3,10 +3,14 @@ package com.sxj.file.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.SimpleTimeZone;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
@@ -29,12 +34,57 @@ public class FileController {
 	@Autowired
 	private IStorageClientService storageClientService;
 
-	@RequestMapping(value = "{group}/{st}/{f1}/{f2}/{id}")
+	@Autowired
+	private SupervisorShiroRedisCacheManager redesCacheManager;
+
+	@RequestMapping(value = "{group}/{st}/{f1}/{f2}/{id}", method = RequestMethod.GET)
 	public void getImage(@PathVariable String group, @PathVariable String st,
 			@PathVariable String f1, @PathVariable String f2,
 			@PathVariable String id, HttpServletRequest request,
 			HttpServletResponse response) throws WebException {
 		try {
+			String rurl = getHeadersInfo(request).get("referer");
+			if (rurl == null) {
+				response.setStatus(404);
+				return;
+			}
+			if (request.getCookies() == null) {
+				response.setStatus(404);
+				return;
+			}
+			Map<String, Cookie> cookieMap = ReadCookieMap(request);
+			if (rurl.contains("supervisor-website")
+					|| rurl.contains("www.menchuang.org.cn")) {
+				if (cookieMap.get("SHAREJSESSIONID_WEBSITE") == null) {
+					response.setStatus(404);
+					return;
+				}
+				Boolean flag = redesCacheManager.get(
+						"website.session.cache.name",
+						cookieMap.get("SHAREJSESSIONID_WEBSITE").getValue());
+				if (!flag) {
+					response.setStatus(404);
+					return;
+				}
+
+			} else if (rurl.contains("supervisor-manager")
+					|| rurl.contains("manage.menchuang.org.cn")) {
+				if (cookieMap.get("SHAREJSESSIONID_MANAGE") == null) {
+					response.setStatus(404);
+					return;
+				}
+				Boolean flag = redesCacheManager.get(
+						"webmanage.session.cache.name",
+						cookieMap.get("SHAREJSESSIONID_MANAGE").getValue());
+				if (!flag) {
+					response.setStatus(404);
+					return;
+				}
+			} else {
+				response.setStatus(404);
+				return;
+			}
+
 			response.setDateHeader("expries",
 					System.currentTimeMillis() + 1000 * 3600);
 			StringBuffer modifyId = new StringBuffer();
@@ -129,6 +179,28 @@ public class FileController {
 
 		}
 
+	}
+
+	private Map<String, String> getHeadersInfo(HttpServletRequest request) {
+		Map<String, String> map = new HashMap<String, String>();
+		Enumeration headerNames = request.getHeaderNames();
+		while (headerNames.hasMoreElements()) {
+			String key = (String) headerNames.nextElement();
+			String value = request.getHeader(key);
+			map.put(key, value);
+		}
+		return map;
+	}
+
+	private static Map<String, Cookie> ReadCookieMap(HttpServletRequest request) {
+		Map<String, Cookie> cookieMap = new HashMap<String, Cookie>();
+		Cookie[] cookies = request.getCookies();
+		if (null != cookies) {
+			for (Cookie cookie : cookies) {
+				cookieMap.put(cookie.getName(), cookie);
+			}
+		}
+		return cookieMap;
 	}
 
 	public static void main(String[] args) throws ParseException {

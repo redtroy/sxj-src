@@ -287,4 +287,10 @@ public class EhCache implements Cache, CacheEventListener
         }
     }
     
+    @Override
+    public Boolean exists(Object key) throws CacheException
+    {
+        return cache.isKeyInCache(key);
+    }
+    
 }

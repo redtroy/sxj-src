@@ -256,6 +256,17 @@ public class HierarchicalCacheManager
         }
     }
     
+    public final static Boolean exists(int level, String name, Object key)
+    {
+        if (name != null && key != null)
+        {
+            Cache cache = _GetCache(level, name, false);
+            if (cache != null)
+                return cache.exists(key);
+        }
+        return false;
+    }
+    
     /**
      * 批量删除缓存中的一些数据
      * @param level
