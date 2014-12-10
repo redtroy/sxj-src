@@ -130,4 +130,6 @@ public interface IWindowRfidService {
 	 */
 	public int testWindow(String contractNo, String[] rfidNos)
 			throws ServiceException;
+
+	void updateGid(List<WindowRfidEntity> winList,String id) throws ServiceException;
 }

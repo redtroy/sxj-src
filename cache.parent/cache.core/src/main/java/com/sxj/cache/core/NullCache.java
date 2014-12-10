@@ -97,4 +97,10 @@ public class NullCache implements Cache
         
     }
     
+    @Override
+    public Boolean exists(Object key) throws CacheException
+    {
+        return false;
+    }
+    
 }

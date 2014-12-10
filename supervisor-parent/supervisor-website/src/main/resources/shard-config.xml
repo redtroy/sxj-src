@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<keyNodes> 
+		<keyNode type="SN" ref="dataSource"></keyNode>
+		<keyNode type="ID" ref="dataSource"></keyNode>
+	</keyNodes>
+	<!-- 数据结点配置 -->
+	<dataNodes>
+		<!-- 数据节点1 -->
+		<dataNode>
+			<writeNodes ref="dataSource">
+			</writeNodes>
+			<readNodes ref="dataSource2">
+			</readNodes>
+		</dataNode>
+	</dataNodes>
+
+	<!-- 配置需要分库的表，分库所依赖的字段 -->
+	<!-- <rules> <table name="SHARD" column="SHARD_ID"></table> </rules> -->
+
+</configuration>

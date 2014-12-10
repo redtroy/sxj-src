@@ -68,4 +68,6 @@ public interface Cache
     
     public List values() throws CacheException;
     
+    public Boolean exists(Object key) throws CacheException;
+    
 }

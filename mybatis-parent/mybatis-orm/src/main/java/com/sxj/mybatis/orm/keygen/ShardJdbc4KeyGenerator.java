@@ -76,10 +76,10 @@ public class ShardJdbc4KeyGenerator implements ShardKeyGenerator
         {
             connection.rollback();
         }
-        finally
-        {
-            connection.close();
-        }
+        //        finally
+        //        {
+        //            connection.close();
+        //        }
     }
     
     private void processObject(Connection connection, Object parameter,
