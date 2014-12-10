@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-
+    <import resource="classpath*:spring/mvc/applicationContext-shiro.xml" />
 	<context:component-scan base-package="com.sxj.file.controller" />
 	<!--抛出的异常转到特定View -->
 	<bean id="exceptionResolver"
@@ -31,6 +31,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath*:config/fdfs_client.properties</value>
+				<value>classpath*:config/shiro.properties</value>
 			</list>
 		</property>
 	</bean>
