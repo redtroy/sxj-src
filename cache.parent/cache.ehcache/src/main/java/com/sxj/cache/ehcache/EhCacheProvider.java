@@ -127,7 +127,7 @@ public class EhCacheProvider implements CacheProvider
         if (xml == null)
             throw new CacheException("cannot find ehcache.xml !!!");
         
-        manager = new CacheManager();
+        manager = new CacheManager(xml);
         _CacheManager = new ConcurrentHashMap<String, EhCache>();
     }
     
