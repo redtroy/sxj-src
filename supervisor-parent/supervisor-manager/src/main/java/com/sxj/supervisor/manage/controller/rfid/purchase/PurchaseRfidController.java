@@ -1,16 +1,16 @@
 package com.sxj.supervisor.manage.controller.rfid.purchase;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
+import org.supercsv.io.CsvBeanReader;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -42,7 +45,7 @@ import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.purchase.IPurchaseRfidService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
-import com.sxj.util.common.NumberUtils;
+import com.sxj.util.common.FileUtil;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -355,11 +358,11 @@ public class PurchaseRfidController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("exportRfid")
-	public void exportRfid(String applyNo, Integer type, ModelMap model,
+	public void exportRfid(String purchaseNo, Integer type, ModelMap model,
 			HttpServletResponse response) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			String name = "私享家rfid-{" + applyNo + "}-"+type+".csv";
+			String name = "私享家rfid-{" + purchaseNo + "}-"+type+".csv";
 			name =new String(name.getBytes("UTF-8"),"iso-8859-1");
 			response.addHeader("Content-Disposition", "attachment;filename="  
 	                + new String(name.getBytes()));  
@@ -374,7 +377,7 @@ public class PurchaseRfidController extends BaseController {
 			if (type == 0) {
 				// 门窗RFID
 				WindowRfidQuery winQuery = new WindowRfidQuery();
-				winQuery.setApplyNo(applyNo);
+				winQuery.setPurchaseNo(purchaseNo);
 				List<WindowRfidEntity> window = windowRfidService
 						.queryWindowRfid(winQuery);
 				for (WindowRfidEntity windowRfidEntity : window) {
@@ -382,7 +385,7 @@ public class PurchaseRfidController extends BaseController {
 				}
 			} else {
 				LogisticsRfidQuery lQuery = new LogisticsRfidQuery();
-				lQuery.setApplyNo(applyNo);
+				lQuery.setPurchaseNo(purchaseNo);
 				List<LogisticsRfidEntity> logisticsList = logisticsRfidService
 						.queryLogistics(lQuery);
 				for (LogisticsRfidEntity logisticsRfidEntity : logisticsList) {
@@ -400,5 +403,66 @@ public class PurchaseRfidController extends BaseController {
 			map.put("error", e.getMessage());
 		}
 	}
-
+	@RequestMapping("importFile")  
+    public  @ResponseBody Map<String, String> importFile(HttpServletRequest request,  
+            HttpServletResponse response,String id) throws  WebException {
+		Map<String, String> map = new HashMap<String, String>();
+		try{
+		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
+		response.setContentType("text/html;charset=utf-8"); 
+		MultipartFile file = re.getFile("fileName");
+		String name =file.getOriginalFilename();
+		String prefix =name.substring(name.lastIndexOf(".")+1);
+		if(!prefix.equals("csv")){
+			throw new WebException("文件格式错误");
+		}
+		String type =name.substring(name.lastIndexOf("-")+1,name.lastIndexOf("."));
+		InputStreamReader freader = new InputStreamReader(file.getInputStream(),"UTF-8");
+		CsvBeanReader reader = new CsvBeanReader(freader,CsvPreference.STANDARD_PREFERENCE);  
+		String[] headers = reader.getHeader(false);
+		if(type.equals("0")){
+			//门窗
+			WindowRfidEntity bean = null;  
+			List<WindowRfidEntity> windowList = new ArrayList<WindowRfidEntity>();
+			while ((bean = reader.read(WindowRfidEntity.class, headers)) != null) {
+				WindowRfidEntity win=windowRfidService.getWindowRfidByNo(bean.getRfidNo());
+				if(win==null){
+					break;
+				}
+				windowList.add(bean);
+			}
+			if(windowList!=null && windowList.size()>0){
+				windowRfidService.updateGid(windowList,id);
+			}else{
+				throw  new WebException("文件内容错误");
+			}
+			
+		}else  if(type.equals("1")||type.equals("2")){
+			//物流
+			LogisticsRfidEntity bean = null;  
+			List<LogisticsRfidEntity> logisticsList = new ArrayList<LogisticsRfidEntity>();
+			while ((bean = reader.read(LogisticsRfidEntity.class, headers)) != null) {  
+				LogisticsRfidEntity logistics=logisticsRfidService.getLogisticsByNo(bean.getRfidNo());
+				if(logistics==null){
+					break;
+				}
+				logisticsList.add(bean);
+			}
+			if(logisticsList!=null && logisticsList.size()>0){
+				logisticsRfidService.updateGid(logisticsList,id);
+			}else{
+				throw  new WebException("文件内容错误");
+			}
+			
+		}else{
+			throw  new WebException("文件内容错误");
+		}
+		reader.close();
+		map.put("isOk", "ok");
+		}catch (Exception e) {
+			SxjLogger.error("导入GID错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
+    }
 }

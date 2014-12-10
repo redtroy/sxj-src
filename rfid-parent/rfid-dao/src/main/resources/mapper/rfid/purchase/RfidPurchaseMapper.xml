@@ -20,12 +20,13 @@
 		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
 		<result property="receiptState" column="RECEIPT_STATE" jdbcType="INTEGER" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
 		<result property="delstate" column="DEL_STATE" jdbcType="BOOLEAN" />
+		<result property="gidState" column="GID_STATE" jdbcType="INTEGER" />
 	</resultMap>
 	<!-- 按条件查询采购申请单 -->
 	<select id="queryList" resultMap="purchaseResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID, PURCHASE_NO, SUPPLIER_NO, SUPPLIER_NAME, RFID_TYPE, COUNT, PRICE, AMOUNT, 
-					PURCHASE_DATE, CONTRACT_NO, APPLY_NO, IMPORT_STATE, PAY_STATE, RECEIPT_STATE FROM R_RFID_PURCHASE
+					PURCHASE_DATE, CONTRACT_NO, APPLY_NO, IMPORT_STATE,GID_STATE, PAY_STATE, RECEIPT_STATE FROM R_RFID_PURCHASE
  					WHERE DEL_STATE=0 ]]>
 		<if test="condition.purchaseNo != null and condition.purchaseNo !=''">
 			<![CDATA[AND PURCHASE_NO = #{condition.purchaseNo}]]>

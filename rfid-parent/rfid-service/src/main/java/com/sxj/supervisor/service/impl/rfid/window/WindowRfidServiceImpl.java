@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
+import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
@@ -39,6 +41,9 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	@Autowired
 	private IWindowRfidRefService winRefService;
 
+	@Autowired
+	private IRfidPurchaseDao rfidPurchaseDao;
+	
 	@Override
 	@Transactional(readOnly = true)
 	public List<WindowRfidEntity> queryWindowRfid(WindowRfidQuery query)
@@ -560,6 +565,23 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			return 0;
+		}
+	}
+	@Override
+	@Transactional
+	public void updateGid(List<WindowRfidEntity> winList,String id)throws ServiceException {
+		try{
+			windowRfidDao.updateGid(winList);
+			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
+			purchase.setId(id);
+			purchase.setGidState(1);
+			rfidPurchaseDao.updateRfidPurchase(purchase);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新GID失败", e);
 		}
 	}
 }
