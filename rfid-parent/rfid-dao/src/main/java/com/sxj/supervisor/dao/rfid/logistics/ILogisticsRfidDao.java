@@ -91,4 +91,6 @@ public interface ILogisticsRfidDao {
 	 **/
 	@Get
 	public LogisticsRfidEntity getLogisticsRfid(String id);
+	
+	public void updateGid(List<LogisticsRfidEntity> list);
 }

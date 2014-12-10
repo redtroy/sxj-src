@@ -22,6 +22,7 @@
 		<result property="progressState" column="PROGRESS_STATE"
 			jdbcType="INTEGER" />
 		<result property="log" column="LOG" jdbcType="VARCHAR" />
+		<result property="gid" column="GID" jdbcType="CHAR" />
 	</resultMap>
 	<!-- 按条件查询门窗 -->
 	<select id="queryWindowRfidList" resultMap="windowRfidResultMap"
@@ -104,4 +105,9 @@
 	<select id="selectByRfidNo" resultMap="windowRfidResultMap">
 	  <![CDATA[ SELECT * FROM R_WINDOW_RFID WHERE RFID_NO=#{rfidNo}]]>
 	</select>
+	<update id="updateGid" parameterType="java.util.List">
+		<foreach item="item" collection="list" >
+		UPDATE R_WINDOW_RFID SET GID=#{item.gid} WHERE RFID_NO=#{item.rfidNo};
+		</foreach>
+	</update>
 </mapper>
