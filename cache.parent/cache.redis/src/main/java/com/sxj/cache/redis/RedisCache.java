@@ -332,4 +332,30 @@ public class RedisCache implements Cache
         }
         
     }
+    
+    @Override
+    public Boolean exists(Object key) throws CacheException
+    {
+        if (key == null)
+            return false;
+        else
+        {
+            boolean broken = false;
+            Jedis cache = RedisCacheProvider.getResource();
+            try
+            {
+                return cache.exists(serializeKey(key).getBytes());
+            }
+            catch (Exception e)
+            {
+                broken = true;
+                throw new CacheException(e);
+            }
+            finally
+            {
+                RedisCacheProvider.returnResource(cache, broken);
+            }
+            
+        }
+    }
 }
