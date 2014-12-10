@@ -21,46 +21,9 @@
 			<version>1.0</version>
 		</dependency>
 		<!-- springside -->
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>spring-extension</artifactId>
-		</dependency>
 		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -68,39 +31,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sxj</groupId>
-			<artifactId>mybatis-shard</artifactId>
-			<version>3.2.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>cache.spring</artifactId>
+			<artifactId>redis-collections</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>jsonrpc-core</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>redis-spring</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>redis-topic</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>spring-util</artifactId>
-			<version>4.2.3</version>
-		</dependency>
-	</dependencies>
+ </dependencies>
 </project>
