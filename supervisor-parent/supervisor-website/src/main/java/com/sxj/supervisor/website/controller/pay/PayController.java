@@ -209,7 +209,9 @@ public class PayController extends BaseController {
 			map.put("payAmount", pay.getPayAmount());
 			map.put("content", pay.getContent());
 			String payjson = JsonMapper.nonDefaultMapper().toJson(map);
-			httpClient.postJson(webUrl + "/finance/getModel.htm", payjson);
+			String state = httpClient.postJson(
+					webUrl + "/finance/getModel.htm", payjson);
+			SxjLogger.info("-------" + state, this.getClass());
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
@@ -219,6 +221,7 @@ public class PayController extends BaseController {
 					+ loginToken.getMemberNo() + "&token="
 					+ EncryptUtil.md5Hex(loginToken.toString());
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new WebException(e.getMessage());
 		}
 	}
