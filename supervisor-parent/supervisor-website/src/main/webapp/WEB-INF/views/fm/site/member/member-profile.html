@@ -4,177 +4,220 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
-<script src="${b.staticPath}js/jqueryui.js"></script>
-<script src="${b.staticPath}js/intense.js"></script>
-<script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
-<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript" ></script>
-<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
-<@b.validate/>
-<@b.dialogBox/>
-<@b.upload/>
-<script>
-var validform;
-jQuery(document).ready(function($) {
-	$('.demo-image').click(function(){
-		$('.maskdivgen').fadeIn(100);
-		$('.viewer').slideDown(200);
-	})
-	  $('#edit_pwd').css({
-		  position:'absolute',
-		  left: "33%",
-		  top: "40%"
-		  });
-	validform=$("#edit_pwd").Validform({
-		tiptype:3});
-	});
+	<meta name="description"
+		content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+		<link href="${b.staticPath}style/style.css" rel="stylesheet"
+			type="text/css" />
+		<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+		<script src="${b.staticPath}js/jqueryui.js"></script>
+		<script src="${b.staticPath}js/intense.js"></script>
+		<script src="${b.staticPath}js/jquery.mousewheel.js"
+			type="text/javascript"></script>
+		<script src="${b.staticPath}js/jquery.iviewer.js"
+			type="text/javascript"></script>
+		<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+			type="text/css" />
+		<@b.validate/> <@b.dialogBox/> <@b.upload/> <script>
+			var validform;
+			jQuery(document).ready(function($) {
+				$('.demo-image').click(function() {
+					$('.maskdivgen').fadeIn(100);
+					$('.viewer').slideDown(200);
+				})
+				$('#edit_pwd').css({
+					position : 'absolute',
+					left : "33%",
+					top : "40%"
+				});
+				validform = $("#edit_pwd").Validform({
+					tiptype : 3
+				});
+			});
 
-window.onload = function() {
-	$(".demo-image").click(function(){
-		var imageSource=$(this).attr("data-image");
-		refreshIviewer($("#viewer2"),imageSource,$("#img_close"));
-	});
-}
-jQuery(document).ready(function($) {
-	$('.btnPassword').click(function(){
-		$("#edit_pwd").find("input").val("");
-		validform.resetForm();
-		$('.maskdivgen').fadeIn(100);
-		$('.passwordPop').slideDown(200);
-	})
-	$('.modal-header .close').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.passwordPop').slideUp(200);
-	})
-	
-	})  
-function close_img(){
-	$("#img_close").hide();
-}
-function close_div(id){
-	$('.maskdivgen').fadeOut(100);
-	$('.passwordPop').slideUp(200);
-	//reset_edit_pwd();
-}
-function edit_pwd(id){
-	if (!validform.check()){
-		return false;
-	}
-	var pwd1=$("#pwd1").val();
-	var pwd2=$("#pwd2").val();
-		$.post("edit_pwd.htm",{id:id,password:pwd1},function(data){
-			succInfo(function(){
+			window.onload = function() {
+				$(".demo-image").click(
+						function() {
+							var imageSource = $(this).attr("data-image");
+							refreshIviewer($("#viewer2"), imageSource,
+									$("#img_close"));
+						});
+			}
+			jQuery(document).ready(function($) {
+				$('.btnPassword').click(function() {
+					$("#edit_pwd").find("input").val("");
+					validform.resetForm();
+					$('.maskdivgen').fadeIn(100);
+					$('.passwordPop').slideDown(200);
+				})
+				$('.modal-header .close').click(function() {
+					$('.maskdivgen').fadeOut(100);
+					$('.passwordPop').slideUp(200);
+				})
+
+			})
+			function close_img() {
+				$("#img_close").hide();
+			}
+			function close_div(id) {
 				$('.maskdivgen').fadeOut(100);
 				$('.passwordPop').slideUp(200);
-			},"修改成功！");
-			
-		})
-}
+				//reset_edit_pwd();
+			}
+			function edit_pwd(id) {
+				if (!validform.check()) {
+					return false;
+				}
+				var pwd1 = $("#pwd1").val();
+				var pwd2 = $("#pwd2").val();
+				$.post("edit_pwd.htm", {
+					id : id,
+					password : pwd1
+				}, function(data) {
+					succInfo(function() {
+						$('.maskdivgen').fadeOut(100);
+						$('.passwordPop').slideUp(200);
+					}, "修改成功！");
 
-function query(){
+				})
+			}
 
-}
-</script>
+			function query() {
+
+			}
+		</script>
 </head>
 
 <body>
-<@b.header />
-<div class="fence-wide ly-clearFix">
-<div class="yard-190 mt15 ly-left">
-<@b.leftMenu />
-</div>
-<div class="yard-870 rightSide ly-left" id="rightSide_div">
-<div class="heading mb15 ly-clearFix">
-  <h1 class="ly-left">
-  <#if (member.flag)>
-  <span class="title fontYH f20 fb">会员中心</span><span class="color-gray6 f14">（您的会员资料已经完善，您的帐户<span class="color-green">${member.checkState.getName()}</span>）</span></h1>
-   <#else>
-   <span class="title fontYH f20 fb">会员中心</span><span class="color-gray6 f14">（您的会员资料已经完善，您的帐户<span class="color-red">${member.checkState.getName()}</span>）</span></h1>
-   </#if>
-</div>
-<div class="contBox tableMem">
-<div class="item">
-  <label>会员编号</label>
-  <span class="color-blue">${member.memberNo}</span></div>
-<div class="item">
-  <label>会员名称</label>${member.name}</div>
-<div class="item">
-  <label>会员类型</label>
- ${member.type.getName()}</div>
-<div class="item"><label>公司所在地</label><#list cityList as city>
-          	<#if (("32:江苏省,"+city.id+":"+city.name)==member.area)>
-          	  江苏省${city.name}
-          	</#if></#list></div>
-<div class="item certCont ly-clearFix">
-<label>企业资质</label>
-<div class="upload">
-<p>${member.bLicenseNo}</p>
-<#if member.bLicensePath==null>
-<img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-<a class="demo-image button button-blue f12" data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a>
-<#else>
-<img src="${b.imagePath}${member.bLicensePath}" width="80" height="107" />
-<a class="demo-image button button-blue f12" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
-</#if>
-</div>
-<div class="upload">
-<p>${member.energyNo}</p>
-<#if member.energyPath==null>
-<img src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-<a class="demo-image button button-blue f12" data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a>
-<#else>
-<img src="${b.imagePath}${member.energyPath}" width="80" height="107" />
-<a class="demo-image button button-blue f12" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a>
-</#if>
-</div></div>
-<div class="item"><label>公司电话</label>${member.telNum}</div>
-<div class="item">
-  <label>公司地址</label>${member.address}</div>
-<div class="item">
-  <label>邮政编码</label>${member.code}</div>
-<div class="item">
-  <label>联系人</label>${member.contacts}</div>
-<div class="item">
-  <label>联系人手机</label>
-  ${member.phoneNo}
-</div>
-<div class="item">
-  <label>子帐号</label><a href="account/accountList.htm" class="lnk-blue">${member.accountNum}个</a>
-</div>
-<div class="item">
-  <label>帐号状态</label>
-  <#if (member.checkState.id==0)>
-  <span class="state normal">${member.checkState.getName()}</span>
-  <#elseif (member.checkState.id==1)>
-  <span class="state frozen">${member.checkState.getName()}</span>
-  <#else>
-  <span class="state verified">${member.checkState.getName()}</span> </#if></div>
-<div class="item">
-  <label>总交易额</label><a href="${basePath}contract/finance.htm" class="lnk-blue">查看明细</a> </div>
-<div class="item">
-  <label>注册时间</label>
-  ${member.regDate?string("yyyy-MM-dd HH:mm:ss")}</div>
-<div class="mt15 mb20 tc">
-  <a href="edit_member.htm?id=${member.id}" class="button button-orange mr15">修改会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
-</div>
-</div>
-</div>
-<@b.footer />
-<div class="modal-wrap popDemo contPop passwordPop" style="display:none;width:550px;" id="edit_pwd">
-      <div class="modal-header"><span class="close" onclick="close_div('${member.id}');">关闭</span></div>
-      <div class="modal-body">
-        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>
-        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="close_div('${member.id}');">取消</button></div>
-  </div>
-</div>
-    <div class="maskdivgen" style="display:none"></div>
-   <div class="viewer modal-wrap" id="img_close" style="display:none">
-<div class="modal-header"><span class="close" onclick="close_img()">关闭</span></div>
-<div id="viewer2" class="modal-body iviewer"></div>
-</div>
-<div class="maskdivgen" style="display:none"></div>
+	<@b.header />
+	<div class="fence-wide ly-clearFix">
+		<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
+		<div class="yard-870 rightSide ly-left" id="rightSide_div">
+			<div class="heading mb15 ly-clearFix">
+				<h1 class="ly-left">
+					<#if (member.flag)> <span class="title fontYH f20 fb">会员中心</span><span
+						class="color-gray6 f14">（您的会员资料已经完善，您的帐户<span
+						class="color-green">${member.checkState.getName()}</span>）
+					</span>
+				</h1>
+				<#else> <span class="title fontYH f20 fb">会员中心</span><span
+					class="color-gray6 f14">（您的会员资料已经完善，您的帐户<span
+					class="color-red">${member.checkState.getName()}</span>）
+				</span>
+				</h1>
+				</#if>
+			</div>
+			<div class="contBox tableMem">
+				<div class="item">
+					<label>会员编号</label> <span class="color-blue">${member.memberNo}</span>
+				</div>
+				<div class="item">
+					<label>会员名称</label>${member.name}
+				</div>
+				<div class="item">
+					<label>会员类型</label> ${member.type.getName()}
+				</div>
+				<div class="item">
+					<label>公司所在地</label><#list cityList as city> <#if
+					(("32:江苏省,"+city.id+":"+city.name)==member.area)> 江苏省${city.name}
+					</#if></#list>
+				</div>
+				<div class="item certCont ly-clearFix">
+					<label>企业资质</label>
+					<div class="upload">
+						<p>${member.bLicenseNo}</p>
+						<#if member.bLicensePath==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.bLicensePath}80x107.JPG" width="80" 
+							height="107"/> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
+						</#if>
+					</div>
+					<div class="upload">
+						<p>${member.energyNo}</p>
+						<#if member.energyPath==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.energyPath}80x107.JPG" width="80" height="107"/>
+						<a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.energyPath}">查看缩略图</a> </#if>
+					</div>
+				</div>
+				<div class="item">
+					<label>公司电话</label>${member.telNum}
+				</div>
+				<div class="item">
+					<label>公司地址</label>${member.address}
+				</div>
+				<div class="item">
+					<label>邮政编码</label>${member.code}
+				</div>
+				<div class="item">
+					<label>联系人</label>${member.contacts}
+				</div>
+				<div class="item">
+					<label>联系人手机</label> ${member.phoneNo}
+				</div>
+				<div class="item">
+					<label>子帐号</label><a href="account/accountList.htm"
+						class="lnk-blue">${member.accountNum}个</a>
+				</div>
+				<div class="item">
+					<label>帐号状态</label> <#if (member.checkState.id==0)> <span
+						class="state normal">${member.checkState.getName()}</span>
+					<#elseif (member.checkState.id==1)> <span class="state frozen">${member.checkState.getName()}</span>
+					<#else> <span class="state verified">${member.checkState.getName()}</span>
+					</#if>
+				</div>
+				<div class="item">
+					<label>总交易额</label><a href="${basePath}contract/finance.htm"
+						class="lnk-blue">查看明细</a>
+				</div>
+				<div class="item">
+					<label>注册时间</label> ${member.regDate?string("yyyy-MM-dd HH:mm:ss")}
+				</div>
+				<div class="mt15 mb20 tc">
+					<a href="edit_member.htm?id=${member.id}"
+						class="button button-orange mr15">修改会员资料</a><a
+						class="button button-orange btnPassword">修改超级密码</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<@b.footer />
+	<div class="modal-wrap popDemo contPop passwordPop"
+		style="display: none; width: 550px;" id="edit_pwd">
+		<div class="modal-header">
+			<span class="close" onclick="close_div('${member.id}');">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div class="item">
+				<label>新密码</label><input class="input input-w180h30" type="password"
+					id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！"
+					nullmsg="请设置密码！" />
+			</div>
+			<div class="item">
+				<label>确认密码</label><input class="input input-w180h30"
+					type="password" id="pwd2" datatype="*6-15"
+					errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！" />
+			</div>
+			<div class="item">
+				<label>&nbsp;</label>
+				<button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button>
+				<button class="button button-gray "
+					onclick="close_div('${member.id}');">取消</button>
+			</div>
+		</div>
+	</div>
+	<div class="maskdivgen" style="display: none"></div>
+	<div class="viewer modal-wrap" id="img_close" style="display: none">
+		<div class="modal-header">
+			<span class="close" onclick="close_img()">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"></div>
+	</div>
+	<div class="maskdivgen" style="display: none"></div>
 </body>
 </html>
