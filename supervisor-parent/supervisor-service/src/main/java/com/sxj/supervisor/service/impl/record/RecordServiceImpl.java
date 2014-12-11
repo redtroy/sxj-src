@@ -90,7 +90,8 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void modifyRecord(RecordEntity record) {
+	public void modifyRecord(RecordEntity record)throws ServiceException{
+		try{
 		RecordEntity oldRe = getRecord(record.getId());
 		String[] oldPath = null;
 		String[] nowPath = null;
@@ -132,6 +133,13 @@ public class RecordServiceImpl implements IRecordService {
 		}
 
 		recordDao.updateRecord(record);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新备案信息错误", e);
+		}
 	}
 
 	/**
@@ -279,7 +287,7 @@ public class RecordServiceImpl implements IRecordService {
 	@Override
 	@Transactional
 	public void modifyState(String contractId, String recordId,
-			RecordConfirmStateEnum state) {
+			RecordConfirmStateEnum state) throws ServiceException{
 		try {
 
 			// RecordEntity re = new RecordEntity();
@@ -353,8 +361,12 @@ public class RecordServiceImpl implements IRecordService {
 				newCon.setRecordDate(new Date());
 			}
 			contractDao.updateContract(newCon);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		} catch (Exception e) {
-			throw new ServiceException("", e);
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("确认合同错误", e);
 		}
 
 	}
@@ -448,7 +460,11 @@ public class RecordServiceImpl implements IRecordService {
 			}
 			CometServiceImpl.takeCount(MessageChannel.RECORD_MESSAGE);
 			MessageChannel.initTopic().publish(MessageChannel.RECORD_MESSAGE);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
 		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("更新备案错误", e);
 		}
 	}
