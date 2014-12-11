@@ -1,4 +1,4 @@
-﻿package com.sxj.finance.model.member;
+package com.sxj.finance.model.member;
 
 import java.io.Serializable;
 

@@ -3,7 +3,7 @@ package com.sxj.finance.website.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.sxj.finance.website.login.SupervisorPrincipal;
+import com.sxj.finance.model.finance.FinancePrincipal;
 
 public class BaseController {
 
@@ -18,10 +18,10 @@ public class BaseController {
 				+ request.getServerPort() + request.getContextPath() + "/";
 	}
 
-	protected SupervisorPrincipal getLoginInfo(HttpSession session) {
+	protected FinancePrincipal getLoginInfo(HttpSession session) {
 		Object object = session.getAttribute("userinfo");
 		if (object != null) {
-			SupervisorPrincipal userBean = (SupervisorPrincipal) object;
+			FinancePrincipal userBean = (FinancePrincipal) object;
 			return userBean;
 		} else {
 			return null;

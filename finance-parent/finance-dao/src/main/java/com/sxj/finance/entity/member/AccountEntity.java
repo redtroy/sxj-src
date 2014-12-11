@@ -1,4 +1,4 @@
-﻿package com.sxj.finance.entity.member;
+package com.sxj.finance.entity.member;
 
 import java.io.Serializable;
 import java.util.Date;
