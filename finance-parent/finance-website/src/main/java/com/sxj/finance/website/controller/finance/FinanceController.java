@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.finance.entity.FinanceEntity;
 import com.sxj.finance.enu.finance.PayStageEnum;
 import com.sxj.finance.model.finance.FinanceModel;
+import com.sxj.finance.model.finance.FinancePrincipal;
 import com.sxj.finance.service.finance.IFinanceService;
 import com.sxj.finance.website.controller.BaseController;
-import com.sxj.finance.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -36,7 +36,7 @@ public class FinanceController extends BaseController {
 			if (query != null) {
 				query.setPagable(true);
 			}
-			SupervisorPrincipal info = getLoginInfo(session);
+			FinancePrincipal info = getLoginInfo(session);
 			String memberNo = info.getMember().getMemberNo();
 			query.setMemberNo(memberNo);
 			PayStageEnum[] states = PayStageEnum.values();

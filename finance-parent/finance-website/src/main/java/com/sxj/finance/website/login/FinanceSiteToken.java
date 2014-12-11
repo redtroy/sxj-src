@@ -2,20 +2,22 @@ package com.sxj.finance.website.login;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 
-public class SupervisorSiteToken extends UsernamePasswordToken {
+import com.sxj.finance.model.finance.FinancePrincipal;
+
+public class FinanceSiteToken extends UsernamePasswordToken {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7748781410357940194L;
 
-	private SupervisorPrincipal userBean;
+	private FinancePrincipal userBean;
 
-	public SupervisorSiteToken() {
+	public FinanceSiteToken() {
 
 	}
 
-	public SupervisorSiteToken(final SupervisorPrincipal userBean,
+	public FinanceSiteToken(final FinancePrincipal userBean,
 			final String password, final boolean rememberMe, final String host) {
 		this.userBean = userBean;
 		super.setPassword(password.toCharArray());
@@ -32,16 +34,16 @@ public class SupervisorSiteToken extends UsernamePasswordToken {
 		}
 	}
 
-	public SupervisorSiteToken(final SupervisorPrincipal userBean,
+	public FinanceSiteToken(final FinancePrincipal userBean,
 			final String password) {
 		this(userBean, password, false, null);
 	}
 
-	public SupervisorPrincipal getUserBean() {
+	public FinancePrincipal getUserBean() {
 		return userBean;
 	}
 
-	public void setUserBean(SupervisorPrincipal userBean) {
+	public void setUserBean(FinancePrincipal userBean) {
 		this.userBean = userBean;
 	}
 

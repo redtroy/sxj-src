@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.sxj</groupId>
-  <artifactId>finance-parent</artifactId>
-  <version>1.0</version>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>finance-website</module>
-    <module>finance-manager</module>
-    <module>finance-dao</module>
-    <module>finance-service</module>
-  </modules>
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sxj</groupId>
+	<artifactId>finance-parent</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>finance-dao</module>
+		<module>finance-service</module>
+		<module>finance-website</module>
+		<module>finance-manager</module>
+	</modules>
+	<properties>
 		<com.sxj.spring>4.2.3</com.sxj.spring>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.7</java.version>
@@ -89,7 +90,7 @@
 				<artifactId>mybatis-pagination</artifactId>
 				<version>${mybatis.orm.version}</version>
 			</dependency>
-			<!-- 数据库连�?-->
+			<!-- 数据库连�? -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>

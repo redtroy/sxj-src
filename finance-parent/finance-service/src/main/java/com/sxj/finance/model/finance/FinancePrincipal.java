@@ -1,11 +1,11 @@
-package com.sxj.finance.website.login;
+package com.sxj.finance.model.finance;
 
 import java.io.Serializable;
 
 import com.sxj.finance.entity.member.AccountEntity;
 import com.sxj.finance.entity.member.MemberEntity;
 
-public class SupervisorPrincipal implements Serializable {
+public class FinancePrincipal implements Serializable {
 
 	/**
 	 * 

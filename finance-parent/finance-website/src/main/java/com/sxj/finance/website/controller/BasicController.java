@@ -16,10 +16,10 @@ import com.sxj.finance.entity.member.MemberEntity;
 import com.sxj.finance.enu.member.AccountStatesEnum;
 import com.sxj.finance.enu.member.MemberCheckStateEnum;
 import com.sxj.finance.enu.member.MemberStatesEnum;
+import com.sxj.finance.model.finance.FinancePrincipal;
 import com.sxj.finance.service.member.IAccountService;
 import com.sxj.finance.service.member.IMemberService;
-import com.sxj.finance.website.login.SupervisorPrincipal;
-import com.sxj.finance.website.login.SupervisorSiteToken;
+import com.sxj.finance.website.login.FinanceSiteToken;
 import com.sxj.util.LoginToken;
 import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.StringUtils;
@@ -40,7 +40,7 @@ public class BasicController extends BaseController {
 		if (session == null || session.getAttribute("userinfo") == null) {
 			return LOGIN;
 		} else {
-			SupervisorPrincipal info = getLoginInfo(session);
+			FinancePrincipal info = getLoginInfo(session);
 			if (info.getMember() != null) {
 				String function = request.getParameter("function");
 				if (StringUtils.isNotEmpty(function)) {
@@ -94,9 +94,9 @@ public class BasicController extends BaseController {
 			if (!tokenMd5.equals(token)) {
 				return LOGIN;
 			}
-			SupervisorPrincipal userBean = new SupervisorPrincipal();
+			FinancePrincipal userBean = new FinancePrincipal();
 			userBean.setMember(memberInfo);
-			SupervisorSiteToken siteToken = new SupervisorSiteToken(userBean,
+			FinanceSiteToken siteToken = new FinanceSiteToken(userBean,
 					memberInfo.getPassword());
 			Subject currentUser = SecurityUtils.getSubject();
 			try {
@@ -126,8 +126,8 @@ public class BasicController extends BaseController {
 		map.put("accountName", accountName);
 		map.put("memberName", memberName);
 		password = EncryptUtil.md5Hex(password);
-		SupervisorSiteToken token = null;
-		SupervisorPrincipal userBean = null;
+		FinanceSiteToken token = null;
+		FinancePrincipal userBean = null;
 		AccountEntity account = null;
 		if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isNotEmpty(accountName)) {
@@ -160,10 +160,10 @@ public class BasicController extends BaseController {
 				return LOGIN;
 			}
 
-			userBean = new SupervisorPrincipal();
+			userBean = new FinancePrincipal();
 			userBean.setAccount(account);
 			userBean.setMember(member);
-			token = new SupervisorSiteToken(userBean, password);
+			token = new FinanceSiteToken(userBean, password);
 		} else if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isEmpty(accountName)) {
 			MemberEntity member = memberService.getMemberByName(memberName);
@@ -179,9 +179,9 @@ public class BasicController extends BaseController {
 				map.put("message", "会员已冻结");
 				return LOGIN;
 			}
-			userBean = new SupervisorPrincipal();
+			userBean = new FinancePrincipal();
 			userBean.setMember(member);
-			token = new SupervisorSiteToken(userBean, password);
+			token = new FinanceSiteToken(userBean, password);
 		} else {
 			map.put("message", "公司名称不能为空");
 			map.put("pmessage", "密码不能为空");
