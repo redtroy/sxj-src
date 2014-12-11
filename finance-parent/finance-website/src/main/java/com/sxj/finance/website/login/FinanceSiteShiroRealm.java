@@ -22,10 +22,11 @@ import org.apache.shiro.util.CollectionUtils;
 
 import com.sxj.finance.entity.member.AccountEntity;
 import com.sxj.finance.entity.member.MemberEntity;
+import com.sxj.finance.model.finance.FinancePrincipal;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.util.logger.SxjLogger;
 
-public class SupervisorSiteShiroRealm extends AuthorizingRealm {
+public class FinanceSiteShiroRealm extends AuthorizingRealm {
 
 	// 用于获取用户信息及用户权限信息的业务接口
 
@@ -35,7 +36,7 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 
 	private static final int SALT_SIZE = 8;
 
-	public SupervisorSiteShiroRealm() {
+	public FinanceSiteShiroRealm() {
 		// 认证
 		super.setAuthenticationCachingEnabled(false);
 		// 授权
@@ -52,9 +53,9 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm {
 	// 获取认证信息
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken authcToken) throws AuthenticationException {
-		SupervisorSiteToken token = (SupervisorSiteToken) authcToken;
+		FinanceSiteToken token = (FinanceSiteToken) authcToken;
 		// 通过表单接收的用户
-		SupervisorPrincipal userBean = token.getUserBean();
+		FinancePrincipal userBean = token.getUserBean();
 		if (userBean == null) {
 			return null;
 		}

@@ -1,4 +1,4 @@
-﻿package com.sxj.finance.manage.controller.member;
+package com.sxj.finance.manage.controller.member;
 
 import java.util.HashMap;
 import java.util.List;

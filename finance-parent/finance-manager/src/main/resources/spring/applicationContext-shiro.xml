@@ -15,14 +15,14 @@
 	default-lazy-init="false">
 
 	<bean id="myShiroRealmService"
-		class="com.sxj.finance.manage.login.SupervisorManagerShiroRealm">
+		class="com.sxj.finance.manage.login.FinanceManagerShiroRealm">
 		<property name="authorizationCacheName" value="${webmanage.authorization.cache.name}"></property>
 		<property name="authenticationCacheName" value="${webmanage.authentication.cache.name}"></property>
 	</bean>
 	<!--<bean class="com.sxj.finance.manage.login.ShiroEventListener"></bean>  -->
 	
-	<bean id="authenticationFilter"
-		class="com.sxj.finance.manage.login.SupervisorManagerPermissionsAuthorizationFilter" />
+	<!--<bean id="authenticationFilter"
+		class="com.sxj.finance.manage.login.SupervisorManagerPermissionsAuthorizationFilter" /> -->
 
 
 	<!-- 权限管理器 -->
@@ -61,7 +61,7 @@
 	</bean>
 
 	<bean id="shiroCacheManager"
-		class="com.sxj.finance.manage.login.SupervisorShiroRedisCacheManager">
+		class="com.sxj.finance.manage.login.FinanceShiroRedisCacheManager">
 		<property name="level" value="2"></property>
 		<property name="collections" ref="redisCollections"></property>
 	</bean>
@@ -110,12 +110,12 @@
 				/member/memberList.htm=user
 			</value>
 		</property>
-		<!-- 声明自定义的过滤器 -->
+		<!-- 声明自定义的过滤器
 		<property name="filters">
 			<map>
 				<entry key="frameperms" value-ref="authenticationFilter"></entry>
 			</map>
-		</property>
+		</property> -->
 	</bean>
 	<!-- 起效权限注解,这个很少在web项目中用到,一般是控制url的访问,不是在controller中声明权限注解 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />

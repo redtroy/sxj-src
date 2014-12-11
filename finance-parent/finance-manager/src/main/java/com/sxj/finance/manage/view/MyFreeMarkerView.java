@@ -16,9 +16,11 @@ public class MyFreeMarkerView extends FreeMarkerView {
 			HttpServletRequest request) throws Exception {
 		HttpServletRequest req = (HttpServletRequest) request;
 		req.setCharacterEncoding("UTF-8");
-		HttpSession session = req.getSession(false);
-		String function = req.getParameter("function");
-		session.setAttribute("function", function);
+		HttpSession session = req.getSession(true);
+		if (session != null) {
+			String function = req.getParameter("function");
+			session.setAttribute("function", function);
+		}
 		String path = request.getContextPath() + "/";
 		model.put(CONTEXT_PATH, path);
 		super.exposeHelpers(model, request);

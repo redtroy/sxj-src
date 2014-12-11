@@ -10,7 +10,7 @@ import com.sxj.redis.advance.core.RMap;
 import com.sxj.spring.modules.security.shiro.ShiroRedisCache;
 import com.sxj.util.Constraints;
 
-public class SupervisorShiroRedisCache<K, V> extends ShiroRedisCache<K, V>
+public class FinanceShiroRedisCache<K, V> extends ShiroRedisCache<K, V>
 {
     
     private static RedisCollections collections;
@@ -20,7 +20,7 @@ public class SupervisorShiroRedisCache<K, V> extends ShiroRedisCache<K, V>
         this.collections = collections;
     }
     
-    public SupervisorShiroRedisCache(int level, String name)
+    public FinanceShiroRedisCache(int level, String name)
     {
         super(level, name);
         // TODO Auto-generated constructor stub

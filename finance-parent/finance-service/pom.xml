@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
@@ -30,9 +30,20 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.sxj</groupId>
-			<artifactId>redis-collections</artifactId>
+			<artifactId>redis-spring</artifactId>
 			<version>1.0</version>
 		</dependency>
- </dependencies>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>redis-topic</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+	</dependencies>
 </project>

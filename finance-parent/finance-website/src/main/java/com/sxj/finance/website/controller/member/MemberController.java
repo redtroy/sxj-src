@@ -1,4 +1,4 @@
-﻿package com.sxj.finance.website.controller.member;
+package com.sxj.finance.website.controller.member;
 
 
 
@@ -11,9 +11,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.finance.entity.member.MemberEntity;
+import com.sxj.finance.model.finance.FinancePrincipal;
 import com.sxj.finance.service.member.IMemberService;
 import com.sxj.finance.website.controller.BaseController;
-import com.sxj.finance.website.login.SupervisorPrincipal;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -36,7 +36,7 @@ public class MemberController extends BaseController {
 			HttpServletRequest request) throws WebException {
 		try {
 			
-			SupervisorPrincipal info = getLoginInfo(session);
+			FinancePrincipal info = getLoginInfo(session);
 			if (info != null) {
 				MemberEntity member = memberService.getMember(info.getMember()
 						.getId());

@@ -31,7 +31,7 @@ import com.sxj.finance.service.system.ISystemAccountService;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.util.logger.SxjLogger;
 
-public class SupervisorManagerShiroRealm extends AuthorizingRealm {
+public class FinanceManagerShiroRealm extends AuthorizingRealm {
 
 	// 用于获取用户信息及用户权限信息的业务接口
 
@@ -44,7 +44,7 @@ public class SupervisorManagerShiroRealm extends AuthorizingRealm {
 
 	private static final int SALT_SIZE = 8;
 
-	public SupervisorManagerShiroRealm() {
+	public FinanceManagerShiroRealm() {
 		super.setAuthenticationCachingEnabled(false);
 	}
 
