@@ -299,14 +299,6 @@ function loadUpload(id,url,isMulti,text,fn){
 <div id="header" class="fence">
 <div class="fence-wide topBox"></div>
 </div>
-<#if Session.userinfo?exists>
-<script>
-$(document).ready(function(){
-	var currentUrl=window.location.href;
-	$.get("${basePath}enter.htm?url="+currentUrl);
-});
-</script>
-</#if>
 </#macro> 
 
 <#macro footer>
