@@ -96,6 +96,7 @@ public class FinanceServiceImpl implements IFinanceService {
 	}
 
 	@Override
+	@Transactional
 	public Boolean pay(FinanceEntity fe) throws ServiceException {
 		try {
 			FinanceEntity f = financeDao.getFinanceEntityById(fe.getId());
@@ -118,6 +119,7 @@ public class FinanceServiceImpl implements IFinanceService {
 	}
 
 	@Override
+	@Transactional
 	public Boolean shelve(FinanceEntity fe) throws ServiceException {
 		try {
 			FinanceEntity f = financeDao.getFinanceEntityById(fe.getId());
@@ -141,6 +143,7 @@ public class FinanceServiceImpl implements IFinanceService {
 	}
 
 	@Override
+	@Transactional
 	public Boolean accept(FinanceEntity fe) throws ServiceException {
 		try {
 			FinanceEntity f = financeDao.getFinanceEntityById(fe.getId());
@@ -160,6 +163,7 @@ public class FinanceServiceImpl implements IFinanceService {
 	}
 
 	@Override
+	@Transactional
 	public String setModel(Map<String, Object> map) throws ServiceException {
 		try {
 			FinanceEntity fe = new FinanceEntity();
