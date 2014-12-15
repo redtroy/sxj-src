@@ -149,9 +149,11 @@ function pay(id){
       </div>
       <#elseif (model.state.ordinal()==1)>
         <span class="state process">融资受理中</span>
-      <#elseif (model.state.ordinal()==2)>
-        <span class="state verified">融资已放款</span>
+         <#elseif (model.state.ordinal()==2)>
+        <span class="state process">融资受理中</span>
       <#elseif (model.state.ordinal()==3)>
+        <span class="state verified">融资已放款</span>
+      <#elseif (model.state.ordinal()==4)>
         <span class="state frozen">融资已搁置</span>
         <#else>
         <span></span>
