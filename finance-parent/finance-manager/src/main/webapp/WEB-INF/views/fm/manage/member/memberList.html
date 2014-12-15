@@ -13,17 +13,17 @@
 <@b.validate/>
 <script>
 	jQuery(document).ready(function($) {
-		$(".tabList .lnk-blue").click(function() {
+		$(".tabList .lnk-blue").live('click', function() {
 			var contractId = $(this).attr("value");
 			$("#info_"+contractId).toggle(function() {
 				$(this).load("${basePath}member/memberInfo.htm?id="+contractId);
 			}
 			);
 		});
-		$(".trClass").mouseover(function(){
+		$(".trClass").live('mouseover', function() {
 			$(this).addClass("bColor-hover");
 		});
-		$(".trClass").onmouseout(function(){
+		$(".trClass").live('mouseout', function() {
 			$(this).removeClass("bColor-hover");
 		});
 	})
