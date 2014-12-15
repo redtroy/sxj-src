@@ -53,7 +53,7 @@
   		<filter-name>csrfFilter</filter-name>
 	  	<filter-class>com.sxj.web.filter.CsrfFilter</filter-class>
 	  	<init-param>
-	  		<param-name>file</param-name>
+	  		<param-name>configFile</param-name>
 	  		<param-value>/csrfguard.properties</param-value>
 	  	</init-param>
   </filter>
