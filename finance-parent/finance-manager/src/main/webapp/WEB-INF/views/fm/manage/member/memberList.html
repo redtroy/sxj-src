@@ -20,6 +20,12 @@
 			}
 			);
 		});
+		$(".trClass").mouseover(function(){
+			$(this).addClass("bColor-hover");
+		});
+		$(".trClass").onmouseout(function(){
+			$(this).removeClass("bColor-hover");
+		});
 	})
 	function closeInfo(id){
 			$("#info_"+id).html("");
@@ -109,7 +115,7 @@
 								<th>操作</th>
 							</tr>
 							<#list memberList as  member>
-							<tr class="bColor-hover">
+							<tr class="trClass">
 								<td><a href="javascript:void(0);" value="${member.id}" class="lnk-blue">${member.memberNo}</a></td>
 								<td>${member.name}</td>
 								<td>${member.contacts}</td>
