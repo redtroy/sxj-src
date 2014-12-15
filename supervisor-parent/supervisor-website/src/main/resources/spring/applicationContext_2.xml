@@ -18,6 +18,7 @@
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 	<import resource="classpath*:spring/fast-dfs.xml" />
 	<import resource="classpath*:spring/spring-shard.xml" />
+	<!-- <import resource="classpath*:spring/applicationContext-csrf.xml" /> -->
 	<task:annotation-driven />
 	<context:annotation-config />
 	<aop:aspectj-autoproxy />

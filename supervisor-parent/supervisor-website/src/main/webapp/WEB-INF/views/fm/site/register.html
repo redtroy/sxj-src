@@ -17,7 +17,7 @@
 <h1 class="fontYH f18">欢迎注册成为私享家绿色门窗平台用户</h1></div>
 <div class="regBox ly-clearFix">
 <div class="regInfo ly-left">
-<form action="regist_save.htm" method="post" id="regist_box">
+<@csrf.form action="regist_save.htm" method="post" id="regist_box">
 <div class="item">
 <label><span class="color-red mr5 fb">*</span>公司名称</label>
 <input class="input input-w270h36" type="text" autocomplete="off" placeholder="" title="公司名称-作为登录用的超级账号名" id="name" name="name" value="${member.name}" />
@@ -58,7 +58,7 @@ ${type[0].getName()}</span>/
 <div class="item" disabled="none"><label>&nbsp;</label>
 <a href="" class="button button-orange btn-regin" onclick="regist();return false;">同意协议并注册</a>
 </div>
-</form>
+</@csrf.form>
 </div>
 <div class="aside ly-left">&nbsp;</div>
 

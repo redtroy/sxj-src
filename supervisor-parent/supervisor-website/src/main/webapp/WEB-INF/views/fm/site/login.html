@@ -40,7 +40,7 @@ function login()
 <div class="fence signCont">
 <div class="fence-wide">
 <div class="signBox fontYH">
-<form id="login_form" action="${basePath}login.htm" method="post">
+<@csrf.form action="${basePath}login.htm" id="login_form" method="post">
   <div class="regInfo">
   <div class="join tr">
   <span class="fb">还不是私享家会员？</span>
@@ -66,7 +66,7 @@ function login()
 <a href="javascript:login();" class="button btn-regin mt5 f18">登&nbsp;录</a>
 </div>
 </div>
-</form>
+</@csrf.form>
 <div class="pt10 color-gray9 tc fireDown">建议下载<a href="http://www.firefox.com.cn/" class="lnk-blue ml5 mr5" target="_blank">火狐浏览器</a>访问使用平台，谢谢！</div>
 </div>
 </div>

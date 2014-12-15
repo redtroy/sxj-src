@@ -154,7 +154,7 @@ function close_img(){
 		   return true;
 	   }
 	   if (energyNo==""){
-		   messageInfo("营业执照号不能为空");
+		   messageInfo("节能标识推广证号不能为空");
 		   return true;
 	   }
 	   if (contacts==""){
@@ -175,6 +175,14 @@ function close_img(){
 	   }
 	   if (code==""){
 		   messageInfo("邮政编码不能为空");
+		   return true;
+	   }
+	   if (telNum==""){
+		   messageInfo("固定号码不能为空！");
+		   return true;
+	   }
+	   if (!telNum.match(/^\d{1,6}-\d{1,8}$/)){
+		   messageInfo("请检查固定号码格式是否正确！");
 		   return true;
 	   }
 	   if (telNum.length>13){
