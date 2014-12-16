@@ -5,18 +5,7 @@
                         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
 	default-lazy-init="false">
 
-	<bean id="configBean"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath*:config/database.properties</value>
-				<value>classpath*:config/mobile_message.properties</value>
-				<value>classpath*:config/fdfs_client.properties</value>
-				<value>classpath*:config/shiro.properties</value>
-				<value>classpath*:cache.properties</value>
-			</list>
-		</property>
-	</bean>
+	
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
 		destroy-method="close">

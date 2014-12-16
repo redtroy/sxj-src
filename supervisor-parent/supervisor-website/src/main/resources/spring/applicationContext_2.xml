@@ -17,13 +17,11 @@
 	<import resource="classpath*:spring/database-config.xml" />
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 	<import resource="classpath*:spring/fast-dfs.xml" />
-	<import resource="classpath*:spring/spring-shard.xml" />
+	<import resource="classpath*:spring/mybatis-shard.xml" />
 	<!-- <import resource="classpath*:spring/applicationContext-csrf.xml" /> -->
 	<task:annotation-driven />
 	<context:annotation-config />
 	<aop:aspectj-autoproxy />
-	<tx:annotation-driven transaction-manager="transactionManager"
-		proxy-target-class="true"/>
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="com.sxj.supervisor.service">
 		<context:exclude-filter type="annotation"

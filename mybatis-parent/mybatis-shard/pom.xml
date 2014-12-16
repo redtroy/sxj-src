@@ -30,11 +30,6 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-spring</artifactId>
 			<version>1.2.2</version>
@@ -69,6 +64,11 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.0.6.RELEASE</version>
+		</dependency>
+		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>1.8.1</version>
@@ -83,5 +83,23 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.31</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.0.6.RELEASE</version>
+		</dependency>
 	</dependencies>
+	<build>
+	<plugins>
+		<plugin>
+			<artifactId>maven-jar-plugin</artifactId>
+			<configuration>					
+				<classesDirectory>target/classes/</classesDirectory>
+				<archive>
+					<addMavenDescriptor>false</addMavenDescriptor>
+				</archive>
+			</configuration>
+		</plugin>
+	</plugins>
+</build>
 </project>

@@ -13,18 +13,18 @@
 
 	<bean class="com.sxj.mybatis.shard.mapper.MapperScanConfigurator">
 		<property name="basePackage" value="com.sxj.supervisor.dao" />
-		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
 		<property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" />
 		<property name="typeAliasesPackage" value="com.sxj.supervisor.entity"></property>
 	</bean>
 	<!-- 后置处理器，初始化所有Mapper -->
 	<bean class="com.sxj.mybatis.shard.listener.MybatisMapperProcessor"></bean>
-
 	<!-- 启动 事务 -->
 	<bean id="transactionManager"
 		class="com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager">
 	</bean>
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
 
 
 </beans>

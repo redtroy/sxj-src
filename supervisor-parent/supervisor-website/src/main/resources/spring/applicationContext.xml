@@ -20,8 +20,7 @@
 	<task:annotation-driven />
 	<context:annotation-config />
 	<aop:aspectj-autoproxy />
-	<tx:annotation-driven transaction-manager="transactionManager"
-		proxy-target-class="true" />
+	
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="com.sxj.supervisor.service">
 		<context:exclude-filter type="annotation"
@@ -31,13 +30,12 @@
 	</context:component-scan>
 
 	<!-- 事务管理器, Jdbc单数据源事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
-
-
 	<!-- MyBatis配置 -->
 	<bean id="sqlSessionFactory" class="com.sxj.mybatis.orm.ActiveSQLSessionFactoryBean">
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />

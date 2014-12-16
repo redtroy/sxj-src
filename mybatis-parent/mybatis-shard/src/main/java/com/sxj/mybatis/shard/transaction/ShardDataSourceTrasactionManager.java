@@ -30,6 +30,7 @@ public class ShardDataSourceTrasactionManager extends
     
     public static void putSession(DataSource ds, SqlSession sqlSession)
     {
+        
         Map<DataSource, SqlSession> sessions = currentSessions.get();
         if (sessions == null)
         {
