@@ -1,6 +1,8 @@
 package com.sxj.mybatis.shard.datasource;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -16,7 +18,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 import com.sxj.mybatis.shard.MybatisConfiguration;
 import com.sxj.mybatis.shard.datasource.DataSourceFactory.DataSourceNode;
-import com.sxj.mybatis.shard.spring.aop.ShardTransactionInterceptor;
+import com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager;
 import com.sxj.spring.modules.util.RegexUtil;
 
 public class DataSourceRouter
@@ -24,6 +26,17 @@ public class DataSourceRouter
     
     // 数据节点数量
     // private static int nodeNum = DataSourceFactory.getNodes().size();
+    
+    private static final ThreadLocal<Set<String>> writeTableQueue = new ThreadLocal<Set<String>>()
+    {
+        
+        @Override
+        protected Set<String> initialValue()
+        {
+            return new HashSet<String>();
+        }
+        
+    };
     
     public final static String Command_W = "w";
     
@@ -70,8 +83,6 @@ public class DataSourceRouter
     public static DataSource getDataSource(MappedStatement ms,
             BoundSql boundSql, Object param)
     {
-        System.out.println("----------------------------------"
-                + ShardTransactionInterceptor.isReadOnly());
         String sql = boundSql.getSql();
         sql = sql.replaceAll("\\s+", " ");
         String lowerSql = sql.trim().toLowerCase();
@@ -86,6 +97,7 @@ public class DataSourceRouter
         else
         {
             commandType = Command_W;
+            refreshTableQueue(tblName);
         }
         
         // for update sql : update t set xxx where aa = 22
@@ -248,14 +260,41 @@ public class DataSourceRouter
         if (commandType.equals(Command_R))
         {
             int index = (int) (targetNode.getReadNodes().size() * Math.random());
-            ds = targetNode.getReadNodes().get(index);
+            if (!isWriteTable(tblName)
+                    && ShardDataSourceTrasactionManager.isCurrentTransactionReadOnly())
+            {
+                ds = targetNode.getReadNodes().get(index);
+                System.out.println(lowerSql + "-----------------READ");
+            }
+            else
+            {
+                ds = targetNode.getWriteNodes().get(index);
+                System.out.println(lowerSql + "-----------------WRITE");
+            }
         }
         else
         {
             int index = (int) (targetNode.getWriteNodes().size() * Math.random());
             ds = targetNode.getWriteNodes().get(index);
+            System.out.println(lowerSql + "-----------------WRITE");
         }
+        
         return ds;
+    }
+    
+    private static boolean refreshTableQueue(String tblName)
+    {
+        Set<String> set = writeTableQueue.get();
+        if (set.contains(tblName))
+            return false;
+        set.add(tblName);
+        writeTableQueue.set(set);
+        return true;
+    }
+    
+    private static boolean isWriteTable(String tblName)
+    {
+        return writeTableQueue.get().contains(tblName);
     }
     
     private static Object getParamValue(MappedStatement ms, BoundSql boundSql,

@@ -18,6 +18,7 @@ import com.sxj.mybatis.shard.session.ShardedSqlSession;
 public class ShardDataSourceTrasactionManager extends
         AbstractPlatformTransactionManager
 {
+    private static final ThreadLocal<Boolean> isReadOnly = new ThreadLocal<Boolean>();
     
     /**
      * 
@@ -99,6 +100,7 @@ public class ShardDataSourceTrasactionManager extends
     protected void doBegin(Object transaction, TransactionDefinition definition)
             throws TransactionException
     {
+        isReadOnly.set(definition.isReadOnly());
         //        System.out.println("Begin Transaction");
         logger.debug("Begin transaction with name [" + definition.getName()
                 + "]: " + definition);
@@ -172,4 +174,10 @@ public class ShardDataSourceTrasactionManager extends
         currentConnections.remove();
     }
     
+    public static boolean isCurrentTransactionReadOnly()
+    {
+        if (isReadOnly.get() == null)
+            return true;
+        return isReadOnly.get();
+    }
 }

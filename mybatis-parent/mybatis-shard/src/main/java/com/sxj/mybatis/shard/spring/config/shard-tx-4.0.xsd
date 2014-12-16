@@ -32,7 +32,7 @@
 				]]></xsd:documentation>
 				<xsd:appinfo>
 					<tool:annotation>
-						<tool:exports type="org.springframework.transaction.interceptor.TransactionInterceptor"/>
+						<tool:exports type="com.sxj.mybatis.shard.spring.aop.ShardTransactionInterceptor"/>
 					</tool:annotation>
 				</xsd:appinfo>
 			</xsd:annotation>
