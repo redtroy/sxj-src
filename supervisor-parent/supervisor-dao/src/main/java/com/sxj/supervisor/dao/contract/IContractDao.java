@@ -57,5 +57,5 @@ public interface IContractDao {
 	 * 
 	 * @param id
 	 */
-	public int updateContractRfid(Map<String, Float> map);
+	public int updateContractRfid(Map<String, Object> map);
 }

@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.open.controller;
+package com.sxj.supervisor.open.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,7 +36,6 @@ import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
-import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller

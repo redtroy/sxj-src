@@ -1540,7 +1540,8 @@ public class ContractServiceImpl implements IContractService {
 					startNum, gRfid, lRfid, windowType);
 			// windowRfidService.startWindowRfid(count, useCount, refContractNo,
 			// minRfid, maxRfid, gRfid, lRfid, windowType);
-			Map<String, Float> map = new HashMap<>();
+			Map<String, Object> map = new HashMap<>();
+			map.put("contractNo", refContractNo);
 			map.put("usequantity", (float) startNum + useQuantity);
 			map.put("oldUseQuantity", useQuantity);
 			int index = contractDao.updateContractRfid(map);
@@ -2033,7 +2034,8 @@ public class ContractServiceImpl implements IContractService {
 	 * 更新批次支付狀態
 	 */
 	@Override
-	public void modifyBatchPayState(String contractNo, String rfidNo,String payNo) {
+	public void modifyBatchPayState(String contractNo, String rfidNo,
+			String payNo) {
 		try {
 			ContractBatchEntity contractBatch = contractBatchDao
 					.getBacthsByRfid(rfidNo);

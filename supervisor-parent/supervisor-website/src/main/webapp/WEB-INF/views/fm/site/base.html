@@ -306,6 +306,7 @@ function loadPage(currentPage,totalPage) {
  }
 $(".pagination").ready(function(){
 	loadPage(${query.currentPage},${query.totalPage});
+	$(".pagination").append("<input name='' value=''/><a class='next'>提交</a>");
 });
 </script>
 </#macro>
