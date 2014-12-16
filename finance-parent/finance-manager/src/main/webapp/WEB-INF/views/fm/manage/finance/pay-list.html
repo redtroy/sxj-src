@@ -57,7 +57,12 @@ function shelve(id){
 }
 //支付
 function pay(id){
-	var creditAmount=$("#pay_info_"+id).find(":input").val();
+	var creditAmount=$("#pay_info_"+id).find(":input[name='financeAmount']").val();
+	var maxPay=$("#pay_info_"+id).find(":input[name='maxPay']").val();
+	if (parseFloat(creditAmount)>parseFloat(maxPay)){
+		alert('支付金额超过融资金额！！');
+		return false;
+	}
 	$.post("pay.htm",{id:id,creditAmount:creditAmount},function(data){
 		 if (data.isOk=="ok"){
 			 $("#pay_info_"+id).slideUp(200);
@@ -154,7 +159,8 @@ function pay(id){
         <div class="modal-body">
           <div class="ly-clearFix">
             <label class="mr5">放款金额</label>
-            <input name="input2" type="text" value="" class="input" />
+            <input type="hidden" name="maxPay" value="${model.financeAmount?string("0.00")}">
+            <input name="financeAmount" type="text" value="" class="input" />
           </div>
           <div class="mt15">
             <button class="button button-red btn-ok mr5" onclick="pay('${model.id}');return false;">确认</button>
