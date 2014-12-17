@@ -297,7 +297,15 @@ function loadUpload(id,url,isMulti,text,fn){
 </#macro> 
 <#macro header>
 <div id="header" class="fence">
-<div class="fence-wide topBox"></div>
+<div class="fence-wide topBox">
+<#if Session.userinfo?exists>
+		<div class="logOut tr pr20 fontYH f14">
+			<#if Session.userinfo.account?exists> ${Session.userinfo.account.name}，您好
+			<#else> ${Session.userinfo.member.name}，您好！
+			</#if> <a href="${basePath}logout.htm">退出当前帐户</a>
+		</div>
+		</#if>
+</div>
 </div>
 </#macro> 
 
@@ -307,23 +315,27 @@ function loadUpload(id,url,isMulti,text,fn){
 </div>
 </#macro>
 <#macro leftMenu isLoad>
+<script>
+$(document).ready(function(){
+	$(".leftMenu li").removeClass("on");
+	$(".leftMenu a").each(function(){
+		var href=window.location.href;
+		if(href.indexOf($(this).attr("href"))>0)
+			$(this).parent().addClass("on");
+	})
+});
+</script>
 <div class="yard-200 ly-left">
 <div class="leftMenu pt5 pb5">
 <h2 class="pl15 fb">会员中心</h2>
 <ul class="pl10 pr10">
-<#if Session.function==1>
-<li class="on"><a href="${basePath}member/info.htm?function=1">会员中心</a></li>
-<#else>
-<li><a href="${basePath}member/info.htm?function=1">会员中心</a></li>
-</#if>
+<li><a href="${basePath}member/info.htm">会员中心</a></li>
 </ul>
 <h2 class="pl15 pt5 fb">融资管理</h2>
 <ul class="pl10 pr10">
-<#if Session.function==2>
-<li class="on"><a href="${basePath}finance/financeList.htm?function=2">融资管理</a></li>
-<#else>
-<li><a href="${basePath}finance/financeList.htm?function=2">融资管理</a></li>
-</#if>
+
+<li><a href="${basePath}finance/financeList.htm">融资管理</a></li>
+
 </ul>
 </div>
 </div>

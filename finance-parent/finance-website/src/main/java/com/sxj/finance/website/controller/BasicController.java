@@ -78,6 +78,14 @@ public class BasicController extends BaseController {
 		return LOGIN;
 	}
 
+	@RequestMapping("logout")
+	public String logout(HttpServletRequest request) {
+		Subject currentUser = SecurityUtils.getSubject();
+		currentUser.logout();
+		return "redirect:" + getBasePath(request) + "to_login.htm";
+
+	}
+
 	@RequestMapping("/autoLogin")
 	public String autoLogin(String member, String token, HttpSession session,
 			HttpServletRequest request, ModelMap map) {

@@ -46,6 +46,13 @@ public class BasicController extends BaseController {
 		}
 	}
 
+	@RequestMapping("logout")
+	public String logout(HttpServletRequest request) {
+		Subject currentUser = SecurityUtils.getSubject();
+		currentUser.logout();
+		return "redirect:" + getBasePath(request) + "to_login.htm";
+	}
+
 	@RequestMapping("login")
 	public String login(String account, String password, HttpSession session,
 			HttpServletRequest request, ModelMap map) {
