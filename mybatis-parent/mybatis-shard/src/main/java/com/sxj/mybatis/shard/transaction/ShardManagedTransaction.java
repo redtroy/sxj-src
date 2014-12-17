@@ -65,13 +65,12 @@ public class ShardManagedTransaction implements Transaction
     
     private void openConnection() throws SQLException
     {
-        connection = ShardDataSourceTrasactionManager.getConnection(dataSource);
+        connection = ShardManagedTransactionManager.getConnection(dataSource);
         if (connection == null)
         {
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
-            ShardDataSourceTrasactionManager.putConnection(dataSource,
-                    connection);
+            ShardManagedTransactionManager.putConnection(dataSource, connection);
         }
     }
     
@@ -103,7 +102,7 @@ public class ShardManagedTransaction implements Transaction
     
     public void close() throws SQLException
     {
-        ShardDataSourceTrasactionManager.closeConnection(dataSource);
+        ShardManagedTransactionManager.closeConnection(dataSource);
     }
     
 }

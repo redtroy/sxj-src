@@ -18,7 +18,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 
 import com.sxj.mybatis.shard.MybatisConfiguration;
 import com.sxj.mybatis.shard.datasource.DataSourceFactory.DataSourceNode;
-import com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager;
+import com.sxj.mybatis.shard.transaction.ShardManagedTransactionManager;
 import com.sxj.spring.modules.util.RegexUtil;
 
 public class DataSourceRouter
@@ -261,7 +261,7 @@ public class DataSourceRouter
         {
             int index = (int) (targetNode.getReadNodes().size() * Math.random());
             if (!isWriteTable(tblName)
-                    && ShardDataSourceTrasactionManager.isCurrentTransactionReadOnly())
+                    && ShardManagedTransactionManager.isCurrentTransactionReadOnly())
             {
                 ds = targetNode.getReadNodes().get(index);
                 System.out.println(lowerSql + "-----------------READ");

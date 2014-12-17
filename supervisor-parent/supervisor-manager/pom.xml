@@ -108,6 +108,10 @@
 					<groupId>com.alibaba</groupId>
 					<artifactId>tools</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>jconsole</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
@@ -197,7 +201,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>  -->
+					<!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
 				</configuration>
 			</plugin>
 		</plugins>

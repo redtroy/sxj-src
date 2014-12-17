@@ -30,6 +30,8 @@ public class DataSourceFactory
     
     private static ApplicationContext context;
     
+    private static boolean initialized = false;
+    
     public static void main(String[] args)
     {
         initDataSources();
@@ -90,6 +92,9 @@ public class DataSourceFactory
     
     public static void initDataSources()
     {
+        if (initialized)
+            return;
+        
         XmlReader.loadShardConfigs();
         //        Map<String, DataSourceCfg> dataSourceCfgs = XmlReader.getDataSources();
         List<DataNodeCfg> dataNodeCfgs = XmlReader.getDataNodes();
@@ -169,7 +174,9 @@ public class DataSourceFactory
         catch (Exception e)
         {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
+        initialized = true;
     }
     
     private static List<String> split(String input, String s)
