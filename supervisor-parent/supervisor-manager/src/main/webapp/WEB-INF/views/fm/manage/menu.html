@@ -2,27 +2,29 @@
 	<h2 class="tit">${model.function.title}</h2>
 	<ul>
 	    <#list model.children as mc>
-	    <#if Session.function==mc.id>
-		<li id="${mc.id}_menu" onclick="changeClass(this);" class="now"><a href="javascript:clickFunction('${basePath}${mc.url}?function=${mc.id}');">${mc.title}</a></li>
-		<#else>
-		<li id="${mc.id}_menu" onclick="changeClass(this);" class=""><a href="javascript:clickFunction('${basePath}${mc.url}?function=${mc.id}');">${mc.title}</a></li>
-		</#if>
+		<li id="${mc.id}_menu" class=""><a url="${mc.url}" href="javascript:clickFunction('${basePath}${mc.url}');">${mc.title}</a></li>
 		</#list>
 	</ul>
 	</#list>
 <script>
-$(document).ready(function($) {
-	var functionId=getUrlParam("function");
-	$("#leftList").find("li").removeClass("now");
-	$("#"+functionId+"_menu").addClass("now");
+$(document).ready(function(){
+	$("#leftList li").removeClass("now");
+	$("#leftList a").each(function(){
+		var href=window.location.href;
+		if(href.indexOf($(this).attr("url").trim())>0){
+			$(this).parent().addClass("now");
+			return false;
+		}			
 	});
+});
+	
 function getUrlParam(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 	var r = window.location.search.substr(1).match(reg);  //匹配目标参数
 	if (r!=null) return unescape(r[2]); return null; //返回参数值
 }
 function clickFunction(url){
-		url=url+"&"+Math.random();
-		window.location.href=url;
+	url=url+"?"+Math.random();
+	window.location.href=url;
 }
 </script>

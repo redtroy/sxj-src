@@ -512,7 +512,7 @@ function loadUpload(id,url,isMulti,text,fn){
 $(document).ready(function(){
 	var currentUrl=window.location.href;
 	var functionId=getUrlParam("function");
-	$.get("${basePath}enter.htm?url="+currentUrl+"&functionId="+functionId);
+	$.get("${basePath}enter.htm?url="+currentUrl);
 });
 
 function getUrlParam(name){

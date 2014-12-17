@@ -126,15 +126,7 @@ public class BasicController extends BaseController {
 				}
 				return "site/member/account-index";
 			} else if (info.getAccount() == null && info.getMember() != null) {
-				String function = request.getParameter("function");
-				if (StringUtils.isNotEmpty(function)) {
-					return "redirect:" + getBasePath(request)
-							+ "member/memberInfo.htm?function=" + function;
-				} else {
-					return "redirect:" + getBasePath(request)
-							+ "member/memberInfo.htm";
-				}
-
+				return "forward:" + "/member/memberInfo.htm";
 			} else {
 				return LOGIN;
 			}
