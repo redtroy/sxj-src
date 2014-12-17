@@ -189,7 +189,6 @@ public class BasicController extends BaseController {
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.logout();
 		return "redirect:" + getBasePath(request) + "to_login.htm";
-
 	}
 
 	/**

@@ -3,22 +3,23 @@
 <h2 class="fontYH f18">
 <span class="${model.function.style}"></span>${model.function.title}</h2>
 <ul>
- <#list model.children as mc>
-<#if Session.function==mc.id>
-<li id="${mc.id}_menu" class="on"><a href="javascript:clickFunction('${basePath}${mc.url}?function=${mc.id}')">${mc.title}</a></li>
-<#else>
-<li id="${mc.id}_menu" class=""><a href="javascript:clickFunction('${basePath}${mc.url}?function=${mc.id}')">${mc.title}</a></li>
-</#if>
+<#list model.children as mc>
+<li id="${mc.id}_menu" class=""><a url="${basePath}${mc.url}" href="javascript:clickFunction('${basePath}${mc.url}')">${mc.title}</a></li>
 </#list>
 </ul>
 </#list>
 </div>
 <script>
-$(document).ready(function($) {
-	var functionId=getUrlParam("function");
-	$("#leftList").find("li").removeClass("on");
-	$("#"+functionId+"_menu").addClass("on");
+$(document).ready(function(){
+	$(".leftMenu li").removeClass("on");
+	$(".leftMenu a").each(function(){
+		var href=window.location.href;
+		if(href.indexOf($(this).attr("url"))>0){
+			$(this).parent().addClass("on");
+			return false;
+		}			
 	});
+});
 function getUrlParam(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 	var r = window.location.search.substr(1).match(reg);  //匹配目标参数
@@ -29,14 +30,13 @@ function clickFunction(url){
 	if(state=='1'){
 		$.get("${basePath}member/checkEditState.htm?"+Math.random(),function(data){
 			if(data){
-				url=url+"&"+Math.random();
+				url=url+"?"+Math.random();
 				window.location.href=url;
 			}else
 				messageInfo("会员未认证，请完善资料！");
 		});
-		
 	}else{
-		url=url+"&"+Math.random();
+		url=url+"?"+Math.random();
 		window.location.href=url;
 	}
 }

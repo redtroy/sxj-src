@@ -50,12 +50,15 @@ public class CometServiceImpl implements BeanFactoryPostProcessor {
 		try {
 			List<String> list = new ArrayList<String>();
 			RSet<String> set = collections.getSet(key);
-			Iterator<String> iterator = set.iterator();
-			if (iterator != null) {
-				while (iterator.hasNext()) {
-					list.add(iterator.next());
+			if (set != null) {
+				Iterator<String> iterator = set.iterator();
+				if (iterator != null) {
+					while (iterator.hasNext()) {
+						list.add(iterator.next());
+					}
 				}
 			}
+
 			return list;
 		} catch (Exception e) {
 			throw new RuntimeException(e);

@@ -472,18 +472,38 @@ function classLoadUpload(text){
 <meta name="renderer" content="webkit">
 <div id="header" class="fence">
 <div class="logo">
-<h1 class="fontYH fence-wide fb">紫金财富金融服务平台<span class="f24 ml10">后台系统</span></h1>
+<h1 class="fontYH fence-wide fb">
+<#if Session.userinfo?exists>
+<p class="ly-right logOut">${Session.userinfo.name}，您好！<a href="${basePath}logout.htm">退出当前帐户</a></p>
+</#if>
+紫金财富金融服务平台<span class="f24 ml10">后台系统</span>
+</h1>
 </div>
 </div>
+
+
 </#macro>
 <#macro leftMenu isLoad>
+<script>
+$(document).ready(function(){
+	$(".leftMenu li").removeClass("on");
+	$(".leftMenu a").each(function(){
+		var href=window.location.href;
+		if(href.indexOf($(this).attr("href"))>0)
+			$(this).parent().addClass("on");
+	})
+});
+</script>
+
 <div class="yard-200 ly-left">
 <div class="leftMenu pt5 pb5">
 <h2 class="pl15 fb">会员中心</h2>
 <ul>
 <li><a href="${basePath}member/memberList.htm">会员管理</a></li>
+</ul>
 <h2 class="pl15 pt5 fb">融资管理</h2>
-<li class="on"><a href="pay-list.html">融资管理</a></li>
+<ul>
+<li class="on"><a href="${basePath}finance/financeList.htm">融资管理</a></li>
 </ul>
 </div>
 </div>
