@@ -34,14 +34,6 @@
 			<version>2.6.9</version>
 		</dependency>
 		<!-- springside -->
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>spring-extension</artifactId>
-		</dependency>
 		<!-- sxj -->
 		<dependency>
 			<groupId>com.sxj</groupId>
@@ -119,8 +111,12 @@
 					<groupId>com.alibaba</groupId>
 					<artifactId>tools</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>jconsole</artifactId>
+				</exclusion>
 			</exclusions>
-
+				
 		</dependency>
 
 		<dependency>
@@ -155,6 +151,10 @@
 			<artifactId>spring-web</artifactId>
 			<version>4.2.3</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-extension</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>supervisor-website</finalName>
@@ -183,7 +183,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<!-- <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
+					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
 				</configuration>
 			</plugin>
 		</plugins>

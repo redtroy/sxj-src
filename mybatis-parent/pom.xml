@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sxj</groupId>
 	<artifactId>mybatis-parent</artifactId>
@@ -8,10 +9,10 @@
 	<modules>
 		<module>mybatis-orm</module>
 		<module>mybatis-pagination</module>
-    <module>mybatis-dialect</module>
-    <module>mybatis-cache</module>
-    <module>mybatis-shard</module>
-  </modules>
+		<module>mybatis-dialect</module>
+		<module>mybatis-cache</module>
+		<module>mybatis-shard</module>
+	</modules>
 	<properties>
 		<mybatis.version>3.2.7</mybatis.version>
 		<spring.version>4.0.6.RELEASE</spring.version>
@@ -42,6 +43,15 @@
 	</dependencyManagement>
 	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<classesDirectory>target/classes/</classesDirectory>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

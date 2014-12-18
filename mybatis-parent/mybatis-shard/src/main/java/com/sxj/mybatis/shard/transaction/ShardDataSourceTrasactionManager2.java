@@ -8,17 +8,21 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.jdbc.datasource.ConnectionHolder;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.sxj.mybatis.shard.session.ShardedSqlSession;
 
-public class ShardDataSourceTrasactionManager extends
+public class ShardDataSourceTrasactionManager2 extends
         AbstractPlatformTransactionManager
 {
     private static final ThreadLocal<Boolean> isReadOnly = new ThreadLocal<Boolean>();
+    
+    private DataSource dataSource;
     
     /**
      * 
@@ -94,6 +98,8 @@ public class ShardDataSourceTrasactionManager extends
     protected Object doGetTransaction() throws TransactionException
     {
         TransactionObject txObject = new TransactionObject();
+        ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(this.dataSource);
+        txObject.setConnectionHolder(conHolder, false);
         return txObject;
     }
     
@@ -179,5 +185,15 @@ public class ShardDataSourceTrasactionManager extends
         if (isReadOnly.get() == null)
             return true;
         return isReadOnly.get();
+    }
+    
+    public DataSource getDataSource()
+    {
+        return dataSource;
+    }
+    
+    public void setDataSource(DataSource dataSource)
+    {
+        this.dataSource = dataSource;
     }
 }
