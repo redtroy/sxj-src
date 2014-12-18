@@ -108,8 +108,11 @@
 					<groupId>com.alibaba</groupId>
 					<artifactId>tools</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>jconsole</artifactId>
+				</exclusion>
 			</exclusions>
-
 		</dependency>
 
 		<dependency>

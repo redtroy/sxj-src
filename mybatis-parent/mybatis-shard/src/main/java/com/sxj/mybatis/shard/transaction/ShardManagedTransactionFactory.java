@@ -25,21 +25,25 @@ import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.springframework.util.Assert;
 
-public class ShardManagedTransactionFactory implements TransactionFactory {
-
-	public Transaction newTransaction(DataSource dataSource,
-			TransactionIsolationLevel level, boolean autoCommit) {
-		Assert.notNull("No DataSource specified");
-		return new ShardManagedTransaction(dataSource);
-	}
-
-	public Transaction newTransaction(Connection conn) {
-		throw new UnsupportedOperationException(
-				"New Spring transactions require a DataSource");
-	}
-
-	public void setProperties(Properties props) {
-		// not needed in this version
-	}
-
+public class ShardManagedTransactionFactory implements TransactionFactory
+{
+    
+    public Transaction newTransaction(DataSource dataSource,
+            TransactionIsolationLevel level, boolean autoCommit)
+    {
+        Assert.notNull("No DataSource specified");
+        return new ShardManagedTransaction(dataSource);
+    }
+    
+    public Transaction newTransaction(Connection conn)
+    {
+        throw new UnsupportedOperationException(
+                "New Spring transactions require a DataSource");
+    }
+    
+    public void setProperties(Properties props)
+    {
+        // not needed in this version
+    }
+    
 }

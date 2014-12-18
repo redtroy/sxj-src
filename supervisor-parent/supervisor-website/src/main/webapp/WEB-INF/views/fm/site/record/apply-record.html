@@ -352,6 +352,37 @@
 			if (!pass)
 				$(this).parent().children(".Validform_wrong").show();
 		})
+		
+		$("#engAddress").bigAutocomplete({
+			url : "${basePath}refContractNo.htm",
+			callback : function(data) {
+				if (data){
+					$("#refContractNo").val(data.result);
+					var pass = cg_validform.check(false, $("#refContractNo"));
+					$(this).parent().children(".Validform_wrong").hide();
+				}
+			},
+			beforeShow : function(data) {
+				var memberNameB = $("#engAddress").val();
+				var match = false;
+				for (var i = 0; i < data.length; i++) {
+					if (data[i].title == memberNameB) {
+						$("#refContractNo").val(data[i].result);
+						match = true;
+					}
+				}
+				if (!match) {
+					$("#refContractNo").val("");
+					var pass = cg_validform.check(false, $("#refContractNo"));
+					if (!pass)
+						$(this).parent().children(".Validform_wrong").show();
+				}
+
+			}
+		});
+		$("#engAddress").keyup(function() {
+			//$("#refContractNo").val("");
+		})
 	});
 </script>
 </head>
@@ -440,9 +471,14 @@
 												nullmsg="请输入正确的乙方名称" />
 										</div>
 										<div class="item">
-											<label>关联招标合同号</label><input class="input input-w240h36"
+											<label>工程地址</label><input class="input input-w240h36" value=""
+												  id="engAddress"
+												name="engAddress" />
+										</div>
+										<div class="item">
+											<label>关联招标合同号</label><input class="input input-w240h36" readonly="readonly"
 												value="" id="refContractNo" name="refContractNo"
-												datatype="ys" nullmsg="请输入招标合同号" errormsg="招标合同号只能用英文+数字"  ajaxurl="getContract.htm"/>
+												datatype="ys" nullmsg="请输入工程地址选择招标合同" errormsg="招标合同号只能用英文+数字"  ajaxurl="getContract.htm"/>
 										</div>
 										<div class="item">
 											<label>&nbsp;</label>

@@ -21,7 +21,7 @@
 	<bean class="com.sxj.mybatis.shard.listener.MybatisMapperProcessor"></bean>
 	<!-- 启动 事务 -->
 	<bean id="transactionManager"
-		class="com.sxj.mybatis.shard.transaction.ShardDataSourceTrasactionManager">
+		class="com.sxj.mybatis.shard.transaction.ShardManagedTransactionManager">
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager"
 		proxy-target-class="true" />
