@@ -688,6 +688,7 @@ public class ContractServiceImpl implements IContractService {
 			condition.addCondition("confirmState", query.getConfirmState());// 确认状态
 			condition.addCondition("state", query.getState());// 合同状态
 			condition.addCondition("memberIdB", query.getMemberIdB());// 签订会员ＩＤ
+			condition.addCondition("engAddress", query.getEngAddress());// 工程地址
 			condition.setPage(query);
 
 			List<ContractEntity> contractList = contractDao

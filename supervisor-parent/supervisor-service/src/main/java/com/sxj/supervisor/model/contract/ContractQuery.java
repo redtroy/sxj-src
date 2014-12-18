@@ -82,6 +82,11 @@ public class ContractQuery extends Pagable implements Serializable {
 	private String memberIdA;
 
 	private String memberIdB;
+	
+	/**
+	 * 工程地址
+	 */
+	private String engAddress;
 
 	public String getMemberIdA() {
 		return memberIdA;
@@ -209,6 +214,14 @@ public class ContractQuery extends Pagable implements Serializable {
 
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+
+	public String getEngAddress() {
+		return engAddress;
+	}
+
+	public void setEngAddress(String engAddress) {
+		this.engAddress = engAddress;
 	}
 
 }

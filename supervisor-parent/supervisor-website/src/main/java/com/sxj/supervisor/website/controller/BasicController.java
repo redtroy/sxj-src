@@ -47,9 +47,12 @@ import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.model.member.MemberQuery;
+import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberLogService;
@@ -87,6 +90,12 @@ public class BasicController extends BaseController {
 	@Autowired
 	private RedisTopics topics;
 
+	/**
+	 * getRecordState 合同service
+	 */
+	@Autowired
+	private IContractService contractService;
+	
 	@PostConstruct
 	public void init() {
 		CometEngine engine = CometContext.getInstance().getEngine();
@@ -369,6 +378,45 @@ public class BasicController extends BaseController {
 		return null;
 	}
 
+	/**
+	 * 获取招标合同号
+	 * @param request
+	 * @param response
+	 * @param keyword
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("refContractNo")
+	public @ResponseBody Map<String, String> getRefContractNo(HttpSession session,
+			HttpServletRequest request, HttpServletResponse response,
+			String keyword) throws IOException {
+		ContractQuery query =new ContractQuery();
+		if (keyword != "" && keyword != null) {
+			query.setEngAddress(keyword);
+		}
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		query.setMemberIdB(userBean.getMember().getMemberNo());
+		List<ContractModel> list = contractService.queryContracts(query);
+		List strlist = new ArrayList();
+		String sb = "";
+		for (ContractModel cm: list) {
+			if(cm!=null){
+				sb = "{\"title\":\"" + cm.getContract().getEngAddress() + "\",\"result\":\""
+						+ cm.getContract().getContractNo() + "\"}";
+				strlist.add(sb);	
+			}
+			
+		}
+		String json = "{\"data\":" + strlist.toString() + "}";
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(json);
+		out.flush();
+		out.close();
+		return null;
+	}
+	
 	/**
 	 * 乙方联想
 	 * 

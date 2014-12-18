@@ -59,6 +59,10 @@
 		<if test="condition.recordNo != null and condition.recordNo != ''">
 			<![CDATA[AND R.RECORD_NO=#{condition.recordNo}]]>
 		</if>
+		<!-- 工程地址 -->
+		<if test="condition.engAddress != null and condition.engAddress != ''">
+			<![CDATA[AND C.ENG_ADDRESS LIKE CONCAT('%',#{condition.engAddress},'%')]]>
+		</if>
 		<!-- 合同签订者 -->
 		<if test="condition.memberName != null and condition.memberName != ''">
 			<![CDATA[AND (C.MEMBER_NAME_A LIKE CONCAT('%',#{condition.memberName},'%') or C.MEMBER_NAME_B LIKE CONCAT('%',#{condition.memberName},'%'))]]>
