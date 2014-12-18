@@ -14,11 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.sxj.mybatis.shard.datasource.DataSourceFactory;
@@ -127,7 +129,6 @@ public class ShardManagedTransactionManager implements
                 TransactionStatus status = txManager.getTransaction(defaultTransactionDefinition);
                 
                 TransactionSynchronizationManager.setCurrentTransactionName(defaultTransactionDefinition.getName());
-                
                 transactionStatus.put(dataSource, status);
             }
         }
@@ -155,10 +156,12 @@ public class ShardManagedTransactionManager implements
                     
                     DataSourceTransactionManager txManager = this.transactionManagers.get(dataSource);
                     
-                    TransactionStatus transactionStatus = ((ShardManagedTransactionStatus) status).get(dataSource);
-                    txManager.commit(transactionStatus);
-                    
-                    log.debug("Commit JDBC transaction success");
+                    DefaultTransactionStatus transactionStatus = (DefaultTransactionStatus) ((ShardManagedTransactionStatus) status).get(dataSource);
+                    if (!transactionStatus.isReadOnly())
+                    {
+                        txManager.commit(transactionStatus);
+                        log.debug("Commit JDBC transaction success");
+                    }
                 }
                 catch (Throwable e)
                 {
@@ -263,12 +266,13 @@ public class ShardManagedTransactionManager implements
     
     public static Connection getConnection(DataSource ds)
     {
-        Map<DataSource, Connection> conns = currentConnections.get();
-        if (conns == null)
-        {
-            return null;
-        }
-        return conns.get(ds);
+        //        Map<DataSource, Connection> conns = currentConnections.get();
+        //        if (conns == null)
+        //        {
+        return DataSourceUtils.getConnection(ds);
+        //        }
+        //        
+        //        return conns.get(ds);
     }
     
     public static void closeConnection(DataSource ds)
@@ -279,10 +283,11 @@ public class ShardManagedTransactionManager implements
             return;
         }
         Connection conn = conns.get(ds);
+        
         conns.remove(ds);
         try
         {
-            conn.close();
+            DataSourceUtils.doCloseConnection(conn, ds);
         }
         catch (SQLException e)
         {
