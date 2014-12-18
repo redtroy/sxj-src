@@ -61,7 +61,7 @@
   	<filter-name>csrfFilter</filter-name>
   	<url-pattern>*.htm</url-pattern>
   </filter-mapping>
-<!--   <filter>
+  <filter>
       <filter-name>DruidWebStatFilter</filter-name>
       <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
       <init-param>
@@ -80,7 +80,7 @@
 <servlet-mapping>
     <servlet-name>DruidStatView</servlet-name>
     <url-pattern>/druid/*</url-pattern>
-</servlet-mapping> -->
+</servlet-mapping>
 	
   <listener>
     <description>Comet4J容器侦听</description>
