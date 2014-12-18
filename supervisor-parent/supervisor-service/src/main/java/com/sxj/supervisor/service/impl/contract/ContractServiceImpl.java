@@ -1051,7 +1051,7 @@ public class ContractServiceImpl implements IContractService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
 	public ContractModel getContractModelByContractNo(String contractNo) {
 		try {
 			if (StringUtils.isEmpty(contractNo)) {
