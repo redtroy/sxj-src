@@ -42,4 +42,9 @@
 		</attribute>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
+	<tag>
+		<name>ajaxenabled</name>
+		<tag-class>com.sxj.web.tag.AjaxEnabledTag</tag-class>
+		<dynamic-attributes>false</dynamic-attributes>
+	</tag>
 </taglib>
