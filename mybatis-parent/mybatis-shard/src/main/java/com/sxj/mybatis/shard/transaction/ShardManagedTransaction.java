@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.transaction.Transaction;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.util.Assert;
 
 /**
@@ -68,9 +69,7 @@ public class ShardManagedTransaction implements Transaction
         connection = ShardManagedTransactionManager.getConnection(dataSource);
         if (connection == null)
         {
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(false);
-            ShardManagedTransactionManager.putConnection(dataSource, connection);
+            throw new SQLException("Cannot get Connection From DataSource!!");
         }
     }
     
@@ -102,7 +101,7 @@ public class ShardManagedTransaction implements Transaction
     
     public void close() throws SQLException
     {
-        ShardManagedTransactionManager.closeConnection(dataSource);
+        DataSourceUtils.doCloseConnection(connection, dataSource);//ShardManagedTransactionManager.closeConnection(dataSource);
     }
     
 }

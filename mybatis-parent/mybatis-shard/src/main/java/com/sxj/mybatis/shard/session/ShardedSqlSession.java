@@ -26,8 +26,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.sxj.mybatis.shard.transaction.ShardManagedTransactionManager;
-
 /**
  * Handles MyBatis SqlSession life cycle. It can register and get SqlSessions
  * from Spring {@code TransactionSynchronizationManager}. Also works if no
@@ -54,24 +52,15 @@ public final class ShardedSqlSession
             PersistenceExceptionTranslator exceptionTranslator)
     {
         
-        SqlSession sess = ShardManagedTransactionManager.getSession(ds);
-        if (sess == null)
-        {
-            sess = sessionFactory.openSession(ds);
-            ShardManagedTransactionManager.putSession(ds, sess);
-        }
-        return sess;
+        return sessionFactory.openSession(ds);
+        //return sess;
     }
     
     public static void closeSqlSession(SqlSession session, DataSource ds)
     {
-        SqlSession sess = ShardManagedTransactionManager.getSession(ds);
-        if (sess == session)
+        if (!TransactionSynchronizationManager.isSynchronizationActive())
         {
-            if (!TransactionSynchronizationManager.isSynchronizationActive())
-            {
-                sess.close();
-            }
+            session.close();
         }
     }
     
