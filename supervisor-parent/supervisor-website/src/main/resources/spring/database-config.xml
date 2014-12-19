@@ -59,7 +59,7 @@
 		<property name="logAbandoned" value="true" />
 
 		<property name="removeAbandonedTimeout">
-			<value>1800</value>
+			<value>5</value>
 		</property>
 		<property name="testWhileIdle">
 			<value>true</value>
@@ -102,10 +102,10 @@
 			<value>${sxj.database.password2}</value>
 		</property>
 		<property name="maxActive">
-			<value>50</value>
+			<value>5</value>
 		</property>
 		<property name="initialSize">
-			<value>5</value>
+			<value>1</value>
 		</property>
 		<property name="maxWait">
 			<value>60000</value>
@@ -127,7 +127,7 @@
 		<property name="logAbandoned" value="true" />
 
 		<property name="removeAbandonedTimeout">
-			<value>1800</value>
+			<value>5</value>
 		</property>
 		<property name="testWhileIdle">
 			<value>true</value>
