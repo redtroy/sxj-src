@@ -34,7 +34,7 @@
 			<value>${sxj.database.password}</value>
 		</property>
 		<property name="maxActive">
-			<value>5</value>
+			<value>3</value>
 		</property>
 		<property name="initialSize">
 			<value>1</value>
