@@ -4,7 +4,7 @@
 							<span class="title fontYH f20 fb">新增子帐号</span>
 		</h1>
 	</div>
-	<form id="add_form" action="javascript:void(0);" method="post">
+	<@csrf.form id="add_form" action="javascript:void(0);" method="post">
 		<div class="contBox">
 			<input id="functionIds_hidden" type="hidden" name="functionIds"
 				value="none" />
@@ -33,7 +33,7 @@
 				<a class="button button-gray" href="javascript:cancel();">取消</a>
 			</div>
 		</div>
-	</form>
+	</@csrf.form>
 <div id="roleInfo_div" class="modal-wrap popDemo dropList"
 	style="display: none;"></div>
 <div class="maskdivgen" style="display: none"></div>
