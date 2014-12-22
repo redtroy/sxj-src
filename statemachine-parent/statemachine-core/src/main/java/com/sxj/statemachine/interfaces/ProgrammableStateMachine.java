@@ -21,9 +21,11 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
 
 import java.util.List;
+
+import com.sxj.statemachine.StateHandler;
 
 /**
  * @author Ben Fagin

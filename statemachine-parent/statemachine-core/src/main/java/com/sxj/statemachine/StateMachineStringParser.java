@@ -26,6 +26,10 @@ package com.sxj.statemachine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sxj.statemachine.exception.ParseException;
+import com.sxj.statemachine.interfaces.FactoryStateMachine;
+import com.sxj.statemachine.interfaces.ProgrammableStateMachine;
+
 /**
  * @author  Benjamin Fagin
  * @version 07-06-2013

@@ -21,7 +21,11 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.impl;
+
+import com.sxj.statemachine.WrappedStateMachine;
+import com.sxj.statemachine.interfaces.FactoryStateMachine;
+import com.sxj.statemachine.interfaces.State;
 
 /**
  * @author Ben Fagin

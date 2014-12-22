@@ -21,16 +21,12 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
 
 /**
- * Provides a simple mechanism to remove callbacks from the
- * {@link StateMachine} instance after they have been attached
- * to a transition, entry action, or exit action.
- *
  * @author Ben Fagin
- * @version 2013-07-07
+ * @version 2013-07-10
  */
-public interface HandlerRegistration {
-	void unregister();
+public interface TransitionHandler<T> {
+	void onTransition(T from, T to);
 }

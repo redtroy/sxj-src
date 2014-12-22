@@ -21,7 +21,10 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
+
+import com.sxj.statemachine.exception.TransitionException;
+import com.sxj.statemachine.impl.EnumStateMachine;
 
 /**
  * Provides methods for controlling a state machine without providing direct access to the

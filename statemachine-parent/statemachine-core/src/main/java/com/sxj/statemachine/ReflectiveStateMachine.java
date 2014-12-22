@@ -28,6 +28,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sxj.statemachine.impl.StringStateMachine;
+import com.sxj.statemachine.interfaces.TransitionHandler;
+
 /**
  * @author Ben Fagin
  * @version 2013-07-15

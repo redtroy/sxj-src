@@ -21,7 +21,7 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.impl;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -35,6 +35,15 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
+
+import com.sxj.statemachine.StateHandler;
+import com.sxj.statemachine.exception.TransitionException;
+import com.sxj.statemachine.interfaces.HandlerRegistration;
+import com.sxj.statemachine.interfaces.SequenceHandler;
+import com.sxj.statemachine.interfaces.State;
+import com.sxj.statemachine.interfaces.StateMachine;
+import com.sxj.statemachine.interfaces.StateRouter;
+import com.sxj.statemachine.interfaces.TransitionHandler;
 
 /**
  * Note that null is a valid state

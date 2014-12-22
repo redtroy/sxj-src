@@ -21,18 +21,29 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
+
 
 /**
- * State interface. Each state in a system should have
- * a unique name.
- *
- * This interface can be applied to any enum class, since
- * they already support a name() method.
- *
  * @author Ben Fagin
  * @version 2013-07-07
  */
-public interface State {
-	String name();
+public interface StateRouter<T> {
+
+	/**
+	 * Given a current state, and the state which has
+	 * been requested, determine whether to allow the
+	 * transition, stop it, or redirect it.
+	 *
+	 * To accomplish this, return the state which should
+	 * be the next state. If no preference, return null.
+	 *
+	 * The first router on a {@link StateMachine} instance
+	 * to return a non-null value 'wins'.
+	 *
+	 * @param current the current state
+	 * @param next the state being requested
+	 * @return the next state, or null if no preference
+	 */
+	T route(T current, T next);
 }

@@ -21,20 +21,19 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.exception;
 
-import java.util.List;
+public class ParseException extends Exception {
 
-/**
- * @author Ben Fagin
- * @version 2013-07-08
- */
-public interface SequenceHandler<T> {
+	public ParseException(String message) {
+		super(message);
+	}
 
-	/**
-	 * Handle a match of the given sequence.
-	 *
-	 * @param pattern the pattern which was matched
-	 */
-	void onMatch(List<T> pattern);
+	public ParseException(Throwable cause) {
+		super(cause);
+	}
+
+	public ParseException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

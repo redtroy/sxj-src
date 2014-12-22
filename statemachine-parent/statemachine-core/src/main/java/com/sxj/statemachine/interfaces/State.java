@@ -21,12 +21,18 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
 
 /**
+ * State interface. Each state in a system should have
+ * a unique name.
+ *
+ * This interface can be applied to any enum class, since
+ * they already support a name() method.
+ *
  * @author Ben Fagin
- * @version 2013-07-10
+ * @version 2013-07-07
  */
-public interface TransitionHandler<T> {
-	void onTransition(T from, T to);
+public interface State {
+	String name();
 }

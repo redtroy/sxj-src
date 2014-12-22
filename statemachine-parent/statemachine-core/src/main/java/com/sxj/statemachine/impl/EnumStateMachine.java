@@ -21,9 +21,13 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.impl;
 
 import java.util.Arrays;
+
+import com.sxj.statemachine.WrappedStateMachine;
+import com.sxj.statemachine.interfaces.FactoryStateMachine;
+import com.sxj.statemachine.interfaces.State;
 
 /**
  * A state machine which runs on enums. Note that null is a valid state

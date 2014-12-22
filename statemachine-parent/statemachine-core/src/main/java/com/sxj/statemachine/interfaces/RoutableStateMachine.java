@@ -21,19 +21,28 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
 
-public class ParseException extends Exception {
 
-	public ParseException(String message) {
-		super(message);
-	}
+/**
+ * @author Ben Fagin
+ * @version 2013-07-08
+ */
+public interface RoutableStateMachine<T> {
 
-	public ParseException(Throwable cause) {
-		super(cause);
-	}
+	/**
+	 * Add a new router to the state machine. Order matters!
+	 * The decision of the first router to return a non-null
+	 * value is honored above the others.
+	 *
+	 * @param router to add
+	 * @return handle for unregistering
+	 */
+	HandlerRegistration routeOnTransition(StateRouter<T> router);
 
-	public ParseException(String message, Throwable cause) {
-		super(message, cause);
-	}
+	HandlerRegistration routeOnTransition(T from, T to, StateRouter<T> router);
+
+	HandlerRegistration routeBeforeEntering(T to, StateRouter<T> router);
+
+	HandlerRegistration routeAfterExiting(T from, StateRouter<T> router);
 }

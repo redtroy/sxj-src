@@ -30,6 +30,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sxj.statemachine.impl.GenericStateMachine;
+import com.sxj.statemachine.interfaces.HandlerRegistration;
+import com.sxj.statemachine.interfaces.SequenceHandler;
+import com.sxj.statemachine.interfaces.State;
+import com.sxj.statemachine.interfaces.StateMachine;
+import com.sxj.statemachine.interfaces.StateRouter;
+import com.sxj.statemachine.interfaces.TransitionHandler;
+
 public abstract class WrappedStateMachine<_Wrapper extends State, _Type>
         implements StateMachine<_Type>
 {
