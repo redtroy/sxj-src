@@ -25,8 +25,6 @@ package com.sxj.statemachine.interfaces;
 
 import java.util.List;
 
-import com.sxj.statemachine.StateHandler;
-
 /**
  * @author Ben Fagin
  * @version 2013-07-07

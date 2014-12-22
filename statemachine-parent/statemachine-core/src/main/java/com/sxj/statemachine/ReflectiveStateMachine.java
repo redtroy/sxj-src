@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.sxj.statemachine.impl.StringStateMachine;
+import com.sxj.statemachine.interfaces.StateHandler;
 import com.sxj.statemachine.interfaces.TransitionHandler;
 
 /**

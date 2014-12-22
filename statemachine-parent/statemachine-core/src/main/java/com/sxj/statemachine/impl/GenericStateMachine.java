@@ -36,11 +36,11 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 
-import com.sxj.statemachine.StateHandler;
 import com.sxj.statemachine.exception.TransitionException;
 import com.sxj.statemachine.interfaces.HandlerRegistration;
 import com.sxj.statemachine.interfaces.SequenceHandler;
 import com.sxj.statemachine.interfaces.State;
+import com.sxj.statemachine.interfaces.StateHandler;
 import com.sxj.statemachine.interfaces.StateMachine;
 import com.sxj.statemachine.interfaces.StateRouter;
 import com.sxj.statemachine.interfaces.TransitionHandler;
