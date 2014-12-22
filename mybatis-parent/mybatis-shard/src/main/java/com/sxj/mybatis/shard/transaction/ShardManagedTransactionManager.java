@@ -9,16 +9,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
-import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.sxj.mybatis.shard.datasource.DataSourceFactory;
@@ -32,10 +33,6 @@ public class ShardManagedTransactionManager implements
     private Map<DataSource, DataSourceTransactionManager> transactionManagers = new HashMap<DataSource, DataSourceTransactionManager>();
     
     private static final ThreadLocal<Boolean> isReadOnly = new ThreadLocal<Boolean>();
-    
-    private static ThreadLocal<Map<DataSource, SqlSession>> currentSessions = new ThreadLocal<Map<DataSource, SqlSession>>();
-    
-    private static ThreadLocal<Map<DataSource, Connection>> currentConnections = new ThreadLocal<Map<DataSource, Connection>>();
     
     /**
      * 统计提交
@@ -127,7 +124,6 @@ public class ShardManagedTransactionManager implements
                 TransactionStatus status = txManager.getTransaction(defaultTransactionDefinition);
                 
                 TransactionSynchronizationManager.setCurrentTransactionName(defaultTransactionDefinition.getName());
-                
                 transactionStatus.put(dataSource, status);
             }
         }
@@ -155,9 +151,8 @@ public class ShardManagedTransactionManager implements
                     
                     DataSourceTransactionManager txManager = this.transactionManagers.get(dataSource);
                     
-                    TransactionStatus transactionStatus = ((ShardManagedTransactionStatus) status).get(dataSource);
+                    DefaultTransactionStatus transactionStatus = (DefaultTransactionStatus) ((ShardManagedTransactionStatus) status).get(dataSource);
                     txManager.commit(transactionStatus);
-                    
                     log.debug("Commit JDBC transaction success");
                 }
                 catch (Throwable e)
@@ -228,65 +223,27 @@ public class ShardManagedTransactionManager implements
         return isReadOnly.get();
     }
     
-    public static void putSession(DataSource ds, SqlSession sqlSession)
+    //    public static void putConnection(DataSource ds, Connection conn)
+    //    {
+    //        Map<DataSource, Connection> conns = currentConnections.get();
+    //        if (conns == null)
+    //        {
+    //            conns = new HashMap<DataSource, Connection>();
+    //            currentConnections.set(conns);
+    //        }
+    //        conns.put(ds, conn);
+    //    }
+    
+    public static Connection getConnection(DataSource ds) throws SQLException
     {
-        
-        Map<DataSource, SqlSession> sessions = currentSessions.get();
-        if (sessions == null)
-        {
-            sessions = new HashMap<DataSource, SqlSession>();
-            currentSessions.set(sessions);
-        }
-        sessions.put(ds, sqlSession);
+        //        Map<DataSource, Connection> conns = currentConnections.get();
+        //        if (conns == null)
+        //        {
+        Connection connection = DataSourceUtils.getConnection(ds);
+        return connection;
+        //        }
+        //        
+        //        return conns.get(ds);
     }
     
-    public static SqlSession getSession(DataSource ds)
-    {
-        Map<DataSource, SqlSession> sessions = currentSessions.get();
-        if (sessions == null)
-        {
-            return null;
-        }
-        return sessions.get(ds);
-    }
-    
-    public static void putConnection(DataSource ds, Connection conn)
-    {
-        Map<DataSource, Connection> conns = currentConnections.get();
-        if (conns == null)
-        {
-            conns = new HashMap<DataSource, Connection>();
-            currentConnections.set(conns);
-        }
-        conns.put(ds, conn);
-    }
-    
-    public static Connection getConnection(DataSource ds)
-    {
-        Map<DataSource, Connection> conns = currentConnections.get();
-        if (conns == null)
-        {
-            return null;
-        }
-        return conns.get(ds);
-    }
-    
-    public static void closeConnection(DataSource ds)
-    {
-        Map<DataSource, Connection> conns = currentConnections.get();
-        if (conns == null)
-        {
-            return;
-        }
-        Connection conn = conns.get(ds);
-        conns.remove(ds);
-        try
-        {
-            conn.close();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

@@ -7,6 +7,8 @@ public class SupervisorShiroRedisCacheManager {
 	private int level = 2;
 
 	public Boolean get(String name, String id) {
+		Object dsadas = HierarchicalCacheManager.get(level, name, id);
+		System.out.println(dsadas);
 		return HierarchicalCacheManager.exists(level, name, id);
 	}
 
