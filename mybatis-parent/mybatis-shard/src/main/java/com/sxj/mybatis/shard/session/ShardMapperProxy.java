@@ -68,6 +68,10 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
         currentDs.set(ds);
         Object result = null;
         //        sqlSession = SqlSessionUtils.getSqlSession(ShardSqlSessionFactory.instance());
+        if (ms.isUseCache())
+            sqlSession = ShardedSqlSession.getSqlSession(ShardSqlSessionFactory.instance(),
+                    ExecutorType.REUSE,
+                    null);
         sqlSession = ShardedSqlSession.getSqlSession(ShardSqlSessionFactory.instance(),
                 ExecutorType.SIMPLE,
                 null);
