@@ -21,14 +21,13 @@
  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ******************************************************************************/
 
-package com.sxj.statemachine;
+package com.sxj.statemachine.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sxj.statemachine.impl.StringStateMachine;
 import com.sxj.statemachine.interfaces.StateHandler;
 import com.sxj.statemachine.interfaces.TransitionHandler;
 
