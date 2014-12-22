@@ -59,7 +59,7 @@
 		<property name="logAbandoned" value="true" />
 
 		<property name="removeAbandonedTimeout">
-			<value>1800</value>
+			<value>60</value>
 		</property>
 		<property name="testWhileIdle">
 			<value>true</value>
@@ -127,7 +127,7 @@
 		<property name="logAbandoned" value="true" />
 
 		<property name="removeAbandonedTimeout">
-			<value>1800</value>
+			<value>60</value>
 		</property>
 		<property name="testWhileIdle">
 			<value>true</value>
