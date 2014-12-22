@@ -101,7 +101,7 @@ public class ShardManagedTransaction implements Transaction
     
     public void close() throws SQLException
     {
-        DataSourceUtils.doCloseConnection(connection, dataSource);//ShardManagedTransactionManager.closeConnection(dataSource);
+        DataSourceUtils.releaseConnection(connection, dataSource);//ShardManagedTransactionManager.closeConnection(dataSource);
     }
     
 }

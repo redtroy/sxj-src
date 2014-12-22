@@ -122,7 +122,6 @@ public class ShardManagedTransactionManager implements
                 
                 PlatformTransactionManager txManager = this.transactionManagers.get(dataSource);
                 TransactionStatus status = txManager.getTransaction(defaultTransactionDefinition);
-                
                 TransactionSynchronizationManager.setCurrentTransactionName(defaultTransactionDefinition.getName());
                 transactionStatus.put(dataSource, status);
             }

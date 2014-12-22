@@ -23,6 +23,7 @@ import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -47,12 +48,14 @@ public final class ShardedSqlSession
         // do nothing
     }
     
-    public static SqlSession getSqlSession(DataSource ds,
+    public static SqlSession getSqlSession(
             ShardSqlSessionFactory sessionFactory, ExecutorType executorType,
             PersistenceExceptionTranslator exceptionTranslator)
     {
         
-        return sessionFactory.openSession(ds);
+        return SqlSessionUtils.getSqlSession(sessionFactory,
+                executorType,
+                exceptionTranslator);
         //return sess;
     }
     
