@@ -69,7 +69,7 @@
 				}
 				var pwd1 = $("#pwd1").val();
 				var pwd2 = $("#pwd2").val();
-				$.post("edit_pwd.htm", {
+				$.post("${basePath}member/edit_pwd.htm", {
 					id : id,
 					password : pwd1
 				}, function(data) {
@@ -179,7 +179,7 @@
 					<label>注册时间</label> ${member.regDate?string("yyyy-MM-dd HH:mm:ss")}
 				</div>
 				<div class="mt15 mb20 tc">
-					<a href="edit_member.htm?id=${member.id}"
+					<a href="${basePath}member/edit_member.htm?id=${member.id}"
 						class="button button-orange mr15">修改会员资料</a><a
 						class="button button-orange btnPassword">修改超级密码</a>
 				</div>

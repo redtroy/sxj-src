@@ -49,9 +49,9 @@
     <filter-name>shiroFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-<<<<<<< .mine <!-- <filter>
-======= <!--<filter>
->>>>>>> .theirs  		<filter-name>csrfFilter</filter-name>
+
+ <!--<filter>
+		<filter-name>csrfFilter</filter-name>
 	  	<filter-class>com.sxj.web.filter.CsrfFilter</filter-class>
 	  	<init-param>
 	  		<param-name>configFile</param-name>
@@ -61,11 +61,9 @@
   <filter-mapping>
   	<filter-name>csrfFilter</filter-name>
   	<url-pattern>*.htm</url-pattern>
-<<<<<<< .mine  </filter-mapping> -->
-<!--   <filter>
-=======  </filter-mapping>  -->
+  </filter-mapping> -->
   <filter>
->>>>>>> .theirs      <filter-name>DruidWebStatFilter</filter-name>
+   <filter-name>DruidWebStatFilter</filter-name>
       <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
       <init-param>
        <param-name>exclusions</param-name>
