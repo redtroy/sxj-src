@@ -69,10 +69,6 @@ ${type[0].getName()}</span>/
 
 </body>
 <script>
-XMLHttpRequest.prototype.onsend = function(data) {
-		this.setRequestHeader("X-Requested-With", "%X_REQUESTED_WITH%")
-		this.setRequestHeader("COM_SXJ_CSRFTOKEN", "%TOKEN_VALUE%");
-};
  var message;
  var reName=true;
  var intDiff = parseInt(59);//倒计时总秒数量

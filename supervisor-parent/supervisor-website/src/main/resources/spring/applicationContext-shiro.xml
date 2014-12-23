@@ -14,8 +14,6 @@
 		http://www.springframework.org/schema/aop/spring-aop.xsd"
 	default-lazy-init="false">
 	<!-- 配置多级缓存 -->
-	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
-		lazy-init="false"></bean>
 	<bean id="myShiroRealmService"
 		class="com.sxj.supervisor.website.login.SupervisorSiteShiroRealm">
 		<property name="authorizationCacheName" value="${website.authorization.cache.name}"></property>

@@ -15,6 +15,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.ExceptionUtil;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.MyBatisExceptionTranslator;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -30,6 +31,7 @@ import com.sxj.mybatis.shard.mapper.ShardMapperMethod;
 
 public class ShardMapperProxy implements InvocationHandler, Serializable
 {
+    private static ThreadLocal<DataSource> currentDs = new ThreadLocal<DataSource>();
     
     private static final long serialVersionUID = -6424540398559729838L;
     
@@ -63,11 +65,11 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
         SqlSession sqlSession = null;
         BoundSql boundSql = ms.getBoundSql(param);
         DataSource ds = DataSourceRouter.getDataSource(ms, boundSql, param);
-        
+        currentDs.set(ds);
         Object result = null;
-        sqlSession = ShardedSqlSession.getSqlSession(ds,
-                ShardSqlSessionFactory.instance(),
-                null,
+        //        sqlSession = SqlSessionUtils.getSqlSession(ShardSqlSessionFactory.instance());
+        sqlSession = ShardedSqlSession.getSqlSession(ShardSqlSessionFactory.instance(),
+                ExecutorType.SIMPLE,
                 null);
         
         try
@@ -217,4 +219,10 @@ public class ShardMapperProxy implements InvocationHandler, Serializable
         }
         return object;
     }
+    
+    public static DataSource getCurrentDs()
+    {
+        return currentDs.get();
+    }
+    
 }

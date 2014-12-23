@@ -43,6 +43,7 @@ import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.entity.member.MemberLogEntity;
+import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
@@ -58,6 +59,7 @@ import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberLogService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.comet.CometMessageListener;
 import com.sxj.supervisor.website.comet.MessageThread;
 import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
@@ -85,6 +87,9 @@ public class BasicController extends BaseController {
 	private IMemberLogService logService;
 
 	@Autowired
+	private IAreaService areaService;
+
+	@Autowired
 	private IStorageClientService storageClientService;
 
 	@Autowired
@@ -95,7 +100,7 @@ public class BasicController extends BaseController {
 	 */
 	@Autowired
 	private IContractService contractService;
-	
+
 	@PostConstruct
 	public void init() {
 		CometEngine engine = CometContext.getInstance().getEngine();
@@ -111,7 +116,7 @@ public class BasicController extends BaseController {
 	}
 
 	@RequestMapping("index")
-	public String ToIndex(HttpServletRequest request) {
+	public String ToIndex(HttpServletRequest request, ModelMap map) {
 		HttpSession session = request.getSession(false);
 		if (session == null || session.getAttribute("userinfo") == null) {
 			return LOGIN;
@@ -135,7 +140,14 @@ public class BasicController extends BaseController {
 				}
 				return "site/member/account-index";
 			} else if (info.getAccount() == null && info.getMember() != null) {
-				return "forward:" + "/member/memberInfo.htm";
+				List<AreaEntity> cityList = areaService.getChildrenAreas("32");
+				map.put("cityList", cityList);
+				map.put("member", info.getMember());
+				if (info.getMember().getFlag()) {
+					return "site/member/member-profile";
+				} else {
+					return "site/member/edit-member";
+				}
 			} else {
 				return LOGIN;
 			}
@@ -372,6 +384,7 @@ public class BasicController extends BaseController {
 
 	/**
 	 * 获取招标合同号
+	 * 
 	 * @param request
 	 * @param response
 	 * @param keyword
@@ -379,10 +392,10 @@ public class BasicController extends BaseController {
 	 * @throws IOException
 	 */
 	@RequestMapping("refContractNo")
-	public @ResponseBody Map<String, String> getRefContractNo(HttpSession session,
-			HttpServletRequest request, HttpServletResponse response,
-			String keyword) throws IOException {
-		ContractQuery query =new ContractQuery();
+	public @ResponseBody Map<String, String> getRefContractNo(
+			HttpSession session, HttpServletRequest request,
+			HttpServletResponse response, String keyword) throws IOException {
+		ContractQuery query = new ContractQuery();
 		if (keyword != "" && keyword != null) {
 			query.setEngAddress(keyword);
 		}
@@ -392,13 +405,14 @@ public class BasicController extends BaseController {
 		List<ContractModel> list = contractService.queryContracts(query);
 		List strlist = new ArrayList();
 		String sb = "";
-		for (ContractModel cm: list) {
-			if(cm!=null){
-				sb = "{\"title\":\"" + cm.getContract().getEngAddress() + "\",\"result\":\""
-						+ cm.getContract().getContractNo() + "\"}";
-				strlist.add(sb);	
+		for (ContractModel cm : list) {
+			if (cm != null) {
+				sb = "{\"title\":\"" + cm.getContract().getEngAddress()
+						+ "\",\"result\":\"" + cm.getContract().getContractNo()
+						+ "\"}";
+				strlist.add(sb);
 			}
-			
+
 		}
 		String json = "{\"data\":" + strlist.toString() + "}";
 		response.setCharacterEncoding("UTF-8");
@@ -408,7 +422,7 @@ public class BasicController extends BaseController {
 		out.close();
 		return null;
 	}
-	
+
 	/**
 	 * 乙方联想
 	 * 

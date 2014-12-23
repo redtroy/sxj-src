@@ -393,9 +393,10 @@ public class RecordController extends BaseController {
 			String recordId, HttpSession session, String message)
 			throws WebException {
 		try {
-
-			SupervisorPrincipal member = (SupervisorPrincipal) session
-					.getAttribute("userinfo");
+			SupervisorPrincipal member = getLoginInfo(session);
+			if (member == null) {
+				return LOGIN;
+			}
 			ContractModel contract = contractService
 					.getContractModelByContractNo(contractNo);
 			ContractModel contractModel = new ContractModel();
@@ -495,8 +496,8 @@ public class RecordController extends BaseController {
 			Map<String, String> map = new HashMap<String, String>();
 			SupervisorPrincipal member = (SupervisorPrincipal) session
 					.getAttribute("userinfo");
-			int size = contractService.getContractByZhaobiaoContractNo(
-					param, member.getMember().getMemberNo());
+			int size = contractService.getContractByZhaobiaoContractNo(param,
+					member.getMember().getMemberNo());
 			if (size == 0) {
 				map.put("status", "n");
 				map.put("info", "请输入正确的招标合同号");

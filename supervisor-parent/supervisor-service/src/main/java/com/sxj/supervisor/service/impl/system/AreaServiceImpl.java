@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.system.IAreaDao;
 import com.sxj.supervisor.entity.system.AreaEntity;
@@ -18,6 +19,7 @@ public class AreaServiceImpl implements IAreaService {
 	private IAreaDao areaDao;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<AreaEntity> getChildrenAreas(String parentId)
 			throws ServiceException {
 		try {

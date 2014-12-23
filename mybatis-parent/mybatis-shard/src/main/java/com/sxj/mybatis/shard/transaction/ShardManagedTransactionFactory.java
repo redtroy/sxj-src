@@ -22,10 +22,11 @@ import javax.sql.DataSource;
 
 import org.apache.ibatis.session.TransactionIsolationLevel;
 import org.apache.ibatis.transaction.Transaction;
-import org.apache.ibatis.transaction.TransactionFactory;
+import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.springframework.util.Assert;
 
-public class ShardManagedTransactionFactory implements TransactionFactory
+public class ShardManagedTransactionFactory extends
+        SpringManagedTransactionFactory
 {
     
     public Transaction newTransaction(DataSource dataSource,
