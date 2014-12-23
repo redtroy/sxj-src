@@ -26,7 +26,7 @@ import com.sxj.statemachine.interfaces.StateMachineStrategy;
  * Basic state machine implementation. Implements a non-reentrant transition
  * strategy
  */
-public class StateMachineImpl implements StateMachine
+public class StateMachineImpl implements IStateMachine
 {
     protected Logger l = LoggerFactory.getLogger(getClass());
     

@@ -18,7 +18,7 @@ package com.sxj.statemachine.interfaces;
 import java.util.List;
 import java.util.Set;
 
-import com.sxj.statemachine.StateMachine;
+import com.sxj.statemachine.IStateMachine;
 import com.sxj.statemachine.annotations.EnterState;
 import com.sxj.statemachine.exceptions.StateMachineException;
 
@@ -51,7 +51,7 @@ import com.sxj.statemachine.exceptions.StateMachineException;
  * {@link TransitionController} and {@link ExitStateController} for further details</li>
  * 
  * <li>We keep the definition of the state machine separated from the execution,
- *     which happens in the {@link StateMachine} object.</li>
+ *     which happens in the {@link IStateMachine} object.</li>
  *     
  * <li>You can create a state machine from a {@link StateMachineDefinition} invoking
  *     {@link com.sxj.statemachine.StateMachines#newReentrant(StateMachineDefinition)} or

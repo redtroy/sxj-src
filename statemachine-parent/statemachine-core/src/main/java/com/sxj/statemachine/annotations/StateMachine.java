@@ -25,5 +25,5 @@ import java.lang.annotation.Target;
 /**
  * All state machine classes must be annotated with it. Just to have some discipline about them :-)
  */
-public @interface AStateMachine {
+public @interface StateMachine {
 }

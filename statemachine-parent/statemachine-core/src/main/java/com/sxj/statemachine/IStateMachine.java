@@ -56,7 +56,7 @@ import com.sxj.statemachine.interfaces.StateMachineDefinition;
  *     for that</li>
  * </ul>
  */
-public interface StateMachine
+public interface IStateMachine
 {
     /**
      * Returns the current state of the state machine

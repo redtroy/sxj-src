@@ -23,11 +23,11 @@ import java.lang.reflect.Modifier;
 
 import org.slf4j.Logger;
 
-import com.sxj.statemachine.annotations.AStateMachine;
 import com.sxj.statemachine.annotations.EnterState;
 import com.sxj.statemachine.annotations.Event;
 import com.sxj.statemachine.annotations.ExitState;
 import com.sxj.statemachine.annotations.State;
+import com.sxj.statemachine.annotations.StateMachine;
 import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.annotations.Transitions;
 import com.sxj.statemachine.exceptions.StateMachineException;
@@ -40,32 +40,32 @@ import com.sxj.statemachine.strategy.ReentrantStrategy;
  * from an annotated class.
  * 
  * <p>
- * The annotated class must be annotated with {@link AStateMachine}
+ * The annotated class must be annotated with {@link StateMachine}
  */
 public class StateMachines
 {
     protected static Logger l = getLogger(StateMachines.class);
     
-    public static StateMachine newReentrant(StateMachineDefinition definition)
+    public static IStateMachine newReentrant(StateMachineDefinition definition)
             throws StateMachineException
     {
         return new StateMachineImpl(definition, new ReentrantStrategy());
     }
     
-    public static StateMachine newReentrant(Object instance)
+    public static IStateMachine newReentrant(Object instance)
             throws StateMachineException
     {
         return new StateMachineImpl(processAnnotatedController(instance),
                 new ReentrantStrategy());
     }
     
-    public static StateMachine newNonReentrant(StateMachineDefinition definition)
-            throws StateMachineException
+    public static IStateMachine newNonReentrant(
+            StateMachineDefinition definition) throws StateMachineException
     {
         return new StateMachineImpl(definition, new NonReentrantStrategy());
     }
     
-    public static StateMachine newNonReentrant(Object instance)
+    public static IStateMachine newNonReentrant(Object instance)
             throws StateMachineException
     {
         return new StateMachineImpl(processAnnotatedController(instance),
@@ -76,7 +76,7 @@ public class StateMachines
             Object instance) throws StateMachineException
     {
         Class<?> clazz = instance.getClass();
-        if (!clazz.isAnnotationPresent(com.sxj.statemachine.annotations.AStateMachine.class))
+        if (!clazz.isAnnotationPresent(com.sxj.statemachine.annotations.StateMachine.class))
         {
             throw new StateMachineException(
                     "All state machines must be annotated with the @AStateMachine annotation");

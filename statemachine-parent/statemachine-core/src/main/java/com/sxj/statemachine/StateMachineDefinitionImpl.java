@@ -49,7 +49,7 @@ import com.sxj.statemachine.interfaces.TransitionController;
  * Some constraints of the model:
  * <ul>
  * <li>A state machine must have an initial state. If not, the
- * {@link StateMachine} will throw an exception when trying to instantiate it.</li>
+ * {@link IStateMachine} will throw an exception when trying to instantiate it.</li>
  * <li>A state machine might have multiple finish states. Finish states have
  * additional checkings that do not allow creating transitions to other states.
  * Only reflexive transitions are allowed</li>
