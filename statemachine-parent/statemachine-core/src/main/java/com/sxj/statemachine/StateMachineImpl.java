@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sxj.statemachine.exceptions.StateMachineException;
+import com.sxj.statemachine.interfaces.IStateMachine;
 import com.sxj.statemachine.interfaces.StateMachineDefinition;
 import com.sxj.statemachine.interfaces.StateMachineStrategy;
 

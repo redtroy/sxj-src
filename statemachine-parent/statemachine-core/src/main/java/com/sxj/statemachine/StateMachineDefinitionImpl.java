@@ -35,6 +35,7 @@ import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.exceptions.StateMachineException;
 import com.sxj.statemachine.interfaces.EnterStateController;
 import com.sxj.statemachine.interfaces.ExitStateController;
+import com.sxj.statemachine.interfaces.IStateMachine;
 import com.sxj.statemachine.interfaces.StateMachineDefinition;
 import com.sxj.statemachine.interfaces.TransitionController;
 

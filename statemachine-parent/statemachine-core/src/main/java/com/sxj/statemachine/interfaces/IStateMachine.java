@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
 
+import com.sxj.statemachine.StateMachines;
 import com.sxj.statemachine.exceptions.StateMachineException;
-import com.sxj.statemachine.interfaces.EnterStateController;
-import com.sxj.statemachine.interfaces.StateMachineDefinition;
 
 /**
  * We keep the definition of the state machine in the {@link StateMachineDefinition} 

@@ -1,18 +1,3 @@
-/*  
- * Copyright 2012-2013 xavi.ferro
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.sxj.statemachine;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -31,6 +16,7 @@ import com.sxj.statemachine.annotations.StateMachine;
 import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.annotations.Transitions;
 import com.sxj.statemachine.exceptions.StateMachineException;
+import com.sxj.statemachine.interfaces.IStateMachine;
 import com.sxj.statemachine.interfaces.StateMachineDefinition;
 import com.sxj.statemachine.strategy.NonReentrantStrategy;
 import com.sxj.statemachine.strategy.ReentrantStrategy;
@@ -42,7 +28,7 @@ import com.sxj.statemachine.strategy.ReentrantStrategy;
  * <p>
  * The annotated class must be annotated with {@link StateMachine}
  */
-public class StateMachines
+public class StateMachines<S, E>
 {
     protected static Logger l = getLogger(StateMachines.class);
     
@@ -72,7 +58,7 @@ public class StateMachines
                 new NonReentrantStrategy());
     }
     
-    static void checkClassAnnotation(StateMachineDefinition definition,
+    private static void checkClassAnnotation(StateMachineDefinition definition,
             Object instance) throws StateMachineException
     {
         Class<?> clazz = instance.getClass();
@@ -83,7 +69,7 @@ public class StateMachines
         }
     }
     
-    static StateMachineDefinitionImpl checkFieldAnnotations(
+    private static StateMachineDefinitionImpl checkFieldAnnotations(
             StateMachineDefinitionImpl stateMachineDefinition, Object instance)
             throws StateMachineException
     {
@@ -109,7 +95,7 @@ public class StateMachines
         return stateMachineDefinition;
     }
     
-    static private StateMachineDefinition processAnnotatedController(
+    private static StateMachineDefinition processAnnotatedController(
             Object instance) throws StateMachineException
     {
         StateMachineDefinitionImpl stateMachineDefinition = new StateMachineDefinitionImpl();
@@ -121,7 +107,7 @@ public class StateMachines
         return stateMachineDefinition;
     }
     
-    static void checkTransitionAnnotations(
+    private static void checkTransitionAnnotations(
             StateMachineDefinitionImpl definition, Object instance)
             throws StateMachineException
     {
@@ -162,8 +148,8 @@ public class StateMachines
         }
     }
     
-    static void checkGenericTransitionHasTheRightParameters(Method method)
-            throws StateMachineException
+    private static void checkGenericTransitionHasTheRightParameters(
+            Method method) throws StateMachineException
     {
         Class<?> paramTypes[] = method.getParameterTypes();
         if (paramTypes == null || paramTypes.length != 1
@@ -174,7 +160,7 @@ public class StateMachines
                             + " is not well defined. It should have one and only TransitionEvent paramter");
     }
     
-    static void checkEnterStateAnnotation(Object instance,
+    private static void checkEnterStateAnnotation(Object instance,
             StateMachineDefinitionImpl definition, Method method, EnterState ann)
             throws StateMachineException
     {
@@ -195,7 +181,7 @@ public class StateMachines
         definition.defineEnterState(ann, method, instance);
     }
     
-    static void checkExitStateAnnotation(Object instance,
+    private static void checkExitStateAnnotation(Object instance,
             StateMachineDefinitionImpl definition, Method method, ExitState ann)
             throws StateMachineException
     {
@@ -215,7 +201,7 @@ public class StateMachines
         definition.defineExitState(ann, method, instance);
     }
     
-    static private void checkStateAnnotation(Object instance,
+    private static void checkStateAnnotation(Object instance,
             StateMachineDefinitionImpl definition, Field field, State ann)
             throws StateMachineException
     {
@@ -235,7 +221,7 @@ public class StateMachines
         }
     }
     
-    static private void checkEventAnnotation(Object instance,
+    private static void checkEventAnnotation(Object instance,
             StateMachineDefinitionImpl definition, Field field, Event ann)
             throws StateMachineException
     {
@@ -263,7 +249,7 @@ public class StateMachines
     /*
      * TODO. Define a set of tests for this functionality
      */
-    static private void checkTransitionAnnotation(Object instance,
+    private static void checkTransitionAnnotation(Object instance,
             StateMachineDefinitionImpl stateMachineDefinition, Method method,
             Transition ann) throws StateMachineException
     {
@@ -277,7 +263,7 @@ public class StateMachines
      * 
      * @return true if it conforms the condition, false otherwise.
      */
-    static private boolean isStringAndFinal(Field field)
+    private static boolean isStringAndFinal(Field field)
     {
         return (field.getType().equals(String.class)
                 && Modifier.isFinal(field.getModifiers()) && Modifier.isPublic(field.getModifiers()));

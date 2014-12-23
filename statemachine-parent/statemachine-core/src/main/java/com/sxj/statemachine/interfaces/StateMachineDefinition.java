@@ -18,7 +18,6 @@ package com.sxj.statemachine.interfaces;
 import java.util.List;
 import java.util.Set;
 
-import com.sxj.statemachine.IStateMachine;
 import com.sxj.statemachine.annotations.EnterState;
 import com.sxj.statemachine.exceptions.StateMachineException;
 
