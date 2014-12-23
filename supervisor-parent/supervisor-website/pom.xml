@@ -177,7 +177,7 @@
 					<type>jar</type>
 					<outputDirectory>${project.build.directory}/extlib</outputDirectory>
 				</configuration>
-			</plugin>
+			</plugin> 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
