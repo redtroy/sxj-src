@@ -334,7 +334,7 @@ Intense( elements );
           <td><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <td><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <#if (member.checkState.id==0)>
-          <td><a class="btn btn-gray" onclick="editCheckState('${member.id}',1,'${member.flag?string}')"><span>审核</span></a></td>
+          <td><a class="btn btn-gray" onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
           <#elseif (member.checkState.id==1)>
           <td><a class="btn  btn-green" onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
           <#elseif (member.checkState.id==2)>
