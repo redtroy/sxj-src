@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
 
 import java.util.List;
 import java.util.Set;
 
+import com.sxj.statemachine.StateMachine;
 import com.sxj.statemachine.annotations.EnterState;
-import com.sxj.statemachine.exceptions.StateNotDefinedException;
-import com.sxj.statemachine.exceptions.TransitionNotDefinedException;
+import com.sxj.statemachine.exceptions.StateMachineException;
 
 /**
  * Allows defining the state machine. Read the README file for further
@@ -56,7 +56,7 @@ import com.sxj.statemachine.exceptions.TransitionNotDefinedException;
  * <li>You can create a state machine from a {@link StateMachineDefinition} invoking
  *     {@link com.sxj.statemachine.StateMachines#newReentrant(StateMachineDefinition)} or
  *     {@link com.sxj.statemachine.StateMachines#newNonReentrant(StateMachineDefinition)}.
- *     Check {@link com.sxj.statemachine.StateMachineStrategy} to understand the difference
+ *     Check {@link com.sxj.statemachine.interfaces.StateMachineStrategy} to understand the difference
  *     between both.</li>
  * 
  * <p>
@@ -70,56 +70,57 @@ import com.sxj.statemachine.exceptions.TransitionNotDefinedException;
  * from the {@link EnterState} phase</li>
  * </ul>
  */
-public interface StateMachineDefinition {
+public interface StateMachineDefinition
+{
     /**
      * Is it an already define state?
      */
     public boolean isState(String state);
-
+    
     /**
      * Is the one and only state?
      */
     public boolean isStartState(String state);
-
+    
     /**
      * Is an Final state?
      */
     public boolean isFinalState(String state);
-
+    
     /**
      * Returns a copy of the list of states
      */
     public List<String> getStates();
-
+    
     /**
      * Returns the list of states that have been marked as Final ones
      */
     public List<String> getFinalStates();
-
+    
     /**
      * Returns the start state of the state machine. There can only be one
      */
     public String getStartState();
-
+    
     /**
      * Is it an already defined event?
      */
     public boolean isEvent(String event);
-
+    
     /**
      * Returns a copy of the list of all the events
      */
     public Set<String> getEvents();
-
+    
     /**
      * Returns a copy of all the events that could be applied to
      * <code>state</code>
      */
     public List<String> getApplicableEvents(String state);
-
+    
     /**
      * Returns the state we reach for the specified source state and event
      */
-    public String getTargetState(String source, String event) throws TransitionNotDefinedException,
-            StateNotDefinedException;
+    public String getTargetState(String source, String event)
+            throws StateMachineException;
 }

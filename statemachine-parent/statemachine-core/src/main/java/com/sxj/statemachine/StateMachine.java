@@ -15,8 +15,9 @@
  */
 package com.sxj.statemachine;
 
-import com.sxj.statemachine.exceptions.StateMachineDefinitionException;
-import com.sxj.statemachine.exceptions.StateMachineExecutionException;
+import com.sxj.statemachine.exceptions.StateMachineException;
+import com.sxj.statemachine.interfaces.EnterStateController;
+import com.sxj.statemachine.interfaces.StateMachineDefinition;
 
 /**
  * We keep the definition of the state machine in the {@link StateMachineDefinition} 
@@ -55,20 +56,21 @@ import com.sxj.statemachine.exceptions.StateMachineExecutionException;
  *     for that</li>
  * </ul>
  */
-public interface StateMachine {
+public interface StateMachine
+{
     /**
      * Returns the current state of the state machine
      */
     public String getCurrentState();
-
+    
     /**
      * Returns the state machine definition
      */
     public StateMachineDefinition getDefinition();
-
+    
     /**
      * Consumes an event following the selected strategy.
      */
-    public void processEvent(String event, Object object) throws StateMachineExecutionException,
-            StateMachineDefinitionException;
+    public void processEvent(String event, Object object)
+            throws StateMachineException;
 }

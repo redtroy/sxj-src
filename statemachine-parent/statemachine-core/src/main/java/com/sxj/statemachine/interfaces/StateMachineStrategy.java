@@ -12,16 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
-package com.sxj.statemachine;
+ */
+package com.sxj.statemachine.interfaces;
 
-import com.sxj.statemachine.exceptions.EventNotDefinedException;
-import com.sxj.statemachine.exceptions.ReentrantTransitionNotAllowed;
-import com.sxj.statemachine.exceptions.StateMachineDefinitionException;
-import com.sxj.statemachine.exceptions.StateMachineExecutionException;
-import com.sxj.statemachine.exceptions.TransitionNotDefinedException;
+import com.sxj.statemachine.StateMachineImpl;
+import com.sxj.statemachine.exceptions.StateMachineException;
 
-public interface StateMachineStrategy {
+public interface StateMachineStrategy
+{
     /**
      * Checks that current event is allowed for the current state. That means that a
      * transition has been defined for this state machine.
@@ -43,8 +41,6 @@ public interface StateMachineStrategy {
      * @throws ReentrantTransitionNotAllowed
      * @throws TransitionNotDefinedException
      */
-    public void processEvent(StateMachineImpl statemachine,
-                             String event,
-                             Object object)
-        throws StateMachineExecutionException, StateMachineDefinitionException;
+    public void processEvent(StateMachineImpl statemachine, String event,
+            Object object) throws StateMachineException;
 }

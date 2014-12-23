@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */   
-package com.sxj.statemachine.exceptions;
+package com.sxj.statemachine.interfaces;
 
-public class IllegalEventAnnotationException extends IllegalAnnotationException {
-    private static final long serialVersionUID = 1L;
+import com.sxj.statemachine.TransitionInfo;
 
-    public IllegalEventAnnotationException(String msg) {
-        super(msg);
-    }
+/**
+ * It corresponds to the transition phase itself. It's where most of the work shoul be done,
+ * unless you have very specific needs.
+ */
+public interface TransitionController {
+    void execute(TransitionInfo event);
 }

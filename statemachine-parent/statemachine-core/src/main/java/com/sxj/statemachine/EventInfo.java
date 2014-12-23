@@ -15,6 +15,8 @@
  */   
 package com.sxj.statemachine;
 
+import com.sxj.statemachine.interfaces.EnterStateController;
+
 /**
  * <p>Contains all information required for processing an event in a state machine. An event
  * is defined by an event identifier and an object -it might be null- that will be useful

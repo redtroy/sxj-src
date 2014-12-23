@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package com.sxj.statemachine.exceptions;
+package com.sxj.statemachine.interfaces;
 
-public class StateMachineExecutionException extends StateMachineException {
-    private static final long serialVersionUID = 1L;
-    public StateMachineExecutionException(String msg) {
-        super(msg);
-    }
+import com.sxj.statemachine.TransitionInfo;
+
+/**
+ * The only transition phase that we could cancel the transition if we return
+ * false
+ */
+public interface ExitStateController {
+    /**
+     * If we return <code>false</code> we will cancel the transition
+     * 
+     * @return returns a boolean for continuing the transition or not.
+     */
+    Boolean execute(TransitionInfo event);
 }

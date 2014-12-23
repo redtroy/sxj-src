@@ -20,17 +20,15 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.LoggerFactory;
 
-import com.sxj.statemachine.EnterStateController;
 import com.sxj.statemachine.EventInfo;
-import com.sxj.statemachine.ExitStateController;
 import com.sxj.statemachine.StateMachineDefinitionImpl;
 import com.sxj.statemachine.StateMachineImpl;
-import com.sxj.statemachine.StateMachineStrategy;
-import com.sxj.statemachine.TransitionController;
 import com.sxj.statemachine.TransitionInfo;
-import com.sxj.statemachine.exceptions.EventNotDefinedException;
-import com.sxj.statemachine.exceptions.ReentrantTransitionNotAllowed;
-import com.sxj.statemachine.exceptions.StateMachineDefinitionException;
+import com.sxj.statemachine.exceptions.StateMachineException;
+import com.sxj.statemachine.interfaces.EnterStateController;
+import com.sxj.statemachine.interfaces.ExitStateController;
+import com.sxj.statemachine.interfaces.StateMachineStrategy;
+import com.sxj.statemachine.interfaces.TransitionController;
 
 /**
  * Single-thread implementation which user can configure whether it allows reentrant 
@@ -63,13 +61,11 @@ public class ReentrantStrategy implements StateMachineStrategy
     }
     
     public void processEvent(StateMachineImpl statemachine, String event,
-            Object object) throws ReentrantTransitionNotAllowed,
-            StateMachineDefinitionException
+            Object object) throws StateMachineException
     {
         StateMachineDefinitionImpl stateMachineDefinition = (StateMachineDefinitionImpl) statemachine.getDefinition();
         if (!stateMachineDefinition.isEvent(event))
-            throw new EventNotDefinedException("Event " + event
-                    + " not defined");
+            throw new StateMachineException("Event " + event + " not defined");
         
         try
         {
@@ -81,7 +77,7 @@ public class ReentrantStrategy implements StateMachineStrategy
             {
                 if (inTransition)
                 {
-                    throw new ReentrantTransitionNotAllowed(
+                    throw new StateMachineException(
                             "Reentrance from the same thread is not allowed");
                 }
                 else

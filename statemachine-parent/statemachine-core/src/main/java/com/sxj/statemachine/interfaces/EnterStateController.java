@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package com.sxj.statemachine;
+package com.sxj.statemachine.interfaces;
+
+import com.sxj.statemachine.EventInfo;
+import com.sxj.statemachine.TransitionInfo;
 
 /**
  * Corresponds to the enter state phase. During this phase, the state machine allows
