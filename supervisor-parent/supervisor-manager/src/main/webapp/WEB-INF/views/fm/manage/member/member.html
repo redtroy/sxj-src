@@ -127,7 +127,7 @@ function close_img(){
    //更改账户状态
    function editState(id,state){
 	   dialogBox(function(index){
-		   $.post("editState.htm",{id:id,state:state},function(data){
+		   $.post("${basePath}member/editState.htm",{id:id,state:state},function(data){
 			   layer.close(index);
 				  if (data.isOK=='ok'){
 					  succInfo(function(){
