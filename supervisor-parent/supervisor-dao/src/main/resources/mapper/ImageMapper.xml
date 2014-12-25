@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.IImageDao">
+	<resultMap id="ImageResultMap" type="com.sxj.supervisor.entity.ImageEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="md5" column="MD5" jdbcType="VARCHAR" />
+		<result property="imageId" column="IMAGE_ID" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 系统功能高级查询 -->
+	<select id="getImage" resultMap="ImageResultMap"
+		parameterType="String">
+		<![CDATA[SELECT ID,MD5,IMAGE_ID,STATE 
+		 FROM M_IMAGE WHERE MD5=#{md5}]]>
+	</select>
+</mapper>

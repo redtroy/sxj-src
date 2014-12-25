@@ -12,6 +12,7 @@ import com.sxj.supervisor.dao.member.IMemberFunctionDao;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -77,6 +78,9 @@ public class MemberFunctionServiceImpl implements IMemberFunctionService {
 	public MemberFunctionEntity getFunction(String functionId)
 			throws ServiceException {
 		try {
+			if (StringUtils.isEmpty(functionId)) {
+				return null;
+			}
 			MemberFunctionEntity function = functionDao.getFunction(functionId);
 			return function;
 		} catch (Exception e) {
