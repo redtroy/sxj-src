@@ -25,7 +25,7 @@ import com.sxj.statemachine.interfaces.TransitionController;
 
 public class StateMachineDefinitionImpl implements StateMachineDefinition
 {
-    private static Logger l = LoggerFactory.getLogger(StateMachineDefinitionImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(StateMachineDefinitionImpl.class);
     
     private String startState;
     
@@ -79,7 +79,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
                     + " already defined in the state machine");
         
         events.add(event);
-        l.debug("#defineEvent succeed for event id " + event);
+        logger.debug("#defineEvent succeed for event id " + event);
     }
     
     public Set<String> getEvents()
@@ -119,7 +119,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
             states.put(state, new State(state, isStart, isFinal));
         }
         
-        l.debug("#defineState succeed for state id " + state);
+        logger.debug("#defineState succeed for state id " + state);
         
         if (isStart)
             this.startState = state;
@@ -189,15 +189,15 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
                         }
                         catch (IllegalAccessException e)
                         {
-                            l.error("This should never happen");
+                            logger.error("This should never happen");
                         }
                         catch (IllegalArgumentException e)
                         {
-                            l.error("This should never happen");
+                            logger.error("This should never happen");
                         }
                         catch (InvocationTargetException swallow)
                         {
-                            l.error("Exceptions should be treated in the controller. Swallowing it",
+                            logger.error("Exceptions should be treated in the controller. Swallowing it",
                                     swallow);
                         }
                     }
@@ -233,15 +233,15 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
                 }
                 catch (IllegalAccessException e)
                 {
-                    l.error("This should never happen");
+                    logger.error("This should never happen");
                 }
                 catch (IllegalArgumentException e)
                 {
-                    l.error("This should never happen");
+                    logger.error("This should never happen");
                 }
                 catch (InvocationTargetException swallow)
                 {
-                    l.error("Exceptions should be treated in the controller. Swallowing it",
+                    logger.error("Exceptions should be treated in the controller. Swallowing it",
                             swallow);
                 }
                 return result;
@@ -270,15 +270,15 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
                 }
                 catch (IllegalAccessException e)
                 {
-                    l.error("This should never happen");
+                    logger.error("This should never happen");
                 }
                 catch (IllegalArgumentException e)
                 {
-                    l.error("This should never happen");
+                    logger.error("This should never happen");
                 }
                 catch (InvocationTargetException swallow)
                 {
-                    l.error("Exceptions should be treated in the controller. Swallowing it",
+                    logger.error("Exceptions should be treated in the controller. Swallowing it",
                             swallow);
                 }
                 return evtInfo;
