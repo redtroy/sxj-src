@@ -1,18 +1,3 @@
-/*  
- * Copyright 2012 xavi.ferro
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */   
 package com.sxj.statemachine.annotations;
 
 import java.lang.annotation.ElementType;
@@ -26,9 +11,11 @@ import java.lang.annotation.Target;
  * Defines a state in an annotated state machine. The annotated
  * field must be defined as <code>public static final</code>
  */
-public @interface State { 
+public @interface State
+{
     /** Whether the state is the start one of the state machine */
     boolean isStart() default false;
+    
     /** Whether the state is an end one of the state machine */
     boolean isFinal() default false;
 }
