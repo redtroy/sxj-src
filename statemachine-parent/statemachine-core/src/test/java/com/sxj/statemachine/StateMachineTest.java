@@ -24,7 +24,8 @@ public class StateMachineTest
     public void test() throws StateMachineException
     {
         IStateMachine machine = StateMachines.newNonReentrant(new StateMachineConfig());
-        machine.processEvent("A-B", null);
+        machine.fire("AtoB", null);
+        machine.fire("BtoC", null);
         machine.getCurrentState();
     }
     

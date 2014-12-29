@@ -42,8 +42,7 @@ public class StateMachineImpl implements IStateMachine
      * <p>
      * This method delegates completely on the strategy.
      */
-    public void processEvent(String event, Object object)
-            throws StateMachineException
+    public void fire(String event, Object object) throws StateMachineException
     {
         strategy.processEvent(this, event, object);
     }

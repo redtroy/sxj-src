@@ -4,12 +4,14 @@ import com.sxj.statemachine.annotations.StateMachine;
 import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.annotations.Transitions;
 
-@StateMachine
+@StateMachine(stateType = DemoStates.class, startState = "A", finalStates = {
+        "C", "D" })
+@Transitions({ @Transition(source = "A", event = "AtoB", target = "B") })
 public class StateMachineConfig
 {
-    @Transitions({ @Transition(event = "A-B", source = "A", target = "B") })
-    public void noop(TransitionInfo info)
+    @Transitions({ @Transition(source = "B", event = "BtoC", target = "C") })
+    public void noop(TransitionInfo event)
     {
-        System.out.println("#tx: " + info);
+        System.out.println("tx@:" + event.getEvent());
     }
 }

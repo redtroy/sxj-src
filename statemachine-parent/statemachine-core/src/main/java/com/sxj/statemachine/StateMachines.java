@@ -60,6 +60,16 @@ public class StateMachines
                 new NonReentrantStrategy());
     }
     
+    private static boolean isFinal(String state, String... states)
+    {
+        for (String s : states)
+        {
+            if (s.equals(states))
+                return true;
+        }
+        return false;
+    }
+    
     private static void checkClassAnnotation(
             StateMachineDefinitionImpl definition, Object instance)
             throws StateMachineException
@@ -79,15 +89,10 @@ public class StateMachines
         {
             if (e.name().equals(startState))
                 definition.defineState(e.name(), true, false);
+            else if (isFinal(e.name(), finalStates))
+                definition.defineState(e.name(), false, true);
             else
-            {
-                for (String state : finalStates)
-                {
-                    if (e.name().equals(startState))
-                        definition.defineState(state, false, true);
-                    definition.defineState(e.name());
-                }
-            }
+                definition.defineState(e.name());
         }
         
         Transitions transitions = clazz.getAnnotation(Transitions.class);
@@ -97,17 +102,23 @@ public class StateMachines
             for (Transition t : values)
             {
                 String methodName = t.callee();
-                Method[] methods = clazz.getMethods();
-                for (Method method : methods)
-                {
-                    if (method.getName().equals(methodName))
-                        checkTransitionAnnotation(instance,
-                                definition,
-                                method,
-                                t);
-                }
+                checkTransitionAnnotation(instance,
+                        definition,
+                        getMethod(methodName, clazz),
+                        t);
             }
         }
+    }
+    
+    private static Method getMethod(String name, Class<?> clazz)
+    {
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods)
+        {
+            if (method.getName().equals(name))
+                return method;
+        }
+        return null;
     }
     
     private static StateMachineDefinitionImpl checkFieldAnnotations(
@@ -295,7 +306,9 @@ public class StateMachines
             Transition ann) throws StateMachineException
     {
         // First of all, we check the parameters
-        checkGenericTransitionHasTheRightParameters(method);
+        stateMachineDefinition.defineEvent(ann.event());
+        if (method != null)
+            checkGenericTransitionHasTheRightParameters(method);
         stateMachineDefinition.defineTransition(ann, method, instance);
     }
     

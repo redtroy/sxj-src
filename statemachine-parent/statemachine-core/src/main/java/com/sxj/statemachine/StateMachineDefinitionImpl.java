@@ -176,32 +176,45 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
     void defineTransition(Transition transition, final Method method,
             final Object callee) throws StateMachineException
     {
-        this.defineTransition(transition.source(),
-                transition.event(),
-                transition.target(),
-                new TransitionController()
-                {
-                    public void execute(TransitionInfo event)
+        if (method != null)
+            this.defineTransition(transition.source(),
+                    transition.event(),
+                    transition.target(),
+                    new TransitionController()
                     {
-                        try
+                        public void execute(TransitionInfo event)
                         {
-                            method.invoke(callee, event);
+                            try
+                            {
+                                method.invoke(callee, event);
+                            }
+                            catch (IllegalAccessException e)
+                            {
+                                logger.error("This should never happen");
+                            }
+                            catch (IllegalArgumentException e)
+                            {
+                                logger.error("This should never happen");
+                            }
+                            catch (InvocationTargetException swallow)
+                            {
+                                logger.error("Exceptions should be treated in the controller. Swallowing it",
+                                        swallow);
+                            }
                         }
-                        catch (IllegalAccessException e)
+                    });
+        else
+            this.defineTransition(transition.source(),
+                    transition.event(),
+                    transition.target(),
+                    new TransitionController()
+                    {
+                        public void execute(TransitionInfo event)
                         {
-                            logger.error("This should never happen");
+                            System.out.println("txdddd@:" + event.getEvent());
+                            logger.debug(event.toString());
                         }
-                        catch (IllegalArgumentException e)
-                        {
-                            logger.error("This should never happen");
-                        }
-                        catch (InvocationTargetException swallow)
-                        {
-                            logger.error("Exceptions should be treated in the controller. Swallowing it",
-                                    swallow);
-                        }
-                    }
-                });
+                    });
     }
     
     public void defineTransition(String source, String event, String target,
