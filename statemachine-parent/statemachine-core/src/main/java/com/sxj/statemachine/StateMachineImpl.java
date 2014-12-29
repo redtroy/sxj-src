@@ -14,20 +14,20 @@ import com.sxj.statemachine.interfaces.StateMachineStrategy;
  */
 public class StateMachineImpl<S extends Enum<?>> implements IStateMachine<S>
 {
-    protected Logger l = LoggerFactory.getLogger(getClass());
+    private static Logger l = LoggerFactory.getLogger(StateMachineImpl.class);
     
-    protected S currentState;
+    private ThreadLocal<S> currentState = new ThreadLocal<S>();
     
-    protected StateMachineDefinition<S> definition;
+    private StateMachineDefinition<S> definition;
     
-    protected StateMachineStrategy<S> strategy;
+    private StateMachineStrategy<S> strategy;
     
-    public StateMachineImpl(StateMachineDefinition<S> definition,
+    protected StateMachineImpl(StateMachineDefinition<S> definition,
             StateMachineStrategy<S> strategy) throws StateMachineException
     {
         this.definition = definition;
         this.strategy = strategy;
-        this.currentState = definition.getStartState();
+        this.currentState.set(definition.getStartState());
         
         if (currentState == null)
             throw new StateMachineException(
@@ -59,13 +59,13 @@ public class StateMachineImpl<S extends Enum<?>> implements IStateMachine<S>
     
     public S getCurrentState()
     {
-        return currentState;
+        return currentState.get();
     }
     
     public void setCurrentState(S currentState)
     {
         l.debug("#setCurrentState: " + currentState);
-        this.currentState = currentState;
+        this.currentState.set(currentState);
     }
     
     /**

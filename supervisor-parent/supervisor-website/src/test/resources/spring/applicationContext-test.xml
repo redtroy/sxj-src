@@ -4,7 +4,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="fsmConfig" class="com.sxj.statemachine.StateMachineConfig"></bean>
-	<bean id="fsm" class="com.sxj.statemachine.StateMachineBuilder">
+	<bean id="fsm" class="com.sxj.statemachine.StateMachineImpl">
+	
 	</bean>
 
 </beans>
