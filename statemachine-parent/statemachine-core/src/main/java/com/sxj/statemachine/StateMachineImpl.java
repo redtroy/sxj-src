@@ -12,17 +12,17 @@ import com.sxj.statemachine.interfaces.StateMachineStrategy;
  * Basic state machine implementation. Implements a non-reentrant transition
  * strategy
  */
-public class StateMachineImpl implements IStateMachine
+public class StateMachineImpl<S extends Enum<?>> implements IStateMachine<S>
 {
     protected Logger l = LoggerFactory.getLogger(getClass());
     
-    protected String currentState;
+    protected S currentState;
     
-    protected StateMachineDefinition definition;
+    protected StateMachineDefinition<S> definition;
     
     protected StateMachineStrategy strategy;
     
-    public StateMachineImpl(StateMachineDefinition definition,
+    public StateMachineImpl(StateMachineDefinition<S> definition,
             StateMachineStrategy strategy) throws StateMachineException
     {
         this.definition = definition;
@@ -57,12 +57,12 @@ public class StateMachineImpl implements IStateMachine
         return this.strategy;
     }
     
-    public String getCurrentState()
+    public S getCurrentState()
     {
         return currentState;
     }
     
-    public void setCurrentState(String currentState)
+    public void setCurrentState(S currentState)
     {
         l.debug("#setCurrentState: " + currentState);
         this.currentState = currentState;

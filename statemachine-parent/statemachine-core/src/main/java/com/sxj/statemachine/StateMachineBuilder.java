@@ -30,33 +30,33 @@ import com.sxj.statemachine.strategy.ReentrantStrategy;
  * <p>
  * The annotated class must be annotated with {@link StateMachine}
  */
-public class StateMachines
+public class StateMachineBuilder<S extends Enum<?>>
 {
-    protected static Logger l = getLogger(StateMachines.class);
+    protected static Logger l = getLogger(StateMachineBuilder.class);
     
-    public static IStateMachine newReentrant(StateMachineDefinition definition)
+    public IStateMachine<S> newReentrant(StateMachineDefinition<S> definition)
             throws StateMachineException
     {
-        return new StateMachineImpl(definition, new ReentrantStrategy());
+        return new StateMachineImpl<S>(definition, new ReentrantStrategy());
     }
     
-    public static IStateMachine newReentrant(Object instance)
+    public IStateMachine<S> newReentrant(Object instance)
             throws StateMachineException
     {
-        return new StateMachineImpl(processAnnotatedController(instance),
-                new ReentrantStrategy());
+        return new StateMachineImpl<S>(processAnnotatedController(instance),
+                new ReentrantStrategy<S>());
     }
     
-    public static IStateMachine newNonReentrant(
-            StateMachineDefinition definition) throws StateMachineException
-    {
-        return new StateMachineImpl(definition, new NonReentrantStrategy());
-    }
-    
-    public static IStateMachine newNonReentrant(Object instance)
+    public IStateMachine<S> newNonReentrant(StateMachineDefinition<S> definition)
             throws StateMachineException
     {
-        return new StateMachineImpl(processAnnotatedController(instance),
+        return new StateMachineImpl<S>(definition, new NonReentrantStrategy());
+    }
+    
+    public IStateMachine<S> newNonReentrant(Object instance)
+            throws StateMachineException
+    {
+        return new StateMachineImpl<S>(processAnnotatedController(instance),
                 new NonReentrantStrategy());
     }
     
@@ -70,9 +70,8 @@ public class StateMachines
         return false;
     }
     
-    private static void checkClassAnnotation(
-            StateMachineDefinitionImpl definition, Object instance)
-            throws StateMachineException
+    private void checkClassAnnotation(StateMachineDefinitionImpl<S> definition,
+            Object instance) throws StateMachineException
     {
         Class<?> clazz = instance.getClass();
         if (!clazz.isAnnotationPresent(com.sxj.statemachine.annotations.StateMachine.class))
@@ -81,18 +80,19 @@ public class StateMachines
                     "All state machines must be annotated with the @AStateMachine annotation");
         }
         StateMachine machine = clazz.getAnnotation(StateMachine.class);
-        Class<? extends Enum<?>> stateType = machine.stateType();
+        Class<S> stateType = (Class<S>) machine.stateType();
+        definition.setType(stateType);
         String startState = machine.startState();
         String[] finalStates = machine.finalStates();
-        List<? extends Enum<?>> asList = Arrays.asList(stateType.getEnumConstants());
-        for (Enum<?> e : asList)
+        List<S> asList = Arrays.asList(stateType.getEnumConstants());
+        for (S e : asList)
         {
             if (e.name().equals(startState))
-                definition.defineState(e.name(), true, false);
+                definition.defineState(e, true, false);
             else if (isFinal(e.name(), finalStates))
-                definition.defineState(e.name(), false, true);
+                definition.defineState(e, false, true);
             else
-                definition.defineState(e.name());
+                definition.defineState(e);
         }
         
         Transitions transitions = clazz.getAnnotation(Transitions.class);
@@ -147,10 +147,10 @@ public class StateMachines
         return stateMachineDefinition;
     }
     
-    private static StateMachineDefinition processAnnotatedController(
-            Object instance) throws StateMachineException
+    private StateMachineDefinition<S> processAnnotatedController(Object instance)
+            throws StateMachineException
     {
-        StateMachineDefinitionImpl stateMachineDefinition = new StateMachineDefinitionImpl();
+        StateMachineDefinitionImpl<S> stateMachineDefinition = new StateMachineDefinitionImpl<S>();
         
         checkClassAnnotation(stateMachineDefinition, instance);
         checkFieldAnnotations(stateMachineDefinition, instance);
@@ -159,8 +159,8 @@ public class StateMachines
         return stateMachineDefinition;
     }
     
-    private static void checkTransitionAnnotations(
-            StateMachineDefinitionImpl definition, Object instance)
+    private void checkTransitionAnnotations(
+            StateMachineDefinitionImpl<S> definition, Object instance)
             throws StateMachineException
     {
         // Let's process the transitions
@@ -264,7 +264,9 @@ public class StateMachines
         try
         {
             String stateName = (String) field.get(instance);
-            definition.defineState(stateName, ann.isStart(), ann.isFinal());
+            definition.defineState(definition.getActualState(stateName),
+                    ann.isStart(),
+                    ann.isFinal());
         }
         catch (IllegalAccessException e)
         {

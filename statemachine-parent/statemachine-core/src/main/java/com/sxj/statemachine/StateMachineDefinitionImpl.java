@@ -23,11 +23,15 @@ import com.sxj.statemachine.interfaces.ExitStateController;
 import com.sxj.statemachine.interfaces.StateMachineDefinition;
 import com.sxj.statemachine.interfaces.TransitionController;
 
-public class StateMachineDefinitionImpl implements StateMachineDefinition
+public class StateMachineDefinitionImpl<S extends Enum<?>> implements
+        StateMachineDefinition<S>
 {
+    
+    private Class<S> genericType;
+    
     private static Logger logger = LoggerFactory.getLogger(StateMachineDefinitionImpl.class);
     
-    private String startState;
+    private S startState;
     
     private HashMap<String, State> states;
     
@@ -44,12 +48,12 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
         return this.events.contains(event);
     }
     
-    public boolean isState(String state)
+    public boolean isState(S state)
     {
-        return this.states.containsKey(state);
+        return this.states.containsKey(state.name());
     }
     
-    public boolean isStartState(String state)
+    public boolean isStartState(S state)
     {
         boolean result = false;
         
@@ -60,7 +64,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
         return result;
     }
     
-    public boolean isFinalState(String state)
+    public boolean isFinalState(S state)
     {
         boolean result = false;
         State s = states.get(state);
@@ -87,12 +91,12 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
         return Collections.unmodifiableSet(events);
     }
     
-    public void defineState(String state) throws StateMachineException
+    public void defineState(S state) throws StateMachineException
     {
         this.defineState(state, false, false);
     }
     
-    public void defineState(String state, boolean isStart, boolean isFinal)
+    public void defineState(S state, boolean isStart, boolean isFinal)
             throws StateMachineException
     {
         
@@ -116,7 +120,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
         }
         else
         {
-            states.put(state, new State(state, isStart, isFinal));
+            states.put(state.name(), new State(state.name(), isStart, isFinal));
         }
         
         logger.debug("#defineState succeed for state id " + state);
@@ -125,34 +129,43 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
             this.startState = state;
     }
     
-    public String getStartState()
+    public S getStartState()
     {
         return this.startState;
     }
     
-    public List<String> getFinalStates()
+    public List<S> getFinalStates()
     {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<S> result = new ArrayList<S>();
         for (State state : this.states.values())
         {
             if (state.isFinal)
             {
-                result.add(state.getName());
+                result.add(getActualState(state.getName()));
             }
         }
         return result;
     }
     
+    protected S getActualState(String name)
+    {
+        S[] enumConstants = genericType.getEnumConstants();
+        for (S s : enumConstants)
+            if (s.name().equals(name))
+                return s;
+        return null;
+    }
+    
     private State checkStateExists(String state) throws StateMachineException
     {
-        if (!isState(state))
+        if (!isState(getActualState(state)))
             throw new StateMachineException("State " + state
                     + " does not exist");
         
         return states.get(state);
     }
     
-    private void checkStateNotNull(String state)
+    private void checkStateNotNull(S state)
     {
         if (state == null)
             throw new IllegalArgumentException(
@@ -220,6 +233,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
     public void defineTransition(String source, String event, String target,
             TransitionController controller) throws StateMachineException
     {
+        
         State sourceState = checkStateExists(source);
         checkStateExists(target);
         checkEventExists(event);
@@ -346,7 +360,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
      * @throws TransitionNotDefinedException
      *             in case the transition does not exist
      */
-    public String getTargetState(String source, String event)
+    public S getTargetState(String source, String event)
             throws StateMachineException
     {
         State src = checkStateExists(source);
@@ -357,14 +371,14 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
             throw new StateMachineException("Transition from state " + source
                     + " with event " + event + " not defined");
         
-        return target.getState();
+        return getActualState(target.getState());
     }
     
-    public List<String> getStates()
+    public List<S> getStates()
     {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<S> result = new ArrayList<S>();
         for (String key : states.keySet())
-            result.add(key);
+            result.add(getActualState(key));
         return result;
     }
     
@@ -372,7 +386,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
     {
         List<String> result = new ArrayList<String>();
         
-        if (this.isState(source))
+        if (this.isState(getActualState(source)))
         {
             HashMap<String, TransitionTarget> transitions = states.get(source)
                     .getTransitions();
@@ -584,5 +598,10 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
         {
             return name;
         }
+    }
+    
+    public void setType(Class<S> type)
+    {
+        genericType = type;
     }
 }

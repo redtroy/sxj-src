@@ -19,7 +19,8 @@ import com.sxj.statemachine.interfaces.TransitionController;
  * Single-thread implementation which user can configure whether it allows reentrant 
  * transitions
  */
-public class ReentrantStrategy implements StateMachineStrategy
+public class ReentrantStrategy<S extends Enum<?>> implements
+        StateMachineStrategy<S>
 {
     private static org.slf4j.Logger l = LoggerFactory.getLogger(ReentrantStrategy.class);
     
@@ -45,10 +46,10 @@ public class ReentrantStrategy implements StateMachineStrategy
         this.allowsReentrantTransitions = allowsReentrant;
     }
     
-    public void processEvent(StateMachineImpl statemachine, String event,
+    public void processEvent(StateMachineImpl<S> statemachine, String event,
             Object object) throws StateMachineException
     {
-        StateMachineDefinitionImpl stateMachineDefinition = (StateMachineDefinitionImpl) statemachine.getDefinition();
+        StateMachineDefinitionImpl<S> stateMachineDefinition = (StateMachineDefinitionImpl<S>) statemachine.getDefinition();
         if (!stateMachineDefinition.isEvent(event))
             throw new StateMachineException("Event " + event + " not defined");
         
@@ -71,14 +72,15 @@ public class ReentrantStrategy implements StateMachineStrategy
                 }
             }
             
-            String source = statemachine.getCurrentState();
-            String target = stateMachineDefinition.getTargetState(source, event);
-            TransitionInfo tEvent = new TransitionInfo(source, event, target,
-                    object);
+            S source = statemachine.getCurrentState();
+            S target = stateMachineDefinition.getTargetState(source.name(),
+                    event);
+            TransitionInfo tEvent = new TransitionInfo(source.name(), event,
+                    target.name(), object);
             
-            ExitStateController exitController = stateMachineDefinition.getExitStateController(source);
-            EnterStateController enterController = stateMachineDefinition.getEnterStateController(target);
-            TransitionController transitionController = stateMachineDefinition.getTransitionController(source,
+            ExitStateController exitController = stateMachineDefinition.getExitStateController(source.name());
+            EnterStateController enterController = stateMachineDefinition.getEnterStateController(target.name());
+            TransitionController transitionController = stateMachineDefinition.getTransitionController(source.name(),
                     event);
             
             if (exitController != null)

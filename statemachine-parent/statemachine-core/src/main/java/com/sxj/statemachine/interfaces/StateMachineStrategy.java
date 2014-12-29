@@ -3,7 +3,7 @@ package com.sxj.statemachine.interfaces;
 import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.statemachine.exceptions.StateMachineException;
 
-public interface StateMachineStrategy
+public interface StateMachineStrategy<S extends Enum<?>>
 {
     /**
      * Checks that current event is allowed for the current state. That means that a
@@ -26,6 +26,6 @@ public interface StateMachineStrategy
      * @throws ReentrantTransitionNotAllowed
      * @throws TransitionNotDefinedException
      */
-    public void processEvent(StateMachineImpl statemachine, String event,
+    public void processEvent(StateMachineImpl<S> statemachine, String event,
             Object object) throws StateMachineException;
 }

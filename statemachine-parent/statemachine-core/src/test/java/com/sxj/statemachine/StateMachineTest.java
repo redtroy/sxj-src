@@ -23,10 +23,11 @@ public class StateMachineTest
     @Test
     public void test() throws StateMachineException
     {
-        IStateMachine machine = StateMachines.newNonReentrant(new StateMachineConfig());
+        IStateMachine<DemoStates> machine = new StateMachineBuilder<DemoStates>().newNonReentrant(new StateMachineConfig());
         machine.fire("AtoB", null);
         machine.fire("BtoC", null);
-        machine.getCurrentState();
+        DemoStates currentState = machine.getCurrentState();
+        System.out.println("==========" + currentState);
     }
     
 }
