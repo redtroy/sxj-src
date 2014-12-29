@@ -20,10 +20,10 @@ public class StateMachineImpl<S extends Enum<?>> implements IStateMachine<S>
     
     protected StateMachineDefinition<S> definition;
     
-    protected StateMachineStrategy strategy;
+    protected StateMachineStrategy<S> strategy;
     
     public StateMachineImpl(StateMachineDefinition<S> definition,
-            StateMachineStrategy strategy) throws StateMachineException
+            StateMachineStrategy<S> strategy) throws StateMachineException
     {
         this.definition = definition;
         this.strategy = strategy;
@@ -47,12 +47,12 @@ public class StateMachineImpl<S extends Enum<?>> implements IStateMachine<S>
         strategy.processEvent(this, event, object);
     }
     
-    public StateMachineDefinition getDefinition()
+    public StateMachineDefinition<S> getDefinition()
     {
         return this.definition;
     }
     
-    public StateMachineStrategy getStrategy()
+    public StateMachineStrategy<S> getStrategy()
     {
         return this.strategy;
     }

@@ -37,7 +37,7 @@ public class StateMachineBuilder<S extends Enum<?>>
     public IStateMachine<S> newReentrant(StateMachineDefinition<S> definition)
             throws StateMachineException
     {
-        return new StateMachineImpl<S>(definition, new ReentrantStrategy());
+        return new StateMachineImpl<S>(definition, new ReentrantStrategy<S>());
     }
     
     public IStateMachine<S> newReentrant(Object instance)
@@ -60,7 +60,7 @@ public class StateMachineBuilder<S extends Enum<?>>
                 new NonReentrantStrategy());
     }
     
-    private static boolean isFinal(String state, String... states)
+    private boolean isFinal(String state, String... states)
     {
         for (String s : states)
         {
@@ -110,7 +110,7 @@ public class StateMachineBuilder<S extends Enum<?>>
         }
     }
     
-    private static Method getMethod(String name, Class<?> clazz)
+    private Method getMethod(String name, Class<?> clazz)
     {
         Method[] methods = clazz.getMethods();
         for (Method method : methods)
@@ -121,9 +121,9 @@ public class StateMachineBuilder<S extends Enum<?>>
         return null;
     }
     
-    private static StateMachineDefinitionImpl checkFieldAnnotations(
-            StateMachineDefinitionImpl stateMachineDefinition, Object instance)
-            throws StateMachineException
+    private StateMachineDefinitionImpl<S> checkFieldAnnotations(
+            StateMachineDefinitionImpl<S> stateMachineDefinition,
+            Object instance) throws StateMachineException
     {
         Class<?> clazz = instance.getClass();
         
@@ -212,8 +212,8 @@ public class StateMachineBuilder<S extends Enum<?>>
                             + " is not well defined. It should have one and only TransitionEvent paramter");
     }
     
-    private static void checkEnterStateAnnotation(Object instance,
-            StateMachineDefinitionImpl definition, Method method, OnEnter ann)
+    private void checkEnterStateAnnotation(Object instance,
+            StateMachineDefinitionImpl<S> definition, Method method, OnEnter ann)
             throws StateMachineException
     {
         // First of all, we check the parameters
@@ -233,8 +233,8 @@ public class StateMachineBuilder<S extends Enum<?>>
         definition.defineEnterState(ann, method, instance);
     }
     
-    private static void checkExitStateAnnotation(Object instance,
-            StateMachineDefinitionImpl definition, Method method, OnExit ann)
+    private void checkExitStateAnnotation(Object instance,
+            StateMachineDefinitionImpl<S> definition, Method method, OnExit ann)
             throws StateMachineException
     {
         // First of all, we check the parameters
@@ -253,8 +253,8 @@ public class StateMachineBuilder<S extends Enum<?>>
         definition.defineExitState(ann, method, instance);
     }
     
-    private static void checkStateAnnotation(Object instance,
-            StateMachineDefinitionImpl definition, Field field, State ann)
+    private void checkStateAnnotation(Object instance,
+            StateMachineDefinitionImpl<S> definition, Field field, State ann)
             throws StateMachineException
     {
         if (!isStringAndFinal(field))
@@ -275,8 +275,8 @@ public class StateMachineBuilder<S extends Enum<?>>
         }
     }
     
-    private static void checkEventAnnotation(Object instance,
-            StateMachineDefinitionImpl definition, Field field, Event ann)
+    private void checkEventAnnotation(Object instance,
+            StateMachineDefinitionImpl<S> definition, Field field, Event ann)
             throws StateMachineException
     {
         if (!isStringAndFinal(field))
@@ -303,9 +303,9 @@ public class StateMachineBuilder<S extends Enum<?>>
     /*
      * TODO. Define a set of tests for this functionality
      */
-    private static void checkTransitionAnnotation(Object instance,
-            StateMachineDefinitionImpl stateMachineDefinition, Method method,
-            Transition ann) throws StateMachineException
+    private void checkTransitionAnnotation(Object instance,
+            StateMachineDefinitionImpl<S> stateMachineDefinition,
+            Method method, Transition ann) throws StateMachineException
     {
         // First of all, we check the parameters
         stateMachineDefinition.defineEvent(ann.event());
@@ -319,7 +319,7 @@ public class StateMachineBuilder<S extends Enum<?>>
      * 
      * @return true if it conforms the condition, false otherwise.
      */
-    private static boolean isStringAndFinal(Field field)
+    private boolean isStringAndFinal(Field field)
     {
         return (field.getType().equals(String.class)
                 && Modifier.isFinal(field.getModifiers()) && Modifier.isPublic(field.getModifiers()));
