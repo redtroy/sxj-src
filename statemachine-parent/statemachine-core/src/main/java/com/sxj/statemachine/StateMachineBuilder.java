@@ -50,14 +50,15 @@ public class StateMachineBuilder<S extends Enum<?>>
     public IStateMachine<S> newNonReentrant(StateMachineDefinition<S> definition)
             throws StateMachineException
     {
-        return new StateMachineImpl<S>(definition, new NonReentrantStrategy());
+        return new StateMachineImpl<S>(definition,
+                new NonReentrantStrategy<S>());
     }
     
     public IStateMachine<S> newNonReentrant(Object instance)
             throws StateMachineException
     {
         return new StateMachineImpl<S>(processAnnotatedController(instance),
-                new NonReentrantStrategy());
+                new NonReentrantStrategy<S>());
     }
     
     private boolean isFinal(String state, String... states)
