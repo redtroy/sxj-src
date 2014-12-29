@@ -5,7 +5,6 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.sxj.statemachine.exceptions.StateMachineException;
-import com.sxj.statemachine.interfaces.IStateMachine;
 
 public class StateMachineTest
 {
@@ -23,8 +22,9 @@ public class StateMachineTest
     @Test
     public void test() throws StateMachineException
     {
-        IStateMachine<DemoStates> machine = new StateMachineBuilder<DemoStates>().newNonReentrant(new StateMachineConfig());
-        machine.fire("AtoB", null);
+        StateMachineImpl<DemoStates> machine = (StateMachineImpl<DemoStates>) new StateMachineBuilder<DemoStates>().newNonReentrant(new StateMachineConfig());
+        //        machine.fire("AtoB", null);
+        machine.setCurrentState(DemoStates.B);
         machine.fire("BtoC", null);
         DemoStates currentState = machine.getCurrentState();
         System.out.println("==========" + currentState);

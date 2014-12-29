@@ -9,6 +9,7 @@ import com.sxj.statemachine.annotations.Transitions;
 @Transitions({ @Transition(source = "A", event = "AtoB", target = "B") })
 public class StateMachineConfig
 {
+    
     @Transitions({ @Transition(source = "B", event = "BtoC", target = "C") })
     public void noop(TransitionInfo event)
     {
