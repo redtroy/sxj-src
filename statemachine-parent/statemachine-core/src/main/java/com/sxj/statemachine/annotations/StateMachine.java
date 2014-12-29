@@ -12,4 +12,9 @@ import java.lang.annotation.Target;
  */
 public @interface StateMachine
 {
+    Class<? extends Enum<?>> stateType();
+    
+    String startState();
+    
+    String[] finalStates();
 }

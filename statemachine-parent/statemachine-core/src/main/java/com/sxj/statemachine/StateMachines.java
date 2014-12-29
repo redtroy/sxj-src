@@ -5,12 +5,14 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.sxj.statemachine.annotations.EnterState;
 import com.sxj.statemachine.annotations.Event;
-import com.sxj.statemachine.annotations.ExitState;
+import com.sxj.statemachine.annotations.OnEnter;
+import com.sxj.statemachine.annotations.OnExit;
 import com.sxj.statemachine.annotations.State;
 import com.sxj.statemachine.annotations.StateMachine;
 import com.sxj.statemachine.annotations.Transition;
@@ -28,7 +30,7 @@ import com.sxj.statemachine.strategy.ReentrantStrategy;
  * <p>
  * The annotated class must be annotated with {@link StateMachine}
  */
-public class StateMachines<S, E>
+public class StateMachines
 {
     protected static Logger l = getLogger(StateMachines.class);
     
@@ -58,14 +60,53 @@ public class StateMachines<S, E>
                 new NonReentrantStrategy());
     }
     
-    private static void checkClassAnnotation(StateMachineDefinition definition,
-            Object instance) throws StateMachineException
+    private static void checkClassAnnotation(
+            StateMachineDefinitionImpl definition, Object instance)
+            throws StateMachineException
     {
         Class<?> clazz = instance.getClass();
         if (!clazz.isAnnotationPresent(com.sxj.statemachine.annotations.StateMachine.class))
         {
             throw new StateMachineException(
                     "All state machines must be annotated with the @AStateMachine annotation");
+        }
+        StateMachine machine = clazz.getAnnotation(StateMachine.class);
+        Class<? extends Enum<?>> stateType = machine.stateType();
+        String startState = machine.startState();
+        String[] finalStates = machine.finalStates();
+        List<? extends Enum<?>> asList = Arrays.asList(stateType.getEnumConstants());
+        for (Enum<?> e : asList)
+        {
+            if (e.name().equals(startState))
+                definition.defineState(e.name(), true, false);
+            else
+            {
+                for (String state : finalStates)
+                {
+                    if (e.name().equals(startState))
+                        definition.defineState(state, false, true);
+                    definition.defineState(e.name());
+                }
+            }
+        }
+        
+        Transitions transitions = clazz.getAnnotation(Transitions.class);
+        if (transitions != null)
+        {
+            Transition[] values = transitions.value();
+            for (Transition t : values)
+            {
+                String methodName = t.callee();
+                Method[] methods = clazz.getMethods();
+                for (Method method : methods)
+                {
+                    if (method.getName().equals(methodName))
+                        checkTransitionAnnotation(instance,
+                                definition,
+                                method,
+                                t);
+                }
+            }
         }
     }
     
@@ -131,19 +172,19 @@ public class StateMachines<S, E>
                         method,
                         method.getAnnotation(Transition.class));
             }
-            else if (method.isAnnotationPresent(EnterState.class))
+            else if (method.isAnnotationPresent(OnEnter.class))
             {
                 checkEnterStateAnnotation(instance,
                         definition,
                         method,
-                        method.getAnnotation(EnterState.class));
+                        method.getAnnotation(OnEnter.class));
             }
-            else if (method.isAnnotationPresent(ExitState.class))
+            else if (method.isAnnotationPresent(OnExit.class))
             {
                 checkExitStateAnnotation(instance,
                         definition,
                         method,
-                        method.getAnnotation(ExitState.class));
+                        method.getAnnotation(OnExit.class));
             }
         }
     }
@@ -161,7 +202,7 @@ public class StateMachines<S, E>
     }
     
     private static void checkEnterStateAnnotation(Object instance,
-            StateMachineDefinitionImpl definition, Method method, EnterState ann)
+            StateMachineDefinitionImpl definition, Method method, OnEnter ann)
             throws StateMachineException
     {
         // First of all, we check the parameters
@@ -182,7 +223,7 @@ public class StateMachines<S, E>
     }
     
     private static void checkExitStateAnnotation(Object instance,
-            StateMachineDefinitionImpl definition, Method method, ExitState ann)
+            StateMachineDefinitionImpl definition, Method method, OnExit ann)
             throws StateMachineException
     {
         // First of all, we check the parameters

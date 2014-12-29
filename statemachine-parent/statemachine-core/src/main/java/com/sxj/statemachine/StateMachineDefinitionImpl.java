@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.sxj.statemachine.annotations.EnterState;
-import com.sxj.statemachine.annotations.ExitState;
+import com.sxj.statemachine.annotations.OnEnter;
+import com.sxj.statemachine.annotations.OnExit;
 import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.exceptions.StateMachineException;
 import com.sxj.statemachine.interfaces.EnterStateController;
@@ -217,7 +217,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
         sourceState.setTransitionController(event, target, controller);
     }
     
-    void defineExitState(ExitState ann, final Method method, final Object callee)
+    void defineExitState(OnExit ann, final Method method, final Object callee)
             throws StateMachineException
     {
         this.defineExitState(ann.value(), new ExitStateController()
@@ -256,7 +256,7 @@ public class StateMachineDefinitionImpl implements StateMachineDefinition
         internalState.setExitStateController(controller);
     }
     
-    void defineEnterState(final EnterState ann, final Method method,
+    void defineEnterState(final OnEnter ann, final Method method,
             final Object callee) throws StateMachineException
     {
         this.defineEnterState(ann.value(), new EnterStateController()

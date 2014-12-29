@@ -9,13 +9,13 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 /**
  * Defines a transition enter state phase. Methods annotated with it
- * might have the same contract as the {@link ExitStateController}
+ * might have the same contract as the {@link EnterStateController}.
  * 
- * <p>It allows defining the method as void, though. It means that
- * the phase will return a <code>true</code>, which means the transition
- * continues without problems.
+ * <p>There is only one difference with the contract: if the method returns
+ * void, the state machine execution will assume we don't want to forward
+ * to any other state.
  */
-public @interface ExitState
+public @interface OnEnter
 {
-    public String value();
+    String value();
 }

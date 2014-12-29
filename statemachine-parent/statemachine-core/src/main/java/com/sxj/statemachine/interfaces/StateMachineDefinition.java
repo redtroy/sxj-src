@@ -3,7 +3,7 @@ package com.sxj.statemachine.interfaces;
 import java.util.List;
 import java.util.Set;
 
-import com.sxj.statemachine.annotations.EnterState;
+import com.sxj.statemachine.annotations.OnEnter;
 import com.sxj.statemachine.exceptions.StateMachineException;
 
 /**
@@ -51,7 +51,7 @@ import com.sxj.statemachine.exceptions.StateMachineException;
  * </li>
  * <li>Transitions from the same thread will throw an exception as we need to
  * avoid recurrent transitions that might end up in an error state unless they come
- * from the {@link EnterState} phase</li>
+ * from the {@link OnEnter} phase</li>
  * </ul>
  */
 public interface StateMachineDefinition

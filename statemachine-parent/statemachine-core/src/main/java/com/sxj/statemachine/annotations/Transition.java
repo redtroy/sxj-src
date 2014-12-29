@@ -27,4 +27,6 @@ public @interface Transition
      * The event that provokes the transition
      */
     String event();
+    
+    String callee() default "";
 }
