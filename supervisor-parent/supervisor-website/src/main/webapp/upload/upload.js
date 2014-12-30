@@ -71,7 +71,6 @@
 	        },
 	        dnd: '#uploader .queueList',
 	        paste: document.body,
-
 	        accept: {
 	            title: 'Images',
 	            extensions: 'gif,jpg,jpeg,bmp,png',
@@ -85,7 +84,7 @@
 
 	        chunked: true,
 	        // server: 'http://webuploader.duapp.com/server/fileupload.php',
-	        server: '${basePath}upload.htm',
+	        server: basePath+'upload.htm',
 	        fileNumLimit: 300,
 	        fileSizeLimit: 5 * 1024 * 1024,    // 200 M
 	        fileSingleSizeLimit: 1 * 1024 * 1024    // 50 M
@@ -379,14 +378,11 @@
 	        updateTotalProgress();
 	    };
 	    uploader.on( 'fileQueued', function( file ) {
-
 	        uploader.md5File( file )
-
 	            // 及时显示进度
 	            .progress(function(percentage) {
 	                console.log('Percentage:', percentage);
 	            })
-
 	            // 完成
 	            .then(function(val) {
 	                console.log('md5 result:', val);
