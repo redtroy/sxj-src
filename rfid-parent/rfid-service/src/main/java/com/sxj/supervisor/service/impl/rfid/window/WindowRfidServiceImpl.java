@@ -43,7 +43,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Autowired
 	private IRfidPurchaseDao rfidPurchaseDao;
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<WindowRfidEntity> queryWindowRfid(WindowRfidQuery query)
@@ -482,9 +482,15 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			if (rfid == null) {
 				throw new ServiceException("被补损的RFID不存在");
 			}
+			if (!rfid.getRfidState().equals(RfidStateEnum.used)) {
+				throw new ServiceException("被补损的RFID不是已使用状态");
+			}
 			WindowRfidEntity newRfid = getWindowRfidByNo(newRfidNo);
 			if (newRfid == null) {
 				throw new ServiceException("补损的RFID不存在");
+			}
+			if (!newRfid.getRfidState().equals(RfidStateEnum.unused)) {
+				throw new ServiceException("补损的RFID不是未使用状态");
 			}
 			rfid.setReplenishNo(newRfidNo);
 			rfid.setRfidState(RfidStateEnum.damaged);
@@ -505,7 +511,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			winRef.setMemberNo(newRfid.getMemberNo());
 			winRef.setMemberName(newRfid.getMemberName());
 			winRef.setType(LinkStateEnum.rfidLoss);
-			winRef.setWindowsNo(newRfid.getWindowType());
+			winRef.setWindowsNo(rfid.getWindowType());
 			winRef.setGlassBatchNo(newRfid.getGlassRfid());
 			winRef.setProfileBatchNo(newRfid.getProfileRfid());
 			winRef.setApplyDate(new Date());
@@ -567,10 +573,12 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			return 0;
 		}
 	}
+
 	@Override
 	@Transactional
-	public void updateGid(List<WindowRfidEntity> winList,String id)throws ServiceException {
-		try{
+	public void updateGid(List<WindowRfidEntity> winList, String id)
+			throws ServiceException {
+		try {
 			windowRfidDao.updateGid(winList);
 			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
 			purchase.setId(id);
