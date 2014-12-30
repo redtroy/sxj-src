@@ -43,15 +43,25 @@ public class MysqlLoaderTest
     @Transactional(propagation = Propagation.REQUIRED)
     public void test()
     {
-        System.out.println(new Date());
         DataSource writeDs = DataSourceFactory.getDataNodes()
                 .get(0)
                 .getWriteNodes()
                 .get(0);
         Connection connection = DataSourceUtils.getConnection(writeDs);
-        
         try
         {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < 1000000; i++)
+            {
+                String value = Identities.randomBase62(32) + ","
+                        + Identities.randomBase62(12) + "中文";
+                sb.append(value);
+                sb.append(System.getProperty("line.separator"));
+            }
+            ByteArrayInputStream bis = new ByteArrayInputStream(sb.toString()
+                    .getBytes("UTF-8"));
+            System.out.println(new Date());
+            
             PipedOutputStream pos = new PipedOutputStream();
             PipedInputStream pis = new PipedInputStream(pos);
             PreparedStatement prepareStatement = connection.prepareStatement("LOAD DATA LOCAL INFILE 'tmp.csv' IGNORE INTO TABLE TEST_FUNCTION fields terminated by ',' (ID,TITLE) ");
@@ -60,16 +70,7 @@ public class MysqlLoaderTest
                 com.mysql.jdbc.PreparedStatement unwrap = prepareStatement.unwrap(com.mysql.jdbc.PreparedStatement.class);
                 //                unwrap.setLocalInfileInputStream(pis);
                 //                boolean rows = unwrap.execute();
-                StringBuffer sb = new StringBuffer();
-                for (int i = 0; i < 100000; i++)
-                {
-                    String value = Identities.randomBase62(32) + ","
-                            + Identities.randomBase62(12) + "中文";
-                    sb.append(value);
-                    sb.append(System.getProperty("line.separator"));
-                }
-                ByteArrayInputStream bis = new ByteArrayInputStream(
-                        sb.toString().getBytes("UTF-8"));
+                
                 unwrap.setLocalInfileInputStream(bis);
                 int rows = unwrap.executeUpdate();
                 System.out.println(rows);
