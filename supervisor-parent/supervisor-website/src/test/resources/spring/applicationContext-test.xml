@@ -2,7 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-	<bean id="fsmConfig" class="com.sxj.statemachine.StateMachineConfig"></bean>
-
+	<bean id="fsm" class="com.sxj.statemachine.StateMachineFactory" factory-method="newInstance">
+		<constructor-arg>
+			<bean id="fsmConfig" class="com.sxj.statemachine.StateMachineConfig"></bean>
+		</constructor-arg>
+	</bean>
 </beans>

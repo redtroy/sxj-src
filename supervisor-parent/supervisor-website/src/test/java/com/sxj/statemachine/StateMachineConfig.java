@@ -1,5 +1,7 @@
 package com.sxj.statemachine;
 
+import com.sxj.statemachine.annotations.OnEnter;
+import com.sxj.statemachine.annotations.OnExit;
 import com.sxj.statemachine.annotations.StateMachine;
 import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.annotations.Transitions;
@@ -14,5 +16,19 @@ public class StateMachineConfig
     public void noop(TransitionInfo event)
     {
         System.out.println("tx@:" + event.getEvent());
+    }
+    
+    @OnEnter(value = "B")
+    public EventInfo enterB(TransitionInfo event)
+    {
+        System.out.println("Entered B state");
+        return null;
+    }
+    
+    @OnExit("A")
+    public Boolean exitA(TransitionInfo event)
+    {
+        System.out.println("Exited A state");
+        return true;
     }
 }
