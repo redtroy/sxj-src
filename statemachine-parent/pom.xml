@@ -8,6 +8,7 @@
   <modules>
     <module>statemachine-impl</module>
     <module>statemachine-manager</module>
+    <module>statemachine-core</module>
   </modules>
   <properties>
   	<statemachine.version>1.0</statemachine.version>
