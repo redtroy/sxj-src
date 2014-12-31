@@ -51,7 +51,7 @@ public class MysqlLoaderTest
         try
         {
             StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 String value = Identities.randomBase62(32) + ","
                         + Identities.randomBase62(12) + "中文";
