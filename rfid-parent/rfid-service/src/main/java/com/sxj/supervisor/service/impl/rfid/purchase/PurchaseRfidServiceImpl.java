@@ -1,14 +1,16 @@
 package com.sxj.supervisor.service.impl.rfid.purchase;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +40,7 @@ import com.sxj.supervisor.service.rfid.sale.IRfidPriceService;
 import com.sxj.supervisor.service.rfid.sale.IRfidSaleStatisticalService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.common.DateTimeUtils;
-import com.sxj.util.common.NumberUtils;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.CustomDecimal;
@@ -68,6 +70,9 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 
 	@Autowired
 	private IRfidKeyService keyService;
+
+	@Autowired
+	private DataSource dataSource;
 
 	@Override
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
@@ -360,9 +365,11 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			Long count = purchase.getCount();
 			Long lastkey = keyService.getKey(count.intValue());
 			if (RfidTypeEnum.door.equals(rfidType)) {
-				List<WindowRfidEntity> winRfids = new ArrayList<>();
+				// List<WindowRfidEntity> winRfids = new ArrayList<>();
+				StringBuffer sb = new StringBuffer();
 				for (Long i = lastkey; i > lastkey - count; i--) {
 					WindowRfidEntity rfid = new WindowRfidEntity();
+					rfid.setId(StringUtils.getUUID());
 					rfid.setApplyNo(purchase.getApplyNo());
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					rfid.setContractNo(purchase.getContractNo());
@@ -385,34 +392,54 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					String rfidNo = CustomDecimal.getDecimalString(4,
 							new BigDecimal(i));
 					rfid.setRfidNo(rfidNo);
-					winRfids.add(rfid);
+					sb.append(rfid.toString());
+					sb.append(System.getProperty("line.separator"));
+					// winRfids.add(rfid);
 				}
-				// 执行线程
-				ExecutorService pool = Executors
-						.newFixedThreadPool(threadCount);
-				List<Future<Integer>> futures = new ArrayList<>();
-				List<Integer[]> splits = NumberUtils.split(count.intValue(),
-						executeCount);
-				for (Integer[] split : splits) {
-					List<WindowRfidEntity> subList = winRfids.subList(split[0],
-							split[1]);
-					WindowRfidThread thread1 = new WindowRfidThread(subList,
-							winRfidService);
-					Future<Integer> submit = pool.submit(thread1);
-					futures.add(submit);
+				Connection connection = DataSourceUtils
+						.getConnection(dataSource);
+				PreparedStatement prepareStatement = connection
+						.prepareStatement("LOAD DATA LOCAL INFILE 'tmp.csv' IGNORE INTO TABLE R_WINDOW_RFID fields terminated by '|' (ID,RFID_NO,GENERATE_KEY,MEMBER_NAME,MEMBER_NO,APPLY_NO,PURCHASE_NO,CONTRACT_NO,WINDOW_TYPE,GLASS_RFID,PROFILE_RFID,IMPORT_DATE,REPLENISH_NO,RFID_STATE,LOG,PROGRESS_STATE,GID) ");
+				if (prepareStatement
+						.isWrapperFor(com.mysql.jdbc.PreparedStatement.class)) {
+					com.mysql.jdbc.PreparedStatement unwrap = prepareStatement
+							.unwrap(com.mysql.jdbc.PreparedStatement.class);
+					// unwrap.setLocalInfileInputStream(pis);
+					// boolean rows = unwrap.execute();
+					ByteArrayInputStream bis = new ByteArrayInputStream(sb
+							.toString().getBytes("UTF-8"));
+					unwrap.setLocalInfileInputStream(bis);
+					int rows = unwrap.executeUpdate();
+					System.out.println(rows);
 				}
-				Integer threadCount = 0;
-				for (Future<Integer> future : futures) {
-					Integer submitCount = future.get();
-					threadCount = threadCount + submitCount;
-				}
-				if (threadCount.intValue() != count.intValue())
-					throw new ServiceException("导入RFID失败！");
+				// // 执行线程
+				// ExecutorService pool = Executors
+				// .newFixedThreadPool(threadCount);
+				// List<Future<Integer>> futures = new ArrayList<>();
+				// List<Integer[]> splits = NumberUtils.split(count.intValue(),
+				// executeCount);
+				// for (Integer[] split : splits) {
+				// List<WindowRfidEntity> subList = winRfids.subList(split[0],
+				// split[1]);
+				// WindowRfidThread thread1 = new WindowRfidThread(subList,
+				// winRfidService);
+				// Future<Integer> submit = pool.submit(thread1);
+				// futures.add(submit);
+				// }
+				// Integer threadCount = 0;
+				// for (Future<Integer> future : futures) {
+				// Integer submitCount = future.get();
+				// threadCount = threadCount + submitCount;
+				// }
+				// if (threadCount.intValue() != count.intValue())
+				// throw new ServiceException("导入RFID失败！");
 
 			} else {
-				List<LogisticsRfidEntity> rfids = new ArrayList<>();
+				// List<LogisticsRfidEntity> rfids = new ArrayList<>();
+				StringBuffer sb = new StringBuffer();
 				for (Long i = lastkey; i > lastkey - count; i--) {
 					LogisticsRfidEntity rfid = new LogisticsRfidEntity();
+					rfid.setId(StringUtils.getUUID());
 					rfid.setApplyNo(purchase.getApplyNo());
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					// rfid.setContractNo(purchase.getContractNo());
@@ -435,31 +462,50 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					String rfidNo = CustomDecimal.getDecimalString(4,
 							new BigDecimal(i));
 					rfid.setRfidNo(rfidNo);
-					rfids.add(rfid);
+					// rfids.add(rfid);
+					sb.append(rfid.toString());
+					sb.append(System.getProperty("line.separator"));
 				}
 
-				// 执行线程
-				ExecutorService pool = Executors
-						.newFixedThreadPool(threadCount);
-				List<Future<Integer>> futures = new ArrayList<>();
-				List<Integer[]> splits = NumberUtils.split(count.intValue(),
-						executeCount);
-				for (Integer[] split : splits) {
-					List<LogisticsRfidEntity> subList = rfids.subList(split[0],
-							split[1]);
-					LogisticsRfidThread thread1 = new LogisticsRfidThread(
-							subList, logisticsRfidService);
-					Future<Integer> submit = pool.submit(thread1);
-					futures.add(submit);
+				Connection connection = DataSourceUtils
+						.getConnection(dataSource);
+				PreparedStatement prepareStatement = connection
+						.prepareStatement("LOAD DATA LOCAL INFILE 'tmp.csv' IGNORE INTO TABLE R_LOGISTICS_RFID fields terminated by '|' (ID,RFID_NO,GENERATE_KEY,MEMBER_NAME,MEMBER_NO,APPLY_NO,PURCHASE_NO,CONTRACT_NO,TYPE,IMPORT_DATE,BATCH_NO,IS_LOSS_BATCH,REPLENISH_NO,RFID_STATE,LOG,PROGRESS_STATE,GID) ");
+				if (prepareStatement
+						.isWrapperFor(com.mysql.jdbc.PreparedStatement.class)) {
+					com.mysql.jdbc.PreparedStatement unwrap = prepareStatement
+							.unwrap(com.mysql.jdbc.PreparedStatement.class);
+					// unwrap.setLocalInfileInputStream(pis);
+					// boolean rows = unwrap.execute();
+					ByteArrayInputStream bis = new ByteArrayInputStream(sb
+							.toString().getBytes("UTF-8"));
+					unwrap.setLocalInfileInputStream(bis);
+					int rows = unwrap.executeUpdate();
+					System.out.println(rows);
+				}
 
-				}
-				Integer threadCount = 0;
-				for (Future<Integer> future : futures) {
-					Integer submitCount = future.get();
-					threadCount = threadCount + submitCount;
-				}
-				if (threadCount.intValue() != count.intValue())
-					throw new ServiceException("导入RFID失败！");
+				// // 执行线程
+				// ExecutorService pool = Executors
+				// .newFixedThreadPool(threadCount);
+				// List<Future<Integer>> futures = new ArrayList<>();
+				// List<Integer[]> splits = NumberUtils.split(count.intValue(),
+				// executeCount);
+				// for (Integer[] split : splits) {
+				// List<LogisticsRfidEntity> subList = rfids.subList(split[0],
+				// split[1]);
+				// LogisticsRfidThread thread1 = new LogisticsRfidThread(
+				// subList, logisticsRfidService);
+				// Future<Integer> submit = pool.submit(thread1);
+				// futures.add(submit);
+				//
+				// }
+				// Integer threadCount = 0;
+				// for (Future<Integer> future : futures) {
+				// Integer submitCount = future.get();
+				// threadCount = threadCount + submitCount;
+				// }
+				// if (threadCount.intValue() != count.intValue())
+				// throw new ServiceException("导入RFID失败！");
 			}
 			purchase.setImportState(ImportStateEnum.imported);
 			rfidPurchaseDao.updateRfidPurchase(purchase);
