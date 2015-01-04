@@ -7,9 +7,7 @@
     <artifactId>statemachine-parent</artifactId>
     <version>1.0</version>
   </parent>
-  <groupId>com.sxj</groupId>
   <artifactId>statemachine-core</artifactId>
-  <version>1.0</version>
   <name>statemachine-core</name>
   <url>http://maven.apache.org</url>
   <properties>
