@@ -14,9 +14,10 @@
 		<setting name="cacheEnabled" value="true" />
 	</settings>
 	<typeHandlers>
-		<typeHandler
-			handler="com.sxj.finance.typeHandler.PayStageEnumTypeHandler"
+		<typeHandler handler="com.sxj.finance.typeHandler.PayStageEnumTypeHandler"
 			javaType="com.sxj.finance.enu.finance.PayStageEnum" />
+		<typeHandler handler="com.sxj.finance.typeHandler.SexStatesEnumTypeHandler"
+			javaType="com.sxj.finance.enu.member.SexStatesEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

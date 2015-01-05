@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.finance.entity.member.MemberEntity;
 import com.sxj.finance.model.finance.FinancePrincipal;
+import com.sxj.finance.model.member.LoanQuery;
+import com.sxj.finance.service.member.ILoanService;
 import com.sxj.finance.service.member.IMemberService;
 import com.sxj.finance.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
@@ -23,6 +25,9 @@ public class MemberController extends BaseController {
 	
 	@Autowired
 	private IMemberService memberService;
+	
+	@Autowired
+	private ILoanService loanService;
 	
 	/**
 	 * 根据会员号获取会员信息
@@ -49,6 +54,27 @@ public class MemberController extends BaseController {
 			return LOGIN;
 		} catch (Exception e) {
 			SxjLogger.error("获取会员信息错误", e, this.getClass());
+			throw new WebException(e.getMessage());
+		}
+
+	}
+	
+	/**
+	 * 添加贷款信息
+	 * 
+	 * @param map
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("/addLoan")
+	public String addLoan(ModelMap map, HttpSession session,
+			HttpServletRequest request,LoanQuery loan) throws WebException {
+		try {
+				loanService.addLoanInfo(loan);
+				//map.put("member", member);
+				return "site/member/member";
+		} catch (Exception e) {
+			SxjLogger.error("添加贷款信息错误", e, this.getClass());
 			throw new WebException(e.getMessage());
 		}
 

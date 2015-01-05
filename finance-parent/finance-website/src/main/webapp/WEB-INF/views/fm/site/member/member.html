@@ -7,6 +7,31 @@
 <meta name="description" content="紫金财富金融服务平台"/>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<@b.validate/>
+<@b.dialogBox/>
+<script type="text/javascript">
+var validform;
+
+$(document).ready(function() {
+	validform = $("#loanForm").Validform({
+		tiptype : 3
+	});
+})
+
+function saveLoan(){
+	if (!validform.check()) {
+		return;
+	}
+	dialogBox(function(index) {
+		$.post("addLoan.htm", $("#loanForm").serialize(),
+				function(data) {
+					layer.close(index);
+					if (data.isOK == 'ok') {
+					} 
+				});
+	}, "是否保存会员信息?");
+}
+</script>
 </head>
 
 <body>
@@ -63,9 +88,253 @@
     <td>${member.type.getName()}</td>
   </tr>
 </table>
-<!-- <div class="buttonBox memBtn">
-  <a href="member-center.html" class="button button-red">确认会员信息</a></div>
-</div> -->
+<form action="" id="loanForm">
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
+  <caption class="fontYH f16">
+    基本资料
+    </caption>
+  <tr>
+    <th>姓名</th>
+    <td><input type="text" name="loan.memberInfo.name" datatype="*1-50" nullmsg="请输入姓名" id="name" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>性别</th>
+    <td><span class="mr10">
+      <input type="radio" name="loan.memberInfo.sex" id="" />
+      男</span>
+      <input type="radio" name="loan.memberInfo.sex" id="" />
+      女 </td>
+  </tr>
+  <tr>
+    <th>年龄</th>
+    <td><input type="text" name="loan.memberInfo.age" id="" class=" input input-w50h30"/></td>
+  </tr>
+  <tr>
+    <th>家庭住址</th>
+    <td><textarea name="loan.memberInfo.homeAddress" id="" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+  <tr>
+    <th>联系电话</th>
+    <td><input name="loan.memberInfo.telNum" type="text" class=" input input-w180h30" id="textfield4"/></td>
+  </tr>
+  <tr>
+    <th>身份证号</th>
+    <td><input name="loan.memberInfo.cardNum" type="text" class=" input input-w180h30" id="textfield5"/></td>
+  </tr>
+  <tr>
+    <th>电子邮箱</th>
+    <td><input type="text" name="loan.memberInfo.email" id="textfield6" class=" input input-w180h30"/></td>
+  </tr>
+  <tr>
+    <th>地址</th>
+    <td><textarea name="loan.memberInfo.address" id="textarea4" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+  <tr>
+    <th>营业执照编码</th>
+    <td><input type="text" name="loan.memberInfo.bLicence" id="textfield9" class=" input input-w180h30"/></td>
+  </tr>
+  <tr>
+    <th>注册资本</th>
+    <td><input name="loan.memberInfo.registered" type="text" class=" input input-w180h30" id="textfield10"/></td>
+  </tr>
+  <tr>
+    <th>经营主体</th>
+    <td><textarea name="loan.memberInfo.manage" id="textarea5" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+  <tr>
+    <th>经营范围</th>
+    <td><textarea name="loan.memberInfo.manageRange" id="textarea" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
+  <caption class="fontYH f16">
+    <a href="#" class="icon icon-edit mt5 ly-right" style="display:none">修改</a> 资产情况<span class="f12 color-gray6 ml10">(截至上个月末)</span>
+    </caption>
+  <tr>
+    <th>资产总额</th>
+    <td><input type="text" name="loan.assetsInfo.assetsSum" id="textfield3" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>负债总额</th>
+    <td><input type="text" name="loan.assetsInfo.liabilities" id="textfield7" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>固定资产净值</th>
+    <td><input type="text" name="loan.assetsInfo.fixedAssets" id="textfield8" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>应收账款总额</th>
+    <td><input type="text" name="loan.assetsInfo.receviceSum" id="textfield11" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>净资产</th>
+    <td><input type="text" name="loan.assetsInfo.netAssets" id="textfield12" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>资产负债率</th>
+    <td><input type="text" name="loan.assetsInfo.assetRatio" id="textfield13" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>其他资产情况备注</th>
+    <td><textarea name="loan.assetsInfo.remark" id="textarea2" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
+  <caption class="fontYH f16">
+    经营情况
+    </caption>
+  <tr>
+    <th>上年度主营业务收入</th>
+    <td><input type="text" name="loan.management.mainIncome" id="textfield14" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>上年度净利润</th>
+    <td><input type="text" name="loan.management.preNetProfit" id="textfield15" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>本年度累计销售额</th>
+    <td><input type="text" name="loan.management.saleSum" id="textfield16" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>本年度累计净利润</th>
+    <td><input type="text" name="loan.management.nowNetProfit" id="textfield17" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>近3个月资金流入</th>
+    <td><input type="text" name="loan.management.inFlow" id="textfield18" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>近3个月资金流出</th>
+    <td><input type="text" name="loan.management.outFlow" id="textfield19" class=" input input-w140h30"/></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
+  <caption class="fontYH f16">
+    <span class="ly-right f12" style="display:none"><a href="member-center.html" class="button btn-link">确认</a><a href="member-center.html" class="lnk-gray ml10">取消</a></span> 信用记录
+    </caption>
+  <tr>
+    <th>未结清贷款笔数</th>
+    <td><input type="text" name="loan.creditInfo.unLoan" id="textfield20" class=" input input-w50h30"/></td>
+  </tr>
+  <tr>
+    <th>未结清贷款总额</th>
+    <td><input type="text" name="loan.creditInfo.unLoanAmount" id="textfield21" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>有无贷款逾期记录</th>
+    <td><span class="mr10">
+      <input type="radio" name="loan.creditInfo.isOverdue" id="" />
+      有 </span>
+      <input type="radio" name="loan.creditInfo.isOverdue" id="" />
+      没有</td>
+  </tr>
+  <tr>
+    <th>逾期贷款期数</th>
+    <td><input type="text" name="loan.creditInfo.overdueNum" id="textfield22" class=" input input-w50h30"/></td>
+  </tr>
+  <tr>
+    <th>单笔最高逾期金额</th>
+    <td><input type="text" name="loan.creditInfo.maxOverdueAmount" id="textfield23" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>最长逾期月数</th>
+    <td><input type="text" name="loan.creditInfo.maxOverdueMonth" id="textfield24" class=" input input-w50h30"/></td>
+  </tr>
+  <tr>
+    <th>信用卡逾期记录</th>
+    <td><input type="text" name="loan.creditInfo.cardOverdue" id="textfield25" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>单笔最高逾期金额</th>
+    <td><input type="text" name="loan.creditInfo.cardMaxOverdueAmount" id="textfield26" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>对外担保总额</th>
+    <td><input type="text" name="loan.creditInfo.guarantee" id="textfield27" class=" input input-w140h30"/></td>
+  </tr>
+  <tr>
+    <th>未结清贷款到期明细</th>
+    <td><textarea name="loan.creditInfo.loanItem" id="textarea6" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+  <tr>
+    <th>对外担保到期明细</th>
+    <td><textarea name="loan.creditInfo.guaranteeItem" id="textarea7" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
+  <caption class="fontYH f16">
+    担保情况
+    </caption>
+  <tr>
+    <td colspan="2" class="tl tabTitle fb mb5">1、可抵押资产情况</td>
+  </tr>
+  <tr>
+    <th>产权人</th>
+    <td><input name="loan.guarantee.property" type="text" class=" input input-w140h30" id="textfield28"/></td>
+  </tr>
+  <tr>
+    <th>房屋座落</th>
+    <td><textarea name="loan.guarantee.houseAddress" id="textarea9" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+  <tr>
+    <th>建筑面积</th>
+    <td><input name="loan.guarantee.houseArea" type="text" class=" input input-w140h30" id="textfield29"/></td>
+  </tr>
+  <tr>
+    <th>房价估算</th>
+    <td><input name="loan.guarantee.houseAmount" type="text" class=" input input-w140h30" id="textfield30"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="tl tabTitle fb mb5">2、可保证担保情况</td>
+  </tr>
+  <tr>
+    <th>担保企业</th>
+    <td><input type="text" name="loan.guarantee.enterprise" id="textfield31" class=" input input-w270h30"/></td>
+  </tr>
+  <tr>
+    <th>地址</th>
+    <td><textarea name="loan.guarantee.address" id="textarea8" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+  <tr>
+    <th>企业法人姓名</th>
+    <td><input name="loan.guarantee.legal" type="text" class=" input input-w140h30" id="textfield32"/></td>
+  </tr>
+  <tr>
+    <th>注册资本</th>
+    <td><input name="loan.guarantee.registered" type="text" class=" input input-w140h30" id="textfield33"/></td>
+  </tr>
+  <tr>
+    <th>经营范围</th>
+    <td><textarea name="loan.guarantee.manageRange" id="textarea10" cols="80" rows="2" class="input"></textarea></td>
+  </tr>
+  <tr>
+    <th>资产总额</th>
+    <td><input name="loan.guarantee.assetsSum" type="text" class=" input input-w140h30" id="textfield34"/></td>
+  </tr>
+  <tr>
+    <th>负债总额</th>
+    <td><input name="loan.guarantee.liabilities" type="text" class=" input input-w140h30" id="textfield35"/></td>
+  </tr>
+  <tr>
+    <th>固定资产总额</th>
+    <td><input name="loan.guarantee.fixedAssets" type="text" class=" input input-w140h30" id="textfield36"/></td>
+  </tr>
+  <tr>
+    <th>资产负债率</th>
+    <td><input name="loan.guarantee.assetRatio" type="text" class=" input input-w140h30" id="textfield37"/></td>
+  </tr>
+  <tr>
+    <th>本年度销售额累计</th>
+    <td><input name="loan.guarantee.saleSum" type="text" class=" input input-w140h30" id="textfield38"/></td>
+  </tr>
+  <tr>
+    <th>本年度净利润累计</th>
+    <td><input name="loan.guarantee.nowNetProfit" type="text" class=" input input-w140h30" id="textfield39"/></td>
+  </tr>
+</table>
+<div class="buttonBox memBtn">
+  <a href="javascript:void(0);" onclick="saveLoan()" class="button button-red">完善会员信息</a></div>
+  </form>
 </div>
 </div>
 <@b.footer/>

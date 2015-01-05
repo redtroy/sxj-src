@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.finance.dao.member.IMemberInfoDao">
+	<resultMap id="MemberInfoResultMap"
+		type="com.sxj.finance.entity.member.MemberInfoEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="sex" column="SEX" jdbcType="INTEGER" />
+		<result property="age" column="AGE" jdbcType="INTEGER"/>
+		<result property="homeAddress" column="HOME_ADDRESS" jdbcType="VARCHAR" />
+		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
+		<result property="cardNum" column="CARD_NUM" jdbcType="VARCHAR" />
+		<result property="email" column="EMAIL" jdbcType="VARCHAR" />
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
+		<result property="bLicence" column="B_LICENCE" jdbcType="VARCHAR" />
+		<result property="registered" column="REGISTERED" jdbcType="DOUBLE" />
+		<result property="manage" column="MANAGE" jdbcType="VARCHAR" />
+		<result property="manageRange" column="MANAGE_RANGE" jdbcType="VARCHAR" />
+	</resultMap>
+</mapper>

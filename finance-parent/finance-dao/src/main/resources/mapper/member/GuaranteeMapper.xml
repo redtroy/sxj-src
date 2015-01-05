@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.finance.dao.member.IGuaranteeDao">
+	<resultMap id="GuaranteeResultMap"
+		type="com.sxj.finance.entity.member.GuaranteeEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="unLoan" column="UN_LOAN" jdbcType="INTEGER" />
+		<result property="unLoanAmount" column="UN_LOAN_AMOUNT" jdbcType="DOUBLE" />
+		<result property="isOverdue" column="IS_OVERDUE" jdbcType="BOOLEAN"/>
+		<result property="overdueNum" column="OVERDUE_NUM" jdbcType="INTEGER" />
+		<result property="maxOverdueAmount" column="MAX_OVERDUE_AMOUNT" jdbcType="DOUBLE" />
+		<result property="maxOverdueMonth" column="MAX_OVERDUE_MONTH" jdbcType="INTEGER" />
+		<result property="cardOverdue" column="CARD_OVERDUE" jdbcType="INTEGER" />
+		<result property="cardMaxOverdueAmount" column="CARD_MAX_OVERDUE_AMOUNT" jdbcType="DOUBLE" />
+		<result property="guarantee" column="GUARANTEE" jdbcType="DOUBLE" />
+		<result property="loanItem" column="LOAN_ITEM" jdbcType="VARCHAR" />
+		<result property="guaranteeItem" column="GUARANTEE_ITEM" jdbcType="VARCHAR" />
+	</resultMap>
+</mapper>

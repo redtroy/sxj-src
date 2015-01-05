@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.finance.dao.member.IManagementDao">
+	<resultMap id="ManagementResultMap"
+		type="com.sxj.finance.entity.member.ManagementEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="mainIncome" column="MAIN_INCOME" jdbcType="DOUBLE" />
+		<result property="preNetProfit" column="PRE_NET_PROFIT" jdbcType="DOUBLE" />
+		<result property="saleSum" column="SALE_SUM" jdbcType="DOUBLE"/>
+		<result property="nowNetProfit" column="NOW_NET_PROFIT" jdbcType="DOUBLE" />
+		<result property="inFlow" column="IN_FLOW" jdbcType="DOUBLE" />
+		<result property="outFlow" column="OUT_FLOW" jdbcType="DOUBLE" />
+	</resultMap>
+</mapper>

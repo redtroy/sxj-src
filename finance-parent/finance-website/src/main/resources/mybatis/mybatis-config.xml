@@ -10,13 +10,14 @@
 	<settings>
 		<!-- changes from the defaults -->
 		<setting name="lazyLoadingEnabled" value="false" />
-		<setting name="localCacheScope" value="STATEMENT"/>
+		<setting name="localCacheScope" value="STATEMENT" />
 	</settings>
 
 	<typeHandlers>
-	  <typeHandler
-			handler="com.sxj.finance.typeHandler.PayStageEnumTypeHandler"
+		<typeHandler handler="com.sxj.finance.typeHandler.PayStageEnumTypeHandler"
 			javaType="com.sxj.finance.enu.finance.PayStageEnum" />
+		<typeHandler handler="com.sxj.finance.typeHandler.SexStatesEnumTypeHandler"
+			javaType="com.sxj.finance.enu.member.SexStatesEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />
