@@ -19,4 +19,9 @@
 		<result property="loanItem" column="LOAN_ITEM" jdbcType="VARCHAR" />
 		<result property="guaranteeItem" column="GUARANTEE_ITEM" jdbcType="VARCHAR" />
 	</resultMap>
+	
+	<select id="getCreditInfo" resultMap="CreditInfoResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_MEMBER_CREDITINFO WHERE MEMBER_NO=#{memberNo}]]>
+	</select>
 </mapper>

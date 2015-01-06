@@ -6,13 +6,52 @@
 	<resultMap id="AccountResultMap"
 		type="com.sxj.finance.entity.member.AccountEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
-		<result property="assetsSum" column="ASSETS_SUM" jdbcType="DOUBLE" />
-		<result property="liabilities" column="LIABILITIES" jdbcType="DOUBLE" />
-		<result property="fixedAssets" column="FIXED_ASSETS" jdbcType="DOUBLE"/>
-		<result property="receviceSum" column="RECEVICE_SUM" jdbcType="DOUBLE" />
-		<result property="netAssets" column="NET_ASSETS" jdbcType="DOUBLE" />
-		<result property="assetRatio" column="ASSET_RATIO" jdbcType="DOUBLE" />
-		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
+		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
+		<result property="accountName" column="ACCOUNT_NAME" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER"/>
+		<result property="regDate" column="REG_DATE" jdbcType="TIMESTAMP" />
+		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
+		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
+		<result property="lastLogin" column="LAST_LOGIN" jdbcType="TIMESTAMP" />
+		<result property="version" column="VERSION_LOCK" jdbcType="INTEGER"/>
 	</resultMap>
+	<select id="getAccountByAccountName"
+		resultMap="AccountResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_MEMBER_ACCOUNT WHERE ACCOUNT_NAME=#{condition.accountName} and PARENT_ID=#{condition.parentId}]]>
+	</select>
+	<!-- 子账户高级查询 -->
+	<select id="queryAccount"
+		resultMap="AccountResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT DISTINCT A.ID,A.PARENT_ID,A.ACCOUNT_NAME,A.NAME,
+		A.STATE,A.REG_DATE,A.PASSWORD,A.ACCOUNT_NO,A.LAST_LOGIN,A.VERSION_LOCK  
+		 FROM M_MEMBER_ACCOUNT A LEFT JOIN M_MEMBER_ROLE r ON A.ID=r.ACCOUNT_ID WHERE 1=1]]>
+		<if test="condition.parentId != null and condition.parentId != ''">
+			<![CDATA[AND A.PARENT_ID = #{condition.parentId} ]]>
+		</if>
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND A.NAME LIKE CONCAT('%',#{condition.name},'%')]]>
+		</if>
+		<if test="condition.accountNo != null and condition.accountNo != ''">
+			<![CDATA[AND A.ACCOUNT_NO = #{condition.accountNo}]]>
+		</if>
+		<if test="condition.accountName != null and condition.accountName != ''">
+			<![CDATA[AND A.ACCOUNT_NAME LIKE CONCAT('%',#{condition.accountName},'%')]]>
+		</if>
+		<if test="condition.state != null">
+			<![CDATA[AND A.STATE = #{condition.state}]]>
+		</if>
+		<!-- 权限ID -->
+		<if test="condition.functionId!= null  and condition.functionId!=''">
+			<![CDATA[ AND r.FUNCTION_ID=#{condition.functionId}]]>
+		</if>
+		<!-- 子会员注册时间段 -->
+		<if
+			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
+			<![CDATA[AND A.REG_DATE >=#{condition.startDate} AND A.REG_DATE <= #{condition.endDate}]]>
+		</if>
+		<![CDATA[ ORDER BY A.STATE DESC,A.REG_DATE DESC]]>
+	</select>
 </mapper>

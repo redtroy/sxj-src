@@ -27,7 +27,6 @@ public interface IGuaranteeDao {
 	 *
 	 * @param id
 	 **/
-	@Get
-	public GuaranteeEntity getGuarantee(String id);
+	public GuaranteeEntity getGuarantee(String memberNo);
 
 }

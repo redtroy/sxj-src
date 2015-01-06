@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.finance.entity.member.MemberEntity;
 import com.sxj.finance.manage.controller.BaseController;
+import com.sxj.finance.model.member.LoanQuery;
 import com.sxj.finance.model.member.MemberQuery;
+import com.sxj.finance.service.member.ILoanService;
 import com.sxj.finance.service.member.IMemberService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -24,6 +26,9 @@ public class MemberController extends BaseController {
 
 	@Autowired
 	private IMemberService memberService;
+	
+	@Autowired
+	private ILoanService loanService;
 
 	/**
 	 * 会员管理列表
@@ -76,7 +81,7 @@ public class MemberController extends BaseController {
 	}
 
 	/**
-	 * 修改审核状态
+	 * 会员详情
 	 * 
 	 * @param id
 	 * @return
@@ -85,6 +90,10 @@ public class MemberController extends BaseController {
 	public String getMemberInfo(String id, ModelMap map) throws WebException {
 		try {
 			MemberEntity member = memberService.getMember(id);
+			if(member!=null){
+				LoanQuery loan =loanService.queryLoanInfo(member.getMemberNo());
+				map.put("loan", loan);
+			}
 			map.put("member", member);
 			map.put("id", id);
 			return "manage/member/memberInfo";

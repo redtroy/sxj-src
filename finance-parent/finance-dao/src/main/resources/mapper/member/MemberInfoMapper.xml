@@ -8,7 +8,7 @@
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
-		<result property="sex" column="SEX" jdbcType="INTEGER" />
+		<result property="sex" column="SEX" jdbcType="BOOLEAN" />
 		<result property="age" column="AGE" jdbcType="INTEGER"/>
 		<result property="homeAddress" column="HOME_ADDRESS" jdbcType="VARCHAR" />
 		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
@@ -20,4 +20,9 @@
 		<result property="manage" column="MANAGE" jdbcType="VARCHAR" />
 		<result property="manageRange" column="MANAGE_RANGE" jdbcType="VARCHAR" />
 	</resultMap>
+	
+	<select id="getMemberInfo" resultMap="MemberInfoResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_MEMBER_INFO WHERE MEMBER_NO=#{memberNo}]]>
+	</select>
 </mapper>

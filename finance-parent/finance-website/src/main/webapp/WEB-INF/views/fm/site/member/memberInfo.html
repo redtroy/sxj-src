@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>紫金财富金融服务平台</title>
+<meta name="keywords" content="紫金财富金融服务平台"/>
+<meta name="description" content="紫金财富金融服务平台"/>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<@b.validate/>
+<@b.dialogBox/>
+<script type="text/javascript">
+var validform;
+
+$(document).ready(function() {
+	validform = $("#loanForm").Validform({
+		tiptype : 3
+	});
+})
+
+function saveLoan(){
+	if (!validform.check()) {
+		return;
+	}
+	dialogBox(function(index) {
+		$.post("addLoan.htm", $("#loanForm").serialize(),
+				function(data) {
+					layer.close(index);
+					if (data.isOk == 'ok') {
+						alert("成功");
+					}else{
+						alert("失败");
+					}
+				});
+	}, "是否保存会员信息?");
+}
+</script>
+</head>
+
+<body>
+<@b.header/>
+<div class="fence-wide pb20 ly-clearFix">
+<@b.leftMenu/>
+<div class="yard-880 rightSide ly-left">
+<div class="heading fontYH f22">会员中心<div class="mt5 color-gray9 ly-right f14"><span class="icon icon-secret mr10">&nbsp;</span>对于您的隐私信息，我们会严格保密</div></div>
+<div class="mainBox">
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone mb20">
+<caption class="fontYH f16 mb10 ly-hide">基本资料</caption>
+  <tr>
+    <th>企业名称</th>
+    <td>${member.name}</td>
+  </tr>
+  <tr>
+    <th>企业类型</th>
+    <td>${member.type.getName()}</td>
+  </tr>
+  <tr>
+    <th>公司所在地</th>
+    <td>
+    <#assign areaArr=(member.area?split(","))>
+    <#list areaArr as areaArr>
+    	<#assign area=(areaArr?split(":"))>
+    	<#list area as area>
+    		<#if !area_has_next>${area}</#if>
+    	</#list>
+    </#list>
+    </td>
+  </tr>
+  <tr>
+    <th>企业资质</th>
+    <td>${member.bLicenseNo}<span class="ml20">${member.energyNo}</span></td>
+  </tr>
+  <tr>
+    <th>公司电话</th>
+    <td><span class="item">${member.telNum}</span></td>
+  </tr>
+  <tr>
+    <th>公司地址</th>
+    <td><span class="item">${member.address}</span></td>
+  </tr>
+  <tr>
+    <th>联系人</th>
+    <td>${member.contacts}</td>
+  </tr>
+  <tr>
+    <th>联系人手机</th>
+    <td><span class="item">${member.phoneNo}</span></td>
+  </tr>
+  <tr>
+    <th>主要产品</th>
+    <td>${member.type.getName()}</td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone mb20">
+    <caption class="fontYH f16">
+      基本资料
+      </caption>
+    <tr>
+      <th>姓名</th>
+      <td>${loan.memberInfo.name}</td>
+    </tr>
+    <tr>
+      <th>性别</th>
+      <td>${loan.memberInfo.sex}</td>
+    </tr>
+    <tr>
+      <th>年龄</th>
+      <td>${loan.memberInfo.age}</td>
+    </tr>
+    <tr>
+      <th>家庭住址</th>
+      <td>${loan.memberInfo.homeAddress}</td>
+    </tr>
+    <tr>
+      <th>联系电话</th>
+      <td>${loan.memberInfo.telNum}</td>
+    </tr>
+    <tr>
+      <th>身份证号</th>
+      <td>${loan.memberInfo.cardNum}</td>
+    </tr>
+    <tr>
+      <th>电子邮箱</th>
+      <td>${loan.memberInfo.email}</td>
+    </tr>
+    <tr>
+      <th>经营主体</th>
+      <td>${loan.memberInfo.manage}</td>
+    </tr>
+    <tr>
+      <th>地址</th>
+      <td>${loan.memberInfo.address}</td>
+    </tr>
+    <tr>
+      <th>营业执照编码</th>
+      <td>${loan.memberInfo.bLicence}</td>
+    </tr>
+    <tr>
+      <th>注册资本</th>
+      <td>${loan.memberInfo.registered}</td>
+    </tr>
+    <tr>
+      <th>经营范围</th>
+      <td>${loan.memberInfo.manageRange}</td>
+    </tr>
+  </table>
+  <table border="0" cellpadding="0" cellspacing="0" class="table tableNone mb20">
+    <caption class="fontYH f16">
+      资产情况<span class="f12 color-gray6 ml10">(截至上个月末)</span>
+      </caption>
+    <tr>
+      <th>资产总额</th>
+      <td>${loan.assetsInfo.assetsSum}</td>
+    </tr>
+    <tr>
+      <th>负债总额</th>
+      <td>${loan.assetsInfo.liabilities}</td>
+    </tr>
+    <tr>
+      <th>固定资产净值</th>
+      <td>${loan.assetsInfo.fixedAssets}</td>
+    </tr>
+    <tr>
+      <th>应收账款总额</th>
+      <td>${loan.assetsInfo.receviceSum}</td>
+    </tr>
+    <tr>
+      <th>净资产</th>
+      <td>${loan.assetsInfo.netAssets}</td>
+    </tr>
+    <tr>
+      <th>资产负债率</th>
+      <td>${loan.assetsInfo.assetRatio}</td>
+    </tr>
+    <tr>
+      <th>其他资产情况备注</th>
+      <td>${loan.assetsInfo.remark}</td>
+    </tr>
+</table>
+  <table border="0" cellpadding="0" cellspacing="0" class="table tableNone mb20">
+    <caption class="fontYH f16">
+    经营情况
+    </caption>
+  <tr>
+    <th>上年度主营业务收入</th>
+    <td>${loan.management.mainIncome}</td>
+  </tr>
+  <tr>
+    <th>上年度净利润</th>
+    <td>${loan.management.preNetProfit}</td>
+  </tr>
+  <tr>
+    <th>本年度累计销售额</th>
+    <td>${loan.management.saleSum}</td>
+  </tr>
+  <tr>
+    <th>本年度累计净利润</th>
+    <td>${loan.management.nowNetProfit}</td>
+  </tr>
+  <tr>
+    <th>近3个月资金流入</th>
+    <td>${loan.management.inFlow}</td>
+  </tr>
+  <tr>
+    <th>近3个月资金流出</th>
+    <td>${loan.management.outFlow}</td>
+  </tr>
+</table>
+  <table border="0" cellpadding="0" cellspacing="0" class="table tableNone mb20">
+    <caption class="fontYH f16">信用记录
+    </caption>
+  <tr>
+    <th>未结清贷款笔数</th>
+    <td>${loan.creditInfo.unLoan}</td>
+  </tr>
+  <tr>
+    <th>未结清贷款总额</th>
+    <td>${loan.creditInfo.unLoanAmount}</td>
+  </tr>
+  <tr>
+    <th>有无贷款逾期记录</th>
+    <td>${loan.creditInfo.isOverdue}</td>
+  </tr>
+  <tr>
+    <th>逾期贷款期数</th>
+    <td>${loan.creditInfo.overdueNum}</td>
+  </tr>
+  <tr>
+    <th>单笔最高逾期金额</th>
+    <td>${loan.creditInfo.maxOverdueAmount}</td>
+  </tr>
+  <tr>
+    <th>最长逾期月数</th>
+    <td>${loan.creditInfo.maxOverdueMonth}</td>
+  </tr>
+  <tr>
+    <th>信用卡逾期记录</th>
+    <td>${loan.creditInfo.cardOverdue}</td>
+  </tr>
+  <tr>
+    <th>单笔最高逾期金额</th>
+    <td>${loan.creditInfo.cardMaxOverdueAmount}</td>
+  </tr>
+  <tr>
+    <th>对外担保总额</th>
+    <td>${loan.creditInfo.guarantee}</td>
+  </tr>
+  <tr>
+    <th>未结清贷款到期明细</th>
+    <td>${loan.creditInfo.loanItem}</td>
+  </tr>
+  <tr>
+    <th>对外担保到期明细</th>
+    <td>${loan.creditInfo.guaranteeItem}</td>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="table tableNone mb20">
+  <caption class="fontYH f16">担保情况</caption>
+  <tr>
+    <td colspan="2" class="tl tabTitle fb mb5">1、可抵押资产情况</td>
+  </tr>
+  <tr>
+    <th>产权人</th>
+    <td>${loan.guarantee.property}</td>
+  </tr>
+  <tr>
+    <th>房屋座落</th>
+    <td>${loan.guarantee.houseAddress}</td>
+  </tr>
+  <tr>
+    <th>建筑面积</th>
+    <td>${loan.guarantee.houseArea}</td>
+  </tr>
+  <tr>
+    <th>房价估算</th>
+    <td>${loan.guarantee.houseAmount}</td>
+  </tr>
+  <tr>
+    <td colspan="2" class="tl tabTitle fb mb5">2、可保证担保情况</td>
+  </tr>
+  <tr>
+    <th>担保企业</th>
+    <td>${loan.guarantee.enterprise}</td>
+  </tr>
+  <tr>
+    <th>地址</th>
+    <td>${loan.guarantee.address}</td>
+  </tr>
+  <tr>
+    <th>企业法人姓名</th>
+    <td>${loan.guarantee.legal}</td>
+  </tr>
+  <tr>
+    <th>注册资本</th>
+    <td>${loan.guarantee.registered}</td>
+  </tr>
+  <tr>
+    <th>经营范围</th>
+    <td>${loan.guarantee.manageRange}</td>
+  </tr>
+  <tr>
+    <th>资产总额</th>
+    <td>${loan.guarantee.assetsSum}</td>
+  </tr>
+  <tr>
+    <th>负债总额</th>
+    <td>${loan.guarantee.liabilities}</td>
+  </tr>
+  <tr>
+    <th>固定资产总额</th>
+    <td>${loan.guarantee.fixedAssets}</td>
+  </tr>
+  <tr>
+    <th>资产负债率</th>
+    <td>${loan.guarantee.assetRatio}</td>
+  </tr>
+  <tr>
+    <th>本年度销售额累计</th>
+    <td>${loan.guarantee.saleSum}</td>
+  </tr>
+  <tr>
+    <th>本年度净利润累计</th>
+    <td>${loan.guarantee.nowNetProfit}</td>
+  </tr>
+</table>
+<div class="buttonBox memBtn">
+  <a href="toModify.htm" class="button button-red">修改会员信息</a>
+  <a href="#" class="button button-gray">取消</a>
+</div>
+</div>
+</div>
+<@b.footer/>
+</body>
+</html>

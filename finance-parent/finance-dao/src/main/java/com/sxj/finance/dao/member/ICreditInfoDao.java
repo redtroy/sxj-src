@@ -27,7 +27,6 @@ public interface ICreditInfoDao {
 	 *
 	 * @param id
 	 **/
-	@Get
-	public CreditInfoEntity getCreditInfo(String id);
+	public CreditInfoEntity getCreditInfo(String memberNo);
 
 }

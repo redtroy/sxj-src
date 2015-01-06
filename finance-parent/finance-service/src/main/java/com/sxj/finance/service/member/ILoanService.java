@@ -9,6 +9,6 @@ public interface ILoanService {
 	
 	public void modifyLoanInfo(LoanQuery loan) throws ServiceException;
 	
-	public LoanQuery modifyLoanInfo(String memberNo) throws ServiceException;
+	public LoanQuery queryLoanInfo(String memberNo) throws ServiceException;
 	
 }

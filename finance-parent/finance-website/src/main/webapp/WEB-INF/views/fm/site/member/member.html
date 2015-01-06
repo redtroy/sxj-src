@@ -27,7 +27,12 @@ function saveLoan(){
 				function(data) {
 					layer.close(index);
 					if (data.isOK == 'ok') {
-					} 
+						succInfo(function(){
+							window.location.href = "info.htm";
+						 },"保存会员信息成功");
+					}else{
+						messageInfo("保存会员信息失败");
+					}
 				});
 	}, "是否保存会员信息?");
 }
@@ -88,62 +93,67 @@ function saveLoan(){
     <td>${member.type.getName()}</td>
   </tr>
 </table>
-<form action="" id="loanForm">
+<form action="" id="loanForm" method="post">
+<input type="hidden" value="${member.memberNo}" name="memberInfo.memberNo"/>
+<input type="hidden" value="${member.memberNo}" name="assetsInfo.memberNo"/>
+<input type="hidden" value="${member.memberNo}" name="management.memberNo"/>
+<input type="hidden" value="${member.memberNo}" name="creditInfo.memberNo"/>
+<input type="hidden" value="${member.memberNo}" name="guarantee.memberNo"/>
 <table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
   <caption class="fontYH f16">
     基本资料
     </caption>
   <tr>
     <th>姓名</th>
-    <td><input type="text" name="loan.memberInfo.name" datatype="*1-50" nullmsg="请输入姓名" id="name" class=" input input-w140h30"/></td>
+    <td><input type="text" name="memberInfo.name" datatype="*1-50" nullmsg="请输入姓名" id="name" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>性别</th>
     <td><span class="mr10">
-      <input type="radio" name="loan.memberInfo.sex" id="" />
+      <input type="radio" name="memberInfo.sex" id="" value="false" />
       男</span>
-      <input type="radio" name="loan.memberInfo.sex" id="" />
+      <input type="radio" name="memberInfo.sex" id="" value="true" />
       女 </td>
   </tr>
   <tr>
     <th>年龄</th>
-    <td><input type="text" name="loan.memberInfo.age" id="" class=" input input-w50h30"/></td>
+    <td><input type="text" name="memberInfo.age" id="" class=" input input-w50h30"/></td>
   </tr>
   <tr>
     <th>家庭住址</th>
-    <td><textarea name="loan.memberInfo.homeAddress" id="" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="memberInfo.homeAddress" id="" cols="80" rows="2" class="input"></textarea></td>
   </tr>
   <tr>
     <th>联系电话</th>
-    <td><input name="loan.memberInfo.telNum" type="text" class=" input input-w180h30" id="textfield4"/></td>
+    <td><input name="memberInfo.telNum" type="text" class=" input input-w180h30" id="textfield4"/></td>
   </tr>
   <tr>
     <th>身份证号</th>
-    <td><input name="loan.memberInfo.cardNum" type="text" class=" input input-w180h30" id="textfield5"/></td>
+    <td><input name="memberInfo.cardNum" type="text" class=" input input-w180h30" id="textfield5"/></td>
   </tr>
   <tr>
     <th>电子邮箱</th>
-    <td><input type="text" name="loan.memberInfo.email" id="textfield6" class=" input input-w180h30"/></td>
+    <td><input type="text" name="memberInfo.email" id="textfield6" class=" input input-w180h30"/></td>
   </tr>
   <tr>
     <th>地址</th>
-    <td><textarea name="loan.memberInfo.address" id="textarea4" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="memberInfo.address" id="textarea4" cols="80" rows="2" class="input"></textarea></td>
   </tr>
   <tr>
     <th>营业执照编码</th>
-    <td><input type="text" name="loan.memberInfo.bLicence" id="textfield9" class=" input input-w180h30"/></td>
+    <td><input type="text" name="memberInfo.bLicence" id="textfield9" class=" input input-w180h30"/></td>
   </tr>
   <tr>
     <th>注册资本</th>
-    <td><input name="loan.memberInfo.registered" type="text" class=" input input-w180h30" id="textfield10"/></td>
+    <td><input name="memberInfo.registered" type="text" class=" input input-w180h30" id="textfield10"/></td>
   </tr>
   <tr>
     <th>经营主体</th>
-    <td><textarea name="loan.memberInfo.manage" id="textarea5" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="memberInfo.manage" id="textarea5" cols="80" rows="2" class="input"></textarea></td>
   </tr>
   <tr>
     <th>经营范围</th>
-    <td><textarea name="loan.memberInfo.manageRange" id="textarea" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="memberInfo.manageRange" id="textarea" cols="80" rows="2" class="input"></textarea></td>
   </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
@@ -152,31 +162,31 @@ function saveLoan(){
     </caption>
   <tr>
     <th>资产总额</th>
-    <td><input type="text" name="loan.assetsInfo.assetsSum" id="textfield3" class=" input input-w140h30"/></td>
+    <td><input type="text" name="assetsInfo.assetsSum" id="textfield3" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>负债总额</th>
-    <td><input type="text" name="loan.assetsInfo.liabilities" id="textfield7" class=" input input-w140h30"/></td>
+    <td><input type="text" name="assetsInfo.liabilities" id="textfield7" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>固定资产净值</th>
-    <td><input type="text" name="loan.assetsInfo.fixedAssets" id="textfield8" class=" input input-w140h30"/></td>
+    <td><input type="text" name="assetsInfo.fixedAssets" id="textfield8" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>应收账款总额</th>
-    <td><input type="text" name="loan.assetsInfo.receviceSum" id="textfield11" class=" input input-w140h30"/></td>
+    <td><input type="text" name="assetsInfo.receviceSum" id="textfield11" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>净资产</th>
-    <td><input type="text" name="loan.assetsInfo.netAssets" id="textfield12" class=" input input-w140h30"/></td>
+    <td><input type="text" name="assetsInfo.netAssets" id="textfield12" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>资产负债率</th>
-    <td><input type="text" name="loan.assetsInfo.assetRatio" id="textfield13" class=" input input-w140h30"/></td>
+    <td><input type="text" name="assetsInfo.assetRatio" id="textfield13" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>其他资产情况备注</th>
-    <td><textarea name="loan.assetsInfo.remark" id="textarea2" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="assetsInfo.remark" id="textarea2" cols="80" rows="2" class="input"></textarea></td>
   </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
@@ -185,27 +195,27 @@ function saveLoan(){
     </caption>
   <tr>
     <th>上年度主营业务收入</th>
-    <td><input type="text" name="loan.management.mainIncome" id="textfield14" class=" input input-w140h30"/></td>
+    <td><input type="text" name="management.mainIncome" id="textfield14" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>上年度净利润</th>
-    <td><input type="text" name="loan.management.preNetProfit" id="textfield15" class=" input input-w140h30"/></td>
+    <td><input type="text" name="management.preNetProfit" id="textfield15" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>本年度累计销售额</th>
-    <td><input type="text" name="loan.management.saleSum" id="textfield16" class=" input input-w140h30"/></td>
+    <td><input type="text" name="management.saleSum" id="textfield16" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>本年度累计净利润</th>
-    <td><input type="text" name="loan.management.nowNetProfit" id="textfield17" class=" input input-w140h30"/></td>
+    <td><input type="text" name="management.nowNetProfit" id="textfield17" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>近3个月资金流入</th>
-    <td><input type="text" name="loan.management.inFlow" id="textfield18" class=" input input-w140h30"/></td>
+    <td><input type="text" name="management.inFlow" id="textfield18" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>近3个月资金流出</th>
-    <td><input type="text" name="loan.management.outFlow" id="textfield19" class=" input input-w140h30"/></td>
+    <td><input type="text" name="management.outFlow" id="textfield19" class=" input input-w140h30"/></td>
   </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
@@ -214,51 +224,51 @@ function saveLoan(){
     </caption>
   <tr>
     <th>未结清贷款笔数</th>
-    <td><input type="text" name="loan.creditInfo.unLoan" id="textfield20" class=" input input-w50h30"/></td>
+    <td><input type="text" name="creditInfo.unLoan" id="textfield20" class=" input input-w50h30"/></td>
   </tr>
   <tr>
     <th>未结清贷款总额</th>
-    <td><input type="text" name="loan.creditInfo.unLoanAmount" id="textfield21" class=" input input-w140h30"/></td>
+    <td><input type="text" name="creditInfo.unLoanAmount" id="textfield21" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>有无贷款逾期记录</th>
     <td><span class="mr10">
-      <input type="radio" name="loan.creditInfo.isOverdue" id="" />
+      <input type="radio" name="creditInfo.isOverdue" id="" />
       有 </span>
-      <input type="radio" name="loan.creditInfo.isOverdue" id="" />
+      <input type="radio" name="creditInfo.isOverdue" id="" />
       没有</td>
   </tr>
   <tr>
     <th>逾期贷款期数</th>
-    <td><input type="text" name="loan.creditInfo.overdueNum" id="textfield22" class=" input input-w50h30"/></td>
+    <td><input type="text" name="creditInfo.overdueNum" id="textfield22" class=" input input-w50h30"/></td>
   </tr>
   <tr>
     <th>单笔最高逾期金额</th>
-    <td><input type="text" name="loan.creditInfo.maxOverdueAmount" id="textfield23" class=" input input-w140h30"/></td>
+    <td><input type="text" name="creditInfo.maxOverdueAmount" id="textfield23" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>最长逾期月数</th>
-    <td><input type="text" name="loan.creditInfo.maxOverdueMonth" id="textfield24" class=" input input-w50h30"/></td>
+    <td><input type="text" name="creditInfo.maxOverdueMonth" id="textfield24" class=" input input-w50h30"/></td>
   </tr>
   <tr>
     <th>信用卡逾期记录</th>
-    <td><input type="text" name="loan.creditInfo.cardOverdue" id="textfield25" class=" input input-w140h30"/></td>
+    <td><input type="text" name="creditInfo.cardOverdue" id="textfield25" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>单笔最高逾期金额</th>
-    <td><input type="text" name="loan.creditInfo.cardMaxOverdueAmount" id="textfield26" class=" input input-w140h30"/></td>
+    <td><input type="text" name="creditInfo.cardMaxOverdueAmount" id="textfield26" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>对外担保总额</th>
-    <td><input type="text" name="loan.creditInfo.guarantee" id="textfield27" class=" input input-w140h30"/></td>
+    <td><input type="text" name="creditInfo.guarantee" id="textfield27" class=" input input-w140h30"/></td>
   </tr>
   <tr>
     <th>未结清贷款到期明细</th>
-    <td><textarea name="loan.creditInfo.loanItem" id="textarea6" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="creditInfo.loanItem" id="textarea6" cols="80" rows="2" class="input"></textarea></td>
   </tr>
   <tr>
     <th>对外担保到期明细</th>
-    <td><textarea name="loan.creditInfo.guaranteeItem" id="textarea7" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="creditInfo.guaranteeItem" id="textarea7" cols="80" rows="2" class="input"></textarea></td>
   </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" class="table tableNone tableMember mb20">
@@ -270,66 +280,66 @@ function saveLoan(){
   </tr>
   <tr>
     <th>产权人</th>
-    <td><input name="loan.guarantee.property" type="text" class=" input input-w140h30" id="textfield28"/></td>
+    <td><input name="guarantee.property" type="text" class=" input input-w140h30" id="textfield28"/></td>
   </tr>
   <tr>
     <th>房屋座落</th>
-    <td><textarea name="loan.guarantee.houseAddress" id="textarea9" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="guarantee.houseAddress" id="textarea9" cols="80" rows="2" class="input"></textarea></td>
   </tr>
   <tr>
     <th>建筑面积</th>
-    <td><input name="loan.guarantee.houseArea" type="text" class=" input input-w140h30" id="textfield29"/></td>
+    <td><input name="guarantee.houseArea" type="text" class=" input input-w140h30" id="textfield29"/></td>
   </tr>
   <tr>
     <th>房价估算</th>
-    <td><input name="loan.guarantee.houseAmount" type="text" class=" input input-w140h30" id="textfield30"/></td>
+    <td><input name="guarantee.houseAmount" type="text" class=" input input-w140h30" id="textfield30"/></td>
   </tr>
   <tr>
     <td colspan="2" class="tl tabTitle fb mb5">2、可保证担保情况</td>
   </tr>
   <tr>
     <th>担保企业</th>
-    <td><input type="text" name="loan.guarantee.enterprise" id="textfield31" class=" input input-w270h30"/></td>
+    <td><input type="text" name="guarantee.enterprise" id="textfield31" class=" input input-w270h30"/></td>
   </tr>
   <tr>
     <th>地址</th>
-    <td><textarea name="loan.guarantee.address" id="textarea8" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="guarantee.address" id="textarea8" cols="80" rows="2" class="input"></textarea></td>
   </tr>
   <tr>
     <th>企业法人姓名</th>
-    <td><input name="loan.guarantee.legal" type="text" class=" input input-w140h30" id="textfield32"/></td>
+    <td><input name="guarantee.legal" type="text" class=" input input-w140h30" id="textfield32"/></td>
   </tr>
   <tr>
     <th>注册资本</th>
-    <td><input name="loan.guarantee.registered" type="text" class=" input input-w140h30" id="textfield33"/></td>
+    <td><input name="guarantee.registered" type="text" class=" input input-w140h30" id="textfield33"/></td>
   </tr>
   <tr>
     <th>经营范围</th>
-    <td><textarea name="loan.guarantee.manageRange" id="textarea10" cols="80" rows="2" class="input"></textarea></td>
+    <td><textarea name="guarantee.manageRange" id="textarea10" cols="80" rows="2" class="input"></textarea></td>
   </tr>
   <tr>
     <th>资产总额</th>
-    <td><input name="loan.guarantee.assetsSum" type="text" class=" input input-w140h30" id="textfield34"/></td>
+    <td><input name="guarantee.assetsSum" type="text" class=" input input-w140h30" id="textfield34"/></td>
   </tr>
   <tr>
     <th>负债总额</th>
-    <td><input name="loan.guarantee.liabilities" type="text" class=" input input-w140h30" id="textfield35"/></td>
+    <td><input name="guarantee.liabilities" type="text" class=" input input-w140h30" id="textfield35"/></td>
   </tr>
   <tr>
     <th>固定资产总额</th>
-    <td><input name="loan.guarantee.fixedAssets" type="text" class=" input input-w140h30" id="textfield36"/></td>
+    <td><input name="guarantee.fixedAssets" type="text" class=" input input-w140h30" id="textfield36"/></td>
   </tr>
   <tr>
     <th>资产负债率</th>
-    <td><input name="loan.guarantee.assetRatio" type="text" class=" input input-w140h30" id="textfield37"/></td>
+    <td><input name="guarantee.assetRatio" type="text" class=" input input-w140h30" id="textfield37"/></td>
   </tr>
   <tr>
     <th>本年度销售额累计</th>
-    <td><input name="loan.guarantee.saleSum" type="text" class=" input input-w140h30" id="textfield38"/></td>
+    <td><input name="guarantee.saleSum" type="text" class=" input input-w140h30" id="textfield38"/></td>
   </tr>
   <tr>
     <th>本年度净利润累计</th>
-    <td><input name="loan.guarantee.nowNetProfit" type="text" class=" input input-w140h30" id="textfield39"/></td>
+    <td><input name="guarantee.nowNetProfit" type="text" class=" input input-w140h30" id="textfield39"/></td>
   </tr>
 </table>
 <div class="buttonBox memBtn">

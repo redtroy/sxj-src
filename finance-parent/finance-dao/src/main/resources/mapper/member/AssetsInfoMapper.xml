@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.sxj.finance.dao.member.IAssetsInfoDao">
 	<resultMap id="AssetsInfoResultMap"
 		type="com.sxj.finance.entity.member.AssetsInfoEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
-		<result property="accountName" column="ACCOUNT_NAME" jdbcType="VARCHAR" />
-		<result property="name" column="NAME" jdbcType="VARCHAR" />
-		<result property="state" column="STATE" jdbcType="INTEGER"/>
-		<result property="regDate" column="REG_DATE" jdbcType="TIMESTAMP" />
-		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
-		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
-		<result property="lastLogin" column="LAST_LOGIN" jdbcType="TIMESTAMP" />
-		<result property="version" column="VERSION_LOCK" jdbcType="INTEGER"/>
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="assetsSum" column="ASSETS_SUM" jdbcType="DOUBLE" />
+		<result property="liabilities" column="LIABILITIES" jdbcType="DOUBLE" />
+		<result property="fixedAssets" column="FIXED_ASSETS" jdbcType="DOUBLE"/>
+		<result property="receviceSum" column="RECEVICE_SUM" jdbcType="DOUBLE" />
+		<result property="netAssets" column="NET_ASSETS" jdbcType="DOUBLE" />
+		<result property="assetRatio" column="ASSET_RATIO" jdbcType="DOUBLE" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
 	</resultMap>
+	
+	<select id="getAssetsInfo" resultMap="AssetsInfoResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_MEMBER_ASSETSINFO WHERE MEMBER_NO=#{memberNo}]]>
+	</select>
 </mapper>

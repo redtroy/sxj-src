@@ -7,20 +7,19 @@ import com.sxj.finance.entity.member.CreditInfoEntity;
 import com.sxj.finance.entity.member.GuaranteeEntity;
 import com.sxj.finance.entity.member.ManagementEntity;
 import com.sxj.finance.entity.member.MemberInfoEntity;
-import com.sxj.mybatis.pagination.Pagable;
-
 /**
  * 贷款申报表Model
  * 
  * @author Ann
  *
  */
-public class LoanQuery extends Pagable implements Serializable {
+public class LoanQuery  implements Serializable {
+
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2962308348902169716L;
+	private static final long serialVersionUID = -6910916929086257361L;
 
 	/**
 	 * 基本信息

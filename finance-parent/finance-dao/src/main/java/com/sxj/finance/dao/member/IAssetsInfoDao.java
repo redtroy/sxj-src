@@ -28,7 +28,6 @@ public interface IAssetsInfoDao {
 	 *
 	 * @param id
 	 **/
-	@Get
-	public AssetsInfoEntity getAssetsInfo(String id);
+	public AssetsInfoEntity getAssetsInfo(String memberNo);
 
 }

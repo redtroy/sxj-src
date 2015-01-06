@@ -27,7 +27,6 @@ public interface IManagementDao {
 	 *
 	 * @param id
 	 **/
-	@Get
-	public ManagementEntity getManagement(String id);
+	public ManagementEntity getManagement(String memberNo);
 
 }

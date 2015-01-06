@@ -9,6 +9,11 @@ import com.sxj.finance.dao.member.ICreditInfoDao;
 import com.sxj.finance.dao.member.IGuaranteeDao;
 import com.sxj.finance.dao.member.IManagementDao;
 import com.sxj.finance.dao.member.IMemberInfoDao;
+import com.sxj.finance.entity.member.AssetsInfoEntity;
+import com.sxj.finance.entity.member.CreditInfoEntity;
+import com.sxj.finance.entity.member.GuaranteeEntity;
+import com.sxj.finance.entity.member.ManagementEntity;
+import com.sxj.finance.entity.member.MemberInfoEntity;
 import com.sxj.finance.model.member.LoanQuery;
 import com.sxj.finance.service.member.ILoanService;
 import com.sxj.util.exception.ServiceException;
@@ -70,9 +75,24 @@ public class LoanServiceImpl implements ILoanService {
 	}
 
 	@Override
-	public LoanQuery modifyLoanInfo(String memberNo) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public LoanQuery queryLoanInfo(String memberNo) throws ServiceException {
+		try{
+			LoanQuery loan = new LoanQuery();
+			AssetsInfoEntity assetsInfo=assetsInfoDao.getAssetsInfo(memberNo);
+			CreditInfoEntity creditInfo=creditInfoDao.getCreditInfo(memberNo);
+			GuaranteeEntity guarantee=guaranteeDao.getGuarantee(memberNo);
+			ManagementEntity management=managementDao.getManagement(memberNo);
+			MemberInfoEntity memberInfo=memberInfoDao.getMemberInfo(memberNo);
+			loan.setAssetsInfo(assetsInfo);
+			loan.setCreditInfo(creditInfo);
+			loan.setGuarantee(guarantee);
+			loan.setManagement(management);
+			loan.setMemberInfo(memberInfo);
+			return loan;
+		} catch (Exception e) {
+			SxjLogger.error("获取贷款申请表错误", e, this.getClass());
+			throw new ServiceException("获取贷款申请表错误", e);
+		}
 	}
 
 }

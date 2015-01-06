@@ -27,6 +27,5 @@ public interface IMemberInfoDao {
 	 *
 	 * @param id
 	 **/
-	@Get
-	public MemberInfoEntity getManagement(String id);
+	public MemberInfoEntity getMemberInfo(String memberNo);
 }

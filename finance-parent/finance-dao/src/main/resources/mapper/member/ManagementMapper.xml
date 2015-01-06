@@ -14,4 +14,9 @@
 		<result property="inFlow" column="IN_FLOW" jdbcType="DOUBLE" />
 		<result property="outFlow" column="OUT_FLOW" jdbcType="DOUBLE" />
 	</resultMap>
+	
+	<select id="getManagement" resultMap="ManagementResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_MEMBER_MANAGEMENT WHERE MEMBER_NO=#{memberNo}]]>
+	</select>
 </mapper>

@@ -3,7 +3,6 @@ package com.sxj.finance.entity.member;
 import java.io.Serializable;
 
 import com.sxj.finance.dao.member.IMemberInfoDao;
-import com.sxj.finance.enu.member.SexStatesEnum;
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
@@ -49,7 +48,7 @@ public class MemberInfoEntity extends Pagable implements Serializable {
 	 * 性别
 	 */
 	@Column(name = "SEX")
-	private SexStatesEnum sex;
+	private Boolean sex;
 	/**
 	 * 年龄
 	 */
@@ -118,10 +117,10 @@ public class MemberInfoEntity extends Pagable implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public SexStatesEnum getSex() {
+	public Boolean getSex() {
 		return sex;
 	}
-	public void setSex(SexStatesEnum sex) {
+	public void setSex(Boolean sex) {
 		this.sex = sex;
 	}
 	public Integer getAge() {

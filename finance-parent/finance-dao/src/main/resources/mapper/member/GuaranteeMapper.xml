@@ -7,16 +7,25 @@
 		type="com.sxj.finance.entity.member.GuaranteeEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
-		<result property="unLoan" column="UN_LOAN" jdbcType="INTEGER" />
-		<result property="unLoanAmount" column="UN_LOAN_AMOUNT" jdbcType="DOUBLE" />
-		<result property="isOverdue" column="IS_OVERDUE" jdbcType="BOOLEAN"/>
-		<result property="overdueNum" column="OVERDUE_NUM" jdbcType="INTEGER" />
-		<result property="maxOverdueAmount" column="MAX_OVERDUE_AMOUNT" jdbcType="DOUBLE" />
-		<result property="maxOverdueMonth" column="MAX_OVERDUE_MONTH" jdbcType="INTEGER" />
-		<result property="cardOverdue" column="CARD_OVERDUE" jdbcType="INTEGER" />
-		<result property="cardMaxOverdueAmount" column="CARD_MAX_OVERDUE_AMOUNT" jdbcType="DOUBLE" />
-		<result property="guarantee" column="GUARANTEE" jdbcType="DOUBLE" />
-		<result property="loanItem" column="LOAN_ITEM" jdbcType="VARCHAR" />
-		<result property="guaranteeItem" column="GUARANTEE_ITEM" jdbcType="VARCHAR" />
+		<result property="property" column="PROPERTY" jdbcType="VARCHAR" />
+		<result property="houseAddress" column="HOUSE_ADDRESS" jdbcType="VARCHAR" />
+		<result property="houseArea" column="HOUSE_AREA" jdbcType="VARCHAR"/>
+		<result property="houseAmount" column="HOUSE_AMOUNT" jdbcType="DOUBLE" />
+		<result property="enterprise" column="ENTERPRISE" jdbcType="VARCHAR" />
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
+		<result property="legal" column="LEGAL" jdbcType="VARCHAR" />
+		<result property="registered" column="REGISTERED" jdbcType="DOUBLE" />
+		<result property="manageRange" column="MANAGE_RANGE" jdbcType="VARCHAR" />
+		<result property="assetsSum" column="ASSETS_SUM" jdbcType="DOUBLE" />
+		<result property="liabilities" column="LIABILITIES" jdbcType="DOUBLE" />
+		<result property="fixedAssets" column="FIXED_ASSETS" jdbcType="DOUBLE" />
+		<result property="assetRatio" column="ASSET_RATIO" jdbcType="DOUBLE" />
+		<result property="saleSum" column="SALE_SUM" jdbcType="DOUBLE" />
+		<result property="nowNetProfit" column="NOW_NET_PROFIT" jdbcType="DOUBLE" />
 	</resultMap>
+	
+	<select id="getGuarantee" resultMap="GuaranteeResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_MEMBER_GUARANTEE WHERE MEMBER_NO=#{memberNo}]]>
+	</select>
 </mapper>
