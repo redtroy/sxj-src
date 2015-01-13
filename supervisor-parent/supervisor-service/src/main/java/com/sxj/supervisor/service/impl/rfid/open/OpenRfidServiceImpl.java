@@ -45,6 +45,7 @@ import com.sxj.supervisor.model.open.WinTypeModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -89,10 +90,12 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	private IWindowRfidRefDao windowRfidRefDao;
 
 	@Override
-	public BatchModel getBatchByRfid(String rfid) throws ServiceException,
+	public BatchModel getBatchByRfid(String gid) throws ServiceException,
 			SQLException {
 		BatchModel batchModel = new BatchModel();
+		String rfid =logisticsDao.getRfid(gid).get(0);
 		Bacth batch = new Bacth();
+		if(StringUtils.isNotEmpty(rfid)){
 		QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
 		logisticsQuery.addCondition("rfidNo", rfid);
 		List<LogisticsRfidEntity> ref = logisticsDao
@@ -103,13 +106,13 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 				.queryList(logisticsRefQuery);
 		if (logisticsRef != null && logisticsRef.size() > 0) {
 			LogisticsRefEntity lRef = logisticsRef.get(0);
-			if (lRef.getState().getId() == 1) {//
+			//if (lRef.getState().getId() == 1) {//
 				if (ref != null && ref.size() > 0) {
 					LogisticsRfidEntity le = ref.get(0);
 					ContractNo contract = new ContractNo();
 					contract.setContractNo(le.getContractNo());
 					batchModel.setContract(contract);// 封装合同号
-					if (le.getProgressState().getId() == 0) {
+					if (le.getProgressState().getId() == 2) {
 
 						QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
 						query.addCondition("rfidNo", rfid);
@@ -166,12 +169,15 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 					}
 
 				}
-			} else {
-				batch.setState("3");
-			}
-			batchModel.setBatchList(batch);
+//			} else {
+//				batch.setState("3");
+//			}
+			
 		}
-
+		}else{
+			batch.setState("0");
+		}
+		batchModel.setBatchList(batch);
 		return batchModel;
 	}
 
@@ -205,8 +211,11 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	 * 获取门窗
 	 */
 	@Override
-	public WinTypeModel getWinTypeByRfid(String rfid) throws ServiceException,
+	public WinTypeModel getWinTypeByRfid(String gid) throws ServiceException,
 			SQLException {
+		String rfid =logisticsDao.getRfid(gid).get(0);
+		WinTypeModel wtm = new WinTypeModel();
+		if(StringUtils.isNotEmpty(rfid)){
 		QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
 		query.addCondition("rfidNo", rfid);
 
@@ -216,7 +225,6 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 		List<WindowRefEntity> winRef = windowRfidRefDao
 				.queryWindowRfidRefList(refQuery);
 
-		WinTypeModel wtm = new WinTypeModel();
 		if (winRef != null && winRef.size() > 0) {
 			WindowRefEntity windowRef = winRef.get(0);
 			if (windowRef.getState().getId() == 1) {
@@ -236,6 +244,8 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			}
 		} else {
 			wtm.setState("2");// 未启用
+		}
+			wtm.setState("0");// 失败
 		}
 		return wtm;
 	}
@@ -262,9 +272,11 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	 */
 	@Override
 	@Transactional
-	public int shipped(String rfid) throws ServiceException, SQLException,
+	public int shipped(String gid) throws ServiceException, SQLException,
 			JsonParseException, JsonMappingException, IOException {
 		try {
+			String rfid =logisticsDao.getRfid(gid).get(0);
+			if(StringUtils.isNotEmpty(rfid)){
 			QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
 			logisticsQuery.addCondition("rfidNo", rfid);
 			List<LogisticsRfidEntity> ref = logisticsDao
@@ -301,6 +313,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 					return 2;
 				}
 			}
+			}
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());
@@ -317,8 +330,10 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	 */
 	@Override
 	@Transactional
-	public int accepting(String rfid) throws ServiceException {
+	public int accepting(String gid) throws ServiceException {
 		try {
+			String rfid =logisticsDao.getRfid(gid).get(0);
+			if(StringUtils.isNotEmpty(rfid)){
 			QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
 			logisticsQuery.addCondition("rfidNo", rfid);
 			List<LogisticsRfidEntity> ref = logisticsDao
@@ -360,6 +375,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 						return 1;
 					}
 				}
+			}
 			}
 			return 0;
 		} catch (ServiceException e) {

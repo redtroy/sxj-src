@@ -149,11 +149,11 @@ public class OpenRfidController {
 	 * @return
 	 * @throws SQLException
 	 */
-	@RequestMapping(value = "info/batch/{rfidNo}")
+	@RequestMapping(value = "info/batch/{gid}")
 	public @ResponseBody BatchModel getRfidBatchInfo(
-			@PathVariable String rfidNo, HttpServletResponse response) {
+			@PathVariable String gid, HttpServletResponse response) {
 		try {
-			BatchModel model = openRfidService.getBatchByRfid(rfidNo);
+			BatchModel model = openRfidService.getBatchByRfid(gid);
 			response.setContentType("application/json; charset=utf-8");
 			PrintWriter out = response.getWriter();
 			out.print(JsonMapper.nonEmptyMapper().toJson(model));
@@ -174,12 +174,12 @@ public class OpenRfidController {
 	 * @throws SQLException
 	 * @throws ServiceException
 	 */
-	@RequestMapping(value = "info/contract/{rfidNo}")
+	@RequestMapping(value = "info/contract/{gid}")
 	public @ResponseBody WinTypeModel getRfidContractInfo(
-			@PathVariable String rfidNo, HttpServletResponse response) {
+			@PathVariable String gid, HttpServletResponse response) {
 
 		try {
-			WinTypeModel win = openRfidService.getWinTypeByRfid(rfidNo);
+			WinTypeModel win = openRfidService.getWinTypeByRfid(gid);
 			response.setContentType("application/json; charset=utf-8");
 			PrintWriter out = response.getWriter();
 			out.print(JsonMapper.nonEmptyMapper().toJson(win));
@@ -205,11 +205,11 @@ public class OpenRfidController {
 	 */
 	@RequestMapping(value = "send/{rfidNo}")
 	public @ResponseBody Map<String, Object> sendGoods(
-			@PathVariable String rfidNo) {
+			@PathVariable String gid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 
-			int state = openRfidService.shipped(rfidNo);
+			int state = openRfidService.shipped(gid);
 			if (state == 1) {
 				map.put("state", 1);
 				map.put("message", "发货成功");
@@ -237,10 +237,10 @@ public class OpenRfidController {
 	 */
 	@RequestMapping(value = "check/{rfidNo}")
 	public @ResponseBody Map<String, Object> checkAndAccept(
-			@PathVariable String rfidNo) {
+			@PathVariable String gid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			int state = openRfidService.accepting(rfidNo);
+			int state = openRfidService.accepting(gid);
 			if (state == 1) {
 				map.put("state", 1);
 				map.put("message", "验收成功");
@@ -265,11 +265,11 @@ public class OpenRfidController {
 	 */
 	@RequestMapping(value = "test")
 	public @ResponseBody Map<String, Object> testRfid(String contractNo,
-			String[] rfidNos) {
-		System.err.println(contractNo + "++++" + rfidNos.toString());
+			String[] gids) {
+		System.err.println(contractNo + "++++" + gids.toString());
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			int stepState = windowRfid.testWindow(contractNo, rfidNos);
+			int stepState = windowRfid.testWindow(contractNo, gids);
 			if (stepState == 1) {
 				map.put("state", "1");
 				map.put("message", "质检成功");
@@ -291,12 +291,12 @@ public class OpenRfidController {
 	 * @param rfidNo
 	 * @return
 	 */
-	@RequestMapping(value = "setup/{rfidNo}")
+	@RequestMapping(value = "setup/{gid}")
 	public @ResponseBody Map<String, Object> setupRfid(
-			@PathVariable String rfidNo) {
+			@PathVariable String gid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			int stepState = windowRfid.stepWindow(rfidNo);
+			int stepState = windowRfid.stepWindow(gid);
 			if (stepState == 1) {
 				map.put("state", "1");
 				map.put("message", "安装成功");

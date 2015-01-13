@@ -123,12 +123,12 @@ public interface IWindowRfidService {
 	/**
 	 * 安装
 	 */
-	public int stepWindow(String rfidNo) throws ServiceException;
+	public int stepWindow(String gid) throws ServiceException;
 
 	/**
 	 * 质检
 	 */
-	public int testWindow(String contractNo, String[] rfidNos)
+	public int testWindow(String contractNo, String[] gids)
 			throws ServiceException;
 
 	void updateGid(List<WindowRfidEntity> winList,String id) throws ServiceException;

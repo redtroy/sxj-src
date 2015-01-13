@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
 import com.sxj.supervisor.entity.rfid.purchase.RfidPurchaseEntity;
@@ -43,6 +44,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Autowired
 	private IRfidPurchaseDao rfidPurchaseDao;
+	
+	@Autowired
+	private ILogisticsRfidDao logisticsDao;
+
 
 	@Override
 	@Transactional(readOnly = true)
@@ -535,16 +540,18 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	 */
 	@Override
 	@Transactional
-	public int stepWindow(String rfidNo) throws ServiceException {
+	public int stepWindow(String gid) throws ServiceException {
 		try {
+			String rfidNo =logisticsDao.getRfid(gid).get(0);
+			if(StringUtils.isNotEmpty(rfidNo)){
 			WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 			if (!wind.getProgressState().equals(LabelProgressEnum.installed)) {
 				wind.setProgressState(LabelProgressEnum.installed);
 				updateWindowRfid(wind);
 				return 1;
-			} else {
-				return 0;
+			} 
 			}
+				return 0;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			return 0;
@@ -553,9 +560,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public int testWindow(String contractNo, String[] rfidNos)
+	public int testWindow(String contractNo, String[] gids)
 			throws ServiceException {
 		try {
+			List<String> rfidNos =logisticsDao.getRfid(gids);
 			for (String rfidNo : rfidNos) {
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 				if (contractNo.equals(wind.getContractNo())

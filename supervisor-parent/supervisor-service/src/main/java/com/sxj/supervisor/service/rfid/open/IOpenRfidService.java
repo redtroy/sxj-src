@@ -19,15 +19,15 @@ public interface IOpenRfidService {
 	 */
 	BatchModel getBatchByRfid(String rfid) throws ServiceException, SQLException;
 
-	WinTypeModel getWinTypeByRfid(String rfid) throws ServiceException,
+	WinTypeModel getWinTypeByRfid(String gid) throws ServiceException,
 			SQLException;
 
 	String getAddress(String contractNo) throws ServiceException, SQLException;
 
-	int shipped(String rfid) throws ServiceException, SQLException,
+	int shipped(String gid) throws ServiceException, SQLException,
 			JsonParseException, JsonMappingException, IOException;
 
-	int accepting(String rfid) throws ServiceException, SQLException,
+	int accepting(String gid) throws ServiceException, SQLException,
 			JsonParseException, JsonMappingException, IOException;
 
 }
