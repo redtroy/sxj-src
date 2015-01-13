@@ -243,8 +243,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 					
 					var values='';
 					var values1='';
-					var batchId='';
-					var batchId1='';
+					var contractBatchIds='';
+					var changeBatchIds='';
 					$(".ocptable").find(".lnk-red").each(function(i){//合同条目
 						values+=$(this).parent().attr("value")+",";
 					});
@@ -252,14 +252,15 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						values1+=$(this).parent().attr("value")+",";
 					});
 					$(".cpctable").find(".lnk-red").each(function(){//变更批次
-						batchId1+=$(this).parent().attr("value")+",";
+						changeBatchIds+=$(this).parent().attr("value")+",";
 					});
 					$(".opctable").find(".lnk-red").each(function(){//合同批次
-						batchId+=$(this).parent().attr("value")+",";
+						contractBatchIds+=$(this).parent().attr("value")+",";
 					});
+					alert(contractBatchIds);
 					dialogBox(function(index) {
 						$.post("saveChanges.htm", 
-								$("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1+"&$contractBatchIds="+batchId+"&changeBatchIds="+batchId1,
+								$("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1+"&$contractBatchIds="+contractBatchIds+"&changeBatchIds="+contractBatchIds,
 								function(data) {
 									layer.close(index);
 									if (data.isOK == 'ok') {
