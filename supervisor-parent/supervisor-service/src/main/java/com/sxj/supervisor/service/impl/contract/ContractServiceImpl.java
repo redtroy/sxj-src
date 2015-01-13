@@ -740,8 +740,6 @@ public class ContractServiceImpl implements IContractService {
 			ModifyContractEntity mec = model.getModifyContract();
 			if (itemList != null) {
 				contractItemDao.updateItem(itemList);
-			}else{
-				throw new ServiceException("变更合同信息错误");
 			}
 			if (mec != null) {
 				contractModifyDao.addModify(mec);
@@ -781,8 +779,6 @@ public class ContractServiceImpl implements IContractService {
 					}
 
 				}
-			}else{
-				throw new ServiceException("变更合同信息错误");
 			}
 			RecordEntity re = new RecordEntity();
 			re.setId(recordId);
@@ -801,8 +797,6 @@ public class ContractServiceImpl implements IContractService {
 					cilist.add(ci);
 				}
 				contractItemDao.updateItem(cilist);
-			}else{
-				throw new ServiceException("变更合同信息错误");
 			}
 			if (StringUtils.isNotEmpty(changeIds)) {
 				changeIds = changeIds.substring(0, changeIds.length() - 1);
@@ -815,8 +809,6 @@ public class ContractServiceImpl implements IContractService {
 					milist.add(ci);
 				}
 				contractModifyItemDao.updateItems(milist);
-			}else{
-				throw new ServiceException("变更合同信息错误");
 			}
 			// 批次变更状态
 			if (StringUtils.isNotEmpty(changeBatchIds)) {// 变更批次
@@ -831,8 +823,6 @@ public class ContractServiceImpl implements IContractService {
 					milist.add(mb);
 				}
 				contractModifyBatchDao.updateItems(milist);
-			}else{
-				throw new ServiceException("变更合同信息错误");
 			}
 			// 批次变更状态
 			if (StringUtils.isNotEmpty(contractBatchIds)) {// 合同批次
@@ -847,8 +837,6 @@ public class ContractServiceImpl implements IContractService {
 					cblist.add(cb);
 				}
 				contractBatchDao.updateBatchs(cblist);
-			}else{
-				throw new ServiceException("变更合同信息错误");
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
