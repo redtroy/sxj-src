@@ -257,10 +257,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 					$(".opctable").find(".lnk-red").each(function(){//合同批次
 						contractBatchIds+=$(this).parent().attr("value")+",";
 					});
-					alert(contractBatchIds);
 					dialogBox(function(index) {
 						$.post("saveChanges.htm", 
-								$("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1+"&$contractBatchIds="+contractBatchIds+"&changeBatchIds="+contractBatchIds,
+								$("#changsForm").serialize()+"&contractIds="+values+"&changeIds="+values1+"&contractBatchIds="+contractBatchIds+"&changeBatchIds="+changeBatchIds,
 								function(data) {
 									layer.close(index);
 									if (data.isOK == 'ok') {
