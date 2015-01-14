@@ -25,7 +25,7 @@ public class AssetsInfoEntity extends Pagable implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -7535349859280866177L;
-	
+
 	@Id(column = "ID")
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
