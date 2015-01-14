@@ -160,6 +160,11 @@
 			<artifactId>statemachine-core</artifactId>
 			<version>1.0</version>
 		</dependency> -->
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>statemachine-core</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>supervisor-website</finalName>
