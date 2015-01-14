@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.sxj.mybatis.pagination.Pagable;
 
-public class ContractNo  implements Serializable{
+public class Contract  implements Serializable{
 
 	
 	/**
@@ -14,6 +14,8 @@ public class ContractNo  implements Serializable{
 	
 	
 	private String contractNo;
+	
+	private String rfid;
 
 
 	public String getContractNo() {
@@ -23,5 +25,15 @@ public class ContractNo  implements Serializable{
 
 	public void setContractNo(String contractNo) {
 		this.contractNo = contractNo;
+	}
+
+
+	public String getRfid() {
+		return rfid;
+	}
+
+
+	public void setRfid(String rfid) {
+		this.rfid = rfid;
 	}
 }
