@@ -827,7 +827,7 @@ public class ContractServiceImpl implements IContractService {
 			// 批次变更状态
 			if (StringUtils.isNotEmpty(contractBatchIds)) {// 合同批次
 				contractBatchIds = contractBatchIds.substring(0,
-						changeIds.length() - 1);
+						contractBatchIds.length() - 1);
 				String[] batchIdArr = contractBatchIds.split(",");
 				List<ContractBatchEntity> cblist = new ArrayList<ContractBatchEntity>();
 				for (String string : batchIdArr) {

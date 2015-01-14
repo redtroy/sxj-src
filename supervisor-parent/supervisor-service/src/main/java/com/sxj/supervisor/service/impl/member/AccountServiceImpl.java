@@ -84,8 +84,6 @@ public class AccountServiceImpl implements IAccountService {
 				if (roles.size() > 0) {
 					roleServce.addRoles(roles);
 				}
-			} else {
-				roleServce.removeRoles(account.getId());
 			}
 		} catch (Exception e) {
 			SxjLogger.error("添加会员子账户信息错误", e, this.getClass());

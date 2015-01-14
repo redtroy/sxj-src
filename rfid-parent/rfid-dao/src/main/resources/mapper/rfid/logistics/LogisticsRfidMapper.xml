@@ -132,7 +132,7 @@
 		UPDATE R_LOGISTICS_RFID SET GID=#{item.gid} WHERE RFID_NO=#{item.rfidNo};
 		</foreach>
 	</update>
-	<select id="getRfid" resultType="java.util.List" parameterType="java.util.List">
+	<select id="getRfid" resultType="java.util.List" parameterType="String">
 		<![CDATA[ SELECT RFID_NO FROM R_LOGISTICS_RFID WHERE GID in ]]>
 		<foreach item="item" collection="array" open="(" close=")" separator=",">
 		#{item}
