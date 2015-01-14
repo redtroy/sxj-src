@@ -35,7 +35,7 @@ public class CacheManagerTest
         //        result.add("c");
         //        result.add("d");
         //        result.add("e");
-        cacheManager.set(2, "L2List", "ListString", "demo");
+        cacheManager.set(2, "L2List", "ListString", "demo", 1000);
         System.out.println(cacheManager.get(2, "L2List", "ListString"));
         //        List<String> object = (List<String>) cacheManager.get(2,
         //                "L2List",
@@ -48,5 +48,4 @@ public class CacheManagerTest
         //        Object object = cacheManager.get(2, "testL2Cache", "demokey");
         //        Assert.assertEquals("demovalue2", object.toString());
     }
-    
 }

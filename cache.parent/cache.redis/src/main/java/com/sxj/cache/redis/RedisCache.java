@@ -317,8 +317,8 @@ public class RedisCache implements Cache
             {
                 Transaction multi = cache.multi();
                 byte[] bytes = serializeKey(key).getBytes();
-                cache.set(bytes, serializeObject(value).getBytes());
-                cache.expire(bytes, seconds);
+                multi.set(bytes, serializeObject(value).getBytes());
+                multi.expire(bytes, seconds);
                 //                cache.set(serializeKey(key).getBytes(),
                 //                        serializeObject(value).getBytes(),
                 //                        "NX".getBytes(),
