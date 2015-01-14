@@ -109,12 +109,13 @@ public class LogisticsRefController extends BaseController {
 	 * 查询批次申请
 	 */
 	@RequestMapping("query_contract")
-	public String query_contract(String contractNo, String rfidNo, ModelMap map)
-			throws WebException {
+	public String query_contract(String id, String contractNo, String rfidNo,
+			ModelMap map) throws WebException {
 		try {
 			ContractBatchModel model = contractService.getBatchByRfid(rfidNo);
 			map.put("model", model);
 			map.put("contractNo", contractNo);
+			map.put("id", id);
 		} catch (Exception e) {
 			SxjLogger.error("批次合同查询错误", e, this.getClass());
 			throw new WebException("批次合同查询错误");

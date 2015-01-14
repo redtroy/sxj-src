@@ -34,7 +34,7 @@
   function open_1(id,contractNo,rfidNo){
 	   var temp= $("#edit_1_"+id).is(":hidden");//是否隐藏 
 	   if (temp){
-	  $.post("query_contract.htm",{contractNo:contractNo,rfidNo:rfidNo},function(data){
+	  $.post("query_contract.htm",{id:id,contractNo:contractNo,rfidNo:rfidNo},function(data){
 		  var obj=$("#edit_1_"+id);
 		  obj.children().eq(0).html(data);
 		  obj.show();
