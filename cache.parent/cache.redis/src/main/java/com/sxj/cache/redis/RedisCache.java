@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 
 import com.sxj.cache.core.Cache;
 import com.sxj.cache.core.CacheException;
@@ -314,11 +315,16 @@ public class RedisCache implements Cache
             Jedis cache = RedisCacheProvider.getResource();
             try
             {
-                cache.set(serializeKey(key).getBytes(),
-                        serializeObject(value).getBytes(),
-                        "NX".getBytes(),
-                        "EX".getBytes(),
-                        seconds);
+                Transaction multi = cache.multi();
+                byte[] bytes = serializeKey(key).getBytes();
+                multi.set(bytes, serializeObject(value).getBytes());
+                multi.expire(bytes, seconds);
+                //                cache.set(serializeKey(key).getBytes(),
+                //                        serializeObject(value).getBytes(),
+                //                        "NX".getBytes(),
+                //                        "EX".getBytes(),
+                //                        seconds);
+                multi.exec();
             }
             catch (Exception e)
             {

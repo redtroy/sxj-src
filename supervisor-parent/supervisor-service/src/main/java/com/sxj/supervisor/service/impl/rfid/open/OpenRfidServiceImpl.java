@@ -39,8 +39,7 @@ import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.open.Bacth;
 import com.sxj.supervisor.model.open.BatchModel;
-import com.sxj.supervisor.model.open.BatchNo;
-import com.sxj.supervisor.model.open.ContractNo;
+import com.sxj.supervisor.model.open.Contract;
 import com.sxj.supervisor.model.open.WinTypeModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -109,9 +108,10 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			//if (lRef.getState().getId() == 1) {//
 				if (ref != null && ref.size() > 0) {
 					LogisticsRfidEntity le = ref.get(0);
-					ContractNo contract = new ContractNo();
+					Contract contract = new Contract();
 					contract.setContractNo(le.getContractNo());
 					batchModel.setContract(contract);// 封装合同号
+					contract.setRfid(rfid);
 					if (le.getProgressState().getId() == 2) {
 
 						QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
@@ -132,9 +132,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 
 						if (cbatchList != null && cbatchList.size() > 0) {
 							ContractBatchEntity cbe = cbatchList.get(0);
-							BatchNo BatchNo = new BatchNo();
-							BatchNo.setBatchNo(cbe.getBatchNo());
-							batch.setBatch(BatchNo);
+							batch.setBatchNo(cbe.getBatchNo());
 							List<BatchItemModel> batchModelList = this
 									.jsonChangeList(cbe.getBatchItems());
 							batch.setBatchItems(batchModelList);
@@ -142,9 +140,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 						if (modifyBatch != null && modifyBatch.size() > 0) {
 							ModifyBatchEntity modiy = modifyBatch.get(0);
 							Bacth bacth = new Bacth();
-							BatchNo BatchNo = new BatchNo();
-							BatchNo.setBatchNo(modiy.getBatchNo());
-							bacth.setBatch(BatchNo);
+							bacth.setBatchNo(modiy.getBatchNo());
 							List<BatchItemModel> batchModelList = this
 									.jsonChangeList(modiy.getBatchItems());
 							batch.setBatchItems(batchModelList);
@@ -152,9 +148,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 						if (batchList != null && batchList.size() > 0) {
 							ReplenishBatchEntity rbe = batchList.get(0);
 							Bacth bacth = new Bacth();
-							BatchNo BatchNo = new BatchNo();
-							// BatchNo.setBatchNo(rbe.getBatchNo());
-							bacth.setBatch(BatchNo);
+							bacth.setBatchNo(rbe.getBatchNo().toString());
 							List<BatchItemModel> batchModelList = this
 									.jsonChangeList(rbe.getBatchItems());
 							batch.setBatchItems(batchModelList);

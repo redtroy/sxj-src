@@ -9,15 +9,15 @@ public class BatchModel  implements Serializable {
 	 */
 	private static final long serialVersionUID = 3269003516339562334L;
 
-	private ContractNo contract;
+	private Contract contract;
 	
 	private Bacth batchList;
 
-	public ContractNo getContract() {
+	public Contract getContract() {
 		return contract;
 	}
 
-	public void setContract(ContractNo contract) {
+	public void setContract(Contract contract) {
 		this.contract = contract;
 	}
 

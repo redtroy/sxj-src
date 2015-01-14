@@ -380,6 +380,7 @@ public class PurchaseRfidController extends BaseController {
 				winQuery.setPurchaseNo(purchaseNo);
 				List<WindowRfidEntity> window = windowRfidService
 						.queryWindowRfid(winQuery);
+				
 				for (WindowRfidEntity windowRfidEntity : window) {
 					writer.write(windowRfidEntity, headers);
 				}

@@ -11,7 +11,7 @@
 		<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
 		<result property="generateKey" column="GENERATE_KEY" jdbcType="INTEGER" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
-		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR"/>
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
@@ -20,7 +20,7 @@
 		<result property="replenishNo" column="REPLENISH_NO" jdbcType="VARCHAR" />
 		<result property="rfidState" column="RFID_STATE" jdbcType="INTEGER" />
 		<result property="progressState" column="PROGRESS_STATE"
-			jdbcType="INTEGER"  />
+			jdbcType="INTEGER" />
 		<result property="log" column="LOG" jdbcType="VARCHAR" />
 		<result property="gid" column="GID" jdbcType="CHAR" />
 	</resultMap>
@@ -112,10 +112,12 @@
 		<if test="condition.type != null and condition.type !=''">
 			<![CDATA[AND rlr.TYPE = #{condition.type}]]>
 		</if>
-		<if test="condition.progressState != null and condition.progressState !='' and condition.progressState &lt;=1">
+		<if
+			test="condition.progressState != null and condition.progressState !='' and condition.progressState &lt;=1">
 			<![CDATA[AND rlr.PROGRESS_STATE <=1]]>
 		</if>
-		<if test="condition.progressState != null and condition.progressState !='' and condition.progressState &gt;1">
+		<if
+			test="condition.progressState != null and condition.progressState !='' and condition.progressState &gt;1">
 			<![CDATA[AND rlr.PROGRESS_STATE = #{condition.progressState}]]>
 		</if>
 		<if test="condition.rfidState != null and condition.rfidState !=''">
@@ -128,19 +130,21 @@
 		<![CDATA[ ORDER BY rlr.RFID_NO DESC]]>
 	</select>
 	<update id="updateGid" parameterType="java.util.List">
-		<foreach item="item" collection="list" >
-		UPDATE R_LOGISTICS_RFID SET GID=#{item.gid} WHERE RFID_NO=#{item.rfidNo};
+		<foreach item="item" collection="list">
+			UPDATE R_LOGISTICS_RFID SET GID=#{item.gid} WHERE RFID_NO=#{item.rfidNo};
 		</foreach>
 	</update>
-	<select id="getRfid" resultType="java.util.List" parameterType="String">
+	<select id="getRfid" resultType="String" parameterType="String">
 		<![CDATA[ SELECT RFID_NO FROM R_LOGISTICS_RFID WHERE GID in ]]>
-		<foreach item="item" collection="array" open="(" close=")" separator=",">
-		#{item}
+		<foreach item="item" collection="array" open="(" close=")"
+			separator=",">
+			#{item}
 		</foreach>
-		<![CDATA[ union 
+		<![CDATA[ union all 
 				  SELECT RFID_NO FROM R_WINDOW_RFID WHERE GID in]]>
-			<foreach item="item" collection="array" open="(" close=")" separator=",">
-		#{item}
-		</foreach>	  
+		<foreach item="item" collection="array" open="(" close=")"
+			separator=",">
+			#{item}
+		</foreach>
 	</select>
 </mapper>
