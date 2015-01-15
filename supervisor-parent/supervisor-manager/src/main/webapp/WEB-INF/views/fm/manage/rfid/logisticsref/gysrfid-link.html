@@ -34,7 +34,7 @@
   function open_1(id,contractNo,rfidNo){
 	   var temp= $("#edit_1_"+id).is(":hidden");//是否隐藏 
 	   if (temp){
-	  $.post("query_contract.htm",{contractNo:contractNo,rfidNo:rfidNo},function(data){
+	  $.post("query_contract.htm",{id:id,contractNo:contractNo,rfidNo:rfidNo},function(data){
 		  var obj=$("#edit_1_"+id);
 		  obj.children().eq(0).html(data);
 		  obj.show();
@@ -223,8 +223,8 @@ function removeMessge(){
           <td><a href="" class="lnk-blue" onclick="open_1('${model.id}','${model.contractNo}','${model.rfidNo}');return false;">${model.rfidRefNo}</a></td>
           <td>${model.rfidNo}</td>
           <td>${model.memberName}</td>
-          <td>${model.rfidType.getName()}</td>
-		  <td>${model.type.getName()}</td>
+          <td><#if (model.rfidType??)>${model.rfidType.getName()}</#if></td>
+		  <td><#if (model.type??)>${model.type.getName()}</#if></td>
 		  <td>${model.contractNo}</td>
           <td>${model.batchNo}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
@@ -249,8 +249,8 @@ function removeMessge(){
          <td><a href="#" class="lnk-blue" onclick="open_2('edit_2_${model.id}')">${model.rfidRefNo}</a></td>
           <td>${model.rfidNo}</td>
           <td>${model.memberName}</td>
-          <td>${model.rfidType.getName()}</td>
-		  <td>${model.type.getName()}</td>
+          <td><#if (model.rfidType??)>${model.rfidType.getName()}</#if></td>
+		  <td><#if (model.type??)>${model.type.getName()}</#if></td>
 		  <td>${model.contractNo}</td>
           <td>${model.batchNo}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
@@ -285,8 +285,8 @@ function removeMessge(){
          <td><a href="#" class="lnk-blue" onclick="open_2('edit_2_${model.id}')">${model.rfidRefNo}</a></td>
           <td>${model.rfidNo}</td>
           <td>${model.memberName}</td>
-          <td>${model.rfidType.getName()}</td>
-		  <td>${model.type.getName()}</td>
+          <td><#if (model.rfidType??)>${model.rfidType.getName()}</#if></td>
+		  <td><#if (model.type??)>${model.type.getName()}</#if></td>
 		  <td>${model.contractNo}</td>
           <td>${model.batchNo}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>

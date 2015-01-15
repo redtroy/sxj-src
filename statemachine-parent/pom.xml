@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.sxj</groupId>
-  <artifactId>statemachine-parent</artifactId>
-  <version>1.0</version>
-  <packaging>pom</packaging>
-  <modules>
-    <module>statemachine-impl</module>
-    <module>statemachine-manager</module>
-    <module>statemachine-core</module>
-  </modules>
-  <properties>
-  	<statemachine.version>1.0</statemachine.version>
-  	<java.version>1.7</java.version>
-  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  <build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sxj</groupId>
+	<artifactId>statemachine-parent</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>statemachine-impl</module>
+		<module>statemachine-manager</module>
+		<module>statemachine-core</module>
+	</modules>
+	<properties>
+		<statemachine.version>1.0</statemachine.version>
+		<java.version>1.7</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -76,4 +77,16 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Local Nexus Repository</name>
+			<url>http://192.168.1.11:8080/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Local Nexus Repository</name>
+			<url>http://192.168.1.11:8080/nexus/content/groups/public</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
