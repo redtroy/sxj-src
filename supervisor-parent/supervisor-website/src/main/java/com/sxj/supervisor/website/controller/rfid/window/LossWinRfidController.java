@@ -75,13 +75,13 @@ public class LossWinRfidController extends BaseController {
 
 			WindowRfidQuery winQuery = new WindowRfidQuery();
 			winQuery.setContractNo(query.getRefContractNo());
-			winQuery.setRfidState(RfidStateEnum.unused.getId());
+			winQuery.setRfidState(RfidStateEnum.UN_USED.getId());
 			List<WindowRfidEntity> winList = windowRfidService
 					.queryWindowRfid(winQuery);
 			if (winList != null) {
 				unStartQuantity = unStartQuantity + winList.size();
 			}
-			winQuery.setRfidState(RfidStateEnum.disable.getId());
+			winQuery.setRfidState(RfidStateEnum.DISABLE.getId());
 			winList = windowRfidService.queryWindowRfid(winQuery);
 			if (winList != null) {
 				unStartQuantity = unStartQuantity + winList.size();
@@ -121,7 +121,7 @@ public class LossWinRfidController extends BaseController {
 			if (oldRfid == null) {
 				throw new ServiceException("该标签不是认证标签");
 			}
-			if (!oldRfid.getRfidState().equals(RfidStateEnum.used)) {
+			if (!oldRfid.getRfidState().equals(RfidStateEnum.USED)) {
 				throw new ServiceException("该被补损RFID不是已使用状态");
 			}
 			if (!oldRfid.getContractNo().equals(refContractNo)) {

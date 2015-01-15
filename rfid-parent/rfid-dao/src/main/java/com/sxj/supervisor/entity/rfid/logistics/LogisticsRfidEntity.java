@@ -239,12 +239,12 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	public void setRfidState(RfidStateEnum rfidState) {
 		this.rfidState = rfidState;
-		if (RfidStateEnum.damaged.equals(getRfidState())) {
-			RfidLog log = new RfidLog();
-			log.setId(getRfidState().getId());
-			log.setState(getRfidState().getName());
-			log.setDate(DateTimeUtils.getDateTime());
-			setLogList(log);
+		if (RfidStateEnum.DAMAGED.equals(getRfidState())) {
+			RfidLog rfidLog = new RfidLog();
+			rfidLog.setId(getRfidState().getId());
+			rfidLog.setState(getRfidState().getName());
+			rfidLog.setDate(DateTimeUtils.getDateTime());
+			setLogList(rfidLog);
 		}
 	}
 
@@ -331,7 +331,7 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		if (this.getId() != null) {
 			sb.append(this.getId());
 		}
@@ -377,7 +377,7 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		}
 		sb.append("|");
 		if (this.getIsLossBatch() != null) {
-			if (this.getIsLossBatch() == true) {
+			if (this.getIsLossBatch()) {
 				sb.append(1);
 			} else {
 				sb.append(0);

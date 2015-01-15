@@ -178,7 +178,7 @@ public class LogisticsRfidController extends BaseController {
 			if (rfid == null) {
 				throw new WebException("该RFID不存在！");
 			}
-			if (!rfid.getRfidState().equals(RfidStateEnum.used)) {
+			if (!rfid.getRfidState().equals(RfidStateEnum.USED)) {
 				throw new WebException("该RFID不是已使用状态！");
 			}
 			WindowRfidQuery query = new WindowRfidQuery();

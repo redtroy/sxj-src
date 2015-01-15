@@ -100,7 +100,7 @@ public class WindowRfidController extends BaseController {
 		try {
 			WindowRfidEntity win = new WindowRfidEntity();
 			win.setId(id);
-			win.setRfidState(RfidStateEnum.disable);
+			win.setRfidState(RfidStateEnum.DISABLE);
 			windowRfidService.updateWindowRfid(win);
 			map.put("isOK", "ok");
 		} catch (Exception e) {

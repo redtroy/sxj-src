@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.redis.service.comet.CometServiceImpl;
-import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
+import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
-import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
+import com.sxj.supervisor.enu.rfid.windowref.LinkStateEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
@@ -106,7 +106,7 @@ public class WindowRefController extends BaseController {
 		try {
 			WindowRefEntity win = new WindowRefEntity();
 			win.setId(id);
-			win.setState(AuditStateEnum.approval);
+			win.setState(AuditStateEnum.APPROVAL);
 			windowRefService.updateWindowRfidRef(win);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");

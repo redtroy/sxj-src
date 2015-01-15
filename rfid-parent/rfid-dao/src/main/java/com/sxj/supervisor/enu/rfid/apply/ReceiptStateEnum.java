@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.rfid.apply;
 
 public enum ReceiptStateEnum {
-	shipments("发货中", 0), Goods_receipt("已收货", 1);
+	SHIPMENTS("发货中", 0), GOODS_RECRIPT("已收货", 1);
 
 	// 成员变量
 	private Integer id;

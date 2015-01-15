@@ -6,7 +6,7 @@ package com.sxj.supervisor.enu.rfid;
  *
  */
 public enum RfidStateEnum {
-	unused("未使用", 0), used("已使用", 1), damaged("已破损", 2),disable("已停用", 3),delete("已删除", 4);
+	UN_USED("未使用", 0), USED("已使用", 1), DAMAGED("已破损", 2),DISABLE("已停用", 3),DELETE("已删除", 4);
 
 	// 成员变量
 	private Integer id;

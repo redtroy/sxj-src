@@ -220,12 +220,12 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 
 	public void setRfidState(RfidStateEnum rfidState) {
 		this.rfidState = rfidState;
-		if (RfidStateEnum.damaged.equals(getRfidState())) {
-			RfidLog log = new RfidLog();
-			log.setId(getRfidState().getId());
-			log.setState(getRfidState().getName());
-			log.setDate(DateTimeUtils.getDateTime());
-			setLogList(log);
+		if (RfidStateEnum.DAMAGED.equals(getRfidState())) {
+			RfidLog rfidLog = new RfidLog();
+			rfidLog.setId(getRfidState().getId());
+			rfidLog.setState(getRfidState().getName());
+			rfidLog.setDate(DateTimeUtils.getDateTime());
+			setLogList(rfidLog);
 		}
 	}
 
@@ -252,11 +252,11 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	public void setProgressState(LabelProgressEnum progressState) {
 		this.progressState = progressState;
 		if (getProgressState() != null) {
-			RfidLog log = new RfidLog();
-			log.setId(getProgressState().getId());
-			log.setState(getProgressState().getName());
-			log.setDate(DateTimeUtils.getDateTime());
-			setLogList(log);
+			RfidLog rfidLog = new RfidLog();
+			rfidLog.setId(getProgressState().getId());
+			rfidLog.setState(getProgressState().getName());
+			rfidLog.setDate(DateTimeUtils.getDateTime());
+			setLogList(rfidLog);
 		}
 	}
 
@@ -335,7 +335,7 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		if (this.getId() != null) {
 			sb.append(this.getId());
 		}

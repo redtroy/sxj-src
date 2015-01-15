@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.redis.service.comet.CometServiceImpl;
-import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
-import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
+import com.sxj.supervisor.dao.rfid.windowref.IWindowRfidRefDao;
+import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.windowRef.WindowRefQuery;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;

@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.rfid.ref;
 
 public enum AuditStateEnum {
-	noapproval("未审核", 0), approval("已审核", 1);
+	NO_APPROVAL("未审核", 0), APPROVAL("已审核", 1);
 
 	// 成员变量
 	private Integer id;

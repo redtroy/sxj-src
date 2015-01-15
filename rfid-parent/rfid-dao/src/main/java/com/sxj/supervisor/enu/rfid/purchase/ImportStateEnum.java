@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.rfid.purchase;
  *
  */
 public enum ImportStateEnum {
-	not_imported("未导入", 0),imported("已导入",1) ;
+	NOT_IMPORTED("未导入", 0),IMPORTED("已导入",1) ;
 
 	// 成员变量
 	private Integer id;
