@@ -128,7 +128,7 @@ public interface IWindowRfidService {
 	/**
 	 * 质检
 	 */
-	public int testWindow(String contractNo, String[] gids)
+	public int testWindow(String contractNo, String[] gids,String address)
 			throws ServiceException;
 
 	void updateGid(List<WindowRfidEntity> winList,String id) throws ServiceException;

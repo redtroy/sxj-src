@@ -545,8 +545,12 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			String rfidNo =logisticsDao.getRfid(gid).get(0);
 			if(StringUtils.isNotEmpty(rfidNo)){
 			WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
+			if (!wind.getProgressState().equals(LabelProgressEnum.installed)) {
+				wind.setProgressState(LabelProgressEnum.installed);
 			if (!wind.getProgressState().equals(LabelProgressEnum.INSTALL)) {
 				wind.setProgressState(LabelProgressEnum.INSTALL);
+			if (wind.getProgressState().equals(LabelProgressEnum.hasReceipt)) {
+				wind.setProgressState(LabelProgressEnum.installed);
 				updateWindowRfid(wind);
 				return 1;
 			} 
@@ -558,9 +562,12 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 		}
 	}
 
+	/**
+	 * 质检
+	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public int testWindow(String contractNo, String[] gids)
+	public int testWindow(String contractNo, String[] gids,String address)
 			throws ServiceException {
 		try {
 			List<String> rfidNos =logisticsDao.getRfid(gids);

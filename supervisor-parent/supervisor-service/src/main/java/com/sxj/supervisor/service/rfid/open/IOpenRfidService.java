@@ -2,6 +2,7 @@ package com.sxj.supervisor.service.rfid.open;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -29,5 +30,8 @@ public interface IOpenRfidService {
 
 	int accepting(String gid) throws ServiceException, SQLException,
 			JsonParseException, JsonMappingException, IOException;
+
+	List<WinTypeModel> getWinTypeByRfids(String[] gid) throws ServiceException,
+			SQLException;
 
 }
