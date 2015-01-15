@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -78,8 +79,9 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	public List<RfidPurchaseEntity> queryPurchase(PurchaseRfidQuery query)
 			throws ServiceException {
 		try {
+			List<RfidPurchaseEntity> rfidList = new ArrayList<RfidPurchaseEntity>();
 			if (query == null) {
-				return null;
+				return rfidList;
 			}
 			QueryCondition<RfidPurchaseEntity> condition = new QueryCondition<RfidPurchaseEntity>();
 			condition.addCondition("purchaseNo", query.getPurchaseNo());
@@ -93,8 +95,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			condition.addCondition("startDate", query.getStartDate());
 			condition.addCondition("endDate", query.getEndDate());
 			condition.setPage(query);
-			List<RfidPurchaseEntity> rfidList = rfidPurchaseDao
-					.queryList(condition);
+			rfidList = rfidPurchaseDao.queryList(condition);
 			query.setPage(condition);
 			return rfidList;
 		} catch (Exception e) {
@@ -114,13 +115,13 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			if (old == null) {
 				throw new ServiceException("采购单不存在");
 			}
-			if (old.getPayState().equals(PayStateEnum.paid)) {
+			if (old.getPayState().equals(PayStateEnum.PAYED)) {
 				throw new ServiceException("采购单已付款，不能修改");
 			}
-			if (!old.getReceiptState().equals(DeliveryStateEnum.unfilled)) {
+			if (!old.getReceiptState().equals(DeliveryStateEnum.UN_FILLED)) {
 				throw new ServiceException("采购单已发货，不能修改");
 			}
-			if (old.getImportState().equals(ImportStateEnum.imported)) {
+			if (old.getImportState().equals(ImportStateEnum.IMPORTED)) {
 				throw new ServiceException("采购单已导入，不能修改");
 			}
 			RfidApplicationEntity app = applyService.getApplication(old
@@ -199,10 +200,10 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	public void confirmDelivery(String id) throws ServiceException {
 		try {
 			RfidPurchaseEntity purchase = rfidPurchaseDao.getRfidPurchase(id);
-			purchase.setReceiptState(DeliveryStateEnum.shipped);
+			purchase.setReceiptState(DeliveryStateEnum.SHIPPED);
 			rfidPurchaseDao.updateRfidPurchase(purchase);
 			// 修改RFID状态
-			if (purchase.getRfidType().equals(RfidTypeEnum.door)) {
+			if (purchase.getRfidType().equals(RfidTypeEnum.DOOR)) {
 				WindowRfidQuery query = new WindowRfidQuery();
 				query.setPurchaseNo(purchase.getPurchaseNo());
 				List<WindowRfidEntity> listRfid = winRfidService
@@ -217,7 +218,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					if (windowRfid == null) {
 						continue;
 					}
-					windowRfid.setProgressState(LabelProgressEnum.shipped);
+					windowRfid.setProgressState(LabelProgressEnum.SHIPPED);
 				}
 				winRfidService.batchUpdateWindowRfid(listRfid
 						.toArray(new WindowRfidEntity[listRfid.size()]));
@@ -236,7 +237,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					if (rfidEntity == null) {
 						continue;
 					}
-					rfidEntity.setProgressState(LabelStateEnum.shipped);
+					rfidEntity.setProgressState(LabelStateEnum.SHIPPED);
 				}
 				logisticsRfidService.batchUpdateLogistics(listRfid
 						.toArray(new LogisticsRfidEntity[listRfid.size()]));
@@ -259,10 +260,10 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	public void confirmReceipt(String id) throws ServiceException {
 		try {
 			RfidPurchaseEntity purchase = rfidPurchaseDao.getRfidPurchase(id);
-			purchase.setReceiptState(DeliveryStateEnum.receiving);
+			purchase.setReceiptState(DeliveryStateEnum.RECEIVING);
 			rfidPurchaseDao.updateRfidPurchase(purchase);
 			// 修改RFID状态
-			if (purchase.getRfidType().equals(RfidTypeEnum.door)) {
+			if (purchase.getRfidType().equals(RfidTypeEnum.DOOR)) {
 				WindowRfidQuery query = new WindowRfidQuery();
 				query.setPurchaseNo(purchase.getPurchaseNo());
 				List<WindowRfidEntity> listRfid = winRfidService
@@ -277,7 +278,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					if (windowRfid == null) {
 						continue;
 					}
-					windowRfid.setProgressState(LabelProgressEnum.hasReceipt);
+					windowRfid.setProgressState(LabelProgressEnum.HAS_RECEIPT);
 				}
 				winRfidService.batchUpdateWindowRfid(listRfid
 						.toArray(new WindowRfidEntity[listRfid.size()]));
@@ -296,7 +297,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					if (rfidEntity == null) {
 						continue;
 					}
-					rfidEntity.setProgressState(LabelStateEnum.hasReceipt);
+					rfidEntity.setProgressState(LabelStateEnum.HAS_RECEIPT);
 				}
 				logisticsRfidService.batchUpdateLogistics(listRfid
 						.toArray(new LogisticsRfidEntity[listRfid.size()]));
@@ -308,7 +309,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			if (apply != null) {
 				PurchaseRfidQuery query = new PurchaseRfidQuery();
 				query.setApplyNo(appNo);
-				query.setReceiptState(DeliveryStateEnum.receiving.getId());
+				query.setReceiptState(DeliveryStateEnum.RECEIVING.getId());
 				Long hasReceCount = 0l;
 				List<RfidPurchaseEntity> list = queryPurchase(query);
 				if (list != null) {
@@ -320,7 +321,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					}
 				}
 				if (apply.getCount().intValue() == hasReceCount.intValue()) {
-					apply.setReceiptState(ReceiptStateEnum.Goods_receipt);
+					apply.setReceiptState(ReceiptStateEnum.GOODS_RECRIPT);
 					applyService.updateApp(apply);
 				}
 			}
@@ -364,7 +365,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			RfidTypeEnum rfidType = purchase.getRfidType();
 			Long count = purchase.getCount();
 			Long lastkey = keyService.getKey(count.intValue());
-			if (RfidTypeEnum.door.equals(rfidType)) {
+			if (RfidTypeEnum.DOOR.equals(rfidType)) {
 				// List<WindowRfidEntity> winRfids = new ArrayList<>();
 				StringBuffer sb = new StringBuffer();
 				for (Long i = lastkey; i > lastkey - count; i--) {
@@ -376,16 +377,16 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					rfid.setImportDate(new Date());
 					rfid.setMemberNo(apply.getMemberNo());
 					rfid.setMemberName(apply.getMemberName());
-					rfid.setRfidState(RfidStateEnum.unused);
+					rfid.setRfidState(RfidStateEnum.UN_USED);
 					if (purchase.getReceiptState().equals(
-							DeliveryStateEnum.unfilled)) {
-						rfid.setProgressState(LabelProgressEnum.unfilled);
+							DeliveryStateEnum.UN_FILLED)) {
+						rfid.setProgressState(LabelProgressEnum.UN_FILLED);
 					} else if (purchase.getReceiptState().equals(
-							DeliveryStateEnum.shipped)) {
-						rfid.setProgressState(LabelProgressEnum.shipped);
+							DeliveryStateEnum.SHIPPED)) {
+						rfid.setProgressState(LabelProgressEnum.SHIPPED);
 					} else if (purchase.getReceiptState().equals(
-							DeliveryStateEnum.receiving)) {
-						rfid.setProgressState(LabelProgressEnum.hasReceipt);
+							DeliveryStateEnum.RECEIVING)) {
+						rfid.setProgressState(LabelProgressEnum.HAS_RECEIPT);
 					}
 
 					rfid.setGenerateKey(i);
@@ -444,18 +445,18 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
 					// rfid.setContractNo(purchase.getContractNo());
 					rfid.setImportDate(new Date());
-					rfid.setRfidState(RfidStateEnum.unused);
+					rfid.setRfidState(RfidStateEnum.UN_USED);
 					rfid.setMemberNo(apply.getMemberNo());
 					rfid.setMemberName(apply.getMemberName());
 					if (purchase.getReceiptState().equals(
-							DeliveryStateEnum.unfilled)) {
-						rfid.setProgressState(LabelStateEnum.unfilled);
+							DeliveryStateEnum.UN_FILLED)) {
+						rfid.setProgressState(LabelStateEnum.UN_FILLED);
 					} else if (purchase.getReceiptState().equals(
-							DeliveryStateEnum.shipped)) {
-						rfid.setProgressState(LabelStateEnum.shipped);
+							DeliveryStateEnum.SHIPPED)) {
+						rfid.setProgressState(LabelStateEnum.SHIPPED);
 					} else if (purchase.getReceiptState().equals(
-							DeliveryStateEnum.receiving)) {
-						rfid.setProgressState(LabelStateEnum.hasReceipt);
+							DeliveryStateEnum.RECEIVING)) {
+						rfid.setProgressState(LabelStateEnum.HAS_RECEIPT);
 					}
 					rfid.setType(rfidType);
 					rfid.setGenerateKey(i);
@@ -507,7 +508,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				// if (threadCount.intValue() != count.intValue())
 				// throw new ServiceException("导入RFID失败！");
 			}
-			purchase.setImportState(ImportStateEnum.imported);
+			purchase.setImportState(ImportStateEnum.IMPORTED);
 			rfidPurchaseDao.updateRfidPurchase(purchase);
 			// updatePurchase(purchase);
 			long endTime = System.currentTimeMillis();
@@ -534,16 +535,16 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			if (purchase.isDelstate()) {
 				throw new ServiceException("采购单已经被删除");
 			}
-			if (purchase.getImportState().equals(ImportStateEnum.imported)) {
+			if (purchase.getImportState().equals(ImportStateEnum.IMPORTED)) {
 				throw new ServiceException("采购单已经导入RFID，不能被删除");
 			}
-			if (purchase.getPayState().equals(PayStateEnum.paid)) {
+			if (purchase.getPayState().equals(PayStateEnum.PAYED)) {
 				throw new ServiceException("采购单已经付款，不能被删除");
 			}
-			if (purchase.getReceiptState().equals(DeliveryStateEnum.shipped)) {
+			if (purchase.getReceiptState().equals(DeliveryStateEnum.SHIPPED)) {
 				throw new ServiceException("采购单已发货，不能被删除");
 			}
-			if (purchase.getReceiptState().equals(DeliveryStateEnum.receiving)) {
+			if (purchase.getReceiptState().equals(DeliveryStateEnum.RECEIVING)) {
 				throw new ServiceException("采购单已收货，不能被删除");
 			}
 			RfidApplicationEntity apply = applyService.getApplication(purchase

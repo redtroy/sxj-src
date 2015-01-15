@@ -142,7 +142,7 @@ public class PurchaseRfidController extends BaseController {
 	public @ResponseBody Map<String, String> confirmPay(String id,
 			ModelMap model) throws WebException {
 		try {
-			purchaseRfidService.updatePayState(id, PayStateEnum.paid);
+			purchaseRfidService.updatePayState(id, PayStateEnum.PAYED);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");
 			return map;
@@ -281,9 +281,9 @@ public class PurchaseRfidController extends BaseController {
 			throws WebException {
 		try {
 			purchase.setPurchaseDate(new Date());
-			purchase.setImportState(ImportStateEnum.not_imported);
-			purchase.setPayState(PayStateEnum.unpaid);
-			purchase.setReceiptState(DeliveryStateEnum.unfilled);
+			purchase.setImportState(ImportStateEnum.NOT_IMPORTED);
+			purchase.setPayState(PayStateEnum.UN_PAYED);
+			purchase.setReceiptState(DeliveryStateEnum.UN_FILLED);
 			purchaseRfidService.addPurchase(purchase, applyId, hasNumber);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isOK", "ok");

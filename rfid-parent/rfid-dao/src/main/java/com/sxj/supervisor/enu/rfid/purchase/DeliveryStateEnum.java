@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.rfid.purchase;
  *
  */
 public enum DeliveryStateEnum {
-	unfilled("未发货", 0), shipped("已发货", 1),receiving("已收货", 2);
+	UN_FILLED("未发货", 0), SHIPPED("已发货", 1),RECEIVING("已收货", 2);
 
 	// 成员变量
 	private Integer id;

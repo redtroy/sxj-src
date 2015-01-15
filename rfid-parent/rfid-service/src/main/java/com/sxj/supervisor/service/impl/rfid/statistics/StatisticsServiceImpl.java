@@ -156,7 +156,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		RfidSaleQuery query = new RfidSaleQuery();
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
-		query.setRfidType(RfidTypeEnum.door);
+		query.setRfidType(RfidTypeEnum.DOOR);
 		List<RfidSaleStatisticalEntity> list = saleService.queryList(query);
 		Long count = 0l;
 		StatisticsItemModel item = new StatisticsItemModel();
@@ -182,9 +182,9 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		RfidSaleQuery query = new RfidSaleQuery();
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
-		query.setRfidType(RfidTypeEnum.extrusions);
+		query.setRfidType(RfidTypeEnum.EXTRUSIONS);
 		List<RfidSaleStatisticalEntity> list1 = saleService.queryList(query);
-		query.setRfidType(RfidTypeEnum.glass);
+		query.setRfidType(RfidTypeEnum.GLASS);
 		List<RfidSaleStatisticalEntity> list2 = saleService.queryList(query);
 		if (list1 == null) {
 			list1 = new ArrayList<RfidSaleStatisticalEntity>();
@@ -213,7 +213,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		RfidSaleQuery query = new RfidSaleQuery();
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
-		query.setRfidType(RfidTypeEnum.door);
+		query.setRfidType(RfidTypeEnum.DOOR);
 		List<RfidSaleStatisticalEntity> list = saleService.queryList(query);
 		Double count = 0d;
 		StatisticsItemModel item = new StatisticsItemModel();
@@ -239,9 +239,9 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		RfidSaleQuery query = new RfidSaleQuery();
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
-		query.setRfidType(RfidTypeEnum.extrusions);
+		query.setRfidType(RfidTypeEnum.EXTRUSIONS);
 		List<RfidSaleStatisticalEntity> list1 = saleService.queryList(query);
-		query.setRfidType(RfidTypeEnum.glass);
+		query.setRfidType(RfidTypeEnum.GLASS);
 		List<RfidSaleStatisticalEntity> list2 = saleService.queryList(query);
 		if (list1 == null) {
 			list1 = new ArrayList<RfidSaleStatisticalEntity>();
@@ -270,7 +270,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		PurchaseRfidQuery query = new PurchaseRfidQuery();
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
-		query.setRfidType(RfidTypeEnum.door.getId());
+		query.setRfidType(RfidTypeEnum.DOOR.getId());
 		List<RfidPurchaseEntity> list = purchaseService.queryPurchase(query);
 		Double count = 0d;
 		StatisticsItemModel item = new StatisticsItemModel();
@@ -295,9 +295,9 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		PurchaseRfidQuery query = new PurchaseRfidQuery();
 		query.setStartDate(startDate);
 		query.setEndDate(endDate);
-		query.setRfidType(RfidTypeEnum.glass.getId());
+		query.setRfidType(RfidTypeEnum.GLASS.getId());
 		List<RfidPurchaseEntity> list1 = purchaseService.queryPurchase(query);
-		query.setRfidType(RfidTypeEnum.extrusions.getId());
+		query.setRfidType(RfidTypeEnum.EXTRUSIONS.getId());
 		List<RfidPurchaseEntity> list2 = purchaseService.queryPurchase(query);
 		if (list1 == null) {
 			list1 = new ArrayList<RfidPurchaseEntity>();
@@ -340,7 +340,7 @@ public class StatisticsServiceImpl implements IStatisticsService {
 		for (Iterator<RfidApplicationEntity> iterator = appList.iterator(); iterator
 				.hasNext();) {
 			RfidApplicationEntity entity = iterator.next();
-			if (entity.getRfidType().getId() == RfidTypeEnum.door.getId()) {
+			if (entity.getRfidType().getId() == RfidTypeEnum.DOOR.getId()) {
 				appCount = appCount
 						+ (entity.getCount() * price.getWindowPrice());
 				countList.add((entity.getCount() * price.getWindowPrice()));

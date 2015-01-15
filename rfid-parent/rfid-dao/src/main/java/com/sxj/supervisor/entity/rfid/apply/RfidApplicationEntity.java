@@ -163,9 +163,6 @@ public class RfidApplicationEntity extends Pagable implements Serializable {
 	}
 
 	public Long getCount() {
-		// if (count == null) {
-		// count = 0l;
-		// }
 		return count;
 	}
 

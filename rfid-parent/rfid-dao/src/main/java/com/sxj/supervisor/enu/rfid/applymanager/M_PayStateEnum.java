@@ -1,22 +1,21 @@
-package com.sxj.supervisor.enu.rfid.windowRef;
+package com.sxj.supervisor.enu.rfid.applymanager;
 
-
-public enum LinkStateEnum {
-	windowApply("门窗申请", 0),rfidLoss("RFID补损", 1),windowLoss("门窗补损", 2);
+public enum M_PayStateEnum {
+	PAYMENT("已付款", 0), NOT_PAYMENT("未付款", 1);
 
 	// 成员变量
 	private Integer id;
 
 	private String name;
 
-	private LinkStateEnum(String name, Integer id) {
+	private M_PayStateEnum(String name, Integer id) {
 		this.name = name;
 		this.id = id;
 	}
 
 	// 普通方法
 	public static String getName(Integer id) {
-		for (LinkStateEnum c : LinkStateEnum.values()) {
+		for (M_PayStateEnum c : M_PayStateEnum.values()) {
 			if (c.getId() == id) {
 				return c.name;
 			}

@@ -16,7 +16,7 @@ import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
-import com.sxj.supervisor.enu.rfid.applyManager.M_PayStateEnum;
+import com.sxj.supervisor.enu.rfid.applymanager.M_PayStateEnum;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.website.controller.BaseController;

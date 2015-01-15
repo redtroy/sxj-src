@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao">
+<mapper namespace="com.sxj.supervisor.dao.rfid.windowref.IWindowRfidRefDao">
 	<resultMap id="windowRfidRefResultMap"
-		type="com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity">
+		type="com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="rfidRefNo" column="RFID_REF_NO" jdbcType="VARCHAR" />
 		<result property="minRfidNo" column="MIN_RFID_NO" jdbcType="VARCHAR" />

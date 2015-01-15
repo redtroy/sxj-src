@@ -2,7 +2,7 @@ package com.sxj.supervisor.typehandler;
 
 import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 
-import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
+import com.sxj.supervisor.enu.rfid.windowref.LinkStateEnum;
 
 public class LinkStateEnumTypeHandler extends
 		EnumOrdinalTypeHandler<LinkStateEnum> {

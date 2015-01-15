@@ -1,4 +1,4 @@
-package com.sxj.supervisor.entity.rfid.windowRef;
+package com.sxj.supervisor.entity.rfid.windowref;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,10 +11,10 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
+import com.sxj.supervisor.dao.rfid.windowref.IWindowRfidRefDao;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
-import com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum;
+import com.sxj.supervisor.enu.rfid.windowref.LinkStateEnum;
 
 /**
  * 门窗RFID关联申请

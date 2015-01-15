@@ -20,7 +20,7 @@ import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
-import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
+import com.sxj.supervisor.dao.rfid.windowref.IWindowRfidRefDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
@@ -29,7 +29,7 @@ import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
-import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
+import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
 import com.sxj.supervisor.enu.contract.PayContentStateEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
@@ -278,7 +278,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			if (ref != null && ref.size() > 0) {
 				LogisticsRfidEntity le = ref.get(0);
 				if (le.getProgressState().getId() == 2) {
-					le.setProgressState(LabelStateEnum.installed);
+					le.setProgressState(LabelStateEnum.INSTALL);
 					logisticsDao.updateLogisticsRfid(le);
 					// 更新出库状态
 					ContractBatchEntity contractBatch = contractBatchDao
@@ -333,7 +333,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			if (ref != null && ref.size() > 0) {
 				LogisticsRfidEntity le = ref.get(0);
 				if (le.getProgressState().getId() == 3) {
-					le.setProgressState(LabelStateEnum.hasQuality);
+					le.setProgressState(LabelStateEnum.HAS_QUALITY);
 					logisticsDao.updateLogisticsRfid(le);
 					// 获取合同信息
 					ContractModel cm = contractService
