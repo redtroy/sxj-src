@@ -44,10 +44,9 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
 	@Autowired
 	private IRfidPurchaseDao rfidPurchaseDao;
-	
+
 	@Autowired
 	private ILogisticsRfidDao logisticsDao;
-
 
 	@Override
 	@Transactional(readOnly = true)
@@ -542,20 +541,20 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	@Transactional
 	public int stepWindow(String gid) throws ServiceException {
 		try {
-			String rfidNo =logisticsDao.getRfid(gid).get(0);
-			if(StringUtils.isNotEmpty(rfidNo)){
-			WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
-			if (!wind.getProgressState().equals(LabelProgressEnum.installed)) {
-				wind.setProgressState(LabelProgressEnum.installed);
-			if (!wind.getProgressState().equals(LabelProgressEnum.INSTALL)) {
-				wind.setProgressState(LabelProgressEnum.INSTALL);
-			if (wind.getProgressState().equals(LabelProgressEnum.hasReceipt)) {
-				wind.setProgressState(LabelProgressEnum.installed);
-				updateWindowRfid(wind);
-				return 1;
-			} 
+			String rfidNo = logisticsDao.getRfid(gid).get(0);
+			if (StringUtils.isNotEmpty(rfidNo)) {
+				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
+				if (wind.getProgressState().equals(
+						LabelProgressEnum.HAS_RECEIPT)) {
+					wind.setProgressState(LabelProgressEnum.INSTALL);
+					updateWindowRfid(wind);
+					return 1;
+				} else if (wind.getProgressState().equals(
+						LabelProgressEnum.INSTALL)) {
+					return 2;
+				}
 			}
-				return 0;
+			return 0;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			return 0;
@@ -567,10 +566,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public int testWindow(String contractNo, String[] gids,String address)
+	public int testWindow(String contractNo, String[] gids, String address)
 			throws ServiceException {
 		try {
-			List<String> rfidNos =logisticsDao.getRfid(gids);
+			List<String> rfidNos = logisticsDao.getRfid(gids);
 			for (String rfidNo : rfidNos) {
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 				if (contractNo.equals(wind.getContractNo())
