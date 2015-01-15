@@ -23,6 +23,7 @@
 			jdbcType="INTEGER" />
 		<result property="log" column="LOG" jdbcType="VARCHAR" />
 		<result property="gid" column="GID" jdbcType="CHAR" />
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
 	</resultMap>
 	<!-- 按条件查询门窗 -->
 	<select id="queryWindowRfidList" resultMap="windowRfidResultMap"

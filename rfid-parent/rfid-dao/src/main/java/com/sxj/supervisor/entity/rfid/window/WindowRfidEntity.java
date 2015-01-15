@@ -135,6 +135,10 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "GID")
 	private String gid;
+	
+	@Column(name = "ADDRESS")
+	private String address;
+	
 
 	private List<RfidLog> logList = new ArrayList<RfidLog>();
 
@@ -401,4 +405,13 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 		}
 		return sb.toString();
 	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 }
