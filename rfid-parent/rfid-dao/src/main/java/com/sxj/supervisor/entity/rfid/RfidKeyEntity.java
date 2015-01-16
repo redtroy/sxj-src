@@ -18,7 +18,6 @@ public class RfidKeyEntity implements Serializable {
 
 	public RfidKeyEntity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public RfidKeyEntity(Long id, String name) {
