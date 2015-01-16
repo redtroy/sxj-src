@@ -1,8 +1,6 @@
 package com.sxj.util.common;
 
 import java.math.BigDecimal;
-
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,10 +12,12 @@ import java.util.UUID;
 
 import org.apache.commons.codec.net.URLCodec;
 
-/** 字符串工具类
+/**
+ * 字符串工具类
  * 
  * @description 提供操作字符串的常用工具方法
- * @author Lincoln */
+ * @author Lincoln
+ */
 public class StringUtils {
 	static Map<String, String> weekName = new HashMap<String, String>();
 	static {
@@ -30,10 +30,12 @@ public class StringUtils {
 		weekName.put("1", "星期日");
 	}
 
-	/** 将对象数组拼接成字符串 以 "," 号分隔 返回String
+	/**
+	 * 将对象数组拼接成字符串 以 "," 号分隔 返回String
 	 * 
 	 * @param ids
-	 * @return */
+	 * @return
+	 */
 	public static String getString(Object[] objArr) {
 		StringBuffer buf = new StringBuffer();
 		for (int i = 0; i < objArr.length; i++) {
@@ -45,10 +47,12 @@ public class StringUtils {
 		return buf.toString();
 	}
 
-	/** 将对象数组转换为可显字符串
+	/**
+	 * 将对象数组转换为可显字符串
 	 * 
 	 * @param objArr
-	 * @return */
+	 * @return
+	 */
 	public static String toString(Object[] objArr) {
 		if (objArr == null) {
 			return null;
@@ -62,18 +66,22 @@ public class StringUtils {
 		return buf.toString();
 	}
 
-	/** 获取星期几的名称
+	/**
+	 * 获取星期几的名称
 	 * 
 	 * @param str
-	 * @return */
+	 * @return
+	 */
 	public static String getWeekName(String str) {
 		return weekName.get(str);
 	}
 
-	/** 将单个对象转换为可显字符串
+	/**
+	 * 将单个对象转换为可显字符串
 	 * 
 	 * @param obj
-	 * @return */
+	 * @return
+	 */
 	public static String toString(Object obj) {
 		if (obj instanceof String) {
 			return "\"" + obj + "\"";
@@ -87,17 +95,19 @@ public class StringUtils {
 
 	public static void main(String[] args) {
 		if (StringUtils.isNotEmpty(" ")) {
-			//System.out.println("-----------33333-------------");
+			// System.out.println("-----------33333-------------");
 			return;
 		}
 		System.out.println("-----------fsdfsdf-------------");
 	}
 
-	/** 使用正则表达式验证字符串格式是否合法
+	/**
+	 * 使用正则表达式验证字符串格式是否合法
 	 * 
 	 * @param piNoPattern
 	 * @param str
-	 * @return */
+	 * @return
+	 */
 	// public static boolean patternValidate(String pattern, String str) {
 	// if (pattern == null || str == null) {
 	// throw new SystemException("参数格式不合法[patternValidate(String " + pattern +
@@ -106,10 +116,12 @@ public class StringUtils {
 	// return Pattern.matches(pattern, str);
 	// }
 
-	/** 验证字符串是否为空字符
+	/**
+	 * 验证字符串是否为空字符
 	 * 
 	 * @param str
-	 * @return */
+	 * @return
+	 */
 	public static boolean isEmpty(String str) {
 		return str == null || str.trim().equals("")
 				|| str.trim().toLowerCase().equals("null") || str.length() == 0;
@@ -119,43 +131,66 @@ public class StringUtils {
 		return (!isEmpty(str));
 	}
 
-	/** 验证字符串是否为空字符
+	/**
+	 * 验证字符串是否为空字符
 	 * 
 	 * @param str
-	 * @return */
+	 * @return
+	 */
 	public static boolean isBlank(String str) {
 		return str == null || str.trim().equals("")
 				|| str.trim().toLowerCase().equals("null")
 				|| str.trim().toLowerCase().equals("all");
 	}
 
-	/** 判断字符串不为空
+	/**
+	 * 判断字符串不为空
 	 * 
 	 * @param str
-	 * @return */
+	 * @return
+	 */
 	public static boolean notBlank(String str) {
 		return !isBlank(str);
 	}
 
-	/** 如果为空,将字符串转换为NULL
+	/**
+	 * 如果为空,将字符串转换为""
 	 * 
 	 * @param str
-	 * @return */
+	 * @return
+	 */
 	public static String trimToNull(String str) {
-		String s = null;
-		if (isBlank(str)) {
+		String s = "";
+		if (str == null) {
 			return s;
 		}
 		s = str.trim();
 		return s;
 	}
 
-	/** 字符编码转换器
+	/**
+	 * 如果为空,将字符串转换为""
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static String trimToNull(Long str) {
+		String s = "";
+		if (str == null) {
+			return s;
+		}
+		s = str.longValue() + "";
+		return s;
+	}
+
+	/**
+	 * 字符编码转换器
 	 * 
 	 * @param str
 	 * @param newCharset
 	 * @return
-	 * @throws Exception */
+	 * @throws Exception
+	 */
 	public static String changeCharset(String str, String newCharset)
 			throws Exception {
 		if (str != null) {
@@ -165,10 +200,12 @@ public class StringUtils {
 		return null;
 	}
 
-	/** 判断一个字符串是否为boolean信息
+	/**
+	 * 判断一个字符串是否为boolean信息
 	 * 
 	 * @param str
-	 * @return */
+	 * @return
+	 */
 	public static boolean isBooleanStr(String str) {
 		try {
 			Boolean.parseBoolean(str);
@@ -179,15 +216,17 @@ public class StringUtils {
 		}
 	}
 
-	/** 取得指定长度的字符串(如果长度过长,将截取后半部分特定长度,如果长度太短,则使用指定字符进行左补齐)
+	/**
+	 * 取得指定长度的字符串(如果长度过长,将截取后半部分特定长度,如果长度太短,则使用指定字符进行左补齐)
 	 * 
 	 * @param str
-	 *        原始字符串
+	 *            原始字符串
 	 * @param length
-	 *        要求的长度
+	 *            要求的长度
 	 * @param c
-	 *        用于补位的支付
-	 * @return 指定长度的字符串 */
+	 *            用于补位的支付
+	 * @return 指定长度的字符串
+	 */
 	public static String getLengthStr(String str, int length, char c) {
 		if (str == null) {
 			str = "";
@@ -214,14 +253,16 @@ public class StringUtils {
 		return buf.toString();
 	}
 
-	/** : convlToLong
+	/**
+	 * : convlToLong
 	 * 
 	 * @Description: TODO String 作非空处理
 	 * @param @param orgStr
 	 * @param @param convertStr
 	 * @param @return
 	 * @return Long
-	 * @throws */
+	 * @throws
+	 */
 	public static String convertNullToString(Object orgStr, String convertStr) {
 		if (orgStr == null) {
 			return convertStr;
@@ -229,14 +270,16 @@ public class StringUtils {
 		return orgStr.toString();
 	}
 
-	/** : convertNulg
+	/**
+	 * : convertNulg
 	 * 
 	 * @Description: TODO Long 作非空处理
 	 * @param @param orgStr
 	 * @param @param convertStr
 	 * @param @return
 	 * @return Long
-	 * @throws */
+	 * @throws
+	 */
 	public static Long convertNullToLong(Object orgStr, Long convertStr) {
 		if (orgStr == null || Long.parseLong(orgStr.toString()) == 0) {
 			return convertStr;
@@ -245,13 +288,15 @@ public class StringUtils {
 		}
 	}
 
-	/** : convertNullTolon * @Description: TODO long 作非空处理
+	/**
+	 * : convertNullTolon * @Description: TODO long 作非空处理
 	 * 
 	 * @param @param orgStr
 	 * @param @param convertStr
 	 * @param @return
 	 * @return long
-	 * @throws */
+	 * @throws
+	 */
 	public static long convertNullTolong(Object orgStr, long convertStr) {
 		if (orgStr == null || Long.parseLong(orgStr.toString()) == 0) {
 			return convertStr;
@@ -260,13 +305,15 @@ public class StringUtils {
 		}
 	}
 
-	/** : convertNullToInt cription: TODO Int 作非空处理
+	/**
+	 * : convertNullToInt cription: TODO Int 作非空处理
 	 * 
 	 * @param @param orgStr
 	 * @param @param convertStr
 	 * @param @return
 	 * @return int
-	 * @throws */
+	 * @throws
+	 */
 	public static int convertNullToInt(Object orgStr, int convertStr) {
 		if (orgStr == null || Long.parseLong(orgStr.toString()) == 0) {
 			return convertStr;
@@ -275,14 +322,16 @@ public class StringUtils {
 		}
 	}
 
-	/** : convertNullToInt
+	/**
+	 * : convertNullToInt
 	 * 
 	 * @Deson: TODO Integer 作非空处理
 	 * @param @param orgStr
 	 * @param @param convertStr
 	 * @param @return
 	 * @return int
-	 * @throws */
+	 * @throws
+	 */
 	public static int convertNullToInteger(Object orgStr, int convertStr) {
 		if (orgStr == null) {
 			return convertStr;
@@ -291,13 +340,15 @@ public class StringUtils {
 		}
 	}
 
-	/** : convertNullToDate
+	/**
+	 * : convertNullToDate
 	 * 
 	 * @DescriptODO Date 作非空处理
 	 * @param @param orgStr
 	 * @param @return
 	 * @return Date
-	 * @throws */
+	 * @throws
+	 */
 	public static Date convertNullToDate(Object orgStr) {
 		if (orgStr == null || orgStr.toString().equals("")) {
 			return new Date();
@@ -306,13 +357,15 @@ public class StringUtils {
 		}
 	}
 
-	/** : convertNullToDate
+	/**
+	 * : convertNullToDate
 	 * 
 	 * @Description: ate 作非空处理
 	 * @param @param orgStr
 	 * @param @return
 	 * @return Date
-	 * @throws */
+	 * @throws
+	 */
 	public static BigDecimal convertNullToBigDecimal(Object orgStr) {
 		if (orgStr == null || orgStr.toString().equals("")) {
 			return new BigDecimal("0");
@@ -321,12 +374,14 @@ public class StringUtils {
 		}
 	}
 
-	/** 对字符串 - 在左边填充指定符号
+	/**
+	 * 对字符串 - 在左边填充指定符号
 	 * 
 	 * @param s
 	 * @param fullLength
 	 * @param addSymbol
-	 * @return */
+	 * @return
+	 */
 	public static String addSymbolAtLeft(String s, int fullLength,
 			char addSymbol) {
 		if (s == null) {
@@ -359,12 +414,14 @@ public class StringUtils {
 		return result;
 	}
 
-	/** 对字符串 - 在右边填充指定符号
+	/**
+	 * 对字符串 - 在右边填充指定符号
 	 * 
 	 * @param s
 	 * @param fullLength
 	 * @param addSymbol
-	 * @return */
+	 * @return
+	 */
 	public static String addSymbolAtRight(String s, int fullLength,
 			char addSymbol) {
 		if (s == null) {
@@ -395,11 +452,13 @@ public class StringUtils {
 		return result;
 	}
 
-	/** 判断两个字符串是否相同
+	/**
+	 * 判断两个字符串是否相同
 	 * 
 	 * @param str1
 	 * @param str2
-	 * @return */
+	 * @return
+	 */
 	public static boolean isEquals(String str1, String str2) {
 		if (str1 == null) {
 			return str2 == null;
@@ -408,22 +467,26 @@ public class StringUtils {
 		}
 	}
 
-	/** 判断两个字符串是否不同
+	/**
+	 * 判断两个字符串是否不同
 	 * 
 	 * @param str1
 	 * @param str2
-	 * @return */
+	 * @return
+	 */
 	public static boolean notEquals(String str1, String str2) {
 		return !isEquals(str1, str2);
 	}
 
-	/** 分隔字符串
+	/**
+	 * 分隔字符串
 	 * 
 	 * @param srcStr
-	 *        被分隔的字符串
+	 *            被分隔的字符串
 	 * @param splitChars
-	 *        多个分隔符
-	 * @return 分隔结果 */
+	 *            多个分隔符
+	 * @return 分隔结果
+	 */
 	public static List<String> splitString(String srcStr, String splitChars) {
 		if (isBlank(srcStr)) {
 			return null;
@@ -436,14 +499,15 @@ public class StringUtils {
 		return strList;
 	}
 
-	/** 格式化字符串
+	/**
+	 * 格式化字符串
 	 * 
 	 * @param src
 	 * @param params
-	 * @return */
+	 * @return
+	 */
 	public static String formatString(String src, Object... params) {
-		String[] paramsStrArr = params != null
-				? new String[params.length]
+		String[] paramsStrArr = params != null ? new String[params.length]
 				: null;
 		for (int i = 0; params != null && i < params.length; i++) {
 			paramsStrArr[i] = String.valueOf(params[i]);
@@ -452,9 +516,11 @@ public class StringUtils {
 		return MessageFormat.format(src, paramsStrArr);
 	}
 
-	/** 获取UUID
+	/**
+	 * 获取UUID
 	 * 
-	 * @return */
+	 * @return
+	 */
 	public static String getUUID() {
 		String uuid = UUID.randomUUID().toString();
 		return uuid.replaceAll("-{1}", "");
@@ -479,6 +545,7 @@ public class StringUtils {
 		}
 		return null;
 	}
+
 	public static String subStrByBytes(String str, int len, String tail) {
 		if (str == null) {
 			return "";

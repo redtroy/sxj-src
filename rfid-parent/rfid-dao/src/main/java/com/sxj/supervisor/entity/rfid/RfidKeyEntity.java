@@ -12,64 +12,52 @@ import com.sxj.supervisor.dao.rfid.IRfidKeyDao;
 
 @Entity(mapper = IRfidKeyDao.class)
 @Table(name = "R_GLOBAL_KEY")
-public class RfidKeyEntity implements Serializable
-{
-    
-    public RfidKeyEntity()
-    {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 6380009754153582277L;
-    
-    @Id(column = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = 0L;
-    
-    public RfidKeyEntity(Long id, String name)
-    {
-        super();
-        this.id = id;
-        this.name = name;
-    }
-    
-    @Column(name = "NAME")
-    private String name;
-    
-    private Integer step = 0;
-    
-    public Long getId()
-    {
-        return id;
-    }
-    
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-    
-    public String getName()
-    {
-        return name;
-    }
-    
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-    
-    public Integer getStep()
-    {
-        return step;
-    }
-    
-    public void setStep(Integer step)
-    {
-        this.step = step;
-    }
-    
+public class RfidKeyEntity implements Serializable {
+
+	private static final long serialVersionUID = 6380009754153582277L;
+
+	public RfidKeyEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public RfidKeyEntity(Long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	@Id(column = "ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id = 0L;
+
+	@Column(name = "NAME")
+	private String name;
+
+	private Integer step = 0;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getStep() {
+		return step;
+	}
+
+	public void setStep(Integer step) {
+		this.step = step;
+	}
+
 }
