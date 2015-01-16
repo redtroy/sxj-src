@@ -9,7 +9,6 @@ public class M_PayStateEnumTypeHandler extends
 
 	public M_PayStateEnumTypeHandler(Class<M_PayStateEnum> type) {
 		super(type);
-		// TODO Auto-generated constructor stub
 	}
 
 }

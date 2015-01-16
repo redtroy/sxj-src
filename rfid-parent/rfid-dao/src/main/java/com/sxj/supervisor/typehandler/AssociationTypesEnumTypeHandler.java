@@ -9,7 +9,6 @@ public class AssociationTypesEnumTypeHandler extends
 
 	public AssociationTypesEnumTypeHandler(Class<AssociationTypesEnum> type) {
 		super(type);
-		// TODO Auto-generated constructor stub
 	}
 
 }

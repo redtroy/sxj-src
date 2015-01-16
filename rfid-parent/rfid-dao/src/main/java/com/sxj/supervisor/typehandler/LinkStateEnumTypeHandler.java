@@ -8,6 +8,5 @@ public class LinkStateEnumTypeHandler extends
 		EnumOrdinalTypeHandler<LinkStateEnum> {
 	public LinkStateEnumTypeHandler(Class<LinkStateEnum> type) {
 		super(type);
-		// TODO Auto-generated constructor stub
 	}
 }
