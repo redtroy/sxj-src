@@ -58,7 +58,7 @@
 		</if>
 		<![CDATA[ ORDER BY rlr.RFID_NO DESC]]>
 	</select>
-	<select id="queryLogisticsRfidList_A" resultMap="logisticsResultMap"
+	<select id="queryLogisticsRfidListA" resultMap="logisticsResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr,M_CONTRACT c WHERE rlr.RFID_STATE<>4 AND rlr.CONTRACT_NO=c.CONTRACT_NO AND rlr.PROGRESS_STATE>=2]]>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">
@@ -91,7 +91,7 @@
 		</if>
 		<![CDATA[ ORDER BY rlr.RFID_NO DESC]]>
 	</select>
-	<select id="queryLogisticsRfidList_B" resultMap="logisticsResultMap"
+	<select id="queryLogisticsRfidListB" resultMap="logisticsResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT rlr.* FROM R_LOGISTICS_RFID rlr WHERE rlr.RFID_STATE<>4]]>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">

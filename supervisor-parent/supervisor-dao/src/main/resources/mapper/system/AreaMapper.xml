@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sxj.supervisor.dao.system.IAreaDao">
-<cache type="com.sxj.mybatis.cache.HierarchicalCache">
+<!--<cache type="com.sxj.mybatis.cache.HierarchicalCache">
 		<property name="level" value="2"/>
 		<property name="timeToLive" value="10"/>
-</cache>
+</cache> -->
 	<resultMap id="AreaResultMap" type="com.sxj.supervisor.entity.system.AreaEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
