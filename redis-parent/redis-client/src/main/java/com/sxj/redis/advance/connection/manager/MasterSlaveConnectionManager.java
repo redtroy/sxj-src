@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sxj.redis.advance.connection;
+package com.sxj.redis.advance.connection.manager;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -50,6 +50,8 @@ import com.sxj.redis.advance.MasterSlaveServersConfig;
 import com.sxj.redis.advance.async.AsyncOperation;
 import com.sxj.redis.advance.async.SyncOperation;
 import com.sxj.redis.advance.codec.RedisCodecWrapper;
+import com.sxj.redis.advance.connection.entry.MasterSlaveEntry;
+import com.sxj.redis.advance.connection.entry.PubSubConnectionEntry;
 import com.sxj.redis.codec.RedisCodec;
 import com.sxj.redis.pubsub.RedisPubSubAdapter;
 import com.sxj.redis.pubsub.RedisPubSubConnection;

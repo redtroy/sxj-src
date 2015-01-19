@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sxj.redis.advance.connection;
+package com.sxj.redis.advance.connection.manager;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,25 +30,101 @@ import org.slf4j.LoggerFactory;
 
 import com.sxj.redis.RedisAsyncConnection;
 import com.sxj.redis.RedisCli;
+import com.sxj.redis.advance.ClusterServersConfig;
 import com.sxj.redis.advance.Config;
 import com.sxj.redis.advance.MasterSlaveServersConfig;
 import com.sxj.redis.advance.SentinelServersConfig;
+import com.sxj.redis.advance.connection.cluster.ClusterNodeInfo;
+import com.sxj.redis.advance.connection.cluster.ClusterPartition;
+import com.sxj.redis.advance.connection.cluster.ClusterNodeInfo.Flag;
+import com.sxj.redis.advance.connection.entry.MasterSlaveEntry;
 import com.sxj.redis.pubsub.RedisPubSubAdapter;
 import com.sxj.redis.pubsub.RedisPubSubConnection;
 
-public class SentinelConnectionManager extends MasterSlaveConnectionManager
+public class ClusterConnectionManager extends MasterSlaveConnectionManager
 {
     
     private final Logger log = LoggerFactory.getLogger(getClass());
     
-    private final List<RedisCli> sentinels = new ArrayList<RedisCli>();
+    private final List<RedisCli> nodeClients = new ArrayList<RedisCli>();
     
-    public SentinelConnectionManager(final SentinelServersConfig cfg,
-            Config config)
+    public ClusterConnectionManager(ClusterServersConfig cfg, Config config)
     {
         init(config);
         
-        final MasterSlaveServersConfig c = new MasterSlaveServersConfig();
+        Map<String, ClusterPartition> partitions = new HashMap<String, ClusterPartition>();
+        
+        for (URI addr : cfg.getNodeAddresses())
+        {
+            RedisCli client = new RedisCli(group, addr.getHost(),
+                    addr.getPort(), cfg.getTimeout());
+            RedisAsyncConnection<String, String> connection = client.connectAsync();
+            String nodesValue = connection.clusterNodes()
+                    .awaitUninterruptibly()
+                    .getNow();
+            System.out.println(nodesValue);
+            
+            List<ClusterNodeInfo> nodes = parse(nodesValue);
+            for (ClusterNodeInfo clusterNodeInfo : nodes)
+            {
+                String id = clusterNodeInfo.getNodeId();
+                if (clusterNodeInfo.getFlags().contains(Flag.SLAVE))
+                {
+                    id = clusterNodeInfo.getSlaveOf();
+                }
+                ClusterPartition partition = partitions.get(id);
+                if (partition == null)
+                {
+                    partition = new ClusterPartition();
+                    partitions.put(id, partition);
+                }
+                
+                if (clusterNodeInfo.getFlags().contains(Flag.FAIL))
+                {
+                    partition.setMasterFail(true);
+                }
+                
+                if (clusterNodeInfo.getFlags().contains(Flag.SLAVE))
+                {
+                    partition.addSlaveAddress(clusterNodeInfo.getAddress());
+                }
+                else
+                {
+                    partition.setEndSlot(clusterNodeInfo.getEndSlot());
+                    partition.setMasterAddress(clusterNodeInfo.getAddress());
+                }
+            }
+            
+            for (ClusterPartition partition : partitions.values())
+            {
+                if (partition.isMasterFail())
+                {
+                    continue;
+                }
+                
+                MasterSlaveServersConfig c = create(cfg);
+                log.info("master: {}", partition.getMasterAddress());
+                c.setMasterAddress(partition.getMasterAddress());
+                for (String slaveAddress : partition.getSlaveAddresses())
+                {
+                    log.info("slave: {}", slaveAddress);
+                    c.addSlaveAddress(slaveAddress);
+                }
+                
+                MasterSlaveEntry entry = new MasterSlaveEntry(codec, group, c);
+                entries.put(partition.getEndSlot(), entry);
+            }
+            
+            client.shutdown();
+            break;
+        }
+        
+        this.config = create(cfg);
+    }
+    
+    private MasterSlaveServersConfig create(ClusterServersConfig cfg)
+    {
+        MasterSlaveServersConfig c = new MasterSlaveServersConfig();
         c.setLoadBalancer(cfg.getLoadBalancer());
         c.setPassword(cfg.getPassword());
         c.setDatabase(cfg.getDatabase());
@@ -55,57 +132,64 @@ public class SentinelConnectionManager extends MasterSlaveConnectionManager
         c.setSlaveConnectionPoolSize(cfg.getSlaveConnectionPoolSize());
         c.setSlaveSubscriptionConnectionPoolSize(cfg.getSlaveSubscriptionConnectionPoolSize());
         c.setSubscriptionsPerConnection(cfg.getSubscriptionsPerConnection());
-        
-        final Set<String> addedSlaves = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
-        for (URI addr : cfg.getSentinelAddresses())
-        {
-            RedisCli client = new RedisCli(group, addr.getHost(),
-                    addr.getPort(), cfg.getTimeout());
-            RedisAsyncConnection<String, String> connection = client.connectAsync();
-            
-            // TODO async
-            List<String> master = connection.getMasterAddrByKey(cfg.getMasterName())
-                    .awaitUninterruptibly()
-                    .getNow();
-            String masterHost = master.get(0) + ":" + master.get(1);
-            c.setMasterAddress(masterHost);
-            log.info("master: {}", masterHost);
-            //            c.addSlaveAddress(masterHost);
-            
-            // TODO async
-            List<Map<String, String>> slaves = connection.slaves(cfg.getMasterName())
-                    .awaitUninterruptibly()
-                    .getNow();
-            for (Map<String, String> map : slaves)
-            {
-                String ip = map.get("ip");
-                String port = map.get("port");
-                log.info("slave: {}:{}", ip, port);
-                c.addSlaveAddress(ip + ":" + port);
-                String host = ip + ":" + port;
-                addedSlaves.add(host);
-            }
-            
-            client.shutdown();
-            break;
-        }
-        
-        init(c);
-        
-        monitorMasterChange(cfg, addedSlaves);
+        return c;
     }
     
-    private void monitorMasterChange(final SentinelServersConfig cfg,
-            final Set<String> addedSlaves)
+    private List<ClusterNodeInfo> parse(String nodesResponse)
+    {
+        List<ClusterNodeInfo> nodes = new ArrayList<ClusterNodeInfo>();
+        for (String nodeInfo : nodesResponse.split("\n"))
+        {
+            ClusterNodeInfo node = new ClusterNodeInfo();
+            String[] params = nodeInfo.split(" ");
+            
+            String nodeId = params[0];
+            node.setNodeId(nodeId);
+            
+            String addr = params[1];
+            node.setAddress(addr);
+            
+            String flags = params[2];
+            for (String flag : flags.split(","))
+            {
+                node.addFlag(ClusterNodeInfo.Flag.valueOf(flag.toUpperCase()));
+            }
+            
+            String slaveOf = params[3];
+            if (!"-".equals(slaveOf))
+            {
+                node.setSlaveOf(slaveOf);
+            }
+            
+            if (params.length > 8)
+            {
+                String slots = params[8];
+                String[] parts = slots.split("-");
+                node.setStartSlot(Integer.valueOf(parts[0]));
+                node.setEndSlot(Integer.valueOf(parts[1]));
+            }
+            
+            nodes.add(node);
+        }
+        return nodes;
+    }
+    
+    private void init(ClusterServersConfig cfg, Config config)
+    {
+        //        monitorMasterChange(cfg);
+    }
+    
+    private void monitorMasterChange(final SentinelServersConfig cfg)
     {
         final AtomicReference<String> master = new AtomicReference<String>();
         final Set<String> freezeSlaves = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+        final Set<String> addedSlaves = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
         
         for (final URI addr : cfg.getSentinelAddresses())
         {
             RedisCli client = new RedisCli(group, addr.getHost(),
                     addr.getPort(), cfg.getTimeout());
-            sentinels.add(client);
+            nodeClients.add(client);
             
             RedisPubSubConnection<String, String> pubsub = client.connectPubSub();
             pubsub.addListener(new RedisPubSubAdapter<String>()
@@ -261,7 +345,7 @@ public class SentinelConnectionManager extends MasterSlaveConnectionManager
     @Override
     public void shutdown()
     {
-        for (RedisCli sentinel : sentinels)
+        for (RedisCli sentinel : nodeClients)
         {
             sentinel.shutdown();
         }

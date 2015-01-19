@@ -21,7 +21,7 @@ import java.util.Collection;
 
 import com.sxj.redis.RedisAsyncConnection;
 import com.sxj.redis.advance.async.ResultOperation;
-import com.sxj.redis.advance.connection.ConnectionManager;
+import com.sxj.redis.advance.connection.manager.ConnectionManager;
 import com.sxj.redis.advance.core.RHyperLogLog;
 
 public class RedisHyperLogLog<V> extends RedisObject implements RHyperLogLog<V>

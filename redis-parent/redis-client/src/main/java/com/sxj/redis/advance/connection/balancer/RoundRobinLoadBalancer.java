@@ -18,7 +18,7 @@ package com.sxj.redis.advance.connection.balancer;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.sxj.redis.advance.connection.SubscribesConnectionEntry;
+import com.sxj.redis.advance.connection.entry.SubscribesConnectionEntry;
 
 public class RoundRobinLoadBalancer extends BaseLoadBalancer
 {

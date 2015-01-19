@@ -20,7 +20,7 @@ import io.netty.util.concurrent.Promise;
 
 import com.sxj.redis.RedisAsyncConnection;
 import com.sxj.redis.advance.async.ResultOperation;
-import com.sxj.redis.advance.connection.ConnectionManager;
+import com.sxj.redis.advance.connection.manager.ConnectionManager;
 import com.sxj.redis.advance.core.RObject;
 
 /**

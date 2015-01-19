@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sxj.redis.advance.connection;
+package com.sxj.redis.advance.connection.manager;
 
 import com.sxj.redis.advance.Config;
 import com.sxj.redis.advance.MasterSlaveServersConfig;
 import com.sxj.redis.advance.SingleServerConfig;
+import com.sxj.redis.advance.connection.entry.SingleEntry;
 
 public class SingleConnectionManager extends MasterSlaveConnectionManager
 {

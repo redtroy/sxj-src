@@ -1,4 +1,4 @@
-package com.sxj.redis.advance.connection;
+package com.sxj.redis.advance.connection.cluster;
 
 import java.util.ArrayList;
 import java.util.List;

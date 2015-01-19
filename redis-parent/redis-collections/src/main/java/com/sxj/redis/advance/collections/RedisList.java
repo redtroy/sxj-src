@@ -30,7 +30,7 @@ import com.sxj.redis.RedisConnection;
 import com.sxj.redis.advance.RedisExpirable;
 import com.sxj.redis.advance.async.ResultOperation;
 import com.sxj.redis.advance.async.SyncOperation;
-import com.sxj.redis.advance.connection.ConnectionManager;
+import com.sxj.redis.advance.connection.manager.ConnectionManager;
 import com.sxj.redis.advance.core.RList;
 
 /**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sxj.redis.advance.connection;
+package com.sxj.redis.advance.connection.entry;
 
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;

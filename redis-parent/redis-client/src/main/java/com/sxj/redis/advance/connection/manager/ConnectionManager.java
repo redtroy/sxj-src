@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sxj.redis.advance.connection;
+package com.sxj.redis.advance.connection.manager;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.Future;
@@ -21,6 +21,7 @@ import io.netty.util.concurrent.Future;
 import com.sxj.redis.RedisConnection;
 import com.sxj.redis.advance.async.AsyncOperation;
 import com.sxj.redis.advance.async.SyncOperation;
+import com.sxj.redis.advance.connection.entry.PubSubConnectionEntry;
 import com.sxj.redis.pubsub.RedisPubSubAdapter;
 
 /**

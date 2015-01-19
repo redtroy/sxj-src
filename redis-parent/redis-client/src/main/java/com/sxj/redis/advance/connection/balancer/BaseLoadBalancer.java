@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.sxj.redis.RedisConnection;
 import com.sxj.redis.RedisConnectionException;
 import com.sxj.redis.advance.MasterSlaveServersConfig;
-import com.sxj.redis.advance.connection.SubscribesConnectionEntry;
+import com.sxj.redis.advance.connection.entry.SubscribesConnectionEntry;
 import com.sxj.redis.advance.misc.ReclosableLatch;
 import com.sxj.redis.codec.RedisCodec;
 import com.sxj.redis.pubsub.RedisPubSubConnection;

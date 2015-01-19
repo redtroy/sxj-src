@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.sxj.redis.RedisAsyncConnection;
 import com.sxj.redis.advance.async.ResultOperation;
-import com.sxj.redis.advance.connection.ConnectionManager;
+import com.sxj.redis.advance.connection.manager.ConnectionManager;
 import com.sxj.redis.advance.core.RExpirable;
 
 public abstract class RedisExpirable extends RedisObject implements RExpirable {

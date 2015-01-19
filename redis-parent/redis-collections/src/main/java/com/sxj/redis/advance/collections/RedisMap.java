@@ -34,7 +34,7 @@ import com.sxj.redis.advance.async.AsyncOperation;
 import com.sxj.redis.advance.async.OperationListener;
 import com.sxj.redis.advance.async.ResultOperation;
 import com.sxj.redis.advance.async.SyncOperation;
-import com.sxj.redis.advance.connection.ConnectionManager;
+import com.sxj.redis.advance.connection.manager.ConnectionManager;
 import com.sxj.redis.advance.core.Predicate;
 import com.sxj.redis.advance.core.RMap;
 import com.sxj.redis.output.MapScanResult;

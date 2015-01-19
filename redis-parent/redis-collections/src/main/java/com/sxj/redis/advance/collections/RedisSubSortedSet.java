@@ -22,7 +22,7 @@ import java.util.SortedSet;
 
 import com.sxj.redis.RedisConnection;
 import com.sxj.redis.advance.collections.RedisSortedSet.BinarySearchResult;
-import com.sxj.redis.advance.connection.ConnectionManager;
+import com.sxj.redis.advance.connection.manager.ConnectionManager;
 
 /**
  *

@@ -28,7 +28,7 @@ import com.sxj.redis.advance.RedisExpirable;
 import com.sxj.redis.advance.async.AsyncOperation;
 import com.sxj.redis.advance.async.OperationListener;
 import com.sxj.redis.advance.async.ResultOperation;
-import com.sxj.redis.advance.connection.ConnectionManager;
+import com.sxj.redis.advance.connection.manager.ConnectionManager;
 import com.sxj.redis.advance.core.RSet;
 import com.sxj.redis.output.ListScanResult;
 

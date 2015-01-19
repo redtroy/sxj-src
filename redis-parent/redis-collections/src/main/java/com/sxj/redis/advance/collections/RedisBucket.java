@@ -23,7 +23,7 @@ import com.sxj.redis.RedisAsyncConnection;
 import com.sxj.redis.advance.RedisExpirable;
 import com.sxj.redis.advance.async.ResultOperation;
 import com.sxj.redis.advance.async.VoidOperation;
-import com.sxj.redis.advance.connection.ConnectionManager;
+import com.sxj.redis.advance.connection.manager.ConnectionManager;
 import com.sxj.redis.advance.core.RBucket;
 
 public class RedisBucket<V> extends RedisExpirable implements RBucket<V>
