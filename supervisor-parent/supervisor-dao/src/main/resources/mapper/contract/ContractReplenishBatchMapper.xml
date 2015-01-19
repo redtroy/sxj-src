@@ -30,6 +30,14 @@
 		<if test="condition.newRfidNo != null and condition.newRfidNo != ''">
 			<![CDATA[AND NEW_RFID_NO = #{condition.newRfidNo}]]>
 		</if>
+		<if test="condition.recordIdArray!=null">
+			AND REPLENISH_ID IN 
+			<foreach collection="array" open="(" close=")" separator="," item="recordId">
+				#{recordId}
+			</foreach>
+		</if>
+		
+		
 		<![CDATA[ ORDER BY BATCH_NO ASC ]]>
 	</select>
 	<select id="getReplenishBatch" resultMap="ReplenishBatchResultMap"

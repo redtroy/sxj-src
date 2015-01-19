@@ -20,4 +20,10 @@
 		parameterType="String">
 		<![CDATA[SELECT *  FROM M_CONTRACT_MODIFY_ITEM WHERE MODIFY_ID =#{condition.recordIds}]]>
 	</select>
+	<select id="queryItemsByModifyIds" resultMap="ModifyItemResultMap" parameterType="String">
+		SELECT *  FROM M_CONTRACT_MODIFY_ITEM WHERE MODIFY_ID IN
+		<foreach collection="array" open="(" close=")" separator="," item="modifyId">
+			#{modifyId}
+		</foreach> 
+	</select>
 </mapper>

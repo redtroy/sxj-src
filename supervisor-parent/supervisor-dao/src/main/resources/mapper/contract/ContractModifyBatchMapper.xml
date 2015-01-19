@@ -34,6 +34,15 @@
 		<if test="condition.state != null and condition.state != ''">
 			<![CDATA[AND UPDATE_STATE != #{condition.state}]]>
 		</if>
+		<if test="condition.modifyIds!=null">
+			AND MODIFY_ID IN 
+			<foreach collection="array" open="(" close=")" separator="," item="modifyId">
+				#{modifyId}
+			</foreach>
+		
+		</if>
+		
+		
 		<![CDATA[ ORDER BY BATCH_NO ASC ]]>
 	</select>
 </mapper>

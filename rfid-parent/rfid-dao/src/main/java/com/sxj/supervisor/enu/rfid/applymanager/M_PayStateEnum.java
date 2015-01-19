@@ -1,6 +1,5 @@
 package com.sxj.supervisor.enu.rfid.applymanager;
 
-
 public enum M_PayStateEnum
 {
     PAYMENT("已付款", 0), NOT_PAYMENT("未付款", 1);
@@ -17,7 +16,7 @@ public enum M_PayStateEnum
     }
     
     // 普通方法
-    public static String getNamed(Integer id)
+    public static String getName(Integer id)
     {
         for (M_PayStateEnum c : M_PayStateEnum.values())
         {

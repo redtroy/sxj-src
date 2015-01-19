@@ -1,6 +1,7 @@
 package com.sxj.supervisor.model.contract;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sxj.supervisor.entity.contract.ContractEntity;
@@ -71,6 +72,8 @@ public class ContractModel implements Serializable
     
     public List<ContractBatchModel> getBatchList()
     {
+        if (batchList == null)
+            return new ArrayList<ContractBatchModel>();
         return batchList;
     }
     
@@ -91,6 +94,8 @@ public class ContractModel implements Serializable
     
     public List<ContractReplenishModel> getReplenishList()
     {
+        if (replenishList == null)
+            return new ArrayList<ContractReplenishModel>();
         return replenishList;
     }
     
