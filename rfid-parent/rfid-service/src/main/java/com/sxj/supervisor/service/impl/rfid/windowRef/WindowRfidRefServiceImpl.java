@@ -10,7 +10,7 @@ import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
 import com.sxj.supervisor.model.comet.RfidChannel;
-import com.sxj.supervisor.model.rfid.windowRef.WindowRefQuery;
+import com.sxj.supervisor.model.rfid.windowref.WindowRefQuery;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.exception.ServiceException;

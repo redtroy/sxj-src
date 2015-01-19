@@ -3,7 +3,7 @@ package com.sxj.supervisor.service.rfid.windowRef;
 import java.util.List;
 
 import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
-import com.sxj.supervisor.model.rfid.windowRef.WindowRefQuery;
+import com.sxj.supervisor.model.rfid.windowref.WindowRefQuery;
 import com.sxj.util.exception.ServiceException;
 
 public interface IWindowRfidRefService {

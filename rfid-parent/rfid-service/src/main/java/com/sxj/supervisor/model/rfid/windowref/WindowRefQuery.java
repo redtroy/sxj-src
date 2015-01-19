@@ -1,4 +1,4 @@
-package com.sxj.supervisor.model.rfid.windowRef;
+package com.sxj.supervisor.model.rfid.windowref;
 
 import java.io.Serializable;
 

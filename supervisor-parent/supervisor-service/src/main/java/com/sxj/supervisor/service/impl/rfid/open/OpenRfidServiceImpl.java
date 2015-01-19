@@ -92,8 +92,9 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	public BatchModel getBatchByRfid(String gid) throws ServiceException,
 			SQLException {
 		BatchModel batchModel = new BatchModel();
-		String rfid = logisticsDao.getRfid(gid).get(0);
 		Bacth batch = new Bacth();
+		try{
+		String rfid = logisticsDao.getRfid(gid).get(0);
 		if (StringUtils.isNotEmpty(rfid)) {
 			QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
 			logisticsQuery.addCondition("rfidNo", rfid);
@@ -165,6 +166,15 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			}
 		} else {
 			batch.setState("0");
+		}
+		}catch (ServiceException e) {
+			batch.setState("0");
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			batch.setState("0");
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取批次错误", e);
 		}
 		batchModel.setBatchList(batch);
 		return batchModel;
