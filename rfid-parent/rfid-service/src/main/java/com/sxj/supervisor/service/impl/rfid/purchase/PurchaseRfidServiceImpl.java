@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
@@ -108,13 +109,9 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	public void updatePurchase(RfidPurchaseEntity purchase)
 			throws ServiceException {
 		try {
-			if (purchase == null) {
-				throw new ServiceException("采购单不存在");
-			}
+			Assert.notNull(purchase, "采购单不存在");
 			RfidPurchaseEntity old = getRfidPurchase(purchase.getId());
-			if (old == null) {
-				throw new ServiceException("采购单不存在");
-			}
+			Assert.notNull(old, "采购单不存在");
 			if (old.getPayState().equals(PayStateEnum.PAYED)) {
 				throw new ServiceException("采购单已付款，不能修改");
 			}
@@ -126,9 +123,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			}
 			RfidApplicationEntity app = applyService.getApplication(old
 					.getApplyNo());
-			if (app == null) {
-				throw new ServiceException("申请单不存在");
-			}
+			Assert.notNull(app, "申请单不存在");
 			app.setHasNumber((app.getHasNumber() - old.getCount())
 					+ purchase.getCount());
 			rfidPurchaseDao.updateRfidPurchase(purchase);
@@ -208,9 +203,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				query.setPurchaseNo(purchase.getPurchaseNo());
 				List<WindowRfidEntity> listRfid = winRfidService
 						.queryWindowRfid(query);
-				if (listRfid == null) {
-					throw new ServiceException("未导入RFID标签，不能发货！");
-				}
+				Assert.notNull(listRfid, "未导入RFID标签，不能发货！");
 				if (listRfid.size() < purchase.getCount()) {
 					throw new ServiceException("未完全导入RFID标签，不能发货！");
 				}
@@ -227,9 +220,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				query.setPurchaseNo(purchase.getPurchaseNo());
 				List<LogisticsRfidEntity> listRfid = logisticsRfidService
 						.queryLogistics(query);
-				if (listRfid == null) {
-					throw new ServiceException("未导入RFID标签，不能发货！");
-				}
+				Assert.notNull(listRfid, "未导入RFID标签，不能发货！");
 				if (listRfid.size() < purchase.getCount()) {
 					throw new ServiceException("未完全导入RFID标签，不能发货！");
 				}
@@ -268,9 +259,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				query.setPurchaseNo(purchase.getPurchaseNo());
 				List<WindowRfidEntity> listRfid = winRfidService
 						.queryWindowRfid(query);
-				if (listRfid == null) {
-					throw new ServiceException("未导入RFID标签，不能收货！");
-				}
+				Assert.notNull(listRfid, "未导入RFID标签，不能收货！");
 				if (listRfid.size() < purchase.getCount()) {
 					throw new ServiceException("未完全导入RFID标签，不能收货！");
 				}
@@ -287,9 +276,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				query.setPurchaseNo(purchase.getPurchaseNo());
 				List<LogisticsRfidEntity> listRfid = logisticsRfidService
 						.queryLogistics(query);
-				if (listRfid == null) {
-					throw new ServiceException("未导入RFID标签，不能收货！");
-				}
+				Assert.notNull(listRfid, "未导入RFID标签，不能收货！");
 				if (listRfid.size() < purchase.getCount()) {
 					throw new ServiceException("未完全导入RFID标签，不能收货！");
 				}
@@ -310,7 +297,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 				PurchaseRfidQuery query = new PurchaseRfidQuery();
 				query.setApplyNo(appNo);
 				query.setReceiptState(DeliveryStateEnum.RECEIVING.getId());
-				Long hasReceCount = 0l;
+				Long hasReceCount = new Long(0);
 				List<RfidPurchaseEntity> list = queryPurchase(query);
 				if (list != null) {
 					for (RfidPurchaseEntity rePurchase : list) {
@@ -333,7 +320,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			entity.setCount(purchase.getCount());
 			entity.setRfidType(purchase.getRfidType());
 			List<RfidPriceEntity> list = rfidPriceService.queryPrice();
-			if (list != null && list.size() > 0) {
+			if (list != null && !list.isEmpty()) {
 				RfidPriceEntity price = list.get(0);
 				if (purchase.getRfidType().getId() == 0) {
 					entity.setPrice(price.getWindowPrice());
@@ -358,7 +345,6 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	@Transactional(timeout = 30)
 	public void importRfid(String purchaseId) throws ServiceException {
 		try {
-			long statrTime = System.currentTimeMillis();
 			RfidPurchaseEntity purchase = getRfidPurchase(purchaseId);
 			RfidApplicationEntity apply = applyService.getApplication(purchase
 					.getApplyNo());
@@ -366,8 +352,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 			Long count = purchase.getCount();
 			Long lastkey = keyService.getKey(count.intValue());
 			if (RfidTypeEnum.DOOR.equals(rfidType)) {
-				// List<WindowRfidEntity> winRfids = new ArrayList<>();
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				for (Long i = lastkey; i > lastkey - count; i--) {
 					WindowRfidEntity rfid = new WindowRfidEntity();
 					rfid.setId(StringUtils.getUUID());
@@ -388,14 +373,12 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 							DeliveryStateEnum.RECEIVING)) {
 						rfid.setProgressState(LabelProgressEnum.HAS_RECEIPT);
 					}
-
 					rfid.setGenerateKey(i);
 					String rfidNo = CustomDecimal.getDecimalString(4,
 							new BigDecimal(i));
 					rfid.setRfidNo(rfidNo);
 					sb.append(rfid.toString());
 					sb.append(System.getProperty("line.separator"));
-					// winRfids.add(rfid);
 				}
 				Connection connection = DataSourceUtils
 						.getConnection(dataSource);
@@ -405,45 +388,20 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 						.isWrapperFor(com.mysql.jdbc.PreparedStatement.class)) {
 					com.mysql.jdbc.PreparedStatement unwrap = prepareStatement
 							.unwrap(com.mysql.jdbc.PreparedStatement.class);
-					// unwrap.setLocalInfileInputStream(pis);
-					// boolean rows = unwrap.execute();
 					ByteArrayInputStream bis = new ByteArrayInputStream(sb
 							.toString().getBytes("UTF-8"));
 					unwrap.setLocalInfileInputStream(bis);
 					int rows = unwrap.executeUpdate();
 					System.out.println(rows);
 				}
-				// // 执行线程
-				// ExecutorService pool = Executors
-				// .newFixedThreadPool(threadCount);
-				// List<Future<Integer>> futures = new ArrayList<>();
-				// List<Integer[]> splits = NumberUtils.split(count.intValue(),
-				// executeCount);
-				// for (Integer[] split : splits) {
-				// List<WindowRfidEntity> subList = winRfids.subList(split[0],
-				// split[1]);
-				// WindowRfidThread thread1 = new WindowRfidThread(subList,
-				// winRfidService);
-				// Future<Integer> submit = pool.submit(thread1);
-				// futures.add(submit);
-				// }
-				// Integer threadCount = 0;
-				// for (Future<Integer> future : futures) {
-				// Integer submitCount = future.get();
-				// threadCount = threadCount + submitCount;
-				// }
-				// if (threadCount.intValue() != count.intValue())
-				// throw new ServiceException("导入RFID失败！");
 
 			} else {
-				// List<LogisticsRfidEntity> rfids = new ArrayList<>();
 				StringBuffer sb = new StringBuffer();
 				for (Long i = lastkey; i > lastkey - count; i--) {
 					LogisticsRfidEntity rfid = new LogisticsRfidEntity();
 					rfid.setId(StringUtils.getUUID());
 					rfid.setApplyNo(purchase.getApplyNo());
 					rfid.setPurchaseNo(purchase.getPurchaseNo());
-					// rfid.setContractNo(purchase.getContractNo());
 					rfid.setImportDate(new Date());
 					rfid.setRfidState(RfidStateEnum.UN_USED);
 					rfid.setMemberNo(apply.getMemberNo());
@@ -463,7 +421,6 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 					String rfidNo = CustomDecimal.getDecimalString(4,
 							new BigDecimal(i));
 					rfid.setRfidNo(rfidNo);
-					// rfids.add(rfid);
 					sb.append(rfid.toString());
 					sb.append(System.getProperty("line.separator"));
 				}
@@ -476,44 +433,14 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 						.isWrapperFor(com.mysql.jdbc.PreparedStatement.class)) {
 					com.mysql.jdbc.PreparedStatement unwrap = prepareStatement
 							.unwrap(com.mysql.jdbc.PreparedStatement.class);
-					// unwrap.setLocalInfileInputStream(pis);
-					// boolean rows = unwrap.execute();
 					ByteArrayInputStream bis = new ByteArrayInputStream(sb
 							.toString().getBytes("UTF-8"));
 					unwrap.setLocalInfileInputStream(bis);
-					int rows = unwrap.executeUpdate();
-					System.out.println(rows);
+					unwrap.executeUpdate();
 				}
-
-				// // 执行线程
-				// ExecutorService pool = Executors
-				// .newFixedThreadPool(threadCount);
-				// List<Future<Integer>> futures = new ArrayList<>();
-				// List<Integer[]> splits = NumberUtils.split(count.intValue(),
-				// executeCount);
-				// for (Integer[] split : splits) {
-				// List<LogisticsRfidEntity> subList = rfids.subList(split[0],
-				// split[1]);
-				// LogisticsRfidThread thread1 = new LogisticsRfidThread(
-				// subList, logisticsRfidService);
-				// Future<Integer> submit = pool.submit(thread1);
-				// futures.add(submit);
-				//
-				// }
-				// Integer threadCount = 0;
-				// for (Future<Integer> future : futures) {
-				// Integer submitCount = future.get();
-				// threadCount = threadCount + submitCount;
-				// }
-				// if (threadCount.intValue() != count.intValue())
-				// throw new ServiceException("导入RFID失败！");
 			}
 			purchase.setImportState(ImportStateEnum.IMPORTED);
 			rfidPurchaseDao.updateRfidPurchase(purchase);
-			// updatePurchase(purchase);
-			long endTime = System.currentTimeMillis();
-			System.out.println("--------------------------------"
-					+ (endTime - statrTime));
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage(), e);
@@ -529,9 +456,7 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService {
 	public void deletePurchase(String id) throws ServiceException {
 		try {
 			RfidPurchaseEntity purchase = rfidPurchaseDao.getRfidPurchase(id);
-			if (purchase == null) {
-				throw new ServiceException("采购单不存在");
-			}
+			Assert.notNull(purchase, "采购单不存在");
 			if (purchase.isDelstate()) {
 				throw new ServiceException("采购单已经被删除");
 			}
