@@ -576,6 +576,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 						&& (!wind.getProgressState().equals(
 								LabelProgressEnum.HAS_QUALITY))) {
 					wind.setProgressState(LabelProgressEnum.HAS_QUALITY);
+					wind.setAddress(address);
 					updateWindowRfid(wind);
 				} else {
 					return 0;
