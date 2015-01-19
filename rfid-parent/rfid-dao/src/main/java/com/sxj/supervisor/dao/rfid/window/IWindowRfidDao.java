@@ -90,7 +90,17 @@ public interface IWindowRfidDao {
 	 * 根据RFID_NO 查询窗户信息
 	 */
 	public WindowRfidEntity selectByRfidNo(String rfidNo);
-	
+
 	public void updateGid(List<WindowRfidEntity> winList);
-	
+
+	/**
+	 * 质检
+	 */
+	public void updateTestWindow(WindowRfidEntity window);
+
+	/**
+	 * 安装
+	 */
+	public void updateStepWindow(WindowRfidEntity window);
+
 }
