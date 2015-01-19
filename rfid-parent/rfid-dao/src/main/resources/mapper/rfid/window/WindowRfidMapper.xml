@@ -111,4 +111,10 @@
 		UPDATE R_WINDOW_RFID SET GID=#{item.gid} WHERE RFID_NO=#{item.rfidNo};
 		</foreach>
 	</update>
+	<update id="updateTestWindow" parameterType="java.util.List">
+		<![CDATA[UPDATE R_WINDOW_RFID SET PROGRESS_STATE=#{window.progressState},ADDRESS=#{window.address} WHERE ID=#{wind.id} and PROGRESS_STATE='3' and RFID_STATE='1']]>
+	</update>
+	<update id="updateStepWindow" parameterType="java.util.List">
+	<![CDATA[	UPDATE R_WINDOW_RFID SET PROGRESS_STATE=#{window.progressState}  WHERE ID=#{wind.id} and PROGRESS_STATE='2' and RFID_STATE='1']]>
+	</update>
 </mapper>

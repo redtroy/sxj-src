@@ -259,9 +259,9 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			throws ServiceException, SQLException {
 		List<String> rfidList = logisticsDao.getRfid(gid);
 		List<WinTypeModel> wtmList = new ArrayList<WinTypeModel>();
-		WinTypeModel wtm = new WinTypeModel();
 		if (rfidList != null && rfidList.size() > 0) {
 			for (String rfid : rfidList) {
+				WinTypeModel wtm = new WinTypeModel();
 				QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
 				query.addCondition("rfidNo", rfid);
 				List<WindowRfidEntity> win = windowRfidDao
