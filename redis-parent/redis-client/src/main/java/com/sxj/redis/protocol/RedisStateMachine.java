@@ -2,15 +2,19 @@
 
 package com.sxj.redis.protocol;
 
-import com.sxj.redis.RedisException;
-
+import static com.sxj.redis.protocol.Charsets.buffer;
+import static com.sxj.redis.protocol.RedisStateMachine.State.Type.BULK;
+import static com.sxj.redis.protocol.RedisStateMachine.State.Type.BYTES;
+import static com.sxj.redis.protocol.RedisStateMachine.State.Type.ERROR;
+import static com.sxj.redis.protocol.RedisStateMachine.State.Type.INTEGER;
+import static com.sxj.redis.protocol.RedisStateMachine.State.Type.MULTI;
+import static com.sxj.redis.protocol.RedisStateMachine.State.Type.SINGLE;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 
-import static com.sxj.redis.protocol.Charsets.buffer;
-import static com.sxj.redis.protocol.RedisStateMachine.State.Type.*;
+import com.sxj.redis.RedisException;
 
 /**
  * State machine that decodes redis server responses encoded according to the
@@ -68,8 +72,6 @@ public class RedisStateMachine<K, V>
             return stack.isEmpty();
         }
         
-        loop:
-        
         while (!stack.isEmpty())
         {
             State state = stack.peek();
@@ -86,7 +88,7 @@ public class RedisStateMachine<K, V>
             {
                 case SINGLE:
                     if ((bytes = readLine(buffer)) == null)
-                        break loop;
+                        break;
                     if (!QUEUED.equals(bytes))
                     {
                         output.set(bytes);
@@ -94,17 +96,17 @@ public class RedisStateMachine<K, V>
                     break;
                 case ERROR:
                     if ((bytes = readLine(buffer)) == null)
-                        break loop;
+                        break;
                     output.setError(bytes);
                     break;
                 case INTEGER:
                     if ((end = findLineEnd(buffer)) == -1)
-                        break loop;
+                        break;
                     output.set(readLong(buffer, buffer.readerIndex(), end));
                     break;
                 case BULK:
                     if ((end = findLineEnd(buffer)) == -1)
-                        break loop;
+                        break;
                     length = (int) readLong(buffer, buffer.readerIndex(), end);
                     if (length == -1)
                     {
@@ -115,14 +117,14 @@ public class RedisStateMachine<K, V>
                         state.type = BYTES;
                         state.count = length + 2;
                         buffer.markReaderIndex();
-                        continue loop;
+                        continue;
                     }
                     break;
                 case MULTI:
                     if (state.count == -1)
                     {
                         if ((end = findLineEnd(buffer)) == -1)
-                            break loop;
+                            break;
                         length = (int) readLong(buffer,
                                 buffer.readerIndex(),
                                 end);
@@ -135,10 +137,10 @@ public class RedisStateMachine<K, V>
                     
                     state.count--;
                     stack.addFirst(new State());
-                    continue loop;
+                    continue;
                 case BYTES:
                     if ((bytes = readBytes(buffer, state.count)) == null)
-                        break loop;
+                        break;
                     output.set(bytes);
             }
             

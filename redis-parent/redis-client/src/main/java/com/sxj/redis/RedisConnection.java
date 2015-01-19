@@ -694,11 +694,11 @@ public class RedisConnection<K, V>
         return await(c.setrange(key, offset, value));
     }
     
-    @Deprecated
-    public void shutdown()
-    {
-        c.shutdown();
-    }
+    //    @Deprecated
+    //    public void shutdown()
+    //    {
+    //        c.shutdown();
+    //    }
     
     public void shutdown(boolean save)
     {

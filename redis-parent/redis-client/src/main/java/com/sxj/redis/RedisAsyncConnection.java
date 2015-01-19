@@ -1,5 +1,3 @@
-// Copyright (C) 2011 - Will Glozer.  All rights reserved.
-
 package com.sxj.redis;
 
 import static com.sxj.redis.protocol.CommandKeyword.AFTER;
@@ -44,9 +42,6 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sxj.redis.codec.RedisCodec;
 import com.sxj.redis.output.BooleanListOutput;
@@ -98,8 +93,6 @@ import com.sxj.spring.modules.util.Encodes;
 public class RedisAsyncConnection<K, V> extends ChannelInboundHandlerAdapter
 {
     
-    private Logger log = LoggerFactory.getLogger(getClass());
-    
     protected BlockingQueue<Command<K, V, ?>> queue;
     
     protected RedisCodec<K, V> codec;
@@ -123,6 +116,8 @@ public class RedisAsyncConnection<K, V> extends ChannelInboundHandlerAdapter
     private RedisCli redisClient;
     
     private volatile boolean reconnect;
+    
+    private static final Integer RATE = 1000;
     
     public void setReconnect(boolean reconnect)
     {
@@ -388,7 +383,7 @@ public class RedisAsyncConnection<K, V> extends ChannelInboundHandlerAdapter
     
     public Future<Boolean> expireat(K key, Date timestamp)
     {
-        return expireat(key, timestamp.getTime() / 1000);
+        return expireat(key, timestamp.getTime() / RATE);
     }
     
     public Future<Boolean> expireat(K key, long timestamp)
@@ -923,11 +918,11 @@ public class RedisAsyncConnection<K, V> extends ChannelInboundHandlerAdapter
         return dispatch(SETRANGE, new IntegerOutput<K, V>(codec), args);
     }
     
-    @Deprecated
-    public void shutdown()
-    {
-        dispatch(SHUTDOWN, new StatusOutput<K, V>(codec));
-    }
+    //    @Deprecated
+    //    public void shutdown()
+    //    {
+    //        dispatch(SHUTDOWN, new StatusOutput<K, V>(codec));
+    //    }
     
     public void shutdown(boolean save)
     {

@@ -1,18 +1,3 @@
-/**
- * Copyright 2014 Nikita Koksharov, Nickolay Borbit
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.sxj.redis.advance.connection.manager;
 
 import java.net.URI;
@@ -35,8 +20,8 @@ import com.sxj.redis.advance.Config;
 import com.sxj.redis.advance.MasterSlaveServersConfig;
 import com.sxj.redis.advance.SentinelServersConfig;
 import com.sxj.redis.advance.connection.cluster.ClusterNodeInfo;
-import com.sxj.redis.advance.connection.cluster.ClusterPartition;
 import com.sxj.redis.advance.connection.cluster.ClusterNodeInfo.Flag;
+import com.sxj.redis.advance.connection.cluster.ClusterPartition;
 import com.sxj.redis.advance.connection.entry.MasterSlaveEntry;
 import com.sxj.redis.pubsub.RedisPubSubAdapter;
 import com.sxj.redis.pubsub.RedisPubSubConnection;
@@ -62,7 +47,7 @@ public class ClusterConnectionManager extends MasterSlaveConnectionManager
             String nodesValue = connection.clusterNodes()
                     .awaitUninterruptibly()
                     .getNow();
-            System.out.println(nodesValue);
+            log.debug(nodesValue);
             
             List<ClusterNodeInfo> nodes = parse(nodesValue);
             for (ClusterNodeInfo clusterNodeInfo : nodes)
