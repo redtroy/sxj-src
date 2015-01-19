@@ -547,7 +547,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				if (wind.getProgressState().equals(
 						LabelProgressEnum.HAS_RECEIPT)) {
 					wind.setProgressState(LabelProgressEnum.INSTALL);
-					updateWindowRfid(wind);
+					windowRfidDao.updateStepWindow(wind);
 					return 1;
 				} else if (wind.getProgressState().equals(
 						LabelProgressEnum.INSTALL)) {
@@ -573,11 +573,11 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			for (String rfidNo : rfidNos) {
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 				if (contractNo.equals(wind.getContractNo())
-						&& (!wind.getProgressState().equals(
-								LabelProgressEnum.HAS_QUALITY))) {
+						&& (wind.getProgressState()
+								.equals(LabelProgressEnum.INSTALL))) {
 					wind.setProgressState(LabelProgressEnum.HAS_QUALITY);
 					wind.setAddress(address);
-					updateWindowRfid(wind);
+					windowRfidDao.updateTestWindow(wind);
 				} else {
 					return 0;
 				}
