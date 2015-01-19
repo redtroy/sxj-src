@@ -35,7 +35,7 @@ public interface ILogisticsRfidDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<LogisticsRfidEntity> queryLogisticsRfidList_B(
+	public List<LogisticsRfidEntity> queryLogisticsRfidListB(
 			QueryCondition<LogisticsRfidEntity> query) throws SQLException;
 
 	/**
@@ -45,7 +45,7 @@ public interface ILogisticsRfidDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<LogisticsRfidEntity> queryLogisticsRfidList_A(
+	public List<LogisticsRfidEntity> queryLogisticsRfidListA(
 			QueryCondition<LogisticsRfidEntity> query) throws SQLException;
 
 	/**

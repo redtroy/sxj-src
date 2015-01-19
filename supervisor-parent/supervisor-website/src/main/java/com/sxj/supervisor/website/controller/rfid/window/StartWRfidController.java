@@ -81,7 +81,7 @@ public class StartWRfidController extends BaseController {
 			}
 			WindowRfidQuery winQuery = new WindowRfidQuery();
 			winQuery.setContractNo(query.getRefContractNo());
-			winQuery.setRfidState(RfidStateEnum.unused.getId());
+			winQuery.setRfidState(RfidStateEnum.UN_USED.getId());
 			List<WindowRfidEntity> winList = windowRfidService
 					.queryWindowRfid(winQuery);
 			if (winList != null) {

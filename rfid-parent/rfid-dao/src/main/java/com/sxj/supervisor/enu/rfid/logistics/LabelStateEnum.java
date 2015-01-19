@@ -2,7 +2,7 @@ package com.sxj.supervisor.enu.rfid.logistics;
 
 
 public enum LabelStateEnum {
-	unfilled("标签未发货", 0),shipped("标签已发货", 1),hasReceipt("标签已收货", 2),installed("标签已出库", 3),hasQuality("标签已验收", 4);
+	UN_FILLED("标签未发货", 0),SHIPPED("标签已发货", 1),HAS_RECEIPT("标签已收货", 2),INSTALL("标签已出库", 3),HAS_QUALITY("标签已验收", 4);
 
 	// 成员变量
 	private Integer id;

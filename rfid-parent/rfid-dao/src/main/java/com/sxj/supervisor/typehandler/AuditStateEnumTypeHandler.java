@@ -9,7 +9,6 @@ public class AuditStateEnumTypeHandler extends
 
 	public AuditStateEnumTypeHandler(Class<AuditStateEnum> type) {
 		super(type);
-		// TODO Auto-generated constructor stub
 	}
 
 }

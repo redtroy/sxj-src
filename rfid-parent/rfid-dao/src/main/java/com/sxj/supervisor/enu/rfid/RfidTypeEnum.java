@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.rfid;
 
 public enum RfidTypeEnum {
-	door("门窗标签", 0), glass("玻璃标签", 1), extrusions("型材标签", 2);
+	DOOR("门窗标签", 0), GLASS("玻璃标签", 1), EXTRUSIONS("型材标签", 2);
 
 	// 成员变量
 	private Integer id;

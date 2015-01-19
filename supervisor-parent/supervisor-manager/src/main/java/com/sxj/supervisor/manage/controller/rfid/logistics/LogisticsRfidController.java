@@ -106,7 +106,7 @@ public class LogisticsRfidController extends BaseController {
 		try {
 			LogisticsRfidEntity win = new LogisticsRfidEntity();
 			win.setId(id);
-			win.setRfidState(RfidStateEnum.delete);
+			win.setRfidState(RfidStateEnum.DELETE);
 			logisticsRfidService.updateLogistics(win);
 			map.put("isOK", "ok");
 		} catch (Exception e) {
@@ -131,7 +131,7 @@ public class LogisticsRfidController extends BaseController {
 		try {
 			LogisticsRfidEntity win = new LogisticsRfidEntity();
 			win.setId(id);
-			win.setRfidState(RfidStateEnum.disable);
+			win.setRfidState(RfidStateEnum.DISABLE);
 			logisticsRfidService.updateLogistics(win);
 			map.put("isOK", "ok");
 		} catch (Exception e) {

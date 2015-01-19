@@ -239,12 +239,12 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	public void setRfidState(RfidStateEnum rfidState) {
 		this.rfidState = rfidState;
-		if (RfidStateEnum.damaged.equals(getRfidState())) {
-			RfidLog log = new RfidLog();
-			log.setId(getRfidState().getId());
-			log.setState(getRfidState().getName());
-			log.setDate(DateTimeUtils.getDateTime());
-			setLogList(log);
+		if (RfidStateEnum.DAMAGED.equals(getRfidState())) {
+			RfidLog rfidLog = new RfidLog();
+			rfidLog.setId(getRfidState().getId());
+			rfidLog.setState(getRfidState().getName());
+			rfidLog.setDate(DateTimeUtils.getDateTime());
+			setLogList(rfidLog);
 		}
 	}
 
@@ -263,11 +263,11 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	public void setProgressState(LabelStateEnum progressState) {
 		this.progressState = progressState;
 		if (getProgressState() != null) {
-			RfidLog log = new RfidLog();
-			log.setId(getProgressState().getId());
-			log.setState(getProgressState().getName());
-			log.setDate(DateTimeUtils.getDateTime());
-			setLogList(log);
+			RfidLog rfidLog = new RfidLog();
+			rfidLog.setId(getProgressState().getId());
+			rfidLog.setState(getProgressState().getName());
+			rfidLog.setDate(DateTimeUtils.getDateTime());
+			setLogList(rfidLog);
 		}
 
 	}
@@ -331,38 +331,22 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		if (this.getId() != null) {
-			sb.append(this.getId());
-		}
+		StringBuilder sb = new StringBuilder();
+		sb.append(StringUtils.trimToNull(this.getId()));
 		sb.append("|");
-		if (this.getRfidNo() != null) {
-			sb.append(this.getRfidNo());
-		}
+		sb.append(StringUtils.trimToNull(this.getRfidNo()));
 		sb.append("|");
-		if (this.getGenerateKey() != null) {
-			sb.append(this.getGenerateKey());
-		}
+		sb.append(StringUtils.trimToNull(this.getGenerateKey()));
 		sb.append("|");
-		if (this.getMemberName() != null) {
-			sb.append(this.getMemberName());
-		}
+		sb.append(StringUtils.trimToNull(this.getMemberName()));
 		sb.append("|");
-		if (this.getMemberNo() != null) {
-			sb.append(this.getMemberNo());
-		}
+		sb.append(StringUtils.trimToNull(this.getMemberNo()));
 		sb.append("|");
-		if (this.getApplyNo() != null) {
-			sb.append(this.getApplyNo());
-		}
+		sb.append(StringUtils.trimToNull(this.getApplyNo()));
 		sb.append("|");
-		if (this.getPurchaseNo() != null) {
-			sb.append(this.getPurchaseNo());
-		}
+		sb.append(StringUtils.trimToNull(this.getPurchaseNo()));
 		sb.append("|");
-		if (this.getContractNo() != null) {
-			sb.append(this.getContractNo());
-		}
+		sb.append(StringUtils.trimToNull(this.getContractNo()));
 		sb.append("|");
 		if (this.getType() != null) {
 			sb.append(this.getType().getId());
@@ -372,37 +356,29 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 			sb.append(DateTimeUtils.formatFullDate(this.getImportDate()));
 		}
 		sb.append("|");
-		if (this.getBatchNo() != null) {
-			sb.append(this.getBatchNo());
-		}
+		sb.append(StringUtils.trimToNull(this.getBatchNo()));
 		sb.append("|");
 		if (this.getIsLossBatch() != null) {
-			if (this.getIsLossBatch() == true) {
+			if (this.getIsLossBatch()) {
 				sb.append(1);
 			} else {
 				sb.append(0);
 			}
 		}
 		sb.append("|");
-		if (this.getReplenishNo() != null) {
-			sb.append(this.getReplenishNo());
-		}
+		sb.append(StringUtils.trimToNull(this.getReplenishNo()));
 		sb.append("|");
 		if (this.getRfidState() != null) {
 			sb.append(this.getRfidState().getId());
 		}
 		sb.append("|");
-		if (this.getLog() != null) {
-			sb.append(this.getLog());
-		}
+		sb.append(StringUtils.trimToNull(this.getLog()));
 		sb.append("|");
 		if (this.getProgressState() != null) {
 			sb.append(this.getProgressState().getId());
 		}
 		sb.append("|");
-		if (this.getGid() != null) {
-			sb.append(this.getGid());
-		}
+		sb.append(StringUtils.trimToNull(this.getGid()));
 		return sb.toString();
 	}
 

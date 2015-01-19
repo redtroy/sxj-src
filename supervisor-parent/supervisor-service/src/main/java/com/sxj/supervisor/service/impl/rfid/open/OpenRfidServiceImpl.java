@@ -20,7 +20,7 @@ import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.dao.rfid.window.IWindowRfidDao;
-import com.sxj.supervisor.dao.rfid.windowRef.IWindowRfidRefDao;
+import com.sxj.supervisor.dao.rfid.windowref.IWindowRfidRefDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
@@ -29,7 +29,7 @@ import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
-import com.sxj.supervisor.entity.rfid.windowRef.WindowRefEntity;
+import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
 import com.sxj.supervisor.enu.contract.PayContentStateEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
@@ -225,32 +225,32 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			List<WindowRefEntity> winRef = windowRfidRefDao
 					.queryWindowRfidRefList(refQuery);
 
-			//if (winRef != null && winRef.size() > 0) {
-			//	WindowRefEntity windowRef = winRef.get(0);
-			//	if (windowRef.getState().getId() == 1) {
-					if (win != null && win.size() > 0) {
-						WindowRfidEntity wre = win.get(0);
-						wtm.setContratcNo(wre.getContractNo());
-						wtm.setRfidNo(wre.getRfidNo());
-						if (wre.getWindowType() != null) {
-							wtm.setWinType(wre.getWindowType().getName());
-						}
-						wtm.setState("1");// 成功
-					} else {
-					//	wtm.setState("2");// 未启用
-						wtm.setState("0");// 失败
-					}
-//				} else {
-//					wtm.setState("3");// 未审核
-//				}
-//			} else {
-//				wtm.setState("2");// 未启用
-//			}
-			
+			// if (winRef != null && winRef.size() > 0) {
+			// WindowRefEntity windowRef = winRef.get(0);
+			// if (windowRef.getState().getId() == 1) {
+			if (win != null && win.size() > 0) {
+				WindowRfidEntity wre = win.get(0);
+				wtm.setContratcNo(wre.getContractNo());
+				wtm.setRfidNo(wre.getRfidNo());
+				if (wre.getWindowType() != null) {
+					wtm.setWinType(wre.getWindowType().getName());
+				}
+				wtm.setState("1");// 成功
+			} else {
+				// wtm.setState("2");// 未启用
+				wtm.setState("0");// 失败
+			}
+			// } else {
+			// wtm.setState("3");// 未审核
+			// }
+			// } else {
+			// wtm.setState("2");// 未启用
+			// }
+
 		}
 		return wtm;
 	}
-	
+
 	/**
 	 * 获取门窗
 	 */
@@ -318,7 +318,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 				if (ref != null && ref.size() > 0) {
 					LogisticsRfidEntity le = ref.get(0);
 					if (le.getProgressState().getId() == 2) {
-						le.setProgressState(LabelStateEnum.installed);
+						le.setProgressState(LabelStateEnum.INSTALL);
 						logisticsDao.updateLogisticsRfid(le);
 						// 更新出库状态
 						ContractBatchEntity contractBatch = contractBatchDao
@@ -373,7 +373,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 				if (ref != null && ref.size() > 0) {
 					LogisticsRfidEntity le = ref.get(0);
 					if (le.getProgressState().getId() == 3) {
-						le.setProgressState(LabelStateEnum.hasQuality);
+						le.setProgressState(LabelStateEnum.HAS_QUALITY);
 						logisticsDao.updateLogisticsRfid(le);
 						// 获取合同信息
 						ContractModel cm = contractService
@@ -411,7 +411,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 							return 1;
 						}
 					}
-					if(le.getProgressState().getId() == 4){
+					if (le.getProgressState().getId() == 4) {
 						return 2;
 					}
 				}

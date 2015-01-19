@@ -96,7 +96,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			if (app.getDelstate()) {
 				throw new ServiceException("RFID申请单已经被删除");
 			}
-			if (app.getPayState().equals(PayStateEnum.payment)) {
+			if (app.getPayState().equals(PayStateEnum.PAYMENT)) {
 				throw new ServiceException("该申请单已受理，不能删除");
 			}
 			if (app.getHasNumber() > 0) {
@@ -130,9 +130,9 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 		try {
 			Date date = DateTimeUtils.parse(System.currentTimeMillis());
 			app.setDateNo("RF" + DateTimeUtils.getTime("yyMM"));
-			app.setPayState(PayStateEnum.non_payment);
+			app.setPayState(PayStateEnum.NOT_PAYMENT);
 			app.setApplyDate(date);
-			app.setReceiptState(ReceiptStateEnum.shipments);
+			app.setReceiptState(ReceiptStateEnum.SHIPMENTS);
 			appDao.addRfidApplication(app);
 
 			CometServiceImpl.takeCount(RfidChannel.RFID_APPLY_MESSAGE);

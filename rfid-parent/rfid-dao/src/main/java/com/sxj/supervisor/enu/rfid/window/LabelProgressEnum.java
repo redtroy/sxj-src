@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.rfid.window;
  *
  */
 public enum LabelProgressEnum {
-	unfilled("标签未发货", 0),shipped("标签已发货", 1),hasReceipt("标签已收货", 2),installed("门窗已安装", 3),hasQuality("门窗已质检", 4);
+	UN_FILLED("标签未发货", 0),SHIPPED("标签已发货", 1),HAS_RECEIPT("标签已收货", 2),INSTALL("门窗已安装", 3),HAS_QUALITY("门窗已质检", 4);
 
 	// 成员变量
 	private Integer id;

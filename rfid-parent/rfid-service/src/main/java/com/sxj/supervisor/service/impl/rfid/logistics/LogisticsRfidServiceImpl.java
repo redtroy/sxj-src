@@ -88,7 +88,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
             condition.addCondition("rfidState", query.getRfidState());
             condition.addCondition("progressState", query.getProgressState());
             condition.setPage(query);
-            List<LogisticsRfidEntity> rfidList = logisticsRfidDao.queryLogisticsRfidList_A(condition);
+            List<LogisticsRfidEntity> rfidList = logisticsRfidDao.queryLogisticsRfidListA(condition);
             query.setPage(condition);
             return rfidList;
         }
@@ -123,7 +123,7 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
             condition.addCondition("rfidState", query.getRfidState());
             condition.addCondition("progressState", query.getProgressState());
             condition.setPage(query);
-            List<LogisticsRfidEntity> rfidList = logisticsRfidDao.queryLogisticsRfidList_B(condition);
+            List<LogisticsRfidEntity> rfidList = logisticsRfidDao.queryLogisticsRfidListB(condition);
             query.setPage(condition);
             return rfidList;
         }

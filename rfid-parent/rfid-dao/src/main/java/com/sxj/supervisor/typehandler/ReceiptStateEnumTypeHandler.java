@@ -9,7 +9,6 @@ public class ReceiptStateEnumTypeHandler extends
 
 	public ReceiptStateEnumTypeHandler(Class<ReceiptStateEnum> type) {
 		super(type);
-		// TODO Auto-generated constructor stub
 	}
 
 }

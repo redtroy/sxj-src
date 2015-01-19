@@ -86,7 +86,7 @@ public class WindowRfidController extends BaseController {
 		try {
 			WindowRfidEntity win = new WindowRfidEntity();
 			win.setId(id);
-			win.setRfidState(RfidStateEnum.delete);
+			win.setRfidState(RfidStateEnum.DELETE);
 			windowRfidService.updateWindowRfid(win);
 			map.put("isOK", "ok");
 		} catch (Exception e) {
@@ -111,7 +111,7 @@ public class WindowRfidController extends BaseController {
 		try {
 			WindowRfidEntity win = new WindowRfidEntity();
 			win.setId(id);
-			win.setRfidState(RfidStateEnum.disable);
+			win.setRfidState(RfidStateEnum.DISABLE);
 			windowRfidService.updateWindowRfid(win);
 			map.put("isOK", "ok");
 		} catch (Exception e) {
@@ -230,7 +230,7 @@ public class WindowRfidController extends BaseController {
 			if (windowRfid == null) {
 				throw new WebException("补损标签不存在");
 			}
-			if (!windowRfid.getRfidState().equals(RfidStateEnum.used)) {
+			if (!windowRfid.getRfidState().equals(RfidStateEnum.USED)) {
 				throw new WebException("标签不是正在使用中的标签，不能用于补损！");
 			}
 			map.put("contractNo", windowRfid.getContractNo());

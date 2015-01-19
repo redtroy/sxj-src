@@ -9,7 +9,6 @@ public class RfidTypeEnumTypeHandler extends
 
 	public RfidTypeEnumTypeHandler(Class<RfidTypeEnum> type) {
 		super(type);
-		// TODO Auto-generated constructor stub
 	}
 
 }
