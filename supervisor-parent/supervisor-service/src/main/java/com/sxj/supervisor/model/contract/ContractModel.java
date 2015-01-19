@@ -73,7 +73,7 @@ public class ContractModel implements Serializable
     public List<ContractBatchModel> getBatchList()
     {
         if (batchList == null)
-            return new ArrayList<ContractBatchModel>();
+        	batchList= new ArrayList<ContractBatchModel>();
         return batchList;
     }
     
@@ -84,6 +84,8 @@ public class ContractModel implements Serializable
     
     public List<ContractModifyModel> getModifyList()
     {
+    	if(modifyList==null)
+    		modifyList= new ArrayList<ContractModifyModel>();
         return modifyList;
     }
     
@@ -95,7 +97,7 @@ public class ContractModel implements Serializable
     public List<ContractReplenishModel> getReplenishList()
     {
         if (replenishList == null)
-            return new ArrayList<ContractReplenishModel>();
+        	replenishList= new ArrayList<ContractReplenishModel>();
         return replenishList;
     }
     

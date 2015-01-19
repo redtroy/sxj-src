@@ -278,7 +278,7 @@
 							<div class="item">
 								<label>交货地址</label> ${contractModel.contract.deliveryAddress}
 							</div>
-							<#if contractModel.batchList?exists>
+							<#if contractModel.batchList?exists && (contractModel.batchList?size>0)>
 							<div class="item ly-clearFix">
 								<label class="ly-left">&nbsp;</label>
 								<table border="0" cellpadding="0" cellspacing="0"
@@ -359,7 +359,7 @@
 							</div>
 							<span class="item"> <label>关联招标合同号</label>
 								${contractModel.contract.refContractNo}
-							</span> <#if contractModel.modifyList?exists>
+							</span> <#if contractModel.modifyList?exists && (contractModel.modifyList?size>0)>
 							<h2 class="titChange f14 fb">变更合同信息</h2>
 							<#list contractModel.modifyList as modifyList>
 
@@ -424,7 +424,7 @@
 							</#if>
 							<div class="item ly-clearFix">
 								<label class="ly-left">&nbsp;</label> <#if
-								modifyList.modifyBatchList?exists>
+								modifyList.modifyBatchList?exists && (modifyList.modifyBatchList?size>0)>
 								<table border="0" cellpadding="0" cellspacing="0"
 									class="tabProd ly-left">
 									<col width="15%"/>
@@ -471,7 +471,7 @@
 								</table>
 								</#if>
 							</div>
-							</#list> </#if> <#if contractModel.replenishList?exists>
+							</#list> </#if> <#if contractModel.replenishList?exists  && (contractModel.replenishList?size>0)>
 							<h2 class="titChange f14 fb">补损合同信息</h2>
 							<#list contractModel.replenishList as replenishList>
 							<div class="item">
