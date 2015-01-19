@@ -76,7 +76,7 @@
 			javaType="com.sxj.supervisor.enu.rfid.ref.AuditStateEnum" />
 
 		<typeHandler handler="com.sxj.supervisor.typehandler.LinkStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.rfid.windowRef.LinkStateEnum" />
+			javaType="com.sxj.supervisor.enu.rfid.windowref.LinkStateEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.LabelStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />
