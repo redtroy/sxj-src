@@ -532,7 +532,7 @@ function createXmlHttpRequest(){
 $(document).ready(function(){
 	var currentUrl=window.location.href;
 	var functionId=getUrlParam("function");
-	$.get("${basePath}enter.htm?url="+currentUrl);
+	$.get("${basePath}enter.htm?functionId="+functionId+"&url="+currentUrl);
 });
 
 function getUrlParam(name){

@@ -90,49 +90,49 @@ public class RecordServiceImpl implements IRecordService {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void modifyRecord(RecordEntity record)throws ServiceException{
-		try{
-		RecordEntity oldRe = getRecord(record.getId());
-		String[] oldPath = null;
-		String[] nowPath = null;
-		if (oldRe != null) {
-			String oldImage = oldRe.getImgPath();
-			if (StringUtils.isNotEmpty(oldImage)) {
-				oldPath = oldImage.split(",");
-			}
-			if (StringUtils.isNotEmpty(record.getImgPath())) {
-				nowPath = record.getImgPath().split(",");
-			}
-			if (oldPath != null && oldPath.length > 0) {
-				for (int i = 0; i < oldPath.length; i++) {
-					if (StringUtils.isNotEmpty(oldPath[i])) {
-						continue;
-					}
-					for (int j = 0; j < nowPath.length; j++) {
-						if (StringUtils.isNotEmpty(nowPath[j])) {
+	public void modifyRecord(RecordEntity record) throws ServiceException {
+		try {
+			RecordEntity oldRe = getRecord(record.getId());
+			String[] oldPath = null;
+			String[] nowPath = null;
+			if (oldRe != null) {
+				String oldImage = oldRe.getImgPath();
+				if (StringUtils.isNotEmpty(oldImage)) {
+					oldPath = oldImage.split(",");
+				}
+				if (StringUtils.isNotEmpty(record.getImgPath())) {
+					nowPath = record.getImgPath().split(",");
+				}
+				if (oldPath != null && oldPath.length > 0) {
+					for (int i = 0; i < oldPath.length; i++) {
+						if (StringUtils.isNotEmpty(oldPath[i])) {
 							continue;
 						}
-						if (!oldPath[i].equals(nowPath[j])) {
-							storageClientService.deleteFile(oldPath[i]);
+						for (int j = 0; j < nowPath.length; j++) {
+							if (StringUtils.isNotEmpty(nowPath[j])) {
+								continue;
+							}
+							if (!oldPath[i].equals(nowPath[j])) {
+								storageClientService.deleteFile(oldPath[i]);
+							}
 						}
 					}
 				}
 			}
-		}
-		// 更改用户---修改备案状态
-		if (oldRe.getContractType().getId() != 0) {
-			MemberEntity member = memberService.memberInfo(record
-					.getMemberIdB());
-			if (member != null) {
-				if (member.getType().getId() == 1) {
-					record.setContractType(ContractTypeEnum.glass);
-				} else if (member.getType().getId() == 2) {
-					record.setContractType(ContractTypeEnum.extrusions);
+			// 更改用户---修改备案状态
+			if (oldRe.getContractType().getId() != 0) {
+				MemberEntity member = memberService.memberInfo(record
+						.getMemberIdB());
+				if (member != null) {
+					if (member.getType().getId() == 1) {
+						record.setContractType(ContractTypeEnum.glass);
+					} else if (member.getType().getId() == 2) {
+						record.setContractType(ContractTypeEnum.extrusions);
+					}
 				}
 			}
-		}
 
-		recordDao.updateRecord(record);
+			recordDao.updateRecord(record);
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());
@@ -235,7 +235,7 @@ public class RecordServiceImpl implements IRecordService {
 	@Transactional
 	public void bindingContract(String contractNo, String refContractNo,
 			String recordNo, String recordNo2, String recordIdA,
-			String recordIdB)throws ServiceException{
+			String recordIdB) throws ServiceException {
 		try {
 			RecordEntity record = recordDao.getRecord(recordIdA);
 			RecordEntity record2 = recordDao.getRecord(recordIdB);
@@ -287,7 +287,7 @@ public class RecordServiceImpl implements IRecordService {
 	@Override
 	@Transactional
 	public void modifyState(String contractId, String recordId,
-			RecordConfirmStateEnum state) throws ServiceException{
+			RecordConfirmStateEnum state) throws ServiceException {
 		try {
 
 			// RecordEntity re = new RecordEntity();
@@ -305,11 +305,7 @@ public class RecordServiceImpl implements IRecordService {
 				rEntity.setId(re.getId());
 				if (re.getContractType().getId() != 0) {
 					if (con.getConfirmState().getId() == 0) {
-						if (state.getId() == 2) {
-							rEntity.setConfirmState(RecordConfirmStateEnum.confirmedA);
-						} else if (state.getId() == 3) {
-							rEntity.setConfirmState(RecordConfirmStateEnum.confirmedB);
-						}
+						rEntity.setConfirmState(state);
 					} else {
 						rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
 						if (re.getFlag().getId() == 1) {
