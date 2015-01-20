@@ -8,6 +8,14 @@
 <link href="${b.staticPath}style/regin.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script>
+(function() {
+	XMLHttpRequest.prototype._send = XMLHttpRequest.prototype.send;
+	XMLHttpRequest.prototype.send = function(data) {
+		this.setRequestHeader("X-Requested-With", "COM_SXJ_CSRFGUARD")
+		this.setRequestHeader("<@csrf.tokenname/>", "<@csrf.tokenvalue/>");
+		this._send.apply(this, arguments);
+	};
+})();
 $(function(){
 	if("${message}"!=""){
 		$("#message_div").show();
