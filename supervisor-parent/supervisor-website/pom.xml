@@ -155,14 +155,6 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-extension</artifactId>
 		</dependency>
-<<<<<<< HEAD
-=======
-		<!-- <dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>statemachine-core</artifactId>
-			<version>1.0</version>
-		</dependency> -->
->>>>>>> 71e418d017a443272d6e21699280307297bb805f
 	</dependencies>
 	<build>
 		<finalName>supervisor-website</finalName>
