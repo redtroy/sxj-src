@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.contract;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,9 @@ public class ContractPayServiceImpl implements IContractPayService {
 	public List<PayRecordEntity> queryPayList(ContractPayModel query)
 			throws ServiceException {
 		try {
+			List<PayRecordEntity> payList = new ArrayList<PayRecordEntity>();
 			if (query == null) {
-				return null;
+				return payList;
 			}
 			QueryCondition<PayRecordEntity> condition = new QueryCondition<PayRecordEntity>();
 			condition.addCondition("memberNo", query.getMemberNo());// 会员号
@@ -52,7 +54,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.addCondition("PayContentState",
 					query.getPayContentState());//
 			condition.setPage(query);
-			List<PayRecordEntity> payList = payDao.queryPayContract(condition);
+			payList = payDao.queryPayContract(condition);
 			query.setPage(condition);
 			return payList;
 		} catch (Exception e) {

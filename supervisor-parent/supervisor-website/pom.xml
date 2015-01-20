@@ -102,7 +102,7 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
-		<!-- 数据库连接 -->
+		<!-- 数据库连接-->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
@@ -155,6 +155,14 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-extension</artifactId>
 		</dependency>
+<<<<<<< HEAD
+=======
+		<!-- <dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>statemachine-core</artifactId>
+			<version>1.0</version>
+		</dependency> -->
+>>>>>>> 71e418d017a443272d6e21699280307297bb805f
 	</dependencies>
 	<build>
 		<finalName>supervisor-website</finalName>
@@ -183,7 +191,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+					<!-- <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
 				</configuration>
 			</plugin>
 		</plugins>

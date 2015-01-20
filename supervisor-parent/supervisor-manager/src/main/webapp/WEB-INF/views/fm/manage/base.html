@@ -276,6 +276,7 @@ $(function(){
 <link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
 <script>
 function loadPage(currentPage,totalPage) {
+	layer.closeAll();
 	// 创建分页
 	$(".pagination").attr("currentPage",currentPage);
 	$(".pagination").attr("totalPage",totalPage);
@@ -283,6 +284,7 @@ function loadPage(currentPage,totalPage) {
 		num_edge_entries: 1, //边缘页数
 		num_display_entries: 4, //主体页数
 		callback: function(page_index,jp){
+			loadingImg();
 			query(page_index+1);
 			$(".pagination").attr("currentPage",page_index+1);
 			return false;

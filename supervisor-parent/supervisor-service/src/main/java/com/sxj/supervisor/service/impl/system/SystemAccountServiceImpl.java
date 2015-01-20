@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import com.sxj.supervisor.dao.system.ISystemAccountDao;
 import com.sxj.supervisor.entity.system.RoleEntity;
@@ -41,38 +43,39 @@ public class SystemAccountServiceImpl implements ISystemAccountService
     {
         try
         {
+            Assert.hasText(account.getPassword());
             SystemAccountEntity oldAccount = getAccountByAccount(account.getAccount());
-            if (oldAccount != null)
-            {
-                throw new ServiceException("用户账户已存在");
-            }
-            if (StringUtils.isNotEmpty(account.getPassword()))
-            {
-                account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
-            }
+            Assert.notNull(oldAccount, "用户账户已存在");
+            //            if (oldAccount != null)
+            //            {
+            //                throw new ServiceException("用户账户已存在");
+            //            }
+            account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
             accountDao.addSystemAccount(account);
             if (functionIds != null && functionIds.length > 0)
             {
                 List<RoleEntity> roles = new ArrayList<RoleEntity>();
                 for (int i = 0; i < functionIds.length; i++)
                 {
-                    if (functionIds[i] == null)
+                    //                    if (functionIds[i] == null)
+                    //                    {
+                    //                        continue;
+                    //                    }
+                    //                    if ("none".equals(functionIds[i]))
+                    //                    {
+                    //                        continue;
+                    //                    }
+                    if (functionIds[i] != null
+                            && !"none".equals(functionIds[i]))
                     {
-                        continue;
+                        RoleEntity role = new RoleEntity();
+                        role.setAccountId(account.getId());
+                        role.setFunctionId(functionIds[i]);
+                        roles.add(role);
                     }
-                    if ("none".equals(functionIds[i]))
-                    {
-                        continue;
-                    }
-                    RoleEntity role = new RoleEntity();
-                    role.setAccountId(account.getId());
-                    role.setFunctionId(functionIds[i]);
-                    roles.add(role);
                 }
-                if (roles.size() > 0)
-                {
-                    roleServce.addRoles(roles);
-                }
+                Assert.notEmpty(roles);
+                roleServce.addRoles(roles);
             }
         }
         catch (Exception e)
@@ -89,43 +92,51 @@ public class SystemAccountServiceImpl implements ISystemAccountService
     {
         try
         {
-            if (account == null)
-            {
-                return;
-            }
+            Assert.notNull(account);
+            Assert.hasText(account.getId());
+            SystemAccountEntity systemAccount = accountDao.getSystemAccount(account.getId());
+            Assert.notNull(systemAccount);
+            //            if (account == null)
+            //            {
+            //                return;
+            //            }
             if (functionIds != null && functionIds.length > 0)
             {
                 List<RoleEntity> roles = new ArrayList<RoleEntity>();
                 for (int i = 0; i < functionIds.length; i++)
                 {
-                    if (functionIds[i] == null)
+                    //                    if (functionIds[i] == null)
+                    //                    {
+                    //                        continue;
+                    //                    }
+                    //                    if ("none".equals(functionIds[i]))
+                    //                    {
+                    //                        continue;
+                    //                    }
+                    if (functionIds[i] != null
+                            && !"none".equals(functionIds[i]))
                     {
-                        continue;
+                        RoleEntity role = new RoleEntity();
+                        role.setAccountId(systemAccount.getId());
+                        role.setFunctionId(functionIds[i]);
+                        roles.add(role);
                     }
-                    if ("none".equals(functionIds[i]))
-                    {
-                        continue;
-                    }
-                    RoleEntity role = new RoleEntity();
-                    role.setAccountId(account.getId());
-                    role.setFunctionId(functionIds[i]);
-                    roles.add(role);
                 }
-                if (roles.size() > 0)
+                if (!CollectionUtils.isEmpty(roles))
                 {
-                    roleServce.removeRoles(account.getId());
+                    roleServce.removeRoles(systemAccount.getId());
                     roleServce.addRoles(roles);
                 }
             }
             else
             {
-                roleServce.removeRoles(account.getId());
+                roleServce.removeRoles(systemAccount.getId());
             }
             if (StringUtils.isNotEmpty(account.getPassword()))
             {
-                account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
+                systemAccount.setPassword(EncryptUtil.md5Hex(account.getPassword()));
             }
-            accountDao.updateSystemAccount(account);
+            accountDao.updateSystemAccount(systemAccount);
         }
         catch (Exception e)
         {

@@ -1,6 +1,7 @@
 package com.sxj.supervisor.dao.contract;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.DeleteProvider;
 
@@ -24,8 +25,7 @@ public interface IContractItemDao {
 	 *
 	 * @param    items
 	**/
-	@BatchInsert
-	public void addItem(List<ContractItemEntity> items);
+	public void addItem(Map<String, Object> map );
 	
 	/**
 	 *  通过合同ID查询条目列表
