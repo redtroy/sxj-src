@@ -104,40 +104,46 @@ public class AccountServiceImpl implements IAccountService
     {
         try
         {
-            if (account == null)
-            {
-                return;
-            }
+            Assert.notNull(account);
+            AccountEntity entity = accountDao.getAccount(account.getId());
+            //            if (account == null)
+            //            {
+            //                return;
+            //            }
             if (functionIds != null && functionIds.length > 0)
             {
                 List<MemberRoleEntity> roles = new ArrayList<MemberRoleEntity>();
                 for (int i = 0; i < functionIds.length; i++)
                 {
-                    if (functionIds[i] == null)
+                    //                    if (functionIds[i] == null)
+                    //                    {
+                    //                        continue;
+                    //                    }
+                    //                    if ("none".equals(functionIds[i]))
+                    //                    {
+                    //                        continue;
+                    //                    }
+                    if (functionIds[i] != null
+                            && !"none".equals(functionIds[i]))
                     {
-                        continue;
+                        MemberRoleEntity role = new MemberRoleEntity();
+                        role.setAccountId(entity.getId());
+                        role.setFunctionId(functionIds[i]);
+                        roles.add(role);
                     }
-                    if ("none".equals(functionIds[i]))
-                    {
-                        continue;
-                    }
-                    MemberRoleEntity role = new MemberRoleEntity();
-                    role.setAccountId(account.getId());
-                    role.setFunctionId(functionIds[i]);
-                    roles.add(role);
                 }
-                if (roles.size() > 0)
-                {
-                    roleServce.removeRoles(account.getId());
-                    roleServce.addRoles(roles);
-                }
+                Assert.notEmpty(roles);
+                //                if (roles.size() > 0)
+                //                {
+                roleServce.removeRoles(account.getId());
+                roleServce.addRoles(roles);
+                //                }
             }
             else
             {
                 roleServce.removeRoles(account.getId());
             }
-            account.setVersion(accountDao.getAccount(account.getId())
-                    .getVersion());
+            account.setVersion(entity.getVersion());
             accountDao.updateAccount(account);
         }
         catch (Exception e)
