@@ -219,60 +219,52 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            if (contract != null)
+            Assert.notNull(contract);
+            RecordEntity record = recordDao.getRecord(recordId);
+            if (StringUtils.isNotEmpty(record.getContractNo())
+                    && record.getState().equals(RecordStateEnum.Binding))
             {
-                RecordEntity record = recordDao.getRecord(recordId);
-                if (StringUtils.isNotEmpty(record.getContractNo())
-                        && record.getState().equals(RecordStateEnum.Binding))
-                {
-                    throw new ServiceException("合同已经生成,不能重复生成");
-                }
-                // 拼装实体
-                if (record != null)
-                {
-                    contract.setRecordDate(record.getAcceptDate()); // 备案时间就是受理时间?
-                    contract.setRecordNo(record.getRecordNo());// 备案号
-                    contract.setType(record.getContractType());
-                    contract.setImgPath(record.getImgPath());
-                    contract.setState(ContractStateEnum.approval);
-                    contract.setConfirmState(ContractSureStateEnum.noaffirm);
-                    contract.setCreateDate(new Date());
-                    String year = new SimpleDateFormat("yy", Locale.CHINESE).format(Calendar.getInstance()
-                            .getTime());
-                    String month = new SimpleDateFormat("MM", Locale.CHINESE).format(Calendar.getInstance()
-                            .getTime());
-                    contract.setDateNo("CT" + year + month);
-                    contract.setUseQuantity(0f);
-                    contractDao.addContract(contract);
-                    
-                    float itemQuantity = 0f;
-                    if (itemList != null)
-                    {
-                        List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
-                        for (int i = 0; i < itemList.size(); i++)
-                        {
-                            ContractItemEntity ci = itemList.get(i);
-                            itemQuantity = itemQuantity + ci.getQuantity();
-                            if (ci.getAmount() != null && ci.getPrice() != null)
-                            {
-                                ci.setContractId(contract.getContractNo());
-                                newList.add(ci);
-                            }
-                            
-                        }
-                        contractItemDao.addItem(newList);// 新增条目
-                    }
-                    contract.setItemQuantity(itemQuantity);
-                    contractDao.updateContract(contract);
-                    if (contract.getContractNo() != null)
-                    {
-                        record.setContractNo(contract.getContractNo());
-                        record.setState(RecordStateEnum.Binding);
-                        recordDao.updateRecord(record);
-                    }
-                    
-                }
+                throw new ServiceException("合同已经生成,不能重复生成");
             }
+            // 拼装实体
+            contract.setRecordDate(record.getAcceptDate()); // 备案时间就是受理时间?
+            contract.setRecordNo(record.getRecordNo());// 备案号
+            contract.setType(record.getContractType());
+            contract.setImgPath(record.getImgPath());
+            contract.setState(ContractStateEnum.approval);
+            contract.setConfirmState(ContractSureStateEnum.noaffirm);
+            contract.setCreateDate(new Date());
+            String year = new SimpleDateFormat("yy", Locale.CHINESE).format(Calendar.getInstance()
+                    .getTime());
+            String month = new SimpleDateFormat("MM", Locale.CHINESE).format(Calendar.getInstance()
+                    .getTime());
+            contract.setDateNo("CT" + year + month);
+            contract.setUseQuantity(0f);
+            contractDao.addContract(contract);
+            
+            float itemQuantity = 0f;
+            if (!CollectionUtils.isEmpty(itemList))
+            {
+                List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
+                for (int i = 0; i < itemList.size(); i++)
+                {
+                    ContractItemEntity ci = itemList.get(i);
+                    itemQuantity = itemQuantity + ci.getQuantity();
+                    if (ci.getAmount() != null && ci.getPrice() != null)
+                    {
+                        ci.setContractId(contract.getContractNo());
+                        newList.add(ci);
+                    }
+                    
+                }
+                contractItemDao.addItem(newList);// 新增条目
+            }
+            contract.setItemQuantity(itemQuantity);
+            contractDao.updateContract(contract);
+            record.setContractNo(contract.getContractNo());
+            record.setState(RecordStateEnum.Binding);
+            recordDao.updateRecord(record);
+            
         }
         catch (Exception e)
         {
@@ -512,7 +504,7 @@ public class ContractServiceImpl implements IContractService
     {
         String replenishRecordIds = this.recordIdArr(contract.getContractNo(),
                 "2");// 获取变更备案
-        if (!StringUtils.isNotEmpty(replenishRecordIds))
+        if (!StringUtils.isEmpty(replenishRecordIds))
         {
             
             QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
@@ -546,6 +538,7 @@ public class ContractServiceImpl implements IContractService
                             contractReplenishModel.getBatchItems()
                                     .add(replenishBatchModel);
                         }
+                        contractReplenishModel.setReplenishContract(replenish);
                         contractModel.getReplenishList()
                                 .add(contractReplenishModel);
                     }
@@ -600,6 +593,7 @@ public class ContractServiceImpl implements IContractService
                             modify,
                             cmm,
                             modifyBatchModel);
+                    cmm.setModifyContract(modify);
                     contractModel.getModifyList().add(cmm);
                 }
                 

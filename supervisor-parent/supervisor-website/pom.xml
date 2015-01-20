@@ -102,7 +102,7 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
-		<!-- 数据库连接 -->
+		<!-- 数据库连接-->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
@@ -116,7 +116,7 @@
 					<artifactId>jconsole</artifactId>
 				</exclusion>
 			</exclusions>
-				
+
 		</dependency>
 
 		<dependency>
@@ -159,11 +159,6 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>statemachine-core</artifactId>
 			<version>1.0</version>
-		</dependency>-->
-		<!-- <dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>statemachine-core</artifactId>
-			<version>1.0</version>
 		</dependency> -->
 	</dependencies>
 	<build>
@@ -187,7 +182,7 @@
 					<type>jar</type>
 					<outputDirectory>${project.build.directory}/extlib</outputDirectory>
 				</configuration>
-			</plugin> 
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>

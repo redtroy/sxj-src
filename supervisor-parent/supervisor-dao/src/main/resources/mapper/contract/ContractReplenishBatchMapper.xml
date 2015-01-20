@@ -32,7 +32,7 @@
 		</if>
 		<if test="condition.recordIdArray!=null">
 			AND REPLENISH_ID IN 
-			<foreach collection="array" open="(" close=")" separator="," item="recordId">
+			<foreach collection="condition.recordIdArray" open="(" close=")" separator="," item="recordId">
 				#{recordId}
 			</foreach>
 		</if>
