@@ -274,10 +274,10 @@ var ul_validform;
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
-								<th>数量<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if></th>
-								<th>单价<span class="money">&yen;</span><#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if>
+								<th>数量（<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if>）</th>
+								<th>单价（<span class="money">&yen;</span>／<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if>）
 								</th>
-								<th>金额<span class="money">&yen;</span></th>
+								<th>金额（<span class="money">&yen;</span>）</th>
 								<th>备注说明</th>
 								<th class="rLine">&nbsp;</th>
 							</tr>
