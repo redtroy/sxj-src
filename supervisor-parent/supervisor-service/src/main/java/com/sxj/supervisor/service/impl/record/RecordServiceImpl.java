@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 
@@ -24,8 +25,10 @@ import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
+import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -145,7 +148,7 @@ public class RecordServiceImpl implements IRecordService
             throw new ServiceException("更新备案信息错误", e);
         }
     }
-
+    
     private void updateImages(RecordEntity record, RecordEntity oldRe)
     {
         String[] oldPath = null;
@@ -333,7 +336,7 @@ public class RecordServiceImpl implements IRecordService
             RecordQuery query = new RecordQuery();
             query.setRecordNo(no);
             List<RecordEntity> list = queryRecord(query);
-            if (list != null && list.size() > 0)
+            if (!CollectionUtils.isEmpty(list))
             {
                 return list.get(0);
             }
@@ -352,12 +355,9 @@ public class RecordServiceImpl implements IRecordService
     {
         try
         {
-            
-            // RecordEntity re = new RecordEntity();
-            // re.setId(recordId);
-            // re.setConfirmState(state);
-            // recordDao.updateRecord(re);
+            Assert.hasText(contractId);
             ContractModel conModel = contractService.getContract(contractId);
+            Assert.notNull(conModel);
             ContractEntity con = conModel.getContract();
             // 更改合同关联所有备案状态
             RecordQuery recordQuery = new RecordQuery();
@@ -654,32 +654,19 @@ public class RecordServiceImpl implements IRecordService
         {
             String recordNo = "";
             ContractModel cm = contractService.getContractModelByContractNo(contractNo);
-            if (cm != null)
+            Assert.notNull(cm);
+            String records = cm.getContract().getRecordNo();
+            Assert.hasText(records);
+            String[] recordArr = records.split(",");
+            for (String string : recordArr)
             {
-                String records = cm.getContract().getRecordNo();
-                if (StringUtils.isNotEmpty(records))
+                RecordEntity recordEntity = this.getRecordByNo(string.trim());
+                if (recordEntity != null)
                 {
-                    String[] recordArr = records.split(",");
-                    for (String string : recordArr)
+                    if ((menber.getType() == MemberTypeEnum.DAWP && recordEntity.getFlag() == RecordFlagEnum.A)
+                            || recordEntity.getFlag() == RecordFlagEnum.B)
                     {
-                        RecordEntity recordEntity = this.getRecordByNo(string.trim());
-                        if (recordEntity != null)
-                        {
-                            if (menber.getType().getId() == 0)
-                            {
-                                if (recordEntity.getFlag().getId() == 0)
-                                {
-                                    recordNo = recordEntity.getRecordNo();
-                                }
-                            }
-                            else
-                            {
-                                if (recordEntity.getFlag().getId() == 1)
-                                {
-                                    recordNo = recordEntity.getRecordNo();
-                                }
-                            }
-                        }
+                        recordNo = recordEntity.getRecordNo();
                     }
                 }
             }
