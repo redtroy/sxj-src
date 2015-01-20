@@ -47,8 +47,8 @@ public class ContractModifyModel implements Serializable
     
     public List<ModifyItemEntity> getModifyItemList()
     {
-        if (modifyBatchList == null)
-            return new ArrayList<ModifyItemEntity>();
+        if (modifyItemList == null)
+        	modifyItemList= new ArrayList<ModifyItemEntity>();
         return modifyItemList;
     }
     
@@ -60,7 +60,7 @@ public class ContractModifyModel implements Serializable
     public List<ModifyBatchModel> getModifyBatchList()
     {
         if (modifyBatchList == null)
-            return new ArrayList<ModifyBatchModel>();
+        	modifyBatchList= new ArrayList<ModifyBatchModel>();
         return modifyBatchList;
     }
     

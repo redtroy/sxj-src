@@ -512,7 +512,7 @@ public class ContractServiceImpl implements IContractService
     {
         String replenishRecordIds = this.recordIdArr(contract.getContractNo(),
                 "2");// 获取变更备案
-        if (!StringUtils.isNotEmpty(replenishRecordIds))
+        if (!StringUtils.isEmpty(replenishRecordIds))
         {
             
             QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
@@ -546,6 +546,7 @@ public class ContractServiceImpl implements IContractService
                             contractReplenishModel.getBatchItems()
                                     .add(replenishBatchModel);
                         }
+                        contractReplenishModel.setReplenishContract(replenish);
                         contractModel.getReplenishList()
                                 .add(contractReplenishModel);
                     }
@@ -600,6 +601,7 @@ public class ContractServiceImpl implements IContractService
                             modify,
                             cmm,
                             modifyBatchModel);
+                    cmm.setModifyContract(modify);
                     contractModel.getModifyList().add(cmm);
                 }
                 

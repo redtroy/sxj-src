@@ -124,7 +124,7 @@
             </tr>
           </table>
           <div><label>交货地址</label>${contractModel.contract.deliveryAddress} </div>
-          <#if contractModel.batchList?exists>
+          <#if contractModel.batchList?exists && (contractModel.batchList?size>0)>
           <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
             <col width="20%" />
             <col width="30%" />
@@ -194,7 +194,7 @@
             <label>关联招标合同号</label>
             ${contractModel.contract.refContractNo} </div>
             </div>
-            <#if contractModel.modifyList?exists>
+            <#if contractModel.modifyList?exists && (contractModel.modifyList?size>0)>
           <div class="infoBox producedBox changeBox text-left">
            
             <!-- 变更信息遍历begin -->
@@ -245,7 +245,7 @@
               </#list>
             </table>
             </#if>
-            <#if modifyList.modifyBatchList?exists>
+            <#if modifyList.modifyBatchList?exists && (modifyList.modifyBatchList?size>0)>
             <table border="0" cellpadding="0" cellspacing="0" class="tabList producedTable">
               <col width="20%" />
               <col width="25%" />
@@ -291,7 +291,7 @@
             <!-- 变更信息遍历结束 -->
           </div>
           </#if>
-          <#if contractModel.replenishList?exists>
+          <#if contractModel.replenishList?exists && (contractModel.replenishList?size>0)>
           <div class="infoBox producedBox changeBox text-left">
             <h2 class="title">合同补损信息</h2>
             <#list contractModel.replenishList as replenishList>
