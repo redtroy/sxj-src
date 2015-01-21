@@ -141,7 +141,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                         {
                             ContractBatchEntity cbe = cbatchList.get(0);
                             batch.setBatchNo(cbe.getBatchNo());
-                            List<BatchItemModel> batchModelList = JsonMapperUtil.jsonChangeList(cbe.getBatchItems());
+                            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(cbe.getBatchItems());
                             batch.setBatchItems(batchModelList);
                         }
                         if (modifyBatch != null && modifyBatch.size() > 0)
@@ -149,7 +149,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                             ModifyBatchEntity modiy = modifyBatch.get(0);
                             Bacth bacth = new Bacth();
                             bacth.setBatchNo(modiy.getBatchNo());
-                            List<BatchItemModel> batchModelList = JsonMapperUtil.jsonChangeList(modiy.getBatchItems());
+                            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(modiy.getBatchItems());
                             batch.setBatchItems(batchModelList);
                         }
                         if (batchList != null && batchList.size() > 0)
@@ -157,7 +157,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                             ReplenishBatchEntity rbe = batchList.get(0);
                             Bacth bacth = new Bacth();
                             bacth.setBatchNo(rbe.getBatchNo().toString());
-                            List<BatchItemModel> batchModelList = JsonMapperUtil.jsonChangeList(rbe.getBatchItems());
+                            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(rbe.getBatchItems());
                             batch.setBatchItems(batchModelList);
                         }
                         if (batch.getBatchItems() != null)

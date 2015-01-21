@@ -14,7 +14,7 @@ public class JsonMapperUtil
 {
     private static final Logger logger = LoggerFactory.getLogger(JsonMapperUtil.class);
     
-    public static List<BatchItemModel> jsonChangeList(String json)
+    public static List<BatchItemModel> getBatchItems(String json)
     {
         List<BatchItemModel> bacthList = new ArrayList<BatchItemModel>();
         try

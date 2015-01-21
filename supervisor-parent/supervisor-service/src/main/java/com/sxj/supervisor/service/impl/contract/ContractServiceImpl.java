@@ -1827,7 +1827,7 @@ public class ContractServiceImpl implements IContractService
                 batch.setContractId(logistics.getContractNo());
             }
             batchModel.setBatch(batch);
-            List<BatchItemModel> batchList = JsonMapperUtil.jsonChangeList(batch.getBatchItems());
+            List<BatchItemModel> batchList = JsonMapperUtil.getBatchItems(batch.getBatchItems());
             batchModel.setBatchItems(batchList);
         }
         
@@ -2367,7 +2367,7 @@ public class ContractServiceImpl implements IContractService
                 {
                     ContractBatchModel cb = new ContractBatchModel();
                     cb.setBatch(contractBatchEntity);
-                    List<BatchItemModel> itemList = JsonMapperUtil.jsonChangeList(contractBatchEntity.getBatchItems());
+                    List<BatchItemModel> itemList = JsonMapperUtil.getBatchItems(contractBatchEntity.getBatchItems());
                     cb.setBatchItems(itemList);
                     cbList.add(cb);
                 }
