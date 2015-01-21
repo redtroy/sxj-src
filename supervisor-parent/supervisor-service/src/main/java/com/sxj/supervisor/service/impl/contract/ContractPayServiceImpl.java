@@ -58,8 +58,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 			query.setPage(condition);
 			return payList;
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ServiceException("查询付款管理出错", e);
+			SxjLogger.error("查询付款管理出错!", e, this.getClass());
+			throw new ServiceException("查询付款管理出错!", e);
 		}
 	}
 
@@ -87,6 +87,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 				return "false";
 			}
 		} catch (Exception e) {
+			SxjLogger.error("甲方付款出错！", e, this.getClass());
 			throw new ServiceException("甲方付款出错！", e);
 		}
 	}
@@ -110,6 +111,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 				return "false";
 			}
 		} catch (Exception e) {
+			SxjLogger.error("乙方确认付款出错！", e, this.getClass());
 			throw new ServiceException("乙方确认付款出错！", e);
 		}
 	}
@@ -130,7 +132,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			query.setPage(condition);
 			return list;
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error("财务统计查询出错！", e, this.getClass());
 			throw new ServiceException("财务统计查询出错！", e);
 		}
 	}
@@ -143,9 +145,9 @@ public class ContractPayServiceImpl implements IContractPayService {
 			PayRecordEntity pay = payDao.getPayRecordEntity(id);
 			return pay;
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error("获取pay实体出错！", e, this.getClass());
+			throw new ServiceException("获取pay实体出错！", e);
 		}
-		return null;
 	}
 
 	@Override
@@ -154,7 +156,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 		try {
 			payDao.addPay(pay);
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error("新增付款管理出错！", e, this.getClass());
 			throw new ServiceException("新增付款管理出错！", e);
 		}
 
@@ -167,7 +169,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			PayRecordEntity pay = payDao.getEntityByRfidNo(rfidNo);
 			return pay.getPayNo();
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error("查询支付单号出错！", e, this.getClass());
 			throw new ServiceException("查询支付单号出错！", e);
 		}
 	}
@@ -179,8 +181,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 			payDao.changeState(payNo, state);
 			return "1";
 		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException();
+			SxjLogger.error("改变支付状态出错", e, this.getClass());
+			throw new ServiceException("改变支付状态出错", e);
 		}
 	}
 }
