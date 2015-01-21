@@ -38,6 +38,13 @@
 		<if test="condition.recordNo != null and condition.recordNo != ''">
 			<![CDATA[AND R.RECORD_NO = #{condition.recordNo}]]>
 		</if>
+		<if test="condition.recordNos!=null">
+			AND RECORD_NO IN 
+			<foreach collection="condition.recordNos" open="(" close=")" separator="," item="recordNo">
+				#{recordNo}
+			</foreach>
+		
+		</if>
 		<!-- 申请会员ID -->
 		<if test="condition.applyId != null and condition.applyId != ''">
 			<![CDATA[AND R.APPLY_ID = #{condition.applyId}]]>
