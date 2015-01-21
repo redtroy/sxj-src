@@ -173,14 +173,12 @@ public class RecordController extends BaseController
                 record.setApplyDate(new Date());
                 record.setDelState(false);
                 setContractType(record, member);
-                
                 record.setFlag(RecordFlagEnum.A);
                 record.setConfirmState(RecordConfirmStateEnum.accepted);
                 recordService.addRecord(record);
                 map.put("isOK", "ok");
                 map.put("recordNo", record.getRecordNo());
             }
-            
             return map;
         }
         catch (Exception e)
@@ -188,7 +186,7 @@ public class RecordController extends BaseController
             throw new WebException(e);
         }
     }
-
+    
     private void setContractType(RecordEntity record, MemberEntity member)
     {
         switch (member.getType())
