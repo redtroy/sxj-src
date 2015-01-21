@@ -556,15 +556,17 @@ public class RecordServiceImpl implements IRecordService {
 			String records = cm.getContract().getRecordNo();
 			Assert.hasText(records);
 			String[] recordArr = records.split(",");
-			for (String string : recordArr) {
-				RecordEntity recordEntity = this.getRecordByNo(string.trim());
-				if (recordEntity != null) {
+			
+			QueryCondition<RecordEntity> condition = new QueryCondition<RecordEntity>();
+			condition.addCondition("recordNos", recordArr);// 备案号
+			List<RecordEntity> recordList = recordDao.queryRecord(condition);
+			
+			for (RecordEntity recordEntity : recordList) {
 					if ((menber.getType() == MemberTypeEnum.DAWP && recordEntity
 							.getFlag() == RecordFlagEnum.A)
 							|| recordEntity.getFlag() == RecordFlagEnum.B) {
 						recordNo = recordEntity.getRecordNo();
 					}
-				}
 			}
 			return recordNo;
 		} catch (ServiceException e) {

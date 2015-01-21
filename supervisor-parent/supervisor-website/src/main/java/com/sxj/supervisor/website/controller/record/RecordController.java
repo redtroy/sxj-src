@@ -167,13 +167,15 @@ public class RecordController extends BaseController
                     .getId());
             if (member.getCheckState() == MemberCheckStateEnum.certified)
             {
+            	MemberEntity memberB = memberService.memberInfo(record
+						.getMemberIdB());
                 record.setApplyId(member.getMemberNo());
                 record.setApplyName(member.getName());
                 record.setState(RecordStateEnum.noBinding);
                 record.setType(RecordTypeEnum.contract);
                 record.setApplyDate(new Date());
                 record.setDelState(false);
-                setContractType(record, member);
+                setContractType(record, memberB);
                 record.setFlag(RecordFlagEnum.A);
                 record.setConfirmState(RecordConfirmStateEnum.accepted);
                 recordService.addRecord(record);
@@ -268,13 +270,15 @@ public class RecordController extends BaseController
                     .getId());
             if (member.getCheckState() == MemberCheckStateEnum.certified)
             {
+            	MemberEntity memberB = memberService.memberInfo(record
+						.getMemberIdB());
                 record.setApplyId(member.getMemberNo());
                 record.setApplyName(member.getName());
                 record.setState(RecordStateEnum.noBinding);
                 record.setType(RecordTypeEnum.contract);
                 record.setApplyDate(new Date());
                 record.setDelState(false);
-                setContractType(record, member);
+                setContractType(record, memberB);
                 record.setFlag(RecordFlagEnum.B);
                 record.setConfirmState(RecordConfirmStateEnum.accepted);
                 recordService.addRecord(record);
