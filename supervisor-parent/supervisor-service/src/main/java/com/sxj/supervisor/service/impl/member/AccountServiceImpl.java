@@ -101,15 +101,10 @@ public class AccountServiceImpl implements IAccountService {
 						roles.add(role);
 					}
 				}
-				Assert.notEmpty(roles);
-				// if (roles.size() > 0)
-				// {
-				roleServce.removeRoles(account.getId());
-				roleServce.addRoles(roles);
-				// }
 				if (!roles.isEmpty()) {
-				// Assert.notEmpty(roles);
-				if (roles.size() > 0) {
+					roleServce.removeRoles(account.getId());
+					roleServce.addRoles(roles);
+				}
 			} else {
 				roleServce.removeRoles(account.getId());
 			}
