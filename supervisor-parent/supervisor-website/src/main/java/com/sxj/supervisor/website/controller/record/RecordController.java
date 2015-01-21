@@ -20,6 +20,7 @@ import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
@@ -483,7 +484,7 @@ public class RecordController extends BaseController
         {
             Map<String, String> map = new HashMap<String, String>();
             SupervisorPrincipal member = (SupervisorPrincipal) session.getAttribute("userinfo");
-            if (member.getMember().getType().getId() == 0)
+            if (member.getMember().getType() == MemberTypeEnum.DAWP)
             {
                 recordService.modifyState(contractId,
                         recordId,
