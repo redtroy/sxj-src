@@ -46,10 +46,10 @@ public class SystemAccountServiceImpl implements ISystemAccountService
             Assert.hasText(account.getPassword());
             SystemAccountEntity oldAccount = getAccountByAccount(account.getAccount());
             Assert.notNull(oldAccount, "用户账户已存在");
-            //            if (oldAccount != null)
-            //            {
-            //                throw new ServiceException("用户账户已存在");
-            //            }
+            // if (oldAccount != null)
+            // {
+            // throw new ServiceException("用户账户已存在");
+            // }
             account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
             accountDao.addSystemAccount(account);
             if (functionIds != null && functionIds.length > 0)
@@ -57,14 +57,14 @@ public class SystemAccountServiceImpl implements ISystemAccountService
                 List<RoleEntity> roles = new ArrayList<RoleEntity>();
                 for (int i = 0; i < functionIds.length; i++)
                 {
-                    //                    if (functionIds[i] == null)
-                    //                    {
-                    //                        continue;
-                    //                    }
-                    //                    if ("none".equals(functionIds[i]))
-                    //                    {
-                    //                        continue;
-                    //                    }
+                    // if (functionIds[i] == null)
+                    // {
+                    // continue;
+                    // }
+                    // if ("none".equals(functionIds[i]))
+                    // {
+                    // continue;
+                    // }
                     if (functionIds[i] != null
                             && !"none".equals(functionIds[i]))
                     {
@@ -96,23 +96,23 @@ public class SystemAccountServiceImpl implements ISystemAccountService
             Assert.hasText(account.getId());
             SystemAccountEntity systemAccount = accountDao.getSystemAccount(account.getId());
             Assert.notNull(systemAccount);
-            //            if (account == null)
-            //            {
-            //                return;
-            //            }
+            // if (account == null)
+            // {
+            // return;
+            // }
             if (functionIds != null && functionIds.length > 0)
             {
                 List<RoleEntity> roles = new ArrayList<RoleEntity>();
                 for (int i = 0; i < functionIds.length; i++)
                 {
-                    //                    if (functionIds[i] == null)
-                    //                    {
-                    //                        continue;
-                    //                    }
-                    //                    if ("none".equals(functionIds[i]))
-                    //                    {
-                    //                        continue;
-                    //                    }
+                    // if (functionIds[i] == null)
+                    // {
+                    // continue;
+                    // }
+                    // if ("none".equals(functionIds[i]))
+                    // {
+                    // continue;
+                    // }
                     if (functionIds[i] != null
                             && !"none".equals(functionIds[i]))
                     {
@@ -291,26 +291,22 @@ public class SystemAccountServiceImpl implements ISystemAccountService
     }
     
     @Override
-    public String edit_pwd(String id, String password) throws ServiceException
+    public void edit_pwd(String id, String password) throws ServiceException
     {
-        SystemAccountEntity account = new SystemAccountEntity();
-        account.setId(id);
-        account.setPassword(password);
         try
         {
             Assert.hasText(id);
             Assert.hasText(password);
-            if (StringUtils.isNotEmpty(account.getPassword()))
-            {
-                account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
-            }
+            SystemAccountEntity account = new SystemAccountEntity();
+            account.setId(id);
+            account.setPassword(password);
+            account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
             accountDao.updateSystemAccount(account);
         }
         catch (SQLException e)
         {
-            e.printStackTrace();
+            throw new ServiceException("修改密码错误", e);
         }
-        return null;
     }
     
 }
