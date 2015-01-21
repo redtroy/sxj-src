@@ -298,6 +298,8 @@ public class SystemAccountServiceImpl implements ISystemAccountService
         account.setPassword(password);
         try
         {
+            Assert.hasText(id);
+            Assert.hasText(password);
             if (StringUtils.isNotEmpty(account.getPassword()))
             {
                 account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
