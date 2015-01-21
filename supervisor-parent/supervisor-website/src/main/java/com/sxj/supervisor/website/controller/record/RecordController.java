@@ -172,18 +172,7 @@ public class RecordController extends BaseController
                 record.setType(RecordTypeEnum.contract);
                 record.setApplyDate(new Date());
                 record.setDelState(false);
-                switch (member.getType())
-                {
-                    case glassFactory:
-                        record.setContractType(ContractTypeEnum.glass);// 合同类型
-                        break;
-                    case genresFactory:
-                        record.setContractType(ContractTypeEnum.extrusions);// 合同类型
-                        break;
-                    
-                    default:
-                        throw new ServiceException("用户类型错误");
-                }
+                setContractType(record, member);
                 
                 record.setFlag(RecordFlagEnum.A);
                 record.setConfirmState(RecordConfirmStateEnum.accepted);
@@ -197,6 +186,22 @@ public class RecordController extends BaseController
         catch (Exception e)
         {
             throw new WebException(e);
+        }
+    }
+
+    private void setContractType(RecordEntity record, MemberEntity member)
+    {
+        switch (member.getType())
+        {
+            case glassFactory:
+                record.setContractType(ContractTypeEnum.glass);// 合同类型
+                break;
+            case genresFactory:
+                record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+                break;
+            
+            default:
+                throw new ServiceException("用户类型错误");
         }
     }
     
@@ -270,17 +275,7 @@ public class RecordController extends BaseController
                 record.setType(RecordTypeEnum.contract);
                 record.setApplyDate(new Date());
                 record.setDelState(false);
-                switch (member.getType())
-                {
-                    case glassFactory:
-                        record.setContractType(ContractTypeEnum.glass);// 合同类型
-                        break;
-                    case genresFactory:
-                        record.setContractType(ContractTypeEnum.extrusions);// 合同类型
-                        break;
-                    default:
-                        throw new ServiceException("用户类型错误");
-                }
+                setContractType(record, member);
                 record.setFlag(RecordFlagEnum.B);
                 record.setConfirmState(RecordConfirmStateEnum.accepted);
                 recordService.addRecord(record);
