@@ -291,7 +291,7 @@ public class SystemAccountServiceImpl implements ISystemAccountService
     }
     
     @Override
-    public void edit_pwd(String id, String password) throws ServiceException
+    public void editPasswd(String id, String password) throws ServiceException
     {
         try
         {
