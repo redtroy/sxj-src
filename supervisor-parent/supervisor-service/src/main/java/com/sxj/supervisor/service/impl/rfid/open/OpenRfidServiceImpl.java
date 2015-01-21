@@ -5,11 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -54,8 +53,6 @@ import com.sxj.util.persistent.QueryCondition;
 @Transactional
 public class OpenRfidServiceImpl implements IOpenRfidService
 {
-    
-    private static final Logger logger = LoggerFactory.getLogger(OpenRfidServiceImpl.class);
     
     /**
      * 批次DAO
@@ -110,14 +107,16 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                 QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
                 logisticsQuery.addCondition("rfidNo", rfid);
                 List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
+                
                 QueryCondition<LogisticsRefEntity> logisticsRefQuery = new QueryCondition<LogisticsRefEntity>();
                 logisticsRefQuery.addCondition("rfidNo", rfid);
                 List<LogisticsRefEntity> logisticsRef = logisticsRefDao.queryList(logisticsRefQuery);
-                if (logisticsRef != null && logisticsRef.size() > 0)
+                
+                if (!CollectionUtils.isEmpty(logisticsRef))
                 {
-                    LogisticsRefEntity lRef = logisticsRef.get(0);
+                    //                    LogisticsRefEntity lRef = logisticsRef.get(0);
                     // if (lRef.getState().getId() == 1) {//
-                    if (ref != null && ref.size() > 0)
+                    if (!CollectionUtils.isEmpty(ref))
                     {
                         LogisticsRfidEntity le = ref.get(0);
                         Contract contract = new Contract();
@@ -127,47 +126,21 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                         QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
                         query.addCondition("rfidNo", rfid);
                         query.addCondition("state", 1);// 是否已变更
-                        List<ContractBatchEntity> cbatchList = contractBatchDao.queryBacths(query);// 合同批次
+                        // 合同批次
+                        List<ContractBatchEntity> cbatchList = contractBatchDao.queryBacths(query);
+                        
                         QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
                         modifyQuery.addCondition("rfidNo", rfid);
                         modifyQuery.addCondition("state", 1);// 是否已变更
-                        List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao.queryBacths(modifyQuery);// 变更批次
+                        // 变更批次
+                        List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao.queryBacths(modifyQuery);
+                        
                         QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
                         replenishQuery.addCondition("newRfidNo", rfid);
                         // 补损批次
                         List<ReplenishBatchEntity> batchList = contractReplenishBatchDao.queryReplenishBatch(replenishQuery);
                         
-                        if (cbatchList != null && cbatchList.size() > 0)
-                        {
-                            ContractBatchEntity cbe = cbatchList.get(0);
-                            batch.setBatchNo(cbe.getBatchNo());
-                            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(cbe.getBatchItems());
-                            batch.setBatchItems(batchModelList);
-                        }
-                        if (modifyBatch != null && modifyBatch.size() > 0)
-                        {
-                            ModifyBatchEntity modiy = modifyBatch.get(0);
-                            Bacth bacth = new Bacth();
-                            bacth.setBatchNo(modiy.getBatchNo());
-                            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(modiy.getBatchItems());
-                            batch.setBatchItems(batchModelList);
-                        }
-                        if (batchList != null && batchList.size() > 0)
-                        {
-                            ReplenishBatchEntity rbe = batchList.get(0);
-                            Bacth bacth = new Bacth();
-                            bacth.setBatchNo(rbe.getBatchNo().toString());
-                            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(rbe.getBatchItems());
-                            batch.setBatchItems(batchModelList);
-                        }
-                        if (batch.getBatchItems() != null)
-                        {
-                            batch.setState("1");
-                        }
-                        else
-                        {
-                            batch.setState("2");
-                        }
+                        setBatchItems(batch, cbatchList, modifyBatch, batchList);
                         
                     }
                     // } else {
@@ -195,6 +168,38 @@ public class OpenRfidServiceImpl implements IOpenRfidService
         }
         batchModel.setBatchList(batch);
         return batchModel;
+    }
+    
+    private void setBatchItems(Bacth batch,
+            List<ContractBatchEntity> cbatchList,
+            List<ModifyBatchEntity> modifyBatch,
+            List<ReplenishBatchEntity> batchList)
+    {
+        if (cbatchList != null && cbatchList.size() > 0)
+        {
+            ContractBatchEntity cbe = cbatchList.get(0);
+            batch.setBatchNo(cbe.getBatchNo());
+            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(cbe.getBatchItems());
+            batch.setBatchItems(batchModelList);
+            batch.setState("1");
+        }
+        else if (modifyBatch != null && modifyBatch.size() > 0)
+        {
+            ModifyBatchEntity modiy = modifyBatch.get(0);
+            batch.setBatchNo(modiy.getBatchNo());
+            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(modiy.getBatchItems());
+            batch.setBatchItems(batchModelList);
+            batch.setState("1");
+        }
+        else if (batchList != null && batchList.size() > 0)
+        {
+            ReplenishBatchEntity rbe = batchList.get(0);
+            batch.setBatchNo(rbe.getBatchNo().toString());
+            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(rbe.getBatchItems());
+            batch.setBatchItems(batchModelList);
+            batch.setState("1");
+        }
+        batch.setState("2");
     }
     
     /**
