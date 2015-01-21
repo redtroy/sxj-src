@@ -185,23 +185,15 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	 * 
 	 * @param json
 	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
 	 */
-	public List<BatchItemModel> jsonChangeList(String json) {
+	public List<BatchItemModel> jsonChangeList(String json) throws JsonParseException, JsonMappingException, IOException {
 		List<BatchItemModel> bacthList = new ArrayList<BatchItemModel>();
-		try {
 			bacthList = JsonMapper.nonEmptyMapper().getMapper()
 					.readValue(json, new TypeReference<List<BatchItemModel>>() {
 					});
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return bacthList;
 
 	}
