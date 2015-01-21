@@ -91,6 +91,7 @@ import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.ref.ILogisticsRefService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
+import com.sxj.supervisor.service.util.JsonMapperUtil;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
@@ -107,6 +108,7 @@ import com.sxj.util.persistent.QueryCondition;
 @Transactional
 public class ContractServiceImpl implements IContractService
 {
+    private static final Logger logger = LoggerFactory.getLogger(ContractServiceImpl.class);
     
     /**
      * 合同DAO
@@ -200,69 +202,73 @@ public class ContractServiceImpl implements IContractService
     @Autowired
     private ILogisticsRefDao refDao;
     
-    public static final Logger logger = LoggerFactory.getLogger(ContractServiceImpl.class);
-    
     @PostConstruct
     public void init()
     {
         self = context.getBean(IContractService.class);
     }
     
-	/**
-	 * 新增合同
-	 */
-	@Override
-	@Transactional
-	public void addContract(ContractEntity contract,
-			List<ContractItemEntity> itemList, String recordId)
-			throws ServiceException {
-		try {
-			Assert.notNull(contract);
-			RecordEntity record = recordDao.getRecord(recordId);
-			if (StringUtils.isNotEmpty(record.getContractNo())
-					&& record.getState().equals(RecordStateEnum.Binding)) {
-				throw new ServiceException("合同已经生成,不能重复生成");
-			}
-			Assert.notEmpty(itemList, "生成合同出错!!");
-			float itemQuantity = 0f;
-			List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
-			for (int i = 0; i < itemList.size(); i++) {
-				ContractItemEntity ci = itemList.get(i);
-				ci.setId(StringUtils.getUUID());
-				itemQuantity = itemQuantity + ci.getQuantity();
-				newList.add(ci);
-			}
-			// 拼装实体
-			contract.setRecordDate(record.getAcceptDate()); 
-			contract.setRecordNo(record.getRecordNo());// 备案号
-			contract.setType(record.getContractType());
-			contract.setImgPath(record.getImgPath());
-			contract.setState(ContractStateEnum.approval);
-			contract.setConfirmState(ContractSureStateEnum.noaffirm);
-			contract.setCreateDate(new Date());
-			String year = new SimpleDateFormat("yy", Locale.CHINESE)
-					.format(Calendar.getInstance().getTime());
-			String month = new SimpleDateFormat("MM", Locale.CHINESE)
-					.format(Calendar.getInstance().getTime());
-			contract.setDateNo("CT" + year + month);
-			contract.setUseQuantity(0f);
-			contract.setItemQuantity(itemQuantity);
-			contractDao.addContract(contract);
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("items", newList);
-			map.put("contractNo", contract.getContractNo());
-			contractItemDao.addItem(map);// 新增条目
-			// contractDao.updateContract(contract);
-			record.setContractNo(contract.getContractNo());
-			record.setState(RecordStateEnum.Binding);
-			recordDao.updateRecord(record);
-
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("新增合同出错:" + e.getMessage(), e);
-		}
-	}
-
+    /**
+     * 新增合同
+     */
+    @Override
+    @Transactional
+    public void addContract(ContractEntity contract,
+            List<ContractItemEntity> itemList, String recordId)
+            throws ServiceException
+    {
+        try
+        {
+            Assert.notNull(contract);
+            RecordEntity record = recordDao.getRecord(recordId);
+            if (StringUtils.isNotEmpty(record.getContractNo())
+                    && record.getState().equals(RecordStateEnum.Binding))
+            {
+                throw new ServiceException("合同已经生成,不能重复生成");
+            }
+            Assert.notEmpty(itemList, "生成合同出错!!");
+            float itemQuantity = 0f;
+            List<ContractItemEntity> newList = new ArrayList<ContractItemEntity>();
+            for (int i = 0; i < itemList.size(); i++)
+            {
+                ContractItemEntity ci = itemList.get(i);
+                ci.setId(StringUtils.getUUID());
+                itemQuantity = itemQuantity + ci.getQuantity();
+                newList.add(ci);
+            }
+            // 拼装实体
+            contract.setRecordDate(record.getAcceptDate());
+            contract.setRecordNo(record.getRecordNo());// 备案号
+            contract.setType(record.getContractType());
+            contract.setImgPath(record.getImgPath());
+            contract.setState(ContractStateEnum.approval);
+            contract.setConfirmState(ContractSureStateEnum.noaffirm);
+            contract.setCreateDate(new Date());
+            String year = new SimpleDateFormat("yy", Locale.CHINESE).format(Calendar.getInstance()
+                    .getTime());
+            String month = new SimpleDateFormat("MM", Locale.CHINESE).format(Calendar.getInstance()
+                    .getTime());
+            contract.setDateNo("CT" + year + month);
+            contract.setUseQuantity(0f);
+            contract.setItemQuantity(itemQuantity);
+            contractDao.addContract(contract);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("items", newList);
+            map.put("contractNo", contract.getContractNo());
+            contractItemDao.addItem(map);// 新增条目
+            // contractDao.updateContract(contract);
+            record.setContractNo(contract.getContractNo());
+            record.setState(RecordStateEnum.Binding);
+            recordDao.updateRecord(record);
+            
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("新增合同出错:" + e.getMessage(), e);
+        }
+    }
+    
     /**
      * 修改合同
      */
@@ -313,8 +319,8 @@ public class ContractServiceImpl implements IContractService
                     contractItemDao.deleteItems(ids.split(","));
                 }
                 Map<String, Object> map = new HashMap<String, Object>();
-    			map.put("items", insertList);
-    			map.put("contractNo", contract.getContract().getContractNo());
+                map.put("items", insertList);
+                map.put("contractNo", contract.getContract().getContractNo());
                 contractItemDao.addItem(map);
             }
             
@@ -1821,47 +1827,11 @@ public class ContractServiceImpl implements IContractService
                 batch.setContractId(logistics.getContractNo());
             }
             batchModel.setBatch(batch);
-            List<BatchItemModel> batchList = this.jsonChangeList(batch.getBatchItems());
+            List<BatchItemModel> batchList = JsonMapperUtil.getBatchItems(batch.getBatchItems());
             batchModel.setBatchItems(batchList);
         }
         
         return batchModel;
-    }
-    
-    /**
-     * json转化list
-     * 
-     * @param json
-     * @return
-     */
-    public List<BatchItemModel> jsonChangeList(String json)
-    {
-        List<BatchItemModel> bacthList = new ArrayList<BatchItemModel>();
-        try
-        {
-            bacthList = JsonMapper.nonEmptyMapper()
-                    .getMapper()
-                    .readValue(json, new TypeReference<List<BatchItemModel>>()
-                    {
-                    });
-        }
-        catch (JsonParseException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (JsonMappingException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return bacthList;
-        
     }
     
     /**
@@ -2397,7 +2367,7 @@ public class ContractServiceImpl implements IContractService
                 {
                     ContractBatchModel cb = new ContractBatchModel();
                     cb.setBatch(contractBatchEntity);
-                    List<BatchItemModel> itemList = this.jsonChangeList(contractBatchEntity.getBatchItems());
+                    List<BatchItemModel> itemList = JsonMapperUtil.getBatchItems(contractBatchEntity.getBatchItems());
                     cb.setBatchItems(itemList);
                     cbList.add(cb);
                 }
