@@ -149,7 +149,7 @@ public class SystemAccountController extends BaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (password.equals(password2)) {
 			SystemAccountEntity user = getLoginInfo(session);
-			accountService.edit_pwd(user.getId(), password);
+			accountService.editPasswd(user.getId(), password);
 			map.put("isOK", "ok");
 		} else {
 			map.put("erro", "两次密码输入不一样");
