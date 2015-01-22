@@ -12,7 +12,13 @@ import com.sxj.supervisor.model.contract.BatchItemModel;
 
 public class JsonMapperUtil
 {
-    private static final Logger logger = LoggerFactory.getLogger(JsonMapperUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsonMapperUtil.class);
+    
+    private JsonMapperUtil()
+    {
+        super();
+        // TODO Auto-generated constructor stub
+    }
     
     public static List<BatchItemModel> getBatchItems(String json)
     {
@@ -27,7 +33,7 @@ public class JsonMapperUtil
         }
         catch (Exception e)
         {
-            logger.debug("", e);
+            LOGGER.debug("", e);
         }
         return bacthList;
     }
