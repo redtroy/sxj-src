@@ -24,7 +24,7 @@ public interface IContractPayDao {
 	 * 修改更新付款管理
 	 */
 	@Update
-	public void update_pay(PayRecordEntity pay);
+	public void updatePay(PayRecordEntity pay);
 
 	/**
 	 * 根据ID 查询

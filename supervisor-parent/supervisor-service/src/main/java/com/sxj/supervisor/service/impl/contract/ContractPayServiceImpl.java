@@ -81,7 +81,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			if (re.getState().ordinal() < 4) {
 				re.setPayReal(payReal);
 				re.setState(payState[4]);
-				payDao.update_pay(re);
+				payDao.updatePay(re);
 				return "ok";
 			} else {
 				return "false";
@@ -103,7 +103,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			PayStageEnum[] payState = PayStageEnum.values();
 			if (re.getState().ordinal() == 4) {
 				re.setState(payState[5]);
-				payDao.update_pay(re);
+				payDao.updatePay(re);
 				contractService.modifyBatchPayState(re.getContractNo(),
 						re.getRfidNo(), re.getPayNo());
 				return "ok";
