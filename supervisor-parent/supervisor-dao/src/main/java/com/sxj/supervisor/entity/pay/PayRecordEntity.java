@@ -42,25 +42,25 @@ public class PayRecordEntity implements Serializable {
 	 * 甲方会员ID
 	 */
 	@Column(name = "MEMBER_NO_A")
-	private String memberNo_A;
+	private String memberNoA;
 
 	/**
 	 * 甲方会员名称
 	 */
 	@Column(name = "MEMBER_NAME_A")
-	private String memberName_A;
+	private String memberNameA;
 
 	/**
 	 * 乙方会员ID
 	 */
 	@Column(name = "MEMBER_NO_B")
-	private String memberNo_B;
+	private String memberNoB;
 
 	/**
 	 * 乙方会员名称
 	 */
 	@Column(name = "MEMBER_NAME_B")
-	private String memberName_B;
+	private String memberNameB;
 
 	/**
 	 * 支付单号
@@ -182,20 +182,20 @@ public class PayRecordEntity implements Serializable {
 		this.content = content;
 	}
 
-	public String getMemberNo_A() {
-		return memberNo_A;
+	public String getMemberNoA() {
+		return memberNoA;
 	}
 
-	public void setMemberNo_A(String memberNo_A) {
-		this.memberNo_A = memberNo_A;
+	public void setMemberNoA(String memberNoA) {
+		this.memberNoA = memberNoA;
 	}
 
-	public String getMemberNo_B() {
-		return memberNo_B;
+	public String getMemberNoB() {
+		return memberNoB;
 	}
 
-	public void setMemberNo_B(String memberNo_B) {
-		this.memberNo_B = memberNo_B;
+	public void setMemberNoB(String memberNoB) {
+		this.memberNoB = memberNoB;
 	}
 
 	public String getId() {
@@ -270,20 +270,20 @@ public class PayRecordEntity implements Serializable {
 		this.state = state;
 	}
 
-	public String getMemberName_A() {
-		return memberName_A;
+	public String getMemberNameA() {
+		return memberNameA;
 	}
 
-	public void setMemberName_A(String memberName_A) {
-		this.memberName_A = memberName_A;
+	public void setMemberNameA(String memberNameA) {
+		this.memberNameA = memberNameA;
 	}
 
-	public String getMemberName_B() {
-		return memberName_B;
+	public String getMemberNameB() {
+		return memberNameB;
 	}
 
-	public void setMemberName_B(String memberName_B) {
-		this.memberName_B = memberName_B;
+	public void setMemberNameB(String memberNameB) {
+		this.memberNameB = memberNameB;
 	}
 
 }

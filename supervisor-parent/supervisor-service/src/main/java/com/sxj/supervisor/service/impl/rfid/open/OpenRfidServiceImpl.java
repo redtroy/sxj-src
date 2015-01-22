@@ -407,11 +407,11 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                             ContractBatchEntity cb = contractBatchDao.getBacthsByRfid(rfid);
                             // 生成支付单
                             PayRecordEntity pay = new PayRecordEntity();
-                            pay.setMemberNo_A(cm.getContract().getMemberIdA());
-                            pay.setMemberName_A(cm.getContract()
+                            pay.setMemberNoA(cm.getContract().getMemberIdA());
+                            pay.setMemberNameA(cm.getContract()
                                     .getMemberNameA());
-                            pay.setMemberNo_B(cm.getContract().getMemberIdB());
-                            pay.setMemberName_B(cm.getContract()
+                            pay.setMemberNoB(cm.getContract().getMemberIdB());
+                            pay.setMemberNameB(cm.getContract()
                                     .getMemberNameB());
                             pay.setContractNo(cm.getContract().getContractNo());
                             pay.setRfidNo(rfid);
