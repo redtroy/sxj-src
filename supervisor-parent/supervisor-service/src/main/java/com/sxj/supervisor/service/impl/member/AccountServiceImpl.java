@@ -57,13 +57,6 @@ public class AccountServiceImpl implements IAccountService {
 			account.setNoType(account.getParentId() + "-");
 			account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
 			accountDao.addAccount(account);
-			// MemberEntity member = memberService.memberInfo(account
-			// .getParentId());
-			// if (member.getAccountNum() == null) {
-			// member.setAccountNum(0);
-			// }
-			// member.setAccountNum(member.getAccountNum() + 1);
-			// memberService.modifyMember(member);
 			memberDao.add_account_num(account.getParentId());
 			if (functionIds != null && functionIds.length > 0) {
 				List<MemberRoleEntity> roles = new ArrayList<MemberRoleEntity>();
@@ -77,8 +70,9 @@ public class AccountServiceImpl implements IAccountService {
 						roles.add(role);
 					}
 				}
-				Assert.notEmpty(roles);
-				roleServce.addRoles(roles);
+				if (!roles.isEmpty()) {
+					roleServce.addRoles(roles);
+				}
 			}
 		} catch (Exception e) {
 			SxjLogger.error("添加会员子账户信息错误", e, this.getClass());
@@ -96,21 +90,9 @@ public class AccountServiceImpl implements IAccountService {
 		try {
 			Assert.notNull(account);
 			AccountEntity entity = accountDao.getAccount(account.getId());
-			// if (account == null)
-			// {
-			// return;
-			// }
 			if (functionIds != null && functionIds.length > 0) {
 				List<MemberRoleEntity> roles = new ArrayList<MemberRoleEntity>();
 				for (int i = 0; i < functionIds.length; i++) {
-					// if (functionIds[i] == null)
-					// {
-					// continue;
-					// }
-					// if ("none".equals(functionIds[i]))
-					// {
-					// continue;
-					// }
 					if (functionIds[i] != null
 							&& !"none".equals(functionIds[i])) {
 						MemberRoleEntity role = new MemberRoleEntity();
@@ -119,8 +101,7 @@ public class AccountServiceImpl implements IAccountService {
 						roles.add(role);
 					}
 				}
-				// Assert.notEmpty(roles);
-				if (roles.size() > 0) {
+				if (!roles.isEmpty()) {
 					roleServce.removeRoles(account.getId());
 					roleServce.addRoles(roles);
 				}
