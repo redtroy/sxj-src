@@ -11,7 +11,6 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<!-- PERSISTENCE begin -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -23,16 +22,11 @@
 			<version>${servlet.jsp.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- PERSISTENCE end -->
-		<!-- Security begin -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- Security end -->
-
-		<!-- Web begin -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -43,9 +37,6 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- Wed end -->
-
-		<!-- UTILS begin -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -56,52 +47,16 @@
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- <dependency> <groupId>net.sf.dozer</groupId> <artifactId>dozer</artifactId> 
-			<optional>true</optional> </dependency> -->
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- UTILS end -->
-
-		<!-- LOGGING begin -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- LOGGING end -->
-
-
-		<!-- TEST begin -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-		</dependency>
-
-
-
-		<!-- TEST end -->
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-util</artifactId>
@@ -117,6 +72,33 @@
 			<artifactId>dozer</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<!-- TEST begin -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
 			<version>${jetty.version}</version>
@@ -128,11 +110,6 @@
 			<version>${jetty.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -140,21 +117,16 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-  <groupId>org.seleniumhq.selenium</groupId>
-  <artifactId>selenium-remote-driver</artifactId>
- <version>${selenium.version}</version>
- <scope>test</scope>
-</dependency>
-<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>${selenium.version}</version>
- <scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
@@ -168,6 +140,9 @@
 			<version>${powermock.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- TEST end -->
+
+		
 	</dependencies>
 
 	<build>
