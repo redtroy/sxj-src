@@ -69,7 +69,7 @@ public final class CsrfGuard implements WebGuard
     
     private String tokenName = null;
     
-    private int tokenLength = -1;
+    private int tokenLength = 32;
     
     private boolean rotate = false;
     

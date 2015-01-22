@@ -96,10 +96,10 @@
 		<property name="keyPassword" value="${httpclient.keyPassword}" />
 	</bean>
 
-	<bean id="fsm" class="com.sxj.statemachine.StateMachineFactory"
+	<!-- <bean id="fsm" class="com.sxj.statemachine.StateMachineFactory"
 		factory-method="newInstance" lazy-init="false">
 		<constructor-arg>
 			<bean id="fsmConfig" class="com.sxj.statemachine.StateMachineConfig"></bean>
 		</constructor-arg>
-	</bean>
+	</bean> -->
 </beans>
