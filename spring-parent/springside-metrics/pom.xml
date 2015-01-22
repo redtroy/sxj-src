@@ -6,15 +6,12 @@
 		<groupId>com.sxj</groupId>
 		<artifactId>spring-parent</artifactId>
 		<version>4.2.3</version>
-		<relativePath>../parent/</relativePath>
 	</parent>
 	<artifactId>spring-metric</artifactId>
 	<packaging>jar</packaging>
-	<name>Springside :: Module :: Metrics</name>
 
 	<!-- 尽量少的引入依赖包，方便单独重用本模块 -->
 	<dependencies>
-		<!-- LOG -->
 		
 
 		<!-- TEST -->
@@ -34,38 +31,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-util</artifactId>
 			<version>4.2.3</version>
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<!-- source attach plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- enforcer, 规则统一定义在parent -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 </project>
