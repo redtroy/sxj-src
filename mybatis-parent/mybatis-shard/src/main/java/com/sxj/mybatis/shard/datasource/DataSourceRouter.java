@@ -15,6 +15,8 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.property.PropertyTokenizer;
 import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sxj.mybatis.shard.MybatisConfiguration;
 import com.sxj.mybatis.shard.datasource.DataSourceFactory.DataSourceNode;
@@ -23,6 +25,7 @@ import com.sxj.spring.modules.util.RegexUtil;
 
 public class DataSourceRouter
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataSourceRouter.class);
     
     // 数据节点数量
     // private static int nodeNum = DataSourceFactory.getNodes().size();
@@ -264,19 +267,19 @@ public class DataSourceRouter
                     && ShardManagedTransactionManager.isCurrentTransactionReadOnly())
             {
                 ds = targetNode.getReadNodes().get(index);
-                System.out.println(lowerSql + "-----------------READ");
+                LOGGER.debug("Will Execute in READ Mode:|=======" + lowerSql);
             }
             else
             {
                 ds = targetNode.getWriteNodes().get(index);
-                System.out.println(lowerSql + "-----------------WRITE");
+                LOGGER.debug("Will Execute in WRITE Mode:|=======" + lowerSql);
             }
         }
         else
         {
             int index = (int) (targetNode.getWriteNodes().size() * Math.random());
             ds = targetNode.getWriteNodes().get(index);
-            System.out.println(lowerSql + "-----------------WRITE");
+            LOGGER.debug("Will Execute in WRITE Mode:|=======" + lowerSql);
         }
         
         return ds;
