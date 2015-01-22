@@ -154,8 +154,12 @@ public class MemberServiceImpl implements IMemberService {
 	@Override
 	@Transactional(readOnly = true)
 	public MemberEntity getMember(String id) {
-		MemberEntity member = menberDao.getMember(id);
-		return member;
+		try {
+			return menberDao.getMember(id);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("会员查找失败！", e);
+		}
 	}
 
 	/**

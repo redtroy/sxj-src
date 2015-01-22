@@ -48,7 +48,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.addCondition("startPayDate", query.getStartPayDate());// 开始时间
 			condition.addCondition("endPayDate", query.getEndPayDate());// 结束时间
 			condition.addCondition("state", query.getState());//
-			condition.addCondition("memberName_A", query.getMemberName_A());//
+			condition.addCondition("memberName_A", query.getMemberNameA());//
 			condition.addCondition("payMode", query.getPayMode());//
 			condition.addCondition("type", query.getType());//
 			condition.addCondition("PayContentState",
