@@ -1446,9 +1446,9 @@ public class ContractServiceImpl implements IContractService {
 			ref.setRfidNo(newRfid);
 			ref.setMemberNo(member.getMemberNo());
 			ref.setMemberName(member.getName());
-			if (member.getType().equals(MemberTypeEnum.glassFactory)) {
+			if (member.getType().equals(MemberTypeEnum.GLASSFACTORY)) {
 				ref.setRfidType(RfidTypeEnum.GLASS);
-			} else if (member.getType().equals(MemberTypeEnum.genresFactory)) {
+			} else if (member.getType().equals(MemberTypeEnum.GENRESFACTORY)) {
 				ref.setRfidType(RfidTypeEnum.EXTRUSIONS);
 			}
 			ref.setType(AssociationTypesEnum.RFID_ADD);
@@ -1508,9 +1508,9 @@ public class ContractServiceImpl implements IContractService {
 			ref.setRfidNo(newRfid);
 			ref.setMemberNo(member.getMemberNo());
 			ref.setMemberName(member.getName());
-			if (member.getType().equals(MemberTypeEnum.glassFactory)) {
+			if (member.getType().equals(MemberTypeEnum.GLASSFACTORY)) {
 				ref.setRfidType(RfidTypeEnum.GLASS);
-			} else if (member.getType().equals(MemberTypeEnum.genresFactory)) {
+			} else if (member.getType().equals(MemberTypeEnum.GENRESFACTORY)) {
 				ref.setRfidType(RfidTypeEnum.EXTRUSIONS);
 			}
 			ref.setType(AssociationTypesEnum.CONTRACTOR_ADD);

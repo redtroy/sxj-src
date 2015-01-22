@@ -165,7 +165,7 @@ public class RecordController extends BaseController
             SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
             MemberEntity member = memberService.getMember(userBean.getMember()
                     .getId());
-            if (member.getCheckState() == MemberCheckStateEnum.certified)
+            if (member.getCheckState() == MemberCheckStateEnum.CERTIFIED)
             {
             	MemberEntity memberB = memberService.memberInfo(record
 						.getMemberIdB());
@@ -194,10 +194,10 @@ public class RecordController extends BaseController
     {
         switch (member.getType())
         {
-            case glassFactory:
+            case GLASSFACTORY:
                 record.setContractType(ContractTypeEnum.glass);// 合同类型
                 break;
-            case genresFactory:
+            case GENRESFACTORY:
                 record.setContractType(ContractTypeEnum.extrusions);// 合同类型
                 break;
             
@@ -225,7 +225,7 @@ public class RecordController extends BaseController
             SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
             MemberEntity member = memberService.getMember(userBean.getMember()
                     .getId());
-            if (member.getCheckState() == MemberCheckStateEnum.certified)
+            if (member.getCheckState() == MemberCheckStateEnum.CERTIFIED)
             {
                 record.setApplyId(member.getMemberNo());
                 record.setApplyName(member.getName());
@@ -268,7 +268,7 @@ public class RecordController extends BaseController
             SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
             MemberEntity member = memberService.getMember(userBean.getMember()
                     .getId());
-            if (member.getCheckState() == MemberCheckStateEnum.certified)
+            if (member.getCheckState() == MemberCheckStateEnum.CERTIFIED)
             {
             	MemberEntity memberB = memberService.memberInfo(record
 						.getMemberIdB());

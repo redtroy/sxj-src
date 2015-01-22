@@ -53,7 +53,7 @@ public class AccountServiceImpl implements IAccountService {
 			AccountEntity oldAccount = getAccountByName(
 					account.getAccountName(), account.getParentId());
 			Assert.notNull(oldAccount, "用户账户已存在");
-			account.setState(AccountStatesEnum.normal);
+			account.setState(AccountStatesEnum.NORMAL);
 			account.setNoType(account.getParentId() + "-");
 			account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
 			accountDao.addAccount(account);

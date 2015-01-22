@@ -67,9 +67,9 @@ public class MemberServiceImpl implements IMemberService {
 			}
 			if (MemberTypeEnum.DAWP.equals(member.getType())) {
 				member.setNoType("M");
-			} else if (MemberTypeEnum.glassFactory.equals(member.getType())) {
+			} else if (MemberTypeEnum.GLASSFACTORY.equals(member.getType())) {
 				member.setNoType("B");
-			} else if (MemberTypeEnum.genresFactory.equals(member.getType())) {
+			} else if (MemberTypeEnum.GENRESFACTORY.equals(member.getType())) {
 				member.setNoType("X");
 			} else {
 				member.setNoType("MEM");
@@ -115,10 +115,10 @@ public class MemberServiceImpl implements IMemberService {
 		case DAWP:
 			m.setNoType("M");
 			break;
-		case glassFactory:
+		case GLASSFACTORY:
 			m.setNoType("B");
 			break;
-		case genresFactory:
+		case GENRESFACTORY:
 			m.setNoType("X");
 			break;
 		default:

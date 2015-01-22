@@ -8,7 +8,7 @@ package com.sxj.supervisor.enu.member;
  */
 public enum MemberCheckStateEnum {
 
-	unaudited("未审核", 0), unrecognized("未认证", 1), certified("已认证", 2);
+	UNAUDITED("未审核", 0), UNRECOGNIZED("未认证", 1), CERTIFIED("已认证", 2);
 
 	// 成员变量
 	private Integer id;
