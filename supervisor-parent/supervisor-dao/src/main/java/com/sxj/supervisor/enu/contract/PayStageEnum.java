@@ -1,38 +1,38 @@
 package com.sxj.supervisor.enu.contract;
 
 public enum PayStageEnum {
-	Stage1("未支付", "支付中"), Stage2_0("融资受理中", "支付中"), Stage2_1("融资已放款", "支付中"), Stage2_2(
-			"融资已搁置", "支付中"), Stage3("乙方确认中", "确认收款"), Stage4("已完成支付", "已完成支付");
-	private String name_a;
-	private String name_b;
+	STAGE1("未支付", "支付中"), STAGE2_0("融资受理中", "支付中"), STAGE2_1("融资已放款", "支付中"), STAGE2_2(
+			"融资已搁置", "支付中"), STAGE3("乙方确认中", "确认收款"), STAGE4("已完成支付", "已完成支付");
+	private String nameA;
+	private String nameB;
 
-	private PayStageEnum(String name_a, String name_b) {
-		this.name_a = name_a;
-		this.name_b = name_b;
+	private PayStageEnum(String nameA, String nameB) {
+		this.nameA = nameA;
+		this.nameB = nameB;
 	}
 
-	public String getName_a() {
-		return name_a;
+	public String getNameA() {
+		return nameA;
 	}
 
-	public void setName_a(String name_a) {
-		this.name_a = name_a;
+	public void setNameA(String nameA) {
+		this.nameA = nameA;
 	}
 
-	public String getName_b() {
-		return name_b;
+	public String getNameB() {
+		return nameB;
 	}
 
-	public void setName_b(String name_b) {
-		this.name_b = name_b;
+	public void setNameB(String nameB) {
+		this.nameB = nameB;
 	}
 
 	public static void main(String... args) {
 		PayStageEnum[] payState = PayStageEnum.values();
 		for (int i = 0; i < payState.length; i++)
-			System.out.println(payState[i].name_b);
+			System.out.println(payState[i].nameB);
 		for (PayStageEnum payStageEnum : payState) {
-			System.out.println(payStageEnum.name_b);
+			System.out.println(payStageEnum.nameB);
 		}
 	}
 }

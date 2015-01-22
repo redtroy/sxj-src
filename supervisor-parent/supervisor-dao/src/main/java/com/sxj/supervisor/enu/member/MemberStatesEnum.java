@@ -8,7 +8,7 @@ package com.sxj.supervisor.enu.member;
  */
 public enum MemberStatesEnum {
 	//normal("未冻结", 1), stop("已冻结", 0);
-	normal("未冻结", 0), stop("已冻结", 1);
+	NORMAL("未冻结", 0), STOP("已冻结", 1);
 
 	// 成员变量
 	private Integer id;

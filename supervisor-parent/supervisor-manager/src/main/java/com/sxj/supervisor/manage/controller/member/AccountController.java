@@ -158,7 +158,7 @@ public class AccountController extends BaseController {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("isOK", "ok");
 		map.put("state", stateName);
-		if (state == AccountStatesEnum.stop.getId()) {
+		if (state == AccountStatesEnum.STOP.getId()) {
 			topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish(
 					"del," + id);
 		}

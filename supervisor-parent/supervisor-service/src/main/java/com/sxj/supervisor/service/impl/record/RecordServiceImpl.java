@@ -108,10 +108,10 @@ public class RecordServiceImpl implements IRecordService {
 						.getMemberIdB());
 				Assert.notNull(member);
 				switch (member.getType()) {
-				case glassFactory:
+				case GLASSFACTORY:
 					record.setContractType(ContractTypeEnum.glass);
 					break;
-				case genresFactory:
+				case GENRESFACTORY:
 					record.setContractType(ContractTypeEnum.extrusions);
 					break;
 				default:
