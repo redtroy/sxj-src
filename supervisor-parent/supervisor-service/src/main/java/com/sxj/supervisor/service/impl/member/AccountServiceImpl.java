@@ -124,8 +124,7 @@ public class AccountServiceImpl implements IAccountService {
 	@Transactional(readOnly = true)
 	public AccountEntity getAccount(String id) throws ServiceException {
 		try {
-			AccountEntity account = accountDao.getAccount(id);
-			return account;
+			return accountDao.getAccount(id);
 		} catch (Exception e) {
 			SxjLogger.error("子会员查询错误", e, this.getClass());
 			throw new ServiceException("子会员查询错误错误", e);
