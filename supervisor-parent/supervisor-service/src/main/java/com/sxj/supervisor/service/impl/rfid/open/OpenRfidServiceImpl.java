@@ -199,7 +199,8 @@ public class OpenRfidServiceImpl implements IOpenRfidService
             batch.setBatchItems(batchModelList);
             batch.setState("1");
         }
-        batch.setState("2");
+        else
+            batch.setState("2");
     }
     
     /**

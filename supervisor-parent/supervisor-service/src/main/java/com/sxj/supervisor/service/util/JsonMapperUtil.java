@@ -17,7 +17,6 @@ public class JsonMapperUtil
     private JsonMapperUtil()
     {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     public static List<BatchItemModel> getBatchItems(String json)

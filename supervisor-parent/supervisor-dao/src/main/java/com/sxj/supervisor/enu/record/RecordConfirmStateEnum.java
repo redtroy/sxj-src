@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.record;
  *
  */
 public enum RecordConfirmStateEnum {
-	accepted("受理中", 0),unconfirmed ("未确认", 1),confirmedA ("甲方确认", 2),confirmedB("乙方确认", 3),hasRecord("已备案", 4);
+	ACCEPTED("受理中", 0),UNCONFIRMED ("未确认", 1),CONFIRMEDA ("甲方确认", 2),CONFIRMEDB("乙方确认", 3),HASRECORD("已备案", 4);
 	// 成员变量
 	private Integer id;
 

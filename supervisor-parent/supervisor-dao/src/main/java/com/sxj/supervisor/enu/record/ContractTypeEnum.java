@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.record;
  *
  */
 public enum ContractTypeEnum {
-	bidding("门窗招标", 0), glass("玻璃采购", 1),extrusions("型材采购", 2);
+	BIDDING("门窗招标", 0), GLASS("玻璃采购", 1),EXTRUSIONS("型材采购", 2);
 
 	// 成员变量
 	private Integer id;
