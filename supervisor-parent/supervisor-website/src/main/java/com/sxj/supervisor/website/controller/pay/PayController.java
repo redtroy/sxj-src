@@ -138,15 +138,17 @@ public class PayController extends BaseController {
 				// 甲方
 				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoA());
-				MessageChannel.initTopic().publish(
-						MessageChannel.WEBSITE_PAY_MESSAGE
-								+ pay.getMemberNoA());
+				MessageChannel.initTopic()
+						.publish(
+								MessageChannel.WEBSITE_PAY_MESSAGE
+										+ pay.getMemberNoA());
 				// 乙方
 				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoB());
-				MessageChannel.initTopic().publish(
-						MessageChannel.WEBSITE_PAY_MESSAGE
-								+ pay.getMemberNoB());
+				MessageChannel.initTopic()
+						.publish(
+								MessageChannel.WEBSITE_PAY_MESSAGE
+										+ pay.getMemberNoB());
 				map.put("isOk", "ok");
 			} else {
 				map.put("isOk", "false");
@@ -171,9 +173,10 @@ public class PayController extends BaseController {
 				// 乙方
 				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoB());
-				MessageChannel.initTopic().publish(
-						MessageChannel.WEBSITE_PAY_MESSAGE
-								+ pay.getMemberNoB());
+				MessageChannel.initTopic()
+						.publish(
+								MessageChannel.WEBSITE_PAY_MESSAGE
+										+ pay.getMemberNoB());
 				map.put("isOk", "ok");
 			} else {
 				map.put("isOk", "false");
@@ -211,7 +214,12 @@ public class PayController extends BaseController {
 			String payjson = JsonMapper.nonDefaultMapper().toJson(map);
 			String state = httpClient.postJson(
 					webUrl + "/finance/getModel.htm", payjson);
-			SxjLogger.info("-------" + state, this.getClass());
+			Map<String, String> jmap = JsonMapper.nonDefaultMapper().fromJson(
+					state, HashMap.class);
+			if ("0".equals(jmap.get("flag"))) {
+				SxjLogger.info("-------" + state, this.getClass());
+				throw new WebException("融资请求失败！");
+			}
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
