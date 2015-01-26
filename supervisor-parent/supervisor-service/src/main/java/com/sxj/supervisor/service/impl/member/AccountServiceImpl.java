@@ -57,7 +57,7 @@ public class AccountServiceImpl implements IAccountService {
 			account.setNoType(account.getParentId() + "-");
 			account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
 			accountDao.addAccount(account);
-			memberDao.add_account_num(account.getParentId());
+			memberDao.addAccountNum(account.getParentId());
 			if (functionIds != null && functionIds.length > 0) {
 				List<MemberRoleEntity> roles = new ArrayList<MemberRoleEntity>();
 				for (int i = 0; i < functionIds.length; i++) {
