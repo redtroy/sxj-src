@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.contract;
 
 public enum PayContentStateEnum {
-	deposit("定金", 0), payment("货款", 1);
+	DEPOSIT("定金", 0), PAYMENT("货款", 1);
 
 	// 成员变量
 	private Integer id;

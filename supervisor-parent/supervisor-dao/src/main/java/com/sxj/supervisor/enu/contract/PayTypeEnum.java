@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.contract;
 
 public enum PayTypeEnum {
-	glass("玻璃", 0), extruders("型材", 1);
+	GLASS("玻璃", 0), EXTRUDERS("型材", 1);
 
 	// 成员变量
 	private Integer id;
