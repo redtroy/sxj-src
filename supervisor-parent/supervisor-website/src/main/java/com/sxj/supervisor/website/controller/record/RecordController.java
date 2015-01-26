@@ -271,7 +271,7 @@ public class RecordController extends BaseController
             if (member.getCheckState() == MemberCheckStateEnum.certified)
             {
             	MemberEntity memberB = memberService.memberInfo(record
-						.getMemberIdB());
+						.getMemberIdA());
                 record.setApplyId(member.getMemberNo());
                 record.setApplyName(member.getName());
                 record.setState(RecordStateEnum.noBinding);

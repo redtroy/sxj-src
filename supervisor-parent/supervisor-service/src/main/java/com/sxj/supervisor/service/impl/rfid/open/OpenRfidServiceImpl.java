@@ -122,6 +122,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                         Contract contract = new Contract();
                         contract.setContractNo(le.getContractNo());
                         batchModel.setContract(contract);// 封装合同号
+                        batchModel.setRfidState(le.getProgressState().getId());//封装RFID状态
                         contract.setRfid(rfid);
                         QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
                         query.addCondition("rfidNo", rfid);

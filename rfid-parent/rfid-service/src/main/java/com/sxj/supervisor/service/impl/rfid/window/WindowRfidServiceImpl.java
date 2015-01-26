@@ -571,6 +571,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	public int testWindow(String contractNo, String[] gids, String address)
 			throws ServiceException {
 		try {
+			contractNo.toUpperCase();
 			List<String> rfidNos = logisticsDao.getRfid(gids);
 			for (String rfidNo : rfidNos) {
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);

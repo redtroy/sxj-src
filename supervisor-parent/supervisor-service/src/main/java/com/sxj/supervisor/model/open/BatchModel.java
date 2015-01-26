@@ -12,6 +12,8 @@ public class BatchModel  implements Serializable {
 	private Contract contract;
 	
 	private Bacth batchList;
+	
+	private Integer rfidState;
 
 	public Contract getContract() {
 		return contract;
@@ -27,6 +29,14 @@ public class BatchModel  implements Serializable {
 
 	public void setBatchList(Bacth batchList) {
 		this.batchList = batchList;
+	}
+
+	public Integer getRfidState() {
+		return rfidState;
+	}
+
+	public void setRfidState(Integer rfidState) {
+		this.rfidState = rfidState;
 	}
 	
 	
