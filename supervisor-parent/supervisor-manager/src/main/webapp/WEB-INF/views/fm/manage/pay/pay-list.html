@@ -79,7 +79,7 @@ function query(page){
         付款状态<select name="state">
 	   <option selected="selected" value="">全部</option>
           <#list payStages as model>
-          <option value="${model.ordinal()}">${model.getName_a()}</option>
+          <option value="${model.ordinal()}">${model.getNameA()}</option>
           </#list>
         </select>
         付款方式<select name="payMode">
@@ -124,7 +124,7 @@ function query(page){
           <td><a href="javascript:loadInfo('${model.contractNo}','${model.id}')" class="lnk-blue">${model.contractNo}</a></td>
           <td>${model.batchNo}</td>
           <td><#if (model.type??)>${model.type.getName()}</#if></td>
-          <td>${model.memberName_A}</td>
+          <td>${model.memberNameA}</td>
           <td>${model.rfidNo}</td>
           <td>${model.payAmount}</td>
           <td><#if (model.payDate??)>${model.payDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
