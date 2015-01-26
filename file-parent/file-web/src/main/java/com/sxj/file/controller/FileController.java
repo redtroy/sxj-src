@@ -80,6 +80,32 @@ public class FileController {
 					response.setStatus(404);
 					return;
 				}
+			} else if (rurl.contains("finance-manager")
+					|| rurl.contains("manage.zijincaifu.net")) {
+				if (cookieMap.get("SHAREJSESSIONID_MANAGE") == null) {
+					response.setStatus(404);
+					return;
+				}
+				Boolean flag = redesCacheManager.get(
+						"webmanage.session.cache.name",
+						cookieMap.get("SHAREJSESSIONID_MANAGE").getValue());
+				if (!flag) {
+					response.setStatus(404);
+					return;
+				}
+			} else if (rurl.contains("finance-website")
+					|| rurl.contains("www.zijincaifu.net")) {
+				if (cookieMap.get("SHAREJSESSIONID_WEBSITE") == null) {
+					response.setStatus(404);
+					return;
+				}
+				Boolean flag = redesCacheManager.get(
+						"website.session.cache.name",
+						cookieMap.get("SHAREJSESSIONID_WEBSITE").getValue());
+				if (!flag) {
+					response.setStatus(404);
+					return;
+				}
 			} else {
 				response.setStatus(404);
 				return;
