@@ -14,41 +14,54 @@ import com.sxj.util.logger.SxjLogger;
 
 @Service
 @Transactional
-public class RfidPriceServiceImpl implements IRfidPriceService {
-
-	@Autowired
-	private IRfidPriceDao priceDao;
-
-	@Override
-	public void addPrice(RfidPriceEntity entity) throws ServiceException {
-		try {
-			priceDao.insertPrice(entity);
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("新增RFID价格错误", e);
-		}
-
-	}
-
-	@Override
-	public void modifyPrice(RfidPriceEntity entity) throws ServiceException {
-		try {
-			priceDao.updatePrice(entity);
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("更新RFID价格错误", e);
-		}
-
-	}
-
-	@Override
-	public List<RfidPriceEntity> queryPrice() throws ServiceException {
-		try {
-			return priceDao.queryPrice(null);
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("查詢RFID价格错误", e);
-		}
-	}
-
+public class RfidPriceServiceImpl implements IRfidPriceService
+{
+    
+    @Autowired
+    private IRfidPriceDao priceDao;
+    
+    @Override
+    public void addPrice(RfidPriceEntity entity) throws ServiceException
+    {
+        try
+        {
+            priceDao.insertPrice(entity);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("新增RFID价格错误", e);
+        }
+        
+    }
+    
+    @Override
+    public void modifyPrice(RfidPriceEntity entity) throws ServiceException
+    {
+        try
+        {
+            priceDao.updatePrice(entity);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("更新RFID价格错误", e);
+        }
+        
+    }
+    
+    @Override
+    public List<RfidPriceEntity> queryPrice() throws ServiceException
+    {
+        try
+        {
+            return priceDao.queryPrice(null);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("查詢RFID价格错误", e);
+        }
+    }
+    
 }

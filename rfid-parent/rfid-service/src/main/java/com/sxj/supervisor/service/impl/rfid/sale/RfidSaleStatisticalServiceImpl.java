@@ -17,38 +17,48 @@ import com.sxj.util.persistent.QueryCondition;
 @Service
 @Transactional
 public class RfidSaleStatisticalServiceImpl implements
-		IRfidSaleStatisticalService {
-
-	@Autowired
-	private IRfidSaleStatisticalDao dao;
-
-	@Override
-	public void add(RfidSaleStatisticalEntity entity) throws ServiceException {
-		try {
-			dao.insert(entity);
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("新增销售记录错误", e);
-		}
-
-	}
-
-	@Override
-	public List<RfidSaleStatisticalEntity> queryList(RfidSaleQuery query)
-			throws ServiceException {
-		try {
-			QueryCondition<RfidSaleStatisticalEntity> condition = new QueryCondition<RfidSaleStatisticalEntity>();
-			condition.addCondition("startDate", query.getStartDate());
-			condition.addCondition("endDate", query.getEndDate());
-			if (query.getRfidType() != null) {
-				condition.addCondition("rfidType", query.getRfidType().getId());
-			}
-			List<RfidSaleStatisticalEntity> list = dao.queryList(condition);
-			return list;
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("查询销售记录", e);
-		}
-	}
-
+        IRfidSaleStatisticalService
+{
+    
+    @Autowired
+    private IRfidSaleStatisticalDao dao;
+    
+    @Override
+    public void add(RfidSaleStatisticalEntity entity) throws ServiceException
+    {
+        try
+        {
+            dao.insert(entity);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("新增销售记录错误", e);
+        }
+        
+    }
+    
+    @Override
+    public List<RfidSaleStatisticalEntity> queryList(RfidSaleQuery query)
+            throws ServiceException
+    {
+        try
+        {
+            QueryCondition<RfidSaleStatisticalEntity> condition = new QueryCondition<RfidSaleStatisticalEntity>();
+            condition.addCondition("startDate", query.getStartDate());
+            condition.addCondition("endDate", query.getEndDate());
+            if (query.getRfidType() != null)
+            {
+                condition.addCondition("rfidType", query.getRfidType().getId());
+            }
+            List<RfidSaleStatisticalEntity> list = dao.queryList(condition);
+            return list;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("查询销售记录", e);
+        }
+    }
+    
 }
