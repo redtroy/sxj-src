@@ -9,20 +9,21 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.util.persistent.QueryCondition;
 
-public interface IAreaDao {
-
-	@BatchInsert
-	public void addAreas(List<AreaEntity> areas) throws SQLException;
-
-	@Delete
-	public void deleteArea(String id) throws SQLException;
-
-	@Get
-	public AreaEntity getArea(String id) throws SQLException;
-
-	public void deleteChildrenArea(String parentId) throws SQLException;
-
-	public List<AreaEntity> getAreas(QueryCondition<AreaEntity> query)
-			throws SQLException;
-
+public interface IAreaDao
+{
+    
+    @BatchInsert
+    public void addAreas(List<AreaEntity> areas) throws SQLException;
+    
+    @Delete
+    public void deleteArea(String id) throws SQLException;
+    
+    @Get
+    public AreaEntity getArea(String id) throws SQLException;
+    
+    public void deleteChildrenArea(String parentId) throws SQLException;
+    
+    public List<AreaEntity> getAreas(QueryCondition<AreaEntity> query)
+            throws SQLException;
+    
 }

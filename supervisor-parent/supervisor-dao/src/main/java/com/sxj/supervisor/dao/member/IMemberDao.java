@@ -19,59 +19,60 @@ import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.util.persistent.QueryCondition;
 
-public interface IMemberDao {
-
-	public void update(MemberEntity member);
-
-	/**
-	 * 新增会员
-	 *
-	 * @param member
-	 **/
-	@Insert
-	public void addMember(MemberEntity member);
-
-	/**
-	 * 更新会员
-	 *
-	 * @param member
-	 **/
-	@Update
-	public void updateMember(MemberEntity member);
-
-	/**
-	 * 获取会员信息
-	 *
-	 * @param id
-	 **/
-	@Get
-	public MemberEntity getMember(String id);
-
-	/**
-	 * 获取会员信息
-	 *
-	 * @param id
-	 **/
-	public MemberEntity getMemberByName(String name);
-
-	/**
-	 * 删除会员
-	 *
-	 * @param id
-	 **/
-	@Delete
-	public void deleteMember(String id);
-
-	/**
-	 * 查询会员
-	 *
-	 * @param member
-	 * @param memberList
-	 **/
-	public List<MemberEntity> queryMembers(QueryCondition<MemberEntity> query);
-
-	/**
-	 * 增加会员子帐号数目信息 id 是MEMBER 表的 MEMBER_NO
-	 */
-	public void addAccountNum(String id);
+public interface IMemberDao
+{
+    
+    public void update(MemberEntity member);
+    
+    /**
+     * 新增会员
+     *
+     * @param member
+     **/
+    @Insert
+    public void addMember(MemberEntity member);
+    
+    /**
+     * 更新会员
+     *
+     * @param member
+     **/
+    @Update
+    public void updateMember(MemberEntity member);
+    
+    /**
+     * 获取会员信息
+     *
+     * @param id
+     **/
+    @Get
+    public MemberEntity getMember(String id);
+    
+    /**
+     * 获取会员信息
+     *
+     * @param id
+     **/
+    public MemberEntity getMemberByName(String name);
+    
+    /**
+     * 删除会员
+     *
+     * @param id
+     **/
+    @Delete
+    public void deleteMember(String id);
+    
+    /**
+     * 查询会员
+     *
+     * @param member
+     * @param memberList
+     **/
+    public List<MemberEntity> queryMembers(QueryCondition<MemberEntity> query);
+    
+    /**
+     * 增加会员子帐号数目信息 id 是MEMBER 表的 MEMBER_NO
+     */
+    public void addAccountNum(String id);
 }

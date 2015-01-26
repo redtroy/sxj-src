@@ -1,6 +1,5 @@
 package com.sxj.supervisor.enu.member;
 
-
 /**
  * 会员类型
  * 
