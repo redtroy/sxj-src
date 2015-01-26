@@ -178,7 +178,7 @@ public class RecordServiceImpl implements IRecordService {
 				ContractModel cm = contractService
 						.getContractModelByContractNo(re.getContractNo());
 				ContractEntity ce = cm.getContract();
-				ce.setConfirmState(ContractSureStateEnum.filings);// 已备案
+				ce.setConfirmState(ContractSureStateEnum.FILINGS);// 已备案
 				ce.setState(ContractStateEnum.noapproval);// 已审核
 				contractDao.updateContract(ce);
 				// 变更所有备案状态为已备案
@@ -367,16 +367,16 @@ public class RecordServiceImpl implements IRecordService {
 			if (con.getType().getId() != 0) {
 				if (con.getConfirmState().getId() == 0) {
 					if (state.getId() == 2) {
-						newCon.setConfirmState(ContractSureStateEnum.aaffirm);
+						newCon.setConfirmState(ContractSureStateEnum.AAFFIRM);
 					} else if (state.getId() == 3) {
-						newCon.setConfirmState(ContractSureStateEnum.baffirm);
+						newCon.setConfirmState(ContractSureStateEnum.BAFFIRM);
 					}
 				} else {
-					newCon.setConfirmState(ContractSureStateEnum.filings);
+					newCon.setConfirmState(ContractSureStateEnum.FILINGS);
 					newCon.setRecordDate(new Date());
 				}
 			} else {
-				newCon.setConfirmState(ContractSureStateEnum.filings);
+				newCon.setConfirmState(ContractSureStateEnum.FILINGS);
 				newCon.setRecordDate(new Date());
 			}
 			contractDao.updateContract(newCon);
@@ -474,7 +474,7 @@ public class RecordServiceImpl implements IRecordService {
 				ContractEntity centity = new ContractEntity();
 				centity.setId(ce.getId());
 				centity.setState(ContractStateEnum.approval);
-				centity.setConfirmState(ContractSureStateEnum.noaffirm);
+				centity.setConfirmState(ContractSureStateEnum.NOAFFIRM);
 				contractDao.updateContract(centity);
 			}
 			CometServiceImpl.takeCount(MessageChannel.RECORD_MESSAGE);

@@ -356,7 +356,7 @@ public class ContractServiceImpl implements IContractService
             contract.setType(record.getContractType());
             contract.setImgPath(record.getImgPath());
             contract.setState(ContractStateEnum.approval);
-            contract.setConfirmState(ContractSureStateEnum.noaffirm);
+            contract.setConfirmState(ContractSureStateEnum.NOAFFIRM);
             contract.setCreateDate(new Date());
             String year = new SimpleDateFormat("yy", Locale.CHINESE).format(Calendar.getInstance()
                     .getTime());
@@ -1163,7 +1163,7 @@ public class ContractServiceImpl implements IContractService
             {
                 ce.setId(contractId);
                 ce.setState(state);
-                ce.setConfirmState(ContractSureStateEnum.noaffirm);
+                ce.setConfirmState(ContractSureStateEnum.NOAFFIRM);
                 contractDao.updateContract(ce);
             }
             ContractEntity centity = contractDao.getContract(contractId);

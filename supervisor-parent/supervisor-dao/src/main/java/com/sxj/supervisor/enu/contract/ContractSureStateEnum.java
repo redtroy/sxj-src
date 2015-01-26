@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.contract;
  *
  */
 public enum ContractSureStateEnum {
-	noaffirm("未确认", 0), aaffirm ("甲方确认", 1),baffirm("乙方确认", 2),filings("已备案", 3);
+	NOAFFIRM("未确认", 0), AAFFIRM ("甲方确认", 1),BAFFIRM("乙方确认", 2),FILINGS("已备案", 3);
 
 	// 成员变量
 	private Integer id;

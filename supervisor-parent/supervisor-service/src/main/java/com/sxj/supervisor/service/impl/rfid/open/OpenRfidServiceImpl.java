@@ -422,12 +422,12 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                             pay.setPayAmount(cb.getAmount());
                             if (cm.getContract().getType().getId() == 1)
                             {
-                                pay.setType(PayTypeEnum.glass);
+                                pay.setType(PayTypeEnum.GLASS);
                                 pay.setContent("第" + cb.getBatchNo() + "批次玻璃货款");
                             }
                             else if (cm.getContract().getType().getId() == 2)
                             {
-                                pay.setType(PayTypeEnum.extruders);
+                                pay.setType(PayTypeEnum.EXTRUDERS);
                                 pay.setContent("第" + cb.getBatchNo() + "批次型材货款");
                             }
                             pay.setState(PayStageEnum.STAGE1);
