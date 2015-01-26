@@ -6,7 +6,7 @@ package com.sxj.supervisor.enu.record;
  */
 
 public enum RecordTypeEnum {
-	contract("合同备案", 0), change("变更备案", 1),supplement("补损备案", 2);
+	CONTRACT("合同备案", 0), CHANGE("变更备案", 1),SUPPLEMENT("补损备案", 2);
 
 	// 成员变量
 	private Integer id;
