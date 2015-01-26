@@ -39,7 +39,7 @@
 			<![CDATA[AND R.RECORD_NO = #{condition.recordNo}]]>
 		</if>
 		<if test="condition.recordNos!=null">
-			AND RECORD_NO IN 
+			AND R.RECORD_NO IN 
 			<foreach collection="condition.recordNos" open="(" close=")" separator="," item="recordNo">
 				#{recordNo}
 			</foreach>
