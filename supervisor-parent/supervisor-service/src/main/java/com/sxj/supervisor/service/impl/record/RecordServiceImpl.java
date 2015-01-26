@@ -103,16 +103,16 @@ public class RecordServiceImpl implements IRecordService {
 			updateImages(record, oldRe);
 			// 更改用户---修改备案状态
 			if (oldRe.getContractType() != null
-					&& oldRe.getContractType() != ContractTypeEnum.bidding) {
+					&& oldRe.getContractType() != ContractTypeEnum.BIDDING) {
 				MemberEntity member = memberService.memberInfo(record
 						.getMemberIdB());
 				Assert.notNull(member);
 				switch (member.getType()) {
 				case GLASSFACTORY:
-					record.setContractType(ContractTypeEnum.glass);
+					record.setContractType(ContractTypeEnum.GLASS);
 					break;
 				case GENRESFACTORY:
-					record.setContractType(ContractTypeEnum.extrusions);
+					record.setContractType(ContractTypeEnum.EXTRUSIONS);
 					break;
 				default:
 					break;

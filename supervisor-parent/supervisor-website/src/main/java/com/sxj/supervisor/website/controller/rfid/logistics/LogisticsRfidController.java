@@ -269,7 +269,7 @@ public class LogisticsRfidController extends BaseController {
 				throw new WebException("合同不存在！");
 			}
 			if (contract.getContract().getType()
-					.equals(ContractTypeEnum.bidding)) {
+					.equals(ContractTypeEnum.BIDDING)) {
 				throw new WebException("该合同不是采购合同！");
 			}
 			if (!contract.getContract().getMemberIdB()

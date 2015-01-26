@@ -1168,7 +1168,7 @@ public class ContractServiceImpl implements IContractService
             }
             ContractEntity centity = contractDao.getContract(contractId);
             // 生成RFID申请单
-            if (centity.getType().equals(ContractTypeEnum.bidding))
+            if (centity.getType().equals(ContractTypeEnum.BIDDING))
             {
                 RfidApplicationEntity app = new RfidApplicationEntity();
                 app.setDateNo(DateTimeUtils.getTime("yyMM"));

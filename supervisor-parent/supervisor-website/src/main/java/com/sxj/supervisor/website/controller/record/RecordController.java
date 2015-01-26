@@ -195,10 +195,10 @@ public class RecordController extends BaseController
         switch (member.getType())
         {
             case GLASSFACTORY:
-                record.setContractType(ContractTypeEnum.glass);// 合同类型
+                record.setContractType(ContractTypeEnum.GLASS);// 合同类型
                 break;
             case GENRESFACTORY:
-                record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+                record.setContractType(ContractTypeEnum.EXTRUSIONS);// 合同类型
                 break;
             
             default:
@@ -234,7 +234,7 @@ public class RecordController extends BaseController
                 record.setApplyDate(new Date());
                 record.setDelState(false);
                 record.setConfirmState(RecordConfirmStateEnum.accepted);
-                record.setContractType(ContractTypeEnum.bidding);// 合同类型
+                record.setContractType(ContractTypeEnum.BIDDING);// 合同类型
                 record.setFlag(RecordFlagEnum.B);
                 recordService.addRecord(record);
                 map.put("isOK", "ok");
