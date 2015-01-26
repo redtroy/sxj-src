@@ -179,7 +179,7 @@ public class RecordServiceImpl implements IRecordService {
 						.getContractModelByContractNo(re.getContractNo());
 				ContractEntity ce = cm.getContract();
 				ce.setConfirmState(ContractSureStateEnum.FILINGS);// 已备案
-				ce.setState(ContractStateEnum.noapproval);// 已审核
+				ce.setState(ContractStateEnum.NOAPPROVAL);// 已审核
 				contractDao.updateContract(ce);
 				// 变更所有备案状态为已备案
 				RecordQuery query = new RecordQuery();
@@ -473,7 +473,7 @@ public class RecordServiceImpl implements IRecordService {
 				ContractEntity ce = cm.getContract();
 				ContractEntity centity = new ContractEntity();
 				centity.setId(ce.getId());
-				centity.setState(ContractStateEnum.approval);
+				centity.setState(ContractStateEnum.APPROVAL);
 				centity.setConfirmState(ContractSureStateEnum.NOAFFIRM);
 				contractDao.updateContract(centity);
 			}

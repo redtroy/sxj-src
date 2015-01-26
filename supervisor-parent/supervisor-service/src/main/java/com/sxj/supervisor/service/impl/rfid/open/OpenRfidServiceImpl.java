@@ -431,8 +431,8 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                                 pay.setContent("第" + cb.getBatchNo() + "批次型材货款");
                             }
                             pay.setState(PayStageEnum.STAGE1);
-                            pay.setPayMode(PayModeEnum.cash);
-                            pay.setPayContentState(PayContentStateEnum.payment);
+                            pay.setPayMode(PayModeEnum.CASH);
+                            pay.setPayContentState(PayContentStateEnum.PAYMENT);
                             contractPayService.addPayRecordEntity(pay);// 生成支付单
                             return 1;
                         }

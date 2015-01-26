@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.contract;
 
 public enum PayModeEnum {
-	cash("现金支付", 0), financing("融资支付", 1);
+	CASH("现金支付", 0), FINANCING("融资支付", 1);
 
 	// 成员变量
 	private Integer id;

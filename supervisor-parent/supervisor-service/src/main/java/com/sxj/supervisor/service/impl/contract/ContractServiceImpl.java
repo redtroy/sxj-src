@@ -355,7 +355,7 @@ public class ContractServiceImpl implements IContractService
             contract.setRecordNo(record.getRecordNo());// 备案号
             contract.setType(record.getContractType());
             contract.setImgPath(record.getImgPath());
-            contract.setState(ContractStateEnum.approval);
+            contract.setState(ContractStateEnum.APPROVAL);
             contract.setConfirmState(ContractSureStateEnum.NOAFFIRM);
             contract.setCreateDate(new Date());
             String year = new SimpleDateFormat("yy", Locale.CHINESE).format(Calendar.getInstance()

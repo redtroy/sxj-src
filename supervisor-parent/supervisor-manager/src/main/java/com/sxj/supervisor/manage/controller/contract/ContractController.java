@@ -300,7 +300,7 @@ public class ContractController extends BaseController {
 			throws WebException {
 		try {
 			contractService.modifyCheckState(contractId,
-					ContractStateEnum.noapproval);
+					ContractStateEnum.NOAPPROVAL);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
 			return map;

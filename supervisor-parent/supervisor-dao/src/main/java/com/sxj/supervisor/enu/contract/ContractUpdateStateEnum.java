@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.contract;
  *
  */
 public enum ContractUpdateStateEnum {
-	notchange("未变更", 0), havechanged("已变更", 1);
+	NOTCHANGE("未变更", 0), HAVECHANGED("已变更", 1);
 
 	// 成员变量
 	private Integer id;
