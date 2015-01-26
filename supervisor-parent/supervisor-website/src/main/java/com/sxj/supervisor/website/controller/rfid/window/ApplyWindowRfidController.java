@@ -170,7 +170,7 @@ public class ApplyWindowRfidController extends BaseController {
 				map.put("info", "没有找到相匹配的合同");
 				return map;
 			}
-			if (!cm.getContract().getType().equals(ContractTypeEnum.bidding)) {
+			if (!cm.getContract().getType().equals(ContractTypeEnum.BIDDING)) {
 				map.put("status", "n");
 				map.put("info", "合同不是招标合同");
 				return map;

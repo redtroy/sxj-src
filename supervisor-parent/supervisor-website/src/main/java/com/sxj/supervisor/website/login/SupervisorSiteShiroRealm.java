@@ -196,8 +196,6 @@ public class SupervisorSiteShiroRealm extends AuthorizingRealm
         {
             for (Permission perm : perms)
             {
-                System.out.println("-----------" + perm + "::::::::::"
-                        + permission);
                 if (perm.implies(permission))
                 {
                     return true;

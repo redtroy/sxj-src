@@ -12,8 +12,7 @@
                         http://www.springframework.org/schema/task 
                         http://www.springframework.org/schema/task/spring-task-4.0.xsd
                         http://www.springframework.org/schema/aop
-                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
-	default-lazy-init="true">
+                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd" default-lazy-init="true">
 	<import resource="classpath*:spring/database-config.xml" />
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 	<import resource="classpath*:spring/fast-dfs.xml" />

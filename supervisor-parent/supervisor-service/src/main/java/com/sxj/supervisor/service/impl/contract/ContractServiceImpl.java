@@ -16,7 +16,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,7 +27,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
-import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.contract.IContractItemDao;

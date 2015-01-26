@@ -16,46 +16,47 @@ import com.sxj.util.persistent.QueryCondition;
  * @author Ann
  *
  */
-public interface IWindowRfidRefDao {
-	/**
-	 * 查询门窗RFID列表关联
-	 *
-	 * @param query
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<WindowRefEntity> queryWindowRfidRefList(
-			QueryCondition<WindowRefEntity> query) throws SQLException;
-
-	/**
-	 * 新增门窗RFID关联
-	 *
-	 * @param member
-	 **/
-	@Insert
-	public void addWindowRfidRef(WindowRefEntity window) throws SQLException;
-
-	/**
-	 * 更新门窗RFID关联
-	 *
-	 * @param member
-	 **/
-	@Update
-	public void updateWindowRfidRef(WindowRefEntity window) throws SQLException;
-
-	/**
-	 * 获取门窗RFID关联信息
-	 *
-	 * @param id
-	 **/
-	@Get
-	public WindowRefEntity getWindowRfidRef(String id);
-
-	/**
-	 * 获取门窗RFID关联信息
-	 *
-	 * @param id
-	 **/
-	@Delete
-	public void deleteRfidRef(String id);
+public interface IWindowRfidRefDao
+{
+    /**
+     * 查询门窗RFID列表关联
+     *
+     * @param query
+     * @return
+     * @throws SQLException
+     */
+    public List<WindowRefEntity> queryWindowRfidRefList(
+            QueryCondition<WindowRefEntity> query) throws SQLException;
+    
+    /**
+     * 新增门窗RFID关联
+     *
+     * @param member
+     **/
+    @Insert
+    public void addWindowRfidRef(WindowRefEntity window) throws SQLException;
+    
+    /**
+     * 更新门窗RFID关联
+     *
+     * @param member
+     **/
+    @Update
+    public void updateWindowRfidRef(WindowRefEntity window) throws SQLException;
+    
+    /**
+     * 获取门窗RFID关联信息
+     *
+     * @param id
+     **/
+    @Get
+    public WindowRefEntity getWindowRfidRef(String id);
+    
+    /**
+     * 获取门窗RFID关联信息
+     *
+     * @param id
+     **/
+    @Delete
+    public void deleteRfidRef(String id);
 }

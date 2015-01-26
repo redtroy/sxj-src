@@ -108,11 +108,6 @@
     <filter-name>CacheFilter</filter-name>
     <url-pattern>*.html</url-pattern>
   </filter-mapping>
-  
-  
-  
-  
-  
   <welcome-file-list>
     <welcome-file>/index.htm</welcome-file>
     <welcome-file>/to_login.htm</welcome-file>

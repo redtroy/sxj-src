@@ -17,82 +17,83 @@ import com.sxj.util.persistent.QueryCondition;
  * @author Ann
  *
  */
-public interface ILogisticsRfidDao {
-	/**
-	 * 查询物流RFID列表
-	 *
-	 * @param query
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<LogisticsRfidEntity> queryLogisticsRfidList(
-			QueryCondition<LogisticsRfidEntity> query) throws SQLException;
-
-	/**
-	 * 查询物流RFID列表 乙方
-	 * 
-	 * @param query
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<LogisticsRfidEntity> queryLogisticsRfidListB(
-			QueryCondition<LogisticsRfidEntity> query) throws SQLException;
-
-	/**
-	 * 查询物流RFID列表 甲方
-	 * 
-	 * @param query
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<LogisticsRfidEntity> queryLogisticsRfidListA(
-			QueryCondition<LogisticsRfidEntity> query) throws SQLException;
-
-	/**
-	 * 新增物流RFID
-	 *
-	 * @param member
-	 **/
-	@Insert
-	public void addLogisticsRfid(LogisticsRfidEntity logistics)
-			throws SQLException;
-
-	/**
-	 * 新增物流RFID
-	 *
-	 * @param member
-	 **/
-	@BatchInsert
-	public Integer batchAddLogisticsRfid(LogisticsRfidEntity[] logistics)
-			throws SQLException;
-
-	/**
-	 * 更新物流RFID
-	 *
-	 * @param member
-	 **/
-	@BatchUpdate
-	public void batchUpdateLogisticsRfid(LogisticsRfidEntity[] logistics)
-			throws SQLException;
-
-	/**
-	 * 更新物流RFID
-	 *
-	 * @param member
-	 **/
-	@Update
-	public void updateLogisticsRfid(LogisticsRfidEntity logistics)
-			throws SQLException;
-
-	/**
-	 * 获取物流RFID信息
-	 *
-	 * @param id
-	 **/
-	@Get
-	public LogisticsRfidEntity getLogisticsRfid(String id);
-	
-	public void updateGid(List<LogisticsRfidEntity> list);
-	
-	public List<String> getRfid(String ... gid)throws SQLException;
+public interface ILogisticsRfidDao
+{
+    /**
+     * 查询物流RFID列表
+     *
+     * @param query
+     * @return
+     * @throws SQLException
+     */
+    public List<LogisticsRfidEntity> queryLogisticsRfidList(
+            QueryCondition<LogisticsRfidEntity> query) throws SQLException;
+    
+    /**
+     * 查询物流RFID列表 乙方
+     * 
+     * @param query
+     * @return
+     * @throws SQLException
+     */
+    public List<LogisticsRfidEntity> queryLogisticsRfidListB(
+            QueryCondition<LogisticsRfidEntity> query) throws SQLException;
+    
+    /**
+     * 查询物流RFID列表 甲方
+     * 
+     * @param query
+     * @return
+     * @throws SQLException
+     */
+    public List<LogisticsRfidEntity> queryLogisticsRfidListA(
+            QueryCondition<LogisticsRfidEntity> query) throws SQLException;
+    
+    /**
+     * 新增物流RFID
+     *
+     * @param member
+     **/
+    @Insert
+    public void addLogisticsRfid(LogisticsRfidEntity logistics)
+            throws SQLException;
+    
+    /**
+     * 新增物流RFID
+     *
+     * @param member
+     **/
+    @BatchInsert
+    public Integer batchAddLogisticsRfid(LogisticsRfidEntity[] logistics)
+            throws SQLException;
+    
+    /**
+     * 更新物流RFID
+     *
+     * @param member
+     **/
+    @BatchUpdate
+    public void batchUpdateLogisticsRfid(LogisticsRfidEntity[] logistics)
+            throws SQLException;
+    
+    /**
+     * 更新物流RFID
+     *
+     * @param member
+     **/
+    @Update
+    public void updateLogisticsRfid(LogisticsRfidEntity logistics)
+            throws SQLException;
+    
+    /**
+     * 获取物流RFID信息
+     *
+     * @param id
+     **/
+    @Get
+    public LogisticsRfidEntity getLogisticsRfid(String id);
+    
+    public void updateGid(List<LogisticsRfidEntity> list);
+    
+    public List<String> getRfid(String... gid) throws SQLException;
 }

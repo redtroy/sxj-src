@@ -59,7 +59,7 @@ public class LossWinRfidController extends BaseController {
 				throw new WebException("招标合同不存在");
 			}
 			if (!contract.getContract().getType()
-					.equals(ContractTypeEnum.bidding)) {
+					.equals(ContractTypeEnum.BIDDING)) {
 				throw new WebException("此合同不是招标合同");
 			}
 			if (!userInfo.getMember().getMemberNo()

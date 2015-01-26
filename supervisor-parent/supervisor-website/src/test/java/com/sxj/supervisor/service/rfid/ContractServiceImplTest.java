@@ -33,7 +33,7 @@ public class ContractServiceImplTest {
 	@Test
 	public void test() {
 		MemberEntity member = new MemberEntity();
-		member.setType(MemberTypeEnum.genresFactory);
+		member.setType(MemberTypeEnum.GENRESFACTORY);
 		service.updateContractLoss("AAAB13634,AAAB52969,AAAB52967",
 				"CT14110098", "33b5XLlND7L0EA62c5qm0HYast3RJnXl", member,
 				"AAAB52903");

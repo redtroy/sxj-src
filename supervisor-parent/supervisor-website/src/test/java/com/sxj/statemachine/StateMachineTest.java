@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.sxj.statemachine.exceptions.StateMachineException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
 public class StateMachineTest {
 	@Autowired
 	StateMachineImpl<DemoStates> fsm;

@@ -10,22 +10,24 @@ import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.util.persistent.QueryCondition;
 
-public interface ISystemAccountDao {
-
-	@Insert
-	public void addSystemAccount(SystemAccountEntity entity) throws SQLException;
-
-	@Update
-	public void updateSystemAccount(SystemAccountEntity entity)
-			throws SQLException;
-
-	@Get
-	public SystemAccountEntity getSystemAccount(String id) throws SQLException;
-
-	@Delete
-	public void deleteSystemAccount(String id) throws SQLException;
-
-	public List<SystemAccountEntity> querySystemAccount(
-			QueryCondition<SystemAccountEntity> query) throws SQLException;
-
+public interface ISystemAccountDao
+{
+    
+    @Insert
+    public void addSystemAccount(SystemAccountEntity entity)
+            throws SQLException;
+    
+    @Update
+    public void updateSystemAccount(SystemAccountEntity entity)
+            throws SQLException;
+    
+    @Get
+    public SystemAccountEntity getSystemAccount(String id) throws SQLException;
+    
+    @Delete
+    public void deleteSystemAccount(String id) throws SQLException;
+    
+    public List<SystemAccountEntity> querySystemAccount(
+            QueryCondition<SystemAccountEntity> query) throws SQLException;
+    
 }

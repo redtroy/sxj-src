@@ -4,7 +4,6 @@ import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 
 import com.sxj.finance.enu.member.MemberTypeEnum;
 
-
 public class MemberTypeEnumTypeHandler extends
         EnumOrdinalTypeHandler<MemberTypeEnum>
 {

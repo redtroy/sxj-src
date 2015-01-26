@@ -81,7 +81,7 @@ $(function(){
 						for (var i=0;i<data.list.length;i++){
 							if (data.list[i].contract.type=="GLASS"){
 								$("#contract_a").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
-							}else if (data.list[i].contract.type=="extrusions"){
+							}else if (data.list[i].contract.type=="EXTRUSIONS"){
 								$("#contract_b").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
 							}
 						}
@@ -150,9 +150,9 @@ function query(){
 	$.post("queryRefContract.htm",{refContractNo:refContractNo,num:num},function(data){
 		if (data.isOk=='ok'){
 			for (var i=0;i<data.list.length;i++){
-				if (data.list[i].contract.type=="glass"){
+				if (data.list[i].contract.type=="GLASS"){
 					$("#contract_a").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
-				}else if (data.list[i].contract.type=="extrusions"){
+				}else if (data.list[i].contract.type=="EXTRUSIONS"){
 					$("#contract_b").append("<option value='"+i+"'>"+data.list[i].contract.contractNo+"</option>");
 				}
 			}

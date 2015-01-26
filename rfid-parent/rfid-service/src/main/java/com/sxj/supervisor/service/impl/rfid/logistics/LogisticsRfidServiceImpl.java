@@ -26,8 +26,8 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
     @Autowired
     private ILogisticsRfidDao logisticsRfidDao;
     
-	@Autowired
-	private IRfidPurchaseDao rfidPurchaseDao;
+    @Autowired
+    private IRfidPurchaseDao rfidPurchaseDao;
     
     @Override
     @Transactional(readOnly = true)
@@ -264,21 +264,29 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
             throw new ServiceException("更急rfid获取信息错误", e);
         }
     }
+    
     @Override
-	@Transactional
-	public void updateGid(List<LogisticsRfidEntity> list,String id)throws ServiceException {
-		try{
-			logisticsRfidDao.updateGid(list);
-			RfidPurchaseEntity purchase = new RfidPurchaseEntity();
-			purchase.setId(id);
-			purchase.setGidState(1);
-			rfidPurchaseDao.updateRfidPurchase(purchase);
-		} catch (ServiceException e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException(e.getMessage());
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("更新GID失败", e);
-		}
-	}
+    @Transactional
+    public void updateGid(List<LogisticsRfidEntity> list, String id)
+            throws ServiceException
+    {
+        try
+        {
+            logisticsRfidDao.updateGid(list);
+            RfidPurchaseEntity purchase = new RfidPurchaseEntity();
+            purchase.setId(id);
+            purchase.setGidState(1);
+            rfidPurchaseDao.updateRfidPurchase(purchase);
+        }
+        catch (ServiceException e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException(e.getMessage());
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("更新GID失败", e);
+        }
+    }
 }

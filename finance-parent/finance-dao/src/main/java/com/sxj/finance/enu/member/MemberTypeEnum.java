@@ -1,6 +1,5 @@
 package com.sxj.finance.enu.member;
 
-
 /**
  * 会员类型
  * 

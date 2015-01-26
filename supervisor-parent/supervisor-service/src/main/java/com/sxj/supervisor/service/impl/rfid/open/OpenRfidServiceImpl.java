@@ -199,7 +199,8 @@ public class OpenRfidServiceImpl implements IOpenRfidService
             batch.setBatchItems(batchModelList);
             batch.setState("1");
         }
-        batch.setState("2");
+        else
+            batch.setState("2");
     }
     
     /**
@@ -407,11 +408,11 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                             ContractBatchEntity cb = contractBatchDao.getBacthsByRfid(rfid);
                             // 生成支付单
                             PayRecordEntity pay = new PayRecordEntity();
-                            pay.setMemberNo_A(cm.getContract().getMemberIdA());
-                            pay.setMemberName_A(cm.getContract()
+                            pay.setMemberNoA(cm.getContract().getMemberIdA());
+                            pay.setMemberNameA(cm.getContract()
                                     .getMemberNameA());
-                            pay.setMemberNo_B(cm.getContract().getMemberIdB());
-                            pay.setMemberName_B(cm.getContract()
+                            pay.setMemberNoB(cm.getContract().getMemberIdB());
+                            pay.setMemberNameB(cm.getContract()
                                     .getMemberNameB());
                             pay.setContractNo(cm.getContract().getContractNo());
                             pay.setRfidNo(rfid);
@@ -421,17 +422,17 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                             pay.setPayAmount(cb.getAmount());
                             if (cm.getContract().getType().getId() == 1)
                             {
-                                pay.setType(PayTypeEnum.glass);
+                                pay.setType(PayTypeEnum.GLASS);
                                 pay.setContent("第" + cb.getBatchNo() + "批次玻璃货款");
                             }
                             else if (cm.getContract().getType().getId() == 2)
                             {
-                                pay.setType(PayTypeEnum.extruders);
+                                pay.setType(PayTypeEnum.EXTRUDERS);
                                 pay.setContent("第" + cb.getBatchNo() + "批次型材货款");
                             }
-                            pay.setState(PayStageEnum.Stage1);
-                            pay.setPayMode(PayModeEnum.cash);
-                            pay.setPayContentState(PayContentStateEnum.payment);
+                            pay.setState(PayStageEnum.STAGE1);
+                            pay.setPayMode(PayModeEnum.CASH);
+                            pay.setPayContentState(PayContentStateEnum.PAYMENT);
                             contractPayService.addPayRecordEntity(pay);// 生成支付单
                             return 1;
                         }

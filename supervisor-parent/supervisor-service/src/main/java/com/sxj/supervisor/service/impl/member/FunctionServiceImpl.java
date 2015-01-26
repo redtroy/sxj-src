@@ -17,63 +17,73 @@ import com.sxj.util.persistent.QueryCondition;
 
 @Service
 @Transactional
-public class FunctionServiceImpl implements IFunctionService {
-	@Autowired
-	private IFunctionDao functiondao;
-
-	/**
-	 * 获取左侧菜单
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<FunctionModel> queryFunctions() throws ServiceException {
-		try {
-			QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
-			query.addCondition("parentId", "0");
-			List<FunctionEntity> functionList = functiondao
-					.queryFunction(query);
-			List<FunctionModel> list = new ArrayList<FunctionModel>();
-			for (FunctionEntity functionEntity : functionList) {
-				if (functionEntity == null) {
-					continue;
-				}
-				QueryCondition<FunctionEntity> childrenQuery = new QueryCondition<FunctionEntity>();
-				childrenQuery.addCondition("parentId", functionEntity.getId());
-				List<FunctionEntity> childrenList = functiondao
-						.queryFunction(childrenQuery);
-				FunctionModel model = new FunctionModel();
-				model.setFunction(functionEntity);
-				model.setChildren(childrenList);
-				list.add(model);
-
-			}
-			return list;
-		} catch (Exception e) {
-			SxjLogger.error("查询所有系统菜单错误", e, this.getClass());
-			throw new ServiceException("查询所有系统菜单错误", e);
-		}
-
-	}
-
-	/**
-	 * 获取系统功能信息
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public FunctionEntity getFunction(String id) {
-		FunctionEntity fe = functiondao.getFunction(id);
-		return fe;
-	}
-
-	@Override
-	public List<FunctionEntity> queryChildrenFunctions(String parentId) {
-		try {
-			QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
-			query.addCondition("parentId", parentId);
-			List<FunctionEntity> entity = functiondao.queryFunction(query);
-			return entity;
-		} catch (Exception e) {
-			throw new ServiceException("查询功能菜单错误", e);
-		}
-	}
+public class FunctionServiceImpl implements IFunctionService
+{
+    @Autowired
+    private IFunctionDao functiondao;
+    
+    /**
+     * 获取左侧菜单
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<FunctionModel> queryFunctions() throws ServiceException
+    {
+        try
+        {
+            QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
+            query.addCondition("parentId", "0");
+            List<FunctionEntity> functionList = functiondao.queryFunction(query);
+            List<FunctionModel> list = new ArrayList<FunctionModel>();
+            for (FunctionEntity functionEntity : functionList)
+            {
+                if (functionEntity == null)
+                {
+                    continue;
+                }
+                QueryCondition<FunctionEntity> childrenQuery = new QueryCondition<FunctionEntity>();
+                childrenQuery.addCondition("parentId", functionEntity.getId());
+                List<FunctionEntity> childrenList = functiondao.queryFunction(childrenQuery);
+                FunctionModel model = new FunctionModel();
+                model.setFunction(functionEntity);
+                model.setChildren(childrenList);
+                list.add(model);
+                
+            }
+            return list;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询所有系统菜单错误", e, this.getClass());
+            throw new ServiceException("查询所有系统菜单错误", e);
+        }
+        
+    }
+    
+    /**
+     * 获取系统功能信息
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public FunctionEntity getFunction(String id)
+    {
+        FunctionEntity fe = functiondao.getFunction(id);
+        return fe;
+    }
+    
+    @Override
+    public List<FunctionEntity> queryChildrenFunctions(String parentId)
+    {
+        try
+        {
+            QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
+            query.addCondition("parentId", parentId);
+            List<FunctionEntity> entity = functiondao.queryFunction(query);
+            return entity;
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException("查询功能菜单错误", e);
+        }
+    }
 }
