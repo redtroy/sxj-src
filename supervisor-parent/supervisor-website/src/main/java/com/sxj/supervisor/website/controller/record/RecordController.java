@@ -171,7 +171,7 @@ public class RecordController extends BaseController
 						.getMemberIdB());
                 record.setApplyId(member.getMemberNo());
                 record.setApplyName(member.getName());
-                record.setState(RecordStateEnum.noBinding);
+                record.setState(RecordStateEnum.NOBINDING);
                 record.setType(RecordTypeEnum.CONTRACT);
                 record.setApplyDate(new Date());
                 record.setDelState(false);
@@ -229,7 +229,7 @@ public class RecordController extends BaseController
             {
                 record.setApplyId(member.getMemberNo());
                 record.setApplyName(member.getName());
-                record.setState(RecordStateEnum.noBinding);
+                record.setState(RecordStateEnum.NOBINDING);
                 record.setType(RecordTypeEnum.CONTRACT);
                 record.setApplyDate(new Date());
                 record.setDelState(false);
@@ -274,7 +274,7 @@ public class RecordController extends BaseController
 						.getMemberIdB());
                 record.setApplyId(member.getMemberNo());
                 record.setApplyName(member.getName());
-                record.setState(RecordStateEnum.noBinding);
+                record.setState(RecordStateEnum.NOBINDING);
                 record.setType(RecordTypeEnum.CONTRACT);
                 record.setApplyDate(new Date());
                 record.setDelState(false);
@@ -338,12 +338,12 @@ public class RecordController extends BaseController
                 if (flag.equals("1"))
                 {
                     record.setType(RecordTypeEnum.CHANGE);
-                    record.setState(RecordStateEnum.nochange);
+                    record.setState(RecordStateEnum.NOCHANGE);
                 }
                 else if (flag.equals("2"))
                 {
                     record.setType(RecordTypeEnum.SUPPLEMENT);
-                    record.setState(RecordStateEnum.nosupplement);
+                    record.setState(RecordStateEnum.NOSUPPLEMENT);
                 }
                 record.setConfirmState(RecordConfirmStateEnum.accepted);
                 recordService.saveRecord(record);

@@ -336,7 +336,7 @@ public class ContractServiceImpl implements IContractService
             Assert.notNull(contract);
             RecordEntity record = recordDao.getRecord(recordId);
             if (StringUtils.isNotEmpty(record.getContractNo())
-                    && record.getState().equals(RecordStateEnum.Binding))
+                    && record.getState().equals(RecordStateEnum.BINDING))
             {
                 throw new ServiceException("合同已经生成,不能重复生成");
             }
@@ -372,7 +372,7 @@ public class ContractServiceImpl implements IContractService
             contractItemDao.addItem(map);// 新增条目
             // contractDao.updateContract(contract);
             record.setContractNo(contract.getContractNo());
-            record.setState(RecordStateEnum.Binding);
+            record.setState(RecordStateEnum.BINDING);
             recordDao.updateRecord(record);
             
         }
@@ -456,7 +456,7 @@ public class ContractServiceImpl implements IContractService
                         {
                             RecordEntity re = recordService.getRecordByNo(str.trim());
                             re.setContractNo("");
-                            re.setState(RecordStateEnum.noBinding);
+                            re.setState(RecordStateEnum.NOBINDING);
                             recordDao.updateRecord(re);
                         }
                         // 更新备案号
@@ -465,7 +465,7 @@ public class ContractServiceImpl implements IContractService
                             RecordEntity re = recordService.getRecordByNo(str);
                             re.setContractNo(contract.getContract()
                                     .getContractNo());
-                            re.setState(RecordStateEnum.Binding);
+                            re.setState(RecordStateEnum.BINDING);
                             recordDao.updateRecord(re);
                         }
                     }
@@ -982,7 +982,7 @@ public class ContractServiceImpl implements IContractService
             }
             RecordEntity re = new RecordEntity();
             re.setId(recordId);
-            re.setState(RecordStateEnum.change);
+            re.setState(RecordStateEnum.CHANGE);
             recordDao.updateRecord(re);
             // 更新变更信息
             if (StringUtils.isNotEmpty(contractIds))
@@ -1126,7 +1126,7 @@ public class ContractServiceImpl implements IContractService
                     }
                     RecordEntity re = new RecordEntity();
                     re.setId(recordId);
-                    re.setState(RecordStateEnum.supplement);
+                    re.setState(RecordStateEnum.SUPPLEMENT);
                     recordDao.updateRecord(re);
                     // 更新合同有效批次条目
                     ContractModel cm = this.getContractModelByContractNo(contractId);

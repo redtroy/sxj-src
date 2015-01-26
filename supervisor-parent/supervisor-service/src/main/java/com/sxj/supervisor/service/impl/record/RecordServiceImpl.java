@@ -264,13 +264,13 @@ public class RecordServiceImpl implements IRecordService {
 			if (record != null) {
 				record.setRefContractNo(refContractNo);
 				record.setContractNo(contractNo);
-				record.setState(RecordStateEnum.Binding);
+				record.setState(RecordStateEnum.BINDING);
 				recordDao.updateRecord(record);
 			}
 			if (record2 != null) {
 				record2.setRefContractNo(refContractNo);
 				record2.setContractNo(contractNo);
-				record2.setState(RecordStateEnum.Binding);
+				record2.setState(RecordStateEnum.BINDING);
 				recordDao.updateRecord(record2);
 			}
 			// 插入合同
@@ -336,19 +336,19 @@ public class RecordServiceImpl implements IRecordService {
 							rEntity.setRecordDate(new Date());// 备案时间
 						}
 						if (re.getType().getId() == 1) {
-							rEntity.setState(RecordStateEnum.change);
+							rEntity.setState(RecordStateEnum.CHANGE);
 							if (re.getRecordState() == 0) {
 								rEntity.setRecordState(1);
 								rEntity.setRecordDate(new Date());// 备案时间
 							}
 						} else if (re.getType().getId() == 2) {
-							rEntity.setState(RecordStateEnum.supplement);
+							rEntity.setState(RecordStateEnum.SUPPLEMENT);
 							if (re.getRecordState() == 0) {
 								rEntity.setRecordState(1);
 								rEntity.setRecordDate(new Date());// 备案时间
 							}
 						} else {
-							rEntity.setState(RecordStateEnum.Binding);
+							rEntity.setState(RecordStateEnum.BINDING);
 							if (re.getRecordState() == 0) {
 								rEntity.setRecordState(1);
 								rEntity.setRecordDate(new Date());// 备案时间

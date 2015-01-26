@@ -5,7 +5,7 @@ package com.sxj.supervisor.enu.record;
  *
  */
 public enum RecordStateEnum {
-	noBinding("未绑定", 0),Binding ("已绑定", 1),nochange ("未变更", 2),change("已变更", 3),nosupplement("未补损", 4),supplement("已补损", 5);
+	NOBINDING("未绑定", 0),BINDING ("已绑定", 1),NOCHANGE ("未变更", 2),CHANGE("已变更", 3),NOSUPPLEMENT("未补损", 4),SUPPLEMENT("已补损", 5);
 
 	// 成员变量
 	private Integer id;
