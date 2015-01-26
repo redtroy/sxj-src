@@ -130,17 +130,17 @@ function query(page){
           <td><#if (model.payDate??)>${model.payDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <td>${model.content}</td>
           <#if (model.state.ordinal()==0)>
-          <td><em class="state frozen">${model.state.name_a}</em></td>
+          <td><em class="state frozen">${model.state.nameA}</em></td>
           <#elseif (model.state.ordinal()==1)>
-          <td><em class="state process">${model.state.name_a}</em></td>
+          <td><em class="state process">${model.state.nameA}</em></td>
           <#elseif (model.state.ordinal()==2)>
-          <td><em class="state verified">${model.state.name_a}</em></td>
+          <td><em class="state verified">${model.state.nameA}</em></td>
           <#elseif (model.state.ordinal()==3)>
-          <td><em class="state frozen">${model.state.name_a}</em></td>
+          <td><em class="state frozen">${model.state.nameA}</em></td>
           <#elseif (model.state.ordinal()==4)>
-           <td><em class="state normal">${model.state.name_a}</em></td>
+           <td><em class="state normal">${model.state.nameA}</em></td>
           <#elseif (model.state.ordinal()==5)>
-          <td><em class="state verified">${model.state.name_a}</em></td>
+          <td><em class="state verified">${model.state.nameA}</em></td>
           </#if>
           <td><em class="state process"><#if (model.payMode??)>${model.payMode.getName()}</#if></em></td>
         </tr>
