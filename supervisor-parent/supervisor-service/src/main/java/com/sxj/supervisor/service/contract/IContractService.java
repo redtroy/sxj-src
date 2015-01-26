@@ -4,13 +4,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.jsonrpc.annotation.JsonRpcService;
-import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -81,7 +79,7 @@ public interface IContractService {
 	public void changeContract(String recordId, String contractId,
 			ContractModifyModel model, String recordNo,
 			List<ContractItemEntity> itemList, String contractIds,
-			String changeIds,String contractBatchIds,String changeBatchIds);
+			String changeIds, String contractBatchIds, String changeBatchIds);
 
 	/**
 	 * 补损合同
@@ -100,7 +98,7 @@ public interface IContractService {
 	 * @param contractId
 	 * @param state
 	 */
-	public void modifyCheckState(String contractId, ContractStateEnum state);
+	public void modifyCheckState(String contractId);
 
 	/**
 	 * 根据合同号获取详情
@@ -271,10 +269,9 @@ public interface IContractService {
 	 * @param contractNo
 	 * @param rfidNo
 	 */
-	public void modifyBatchPayState(String contractNo, String rfidNo, String payNo);
+	public void modifyBatchPayState(String contractNo, String rfidNo,
+			String payNo);
 
 	List<ContractBatchModel> getBacthsByContractNo(String contractNo);
-
-	
 
 }

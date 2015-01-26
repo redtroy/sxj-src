@@ -6,7 +6,7 @@ import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
-import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.util.exception.ServiceException;
 
@@ -69,8 +69,7 @@ public interface IRecordService {
 	 * @param contractId
 	 * @param state
 	 */
-	public void modifyState(String contractId, String recordId,
-			RecordConfirmStateEnum state);
+	public void modifyState(String contractId, MemberTypeEnum memType);
 
 	public List<ContractBatchEntity> getBatch(String recordId);
 
@@ -83,7 +82,6 @@ public interface IRecordService {
 	void updateRecordAndContract(RecordEntity record, ContractEntity contract)
 			throws ServiceException;
 
-
 	String getRecordNo(String contractNo, MemberEntity menber);
-	
+
 }

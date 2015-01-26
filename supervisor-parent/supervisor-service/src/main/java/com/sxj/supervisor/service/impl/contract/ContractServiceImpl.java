@@ -15,8 +15,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -29,7 +27,6 @@ import org.springframework.util.CollectionUtils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
@@ -53,7 +50,6 @@ import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
-import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
@@ -61,18 +57,13 @@ import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
-import com.sxj.supervisor.enu.record.ContractTypeEnum;
-import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
-import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
-import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.enu.rfid.windowref.LinkStateEnum;
-import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -81,7 +72,6 @@ import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.ContractReplenishModel;
 import com.sxj.supervisor.model.contract.ModifyBatchModel;
 import com.sxj.supervisor.model.contract.ReplenishBatchModel;
-import com.sxj.supervisor.model.record.RecordQuery;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
@@ -94,7 +84,6 @@ import com.sxj.supervisor.service.rfid.ref.ILogisticsRefService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
 import com.sxj.supervisor.service.util.JsonMapperUtil;
-import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -109,9 +98,6 @@ import com.sxj.util.persistent.QueryCondition;
 @Service
 @Transactional
 public class ContractServiceImpl implements IContractService {
-	private static final Logger logger = LoggerFactory
-			.getLogger(ContractServiceImpl.class);
-
 	/**
 	 * 合同DAO
 	 */
@@ -205,98 +191,12 @@ public class ContractServiceImpl implements IContractService {
 	private ILogisticsRefDao refDao;
 
 	@Autowired
-	@Qualifier("fsm")
-	private StateMachineImpl<RecordConfirmStateEnum> fsm;
+	@Qualifier("recordStatefsm")
+	private StateMachineImpl<RecordStateEnum> recordStatefsm;
 
-	public void setContractDao(IContractDao contractDao) {
-		this.contractDao = contractDao;
-	}
-
-	public void setLogisticsDao(ILogisticsRfidDao logisticsDao) {
-		this.logisticsDao = logisticsDao;
-	}
-
-	public void setContractBatchDao(IContractBatchDao contractBatchDao) {
-		this.contractBatchDao = contractBatchDao;
-	}
-
-	public void setContractBatchHisDao(
-			IContractModifyBatchDao contractBatchHisDao) {
-		this.contractBatchHisDao = contractBatchHisDao;
-	}
-
-	public void setContractItemDao(IContractItemDao contractItemDao) {
-		this.contractItemDao = contractItemDao;
-	}
-
-	public void setContractModifyItemDao(
-			IContractModifyItemDao contractModifyItemDao) {
-		this.contractModifyItemDao = contractModifyItemDao;
-	}
-
-	public void setContractModifyDao(IContractModifyDao contractModifyDao) {
-		this.contractModifyDao = contractModifyDao;
-	}
-
-	public void setContractModifyBatchDao(
-			IContractModifyBatchDao contractModifyBatchDao) {
-		this.contractModifyBatchDao = contractModifyBatchDao;
-	}
-
-	public void setContractReplenishDao(
-			IContractReplenishDao contractReplenishDao) {
-		this.contractReplenishDao = contractReplenishDao;
-	}
-
-	public void setContractReplenishBatchDao(
-			IContractReplenishBatchDao contractReplenishBatchDao) {
-		this.contractReplenishBatchDao = contractReplenishBatchDao;
-	}
-
-	public void setRecordDao(IRecordDao recordDao) {
-		this.recordDao = recordDao;
-	}
-
-	public void setRecordService(IRecordService recordService) {
-		this.recordService = recordService;
-	}
-
-	public void setLogisticsRfidService(
-			ILogisticsRfidService logisticsRfidService) {
-		this.logisticsRfidService = logisticsRfidService;
-	}
-
-	public void setLogisticsRefService(ILogisticsRefService logisticsRefService) {
-		this.logisticsRefService = logisticsRefService;
-	}
-
-	public void setWindowRfidService(IWindowRfidService windowRfidService) {
-		this.windowRfidService = windowRfidService;
-	}
-
-	public void setWindowRefService(IWindowRfidRefService windowRefService) {
-		this.windowRefService = windowRefService;
-	}
-
-	public void setAppRfidService(IRfidApplicationService appRfidService) {
-		this.appRfidService = appRfidService;
-	}
-
-	public void setSelf(IContractService self) {
-		this.self = self;
-	}
-
-	public void setContext(ApplicationContext context) {
-		this.context = context;
-	}
-
-	public void setRefDao(ILogisticsRefDao refDao) {
-		this.refDao = refDao;
-	}
-
-	public void setFsm(StateMachineImpl<RecordConfirmStateEnum> fsm) {
-		this.fsm = fsm;
-	}
+	@Autowired
+	@Qualifier("contractStatefsm")
+	private StateMachineImpl<ContractStateEnum> contractStatefsm;
 
 	@PostConstruct
 	public void init() {
@@ -332,7 +232,7 @@ public class ContractServiceImpl implements IContractService {
 			contract.setRecordNo(record.getRecordNo());// 备案号
 			contract.setType(record.getContractType());
 			contract.setImgPath(record.getImgPath());
-			contract.setState(ContractStateEnum.approval);
+			contract.setState(ContractStateEnum.noapprova);
 			contract.setConfirmState(ContractSureStateEnum.noaffirm);
 			contract.setCreateDate(new Date());
 			String year = new SimpleDateFormat("yy", Locale.CHINESE)
@@ -349,8 +249,10 @@ public class ContractServiceImpl implements IContractService {
 			contractItemDao.addItem(map);// 新增条目
 			// contractDao.updateContract(contract);
 			record.setContractNo(contract.getContractNo());
-			record.setState(RecordStateEnum.Binding);
-			recordDao.updateRecord(record);
+			recordStatefsm.setCurrentState(record.getState());
+			recordStatefsm.fire(record.getState().toString(), record);
+			// record.setState(RecordStateEnum.Binding);
+			// recordDao.updateRecord(record);
 
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -843,10 +745,10 @@ public class ContractServiceImpl implements IContractService {
 					// 变更条目
 					List<ModifyItemEntity> mieList = new ArrayList<ModifyItemEntity>();
 					if (model.getModifyItemList() != null) {
-						for (Iterator iterator = model.getModifyItemList()
-								.iterator(); iterator.hasNext();) {
-							ModifyItemEntity mie = (ModifyItemEntity) iterator
-									.next();
+						for (Iterator<ModifyItemEntity> iterator = model
+								.getModifyItemList().iterator(); iterator
+								.hasNext();) {
+							ModifyItemEntity mie = iterator.next();
 							mie.setModifyId(mec.getId());
 							mie.setUpdateState(0);
 							mieList.add(mie);
@@ -878,7 +780,7 @@ public class ContractServiceImpl implements IContractService {
 			}
 			RecordEntity re = new RecordEntity();
 			re.setId(recordId);
-			re.setState(RecordStateEnum.change);
+			re.setState(RecordStateEnum.Binding);
 			recordDao.updateRecord(re);
 			// 更新变更信息
 			if (StringUtils.isNotEmpty(contractIds)) {
@@ -1002,7 +904,7 @@ public class ContractServiceImpl implements IContractService {
 					}
 					RecordEntity re = new RecordEntity();
 					re.setId(recordId);
-					re.setState(RecordStateEnum.supplement);
+					re.setState(RecordStateEnum.Binding);
 					recordDao.updateRecord(re);
 					// 更新合同有效批次条目
 					ContractModel cm = this
@@ -1027,120 +929,15 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	@Transactional
-	public void modifyCheckState(String contractId, ContractStateEnum state)
-			throws ServiceException {
+	public void modifyCheckState(String contractId) throws ServiceException {
 		try {
-			ContractEntity ce = new ContractEntity();
-			if (contractId != null) {
-				ce.setId(contractId);
-				ce.setState(state);
-				ce.setConfirmState(ContractSureStateEnum.noaffirm);
-				contractDao.updateContract(ce);
-			}
+			Assert.hasText(contractId, "合同号不能为空");
 			ContractEntity centity = contractDao.getContract(contractId);
-			// 生成RFID申请单
-			if (centity.getType().equals(ContractTypeEnum.bidding)) {
-				RfidApplicationEntity app = new RfidApplicationEntity();
-				app.setDateNo(DateTimeUtils.getTime("yyMM"));
-				app.setMemberNo(centity.getMemberIdB());
-				app.setMemberName(centity.getMemberNameB());
-				app.setRfidType(RfidTypeEnum.DOOR);
-				app.setContractNo(centity.getContractNo());
-				int count = (int) (centity.getItemQuantity() + 100);
-				app.setCount(new Long(count));
-				app.setApplyDate(new Date());
-				app.setPayState(PayStateEnum.NOT_PAYMENT);
-				app.setReceiptState(ReceiptStateEnum.SHIPMENTS);
-				app.setHasNumber(0l);
-				appRfidService.addApp(app);
-			}
-			if (centity.getRecordNo() != null) {
-				RecordQuery recordQuery = new RecordQuery();
-				recordQuery.setContractNo(centity.getContractNo());
-				recordQuery.setSort("DESC");
-				recordQuery.setSortColumn("R.APPLY_DATE");
-				List<RecordEntity> recordList = recordService
-						.queryRecord(recordQuery);
-				// 变更该合同所有备案状态
-				if (recordList != null) {
-					for (RecordEntity recordEntity : recordList) {
-						fsm.fire("ac_un", null);
-						recordEntity.setConfirmState(fsm.getCurrentState());
-
-						if (recordEntity.getFlag().getId() == 0) {
-							if (recordEntity.getAcceptState() == null
-									|| recordEntity.getAcceptState() == 0) {
-								recordEntity.setAcceptDate(new Date());// 受理时间
-								recordEntity.setAcceptState(1);
-							}
-						} else {
-							recordEntity.setAcceptDate(new Date());
-						}
-						recordDao.updateRecord(recordEntity);
-					}
-					RecordEntity record = recordList.get(0);
-
-					String key_a = MessageChannel.WEBSITE_RECORD_MESSAGE
-							+ record.getMemberIdA();
-					// List<String> messageList = CometServiceImpl.get(key_a);
-					// if (messageList == null || messageList.size() == 0) {
-					// messageList = new ArrayList<String>();
-					// }
-					String msgName = "";
-					if (record.getType().getId() == 0) {
-						if (record.getContractType().getId() == 0) {
-							msgName = "开发商";
-						}
-					} else if (record.getType().getId() == 1) {
-						msgName = "变更";
-					} else if (record.getType().getId() == 2) {
-						msgName = "补损";
-					}
-					String message = record.getId() + "," + msgName + ","
-							+ centity.getContractNo() + ','
-							+ record.getMemberIdA() + ','
-							+ record.getContractType().getId();
-					// messageList.add(message);
-					CometServiceImpl.add(key_a, message);
-					MessageChannel.initTopic().publish(key_a);
-					// HierarchicalCacheManager.set(2, "comet_message",
-					// "record_push_message_" + record.getMemberIdA(),
-					// messageList);
-					// 乙方
-					String key_b = MessageChannel.WEBSITE_RECORD_MESSAGE
-							+ record.getMemberIdB();
-					// List<String> messageListB = null;
-					// Object cacheB = HierarchicalCacheManager.get(2,
-					// "comet_message",
-					// "record_push_message_" + record.getMemberIdB());
-					// if (cacheB instanceof ArrayList) {
-					// messageListB = (List<String>) cacheB;
-					// } else {
-					// messageListB = new ArrayList<String>();
-					// }
-					String msgNameB = "";
-					if (record.getType().getId() == 0) {
-						if (record.getContractType().getId() == 0) {
-							msgNameB = "开发商";
-						}
-					} else if (record.getType().getId() == 1) {
-						msgNameB = "变更";
-					} else if (record.getType().getId() == 2) {
-						msgNameB = "补损";
-					}
-					String messageB = record.getId() + "," + msgNameB + ","
-							+ centity.getContractNo() + ','
-							+ record.getMemberIdB() + ','
-							+ record.getContractType().getId();
-					CometServiceImpl.add(key_b, messageB);
-					MessageChannel.initTopic().publish(key_b);
-					// messageListB.add(messageB);
-					// HierarchicalCacheManager.set(2, "comet_message",
-					// "record_push_message_" + record.getMemberIdB(),
-					// messageListB);
-				}
-			}
-
+			Assert.notNull(centity, "该合同不存在");
+			contractStatefsm.setCurrentState(centity.getState());
+			contractStatefsm.fire(centity.getState().toString(), centity);
+			// centity.setConfirmState(ContractSureStateEnum.noaffirm);
+			// contractDao.updateContract(ce);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("审核合同错误", e);

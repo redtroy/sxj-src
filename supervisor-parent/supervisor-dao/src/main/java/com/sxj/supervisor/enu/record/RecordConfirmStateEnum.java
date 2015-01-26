@@ -1,11 +1,14 @@
 package com.sxj.supervisor.enu.record;
+
 /**
- * (前台)备案状态
+ * 备案审核状态
+ * 
  * @author Administrator
  *
  */
 public enum RecordConfirmStateEnum {
-	accepted("受理中", 0),unconfirmed ("未确认", 1),confirmedA ("甲方确认", 2),confirmedB("乙方确认", 3),hasRecord("已备案", 4);
+	accepted("受理中", 0), unconfirmed("未确认", 1), confirmedA("甲方确认", 2), confirmedB(
+			"乙方确认", 3), hasRecord("已备案", 4);
 	// 成员变量
 	private Integer id;
 

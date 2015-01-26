@@ -50,9 +50,6 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.ContractWindowTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.ContractWindowTypeEnum" />
-		<typeHandler
-			handler="com.sxj.supervisor.typehandler.ContractUpdateStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.contract.ContractUpdateStateEnum" />
 		<typeHandler handler="com.sxj.supervisor.typehandler.PayStageEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.PayStageEnum" />
 

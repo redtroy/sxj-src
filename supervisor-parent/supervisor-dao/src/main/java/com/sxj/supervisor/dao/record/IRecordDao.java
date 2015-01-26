@@ -12,6 +12,7 @@ import com.sxj.util.persistent.QueryCondition;
 public interface IRecordDao {
 	/**
 	 * 新增备案
+	 * 
 	 * @param record
 	 */
 	@Insert
@@ -19,6 +20,7 @@ public interface IRecordDao {
 
 	/**
 	 * 修改备案
+	 * 
 	 * @param record
 	 */
 	@Update
@@ -26,6 +28,7 @@ public interface IRecordDao {
 
 	/**
 	 * 查询备案
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -33,7 +36,16 @@ public interface IRecordDao {
 	public RecordEntity getRecord(String id);
 
 	/**
+	 * 查询有效地备案
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public RecordEntity queryUserRecord(String contratcNo);
+
+	/**
 	 * 删除备案
+	 * 
 	 * @param id
 	 */
 	@Delete
@@ -41,15 +53,24 @@ public interface IRecordDao {
 
 	/**
 	 * 备案高级查询
+	 * 
 	 * @param query
 	 * @return
 	 */
 	public List<RecordEntity> queryRecord(QueryCondition<RecordEntity> query);
-	
+
 	/**
 	 * 合同进度
+	 * 
 	 * @param contractNo
 	 * @return
 	 */
 	public String getProgress(String contractNo);
+
+	/**
+	 * 批量更新备案审核状态
+	 * 
+	 * @param contractNo
+	 */
+	public void batchUpdateConfirmState(String contractNo);
 }
