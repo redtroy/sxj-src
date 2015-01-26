@@ -187,7 +187,7 @@ public class RecordServiceImpl implements IRecordService {
 				List<RecordEntity> reList = this.queryRecord(query);
 				for (RecordEntity recordEntity : reList) {
 					recordEntity
-							.setConfirmState(RecordConfirmStateEnum.hasRecord);
+							.setConfirmState(RecordConfirmStateEnum.HASRECORD);
 					recordDao.updateRecord(recordEntity);
 				}
 			}
@@ -325,12 +325,12 @@ public class RecordServiceImpl implements IRecordService {
 				if (re.getContractType().getId() != 0) {
 					if (con.getConfirmState().getId() == 0) {
 						if (state.getId() == 2) {
-							rEntity.setConfirmState(RecordConfirmStateEnum.confirmedA);
+							rEntity.setConfirmState(RecordConfirmStateEnum.CONFIRMEDA);
 						} else if (state.getId() == 3) {
-							rEntity.setConfirmState(RecordConfirmStateEnum.confirmedB);
+							rEntity.setConfirmState(RecordConfirmStateEnum.CONFIRMEDB);
 						}
 					} else {
-						rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+						rEntity.setConfirmState(RecordConfirmStateEnum.HASRECORD);
 						if (re.getFlag().getId() == 1) {
 							rEntity.setRecordState(1);
 							rEntity.setRecordDate(new Date());// 备案时间
@@ -356,7 +356,7 @@ public class RecordServiceImpl implements IRecordService {
 						}
 					}
 				} else {
-					rEntity.setConfirmState(RecordConfirmStateEnum.hasRecord);
+					rEntity.setConfirmState(RecordConfirmStateEnum.HASRECORD);
 					rEntity.setRecordDate(new Date());// 备案时间
 
 				}
@@ -465,7 +465,7 @@ public class RecordServiceImpl implements IRecordService {
 			query.setContractNo(contractNo);
 			List<RecordEntity> list = queryRecord(query);
 			for (RecordEntity recordEntity : list) {
-				recordEntity.setConfirmState(RecordConfirmStateEnum.accepted);
+				recordEntity.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
 				recordDao.updateRecord(recordEntity);
 			}
 			if (cm != null) {

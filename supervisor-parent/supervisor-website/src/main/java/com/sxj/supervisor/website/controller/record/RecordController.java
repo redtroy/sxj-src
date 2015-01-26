@@ -177,7 +177,7 @@ public class RecordController extends BaseController
                 record.setDelState(false);
                 setContractType(record, memberB);
                 record.setFlag(RecordFlagEnum.A);
-                record.setConfirmState(RecordConfirmStateEnum.accepted);
+                record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
                 recordService.addRecord(record);
                 map.put("isOK", "ok");
                 map.put("recordNo", record.getRecordNo());
@@ -233,7 +233,7 @@ public class RecordController extends BaseController
                 record.setType(RecordTypeEnum.CONTRACT);
                 record.setApplyDate(new Date());
                 record.setDelState(false);
-                record.setConfirmState(RecordConfirmStateEnum.accepted);
+                record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
                 record.setContractType(ContractTypeEnum.BIDDING);// 合同类型
                 record.setFlag(RecordFlagEnum.B);
                 recordService.addRecord(record);
@@ -280,7 +280,7 @@ public class RecordController extends BaseController
                 record.setDelState(false);
                 setContractType(record, memberB);
                 record.setFlag(RecordFlagEnum.B);
-                record.setConfirmState(RecordConfirmStateEnum.accepted);
+                record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
                 recordService.addRecord(record);
                 map.put("isOK", "ok");
                 map.put("recordNo", record.getRecordNo());
@@ -345,7 +345,7 @@ public class RecordController extends BaseController
                     record.setType(RecordTypeEnum.SUPPLEMENT);
                     record.setState(RecordStateEnum.NOSUPPLEMENT);
                 }
-                record.setConfirmState(RecordConfirmStateEnum.accepted);
+                record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
                 recordService.saveRecord(record);
             }
             else
@@ -492,13 +492,13 @@ public class RecordController extends BaseController
             {
                 recordService.modifyState(contractId,
                         recordId,
-                        RecordConfirmStateEnum.confirmedA);
+                        RecordConfirmStateEnum.CONFIRMEDA);
             }
             else
             {
                 recordService.modifyState(contractId,
                         recordId,
-                        RecordConfirmStateEnum.confirmedB);
+                        RecordConfirmStateEnum.CONFIRMEDB);
             }
             String key = MessageChannel.WEBSITE_RECORD_MESSAGE
                     + member.getMember().getMemberNo();
