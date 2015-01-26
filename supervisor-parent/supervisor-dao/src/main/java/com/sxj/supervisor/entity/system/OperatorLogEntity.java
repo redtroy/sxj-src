@@ -38,7 +38,7 @@ public class OperatorLogEntity extends Pagable implements Serializable {
 	 * 操作時間
 	 */
 	@Column(name = "OPER_TIME")
-	private Date OperatorTime;
+	private Date operatorTime;
 
 	/**
 	 * 操作內容
@@ -63,11 +63,11 @@ public class OperatorLogEntity extends Pagable implements Serializable {
 	}
 
 	public Date getOperatorTime() {
-		return OperatorTime;
+		return operatorTime;
 	}
 
 	public void setOperatorTime(Date operatorTime) {
-		OperatorTime = operatorTime;
+		operatorTime = operatorTime;
 	}
 
 	public String getLogs() {

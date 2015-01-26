@@ -124,7 +124,7 @@ public class PayRecordEntity implements Serializable {
 	 * @return
 	 */
 	@Column(name = "PAY_CONTENT_STATE")
-	private PayContentStateEnum PayContentState;
+	private PayContentStateEnum payContentState;
 
 	/**
 	 * 类型
@@ -155,11 +155,11 @@ public class PayRecordEntity implements Serializable {
 	}
 
 	public PayContentStateEnum getPayContentState() {
-		return PayContentState;
+		return payContentState;
 	}
 
 	public void setPayContentState(PayContentStateEnum payContentState) {
-		PayContentState = payContentState;
+		payContentState = payContentState;
 	}
 
 	public PayTypeEnum getType() {
