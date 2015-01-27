@@ -70,7 +70,7 @@ public class ContractPayServiceImpl implements IContractPayService
     }
     
     @Override
-    public void update_state(String id, Integer state) throws ServiceException
+    public void updateState(String id, Integer state) throws ServiceException
     {
         // TODO Auto-generated method stub
         
@@ -111,7 +111,7 @@ public class ContractPayServiceImpl implements IContractPayService
      */
     @Override
     @Transactional
-    public String pay_ok(String id) throws ServiceException
+    public String payOk(String id) throws ServiceException
     {
         try
         {

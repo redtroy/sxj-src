@@ -1,11 +1,3 @@
-/*
- * @(#)ActiveSQLSessionFactoryBean.java 2013年12月27日 下午23:33:33
- *
- * Copyright (c) 2011-2013 Makersoft.org all rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *
- */
 package com.sxj.mybatis.orm;
 
 import java.io.IOException;

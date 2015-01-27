@@ -18,7 +18,7 @@ public interface IContractPayService
     /**
      * 更改收款、付款状态
      */
-    public void update_state(String id, Integer state) throws ServiceException;
+    public void updateState(String id, Integer state) throws ServiceException;
     
     /**
      * 甲方付款
@@ -28,7 +28,7 @@ public interface IContractPayService
     /**
      * 乙方确认收款
      */
-    public String pay_ok(String id) throws ServiceException;
+    public String payOk(String id) throws ServiceException;
     
     /**
      * 财务统计查询

@@ -34,6 +34,8 @@ public class StateMachineBuilder<S extends Enum<?>>
 {
     protected static Logger l = getLogger(StateMachineBuilder.class);
     
+    private Object enhanced;
+    
     public IStateMachine<S> newReentrant(StateMachineDefinition<S> definition)
             throws StateMachineException
     {
@@ -51,6 +53,14 @@ public class StateMachineBuilder<S extends Enum<?>>
             throws StateMachineException
     {
         return new StateMachineImpl<S>(definition,
+                new NonReentrantStrategy<S>());
+    }
+    
+    public IStateMachine<S> newNonReentrant(Object instance, Object enhanced)
+            throws StateMachineException
+    {
+        this.enhanced = enhanced;
+        return new StateMachineImpl<S>(processAnnotatedController(instance),
                 new NonReentrantStrategy<S>());
     }
     
@@ -231,7 +241,8 @@ public class StateMachineBuilder<S extends Enum<?>>
                             + " is not well defined. Enter phase must return a EventInfo or void");
         }
         
-        definition.defineEnterState(ann, method, instance);
+        definition.defineEnterState(ann, method, enhanced == null ? instance
+                : enhanced);
     }
     
     private void checkExitStateAnnotation(Object instance,
@@ -251,7 +262,8 @@ public class StateMachineBuilder<S extends Enum<?>>
                             + " is not well defined. Exit phase must return a boolean or void");
         }
         
-        definition.defineExitState(ann, method, instance);
+        definition.defineExitState(ann, method, enhanced == null ? instance
+                : enhanced);
     }
     
     private void checkStateAnnotation(Object instance,
@@ -312,7 +324,9 @@ public class StateMachineBuilder<S extends Enum<?>>
         stateMachineDefinition.defineEvent(ann.event());
         if (method != null)
             checkGenericTransitionHasTheRightParameters(method);
-        stateMachineDefinition.defineTransition(ann, method, instance);
+        stateMachineDefinition.defineTransition(ann,
+                method,
+                enhanced == null ? instance : enhanced);
     }
     
     /**

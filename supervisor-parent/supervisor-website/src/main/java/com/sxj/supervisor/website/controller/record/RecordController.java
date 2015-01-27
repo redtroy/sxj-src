@@ -245,7 +245,7 @@ public class RecordController extends BaseController {
 					.getId());
 			if (member.getCheckState() == MemberCheckStateEnum.CERTIFIED) {
 				MemberEntity memberB = memberService.memberInfo(record
-						.getMemberIdB());
+						.getMemberIdA());
 				record.setApplyId(member.getMemberNo());
 				record.setApplyName(member.getName());
 				record.setState(RecordStateEnum.NOBINDING);

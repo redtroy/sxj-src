@@ -17,4 +17,6 @@ public @interface StateMachine
     String startState();
     
     String[] finalStates();
+    
+    String name() default "";
 }

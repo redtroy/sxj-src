@@ -135,7 +135,7 @@ public class AccountController extends BaseController {
 	public @ResponseBody Map<String, String> save_pwd(String id, String password)
 			throws WebException {
 		try {
-			accountService.edit_pwd(id, password);
+			accountService.editPwd(id, password);
 			topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME).publish(
 					"del," + id);
 		} catch (Exception e) {

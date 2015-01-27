@@ -12,4 +12,10 @@ public class StateMachineFactory
     {
         return builder.newNonReentrant(config);
     }
+    
+    public static IStateMachine<Enum<?>> newInstance(Object config,
+            Object enhanced) throws StateMachineException
+    {
+        return builder.newNonReentrant(config, enhanced);
+    }
 }
