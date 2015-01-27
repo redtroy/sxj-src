@@ -166,7 +166,7 @@ public class PayController extends BaseController {
 	public @ResponseBody Map<String, String> pay_ok(String id)
 			throws WebException {
 		try {
-			String flag = payService.pay_ok(id);
+			String flag = payService.payOk(id);
 			Map<String, String> map = new HashMap<String, String>();
 			if (flag.equals("ok")) {
 				PayRecordEntity pay = payService.getPayRecordEntity(id);

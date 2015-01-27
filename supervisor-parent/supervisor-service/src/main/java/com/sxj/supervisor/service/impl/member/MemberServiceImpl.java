@@ -300,7 +300,7 @@ public class MemberServiceImpl implements IMemberService {
 	 */
 	@Override
 	@Transactional
-	public void edit_pwd(String id, String pwd) throws ServiceException {
+	public void editPwd(String id, String pwd) throws ServiceException {
 		try {
 			MemberEntity member = new MemberEntity();
 			String md5Passwrod = EncryptUtil.md5Hex(pwd);

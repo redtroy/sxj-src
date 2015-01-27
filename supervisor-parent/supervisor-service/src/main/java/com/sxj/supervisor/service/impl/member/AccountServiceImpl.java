@@ -252,7 +252,7 @@ public class AccountServiceImpl implements IAccountService {
 
 	@Override
 	@Transactional
-	public String edit_pwd(String id, String pwd) throws ServiceException {
+	public String editPwd(String id, String pwd) throws ServiceException {
 		try {
 			AccountEntity account = new AccountEntity();
 			account.setId(id);

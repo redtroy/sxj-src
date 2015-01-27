@@ -98,7 +98,7 @@ public class MemberController extends BaseController {
 	@RequestMapping("/edit_pwd")
 	public @ResponseBody Map<String, String> edit_pwd(String id, String password) {
 		Map<String, String> map = new HashMap<String, String>();
-		memberService.edit_pwd(id, password);
+		memberService.editPwd(id, password);
 		return map;
 	}
 
