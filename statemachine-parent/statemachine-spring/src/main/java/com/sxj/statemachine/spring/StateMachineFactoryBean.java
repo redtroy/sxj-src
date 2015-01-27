@@ -59,9 +59,14 @@ public class StateMachineFactoryBean implements BeanFactoryPostProcessor,
                     {
                         String className = classMetadata.getClassName();
                         classNames.add(className);
-                        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(Class.forName(className));
-                        dlbf.registerBeanDefinition(className,
-                                builder.getBeanDefinition());
+                        String[] beanNamesForType = dlbf.getBeanNamesForType(Class.forName(className));
+                        if (beanNamesForType == null
+                                || beanNamesForType.length == 0)
+                        {
+                            BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(Class.forName(className));
+                            dlbf.registerBeanDefinition(className,
+                                    builder.getBeanDefinition());
+                        }
                     }
                 }
             }

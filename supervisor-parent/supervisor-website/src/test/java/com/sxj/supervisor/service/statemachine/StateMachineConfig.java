@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.statemachine;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.statemachine.TransitionInfo;
@@ -13,6 +14,7 @@ import com.sxj.supervisor.dao.member.IMemberDao;
 @StateMachine(stateType = DemoStates.class, startState = "A", finalStates = {
         "C", "D" }, name = "fsm")
 @Transitions({ @Transition(source = "A", event = "AtoB", target = "B") })
+@Service
 public class StateMachineConfig
 {
     
@@ -24,7 +26,7 @@ public class StateMachineConfig
     public void noop(TransitionInfo event)
     {
         System.out.println("tx@:" + event.getEvent());
-        throw new RuntimeException("Testing rollback!!!!!!!!");
+        //        throw new RuntimeException("Testing rollback!!!!!!!!");
     }
     
     public void noop2(TransitionInfo event)
