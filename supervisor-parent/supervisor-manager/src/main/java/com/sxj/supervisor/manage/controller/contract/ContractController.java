@@ -252,9 +252,7 @@ public class ContractController extends BaseController {
 			model.setModifyContract(contractModifyModel.getModifyContract());
 			model.setModifyBatchList(contractModifyModel.getModifyBatchList());
 			model.setModifyItemList(contractModifyModel.getModifyItemList());
-			contractService.changeContract(recordId,
-					contractModifyModel.getContractId(), model,
-					contractModifyModel.getRecordNo(),
+			contractService.changeContract(recordId,model,
 					contractModifyModel.getItemList(),contractIds,changeIds,contractBatchIds,changeBatchIds);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
