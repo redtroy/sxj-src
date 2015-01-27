@@ -1,6 +1,5 @@
 package com.sxj.statemachine.spring;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,15 +7,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.Resource;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.ClassMetadata;
@@ -28,8 +24,7 @@ import com.sxj.statemachine.StateMachineFactory;
 import com.sxj.statemachine.annotations.StateMachine;
 import com.sxj.statemachine.exceptions.StateMachineException;
 
-public class StateMachineFactoryBean implements
-        ApplicationListener<ContextRefreshedEvent>, BeanFactoryPostProcessor,
+public class StateMachineFactoryBean implements BeanFactoryPostProcessor,
         ApplicationContextAware
 {
     
@@ -39,7 +34,8 @@ public class StateMachineFactoryBean implements
     
     private String basePackages;
     
-    private Set<String> findStateMachineConfigs() throws IOException
+    private Set<String> findStateMachineConfigs(DefaultListableBeanFactory dlbf)
+            throws Exception
     {
         Set<String> classNames = new HashSet<String>();
         SimpleMetadataReaderFactory metadataReaderFactory = new SimpleMetadataReaderFactory(
@@ -58,10 +54,14 @@ public class StateMachineFactoryBean implements
                     MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
                     ClassMetadata classMetadata = metadataReader.getClassMetadata();
                     AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
-                    String entityAnnotation = StateMachine.class.getName();
-                    if (annotationMetadata.isAnnotated(entityAnnotation))
+                    String stateMachineAnnotation = StateMachine.class.getName();
+                    if (annotationMetadata.isAnnotated(stateMachineAnnotation))
                     {
-                        classNames.add(classMetadata.getClassName());
+                        String className = classMetadata.getClassName();
+                        classNames.add(className);
+                        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(Class.forName(className));
+                        dlbf.registerBeanDefinition(className,
+                                builder.getBeanDefinition());
                     }
                 }
             }
@@ -73,7 +73,7 @@ public class StateMachineFactoryBean implements
             throws Exception
     {
         
-        Set<String> findStateMachineConfigs = findStateMachineConfigs();
+        Set<String> findStateMachineConfigs = findStateMachineConfigs(dlbf);
         for (String className : findStateMachineConfigs)
         {
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(StateMachineFactory.class);
@@ -132,25 +132,6 @@ public class StateMachineFactoryBean implements
     public void setBasePackages(String basePackages)
     {
         this.basePackages = basePackages;
-    }
-    
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event)
-    {
-        // TODO Auto-generated method stub
-        this.applicationContext = event.getApplicationContext();
-        
-        AutowireCapableBeanFactory autowireCapableBeanFactory = event.getApplicationContext()
-                .getAutowireCapableBeanFactory();
-        try
-        {
-            //            registerStateMachines((DefaultListableBeanFactory) autowireCapableBeanFactory);
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
     
     @Override

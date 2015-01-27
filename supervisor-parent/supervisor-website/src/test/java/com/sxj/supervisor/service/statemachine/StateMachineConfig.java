@@ -1,7 +1,6 @@
 package com.sxj.supervisor.service.statemachine;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.statemachine.TransitionInfo;
@@ -11,7 +10,6 @@ import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.annotations.Transitions;
 import com.sxj.supervisor.dao.member.IMemberDao;
 
-@Service
 @StateMachine(stateType = DemoStates.class, startState = "A", finalStates = {
         "C", "D" }, name = "fsm")
 @Transitions({ @Transition(source = "A", event = "AtoB", target = "B") })
@@ -44,7 +42,7 @@ public class StateMachineConfig
     @Transactional
     public Boolean exitB(TransitionInfo event)
     {
-        memberDAO.deleteMember("bXKuG5RODdRwQFk8yi0dQX6HQkkb2EXE");
+        memberDAO.deleteMember("iSoJ0S66Pj2alJqLwOLHVgRGMcpPtwPU");
         System.out.println("Exited A state");
         return true;
     }
