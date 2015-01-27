@@ -24,7 +24,7 @@ public class StateMachineConfig
     public void noop(TransitionInfo event)
     {
         System.out.println("tx@:" + event.getEvent());
-        //        throw new RuntimeException("Testing rollback!!!!!!!!");
+        throw new RuntimeException("Testing rollback!!!!!!!!");
     }
     
     public void noop2(TransitionInfo event)
@@ -42,7 +42,10 @@ public class StateMachineConfig
     @Transactional
     public Boolean exitB(TransitionInfo event)
     {
-        memberDAO.deleteMember("iSoJ0S66Pj2alJqLwOLHVgRGMcpPtwPU");
+        if (event == null)
+            memberDAO.deleteMember("8RUlcJhqdAH2c60o1qNG3kCbJvGP40AT");
+        else
+            memberDAO.deleteMember((String) event.getObject());
         System.out.println("Exited A state");
         return true;
     }

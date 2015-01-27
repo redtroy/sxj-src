@@ -27,6 +27,9 @@ public class StateMachineTest
     @Autowired
     ApplicationContext context;
     
+    @Autowired
+    StateMachineConfig config;
+    
     @AfterClass
     public static void tearDownAfterClass() throws Exception
     {
@@ -47,8 +50,9 @@ public class StateMachineTest
         //        //        bean2.exitB(null);
         //        bean.addMember(null);
         //        fsm.fire("AtoB", null);
+        config.exitB(null);
         fsm.setCurrentState(DemoStates.B);
-        fsm.fire("BtoC", null);
+        fsm.fire("BtoC", "8RUlcJhqdAH2c60o1qNG3kCbJvGP40AT");
         System.out.println(fsm.getCurrentState());
         org.junit.Assert.assertEquals(DemoStates.C, fsm.getCurrentState());
     }
