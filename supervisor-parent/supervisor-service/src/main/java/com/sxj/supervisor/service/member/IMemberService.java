@@ -31,7 +31,7 @@ public interface IMemberService
     
     public MemberEntity memberInfo(String memberNo) throws ServiceException;
     
-    public void edit_pwd(String id, String pwd) throws ServiceException;
+    public void editPwd(String id, String pwd) throws ServiceException;
     
     public String createvalidata(String phoneNo, String message)
             throws ServiceException;

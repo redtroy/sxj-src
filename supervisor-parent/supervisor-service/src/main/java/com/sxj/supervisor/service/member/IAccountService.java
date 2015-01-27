@@ -29,7 +29,7 @@ public interface IAccountService
     
     public String initializePwd(String id) throws ServiceException;
     
-    public String edit_pwd(String id, String pwd) throws ServiceException;
+    public String editPwd(String id, String pwd) throws ServiceException;
     
     public void edit_Login(String id) throws ServiceException;
 }

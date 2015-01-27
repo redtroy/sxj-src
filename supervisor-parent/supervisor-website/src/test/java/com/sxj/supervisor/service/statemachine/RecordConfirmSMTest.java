@@ -1,4 +1,4 @@
-package com.sxj.statemachine;
+package com.sxj.supervisor.service.statemachine;
 
 import static org.junit.Assert.fail;
 
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
