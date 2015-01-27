@@ -48,7 +48,11 @@ public class FileController {
 				response.setStatus(404);
 				return;
 			}
-			if (request.getCookies() == null) {
+			if (request.getCookies() == null
+					&& !((rurl.contains("finance-manager")
+							|| rurl.contains("manage.zijincaifu.net")
+							|| rurl.contains("finance-website") || rurl
+								.contains("www.zijincaifu.net")))) {
 				response.setStatus(404);
 				return;
 			}
@@ -80,6 +84,10 @@ public class FileController {
 					response.setStatus(404);
 					return;
 				}
+			} else if (rurl.contains("finance-manager")
+					|| rurl.contains("manage.zijincaifu.net")) {
+			} else if (rurl.contains("finance-website")
+					|| rurl.contains("www.zijincaifu.net")) {
 			} else {
 				response.setStatus(404);
 				return;

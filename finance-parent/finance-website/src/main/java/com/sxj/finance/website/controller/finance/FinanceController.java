@@ -79,12 +79,12 @@ public class FinanceController extends BaseController {
 		Map<String, String> map2 = new HashMap<String, String>();
 		try {
 			String flag = financeService.setModel(map);
-			map.put("flag", flag);
+			map2.put("flag", flag);
 			return map2;
 		} catch (Exception e) {
 			e.printStackTrace();
 			SxjLogger.error("获取支付单数据", e, this.getClass());
-			map.put("flag", "0");
+			map2.put("flag", "0");
 			return map2;
 		}
 	}
