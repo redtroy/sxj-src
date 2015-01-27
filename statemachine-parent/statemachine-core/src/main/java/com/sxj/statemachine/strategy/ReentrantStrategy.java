@@ -117,6 +117,7 @@ public class ReentrantStrategy<S extends Enum<?>> implements
         catch (InterruptedException ie)
         {
             l.warn("#processEvent: interrupted exception might not happen");
+            throw new StateMachineException(ie);
         }
         finally
         {
