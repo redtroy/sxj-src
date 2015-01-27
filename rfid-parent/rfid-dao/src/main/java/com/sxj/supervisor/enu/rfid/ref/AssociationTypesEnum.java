@@ -15,19 +15,6 @@ public enum AssociationTypesEnum
         this.id = id;
     }
     
-    // 普通方法
-    public static String getName(Integer id)
-    {
-        for (AssociationTypesEnum c : AssociationTypesEnum.values())
-        {
-            if (c.getId() == id)
-            {
-                return c.name;
-            }
-        }
-        return null;
-    }
-    
     public Integer getId()
     {
         return id;

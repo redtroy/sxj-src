@@ -15,18 +15,6 @@ public enum LinkStateEnum
         this.id = id;
     }
     
-    // 普通方法
-    public static String getName(Integer id)
-    {
-        for (LinkStateEnum c : LinkStateEnum.values())
-        {
-            if (c.getId() == id)
-            {
-                return c.name;
-            }
-        }
-        return null;
-    }
     
     public Integer getId()
     {

@@ -19,19 +19,6 @@ public enum ContractWindowTypeEnum
         this.id = id;
     }
     
-    // 普通方法
-    public static String getName(Integer id)
-    {
-        for (ContractWindowTypeEnum c : ContractWindowTypeEnum.values())
-        {
-            if (c.getId() == id)
-            {
-                return c.name;
-            }
-        }
-        return null;
-    }
-    
     public Integer getId()
     {
         return id;

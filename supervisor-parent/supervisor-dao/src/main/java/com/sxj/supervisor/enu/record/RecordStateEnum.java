@@ -21,18 +21,6 @@ public enum RecordStateEnum
         this.id = id;
     }
     
-    // 普通方法
-    public static String getName(Integer id)
-    {
-        for (RecordStateEnum c : RecordStateEnum.values())
-        {
-            if (c.getId() == id)
-            {
-                return c.name;
-            }
-        }
-        return null;
-    }
     
     public Integer getId()
     {
