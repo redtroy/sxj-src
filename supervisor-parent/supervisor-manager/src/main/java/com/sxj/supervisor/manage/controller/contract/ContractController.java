@@ -301,7 +301,7 @@ public class ContractController extends BaseController {
 	public @ResponseBody Map<String, Object> check(String contractId)
 			throws WebException {
 		try {
-			contractService.modifyCheckState(contractId);
+			contractService.checkContract(contractId);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
 			return map;

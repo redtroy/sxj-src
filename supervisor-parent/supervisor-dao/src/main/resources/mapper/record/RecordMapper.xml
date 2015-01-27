@@ -108,8 +108,13 @@
 	</select>
 	<update id="batchUpdateConfirmState" parameterType="String">
 	<![CDATA[UPDATE M_CONTRACT_RECORD R SET R.CONFIRM_STATE = 4, R.RECORD_DATE = (CASE R.RECORD_STATE ]]>
-	<![CDATA[ WHEN "0" THEN NOW() CASE R.RECORD_STATE WHEN NULL THEN NOW() else R.RECORD_DATE end ),R.RECORD_STATE = (CASE R.RECORD_FLAG ]]>
+	<![CDATA[ WHEN "0" THEN NOW() WHEN R.RECORD_STATE IS NULL THEN NOW() else R.RECORD_DATE end ),R.RECORD_STATE = (CASE R.RECORD_FLAG ]]>
 	<![CDATA[ WHEN 0 THEN 1 else R.RECORD_STATE end) WHERE R.CONTRACT_NO = #{contractNo}]]>
+	</update>
+	
+	<update id="batchUpdateCheckState" parameterType="String">
+	<![CDATA[UPDATE M_CONTRACT_RECORD R SET R.CONFIRM_STATE = 1,R.ACCEPT_DATE=(CASE R.ACCEPT_STATE ]]>
+	<![CDATA[ WHEN "0" THEN NOW() WHEN R.RECORD_STATE IS NULL THEN NOW() else R.ACCEPT_DATE end ) WHERE R.CONTRACT_NO = #{contractNo} AND R.CONFIRM_STATE = 0]]>
 	</update>
 	<select id="queryUserRecord" resultMap="RecordResultMap"
 		parameterType="String">

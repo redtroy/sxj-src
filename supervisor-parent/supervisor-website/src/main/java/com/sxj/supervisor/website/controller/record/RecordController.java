@@ -150,18 +150,18 @@ public class RecordController extends BaseController {
 					.getAttribute("userinfo");
 			MemberEntity member = memberService.getMember(userBean.getMember()
 					.getId());
-			if (member.getCheckState() == MemberCheckStateEnum.certified) {
+			if (member.getCheckState() == MemberCheckStateEnum.CERTIFIED) {
 				MemberEntity memberB = memberService.memberInfo(record
 						.getMemberIdB());
 				record.setApplyId(member.getMemberNo());
 				record.setApplyName(member.getName());
-				record.setState(RecordStateEnum.noBinding);
-				record.setType(RecordTypeEnum.contract);
+				record.setState(RecordStateEnum.NOBINDING);
+				record.setType(RecordTypeEnum.CONTRACT);
 				record.setApplyDate(new Date());
 				record.setDelState(false);
 				setContractType(record, memberB);
 				record.setFlag(RecordFlagEnum.A);
-				record.setConfirmState(RecordConfirmStateEnum.accepted);
+				record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
 				recordService.addRecord(record);
 				map.put("isOK", "ok");
 				map.put("recordNo", record.getRecordNo());
@@ -174,11 +174,11 @@ public class RecordController extends BaseController {
 
 	private void setContractType(RecordEntity record, MemberEntity member) {
 		switch (member.getType()) {
-		case glassFactory:
-			record.setContractType(ContractTypeEnum.glass);// 合同类型
+		case GLASSFACTORY:
+			record.setContractType(ContractTypeEnum.GLASS);// 合同类型
 			break;
-		case genresFactory:
-			record.setContractType(ContractTypeEnum.extrusions);// 合同类型
+		case GENRESFACTORY:
+			record.setContractType(ContractTypeEnum.EXTRUSIONS);// 合同类型
 			break;
 
 		default:
@@ -204,15 +204,15 @@ public class RecordController extends BaseController {
 					.getAttribute("userinfo");
 			MemberEntity member = memberService.getMember(userBean.getMember()
 					.getId());
-			if (member.getCheckState() == MemberCheckStateEnum.certified) {
+			if (member.getCheckState() == MemberCheckStateEnum.CERTIFIED) {
 				record.setApplyId(member.getMemberNo());
 				record.setApplyName(member.getName());
-				record.setState(RecordStateEnum.noBinding);
-				record.setType(RecordTypeEnum.contract);
+				record.setState(RecordStateEnum.NOBINDING);
+				record.setType(RecordTypeEnum.CONTRACT);
 				record.setApplyDate(new Date());
 				record.setDelState(false);
-				record.setConfirmState(RecordConfirmStateEnum.accepted);
-				record.setContractType(ContractTypeEnum.bidding);// 合同类型
+				record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
+				record.setContractType(ContractTypeEnum.BIDDING);// 合同类型
 				record.setFlag(RecordFlagEnum.B);
 				recordService.addRecord(record);
 				map.put("isOK", "ok");
@@ -243,18 +243,18 @@ public class RecordController extends BaseController {
 					.getAttribute("userinfo");
 			MemberEntity member = memberService.getMember(userBean.getMember()
 					.getId());
-			if (member.getCheckState() == MemberCheckStateEnum.certified) {
+			if (member.getCheckState() == MemberCheckStateEnum.CERTIFIED) {
 				MemberEntity memberB = memberService.memberInfo(record
 						.getMemberIdB());
 				record.setApplyId(member.getMemberNo());
 				record.setApplyName(member.getName());
-				record.setState(RecordStateEnum.noBinding);
-				record.setType(RecordTypeEnum.contract);
+				record.setState(RecordStateEnum.NOBINDING);
+				record.setType(RecordTypeEnum.CONTRACT);
 				record.setApplyDate(new Date());
 				record.setDelState(false);
 				setContractType(record, memberB);
 				record.setFlag(RecordFlagEnum.B);
-				record.setConfirmState(RecordConfirmStateEnum.accepted);
+				record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
 				recordService.addRecord(record);
 				map.put("isOK", "ok");
 				map.put("recordNo", record.getRecordNo());
@@ -300,13 +300,13 @@ public class RecordController extends BaseController {
 					record.setRfidNo(RFID);
 				}
 				if (flag.equals("1")) {
-					record.setType(RecordTypeEnum.change);
-					record.setState(RecordStateEnum.noBinding);
+					record.setType(RecordTypeEnum.CHANGE);
+					record.setState(RecordStateEnum.NOBINDING);
 				} else if (flag.equals("2")) {
-					record.setType(RecordTypeEnum.supplement);
-					record.setState(RecordStateEnum.noBinding);
+					record.setType(RecordTypeEnum.SUPPLEMENT);
+					record.setState(RecordStateEnum.NOBINDING);
 				}
-				record.setConfirmState(RecordConfirmStateEnum.accepted);
+				record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
 				recordService.saveRecord(record);
 			} else {
 				throw new WebException("生成备案出错");

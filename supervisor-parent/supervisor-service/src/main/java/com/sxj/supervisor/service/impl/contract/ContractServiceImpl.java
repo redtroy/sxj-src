@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.contract.IContractItemDao;
@@ -213,7 +215,7 @@ public class ContractServiceImpl implements IContractService {
 			Assert.notNull(contract);
 			RecordEntity record = recordDao.getRecord(recordId);
 			if (StringUtils.isNotEmpty(record.getContractNo())
-					&& record.getState().equals(RecordStateEnum.Binding)) {
+					&& record.getState().equals(RecordStateEnum.BINDING)) {
 				throw new ServiceException("合同已经生成,不能重复生成");
 			}
 			Assert.notEmpty(itemList, "生成合同出错!!");
@@ -230,8 +232,8 @@ public class ContractServiceImpl implements IContractService {
 			contract.setRecordNo(record.getRecordNo());// 备案号
 			contract.setType(record.getContractType());
 			contract.setImgPath(record.getImgPath());
-			contract.setState(ContractStateEnum.noapprova);
-			contract.setConfirmState(ContractSureStateEnum.noaffirm);
+			contract.setState(ContractStateEnum.NOAPPROVAL);
+			contract.setConfirmState(ContractSureStateEnum.NOAFFIRM);
 			contract.setCreateDate(new Date());
 			String year = new SimpleDateFormat("yy", Locale.CHINESE)
 					.format(Calendar.getInstance().getTime());
@@ -250,7 +252,7 @@ public class ContractServiceImpl implements IContractService {
 			recordStatefsm.setCurrentState(record.getState());
 			recordStatefsm.fire(record.getState().toString(), record);
 			// record.setState(RecordStateEnum.Binding);
-			// recordDao.updateRecord(record);
+			recordDao.updateRecord(record);
 
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -318,7 +320,7 @@ public class ContractServiceImpl implements IContractService {
 							RecordEntity re = recordService.getRecordByNo(str
 									.trim());
 							re.setContractNo("");
-							re.setState(RecordStateEnum.noBinding);
+							re.setState(RecordStateEnum.NOBINDING);
 							recordDao.updateRecord(re);
 						}
 						// 更新备案号
@@ -326,7 +328,7 @@ public class ContractServiceImpl implements IContractService {
 							RecordEntity re = recordService.getRecordByNo(str);
 							re.setContractNo(contract.getContract()
 									.getContractNo());
-							re.setState(RecordStateEnum.Binding);
+							re.setState(RecordStateEnum.BINDING);
 							recordDao.updateRecord(re);
 						}
 					}
@@ -742,7 +744,7 @@ public class ContractServiceImpl implements IContractService {
 				if (mec.getId() != null) {
 					// 变更条目
 					List<ModifyItemEntity> mieList = new ArrayList<ModifyItemEntity>();
-					if (model.getModifyItemList() != null) {
+					if (!CollectionUtils.isEmpty(model.getModifyItemList())) {
 						for (Iterator<ModifyItemEntity> iterator = model
 								.getModifyItemList().iterator(); iterator
 								.hasNext();) {
@@ -756,8 +758,7 @@ public class ContractServiceImpl implements IContractService {
 					// 变更批次
 					List<ModifyBatchModel> mbmList = model.getModifyBatchList();
 					List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
-					if (mbmList != null) {
-
+					if (!CollectionUtils.isEmpty(mbmList)) {
 						for (ModifyBatchModel modifyBatchEntity : mbmList) {
 							ModifyBatchEntity mbe = modifyBatchEntity
 									.getModifyBatch();
@@ -778,7 +779,7 @@ public class ContractServiceImpl implements IContractService {
 			}
 			RecordEntity re = new RecordEntity();
 			re.setId(recordId);
-			re.setState(RecordStateEnum.Binding);
+			re.setState(RecordStateEnum.BINDING);
 			recordDao.updateRecord(re);
 			// 更新变更信息
 			if (StringUtils.isNotEmpty(contractIds)) {
@@ -902,7 +903,7 @@ public class ContractServiceImpl implements IContractService {
 					}
 					RecordEntity re = new RecordEntity();
 					re.setId(recordId);
-					re.setState(RecordStateEnum.Binding);
+					re.setState(RecordStateEnum.BINDING);
 					recordDao.updateRecord(re);
 					// 更新合同有效批次条目
 					ContractModel cm = this
@@ -923,11 +924,11 @@ public class ContractServiceImpl implements IContractService {
 	}
 
 	/**
-	 * 变更确认状态
+	 * 确认合同
 	 */
 	@Override
 	@Transactional
-	public void modifyCheckState(String contractId) throws ServiceException {
+	public void confirmContract(String contractId) throws ServiceException {
 		try {
 			Assert.hasText(contractId, "合同号不能为空");
 			ContractEntity centity = contractDao.getContract(contractId);
@@ -940,6 +941,24 @@ public class ContractServiceImpl implements IContractService {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("审核合同错误", e);
 		}
+	}
+
+	@Override
+	@Transactional
+	public void checkContract(String contractId) throws ServiceException {
+		try {
+			Assert.hasText(contractId, "合同号不能为空");
+			ContractEntity centity = contractDao.getContract(contractId);
+			Assert.notNull(centity, "该合同不存在");
+			contractStatefsm.setCurrentState(centity.getState());
+			contractStatefsm.fire(centity.getState().toString(), centity);
+			// centity.setConfirmState(ContractSureStateEnum.noaffirm);
+			// contractDao.updateContract(centity);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("审核合同错误", e);
+		}
+
 	}
 
 	@Override
@@ -1241,9 +1260,9 @@ public class ContractServiceImpl implements IContractService {
 			ref.setRfidNo(newRfid);
 			ref.setMemberNo(member.getMemberNo());
 			ref.setMemberName(member.getName());
-			if (member.getType().equals(MemberTypeEnum.glassFactory)) {
+			if (member.getType().equals(MemberTypeEnum.GLASSFACTORY)) {
 				ref.setRfidType(RfidTypeEnum.GLASS);
-			} else if (member.getType().equals(MemberTypeEnum.genresFactory)) {
+			} else if (member.getType().equals(MemberTypeEnum.GENRESFACTORY)) {
 				ref.setRfidType(RfidTypeEnum.EXTRUSIONS);
 			}
 			ref.setType(AssociationTypesEnum.RFID_ADD);
@@ -1303,9 +1322,9 @@ public class ContractServiceImpl implements IContractService {
 			ref.setRfidNo(newRfid);
 			ref.setMemberNo(member.getMemberNo());
 			ref.setMemberName(member.getName());
-			if (member.getType().equals(MemberTypeEnum.glassFactory)) {
+			if (member.getType().equals(MemberTypeEnum.GLASSFACTORY)) {
 				ref.setRfidType(RfidTypeEnum.GLASS);
-			} else if (member.getType().equals(MemberTypeEnum.genresFactory)) {
+			} else if (member.getType().equals(MemberTypeEnum.GENRESFACTORY)) {
 				ref.setRfidType(RfidTypeEnum.EXTRUSIONS);
 			}
 			ref.setType(AssociationTypesEnum.CONTRACTOR_ADD);
@@ -1971,4 +1990,5 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException("更新批次错误", e);
 		}
 	}
+
 }

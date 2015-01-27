@@ -93,12 +93,20 @@ public interface IContractService {
 			ReplenishContractEntity replenishContract);
 
 	/**
-	 * 变更确认状态
+	 * 确认合同
 	 * 
 	 * @param contractId
 	 * @param state
 	 */
-	public void modifyCheckState(String contractId);
+	public void confirmContract(String contractId);
+
+	/**
+	 * 审核合同
+	 * 
+	 * @param contractId
+	 * @throws ServiceException
+	 */
+	public void checkContract(String contractId) throws ServiceException;
 
 	/**
 	 * 根据合同号获取详情

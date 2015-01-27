@@ -2,6 +2,7 @@ package com.sxj.supervisor.service.record;
 
 import java.util.List;
 
+import com.sxj.statemachine.exceptions.StateMachineException;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -70,6 +71,9 @@ public interface IRecordService {
 	 * @param state
 	 */
 	public void modifyState(String contractId, MemberTypeEnum memType);
+
+	public void batchModifyConfimState(String contractNo, MemberTypeEnum memType)
+			throws StateMachineException;
 
 	public List<ContractBatchEntity> getBatch(String recordId);
 

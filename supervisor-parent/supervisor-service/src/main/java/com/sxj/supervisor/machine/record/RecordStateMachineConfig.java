@@ -12,22 +12,27 @@ import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 
-@StateMachine(stateType = RecordStateEnum.class, startState = "noBinding", finalStates = { "Binding" })
+@StateMachine(stateType = RecordStateEnum.class, startState = "NOBINDING", finalStates = { "BINDING" })
 public class RecordStateMachineConfig {
 
 	@Autowired
 	private IRecordDao recordDao;
 
-	@Transitions({ @Transition(source = "noBinding", event = "noBinding", target = "Binding") })
+	@Transitions({ @Transition(source = "NOBINDING", event = "NOBINDING", target = "BINDING") })
 	public void noop(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@OnEnter(value = "Binding")
+	@Transitions({ @Transition(source = "BINDING", event = "BINDING", target = "BINDING") })
+	public void noop2(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	@OnEnter(value = "BINDING")
 	public EventInfo enterB(TransitionInfo event) {
 		RecordEntity record = (RecordEntity) event.getObject();
-		record.setState(RecordStateEnum.Binding);
-		recordDao.updateRecord(record);
+		record.setState(RecordStateEnum.BINDING);
+		// recordDao.updateRecord(record);
 		return null;
 	}
 	//

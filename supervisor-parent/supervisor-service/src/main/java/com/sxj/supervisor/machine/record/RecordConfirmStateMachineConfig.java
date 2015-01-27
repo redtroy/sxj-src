@@ -1,5 +1,7 @@
 package com.sxj.supervisor.machine.record;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sxj.statemachine.EventInfo;
@@ -11,65 +13,95 @@ import com.sxj.statemachine.annotations.Transitions;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
+import com.sxj.supervisor.enu.record.RecordFlagEnum;
 
-@StateMachine(stateType = RecordConfirmStateEnum.class, startState = "accepted", finalStates = { "hasRecord" })
+@StateMachine(stateType = RecordConfirmStateEnum.class, startState = "ACCEPTED", finalStates = { "HASRECORD" })
 public class RecordConfirmStateMachineConfig {
 
 	@Autowired
 	private IRecordDao recordDao;
 
-	@Transitions({ @Transition(source = "accepted", event = "accepted", target = "unconfirmed") })
+	@Transitions({ @Transition(source = "ACCEPTED", event = "ACCEPTED", target = "UNCONFIRMED") })
 	public void noop(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@Transitions({ @Transition(source = "unconfirmed", event = "unconfirmedDAWPextrusions", target = "confirmedA") })
+	@Transitions({ @Transition(source = "UNCONFIRMED", event = "UNCONFIRMEDDAWPEXTRUSIONS", target = "CONFIRMEDA") })
 	public void noop1(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@Transitions({ @Transition(source = "unconfirmed", event = "unconfirmedDAWPglass", target = "confirmedA") })
+	@Transitions({ @Transition(source = "UNCONFIRMED", event = "UNCONFIRMEDDAWPGLASS", target = "CONFIRMEDA") })
 	public void noop2(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@Transitions({ @Transition(source = "unconfirmed", event = "unconfirmedglassFactoryglass", target = "confirmedB") })
+	@Transitions({ @Transition(source = "UNCONFIRMED", event = "UNCONFIRMEDGLASSFACTORYGLASS", target = "CONFIRMEDB") })
 	public void noop3(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@Transitions({ @Transition(source = "unconfirmed", event = "unconfirmedglassFactoryextrusions", target = "confirmedB") })
+	@Transitions({ @Transition(source = "UNCONFIRMED", event = "UNCONFIRMEDGENRESFACTORYEXTRUSIONS", target = "CONFIRMEDB") })
 	public void noop4(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@Transitions({ @Transition(source = "unconfirmed", event = "unconfirmedDAWPbidding", target = "hasRecord") })
+	@Transitions({ @Transition(source = "UNCONFIRMED", event = "UNCONFIRMEDDAWPBIDDING", target = "HASRECORD") })
 	public void noop5(TransitionInfo event) {
+
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@Transitions({ @Transition(source = "confirmedA", event = "confirmedA", target = "hasRecord") })
+	@Transitions({ @Transition(source = "CONFIRMEDA", event = "CONFIRMEDAGLASSFACTORYGLASS", target = "HASRECORD") })
 	public void noop6(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@Transitions({ @Transition(source = "confirmedB", event = "confirmedB", target = "hasRecord") })
+	@Transitions({ @Transition(source = "CONFIRMEDA", event = "CONFIRMEDAGENRESFACTORYEXTRUSIONS", target = "HASRECORD") })
 	public void noop7(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@OnEnter(value = "confirmedA")
-	public EventInfo enterB(TransitionInfo event) {
-		// RecordEntity record = (RecordEntity) event.getObject();
-		// record.setState(RecordStateEnum.Binding);
+	@Transitions({ @Transition(source = "CONFIRMEDB", event = "CONFIRMEDBDAWPGLASS", target = "HASRECORD") })
+	public void noop8(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	@Transitions({ @Transition(source = "CONFIRMEDB", event = "CONFIRMEDBDAWPEXTRUSIONS", target = "HASRECORD") })
+	public void noop9(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	@OnEnter(value = "CONFIRMEDA")
+	public EventInfo enterA(TransitionInfo event) {
+		RecordEntity record = (RecordEntity) event.getObject();
+		record.setConfirmState(RecordConfirmStateEnum.CONFIRMEDA);
 		// recordDao.updateRecord(record);
 		return null;
 	}
 
-	@OnEnter(value = "hasRecord")
+	@OnEnter(value = "CONFIRMEDB")
+	public EventInfo enterB(TransitionInfo event) {
+		RecordEntity record = (RecordEntity) event.getObject();
+		record.setConfirmState(RecordConfirmStateEnum.CONFIRMEDB);
+		// recordDao.updateRecord(record);
+		return null;
+	}
+
+	@OnEnter(value = "HASRECORD")
 	public EventInfo enterHasRecord(TransitionInfo event) {
 		RecordEntity record = (RecordEntity) event.getObject();
-		recordDao.batchUpdateConfirmState(record.getContractNo());
+		record.setConfirmState(RecordConfirmStateEnum.HASRECORD);
+		if (record.getRecordState() != null) {
+			if (record.getRecordState().intValue() != 1) {
+				record.setRecordDate(new Date());
+				if (record.getFlag().equals(RecordFlagEnum.A)) {
+					record.setRecordState(1);
+				}
+
+			}
+		}
+		// recordDao.batchUpdateConfirmState(record.getContractNo());
 		return null;
 	}
 	//
