@@ -729,8 +729,7 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Override
 	@Transactional
-	public void changeContract(String recordId, String contractId,
-			ContractModifyModel model, String recordNo,
+	public void changeContract(String recordId, ContractModifyModel model,
 			List<ContractItemEntity> itemList, String contractIds,
 			String changeIds, String contractBatchIds, String changeBatchIds)
 			throws ServiceException {
