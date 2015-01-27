@@ -22,18 +22,6 @@ public enum MemberCheckStateEnum
         this.id = id;
     }
     
-    // 普通方法
-    public String getName(Integer id)
-    {
-        for (MemberCheckStateEnum c : MemberCheckStateEnum.values())
-        {
-            if (c.getId() == id)
-            {
-                return c.name;
-            }
-        }
-        return null;
-    }
     
     public Integer getId()
     {

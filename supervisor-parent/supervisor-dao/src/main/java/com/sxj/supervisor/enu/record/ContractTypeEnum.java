@@ -20,18 +20,6 @@ public enum ContractTypeEnum
         this.id = id;
     }
     
-    // 普通方法
-    public static String getName(Integer id)
-    {
-        for (ContractTypeEnum c : ContractTypeEnum.values())
-        {
-            if (c.getId() == id)
-            {
-                return c.name;
-            }
-        }
-        return null;
-    }
     
     public Integer getId()
     {

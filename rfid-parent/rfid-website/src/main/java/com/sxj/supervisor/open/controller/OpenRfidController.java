@@ -311,7 +311,7 @@ public class OpenRfidController {
 				return map;
 			} else{
 				String[] gidArr = gids.split(",");
-				int stepState = windowRfid.testWindow(contractNo, gidArr,address);
+				int stepState = windowRfid.testWindow(contractNo.trim(),gidArr,address);
 				if (stepState == 1) {
 					map.put("state", "1");
 					map.put("message", "质检成功");
