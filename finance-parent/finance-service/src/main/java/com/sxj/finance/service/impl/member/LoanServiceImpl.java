@@ -21,78 +21,95 @@ import com.sxj.util.logger.SxjLogger;
 
 @Service
 @Transactional
-public class LoanServiceImpl implements ILoanService {
-
-	@Autowired
-	private IAssetsInfoDao assetsInfoDao;
-	@Autowired
-	private ICreditInfoDao creditInfoDao;
-	@Autowired
-	private IGuaranteeDao guaranteeDao;
-	@Autowired
-	private IManagementDao managementDao;
-	@Autowired
-	private IMemberInfoDao memberInfoDao;
-
-	/**
-	 * 新增贷款信息
-	 */
-	@Override
-	@Transactional
-	public void addLoanInfo(LoanQuery loan) throws ServiceException {
-		try {
-			assetsInfoDao.addAssetsInfo(loan.getAssetsInfo());
-			creditInfoDao.addCreditInfo(loan.getCreditInfo());
-			guaranteeDao.addGuarantee(loan.getGuarantee());
-			managementDao.addManagement(loan.getManagement());
-			memberInfoDao.addMemberInfo(loan.getMemberInfo());
-			
-		} catch (Exception e) {
-			SxjLogger.error("新增贷款申请表错误", e, this.getClass());
-			throw new ServiceException("新增贷款申请表错误", e);
-		}
-
-	}
-
-	/**
-	 * 更新贷款信息
-	 */
-	@Override
-	@Transactional
-	public void modifyLoanInfo(LoanQuery loan) throws ServiceException {
-		try {
-			assetsInfoDao.updateAssetsInfo(loan.getAssetsInfo());
-			creditInfoDao.updateCreditInfo(loan.getCreditInfo());
-			guaranteeDao.updateGuarantee(loan.getGuarantee());
-			managementDao.updateManagement(loan.getManagement());
-			memberInfoDao.updateMemberInfo(loan.getMemberInfo());
-			
-		} catch (Exception e) {
-			SxjLogger.error("更新贷款申请表错误", e, this.getClass());
-			throw new ServiceException("更新贷款申请表错误", e);
-		}
-
-	}
-
-	@Override
-	public LoanQuery queryLoanInfo(String memberNo) throws ServiceException {
-		try{
-			LoanQuery loan = new LoanQuery();
-			AssetsInfoEntity assetsInfo=assetsInfoDao.getAssetsInfo(memberNo);
-			CreditInfoEntity creditInfo=creditInfoDao.getCreditInfo(memberNo);
-			GuaranteeEntity guarantee=guaranteeDao.getGuarantee(memberNo);
-			ManagementEntity management=managementDao.getManagement(memberNo);
-			MemberInfoEntity memberInfo=memberInfoDao.getMemberInfo(memberNo);
-			loan.setAssetsInfo(assetsInfo);
-			loan.setCreditInfo(creditInfo);
-			loan.setGuarantee(guarantee);
-			loan.setManagement(management);
-			loan.setMemberInfo(memberInfo);
-			return loan;
-		} catch (Exception e) {
-			SxjLogger.error("获取贷款申请表错误", e, this.getClass());
-			throw new ServiceException("获取贷款申请表错误", e);
-		}
-	}
-
+public class LoanServiceImpl implements ILoanService
+{
+    
+    @Autowired
+    private IAssetsInfoDao assetsInfoDao;
+    
+    @Autowired
+    private ICreditInfoDao creditInfoDao;
+    
+    @Autowired
+    private IGuaranteeDao guaranteeDao;
+    
+    @Autowired
+    private IManagementDao managementDao;
+    
+    @Autowired
+    private IMemberInfoDao memberInfoDao;
+    
+    /**
+     * 新增贷款信息
+     */
+    @Override
+    @Transactional
+    public void addLoanInfo(LoanQuery loan) throws ServiceException
+    {
+        try
+        {
+            assetsInfoDao.addAssetsInfo(loan.getAssetsInfo());
+            creditInfoDao.addCreditInfo(loan.getCreditInfo());
+            guaranteeDao.addGuarantee(loan.getGuarantee());
+            managementDao.addManagement(loan.getManagement());
+            memberInfoDao.addMemberInfo(loan.getMemberInfo());
+            
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("新增贷款申请表错误", e, this.getClass());
+            throw new ServiceException("新增贷款申请表错误", e);
+        }
+        
+    }
+    
+    /**
+     * 更新贷款信息
+     */
+    @Override
+    @Transactional
+    public void modifyLoanInfo(LoanQuery loan) throws ServiceException
+    {
+        try
+        {
+            assetsInfoDao.updateAssetsInfo(loan.getAssetsInfo());
+            creditInfoDao.updateCreditInfo(loan.getCreditInfo());
+            guaranteeDao.updateGuarantee(loan.getGuarantee());
+            managementDao.updateManagement(loan.getManagement());
+            memberInfoDao.updateMemberInfo(loan.getMemberInfo());
+            
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("更新贷款申请表错误", e, this.getClass());
+            throw new ServiceException("更新贷款申请表错误", e);
+        }
+        
+    }
+    
+    @Override
+    public LoanQuery queryLoanInfo(String memberNo) throws ServiceException
+    {
+        try
+        {
+            LoanQuery loan = new LoanQuery();
+            AssetsInfoEntity assetsInfo = assetsInfoDao.getAssetsInfo(memberNo);
+            CreditInfoEntity creditInfo = creditInfoDao.getCreditInfo(memberNo);
+            GuaranteeEntity guarantee = guaranteeDao.getGuarantee(memberNo);
+            ManagementEntity management = managementDao.getManagement(memberNo);
+            MemberInfoEntity memberInfo = memberInfoDao.getMemberInfo(memberNo);
+            loan.setAssetsInfo(assetsInfo);
+            loan.setCreditInfo(creditInfo);
+            loan.setGuarantee(guarantee);
+            loan.setManagement(management);
+            loan.setMemberInfo(memberInfo);
+            return loan;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("获取贷款申请表错误", e, this.getClass());
+            throw new ServiceException("获取贷款申请表错误", e);
+        }
+    }
+    
 }

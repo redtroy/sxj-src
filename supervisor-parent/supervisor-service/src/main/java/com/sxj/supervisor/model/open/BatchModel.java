@@ -1,4 +1,4 @@
-package com.sxj.supervisor.model.open;
+﻿package com.sxj.supervisor.model.open;
 
 import java.io.Serializable;
 

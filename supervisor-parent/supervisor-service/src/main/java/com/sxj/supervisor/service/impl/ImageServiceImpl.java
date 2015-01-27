@@ -14,30 +14,39 @@ import com.sxj.util.logger.SxjLogger;
 
 @Service
 @Transactional
-public class ImageServiceImpl implements IImageService {
-
-	@Autowired
-	private IImageDao imageDao;
-
-	@Override
-	public void addImages(List<ImageEntity> images) throws ServiceException {
-		try {
-			imageDao.addImages(images);
-		} catch (Exception e) {
-			SxjLogger.error("添加图片数据错误", e, this.getClass());
-			throw new ServiceException("添加图片数据错误", e);
-		}
-
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public ImageEntity getImage(String md5) throws ServiceException {
-		try {
-			return imageDao.getImage(md5);
-		} catch (Exception e) {
-			SxjLogger.error("获取图片数据错误", e, this.getClass());
-			throw new ServiceException("获取图片数据错误", e);
-		}
-	}
+public class ImageServiceImpl implements IImageService
+{
+    
+    @Autowired
+    private IImageDao imageDao;
+    
+    @Override
+    public void addImages(List<ImageEntity> images) throws ServiceException
+    {
+        try
+        {
+            imageDao.addImages(images);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("添加图片数据错误", e, this.getClass());
+            throw new ServiceException("添加图片数据错误", e);
+        }
+        
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public ImageEntity getImage(String md5) throws ServiceException
+    {
+        try
+        {
+            return imageDao.getImage(md5);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("获取图片数据错误", e, this.getClass());
+            throw new ServiceException("获取图片数据错误", e);
+        }
+    }
 }

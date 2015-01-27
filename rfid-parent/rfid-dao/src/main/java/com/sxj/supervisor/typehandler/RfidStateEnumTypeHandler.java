@@ -4,11 +4,12 @@ import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 
-
-public class RfidStateEnumTypeHandler  extends
-		EnumOrdinalTypeHandler<RfidStateEnum> {
-	public RfidStateEnumTypeHandler(Class<RfidStateEnum> type) {
-		super(type);
-	}
-
+public class RfidStateEnumTypeHandler extends
+        EnumOrdinalTypeHandler<RfidStateEnum>
+{
+    public RfidStateEnumTypeHandler(Class<RfidStateEnum> type)
+    {
+        super(type);
+    }
+    
 }

@@ -168,8 +168,8 @@ public class MemberController extends BaseController {
 			return "site/register";
 		}
 		if (message.equals(ms)) {
-			member.setState(MemberStatesEnum.normal);
-			member.setCheckState(MemberCheckStateEnum.unaudited);
+			member.setState(MemberStatesEnum.NORMAL);
+			member.setCheckState(MemberCheckStateEnum.UNAUDITED);
 			member.setRegDate(new Date());
 			member.setFlag(false);
 			memberService.addMember(member);
@@ -288,11 +288,11 @@ public class MemberController extends BaseController {
 		// collections.getSet(Constraints.EDIT_CHECK_STATE_SET);
 		// if (set.contains(member.getId())) {
 		if (member.getMember().getCheckState()
-				.equals(MemberCheckStateEnum.unrecognized)) {
+				.equals(MemberCheckStateEnum.UNRECOGNIZED)) {
 			MemberEntity newMember = memberService.getMember(member.getMember()
 					.getId());
 			if (newMember.getCheckState()
-					.equals(MemberCheckStateEnum.certified)) {
+					.equals(MemberCheckStateEnum.CERTIFIED)) {
 				member.setMember(newMember);
 				session.setAttribute("userinfo", member);
 				return true;

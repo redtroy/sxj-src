@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.impl.contract;
+﻿package com.sxj.supervisor.service.impl.contract;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -60,7 +60,6 @@ import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
-import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
@@ -202,6 +201,121 @@ public class ContractServiceImpl implements IContractService
     @Autowired
     private ILogisticsRefDao refDao;
     
+    //    @Autowired
+    //    @Qualifier("fsm")
+    //    private StateMachineImpl<RecordConfirmStateEnum> fsm;
+    //    
+    public void setContractDao(IContractDao contractDao)
+    {
+        this.contractDao = contractDao;
+    }
+    
+    public void setLogisticsDao(ILogisticsRfidDao logisticsDao)
+    {
+        this.logisticsDao = logisticsDao;
+    }
+    
+    public void setContractBatchDao(IContractBatchDao contractBatchDao)
+    {
+        this.contractBatchDao = contractBatchDao;
+    }
+    
+    public void setContractBatchHisDao(
+            IContractModifyBatchDao contractBatchHisDao)
+    {
+        this.contractBatchHisDao = contractBatchHisDao;
+    }
+    
+    public void setContractItemDao(IContractItemDao contractItemDao)
+    {
+        this.contractItemDao = contractItemDao;
+    }
+    
+    public void setContractModifyItemDao(
+            IContractModifyItemDao contractModifyItemDao)
+    {
+        this.contractModifyItemDao = contractModifyItemDao;
+    }
+    
+    public void setContractModifyDao(IContractModifyDao contractModifyDao)
+    {
+        this.contractModifyDao = contractModifyDao;
+    }
+    
+    public void setContractModifyBatchDao(
+            IContractModifyBatchDao contractModifyBatchDao)
+    {
+        this.contractModifyBatchDao = contractModifyBatchDao;
+    }
+    
+    public void setContractReplenishDao(
+            IContractReplenishDao contractReplenishDao)
+    {
+        this.contractReplenishDao = contractReplenishDao;
+    }
+    
+    public void setContractReplenishBatchDao(
+            IContractReplenishBatchDao contractReplenishBatchDao)
+    {
+        this.contractReplenishBatchDao = contractReplenishBatchDao;
+    }
+    
+    public void setRecordDao(IRecordDao recordDao)
+    {
+        this.recordDao = recordDao;
+    }
+    
+    public void setRecordService(IRecordService recordService)
+    {
+        this.recordService = recordService;
+    }
+    
+    public void setLogisticsRfidService(
+            ILogisticsRfidService logisticsRfidService)
+    {
+        this.logisticsRfidService = logisticsRfidService;
+    }
+    
+    public void setLogisticsRefService(ILogisticsRefService logisticsRefService)
+    {
+        this.logisticsRefService = logisticsRefService;
+    }
+    
+    public void setWindowRfidService(IWindowRfidService windowRfidService)
+    {
+        this.windowRfidService = windowRfidService;
+    }
+    
+    public void setWindowRefService(IWindowRfidRefService windowRefService)
+    {
+        this.windowRefService = windowRefService;
+    }
+    
+    public void setAppRfidService(IRfidApplicationService appRfidService)
+    {
+        this.appRfidService = appRfidService;
+    }
+    
+    public void setSelf(IContractService self)
+    {
+        this.self = self;
+    }
+    
+    public void setContext(ApplicationContext context)
+    {
+        this.context = context;
+    }
+    
+    public void setRefDao(ILogisticsRefDao refDao)
+    {
+        this.refDao = refDao;
+    }
+    
+    //    public void setFsm(StateMachineImpl<RecordConfirmStateEnum> fsm)
+    //    {
+    //        this.fsm = fsm;
+    //    }
+    //    
     @PostConstruct
     public void init()
     {
@@ -222,7 +336,7 @@ public class ContractServiceImpl implements IContractService
             Assert.notNull(contract);
             RecordEntity record = recordDao.getRecord(recordId);
             if (StringUtils.isNotEmpty(record.getContractNo())
-                    && record.getState().equals(RecordStateEnum.Binding))
+                    && record.getState().equals(RecordStateEnum.BINDING))
             {
                 throw new ServiceException("合同已经生成,不能重复生成");
             }
@@ -241,8 +355,8 @@ public class ContractServiceImpl implements IContractService
             contract.setRecordNo(record.getRecordNo());// 备案号
             contract.setType(record.getContractType());
             contract.setImgPath(record.getImgPath());
-            contract.setState(ContractStateEnum.approval);
-            contract.setConfirmState(ContractSureStateEnum.noaffirm);
+            contract.setState(ContractStateEnum.APPROVAL);
+            contract.setConfirmState(ContractSureStateEnum.NOAFFIRM);
             contract.setCreateDate(new Date());
             String year = new SimpleDateFormat("yy", Locale.CHINESE).format(Calendar.getInstance()
                     .getTime());
@@ -257,7 +371,7 @@ public class ContractServiceImpl implements IContractService
             map.put("contractNo", contract.getContractNo());
             contractItemDao.addItem(map);// 新增条目
             record.setContractNo(contract.getContractNo());
-            record.setState(RecordStateEnum.Binding);
+            record.setState(RecordStateEnum.BINDING);
             recordDao.updateRecord(record);
             
         }
@@ -341,7 +455,7 @@ public class ContractServiceImpl implements IContractService
                         {
                             RecordEntity re = recordService.getRecordByNo(str.trim());
                             re.setContractNo("");
-                            re.setState(RecordStateEnum.noBinding);
+                            re.setState(RecordStateEnum.NOBINDING);
                             recordDao.updateRecord(re);
                         }
                         // 更新备案号
@@ -350,7 +464,7 @@ public class ContractServiceImpl implements IContractService
                             RecordEntity re = recordService.getRecordByNo(str);
                             re.setContractNo(contract.getContract()
                                     .getContractNo());
-                            re.setState(RecordStateEnum.Binding);
+                            re.setState(RecordStateEnum.BINDING);
                             recordDao.updateRecord(re);
                         }
                     }
@@ -863,7 +977,7 @@ public class ContractServiceImpl implements IContractService
             }
             RecordEntity re = new RecordEntity();
             re.setId(recordId);
-            re.setState(RecordStateEnum.change);
+            re.setState(RecordStateEnum.CHANGE);
             recordDao.updateRecord(re);
             // 更新变更信息
             if (StringUtils.isNotEmpty(contractIds))
@@ -1003,7 +1117,7 @@ public class ContractServiceImpl implements IContractService
                     }
                     RecordEntity re = new RecordEntity();
                     re.setId(recordId);
-                    re.setState(RecordStateEnum.supplement);
+                    re.setState(RecordStateEnum.SUPPLEMENT);
                     recordDao.updateRecord(re);
                     // 更新合同有效批次条目
                     ContractModel cm = this.getContractModelByContractNo(contractId);
@@ -1040,12 +1154,12 @@ public class ContractServiceImpl implements IContractService
             {
                 ce.setId(contractId);
                 ce.setState(state);
-                ce.setConfirmState(ContractSureStateEnum.noaffirm);
+                ce.setConfirmState(ContractSureStateEnum.NOAFFIRM);
                 contractDao.updateContract(ce);
             }
             ContractEntity centity = contractDao.getContract(contractId);
             // 生成RFID申请单
-            if (centity.getType().equals(ContractTypeEnum.bidding))
+            if (centity.getType().equals(ContractTypeEnum.BIDDING))
             {
                 RfidApplicationEntity app = new RfidApplicationEntity();
                 app.setDateNo(DateTimeUtils.getTime("yyMM"));
@@ -1073,7 +1187,9 @@ public class ContractServiceImpl implements IContractService
                 {
                     for (RecordEntity recordEntity : recordList)
                     {
-                        recordEntity.setConfirmState(RecordConfirmStateEnum.unconfirmed);
+                        //                        fsm.fire("ac_un", null);
+                        //                        recordEntity.setConfirmState(fsm.getCurrentState());
+                        
                         if (recordEntity.getFlag().getId() == 0)
                         {
                             if (recordEntity.getAcceptState() == null
@@ -1486,11 +1602,11 @@ public class ContractServiceImpl implements IContractService
             ref.setRfidNo(newRfid);
             ref.setMemberNo(member.getMemberNo());
             ref.setMemberName(member.getName());
-            if (member.getType().equals(MemberTypeEnum.glassFactory))
+            if (member.getType().equals(MemberTypeEnum.GLASSFACTORY))
             {
                 ref.setRfidType(RfidTypeEnum.GLASS);
             }
-            else if (member.getType().equals(MemberTypeEnum.genresFactory))
+            else if (member.getType().equals(MemberTypeEnum.GENRESFACTORY))
             {
                 ref.setRfidType(RfidTypeEnum.EXTRUSIONS);
             }
@@ -1541,11 +1657,11 @@ public class ContractServiceImpl implements IContractService
             ref.setRfidNo(newRfid);
             ref.setMemberNo(member.getMemberNo());
             ref.setMemberName(member.getName());
-            if (member.getType().equals(MemberTypeEnum.glassFactory))
+            if (member.getType().equals(MemberTypeEnum.GLASSFACTORY))
             {
                 ref.setRfidType(RfidTypeEnum.GLASS);
             }
-            else if (member.getType().equals(MemberTypeEnum.genresFactory))
+            else if (member.getType().equals(MemberTypeEnum.GENRESFACTORY))
             {
                 ref.setRfidType(RfidTypeEnum.EXTRUSIONS);
             }

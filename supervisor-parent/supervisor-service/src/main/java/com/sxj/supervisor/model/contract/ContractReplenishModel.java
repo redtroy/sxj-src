@@ -41,7 +41,7 @@ public class ContractReplenishModel implements Serializable
     public List<ReplenishBatchModel> getBatchItems()
     {
         if (batchItems == null)
-        	batchItems= new ArrayList<ReplenishBatchModel>();
+            batchItems = new ArrayList<ReplenishBatchModel>();
         return batchItems;
     }
     

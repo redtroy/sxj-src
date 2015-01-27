@@ -5,10 +5,12 @@ import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 
 public class RecordConfirmStateEnumTypeHandler extends
-		EnumOrdinalTypeHandler<RecordConfirmStateEnum> {
-
-	public RecordConfirmStateEnumTypeHandler(Class<RecordConfirmStateEnum> type) {
-		super(type);
-	}
-
+        EnumOrdinalTypeHandler<RecordConfirmStateEnum>
+{
+    
+    public RecordConfirmStateEnumTypeHandler(Class<RecordConfirmStateEnum> type)
+    {
+        super(type);
+    }
+    
 }

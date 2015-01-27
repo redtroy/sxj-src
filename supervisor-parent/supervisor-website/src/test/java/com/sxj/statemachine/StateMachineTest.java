@@ -11,27 +11,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.sxj.statemachine.exceptions.StateMachineException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring/applicationContext-test.xml" })
-public class StateMachineTest
-{
-    @Autowired
-    StateMachineImpl<DemoStates> fsm;
-    
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception
-    {
-    }
-    
-    @After
-    public void tearDown() throws Exception
-    {
-    }
-    
-    @Test
-    public void test() throws StateMachineException
-    {
-        fsm.fire("AtoB", null);
-        org.junit.Assert.assertEquals(DemoStates.B, fsm.getCurrentState());
-    }
-    
+@ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
+public class StateMachineTest {
+	@Autowired
+	StateMachineImpl<DemoStates> fsm;
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void test() throws StateMachineException {
+		// fsm.fire("AtoB", null);
+		fsm.setCurrentState(DemoStates.B);
+		fsm.fire("BtoC", null);
+		System.out.println(fsm.getCurrentState());
+		org.junit.Assert.assertEquals(DemoStates.C, fsm.getCurrentState());
+	}
 }

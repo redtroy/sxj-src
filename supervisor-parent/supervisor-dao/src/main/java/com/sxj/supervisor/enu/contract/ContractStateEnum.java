@@ -7,7 +7,7 @@ package com.sxj.supervisor.enu.contract;
  */
 public enum ContractStateEnum
 {
-    approval("未审核", 0), noapproval("已审核", 1);
+    APPROVAL("未审核", 0), NOAPPROVAL("已审核", 1);
     
     // 成员变量
     private Integer id;
@@ -20,18 +20,6 @@ public enum ContractStateEnum
         this.id = id;
     }
     
-    // 普通方法
-    public static String getName(Integer id)
-    {
-        for (ContractStateEnum c : ContractStateEnum.values())
-        {
-            if (c.getId() == id)
-            {
-                return c.name;
-            }
-        }
-        return null;
-    }
     
     public Integer getId()
     {

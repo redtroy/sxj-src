@@ -6,10 +6,10 @@
 	<resultMap id="ContractPayResultMap"
 		type="com.sxj.supervisor.entity.pay.PayRecordEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="memberNo_A" column="MEMBER_NO_A" jdbcType="VARCHAR" />
-		<result property="memberName_A" column="MEMBER_NAME_A" jdbcType="VARCHAR" />
-		<result property="memberNo_B" column="MEMBER_NO_B" jdbcType="VARCHAR" />
-		<result property="memberName_B" column="MEMBER_NAME_B" jdbcType="VARCHAR" />
+		<result property="memberNoA" column="MEMBER_NO_A" jdbcType="VARCHAR" />
+		<result property="memberNameA" column="MEMBER_NAME_A" jdbcType="VARCHAR" />
+		<result property="memberNoB" column="MEMBER_NO_B" jdbcType="VARCHAR" />
+		<result property="memberNameB" column="MEMBER_NAME_B" jdbcType="VARCHAR" />
 		<result property="payNo" column="PAY_NO" jdbcType="VARCHAR"
 			javaType="String" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR"

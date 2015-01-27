@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.contract;
+﻿package com.sxj.supervisor.service.contract;
 
 import java.sql.SQLException;
 import java.util.List;

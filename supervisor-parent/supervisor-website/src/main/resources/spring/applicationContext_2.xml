@@ -30,28 +30,21 @@
 			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 
-	<!-- 事务管理器, Jdbc单数据源事务 
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>-->
+	<!-- 事务管理器, Jdbc单数据源事务 <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="dataSource" /> </bean> -->
 
 
 
-	<!-- MyBatis配置
-	<bean id="sqlSessionFactory" class="com.sxj.mybatis.orm.ActiveSQLSessionFactoryBean">
-		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
-		<property name="dataSource" ref="dataSource" />-->
-		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置
-		<property name="typeAliasesPackage" value="com.sxj.supervisor.entity" /> -->
-		<!-- 显式指定Mapper文件位置
-		<property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" />
-	</bean> -->
-	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.sxj.supervisor.dao" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-	</bean>  -->
+	<!-- MyBatis配置 <bean id="sqlSessionFactory" class="com.sxj.mybatis.orm.ActiveSQLSessionFactoryBean"> 
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" 
+		/> <property name="dataSource" ref="dataSource" /> -->
+	<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 <property name="typeAliasesPackage" 
+		value="com.sxj.supervisor.entity" /> -->
+	<!-- 显式指定Mapper文件位置 <property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" 
+		/> </bean> -->
+	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> 
+		<property name="basePackage" value="com.sxj.supervisor.dao" /> <property 
+		name="sqlSessionFactoryBeanName" value="sqlSessionFactory" /> </bean> -->
 	<!-- 配置多级缓存 -->
 	<bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
 		lazy-init="false" init-method="initCacheProvider">
@@ -95,11 +88,18 @@
 		</constructor-arg>
 	</bean>
 	<bean class="com.sxj.redis.service.comet.CometServiceImpl" />
-	
+
 	<bean id="httpClient" class="com.sxj.util.common.SxjHttpClientImpl">
 		<property name="charset" value="${httpclient.charset}" />
 		<property name="keyStoreType" value="${httpclient.keyStoreType}" />
 		<property name="keyStorePath" value="${httpclient.keyStorePath}" />
 		<property name="keyPassword" value="${httpclient.keyPassword}" />
 	</bean>
+
+	<!-- <bean id="fsm" class="com.sxj.statemachine.StateMachineFactory"
+		factory-method="newInstance" lazy-init="false">
+		<constructor-arg>
+			<bean id="fsmConfig" class="com.sxj.statemachine.StateMachineConfig"></bean>
+		</constructor-arg>
+	</bean> -->
 </beans>

@@ -57,7 +57,7 @@
     </tr>
     <tr>
       <th>性别</th>
-      <td>${loan.memberInfo.sex}</td>
+      <td><#if loan.memberInfo.sex??><#if loan.memberInfo.sex==false>男<#elseif loan.memberInfo.sex==true>女</#if></#if></td>
     </tr>
     <tr>
       <th>年龄</th>
@@ -178,7 +178,7 @@
   </tr>
   <tr>
     <th>有无贷款逾期记录</th>
-    <td>${loan.creditInfo.isOverdue}</td>
+    <td><#if loan.creditInfo.isOverdue??><#if loan.creditInfo.isOverdue==true>有<#elseif loan.creditInfo.isOverdue==false>没有</#if></#if></td>
   </tr>
   <tr>
     <th>逾期贷款期数</th>

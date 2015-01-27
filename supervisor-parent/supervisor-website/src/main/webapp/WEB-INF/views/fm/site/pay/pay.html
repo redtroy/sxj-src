@@ -168,7 +168,7 @@ function to_finance(payId){
       付款状态<select name="state">
 		    <option selected="selected" value="">全部</option>
 		    <#list payState as ps>
-            <option value="${ps.ordinal()}">${ps.getName_a()}</option>
+            <option value="${ps.ordinal()}">${ps.getNameA()}</option>
             </#list>
           </select>
    <#else>
@@ -179,7 +179,7 @@ function to_finance(payId){
             <option value="${ps.ordinal()}">等待付款</option>
             </#if>
             <#if (ps.ordinal()>3)>
-            <option value="${ps.ordinal()}">${ps.getName_b()}</option>
+            <option value="${ps.ordinal()}">${ps.getNameB()}</option>
             </#if>
             </#list>
           </select>

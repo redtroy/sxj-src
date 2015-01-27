@@ -16,52 +16,53 @@ import com.sxj.util.persistent.QueryCondition;
  * @author Ann
  *
  */
-public interface IContractModifyBatchDao {
-	/**
-	 * 添加批次信息
-	 *
-	 * @param batchs
-	 **/
-	@BatchInsert
-	public void addBatchs(List<ModifyBatchEntity> batchs);
-
-	/**
-	 * 获取批次信息
-	 *
-	 * @param id
-	 **/
-	@Get
-	public ModifyBatchEntity getBatch(String id);
-
-	/**
-	 * 更新批次
-	 * 
-	 * @param items
-	 */
-	@Update
-	public void updateBatch(ModifyBatchEntity batch);
-
-	/**
-	 * 查询批次列表
-	 *
-	 * @param contractId
-	 **/
-	public List<ModifyBatchEntity> queryBacths(
-			QueryCondition<ModifyBatchEntity> query);
-
-	/**
-	 * 刪除批次
-	 * 
-	 * @param contractId
-	 */
-	@Delete
-	public void deleteBatchs(String contractId);
-
-	/**
-	 * 更新批次
-	 * 
-	 * @param items
-	 */
-	@BatchUpdate
-	public void updateItems(List<ModifyBatchEntity> items);
+public interface IContractModifyBatchDao
+{
+    /**
+     * 添加批次信息
+     *
+     * @param batchs
+     **/
+    @BatchInsert
+    public void addBatchs(List<ModifyBatchEntity> batchs);
+    
+    /**
+     * 获取批次信息
+     *
+     * @param id
+     **/
+    @Get
+    public ModifyBatchEntity getBatch(String id);
+    
+    /**
+     * 更新批次
+     * 
+     * @param items
+     */
+    @Update
+    public void updateBatch(ModifyBatchEntity batch);
+    
+    /**
+     * 查询批次列表
+     *
+     * @param contractId
+     **/
+    public List<ModifyBatchEntity> queryBacths(
+            QueryCondition<ModifyBatchEntity> query);
+    
+    /**
+     * 刪除批次
+     * 
+     * @param contractId
+     */
+    @Delete
+    public void deleteBatchs(String contractId);
+    
+    /**
+     * 更新批次
+     * 
+     * @param items
+     */
+    @BatchUpdate
+    public void updateItems(List<ModifyBatchEntity> items);
 }

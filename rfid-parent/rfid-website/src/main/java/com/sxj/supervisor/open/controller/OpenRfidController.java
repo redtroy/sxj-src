@@ -76,7 +76,7 @@ public class OpenRfidController {
 					retVal.put("state", 0);
 					return retVal;
 				}
-				if (AccountStatesEnum.stop.equals(account.getState())) {
+				if (AccountStatesEnum.STOP.equals(account.getState())) {
 					retVal.put("state", 0);
 					return retVal;
 				}

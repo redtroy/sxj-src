@@ -128,7 +128,7 @@ public class BasicController extends BaseController {
 				if (newAccount == null) {
 					return LOGIN;
 				}
-				if (newAccount.getState().equals(AccountStatesEnum.stop)) {
+				if (newAccount.getState().equals(AccountStatesEnum.STOP)) {
 					return LOGIN;
 				}
 				if (StringUtils.isEmpty(newAccount.getPassword())) {
@@ -198,11 +198,11 @@ public class BasicController extends BaseController {
 				map.put("message", "会员名错误");
 				return LOGIN;
 			}
-			if (MemberCheckStateEnum.unaudited.equals(member.getCheckState())) {
+			if (MemberCheckStateEnum.UNAUDITED.equals(member.getCheckState())) {
 				map.put("message", "会员未审核");
 				return LOGIN;
 			}
-			if (MemberStatesEnum.stop.equals(member.getState())) {
+			if (MemberStatesEnum.STOP.equals(member.getState())) {
 				map.put("message", "会员已冻结");
 				return LOGIN;
 			}
@@ -213,7 +213,7 @@ public class BasicController extends BaseController {
 				map.put("amessage", "会员子账户不存在");
 				return LOGIN;
 			}
-			if (AccountStatesEnum.stop.equals(account.getState())) {
+			if (AccountStatesEnum.STOP.equals(account.getState())) {
 				map.put("amessage", "会员子账户已冻结");
 				return LOGIN;
 			}
@@ -229,11 +229,11 @@ public class BasicController extends BaseController {
 				map.put("message", "会员不存在");
 				return LOGIN;
 			}
-			if (MemberCheckStateEnum.unaudited.equals(member.getCheckState())) {
+			if (MemberCheckStateEnum.UNAUDITED.equals(member.getCheckState())) {
 				map.put("message", "会员未审核");
 				return LOGIN;
 			}
-			if (MemberStatesEnum.stop.equals(member.getState())) {
+			if (MemberStatesEnum.STOP.equals(member.getState())) {
 				map.put("message", "会员已冻结");
 				return LOGIN;
 			}

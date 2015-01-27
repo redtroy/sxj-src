@@ -137,16 +137,16 @@ public class PayController extends BaseController {
 				PayRecordEntity pay = payService.getPayRecordEntity(id);
 				// 甲方
 				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-						+ pay.getMemberNo_A());
+						+ pay.getMemberNoA());
 				MessageChannel.initTopic().publish(
 						MessageChannel.WEBSITE_PAY_MESSAGE
-								+ pay.getMemberNo_A());
+								+ pay.getMemberNoA());
 				// 乙方
 				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
-						+ pay.getMemberNo_B());
+						+ pay.getMemberNoB());
 				MessageChannel.initTopic().publish(
 						MessageChannel.WEBSITE_PAY_MESSAGE
-								+ pay.getMemberNo_B());
+								+ pay.getMemberNoB());
 				map.put("isOk", "ok");
 			} else {
 				map.put("isOk", "false");
@@ -170,10 +170,10 @@ public class PayController extends BaseController {
 				PayRecordEntity pay = payService.getPayRecordEntity(id);
 				// 乙方
 				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-						+ pay.getMemberNo_B());
+						+ pay.getMemberNoB());
 				MessageChannel.initTopic().publish(
 						MessageChannel.WEBSITE_PAY_MESSAGE
-								+ pay.getMemberNo_B());
+								+ pay.getMemberNoB());
 				map.put("isOk", "ok");
 			} else {
 				map.put("isOk", "false");
@@ -202,7 +202,7 @@ public class PayController extends BaseController {
 				throw new WebException("付款记录不存在");
 			}
 			Map<String, Object> map = new HashMap<>();
-			map.put("memberNo_A", pay.getMemberNo_A());
+			map.put("memberNo_A", pay.getMemberNoA());
 			map.put("payNo", pay.getPayNo());
 			map.put("contractNo", pay.getContractNo());
 			map.put("batchNo", pay.getBatchNo());
