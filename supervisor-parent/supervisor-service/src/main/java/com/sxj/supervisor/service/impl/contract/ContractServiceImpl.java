@@ -416,20 +416,14 @@ public class ContractServiceImpl implements IContractService
                         .getContractNo());
                 if (!CollectionUtils.isEmpty(item))
                 {
-                    String ids = "";
+                    StringBuilder ids =new StringBuilder();
                     for (ContractItemEntity contractItemEntity : item)
                     {
-                        if (ids == "")
-                        {
-                            ids += contractItemEntity.getId();
-                        }
-                        else
-                        {
-                            ids += "," + contractItemEntity.getId();
-                        }
+                    	ids.append(contractItemEntity.getId()).append(",");
                     }
+                    String newIds = ids.substring(0,ids.length()-1);
                     // 删除条目
-                    contractItemDao.deleteItems(ids.split(","));
+                    contractItemDao.deleteItems(newIds.split(","));
                 }
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("items", insertList);
@@ -852,10 +846,7 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            if (query == null)
-            {
-                return null;
-            }
+        	Assert.notNull(query);
             QueryCondition<ContractEntity> condition = new QueryCondition<ContractEntity>();
             condition.addCondition("keyword", query.getKeyword());
             condition.addCondition("contractNo", query.getContractNo());// 合同号
@@ -1317,7 +1308,7 @@ public class ContractServiceImpl implements IContractService
                 {
                     continue;
                 }
-                if (contractEntity.getType().getId() == type)
+                if (contractEntity.getType().getId().equals(type))
                 {
                     batch.setContractId(contractEntity.getContractNo());
                 }
@@ -1968,14 +1959,14 @@ public class ContractServiceImpl implements IContractService
                 WindowRfidQuery query = new WindowRfidQuery();
                 query.setRfid(ref.getRfidNo());
                 List<WindowRfidEntity> winRfidList = windowRfidService.queryWindowRfid(query);
-                if (winRfidList != null && winRfidList.size() > 0)
+                if (!CollectionUtils.isEmpty(winRfidList))
                 {
                     throw new ServiceException("该物流RFID已被门窗标签关联！");
                 }
                 LogisticsRefQuery refQuery = new LogisticsRefQuery();
                 refQuery.setReplenishRfid(ref.getRfidNo());
                 List<LogisticsRefEntity> refList = logisticsRefService.query(refQuery);
-                if (refList != null && refList.size() > 0)
+                if (!CollectionUtils.isEmpty(refList))
                 {
                     throw new ServiceException("该物流RFID已被采购合同补损过！");
                 }
@@ -2010,7 +2001,7 @@ public class ContractServiceImpl implements IContractService
                     throw new ServiceException("该RFID没有对应的批次！");
                 }
                 List<BatchItemModel> batchItems = batchModel.getBatchItems();
-                if (batchItems == null || batchItems.size() == 0)
+                if (CollectionUtils.isEmpty(batchItems))
                 {
                     throw new ServiceException("该RFID没有对应的批次条目信息！");
                 }
