@@ -3,8 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sxj.supervisor.dao.contract.IContractPayDao">
-	<resultMap id="ContractPayResultMap"
-		type="com.sxj.supervisor.entity.pay.PayRecordEntity">
+	<resultMap id="ContractPayResultMap" type="com.sxj.supervisor.entity.pay.PayRecordEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="memberNoA" column="MEMBER_NO_A" jdbcType="VARCHAR" />
 		<result property="memberNameA" column="MEMBER_NAME_A" jdbcType="VARCHAR" />
@@ -20,17 +19,18 @@
 		<result property="payAmount" column="PAY_AMOUNT" jdbcType="INTEGER" />
 		<result property="payReal" column="PAY_REAL" jdbcType="INTEGER" />
 		<result property="payDate" column="PAY_DATE" jdbcType="TIMESTAMP" />
-		<result property="state" column="STATE" jdbcType="INTEGER"/>
-		<result property="payContentState" column="PAY_CONTENT_STATE" jdbcType="INTEGER"/>
-		<result property="type" column="TYPE" jdbcType="INTEGER"/>
-		<result property="payMode" column="PAY_MODE" jdbcType="INTEGER"/>
+		<result property="state" column="STATE" jdbcType="INTEGER" />
+		<result property="payContentState" column="PAY_CONTENT_STATE"
+			jdbcType="INTEGER" />
+		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="payMode" column="PAY_MODE" jdbcType="INTEGER" />
 
 	</resultMap>
-    <select id="getEntityByRfidNo" resultMap="ContractPayResultMap"
+	<select id="getEntityByRfidNo" resultMap="ContractPayResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM M_CONTRACT_PAY WHERE RFID_NO=#{rfidNo}]]>
 	</select>
-	 <update id="changeState">
+	<update id="changeState">
 		<![CDATA[UPDATE M_CONTRACT_PAY SET STATE=#{state} where PAY_NO=#{payNo}]]>
 	</update>
 	<!-- 条件查询合同 -->
@@ -58,11 +58,13 @@
 		<if test="condition.rfidNo != null and condition.rfidNo != ''">
 			<![CDATA[AND P.RFID_NO like CONCAT('%',#{condition.rfidNo},'%')]]>
 		</if>
-	   <!-- 付款状态/收款状态 -->
-		<if test="condition.state != null and condition.state !='' and condition.memberType != 1 and condition.memberType != 2">
+		<!-- 付款状态/收款状态 -->
+		<if
+			test="condition.state != null and condition.state !='' and condition.memberType != 1 and condition.memberType != 2">
 			<![CDATA[AND P.STATE =#{condition.state}]]>
 		</if>
-		<if test="condition.state != null and condition.state !='' and condition.memberType != null and condition.memberType !='' and condition.memberType !=0">
+		<if
+			test="condition.state != null and condition.state !='' and condition.memberType != null and condition.memberType !='' and condition.memberType !=0">
 			<if test="condition.state &lt;4">
 			<![CDATA[AND P.STATE <4 ]]>
 			</if>
@@ -70,19 +72,20 @@
 			<![CDATA[AND P.STATE =#{condition.state}]]>
 			</if>
 		</if>
-		 <!-- 支付内容状态 -->
-		<if test="condition.PayContentState != null and condition.PayContentState !=''">
+		<!-- 支付内容状态 -->
+		<if
+			test="condition.PayContentState != null and condition.PayContentState !=''">
 			<![CDATA[AND P.PAY_CONTENT_STATE =#{condition.PayContentState}]]>
 		</if>
-		 <!-- 付款方式 -->
+		<!-- 付款方式 -->
 		<if test="condition.payMode != null and condition.payMode !=''">
 			<![CDATA[AND P.PAY_MODE =#{condition.payMode}]]>
 		</if>
-		 <!-- 类型 -->
+		<!-- 类型 -->
 		<if test="condition.type != null and condition.type !=''">
 			<![CDATA[AND P.TYPE =#{condition.type}]]>
 		</if>
-		<!-- 支付时间段-->
+		<!-- 支付时间段 -->
 		<if
 			test="condition.startPayDate != null and condition.endPayDate != null and  condition.startPayDate != '' and condition.endPayDate != ''">
 			<![CDATA[AND P.PAY_DATE >=#{condition.startPayDate} AND P.PAY_DATE <= #{condition.endPayDate}]]>
@@ -90,4 +93,13 @@
 		<![CDATA[ ORDER BY P.PAY_NO DESC
 		]]>
 	</select>
+	<insert id="addContractPay" parameterType="com.sxj.supervisor.entity.pay.PayRecordEntity">
+		<![CDATA[ if not exists(SELECT 1 FROM M_CONTRACT_PAY p WHERE p.PAY_CONTENT_STATE=0 AND p.CONTRACT_NO=#{contractNo})
+		INSERT INTO M_CONTRACT_PAY(ID,MEMBER_NO_A,MEMBER_NAME_A,MEMBER_NO_B,MEMBER_NAME_B
+		,PAY_NO,CONTRACT_No,BATCH_NO,RFID_NO,PAY_AMOUNT,PAY_REAL,PAY_DATE,CONTENT,STATE
+		,PAY_CONTENT_STATE,TYPE,PAY_MODE) 
+		VALUES(#{id},#{memberNoA},#{memberNameA},#{memberNoB},#{memberNameB}
+		,#{payNo},#{contractNo},#{batchNo},#{rfidNo},#{payAmount},#{payReal},#{payDate},#{content},#{state}
+		,#{payContentState},#{type},#{payMode})]]>
+	</insert>
 </mapper>
