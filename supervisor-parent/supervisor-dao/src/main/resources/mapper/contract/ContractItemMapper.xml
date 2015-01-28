@@ -22,8 +22,8 @@
 	</select>
 	<insert id="addItem" parameterType="java.util.Map">
 		<![CDATA[ INSERT INTO M_CONTRACT_ITEM(ID,CONTRACT_ID,PRODUCT_NAME,PRODUCT_MODEL,QUANTITY,PRICE,AMOUNT,REMARKS,UPDATE_STATE,WINDOW_TYPE)  VALUES ]]> 
-			<foreach open="(" close=")"  separator="," collection="items"  item="item" >
-			<![CDATA[  #{item.id},#{contractNo},#{item.productName},#{item.productModel},#{item.quantity},#{item.price},#{item.amount},#{item.remarks},#{item.updateState},#{item.windowType}]]> 
+			<foreach separator="," collection="items"  item="item" >
+			<![CDATA[(#{item.id},#{contractNo},#{item.productName},#{item.productModel},#{item.quantity},#{item.price},#{item.amount},#{item.remarks},#{item.updateState},#{item.windowType})]]> 
 			</foreach>
 	</insert>
 </mapper>
