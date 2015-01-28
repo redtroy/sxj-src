@@ -40,4 +40,10 @@ public interface IMemberDao
      * @param id
      **/
     public MemberEntity getMemberByName(String name);
+    
+    /**
+     * 更新会员第一次登录的时间
+     * @param memberId
+     */
+    public void updateMemberLoginDate(String memberNo);
 }
