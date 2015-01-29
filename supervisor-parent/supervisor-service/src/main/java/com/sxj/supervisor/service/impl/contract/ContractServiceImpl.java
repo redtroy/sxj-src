@@ -39,7 +39,6 @@ import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
-import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
@@ -78,7 +77,6 @@ import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
-import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.ref.ILogisticsRefService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
@@ -112,12 +110,6 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Autowired
 	private IContractBatchDao contractBatchDao;
-
-	/**
-	 * 变更合同批次DAO
-	 */
-	@Autowired
-	private IContractModifyBatchDao contractBatchHisDao;
 
 	/**
 	 * 合同产品条目
@@ -179,16 +171,10 @@ public class ContractServiceImpl implements IContractService {
 	@Autowired
 	private IWindowRfidRefService windowRefService;
 
-	@Autowired
-	private IRfidApplicationService appRfidService;
-
 	private IContractService self;
 
 	@Autowired
 	private ApplicationContext context;
-
-	@Autowired
-	private ILogisticsRefDao refDao;
 
 	@Autowired
 	@Qualifier("recordStatefsm")
@@ -247,11 +233,9 @@ public class ContractServiceImpl implements IContractService {
 			map.put("items", newList);
 			map.put("contractNo", contract.getContractNo());
 			contractItemDao.addItem(map);// 新增条目
-			// contractDao.updateContract(contract);
 			record.setContractNo(contract.getContractNo());
 			recordStatefsm.setCurrentState(record.getState());
 			recordStatefsm.fire(record.getState().toString(), record);
-			// record.setState(RecordStateEnum.Binding);
 			recordDao.updateRecord(record);
 
 		} catch (Exception e) {
@@ -620,7 +604,7 @@ public class ContractServiceImpl implements IContractService {
 			condition.addCondition("contractNo", contractNo);// 合同号
 			List<ContractEntity> contractList = contractDao
 					.queryContract(condition);
-			if (contractList == null || contractList.size() == 0) {
+			if (contractList.isEmpty()) {
 				return null;
 			}
 			return contractList.get(0);
@@ -644,7 +628,7 @@ public class ContractServiceImpl implements IContractService {
 		qc.addCondition("recordType", type);// 备案状态
 		List<RecordEntity> record = recordDao.queryRecord(qc);
 		String recordIds = "";
-		if (record != null && record.size() > 0) {
+		if (!record.isEmpty()) {
 			for (Iterator<RecordEntity> iterator = record.iterator(); iterator
 					.hasNext();) {
 				RecordEntity recordEntity = (RecordEntity) iterator.next();
@@ -694,8 +678,7 @@ public class ContractServiceImpl implements IContractService {
 			query.setPage(condition);
 			List<ContractModel> contractModelList = new ArrayList<ContractModel>();
 			for (ContractEntity contractEntity : contractList) {
-				// JsonMapper.nonEmptyMapper().fromJson(contractEntity.getStateLog(),
-				// StateLogModel.class);//备案记录
+				// 备案记录
 				ContractModel cm = new ContractModel();
 				cm.setContract(contractEntity);
 				contractModelList.add(cm);
