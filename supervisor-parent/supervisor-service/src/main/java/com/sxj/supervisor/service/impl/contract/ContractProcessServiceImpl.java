@@ -5,13 +5,19 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.contract.IContractDao;
+import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
+import com.sxj.supervisor.enu.contract.PayContentStateEnum;
+import com.sxj.supervisor.enu.contract.PayModeEnum;
+import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
@@ -20,6 +26,7 @@ import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.service.contract.IContractProcessService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.util.common.DateTimeUtils;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -41,6 +48,9 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 
 	@Autowired
 	private IRfidApplicationService appRfidService;
+	
+	@Autowired
+	private IContractPayDao payDao;
 
 	/**
 	 * 变更确认状态
@@ -237,6 +247,37 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 			throw new ServiceException("审核合同错误", e);
 		}
 
+	}
+	@Override
+	@Transactional
+	public void addContractPay(String contractNo) throws ServiceException{
+		try {
+			Assert.hasText(contractNo, "合同号不能为空");
+			ContractEntity con = contractDao
+					.getContractByContractNo(contractNo);
+			Assert.notNull(con, "合同不存在");
+			// 生成支付单
+			PayRecordEntity pay = new PayRecordEntity();
+			 pay.setDateNo(con.getContractNo()
+                     + "P");// 编号
+			pay.setContractNo(con.getContractNo());
+			pay.setMemberNameA(con.getMemberNameA());
+			pay.setMemberNameB(con.getMemberNameB());
+			pay.setMemberNoA(con.getMemberIdA());
+			pay.setMemberNoB(con.getMemberIdB());
+			pay.setPayAmount(con.getDeposit());// 定金
+			pay.setContent("合同定金");
+			pay.setState(PayStageEnum.STAGE1);
+			pay.setPayMode(PayModeEnum.CASH);
+			pay.setPayContentState(PayContentStateEnum.DEPOSIT);
+			payDao.addContractPay(pay);//新增定金支付单
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("新增合同支付单错误", e);
+		}
 	}
 
 }

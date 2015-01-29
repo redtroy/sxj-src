@@ -13,7 +13,7 @@ import com.sxj.statemachine.annotations.Transitions;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
-import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.contract.IContractProcessService;
 
 @StateMachine(stateType = ContractSureStateEnum.class, startState = "NOAFFIRM", finalStates = { "FILINGS" })
 public class ContractSureStateMachineConfig {
@@ -22,7 +22,7 @@ public class ContractSureStateMachineConfig {
 	private IContractDao contractDao;
 	
 	@Autowired
-	private IContractService contractService;
+	private IContractProcessService contractService;
 	
 	
 

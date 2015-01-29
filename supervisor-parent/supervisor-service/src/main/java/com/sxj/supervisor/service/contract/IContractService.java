@@ -274,6 +274,5 @@ public interface IContractService {
 			String changeIds, String contractBatchIds, String changeBatchIds)
 			throws ServiceException;
 
-	void addContractPay(String contractNo);
 
 }

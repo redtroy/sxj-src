@@ -93,13 +93,14 @@
 		<![CDATA[ ORDER BY P.PAY_NO DESC
 		]]>
 	</select>
-	<insert id="addContractPay" parameterType="com.sxj.supervisor.entity.pay.PayRecordEntity">
-		<![CDATA[ if not exists(SELECT 1 FROM M_CONTRACT_PAY p WHERE p.PAY_CONTENT_STATE=0 AND p.CONTRACT_NO=#{contractNo})
+	 <insert id="addContractPay" parameterType="com.sxj.supervisor.entity.pay.PayRecordEntity">
+		<![CDATA[ 
 		INSERT INTO M_CONTRACT_PAY(ID,MEMBER_NO_A,MEMBER_NAME_A,MEMBER_NO_B,MEMBER_NAME_B
-		,PAY_NO,CONTRACT_No,BATCH_NO,RFID_NO,PAY_AMOUNT,PAY_REAL,PAY_DATE,CONTENT,STATE
+		,PAY_NO,CONTRACT_NO,BATCH_NO,RFID_NO,PAY_AMOUNT,PAY_REAL,PAY_DATE,CONTENT,STATE
 		,PAY_CONTENT_STATE,TYPE,PAY_MODE) 
-		VALUES(#{id},#{memberNoA},#{memberNameA},#{memberNoB},#{memberNameB}
+		SELECT #{id},#{memberNoA},#{memberNameA},#{memberNoB},#{memberNameB}
 		,#{payNo},#{contractNo},#{batchNo},#{rfidNo},#{payAmount},#{payReal},#{payDate},#{content},#{state}
-		,#{payContentState},#{type},#{payMode})]]>
-	</insert>
+		,#{payContentState},#{type},#{payMode} FROM dual WHERE NOT EXISTS (SELECT CONTRACT_NO FROM M_CONTRACT_PAY WHERE
+		 CONTRACT_NO =#{contractNo}  AND PAY_CONTENT_STATE=0)]]>
+	</insert> 
 </mapper>

@@ -166,8 +166,6 @@ public class ContractServiceImpl implements IContractService {
 	@Autowired
 	private IRecordDao recordDao;
 
-	@Autowired
-	private IContractPayDao payDao;
 
 	/**
 	 * 备案service
@@ -1039,7 +1037,7 @@ public class ContractServiceImpl implements IContractService {
 			List<ModifyBatchEntity> batchList = contractModifyBatchDao
 					.queryBacths(condition);
 			List<ModifyBatchModel> newBatchModelLIst = new ArrayList<ModifyBatchModel>();
-			if (batchList != null && batchList.size() > 0) {
+			if (!CollectionUtils.isEmpty(batchList)) {
 				for (int i = 0; i < batchList.size(); i++) {
 					ModifyBatchEntity batch = batchList.get(i);
 					ModifyBatchModel batchModel = new ModifyBatchModel();
@@ -1073,7 +1071,7 @@ public class ContractServiceImpl implements IContractService {
 			List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
 					.queryReplenishBatch(condition);
 			List<ReplenishBatchModel> newBatchModelLIst = new ArrayList<ReplenishBatchModel>();
-			if (batchList != null && batchList.size() > 0) {
+			if (!CollectionUtils.isEmpty(batchList)) {
 				for (int i = 0; i < batchList.size(); i++) {
 					ReplenishBatchEntity batch = batchList.get(i);
 					ReplenishBatchModel batchModel = new ReplenishBatchModel();
@@ -1412,11 +1410,11 @@ public class ContractServiceImpl implements IContractService {
 			ContractQuery query = new ContractQuery();
 			query.setRefContractNo(refContractNo);
 			List<ContractModel> list = queryContracts(query);
-			List<ContractEntity> ContractList = new ArrayList<ContractEntity>();
+			List<ContractEntity> contractList = new ArrayList<ContractEntity>();
 			for (ContractModel contractModel : list) {
-				ContractList.add(contractModel.getContract());
+				contractList.add(contractModel.getContract());
 			}
-			return ContractList;
+			return contractList;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("获取合同信息错误", e);
@@ -1998,34 +1996,4 @@ public class ContractServiceImpl implements IContractService {
 		}
 	}
 
-	
-	@Override
-	public void addContractPay(String contractNo) {
-		try {
-			Assert.hasText(contractNo, "合同号不能为空");
-			ContractEntity con = contractDao
-					.getContractByContractNo(contractNo);
-			Assert.notNull(con, "合同不存在");
-			// 生成支付单
-			PayRecordEntity pay = new PayRecordEntity();
-			pay.setId(StringUtils.getUUID());
-			pay.setContractNo(con.getContractNo());
-			pay.setMemberNameA(con.getMemberNameA());
-			pay.setMemberNameB(con.getMemberNameB());
-			pay.setMemberNoA(con.getMemberIdA());
-			pay.setMemberNoB(pay.getMemberNoB());
-			pay.setPayAmount(con.getDeposit());// 定金
-			pay.setContent("合同定金");
-			pay.setState(PayStageEnum.STAGE1);
-			pay.setPayMode(PayModeEnum.CASH);
-			pay.setPayContentState(PayContentStateEnum.DEPOSIT);
-			payDao.addContractPay(pay);//新增定金支付单
-		} catch (ServiceException e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException(e.getMessage());
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("新增合同支付单错误", e);
-		}
-	}
 }
