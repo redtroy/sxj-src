@@ -943,82 +943,69 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            if (replenishContract != null)
+            Assert.notNull(replenishContract);
+            RecordEntity record = recordDao.getRecord(recordId);
+            Assert.hasText(record.getRfidNo());
+            ContractModel cm = this.getContractModelByContractNo(contractId);
+            Assert.notNull(cm);
+            // 更新补损状态
+            String[] rfidNoArr = record.getRfidNo().split(",");
+            for (String rfidNo : rfidNoArr)
             {
-                RecordEntity record = recordDao.getRecord(recordId);
-                if (record.getRfidNo() != null)
+                ContractBatchEntity batch = contractBatchDao.getBacthsByRfid(rfidNo);
+                if (batch != null)
                 {
-                    // 更新补损状态
-                    String[] rfidNoArr = record.getRfidNo().split(",");
-                    for (String rfidNo : rfidNoArr)
+                    if (batch.getType() == 1)
                     {
-                        ContractBatchEntity batch = contractBatchDao.getBacthsByRfid(rfidNo);
-                        if (batch != null)
-                        {
-                            if (batch.getType() == 1)
-                            {
-                                ContractBatchEntity cb = new ContractBatchEntity();
-                                cb.setId(batch.getId());
-                                cb.setReplenishState(1);
-                                contractBatchDao.updateBatch(batch);
-                            }
-                            else if (batch.getType() == 2)
-                            {
-                                ModifyBatchEntity mb = new ModifyBatchEntity();
-                                mb.setId(batch.getId());
-                                mb.setReplenishState(1);
-                                contractModifyBatchDao.updateBatch(mb);
-                            }
-                            else if (batch.getType() == 3)
-                            {
-                                ReplenishBatchEntity rb = new ReplenishBatchEntity();
-                                rb.setId(batch.getId());
-                                rb.setReplenishState(1);
-                                contractReplenishBatchDao.updateBatch(rb);
-                            }
-                        }
+                        ContractBatchEntity cb = new ContractBatchEntity();
+                        cb.setId(batch.getId());
+                        cb.setReplenishState(1);
+                        contractBatchDao.updateBatch(batch);
                     }
-                    contractReplenishDao.addReplenish(replenishContract);
-                    if (replenishContract.getId() != null)
+                    else if (batch.getType() == 2)
                     {
-                        // 补损批次
-                        if (batchList != null)
-                        {
-                            List<ReplenishBatchEntity> list = new ArrayList<ReplenishBatchEntity>();
-                            for (ReplenishBatchModel replenishBatchModel : batchList)
-                            {
-                                String json = JsonMapper.nonEmptyMapper()
-                                        .toJson(replenishBatchModel.getReplenishBatchItems());
-                                ReplenishBatchEntity rb = replenishBatchModel.getReplenishBatch();
-                                rb.setBatchItems(json);
-                                rb.setRfidNo(record.getRfidNo());// 添加补损RFID到批次
-                                rb.setReplenishState(0);
-                                rb.setPayState(0);
-                                rb.setWarehouseState(0);
-                                rb.setReplenishId(replenishContract.getId());
-                                rb.setNoType(contractId + "-");
-                                list.add(rb);
-                            }
-                            contractReplenishBatchDao.addReplenishBatch(list);
-                        }
-                        
+                        ModifyBatchEntity mb = new ModifyBatchEntity();
+                        mb.setId(batch.getId());
+                        mb.setReplenishState(1);
+                        contractModifyBatchDao.updateBatch(mb);
                     }
-                    RecordEntity re = new RecordEntity();
-                    re.setId(recordId);
-                    re.setState(RecordStateEnum.BINDING);
-                    recordDao.updateRecord(re);
-                    // 更新合同有效批次条目
-                    ContractModel cm = this.getContractModelByContractNo(contractId);
-                    if (cm != null)
+                    else if (batch.getType() == 3)
                     {
-                        ContractEntity ce = new ContractEntity();
-                        ce.setId(cm.getContract().getId());
-                        ce.setEffectiveBatch(cm.getContract()
-                                .getEffectiveBatch() + 1);
-                        contractDao.updateContract(ce);
+                        ReplenishBatchEntity rb = new ReplenishBatchEntity();
+                        rb.setId(batch.getId());
+                        rb.setReplenishState(1);
+                        contractReplenishBatchDao.updateBatch(rb);
                     }
                 }
             }
+            contractReplenishDao.addReplenish(replenishContract);
+            // 补损批次
+            if (batchList != null)
+            {
+                List<ReplenishBatchEntity> list = new ArrayList<ReplenishBatchEntity>();
+                for (ReplenishBatchModel replenishBatchModel : batchList)
+                {
+                    String json = JsonMapper.nonEmptyMapper()
+                            .toJson(replenishBatchModel.getReplenishBatchItems());
+                    ReplenishBatchEntity rb = replenishBatchModel.getReplenishBatch();
+                    rb.setBatchItems(json);
+                    rb.setRfidNo(record.getRfidNo());// 添加补损RFID到批次
+                    rb.setReplenishState(0);
+                    rb.setPayState(0);
+                    rb.setWarehouseState(0);
+                    rb.setReplenishId(replenishContract.getId());
+                    rb.setNoType(contractId + "-");
+                    list.add(rb);
+                }
+                contractReplenishBatchDao.addReplenishBatch(list);
+            }
+            
+            record.setState(RecordStateEnum.BINDING);
+            recordDao.updateRecord(record);
+            // 更新合同有效批次条目
+            ContractEntity contract = cm.getContract();
+            contract.setEffectiveBatch(contract.getEffectiveBatch() + 1);
+            contractDao.updateContract(contract);
         }
         catch (Exception e)
         {
