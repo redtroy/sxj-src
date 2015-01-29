@@ -109,6 +109,7 @@ public class BasicController extends BaseController {
 			Subject currentUser = SecurityUtils.getSubject();
 			try {
 				currentUser.login(siteToken);
+				memberService.updateMenberLoginDate(memberInfo.getMemberNo());
 			} catch (AuthenticationException e) {
 				SxjLogger.error("登陆失败", e, this.getClass());
 				map.put("pmessage", "密码错误");
@@ -137,9 +138,10 @@ public class BasicController extends BaseController {
 		FinanceSiteToken token = null;
 		FinancePrincipal userBean = null;
 		AccountEntity account = null;
+		MemberEntity member =null;
 		if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isNotEmpty(accountName)) {
-			MemberEntity member = memberService.getMemberByName(memberName);
+			 member = memberService.getMemberByName(memberName);
 			if (member == null) {
 				map.put("message", "会员不存在");
 				return LOGIN;
@@ -174,7 +176,7 @@ public class BasicController extends BaseController {
 			token = new FinanceSiteToken(userBean, password);
 		} else if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isEmpty(accountName)) {
-			MemberEntity member = memberService.getMemberByName(memberName);
+			 member = memberService.getMemberByName(memberName);
 			if (member == null) {
 				map.put("message", "会员不存在");
 				return LOGIN;
@@ -198,6 +200,7 @@ public class BasicController extends BaseController {
 		Subject currentUser = SecurityUtils.getSubject();
 		try {
 			currentUser.login(token);
+			memberService.updateMenberLoginDate(member.getMemberNo());
 		} catch (AuthenticationException e) {
 			SxjLogger.error("登陆失败", e, this.getClass());
 			map.put("pmessage", "密码错误");

@@ -49,4 +49,10 @@ public interface IContractPayDao
      */
     public void changeState(@Param("payNo") String payNo,
             @Param("state") String state);
+    
+    /**
+     * 生成合同定金
+     * @param pay
+     */
+    public void addContractPay(PayRecordEntity pay);
 }
