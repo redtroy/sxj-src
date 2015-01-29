@@ -1,10 +1,15 @@
 package com.sxj.mybatis.orm;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.AutoMappingBehavior;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -35,6 +40,8 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
     
     private ApplicationContext applicationContext;
     
+    private Map<String, MappedStatement> refreshed = new HashMap<String, MappedStatement>();
+    
     @Override
     public void afterPropertiesSet() throws Exception
     {
@@ -42,11 +49,38 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
         SqlSessionFactory sqlSessionFactory = super.getObject();
         configuration = sqlSessionFactory.getConfiguration();
         configuration.setAutoMappingBehavior(AutoMappingBehavior.NONE);
+        refreshMappedStatements();
         for (String clazzName : findEntityClassNames())
         {
             GenericStatementBuilder builder = new GenericStatementBuilder(
                     configuration, Class.forName(clazzName));
             builder.build();
+        }
+    }
+    
+    private void refreshMappedStatements()
+    {
+        Map<String, MappedStatement> mappedStatements = (Map<String, MappedStatement>) Reflections.getFieldValue(configuration,
+                "mappedStatements");
+        Collection<MappedStatement> values = mappedStatements.values();
+        for (MappedStatement mappedStatement : values)
+        {
+            Class<?> entityClass = mappedStatement.getParameterMap().getType();
+            if (mappedStatement instanceof MappedStatement
+                    && mappedStatement.getSqlCommandType() == SqlCommandType.INSERT
+                    && entityClass.isAnnotationPresent(Entity.class))
+            {
+                refreshed.put(mappedStatement.getId(), mappedStatement);
+            }
+        }
+        Set<String> refreshedKeys = refreshed.keySet();
+        for (String key : refreshedKeys)
+        {
+            MappedStatement mappedStatement = mappedStatements.get(key);
+            mappedStatements.remove(key);
+            new GenericStatementBuilder(configuration,
+                    mappedStatement.getParameterMap().getType()).refresh(mappedStatement);
+            ;
         }
     }
     

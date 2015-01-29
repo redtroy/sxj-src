@@ -12,4 +12,7 @@
 		<!-- 默认存活5s -->
 		<property name="timeToLive" value="10" />
 	</cache>
+	<insert id="insertDemo" parameterType="com.sxj.mybatis.orm.model.Function">
+		insert into TEST_FUNCTION (ID,TITLE) values (#{functionId},#{functionName})
+	</insert>
 </mapper>

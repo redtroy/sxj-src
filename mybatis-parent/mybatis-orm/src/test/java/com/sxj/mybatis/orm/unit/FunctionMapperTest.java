@@ -64,6 +64,12 @@ public class FunctionMapperTest
         
     }
     
+    @Test
+    public void testNothing()
+    {
+        mapper.insertDemo(buildFunction());
+    }
+    
     public void testInsert()
     {
         Function function = buildFunction();
@@ -83,7 +89,6 @@ public class FunctionMapperTest
         mapper.batchInsert(buildFunctions());
     }
     
-    @Test
     public void testBatchInsertArray()
     {
         mapper.batchInsert(buildArrayFunctions());
