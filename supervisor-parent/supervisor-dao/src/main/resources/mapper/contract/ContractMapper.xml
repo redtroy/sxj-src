@@ -102,4 +102,7 @@
 	<update id="updateContractRfid" parameterType="java.util.Map">
 	<![CDATA[update M_CONTRACT c set c.USE_QUANTITY=#{usequantity} where c.CONTRACT_NO=#{contractNo} and c.ITEM_QUANTITY>=#{usequantity} and c.USE_QUANTITY=#{oldUseQuantity}]]>
 	</update>
+	<select id="getContractByContractNo" resultMap="ContractResultMap" parameterType="String">
+		<![CDATA[ SELECT * FROM M_CONTRACT WHERE CONTRACT_NO=#{contractNo}]]>
+	</select>
 </mapper>

@@ -20,4 +20,6 @@ public interface IContractProcessService {
 	 */
 	public void modifyConfirmState(ContractEntity contract);
 
+	void addContractPay(String contractNo);
+
 }

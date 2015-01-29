@@ -64,6 +64,7 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("startDate", query.getStartDate());// 开始时间
             condition.addCondition("endDate", query.getEndDate());// 结束时间
             condition.addCondition("typeB", query.getMemberTypeB());
+            condition.addCondition("financeState", query.getFinanceState());
             condition.setPage(query);
             List<MemberEntity> memberList = menberDao.queryMembers(condition);
             query.setPage(condition);
@@ -137,5 +138,18 @@ public class MemberServiceImpl implements IMemberService
             SxjLogger.error("根据会员名称查询会员错误", e, this.getClass());
             throw new ServiceException("根据会员名称查询会员错误", e);
         }
+    }
+    
+    @Override
+    public void updateMenberLoginDate(String memberNo)throws ServiceException{
+            try
+            {
+                 menberDao.updateMemberLoginDate(memberNo);
+            }
+            catch (Exception e)
+            {
+                SxjLogger.error("更新会员登录时间错误", e, this.getClass());
+                throw new ServiceException("更新会员登录时间错误", e);
+            }
     }
 }

@@ -91,10 +91,10 @@ function pay(id){
       <input type="text" class="input" name="payNo" value="" />
       合同号
       <input type="text" class="input" name="contractNo" value="" />
-      支付时间段
+   <!--    支付时间段
       <input type="text" class="input input-time cal form-control" name="startDate" value="" datepicker="datepicker" />
       -
-      <input type="text" class="input input-time cal form-control" name="endDate" value="" datepicker="datepicker" />
+      <input type="text" class="input input-time cal form-control" name="endDate" value="" datepicker="datepicker" /> -->
     付款状态
       <select name="state">
         <option selected="selected" value="">全部</option>
@@ -131,7 +131,7 @@ function pay(id){
      <#list list as model>
     <tr>
       <td>${model.payNo}</td>
-      <td><a href="#" class="lnk-blue">${model.contractNo}</a></td>
+      <td>${model.contractNo}</td>
       <td>${model.batchNo}</td>
       <#if model.payAmount??>
       <td>${model.payAmount?string("0.00")}元</td>

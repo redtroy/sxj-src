@@ -72,11 +72,11 @@ function pay(id){
     合同号
     <input type="text" class="input" name="contractNo" value="" />
     
-    支付时间段
+  <!--   支付时间段
     <input type="text" class="input input-time cal form-control" name="startDate" value="" datepicker="datepicker" />
     -
     <input type="text" class="input input-time cal form-control" name="endDate" value="" datepicker="datepicker" />
-   付款状态
+   付款状态 -->
     <select name="state">
       <option selected="selected" value="">全部</option>
       <option value="0">${states[0].getName_a()}</option>
@@ -112,7 +112,7 @@ function pay(id){
   <#list list as model>
   <tr>
     <td>${model.payNo}</td>
-    <td><a href="#" class="lnk-blue">${model.contractNo}</a></td>
+    <td>${model.contractNo}</td>
     <td>${model.batchNo}</td>
     <#if model.payAmount??>
     <td>${model.payAmount?string("0.00")}元</td>
@@ -132,7 +132,7 @@ function pay(id){
     <td>${model.content}</td>
     <td>
    <#if (model.state.ordinal()==0)>
-    <a class="button btn-link btn-financle" pay_id="pay_info_${model.id}">我要融资</a>
+    <a class="button button-red" pay_id="pay_info_${model.id}">我要融资</a>
       <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
       <div class="tipGray"><span class="icon icon16 icon-close ly-right" onclick="close('pay_info_${model.id}');return false;">关闭</span>
 </div>
