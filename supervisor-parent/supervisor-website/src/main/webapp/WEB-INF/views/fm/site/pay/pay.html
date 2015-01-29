@@ -139,7 +139,7 @@ function pay_ok(id){
 }
 
 function to_finance(payId){
-	window.location.href="${basePath}pay/tofinance.htm?payId="+payId;
+	window.open("${basePath}pay/tofinance.htm?payId="+payId);
 }
 </script>
 </head>
@@ -158,7 +158,7 @@ function to_finance(payId){
 <div class="contBox">
   <div class="searBox f12 mb10" id="serch_div">
   <p class="pt0 mt0 mb5">
-    支付单号<input type="text" class="input" name="payNo" value="">
+    支付单号<input type="text" class="input" name="payNo" style="width:92px;" value="">
     合同号<input type="text" class="input" name="contractNo" value="">
     RFID编号<input type="text" class="input" name="rfidNo" value="">
     支付时间段<input type="text" class="input input-time cal form-control" name="startPayDate" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="endPayDate" value="" datepicker>
