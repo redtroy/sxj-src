@@ -1092,17 +1092,13 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            List<ContractEntity> contractList = getContractByRefContractNo(refContractNo);
-            ContractBatchModel batchModel = new ContractBatchModel();
+            Assert.hasText(rfidNo);
+            Assert.hasText(refContractNo);
             ContractBatchEntity batch = contractBatchDao.getBacthsByRfid(rfidNo);
-            if (batch == null)
-            {
-                return null;
-            }
-            if (contractList == null || contractList.size() == 0)
-            {
-                return null;
-            }
+            Assert.notNull(batch);
+            List<ContractEntity> contractList = getContractByRefContractNo(refContractNo);
+            Assert.notEmpty(contractList);
+            ContractBatchModel batchModel = new ContractBatchModel();
             for (ContractEntity contractEntity : contractList)
             {
                 if (contractEntity == null)
