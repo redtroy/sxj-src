@@ -13,32 +13,32 @@ import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 
 @StateMachine(stateType = RecordStateEnum.class, startState = "NOBINDING", finalStates = { "BINDING" })
-public class RecordStateMachineConfig {
-
-	@Autowired
-	private IRecordDao recordDao;
-
-	@Transitions({ @Transition(source = "NOBINDING", event = "NOBINDING", target = "BINDING") })
-	public void noop(TransitionInfo event) {
-		System.out.println("tx@:" + event.getEvent());
-	}
-
-	@Transitions({ @Transition(source = "BINDING", event = "BINDING", target = "BINDING") })
-	public void noop2(TransitionInfo event) {
-		System.out.println("tx@:" + event.getEvent());
-	}
-
-	@OnEnter(value = "BINDING")
-	public EventInfo enterB(TransitionInfo event) {
-		RecordEntity record = (RecordEntity) event.getObject();
-		record.setState(RecordStateEnum.BINDING);
-		// recordDao.updateRecord(record);
-		return null;
-	}
-	//
-	// @OnExit("A")
-	// public Boolean exitA(TransitionInfo event) {
-	// System.out.println("Exited A state");
-	// return true;
-	// }
+public class RecordStateMachineConfig
+{
+    
+    @Autowired
+    private IRecordDao recordDao;
+    
+    @Transitions({
+            @Transition(source = "NOBINDING", event = "NOBINDING", target = "BINDING"),
+            @Transition(source = "BINDING", event = "BINDING", target = "BINDING") })
+    public void noop(TransitionInfo event)
+    {
+        System.out.println("tx@:" + event.getEvent());
+    }
+    
+    @OnEnter(value = "BINDING")
+    public EventInfo enterB(TransitionInfo event)
+    {
+        RecordEntity record = (RecordEntity) event.getObject();
+        record.setState(RecordStateEnum.BINDING);
+        // recordDao.updateRecord(record);
+        return null;
+    }
+    //
+    // @OnExit("A")
+    // public Boolean exitA(TransitionInfo event) {
+    // System.out.println("Exited A state");
+    // return true;
+    // }
 }
