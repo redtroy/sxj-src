@@ -943,6 +943,7 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
+            Assert.notEmpty(batchList);
             Assert.notNull(replenishContract);
             RecordEntity record = recordDao.getRecord(recordId);
             Assert.hasText(record.getRfidNo());
@@ -980,25 +981,22 @@ public class ContractServiceImpl implements IContractService
             }
             contractReplenishDao.addReplenish(replenishContract);
             // 补损批次
-            if (batchList != null)
+            List<ReplenishBatchEntity> list = new ArrayList<ReplenishBatchEntity>();
+            for (ReplenishBatchModel replenishBatchModel : batchList)
             {
-                List<ReplenishBatchEntity> list = new ArrayList<ReplenishBatchEntity>();
-                for (ReplenishBatchModel replenishBatchModel : batchList)
-                {
-                    String json = JsonMapper.nonEmptyMapper()
-                            .toJson(replenishBatchModel.getReplenishBatchItems());
-                    ReplenishBatchEntity rb = replenishBatchModel.getReplenishBatch();
-                    rb.setBatchItems(json);
-                    rb.setRfidNo(record.getRfidNo());// 添加补损RFID到批次
-                    rb.setReplenishState(0);
-                    rb.setPayState(0);
-                    rb.setWarehouseState(0);
-                    rb.setReplenishId(replenishContract.getId());
-                    rb.setNoType(contractId + "-");
-                    list.add(rb);
-                }
-                contractReplenishBatchDao.addReplenishBatch(list);
+                String json = JsonMapper.nonEmptyMapper()
+                        .toJson(replenishBatchModel.getReplenishBatchItems());
+                ReplenishBatchEntity rb = replenishBatchModel.getReplenishBatch();
+                rb.setBatchItems(json);
+                rb.setRfidNo(record.getRfidNo());// 添加补损RFID到批次
+                rb.setReplenishState(0);
+                rb.setPayState(0);
+                rb.setWarehouseState(0);
+                rb.setReplenishId(replenishContract.getId());
+                rb.setNoType(contractId + "-");
+                list.add(rb);
             }
+            contractReplenishBatchDao.addReplenishBatch(list);
             
             record.setState(RecordStateEnum.BINDING);
             recordDao.updateRecord(record);

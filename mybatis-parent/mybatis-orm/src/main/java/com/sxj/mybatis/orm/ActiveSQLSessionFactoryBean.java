@@ -63,14 +63,19 @@ public class ActiveSQLSessionFactoryBean extends SqlSessionFactoryBean
         Map<String, MappedStatement> mappedStatements = (Map<String, MappedStatement>) Reflections.getFieldValue(configuration,
                 "mappedStatements");
         Collection<MappedStatement> values = mappedStatements.values();
-        for (MappedStatement mappedStatement : values)
+        for (Object value : values)
         {
-            Class<?> entityClass = mappedStatement.getParameterMap().getType();
-            if (mappedStatement instanceof MappedStatement
-                    && mappedStatement.getSqlCommandType() == SqlCommandType.INSERT
-                    && entityClass.isAnnotationPresent(Entity.class))
+            if (value instanceof MappedStatement)
             {
-                refreshed.put(mappedStatement.getId(), mappedStatement);
+                MappedStatement mappedStatement = (MappedStatement) value;
+                Class<?> entityClass = mappedStatement.getParameterMap()
+                        .getType();
+                if (mappedStatement instanceof MappedStatement
+                        && mappedStatement.getSqlCommandType() == SqlCommandType.INSERT
+                        && entityClass.isAnnotationPresent(Entity.class))
+                {
+                    refreshed.put(mappedStatement.getId(), mappedStatement);
+                }
             }
         }
         Set<String> refreshedKeys = refreshed.keySet();
