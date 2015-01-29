@@ -16,10 +16,13 @@
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
 		<result property="imgPath" column="IMG_PATH" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
-		<result property="contractType" column="CONTRACT_TYPE" jdbcType="INTEGER" />
-		<result property="confirmState" column="CONFIRM_STATE" jdbcType="INTEGER" />
+		<result property="contractType" column="CONTRACT_TYPE"
+			jdbcType="INTEGER" />
+		<result property="confirmState" column="CONFIRM_STATE"
+			jdbcType="INTEGER" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
-		<result property="refContractNo" column="REF_CONTRACT_NO" jdbcType="VARCHAR" />
+		<result property="refContractNo" column="REF_CONTRACT_NO"
+			jdbcType="VARCHAR" />
 		<result property="applyDate" column="APPLY_DATE" jdbcType="TIMESTAMP" />
 		<result property="acceptDate" column="ACCEPT_DATE" jdbcType="TIMESTAMP" />
 		<result property="delState" column="DEL_STATE" jdbcType="BOOLEAN" />
@@ -43,7 +46,7 @@
 			<foreach collection="condition.recordNos" open="(" close=")" separator="," item="recordNo">
 				#{recordNo}
 			</foreach>
-		
+
 		</if>
 		<!-- 申请会员ID -->
 		<if test="condition.applyId != null and condition.applyId != ''">
@@ -53,34 +56,35 @@
 		<if test="condition.memberId != null and condition.memberId != ''">
 			<![CDATA[AND (R.MEMBER_ID_A=#{condition.memberId} or R.MEMBER_ID_B=#{condition.memberId})]]>
 		</if>
-		<!-- 合同类型-->
+		<!-- 合同类型 -->
 		<if test="condition.contractType != null">
 			<![CDATA[AND R.CONTRACT_TYPE = #{condition.contractType}]]>
 		</if>
-		<!-- 对应合同号-->
+		<!-- 对应合同号 -->
 		<if test="condition.contractNo != null and condition.contractNo != ''">
 			<![CDATA[AND R.CONTRACT_NO = #{condition.contractNo}]]>
 		</if>
-		<!-- 对应甲方会员ID-->
+		<!-- 对应甲方会员ID -->
 		<if test="condition.memberIdA != null and condition.memberIdA != ''">
 			<![CDATA[AND R.MEMBER_ID_A = #{condition.memberIdA}]]>
 		</if>
-		<!-- 合同签订人-->
-		<if test="condition.contractPepole != null and condition.contractPepole != ''">
+		<!-- 合同签订人 -->
+		<if
+			test="condition.contractPepole != null and condition.contractPepole != ''">
 			<![CDATA[AND (R.MEMBER_NAME_A LIKE CONCAT('%',#{condition.contractPepole},'%') OR R.MEMBER_NAME_B LIKE CONCAT('%',#{condition.contractPepole},'%'))]]>
 		</if>
-		<!-- 对应乙方会员ID-->
+		<!-- 对应乙方会员ID -->
 		<if test="condition.memberIdB != null and condition.memberIdB != ''">
 			<![CDATA[AND R.MEMBER_ID_B = #{condition.memberIdB}]]>
 		</if>
-		<!-- 备案状态-->
+		<!-- 备案状态 -->
 		<if test="condition.state != null">
 			<![CDATA[AND R.STATE = #{condition.state}]]>
 		</if>
 		<if test="condition.flag != null and condition.flag != ''">
 			<![CDATA[AND R.RECORD_FLAG = #{condition.flag}]]>
 		</if>
-		<!-- 备案类型-->
+		<!-- 备案类型 -->
 		<if test="condition.recordType != null">
 			<![CDATA[AND R.TYPE = #{condition.recordType}]]>
 		</if>
@@ -88,15 +92,33 @@
 			<![CDATA[AND R.CONFIRM_STATE = #{condition.confirmState}]]>
 		</if>
 		<!-- 申请时间段 -->
- 		<if test="condition.startApplyDate != null and condition.endApplyDate != null and condition.startApplyDate != ''  and condition.endApplyDate != ''"> 
+		<if
+			test="condition.startApplyDate != null and condition.endApplyDate != null and condition.startApplyDate != ''  and condition.endApplyDate != ''"> 
 			<![CDATA[AND R.APPLY_DATE >=#{condition.startApplyDate} AND R.APPLY_DATE < DATE_ADD(#{condition.endApplyDate},INTERVAL 1 DAY)]]>
 		</if>
 		<!-- 受理时间段 -->
-		<if test="condition.startAcceptDate != null and condition.endAcceptDate != null and condition.startAcceptDate != '' and condition.endAcceptDate != ''">
+		<if
+			test="condition.startAcceptDate != null and condition.endAcceptDate != null and condition.startAcceptDate != '' and condition.endAcceptDate != ''">
 			<![CDATA[AND R.ACCEPT_DATE >=#{condition.startAcceptDate} AND R.ACCEPT_DATE < DATE_ADD(#{condition.endAcceptDate},INTERVAL 1 DAY)]]>
 		</if>
-		<if test="condition.sortColumn != null and condition.sortColumn != null and condition.sort != '' and condition.sort != ''">
+		<if
+			test="condition.sortColumn != null and condition.sortColumn != null and condition.sort != '' and condition.sort != ''">
 		<![CDATA[ORDER BY ${condition.sortColumn} ${condition.sort}]]>
 		</if>
+	</select>
+	<update id="batchUpdateConfirmState" parameterType="String">
+	<![CDATA[UPDATE M_CONTRACT_RECORD R SET R.CONFIRM_STATE = 4, R.RECORD_DATE = (CASE R.RECORD_STATE ]]>
+	<![CDATA[ WHEN "0" THEN NOW() WHEN R.RECORD_STATE IS NULL THEN NOW() else R.RECORD_DATE end ),R.RECORD_STATE = (CASE R.RECORD_FLAG ]]>
+	<![CDATA[ WHEN 0 THEN 1 else R.RECORD_STATE end) WHERE R.CONTRACT_NO = #{contractNo}]]>
+	</update>
+	
+	<update id="batchUpdateCheckState" parameterType="String">
+	<![CDATA[UPDATE M_CONTRACT_RECORD R SET R.CONFIRM_STATE = 1,R.ACCEPT_DATE=(CASE R.ACCEPT_STATE ]]>
+	<![CDATA[ WHEN "0" THEN NOW() WHEN R.RECORD_STATE IS NULL THEN NOW() else R.ACCEPT_DATE end ) WHERE R.CONTRACT_NO = #{contractNo} AND R.CONFIRM_STATE = 0]]>
+	</update>
+	<select id="queryUserRecord" resultMap="RecordResultMap"
+		parameterType="String">
+		<![CDATA[select r.* from M_CONTRACT_RECORD r where r.RECORD_NO=]]>
+		<![CDATA[(select MAX(r2.RECORD_NO) from M_CONTRACT_RECORD r2 where r2.CONTRACT_NO=#{contractId} and r2.RECORD_STATE=0 )]]>
 	</select>
 </mapper>

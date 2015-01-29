@@ -11,6 +11,8 @@
 <@b.pageScript/>
 <@b.dialogBox/>
 <@b.validate/>
+<@b.errorInfo/>
+
 <script>
 	jQuery(document).ready(function($) {
 		$(".tabList .lnk-blue").live('click', function() {
@@ -26,6 +28,7 @@
 		$(".trClass").live('mouseout', function() {
 			$(this).removeClass("bColor-hover");
 		});
+		$("input").attr("autocomplete","off");
 	})
 	function closeInfo(id){
 			$("#info_"+id).html("");
@@ -91,6 +94,11 @@
 									营业执照号码 <input type="text" class="input" name="bLicenseNo"
 										value="${query.bLicenseNo}" /> 节能标识推广证号 <input type="text"
 										class="input" name="energyNo" value="${query.energyNo}" />
+										审核状态<select name="financeState">
+										<option value="">全部</option>
+										<option value="0">未审核</option>
+										<option value="1">已审核</option>
+										</select>
 									<button class="button button-search" onclick="query();">查询</button>
 								</p>
 							</form>

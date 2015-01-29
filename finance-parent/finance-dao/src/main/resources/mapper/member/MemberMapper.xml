@@ -35,6 +35,7 @@
 		<result property="version" column="VERSION_LOCK" jdbcType="INTEGER" />
 		<result property="financeState" column="FINANCE_STATE"
 			jdbcType="INTEGER" />
+			<result property="loginDate" column="LOGIN_DATE" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<select id="getMemberByName" resultMap="MemberResultMap"
 		parameterType="String">
@@ -84,6 +85,9 @@
 		<if test="condition.checkState !=null">
 			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>
 		</if>
+		<if test="condition.financeState !=null">
+			<![CDATA[AND FINANCE_STATE = #{condition.financeState}]]>
+		</if>
 		<!-- 会员状态 -->
 		<if test="condition.state !=null">
 			<![CDATA[AND STATE = #{condition.state}]]>
@@ -93,6 +97,10 @@
 			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
 			<![CDATA[AND REG_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) AND REG_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
 		</if>
-		<![CDATA[ ORDER BY STATE,REG_DATE DESC]]>
+		<![CDATA[ ORDER BY LOGIN_DATE DESC]]>
 	</select>
+	
+	<update id="updateMemberLoginDate" parameterType="String">
+		<![CDATA[ UPDATE M_MEMBER  M  SET M.LOGIN_DATE=NOW() WHERE M.LOGIN_DATE IS NULL AND M.MEMBER_NO=#{memberNo} ]]>
+	</update>
 </mapper>

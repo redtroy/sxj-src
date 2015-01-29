@@ -42,6 +42,8 @@ public class MemberQuery extends Pagable implements Serializable
     
     private String phoneNo;
     
+    private  Integer financeState;
+    
     public Integer getMemberTypeB()
     {
         return memberTypeB;
@@ -191,5 +193,13 @@ public class MemberQuery extends Pagable implements Serializable
     {
         this.phoneNo = phoneNo;
     }
+
+	public Integer getFinanceState() {
+		return financeState;
+	}
+
+	public void setFinanceState(Integer financeState) {
+		this.financeState = financeState;
+	}
     
 }

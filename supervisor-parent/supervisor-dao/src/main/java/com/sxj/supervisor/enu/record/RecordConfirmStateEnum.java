@@ -1,7 +1,8 @@
 package com.sxj.supervisor.enu.record;
 
 /**
- * (前台)备案状态
+ * 备案审核状态
+ * 
  * @author Administrator
  *
  */

@@ -106,7 +106,7 @@ function del(id,contractNo){
 				$.post("delRecord.htm",{id:id},function(data){
 					layer.close(index);
 					if (data.isOk=="ok"){
-						window.location.href="recordList.htm";
+						query($("#pager").attr("currentPage"));
 					}
 				})
 			}, "确实删除备案吗?");
@@ -116,7 +116,7 @@ function del(id,contractNo){
 			errorInfo("该备案已刪除！");
 		}
 	});
-	query($("#pager").attr("currentPage"));
+	
 }
 function to_modify(id){
 	$.post("getRecordState.htm", {
@@ -231,27 +231,78 @@ function to_modify(id){
 							href="javascript:to_modify('${record.id}');" class="edit">修改</a></#if><a
 							href="javascript:void(0);" class="del"
 							onclick="del('${record.id}','${record.contractNo}')">删除</a></#if>
-						</td> <#if (record.state.id==0)>
-						<td class="contract"><#if (record.contractType??)> <#if
-							record.contractType.getId()!=0><a
+						</td>
+						<td class="contract">
+						<#if (record.type.id==0)>
+						<#if (record.state.id==0)>
+						<#if record.contractType.getId()!=0>
+						<a
 							href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a
 							href="${basePath}contract/produced.htm?recordId=${record.id}"
 							class="lnk-green">生成合同</a><#else><a
 							href="${basePath}contract/produced-kfs.htm?recordId=${record.id}"
-							class="lnk-green">生成招标合同</a></#if></#if>
-						</td> <#elseif (record.state.id==1)>
+							class="lnk-green">生成招标合同</a>
+						</#if>
+						<#elseif (record.state.id==1)>
+						<em class="state verified">已绑定</em>
+						</#if>
+						
+						<#elseif (record.type.id==1)>
+						<#if (record.state.id==0)>
+						<a
+							href="${basePath}contract/changes.htm?recordId=${record.id}"
+							class="lnk-green">变更当前合同</a>
+						<#elseif (record.state.id==1)>
+						<em class="state verified">已变更</em>
+						</#if>
+						<#elseif (record.type.id==2)>
+						<#if (record.state.id==0)>
+						<a
+							href="${basePath}contract/replenish.htm?recordId=${record.id}"
+							class="lnk-green">补损当前合同</a>
+						<#elseif (record.state.id==1)>
+						<em class="state verified">已补损</em>
+						</#if>
+						</#if>
+						</td>
+					
+						
+						
+						
+						
+						
+						
+						
+						<!-- <#if (record.state.id==0)>
+						<td class="contract">
+						<#if (record.contractType??)>
+						<#if record.contractType.getId()!=0>
+						<a
+							href="banding_edit.htm?id=${record.id}" class="lnk-green">绑定合同</a><a
+							href="${basePath}contract/produced.htm?recordId=${record.id}"
+							class="lnk-green">生成合同</a><#else><a
+							href="${basePath}contract/produced-kfs.htm?recordId=${record.id}"
+							class="lnk-green">生成招标合同</a>
+						</#if>
+						</#if>
+						</td>
+						<#elseif (record.state.id==1)>
+						<#if (record.type.id==0)>
 						<td class="contract"><em class="state verified">已绑定</em></td>
-						<#elseif (record.state.id==2)>
+						</#if>
+						<#elseif (record.type.id==1)>
 						<td class="contract"><a
 							href="${basePath}contract/changes.htm?recordId=${record.id}"
-							class="lnk-green">变更当前合同</a></td> <#elseif (record.state.id==3)>
-						<td class="contract"><em class="state verified">已变更</em></td>
-						<#elseif (record.state.id==4)>
-						<td class="contract"><a
+							class="lnk-green">变更当前合同</a></td>
+							<#elseif (record.state.id==3)>
+							<td class="contract"><em class="state verified">已变更</em></td>
+							<#elseif (record.type.id==2)>
+							<td class="contract"><a
 							href="${basePath}contract/replenish.htm?recordId=${record.id}"
-							class="lnk-green">补损当前合同</a></td> <#elseif (record.state.id==5)>
-						<td class="contract"><em class="state verified">已补损</em></td>
-						</#if>
+							class="lnk-green">补损当前合同</a></td>
+							<#elseif (record.state.id==5)>
+							<td class="contract"><em class="state verified">已补损</em></td>
+						</#if> -->
 					</tr>
 					</#list>
 				</table>

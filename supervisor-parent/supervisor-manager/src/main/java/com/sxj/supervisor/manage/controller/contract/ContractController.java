@@ -245,15 +245,17 @@ public class ContractController extends BaseController {
 
 	@RequestMapping("saveChanges")
 	public @ResponseBody Map<String, Object> saveChanges(
-			ContractModifyControllerModel contractModifyModel, String recordId,String contractIds,String changeIds,String changeBatchIds,String contractBatchIds)
-			throws WebException {
+			ContractModifyControllerModel contractModifyModel, String recordId,
+			String contractIds, String changeIds, String changeBatchIds,
+			String contractBatchIds) throws WebException {
 		try {
 			ContractModifyModel model = new ContractModifyModel();
 			model.setModifyContract(contractModifyModel.getModifyContract());
 			model.setModifyBatchList(contractModifyModel.getModifyBatchList());
 			model.setModifyItemList(contractModifyModel.getModifyItemList());
 			contractService.changeContract(recordId,model,
-					contractModifyModel.getItemList(),contractIds,changeIds,contractBatchIds,changeBatchIds);
+					contractModifyModel.getItemList(), contractIds, changeIds,
+					contractBatchIds, changeBatchIds);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
 			return map;
@@ -297,8 +299,7 @@ public class ContractController extends BaseController {
 	public @ResponseBody Map<String, Object> check(String contractId)
 			throws WebException {
 		try {
-			contractService.modifyCheckState(contractId,
-					ContractStateEnum.NOAPPROVAL);
+			contractService.checkContract(contractId);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("isOK", "ok");
 			return map;

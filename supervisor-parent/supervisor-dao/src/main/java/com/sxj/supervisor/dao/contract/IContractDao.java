@@ -59,4 +59,11 @@ public interface IContractDao
      * @param id
      */
     public int updateContractRfid(Map<String, Object> map);
+    
+    /**
+     * 根据合同号获取合同
+     * @param contractNo
+     * @return
+     */
+    public ContractEntity getContractByContractNo(String contractNo);
 }

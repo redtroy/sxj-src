@@ -20,19 +20,6 @@ public enum ContractState
         this.id = id;
     }
     
-    // 普通方法
-    public static String getName(Integer id)
-    {
-        for (ContractState c : ContractState.values())
-        {
-            if (c.getId() == id)
-            {
-                return c.name;
-            }
-        }
-        return null;
-    }
-    
     public Integer getId()
     {
         return id;
