@@ -35,7 +35,6 @@ import com.sxj.supervisor.dao.contract.IContractItemDao;
 import com.sxj.supervisor.dao.contract.IContractModifyBatchDao;
 import com.sxj.supervisor.dao.contract.IContractModifyDao;
 import com.sxj.supervisor.dao.contract.IContractModifyItemDao;
-import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
@@ -50,7 +49,6 @@ import com.sxj.supervisor.entity.contract.ModifyItemEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
@@ -58,9 +56,6 @@ import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
-import com.sxj.supervisor.enu.contract.PayContentStateEnum;
-import com.sxj.supervisor.enu.contract.PayModeEnum;
-import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
@@ -165,7 +160,6 @@ public class ContractServiceImpl implements IContractService {
 	 */
 	@Autowired
 	private IRecordDao recordDao;
-
 
 	/**
 	 * 备案service

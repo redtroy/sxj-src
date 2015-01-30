@@ -2,12 +2,17 @@ package com.sxj.mybatis.shard.listener;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.executor.ErrorContext;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -27,11 +32,14 @@ import com.sxj.mybatis.shard.configuration.node.ShardRuleCfg;
 import com.sxj.mybatis.shard.datasource.DataSourceFactory;
 import com.sxj.mybatis.shard.mapper.MapperScanConfigurator;
 import com.sxj.spring.modules.util.AnnotationUtils;
+import com.sxj.spring.modules.util.Reflections;
 
 public class MybatisMapperProcessor implements
         ApplicationListener<ContextRefreshedEvent>
 {
     private static boolean initialized = false;
+    
+    private Map<String, MappedStatement> refreshed = new HashMap<String, MappedStatement>();
     
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event)
@@ -54,12 +62,45 @@ public class MybatisMapperProcessor implements
     private void buildOrmMapper(ContextRefreshedEvent event)
             throws IOException, ClassNotFoundException
     {
+        refreshMappedStatements();
         for (String clazzName : findEntityClassNames(event.getApplicationContext()))
         {
             GenericStatementBuilder builder = new GenericStatementBuilder(
                     MybatisConfiguration.getConfiguration(),
                     Class.forName(clazzName));
             builder.build();
+        }
+    }
+    
+    private void refreshMappedStatements()
+    {
+        Map<String, MappedStatement> mappedStatements = (Map<String, MappedStatement>) Reflections.getFieldValue(MybatisConfiguration.getConfiguration(),
+                "mappedStatements");
+        Collection<MappedStatement> values = mappedStatements.values();
+        for (Object value : values)
+        {
+            if (value instanceof MappedStatement)
+            {
+                MappedStatement mappedStatement = (MappedStatement) value;
+                Class<?> entityClass = mappedStatement.getParameterMap()
+                        .getType();
+                if (mappedStatement instanceof MappedStatement
+                        && mappedStatement.getSqlCommandType() == SqlCommandType.INSERT
+                        && entityClass.isAnnotationPresent(Entity.class))
+                {
+                    refreshed.put(mappedStatement.getId(), mappedStatement);
+                }
+            }
+        }
+        Set<String> refreshedKeys = refreshed.keySet();
+        for (String key : refreshedKeys)
+        {
+            MappedStatement mappedStatement = mappedStatements.get(key);
+            mappedStatements.remove(key);
+            new GenericStatementBuilder(
+                    MybatisConfiguration.getConfiguration(),
+                    mappedStatement.getParameterMap().getType()).refresh(mappedStatement);
+            ;
         }
     }
     

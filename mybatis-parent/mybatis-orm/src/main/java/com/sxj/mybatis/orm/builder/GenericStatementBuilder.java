@@ -26,6 +26,7 @@ import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
+import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMap;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.SqlCommandType;
@@ -591,6 +592,111 @@ public class GenericStatementBuilder extends BaseBuilder
                 fetchSize,
                 timeout,
                 null,
+                parameterType,
+                null,
+                null,
+                null,
+                flushCache,
+                useCache,
+                resultOrdered,
+                keyGenerator,
+                keyProperty,
+                keyColumn,
+                databaseId,
+                lang);
+    }
+    
+    public void refresh(MappedStatement mappedStatement)
+    {
+        Integer timeout = null;
+        Class<?> parameterType = entityClass;
+        
+        ///~~~~~~~~~~
+        boolean flushCache = true;
+        boolean useCache = false;
+        boolean resultOrdered = false;
+        KeyGenerator keyGenerator = new NoKeyGenerator();
+        String keyProperty = null;
+        String keyColumn = null;
+        
+        Id id = AnnotationUtils.findDeclaredAnnotation(Id.class, entityClass);
+        GeneratedValue generatedValue = AnnotationUtils.findDeclaredAnnotation(GeneratedValue.class,
+                entityClass);
+        if (id != null)
+        {
+            String keyStatementId = entityClass.getName() + ".insert"
+                    + SelectKeyGenerator.SELECT_KEY_SUFFIX;
+            if (!sharded)
+            {
+                
+                if (containSn)
+                    snGenerators.put(mappedStatement.getId(), new SnGenerator());
+                if (configuration.hasKeyGenerator(keyStatementId))
+                {
+                    keyGenerator = configuration.getKeyGenerator(keyStatementId);
+                }
+                else if (generatedValue != null)
+                {
+                    if (generatedValue.strategy() == GenerationType.UUID)
+                    {
+                        keyGenerator = new UuidKeyGenerator(
+                                generatedValue.length());
+                    }
+                }
+                else
+                {
+                    keyGenerator = id.generatedKeys() ? new Jdbc4KeyGenerator()
+                            : new NoKeyGenerator();
+                }
+            }
+            else
+            {
+                if (containSn)
+                    shardSnGenerators.put(mappedStatement.getId(),
+                            new ShardSnGenerator());
+                if (generatedValue != null)
+                {
+                    if (generatedValue.strategy() == GenerationType.UUID)
+                    {
+                        shardedKeyGenerators.put(mappedStatement.getId(),
+                                new ShardUuidKeyGenerator(
+                                        generatedValue.length()));
+                    }
+                    else if (generatedValue.strategy() == GenerationType.TABLE
+                            || generatedValue.strategy() == GenerationType.AUTO)
+                    {
+                        shardedKeyGenerators.put(mappedStatement.getId(),
+                                new ShardJdbc4KeyGenerator());
+                    }
+                }
+                //                shardedKeyGenerators.put(statementId, new shardeduu)
+            }
+            keyProperty = idField.getName();
+            keyColumn = StringUtils.isBlank(id.column()) ? CaseFormatUtils.camelToUnderScore(idField.getName())
+                    : id.column();
+        }
+        
+        SqlSource sqlSource = mappedStatement.getSqlSource();
+        String parameterMap = null;
+        Iterator<String> parameterMapNames = configuration.getParameterMapNames()
+                .iterator();
+        while (parameterMapNames.hasNext())
+        {
+            String name = parameterMapNames.next();
+            ParameterMap temp = configuration.getParameterMap(name);
+            if (temp.getType().equals(entityClass))
+            {
+                parameterMap = temp.getId();
+                break;
+            }
+        }
+        assistant.addMappedStatement(mappedStatement.getId(),
+                sqlSource,
+                StatementType.PREPARED,
+                SqlCommandType.INSERT,
+                null,
+                timeout,
+                parameterMap,
                 parameterType,
                 null,
                 null,
