@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
@@ -16,6 +15,7 @@ import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
+import com.sxj.supervisor.service.impl.rfid.CometServiceImpl;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;

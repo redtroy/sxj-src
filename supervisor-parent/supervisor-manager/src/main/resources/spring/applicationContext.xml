@@ -109,7 +109,7 @@
 			</bean>
 		</constructor-arg>
 	</bean>
-	<bean class="com.sxj.redis.service.comet.CometServiceImpl" />
+	<bean class="com.sxj.supervisor.comet.CometServiceImpl" />
 	
 	<bean id="recordStatefsm" class="com.sxj.statemachine.StateMachineFactory"
 		factory-method="newInstance" lazy-init="false">

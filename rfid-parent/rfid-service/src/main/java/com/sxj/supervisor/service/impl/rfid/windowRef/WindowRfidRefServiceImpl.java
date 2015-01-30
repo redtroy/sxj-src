@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.dao.rfid.windowref.IWindowRfidRefDao;
 import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.rfid.windowRef.WindowRefQuery;
+import com.sxj.supervisor.service.impl.rfid.CometServiceImpl;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.exception.ServiceException;
