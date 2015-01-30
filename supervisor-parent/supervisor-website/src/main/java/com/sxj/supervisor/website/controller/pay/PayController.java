@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.redis.service.comet.CometServiceImpl;
-import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
@@ -200,33 +199,34 @@ public class PayController extends BaseController {
 			if (loginInfo == null) {
 				return LOGIN;
 			}
-			PayRecordEntity pay = payService.getPayRecordEntity(payId);
-			if (pay == null) {
-				throw new WebException("付款记录不存在");
-			}
-			Map<String, Object> map = new HashMap<>();
-			map.put("memberNo_A", pay.getMemberNoA());
-			map.put("payNo", pay.getPayNo());
-			map.put("contractNo", pay.getContractNo());
-			map.put("batchNo", pay.getBatchNo());
-			map.put("payAmount", pay.getPayAmount());
-			map.put("content", pay.getContent());
-			String payjson = JsonMapper.nonDefaultMapper().toJson(map);
-			String state = httpClient.postJson(
-					webUrl + "/finance/getModel.htm", payjson);
-			Map<String, String> jmap = JsonMapper.nonDefaultMapper().fromJson(
-					state, HashMap.class);
-			if ("0".equals(jmap.get("flag"))) {
-				SxjLogger.info("-------" + state, this.getClass());
-				throw new WebException("融资请求失败！");
-			}
+			// PayRecordEntity pay = payService.getPayRecordEntity(payId);
+			// if (pay == null) {
+			// throw new WebException("付款记录不存在");
+			// }
+			// Map<String, Object> map = new HashMap<>();
+			// map.put("memberNo_A", pay.getMemberNoA());
+			// map.put("payNo", pay.getPayNo());
+			// map.put("contractNo", pay.getContractNo());
+			// map.put("batchNo", pay.getBatchNo());
+			// map.put("payAmount", pay.getPayAmount());
+			// map.put("content", pay.getContent());
+			// String payjson = JsonMapper.nonDefaultMapper().toJson(map);
+			// String state = httpClient.postJson(
+			// webUrl + "/finance/getModel.htm", payjson);
+			// Map<String, String> jmap =
+			// JsonMapper.nonDefaultMapper().fromJson(
+			// state, HashMap.class);
+			// if ("0".equals(jmap.get("flag"))) {
+			// SxjLogger.info("-------" + state, this.getClass());
+			// throw new WebException("融资请求失败！");
+			// }
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
 			loginToken.setPassword(loginInfo.getMember().getPassword());
 
-			return "redirect:" + webUrl + "/to_login.htm?member="
-					+ loginToken.getMemberNo() + "&token="
+			return "redirect:" + webUrl + "/to_login.htm?payId=" + payId
+					+ "&member=" + loginToken.getMemberNo() + "&token="
 					+ EncryptUtil.md5Hex(loginToken.toString());
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
