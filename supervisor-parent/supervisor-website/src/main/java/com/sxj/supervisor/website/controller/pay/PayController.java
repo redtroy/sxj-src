@@ -14,13 +14,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.redis.service.comet.CometServiceImpl;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
+import com.sxj.supervisor.service.CometServiceImpl;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -90,6 +90,21 @@ public class PayController extends BaseController {
 		return "site/pay/pay";
 	}
 
+	@RequestMapping("cleanChannel")
+	public @ResponseBody Map<String, String> cleanChannel(String channelName)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			CometServiceImpl.setCount(channelName, 0l);
+			map.put("isOk", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("清除频道错误", e, this.getClass());
+			throw new WebException("清除频道错误");
+		}
+
+	}
+
 	/**
 	 * 根据合同号获取详细信息
 	 * 
@@ -135,12 +150,11 @@ public class PayController extends BaseController {
 			if (flag.equals("ok")) {
 				PayRecordEntity pay = payService.getPayRecordEntity(id);
 				// 甲方
-				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-						+ pay.getMemberNoA());
-				MessageChannel.initTopic()
-						.publish(
-								MessageChannel.WEBSITE_PAY_MESSAGE
-										+ pay.getMemberNoA());
+				/*
+				 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
+				 * + pay.getMemberNoA()); MessageChannel.initTopic() .publish(
+				 * MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
+				 */
 				// 乙方
 				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoB());
