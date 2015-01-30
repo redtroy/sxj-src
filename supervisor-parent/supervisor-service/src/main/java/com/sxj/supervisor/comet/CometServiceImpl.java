@@ -1,4 +1,4 @@
-package com.sxj.redis.service.comet;
+package com.sxj.supervisor.comet;
 
 import java.util.ArrayList;
 import java.util.Iterator;
