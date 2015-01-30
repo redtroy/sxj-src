@@ -215,7 +215,7 @@ function to_finance(payId){
       <td>${model.rfidNo}</td>
       <td>${model.payAmount}</td>
       <#if (model.payDate??)>
-      <td>${model.payDate?date}</td>
+      <td>${model.payDate?string("yyyy-MM-dd HH:mm:ss")}</td>
       <#else>
       <td>-</td>
       </#if>
