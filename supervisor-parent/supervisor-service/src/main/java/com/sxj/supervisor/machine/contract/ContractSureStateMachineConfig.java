@@ -15,16 +15,14 @@ import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
 import com.sxj.supervisor.service.contract.IContractProcessService;
 
-@StateMachine(stateType = ContractSureStateEnum.class, startState = "NOAFFIRM", finalStates = { "FILINGS" })
+@StateMachine(stateType = ContractSureStateEnum.class, startState = "NOAFFIRM", finalStates = { "FILINGS" }, name = "contractSureStatefsm")
 public class ContractSureStateMachineConfig {
 
 	@Autowired
 	private IContractDao contractDao;
-	
+
 	@Autowired
 	private IContractProcessService contractService;
-	
-	
 
 	@Transitions({ @Transition(source = "NOAFFIRM", event = "NOAFFIRMDAWPGLASS", target = "AAFFIRM") })
 	public void noop(TransitionInfo event) {
@@ -75,7 +73,7 @@ public class ContractSureStateMachineConfig {
 	public EventInfo enterA(TransitionInfo event) {
 		ContractEntity contract = (ContractEntity) event.getObject();
 		contract.setConfirmState(ContractSureStateEnum.AAFFIRM);
-		contractService.addContractPay(contract.getContractNo());//生成支付单
+		contractService.addContractPay(contract.getContractNo());// 生成支付单
 		// contractDao.updateContract(contract);
 		return null;
 	}
@@ -93,7 +91,7 @@ public class ContractSureStateMachineConfig {
 		ContractEntity contract = (ContractEntity) event.getObject();
 		contract.setRecordDate(new Date());
 		contract.setConfirmState(ContractSureStateEnum.FILINGS);
-		contractService.addContractPay(contract.getContractNo());//生成支付单
+		contractService.addContractPay(contract.getContractNo());// 生成支付单
 		// contractDao.updateContract(contract);
 		return null;
 	}
@@ -114,5 +112,5 @@ public class ContractSureStateMachineConfig {
 	// recordDao.updateRecord(record);
 	// return null;
 	// }
-	
+
 }
