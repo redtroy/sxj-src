@@ -352,6 +352,8 @@ var basePath ='${basePath}';
 		});
 		$("#memberNameB").blur(function() {
 			var pass = cg_validform.check(false, $("#memberIdB"));
+			//隐藏
+			$("#bigAutocompleteContent").hide();
 			if (!pass)
 				$(this).parent().children(".Validform_wrong").show();
 		})
@@ -387,7 +389,6 @@ var basePath ='${basePath}';
 			//$("#refContractNo").val("");
 		})
 	});
-	
 </script>
 </head>
 <body>
