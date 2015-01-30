@@ -8,11 +8,20 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="${b.staticPath}js/artDialog4/artDialog.js" ></script>
+<link href="${b.staticPath}js/artDialog4/skins/default.css" rel="stylesheet"
+	type="text/css" />
+	<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jquery.mousewheel.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
 <@b.pageScript/>
-<@b.dialogBox/>
 <@b.validate/>
-<@b.errorInfo/>
-
+<@b.upload/>
 <script>
 	jQuery(document).ready(function($) {
 		$(".tabList .lnk-blue").live('click', function() {
@@ -34,24 +43,43 @@
 			$("#info_"+id).html("");
 			$("#info_"+id).hide();
 	}
+	function close_img() {
+		$("#img_close").hide();
+		$(".maskdivgen").hide();
+	}
 	//更改审核状态
 	function editCheckState(id, state) {
-		dialogBox(function(index) {
-			$.post("editCheckState.htm", {
-				id : id,
-				state : state
-			}, function(data) {
-				layer.close(index);
-				if (data.isOK == 'ok') {
-					succInfo(function() {
-						query($("#pager").attr("currentPage"));
-					}, "修改审核状态成功！");
-
-				} else {
-					errorInfo("修改审核状态失败！");
-				}
-			});
-		}, "请确认是否更改审核状态！");
+		art.dialog({
+			icon: 'question',
+			lock: true,
+		    content: '是否审核会员?',
+		    ok: function () {
+				$.post("editCheckState.htm", {
+					id : id,
+					state : state
+				}, function(data) {
+					if (data.isOK == 'ok') {
+						art.dialog({
+							 lock: true,
+							 icon: 'succeed',
+							 content: '审核会员成功',
+							 ok: function () {
+								 query($("#pager").attr("currentPage"));
+							 }
+						});
+					} else {
+						art.dialog({
+							 lock: true,
+							 icon: 'error',
+							 content: '审核会员失败',
+						});
+					}
+				});
+		    },
+		    cancelVal: '取消',
+		    cancel: true //为true等价于function(){}
+		});
+			
 	}
 	function query(page) {
 		var params = $("#search_form").serialize();
@@ -146,5 +174,13 @@
 		</div>
 	</div>
 <@b.footer/>
+<div class="maskdivgen" style="display: none"></div>
+		<div class="viewer modal-wrap" id="img_close" style="display: none">
+			<div class="modal-header">
+				<span class="close" onclick="close_img()">关闭</span>
+			</div>
+			<div id="viewer2" class="modal-body iviewer"></div>
+		</div>
+		<div class="maskdivgen" style="display: none"></div>
 </body>
 </html>
