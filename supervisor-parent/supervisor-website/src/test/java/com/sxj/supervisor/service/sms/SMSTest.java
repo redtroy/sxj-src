@@ -41,7 +41,7 @@ public class SMSTest
         sb.append("&pwd=CEE4D6CC34577FB24D1726F8AFEB");
         
         // 向StringBuffer追加手机号码
-        sb.append("&mobile=18118808098");
+        sb.append("&mobile=18915909935");
         
         // 向StringBuffer追加消息内容转URL标准码
         sb.append("&content=" + URLEncoder.encode(content));
