@@ -31,6 +31,7 @@ import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.Constraints;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/member/account")
@@ -121,10 +122,12 @@ public class AccountController extends BaseController {
 				accountService.addAccount(account, ids);
 				map.put("isOK", "ok");
 			}
-			return map;
+
 		} catch (Exception e) {
-			throw new WebException(e.getMessage());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			map.put("error", e.getMessage());
 		}
+		return map;
 
 	}
 

@@ -12,7 +12,7 @@ import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.enu.contract.ContractStateEnum;
 import com.sxj.supervisor.service.contract.IContractProcessService;
 
-@StateMachine(stateType = ContractStateEnum.class, startState = "NOAPPROVAL", finalStates = { "APPROVAL" })
+@StateMachine(stateType = ContractStateEnum.class, startState = "NOAPPROVAL", finalStates = { "APPROVAL" }, name = "contractStatefsm")
 public class ContractStateMachineConfig {
 
 	/**
