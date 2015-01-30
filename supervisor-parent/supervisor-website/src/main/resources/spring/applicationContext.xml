@@ -93,7 +93,7 @@
 			</bean>
 		</constructor-arg>
 	</bean>
-	<bean class="com.sxj.redis.service.comet.CometServiceImpl" />
+	<bean class="com.sxj.supervisor.service.CometServiceImpl" />
 	
 	<bean id="httpClient" class="com.sxj.util.common.SxjHttpClientImpl">
 		<property name="charset" value="${httpclient.charset}" />

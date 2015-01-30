@@ -52,7 +52,9 @@ public class AccountServiceImpl implements IAccountService {
 		try {
 			AccountEntity oldAccount = getAccountByName(
 					account.getAccountName(), account.getParentId());
-			Assert.notNull(oldAccount, "用户账户已存在");
+			if (oldAccount != null) {
+				throw new ServiceException("用户账户已存在");
+			}
 			account.setState(AccountStatesEnum.NORMAL);
 			account.setNoType(account.getParentId() + "-");
 			account.setPassword(EncryptUtil.md5Hex(account.getPassword()));
@@ -75,7 +77,7 @@ public class AccountServiceImpl implements IAccountService {
 				}
 			}
 		} catch (Exception e) {
-			SxjLogger.error("添加会员子账户信息错误", e, this.getClass());
+			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("添加会员子账户信息错误", e);
 		}
 	}

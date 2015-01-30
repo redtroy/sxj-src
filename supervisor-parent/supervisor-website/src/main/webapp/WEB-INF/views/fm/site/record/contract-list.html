@@ -408,9 +408,9 @@ function busunSeav(){
 				errorInfo("该备案已处理,不能刪除！");
 			}else{
 				errorInfo("该备案已刪除！");
+				query($("#pager").attr("currentPage"));
 			}
 		});
-		query($("#pager").attr("currentPage"));
 	}
 	function to_modify(id){
 		$.post("getRecordState.htm", {
@@ -422,9 +422,9 @@ function busunSeav(){
 				errorInfo("该备案已处理,不能修改！");
 			}else{
 				errorInfo("该备案已刪除！");
+				query($("#pager").attr("currentPage"));
 			}
 		});
-		query($("#pager").attr("currentPage"));
 	}
 	function openBatch(){
 		var recordId =$("#bsRecordId").val(); 

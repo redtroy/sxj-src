@@ -94,7 +94,7 @@
 		</if>
 		<![CDATA[ ORDER BY STATE,REG_DATE DESC]]>
 	</select>
-	<select id="add_account_num" resultMap="MemberResultMap"
+	<select id="addAccountNum" resultMap="MemberResultMap"
 		parameterType="String">
 		<![CDATA[UPDATE M_MEMBER SET ACCOUNT_NUM=(CASE WHEN ACCOUNT_NUM IS NULL THEN 0 ELSE ACCOUNT_NUM END)+1  WHERE MEMBER_NO=#{id}]]>
 	</select>

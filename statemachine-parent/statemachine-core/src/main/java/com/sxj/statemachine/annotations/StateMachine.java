@@ -10,13 +10,12 @@ import java.lang.annotation.Target;
 /**
  * All state machine classes must be annotated with it. Just to have some discipline about them :-)
  */
-public @interface StateMachine
-{
-    Class<? extends Enum<?>> stateType();
-    
-    String startState();
-    
-    String[] finalStates();
-    
-    String name() default "";
+public @interface StateMachine {
+	Class<? extends Enum<?>> stateType();
+
+	String startState();
+
+	String[] finalStates();
+
+	String name();
 }
