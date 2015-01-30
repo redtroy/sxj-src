@@ -1,0 +1,55 @@
+<form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
+          <td colspan="11">
+          <div class="infoBox">
+          <ul class="ly-clearFix">
+          <input type="hidden" name ="id" value="${member.id}"/>
+          <li><label>会员名称</label>${member.name}</li>
+          <li><label>城市</label> 江苏省-
+            <select name="area" id="city">
+           	<option value="">-请选择-</option>
+          	<#list cityList as city>
+          	<#if (("32:江苏省,"+city.id+":"+city.name)==member.area)>
+          	 <option value="32:江苏省,${city.id}:${city.name}" selected="selected">${city.name}</option>
+          	<#else>
+            <option value="32:江苏省,${city.id}:${city.name}">${city.name}</option>
+            </#if>
+            </#list>
+          </select>
+           	 会员类型
+           	<#if (member.checkState.getId() != 2)>
+            <select name="type">
+              <#list types as type>
+                <#if (type.getId()==member.type.getId())>
+                      <option value="${type.getId()}" selected="selected">${type.getName()}</option>
+                <#else>
+                      <option value="${type.getId()}">${type.getName()}</option>
+                </#if>
+            </#list>
+            </select>
+            <#else>
+               &nbsp; ${member.type.getName()}<input type="hidden" name="type" value="${member.type.getId()}" />
+            </#if>
+          </li>
+          <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo" datatype="*2-30" nullmsg="营业执照号不能为空" value="${member.getbLicenseNo()}" />
+          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p>
+          </li>
+          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30" nullmsg="节能标识推广证号不能为空" value="${member.getEnergyNo()}" />
+          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p>
+          </li>
+          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" datatype="*2-50" nullmsg="联系人不能为空" name="contacts"/></li>
+          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" datatype="m" nullmsg="手机号码不能为空" name="phoneNo"/></li>
+          <li><label>公司地址</label><input type="text" value="${member.address}" datatype="*2-50" nullmsg="地址不能为空" name="address"/></li>
+          <li><label>固定电话</label><input type="text" value="${member.telNum}" name="telNum"/></li>
+          <li><label>注册时间</label><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
+          <li><label>认证时间</label><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
+          <li><label>审核状态</label><em class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
+          <li><label>帐户状态</label><em class="state verified" id="state1">${member.state.getName()}</em></li>
+          <li><label>子帐号</label>${member.getAccountNum()}</li>
+          <li><label>总交易额</label>${member.totalAmount}元</li>
+          <li><label>扫描设备号</label><textarea cols="" rows="3" class="textRfid" id="deviceNumber" >${member.deviceNumber}</textarea></li>
+          <li><label>邮政编码</label><input type="text" value="${member.code}" id="code" name="code" /></li>
+          </ul>
+          <div class="btnBox"><a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info');return false;">确认修改</a><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
+          </div>
+          </td>
+ </form>
