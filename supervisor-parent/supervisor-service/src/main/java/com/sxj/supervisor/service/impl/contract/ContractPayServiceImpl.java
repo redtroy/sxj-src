@@ -12,8 +12,10 @@ import com.sxj.supervisor.dao.contract.IAccountingDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.model.statistics.AccountingModel;
+import com.sxj.supervisor.service.CometServiceImpl;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.util.exception.ServiceException;
@@ -157,6 +159,10 @@ public class ContractPayServiceImpl implements IContractPayService {
 	public void addPayRecordEntity(PayRecordEntity pay) throws ServiceException {
 		try {
 			payDao.addPay(pay);
+			CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
+					+ pay.getMemberNoA());
+			MessageChannel.initTopic().publish(
+					MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
 		} catch (Exception e) {
 			SxjLogger.error("新增付款管理出错！", e, this.getClass());
 			throw new ServiceException("新增付款管理出错！", e);

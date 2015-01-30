@@ -392,9 +392,9 @@ var caculateRow=function($tr){
 						<tr id="total_tr">
 							<td><strong>合计</strong></td>
 							<td>&nbsp;</td>
-							<td><span id="quantitySum"></span></td>
+							<td><span id="quantitySum"></span> <#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if></td>
 							<td>&nbsp;</td>
-							<td><span id="amountSum"></span></td>
+							<td><span id="amountSum"></span> 元</td>
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
 						</tr>
@@ -403,7 +403,7 @@ var caculateRow=function($tr){
 						<label>交货地址</label> <input name="contract.deliveryAddress" type="text"
 							value="${contractModel.contract.deliveryAddress}" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入交货地址！"  />
 					</div>
-					<#if contractModel.batchList?exists >
+					<#if contractModel.batchList?exists  && (contractModel.batchList?size>0)>
 					<table border="0" cellpadding="0" cellspacing="0"
 						class="tabList producedTable">
 						<col width="20%" />
@@ -476,7 +476,7 @@ var caculateRow=function($tr){
 						<label>关联招标合同号</label> ${contractModel.contract.refContractNo}
 					</div>
 				</div>
-				<#if contractModel.modifyList?exists>
+				<#if contractModel.modifyList?exists && (contractModel.modifyList?size>0)>
 				<div class="changeBox">
 				<#list contractModel.modifyList as modifyList>
 					<h2 class="title">合同变更信息</h2>
@@ -502,7 +502,7 @@ var caculateRow=function($tr){
 						<div class="ly-left">
 						<input type="file" name="contractFile"   multiple="true" id="${modifyList.modifyContract.id}"/></div>
 					</div>
-					<#if modifyList.modifyItemList?exists>
+					<#if modifyList.modifyItemList?exists && (modifyList.modifyItemList?size>0)>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="20%" />
@@ -538,7 +538,7 @@ var caculateRow=function($tr){
 						 </#list>
 						</table>
 						</#if>
-						<#if modifyList.modifyBatchList?exists>
+						<#if modifyList.modifyBatchList?exists && (modifyList.modifyBatchList?size>0)>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="20%" />
@@ -588,7 +588,7 @@ var caculateRow=function($tr){
 					</#list>
 				</div>
 				</#if>
-				 <#if contractModel.replenishList?exists>
+				 <#if contractModel.replenishList?exists && (contractModel.replenishList?size>0)>
 				<div class="changeBox">
 					<h2 class="title">合同补损信息</h2>
 					<#list contractModel.replenishList as replenishList>
