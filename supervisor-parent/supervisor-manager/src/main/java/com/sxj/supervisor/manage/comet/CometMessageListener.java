@@ -5,7 +5,7 @@ import java.util.List;
 import com.sxj.redis.advance.core.MessageListener;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.comet.RfidChannel;
-import com.sxj.supervisor.service.CometServiceImpl;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.logger.SxjLogger;
 
 public class CometMessageListener implements MessageListener<String>
