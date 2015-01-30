@@ -143,6 +143,9 @@ public class BasicController extends BaseController {
 				List<AreaEntity> cityList = areaService.getChildrenAreas("32");
 				MemberEntity member = memberService.getMember(info.getMember()
 						.getId());
+				if (member.getAccountNum() == null) {
+					member.setAccountNum(0);
+				}
 				map.put("cityList", cityList);
 				map.put("member", member);
 				if (info.getMember().getFlag()) {
