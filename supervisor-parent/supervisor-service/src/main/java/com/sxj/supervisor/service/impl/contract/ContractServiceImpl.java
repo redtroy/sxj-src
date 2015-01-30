@@ -284,7 +284,7 @@ public class ContractServiceImpl implements IContractService {
 				insertList.add(contractItemEntity);
 			}
 			// 条目
-			if (contract.getItemList() != null) {
+			if (!CollectionUtils.isEmpty(contract.getItemList())) {
 				List<ContractItemEntity> item = contractItemDao
 						.queryItems(contract.getContract().getContractNo());
 				if (item != null) {
@@ -338,7 +338,7 @@ public class ContractServiceImpl implements IContractService {
 			}
 
 			// 批次
-			if (contract.getBatchList() != null) {
+			if (!CollectionUtils.isEmpty(contract.getBatchList())) {
 				List<ContractBatchEntity> cbelist = new ArrayList<ContractBatchEntity>();
 				for (int i = 0; i < contract.getBatchList().size(); i++) {
 					ContractBatchModel cbm = contract.getBatchList().get(i);
@@ -352,7 +352,7 @@ public class ContractServiceImpl implements IContractService {
 				contractBatchDao.updateBatchs(cbelist);
 			}
 			// 变更记录
-			if (contract.getModifyList() != null) {
+			if (!CollectionUtils.isEmpty(contract.getModifyList())) {
 				List<ModifyContractEntity> mceList = new ArrayList<ModifyContractEntity>();// 变更记录主体
 				for (int i = 0; i < contract.getModifyList().size(); i++) {
 					ContractModifyModel cmm = contract.getModifyList().get(i);
@@ -381,7 +381,7 @@ public class ContractServiceImpl implements IContractService {
 				contractModifyDao.updateModify(mceList);
 			}
 			// 补损记录
-			if (contract.getReplenishList() != null) {
+			if (!CollectionUtils.isEmpty(contract.getReplenishList())) {
 				List<ReplenishContractEntity> mceList = new ArrayList<ReplenishContractEntity>();// 补损记录主体
 				for (int i = 0; i < contract.getReplenishList().size(); i++) {
 					ContractReplenishModel crm = contract.getReplenishList()
