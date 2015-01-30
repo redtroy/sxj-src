@@ -20,11 +20,11 @@ import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
-import com.sxj.supervisor.service.CometServiceImpl;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.LoginToken;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.ISxjHttpClient;
 import com.sxj.util.exception.WebException;
@@ -184,12 +184,11 @@ public class PayController extends BaseController {
 			if (flag.equals("ok")) {
 				PayRecordEntity pay = payService.getPayRecordEntity(id);
 				// 乙方
-				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-						+ pay.getMemberNoB());
-				MessageChannel.initTopic()
-						.publish(
-								MessageChannel.WEBSITE_PAY_MESSAGE
-										+ pay.getMemberNoB());
+				/*
+				 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
+				 * + pay.getMemberNoB()); MessageChannel.initTopic() .publish(
+				 * MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoB());
+				 */
 				map.put("isOk", "ok");
 			} else {
 				map.put("isOk", "false");
