@@ -5,14 +5,12 @@ import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.annotations.Transitions;
 
 @StateMachine(stateType = DemoStates.class, startState = "A", finalStates = {
-        "C", "D" })
+		"C", "D" }, name = "eqwe")
 @Transitions({ @Transition(source = "A", event = "AtoB", target = "B") })
-public class StateMachineConfig
-{
-    
-    @Transitions({ @Transition(source = "B", event = "BtoC", target = "C") })
-    public void noop(TransitionInfo event)
-    {
-        System.out.println("tx@:" + event.getEvent());
-    }
+public class StateMachineConfig {
+
+	@Transitions({ @Transition(source = "B", event = "BtoC", target = "C") })
+	public void noop(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
 }
