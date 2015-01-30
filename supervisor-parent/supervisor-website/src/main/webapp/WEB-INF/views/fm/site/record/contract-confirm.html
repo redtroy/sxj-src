@@ -49,7 +49,7 @@
 				layer.close(index);
 				if (data.isOK == 'ok') {
 					succInfo(function() {
-						window.location.href = "query.htm";
+						window.location.href = "${basePath}pay/paylist.htm";
 					}, "确认成功!");
 				} else {
 					messageInfo("确认失败!");

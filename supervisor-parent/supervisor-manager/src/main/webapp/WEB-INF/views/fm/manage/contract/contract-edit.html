@@ -35,6 +35,14 @@ function modify(){
 	if (!ul_validform.check()){
 		return false;
 	}
+	var value=$("#batchCount").val();
+	var hideValue=$("#hideBatchCount").val();
+	if(parseFloat(value)){
+		if(value<=hideValue){
+			messageInfo("总批次不能小于已生成批次");
+			return;
+		}
+	}
 	$("#TbData").find(".CaseRow").each(function(i){
 		if($(this).children(":input").length==1){
 			var idName=$(this).children(":input").attr("name").replace("[index]","["+i+"]");
@@ -314,6 +322,16 @@ var caculateRow=function($tr){
 		
 		$("#quantitySum").html(quantity.toFixed(2));
 		$("#amountSum").html(amount.toFixed(2));
+		//修改批次
+		$("#batchCount").live("blur",function(){
+			var value=$(this).val();
+			var hideValue=$("#hideBatchCount").val();
+			if(parseFloat(value)){
+				if(value<=hideValue){
+					messageInfo("总批次不能小于已生成批次");
+				}
+			}
+		})
 	});
 
 </script>
@@ -450,7 +468,7 @@ var caculateRow=function($tr){
 					</table>
 					</#if>
 					<div>
-						<label>本合同还有</label> <#if contractModel.batchList?exists>${(contractModel.contract.batchCount-contractModel.batchList?size)?int}<#else>${contractModel.contract.batchCount} </#if> 批次待交付
+						<label>合同总批次</label> <input type="text"  name="contract.batchCount" id="batchCount" datatype="/^[0-9]*[1-9][0-9]*$/" errormsg="请输入大于0的数字" nullmsg="请输入合同批次 ！" value="${contractModel.contract.batchCount}"/><input type="hidden" id="hideBatchCount" name="hideBatchCount" value="${contractModel.batchList?size}"/><#if ((contractModel.contract.batchCount-contractModel.batchList?size)?int>0)>本合同还有${(contractModel.contract.batchCount-contractModel.batchList?size)?int}批次待交付 </#if> 
 					</div>
 					<div>
 						<label>合同定金</label> <input name="contract.deposit" class="deposit" type="text" value="${contractModel.contract.deposit?string('0.00')}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！"  />
