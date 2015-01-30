@@ -87,8 +87,8 @@ public class BasicController extends BaseController {
 	}
 
 	@RequestMapping("/autoLogin")
-	public String autoLogin(String member, String token, HttpSession session,
-			HttpServletRequest request, ModelMap map) {
+	public String autoLogin(String member, String payId, String token,
+			HttpSession session, HttpServletRequest request, ModelMap map) {
 		try {
 			MemberEntity memberInfo = memberService.memberInfo(member);
 			if (memberInfo == null) {
@@ -114,7 +114,6 @@ public class BasicController extends BaseController {
 				SxjLogger.error("登陆失败", e, this.getClass());
 				map.put("pmessage", "密码错误");
 				return LOGIN;
-
 			}
 			if (currentUser.isAuthenticated()) {
 				session.setAttribute("userinfo", userBean);
@@ -138,10 +137,10 @@ public class BasicController extends BaseController {
 		FinanceSiteToken token = null;
 		FinancePrincipal userBean = null;
 		AccountEntity account = null;
-		MemberEntity member =null;
+		MemberEntity member = null;
 		if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isNotEmpty(accountName)) {
-			 member = memberService.getMemberByName(memberName);
+			member = memberService.getMemberByName(memberName);
 			if (member == null) {
 				map.put("message", "会员不存在");
 				return LOGIN;
@@ -176,7 +175,7 @@ public class BasicController extends BaseController {
 			token = new FinanceSiteToken(userBean, password);
 		} else if (StringUtils.isNotEmpty(memberName)
 				&& StringUtils.isEmpty(accountName)) {
-			 member = memberService.getMemberByName(memberName);
+			member = memberService.getMemberByName(memberName);
 			if (member == null) {
 				map.put("message", "会员不存在");
 				return LOGIN;
