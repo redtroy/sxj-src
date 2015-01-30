@@ -292,6 +292,9 @@ public class ContractProcessServiceImpl implements IContractProcessService
             Assert.hasText(contractNo, "合同号不能为空");
             ContractEntity con = contractDao.getContractByContractNo(contractNo);
             Assert.notNull(con, "合同不存在");
+            if(con.getType().equals(ContractTypeEnum.BIDDING)){
+            	return;
+            }
             // 生成支付单
             PayRecordEntity pay = new PayRecordEntity();
             pay.setDateNo(con.getContractNo() + "P");// 编号

@@ -1,22 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-<#include "site/base.html">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗" />
 <meta name="description"
 	content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。" />
-<link href="${staticPath}style/style.css" rel="stylesheet"
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
-<link href="${staticPath}style/uploadify.css " rel="stylesheet"
+<link href="${b.staticPath}style/uploadify.css " rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" type="text/css"
 	href="${b.staticPath}style/elastislide.css" />
-<script src="${staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
 	type="text/css" />
-<script src="${staticPath}js/tytabs.jquery.min.js"
+<script src="${b.staticPath}js/tytabs.jquery.min.js"
 	type="text/javascript"></script>
 	<script src="${b.staticPath}js/jqueryui.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
@@ -24,8 +23,8 @@
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
-<script src="${staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
-<script src="${staticPath}/js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
+<script src="${b.staticPath}/js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/jquery.elastislide-style.js"
 	type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.elastislide.js"
@@ -395,7 +394,7 @@ $(document).ready(function() {
 									value="${record.memberIdB}" datatype="*1-50" nullmsg="请输入正确的乙方名称" />
 							</div>
 							<div class="item">
-											<label>工程地址</label><input class="input input-w240h36" value=""
+											<label>工程地址</label><input autocomplete="off" class="input input-w240h36" value="${engAddress}"
 												  id="engAddress"
 												name="engAddress" />
 							</div>
@@ -585,12 +584,13 @@ $(document).ready(function() {
 			</div>
 		</div>
 	<@b.footer />
-	<div class="viewer modal-wrap">
-	<div class="modal-header">
-				<span class="close">关闭</span>
-			</div>
-		<div id="viewer2" class="modal-body iviewer" style="width: 100%;display: none;top: 0px"></div>
+	<div class="viewer modal-wrap" id="iviewerModal" >
+		<div class="modal-header" style="display: none;">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"
+			style="width: 100%; display: none; top: 0px"></div>
 	</div>
-	<div class="maskdivgen" style="display: none"></div>
+	<div class="maskdivgen maskdivgen1" style="display: none"></div>
 </body>
 </html>

@@ -297,6 +297,10 @@ public class RecordController extends BaseController
         try
         {
             RecordEntity record = recordService.getRecord(recordId);
+            if(!StringUtils.isEmpty(record.getRefContractNo())){
+            	ContractEntity contract = contractService.getContractByNo(record.getRefContractNo());
+            	map.put("engAddress", contract.getEngAddress());
+            }
             SupervisorPrincipal member = (SupervisorPrincipal) session.getAttribute("userinfo");
             if (record.getType().getId() == 2)
             {
