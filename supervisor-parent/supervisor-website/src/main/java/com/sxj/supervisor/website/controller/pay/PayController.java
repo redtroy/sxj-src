@@ -91,6 +91,21 @@ public class PayController extends BaseController {
 		return "site/pay/pay";
 	}
 
+	@RequestMapping("cleanChannel")
+	public @ResponseBody Map<String, String> cleanChannel(String channelName)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			CometServiceImpl.setCount(channelName, 0l);
+			map.put("isOk", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("清除频道错误", e, this.getClass());
+			throw new WebException("清除频道错误");
+		}
+
+	}
+
 	/**
 	 * 根据合同号获取详细信息
 	 * 
@@ -136,12 +151,11 @@ public class PayController extends BaseController {
 			if (flag.equals("ok")) {
 				PayRecordEntity pay = payService.getPayRecordEntity(id);
 				// 甲方
-				CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-						+ pay.getMemberNoA());
-				MessageChannel.initTopic()
-						.publish(
-								MessageChannel.WEBSITE_PAY_MESSAGE
-										+ pay.getMemberNoA());
+				/*
+				 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
+				 * + pay.getMemberNoA()); MessageChannel.initTopic() .publish(
+				 * MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
+				 */
 				// 乙方
 				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoB());
