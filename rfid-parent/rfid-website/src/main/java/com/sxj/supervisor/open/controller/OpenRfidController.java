@@ -25,18 +25,21 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.WinTypeModel;
 import com.sxj.supervisor.rfid.login.ApiShiroRedisCache;
 import com.sxj.supervisor.rfid.login.ApiToken;
+import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.open.member.IAccountService;
 import com.sxj.supervisor.service.open.member.IMemberService;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
@@ -53,6 +56,39 @@ public class OpenRfidController {
 
 	@Autowired
 	private IWindowRfidService windowRfid;
+
+	@Autowired
+	private IContractPayService payService;
+
+	/**
+	 * 测试
+	 * 
+	 * @throws WebException
+	 */
+	@RequestMapping(value = "info/pay/{payId}")
+	public @ResponseBody Map<String, Object> getPayInfo(
+			@PathVariable String payId) throws WebException {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			PayRecordEntity pay = payService.getPayRecordEntity(payId);
+			if (pay == null) {
+				throw new WebException("付款记录不存在");
+			}
+			map.put("memberNo_A", pay.getMemberNoA());
+			map.put("payNo", pay.getPayNo());
+			map.put("contractNo", pay.getContractNo());
+			map.put("batchNo", pay.getBatchNo());
+			map.put("payAmount", pay.getPayAmount());
+			map.put("content", pay.getContent());
+			map.put("state", 1);
+
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			map.put("state", 0);
+			map.put("error", e.getMessage());
+		}
+		return map;
+	}
 
 	/**
 	 * 登陆
@@ -151,8 +187,8 @@ public class OpenRfidController {
 	 * @throws SQLException
 	 */
 	@RequestMapping(value = "info/batch/{gid}")
-	public @ResponseBody BatchModel getRfidBatchInfo(
-			@PathVariable String gid, HttpServletResponse response) {
+	public @ResponseBody BatchModel getRfidBatchInfo(@PathVariable String gid,
+			HttpServletResponse response) {
 		try {
 			BatchModel model = openRfidService.getBatchByRfid(gid);
 			response.setContentType("application/json; charset=utf-8");
@@ -206,11 +242,12 @@ public class OpenRfidController {
 			@PathVariable String gid, HttpServletResponse response) {
 
 		try {
-			if(StringUtils.isEmpty(gid)){
+			if (StringUtils.isEmpty(gid)) {
 				return null;
-			}else{
-				String[] gidArr=gid.split(",");
-				List<WinTypeModel> win = openRfidService.getWinTypeByRfids(gidArr);
+			} else {
+				String[] gidArr = gid.split(",");
+				List<WinTypeModel> win = openRfidService
+						.getWinTypeByRfids(gidArr);
 				response.setContentType("application/json; charset=utf-8");
 				PrintWriter out = response.getWriter();
 				out.print(JsonMapper.nonEmptyMapper().toJson(win));
@@ -223,7 +260,7 @@ public class OpenRfidController {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 发货(出库)
 	 * 
@@ -236,8 +273,7 @@ public class OpenRfidController {
 	 * @throws JsonParseException
 	 */
 	@RequestMapping(value = "send/{gid}")
-	public @ResponseBody Map<String, Object> sendGoods(
-			@PathVariable String gid) {
+	public @ResponseBody Map<String, Object> sendGoods(@PathVariable String gid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 
@@ -276,10 +312,10 @@ public class OpenRfidController {
 			if (state == 1) {
 				map.put("state", 1);
 				map.put("message", "验收成功");
-			}  else if (state == 2) {
+			} else if (state == 2) {
 				map.put("state", 2);
 				map.put("message", "不能重复验收");
-			}else {
+			} else {
 				map.put("state", 0);
 				map.put("message", "验收失败");
 			}
@@ -300,18 +336,19 @@ public class OpenRfidController {
 	 */
 	@RequestMapping(value = "test")
 	public @ResponseBody Map<String, Object> testRfid(String contractNo,
-			String gids,String address) {
+			String gids, String address) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.err.println(contractNo + "++++" + gids.toString());
-		
+
 		try {
-			if(StringUtils.isEmpty(gids)){
+			if (StringUtils.isEmpty(gids)) {
 				map.put("state", "0");
-				map.put("message", "质检失败");	
+				map.put("message", "质检失败");
 				return map;
-			} else{
+			} else {
 				String[] gidArr = gids.split(",");
-				int stepState = windowRfid.testWindow(contractNo.trim(),gidArr,address);
+				int stepState = windowRfid.testWindow(contractNo.trim(),
+						gidArr, address);
 				if (stepState == 1) {
 					map.put("state", "1");
 					map.put("message", "质检成功");
@@ -335,18 +372,17 @@ public class OpenRfidController {
 	 * @return
 	 */
 	@RequestMapping(value = "setup/{gid}")
-	public @ResponseBody Map<String, Object> setupRfid(
-			@PathVariable String gid) {
+	public @ResponseBody Map<String, Object> setupRfid(@PathVariable String gid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			int stepState = windowRfid.stepWindow(gid);
 			if (stepState == 1) {
 				map.put("state", "1");
 				map.put("message", "安装成功");
-			}else if (stepState == 2) {
+			} else if (stepState == 2) {
 				map.put("state", "2");
 				map.put("message", "安装成功");
-			}else {
+			} else {
 				map.put("state", "0");
 				map.put("message", "安装失败");
 			}

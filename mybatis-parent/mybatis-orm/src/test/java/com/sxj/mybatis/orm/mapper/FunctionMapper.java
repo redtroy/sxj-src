@@ -35,4 +35,6 @@ public interface FunctionMapper
     
     @MultiGet
     List<Function> multiGet(String[] functionIds);
+    
+    int insertDemo(Function function);
 }
