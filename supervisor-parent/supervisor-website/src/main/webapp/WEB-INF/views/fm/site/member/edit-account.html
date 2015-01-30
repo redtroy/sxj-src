@@ -21,7 +21,7 @@ var pwd_validform;
  }
   function query(page){
 		var params=$("#search_form").serialize();
-		$.post("accountList.htm",params,function(data){
+		$.post("accountList.htm?"+Math.random(),params,function(data){
 			var res=$(data).find("#right_div");
 			$("#right_div").empty();
 			$("#right_div").append(res.html());
@@ -75,7 +75,7 @@ var pwd_validform;
   
   //确认修改
   var redexAccount=/^[A-Za-z0-9]+$/;
-  var regexName =/^[\u4e00-\u9fa5a-zA-Z-0-9]{2,20}$/ ;
+  var regexName =/^[\u4e00-\u9fa5a-zA-Z-0-9\d/]{2,40}$/ ;
   function edit_save(id){
 	  var params=$("#"+id).find(":input");
 	  var old=$("#"+id).find("#old_hidden").val();

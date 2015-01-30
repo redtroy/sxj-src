@@ -59,7 +59,7 @@ var pageii
    }
    //确认修改
    var redexAccount=/^[A-Za-z0-9]{1,15}$/;
-   var regexName =/^[a-zA-Z\u4e00-\u9fa5]{1,20}$/;
+   var regexName =/^[a-zA-Z\u4e00-\u9fa5\d/]{1,40}$/;
    function editOk(memerNo,id){
 	   var params=$("#"+id).find(":input");
 	   var old=$("#"+id).find("#old_hidden").val();
