@@ -49,8 +49,8 @@ jQuery(document).ready(function($) {
 		$('#'+obj).slideUp(200);
 	});
 	$("#message_div").live("click",function(){
-		window.location.href="cleanChannel.htm?channelName=${channelName}";
-		window.location.href="paylist.htm"; 
+		window.location.href="${basePath}pay/cleanChannel.htm?channelName=${channelName}";
+		window.location.href="${basePath}pay/paylist.htm"; 
 	})
 	JS.Engine.start('${basePath}comet');
 		JS.Engine.on({
@@ -219,7 +219,7 @@ function to_finance(payId){
       <#else>
       <td>-</td>
       </#if>
-      <td>${model.payNo}</td>
+      <td>${model.content}</td>
       <#if (model.state.ordinal()==0)>
           <#if (state=="a")>
            <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button>

@@ -18,9 +18,9 @@ import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.rfid.windowRef.WindowRefQuery;
-import com.sxj.supervisor.service.CometServiceImpl;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 

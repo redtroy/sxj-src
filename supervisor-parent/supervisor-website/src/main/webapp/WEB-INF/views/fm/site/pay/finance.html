@@ -31,6 +31,10 @@ $(function(){
 		$('.maskdivgen').fadeOut(100);
 		$('.viewer').slideUp(200);
 	});
+	$("#message_div").live("click",function(){
+		window.location.href="${basePath}pay/cleanChannel.htm?channelName=${channelName}";
+		window.location.href="${basePath}pay/paylist.htm"; 
+	})
 	JS.Engine.start('${basePath}comet');
 		JS.Engine.on({
 			start : function(cId, channelList, engine){  
