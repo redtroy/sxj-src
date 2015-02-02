@@ -9,7 +9,7 @@ public class RedisTopicTest
 {
     RedisTopics topics;
     
-    private static final String TOPIC_NAME = "test-topic";
+    private static final String TOPIC_NAME = "topic1";
     
     @Before
     public void setUp()

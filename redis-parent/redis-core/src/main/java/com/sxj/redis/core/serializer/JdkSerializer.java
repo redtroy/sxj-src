@@ -35,6 +35,8 @@ public class JdkSerializer implements Serializer
     {
         try
         {
+            if (str == null)
+                return null;
             byte[] decodeBase64 = Encodes.decodeBase64(str);
             ByteArrayInputStream bis = new ByteArrayInputStream(decodeBase64);
             ObjectInputStream ois = new ObjectInputStream(bis);
@@ -50,7 +52,7 @@ public class JdkSerializer implements Serializer
     {
         List<String> strs = new ArrayList<String>();
         strs.add("bac");
-        String serialize = new JdkSerializer().serialize(strs);
+        String serialize = new JdkSerializer().serialize(null);
         Object deserialize = new JdkSerializer().deserialize(serialize);
         System.out.println(deserialize);
     }
