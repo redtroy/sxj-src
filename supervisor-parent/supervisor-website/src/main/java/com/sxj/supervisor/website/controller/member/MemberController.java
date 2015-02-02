@@ -241,10 +241,15 @@ public class MemberController extends BaseController {
 	public @ResponseBody Map<String, String> send_ms(HttpSession session,
 			String phoneNo) {
 		Map<String, String> map = new HashMap<String, String>();
+		if (StringUtils.isEmpty(phoneNo)) {
+			map.put("error", "手机号不能为空");
+			return map;
+		}
+		phoneNo = phoneNo.trim();
 		RAtomicLong num = redisConcurrent.getAtomicLong("num_" + phoneNo, 59);// 记录次数59秒只能发送一次
 		RAtomicLong sendMax = redisConcurrent.getAtomicLong("sendMax_"
 				+ phoneNo, DateTimeUtils.getNextZeroTime());
-		if (sendMax.incrementAndGet() <= 50) {
+		if (sendMax.incrementAndGet() <= 5) {
 			if (num.incrementAndGet() == 1) {
 				String message = "";
 				message = memberService.createvalidata(phoneNo, message);

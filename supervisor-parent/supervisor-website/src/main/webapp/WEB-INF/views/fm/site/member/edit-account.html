@@ -21,7 +21,7 @@ var pwd_validform;
  }
   function query(page){
 		var params=$("#search_form").serialize();
-		$.post("accountList.htm?"+Math.random(),params,function(data){
+		$.post("accountList.htm?rand="+Math.random(),params,function(data){
 			var res=$(data).find("#right_div");
 			$("#right_div").empty();
 			$("#right_div").append(res.html());
