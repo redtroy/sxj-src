@@ -48,7 +48,6 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
     public int addListener(final MessageListener<M> listener)
     {
         Jedis jedis = provider.getResource();
-        boolean broken = false;
         try
         {
             RedisMessageListenerWrapper<M> wrapper = new RedisMessageListenerWrapper<M>(
@@ -56,14 +55,16 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
             TopicThread<M> topicThread = new TopicThread<M>(jedis, wrapper);
             ExecutorService newCachedThreadPool = Executors.newFixedThreadPool(1);
             topicThread.setService(newCachedThreadPool);
-            newCachedThreadPool.execute(topicThread);
             int hashCode = wrapper.hashCode();
-            pubsubs.put(hashCode, topicThread);
+            if (!pubsubs.containsKey(hashCode))
+            {
+                pubsubs.put(hashCode, topicThread);
+                newCachedThreadPool.execute(topicThread);
+            }
             return hashCode;
         }
         catch (Exception e)
         {
-            broken = true;
             throw new RedisException("", e);
         }
         finally
@@ -140,6 +141,12 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         private Jedis getJedis()
         {
             return jedis;
+        }
+        
+        @Override
+        public int hashCode()
+        {
+            return super.hashCode();
         }
         
     }
