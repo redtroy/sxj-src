@@ -63,7 +63,7 @@
 			</bean>
 		</constructor-arg>
 	</bean>
-	<bean id="redisCollections" class="com.sxj.redis.advance.RedisCollections">
+	<bean id="redisCollections" class="com.sxj.redis.core.collections.RedisCollections">
 		<constructor-arg index="0">
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">
@@ -75,7 +75,7 @@
 			</bean>
 		</constructor-arg>
 	</bean>
-	<bean id="redisTopics" class="com.sxj.redis.advance.topic.RedisTopics">
+	<bean id="redisTopics" class="com.sxj.redis.core.pubsub.RedisTopics">
 		<constructor-arg index="0">
 			<bean class="com.sxj.redis.advance.Config">
 				<property name="singleServerConfig">

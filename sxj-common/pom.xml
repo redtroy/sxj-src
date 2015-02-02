@@ -77,13 +77,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sxj</groupId>
-			<artifactId>redis-spring</artifactId>
+			<artifactId>redis-core</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>redis-topic</artifactId>
-			<version>1.0</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>4.0.6.RELEASE</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>

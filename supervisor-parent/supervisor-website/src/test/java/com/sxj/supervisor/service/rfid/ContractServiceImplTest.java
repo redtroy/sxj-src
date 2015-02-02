@@ -9,8 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sxj.redis.advance.RedisConcurrent;
-import com.sxj.redis.advance.core.RAtomicLong;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.service.contract.IContractService;

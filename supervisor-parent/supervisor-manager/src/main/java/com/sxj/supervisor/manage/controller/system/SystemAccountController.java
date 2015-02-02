@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.redis.advance.topic.RedisTopics;
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.OperatorLogEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;

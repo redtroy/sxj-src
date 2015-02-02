@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.model.comet.RfidChannel;
@@ -22,6 +23,9 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 
 	@Autowired
 	private ILogisticsRefDao refDao;
+
+	@Autowired
+	private RedisTopics topics;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -61,7 +65,7 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 			refDao.update(model);
 			CometServiceImpl
 					.subCount(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
-			RfidChannel.initTopic().publish(
+			topics.getTopic(RfidChannel.TOPIC_NAME).publish(
 					RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -95,7 +99,7 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 				refDao.add(model);
 				CometServiceImpl
 						.takeCount(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
-				RfidChannel.initTopic().publish(
+				topics.getTopic(RfidChannel.TOPIC_NAME).publish(
 						RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
 			}
 		} catch (Exception e) {
