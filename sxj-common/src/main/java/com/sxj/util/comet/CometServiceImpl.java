@@ -11,7 +11,6 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import com.sxj.redis.advance.RedisCollections;
 import com.sxj.redis.advance.RedisConcurrent;
 import com.sxj.redis.advance.core.RAtomicLong;
-import com.sxj.redis.advance.core.RLock;
 import com.sxj.redis.advance.core.RSet;
 import com.sxj.redis.advance.core.RTopic;
 import com.sxj.redis.advance.topic.RedisTopics;
@@ -33,15 +32,15 @@ public class CometServiceImpl implements BeanFactoryPostProcessor {
 	}
 
 	public static void add(String key, String obj) {
-		RLock lock = redisConcurrent.getLock(key + "_lock");
+		// RLock lock = redisConcurrent.getLock(key + "_lock");
 		try {
-			lock.lock();
+			// lock.lock();
 			RSet<String> set = collections.getSet(key);
 			set.add(obj);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
-			lock.unlock();
+			// lock.unlock();
 		}
 
 	}
@@ -66,15 +65,15 @@ public class CometServiceImpl implements BeanFactoryPostProcessor {
 	}
 
 	public static void remove(String key, String obj) {
-		RLock lock = redisConcurrent.getLock(key + "_lock");
+		// RLock lock = redisConcurrent.getLock(key + "_lock");
 		try {
-			lock.lock();
+			// lock.lock();
 			RSet<String> set = collections.getSet(key);
 			set.remove(obj);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
-			lock.unlock();
+			// lock.unlock();
 		}
 
 	}
