@@ -257,6 +257,9 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 					.getContractByContractNo(contractNo);
 			Assert.notNull(con, "合同不存在");
 			// 生成支付单
+			if(con.getType().equals(ContractTypeEnum.BIDDING)){
+            	return;
+            }
 			PayRecordEntity pay = new PayRecordEntity();
 			pay.setDateNo(con.getContractNo() + "P");// 编号
 			pay.setContractNo(con.getContractNo());

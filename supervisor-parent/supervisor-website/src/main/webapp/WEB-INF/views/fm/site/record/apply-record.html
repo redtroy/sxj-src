@@ -350,10 +350,14 @@ var basePath ='${basePath}';
 
 			}
 		});
+			$(document).keydown(function(event){
+			if(event.keyCode==9){
+				//隐藏
+				$("#bigAutocompleteContent").hide();
+			}
+			});
 		$("#memberNameB").blur(function() {
 			var pass = cg_validform.check(false, $("#memberIdB"));
-			//隐藏
-			$("#bigAutocompleteContent").hide();
 			if (!pass)
 				$(this).parent().children(".Validform_wrong").show();
 		})
