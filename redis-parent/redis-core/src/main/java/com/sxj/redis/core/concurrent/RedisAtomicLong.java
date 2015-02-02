@@ -1,5 +1,8 @@
 package com.sxj.redis.core.concurrent;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
@@ -14,6 +17,20 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     public RedisAtomicLong(RedisProvider provider, String name)
     {
         super(provider, name);
+    }
+    
+    public RedisAtomicLong(RedisProvider provider, String name, long seconds)
+    {
+        super(provider, name);
+        set(0);
+        this.expire(seconds, TimeUnit.SECONDS);
+    }
+    
+    public RedisAtomicLong(RedisProvider provider, String name, Date timestamp)
+    {
+        super(provider, name);
+        set(0);
+        this.expireAt(timestamp);
     }
     
     @Override
