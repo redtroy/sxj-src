@@ -12,37 +12,45 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
 import com.sxj.redis.core.RMap;
+import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisExpirable;
-import com.sxj.redis.core.serializer.JdkSerializer;
-import com.sxj.redis.core.serializer.JsonSerializer;
-import com.sxj.redis.core.serializer.Serializer;
+import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
 {
     
-    private final static Serializer K_SERIALIZER = new JsonSerializer();
-    
-    private final static Serializer V_SERIALIZER = new JdkSerializer();
-    
-    private RedisMap(Jedis jedis, String name)
+    public RedisMap(RedisProvider provider, String name)
     {
-        super(jedis, name);
-        // TODO Auto-generated constructor stub
+        super(provider, name);
     }
     
     @Override
     public V putIfAbsent(K key, V value)
     {
-        int hsetnx = jedis.hsetnx(name,
-                K_SERIALIZER.serialize(key),
-                V_SERIALIZER.serialize(value)).intValue();
-        switch (hsetnx)
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            case 1:
-                return value;
-                
-            default:
-                return null;
+            int hsetnx = jedis.hsetnx(name,
+                    K_SERIALIZER.serialize(key),
+                    V_SERIALIZER.serialize(value)).intValue();
+            switch (hsetnx)
+            {
+                case 1:
+                    return value;
+                    
+                default:
+                    return null;
+            }
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
         }
     }
     
@@ -60,64 +68,106 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public boolean remove(Object key, Object value)
     {
-        Transaction multi = jedis.multi();
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
         boolean retValue = false;
-        if (isEqual(multi, key, value))
+        try
         {
-            int intValue = multi.hdel(name, K_SERIALIZER.serialize(key))
-                    .get()
-                    .intValue();
-            switch (intValue)
+            Transaction multi = jedis.multi();
+            
+            if (isEqual(multi, key, value))
             {
-                case 1:
-                    retValue = true;
-                default:
-                    break;
+                int intValue = multi.hdel(name, K_SERIALIZER.serialize(key))
+                        .get()
+                        .intValue();
+                switch (intValue)
+                {
+                    case 1:
+                        retValue = true;
+                    default:
+                        break;
+                }
             }
+            multi.exec();
         }
-        multi.exec();
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
         return retValue;
     }
     
     @Override
     public boolean replace(K key, V oldValue, V newValue)
     {
-        Transaction multi = jedis.multi();
+        Jedis jedis = provider.getResource();
         boolean retValue = false;
-        if (isEqual(multi, key, oldValue))
+        boolean broken = false;
+        try
         {
-            int intValue = multi.hset(name,
-                    K_SERIALIZER.serialize(key),
-                    V_SERIALIZER.serialize(newValue))
-                    .get()
-                    .intValue();
-            switch (intValue)
+            Transaction multi = jedis.multi();
+            if (isEqual(multi, key, oldValue))
             {
-                case 1:
-                    retValue = true;
-                default:
-                    break;
+                int intValue = multi.hset(name,
+                        K_SERIALIZER.serialize(key),
+                        V_SERIALIZER.serialize(newValue))
+                        .get()
+                        .intValue();
+                switch (intValue)
+                {
+                    case 1:
+                        retValue = true;
+                    default:
+                        break;
+                }
             }
         }
-        
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
         return retValue;
     }
     
     @Override
     public V replace(K key, V value)
     {
-        Transaction multi = jedis.multi();
-        int intValue = multi.hset(name,
-                K_SERIALIZER.serialize(key),
-                V_SERIALIZER.serialize(value))
-                .get()
-                .intValue();
-        switch (intValue)
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            case 1:
-                return value;
-            default:
-                return null;
+            Transaction multi = jedis.multi();
+            int intValue = multi.hset(name,
+                    K_SERIALIZER.serialize(key),
+                    V_SERIALIZER.serialize(value))
+                    .get()
+                    .intValue();
+            switch (intValue)
+            {
+                case 1:
+                    return value;
+                default:
+                    return null;
+            }
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
         }
         
     }
@@ -125,7 +175,21 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public int size()
     {
-        return jedis.hlen(name).intValue();
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
+        {
+            return jedis.hlen(name).intValue();
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override
@@ -137,125 +201,247 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public boolean containsKey(Object key)
     {
-        return jedis.hexists(name, K_SERIALIZER.serialize(key));
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
+        {
+            return jedis.hexists(name, K_SERIALIZER.serialize(key));
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+            
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override
     public boolean containsValue(Object value)
     {
-        List<String> hvals = jedis.hvals(name);
-        String serialize = V_SERIALIZER.serialize(value);
-        return hvals.contains(serialize);
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
+        {
+            List<String> hvals = jedis.hvals(name);
+            String serialize = V_SERIALIZER.serialize(value);
+            return hvals.contains(serialize);
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override
     public V get(Object key)
     {
-        String hget = jedis.hget(name, K_SERIALIZER.serialize(key));
-        return (V) V_SERIALIZER.deserialize(hget);
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
+        {
+            String hget = jedis.hget(name, K_SERIALIZER.serialize(key));
+            return (V) V_SERIALIZER.deserialize(hget);
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override
     public V put(K key, V value)
     {
-        int hset = jedis.hset(name,
-                K_SERIALIZER.serialize(key),
-                V_SERIALIZER.serialize(value)).intValue();
-        switch (hset)
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            case 1:
-                return value;
-                
-            default:
-                return null;
+            int hset = jedis.hset(name,
+                    K_SERIALIZER.serialize(key),
+                    V_SERIALIZER.serialize(value)).intValue();
+            switch (hset)
+            {
+                case 1:
+                    return value;
+                    
+                default:
+                    return null;
+            }
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
         }
     }
     
     @Override
     public V remove(Object key)
     {
-        Transaction multi = jedis.multi();
-        V retValue = null;
-        String serializeKey = K_SERIALIZER.serialize(key);
-        if (multi.exists(serializeKey).get())
+        
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            V deserialize = (V) V_SERIALIZER.deserialize(multi.hget(name,
-                    serializeKey).get());
-            int hdel = multi.hdel(name, serializeKey).get().intValue();
-            switch (hdel)
+            Transaction multi = jedis.multi();
+            V retValue = null;
+            String serializeKey = K_SERIALIZER.serialize(key);
+            if (multi.exists(serializeKey).get())
             {
-                case 1:
-                    retValue = deserialize;
-                    
-                default:
-                    break;
+                V deserialize = (V) V_SERIALIZER.deserialize(multi.hget(name,
+                        serializeKey).get());
+                int hdel = multi.hdel(name, serializeKey).get().intValue();
+                switch (hdel)
+                {
+                    case 1:
+                        retValue = deserialize;
+                        
+                    default:
+                        break;
+                }
             }
+            return retValue;
         }
-        return retValue;
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override
     public void putAll(Map<? extends K, ? extends V> m)
     {
-        Set<? extends K> keySet = m.keySet();
-        Map<String, String> map = new HashMap<String, String>();
-        for (K key : keySet)
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            map.put(K_SERIALIZER.serialize(key),
-                    V_SERIALIZER.serialize(m.get(key)));
+            Set<? extends K> keySet = m.keySet();
+            Map<String, String> map = new HashMap<String, String>();
+            for (K key : keySet)
+            {
+                map.put(K_SERIALIZER.serialize(key),
+                        V_SERIALIZER.serialize(m.get(key)));
+            }
+            jedis.hmset(name, map);
         }
-        jedis.hmset(name, map);
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override
     public void clear()
     {
         delete();
-        
     }
     
     @Override
     public Set<K> keySet()
     {
-        Set<String> hkeys = jedis.hkeys(name);
-        Set<K> retValue = new HashSet<K>();
-        for (String key : hkeys)
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            retValue.add((K) K_SERIALIZER.deserialize(key));
+            Set<String> hkeys = jedis.hkeys(name);
+            Set<K> retValue = new HashSet<K>();
+            for (String key : hkeys)
+            {
+                retValue.add((K) K_SERIALIZER.deserialize(key));
+            }
+            return retValue;
         }
-        return retValue;
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override
     public Collection<V> values()
     {
-        List<String> hvals = jedis.hvals(name);
-        List<V> retValue = new ArrayList<V>();
-        for (String value : hvals)
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            retValue.add((V) V_SERIALIZER.deserialize(value));
+            List<String> hvals = jedis.hvals(name);
+            List<V> retValue = new ArrayList<V>();
+            for (String value : hvals)
+            {
+                retValue.add((V) V_SERIALIZER.deserialize(value));
+            }
+            return retValue;
         }
-        return retValue;
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override
     public Set<java.util.Map.Entry<K, V>> entrySet()
     {
-        Map<String, String> hgetAll = jedis.hgetAll(name);
-        Map<K, V> map = new HashMap<K, V>();
-        Set<Entry<String, String>> entrySet = hgetAll.entrySet();
-        for (Map.Entry<String, String> entry : entrySet)
+        
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            map.put((K) K_SERIALIZER.deserialize(entry.getKey()),
-                    (V) V_SERIALIZER.deserialize(entry.getValue()));
+            Map<String, String> hgetAll = jedis.hgetAll(name);
+            Map<K, V> map = new HashMap<K, V>();
+            Set<Entry<String, String>> entrySet = hgetAll.entrySet();
+            for (Map.Entry<String, String> entry : entrySet)
+            {
+                map.put((K) K_SERIALIZER.deserialize(entry.getKey()),
+                        (V) V_SERIALIZER.deserialize(entry.getValue()));
+            }
+            return map.entrySet();
         }
-        return map.entrySet();
-    }
-    
-    @Override
-    public String getName()
-    {
-        return name;
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     //    @Override
@@ -268,20 +454,34 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public Map<K, V> getAll(Set<K> keys)
     {
-        Set<String> serialzeKeys = new HashSet<String>();
-        for (K key : keys)
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
         {
-            serialzeKeys.add(K_SERIALIZER.serialize(key));
+            Set<String> serialzeKeys = new HashSet<String>();
+            for (K key : keys)
+            {
+                serialzeKeys.add(K_SERIALIZER.serialize(key));
+            }
+            List<String> hmget = jedis.hmget(name,
+                    serialzeKeys.toArray(new String[serialzeKeys.size()]));
+            Map<K, V> map = new HashMap<K, V>();
+            int index = 0;
+            for (K key : keys)
+            {
+                map.put(key, (V) V_SERIALIZER.deserialize(hmget.get(index)));
+            }
+            return map;
         }
-        List<String> hmget = jedis.hmget(name,
-                serialzeKeys.toArray(new String[serialzeKeys.size()]));
-        Map<K, V> map = new HashMap<K, V>();
-        int index = 0;
-        for (K key : keys)
+        catch (Exception e)
         {
-            map.put(key, (V) V_SERIALIZER.deserialize(hmget.get(index)));
+            broken = true;
+            throw new RedisException("", e);
         }
-        return map;
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
 }

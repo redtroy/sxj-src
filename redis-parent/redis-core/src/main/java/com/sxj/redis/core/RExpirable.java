@@ -26,5 +26,5 @@ public interface RExpirable extends RObject
      *          -2 if the key does not exist.
      *          -1 if the key exists but has no associated expire.
      */
-    long remainTimeToLive();
+    long ttl();
 }
