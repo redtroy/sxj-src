@@ -1,5 +1,8 @@
 package com.sxj.redis.core.pubsub;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import redis.clients.jedis.JedisPubSub;
 
 import com.sxj.redis.core.MessageListener;
@@ -8,6 +11,8 @@ import com.sxj.redis.core.serializer.Serializer;
 
 public class RedisMessageListenerWrapper<M> extends JedisPubSub
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RedisMessageListenerWrapper.class);
+    
     private MessageListener<M> listener;
     
     private String channel;
@@ -25,7 +30,14 @@ public class RedisMessageListenerWrapper<M> extends JedisPubSub
     @Override
     public void onMessage(String channel, String message)
     {
-        listener.onMessage((M) V_SERIALIZER.deserialize(message));
+        try
+        {
+            listener.onMessage((M) V_SERIALIZER.deserialize(message));
+        }
+        catch (Exception e)
+        {
+            LOGGER.debug(message, e);
+        }
     }
     
     @Override
