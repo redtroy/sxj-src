@@ -61,6 +61,7 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.comet.CometMessageListener;
 import com.sxj.supervisor.website.comet.MessageThread;
+import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.FileUtil;
@@ -254,11 +255,11 @@ public class BasicController extends BaseController {
 			currentUser.login(token);
 			PrincipalCollection principals = currentUser.getPrincipals();
 			if (userBean.getAccount() != null) {
-				// SupervisorShiroRedisCache.addToMap(userBean.getAccount()
-				// .getId(), principals);
+				SupervisorShiroRedisCache.addToMap(userBean.getAccount()
+						.getId(), principals);
 			} else {
-				// SupervisorShiroRedisCache.addToMap(userBean.getMember()
-				// .getMemberNo(), principals);
+				SupervisorShiroRedisCache.addToMap(userBean.getMember()
+						.getMemberNo(), principals);
 			}
 		} catch (AuthenticationException e) {
 			SxjLogger.error("登陆失败", e, this.getClass());
