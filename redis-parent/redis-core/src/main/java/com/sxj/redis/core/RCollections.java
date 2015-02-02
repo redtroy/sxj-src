@@ -1,5 +1,6 @@
 package com.sxj.redis.core;
 
+
 public interface RCollections
 {
     

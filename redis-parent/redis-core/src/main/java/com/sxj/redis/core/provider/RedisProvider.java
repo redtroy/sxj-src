@@ -1,5 +1,7 @@
 package com.sxj.redis.core.provider;
 
+import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import redis.clients.jedis.Jedis;
@@ -8,6 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
+import com.sxj.spring.modules.util.ClassLoaderUtil;
 
 /**
  * Redis 缓存实现
@@ -28,10 +31,49 @@ public class RedisProvider implements RProvider
     
     private static JedisPool pool;
     
+    private String configFile;
+    
+    public RedisProvider(String configFile)
+    {
+        this.configFile = configFile;
+        initRedisProvider();
+    }
+    
     @Override
     public String name()
     {
         return "redis";
+    }
+    
+    public void initRedisProvider()
+    {
+        try
+        {
+            InputStream configStream = ClassLoaderUtil.getResource(configFile);
+            Properties props = new Properties();
+            props.load(configStream);
+            configStream.close();
+            start(getProviderProperties(props));
+        }
+        catch (Exception e)
+        {
+            throw new RedisException("Unabled to initialize cache providers", e);
+        }
+    }
+    
+    private final Properties getProviderProperties(Properties props)
+    {
+        Properties new_props = new Properties();
+        Enumeration<Object> keys = props.keys();
+        String prefix = "redis.collections.";
+        while (keys.hasMoreElements())
+        {
+            String key = (String) keys.nextElement();
+            if (key.startsWith(prefix))
+                new_props.setProperty(key.substring(prefix.length()),
+                        props.getProperty(key));
+        }
+        return new_props;
     }
     
     /**
