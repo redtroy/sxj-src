@@ -60,35 +60,35 @@ public class OpenRfidController {
 	@Autowired
 	private IContractPayService payService;
 
-	/**
-	 * 测试
-	 * 
-	 * @throws WebException
-	 */
-	@RequestMapping(value = "info/pay/{payId}")
-	public @ResponseBody Map<String, Object> getPayInfo(
-			@PathVariable String payId) throws WebException {
-		Map<String, Object> map = new HashMap<>();
-		try {
-			PayRecordEntity pay = payService.getPayRecordEntity(payId);
-			if (pay == null) {
-				throw new WebException("付款记录不存在");
-			}
-			map.put("memberNo_A", pay.getMemberNoA());
-			map.put("payNo", pay.getPayNo());
-			map.put("contractNo", pay.getContractNo());
-			map.put("batchNo", pay.getBatchNo());
-			map.put("payAmount", pay.getPayAmount());
-			map.put("content", pay.getContent());
-			map.put("state", 1);
-
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			map.put("state", 0);
-			map.put("error", e.getMessage());
-		}
-		return map;
-	}
+//	/**
+//	 * 测试
+//	 * 
+//	 * @throws WebException
+//	 */
+//	@RequestMapping(value = "info/pay/{payId}")
+//	public @ResponseBody Map<String, Object> getPayInfo(
+//			@PathVariable String payId) throws WebException {
+//		Map<String, Object> map = new HashMap<>();
+//		try {
+//			PayRecordEntity pay = payService.getPayRecordEntity(payId);
+//			if (pay == null) {
+//				throw new WebException("付款记录不存在");
+//			}
+//			map.put("memberNo_A", pay.getMemberNoA());
+//			map.put("payNo", pay.getPayNo());
+//			map.put("contractNo", pay.getContractNo());
+//			map.put("batchNo", pay.getBatchNo());
+//			map.put("payAmount", pay.getPayAmount());
+//			map.put("content", pay.getContent());
+//			map.put("state", 1);
+//
+//		} catch (Exception e) {
+//			SxjLogger.error(e.getMessage(), e, this.getClass());
+//			map.put("state", 0);
+//			map.put("error", e.getMessage());
+//		}
+//		return map;
+//	}
 
 	/**
 	 * 登陆
@@ -97,9 +97,9 @@ public class OpenRfidController {
 	 * @return
 	 */
 	@RequestMapping(value = "login")
-	public @ResponseBody Map<String, Integer> login(String userId,
+	public @ResponseBody Map<String, String> login(String userId,
 			String password, HttpSession session) {
-		Map<String, Integer> retVal = new HashMap<String, Integer>();
+		Map<String, String> retVal = new HashMap<String, String>();
 		try {
 			System.err.println(userId + "++++" + password);
 			ApiToken token = null;
@@ -109,11 +109,11 @@ public class OpenRfidController {
 			if (StringUtils.isNotEmpty(userId)) {
 				account = accountService.getAccountByAccountNo(userId);
 				if (account == null) {
-					retVal.put("state", 0);
+					retVal.put("state", "0");
 					return retVal;
 				}
 				if (AccountStatesEnum.STOP.equals(account.getState())) {
-					retVal.put("state", 0);
+					retVal.put("state", "0");
 					return retVal;
 				}
 				userBean = new SupervisorPrincipal();
@@ -122,8 +122,9 @@ public class OpenRfidController {
 						.getParentId());
 				userBean.setMember(member);
 				token = new ApiToken(userBean, password);
+				retVal.put("userName", member.getName());
 			} else {
-				retVal.put("state", 0);
+				retVal.put("state", ")");
 				return retVal;
 			}
 
@@ -137,7 +138,7 @@ public class OpenRfidController {
 				}
 			} catch (AuthenticationException e) {
 				SxjLogger.error(e.getMessage(), e, this.getClass());
-				retVal.put("state", -1);
+				retVal.put("state", "-1");
 				return retVal;
 
 			}
@@ -146,13 +147,13 @@ public class OpenRfidController {
 				if (account != null) {
 					accountService.edit_Login(account.getId());
 				}
-				retVal.put("state", 1);
+				retVal.put("state", "1");
 			} else {
-				retVal.put("state", 1);
+				retVal.put("state", "1");
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			retVal.put("state", -1);
+			retVal.put("state", "-1");
 			return retVal;
 		}
 		return retVal;
