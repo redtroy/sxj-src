@@ -1,6 +1,5 @@
 package com.sxj.redis.core;
 
-
 public interface RCollections
 {
     
@@ -19,5 +18,29 @@ public interface RCollections
      * @return
      */
     <V> RSet<V> getSet(String name);
+    
+    /**
+     * Returns list instance by name.
+     *
+     * @param name of list
+     * @return
+     */
+    <V> RList<V> getList(String name);
+    
+    /**
+     * Returns queue instance by name.
+     *
+     * @param name of queue
+     * @return
+     */
+    <V> RQueue<V> getQueue(String name);
+    
+    /**
+     * Returns deque instance by name.
+     *
+     * @param name of deque
+     * @return
+     */
+    <V> RDeque<V> getDeque(String name);
     
 }
