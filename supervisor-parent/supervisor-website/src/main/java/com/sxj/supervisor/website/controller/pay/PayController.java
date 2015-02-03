@@ -239,7 +239,7 @@ public class PayController extends BaseController {
 //				SxjLogger.info("-------" + state, this.getClass());
 //				throw new WebException("融资请求失败！");
 //			}
-			RSet<Object> set = collections.getSet(payId);
+			RSet<Map> set = collections.getSet(payId);
 			set.add(map);
 			set.expireAt(60000);// 设置失效时间
 			LoginToken loginToken = new LoginToken();
