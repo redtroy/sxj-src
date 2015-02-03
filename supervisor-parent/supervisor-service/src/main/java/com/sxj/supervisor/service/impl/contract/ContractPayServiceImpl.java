@@ -127,7 +127,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<AccountingModel> query_finance(AccountingModel query,
-			String startDate, String endDate) throws ServiceException {
+			String startDate, String endDate, String memberNo)
+			throws ServiceException {
 		try {
 			QueryCondition<AccountingModel> condition = new QueryCondition<AccountingModel>();
 			condition.addCondition("recordNo", query.getRecordNo());// 备案号
@@ -135,6 +136,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.addCondition("contractType", query.getContractType());// 合同类型
 			condition.addCondition("startDate", startDate);// 开始时间
 			condition.addCondition("endDate", endDate);// 结束时间
+			condition.addCondition("memberNo", memberNo);// 结束时间
 			condition.setPage(query);
 			List<AccountingModel> list = accountingDao.query(condition);
 			query.setPage(condition);

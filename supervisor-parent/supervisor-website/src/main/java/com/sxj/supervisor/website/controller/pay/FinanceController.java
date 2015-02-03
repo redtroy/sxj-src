@@ -22,7 +22,7 @@ import com.sxj.util.exception.WebException;
 public class FinanceController extends BaseController {
 	@Autowired
 	private IContractPayService payService;
-	
+
 	@RequestMapping("finance")
 	public String finance(ModelMap map, AccountingModel query,
 			String startDate, String endDate, HttpSession session)
@@ -35,7 +35,7 @@ public class FinanceController extends BaseController {
 			String memberNo = info.getMember().getMemberNo();
 			ContractTypeEnum[] types = ContractTypeEnum.values();
 			List<AccountingModel> list = payService.query_finance(query,
-					startDate, endDate);
+					startDate, endDate, memberNo);
 			map.put("list", list);
 			map.put("types", types);
 			map.put("query", query);

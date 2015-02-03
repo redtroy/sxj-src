@@ -40,10 +40,13 @@
 		<if test="condition.contractType != '' and condition.contractType !=null ">
 			<![CDATA[AND mc.TYPE =#{condition.contractType}]]>
 		</if>
+			<if test="condition.memberNo != '' and condition.memberNo !=null ">
+			<![CDATA[AND (mp.MEMBER_NO_A=#{condition.memberNo} or mp.MEMBER_NO_B=#{condition.memberNo})]]>
+		</if>
 		<if
 			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
 			<![CDATA[AND mc.SIGNED_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) AND mc.SIGNED_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
 		</if>
-		<![CDATA[GROUP BY mp.`CONTRACT_No`]]>
+		<![CDATA[GROUP BY mp.CONTRACT_No desc]]>
 	</select>
 </mapper>
