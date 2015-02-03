@@ -1,5 +1,8 @@
 package com.sxj.finance.website.controller;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -17,9 +20,12 @@ import com.sxj.finance.enu.member.AccountStatesEnum;
 import com.sxj.finance.enu.member.MemberCheckStateEnum;
 import com.sxj.finance.enu.member.MemberStatesEnum;
 import com.sxj.finance.model.finance.FinancePrincipal;
+import com.sxj.finance.service.finance.IFinanceService;
 import com.sxj.finance.service.member.IAccountService;
 import com.sxj.finance.service.member.IMemberService;
 import com.sxj.finance.website.login.FinanceSiteToken;
+import com.sxj.redis.core.RSet;
+import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.util.LoginToken;
 import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.StringUtils;
@@ -33,6 +39,13 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IAccountService accountService;
+	
+	@Autowired
+	private RedisCollections collections;
+	
+	@Autowired
+	private IFinanceService financeService;
+
 
 	@RequestMapping("index")
 	public String ToIndex(HttpServletRequest request) {
@@ -110,6 +123,12 @@ public class BasicController extends BaseController {
 			try {
 				currentUser.login(siteToken);
 				memberService.updateMenberLoginDate(memberInfo.getMemberNo());
+				RSet<Map<String,Object>> set = collections.getSet(payId);
+				Iterator<Map<String,Object>> i = set.iterator();
+				while (i.hasNext()) {
+					Map<String,Object> map1 = (Map<String,Object>) i.next();
+					financeService.setModel(map1);
+				}
 			} catch (AuthenticationException e) {
 				SxjLogger.error("登陆失败", e, this.getClass());
 				map.put("pmessage", "密码错误");

@@ -22,7 +22,7 @@ import com.sxj.util.exception.WebException;
 public class FinanceController extends BaseController {
 	@Autowired
 	private IContractPayService payService;
-
+	
 	@RequestMapping("finance")
 	public String finance(ModelMap map, AccountingModel query,
 			String startDate, String endDate, HttpSession session)

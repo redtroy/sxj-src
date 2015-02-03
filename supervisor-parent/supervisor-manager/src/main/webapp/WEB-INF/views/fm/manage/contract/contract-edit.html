@@ -38,7 +38,7 @@ function modify(){
 	var value=$("#batchCount").val();
 	var hideValue=$("#hideBatchCount").val();
 	if(parseFloat(value)){
-		if(value<=hideValue){
+		if(value<hideValue){
 			messageInfo("总批次不能小于已生成批次");
 			return;
 		}
@@ -327,7 +327,7 @@ var caculateRow=function($tr){
 			var value=$(this).val();
 			var hideValue=$("#hideBatchCount").val();
 			if(parseFloat(value)){
-				if(value<=hideValue){
+				if(value<hideValue){
 					messageInfo("总批次不能小于已生成批次");
 				}
 			}
