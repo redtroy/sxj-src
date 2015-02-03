@@ -84,7 +84,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         boolean broken = false;
         try
         {
-            jedis.rpushx(name, V_SERIALIZER.serialize(e));
+            jedis.rpush(name, V_SERIALIZER.serialize(e));
         }
         catch (Exception ex)
         {
@@ -191,7 +191,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         boolean broken = false;
         try
         {
-            jedis.rpushx(name, values);
+            jedis.rpush(name, values);
             return true;
         }
         catch (Exception e)

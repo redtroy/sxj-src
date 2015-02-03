@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -87,11 +88,18 @@ public class RedisSetTest
     public void testIterator()
     {
         RSet<Map<String, String>> set = collections.getSet("MAP");
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("A", "B");
+        map.put("B", "C");
+        set.add(map);
         Iterator<Map<String, String>> iterator = set.iterator();
         while (iterator.hasNext())
         {
             Map<String, String> next = iterator.next();
-            System.out.println(next.get("A"));
+            Set<String> keySet = next.keySet();
+            for (String key : keySet)
+                System.out.println(key + ":" + next.get(key));
+            System.out.println("----------------");
         }
     }
 }
