@@ -1,0 +1,91 @@
+package com.sxj.redis.core.collections;
+
+import java.util.NoSuchElementException;
+
+import redis.clients.jedis.Jedis;
+
+import com.sxj.redis.core.RQueue;
+import com.sxj.redis.core.provider.RedisProvider;
+
+public class RedisQueue<V> extends RedisList<V> implements RQueue<V>
+{
+    public RedisQueue(RedisProvider provider, String name)
+    {
+        super(provider, name);
+        // TODO Auto-generated constructor stub
+    }
+    
+    @Override
+    public boolean offer(V e)
+    {
+        return add(e);
+    }
+    
+    @Override
+    public V remove()
+    {
+        V value = poll();
+        if (value == null)
+        {
+            throw new NoSuchElementException();
+        }
+        return value;
+    }
+    
+    @Override
+    public V poll()
+    {
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
+        {
+            String lpop = jedis.lpop(name);
+            return (V) V_SERIALIZER.deserialize(lpop);
+        }
+        catch (Exception e)
+        {
+            broken = true;
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
+        return null;
+    }
+    
+    @Override
+    public V element()
+    {
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
+        {
+            String lindex = jedis.lindex(name, 0);
+            if (lindex == null)
+            {
+                throw new NoSuchElementException();
+            }
+            return (V) V_SERIALIZER.serialize(lindex);
+        }
+        catch (Exception e)
+        {
+            broken = true;
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
+        return null;
+    }
+    
+    @Override
+    public V peek()
+    {
+        if (isEmpty())
+        {
+            return null;
+        }
+        return get(0);
+    }
+    
+}

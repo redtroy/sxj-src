@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.shiro.cache.CacheException;
 
-import com.sxj.redis.advance.RedisCollections;
-import com.sxj.redis.advance.core.RMap;
+import com.sxj.redis.core.RMap;
+import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.spring.modules.security.shiro.ShiroRedisCache;
 import com.sxj.util.Constraints;
 

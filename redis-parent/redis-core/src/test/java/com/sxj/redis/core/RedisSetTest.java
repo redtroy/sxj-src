@@ -1,7 +1,11 @@
 package com.sxj.redis.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -21,7 +25,6 @@ public class RedisSetTest
     {
         collections = new RedisCollections(
                 "config/redis-collections.properties");
-        testAdd();
     }
     
     public void testAdd()
@@ -31,21 +34,18 @@ public class RedisSetTest
         set.add("B");
     }
     
-    @Test
     public void testSize()
     {
         RSet<String> set = collections.getSet(SET_NAME);
         System.out.println(set.size());
     }
     
-    @Test
     public void testContains()
     {
         RSet<String> set = collections.getSet(SET_NAME);
         Assert.assertTrue(set.contains("A"));
     }
     
-    @Test
     public void testContainsAll()
     {
         RSet<String> set = collections.getSet(SET_NAME);
@@ -54,7 +54,6 @@ public class RedisSetTest
         Assert.assertTrue(set.containsAll(values));
     }
     
-    @Test
     public void testRemove()
     {
         RSet<String> set = collections.getSet(SET_NAME);
@@ -62,7 +61,6 @@ public class RedisSetTest
         Assert.assertEquals(1, set.size());
     }
     
-    @Test
     public void testRemoveAll()
     {
         RSet<String> set = collections.getSet(SET_NAME);
@@ -72,11 +70,36 @@ public class RedisSetTest
         Assert.assertEquals(1, set.size());
     }
     
-    @Test
     public void testExpire()
     {
         RSet<String> set = collections.getSet(SET_NAME);
         set.expire(10, TimeUnit.SECONDS);
     }
     
+    public void testSetMap()
+    {
+        RSet<Map<String, String>> set = collections.getSet("MAP");
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("A", "B");
+        set.add(map);
+    }
+    
+    @Test
+    public void testIterator()
+    {
+        RSet<Map<String, String>> set = collections.getSet("MAP");
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("A", "B");
+        map.put("B", "C");
+        set.add(map);
+        Iterator<Map<String, String>> iterator = set.iterator();
+        while (iterator.hasNext())
+        {
+            Map<String, String> next = iterator.next();
+            Set<String> keySet = next.keySet();
+            for (String key : keySet)
+                System.out.println(key + ":" + next.get(key));
+            System.out.println("----------------");
+        }
+    }
 }
