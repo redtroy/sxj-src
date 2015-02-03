@@ -1,6 +1,7 @@
 package com.sxj.supervisor.website.controller.pay;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -225,7 +226,7 @@ public class PayController extends BaseController {
 			if (pay == null) {
 				throw new WebException("付款记录不存在");
 			}
-			Map<String, Object> map = new HashMap<>();
+			HashMap<String, Object> map = new HashMap<>();
 
 			map.put("memberNo_A", pay.getMemberNoA());
 			map.put("payNo", pay.getPayNo());
@@ -233,19 +234,22 @@ public class PayController extends BaseController {
 			map.put("batchNo", pay.getBatchNo());
 			map.put("payAmount", pay.getPayAmount());
 			map.put("content", pay.getContent());
-			
-//			String payjson = JsonMapper.nonDefaultMapper().toJson(map);
-//			String state = httpClient.postJson(
-//					webUrl + "/finance/getModel.htm", payjson);
-//			Map<String, String> jmap = JsonMapper.nonDefaultMapper().fromJson(
-//					state, HashMap.class);
-//			if ("0".equals(jmap.get("flag"))) {
-//				SxjLogger.info("-------" + state, this.getClass());
-//				throw new WebException("融资请求失败！");
-//			}
-			RSet<Map<String,Object>> set = collections.getSet(payId);
+
+			// String payjson = JsonMapper.nonDefaultMapper().toJson(map);
+			// String state = httpClient.postJson(
+			// webUrl + "/finance/getModel.htm", payjson);
+			// Map<String, String> jmap =
+			// JsonMapper.nonDefaultMapper().fromJson(
+			// state, HashMap.class);
+			// if ("0".equals(jmap.get("flag"))) {
+			// SxjLogger.info("-------" + state, this.getClass());
+			// throw new WebException("融资请求失败！");
+			// }
+			RSet<HashMap<String, Object>> set = collections.getSet(payId);
 			set.add(map);
-			set.expireAt(60000);// 设置失效时间
+			Iterator<HashMap<String, Object>> i = set.iterator();
+			HashMap<String, Object> fdsfsd = i.next();
+			// set.expireAt(60000);// 设置失效时间
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
