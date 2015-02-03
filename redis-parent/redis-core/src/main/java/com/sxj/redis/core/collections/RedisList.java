@@ -223,6 +223,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
             boolean broken = false;
             try
             {
+                jedis.watch(name);
                 List<String> tail = jedis.lrange(name, index, size());
                 Transaction multi = jedis.multi();
                 multi.ltrim(name, 0, index - 1);
@@ -353,6 +354,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         boolean broken = false;
         try
         {
+            jedis.watch(name);
             String lindex = jedis.lindex(name, index);
             Transaction multi = jedis.multi();
             multi.lset(name, index, V_SERIALIZER.serialize(element));
@@ -391,6 +393,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
             }
             while (true)
             {
+                jedis.watch(name);
                 String lindex = jedis.lindex(name, index);
                 List<String> tail = jedis.lrange(name, index + 1, size());
                 Transaction multi = jedis.multi();
