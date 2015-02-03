@@ -233,18 +233,17 @@ public class PayController extends BaseController {
 			map.put("batchNo", pay.getBatchNo());
 			map.put("payAmount", pay.getPayAmount());
 			map.put("content", pay.getContent());
-
-			// String payjson = JsonMapper.nonDefaultMapper().toJson(map);
-			// String state = httpClient.postJson(
-			// webUrl + "/finance/getModel.htm", payjson);
-			// Map<String, String> jmap =
-			// JsonMapper.nonDefaultMapper().fromJson(
-			// state, HashMap.class);
-			// if ("0".equals(jmap.get("flag"))) {
-			// SxjLogger.info("-------" + state, this.getClass());
-			// throw new WebException("融资请求失败！");
-			// }
-			RQueue<Map<String, Object>> queue = collections.getQueue(payId);
+			
+//			String payjson = JsonMapper.nonDefaultMapper().toJson(map);
+//			String state = httpClient.postJson(
+//					webUrl + "/finance/getModel.htm", payjson);
+//			Map<String, String> jmap = JsonMapper.nonDefaultMapper().fromJson(
+//					state, HashMap.class);
+//			if ("0".equals(jmap.get("flag"))) {
+//				SxjLogger.info("-------" + state, this.getClass());
+//				throw new WebException("融资请求失败！");
+//			}
+			RQueue<Map<String,Object>> queue = collections.getQueue(payId);
 			queue.offer(map);
 			// queue.expireAt(60000);// 设置失效时间
 			LoginToken loginToken = new LoginToken();
