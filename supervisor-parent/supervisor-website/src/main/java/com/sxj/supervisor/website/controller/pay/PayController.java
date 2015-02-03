@@ -245,7 +245,7 @@ public class PayController extends BaseController {
 //				throw new WebException("融资请求失败！");
 //			}
 			RQueue<Map<String,Object>> queue = collections.getQueue(payId);
-			queue.add(map);
+			queue.offer(map);
 			//queue.expireAt(60000);// 设置失效时间
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
