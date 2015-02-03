@@ -19,7 +19,6 @@ import com.sxj.finance.model.finance.FinanceModel;
 import com.sxj.finance.model.finance.FinancePrincipal;
 import com.sxj.finance.service.finance.IFinanceService;
 import com.sxj.finance.website.controller.BaseController;
-import com.sxj.redis.advance.RedisCollections;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 

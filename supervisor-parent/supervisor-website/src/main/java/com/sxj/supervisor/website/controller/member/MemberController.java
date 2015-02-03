@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.cache.manager.HierarchicalCacheManager;
-import com.sxj.redis.advance.RedisCollections;
-import com.sxj.redis.advance.RedisConcurrent;
-import com.sxj.redis.advance.core.RAtomicLong;
+import com.sxj.redis.core.RAtomicLong;
+import com.sxj.redis.core.collections.RedisCollections;
+import com.sxj.redis.core.concurrent.RedisConcurrent;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;

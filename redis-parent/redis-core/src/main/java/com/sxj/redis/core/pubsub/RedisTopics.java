@@ -25,9 +25,13 @@ public class RedisTopics implements RTopics
             return (RTopic<M>) topics.get(name);
         else
         {
-            RedisTopic<M> redisTopic = new RedisTopic<M>(provider, name);
-            topics.put(name, redisTopic);
-            return redisTopic;
+            synchronized (topics)
+            {
+                RedisTopic<M> redisTopic = new RedisTopic<M>(provider, name);
+                topics.put(name, redisTopic);
+                return redisTopic;
+            }
+            
         }
     }
     

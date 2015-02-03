@@ -14,8 +14,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sxj.redis.advance.RedisCollections;
-import com.sxj.redis.advance.core.RSet;
+import com.sxj.redis.core.RSet;
+import com.sxj.redis.core.collections.RedisCollections;
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
@@ -49,6 +50,9 @@ public class PayController extends BaseController {
 
 	@Autowired
 	private ISxjHttpClient httpClient;
+
+	@Autowired
+	private RedisTopics redisTopics;
 
 	@Value("${httpclient.financeUrl}")
 	private String webUrl;
@@ -163,7 +167,7 @@ public class PayController extends BaseController {
 				// 乙方
 				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoB());
-				MessageChannel.initTopic()
+				redisTopics.getTopic(MessageChannel.TOPIC_NAME)
 						.publish(
 								MessageChannel.WEBSITE_PAY_MESSAGE
 										+ pay.getMemberNoB());
@@ -239,7 +243,7 @@ public class PayController extends BaseController {
 //				SxjLogger.info("-------" + state, this.getClass());
 //				throw new WebException("融资请求失败！");
 //			}
-			RSet<Map> set = collections.getSet(payId);
+			RSet<Map<String,Object>> set = collections.getSet(payId);
 			set.add(map);
 			set.expireAt(60000);// 设置失效时间
 			LoginToken loginToken = new LoginToken();

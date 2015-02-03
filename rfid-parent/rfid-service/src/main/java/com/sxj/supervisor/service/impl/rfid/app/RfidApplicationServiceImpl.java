@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.dao.rfid.apply.IRfidApplicationDao;
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
@@ -24,6 +26,7 @@ import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
+@Transactional
 public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	@Autowired
 	private IRfidApplicationDao appDao;
@@ -31,7 +34,11 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	@Autowired
 	private IRfidPurchaseDao purchaseDao;
 
+	@Autowired
+	private RedisTopics topics;
+
 	@Override
+	@Transactional(readOnly = true)
 	public List<RfidApplicationEntity> query(RfidApplicationQuery query)
 			throws ServiceException {
 		try {
@@ -126,6 +133,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	 * 新增申请单
 	 */
 	@Override
+	@Transactional
 	public void addApp(RfidApplicationEntity app) throws ServiceException {
 		try {
 			Date date = DateTimeUtils.parse(System.currentTimeMillis());
@@ -136,7 +144,8 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 			appDao.addRfidApplication(app);
 
 			CometServiceImpl.takeCount(RfidChannel.RFID_APPLY_MESSAGE);
-			RfidChannel.initTopic().publish(RfidChannel.RFID_APPLY_MESSAGE);
+			topics.getTopic(RfidChannel.TOPIC_NAME).publish(
+					RfidChannel.RFID_APPLY_MESSAGE);
 		} catch (Exception e) {
 			SxjLogger.error("新增申请单错误", e, this.getClass());
 			throw new ServiceException("申请单错误");
@@ -148,6 +157,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	 * 根据申请单号获取
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public RfidApplicationEntity getApplication(String no)
 			throws ServiceException {
 		try {
@@ -171,6 +181,7 @@ public class RfidApplicationServiceImpl implements IRfidApplicationService {
 	 * 获取申请单
 	 */
 	@Override
+	@Transactional(readOnly = true, propagation = Propagation.NOT_SUPPORTED)
 	public RfidApplicationEntity getApplicationInfo(String id)
 			throws ServiceException {
 		try {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
@@ -50,6 +51,9 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 
 	@Autowired
 	private IContractPayDao payDao;
+
+	@Autowired
+	private RedisTopics redisTopics;
 
 	/**
 	 * 变更确认状态
@@ -129,7 +133,7 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ userRecord.getContractType().getId();
 				// messageList.add(message);
 				CometServiceImpl.add(key_a, message);
-				MessageChannel.initTopic().publish(key_a);
+				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_a);
 				// HierarchicalCacheManager.set(2, "comet_message",
 				// "record_push_message_" + record.getMemberIdA(),
 				// messageList);
@@ -160,7 +164,7 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ userRecord.getMemberIdB() + ','
 						+ userRecord.getContractType().getId();
 				CometServiceImpl.add(key_b, messageB);
-				MessageChannel.initTopic().publish(key_b);
+				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_b);
 				// messageListB.add(messageB);
 				// HierarchicalCacheManager.set(2, "comet_message",
 				// "record_push_message_" + record.getMemberIdB(),
@@ -218,7 +222,7 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ userRecord.getMemberIdA() + ','
 						+ userRecord.getContractType().getId();
 				CometServiceImpl.add(key_a, message);
-				MessageChannel.initTopic().publish(key_a);
+				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_a);
 
 				// 乙方
 				String key_b = MessageChannel.WEBSITE_RECORD_MESSAGE
@@ -239,7 +243,7 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ userRecord.getMemberIdB() + ','
 						+ userRecord.getContractType().getId();
 				CometServiceImpl.add(key_b, messageB);
-				MessageChannel.initTopic().publish(key_b);
+				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_b);
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -257,9 +261,9 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 					.getContractByContractNo(contractNo);
 			Assert.notNull(con, "合同不存在");
 			// 生成支付单
-			if(con.getType().equals(ContractTypeEnum.BIDDING)){
-            	return;
-            }
+			if (con.getType().equals(ContractTypeEnum.BIDDING)) {
+				return;
+			}
 			PayRecordEntity pay = new PayRecordEntity();
 			pay.setDateNo(con.getContractNo() + "P");// 编号
 			pay.setContractNo(con.getContractNo());
@@ -275,7 +279,7 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 			payDao.addContractPay(pay);// 新增定金支付单
 			CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 					+ pay.getMemberNoA());
-			MessageChannel.initTopic().publish(
+			redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
 					MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());

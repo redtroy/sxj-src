@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.dao.rfid.windowref.IWindowRfidRefDao;
 import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
 import com.sxj.supervisor.model.comet.RfidChannel;
@@ -22,6 +23,9 @@ import com.sxj.util.persistent.QueryCondition;
 public class WindowRfidRefServiceImpl implements IWindowRfidRefService {
 	@Autowired
 	private IWindowRfidRefDao windowRfidRefDao;
+
+	@Autowired
+	private RedisTopics topics;
 
 	@Override
 	public List<WindowRefEntity> queryWindowRfidRef(WindowRefQuery query)
@@ -60,7 +64,7 @@ public class WindowRfidRefServiceImpl implements IWindowRfidRefService {
 			windowRfidRefDao.updateWindowRfidRef(win);
 			CometServiceImpl
 					.subCount(RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
-			RfidChannel.initTopic().publish(
+			topics.getTopic(RfidChannel.TOPIC_NAME).publish(
 					RfidChannel.WIND_MANAGER_LOGISTICS_MESSGAGE);
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -87,7 +91,7 @@ public class WindowRfidRefServiceImpl implements IWindowRfidRefService {
 				windowRfidRefDao.addWindowRfidRef(win);
 				CometServiceImpl
 						.takeCount(RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
-				RfidChannel.initTopic().publish(
+				topics.getTopic(RfidChannel.TOPIC_NAME).publish(
 						RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
 			}
 

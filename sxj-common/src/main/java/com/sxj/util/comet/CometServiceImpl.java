@@ -8,12 +8,12 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
-import com.sxj.redis.advance.RedisCollections;
-import com.sxj.redis.advance.RedisConcurrent;
-import com.sxj.redis.advance.core.RAtomicLong;
-import com.sxj.redis.advance.core.RSet;
-import com.sxj.redis.advance.core.RTopic;
-import com.sxj.redis.advance.topic.RedisTopics;
+import com.sxj.redis.core.RAtomicLong;
+import com.sxj.redis.core.RSet;
+import com.sxj.redis.core.RTopic;
+import com.sxj.redis.core.collections.RedisCollections;
+import com.sxj.redis.core.concurrent.RedisConcurrent;
+import com.sxj.redis.core.pubsub.RedisTopics;
 
 public class CometServiceImpl implements BeanFactoryPostProcessor {
 

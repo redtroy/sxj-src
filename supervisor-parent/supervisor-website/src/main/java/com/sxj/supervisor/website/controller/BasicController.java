@@ -35,8 +35,8 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
-import com.sxj.redis.advance.core.RTopic;
-import com.sxj.redis.advance.topic.RedisTopics;
+import com.sxj.redis.core.RTopic;
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -61,6 +61,7 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.comet.CometMessageListener;
 import com.sxj.supervisor.website.comet.MessageThread;
+import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.FileUtil;
@@ -254,11 +255,11 @@ public class BasicController extends BaseController {
 			currentUser.login(token);
 			PrincipalCollection principals = currentUser.getPrincipals();
 			if (userBean.getAccount() != null) {
-				// SupervisorShiroRedisCache.addToMap(userBean.getAccount()
-				// .getId(), principals);
+				SupervisorShiroRedisCache.addToMap(userBean.getAccount()
+						.getId(), principals);
 			} else {
-				// SupervisorShiroRedisCache.addToMap(userBean.getMember()
-				// .getMemberNo(), principals);
+				SupervisorShiroRedisCache.addToMap(userBean.getMember()
+						.getMemberNo(), principals);
 			}
 		} catch (AuthenticationException e) {
 			SxjLogger.error("登陆失败", e, this.getClass());

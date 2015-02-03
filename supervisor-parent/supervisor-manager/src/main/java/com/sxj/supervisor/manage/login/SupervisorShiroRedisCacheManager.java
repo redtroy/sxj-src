@@ -3,7 +3,7 @@ package com.sxj.supervisor.manage.login;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 
-import com.sxj.redis.advance.RedisCollections;
+import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager;
 
 public class SupervisorShiroRedisCacheManager extends ShiroRedisCacheManager {

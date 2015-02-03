@@ -30,7 +30,6 @@ import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.model.open.WinTypeModel;
-import com.sxj.supervisor.rfid.login.ApiShiroRedisCache;
 import com.sxj.supervisor.rfid.login.ApiToken;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.open.member.IAccountService;
@@ -133,8 +132,8 @@ public class OpenRfidController {
 				currentUser.login(token);
 				PrincipalCollection principals = currentUser.getPrincipals();
 				if (userBean.getAccount() != null) {
-					ApiShiroRedisCache.addToMap(userBean.getAccount().getId(),
-							principals);
+					// ApiShiroRedisCache.addToMap(userBean.getAccount().getId(),
+					// principals);
 				}
 			} catch (AuthenticationException e) {
 				SxjLogger.error(e.getMessage(), e, this.getClass());

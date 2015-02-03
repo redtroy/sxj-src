@@ -9,11 +9,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
-import com.sxj.redis.advance.RedisCollections;
-import com.sxj.redis.advance.core.MessageListener;
-import com.sxj.redis.advance.core.RMap;
-import com.sxj.redis.advance.core.RTopic;
-import com.sxj.redis.advance.topic.RedisTopics;
+import com.sxj.redis.core.MessageListener;
+import com.sxj.redis.core.RMap;
+import com.sxj.redis.core.RTopic;
+import com.sxj.redis.core.collections.RedisCollections;
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.beanfactory.CustomizedPropertyPlaceholderConfigurer;
 import com.sxj.spring.modules.security.shiro.ShiroRedisCacheManager;
 import com.sxj.util.Constraints;
