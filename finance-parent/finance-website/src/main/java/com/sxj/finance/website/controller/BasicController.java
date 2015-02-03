@@ -24,8 +24,10 @@ import com.sxj.finance.service.finance.IFinanceService;
 import com.sxj.finance.service.member.IAccountService;
 import com.sxj.finance.service.member.IMemberService;
 import com.sxj.finance.website.login.FinanceSiteToken;
+import com.sxj.redis.core.RQueue;
 import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.collections.RedisCollections;
+import com.sxj.redis.core.collections.RedisMap;
 import com.sxj.util.LoginToken;
 import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.StringUtils;
@@ -82,12 +84,13 @@ public class BasicController extends BaseController {
 	}
 
 	@RequestMapping("to_login")
-	public String ToLogin(String member, String token,
+	public String ToLogin(String member, String token,String payId,
 			HttpServletRequest request, ModelMap map) {
 		String retUrl = request.getHeader("Referer");
 		System.out.println("-----" + retUrl + "-----");
 		map.put("member", member);
 		map.put("token", token);
+		map.put("payId", payId);
 		return LOGIN;
 	}
 
@@ -123,12 +126,13 @@ public class BasicController extends BaseController {
 			try {
 				currentUser.login(siteToken);
 				memberService.updateMenberLoginDate(memberInfo.getMemberNo());
-				RSet<Map<String,Object>> set = collections.getSet(payId);
-				Iterator<Map<String,Object>> i = set.iterator();
-				while (i.hasNext()) {
+				RQueue<Map<String,Object>> queue = collections.getQueue(payId);
+				 Iterator<Map<String, Object>> i = queue.iterator();
+				 while (i.hasNext()) {
 					Map<String,Object> map1 = (Map<String,Object>) i.next();
 					financeService.setModel(map1);
 				}
+					
 			} catch (AuthenticationException e) {
 				SxjLogger.error("登陆失败", e, this.getClass());
 				map.put("pmessage", "密码错误");

@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.redis.core.RQueue;
 import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.redis.core.pubsub.RedisTopics;
@@ -243,9 +244,9 @@ public class PayController extends BaseController {
 //				SxjLogger.info("-------" + state, this.getClass());
 //				throw new WebException("融资请求失败！");
 //			}
-			RSet<Map<String,Object>> set = collections.getSet(payId);
-			set.add(map);
-			set.expireAt(60000);// 设置失效时间
+			RQueue<Map<String,Object>> queue = collections.getQueue(payId);
+			queue.add(map);
+			//queue.expireAt(60000);// 设置失效时间
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());

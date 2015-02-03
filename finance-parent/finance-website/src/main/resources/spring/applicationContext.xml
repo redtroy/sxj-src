@@ -55,28 +55,19 @@
 		<!-- <property name="configFile" value="cache.properties"></property> -->
 		<property name="databaseId" value="2"></property>
 	</bean>
-	<bean id="redisCollections" class="com.sxj.redis.advance.RedisCollections">
+	<bean id="redisConcurrent" class="com.sxj.redis.core.concurrent.RedisConcurrent">
 		<constructor-arg index="0">
-			<bean class="com.sxj.redis.advance.Config">
-				<property name="singleServerConfig">
-					<bean class="com.sxj.redis.advance.SingleServerConfig">
-						<property name="address" value="${redis.host}:${redis.port}"></property>
-						<property name="database" value="0"></property>
-					</bean>
-				</property>
-			</bean>
+			<value>config/redis-advance.properties</value>
 		</constructor-arg>
 	</bean>
-	<bean id="redisTopics" class="com.sxj.redis.advance.topic.RedisTopics">
+	<bean id="redisCollections" class="com.sxj.redis.core.collections.RedisCollections">
 		<constructor-arg index="0">
-			<bean class="com.sxj.redis.advance.Config">
-				<property name="singleServerConfig">
-					<bean class="com.sxj.redis.advance.SingleServerConfig">
-						<property name="address" value="${redis.host}:${redis.port}"></property>
-						<property name="database" value="0"></property>
-					</bean>
-				</property>
-			</bean>
+			<value>config/redis-advance.properties</value>
+		</constructor-arg>
+	</bean>
+	<bean id="redisTopics" class="com.sxj.redis.core.pubsub.RedisTopics">
+		<constructor-arg index="0">
+			<value>config/redis-advance.properties</value>
 		</constructor-arg>
 	</bean>
 	<bean id="httpClient" class="com.sxj.util.common.SxjHttpClientImpl">
