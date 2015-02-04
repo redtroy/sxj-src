@@ -28,7 +28,6 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     public RedisAtomicLong(RedisProvider provider, String name, Date timestamp)
     {
         super(provider, name);
-        set(0);
         this.expireAt(timestamp);
     }
     
