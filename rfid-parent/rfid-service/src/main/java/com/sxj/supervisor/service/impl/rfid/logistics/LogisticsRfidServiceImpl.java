@@ -289,4 +289,15 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
             throw new ServiceException("更新GID失败", e);
         }
     }
+    
+    @Override
+    public int getRfidState(String rfidNo){
+		try {
+			return logisticsRfidDao.getRfidState(rfidNo);
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取RFID状态错误");
+		}
+		
+	}
 }

@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 					<#if member.bLicensePath==null> <img
 						src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 					<#else> <img src="${b.imagePath}${member.bLicensePath}"
-						data-image="${b.imagePath}${member.bLicensePath}"
+						data-image="${b.imagePath}${member.bLicensePath}"style="cursor:pointer;" alt="点击查看大图"
 						class="demo-image" width="80" height="107" /> </#if>
 						</div>
 					<div class="upload ly-left">
@@ -44,7 +44,7 @@ jQuery(document).ready(function($) {
 						<#if member.energyPath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<#else> <img src="${b.imagePath}${member.energyPath}"
-							data-image="${b.imagePath}${member.energyPath}"
+							data-image="${b.imagePath}${member.energyPath}"style="cursor:pointer;" alt="点击查看大图"
 							class="demo-image" width="80" height="107" /> </#if>
 							</div>
 							</td>

@@ -93,4 +93,6 @@ public interface ILogisticsRfidService
     
     void updateGid(List<LogisticsRfidEntity> list, String id)
             throws ServiceException;
+
+	int getRfidState(String rfidNo);
 }

@@ -23,6 +23,7 @@ import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
@@ -36,6 +37,9 @@ public class StartWRfidController extends BaseController {
 
 	@Autowired
 	private IContractService contractService;
+	
+	@Autowired
+	private ILogisticsRfidService logisticsRfidService;
 
 	/**
 	 * 跳转标签启用
@@ -168,6 +172,18 @@ public class StartWRfidController extends BaseController {
 			contractService.startWindowRfid(startNum, refContractNo, minRfid,
 					maxRfid, gRfid, lRfid, windowType);
 			map.put("isOk", "ok");
+		} catch (Exception e) {
+			SxjLogger.error("启用标签错误", e, this.getClass());
+			map.put("error", e.getMessage());
+		}
+		return map;
+	}
+	@RequestMapping("getRfidState")
+	public @ResponseBody Map<Object, Object> getRfidState(String rfidNo) throws WebException {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		try {
+			int num=logisticsRfidService.getRfidState(rfidNo);
+			map.put("state", num);
 		} catch (Exception e) {
 			SxjLogger.error("启用标签错误", e, this.getClass());
 			map.put("error", e.getMessage());

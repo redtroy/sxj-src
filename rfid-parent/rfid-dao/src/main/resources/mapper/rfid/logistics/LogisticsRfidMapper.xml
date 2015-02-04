@@ -147,4 +147,7 @@
 			#{item}
 		</foreach>
 	</select>
+	<select id="getRfidState" resultType="int" parameterType="String">
+		SELECT COUNT(ID) FROM R_LOGISTICS_RFID WHERE  RFID_NO=#{rfidNo} AND PROGRESS_STATE='3'
+	</select>
 </mapper>

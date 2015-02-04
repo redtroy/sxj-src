@@ -91,14 +91,14 @@ function close_img() {
 								<p class="f12">${member.bLicenseNo}</p>
 								<#if member.bLicensePath==null> <img
 									src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-								<#else> <img src="${b.imagePath}${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}" class="demo-image"
+								<#else> <img src="${b.imagePath}${member.bLicensePath}" style="cursor:pointer;" alt="点击查看大图" data-image="${b.imagePath}${member.bLicensePath}" class="demo-image"
 									width="80" height="107" /> </#if>
 							</div>
 							<div class="upload ly-left">
 								<p class="f12">${member.energyNo}</p>
 								<#if member.energyPath==null> <img
 									src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-								<#else> <img src="${b.imagePath}${member.energyPath}" data-image="${b.imagePath}${member.energyPath}" class="demo-image" width="80"
+								<#else> <img src="${b.imagePath}${member.energyPath}" style="cursor:pointer;" alt="点击查看大图" data-image="${b.imagePath}${member.energyPath}" class="demo-image" width="80"
 									height="107" /> </#if>
 							</div></td>
 					</tr>
