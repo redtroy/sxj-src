@@ -10,13 +10,14 @@
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
 <@b.pageScript/>
+<@b.dialogBox/>
 <script>
 //读取详细信息
 function loadInfo(contractNo,id) {
 	var temp= $("#info_"+id).is(":hidden");//是否隐藏 
 	if (temp){
 	  $("#info_" + id).show();
-	  $("#info_" + id).load("info.htm?contractNo=" + contractNo+"&recordNo="+id);
+	  $("#info_" + id).load("${basePath}pay/info.htm?contractNo=" + contractNo+"&recordNo="+id);
 	}else{
 	  $("#info_" + id).hide();
 	  $("#info_" + id).html('');

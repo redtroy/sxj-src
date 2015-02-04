@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="${b.staticPath}style/datepicker.css"/>-->
 <script>
 jQuery(document).ready(function($) {
-	$('.btn-financle').live("click",function(){
+	$('.button-red').live("click",function(){
 		var obj=$(this).attr("pay_id");
 		$('#'+obj).slideDown(200);
 	});
@@ -23,8 +23,7 @@ jQuery(document).ready(function($) {
 	});
 	
 })
-function close(obj){
-	console.log(obj)
+function closeDiv(obj){
 	$('#'+obj).slideUp(200);
 }
 function query(page){
@@ -134,7 +133,7 @@ function pay(id){
    <#if (model.state.ordinal()==0)>
     <a class="button button-red" pay_id="pay_info_${model.id}">我要融资</a>
       <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
-      <div class="tipGray"><span class="icon icon16 icon-close ly-right" onclick="close('pay_info_${model.id}');return false;">关闭</span>
+      <div class="tipGray"><span class="icon icon16 icon-close ly-right" onclick="javascript:closeDiv('pay_info_${model.id}');">关闭</span>
 </div>
         <div class="modal-body">
           <div class="ly-clearFix">

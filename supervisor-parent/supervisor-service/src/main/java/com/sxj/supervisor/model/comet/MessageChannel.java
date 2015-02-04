@@ -12,6 +12,8 @@ public class MessageChannel {
 
 	public static final String WEBSITE_PAY_MESSAGE = "pay_push_message_";
 
+	public static final String WEBSITE_FINANCE_MESSAGE = "finance_push_message_";
+
 	private MessageChannel() {
 		super();
 		// TODO Auto-generated constructor stub
