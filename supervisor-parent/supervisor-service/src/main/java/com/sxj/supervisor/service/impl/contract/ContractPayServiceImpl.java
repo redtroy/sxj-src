@@ -114,6 +114,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 				payDao.updatePay(re);
 				contractService.modifyBatchPayState(re.getContractNo(),
 						re.getRfidNo(), re.getPayNo());
+				contractService.updateStartDate(re.getContractNo());
 				return "ok";
 			} else {
 				return "false";
