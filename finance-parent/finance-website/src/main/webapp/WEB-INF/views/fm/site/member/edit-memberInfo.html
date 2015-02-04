@@ -56,7 +56,6 @@ function close_img() {
 							 icon: 'succeed',
 							 content: '修改会员信息成功',
 							 ok: function () {
-								 window.location.href = "info.htm";
 							 }
 						});
 					} else {
@@ -68,6 +67,18 @@ function close_img() {
 					}
 
 				});
+		    },
+		    cancelVal: '取消',
+		    cancel: true //为true等价于function(){}
+		});
+	}
+	function cancel(){
+		art.dialog({
+			icon: 'question',
+			lock: true,
+		    content: '是否取消修改会员信息?',
+		    ok: function () {
+				window.location.href = "info.htm";
 		    },
 		    cancelVal: '取消',
 		    cancel: true //为true等价于function(){}
@@ -111,14 +122,14 @@ function close_img() {
 								<p class="f12">${member.bLicenseNo}</p>
 								<#if member.bLicensePath==null> <img
 									src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-								<#else> <img src="${b.imagePath}${member.bLicensePath}" style="cursor:pointer;" alt="点击查看大图" data-image="${b.imagePath}${member.bLicensePath}" class="demo-image"
+								<#else> <img src="${b.imagePath}${member.bLicensePath}" style="cursor:pointer;" title="点击查看大图" data-image="${b.imagePath}${member.bLicensePath}" class="demo-image"
 									width="80" height="107" /> </#if>
 							</div>
 							<div class="upload ly-left">
 								<p class="f12">${member.energyNo}</p>
 								<#if member.energyPath==null> <img
 									src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-								<#else> <img src="${b.imagePath}${member.energyPath}" style="cursor:pointer;" alt="点击查看大图" data-image="${b.imagePath}${member.energyPath}"class="demo-image" width="80"
+								<#else> <img src="${b.imagePath}${member.energyPath}" style="cursor:pointer;" title="点击查看大图" data-image="${b.imagePath}${member.energyPath}"class="demo-image" width="80"
 									height="107" /> </#if>
 							</div></td>
 					</tr>
@@ -153,11 +164,11 @@ function close_img() {
 						value="${loan.guarantee.id}" name="guarantee.id" />
 					<table border="0" cellpadding="0" cellspacing="0"
 						class="table tableNone tableMember mb20">
-						<caption class="fontYH f16">基本资料</caption>
+						<caption class="fontYH f16"><a class="btn-save f12 ly-right" href="javascript:saveLoan();">保存信息</a>基本资料</caption>
 						<tr>
 							<th>姓名</th>
 							<td><input type="text" name="memberInfo.name"
-								value="${loan.memberInfo.name}" datatype="*1-50" nullmsg="请输入姓名"
+								value="${loan.memberInfo.name}" datatype="*1-20" nullmsg="请输入姓名"
 								id="name" class=" input input-w140h30" /></td>
 						</tr>
 						<tr>
@@ -174,29 +185,29 @@ function close_img() {
 						</tr>
 						<tr>
 							<th>年龄</th>
-							<td><input type="text" name="memberInfo.age" id=""
+							<td><input type="text" name="memberInfo.age" id="" datatype="n1-2" nullmsg="请输入年龄" errormsg="请输入正确的年龄"
 								value="${loan.memberInfo.age}" class=" input input-w50h30" /></td>
 						</tr>
 						<tr>
 							<th>家庭住址</th>
-							<td><textarea name="memberInfo.homeAddress" id="" cols="80"
+							<td><textarea name="memberInfo.homeAddress" id="" cols="80" datatype="*1-100" nullmsg="请输入家庭住址" errormsg="只能输入100个字符"
 									rows="2" class="input">${loan.memberInfo.homeAddress}</textarea></td>
 						</tr>
 						<tr>
 							<th>联系电话</th>
-							<td><input name="memberInfo.telNum" type="text"
+							<td><input name="memberInfo.telNum" type="text" datatype="*1-15" nullmsg="请输入联系电话" errormsg="只能输入15个字符"
 								value="${loan.memberInfo.telNum}" class=" input input-w180h30"
 								id="textfield4" /></td>
 						</tr>
 						<tr>
 							<th>身份证号</th>
-							<td><input name="memberInfo.cardNum" type="text"
+							<td><input name="memberInfo.cardNum" type="text" datatype="*1-18" nullmsg="请输入身份证号" errormsg="只能输入18个字符"
 								value="${loan.memberInfo.cardNum}" class=" input input-w180h30"
 								id="textfield5" /></td>
 						</tr>
 						<tr>
 							<th>电子邮箱</th>
-							<td><input type="text" name="memberInfo.email"
+							<td><input type="text" name="memberInfo.email" datatype="e" nullmsg="请输入电子邮箱" 
 								value="${loan.memberInfo.email}" id="textfield6"
 								class=" input input-w180h30" /></td>
 						</tr>
@@ -207,14 +218,14 @@ function close_img() {
 						</tr>
 						<tr>
 							<th>营业执照编码</th>
-							<td><input type="text" name="memberInfo.bLicence"
+							<td><input type="text" name="memberInfo.bLicence" datatype="*1-20" nullmsg="请输入营业执照编码" errormsg="只能输入20个字符"
 								id="textfield9" value="${loan.memberInfo.bLicence}"
 								class=" input input-w180h30" /></td>
 						</tr>
 						<tr>
 							<th>注册资本</th>
 							<td><input name="memberInfo.registered" type="text"
-								value="${loan.memberInfo.registered}"
+								value="${loan.memberInfo.registered}" 
 								class=" input input-w180h30" id="textfield10" /></td>
 						</tr>
 						<tr>
@@ -231,8 +242,7 @@ function close_img() {
 					<table border="0" cellpadding="0" cellspacing="0"
 						class="table tableNone tableMember mb20">
 						<caption class="fontYH f16">
-							<a href="#" class="icon icon-edit mt5 ly-right"
-								style="display: none">修改</a> 资产情况<span
+							<a class="btn-save f12 ly-right" href="javascript:saveLoan();">保存信息</a>资产情况<span
 								class="f12 color-gray6 ml10">(截至上个月末)</span>
 						</caption>
 						<tr>
@@ -279,7 +289,7 @@ function close_img() {
 					</table>
 					<table border="0" cellpadding="0" cellspacing="0"
 						class="table tableNone tableMember mb20">
-						<caption class="fontYH f16">经营情况</caption>
+						<caption class="fontYH f16"><a class="btn-save f12 ly-right" href="javascript:saveLoan();">保存信息</a>经营情况</caption>
 						<tr>
 							<th>上年度主营业务收入</th>
 							<td><input type="text" name="management.mainIncome"
@@ -320,9 +330,7 @@ function close_img() {
 					<table border="0" cellpadding="0" cellspacing="0"
 						class="table tableNone tableMember mb20">
 						<caption class="fontYH f16">
-							<span class="ly-right f12" style="display: none"><a
-								href="member-center.html" class="button btn-link">确认</a><a
-								href="member-center.html" class="lnk-gray ml10">取消</a></span> 信用记录
+							<a class="btn-save f12 ly-right" href="javascript:saveLoan();">保存信息</a> 信用记录
 						</caption>
 						<tr>
 							<th>未结清贷款笔数</th>
@@ -398,7 +406,7 @@ function close_img() {
 					</table>
 					<table border="0" cellpadding="0" cellspacing="0"
 						class="table tableNone tableMember mb20">
-						<caption class="fontYH f16">担保情况</caption>
+						<caption class="fontYH f16"><a class="btn-save f12 ly-right" href="javascript:saveLoan();">保存信息</a>担保情况</caption>
 						<tr>
 							<td colspan="2" class="tl tabTitle fb mb5">1、可抵押资产情况</td>
 						</tr>
@@ -494,9 +502,9 @@ function close_img() {
 						</tr>
 					</table>
 					<div class="buttonBox memBtn">
-						<a href="javascript:void(0);" onclick="saveLoan()"
-							class="button button-red">完善会员信息</a>
-					</div>
+						<a href="javascript:void(0);" onclick="cancel()"
+							class="button button-red">取消修改</a>
+					</div> 
 				</form>
 			</div>
 		</div>
