@@ -96,4 +96,6 @@ public interface ILogisticsRfidDao
     public void updateGid(List<LogisticsRfidEntity> list);
     
     public List<String> getRfid(String... gid) throws SQLException;
+    
+    public int getRfidState(String rfidNo)throws SQLException;
 }

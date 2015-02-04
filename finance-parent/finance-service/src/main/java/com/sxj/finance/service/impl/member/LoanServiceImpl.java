@@ -72,17 +72,26 @@ public class LoanServiceImpl implements ILoanService
     {
         try
         {
-            assetsInfoDao.updateAssetsInfo(loan.getAssetsInfo());
-            creditInfoDao.updateCreditInfo(loan.getCreditInfo());
-            guaranteeDao.updateGuarantee(loan.getGuarantee());
-            managementDao.updateManagement(loan.getManagement());
-            memberInfoDao.updateMemberInfo(loan.getMemberInfo());
-            
+        	if(loan.getAssetsInfo()!=null){
+        		 assetsInfoDao.updateAssetsInfo(loan.getAssetsInfo());
+        	}
+        	if(loan.getCreditInfo()!=null){
+        		 creditInfoDao.updateCreditInfo(loan.getCreditInfo());
+        	}
+        	if(loan.getGuarantee()!=null){
+        		 guaranteeDao.updateGuarantee(loan.getGuarantee());
+        	}
+        	if(loan.getManagement()!=null){
+        		managementDao.updateManagement(loan.getManagement());
+        	}
+        	if(loan.getMemberInfo()!=null){
+        		 memberInfoDao.updateMemberInfo(loan.getMemberInfo());
+        	}
         }
         catch (Exception e)
         {
-            SxjLogger.error("更新贷款申请表错误", e, this.getClass());
-            throw new ServiceException("更新贷款申请表错误", e);
+            SxjLogger.error("更新资料错误", e, this.getClass());
+            throw new ServiceException("更新资料错误", e);
         }
         
     }

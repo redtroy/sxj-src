@@ -117,5 +117,5 @@ public class LogisticsRefServiceImpl implements ILogisticsRefService {
 			throw new ServiceException("获取物流RFID关联申请错误");
 		}
 	}
-
+	
 }

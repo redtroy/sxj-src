@@ -41,13 +41,12 @@ public class BasicController extends BaseController {
 
 	@Autowired
 	private IAccountService accountService;
-	
+
 	@Autowired
 	private RedisCollections collections;
-	
+
 	@Autowired
 	private IFinanceService financeService;
-
 
 	@RequestMapping("index")
 	public String ToIndex(HttpServletRequest request) {
@@ -84,7 +83,7 @@ public class BasicController extends BaseController {
 	}
 
 	@RequestMapping("to_login")
-	public String ToLogin(String member, String token,String payId,
+	public String ToLogin(String member, String token, String payId,
 			HttpServletRequest request, ModelMap map) {
 		String retUrl = request.getHeader("Referer");
 		System.out.println("-----" + retUrl + "-----");
@@ -126,13 +125,10 @@ public class BasicController extends BaseController {
 			try {
 				currentUser.login(siteToken);
 				memberService.updateMenberLoginDate(memberInfo.getMemberNo());
-				RQueue<Map<String,Object>> queue = collections.getQueue(payId);
-				 Iterator<Map<String, Object>> i = queue.iterator();
-				 while (i.hasNext()) {
-					Map<String,Object> map1 = (Map<String,Object>) i.next();
-					financeService.setModel(map1);
-				}
-					
+				RQueue<Map<String, Object>> queue = collections.getQueue(payId);
+				Map<String, Object> map1 = queue.poll();
+				financeService.setModel(map1);
+				queue.clear();
 			} catch (AuthenticationException e) {
 				SxjLogger.error("登陆失败", e, this.getClass());
 				map.put("pmessage", "密码错误");

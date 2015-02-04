@@ -213,14 +213,34 @@ function rfid_a(pc_a_id){
 	if(container_a[pc_a_id].batch.rfidNo==null){
 		$("#rfid_a").text("");
 	}else{
-		$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
+		
+		$.post("getRfidState.htm",{rfidNo:container_a[pc_a_id].batch.rfidNo},function(data){
+			num= data.state;
+			if(num>0){
+				$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
+				$("#spanA").text("");
+			}else{
+				$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
+				$("#spanA").text("该批次货物还未验收,不能启用!");
+			}
+		})
 	}
 }
 function rfid_b(pc_b_id){
 	if(container_b[pc_b_id].batch.rfidNo==null){
 		$("#rfid_b").text("");
 	}else{
-		$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
+		$.post("getRfidState.htm",{rfidNo:container_b[pc_b_id].batch.rfidNo},function(data){
+			num= data.state;
+			if(num>0){
+				$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
+				$("#spanB").text("");
+			}else{
+				$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
+				$("#spanB").text("该批次货物还未验收,不能启用!");
+			}
+		})
+		
 	}
 	
 }
@@ -262,18 +282,32 @@ function star(){
 	var num=$("#num").val();
 	var gRfid=$("#rfid_a").text();
 	var lRfid=$("#rfid_b").text();
+	var spanA = $("#spanA").text();
+	var spanB = $("#spanB").text();
+	var pc_a = $("#pc_a option:selected").text();
+	var pc_b = $("#pc_b option:selected").text();
+	var contract_a =$("#contract_a option:selected").text();
+	var contract_b =$("#contract_b option:selected").text();
+	if(spanA!=""&&spanB!=null){
+		messageInfo(contract_a+'合同的第'+pc_a+'批次，货物还未验收！');
+		return;
+	}
+	if(spanB!="" && spanB!=null){
+		messageInfo(contract_b+'合同的第'+pc_b+'批次，货物还未验收！');
+		return;
+	}
 	var windowType=$("#windowType option:selected").val();
 	if (num=="" || num== null){
 		messageInfo('请输入启用数量');
-		return false;
+		return;
 	}
 	if (gRfid=="" || gRfid== null){
 		messageInfo('玻璃采购合同物流标签缺失，无法启用');
-		return false;
+		return;
 	}
 	if (lRfid=="" || lRfid== null){
 		messageInfo('型材采购合同物流标签缺失，无法启用');
-		return false;
+		return;
 	}
 	dialogBox(function(index){
 		$.post("start_lable.htm",{startNum:num,refContractNo:refContractNo,gRfid:gRfid,lRfid:lRfid,windowType:windowType},function(data){
@@ -328,7 +362,7 @@ function right(obj){
     </select>
 </div>
 <div class="item">
-  <label>对应玻璃RFID</label><span class="color-blue ml5" id="rfid_a"></span>
+  <label>对应玻璃RFID</label><span class="color-blue ml5" id="rfid_a"></span>&nbsp;&nbsp;&nbsp;<span id="spanA" style="color:red;"></span>
 </div>
 <div class="item">
   <label>对应型材采购合同</label>
@@ -342,7 +376,9 @@ function right(obj){
 </div>
 <div class="item">
   <label>对应型材RFID</label>
-  <span class="color-blue ml5" id="rfid_b"></span> </div>
+  <span class="color-blue ml5" id="rfid_b"></span>&nbsp;&nbsp;&nbsp;<span id="spanB" style="color:red;"></span>
+  
+   </div>
 <div class="item"><label>窗型代号</label><select name="select" id="windowType">
             <#list type as t>
 			<option value="${t.id}">${t.getName()}</option>

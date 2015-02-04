@@ -17,20 +17,40 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     public RedisAtomicLong(RedisProvider provider, String name)
     {
         super(provider, name);
+        init();
     }
     
     public RedisAtomicLong(RedisProvider provider, String name, long seconds)
     {
         super(provider, name);
-        set(0);
+        init();
         this.expire(seconds, TimeUnit.SECONDS);
     }
     
     public RedisAtomicLong(RedisProvider provider, String name, Date timestamp)
     {
         super(provider, name);
-        set(0);
+        init();
         this.expireAt(timestamp);
+    }
+    
+    private void init()
+    {
+        Jedis jedis = provider.getResource();
+        boolean broken = false;
+        try
+        {
+            jedis.setnx(name, "0");
+        }
+        catch (Exception e)
+        {
+            broken = true;
+            throw new RedisException("", e);
+        }
+        finally
+        {
+            provider.returnResource(jedis, broken);
+        }
     }
     
     @Override

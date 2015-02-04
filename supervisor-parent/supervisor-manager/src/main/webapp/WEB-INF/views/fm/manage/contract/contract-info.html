@@ -165,12 +165,12 @@
           </table>
           </#if>
           <div>
-            <label>本合同还有</label>
+            <label>本合同共有</label><span class="color-red fb ml5 mr5">${contractModel.contract.batchCount}</span>批次,还有<span class="color-red fb ml5 mr5">
             <#if contractModel.batchList?exists>
             ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
             <#else>
             ${contractModel.contract.batchCount}
-             </#if>
+             </#if></span>
             	批次待交付 </div>
           <div>
             <label>合同定金</label>
