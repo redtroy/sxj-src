@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.redis.core.RQueue;
-import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
@@ -234,19 +233,20 @@ public class PayController extends BaseController {
 			map.put("batchNo", pay.getBatchNo());
 			map.put("payAmount", pay.getPayAmount());
 			map.put("content", pay.getContent());
-			
-//			String payjson = JsonMapper.nonDefaultMapper().toJson(map);
-//			String state = httpClient.postJson(
-//					webUrl + "/finance/getModel.htm", payjson);
-//			Map<String, String> jmap = JsonMapper.nonDefaultMapper().fromJson(
-//					state, HashMap.class);
-//			if ("0".equals(jmap.get("flag"))) {
-//				SxjLogger.info("-------" + state, this.getClass());
-//				throw new WebException("融资请求失败！");
-//			}
-			RQueue<Map<String,Object>> queue = collections.getQueue(payId);
+
+			// String payjson = JsonMapper.nonDefaultMapper().toJson(map);
+			// String state = httpClient.postJson(
+			// webUrl + "/finance/getModel.htm", payjson);
+			// Map<String, String> jmap =
+			// JsonMapper.nonDefaultMapper().fromJson(
+			// state, HashMap.class);
+			// if ("0".equals(jmap.get("flag"))) {
+			// SxjLogger.info("-------" + state, this.getClass());
+			// throw new WebException("融资请求失败！");
+			// }
+			RQueue<Map<String, Object>> queue = collections.getQueue(payId);
 			queue.add(map);
-			//queue.expireAt(60000);// 设置失效时间
+			// queue.expireAt(60000);// 设置失效时间
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());

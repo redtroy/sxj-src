@@ -67,11 +67,11 @@ public class PayController extends BaseController {
 						.getContract().getId());
 			}
 			model.put("contractModel", contractModel);
-			model.put("recordNo", recordNo);
+			model.put("contractId", recordNo);
 			if (contractModel.getContract().getType().getId() == 0) {
-				return "manage/pay/contract-info-zhaobiao";
+				return "manage/contract/contract-info-zhaobiao";
 			} else {
-				return "manage/pay/contract-info";
+				return "manage/contract/contract-info";
 			}
 			// contractModel.getContract().getImgPath().split(",");
 		} catch (Exception e) {

@@ -11,42 +11,55 @@
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="signDate" column="SIGNED_DATE" jdbcType="TIMESTAMP" />
 		<result property="amount" column="PAY_AMOUNT" jdbcType="DOUBLE" />
 		<result property="payAmount" column="PAY_REAL" jdbcType="DOUBLE" />
 		<result property="noPayAmount" column="NO_PAY_AMOUNT" jdbcType="DOUBLE" />
 		<result property="progress" column="PROGRESS" jdbcType="VARCHAR" />
 		<result property="payNo" column="PAY_NO" jdbcType="VARCHAR" />
+		<result property="amountItem" column="AMOUNTITEM" jdbcType="DOUBLE" />
+		<result property="amountModifyItem" column="AMOUNTMODIFYITEM" jdbcType="DOUBLE" />
+		<result property="amountBatch" column="AMOUNTBATCH" jdbcType="DOUBLE" />
+		<result property="amountModifyBatch" column="AMOUNTMODIFYBATCH" jdbcType="DOUBLE" />
 	</resultMap>
 
 	<!-- 条件查询财务统计 -->
 	<select id="query" resultMap="AccountingResultMap"
 		parameterType="String">
-		<![CDATA[SELECT mp.`ID` AS ID,mc.CONTRACT_NO,mc.`RECORD_NO` AS RECORD_NO,mc.`MEMBER_NAME_A`,mc.`MEMBER_NAME_B`,round(mc.PAY_BATCH/mc.BATCH_COUNT*100) AS PROGRESS,
-		mc.`TYPE`,mc.`SIGNED_DATE`,(SUM((CASE WHEN mi.`AMOUNT` IS NULL THEN 0 ELSE mi.`AMOUNT` END)) +SUM((CASE  WHEN a.AMOUNT IS NULL THEN 0 ELSE a.AMOUNT END))) AS PAY_AMOUNT,mp.`PAY_REAL` AS PAY_REAL,
-		(SUM((CASE WHEN mi.`AMOUNT` IS NULL THEN 0 ELSE mi.`AMOUNT` END)) +SUM((CASE  WHEN a.AMOUNT IS NULL THEN 0 ELSE a.AMOUNT END))-SUM((CASE WHEN mp.`PAY_REAL` IS NULL THEN 0 ELSE mp.`PAY_REAL` END))) AS NO_PAY_AMOUNT FROM M_CONTRACT_PAY mp 
-		LEFT JOIN M_CONTRACT mc ON mp.CONTRACT_No=mc.CONTRACT_NO 
-		LEFT JOIN (SELECT * FROM M_CONTRACT_ITEM WHERE  UPDATE_STATE<>1 OR UPDATE_STATE IS NULL) mi ON mi.`CONTRACT_ID`=mp.`CONTRACT_No`
-		LEFT JOIN (SELECT mcm.`CONTRACT_ID` AS  CONTRACT_NO ,mcmdi.`AMOUNT` AS AMOUNT, mcmdi.`UPDATE_STATE` AS UPDATE_STATE
-		FROM M_CONTRACT_MODIFY mcm,M_CONTRACT_MODIFY_ITEM mcmdi WHERE mcm.`ID`=mcmdi.`MODIFY_ID` AND (mcmdi.`UPDATE_STATE` <>1 OR mcmdi.`UPDATE_STATE` IS NULL)) a ON a.CONTRACT_NO=mp.`CONTRACT_No`
-        WHERE 1=1 ]]>
+		<![CDATA[SELECT ID,CONTRACT_NO,STATE,RECORD_NO,MEMBER_NAME_A,MEMBER_NAME_B,ROUND(PAY_BATCH/BATCH_COUNT*100) AS PROGRESS,TYPE,SIGNED_DATE FROM FINANCE_VIEW_2 WHERE 1=1 ]]>
 
 		<if test="condition.recordNo != null and condition.recordNo != ''">
-			<![CDATA[AND mc.RECORD_NO LIKE CONCAT('%',#{condition.recordNo},'%')]]>
+			<![CDATA[AND RECORD_NO LIKE CONCAT('%',#{condition.recordNo},'%')]]>
 		</if>
 		<if test="condition.contractNo!= null and condition.contractNo != ''">
-			<![CDATA[AND mc.CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%')]]>
+			<![CDATA[AND CONTRACT_NO LIKE CONCAT('%',#{condition.contractNo},'%')]]>
 		</if>
 		<if test="condition.contractType != '' and condition.contractType !=null ">
-			<![CDATA[AND mc.TYPE =#{condition.contractType}]]>
+			<![CDATA[AND TYPE =#{condition.contractType}]]>
 		</if>
 			<if test="condition.memberNo != '' and condition.memberNo !=null ">
-			<![CDATA[AND (mp.MEMBER_NO_A=#{condition.memberNo} or mp.MEMBER_NO_B=#{condition.memberNo})]]>
+			<![CDATA[AND (MEMBER_NO_A=#{condition.memberNo} or MEMBER_NO_B=#{condition.memberNo})]]>
 		</if>
 		<if
 			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
-			<![CDATA[AND mc.SIGNED_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) AND mc.SIGNED_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
+			<![CDATA[AND SIGNED_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) AND SIGNED_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
 		</if>
-		<![CDATA[GROUP BY mp.CONTRACT_No desc]]>
+	</select>
+	<select id="queryAmountItem" resultType="java.lang.Double"
+		parameterType="String">
+	 <![CDATA[select (CASE WHEN sum(AMOUNT) is null THEN 0 ELSE sum(AMOUNT) END)AS AMOUNTITEM from M_CONTRACT_ITEM WHERE  (UPDATE_STATE<>1 OR UPDATE_STATE IS NULL) AND CONTRACT_ID=#{contractNo}]]>
+	</select>
+	<select id="queryAmountModifyItem" resultType="java.lang.Double"
+		parameterType="String">
+	 <![CDATA[SELECT (CASE WHEN sum(mcmdi.`AMOUNT`) is null THEN 0 ELSE sum(mcmdi.`AMOUNT`) END) AS AMOUNTMODIFYITEM  FROM M_CONTRACT_MODIFY mcm,M_CONTRACT_MODIFY_ITEM mcmdi WHERE mcm.`ID`=mcmdi.`MODIFY_ID`  AND (mcmdi.`UPDATE_STATE` <>1 OR mcmdi.`UPDATE_STATE` IS NULL) AND mcm.CONTRACT_ID=#{contractNo}]]>
+	</select>
+	<select id="queryAmountBatch" resultType="java.lang.Double"
+		parameterType="String">
+	  <![CDATA[select (CASE WHEN sum(AMOUNT) is null THEN 0 ELSE sum(AMOUNT) END) AS AMOUNTBATCH from M_CONTRACT_BATCH WHERE  (UPDATE_STATE<>1 OR UPDATE_STATE IS NULL) AND CONTRACT_ID=#{contractNo}]]>
+	</select>
+	<select id="queryAmountModifyBatch" resultType="java.lang.Double"
+		parameterType="String">
+	 <![CDATA[SELECT (CASE WHEN sum(mcmdi.`AMOUNT`) is null THEN 0 ELSE sum(mcmdi.`AMOUNT`) END) AS AMOUNTMODIFYBATCH  FROM M_CONTRACT_MODIFY mcm,M_CONTRACT_MODIFY_BATCH mcmdi WHERE mcm.`ID`=mcmdi.`MODIFY_ID`  AND (mcmdi.`UPDATE_STATE` <>1 OR mcmdi.`UPDATE_STATE` IS NULL) AND mcm.CONTRACT_ID = #{contractNo} ]]>
 	</select>
 </mapper>

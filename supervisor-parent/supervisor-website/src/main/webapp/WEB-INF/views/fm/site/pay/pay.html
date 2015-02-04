@@ -208,7 +208,11 @@ function to_finance(payId){
       <th>付款状态</th>
       </tr>
     <#list list as model>
-    <tr class="bColor-red">
+    <#if (model.state.ordinal() &lt; 4)>
+      <tr class="bColor-red">
+    <#else>
+      <tr >
+    </#if>
       <td>${model.payNo}</td>
       <td><a href="javascript:loadInfo('${model.contractNo}','${model.id}')" class="lnk-blue">${model.contractNo}</a></td>
       <td>${model.batchNo}</td>

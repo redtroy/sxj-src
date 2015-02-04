@@ -1,6 +1,8 @@
 package com.sxj.supervisor.website.controller.pay;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
@@ -15,7 +18,9 @@ import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.statistics.AccountingModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller("suFinanceController")
 @RequestMapping("/finance")
@@ -39,7 +44,8 @@ public class FinanceController extends BaseController {
 			map.put("list", list);
 			map.put("types", types);
 			map.put("query", query);
-			String channelName = MessageChannel.WEBSITE_PAY_MESSAGE + memberNo;
+			String channelName = MessageChannel.WEBSITE_FINANCE_MESSAGE
+					+ memberNo;
 			map.put("channelName", channelName);
 			// 注册监听
 
@@ -48,5 +54,20 @@ public class FinanceController extends BaseController {
 			throw new WebException(e.getMessage());
 		}
 		return "site/pay/finance";
+	}
+
+	@RequestMapping("cleanChannel")
+	public @ResponseBody Map<String, String> cleanChannel(String channelName)
+			throws WebException {
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			CometServiceImpl.setCount(channelName, 0l);
+			map.put("isOk", "ok");
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("清除频道错误", e, this.getClass());
+			throw new WebException("清除频道错误");
+		}
+
 	}
 }

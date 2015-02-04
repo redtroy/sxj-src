@@ -124,6 +124,9 @@ public class ContractPayServiceImpl implements IContractPayService {
 		}
 	}
 
+	/**
+	 * 财务统计查询
+	 */
 	@Override
 	@Transactional(readOnly = true)
 	public List<AccountingModel> query_finance(AccountingModel query,
@@ -140,10 +143,35 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.setPage(query);
 			List<AccountingModel> list = accountingDao.query(condition);
 			query.setPage(condition);
+			list = financeAmount(list);
 			return list;
 		} catch (Exception e) {
 			SxjLogger.error("财务统计查询出错！", e, this.getClass());
 			throw new ServiceException("财务统计查询出错！", e);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	public List<AccountingModel> financeAmount(List<AccountingModel> list)
+			throws ServiceException {
+		try {
+			if (list.size() > 0) {
+				for (int i = 0; i < list.size(); i++) {
+					String contractNo = list.get(i).getContractNo();
+					Double amount = accountingDao.queryAmountItem(contractNo)
+							+ accountingDao.queryAmountModifyItem(contractNo);
+					Double payAmount = accountingDao
+							.queryAmountBatch(contractNo)
+							+ accountingDao.queryAmountModifyBatch(contractNo);
+					list.get(i).setAmount(amount);
+					list.get(i).setPayAmount(payAmount);
+					list.get(i).setNoPayAmount(amount - payAmount);
+				}
+			}
+			return list;
+		} catch (Exception e) {
+			SxjLogger.error("财务统计金额查询出错！", e, this.getClass());
+			throw new ServiceException("财务统计金额查询出错！", e);
 		}
 	}
 
@@ -169,6 +197,12 @@ public class ContractPayServiceImpl implements IContractPayService {
 					+ pay.getMemberNoA());
 			redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
 					MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
+			CometServiceImpl.takeCount(MessageChannel.WEBSITE_FINANCE_MESSAGE
+					+ pay.getMemberNoA());
+			redisTopics.getTopic(MessageChannel.TOPIC_NAME)
+					.publish(
+							MessageChannel.WEBSITE_FINANCE_MESSAGE
+									+ pay.getMemberNoA());
 		} catch (Exception e) {
 			SxjLogger.error("新增付款管理出错！", e, this.getClass());
 			throw new ServiceException("新增付款管理出错！", e);
