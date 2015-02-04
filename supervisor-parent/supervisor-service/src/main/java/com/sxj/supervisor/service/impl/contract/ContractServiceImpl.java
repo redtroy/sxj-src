@@ -1989,17 +1989,31 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException("更新批次错误", e);
 		}
 	}
+
 	@Override
-	public ContractEntity getContractByNo(String contractNo){
+	public ContractEntity getContractByNo(String contractNo) {
 		try {
-			ContractEntity contract=contractDao.getContractByContractNo(contractNo);
-		return contract;
-	} catch (ServiceException e) {
-		SxjLogger.error(e.getMessage(), e, this.getClass());
-		throw new ServiceException(e.getMessage());
-	} catch (Exception e) {
-		SxjLogger.error(e.getMessage(), e, this.getClass());
-		throw new ServiceException("获取合同错误错误", e);
+			ContractEntity contract = contractDao
+					.getContractByContractNo(contractNo);
+			return contract;
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取合同错误", e);
+		}
 	}
+	@Override
+	public void updateStartDate(String contractNo) throws ServiceException{
+		try {
+			 contractDao.updateStartDate(contractNo);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新生效时间错误", e);
+		}
 	}
 }

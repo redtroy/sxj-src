@@ -105,4 +105,7 @@
 	<select id="getContractByContractNo" resultMap="ContractResultMap" parameterType="String">
 		<![CDATA[ SELECT * FROM M_CONTRACT WHERE CONTRACT_NO=#{contractNo}]]>
 	</select>
+	<update id="updateStartDate" parameterType="String">
+	<![CDATA[UPDATE M_CONTRACT C SET C.START_DATE=NOW() WHERE C.CONTRACT_NO=#{contractNo}]]>
+	</update>
 </mapper>

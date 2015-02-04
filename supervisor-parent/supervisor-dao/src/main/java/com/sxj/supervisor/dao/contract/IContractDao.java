@@ -1,5 +1,6 @@
 package com.sxj.supervisor.dao.contract;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -66,4 +67,11 @@ public interface IContractDao
      * @return
      */
     public ContractEntity getContractByContractNo(String contractNo);
+    
+    /**
+     * 更新生效时间
+     * @param contractNo
+     * @throws SQLException
+     */
+    public void updateStartDate(String contractNo)throws SQLException;
 }

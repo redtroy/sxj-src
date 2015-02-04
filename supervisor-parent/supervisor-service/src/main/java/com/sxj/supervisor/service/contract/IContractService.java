@@ -276,5 +276,8 @@ public interface IContractService {
 
 	ContractEntity getContractByNo(String refContractNo);
 
+	void updateStartDate(String contractNo) throws ServiceException;
+
+
 
 }
