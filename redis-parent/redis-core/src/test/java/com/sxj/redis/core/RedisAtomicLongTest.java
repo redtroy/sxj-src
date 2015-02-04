@@ -1,7 +1,5 @@
 package com.sxj.redis.core;
 
-import java.util.Date;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +20,7 @@ public class RedisAtomicLongTest
     @Test
     public void test()
     {
-        RAtomicLong atomicLong = concurrent.getAtomicLong("A", new Date());
+        RAtomicLong atomicLong = concurrent.getAtomicLong("A", 10);
         atomicLong.incrementAndGet();
     }
     
