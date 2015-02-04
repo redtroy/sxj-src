@@ -159,9 +159,9 @@
 								<td>${member.bLicenseNo}</td>
 								<td>${member.energyNo}</td>
 								<td><#if member.financeState==1><span
-									class="state verified">已审核</span><#else><a
-									href="javascript:void(0);"
-									onclick="editCheckState('${member.id}',1)" class="lnk-blue">审核</a></#if>
+									class="state verified">已审核</span><#else>
+									<a href="javascript:void(0);"
+									onclick="editCheckState('${member.id}',1)" class="button btn-examine">审核</a></#if>
 								</td>
 							</tr>
 							<tr id="info_${member.id}" style="display: none">
