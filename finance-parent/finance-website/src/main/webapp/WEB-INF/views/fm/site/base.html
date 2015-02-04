@@ -329,10 +329,21 @@ $(document).ready(function(){
 		var href=window.location.href;
 		if(href.indexOf($(this).attr("href"))>0)
 			$(this).parent().addClass("on");
-	})
+	});
+	var menuYloc = $("#splitsuspend_div").offset().top;
+	    $(window).scroll(function (){ 
+	        var offsetTop = $(window).scrollTop();
+	      // alert(menuYloc);
+	       //alert(offsetTop);
+	        if(offsetTop>=menuYloc){
+	        	 $("#splitsuspend_div").animate({top : offsetTop-menuYloc+"px"},{ duration:100 , queue:false });
+	        }
+	    });
+	
+	
 });
 </script>
-<div class="yard-200 ly-left">
+<div class="yard-200 ly-left" id="splitsuspend_div" style="position: relative;top:0px;">
 <div class="leftMenu pt5 pb5">
 <h2 class="pl15 fb">会员中心</h2>
 <ul class="pl10 pr10">

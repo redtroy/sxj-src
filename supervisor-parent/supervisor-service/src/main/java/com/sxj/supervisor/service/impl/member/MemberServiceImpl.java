@@ -27,7 +27,7 @@ import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
-import com.sxj.util.message.SendMessage;
+import com.sxj.util.message.NewSendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -40,23 +40,20 @@ public class MemberServiceImpl implements IMemberService {
 	@Autowired
 	private RedisTopics redisTopics;
 
-	@Value("${mobile.sOpenUrl}")
-	private String sOpenUrl;
+	@Value("${mobile.smsUrl}")
+	private String smsUrl;
 
-	@Value("${mobile.sDataUrl}")
-	private String sDataUrl;
+	@Value("${mobile.userName}")
+	private String userName;
 
-	@Value("${mobile.account}")
-	private String account;
+	@Value("${mobile.password}")
+	private String password;
 
-	@Value("${mobile.authkey}")
-	private String authkey;
+	@Value("${mobile.sign}")
+	private String sign;
 
-	@Value("${mobile.cgid}")
-	private Integer cgid;
-
-	@Value("${mobile.csid}")
-	private Integer csid;
+	@Value("${mobile.type}")
+	private String type;
 
 	/**
 	 * 新增会员
@@ -336,8 +333,8 @@ public class MemberServiceImpl implements IMemberService {
 			throws ServiceException {
 		try {
 			message = Identities.randomNumber(6);
-			SendMessage.getInstance(sOpenUrl, sDataUrl, account, authkey, cgid,
-					csid).sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
+			NewSendMessage.getInstance(smsUrl, userName, password, sign, type)
+					.sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
 		} catch (Exception e) {
 			SxjLogger.error("发送验证码错误", e, this.getClass());
 			throw new ServiceException("发送验证码错误", e);

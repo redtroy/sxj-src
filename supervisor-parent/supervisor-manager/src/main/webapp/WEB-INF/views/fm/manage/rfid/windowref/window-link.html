@@ -227,7 +227,7 @@ function batch2(id,contractNo,rfidNo,type){
 		  <td><a href="javascript:batch('${win.id}','${win.contractNo}','${win.glassBatchNo}','1')" class="lnk-blue">${win.glassBatchNo}</a></td>
           <td><a href="javascript:batch2('${win.id}','${win.contractNo}','${win.profileBatchNo}','2')" class="lnk-blue">${win.profileBatchNo}</a></td>
 		  <td>${win.applyDate?string("yyyy-MM-dd HH:mm:ss")}</td>
-		  <td><#if win.replenishRfid?exists>${win.replenishRfid}<#else>-</#if></td>
+		  <td title="${win.replenishRfid}"><#if win.replenishRfid?exists>${win.replenishRfid[0..8]}<#else>-</#if></td>
 		  <td><#if win.state.getId()==0><button class="btn btn-gray" onclick="audit('${win.id}');"><span>审核</span></button><#else><em class="state verified">已审核</em></#if></td>
 		  <td class="operation"><#if win.state.getId()==0><a href="javascript:del('${win.id}');" class="del">删除</a></#if></td>
         </tr>
