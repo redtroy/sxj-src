@@ -281,6 +281,12 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 					+ pay.getMemberNoA());
 			redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
 					MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
+			CometServiceImpl.takeCount(MessageChannel.WEBSITE_FINANCE_MESSAGE
+					+ pay.getMemberNoA());
+			redisTopics.getTopic(MessageChannel.TOPIC_NAME)
+					.publish(
+							MessageChannel.WEBSITE_FINANCE_MESSAGE
+									+ pay.getMemberNoA());
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());

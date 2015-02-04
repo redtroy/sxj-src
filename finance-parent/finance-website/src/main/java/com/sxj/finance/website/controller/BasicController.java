@@ -128,7 +128,7 @@ public class BasicController extends BaseController {
 				RQueue<Map<String, Object>> queue = collections.getQueue(payId);
 				Map<String, Object> map1 = queue.poll();
 				financeService.setModel(map1);
-
+				queue.clear();
 			} catch (AuthenticationException e) {
 				SxjLogger.error("登陆失败", e, this.getClass());
 				map.put("pmessage", "密码错误");

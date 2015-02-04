@@ -48,4 +48,6 @@ public interface ILogisticsRefService
      * @throws ServiceException
      */
     public void del(String id) throws ServiceException;
+    
+    
 }
