@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.redis.core.RQueue;
-import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
@@ -226,7 +225,7 @@ public class PayController extends BaseController {
 			if (pay == null) {
 				throw new WebException("付款记录不存在");
 			}
-			Map<String, Object> map = new HashMap<>();
+			HashMap<String, Object> map = new HashMap<>();
 
 			map.put("memberNo_A", pay.getMemberNoA());
 			map.put("payNo", pay.getPayNo());
@@ -246,7 +245,7 @@ public class PayController extends BaseController {
 //			}
 			RQueue<Map<String,Object>> queue = collections.getQueue(payId);
 			queue.offer(map);
-			//queue.expireAt(60000);// 设置失效时间
+			// queue.expireAt(60000);// 设置失效时间
 			LoginToken loginToken = new LoginToken();
 			loginToken.setMemberNo(loginInfo.getMember().getMemberNo());
 			loginToken.setMemberName(loginInfo.getMember().getName());
