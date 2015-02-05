@@ -327,7 +327,10 @@ $(document).ready(function(){
 	$(".leftMenu li").removeClass("on");
 	$(".leftMenu a").each(function(){
 		var href=window.location.href;
-		if(href.indexOf($(this).attr("href"))>0)
+		href=href.substring(0,href.lastIndexOf("/"));
+		var menu=$(this).attr("href");
+		menu=menu.substring(0,menu.lastIndexOf("/"));
+		if(href.indexOf(menu)>0)
 			$(this).parent().addClass("on");
 	});
 	var menuYloc = $("#splitsuspend_div").offset().top;

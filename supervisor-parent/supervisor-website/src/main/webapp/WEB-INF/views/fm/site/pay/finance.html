@@ -55,7 +55,7 @@ $(function(){
  function  loadBatch(contractNo,id,type){
 		var isopen=$("#info1_" + id).attr("isopen");
 		if(isopen=="0"){
-			$("#info1_" + id).load("${basePath}/record/getBatchPay.htm?contractNo=" + contractNo+"&recordNo="+id)+"&type="+type;
+			$("#info1_" + id).load("${basePath}record/getBatchPay.htm?contractNo=" + contractNo+"&recordNo="+id)+"&type="+type;
 			$("#info1_" + id).attr("isopen","1");
 			$("#info_" + id).hide();
 		 	$("#info_" + id).html('');
@@ -111,7 +111,7 @@ $(function(){
 <div class="yard-870 rightSide ly-left">
 <div class="heading mb15 ly-clearFix">
   <h1>
-							<span class="title fontYH f20 fb">账务统计</span></h1>
+	<span class="title fontYH f20 fb">账务统计</span></h1>
 </div>
 <div class="contBox">
   <div class="searBox f12 mb10" id="serch_div">
