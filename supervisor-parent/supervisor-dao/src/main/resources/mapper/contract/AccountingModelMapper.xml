@@ -38,8 +38,11 @@
 		<if test="condition.contractType != '' and condition.contractType !=null ">
 			<![CDATA[AND TYPE =#{condition.contractType}]]>
 		</if>
-		<if test=" condition.state !=null ">
-			<![CDATA[AND STATE =#{condition.state}]]>
+		<if test=" condition.state !=null and  condition.state==0">
+			<![CDATA[AND (CASE WHEN PAY_BATCH IS NULL THEN 0 ELSE PAY_BATCH END) != (CASE WHEN BATCH_COUNT IS NULL THEN 0 ELSE BATCH_COUNT END)]]>
+		</if>
+		<if test=" condition.state !=null and  condition.state==1">
+			<![CDATA[AND (CASE WHEN PAY_BATCH IS NULL THEN 0 ELSE PAY_BATCH END) = (CASE WHEN BATCH_COUNT IS NULL THEN 0 ELSE BATCH_COUNT END)]]>
 		</if>
 			<if test="condition.memberNo != '' and condition.memberNo !=null ">
 			<![CDATA[AND (MEMBER_NO_A=#{condition.memberNo} or MEMBER_NO_B=#{condition.memberNo})]]>
@@ -59,10 +62,10 @@
 	</select>
 	<select id="queryAmountBatch" resultType="java.lang.Double"
 		parameterType="String">
-	  <![CDATA[select (CASE WHEN sum(AMOUNT) is null THEN 0 ELSE sum(AMOUNT) END) AS AMOUNTBATCH from M_CONTRACT_BATCH WHERE  (UPDATE_STATE<>1 OR UPDATE_STATE IS NULL) AND CONTRACT_ID=#{contractNo}]]>
+	  <![CDATA[select (CASE WHEN sum(AMOUNT) is null THEN 0 ELSE sum(AMOUNT) END) AS AMOUNTBATCH from M_CONTRACT_BATCH WHERE  (UPDATE_STATE<>1 OR UPDATE_STATE IS NULL) AND PAY_STATE=1 AND CONTRACT_ID=#{contractNo}]]>
 	</select>
 	<select id="queryAmountModifyBatch" resultType="java.lang.Double"
 		parameterType="String">
-	 <![CDATA[SELECT (CASE WHEN sum(mcmdi.`AMOUNT`) is null THEN 0 ELSE sum(mcmdi.`AMOUNT`) END) AS AMOUNTMODIFYBATCH  FROM M_CONTRACT_MODIFY mcm,M_CONTRACT_MODIFY_BATCH mcmdi WHERE mcm.`ID`=mcmdi.`MODIFY_ID`  AND (mcmdi.`UPDATE_STATE` <>1 OR mcmdi.`UPDATE_STATE` IS NULL) AND mcm.CONTRACT_ID = #{contractNo} ]]>
+	 <![CDATA[SELECT (CASE WHEN sum(mcmdi.`AMOUNT`) is null THEN 0 ELSE sum(mcmdi.`AMOUNT`) END) AS AMOUNTMODIFYBATCH  FROM M_CONTRACT_MODIFY mcm,M_CONTRACT_MODIFY_BATCH mcmdi WHERE mcm.`ID`=mcmdi.`MODIFY_ID`  AND (mcmdi.`UPDATE_STATE` <>1 OR mcmdi.`UPDATE_STATE` IS NULL) AND mcmdi.PAY_STATE=1 AND mcm.CONTRACT_ID = #{contractNo} ]]>
 	</select>
 </mapper>
