@@ -98,8 +98,9 @@ function pay(id){
     付款状态
       <select name="state">
         <option selected="selected" value="">全部</option>
+        <option value="0">未申请</option>
         <option value="1">${states[1].getName_b()}</option>
-        <option value="2">${states[2].getName_b()}</option>
+        <option value="2">已受理</option>
         <option value="3">${states[3].getName_b()}</option>
         <option value="4">${states[4].getName_b()}</option>
       </select>
