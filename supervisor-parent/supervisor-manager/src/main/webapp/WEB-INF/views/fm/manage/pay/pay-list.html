@@ -101,9 +101,9 @@ function query(page){
         <col width="10%" />
         <col width="8%" />
         <col width="8%" />
-        <col width="10%" />
-        <col width="12%" />
         <col width="8%" />
+        <col width="12%" />
+        <col width="10%" />
         <col width="10%" />
         <tr>
           <th>支付单号</th>
@@ -119,6 +119,13 @@ function query(page){
           <th class="rLine">付款方式</th>
         </tr>
         <#assign num=0>
+        <#function getValue rawvalue>
+          <#if rawvalue == "">  
+            <#return 0>
+         <#else>
+             <#return rawvalue?number>
+        </#if>
+        </#function>
         <#list list as model>
         <tr>
           <td>${model.payNo}</td>
@@ -147,20 +154,11 @@ function query(page){
         </tr>
         <tr class="tableInfo" id="info_${model.id}" style="display:none;">
         </tr>
-        <#assign num=num+model.payAmount>
+        <#assign num=num+getValue(model.payAmount)>
         </#list>
         <tr>
           <td><strong>合计</strong></td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td><strong>${num}元</strong></td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td  colspan='10'><strong>${num}元</strong></td>
         </tr>
       </table>
     <!-- InstanceEndEditable --></div>

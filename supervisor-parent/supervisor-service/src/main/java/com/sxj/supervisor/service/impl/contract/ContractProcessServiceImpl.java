@@ -276,24 +276,24 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 			pay.setContent("合同定金");
 			pay.setState(PayStageEnum.STAGE1);
 			pay.setPayMode(PayModeEnum.CASH);
-			if(con.getType().equals(ContractTypeEnum.GLASS)){
+			if (con.getType().equals(ContractTypeEnum.GLASS)) {
 				pay.setType(PayTypeEnum.GLASS);
-			}else if(con.getType().equals(ContractTypeEnum.EXTRUSIONS)){
+			} else if (con.getType().equals(ContractTypeEnum.EXTRUSIONS)) {
 				pay.setType(PayTypeEnum.EXTRUDERS);
 			}
-			
+
 			pay.setPayContentState(PayContentStateEnum.DEPOSIT);
 			payDao.addContractPay(pay);// 新增定金支付单
 			CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 					+ pay.getMemberNoA());
 			redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
 					MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
-			CometServiceImpl.takeCount(MessageChannel.WEBSITE_FINANCE_MESSAGE
-					+ pay.getMemberNoA());
-			redisTopics.getTopic(MessageChannel.TOPIC_NAME)
-					.publish(
-							MessageChannel.WEBSITE_FINANCE_MESSAGE
-									+ pay.getMemberNoA());
+			// CometServiceImpl.takeCount(MessageChannel.WEBSITE_FINANCE_MESSAGE
+			// + pay.getMemberNoA());
+			// redisTopics.getTopic(MessageChannel.TOPIC_NAME)
+			// .publish(
+			// MessageChannel.WEBSITE_FINANCE_MESSAGE
+			// + pay.getMemberNoA());
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage());

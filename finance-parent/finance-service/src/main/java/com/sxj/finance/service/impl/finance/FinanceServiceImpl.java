@@ -22,7 +22,9 @@ import com.sxj.util.persistent.QueryCondition;
 @Service
 public class FinanceServiceImpl implements IFinanceService {
 
-	private final String url = "http://127.0.0.1:8080/supervisor-website/pay/changeState.htm";
+	// private final String url =
+	// "http://www.menchuang.org.cn:8080/supervisor-website/pay/changeState.htm";
+	private final String url = "http://www.menchuang.org.cn/pay/changeState.htm";
 
 	@Autowired
 	private FinanceDao financeDao;
