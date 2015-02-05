@@ -167,12 +167,12 @@ public class FinanceServiceImpl implements IFinanceService {
 	public String setModel(Map<String, Object> map) throws ServiceException {
 		try {
 			FinanceEntity fe = new FinanceEntity();
-			fe.setMemberNo(map.get("memberNo_A").toString());
-			fe.setPayNo(map.get("payNo").toString());
-			fe.setContractNo(map.get("contractNo").toString());
-			fe.setBatchNo(map.get("batchNo").toString());
-			fe.setPayAmount(Double.valueOf(map.get("payAmount").toString()));
-			fe.setContent(map.get("content").toString());
+			fe.setMemberNo(changeString(map.get("memberNo_A")));
+			fe.setPayNo(changeString(map.get("payNo")));
+			fe.setContractNo(changeString(map.get("contractNo")));
+			fe.setBatchNo(changeString(map.get("batchNo")));
+			fe.setPayAmount(Double.valueOf(changeString(map.get("payAmount"))));
+			fe.setContent(changeString(map.get("content")));
 			fe.setState(PayStageEnum.Stage1);
 			fe.setCreatDate(new Date());
 			FinanceModel query = new FinanceModel();
@@ -185,6 +185,14 @@ public class FinanceServiceImpl implements IFinanceService {
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException("增加数据出错", e);
+		}
+	}
+
+	public String changeString(Object obj) {
+		try {
+			return obj.toString();
+		} catch (Exception e) {
+			return "";
 		}
 	}
 }
