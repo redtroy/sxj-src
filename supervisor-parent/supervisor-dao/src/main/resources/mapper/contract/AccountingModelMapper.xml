@@ -38,6 +38,9 @@
 		<if test="condition.contractType != '' and condition.contractType !=null ">
 			<![CDATA[AND TYPE =#{condition.contractType}]]>
 		</if>
+		<if test=" condition.state !=null ">
+			<![CDATA[AND STATE =#{condition.state}]]>
+		</if>
 			<if test="condition.memberNo != '' and condition.memberNo !=null ">
 			<![CDATA[AND (MEMBER_NO_A=#{condition.memberNo} or MEMBER_NO_B=#{condition.memberNo})]]>
 		</if>
