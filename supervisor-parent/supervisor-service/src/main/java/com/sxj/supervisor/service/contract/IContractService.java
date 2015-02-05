@@ -278,6 +278,8 @@ public interface IContractService {
 
 	void updateStartDate(String contractNo) throws ServiceException;
 
+	int getBindingState(String contractNo);
+
 
 
 }

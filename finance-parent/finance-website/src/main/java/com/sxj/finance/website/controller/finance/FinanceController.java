@@ -37,6 +37,7 @@ public class FinanceController extends BaseController {
 				query.setPagable(true);
 			}
 			FinancePrincipal info = getLoginInfo(session);
+			
 			String memberNo = info.getMember().getMemberNo();
 			query.setMemberNo(memberNo);
 			PayStageEnum[] states = PayStageEnum.values();

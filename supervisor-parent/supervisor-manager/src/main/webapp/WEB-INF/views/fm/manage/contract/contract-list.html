@@ -89,7 +89,7 @@ $(function(){
 		$(".maskdivgen").hide();
 	})
 });
-function check(id,recordNo,contractType){
+function check(id,recordNo,contractType,contractNo){
 	var recordNoArr = recordNo.split(",");
 	if(contractType!=0){
 		if(recordNoArr.length<2){
@@ -97,19 +97,28 @@ function check(id,recordNo,contractType){
 			return;
 		}
 	}
-	dialogBox(function(index) {
-	$.post("check.htm",{contractId:id},function(data){
-		layer.close(index);
-		if (data.isOK == 'ok') {
-			succInfo(function(){
-				 var currentpage=$("#pager").attr("currentpage");
-				  query(currentpage);
-			 },"审核成功");
-			 
-			}else{
-				messageInfo("审核失败");
-			}	
-	});}, "确定审核该合同吗?");
+	
+	$.post("getBindingState.htm",{contractNo:contractNo},function(data){
+		if(data.state==0){
+			dialogBox(function(index) {
+			$.post("check.htm",{contractId:id},function(data){
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function(){
+						 var currentpage=$("#pager").attr("currentpage");
+						  query(currentpage);
+					 },"审核成功");
+					 
+					}else{
+						messageInfo("审核失败");
+					}	
+			});
+			}, "确定审核该合同吗?");
+		}else{
+			messageInfo("不能审核该合同,请确认是否处理完成!");
+		}
+		
+	});
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -221,7 +230,7 @@ function check(id,recordNo,contractType){
           	<em class="state verified">${model.contract.confirmState.getName()}</em>
         </#if>
         </td>
-        <td><#if model.contract.state.getId() ==1><em class="state verified">${model.contract.state.getName()}</em><#else><a class="btn" onclick="check('${model.contract.id}','${model.contract.recordNo}','${model.contract.type.getId()}');"><span>审核</span></a></#if></td>
+        <td><#if model.contract.state.getId() ==1><em class="state verified">${model.contract.state.getName()}</em><#else><a class="btn" onclick="check('${model.contract.id}','${model.contract.recordNo}','${model.contract.type.getId()}','${model.contract.contractNo}');"><span>审核</span></a></#if></td>
         <td class="operation">
         <#if model.contract.type.getId()==0><a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a><#else> <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a></#if>
         <!-- <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a> --></td>

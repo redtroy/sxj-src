@@ -1,5 +1,6 @@
 package com.sxj.supervisor.dao.record;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.Delete;
@@ -73,5 +74,12 @@ public interface IRecordDao {
 	 */
 	public void batchUpdateCheckState(String contractNo);
 
-	public RecordEntity queryUserRecord(String contratcNo);
+	public RecordEntity queryUserRecord(String contractNo);
+	
+	/**
+	 * 查询合同下备案绑定状态
+	 * @param contratcNo
+	 * @return
+	 */
+	public int getBindingState(String contractNo)throws SQLException;
 }

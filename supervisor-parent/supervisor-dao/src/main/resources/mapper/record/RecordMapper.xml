@@ -119,6 +119,9 @@
 	<select id="queryUserRecord" resultMap="RecordResultMap"
 		parameterType="String">
 		<![CDATA[select r.* from M_CONTRACT_RECORD r where r.RECORD_NO=]]>
-		<![CDATA[(select MAX(r2.RECORD_NO) from M_CONTRACT_RECORD r2 where r2.CONTRACT_NO=#{contractId} and r2.RECORD_STATE=0 )]]>
+		<![CDATA[(select MAX(r2.RECORD_NO) from M_CONTRACT_RECORD r2 where r2.CONTRACT_NO=#{contractNo} and r2.RECORD_STATE=0 )]]>
+	</select>
+	<select id="getBindingState" resultType="int" parameterType="String">
+		<![CDATA[SELECT COUNT(R.ID) FROM M_CONTRACT_RECORD R  WHERE  R.CONTRACT_NO=#{contractNo} AND R.STATE=0]]>
 	</select>
 </mapper>

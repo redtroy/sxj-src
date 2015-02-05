@@ -341,4 +341,22 @@ public class ContractController extends BaseController {
 			throw new WebException(e);
 		}
 	}
+	/**
+	 * 获取备案状态
+	 * @param contractNo
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("getBindingState")
+	public @ResponseBody Map<String, Object> getBindingState(String contractNo)
+			throws WebException {
+		try {
+			int num =contractService.getBindingState(contractNo);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("state", num);
+			return map;
+		} catch (Exception e) {
+			throw new WebException(e);
+		}
+	}
 }
