@@ -107,6 +107,9 @@ public class BasicController extends BaseController {
 		try {
 			MemberEntity memberInfo = memberService.memberInfo(member);
 			if (memberInfo == null) {
+				map.put("payId", payId);
+				map.put("member", member);
+				map.put("token", token);
 				return LOGIN;
 			}
 			LoginToken newToken = new LoginToken();
@@ -115,6 +118,9 @@ public class BasicController extends BaseController {
 			newToken.setPassword(memberInfo.getPassword());
 			String tokenMd5 = EncryptUtil.md5Hex(newToken.toString());
 			if (!tokenMd5.equals(token)) {
+				map.put("payId", payId);
+				map.put("member", member);
+				map.put("token", token);
 				return LOGIN;
 			}
 			FinancePrincipal userBean = new FinancePrincipal();
@@ -125,13 +131,19 @@ public class BasicController extends BaseController {
 			try {
 				currentUser.login(siteToken);
 				memberService.updateMenberLoginDate(memberInfo.getMemberNo());
-				RQueue<Map<String, Object>> queue = collections.getQueue(payId);
-				Map<String, Object> map1 = queue.poll();
-				financeService.setModel(map1);
-				queue.clear();
+				if(!StringUtils.isEmpty(payId)){
+					RQueue<Map<String, Object>> queue = collections.getQueue(payId);
+					Map<String, Object> map1 = queue.poll();
+						financeService.setModel(map1);
+						queue.clear();
+				}
+				
 			} catch (AuthenticationException e) {
 				SxjLogger.error("登陆失败", e, this.getClass());
 				map.put("pmessage", "密码错误");
+				map.put("payId", payId);
+				map.put("member", member);
+				map.put("token", token);
 				return LOGIN;
 			}
 			if (currentUser.isAuthenticated()) {
@@ -139,10 +151,16 @@ public class BasicController extends BaseController {
 				return "redirect:" + getBasePath(request) + "index.htm";
 			} else {
 				map.put("message", "登陆失败");
+				map.put("payId", payId);
+				map.put("member", member);
+				map.put("token", token);
 				return LOGIN;
 			}
 		} catch (Exception e) {
 			map.put("message", "登陆失败");
+			map.put("payId", payId);
+			map.put("member", member);
+			map.put("token", token);
 			return LOGIN;
 		}
 	}

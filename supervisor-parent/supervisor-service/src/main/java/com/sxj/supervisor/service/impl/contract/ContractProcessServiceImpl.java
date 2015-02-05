@@ -18,6 +18,7 @@ import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
 import com.sxj.supervisor.enu.contract.PayContentStateEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.supervisor.enu.contract.PayTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
@@ -275,6 +276,12 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 			pay.setContent("合同定金");
 			pay.setState(PayStageEnum.STAGE1);
 			pay.setPayMode(PayModeEnum.CASH);
+			if(con.getType().equals(ContractTypeEnum.GLASS)){
+				pay.setType(PayTypeEnum.GLASS);
+			}else if(con.getType().equals(ContractTypeEnum.EXTRUSIONS)){
+				pay.setType(PayTypeEnum.EXTRUDERS);
+			}
+			
 			pay.setPayContentState(PayContentStateEnum.DEPOSIT);
 			payDao.addContractPay(pay);// 新增定金支付单
 			CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
