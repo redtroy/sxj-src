@@ -90,7 +90,7 @@
 			test="condition.startPayDate != null and condition.endPayDate != null and  condition.startPayDate != '' and condition.endPayDate != ''">
 			<![CDATA[AND P.PAY_DATE >=#{condition.startPayDate} AND P.PAY_DATE <= #{condition.endPayDate}]]>
 		</if>
-		<![CDATA[ ORDER BY P.PAY_NO DESC
+		<![CDATA[ ORDER BY P.STATE ASC,P.PAY_NO DESC
 		]]>
 	</select>
 	 <insert id="addContractPay" parameterType="com.sxj.supervisor.entity.pay.PayRecordEntity">

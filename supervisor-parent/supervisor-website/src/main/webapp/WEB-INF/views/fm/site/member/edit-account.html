@@ -11,10 +11,6 @@
 <@b.dialogBox/>
 <Script>
 var editId;
-var rightDiv;
-$(document).ready(function(){
-	rightDiv=$("#right_div");
-});
 var pwd_validform;
 $.ajax({
 	   cache:false
@@ -30,8 +26,8 @@ $.ajax({
 		var params=$("#search_form").serialize();
 		$.post("accountList.htm?rand="+Math.random(),params,function(data){
 			var res=$(data).find("#right_div");
-			rightDiv.empty();
-			rightDiv.append(res.html());
+			$("#right_div").empty();
+			$("#right_div").append(res.html());
 		});
   }
   
@@ -126,7 +122,7 @@ $.ajax({
 		  $.post("editState.htm",{id:id,state:stateId},function(data){
 			 
 			  if (data.isOK=='ok'){
-				  setTimeout(query($("#pager").attr("currentPage")),1500);
+				  setTimeout(query,500,$("#pager").attr("currentPage"));
 			   }else{
 					errorInfo(data);
 				}
