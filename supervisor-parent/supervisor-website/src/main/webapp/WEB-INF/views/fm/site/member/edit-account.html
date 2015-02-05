@@ -126,7 +126,7 @@ $.ajax({
 		  $.post("editState.htm",{id:id,state:stateId},function(data){
 			 
 			  if (data.isOK=='ok'){
-				  setTimeout(query($("#pager").attr("currentPage")),500);
+				  setTimeout(query,500,$("#pager").attr("currentPage"));
 			   }else{
 					errorInfo(data);
 				}
