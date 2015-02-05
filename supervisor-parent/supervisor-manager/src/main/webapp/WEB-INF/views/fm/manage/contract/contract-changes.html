@@ -359,7 +359,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						<div>
 							<label>交货地址</label> ${contractModel.contract.deliveryAddress}
 						</div>
-						<#if contractModel.batchList?exists>
+						<#if contractModel.batchList?exists && (contractModel.batchList?size>0)>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable opctable">
 							<col width="20%" />
@@ -492,7 +492,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</#list>
 								</table>
 								</#if>
-								<#if modifyList.modifyBatchList?exists>
+								<#if modifyList.modifyBatchList?exists && (modifyList.modifyBatchList?size>0)>
 								<table border="0" cellpadding="0" cellspacing="0"
 									class="tabList producedTable cpctable" id="opctable">
 									<col width="20%" />

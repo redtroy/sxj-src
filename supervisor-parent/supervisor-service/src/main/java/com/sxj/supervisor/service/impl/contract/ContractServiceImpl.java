@@ -2017,7 +2017,7 @@ public class ContractServiceImpl implements IContractService {
 		}
 	}
 	@Override
-	public int getBindingState(String contractNo) {
+	public int getBindingState(String contractNo)throws ServiceException {
 		try {
 			return recordDao.getBindingState(contractNo);
 		} catch (ServiceException e) {
