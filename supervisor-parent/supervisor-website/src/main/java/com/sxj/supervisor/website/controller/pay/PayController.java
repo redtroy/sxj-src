@@ -67,7 +67,7 @@ public class PayController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("paylist")
-	public String paylist(ModelMap map, ContractPayModel query,
+	public String paylist(ModelMap map, String del, ContractPayModel query,
 			HttpServletRequest request, HttpSession session)
 			throws WebException {
 		try {
@@ -86,9 +86,12 @@ public class PayController extends BaseController {
 			} else {
 				map.put("state", "b");
 			}
+			String channelName = MessageChannel.WEBSITE_PAY_MESSAGE + memberNo;
+			if ("1".equals(del)) {
+				CometServiceImpl.setCount(channelName, 0l);
+			}
 			map.put("payState", payState);
 			map.put("query", query);
-			String channelName = MessageChannel.WEBSITE_PAY_MESSAGE + memberNo;
 			map.put("channelName", channelName);
 			// 注册监听
 
@@ -214,8 +217,8 @@ public class PayController extends BaseController {
 	 * @throws WebException
 	 */
 	@RequestMapping("tofinance")
-	public String tofinance(String payId, HttpSession session)
-			throws WebException {
+	public String tofinance(String payId, HttpServletRequest request,
+			HttpSession session) throws WebException {
 		try {
 			SupervisorPrincipal loginInfo = getLoginInfo(session);
 			if (loginInfo == null) {
