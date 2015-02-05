@@ -97,19 +97,28 @@ function check(id,recordNo,contractType){
 			return;
 		}
 	}
-	dialogBox(function(index) {
-	$.post("check.htm",{contractId:id},function(data){
-		layer.close(index);
-		if (data.isOK == 'ok') {
-			succInfo(function(){
-				 var currentpage=$("#pager").attr("currentpage");
-				  query(currentpage);
-			 },"审核成功");
-			 
-			}else{
-				messageInfo("审核失败");
-			}	
-	});}, "确定审核该合同吗?");
+	
+	$.post("getBindingState.htm",{contractId:id},function(data){
+		if(data.state==0){
+			dialogBox(function(index) {
+			$.post("check.htm",{contractId:id},function(data){
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function(){
+						 var currentpage=$("#pager").attr("currentpage");
+						  query(currentpage);
+					 },"审核成功");
+					 
+					}else{
+						messageInfo("审核失败");
+					}	
+			});
+			}, "确定审核该合同吗?");
+		}else{
+			messageInfo("不能审核该合同,请确认是否处理完成!");
+		}
+		
+	});
 }
 </script>
 <!-- InstanceEndEditable -->

@@ -1,5 +1,6 @@
 package com.sxj.finance.website.controller;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -84,13 +85,66 @@ public class BasicController extends BaseController {
 
 	@RequestMapping("to_login")
 	public String ToLogin(String member, String token, String payId,
-			HttpServletRequest request, ModelMap map) {
+			HttpServletRequest request, HttpSession session, ModelMap map)
+			throws Exception {
+		FinancePrincipal userBean = new FinancePrincipal();
 		String retUrl = request.getHeader("Referer");
 		System.out.println("-----" + retUrl + "-----");
+		MemberEntity memberInfo = memberService.memberInfo(member);
 		map.put("member", member);
 		map.put("token", token);
 		map.put("payId", payId);
+		if (memberInfo == null) {
+			return LOGIN;
+		}
+		if (memberInfo.getFinanceState() == 1) {
+			LoginToken newToken = new LoginToken();
+			newToken.setMemberNo(memberInfo.getMemberNo());
+			newToken.setMemberName(memberInfo.getName());
+			newToken.setPassword(memberInfo.getPassword());
+			String tokenMd5 = EncryptUtil.md5Hex(newToken.toString());
+			if (!tokenMd5.equals(token)) {
+				map.put("payId", payId);
+				map.put("member", member);
+				map.put("token", token);
+				return LOGIN;
+			}
+			//Subject currentUser = SecurityUtils.getSubject();
+			Subject currentUser2 = SecurityUtils.getSubject();
+			try {
+				userBean.setMember(memberInfo);
+				FinanceSiteToken siteToken = new FinanceSiteToken(userBean,
+						memberInfo.getPassword());
+				//currentUser.logout();
+				currentUser2.login(siteToken);
+				memberService.updateMenberLoginDate(memberInfo.getMemberNo());
+			} catch (AuthenticationException e) {
+				SxjLogger.error("登陆错误", e, this.getClass());
+				map.put("pmessage", "登陆错误");
+				return LOGIN;
+			}
+			if (currentUser2.isAuthenticated()) {
+				session.setAttribute("userinfo", userBean);
+				if (StringUtils.isNotEmpty(payId)) {
+					RQueue<Map<String, Object>> queue = collections
+							.getQueue(payId);
+					Map<String, Object> map1 = queue.poll();
+					financeService.setModel(map1);
+					queue.clear();
+				}
+				return "redirect:" + getBasePath(request)
+						+ "finance/financeList.htm";
+			} else {
+				map.put("message", "登陆失败");
+				map.put("payId", payId);
+				map.put("member", member);
+				map.put("token", token);
+				return LOGIN;
+			}
+
+		}
 		return LOGIN;
+
 	}
 
 	@RequestMapping("logout")
@@ -129,18 +183,12 @@ public class BasicController extends BaseController {
 					memberInfo.getPassword());
 			Subject currentUser = SecurityUtils.getSubject();
 			try {
+				//currentUser.logout();
 				currentUser.login(siteToken);
 				memberService.updateMenberLoginDate(memberInfo.getMemberNo());
-				if(!StringUtils.isEmpty(payId)){
-					RQueue<Map<String, Object>> queue = collections.getQueue(payId);
-					Map<String, Object> map1 = queue.poll();
-						financeService.setModel(map1);
-						queue.clear();
-				}
-				
 			} catch (AuthenticationException e) {
-				SxjLogger.error("登陆失败", e, this.getClass());
-				map.put("pmessage", "密码错误");
+				SxjLogger.error("登陆错误", e, this.getClass());
+				map.put("pmessage", "登陆错误");
 				map.put("payId", payId);
 				map.put("member", member);
 				map.put("token", token);
@@ -148,6 +196,13 @@ public class BasicController extends BaseController {
 			}
 			if (currentUser.isAuthenticated()) {
 				session.setAttribute("userinfo", userBean);
+				if (!StringUtils.isEmpty(payId)) {
+					RQueue<Map<String, Object>> queue = collections
+							.getQueue(payId);
+					Map<String, Object> map1 = queue.poll();
+					financeService.setModel(map1);
+					queue.clear();
+				}
 				return "redirect:" + getBasePath(request) + "index.htm";
 			} else {
 				map.put("message", "登陆失败");
@@ -238,8 +293,8 @@ public class BasicController extends BaseController {
 			currentUser.login(token);
 			memberService.updateMenberLoginDate(member.getMemberNo());
 		} catch (AuthenticationException e) {
-			SxjLogger.error("登陆失败", e, this.getClass());
-			map.put("pmessage", "密码错误");
+			SxjLogger.error("登陆错误", e, this.getClass());
+			map.put("pmessage", "登陆错误");
 			return LOGIN;
 
 		}

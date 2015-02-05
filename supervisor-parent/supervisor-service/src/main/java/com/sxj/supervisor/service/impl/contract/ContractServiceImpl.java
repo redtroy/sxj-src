@@ -2016,4 +2016,16 @@ public class ContractServiceImpl implements IContractService {
 			throw new ServiceException("更新生效时间错误", e);
 		}
 	}
+	@Override
+	public int getBindingState(String contractNo) {
+		try {
+			return recordDao.getBindingState(contractNo);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取备案绑定状态错误", e);
+		}
+	}
 }
