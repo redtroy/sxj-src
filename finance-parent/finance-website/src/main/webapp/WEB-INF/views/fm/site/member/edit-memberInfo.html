@@ -185,29 +185,29 @@ function close_img() {
 						</tr>
 						<tr>
 							<th>年龄</th>
-							<td><input type="text" name="memberInfo.age" id="" datatype="n1-2" nullmsg="请输入年龄" errormsg="请输入正确的年龄"
+							<td><input type="text" name="memberInfo.age" id="" ignore="ignore"  datatype="n1-2" nullmsg="请输入年龄" errormsg="请输入正确的年龄"
 								value="${loan.memberInfo.age}" class=" input input-w50h30" /></td>
 						</tr>
 						<tr>
 							<th>家庭住址</th>
-							<td><textarea name="memberInfo.homeAddress" id="" cols="80" datatype="*1-100" nullmsg="请输入家庭住址" errormsg="只能输入100个字符"
+							<td><textarea name="memberInfo.homeAddress" id="" ignore="ignore"  cols="80" datatype="*1-100" nullmsg="请输入家庭住址" errormsg="只能输入100个字符"
 									rows="2" class="input">${loan.memberInfo.homeAddress}</textarea></td>
 						</tr>
 						<tr>
 							<th>联系电话</th>
-							<td><input name="memberInfo.telNum" type="text" datatype="*1-15" nullmsg="请输入联系电话" errormsg="只能输入15个字符"
+							<td><input name="memberInfo.telNum" type="text" ignore="ignore"  datatype="*1-15" nullmsg="请输入联系电话" errormsg="只能输入15个字符"
 								value="${loan.memberInfo.telNum}" class=" input input-w180h30"
 								id="textfield4" /></td>
 						</tr>
 						<tr>
 							<th>身份证号</th>
-							<td><input name="memberInfo.cardNum" type="text" datatype="*1-18" nullmsg="请输入身份证号" errormsg="只能输入18个字符"
+							<td><input name="memberInfo.cardNum" type="text" ignore="ignore"  datatype="*1-18" nullmsg="请输入身份证号" errormsg="只能输入18个字符"
 								value="${loan.memberInfo.cardNum}" class=" input input-w180h30"
 								id="textfield5" /></td>
 						</tr>
 						<tr>
 							<th>电子邮箱</th>
-							<td><input type="text" name="memberInfo.email" datatype="e" nullmsg="请输入电子邮箱" 
+							<td><input type="text" name="memberInfo.email" datatype="e" ignore="ignore"  nullmsg="请输入电子邮箱" 
 								value="${loan.memberInfo.email}" id="textfield6"
 								class=" input input-w180h30" /></td>
 						</tr>
@@ -218,7 +218,7 @@ function close_img() {
 						</tr>
 						<tr>
 							<th>营业执照编码</th>
-							<td><input type="text" name="memberInfo.bLicence" datatype="*1-20" nullmsg="请输入营业执照编码" errormsg="只能输入20个字符"
+							<td><input type="text" name="memberInfo.bLicence" datatype="*1-20" ignore="ignore"  nullmsg="请输入营业执照编码" errormsg="只能输入20个字符"
 								id="textfield9" value="${loan.memberInfo.bLicence}"
 								class=" input input-w180h30" /></td>
 						</tr>
@@ -502,8 +502,8 @@ function close_img() {
 						</tr>
 					</table>
 					<div class="buttonBox memBtn">
-						<a href="javascript:void(0);" onclick="cancel()"
-							class="button button-red">取消修改</a>
+						<a href="javascript:void(0);" onclick="saveLoan()"
+							class="button button-red">修改会员信息</a>
 					</div> 
 				</form>
 			</div>
