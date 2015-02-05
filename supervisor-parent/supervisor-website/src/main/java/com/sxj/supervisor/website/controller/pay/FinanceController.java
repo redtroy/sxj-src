@@ -30,7 +30,7 @@ public class FinanceController extends BaseController {
 
 	@RequestMapping("finance")
 	public String finance(ModelMap map, AccountingModel query,
-			String startDate, String endDate, HttpSession session)
+			String startDate, String del, String endDate, HttpSession session)
 			throws WebException {
 		try {
 			if (query != null) {
@@ -46,6 +46,9 @@ public class FinanceController extends BaseController {
 			map.put("query", query);
 			String channelName = MessageChannel.WEBSITE_FINANCE_MESSAGE
 					+ memberNo;
+			if ("1".equals(del)) {
+				CometServiceImpl.setCount(channelName, 0l);
+			}
 			map.put("channelName", channelName);
 			// 注册监听
 
