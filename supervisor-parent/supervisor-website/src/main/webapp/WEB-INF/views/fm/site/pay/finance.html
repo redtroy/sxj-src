@@ -33,8 +33,7 @@ $(function(){
 		$('.viewer').slideUp(200);
 	});
 	$("#message_div").live("click",function(){
-		window.location.href="${basePath}finance/cleanChannel.htm?channelName=${channelName}";
-		window.location.href="${basePath}finance/finance.htm"; 
+		window.location.href="${basePath}finance/finance.htm?del=1"; 
 	})
 	JS.Engine.start('${basePath}comet');
 		JS.Engine.on({
