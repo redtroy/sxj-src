@@ -137,6 +137,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			QueryCondition<AccountingModel> condition = new QueryCondition<AccountingModel>();
 			condition.addCondition("recordNo", query.getRecordNo());// 备案号
 			condition.addCondition("contractNo", query.getContractNo());// 合同号
+			condition.addCondition("state", query.getState());// 合同状态
 			condition.addCondition("contractType", query.getContractType());// 合同类型
 			condition.addCondition("startDate", startDate);// 开始时间
 			condition.addCondition("endDate", endDate);// 结束时间

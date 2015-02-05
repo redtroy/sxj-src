@@ -49,8 +49,7 @@ jQuery(document).ready(function($) {
 		$('#'+obj).slideUp(200);
 	});
 	$("#message_div").live("click",function(){
-		window.location.href="${basePath}pay/cleanChannel.htm?channelName=${channelName}";
-		window.location.href="${basePath}pay/paylist.htm"; 
+		window.location.href="${basePath}pay/paylist.htm?del=1"; 
 	})
 	JS.Engine.start('${basePath}comet');
 		JS.Engine.on({

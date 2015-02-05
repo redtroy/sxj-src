@@ -12,6 +12,9 @@
 <Script>
 var editId;
 var pwd_validform;
+$.ajax({
+	   cache:false
+	 });
   //增加子账户
   function add_account(memberNo){
 	$.get("new_account.htm?memberNo="+memberNo,function(data){
@@ -117,14 +120,16 @@ var pwd_validform;
   function checkState(id,stateId){
 	  dialogBox(function(index){
 		  $.post("editState.htm",{id:id,state:stateId},function(data){
-			  layer.close(index);
+			 
 			  if (data.isOK=='ok'){
-				  query($("#pager").attr("currentPage"));
+				  setTimeout(query,500,$("#pager").attr("currentPage"));
 			   }else{
 					errorInfo(data);
 				}
+			  layer.close(index);
 		  });
 	  },"是否确认更改状态？");
+	  
 }
 //初始化函数
  $(window).resize(); 
@@ -201,9 +206,9 @@ var pwd_validform;
      	 </div>
       </td>
       <#if (account.state.id == 1)>
-      <td><button class="button button-red" onclick="checkState('${account.id}','0')" >停用</button></td>
+      <td><span class="button button-red" onclick="checkState('${account.id}','0')" >停用</span></td>
       <#elseif (account.state.id == 0)>
-      <td><button class="button button-green" onclick="checkState('${account.id}','1')" >恢复</button></td>
+      <td><span class="button button-green" onclick="checkState('${account.id}','1')" >恢复</span></td>
       </#if>
       <td>${account.regDate?string("yyyy-MM-dd HH:mm:ss")}</td>
       <td id="edit_td"><a href="javascript:void(0);" class="lnk-blue mr20" onclick="edit_account('${account.id}')"><span class="icon icon16 icon-edit"></span>修改</a><a href="javascript:void(0);" class="lnk-blue btnPassword" onclick="edit_pwd('${account.id}')"><span class="icon icon16 icon-password" ></span>修改密码</a></td>
