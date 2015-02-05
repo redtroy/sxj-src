@@ -116,15 +116,17 @@ $(function(){
   <div class="searBox f12 mb10" id="serch_div">
     合同号<input type="text" class="input" name="contractNo" value="">
     签订时间<input type="text" class="input input-time cal form-control" name="startDate" value="" datepicker />-<input type="text" class="input input-time cal form-control" name="endDate" value="" datepicker>
-    合同状态<select name="select">
-		    <option selected="selected">全部</option>
-            <option>进行中</option>
-            <option>已完成</option>
+    合同状态<select name="state">
+		    <option selected="selected" value="">全部</option>
+            <option value="0">进行中</option>
+            <option value="1">已完成</option>
           </select>
     合同类型<select name="contractType">
 		    <option selected="selected" value="">全部</option>
 		    <#list types as type>
+		    <#if (type.id != 0)>
             <option value="${type.id}">${type.getName()}</option>
+            </#if>
             </#list>
           </select>
           <button class="button button-search" onclick="query();return false;">查询</button>

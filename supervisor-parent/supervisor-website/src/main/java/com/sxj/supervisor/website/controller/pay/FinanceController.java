@@ -46,7 +46,7 @@ public class FinanceController extends BaseController {
 			map.put("query", query);
 			String channelName = MessageChannel.WEBSITE_FINANCE_MESSAGE
 					+ memberNo;
-			if (del.equals("1")) {
+			if ("1".equals(del)) {
 				CometServiceImpl.setCount(channelName, 0l);
 			}
 			map.put("channelName", channelName);
