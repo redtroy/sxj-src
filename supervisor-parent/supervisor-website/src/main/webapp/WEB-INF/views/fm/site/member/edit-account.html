@@ -11,6 +11,10 @@
 <@b.dialogBox/>
 <Script>
 var editId;
+var rightDiv;
+$(document).ready(function(){
+	rightDiv=$("#right_div");
+});
 var pwd_validform;
   //增加子账户
   function add_account(memberNo){
@@ -23,8 +27,8 @@ var pwd_validform;
 		var params=$("#search_form").serialize();
 		$.post("accountList.htm?rand="+Math.random(),params,function(data){
 			var res=$(data).find("#right_div");
-			$("#right_div").empty();
-			$("#right_div").append(res.html());
+			rightDiv.empty();
+			rightDiv.append(res.html());
 		});
   }
   
@@ -117,12 +121,13 @@ var pwd_validform;
   function checkState(id,stateId){
 	  dialogBox(function(index){
 		  $.post("editState.htm",{id:id,state:stateId},function(data){
-			  layer.close(index);
+			 
 			  if (data.isOK=='ok'){
-				  query($("#pager").attr("currentPage"));
+				  setTimeout(query($("#pager").attr("currentPage")),500);
 			   }else{
 					errorInfo(data);
 				}
+			  layer.close(index);
 		  });
 	  },"是否确认更改状态？");
 }
