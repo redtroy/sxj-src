@@ -40,22 +40,43 @@
 		var id = $("#recordId").val();
 		var contractId = $("#contractId").val();
 		var message = $("#message").val();
-		dialogBox(function(index) {
-			$.post("confirmRecord.htm", {
-				recordId : id,
-				contractId : contractId,
-				message : message
-			}, function(data) {
-				layer.close(index);
-				if (data.isOK == 'ok') {
-					succInfo(function() {
-						window.location.href = "${basePath}pay/paylist.htm";
-					}, "确认成功!");
-				} else {
-					messageInfo("确认失败!");
-				}
-			})
-		}, "确认本合同并去支付合同定金?");
+		var type = "${type}";
+		if(type==0){
+			dialogBox(function(index) {
+				$.post("confirmRecord.htm", {
+					recordId : id,
+					contractId : contractId,
+					message : message
+				}, function(data) {
+					layer.close(index);
+					if (data.isOK == 'ok') {
+						succInfo(function() {
+							window.location.href = "${basePath}pay/paylist.htm";
+						}, "确认成功!");
+					} else {
+						messageInfo("确认失败!");
+					}
+				})
+			}, "确认本合同并去支付合同定金?");	
+		}else{
+			dialogBox(function(index) {
+				$.post("confirmRecord.htm", {
+					recordId : id,
+					contractId : contractId,
+					message : message
+				}, function(data) {
+					layer.close(index);
+					if (data.isOK == 'ok') {
+						succInfo(function() {
+							window.location.href = "query.htm";
+						}, "确认成功!");
+					} else {
+						messageInfo("确认失败!");
+					}
+				})
+			}, "是否确认合同?");
+		}
+	
 	}
 
 	$(document)
