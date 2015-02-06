@@ -1,4 +1,4 @@
-package com.sxj.statemachine.spring;
+package com.sxj.supervisor.service.statemachine.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
