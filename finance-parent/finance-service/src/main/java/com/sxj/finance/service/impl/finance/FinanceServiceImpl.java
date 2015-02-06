@@ -109,7 +109,8 @@ public class FinanceServiceImpl implements IFinanceService {
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("payNo", f.getPayNo());
 				map.put("state", "2");
-				cl.post(url, map);
+				String res = cl.post(url, map);
+				SxjLogger.info(res, this.getClass());
 			} else {
 				return false;
 			}
