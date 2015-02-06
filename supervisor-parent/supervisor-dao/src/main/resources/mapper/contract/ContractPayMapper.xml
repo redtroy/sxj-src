@@ -30,6 +30,10 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM M_CONTRACT_PAY WHERE RFID_NO=#{rfidNo}]]>
 	</select>
+	<select id="getEntityByPayNo" resultMap="ContractPayResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_CONTRACT_PAY WHERE PAY_NO=#{payNo}]]>
+	</select>
 	<update id="changeState">
 		<![CDATA[UPDATE M_CONTRACT_PAY SET STATE=#{state} where PAY_NO=#{payNo}]]>
 	</update>

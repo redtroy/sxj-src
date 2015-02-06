@@ -1,17 +1,19 @@
 package com.sxj.supervisor.service.impl.contract;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.redis.core.pubsub.RedisTopics;
+import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.supervisor.dao.contract.IAccountingDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
+import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractPayModel;
@@ -37,6 +39,14 @@ public class ContractPayServiceImpl implements IContractPayService {
 	@Autowired
 	private RedisTopics redisTopics;
 
+	@Autowired
+	@Qualifier("payStageFsm")
+	private StateMachineImpl<PayStageEnum> payStageFsm;
+
+	@Autowired
+	@Qualifier("payModeFsm")
+	private StateMachineImpl<PayModeEnum> payModeFsm;
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<PayRecordEntity> queryPayList(ContractPayModel query)
@@ -57,9 +67,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.addCondition("state", query.getState());//
 			condition.addCondition("memberName_A", query.getMemberNameA());//
 			condition.addCondition("payMode", query.getPayMode());//
-			condition.addCondition("type", query.getType());//
-			condition.addCondition("PayContentState",
-					query.getPayContentState());//
+			condition.addCondition("type", query.getContractType());// 支付类型
+			condition.addCondition("PayContentState", query.getPayType());// 支付内容状态
 			condition.setPage(query);
 			payList = payDao.queryPayContract(condition);
 			query.setPage(condition);
@@ -71,59 +80,82 @@ public class ContractPayServiceImpl implements IContractPayService {
 	}
 
 	@Override
-	public void updateState(String id, Integer state) throws ServiceException {
-		// TODO Auto-generated method stub
-
+	public String updateState(PayRecordEntity re) throws ServiceException {
+		try {
+			payStageFsm.setCurrentState(re.getState());
+			payStageFsm.fire(re.getState().toString(), re);
+			payDao.updatePay(re);
+		} catch (Exception e) {
+			SxjLogger.error("更改状态出错!", e, this.getClass());
+			throw new ServiceException("更改状态出错!", e);
+		}
+		return "ok";
 	}
 
-	/**
-	 * 甲方付款
-	 */
 	@Override
-	@Transactional
-	public String pay(String id, Double payReal) throws ServiceException {
+	public String updateMode(String payNo, String event)
+			throws ServiceException {
 		try {
-			PayRecordEntity re = payDao.getPayRecordEntity(id);
-			PayStageEnum[] payState = PayStageEnum.values();
-			if (re.getState().ordinal() < 4) {
-				re.setPayReal(payReal);
-				re.setState(payState[4]);
-				re.setPayDate(new Date());
-				payDao.updatePay(re);
-				return "ok";
-			} else {
-				return "false";
-			}
+			PayRecordEntity re = getPayNoBypayNo(payNo);
+			payModeFsm.setCurrentState(re.getPayMode());
+			payModeFsm.fire(re.getPayMode().toString() + "_"
+					+ re.getState().toString() + "_" + event, re);
+			payDao.updatePay(re);
+			return "ok";
 		} catch (Exception e) {
-			SxjLogger.error("甲方付款出错！", e, this.getClass());
-			throw new ServiceException("甲方付款出错！", e);
+			SxjLogger.error("更改状态出错!", e, this.getClass());
+			return "false";
 		}
 	}
 
-	/**
-	 * 乙方确认收款
-	 */
-	@Override
-	@Transactional
-	public String payOk(String id) throws ServiceException {
-		try {
-			PayRecordEntity re = payDao.getPayRecordEntity(id);
-			PayStageEnum[] payState = PayStageEnum.values();
-			if (re.getState().ordinal() == 4) {
-				re.setState(payState[5]);
-				payDao.updatePay(re);
-				contractService.modifyBatchPayState(re.getContractNo(),
-						re.getRfidNo(), re.getPayNo());
-				contractService.updateStartDate(re.getContractNo());
-				return "ok";
-			} else {
-				return "false";
-			}
-		} catch (Exception e) {
-			SxjLogger.error("乙方确认付款出错！", e, this.getClass());
-			throw new ServiceException("乙方确认付款出错！", e);
-		}
-	}
+	// /**
+	// * 甲方付款
+	// */
+	// @Override
+	// @Transactional
+	// public String pay(String id, Double payReal) throws ServiceException {
+	// try {
+	// PayRecordEntity re = payDao.getPayRecordEntity(id);
+	// PayStageEnum[] payState = PayStageEnum.values();
+	// if (re.getState().ordinal() < 4) {
+	// re.setPayReal(payReal);
+	// re.setState(payState[4]);
+	// re.setPayDate(new Date());
+	// payDao.updatePay(re);
+	// return "ok";
+	// } else {
+	// return "false";
+	// }
+	// } catch (Exception e) {
+	// SxjLogger.error("甲方付款出错！", e, this.getClass());
+	// throw new ServiceException("甲方付款出错！", e);
+	// }
+	// }
+
+	// /**
+	// * 乙方确认收款
+	// */
+	// @Override
+	// @Transactional
+	// public String payOk(String id) throws ServiceException {
+	// try {
+	// PayRecordEntity re = payDao.getPayRecordEntity(id);
+	// PayStageEnum[] payState = PayStageEnum.values();
+	// if (re.getState().ordinal() == 4) {
+	// re.setState(payState[5]);
+	// payDao.updatePay(re);
+	// contractService.modifyBatchPayState(re.getContractNo(),
+	// re.getRfidNo(), re.getPayNo());
+	// contractService.updateStartDate(re.getContractNo());
+	// return "ok";
+	// } else {
+	// return "false";
+	// }
+	// } catch (Exception e) {
+	// SxjLogger.error("乙方确认付款出错！", e, this.getClass());
+	// throw new ServiceException("乙方确认付款出错！", e);
+	// }
+	// }
 
 	/**
 	 * 财务统计查询
@@ -225,14 +257,25 @@ public class ContractPayServiceImpl implements IContractPayService {
 	}
 
 	@Override
-	public String changeState(String payNo, String state)
+	public PayRecordEntity getPayNoBypayNo(String payNo)
 			throws ServiceException {
 		try {
-			payDao.changeState(payNo, state);
-			return "1";
+			return payDao.getEntityByPayNo(payNo);
 		} catch (Exception e) {
-			SxjLogger.error("改变支付状态出错", e, this.getClass());
-			throw new ServiceException("改变支付状态出错", e);
+			SxjLogger.error("根据支付单号查询实体出错！", e, this.getClass());
+			throw new ServiceException("根据支付单号查询实体出错！", e);
 		}
 	}
+
+	// @Override
+	// public String changeState(String payNo, String state)
+	// throws ServiceException {
+	// try {
+	// payDao.changeState(payNo, state);
+	// return "1";
+	// } catch (Exception e) {
+	// SxjLogger.error("改变支付状态出错", e, this.getClass());
+	// throw new ServiceException("改变支付状态出错", e);
+	// }
+	// }
 }

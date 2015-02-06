@@ -221,7 +221,7 @@ function to_finance(payId){
       <td>-</td>
       </#if>
       <td>${model.content}</td>
-      <#if (model.state.ordinal()==0)>
+      <#if (model.state.ordinal()==0 && model.payMode.ordinal()==0)>
           <#if (state=="a")>
            <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button>
            <button class="button button-orange" onclick="to_finance('${model.id}');">融资</button>
@@ -240,7 +240,7 @@ function to_finance(payId){
           <#else>
           <td><span class="state normal">等待付款</span></td>
           </#if>
-       <#elseif (model.state.ordinal()==1)>
+       <#elseif (model.state.ordinal()==0 && model.payMode.ordinal()==1)>
             <#if (state=="a")>
                <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button><span class="state normal">融资受理中</span>
                <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
@@ -259,7 +259,7 @@ function to_finance(payId){
             <#else>
                 <td><span class="state normal">等待付款</span></td>
             </#if>
-       <#elseif (model.state.ordinal()==2)>
+       <#elseif (model.state.ordinal()==0 && model.payMode.ordinal()==3)>
              <#if (state=="a")>
                <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button><span class="state verified">融资已放款</span>
                <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
@@ -278,7 +278,7 @@ function to_finance(payId){
                <#else>
                 <td><span class="state normal">等待付款</span></td>
             </#if>
-          <#elseif (model.state.ordinal()==3)>
+          <#elseif (model.state.ordinal()==0 && model.payMode.ordinal()==2)>
              <#if (state=="a")>
                <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button><span class="state process">融资已搁置</span>
                <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
@@ -297,7 +297,7 @@ function to_finance(payId){
                <#else>
                 <td><span class="state normal">等待付款</span></td>
             </#if>
-          <#elseif (model.state.ordinal()==4)> 
+          <#elseif (model.state.ordinal()==1)> 
              <#if (state=="a")>
                <td><span class="state normal">乙方确认中</span></td>
             <#else>
@@ -315,7 +315,7 @@ function to_finance(payId){
                   </div>
                </div></td>
             </#if>
-       <#elseif (model.state.ordinal()==5)>
+       <#elseif (model.state.ordinal()==2)>
             <td><span class="state verified">已完成支付</span></td>
        </#if> 
       </tr>

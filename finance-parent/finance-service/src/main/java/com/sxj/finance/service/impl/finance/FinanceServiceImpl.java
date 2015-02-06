@@ -108,7 +108,7 @@ public class FinanceServiceImpl implements IFinanceService {
 				financeDao.update(fe);
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("payNo", f.getPayNo());
-				map.put("state", "2");
+				map.put("state", f.getState().toString());
 				String res = cl.post(url, map);
 				SxjLogger.info(res, this.getClass());
 			} else {
@@ -132,7 +132,7 @@ public class FinanceServiceImpl implements IFinanceService {
 				financeDao.update(fe);
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("payNo", f.getPayNo());
-				map.put("state", "3");
+				map.put("state", f.getState().toString());
 				cl.post(url, map);
 			} else {
 				return false;

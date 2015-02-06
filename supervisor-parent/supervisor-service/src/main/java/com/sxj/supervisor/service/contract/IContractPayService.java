@@ -17,17 +17,25 @@ public interface IContractPayService {
 	/**
 	 * 更改收款、付款状态
 	 */
-	public void updateState(String id, Integer state) throws ServiceException;
+	public String updateState(PayRecordEntity re) throws ServiceException;
 
 	/**
-	 * 甲方付款
+	 * 
+	 * @param id
+	 * @param event
+	 * @throws ServiceException
 	 */
-	public String pay(String id, Double payReal) throws ServiceException;
+	public String updateMode(String id, String event) throws ServiceException;
 
-	/**
-	 * 乙方确认收款
-	 */
-	public String payOk(String id) throws ServiceException;
+	// /**
+	// * 甲方付款
+	// */
+	// public String pay(String id, Double payReal) throws ServiceException;
+	//
+	// /**
+	// * 乙方确认收款
+	// */
+	// public String payOk(String id) throws ServiceException;
 
 	/**
 	 * 财务统计查询
@@ -53,8 +61,8 @@ public interface IContractPayService {
 	public String getPayNoByRfidNo(String rfidNo) throws ServiceException;
 
 	/**
-	 * 更改融资状态
+	 * 根据支付单号，获取支付单实体
 	 */
-	public String changeState(String payNo, String state)
+	public PayRecordEntity getPayNoBypayNo(String payNo)
 			throws ServiceException;
 }

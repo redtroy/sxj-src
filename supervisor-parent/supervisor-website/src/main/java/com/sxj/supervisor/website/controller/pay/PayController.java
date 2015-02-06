@@ -160,10 +160,11 @@ public class PayController extends BaseController {
 	public @ResponseBody Map<String, String> pay(String id, Double payReal)
 			throws WebException {
 		try {
-			String flag = payService.pay(id, payReal);
+			PayRecordEntity pay = payService.getPayRecordEntity(id);
+			pay.setPayReal(payReal);
+			String flag = payService.updateState(pay);
 			Map<String, String> map = new HashMap<String, String>();
 			if (flag.equals("ok")) {
-				PayRecordEntity pay = payService.getPayRecordEntity(id);
 				// 甲方
 				/*
 				 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
@@ -194,10 +195,11 @@ public class PayController extends BaseController {
 	public @ResponseBody Map<String, String> pay_ok(String id)
 			throws WebException {
 		try {
-			String flag = payService.payOk(id);
+			PayRecordEntity pay = payService.getPayRecordEntity(id);
+			String flag = payService.updateState(pay);
 			Map<String, String> map = new HashMap<String, String>();
 			if (flag.equals("ok")) {
-				PayRecordEntity pay = payService.getPayRecordEntity(id);
+				// PayRecordEntity pay = payService.getPayRecordEntity(id);
 				// 乙方
 				/*
 				 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
@@ -276,7 +278,7 @@ public class PayController extends BaseController {
 			String state) throws WebException {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			String flag = payService.changeState(payNo, state);
+			String flag = payService.updateMode(payNo, state);
 			map.put("flag", flag);
 		} catch (Exception e) {
 			SxjLogger.error("更改状态出错", e, this.getClass());
