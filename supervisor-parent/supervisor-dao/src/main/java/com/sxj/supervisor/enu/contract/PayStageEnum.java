@@ -1,7 +1,7 @@
 package com.sxj.supervisor.enu.contract;
 
 public enum PayStageEnum {
-	STAGE1("未付款", "等待付款"), STAGE2("乙方确认中", "确认付款"), STAGE3("已完成支付", "已完成支付");
+	STAGE1("未付款", "等待付款"), STAGE2("乙方确认中", "确认收款"), STAGE3("已完成支付", "已完成支付");
 	private String nameA;
 
 	private String nameB;

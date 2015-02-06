@@ -101,10 +101,10 @@ public class ContractPayServiceImpl implements IContractPayService {
 			payModeFsm.fire(re.getPayMode().toString() + "_"
 					+ re.getState().toString() + "_" + event, re);
 			payDao.updatePay(re);
-			return "ok";
+			return "1";
 		} catch (Exception e) {
 			SxjLogger.error("更改状态出错!", e, this.getClass());
-			return "false";
+			throw new ServiceException("更改状态出错!", e);
 		}
 	}
 

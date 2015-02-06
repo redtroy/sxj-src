@@ -14,6 +14,7 @@ import com.sxj.finance.entity.FinanceEntity;
 import com.sxj.finance.enu.finance.PayStageEnum;
 import com.sxj.finance.model.finance.FinanceModel;
 import com.sxj.finance.service.finance.IFinanceService;
+import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.util.common.ISxjHttpClient;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -22,9 +23,9 @@ import com.sxj.util.persistent.QueryCondition;
 @Service
 public class FinanceServiceImpl implements IFinanceService {
 
+	private final String url = "http://www.menchuang.org.cn:8080/supervisor-website/pay/changeState.htm";
 	// private final String url =
-	// "http://www.menchuang.org.cn:8080/supervisor-website/pay/changeState.htm";
-	private final String url = "http://www.menchuang.org.cn/pay/changeState.htm";
+	// "http://www.menchuang.org.cn/pay/changeState.htm";
 
 	@Autowired
 	private FinanceDao financeDao;
@@ -108,17 +109,22 @@ public class FinanceServiceImpl implements IFinanceService {
 				financeDao.update(fe);
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("payNo", f.getPayNo());
-				map.put("state", f.getState().toString());
+				map.put("state", fe.getState().toString());
 				String res = cl.post(url, map);
-				SxjLogger.info(res, this.getClass());
+				Map<String, String> jmap = JsonMapper.nonDefaultMapper()
+						.fromJson(res, HashMap.class);
+				if ("1".equals(jmap.get("flag"))) {
+					return true;
+				} else {
+					throw new ServiceException("同步状态出错");
+				}
 			} else {
 				return false;
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			return false;
+			throw new ServiceException(e.getMessage(), e);
 		}
-		return true;
 	}
 
 	@Override
@@ -132,17 +138,23 @@ public class FinanceServiceImpl implements IFinanceService {
 				financeDao.update(fe);
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("payNo", f.getPayNo());
-				map.put("state", f.getState().toString());
-				cl.post(url, map);
+				map.put("state", fe.getState().toString());
+				String res = cl.post(url, map);
+				Map<String, String> jmap = JsonMapper.nonDefaultMapper()
+						.fromJson(res, HashMap.class);
+				if ("1".equals(jmap.get("flag"))) {
+					return true;
+				} else {
+					throw new ServiceException("同步状态出错");
+				}
 			} else {
 				return false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			return false;
+			throw new ServiceException(e.getMessage(), e);
 		}
-		return true;
 	}
 
 	@Override

@@ -28,6 +28,15 @@
 		</dependency>
 
 		<!-- springside -->
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>4.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-extension</artifactId>
+		</dependency>
 		<!-- Spring -->
 
 

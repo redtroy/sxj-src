@@ -74,6 +74,14 @@ public class PayController extends BaseController {
 		try {
 			if (query != null) {
 				query.setPagable(true);
+				if (!"".equals(query.getState()) && query.getState() != null) {
+					String[] states = query.getState().split("_");
+					if ("M".equals(states[0])) {
+						query.setPayMode(states[1]);
+					} else if ("S".equals(states[0])) {
+						query.setState(states[1]);
+					}
+				}
 			}
 			SupervisorPrincipal info = getLoginInfo(session);
 			String memberNo = info.getMember().getMemberNo();

@@ -62,7 +62,7 @@
 		<if test="condition.rfidNo != null and condition.rfidNo != ''">
 			<![CDATA[AND P.RFID_NO like CONCAT('%',#{condition.rfidNo},'%')]]>
 		</if>
-		<!-- 付款状态/收款状态 -->
+		<!-- 付款状态/收款状态 
 		<if
 			test="condition.state != null and condition.state !='' and condition.memberType != 1 and condition.memberType != 2">
 			<![CDATA[AND P.STATE =#{condition.state}]]>
@@ -75,6 +75,13 @@
 			<if test="condition.state &gt;3">
 			<![CDATA[AND P.STATE =#{condition.state}]]>
 			</if>
+		</if>-->
+		<!-- STATE -->
+		<if test="condition.state != null and condition.state != ''">
+			<![CDATA[AND P.STATE = #{condition.state}]]>
+		</if>
+		<if test="condition.payMode != null and condition.payMode != ''">
+			<![CDATA[AND P.PAY_MODE = #{condition.payMode}]]>
 		</if>
 		<!-- 支付内容状态 -->
 		<if
