@@ -1,8 +1,16 @@
-ï»¿
-		<!-- åˆåŒè¯¦æƒ… -->
+
+		<!-- ºÏÍ¬ÏêÇé -->
 	<td colspan="12">
 		<script type="text/javascript">
 	$(document).ready(function(){
+		var browser=navigator.appName;
+		if (browser=="Netscape"||browser=="Microsoft Internet Explorer"){
+			$('.elastislide-list').each(function(){
+				$(this).find("img").each(function(){
+					$(this).attr("src",$(this).attr("data-image"));
+				});
+			});
+		}
 		var start=0;
 		
 		$('.imagelist').each(function(){
@@ -64,39 +72,39 @@
 				$(this).html(parseFloat($(this).html()).toFixed(2));
 			}
 		});
-		$(".tquantity").html(quantity+"æ¨˜");
-		$(".tamount").html(amount.toFixed(2)+"å…ƒ");
+		$(".tquantity").html(quantity+"éÌ");
+		$(".tamount").html(amount.toFixed(2)+"Ôª");
 	});
 	</script>
 		<div class="contInfo tl">
 		<ul class="tabMenu tabs">
-              <li class="current">åˆåŒä¿¡æ¯</li>
+              <li class="current">ºÏÍ¬ĞÅÏ¢</li>
          </ul>
                   <div class="info ly-clearFix">
                     <div class="item">
-                      <label>åˆåŒå·</label>
+                      <label>ºÏÍ¬ºÅ</label>
                       ${contractModel.contract.contractNo}</div>
                       <div class="item">
                       <label>&nbsp;</label>
                       &nbsp;</div>
                     <div class="item">
-                      <label>å·¥ç¨‹åç§°</label>
+                      <label>¹¤³ÌÃû³Æ</label>
                      ${contractModel.contract.engName}</div>
                      <div class="item">
-                      <label>å·¥ç¨‹åœ°ç‚¹</label>
+                      <label>¹¤³ÌµØµã</label>
                      ${contractModel.contract.engAddress} </div>
                     <div class="item">
-                      <label>ç”²æ–¹</label>
+                      <label>¼×·½</label>
                       ${contractModel.contract.memberNameA}</div>
                     <div class="item">
-                      <label>ä¹™æ–¹</label>
+                      <label>ÒÒ·½</label>
                       ${contractModel.contract.memberNameB}</div>
                     <div class="item">
-                      <label>ç­¾è®¢åœ°ç‚¹</label>
+                      <label>Ç©¶©µØµã</label>
                      ${contractModel.contract.address}</div>
                     <div class="item">
-                      <label>ç­¾è®¢æ—¶é—´</label>
-                      ${contractModel.contract.signedDate?string("yyyyå¹´MMæœˆddæ—¥")}</div>
+                      <label>Ç©¶©Ê±¼ä</label>
+                      ${contractModel.contract.signedDate?string("yyyyÄêMMÔÂddÈÕ")}</div>
                   </div>
                   <div class="item ly-clearFix">
                     <label class="ly-left">&nbsp;</label>
@@ -108,12 +116,12 @@
                       <col width="13%" />
                       <col width="30%" />
                       <tr>
-                        <th>äº§å“åç§°</th>
-                        <th>å‹å·è§„æ ¼</th>
-                        <th>æ•°é‡<span>ï¼ˆæ¨˜ï¼‰</span></th>
-                        <th>å•ä»·<span>ï¼ˆå…ƒï¼‰</span></th>
-                        <th>é‡‘é¢</th>
-                        <th>å¤‡æ³¨è¯´æ˜</th>
+                        <th>²úÆ·Ãû³Æ</th>
+                        <th>ĞÍºÅ¹æ¸ñ</th>
+                        <th>ÊıÁ¿<span>£¨éÌ£©</span></th>
+                        <th>µ¥¼Û<span>£¨Ôª£©</span></th>
+                        <th>½ğ¶î</th>
+                        <th>±¸×¢ËµÃ÷</th>
                       </tr>
 			            <#list contractModel.itemList as item>
                       <tr>
@@ -126,7 +134,7 @@
                       </tr>
                        </#list>
                       <tr class="fb">
-                        <td>åˆè®¡</td>
+                        <td>ºÏ¼Æ</td>
                         <td>&nbsp;</td>
                         <td class="tquantity"></td>
                         <td>&nbsp;</td>
@@ -134,19 +142,19 @@
                         <#if contractModel.contract.imgPath!=null>
                         <td class="tl">
                         <#assign arr=(contractModel.contract.imgPath?split(","))>
-                 		æœ¬åˆåŒé™„ä»¶æ¸…å•å…±${arr?size}é¡µ</td>
+                 		±¾ºÏÍ¬¸½¼şÇåµ¥¹²${arr?size}Ò³</td>
                  		<#else>
                  		<td class="tl">
-                 		æœ¬åˆåŒé™„ä»¶æ¸…å•å…±0é¡µ</td>
+                 		±¾ºÏÍ¬¸½¼şÇåµ¥¹²0Ò³</td>
                  		</#if>
                       </tr>
                     </table>
                   </div>
                   <div class="item">
-                    <label>åˆåŒå¤‡æ³¨</label>
+                    <label>ºÏÍ¬±¸×¢</label>
                     ${contractModel.contract.remarks}</div>
                   <div class="item">
-                    <label>åˆåŒæ‰«æä»¶</label>
+                    <label>ºÏÍ¬É¨Ãè¼ş</label>
                    	</div>
                   <div class="item">
                     <label>&nbsp;</label>
@@ -164,6 +172,6 @@
                     </div>
                   <div class="item mt10">
                     <label>&nbsp;</label>
-                    <button class="button button-gray" onclick="closeContract('${recordNo}')">æ”¶èµ·</button>
+                    <button class="button button-gray" onclick="closeContract('${recordNo}')">ÊÕÆğ</button>
                   </div>
                 </div></td>

@@ -312,7 +312,7 @@ public class ContractProcessServiceImpl implements IContractProcessService
             pay.setPayAmount(con.getDeposit());// 定金
             pay.setContent("合同定金");
             pay.setState(PayStageEnum.STAGE1);
-            pay.setPayMode(PayModeEnum.CASH);
+            pay.setPayMode(PayModeEnum.MODE1);
             if (con.getType().equals(ContractTypeEnum.GLASS))
             {
                 pay.setContractType(PayContractTypeEnum.GLASS);
