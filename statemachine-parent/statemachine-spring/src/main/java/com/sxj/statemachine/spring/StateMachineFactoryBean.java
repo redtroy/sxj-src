@@ -1,5 +1,6 @@
 package com.sxj.statemachine.spring;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -21,6 +24,7 @@ import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
 import org.springframework.util.Assert;
 
 import com.sxj.statemachine.StateMachineFactory;
+import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.statemachine.annotations.StateMachine;
 import com.sxj.statemachine.exceptions.StateMachineException;
 
@@ -63,7 +67,26 @@ public class StateMachineFactoryBean implements BeanFactoryPostProcessor,
                         if (beanNamesForType == null
                                 || beanNamesForType.length == 0)
                         {
-                            BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(Class.forName(className));
+                            Class<?> clazz = Class.forName(className);
+                            BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(clazz);
+                            builder.setAutowireMode(Autowire.BY_TYPE.ordinal());
+                            Field[] fields = clazz.getDeclaredFields();
+                            for (Field field : fields)
+                            {
+                                if (field.getType()
+                                        .equals(StateMachineImpl.class))
+                                    if (field.isAnnotationPresent(Qualifier.class))
+                                    {
+                                        String depend = field.getAnnotation(Qualifier.class)
+                                                .value();
+                                        builder.addDependsOn(depend);
+                                    }
+                                    else
+                                    {
+                                        builder.addDependsOn(field.getName());
+                                    }
+                            }
+                            
                             dlbf.registerBeanDefinition(className,
                                     builder.getBeanDefinition());
                         }
@@ -89,14 +112,14 @@ public class StateMachineFactoryBean implements BeanFactoryPostProcessor,
             String wrappedBean = getWrappedBean(dlbf, clazz);
             if (wrappedBean != null)
             {
-                builder.addConstructorArgValue(instance)
-                        .addConstructorArgReference(wrappedBean);
+                builder.addConstructorArgReference(wrappedBean);
             }
             else
             {
                 builder.addConstructorArgValue(instance);
             }
             builder.setLazyInit(false);
+            
             dlbf.registerBeanDefinition(name, builder.getBeanDefinition());
         }
     }
