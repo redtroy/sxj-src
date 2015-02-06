@@ -29,6 +29,7 @@ import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
+import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
@@ -400,7 +401,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
                                 pay.setContent("第" + cb.getBatchNo() + "批次型材货款");
                             }
                             pay.setState(PayStageEnum.STAGE1);
-                            pay.setPayMode(PayModeEnum.CASH);
+                            pay.setPayMode(PayModeEnum.MODE1);
                             pay.setPayType(PayTypeEnum.PAYMENT);
                             contractPayService.addPayRecordEntity(pay);// 生成支付单
                             return 1;
