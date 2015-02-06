@@ -8,10 +8,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
-import com.sxj.supervisor.enu.contract.PayTypeEnum;
+import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
-import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
+import com.sxj.supervisor.enu.contract.PayTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractPayModel;
