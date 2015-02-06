@@ -1,19 +1,20 @@
 package com.sxj.supervisor.enu.contract;
 
-public enum PayContentStateEnum
+public enum PayContractTypeEnum
 {
-    DEPOSIT("定金", 0), PAYMENT("货款", 1);
+    GLASS("玻璃", 0), EXTRUDERS("型材", 1);
     
     // 成员变量
     private Integer id;
     
     private String name;
     
-    private PayContentStateEnum(String name, Integer id)
+    private PayContractTypeEnum(String name, Integer id)
     {
         this.name = name;
         this.id = id;
     }
+    
     
     public Integer getId()
     {
