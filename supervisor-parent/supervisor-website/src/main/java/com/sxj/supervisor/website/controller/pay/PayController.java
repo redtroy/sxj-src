@@ -18,6 +18,7 @@ import com.sxj.redis.core.RQueue;
 import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
+import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -79,6 +80,7 @@ public class PayController extends BaseController {
 			query.setMemberNo(memberNo);
 			query.setMemberType(info.getMember().getType().getId().toString());
 			List<PayRecordEntity> list = payService.queryPayList(query);
+			PayModeEnum[] payMode = PayModeEnum.values();
 			PayStageEnum[] payState = PayStageEnum.values();
 			map.put("list", list);
 			if (info.getMember().getType().getId() == 0) {
@@ -91,6 +93,7 @@ public class PayController extends BaseController {
 				CometServiceImpl.setCount(channelName, 0l);
 			}
 			map.put("payState", payState);
+			map.put("payMode", payMode);
 			map.put("query", query);
 			map.put("channelName", channelName);
 			// 注册监听
