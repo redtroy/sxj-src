@@ -29,7 +29,6 @@ import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
-import com.sxj.supervisor.enu.contract.PayContentStateEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
@@ -349,72 +348,81 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	}
 
 	/**
-	 * 验收
-	 */
-	@Override
-	@Transactional
-	public int accepting(String gid) throws ServiceException {
-		try {
-			String rfid = logisticsDao.getRfid(gid).get(0);
-			if (StringUtils.isNotEmpty(rfid)) {
-				QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
-				logisticsQuery.addCondition("rfidNo", rfid);
-				List<LogisticsRfidEntity> ref = logisticsDao
-						.queryLogisticsRfidList(logisticsQuery);
-				if (ref != null && ref.size() > 0) {
-					LogisticsRfidEntity le = ref.get(0);
-					if (le.getProgressState().getId() == 3) {
-						le.setProgressState(LabelStateEnum.HAS_QUALITY);
-						logisticsDao.updateLogisticsRfid(le);
-						// 获取合同信息
-						ContractModel cm = contractService
-								.getContractModelByContractNo(le
-										.getContractNo());
-						if (cm != null) {
-							// 获取批次信息
-							ContractBatchEntity cb = contractBatchDao
-									.getBacthsByRfid(rfid);
-							// 生成支付单
-							PayRecordEntity pay = new PayRecordEntity();
-							pay.setMemberNoA(cm.getContract().getMemberIdA());
-							pay.setMemberNameA(cm.getContract()
-									.getMemberNameA());
-							pay.setMemberNoB(cm.getContract().getMemberIdB());
-							pay.setMemberNameB(cm.getContract()
-									.getMemberNameB());
-							pay.setContractNo(cm.getContract().getContractNo());
-							pay.setRfidNo(rfid);
-							pay.setDateNo(cm.getContract().getContractNo()
-									+ "P");// 编号
-							pay.setBatchNo(cb.getBatchNo());
-							pay.setPayAmount(cb.getAmount());
-							if (cm.getContract().getType().getId() == 1) {
-								pay.setType(PayTypeEnum.GLASS);
-								pay.setContent("第" + cb.getBatchNo() + "批次玻璃货款");
-							} else if (cm.getContract().getType().getId() == 2) {
-								pay.setType(PayTypeEnum.EXTRUDERS);
-								pay.setContent("第" + cb.getBatchNo() + "批次型材货款");
-							}
-							pay.setState(PayStageEnum.STAGE1);
-							pay.setPayMode(PayModeEnum.CASH);
-							pay.setPayContentState(PayContentStateEnum.PAYMENT);
-							contractPayService.addPayRecordEntity(pay);// 生成支付单
-							return 1;
-						}
-					}
-					if (le.getProgressState()
-							.equals(LabelStateEnum.HAS_QUALITY)) {
-						return 2;
-					}
-				}
-			}
-			return 0;
-		} catch (ServiceException e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException(e.getMessage());
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("更新批次错误", e);
-		}
-	}
+     * 验收
+     */
+    @Override
+    @Transactional
+    public int accepting(String gid) throws ServiceException
+    {
+        try
+        {
+            String rfid = logisticsDao.getRfid(gid).get(0);
+            if (StringUtils.isNotEmpty(rfid))
+            {
+                QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
+                logisticsQuery.addCondition("rfidNo", rfid);
+                List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
+                if (ref != null && ref.size() > 0)
+                {
+                    LogisticsRfidEntity le = ref.get(0);
+                    if (le.getProgressState().getId() == 3)
+                    {
+                        le.setProgressState(LabelStateEnum.HAS_QUALITY);
+                        logisticsDao.updateLogisticsRfid(le);
+                        // 获取合同信息
+                        ContractModel cm = contractService.getContractModelByContractNo(le.getContractNo());
+                        if (cm != null)
+                        {
+                            // 获取批次信息
+                            ContractBatchEntity cb = contractBatchDao.getBacthsByRfid(rfid);
+                            // 生成支付单
+                            PayRecordEntity pay = new PayRecordEntity();
+                            pay.setMemberNoA(cm.getContract().getMemberIdA());
+                            pay.setMemberNameA(cm.getContract()
+                                    .getMemberNameA());
+                            pay.setMemberNoB(cm.getContract().getMemberIdB());
+                            pay.setMemberNameB(cm.getContract()
+                                    .getMemberNameB());
+                            pay.setContractNo(cm.getContract().getContractNo());
+                            pay.setRfidNo(rfid);
+                            pay.setDateNo(cm.getContract().getContractNo()
+                                    + "P");// 编号
+                            pay.setBatchNo(cb.getBatchNo());
+                            pay.setPayAmount(cb.getAmount());
+                            if (cm.getContract().getType().getId() == 1)
+                            {
+                                pay.setContractType(PayContractTypeEnum.GLASS);
+                                pay.setContent("第" + cb.getBatchNo() + "批次玻璃货款");
+                            }
+                            else if (cm.getContract().getType().getId() == 2)
+                            {
+                                pay.setContractType(PayContractTypeEnum.EXTRUDERS);
+                                pay.setContent("第" + cb.getBatchNo() + "批次型材货款");
+                            }
+                            pay.setState(PayStageEnum.STAGE1);
+                            pay.setPayMode(PayModeEnum.CASH);
+                            pay.setPayType(PayTypeEnum.PAYMENT);
+                            contractPayService.addPayRecordEntity(pay);// 生成支付单
+                            return 1;
+                        }
+                    }
+                    if (le.getProgressState().getId() == 4)
+                    {
+                        return 2;
+                    }
+                }
+            }
+            return 0;
+        }
+        catch (ServiceException e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException(e.getMessage());
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("更新批次错误", e);
+        }
+    }
 }

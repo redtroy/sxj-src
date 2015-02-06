@@ -39,10 +39,10 @@
 			<![CDATA[AND TYPE =#{condition.contractType}]]>
 		</if>
 		<if test=" condition.state !=null and  condition.state==0">
-			<![CDATA[AND (CASE WHEN PAY_BATCH IS NULL THEN 0 ELSE PAY_BATCH END) != (CASE WHEN BATCH_COUNT IS NULL THEN 0 ELSE BATCH_COUNT END)]]>
+			<![CDATA[AND (CASE WHEN PAY_BATCH IS NULL THEN 0 ELSE PAY_BATCH END) != (CASE WHEN BATCH_COUNT IS NULL THEN 0 ELSE BATCH_COUNT END) AND (CASE WHEN BATCH_COUNT IS NULL THEN 0 ELSE BATCH_COUNT END) !=0]]>
 		</if>
 		<if test=" condition.state !=null and  condition.state==1">
-			<![CDATA[AND (CASE WHEN PAY_BATCH IS NULL THEN 0 ELSE PAY_BATCH END) = (CASE WHEN BATCH_COUNT IS NULL THEN 0 ELSE BATCH_COUNT END)]]>
+			<![CDATA[AND (CASE WHEN PAY_BATCH IS NULL THEN 0 ELSE PAY_BATCH END) = (CASE WHEN BATCH_COUNT IS NULL THEN 0 ELSE BATCH_COUNT END) AND (CASE WHEN BATCH_COUNT IS NULL THEN 0 ELSE BATCH_COUNT END) !=0]]>
 		</if>
 			<if test="condition.memberNo != '' and condition.memberNo !=null ">
 			<![CDATA[AND (MEMBER_NO_A=#{condition.memberNo} or MEMBER_NO_B=#{condition.memberNo})]]>

@@ -97,8 +97,8 @@
 			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />
 			
 			<typeHandler
-			handler="com.sxj.supervisor.typehandler.PayContentStateEnumTypeHandler"
-			javaType="com.sxj.supervisor.enu.contract.PayContentStateEnum" />
+			handler="com.sxj.supervisor.typehandler.PayContractTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.contract.PayContractTypeEnum" />
 				<typeHandler
 			handler="com.sxj.supervisor.typehandler.PayModeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.PayModeEnum" />
