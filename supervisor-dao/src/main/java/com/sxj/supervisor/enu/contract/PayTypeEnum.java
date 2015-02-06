@@ -2,7 +2,7 @@ package com.sxj.supervisor.enu.contract;
 
 public enum PayTypeEnum
 {
-    GLASS("玻璃", 0), EXTRUDERS("型材", 1);
+    DEPOSIT("定金", 0), PAYMENT("货款", 1);
     
     // 成员变量
     private Integer id;
@@ -14,7 +14,6 @@ public enum PayTypeEnum
         this.name = name;
         this.id = id;
     }
-    
     
     public Integer getId()
     {

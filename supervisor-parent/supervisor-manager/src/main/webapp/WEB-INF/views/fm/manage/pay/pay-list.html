@@ -104,7 +104,7 @@ $(function(){
         付款方式<select name="payMode">
 	   <option selected="selected" value="">全部</option>
          <#list payModes as model>
-          <option value="${model.id}">${model.getName()}</option>
+          <option value="${model.id}">${model.getNameA()}</option>
           </#list>
         </select>
         <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>
@@ -161,14 +161,20 @@ $(function(){
           <td><em class="state process">${model.state.nameA}</em></td>
           <#elseif (model.state.ordinal()==2)>
           <td><em class="state verified">${model.state.nameA}</em></td>
-          <#elseif (model.state.ordinal()==3)>
-          <td><em class="state frozen">${model.state.nameA}</em></td>
-          <#elseif (model.state.ordinal()==4)>
-           <td><em class="state normal">${model.state.nameA}</em></td>
-          <#elseif (model.state.ordinal()==5)>
-          <td><em class="state verified">${model.state.nameA}</em></td>
           </#if>
-          <td><em class="state process"><#if (model.payMode??)>${model.payMode.getName()}</#if></em></td>
+          <#if (model.payMode.ordinal()==0)>
+          <td><em class="state process"><#if (model.payMode??)>${model.payMode.getNameA()}</#if></em></td>
+          <#elseif (model.payMode.ordinal()==1)>
+          <td><em class="state normal"><#if (model.payMode??)>${model.payMode.getNameA()}</#if></em></td>
+          <#elseif (model.payMode.ordinal()==2)>
+          <td><em class="state frozen"><#if (model.payMode??)>${model.payMode.getNameA()}</#if></em></td>
+          <#elseif (model.payMode.ordinal()==3)>
+          <td><em class="state verified"><#if (model.payMode??)>${model.payMode.getNameA()}</#if></em></td>
+          <#elseif (model.payMode.ordinal()==4)>
+          <td><em class="state verified"><#if (model.payMode??)>${model.payMode.getNameA()}</#if></em></td>
+          <#elseif (model.payMode.ordinal()==5)>
+          <td><em class="state verified"><#if (model.payMode??)>${model.payMode.getNameA()}</#if></em></td>
+          </#if>
         </tr>
         <tr class="tableInfo" id="info_${model.id}" style="display:none;">
         </tr>

@@ -29,7 +29,7 @@ import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.entity.rfid.windowref.WindowRefEntity;
-import com.sxj.supervisor.enu.contract.PayContentStateEnum;
+import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
@@ -51,335 +51,304 @@ import com.sxj.util.persistent.QueryCondition;
 
 @Service
 @Transactional
-public class OpenRfidServiceImpl implements IOpenRfidService
-{
-    
-    /**
-     * 批次DAO
-     */
-    @Autowired
-    private IContractBatchDao contractBatchDao;
-    
-    /**
-     * 变更合同批次DAO
-     */
-    @Autowired
-    private IContractModifyBatchDao contractModifyBatchDao;
-    
-    /**
-     * 补损合同批次
-     */
-    @Autowired
-    private IContractReplenishBatchDao contractReplenishBatchDao;
-    
-    @Autowired
-    private ILogisticsRfidDao logisticsDao;
-    
-    @Autowired
-    private ILogisticsRefDao logisticsRefDao;
-    
-    @Autowired
-    private IWindowRfidDao windowRfidDao;
-    
-    @Autowired
-    private IContractDao contractDao;
-    
-    @Autowired
-    private IContractService contractService;
-    
-    @Autowired
-    private IContractPayService contractPayService;
-    
-    @Autowired
-    private IWindowRfidRefDao windowRfidRefDao;
-    
-    @Override
-    public BatchModel getBatchByRfid(String gid) throws ServiceException,
-            SQLException
-    {
-        BatchModel batchModel = new BatchModel();
-        Bacth batch = new Bacth();
-        try
-        {
-            String rfid = logisticsDao.getRfid(gid).get(0);
-            if (StringUtils.isNotEmpty(rfid))
-            {
-                QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
-                logisticsQuery.addCondition("rfidNo", rfid);
-                List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
-                
-                QueryCondition<LogisticsRefEntity> logisticsRefQuery = new QueryCondition<LogisticsRefEntity>();
-                logisticsRefQuery.addCondition("rfidNo", rfid);
-                List<LogisticsRefEntity> logisticsRef = logisticsRefDao.queryList(logisticsRefQuery);
-                
-                if (!CollectionUtils.isEmpty(logisticsRef))
-                {
-                    //                    LogisticsRefEntity lRef = logisticsRef.get(0);
-                    // if (lRef.getState().getId() == 1) {//
-                    if (!CollectionUtils.isEmpty(ref))
-                    {
-                        LogisticsRfidEntity le = ref.get(0);
-                        Contract contract = new Contract();
-                        contract.setContractNo(le.getContractNo());
-                        batchModel.setContract(contract);// 封装合同号
-                        batchModel.setRfidState(le.getProgressState().getId());//封装RFID状态
-                        contract.setRfid(rfid);
-                        QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
-                        query.addCondition("rfidNo", rfid);
-                        query.addCondition("state", 1);// 是否已变更
-                        // 合同批次
-                        List<ContractBatchEntity> cbatchList = contractBatchDao.queryBacths(query);
-                        
-                        QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
-                        modifyQuery.addCondition("rfidNo", rfid);
-                        modifyQuery.addCondition("state", 1);// 是否已变更
-                        // 变更批次
-                        List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao.queryBacths(modifyQuery);
-                        
-                        QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
-                        replenishQuery.addCondition("newRfidNo", rfid);
-                        // 补损批次
-                        List<ReplenishBatchEntity> batchList = contractReplenishBatchDao.queryReplenishBatch(replenishQuery);
-                        
-                        setBatchItems(batch, cbatchList, modifyBatch, batchList);
-                        
-                    }
-                    // } else {
-                    // batch.setState("3");
-                    // }
-                    
-                }
-            }
-            else
-            {
-                batch.setState("0");
-            }
-        }
-        catch (ServiceException e)
-        {
-            batch.setState("0");
-            SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new ServiceException(e.getMessage());
-        }
-        catch (Exception e)
-        {
-            batch.setState("0");
-            SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new ServiceException("获取批次错误", e);
-        }
-        batchModel.setBatchList(batch);
-        return batchModel;
-    }
-    
-    private void setBatchItems(Bacth batch,
-            List<ContractBatchEntity> cbatchList,
-            List<ModifyBatchEntity> modifyBatch,
-            List<ReplenishBatchEntity> batchList)
-    {
-        if (cbatchList != null && cbatchList.size() > 0)
-        {
-            ContractBatchEntity cbe = cbatchList.get(0);
-            batch.setBatchNo(cbe.getBatchNo());
-            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(cbe.getBatchItems());
-            batch.setBatchItems(batchModelList);
-            batch.setState("1");
-        }
-        else if (modifyBatch != null && modifyBatch.size() > 0)
-        {
-            ModifyBatchEntity modiy = modifyBatch.get(0);
-            batch.setBatchNo(modiy.getBatchNo());
-            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(modiy.getBatchItems());
-            batch.setBatchItems(batchModelList);
-            batch.setState("1");
-        }
-        else if (batchList != null && batchList.size() > 0)
-        {
-            ReplenishBatchEntity rbe = batchList.get(0);
-            batch.setBatchNo(rbe.getBatchNo().toString());
-            List<BatchItemModel> batchModelList = JsonMapperUtil.getBatchItems(rbe.getBatchItems());
-            batch.setBatchItems(batchModelList);
-            batch.setState("1");
-        }
-        else
-            batch.setState("2");
-    }
-    
-    /**
-     * 获取门窗
-     */
-    @Override
-    public WinTypeModel getWinTypeByRfid(String gid) throws ServiceException,
-            SQLException
-    {
-        String rfid = logisticsDao.getRfid(gid).get(0);
-        WinTypeModel wtm = new WinTypeModel();
-        if (StringUtils.isNotEmpty(rfid))
-        {
-            QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
-            query.addCondition("rfidNo", rfid);
-            
-            List<WindowRfidEntity> win = windowRfidDao.queryWindowRfidList(query);
-            QueryCondition<WindowRefEntity> refQuery = new QueryCondition<WindowRefEntity>();
-            refQuery.addCondition("rfidNo", rfid);
-            List<WindowRefEntity> winRef = windowRfidRefDao.queryWindowRfidRefList(refQuery);
-            
-            // if (winRef != null && winRef.size() > 0) {
-            // WindowRefEntity windowRef = winRef.get(0);
-            // if (windowRef.getState().getId() == 1) {
-            if (win != null && win.size() > 0)
-            {
-                WindowRfidEntity wre = win.get(0);
-                wtm.setContratcNo(wre.getContractNo());
-                wtm.setRfidNo(wre.getRfidNo());
-                if (wre.getWindowType() != null)
-                {
-                    wtm.setWinType(wre.getWindowType().getName());
-                }
-                wtm.setState("1");// 成功
-            }
-            else
-            {
-                // wtm.setState("2");// 未启用
-                wtm.setState("0");// 失败
-            }
-            // } else {
-            // wtm.setState("3");// 未审核
-            // }
-            // } else {
-            // wtm.setState("2");// 未启用
-            // }
-            
-        }
-        return wtm;
-    }
-    
-    /**
-     * 获取门窗
-     */
-    @Override
-    public List<WinTypeModel> getWinTypeByRfids(String[] gid)
-            throws ServiceException, SQLException
-    {
-        List<String> rfidList = logisticsDao.getRfid(gid);
-        List<WinTypeModel> wtmList = new ArrayList<WinTypeModel>();
-        if (rfidList != null && rfidList.size() > 0)
-        {
-            for (String rfid : rfidList)
-            {
-                WinTypeModel wtm = new WinTypeModel();
-                QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
-                query.addCondition("rfidNo", rfid);
-                List<WindowRfidEntity> win = windowRfidDao.queryWindowRfidList(query);
-                if (win != null && win.size() > 0)
-                {
-                    WindowRfidEntity wre = win.get(0);
-                    wtm.setContratcNo(wre.getContractNo());
-                    wtm.setRfidNo(wre.getRfidNo());
-                    if (wre.getWindowType() != null)
-                    {
-                        wtm.setWinType(wre.getWindowType().getName());
-                    }
-                    wtm.setState("1");// 成功
-                }
-                else
-                {
-                    wtm.setState("0");// 失败
-                    
-                }
-                wtmList.add(wtm);
-            }
-        }
-        return wtmList;
-    }
-    
-    /**
-     * 获取合同地址
-     */
-    @Override
-    public String getAddress(String contractNo) throws ServiceException,
-            SQLException
-    {
-        QueryCondition<ContractEntity> query = new QueryCondition<ContractEntity>();
-        query.addCondition("contractType", "0");
-        query.addCondition("contractNo", contractNo);
-        List<ContractEntity> ceList = contractDao.queryContract(query);
-        String address = "";
-        if (ceList != null && ceList.size() > 0)
-        {
-            address = ceList.get(0).getEngAddress();
-        }
-        return address;
-    }
-    
-    /**
-     * 发货
-     */
-    @Override
-    @Transactional
-    public int shipped(String gid) throws ServiceException, SQLException,
-            JsonParseException, JsonMappingException, IOException
-    {
-        try
-        {
-            String rfid = logisticsDao.getRfid(gid).get(0);
-            if (StringUtils.isNotEmpty(rfid))
-            {
-                QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
-                logisticsQuery.addCondition("rfidNo", rfid);
-                List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
-                if (ref != null && ref.size() > 0)
-                {
-                    LogisticsRfidEntity le = ref.get(0);
-                    if (le.getProgressState().getId() == 2)
-                    {
-                        le.setProgressState(LabelStateEnum.INSTALL);
-                        logisticsDao.updateLogisticsRfid(le);
-                        // 更新出库状态
-                        ContractBatchEntity contractBatch = contractBatchDao.getBacthsByRfid(rfid);
-                        if (contractBatch != null)
-                        {
-                            if (contractBatch.getType() == 1)
-                            {
-                                ContractBatchEntity cbe = new ContractBatchEntity();
-                                cbe.setId(contractBatch.getId());
-                                cbe.setWarehouseState(1);
-                                contractBatchDao.updateBatch(cbe);
-                            }
-                            else if (contractBatch.getType() == 2)
-                            {
-                                ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
-                                modifyBatch.setId(contractBatch.getId());
-                                modifyBatch.setWarehouseState(1);
-                                contractModifyBatchDao.updateBatch(modifyBatch);
-                            }
-                            else if (contractBatch.getType() == 3)
-                            {
-                                ReplenishBatchEntity replenishBatch = new ReplenishBatchEntity();
-                                replenishBatch.setId(contractBatch.getId());
-                                replenishBatch.setWarehouseState(1);
-                                contractReplenishBatchDao.updateBatch(replenishBatch);
-                            }
-                        }
-                        return 1;
-                    }
-                }
-            }
-        }
-        catch (ServiceException e)
-        {
-            SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new ServiceException(e.getMessage());
-        }
-        catch (Exception e)
-        {
-            SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new ServiceException("更新批次错误", e);
-        }
-        
-        return 0;
-    }
-    
-    /**
+public class OpenRfidServiceImpl implements IOpenRfidService {
+
+	/**
+	 * 批次DAO
+	 */
+	@Autowired
+	private IContractBatchDao contractBatchDao;
+
+	/**
+	 * 变更合同批次DAO
+	 */
+	@Autowired
+	private IContractModifyBatchDao contractModifyBatchDao;
+
+	/**
+	 * 补损合同批次
+	 */
+	@Autowired
+	private IContractReplenishBatchDao contractReplenishBatchDao;
+
+	@Autowired
+	private ILogisticsRfidDao logisticsDao;
+
+	@Autowired
+	private ILogisticsRefDao logisticsRefDao;
+
+	@Autowired
+	private IWindowRfidDao windowRfidDao;
+
+	@Autowired
+	private IContractDao contractDao;
+
+	@Autowired
+	private IContractService contractService;
+
+	@Autowired
+	private IContractPayService contractPayService;
+
+	@Autowired
+	private IWindowRfidRefDao windowRfidRefDao;
+
+	@Override
+	public BatchModel getBatchByRfid(String gid) throws ServiceException,
+			SQLException {
+		BatchModel batchModel = new BatchModel();
+		Bacth batch = new Bacth();
+		try {
+			String rfid = logisticsDao.getRfid(gid).get(0);
+			if (StringUtils.isNotEmpty(rfid)) {
+				QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
+				logisticsQuery.addCondition("rfidNo", rfid);
+				List<LogisticsRfidEntity> ref = logisticsDao
+						.queryLogisticsRfidList(logisticsQuery);
+
+				QueryCondition<LogisticsRefEntity> logisticsRefQuery = new QueryCondition<LogisticsRefEntity>();
+				logisticsRefQuery.addCondition("rfidNo", rfid);
+				List<LogisticsRefEntity> logisticsRef = logisticsRefDao
+						.queryList(logisticsRefQuery);
+
+				if (!CollectionUtils.isEmpty(logisticsRef)) {
+					LogisticsRefEntity lRef = logisticsRef.get(0);
+					if (lRef.getState().getId() == 1) {//
+						if (!CollectionUtils.isEmpty(ref)) {
+							LogisticsRfidEntity le = ref.get(0);
+							Contract contract = new Contract();
+							contract.setContractNo(le.getContractNo());
+							batchModel.setContract(contract);// 封装合同号
+							batchModel.setRfidState(le.getProgressState()
+									.getId());// 封装RFID状态
+							contract.setRfid(rfid);
+							QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
+							query.addCondition("rfidNo", rfid);
+							query.addCondition("state", 1);// 是否已变更
+							// 合同批次
+							List<ContractBatchEntity> cbatchList = contractBatchDao
+									.queryBacths(query);
+
+							QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
+							modifyQuery.addCondition("rfidNo", rfid);
+							modifyQuery.addCondition("state", 1);// 是否已变更
+							// 变更批次
+							List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao
+									.queryBacths(modifyQuery);
+
+							QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
+							replenishQuery.addCondition("newRfidNo", rfid);
+							// 补损批次
+							List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+									.queryReplenishBatch(replenishQuery);
+
+							setBatchItems(batch, cbatchList, modifyBatch,
+									batchList);
+
+						}
+					} else {
+						batch.setState("3");
+					}
+
+				}
+			} else {
+				batch.setState("0");
+			}
+		} catch (ServiceException e) {
+			batch.setState("0");
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			batch.setState("0");
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取批次错误", e);
+		}
+		batchModel.setBatchList(batch);
+		return batchModel;
+	}
+
+	private void setBatchItems(Bacth batch,
+			List<ContractBatchEntity> cbatchList,
+			List<ModifyBatchEntity> modifyBatch,
+			List<ReplenishBatchEntity> batchList) {
+		if (cbatchList != null && cbatchList.size() > 0) {
+			ContractBatchEntity cbe = cbatchList.get(0);
+			batch.setBatchNo(cbe.getBatchNo());
+			List<BatchItemModel> batchModelList = JsonMapperUtil
+					.getBatchItems(cbe.getBatchItems());
+			batch.setBatchItems(batchModelList);
+			batch.setState("1");
+		} else if (modifyBatch != null && modifyBatch.size() > 0) {
+			ModifyBatchEntity modiy = modifyBatch.get(0);
+			batch.setBatchNo(modiy.getBatchNo());
+			List<BatchItemModel> batchModelList = JsonMapperUtil
+					.getBatchItems(modiy.getBatchItems());
+			batch.setBatchItems(batchModelList);
+			batch.setState("1");
+		} else if (batchList != null && batchList.size() > 0) {
+			ReplenishBatchEntity rbe = batchList.get(0);
+			batch.setBatchNo(rbe.getBatchNo().toString());
+			List<BatchItemModel> batchModelList = JsonMapperUtil
+					.getBatchItems(rbe.getBatchItems());
+			batch.setBatchItems(batchModelList);
+			batch.setState("1");
+		} else
+			batch.setState("2");
+	}
+
+	/**
+	 * 获取门窗
+	 */
+	@Override
+	public WinTypeModel getWinTypeByRfid(String gid) throws ServiceException,
+			SQLException {
+		String rfid = logisticsDao.getRfid(gid).get(0);
+		WinTypeModel wtm = new WinTypeModel();
+		if (StringUtils.isNotEmpty(rfid)) {
+			QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
+			query.addCondition("rfidNo", rfid);
+
+			List<WindowRfidEntity> win = windowRfidDao
+					.queryWindowRfidList(query);
+			QueryCondition<WindowRefEntity> refQuery = new QueryCondition<WindowRefEntity>();
+			refQuery.addCondition("rfidNo", rfid);
+			List<WindowRefEntity> winRef = windowRfidRefDao
+					.queryWindowRfidRefList(refQuery);
+
+			if (winRef != null && winRef.size() > 0) {
+				WindowRefEntity windowRef = winRef.get(0);
+				if (windowRef.getState().getId() == 1) {
+					if (win != null && win.size() > 0) {
+						WindowRfidEntity wre = win.get(0);
+						wtm.setContratcNo(wre.getContractNo());
+						wtm.setRfidNo(wre.getRfidNo());
+						if (wre.getWindowType() != null) {
+							wtm.setWinType(wre.getWindowType().getName());
+						}
+						wtm.setState("1");// 成功
+					} else {
+						wtm.setState("2");// 未启用
+					}
+				} else {
+					wtm.setState("3");// 未审核
+				}
+			} else {
+				wtm.setState("2");// 未启用
+			}
+
+		}
+		return wtm;
+	}
+
+	/**
+	 * 获取门窗
+	 */
+	@Override
+	public List<WinTypeModel> getWinTypeByRfids(String[] gid)
+			throws ServiceException, SQLException {
+		List<String> rfidList = logisticsDao.getRfid(gid);
+		List<WinTypeModel> wtmList = new ArrayList<WinTypeModel>();
+		if (rfidList != null && rfidList.size() > 0) {
+			for (String rfid : rfidList) {
+				WinTypeModel wtm = new WinTypeModel();
+				QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
+				query.addCondition("rfidNo", rfid);
+				List<WindowRfidEntity> win = windowRfidDao
+						.queryWindowRfidList(query);
+				if (!CollectionUtils.isEmpty(win)) {
+					WindowRfidEntity wre = win.get(0);
+					wtm.setContratcNo(wre.getContractNo());
+					wtm.setRfidNo(wre.getRfidNo());
+					if (wre.getWindowType() != null) {
+						wtm.setWinType(wre.getWindowType().getName());
+					}
+					wtm.setState("1");// 成功
+				} else {
+					wtm.setState("0");// 失败
+
+				}
+				wtmList.add(wtm);
+			}
+		}
+		return wtmList;
+	}
+
+	/**
+	 * 获取合同地址
+	 */
+	@Override
+	public String getAddress(String contractNo) throws ServiceException,
+			SQLException {
+		QueryCondition<ContractEntity> query = new QueryCondition<ContractEntity>();
+		query.addCondition("contractType", "0");
+		query.addCondition("contractNo", contractNo);
+		List<ContractEntity> ceList = contractDao.queryContract(query);
+		String address = "";
+		if (!CollectionUtils.isEmpty(ceList)) {
+			address = ceList.get(0).getEngAddress();
+		}
+		return address;
+	}
+
+	/**
+	 * 发货
+	 */
+	@Override
+	@Transactional
+	public int shipped(String gid) throws ServiceException, SQLException,
+			JsonParseException, JsonMappingException, IOException {
+		try {
+			String rfid = logisticsDao.getRfid(gid).get(0);
+			if (StringUtils.isNotEmpty(rfid)) {
+				QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
+				logisticsQuery.addCondition("rfidNo", rfid);
+				List<LogisticsRfidEntity> logistics = logisticsDao
+						.queryLogisticsRfidList(logisticsQuery);
+				if (!CollectionUtils.isEmpty(logistics)) {
+					LogisticsRfidEntity le = logistics.get(0);
+					if (le.getProgressState()
+							.equals(LabelStateEnum.HAS_RECEIPT)) {// 标签是否收货状态
+						le.setProgressState(LabelStateEnum.INSTALL);
+						logisticsDao.updateLogisticsRfid(le);
+						// 更新出库状态
+						ContractBatchEntity contractBatch = contractBatchDao
+								.getBacthsByRfid(rfid);
+						if (contractBatch != null) {
+							if (contractBatch.getType() == 1) {
+								ContractBatchEntity cbe = new ContractBatchEntity();
+								cbe.setId(contractBatch.getId());
+								cbe.setWarehouseState(1);
+								contractBatchDao.updateBatch(cbe);
+							} else if (contractBatch.getType() == 2) {
+								ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
+								modifyBatch.setId(contractBatch.getId());
+								modifyBatch.setWarehouseState(1);
+								contractModifyBatchDao.updateBatch(modifyBatch);
+							} else if (contractBatch.getType() == 3) {
+								ReplenishBatchEntity replenishBatch = new ReplenishBatchEntity();
+								replenishBatch.setId(contractBatch.getId());
+								replenishBatch.setWarehouseState(1);
+								contractReplenishBatchDao
+										.updateBatch(replenishBatch);
+							}
+						}
+						return 1;
+					} else {
+						return 2; // 标签
+					}
+				}
+			}
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新批次错误", e);
+		}
+
+		return 0;
+	}
+
+	/**
      * 验收
      */
     @Override
@@ -423,17 +392,17 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                             pay.setPayAmount(cb.getAmount());
                             if (cm.getContract().getType().getId() == 1)
                             {
-                                pay.setType(PayTypeEnum.GLASS);
+                                pay.setContractType(PayContractTypeEnum.GLASS);
                                 pay.setContent("第" + cb.getBatchNo() + "批次玻璃货款");
                             }
                             else if (cm.getContract().getType().getId() == 2)
                             {
-                                pay.setType(PayTypeEnum.EXTRUDERS);
+                                pay.setContractType(PayContractTypeEnum.EXTRUDERS);
                                 pay.setContent("第" + cb.getBatchNo() + "批次型材货款");
                             }
                             pay.setState(PayStageEnum.STAGE1);
-                            pay.setPayMode(PayModeEnum.CASH);
-                            pay.setPayContentState(PayContentStateEnum.PAYMENT);
+                            pay.setPayMode(PayModeEnum.MODE1);
+                            pay.setPayType(PayTypeEnum.PAYMENT);
                             contractPayService.addPayRecordEntity(pay);// 生成支付单
                             return 1;
                         }

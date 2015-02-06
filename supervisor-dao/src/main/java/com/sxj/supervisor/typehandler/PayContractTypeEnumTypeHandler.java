@@ -4,9 +4,10 @@ import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
 
-public class PayTypeEnumTypeHandler extends EnumOrdinalTypeHandler<PayTypeEnum>
+public class PayContractTypeEnumTypeHandler extends
+        EnumOrdinalTypeHandler<PayTypeEnum>
 {
-    public PayTypeEnumTypeHandler(Class<PayTypeEnum> type)
+    public PayContractTypeEnumTypeHandler(Class<PayTypeEnum> type)
     {
         super(type);
     }

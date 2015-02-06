@@ -11,7 +11,7 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
-import com.sxj.supervisor.enu.contract.PayContentStateEnum;
+import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
@@ -125,16 +125,16 @@ public class PayRecordEntity implements Serializable
      * 
      * @return
      */
-    @Column(name = "PAY_CONTENT_STATE")
-    private PayContentStateEnum payContentState;
+    @Column(name = "PAY_TYPE")
+    private PayTypeEnum payType;
     
     /**
      * 类型
      * 
      * @return
      */
-    @Column(name = "TYPE")
-    private PayTypeEnum type;
+    @Column(name = "PAY_CONTRACT_TYPE")
+    private PayContractTypeEnum contractType;
     
     /**
      * 付款方式
@@ -157,26 +157,6 @@ public class PayRecordEntity implements Serializable
     public void setPayReal(Double payReal)
     {
         this.payReal = payReal;
-    }
-    
-    public PayContentStateEnum getPayContentState()
-    {
-        return payContentState;
-    }
-    
-    public void setPayContentState(PayContentStateEnum payContentState)
-    {
-        this.payContentState = payContentState;
-    }
-    
-    public PayTypeEnum getType()
-    {
-        return type;
-    }
-    
-    public void setType(PayTypeEnum type)
-    {
-        this.type = type;
     }
     
     public PayModeEnum getPayMode()
@@ -322,6 +302,26 @@ public class PayRecordEntity implements Serializable
     public void setMemberNameB(String memberNameB)
     {
         this.memberNameB = memberNameB;
+    }
+    
+    public PayTypeEnum getPayType()
+    {
+        return payType;
+    }
+    
+    public void setPayType(PayTypeEnum payType)
+    {
+        this.payType = payType;
+    }
+    
+    public PayContractTypeEnum getContractType()
+    {
+        return contractType;
+    }
+    
+    public void setContractType(PayContractTypeEnum contractType)
+    {
+        this.contractType = contractType;
     }
     
 }

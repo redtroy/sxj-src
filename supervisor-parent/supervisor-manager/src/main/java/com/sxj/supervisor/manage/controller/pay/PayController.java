@@ -8,7 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
-import com.sxj.supervisor.enu.contract.PayContentStateEnum;
+import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
@@ -38,9 +38,9 @@ public class PayController extends BaseController {
 				query.setPagable(true);
 			}
 			List<PayRecordEntity> list = payService.queryPayList(query);
-			PayContentStateEnum[] payStates = PayContentStateEnum.values();// 支付内容
+			PayTypeEnum[] payStates = PayTypeEnum.values();// 支付内容
 			PayModeEnum[] payModes = PayModeEnum.values();// 支付方式
-			PayTypeEnum[] payTypes = PayTypeEnum.values();// 类型
+			PayContractTypeEnum[] payTypes = PayContractTypeEnum.values();// 类型
 			PayStageEnum[] payStages = PayStageEnum.values();// 付款状态
 			map.put("list", list);
 			map.put("payStates", payStates);

@@ -720,13 +720,15 @@ public class RecordController extends BaseController
     
     @RequestMapping("getBatchPay")
     public String getBatchPay(String contractNo, String recordNo, String type,
-            ModelMap map) throws WebException
+            ModelMap map,HttpSession session) throws WebException
     {
         try
         {
+        	SupervisorPrincipal member = (SupervisorPrincipal) session.getAttribute("userinfo");
             List<ContractBatchModel> batchList = contractService.getBacthsByContractNo(contractNo);
             map.put("batchList", batchList);
             map.put("recordNo", recordNo);
+            map.put("flag", member.getMember().getType().getId());
             map.put("type", type);
             return "site/record/progress";
         }
