@@ -89,34 +89,9 @@
 	</bean>
 	<bean class="com.sxj.util.comet.CometServiceImpl" />
 	
-	<bean id="recordStatefsm" class="com.sxj.statemachine.StateMachineFactory"
-		factory-method="newInstance" lazy-init="false">
-		<constructor-arg>
-			<bean id="recordStatefsm1"
-				class="com.sxj.supervisor.machine.record.RecordStateMachineConfig"></bean>
-		</constructor-arg>
+	<bean class="com.sxj.statemachine.spring.StateMachineFactoryBean">
+		<property name="basePackages" value="com.sxj.supervisor.machine">
+		</property>
 	</bean>
-
-	<bean id="recordConfirmStatefsm" class="com.sxj.statemachine.StateMachineFactory"
-		factory-method="newInstance" lazy-init="false">
-		<constructor-arg>
-			<bean id="recordConfirmStatefsm1"
-				class="com.sxj.supervisor.machine.record.RecordConfirmStateMachineConfig"></bean>
-		</constructor-arg>
-	</bean>
-	<bean id="contractSureStatefsm" class="com.sxj.statemachine.StateMachineFactory"
-		factory-method="newInstance" lazy-init="false">
-		<constructor-arg>
-			<bean id="contractSureStatefsm1"
-				class="com.sxj.supervisor.machine.contract.ContractSureStateMachineConfig"></bean>
-		</constructor-arg>
-	</bean>
-
-	<bean id="contractStatefsm" class="com.sxj.statemachine.StateMachineFactory"
-		factory-method="newInstance" lazy-init="false">
-		<constructor-arg>
-			<bean id="contractStatefsm1"
-				class="com.sxj.supervisor.machine.contract.ContractStateMachineConfig"></bean>
-		</constructor-arg>
-	</bean>
+	
 </beans>

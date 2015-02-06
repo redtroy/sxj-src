@@ -104,7 +104,7 @@ $(function(){
         付款方式<select name="payMode">
 	   <option selected="selected" value="">全部</option>
          <#list payModes as model>
-          <option value="${model.id}">${model.getNameA()}</option>
+          <option value="${model.ordinal()}">${model.getNameA()}</option>
           </#list>
         </select>
         <button class="btn btn-blue" onclick="query();return false;"><span>查询</span></button>

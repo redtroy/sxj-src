@@ -9,8 +9,8 @@ import com.sxj.statemachine.annotations.Transitions;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 
-@StateMachine(stateType = PayModeEnum.class, startState = "MDDE1", finalStates = {
-		"MDDE3", "MDDE4" }, name = "payModeFsm")
+@StateMachine(stateType = PayModeEnum.class, startState = "MODE1", finalStates = {
+		"MODE3", "MODE4" }, name = "payModeFsm")
 public class PayModeMachineConfig {
 
 	/**
@@ -18,7 +18,7 @@ public class PayModeMachineConfig {
 	 * 
 	 * @param event
 	 */
-	@Transitions({ @Transition(source = "MDDE1", event = "MDDE1_STAGE1_", target = "MODE2_0") })
+	@Transitions({ @Transition(source = "MODE1", event = "MODE1_STAGE1_", target = "MODE2_0") })
 	public void noop(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
@@ -28,7 +28,7 @@ public class PayModeMachineConfig {
 	 * 
 	 * @param event
 	 */
-	@Transitions({ @Transition(source = "MDDE1", event = "MDDE1_STAGE3_", target = "MDDE3") })
+	@Transitions({ @Transition(source = "MODE1", event = "MODE1_STAGE3_", target = "MODE3") })
 	public void noop1(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
@@ -88,7 +88,7 @@ public class PayModeMachineConfig {
 	 * 
 	 * @param event
 	 */
-	@Transitions({ @Transition(source = "MODE2_1", event = "MODE2_1_STAGE3_", target = "MDDE3") })
+	@Transitions({ @Transition(source = "MODE2_1", event = "MODE2_1_STAGE3_", target = "MODE3") })
 	public void noop5(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
@@ -98,7 +98,7 @@ public class PayModeMachineConfig {
 	 * 
 	 * @param event
 	 */
-	@Transitions({ @Transition(source = "MODE2_0", event = "MODE2_0_STAGE3_", target = "MDDE3") })
+	@Transitions({ @Transition(source = "MODE2_0", event = "MODE2_0_STAGE3_", target = "MODE3") })
 	public void noop6(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
@@ -110,7 +110,7 @@ public class PayModeMachineConfig {
 		return null;
 	}
 
-	@OnEnter(value = "MDDE3")
+	@OnEnter(value = "MODE3")
 	public EventInfo enter2(TransitionInfo event) {
 		PayRecordEntity re = (PayRecordEntity) event.getObject();
 		re.setPayMode(PayModeEnum.MODE3);
