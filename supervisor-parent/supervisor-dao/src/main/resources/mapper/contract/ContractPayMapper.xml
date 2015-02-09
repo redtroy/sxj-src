@@ -112,7 +112,7 @@
 		SELECT #{id},#{memberNoA},#{memberNameA},#{memberNoB},#{memberNameB}
 		,#{payNo},#{contractNo},#{batchNo},#{rfidNo},#{payAmount},#{payReal},#{payDate},#{content},#{state}
 		,#{payType},#{contractType},#{payMode} FROM dual WHERE NOT EXISTS (SELECT CONTRACT_NO FROM M_CONTRACT_PAY WHERE
-		 CONTRACT_NO =#{contractNo}  AND PAY_CONTENT_STATE=0)]]>
+		 CONTRACT_NO =#{contractNo}  AND PAY_CONTRACT_TYPE=0)]]>
 	</insert> 
 	<select id="queryManagerPayContract" resultMap="ContractPayResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
@@ -161,7 +161,7 @@
 		</if>
 		<!-- 支付内容状态 -->
 		<if
-			test="condition.PayContentState != null and condition.PayContentState !=''">
+			test="condition.payType != null and condition.payType !=''">
 			<![CDATA[AND P.PAY_TYPE =#{condition.payType}]]>
 		</if>
 		<!-- 付款方式 -->
@@ -169,7 +169,7 @@
 			<![CDATA[AND P.PAY_MODE =#{condition.payMode}]]>
 		</if>
 		<!-- 类型 -->
-		<if test="condition.type != null and condition.type !=''">
+		<if test="condition.contractType != null and condition.contractType !=''">
 			<![CDATA[AND P.PAY_CONTRACT_TYPE =#{condition.contractType}]]>
 		</if>
 		<!-- 支付时间段 -->
