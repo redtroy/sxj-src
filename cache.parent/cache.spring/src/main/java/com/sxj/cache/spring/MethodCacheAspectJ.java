@@ -37,7 +37,6 @@ public class MethodCacheAspectJ
         String name = annotation.name();
         Object result = null;
         String cacheKey = getCacheKey(targetName, methodName, arguments);
-        System.out.println("key--" + cacheKey);
         Object object = HierarchicalCacheManager.get(level.ordinal(),
                 name,
                 cacheKey);
@@ -49,7 +48,6 @@ public class MethodCacheAspectJ
             
             if (result != null)
             {
-                System.err.println("---------------------------");
                 HierarchicalCacheManager.set(level.ordinal(),
                         name,
                         cacheKey,

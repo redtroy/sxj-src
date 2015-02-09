@@ -53,7 +53,6 @@ public class JdkSerializer implements Serializer
         strs.add("bac");
         String serialize = new JdkSerializer().serialize(strs);
         Object deserialize = new JdkSerializer().deserialize(serialize);
-        System.out.println(deserialize);
     }
     
 }
