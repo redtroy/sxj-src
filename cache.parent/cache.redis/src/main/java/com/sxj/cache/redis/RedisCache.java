@@ -244,7 +244,7 @@ public class RedisCache implements Cache
             
             if (cache == null)
             {
-                throw new Exception("Unable to get jedis resource!");
+                throw new CacheException("Unable to get jedis resource!");
             }
             
             cache.eval(String.format(DELETE_SCRIPT_IN_LUA, pattern));

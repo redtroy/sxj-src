@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sxj.cache.core.CacheException;
 import com.sxj.spring.modules.util.Encodes;
 
 public class JdkSerializer implements Serializer
@@ -26,7 +27,7 @@ public class JdkSerializer implements Serializer
         }
         catch (IOException ioe)
         {
-            throw new RuntimeException(ioe);
+            throw new CacheException(ioe);
         }
     }
     
@@ -42,7 +43,7 @@ public class JdkSerializer implements Serializer
         }
         catch (IOException | ClassNotFoundException ioe)
         {
-            throw new RuntimeException(ioe);
+            throw new CacheException(ioe);
         }
     }
     

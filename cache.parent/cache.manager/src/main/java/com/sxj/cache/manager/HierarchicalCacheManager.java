@@ -113,7 +113,8 @@ public class HierarchicalCacheManager
     }
     
     private final static CacheProvider getProviderInstance(String value)
-            throws Exception
+            throws InstantiationException, IllegalAccessException,
+            ClassNotFoundException
     {
         if ("ehcache".equalsIgnoreCase(value))
             return new EhCacheProvider();

@@ -3,6 +3,7 @@ package com.sxj.cache.core.serializer;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sxj.cache.core.CacheException;
 
 public class JsonSerializer implements Serializer
 {
@@ -21,7 +22,7 @@ public class JsonSerializer implements Serializer
         }
         catch (Exception e)
         {
-            throw new RuntimeException(e);
+            throw new CacheException(e);
         }
     }
     
@@ -38,7 +39,7 @@ public class JsonSerializer implements Serializer
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            throw new CacheException(e);
         }
     }
     
