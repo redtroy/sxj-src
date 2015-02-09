@@ -18,7 +18,7 @@ public class PayModeMachineConfig {
 	 * 
 	 * @param event
 	 */
-	@Transitions({ @Transition(source = "MODE1", event = "MODE1_STAGE1_", target = "MODE2_0") })
+	@Transitions({ @Transition(source = "MODE1", event = "MODE1_STAGE1_Stage2_0", target = "MODE2_0") })
 	public void noop(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
@@ -83,6 +83,37 @@ public class PayModeMachineConfig {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
+	// /**
+	// * 融资已放款-融资支付（点击融资通过事件）
+	// *
+	// * @param event
+	// */
+	// @Transitions({ @Transition(source = "MODE2_0", event =
+	// "MODE2_0_STAGE3_Stage2_2", target = "MODE4") })
+	// public void noop43(TransitionInfo event) {
+	// System.out.println("tx@:" + event.getEvent());
+	// }
+
+	/**
+	 * 融资已放款-融资支付（点击融资通过事件）
+	 * 
+	 * @param event
+	 */
+	@Transitions({ @Transition(source = "MODE3", event = "MODE3_STAGE3_Stage2_2", target = "MODE4") })
+	public void noop41(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	/**
+	 * 融资已放款-融资支付（点击融资通过事件）
+	 * 
+	 * @param event
+	 */
+	@Transitions({ @Transition(source = "MODE4", event = "MODE4_STAGE3_Stage2_2", target = "MODE4") })
+	public void noop42(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
 	/**
 	 * 融资已搁置-现金支付（重新进行现金支付事件）
 	 * 
@@ -94,12 +125,32 @@ public class PayModeMachineConfig {
 	}
 
 	/**
+	 * 融资已搁置-现金支付（重新进行现金支付事件）
+	 * 
+	 * @param event
+	 */
+	@Transitions({ @Transition(source = "MODE3", event = "MODE3_STAGE3_Stage2_3", target = "MODE3") })
+	public void noop51(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	/**
+	 * 融资已搁置-现金支付（重新进行现金支付事件）
+	 * 
+	 * @param event
+	 */
+	@Transitions({ @Transition(source = "MODE4", event = "MODE4_STAGE3_Stage2_3", target = "MODE3") })
+	public void noop52(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	/**
 	 * 融资受理中-现金支付（点击融资后点击现金支付）
 	 * 
 	 * @param event
 	 */
 	@Transitions({ @Transition(source = "MODE2_0", event = "MODE2_0_STAGE3_", target = "MODE3") })
-	public void noop6(TransitionInfo event) {
+	public void noop53(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 

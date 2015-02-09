@@ -114,4 +114,70 @@
 		,#{payContentState},#{type},#{payMode} FROM dual WHERE NOT EXISTS (SELECT CONTRACT_NO FROM M_CONTRACT_PAY WHERE
 		 CONTRACT_NO =#{contractNo}  AND PAY_CONTENT_STATE=0)]]>
 	</insert> 
+	<select id="queryManagerPayContract" resultMap="ContractPayResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT P.*  FROM M_CONTRACT_PAY P  WHERE 1=1
+	]]>
+		<!-- 根据会员号查询 -->
+		<if test="condition.memberNo != null and condition.memberNo != ''">
+			<![CDATA[ AND (P.MEMBER_NO_A = #{condition.memberNo} OR P.MEMBER_NO_B = #{condition.memberNo})]]>
+		</if>
+		<!-- 甲方会员名称 -->
+		<if test="condition.memberName_A != null and condition.memberName_A != ''">
+			<![CDATA[ AND  P.MEMBER_NAME_A like CONCAT('%',#{condition.memberName_A},'%')]]>
+		</if>
+		<!-- 支付单号 -->
+		<if test="condition.payNo != null and condition.payNo != ''">
+			<![CDATA[ AND P.PAY_NO like CONCAT('%',#{condition.payNo},'%')]]>
+		</if>
+		<!-- 合同号 -->
+		<if test="condition.contractNo != null and condition.contractNo != ''">
+			<![CDATA[AND P.CONTRACT_NO like CONCAT('%',#{condition.contractNo},'%')]]>
+		</if>
+		<!-- RFID编号 -->
+		<if test="condition.rfidNo != null and condition.rfidNo != ''">
+			<![CDATA[AND P.RFID_NO like CONCAT('%',#{condition.rfidNo},'%')]]>
+		</if>
+		<!-- 付款状态/收款状态 
+		<if
+			test="condition.state != null and condition.state !='' and condition.memberType != 1 and condition.memberType != 2">
+			<![CDATA[AND P.STATE =#{condition.state}]]>
+		</if>
+		<if
+			test="condition.state != null and condition.state !='' and condition.memberType != null and condition.memberType !='' and condition.memberType !=0">
+			<if test="condition.state &lt;4">
+			<![CDATA[AND P.STATE <4 ]]>
+			</if>
+			<if test="condition.state &gt;3">
+			<![CDATA[AND P.STATE =#{condition.state}]]>
+			</if>
+		</if>-->
+		<!-- STATE -->
+		<if test="condition.state != null and condition.state != ''">
+			<![CDATA[AND P.STATE = #{condition.state}]]>
+		</if>
+		<if test="condition.payMode != null and condition.payMode != ''">
+			<![CDATA[AND P.PAY_MODE = #{condition.payMode}]]>
+		</if>
+		<!-- 支付内容状态 -->
+		<if
+			test="condition.PayContentState != null and condition.PayContentState !=''">
+			<![CDATA[AND P.PAY_CONTENT_STATE =#{condition.PayContentState}]]>
+		</if>
+		<!-- 付款方式 -->
+		<if test="condition.payMode != null and condition.payMode !=''">
+			<![CDATA[AND P.PAY_MODE =#{condition.payMode}]]>
+		</if>
+		<!-- 类型 -->
+		<if test="condition.type != null and condition.type !=''">
+			<![CDATA[AND P.TYPE =#{condition.type}]]>
+		</if>
+		<!-- 支付时间段 -->
+		<if
+			test="condition.startPayDate != null and condition.endPayDate != null and  condition.startPayDate != '' and condition.endPayDate != ''">
+			<![CDATA[AND P.PAY_DATE >=#{condition.startPayDate} AND P.PAY_DATE <= #{condition.endPayDate}]]>
+		</if>
+		<![CDATA[ ORDER BY P.PAY_NO DESC
+		]]>
+	</select>
 </mapper>

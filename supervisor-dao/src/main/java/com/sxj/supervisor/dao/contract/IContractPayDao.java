@@ -21,6 +21,14 @@ public interface IContractPayDao {
 			QueryCondition<PayRecordEntity> query);
 
 	/**
+	 * 付款管理高级查询后台
+	 *
+	 * @param function
+	 **/
+	public List<PayRecordEntity> queryManagerPayContract(
+			QueryCondition<PayRecordEntity> query);
+
+	/**
 	 * 修改更新付款管理
 	 */
 	@Update
