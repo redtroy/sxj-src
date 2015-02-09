@@ -33,6 +33,7 @@ import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
+import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -332,8 +333,12 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 							}
 						}
 						return 1;
-					} else {
-						return 2; // 标签
+					} else if(le.getProgressState().equals(LabelStateEnum.INSTALL)){
+						return 2; // 货物已出库
+					}else if(le.getProgressState().equals(LabelStateEnum.HAS_QUALITY)){
+						return 3; // 货物已验收
+					}else if(le.getRfidState().equals(RfidStateEnum.DISABLE)){
+						return 4; // 标签已停用
 					}
 				}
 			}
@@ -366,7 +371,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
                 if (ref != null && ref.size() > 0)
                 {
                     LogisticsRfidEntity le = ref.get(0);
-                    if (le.getProgressState().getId() == 3)
+                    if (le.getProgressState().equals(LabelStateEnum.INSTALL))//标签是都已出库
                     {
                         le.setProgressState(LabelStateEnum.HAS_QUALITY);
                         logisticsDao.updateLogisticsRfid(le);
@@ -406,11 +411,14 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
                             contractPayService.addPayRecordEntity(pay);// 生成支付单
                             return 1;
                         }
-                    }
-                    if (le.getProgressState().getId() == 4)
+                    }else if (le.getProgressState().equals(LabelStateEnum.HAS_QUALITY))
                     {
-                        return 2;
-                    }
+                        return 2;//货物已验收
+                    }else if(le.getProgressState().equals(LabelStateEnum.INSTALL)){
+						return 3; // 货物未出库
+					}else if(le.getRfidState().equals(RfidStateEnum.DISABLE)){
+						return 4; // 标签已停用
+					}
                 }
             }
             return 0;
