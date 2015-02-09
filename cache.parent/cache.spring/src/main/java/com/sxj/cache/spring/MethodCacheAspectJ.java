@@ -63,7 +63,9 @@ public class MethodCacheAspectJ
         catch (Throwable t)
         {
             throw new CacheException(t);
+            
         }
+        
     }
     
     private Method findCachedMethod(Class<?> clazz, String methodName,

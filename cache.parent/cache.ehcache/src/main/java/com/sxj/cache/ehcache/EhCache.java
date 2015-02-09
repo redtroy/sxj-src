@@ -35,7 +35,7 @@ public class EhCache implements Cache, CacheEventListener
     }
     
     @SuppressWarnings("rawtypes")
-    public List keys() throws CacheException
+    public List keys()
     {
         return this.cache.getKeys();
     }
@@ -47,7 +47,7 @@ public class EhCache implements Cache, CacheEventListener
      * @return The value placed into the cache with an earlier put, or null if not found or expired
      * @throws CacheException
      */
-    public Object get(Object key) throws CacheException
+    public Object get(Object key)
     {
         try
         {
@@ -75,7 +75,7 @@ public class EhCache implements Cache, CacheEventListener
      * @throws CacheException if the {@link CacheManager}
      *                        is shutdown or another {@link Exception} occurs.
      */
-    public void update(Object key, Object value) throws CacheException
+    public void update(Object key, Object value)
     {
         put(key, value);
     }
@@ -88,7 +88,7 @@ public class EhCache implements Cache, CacheEventListener
      * @throws CacheException if the {@link CacheManager}
      *                        is shutdown or another {@link Exception} occurs.
      */
-    public void put(Object key, Object value) throws CacheException
+    public void put(Object key, Object value)
     {
         try
         {
@@ -119,7 +119,7 @@ public class EhCache implements Cache, CacheEventListener
      * @throws CacheException
      */
     @Override
-    public void evict(Object key) throws CacheException
+    public void evict(Object key)
     {
         try
         {
@@ -140,7 +140,7 @@ public class EhCache implements Cache, CacheEventListener
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public void evict(List keys) throws CacheException
+    public void evict(List keys)
     {
         cache.removeAll(keys);
     }
@@ -151,7 +151,7 @@ public class EhCache implements Cache, CacheEventListener
      *
      * @throws CacheException
      */
-    public void clear() throws CacheException
+    public void clear()
     {
         try
         {
@@ -172,7 +172,7 @@ public class EhCache implements Cache, CacheEventListener
      *
      * @throws CacheException
      */
-    public void destroy() throws CacheException
+    public void destroy()
     {
         try
         {
@@ -186,12 +186,6 @@ public class EhCache implements Cache, CacheEventListener
         {
             throw new CacheException(e);
         }
-    }
-    
-    @Override
-    public Object clone() throws CloneNotSupportedException
-    {
-        throw new CloneNotSupportedException();
     }
     
     @Override
@@ -217,21 +211,21 @@ public class EhCache implements Cache, CacheEventListener
     
     @Override
     public void notifyElementPut(Ehcache arg0, Element arg1)
-            throws net.sf.ehcache.CacheException
+    
     {
         return;
     }
     
     @Override
     public void notifyElementRemoved(Ehcache arg0, Element arg1)
-            throws net.sf.ehcache.CacheException
+    
     {
         return;
     }
     
     @Override
     public void notifyElementUpdated(Ehcache arg0, Element arg1)
-            throws net.sf.ehcache.CacheException
+    
     {
         return;
     }
@@ -282,6 +276,12 @@ public class EhCache implements Cache, CacheEventListener
     public Boolean exists(Object key) throws CacheException
     {
         return cache.isKeyInCache(key);
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException
+    {
+        throw new CloneNotSupportedException();
     }
     
 }

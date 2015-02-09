@@ -9,60 +9,59 @@ public interface Cache
      * Get an item from the cache, nontransactionally
      * @param key
      * @return the cached object or <tt>null</tt>
-     * @throws CacheException
+     * @
      */
-    public Object get(Object key) throws CacheException;
+    public Object get(Object key);
     
     /**
      * Add an item to the cache, nontransactionally, with
      * failfast semantics
      * @param key
      * @param value
-     * @throws CacheException
+     * @
      */
-    public void put(Object key, Object value) throws CacheException;
+    public void put(Object key, Object value);
     
-    public void put(Object key, Object value, int seconds)
-            throws CacheException;
+    public void put(Object key, Object value, int seconds);
     
     /**
      * Add an item to the cache
      * @param key
      * @param value
-     * @throws CacheException
+     * @
      */
-    public void update(Object key, Object value) throws CacheException;
+    public void update(Object key, Object value);
     
     @SuppressWarnings("rawtypes")
-    public List keys() throws CacheException;
+    public List keys();
     
     /**
      * Remove an item from the cache
      */
-    public void evict(Object key) throws CacheException;
+    public void evict(Object key);
     
     /**
      * Batch remove cache objects
      * @param keys
-     * @throws CacheException
+     * @
      */
     @SuppressWarnings("rawtypes")
-    public void evict(List keys) throws CacheException;
+    public void evict(List keys);
     
     /**
      * Clear the cache
      */
-    public void clear() throws CacheException;
+    public void clear();
     
     /**
      * Clean up
      */
-    public void destroy() throws CacheException;
+    public void destroy();
     
-    public Long size() throws CacheException;
+    public Long size();
     
-    public List values() throws CacheException;
+    public List values();
     
-    public Boolean exists(Object key) throws CacheException;
+    public Boolean exists(Object key);
     
 }

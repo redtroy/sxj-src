@@ -19,9 +19,9 @@ import com.sxj.spring.modules.util.ClassLoaderUtil;
 public class EhCacheProvider implements CacheProvider
 {
     
-    private final static Logger LOGGER = LoggerFactory.getLogger(EhCacheProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EhCacheProvider.class);
     
-    private final static String CONFIG_XML = "/ehcache.xml";
+    private static final String CONFIG_XML = "/ehcache.xml";
     
     private CacheManager manager;
     
@@ -47,37 +47,34 @@ public class EhCacheProvider implements CacheProvider
      * @throws CacheException inter alia, if a cache of the same name already exists
      */
     public EhCache buildCache(String name, boolean autoCreate,
-            CacheExpiredListener listener) throws CacheException
+            CacheExpiredListener listener)
     {
         EhCache ehcache = cacheManager.get(name);
-        if (ehcache == null && autoCreate)
+        synchronized (cacheManager)
         {
-            try
+            
+            if (ehcache == null && autoCreate)
             {
-                synchronized (cacheManager)
-                {
-                    ehcache = cacheManager.get(name);
-                    if (ehcache == null)
-                    {
-                        net.sf.ehcache.Cache cache = manager.getCache(name);
-                        if (cache == null)
-                        {
-                            LOGGER.warn("Could not find configuration [" + name
-                                    + "]; using defaults.");
-                            manager.addCache(name);
-                            cache = manager.getCache(name);
-                            LOGGER.debug("started EHCache region: " + name);
-                        }
-                        ehcache = new EhCache(cache, listener);
-                        cacheManager.put(name, ehcache);
-                    }
-                }
-            }
-            catch (net.sf.ehcache.CacheException e)
-            {
-                throw new CacheException(e);
+                
+                ehcache = getEhCache(name, listener);
             }
         }
+        return ehcache;
+    }
+    
+    private EhCache getEhCache(String name, CacheExpiredListener listener)
+    {
+        net.sf.ehcache.Cache cache = manager.getCache(name);
+        if (cache == null)
+        {
+            LOGGER.warn("Could not find configuration [" + name
+                    + "]; using defaults.");
+            manager.addCache(name);
+            cache = manager.getCache(name);
+            LOGGER.debug("started EHCache region: " + name);
+        }
+        EhCache ehcache = new EhCache(cache, listener);
+        cacheManager.put(name, ehcache);
         return ehcache;
     }
     

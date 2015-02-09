@@ -7,7 +7,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import com.sxj.cache.core.Cache;
-import com.sxj.cache.core.CacheException;
 import com.sxj.cache.core.CacheExpiredListener;
 import com.sxj.cache.core.CacheProvider;
 
@@ -21,6 +20,24 @@ public class RedisCacheProvider implements CacheProvider
     private static String host;
     
     private static final String LOCALHOST = "127.0.0.1";
+    
+    private static final int DEFAULT_PORT = 6379;
+    
+    private static final int DEFAULT_TIMEOUT = 2000;
+    
+    private static final int DEFAULT_DATABASE = 0;
+    
+    private static final int DEFAULT_MAXIDLE = 10;
+    
+    private static final int DEFAULT_MINIDLE = 5;
+    
+    private static final int DEFAULT_NUMTESTSPEREVICTIONRUN = 10;
+    
+    private static final int DEFAULT_TIMEBETWEENEVICTIONRUNSMILLIS = 10;
+    
+    private static final int DEFAULT_SOFTMINEVICTABLEIDLETIMEMILLIS = 10;
+    
+    private static final int DEFAULT_MINEVICTABLEIDLETIMEMILLIS = 1000;
     
     private static int port;
     
@@ -62,40 +79,43 @@ public class RedisCacheProvider implements CacheProvider
     
     @Override
     public Cache buildCache(String regionName, boolean autoCreate,
-            CacheExpiredListener listener) throws CacheException
+            CacheExpiredListener listener)
     {
         return new RedisCache(regionName);
     }
     
     @Override
-    public void start(Properties props) throws CacheException
+    public void start(Properties props)
     {
         JedisPoolConfig config = new JedisPoolConfig();
         
         host = getProperty(props, "host", LOCALHOST);
         password = props.getProperty("password", null);
         
-        port = getProperty(props, "port", 6379);
-        timeout = getProperty(props, "timeout", 2000);
-        database = getProperty(props, "database", 0);
+        port = getProperty(props, "port", DEFAULT_PORT);
         
-        config.setMaxIdle(getProperty(props, "maxIdle", 10));
-        config.setMinIdle(getProperty(props, "minIdle", 5));
+        timeout = getProperty(props, "timeout", DEFAULT_TIMEOUT);
+        
+        database = getProperty(props, "database", DEFAULT_DATABASE);
+        
+        config.setMaxIdle(getProperty(props, "maxIdle", DEFAULT_MAXIDLE));
+        
+        config.setMinIdle(getProperty(props, "minIdle", DEFAULT_MINIDLE));
         config.setTestWhileIdle(getProperty(props, "testWhileIdle", false));
         config.setTestOnBorrow(getProperty(props, "testOnBorrow", true));
         config.setTestOnReturn(getProperty(props, "testOnReturn", false));
         config.setNumTestsPerEvictionRun(getProperty(props,
                 "numTestsPerEvictionRun",
-                10));
+                DEFAULT_NUMTESTSPEREVICTIONRUN));
         config.setMinEvictableIdleTimeMillis(getProperty(props,
                 "minEvictableIdleTimeMillis",
-                1000));
+                DEFAULT_MINEVICTABLEIDLETIMEMILLIS));
         config.setSoftMinEvictableIdleTimeMillis(getProperty(props,
                 "softMinEvictableIdleTimeMillis",
-                10));
+                DEFAULT_SOFTMINEVICTABLEIDLETIMEMILLIS));
         config.setTimeBetweenEvictionRunsMillis(getProperty(props,
                 "timeBetweenEvictionRunsMillis",
-                10));
+                DEFAULT_TIMEBETWEENEVICTIONRUNSMILLIS));
         pool = new JedisPool(config, host, port, timeout, password, database);
         
     }

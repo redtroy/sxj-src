@@ -9,7 +9,7 @@ public class NullCache implements Cache
      * @see net.oschina.j2cache.Cache#get(java.lang.Object)
      */
     @Override
-    public Object get(Object key) throws CacheException
+    public Object get(Object key)
     {
         return null;
     }
@@ -18,7 +18,7 @@ public class NullCache implements Cache
      * @see net.oschina.j2cache.Cache#put(java.lang.Object, java.lang.Object)
      */
     @Override
-    public void put(Object key, Object value) throws CacheException
+    public void put(Object key, Object value)
     {
         return;
     }
@@ -27,7 +27,7 @@ public class NullCache implements Cache
      * @see net.oschina.j2cache.Cache#update(java.lang.Object, java.lang.Object)
      */
     @Override
-    public void update(Object key, Object value) throws CacheException
+    public void update(Object key, Object value)
     {
         return;
     }
@@ -37,7 +37,7 @@ public class NullCache implements Cache
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public List keys() throws CacheException
+    public List keys()
     {
         return null;
     }
@@ -46,7 +46,7 @@ public class NullCache implements Cache
      * @see net.oschina.j2cache.Cache#remove(java.lang.Object)
      */
     @Override
-    public void evict(Object key) throws CacheException
+    public void evict(Object key)
     {
         return;
     }
@@ -56,7 +56,7 @@ public class NullCache implements Cache
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public void evict(List keys) throws CacheException
+    public void evict(List keys)
     {
         return;
     }
@@ -65,7 +65,7 @@ public class NullCache implements Cache
      * @see net.oschina.j2cache.Cache#clear()
      */
     @Override
-    public void clear() throws CacheException
+    public void clear()
     {
         return;
     }
@@ -74,32 +74,32 @@ public class NullCache implements Cache
      * @see net.oschina.j2cache.Cache#destroy()
      */
     @Override
-    public void destroy() throws CacheException
+    public void destroy()
     {
         return;
     }
     
     @Override
-    public Long size() throws CacheException
+    public Long size()
     {
         return 0L;
     }
     
     @Override
-    public List values() throws CacheException
+    public List values()
     {
         return null;
     }
     
     @Override
     public void put(Object key, Object value, int seconds)
-            throws CacheException
+    
     {
         return;
     }
     
     @Override
-    public Boolean exists(Object key) throws CacheException
+    public Boolean exists(Object key)
     {
         return false;
     }

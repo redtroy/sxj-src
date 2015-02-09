@@ -64,7 +64,7 @@ public class RedisCache implements Cache
     }
     
     @Override
-    public Object get(Object key) throws CacheException
+    public Object get(Object key)
     {
         Object obj = null;
         boolean broken = false;
@@ -90,7 +90,7 @@ public class RedisCache implements Cache
     }
     
     @Override
-    public void put(Object key, Object value) throws CacheException
+    public void put(Object key, Object value)
     {
         if (value == null)
             evict(key);
@@ -116,13 +116,13 @@ public class RedisCache implements Cache
     }
     
     @Override
-    public void update(Object key, Object value) throws CacheException
+    public void update(Object key, Object value)
     {
         put(key, value);
     }
     
     @Override
-    public void evict(Object key) throws CacheException
+    public void evict(Object key)
     {
         boolean broken = false;
         Jedis cache = RedisCacheProvider.getResource();
@@ -146,7 +146,7 @@ public class RedisCache implements Cache
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public void evict(List keys) throws CacheException
+    public void evict(List keys)
     {
         if (CollectionUtils.isEmpty(keys))
             return;
@@ -174,7 +174,7 @@ public class RedisCache implements Cache
     
     @Override
     @SuppressWarnings("rawtypes")
-    public List keys() throws CacheException
+    public List keys()
     {
         Jedis cache = RedisCacheProvider.getResource();
         boolean broken = false;
@@ -229,7 +229,7 @@ public class RedisCache implements Cache
     }
     
     @Override
-    public void clear() throws CacheException
+    public void clear()
     {
         Jedis cache = RedisCacheProvider.getResource();
         boolean broken = false;
@@ -249,27 +249,27 @@ public class RedisCache implements Cache
     }
     
     @Override
-    public void destroy() throws CacheException
+    public void destroy()
     {
         this.clear();
     }
     
     @Override
-    public Long size() throws CacheException
+    public Long size()
     {
         
         return (long) keys().size();
     }
     
     @Override
-    public List values() throws CacheException
+    public List values()
     {
         throw new CacheException("Operation not supported!!!");
     }
     
     @Override
     public void put(Object key, Object value, int seconds)
-            throws CacheException
+    
     {
         if (value == null)
             evict(key);
@@ -299,7 +299,7 @@ public class RedisCache implements Cache
     }
     
     @Override
-    public Boolean exists(Object key) throws CacheException
+    public Boolean exists(Object key)
     {
         if (key == null)
             return false;

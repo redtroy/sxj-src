@@ -24,9 +24,13 @@ import com.sxj.spring.modules.util.ClassLoaderUtil;
 public class HierarchicalCacheManager
 {
     
-    private final static Logger LOGGER = LoggerFactory.getLogger(HierarchicalCacheManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HierarchicalCacheManager.class);
     
-    private final static String CONFIG_FILE = "cache.properties";
+    private static final String CONFIG_FILE = "cache.properties";
+    
+    private static final String L1_PROVIDER_CLASS = "cache.L1.provider_class";
+    
+    private static final String L2_PROVIDER_CLASS = "cache.L2.provider_class";
     
     private String configFile;
     
@@ -70,8 +74,8 @@ public class HierarchicalCacheManager
                     props.getProperty("redis.database",
                             String.valueOf(databaseId)));
             configStream.close();
-            if (props.getProperty("cache.L1.provider_class") == null
-                    && props.getProperty("cache.L2.provider_class") == null)
+            if (props.getProperty(L1_PROVIDER_CLASS) == null
+                    && props.getProperty(L2_PROVIDER_CLASS) == null)
                 throw new CacheException(
                         "At lease one provider_class should be defined!");
             startL1Provider(props);
@@ -88,9 +92,9 @@ public class HierarchicalCacheManager
             throws InstantiationException, IllegalAccessException,
             ClassNotFoundException
     {
-        if (props.getProperty("cache.L2.provider_class") != null)
+        if (props.getProperty(L2_PROVIDER_CLASS) != null)
         {
-            HierarchicalCacheManager.l2_provider = getProviderInstance(props.getProperty("cache.L2.provider_class"));
+            HierarchicalCacheManager.l2_provider = getProviderInstance(props.getProperty(L2_PROVIDER_CLASS));
             HierarchicalCacheManager.l2_provider.start(getProviderProperties(props,
                     HierarchicalCacheManager.l2_provider));
             LOGGER.info("Using L2 CacheProvider : "
@@ -102,9 +106,9 @@ public class HierarchicalCacheManager
             throws InstantiationException, IllegalAccessException,
             ClassNotFoundException
     {
-        if (props.getProperty("cache.L1.provider_class") != null)
+        if (props.getProperty(L1_PROVIDER_CLASS) != null)
         {
-            HierarchicalCacheManager.l1_provider = getProviderInstance(props.getProperty("cache.L1.provider_class"));
+            HierarchicalCacheManager.l1_provider = getProviderInstance(props.getProperty(L1_PROVIDER_CLASS));
             HierarchicalCacheManager.l1_provider.start(getProviderProperties(props,
                     HierarchicalCacheManager.l1_provider));
             LOGGER.info("Using L1 CacheProvider : "
@@ -112,7 +116,7 @@ public class HierarchicalCacheManager
         }
     }
     
-    private final static CacheProvider getProviderInstance(String value)
+    private static final CacheProvider getProviderInstance(String value)
             throws InstantiationException, IllegalAccessException,
             ClassNotFoundException
     {
@@ -125,7 +129,7 @@ public class HierarchicalCacheManager
         return (CacheProvider) Class.forName(value).newInstance();
     }
     
-    private final static Properties getProviderProperties(Properties props,
+    private static final Properties getProviderProperties(Properties props,
             CacheProvider provider)
     {
         Properties tmp = new Properties();
@@ -141,7 +145,7 @@ public class HierarchicalCacheManager
         return tmp;
     }
     
-    private final static Cache getCache(int level, String cacheName,
+    private static final Cache getCache(int level, String cacheName,
             boolean autoCreate)
     {
         switch (level)
@@ -157,7 +161,7 @@ public class HierarchicalCacheManager
         }
     }
     
-    public final static void shutdown(int level)
+    public static final void shutdown(int level)
     {
         ((level == 1) ? l1_provider : l2_provider).stop();
     }
@@ -169,7 +173,7 @@ public class HierarchicalCacheManager
      * @param key
      * @return
      */
-    public final static Object get(int level, String name, Object key)
+    public static final Object get(int level, String name, Object key)
     {
         if (name != null && key != null)
         {
@@ -190,7 +194,7 @@ public class HierarchicalCacheManager
      * @return
      */
     @SuppressWarnings("unchecked")
-    public final static <T> T get(int level, Class<T> resultClass, String name,
+    public static final <T> T get(int level, Class<T> resultClass, String name,
             Object key)
     {
         if (name != null && key != null)
@@ -214,7 +218,7 @@ public class HierarchicalCacheManager
      * @param key
      * @param value
      */
-    public final static void set(int level, String name, Object key,
+    public static final void set(int level, String name, Object key,
             Object value)
     {
         if (name != null && key != null && value != null)
@@ -225,7 +229,7 @@ public class HierarchicalCacheManager
         }
     }
     
-    public final static void set(int level, String name, Object key,
+    public static final void set(int level, String name, Object key,
             Object value, int seconds)
     {
         if (name != null && key != null && value != null)
@@ -245,7 +249,7 @@ public class HierarchicalCacheManager
      * @param name
      * @param key
      */
-    public final static void evict(int level, String name, Object key)
+    public static final void evict(int level, String name, Object key)
     {
         if (name != null && key != null)
         {
@@ -255,7 +259,7 @@ public class HierarchicalCacheManager
         }
     }
     
-    public final static Boolean exists(int level, String name, Object key)
+    public static final Boolean exists(int level, String name, Object key)
     {
         if (name != null && key != null)
         {
@@ -273,7 +277,7 @@ public class HierarchicalCacheManager
      * @param keys
      */
     @SuppressWarnings("rawtypes")
-    public final static void batchEvict(int level, String name, List keys)
+    public static final void batchEvict(int level, String name, List keys)
     {
         if (name != null && CollectionUtils.isNotEmpty(keys))
         {
@@ -286,29 +290,26 @@ public class HierarchicalCacheManager
     /**
      * Clear the cache
      */
-    public final static void clear(int level, String name)
-            throws CacheException
+    public static final void clear(int level, String name)
     {
         Cache cache = getCache(level, name, false);
         if (cache != null)
             cache.clear();
     }
     
-    @SuppressWarnings("rawtypes")
-    public final static List keys(int level, String name) throws CacheException
+    public static final List keys(int level, String name)
     {
         Cache cache = getCache(level, name, false);
         return (cache != null) ? cache.keys() : null;
     }
     
-    public final static Long size(int level, String name) throws CacheException
+    public static final Long size(int level, String name)
     {
         Cache cache = getCache(level, name, false);
         return (cache != null) ? cache.size() : 0L;
     }
     
-    public final static List values(int level, String name)
-            throws CacheException
+    public static final List values(int level, String name)
     {
         Cache cache = getCache(level, name, false);
         return (cache != null) ? cache.values() : null;
