@@ -286,10 +286,10 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.addCondition("state", query.getState());//
 			condition.addCondition("memberName_A", query.getMemberNameA());//
 			condition.addCondition("payMode", query.getPayMode());//
-			condition.addCondition("type", query.getContractType());// 支付类型
-			condition.addCondition("PayContentState", query.getPayType());// 支付内容状态
+			condition.addCondition("contractType", query.getContractType());// 支付类型
+			condition.addCondition("payType", query.getPayType());// 支付内容状态
 			condition.setPage(query);
-			payList = payDao.queryPayContract(condition);
+			payList = payDao.queryManagerPayContract(condition);
 			query.setPage(condition);
 			return payList;
 		} catch (Exception e) {
