@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.collections.MapUtils;
+
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.MessageListener;
@@ -69,7 +71,6 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         }
         finally
         {
-            //            provider.returnResource(jedis, broken);
         }
     }
     
@@ -88,7 +89,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
                     thread.getService().shutdown();
                     pubsubs.remove(listenerId);
                     thread.getWrapper().unsubscribe(name);
-                    if (pubsubs.size() == 0)
+                    if (MapUtils.isEmpty(pubsubs))
                         provider.returnResource(jedis, false);
                 }
             }

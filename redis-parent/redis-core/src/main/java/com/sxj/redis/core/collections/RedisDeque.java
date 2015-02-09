@@ -156,7 +156,6 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
         try
         {
             List<String> lrange = jedis.lrange(name, -1, -1);
-            ;
             if (lrange.isEmpty())
             {
                 throw new NoSuchElementException();
