@@ -67,10 +67,8 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         }
         catch (Exception e)
         {
+            provider.returnResource(jedis, true);
             throw new RedisException("", e);
-        }
-        finally
-        {
         }
     }
     
@@ -142,12 +140,6 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         private Jedis getJedis()
         {
             return jedis;
-        }
-        
-        @Override
-        public int hashCode()
-        {
-            return super.hashCode();
         }
         
     }

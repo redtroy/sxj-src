@@ -17,7 +17,7 @@ import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisList<V> extends RedisExpirable implements RList<V>
 {
-    private int batchSize = 50;
+    private static final int BATCHSIZE = 50;
     
     public RedisList(RedisProvider provider, String name)
     {
@@ -143,26 +143,17 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         boolean broken = false;
         try
         {
-            Collection<String> copy = new ArrayList<String>();
+            List<String> copy = new ArrayList<String>();
             for (Object o : c)
             {
                 copy.add(V_SERIALIZER.serialize(o));
             }
-            int pages = pages(size(), batchSize);
+            int pages = pages(size(), BATCHSIZE);
             for (int i = 0; i < pages; i++)
             {
-                List<String> lrange = jedis.lrange(name, i * batchSize, i
-                        * batchSize + batchSize - 1);
-                
-                for (Iterator<String> iterator = copy.iterator(); iterator.hasNext();)
-                {
-                    String obj = iterator.next();
-                    int index = lrange.indexOf(obj);
-                    if (index != -1)
-                    {
-                        iterator.remove();
-                    }
-                }
+                List<String> lrange = jedis.lrange(name, i * BATCHSIZE, i
+                        * BATCHSIZE + BATCHSIZE - 1);
+                removeMatched(copy, lrange);
             }
             return copy.isEmpty();
         }
@@ -174,6 +165,19 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         finally
         {
             provider.returnResource(jedis, broken);
+        }
+    }
+    
+    private void removeMatched(List<String> copy, List<String> lrange)
+    {
+        for (Iterator<String> iterator = copy.iterator(); iterator.hasNext();)
+        {
+            String obj = iterator.next();
+            int index = lrange.indexOf(obj);
+            if (index != -1)
+            {
+                iterator.remove();
+            }
         }
     }
     
@@ -223,13 +227,14 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
             boolean broken = false;
             try
             {
+                int ops = 3;
                 jedis.watch(name);
                 List<String> tail = jedis.lrange(name, index, size());
                 Transaction multi = jedis.multi();
                 multi.ltrim(name, 0, index - 1);
                 multi.rpush(name, values);
                 multi.rpush(name, tail.toArray(new String[tail.size()]));
-                return multi.exec().size() == 3;
+                return multi.exec().size() == ops;
             }
             catch (Exception e)
             {
@@ -393,6 +398,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
                 String lpop = jedis.lpop(getName());
                 return (V) V_SERIALIZER.deserialize(lpop);
             }
+            int ops = 2;
             while (true)
             {
                 jedis.watch(name);
@@ -401,7 +407,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
                 Transaction multi = jedis.multi();
                 multi.ltrim(name, 0, index - 1);
                 multi.rpush(name, tail.toArray(new String[tail.size()]));
-                if (multi.exec().size() == 2)
+                if (multi.exec().size() == ops)
                     return (V) V_SERIALIZER.deserialize(lindex);
             }
         }
@@ -419,13 +425,11 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
     private int pages(int p, int q)
     {
         int div = p / q;
-        int rem = p - q * div; // equal to p % q
-        
+        int rem = p - q * div;
         if (rem == 0)
         {
             return div;
         }
-        
         return div + 1;
     }
     
@@ -438,18 +442,18 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         }
         Jedis jedis = provider.getResource();
         boolean broken = false;
-        int pages = pages(size(), batchSize);
+        int pages = pages(size(), BATCHSIZE);
         String value = V_SERIALIZER.serialize(o);
         try
         {
             for (int i = 0; i < pages; i++)
             {
-                List<String> lrange = jedis.lrange(name, i * batchSize, i
-                        * batchSize + batchSize - 1);
+                List<String> lrange = jedis.lrange(name, i * BATCHSIZE, i
+                        * BATCHSIZE + BATCHSIZE - 1);
                 int index = lrange.indexOf(value);
                 if (index != -1)
                 {
-                    return index + i * batchSize;
+                    return index + i * BATCHSIZE;
                 }
             }
             return -1;
@@ -474,7 +478,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         }
         
         final int size = size();
-        int pages = pages(size, batchSize);
+        int pages = pages(size, BATCHSIZE);
         Jedis jedis = provider.getResource();
         boolean broken = false;
         try
@@ -482,9 +486,9 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
             
             for (int i = 1; i <= pages; i++)
             {
-                int startIndex = -i * batchSize;
+                int startIndex = -i * BATCHSIZE;
                 List<String> lrange = jedis.lrange(name, startIndex, size
-                        - (i - 1) * batchSize);
+                        - (i - 1) * BATCHSIZE);
                 int index = lrange.lastIndexOf(V_SERIALIZER.serialize(o));
                 if (index != -1)
                 {

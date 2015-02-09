@@ -34,14 +34,9 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
             int hsetnx = jedis.hsetnx(name,
                     K_SERIALIZER.serialize(key),
                     V_SERIALIZER.serialize(value)).intValue();
-            switch (hsetnx)
-            {
-                case 1:
-                    return value;
-                    
-                default:
-                    return null;
-            }
+            if (hsetnx == 1)
+                return value;
+            return null;
         }
         catch (Exception e)
         {
@@ -80,13 +75,8 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
                 int intValue = multi.hdel(name, K_SERIALIZER.serialize(key))
                         .get()
                         .intValue();
-                switch (intValue)
-                {
-                    case 1:
-                        retValue = true;
-                    default:
-                        break;
-                }
+                if (intValue == 1)
+                    retValue = true;
             }
             multi.exec();
         }
@@ -118,13 +108,8 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
                         V_SERIALIZER.serialize(newValue))
                         .get()
                         .intValue();
-                switch (intValue)
-                {
-                    case 1:
-                        retValue = true;
-                    default:
-                        break;
-                }
+                if (intValue == 1)
+                    retValue = true;
             }
         }
         catch (Exception e)
@@ -152,13 +137,9 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
                     V_SERIALIZER.serialize(value))
                     .get()
                     .intValue();
-            switch (intValue)
-            {
-                case 1:
-                    return value;
-                default:
-                    return null;
-            }
+            if (intValue == 1)
+                return value;
+            return null;
         }
         catch (Exception e)
         {
@@ -308,14 +289,8 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
                 V deserialize = (V) V_SERIALIZER.deserialize(multi.hget(name,
                         serializeKey).get());
                 int hdel = multi.hdel(name, serializeKey).get().intValue();
-                switch (hdel)
-                {
-                    case 1:
-                        retValue = deserialize;
-                        
-                    default:
-                        break;
-                }
+                if (hdel == 1)
+                    retValue = deserialize;
             }
             return retValue;
         }
