@@ -24,6 +24,7 @@ public class NullCache implements Cache
     @Override
     public void put(Object key, Object value) throws CacheException
     {
+        return;
     }
     
     /* (non-Javadoc)
@@ -32,6 +33,7 @@ public class NullCache implements Cache
     @Override
     public void update(Object key, Object value) throws CacheException
     {
+        return;
     }
     
     /* (non-Javadoc)
@@ -50,6 +52,7 @@ public class NullCache implements Cache
     @Override
     public void evict(Object key) throws CacheException
     {
+        return;
     }
     
     /* (non-Javadoc)
@@ -59,6 +62,7 @@ public class NullCache implements Cache
     @SuppressWarnings("rawtypes")
     public void evict(List keys) throws CacheException
     {
+        return;
     }
     
     /* (non-Javadoc)
@@ -67,6 +71,7 @@ public class NullCache implements Cache
     @Override
     public void clear() throws CacheException
     {
+        return;
     }
     
     /* (non-Javadoc)
@@ -75,6 +80,7 @@ public class NullCache implements Cache
     @Override
     public void destroy() throws CacheException
     {
+        return;
     }
     
     @Override
@@ -93,8 +99,7 @@ public class NullCache implements Cache
     public void put(Object key, Object value, int seconds)
             throws CacheException
     {
-        // TODO Auto-generated method stub
-        
+        return;
     }
     
     @Override

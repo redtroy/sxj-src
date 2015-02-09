@@ -18,7 +18,7 @@ public class MethodCacheAspectJ
     @Pointcut("@annotation(com.sxj.cache.spring.annotation.Cached)")
     public void methodCachePointCut()
     {
-        
+        return;
     }
     
     @Around("methodCachePointCut()")
