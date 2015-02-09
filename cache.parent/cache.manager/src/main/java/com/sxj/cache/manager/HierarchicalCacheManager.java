@@ -18,7 +18,6 @@ import com.sxj.cache.redis.RedisCacheProvider;
 
 /**
  * 缓存管理器
- * @author liudong
  */
 public class HierarchicalCacheManager
 {
@@ -155,9 +154,6 @@ public class HierarchicalCacheManager
                         autoCreate,
                         listener);
         }
-        //        return ((level == 1) ? l1_provider : l2_provider).buildCache(cache_name,
-        //                autoCreate,
-        //                listener);
     }
     
     public final static void shutdown(int level)
@@ -174,7 +170,6 @@ public class HierarchicalCacheManager
      */
     public final static Object get(int level, String name, Object key)
     {
-        //System.out.println("GET1 => " + name+":"+key);
         if (name != null && key != null)
         {
             Cache cache = _GetCache(level, name, false);
@@ -197,7 +192,6 @@ public class HierarchicalCacheManager
     public final static <T> T get(int level, Class<T> resultClass, String name,
             Object key)
     {
-        //System.out.println("GET2 => " + name+":"+key);
         if (name != null && key != null)
         {
             Cache cache = _GetCache(level, name, false);
@@ -217,7 +211,6 @@ public class HierarchicalCacheManager
     public final static void set(int level, String name, Object key,
             Object value)
     {
-        //System.out.println("SET => " + name+":"+key+"="+value);
         if (name != null && key != null && value != null)
         {
             Cache cache = _GetCache(level, name, true);
@@ -248,7 +241,6 @@ public class HierarchicalCacheManager
      */
     public final static void evict(int level, String name, Object key)
     {
-        //batchEvict(level, name, java.util.Arrays.asList(key));
         if (name != null && key != null)
         {
             Cache cache = _GetCache(level, name, false);

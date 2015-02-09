@@ -18,7 +18,6 @@ import com.sxj.cache.core.serializer.Serializer;
 /**
  * Redis 缓存实现
  * 
- * @author winterlau
  */
 public class RedisCache implements Cache
 {
@@ -319,11 +318,6 @@ public class RedisCache implements Cache
                 byte[] bytes = serializeKey(key).getBytes();
                 multi.set(bytes, serializeObject(value).getBytes());
                 multi.expire(bytes, seconds);
-                //                cache.set(serializeKey(key).getBytes(),
-                //                        serializeObject(value).getBytes(),
-                //                        "NX".getBytes(),
-                //                        "EX".getBytes(),
-                //                        seconds);
                 multi.exec();
             }
             catch (Exception e)
