@@ -33,9 +33,7 @@ public class JsonSerializer implements Serializer
         try
         {
             CacheObject readValue = mapper.readValue(str, CacheObject.class);
-            Object readValue2 = mapper.readValue(readValue.getValue(),
-                    readValue.getType());
-            return readValue2;
+            return mapper.readValue(readValue.getValue(), readValue.getType());
         }
         catch (IOException e)
         {

@@ -69,7 +69,7 @@ public class MethodCacheAspectJ
     }
     
     private Method findCachedMethod(Class<?> clazz, String methodName,
-            Object[] arguments) throws NoSuchMethodException, SecurityException
+            Object[] arguments) throws NoSuchMethodException
     {
         Class<?>[] parameterTypes = new Class<?>[arguments.length];
         for (int i = 0; i < arguments.length; i++)

@@ -32,6 +32,10 @@ public class HierarchicalCacheManager
     
     private static final String L2_PROVIDER_CLASS = "cache.L2.provider_class";
     
+    private static final int LEVEL1 = 1;
+    
+    private static final int LEVEL2 = 2;
+    
     private String configFile;
     
     private String databaseId;
@@ -150,9 +154,9 @@ public class HierarchicalCacheManager
     {
         switch (level)
         {
-            case 1:
+            case LEVEL1:
                 return l1_provider.buildCache(cacheName, autoCreate, listener);
-            case 2:
+            case LEVEL2:
                 return l2_provider.buildCache(cacheName, autoCreate, listener);
             default:
                 return new NullCacheProvider().buildCache(cacheName,

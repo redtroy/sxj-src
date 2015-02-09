@@ -28,6 +28,8 @@ public class RedisCache implements Cache
     
     private static final Serializer V_SERIALIZER = new JdkSerializer();
     
+    private static final int OFFSET = 3;
+    
     private String region;
     
     private static final String DELETE_SCRIPT_IN_LUA = "local keys = redis.call('keys', '%s')"
@@ -178,13 +180,14 @@ public class RedisCache implements Cache
     {
         Jedis cache = RedisCacheProvider.getResource();
         boolean broken = false;
+        
         try
         {
             List<String> keys = new ArrayList<String>();
             keys.addAll(cache.keys(region + ":*"));
             for (int i = 0; i < keys.size(); i++)
             {
-                keys.set(i, keys.get(i).substring(region.length() + 3));
+                keys.set(i, keys.get(i).substring(region.length() + OFFSET));
             }
             return keys;
         }
