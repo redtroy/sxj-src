@@ -6,11 +6,6 @@
   <version>1.0</version>
   <packaging>pom</packaging>
   <modules>
-  	<module>redis-client</module>
-    <module>redis-concurrent</module>
-    <module>redis-collections</module>
-    <module>redis-spring</module>
-    <module>redis-topic</module>
     <module>redis-core</module>
   </modules>
   <properties>
