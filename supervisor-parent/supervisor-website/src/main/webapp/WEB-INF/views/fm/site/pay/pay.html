@@ -205,7 +205,9 @@ function to_finance(payId){
       <th>付款状态</th>
       </tr>
     <#list list as model>
-    <#if (model.state.ordinal() &lt; 1)>
+    <#if (model.state.ordinal() &lt; 1 && state=="a")>
+      <tr class="bColor-red">
+    <#elseif (model.state.ordinal() == 1 && state=="b")>
       <tr class="bColor-red">
     <#else>
       <tr >

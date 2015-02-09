@@ -1,5 +1,6 @@
 package com.sxj.supervisor.website.controller.pay;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,15 +88,17 @@ public class PayController extends BaseController {
 			String memberNo = info.getMember().getMemberNo();
 			query.setMemberNo(memberNo);
 			query.setMemberType(info.getMember().getType().getId().toString());
-			List<PayRecordEntity> list = payService.queryPayList(query);
 			PayModeEnum[] payMode = PayModeEnum.values();
 			PayStageEnum[] payState = PayStageEnum.values();
-			map.put("list", list);
+			List<PayRecordEntity> list = new ArrayList<PayRecordEntity>();
 			if (info.getMember().getType().getId() == 0) {
+				list = payService.queryPayListA(query);
 				map.put("state", "a");
 			} else {
+				list = payService.queryPayListB(query);
 				map.put("state", "b");
 			}
+			map.put("list", list);
 			String channelName = MessageChannel.WEBSITE_PAY_MESSAGE + memberNo;
 			if ("1".equals(del)) {
 				CometServiceImpl.setCount(channelName, 0l);
@@ -169,26 +172,29 @@ public class PayController extends BaseController {
 			throws WebException {
 		try {
 			PayRecordEntity pay = payService.getPayRecordEntity(id);
-			pay.setPayReal(payReal);
-			String flag = payService.updateState(pay);
 			Map<String, String> map = new HashMap<String, String>();
-			if (flag.equals("ok")) {
-				// 甲方
-				/*
-				 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-				 * + pay.getMemberNoA()); MessageChannel.initTopic() .publish(
-				 * MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
-				 */
-				// 乙方
-				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
-						+ pay.getMemberNoB());
-				redisTopics.getTopic(MessageChannel.TOPIC_NAME)
-						.publish(
-								MessageChannel.WEBSITE_PAY_MESSAGE
-										+ pay.getMemberNoB());
-				map.put("isOk", "ok");
-			} else {
-				map.put("isOk", "false");
+			pay.setPayReal(payReal);
+			if (pay.getState().equals(PayStageEnum.STAGE1)) {
+				String flag = payService.updateState(pay);
+				if (flag.equals("ok")) {
+					// 甲方
+					/*
+					 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
+					 * + pay.getMemberNoA()); MessageChannel.initTopic()
+					 * .publish( MessageChannel.WEBSITE_PAY_MESSAGE +
+					 * pay.getMemberNoA());
+					 */
+					// 乙方
+					CometServiceImpl
+							.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
+									+ pay.getMemberNoB());
+					redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
+							MessageChannel.WEBSITE_PAY_MESSAGE
+									+ pay.getMemberNoB());
+					map.put("isOk", "ok");
+				} else {
+					map.put("isOk", "false");
+				}
 			}
 			return map;
 		} catch (Exception e) {
@@ -204,19 +210,22 @@ public class PayController extends BaseController {
 			throws WebException {
 		try {
 			PayRecordEntity pay = payService.getPayRecordEntity(id);
-			String flag = payService.updateState(pay);
 			Map<String, String> map = new HashMap<String, String>();
-			if (flag.equals("ok")) {
-				// PayRecordEntity pay = payService.getPayRecordEntity(id);
-				// 乙方
-				/*
-				 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-				 * + pay.getMemberNoB()); MessageChannel.initTopic() .publish(
-				 * MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoB());
-				 */
-				map.put("isOk", "ok");
-			} else {
-				map.put("isOk", "false");
+			if (pay.getState().equals(PayStageEnum.STAGE2)) {
+				String flag = payService.updateState(pay);
+				if (flag.equals("ok")) {
+					// PayRecordEntity pay = payService.getPayRecordEntity(id);
+					// 乙方
+					/*
+					 * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
+					 * + pay.getMemberNoB()); MessageChannel.initTopic()
+					 * .publish( MessageChannel.WEBSITE_PAY_MESSAGE +
+					 * pay.getMemberNoB());
+					 */
+					map.put("isOk", "ok");
+				} else {
+					map.put("isOk", "false");
+				}
 			}
 			return map;
 		} catch (Exception e) {

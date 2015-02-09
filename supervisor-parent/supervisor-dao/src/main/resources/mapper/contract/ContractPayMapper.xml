@@ -38,7 +38,7 @@
 		<![CDATA[UPDATE M_CONTRACT_PAY SET STATE=#{state} where PAY_NO=#{payNo}]]>
 	</update>
 	<!-- 条件查询合同 -->
-	<select id="queryPayContract" resultMap="ContractPayResultMap"
+	<select id="queryPayContractA" resultMap="ContractPayResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT P.*  FROM M_CONTRACT_PAY P  WHERE 1=1
 	]]>
@@ -102,6 +102,73 @@
 			<![CDATA[AND P.PAY_DATE >=#{condition.startPayDate} AND P.PAY_DATE <= #{condition.endPayDate}]]>
 		</if>
 		<![CDATA[ ORDER BY P.STATE ASC,P.PAY_NO DESC
+		]]>
+	</select>
+	<!-- 条件查询合同 -->
+	<select id="queryPayContractB" resultMap="ContractPayResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM (SELECT A.*,(CASE WHEN A.STATE=1 THEN 4 WHEN A.STATE=0 THEN 3 ELSE A.STATE END) AS OD  FROM M_CONTRACT_PAY A) P  WHERE 1=1 
+	]]>
+		<!-- 根据会员号查询 -->
+		<if test="condition.memberNo != null and condition.memberNo != ''">
+			<![CDATA[ AND (P.MEMBER_NO_A = #{condition.memberNo} OR P.MEMBER_NO_B = #{condition.memberNo})]]>
+		</if>
+		<!-- 甲方会员名称 -->
+		<if test="condition.memberName_A != null and condition.memberName_A != ''">
+			<![CDATA[ AND  P.MEMBER_NAME_A like CONCAT('%',#{condition.memberName_A},'%')]]>
+		</if>
+		<!-- 支付单号 -->
+		<if test="condition.payNo != null and condition.payNo != ''">
+			<![CDATA[ AND P.PAY_NO like CONCAT('%',#{condition.payNo},'%')]]>
+		</if>
+		<!-- 合同号 -->
+		<if test="condition.contractNo != null and condition.contractNo != ''">
+			<![CDATA[AND P.CONTRACT_NO like CONCAT('%',#{condition.contractNo},'%')]]>
+		</if>
+		<!-- RFID编号 -->
+		<if test="condition.rfidNo != null and condition.rfidNo != ''">
+			<![CDATA[AND P.RFID_NO like CONCAT('%',#{condition.rfidNo},'%')]]>
+		</if>
+		<!-- 付款状态/收款状态 
+		<if
+			test="condition.state != null and condition.state !='' and condition.memberType != 1 and condition.memberType != 2">
+			<![CDATA[AND P.STATE =#{condition.state}]]>
+		</if>
+		<if
+			test="condition.state != null and condition.state !='' and condition.memberType != null and condition.memberType !='' and condition.memberType !=0">
+			<if test="condition.state &lt;4">
+			<![CDATA[AND P.STATE <4 ]]>
+			</if>
+			<if test="condition.state &gt;3">
+			<![CDATA[AND P.STATE =#{condition.state}]]>
+			</if>
+		</if>-->
+		<!-- STATE -->
+		<if test="condition.state != null and condition.state != ''">
+			<![CDATA[AND P.STATE = #{condition.state}]]>
+		</if>
+		<if test="condition.payMode != null and condition.payMode != ''">
+			<![CDATA[AND P.PAY_MODE = #{condition.payMode}]]>
+		</if>
+		<!-- 支付内容状态 -->
+		<if
+			test="condition.payType != null and condition.payType !=''">
+			<![CDATA[AND P.PAY_TYPE =#{condition.payType}]]>
+		</if>
+		<!-- 付款方式 -->
+		<if test="condition.payMode != null and condition.payMode !=''">
+			<![CDATA[AND P.PAY_MODE =#{condition.payMode}]]>
+		</if>
+		<!-- 类型 -->
+		<if test="condition.contractType != null and condition.contractType !=''">
+			<![CDATA[AND P.PAY_CONTRACT_TYPE =#{condition.contractType}]]>
+		</if>
+		<!-- 支付时间段 -->
+		<if
+			test="condition.startPayDate != null and condition.endPayDate != null and  condition.startPayDate != '' and condition.endPayDate != ''">
+			<![CDATA[AND P.PAY_DATE >=#{condition.startPayDate} AND P.PAY_DATE <= #{condition.endPayDate}]]>
+		</if>
+		<![CDATA[ ORDER BY P.OD DESC,P.PAY_NO DESC
 		]]>
 	</select>
 	 <insert id="addContractPay" parameterType="com.sxj.supervisor.entity.pay.PayRecordEntity">

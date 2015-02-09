@@ -13,11 +13,19 @@ import com.sxj.util.persistent.QueryCondition;
 public interface IContractPayDao {
 
 	/**
-	 * 付款管理高级查询
-	 *
+	 * 付款管理高级查询 甲方
+	 * 
 	 * @param function
 	 **/
-	public List<PayRecordEntity> queryPayContract(
+	public List<PayRecordEntity> queryPayContractA(
+			QueryCondition<PayRecordEntity> query);
+
+	/**
+	 * 付款管理高级查询 乙方
+	 * 
+	 * @param function
+	 **/
+	public List<PayRecordEntity> queryPayContractB(
 			QueryCondition<PayRecordEntity> query);
 
 	/**

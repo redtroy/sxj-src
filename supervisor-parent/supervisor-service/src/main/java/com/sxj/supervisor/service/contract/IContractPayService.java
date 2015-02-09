@@ -11,7 +11,13 @@ public interface IContractPayService {
 	/**
 	 * 查询合同列表
 	 */
-	public List<PayRecordEntity> queryPayList(ContractPayModel query)
+	public List<PayRecordEntity> queryPayListA(ContractPayModel query)
+			throws ServiceException;
+
+	/**
+	 * 查询合同列表
+	 */
+	public List<PayRecordEntity> queryPayListB(ContractPayModel query)
 			throws ServiceException;
 
 	/**
