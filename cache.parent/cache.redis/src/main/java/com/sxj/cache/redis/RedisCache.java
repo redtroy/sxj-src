@@ -22,11 +22,11 @@ import com.sxj.cache.core.serializer.Serializer;
 public class RedisCache implements Cache
 {
     
-    private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RedisCache.class);
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RedisCache.class);
     
-    private final static Serializer K_SERIALIZER = new JsonSerializer();
+    private static final Serializer K_SERIALIZER = new JsonSerializer();
     
-    private final static Serializer V_SERIALIZER = new JdkSerializer();
+    private static final Serializer V_SERIALIZER = new JdkSerializer();
     
     private String region;
     

@@ -5,7 +5,7 @@ import java.util.Properties;
 public class NullCacheProvider implements CacheProvider
 {
     
-    private final static NullCache CACHE = new NullCache();
+    private static final NullCache CACHE = new NullCache();
     
     @Override
     public String name()
@@ -18,7 +18,7 @@ public class NullCacheProvider implements CacheProvider
      */
     @Override
     public Cache buildCache(String regionName, boolean autoCreate,
-            CacheExpiredListener listener) throws CacheException
+            CacheExpiredListener listener)
     {
         return CACHE;
     }
@@ -27,7 +27,7 @@ public class NullCacheProvider implements CacheProvider
      * @see net.oschina.j2cache.CacheProvider#start()
      */
     @Override
-    public void start(Properties props) throws CacheException
+    public void start(Properties props)
     {
         return;
     }

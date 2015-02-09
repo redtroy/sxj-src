@@ -85,7 +85,7 @@ public class EhCacheProvider implements CacheProvider
      * @param properties current configuration settings.
      * @throws FileNotFoundException 
      */
-    public void start(Properties props) throws CacheException
+    public void start(Properties props)
     {
         if (manager != null)
         {

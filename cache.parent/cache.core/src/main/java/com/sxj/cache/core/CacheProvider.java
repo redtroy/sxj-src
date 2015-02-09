@@ -17,10 +17,10 @@ public interface CacheProvider
      * @param regionName the name of the cache region
      * @param autoCreate autoCreate settings
      * @param listener listener for expired elements
-     * @throws CacheException
+     * @
      */
     public Cache buildCache(String regionName, boolean autoCreate,
-            CacheExpiredListener listener) throws CacheException;
+            CacheExpiredListener listener);
     
     /**
      * Callback to perform any necessary initialization of the underlying cache implementation
@@ -28,7 +28,7 @@ public interface CacheProvider
      *
      * @param properties current configuration settings.
      */
-    public void start(Properties props) throws CacheException;
+    public void start(Properties props);
     
     /**
      * Callback to perform any necessary cleanup of the underlying cache implementation

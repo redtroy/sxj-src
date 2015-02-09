@@ -45,7 +45,7 @@ public class EhCache implements Cache, CacheEventListener
      *
      * @param key the key of the element to return.
      * @return The value placed into the cache with an earlier put, or null if not found or expired
-     * @throws CacheException
+     * @
      */
     public Object get(Object key)
     {
@@ -72,7 +72,7 @@ public class EhCache implements Cache, CacheEventListener
      *
      * @param key   a key
      * @param value a value
-     * @throws CacheException if the {@link CacheManager}
+     * @ if the {@link CacheManager}
      *                        is shutdown or another {@link Exception} occurs.
      */
     public void update(Object key, Object value)
@@ -85,7 +85,7 @@ public class EhCache implements Cache, CacheEventListener
      *
      * @param key   a key
      * @param value a value
-     * @throws CacheException if the {@link CacheManager}
+     * @ if the {@link CacheManager}
      *                        is shutdown or another {@link Exception} occurs.
      */
     public void put(Object key, Object value)
@@ -116,7 +116,7 @@ public class EhCache implements Cache, CacheEventListener
      * If no element matches, nothing is removed and no Exception is thrown.
      *
      * @param key the key of the element to remove
-     * @throws CacheException
+     * @
      */
     @Override
     public void evict(Object key)
@@ -149,7 +149,7 @@ public class EhCache implements Cache, CacheEventListener
      * Remove all elements in the cache, but leave the cache
      * in a useable state.
      *
-     * @throws CacheException
+     * @
      */
     public void clear()
     {
@@ -170,7 +170,7 @@ public class EhCache implements Cache, CacheEventListener
     /**
      * Remove the cache and make it unuseable.
      *
-     * @throws CacheException
+     * @
      */
     public void destroy()
     {
@@ -237,20 +237,20 @@ public class EhCache implements Cache, CacheEventListener
     }
     
     @Override
-    public Long size() throws CacheException
+    public Long size()
     {
         return (long) keys().size();
     }
     
     @Override
-    public List values() throws CacheException
+    public List values()
     {
         throw new CacheException("Operation not supported!!!");
     }
     
     @Override
     public void put(Object key, Object value, int seconds)
-            throws CacheException
+    
     {
         try
         {
@@ -273,7 +273,7 @@ public class EhCache implements Cache, CacheEventListener
     }
     
     @Override
-    public Boolean exists(Object key) throws CacheException
+    public Boolean exists(Object key)
     {
         return cache.isKeyInCache(key);
     }
