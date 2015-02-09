@@ -53,4 +53,14 @@ public class RedisObject implements RObject
         }
     }
     
+    public static Serializer getKSerializer()
+    {
+        return K_SERIALIZER;
+    }
+    
+    public static Serializer getVSerializer()
+    {
+        return V_SERIALIZER;
+    }
+    
 }

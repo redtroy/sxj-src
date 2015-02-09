@@ -1,14 +1,10 @@
 package com.sxj.redis.core.collections;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.ScanResult;
 
 import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.exception.RedisException;
@@ -69,82 +65,10 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
         }
     }
     
-    private Iterator<V> scanIterator(Jedis jedis, final int start)
-    {
-        ScanResult<String> sscan = jedis.sscan(name, start);
-        List<String> results = sscan.getResult();
-        List<V> retValue = new ArrayList<V>();
-        for (String result : results)
-        {
-            retValue.add((V) V_SERIALIZER.deserialize(result));
-        }
-        return retValue.iterator();
-    }
-    
     @Override
     public Iterator<V> iterator()
     {
-        
-        return new Iterator<V>()
-        {
-            Iterator<V> iterator;
-            
-            private V value;
-            
-            private boolean removed;
-            
-            @Override
-            public boolean hasNext()
-            {
-                scan();
-                return iterator.hasNext();
-            }
-            
-            private void scan()
-            {
-                if (iterator == null)
-                {
-                    final Jedis jedis = provider.getResource();
-                    boolean broken = false;
-                    try
-                    {
-                        
-                        iterator = scanIterator(jedis, 0);
-                    }
-                    catch (Exception e)
-                    {
-                        broken = true;
-                        throw new RedisException("", e);
-                    }
-                    finally
-                    {
-                        provider.returnResource(jedis, broken);
-                    }
-                }
-            }
-            
-            @Override
-            public V next()
-            {
-                if (!hasNext())
-                {
-                    throw new NoSuchElementException("No such element at index");
-                }
-                removed = false;
-                return value = iterator.next();
-            }
-            
-            @Override
-            public void remove()
-            {
-                scan();
-                iterator.remove();
-                RedisSet.this.remove(value);
-                removed = true;
-            }
-            
-        };
-        
+        return new RedisSetIterator<V>(provider, this);
     }
     
     @Override

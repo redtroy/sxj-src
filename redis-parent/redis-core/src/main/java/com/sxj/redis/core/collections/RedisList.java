@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.NoSuchElementException;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
@@ -37,7 +36,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
-            throw new RedisException("", e);
+            throw new RedisException(e);
         }
         finally
         {
@@ -89,6 +88,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception ex)
         {
             broken = true;
+            throw new RedisException(ex);
         }
         finally
         {
@@ -124,12 +124,12 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return false;
     }
     
     @Override
@@ -169,12 +169,12 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return false;
     }
     
     @Override
@@ -197,13 +197,13 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
         
-        return false;
     }
     
     @Override
@@ -234,12 +234,12 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
             catch (Exception e)
             {
                 broken = true;
+                throw new RedisException(e);
             }
             finally
             {
                 provider.returnResource(jedis, broken);
             }
-            return false;
             
         }
         else
@@ -281,6 +281,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
@@ -325,12 +326,12 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
     }
     
     private void checkIndex(int index)
@@ -364,6 +365,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
@@ -406,12 +408,12 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
     }
     
     private int pages(int p, int q)
@@ -455,12 +457,12 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return -1;
     }
     
     @Override
@@ -493,6 +495,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
@@ -511,96 +514,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
     @Override
     public ListIterator<V> listIterator(final int index)
     {
-        return new ListIterator<V>()
-        {
-            
-            private int currentIndex = index - 1;
-            
-            private boolean removeExecuted;
-            
-            @Override
-            public boolean hasNext()
-            {
-                int size = size();
-                return currentIndex + 1 < size && size > 0;
-            }
-            
-            @Override
-            public V next()
-            {
-                if (!hasNext())
-                {
-                    throw new NoSuchElementException(
-                            "No such element at index " + currentIndex);
-                }
-                currentIndex++;
-                removeExecuted = false;
-                return RedisList.this.get(currentIndex);
-            }
-            
-            @Override
-            public void remove()
-            {
-                if (removeExecuted)
-                {
-                    throw new IllegalStateException(
-                            "Element been already deleted");
-                }
-                RedisList.this.remove(currentIndex);
-                currentIndex--;
-                removeExecuted = true;
-            }
-            
-            @Override
-            public boolean hasPrevious()
-            {
-                int size = size();
-                return currentIndex - 1 < size && size > 0 && currentIndex >= 0;
-            }
-            
-            @Override
-            public V previous()
-            {
-                if (!hasPrevious())
-                {
-                    throw new NoSuchElementException(
-                            "No such element at index " + currentIndex);
-                }
-                removeExecuted = false;
-                V res = RedisList.this.get(currentIndex);
-                currentIndex--;
-                return res;
-            }
-            
-            @Override
-            public int nextIndex()
-            {
-                return currentIndex + 1;
-            }
-            
-            @Override
-            public int previousIndex()
-            {
-                return currentIndex;
-            }
-            
-            @Override
-            public void set(V e)
-            {
-                if (currentIndex >= size() - 1)
-                {
-                    throw new IllegalStateException();
-                }
-                RedisList.this.set(currentIndex, e);
-            }
-            
-            @Override
-            public void add(V e)
-            {
-                RedisList.this.add(currentIndex + 1, e);
-                currentIndex++;
-            }
-        };
+        return new RedisListIterator<V>(index, this);
     }
     
     @Override

@@ -444,13 +444,6 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         }
     }
     
-    //    @Override
-    //    public V addAndGet(K key, V delta)
-    //    {
-    //        // TODO Auto-generated method stub
-    //        return null;
-    //    }
-    
     @Override
     public Map<K, V> getAll(Set<K> keys)
     {

@@ -229,47 +229,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     @Override
     public Iterator<V> descendingIterator()
     {
-        return new Iterator<V>()
-        {
-            
-            private int currentIndex = size();
-            
-            private boolean removeExecuted;
-            
-            @Override
-            public boolean hasNext()
-            {
-                int size = size();
-                return currentIndex > 0 && size > 0;
-            }
-            
-            @Override
-            public V next()
-            {
-                if (!hasNext())
-                {
-                    throw new NoSuchElementException(
-                            "No such element at index " + currentIndex);
-                }
-                currentIndex--;
-                removeExecuted = false;
-                return RedisDeque.this.get(currentIndex);
-            }
-            
-            @Override
-            public void remove()
-            {
-                if (removeExecuted)
-                {
-                    throw new IllegalStateException(
-                            "Element been already deleted");
-                }
-                RedisDeque.this.remove(currentIndex);
-                currentIndex++;
-                removeExecuted = true;
-            }
-            
-        };
+        return new RedisDequeIterator<V>(this);
     }
     
     @Override
