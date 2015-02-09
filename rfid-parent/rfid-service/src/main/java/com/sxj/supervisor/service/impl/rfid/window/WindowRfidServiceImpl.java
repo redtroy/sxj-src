@@ -547,13 +547,19 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			if (StringUtils.isNotEmpty(rfidNo)) {
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 				if (wind.getProgressState().equals(
-						LabelProgressEnum.HAS_RECEIPT)) {
+						LabelProgressEnum.HAS_RECEIPT)) {//标签是否已收货
 					wind.setProgressState(LabelProgressEnum.INSTALL);
 					windowRfidDao.updateStepWindow(wind);
 					return 1;
 				} else if (wind.getProgressState().equals(
 						LabelProgressEnum.INSTALL)) {
-					return 2;
+					return 2;//门窗已安装
+				}else if (wind.getProgressState().equals(
+						LabelProgressEnum.HAS_QUALITY)) {
+					return 3;//门窗已质检
+				}else if (wind.getRfidState().equals(
+						RfidStateEnum.DISABLE)) {
+					return 4;//门窗已停用
 				}
 			}
 			return 0;

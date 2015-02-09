@@ -41,7 +41,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 
 	@Autowired
 	@Qualifier("payStagefsm")
-	private StateMachineImpl<PayStageEnum> payStageFsm;
+	private StateMachineImpl<PayStageEnum> payStagefsm;
 
 	@Autowired
 	@Qualifier("payModeFsm")
@@ -67,8 +67,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.addCondition("state", query.getState());//
 			condition.addCondition("memberName_A", query.getMemberNameA());//
 			condition.addCondition("payMode", query.getPayMode());//
-			condition.addCondition("type", query.getContractType());// 支付类型
-			condition.addCondition("PayContentState", query.getPayType());// 支付内容状态
+			condition.addCondition("contractType", query.getContractType());// 支付类型
+			condition.addCondition("payType", query.getPayType());// 支付内容状态
 			condition.setPage(query);
 			payList = payDao.queryPayContract(condition);
 			query.setPage(condition);
@@ -82,8 +82,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 	@Override
 	public String updateState(PayRecordEntity re) throws ServiceException {
 		try {
-			payStageFsm.setCurrentState(re.getState());
-			payStageFsm.fire(re.getState().toString(), re);
+			payStagefsm.setCurrentState(re.getState());
+			payStagefsm.fire(re.getState().toString(), re);
 			payDao.updatePay(re);
 		} catch (Exception e) {
 			SxjLogger.error("更改状态出错!", e, this.getClass());
@@ -286,10 +286,10 @@ public class ContractPayServiceImpl implements IContractPayService {
 			condition.addCondition("state", query.getState());//
 			condition.addCondition("memberName_A", query.getMemberNameA());//
 			condition.addCondition("payMode", query.getPayMode());//
-			condition.addCondition("type", query.getContractType());// 支付类型
-			condition.addCondition("PayContentState", query.getPayType());// 支付内容状态
+			condition.addCondition("contractType", query.getContractType());// 支付类型
+			condition.addCondition("payType", query.getPayType());// 支付内容状态
 			condition.setPage(query);
-			payList = payDao.queryPayContract(condition);
+			payList = payDao.queryManagerPayContract(condition);
 			query.setPage(condition);
 			return payList;
 		} catch (Exception e) {
