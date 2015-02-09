@@ -37,7 +37,7 @@ public class PayController extends BaseController {
 			if (query != null) {
 				query.setPagable(true);
 			}
-			List<PayRecordEntity> list = payService.queryPayList(query);
+			List<PayRecordEntity> list = payService.queryManagerPayList(query);
 			PayTypeEnum[] payStates = PayTypeEnum.values();// 支付内容
 			PayModeEnum[] payModes = PayModeEnum.values();// 支付方式
 			PayContractTypeEnum[] payTypes = PayContractTypeEnum.values();// 类型

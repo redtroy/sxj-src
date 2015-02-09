@@ -15,6 +15,12 @@ public interface IContractPayService {
 			throws ServiceException;
 
 	/**
+	 * 查询合同列表
+	 */
+	public List<PayRecordEntity> queryManagerPayList(ContractPayModel query)
+			throws ServiceException;
+
+	/**
 	 * 更改收款、付款状态
 	 */
 	public String updateState(PayRecordEntity re) throws ServiceException;

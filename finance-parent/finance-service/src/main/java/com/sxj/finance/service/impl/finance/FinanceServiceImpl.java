@@ -87,15 +87,25 @@ public class FinanceServiceImpl implements IFinanceService {
 				fe.setState(PayStageEnum.Stage2_0);
 				fe.setApplyDate(new Date());
 				financeDao.update(fe);
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("payNo", f.getPayNo());
+				map.put("state", fe.getState().toString());
+				String res = cl.post(url, map);
+				Map<String, String> jmap = JsonMapper.nonDefaultMapper()
+						.fromJson(res, HashMap.class);
+				if ("1".equals(jmap.get("flag"))) {
+					return true;
+				} else {
+					throw new ServiceException("同步状态出错");
+				}
 			} else {
 				return false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			return false;
+			throw new ServiceException(e.getMessage(), e);
 		}
-		return true;
 	}
 
 	@Override

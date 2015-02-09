@@ -11,6 +11,7 @@
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <link rel="stylesheet" href="${b.staticPath}style/datepicker.css"/>-->
+<@b.pageScript/>
 <script>
 jQuery(document).ready(function($) {
 	$('.button-red').live("click",function(){
@@ -86,6 +87,7 @@ function pay(id){
     <button class="button button-search" onclick="query()">查询</button>
   </p>
 </div>
+ <@b.pager/>
 <table border="0" cellpadding="0" cellspacing="0" class="tabList">
    <col width="10%" />
     <col width="10%" />
@@ -131,7 +133,7 @@ function pay(id){
     <td>${model.content}</td>
     <td>
    <#if (model.state.ordinal()==0)>
-    <a class="button button-red" pay_id="pay_info_${model.id}">我要融资</a>
+    <a class="button  btn-link" pay_id="pay_info_${model.id}">我要融资</a>
       <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
       <div class="tipGray"><span class="icon icon16 icon-close ly-right" onclick="javascript:closeDiv('pay_info_${model.id}');">关闭</span>
 </div>
@@ -178,6 +180,7 @@ function pay(id){
     <td>&nbsp;</td>
   </tr>
 </table>
+ <@b.pager/>
 </div>
 </div>
 <@b.footer/>

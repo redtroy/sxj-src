@@ -13,8 +13,8 @@
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
-	<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
-	<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/intense.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
 <script src="${b.staticPath}js/jquery.elastislide-style.js" type="text/javascript" ></script>
@@ -94,7 +94,7 @@ $(function(){
         </p>
        <p>
        支付时间段
-       <input type="text" name="startPayDate" value="">-<input type="text" name="endPayDate" value="">       
+       <input type="text" name="startPayDate" datepicker value="">-<input type="text" datepicker name="endPayDate" value="">       
         付款状态<select name="state">
 	   <option selected="selected" value="">全部</option>
           <#list payStages as model>

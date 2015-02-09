@@ -267,6 +267,37 @@ public class ContractPayServiceImpl implements IContractPayService {
 		}
 	}
 
+	@Override
+	public List<PayRecordEntity> queryManagerPayList(ContractPayModel query)
+			throws ServiceException {
+		try {
+			List<PayRecordEntity> payList = new ArrayList<PayRecordEntity>();
+			if (query == null) {
+				return payList;
+			}
+			QueryCondition<PayRecordEntity> condition = new QueryCondition<PayRecordEntity>();
+			condition.addCondition("memberNo", query.getMemberNo());// 会员号
+			condition.addCondition("memberType", query.getMemberType());// 会员号
+			condition.addCondition("payNo", query.getPayNo());// 支付单号
+			condition.addCondition("contractNo", query.getContractNo());// 合同号
+			condition.addCondition("rfidNo", query.getRfidNo());// Rfid编号
+			condition.addCondition("startPayDate", query.getStartPayDate());// 开始时间
+			condition.addCondition("endPayDate", query.getEndPayDate());// 结束时间
+			condition.addCondition("state", query.getState());//
+			condition.addCondition("memberName_A", query.getMemberNameA());//
+			condition.addCondition("payMode", query.getPayMode());//
+			condition.addCondition("type", query.getContractType());// 支付类型
+			condition.addCondition("PayContentState", query.getPayType());// 支付内容状态
+			condition.setPage(query);
+			payList = payDao.queryPayContract(condition);
+			query.setPage(condition);
+			return payList;
+		} catch (Exception e) {
+			SxjLogger.error("查询付款管理出错!", e, this.getClass());
+			throw new ServiceException("查询付款管理出错!", e);
+		}
+	}
+
 	// @Override
 	// public String changeState(String payNo, String state)
 	// throws ServiceException {

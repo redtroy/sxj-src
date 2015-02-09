@@ -18,7 +18,7 @@ public class PayModeMachineConfig {
 	 * 
 	 * @param event
 	 */
-	@Transitions({ @Transition(source = "MODE1", event = "MODE1_STAGE1_", target = "MODE2_0") })
+	@Transitions({ @Transition(source = "MODE1", event = "MODE1_STAGE1_Stage2_0", target = "MODE2_0") })
 	public void noop(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
