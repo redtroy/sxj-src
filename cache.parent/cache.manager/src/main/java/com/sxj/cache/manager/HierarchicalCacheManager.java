@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -274,7 +275,7 @@ public class HierarchicalCacheManager
     @SuppressWarnings("rawtypes")
     public final static void batchEvict(int level, String name, List keys)
     {
-        if (name != null && keys != null && keys.size() > 0)
+        if (name != null && CollectionUtils.isNotEmpty(keys))
         {
             Cache cache = getCache(level, name, false);
             if (cache != null)
