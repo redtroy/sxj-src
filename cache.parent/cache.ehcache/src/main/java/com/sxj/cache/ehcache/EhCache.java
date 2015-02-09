@@ -250,7 +250,7 @@ public class EhCache implements Cache, CacheEventListener
     @Override
     public List values() throws CacheException
     {
-        return null;
+        throw new CacheException("Operation not supported!!!");
     }
     
     @Override
