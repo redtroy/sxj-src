@@ -1,9 +1,9 @@
 package com.sxj.cache.redis;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
@@ -81,8 +81,6 @@ public class RedisCache implements Cache
         {
             LOGGER.error("Error occured when get data from L2 cache", e);
             broken = true;
-            if (e instanceof IOException)
-                evict(key);
         }
         finally
         {
@@ -150,7 +148,7 @@ public class RedisCache implements Cache
     @SuppressWarnings("rawtypes")
     public void evict(List keys) throws CacheException
     {
-        if (keys == null || keys.size() == 0)
+        if (CollectionUtils.isEmpty(keys))
             return;
         boolean broken = false;
         Jedis cache = RedisCacheProvider.getResource();

@@ -2,6 +2,7 @@ package com.sxj.cache.ehcache;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,7 +25,7 @@ public class EhCacheProvider implements CacheProvider
     
     private CacheManager manager;
     
-    private ConcurrentHashMap<String, EhCache> cacheManager;
+    private Map<String, EhCache> cacheManager;
     
     @Override
     public String name()

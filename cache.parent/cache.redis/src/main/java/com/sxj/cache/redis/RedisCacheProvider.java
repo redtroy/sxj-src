@@ -20,6 +20,8 @@ public class RedisCacheProvider implements CacheProvider
     
     private static String host;
     
+    private static final String LOCALHOST = "127.0.0.1";
+    
     private static int port;
     
     private static int timeout;
@@ -48,7 +50,6 @@ public class RedisCacheProvider implements CacheProvider
         if (isBrokenResource)
         {
             pool.returnBrokenResource(jedis);
-            jedis = null;
         }
         else
             pool.returnResource(jedis);
@@ -71,7 +72,7 @@ public class RedisCacheProvider implements CacheProvider
     {
         JedisPoolConfig config = new JedisPoolConfig();
         
-        host = getProperty(props, "host", "127.0.0.1");
+        host = getProperty(props, "host", LOCALHOST);
         password = props.getProperty("password", null);
         
         port = getProperty(props, "port", 6379);
@@ -119,7 +120,7 @@ public class RedisCacheProvider implements CacheProvider
             return Integer.parseInt(props.getProperty(key,
                     String.valueOf(defaultValue)).trim());
         }
-        catch (Exception e)
+        catch (NumberFormatException nfe)
         {
             return defaultValue;
         }

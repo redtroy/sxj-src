@@ -1,6 +1,5 @@
 package com.sxj.cache.manager;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
@@ -64,22 +63,8 @@ public class HierarchicalCacheManager
         try
         {
             configStream = ClassLoaderUtil.getResource(path);
-        }
-        catch (FileNotFoundException e1)
-        {
-            throw new CacheException(e1);
-        }
-        if (configStream == null)
-            throw new CacheException("Cannot find "
-                    + HierarchicalCacheManager.class.getClassLoader()
-                            .getResource(path)
-                            .toExternalForm() + " !!!");
-        
-        Properties props = new Properties();
-        
-        HierarchicalCacheManager.listener = listener;
-        try
-        {
+            Properties props = new Properties();
+            HierarchicalCacheManager.listener = listener;
             props.load(configStream);
             props.setProperty("redis.database",
                     props.getProperty("redis.database",
@@ -91,7 +76,7 @@ public class HierarchicalCacheManager
                         "At lease one provider_class should be defined!");
             startL1Provider(props);
             startL2Provider(props);
-            
+            configStream.close();
         }
         catch (Exception e)
         {
