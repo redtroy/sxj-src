@@ -3,6 +3,8 @@ package com.sxj.cache.spring;
 import java.lang.reflect.Method;
 import java.util.Date;
 
+import net.sf.ehcache.CacheException;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,39 +25,45 @@ public class MethodCacheAspectJ
     
     @Around("methodCachePointCut()")
     public Object methodCacheHold(ProceedingJoinPoint joinPoint)
-            throws Throwable
     {
-        String targetName = joinPoint.getTarget().getClass().getName();
-        String methodName = joinPoint.getSignature().getName();
-        Object[] arguments = joinPoint.getArgs();
-        Method method = findCachedMethod(joinPoint.getTarget().getClass(),
-                methodName,
-                arguments);
-        Cached annotation = method.getAnnotation(Cached.class);
-        CacheLevel level = annotation.level();
-        int timeToLive = annotation.timeToLive();
-        String name = annotation.name();
-        Object result = null;
-        String cacheKey = getCacheKey(targetName, methodName, arguments);
-        Object object = HierarchicalCacheManager.get(level.ordinal(),
-                name,
-                cacheKey);
-        if (object != null)
-            return object;
-        else
+        try
         {
-            result = joinPoint.proceed();
-            
-            if (result != null)
+            String targetName = joinPoint.getTarget().getClass().getName();
+            String methodName = joinPoint.getSignature().getName();
+            Object[] arguments = joinPoint.getArgs();
+            Method method = findCachedMethod(joinPoint.getTarget().getClass(),
+                    methodName,
+                    arguments);
+            Cached annotation = method.getAnnotation(Cached.class);
+            CacheLevel level = annotation.level();
+            int timeToLive = annotation.timeToLive();
+            String name = annotation.name();
+            Object result = null;
+            String cacheKey = getCacheKey(targetName, methodName, arguments);
+            Object object = HierarchicalCacheManager.get(level.ordinal(),
+                    name,
+                    cacheKey);
+            if (object != null)
+                return object;
+            else
             {
-                HierarchicalCacheManager.set(level.ordinal(),
-                        name,
-                        cacheKey,
-                        result,
-                        timeToLive);
+                result = joinPoint.proceed();
+                
+                if (result != null)
+                {
+                    HierarchicalCacheManager.set(level.ordinal(),
+                            name,
+                            cacheKey,
+                            result,
+                            timeToLive);
+                }
             }
+            return result;
         }
-        return result;
+        catch (Throwable t)
+        {
+            throw new CacheException(t);
+        }
     }
     
     private Method findCachedMethod(Class<?> clazz, String methodName,

@@ -39,11 +39,6 @@ public class RedisCache implements Cache
         this.region = region;
     }
     
-    private Object deserializeKey(String json)
-    {
-        return K_SERIALIZER.deserialize(json);
-    }
-    
     private String serializeObject(Object object)
     {
         
@@ -192,31 +187,6 @@ public class RedisCache implements Cache
             for (int i = 0; i < keys.size(); i++)
             {
                 keys.set(i, keys.get(i).substring(region.length() + 3));
-            }
-            return keys;
-        }
-        catch (Exception e)
-        {
-            broken = true;
-            throw new CacheException(e);
-        }
-        finally
-        {
-            RedisCacheProvider.returnResource(cache, broken);
-        }
-    }
-    
-    private List originalKeys() throws CacheException
-    {
-        Jedis cache = RedisCacheProvider.getResource();
-        boolean broken = false;
-        try
-        {
-            List<String> keys = new ArrayList<String>();
-            keys.addAll(cache.keys(region + ":*"));
-            for (int i = 0; i < keys.size(); i++)
-            {
-                keys.set(i, keys.get(i));
             }
             return keys;
         }

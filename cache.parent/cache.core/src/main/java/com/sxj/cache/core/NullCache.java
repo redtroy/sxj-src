@@ -82,7 +82,7 @@ public class NullCache implements Cache
     @Override
     public Long size() throws CacheException
     {
-        return 0l;
+        return 0L;
     }
     
     @Override

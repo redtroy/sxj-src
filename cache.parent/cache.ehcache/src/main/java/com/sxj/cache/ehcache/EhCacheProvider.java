@@ -24,7 +24,7 @@ public class EhCacheProvider implements CacheProvider
     
     private CacheManager manager;
     
-    private ConcurrentHashMap<String, EhCache> _CacheManager;
+    private ConcurrentHashMap<String, EhCache> cacheManager;
     
     @Override
     public String name()
@@ -48,14 +48,14 @@ public class EhCacheProvider implements CacheProvider
     public EhCache buildCache(String name, boolean autoCreate,
             CacheExpiredListener listener) throws CacheException
     {
-        EhCache ehcache = _CacheManager.get(name);
+        EhCache ehcache = cacheManager.get(name);
         if (ehcache == null && autoCreate)
         {
             try
             {
-                synchronized (_CacheManager)
+                synchronized (cacheManager)
                 {
-                    ehcache = _CacheManager.get(name);
+                    ehcache = cacheManager.get(name);
                     if (ehcache == null)
                     {
                         net.sf.ehcache.Cache cache = manager.getCache(name);
@@ -68,7 +68,7 @@ public class EhCacheProvider implements CacheProvider
                             LOGGER.debug("started EHCache region: " + name);
                         }
                         ehcache = new EhCache(cache, listener);
-                        _CacheManager.put(name, ehcache);
+                        cacheManager.put(name, ehcache);
                     }
                 }
             }
@@ -104,7 +104,7 @@ public class EhCacheProvider implements CacheProvider
             if (resource == null)
                 throw new CacheException("cannot find ehcache.xml !!!");
             manager = new CacheManager(resource);
-            _CacheManager = new ConcurrentHashMap<String, EhCache>();
+            cacheManager = new ConcurrentHashMap<String, EhCache>();
         }
         catch (FileNotFoundException e)
         {

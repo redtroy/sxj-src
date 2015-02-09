@@ -1,5 +1,6 @@
 package com.sxj.cache.manager;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.sxj.cache.core.CacheProvider;
 import com.sxj.cache.core.NullCacheProvider;
 import com.sxj.cache.ehcache.EhCacheProvider;
 import com.sxj.cache.redis.RedisCacheProvider;
+import com.sxj.spring.modules.util.ClassLoaderUtil;
 
 /**
  * 缓存管理器
@@ -58,16 +60,15 @@ public class HierarchicalCacheManager
     {
         final String path = getConfigFile() == null ? configFile
                 : getConfigFile();
-        InputStream configStream = HierarchicalCacheManager.class.getClassLoader()
-                .getParent()
-                .getResourceAsStream(path);
-        if (configStream == null)
-            configStream = HierarchicalCacheManager.class.getClassLoader()
-                    .getResourceAsStream(path);
-        if (configStream == null)
-            configStream = Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResourceAsStream(path);
+        InputStream configStream = null;
+        try
+        {
+            configStream = ClassLoaderUtil.getResource(path);
+        }
+        catch (FileNotFoundException e1)
+        {
+            throw new CacheException(e1);
+        }
         if (configStream == null)
             throw new CacheException("Cannot find "
                     + HierarchicalCacheManager.class.getClassLoader()
@@ -88,27 +89,41 @@ public class HierarchicalCacheManager
                     && props.getProperty("cache.L2.provider_class") == null)
                 throw new CacheException(
                         "At lease one provider_class should be defined!");
-            if (props.getProperty("cache.L1.provider_class") != null)
-            {
-                HierarchicalCacheManager.l1_provider = getProviderInstance(props.getProperty("cache.L1.provider_class"));
-                HierarchicalCacheManager.l1_provider.start(getProviderProperties(props,
-                        HierarchicalCacheManager.l1_provider));
-                LOGGER.info("Using L1 CacheProvider : "
-                        + l1_provider.getClass().getName());
-            }
-            if (props.getProperty("cache.L2.provider_class") != null)
-            {
-                HierarchicalCacheManager.l2_provider = getProviderInstance(props.getProperty("cache.L2.provider_class"));
-                HierarchicalCacheManager.l2_provider.start(getProviderProperties(props,
-                        HierarchicalCacheManager.l2_provider));
-                LOGGER.info("Using L2 CacheProvider : "
-                        + l2_provider.getClass().getName());
-            }
+            startL1Provider(props);
+            startL2Provider(props);
             
         }
         catch (Exception e)
         {
             throw new CacheException("Unabled to initialize cache providers", e);
+        }
+    }
+    
+    private void startL2Provider(Properties props)
+            throws InstantiationException, IllegalAccessException,
+            ClassNotFoundException
+    {
+        if (props.getProperty("cache.L2.provider_class") != null)
+        {
+            HierarchicalCacheManager.l2_provider = getProviderInstance(props.getProperty("cache.L2.provider_class"));
+            HierarchicalCacheManager.l2_provider.start(getProviderProperties(props,
+                    HierarchicalCacheManager.l2_provider));
+            LOGGER.info("Using L2 CacheProvider : "
+                    + l2_provider.getClass().getName());
+        }
+    }
+    
+    private void startL1Provider(Properties props)
+            throws InstantiationException, IllegalAccessException,
+            ClassNotFoundException
+    {
+        if (props.getProperty("cache.L1.provider_class") != null)
+        {
+            HierarchicalCacheManager.l1_provider = getProviderInstance(props.getProperty("cache.L1.provider_class"));
+            HierarchicalCacheManager.l1_provider.start(getProviderProperties(props,
+                    HierarchicalCacheManager.l1_provider));
+            LOGGER.info("Using L1 CacheProvider : "
+                    + l1_provider.getClass().getName());
         }
     }
     
@@ -141,17 +156,17 @@ public class HierarchicalCacheManager
         return tmp;
     }
     
-    private final static Cache getCache(int level, String cache_name,
+    private final static Cache getCache(int level, String cacheName,
             boolean autoCreate)
     {
         switch (level)
         {
             case 1:
-                return l1_provider.buildCache(cache_name, autoCreate, listener);
+                return l1_provider.buildCache(cacheName, autoCreate, listener);
             case 2:
-                return l2_provider.buildCache(cache_name, autoCreate, listener);
+                return l2_provider.buildCache(cacheName, autoCreate, listener);
             default:
-                return new NullCacheProvider().buildCache(cache_name,
+                return new NullCacheProvider().buildCache(cacheName,
                         autoCreate,
                         listener);
         }
@@ -304,7 +319,7 @@ public class HierarchicalCacheManager
     public final static Long size(int level, String name) throws CacheException
     {
         Cache cache = getCache(level, name, false);
-        return (cache != null) ? cache.size() : 0l;
+        return (cache != null) ? cache.size() : 0L;
     }
     
     public final static List values(int level, String name)
