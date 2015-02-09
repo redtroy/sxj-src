@@ -85,7 +85,7 @@
 		</if>
 		<!-- 支付内容状态 -->
 		<if
-			test="condition.PayContentState != null and condition.PayContentState !=''">
+			test="condition.payType != null and condition.payType !=''">
 			<![CDATA[AND P.PAY_TYPE =#{condition.payType}]]>
 		</if>
 		<!-- 付款方式 -->
@@ -93,7 +93,7 @@
 			<![CDATA[AND P.PAY_MODE =#{condition.payMode}]]>
 		</if>
 		<!-- 类型 -->
-		<if test="condition.type != null and condition.type !=''">
+		<if test="condition.contractType != null and condition.contractType !=''">
 			<![CDATA[AND P.PAY_CONTRACT_TYPE =#{condition.contractType}]]>
 		</if>
 		<!-- 支付时间段 -->
