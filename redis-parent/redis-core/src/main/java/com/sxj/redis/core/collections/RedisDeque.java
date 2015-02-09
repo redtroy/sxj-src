@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RDeque;
+import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
@@ -15,7 +16,6 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     public RedisDeque(RedisProvider provider, String name)
     {
         super(provider, name);
-        // TODO Auto-generated constructor stub
     }
     
     @Override
@@ -36,6 +36,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
         catch (Exception ex)
         {
             broken = true;
+            throw new RedisException(ex);
         }
         finally
         {
@@ -56,12 +57,12 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
         catch (Exception ex)
         {
             broken = true;
+            throw new RedisException(ex);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return false;
     }
     
     @Override
@@ -87,12 +88,12 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
     }
     
     @Override
@@ -114,13 +115,12 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
-        
     }
     
     @Override
@@ -140,12 +140,12 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
     }
     
     @Override
@@ -166,12 +166,12 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
     }
     
     @Override
@@ -193,12 +193,12 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
     }
     
     @Override

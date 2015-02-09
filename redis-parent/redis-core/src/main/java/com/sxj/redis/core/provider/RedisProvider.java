@@ -18,6 +18,25 @@ import com.sxj.spring.modules.util.ClassLoaderUtil;
  */
 public class RedisProvider implements RProvider
 {
+    private static final String LOCALHOST = "127.0.0.1";
+    
+    private static final int DEFAULT_PORT = 6379;
+    
+    private static final int DEFAULT_TIMEOUT = 2000;
+    
+    private static final int DEFAULT_DATABASE = 0;
+    
+    private static final int DEFAULT_MAXIDLE = 10;
+    
+    private static final int DEFAULT_MINIDLE = 5;
+    
+    private static final int DEFAULT_NUMTESTSPEREVICTIONRUN = 10;
+    
+    private static final int DEFAULT_TIMEBETWEENEVICTIONRUNSMILLIS = 10;
+    
+    private static final int DEFAULT_SOFTMINEVICTABLEIDLETIMEMILLIS = 10;
+    
+    private static final int DEFAULT_MINEVICTABLEIDLETIMEMILLIS = 1000;
     
     private static String host;
     
@@ -63,17 +82,17 @@ public class RedisProvider implements RProvider
     
     private final Properties getProviderProperties(Properties props)
     {
-        Properties new_props = new Properties();
+        Properties tmp = new Properties();
         Enumeration<Object> keys = props.keys();
         String prefix = "redis.collections.";
         while (keys.hasMoreElements())
         {
             String key = (String) keys.nextElement();
             if (key.startsWith(prefix))
-                new_props.setProperty(key.substring(prefix.length()),
+                tmp.setProperty(key.substring(prefix.length()),
                         props.getProperty(key));
         }
-        return new_props;
+        return tmp;
     }
     
     /**
@@ -88,7 +107,6 @@ public class RedisProvider implements RProvider
         if (broken)
         {
             pool.returnBrokenResource(jedis);
-            jedis = null;
         }
         else
             pool.returnResource(jedis);
@@ -104,30 +122,33 @@ public class RedisProvider implements RProvider
     {
         JedisPoolConfig config = new JedisPoolConfig();
         
-        host = getProperty(props, "host", "127.0.0.1");
+        host = getProperty(props, "host", LOCALHOST);
         password = props.getProperty("password", null);
         
-        port = getProperty(props, "port", 6379);
-        timeout = getProperty(props, "timeout", 2000);
-        database = getProperty(props, "database", 0);
+        port = getProperty(props, "port", DEFAULT_PORT);
         
-        config.setMaxIdle(getProperty(props, "maxIdle", 10));
-        config.setMinIdle(getProperty(props, "minIdle", 5));
+        timeout = getProperty(props, "timeout", DEFAULT_TIMEOUT);
+        
+        database = getProperty(props, "database", DEFAULT_DATABASE);
+        
+        config.setMaxIdle(getProperty(props, "maxIdle", DEFAULT_MAXIDLE));
+        
+        config.setMinIdle(getProperty(props, "minIdle", DEFAULT_MINIDLE));
         config.setTestWhileIdle(getProperty(props, "testWhileIdle", false));
         config.setTestOnBorrow(getProperty(props, "testOnBorrow", true));
         config.setTestOnReturn(getProperty(props, "testOnReturn", false));
         config.setNumTestsPerEvictionRun(getProperty(props,
                 "numTestsPerEvictionRun",
-                10));
+                DEFAULT_NUMTESTSPEREVICTIONRUN));
         config.setMinEvictableIdleTimeMillis(getProperty(props,
                 "minEvictableIdleTimeMillis",
-                1000));
+                DEFAULT_MINEVICTABLEIDLETIMEMILLIS));
         config.setSoftMinEvictableIdleTimeMillis(getProperty(props,
                 "softMinEvictableIdleTimeMillis",
-                10));
+                DEFAULT_SOFTMINEVICTABLEIDLETIMEMILLIS));
         config.setTimeBetweenEvictionRunsMillis(getProperty(props,
                 "timeBetweenEvictionRunsMillis",
-                10));
+                DEFAULT_TIMEBETWEENEVICTIONRUNSMILLIS));
         pool = new JedisPool(config, host, port, timeout, password, database);
         
     }
@@ -152,7 +173,7 @@ public class RedisProvider implements RProvider
             return Integer.parseInt(props.getProperty(key,
                     String.valueOf(defaultValue)).trim());
         }
-        catch (Exception e)
+        catch (NumberFormatException e)
         {
             return defaultValue;
         }

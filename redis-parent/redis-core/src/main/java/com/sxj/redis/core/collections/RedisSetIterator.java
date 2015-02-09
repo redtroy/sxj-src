@@ -80,7 +80,8 @@ public class RedisSetIterator<V> implements Iterator<V>
             throw new NoSuchElementException("No such element at index");
         }
         removed = false;
-        return value = iterator.next();
+        value = iterator.next();
+        return value;
     }
     
     @Override

@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RQueue;
+import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisQueue<V> extends RedisList<V> implements RQueue<V>
@@ -12,7 +13,6 @@ public class RedisQueue<V> extends RedisList<V> implements RQueue<V>
     public RedisQueue(RedisProvider provider, String name)
     {
         super(provider, name);
-        // TODO Auto-generated constructor stub
     }
     
     @Override
@@ -45,12 +45,12 @@ public class RedisQueue<V> extends RedisList<V> implements RQueue<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
     }
     
     @Override
@@ -70,12 +70,12 @@ public class RedisQueue<V> extends RedisList<V> implements RQueue<V>
         catch (Exception e)
         {
             broken = true;
+            throw new RedisException(e);
         }
         finally
         {
             provider.returnResource(jedis, broken);
         }
-        return null;
     }
     
     @Override

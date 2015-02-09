@@ -1,6 +1,6 @@
 package com.sxj.cache.core.serializer;
 
-public class CacheObject<T>
+public class JsonObject<T>
 {
     private Class<T> type;
     

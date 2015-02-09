@@ -15,7 +15,7 @@ public class JsonSerializer implements Serializer
         {
             ObjectMapper mapper = new ObjectMapper();
             String valueAsString = mapper.writeValueAsString(obj);
-            CacheObject cacheObject = new CacheObject();
+            JsonObject cacheObject = new JsonObject();
             cacheObject.setType(obj.getClass());
             cacheObject.setValue(valueAsString);
             return mapper.writeValueAsString(cacheObject);
@@ -32,7 +32,7 @@ public class JsonSerializer implements Serializer
         ObjectMapper mapper = new ObjectMapper();
         try
         {
-            CacheObject readValue = mapper.readValue(str, CacheObject.class);
+            JsonObject readValue = mapper.readValue(str, JsonObject.class);
             return mapper.readValue(readValue.getValue(), readValue.getType());
         }
         catch (IOException e)

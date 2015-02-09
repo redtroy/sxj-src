@@ -1,17 +1,17 @@
 package com.sxj.redis.core.serializer;
 
-public class CacheObject
+public class JsonObject<T>
 {
-    private Class<?> type;
+    private Class<T> type;
     
     private String value;
     
-    public Class<?> getType()
+    public Class<T> getType()
     {
         return type;
     }
     
-    public void setType(Class<?> type)
+    public void setType(Class<T> type)
     
     {
         this.type = type;
