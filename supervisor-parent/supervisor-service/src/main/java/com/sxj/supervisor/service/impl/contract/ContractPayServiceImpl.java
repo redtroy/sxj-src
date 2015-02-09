@@ -41,7 +41,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 
 	@Autowired
 	@Qualifier("payStagefsm")
-	private StateMachineImpl<PayStageEnum> payStageFsm;
+	private StateMachineImpl<PayStageEnum> payStagefsm;
 
 	@Autowired
 	@Qualifier("payModeFsm")
@@ -82,8 +82,8 @@ public class ContractPayServiceImpl implements IContractPayService {
 	@Override
 	public String updateState(PayRecordEntity re) throws ServiceException {
 		try {
-			payStageFsm.setCurrentState(re.getState());
-			payStageFsm.fire(re.getState().toString(), re);
+			payStagefsm.setCurrentState(re.getState());
+			payStagefsm.fire(re.getState().toString(), re);
 			payDao.updatePay(re);
 		} catch (Exception e) {
 			SxjLogger.error("更改状态出错!", e, this.getClass());
