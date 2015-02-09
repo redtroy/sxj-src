@@ -283,15 +283,21 @@ public class OpenRfidController {
 				map.put("message", "发货成功");
 			} else if (state == 2) {
 				map.put("state", 2);
-				map.put("message", "不能重复发货");
+				map.put("message", "货物已发货,不能重复发货");
+			} else if (state == 3){
+				map.put("state", 3);
+				map.put("message", "货物已验收,不能发货");
+			} else if (state == 4){
+				map.put("state", 4);
+				map.put("message", "标签已停用,不能发货");
 			} else {
 				map.put("state", 0);
-				map.put("message", "发货失败");
+				map.put("message", "系统错误");
 			}
 		} catch (ServiceException | SQLException | IOException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			map.put("state", 0);
-			map.put("message", "发货失败");
+			map.put("message", "系统错误");
 		}
 		return map;
 
@@ -314,7 +320,13 @@ public class OpenRfidController {
 				map.put("message", "验收成功");
 			} else if (state == 2) {
 				map.put("state", 2);
-				map.put("message", "不能重复验收");
+				map.put("message", "货物已验收,不能重复验收");
+			}else if (state == 3) {
+				map.put("state", 3);
+				map.put("message", "货物未出库,不能验收");
+			} else if (state == 4){
+				map.put("state", 4);
+				map.put("message", "标签已停用,不能验收");
 			} else {
 				map.put("state", 0);
 				map.put("message", "验收失败");
@@ -381,16 +393,22 @@ public class OpenRfidController {
 				map.put("message", "安装成功");
 			} else if (stepState == 2) {
 				map.put("state", "2");
-				map.put("message", "安装成功");
-			} else {
+				map.put("message", "门窗已安装,不能重复安装");
+			}  else if (stepState == 3) {
+				map.put("state", "3");
+				map.put("message", "门窗已质检,不能安装");
+			} else if (stepState == 4) {
+				map.put("state", "4");
+				map.put("message", "标签已停用,不能安装");
+			}else {
 				map.put("state", "0");
-				map.put("message", "安装失败");
+				map.put("message", "系统错误");
 			}
 
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			map.put("state", "0");
-			map.put("message", "安装失败");
+			map.put("message", "系统错误");
 		}
 		return map;
 

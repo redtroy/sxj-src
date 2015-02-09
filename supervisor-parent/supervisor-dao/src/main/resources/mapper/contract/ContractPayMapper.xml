@@ -20,9 +20,9 @@
 		<result property="payReal" column="PAY_REAL" jdbcType="INTEGER" />
 		<result property="payDate" column="PAY_DATE" jdbcType="TIMESTAMP" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
-		<result property="payContentState" column="PAY_CONTENT_STATE"
+		<result property="payType" column="PAY_TYPE"
 			jdbcType="INTEGER" />
-		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="contractType" column="PAY_CONTRACT_TYPE" jdbcType="INTEGER" />
 		<result property="payMode" column="PAY_MODE" jdbcType="INTEGER" />
 
 	</resultMap>
@@ -86,7 +86,7 @@
 		<!-- 支付内容状态 -->
 		<if
 			test="condition.PayContentState != null and condition.PayContentState !=''">
-			<![CDATA[AND P.PAY_CONTENT_STATE =#{condition.PayContentState}]]>
+			<![CDATA[AND P.PAY_TYPE =#{condition.payType}]]>
 		</if>
 		<!-- 付款方式 -->
 		<if test="condition.payMode != null and condition.payMode !=''">
@@ -94,7 +94,7 @@
 		</if>
 		<!-- 类型 -->
 		<if test="condition.type != null and condition.type !=''">
-			<![CDATA[AND P.TYPE =#{condition.type}]]>
+			<![CDATA[AND P.PAY_CONTRACT_TYPE =#{condition.contractType}]]>
 		</if>
 		<!-- 支付时间段 -->
 		<if
@@ -162,7 +162,7 @@
 		<!-- 支付内容状态 -->
 		<if
 			test="condition.PayContentState != null and condition.PayContentState !=''">
-			<![CDATA[AND P.PAY_CONTENT_STATE =#{condition.PayContentState}]]>
+			<![CDATA[AND P.PAY_TYPE =#{condition.payType}]]>
 		</if>
 		<!-- 付款方式 -->
 		<if test="condition.payMode != null and condition.payMode !=''">
@@ -170,7 +170,7 @@
 		</if>
 		<!-- 类型 -->
 		<if test="condition.type != null and condition.type !=''">
-			<![CDATA[AND P.TYPE =#{condition.type}]]>
+			<![CDATA[AND P.PAY_CONTRACT_TYPE =#{condition.contractType}]]>
 		</if>
 		<!-- 支付时间段 -->
 		<if
