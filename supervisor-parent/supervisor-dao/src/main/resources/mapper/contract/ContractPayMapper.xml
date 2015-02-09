@@ -112,7 +112,7 @@
 		SELECT #{id},#{memberNoA},#{memberNameA},#{memberNoB},#{memberNameB}
 		,#{payNo},#{contractNo},#{batchNo},#{rfidNo},#{payAmount},#{payReal},#{payDate},#{content},#{state}
 		,#{payType},#{contractType},#{payMode} FROM dual WHERE NOT EXISTS (SELECT CONTRACT_NO FROM M_CONTRACT_PAY WHERE
-		 CONTRACT_NO =#{contractNo}  AND PAY_CONTRACT_TYPE=0)]]>
+		 CONTRACT_NO =#{contractNo}  AND PAY_TYPE=0)]]>
 	</insert> 
 	<select id="queryManagerPayContract" resultMap="ContractPayResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
