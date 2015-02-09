@@ -1,6 +1,7 @@
 package com.sxj.cache.ehcache;
 
-import java.net.URL;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,12 +13,8 @@ import org.slf4j.LoggerFactory;
 import com.sxj.cache.core.CacheException;
 import com.sxj.cache.core.CacheExpiredListener;
 import com.sxj.cache.core.CacheProvider;
+import com.sxj.spring.modules.util.ClassLoaderUtil;
 
-/**
- * Cache Provider plugin
- * 
- * Taken from EhCache 1.3 distribution
- */
 public class EhCacheProvider implements CacheProvider
 {
     
@@ -88,6 +85,7 @@ public class EhCacheProvider implements CacheProvider
      * during SessionFactory construction.
      *
      * @param properties current configuration settings.
+     * @throws FileNotFoundException 
      */
     public void start(Properties props) throws CacheException
     {
@@ -98,20 +96,21 @@ public class EhCacheProvider implements CacheProvider
                     + " If this behaviour is required, consider using net.sf.ehcache.hibernate.SingletonEhCacheProvider.");
             return;
         }
-        URL xml = getClass().getClassLoader()
-                .getParent()
-                .getResource(CONFIG_XML);
-        if (xml == null)
-            xml = getClass().getResource(CONFIG_XML);
-        if (xml == null)
-            xml = Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResource(CONFIG_XML);
-        if (xml == null)
-            throw new CacheException("cannot find ehcache.xml !!!");
+        if (props != null)
+            LOGGER.info("Properties file not supported in this version!!");
+        try
+        {
+            InputStream resource = ClassLoaderUtil.getResource(CONFIG_XML);
+            if (resource == null)
+                throw new CacheException("cannot find ehcache.xml !!!");
+            manager = new CacheManager(resource);
+            _CacheManager = new ConcurrentHashMap<String, EhCache>();
+        }
+        catch (FileNotFoundException e)
+        {
+            throw new CacheException(e);
+        }
         
-        manager = new CacheManager(xml);
-        _CacheManager = new ConcurrentHashMap<String, EhCache>();
     }
     
     /**

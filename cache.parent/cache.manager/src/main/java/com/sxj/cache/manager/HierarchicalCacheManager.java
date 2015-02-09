@@ -55,7 +55,7 @@ public class HierarchicalCacheManager
     public void initCacheProvider(String configFile, int databaseId,
             CacheExpiredListener listener)
     {
-        final String path = getConfigFile() == null ? CONFIG_FILE
+        final String path = getConfigFile() == null ? configFile
                 : getConfigFile();
         InputStream configStream = HierarchicalCacheManager.class.getClassLoader()
                 .getParent()
@@ -196,7 +196,12 @@ public class HierarchicalCacheManager
         {
             Cache cache = _GetCache(level, name, false);
             if (cache != null)
-                return (T) cache.get(key);
+            {
+                Object object = cache.get(key);
+                if (resultClass.isInstance(object))
+                    throw new CacheException("Class mismatched!!");
+                return (T) object;
+            }
         }
         return null;
     }

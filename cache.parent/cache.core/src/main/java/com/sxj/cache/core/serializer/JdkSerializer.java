@@ -5,8 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.sxj.cache.core.CacheException;
 import com.sxj.spring.modules.util.Encodes;
@@ -45,14 +43,6 @@ public class JdkSerializer implements Serializer
         {
             throw new CacheException(ioe);
         }
-    }
-    
-    public static void main(String args[])
-    {
-        List<String> strs = new ArrayList<String>();
-        strs.add("bac");
-        String serialize = new JdkSerializer().serialize(strs);
-        Object deserialize = new JdkSerializer().deserialize(serialize);
     }
     
 }
