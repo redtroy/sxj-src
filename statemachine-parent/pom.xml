@@ -7,8 +7,6 @@
 	<version>1.0</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>statemachine-impl</module>
-		<module>statemachine-manager</module>
 		<module>statemachine-core</module>
 		<module>statemachine-spring</module>
 	</modules>
