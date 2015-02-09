@@ -22,7 +22,7 @@ import com.sxj.cache.redis.RedisCacheProvider;
 public class HierarchicalCacheManager
 {
     
-    private final static Logger log = LoggerFactory.getLogger(HierarchicalCacheManager.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(HierarchicalCacheManager.class);
     
     private final static String CONFIG_FILE = "cache.properties";
     
@@ -92,7 +92,7 @@ public class HierarchicalCacheManager
                 HierarchicalCacheManager.l1_provider = getProviderInstance(props.getProperty("cache.L1.provider_class"));
                 HierarchicalCacheManager.l1_provider.start(getProviderProperties(props,
                         HierarchicalCacheManager.l1_provider));
-                log.info("Using L1 CacheProvider : "
+                LOGGER.info("Using L1 CacheProvider : "
                         + l1_provider.getClass().getName());
             }
             if (props.getProperty("cache.L2.provider_class") != null)
@@ -100,7 +100,7 @@ public class HierarchicalCacheManager
                 HierarchicalCacheManager.l2_provider = getProviderInstance(props.getProperty("cache.L2.provider_class"));
                 HierarchicalCacheManager.l2_provider.start(getProviderProperties(props,
                         HierarchicalCacheManager.l2_provider));
-                log.info("Using L2 CacheProvider : "
+                LOGGER.info("Using L2 CacheProvider : "
                         + l2_provider.getClass().getName());
             }
             

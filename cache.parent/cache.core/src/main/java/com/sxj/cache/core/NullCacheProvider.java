@@ -2,13 +2,10 @@ package com.sxj.cache.core;
 
 import java.util.Properties;
 
-/**
- * @author winterlau
- */
 public class NullCacheProvider implements CacheProvider
 {
     
-    private final static NullCache cache = new NullCache();
+    private final static NullCache CACHE = new NullCache();
     
     @Override
     public String name()
@@ -23,7 +20,7 @@ public class NullCacheProvider implements CacheProvider
     public Cache buildCache(String regionName, boolean autoCreate,
             CacheExpiredListener listener) throws CacheException
     {
-        return cache;
+        return CACHE;
     }
     
     /* (non-Javadoc)

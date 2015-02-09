@@ -22,7 +22,7 @@ import com.sxj.cache.core.serializer.Serializer;
 public class RedisCache implements Cache
 {
     
-    private final static org.slf4j.Logger log = LoggerFactory.getLogger(RedisCache.class);
+    private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RedisCache.class);
     
     private final static Serializer K_SERIALIZER = new JsonSerializer();
     
@@ -84,7 +84,7 @@ public class RedisCache implements Cache
         }
         catch (Exception e)
         {
-            log.error("Error occured when get data from L2 cache", e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
             broken = true;
             if (e instanceof IOException)
                 evict(key);

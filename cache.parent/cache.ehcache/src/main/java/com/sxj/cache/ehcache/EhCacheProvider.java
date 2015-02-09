@@ -1,19 +1,3 @@
-//$Id: EhCacheProvider.java 9964 2006-05-30 15:40:54Z epbernard $
-/**
- *  Copyright 2003-2006 Greg Luck, Jboss Inc
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 package com.sxj.cache.ehcache;
 
 import java.net.URL;
@@ -33,12 +17,11 @@ import com.sxj.cache.core.CacheProvider;
  * Cache Provider plugin
  * 
  * Taken from EhCache 1.3 distribution
- * @author liudong
  */
 public class EhCacheProvider implements CacheProvider
 {
     
-    private final static Logger log = LoggerFactory.getLogger(EhCacheProvider.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(EhCacheProvider.class);
     
     private final static String CONFIG_XML = "/ehcache.xml";
     
@@ -81,11 +64,11 @@ public class EhCacheProvider implements CacheProvider
                         net.sf.ehcache.Cache cache = manager.getCache(name);
                         if (cache == null)
                         {
-                            log.warn("Could not find configuration [" + name
+                            LOGGER.warn("Could not find configuration [" + name
                                     + "]; using defaults.");
                             manager.addCache(name);
                             cache = manager.getCache(name);
-                            log.debug("started EHCache region: " + name);
+                            LOGGER.debug("started EHCache region: " + name);
                         }
                         ehcache = new EhCache(cache, listener);
                         _CacheManager.put(name, ehcache);
@@ -110,7 +93,7 @@ public class EhCacheProvider implements CacheProvider
     {
         if (manager != null)
         {
-            log.warn("Attempt to restart an already started EhCacheProvider. Use sessionFactory.close() "
+            LOGGER.warn("Attempt to restart an already started EhCacheProvider. Use sessionFactory.close() "
                     + " between repeated calls to buildSessionFactory. Using previously created EhCacheProvider."
                     + " If this behaviour is required, consider using net.sf.ehcache.hibernate.SingletonEhCacheProvider.");
             return;

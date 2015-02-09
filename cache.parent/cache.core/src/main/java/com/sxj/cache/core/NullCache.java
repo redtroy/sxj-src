@@ -2,10 +2,6 @@ package com.sxj.cache.core;
 
 import java.util.List;
 
-/**
- * 空的缓存Provider
- * @author winterlau
- */
 public class NullCache implements Cache
 {
     
