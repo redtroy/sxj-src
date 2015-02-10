@@ -12,14 +12,14 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
 import com.sxj.redis.core.RMap;
+import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisExpirable;
-import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
 {
     
-    public RedisMap(RedisProvider provider, String name)
+    public RedisMap(RProvider provider, String name)
     {
         super(provider, name);
     }

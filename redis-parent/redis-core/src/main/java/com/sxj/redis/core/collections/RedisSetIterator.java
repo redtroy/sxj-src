@@ -8,8 +8,8 @@ import java.util.NoSuchElementException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanResult;
 
+import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
-import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisSetIterator<V> implements Iterator<V>
 {
@@ -19,11 +19,11 @@ public class RedisSetIterator<V> implements Iterator<V>
     
     private boolean removed;
     
-    private RedisProvider provider;
+    private RProvider provider;
     
     private RedisSet<V> redisSet;
     
-    public RedisSetIterator(RedisProvider provider, RedisSet<V> redisSet)
+    public RedisSetIterator(RProvider provider, RedisSet<V> redisSet)
     {
         super();
         this.provider = provider;

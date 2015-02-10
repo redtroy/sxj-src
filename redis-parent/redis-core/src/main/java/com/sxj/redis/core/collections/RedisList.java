@@ -11,15 +11,15 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
 import com.sxj.redis.core.RList;
+import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisExpirable;
-import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisList<V> extends RedisExpirable implements RList<V>
 {
     private static final int BATCHSIZE = 50;
     
-    public RedisList(RedisProvider provider, String name)
+    public RedisList(RProvider provider, String name)
     {
         super(provider, name);
     }

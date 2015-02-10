@@ -6,13 +6,13 @@ import java.util.concurrent.TimeUnit;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RExpirable;
+import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
-import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisExpirable extends RedisObject implements RExpirable
 {
     
-    public RedisExpirable(RedisProvider provider, String name)
+    public RedisExpirable(RProvider provider, String name)
     {
         super(provider, name);
     }

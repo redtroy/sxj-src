@@ -29,7 +29,8 @@ public interface IContractPayService {
 	/**
 	 * 更改收款、付款状态
 	 */
-	public String updateState(PayRecordEntity re) throws ServiceException;
+	public String updateState(PayRecordEntity re, String flag)
+			throws ServiceException;
 
 	/**
 	 * 

@@ -6,15 +6,15 @@ import java.util.Set;
 
 import redis.clients.jedis.Jedis;
 
+import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisExpirable;
-import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisSet<V> extends RedisExpirable implements RSet<V>
 {
     
-    public RedisSet(RedisProvider provider, String name)
+    public RedisSet(RProvider provider, String name)
     {
         super(provider, name);
     }
