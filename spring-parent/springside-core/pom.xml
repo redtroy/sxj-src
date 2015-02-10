@@ -142,7 +142,13 @@
 		</dependency>
 		<!-- TEST end -->
 
-		
+
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>4.2.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
