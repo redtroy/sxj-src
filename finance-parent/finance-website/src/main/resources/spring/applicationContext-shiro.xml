@@ -61,7 +61,7 @@
 
 	<bean id="shiroCacheManager"
 		class="com.sxj.finance.website.login.FinanceShiroRedisCacheManager">
-		<property name="level" value="2"></property>
+		<property name="level" value="REDIS"></property>
 		<property name="collections" ref="redisCollections"></property>
 	</bean>
 
