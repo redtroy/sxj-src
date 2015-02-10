@@ -32,13 +32,16 @@ public class RedisCache implements Cache
     
     private String region;
     
+    private RedisCacheProvider provider;
+    
     private static final String DELETE_SCRIPT_IN_LUA = "local keys = redis.call('keys', '%s')"
             + "  for i,k in ipairs(keys) do"
             + "    local res = redis.call('del', k)" + "  end";
     
-    public RedisCache(String region)
+    public RedisCache(String region, RedisCacheProvider provider)
     {
         this.region = region;
+        this.provider = provider;
     }
     
     private String serializeObject(Object object)
@@ -62,7 +65,7 @@ public class RedisCache implements Cache
     {
         Object obj = null;
         boolean broken = false;
-        Jedis cache = RedisCacheProvider.getResource();
+        Jedis cache = provider.getResource();
         try
         {
             if (null == key)
@@ -78,7 +81,7 @@ public class RedisCache implements Cache
         }
         finally
         {
-            RedisCacheProvider.returnResource(cache, broken);
+            provider.returnResource(cache, broken);
         }
         return obj;
     }
@@ -91,7 +94,7 @@ public class RedisCache implements Cache
         else
         {
             boolean broken = false;
-            Jedis cache = RedisCacheProvider.getResource();
+            Jedis cache = provider.getResource();
             try
             {
                 cache.set(serializeKey(key).getBytes(),
@@ -104,7 +107,7 @@ public class RedisCache implements Cache
             }
             finally
             {
-                RedisCacheProvider.returnResource(cache, broken);
+                provider.returnResource(cache, broken);
             }
         }
     }
@@ -119,7 +122,7 @@ public class RedisCache implements Cache
     public void evict(Object key)
     {
         boolean broken = false;
-        Jedis cache = RedisCacheProvider.getResource();
+        Jedis cache = provider.getResource();
         try
         {
             cache.del(serializeKey(key));
@@ -131,7 +134,7 @@ public class RedisCache implements Cache
         }
         finally
         {
-            RedisCacheProvider.returnResource(cache, broken);
+            provider.returnResource(cache, broken);
         }
     }
     
@@ -145,7 +148,7 @@ public class RedisCache implements Cache
         if (CollectionUtils.isEmpty(keys))
             return;
         boolean broken = false;
-        Jedis cache = RedisCacheProvider.getResource();
+        Jedis cache = provider.getResource();
         try
         {
             String[] okeys = new String[keys.size()];
@@ -162,7 +165,7 @@ public class RedisCache implements Cache
         }
         finally
         {
-            RedisCacheProvider.returnResource(cache, broken);
+            provider.returnResource(cache, broken);
         }
     }
     
@@ -170,7 +173,7 @@ public class RedisCache implements Cache
     @SuppressWarnings("rawtypes")
     public List keys()
     {
-        Jedis cache = RedisCacheProvider.getResource();
+        Jedis cache = provider.getResource();
         boolean broken = false;
         
         try
@@ -190,7 +193,7 @@ public class RedisCache implements Cache
         }
         finally
         {
-            RedisCacheProvider.returnResource(cache, broken);
+            provider.returnResource(cache, broken);
         }
         return Collections.EMPTY_LIST;
     }
@@ -198,7 +201,7 @@ public class RedisCache implements Cache
     public void deleteKeys(String pattern)
     {
         boolean broken = false;
-        Jedis cache = RedisCacheProvider.getResource();
+        Jedis cache = provider.getResource();
         try
         {
             
@@ -219,7 +222,7 @@ public class RedisCache implements Cache
         {
             if (cache != null)
             {
-                RedisCacheProvider.returnResource(cache, broken);
+                provider.returnResource(cache, broken);
             }
         }
     }
@@ -227,7 +230,7 @@ public class RedisCache implements Cache
     @Override
     public void clear()
     {
-        Jedis cache = RedisCacheProvider.getResource();
+        Jedis cache = provider.getResource();
         boolean broken = false;
         try
         {
@@ -240,7 +243,7 @@ public class RedisCache implements Cache
         }
         finally
         {
-            RedisCacheProvider.returnResource(cache, broken);
+            provider.returnResource(cache, broken);
         }
     }
     
@@ -272,7 +275,7 @@ public class RedisCache implements Cache
         else
         {
             boolean broken = false;
-            Jedis cache = RedisCacheProvider.getResource();
+            Jedis cache = provider.getResource();
             try
             {
                 Transaction multi = cache.multi();
@@ -288,7 +291,7 @@ public class RedisCache implements Cache
             }
             finally
             {
-                RedisCacheProvider.returnResource(cache, broken);
+                provider.returnResource(cache, broken);
             }
         }
         
@@ -302,7 +305,7 @@ public class RedisCache implements Cache
         else
         {
             boolean broken = false;
-            Jedis cache = RedisCacheProvider.getResource();
+            Jedis cache = provider.getResource();
             try
             {
                 return cache.exists(serializeKey(key).getBytes());
@@ -314,7 +317,7 @@ public class RedisCache implements Cache
             }
             finally
             {
-                RedisCacheProvider.returnResource(cache, broken);
+                provider.returnResource(cache, broken);
             }
             
         }
