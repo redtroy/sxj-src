@@ -7,13 +7,13 @@ import java.util.NoSuchElementException;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RDeque;
+import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
-import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
 {
     
-    public RedisDeque(RedisProvider provider, String name)
+    public RedisDeque(RProvider provider, String name)
     {
         super(provider, name);
     }

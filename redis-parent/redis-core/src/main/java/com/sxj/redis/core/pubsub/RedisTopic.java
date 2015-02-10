@@ -10,17 +10,17 @@ import org.apache.commons.collections.MapUtils;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.MessageListener;
+import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.RTopic;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisObject;
-import com.sxj.redis.core.provider.RedisProvider;
 
 public class RedisTopic<M> extends RedisObject implements RTopic<M>
 {
     
     private Map<Integer, TopicThread<M>> pubsubs = new HashMap<Integer, TopicThread<M>>();
     
-    public RedisTopic(RedisProvider provider, String name)
+    public RedisTopic(RProvider provider, String name)
     {
         super(provider, name);
     }
@@ -106,7 +106,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         
         private RedisMessageListenerWrapper<M> wrapper;
         
-        private RedisProvider provider;
+        private RProvider provider;
         
         private Jedis jedis;
         
@@ -114,7 +114,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         
         private static final int MILLIS_TO_RETRY = 1000;
         
-        public TopicThread(RedisProvider provider,
+        public TopicThread(RProvider provider,
                 RedisMessageListenerWrapper<M> wrapper)
         {
             this.provider = provider;
