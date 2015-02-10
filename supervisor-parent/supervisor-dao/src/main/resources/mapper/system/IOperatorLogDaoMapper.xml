@@ -5,7 +5,7 @@
 	<resultMap id="LogMap" type="com.sxj.supervisor.entity.system.OperatorLogEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="accountNo" column="ACCOUNT_NO" jdbcType="VARCHAR" />
-		<result property="OperatorTime" column="OPER_TIME" javaType="DATE" />
+		<result property="operatorTime" column="OPER_TIME" javaType="DATE" />
 		<result property="logs" column="LOGS" jdbcType="VARCHAR" />
 	</resultMap>
 	<!-- 高级查询 -->
