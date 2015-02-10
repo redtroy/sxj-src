@@ -5,9 +5,8 @@ import redis.clients.jedis.Jedis;
 import com.sxj.redis.core.RObject;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.provider.RedisProvider;
-import com.sxj.redis.core.serializer.JdkSerializer;
-import com.sxj.redis.core.serializer.JsonSerializer;
-import com.sxj.redis.core.serializer.Serializer;
+import com.sxj.spring.modules.util.Serializers;
+import com.sxj.spring.modules.util.serializer.Serializer;
 
 public class RedisObject implements RObject
 {
@@ -16,9 +15,9 @@ public class RedisObject implements RObject
     
     protected String name;
     
-    protected final static Serializer K_SERIALIZER = new JsonSerializer();
+    protected final static Serializer K_SERIALIZER = Serializers.getJsonSerializer();
     
-    protected final static Serializer V_SERIALIZER = new JdkSerializer();
+    protected final static Serializer V_SERIALIZER = Serializers.getJdkSerializer();
     
     public RedisObject(RedisProvider provider, String name)
     {

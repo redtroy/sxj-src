@@ -1,4 +1,4 @@
-package com.sxj.redis.core.serializer;
+package com.sxj.spring.modules.util.serializer;
 
 public interface Serializer
 {

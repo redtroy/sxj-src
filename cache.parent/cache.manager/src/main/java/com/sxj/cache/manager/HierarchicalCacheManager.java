@@ -32,10 +32,6 @@ public class HierarchicalCacheManager
     
     private static final String L2_PROVIDER_CLASS = "cache.L2.provider_class";
     
-    private static final int LEVEL1 = 1;
-    
-    private static final int LEVEL2 = 2;
-    
     private String configFile;
     
     private String databaseId;
@@ -149,14 +145,14 @@ public class HierarchicalCacheManager
         return tmp;
     }
     
-    private static final Cache getCache(int level, String cacheName,
+    private static final Cache getCache(CacheLevel level, String cacheName,
             boolean autoCreate)
     {
         switch (level)
         {
-            case LEVEL1:
+            case EHCACHE:
                 return l1_provider.buildCache(cacheName, autoCreate, listener);
-            case LEVEL2:
+            case REDIS:
                 return l2_provider.buildCache(cacheName, autoCreate, listener);
             default:
                 return new NullCacheProvider().buildCache(cacheName,
@@ -177,7 +173,7 @@ public class HierarchicalCacheManager
      * @param key
      * @return
      */
-    public static final Object get(int level, String name, Object key)
+    public static final Object get(CacheLevel level, String name, Object key)
     {
         if (name != null && key != null)
         {
@@ -198,8 +194,8 @@ public class HierarchicalCacheManager
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static final <T> T get(int level, Class<T> resultClass, String name,
-            Object key)
+    public static final <T> T get(CacheLevel level, Class<T> resultClass,
+            String name, Object key)
     {
         if (name != null && key != null)
         {
@@ -222,7 +218,7 @@ public class HierarchicalCacheManager
      * @param key
      * @param value
      */
-    public static final void set(int level, String name, Object key,
+    public static final void set(CacheLevel level, String name, Object key,
             Object value)
     {
         if (name != null && key != null && value != null)
@@ -233,7 +229,7 @@ public class HierarchicalCacheManager
         }
     }
     
-    public static final void set(int level, String name, Object key,
+    public static final void set(CacheLevel level, String name, Object key,
             Object value, int seconds)
     {
         if (name != null && key != null && value != null)
@@ -253,7 +249,7 @@ public class HierarchicalCacheManager
      * @param name
      * @param key
      */
-    public static final void evict(int level, String name, Object key)
+    public static final void evict(CacheLevel level, String name, Object key)
     {
         if (name != null && key != null)
         {
@@ -263,7 +259,7 @@ public class HierarchicalCacheManager
         }
     }
     
-    public static final Boolean exists(int level, String name, Object key)
+    public static final Boolean exists(CacheLevel level, String name, Object key)
     {
         if (name != null && key != null)
         {
@@ -281,7 +277,7 @@ public class HierarchicalCacheManager
      * @param keys
      */
     @SuppressWarnings("rawtypes")
-    public static final void batchEvict(int level, String name, List keys)
+    public static final void batchEvict(CacheLevel level, String name, List keys)
     {
         if (name != null && CollectionUtils.isNotEmpty(keys))
         {
@@ -294,26 +290,26 @@ public class HierarchicalCacheManager
     /**
      * Clear the cache
      */
-    public static final void clear(int level, String name)
+    public static final void clear(CacheLevel level, String name)
     {
         Cache cache = getCache(level, name, false);
         if (cache != null)
             cache.clear();
     }
     
-    public static final List keys(int level, String name)
+    public static final List keys(CacheLevel level, String name)
     {
         Cache cache = getCache(level, name, false);
         return (cache != null) ? cache.keys() : null;
     }
     
-    public static final Long size(int level, String name)
+    public static final Long size(CacheLevel level, String name)
     {
         Cache cache = getCache(level, name, false);
         return (cache != null) ? cache.size() : 0L;
     }
     
-    public static final List values(int level, String name)
+    public static final List values(CacheLevel level, String name)
     {
         Cache cache = getCache(level, name, false);
         return (cache != null) ? cache.values() : null;

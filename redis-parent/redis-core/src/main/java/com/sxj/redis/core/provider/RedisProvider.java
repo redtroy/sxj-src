@@ -14,7 +14,6 @@ import com.sxj.spring.modules.util.ClassLoaderUtil;
 
 /**
  * Redis 缓存实现
- * @author Winter Lau
  */
 public class RedisProvider implements RProvider
 {
