@@ -159,6 +159,12 @@
 			<artifactId>jsonrpc-server-spring</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.4</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -188,7 +194,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-				<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
 				</configuration>
 			</plugin>
 		</plugins>
