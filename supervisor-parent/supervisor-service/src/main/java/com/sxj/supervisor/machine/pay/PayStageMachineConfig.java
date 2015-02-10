@@ -24,12 +24,12 @@ public class PayStageMachineConfig {
 	@Qualifier("payModeFsm")
 	private StateMachineImpl<PayModeEnum> payModeFsm;
 
-	@Transitions({ @Transition(source = "STAGE1", event = "STAGE1", target = "STAGE2") })
+	@Transitions({ @Transition(source = "STAGE1", event = "STAGE1_A", target = "STAGE2") })
 	public void noop(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	@Transitions({ @Transition(source = "STAGE2", event = "STAGE2", target = "STAGE3") })
+	@Transitions({ @Transition(source = "STAGE2", event = "STAGE2_B", target = "STAGE3") })
 	public void noop1(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}

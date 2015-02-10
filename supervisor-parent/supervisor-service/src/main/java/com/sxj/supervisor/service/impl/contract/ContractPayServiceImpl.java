@@ -112,10 +112,11 @@ public class ContractPayServiceImpl implements IContractPayService {
 	}
 
 	@Override
-	public String updateState(PayRecordEntity re) throws ServiceException {
+	public String updateState(PayRecordEntity re, String flag)
+			throws ServiceException {
 		try {
 			payStagefsm.setCurrentState(re.getState());
-			payStagefsm.fire(re.getState().toString(), re);
+			payStagefsm.fire(re.getState().toString() + "_" + flag, re);
 			payDao.updatePay(re);
 		} catch (Exception e) {
 			SxjLogger.error("更改状态出错!", e, this.getClass());

@@ -175,7 +175,7 @@ public class PayController extends BaseController {
 			Map<String, String> map = new HashMap<String, String>();
 			pay.setPayReal(payReal);
 			if (pay.getState().equals(PayStageEnum.STAGE1)) {
-				String flag = payService.updateState(pay);
+				String flag = payService.updateState(pay, "A");
 				if (flag.equals("ok")) {
 					// 甲方
 					/*
@@ -212,7 +212,7 @@ public class PayController extends BaseController {
 			PayRecordEntity pay = payService.getPayRecordEntity(id);
 			Map<String, String> map = new HashMap<String, String>();
 			if (pay.getState().equals(PayStageEnum.STAGE2)) {
-				String flag = payService.updateState(pay);
+				String flag = payService.updateState(pay, "B");
 				if (flag.equals("ok")) {
 					// PayRecordEntity pay = payService.getPayRecordEntity(id);
 					// 乙方
