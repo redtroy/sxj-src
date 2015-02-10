@@ -62,7 +62,7 @@
 
 	<bean id="shiroCacheManager"
 		class="com.sxj.supervisor.website.login.SupervisorShiroRedisCacheManager">
-		<property name="level" value="2"></property>
+		<property name="level" value="REDIS"></property>
 		<property name="collections" ref="redisCollections"></property>
 	</bean>
 
