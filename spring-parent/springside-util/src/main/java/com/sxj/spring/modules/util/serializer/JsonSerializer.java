@@ -28,6 +28,8 @@ public class JsonSerializer implements Serializer
     @Override
     public Object deserialize(final String str)
     {
+        if (str == null)
+            return null;
         ObjectMapper mapper = new ObjectMapper();
         try
         {

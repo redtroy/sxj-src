@@ -31,6 +31,8 @@ public class JdkSerializer implements Serializer
     @Override
     public Object deserialize(String str)
     {
+        if (str == null)
+            return null;
         try
         {
             byte[] decodeBase64 = Encodes.decodeBase64(str);
