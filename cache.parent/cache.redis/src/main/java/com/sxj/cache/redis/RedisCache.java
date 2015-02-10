@@ -12,9 +12,8 @@ import redis.clients.jedis.Transaction;
 
 import com.sxj.cache.core.Cache;
 import com.sxj.cache.core.CacheException;
-import com.sxj.cache.core.serializer.JdkSerializer;
-import com.sxj.cache.core.serializer.JsonSerializer;
-import com.sxj.cache.core.serializer.Serializer;
+import com.sxj.spring.modules.util.Serializers;
+import com.sxj.spring.modules.util.serializer.Serializer;
 
 /**
  * Redis 缓存实现
@@ -25,9 +24,9 @@ public class RedisCache implements Cache
     
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RedisCache.class);
     
-    private static final Serializer K_SERIALIZER = new JsonSerializer();
+    private static final Serializer K_SERIALIZER = Serializers.getJsonSerializer();
     
-    private static final Serializer V_SERIALIZER = new JdkSerializer();
+    private static final Serializer V_SERIALIZER = Serializers.getJdkSerializer();
     
     private static final int OFFSET = 3;
     
@@ -56,14 +55,6 @@ public class RedisCache implements Cache
     private String serializeKey(Object key)
     {
         return region + ":" + K_SERIALIZER.serialize(key);
-    }
-    
-    public static void main(String[] args)
-    {
-        RedisCache cache = new RedisCache("user");
-        JsonSerializer serializer = new JsonSerializer();
-        String key = serializer.serialize(cache);
-        cache = (RedisCache) serializer.deserialize(key);
     }
     
     @Override

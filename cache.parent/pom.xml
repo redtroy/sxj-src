@@ -23,6 +23,7 @@
 		<slf4j.version>1.7.7</slf4j.version>
 		<jedis.version>2.5.1</jedis.version>
 		<jackson.version>2.4.2</jackson.version>
+		<springside.version>4.2.3</springside.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -57,6 +58,11 @@
 				<artifactId>spring-web</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+			<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-util</artifactId>
+			<version>${springside.version}</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<!-- 插件配置 -->
