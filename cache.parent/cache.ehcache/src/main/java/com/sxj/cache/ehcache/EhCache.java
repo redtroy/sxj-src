@@ -7,6 +7,9 @@ import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.event.CacheEventListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sxj.cache.core.Cache;
 import com.sxj.cache.core.CacheException;
 import com.sxj.cache.core.CacheExpiredListener;
@@ -16,6 +19,7 @@ import com.sxj.cache.core.CacheExpiredListener;
  */
 public class EhCache implements Cache, CacheEventListener
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Ehcache.class);
     
     private net.sf.ehcache.Cache cache;
     
@@ -59,12 +63,13 @@ public class EhCache implements Cache, CacheEventListener
                 if (element != null)
                     return element.getObjectValue();
             }
-            return null;
+            
         }
         catch (net.sf.ehcache.CacheException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
+        return null;
     }
     
     /**
@@ -97,15 +102,15 @@ public class EhCache implements Cache, CacheEventListener
         }
         catch (IllegalArgumentException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         catch (IllegalStateException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         catch (net.sf.ehcache.CacheException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         
     }
@@ -127,11 +132,11 @@ public class EhCache implements Cache, CacheEventListener
         }
         catch (IllegalStateException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         catch (net.sf.ehcache.CacheException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
     }
     
@@ -159,11 +164,11 @@ public class EhCache implements Cache, CacheEventListener
         }
         catch (IllegalStateException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         catch (net.sf.ehcache.CacheException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
     }
     
@@ -180,11 +185,11 @@ public class EhCache implements Cache, CacheEventListener
         }
         catch (IllegalStateException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         catch (net.sf.ehcache.CacheException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
     }
     
@@ -260,15 +265,15 @@ public class EhCache implements Cache, CacheEventListener
         }
         catch (IllegalArgumentException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         catch (IllegalStateException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         catch (net.sf.ehcache.CacheException e)
         {
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
     }
     

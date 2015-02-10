@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.system.IRoleDao;
 import com.sxj.supervisor.entity.system.FunctionEntity;
@@ -35,7 +36,7 @@ public class RoleServiceImpl implements IRoleService
             int size = roles.size();
             RoleEntity[] roleArr = (RoleEntity[]) roles.toArray(new RoleEntity[size]);
             roleDao.addRoles(roleArr);
-            HierarchicalCacheManager.evict(2,
+            HierarchicalCacheManager.evict(CacheLevel.REDIS,
                     "sys_role_menu",
                     roleArr[0].getAccountId());
         }
@@ -53,7 +54,9 @@ public class RoleServiceImpl implements IRoleService
         try
         {
             roleDao.deleteRoles(accountId);
-            HierarchicalCacheManager.evict(2, "sys_role_menu", accountId);
+            HierarchicalCacheManager.evict(CacheLevel.REDIS,
+                    "sys_role_menu",
+                    accountId);
         }
         catch (Exception e)
         {
@@ -84,7 +87,7 @@ public class RoleServiceImpl implements IRoleService
     {
         try
         {
-            Object cache = HierarchicalCacheManager.get(2,
+            Object cache = HierarchicalCacheManager.get(CacheLevel.REDIS,
                     "sys_role_menu",
                     accountId);
             if (cache instanceof List)
@@ -111,7 +114,10 @@ public class RoleServiceImpl implements IRoleService
                 model.setChildren(childrenList);
                 list.add(model);
             }
-            HierarchicalCacheManager.set(2, "sys_role_menu", accountId, list);
+            HierarchicalCacheManager.set(CacheLevel.REDIS,
+                    "sys_role_menu",
+                    accountId,
+                    list);
             return list;
         }
         catch (Exception e)
