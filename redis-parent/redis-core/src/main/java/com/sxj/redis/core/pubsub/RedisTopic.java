@@ -54,9 +54,9 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         {
             RedisMessageListenerWrapper<M> wrapper = new RedisMessageListenerWrapper<M>(
                     listener, name);
-            TopicThread<M> topicThread = new TopicThread<M>(jedis, wrapper);
+            TopicThread<M> topicThread = new TopicThread<M>(provider, wrapper);
             ExecutorService newCachedThreadPool = Executors.newFixedThreadPool(1);
-            topicThread.setService(newCachedThreadPool);
+            topicThread.setExecutor(newCachedThreadPool);
             int hashCode = wrapper.hashCode();
             if (!pubsubs.containsKey(hashCode))
             {
@@ -84,7 +84,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
                 {
                     TopicThread<M> thread = pubsubs.get(listenerId);
                     jedis = thread.getJedis();
-                    thread.getService().shutdown();
+                    thread.getExecutor().shutdown();
                     pubsubs.remove(listenerId);
                     thread.getWrapper().unsubscribe(name);
                     if (MapUtils.isEmpty(pubsubs))
@@ -106,35 +106,64 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         
         private RedisMessageListenerWrapper<M> wrapper;
         
+        private RedisProvider provider;
+        
         private Jedis jedis;
         
-        private ExecutorService service;
+        private ExecutorService executor;
         
-        public TopicThread(Jedis jedis, RedisMessageListenerWrapper<M> wrapper)
+        private static final int MILLIS_TO_RETRY = 1000;
+        
+        public TopicThread(RedisProvider provider,
+                RedisMessageListenerWrapper<M> wrapper)
         {
-            this.jedis = jedis;
+            this.provider = provider;
             this.wrapper = wrapper;
+            jedis = provider.getResource();
         }
         
         @Override
         public void run()
         {
-            jedis.subscribe(wrapper, wrapper.getChannel());
+            try
+            {
+                if (jedis != null)
+                    jedis.subscribe(wrapper, wrapper.getChannel());
+            }
+            catch (Exception e)
+            {
+                provider.returnResource(jedis, true);
+                refreshJedis();
+            }
         }
         
-        private ExecutorService getService()
+        private void refreshJedis()
         {
-            return service;
-        }
-        
-        private void setService(ExecutorService service)
-        {
-            this.service = service;
+            try
+            {
+                Thread.sleep(MILLIS_TO_RETRY);
+                jedis = provider.getResource();
+                executor.execute(this);
+            }
+            catch (Exception e)
+            {
+                refreshJedis();
+            }
         }
         
         private RedisMessageListenerWrapper<M> getWrapper()
         {
             return wrapper;
+        }
+        
+        public ExecutorService getExecutor()
+        {
+            return executor;
+        }
+        
+        public void setExecutor(ExecutorService executor)
+        {
+            this.executor = executor;
         }
         
         private Jedis getJedis()

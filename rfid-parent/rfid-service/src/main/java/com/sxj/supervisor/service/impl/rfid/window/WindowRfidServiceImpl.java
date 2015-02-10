@@ -291,11 +291,11 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				windowRfid.setWindowType(windowType);
 				windowRfid.setRfidState(RfidStateEnum.USED);
 				if (i == 1) {
-					winRef.setMinRfidNo((windowRfid.getRfidNo()));
+					winRef.setMaxRfidNo((windowRfid.getRfidNo()));
 				}
 				if (i == list.size()) {
 					startRfidNos = startRfidNos + windowRfid.getRfidNo();
-					winRef.setMaxRfidNo(windowRfid.getRfidNo());
+					winRef.setMinRfidNo(windowRfid.getRfidNo());
 				} else {
 					startRfidNos = startRfidNos + windowRfid.getRfidNo() + ",";
 				}
@@ -450,10 +450,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				// newRfid.setReplenishNo(addRfid[i]);
 				updateWindowRfid(newRfid);
 				if (i == 0) {
-					winRef.setMinRfidNo(newRfid.getRfidNo());
+					winRef.setMaxRfidNo(newRfid.getRfidNo());
 				}
 				if (i + 1 == addRfid.length) {
-					winRef.setMaxRfidNo(newRfid.getRfidNo());
+					winRef.setMinRfidNo(newRfid.getRfidNo());
 				}
 			}
 			// windowRfidDao.batchUpdateWindowRfid(list
@@ -547,19 +547,18 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			if (StringUtils.isNotEmpty(rfidNo)) {
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 				if (wind.getProgressState().equals(
-						LabelProgressEnum.HAS_RECEIPT)) {//标签是否已收货
+						LabelProgressEnum.HAS_RECEIPT)) {// 标签是否已收货
 					wind.setProgressState(LabelProgressEnum.INSTALL);
 					windowRfidDao.updateStepWindow(wind);
 					return 1;
 				} else if (wind.getProgressState().equals(
 						LabelProgressEnum.INSTALL)) {
-					return 2;//门窗已安装
-				}else if (wind.getProgressState().equals(
+					return 2;// 门窗已安装
+				} else if (wind.getProgressState().equals(
 						LabelProgressEnum.HAS_QUALITY)) {
-					return 3;//门窗已质检
-				}else if (wind.getRfidState().equals(
-						RfidStateEnum.DISABLE)) {
-					return 4;//门窗已停用
+					return 3;// 门窗已质检
+				} else if (wind.getRfidState().equals(RfidStateEnum.DISABLE)) {
+					return 4;// 门窗已停用
 				}
 			}
 			return 0;

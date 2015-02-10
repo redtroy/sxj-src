@@ -4,10 +4,12 @@ import org.apache.shiro.cache.AbstractCacheManager;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 
+import com.sxj.cache.manager.CacheLevel;
+
 public class ShiroRedisCacheManager extends AbstractCacheManager
 {
     
-    private int level = 2;
+    private CacheLevel level = CacheLevel.REDIS;
     
     //认证
     public static final String authenticationCacheName = "shiro-authenticationCacheName";
@@ -21,12 +23,12 @@ public class ShiroRedisCacheManager extends AbstractCacheManager
         return new ShiroRedisCache<String, Object>(getLevel(), cacheName);
     }
     
-    public int getLevel()
+    public CacheLevel getLevel()
     {
         return level;
     }
     
-    public void setLevel(int level)
+    public void setLevel(CacheLevel level)
     {
         this.level = level;
     }

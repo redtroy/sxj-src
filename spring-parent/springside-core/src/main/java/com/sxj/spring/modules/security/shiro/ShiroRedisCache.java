@@ -9,17 +9,18 @@ import org.apache.shiro.cache.CacheException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 
 public class ShiroRedisCache<K, V> implements Cache<K, V>
 {
     Logger logger = LoggerFactory.getLogger(getClass());
     
-    private int level = 2;
+    private CacheLevel level = CacheLevel.REDIS;
     
     private String name = "shiroSessions";
     
-    public ShiroRedisCache(int level, String name)
+    public ShiroRedisCache(CacheLevel level, String name)
     {
         super();
         this.level = level;
@@ -148,7 +149,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V>
         this.name = name;
     }
     
-    public void setLevel(int level)
+    private void setLevel(CacheLevel level)
     {
         this.level = level;
     }

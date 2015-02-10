@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.shiro.cache.CacheException;
 
+import com.sxj.cache.manager.CacheLevel;
 import com.sxj.redis.core.RMap;
 import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.spring.modules.security.shiro.ShiroRedisCache;
@@ -20,10 +21,9 @@ public class FinanceShiroRedisCache<K, V> extends ShiroRedisCache<K, V>
         this.collections = collections;
     }
     
-    public FinanceShiroRedisCache(int level, String name)
+    public FinanceShiroRedisCache(CacheLevel level, String name)
     {
         super(level, name);
-        // TODO Auto-generated constructor stub
     }
     
     @Override

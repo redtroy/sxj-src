@@ -29,7 +29,7 @@
 			<![CDATA[AND RFID_REF_NO = #{condition.rfidRefNo}]]>
 		</if>
 		<if test="condition.rfidNo != null and condition.rfidNo !=''">
-			<![CDATA[AND #{condition.rfidNo} BETWEEN MIN_RFID_NO AND MAX_RFID_NO]]>
+			<![CDATA[AND RFID_NOS LIKE CONCAT('%',#{condition.rfidNo},'%')]]>
 		</if>
 		<if test="condition.memberName != null and condition.memberName !=''">
 			<![CDATA[AND MEMBER_NAME LIKE CONCAT('%',#{condition.memberName},'%')]]>

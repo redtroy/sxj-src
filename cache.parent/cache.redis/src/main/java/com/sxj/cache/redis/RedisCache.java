@@ -1,6 +1,7 @@
 package com.sxj.cache.redis;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -11,9 +12,8 @@ import redis.clients.jedis.Transaction;
 
 import com.sxj.cache.core.Cache;
 import com.sxj.cache.core.CacheException;
-import com.sxj.cache.core.serializer.JdkSerializer;
-import com.sxj.cache.core.serializer.JsonSerializer;
-import com.sxj.cache.core.serializer.Serializer;
+import com.sxj.spring.modules.util.Serializers;
+import com.sxj.spring.modules.util.serializer.Serializer;
 
 /**
  * Redis 缓存实现
@@ -24,9 +24,9 @@ public class RedisCache implements Cache
     
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RedisCache.class);
     
-    private static final Serializer K_SERIALIZER = new JsonSerializer();
+    private static final Serializer K_SERIALIZER = Serializers.getJsonSerializer();
     
-    private static final Serializer V_SERIALIZER = new JdkSerializer();
+    private static final Serializer V_SERIALIZER = Serializers.getJdkSerializer();
     
     private static final int OFFSET = 3;
     
@@ -55,14 +55,6 @@ public class RedisCache implements Cache
     private String serializeKey(Object key)
     {
         return region + ":" + K_SERIALIZER.serialize(key);
-    }
-    
-    public static void main(String[] args)
-    {
-        RedisCache cache = new RedisCache("user");
-        JsonSerializer serializer = new JsonSerializer();
-        String key = serializer.serialize(cache);
-        cache = (RedisCache) serializer.deserialize(key);
     }
     
     @Override
@@ -108,7 +100,7 @@ public class RedisCache implements Cache
             catch (Exception e)
             {
                 broken = true;
-                throw new CacheException(e);
+                LOGGER.error("Error occured when get data from L2 cache", e);
             }
             finally
             {
@@ -135,7 +127,7 @@ public class RedisCache implements Cache
         catch (Exception e)
         {
             broken = true;
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         finally
         {
@@ -166,7 +158,7 @@ public class RedisCache implements Cache
         catch (Exception e)
         {
             broken = true;
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         finally
         {
@@ -194,12 +186,13 @@ public class RedisCache implements Cache
         catch (Exception e)
         {
             broken = true;
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         finally
         {
             RedisCacheProvider.returnResource(cache, broken);
         }
+        return Collections.EMPTY_LIST;
     }
     
     public void deleteKeys(String pattern)
@@ -216,10 +209,10 @@ public class RedisCache implements Cache
             
             cache.eval(String.format(DELETE_SCRIPT_IN_LUA, pattern));
         }
-        catch (Exception exc)
+        catch (Exception e)
         {
             broken = true;
-            throw new CacheException(exc);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         
         finally
@@ -243,7 +236,7 @@ public class RedisCache implements Cache
         catch (Exception e)
         {
             broken = true;
-            throw new CacheException(e);
+            LOGGER.error("Error occured when get data from L2 cache", e);
         }
         finally
         {
@@ -291,7 +284,7 @@ public class RedisCache implements Cache
             catch (Exception e)
             {
                 broken = true;
-                throw new CacheException(e);
+                LOGGER.error("Error occured when get data from L2 cache", e);
             }
             finally
             {
@@ -317,7 +310,7 @@ public class RedisCache implements Cache
             catch (Exception e)
             {
                 broken = true;
-                throw new CacheException(e);
+                LOGGER.error("Error occured when get data from L2 cache", e);
             }
             finally
             {
@@ -325,5 +318,6 @@ public class RedisCache implements Cache
             }
             
         }
+        return false;
     }
 }

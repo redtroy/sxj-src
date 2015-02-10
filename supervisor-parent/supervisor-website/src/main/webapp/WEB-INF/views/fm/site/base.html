@@ -14,7 +14,7 @@ $(function(){
 		showOn: 'focus',
 		alignTo: 'target',
 		alignX: 'right',
-		alignY: 'center',
+		alignY: 'inner-top',
 		offsetX: 5
 	});
 	
@@ -51,7 +51,7 @@ $(function(){
 <div id="error_info_div" style="display: none;">
 	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px;z-index: 99999">
 		<div class="modal-header">
-			<div class="tit">消息提示</div>
+			<div class="tit"></div>
 			<span class="close" id="dialog_close_span">关闭</span>
 		</div>
 		<div class="modal-body">
@@ -69,7 +69,7 @@ $(function(){
 <div id="succ_info_div" style="display: none;">
 	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px;z-index: 99999">
 		<div class="modal-header">
-			<div class="tit">消息提示</div>
+			<div class="tit"></div>
 			<span class="close" id="dialog_close_span">关闭</span>
 		</div>
 		<div class="modal-body">
@@ -87,13 +87,13 @@ $(function(){
 <div id="message_info_div" style="display: none;">
 	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
 		<div class="modal-header">
-			<div class="tit">消息提示</div>
+			<div class="tit"></div>
 			<span class="close" id="dialog_close_span">关闭</span>
 		</div>
 		<div class="modal-body">
 			<div id="message_hint_div" class="tipBox ly-clearFix">
 				<span class="icon icon32 icon-32-info"></span>
-				<p class="fontYH f18" id="message_hint">一般性网站提示内容</p>
+				<p class="color-blue fontYH f18" id="message_hint">一般性网站提示内容</p>
 			</div>
 			<div class="button-box">
 				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
@@ -311,6 +311,7 @@ function loadPage(currentPage,totalPage) {
 	jump(currentPage);
  }
 $(".pagination").ready(function(){
+	
 	loadPage(${query.currentPage},${query.totalPage});
 });
 var jump = function(currentPage){

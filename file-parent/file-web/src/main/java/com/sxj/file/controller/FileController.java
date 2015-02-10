@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import third.rewrite.fastdfs.service.IStorageClientService;
 import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
+import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.util.common.StringUtils;
@@ -125,14 +126,14 @@ public class FileController
                     "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
             dataformat.setTimeZone(new SimpleTimeZone(0, "GMT"));
             
-            Object lastModified = HierarchicalCacheManager.get(IFileUpLoad.LEVEL,
+            Object lastModified = HierarchicalCacheManager.get(CacheLevel.REDIS,
                     IFileUpLoad.CACHE_NAME,
                     modifyId.toString());
             if (lastModified == null)
             {
                 Date nowdate = new Date();
                 lastModified = dataformat.format(nowdate);
-                HierarchicalCacheManager.set(IFileUpLoad.LEVEL,
+                HierarchicalCacheManager.set(CacheLevel.REDIS,
                         IFileUpLoad.CACHE_NAME,
                         modifyId.toString(),
                         lastModified.toString());

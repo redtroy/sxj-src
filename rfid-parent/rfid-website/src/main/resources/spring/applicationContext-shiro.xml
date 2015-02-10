@@ -58,7 +58,7 @@
 	</bean>
  
 	<bean id="shiroCacheManager" class="com.sxj.supervisor.rfid.login.ApiShiroRedisCacheManager">
-		<property name="level" value="2"></property>
+		<property name="level" value="REDIS"></property>
 		<property name="collections" ref="redisCollections"></property>
 	</bean>
 
