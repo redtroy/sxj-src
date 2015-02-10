@@ -83,6 +83,7 @@ public class RedisCacheProvider implements CacheProvider
         }
         catch (Exception e)
         {
+            pool.destroy();
             start(redisProps);
             throw new CacheException(e);
         }
