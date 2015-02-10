@@ -59,35 +59,35 @@ public class OpenRfidController {
 	@Autowired
 	private IContractPayService payService;
 
-//	/**
-//	 * 测试
-//	 * 
-//	 * @throws WebException
-//	 */
-//	@RequestMapping(value = "info/pay/{payId}")
-//	public @ResponseBody Map<String, Object> getPayInfo(
-//			@PathVariable String payId) throws WebException {
-//		Map<String, Object> map = new HashMap<>();
-//		try {
-//			PayRecordEntity pay = payService.getPayRecordEntity(payId);
-//			if (pay == null) {
-//				throw new WebException("付款记录不存在");
-//			}
-//			map.put("memberNo_A", pay.getMemberNoA());
-//			map.put("payNo", pay.getPayNo());
-//			map.put("contractNo", pay.getContractNo());
-//			map.put("batchNo", pay.getBatchNo());
-//			map.put("payAmount", pay.getPayAmount());
-//			map.put("content", pay.getContent());
-//			map.put("state", 1);
-//
-//		} catch (Exception e) {
-//			SxjLogger.error(e.getMessage(), e, this.getClass());
-//			map.put("state", 0);
-//			map.put("error", e.getMessage());
-//		}
-//		return map;
-//	}
+	// /**
+	// * 测试
+	// *
+	// * @throws WebException
+	// */
+	// @RequestMapping(value = "info/pay/{payId}")
+	// public @ResponseBody Map<String, Object> getPayInfo(
+	// @PathVariable String payId) throws WebException {
+	// Map<String, Object> map = new HashMap<>();
+	// try {
+	// PayRecordEntity pay = payService.getPayRecordEntity(payId);
+	// if (pay == null) {
+	// throw new WebException("付款记录不存在");
+	// }
+	// map.put("memberNo_A", pay.getMemberNoA());
+	// map.put("payNo", pay.getPayNo());
+	// map.put("contractNo", pay.getContractNo());
+	// map.put("batchNo", pay.getBatchNo());
+	// map.put("payAmount", pay.getPayAmount());
+	// map.put("content", pay.getContent());
+	// map.put("state", 1);
+	//
+	// } catch (Exception e) {
+	// SxjLogger.error(e.getMessage(), e, this.getClass());
+	// map.put("state", 0);
+	// map.put("error", e.getMessage());
+	// }
+	// return map;
+	// }
 
 	/**
 	 * 登陆
@@ -284,12 +284,15 @@ public class OpenRfidController {
 			} else if (state == 2) {
 				map.put("state", 2);
 				map.put("message", "货物已发货,不能重复发货");
-			} else if (state == 3){
+			} else if (state == 3) {
 				map.put("state", 3);
 				map.put("message", "货物已验收,不能发货");
-			} else if (state == 4){
+			} else if (state == 4) {
 				map.put("state", 4);
 				map.put("message", "标签已停用,不能发货");
+			} else if (state == 5) {
+				map.put("state", 5);
+				map.put("message", "标签未审核,不能发货");
 			} else {
 				map.put("state", 0);
 				map.put("message", "系统错误");
@@ -321,12 +324,15 @@ public class OpenRfidController {
 			} else if (state == 2) {
 				map.put("state", 2);
 				map.put("message", "货物已验收,不能重复验收");
-			}else if (state == 3) {
+			} else if (state == 3) {
 				map.put("state", 3);
 				map.put("message", "货物未出库,不能验收");
-			} else if (state == 4){
+			} else if (state == 4) {
 				map.put("state", 4);
 				map.put("message", "标签已停用,不能验收");
+			} else if (state == 5) {
+				map.put("state", 5);
+				map.put("message", "标签未审核,不能发货");
 			} else {
 				map.put("state", 0);
 				map.put("message", "验收失败");
@@ -394,13 +400,13 @@ public class OpenRfidController {
 			} else if (stepState == 2) {
 				map.put("state", "2");
 				map.put("message", "门窗已安装,不能重复安装");
-			}  else if (stepState == 3) {
+			} else if (stepState == 3) {
 				map.put("state", "3");
 				map.put("message", "门窗已质检,不能安装");
 			} else if (stepState == 4) {
 				map.put("state", "4");
 				map.put("message", "标签已停用,不能安装");
-			}else {
+			} else {
 				map.put("state", "0");
 				map.put("message", "系统错误");
 			}

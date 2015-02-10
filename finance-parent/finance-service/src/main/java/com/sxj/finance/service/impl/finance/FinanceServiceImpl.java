@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +24,8 @@ import com.sxj.util.persistent.QueryCondition;
 @Service
 public class FinanceServiceImpl implements IFinanceService {
 
-	private final String url = "http://www.menchuang.org.cn:8080/supervisor-website/pay/changeState.htm";
-	// private final String url =
-	// "http://www.menchuang.org.cn/pay/changeState.htm";
+	@Value("${supervisor.url}")
+	private String url = "";
 
 	@Autowired
 	private FinanceDao financeDao;

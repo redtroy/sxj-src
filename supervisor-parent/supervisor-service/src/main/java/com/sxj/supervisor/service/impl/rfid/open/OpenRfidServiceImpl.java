@@ -35,6 +35,7 @@ import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
+import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.open.Bacth;
@@ -113,41 +114,39 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 
 				if (!CollectionUtils.isEmpty(logisticsRef)) {
 					LogisticsRefEntity lRef = logisticsRef.get(0);
-					if (lRef.getState().getId() == 1) {//
-						if (!CollectionUtils.isEmpty(ref)) {
-							LogisticsRfidEntity le = ref.get(0);
-							Contract contract = new Contract();
-							contract.setContractNo(le.getContractNo());
-							batchModel.setContract(contract);// 封装合同号
-							batchModel.setRfidState(le.getProgressState()
-									.getId());// 封装RFID状态
-							contract.setRfid(rfid);
-							QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
-							query.addCondition("rfidNo", rfid);
-							query.addCondition("state", 1);// 是否已变更
-							// 合同批次
-							List<ContractBatchEntity> cbatchList = contractBatchDao
-									.queryBacths(query);
 
-							QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
-							modifyQuery.addCondition("rfidNo", rfid);
-							modifyQuery.addCondition("state", 1);// 是否已变更
-							// 变更批次
-							List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao
-									.queryBacths(modifyQuery);
+					if (!CollectionUtils.isEmpty(ref)) {
+						LogisticsRfidEntity le = ref.get(0);
+						Contract contract = new Contract();
+						contract.setContractNo(le.getContractNo());
+						batchModel.setContract(contract);// 封装合同号
+						batchModel.setRfidState(le.getProgressState().getId());// 封装RFID状态
+						contract.setRfid(rfid);
+						QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
+						query.addCondition("rfidNo", rfid);
+						query.addCondition("state", 1);// 是否已变更
+						// 合同批次
+						List<ContractBatchEntity> cbatchList = contractBatchDao
+								.queryBacths(query);
 
-							QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
-							replenishQuery.addCondition("newRfidNo", rfid);
-							// 补损批次
-							List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
-									.queryReplenishBatch(replenishQuery);
+						QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
+						modifyQuery.addCondition("rfidNo", rfid);
+						modifyQuery.addCondition("state", 1);// 是否已变更
+						// 变更批次
+						List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao
+								.queryBacths(modifyQuery);
 
-							setBatchItems(batch, cbatchList, modifyBatch,
-									batchList);
+						QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
+						replenishQuery.addCondition("newRfidNo", rfid);
+						// 补损批次
+						List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+								.queryReplenishBatch(replenishQuery);
 
-						}
-					} else {
-						batch.setState("3");
+						setBatchItems(batch, cbatchList, modifyBatch, batchList);
+
+					}
+					if (lRef.getState().getId() == 0) {
+						batch.setState("3");// 未审核
 					}
 
 				}
@@ -202,8 +201,9 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	@Override
 	public WinTypeModel getWinTypeByRfid(String gid) throws ServiceException,
 			SQLException {
-		String rfid = logisticsDao.getRfid(gid).get(0);
 		WinTypeModel wtm = new WinTypeModel();
+		try{
+		String rfid = logisticsDao.getRfid(gid).get(0);
 		if (StringUtils.isNotEmpty(rfid)) {
 			QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
 			query.addCondition("rfidNo", rfid);
@@ -228,16 +228,27 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 						wtm.setState("1");// 成功
 					} else {
 						wtm.setState("2");// 未启用
+						wtm.setRfidNo(rfid);
 					}
 				} else {
 					wtm.setState("3");// 未审核
+					wtm.setRfidNo(rfid);
 				}
 			} else {
 				wtm.setState("2");// 未启用
+				wtm.setRfidNo(rfid);
 			}
 
 		}
 		return wtm;
+	} catch (ServiceException e) {
+		SxjLogger.error(e.getMessage(), e, this.getClass());
+		throw new ServiceException(e.getMessage());
+	} catch (Exception e) {
+		SxjLogger.error(e.getMessage(), e, this.getClass());
+		throw new ServiceException("获取门窗错误", e);
+	}
+		
 	}
 
 	/**
@@ -304,41 +315,55 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 				logisticsQuery.addCondition("rfidNo", rfid);
 				List<LogisticsRfidEntity> logistics = logisticsDao
 						.queryLogisticsRfidList(logisticsQuery);
-				if (!CollectionUtils.isEmpty(logistics)) {
+				QueryCondition<LogisticsRefEntity> logisticsRefQuery = new QueryCondition<LogisticsRefEntity>();
+				logisticsRefQuery.addCondition("rfidNo", rfid);
+				List<LogisticsRefEntity> logisticsRef = logisticsRefDao
+						.queryList(logisticsRefQuery);// 审核状态
+				if (!CollectionUtils.isEmpty(logistics)
+						&& !CollectionUtils.isEmpty(logisticsRef)) {
 					LogisticsRfidEntity le = logistics.get(0);
-					if (le.getProgressState()
-							.equals(LabelStateEnum.HAS_RECEIPT)) {// 标签是否收货状态
-						le.setProgressState(LabelStateEnum.INSTALL);
-						logisticsDao.updateLogisticsRfid(le);
-						// 更新出库状态
-						ContractBatchEntity contractBatch = contractBatchDao
-								.getBacthsByRfid(rfid);
-						if (contractBatch != null) {
-							if (contractBatch.getType() == 1) {
-								ContractBatchEntity cbe = new ContractBatchEntity();
-								cbe.setId(contractBatch.getId());
-								cbe.setWarehouseState(1);
-								contractBatchDao.updateBatch(cbe);
-							} else if (contractBatch.getType() == 2) {
-								ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
-								modifyBatch.setId(contractBatch.getId());
-								modifyBatch.setWarehouseState(1);
-								contractModifyBatchDao.updateBatch(modifyBatch);
-							} else if (contractBatch.getType() == 3) {
-								ReplenishBatchEntity replenishBatch = new ReplenishBatchEntity();
-								replenishBatch.setId(contractBatch.getId());
-								replenishBatch.setWarehouseState(1);
-								contractReplenishBatchDao
-										.updateBatch(replenishBatch);
-							}
+					LogisticsRefEntity lRef = logisticsRef.get(0);
+					if (lRef.getState().equals(AuditStateEnum.APPROVAL)) {
+						if (le.getRfidState().equals(RfidStateEnum.DISABLE)) {
+							return 4; // 标签已停用
 						}
-						return 1;
-					} else if(le.getProgressState().equals(LabelStateEnum.INSTALL)){
-						return 2; // 货物已出库
-					}else if(le.getProgressState().equals(LabelStateEnum.HAS_QUALITY)){
-						return 3; // 货物已验收
-					}else if(le.getRfidState().equals(RfidStateEnum.DISABLE)){
-						return 4; // 标签已停用
+						if (le.getProgressState().equals(
+								LabelStateEnum.HAS_RECEIPT)) {// 标签是否收货状态
+							le.setProgressState(LabelStateEnum.INSTALL);
+							logisticsDao.updateLogisticsRfid(le);
+							// 更新出库状态
+							ContractBatchEntity contractBatch = contractBatchDao
+									.getBacthsByRfid(rfid);
+							if (contractBatch != null) {
+								if (contractBatch.getType() == 1) {
+									ContractBatchEntity cbe = new ContractBatchEntity();
+									cbe.setId(contractBatch.getId());
+									cbe.setWarehouseState(1);
+									contractBatchDao.updateBatch(cbe);
+								} else if (contractBatch.getType() == 2) {
+									ModifyBatchEntity modifyBatch = new ModifyBatchEntity();
+									modifyBatch.setId(contractBatch.getId());
+									modifyBatch.setWarehouseState(1);
+									contractModifyBatchDao
+											.updateBatch(modifyBatch);
+								} else if (contractBatch.getType() == 3) {
+									ReplenishBatchEntity replenishBatch = new ReplenishBatchEntity();
+									replenishBatch.setId(contractBatch.getId());
+									replenishBatch.setWarehouseState(1);
+									contractReplenishBatchDao
+											.updateBatch(replenishBatch);
+								}
+							}
+							return 1;
+						} else if (le.getProgressState().equals(
+								LabelStateEnum.INSTALL)) {
+							return 2; // 货物已出库
+						} else if (le.getProgressState().equals(
+								LabelStateEnum.HAS_QUALITY)) {
+							return 3; // 货物已验收
+						}
+					} else {
+						return 5;
 					}
 				}
 			}
@@ -354,84 +379,94 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	}
 
 	/**
-     * 验收
-     */
-    @Override
-    @Transactional
-    public int accepting(String gid) throws ServiceException
-    {
-        try
-        {
-            String rfid = logisticsDao.getRfid(gid).get(0);
-            if (StringUtils.isNotEmpty(rfid))
-            {
-                QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
-                logisticsQuery.addCondition("rfidNo", rfid);
-                List<LogisticsRfidEntity> ref = logisticsDao.queryLogisticsRfidList(logisticsQuery);
-                if (ref != null && ref.size() > 0)
-                {
-                    LogisticsRfidEntity le = ref.get(0);
-                    if (le.getProgressState().equals(LabelStateEnum.INSTALL))//标签是都已出库
-                    {
-                        le.setProgressState(LabelStateEnum.HAS_QUALITY);
-                        logisticsDao.updateLogisticsRfid(le);
-                        // 获取合同信息
-                        ContractModel cm = contractService.getContractModelByContractNo(le.getContractNo());
-                        if (cm != null)
-                        {
-                            // 获取批次信息
-                            ContractBatchEntity cb = contractBatchDao.getBacthsByRfid(rfid);
-                            // 生成支付单
-                            PayRecordEntity pay = new PayRecordEntity();
-                            pay.setMemberNoA(cm.getContract().getMemberIdA());
-                            pay.setMemberNameA(cm.getContract()
-                                    .getMemberNameA());
-                            pay.setMemberNoB(cm.getContract().getMemberIdB());
-                            pay.setMemberNameB(cm.getContract()
-                                    .getMemberNameB());
-                            pay.setContractNo(cm.getContract().getContractNo());
-                            pay.setRfidNo(rfid);
-                            pay.setDateNo(cm.getContract().getContractNo()
-                                    + "P");// 编号
-                            pay.setBatchNo(cb.getBatchNo());
-                            pay.setPayAmount(cb.getAmount());
-                            if (cm.getContract().getType().getId() == 1)
-                            {
-                                pay.setContractType(PayContractTypeEnum.GLASS);
-                                pay.setContent("第" + cb.getBatchNo() + "批次玻璃货款");
-                            }
-                            else if (cm.getContract().getType().getId() == 2)
-                            {
-                                pay.setContractType(PayContractTypeEnum.EXTRUDERS);
-                                pay.setContent("第" + cb.getBatchNo() + "批次型材货款");
-                            }
-                            pay.setState(PayStageEnum.STAGE1);
-                            pay.setPayMode(PayModeEnum.MODE1);
-                            pay.setPayType(PayTypeEnum.PAYMENT);
-                            contractPayService.addPayRecordEntity(pay);// 生成支付单
-                            return 1;
-                        }
-                    }else if (le.getProgressState().equals(LabelStateEnum.HAS_QUALITY))
-                    {
-                        return 2;//货物已验收
-                    }else if(le.getProgressState().equals(LabelStateEnum.INSTALL)){
-						return 3; // 货物未出库
-					}else if(le.getRfidState().equals(RfidStateEnum.DISABLE)){
-						return 4; // 标签已停用
+	 * 验收
+	 */
+	@Override
+	@Transactional
+	public int accepting(String gid) throws ServiceException {
+		try {
+			String rfid = logisticsDao.getRfid(gid).get(0);
+			if (StringUtils.isNotEmpty(rfid)) {
+				QueryCondition<LogisticsRfidEntity> logisticsQuery = new QueryCondition<LogisticsRfidEntity>();
+				logisticsQuery.addCondition("rfidNo", rfid);
+				List<LogisticsRfidEntity> logistics = logisticsDao
+						.queryLogisticsRfidList(logisticsQuery);
+				QueryCondition<LogisticsRefEntity> logisticsRefQuery = new QueryCondition<LogisticsRefEntity>();
+				logisticsRefQuery.addCondition("rfidNo", rfid);
+				List<LogisticsRefEntity> logisticsRef = logisticsRefDao
+						.queryList(logisticsRefQuery);// 审核状态
+				if (!CollectionUtils.isEmpty(logistics)
+						&& !CollectionUtils.isEmpty(logisticsRef)) {
+					LogisticsRfidEntity le = logistics.get(0);
+					LogisticsRefEntity lRef = logisticsRef.get(0);
+					if (lRef.getState().equals(AuditStateEnum.APPROVAL)) {
+						if (le.getRfidState().equals(RfidStateEnum.DISABLE)) {
+							return 4; // 标签已停用
+						}
+						if (le.getProgressState()
+								.equals(LabelStateEnum.INSTALL))// 标签是都已出库
+						{
+							le.setProgressState(LabelStateEnum.HAS_QUALITY);
+							logisticsDao.updateLogisticsRfid(le);
+							// 获取合同信息
+							ContractModel cm = contractService
+									.getContractModelByContractNo(le
+											.getContractNo());
+							if (cm != null) {
+								// 获取批次信息
+								ContractBatchEntity cb = contractBatchDao
+										.getBacthsByRfid(rfid);
+								// 生成支付单
+								PayRecordEntity pay = new PayRecordEntity();
+								pay.setMemberNoA(cm.getContract()
+										.getMemberIdA());
+								pay.setMemberNameA(cm.getContract()
+										.getMemberNameA());
+								pay.setMemberNoB(cm.getContract()
+										.getMemberIdB());
+								pay.setMemberNameB(cm.getContract()
+										.getMemberNameB());
+								pay.setContractNo(cm.getContract()
+										.getContractNo());
+								pay.setRfidNo(rfid);
+								pay.setDateNo(cm.getContract().getContractNo()
+										+ "P");// 编号
+								pay.setBatchNo(cb.getBatchNo());
+								pay.setPayAmount(cb.getAmount());
+								if (cm.getContract().getType().getId() == 1) {
+									pay.setContractType(PayContractTypeEnum.GLASS);
+									pay.setContent("第" + cb.getBatchNo()
+											+ "批次玻璃货款");
+								} else if (cm.getContract().getType().getId() == 2) {
+									pay.setContractType(PayContractTypeEnum.EXTRUDERS);
+									pay.setContent("第" + cb.getBatchNo()
+											+ "批次型材货款");
+								}
+								pay.setState(PayStageEnum.STAGE1);
+								pay.setPayMode(PayModeEnum.MODE1);
+								pay.setPayType(PayTypeEnum.PAYMENT);
+								contractPayService.addPayRecordEntity(pay);// 生成支付单
+								return 1;
+							}
+						} else if (le.getProgressState().equals(
+								LabelStateEnum.HAS_QUALITY)) {
+							return 2;// 货物已验收
+						} else if (le.getProgressState().equals(
+								LabelStateEnum.INSTALL)) {
+							return 3; // 货物未出库
+						}
+					} else {
+						return 5;
 					}
-                }
-            }
-            return 0;
-        }
-        catch (ServiceException e)
-        {
-            SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new ServiceException(e.getMessage());
-        }
-        catch (Exception e)
-        {
-            SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new ServiceException("更新批次错误", e);
-        }
-    }
+				}
+			}
+			return 0;
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新批次错误", e);
+		}
+	}
 }
