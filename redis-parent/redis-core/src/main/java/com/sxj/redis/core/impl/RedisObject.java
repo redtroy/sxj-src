@@ -3,8 +3,8 @@ package com.sxj.redis.core.impl;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RObject;
-import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
+import com.sxj.redis.provider.RProvider;
 import com.sxj.spring.modules.util.Serializers;
 import com.sxj.spring.modules.util.serializer.Serializer;
 
@@ -35,7 +35,7 @@ public class RedisObject implements RObject
     @Override
     public void delete()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {

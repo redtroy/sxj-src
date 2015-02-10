@@ -4,10 +4,10 @@ import com.sxj.redis.core.RCollections;
 import com.sxj.redis.core.RDeque;
 import com.sxj.redis.core.RList;
 import com.sxj.redis.core.RMap;
-import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.RQueue;
 import com.sxj.redis.core.RSet;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
+import com.sxj.redis.provider.impl.SingleRedisProvider;
 
 public class RedisCollections implements RCollections
 {
@@ -15,7 +15,7 @@ public class RedisCollections implements RCollections
     
     public RedisCollections(String configFile)
     {
-        provider = new RedisProvider(configFile);
+        provider = new SingleRedisProvider(configFile);
     }
     
     @Override

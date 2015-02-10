@@ -12,9 +12,9 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Transaction;
 
 import com.sxj.redis.core.RMap;
-import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisExpirable;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
 {
@@ -27,7 +27,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public V putIfAbsent(K key, V value)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -63,7 +63,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public boolean remove(Object key, Object value)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         boolean retValue = false;
         try
@@ -95,7 +95,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public boolean replace(K key, V oldValue, V newValue)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean retValue = false;
         boolean broken = false;
         try
@@ -127,7 +127,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public V replace(K key, V value)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -156,7 +156,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public int size()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -182,7 +182,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public boolean containsKey(Object key)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -203,7 +203,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public boolean containsValue(Object value)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -225,7 +225,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public V get(Object key)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -246,7 +246,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public V put(K key, V value)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -277,7 +277,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     public V remove(Object key)
     {
         
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -308,7 +308,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public void putAll(Map<? extends K, ? extends V> m)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -341,7 +341,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public Set<K> keySet()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -367,7 +367,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public Collection<V> values()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -394,7 +394,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     public Set<java.util.Map.Entry<K, V>> entrySet()
     {
         
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -422,7 +422,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
     @Override
     public Map<K, V> getAll(Set<K> keys)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {

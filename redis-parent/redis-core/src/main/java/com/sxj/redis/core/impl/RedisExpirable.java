@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RExpirable;
-import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisExpirable extends RedisObject implements RExpirable
 {
@@ -20,7 +20,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public boolean expire(long timeToLive, TimeUnit timeUnit)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -42,7 +42,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public boolean expireAt(long timestamp)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -63,7 +63,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public boolean expireAt(Date timestamp)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -84,7 +84,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public boolean clearExpire()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -105,7 +105,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public long ttl()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {

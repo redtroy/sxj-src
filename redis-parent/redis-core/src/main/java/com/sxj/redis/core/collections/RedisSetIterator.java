@@ -8,8 +8,8 @@ import java.util.NoSuchElementException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanResult;
 
-import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisSetIterator<V> implements Iterator<V>
 {
@@ -53,7 +53,7 @@ public class RedisSetIterator<V> implements Iterator<V>
     {
         if (iterator == null)
         {
-            final Jedis jedis = provider.getResource();
+            final Jedis jedis = provider.getResource(redisSet.getName());
             boolean broken = false;
             try
             {

@@ -10,10 +10,10 @@ import org.apache.commons.collections.MapUtils;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.MessageListener;
-import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.RTopic;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisObject;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisTopic<M> extends RedisObject implements RTopic<M>
 {
@@ -29,7 +29,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
     public long publish(M message)
     {
         
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -49,7 +49,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
     @Override
     public int addListener(final MessageListener<M> listener)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         try
         {
             RedisMessageListenerWrapper<M> wrapper = new RedisMessageListenerWrapper<M>(
@@ -101,7 +101,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         }
     }
     
-    public static class TopicThread<M> implements Runnable
+    public class TopicThread<M> implements Runnable
     {
         
         private RedisMessageListenerWrapper<M> wrapper;
@@ -119,7 +119,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
         {
             this.provider = provider;
             this.wrapper = wrapper;
-            jedis = provider.getResource();
+            jedis = provider.getResource(name);
         }
         
         @Override
@@ -142,7 +142,7 @@ public class RedisTopic<M> extends RedisObject implements RTopic<M>
             try
             {
                 Thread.sleep(MILLIS_TO_RETRY);
-                jedis = provider.getResource();
+                jedis = provider.getResource(name);
                 executor.execute(this);
             }
             catch (Exception e)

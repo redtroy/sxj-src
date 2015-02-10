@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
 import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RDeque;
-import com.sxj.redis.core.RProvider;
 import com.sxj.redis.core.exception.RedisException;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
 {
@@ -27,7 +27,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     @Override
     public void addLast(V e)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -47,7 +47,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     @Override
     public boolean offerFirst(V e)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -74,7 +74,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     @Override
     public V removeLast()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -105,7 +105,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     @Override
     public V pollLast()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -126,7 +126,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     @Override
     public V getFirst()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -151,7 +151,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     @Override
     public V getLast()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -182,7 +182,7 @@ public class RedisDeque<V> extends RedisQueue<V> implements RDeque<V>
     @Override
     public V peekLast()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
