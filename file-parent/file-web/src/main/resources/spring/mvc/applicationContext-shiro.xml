@@ -18,7 +18,7 @@
 
 	<bean id="shiroCacheManager"
 		class="com.sxj.file.controller.SupervisorShiroRedisCacheManager">
-		<property name="level" value="2"></property>
+		<property name="level" value="REDIS"></property>
 	</bean>
 
 </beans>
