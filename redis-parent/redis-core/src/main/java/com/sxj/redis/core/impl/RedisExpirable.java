@@ -67,7 +67,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
         boolean broken = false;
         try
         {
-            jedis.expireAt(name, timestamp.getTime());
+            jedis.expireAt(name, timestamp.getTime() / 1000);
             return true;
         }
         catch (Exception e)
