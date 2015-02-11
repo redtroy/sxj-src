@@ -488,18 +488,18 @@ function busunSeav(){
 					<@b.pager/>
 					<table border="0" cellpadding="0" cellspacing="0" class="tabList"
 						id="res_table">
-							<col width="8%" />
-					        <col width="8%" />
-					        <col width="8%" />
-					        <col width="8%" />
-					        <col width="8%" />
-					        <col width="8%" />
-					        <col width="5%" />
-					        <col width="10%" />
-					        <col width="10%" />
-					        <col width="10%" />
-					        <col width="3%" />
-					        <col width="14%" />
+							 <col width="8%" />
+        <col width="8%" />
+        <col width="8%" />
+        <col width="8%" />
+        <col width="8%" />
+        <col width="8%" />
+        <col width="5%" />
+        <col width="10%" />
+        <col width="10%" />
+        <col width="12%" />
+        <col width="4%" />
+        <col width="10%" />
 						<tr>
 							<th>备案号</th>
 							<th>合同号</th>
@@ -559,10 +559,12 @@ function busunSeav(){
 								<div class="progressBar">
                   					<div class="progre100"></div>
                					 </div>
-                				<div class="color-green">100%</div></td>
+                				<div class="color-green">100%</div>
 								</#if>
 							</div>
-								<#else>-</#if>
+								<#else><div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div></#if>
 							</td>
 							<td>
 							<#if type==0>
@@ -572,7 +574,7 @@ function busunSeav(){
 							<#else>
 							<a
 								href="javascript:to_modify('${record.id}')" class="lnk-blue"><span
-									class="icon icon16 icon-edit"></span>修改</a> <a
+									class="icon icon16 icon-edit"></span>修改</a> <br/> <a
 								href="javascript:delRecord('${record.id}','${record.contractNo}')"
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
 							</a> 
@@ -582,14 +584,14 @@ function busunSeav(){
 							<#if record.contractNo?exists>
 							<a
 								href="javascript:biangeng('${record.id}','${record.contractNo}');"
-								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+								class="lnk-blue variContract " recordId="${record.id}">变更</a><br/>
 								<a
 								href="javascript:busun('${record.id}','${record.contractNo}');"
 								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
 							<#else>
 								<a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
-							</a> <a
+							</a><br/> <a
 								href="javascript:delRecord('${record.id}','${record.contractNo}')"
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
 							</a>
@@ -597,14 +599,14 @@ function busunSeav(){
 							<#elseif record.type.getId()==1>
 							<#if record.state.getId()==1> <a
 								href="javascript:biangeng('${record.id}','${record.contractNo}');"
-								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+								class="lnk-blue variContract " recordId="${record.id}">变更</a><br/>
 								<a
 								href="javascript:busun('${record.id}','${record.contractNo}');"
 								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
 							<#else>
 							<a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
-							</a><a
+							</a><br/><a
 								href="javascript:delRecord('${record.id}','${record.contractNo}')"
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
 							</a>
@@ -613,14 +615,14 @@ function busunSeav(){
 							<#if record.state.getId()==1>
 							<a
 								href="javascript:biangeng('${record.id}','${record.contractNo}');"
-								class="lnk-blue variContract mr10" recordId="${record.id}">变更</a>
+								class="lnk-blue variContract " recordId="${record.id}">变更</a><br/>
 								<a
 								href="javascript:busun('${record.id}','${record.contractNo}');"
 								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
 							<#else>
 								<a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
-							</a> <a
+							</a> <br/><a
 								href="javascript:delRecord('${record.id}','${record.contractNo}')"
 								class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
 							</a>

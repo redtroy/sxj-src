@@ -353,34 +353,25 @@ public class OpenRfidController {
 	 * @return
 	 */
 	@RequestMapping(value = "test")
-	public @ResponseBody Map<String, Object> testRfid(String contractNo,
+	public @ResponseBody Map<String, String> testRfid(String contractNo,
 			String gids, String address) {
-		Map<String, Object> map = new HashMap<String, Object>();
 		System.err.println(contractNo + "++++" + gids.toString());
 
 		try {
 			if (StringUtils.isEmpty(gids)) {
+				Map<String, String> map = new HashMap<String, String>();
 				map.put("state", "0");
 				map.put("message", "质检失败");
 				return map;
-			} else {
-				String[] gidArr = gids.split(",");
-				int stepState = windowRfid.testWindow(contractNo.trim(),
-						gidArr, address);
-				if (stepState == 1) {
-					map.put("state", "1");
-					map.put("message", "质检成功");
-				} else {
-					map.put("state", "0");
-					map.put("message", "质检失败");
-				}
 			}
+			String[] gidArr = gids.split(",");
+			Map<String, String> map = windowRfid.testWindow(contractNo.trim(),
+					gidArr, address);
+			return map;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			map.put("state", "0");
-			map.put("message", "质检失败");
 		}
-		return map;
+		return null;
 	}
 
 	/**
@@ -406,6 +397,9 @@ public class OpenRfidController {
 			} else if (stepState == 4) {
 				map.put("state", "4");
 				map.put("message", "标签已停用,不能安装");
+			} else if (stepState == 5) {
+				map.put("state", "5");
+				map.put("message", "标签未审核,不能安装");
 			} else {
 				map.put("state", "0");
 				map.put("message", "系统错误");

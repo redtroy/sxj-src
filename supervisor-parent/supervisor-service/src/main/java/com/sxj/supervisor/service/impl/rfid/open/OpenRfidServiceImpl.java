@@ -36,6 +36,7 @@ import com.sxj.supervisor.enu.contract.PayTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
+import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.open.Bacth;
@@ -202,53 +203,53 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	public WinTypeModel getWinTypeByRfid(String gid) throws ServiceException,
 			SQLException {
 		WinTypeModel wtm = new WinTypeModel();
-		try{
-		String rfid = logisticsDao.getRfid(gid).get(0);
-		if (StringUtils.isNotEmpty(rfid)) {
-			QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
-			query.addCondition("rfidNo", rfid);
+		try {
+			String rfid = logisticsDao.getRfid(gid).get(0);
+			if (StringUtils.isNotEmpty(rfid)) {
+				QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
+				query.addCondition("rfidNo", rfid);
 
-			List<WindowRfidEntity> win = windowRfidDao
-					.queryWindowRfidList(query);
-			QueryCondition<WindowRefEntity> refQuery = new QueryCondition<WindowRefEntity>();
-			refQuery.addCondition("rfidNo", rfid);
-			List<WindowRefEntity> winRef = windowRfidRefDao
-					.queryWindowRfidRefList(refQuery);
+				List<WindowRfidEntity> win = windowRfidDao
+						.queryWindowRfidList(query);
+				QueryCondition<WindowRefEntity> refQuery = new QueryCondition<WindowRefEntity>();
+				refQuery.addCondition("rfidNo", rfid);
+				List<WindowRefEntity> winRef = windowRfidRefDao
+						.queryWindowRfidRefList(refQuery);
 
-			if (winRef != null && winRef.size() > 0) {
-				WindowRefEntity windowRef = winRef.get(0);
-				if (windowRef.getState().getId() == 1) {
-					if (win != null && win.size() > 0) {
-						WindowRfidEntity wre = win.get(0);
-						wtm.setContratcNo(wre.getContractNo());
-						wtm.setRfidNo(wre.getRfidNo());
-						if (wre.getWindowType() != null) {
-							wtm.setWinType(wre.getWindowType().getName());
+				if (winRef != null && winRef.size() > 0) {
+					WindowRefEntity windowRef = winRef.get(0);
+					if (windowRef.getState().getId() == 1) {
+						if (win != null && win.size() > 0) {
+							WindowRfidEntity wre = win.get(0);
+							wtm.setContratcNo(wre.getContractNo());
+							wtm.setRfidNo(wre.getRfidNo());
+							if (wre.getWindowType() != null) {
+								wtm.setWinType(wre.getWindowType().getName());
+							}
+							wtm.setState("1");// 成功
+						} else {
+							wtm.setState("2");// 未启用
+							wtm.setRfidNo(rfid);
 						}
-						wtm.setState("1");// 成功
 					} else {
-						wtm.setState("2");// 未启用
+						wtm.setState("3");// 未审核
 						wtm.setRfidNo(rfid);
 					}
 				} else {
-					wtm.setState("3");// 未审核
+					wtm.setState("2");// 未启用
 					wtm.setRfidNo(rfid);
 				}
-			} else {
-				wtm.setState("2");// 未启用
-				wtm.setRfidNo(rfid);
-			}
 
+			}
+			return wtm;
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取门窗错误", e);
 		}
-		return wtm;
-	} catch (ServiceException e) {
-		SxjLogger.error(e.getMessage(), e, this.getClass());
-		throw new ServiceException(e.getMessage());
-	} catch (Exception e) {
-		SxjLogger.error(e.getMessage(), e, this.getClass());
-		throw new ServiceException("获取门窗错误", e);
-	}
-		
+
 	}
 
 	/**
@@ -257,31 +258,53 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 	@Override
 	public List<WinTypeModel> getWinTypeByRfids(String[] gid)
 			throws ServiceException, SQLException {
-		List<String> rfidList = logisticsDao.getRfid(gid);
-		List<WinTypeModel> wtmList = new ArrayList<WinTypeModel>();
-		if (rfidList != null && rfidList.size() > 0) {
-			for (String rfid : rfidList) {
-				WinTypeModel wtm = new WinTypeModel();
-				QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
-				query.addCondition("rfidNo", rfid);
-				List<WindowRfidEntity> win = windowRfidDao
-						.queryWindowRfidList(query);
-				if (!CollectionUtils.isEmpty(win)) {
-					WindowRfidEntity wre = win.get(0);
-					wtm.setContratcNo(wre.getContractNo());
-					wtm.setRfidNo(wre.getRfidNo());
-					if (wre.getWindowType() != null) {
-						wtm.setWinType(wre.getWindowType().getName());
+		try {
+			List<String> rfidList = logisticsDao.getRfid(gid);
+			List<WinTypeModel> wtmList = new ArrayList<WinTypeModel>();
+			if (rfidList != null && rfidList.size() > 0) {
+				for (String rfid : rfidList) {
+					WinTypeModel wtm = new WinTypeModel();
+					QueryCondition<WindowRfidEntity> query = new QueryCondition<WindowRfidEntity>();
+					query.addCondition("rfidNo", rfid);
+					List<WindowRfidEntity> win = windowRfidDao
+							.queryWindowRfidList(query);
+
+					QueryCondition<WindowRefEntity> refQuery = new QueryCondition<WindowRefEntity>();
+					refQuery.addCondition("rfidNo", rfid);
+					List<WindowRefEntity> winRef = windowRfidRefDao
+							.queryWindowRfidRefList(refQuery);
+					if (!CollectionUtils.isEmpty(win)
+							&& !CollectionUtils.isEmpty(winRef)) {
+						WindowRefEntity windowRef = winRef.get(0);
+						if (windowRef.getState()
+								.equals(AuditStateEnum.APPROVAL)) {// 已审核
+							WindowRfidEntity wre = win.get(0);
+							if (wre.getProgressState().equals(
+									LabelProgressEnum.INSTALL)) {
+								wtm.setContratcNo(wre.getContractNo());
+								wtm.setRfidNo(wre.getRfidNo());
+								if (wre.getWindowType() != null) {
+									wtm.setWinType(wre.getWindowType()
+											.getName());
+								}
+								wtm.setState("1");// 成功
+								wtmList.add(wtm);
+							}
+
+						}
 					}
-					wtm.setState("1");// 成功
-				} else {
-					wtm.setState("0");// 失败
 
 				}
-				wtmList.add(wtm);
 			}
+			return wtmList;
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取门窗错误", e);
 		}
-		return wtmList;
+
 	}
 
 	/**
@@ -431,15 +454,19 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 								pay.setRfidNo(rfid);
 								pay.setDateNo(cm.getContract().getContractNo()
 										+ "P");// 编号
-								pay.setBatchNo(cb.getBatchNo());
+								String bu= "";
+								if(cb.getType()==3){
+									bu="补";
+								}
+								pay.setBatchNo(bu+cb.getBatchNo());
 								pay.setPayAmount(cb.getAmount());
 								if (cm.getContract().getType().getId() == 1) {
 									pay.setContractType(PayContractTypeEnum.GLASS);
-									pay.setContent("第" + cb.getBatchNo()
+									pay.setContent(bu+"第" + cb.getBatchNo()
 											+ "批次玻璃货款");
 								} else if (cm.getContract().getType().getId() == 2) {
 									pay.setContractType(PayContractTypeEnum.EXTRUDERS);
-									pay.setContent("第" + cb.getBatchNo()
+									pay.setContent(bu+"第" + cb.getBatchNo()
 											+ "批次型材货款");
 								}
 								pay.setState(PayStageEnum.STAGE1);
