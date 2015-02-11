@@ -20,6 +20,8 @@ public class CometMessageListener implements MessageListener<String> {
 	public void onMessage(String msg) {
 		if (msg.equals(MessageChannel.RECORD_MESSAGE)
 				|| msg.equals(RfidChannel.RFID_APPLY_MESSAGE)
+				|| msg.contains(MessageChannel.WEBSITE_PAY_MESSAGE)
+				|| msg.contains(MessageChannel.WEBSITE_FINANCE_MESSAGE)
 				|| msg.equals(MessageChannel.MEMBER_MESSAGE)) {
 			Long count = CometServiceImpl.getCount(msg);
 			SxjLogger.debug("Sending Message to Comet Client:" + count,
