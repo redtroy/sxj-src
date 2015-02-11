@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.rfid.window;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
@@ -129,7 +130,7 @@ public interface IWindowRfidService
     /**
      * 质检
      */
-    public int testWindow(String contractNo, String[] gids, String address)
+    public Map<String, String> testWindow(String contractNo, String[] gids, String address)
             throws ServiceException;
     
     void updateGid(List<WindowRfidEntity> winList, String id)

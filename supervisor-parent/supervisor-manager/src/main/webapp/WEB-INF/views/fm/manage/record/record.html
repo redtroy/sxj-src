@@ -126,11 +126,12 @@ function to_modify(id){
 				window.location.href="record_edit.htm?id="+id;
 		}else if(data.isOK == "no"){
 			errorInfo("该备案已处理,不能刪除！");
+			query($("#pager").attr("currentPage"));
 		}else{
 			errorInfo("该备案已刪除！");
+			query($("#pager").attr("currentPage"));
 		}
 	});
-	query($("#pager").attr("currentPage"));
 }
 </script>
 </head>

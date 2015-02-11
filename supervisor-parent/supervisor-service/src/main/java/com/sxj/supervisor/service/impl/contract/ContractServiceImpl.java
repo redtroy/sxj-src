@@ -385,12 +385,12 @@ public class ContractServiceImpl implements IContractService
                     {
                         mceList.add(cmm.getModifyContract());
                     }
-                    if (cmm.getModifyItemList() != null)
+                    if (!CollectionUtils.isEmpty(cmm.getModifyItemList()))
                     {
                         contractModifyItemDao.updateItems(cmm.getModifyItemList());
                     }
                     List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
-                    if (cmm.getModifyBatchList() != null)
+                    if (!CollectionUtils.isEmpty(cmm.getModifyBatchList()))
                     {
                         for (int j = 0; j < cmm.getModifyBatchList().size(); j++)
                         {
@@ -422,7 +422,7 @@ public class ContractServiceImpl implements IContractService
                         mceList.add(crm.getReplenishContract());
                     }
                     List<ReplenishBatchEntity> rbeList = new ArrayList<ReplenishBatchEntity>();
-                    if (crm.getBatchItems() != null)
+                    if (!CollectionUtils.isEmpty(crm.getBatchItems()))
                     {
                         for (int j = 0; j < crm.getBatchItems().size(); j++)
                         {
@@ -529,8 +529,11 @@ public class ContractServiceImpl implements IContractService
                                                 });
                                 replenishBatchModel.setReplenishBatchItems(batchItemModelList);
                             }
-                            contractReplenishModel.getBatchItems()
-                                    .add(replenishBatchModel);
+                            if(replenish.getId().equals(batch.getReplenishId())){
+                            	 contractReplenishModel.getBatchItems()
+                                 .add(replenishBatchModel);
+                            }
+                           
                         }
                         contractReplenishModel.setReplenishContract(replenish);
                         contractModel.getReplenishList()

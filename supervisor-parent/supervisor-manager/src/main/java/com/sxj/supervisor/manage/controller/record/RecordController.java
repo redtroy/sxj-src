@@ -303,9 +303,7 @@ public class RecordController extends BaseController
             RecordEntity re = recordService.getRecord(id);
             if (re != null)
             {
-                if (re.getType().getId() == 0)
-                {
-                    if (StringUtils.isEmpty(re.getContractNo()))
+                    if (re.getState().equals(RecordStateEnum.NOBINDING))
                     {
                         map.put("isOK", "ok");
                     }
@@ -313,29 +311,6 @@ public class RecordController extends BaseController
                     {
                         map.put("isOK", "no");
                     }
-                }
-                else if (re.getType().getId() == 1)
-                {
-                    if (re.getState().getId() == 2)
-                    {
-                        map.put("isOK", "ok");
-                    }
-                    else
-                    {
-                        map.put("isOK", "no");
-                    }
-                }
-                else if (re.getType().getId() == 2)
-                {
-                    if (re.getState().getId() == 4)
-                    {
-                        map.put("isOK", "ok");
-                    }
-                    else
-                    {
-                        map.put("isOK", "no");
-                    }
-                }
             }
             else
             {

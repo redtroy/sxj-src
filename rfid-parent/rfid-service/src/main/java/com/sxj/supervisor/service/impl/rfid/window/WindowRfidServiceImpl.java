@@ -3,13 +3,16 @@ package com.sxj.supervisor.service.impl.rfid.window;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
 import com.sxj.supervisor.dao.rfid.purchase.IRfidPurchaseDao;
@@ -24,6 +27,7 @@ import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.enu.rfid.windowref.LinkStateEnum;
 import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
+import com.sxj.supervisor.model.rfid.windowRef.WindowRefQuery;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
 import com.sxj.supervisor.service.rfid.windowRef.IWindowRfidRefService;
 import com.sxj.util.common.StringUtils;
@@ -545,21 +549,33 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 		try {
 			String rfidNo = logisticsDao.getRfid(gid).get(0);
 			if (StringUtils.isNotEmpty(rfidNo)) {
+				WindowRefQuery query = new WindowRefQuery();
+				query.setRfidNo(rfidNo);
+				List<WindowRefEntity>  winfRefList=winRefService.queryWindowRfidRef(query);
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
-				if (wind.getProgressState().equals(
-						LabelProgressEnum.HAS_RECEIPT)) {// 标签是否已收货
-					wind.setProgressState(LabelProgressEnum.INSTALL);
-					windowRfidDao.updateStepWindow(wind);
-					return 1;
-				} else if (wind.getProgressState().equals(
-						LabelProgressEnum.INSTALL)) {
-					return 2;// 门窗已安装
-				} else if (wind.getProgressState().equals(
-						LabelProgressEnum.HAS_QUALITY)) {
-					return 3;// 门窗已质检
-				} else if (wind.getRfidState().equals(RfidStateEnum.DISABLE)) {
-					return 4;// 门窗已停用
+				if(!CollectionUtils.isEmpty(winfRefList)){
+					WindowRefEntity winRef=winfRefList.get(0);
+					if(winRef.getState().equals(AuditStateEnum.APPROVAL)){
+						if (wind.getProgressState().equals(
+								LabelProgressEnum.HAS_RECEIPT)) {// 标签是否已收货
+							wind.setProgressState(LabelProgressEnum.INSTALL);
+							windowRfidDao.updateStepWindow(wind);
+							return 1;
+						} else if (wind.getProgressState().equals(
+								LabelProgressEnum.INSTALL)) {
+							return 2;// 门窗已安装
+						} else if (wind.getProgressState().equals(
+								LabelProgressEnum.HAS_QUALITY)) {
+							return 3;// 门窗已质检
+						} else if (wind.getRfidState().equals(RfidStateEnum.DISABLE)) {
+							return 4;// 门窗已停用
+						}
+					}else{
+						return 5;// 未审核
+					}
+					
 				}
+				
 			}
 			return 0;
 		} catch (Exception e) {
@@ -573,11 +589,12 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public int testWindow(String contractNo, String[] gids, String address)
+	public Map<String,String> testWindow(String contractNo, String[] gids, String address)
 			throws ServiceException {
 		try {
 			contractNo.toUpperCase();
 			List<String> rfidNos = logisticsDao.getRfid(gids);
+			Map<String,String> map = new HashMap<String,String>();
 			for (String rfidNo : rfidNos) {
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 				if (contractNo.equals(wind.getContractNo())
@@ -586,15 +603,18 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 					wind.setProgressState(LabelProgressEnum.HAS_QUALITY);
 					wind.setAddress(address);
 					windowRfidDao.updateTestWindow(wind);
-				} else {
-					return 0;
+					map.put(rfidNo, "质检成功");
+				} else if(wind.getProgressState().equals(LabelProgressEnum.HAS_QUALITY)) {
+					map.put(rfidNo, "门窗已质检,不能重复质检");
+				}else if(wind.getRfidState().equals(RfidStateEnum.DISABLE)) {
+					map.put(rfidNo, "标签已停用,不能质检");
 				}
 			}
-			return 1;
+			return map;
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
-			return 0;
 		}
+		return null;
 	}
 
 	@Override
