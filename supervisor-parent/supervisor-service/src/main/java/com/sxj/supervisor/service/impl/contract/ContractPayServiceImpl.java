@@ -112,10 +112,11 @@ public class ContractPayServiceImpl implements IContractPayService {
 	}
 
 	@Override
-	public String updateState(PayRecordEntity re) throws ServiceException {
+	public String updateState(PayRecordEntity re, String flag)
+			throws ServiceException {
 		try {
 			payStagefsm.setCurrentState(re.getState());
-			payStagefsm.fire(re.getState().toString(), re);
+			payStagefsm.fire(re.getState().toString() + "_" + flag, re);
 			payDao.updatePay(re);
 		} catch (Exception e) {
 			SxjLogger.error("更改状态出错!", e, this.getClass());
@@ -164,30 +165,24 @@ public class ContractPayServiceImpl implements IContractPayService {
 	// }
 	// }
 
-	// /**
-	// * 乙方确认收款
-	// */
-	// @Override
-	// @Transactional
-	// public String payOk(String id) throws ServiceException {
-	// try {
-	// PayRecordEntity re = payDao.getPayRecordEntity(id);
-	// PayStageEnum[] payState = PayStageEnum.values();
-	// if (re.getState().ordinal() == 4) {
-	// re.setState(payState[5]);
-	// payDao.updatePay(re);
-	// contractService.modifyBatchPayState(re.getContractNo(),
-	// re.getRfidNo(), re.getPayNo());
-	// contractService.updateStartDate(re.getContractNo());
-	// return "ok";
-	// } else {
-	// return "false";
-	// }
-	// } catch (Exception e) {
-	// SxjLogger.error("乙方确认付款出错！", e, this.getClass());
-	// throw new ServiceException("乙方确认付款出错！", e);
-	// }
-	// }
+	/**
+	 * 乙方确认收款
+	 */
+	@Override
+	@Transactional
+	public String payOk(PayRecordEntity re, String flag)
+			throws ServiceException {
+		try {
+			updateState(re, flag);
+			contractService.modifyBatchPayState(re.getContractNo(),
+					re.getRfidNo(), re.getPayNo());
+			contractService.updateStartDate(re.getContractNo());
+			return "ok";
+		} catch (Exception e) {
+			SxjLogger.error("乙方确认付款出错！", e, this.getClass());
+			throw new ServiceException("乙方确认付款出错！", e);
+		}
+	}
 
 	/**
 	 * 财务统计查询

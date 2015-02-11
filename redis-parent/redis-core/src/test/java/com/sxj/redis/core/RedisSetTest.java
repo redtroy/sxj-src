@@ -1,6 +1,8 @@
 package com.sxj.redis.core;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -84,7 +86,6 @@ public class RedisSetTest
         set.add(map);
     }
     
-    @Test
     public void testIterator()
     {
         RSet<Map<String, String>> set = collections.getSet("MAP");
@@ -101,5 +102,17 @@ public class RedisSetTest
                 System.out.println(key + ":" + next.get(key));
             System.out.println("----------------");
         }
+    }
+    
+    @Test
+    public void testExpireAt()
+    {
+        RSet<String> set = collections.getSet(SET_NAME);
+        set.add("A");
+        Date now = new Date();
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(now);
+        instance.add(Calendar.MINUTE, 10);
+        set.expireAt(instance.getTime());
     }
 }

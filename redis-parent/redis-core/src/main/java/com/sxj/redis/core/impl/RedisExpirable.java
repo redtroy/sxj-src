@@ -7,12 +7,12 @@ import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RExpirable;
 import com.sxj.redis.core.exception.RedisException;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisExpirable extends RedisObject implements RExpirable
 {
     
-    public RedisExpirable(RedisProvider provider, String name)
+    public RedisExpirable(RProvider provider, String name)
     {
         super(provider, name);
     }
@@ -20,7 +20,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public boolean expire(long timeToLive, TimeUnit timeUnit)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -42,7 +42,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public boolean expireAt(long timestamp)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -63,11 +63,11 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public boolean expireAt(Date timestamp)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
-            jedis.expireAt(name, timestamp.getTime());
+            jedis.expireAt(name, timestamp.getTime() / 1000);
             return true;
         }
         catch (Exception e)
@@ -84,7 +84,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public boolean clearExpire()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -105,7 +105,7 @@ public class RedisExpirable extends RedisObject implements RExpirable
     @Override
     public long ttl()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {

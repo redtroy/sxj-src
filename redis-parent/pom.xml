@@ -7,6 +7,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>redis-core</module>
+    <module>redis-provider</module>
   </modules>
   <properties>
   	<netty.version>4.0.21.Final</netty.version>

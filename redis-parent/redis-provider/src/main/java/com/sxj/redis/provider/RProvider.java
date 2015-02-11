@@ -1,4 +1,4 @@
-package com.sxj.redis.core;
+package com.sxj.redis.provider;
 
 import java.util.Properties;
 
@@ -29,6 +29,6 @@ public interface RProvider
     
     public void returnResource(Jedis jedis, boolean isBrokenResource);
     
-    public Jedis getResource();
+    public Jedis getResource(String key);
     
 }

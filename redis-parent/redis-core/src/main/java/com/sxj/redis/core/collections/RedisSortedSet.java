@@ -9,14 +9,13 @@ import java.util.SortedSet;
 
 import com.sxj.redis.core.RSortedSet;
 import com.sxj.redis.core.impl.RedisObject;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisSortedSet<V> extends RedisObject implements RSortedSet<V>
 {
-    public RedisSortedSet(RedisProvider provider, String name)
+    public RedisSortedSet(RProvider provider, String name)
     {
         super(provider, name);
-        // TODO Auto-generated constructor stub
     }
     
     @Override

@@ -25,9 +25,9 @@ $.ajax({
   function query(page){
 		var params=$("#search_form").serialize();
 		$.post("accountList.htm?rand="+Math.random(),params,function(data){
-			var res=$(data).find("#right_div");
-			$("#right_div").empty();
-			$("#right_div").append(res.html());
+			var res=$(data).find(".tabList");
+			$(".tabList").empty();
+			$(".tabList").append(res.html());
 		});
   }
   

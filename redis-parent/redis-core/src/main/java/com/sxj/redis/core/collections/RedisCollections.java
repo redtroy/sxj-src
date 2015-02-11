@@ -6,15 +6,16 @@ import com.sxj.redis.core.RList;
 import com.sxj.redis.core.RMap;
 import com.sxj.redis.core.RQueue;
 import com.sxj.redis.core.RSet;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
+import com.sxj.redis.provider.impl.SingleRedisProvider;
 
 public class RedisCollections implements RCollections
 {
-    private RedisProvider provider;
+    private RProvider provider;
     
     public RedisCollections(String configFile)
     {
-        provider = new RedisProvider(configFile);
+        provider = new SingleRedisProvider(configFile);
     }
     
     @Override

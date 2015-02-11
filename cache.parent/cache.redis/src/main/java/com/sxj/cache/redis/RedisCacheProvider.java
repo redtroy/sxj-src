@@ -7,6 +7,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import com.sxj.cache.core.Cache;
+import com.sxj.cache.core.CacheException;
 import com.sxj.cache.core.CacheExpiredListener;
 import com.sxj.cache.core.CacheProvider;
 
@@ -49,6 +50,8 @@ public class RedisCacheProvider implements CacheProvider
     
     private static JedisPool pool;
     
+    private static Properties redisProps;
+    
     @Override
     public String name()
     {
@@ -60,7 +63,7 @@ public class RedisCacheProvider implements CacheProvider
      * @param jedis
      * @param isBrokenResource
      */
-    public static void returnResource(Jedis jedis, boolean isBrokenResource)
+    public void returnResource(Jedis jedis, boolean isBrokenResource)
     {
         if (null == jedis)
             return;
@@ -72,21 +75,31 @@ public class RedisCacheProvider implements CacheProvider
             pool.returnResource(jedis);
     }
     
-    public static Jedis getResource()
+    public Jedis getResource()
     {
-        return pool.getResource();
+        try
+        {
+            return pool.getResource();
+        }
+        catch (Exception e)
+        {
+            pool.destroy();
+            start(redisProps);
+            throw new CacheException(e);
+        }
     }
     
     @Override
     public Cache buildCache(String regionName, boolean autoCreate,
             CacheExpiredListener listener)
     {
-        return new RedisCache(regionName);
+        return new RedisCache(regionName, this);
     }
     
     @Override
     public void start(Properties props)
     {
+        
         JedisPoolConfig config = new JedisPoolConfig();
         
         host = getProperty(props, "host", LOCALHOST);
@@ -117,6 +130,7 @@ public class RedisCacheProvider implements CacheProvider
                 "timeBetweenEvictionRunsMillis",
                 DEFAULT_TIMEBETWEENEVICTIONRUNSMILLIS));
         pool = new JedisPool(config, host, port, timeout, password, database);
+        redisProps = props;
         
     }
     
@@ -126,14 +140,12 @@ public class RedisCacheProvider implements CacheProvider
         pool.destroy();
     }
     
-    private static String getProperty(Properties props, String key,
-            String defaultValue)
+    private String getProperty(Properties props, String key, String defaultValue)
     {
         return props.getProperty(key, defaultValue).trim();
     }
     
-    private static int getProperty(Properties props, String key,
-            int defaultValue)
+    private int getProperty(Properties props, String key, int defaultValue)
     {
         try
         {
@@ -146,7 +158,7 @@ public class RedisCacheProvider implements CacheProvider
         }
     }
     
-    private static boolean getProperty(Properties props, String key,
+    private boolean getProperty(Properties props, String key,
             boolean defaultValue)
     {
         return "true".equalsIgnoreCase(props.getProperty(key,

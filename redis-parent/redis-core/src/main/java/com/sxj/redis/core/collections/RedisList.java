@@ -13,13 +13,13 @@ import redis.clients.jedis.Transaction;
 import com.sxj.redis.core.RList;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisExpirable;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisList<V> extends RedisExpirable implements RList<V>
 {
     private static final int BATCHSIZE = 50;
     
-    public RedisList(RedisProvider provider, String name)
+    public RedisList(RProvider provider, String name)
     {
         super(provider, name);
     }
@@ -27,7 +27,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
     @Override
     public int size()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -79,7 +79,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
     @Override
     public boolean add(V e)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -115,7 +115,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
      */
     protected boolean remove(Object o, int count)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -139,7 +139,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         {
             return false;
         }
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -191,7 +191,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
             values[index] = V_SERIALIZER.serialize(value);
             index++;
         }
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -223,7 +223,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         }
         if (index < size())
         {
-            Jedis jedis = provider.getResource();
+            Jedis jedis = provider.getResource(name);
             boolean broken = false;
             try
             {
@@ -269,7 +269,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
     @Override
     public boolean removeAll(Collection<?> c)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         boolean result = false;
         try
@@ -321,7 +321,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
     public V get(int index)
     {
         checkIndex(index);
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -356,7 +356,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
     public V set(int index, V element)
     {
         checkIndex(index);
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -389,7 +389,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
     public V remove(int index)
     {
         checkIndex(index);
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -440,7 +440,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         {
             return -1;
         }
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         int pages = pages(size(), BATCHSIZE);
         String value = V_SERIALIZER.serialize(o);
@@ -479,7 +479,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
         
         final int size = size();
         int pages = pages(size, BATCHSIZE);
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -536,7 +536,7 @@ public class RedisList<V> extends RedisExpirable implements RList<V>
                     + " toIndex: " + toIndex);
         }
         
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {

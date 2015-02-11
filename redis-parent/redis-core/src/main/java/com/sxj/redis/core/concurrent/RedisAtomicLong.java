@@ -9,25 +9,25 @@ import redis.clients.jedis.Transaction;
 import com.sxj.redis.core.RAtomicLong;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisExpirable;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
 {
     
-    public RedisAtomicLong(RedisProvider provider, String name)
+    public RedisAtomicLong(RProvider provider, String name)
     {
         super(provider, name);
         init();
     }
     
-    public RedisAtomicLong(RedisProvider provider, String name, long seconds)
+    public RedisAtomicLong(RProvider provider, String name, long seconds)
     {
         super(provider, name);
         init();
         this.expire(seconds, TimeUnit.SECONDS);
     }
     
-    public RedisAtomicLong(RedisProvider provider, String name, Date timestamp)
+    public RedisAtomicLong(RProvider provider, String name, Date timestamp)
     {
         super(provider, name);
         init();
@@ -36,7 +36,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     
     private void init()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -62,7 +62,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     @Override
     public long addAndGet(long delta)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -82,7 +82,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     @Override
     public boolean compareAndSet(long expect, long update)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -116,7 +116,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     public long decrementAndGet()
     {
         
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -136,7 +136,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     @Override
     public Long get()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -169,7 +169,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     @Override
     public long getAndSet(long newValue)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -189,7 +189,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     @Override
     public long incrementAndGet()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -215,7 +215,7 @@ public class RedisAtomicLong extends RedisExpirable implements RAtomicLong
     @Override
     public void set(long newValue)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
