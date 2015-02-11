@@ -57,7 +57,7 @@
 			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
 		</if>
 		<if test="condition.windowType != null and condition.windowType !=''">
-			<![CDATA[AND WINDOW_TYPE = #{condition.windowType}]]>
+			<![CDATA[AND RFID_STATE<>0  AND WINDOW_TYPE = #{condition.windowType}]]>
 		</if>
 		<if test="condition.rfidState != null">
 			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>

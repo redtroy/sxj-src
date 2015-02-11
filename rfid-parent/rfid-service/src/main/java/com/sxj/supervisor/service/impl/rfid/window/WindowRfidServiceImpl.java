@@ -451,6 +451,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				newRfid.setProfileRfid(lRfid);
 				newRfid.setWindowType(oldRfid.getWindowType());
 				newRfid.setRfidState(RfidStateEnum.USED);
+				newRfid.setProgressState(oldRfid.getProgressState());
 				// newRfid.setReplenishNo(addRfid[i]);
 				updateWindowRfid(newRfid);
 				if (i == 0) {
@@ -507,6 +508,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			updateWindowRfid(rfid);
 
 			newRfid.setRfidState(RfidStateEnum.USED);
+			newRfid.setProgressState(rfid.getProgressState());
 			newRfid.setWindowType(rfid.getWindowType());
 			newRfid.setContractNo(rfid.getContractNo());
 			newRfid.setGlassRfid(rfid.getGlassRfid());

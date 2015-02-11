@@ -336,13 +336,14 @@
 								as payState>
 								<option value="${payState.getId()}">${payState.getName()}</option>
 								</#list>
-							</select> 发货状态 <select name="receiptState">
+							</select> 
+						</p>
+						发货状态 <select name="receiptState">
 								<option selected="selected" value="">全部</option> <#list delivery
 								as delivery>
 								<option value="${delivery.getId()}">${delivery.getName()}</option>
 								</#list>
 							</select>
-						</p>
 						导入状态 <select name="importState">
 							<option selected="selected" value="">全部</option> <#list
 							importState as importState>
