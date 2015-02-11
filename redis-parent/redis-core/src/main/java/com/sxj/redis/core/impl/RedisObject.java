@@ -4,14 +4,14 @@ import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RObject;
 import com.sxj.redis.core.exception.RedisException;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
 import com.sxj.spring.modules.util.Serializers;
 import com.sxj.spring.modules.util.serializer.Serializer;
 
 public class RedisObject implements RObject
 {
     
-    protected RedisProvider provider;
+    protected RProvider provider;
     
     protected String name;
     
@@ -19,7 +19,7 @@ public class RedisObject implements RObject
     
     protected final static Serializer V_SERIALIZER = Serializers.getJdkSerializer();
     
-    public RedisObject(RedisProvider provider, String name)
+    public RedisObject(RProvider provider, String name)
     {
         super();
         this.provider = provider;
@@ -35,7 +35,7 @@ public class RedisObject implements RObject
     @Override
     public void delete()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {

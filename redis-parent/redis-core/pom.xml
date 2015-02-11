@@ -40,5 +40,10 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.7</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>redis-provider</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 </project>

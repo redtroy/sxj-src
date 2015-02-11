@@ -1,4 +1,4 @@
-package com.sxj.redis.core.provider;
+package com.sxj.redis.provider.impl;
 
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -8,14 +8,14 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import com.sxj.redis.core.RProvider;
-import com.sxj.redis.core.exception.RedisException;
+import com.sxj.redis.provider.RProvider;
+import com.sxj.redis.provider.exception.RedisException;
 import com.sxj.spring.modules.util.ClassLoaderUtil;
 
 /**
  * Redis 缓存实现
  */
-public class RedisProvider implements RProvider
+public class SingleRedisProvider implements RProvider
 {
     private static final String LOCALHOST = "127.0.0.1";
     
@@ -51,7 +51,7 @@ public class RedisProvider implements RProvider
     
     private String configFile;
     
-    public RedisProvider(String configFile)
+    public SingleRedisProvider(String configFile)
     {
         this.configFile = configFile;
         initRedisProvider();
@@ -111,7 +111,7 @@ public class RedisProvider implements RProvider
             pool.returnResource(jedis);
     }
     
-    public Jedis getResource()
+    public Jedis getResource(String key)
     {
         return pool.getResource();
     }

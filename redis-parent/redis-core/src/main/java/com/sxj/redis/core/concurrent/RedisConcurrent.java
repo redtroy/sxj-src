@@ -4,15 +4,16 @@ import java.util.Date;
 
 import com.sxj.redis.core.RAtomicLong;
 import com.sxj.redis.core.RConcurrent;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
+import com.sxj.redis.provider.impl.SingleRedisProvider;
 
 public class RedisConcurrent implements RConcurrent
 {
-    private RedisProvider provider;
+    private RProvider provider;
     
     public RedisConcurrent(String configFile)
     {
-        provider = new RedisProvider(configFile);
+        provider = new SingleRedisProvider(configFile);
     }
     
     @Override

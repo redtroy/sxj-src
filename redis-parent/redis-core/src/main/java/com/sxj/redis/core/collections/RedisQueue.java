@@ -6,11 +6,11 @@ import redis.clients.jedis.Jedis;
 
 import com.sxj.redis.core.RQueue;
 import com.sxj.redis.core.exception.RedisException;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisQueue<V> extends RedisList<V> implements RQueue<V>
 {
-    public RedisQueue(RedisProvider provider, String name)
+    public RedisQueue(RProvider provider, String name)
     {
         super(provider, name);
     }
@@ -35,7 +35,7 @@ public class RedisQueue<V> extends RedisList<V> implements RQueue<V>
     @Override
     public V poll()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -56,7 +56,7 @@ public class RedisQueue<V> extends RedisList<V> implements RQueue<V>
     @Override
     public V element()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {

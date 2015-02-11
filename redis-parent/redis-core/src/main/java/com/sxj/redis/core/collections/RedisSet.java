@@ -9,12 +9,12 @@ import redis.clients.jedis.Jedis;
 import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.exception.RedisException;
 import com.sxj.redis.core.impl.RedisExpirable;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
 
 public class RedisSet<V> extends RedisExpirable implements RSet<V>
 {
     
-    public RedisSet(RedisProvider provider, String name)
+    public RedisSet(RProvider provider, String name)
     {
         super(provider, name);
     }
@@ -22,7 +22,7 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
     @Override
     public int size()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -48,7 +48,7 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
     @Override
     public boolean contains(Object o)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -74,7 +74,7 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
     @Override
     public Object[] toArray()
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -95,7 +95,7 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
     @Override
     public <T> T[] toArray(T[] a)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -116,7 +116,7 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
     @Override
     public boolean add(V e)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -143,7 +143,7 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
     @Override
     public boolean remove(Object o)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         try
         {
@@ -183,7 +183,7 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
     @Override
     public boolean addAll(Collection<? extends V> c)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         String[] values = array(c);
         try
@@ -238,7 +238,7 @@ public class RedisSet<V> extends RedisExpirable implements RSet<V>
     @Override
     public boolean removeAll(Collection<?> c)
     {
-        Jedis jedis = provider.getResource();
+        Jedis jedis = provider.getResource(name);
         boolean broken = false;
         String[] values = array(c);
         try

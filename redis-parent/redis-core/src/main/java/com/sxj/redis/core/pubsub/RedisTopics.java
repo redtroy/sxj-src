@@ -5,17 +5,18 @@ import java.util.Map;
 
 import com.sxj.redis.core.RTopic;
 import com.sxj.redis.core.RTopics;
-import com.sxj.redis.core.provider.RedisProvider;
+import com.sxj.redis.provider.RProvider;
+import com.sxj.redis.provider.impl.SingleRedisProvider;
 
 public class RedisTopics implements RTopics
 {
-    private RedisProvider provider;
+    private RProvider provider;
     
     private static Map<String, RedisTopic> topics = new HashMap<String, RedisTopic>();
     
     public RedisTopics(String configFile)
     {
-        provider = new RedisProvider(configFile);
+        provider = new SingleRedisProvider(configFile);
     }
     
     @Override
