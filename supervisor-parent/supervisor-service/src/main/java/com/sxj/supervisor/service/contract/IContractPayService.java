@@ -45,10 +45,11 @@ public interface IContractPayService {
 	// */
 	// public String pay(String id, Double payReal) throws ServiceException;
 	//
-	// /**
-	// * 乙方确认收款
-	// */
-	// public String payOk(String id) throws ServiceException;
+	/**
+	 * 乙方确认收款
+	 */
+	public String payOk(PayRecordEntity re, String flag)
+			throws ServiceException;
 
 	/**
 	 * 财务统计查询

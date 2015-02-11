@@ -212,7 +212,7 @@ public class PayController extends BaseController {
 			PayRecordEntity pay = payService.getPayRecordEntity(id);
 			Map<String, String> map = new HashMap<String, String>();
 			if (pay.getState().equals(PayStageEnum.STAGE2)) {
-				String flag = payService.updateState(pay, "B");
+				String flag = payService.payOk(pay, "B");
 				if (flag.equals("ok")) {
 					// PayRecordEntity pay = payService.getPayRecordEntity(id);
 					// 乙方
