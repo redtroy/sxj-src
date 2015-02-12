@@ -1,6 +1,7 @@
 package com.sxj.supervisor.dao.contract;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.BatchUpdate;
@@ -89,4 +90,18 @@ public interface IContractBatchDao
      * @return
      */
     public List<ContractBatchEntity> getBacthsByContractNo(String contractNo);
+    
+    /**
+     * 根据合同号批次号获取批次
+     * @return
+     */
+    public ContractBatchEntity getBacthsByContractNoAndBatchNo(Map<String, Object> map);
+    
+    /**
+     * 根据合同号批次号去补损表获取批次
+     * @param contractNo
+     * @param bacthNo
+     * @return
+     */
+    public ContractBatchEntity getBacthsByReplenishBatch(Map<String, Object> map);
 }
