@@ -14,6 +14,7 @@
               <th class="rLine">对应批次RFID编号</th>
               
             </tr>
+            <#if (conBatch?size>0) >
             <#list conBatch as batch>
             <tr>
               <td><#if batch.batch.type==3>补</#if>第${batch.batch.batchNo}批次</td>
@@ -27,14 +28,15 @@
               <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                  <#list batch.batchItems as batchItem>
                   <tr>
-                    <td>${batchItem.quantity?string("0.00")}</td>
+                    <td><#if batchItem.quantity??>${batchItem.quantity?string("0.00")}</#if></td>
                   </tr>
                   </#list>
                 </table></td>
-              <td>${batch.batch.amount?string("0.00")}</td>
+              <td><#if batch.batch.amount??>${batch.batch.amount?string("0.00")}</#if></td>
               <td>${batch.batch.rfidNo}</td>
             </tr>
               </#list>
+              </#if>
           </table>
 		   <div class="btnBox text-center"><a href="javascript:closeContract('${id}');" class="button button-gray button-small close">收起</a></div>
 		  </td>

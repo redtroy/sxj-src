@@ -77,7 +77,12 @@ $(function(){
 								$(".tableClass").remove();
 								
 								$("#contract_div").text(data.batch.contractId);
-								$("#batchNo_div").text(data.batch.batchNo);
+								if(data.batch.type==3){
+									$("#batchNo_div").text("补"+data.batch.batchNo);
+								}else{
+									$("#batchNo_div").text(data.batch.batchNo);
+								}
+								
 								$("#rfid_form").find("#contractNo").val(data.batch.contractId);
 								$("#rfid_form").find("#batchNo").val(data.batch.batchNo);
 								
