@@ -60,6 +60,7 @@ import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
@@ -1670,6 +1671,7 @@ public class ContractServiceImpl implements IContractService {
 					throw new ServiceException("此RFID已经被补损，不能删除");
 				}
 				logistics.setRfidState(RfidStateEnum.UN_USED);
+				logistics.setProgressState(LabelStateEnum.HAS_RECEIPT);
 				logistics.setReplenishNo("");
 				logistics.setContractNo("");
 				logistics.setBatchNo("");
