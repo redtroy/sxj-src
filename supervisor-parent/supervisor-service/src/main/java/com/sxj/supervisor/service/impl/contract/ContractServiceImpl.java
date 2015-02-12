@@ -529,11 +529,13 @@ public class ContractServiceImpl implements IContractService
                                                 });
                                 replenishBatchModel.setReplenishBatchItems(batchItemModelList);
                             }
-                            if(replenish.getId().equals(batch.getReplenishId())){
-                            	 contractReplenishModel.getBatchItems()
-                                 .add(replenishBatchModel);
+                            if (replenish.getId()
+                                    .equals(batch.getReplenishId()))
+                            {
+                                contractReplenishModel.getBatchItems()
+                                        .add(replenishBatchModel);
                             }
-                           
+                            
                         }
                         contractReplenishModel.setReplenishContract(replenish);
                         contractModel.getReplenishList()
@@ -1731,39 +1733,43 @@ public class ContractServiceImpl implements IContractService
         return batchModel;
     }
     
-	/**
-	 * 根据合同号获取批次
-	 */
-	@Override
-	public ContractBatchModel getBacthsByContractNoAndBatchNo(
-			String contractNo, String bacthNo, String isLossBatch)
-			throws ServiceException, SQLException {
-		try {
-			Map<String, Object> map = new HashMap<String, Object>();
-			ContractBatchModel batchModel = new ContractBatchModel();
-			ContractBatchEntity batch = new ContractBatchEntity();
-			map.put("contractNo", contractNo);
-			map.put("bacthNo", bacthNo);
-			if (isLossBatch.equals("1")) {
-				batch = contractBatchDao.getBacthsByContractNoAndBatchNo(map);
-			} else {
-				batch = contractBatchDao.getBacthsByReplenishBatch(map);
-				
-			}
-
-			batch.setContractId(contractNo);
-			batchModel.setBatch(batch);
-			List<BatchItemModel> batchList = JsonMapperUtil.getBatchItems(batch
-					.getBatchItems());
-			batchModel.setBatchItems(batchList);
-			return batchModel;
-		} catch (Exception e) {
-			SxjLogger.error(e.getMessage(), e, this.getClass());
-			throw new ServiceException("获取合同信息错误", e);
-		}
-	}
-    
-    
+    /**
+     * 根据合同号获取批次
+     */
+    @Override
+    public ContractBatchModel getBacthsByContractNoAndBatchNo(
+            String contractNo, String bacthNo, String isLossBatch)
+            throws ServiceException, SQLException
+    {
+        try
+        {
+            Map<String, Object> map = new HashMap<String, Object>();
+            ContractBatchModel batchModel = new ContractBatchModel();
+            ContractBatchEntity batch = new ContractBatchEntity();
+            map.put("contractNo", contractNo);
+            map.put("bacthNo", bacthNo);
+            if (isLossBatch.equals("1"))
+            {
+                batch = contractBatchDao.getBacthsByContractNoAndBatchNo(map);
+            }
+            else
+            {
+                batch = contractBatchDao.getBacthsByReplenishBatch(map);
+                
+            }
+            
+            batch.setContractId(contractNo);
+            batchModel.setBatch(batch);
+            List<BatchItemModel> batchList = JsonMapperUtil.getBatchItems(batch.getBatchItems());
+            batchModel.setBatchItems(batchList);
+            return batchModel;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("获取合同信息错误", e);
+        }
+    }
     
     /**
      * 根据RFID删除批次
