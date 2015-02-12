@@ -1,12 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
 <meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
 <meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
-<@b.dialogBox/>
+<link href="${b.staticPath}style/regin.css" rel="stylesheet" type="text/css" />
 <SCRIPT LANGUAGE="JavaScript"> 
 function AddFavorite(sURL, sTitle)
 {
@@ -22,31 +20,58 @@ function AddFavorite(sURL, sTitle)
         }
         catch (e)
         {
-            messageInfo("加入收藏失败，请使用Ctrl+D进行添加");
+            alert("加入收藏失败，请使用Ctrl+D进行添加");
         }
     }
 }
 </SCRIPT>
 
 </head>
-<body>
-<div id="header" class="fence">
-  <h1 class="fence-wide ly-clearFix"><a href="login.html" class="logo"><img src="${b.staticPath}images/logo.jpg" alt="私享家绿色门窗平台" title="私享家绿色门窗平台" /></a>
-<div class=" topBan pr"><span class="pa logOut"></span></div> </h1>
+<body id="signBox">
+<div id="header">
+  <h1 class="fence-wide"><a href="http://www.menchuang.org.cn/to_login.htm" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
 </div>
-<div class="contBox">
-<div class="msg-suc msgbar ly-clearFix p10">
-<div class="icon icon32 icon-32-suc ly-left">&nbsp;</div>
-<div class="msgCont ly-left">
-<dl>
-<dt class="fontYH f20 mb10">恭喜，您已经申请成功！</dt>
-<dd class="f12 color-gray6 mb5">私享家会尽快与您联系，谢谢。</dd>
-<dd class="mb5"><a class="f12 lnk-blue" onclick="AddFavorite('http://www.mengchuang.org.cn')" title="私享家绿色门窗平台">收藏私享家平台网址&gt;&gt;</a></dd>
-<dd><a class="f12 color-green" href="${basePath}to_login.htm">返回首页>></a></dd>
-</dl>
+<div class="fence regSuc">
+<div class="fence-wide">
+<div class="signBox fontYH">
+      <div class="sucBox msg-suc ly-clearFix">
+          <div class="icon icon32 mt5 icon-32-suc ly-left">&nbsp;</div>
+          <div class="msgCont ml15 ly-left">
+            <dl>
+              <dt class="fontYH f24 mb15">恭喜，您已经申请成功！</dt>
+              <dd class="f16 color-gray6 mb20">私享家会尽快与您联系，谢谢。</dd>
+              <dd class="pt10 mb10"><a class="btn-link mr20" href="http://www.menchuang.org.cn/">返回首页</a><a class="btn-save ml20" onclick="AddFavorite('http://www.mengchuang.org.cn')" title="私享家绿色门窗平台">收藏本站</a></dd>
+            </dl>
+          </div>
+      </div>
 </div>
 </div>
 </div>
 <div id="footer" class="f12">&copy; 2014 私享家绿色门窗平台&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14040094号-1</a></span></div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
