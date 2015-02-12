@@ -99,7 +99,7 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	 * 是否补损批次
 	 */
 	@Column(name = "IS_LOSS_BATCH")
-	private Boolean isLossBatch = false;
+	private Boolean isLossBatch;
 
 	/**
 	 * 导入日期
@@ -297,6 +297,12 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 		}
 	}
 
+	public void setLogList(List<RfidLog> logList) {
+		this.logList = logList;
+		String json = JsonMapper.nonEmptyMapper().toJson(this.logList);
+		setLog(json);
+	}
+
 	public void removeLog(RfidLog log) {
 		if (getLogList() != null) {
 			for (Iterator<RfidLog> iterator = logList.iterator(); iterator
@@ -317,7 +323,8 @@ public class LogisticsRfidEntity extends Pagable implements Serializable {
 	}
 
 	private void setLogList(RfidLog log) {
-		getLogList().add(log);
+		logList = getLogList();
+		logList.add(log);
 		String json = JsonMapper.nonEmptyMapper().toJson(logList);
 		setLog(json);
 

@@ -407,6 +407,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			String memberName = null;
 			WindowTypeEnum windowsNo = null;
 			String replenishRfid = "";
+			String rfidNos = "";
 			WindowRefEntity winRef = new WindowRefEntity();
 			for (int i = 0; i < addRfid.length; i++) {
 				WindowRfidEntity oldRfid = getWindowRfidByNo(addRfid[i]);
@@ -438,8 +439,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				windowsNo = newRfid.getWindowType();
 				if (i < addRfid.length - 1) {
 					replenishRfid = replenishRfid + oldRfid.getRfidNo() + ",";
+					rfidNos = rfidNos + newRfid.getRfidNo() + ",";
 				} else {
 					replenishRfid = replenishRfid + oldRfid.getRfidNo();
+					rfidNos = rfidNos + newRfid.getRfidNo();
 				}
 				// 更新旧RFID
 				oldRfid.setReplenishNo(newRfid.getRfidNo());
@@ -451,7 +454,35 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 				newRfid.setProfileRfid(lRfid);
 				newRfid.setWindowType(oldRfid.getWindowType());
 				newRfid.setRfidState(RfidStateEnum.USED);
+
+				List<RfidLog> newLogList = newRfid.getLogList();
+
+				RfidLog log1 = new RfidLog();
+				log1.setId(LabelProgressEnum.UN_FILLED.getId());
+				log1.setState(LabelProgressEnum.UN_FILLED.getName());
+
+				RfidLog log2 = new RfidLog();
+				log2.setId(LabelProgressEnum.SHIPPED.getId());
+				log2.setState(LabelProgressEnum.SHIPPED.getName());
+
+				RfidLog log3 = new RfidLog();
+				log3.setId(LabelProgressEnum.HAS_RECEIPT.getId());
+				log3.setState(LabelProgressEnum.HAS_RECEIPT.getName());
+
+				RfidLog log4 = new RfidLog();
+				log4.setId(RfidStateEnum.DAMAGED.getId());
+				log4.setState(RfidStateEnum.DAMAGED.getName());
+
+				oldRfid.removeLog(log1);
+				oldRfid.removeLog(log2);
+				oldRfid.removeLog(log3);
+				oldRfid.removeLog(log4);
+
+				if (newLogList != null) {
+					newLogList.addAll(oldRfid.getLogList());
+				}
 				newRfid.setProgressState(oldRfid.getProgressState());
+				newRfid.setLogList(newLogList);
 				// newRfid.setReplenishNo(addRfid[i]);
 				updateWindowRfid(newRfid);
 				if (i == 0) {
@@ -464,6 +495,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			// windowRfidDao.batchUpdateWindowRfid(list
 			// .toArray(new WindowRfidEntity[list.size()]));
 			// 生成关联单
+			winRef.setRfidNos(rfidNos);
 			winRef.setMemberNo(memberNo);
 			winRef.setMemberName(memberName);
 			winRef.setType(LinkStateEnum.WINDOW_LOSS);
@@ -508,7 +540,36 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			updateWindowRfid(rfid);
 
 			newRfid.setRfidState(RfidStateEnum.USED);
+
+			List<RfidLog> newLogList = newRfid.getLogList();
+
+			RfidLog log1 = new RfidLog();
+			log1.setId(LabelProgressEnum.UN_FILLED.getId());
+			log1.setState(LabelProgressEnum.UN_FILLED.getName());
+
+			RfidLog log2 = new RfidLog();
+			log2.setId(LabelProgressEnum.SHIPPED.getId());
+			log2.setState(LabelProgressEnum.SHIPPED.getName());
+
+			RfidLog log3 = new RfidLog();
+			log3.setId(LabelProgressEnum.HAS_RECEIPT.getId());
+			log3.setState(LabelProgressEnum.HAS_RECEIPT.getName());
+
+			RfidLog log4 = new RfidLog();
+			log4.setId(RfidStateEnum.DAMAGED.getId());
+			log4.setState(RfidStateEnum.DAMAGED.getName());
+
+			rfid.removeLog(log1);
+			rfid.removeLog(log2);
+			rfid.removeLog(log3);
+			rfid.removeLog(log4);
+
+			if (newLogList != null) {
+				newLogList.addAll(rfid.getLogList());
+			}
 			newRfid.setProgressState(rfid.getProgressState());
+			newRfid.setLogList(newLogList);
+
 			newRfid.setWindowType(rfid.getWindowType());
 			newRfid.setContractNo(rfid.getContractNo());
 			newRfid.setGlassRfid(rfid.getGlassRfid());
@@ -553,11 +614,12 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 			if (StringUtils.isNotEmpty(rfidNo)) {
 				WindowRefQuery query = new WindowRefQuery();
 				query.setRfidNo(rfidNo);
-				List<WindowRefEntity>  winfRefList=winRefService.queryWindowRfidRef(query);
+				List<WindowRefEntity> winfRefList = winRefService
+						.queryWindowRfidRef(query);
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
-				if(!CollectionUtils.isEmpty(winfRefList)){
-					WindowRefEntity winRef=winfRefList.get(0);
-					if(winRef.getState().equals(AuditStateEnum.APPROVAL)){
+				if (!CollectionUtils.isEmpty(winfRefList)) {
+					WindowRefEntity winRef = winfRefList.get(0);
+					if (winRef.getState().equals(AuditStateEnum.APPROVAL)) {
 						if (wind.getProgressState().equals(
 								LabelProgressEnum.HAS_RECEIPT)) {// 标签是否已收货
 							wind.setProgressState(LabelProgressEnum.INSTALL);
@@ -569,15 +631,16 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 						} else if (wind.getProgressState().equals(
 								LabelProgressEnum.HAS_QUALITY)) {
 							return 3;// 门窗已质检
-						} else if (wind.getRfidState().equals(RfidStateEnum.DISABLE)) {
+						} else if (wind.getRfidState().equals(
+								RfidStateEnum.DISABLE)) {
 							return 4;// 门窗已停用
 						}
-					}else{
+					} else {
 						return 5;// 未审核
 					}
-					
+
 				}
-				
+
 			}
 			return 0;
 		} catch (Exception e) {
@@ -591,12 +654,12 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Map<String,String> testWindow(String contractNo, String[] gids, String address)
-			throws ServiceException {
+	public Map<String, String> testWindow(String contractNo, String[] gids,
+			String address) throws ServiceException {
 		try {
 			contractNo.toUpperCase();
 			List<String> rfidNos = logisticsDao.getRfid(gids);
-			Map<String,String> map = new HashMap<String,String>();
+			Map<String, String> map = new HashMap<String, String>();
 			for (String rfidNo : rfidNos) {
 				WindowRfidEntity wind = windowRfidDao.selectByRfidNo(rfidNo);
 				if (contractNo.equals(wind.getContractNo())
@@ -606,9 +669,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 					wind.setAddress(address);
 					windowRfidDao.updateTestWindow(wind);
 					map.put(rfidNo, "质检成功");
-				} else if(wind.getProgressState().equals(LabelProgressEnum.HAS_QUALITY)) {
+				} else if (wind.getProgressState().equals(
+						LabelProgressEnum.HAS_QUALITY)) {
 					map.put(rfidNo, "门窗已质检,不能重复质检");
-				}else if(wind.getRfidState().equals(RfidStateEnum.DISABLE)) {
+				} else if (wind.getRfidState().equals(RfidStateEnum.DISABLE)) {
 					map.put(rfidNo, "标签已停用,不能质检");
 				}
 			}

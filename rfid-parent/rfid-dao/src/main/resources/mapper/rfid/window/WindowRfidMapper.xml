@@ -112,9 +112,9 @@
 		</foreach>
 	</update>
 	<update id="updateTestWindow" parameterType="com.sxj.supervisor.entity.rfid.window.WindowRfidEntity">
-		<![CDATA[UPDATE R_WINDOW_RFID SET PROGRESS_STATE=#{progressState},ADDRESS=#{address} WHERE ID=#{id} and PROGRESS_STATE='3' and RFID_STATE='1']]>
+		<![CDATA[UPDATE R_WINDOW_RFID SET LOG=#{log},PROGRESS_STATE=#{progressState},ADDRESS=#{address} WHERE ID=#{id} and PROGRESS_STATE='3' and RFID_STATE='1']]>
 	</update>
 	<update id="updateStepWindow" parameterType="com.sxj.supervisor.entity.rfid.window.WindowRfidEntity">
-	<![CDATA[	UPDATE R_WINDOW_RFID SET PROGRESS_STATE=#{progressState}  WHERE ID=#{id} and PROGRESS_STATE='2' and RFID_STATE='1']]>
+	<![CDATA[	UPDATE R_WINDOW_RFID SET LOG=#{log},PROGRESS_STATE=#{progressState}  WHERE ID=#{id} and PROGRESS_STATE='2' and RFID_STATE='1']]>
 	</update>
 </mapper>

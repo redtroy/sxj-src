@@ -10,9 +10,10 @@
 		     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 		     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		     http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
- 
+
 	<!-- 引入 jdbc.properties -->
-	<context:property-placeholder location="classpath:config/database.properties,config/mobile_message.properties" />
+	<context:property-placeholder
+		location="classpath:config/database.properties,config/mobile_message.properties" />
 
 	<!-- 启动 ioc 注解 -->
 	<context:component-scan base-package="com.**" />
@@ -134,10 +135,12 @@
 		</property>
 	</bean>
 	<bean class="com.sxj.mybatis.shard.mapper.MapperScanConfigurator">
-		<property name="basePackage" value="com.sxj.supervisor.dao,com.sxj.supervisor.dao.rfid" />
+		<property name="basePackage"
+			value="com.sxj.supervisor.dao,com.sxj.supervisor.dao.rfid" />
 		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
 		<property name="mapperLocations" value="classpath*:/mapper/**/*Mapper.xml" />
-		<property name="typeAliasesPackage" value="com.sxj.supervisor.entity,com.sxj.supervisor.entity.rfid"></property>
+		<property name="typeAliasesPackage"
+			value="com.sxj.supervisor.entity,com.sxj.supervisor.entity.rfid"></property>
 	</bean>
 	<!-- 后置处理器，初始化所有Mapper -->
 	<bean class="com.sxj.mybatis.shard.listener.MybatisMapperProcessor"></bean>
