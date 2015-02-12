@@ -280,6 +280,11 @@ public interface IContractService {
 
 	int getBindingState(String contractNo);
 
+	ContractBatchModel getBacthsByContractNoAndBatchNo(String contractNo,
+			String bacthNo, String isLossBatch) throws ServiceException,
+			SQLException;
+
+
 
 
 }

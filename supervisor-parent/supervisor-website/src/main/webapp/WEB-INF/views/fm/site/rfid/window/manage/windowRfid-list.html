@@ -95,7 +95,7 @@ function closeContract(id){
 
 function blBatch(id,rfidNo){
 	if ($("#blBatch"+id).children().length==0){
-	$("#blBatch"+id).load("contractBatch.htm?rfidNo="+rfidNo+"&id=blBatch"+id+"&type=1");
+	$("#blBatch"+id).load("contractBatchByRfid.htm?rfidNo="+rfidNo+"&id=blBatch"+id+"&type=1");
 	$("#xcBatch"+id).html("");
 	$("#info"+id).html("");
 	$("#log"+id).html("");
@@ -105,7 +105,7 @@ function blBatch(id,rfidNo){
 }
 function xcBatch(id,rfidNo){
 	if ($("#xcBatch"+id).children().length==0){
-	$("#xcBatch"+id).load("contractBatch.htm?rfidNo="+rfidNo+"&id=xcBatch"+id+"&type=2");
+	$("#xcBatch"+id).load("contractBatchByRfid.htm?rfidNo="+rfidNo+"&id=xcBatch"+id+"&type=2");
 	$("#blBatch"+id).html("");
 	$("#info"+id).html("");
 	$("#log"+id).html("");

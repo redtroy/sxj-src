@@ -76,10 +76,10 @@ public class LogisticsRfidController extends BaseController {
 	 */
 	@RequestMapping("contractBatch")
 	public String getContractBatch(ModelMap model, String rfidNo, String id,
-			String type) throws WebException {
+			String type,String isLossBatch,String batchNo,String contractNo) throws WebException {
 		try {
-			ContractBatchModel conBatch = contractService
-					.getBatchByRfid(rfidNo);
+			ContractBatchModel conBatch = contractService.getBacthsByContractNoAndBatchNo(
+					contractNo, batchNo, isLossBatch);
 			model.put("conBatch", conBatch);
 			model.put("id", id);
 			model.put("type", type);

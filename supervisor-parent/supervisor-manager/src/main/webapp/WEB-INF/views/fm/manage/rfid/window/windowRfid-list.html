@@ -71,7 +71,7 @@ function closeContract(id){
 function blBatch(id,contractNo,rfidNo){
 	var pdflag=$("#info"+id).attr("pdflag");
 	if (pdflag!=2){
-	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=1");
+	$("#info"+id).load("contractBatchByRfid.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=1");
 	$("#info"+id).attr("pdflag","2");
 	}else{
 		$("#info"+id).attr("pdflag","0");
@@ -81,7 +81,7 @@ function blBatch(id,contractNo,rfidNo){
 function xcBatch(id,contractNo,rfidNo){
 	var pdflag=$("#info"+id).attr("pdflag");
 	if (pdflag!=3){
-	$("#info"+id).load("contractBatch.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=2");
+	$("#info"+id).load("contractBatchByRfid.htm?contractNo="+contractNo+"&rfidNo="+rfidNo+"&id="+id+"&type=2");
 	$("#info"+id).attr("pdflag","3");
 	}else{
 		$("#info"+id).attr("pdflag","0");

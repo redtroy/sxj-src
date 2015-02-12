@@ -66,5 +66,22 @@
 			  AND length(RB.NEW_RFID_NO)>0 ) temp ORDER BY TYPE,BATCH_NO ASC
 		]]>
 	</select>
-
+	<!-- 根据合同号批次号获取批次 -->
+	<select id="getBacthsByContractNoAndBatchNo" resultMap="BacthResultMap"
+		parameterType="String">
+		<![CDATA[SELECT C.ID,C.BATCH_NO,C.AMOUNT,C.BATCH_ITEMS,C.RFID_NO,1 AS TYPE,C.PAY_NO FROM M_CONTRACT_BATCH C WHERE 
+		 C.CONTRACT_ID=#{contractNo} AND C.UPDATE_STATE!=1 AND C.BATCH_NO=#{bacthNo} UNION ALL 
+		SELECT MB.ID,MB.BATCH_NO,MB.AMOUNT,MB.BATCH_ITEMS,MB.RFID_NO,1 AS TYPE,MB.PAY_NO FROM 
+		 M_CONTRACT_MODIFY_BATCH MB LEFT JOIN M_CONTRACT_MODIFY M ON MB.MODIFY_ID=M.ID WHERE M.CONTRACT_ID=#{contractNo} 
+		  AND MB.UPDATE_STATE!=1 AND MB.BATCH_NO=#{bacthNo}
+		]]>
+	</select>
+	<!-- 根据合同号批次号补损表获取批次 -->
+	<select id="getBacthsByReplenishBatch" resultMap="BacthResultMap"
+		parameterType="String">
+		<![CDATA[SELECT RB.ID,RB.BATCH_NO,RB.AMOUNT,RB.BATCH_ITEMS,RB.RFID_NO,3 AS TYPE,RB.PAY_NO 
+		 FROM M_CONTRACT_REPLENISH_BATCH RB LEFT JOIN M_CONTRACT_REPLENISH R ON RB.REPLENISH_ID=R.ID 
+		  WHERE R.CONTRACT_ID=#{contractNo}  AND RB.BATCH_NO=#{bacthNo}
+		]]>
+	</select>
 </mapper>
