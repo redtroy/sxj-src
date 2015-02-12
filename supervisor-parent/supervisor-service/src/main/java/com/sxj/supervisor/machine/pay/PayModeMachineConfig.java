@@ -24,6 +24,26 @@ public class PayModeMachineConfig {
 	}
 
 	/**
+	 * 待支付-融资受理中（点击融资事件）
+	 * 
+	 * @param event
+	 */
+	@Transitions({ @Transition(source = "MODE1", event = "MODE1_STAGE2_Stage2_0", target = "MODE2_0") })
+	public void noop01(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	/**
+	 * 待支付-融资受理中（点击融资事件）
+	 * 
+	 * @param event
+	 */
+	@Transitions({ @Transition(source = "MODE1", event = "MODE1_STAGE3_Stage2_0", target = "MODE2_0") })
+	public void noop02(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	/**
 	 * 待支付-现金支付（现金支付事件）
 	 * 
 	 * @param event
