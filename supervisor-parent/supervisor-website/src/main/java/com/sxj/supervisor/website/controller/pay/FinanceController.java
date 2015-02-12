@@ -44,6 +44,11 @@ public class FinanceController extends BaseController {
 			map.put("list", list);
 			map.put("types", types);
 			map.put("query", query);
+			if (info.getMember().getType().getId() == 0) {
+				map.put("state", "a");
+			} else {
+				map.put("state", "b");
+			}
 			String channelName = MessageChannel.WEBSITE_FINANCE_MESSAGE
 					+ memberNo;
 			if ("1".equals(del)) {

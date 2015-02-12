@@ -70,7 +70,7 @@ public interface IContractPayDao {
 	 * 
 	 * @param pay
 	 */
-	public void addContractPay(PayRecordEntity pay);
+	public int addContractPay(PayRecordEntity pay);
 
 	/**
 	 * 根据payNo查询实体
