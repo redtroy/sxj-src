@@ -118,39 +118,45 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 
 					if (!CollectionUtils.isEmpty(ref)) {
 						LogisticsRfidEntity le = ref.get(0);
-						Contract contract = new Contract();
-						contract.setContractNo(le.getContractNo());
-						batchModel.setContract(contract);// 封装合同号
-						batchModel.setRfidState(le.getProgressState().getId());// 封装RFID状态
-						contract.setRfid(rfid);
-						QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
-						query.addCondition("rfidNo", rfid);
-						query.addCondition("state", 1);// 是否已变更
-						// 合同批次
-						List<ContractBatchEntity> cbatchList = contractBatchDao
-								.queryBacths(query);
+						if(le.getRfidState().equals(RfidStateEnum.USED)){
+						    Contract contract = new Contract();
+	                        contract.setContractNo(le.getContractNo());
+	                        batchModel.setContract(contract);// 封装合同号
+	                        batchModel.setRfidState(le.getProgressState().getId());// 封装RFID状态
+	                        contract.setRfid(rfid);
+	                        QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
+	                        query.addCondition("rfidNo", rfid);
+	                        query.addCondition("state", 1);// 是否已变更
+	                        // 合同批次
+	                        List<ContractBatchEntity> cbatchList = contractBatchDao
+	                                .queryBacths(query);
 
-						QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
-						modifyQuery.addCondition("rfidNo", rfid);
-						modifyQuery.addCondition("state", 1);// 是否已变更
-						// 变更批次
-						List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao
-								.queryBacths(modifyQuery);
+	                        QueryCondition<ModifyBatchEntity> modifyQuery = new QueryCondition<ModifyBatchEntity>();
+	                        modifyQuery.addCondition("rfidNo", rfid);
+	                        modifyQuery.addCondition("state", 1);// 是否已变更
+	                        // 变更批次
+	                        List<ModifyBatchEntity> modifyBatch = contractModifyBatchDao
+	                                .queryBacths(modifyQuery);
 
-						QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
-						replenishQuery.addCondition("newRfidNo", rfid);
-						// 补损批次
-						List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
-								.queryReplenishBatch(replenishQuery);
+	                        QueryCondition<ReplenishBatchEntity> replenishQuery = new QueryCondition<ReplenishBatchEntity>();
+	                        replenishQuery.addCondition("newRfidNo", rfid);
+	                        // 补损批次
+	                        List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+	                                .queryReplenishBatch(replenishQuery);
 
-						setBatchItems(batch, cbatchList, modifyBatch, batchList);
+	                        setBatchItems(batch, cbatchList, modifyBatch, batchList); 
+						} else if(le.getRfidState().equals(RfidStateEnum.UN_USED)) {
+		                    batch.setState("4");//标签未使用
+		                }
 
 					}
 					if (lRef.getState().getId() == 0) {
 						batch.setState("3");// 未审核
 					}
 
-				}
+				} else {
+	                batch.setState("0");
+	            }
 			} else {
 				batch.setState("0");
 			}
@@ -187,7 +193,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 			batch.setState("1");
 		} else if (batchList != null && batchList.size() > 0) {
 			ReplenishBatchEntity rbe = batchList.get(0);
-			batch.setBatchNo(rbe.getBatchNo().toString());
+			batch.setBatchNo("补"+rbe.getBatchNo().toString());
 			List<BatchItemModel> batchModelList = JsonMapperUtil
 					.getBatchItems(rbe.getBatchItems());
 			batch.setBatchItems(batchModelList);
