@@ -74,6 +74,16 @@ public class PayModeMachineConfig {
 	}
 
 	/**
+	 * 融资受理中-融资已搁置（点击融资未通过事件）
+	 * 
+	 * @param event
+	 */
+	@Transitions({ @Transition(source = "MODE2_0", event = "MODE2_0_STAGE3_Stage2_3", target = "MODE3") })
+	public void noop22(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
+
+	/**
 	 * 融资受理中-融资已放款（点击融资通过事件）
 	 * 
 	 * @param event
@@ -103,16 +113,15 @@ public class PayModeMachineConfig {
 		System.out.println("tx@:" + event.getEvent());
 	}
 
-	// /**
-	// * 融资已放款-融资支付（点击融资通过事件）
-	// *
-	// * @param event
-	// */
-	// @Transitions({ @Transition(source = "MODE2_0", event =
-	// "MODE2_0_STAGE3_Stage2_2", target = "MODE4") })
-	// public void noop43(TransitionInfo event) {
-	// System.out.println("tx@:" + event.getEvent());
-	// }
+	/**
+	 * 融资已放款-融资支付（点击融资通过事件）
+	 *
+	 * @param event
+	 */
+	@Transitions({ @Transition(source = "MODE2_0", event = "MODE2_0_STAGE3_Stage2_2", target = "MODE4") })
+	public void noop43(TransitionInfo event) {
+		System.out.println("tx@:" + event.getEvent());
+	}
 
 	/**
 	 * 融资已放款-融资支付（点击融资通过事件）
@@ -165,11 +174,11 @@ public class PayModeMachineConfig {
 	}
 
 	/**
-	 * 融资受理中-现金支付（点击融资后点击现金支付）
+	 * 乙方确认支付（融资状态保持不变）
 	 * 
 	 * @param event
 	 */
-	@Transitions({ @Transition(source = "MODE2_0", event = "MODE2_0_STAGE3_", target = "MODE3") })
+	@Transitions({ @Transition(source = "MODE2_0", event = "MODE2_0_STAGE3_", target = "MODE2_0") })
 	public void noop53(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
