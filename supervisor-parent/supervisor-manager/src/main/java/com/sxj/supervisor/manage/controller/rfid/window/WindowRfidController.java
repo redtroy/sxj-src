@@ -138,6 +138,23 @@ public class WindowRfidController extends BaseController {
 
 	@RequestMapping("contractBatch")
 	public String getContractBatch(ModelMap model, String contractNo,
+			String rfidNo, String id, Integer type,String isLossBatch,String batchNo) throws WebException {
+		try {
+			ContractBatchModel conBatch = contractService.getBacthsByContractNoAndBatchNo(
+					contractNo, batchNo, isLossBatch);
+			model.put("batch", conBatch);
+			model.put("id", id);
+			model.put("type", type);
+			model.put("contractNo", contractNo);
+			return "manage/rfid/window/contract-batch";
+		} catch (Exception e) {
+			SxjLogger.error("查询合同信息错误", e, this.getClass());
+			throw new WebException("查询合同信息错误");
+		}
+	}
+	
+	@RequestMapping("contractBatchByRfid")
+	public String getContractBatchByRfid(ModelMap model, String contractNo,
 			String rfidNo, String id, Integer type) throws WebException {
 		try {
 			ContractBatchModel conBatch = contractService.getContractBatch(

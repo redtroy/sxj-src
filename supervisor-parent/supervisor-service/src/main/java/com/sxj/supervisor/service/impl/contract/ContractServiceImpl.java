@@ -60,8 +60,10 @@ import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
+import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
+import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
 import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.enu.rfid.windowref.LinkStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
@@ -529,11 +531,13 @@ public class ContractServiceImpl implements IContractService
                                                 });
                                 replenishBatchModel.setReplenishBatchItems(batchItemModelList);
                             }
-                            if(replenish.getId().equals(batch.getReplenishId())){
-                            	 contractReplenishModel.getBatchItems()
-                                 .add(replenishBatchModel);
+                            if (replenish.getId()
+                                    .equals(batch.getReplenishId()))
+                            {
+                                contractReplenishModel.getBatchItems()
+                                        .add(replenishBatchModel);
                             }
-                           
+                            
                         }
                         contractReplenishModel.setReplenishContract(replenish);
                         contractModel.getReplenishList()
@@ -1417,6 +1421,37 @@ public class ContractServiceImpl implements IContractService
             }
             newLogisRfid.setContractNo(contractNo);
             newLogisRfid.setRfidState(RfidStateEnum.USED);
+            // List<RfidLog> oldLogList = logistics.getLogList();
+            List<RfidLog> newLogList = newLogisRfid.getLogList();
+            // if (oldLogList != null && oldLogList.size() > 0) {
+            RfidLog log1 = new RfidLog();
+            log1.setId(LabelStateEnum.UN_FILLED.getId());
+            log1.setState(LabelStateEnum.UN_FILLED.getName());
+            
+            RfidLog log2 = new RfidLog();
+            log2.setId(LabelStateEnum.SHIPPED.getId());
+            log2.setState(LabelStateEnum.SHIPPED.getName());
+            
+            RfidLog log3 = new RfidLog();
+            log3.setId(LabelStateEnum.HAS_RECEIPT.getId());
+            log3.setState(LabelStateEnum.HAS_RECEIPT.getName());
+            
+            RfidLog log4 = new RfidLog();
+            log4.setId(RfidStateEnum.DAMAGED.getId());
+            log4.setState(RfidStateEnum.DAMAGED.getName());
+            
+            logistics.removeLog(log1);
+            logistics.removeLog(log2);
+            logistics.removeLog(log3);
+            logistics.removeLog(log4);
+            // }
+            if (newLogList != null)
+            {
+                newLogList.addAll(logistics.getLogList());
+            }
+            newLogisRfid.setProgressState(logistics.getProgressState());
+            newLogisRfid.setLogList(newLogList);
+            
             newLogisRfid.setBatchNo(batchNo);
             newLogisRfid.setIsLossBatch(logistics.getIsLossBatch());
             logisticsRfidService.updateLogistics(newLogisRfid);
@@ -1436,6 +1471,7 @@ public class ContractServiceImpl implements IContractService
             }
             ref.setType(AssociationTypesEnum.RFID_ADD);
             ref.setBatchNo(batchNo);
+            ref.setIsLossBatch(logistics.getIsLossBatch());
             ref.setApplyDate(new Date());
             ref.setContractNo(contractNo);
             ref.setState(AuditStateEnum.NO_APPROVAL);
@@ -1507,6 +1543,7 @@ public class ContractServiceImpl implements IContractService
                 ref.setRfidType(RfidTypeEnum.EXTRUSIONS);
             }
             ref.setType(AssociationTypesEnum.CONTRACTOR_ADD);
+            ref.setIsLossBatch(true);
             ref.setBatchNo(batch.getBatchNo() + "");
             ref.setApplyDate(new Date());
             ref.setContractNo(contractNo);
@@ -1526,6 +1563,7 @@ public class ContractServiceImpl implements IContractService
             }
             newLogisRfid.setContractNo(contractNo);
             newLogisRfid.setRfidState(RfidStateEnum.USED);
+            // newLogisRfid.setProgressState(progressState);
             newLogisRfid.setBatchNo(batch.getBatchNo() + "");
             newLogisRfid.setIsLossBatch(true);
             logisticsRfidService.updateLogistics(newLogisRfid);
@@ -1732,6 +1770,44 @@ public class ContractServiceImpl implements IContractService
     }
     
     /**
+     * 根据合同号获取批次
+     */
+    @Override
+    public ContractBatchModel getBacthsByContractNoAndBatchNo(
+            String contractNo, String bacthNo, String isLossBatch)
+            throws ServiceException, SQLException
+    {
+        try
+        {
+            Map<String, Object> map = new HashMap<String, Object>();
+            ContractBatchModel batchModel = new ContractBatchModel();
+            ContractBatchEntity batch = new ContractBatchEntity();
+            map.put("contractNo", contractNo);
+            map.put("bacthNo", bacthNo);
+            if (isLossBatch.equals("1"))
+            {
+                batch = contractBatchDao.getBacthsByContractNoAndBatchNo(map);
+            }
+            else
+            {
+                batch = contractBatchDao.getBacthsByReplenishBatch(map);
+                
+            }
+            
+            batch.setContractId(contractNo);
+            batchModel.setBatch(batch);
+            List<BatchItemModel> batchList = JsonMapperUtil.getBatchItems(batch.getBatchItems());
+            batchModel.setBatchItems(batchList);
+            return batchModel;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("获取合同信息错误", e);
+        }
+    }
+    
+    /**
      * 根据RFID删除批次
      */
     @Override
@@ -1905,6 +1981,18 @@ public class ContractServiceImpl implements IContractService
                     throw new ServiceException("此RFID已经被补损，不能删除");
                 }
                 logistics.setRfidState(RfidStateEnum.UN_USED);
+                RfidLog log1 = new RfidLog();
+                log1.setId(LabelStateEnum.HAS_QUALITY.getId());
+                log1.setState(LabelStateEnum.HAS_QUALITY.getName());
+                
+                RfidLog log2 = new RfidLog();
+                log2.setId(LabelStateEnum.INSTALL.getId());
+                log2.setState(LabelStateEnum.INSTALL.getName());
+                logistics.removeLog(log1);
+                logistics.removeLog(log2);
+                List<RfidLog> rollLogList = logistics.getLogList();
+                logistics.setProgressState(LabelStateEnum.HAS_RECEIPT);
+                logistics.setLogList(rollLogList);
                 logistics.setReplenishNo("");
                 logistics.setContractNo("");
                 logistics.setBatchNo("");
@@ -2080,6 +2168,20 @@ public class ContractServiceImpl implements IContractService
                 
                 // 还原补损的RFID
                 rfid.setRfidState(RfidStateEnum.UN_USED);
+                
+                RfidLog log1 = new RfidLog();
+                log1.setId(LabelProgressEnum.INSTALL.getId());
+                log1.setState(LabelProgressEnum.INSTALL.getName());
+                
+                RfidLog log2 = new RfidLog();
+                log2.setId(LabelProgressEnum.HAS_QUALITY.getId());
+                log2.setState(LabelProgressEnum.HAS_QUALITY.getName());
+                rfid.removeLog(log1);
+                rfid.removeLog(log2);
+                List<RfidLog> rollLogList = rfid.getLogList();
+                rfid.setProgressState(LabelProgressEnum.HAS_RECEIPT);
+                rfid.setLogList(rollLogList);
+                
                 rfid.setWindowType(null);
                 rfid.setGlassRfid("");
                 rfid.setProfileRfid("");
@@ -2088,22 +2190,25 @@ public class ContractServiceImpl implements IContractService
             else if (ref.getType().equals(LinkStateEnum.WINDOW_LOSS))
             {
                 String replenishRfids = ref.getReplenishRfid();
-                WindowRfidQuery query = new WindowRfidQuery();
-                query.setMinRfidNo(ref.getMinRfidNo());
-                query.setMaxRfidNo(ref.getMaxRfidNo());
-                query.setContractNo(ref.getContractNo());
-                query.setRfidState(RfidStateEnum.UN_USED.getId());
-                List<WindowRfidEntity> list = windowRfidService.queryWindowRfid(query);
-                if (list == null || list.size() == 0)
+                String rfidNos = ref.getRfidNos();
+                if (rfidNos == null)
                 {
                     throw new ServiceException("补损的RFID不存在");
                 }
                 if (StringUtils.isNotEmpty(replenishRfids))
                 {
                     String[] replenishRfidArr = replenishRfids.split(",");
-                    if (list.size() != replenishRfidArr.length)
+                    String[] rfidArr = rfidNos.split(",");
+                    if (rfidArr.length != replenishRfidArr.length)
                     {
                         throw new ServiceException("补损的RFID数量与需要被补损的RFID数量不一致");
+                    }
+                    WindowRfidQuery query = new WindowRfidQuery();
+                    query.setRfidNos(rfidArr);
+                    List<WindowRfidEntity> list = windowRfidService.queryWindowRfid(query);
+                    if (list == null || list.size() == 0)
+                    {
+                        throw new ServiceException("门窗RFID标签不存在");
                     }
                     for (int i = 0; i < replenishRfidArr.length; i++)
                     {
@@ -2139,14 +2244,32 @@ public class ContractServiceImpl implements IContractService
                         }
                         // 更新旧RFID
                         replenishRfid.setReplenishNo("");
+                        RfidLog log = new RfidLog();
+                        log.setId(RfidStateEnum.DAMAGED.getId());
+                        log.setState(RfidStateEnum.DAMAGED.getName());
+                        replenishRfid.removeLog(log);
                         replenishRfid.setRfidState(RfidStateEnum.USED);
                         windowRfidService.updateWindowRfid(replenishRfid);
                         
                         // 设置新RFID
-                        newRfid.setGlassRfid(ref.getGlassBatchNo());
-                        newRfid.setProfileRfid(ref.getProfileBatchNo());
+                        newRfid.setGlassRfid("");
+                        newRfid.setProfileRfid("");
                         newRfid.setWindowType(null);
                         newRfid.setRfidState(RfidStateEnum.UN_USED);
+                        
+                        RfidLog log1 = new RfidLog();
+                        log1.setId(LabelProgressEnum.INSTALL.getId());
+                        log1.setState(LabelProgressEnum.INSTALL.getName());
+                        
+                        RfidLog log2 = new RfidLog();
+                        log2.setId(LabelProgressEnum.HAS_QUALITY.getId());
+                        log2.setState(LabelProgressEnum.HAS_QUALITY.getName());
+                        newRfid.removeLog(log1);
+                        newRfid.removeLog(log2);
+                        List<RfidLog> rollLogList = newRfid.getLogList();
+                        newRfid.setProgressState(LabelProgressEnum.HAS_RECEIPT);
+                        newRfid.setLogList(rollLogList);
+                        
                         windowRfidService.updateWindowRfid(newRfid);
                     }
                 }

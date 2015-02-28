@@ -226,7 +226,7 @@ function removeMessge(){
           <td><#if (model.rfidType??)>${model.rfidType.getName()}</#if></td>
 		  <td><#if (model.type??)>${model.type.getName()}</#if></td>
 		  <td>${model.contractNo}</td>
-          <td>${model.batchNo}</td>
+          <td><#if model.isLossBatch>补</#if>${model.batchNo}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>-</td>
 		  <#if (model.state.id==0)>
@@ -252,7 +252,7 @@ function removeMessge(){
           <td><#if (model.rfidType??)>${model.rfidType.getName()}</#if></td>
 		  <td><#if (model.type??)>${model.type.getName()}</#if></td>
 		  <td>${model.contractNo}</td>
-          <td>${model.batchNo}</td>
+          <td><#if model.isLossBatch>补</#if>${model.batchNo}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>${model.replenishRfid}</td>
 		   <#if (model.state.id==0)>
@@ -288,7 +288,7 @@ function removeMessge(){
           <td><#if (model.rfidType??)>${model.rfidType.getName()}</#if></td>
 		  <td><#if (model.type??)>${model.type.getName()}</#if></td>
 		  <td>${model.contractNo}</td>
-          <td>${model.batchNo}</td>
+          <td><#if model.isLossBatch>补</#if>${model.batchNo}</td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>${model.replenishRfid}</td>
 		    <#if (model.state.id==0)>

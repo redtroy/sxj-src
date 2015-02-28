@@ -87,10 +87,15 @@ function log(id){
 	}
 	
 }
-function loadInfoBatch(id,rfidNo,type){
+function loadInfoBatch(id,rfidNo,type,batchNo,isLossBatch,contractNo){
+	if(isLossBatch==""){
+		isLossBatch=1;
+	}else{
+		isLossBatch=0;
+	}
 	var isopen=$("#info" + id).attr("isopen");
 	if (isopen!=3){
-		$("#info"+id).load("contractBatch.htm?type="+type+"&rfidNo="+rfidNo+"&id="+id);
+		$("#info"+id).load("contractBatch.htm?type="+type+"&rfidNo="+rfidNo+"&id="+id+"&batchNo="+batchNo+"&isLossBatch="+isLossBatch+"&contractNo="+contractNo);
 		$("#info" + id).attr("isopen","3");
 	}else{
 		$("#info" + id).html("");
@@ -195,9 +200,9 @@ $(function(){
 		  <td>${list.memberName}</td>
           <td><a href="javascript:loadInfo('${list.id}','${list.contractNo}')" class="lnk-blue">${list.contractNo}</a></td>
 		 <#if (list.replenishNo?exists&&list.replenishNo!="")>
-		  <td><a href="javascript:loadInfoBatch('${list.id}','${list.replenishNo}',${list.type.id})" class="lnk-blue"><#if (list.isLossBatch?exists&&list.isLossBatch==true)>补</#if>${list.batchNo}</a></td>
+		  <td><a href="javascript:loadInfoBatch('${list.id}','${list.replenishNo}','${list.type.id}','${list.batchNo}','${list.isLossBatch}','${list.contractNo}')" class="lnk-blue"><#if (list.isLossBatch?exists&&list.isLossBatch==true)>补</#if>${list.batchNo}</a></td>
 		  <#else>
-		  <td><a href="javascript:loadInfoBatch('${list.id}','${list.rfidNo}',${list.type.id})" class="lnk-blue"><#if (list.isLossBatch?exists&&list.isLossBatch==true)>补</#if>${list.batchNo}</a></td>
+		  <td><a href="javascript:loadInfoBatch('${list.id}','${list.rfidNo}','${list.type.id}','${list.batchNo}','${list.isLossBatch}','${list.contractNo}')" class="lnk-blue"><#if (list.isLossBatch?exists&&list.isLossBatch==true)>补</#if>${list.batchNo}</a></td>
 		  </#if>
 		  <td>${list.importDate?string("yyyy-MM-dd HH:mm:ss")}</td>
           <td><#if list.replenishNo?exists>${list.replenishNo}<#else>-</#if></td>

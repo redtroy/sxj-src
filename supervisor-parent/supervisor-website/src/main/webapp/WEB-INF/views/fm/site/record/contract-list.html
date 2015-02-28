@@ -584,10 +584,10 @@ function busunSeav(){
 							<#if record.contractNo?exists>
 							<a
 								href="javascript:biangeng('${record.id}','${record.contractNo}');"
-								class="lnk-blue variContract " recordId="${record.id}">变更</a><br/>
+								class="lnk-blue variContract " recordId="${record.id}"><span class="icon icon16 icon-change"></span>变更</a><br/>
 								<a
 								href="javascript:busun('${record.id}','${record.contractNo}');"
-								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+								class="lnk-blue suppContract" recordId="${record.id}"><span class="icon icon16 icon-loss"></span>补损</a>
 							<#else>
 								<a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
@@ -599,10 +599,10 @@ function busunSeav(){
 							<#elseif record.type.getId()==1>
 							<#if record.state.getId()==1> <a
 								href="javascript:biangeng('${record.id}','${record.contractNo}');"
-								class="lnk-blue variContract " recordId="${record.id}">变更</a><br/>
+								class="lnk-blue variContract " recordId="${record.id}"><span class="icon icon16 icon-change"></span>变更</a><br/>
 								<a
 								href="javascript:busun('${record.id}','${record.contractNo}');"
-								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+								class="lnk-blue suppContract" recordId="${record.id}"><span class="icon icon16 icon-loss"></span>补损</a>
 							<#else>
 							<a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
@@ -615,10 +615,10 @@ function busunSeav(){
 							<#if record.state.getId()==1>
 							<a
 								href="javascript:biangeng('${record.id}','${record.contractNo}');"
-								class="lnk-blue variContract " recordId="${record.id}">变更</a><br/>
+								class="lnk-blue variContract " recordId="${record.id}"><span class="icon icon16 icon-change"></span>变更</a><br/>
 								<a
 								href="javascript:busun('${record.id}','${record.contractNo}');"
-								class="lnk-blue suppContract" recordId="${record.id}">补损</a>
+								class="lnk-blue suppContract" recordId="${record.id}"><span class="icon icon16 icon-loss"></span>补损</a>
 							<#else>
 								<a href="javascript:to_modify('${record.id}')"
 								class="lnk-blue"> <span class="icon icon16 icon-edit"></span>修改
