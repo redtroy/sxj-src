@@ -103,6 +103,13 @@ public class MemberServiceImpl implements IMemberService {
 				menberDao.addMember(m);
 				menberDao.deleteMember(member.getId());
 			}
+			// 如果该会员之前没有完善会员资料，则提示
+			if (!m.getFlag()) {
+				CometServiceImpl
+						.takeCount(MessageChannel.MEMBER_PERFECT_MESSAGE);
+				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
+						MessageChannel.MEMBER_PERFECT_MESSAGE);
+			}
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
 			throw new ServiceException(e.getMessage(), e);
@@ -190,6 +197,7 @@ public class MemberServiceImpl implements IMemberService {
 			condition.addCondition("startDate", query.getStartDate());// 开始时间
 			condition.addCondition("endDate", query.getEndDate());// 结束时间
 			condition.addCondition("typeB", query.getMemberTypeB());
+			condition.addCondition("flag", query.getFlag());
 			condition.setPage(query);
 			memberList = menberDao.queryMembers(condition);
 			query.setPage(condition);
