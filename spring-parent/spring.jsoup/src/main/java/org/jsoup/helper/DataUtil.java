@@ -24,7 +24,7 @@ public class DataUtil
 {
     private static final Pattern charsetPattern = Pattern.compile("(?i)\\bcharset=\\s*(?:\"|')?([^\\s,;\"']*)");
     
-    static final String defaultCharset = "GBK"; // used if not found in header or meta charset
+    static final String defaultCharset = "UTF-8"; // used if not found in header or meta charset
     
     private static final int bufferSize = 0x20000; // ~130K.
     
@@ -94,7 +94,7 @@ public class DataUtil
         Document doc = null;
         if (charsetName == null)
         { // determine from meta. safe parse as UTF-8
-            // look for <meta http-equiv="Content-Type" content="text/html;charset=gb2312"> or HTML5 <meta charset="gb2312">
+          // look for <meta http-equiv="Content-Type" content="text/html;charset=gb2312"> or HTML5 <meta charset="gb2312">
             docData = Charset.forName(defaultCharset)
                     .decode(byteData)
                     .toString();

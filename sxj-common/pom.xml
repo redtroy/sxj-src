@@ -86,9 +86,9 @@
 			<version>4.0.6.RELEASE</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.8.1-sxj</version>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring.jsoup</artifactId>
+			<version>4.2.3</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>

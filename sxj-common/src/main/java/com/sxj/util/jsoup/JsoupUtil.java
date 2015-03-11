@@ -41,12 +41,15 @@ public class JsoupUtil
                             " zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .data("drpBiaoDuanType", "0")
-                    .data("txtProjectName", "门窗")
+                    .data("txtProjectName", projectName)
                     .data("__VIEWSTATE", _VIEWSTATE)
                     .data("__EVENTVALIDATION", _EVENTVALIDATION)
                     .data("ImageButton1.x", "19")
+                    .encoding("GBK")
                     .data("ImageButton1.y", "5")
                     .post();
+            _VIEWSTATE = post.select("#__VIEWSTATE").val();
+            _EVENTVALIDATION = post.select("#__EVENTVALIDATION").val();
             System.out.println(post.toString());
             System.out.println(post.select("#txtProjectName").val());
         }
