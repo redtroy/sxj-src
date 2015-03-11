@@ -8,8 +8,6 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.sxj.util.common.SxjHttpClientImpl;
-
 public class JsoupUtil
 {
     
@@ -28,7 +26,6 @@ public class JsoupUtil
             String _EVENTVALIDATION = document.select("#__EVENTVALIDATION")
                     .val();
             Map<String, String> cookies = response.cookies();
-            SxjHttpClientImpl im = new SxjHttpClientImpl();
             Document post = Jsoup.connect(url)
                     .timeout(30000)
                     .cookies(cookies)
