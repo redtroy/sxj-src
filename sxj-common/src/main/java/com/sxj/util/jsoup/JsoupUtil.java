@@ -1,7 +1,6 @@
 package com.sxj.util.jsoup;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.Map;
 
 import org.jsoup.Connection.Response;
@@ -15,10 +14,7 @@ public class JsoupUtil
     {
         try
         {
-            System.out.println("\u95c2\u3127\u7365");
             String projectName = "门窗";
-            System.out.println(URLEncoder.encode(projectName, "GBK"));
-            System.out.println(new String(projectName.getBytes(), "GBK"));
             String url = "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx";
             Response response = Jsoup.connect(url).timeout(30000).execute();
             Document document = response.parse();
