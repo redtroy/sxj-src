@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -580,14 +581,22 @@ public class SxjHttpClientImpl implements ISxjHttpClient
         //		im.setKeyPassword("123456");
         //		im.setKeyStorePath("E:/t.jks");
         //		im.setKeyStoreType("jks");
-        //		String aa = im.sslGet("https://www.menchuang.org.cn", "");
+        //		String aa = im.sslGet("https://www.menchuang.org.cn", ""); 
         //		System.out.println(aa);
-        Header host = new BasicHeader("Host", "market.cnal.com");
-        Header agent = new BasicHeader("User-Agent",
-                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0");
-        String string = im.get("http://market.cnal.com/share/market/cj30.json",
-                host,
-                agent);
+        //        Header host = new BasicHeader("Host", "market.cnal.com");
+        //        Header agent = new BasicHeader("User-Agent",
+        //                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0");
+        //        String string = im.get("http://market.cnal.com/share/market/cj30.json",
+        //                host,
+        //                agent);
+        Header host = new BasicHeader("Host", "www1.njcein.com.cn");
+        Header referer = new BasicHeader("Referer",
+                "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx");
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("drpBiaoDuanType", "0");
+        params.put("txtProjectName", "门窗");
+        String string = im.post("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx",
+                params);
         System.out.println(string);
         
     }
