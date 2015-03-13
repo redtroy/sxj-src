@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.message.IMessageConfigDao">
+	<resultMap id="com.sxj.supervisor.dao.message.IMessageConfigDao.messageConfig"
+		type="com.sxj.supervisor.entity.message.MessageConfigEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="isAccept" column="IS_ACCETP" jdbcType="INTEGER" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="INTEGER" />
+		<result property="messageType" column="MESSAGE_TYPE" jdbcType="VARCHAR" />
+		<result property="phone" column="PHONE" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 高级查询 -->
+	<select id="queryConfigList"
+		resultMap="com.sxj.supervisor.dao.message.IMessageConfigDao.messageConfig"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_MESSAGE_CONFIG  WHERE 1=1]]>
+		<if test="condition.memberNo!= null and condition.memberNo != ''">
+			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
+		</if>
+		<![CDATA[ ORDER BY MESSAGE_TYPE DESC]]>
+	</select>
+	
+	<delete id="delConfig" parameterType="java.lang.String">
+	<![CDATA[delete from M_MESSAGE_CONFIG where MEMBER_NO=#{memberNo}]]>
+	</delete>
+</mapper>
