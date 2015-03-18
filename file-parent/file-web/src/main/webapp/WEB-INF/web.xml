@@ -29,6 +29,18 @@
 	    <servlet-name>springmvc</servlet-name>
 	    <url-pattern>*.GIF</url-pattern>
 	  </servlet-mapping>
+	  <servlet-mapping>
+	    <servlet-name>springmvc</servlet-name>
+	    <url-pattern>*.PDF</url-pattern>
+	  </servlet-mapping>
+	    <servlet-mapping>
+	    <servlet-name>springmvc</servlet-name>
+	    <url-pattern>*.TXT</url-pattern>
+	  </servlet-mapping>
+	   <servlet-mapping>
+	    <servlet-name>springmvc</servlet-name>
+	    <url-pattern>*.HTML</url-pattern>
+	  </servlet-mapping>
 	  <filter>
 	    <filter-name>CacheFilter</filter-name>
 	    <filter-class>com.tacitknowledge.filters.cache.CacheHeaderFilter</filter-class>

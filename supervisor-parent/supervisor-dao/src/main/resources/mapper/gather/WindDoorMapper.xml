@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.gather.WindDoorDao">
+<!--<cache type="com.sxj.mybatis.cache.HierarchicalCache">
+		<property name="level" value="2"/>
+		<property name="timeToLive" value="10"/>
+</cache> -->
+	<resultMap id="WindDoorResultMap" type="com.sxj.supervisor.entity.gather.WindDoorEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="bdfl" column="BDFL" jdbcType="VARCHAR" />
+		<result property="xmmc" column="XMMC" jdbcType="VARCHAR" />
+		<result property="qy" column="QY" jdbcType="VARCHAR" />
+		<result property="jzrq" column="JZRQ" jdbcType="VARCHAR" />
+		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
+		<result property="gifPath" column="GIF_PATH" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<!-- 高级查询 -->
+	<select id="getWindDoor" resultMap="WindDoorResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		
+	</select>
+</mapper>
