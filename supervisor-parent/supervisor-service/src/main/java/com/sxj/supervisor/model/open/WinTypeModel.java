@@ -16,6 +16,30 @@ public class WinTypeModel implements Serializable
     
     private String contratcNo;
     
+    private String gid;
+    
+    private Integer rfidState;
+    
+    public Integer getRfidState()
+    {
+        return rfidState;
+    }
+    
+    public void setRfidState(Integer rfidState)
+    {
+        this.rfidState = rfidState;
+    }
+    
+    public String getGid()
+    {
+        return gid;
+    }
+    
+    public void setGid(String gid)
+    {
+        this.gid = gid;
+    }
+    
     /**
      * 状态(0:失败1:成功2:未启用3:未审核)
      */
