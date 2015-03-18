@@ -23,6 +23,9 @@ jQuery(document).ready(function($) {
 	$(".msgBox").live("click",function(){
 		window.location.href="${basePath}member/memberList.htm?isDelMes=true";
 	});
+	$(".msgBoxPrefect").live("click",function(){
+		window.location.href="${basePath}member/memberList.htm?isDelMesPerfect=true&flag=1&checkState=1";
+	});
 	JS.Engine.on({
 			 start : function(cId, channelList, engine){  
 			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
@@ -32,7 +35,17 @@ jQuery(document).ready(function($) {
 	        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的会员注册！</div>";
 	        	 $("#message_div").append(bb);
 	         },   
-	 });  
+	 });
+	JS.Engine.on({
+		 start : function(cId, channelList, engine){  
+		      $.get("${basePath}notifyComet.htm?channelName=${channelNamePerfect}&ram="+Math.random()); 
+		    },  
+		 "${channelNamePerfect}" : function(data){//侦听一个channel
+			 $("#message_div_perfcet").empty();
+         	 var bb="<div class='msgBoxPrefect msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条客户已完善资料但未认证的记录！</div>";
+       	     $("#message_div_perfcet").append(bb);
+        },   
+     });  
 	 JS.Engine.start('${basePath}comet');
 });
 window.onload = function() {
@@ -305,6 +318,7 @@ Intense( elements );
       </div>
        <form id="edit_form"></form>
        <div id="message_div"></div>
+        <div id="message_div_perfcet"></div>
       <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
         <col width="6%" />
@@ -348,7 +362,9 @@ Intense( elements );
           <td><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
           <#if (member.checkState.id==0)>
           <td><a class="btn btn-gray" onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
-          <#elseif (member.checkState.id==1)>
+          <#elseif (member.checkState.id==1 && !member.flag)>
+          <td><span class="state normal">完善中</span></td>
+          <#elseif (member.checkState.id==1 && member.flag)>
           <td><a class="btn  btn-green" onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
           <#elseif (member.checkState.id==2)>
            <td><em class="state verified">已认证</em></td>

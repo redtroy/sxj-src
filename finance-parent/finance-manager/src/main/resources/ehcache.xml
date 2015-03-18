@@ -1,4 +1,4 @@
-<ehcache name="manager-ehcache" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false" dynamicConfig="false">
+<ehcache name="financemanager-ehcache" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false" dynamicConfig="false">
 
     <diskStore path="java.io.tmpdir"/>
 	

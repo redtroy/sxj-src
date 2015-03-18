@@ -85,6 +85,11 @@
 			<artifactId>spring-beans</artifactId>
 			<version>4.0.6.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring.jsoup</artifactId>
+			<version>4.2.3</version>
+		</dependency>
 	</dependencies>
 	<distributionManagement>
 		<repository>

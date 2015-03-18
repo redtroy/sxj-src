@@ -74,10 +74,16 @@ public class MemberController extends BaseController {
 			map.put("cityList", cityList);
 			map.put("query", query);
 			map.put("channelName", MessageChannel.MEMBER_MESSAGE);
+			map.put("channelNamePerfect", MessageChannel.MEMBER_PERFECT_MESSAGE);
 			if (StringUtils.isNotEmpty(query.getIsDelMes())) {
 				CometServiceImpl.setCount(MessageChannel.MEMBER_MESSAGE, 0l);
 			}
+			if (StringUtils.isNotEmpty(query.getIsDelMesPerfect())) {
+				CometServiceImpl.setCount(
+						MessageChannel.MEMBER_PERFECT_MESSAGE, 0l);
+			}
 			registChannel(MessageChannel.MEMBER_MESSAGE);
+			registChannel(MessageChannel.MEMBER_PERFECT_MESSAGE);
 			return "manage/member/member";
 		} catch (Exception e) {
 			SxjLogger.error("查询会员信息错误", e, this.getClass());
