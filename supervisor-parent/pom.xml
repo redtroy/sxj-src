@@ -11,6 +11,7 @@
 		<module>supervisor-website</module>
 		<module>supervisor-dao</module>
 		<module>supervisor-service</module>
+		<module>supervisor-tasks</module>
 	</modules>
 	<properties>
 		<com.sxj.spring>4.2.3</com.sxj.spring>
@@ -90,7 +91,7 @@
 				<artifactId>mybatis-pagination</artifactId>
 				<version>${mybatis.orm.version}</version>
 			</dependency>
-			<!-- 数据库连接 -->
+			<!-- 数据库连�? -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>

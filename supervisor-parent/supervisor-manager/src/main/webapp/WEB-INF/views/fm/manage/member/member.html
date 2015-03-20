@@ -1,40 +1,73 @@
-﻿<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
-<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/comet4j.js"></script>
-<script type="text/javascript" src="${b.staticPath}js/jqueryui.js" ></script>
-<script type="text/javascript" src="${b.staticPath}js/jquery.mousewheel.js" ></script>
-<script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js" ></script>
-<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
-<@b.pageScript/>
-<@b.dialogBox/>
-<@b.validate/>
-<@b.upload/>
+<script type="text/javascript" src="${b.staticPath}js/jqueryui.js"></script>
+<script type="text/javascript"
+	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
+<@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.upload/>
 <script>
 jQuery(document).ready(function($) {
 	$(".msgBox").live("click",function(){
 		window.location.href="${basePath}member/memberList.htm?isDelMes=true";
 	});
-	JS.Engine.on({
-			 start : function(cId, channelList, engine){  
-			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
-			    },  
-			 "${channelName}" : function(data){//侦听一个channel
-				 $("#message_div").empty();
-	        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的会员注册！</div>";
-	        	 $("#message_div").append(bb);
-	         },   
-	 });  
-	 JS.Engine.start('${basePath}comet');
+	$(".msgBoxPrefect").live("click",function(){
+		window.location.href="${basePath}member/memberList.htm?isDelMesPerfect=true&flag=1&checkState=1";
+	});
+// 	JS.Engine.on({
+// 			 start : function(cId, channelList, engine){  
+// 			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
+// 			    },  
+// 			 "${channelName}" : function(data){//侦听一个channel
+// 				 $("#message_div").empty();
+// 	        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的会员注册！</div>";
+// 	        	 $("#message_div").append(bb);
+// 	         },   
+// 	 });
+// 	JS.Engine.on({
+// 		 start : function(cId, channelList, engine){  
+// 		      $.get("${basePath}notifyComet.htm?channelName=${channelNamePerfect}&ram="+Math.random()); 
+// 		    },  
+// 		 "${channelNamePerfect}" : function(data){//侦听一个channel
+// 			 $("#message_div_perfcet").empty();
+//          	 var bb="<div class='msgBoxPrefect msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条客户已完善资料但未认证的记录！</div>";
+//        	     $("#message_div_perfcet").append(bb);
+//         },   
+//      });  
+// 	 JS.Engine.start('${basePath}comet');
+	window.setInterval(message, 3000); 
 });
+//提示消息
+function message(){
+	 $.get("${basePath}message.htm?channelName=${channelName}&ram="+Math.random(), function(data){
+		 if(typeof(data.count) != "undefined"){
+			 $("#message_div").empty();
+	    	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data.count+"</strong>条新的会员注册！</div>";
+	    	 $("#message_div").append(bb);
+		 }
+		
+	 });
+	 $.get("${basePath}message.htm?channelName=${channelNamePerfect}&ram="+Math.random(), function(data){
+		 if(typeof(data.count) != "undefined"){
+			 $("#message_div_perfcet").empty();
+	     	 var bb="<div class='msgBoxPrefect msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data.count+"</strong>条客户已完善资料但未认证的记录！</div>";
+	   	     $("#message_div_perfcet").append(bb);
+		 }
+	 });
+}
 window.onload = function() {
 	$(".demo-image").live("click",function(){
 		var imageSource=$(this).attr("data-image");
@@ -235,157 +268,164 @@ Intense( elements );
 <!-- InstanceEndEditable -->
 </head>
 <body>
-<@b.header />
-<div id="main" class="fence-wide">
-<!-- InstanceBeginEditable name="local" -->
-<@b.menuPath/>
-<div id="mainBg" class="ly-clearFix yard-1200">
- 	<@b.leftMenu />
-    <div id="rightBar">
-    <!-- InstanceBeginEditable name="rightBar" -->
-      <h2 class="title">会员管理</h2>
-      <div id="searchBox" class="ly-clearFix">
-      <form action="javascript:void(0);" id="search_form">
-        <p> 会员ID<input type="text" name="memberNo" id="memberID" value="${query.memberNo}" />
-          会员名称<input type="text" name="memberName" id="memberName" value="${query.memberName}" />
-          联系人名称<input type="text" name="contacts" id="contacts" value="${query.contacts}" />
-          联系人手机<input type="text" name="contactsPhone" id="contactsPhone" value="${query.contactsPhone}" />
-          城市 江苏省-
-          <select name="area" id="city">
-           <option value="">-请选择-</option>
-          	<#list cityList as city>
-            <option value="${city.id}:${city.name}">${city.name}</option>
-            </#list>
-          </select>
-         营业执照号码
-          <input type="text" name="bLicenseNo" id="bLicenseNo" value="${query.bLicenseNo}" /></p>
-		  <p>
-          节能标识推广证号
-          <input type="text" name="energyNo" id="energyNo" value="${query.energyNo}" />
-          会员类型
-          <select name="memberType" id="type">
-           <option value="">-请选择-</option>
-            <#list types as type>
-            <#if type.id==query.memberType>
-            	<option value="${type.getId()}" selected="selected">${type.getName()}</option>
-             <#else>
-             	<option value="${type.getId()}">${type.getName()}</option>
-            </#if>
-            </#list>
-          </select>
-          审核状态
-          <select name="checkState" id="checkState">
-           <option value="">-请选择-</option>
-           <#list checkStates as state>
-           <#if state.id=query.checkState>
-            <option value="${state.getId()}" selected="selected">${state.getName()}</option>
-            <#else>
-             <option value="${state.getId()}">${state.getName()}</option>
-            </#if>
-           </#list>
-          </select>
-          账户状态
-          <select name="memberState" id="memberState">
-           <option value="">-请选择-</option>
-           <#list states as state>
-            <#if state.id=query.memberState>
-            <option value="${state.getId()}" selected="selected">${state.getName()}</option>
-            <#else>
-             <option value="${state.getId()}">${state.getName()}</option>
-            </#if>
-           </#list>
-          </select>
-		   会员注册时间段
-          <input class="form-control" type="text" datepicker id="time1" name="startDate">
-          -
-          <input class="form-control" type="text" datepicker id="time2" name="endDate">
-          <a class="btn btn-blue ly-right" onclick="query();"><span>查询</span></a>
-        </p>
-        </form>
-      </div>
-       <form id="edit_form"></form>
-       <div id="message_div"></div>
-      <@b.pager/>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
-        <col width="6%" />
-        <col width="10%"/>
-        <col width="10%"/>
-        <col width="10%" />
-        <col width="10%" />
-        <col width="8%" />
-        <col width="8%" />
-        <col width="8%" />
-        <col width="8%" />
-        <col width="8%" />
-        <col width="14%" />
-        <tr>
-          <th>会员ID</th>
-          <th>会员名称</th>
-          <th>联系人名称</th>
-          <th>营业执照号码</th>
-          <th>节能标识<br />
-            	推广证号</th>
-          <th>会员类型</th>
-          <th>注册时间</th>
-          <th>认证时间</th>
-          <th>审核状态</th>
-          <th>帐户状态</th>
-          <th class="rLine">操作</th>
-        </tr>
-        <#list memberList as member>
-        <#if member.state.id==0>
-        <tr >
-        <#elseif member.state.id==1>
-        <tr class="bgColor-gray">
-         </#if>
-          <td><a href="javascript:openDiv('${member.id}_info','${member.id}');" class="lnk-blue">${member.memberNo}</a></td>
-          <td>${member.name}</td>
-          <td>${member.contacts}</td>
-          <td>${member.getbLicenseNo()}</td>
-          <td>${member.getEnergyNo()}</td>
-          <td>${member.type.getName()}</td>
-          <td><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
-          <td><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
-          <#if (member.checkState.id==0)>
-          <td><a class="btn btn-gray" onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
-          <#elseif (member.checkState.id==1)>
-          <td><a class="btn  btn-green" onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
-          <#elseif (member.checkState.id==2)>
-           <td><em class="state verified">已认证</em></td>
-          </#if>
-          <#if member.state.id==0>
-          <td><a class="btn btn-green" onclick="editState('${member.id}',1)"><span>冻结</span></a></td>
-           <#elseif member.state.id==1>
-           <td><a class="btn btn-red" onclick="editState('${member.id}',0)"><span>解冻</span></a></td>
-          </#if>
-          
-          <td><a class="btn btn-gray btn-password" href="javascript:void(0);" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
-        </tr>
-        <tr class="tableInfo" style="display:none;" id="${member.id}_info" index="">
-        
-        </tr>
-        </#list>
-      </table>
-      <@b.pager/>
-    <div id="res_password_div" class="modal-wrap popDemo passwordBox" style="display:none">
-     <div class="modal-header"><span title="关闭" class="close">关闭</span></div>
-     <div class="modal-body">
-     <div class="tipBox ly-clearFix">
-     <span class="icon32 icon-32-info"></span>
-     <p class="color-blue fontYH f18" id="promptPwd"></p>
-     </div>
-     <button class="popBtn" id="pass_btn" >确认</button>
-     </div>
-     </div>
-     <!-- InstanceEndEditable --></div>
-</div>
-   <div class="maskdivgen" style="display:none"></div>
-    <div class="viewer modal-wrap" id="img_close" style="display:none">
-      <div class="modal-header"><span class="close" onclick="close_img()">关闭</span></div>
-      <div id="viewer2" class="modal-body iviewer"></div>
-    </div>
-   <div class="maskdivgen" style="display:none"></div>
-<@b.footer />
+	<@b.header />
+	<div id="main" class="fence-wide">
+		<!-- InstanceBeginEditable name="local" -->
+		<@b.menuPath/>
+		<div id="mainBg" class="ly-clearFix yard-1200">
+			<@b.leftMenu />
+			<div id="rightBar">
+				<!-- InstanceBeginEditable name="rightBar" -->
+				<h2 class="title">会员管理</h2>
+				<div id="searchBox" class="ly-clearFix">
+					<form action="javascript:void(0);" id="search_form">
+						<p>
+							会员ID<input type="text" name="memberNo" id="memberID"
+								value="${query.memberNo}" /> 会员名称<input type="text"
+								name="memberName" id="memberName" value="${query.memberName}" />
+							联系人名称<input type="text" name="contacts" id="contacts"
+								value="${query.contacts}" /> 联系人手机<input type="text"
+								name="contactsPhone" id="contactsPhone"
+								value="${query.contactsPhone}" /> 城市 江苏省- <select name="area"
+								id="city">
+								<option value="">-请选择-</option> <#list cityList as city>
+								<option value="${city.id}:${city.name}">${city.name}</option>
+								</#list>
+							</select> 营业执照号码 <input type="text" name="bLicenseNo" id="bLicenseNo"
+								value="${query.bLicenseNo}" />
+						</p>
+						<p>
+							节能标识推广证号 <input type="text" name="energyNo" id="energyNo"
+								value="${query.energyNo}" /> 会员类型 <select name="memberType"
+								id="type">
+								<option value="">-请选择-</option> <#list types as type> <#if
+								type.id==query.memberType>
+								<option value="${type.getId()}" selected="selected">${type.getName()}</option>
+								<#else>
+								<option value="${type.getId()}">${type.getName()}</option>
+								</#if> </#list>
+							</select> 审核状态 <select name="checkState" id="checkState">
+								<option value="">-请选择-</option> <#list checkStates as state>
+								<#if state.id=query.checkState>
+								<option value="${state.getId()}" selected="selected">${state.getName()}</option>
+								<#else>
+								<option value="${state.getId()}">${state.getName()}</option>
+								</#if> </#list>
+							</select> 账户状态 <select name="memberState" id="memberState">
+								<option value="">-请选择-</option> <#list states as state> <#if
+								state.id=query.memberState>
+								<option value="${state.getId()}" selected="selected">${state.getName()}</option>
+								<#else>
+								<option value="${state.getId()}">${state.getName()}</option>
+								</#if> </#list>
+							</select> 会员注册时间段 <input class="form-control" type="text" datepicker
+								id="time1" name="startDate"> - <input
+								class="form-control" type="text" datepicker id="time2"
+								name="endDate"> <a class="btn btn-blue ly-right"
+								onclick="query();"><span>查询</span></a>
+						</p>
+					</form>
+				</div>
+				<form id="edit_form"></form>
+				<div id="message_div"></div>
+				<div id="message_div_perfcet"></div>
+				<@b.pager/>
+				<table border="0" cellpadding="0" cellspacing="0" class="tabList"
+					id="res_table">
+					<col width="6%" />
+					<col width="10%" />
+					<col width="10%" />
+					<col width="10%" />
+					<col width="10%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="14%" />
+					<tr>
+						<th>会员ID</th>
+						<th>会员名称</th>
+						<th>联系人名称</th>
+						<th>营业执照号码</th>
+						<th>节能标识<br /> 推广证号
+						</th>
+						<th>会员类型</th>
+						<th>注册时间</th>
+						<th>认证时间</th>
+						<th>审核状态</th>
+						<th>帐户状态</th>
+						<th class="rLine">操作</th>
+					</tr>
+					<#list memberList as member> <#if member.state.id==0>
+					<tr><#elseif member.state.id==1>
+					<tr class="bgColor-gray">
+						</#if>
+						<td><a
+							href="javascript:openDiv('${member.id}_info','${member.id}');"
+							class="lnk-blue">${member.memberNo}</a></td>
+						<td>${member.name}</td>
+						<td>${member.contacts}</td>
+						<td>${member.getbLicenseNo()}</td>
+						<td>${member.getEnergyNo()}</td>
+						<td>${member.type.getName()}</td>
+						<td><#if
+							(member.regDate??)>${member.regDate?string("yyyy-MM-dd
+							HH:mm:ss")}</#if></td>
+						<td><#if (member.authorDate??)>
+							${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td> <#if
+						(member.checkState.id==0)>
+						<td><a class="btn btn-gray"
+							onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
+						<#elseif (member.checkState.id==1 && !member.flag)>
+						<td><span class="state normal">完善中</span></td> <#elseif
+						(member.checkState.id==1 && member.flag)>
+						<td><a class="btn  btn-green"
+							onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
+						<#elseif (member.checkState.id==2)>
+						<td><em class="state verified">已认证</em></td> </#if> <#if
+						member.state.id==0>
+						<td><a class="btn btn-green"
+							onclick="editState('${member.id}',1)"><span>冻结</span></a></td>
+						<#elseif member.state.id==1>
+						<td><a class="btn btn-red"
+							onclick="editState('${member.id}',0)"><span>解冻</span></a></td> </#if>
 
+						<td><a class="btn btn-gray btn-password"
+							href="javascript:void(0);" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
+					</tr>
+					<tr class="tableInfo" style="display: none;" id="${member.id}_info"
+						index="">
+
+					</tr>
+					</#list>
+				</table>
+				<@b.pager/>
+				<div id="res_password_div" class="modal-wrap popDemo passwordBox"
+					style="display: none">
+					<div class="modal-header">
+						<span title="关闭" class="close">关闭</span>
+					</div>
+					<div class="modal-body">
+						<div class="tipBox ly-clearFix">
+							<span class="icon32 icon-32-info"></span>
+							<p class="color-blue fontYH f18" id="promptPwd"></p>
+						</div>
+						<button class="popBtn" id="pass_btn">确认</button>
+					</div>
+				</div>
+				<!-- InstanceEndEditable -->
+			</div>
+		</div>
+		<div class="maskdivgen" style="display: none"></div>
+		<div class="viewer modal-wrap" id="img_close" style="display: none">
+			<div class="modal-header">
+				<span class="close" onclick="close_img()">关闭</span>
+			</div>
+			<div id="viewer2" class="modal-body iviewer"></div>
+		</div>
+		<div class="maskdivgen" style="display: none"></div>
+		<@b.footer />
 </body>
-<!-- InstanceEnd --></html>
+<!-- InstanceEnd -->
+</html>

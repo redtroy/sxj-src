@@ -313,31 +313,73 @@ function busunSeav(){
 		   }
    		}) 
    		//结束
-   			JS.Engine.on({
-   				start : function(cId, channelList, engine){ 
-   			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random());
-   			    }, 
-				 "${channelName}" : function(data){//侦听一个channel
-					 $("#message_div").empty();
-				 for(var i=0;i<data.length;i++){
-	            	 var message = new Array();
-	            	 message = data[i].split(",");
-	            	 var bb="";
-	            	 if(message[4]==0){
-	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?message="+data[i]+"&recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue zhaobiaoMessage' data-message='"+data[i]+"' id=''>待确认</a>的"+message[1]+"信息</div>"; 
-	            	 }else{
-	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?message="+data[i]+"&recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue message' data-message='"+data[i]+"' id=''>待确认</a>的"+message[1]+"信息</div>"; 
-	            	 }
-	            	 $("#message_div").append(bb);
-				 	}
-	             },   
-	     	});
-		JS.Engine.start('${basePath}comet');
+//    			JS.Engine.on({
+//    				start : function(cId, channelList, engine){ 
+//    			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random());
+//    			    }, 
+// 				 "${channelName}" : function(data){//侦听一个channel
+// 					 $("#message_div").empty();
+// 				 for(var i=0;i<data.length;i++){
+// 	            	 var message = new Array();
+// 	            	 message = data[i].split(",");
+// 	            	 var bb="";
+// 	            	 if(message[4]==0){
+// 	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?message="+data[i]+"&recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue zhaobiaoMessage' data-message='"+data[i]+"' id=''>待确认</a>的"+message[1]+"信息</div>"; 
+// 	            	 }else{
+// 	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?message="+data[i]+"&recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue message' data-message='"+data[i]+"' id=''>待确认</a>的"+message[1]+"信息</div>"; 
+// 	            	 }
+// 	            	 $("#message_div").append(bb);
+// 				 	}
+// 	             },   
+// 	     	});
+// 		JS.Engine.start('${basePath}comet');
+   		window.setInterval(message, 3000); 
 	});
-	function closeMessage(obj){
+	//{"channelName":"record_push_message_MEM000001","cache":["vxJiLbwzbbaT9KAc6B0CI0zpcK4soVN2,开发商,CT15030102,MEM000001,0"]}
+	//提示消息
+	function message() {
+		$.get("${basePath}message.htm?channelName=${channelName}&ram="+ Math.random(),
+						function(data) {
+							if (typeof (data.cache) != "undefined") {
+								$("#message_div").empty();
+								for (var i = 0; i < data.cache.length; i++) {
+									var message = new Array();
+									message = data.cache[i].split(",");
+									var bb = "";
+									if (message[4] == 0) {
+										bb = "<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?message="
+												+ data.cache[i]
+												+ "&recordId="
+												+ message[0]
+												+ "&contractNo="
+												+ message[2]
+												+ "' class='lnk-blue zhaobiaoMessage' data-message='"
+												+ data.cache[i]
+												+ "' id=''>待确认</a>的"
+												+ message[1] + "信息</div>";
+									} else {
+										bb = "<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?message="
+												+ data.cache[i]
+												+ "&recordId="
+												+ message[0]
+												+ "&contractNo="
+												+ message[2]
+												+ "' class='lnk-blue message' data-message='"
+												+ data.cache[i]
+												+ "' id=''>待确认</a>的"
+												+ message[1] + "信息</div>";
+									}
+									$("#message_div").append(bb);
+								}
+							}
+
+						});
+	}
+
+	function closeMessage(obj) {
 		$(obj).parent().remove();
 	}
-	
+
 	function query(page) {
 		var params = $("#search_form").serialize();
 		if (page != undefined) {
@@ -354,95 +396,114 @@ function busunSeav(){
 		});
 	}
 
-	function  loadBatch(contractNo,recordNo,type){
-		var isopen=$("#info" + recordNo).attr("isopen");
-		if(isopen=="0"){
-			$("#info" + recordNo).load("getBatchPay.htm?contractNo=" + contractNo+"&recordNo="+recordNo)+"&type="+type;
-			$("#info" + recordNo).attr("isopen","1");
-		}
-		else if(isopen=="1"){
+	function loadBatch(contractNo, recordNo, type) {
+		var isopen = $("#info" + recordNo).attr("isopen");
+		if (isopen == "0") {
+			$("#info" + recordNo).load(
+					"getBatchPay.htm?contractNo=" + contractNo + "&recordNo="
+							+ recordNo)
+					+ "&type=" + type;
+			$("#info" + recordNo).attr("isopen", "1");
+		} else if (isopen == "1") {
 			$("#info" + recordNo).html("");
-			$("#info" + recordNo).attr("isopen","0");
+			$("#info" + recordNo).attr("isopen", "0");
 		}
 	}
 	function loadInfo(contractNo, recordNo) {
-		$("#res_table").find(".infoTr").each(function(){
-			if($(this).attr("isopen")==1)
+		$("#res_table").find(".infoTr").each(function() {
+			if ($(this).attr("isopen") == 1)
 				$(this).html("");
 		});
-		var isopen=$("#info" + recordNo).attr("isopen");
-		if(isopen=="0"){
-			$("#info" + recordNo).load("info.htm?contractNo=" + contractNo+"&recordNo="+recordNo);
-			$("#info" + recordNo).attr("isopen","1");
-		}
-		else if(isopen=="1"){
+		var isopen = $("#info" + recordNo).attr("isopen");
+		if (isopen == "0") {
+			$("#info" + recordNo).load(
+					"info.htm?contractNo=" + contractNo + "&recordNo="
+							+ recordNo);
+			$("#info" + recordNo).attr("isopen", "1");
+		} else if (isopen == "1") {
 			$("#info" + recordNo).html("");
-			$("#info" + recordNo).attr("isopen","0");
+			$("#info" + recordNo).attr("isopen", "0");
 		}
 	}
 	function closeContract(recordNo) {
 		$("#info" + recordNo).html("");
-		$("#info" + recordNo).attr("isopen","0");
+		$("#info" + recordNo).attr("isopen", "0");
 	}
 
-	function delRecord(id,contractNo) {
+	function delRecord(id, contractNo) {
 		$.post("getRecordState.htm", {
 			id : id
 		}, function(data) {
 			if (data.isOK == "ok") {
-					dialogBox(function(index){
-							$.post("delRecord.htm", {
-								id : id
-							}, function(data) {
-								layer.close(index);
-								if (data.isOK == "ok") {
-									 succInfo(function(){
-										  query($("#pager").attr("currentPage"));
-									  },"刪除备案成功！");
-									
-								} else {
-									errorInfo("删除备案失败");
-								}
-					});},"是否删除备案?");
-			} else if(data.isOK == "no"){
+				dialogBox(function(index) {
+					$.post("delRecord.htm", {
+						id : id
+					}, function(data) {
+						layer.close(index);
+						if (data.isOK == "ok") {
+							succInfo(function() {
+								query($("#pager").attr("currentPage"));
+							}, "刪除备案成功！");
+
+						} else {
+							errorInfo("删除备案失败");
+						}
+					});
+				}, "是否删除备案?");
+			} else if (data.isOK == "no") {
 				errorInfo("该备案已处理,不能刪除！");
-			}else{
+			} else {
 				errorInfo("该备案已刪除！");
 				query($("#pager").attr("currentPage"));
 			}
 		});
 	}
-	function to_modify(id){
+	function to_modify(id) {
 		$.post("getRecordState.htm", {
 			id : id
 		}, function(data) {
 			if (data.isOK == "ok") {
-					window.location.href="to_modify.htm?recordId="+id;
-			}else if(data.isOK == "no"){
+				window.location.href = "to_modify.htm?recordId=" + id;
+			} else if (data.isOK == "no") {
 				errorInfo("该备案已处理,不能修改！");
-			}else{
+			} else {
 				errorInfo("该备案已刪除！");
 				query($("#pager").attr("currentPage"));
 			}
 		});
 	}
-	function openBatch(){
-		var recordId =$("#bsRecordId").val(); 
+	function openBatch() {
+		var recordId = $("#bsRecordId").val();
 		$("#batchUl").empty();
-		$.post("getBatch.htm", {recordId:recordId}, function(data) {
-			if (data.batch != undefined && data.batch.length>0) {
-				$("#batch-list").slideDown(200);
-				$('.maskdivgen2').fadeIn(100);
-				var batch =data.batch;
-				for(var i =0;i<batch.length;i++){
-					var bu='';
-					if(batch[i].type==3){bu='补'}
-					$("#batchUl").append('<li><input  type="checkbox" name="batchRfidNo"  title="'+batch[i].batchNo+'" value="'+batch[i].rfidNo+'" />'+bu+'第'+batch[i].batchNo+'批次</li>');
-				}
-			}else{
-				errorInfo("没有找到相关批次!");
-			}
-		});
+		$
+				.post(
+						"getBatch.htm",
+						{
+							recordId : recordId
+						},
+						function(data) {
+							if (data.batch != undefined
+									&& data.batch.length > 0) {
+								$("#batch-list").slideDown(200);
+								$('.maskdivgen2').fadeIn(100);
+								var batch = data.batch;
+								for (var i = 0; i < batch.length; i++) {
+									var bu = '';
+									if (batch[i].type == 3) {
+										bu = '补'
+									}
+									$("#batchUl")
+											.append(
+													'<li><input  type="checkbox" name="batchRfidNo"  title="'+batch[i].batchNo+'" value="'+batch[i].rfidNo+'" />'
+															+ bu
+															+ '第'
+															+ batch[i].batchNo
+															+ '批次</li>');
+								}
+							} else {
+								errorInfo("没有找到相关批次!");
+							}
+						});
 	}
 </script>
 </head>

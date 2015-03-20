@@ -8,6 +8,8 @@ public class MessageChannel
     public static final String RECORD_MESSAGE = "record_count_message";
     
     public static final String MEMBER_MESSAGE = "member_count_message";
+
+	public static final String MEMBER_PERFECT_MESSAGE = "member_perfect_message";
     
     public static final String WEBSITE_RECORD_MESSAGE = "record_push_message_";
     

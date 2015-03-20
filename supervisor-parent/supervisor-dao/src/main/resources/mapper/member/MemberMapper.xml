@@ -87,6 +87,10 @@
 		<if test="condition.state !=null">
 			<![CDATA[AND STATE = #{condition.state}]]>
 		</if>
+		<!-- 是否完善资料 -->
+		<if test="condition.flag !=null and condition.flag!=''">
+			<![CDATA[AND FLAG = #{condition.flag}]]>
+		</if>
 		<!-- 会员注册时间段 -->
 		<if
 			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">

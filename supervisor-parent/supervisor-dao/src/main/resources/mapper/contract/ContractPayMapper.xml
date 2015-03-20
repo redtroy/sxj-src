@@ -175,10 +175,10 @@
 		<![CDATA[ 
 		INSERT INTO M_CONTRACT_PAY(ID,MEMBER_NO_A,MEMBER_NAME_A,MEMBER_NO_B,MEMBER_NAME_B
 		,PAY_NO,CONTRACT_NO,BATCH_NO,RFID_NO,PAY_AMOUNT,PAY_REAL,PAY_DATE,CONTENT,STATE
-		,PAY_TYPE,PAY_CONTRACT_TYPE,PAY_MODE) 
+		,PAY_TYPE,PAY_CONTRACT_TYPE,PAY_MODE,CREAT_PAY_DATE) 
 		SELECT #{id},#{memberNoA},#{memberNameA},#{memberNoB},#{memberNameB}
 		,#{payNo},#{contractNo},#{batchNo},#{rfidNo},#{payAmount},#{payReal},#{payDate},#{content},#{state}
-		,#{payType},#{contractType},#{payMode} FROM dual WHERE NOT EXISTS (SELECT CONTRACT_NO FROM M_CONTRACT_PAY WHERE
+		,#{payType},#{contractType},#{payMode},NOW() FROM dual WHERE NOT EXISTS (SELECT CONTRACT_NO FROM M_CONTRACT_PAY WHERE
 		 CONTRACT_NO =#{contractNo}  AND PAY_TYPE=0)]]>
 	</insert> 
 	<select id="queryManagerPayContract" resultMap="ContractPayResultMap"

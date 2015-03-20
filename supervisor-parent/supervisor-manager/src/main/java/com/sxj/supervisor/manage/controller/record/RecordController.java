@@ -71,7 +71,7 @@ public class RecordController extends BaseController
             {
                 CometServiceImpl.setCount(MessageChannel.RECORD_MESSAGE, 0l);
             }
-            registChannel(MessageChannel.RECORD_MESSAGE);
+           // registChannel(MessageChannel.RECORD_MESSAGE);
             return "manage/record/record";
         }
         catch (Exception e)

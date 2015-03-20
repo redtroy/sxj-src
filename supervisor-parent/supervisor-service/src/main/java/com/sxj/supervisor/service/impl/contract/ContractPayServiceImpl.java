@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.impl.contract;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -253,6 +254,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	@Transactional
 	public void addPayRecordEntity(PayRecordEntity pay) throws ServiceException {
 		try {
+			pay.setCreatPayDate(new Date());
 			payDao.addPay(pay);
 			CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 					+ pay.getMemberNoA());

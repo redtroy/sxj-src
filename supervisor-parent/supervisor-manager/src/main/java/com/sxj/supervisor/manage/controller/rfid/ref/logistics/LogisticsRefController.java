@@ -62,7 +62,7 @@ public class LogisticsRefController extends BaseController
             map.put("list", list);
             map.put("channelName",
                     RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
-            registChannel(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
+            //registChannel(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF);
             if ("true".equals(removeMessge))
             {
                 CometServiceImpl.setCount(RfidChannel.RFID_MANAGER_LOGISTICS_MESSGAGE_REF,

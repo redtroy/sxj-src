@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.gather.AlDao">
+<!--<cache type="com.sxj.mybatis.cache.HierarchicalCache">
+		<property name="level" value="2"/>
+		<property name="timeToLive" value="10"/>
+</cache> -->
+	<resultMap id="AlResultMap" type="com.sxj.supervisor.entity.gather.AlEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="date" column="DATE" jdbcType="VARCHAR" />
+		<result property="min" column="MIN" jdbcType="VARCHAR" />
+		<result property="max" column="MAX" jdbcType="VARCHAR" />
+		<result property="average" column="AVERAGE" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 高级查询 -->
+	<select id="getAl" resultMap="AlResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		
+	</select>
+</mapper>

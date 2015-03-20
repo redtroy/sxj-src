@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   <display-name>supervisor-manager</display-name>
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener
-			</listener-class>
-  </listener>
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath*:spring/applicationContext_2.xml</param-value>
@@ -18,6 +14,10 @@
       <param-value>classpath:spring/mvc/mvc-config.xml</param-value>
     </init-param>
   </servlet>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener
+			</listener-class>
+  </listener>
   <servlet-mapping>
     <servlet-name>springmvc</servlet-name>
     <url-pattern>*.htm</url-pattern>
@@ -76,13 +76,14 @@
 <servlet>
     <servlet-name>DruidStatView</servlet-name>
     <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>  
+    <load-on-startup>2</load-on-startup>
 </servlet>   
 <servlet-mapping>
     <servlet-name>DruidStatView</servlet-name>
     <url-pattern>/druid/*</url-pattern>
 </servlet-mapping> 
 	
-  <listener>
+  <!-- <listener>
     <description>Comet4J容器侦听</description>
     <listener-class>org.comet4j.core.CometAppListener</listener-class>
   </listener>
@@ -95,7 +96,7 @@
   <servlet-mapping>
     <servlet-name>CometServlet</servlet-name>
     <url-pattern>/comet</url-pattern>
-  </servlet-mapping>
+ </servlet-mapping>--> 
   <filter>
     <filter-name>CacheFilter</filter-name>
     <filter-class>com.tacitknowledge.filters.cache.CacheHeaderFilter</filter-class>

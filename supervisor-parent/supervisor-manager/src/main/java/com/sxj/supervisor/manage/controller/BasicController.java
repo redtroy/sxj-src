@@ -27,8 +27,6 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import org.comet4j.core.CometContext;
-import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,9 +46,9 @@ import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.OperatorLogEntity;
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
-import com.sxj.supervisor.manage.comet.CometMessageListener;
-import com.sxj.supervisor.manage.comet.MessageThread;
 import com.sxj.supervisor.manage.login.SupervisorShiroRedisCache;
+import com.sxj.supervisor.model.comet.MessageChannel;
+import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
 import com.sxj.supervisor.model.system.FunctionModel;
@@ -94,15 +92,15 @@ public class BasicController extends BaseController
     @Autowired
     private RedisTopics topics;
     
-    @PostConstruct
-    public void init()
-    {
-        CometEngine engine = CometContext.getInstance().getEngine();
-        // 启动 Comet Server Thread
-        MessageThread cometServer = MessageThread.newInstance(engine);
-        RTopic<String> topic1 = topics.getTopic("topic1");
-        topic1.addListener(new CometMessageListener(cometServer));
-    }
+//    @PostConstruct
+//    public void init()
+//    {
+//        CometEngine engine = CometContext.getInstance().getEngine();
+//        // 启动 Comet Server Thread
+//        MessageThread cometServer = MessageThread.newInstance(engine);
+//        RTopic<String> topic1 = topics.getTopic("topic1");
+//        topic1.addListener(new CometMessageListener(cometServer));
+//    }
     
     @RequestMapping("notifyComet")
     public @ResponseBody void notifyComet(String channelName)
@@ -620,5 +618,43 @@ public class BasicController extends BaseController
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    
+    @RequestMapping("message")
+    public @ResponseBody Map<String, Object> message(
+            HttpServletRequest request, HttpServletResponse response,
+            String channelName) throws IOException
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (channelName.equals(MessageChannel.RECORD_MESSAGE)
+                || channelName.equals(RfidChannel.RFID_APPLY_MESSAGE)
+                || channelName.contains(MessageChannel.WEBSITE_PAY_MESSAGE)
+                || channelName.contains(MessageChannel.WEBSITE_FINANCE_MESSAGE)
+                || channelName.equals(MessageChannel.MEMBER_MESSAGE)
+                || channelName.equals(MessageChannel.MEMBER_PERFECT_MESSAGE))
+        {
+            Long count = CometServiceImpl.getCount(channelName);
+            SxjLogger.debug("Sending Message to Comet Client:" + count,
+                    getClass());
+            if (count > 0)
+            {
+                map.put("count", count);
+                map.put("channelName", channelName);
+                return map;
+            }
+        }
+        else
+        {
+            List<String> cache = CometServiceImpl.get(channelName);
+            SxjLogger.debug("Sending Message to Comet Client:" + cache,
+                    getClass());
+            if (cache != null && cache.size() > 0)
+            {
+                map.put("cache", cache);
+                map.put("channelName", channelName);
+                return map;
+            }
+        }
+        return null;
     }
 }
