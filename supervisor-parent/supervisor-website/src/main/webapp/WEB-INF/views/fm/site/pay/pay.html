@@ -51,95 +51,119 @@ jQuery(document).ready(function($) {
 	$("#message_div").live("click",function(){
 		window.location.href="${basePath}pay/paylist.htm?del=1"; 
 	})
-	JS.Engine.start('${basePath}comet');
-		JS.Engine.on({
-			start : function(cId, channelList, engine){  
-		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
-		    }, 
-		 "${channelName}" : function(data){//侦听一个channel
-			 $("#message_div").empty();
-		  if (data>0){
-			if ("${state}"=="a"){
-			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
-			}else{
-			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有'+data+'笔合同里有待确认的款项</div>';
-			}
-			$("#message_div").html(bb);
-		  }
-         },   
- 	}); 
-	
+// 	JS.Engine.start('${basePath}comet');
+// 		JS.Engine.on({
+// 			start : function(cId, channelList, engine){  
+// 		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
+// 		    }, 
+// 		 "${channelName}" : function(data){//侦听一个channel
+// 			 $("#message_div").empty();
+// 		  if (data>0){
+// 			if ("${state}"=="a"){
+// 			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
+// 			}else{
+// 			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有'+data+'笔合同里有待确认的款项</div>';
+// 			}
+// 			$("#message_div").html(bb);
+// 		  }
+//          },   
+//  	}); 
+		window.setInterval(message, 3000); 
 });
+	//提示消息
+	function message() {
+		$.get("${basePath}message.htm?channelName=${channelName}&ram="+ Math.random(),
+			function(data) {
+				if (typeof (data.count) != "undefined") {
+					$("#message_div").empty();
+					if ("${state}" == "a") {
+						var bb = '<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'
+								+ data.count + '笔合同里有待支付的款项</div>';
+					} else {
+						var bb = '<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有'
+								+ data.count + '笔合同里有待确认的款项</div>';
+					}
+					$("#message_div").html(bb);
+				}
 
-function closeMessage(obj){
-	$(obj).parent().remove();
-}
-function query(page){
-	var params=$("#serch_div").find(":input").serialize();
-	if(page!=undefined){
-		   params=params+"&currentPage="+page;
+			});
 	}
-	$.post("paylist.htm",params,function(data){
-		var tableList=$(data).find(".tabList");
-		var pager=$(data).find("#pager");
-		$(".tabList").empty();
-		$(".tabList").append(tableList.html());
-		var totalPage=pager.attr("totalPage");
-		var currentPage=pager.attr("currentPage");
-		loadPage(currentPage,totalPage,query);
-	})
-	
-}
-//读取详细信息
-function loadInfo(contractNo,id) {
-	var temp= $("#info_"+id).is(":hidden");//是否隐藏 
-	if (temp){
-	  $("#info_" + id).show();
-	  $("#info_" + id).load("${basePath}record/info.htm?contractNo=" + contractNo+"&recordNo="+id);
-	}else{
-	  $("#info_" + id).hide();
-	  $("#info_" + id).html('');
+	function closeMessage(obj) {
+		$(obj).parent().remove();
 	}
-}
-function closeContract(id){
-	 $("#info_" + id).hide();
-	 $("#info_" + id).html('');
-}
-//支付
-function pay(id){
-	var payReal=$("#pay_info_"+id).find(":input").val();
-	//payReal=payReal*100;
-	$.post("pay.htm",{id:id,payReal:payReal},function(data){
-		 if (data.isOk=="ok"){
-			 succInfo(function(){
-				 $("#pay_info_"+id).slideUp(200);
-				 query($("#pager").attr("currentPage"));
-			 },"付款成功！");
-			
-		 }else{
-			 errorInfo(data.error);
-			 $("#pay_info_"+id).slideUp(200);
-		 }
-	})
-}
-//确认支付
-function pay_ok(id){
-	$.post("pay_ok.htm",{id:id},function(data){
-		 if (data.isOk=="ok"){
-			 succInfo(function(){
-				 $("#pay_info_"+id).slideUp(200);
-				 query($("#pager").attr("currentPage"));
-			 },"确认成功！");
-		 }else{
-			 errorInfo(data.error);
-			 $("#pay_info_"+id).slideUp(200);
-		 }
-	})
-}
+	function query(page) {
+		var params = $("#serch_div").find(":input").serialize();
+		if (page != undefined) {
+			params = params + "&currentPage=" + page;
+		}
+		$.post("paylist.htm", params, function(data) {
+			var tableList = $(data).find(".tabList");
+			var pager = $(data).find("#pager");
+			$(".tabList").empty();
+			$(".tabList").append(tableList.html());
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
+		})
 
-function to_finance(payId){
-	window.open("${basePath}pay/tofinance.htm?payId="+payId);
-}
+	}
+	//读取详细信息
+	function loadInfo(contractNo, id) {
+		var temp = $("#info_" + id).is(":hidden");//是否隐藏 
+		if (temp) {
+			$("#info_" + id).show();
+			$("#info_" + id).load(
+					"${basePath}record/info.htm?contractNo=" + contractNo
+							+ "&recordNo=" + id);
+		} else {
+			$("#info_" + id).hide();
+			$("#info_" + id).html('');
+		}
+	}
+	function closeContract(id) {
+		$("#info_" + id).hide();
+		$("#info_" + id).html('');
+	}
+	//支付
+	function pay(id) {
+		var payReal = $("#pay_info_" + id).find(":input").val();
+		//payReal=payReal*100;
+		$.post("pay.htm", {
+			id : id,
+			payReal : payReal
+		}, function(data) {
+			if (data.isOk == "ok") {
+				succInfo(function() {
+					$("#pay_info_" + id).slideUp(200);
+					query($("#pager").attr("currentPage"));
+				}, "付款成功！");
+
+			} else {
+				errorInfo(data.error);
+				$("#pay_info_" + id).slideUp(200);
+			}
+		})
+	}
+	//确认支付
+	function pay_ok(id) {
+		$.post("pay_ok.htm", {
+			id : id
+		}, function(data) {
+			if (data.isOk == "ok") {
+				succInfo(function() {
+					$("#pay_info_" + id).slideUp(200);
+					query($("#pager").attr("currentPage"));
+				}, "确认成功！");
+			} else {
+				errorInfo(data.error);
+				$("#pay_info_" + id).slideUp(200);
+			}
+		})
+	}
+
+	function to_finance(payId) {
+		window.open("${basePath}pay/tofinance.htm?payId=" + payId);
+	}
 </script>
 </head>
 
