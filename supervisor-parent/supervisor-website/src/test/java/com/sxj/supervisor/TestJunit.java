@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.quartz;
+package com.sxj.supervisor;
 
 import org.junit.After;
 import org.junit.AfterClass;

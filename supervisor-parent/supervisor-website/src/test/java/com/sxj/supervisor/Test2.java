@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.quartz;
+package com.sxj.supervisor;
 
 
 public class Test2 {
