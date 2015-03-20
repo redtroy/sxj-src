@@ -32,6 +32,19 @@
 				validform = $("#edit_pwd").Validform({
 					tiptype : 3
 				});
+				
+				$('.btnPassword').click(function() {
+					$("#edit_pwd").find("input").val("");
+					validform.resetForm();
+					$('.maskdivgen').fadeIn(100);
+					$('.passwordPop').slideDown(200);
+				});
+				$('.modal-header .close').click(function() {
+					$('.maskdivgen').fadeOut(100);
+					$('.passwordPop').slideUp(200);
+				});
+				
+				window.setInterval(queryMessage,5000);
 			});
 
 			window.onload = function() {
@@ -42,19 +55,6 @@
 									$("#img_close"));
 						});
 			}
-			jQuery(document).ready(function($) {
-				$('.btnPassword').click(function() {
-					$("#edit_pwd").find("input").val("");
-					validform.resetForm();
-					$('.maskdivgen').fadeIn(100);
-					$('.passwordPop').slideDown(200);
-				})
-				$('.modal-header .close').click(function() {
-					$('.maskdivgen').fadeOut(100);
-					$('.passwordPop').slideUp(200);
-				})
-
-			})
 			function close_img() {
 				$("#img_close").hide();
 			}
@@ -81,7 +81,15 @@
 				})
 			}
 
-			function query() {
+			function queryMessage() {
+				$.get("${basePath}message.htm?channelName=${channelName}&ram="+Math.random(), function(data){
+					 if(typeof(data.count) != "undefined"){
+						 $("#message_div").empty();
+			        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data.count+"</strong>条新的备案申请！</div>";
+			        	 $("#message_div").append(bb);
+					 }
+					
+				 });
 
 			}
 		</script>
@@ -91,7 +99,24 @@
 	<@b.header />
 	<div class="fence-wide ly-clearFix">
 		<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
-		<div class="yard-870 rightSide ly-left" id="rightSide_div">
+		<div class="yard-870 rightSide pr ly-left" id="rightSide_div">
+		<div class="pa memNews">
+			<#if systemMessageCount??>
+				<div class="tipNews">
+				<p class="newsNum tr fb f14"><span>${systemMessageCount}</span></p>
+				<p class="newsCont">您有${systemMessageCount}条新系统消息</p></div>
+			</#if>
+			<#if transMessageCount??>
+				<div class="tipMess">
+					<p class="newsNum tr fb f14"><span>${transMessageCount}</span></p>
+					<p class="newsCont">您有${transMessageCount}条新交易消息</p>
+				</div>
+			</#if>
+			<div class="tipInv">
+				<p class="newsNum tr fb f14"><span>12</span></p>
+				<p class="newsCont">您有12条招标消息</p>
+			</div>
+		</div>
 			<div class="heading mb15 ly-clearFix">
 				<h1 class="ly-left">
 					<#if (member.flag)> <span class="title fontYH f20 fb">会员中心</span><span

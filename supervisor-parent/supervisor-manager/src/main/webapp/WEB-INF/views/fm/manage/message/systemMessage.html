@@ -1,0 +1,68 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<@b.pageScript/>
+<@b.dialogBox/>
+<script>
+ //查询
+   function query(page){
+	   var params=$("#serch").serialize();
+	   if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+		$.post("${basePath}sysMessage/query.htm",params,function(data){
+			var res=$(data).find("#rightBar").children("#res_table");
+			var pager=$(data).find("#rightBar").children("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		});
+	   
+   }
+</script>
+</head>
+<body>
+<div id="header" class="fence-wide">
+    <h1 class="yard-1200 ly-clearFix"><a href="#" class="logo"></a><span class="fontYH">私享家绿色门窗平台管理系统</span><span class="logOut ly-right"><a href="#">注销帐户并退出</a></span></h1>
+    <div class="border-header"></div>
+</div>
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<@b.menuPath/>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+   <@b.leftMenu />
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">消息管理</h2>
+     <form action="javascript:void(0);" id="serch">
+	    <div id="usrBox"><button class="button button-green button-news ly-right" onclick="javascript:window.location.href='toedit.htm'">发送新消息</button>   
+	          发送时间<input type="text" name="startDate" value="" datepicker id="time1">-<input type="text" name="endDate" value="" datepicker id="time1"><button class="btn btn-blue ml10" onclick="query();"><span>搜索</span></button>
+	    </div>
+    </form>
+    <div class="newsList f14" id="res_table">
+    <ul>
+    <#list messageList as message>
+      <li><a href="toedit.htm?infoId=${message.id}"  class="lnk-blue"><span class="time mr10"><#if (message.sendDate??)> ${message.sendDate?string("yyyy-MM-dd HH:mm:ss")}</#if></span>${message.title}</a></li>
+      <!-- <li class="bgGray"><a href="news.html"  class="lnk-blue"><span class="time mr10"><#if (message.sendDate??)> ${message.sendDate?string("yyyy-MM-dd HH:mm:ss")}</#if></span>${message.title}</a></li> -->
+    </#list>
+     </ul>
+      <@b.pager/>
+    </div>
+   </div>
+</div>
+<@b.footer />
+</body>
+</html>

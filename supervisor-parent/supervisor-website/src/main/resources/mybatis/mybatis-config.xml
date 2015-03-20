@@ -10,7 +10,7 @@
 	<settings>
 		<!-- changes from the defaults -->
 		<setting name="lazyLoadingEnabled" value="false" />
-		<setting name="localCacheScope" value="STATEMENT"/>
+		<setting name="localCacheScope" value="STATEMENT" />
 	</settings>
 
 	<typeHandlers>
@@ -95,19 +95,26 @@
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.LabelStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum" />
-			
-			<typeHandler
+
+		<typeHandler
 			handler="com.sxj.supervisor.typehandler.PayContractTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.PayContractTypeEnum" />
-				<typeHandler
-			handler="com.sxj.supervisor.typehandler.PayModeEnumTypeHandler"
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayModeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.PayModeEnum" />
-				<typeHandler
-			handler="com.sxj.supervisor.typehandler.PayStageEnumTypeHandler"
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayStageEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.PayStageEnum" />
-				<typeHandler
-			handler="com.sxj.supervisor.typehandler.PayTypeEnumTypeHandler"
+		<typeHandler handler="com.sxj.supervisor.typehandler.PayTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.PayTypeEnum" />
+
+
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MessageTypeEnumTypehandler"
+			javaType="com.sxj.supervisor.enu.message.MessageTypeEnum" />
+
+
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MessageStateEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.message.MessageStateEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

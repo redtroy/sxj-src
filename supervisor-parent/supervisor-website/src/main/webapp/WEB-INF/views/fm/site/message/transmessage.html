@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
+<title>交易信息</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<@b.dialogBox/>
+<@b.pageScript/>
+<script>
+$(function(){
+	$(":checkbox").change(function() {
+		 var ischecked=$(this).attr("checked");
+		 var type=$(this).val();
+		 var accept=false;
+		 var id=$(this).next("#configId").val();
+		 if(ischecked=="checked"){
+			 accept=true;
+		 }
+		 $.post("changeConfig.htm",{configId:id,isAccept:accept,configType:type} ,function(data){
+			 if(data.isOK=="ok"){
+				$(this).next("#configId").val(data.configId);
+			 }
+		 });
+	});
+	
+});
+
+function modifyState(id){
+	var state=$("#message_div_"+id).attr("state");
+	var type=$("#message_div_"+id).attr("type");
+	if(state==0){
+		$.post("modifyState.htm","id="+id,function(data){
+			if(data.isOK="ok"){
+				$("#message_div_"+id).attr("state",1);
+				$("#message_div_"+id).removeClass("bgUnread");
+				$("#message_div_"+id).next().removeClass("icon-mess-unread");
+				$("#message_div_"+id).next().addClass("icon-mess-read");
+				
+				if(type==0){
+					window.location.href="${basePath}record/query.htm";
+				}else if(type==1){
+					window.location.href="${basePath}pay/paylist.htm";
+				}
+				else if(type==2){
+					window.location.href="${basePath}rfid/logistics/queryList.htm";
+				}
+				else if(type==3){
+					window.location.href="${basePath}rfid/window/logistics/query.htm";
+				}
+			}
+		});
+	}else{
+		if(type==0){
+			window.location.href="${basePath}record/query.htm";
+		}else if(type==1){
+			window.location.href="${basePath}pay/paylist.htm";
+		}
+		else if(type==2){
+			window.location.href="${basePath}rfid/logistics/queryList.htm";
+		}
+		else if(type==3){
+			window.location.href="${basePath}rfid/window/logistics/query.htm";
+		}
+	}
+}
+
+</script>
+</head>
+<body>
+<@b.header />
+<div class="fence-wide ly-clearFix">
+<div class="yard-190 mt15 ly-left">
+<@b.leftMenu />
+</div>
+<div class="yard-870 rightSide ly-left" id="rightBar">
+<div class="heading mb15 ly-clearFix">
+<h1>
+  <span class="title fontYH f20 fb">交易信息</span></h1>
+</div>
+<div class="bgOk fb color-gray6"><span class="ml5">接收短信提醒设置：</span>
+<#list types as types>
+<#if types.getId()&lt;4>
+ <#assign isCheck="false"/>
+  <#assign configId=""/>
+	<#if messageConfig??>
+		<#list messageConfig as messageConfig>
+			<#if types.getId()==messageConfig.messageType.getId()>
+				 <#assign isCheck="true"/>
+				 <#assign configId="${messageConfig.id}"/>
+			</#if>
+		</#list>
+		<#if isCheck=="true">
+			<input id="configType" type="checkbox" value="${types}" checked="checked" />
+			<input id="configId" type="hidden" name="configId" value="${configId}"/>
+			<span class="ml5">${types.getName()}</span>
+		<#else>
+			<input id="configType" type="checkbox" value="${types}"/>
+			<input id="configId" type="hidden" name="configId" value=""/>
+			<span class="ml5">${types.getName()}</span>
+		</#if>
+	<#else>
+	<input id="configType" type="checkbox" value="${types}"/> 
+	<input id="configId" type="hidden" name="configId" value=""/>
+	<span class="ml5">${types.getName()}</span>
+	</#if>
+</#if>
+</#list>
+<div class="newsBox">
+<#list messageList as message>
+ <#if message.type=="CONTRACT">
+ 	<#if message.state.getId()==0>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="bgUnread colorPink" onclick="modifyState('${message.id}');"><span class="icon icon-mess-unread">
+ 	<#else>
+ 	<div  id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}"  class="colorPink" onclick="modifyState('${message.id}');"><span class="icon icon-mess-read">
+ 	</#if>
+ 	</span>
+ 	贵公司有份合同号${message.contractNo}的合同信息<span class="fb">${message.stateMessage}
+ 	</span>
+ 	</div>
+ <#elseif message.type=="PAY">
+ 	<#if message.state.getId()==0>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="bgUnread colorOrg" onclick="modifyState('${message.id}');"><span class="icon icon-mess-unread">
+ 	<#else>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="colorOrg" onclick="modifyState('${message.id}');"><span class="icon icon-mess-read">
+ 	</#if>
+ 	</span>
+ 	贵公司有笔单号${message.contractNo}的支付单<span class="fb">${message.stateMessage}
+ 	</span>
+ 	</div>
+ <#elseif message.type=="DELIVER">
+  	<#if message.state.getId()==0>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="bgUnread colorBlue" onclick="modifyState('${message.id}');"><span class="icon icon-mess-unread">
+ 	<#else>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="colorBlue" onclick="modifyState('${message.id}');"><span class="icon icon-mess-read">
+ 	</#if>
+ 	</span>
+ 	贵公司合同号${message.contractNo}的第${message.batchNo}批次货物<span class="fb">${message.stateMessage}
+ 	</span>
+ 	</div>
+ <#elseif message.type=="RECEIPT">
+ 	<#if message.state.getId()==0>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="bgUnread colorGreen" onclick="modifyState('${message.id}');"><span class="icon icon-mess-unread">
+ 	<#else>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="colorGreen" onclick="modifyState('${message.id}');"><span class="icon icon-mess-read">
+ 	</#if>
+ 	</span>
+ 	贵公司合同号${message.contractNo}的第${message.batchNo}批次货物<span class="fb">${message.stateMessage}
+ 	</span>
+ 	</div>
+ </#if>
+</#list>
+</div>
+<div class="ly-clearFix">
+<@b.pager/>
+</div>
+</div>
+<@b.footer />
+</body>
+</html>

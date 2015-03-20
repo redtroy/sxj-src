@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,7 +32,6 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
-import com.sxj.redis.core.RTopic;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.AccountEntity;
@@ -100,15 +98,15 @@ public class BasicController extends BaseController
     @Autowired
     private IContractService contractService;
     
-//    @PostConstruct
-//    public void init()
-//    {
-//        CometEngine engine = CometContext.getInstance().getEngine();
-//        // 启动 Comet Server Thread
-//        MessageThread cometServer = MessageThread.newInstance(engine);
-//        RTopic<String> topic1 = topics.getTopic("topic1");
-//        topic1.addListener(new CometMessageListener(cometServer));
-//    }
+    //    @PostConstruct
+    //    public void init()
+    //    {
+    //        CometEngine engine = CometContext.getInstance().getEngine();
+    //        // 启动 Comet Server Thread
+    //        MessageThread cometServer = MessageThread.newInstance(engine);
+    //        RTopic<String> topic1 = topics.getTopic("topic1");
+    //        topic1.addListener(new CometMessageListener(cometServer));
+    //    }
     
     @RequestMapping("notifyComet")
     public @ResponseBody void notifyComet(String channelName)
@@ -163,6 +161,16 @@ public class BasicController extends BaseController
                 map.put("member", member);
                 if (info.getMember().getFlag())
                 {
+                    
+                    Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                            + member.getMemberNo());
+                    Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                            + member.getMemberNo());
+                    map.put("systemMessageCount", systemMessageCount);
+                    map.put("transMessageCount", transMessageCount);
+                    
+                    //                    Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                    //                            + member.getMemberNo());
                     return "site/member/member-profile";
                 }
                 else
@@ -513,6 +521,44 @@ public class BasicController extends BaseController
             mq.setMemberName(keyword);
         }
         mq.setMemberTypeB(0);
+        List<MemberEntity> list = memberService.queryMembers(mq);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (MemberEntity memberEntity : list)
+        {
+            sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+                    + memberEntity.getMemberNo() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 会员联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCompleMember")
+    public @ResponseBody Map<String, String> autoCompleMember(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        MemberQuery mq = new MemberQuery();
+        if (keyword != "" && keyword != null)
+        {
+            mq.setMemberName(keyword);
+        }
+        //mq.setMemberTypeB(0);
         List<MemberEntity> list = memberService.queryMembers(mq);
         List strlist = new ArrayList();
         String sb = "";

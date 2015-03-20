@@ -96,8 +96,8 @@
   <servlet-mapping>
     <servlet-name>CometServlet</servlet-name>
     <url-pattern>/comet</url-pattern>
-<<<<<<< .mine  </servlet-mapping> -->
- <filter>
+ </servlet-mapping>--> 
+  <filter>
     <filter-name>CacheFilter</filter-name>
     <filter-class>com.tacitknowledge.filters.cache.CacheHeaderFilter</filter-class>
   </filter>

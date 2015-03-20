@@ -24,6 +24,6 @@
 		 <if test="condition.flag != null and condition.flag!=''">
 			<![CDATA[ AND (FLAG=#{condition.flag} OR FLAG=0)]]>
 		</if>
-		<![CDATA[ ORDER BY 'DESC']]>
+		<![CDATA[ ORDER BY `DESC`]]>
 	</select>
 </mapper>

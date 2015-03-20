@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
+<title>系统信息</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<@b.dialogBox/>
+<@b.pageScript/>
+<script>
+$(function(){
+	$("#configType").change(function() {
+		 var ischecked=$(this).attr("checked");
+		 var accept=false;
+		 var id=$("#configId").val();
+		 if(ischecked=="checked"){
+			 accept=true;
+		 }
+		 $.post("changeConfig.htm",{configId:id,isAccept:accept} ,function(data){
+			 if(data.isOK=="ok"){
+				 $("#configId").val(data.configId);
+			 }
+		 });
+	});
+	
+});
+
+function modifyState(id,infoId){
+	var state=$("#message_span_"+infoId).attr("state");
+	if(state==0){
+		$.post("modifyState.htm","id="+id,function(data){
+			if(data.isOK="ok"){
+				$("#message_span_"+infoId).attr("state",1);
+				$("#message_span_"+infoId).removeClass("icon-news-unread");
+				$("#message_span_"+infoId).addClass("icon-news-read");
+				$("#message_span2_"+infoId).addClass("color-gray6");
+			}
+		});
+	}
+	$("#messageInfo_"+infoId).css("display","");
+	$("#message_span_"+infoId).parent().removeClass("bgUnread colorOrg");
+	$("#message_span_"+infoId).parent().addClass("on");
+}
+
+function closeInfo(infoId){
+	$("#messageInfo_"+infoId).css("display","none");
+	$("#message_span_"+infoId).parent().removeClass("on");
+	
+}
+
+
+</script>
+</head>
+<body>
+<@b.header />
+<div class="fence-wide ly-clearFix">
+<div class="yard-190 mt15 ly-left">
+<@b.leftMenu />
+</div>
+<div class="yard-870 rightSide ly-left">
+<div class="heading mb15 ly-clearFix">
+<h1>
+  <span class="title fontYH f20 fb">系统信息</span></h1>
+</div>
+<div class="bgOk fb">
+<#if messageConfig??>
+	<#if messageConfig.messageType.getId()==4>
+		<#if messageConfig.isAccetp==true>
+			<input id="configType" name="input" type="checkbox"  value="4" checked="checked"/>
+			<input id="configId" type="hidden" name="configId" value="${messageConfig.id}"/>
+		<#else>
+			<input id="configType" name="input" type="checkbox"  value="4"/>
+			<input type="hidden" name="configId" value="${messageConfig.id}"/>
+		</#if>
+	<#else>
+		<input id="configType" name="input" type="checkbox"  value="4"/>
+		<input id="configId" type="hidden" name="configId" value=""/>
+	</#if>
+<#else>
+	<input id="configType" name="input" type="checkbox"  value="4"/>
+	<input id="configId" type="hidden" name="configId" value=""/>
+</#if>
+  <span class="ml5">接收系统信息短信</span></div>
+<div class="newsBox newsList">
+<#list messageList as message>
+ <#if message.state.getId()==0>
+ <div class="bgUnread colorOrg" onclick="modifyState('${message.id}','${message.infoId}');">
+	 <span id="message_span_${message.infoId}" state="${message.state.getId()}" class="icon icon-news-unread">
+	 </span>
+	 <span id="message_span2_${message.infoId}" class="mr10"><#if (message.sendDate??)> ${message.sendDate?date}</#if></span>${message.title}
+ </div>
+<#else>
+ <div onclick="modifyState('${message.id}','${message.infoId}');">
+  	<span id="message_span_${message.infoId}" state="${message.state.getId()}" class="icon icon-news-read"></span>
+  	<span id="message_span2_${message.infoId}" class="color-gray6 mr10"><#if (message.sendDate??)> ${message.sendDate?date}</#if></span>${message.title}
+ </div>
+ </#if>
+ 
+ <div id="messageInfo_${message.infoId}" class="newsInfo" style="display: none">
+ 	${message.message}
+	<div class="tc">
+	   <button class="button button-gray f12" onclick="closeInfo('${message.infoId}');">收起</button>
+	</div>
+</div>
+</#list>
+<!--<div class="on"><span class="icon icon-news-read"></span><span class="color-gray6 mr10">2015年3月2日</span>系统信息标题</div>  -->
+
+<!--<div><span class="icon icon-news-read"></span><span class="color-gray6 mr10">2015年3月5日</span>系统信息标题</div>  -->
+</div>
+<div class="ly-clearFix">
+<@b.pager/>
+</div>
+</div>
+<@b.footer />
+</body>
+</html>
