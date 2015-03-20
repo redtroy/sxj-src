@@ -7,21 +7,13 @@
     <artifactId>supervisor-parent</artifactId>
     <version>1.0</version>
   </parent>
-  <groupId>com.sxj</groupId>
   <artifactId>supervisor-tasks</artifactId>
-  <version>1.0</version>
   <name>supervisor-tasks</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-core</artifactId>
@@ -32,45 +24,12 @@
     	<artifactId>spring-extension</artifactId>
     </dependency>
     
-    	<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
-			<version>2.6.9</version>
-		</dependency>
 		
     <!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.webflow</groupId>
-			<artifactId>spring-webflow</artifactId>
-		</dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-		</dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-		</dependency>
 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-		</dependency>
 		<!-- mybatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -114,9 +73,8 @@
     	<artifactId>supervisor-service</artifactId>
     </dependency>
     <dependency>
-			<groupId>org.comet4j</groupId>
-			<artifactId>comet4j-tomcat7</artifactId>
-			<version>1.0</version>
-		</dependency>
+    	<groupId>junit</groupId>
+    	<artifactId>junit</artifactId>
+    </dependency>
   </dependencies>
 </project>
