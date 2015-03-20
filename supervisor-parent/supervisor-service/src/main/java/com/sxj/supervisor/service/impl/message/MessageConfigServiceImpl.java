@@ -1,5 +1,6 @@
-package com.sxj.supervisor.service.impl.meaagae;
+package com.sxj.supervisor.service.impl.message;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.message.IMessageConfigDao;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
-import com.sxj.supervisor.service.meaagae.IMessageConfigService;
+import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -27,10 +28,10 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     {
         try
         {
-            dao.delConfig(memberNo);
+            //dao.delConfig(memberNo);
             if (config != null && config.size() > 0)
             {
-                dao.addConfig(config);
+                dao.addConfigBatch(config);
             }
             
         }
@@ -39,6 +40,43 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             SxjLogger.error("设置消息配置错误", e, this.getClass());
             throw new ServiceException("设置消息配置错误", e);
             
+        }
+        
+    }
+    
+    @Override
+    @Transactional
+    public void updateConfig(List<MessageConfigEntity> config)
+            throws ServiceException
+    {
+        try
+        {
+            for (Iterator<MessageConfigEntity> iterator = config.iterator(); iterator.hasNext();)
+            {
+                MessageConfigEntity messageConfigEntity = (MessageConfigEntity) iterator.next();
+                if (messageConfigEntity.getId() == null)
+                {
+                    dao.addConfig(messageConfigEntity);
+                }
+                else
+                {
+                    MessageConfigEntity oldConfig = dao.getConfig(messageConfigEntity.getId());
+                    if (oldConfig == null)
+                    {
+                        dao.addConfig(messageConfigEntity);
+                    }
+                    else
+                    {
+                        dao.updateConfig(messageConfigEntity);
+                    }
+                }
+                
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("设置消息配置错误", e, this.getClass());
+            throw new ServiceException("设置消息配置错误", e);
         }
         
     }

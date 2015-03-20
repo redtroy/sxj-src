@@ -3,14 +3,15 @@ package com.sxj.supervisor.entity.message;
 import java.io.Serializable;
 
 import com.sxj.mybatis.orm.annotations.Column;
-import com.sxj.mybatis.orm.annotations.GeneratedValue;
-import com.sxj.mybatis.orm.annotations.GenerationType;
+import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.message.IMessageConfigDao;
 import com.sxj.supervisor.enu.message.MessageTypeEnum;
 
 @Table(name = "M_MESSAGE_CONFIG")
+@Entity(mapper = IMessageConfigDao.class)
 public class MessageConfigEntity extends Pagable implements Serializable
 {
     
@@ -20,7 +21,6 @@ public class MessageConfigEntity extends Pagable implements Serializable
     private static final long serialVersionUID = -5000262880259450715L;
     
     @Id(column = "ID")
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     
     @Column(name = "IS_ACCETP")

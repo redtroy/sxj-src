@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.message.ISystemInfoDao">
+	<resultMap id="com.sxj.supervisor.dao.message.ISystemInfoDao.systemInfo"
+		type="com.sxj.supervisor.entity.message.SystemMessageInfoEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE" jdbcType="VARCHAR" />
+		<result property="message" column="MESSAGE" jdbcType="VARCHAR" />
+		<result property="sendDate" column="SEND_DATE" jdbcType="TIMESTAMP" />
+		<result property="memberList" column="MEMBER_LIST" jdbcType="VARCHAR" />
+		<result property="memberTypeList" column="MEMBER_TYPE_LIST" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 高级查询 -->
+	<select id="queryMessageInfo"
+		resultMap="com.sxj.supervisor.dao.message.ISystemInfoDao.systemInfo"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_SYSTEM_INFO  WHERE 1=1]]>
+		<if
+			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
+			<![CDATA[AND SEND_DATE >=#{condition.startDate} AND SEND_DATE <= #{condition.endDate}]]>
+		</if>
+		<![CDATA[ ORDER BY SEND_DATE DESC]]>
+	</select>
+</mapper>

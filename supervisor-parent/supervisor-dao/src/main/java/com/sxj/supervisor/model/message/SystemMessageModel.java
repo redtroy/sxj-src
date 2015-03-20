@@ -17,9 +17,9 @@ public class SystemMessageModel extends Pagable implements Serializable
      */
     private static final long serialVersionUID = -7537614474809857668L;
     
-    private SystemMessageEntity message;
+    private SystemMessageEntity message = new SystemMessageEntity();
     
-    private SystemMessageInfoEntity info;
+    private SystemMessageInfoEntity info = new SystemMessageInfoEntity();
     
     public String getMemberNo()
     {
@@ -63,12 +63,12 @@ public class SystemMessageModel extends Pagable implements Serializable
     
     public String getId()
     {
-        return info.getId();
+        return message.getId();
     }
     
     public void setId(String id)
     {
-        info.setId(id);
+        message.setId(id);
     }
     
     public String getTitle()

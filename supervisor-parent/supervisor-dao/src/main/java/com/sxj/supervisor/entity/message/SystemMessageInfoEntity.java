@@ -4,13 +4,16 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.sxj.mybatis.orm.annotations.Column;
+import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.message.ISystemInfoDao;
 
 @Table(name = "M_SYSTEM_INFO")
+@Entity(mapper = ISystemInfoDao.class)
 public class SystemMessageInfoEntity extends Pagable implements Serializable
 {
     
@@ -31,6 +34,12 @@ public class SystemMessageInfoEntity extends Pagable implements Serializable
     
     @Column(name = "SEND_DATE")
     private Date sendDate;
+    
+    @Column(name = "MEMBER_LIST")
+    private String memberList;
+    
+    @Column(name = "MEMBER_TYPE_LIST")
+    private String memberTypeList;
     
     public String getId()
     {
@@ -70,6 +79,26 @@ public class SystemMessageInfoEntity extends Pagable implements Serializable
     public void setSendDate(Date sendDate)
     {
         this.sendDate = sendDate;
+    }
+    
+    public String getMemberList()
+    {
+        return memberList;
+    }
+    
+    public void setMemberList(String memberList)
+    {
+        this.memberList = memberList;
+    }
+    
+    public String getMemberTypeList()
+    {
+        return memberTypeList;
+    }
+    
+    public void setMemberTypeList(String memberTypeList)
+    {
+        this.memberTypeList = memberTypeList;
     }
     
 }

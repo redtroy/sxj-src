@@ -14,8 +14,18 @@
 		<result property="sendDate" column="SEND_DATE" jdbcType="TIMESTAMP"/>
 	</resultMap>
 	
+	<resultMap id="com.sxj.supervisor.dao.message.ISystemMessageDao.systemMessageEntity"
+		type="com.sxj.supervisor.entity.message.SystemMessageEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
+		<result property="infoId" column="INFO_ID" jdbcType="VARCHAR" />
+		<result property="memberType" column="MEMBER_TYPE" jdbcType="INTEGER" />
+		<result property="state" column="STATE" jdbcType="INTEGER"/>
+	</resultMap>
+	
 	<!-- 高级查询 -->
-	<select id="queryMessageInfo"
+	<select id="queryMessageModel"
 		resultMap="com.sxj.supervisor.dao.message.ISystemMessageDao.systemMessage"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM M_SYSTEM_MESSAGE message inner join M_SYSTEM_INFO info on message.INFO_ID=info.ID  WHERE 1=1]]>
@@ -24,4 +34,11 @@
 		</if>
 		<![CDATA[ ORDER BY message.STATE DESC]]>
 	</select>
+	<!-- 高级查询 -->
+	<select id="queryMessage"
+		resultMap="com.sxj.supervisor.dao.message.ISystemMessageDao.systemMessageEntity"
+		parameterType="java.lang.String">
+		<![CDATA[SELECT * FROM M_SYSTEM_MESSAGE message  WHERE message.INFO_ID=#{infoId}]]>
+	</select>
+	
 </mapper>

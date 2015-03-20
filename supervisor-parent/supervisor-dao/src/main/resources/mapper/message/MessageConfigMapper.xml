@@ -5,7 +5,7 @@
 	<resultMap id="com.sxj.supervisor.dao.message.IMessageConfigDao.messageConfig"
 		type="com.sxj.supervisor.entity.message.MessageConfigEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="isAccept" column="IS_ACCETP" jdbcType="INTEGER" />
+		<result property="isAccetp" column="IS_ACCETP" jdbcType="INTEGER" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="INTEGER" />
 		<result property="messageType" column="MESSAGE_TYPE" jdbcType="VARCHAR" />
 		<result property="phone" column="PHONE" jdbcType="VARCHAR"/>
@@ -14,11 +14,8 @@
 	<!-- 高级查询 -->
 	<select id="queryConfigList"
 		resultMap="com.sxj.supervisor.dao.message.IMessageConfigDao.messageConfig"
-		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM M_MESSAGE_CONFIG  WHERE 1=1]]>
-		<if test="condition.memberNo!= null and condition.memberNo != ''">
-			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
-		</if>
+		parameterType="java.lang.String">
+		<![CDATA[SELECT * FROM M_MESSAGE_CONFIG  WHERE MEMBER_NO = #{memberNo}]]>
 		<![CDATA[ ORDER BY MESSAGE_TYPE DESC]]>
 	</select>
 	

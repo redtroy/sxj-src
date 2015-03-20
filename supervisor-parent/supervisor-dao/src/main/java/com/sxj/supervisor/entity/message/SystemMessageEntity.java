@@ -3,15 +3,18 @@ package com.sxj.supervisor.entity.message;
 import java.io.Serializable;
 
 import com.sxj.mybatis.orm.annotations.Column;
+import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.message.ISystemMessageDao;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.message.MessageStateEnum;
 
 @Table(name = "M_SYSTEM_MESSAGE")
+@Entity(mapper = ISystemMessageDao.class)
 public class SystemMessageEntity extends Pagable implements Serializable
 {
     
@@ -26,6 +29,9 @@ public class SystemMessageEntity extends Pagable implements Serializable
     
     @Column(name = "MEMBER_NO")
     private String memberNo;
+    
+    @Column(name = "MEMBER_NAME")
+    private String memberName;
     
     @Column(name = "INFO_ID")
     private String infoId;
@@ -84,6 +90,16 @@ public class SystemMessageEntity extends Pagable implements Serializable
     public void setState(MessageStateEnum state)
     {
         this.state = state;
+    }
+    
+    public String getMemberName()
+    {
+        return memberName;
+    }
+    
+    public void setMemberName(String memberName)
+    {
+        this.memberName = memberName;
     }
     
 }

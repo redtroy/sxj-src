@@ -47,6 +47,7 @@ import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
@@ -165,6 +166,15 @@ public class BasicController extends BaseController
                 map.put("member", member);
                 if (info.getMember().getFlag())
                 {
+                    Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                            + member.getMemberNo());
+                    Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                            + member.getMemberNo());
+                    map.put("systemMessageCount", systemMessageCount);
+                    map.put("transMessageCount", transMessageCount);
+                    
+                    //                    Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                    //                            + member.getMemberNo());
                     return "site/member/member-profile";
                 }
                 else
@@ -515,6 +525,44 @@ public class BasicController extends BaseController
             mq.setMemberName(keyword);
         }
         mq.setMemberTypeB(0);
+        List<MemberEntity> list = memberService.queryMembers(mq);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (MemberEntity memberEntity : list)
+        {
+            sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+                    + memberEntity.getMemberNo() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 会员联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCompleMember")
+    public @ResponseBody Map<String, String> autoCompleMember(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        MemberQuery mq = new MemberQuery();
+        if (keyword != "" && keyword != null)
+        {
+            mq.setMemberName(keyword);
+        }
+        //mq.setMemberTypeB(0);
         List<MemberEntity> list = memberService.queryMembers(mq);
         List strlist = new ArrayList();
         String sb = "";

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
@@ -9,6 +9,65 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.dialogBox/>
 <@b.pageScript/>
+<script>
+$(function(){
+	$(":checkbox").change(function() {
+		 var ischecked=$(this).attr("checked");
+		 var type=$(this).val();
+		 var accept=false;
+		 var id=$(this).next("#configId").val();
+		 if(ischecked=="checked"){
+			 accept=true;
+		 }
+		 $.post("changeConfig.htm",{configId:id,isAccept:accept,configType:type} ,function(data){
+			 if(data.isOK=="ok"){
+				$(this).next("#configId").val(data.configId);
+			 }
+		 });
+	});
+	
+});
+
+function modifyState(id){
+	var state=$("#message_div_"+id).attr("state");
+	var type=$("#message_div_"+id).attr("type");
+	if(state==0){
+		$.post("modifyState.htm","id="+id,function(data){
+			if(data.isOK="ok"){
+				$("#message_div_"+id).attr("state",1);
+				$("#message_div_"+id).removeClass("bgUnread");
+				$("#message_div_"+id).next().removeClass("icon-mess-unread");
+				$("#message_div_"+id).next().addClass("icon-mess-read");
+				
+				if(type==0){
+					window.location.href="${basePath}record/query.htm";
+				}else if(type==1){
+					window.location.href="${basePath}pay/paylist.htm";
+				}
+				else if(type==2){
+					window.location.href="${basePath}rfid/logistics/queryList.htm";
+				}
+				else if(type==3){
+					window.location.href="${basePath}rfid/window/logistics/query.htm";
+				}
+			}
+		});
+	}else{
+		if(type==0){
+			window.location.href="${basePath}record/query.htm";
+		}else if(type==1){
+			window.location.href="${basePath}pay/paylist.htm";
+		}
+		else if(type==2){
+			window.location.href="${basePath}rfid/logistics/queryList.htm";
+		}
+		else if(type==3){
+			window.location.href="${basePath}rfid/window/logistics/query.htm";
+		}
+	}
+}
+
+</script>
 </head>
 <body>
 <@b.header />
@@ -24,50 +83,74 @@
 <div class="bgOk fb color-gray6"><span class="ml5">接收短信提醒设置：</span>
 <#list types as types>
 <#if types.getId()&lt;4>
-	<#if config??>
-		<#list config as config>
-			<#if types.getId()==config.messageType.getId()>
-				<input name="" type="checkbox" value="${types.getId()}" checked="checked" />
-				<span class="ml5">${types.getName()}</span>
+ <#assign isCheck="false"/>
+  <#assign configId=""/>
+	<#if messageConfig??>
+		<#list messageConfig as messageConfig>
+			<#if types.getId()==messageConfig.messageType.getId()>
+				 <#assign isCheck="true"/>
+				 <#assign configId="${messageConfig.id}"/>
 			</#if>
 		</#list>
+		<#if isCheck=="true">
+			<input id="configType" type="checkbox" value="${types}" checked="checked" />
+			<input id="configId" type="hidden" name="configId" value="${configId}"/>
+			<span class="ml5">${types.getName()}</span>
+		<#else>
+			<input id="configType" type="checkbox" value="${types}"/>
+			<input id="configId" type="hidden" name="configId" value=""/>
+			<span class="ml5">${types.getName()}</span>
+		</#if>
 	<#else>
-	<input name="" type="checkbox" value="${types.getId()}"/> 
+	<input id="configType" type="checkbox" value="${types}"/> 
+	<input id="configId" type="hidden" name="configId" value=""/>
 	<span class="ml5">${types.getName()}</span>
 	</#if>
 </#if>
 </#list>
 <div class="newsBox">
 <#list messageList as message>
-<#if message.state.getId()==0>
-<div class="bgUnread colorPink">
-<span class="icon icon-mess-unread"></span>
-<#else>
-<div class="colorPink">
-<span class="icon icon-mess-read"></span>
-</#if>
-<#if message.state.getId()==0>
-<div class="bgUnread colorOrg">
-<span class="icon icon-mess-unread"></span>
-<#else>
-<div class="colorOrg">
-<span class="icon icon-mess-read"></span>
-</#if>
-<#if message.state.getId()==0>
-<div class="bgUnread colorBlue">
-<span class="icon icon-mess-unread"></span>
-<#else>
-<div class="colorBlue">
-<span class="icon icon-mess-read"></span>
-</#if>
-<#if message.state.getId()==0>
-<div class="bgUnread colorGreen">
-<span class="icon icon-mess-unread"></span>
-<#else>
-<div class="colorGreen">
-<span class="icon icon-mess-read"></span>
-</#if>
-${message.message}<span class="fb">${message.stateMessage}</span></div>	
+ <#if message.type=="CONTRACT">
+ 	<#if message.state.getId()==0>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="bgUnread colorPink" onclick="modifyState('${message.id}');"><span class="icon icon-mess-unread">
+ 	<#else>
+ 	<div  id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}"  class="colorPink" onclick="modifyState('${message.id}');"><span class="icon icon-mess-read">
+ 	</#if>
+ 	</span>
+ 	贵公司有份合同号${message.contractNo}的合同信息<span class="fb">${message.stateMessage}
+ 	</span>
+ 	</div>
+ <#elseif message.type=="PAY">
+ 	<#if message.state.getId()==0>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="bgUnread colorOrg" onclick="modifyState('${message.id}');"><span class="icon icon-mess-unread">
+ 	<#else>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="colorOrg" onclick="modifyState('${message.id}');"><span class="icon icon-mess-read">
+ 	</#if>
+ 	</span>
+ 	贵公司有笔单号${message.contractNo}的支付单<span class="fb">${message.stateMessage}
+ 	</span>
+ 	</div>
+ <#elseif message.type=="DELIVER">
+  	<#if message.state.getId()==0>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="bgUnread colorBlue" onclick="modifyState('${message.id}');"><span class="icon icon-mess-unread">
+ 	<#else>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="colorBlue" onclick="modifyState('${message.id}');"><span class="icon icon-mess-read">
+ 	</#if>
+ 	</span>
+ 	贵公司合同号${message.contractNo}的第${message.batchNo}批次货物<span class="fb">${message.stateMessage}
+ 	</span>
+ 	</div>
+ <#elseif message.type=="RECEIPT">
+ 	<#if message.state.getId()==0>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="bgUnread colorGreen" onclick="modifyState('${message.id}');"><span class="icon icon-mess-unread">
+ 	<#else>
+ 	<div id="message_div_${message.id}" type="${message.type.getId()}" state="${message.state.getId()}" class="colorGreen" onclick="modifyState('${message.id}');"><span class="icon icon-mess-read">
+ 	</#if>
+ 	</span>
+ 	贵公司合同号${message.contractNo}的第${message.batchNo}批次货物<span class="fb">${message.stateMessage}
+ 	</span>
+ 	</div>
+ </#if>
 </#list>
 </div>
 <div class="ly-clearFix">
