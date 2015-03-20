@@ -57,7 +57,7 @@ public class FinanceController extends BaseController {
 			map.put("channelName", channelName);
 			// 注册监听
 
-			registChannel(channelName);
+			//registChannel(channelName);
 		} catch (Exception e) {
 			throw new WebException(e.getMessage());
 		}

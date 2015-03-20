@@ -62,7 +62,7 @@ public class RfidApplicationController extends BaseController
             {
                 CometServiceImpl.setCount(RfidChannel.RFID_APPLY_MESSAGE, 0l);
             }
-            registChannel(RfidChannel.RFID_APPLY_MESSAGE);
+           // registChannel(RfidChannel.RFID_APPLY_MESSAGE);
         }
         catch (Exception e)
         {

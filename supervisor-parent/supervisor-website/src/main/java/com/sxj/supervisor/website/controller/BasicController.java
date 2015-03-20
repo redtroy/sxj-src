@@ -22,8 +22,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import org.comet4j.core.CometContext;
-import org.comet4j.core.CometEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -61,8 +59,6 @@ import com.sxj.supervisor.service.member.IMemberLogService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
-import com.sxj.supervisor.website.comet.CometMessageListener;
-import com.sxj.supervisor.website.comet.MessageThread;
 import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.comet.CometServiceImpl;
@@ -104,15 +100,15 @@ public class BasicController extends BaseController
     @Autowired
     private IContractService contractService;
     
-    @PostConstruct
-    public void init()
-    {
-        CometEngine engine = CometContext.getInstance().getEngine();
-        // 启动 Comet Server Thread
-        MessageThread cometServer = MessageThread.newInstance(engine);
-        RTopic<String> topic1 = topics.getTopic("topic1");
-        topic1.addListener(new CometMessageListener(cometServer));
-    }
+//    @PostConstruct
+//    public void init()
+//    {
+//        CometEngine engine = CometContext.getInstance().getEngine();
+//        // 启动 Comet Server Thread
+//        MessageThread cometServer = MessageThread.newInstance(engine);
+//        RTopic<String> topic1 = topics.getTopic("topic1");
+//        topic1.addListener(new CometMessageListener(cometServer));
+//    }
     
     @RequestMapping("notifyComet")
     public @ResponseBody void notifyComet(String channelName)
