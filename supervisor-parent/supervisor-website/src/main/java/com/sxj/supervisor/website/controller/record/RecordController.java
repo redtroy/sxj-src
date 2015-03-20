@@ -78,7 +78,7 @@ public class RecordController extends BaseController {
 					+ userBean.getMember().getMemberNo();
 			map.put("channelName", channelName);
 			// 注册监听
-			registChannel(channelName);
+			//registChannel(channelName);
 			return "site/record/contract-list";
 		} catch (Exception e) {
 			SxjLogger.error("查询合同信息错误", e, this.getClass());

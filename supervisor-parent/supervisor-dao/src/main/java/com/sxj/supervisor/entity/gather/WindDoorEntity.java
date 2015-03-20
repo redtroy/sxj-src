@@ -61,6 +61,20 @@ public class WindDoorEntity implements Serializable {
 	@Column(name = "GIF_PATH")
 	private String gifPath;
 
+	/**
+	 * 抓去最新数据的标记
+	 */
+	@Column(name = "FLAG")
+	private int flag;
+
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
+
 	public String getFilePath() {
 		return filePath;
 	}

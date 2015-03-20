@@ -14,12 +14,13 @@
 		<result property="jzrq" column="JZRQ" jdbcType="VARCHAR" />
 		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
 		<result property="gifPath" column="GIF_PATH" jdbcType="VARCHAR" />
+		<result property="flag" column="FLAG" jdbcType="INTEGER" />
 	</resultMap>
 
 
 	<!-- 高级查询 -->
-	<select id="getWindDoor" resultMap="WindDoorResultMap"
+	<select id="getMaxWindDoor" resultMap="WindDoorResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		
+		<![CDATA[SELECT * FROM WIND_DOOR ORDER BY FLAG DESC ]]>
 	</select>
 </mapper>

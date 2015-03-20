@@ -9,9 +9,9 @@
 		<version>1.0</version>
 	</parent>
 	<artifactId>supervisor-website</artifactId>
-	<packaging>war</packaging>
 	<name>supervisor-website Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -23,28 +23,34 @@
 			<artifactId>tk-filters</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.comet4j</groupId>
 			<artifactId>comet4j-tomcat7</artifactId>
 			<version>1.0</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
 			<version>2.6.9</version>
 		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.2.1</version>
+		</dependency>
 		<!-- springside -->
 		<!-- sxj -->
-		<dependency>
-			<groupId>com.sxj</groupId>
-			<artifactId>supervisor-service</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>rfid-service</artifactId>
 			<version>1.0</version>
 		</dependency>
-
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -159,6 +165,11 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>statemachine-spring</artifactId>
 			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sxj</groupId>

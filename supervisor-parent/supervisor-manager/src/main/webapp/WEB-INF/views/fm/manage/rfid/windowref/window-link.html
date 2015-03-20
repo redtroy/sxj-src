@@ -14,20 +14,33 @@
 <@b.dialogBox/>
 <script>
 $(function(){
-	  JS.Engine.start('${basePath}comet');
-		JS.Engine.on({
-			start : function(cId, channelList, engine){  
-		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
-		    }, 
-		 "${channelName}" : function(data){//侦听一个channel
-			 $("#message_div").empty();
-		  if (data>0){
-			var bb='<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>'+data+'</strong>条新的门窗RFID关联申请！</div>';
-			$("#message_div").html(bb);
-		  }
-       },   
-	}); 
+// 	  JS.Engine.start('${basePath}comet');
+// 		JS.Engine.on({
+// 			start : function(cId, channelList, engine){  
+// 		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
+// 		    }, 
+// 		 "${channelName}" : function(data){//侦听一个channel
+// 			 $("#message_div").empty();
+// 		  if (data>0){
+// 			var bb='<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>'+data+'</strong>条新的门窗RFID关联申请！</div>';
+// 			$("#message_div").html(bb);
+// 		  }
+//        },   
+// 	}); 
+	window.setInterval(message, 3000); 
 })
+
+//提示消息
+function message(){
+	 $.get("${basePath}message.htm?channelName=${channelName}&ram="+Math.random(), function(data){
+		 if(typeof(data.count) != "undefined"){
+			 $("#message_div").empty();
+	 		 var bb='<div class="msgBox msg-remind record-tip"><span class="icon icon16 icon-remind"></span>有<strong>'+data.count+'</strong>条新的门窗RFID关联申请！</div>';
+	 		 $("#message_div").html(bb);
+		 }
+		
+	 });
+}
 function query(page){
 	var params=$("#search_form").serialize();
 	 if(page!=undefined){

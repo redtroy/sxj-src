@@ -82,8 +82,8 @@ public class MemberController extends BaseController {
 				CometServiceImpl.setCount(
 						MessageChannel.MEMBER_PERFECT_MESSAGE, 0l);
 			}
-			registChannel(MessageChannel.MEMBER_MESSAGE);
-			registChannel(MessageChannel.MEMBER_PERFECT_MESSAGE);
+//			registChannel(MessageChannel.MEMBER_MESSAGE);
+//			registChannel(MessageChannel.MEMBER_PERFECT_MESSAGE);
 			return "manage/member/member";
 		} catch (Exception e) {
 			SxjLogger.error("查询会员信息错误", e, this.getClass());
