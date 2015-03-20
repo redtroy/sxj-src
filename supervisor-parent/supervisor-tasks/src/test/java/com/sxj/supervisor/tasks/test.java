@@ -19,8 +19,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.dao.gather.AlDao;
 import com.sxj.supervisor.entity.gather.AlEntity;
-import com.sxj.supervisor.service.gather.IAlService;
+import com.sxj.supervisor.tasks.Model.DataMap;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
@@ -28,7 +29,7 @@ import com.sxj.supervisor.service.gather.IAlService;
 public class test {
 
 	@Autowired
-	private IAlService al;
+	private AlDao al;
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {

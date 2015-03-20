@@ -1,4 +1,4 @@
-package com.sxj.supervisor.tasks;
+package com.sxj.supervisor.tasks.Model;
 
 import java.util.Map;
 

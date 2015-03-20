@@ -18,6 +18,7 @@
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 	<import resource="classpath*:spring/fast-dfs.xml" />
 	<import resource="classpath*:spring/mybatis-shard.xml" />
+	<import resource="classpath*:spring/quartz_job.xml" />
 	<!-- <import resource="classpath*:spring/applicationContext-csrf.xml" /> -->
 	<task:annotation-driven />
 	<context:annotation-config />
@@ -29,7 +30,6 @@
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
-
 	<!-- 事务管理器, Jdbc单数据源事务 <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
 		<property name="dataSource" ref="dataSource" /> </bean> -->
 

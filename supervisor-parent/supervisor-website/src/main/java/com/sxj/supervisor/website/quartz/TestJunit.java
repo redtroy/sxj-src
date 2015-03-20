@@ -1,4 +1,4 @@
-package com.sxj.supervisor.tasks;
+package com.sxj.supervisor.website.quartz;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -11,7 +11,8 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
-public class Test2 {
+public class TestJunit {
+
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 	}
@@ -22,7 +23,5 @@ public class Test2 {
 
 	@Test
 	public void test() {
-		test t = new test();
-		t.al();
 	}
 }

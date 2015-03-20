@@ -1,4 +1,4 @@
-package com.sxj.supervisor.tasks;
+package com.sxj.supervisor.service.tasks.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -12,42 +12,28 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.stereotype.Service;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 
+import com.sxj.cache.manager.CacheLevel;
+import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
-import com.sxj.supervisor.service.gather.IWindDoorService;
+import com.sxj.supervisor.service.tasks.IWindDoorService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
-public class Dome2 {
+@Service
+public class WindDoorServiceImpl implements IWindDoorService {
+
+	@Autowired
+	private WindDoorDao wda;
 
 	@Autowired
 	private IStorageClientService storageClientService;
 
-	@Autowired
-	private IWindDoorService wds;
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	@Test
-	public void Dome() {
-		// ConnectionDb cn = new ConnectionDb();
+	@Override
+	public void WindDoorGather() {
 		try {
 			Response response = Jsoup
 					.connect(
@@ -60,7 +46,8 @@ public class Dome2 {
 					.val();
 			Map<String, String> cookies = response.cookies();
 			int pageNum = page(__VIEWSTATE, __EVENTVALIDATION, cookies);
-			for (int i = 1; i <= pageNum; i++) {
+			int flag = 0;
+			STOP: for (int i = 1; i <= pageNum; i++) {
 				Map map = new HashMap();
 				// map.put("ImageButton1.x", "32");
 				// map.put("ImageButton1.y", "10");
@@ -99,45 +86,47 @@ public class Dome2 {
 							.getElementsByTag("a").attr("href");
 					String qy = tr.getElementsByTag("td").get(3).text();// 区域
 					String jzsj = tr.getElementsByTag("td").get(4).text();// 截至日期
-					System.out.println(bdfl);
-					System.out.println(xmmc);
-					System.out.println(qy);
-					System.out.println(jzsj);
-					System.out.println(url);
+					// System.out.println(bdfl);
+					// System.out.println(xmmc);
+					// System.out.println(qy);
+					// System.out.println(jzsj);
+					// System.out.println(url);
+					String GongGaoGuid = url.split("GongGaoGuid=")[1];
+					System.out.println(GongGaoGuid);
+					String oldGongGaoGuid = (String) HierarchicalCacheManager
+							.get(CacheLevel.REDIS, "windDoor", "GongGaoGuid");
+					if (oldGongGaoGuid != null
+							&& GongGaoGuid.equals(oldGongGaoGuid)) {
+						break STOP;
+					}
+					if (flag == 0) {
+						HierarchicalCacheManager.set(CacheLevel.REDIS,
+								"windDoor", "GongGaoGuid", GongGaoGuid);
+					}
+
 					Map<String, String> contentMap = content("http://www1.njcein.com.cn"
 							+ url);
-					// String uuid = UUID.randomUUID().toString();
-					// String sql =
-					// "insert into WIND_DOOR(ID,BDFL,XMMC,QY,JZRQ,CONTENT) values(?,?,?,?,?,?)";
 					String filePath = storageClientService.uploadFile(null,
 							new ByteArrayInputStream(contentMap.get("content")
 									.getBytes()), contentMap.get("content")
 									.getBytes().length, "txt".toUpperCase());
-					// List<String> list = new ArrayList<String>();
-					// list.add(uuid);
-					// list.add(bdfl);
-					// list.add(xmmc);
-					// list.add(qy);
-					// list.add(jzsj);
-					// list.add(filePath);
-					// System.out.println(sql);
-					// cn.DBHelper2(sql, list);
-					WindDoorEntity wd = new WindDoorEntity();
-					wd.setBdfl(bdfl);
-					wd.setFilePath(filePath);
-					wd.setJzrq(jzsj);
-					wd.setQy(qy);
-					wd.setXmmc(xmmc);
+					WindDoorEntity windDoor = new WindDoorEntity();
+					windDoor.setBdfl(bdfl);
+					windDoor.setFilePath(filePath);
+					windDoor.setJzrq(jzsj);
+					windDoor.setQy(qy);
+					windDoor.setXmmc(xmmc);
 					if (contentMap.get("gifPath") != null) {
-						wd.setGifPath(contentMap.get("gifPath"));
+						windDoor.setGifPath(contentMap.get("gifPath"));
 					}
-					wds.addWindDoor(wd);
+					wda.addWindDoor(windDoor);
+					flag++;
 				}
-				// System.out.println(doc);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public static int page(String __VIEWSTATE, String __EVENTVALIDATION,
