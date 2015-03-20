@@ -28,11 +28,11 @@
 			<artifactId>tk-filters</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.comet4j</groupId>
 			<artifactId>comet4j-tomcat7</artifactId>
 			<version>1.0</version>
-		</dependency>
+		</dependency> -->
 		<!-- springside -->
 		<dependency>
 			<groupId>com.sxj</groupId>

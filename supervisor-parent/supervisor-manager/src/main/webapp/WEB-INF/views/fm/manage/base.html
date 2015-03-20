@@ -483,9 +483,16 @@ $("#menuPath").load("${basePath}menu_path.htm");
 </script>
 </#macro>
 <#macro footer>
+<script type="text/javascript">
+$(document).ready(function(){
+	var newDate = new Date();
+	var year = newDate.getFullYear();
+	$("#yearSapn").text(year);
+});
+</script>
 <div id="footer" class="fence-wide">
   <div class="yard-1200">
-    <p>&copy; 2014 私享家绿色门窗平台&nbsp;版权所有&nbsp;<a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14040094号-1</a></p>
+    <p>&copy; <span id="yearSapn"></span> 私享家绿色门窗平台&nbsp;版权所有&nbsp;<a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14040094号-1</a></p>
   </div>
 </div>
 

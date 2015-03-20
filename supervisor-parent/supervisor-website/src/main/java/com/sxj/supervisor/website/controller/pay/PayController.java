@@ -121,7 +121,7 @@ public class PayController extends BaseController
             map.put("channelName", channelName);
             // 注册监听
             
-            registChannel(channelName);
+            //registChannel(channelName);
         }
         catch (Exception e)
         {

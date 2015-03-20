@@ -35,22 +35,36 @@ $(function(){
 	$("#message_div").live("click",function(){
 		window.location.href="${basePath}finance/finance.htm?del=1"; 
 	})
-	JS.Engine.start('${basePath}comet');
-		JS.Engine.on({
-			start : function(cId, channelList, engine){  
-		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
-		    }, 
-		 "${channelName}" : function(data){//侦听一个channel
-			 $("#message_div").empty();
-		  if (data>0){
-			if ("${state}"=="a"){
-			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
-			}
-			$("#message_div").html(bb);
-		  }
-         },   
- 	}); 
+// 	JS.Engine.start('${basePath}comet');
+// 		JS.Engine.on({
+// 			start : function(cId, channelList, engine){  
+// 		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
+// 		    }, 
+// 		 "${channelName}" : function(data){//侦听一个channel
+// 			 $("#message_div").empty();
+// 		  if (data>0){
+// 			if ("${state}"=="a"){
+// 			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'+data+'笔合同里有待支付的款项</div>';
+// 			}
+// 			$("#message_div").html(bb);
+// 		  }
+//          },   
+//  	});
+		window.setInterval(message, 3000); 
 })
+//提示消息
+function message(){
+	 $.get("${basePath}message.htm?channelName=${channelName}&ram="+Math.random(), function(data){
+		 if(typeof(data.count) != "undefined"){
+			 $("#message_div").empty();
+	 			if ("${state}"=="a"){
+	 			var bb='<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'+data.count+'笔合同里有待支付的款项</div>';
+	 			}
+	 			$("#message_div").html(bb);
+		 }
+		
+	 });
+}
  function  loadBatch(contractNo,id,type){
 		var isopen=$("#info1_" + id).attr("isopen");
 		if(isopen=="0"){

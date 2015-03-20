@@ -83,7 +83,7 @@
     <url-pattern>/druid/*</url-pattern>
 </servlet-mapping> 
 	
- <!--  <listener>
+  <!-- <listener>
     <description>Comet4J容器侦听</description>
     <listener-class>org.comet4j.core.CometAppListener</listener-class>
   </listener>
@@ -96,8 +96,9 @@
   <servlet-mapping>
     <servlet-name>CometServlet</servlet-name>
     <url-pattern>/comet</url-pattern>
-  </servlet-mapping> -->
-  <filter>
+<<<<<<< .mine  </servlet-mapping> -->
+=======  </servlet-mapping>--> 
+>>>>>>> .theirs  <filter>
     <filter-name>CacheFilter</filter-name>
     <filter-class>com.tacitknowledge.filters.cache.CacheHeaderFilter</filter-class>
   </filter>

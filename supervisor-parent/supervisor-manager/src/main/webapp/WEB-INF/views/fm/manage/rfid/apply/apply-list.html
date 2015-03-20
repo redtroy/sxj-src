@@ -20,18 +20,31 @@ jQuery(document).ready(function($) {
 	$(".msgBox").live("click",function(){
 		window.location.href="${basePath}rfid/apply/appList.htm?isDelMes=true";
 	});
-	 JS.Engine.on({  
-		 start : function(cId, channelList, engine){  
-		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
-		    }, 
-		    "${channelName}" : function(data){//侦听一个channel
-			 $("#message_div").empty();
-        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的RFID申请！</div>";
-        	 $("#message_div").append(bb);
-         },   
- });  
- JS.Engine.start('${basePath}comet');
+// 	 JS.Engine.on({  
+// 		 start : function(cId, channelList, engine){  
+// 		      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
+// 		    }, 
+// 		    "${channelName}" : function(data){//侦听一个channel
+// 			 $("#message_div").empty();
+//         	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的RFID申请！</div>";
+//         	 $("#message_div").append(bb);
+//          },   
+//  });  
+//  JS.Engine.start('${basePath}comet');
+	window.setInterval(message, 3000); 
 })
+
+//提示消息
+function message(){
+	 $.get("${basePath}message.htm?channelName=${channelName}&ram="+Math.random(), function(data){
+		 if(typeof(data.count) != "undefined"){
+			 $("#message_div").empty();
+        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data.count+"</strong>条新的RFID申请！</div>";
+        	 $("#message_div").append(bb);
+		 }
+		
+	 });
+}
 //修改
   function edit(id){
 	 

@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.comet4j.core.CometContext;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -112,13 +111,13 @@ public class BaseController
     //
     // }''
     
-    protected void registChannel(final String channelName)
-    {
-        if (!CometContext.getInstance().getAppModules().contains(channelName))
-        {
-            CometContext.getInstance().registChannel(channelName);// 注册应用的channel
-        }
-    }
+//    protected void registChannel(final String channelName)
+//    {
+//        if (!CometContext.getInstance().getAppModules().contains(channelName))
+//        {
+//            CometContext.getInstance().registChannel(channelName);// 注册应用的channel
+//        }
+//    }
     
     protected String getValidError(BindingResult result) throws SystemException
     {

@@ -60,7 +60,7 @@ public class WindowRefController extends BaseController
             model.put("winList", winList);
             model.put("channelName",
                     RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
-            registChannel(RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
+            //registChannel(RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF);
             if ("true".equals(removeMessge))
             {
                 CometServiceImpl.setCount(RfidChannel.WIND_MANAGER_WINDOW_MESSGAGE_REF,
