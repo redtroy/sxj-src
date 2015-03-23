@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +48,8 @@ public class WindDoorServiceImpl implements IWindDoorService {
 			Map<String, String> cookies = response.cookies();
 			int pageNum = page(__VIEWSTATE, __EVENTVALIDATION, cookies);
 			int flag = 0;
+			String oldGongGaoGuid = (String) HierarchicalCacheManager.get(
+					CacheLevel.REDIS, "windDoor", "GongGaoGuid");
 			STOP: for (int i = 1; i <= pageNum; i++) {
 				Map map = new HashMap();
 				// map.put("ImageButton1.x", "32");
@@ -93,8 +96,6 @@ public class WindDoorServiceImpl implements IWindDoorService {
 					// System.out.println(url);
 					String GongGaoGuid = url.split("GongGaoGuid=")[1];
 					System.out.println(GongGaoGuid);
-					String oldGongGaoGuid = (String) HierarchicalCacheManager
-							.get(CacheLevel.REDIS, "windDoor", "GongGaoGuid");
 					if (oldGongGaoGuid != null
 							&& GongGaoGuid.equals(oldGongGaoGuid)) {
 						break STOP;
@@ -116,6 +117,7 @@ public class WindDoorServiceImpl implements IWindDoorService {
 					windDoor.setJzrq(jzsj);
 					windDoor.setQy(qy);
 					windDoor.setXmmc(xmmc);
+					windDoor.setNowDate(new Date());
 					if (contentMap.get("gifPath") != null) {
 						windDoor.setGifPath(contentMap.get("gifPath"));
 					}

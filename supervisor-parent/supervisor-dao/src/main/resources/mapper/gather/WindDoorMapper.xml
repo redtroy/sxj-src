@@ -15,6 +15,7 @@
 		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
 		<result property="gifPath" column="GIF_PATH" jdbcType="VARCHAR" />
 		<result property="flag" column="FLAG" jdbcType="INTEGER" />
+		<result property="nowDate" column="NOW_DATE" jdbcType="TIMESTAMP" />
 	</resultMap>
 
 

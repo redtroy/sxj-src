@@ -11,6 +11,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sxj.cache.manager.CacheLevel;
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.dao.gather.AlDao;
 import com.sxj.supervisor.entity.gather.AlEntity;
@@ -29,14 +31,30 @@ public class AlGatherImpl implements IAlGather {
 			String name = getJsonString("");
 			DataMap dm = JsonMapper.nonEmptyMapper().fromJson(name,
 					DataMap.class);
+			String oldDate = (String) HierarchicalCacheManager.get(
+					CacheLevel.REDIS, "Al", "date");
+			String newDate = "";
+			boolean flag = false;
 			for (Map<String, String> map : dm.getData().get("3").values()) {
-				AlEntity alEntity = new AlEntity();
-				alEntity.setDate(map.get("date"));
-				alEntity.setMax(map.get("max"));
-				alEntity.setMin(map.get("min"));
-				alEntity.setAverage(map.get("average"));
-				ad.addAl(alEntity);
+				if (oldDate == null) {
+					flag = true;
+				}
+				if (oldDate != null && map.get("date").equals(oldDate)) {
+					flag = true;
+					continue;
+				}
+				if (flag) {
+					AlEntity alEntity = new AlEntity();
+					alEntity.setDate(map.get("date"));
+					alEntity.setMax(map.get("max"));
+					alEntity.setMin(map.get("min"));
+					alEntity.setAverage(map.get("average"));
+					ad.addAl(alEntity);
+					newDate = map.get("date");
+				}
 			}
+			HierarchicalCacheManager.set(CacheLevel.REDIS, "Al", "date",
+					newDate);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
