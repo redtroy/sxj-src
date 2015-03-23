@@ -23,7 +23,7 @@
             <ref bean="alJob" />
         </property>
         <property name="cronExpression">
-            <value>0 21 17 * * ?</value>
+            <value>0 27 14 * * ?</value>
         </property>
     </bean> 
      <bean id="windDoorJobTrigger" class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">

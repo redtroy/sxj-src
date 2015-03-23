@@ -36,7 +36,9 @@ $(document).keyup(function(event){
 	});
 function login()
 {
-	$("#login_form").submit();
+	if($("#memberName_input").val()!=""&&$("#password_input").val()!=""){
+		$("#login_form").submit();
+	 }
 	
 }
 </script>

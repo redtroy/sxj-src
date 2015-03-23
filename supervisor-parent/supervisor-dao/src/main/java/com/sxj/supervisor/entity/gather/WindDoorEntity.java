@@ -1,6 +1,7 @@
 package com.sxj.supervisor.entity.gather;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
@@ -62,10 +63,24 @@ public class WindDoorEntity implements Serializable {
 	private String gifPath;
 
 	/**
+	 * 抓去数据时间
+	 */
+	@Column(name = "NOW_DATE")
+	private Date nowDate;
+
+	/**
 	 * 抓去最新数据的标记
 	 */
 	@Column(name = "FLAG")
 	private int flag;
+
+	public Date getNowDate() {
+		return nowDate;
+	}
+
+	public void setNowDate(Date nowDate) {
+		this.nowDate = nowDate;
+	}
 
 	public int getFlag() {
 		return flag;

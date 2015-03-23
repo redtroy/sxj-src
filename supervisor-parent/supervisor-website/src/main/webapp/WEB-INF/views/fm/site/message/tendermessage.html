@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#tabsholder").tytabs({
+							prefixtabs:"tabz",
+							prefixcontent:"content",
+							classcontent:"tabscontent",
+							tabinit:"3",
+							catchget:"tab2",
+							fadespeed:"normal"
+							});
+});
+</script>
+</head>
+
+<body>
+<@b.header />
+<div class="fence-wide ly-clearFix">
+<div class="yard-190 mt15 ly-left">
+<@b.leftMenu />
+</div>
+<div class="yard-870 rightSide ly-left inviteBox">
+<div class="heading mb15 ly-clearFix">
+<h1>
+  <span class="title fontYH f20 fb">市场信息</span></h1>
+</div>
+<div class="bgOk fb">
+  <input name="input" type="checkbox" value="" checked="checked" />
+  <span class="ml5">接收市场信息短信</span></div>
+<div class="contBox">
+<div id="tabsholder">
+<ul class="tabs">
+<li id="tabz1"><a href="#">江苏省开发商招标信息</a></li>
+</ul>
+<div class="contents">
+<div id="content1" class="tabscontent">
+<ul class="invList">
+<li class="bgUnread">
+<span class="icon icon-invi-unread"></span>
+<span class="time mr10">2015-03-03</span>
+<a href="invite-info.html">华夏幸福潮白河孔雀城襄颖园外墙石材幕墙工程招标公告</a>
+</li>
+<li class="bgGray">
+<span class="icon icon-invi-read"></span>
+<span class="time mr10">2015-03-03</span>
+<a href="invite-info.html">华夏幸福集采基地类入口区园林景观工程招标公告</a>
+</li>
+</ul>
+<div class="ly-clearFix">
+        <div id="pager" class="jPaginate"></div>
+      </div>
+</div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<@b.footer />
+</body>
+<script type="text/javascript">
+		$(function() {
+			$("#pager").paginate({
+				count 		: 50,
+				start 		: 1,
+				display     : 10,
+				border					: true,
+				border_color			: '#CCC',
+				text_color  			: '#333',
+				background_color    	: '#FFF',	
+				border_hover_color		: '#ff4400',
+				text_hover_color  		: '#ff4400',
+				background_hover_color	: '#fff', 
+				images					: false,
+				mouse					: 'press'
+			});
+});
+		</script>
+</html>
