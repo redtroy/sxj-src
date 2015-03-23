@@ -17,12 +17,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
+import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
+import com.sxj.supervisor.entity.message.TransMessageEntity;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
+import com.sxj.supervisor.service.message.ITransMessageService;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
+import com.sxj.util.exception.ServiceException;
 
 @Service
 public class WindDoorServiceImpl implements IWindDoorService {
@@ -32,6 +38,9 @@ public class WindDoorServiceImpl implements IWindDoorService {
 
 	@Autowired
 	private IStorageClientService storageClientService;
+
+	@Autowired
+	private ITransMessageService tms;
 
 	@Override
 	public void WindDoorGather() {
@@ -48,8 +57,10 @@ public class WindDoorServiceImpl implements IWindDoorService {
 			Map<String, String> cookies = response.cookies();
 			int pageNum = page(__VIEWSTATE, __EVENTVALIDATION, cookies);
 			int flag = 0;
-			String oldGongGaoGuid = (String) HierarchicalCacheManager.get(
-					CacheLevel.REDIS, "windDoor", "GongGaoGuid");
+			// String oldGongGaoGuid = (String) HierarchicalCacheManager.get(
+			// CacheLevel.REDIS, "windDoor", "GongGaoGuid");
+			String oldGongGaoGuid = null;
+			System.out.println("star");
 			STOP: for (int i = 1; i <= pageNum; i++) {
 				Map map = new HashMap();
 				// map.put("ImageButton1.x", "32");
@@ -95,7 +106,6 @@ public class WindDoorServiceImpl implements IWindDoorService {
 					// System.out.println(jzsj);
 					// System.out.println(url);
 					String GongGaoGuid = url.split("GongGaoGuid=")[1];
-					System.out.println(GongGaoGuid);
 					if (oldGongGaoGuid != null
 							&& GongGaoGuid.equals(oldGongGaoGuid)) {
 						break STOP;
@@ -110,7 +120,8 @@ public class WindDoorServiceImpl implements IWindDoorService {
 					String filePath = storageClientService.uploadFile(null,
 							new ByteArrayInputStream(contentMap.get("content")
 									.getBytes()), contentMap.get("content")
-									.getBytes().length, "txt".toUpperCase());
+									.getBytes().length, "jpg".toUpperCase());
+					System.out.println(filePath);
 					WindDoorEntity windDoor = new WindDoorEntity();
 					windDoor.setBdfl(bdfl);
 					windDoor.setFilePath(filePath);
@@ -118,6 +129,12 @@ public class WindDoorServiceImpl implements IWindDoorService {
 					windDoor.setQy(qy);
 					windDoor.setXmmc(xmmc);
 					windDoor.setNowDate(new Date());
+					TransMessageEntity message = new TransMessageEntity();
+					message.setType(MessageTypeEnum.TENDER);
+					message.setState(MessageStateEnum.UNREAD);
+					message.setMessage(xmmc);
+					message.setSendDate(new Date());
+					tms.addMessage(message);
 					if (contentMap.get("gifPath") != null) {
 						windDoor.setGifPath(contentMap.get("gifPath"));
 					}
@@ -169,7 +186,6 @@ public class WindDoorServiceImpl implements IWindDoorService {
 	public Map<String, String> content(String url) {
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			System.out.println(url);
 			Document doc = (Document) Jsoup.connect(url).timeout(3000).get();
 			Element element = doc.getElementById("ZBGGDetail1_tblInfo");
 			if (element.getElementById("ZBGGDetail1_trAttach") != null
@@ -177,15 +193,21 @@ public class WindDoorServiceImpl implements IWindDoorService {
 							.getElementById("ZBGGDetail1_trAttach"))) {
 				element.getElementById("ZBGGDetail1_trAttach").remove();
 			}
+			element.getElementsByClass("table").remove();
 			String img = element.getElementById("ZBGGDetail1_divDS")
 					.getElementsByTag("img").attr("src");
 			if (img != null && !"".equals(img)) {
 				String gifPath = downPicture("http://www1.njcein.com.cn/njxxnew/ZtbInfo/"
 						+ img);
 				map.put("gifPath", gifPath);
+				element.getElementById("ZBGGDetail1_divDS")
+						.getElementsByTag("img")
+						.attr("src",
+								"http://storage.menchuang.org.cn/" + gifPath);
+				System.out.println(element.getElementById("ZBGGDetail1_divDS")
+						.getElementsByTag("img").attr("src"));
 			}
 			map.put("content", element.toString());
-			// System.out.println(element.toString());
 			return map;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -229,4 +251,48 @@ public class WindDoorServiceImpl implements IWindDoorService {
 			return null;
 		}
 	}
+
+	@Override
+	public WindDoorEntity getInfoById(String id) throws ServiceException {
+		try {
+			WindDoorEntity wde = wda.getInfoById(id);
+			String group = wde.getFilePath().substring(0,
+					wde.getFilePath().indexOf("/"));
+			String path = wde.getFilePath().substring(
+					wde.getFilePath().indexOf("/") + 1,
+					wde.getFilePath().length());
+			String file = new String(storageClientService.downloadFile(group,
+					path, new ByteArrayFdfsFileInputStreamHandler()));
+			wde.setFilePath(file);
+			return wde;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
+
+	// /**
+	// * 通过HTTP方式获取文件
+	// *
+	// * @param strUrl
+	// * @param fileName
+	// * @return
+	// * @throws IOException
+	// */
+	// private String getRemoteFile(String strUrl) throws IOException {
+	// try {
+	// URL url = new URL(strUrl);
+	// /* 此为联系获得网络资源的固定格式用法，以便后面的in变量获得url截取网络资源的输入流 */
+	// HttpURLConnection connection = (HttpURLConnection) url
+	// .openConnection();
+	// DataInputStream in = new DataInputStream(
+	// connection.getInputStream());
+	// System.out.println(in.toString());
+	// in.close();
+	// connection.disconnect();
+	// return true;
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 }

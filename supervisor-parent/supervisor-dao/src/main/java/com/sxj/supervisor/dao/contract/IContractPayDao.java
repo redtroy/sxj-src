@@ -52,7 +52,7 @@ public interface IContractPayDao {
 	 * 新增付款单
 	 */
 	@Insert
-	public void addPay(PayRecordEntity pay);
+	public String addPay(PayRecordEntity pay);
 
 	/**
 	 * 根据RFIDNO查询实体
@@ -70,7 +70,7 @@ public interface IContractPayDao {
 	 * 
 	 * @param pay
 	 */
-	public int addContractPay(PayRecordEntity pay);
+	public String addContractPay(PayRecordEntity pay);
 
 	/**
 	 * 根据payNo查询实体

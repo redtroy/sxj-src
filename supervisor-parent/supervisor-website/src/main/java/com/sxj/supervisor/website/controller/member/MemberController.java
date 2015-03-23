@@ -25,11 +25,13 @@ import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
@@ -385,6 +387,37 @@ public class MemberController extends BaseController
         {
             return true;
         }
+        
+    }
+    
+    @RequestMapping("getMessageCount")
+    public @ResponseBody Map<String, Long> getMessageCount(HttpSession session)
+            throws WebException
+    {
+        Map<String, Long> map = new HashMap<>();
+        try
+        {
+            SupervisorPrincipal login = getLoginInfo(session);
+            if (login == null)
+            {
+                throw new WebException("会员未登陆");
+            }
+            MemberEntity member = login.getMember();
+            Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                    + member.getMemberNo());
+            Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                    + member.getMemberNo());
+            Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                    + member.getMemberNo());
+            map.put("systemMessageCount", systemMessageCount);
+            map.put("transMessageCount", transMessageCount);
+            map.put("tenderMessageCount", tenderMessageCount);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+        }
+        return map;
         
     }
 }

@@ -12,7 +12,7 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 
 @Entity(mapper = WindDoorDao.class)
-@Table(name = "WIND_DOOR")
+@Table(name = "M_WIND_DOOR")
 public class WindDoorEntity implements Serializable {
 
 	/**

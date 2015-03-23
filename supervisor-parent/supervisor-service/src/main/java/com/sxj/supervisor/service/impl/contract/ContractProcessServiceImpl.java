@@ -63,6 +63,9 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 	@Autowired
 	private ITransMessageService messageService;
 
+	@Autowired
+	private ITransMessageService tms;
+
 	/**
 	 * 变更确认状态
 	 */
@@ -291,14 +294,22 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 			}
 
 			pay.setPayType(PayTypeEnum.DEPOSIT);
-			int flag = payDao.addContractPay(pay);// 新增定金支付单
-			if (flag == 1) {
+			String newId = payDao.addContractPay(pay);// 新增定金支付单
+			if (newId != "" && newId != null) {
 				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoA());
 				redisTopics.getTopic(MessageChannel.TOPIC_NAME)
 						.publish(
 								MessageChannel.WEBSITE_PAY_MESSAGE
 										+ pay.getMemberNoA());
+				TransMessageEntity message = new TransMessageEntity();
+				message.setType(MessageTypeEnum.PAY);
+				message.setState(MessageStateEnum.UNREAD);
+				message.setStateMessage("未付款");
+				message.setContractNo(payDao.getPayRecordEntity(newId)
+						.getPayNo());
+				message.setSendDate(new Date());
+				tms.addMessage(message);
 			}
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
