@@ -26,6 +26,9 @@ public class TenderMessageEntity extends Pagable implements Serializable
     @Column(name = "INFO_ID")
     private String infoId;
     
+    @Column(name = "MEMBER_NO")
+    private String memberNo;
+    
     @Column(name = "STATE")
     private MessageStateEnum state;
     
@@ -57,6 +60,16 @@ public class TenderMessageEntity extends Pagable implements Serializable
     public void setState(MessageStateEnum state)
     {
         this.state = state;
+    }
+    
+    public String getMemberNo()
+    {
+        return memberNo;
+    }
+    
+    public void setMemberNo(String memberNo)
+    {
+        this.memberNo = memberNo;
     }
     
 }

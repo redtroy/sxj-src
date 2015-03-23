@@ -9,7 +9,6 @@
         class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
-                <!--  <ref bean="crontestJobTrigger" />  -->
                  <ref bean="alJobTrigger" />      <!-- 铝采集 -->
                  <ref bean="windDoorJobTrigger" />   <!-- 门窗采集 -->
             </list>
@@ -19,14 +18,6 @@
 
 
     <!-- 调度的配置开始 -->
-    <bean id="crontestJobTrigger" class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail">
-            <ref bean="myJobDetail" />
-        </property>
-        <property name="cronExpression">
-            <value>0/1 * * * * ?</value>
-        </property>
-    </bean>
     <bean id="alJobTrigger" class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail">
             <ref bean="alJob" />
@@ -45,15 +36,6 @@
     </bean> 
     <!-- 调度的配置结束 -->
     <!-- job的配置开始 -->
-    <bean id="myJobDetail"
-        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject">
-            <ref bean="test2" />
-        </property>
-        <property name="targetMethod">
-            <value>work</value>
-        </property>
-    </bean>
      <bean id="alJob"
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject">
@@ -74,7 +56,6 @@
     </bean> 
     <!-- job的配置结束 -->
      <!-- 工作的bean -->
-    <bean id="test2" class="com.sxj.supervisor.website.quartz.Test2" />
     <bean id="al" class="com.sxj.supervisor.website.quartz.AlGatherQuartz" /> 
     <bean id="windDoor" class="com.sxj.supervisor.website.quartz.WindDoorQuartz" /> 
 

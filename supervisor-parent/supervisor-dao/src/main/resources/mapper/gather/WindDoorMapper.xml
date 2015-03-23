@@ -22,6 +22,6 @@
 	<!-- 高级查询 -->
 	<select id="getMaxWindDoor" resultMap="WindDoorResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM WIND_DOOR ORDER BY FLAG DESC ]]>
+		<![CDATA[SELECT * FROM M_WIND_DOOR ORDER BY FLAG DESC ]]>
 	</select>
 </mapper>
