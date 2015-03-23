@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.message.ITenderMessageDao">
+	<resultMap id="com.sxj.supervisor.dao.message.ITenderMessageDao.message"
+		type="com.sxj.supervisor.model.message.TenderMessageModel">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="infoId" column="INFO_ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
+		<result property="xmmc" column="XMMC" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 高级查询 -->
+	<select id="queryMessageList"
+		resultMap="com.sxj.supervisor.dao.message.ITenderMessageDao.message"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_TRANS_MESSAGE m INNER JOIN M_WIND_DOOR d on m.INFO_ID=d.ID WHERE 1=1]]>
+		<if test="condition.memberNo!= null and condition.memberNo != ''">
+			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
+		</if>
+		<![CDATA[ ORDER BY STATE DESC]]>
+	</select>
+</mapper>
