@@ -4,6 +4,37 @@
 <span class="${model.function.style}"></span>${model.function.title}</h2>
 <ul>
 <#list model.children as mc>
+<#if  mc.id==6>
+<#if contractMessageCount??&&contractMessageCount&gt;0>
+<span class="new-message" id="contract_message">${contractMessageCount}</span>
+<#else>
+<span class="new-message" id="contract_message" style="display: none;">${contractMessageCount}</span>
+</#if>
+<#elseif mc.id==8>
+<#if payMessageCount??&&payMessageCount&gt;0>
+<span class="new-message" id="pay_message">${payMessageCount}</span>
+<#else>
+<span class="new-message" id="pay_message" style="display: none;">${payMessageCount}</span>
+</#if>
+<#elseif mc.id==21>
+<#if transMessageCount??&&transMessageCount&gt;0>
+<span class="new-message" id="trans_message">${transMessageCount}</span>
+<#else>
+<span class="new-message" id="trans_message" style="display: none;">${transMessageCount}</span>
+</#if>
+<#elseif mc.id==22>
+<#if sysMessageCount??&&sysMessageCount&gt;0>
+<span class="new-message" id="sys_message">${sysMessageCount}</span>
+<#else>
+<span class="new-message" id="sys_message" style="display: none;">${sysMessageCount}</span>
+</#if>
+<#elseif mc.id==23>
+<#if tenderMessageCount??&&tenderMessageCount&gt;0>
+<span class="new-message" id="tender_message">${tenderMessageCount}</span>
+<#else>
+<span class="new-message" id="tender_message" style="display: none;">${tenderMessageCount}</span>
+</#if>
+</#if>
 <li id="${mc.id}_menu" class=""><a url="${basePath}${mc.url}" href="javascript:clickFunction('${basePath}${mc.url}')">${mc.title}</a></li>
 </#list>
 </ul>
@@ -19,6 +50,8 @@ $(document).ready(function(){
 			return false;
 		}			
 	});
+	
+	window.setInterval(menuMessage, 5000);
 });
 function getUrlParam(name){
 	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
@@ -39,5 +72,45 @@ function clickFunction(url){
 		url=url+"?"+Math.random();
 		window.location.href=url;
 	}
+}
+
+function menuMessage() {
+	$.get("${basePath}menuMessageCount.htm?ram="+Math.random(), function(data){
+		 if(typeof(data.contractMessageCount) != "undefined"&&data.contractMessageCount>0){
+			 $("#contract_message").text(data.contractMessageCount);
+			 $("#contract_message").show();
+		 }else{
+			 $("#contract_message").hide();
+		 }
+		 
+		 if(typeof(data.payMessageCount) != "undefined"&&data.payMessageCount>0){
+			 $("#pay_message").text(data.payMessageCount);
+			 $("#pay_message").show();
+		 }else{
+			 $("#pay_message").hide();
+		 }
+		 
+		 if(typeof(data.transMessageCount) != "undefined"&&data.transMessageCount>0){
+			 $("#trans_message").text(data.transMessageCount);
+			 $("#trans_message").show();
+		 }else{
+			 $("#trans_message").hide();
+		 }
+		 
+		 if(typeof(data.sysMessageCount) != "undefined"&&data.sysMessageCount>0){
+			 $("#sys_message").text(data.sysMessageCount);
+			 $("#sys_message").show();
+		 }else{
+			 $("#sys_message").hide();
+		 }
+		 
+		 if(typeof(data.tenderMessageCount) != "undefined"&&data.tenderMessageCount>0){
+			 $("#tender_message").text(data.tenderMessageCount);
+			 $("#tender_message").show();
+		 }else{
+			 $("#tender_message").hide();
+		 }
+		
+	 });
 }
 </script>

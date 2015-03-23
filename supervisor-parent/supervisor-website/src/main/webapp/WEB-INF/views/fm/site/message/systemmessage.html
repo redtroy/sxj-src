@@ -27,6 +27,24 @@ $(function(){
 	
 });
 
+
+function query(page) {
+	var params = "";
+	if (page != undefined) {
+		params = params + "?currentPage=" + page;
+	}
+	$.post("query.htm", params, function(data) {
+		var res = $(data).find(".newsList");
+		var pager = $(data).find("#pager");
+		$(".newsList").empty();
+		$(".newsList").append(res.html());
+		var totalPage = pager.attr("totalPage");
+		var currentPage = pager.attr("currentPage");
+		loadPage(currentPage, totalPage, query);
+	});
+}
+
+
 function modifyState(id,infoId){
 	var state=$("#message_span_"+infoId).attr("state");
 	if(state==0){

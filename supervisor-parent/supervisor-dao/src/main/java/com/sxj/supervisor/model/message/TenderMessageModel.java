@@ -1,6 +1,7 @@
 package com.sxj.supervisor.model.message;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
@@ -67,6 +68,16 @@ public class TenderMessageModel extends Pagable implements Serializable
     public void setMemberNo(String memberNo)
     {
         message.setMemberNo(memberNo);
+    }
+    
+    public Date getNowDate()
+    {
+        return info.getNowDate();
+    }
+    
+    public void setNowDate(Date nowDate)
+    {
+        info.setNowDate(nowDate);
     }
     
 }

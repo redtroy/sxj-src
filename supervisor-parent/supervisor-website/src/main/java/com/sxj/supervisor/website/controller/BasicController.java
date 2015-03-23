@@ -62,6 +62,7 @@ import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.FileUtil;
 import com.sxj.util.common.StringUtils;
+import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
@@ -166,11 +167,21 @@ public class BasicController extends BaseController
                             + member.getMemberNo());
                     Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                             + member.getMemberNo());
+                    Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                            + member.getMemberNo());
                     map.put("systemMessageCount", systemMessageCount);
                     map.put("transMessageCount", transMessageCount);
+                    map.put("tenderMessageCount", tenderMessageCount);
                     
-                    //                    Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
-                    //                            + member.getMemberNo());
+                    map.put("channelName_sys",
+                            MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                                    + member.getMemberNo());
+                    map.put("channelName_trans",
+                            MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                                    + member.getMemberNo());
+                    map.put("channelName_tender",
+                            MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                                    + member.getMemberNo());
                     return "site/member/member-profile";
                 }
                 else
@@ -369,6 +380,24 @@ public class BasicController extends BaseController
             List<MemberFunctionModel> list = roleService.getRoleFunctions(userBean.getAccount()
                     .getId());
             map.put("list", list);
+        }
+        if (userBean.getMember() != null)
+        {
+            Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                    + userBean.getMember().getMemberNo());
+            Long sysMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                    + userBean.getMember().getMemberNo());
+            Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                    + userBean.getMember().getMemberNo());
+            Long contractMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+                    + userBean.getMember().getMemberNo());
+            Long payMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                    + userBean.getMember().getMemberNo());
+            map.put("transMessageCount", transMessageCount);
+            map.put("sysMessageCount", sysMessageCount);
+            map.put("tenderMessageCount", tenderMessageCount);
+            map.put("contractMessageCount", contractMessageCount);
+            map.put("payMessageCount", payMessageCount);
         }
         return "site/menu";
     }
@@ -744,22 +773,27 @@ public class BasicController extends BaseController
             String channelName) throws IOException
     {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (channelName.equals(MessageChannel.RECORD_MESSAGE)
-                || channelName.equals(RfidChannel.RFID_APPLY_MESSAGE)
+        if (channelName.contains(MessageChannel.RECORD_MESSAGE)
+                || channelName.contains(RfidChannel.RFID_APPLY_MESSAGE)
                 || channelName.contains(MessageChannel.WEBSITE_PAY_MESSAGE)
                 || channelName.contains(MessageChannel.WEBSITE_FINANCE_MESSAGE)
-                || channelName.equals(MessageChannel.MEMBER_MESSAGE)
-                || channelName.equals(MessageChannel.MEMBER_PERFECT_MESSAGE))
+                || channelName.contains(MessageChannel.MEMBER_MESSAGE)
+                || channelName.contains(MessageChannel.MEMBER_PERFECT_MESSAGE)
+                || channelName.contains(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT)
+                || channelName.contains(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT)
+                || channelName.contains(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT)
+                || channelName.contains(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT)
+                || channelName.contains(MessageChannel.MEMBER_PAY_MESSAGE_COUNT))
         {
             Long count = CometServiceImpl.getCount(channelName);
             SxjLogger.debug("Sending Message to Comet Client:" + count,
                     getClass());
-            if (count > 0)
-            {
-                map.put("count", count);
-                map.put("channelName", channelName);
-                return map;
-            }
+            //if (count > 0)
+            //  {
+            map.put("count", count);
+            map.put("channelName", channelName);
+            return map;
+            // }
         }
         else
         {
@@ -774,5 +808,42 @@ public class BasicController extends BaseController
             }
         }
         return null;
+    }
+    
+    @RequestMapping("menuMessageCount")
+    public @ResponseBody Map<String, Long> menuMessageCount(HttpSession session)
+            throws WebException
+    {
+        Map<String, Long> map = new HashMap<>();
+        try
+        {
+            SupervisorPrincipal login = getLoginInfo(session);
+            if (login == null)
+            {
+                throw new WebException("会员未登陆");
+            }
+            MemberEntity member = login.getMember();
+            Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                    + member.getMemberNo());
+            Long sysMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                    + member.getMemberNo());
+            Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                    + member.getMemberNo());
+            Long contractMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+                    + member.getMemberNo());
+            Long payMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                    + member.getMemberNo());
+            map.put("transMessageCount", transMessageCount);
+            map.put("sysMessageCount", sysMessageCount);
+            map.put("tenderMessageCount", tenderMessageCount);
+            map.put("contractMessageCount", contractMessageCount);
+            map.put("payMessageCount", payMessageCount);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+        }
+        return map;
+        
     }
 }
