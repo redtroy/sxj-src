@@ -59,6 +59,9 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 
 	@Autowired
 	private RedisTopics redisTopics;
+	
+	@Autowired
+	private ITransMessageService messageService;
 
 	@Autowired
 	private ITransMessageService tms;
@@ -139,24 +142,20 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ contract.getContractNo() + ','
 						+ userRecord.getMemberIdA() + ','
 						+ userRecord.getContractType().getId();
-				// messageList.add(message);
 				CometServiceImpl.add(key_a, message);
 				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_a);
-				// HierarchicalCacheManager.set(2, "comet_message",
-				// "record_push_message_" + record.getMemberIdA(),
-				// messageList);
-				// 乙方
 				String key_b = MessageChannel.WEBSITE_RECORD_MESSAGE
 						+ userRecord.getMemberIdB();
-				// List<String> messageListB = null;
-				// Object cacheB = HierarchicalCacheManager.get(2,
-				// "comet_message",
-				// "record_push_message_" + record.getMemberIdB());
-				// if (cacheB instanceof ArrayList) {
-				// messageListB = (List<String>) cacheB;
-				// } else {
-				// messageListB = new ArrayList<String>();
-				// }
+				TransMessageEntity transMassage = new TransMessageEntity();
+				transMassage.setType(MessageTypeEnum.CONTRACT);
+				transMassage.setState(MessageStateEnum.UNREAD);
+				transMassage.setMessage("贵公司有一条待确认的"+msgName+"信息");
+				transMassage.setContractNo(contract.getContractNo());
+				transMassage.setMemberNo(contract.getMemberIdA());
+				transMassage.setStateMessage("待确认");
+				transMassage.setSendDate(new Date());
+				messageService.addMessage(transMassage);
+				//乙方
 				String msgNameB = "";
 				if (userRecord.getType().getId() == 0) {
 					if (userRecord.getContractType().getId() == 0) {
@@ -173,10 +172,15 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ userRecord.getContractType().getId();
 				CometServiceImpl.add(key_b, messageB);
 				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_b);
-				// messageListB.add(messageB);
-				// HierarchicalCacheManager.set(2, "comet_message",
-				// "record_push_message_" + record.getMemberIdB(),
-				// messageListB);
+                TransMessageEntity transMassageB = new TransMessageEntity();
+                transMassageB.setType(MessageTypeEnum.CONTRACT);
+                transMassageB.setState(MessageStateEnum.UNREAD);
+                transMassageB.setMessage("贵公司有一条待确认的"+msgNameB+"信息");
+                transMassageB.setContractNo(contract.getContractNo());
+                transMassageB.setMemberNo(contract.getMemberIdB());
+                transMassageB.setStateMessage("待确认");
+                transMassageB.setSendDate(new Date());
+                messageService.addMessage(transMassageB);
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
