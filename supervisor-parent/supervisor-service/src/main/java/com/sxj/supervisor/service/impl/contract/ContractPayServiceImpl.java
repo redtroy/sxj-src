@@ -13,14 +13,18 @@ import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.supervisor.dao.contract.IAccountingDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
+import com.sxj.supervisor.entity.message.TransMessageEntity;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.model.statistics.AccountingModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.message.ITransMessageService;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -39,6 +43,9 @@ public class ContractPayServiceImpl implements IContractPayService {
 
 	@Autowired
 	private RedisTopics redisTopics;
+
+	@Autowired
+	private ITransMessageService tms;
 
 	@Autowired
 	@Qualifier("payStagefsm")
@@ -255,7 +262,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	public void addPayRecordEntity(PayRecordEntity pay) throws ServiceException {
 		try {
 			pay.setCreatPayDate(new Date());
-			payDao.addPay(pay);
+			String id = payDao.addPay(pay);
 			CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 					+ pay.getMemberNoA());
 			redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
@@ -266,6 +273,13 @@ public class ContractPayServiceImpl implements IContractPayService {
 					.publish(
 							MessageChannel.WEBSITE_FINANCE_MESSAGE
 									+ pay.getMemberNoA());
+			TransMessageEntity message = new TransMessageEntity();
+			message.setType(MessageTypeEnum.PAY);
+			message.setState(MessageStateEnum.UNREAD);
+			message.setStateMessage("未付款");
+			message.setContractNo(payDao.getPayRecordEntity(id).getPayNo());
+			message.setSendDate(new Date());
+			tms.addMessage(message);
 		} catch (Exception e) {
 			SxjLogger.error("新增付款管理出错！", e, this.getClass());
 			throw new ServiceException("新增付款管理出错！", e);

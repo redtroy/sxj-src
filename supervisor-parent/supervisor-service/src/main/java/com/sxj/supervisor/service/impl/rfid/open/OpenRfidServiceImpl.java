@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.impl.rfid.open;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ModifyBatchEntity;
 import com.sxj.supervisor.entity.contract.ReplenishBatchEntity;
+import com.sxj.supervisor.entity.message.TransMessageEntity;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity;
 import com.sxj.supervisor.entity.rfid.ref.LogisticsRefEntity;
@@ -33,6 +35,8 @@ import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
 import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
@@ -45,6 +49,7 @@ import com.sxj.supervisor.model.open.Contract;
 import com.sxj.supervisor.model.open.WinTypeModel;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.message.ITransMessageService;
 import com.sxj.supervisor.service.rfid.open.IOpenRfidService;
 import com.sxj.supervisor.service.util.JsonMapperUtil;
 import com.sxj.util.common.StringUtils;
@@ -94,6 +99,9 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
 
     @Autowired
     private IWindowRfidRefDao windowRfidRefDao;
+    
+    @Autowired
+    private ITransMessageService messageService;
 
     @Override
     public BatchModel getBatchByRfid(String gid) throws ServiceException,
@@ -386,6 +394,26 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
                                             .updateBatch(replenishBatch);
                                 }
                             }
+                            ContractEntity contract= contractService.getContractEntityByNo(le.getContractNo());
+                            TransMessageEntity transMassageA = new TransMessageEntity();
+                            transMassageA.setType(MessageTypeEnum.DELIVER);
+                            transMassageA.setState(MessageStateEnum.UNREAD);
+                            //transMassageB.setMessage("贵公司有一条待确认的"+msgNameB+"信息");
+                            transMassageA.setContractNo(le.getContractNo());
+                            transMassageA.setMemberNo(contract.getMemberIdA());
+                            transMassageA.setStateMessage("已发货");
+                            transMassageA.setSendDate(new Date());
+                            messageService.addMessage(transMassageA);
+                            //乙方
+                            TransMessageEntity transMassageB = new TransMessageEntity();
+                            transMassageB.setType(MessageTypeEnum.DELIVER);
+                            transMassageB.setState(MessageStateEnum.UNREAD);
+                            //transMassageB.setMessage("贵公司有一条待确认的"+msgNameB+"信息");
+                            transMassageB.setContractNo(le.getContractNo());
+                            transMassageB.setMemberNo(contract.getMemberIdB());
+                            transMassageB.setStateMessage("已发货");
+                            transMassageB.setSendDate(new Date());
+                            messageService.addMessage(transMassageB);
                             return 1;
                         } else if (le.getProgressState().equals(
                                 LabelStateEnum.INSTALL)) {
@@ -483,6 +511,29 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
                                 pay.setPayMode(PayModeEnum.MODE1);
                                 pay.setPayType(PayTypeEnum.PAYMENT);
                                 contractPayService.addPayRecordEntity(pay);// 生成支付单
+                                
+                                TransMessageEntity transMassageA = new TransMessageEntity();
+                                transMassageA.setType(MessageTypeEnum.RECEIPT);
+                                transMassageA.setState(MessageStateEnum.UNREAD);
+                                //transMassageB.setMessage("贵公司有一条待确认的"+msgNameB+"信息");
+                                transMassageA.setContractNo(le.getContractNo());
+                                transMassageA.setMemberNo(cm.getContract().getMemberIdA());
+                                transMassageA.setStateMessage("货物已收货");
+                                transMassageA.setBatchNo(bu+cb.getBatchNo());
+                                transMassageA.setSendDate(new Date());
+                                messageService.addMessage(transMassageA);
+                                //乙方
+                                TransMessageEntity transMassageB = new TransMessageEntity();
+                                transMassageB.setType(MessageTypeEnum.RECEIPT);
+                                transMassageB.setState(MessageStateEnum.UNREAD);
+                                //transMassageB.setMessage("贵公司有一条待确认的"+msgNameB+"信息");
+                                transMassageB.setContractNo(le.getContractNo());
+                                transMassageB.setMemberNo(cm.getContract().getMemberIdB());
+                                transMassageB.setBatchNo(bu+cb.getBatchNo());
+                                transMassageB.setStateMessage("货物已验收");
+                                transMassageB.setSendDate(new Date());
+                                messageService.addMessage(transMassageB);
+                                
                                 return 1;
                             }
                         } else if (le.getProgressState().equals(

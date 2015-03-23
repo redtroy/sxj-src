@@ -171,7 +171,7 @@
 		<![CDATA[ ORDER BY P.OD DESC,P.PAY_NO DESC
 		]]>
 	</select>
-	 <insert id="addContractPay" parameterType="com.sxj.supervisor.entity.pay.PayRecordEntity">
+	 <insert id="addContractPay" parameterType="com.sxj.supervisor.entity.pay.PayRecordEntity" keyProperty="id">
 		<![CDATA[ 
 		INSERT INTO M_CONTRACT_PAY(ID,MEMBER_NO_A,MEMBER_NAME_A,MEMBER_NO_B,MEMBER_NAME_B
 		,PAY_NO,CONTRACT_NO,BATCH_NO,RFID_NO,PAY_AMOUNT,PAY_REAL,PAY_DATE,CONTENT,STATE

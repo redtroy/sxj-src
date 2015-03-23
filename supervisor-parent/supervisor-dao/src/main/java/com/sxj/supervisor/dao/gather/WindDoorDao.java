@@ -2,6 +2,7 @@ package com.sxj.supervisor.dao.gather;
 
 import java.util.List;
 
+import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 
@@ -17,4 +18,10 @@ public interface WindDoorDao {
 	 * 最新数据的排序查询
 	 */
 	public List<WindDoorEntity> getMaxWindDoor();
+
+	/**
+	 * 根据ID查询详情
+	 */
+	@Get
+	public WindDoorEntity getInfoById(String id);
 }

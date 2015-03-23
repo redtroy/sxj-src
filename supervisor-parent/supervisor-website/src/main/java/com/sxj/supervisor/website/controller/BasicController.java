@@ -302,8 +302,8 @@ public class BasicController extends BaseController
         }
         else
         {
-            map.put("message", "公司名称不能为空");
-            map.put("pmessage", "密码不能为空");
+            map.put("message", "公司名称和密码不能为空");
+            //map.put("pmessage", "密码不能为空");
             return LOGIN;
         }
         Subject currentUser = SecurityUtils.getSubject();

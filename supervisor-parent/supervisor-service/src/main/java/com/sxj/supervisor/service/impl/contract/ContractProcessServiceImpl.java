@@ -12,6 +12,7 @@ import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
 import com.sxj.supervisor.entity.contract.ContractEntity;
+import com.sxj.supervisor.entity.message.TransMessageEntity;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
@@ -19,12 +20,15 @@ import com.sxj.supervisor.enu.contract.PayContractTypeEnum;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
 import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.contract.PayTypeEnum;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.PayStateEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.service.contract.IContractProcessService;
+import com.sxj.supervisor.service.message.ITransMessageService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.DateTimeUtils;
@@ -55,6 +59,12 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 
 	@Autowired
 	private RedisTopics redisTopics;
+	
+	@Autowired
+	private ITransMessageService messageService;
+
+	@Autowired
+	private ITransMessageService tms;
 
 	/**
 	 * 变更确认状态
@@ -132,24 +142,20 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ contract.getContractNo() + ','
 						+ userRecord.getMemberIdA() + ','
 						+ userRecord.getContractType().getId();
-				// messageList.add(message);
 				CometServiceImpl.add(key_a, message);
 				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_a);
-				// HierarchicalCacheManager.set(2, "comet_message",
-				// "record_push_message_" + record.getMemberIdA(),
-				// messageList);
-				// 乙方
 				String key_b = MessageChannel.WEBSITE_RECORD_MESSAGE
 						+ userRecord.getMemberIdB();
-				// List<String> messageListB = null;
-				// Object cacheB = HierarchicalCacheManager.get(2,
-				// "comet_message",
-				// "record_push_message_" + record.getMemberIdB());
-				// if (cacheB instanceof ArrayList) {
-				// messageListB = (List<String>) cacheB;
-				// } else {
-				// messageListB = new ArrayList<String>();
-				// }
+				TransMessageEntity transMassage = new TransMessageEntity();
+				transMassage.setType(MessageTypeEnum.CONTRACT);
+				transMassage.setState(MessageStateEnum.UNREAD);
+				transMassage.setMessage("贵公司有一条待确认的"+msgName+"信息");
+				transMassage.setContractNo(contract.getContractNo());
+				transMassage.setMemberNo(contract.getMemberIdA());
+				transMassage.setStateMessage("待确认");
+				transMassage.setSendDate(new Date());
+				messageService.addMessage(transMassage);
+				//乙方
 				String msgNameB = "";
 				if (userRecord.getType().getId() == 0) {
 					if (userRecord.getContractType().getId() == 0) {
@@ -166,10 +172,15 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ userRecord.getContractType().getId();
 				CometServiceImpl.add(key_b, messageB);
 				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_b);
-				// messageListB.add(messageB);
-				// HierarchicalCacheManager.set(2, "comet_message",
-				// "record_push_message_" + record.getMemberIdB(),
-				// messageListB);
+                TransMessageEntity transMassageB = new TransMessageEntity();
+                transMassageB.setType(MessageTypeEnum.CONTRACT);
+                transMassageB.setState(MessageStateEnum.UNREAD);
+                transMassageB.setMessage("贵公司有一条待确认的"+msgNameB+"信息");
+                transMassageB.setContractNo(contract.getContractNo());
+                transMassageB.setMemberNo(contract.getMemberIdB());
+                transMassageB.setStateMessage("待确认");
+                transMassageB.setSendDate(new Date());
+                messageService.addMessage(transMassageB);
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -283,14 +294,22 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 			}
 
 			pay.setPayType(PayTypeEnum.DEPOSIT);
-			int flag = payDao.addContractPay(pay);// 新增定金支付单
-			if (flag == 1) {
+			String newId = payDao.addContractPay(pay);// 新增定金支付单
+			if (newId != "" && newId != null) {
 				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoA());
 				redisTopics.getTopic(MessageChannel.TOPIC_NAME)
 						.publish(
 								MessageChannel.WEBSITE_PAY_MESSAGE
 										+ pay.getMemberNoA());
+				TransMessageEntity message = new TransMessageEntity();
+				message.setType(MessageTypeEnum.PAY);
+				message.setState(MessageStateEnum.UNREAD);
+				message.setStateMessage("未付款");
+				message.setContractNo(payDao.getPayRecordEntity(newId)
+						.getPayNo());
+				message.setSendDate(new Date());
+				tms.addMessage(message);
 			}
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
