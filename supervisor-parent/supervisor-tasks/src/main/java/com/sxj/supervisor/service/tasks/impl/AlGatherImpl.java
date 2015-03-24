@@ -23,7 +23,7 @@ import com.sxj.supervisor.tasks.Model.DataMap;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 
-@Service()
+@Service(value = "alGather")
 public class AlGatherImpl implements IAlGather
 {
     

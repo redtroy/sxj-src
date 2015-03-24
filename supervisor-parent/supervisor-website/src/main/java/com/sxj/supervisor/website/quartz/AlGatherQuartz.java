@@ -24,6 +24,7 @@ public class AlGatherQuartz extends QuartzJobBean
     {
         try
         {
+            ag = (IAlGather) context.get("ag");
             ag.gather();
         }
         catch (Exception e)
