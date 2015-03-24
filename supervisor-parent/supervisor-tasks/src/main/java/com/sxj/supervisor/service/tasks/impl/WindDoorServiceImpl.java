@@ -23,10 +23,11 @@ import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
-import com.sxj.supervisor.model.comet.MessageChannel;
+import com.sxj.supervisor.entity.message.TransMessageEntity;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.service.message.ITransMessageService;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
-import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.exception.ServiceException;
 
 @Service
