@@ -52,8 +52,8 @@ function modifyState(id){
 			if(data.isOK="ok"){
 				$("#message_div_"+id).attr("state",1);
 				$("#message_div_"+id).removeClass("bgUnread");
-				$("#message_div_"+id).next().removeClass("icon-mess-unread");
-				$("#message_div_"+id).next().addClass("icon-mess-read");
+				$("#message_div_"+id).next("span").removeClass("icon-mess-unread");
+				$("#message_div_"+id).next("span").addClass("icon-mess-read");
 				
 				if(type==0){
 					window.location.href="${basePath}record/query.htm";
@@ -126,6 +126,7 @@ function modifyState(id){
 	</#if>
 </#if>
 </#list>
+</div>
 <div class="newsBox">
 <#list messageList as message>
  <#if message.type=="CONTRACT">
