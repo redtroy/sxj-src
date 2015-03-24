@@ -23,11 +23,8 @@
 			<artifactId>tk-filters</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.comet4j</groupId>
-			<artifactId>comet4j-tomcat7</artifactId>
-			<version>1.0</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.comet4j</groupId> <artifactId>comet4j-tomcat7</artifactId> 
+			<version>1.0</version> </dependency> -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
@@ -45,7 +42,7 @@
 		</dependency>
 		<!-- springside -->
 		<!-- sxj -->
-		
+
 		<dependency>
 			<groupId>com.sxj</groupId>
 			<artifactId>rfid-service</artifactId>
@@ -204,7 +201,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					 <!-- <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
+					<!-- <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> -->
 				</configuration>
 			</plugin>
 		</plugins>

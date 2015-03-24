@@ -14,7 +14,6 @@
 <script type="text/javascript" charset="utf-8" src="${b.staticPath}js/ueditor/ueditor.all.js"> </script>
 <script type="text/javascript" charset="utf-8" src="${b.staticPath}js/ueditor/lang/zh-cn/zh-cn.js"></script>
 <link href="${b.staticPath}js/ueditor/themes/default/css/ueditor.min.css" type="text/css" rel="stylesheet">
-
 <@b.dialogBox/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -24,7 +23,7 @@ var ue;
 $(function(){
 	var ue = UE.getEditor('editor', {
 	    serverUrl: 'http://manage.menchuang.org.cn:8080/supervisor-manager/config.json',
-	    imageUrl:""
+	    imageUrl:'http://manage.menchuang.org.cn:8080/supervisor-manager/upload.htm'
 	});
 	//ue.execCommand('insertHtml', "${info.message}")
 	//UE.getEditor('editor').setContent('312312321');
