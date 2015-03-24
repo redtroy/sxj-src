@@ -28,6 +28,22 @@ $(function(){
 	
 });
 
+function query(page) {
+	var params = "";
+	if (page != undefined) {
+		params = params + "?currentPage=" + page;
+	}
+	$.post("query.htm", params, function(data) {
+		var res = $(data).find(".newsBox");
+		var pager = $(data).find("#pager");
+		$(".newsBox").empty();
+		$(".newsBox").append(res.html());
+		var totalPage = pager.attr("totalPage");
+		var currentPage = pager.attr("currentPage");
+		loadPage(currentPage, totalPage, query);
+	});
+}
+
 function modifyState(id){
 	var state=$("#message_div_"+id).attr("state");
 	var type=$("#message_div_"+id).attr("type");
@@ -88,8 +104,10 @@ function modifyState(id){
 	<#if messageConfig??>
 		<#list messageConfig as messageConfig>
 			<#if types.getId()==messageConfig.messageType.getId()>
-				 <#assign isCheck="true"/>
-				 <#assign configId="${messageConfig.id}"/>
+				<#if messageConfig.isAccetp==true>
+					 <#assign isCheck="true"/>
+				</#if>
+				<#assign configId="${messageConfig.id}"/>
 			</#if>
 		</#list>
 		<#if isCheck=="true">
@@ -98,7 +116,7 @@ function modifyState(id){
 			<span class="ml5">${types.getName()}</span>
 		<#else>
 			<input id="configType" type="checkbox" value="${types}"/>
-			<input id="configId" type="hidden" name="configId" value=""/>
+			<input id="configId" type="hidden" name="configId" value="${configId}"/>
 			<span class="ml5">${types.getName()}</span>
 		</#if>
 	<#else>

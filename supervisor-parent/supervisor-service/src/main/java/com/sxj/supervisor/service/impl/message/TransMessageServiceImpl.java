@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sxj.supervisor.dao.message.ITransMessageDao;
 import com.sxj.supervisor.entity.message.TransMessageEntity;
 import com.sxj.supervisor.enu.message.MessageStateEnum;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.message.TransMessageQuery;
 import com.sxj.supervisor.service.message.ITransMessageService;
@@ -35,6 +36,16 @@ public class TransMessageServiceImpl implements ITransMessageService
                 dao.addMessage(message);
                 CometServiceImpl.takeCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                         + message.getMemberNo());
+                if (message.getType().equals(MessageTypeEnum.CONTRACT))
+                {
+                    CometServiceImpl.takeCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+                            + message.getMemberNo());
+                }
+                else if (message.getType().equals(MessageTypeEnum.PAY))
+                {
+                    CometServiceImpl.takeCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                            + message.getMemberNo());
+                }
             }
             
         }
@@ -87,6 +98,16 @@ public class TransMessageServiceImpl implements ITransMessageService
                 dao.updateMessage(message);
                 CometServiceImpl.subCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                         + message.getMemberNo());
+                if (message.getType().equals(MessageTypeEnum.CONTRACT))
+                {
+                    CometServiceImpl.subCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+                            + message.getMemberNo());
+                }
+                else if (message.getType().equals(MessageTypeEnum.PAY))
+                {
+                    CometServiceImpl.subCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                            + message.getMemberNo());
+                }
             }
         }
         catch (Exception e)

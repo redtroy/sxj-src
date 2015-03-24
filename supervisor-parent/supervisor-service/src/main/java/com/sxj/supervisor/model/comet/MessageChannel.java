@@ -8,8 +8,8 @@ public class MessageChannel
     public static final String RECORD_MESSAGE = "record_count_message";
     
     public static final String MEMBER_MESSAGE = "member_count_message";
-
-	public static final String MEMBER_PERFECT_MESSAGE = "member_perfect_message";
+    
+    public static final String MEMBER_PERFECT_MESSAGE = "member_perfect_message";
     
     public static final String WEBSITE_RECORD_MESSAGE = "record_push_message_";
     
@@ -24,6 +24,14 @@ public class MessageChannel
     public static final String MEMBERTYPE_SYSTEM_MESSAGE_INFO = "MEMBERTYPE_SYSTEM_MESSAGE_INFO_";
     
     public static final String MEMBER_TRANS_MESSAGE_COUNT = "MEMBER_TRANS_MESSAGE_COUNT_";
+    
+    public static final String MEMBER_CONTRACT_MESSAGE_COUNT = "MEMBER_CONTRACT_MESSAGE_COUNT_";
+    
+    public static final String MEMBER_PAY_MESSAGE_COUNT = "MEMBER_PAY_MESSAGE_COUNT_";
+    
+    public static final String MEMBER_TENDER_MESSAGE_INFO = "MEMBER_TENDER_MESSAGE_INFO_";
+    
+    public static final String MEMBER_TENDER_MESSAGE_COUNT = "MEMBER_TENDER_MESSAGE_COUNT_";
     
     private MessageChannel()
     {

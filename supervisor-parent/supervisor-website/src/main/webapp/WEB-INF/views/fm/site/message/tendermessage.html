@@ -10,19 +10,66 @@
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-	$("#tabsholder").tytabs({
-							prefixtabs:"tabz",
-							prefixcontent:"content",
-							classcontent:"tabscontent",
-							tabinit:"3",
-							catchget:"tab2",
-							fadespeed:"normal"
-							});
+$(function(){
+	$("#configType").change(function() {
+		 var ischecked=$(this).attr("checked");
+		 var accept=false;
+		 var id=$("#configId").val();
+		 if(ischecked=="checked"){
+			 accept=true;
+		 }
+		 $.post("changeConfig.htm",{configId:id,isAccept:accept} ,function(data){
+			 if(data.isOK=="ok"){
+				 $("#configId").val(data.configId);
+			 }
+		 });
+	});
+	
 });
+
+function query(page) {
+	var params = "";
+	if (page != undefined) {
+		params = params + "?currentPage=" + page;
+	}
+	$.post("query.htm", params, function(data) {
+		var res = $(data).find(".invList");
+		var pager = $(data).find("#pager");
+		$(".invList").empty();
+		$(".invList").append(res.html());
+		var totalPage = pager.attr("totalPage");
+		var currentPage = pager.attr("currentPage");
+		loadPage(currentPage, totalPage, query);
+	});
+}
+
+function modifyState(id,infoId){
+	var state=$("#message_li_"+infoId).attr("state");
+	if(state==0){
+		$.post("modifyState.htm","id="+id,function(data){
+			if(data.isOK="ok"){
+				$("#message_li_"+infoId).attr("state",1);
+				$("#message_li_"+infoId).removeClass("bgUnread");
+				$("#message_li_"+infoId).addClass("bgGray");
+				window.location.href="${basePath}market/info.htm?id="+infoId;
+				$.get("${basePath}market/info.htm?id="+infoId",function(data){
+					var res = $(data).find(".rightSide");
+					$(".rightSide").empty();
+					$(".rightSide").append(res.html());
+				});
+			}
+		});
+	}else{
+		$.get("${basePath}market/info.htm?id="+infoId",function(data){
+				var res = $(data).find(".rightSide");
+				$(".rightSide").empty();
+				$(".rightSide").append(res.html());
+		});
+	}
+}
+
 </script>
 </head>
-
 <body>
 <@b.header />
 <div class="fence-wide ly-clearFix">
@@ -35,54 +82,58 @@ $(document).ready(function(){
   <span class="title fontYH f20 fb">市场信息</span></h1>
 </div>
 <div class="bgOk fb">
-  <input name="input" type="checkbox" value="" checked="checked" />
-  <span class="ml5">接收市场信息短信</span></div>
+<#if messageConfig??>
+	<#if messageConfig.messageType.getId()==5>
+		<#if messageConfig.isAccetp==true>
+			<input id="configType" name="input" type="checkbox"  value="5" checked="checked"/>
+			<input id="configId" type="hidden" name="configId" value="${messageConfig.id}"/>
+		<#else>
+			<input id="configType" name="input" type="checkbox"  value="5"/>
+			<input type="hidden" name="configId" value="${messageConfig.id}"/>
+		</#if>
+	<#else>
+		<input id="configType" name="input" type="checkbox"  value="5"/>
+		<input id="configId" type="hidden" name="configId" value=""/>
+	</#if>
+<#else>
+	<input id="configType" name="input" type="checkbox"  value="5"/>
+	<input id="configId" type="hidden" name="configId" value=""/>
+</#if>
+  <span class="ml5">接收市场信息短信</span>
+</div>
 <div class="contBox">
 <div id="tabsholder">
-<ul class="tabs">
-<li id="tabz1"><a href="#">江苏省开发商招标信息</a></li>
-</ul>
-<div class="contents">
-<div id="content1" class="tabscontent">
-<ul class="invList">
-<li class="bgUnread">
-<span class="icon icon-invi-unread"></span>
-<span class="time mr10">2015-03-03</span>
-<a href="invite-info.html">华夏幸福潮白河孔雀城襄颖园外墙石材幕墙工程招标公告</a>
-</li>
-<li class="bgGray">
-<span class="icon icon-invi-read"></span>
-<span class="time mr10">2015-03-03</span>
-<a href="invite-info.html">华夏幸福集采基地类入口区园林景观工程招标公告</a>
-</li>
+<!--<ul class="tabs">
+ <li id="tabz1"><a href="javascript:void(0);">江苏省开发商招标信息</a></li> 
+</ul>-->
+<!--<div class="contents"> 
+<div id="content1" class="tabscontent"> -->
+<ul class="invList" onclick="modifyState('${message.id}','${message.infoId}');">
+<#list messageList as message>
+	<#if message.state.getId()==0>
+		<li class="bgUnread" id="message_li_${message.infoId}" state="${message.state.getId()}">
+			<span class="icon icon-invi-unread"></span>
+			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
+			<a href="invite-info.html">${message.xmmc}</a>
+		</li>
+	<#else>
+		<li class="bgGray" id="message_li_${message.infoId}" state="${message.state.getId()}">
+			<span class="icon icon-invi-read"></span>
+			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
+			<a href="invite-info.html">${message.xmmc}</a>
+		</li>
+	</#if>
+</#list>
 </ul>
 <div class="ly-clearFix">
-        <div id="pager" class="jPaginate"></div>
-      </div>
+<@b.pager/>
+</div>
 </div>
   </div>
 </div>
 </div>
-</div>
-</div>
+<!--</div>
+ </div> -->
 <@b.footer />
 </body>
-<script type="text/javascript">
-		$(function() {
-			$("#pager").paginate({
-				count 		: 50,
-				start 		: 1,
-				display     : 10,
-				border					: true,
-				border_color			: '#CCC',
-				text_color  			: '#333',
-				background_color    	: '#FFF',	
-				border_hover_color		: '#ff4400',
-				text_hover_color  		: '#ff4400',
-				background_hover_color	: '#fff', 
-				images					: false,
-				mouse					: 'press'
-			});
-});
-		</script>
 </html>
