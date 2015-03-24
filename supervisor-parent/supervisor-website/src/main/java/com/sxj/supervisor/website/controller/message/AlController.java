@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.supervisor.entity.gather.AlEntity;
 import com.sxj.supervisor.service.tasks.IAlGather;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("al")
@@ -27,7 +28,8 @@ public class AlController {
 			List<AlEntity> list = al.query();
 			map.put("list", list);
 		} catch (Exception e) {
-			// TODO: handle exception
+			SxjLogger.error("查询铝近30天报价出错", e, this.getClass());
+			throw new WebException(e.getMessage());
 		}
 		return map;
 	}
