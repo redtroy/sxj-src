@@ -14,6 +14,8 @@ public class TenderMessageQuery extends Pagable implements Serializable
     
     private String memberNo;
     
+    private String infoId;
+    
     public String getMemberNo()
     {
         return memberNo;
@@ -22,6 +24,16 @@ public class TenderMessageQuery extends Pagable implements Serializable
     public void setMemberNo(String memberNo)
     {
         this.memberNo = memberNo;
+    }
+    
+    public String getInfoId()
+    {
+        return infoId;
+    }
+    
+    public void setInfoId(String infoId)
+    {
+        this.infoId = infoId;
     }
     
 }
