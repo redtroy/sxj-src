@@ -26,6 +26,7 @@ public class AlGatherQuartz extends QuartzJobBean implements Serializable
     {
         try
         {
+            ag = (IAlGather) context.get("ag");
             ag.gather();
         }
         catch (Exception e)
