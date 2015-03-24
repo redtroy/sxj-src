@@ -273,13 +273,22 @@ public class ContractPayServiceImpl implements IContractPayService {
 					.publish(
 							MessageChannel.WEBSITE_FINANCE_MESSAGE
 									+ pay.getMemberNoA());
-			TransMessageEntity message = new TransMessageEntity();
-			message.setType(MessageTypeEnum.PAY);
-			message.setState(MessageStateEnum.UNREAD);
-			message.setStateMessage("未付款");
-			message.setContractNo(pay.getPayNo());
-			message.setSendDate(new Date());
-			tms.addMessage(message);
+			TransMessageEntity messageA = new TransMessageEntity();
+			messageA.setType(MessageTypeEnum.PAY);
+			messageA.setState(MessageStateEnum.UNREAD);
+			messageA.setStateMessage("未付款");
+			messageA.setContractNo(pay.getPayNo());
+			messageA.setMemberNo(pay.getMemberNameA());
+			messageA.setSendDate(new Date());
+			tms.addMessage(messageA);
+			TransMessageEntity messageB = new TransMessageEntity();
+			messageB.setType(MessageTypeEnum.PAY);
+			messageB.setState(MessageStateEnum.UNREAD);
+			messageB.setStateMessage("等待付款");
+			messageB.setContractNo(pay.getPayNo());
+			messageA.setMemberNo(pay.getMemberNameB());
+			messageB.setSendDate(new Date());
+			tms.addMessage(messageB);
 		} catch (Exception e) {
 			SxjLogger.error("新增付款管理出错！", e, this.getClass());
 			throw new ServiceException("新增付款管理出错！", e);
