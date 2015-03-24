@@ -359,7 +359,7 @@ public class ContractProcessServiceImpl implements IContractProcessService
                 message.setStateMessage("未付款");
                 message.setContractNo(pay.getPayNo());
                 message.setSendDate(new Date());
-                tms.addMessage(message);
+                messageService.addMessage(message);
             }
         } catch (ServiceException e) {
             SxjLogger.error(e.getMessage(), e, this.getClass());
