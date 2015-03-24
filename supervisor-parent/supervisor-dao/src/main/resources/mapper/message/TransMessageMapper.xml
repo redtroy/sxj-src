@@ -24,6 +24,6 @@
 		<if test="condition.memberNo!= null and condition.memberNo != ''">
 			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
 		</if>
-		<![CDATA[ ORDER BY STATE DESC]]>
+		<![CDATA[ ORDER BY STATE]]>
 	</select>
 </mapper>
