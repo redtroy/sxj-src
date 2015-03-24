@@ -20,7 +20,7 @@ public class WindDoorInfoController {
 	public String info(ModelMap map, String id) throws WebException {
 		try {
 			WindDoorEntity wde = iwds
-					.getInfoById("31meK9aoT7Hb3y8vc2cktPE0rkFvDsA8");
+					.getInfoById("4eQqt4e6G1FencQOtA5mr4JfsCxZoYhO");
 			map.put("model", wde);
 		} catch (Exception e) {
 			// TODO: handle exception

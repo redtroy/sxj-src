@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.sxj.supervisor.dao.gather.AlDao;
 import com.sxj.supervisor.entity.gather.AlEntity;
 import com.sxj.supervisor.service.tasks.IAlGather;
 import com.sxj.supervisor.tasks.Model.DataMap;
+import com.sxj.util.exception.ServiceException;
 
 @Service()
 public class AlGatherImpl implements IAlGather {
@@ -81,5 +83,15 @@ public class AlGatherImpl implements IAlGather {
 		reader.close();
 		connection.disconnect();
 		return sb.toString();
+	}
+
+	@Override
+	public List<AlEntity> query() throws ServiceException {
+		try {
+			return ad.getAl();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
