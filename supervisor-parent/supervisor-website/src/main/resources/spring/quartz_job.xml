@@ -1,70 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-     <!-- 启动触发器的配置开始 -->
-    <bean name="startQuertz" lazy-init="false" 
-        class="org.springframework.scheduling.quartz.SchedulerFactoryBean" >
-         <property name="configLocation" value="classpath:spring/quartz.properties" />  
-        <property name="triggers">
-            <list>
-                 <ref bean="alJobTrigger" />      <!-- 铝采集 -->
-                 <ref bean="windDoorJobTrigger" />   <!-- 门窗采集 -->
-            </list>
-        </property>
-    </bean>
-    <!-- 启动触发器的配置结束 -->
+	<!-- 启动触发器的配置开始 -->
+	<bean name="startQuertz" lazy-init="false"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="configLocation" value="classpath:spring/quartz.properties" />
+		<property name="triggers">
+			<list>
+				<ref bean="alJobTrigger" />      <!-- 铝采集 -->
+				<ref bean="windDoorJobTrigger" />   <!-- 门窗采集 -->
+			</list>
+		</property>
+	</bean>
+	<!-- 启动触发器的配置结束 -->
 
 
-    <!-- 调度的配置开始 -->
-    <bean id="alJobTrigger" class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail">
-            <ref bean="alJob" />
-        </property>
-        <property name="cronExpression">
-            <value>0/5 * * * * ?</value>
-        </property>
-    </bean> 
-     <bean id="windDoorJobTrigger" class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail">
-            <ref bean="windDoorJob" />
-        </property>
-        <property name="cronExpression">
-            <value>0 49 10 * * ?</value>
-        </property>
-    </bean> 
-    <!-- 调度的配置结束 -->
-    <!-- job的配置开始 -->
-     <!-- <bean id="alJob"
-        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject">
-            <ref bean="al" />
-        </property>
-        <property name="targetMethod">
-            <value>gather</value>
-        </property>
-    </bean> 
-     <bean id="windDoorJob"
-        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject">
-            <ref bean="windDoor" />
-        </property>
-        <property name="targetMethod">
-            <value>gather</value>
-        </property>
-    </bean>  -->
-     <bean id="alJob"
-        class="org.springframework.scheduling.quartz.JobDetailBean">
+	<!-- 调度的配置开始 -->
+	<bean id="alJobTrigger"
+		class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="alJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	<bean id="windDoorJobTrigger"
+		class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="windDoorJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 49 10 * * ?</value>
+		</property>
+	</bean>
+	<!-- 调度的配置结束 -->
+	<!-- job的配置开始 -->
+	<!-- <bean id="alJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+		<property name="targetObject"> <ref bean="al" /> </property> <property name="targetMethod"> 
+		<value>gather</value> </property> </bean> <bean id="windDoorJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+		<property name="targetObject"> <ref bean="windDoor" /> </property> <property 
+		name="targetMethod"> <value>gather</value> </property> </bean> -->
+	<bean id="alJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.sxj.supervisor.website.quartz.AlGatherQuartz"></property>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="ag" value-ref="alGather">
+				</entry>
+			</map>
+		</property>
 		<property name="beanName" value="al"></property>
-   	</bean> 
-   	<bean id="windDoorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-   	<property name="beanName" value="windDoor"></property>
-   	</bean> 
-    <!-- job的配置结束 -->
-     <!-- 工作的bean -->
-    <bean id="al" class="com.sxj.supervisor.website.quartz.AlGatherQuartz"/> 
-    <bean id="windDoor" class="com.sxj.supervisor.website.quartz.WindDoorQuartz"/> 
+	</bean>
+	<!-- <bean id="windDoorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="beanName" value="windDoor"></property>
+	</bean>
+	job的配置结束
+	工作的bean
+	<bean id="al" class="com.sxj.supervisor.website.quartz.AlGatherQuartz" />
+	<bean id="windDoor" class="com.sxj.supervisor.website.quartz.WindDoorQuartz" /> -->
 
 </beans>  
