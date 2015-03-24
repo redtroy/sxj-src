@@ -147,6 +147,7 @@ public class PayController extends BaseController
             Map<String, String> map = new HashMap<String, String>();
             CometServiceImpl.setCount(channelName, 0l);
             map.put("isOk", "ok");
+            
             return map;
         }
         catch (Exception e)
