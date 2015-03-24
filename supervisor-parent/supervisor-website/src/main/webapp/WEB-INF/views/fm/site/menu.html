@@ -16,13 +16,13 @@
 <#else>
 <span class="new-message" id="pay_message" style="display: none;">${payMessageCount}</span>
 </#if>
-<#elseif mc.id==21>
+<#elseif mc.id==22>
 <#if transMessageCount??&&transMessageCount&gt;0>
 <span class="new-message" id="trans_message">${transMessageCount}</span>
 <#else>
 <span class="new-message" id="trans_message" style="display: none;">${transMessageCount}</span>
 </#if>
-<#elseif mc.id==22>
+<#elseif mc.id==21>
 <#if sysMessageCount??&&sysMessageCount&gt;0>
 <span class="new-message" id="sys_message">${sysMessageCount}</span>
 <#else>
@@ -50,7 +50,7 @@ $(document).ready(function(){
 			return false;
 		}			
 	});
-	
+	menuMessage();
 	window.setInterval(menuMessage, 5000);
 });
 function getUrlParam(name){

@@ -448,6 +448,8 @@ public class RecordController extends BaseController {
 					}
 				}
 			}
+			CometServiceImpl.subCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+	                + member.getMember().getMemberNo());
 			map.put("isOK", "ok");
 			return map;
 		} catch (Exception e) {
