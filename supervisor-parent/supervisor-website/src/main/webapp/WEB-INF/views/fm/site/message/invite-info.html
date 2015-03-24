@@ -24,52 +24,13 @@ $(document).ready(function(){
 </head>
 
 <body>
-<div id="header">
-<div class="fence-wide">
-<div class="logOut ly-right"><a href="#">退出当前帐户</a></div>
-</div>
-<h1 class="fence-wide"><a href="login.html" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
-</div>
+<@b.header />
 <div class="fence-wide ly-clearFix">
 <div class="yard-190 mt15 ly-left">
-      <div class="leftMenu">
-<h2 class="fontYH f18">
-<span class="icon icon-member"></span>会员中心</h2>
-<ul>
-<li><a href="member-profile.html">会员中心</a></li><li><a href="sub-account.html">子帐号管理</a></li>
-</ul>
-<h2 class="fontYH f18"><span class="icon icon-contract"></span>合同管理</h2>
-<ul>
-<li><a href="app-record.html">申请合同备案</a></li>
-<li><a href="contract.html">合同备案管理</a></li>
-<li><a href="finance.html">账务统计</a></li>
-<li><a href="pay.html">付款管理</a></li>
-</ul>
-<h2 class="fontYH f18">
-<span class="icon icon-supply"></span>供应链物流管理</h2>
-      <ul>
-        <li><a href="new-gysorder.html">物流标签申请</a></li>
-        <li><a href="gysordermgr.html">物流标签申请管理</a></li>
-        <li><a href="gysrfidmgr.html">物流标签管理</a></li>
-      </ul>
-	  <h2 class="fontYH f18"> <span class="icon icon-supply"></span>认证标签管理</h2>
-      <ul>
-        <li><a href="new-mencorder.html">认证标签申请</a></li>
-        <li><a href="mencordermgr.html">认证标签申请管理</a></li>
-        <li><a href="mencrfidmgr.html">认证标签管理</a></li>
-		<li><a href="mgysrfidmgr.html">物流标签管理</a></li>
-        <li><a href="startmrfid.html">启用认证标签</a></li>
-		<li><a href="loss-menc.html">门窗损坏补损标签</a></li>
-      </ul>
-       <h2 class="fontYH f18"> <span class="icon icon-news"></span>消息管理</h2>
-      <ul>
-        <li><span class="new-message">5</span><a href="news.html">系统信息</a></li>
-        <li><a href="message.html">交易信息</a></li>
-        <li class="on"><a href="invite.html">市场信息</a></li>
-      </ul>
-</div>
+   <@b.leftMenu isLoad="true"/>
 </div>
 <div class="yard-870 rightSide ly-left inviteBox">
+
 <div class="heading mb15 ly-clearFix">
 <h1>
   <span class="title fontYH f20 fb">市场信息</span></h1>
@@ -96,7 +57,8 @@ $(document).ready(function(){
 </div>
 </div>
 </div>
-<div id="footer" class="f12">&copy; 2014 私享家绿色门窗平台&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14040094号-1</a></span></div>
+
+<@b.footer />
 <div class="modal-wrap popDemo contPop passwordPop" style="display:none;">
       <div class="modal-header"><span class="close">关闭</span></div>
       <div class="modal-body">

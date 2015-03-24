@@ -262,7 +262,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 	public void addPayRecordEntity(PayRecordEntity pay) throws ServiceException {
 		try {
 			pay.setCreatPayDate(new Date());
-			String id = payDao.addPay(pay);
+			payDao.addPay(pay);
 			CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 					+ pay.getMemberNoA());
 			redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
@@ -277,7 +277,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			message.setType(MessageTypeEnum.PAY);
 			message.setState(MessageStateEnum.UNREAD);
 			message.setStateMessage("未付款");
-			message.setContractNo(payDao.getPayRecordEntity(id).getPayNo());
+			message.setContractNo(pay.getPayNo());
 			message.setSendDate(new Date());
 			tms.addMessage(message);
 		} catch (Exception e) {
