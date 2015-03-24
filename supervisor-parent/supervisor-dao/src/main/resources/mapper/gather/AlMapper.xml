@@ -17,6 +17,6 @@
 	<!-- 高级查询 -->
 	<select id="getAl" resultMap="AlResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		
+		<![CDATA[SELECT * FROM AL_PRICE ORDER BY DATE DESC LIMIT 0,30]]>
 	</select>
 </mapper>

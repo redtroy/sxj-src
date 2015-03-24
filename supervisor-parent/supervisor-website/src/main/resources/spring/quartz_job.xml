@@ -31,7 +31,7 @@
             <ref bean="windDoorJob" />
         </property>
         <property name="cronExpression">
-            <value>30 54 20 * * ?</value>
+            <value>0 49 10 * * ?</value>
         </property>
     </bean> 
     <!-- 调度的配置结束 -->
