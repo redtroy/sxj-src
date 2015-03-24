@@ -98,16 +98,16 @@ public class TransMessageServiceImpl implements ITransMessageService
                 dao.updateMessage(message);
                 CometServiceImpl.subCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                         + message.getMemberNo());
-                if (message.getType().equals(MessageTypeEnum.CONTRACT))
-                {
-                    CometServiceImpl.subCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
-                            + message.getMemberNo());
-                }
-                else if (message.getType().equals(MessageTypeEnum.PAY))
-                {
-                    CometServiceImpl.subCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
-                            + message.getMemberNo());
-                }
+//                if (message.getType().equals(MessageTypeEnum.CONTRACT))
+//                {
+//                    CometServiceImpl.subCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+//                            + message.getMemberNo());
+//                }
+//                 if (message.getType().equals(MessageTypeEnum.PAY))
+//                {
+//                    CometServiceImpl.subCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+//                            + message.getMemberNo());
+//                }
             }
         }
         catch (Exception e)

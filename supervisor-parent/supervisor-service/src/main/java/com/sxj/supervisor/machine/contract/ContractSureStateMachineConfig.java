@@ -13,7 +13,9 @@ import com.sxj.statemachine.annotations.Transitions;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.enu.contract.ContractSureStateEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.service.contract.IContractProcessService;
+import com.sxj.util.comet.CometServiceImpl;
 
 @StateMachine(stateType = ContractSureStateEnum.class, startState = "NOAFFIRM", finalStates = { "FILINGS" }, name = "contractSureStatefsm")
 public class ContractSureStateMachineConfig {
