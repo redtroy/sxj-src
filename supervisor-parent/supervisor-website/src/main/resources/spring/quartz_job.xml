@@ -38,7 +38,7 @@
     <!-- 调度的配置结束 -->
     <!-- job的配置开始 -->
      <bean id="alJob"
-        class="com.sxj.supervisor.website.quartz.SupervisorMethodInvokingJobDetailFactoryBean">
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject">
             <ref bean="al" />
         </property>
@@ -47,7 +47,7 @@
         </property>
     </bean> 
      <bean id="windDoorJob"
-        class="com.sxj.supervisor.website.quartz.SupervisorMethodInvokingJobDetailFactoryBean">
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject">
             <ref bean="windDoor" />
         </property>
