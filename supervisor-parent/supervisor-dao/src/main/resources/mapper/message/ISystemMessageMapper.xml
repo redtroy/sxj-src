@@ -32,7 +32,7 @@
 		<if test="condition.memberNo!= null and condition.memberNo != ''">
 			<![CDATA[AND message.MEMBER_NO = #{condition.memberNo} ]]>
 		</if>
-		<![CDATA[ ORDER BY message.STATE DESC]]>
+		<![CDATA[ ORDER BY message.STATE]]>
 	</select>
 	<!-- 高级查询 -->
 	<select id="queryMessage"
