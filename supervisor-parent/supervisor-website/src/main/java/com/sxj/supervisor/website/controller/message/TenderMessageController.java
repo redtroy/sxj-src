@@ -50,19 +50,24 @@ public class TenderMessageController extends BaseController
             return LOGIN;
         }
         String memberNo = user.getMember().getMemberNo();
-        List<String> infoIdList = CometServiceImpl.get(MessageChannel.MEMBER_TENDER_MESSAGE_INFO
-                + memberNo);
+        List<String> infoIdList = CometServiceImpl.get(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
         if (infoIdList != null && infoIdList.size() > 0)
         {
             List<TenderMessageEntity> messageList = new ArrayList<TenderMessageEntity>();
             for (Iterator<String> iterator = infoIdList.iterator(); iterator.hasNext();)
             {
                 String infoId = iterator.next();
-                TenderMessageEntity message = new TenderMessageEntity();
-                message.setInfoId(infoId);
-                message.setMemberNo(memberNo);
-                message.setState(MessageStateEnum.UNREAD);
-                messageList.add(message);
+                query.setMemberNo(memberNo);
+                query.setInfoId(infoId);
+                List<TenderMessageModel> list = service.queryMessageList(query);
+                if (list == null || list.size() == 0)
+                {
+                    TenderMessageEntity message = new TenderMessageEntity();
+                    message.setInfoId(infoId);
+                    message.setMemberNo(memberNo);
+                    message.setState(MessageStateEnum.UNREAD);
+                    messageList.add(message);
+                }
             }
             service.addMessage(messageList);
             CometServiceImpl.clear(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
