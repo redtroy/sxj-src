@@ -68,11 +68,11 @@ function save(id){
 	var bLicenseNo=$("#bLicenseNo").val()+"";
     var energyNo=$("#energyNo").val()+"";
 	var erro_flag=false;
-	if (!bLicenseNo.match(/^[A-Za-z0-9]+$/)){
+	if (!bLicenseNo.match(/^[A-Za-z0-9\(\)\-]+$/)){
     	$("#energyNo_erro").show();
     	erro_flag=true;
     }
-    if (!energyNo.match(/^[A-Za-z0-9]+$/)){
+    if (!energyNo.match(/^[A-Za-z0-9\(\)\-]+$/)){
     	$("#energyNo_erro").show();
     	erro_flag=true;
     }

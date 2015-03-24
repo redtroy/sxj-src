@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
@@ -20,6 +21,7 @@ import com.sxj.supervisor.entity.gather.AlEntity;
 import com.sxj.supervisor.service.tasks.IAlGather;
 import com.sxj.supervisor.tasks.Model.DataMap;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 
 @Service()
 public class AlGatherImpl implements IAlGather {
@@ -28,6 +30,7 @@ public class AlGatherImpl implements IAlGather {
 	private AlDao ad;
 
 	@Override
+	@Transactional
 	public void gather() {
 		try {
 			String name = getJsonString("");
@@ -58,7 +61,8 @@ public class AlGatherImpl implements IAlGather {
 			HierarchicalCacheManager.set(CacheLevel.REDIS, "Al", "date",
 					newDate);
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error("抓去铝数据出错", e, this.getClass());
+			throw new ServiceException("抓去铝数据出错", e);
 		}
 
 	}
@@ -86,12 +90,13 @@ public class AlGatherImpl implements IAlGather {
 	}
 
 	@Override
+	@Transactional
 	public List<AlEntity> query() throws ServiceException {
 		try {
 			return ad.getAl();
 		} catch (Exception e) {
-			e.printStackTrace();
+			SxjLogger.error("查询铝近30天报价出错", e, this.getClass());
+			throw new ServiceException("查询铝近30天报价出错", e);
 		}
-		return null;
 	}
 }

@@ -13,6 +13,14 @@
 <script type="text/javascript" src="${b.staticPath}js/highcharts.js"></script>
 <script type="text/javascript">
 $(function(){
+	$("#tabsholder").tytabs({
+		prefixtabs:"tabz",
+		prefixcontent:"content",
+		classcontent:"tabscontent",
+		tabinit:"3",
+		catchget:"tab2",
+		fadespeed:"normal"
+	});
 	$("#configType").change(function() {
 		 var ischecked=$(this).attr("checked");
 		 var accept=false;
@@ -26,6 +34,29 @@ $(function(){
 			 }
 		 });
 	});
+	
+	   $.post("${basePath}al/info.htm",function(dataList){
+		   var dateList=new Array();
+		   var maxList=new Array();
+		   var minList=new Array();
+		   var averageList=new Array();
+		   for (var i=0;i<dataList.list.length;i++){
+			   dateList[dataList.list.length-1-i]=dataList.list[i].date;
+			   maxList[dataList.list.length-1-i]=parseInt(dataList.list[i].max);
+			   minList[dataList.list.length-1-i]=parseInt(dataList.list[i].min);
+			   averageList[dataList.list.length-1-i]=parseInt(dataList.list[i].average);
+		   }
+		   $("#lvchart").highcharts({
+			   title: { text: '近30天铝价格走势图', x: -20 //center 
+				   },
+				   xAxis: { categories: dateList},
+				   yAxis: { title: { text: '单位（元/吨）' }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
+				   legend: { layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0 },
+				   series: [{ name: 'max', data: maxList},
+				           { name: 'min', data: minList }, 
+				           { name: 'average', data: averageList }]
+		   });
+	   });
 	
 });
 
@@ -54,7 +85,7 @@ function modifyState(id,infoId){
 				$("#message_li_"+infoId).removeClass("bgUnread");
 				$("#message_li_"+infoId).addClass("bgGray");
 				window.location.href="${basePath}market/info.htm?id="+infoId;
-				$.get("${basePath}market/info.htm?id="+infoId",function(data){
+				$.get("${basePath}market/info.htm?id="+infoId,function(data){
 					var res = $(data).find(".rightSide");
 					$(".rightSide").empty();
 					$(".rightSide").append(res.html());
@@ -62,46 +93,13 @@ function modifyState(id,infoId){
 			}
 		});
 	}else{
-		$.get("${basePath}market/info.htm?id="+infoId",function(data){
+		$.get("${basePath}market/info.htm?id="+infoId,function(data){
 				var res = $(data).find(".rightSide");
 				$(".rightSide").empty();
 				$(".rightSide").append(res.html());
 		});
 	}
  }
-}} 
-$(document).ready(function(){
-	$("#tabsholder").tytabs({
-							prefixtabs:"tabz",
-							prefixcontent:"content",
-							classcontent:"tabscontent",
-							tabinit:"3",
-							catchget:"tab2",
-							fadespeed:"normal"
-							});
-   $.post("${basePath}al/info.htm",function(dataList){
-	   var dateList=new Array();
-	   var maxList=new Array();
-	   var minList=new Array();
-	   var averageList=new Array();
-	   for (var i=0;i<dataList.list.length;i++){
-		   dateList[dataList.list.length-1-i]=dataList.list[i].date;
-		   maxList[dataList.list.length-1-i]=parseInt(dataList.list[i].max);
-		   minList[dataList.list.length-1-i]=parseInt(dataList.list[i].min);
-		   averageList[dataList.list.length-1-i]=parseInt(dataList.list[i].average);
-	   }
-	   $("#lvchart").highcharts({
-		   title: { text: '近30天铝价格走势图', x: -20 //center 
-			   },
-			   xAxis: { categories: dateList},
-			   yAxis: { title: { text: '单位（元/吨）' }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
-			   legend: { layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0 },
-			   series: [{ name: 'max', data: maxList},
-			           { name: 'min', data: minList }, 
-			           { name: 'average', data: averageList }]
-	   });
-   })
-});
 </script>
 </head>
 <body>
@@ -143,19 +141,19 @@ $(document).ready(function(){
 </ul>
 <div class="contents"> 
 <div id="content1" class="tabscontent"> 
-<ul class="invList" onclick="modifyState('${message.id}','${message.infoId}');">
+<ul class="invList">
 <#list messageList as message>
 	<#if message.state.getId()==0>
-		<li class="bgUnread" id="message_li_${message.infoId}" state="${message.state.getId()}">
+		<li class="bgUnread" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
 			<span class="icon icon-invi-unread"></span>
 			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
-			<a href="invite-info.html">${message.xmmc}</a>
+			<a>${message.xmmc}</a>
 		</li>
 	<#else>
-		<li class="bgGray" id="message_li_${message.infoId}" state="${message.state.getId()}">
+		<li class="bgGray" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
 			<span class="icon icon-invi-read"></span>
 			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
-			<a href="invite-info.html">${message.xmmc}</a>
+			<a>${message.xmmc}</a>
 		</li>
 	</#if>
 </#list>
@@ -171,8 +169,8 @@ $(document).ready(function(){
   </div>
 </div>
 </div>
-<!--</div>
- </div> -->
+</div>
+</div>
 <@b.footer />
 </body>
 </html>

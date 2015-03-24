@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -38,7 +37,6 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
-import com.sxj.redis.core.RTopic;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -92,20 +90,31 @@ public class BasicController extends BaseController
     @Autowired
     private RedisTopics topics;
     
-//    @PostConstruct
-//    public void init()
-//    {
-//        CometEngine engine = CometContext.getInstance().getEngine();
-//        // 启动 Comet Server Thread
-//        MessageThread cometServer = MessageThread.newInstance(engine);
-//        RTopic<String> topic1 = topics.getTopic("topic1");
-//        topic1.addListener(new CometMessageListener(cometServer));
-//    }
+    //    @PostConstruct
+    //    public void init()
+    //    {
+    //        CometEngine engine = CometContext.getInstance().getEngine();
+    //        // 启动 Comet Server Thread
+    //        MessageThread cometServer = MessageThread.newInstance(engine);
+    //        RTopic<String> topic1 = topics.getTopic("topic1");
+    //        topic1.addListener(new CometMessageListener(cometServer));
+    //    }
     
     @RequestMapping("notifyComet")
     public @ResponseBody void notifyComet(String channelName)
     {
         CometServiceImpl.sendMessage("topic1", channelName);
+    }
+    
+    public void uEdit(HttpServletRequest request, HttpServletResponse response)
+    {
+        //        request.setCharacterEncoding("utf-8");
+        //        response.setHeader("Content-Type", "text/html");
+        //        
+        //        String rootPath = application.getRealPath("/");
+        //        
+        //        out.write(new ActionEnter(request, rootPath).exec());
+        
     }
     
     @RequestMapping("footer")
