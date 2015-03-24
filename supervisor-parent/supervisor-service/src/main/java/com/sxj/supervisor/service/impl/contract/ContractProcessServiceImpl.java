@@ -63,6 +63,7 @@ public class ContractProcessServiceImpl implements IContractProcessService
     
     @Autowired
     private ITransMessageService messageService;
+    
     /**
      * 变更确认状态
      */
@@ -317,14 +318,16 @@ public class ContractProcessServiceImpl implements IContractProcessService
     
     @Override
     @Transactional
-    public void addContractPay(String contractNo) throws ServiceException {
-        try {
+    public void addContractPay(String contractNo) throws ServiceException
+    {
+        try
+        {
             Assert.hasText(contractNo, "合同号不能为空");
-            ContractEntity con = contractDao
-                    .getContractByContractNo(contractNo);
+            ContractEntity con = contractDao.getContractByContractNo(contractNo);
             Assert.notNull(con, "合同不存在");
             // 生成支付单
-            if (con.getType().equals(ContractTypeEnum.BIDDING)) {
+            if (con.getType().equals(ContractTypeEnum.BIDDING))
+            {
                 return;
             }
             PayRecordEntity pay = new PayRecordEntity();
@@ -338,33 +341,49 @@ public class ContractProcessServiceImpl implements IContractProcessService
             pay.setContent("合同定金");
             pay.setState(PayStageEnum.STAGE1);
             pay.setPayMode(PayModeEnum.MODE1);
-            if (con.getType().equals(ContractTypeEnum.GLASS)) {
+            if (con.getType().equals(ContractTypeEnum.GLASS))
+            {
                 pay.setContractType(PayContractTypeEnum.GLASS);
-            } else if (con.getType().equals(ContractTypeEnum.EXTRUSIONS)) {
+            }
+            else if (con.getType().equals(ContractTypeEnum.EXTRUSIONS))
+            {
                 pay.setContractType(PayContractTypeEnum.EXTRUDERS);
             }
-
+            
             pay.setPayType(PayTypeEnum.DEPOSIT);
             int flag = payDao.addContractPay(pay);// 新增定金支付单
-            if (flag == 1) {
+            if (flag == 1)
+            {
                 CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
                         + pay.getMemberNoA());
                 redisTopics.getTopic(MessageChannel.TOPIC_NAME)
-                        .publish(
-                                MessageChannel.WEBSITE_PAY_MESSAGE
-                                        + pay.getMemberNoA());
-                TransMessageEntity message = new TransMessageEntity();
-                message.setType(MessageTypeEnum.PAY);
-                message.setState(MessageStateEnum.UNREAD);
-                message.setStateMessage("未付款");
-                message.setContractNo(pay.getPayNo());
-                message.setSendDate(new Date());
-                messageService.addMessage(message);
+                        .publish(MessageChannel.WEBSITE_PAY_MESSAGE
+                                + pay.getMemberNoA());
+                TransMessageEntity messageA = new TransMessageEntity();
+                messageA.setType(MessageTypeEnum.PAY);
+                messageA.setState(MessageStateEnum.UNREAD);
+                messageA.setStateMessage("未付款");
+                messageA.setContractNo(pay.getPayNo());
+                messageA.setMemberNo(pay.getMemberNameA());
+                messageA.setSendDate(new Date());
+                messageService.addMessage(messageA);
+                TransMessageEntity messageB = new TransMessageEntity();
+                messageB.setType(MessageTypeEnum.PAY);
+                messageB.setState(MessageStateEnum.UNREAD);
+                messageB.setStateMessage("等待支付");
+                messageB.setContractNo(pay.getPayNo());
+                messageA.setMemberNo(pay.getMemberNameB());
+                messageB.setSendDate(new Date());
+                messageService.addMessage(messageB);
             }
-        } catch (ServiceException e) {
+        }
+        catch (ServiceException e)
+        {
             SxjLogger.error(e.getMessage(), e, this.getClass());
             throw new ServiceException(e.getMessage());
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             SxjLogger.error(e.getMessage(), e, this.getClass());
             throw new ServiceException("新增合同支付单错误", e);
         }
