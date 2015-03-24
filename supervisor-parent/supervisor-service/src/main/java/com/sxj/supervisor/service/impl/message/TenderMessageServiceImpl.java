@@ -30,7 +30,15 @@ public class TenderMessageServiceImpl implements ITenderMessageService
     public void addMessage(List<TenderMessageEntity> message)
             throws ServiceException
     {
-        // TODO Auto-generated method stub
+        try
+        {
+            dao.addMessage(message);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("添加招标信息错误", e, this.getClass());
+            throw new ServiceException("添加招标信息错误", e);
+        }
         
     }
     
@@ -51,8 +59,8 @@ public class TenderMessageServiceImpl implements ITenderMessageService
         }
         catch (Exception e)
         {
-            SxjLogger.error("查询超标信息错误", e, this.getClass());
-            throw new ServiceException("查询超标信息错误", e);
+            SxjLogger.error("查询招标信息错误", e, this.getClass());
+            throw new ServiceException("查询招标信息错误", e);
         }
     }
     

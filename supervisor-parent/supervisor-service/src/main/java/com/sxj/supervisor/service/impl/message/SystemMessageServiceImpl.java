@@ -15,11 +15,13 @@ import com.sxj.supervisor.entity.message.SystemMessageEntity;
 import com.sxj.supervisor.entity.message.SystemMessageInfoEntity;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.message.MessageStateEnum;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.message.SystemMessageModel;
 import com.sxj.supervisor.model.message.SystemMessageQuery;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.supervisor.service.message.ISystemMessageService;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.exception.ServiceException;
@@ -38,6 +40,9 @@ public class SystemMessageServiceImpl implements ISystemMessageService
     
     @Autowired
     private IMemberService memberService;
+    
+    @Autowired
+    private IMessageConfigService configService;
     
     @Override
     @Transactional
@@ -94,6 +99,10 @@ public class SystemMessageServiceImpl implements ISystemMessageService
                             info.getId());
                     CometServiceImpl.takeCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
                             + memberNos[i]);
+                    
+                    configService.sendMessage(memberNos[i],
+                            MessageTypeEnum.SYSTEM,
+                            info.getTitle());
                 }
             }
             if (types != null && types.size() > 0)
@@ -114,6 +123,10 @@ public class SystemMessageServiceImpl implements ISystemMessageService
                                     info.getId());
                             CometServiceImpl.takeCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
                                     + memberEntity.getMemberNo());
+                            
+                            configService.sendMessage(memberEntity.getMemberNo(),
+                                    MessageTypeEnum.SYSTEM,
+                                    info.getTitle());
                         }
                     }
                 }

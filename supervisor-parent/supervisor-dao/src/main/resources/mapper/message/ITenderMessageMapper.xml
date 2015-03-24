@@ -12,6 +12,14 @@
 		<result property="nowDate" column="NOW_DATE" jdbcType="TIMESTAMP"/>
 	</resultMap>
 	
+	<resultMap id="com.sxj.supervisor.dao.message.ITenderMessageDao.messageEntity"
+		type="com.sxj.supervisor.entity.message.TenderMessageEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="infoId" column="INFO_ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
+	</resultMap>
+	
 	<!-- 高级查询 -->
 	<select id="queryMessageList"
 		resultMap="com.sxj.supervisor.dao.message.ITenderMessageDao.message"
