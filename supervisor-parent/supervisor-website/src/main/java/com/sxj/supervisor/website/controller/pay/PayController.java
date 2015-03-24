@@ -202,7 +202,8 @@ public class PayController extends BaseController {
 					TransMessageEntity message = new TransMessageEntity();
 					message.setType(MessageTypeEnum.PAY);
 					message.setState(MessageStateEnum.UNREAD);
-					message.setStateMessage("未确认");
+					message.setStateMessage("待确认支付");
+					message.setMemberNo(pay.getMemberNameB());
 					message.setContractNo(pay.getPayNo());
 					message.setSendDate(new Date());
 					tms.addMessage(message);
