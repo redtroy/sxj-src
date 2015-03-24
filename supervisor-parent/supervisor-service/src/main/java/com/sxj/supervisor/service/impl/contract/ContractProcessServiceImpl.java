@@ -59,7 +59,7 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 
 	@Autowired
 	private RedisTopics redisTopics;
-	
+
 	@Autowired
 	private ITransMessageService messageService;
 
@@ -149,13 +149,13 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 				TransMessageEntity transMassage = new TransMessageEntity();
 				transMassage.setType(MessageTypeEnum.CONTRACT);
 				transMassage.setState(MessageStateEnum.UNREAD);
-				transMassage.setMessage("贵公司有一条待确认的"+msgName+"信息");
+				transMassage.setMessage("贵公司有一条待确认的" + msgName + "信息");
 				transMassage.setContractNo(contract.getContractNo());
 				transMassage.setMemberNo(contract.getMemberIdA());
 				transMassage.setStateMessage("待确认");
 				transMassage.setSendDate(new Date());
 				messageService.addMessage(transMassage);
-				//乙方
+				// 乙方
 				String msgNameB = "";
 				if (userRecord.getType().getId() == 0) {
 					if (userRecord.getContractType().getId() == 0) {
@@ -172,15 +172,15 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 						+ userRecord.getContractType().getId();
 				CometServiceImpl.add(key_b, messageB);
 				redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_b);
-                TransMessageEntity transMassageB = new TransMessageEntity();
-                transMassageB.setType(MessageTypeEnum.CONTRACT);
-                transMassageB.setState(MessageStateEnum.UNREAD);
-                transMassageB.setMessage("贵公司有一条待确认的"+msgNameB+"信息");
-                transMassageB.setContractNo(contract.getContractNo());
-                transMassageB.setMemberNo(contract.getMemberIdB());
-                transMassageB.setStateMessage("待确认");
-                transMassageB.setSendDate(new Date());
-                messageService.addMessage(transMassageB);
+				TransMessageEntity transMassageB = new TransMessageEntity();
+				transMassageB.setType(MessageTypeEnum.CONTRACT);
+				transMassageB.setState(MessageStateEnum.UNREAD);
+				transMassageB.setMessage("贵公司有一条待确认的" + msgNameB + "信息");
+				transMassageB.setContractNo(contract.getContractNo());
+				transMassageB.setMemberNo(contract.getMemberIdB());
+				transMassageB.setStateMessage("待确认");
+				transMassageB.setSendDate(new Date());
+				messageService.addMessage(transMassageB);
 			}
 		} catch (Exception e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -294,8 +294,8 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 			}
 
 			pay.setPayType(PayTypeEnum.DEPOSIT);
-			String newId = payDao.addContractPay(pay);// 新增定金支付单
-			if (newId != "" && newId != null) {
+			int flag = payDao.addContractPay(pay);// 新增定金支付单
+			if (flag == 1) {
 				CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
 						+ pay.getMemberNoA());
 				redisTopics.getTopic(MessageChannel.TOPIC_NAME)
@@ -306,8 +306,7 @@ public class ContractProcessServiceImpl implements IContractProcessService {
 				message.setType(MessageTypeEnum.PAY);
 				message.setState(MessageStateEnum.UNREAD);
 				message.setStateMessage("未付款");
-				message.setContractNo(payDao.getPayRecordEntity(newId)
-						.getPayNo());
+				message.setContractNo(pay.getPayNo());
 				message.setSendDate(new Date());
 				tms.addMessage(message);
 			}
