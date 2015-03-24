@@ -44,6 +44,7 @@ public class TenderMessageServiceImpl implements ITenderMessageService
             QueryCondition<TenderMessageModel> condition = new QueryCondition<>();
             condition.setPage(query);
             condition.addCondition("memberNo", query.getMemberNo());
+            condition.addCondition("infoId", query.getInfoId());
             List<TenderMessageModel> list = dao.queryMessageList(condition);
             query.setPage(condition);
             return list;

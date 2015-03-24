@@ -12,7 +12,7 @@
 <!--  -->
 <script type="text/javascript" src="${b.staticPath}js/highcharts.js"></script>
 <script type="text/javascript">
-/* $(function(){
+$(function(){
 	$("#configType").change(function() {
 		 var ischecked=$(this).attr("checked");
 		 var accept=false;
@@ -69,7 +69,7 @@ function modifyState(id,infoId){
 		});
 	}
  }
-}} */
+}} 
 $(document).ready(function(){
 	$("#tabsholder").tytabs({
 							prefixtabs:"tabz",
@@ -119,7 +119,7 @@ $(document).ready(function(){
   <span class="title fontYH f20 fb">市场信息</span></h1>
 </div>
 <div class="bgOk fb">
-<!-- <#if messageConfig??>
+<#if messageConfig??>
 	<#if messageConfig.messageType.getId()==5>
 		<#if messageConfig.isAccetp==true>
 			<input id="configType" name="input" type="checkbox"  value="5" checked="checked"/>
@@ -135,18 +135,18 @@ $(document).ready(function(){
 <#else>
 	<input id="configType" name="input" type="checkbox"  value="5"/>
 	<input id="configId" type="hidden" name="configId" value=""/>
-</#if> -->
+</#if>
   <span class="ml5">接收市场信息短信</span>
 </div>
 <div class="contBox">
 <div id="tabsholder">
 <ul class="tabs">
- <li id="tabz1"><a href="javascript:void(0);">江苏省开发商招标信息</a></li> 
+ <li id="tabz1"><a href="#">江苏省开发商招标信息</a></li> 
  <li id="tabz2"><a href="#">当日铝锭参考价</a></li>
 </ul>
 <div class="contents"> 
 <div id="content1" class="tabscontent"> 
-<!-- <ul class="invList" onclick="modifyState('${message.id}','${message.infoId}');">
+<ul class="invList" onclick="modifyState('${message.id}','${message.infoId}');">
 <#list messageList as message>
 	<#if message.state.getId()==0>
 		<li class="bgUnread" id="message_li_${message.infoId}" state="${message.state.getId()}">
@@ -162,7 +162,7 @@ $(document).ready(function(){
 		</li>
 	</#if>
 </#list>
-</ul> -->
+</ul>
 </div>
 <div id="content2" class="tabscontent">
      <div class="con"  id="lvchart"></div>
