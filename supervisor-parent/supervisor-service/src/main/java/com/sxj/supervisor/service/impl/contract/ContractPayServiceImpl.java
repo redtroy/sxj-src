@@ -284,7 +284,7 @@ public class ContractPayServiceImpl implements IContractPayService {
 			TransMessageEntity messageB = new TransMessageEntity();
 			messageB.setType(MessageTypeEnum.PAY);
 			messageB.setState(MessageStateEnum.UNREAD);
-			messageB.setStateMessage("等待付款");
+			messageB.setStateMessage("等待支付");
 			messageB.setContractNo(pay.getPayNo());
 			messageA.setMemberNo(pay.getMemberNameB());
 			messageB.setSendDate(new Date());
