@@ -11,20 +11,24 @@ import com.sxj.util.exception.WebException;
 
 @Controller
 @RequestMapping("market")
-public class WindDoorInfoController {
-
-	@Autowired
-	private IWindDoorService iwds;
-
-	@RequestMapping("info")
-	public String info(ModelMap map, String id) throws WebException {
-		try {
-			WindDoorEntity wde = iwds
-					.getInfoById("1xBkR9UNnt6W2jUT5b7VgFkuNUgNd4wF");
-			map.put("model", wde);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		return "site/message/invite-info";
-	}
+public class WindDoorInfoController
+{
+    
+    @Autowired
+    private IWindDoorService iwds;
+    
+    @RequestMapping("info")
+    public String info(ModelMap map, String id) throws WebException
+    {
+        try
+        {
+            WindDoorEntity wde = iwds.getInfoById(id);
+            map.put("model", wde);
+        }
+        catch (Exception e)
+        {
+            // TODO: handle exception
+        }
+        return "site/message/invite-info";
+    }
 }
