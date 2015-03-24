@@ -12,7 +12,7 @@
 <!--  -->
 <script type="text/javascript" src="${b.staticPath}js/highcharts.js"></script>
 <script type="text/javascript">
-/* $(function(){
+$(function(){
 	$("#configType").change(function() {
 		 var ischecked=$(this).attr("checked");
 		 var accept=false;
@@ -69,7 +69,7 @@ function modifyState(id,infoId){
 		});
 	}
  }
-}} */
+}} 
 $(document).ready(function(){
 	$("#tabsholder").tytabs({
 							prefixtabs:"tabz",
@@ -79,29 +79,26 @@ $(document).ready(function(){
 							catchget:"tab2",
 							fadespeed:"normal"
 							});
-   $.post("${basePath}al/info.htm",function(data){
+   $.post("${basePath}al/info.htm",function(dataList){
 	   var dateList=new Array();
 	   var maxList=new Array();
 	   var minList=new Array();
 	   var averageList=new Array();
-	   for (var i=data.list.length-1;i>=0;i--){
-		   dateList[i]=data.list[i].date;
-		   maxList[i]=data.list[i].max;
-		   minList[i]=data.list[i].min;
-		   averageList[i]=data.list[i].average;
+	   for (var i=0;i<dataList.list.length;i++){
+		   dateList[dataList.list.length-1-i]=dataList.list[i].date;
+		   maxList[dataList.list.length-1-i]=parseInt(dataList.list[i].max);
+		   minList[dataList.list.length-1-i]=parseInt(dataList.list[i].min);
+		   averageList[dataList.list.length-1-i]=parseInt(dataList.list[i].average);
 	   }
 	   $("#lvchart").highcharts({
 		   title: { text: '近30天铝价格走势图', x: -20 //center 
 			   },
 			   xAxis: { categories: dateList},
-			   yAxis: { title: { text: 'Temperature (°C)' }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
+			   yAxis: { title: { text: '单位（元/吨）' }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
 			   legend: { layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0 },
-			   series: [{ name: 'max', data: maxList },
+			   series: [{ name: 'max', data: maxList},
 			           { name: 'min', data: minList }, 
 			           { name: 'average', data: averageList }]
-		   
-		   
-		   
 	   });
    })
 });
@@ -119,7 +116,7 @@ $(document).ready(function(){
   <span class="title fontYH f20 fb">市场信息</span></h1>
 </div>
 <div class="bgOk fb">
-<!-- <#if messageConfig??>
+<#if messageConfig??>
 	<#if messageConfig.messageType.getId()==5>
 		<#if messageConfig.isAccetp==true>
 			<input id="configType" name="input" type="checkbox"  value="5" checked="checked"/>
@@ -135,18 +132,18 @@ $(document).ready(function(){
 <#else>
 	<input id="configType" name="input" type="checkbox"  value="5"/>
 	<input id="configId" type="hidden" name="configId" value=""/>
-</#if> -->
+</#if>
   <span class="ml5">接收市场信息短信</span>
 </div>
 <div class="contBox">
 <div id="tabsholder">
 <ul class="tabs">
- <li id="tabz1"><a href="javascript:void(0);">江苏省开发商招标信息</a></li> 
+ <li id="tabz1"><a href="#">江苏省开发商招标信息</a></li> 
  <li id="tabz2"><a href="#">当日铝锭参考价</a></li>
 </ul>
 <div class="contents"> 
 <div id="content1" class="tabscontent"> 
-<!-- <ul class="invList" onclick="modifyState('${message.id}','${message.infoId}');">
+<ul class="invList" onclick="modifyState('${message.id}','${message.infoId}');">
 <#list messageList as message>
 	<#if message.state.getId()==0>
 		<li class="bgUnread" id="message_li_${message.infoId}" state="${message.state.getId()}">
@@ -162,10 +159,10 @@ $(document).ready(function(){
 		</li>
 	</#if>
 </#list>
-</ul> -->
+</ul>
 </div>
 <div id="content2" class="tabscontent">
-     <div class="con"  id="lvchart"></div>
+     <div class="con"  id="lvchart" style="width:800px;"></div>
   </div>
 <div class="ly-clearFix">
 <@b.pager/>
