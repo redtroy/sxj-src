@@ -79,29 +79,26 @@ $(document).ready(function(){
 							catchget:"tab2",
 							fadespeed:"normal"
 							});
-   $.post("${basePath}al/info.htm",function(data){
+   $.post("${basePath}al/info.htm",function(dataList){
 	   var dateList=new Array();
 	   var maxList=new Array();
 	   var minList=new Array();
 	   var averageList=new Array();
-	   for (var i=data.list.length-1;i>=0;i--){
-		   dateList[i]=data.list[i].date;
-		   maxList[i]=data.list[i].max;
-		   minList[i]=data.list[i].min;
-		   averageList[i]=data.list[i].average;
+	   for (var i=0;i<dataList.list.length;i++){
+		   dateList[dataList.list.length-1-i]=dataList.list[i].date;
+		   maxList[dataList.list.length-1-i]=parseInt(dataList.list[i].max);
+		   minList[dataList.list.length-1-i]=parseInt(dataList.list[i].min);
+		   averageList[dataList.list.length-1-i]=parseInt(dataList.list[i].average);
 	   }
 	   $("#lvchart").highcharts({
 		   title: { text: '近30天铝价格走势图', x: -20 //center 
 			   },
 			   xAxis: { categories: dateList},
-			   yAxis: { title: { text: 'Temperature (°C)' }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
+			   yAxis: { title: { text: '单位（元/吨）' }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
 			   legend: { layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0 },
-			   series: [{ name: 'max', data: maxList },
+			   series: [{ name: 'max', data: maxList},
 			           { name: 'min', data: minList }, 
 			           { name: 'average', data: averageList }]
-		   
-		   
-		   
 	   });
    })
 });
@@ -165,7 +162,7 @@ $(document).ready(function(){
 </ul> -->
 </div>
 <div id="content2" class="tabscontent">
-     <div class="con"  id="lvchart"></div>
+     <div class="con"  id="lvchart" style="width:800px;"></div>
   </div>
 <div class="ly-clearFix">
 <@b.pager/>
