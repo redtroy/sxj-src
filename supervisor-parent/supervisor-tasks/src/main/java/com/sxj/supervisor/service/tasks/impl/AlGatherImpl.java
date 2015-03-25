@@ -23,7 +23,7 @@ import com.sxj.supervisor.tasks.Model.DataMap;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 
-@Service()
+@Service(value = "alGather")
 public class AlGatherImpl implements IAlGather
 {
     
@@ -43,7 +43,7 @@ public class AlGatherImpl implements IAlGather
                     "Al",
                     "date");
             String newDate = "";
-            boolean flag = true;
+            boolean flag = false;
             for (Map<String, String> map : dm.getData().get("3").values())
             {
                 if (oldDate == null)
