@@ -227,8 +227,8 @@ public class Entities
         Map<String, Character> entities = new HashMap<String, Character>();
         try
         {
-            InputStream in = Entities.class.getResourceAsStream("/" + filename);
-            in = ResourcePatternUtils.getResourcePatternResolver(new PathMatchingResourcePatternResolver())
+            //            InputStream in = Entities.class.getResourceAsStream("/" + filename);
+            InputStream in = ResourcePatternUtils.getResourcePatternResolver(new PathMatchingResourcePatternResolver())
                     .getResource("/" + filename)
                     .getInputStream();
             properties.load(in);

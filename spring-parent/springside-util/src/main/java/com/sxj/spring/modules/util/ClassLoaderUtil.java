@@ -1,12 +1,15 @@
 package com.sxj.spring.modules.util;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternUtils;
 
 public class ClassLoaderUtil
 {
-    public static InputStream getResource(String configFile)
-            throws FileNotFoundException
+    public static InputStream getResource(String configFile) throws IOException
     {
         //        InputStream configStream = ClassLoaderUtil.class.getClassLoader()
         //                .getParent()
@@ -20,11 +23,10 @@ public class ClassLoaderUtil
         //                    .getResourceAsStream(configFile);
         //        configStream = getResource(ClassLoaderUtil.class.getClassLoader(),
         //                configFile);
-        InputStream configStream = getResource(ClassLoaderUtil.class.getClassLoader(),
-                configFile);
-        if (configStream == null)
-            configStream = getResource(Thread.currentThread()
-                    .getContextClassLoader(), configFile);
+        
+        InputStream configStream = ResourcePatternUtils.getResourcePatternResolver(new PathMatchingResourcePatternResolver())
+                .getResource(configFile)
+                .getInputStream();
         if (configStream == null)
             throw new FileNotFoundException("Cannot find "
                     + ClassLoaderUtil.class.getClassLoader()
@@ -33,12 +35,4 @@ public class ClassLoaderUtil
         return configStream;
     }
     
-    private static InputStream getResource(ClassLoader loader, String configFile)
-    {
-        InputStream input = loader.getResourceAsStream(configFile);
-        if (input == null && loader.getParent() != null)
-            return getResource(loader.getParent(), configFile);
-        return input;
-        
-    }
 }
