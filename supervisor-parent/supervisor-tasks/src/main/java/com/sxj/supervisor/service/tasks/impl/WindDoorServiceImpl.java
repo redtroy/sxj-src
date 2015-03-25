@@ -216,7 +216,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         try
         {
             Map<String, String> map = new HashMap<String, String>();
-            Document doc = (Document) Jsoup.connect(url).timeout(3000).get();
+            Document doc = (Document) Jsoup.connect(url).timeout(10000).get();
             Element element = doc.getElementById("ZBGGDetail1_tblInfo");
             if (element.getElementById("ZBGGDetail1_trAttach") != null
                     && !"".equals(element.getElementById("ZBGGDetail1_trAttach")))
