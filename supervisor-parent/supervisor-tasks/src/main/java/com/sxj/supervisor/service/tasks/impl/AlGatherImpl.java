@@ -34,6 +34,7 @@ public class AlGatherImpl implements IAlGather
     @Transactional
     public void gather()
     {
+        System.out.println("AlGatherStar");
         String oldDate = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
                 "Al",
                 "date");
@@ -80,6 +81,7 @@ public class AlGatherImpl implements IAlGather
             SxjLogger.error("抓去铝数据出错", e, this.getClass());
             throw new ServiceException("抓去铝数据出错", e);
         }
+        System.out.println("AlGatherEnd");
         
     }
     

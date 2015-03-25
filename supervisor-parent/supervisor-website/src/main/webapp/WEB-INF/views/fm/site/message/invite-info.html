@@ -37,6 +37,9 @@ $(document).ready(function(){
 </div>
 <div class="contBox">
 <div class="tr pr5 pb15 f12"><a class="button button-gray" href="javascript:history.go(-1);">返回</a></div>
+<div>
+<div class="contBox" id=tender_info>
+<div class="tr pr5 pb15 f12"><a class="button button-gray" href="javascript:query();">返回</a></div>
 <div class="invBox">
 <h2 class="invTit fb fontYH f16">招标预告信息</h2>
 <ul class="invCont">
@@ -53,39 +56,7 @@ $(document).ready(function(){
 	 ${model.filePath}
   </div>
 </div>
-<div class="tr pt15 pr5 pb20 f12" ><a class="button button-gray" href="javascript:history.go(-1);">返回</a></div>
-</div>
+<div class="tr pt15 pr5 pb20 f12" ><a class="button button-gray" href="javascript:query();">返回</a></div>
 </div>
 </div>
 
-<@b.footer />
-<div class="modal-wrap popDemo contPop passwordPop" style="display:none;">
-      <div class="modal-header"><span class="close">关闭</span></div>
-      <div class="modal-body">
-        <div class="item"><label>新密码</label><input class="input input-w180h30" /></div>
-        <div class="item"><label>确认密码</label><input class="input input-w180h30" /></div>
-      <div class="item"><label>&nbsp;</label><button class="button button-pop">确认修改</button><button class="button button-gray">取消</button></div>
-  </div>
-</div>
-    <div class="maskdivgen" style="display:none"></div>
-</body>
-<script type="text/javascript">
-		$(function() {
-			$("#pager").paginate({
-				count 		: 50,
-				start 		: 1,
-				display     : 10,
-				border					: true,
-				border_color			: '#CCC',
-				text_color  			: '#333',
-				background_color    	: '#FFF',	
-				border_hover_color		: '#ff4400',
-				text_hover_color  		: '#ff4400',
-				background_hover_color	: '#fff', 
-				images					: false,
-				mouse					: 'press'
-			});
-});
-		</script>
-
-</html>

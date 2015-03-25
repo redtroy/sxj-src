@@ -51,6 +51,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
                 "windDoor",
                 "GongGaoGuid");
+        System.out.println("WDGatherstar");
         try
         {
             Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
@@ -68,7 +69,6 @@ public class WindDoorServiceImpl implements IWindDoorService
             {
                 oldGongGaoGuid = null;
             }
-            System.out.println("star");
             STOP: for (int i = 1; i <= pageNum; i++)
             {
                 Map map = new HashMap();
@@ -166,6 +166,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                     oldGongGaoGuid);
             throw new ServiceException("抓取门窗信息出错", e);
         }
+        System.out.println("WDGatherEnd");
         
     }
     
@@ -320,6 +321,6 @@ public class WindDoorServiceImpl implements IWindDoorService
     public static void main(String[] args)
     {
         WindDoorServiceImpl wd = new WindDoorServiceImpl();
-        wd.content("http://www1.njcein.com.cn/njxxnew/ZtbInfo/ZBGGInfo.aspx?GongGaoGuid=17c87152-bc0e-46d1-9293-b9e6415db52b");
+        wd.content("http://www1.njcein.com.cn/njxxnew/ZtbInfo/ZBGGInfo.aspx?GongGaoGuid=47ab054f-ce98-4248-994f-906b63e24cd6");
     }
 }
