@@ -65,10 +65,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 		</dependency>
@@ -172,6 +168,11 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>supervisor-tasks</artifactId>
 			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-quartz</artifactId>
+			<version>4.2.3</version>
 		</dependency>
 	</dependencies>
 	<build>
