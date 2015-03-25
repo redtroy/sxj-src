@@ -14,11 +14,6 @@
 	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.tacitknowledge</groupId>
 			<artifactId>tk-filters</artifactId>
 			<version>1.0.1</version>
@@ -64,10 +59,6 @@
 			<artifactId>spring-orm</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -172,6 +163,11 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>supervisor-tasks</artifactId>
 			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-quartz</artifactId>
+			<version>4.2.3</version>
 		</dependency>
 	</dependencies>
 	<build>

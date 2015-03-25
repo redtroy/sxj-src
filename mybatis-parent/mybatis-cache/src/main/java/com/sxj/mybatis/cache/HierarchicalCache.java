@@ -4,6 +4,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 
 import org.apache.ibatis.cache.Cache;
 
+import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 
 public class HierarchicalCache implements Cache
@@ -45,8 +46,12 @@ public class HierarchicalCache implements Cache
     
     private void putObject(int level, Object key, Object value, int seconds)
     {
-        HierarchicalCacheManager.evict(level, cacheId, key);
-        HierarchicalCacheManager.set(level, this.cacheId, key, value, seconds);
+        HierarchicalCacheManager.evict(getLevel(level), cacheId, key);
+        HierarchicalCacheManager.set(getLevel(level),
+                this.cacheId,
+                key,
+                value,
+                seconds);
         if ((level - 1) > 0)
             putObject(level - 1, key, value, seconds);
     }
@@ -59,7 +64,9 @@ public class HierarchicalCache implements Cache
     
     private Object getObject(int level, Object key)
     {
-        Object object = HierarchicalCacheManager.get(level, this.cacheId, key);
+        Object object = HierarchicalCacheManager.get(getLevel(level),
+                this.cacheId,
+                key);
         if (object != null)
         {
             putObject(level - 1, key, object, timeToLive);
@@ -79,14 +86,14 @@ public class HierarchicalCache implements Cache
     
     private void removeObject(int level, Object key)
     {
-        HierarchicalCacheManager.evict(level, cacheId, key);
+        HierarchicalCacheManager.evict(getLevel(level), cacheId, key);
         if ((level - 1) > 0)
             removeObject(level - 1, key);
     }
     
     private void clear(int level)
     {
-        HierarchicalCacheManager.clear(level, cacheId);
+        HierarchicalCacheManager.clear(getLevel(level), cacheId);
         if ((level - 1) > 0)
             clear(level - 1);
     }
@@ -141,4 +148,8 @@ public class HierarchicalCache implements Cache
         this.timeToLive = timeToLive;
     }
     
+    private static CacheLevel getLevel(int level)
+    {
+        return CacheLevel.values()[level];
+    }
 }

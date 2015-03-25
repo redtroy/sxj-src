@@ -21,7 +21,7 @@ public class EhCacheProvider implements CacheProvider
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EhCacheProvider.class);
     
-    private static final String CONFIG_XML = "/ehcache.xml";
+    private static final String CONFIG_XML = "ehcache.xml";
     
     private CacheManager manager;
     
