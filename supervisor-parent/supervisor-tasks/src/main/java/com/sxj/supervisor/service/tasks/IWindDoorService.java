@@ -1,10 +1,8 @@
 package com.sxj.supervisor.service.tasks;
 
-import java.io.Serializable;
-
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 
-public interface IWindDoorService extends Serializable
+public interface IWindDoorService
 {
     
     /**
