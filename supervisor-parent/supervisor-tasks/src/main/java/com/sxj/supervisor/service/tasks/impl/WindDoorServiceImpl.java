@@ -49,10 +49,9 @@ public class WindDoorServiceImpl implements IWindDoorService
         try
         {
             Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
-                    .timeout(3000)
+                    .timeout(30000)
                     .execute();
             Document doc = response.parse();
-            ;
             String __VIEWSTATE = doc.getElementById("__VIEWSTATE").val();
             String __EVENTVALIDATION = doc.getElementById("__EVENTVALIDATION")
                     .val();
@@ -63,7 +62,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                     "windDoor",
                     "GongGaoGuid");
             // String oldGongGaoGuid = null;
-            System.out.println("star");
+            System.out.println(pageNum);
             STOP: for (int i = 1; i <= pageNum; i++)
             {
                 Map map = new HashMap();
@@ -77,7 +76,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                 map.put("txtProjectName", "门窗");
                 doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                         .data(map)
-                        .timeout(3000)
+                        .timeout(30000)
                         .cookies(cookies)
                         .header("Accept",
                                 "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
