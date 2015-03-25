@@ -94,8 +94,9 @@ import org.springframework.util.MethodInvoker;
  *
  * @see #afterPropertiesSet()
  */
-public class BeanInvokingJobDetailFactoryBean implements FactoryBean,
-        BeanNameAware, InitializingBean, ApplicationContextAware
+public class BeanInvokingJobDetailFactoryBean implements
+        FactoryBean<JobDetail>, BeanNameAware, InitializingBean,
+        ApplicationContextAware
 {
     /**
      * Set by <code>setApplicationContext</code> when a BeanInvokingJobDetailFactoryBean is defined within a Spring ApplicationContext as a bean.
@@ -129,16 +130,6 @@ public class BeanInvokingJobDetailFactoryBean implements FactoryBean,
      * @see #afterPropertiesSet() 
      */
     private boolean durable = false;
-    
-    /**
-     * Used by <code>afterPropertiesSet</code> to set the JobDetail.volatile property.  Default: false
-     * <p>Volatility - if a job is volatile, it is not persisted between re-starts of the Quartz scheduler.
-     * <p>I set the default to false to be the same as the default for a Quartz Trigger.  An exception is thrown 
-     * when the Trigger is non-volatile and the Job is volatile.  If you want volatility, then you must set this property, and the Trigger's volatility property, to true.
-     * @see <a href="http://www.opensymphony.com/quartz/wikidocs/TutorialLesson3.html">http://www.opensymphony.com/quartz/wikidocs/TutorialLesson3.html</a>
-     * @see #afterPropertiesSet() 
-     */
-    private boolean volatility = false;
     
     /** 
      * Used by <code>afterPropertiesSet</code> to set the JobDetail.requestsRecovery property.  Default: false<BR>
@@ -230,7 +221,7 @@ public class BeanInvokingJobDetailFactoryBean implements FactoryBean,
      * @see #afterPropertiesSet()
      * @see FactoryBean#getObject()
      */
-    public Object getObject() throws Exception
+    public JobDetail getObject() throws Exception
     {
         return jobDetail;
     }
@@ -239,7 +230,7 @@ public class BeanInvokingJobDetailFactoryBean implements FactoryBean,
      * @return JobDetail.class
      * @see FactoryBean#getObjectType()
      */
-    public Class getObjectType()
+    public Class<? extends JobDetail> getObjectType()
     {
         return JobDetail.class;
     }
@@ -396,17 +387,6 @@ public class BeanInvokingJobDetailFactoryBean implements FactoryBean,
     public void setShouldRecover(boolean shouldRecover)
     {
         this.shouldRecover = shouldRecover;
-    }
-    
-    /**
-     * setter for the {@link #volatility} property.
-     * 
-     * @param volatility
-     * @see #volatility
-     */
-    public void setVolatility(boolean volatility)
-    {
-        this.volatility = volatility;
     }
     
     /**
