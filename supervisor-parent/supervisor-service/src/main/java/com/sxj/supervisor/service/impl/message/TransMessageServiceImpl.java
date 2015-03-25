@@ -12,6 +12,7 @@ import com.sxj.supervisor.enu.message.MessageStateEnum;
 import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.message.TransMessageQuery;
+import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.supervisor.service.message.ITransMessageService;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.exception.ServiceException;
@@ -26,6 +27,9 @@ public class TransMessageServiceImpl implements ITransMessageService
     @Autowired
     private ITransMessageDao dao;
     
+    @Autowired
+    private IMessageConfigService configService;
+    
     @Override
     public void addMessage(TransMessageEntity message) throws ServiceException
     {
@@ -33,6 +37,30 @@ public class TransMessageServiceImpl implements ITransMessageService
         {
             if (message != null)
             {
+                String info = "";
+                if (message.getType().equals(MessageTypeEnum.CONTRACT))
+                {
+                    info = "贵公司有份合同号" + message.getContractNo() + "的合同信息"
+                            + message.getStateMessage();
+                }
+                else if (message.getType().equals(MessageTypeEnum.PAY))
+                {
+                    info = "贵公司有笔单号" + message.getContractNo() + "的支付单"
+                            + message.getStateMessage();
+                }
+                else if (message.getType().equals(MessageTypeEnum.DELIVER))
+                {
+                    info = "贵公司有份合同号" + message.getContractNo() + "的第"
+                            + message.getBatchNo() + "批次货物"
+                            + message.getStateMessage();
+                }
+                else if (message.getType().equals(MessageTypeEnum.RECEIPT))
+                {
+                    info = "贵公司有份合同号" + message.getContractNo() + "的第"
+                            + message.getBatchNo() + "批次货物"
+                            + message.getStateMessage();
+                }
+                message.setMessage(info);
                 dao.addMessage(message);
                 CometServiceImpl.takeCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                         + message.getMemberNo());
@@ -46,6 +74,9 @@ public class TransMessageServiceImpl implements ITransMessageService
                     CometServiceImpl.takeCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
                             + message.getMemberNo());
                 }
+                configService.sendMessage(message.getMemberNo(),
+                        message.getType(),
+                        message.getMessage());
             }
             
         }
@@ -98,16 +129,16 @@ public class TransMessageServiceImpl implements ITransMessageService
                 dao.updateMessage(message);
                 CometServiceImpl.subCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                         + message.getMemberNo());
-//                if (message.getType().equals(MessageTypeEnum.CONTRACT))
-//                {
-//                    CometServiceImpl.subCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
-//                            + message.getMemberNo());
-//                }
-//                 if (message.getType().equals(MessageTypeEnum.PAY))
-//                {
-//                    CometServiceImpl.subCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
-//                            + message.getMemberNo());
-//                }
+                //                if (message.getType().equals(MessageTypeEnum.CONTRACT))
+                //                {
+                //                    CometServiceImpl.subCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+                //                            + message.getMemberNo());
+                //                }
+                //                 if (message.getType().equals(MessageTypeEnum.PAY))
+                //                {
+                //                    CometServiceImpl.subCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                //                            + message.getMemberNo());
+                //                }
             }
         }
         catch (Exception e)

@@ -12,7 +12,7 @@ public class SupervisorMethodInvokingJobDetailFactoryBean extends
      * 
      */
     private static final long serialVersionUID = 1L;
-    
+
     @Override
     public void prepare() throws ClassNotFoundException, NoSuchMethodException
     {

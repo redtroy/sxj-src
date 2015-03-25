@@ -6,8 +6,7 @@
 
      <!-- 启动触发器的配置开始 -->
     <bean name="startQuertz" lazy-init="false" 
-        class="org.springframework.scheduling.quartz.SchedulerFactoryBean" >
-         <property name="configLocation" value="classpath:spring/quartz.properties" />  
+        class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
                  <ref bean="alJobTrigger" />      <!-- 铝采集 -->
@@ -24,7 +23,7 @@
             <ref bean="alJob" />
         </property>
         <property name="cronExpression">
-            <value>0/5 * * * * ?</value>
+            <value>0 0 0/1 * * ?</value>
         </property>
     </bean> 
      <bean id="windDoorJobTrigger" class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -32,13 +31,13 @@
             <ref bean="windDoorJob" />
         </property>
         <property name="cronExpression">
-            <value>0 49 10 * * ?</value>
+            <value>0 0 0/1 * * ?</value>
         </property>
     </bean> 
     <!-- 调度的配置结束 -->
     <!-- job的配置开始 -->
      <bean id="alJob"
-        class="com.sxj.supervisor.website.quartz.SupervisorMethodInvokingJobDetailFactoryBean">
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject">
             <ref bean="al" />
         </property>
@@ -47,7 +46,7 @@
         </property>
     </bean> 
      <bean id="windDoorJob"
-        class="com.sxj.supervisor.website.quartz.SupervisorMethodInvokingJobDetailFactoryBean">
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject">
             <ref bean="windDoor" />
         </property>
@@ -57,7 +56,7 @@
     </bean> 
     <!-- job的配置结束 -->
      <!-- 工作的bean -->
-    <bean id="al" class="com.sxj.supervisor.website.quartz.AlGatherQuartz"/> 
-    <bean id="windDoor" class="com.sxj.supervisor.website.quartz.WindDoorQuartz"/> 
+    <bean id="al" class="com.sxj.supervisor.website.quartz.AlGatherQuartz" /> 
+    <bean id="windDoor" class="com.sxj.supervisor.website.quartz.WindDoorQuartz" /> 
 
 </beans>  

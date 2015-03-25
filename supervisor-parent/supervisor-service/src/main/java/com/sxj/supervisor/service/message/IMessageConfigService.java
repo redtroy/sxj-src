@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.message;
 import java.util.List;
 
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.util.exception.ServiceException;
 
 public interface IMessageConfigService
@@ -15,4 +16,10 @@ public interface IMessageConfigService
     
     public List<MessageConfigEntity> queryConfigList(String memberNo)
             throws ServiceException;
+    
+    public MessageConfigEntity getConfig(String memberNo,
+            MessageTypeEnum messageType) throws ServiceException;
+    
+    public void sendMessage(String memberNo, MessageTypeEnum messageType,
+            String message) throws ServiceException;
 }
