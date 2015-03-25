@@ -77,8 +77,8 @@ import org.springframework.util.MethodInvoker;
  *
  * @see #afterPropertiesSet()
  */
-public class MethodInvokingJobDetailFactoryBean implements FactoryBean,
-        BeanNameAware, InitializingBean
+public class MethodInvokingJobDetailFactoryBean implements
+        FactoryBean<JobDetail>, BeanNameAware, InitializingBean
 {
     private Log logger = LogFactory.getLog(getClass());
     
@@ -228,7 +228,7 @@ public class MethodInvokingJobDetailFactoryBean implements FactoryBean,
      * @see #afterPropertiesSet()
      * @see FactoryBean#getObject()
      */
-    public Object getObject() throws Exception
+    public JobDetail getObject() throws Exception
     {
         return jobDetail;
     }
@@ -237,7 +237,7 @@ public class MethodInvokingJobDetailFactoryBean implements FactoryBean,
      * @return JobDetail.class
      * @see FactoryBean#getObjectType()
      */
-    public Class getObjectType()
+    public Class<? extends JobDetail> getObjectType()
     {
         return JobDetail.class;
     }
