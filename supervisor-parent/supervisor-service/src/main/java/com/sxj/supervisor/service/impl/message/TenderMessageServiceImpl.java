@@ -32,7 +32,11 @@ public class TenderMessageServiceImpl implements ITenderMessageService
     {
         try
         {
-            dao.addMessage(message);
+            if (message != null && message.size() > 0)
+            {
+                dao.addMessage(message);
+            }
+            
         }
         catch (Exception e)
         {
@@ -76,8 +80,29 @@ public class TenderMessageServiceImpl implements ITenderMessageService
             {
                 message.setState(state);
                 dao.updateMessage(message);
-                CometServiceImpl.subCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                        + message.getMemberNo());
+                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                        + message.getMemberNo();
+                List<String> userKeys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                Long totalCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+                if (userKeys != null && userKeys.size() > 0)
+                {
+                    if (userKeys.contains(key))
+                    {
+                        CometServiceImpl.subCount(key);
+                    }
+                    else
+                    {
+                        CometServiceImpl.setCount(key, totalCount);
+                    }
+                }
+                else
+                {
+                    CometServiceImpl.setCount(key, totalCount);
+                }
+                
+                CometServiceImpl.add(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS,
+                        MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                                + message.getMemberNo());
             }
         }
         catch (Exception e)

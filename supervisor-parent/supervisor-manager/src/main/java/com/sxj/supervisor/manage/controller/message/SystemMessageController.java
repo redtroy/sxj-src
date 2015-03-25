@@ -38,12 +38,12 @@ public class SystemMessageController extends BaseController
             List<SystemMessageInfoEntity> list = service.querySystemInfoList(query);
             map.put("messageList", list);
             map.put("query", query);
-            return "manage/message/systemmessage";
+            return "manage/message/systemMessage";
         }
         catch (Exception e)
         {
             SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new WebException(e.getMessage());
+            throw new WebException(e.getMessage(), e);
         }
         
     }
