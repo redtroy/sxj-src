@@ -34,16 +34,20 @@ public class AlGatherImpl implements IAlGather
     @Transactional
     public void gather()
     {
+        String oldDate = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
+                "Al",
+                "date");
         try
         {
             String name = getJsonString("");
             DataMap dm = JsonMapper.nonEmptyMapper().fromJson(name,
                     DataMap.class);
-            String oldDate = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
-                    "Al",
-                    "date");
             String newDate = "";
             boolean flag = false;
+            if (ad.getAl().size() < 1)
+            {
+                flag = true;
+            }
             for (Map<String, String> map : dm.getData().get("3").values())
             {
                 if (oldDate == null)

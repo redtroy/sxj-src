@@ -15,6 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
@@ -44,8 +45,12 @@ public class WindDoorServiceImpl implements IWindDoorService
     private ITransMessageService tms;
     
     @Override
+    @Transactional
     public void WindDoorGather() throws ServiceException
     {
+        String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
+                "windDoor",
+                "GongGaoGuid");
         try
         {
             Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
@@ -59,10 +64,10 @@ public class WindDoorServiceImpl implements IWindDoorService
             Map<String, String> cookies = response.cookies();
             int pageNum = page(__VIEWSTATE, __EVENTVALIDATION, cookies);
             int flag = 0;
-            String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
-                    "windDoor",
-                    "GongGaoGuid");
-            // String oldGongGaoGuid = null;
+            if (wda.getMaxWindDoor().size() < 1)
+            {
+                oldGongGaoGuid = null;
+            }
             System.out.println("star");
             STOP: for (int i = 1; i <= pageNum; i++)
             {
@@ -155,6 +160,10 @@ public class WindDoorServiceImpl implements IWindDoorService
         catch (Exception e)
         {
             SxjLogger.error("抓取门窗信息出错", e, this.getClass());
+            HierarchicalCacheManager.set(CacheLevel.REDIS,
+                    "windDoor",
+                    "GongGaoGuid",
+                    oldGongGaoGuid);
             throw new ServiceException("抓取门窗信息出错", e);
         }
         
