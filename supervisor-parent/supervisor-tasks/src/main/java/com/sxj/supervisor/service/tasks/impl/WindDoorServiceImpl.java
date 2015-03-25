@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jsoup.Connection.Response;
@@ -152,6 +153,17 @@ public class WindDoorServiceImpl implements IWindDoorService
                     wda.addWindDoor(windDoor);
                     CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                             windDoor.getId());
+                    CometServiceImpl.takeCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+                    List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                    if (keys != null && keys.size() > 0)
+                        for (String key : keys)
+                        {
+                            if (key == null)
+                            {
+                                continue;
+                            }
+                            CometServiceImpl.takeCount(key);
+                        }
                     flag++;
                 }
             }
