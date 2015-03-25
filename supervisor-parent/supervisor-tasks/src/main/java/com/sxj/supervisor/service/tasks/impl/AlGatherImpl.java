@@ -43,7 +43,7 @@ public class AlGatherImpl implements IAlGather
                     "Al",
                     "date");
             String newDate = "";
-            boolean flag = true;
+            boolean flag = false;
             for (Map<String, String> map : dm.getData().get("3").values())
             {
                 if (oldDate == null)
