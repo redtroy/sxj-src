@@ -55,7 +55,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         try
         {
             Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
-                    .timeout(3000)
+                    .timeout(10000)
                     .execute();
             Document doc = response.parse();
             ;
@@ -186,7 +186,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             map.put("txtProjectName", "门窗");
             Document doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                     .data(map)
-                    .timeout(3000)
+                    .timeout(10000)
                     .cookies(cookies)
                     .header("Accept",
                             "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
@@ -217,7 +217,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         try
         {
             Map<String, String> map = new HashMap<String, String>();
-            Document doc = (Document) Jsoup.connect(url).timeout(3000).get();
+            Document doc = (Document) Jsoup.connect(url).timeout(10000).get();
             Element element = doc.getElementById("ZBGGDetail1_tblInfo");
             if (element.getElementById("ZBGGDetail1_trAttach") != null
                     && !"".equals(element.getElementById("ZBGGDetail1_trAttach")))
