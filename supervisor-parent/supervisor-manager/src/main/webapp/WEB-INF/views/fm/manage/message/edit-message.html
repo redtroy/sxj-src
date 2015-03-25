@@ -53,7 +53,13 @@ $(function(){
 	});
 });
 function comfirMember(){
-	$("#userList").append($("#user_div").html());
+	var text=$("#user_div").find("#user_span").text();
+	if(text!=""){
+		$("#userList").append($("#user_div").html());
+		$("#user_div").find("#user_span").text("");
+		$("#user_div").find("#user_input").val("");
+		$("#user_div").find("#userName_input").val("");
+	}
 }
 
 function submitForm(){

@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.supervisor.dao.message.IMessageConfigDao;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
+import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -20,6 +22,9 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     
     @Autowired
     private IMessageConfigDao dao;
+    
+    @Autowired
+    private IMemberService memberService;
     
     @Override
     @Transactional
@@ -98,4 +103,58 @@ public class MessageConfigServiceImpl implements IMessageConfigService
         }
     }
     
+    @Override
+    public MessageConfigEntity getConfig(String memberNo,
+            MessageTypeEnum messageType) throws ServiceException
+    {
+        try
+        {
+            List<MessageConfigEntity> list = queryConfigList(memberNo);
+            MessageConfigEntity messageConfig = null;
+            if (list != null && list.size() > 0)
+            {
+                for (MessageConfigEntity messageConfigEntity : list)
+                {
+                    if (messageConfigEntity == null)
+                    {
+                        continue;
+                    }
+                    if (messageConfigEntity.getMessageType()
+                            .equals(messageType))
+                    {
+                        if (messageConfigEntity.getIsAccetp())
+                        {
+                            messageConfig = messageConfigEntity;
+                        }
+                    }
+                }
+            }
+            return messageConfig;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("获取消息配置错误", e, this.getClass());
+            throw new ServiceException("获取消息配置错误", e);
+        }
+    }
+    
+    @Override
+    public void sendMessage(String memberNo, MessageTypeEnum messageType,
+            String message) throws ServiceException
+    {
+        try
+        {
+            MessageConfigEntity config = getConfig(memberNo, messageType);
+            if (config != null)
+            {
+                memberService.createvalidata(config.getPhone(), message);
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("发送消息短信错误", e, this.getClass());
+            throw new ServiceException("发送消息短信错误", e);
+        }
+        
+    }
 }
