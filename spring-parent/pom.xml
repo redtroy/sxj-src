@@ -13,6 +13,9 @@
 		<module>springside-util</module>
 		<module>spring-test</module>
     <module>spring.jsoup</module>
+    <module>spring.context.support</module>
+    <module>spring-quartz</module>
+    <module>spring-jsoup</module>
   </modules>
 	<dependencyManagement>
 		<dependencies>

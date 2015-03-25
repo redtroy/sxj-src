@@ -13,6 +13,7 @@
                  <ref bean="windDoorJobTrigger" />   <!-- 门窗采集 -->
             </list>
         </property>
+        <property name="configLocation" value="spring/quartz.properties"></property>
     </bean>
     <!-- 启动触发器的配置结束 -->
 
@@ -23,7 +24,7 @@
             <ref bean="alJob" />
         </property>
         <property name="cronExpression">
-            <value>0 0 0/1 * * ?</value>
+            <value>0/5 * * * * ?</value>
         </property>
     </bean> 
      <bean id="windDoorJobTrigger" class=" org.springframework.scheduling.quartz.CronTriggerFactoryBean">
