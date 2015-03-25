@@ -38,11 +38,14 @@ function loadHighcharts(){
 			   title: { text: '近30天铝价格走势图', x: -20 //center 
 				   },
 				   xAxis: { categories: dateList,tickInterval:3},
+				    credits: {  
+				        enabled: false  
+				      },  
 				   yAxis: { title: { text: '单位（元/吨）' }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
 				   legend: { layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0 },
-				   series: [{ name: 'max', data: maxList},
-				           { name: 'min', data: minList }, 
-				           { name: 'average', data: averageList }]
+				   series: [{ name: '最高', data: maxList},
+				           { name: '最低', data: minList }, 
+				           { name: '均价', data: averageList }]
 			   });
 	   });
 }
