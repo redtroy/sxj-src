@@ -1,5 +1,8 @@
 package com.sxj.supervisor.jsoup;
 
+import java.io.FileNotFoundException;
+
+import org.jsoup.nodes.Entities;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +24,8 @@ public class SpringJsoupTest
         service.WindDoorGather();
     }
     
+    public void testClassLoader() throws FileNotFoundException
+    {
+        Entities.class.getResource("entities-base.properties");
+    }
 }

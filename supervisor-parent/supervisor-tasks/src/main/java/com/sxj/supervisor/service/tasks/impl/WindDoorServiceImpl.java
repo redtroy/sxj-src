@@ -185,7 +185,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             map.put("txtProjectName", "门窗");
             Document doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                     .data(map)
-                    .timeout(3000)
+                    .timeout(30000)
                     .cookies(cookies)
                     .header("Accept",
                             "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")

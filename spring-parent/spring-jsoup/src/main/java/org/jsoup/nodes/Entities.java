@@ -11,8 +11,6 @@ import java.util.Properties;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.parser.Parser;
 
-import com.sxj.spring.modules.util.ClassLoaderUtil;
-
 /**
  * HTML entities, and escape routines.
  * Source: <a href="http://www.w3.org/TR/html5/named-character-references.html#named-character-references">W3C HTML
@@ -227,7 +225,7 @@ public class Entities
         Map<String, Character> entities = new HashMap<String, Character>();
         try
         {
-            InputStream in = ClassLoaderUtil.getResource(filename);
+            InputStream in = Entities.class.getResourceAsStream("/" + filename);
             properties.load(in);
             in.close();
         }
