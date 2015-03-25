@@ -10,6 +10,8 @@ import java.util.Properties;
 
 import org.jsoup.helper.StringUtil;
 import org.jsoup.parser.Parser;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternUtils;
 
 /**
  * HTML entities, and escape routines.
@@ -225,7 +227,10 @@ public class Entities
         Map<String, Character> entities = new HashMap<String, Character>();
         try
         {
-            InputStream in = Entities.class.getResourceAsStream("/" + filename);
+            //            InputStream in = Entities.class.getResourceAsStream("/" + filename);
+            InputStream in = ResourcePatternUtils.getResourcePatternResolver(new PathMatchingResourcePatternResolver())
+                    .getResource("/" + filename)
+                    .getInputStream();
             properties.load(in);
             in.close();
         }

@@ -15,6 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
@@ -44,26 +45,29 @@ public class WindDoorServiceImpl implements IWindDoorService
     private ITransMessageService tms;
     
     @Override
+    @Transactional
     public void WindDoorGather() throws ServiceException
     {
+        String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
+                "windDoor",
+                "GongGaoGuid");
+        System.out.println("WDGatherstar");
         try
         {
             Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
-                    .timeout(3000)
+                    .timeout(30000)
                     .execute();
             Document doc = response.parse();
-            ;
             String __VIEWSTATE = doc.getElementById("__VIEWSTATE").val();
             String __EVENTVALIDATION = doc.getElementById("__EVENTVALIDATION")
                     .val();
             Map<String, String> cookies = response.cookies();
             int pageNum = page(__VIEWSTATE, __EVENTVALIDATION, cookies);
             int flag = 0;
-            String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
-                    "windDoor",
-                    "GongGaoGuid");
-            // String oldGongGaoGuid = null;
-            System.out.println("star");
+            if (wda.getMaxWindDoor().size() < 1)
+            {
+                oldGongGaoGuid = null;
+            }
             STOP: for (int i = 1; i <= pageNum; i++)
             {
                 Map map = new HashMap();
@@ -77,7 +81,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                 map.put("txtProjectName", "门窗");
                 doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                         .data(map)
-                        .timeout(3000)
+                        .timeout(30000)
                         .cookies(cookies)
                         .header("Accept",
                                 "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
@@ -155,8 +159,13 @@ public class WindDoorServiceImpl implements IWindDoorService
         catch (Exception e)
         {
             SxjLogger.error("抓取门窗信息出错", e, this.getClass());
+            HierarchicalCacheManager.set(CacheLevel.REDIS,
+                    "windDoor",
+                    "GongGaoGuid",
+                    oldGongGaoGuid);
             throw new ServiceException("抓取门窗信息出错", e);
         }
+        System.out.println("WDGatherEnd");
         
     }
     
@@ -176,7 +185,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             map.put("txtProjectName", "门窗");
             Document doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                     .data(map)
-                    .timeout(3000)
+                    .timeout(30000)
                     .cookies(cookies)
                     .header("Accept",
                             "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
@@ -207,7 +216,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         try
         {
             Map<String, String> map = new HashMap<String, String>();
-            Document doc = (Document) Jsoup.connect(url).timeout(3000).get();
+            Document doc = (Document) Jsoup.connect(url).timeout(10000).get();
             Element element = doc.getElementById("ZBGGDetail1_tblInfo");
             if (element.getElementById("ZBGGDetail1_trAttach") != null
                     && !"".equals(element.getElementById("ZBGGDetail1_trAttach")))
@@ -311,6 +320,6 @@ public class WindDoorServiceImpl implements IWindDoorService
     public static void main(String[] args)
     {
         WindDoorServiceImpl wd = new WindDoorServiceImpl();
-        wd.content("http://www1.njcein.com.cn/njxxnew/ZtbInfo/ZBGGInfo.aspx?GongGaoGuid=17c87152-bc0e-46d1-9293-b9e6415db52b");
+        wd.content("http://www1.njcein.com.cn/njxxnew/ZtbInfo/ZBGGInfo.aspx?GongGaoGuid=47ab054f-ce98-4248-994f-906b63e24cd6");
     }
 }

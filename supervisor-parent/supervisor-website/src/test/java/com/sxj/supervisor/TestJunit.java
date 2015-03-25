@@ -12,23 +12,27 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
+@ContextConfiguration(locations = { "classpath:spring/applicationContext-test.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
-public class TestJunit {
-
-	@Autowired
-	private IWindDoorService ids;
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	@Test
-	public void test() {
-		ids.WindDoorGather();
-	}
+public class TestJunit
+{
+    
+    @Autowired
+    private IWindDoorService ids;
+    
+    @AfterClass
+    public static void tearDownAfterClass() throws Exception
+    {
+    }
+    
+    @After
+    public void tearDown() throws Exception
+    {
+    }
+    
+    @Test
+    public void test()
+    {
+        ids.WindDoorGather();
+    }
 }
