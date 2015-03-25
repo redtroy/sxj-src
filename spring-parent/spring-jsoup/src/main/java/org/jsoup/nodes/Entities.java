@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import org.jsoup.helper.StringUtil;
 import org.jsoup.parser.Parser;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.sxj.spring.modules.util.ClassLoaderUtil;
 
@@ -228,7 +229,9 @@ public class Entities
         try
         {
             //            InputStream in = Entities.class.getResourceAsStream("/" + filename);
-            InputStream in = ClassLoaderUtil.getResource(filename);
+            InputStream in = new PathMatchingResourcePatternResolver().getResource("classpath*:/"
+                    + filename)
+                    .getInputStream();
             properties.load(in);
             in.close();
         }
@@ -270,5 +273,18 @@ public class Entities
             }
         }
         return outMap;
+    }
+    
+    public static void main(String[] args)
+    {
+        try
+        {
+            System.out.println(ClassLoaderUtil.getResource("classpath:/entities-base.properties"));
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

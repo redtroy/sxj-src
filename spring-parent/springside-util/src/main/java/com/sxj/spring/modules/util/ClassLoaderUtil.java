@@ -23,7 +23,8 @@ public class ClassLoaderUtil
         //        configStream = getResource(ClassLoaderUtil.class.getClassLoader(),
         //                configFile);
         
-        InputStream configStream = new PathMatchingResourcePatternResolver().getResource(configFile)
+        InputStream configStream = new PathMatchingResourcePatternResolver().getResource("classpath:"
+                + configFile)
                 .getInputStream();
         if (configStream == null)
             throw new FileNotFoundException("Cannot find "
