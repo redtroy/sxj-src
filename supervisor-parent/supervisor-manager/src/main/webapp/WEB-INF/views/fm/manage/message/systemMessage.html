@@ -21,8 +21,8 @@
 		   params=params+"&currentPage="+page;
 	   }
 		$.post("${basePath}sysMessage/query.htm",params,function(data){
-			var res=$(data).find("#rightBar").children("#res_table");
-			var pager=$(data).find("#rightBar").children("#pager");
+			var res=$(data).find("#res_table");
+			var pager=$(data).find("#res_table").children("#pager");
 			$("#res_table").empty();
 			$("#res_table").append(res.html());
 			var totalPage=pager.attr("totalPage");

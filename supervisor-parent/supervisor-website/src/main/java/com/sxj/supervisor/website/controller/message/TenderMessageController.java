@@ -57,9 +57,10 @@ public class TenderMessageController extends BaseController
             for (Iterator<String> iterator = infoIdList.iterator(); iterator.hasNext();)
             {
                 String infoId = iterator.next();
-                query.setMemberNo(memberNo);
-                query.setInfoId(infoId);
-                List<TenderMessageModel> list = service.queryMessageList(query);
+                TenderMessageQuery query2 = new TenderMessageQuery();
+                query2.setMemberNo(memberNo);
+                query2.setInfoId(infoId);
+                List<TenderMessageModel> list = service.queryMessageList(query2);
                 if (list == null || list.size() == 0)
                 {
                     TenderMessageEntity message = new TenderMessageEntity();
@@ -70,8 +71,6 @@ public class TenderMessageController extends BaseController
                 }
             }
             service.addMessage(messageList);
-            CometServiceImpl.clear(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                    + memberNo);
         }
         query.setPagable(true);
         query.setMemberNo(memberNo);

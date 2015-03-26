@@ -33,6 +33,8 @@ public class MessageChannel
     
     public static final String MEMBER_TENDER_MESSAGE_COUNT = "MEMBER_TENDER_MESSAGE_COUNT_";
     
+    public static final String MEMBER_READTENDER_MESSAGE_KEYS = "MEMBER_READTENDER_MESSAGE_KEYS";
+    
     private MessageChannel()
     {
         super();

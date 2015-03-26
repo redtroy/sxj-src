@@ -1,6 +1,7 @@
 package com.sxj.cache.ehcache;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
@@ -105,6 +106,10 @@ public class EhCacheProvider implements CacheProvider
             cacheManager = new ConcurrentHashMap<String, EhCache>();
         }
         catch (FileNotFoundException e)
+        {
+            throw new CacheException(e);
+        }
+        catch (IOException e)
         {
             throw new CacheException(e);
         }
