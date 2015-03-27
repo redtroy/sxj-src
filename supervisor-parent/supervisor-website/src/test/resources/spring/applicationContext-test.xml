@@ -18,7 +18,6 @@
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 	<import resource="classpath*:spring/fast-dfs.xml" />
 	<import resource="classpath*:spring/mybatis-shard.xml" />
-	<import resource="classpath*:spring/quartz_job.xml" />
 	<!-- <import resource="classpath*:spring/applicationContext-csrf.xml" /> -->
 	<task:annotation-driven />
 	<context:annotation-config />
@@ -46,11 +45,11 @@
 		<property name="basePackage" value="com.sxj.supervisor.dao" /> <property 
 		name="sqlSessionFactoryBeanName" value="sqlSessionFactory" /> </bean> -->
 	<!-- 配置多级缓存 -->
-	<!-- <bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
+	 <bean id="cacheManager" class="com.sxj.cache.manager.HierarchicalCacheManager"
 		lazy-init="false" init-method="initCacheProvider">
 		<property name="configFile" value="cache.properties"></property>
 		<property name="databaseId" value="2"></property>
-	</bean> -->
+	</bean> 
 	<bean id="redisConcurrent" class="com.sxj.redis.core.concurrent.RedisConcurrent">
 		<constructor-arg index="0">
 			<value>config/redis-advance.properties</value>

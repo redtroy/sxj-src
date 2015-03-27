@@ -246,8 +246,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                 map.put("gifPath", gifPath);
                 element.getElementById("ZBGGDetail1_divDS")
                         .getElementsByTag("img")
-                        .attr("src",
-                                "http://storage.menchuang.org.cn/" + gifPath);
+                        .attr("src", "${b.imagePath}" + gifPath);
                 element.getElementById("ZBGGDetail1_divDS").removeAttr("style");
                 element.getElementById("ZBGGDetail1_divDS").attr("style",
                         "position: absolute;");
@@ -318,6 +317,17 @@ public class WindDoorServiceImpl implements IWindDoorService
             String file = new String(storageClientService.downloadFile(group,
                     path,
                     new ByteArrayFdfsFileInputStreamHandler()));
+            //            Document doc = Jsoup.parse(file);
+            //            String img = doc.getElementById("ZBGGDetail1_divDS")
+            //                    .getElementsByTag("img")
+            //                    .attr("src");
+            //            if (img != null && !"".equals(img))
+            //            {
+            //                doc.getElementById("ZBGGDetail1_divDS")
+            //                .getElementsByTag("img")
+            //                .attr("src",
+            //                        "http://storage.menchuang.org.cn/" + gifPath);
+            //            }
             System.out.println(file);
             wde.setFilePath(file);
             return wde;
