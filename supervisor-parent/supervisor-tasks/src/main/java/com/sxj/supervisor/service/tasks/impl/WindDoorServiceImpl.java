@@ -246,10 +246,10 @@ public class WindDoorServiceImpl implements IWindDoorService
                 map.put("gifPath", gifPath);
                 element.getElementById("ZBGGDetail1_divDS")
                         .getElementsByTag("img")
-                        .attr("src", "${b.imagePath}" + gifPath);
-                element.getElementById("ZBGGDetail1_divDS").removeAttr("style");
-                element.getElementById("ZBGGDetail1_divDS").attr("style",
-                        "position: absolute;");
+                        .attr("src", gifPath);
+                //                element.getElementById("ZBGGDetail1_divDS").removeAttr("style");
+                //                element.getElementById("ZBGGDetail1_divDS").attr("style",
+                //                        "position: absolute;");
             }
             map.put("content", element.toString());
             return map;
