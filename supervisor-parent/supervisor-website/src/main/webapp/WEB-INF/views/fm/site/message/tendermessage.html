@@ -76,6 +76,7 @@ function query(page) {
 		var res = $(data).find(".contBox");
 		var pager = $(data).find("#pager");
 		$(".contBox").empty();
+		$("#wd-info").show();
 		$(".contBox").append(res.html());
 		var totalPage = pager.attr("totalPage");
 		var currentPage = pager.attr("currentPage");
@@ -94,17 +95,18 @@ function modifyState(id,infoId){
 				$("#message_li_"+infoId).removeClass("bgUnread");
 				$("#message_li_"+infoId).addClass("bgGray");
 				$.get("${basePath}market/info.htm?id="+infoId,function(data){
-					var res = $(data).find(".contBox");
+					$("#wd-info").hide();
 					$(".contBox").empty();
-					$(".contBox").append(res.html());
+					$(".contBox").append(data);
 				});
 			}
 		});
 	}else{
-		$.get("${basePath}market/info.htm?id="+infoId,function(data){
-				var res = $(data).find(".contBox");
-				$(".contBox").empty();
-				$(".contBox").append(res.html());
+		$.get("${basePath}market/info.htm?id="+infoId,
+				function(data){
+			$("#wd-info").hide();
+			$(".contBox").empty();
+			$(".contBox").append(data);
 		});
 	}
  }
@@ -121,7 +123,7 @@ function modifyState(id,infoId){
 <h1>
   <span class="title fontYH f20 fb">市场信息</span></h1>
 </div>
-<div class="bgOk fb">
+<div class="bgOk fb" id="wd-info">
 <#if messageConfig??>
 	<#if messageConfig.messageType.getId()==5>
 		<#if messageConfig.isAccetp==true>
