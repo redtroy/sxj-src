@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.message.NewSendMessage;
 
 @Service
 @Transactional
@@ -25,6 +27,21 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     
     @Autowired
     private IMemberService memberService;
+    
+    @Value("${mobile.smsUrl}")
+    private String smsUrl;
+    
+    @Value("${mobile.userName}")
+    private String userName;
+    
+    @Value("${mobile.password}")
+    private String password;
+    
+    @Value("${mobile.sign}")
+    private String sign;
+    
+    @Value("${mobile.type}")
+    private String type;
     
     @Override
     @Transactional
@@ -147,7 +164,16 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             MessageConfigEntity config = getConfig(memberNo, messageType);
             if (config != null)
             {
-                memberService.createvalidata(config.getPhone(), message);
+                if (config.getIsAccetp())
+                {
+                    NewSendMessage.getInstance(smsUrl,
+                            userName,
+                            password,
+                            sign,
+                            type).sendMessage(config.getPhone(),
+                            message + "，请登录私享家绿色门窗平台查看详情！");
+                }
+                
             }
         }
         catch (Exception e)
