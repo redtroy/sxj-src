@@ -354,10 +354,23 @@ var refreshElastislide=function($container,$carousel,data,rebuild){
 			$carousel.empty();
 		if(data instanceof Array){
 			for (var i = 0; i < data.length; i++) {
-				$carousel.append('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
+				var suffix=/\.[^\.]+$/.exec(data[i]);
+				var $li;
+				if(suffix==".PDF"){
+					 $li=$('<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="'+data[i]+'"><img src="${b.staticPath}images/pdf.png" title="点击下载文件" /></a><p>'+(i+1)+'</p></li>');
+				}else{
+					$li=$('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"><img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" /></a><p>'+(i+1)+'</p></li>');
+				}
+				$carousel.append($li);
 			}
 		}else{
-			var $li=$('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a></li>');
+			var suffix=/\.[^\.]+$/.exec(data.fileIds);
+			var $li;
+			if(suffix==".PDF"){
+				$li=$('<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="'+data.fileIds+'"><img src="${b.staticPath}images/pdf.png" title="点击下载文件" /></a></li>');
+			}else{
+				$li=$('<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"><img src="${b.imagePath}'+data.fileIds+'80x100.JPG" alt="" /></a></li>');
+			}
 			$carousel.append($li);
 			var $p=$('<p>'+$carousel.children().length+'</p>');
 			$li.append($p);

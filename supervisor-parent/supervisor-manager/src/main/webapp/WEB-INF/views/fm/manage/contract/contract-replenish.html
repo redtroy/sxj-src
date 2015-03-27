@@ -50,11 +50,17 @@ var validform;
 			$this.find("li").live("click", function() {
 				var el = $(this);
 				var imageSource = el.find("a").attr("data-image");
-				refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
-				el.parent().children("li").removeClass("view");
-				el.addClass("view");
-				$(".maskdivgen").show();
-				preModal = null;
+				var imageSource = el.find("a").attr("data-image");
+				if(typeof(imageSource) == 'undefined'){
+					var filePath =el.find("a").attr("data-pdf");
+					window.location.href = "${basePath}downloadFile.htm?filePath=" + filePath;
+				}else{
+					refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
+					el.parent().children("li").removeClass("view");
+					el.addClass("view");
+					$(".maskdivgen").show();
+					preModal = null;
+				}
 			});
 			refreshElastislide($(this).parent(), $(this));
 		});
@@ -216,8 +222,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
-								<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
-								<th>单价<span>(元/<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+								<th>数量<span>（<#if
+										contractModel.contract.type.getId()==1>㎡</#if><#if
+										contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+								<th>单价<span>(元/<#if
+										contractModel.contract.type.getId()==1>㎡</#if><#if
+										contractModel.contract.type.getId()==2>吨</#if>)</span></th>
 								<th>金额<span>(元)</span></th>
 								<th class="rLine">备注说明</th>
 							</tr>
@@ -245,7 +255,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						<div>
 							<label>交货地址</label> ${contractModel.contract.deliveryAddress}
 						</div>
-						<#if contractModel.batchList?exists && (contractModel.batchList?size>0)>
+						<#if contractModel.batchList?exists &&
+						(contractModel.batchList?size>0)>
 						<table border="0" cellpadding="0" cellspacing="0"
 							class="tabList producedTable">
 							<col width="20%" />
@@ -256,7 +267,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<tr>
 								<th>交货批次</th>
 								<th>产品规格</th>
-								<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+								<th>数量<span>（<#if
+										contractModel.contract.type.getId()==1>㎡</#if><#if
+										contractModel.contract.type.getId()==2>吨</#if>）</span></th>
 								<th>应付货款<span>（元）</span></th>
 								<th class="rLine">对应批次RFID编号</th>
 							</tr>
@@ -313,11 +326,17 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<div class="rollBox">
 									<ul class="elastislide-list imagelist">
 										<#assign arr=(contractModel.contract.imgPath?split(","))>
-										<#list arr as imgPath>
+										<#list arr as imgPath> <#assign suffix=(imgPath?split("."))>
+										<#if suffix[1]=="PDF">
+										<li><a href="javascript:void(0);" class="demo-pdf"
+											data-pdf="${imgPath}"> <img
+												src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
+											<p>${imgPath_index+1}</p></li> <#else>
 										<li><a href="javascript:void(0);"
 											data-image="${b.imagePath}${imgPath}"><img
 												data-image="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a></li> </#list>
+												height="107" /></a>
+										<p>${imgPath_index+1}</p></li> </#if> </#list>
 									</ul>
 								</div>
 
@@ -332,7 +351,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 					<div class="changeBox">
 						<div id="chenges">
 							<h2 class="title">合同变更信息</h2>
-				 <#list contractModel.modifyList as modifyList>
+							<#list contractModel.modifyList as modifyList>
 							<div class="infoBox producedBox f14">
 								<div>
 									<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
@@ -342,16 +361,24 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<div class="rollBox">
 										<ul class="elastislide-list imagelist">
 											<#assign
-											imgArr=(modifyList.modifyContract.imgPath?split(","))> 
-										<#list imgArr as modifyimgPath>
+											imgArr=(modifyList.modifyContract.imgPath?split(","))> <#list
+											imgArr as imgPath> <#assign
+											suffix=(imgPath?split("."))> <#if suffix[1]=="PDF">
+											<li><a href="javascript:void(0);" class="demo-pdf"
+												data-pdf="${imgPath}"> <img
+													src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
+												<p>${imgPath_index+1}</p></li> <#else>
 											<li><a href="javascript:void(0);"
-												data-image="${b.imagePath}${modifyimgPath}"><img
-													data-image="${b.imagePath}${modifyimgPath}" width="80"
-													height="107" /></a></li> </#list>
+												data-image="${b.imagePath}${imgPath}"><img
+													data-image="${b.imagePath}${imgPath}" width="80"
+													height="107" /></a>
+											<p>${imgPath_index+1}</p></li> </#if> </#list>
 										</ul>
 									</div>
 								</div>
-								<#if  modifyList.modifyItemList?exists &&(modifyList.modifyItemList?size>0)>								<table border="0" cellpadding="0" cellspacing="0"
+								<#if modifyList.modifyItemList?exists
+								&&(modifyList.modifyItemList?size>0)>
+								<table border="0" cellpadding="0" cellspacing="0"
 									class="tabList producedTable otable" parameter="changeId[i]">
 									<col width="15%" />
 									<col width="20%" />
@@ -363,28 +390,44 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<tr>
 										<th>产品名称</th>
 										<th>产品规格</th>
-										<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
-										<th>单价<span>(元/<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+										<th>数量<span>（<#if
+												contractModel.contract.type.getId()==1>㎡</#if><#if
+												contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+										<th>单价<span>(元/<#if
+												contractModel.contract.type.getId()==1>㎡</#if><#if
+												contractModel.contract.type.getId()==2>吨</#if>)</span></th>
 										<th>金额<span>(元)</span></th>
 										<th>备注说明</th>
 										<th class="rLine">&nbsp;</th>
 									</tr>
 									<#list modifyList.modifyItemList as modifyItem>
 									<tr id="${modifyItem.id}" class="formitem">
-										<td class="editable" name="modifyItemList[index].productName" data="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！">${modifyItem.productName}</td>
-										<td class="editable" name="modifyItemList[index].productModel" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${modifyItem.productModel}</td>
-										<td class="editable amountClass" name="modifyItemList[index].quantity" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity?string("0.00")}</td>
-										<td class="editable priceClass" name="modifyItemList[index].price" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
-										<td class="editable amountClass" name="modifyItemList[index].amount"  data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"  >${modifyItem.amount?string("0.00")}</td>
+										<td class="editable" name="modifyItemList[index].productName"
+											data="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！">${modifyItem.productName}</td>
+										<td class="editable" name="modifyItemList[index].productModel"
+											data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${modifyItem.productModel}</td>
+										<td class="editable amountClass"
+											name="modifyItemList[index].quantity"
+											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+											errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity?string("0.00")}</td>
+										<td class="editable priceClass"
+											name="modifyItemList[index].price"
+											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
+										<td class="editable amountClass"
+											name="modifyItemList[index].amount"
+											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${modifyItem.amount?string("0.00")}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
-										<td value="${modifyItem.id}"><#if modifyItem.updateState==1><span style="color: red;">!</span>
+										<td value="${modifyItem.id}"><#if
+											modifyItem.updateState==1><span style="color: red;">!</span>
 											</#if>
 										</td>
 									</tr>
 									</#list>
 								</table>
-							</#if>
-								<#if modifyList.modifyBatchList?exists && (modifyList.modifyBatchList?size>0)>
+								</#if> <#if modifyList.modifyBatchList?exists &&
+								(modifyList.modifyBatchList?size>0)>
 								<table border="0" cellpadding="0" cellspacing="0"
 									class="tabList producedTable cpctable" id="opctable">
 									<col width="20%" />
@@ -395,44 +438,57 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<tr>
 										<th>交货批次</th>
 										<th>产品规格</th>
-										<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+										<th>数量<span>（<#if
+												contractModel.contract.type.getId()==1>㎡</#if><#if
+												contractModel.contract.type.getId()==2>吨</#if>）</span></th>
 										<th>应付货款<span>（元）</span></th>
 										<th>对应批次RFID编号</th>
 									</tr>
 									<#list modifyList.modifyBatchList as modifyBatch>
 									<tr id="${modifyBatch.modifyBatch.id}" class="formitem">
-										<td class="editable" name="batchList[i].replenishBatch.batchNo" readonly="readonly" >第${modifyBatch.modifyBatch.batchNo}批次</td>
-										<td name="batchList[i].replenishBatchItems[j].productModel" >
+										<td class="editable"
+											name="batchList[i].replenishBatch.batchNo"
+											readonly="readonly">第${modifyBatch.modifyBatch.batchNo}批次</td>
+										<td name="batchList[i].replenishBatchItems[j].productModel">
 											<table border="0" cellpadding="0" cellspacing="0"
 												class="tabList prodIable">
 												<#list modifyBatch.modifyBatchItems as modifyBatchItems>
 												<tr>
-													<td class="editable" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${modifyBatchItems.productModel}</td>
+													<td class="editable" data="*1-100"
+														errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${modifyBatchItems.productModel}</td>
 												</tr>
 												</#list>
 											</table>
 										</td>
-										<td name="batchList[i].replenishBatchItems[j].quantity"  ><table border="0" cellpadding="0" cellspacing="0"
+										<td name="batchList[i].replenishBatchItems[j].quantity"><table
+												border="0" cellpadding="0" cellspacing="0"
 												class="tabList prodIable">
 												<#list modifyBatch.modifyBatchItems as modifyBatchItems>
 												<tr>
-													<td class="editable dynamictr" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${modifyBatchItems.quantity?string("0.00")}</td>
+													<td class="editable dynamictr"
+														data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+														errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${modifyBatchItems.quantity?string("0.00")}</td>
 												</tr>
 												</#list>
 											</table></td>
-										<td class="editable amountClass" name="batchList[i].replenishBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" >${modifyBatch.modifyBatch.amount?string("0.00")}</td>
-										<td class="editable" name="batchList[i].replenishBatch.rfidNo" readonly="readonly">${modifyBatch.modifyBatch.rfidNo}</td>
+										<td class="editable amountClass"
+											name="batchList[i].replenishBatch.amount"
+											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${modifyBatch.modifyBatch.amount?string("0.00")}</td>
+										<td class="editable" name="batchList[i].replenishBatch.rfidNo"
+											readonly="readonly">${modifyBatch.modifyBatch.rfidNo}</td>
 									</tr>
 									</#list>
 								</table>
 								</#if>
 							</div>
-						</#list> 
+							</#list>
 						</div>
 					</div>
-				</#if>
+					</#if>
 					<!-- 变更信息结束 -->
-					<#if contractModel.replenishList?exists && (contractModel.replenishList?size>0)>
+					<#if contractModel.replenishList?exists &&
+					(contractModel.replenishList?size>0)>
 					<div class="changeBox">
 						<div id="chenges">
 							<h2 class="title">合同补损信息</h2>
@@ -452,15 +508,22 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<ul class="elastislide-list imagelist">
 											<#assign
 											imgArr=(replenishList.replenishContract.imgPath?split(","))>
-											<#list imgArr as imgPath>
+											<#list imgArr as imgPath> <#assign
+											suffix=(imgPath?split("."))> <#if suffix[1]=="PDF">
+											<li><a href="javascript:void(0);" class="demo-pdf"
+												data-pdf="${imgPath}"> <img
+													src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
+												<p>${imgPath_index+1}</p></li> <#else>
 											<li><a href="javascript:void(0);"
 												data-image="${b.imagePath}${imgPath}"><img
 													data-image="${b.imagePath}${imgPath}" width="80"
-													height="107" /></a></li> </#list>
+													height="107" /></a>
+											<p>${imgPath_index+1}</p></li></#if> </#list>
 										</ul>
 									</div>
 								</div>
-								<#if replenishList.batchItems?exists && (replenishList.batchItems?size>0)>
+								<#if replenishList.batchItems?exists &&
+								(replenishList.batchItems?size>0)>
 								<table border="0" cellpadding="0" cellspacing="0"
 									class="tabList producedTable" id="opctable">
 									<col width="20%" />
@@ -479,29 +542,39 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									</tr>
 									<#list replenishList.batchItems as replenishItem>
 									<tr id="${replenishItem.replenishBatch.id}" class="formitem">
-										<td class="editable" name="batchList[i].replenishBatch.batchNo" readonly="readonly">补第${replenishItem.replenishBatch.batchNo}批次</td>
+										<td class="editable"
+											name="batchList[i].replenishBatch.batchNo"
+											readonly="readonly">补第${replenishItem.replenishBatch.batchNo}批次</td>
 										<td name="batchList[i].replenishBatchItems[j].productModel">
 											<table border="0" cellpadding="0" cellspacing="0"
 												class="tabList prodIable">
 												<#list replenishItem.replenishBatchItems as
 												replenishBatchItems>
 												<tr>
-													<td class="editable" data="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${replenishBatchItems.productModel}</td>
+													<td class="editable" data="*1-100"
+														errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！">${replenishBatchItems.productModel}</td>
 												</tr>
 												</#list>
 											</table>
 										</td>
-										<td name="batchList[i].replenishBatchItems[j].quantity" ><table border="0" cellpadding="0" cellspacing="0"
+										<td name="batchList[i].replenishBatchItems[j].quantity"><table
+												border="0" cellpadding="0" cellspacing="0"
 												class="tabList prodIable">
 												<#list replenishItem.replenishBatchItems as
 												replenishBatchItems>
 												<tr>
-													<td class="editable dynamictr" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${replenishBatchItems.quantity?string("0.00")}</td>
+													<td class="editable dynamictr"
+														data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+														errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${replenishBatchItems.quantity?string("0.00")}</td>
 												</tr>
 												</#list>
 											</table></td>
-										<td class="editable amountClass" name="batchList[i].replenishBatch.amount" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" >${replenishItem.replenishBatch.amount?string("0.00")}</td>
-										<td class="editable" name="batchList[i].replenishBatch.rfidNo" readonly="readonly">${replenishItem.replenishBatch.newRfidNo}</td>
+										<td class="editable amountClass"
+											name="batchList[i].replenishBatch.amount"
+											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${replenishItem.replenishBatch.amount?string("0.00")}</td>
+										<td class="editable" name="batchList[i].replenishBatch.rfidNo"
+											readonly="readonly">${replenishItem.replenishBatch.newRfidNo}</td>
 									</tr>
 									</#list>
 								</table>
@@ -529,12 +602,18 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<label>合同补损扫描件</label>
 								<div class="rollBox">
 									<ul class="elastislide-list imagelist">
-										<#assign imgPathArr=(record.imgPath?split(","))> <#list imgPathArr as
-										imgPath>
+										<#assign imgPathArr=(record.imgPath?split(","))> <#list
+										imgPathArr as imgPath> <#assign suffix=(imgPath?split("."))>
+										<#if suffix[1]=="PDF">
+										<li><a href="javascript:void(0);" class="demo-pdf"
+											data-pdf="${imgPath}"> <img
+												src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
+											<p>${imgPath_index+1}</p></li> <#else>
 										<li><a href="javascript:void(0);"
 											data-image="${b.imagePath}${imgPath}"><img
 												data-image="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a></li> </#list>
+												height="107" /></a>
+										<p>${imgPath_index+1}</p></li> </#if></#list>
 									</ul>
 								</div>
 							</div>
@@ -551,20 +630,41 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<th>应付货款<span>（元）</span></th>
 								</tr>
 								<tr class="formitem">
-										<td name="batchList[i].replenishBatchItems[j].productModel">
-											<table cellspacing="0" cellpadding="0" border="0" class="tabList prodIable">
-												<tbody><tr>
-													<td nullmsg="请输入产品规格！" errormsg="输入范围在1~100位之间！" data="*1-100" class="editable"><input datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" ></td>
+									<td name="batchList[i].replenishBatchItems[j].productModel">
+										<table cellspacing="0" cellpadding="0" border="0"
+											class="tabList prodIable">
+											<tbody>
+												<tr>
+													<td nullmsg="请输入产品规格！" errormsg="输入范围在1~100位之间！"
+														data="*1-100" class="editable"><input
+														datatype="*1-100" errormsg="输入范围在1~100位之间！"
+														nullmsg="请输入产品规格！"></td>
 												</tr>
-											</tbody></table>
-										</td>
-										<td name="batchList[i].replenishBatchItems[j].quantity"><table cellspacing="0" cellpadding="0" border="0" class="tabList prodIable">
-												<tbody><tr>
-													<td nullmsg="请输入数量！" errormsg="输入范围在1~20位之间！" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" class="editable dynamictr"><input datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！" class="priceClass" /><span style="margin: 0px;"><a class="lnk-green subtabletr" href="javascript:void(0);">+</a>&nbsp;</span></td>
+											</tbody>
+										</table>
+									</td>
+									<td name="batchList[i].replenishBatchItems[j].quantity"><table
+											cellspacing="0" cellpadding="0" border="0"
+											class="tabList prodIable">
+											<tbody>
+												<tr>
+													<td nullmsg="请输入数量！" errormsg="输入范围在1~20位之间！"
+														data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+														class="editable dynamictr"><input
+														datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+														errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！"
+														class="priceClass" /><span style="margin: 0px;"><a
+															class="lnk-green subtabletr" href="javascript:void(0);">+</a>&nbsp;</span></td>
 												</tr>
-											</tbody></table></td>
-										<td nullmsg="请输入应付货款！" errormsg="输入范围在1~20位之间！" data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" name="batchList[i].replenishBatch.amount" class="editable"><input datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" class="amountClass" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！" /></td>
-										</tr>
+											</tbody>
+										</table></td>
+									<td nullmsg="请输入应付货款！" errormsg="输入范围在1~20位之间！"
+										data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+										name="batchList[i].replenishBatch.amount" class="editable"><input
+										datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
+										class="amountClass" errormsg="输入范围在1~20位之间！"
+										nullmsg="请输入应付货款！" /></td>
+								</tr>
 							</table>
 							<div class="btnBox">
 								<a href="javascript:void(0)" onclick="saveReplenish();"
@@ -580,13 +680,13 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 		</div>
 		<@b.footer />
 		<div class="viewer modal-wrap" style="display: none" id="iviewerModal">
-		<div class="modal-header">
-			<span class="close">关闭</span>
+			<div class="modal-header">
+				<span class="close">关闭</span>
+			</div>
+			<div id="viewer2" class="modal-body iviewer"
+				style="width: 100%; display: none; top: 0px"></div>
 		</div>
-		<div id="viewer2" class="modal-body iviewer"
-			style="width: 100%; display: none; top: 0px"></div>
-	</div>
-	<div class="maskdivgen" style="display: none"></div>
+		<div class="maskdivgen" style="display: none"></div>
 </body>
 <!-- InstanceEnd -->
 </html>
