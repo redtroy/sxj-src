@@ -126,7 +126,7 @@ public class SystemMessageServiceImpl implements ISystemMessageService
                             
                             configService.sendMessage(memberEntity.getMemberNo(),
                                     MessageTypeEnum.SYSTEM,
-                                    info.getTitle());
+                                    "您有一条未读的系统信息");
                         }
                     }
                 }

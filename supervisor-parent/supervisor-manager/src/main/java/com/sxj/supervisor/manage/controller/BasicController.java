@@ -37,6 +37,7 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
+import com.baidu.ueditor.ActionEnter;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -65,6 +66,8 @@ import com.sxj.util.logger.SxjLogger;
 @Controller
 public class BasicController extends BaseController
 {
+    
+    private static final HttpServletRequest DefaultMultipartHttpServletRequest = null;
     
     @Autowired
     private IRoleService roleService;
@@ -106,14 +109,26 @@ public class BasicController extends BaseController
         CometServiceImpl.sendMessage("topic1", channelName);
     }
     
+    @RequestMapping("uEdit")
     public void uEdit(HttpServletRequest request, HttpServletResponse response)
+            throws WebException
     {
-        //        request.setCharacterEncoding("utf-8");
-        //        response.setHeader("Content-Type", "text/html");
-        //        
-        //        String rootPath = application.getRealPath("/");
-        //        
-        //        out.write(new ActionEnter(request, rootPath).exec());
+        try
+        {
+            if (request instanceof DefaultMultipartHttpServletRequest)
+            {
+                request = ((DefaultMultipartHttpServletRequest) request).getRequest();
+            }
+            request.setCharacterEncoding("utf-8");
+            response.setHeader("Content-Type", "text/html");
+            String rootPath = request.getRealPath("/");
+            response.getWriter()
+                    .write(new ActionEnter(request, rootPath).exec());
+        }
+        catch (Exception e)
+        {
+            // TODO: handle exception
+        }
         
     }
     
@@ -666,4 +681,5 @@ public class BasicController extends BaseController
         }
         return null;
     }
+    
 }

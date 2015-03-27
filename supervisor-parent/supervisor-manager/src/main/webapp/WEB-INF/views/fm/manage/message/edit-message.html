@@ -22,7 +22,7 @@
 var ue;
 $(function(){
 	var ue = UE.getEditor('editor', {
-	    serverUrl: 'http://manage.menchuang.org.cn/supervisor-manager/config.json'
+	    serverUrl: 'http://manage.menchuang.org.cn:8080/supervisor-manager/uEdit.htm'
 	});
 	//ue.execCommand('insertHtml', "${info.message}")
 	//UE.getEditor('editor').setContent('312312321');
@@ -62,6 +62,21 @@ function comfirMember(){
 }
 
 function submitForm(){
+	var typeValue="";
+	var memberNo=$("#userList").find("#user_input").val();
+	var messageTitle=$("#messageTitle").val();
+	$("input:checked").each(function(i){
+		 typeValue=$(this).attr("checked");
+	});
+	if(typeValue==""&&(memberNo==undefined||memberNo=="")){
+		messageInfo("必须选择发送的会员或会员类型");
+		return;
+	}
+	if(messageTitle==""){
+		messageInfo("消息标题不能为空");
+		return;
+	}
+	
 	dialogBox(function(index){
 		var formParam = $("#submit_form").serialize();
 		$.post("edit.htm", formParam, function(data) {
@@ -131,7 +146,7 @@ function getContent() {
     </div>
     <div class="titNews">
     <label>标题:</label>
-    <div class="editInfo"><input type="text" name="title" class="input" value="${info.title}" /></div>
+    <div class="editInfo"><input id="messageTitle" type="text" name="title" class="input" value="${info.title}" /></div>
     </div>
     <div class="editBox">
     <label>内容:</label>
@@ -139,7 +154,9 @@ function getContent() {
     <script id="editor" type="text/plain" style="width:95%;height:300px;">
 		${info.message}
 	</script>
+	 <#if !info.title??>
      <div class="buttonBox mt10"><button class="button button-green button-small" onclick="javascript:submitForm();" formaction="javascript:void(0);">发送</button></div>
+     </#if>
      </div>
     </div>
     </div>
