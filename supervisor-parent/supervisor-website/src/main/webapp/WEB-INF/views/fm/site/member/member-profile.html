@@ -130,42 +130,42 @@
 		<div class="yard-870 rightSide pr ly-left" id="rightSide_div">
 			<div class="pa memNews">
 				<#if systemMessageCount??&&systemMessageCount&gt;0>
-				<div class="tipNews">
+				<div class="tipNews" onclick="javascript:window.location.href='${basePath}sysMessage/query.htm'">
 					<p class="newsNum tr fb f14" id="system_message_1">
 						<span>${systemMessageCount}</span>
 					</p>
 					<p class="newsCont" id="system_message_2">您有${systemMessageCount}条新系统消息</p>
 				</div>
 				<#else>
-				<div class="tipNews" style="display: none;">
+				<div class="tipNews" style="display: none;" onclick="javascript:window.location.href='${basePath}sysMessage/query.htm'">
 					<p class="newsNum tr fb f14" id="system_message_1">
 						<span>${systemMessageCount}</span>
 					</p>
 					<p class="newsCont" id="system_message_2">您有${systemMessageCount}条新系统消息</p>
 				</div>
 				</#if> <#if transMessageCount??&&transMessageCount&gt;0>
-				<div class="tipMess">
+				<div class="tipMess" onclick="javascript:window.location.href='${basePath}transMessage/query.htm'">
 					<p class="newsNum tr fb f14" id="trans_message_1">
 						<span>${transMessageCount}</span>
 					</p>
 					<p class="newsCont" id="trans_message_2">您有${transMessageCount}条新交易消息</p>
 				</div>
 				<#else>
-				<div class="tipMess" style="display: none;">
+				<div class="tipMess" style="display: none;" onclick="javascript:window.location.href='${basePath}transMessage/query.htm'">
 					<p class="newsNum tr fb f14" id="trans_message_1">
 						<span>${transMessageCount}</span>
 					</p>
 					<p class="newsCont" id="trans_message_2">您有${transMessageCount}条新交易消息</p>
 				</div>
 				</#if> <#if tenderMessageCount??&&tenderMessageCount&gt;0>
-				<div class="tipInv">
+				<div class="tipInv" onclick="javascript:window.location.href='${basePath}systender/query.htm'">
 					<p class="newsNum tr fb f14" id="tender_message_1">
 						<span>${tenderMessageCount}</span>
 					</p>
 					<p class="newsCont" id="tender_message_2">您有${tenderMessageCount}条招标消息</p>
 				</div>
 				<#else>
-				<div class="tipInv" style="display: none;">
+				<div class="tipInv" style="display: none;" onclick="javascript:window.location.href='${basePath}systender/query.htm'">
 					<p class="newsNum tr fb f14" id="tender_message_1">
 						<span>${tenderMessageCount}</span>
 					</p>
