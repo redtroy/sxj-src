@@ -10,10 +10,10 @@
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
-<script type="text/javascript" charset="utf-8" src="${b.staticPath}js/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="${b.staticPath}js/ueditor/ueditor.all.js"> </script>
-<script type="text/javascript" charset="utf-8" src="${b.staticPath}js/ueditor/lang/zh-cn/zh-cn.js"></script>
-<link href="${b.staticPath}js/ueditor/themes/default/css/ueditor.min.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" charset="utf-8" src="${basePath}ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="${basePath}ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="${basePath}lang/zh-cn/zh-cn.js"></script>
+<link href="${basePath}themes/default/css/ueditor.min.css" type="text/css" rel="stylesheet">
 <@b.dialogBox/>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -22,7 +22,8 @@
 var ue;
 $(function(){
 	var ue = UE.getEditor('editor', {
-	    serverUrl: 'http://manage.menchuang.org.cn:8080/supervisor-manager/uEdit.htm'
+	    serverUrl: 'http://manage.menchuang.org.cn:8080/supervisor-manager/uEdit.htm',
+	    imageUrl: 'http://storage.menchuang.org.cn/'
 	});
 	//ue.execCommand('insertHtml', "${info.message}")
 	//UE.getEditor('editor').setContent('312312321');

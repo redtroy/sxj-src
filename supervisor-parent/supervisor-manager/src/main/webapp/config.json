@@ -1,25 +1,25 @@
 {
     'imageActionName': 'uploadimage', 
     'imageFieldName': 'upfile', 
-    'imageMaxSize': 2048000, 
+    'imageMaxSize': 2048000000000, 
     'imageAllowFiles': ['.png', '.jpg', '.jpeg', '.gif', '.bmp'], 
     'imageCompressEnable': true, 
     'imageCompressBorder': 1600, 
     'imageInsertAlign': 'none',
-    'imageUrlPrefix': '', 
+    'imageUrlPrefix': 'http://storage.menchuang.org.cn/', 
     'imagePathFormat': '\/ueditor\/jsp\/upload\/image\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
                                 
     'scrawlActionName': 'uploadscrawl', 
     'scrawlFieldName': 'upfile', 
     'scrawlPathFormat': '\/ueditor\/jsp\/upload\/image\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
     'scrawlMaxSize': 2048000, 
-    'scrawlUrlPrefix': '', 
+    'scrawlUrlPrefix': 'http://storage.menchuang.org.cn/', 
     'scrawlInsertAlign': 'none',
 
    
     'snapscreenActionName': 'uploadimage', 
     'snapscreenPathFormat': '\/ueditor\/jsp\/upload\/image\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
-    'snapscreenUrlPrefix': '', 
+    'snapscreenUrlPrefix': 'http://storage.menchuang.org.cn/', 
     'snapscreenInsertAlign': 'none', 
 
     
@@ -27,7 +27,7 @@
     'catcherActionName': 'catchimage', 
     'catcherFieldName': 'source', 
     'catcherPathFormat': '\/ueditor\/jsp\/upload\/image\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
-    'catcherUrlPrefix': '', 
+    'catcherUrlPrefix': 'http://storage.menchuang.org.cn:8080/', 
     'catcherMaxSize': 2048000, 
     'catcherAllowFiles': ['.png', '.jpg', '.jpeg', '.gif', '.bmp'], 
 
@@ -35,7 +35,7 @@
     'videoActionName': 'uploadvideo', 
     'videoFieldName': 'upfile',
     'videoPathFormat': '\/ueditor\/jsp\/upload\/video\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
-    'videoUrlPrefix': '', 
+    'videoUrlPrefix': 'http://storage.menchuang.org.cn/', 
     'videoMaxSize': 102400000, 
     'videoAllowFiles': [
         '.flv', '.swf', '.mkv', '.avi', '.rm', '.rmvb', '.mpeg', '.mpg',
@@ -45,7 +45,7 @@
     'fileActionName': 'uploadfile', 
     'fileFieldName': 'upfile',
     'filePathFormat': '\/ueditor\/jsp\/upload\/file\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
-    'fileUrlPrefix': '',
+    'fileUrlPrefix': 'http://storage.menchuang.org.cn/',
     'fileMaxSize': 51200000, 
     'fileAllowFiles': [
         '.png', '.jpg', '.jpeg', '.gif', '.bmp',
