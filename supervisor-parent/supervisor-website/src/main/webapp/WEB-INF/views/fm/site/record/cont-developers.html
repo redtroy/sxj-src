@@ -38,84 +38,45 @@
 		})
 	})
 
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
 						var start = 0;
-
-						$('.elastislide-list')
-								.each(
-										function() {
-											var $this = $(this);
-											$this
-													.find("li")
-													.live(
-															"click",
-															function() {
-																var el = $(this);
-																var imageSource = el
-																		.find(
-																				"a")
-																		.attr(
-																				"data-image");
-																refreshIviewer(
-																		$("#viewer2"),
-																		imageSource,
-																		$("#iviewerModal"));
-																el
-																		.parent()
-																		.children(
-																				"li")
-																		.removeClass(
-																				"view");
-																el
-																		.addClass("view");
-																preModal = null;
-															});
-											$(this)
-													.elastislide(
-															{
-																orientation : 'horizontal',
-																speed : 500,
-																easing : 'ease-in-out',
-																minItems : elastislideConfig.count,
-																start : start,
-																onClick : function(
-																		el,
-																		position,
-																		evt) {
-																	return false;
-																},
-																onReady : function() {
-																	$this
-																			.children(
-																					"li:lt("
-																							+ elastislideConfig.count
-																							+ ")")
-																			.each(
-																					function() {
-																						var $image = $(
-																								this)
-																								.find(
-																										"img");
-																						if ($image
-																								.attr("data-image"))
-																							$image
-																									.attr(
-																											"src",
-																											$image
-																													.attr("data-image"));
-																					});
-																	if ($this
-																			.children("li").length < elastislideConfig.count)
-																		$(
-																				".elastislide-prev")
-																				.hide();
-																	return false;
-																},
-																onBeforeSlide : function() {
-																	return false;
-																},
+			$('.elastislide-list').each(function() {
+				var $this = $(this);
+				$this.find("li").live("click",function() {
+				var el = $(this);
+				var imageSource = el.find("a").attr("data-image");
+				if(typeof(imageSource) == 'undefined'){
+					var filePath =el.find("a").attr("data-pdf");
+					window.location.href = "${basePath}downloadFile.htm?filePath=" + filePath;
+				}else{
+					refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+					el.parent().children("li").removeClass("view");
+					el.addClass("view");
+				preModal = null;
+				}
+			});
+			$(this).elastislide({
+					orientation : 'horizontal',
+					speed : 500,
+					easing : 'ease-in-out',
+					minItems : elastislideConfig.count,
+					start : start,
+					onClick : function(el,position,evt) {
+					return false;
+					},
+					onReady : function() {
+					$this.children("li:lt("+ elastislideConfig.count+ ")").each(function() {
+						var $image = $(this).find("img");
+						if ($image.attr("data-image"))
+							$image.attr("src",$image.attr("data-image"));
+					});
+					if ($this.children("li").length < elastislideConfig.count)
+							$(".elastislide-prev").hide();
+							return false;
+					},
+					onBeforeSlide : function() {
+					return false;
+					},
 																onAfterSlide : function() {
 																	if (start > 0)
 																		slideTimes = slideTimes
@@ -300,9 +261,14 @@
 						<div class="rollBox">
 							<ul class="elastislide-list imagelist">
 								<#list arr as imgPath>
+								 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+							<li><a href="javascript:void(0);" data-pdf="${imgPath}" class="data-pdf"><img src="${b.staticPath}images/pdf.png" width="80" height="107" /></a></li>
+						<#else>
 								<li><a href="javascript:void(0);"
 									data-image="${b.imagePath}${imgPath}"><img
 										data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+							</#if>
 								</#list>
 							</ul>
 						</div>
