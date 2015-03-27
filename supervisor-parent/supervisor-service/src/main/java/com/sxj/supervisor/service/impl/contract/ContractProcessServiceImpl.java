@@ -364,7 +364,7 @@ public class ContractProcessServiceImpl implements IContractProcessService
                 messageA.setState(MessageStateEnum.UNREAD);
                 messageA.setStateMessage("未付款");
                 messageA.setContractNo(pay.getPayNo());
-                messageA.setMemberNo(pay.getMemberNameA());
+                messageA.setMemberNo(pay.getMemberNoA());
                 messageA.setSendDate(new Date());
                 messageService.addMessage(messageA);
                 TransMessageEntity messageB = new TransMessageEntity();
@@ -372,7 +372,7 @@ public class ContractProcessServiceImpl implements IContractProcessService
                 messageB.setState(MessageStateEnum.UNREAD);
                 messageB.setStateMessage("等待支付");
                 messageB.setContractNo(pay.getPayNo());
-                messageA.setMemberNo(pay.getMemberNameB());
+                messageA.setMemberNo(pay.getMemberNoB());
                 messageB.setSendDate(new Date());
                 messageService.addMessage(messageB);
             }
