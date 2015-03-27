@@ -68,43 +68,24 @@
 			}, msg);	
 	
 	}
-	$(document)
-			.ready(
-					function() {
-						var start = 0;
-
-						$('.elastislide-list')
-								.each(
-										function() {
-											var $this = $(this);
-											$this
-													.find("li")
-													.live(
-															"click",
-															function() {
-																var el = $(this);
-																var imageSource = el
-																		.find(
-																				"a")
-																		.attr(
-																				"data-image");
-																refreshIviewer(
-																		$("#viewer2"),
-																		imageSource,
-																		$("#iviewerModal"));
-																el
-																		.parent()
-																		.children(
-																				"li")
-																		.removeClass(
-																				"view");
-																el
-																		.addClass("view");
-																preModal = null;
-															});
-											$(this)
-													.elastislide(
-															{
+	$(document).ready(function() {
+		var start = 0;
+		$('.elastislide-list').each(function() {
+				var $this = $(this);
+				$this.find("li").live("click",function() {
+				var el = $(this);
+				var imageSource = el.find("a").attr("data-image");
+				if(typeof(imageSource) == 'undefined'){
+					var filePath =el.find("a").attr("data-pdf");
+					window.location.href = "${basePath}downloadFile.htm?filePath=" + filePath;
+				}else{
+					refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+					el.parent().children("li").removeClass("view");
+					el.addClass("view");
+					preModal = null;
+				}
+		});
+		$(this).elastislide({
 																orientation : 'horizontal',
 																speed : 500,
 																easing : 'ease-in-out',
@@ -359,10 +340,16 @@
 								<div class="rollBox">
 									<ul class="elastislide-list imagelist">
 										<#list arr as imgPath>
+										 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+							<li><a href="javascript:void(0);" data-pdf="${imgPath}" class="data-pdf"><img src="${b.staticPath}images/pdf.png" width="80" height="107" /></a></li>
+						<#else>
 										<li><a href="javascript:void(0);"
 											data-image="${b.imagePath}${imgPath}"><img
 												data-image="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a></li> </#list>
+												height="107" /></a></li> 
+									</#if>
+									</#list>
 									</ul>
 								</div>
 								<#else> <img src="${b.staticPath}images/nopic.jpg" width="80"
@@ -383,10 +370,14 @@
 								<div class="rollBox">
 									<ul class="elastislide-list imagelist">
 										<#list arr as imgPath>
+										 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+							<li><a href="javascript:void(0);" data-pdf="${imgPath}" class="data-pdf"><img src="${b.staticPath}images/pdf.png" width="80" height="107" /></a></li>
+						<#else>
 										<li><a href="javascript:void(0);"
 											data-image="${b.imagePath}${imgPath}"><img
 												data-image="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a></li> </#list>
+												height="107" /></a></li></#if> </#list>
 									</ul>
 								</div>
 								<#else> <img src="${b.staticPath}images/nopic.jpg" width="80"
@@ -500,10 +491,14 @@
 								<div class="rollBox">
 									<ul class="elastislide-list imagelist">
 										<#list arr as imgPath>
+										 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+							<li><a href="javascript:void(0);" data-pdf="${imgPath}" class="data-pdf"><img src="${b.staticPath}images/pdf.png" width="80" height="107" /></a></li>
+						<#else>
 										<li><a href="javascript:void(0);"
 											data-image="${b.imagePath}${imgPath}"><img
 												data-image="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a></li> </#list>
+												height="107" /></a></li></#if> </#list>
 									</ul>
 								</div>
 								<#else> <img src="${b.staticPath}images/nopic.jpg" width="80"

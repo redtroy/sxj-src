@@ -55,12 +55,17 @@ jQuery(document).ready(function($) {
 	$('.elastislide-list').find("li").live("click",function(){
 		var el=$(this);
 		var imageSource = el.find("a").attr("data-image");
-		refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
-		el.parent().children("li").removeClass("view");
-		el.addClass("view"); 
-		$(".maskdivgen1").show();
-		if(preModal)
-			preModal.hide();
+		if(typeof(imageSource) == 'undefined'){
+			var filePath =el.find("a").attr("data-pdf");
+			window.location.href = "${basePath}downloadFile.htm?filePath=" + filePath;
+		}else{
+			refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+			el.parent().children("li").removeClass("view");
+			el.addClass("view"); 
+			$(".maskdivgen1").show();
+			if(preModal)
+				preModal.hide();
+		}
 		
 	});
 	

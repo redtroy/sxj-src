@@ -1,4 +1,4 @@
-﻿﻿<#assign staticPath="http://static.menchuang.org.cn/supervisor-website/"/>
+<#assign staticPath="http://static.menchuang.org.cn/supervisor-website/"/>
 <#assign imagePath="http://storage.menchuang.org.cn/" />
 <#global csrf=JspTaglibs["/WEB-INF/tld/csrfguard.tld"]>
 <#macro validate>
@@ -416,8 +416,16 @@ var refreshElastislide=function($container,$carousel,data,empty){
 	if(data){
 		if(data instanceof Array){
 			for (var i = 0; i < data.length; i++) {
-				var $img=$('<img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" src="'+imageSrc(data[i])+'" onerror="errorImage(this)" times="0"/>');
-				var $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"></a>');
+				var suffix=/\.[^\.]+$/.exec(data[i]);
+				var $img,$a;
+				if(suffix==".PDF"){
+					 $img=$('<img src="${b.staticPath}images/pdf.png" times="0" title="点击下载文件"/>');
+					 $a=$('<a href="javascript:void(0);" class="demo-pdf" data-pdf="'+data[i]+'"></a>');
+				}else{
+					 $img=$('<img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" src="'+imageSrc(data[i])+'" onerror="errorImage(this)" times="0"/>');
+					 $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"></a>');
+				}
+				
 				$a.append($img);
 				var $p=$('<p>'+(i+1)+'</p>');
 				var $li=$('<li></li>');
@@ -426,8 +434,16 @@ var refreshElastislide=function($container,$carousel,data,empty){
 				$carousel.append($li);
 			}
 		}else{
-			var $img=$('<img src="${b.imagePath}'+data.fileIds+'80x100.JPG" src="'+imageSrc(data.fileIds)+'"  onerror="errorImage(this)" times="0"/>');
-			var $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"></a>');
+			var suffix=/\.[^\.]+$/.exec(data.fileIds);
+			var $img,$a;
+			if(suffix==".PDF"){
+				 $img=$('<img src="${b.staticPath}images/pdf.png" times="0" title="点击下载文件"/>');
+				 $a=$('<a href="javascript:void(0);" class="demo-pdf" data-pdf="'+data.fileIds+'"></a>');
+			}else{
+				 $img=$('<img src="${b.imagePath}'+data.fileIds+'80x100.JPG" src="'+imageSrc(data.fileIds)+'"  onerror="errorImage(this)" times="0"/>');
+				 $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"></a>');
+			}
+			
 			$a.append($img);
 			var $li=$('<li></li>');
 			$li.append($a);
