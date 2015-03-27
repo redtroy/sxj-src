@@ -254,23 +254,26 @@ public class ContractProcessServiceImpl implements IContractProcessService
                 {
                     msgName = "补损";
                 }
-                String message = userRecord.getId() + "," + msgName + ","
-                        + contract.getContractNo() + ','
-                        + userRecord.getMemberIdA() + ','
-                        + userRecord.getContractType().getId();
-                CometServiceImpl.add(key_a, message);
-                redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(key_a);
-                
-                TransMessageEntity transMassage = new TransMessageEntity();
-                transMassage.setType(MessageTypeEnum.CONTRACT);
-                transMassage.setState(MessageStateEnum.UNREAD);
-                transMassage.setMessage("贵公司有一条待确认的" + msgName + "信息");
-                transMassage.setContractNo(contract.getContractNo());
-                transMassage.setMemberNo(contract.getMemberIdA());
-                transMassage.setStateMessage("待确认");
-                transMassage.setSendDate(new Date());
-                messageService.addMessage(transMassage);
-                
+                if (userRecord.getContractType().getId() != 0)
+                {
+                    String message = userRecord.getId() + "," + msgName + ","
+                            + contract.getContractNo() + ','
+                            + userRecord.getMemberIdA() + ','
+                            + userRecord.getContractType().getId();
+                    CometServiceImpl.add(key_a, message);
+                    redisTopics.getTopic(MessageChannel.TOPIC_NAME)
+                            .publish(key_a);
+                    
+                    TransMessageEntity transMassage = new TransMessageEntity();
+                    transMassage.setType(MessageTypeEnum.CONTRACT);
+                    transMassage.setState(MessageStateEnum.UNREAD);
+                    transMassage.setMessage("贵公司有一条待确认的" + msgName + "信息");
+                    transMassage.setContractNo(contract.getContractNo());
+                    transMassage.setMemberNo(contract.getMemberIdA());
+                    transMassage.setStateMessage("待确认");
+                    transMassage.setSendDate(new Date());
+                    messageService.addMessage(transMassage);
+                }
                 // 乙方
                 String key_b = MessageChannel.WEBSITE_RECORD_MESSAGE
                         + userRecord.getMemberIdB();
