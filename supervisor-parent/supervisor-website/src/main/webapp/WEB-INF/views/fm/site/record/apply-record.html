@@ -57,9 +57,11 @@ var basePath ='${basePath}';
 		$('.rollBox').find("li").live("click", function() {
 			var el = $(this);
 			var imageSource = el.find("a").attr("data-image");
-			refreshIviewer($("#viewer2"), imageSource);
-			el.parent().children("li").removeClass("view");
-			el.addClass("view");
+			if(typeof(imageSource) != 'undefined'){
+				refreshIviewer($("#viewer2"), imageSource);
+				el.parent().children("li").removeClass("view");
+				el.addClass("view");
+			}
 		});
 		b_validform = $("#BcgForm").Validform({
 			tiptype : 3
@@ -102,7 +104,7 @@ var basePath ='${basePath}';
 		$file.uploadify({
 			swf : '${basePath}upload/uploadify.swf',
 			uploader : "${basePath}upload.htm",
-			 fileTypeExts: '*.jpg',
+			 fileTypeExts: '*.jpg;*.pdf',
 			auto : true,
 			multi : true,
 			height : 30,
@@ -139,15 +141,20 @@ var basePath ='${basePath}';
 						function() {
 							var el = $(this);
 							var imageSource = el.find("a").attr("data-image");
-							currentHiddenImages = $(this).parent().parent()
-									.parent().parent().siblings(":hidden");
-							currentLi = $(this);
-							refreshIviewer($("#viewer2"), imageSource,
-									$("#iviewerModal"));
-							el.parent().children("li").removeClass("view");
-							el.addClass("view");
-							$(".maskdivgen").show();
-							$(".viewer").show();
+							if(typeof(imageSource) == 'undefined'){
+								var filePath =el.find("a").attr("data-pdf");
+								window.location.href = "${basePath}downloadFile.htm?filePath=" + filePath;
+							}else{
+								currentHiddenImages = $(this).parent().parent()
+										.parent().parent().siblings(":hidden");
+								currentLi = $(this);
+								refreshIviewer($("#viewer2"), imageSource,
+										$("#iviewerModal"));
+								el.parent().children("li").removeClass("view");
+								el.addClass("view");
+								$(".maskdivgen").show();
+								$(".viewer").show();
+							}
 						});
 				uploadImg($("#zbFile"));
 				uploadImg($("#cgFile"));

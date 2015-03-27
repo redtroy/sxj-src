@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,6 +33,7 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
+import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
@@ -402,6 +405,12 @@ public class BasicController extends BaseController
         return "site/menu";
     }
     
+    /**
+     * 上传文件
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @RequestMapping("upload")
     public void uploadFile(HttpServletRequest request,
             HttpServletResponse response) throws IOException
@@ -446,6 +455,54 @@ public class BasicController extends BaseController
         out.print(res);
         out.flush();
         out.close();
+    }
+    
+    /**
+     * 下载文件
+     * @param request
+     * @param response
+     * @param filePath
+     * @throws IOException
+     */
+    @RequestMapping("downloadFile")
+    public void downloadFile(HttpServletRequest request,
+            HttpServletResponse response, String filePath) throws IOException
+    {
+        try{
+            String fileName="扫描件"+stringDate();
+            String group = filePath.substring(0, filePath.indexOf("/"));
+            response.addHeader("Content-Disposition", "attachment;filename="
+                    + fileName+".pdf");
+            response.setContentType("application/pdf");
+            String path = filePath.substring(filePath.indexOf("/") + 1,
+                    filePath.length());
+            byte[] file = storageClientService.downloadFile(group,
+                    path,
+                    new ByteArrayFdfsFileInputStreamHandler());
+            System.out.println(file);
+            ServletOutputStream output = response.getOutputStream();
+            output.write(file);
+            output.flush();
+            output.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            SxjLogger.debug("下载文件出错", e.getClass());
+        }
+    }
+    
+    private String stringDate(){
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);//获取年份         
+        int month=cal.get(Calendar.MONTH);//获取月份         
+        int day=cal.get(Calendar.DATE);//获取日         
+        int hour=cal.get(Calendar.HOUR);//小时          
+        int minute=cal.get(Calendar.MINUTE);//分                     
+        int second=cal.get(Calendar.SECOND);//秒     
+        String date = year+""+month+""+day+""+hour+""+minute+""+second;
+        
+        return date;
     }
     
     /**

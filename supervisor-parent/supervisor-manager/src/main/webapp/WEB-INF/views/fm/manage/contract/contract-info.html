@@ -9,10 +9,15 @@
 			$this.find("li").live("click",function(){
 				var el=$(this);
 				var imageSource = el.find("a").attr("data-image");
-				refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
-				el.parent().children("li").removeClass("view");
-				el.addClass("view");
-				preModal=null;
+				if(typeof(imageSource) == 'undefined'){
+					var filePath =el.find("a").attr("data-pdf");
+					window.location.href = "${basePath}downloadFile.htm?filePath=" + filePath;
+				}else{
+					refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+					el.parent().children("li").removeClass("view");
+					el.addClass("view");
+					preModal=null;
+				}
 			});
 			$(this).elastislide({
 				orientation : 'horizontal',
@@ -185,7 +190,15 @@
 				<ul  class="elastislide-list imagelist">
 				<#assign arr=(contractModel.contract.imgPath?split(","))>
                  <#list arr  as imgPath>
+                 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+					<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="${imgPath}">
+						<img src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
+						<p>${imgPath_index+1}</p>
+					</li>
+					<#else>
                  <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
+                 </#if>
                  </#list>
 				</ul>
 			  </div>
@@ -209,7 +222,15 @@
 				<ul  class="elastislide-list imagelist">
 					  <#assign imgArr=(modifyList.modifyContract.imgPath?split(","))>
                  <#list imgArr  as imgPath>
+                 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+					<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="${imgPath}">
+						<img src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
+						<p>${imgPath_index+1}</p>
+					</li>
+					<#else>
                  <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
+                 </#if>
                  </#list>
 				</ul>
 			  </div>
@@ -307,7 +328,15 @@
 				<ul  class="elastislide-list imagelist">
 				<#assign imgArr=(replenishList.replenishContract.imgPath?split(","))>
                  <#list imgArr  as imgPath>
+                   <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+					<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="${imgPath}">
+						<img src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
+						<p>${imgPath_index+1}</p>
+					</li>
+					<#else>
                  <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
+                 </#if>
                  </#list>
 				</ul>
 			  </div>

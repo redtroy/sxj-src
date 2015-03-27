@@ -1,4 +1,4 @@
-﻿
+
 <!-- 合同详情 -->
 <td colspan="12"><script type="text/javascript">
 $(document).ready(function(){
@@ -18,10 +18,15 @@ $(document).ready(function(){
 		$this.find("li").live("click",function(){
 			var el=$(this);
 			var imageSource = el.find("a").attr("data-image");
-			refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
-			el.parent().children("li").removeClass("view");
-			el.addClass("view");
-			preModal=null;
+			if(typeof(imageSource) == 'undefined'){
+				var filePath =el.find("a").attr("data-pdf");
+				window.location.href = "${basePath}downloadFile.htm?filePath=" + filePath;
+			}else{
+				refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+				el.parent().children("li").removeClass("view");
+				el.addClass("view");
+				preModal=null;
+			}
 		});
 		var $viewer=$(this).elastislide({
 			orientation : 'horizontal',
@@ -219,9 +224,14 @@ $(document).ready(function(){
 			<div class="rollBox">
 				<ul class="elastislide-list imagelist" tab="content1">
 					<#list arr as imgPath>
+					 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+							<li><a href="javascript:void(0);" data-pdf="${imgPath}" class="data-pdf"><img src="${b.staticPath}images/pdf.png" width="80" height="107" /></a></li>
+						<#else>
 					<li><a href="javascript:void(0);"
 						data-image="${b.imagePath}${imgPath}"><img
 							data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+							</#if>
 					</#list>
 				</ul>
 			</div>
@@ -244,9 +254,14 @@ $(document).ready(function(){
 				<div class="rollBox">
 					<ul class="elastislide-list imagelist">
 						<#list arr as imgPath>
+						 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+							<li><a href="javascript:void(0);" data-pdf="${imgPath}" class="data-pdf"><img src="${b.staticPath}images/pdf.png" width="80" height="107" /></a></li>
+						<#else>
 						<li><a href="javascript:void(0);"
 							data-image="${b.imagePath}${imgPath}"><img
 								data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+						</#if>
 						</#list>
 					</ul>
 				</div>
@@ -356,9 +371,14 @@ $(document).ready(function(){
 				<div class="rollBox">
 					<ul class="elastislide-list imagelist">
 						<#list arr as imgPath>
+						 <#assign suffix=(imgPath?split("."))> 
+						<#if suffix[1]=="PDF">
+							<li><a href="javascript:void(0);" data-pdf="${imgPath}" class="data-pdf"><img src="${b.staticPath}images/pdf.png" width="80" height="107" /></a></li>
+						<#else>
 						<li><a href="javascript:void(0);"
 							data-image="${b.imagePath}${imgPath}"><img
 								 data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a></li>
+								 </#if>
 						</#list>
 					</ul>
 				</div>
