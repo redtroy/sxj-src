@@ -235,7 +235,7 @@ public class PayController extends BaseController
                     message.setType(MessageTypeEnum.PAY);
                     message.setState(MessageStateEnum.UNREAD);
                     message.setStateMessage("待确认支付");
-                    message.setMemberNo(pay.getMemberNameB());
+                    message.setMemberNo(pay.getMemberNoB());
                     message.setContractNo(pay.getPayNo());
                     message.setSendDate(new Date());
                     tms.addMessage(message);

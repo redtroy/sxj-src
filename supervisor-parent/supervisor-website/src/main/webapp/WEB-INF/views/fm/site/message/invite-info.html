@@ -20,6 +20,14 @@ $(document).ready(function(){
 							fadespeed:"normal"
 							});
 });
+window.onload = function() {
+	 var imgpath=$("#ZBGGDetail1_divDS").find("img").attr("src");
+	 if (imgpath != null && imgpath!=''){
+	 imgpath="${b.imagePath}"+imgpath;
+	 $("#ZBGGDetail1_divDS").find("img").attr("src",imgpath);
+	 $("#ZBGGDetail1_divDS").show();
+	 }
+	}; 
 </script>
 </head>
 
