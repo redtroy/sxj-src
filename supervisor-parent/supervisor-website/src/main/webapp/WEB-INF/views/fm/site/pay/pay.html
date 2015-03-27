@@ -77,14 +77,16 @@ jQuery(document).ready(function($) {
 			function(data) {
 				if (typeof (data.count) != "undefined") {
 					$("#message_div").empty();
-					if ("${state}" == "a") {
-						var bb = '<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'
-								+ data.count + '笔合同里有待支付的款项</div>';
-					} else {
-						var bb = '<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有'
-								+ data.count + '笔合同里有待确认的款项</div>';
-					}
-					$("#message_div").html(bb);
+					 if (data.count>0){
+						if ("${state}" == "a") {
+							var bb = '<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info" ></span>贵公司有'
+									+ data.count + '笔合同里有待支付的款项</div>';
+						} else {
+							var bb = '<div class="msgBox msg-error msgTip tipRed"><span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有'
+									+ data.count + '笔合同里有待确认的款项</div>';
+						}
+						$("#message_div").html(bb);
+					 }
 				}
 
 			});
