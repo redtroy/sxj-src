@@ -6,7 +6,7 @@
     'imageCompressEnable': true, 
     'imageCompressBorder': 1600, 
     'imageInsertAlign': 'none',
-    'imageUrlPrefix': 'http://storage.menchuang.org.cn/', 
+    'imageUrlPrefix': 'http://storage.menchuang.org.cn:88/', 
     'imagePathFormat': '\/ueditor\/jsp\/upload\/image\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
                                 
     'scrawlActionName': 'uploadscrawl', 

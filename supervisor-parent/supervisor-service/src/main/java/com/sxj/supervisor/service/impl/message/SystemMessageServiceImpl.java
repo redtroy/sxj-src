@@ -102,7 +102,7 @@ public class SystemMessageServiceImpl implements ISystemMessageService
                     
                     configService.sendMessage(memberNos[i],
                             MessageTypeEnum.SYSTEM,
-                            info.getTitle());
+                            "您有一条未读的系统信息");
                 }
             }
             if (types != null && types.size() > 0)
