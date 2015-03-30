@@ -8,6 +8,7 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
+import com.sxj.util.persistent.QueryCondition;
 
 public interface IMessageConfigDao
 {
@@ -29,6 +30,7 @@ public interface IMessageConfigDao
     
     public void delConfig(String memberNo);
     
-    public List<MessageConfigEntity> queryConfigList(String memberNo);
+    public List<MessageConfigEntity> queryConfigList(
+            QueryCondition<MessageConfigEntity> query);
     
 }

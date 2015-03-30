@@ -93,11 +93,13 @@ public class TenderMessageServiceImpl implements ITenderMessageService
                     else
                     {
                         CometServiceImpl.setCount(key, totalCount);
+                        CometServiceImpl.subCount(key);
                     }
                 }
                 else
                 {
                     CometServiceImpl.setCount(key, totalCount);
+                    CometServiceImpl.subCount(key);
                 }
                 
                 CometServiceImpl.add(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS,
