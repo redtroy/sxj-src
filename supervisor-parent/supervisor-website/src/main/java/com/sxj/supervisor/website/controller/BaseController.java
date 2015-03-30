@@ -14,6 +14,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
@@ -46,12 +47,15 @@ public class BaseController
         binder.registerCustomEditor(MemberTypeEnum.class,
                 new EnumPropertyEditorSupport<MemberTypeEnum>(
                         MemberTypeEnum.class));
-        binder.registerCustomEditor(RecordTypeEnum.class,
-                new EnumPropertyEditorSupport<RecordTypeEnum>(
-                        RecordTypeEnum.class));
         binder.registerCustomEditor(ContractTypeEnum.class,
                 new EnumPropertyEditorSupport<ContractTypeEnum>(
                         ContractTypeEnum.class));
+        binder.registerCustomEditor(RecordTypeEnum.class,
+                new EnumPropertyEditorSupport<RecordTypeEnum>(
+                        RecordTypeEnum.class));
+        binder.registerCustomEditor(MemberCheckStateEnum.class,
+                new EnumPropertyEditorSupport<MemberCheckStateEnum>(
+                        MemberCheckStateEnum.class));
         binder.registerCustomEditor(MemberTypeEnum.class,
                 new EnumPropertyEditorSupport<MemberTypeEnum>(
                         MemberTypeEnum.class));
@@ -114,11 +118,11 @@ public class BaseController
     //
     // }
     
-//    protected void registChannel(String channelName)
-//    {
-//        if (!CometContext.getInstance().getAppModules().contains(channelName))
-//            CometContext.getInstance().registChannel(channelName);// 注册应用的channel
-//    }
+    //    protected void registChannel(String channelName)
+    //    {
+    //        if (!CometContext.getInstance().getAppModules().contains(channelName))
+    //            CometContext.getInstance().registChannel(channelName);// 注册应用的channel
+    //    }
     
     protected void getValidError(BindingResult result) throws SystemException
     {

@@ -394,6 +394,10 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
                                             .updateBatch(replenishBatch);
                                 }
                             }
+                             String bu ="";
+                            if(contractBatch.getType()==3){
+                                bu="补";
+                            }
                             ContractEntity contract= contractService.getContractEntityByNo(le.getContractNo());
                             TransMessageEntity transMassageA = new TransMessageEntity();
                             transMassageA.setType(MessageTypeEnum.DELIVER);
@@ -402,6 +406,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
                             transMassageA.setContractNo(le.getContractNo());
                             transMassageA.setMemberNo(contract.getMemberIdA());
                             transMassageA.setStateMessage("已发货");
+                            transMassageA.setBatchNo(bu+contractBatch.getBatchNo());
                             transMassageA.setSendDate(new Date());
                             messageService.addMessage(transMassageA);
                             //乙方
@@ -412,6 +417,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService {
                             transMassageB.setContractNo(le.getContractNo());
                             transMassageB.setMemberNo(contract.getMemberIdB());
                             transMassageB.setStateMessage("已发货");
+                            transMassageA.setBatchNo(bu+contractBatch.getBatchNo());
                             transMassageB.setSendDate(new Date());
                             messageService.addMessage(transMassageB);
                             return 1;

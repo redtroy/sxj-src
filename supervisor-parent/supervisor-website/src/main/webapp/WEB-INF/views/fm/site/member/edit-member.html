@@ -13,9 +13,12 @@
 <@b.dialogBox/>
 <script>
 var edit_pwd_validform;
+var checkState=${member.checkState.id};
 $(document).ready(function() { 
 	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
 	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
+	loadUpload("bLicensePath_File_reload","${basePath}upload.htm",false,"重新上传营业执照扫描件",uploadLicenseReload);
+	loadUpload("energyPath_File_reload","${basePath}upload.htm",false,"重新上传节能标识推广证扫描件" ,uploadenergyPathReload);
 	$("#bLicenseNo").click(function(){
 		$("#bLicenseNo_erro").hide();
 	})
@@ -61,6 +64,23 @@ function uploadenergyPath(data){
     $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $("#energyPath_hidden").val(dataObj.fileIds);
 }
+function uploadLicenseReload(data){
+	checkState=1;
+    var dataObj=eval("("+data+")");//转换为json对象
+    if ($("#bLicensePath_img")!=null){
+     $("#bLicensePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG")
+    }else{
+    	
+    }
+    $("#bLicensePath_hidden").val(dataObj.fileIds);
+}
+
+function uploadenergyPathReload(data){
+	checkState=1;
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $("#energyPath_hidden").val(dataObj.fileIds);
+}
 
 function save(id){
 	var bLicensePath= $("#bLicensePath_hidden").val();
@@ -100,7 +120,7 @@ function save(id){
     }
     var type="${member.type.getId()}";
     $.post("${basePath}member/save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
-    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type
+    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type,checkState:checkState
     },function(data){
     	if(data.isOK="ok"){
     		 succInfo(function(){
@@ -185,6 +205,10 @@ function edit_pwd(id){
           <div class="uploadify">
           <input type="file" class="input-w180h30" id="bLicensePath_File" name="input5" />
            </div>
+         <#else>
+          <div class="uploadify">
+          <input type="file" class="input-w180h30" id="bLicensePath_File_reload" name="input5" />
+           </div>
          </#if>
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
@@ -198,6 +222,8 @@ function edit_pwd(id){
          <div class="uploadify">
          <#if (!member.flag)>
             <input type="file" class="input-w180h30" id="energyPath_File" name="input6">
+          <#else>
+          <input type="file" class="input-w180h30" id="energyPath_File_reload" name="input6">
           </#if>
             <input type="hidden" class="input-w180h30" id="energyPath_hidden" name="energyPath" value="${member.energyPath}">
           </div>

@@ -123,6 +123,9 @@
 				/rfid/window/to_loss.htm=user,frameperms
 				/finance/finance.htm=user,frameperms
 				/pay/paylist.htm=user,frameperms
+				/sysMessage/query.htm=user,frameperms
+				/transMessage/query.htm=user,frameperms
+				/systender/query.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->

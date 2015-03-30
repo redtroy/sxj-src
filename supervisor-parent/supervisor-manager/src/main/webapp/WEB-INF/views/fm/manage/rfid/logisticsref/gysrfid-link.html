@@ -245,7 +245,7 @@ function removeMessge(){
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>-</td>
 		  <#if (model.state.id==0)>
-		  <td><a class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></a></td>
+		  <td><a class="btn btn-gray" onclick="review('${model.id}','${model.isLossBatch}');"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
@@ -271,7 +271,7 @@ function removeMessge(){
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>${model.replenishRfid}</td>
 		   <#if (model.state.id==0)>
-		  <td><a class="btn btn-gray" onclick="review('${model.id}',${model.isLossBatch})"><span>审核</span></a></td>
+		  <td><a class="btn btn-gray" onclick="review('${model.id}','${model.isLossBatch}')"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
@@ -307,7 +307,7 @@ function removeMessge(){
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <td>${model.replenishRfid}</td>
 		    <#if (model.state.id==0)>
-		  <td><a class="btn btn-gray" onclick="review('${model.id}',this)"><span>审核</span></a></td>
+		  <td><a class="btn btn-gray" onclick="review('${model.id}','${model.isLossBatch}')"><span>审核</span></a></td>
 		  <#else>
 		  <td><em class="state verified">已审核</em></td>
 		  </#if>
