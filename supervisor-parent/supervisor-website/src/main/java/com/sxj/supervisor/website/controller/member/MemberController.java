@@ -152,12 +152,9 @@ public class MemberController extends BaseController
         {
             Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
-            memberService.modifyMember(member);
-            
+            member = memberService.modifyMember(member);
             SupervisorPrincipal login = getLoginInfo(session);
-            MemberEntity sessionMember = getLoginInfo(session).getMember();
-            sessionMember.setCheckState(member.getCheckState());
-            login.setMember(sessionMember);
+            login.setMember(member);
             session.setAttribute("userinfo", login);
             
             topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)
