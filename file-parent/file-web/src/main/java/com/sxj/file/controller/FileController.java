@@ -47,67 +47,67 @@ public class FileController
     {
         try
         {
-            String rurl = getHeadersInfo(request).get("referer");
-            if (rurl == null)
-            {
-                response.setStatus(404);
-                return;
-            }
-            if (request.getCookies() == null
-                    && !((rurl.contains("finance-manager")
-                            || rurl.contains("manage.zijincaifu.net")
-                            || rurl.contains("finance-website") || rurl.contains("www.zijincaifu.net"))))
-            {
-                response.setStatus(404);
-                return;
-            }
-            Map<String, Cookie> cookieMap = ReadCookieMap(request);
-            if (rurl.contains("supervisor-website")
-                    || rurl.contains("www.menchuang.org.cn"))
-            {
-                if (cookieMap.get("SHAREJSESSIONID_WEBSITE") == null)
-                {
-                    response.setStatus(404);
-                    return;
-                }
-                Boolean flag = redesCacheManager.get("website.session.cache.name",
-                        cookieMap.get("SHAREJSESSIONID_WEBSITE").getValue());
-                if (!flag)
-                {
-                    response.setStatus(404);
-                    return;
-                }
-                
-            }
-            else if (rurl.contains("supervisor-manager")
-                    || rurl.contains("manage.menchuang.org.cn"))
-            {
-                if (cookieMap.get("SHAREJSESSIONID_MANAGE") == null)
-                {
-                    response.setStatus(404);
-                    return;
-                }
-                Boolean flag = redesCacheManager.get("webmanage.session.cache.name",
-                        cookieMap.get("SHAREJSESSIONID_MANAGE").getValue());
-                if (!flag)
-                {
-                    response.setStatus(404);
-                    return;
-                }
-            }
-            else if (rurl.contains("finance-manager")
-                    || rurl.contains("manage.zijincaifu.net"))
-            {
-            }
-            else if (rurl.contains("finance-website")
-                    || rurl.contains("www.zijincaifu.net"))
-            {
-            }
-            else
-            {
-                response.setStatus(404);
-                return;
-            }
+            // String rurl = getHeadersInfo(request).get("referer");
+            //            if (rurl == null)
+            //            {
+            //                response.setStatus(404);
+            //                return;
+            //            }
+            //            if (request.getCookies() == null
+            //                    && !((rurl.contains("finance-manager")
+            //                            || rurl.contains("manage.zijincaifu.net")
+            //                            || rurl.contains("finance-website") || rurl.contains("www.zijincaifu.net"))))
+            //            {
+            //                response.setStatus(404);
+            //                return;
+            //            }
+            //  Map<String, Cookie> cookieMap = ReadCookieMap(request);
+            // if (rurl.contains("supervisor-website")
+            //        || rurl.contains("www.menchuang.org.cn"))
+            //  {
+            //            if (cookieMap.get("SHAREJSESSIONID_WEBSITE") == null)
+            //            {
+            //                response.setStatus(404);
+            //                return;
+            //            }
+            //            Boolean flag = redesCacheManager.get("website.session.cache.name",
+            //                    cookieMap.get("SHAREJSESSIONID_WEBSITE").getValue());
+            //            if (!flag)
+            //            {
+            //                response.setStatus(404);
+            //                return;
+            //            }
+            
+            //  }
+            // else if (rurl.contains("supervisor-manager")
+            //         || rurl.contains("manage.menchuang.org.cn"))
+            //            {
+            //                if (cookieMap.get("SHAREJSESSIONID_MANAGE") == null)
+            //                {
+            //                    response.setStatus(404);
+            //                    return;
+            //                }
+            //                Boolean flag = redesCacheManager.get("webmanage.session.cache.name",
+            //                        cookieMap.get("SHAREJSESSIONID_MANAGE").getValue());
+            //                if (!flag)
+            //                {
+            //                    response.setStatus(404);
+            //                    return;
+            //                }
+            //  }
+            /// else if (rurl.contains("finance-manager")
+            ///         || rurl.contains("manage.zijincaifu.net"))
+            // {
+            //  }
+            //  else if (rurl.contains("finance-website")
+            //          || rurl.contains("www.zijincaifu.net"))
+            //  {
+            //  }
+            // else
+            //  {
+            ///     response.setStatus(404);
+            //     return;
+            //  }
             
             response.setDateHeader("expries",
                     System.currentTimeMillis() + 1000 * 3600);

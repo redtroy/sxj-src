@@ -41,6 +41,7 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 import com.baidu.ueditor.ActionEnter;
+import com.baidu.ueditor.FileEntity;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -118,15 +119,45 @@ public class BasicController extends BaseController
     {
         try
         {
-            if (request instanceof DefaultMultipartHttpServletRequest)
-            {
-                request = ((DefaultMultipartHttpServletRequest) request).getRequest();
-            }
             request.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "text/html");
             String rootPath = request.getRealPath("/");
-            response.getWriter()
-                    .write(new ActionEnter(request, rootPath).exec());
+            if (request instanceof DefaultMultipartHttpServletRequest)
+            {
+                DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
+                Map<String, MultipartFile> fileMaps = re.getFileMap();
+                Collection<MultipartFile> files = fileMaps.values();
+                List<FileEntity> fileEntitys = new ArrayList<FileEntity>();
+                for (MultipartFile myfile : files)
+                {
+                    if (myfile.isEmpty())
+                    {
+                        System.err.println("文件未上传");
+                    }
+                    else
+                    {
+                        String originalName = myfile.getOriginalFilename();
+                        String extName = FileUtil.getFileExtName(originalName);
+                        FileEntity fileEntity = new FileEntity();
+                        fileEntity.setOriginalName(originalName);
+                        fileEntity.setExtName(extName);
+                        fileEntity.setData(myfile.getBytes());
+                        fileEntitys.add(fileEntity);
+                    }
+                }
+                response.getWriter()
+                        .write(new ActionEnter(
+                                request,
+                                storageClientService,
+                                fileEntitys.toArray(new FileEntity[fileEntitys.size()]),
+                                rootPath).exec());
+            }
+            else
+            {
+                response.getWriter()
+                        .write(new ActionEnter(request, rootPath).exec());
+            }
+            
         }
         catch (Exception e)
         {
@@ -342,6 +373,7 @@ public class BasicController extends BaseController
         }
         
     }
+    
     /**
      * 下载文件
      * @param request
@@ -353,11 +385,12 @@ public class BasicController extends BaseController
     public void downloadFile(HttpServletRequest request,
             HttpServletResponse response, String filePath) throws IOException
     {
-        try{
-            String fileName="扫描件"+stringDate();
+        try
+        {
+            String fileName = "扫描件" + stringDate();
             String group = filePath.substring(0, filePath.indexOf("/"));
             response.addHeader("Content-Disposition", "attachment;filename="
-                    + fileName+".pdf");
+                    + fileName + ".pdf");
             response.setContentType("application/pdf");
             String path = filePath.substring(filePath.indexOf("/") + 1,
                     filePath.length());
@@ -376,15 +409,18 @@ public class BasicController extends BaseController
             SxjLogger.debug("下载文件出错", e.getClass());
         }
     }
-    private String stringDate(){
+    
+    private String stringDate()
+    {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);//获取年份         
-        int month=cal.get(Calendar.MONTH);//获取月份         
-        int day=cal.get(Calendar.DATE);//获取日         
-        int hour=cal.get(Calendar.HOUR);//小时          
-        int minute=cal.get(Calendar.MINUTE);//分                     
-        int second=cal.get(Calendar.SECOND);//秒     
-        String date = year+""+month+""+day+""+hour+""+minute+""+second;
+        int month = cal.get(Calendar.MONTH);//获取月份         
+        int day = cal.get(Calendar.DATE);//获取日         
+        int hour = cal.get(Calendar.HOUR);//小时          
+        int minute = cal.get(Calendar.MINUTE);//分                     
+        int second = cal.get(Calendar.SECOND);//秒     
+        String date = year + "" + month + "" + day + "" + hour + "" + minute
+                + "" + second;
         
         return date;
     }
