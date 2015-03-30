@@ -166,12 +166,16 @@ public class WindDoorServiceImpl implements IWindDoorService
                             }
                             CometServiceImpl.takeCount(key);
                         }
-                        flag++;
                     }
-                    //发送短信
-                    configService.sendAllMessage("您有一条新的市场信息");
+                    flag++;
                 }
             }
+            //发送短信
+            if (flag > 0)
+            {
+                configService.sendAllMessage("您有一条新的市场信息");
+            }
+            
         }
         catch (Exception e)
         {
