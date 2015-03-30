@@ -43,7 +43,7 @@ public class AlGatherImpl implements IAlGather
             String name = getJsonString("");
             DataMap dm = JsonMapper.nonEmptyMapper().fromJson(name,
                     DataMap.class);
-            String newDate = "";
+            String newDate = oldDate;
             boolean flag = false;
             if (ad.getAl().size() < 1)
             {
@@ -51,7 +51,7 @@ public class AlGatherImpl implements IAlGather
             }
             for (Map<String, String> map : dm.getData().get("3").values())
             {
-                if (oldDate == null)
+                if (oldDate == null || oldDate == "")
                 {
                     flag = true;
                 }
