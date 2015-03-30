@@ -60,7 +60,11 @@ function getUrlParam(name){
 }
 function clickFunction(url){
 	var state="${Session.userinfo.member.checkState.id}";
-	if(state=='1'){
+	if(state=='0'){
+		url=url+"?"+Math.random();
+		window.location.href=url;
+	}
+	else{
 		$.get("${basePath}member/checkEditState.htm?"+Math.random(),function(data){
 			if(data){
 				url=url+"?"+Math.random();
@@ -68,9 +72,6 @@ function clickFunction(url){
 			}else
 				messageInfo("会员未认证，请完善资料！");
 		});
-	}else{
-		url=url+"?"+Math.random();
-		window.location.href=url;
 	}
 }
 
