@@ -16,6 +16,7 @@ import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.message.NewSendMessage;
+import com.sxj.util.persistent.QueryCondition;
 
 @Service
 @Transactional
@@ -110,7 +111,9 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     {
         try
         {
-            List<MessageConfigEntity> list = dao.queryConfigList(memberNo);
+            QueryCondition<MessageConfigEntity> query = new QueryCondition<>();
+            query.addCondition("memberNo", memberNo);
+            List<MessageConfigEntity> list = dao.queryConfigList(query);
             return list;
         }
         catch (Exception e)
@@ -174,6 +177,40 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                             message + "，请登录私享家绿色门窗平台查看详情！");
                 }
                 
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("发送消息短信错误", e, this.getClass());
+            throw new ServiceException("发送消息短信错误", e);
+        }
+        
+    }
+    
+    @Override
+    public void sendAllMessage(String message) throws ServiceException
+    {
+        try
+        {
+            QueryCondition<MessageConfigEntity> query = new QueryCondition<>();
+            query.addCondition("messageType", MessageTypeEnum.TENDER.getId());
+            List<MessageConfigEntity> configList = dao.queryConfigList(query);
+            if (configList != null && configList.size() > 0)
+            {
+                for (Iterator<MessageConfigEntity> iterator = configList.iterator(); iterator.hasNext();)
+                {
+                    MessageConfigEntity config = iterator.next();
+                    if (config.getIsAccetp())
+                    {
+                        NewSendMessage.getInstance(smsUrl,
+                                userName,
+                                password,
+                                sign,
+                                type).sendMessage(config.getPhone(),
+                                message + "，请登录私享家绿色门窗平台查看详情！");
+                    }
+                    
+                }
             }
         }
         catch (Exception e)

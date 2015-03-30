@@ -26,7 +26,7 @@ import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.supervisor.model.comet.MessageChannel;
-import com.sxj.supervisor.service.message.ITransMessageService;
+import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.exception.ServiceException;
@@ -43,7 +43,7 @@ public class WindDoorServiceImpl implements IWindDoorService
     private IStorageClientService storageClientService;
     
     @Autowired
-    private ITransMessageService tms;
+    private IMessageConfigService configService;
     
     @Override
     @Transactional
@@ -151,11 +151,13 @@ public class WindDoorServiceImpl implements IWindDoorService
                         windDoor.setGifPath(contentMap.get("gifPath"));
                     }
                     wda.addWindDoor(windDoor);
+                    //
                     CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                             windDoor.getId());
                     CometServiceImpl.takeCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
                     List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
                     if (keys != null && keys.size() > 0)
+                    {
                         for (String key : keys)
                         {
                             if (key == null)
@@ -164,7 +166,10 @@ public class WindDoorServiceImpl implements IWindDoorService
                             }
                             CometServiceImpl.takeCount(key);
                         }
-                    flag++;
+                        flag++;
+                    }
+                    //发送短信
+                    configService.sendAllMessage("您有一条新的市场信息");
                 }
             }
         }
