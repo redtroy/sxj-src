@@ -19,4 +19,6 @@ public interface Constraints
     public static final String WEBSITE_CACHE_NAME = WEBSITE + "-shiroCache";
     
     public static final String EDIT_CHECK_STATE_SET = "editCheckState";
+    
+    public static final String UN_EDIT_CHECK_STATE_SET = "unEditCheckState";
 }

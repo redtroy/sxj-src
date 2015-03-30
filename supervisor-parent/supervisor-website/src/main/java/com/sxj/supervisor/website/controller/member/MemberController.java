@@ -145,16 +145,24 @@ public class MemberController extends BaseController
     }
     
     @RequestMapping("save_member")
-    public @ResponseBody Map<String, Object> save_member(MemberEntity member)
-            throws WebException
+    public @ResponseBody Map<String, Object> save_member(MemberEntity member,
+            HttpSession session) throws WebException
     {
         try
         {
             Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
             memberService.modifyMember(member);
+            
+            SupervisorPrincipal login = getLoginInfo(session);
+            MemberEntity sessionMember = getLoginInfo(session).getMember();
+            sessionMember.setCheckState(member.getCheckState());
+            login.setMember(sessionMember);
+            session.setAttribute("userinfo", login);
+            
             topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)
-                    .publish("editCheckState," + member.getId());
+                    .publish(Constraints.UN_EDIT_CHECK_STATE_SET + ","
+                            + member.getId());
             map.put("isOK", "ok");
             return map;
         }
