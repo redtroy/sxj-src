@@ -468,11 +468,12 @@ public class BasicController extends BaseController
     public void downloadFile(HttpServletRequest request,
             HttpServletResponse response, String filePath) throws IOException
     {
-        try{
-            String fileName="扫描件"+stringDate();
+        try
+        {
+            String fileName = "扫描件" + stringDate();
             String group = filePath.substring(0, filePath.indexOf("/"));
             response.addHeader("Content-Disposition", "attachment;filename="
-                    + fileName+".pdf");
+                    + fileName + ".pdf");
             response.setContentType("application/pdf");
             String path = filePath.substring(filePath.indexOf("/") + 1,
                     filePath.length());
@@ -492,15 +493,17 @@ public class BasicController extends BaseController
         }
     }
     
-    private String stringDate(){
+    private String stringDate()
+    {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);//获取年份         
-        int month=cal.get(Calendar.MONTH);//获取月份         
-        int day=cal.get(Calendar.DATE);//获取日         
-        int hour=cal.get(Calendar.HOUR);//小时          
-        int minute=cal.get(Calendar.MINUTE);//分                     
-        int second=cal.get(Calendar.SECOND);//秒     
-        String date = year+""+month+""+day+""+hour+""+minute+""+second;
+        int month = cal.get(Calendar.MONTH);//获取月份         
+        int day = cal.get(Calendar.DATE);//获取日         
+        int hour = cal.get(Calendar.HOUR);//小时          
+        int minute = cal.get(Calendar.MINUTE);//分                     
+        int second = cal.get(Calendar.SECOND);//秒     
+        String date = year + "" + month + "" + day + "" + hour + "" + minute
+                + "" + second;
         
         return date;
     }
@@ -886,6 +889,26 @@ public class BasicController extends BaseController
                     + member.getMemberNo());
             Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
                     + member.getMemberNo());
+            if (tenderMessageCount <= 0)
+            {
+                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                        + login.getMember().getMemberNo();
+                List<String> userKeys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                Long totalCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+                if (userKeys != null && userKeys.size() > 0)
+                {
+                    if (!userKeys.contains(key))
+                    {
+                        CometServiceImpl.setCount(key, totalCount);
+                        tenderMessageCount = totalCount;
+                    }
+                }
+                else
+                {
+                    CometServiceImpl.setCount(key, totalCount);
+                    tenderMessageCount = totalCount;
+                }
+            }
             Long contractMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
                     + member.getMemberNo());
             Long payMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT

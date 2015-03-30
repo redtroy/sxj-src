@@ -3,7 +3,6 @@ $(document).ready(function(){
 	 var imgpath=$("#ZBGGDetail1_divDS").find("img").attr("src");
 	 if (imgpath != null && imgpath!=''){
 	 imgpath="${b.imagePath}"+imgpath;
-	 console.log(imgpath)
 	 $("#ZBGGDetail1_divDS").find("img").attr("src",imgpath);
 	 $("#ZBGGDetail1_divDS").show();
 	 }
@@ -11,7 +10,7 @@ $(document).ready(function(){
 });
 </script>
 <div class="invBox">
-<h2 class="invTit fb fontYH f16">招标预告信息111111111</h2>
+<h2 class="invTit fb fontYH f16">招标预告信息</h2>
 <ul class="invCont">
 <li><label class="fb fontYH">标段分类：</label><span>${model.bdfl}</span></li>
 <li><label class="fb fontYH">项目名称：</label><span style="width:80%">${model.xmmc}</span></li>
