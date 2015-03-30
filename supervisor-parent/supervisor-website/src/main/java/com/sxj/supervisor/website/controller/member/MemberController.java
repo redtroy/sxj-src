@@ -20,6 +20,7 @@ import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.redis.core.RAtomicLong;
 import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.redis.core.concurrent.RedisConcurrent;
+import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -31,6 +32,7 @@ import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.Constraints;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
@@ -53,6 +55,9 @@ public class MemberController extends BaseController
     
     @Autowired
     private RedisConcurrent redisConcurrent;
+    
+    @Autowired
+    private RedisTopics topics;
     
     @Autowired
     private CachingSessionDAO sessionDAO;
@@ -148,6 +153,8 @@ public class MemberController extends BaseController
             Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
             memberService.modifyMember(member);
+            topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)
+                    .publish("editCheckState," + member.getId());
             map.put("isOK", "ok");
             return map;
         }
