@@ -1,10 +1,9 @@
 package com.baidu.ueditor;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -23,15 +22,15 @@ import com.baidu.ueditor.define.ActionMap;
 public final class ConfigManager
 {
     
-    private final String rootPath;
+    private final InputStream stream;
     
-    private final String originalPath;
+    // private final String originalPath;
     
-    private final String contextPath;
+    // private final String contextPath;
     
-    private static final String configFileName = "config.json";
+    //  private static final String configFileName = "config.json";
     
-    private String parentPath = null;
+    //  private String parentPath = null;
     
     private JSONObject jsonConfig = null;
     
@@ -44,26 +43,24 @@ public final class ConfigManager
     /*
      * 通过一个给定的路径构建一个配置管理器， 该管理器要求地址路径所在目录下必须存在config.properties文件
      */
-    private ConfigManager(String rootPath, String contextPath, String uri)
-            throws FileNotFoundException, IOException
+    private ConfigManager(InputStream stream) throws FileNotFoundException,
+            IOException
     {
         
-        rootPath = rootPath.replace("\\", "/");
-        
-        this.rootPath = rootPath;
-        this.contextPath = contextPath;
-        
-        if (contextPath.length() > 0)
-        {
-            this.originalPath = this.rootPath
-                    + uri.substring(contextPath.length());
-        }
-        else
-        {
-            this.originalPath = this.rootPath + uri;
-        }
-        
+        //rootPath = rootPath.replace("\\", "/");
+        this.stream = stream;
+        //this.contextPath = contextPath;
         this.initEnv();
+        
+        //        if (contextPath.length() > 0)
+        //        {
+        //            this.originalPath = this.rootPath
+        //                    + uri.substring(contextPath.length());
+        //        }
+        //        else
+        //        {
+        //            this.originalPath = this.rootPath + uri;
+        //        }
         
     }
     
@@ -74,13 +71,12 @@ public final class ConfigManager
      * @param uri 当前访问的uri
      * @return 配置管理器实例或者null
      */
-    public static ConfigManager getInstance(String rootPath,
-            String contextPath, String uri)
+    public static ConfigManager getInstance(InputStream stream)
     {
         
         try
         {
-            return new ConfigManager(rootPath, contextPath, uri);
+            return new ConfigManager(stream);
         }
         catch (Exception e)
         {
@@ -174,7 +170,7 @@ public final class ConfigManager
         }
         
         conf.put("savePath", savePath);
-        conf.put("rootPath", this.rootPath);
+        //conf.put("rootPath", this.rootPath);
         
         return conf;
         
@@ -183,16 +179,16 @@ public final class ConfigManager
     private void initEnv() throws FileNotFoundException, IOException
     {
         
-        File file = new File(this.originalPath);
+        //        File file = new File(this.originalPath);
+        //        
+        //        if (!file.isAbsolute())
+        //        {
+        //            file = new File(file.getAbsolutePath());
+        //        }
+        //        
+        //        this.parentPath = file.getParent();
         
-        if (!file.isAbsolute())
-        {
-            file = new File(file.getAbsolutePath());
-        }
-        
-        this.parentPath = file.getParent();
-        
-        String configContent = this.readFile(this.getConfigPath());
+        String configContent = this.readFile(this.stream);
         
         try
         {
@@ -206,10 +202,10 @@ public final class ConfigManager
         
     }
     
-    private String getConfigPath()
-    {
-        return this.parentPath + File.separator + ConfigManager.configFileName;
-    }
+    //    private String getConfigPath()
+    //    {
+    //        return this.parentPath + File.separator + ConfigManager.configFileName;
+    //    }
     
     private String[] getArray(String key)
     {
@@ -226,16 +222,14 @@ public final class ConfigManager
         
     }
     
-    private String readFile(String path) throws IOException
+    private String readFile(InputStream stream) throws IOException
     {
         
         StringBuilder builder = new StringBuilder();
-        
         try
         {
             
-            InputStreamReader reader = new InputStreamReader(
-                    new FileInputStream(path), "UTF-8");
+            InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
             BufferedReader bfReader = new BufferedReader(reader);
             
             String tmpContent = null;

@@ -2,6 +2,7 @@ package com.sxj.supervisor.manage.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
@@ -44,6 +45,7 @@ import com.baidu.ueditor.ActionEnter;
 import com.baidu.ueditor.FileEntity;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.spring.modules.util.ClassLoaderUtil;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.system.FunctionEntity;
@@ -121,7 +123,9 @@ public class BasicController extends BaseController
         {
             request.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "text/html");
-            String rootPath = request.getRealPath("/");
+            InputStream stream = ClassLoaderUtil.getResource("config/config.json");
+            
+            //String rootPath = request.getRealPath("/");
             if (request instanceof DefaultMultipartHttpServletRequest)
             {
                 DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
@@ -150,12 +154,12 @@ public class BasicController extends BaseController
                                 request,
                                 storageClientService,
                                 fileEntitys.toArray(new FileEntity[fileEntitys.size()]),
-                                rootPath).exec());
+                                stream).exec());
             }
             else
             {
                 response.getWriter()
-                        .write(new ActionEnter(request, rootPath).exec());
+                        .write(new ActionEnter(request, stream).exec());
             }
             
         }

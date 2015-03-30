@@ -13,13 +13,13 @@
     'scrawlFieldName': 'upfile', 
     'scrawlPathFormat': '\/ueditor\/jsp\/upload\/image\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
     'scrawlMaxSize': 2048000, 
-    'scrawlUrlPrefix': 'http://storage.menchuang.org.cn/', 
+    'scrawlUrlPrefix': 'http://storage.menchuang.org.cn:88/', 
     'scrawlInsertAlign': 'none',
 
    
     'snapscreenActionName': 'uploadimage', 
     'snapscreenPathFormat': '\/ueditor\/jsp\/upload\/image\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
-    'snapscreenUrlPrefix': 'http://storage.menchuang.org.cn/', 
+    'snapscreenUrlPrefix': 'http://storage.menchuang.org.cn:88/', 
     'snapscreenInsertAlign': 'none', 
 
     
@@ -27,7 +27,7 @@
     'catcherActionName': 'catchimage', 
     'catcherFieldName': 'source', 
     'catcherPathFormat': '\/ueditor\/jsp\/upload\/image\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
-    'catcherUrlPrefix': 'http://storage.menchuang.org.cn:8080/', 
+    'catcherUrlPrefix': 'http://storage.menchuang.org.cn:88/', 
     'catcherMaxSize': 2048000, 
     'catcherAllowFiles': ['.png', '.jpg', '.jpeg', '.gif', '.bmp'], 
 
@@ -35,7 +35,7 @@
     'videoActionName': 'uploadvideo', 
     'videoFieldName': 'upfile',
     'videoPathFormat': '\/ueditor\/jsp\/upload\/video\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
-    'videoUrlPrefix': 'http://storage.menchuang.org.cn/', 
+    'videoUrlPrefix': 'http://storage.menchuang.org.cn:88/', 
     'videoMaxSize': 102400000, 
     'videoAllowFiles': [
         '.flv', '.swf', '.mkv', '.avi', '.rm', '.rmvb', '.mpeg', '.mpg',
