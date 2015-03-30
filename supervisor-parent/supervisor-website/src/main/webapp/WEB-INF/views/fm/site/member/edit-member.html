@@ -16,6 +16,8 @@ var edit_pwd_validform;
 $(document).ready(function() { 
 	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
 	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
+	/* loadUpload("bLicensePath_File_reload","${basePath}upload.htm",false,"重新上传营业执照扫描件",uploadLicense);
+	loadUpload("energyPath_File_reload","${basePath}upload.htm",false,"重新上传节能标识推广证扫描件" ,uploadenergyPath); */
 	$("#bLicenseNo").click(function(){
 		$("#bLicenseNo_erro").hide();
 	})
