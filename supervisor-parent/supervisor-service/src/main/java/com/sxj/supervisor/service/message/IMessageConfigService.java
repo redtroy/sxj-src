@@ -22,4 +22,6 @@ public interface IMessageConfigService
     
     public void sendMessage(String memberNo, MessageTypeEnum messageType,
             String message) throws ServiceException;
+    
+    public void sendAllMessage(String message) throws ServiceException;
 }
