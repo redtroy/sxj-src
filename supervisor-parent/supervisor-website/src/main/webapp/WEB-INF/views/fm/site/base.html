@@ -506,6 +506,26 @@ function loadUpload(id,url,isMulti,text,fn){
 	        }
 	        
 	    });
+}
+function reLoadUpload(id,url,isMulti,text,fn,fileId){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:200,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+	  $.post("${basePath}deleteFile.htm",{fileId:fileId},function(data){
+		  
+	  })
 } 
 </script>
 </#macro>

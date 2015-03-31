@@ -458,6 +458,25 @@ public class BasicController extends BaseController
     }
     
     /**
+     * 删除文件
+     * @param fileId
+     */
+    @RequestMapping("deleteFile")
+    public void deleteFile(String fileId) throws IOException
+    {
+        try
+        {
+            storageClientService.deleteFile(fileId);
+            System.out.println("deleteOk");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            SxjLogger.debug("删除失败!", e.getClass());
+        }
+    }
+    
+    /**
      * 下载文件
      * @param request
      * @param response
