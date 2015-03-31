@@ -462,18 +462,20 @@ public class BasicController extends BaseController
      * @param fileId
      */
     @RequestMapping("deleteFile")
-    public void deleteFile(String fileId) throws IOException
+    public @ResponseBody Map<String, String> deleteFile(String fileId)
+            throws IOException
     {
+        Map<String, String> map = new HashMap<String, String>();
         try
         {
             storageClientService.deleteFile(fileId);
-            System.out.println("deleteOk");
         }
         catch (Exception e)
         {
             e.printStackTrace();
             SxjLogger.debug("删除失败!", e.getClass());
         }
+        return map;
     }
     
     /**
