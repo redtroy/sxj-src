@@ -119,20 +119,23 @@ function save(id){
     	return false;
     }
     var type="${member.type.getId()}";
-    $.post("${basePath}member/save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
-    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type,checkState:checkState
-    },function(data){
-    	if(data.isOK="ok"){
-    		 succInfo(function(){
-    			 window.location.href="${basePath}member/memberInfo.htm"; 
-    		 },"修改成功！");
-    		 
-    	}
-    	else{
-    		errorInfo("修改失败！");
-    	}
-    	
-    })
+    dialogBox(function(index){
+    	  $.post("${basePath}member/save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
+    	    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type,checkState:checkState
+    	    },function(data){
+    	    	if(data.isOK="ok"){
+    	    		 succInfo(function(){
+    	    			 window.location.href="${basePath}member/memberInfo.htm"; 
+    	    		 },"修改成功！");
+    	    		 
+    	    	}
+    	    	else{
+    	    		errorInfo("修改失败！");
+    	    	}
+    	    	layer.close(index);
+    	    });
+    },"是否确认修改");
+  
 }
 function edit_pwd(id){
 	if (!edit_pwd_validform.check()){

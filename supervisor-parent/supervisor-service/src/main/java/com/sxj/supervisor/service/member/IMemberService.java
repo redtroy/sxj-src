@@ -11,7 +11,8 @@ public interface IMemberService
     
     public void addMember(MemberEntity member) throws ServiceException;
     
-    public void modifyMember(MemberEntity member) throws ServiceException;
+    public MemberEntity modifyMember(MemberEntity member)
+            throws ServiceException;
     
     public String initializePwd(String memberId) throws ServiceException;
     

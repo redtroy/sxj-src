@@ -122,6 +122,7 @@
 				/rfid/pricemgr/pricemgr_view.htm=user,frameperms
 				/rfid/statistics/query.htm=user,frameperms
 				/member/log/query.htm=user,frameperms
+				/sysMessage/query.htm=user,frameperms
 			</value>
 		</property>
 		<!-- 声明自定义的过滤器 -->

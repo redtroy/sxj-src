@@ -1,5 +1,6 @@
 package com.baidu.ueditor;
 
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,9 +20,9 @@ public class ActionEnter
     
     private HttpServletRequest request = null;
     
-    private String rootPath = null;
+    //private String rootPath = null;
     
-    private String contextPath = null;
+    // private String contextPath = null;
     
     private FileEntity[] files = null;
     
@@ -31,32 +32,30 @@ public class ActionEnter
     
     private ConfigManager configManager = null;
     
-    public ActionEnter(HttpServletRequest request, String rootPath)
+    private InputStream stream = null;
+    
+    public ActionEnter(HttpServletRequest request, InputStream stream)
     {
         
         this.request = request;
-        this.rootPath = rootPath;
+        this.stream = stream;
         this.actionType = request.getParameter("action");
-        this.contextPath = request.getContextPath();
-        this.configManager = ConfigManager.getInstance(this.rootPath,
-                this.contextPath,
-                request.getRequestURI());
+        //this.contextPath = request.getContextPath();
+        this.configManager = ConfigManager.getInstance(this.stream);
         
     }
     
     public ActionEnter(HttpServletRequest request,
             IStorageClientService storageClientService, FileEntity[] files,
-            String rootPath)
+            InputStream stream)
     {
         this.files = files;
         this.storageClientService = storageClientService;
         this.request = request;
-        this.rootPath = rootPath;
+        this.stream = stream;
         this.actionType = request.getParameter("action");
-        this.contextPath = request.getContextPath();
-        this.configManager = ConfigManager.getInstance(this.rootPath,
-                this.contextPath,
-                request.getRequestURI());
+        // this.contextPath = request.getContextPath();
+        this.configManager = ConfigManager.getInstance(this.stream);
         
     }
     
