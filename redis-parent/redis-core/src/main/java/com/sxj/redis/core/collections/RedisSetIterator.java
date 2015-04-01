@@ -23,6 +23,8 @@ public class RedisSetIterator<V> implements Iterator<V>
     
     private RedisSet<V> redisSet;
     
+    private int cursor = 0;
+    
     public RedisSetIterator(RProvider provider, RedisSet<V> redisSet)
     {
         super();
@@ -41,6 +43,7 @@ public class RedisSetIterator<V> implements Iterator<V>
     {
         ScanResult<String> sscan = jedis.sscan(redisSet.getName(), start);
         List<String> results = sscan.getResult();
+        cursor = sscan.getCursor();
         List<V> retValue = new ArrayList<V>();
         for (String result : results)
         {
@@ -58,7 +61,7 @@ public class RedisSetIterator<V> implements Iterator<V>
             try
             {
                 
-                iterator = scanIterator(jedis, 0);
+                iterator = scanIterator(jedis, cursor);
             }
             catch (Exception e)
             {
