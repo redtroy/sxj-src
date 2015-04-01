@@ -14,6 +14,7 @@
 <script>
 var edit_pwd_validform;
 var checkState=${member.checkState.id};
+var flag=true;
 $(document).ready(function() { 
 	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
 	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
@@ -66,6 +67,7 @@ function uploadenergyPath(data){
 }
 function uploadLicenseReload(data){
 	checkState=1;
+	flag=false;
     var dataObj=eval("("+data+")");//转换为json对象
     if ($("#bLicensePath_img")!=null){
      $("#bLicensePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG")
@@ -78,6 +80,7 @@ function uploadLicenseReload(data){
 
 function uploadenergyPathReload(data){
 	checkState=1;
+	flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#energyPath_hidden").val()},function(data){})
@@ -122,6 +125,11 @@ function save(id){
     }
     var type="${member.type.getId()}";
     dialogBox(function(index){
+    	if (!flag){
+    		if (${member.checkState.id}==2){
+    		  $.post("${basePath}member/unCertificates.htm",function(data){})
+    		}
+    	}
     	  $.post("${basePath}member/save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
     	    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type,checkState:checkState
     	    },function(data){

@@ -432,4 +432,25 @@ public class MemberController extends BaseController
         return map;
         
     }
+    
+    /**
+     * 未认证提醒
+     * @return
+     * @throws WebException
+     */
+    @RequestMapping("unCertificates")
+    public @ResponseBody String unCertificates() throws WebException
+    {
+        try
+        {
+            CometServiceImpl.takeCount(MessageChannel.MEMBER_PERFECT_MESSAGE);
+            topics.getTopic(MessageChannel.TOPIC_NAME)
+                    .publish(MessageChannel.MEMBER_PERFECT_MESSAGE);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+        }
+        return "";
+    }
 }
