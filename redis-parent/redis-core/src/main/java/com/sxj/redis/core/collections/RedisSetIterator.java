@@ -25,7 +25,7 @@ public class RedisSetIterator<V> implements Iterator<V>
     
     private int cursor = 0;
     
-    private int move = 0;
+    private boolean end = false;
     
     public RedisSetIterator(RProvider provider, RedisSet<V> redisSet)
     {
@@ -38,6 +38,12 @@ public class RedisSetIterator<V> implements Iterator<V>
     public boolean hasNext()
     {
         scan();
+        if (!iterator.hasNext())
+        {
+            iterator = null;
+            scan();
+        }
+        
         return iterator.hasNext();
     }
     
@@ -62,8 +68,12 @@ public class RedisSetIterator<V> implements Iterator<V>
             boolean broken = false;
             try
             {
-                
-                iterator = scanIterator(jedis, cursor);
+                if (!end)
+                    iterator = scanIterator(jedis, cursor);
+                else
+                    iterator = new ArrayList().iterator();
+                if (cursor == 0)
+                    end = true;
             }
             catch (Exception e)
             {
@@ -80,8 +90,8 @@ public class RedisSetIterator<V> implements Iterator<V>
     @Override
     public V next()
     {
-        move++;
-        if (move == cursor)
+        
+        if (!iterator.hasNext())
             iterator = null;
         if (!hasNext())
         {
