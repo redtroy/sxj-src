@@ -25,6 +25,8 @@ public class RedisSetIterator<V> implements Iterator<V>
     
     private int cursor = 0;
     
+    private int move = 0;
+    
     public RedisSetIterator(RProvider provider, RedisSet<V> redisSet)
     {
         super();
@@ -78,6 +80,9 @@ public class RedisSetIterator<V> implements Iterator<V>
     @Override
     public V next()
     {
+        move++;
+        if (move == cursor)
+            iterator = null;
         if (!hasNext())
         {
             throw new NoSuchElementException("No such element at index");
