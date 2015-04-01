@@ -31,6 +31,7 @@ import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
+@Transactional
 public class ContractPayServiceImpl implements IContractPayService
 {
     @Autowired
