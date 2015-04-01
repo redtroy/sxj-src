@@ -370,36 +370,18 @@ public class MemberController extends BaseController
         // RSet<Object> set =
         // collections.getSet(Constraints.EDIT_CHECK_STATE_SET);
         // if (set.contains(member.getId())) {
-        if (member.getMember()
-                .getCheckState()
-                .equals(MemberCheckStateEnum.UNRECOGNIZED))
+        MemberEntity newMember = memberService.getMember(member.getMember()
+                .getId());
+        if (newMember.getCheckState().equals(MemberCheckStateEnum.CERTIFIED))
         {
-            MemberEntity newMember = memberService.getMember(member.getMember()
-                    .getId());
-            if (newMember.getCheckState()
-                    .equals(MemberCheckStateEnum.CERTIFIED))
-            {
-                member.setMember(newMember);
-                session.setAttribute("userinfo", member);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            // sessionDAO.getActiveSessionsCache().put(session.getId(),
-            // session);
-            // set.remove(member.getId());
-            // return "1";
-            // } else {
-            //
-            // }
+            member.setMember(newMember);
+            session.setAttribute("userinfo", member);
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
-        
     }
     
     @RequestMapping("getMessageCount")
