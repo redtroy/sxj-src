@@ -312,6 +312,7 @@ Intense( elements );
 								<#else>
 								<option value="${state.getId()}">${state.getName()}</option>
 								</#if> </#list>
+								<option value="3">完善中</option>
 							</select> 账户状态 <select name="memberState" id="memberState">
 								<option value="">-请选择-</option> <#list states as state> <#if
 								state.id=query.memberState>
