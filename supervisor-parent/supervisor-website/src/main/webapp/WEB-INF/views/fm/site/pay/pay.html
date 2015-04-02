@@ -132,8 +132,14 @@ jQuery(document).ready(function($) {
 		var payReal = $("#pay_info_" + id).find(":input").val();
 		//payReal=payReal*100;
 		if (payReal==""){
-			payReal=0;
+			payReal="0";
 		}
+		 if (!payReal.match(/^(\d*\.)?\d+$/)){
+			errorInfo("请输入有效数字！");
+			return false;
+		} 
+		console.log(payReal)
+		return false;
 		$.post("pay.htm", {
 			id : id,
 			payReal : payReal
