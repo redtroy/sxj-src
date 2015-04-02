@@ -375,7 +375,7 @@ public class ContractProcessServiceImpl implements IContractProcessService
                 messageB.setState(MessageStateEnum.UNREAD);
                 messageB.setStateMessage("等待支付");
                 messageB.setContractNo(pay.getPayNo());
-                messageA.setMemberNo(pay.getMemberNoB());
+                messageB.setMemberNo(pay.getMemberNoB());
                 messageB.setSendDate(new Date());
                 messageService.addMessage(messageB);
             }
