@@ -370,36 +370,18 @@ public class MemberController extends BaseController
         // RSet<Object> set =
         // collections.getSet(Constraints.EDIT_CHECK_STATE_SET);
         // if (set.contains(member.getId())) {
-        if (member.getMember()
-                .getCheckState()
-                .equals(MemberCheckStateEnum.UNRECOGNIZED))
+        MemberEntity newMember = memberService.getMember(member.getMember()
+                .getId());
+        if (newMember.getCheckState().equals(MemberCheckStateEnum.CERTIFIED))
         {
-            MemberEntity newMember = memberService.getMember(member.getMember()
-                    .getId());
-            if (newMember.getCheckState()
-                    .equals(MemberCheckStateEnum.CERTIFIED))
-            {
-                member.setMember(newMember);
-                session.setAttribute("userinfo", member);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            // sessionDAO.getActiveSessionsCache().put(session.getId(),
-            // session);
-            // set.remove(member.getId());
-            // return "1";
-            // } else {
-            //
-            // }
+            member.setMember(newMember);
+            session.setAttribute("userinfo", member);
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
-        
     }
     
     @RequestMapping("getMessageCount")
@@ -431,5 +413,26 @@ public class MemberController extends BaseController
         }
         return map;
         
+    }
+    
+    /**
+     * 未认证提醒
+     * @return
+     * @throws WebException
+     */
+    @RequestMapping("unCertificates")
+    public @ResponseBody String unCertificates() throws WebException
+    {
+        try
+        {
+            CometServiceImpl.takeCount(MessageChannel.MEMBER_PERFECT_MESSAGE);
+            topics.getTopic(MessageChannel.TOPIC_NAME)
+                    .publish(MessageChannel.MEMBER_PERFECT_MESSAGE);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+        }
+        return "";
     }
 }

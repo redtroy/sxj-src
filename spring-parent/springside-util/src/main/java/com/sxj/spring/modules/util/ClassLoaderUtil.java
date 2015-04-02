@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternUtils;
 
 public class ClassLoaderUtil
 {
@@ -23,8 +24,8 @@ public class ClassLoaderUtil
         //        configStream = getResource(ClassLoaderUtil.class.getClassLoader(),
         //                configFile);
         
-        InputStream configStream = new PathMatchingResourcePatternResolver().getResource("classpath:"
-                + configFile)
+        InputStream configStream = ResourcePatternUtils.getResourcePatternResolver(new PathMatchingResourcePatternResolver())
+                .getResource(configFile)
                 .getInputStream();
         if (configStream == null)
             throw new FileNotFoundException("Cannot find "

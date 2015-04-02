@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sxj.supervisor.dao.message.IMessageConfigDao;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.message.MessageTypeEnum;
-import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -25,9 +24,6 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     
     @Autowired
     private IMessageConfigDao dao;
-    
-    @Autowired
-    private IMemberService memberService;
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;

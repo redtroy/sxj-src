@@ -23,6 +23,10 @@ public class RedisSetIterator<V> implements Iterator<V>
     
     private RedisSet<V> redisSet;
     
+    private int cursor = 0;
+    
+    private boolean end = false;
+    
     public RedisSetIterator(RProvider provider, RedisSet<V> redisSet)
     {
         super();
@@ -34,6 +38,12 @@ public class RedisSetIterator<V> implements Iterator<V>
     public boolean hasNext()
     {
         scan();
+        if (!iterator.hasNext())
+        {
+            iterator = null;
+            scan();
+        }
+        
         return iterator.hasNext();
     }
     
@@ -41,6 +51,7 @@ public class RedisSetIterator<V> implements Iterator<V>
     {
         ScanResult<String> sscan = jedis.sscan(redisSet.getName(), start);
         List<String> results = sscan.getResult();
+        cursor = sscan.getCursor();
         List<V> retValue = new ArrayList<V>();
         for (String result : results)
         {
@@ -57,8 +68,12 @@ public class RedisSetIterator<V> implements Iterator<V>
             boolean broken = false;
             try
             {
-                
-                iterator = scanIterator(jedis, 0);
+                if (!end)
+                    iterator = scanIterator(jedis, cursor);
+                else
+                    iterator = new ArrayList().iterator();
+                if (cursor == 0)
+                    end = true;
             }
             catch (Exception e)
             {
@@ -75,6 +90,9 @@ public class RedisSetIterator<V> implements Iterator<V>
     @Override
     public V next()
     {
+        
+        if (!iterator.hasNext())
+            iterator = null;
         if (!hasNext())
         {
             throw new NoSuchElementException("No such element at index");

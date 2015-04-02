@@ -31,6 +31,7 @@ import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
+@Transactional
 public class ContractPayServiceImpl implements IContractPayService
 {
     @Autowired
@@ -325,7 +326,7 @@ public class ContractPayServiceImpl implements IContractPayService
             messageB.setState(MessageStateEnum.UNREAD);
             messageB.setStateMessage("等待支付");
             messageB.setContractNo(pay.getPayNo());
-            messageA.setMemberNo(pay.getMemberNoB());
+            messageB.setMemberNo(pay.getMemberNoB());
             messageB.setSendDate(new Date());
             tms.addMessage(messageB);
         }
