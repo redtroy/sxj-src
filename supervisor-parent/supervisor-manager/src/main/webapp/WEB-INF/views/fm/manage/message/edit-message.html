@@ -65,6 +65,7 @@ function submitForm(){
 	var typeValue="";
 	var memberNo=$("#userList").find("#user_input").val();
 	var messageTitle=$("#messageTitle").val();
+	var message=getContent();
 	$("input:checked").each(function(i){
 		 typeValue=$(this).attr("checked");
 	});
@@ -74,6 +75,11 @@ function submitForm(){
 	}
 	if(messageTitle==""){
 		messageInfo("消息标题不能为空");
+		return;
+	}
+	
+	if(message==""){
+		messageInfo("消息不能为空");
 		return;
 	}
 	
@@ -95,7 +101,7 @@ function submitForm(){
 
 function getContent() {
     var arr = [];
-    arr.push(ue.getContent());
+    arr.push(UE.getEditor('editor').getContent());
     return arr;
 }
 
