@@ -131,6 +131,9 @@ jQuery(document).ready(function($) {
 	function pay(id) {
 		var payReal = $("#pay_info_" + id).find(":input").val();
 		//payReal=payReal*100;
+		if (payReal==""){
+			payReal=0;
+		}
 		$.post("pay.htm", {
 			id : id,
 			payReal : payReal
