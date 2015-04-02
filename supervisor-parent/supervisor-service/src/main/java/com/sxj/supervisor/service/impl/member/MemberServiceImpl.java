@@ -15,12 +15,15 @@ import com.sxj.spring.modules.util.Identities;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.NumberUtils;
@@ -40,6 +43,9 @@ public class MemberServiceImpl implements IMemberService
     
     @Autowired
     private RedisTopics redisTopics;
+    
+    @Autowired
+    private IMessageConfigService configService;
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;
@@ -87,6 +93,57 @@ public class MemberServiceImpl implements IMemberService
                 member.setNoType("MEM");
             }
             menberDao.addMember(member);
+            List<MessageConfigEntity> configList = new ArrayList<>();
+            MessageConfigEntity config1 = new MessageConfigEntity();
+            config1.setIsAccetp(true);
+            config1.setMemberNo(member.getMemberNo());
+            config1.setPhone(member.getPhoneNo());
+            config1.setMessageType(MessageTypeEnum.CONTRACT);
+            configList.add(config1);
+            
+            MessageConfigEntity config2 = new MessageConfigEntity();
+            config2.setIsAccetp(true);
+            config2.setMemberNo(member.getMemberNo());
+            config2.setPhone(member.getPhoneNo());
+            config2.setMessageType(MessageTypeEnum.DELIVER);
+            configList.add(config2);
+            
+            MessageConfigEntity config3 = new MessageConfigEntity();
+            config3.setIsAccetp(true);
+            config3.setMemberNo(member.getMemberNo());
+            config3.setPhone(member.getPhoneNo());
+            config3.setMessageType(MessageTypeEnum.PAY);
+            configList.add(config3);
+            
+            MessageConfigEntity config4 = new MessageConfigEntity();
+            config4.setIsAccetp(true);
+            config4.setMemberNo(member.getMemberNo());
+            config4.setPhone(member.getPhoneNo());
+            config4.setMessageType(MessageTypeEnum.RECEIPT);
+            configList.add(config4);
+            
+            MessageConfigEntity config5 = new MessageConfigEntity();
+            config5.setIsAccetp(true);
+            config5.setMemberNo(member.getMemberNo());
+            config5.setPhone(member.getPhoneNo());
+            config5.setMessageType(MessageTypeEnum.SMS);
+            configList.add(config5);
+            
+            MessageConfigEntity config6 = new MessageConfigEntity();
+            config6.setIsAccetp(true);
+            config6.setMemberNo(member.getMemberNo());
+            config6.setPhone(member.getPhoneNo());
+            config6.setMessageType(MessageTypeEnum.SYSTEM);
+            configList.add(config6);
+            
+            MessageConfigEntity config7 = new MessageConfigEntity();
+            config7.setIsAccetp(true);
+            config7.setMemberNo(member.getMemberNo());
+            config7.setPhone(member.getPhoneNo());
+            config7.setMessageType(MessageTypeEnum.TENDER);
+            configList.add(config7);
+            
+            configService.addConfig(member.getMemberNo(), configList);
             CometServiceImpl.takeCount(MessageChannel.MEMBER_MESSAGE);
             redisTopics.getTopic(MessageChannel.TOPIC_NAME)
                     .publish(MessageChannel.MEMBER_MESSAGE);
@@ -120,6 +177,7 @@ public class MemberServiceImpl implements IMemberService
             {
                 assembleMemeberToModify(member, m);
                 menberDao.addMember(m);
+                
                 menberDao.deleteMember(member.getId());
             }
             // 如果该会员之前没有完善会员资料，则提示
