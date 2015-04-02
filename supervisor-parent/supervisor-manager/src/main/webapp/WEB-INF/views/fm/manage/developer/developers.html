@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家电子商贸平台</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="${b.staticPath}style/elastislide.css" />
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/comet4j.js"></script>
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script type="text/javascript"
+	src="${b.staticPath}js/jquery.mousewheel.js"></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+<@b.pageScript/> 
+<@b.dialogBox/>
+<script type="text/javascript">
+//查询
+function query(page){
+	   var params=$("#serchAccount").serialize();
+	   if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+		$.post("developers.htm",params,function(data){
+			var res=$(data).find("#devList");
+			var pager=$(data).find("#pager");
+			$("#devList").empty();
+			$("#devList").append(res.html());
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		});
+	   
+}
+function delDeveloper(id){
+	dialogBox(function(index) {
+	$.post("delete.htm",{id:id},function(data){
+		layer.close(index);
+		if (data.isOK == 'ok') {
+			succInfo(function(){
+				 var currentpage=$("#pager").attr("currentpage");
+				  query(currentpage);
+			 },"删除成功"); 
+			}else{
+				messageInfo("失败");
+			}	
+	});}, "确实要删除该开发商吗?");
+}
+</script>
+</head>
+<body>
+	<@b.header />
+	<div id="main" class="fence-wide">
+		<!-- InstanceBeginEditable name="local" -->
+		<!-- InstanceEndEditable -->
+		<@b.menuPath/>
+		<div id="mainBg" class="ly-clearFix yard-1200">
+			<@b.leftMenu />
+			<div id="rightBar">
+				<!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">省内开发商管理</h2>
+      <div id="devBox">
+      <a href="toEdit.htm" class="button button-green button-news ly-right">新增开发商</a>
+          <form action="javascript:void(0);" id="serchAccount">城市
+          <select name="city">
+            <option selected="selected" value="">全部</option>
+           <#list cityList as city>
+           <#if (("32:江苏省,"+city.id+":"+city.name)==query.city)>
+            	<option value="${city.id}" selected="selected">${city.name}</option>
+            	<#else>
+            	<option value="${city.id}">${city.name}</option>
+            	</#if>
+            </#list>
+          </select>
+          开发商名称
+          <input type="text" name="name" value="${dev.name}" />
+        <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+         </form>
+    </div>
+      <div class="developers">
+        <ul class="devList" id="devList">
+        <li class="titDev"><span class="comName">名称</span><span class="comCity">城市</span><span class="comLink">链接</span><span class="comAdd">地址</span><span class="comTel">电话</span><span class="comEdit">操作</span></li>
+          <#list list as dev>
+          <li><span class="comName"><a href="${dev.url}" target="_blank">${dev.name}</a></span><span class="comCity">
+          <#list cityList as city>
+          	<#if (("32:江苏省,"+city.id+":"+city.name)==dev.city)>${city.name}
+			</#if>
+		</#list>
+		</span>
+		<span class="comLink">${dev.url}</span><span class="comAdd">${dev.address}</span><span class="comTel">${dev.telPhone}</span><span class="comEdit operation"><a href="toEdit.htm?id=${dev.id}" class="edit">修改</a><a href="javascript:delDeveloper('${dev.id}');" class="del">删除</a></span></li>
+          </#list>
+        </ul>
+        <@b.pager/>
+      </div>
+    </div>
+</div>
+</div>
+<@b.footer />
+</body>
+</html>

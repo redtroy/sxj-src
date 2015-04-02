@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.developer.IDevelopersDao">
+	<resultMap id="DevelopersEntity"
+		type="com.sxj.supervisor.entity.developers.DevelopersEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="city" column="CITY" jdbcType="VARCHAR" />
+		<result property="url" column="URL" jdbcType="VARCHAR" />
+		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
+		<result property="telPhone" column="TEL_PHONE" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 条件查询财务统计 -->
+	<select id="query" resultMap="DevelopersEntity"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT ID, NAME, CITY, URL, ADDRESS, TEL_PHONE FROM M_DEVELOPERS WHERE 1=1 ]]>
+
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
+		</if>
+		<if test="condition.city!= null and condition.city != ''">
+			<![CDATA[AND CITY LIKE CONCAT('%',#{condition.city},'%')]]>
+		</if>
+		<if test="condition.url!= null and condition.url != ''">
+			<![CDATA[AND URL LIKE CONCAT('%',#{condition.url},'%')]]>
+		</if>
+		<if test="condition.address!= null and condition.address != ''">
+			<![CDATA[AND ADDRESS LIKE CONCAT('%',#{condition.address},'%')]]>
+		</if>
+		<if test="condition.telPhone!= null and condition.telPhone != ''">
+			<![CDATA[AND TEL_PHONE LIKE CONCAT('%',#{condition.telPhone},'%')]]>
+		</if>
+	</select>
+</mapper>
