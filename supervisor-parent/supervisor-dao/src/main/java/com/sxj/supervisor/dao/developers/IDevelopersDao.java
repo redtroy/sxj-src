@@ -1,4 +1,4 @@
-package com.sxj.supervisor.dao.developer;
+package com.sxj.supervisor.dao.developers;
 
 import java.util.List;
 

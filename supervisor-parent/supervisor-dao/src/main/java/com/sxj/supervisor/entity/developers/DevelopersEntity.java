@@ -9,7 +9,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.developer.IDevelopersDao;
+import com.sxj.supervisor.dao.developers.IDevelopersDao;
 
 /**
  * 省内开发商
