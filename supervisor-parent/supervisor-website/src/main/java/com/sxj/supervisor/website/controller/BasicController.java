@@ -396,6 +396,26 @@ public class BasicController extends BaseController
                     + userBean.getMember().getMemberNo());
             Long payMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
                     + userBean.getMember().getMemberNo());
+            if (tenderMessageCount <= 0)
+            {
+                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                        + userBean.getMember().getMemberNo();
+                List<String> userKeys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                Long totalCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+                if (userKeys != null && userKeys.size() > 0)
+                {
+                    if (!userKeys.contains(key))
+                    {
+                        CometServiceImpl.setCount(key, totalCount);
+                        tenderMessageCount = totalCount;
+                    }
+                }
+                else
+                {
+                    CometServiceImpl.setCount(key, totalCount);
+                    tenderMessageCount = totalCount;
+                }
+            }
             map.put("transMessageCount", transMessageCount);
             map.put("sysMessageCount", sysMessageCount);
             map.put("tenderMessageCount", tenderMessageCount);
