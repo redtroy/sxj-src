@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +70,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             {
                 oldGongGaoGuid = null;
             }
+            List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
             STOP: for (int i = 1; i <= pageNum; i++)
             {
                 Map map = new HashMap();
@@ -150,24 +152,29 @@ public class WindDoorServiceImpl implements IWindDoorService
                     {
                         windDoor.setGifPath(contentMap.get("gifPath"));
                     }
-                    wda.addWindDoor(windDoor);
-                    //
+                    bathList.add(windDoor);
                     CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                             windDoor.getId());
-                    CometServiceImpl.takeCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
-                    List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
-                    if (keys != null && keys.size() > 0)
-                    {
-                        for (String key : keys)
-                        {
-                            if (key == null)
-                            {
-                                continue;
-                            }
-                            CometServiceImpl.takeCount(key);
-                        }
-                    }
                     flag++;
+                }
+            }
+            if (bathList.size() > 0)
+            {
+                wda.addWindDoor(bathList);
+                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT,
+                        Long.valueOf(bathList.size()));
+                List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                if (keys != null && keys.size() > 0)
+                {
+                    for (String key : keys)
+                    {
+                        if (key == null)
+                        {
+                            continue;
+                        }
+                        CometServiceImpl.setCount(key,
+                                Long.valueOf(bathList.size()));
+                    }
                 }
             }
             //发送短信
