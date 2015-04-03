@@ -180,10 +180,10 @@ public class WindDoorServiceImpl implements IWindDoorService
                 }
             }
             //            //发送短信
-            //            if (flag > 0)
-            //            {
-            //                configService.sendAllMessage("您有一条新的市场信息");
-            //            }
+            if (flag > 0)
+            {
+                configService.sendAllMessage("您有一条新的市场信息");
+            }
             
         }
         catch (Exception e)

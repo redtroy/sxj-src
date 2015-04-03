@@ -143,7 +143,7 @@ public class Dome2
                     {
                         wd.setGifPath(contentMap.get("gifPath"));
                     }
-                    wda.addWindDoor(wd);
+                    //wda.addWindDoor(wd);
                 }
                 // System.out.println(doc);
             }
