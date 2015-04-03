@@ -73,24 +73,9 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             for (Iterator<MessageConfigEntity> iterator = config.iterator(); iterator.hasNext();)
             {
                 MessageConfigEntity messageConfigEntity = (MessageConfigEntity) iterator.next();
-                if (messageConfigEntity.getId() == null)
-                {
-                    dao.addConfig(messageConfigEntity);
-                }
-                else
-                {
-                    MessageConfigEntity oldConfig = dao.getConfig(messageConfigEntity.getId());
-                    if (oldConfig == null)
-                    {
-                        dao.addConfig(messageConfigEntity);
-                    }
-                    else
-                    {
-                        dao.updateConfig(messageConfigEntity);
-                    }
-                }
-                
+                dao.updateConfig(messageConfigEntity);
             }
+            
         }
         catch (Exception e)
         {
