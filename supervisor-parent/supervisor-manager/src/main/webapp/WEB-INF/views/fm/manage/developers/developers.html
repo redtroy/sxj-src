@@ -30,6 +30,14 @@
 <@b.pageScript/> 
 <@b.dialogBox/>
 <script type="text/javascript">
+$(function($){
+	var url_ = "${basePath}autoDevelopers.htm";
+	$("#d_name").bigAutocomplete({
+		url : url_,
+		callback : function(data) {
+		}
+	})
+});
 //查询
 function query(page){
 	   var params=$("#serchAccount").serialize();
@@ -88,7 +96,7 @@ function delDeveloper(id){
             </#list>
           </select>
           开发商名称
-          <input type="text" name="name" value="${dev.name}" />
+          <input type="text" name="name" id="d_name" value="${dev.name}" autocomplete="off" />
         <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
          </form>
     </div>

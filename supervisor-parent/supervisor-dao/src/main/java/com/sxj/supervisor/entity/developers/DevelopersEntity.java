@@ -1,6 +1,7 @@
 package com.sxj.supervisor.entity.developers;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
@@ -62,8 +63,21 @@ public class DevelopersEntity extends Pagable implements Serializable
      */
     @Column(name = "TEL_PHONE")
     private String telPhone;
+    /**
+     * 更新时间
+     */
+    @Column(name = "ENTRY_TIME")
+    private Date entryTime;
     
-    public String getId()
+    public Date getEntryTime() {
+		return entryTime;
+	}
+
+	public void setEntryTime(Date entryTime) {
+		this.entryTime = entryTime;
+	}
+
+	public String getId()
     {
         return id;
     }
