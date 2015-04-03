@@ -30,6 +30,7 @@ import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
 import com.sxj.util.comet.CometServiceImpl;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -142,6 +143,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                             "jpg".toUpperCase());
                     System.out.println(filePath);
                     WindDoorEntity windDoor = new WindDoorEntity();
+                    windDoor.setId(StringUtils.getUUID());
                     windDoor.setBdfl(bdfl);
                     windDoor.setFilePath(filePath);
                     windDoor.setJzrq(jzsj);
