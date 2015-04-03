@@ -1,4 +1,4 @@
-package com.sxj.supervisor.website.controller.developer;
+package com.sxj.supervisor.website.controller.developers;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import  com.sxj.supervisor.website.controller.BaseController;
-import com.sxj.supervisor.service.developer.IDevelopersService;
+import com.sxj.supervisor.service.developers.IDevelopersService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -18,7 +18,7 @@ import com.sxj.util.logger.SxjLogger;
 
 
 @Controller
-@RequestMapping("/developer")
+@RequestMapping("/developers")
 public class DeveloperController extends BaseController {
 	@Autowired
 	private IDevelopersService developerService;
@@ -37,7 +37,7 @@ public class DeveloperController extends BaseController {
             map.put("list", list);
             map.put("cityList", cityList);
             map.put("query", entity);
-			return "site/developer/developers";
+			return "site/developers/developers";
     	}catch(Exception e){
             SxjLogger.error("查询开发商信息错误", e, this.getClass());
             throw new WebException("查询开商发信息错误");

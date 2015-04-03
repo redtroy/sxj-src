@@ -1,4 +1,4 @@
-package com.sxj.supervisor.manage.controller.developer;
+package com.sxj.supervisor.manage.controller.developers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,19 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
-import com.sxj.supervisor.entity.message.SystemMessageInfoEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
-import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
-import com.sxj.supervisor.manage.controller.contract.ContractControllerModel;
-import com.sxj.supervisor.service.developer.IDevelopersService;
+import com.sxj.supervisor.service.developers.IDevelopersService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
-@RequestMapping("/developer")
+@RequestMapping("/developers")
 public class DevelopersController extends BaseController
 {
     
@@ -48,7 +45,7 @@ public class DevelopersController extends BaseController
             map.put("list", list);
             map.put("cityList", cityList);
             map.put("query", entity);
-			return "manage/developer/developers";
+			return "manage/developers/developers";
     	}catch(Exception e){
             SxjLogger.error("查询开发商信息错误", e, this.getClass());
             throw new WebException("查询开商发信息错误");
@@ -59,11 +56,11 @@ public class DevelopersController extends BaseController
     	 List<AreaEntity> cityList = areaService.getChildrenAreas("32");
     	 map.put("cityList", cityList);
         if (StringUtils.isEmpty(id)) {
-            return "manage/developer/add-deve";
+            return "manage/developers/add-deve";
         } else {
         	DevelopersEntity info = developerService.getDeveloper(id);
             map.put("info", info);
-            return "manage/developer/add-deve";
+            return "manage/developers/add-deve";
         }
         
     }

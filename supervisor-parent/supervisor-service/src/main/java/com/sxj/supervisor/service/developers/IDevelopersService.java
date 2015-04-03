@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.developer;
+package com.sxj.supervisor.service.developers;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.sxj.supervisor.dao.developer.IDevelopersDao">
+<mapper namespace="com.sxj.supervisor.dao.developers.IDevelopersDao">
 	<resultMap id="DevelopersEntity"
 		type="com.sxj.supervisor.entity.developers.DevelopersEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />

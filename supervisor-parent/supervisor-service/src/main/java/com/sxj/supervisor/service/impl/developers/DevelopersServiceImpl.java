@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.impl.developer;
+package com.sxj.supervisor.service.impl.developers;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.supervisor.dao.developer.IDevelopersDao;
+import com.sxj.supervisor.dao.developers.IDevelopersDao;
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
-import com.sxj.supervisor.service.developer.IDevelopersService;
+import com.sxj.supervisor.service.developers.IDevelopersService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
