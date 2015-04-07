@@ -35,8 +35,11 @@ public class RedisListTest
     {
         RList<String> list = collections.getList(LIST_NAME);
         List<String> sub = new ArrayList<String>();
-        sub.add("B");
-        sub.add("C");
+        for (int i = 1; i <= 20; i++)
+        {
+            sub.add("A_" + i);
+        }
+        
         list.addAll(sub);
         Iterator<String> iterator = list.iterator();
         while (iterator.hasNext())

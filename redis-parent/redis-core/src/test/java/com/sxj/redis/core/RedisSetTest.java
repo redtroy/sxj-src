@@ -86,13 +86,17 @@ public class RedisSetTest
         set.add(map);
     }
     
+    @Test
     public void testIterator()
     {
         RSet<Map<String, String>> set = collections.getSet("MAP");
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("A", "B");
-        map.put("B", "C");
-        set.add(map);
+        for (int i = 1; i <= 20; i++)
+        {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("A_" + i, "B_" + i);
+            set.add(map);
+        }
+        
         Iterator<Map<String, String>> iterator = set.iterator();
         while (iterator.hasNext())
         {
@@ -104,7 +108,6 @@ public class RedisSetTest
         }
     }
     
-    @Test
     public void testExpireAt()
     {
         RSet<String> set = collections.getSet(SET_NAME);

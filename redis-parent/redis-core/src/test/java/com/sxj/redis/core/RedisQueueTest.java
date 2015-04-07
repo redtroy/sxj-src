@@ -23,21 +23,25 @@ public class RedisQueueTest
                 "config/redis-collections.properties");
     }
     
+    @Test
     public void testOffer()
     {
         RQueue<Map<String, List<String>>> queue = collections.getQueue(QUEUE_NAME);
         Map<String, List<String>> map = new HashMap<String, List<String>>();
-        List<String> list = new ArrayList<String>();
-        list.add("A");
-        list.add("B");
-        map.put("demo", list);
+        for (int i = 1; i <= 20; i++)
+        {
+            List<String> list = new ArrayList<String>();
+            list.add("A_" + i);
+            list.add("B_" + i);
+            map.put("demo_" + i, list);
+        }
         queue.offer(map);
-        Map<String, List<String>> map2 = new HashMap<String, List<String>>();
-        List<String> list2 = new ArrayList<String>();
-        list2.add("C");
-        list2.add("D");
-        map2.put("demo", list2);
-        queue.offer(map2);
+        //        Map<String, List<String>> map2 = new HashMap<String, List<String>>();
+        //        List<String> list2 = new ArrayList<String>();
+        //        list2.add("C");
+        //        list2.add("D");
+        //        map2.put("demo", list2);
+        //        queue.offer(map2);
         System.out.println(queue.size());
     }
     
@@ -46,18 +50,15 @@ public class RedisQueueTest
     {
         RQueue<Map<String, List<String>>> queue = collections.getQueue(QUEUE_NAME);
         Map<String, List<String>> poll = queue.poll();
-        List<String> list3 = poll.get("demo");
-        for (String value : list3)
+        for (int i = 1; i <= 20; i++)
         {
-            System.out.println(value);
+            List<String> list3 = poll.get("demo_" + i);
+            for (String value : list3)
+            {
+                System.out.println(value);
+            }
         }
-        poll = queue.poll();
-        list3 = poll.get("demo");
-        for (String value : list3)
-        {
-            System.out.println(value);
-        }
-        System.out.println(queue.size());
+        
     }
     
 }

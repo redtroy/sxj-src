@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.message;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -73,24 +74,9 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             for (Iterator<MessageConfigEntity> iterator = config.iterator(); iterator.hasNext();)
             {
                 MessageConfigEntity messageConfigEntity = (MessageConfigEntity) iterator.next();
-                if (messageConfigEntity.getId() == null)
-                {
-                    dao.addConfig(messageConfigEntity);
-                }
-                else
-                {
-                    MessageConfigEntity oldConfig = dao.getConfig(messageConfigEntity.getId());
-                    if (oldConfig == null)
-                    {
-                        dao.addConfig(messageConfigEntity);
-                    }
-                    else
-                    {
-                        dao.updateConfig(messageConfigEntity);
-                    }
-                }
-                
+                dao.updateConfig(messageConfigEntity);
             }
+            
         }
         catch (Exception e)
         {
@@ -191,6 +177,7 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             QueryCondition<MessageConfigEntity> query = new QueryCondition<>();
             query.addCondition("messageType", MessageTypeEnum.TENDER.getId());
             List<MessageConfigEntity> configList = dao.queryConfigList(query);
+            List<String> phones = new ArrayList<String>();
             if (configList != null && configList.size() > 0)
             {
                 for (Iterator<MessageConfigEntity> iterator = configList.iterator(); iterator.hasNext();)
@@ -198,15 +185,17 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                     MessageConfigEntity config = iterator.next();
                     if (config.getIsAccetp())
                     {
-                        NewSendMessage.getInstance(smsUrl,
-                                userName,
-                                password,
-                                sign,
-                                type).sendMessage(config.getPhone(),
-                                message + "，请登录私享家绿色门窗平台查看详情！");
+                        phones.add(config.getPhone());
                     }
                     
                 }
+                NewSendMessage.getInstance(smsUrl,
+                        userName,
+                        password,
+                        sign,
+                        type)
+                        .sendMessage(phones.toArray(new String[phones.size()]),
+                                message + "，请登录私享家绿色门窗平台查看详情！");
             }
         }
         catch (Exception e)
