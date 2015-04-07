@@ -121,6 +121,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                     // System.out.println(jzsj);
                     // System.out.println(url);
                     String GongGaoGuid = url.split("GongGaoGuid=")[1];
+                    configService.sendAllMessage("您有一条新的开发商招标信息");
                     if (oldGongGaoGuid != null
                             && GongGaoGuid.equals(oldGongGaoGuid))
                     {
@@ -155,6 +156,8 @@ public class WindDoorServiceImpl implements IWindDoorService
                         windDoor.setGifPath(contentMap.get("gifPath"));
                     }
                     bathList.add(windDoor);
+                    //发短信
+                    
                     CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                             windDoor.getId());
                     flag++;
@@ -179,12 +182,6 @@ public class WindDoorServiceImpl implements IWindDoorService
                     }
                 }
             }
-            //            //发送短信
-            if (flag > 0)
-            {
-                configService.sendAllMessage("您有一条新的市场信息");
-            }
-            
         }
         catch (Exception e)
         {
