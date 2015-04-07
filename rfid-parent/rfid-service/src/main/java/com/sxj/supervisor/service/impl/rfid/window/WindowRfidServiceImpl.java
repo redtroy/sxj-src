@@ -651,6 +651,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
 
     /**
      * 质检
+     * 1:质检成功2:门窗已经质检3:标签已停用4:所输入合同号与标签不一致
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -678,7 +679,6 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
                 }else{
                     map.put(rfidNo, "4");
                 }
-                
             }
         } catch (Exception e) {
             SxjLogger.error(e.getMessage(), e, this.getClass());
