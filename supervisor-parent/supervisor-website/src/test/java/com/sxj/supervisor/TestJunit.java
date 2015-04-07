@@ -34,5 +34,7 @@ public class TestJunit
     public void test()
     {
         ids.WindDoorGather();
+        //        CometServiceImpl.takeCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+        //                + "MEM000001");
     }
 }
