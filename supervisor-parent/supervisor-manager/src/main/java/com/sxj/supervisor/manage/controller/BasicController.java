@@ -46,6 +46,7 @@ import com.baidu.ueditor.FileEntity;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.spring.modules.util.ClassLoaderUtil;
+import com.sxj.supervisor.entity.developers.DevelopersEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.system.FunctionEntity;
@@ -57,6 +58,7 @@ import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
 import com.sxj.supervisor.model.system.FunctionModel;
+import com.sxj.supervisor.service.developers.IDevelopersService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.supervisor.service.system.IFunctionService;
@@ -99,6 +101,8 @@ public class BasicController extends BaseController
     @Autowired
     private RedisTopics topics;
     
+	@Autowired
+	private IDevelopersService developerService;
     //    @PostConstruct
     //    public void init()
     //    {
@@ -554,6 +558,41 @@ public class BasicController extends BaseController
         out.close();
         return null;
     }
+    /**
+     * 自动感应开发商
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoDevelopers")
+    public @ResponseBody Map<String, String> autoDevelopers(
+    		HttpServletRequest request, HttpServletResponse response,
+    		String keyword) throws IOException
+    		{
+    	DevelopersEntity query = new DevelopersEntity();
+    	if (keyword != "" && keyword != null)
+    	{
+    		query.setName(keyword);
+    	}
+    	List<DevelopersEntity> list = developerService.queryDeveloperList(query);
+    	List<String> strlist = new ArrayList<String>();
+    	String sb = "";
+    	for (DevelopersEntity developers : list)
+    	{
+    		sb = "{\"title\":\"" + developers.getName() + "\",\"result\":\""+ developers.getId() + "\"}";
+    		strlist.add(sb);
+    	}
+    	String json = "{\"data\":" + strlist.toString() + "}";
+    	response.setCharacterEncoding("UTF-8");
+    	PrintWriter out = response.getWriter();
+    	out.print(json);
+    	out.flush();
+    	out.close();
+    	return null;
+    		}
     
     public static String getIpAddr(HttpServletRequest request)
     {

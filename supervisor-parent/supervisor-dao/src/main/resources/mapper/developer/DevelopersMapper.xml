@@ -11,6 +11,7 @@
 		<result property="url" column="URL" jdbcType="VARCHAR" />
 		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
 		<result property="telPhone" column="TEL_PHONE" jdbcType="VARCHAR" />
+		<result property="entryTime" column="ENTRY_TIME" jdbcType="TIMESTAMP" />
 	</resultMap>
 
 	<!-- 条件查询财务统计 -->
@@ -33,5 +34,6 @@
 		<if test="condition.telPhone!= null and condition.telPhone != ''">
 			<![CDATA[AND TEL_PHONE LIKE CONCAT('%',#{condition.telPhone},'%')]]>
 		</if>
+		<![CDATA[ ORDER BY ENTRY_TIME DESC]]>
 	</select>
 </mapper>
