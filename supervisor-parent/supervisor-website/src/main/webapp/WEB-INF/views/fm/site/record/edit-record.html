@@ -256,6 +256,7 @@ $(document).ready(function() {
 		var urlA = "${basePath}autoCompleA.htm";
 		var urlB = "${basePath}autoCompleB.htm";
 		$("#memberNameA").bigAutocomplete({
+			width: '256',
 			url : urlA,
 			callback : function(data) {
 				if (data)
@@ -285,6 +286,7 @@ $(document).ready(function() {
 				$(this).parent().children(".Validform_wrong").show();
 		})
 		$("#memberNameB").bigAutocomplete({
+			width: '256',
 			url : urlB,
 			callback : function(data) {
 				if (data){
@@ -391,7 +393,7 @@ $(document).ready(function() {
 								<label>甲方</label>${record.memberNameA}
 							</div>
 							<div class="item">
-								<label>乙方</label><input class="input input-w270h30"
+								<label>乙方</label><input class="input input-w240h36"
 									id="memberNameB" name="memberNameB" autocomplete="off"
 									value="${record.memberNameB}" datatype="*1-50" nullmsg="请输入正确的乙方名称" />
 									<input type="hidden"
@@ -475,7 +477,7 @@ $(document).ready(function() {
 								<label>备案号</label>${record.recordNo}
 							</div>
 							<div class="item">
-								<label>甲方</label> <input class="input input-w270h30" datatype="*1-50" nullmsg="请输入正确的甲方名称"
+								<label>甲方</label> <input class="input input-w240h36" datatype="*1-50" nullmsg="请输入正确的甲方名称"
 									value="${record.memberNameA}" name="memberNameA" autocomplete="off"
 									id="memberNameA" /> <input type="hidden" name="memberIdA" id="memberIdA" datatype="*" nullmsg="请输入正确的甲方名称"
 									value="${record.memberIdA}" />
