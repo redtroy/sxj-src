@@ -155,6 +155,8 @@ public class WindDoorServiceImpl implements IWindDoorService
                         windDoor.setGifPath(contentMap.get("gifPath"));
                     }
                     bathList.add(windDoor);
+                    //发短信
+                    configService.sendAllMessage("您有一条新的开发商招标信息，请登录私享家绿色门窗平台查看详情！");
                     CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                             windDoor.getId());
                     flag++;
@@ -179,12 +181,6 @@ public class WindDoorServiceImpl implements IWindDoorService
                     }
                 }
             }
-            //            //发送短信
-            if (flag > 0)
-            {
-                configService.sendAllMessage("您有一条新的市场信息");
-            }
-            
         }
         catch (Exception e)
         {
