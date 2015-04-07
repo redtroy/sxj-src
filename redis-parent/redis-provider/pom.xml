@@ -7,9 +7,7 @@
     <artifactId>redis-parent</artifactId>
     <version>1.0</version>
   </parent>
-  <groupId>com.sxj</groupId>
   <artifactId>redis-provider</artifactId>
-  <version>1.0</version>
   <name>redis-provider</name>
   <url>http://maven.apache.org</url>
   <properties>
