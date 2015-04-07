@@ -1,5 +1,6 @@
 package com.sxj.supervisor.manage.controller.developers;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,7 @@ public class DevelopersController extends BaseController
     	entity.setUrl(url);
     	entity.setAddress(address);
     	entity.setTelPhone(telPhone);
+    	entity.setEntryTime(new Date());
     	try {
 			if(null==id||id.isEmpty()){
 				developerService.addDeveloper(entity);
