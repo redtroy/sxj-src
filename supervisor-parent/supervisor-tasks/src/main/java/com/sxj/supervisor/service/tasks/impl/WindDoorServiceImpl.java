@@ -121,7 +121,6 @@ public class WindDoorServiceImpl implements IWindDoorService
                     // System.out.println(jzsj);
                     // System.out.println(url);
                     String GongGaoGuid = url.split("GongGaoGuid=")[1];
-                    configService.sendAllMessage("您有一条新的开发商招标信息");
                     if (oldGongGaoGuid != null
                             && GongGaoGuid.equals(oldGongGaoGuid))
                     {
@@ -157,7 +156,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                     }
                     bathList.add(windDoor);
                     //发短信
-                    
+                    configService.sendAllMessage("您有一条新的开发商招标信息");
                     CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                             windDoor.getId());
                     flag++;
