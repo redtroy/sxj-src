@@ -219,12 +219,9 @@ public class PayController extends BaseController
                 if (flag.equals("ok"))
                 {
                     // 甲方
-                    /*
-                     * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-                     * + pay.getMemberNoA()); MessageChannel.initTopic()
-                     * .publish( MessageChannel.WEBSITE_PAY_MESSAGE +
-                     * pay.getMemberNoA());
-                     */
+                    
+                    CometServiceImpl.subCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                            + pay.getMemberNoA());
                     // 乙方
                     CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
                             + pay.getMemberNoB());
@@ -272,12 +269,8 @@ public class PayController extends BaseController
                 {
                     // PayRecordEntity pay = payService.getPayRecordEntity(id);
                     // 乙方
-                    /*
-                     * CometServiceImpl.subCount(MessageChannel.WEBSITE_PAY_MESSAGE
-                     * + pay.getMemberNoB()); MessageChannel.initTopic()
-                     * .publish( MessageChannel.WEBSITE_PAY_MESSAGE +
-                     * pay.getMemberNoB());
-                     */
+                    CometServiceImpl.subCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                            + pay.getMemberNoB());
                     map.put("isOk", "ok");
                 }
                 else
