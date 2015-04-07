@@ -178,7 +178,7 @@ public class MemberServiceImpl implements IMemberService
             {
                 member.setVersion(m.getVersion());
                 menberDao.updateMember(member);
-                List<MessageConfigEntity> configList = configService.queryConfigList(member.getMemberNo());
+                List<MessageConfigEntity> configList = configService.queryConfigList(m.getMemberNo());
                 for (Iterator<MessageConfigEntity> iterator = configList.iterator(); iterator.hasNext();)
                 {
                     MessageConfigEntity messageConfig = iterator.next();
