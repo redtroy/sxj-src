@@ -81,7 +81,7 @@ public class MessageConfigServiceImpl implements IMessageConfigService
         catch (Exception e)
         {
             SxjLogger.error("设置消息配置错误", e, this.getClass());
-            throw new ServiceException("设置消息配置错误", e);
+            throw new ServiceException("设置消息配置错误 ", e);
         }
         
     }
