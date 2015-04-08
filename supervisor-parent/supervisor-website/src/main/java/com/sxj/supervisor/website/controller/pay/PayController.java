@@ -122,9 +122,6 @@ public class PayController extends BaseController
             if ("1".equals(del))
             {
                 CometServiceImpl.setCount(channelName, 0l);
-                CometServiceImpl.setCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
-                        + memberNo,
-                        0l);
             }
             map.put("payState", payState);
             map.put("payMode", payMode);
