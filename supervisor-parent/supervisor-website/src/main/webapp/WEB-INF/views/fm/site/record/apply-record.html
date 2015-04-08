@@ -299,6 +299,7 @@ var basePath ='${basePath}';
 		//	})
 		//})
 		$("#memberNameA").bigAutocomplete({
+			width: '256',
 			url : urlA,
 			callback : function(data) {
 				if(data){
@@ -331,6 +332,7 @@ var basePath ='${basePath}';
 				$(this).parent().children(".Validform_wrong").show();
 		})
 		$("#memberNameB").bigAutocomplete({
+			width: '256',
 			url : urlB,
 			callback : function(data) {
 				if (data){
@@ -370,6 +372,7 @@ var basePath ='${basePath}';
 		})
 		
 		$("#engAddress").bigAutocomplete({
+			width: '256',
 			url : "${basePath}refContractNo.htm",
 			callback : function(data) {
 				if (data){
