@@ -142,7 +142,18 @@ public class CometServiceImpl implements BeanFactoryPostProcessor
     public static Long subCount(String key)
     {
         RAtomicLong atomicLong = redisConcurrent.getAtomicLong(key);
+        //        Long now = atomicLong.get();
+        //        if (now == 0)
+        //            return 0L;
+        //        while (!atomicLong.compareAndSet(atomicLong.get() - 1, now - 1))
+        //        {
+        //            now = atomicLong.get();
+        //            if (now == 0)
+        //                return 0L;
+        //        }
         long incrementAndGet = atomicLong.decrementAndGet();
+        if (incrementAndGet < 0)
+            atomicLong.set(0L);
         return incrementAndGet;
         
     }
