@@ -100,7 +100,7 @@ public class MemberController extends BaseController
         }
         catch (Exception e)
         {
-            SxjLogger.error("修改会员信息错误", e, this.getClass());
+            SxjLogger.error("修改会员信息错误 ", e, this.getClass());
             throw new WebException(e.getMessage());
         }
         
