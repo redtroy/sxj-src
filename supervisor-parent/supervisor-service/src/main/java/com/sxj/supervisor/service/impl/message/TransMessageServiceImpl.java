@@ -71,8 +71,11 @@ public class TransMessageServiceImpl implements ITransMessageService
                 }
                 else if (message.getType().equals(MessageTypeEnum.PAY))
                 {
-                    CometServiceImpl.takeCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
-                            + message.getMemberNo());
+                    if (message.getFlag())
+                    {
+                        CometServiceImpl.takeCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                                + message.getMemberNo());
+                    }
                 }
                 configService.sendMessage(message.getMemberNo(),
                         message.getType(),

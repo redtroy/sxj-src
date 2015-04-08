@@ -55,6 +55,11 @@ public class TransMessageEntity extends Pagable implements Serializable
     @Column(name = "VERSION_LOCK")
     private Integer version;
     
+    /**
+     * 标记，判断是否添加支付消息数量
+     */
+    private Boolean flag = true;
+    
     public String getId()
     {
         return id;
@@ -153,6 +158,16 @@ public class TransMessageEntity extends Pagable implements Serializable
     public void setVersion(Integer version)
     {
         this.version = version;
+    }
+    
+    public Boolean getFlag()
+    {
+        return flag;
+    }
+    
+    public void setFlag(Boolean flag)
+    {
+        this.flag = flag;
     }
     
 }
