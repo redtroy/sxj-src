@@ -232,6 +232,7 @@ public class PayController extends BaseController
                     message.setMemberNo(pay.getMemberNoB());
                     message.setContractNo(pay.getPayNo());
                     message.setSendDate(new Date());
+                    message.setFlag(false);
                     tms.addMessage(message);
                     map.put("isOk", "ok");
                 }
