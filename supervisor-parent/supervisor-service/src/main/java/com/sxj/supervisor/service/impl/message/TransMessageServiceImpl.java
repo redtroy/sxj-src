@@ -108,8 +108,10 @@ public class TransMessageServiceImpl implements ITransMessageService
             if (query != null)
             {
                 condition.addCondition("memberNo", query.getMemberNo());
+                condition.setPage(query);
             }
             List<TransMessageEntity> list = dao.queryMessageList(condition);
+            query.setPage(condition);
             return list;
         }
         catch (Exception e)
