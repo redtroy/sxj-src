@@ -42,6 +42,7 @@ public class TransMessageController extends BaseController
             HttpSession session, HttpServletRequest request)
             throws WebException
     {
+        query.setPagable(true);
         SupervisorPrincipal user = getLoginInfo(session);
         if (user == null)
         {

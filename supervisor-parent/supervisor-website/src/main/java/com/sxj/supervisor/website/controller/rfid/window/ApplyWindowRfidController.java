@@ -51,6 +51,9 @@ public class ApplyWindowRfidController extends BaseController {
 				query.setPagable(true);
 			}
 			MemberEntity member = getLoginInfo(session).getMember();
+			if(member==null){
+                return LOGIN;
+            }
 			query.setMemberNo(member.getMemberNo());
 			List<RfidApplicationEntity> list = applyService.query(query);
 			ReceiptStateEnum[] receipt_states = ReceiptStateEnum.values();
@@ -101,6 +104,9 @@ public class ApplyWindowRfidController extends BaseController {
 			throws WebException {
 		try {
 			MemberEntity member = getLoginInfo(session).getMember();
+			if(member==null){
+                return LOGIN;
+            }
 			String type = RfidTypeEnum.getName(member.getType().getId());
 			map.put("member", member);
 			map.put("type", type);
