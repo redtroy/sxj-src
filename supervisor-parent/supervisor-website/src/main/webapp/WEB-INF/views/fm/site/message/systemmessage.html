@@ -31,7 +31,7 @@ $(function(){
 function query(page) {
 	var params = "";
 	if (page != undefined) {
-		params = params + "?currentPage=" + page;
+		params ="currentPage=" + page;
 	}
 	$.post("query.htm", params, function(data) {
 		var res = $(data).find(".newsList");

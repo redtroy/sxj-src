@@ -49,54 +49,27 @@
     <filter-name>shiroFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  <!-- <filter>
-  		<filter-name>csrfFilter</filter-name>
-	  	<filter-class>com.sxj.web.filter.CsrfFilter</filter-class>
-	  	<init-param>
-	  		<param-name>configFile</param-name>
-	  		<param-value>/csrfguard.properties</param-value>
-	  	</init-param>
+  <filter>
+    <filter-name>DruidWebStatFilter</filter-name>
+    <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+    <init-param>
+      <param-name>exclusions</param-name>
+      <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+    </init-param>
   </filter>
   <filter-mapping>
-  	<filter-name>csrfFilter</filter-name>
-  	<url-pattern>*.htm</url-pattern>
-  </filter-mapping> -->
-  <filter>
-      <filter-name>DruidWebStatFilter</filter-name>
-      <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
-      <init-param>
-       <param-name>exclusions</param-name>
-       <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
-      </init-param>
-</filter>
-<filter-mapping>
-     <filter-name>DruidWebStatFilter</filter-name>
-     <url-pattern>/*</url-pattern>
-</filter-mapping>
-<servlet>
-    <servlet-name>DruidStatView</servlet-name>
-    <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>  
-    <load-on-startup>2</load-on-startup>
-</servlet>   
-<servlet-mapping>
-    <servlet-name>DruidStatView</servlet-name>
-    <url-pattern>/druid/*</url-pattern>
-</servlet-mapping> 
-	
-  <!-- <listener>
-    <description>Comet4J容器侦听</description>
-    <listener-class>org.comet4j.core.CometAppListener</listener-class>
-  </listener>
+    <filter-name>DruidWebStatFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <servlet>
-    <description>Comet连接[默认:org.comet4j.core.CometServlet]</description>
-    <display-name>CometServlet</display-name>
-    <servlet-name>CometServlet</servlet-name>
-    <servlet-class>org.comet4j.core.CometServlet</servlet-class>
+    <servlet-name>DruidStatView</servlet-name>
+    <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>CometServlet</servlet-name>
-    <url-pattern>/comet</url-pattern>
- </servlet-mapping>--> 
+    <servlet-name>DruidStatView</servlet-name>
+    <url-pattern>/druid/*</url-pattern>
+  </servlet-mapping>
   <filter>
     <filter-name>CacheFilter</filter-name>
     <filter-class>com.tacitknowledge.filters.cache.CacheHeaderFilter</filter-class>
@@ -109,6 +82,20 @@
     <filter-name>CacheFilter</filter-name>
     <url-pattern>*.html</url-pattern>
   </filter-mapping>
+  <!-- 特殊字符过滤 -->
+  <filter>
+     <filter-name>CharacterFilter</filter-name>
+     <filter-class>com.sxj.supervisor.website.controller.CharacterFilter</filter-class>
+     <init-param>
+         <param-name>characterParams</param-name>
+         <param-value><![CDATA[|,&,;,$,%,',",\',\",<,>,+,\]]></param-value>
+     </init-param>
+ </filter>
+ <filter-mapping>
+     <filter-name>CharacterFilter</filter-name>
+     <url-pattern>/*</url-pattern>
+ </filter-mapping>
+ <!-- 特殊字符过滤 end-->
   <welcome-file-list>
     <welcome-file>/index.htm</welcome-file>
     <welcome-file>/to_login.htm</welcome-file>
