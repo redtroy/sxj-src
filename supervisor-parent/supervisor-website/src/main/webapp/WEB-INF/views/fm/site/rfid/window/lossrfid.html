@@ -19,11 +19,11 @@ var lable=null;
 var isPass=false;
 $(function(){
 	$("#contract_a").change(function(){
-		$("#pc_a option").remove();
+		$("#pc_a").empty();
 		pc_a();
 	});
 	$("#contract_b").change(function(){
-		$("#pc_b option").remove();
+		$("#pc_b").empty();
 		pc_b();
 	});
 	$("#pc_a").change(function(){
@@ -118,6 +118,8 @@ $(function(){
 				}
 				lable=data.bq;
 				//$("#bq_qj").text(data.bq[0]+"-"+data.bq[1])
+				$("#pc_a").empty();
+				$("#pc_b").empty();
 				pc_a();
 				pc_b();
 				add_rfid(num);
@@ -173,6 +175,8 @@ function query(){
 			}
 			lable=data.bq;
 			//$("#bq_qj").text(data.bq[0]+"-"+data.bq[1])
+			$("#pc_a").empty();
+			$("#pc_b").empty();
 			pc_a();
 			pc_b();
 			add_rfid(num);
@@ -188,14 +192,21 @@ function pc_a(){
 	var contractNo=$("#contract_a option:selected").text();
 	if (contractNo !=null){
 		$.post("query_loss_contractNo.htm",{contractNo:contractNo},function(data){
-			if (data.isOk=="ok" && data.cm.replenishList !=null){
+			if (data.isOk=="ok" && data.batchItems!=null){
 				container_a=data.batchItems;
+				$("#pc_a").empty();
 				for (var i=0;i<container_a.length;i++){
-				 $("#pc_a").append("<option value='"+i+"'>补"+container_a[i].replenishBatch.batchNo+"</option>")
+					if(container_a[i].batch.type==3){
+						$("#pc_a").append("<option value='"+i+"'>补"+container_a[i].batch.batchNo+"</option>")
+					}else{
+						$("#pc_a").append("<option value='"+i+"'>"+container_a[i].batch.batchNo+"</option>")
+					}
+				 
 				}
 				rfid_a($("#pc_a option:selected").val());
 				}else{
-					$("#pc_a").append("<option value=''>该合同无补损批次</option>");
+					$("#pc_a").empty();
+					$("#pc_a").append("<option value=''>该合同无批次</option>");
 				}
 		})
 	}
@@ -204,32 +215,38 @@ function pc_b(){
 	var contractNo=$("#contract_b option:selected").text();
 	if (contractNo !=null){
 		$.post("query_loss_contractNo.htm",{contractNo:contractNo},function(data){
-			if (data.isOk=="ok" && data.cm.replenishList !=null){
+			if (data.isOk=="ok" && data.batchItems !=null){
 				container_b=data.batchItems;
+				$("#pc_b").empty();
 				for (var i=0;i<container_b.length;i++){
-				 $("#pc_b").append("<option value='"+i+"'>补"+container_b[i].replenishBatch.batchNo+"</option>")
+					if(container_b[i].batch.type==3){
+				 		$("#pc_b").append("<option value='"+i+"'>补"+container_b[i].batch.batchNo+"</option>")
+					}else{
+						$("#pc_b").append("<option value='"+i+"'>"+container_b[i].batch.batchNo+"</option>")	
+					}
 				}
 				rfid_b($("#pc_b option:selected").val());
 				}else{
-					$("#pc_b").append("<option value=''>该合同无补损批次</option>");
+					$("#pc_b").empty();
+					$("#pc_b").append("<option value=''>该合同无批次</option>");
 				}
 		})
 	}
 }
 function rfid_a(pc_a_id){
-	if(container_a[pc_a_id].replenishBatch.newRfidNo==null){
+	if(container_a[pc_a_id].batch.rfidNo==null){
 		$("#rfid_a").text("");
 	}else{
-		$("#rfid_a").text(container_a[pc_a_id].replenishBatch.newRfidNo);
+		$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
 	}
 	
 }
 function rfid_b(pc_b_id){
-	if(container_b[pc_b_id].replenishBatch.newRfidNo==null){
-		$("#rfid_b").text("");
+ 	if(container_b[pc_b_id].batch.rfidNo==null){
+ 		$("#rfid_b").text("");
 	}else{
-		$("#rfid_b").text(container_b[pc_b_id].replenishBatch.newRfidNo);
-	}
+		$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
+ 	}
 	
 }
 
@@ -282,12 +299,8 @@ function star(){
 	var lRfid=$("#rfid_b").text();
 	var num=$("#num").val();
 	var rfids=$("#add_rfid").find("[name='addRfid']").serialize();
-	if (gRfid=="" || gRfid== null){
+	if ((gRfid=="" || gRfid== null)&&(lRfid=="" || lRfid== null)){
 		messageInfo('玻璃采购合同的补损物流标签缺失，无法进行补损');
-		return false;
-	}
-	if (lRfid=="" || lRfid== null){
-		messageInfo('型材采购合同的补损物流标签缺失，无法进行补损');
 		return false;
 	}
 	dialogBox(function(index){
