@@ -79,7 +79,11 @@ public class TenderMessageServiceImpl implements ITenderMessageService
             if (message != null)
             {
                 message.setState(state);
-                dao.updateMessage(message);
+                Integer count = dao.updateMessage(message);
+                if (count <= 0)
+                {
+                    return;
+                }
                 String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
                         + message.getMemberNo();
                 List<String> userKeys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);

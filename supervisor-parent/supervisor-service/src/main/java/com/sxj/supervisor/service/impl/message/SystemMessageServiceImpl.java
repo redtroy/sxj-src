@@ -257,9 +257,13 @@ public class SystemMessageServiceImpl implements ISystemMessageService
             if (message != null)
             {
                 message.setState(state);
-                messageDao.updateMessage(message);
-                CometServiceImpl.subCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
-                        + message.getMemberNo());
+                Integer count = messageDao.updateMessage(message);
+                if (count > 0)
+                {
+                    CometServiceImpl.subCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                            + message.getMemberNo());
+                }
+                
             }
         }
         catch (Exception e)

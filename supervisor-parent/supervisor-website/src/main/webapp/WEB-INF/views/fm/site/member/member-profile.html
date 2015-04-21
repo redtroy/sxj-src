@@ -84,6 +84,10 @@
 			function queryMessage() {
 				$.get("${basePath}member/getMessageCount.htm?ram="
 						+ Math.random(), function(data) {
+					if(data.isNotLogin==1){
+						window.location.href="${basePath}to_login.htm";
+						return;
+					}
 					if (typeof (data.systemMessageCount) != "undefined") {
 						$("#system_message_1").text(data.systemMessageCount);
 						$("#system_message_2").text(

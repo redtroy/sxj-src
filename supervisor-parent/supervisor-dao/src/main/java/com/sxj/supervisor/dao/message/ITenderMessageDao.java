@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.Get;
-import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.message.TenderMessageEntity;
 import com.sxj.supervisor.model.message.TenderMessageModel;
 import com.sxj.util.persistent.QueryCondition;
@@ -14,8 +13,8 @@ public interface ITenderMessageDao
     @BatchInsert
     public void addMessage(List<TenderMessageEntity> message);
     
-    @Update
-    public void updateMessage(TenderMessageEntity message);
+    //@Update
+    public Integer updateMessage(TenderMessageEntity message);
     
     @Get
     public TenderMessageEntity getMessage(String id);

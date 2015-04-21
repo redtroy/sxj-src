@@ -131,9 +131,13 @@ public class TransMessageServiceImpl implements ITransMessageService
             if (message != null)
             {
                 message.setState(state);
-                dao.updateMessage(message);
-                CometServiceImpl.subCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
-                        + message.getMemberNo());
+                Integer count = dao.updateMessage(message);
+                if (count > 0)
+                {
+                    CometServiceImpl.subCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                            + message.getMemberNo());
+                }
+                
                 //                if (message.getType().equals(MessageTypeEnum.CONTRACT))
                 //                {
                 //                    CometServiceImpl.subCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
