@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,6 +19,7 @@ import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidStateEnum;
+import com.sxj.supervisor.model.contract.ContractBatchModel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.contract.ContractReplenishModel;
@@ -140,27 +142,27 @@ public class LossWinRfidController extends BaseController {
 			throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
-			ContractModel cm = contractService
-					.getContractModelByContractNo(contractNo);
-			if (cm != null) {
+		    List<ContractBatchModel> batchItems=null;
+		    batchItems  = contractService
+					.getBacthsByContractNo(contractNo);
+			if (!CollectionUtils.isEmpty(batchItems)) {
 				map.put("isOk", "ok");
-				map.put("cm", cm);
 			} else {
 				map.put("isOk", "false");
 			}
-			List<ReplenishBatchModel> itemList = new ArrayList<>();
-			List<ContractReplenishModel> replenishList = cm.getReplenishList();
-			if (replenishList != null && replenishList.size() > 0) {
-				for (ContractReplenishModel replenishModel : replenishList) {
-					List<ReplenishBatchModel> item = replenishModel
-							.getBatchItems();
-					if (item == null) {
-						continue;
-					}
-					itemList.addAll(item);
-				}
-			}
-			map.put("batchItems", itemList);
+//			List<ReplenishBatchModel> itemList = new ArrayList<>();
+//			List<ContractReplenishModel> replenishList = cm.getReplenishList();
+//			if (replenishList != null && replenishList.size() > 0) {
+//				for (ContractReplenishModel replenishModel : replenishList) {
+//					List<ReplenishBatchModel> item = replenishModel
+//							.getBatchItems();
+//					if (item == null) {
+//						continue;
+//					}
+//					itemList.addAll(item);
+//				}
+//			}
+			map.put("batchItems", batchItems);
 		} catch (Exception e) {
 			SxjLogger.error("根据合同号查询合同信息错误", e, this.getClass());
 			map.put("error", e.getMessage());

@@ -45,7 +45,7 @@
     'fileActionName': 'uploadfile', 
     'fileFieldName': 'upfile',
     'filePathFormat': '\/ueditor\/jsp\/upload\/file\/{yyyy}{mm}{dd}\/{time}{rand:6}', 
-    'fileUrlPrefix': 'http://storage.menchuang.org.cn/',
+    'fileUrlPrefix': 'http://storage.menchuang.org.cn:88/',
     'fileMaxSize': 51200000, 
     'fileAllowFiles': [
         '.png', '.jpg', '.jpeg', '.gif', '.bmp',
