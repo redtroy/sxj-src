@@ -298,9 +298,11 @@ public class MemberController extends BaseController
      */
     @RequestMapping("send_ms")
     public @ResponseBody Map<String, String> send_ms(HttpSession session,
-            String phoneNo)
+            String phoneNo)  throws WebException
     {
+        
         Map<String, String> map = new HashMap<String, String>();
+        try{
         if (StringUtils.isEmpty(phoneNo))
         {
             map.put("error", "手机号不能为空");
@@ -330,6 +332,10 @@ public class MemberController extends BaseController
         else
         {
             map.put("error", " 每一分钟发送一次");
+        }
+        }catch(Exception e){
+            SxjLogger.error("信息发送错误", e, this.getClass());
+            throw new WebException("发送信息错误");
         }
         return map;
     }
