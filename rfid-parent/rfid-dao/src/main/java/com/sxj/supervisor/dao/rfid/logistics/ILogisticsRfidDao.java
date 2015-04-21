@@ -84,6 +84,13 @@ public interface ILogisticsRfidDao
     @Update
     public void updateLogisticsRfid(LogisticsRfidEntity logistics)
             throws SQLException;
+    /**
+     * 更新rfid
+     * @param logistics
+     * @throws SQLException
+     */
+    public int updateRfid(LogisticsRfidEntity logistics)
+            throws SQLException;
     
     /**
      * 获取物流RFID信息

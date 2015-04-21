@@ -1314,8 +1314,10 @@ public class ContractServiceImpl implements IContractService
             logistics.setRfidState(RfidStateEnum.USED);
             logistics.setBatchNo(batch.getBatchNo());
             logistics.setIsLossBatch(false);
-            logisticsRfidService.updateLogistics(logistics);
-            
+            int num= logisticsRfidService.updateRfid(logistics);
+            if(num==0){
+                throw new ServiceException("RFID已经启用！");  
+            }
             // 申请关联
             LogisticsRefEntity ref = new LogisticsRefEntity();
             ref.setRfidNo(batch.getRfidNo());
@@ -1335,6 +1337,11 @@ public class ContractServiceImpl implements IContractService
             ref.setContractNo(batch.getContractId());
             ref.setState(AuditStateEnum.NO_APPROVAL);
             logisticsRefService.add(ref);
+        }
+        catch (ServiceException e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException(e.getMessage(), e);
         }
         catch (Exception e)
         {

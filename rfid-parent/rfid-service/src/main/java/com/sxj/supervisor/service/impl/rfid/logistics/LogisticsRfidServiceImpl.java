@@ -159,7 +159,34 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
         }
         
     }
-    
+    @Override
+    @Transactional
+    public int updateRfid(LogisticsRfidEntity logistics)
+            throws ServiceException
+    {
+        int num;
+        try
+        {
+            System.out.println(Thread.currentThread());
+            if (logistics == null)
+            {
+                throw new ServiceException("物流RFID不存在");
+            }
+            num=logisticsRfidDao.updateRfid(logistics);
+        }
+        catch (ServiceException e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException(e.getMessage());
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("更新物流RFID错误", e);
+        }
+        return num;
+        
+    }
     @Override
     @Transactional(readOnly = true)
     public List<RfidLog> getRfidStateLog(String id) throws ServiceException

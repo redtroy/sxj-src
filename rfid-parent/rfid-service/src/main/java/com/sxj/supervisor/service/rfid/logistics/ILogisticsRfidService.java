@@ -95,4 +95,6 @@ public interface ILogisticsRfidService
             throws ServiceException;
 
 	int getRfidState(String rfidNo);
+
+    int updateRfid(LogisticsRfidEntity logistics) throws ServiceException;
 }
