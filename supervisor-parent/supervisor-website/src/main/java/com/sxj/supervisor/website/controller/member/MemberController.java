@@ -389,12 +389,14 @@ public class MemberController extends BaseController
             throws WebException
     {
         Map<String, Long> map = new HashMap<>();
+        map.put("isNotLogin", 0l);
         try
         {
             SupervisorPrincipal login = getLoginInfo(session);
             if (login == null)
             {
-                throw new WebException("会员未登陆");
+                map.put("isNotLogin", 1l);
+                return map;
             }
             MemberEntity member = login.getMember();
             Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT

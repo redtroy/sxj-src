@@ -33,4 +33,7 @@
 		</if>
 		<![CDATA[ ORDER BY m.STATE]]>
 	</select>
+	<update id="updateMessage" parameterType="com.sxj.supervisor.entity.message.TenderMessageEntity">
+		<![CDATA[ UPDATE M_TENDER_MESSAGE SET STATE=#{state} WHERE ID=#{id} AND STATE=0]]>
+	</update>
 </mapper>

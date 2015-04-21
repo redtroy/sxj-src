@@ -77,6 +77,11 @@ function clickFunction(url){
 
 function menuMessage() {
 	$.get("${basePath}menuMessageCount.htm?ram="+Math.random(), function(data){
+		if(data.isNotLogin==1){
+			window.location.href="${basePath}to_login.htm";
+			return;
+		}
+		
 		 if(typeof(data.contractMessageCount) != "undefined"&&data.contractMessageCount>0){
 			 $("#contract_message").text(data.contractMessageCount);
 			 $("#contract_message").show();

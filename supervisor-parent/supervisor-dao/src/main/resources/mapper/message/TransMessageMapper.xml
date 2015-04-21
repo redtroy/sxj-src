@@ -2,20 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sxj.supervisor.dao.message.ITransMessageDao">
-	<resultMap id="com.sxj.supervisor.dao.message.ITransMessageDao.transMessage"
+	<resultMap
+		id="com.sxj.supervisor.dao.message.ITransMessageDao.transMessage"
 		type="com.sxj.supervisor.entity.message.TransMessageEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="message" column="MESSAGE" jdbcType="VARCHAR" />
-		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR"/>
+		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
 		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
-		<result property="stateMessage" column="STATE_MESSAGE" jdbcType="VARCHAR" />
+		<result property="stateMessage" column="STATE_MESSAGE"
+			jdbcType="VARCHAR" />
 		<result property="sendDate" column="SEND_DATE" jdbcType="TIMESTAMP" />
-		<result property="version" column="VERSION_LOCK" jdbcType="INTEGER"/>
+		<result property="version" column="VERSION_LOCK" jdbcType="INTEGER" />
 	</resultMap>
-	
+
 	<!-- 高级查询 -->
 	<select id="queryMessageList"
 		resultMap="com.sxj.supervisor.dao.message.ITransMessageDao.transMessage"
@@ -26,4 +28,8 @@
 		</if>
 		<![CDATA[ ORDER BY STATE]]>
 	</select>
+	<update id="updateMessage"
+		parameterType="com.sxj.supervisor.entity.message.TransMessageEntity">
+	<![CDATA[UPDATE M_TRANS_MESSAGE SET STATE=#{state} WHERE ID=#{id} AND STATE=0]]>
+	</update>
 </mapper>
