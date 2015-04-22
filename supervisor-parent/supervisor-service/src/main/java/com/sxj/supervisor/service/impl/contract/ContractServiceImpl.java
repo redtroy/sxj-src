@@ -2334,6 +2334,10 @@ public class ContractServiceImpl implements IContractService
             ContractBatchEntity contractBatch = contractBatchDao.getBacthsByRfid(rfidNo);
             if (contractBatch != null)
             {
+                // 更新合同支付批次条目
+                ContractModel cm = this.getContractModelByContractNo(contractNo);
+                ContractEntity ce = new ContractEntity();
+                ce.setId(cm.getContract().getId());
                 if (contractBatch.getType() == 1)
                 {
                     ContractBatchEntity cbe = new ContractBatchEntity();
@@ -2341,6 +2345,7 @@ public class ContractServiceImpl implements IContractService
                     cbe.setPayState(1);
                     cbe.setPayNo(payNo);
                     contractBatchDao.updateBatch(cbe);
+                    ce.setPayBatch(cm.getContract().getPayBatch() + 1);
                 }
                 else if (contractBatch.getType() == 2)
                 {
@@ -2349,6 +2354,7 @@ public class ContractServiceImpl implements IContractService
                     modifyBatch.setPayState(1);
                     modifyBatch.setPayNo(payNo);
                     contractModifyBatchDao.updateBatch(modifyBatch);
+                    ce.setPayBatch(cm.getContract().getPayBatch() + 1);
                 }
                 else if (contractBatch.getType() == 3)
                 {
@@ -2358,11 +2364,6 @@ public class ContractServiceImpl implements IContractService
                     replenishBatch.setPayNo(payNo);
                     contractReplenishBatchDao.updateBatch(replenishBatch);
                 }
-                // 更新合同支付批次条目
-                ContractModel cm = this.getContractModelByContractNo(contractNo);
-                ContractEntity ce = new ContractEntity();
-                ce.setId(cm.getContract().getId());
-                ce.setPayBatch(cm.getContract().getPayBatch() + 1);
                 contractDao.updateContract(ce);
             }
         }
