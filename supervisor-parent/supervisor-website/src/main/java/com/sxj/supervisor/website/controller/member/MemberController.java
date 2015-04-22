@@ -198,40 +198,48 @@ public class MemberController extends BaseController
      */
     @RequestMapping("regist_save")
     public String regist_save(MemberEntity member, ModelMap map, String ms,
-            HttpSession session)
+            HttpSession session) throws WebException
     {
-        String message = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
-                "checkMs",
-                member.getPhoneNo() + "_checkMs");
-        if (StringUtils.isEmpty(message))
+        try
         {
-            MemberTypeEnum[] type = MemberTypeEnum.values();
-            List<AreaEntity> list = areaService.getChildrenAreas("32");
-            map.put("type", type);
-            map.put("list", list);
-            map.put("member", member);
-            return "site/register";
-        }
-        if (message.equals(ms))
-        {
-            member.setState(MemberStatesEnum.NORMAL);
-            member.setCheckState(MemberCheckStateEnum.UNAUDITED);
-            member.setRegDate(new Date());
-            member.setFlag(false);
-            memberService.addMember(member);
-            HierarchicalCacheManager.evict(CacheLevel.REDIS,
+            String message = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
                     "checkMs",
                     member.getPhoneNo() + "_checkMs");
-            return "redirect:/member/regist_succ.htm";
+            if (StringUtils.isEmpty(message))
+            {
+                MemberTypeEnum[] type = MemberTypeEnum.values();
+                List<AreaEntity> list = areaService.getChildrenAreas("32");
+                map.put("type", type);
+                map.put("list", list);
+                map.put("member", member);
+                return "site/register";
+            }
+            if (message.equals(ms))
+            {
+                member.setState(MemberStatesEnum.NORMAL);
+                member.setCheckState(MemberCheckStateEnum.UNAUDITED);
+                member.setRegDate(new Date());
+                member.setFlag(false);
+                memberService.addMember(member);
+                HierarchicalCacheManager.evict(CacheLevel.REDIS,
+                        "checkMs",
+                        member.getPhoneNo() + "_checkMs");
+                return "redirect:/member/regist_succ.htm";
+            }
+            else
+            {
+                MemberTypeEnum[] type = MemberTypeEnum.values();
+                List<AreaEntity> list = areaService.getChildrenAreas("32");
+                map.put("type", type);
+                map.put("list", list);
+                map.put("member", member);
+                return "site/register";
+            }
         }
-        else
+        catch (Exception e)
         {
-            MemberTypeEnum[] type = MemberTypeEnum.values();
-            List<AreaEntity> list = areaService.getChildrenAreas("32");
-            map.put("type", type);
-            map.put("list", list);
-            map.put("member", member);
-            return "site/register";
+            SxjLogger.error("添加会员信息错误", e, this.getClass());
+            throw new WebException(e.getMessage());
         }
     }
     
@@ -298,42 +306,46 @@ public class MemberController extends BaseController
      */
     @RequestMapping("send_ms")
     public @ResponseBody Map<String, String> send_ms(HttpSession session,
-            String phoneNo)  throws WebException
+            String phoneNo) throws WebException
     {
         
         Map<String, String> map = new HashMap<String, String>();
-        try{
-        if (StringUtils.isEmpty(phoneNo))
+        try
         {
-            map.put("error", "手机号不能为空");
-            return map;
-        }
-        phoneNo = phoneNo.trim();
-        RAtomicLong num = redisConcurrent.getAtomicLong("num_" + phoneNo, 59);// 记录次数59秒只能发送一次
-        if (num.incrementAndGet() == 1)
-        {
-            RAtomicLong sendMax = redisConcurrent.getAtomicLong("sendMax_"
-                    + phoneNo, DateTimeUtils.getNextZeroTime());
-            if (sendMax.incrementAndGet() <= 5)
+            if (StringUtils.isEmpty(phoneNo))
             {
-                String message = "";
-                message = memberService.createvalidata(phoneNo, message);
-                HierarchicalCacheManager.set(CacheLevel.REDIS,
-                        "checkMs",
-                        phoneNo + "_checkMs",
-                        message,
-                        600);
+                map.put("error", "手机号不能为空");
+                return map;
+            }
+            phoneNo = phoneNo.trim();
+            RAtomicLong num = redisConcurrent.getAtomicLong("num_" + phoneNo,
+                    59);// 记录次数59秒只能发送一次
+            if (num.incrementAndGet() == 1)
+            {
+                RAtomicLong sendMax = redisConcurrent.getAtomicLong("sendMax_"
+                        + phoneNo, DateTimeUtils.getNextZeroTime());
+                if (sendMax.incrementAndGet() <= 5)
+                {
+                    String message = "";
+                    message = memberService.createvalidata(phoneNo, message);
+                    HierarchicalCacheManager.set(CacheLevel.REDIS,
+                            "checkMs",
+                            phoneNo + "_checkMs",
+                            message,
+                            600);
+                }
+                else
+                {
+                    map.put("error", "每个号码每天限制发送5次");
+                }
             }
             else
             {
-                map.put("error", "每个号码每天限制发送5次");
+                map.put("error", " 每一分钟发送一次");
             }
         }
-        else
+        catch (Exception e)
         {
-            map.put("error", " 每一分钟发送一次");
-        }
-        }catch(Exception e){
             SxjLogger.error("信息发送错误", e, this.getClass());
             throw new WebException("发送信息错误");
         }
