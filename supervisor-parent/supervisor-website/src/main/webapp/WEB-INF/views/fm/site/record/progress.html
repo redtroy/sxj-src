@@ -4,9 +4,9 @@
 		<#if batchList?exists && (batchList?size>0)>
 		<ol>
 			<#list batchList as batchList>
-			<li>第${batchList.batch.batchNo}批次${batchList.batchItems[0].productModel},等型号共${batchList.batchItems[0].quantity}件<#if
+			<li><#if batchList.batch.type==3>补</#if>第${batchList.batch.batchNo}批次${batchList.batchItems[0].productModel},等型号共${batchList.batchItems[0].quantity}件<#if
 				type==1>玻璃<#elseif type==2>型材</#if><#if
-				batchList.batch.warehouseState==0>未出库!<#else>已出库，<#if
+				batchList.batch.warehouseState==0>未出库.<#else>已出库，<#if
 				batchList.batch.payState==0>
 				<#if flag==0>
 				<span class="color-red mr10">未付款</span>
