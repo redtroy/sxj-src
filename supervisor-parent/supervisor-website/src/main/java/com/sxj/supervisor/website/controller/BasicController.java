@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
@@ -227,7 +228,7 @@ public class BasicController extends BaseController
         return "site/404";
     }
     
-    @RequestMapping("login")
+    @RequestMapping(value="login",method = RequestMethod.POST)
     public String login(String memberName, String accountName, String password,
             HttpSession session, HttpServletRequest request, ModelMap map)
     {
