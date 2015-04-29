@@ -33,7 +33,6 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
-import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
@@ -511,6 +510,7 @@ public class BasicController extends BaseController
     {
         try
         {
+            ServletOutputStream output = response.getOutputStream();
             String fileName = "扫描件" + stringDate();
             String group = filePath.substring(0, filePath.indexOf("/"));
             response.addHeader("Content-Disposition", "attachment;filename="
@@ -518,12 +518,7 @@ public class BasicController extends BaseController
             response.setContentType("application/pdf");
             String path = filePath.substring(filePath.indexOf("/") + 1,
                     filePath.length());
-            byte[] file = storageClientService.downloadFile(group,
-                    path,
-                    new ByteArrayFdfsFileInputStreamHandler());
-            System.out.println(file);
-            ServletOutputStream output = response.getOutputStream();
-            output.write(file);
+            storageClientService.downloadFile(group, path, output);
             output.flush();
             output.close();
         }

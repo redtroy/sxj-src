@@ -17,100 +17,120 @@ import third.rewrite.fastdfs.GroupState;
 import third.rewrite.fastdfs.StorePath;
 import third.rewrite.fastdfs.service.IStorageClientService;
 import third.rewrite.fastdfs.service.ITrackerClientService;
-import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 @ContextConfiguration("classpath:test/spring.xml")
-public class TestFastdfs extends AbstractJUnit4SpringContextTests {
-
-	@Autowired
-	private ITrackerClientService trackerClientService;
-
-	@Autowired
-	private IStorageClientService storageClientService;
-
-	@Test
-	public void testGroupState() {
-		GroupState[] states = trackerClientService.listGroups();
-		for (GroupState state : states) {
-			System.out.println(ToStringBuilder.reflectionToString(state));
-		}
-	}
-
-	@Test
-	public void testUploadFile() throws IOException {
-		// byte[] bytes = FileUtils
-		// .readFileToByteArray(new File(
-		// "C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
-		// StorePath storePath = storageClientService.uploadFile("image01",
-		// new ByteArrayInputStream(bytes), bytes.length, "abcdef");
-		// System.out.println(storePath);
-		// System.out.println(storePath.getPath().length());
-
-	}
-
-	@Test
-	public void testUploadSlaveFile() throws IOException {
-		byte[] bytes = FileUtils.readFileToByteArray(new File(
-				"C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
-		StorePath storePath = storageClientService.uploadSlaveFile("image01",
-				"M00/00/00/rBBynlPsiXeAdH8xASKM8lGiSWc346.png",
-				new ByteArrayInputStream(bytes), bytes.length, "!png", "jpg");
-		System.out.println(storePath);
-	}
-
-	@Test
-	public void testDownloadFile() {
-		byte[] bytes = storageClientService.downloadFile("image01",
-				"M00/00/00/rBBynlPsiXeAdH8xASKM8lGiSWc346[png].jpg",
-				new ByteArrayFdfsFileInputStreamHandler());
-		System.out.println(bytes.length);
-	}
-
-	@Test
-	public void testUploadMultiFile() throws IOException {
-		int totalCount = 1000;
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(100);
-
-		executor.afterPropertiesSet();
-		final AtomicInteger failCount = new AtomicInteger(0);
-		final AtomicInteger count = new AtomicInteger(0);
-		for (int i = 0; i < totalCount; i++) {
-			executor.execute(new Runnable() {
-
-				@Override
-				public void run() {
-					try {
-						byte[] bytes = FileUtils
-								.readFileToByteArray(new File(
-										"C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
-						// StorePath storePath =
-						// storageClientService.uploadFile(
-						// null, new ByteArrayInputStream(bytes),
-						// bytes.length, "jpg");
-						// System.out.println(storePath);
-						// System.out.println(storePath.getPath().length());
-					} catch (Exception e) {
-						e.printStackTrace();
-						failCount.incrementAndGet();
-					} finally {
-						count.incrementAndGet();
-					}
-
-				}
-			});
-
-		}
-		while (count.get() < totalCount) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				return;
-			}
-		}
-		executor.destroy();
-		System.out.println("fail count: " + failCount.get());
-
-	}
-
+public class TestFastdfs extends AbstractJUnit4SpringContextTests
+{
+    
+    @Autowired
+    private ITrackerClientService trackerClientService;
+    
+    @Autowired
+    private IStorageClientService storageClientService;
+    
+    @Test
+    public void testGroupState()
+    {
+        GroupState[] states = trackerClientService.listGroups();
+        for (GroupState state : states)
+        {
+            System.out.println(ToStringBuilder.reflectionToString(state));
+        }
+    }
+    
+    @Test
+    public void testUploadFile() throws IOException
+    {
+        // byte[] bytes = FileUtils
+        // .readFileToByteArray(new File(
+        // "C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
+        // StorePath storePath = storageClientService.uploadFile("image01",
+        // new ByteArrayInputStream(bytes), bytes.length, "abcdef");
+        // System.out.println(storePath);
+        // System.out.println(storePath.getPath().length());
+        
+    }
+    
+    @Test
+    public void testUploadSlaveFile() throws IOException
+    {
+        byte[] bytes = FileUtils.readFileToByteArray(new File(
+                "C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
+        StorePath storePath = storageClientService.uploadSlaveFile("image01",
+                "M00/00/00/rBBynlPsiXeAdH8xASKM8lGiSWc346.png",
+                new ByteArrayInputStream(bytes),
+                bytes.length,
+                "!png",
+                "jpg");
+        System.out.println(storePath);
+    }
+    
+    @Test
+    public void testDownloadFile()
+    {
+        //		byte[] bytes = storageClientService.downloadFile("image01",
+        //				"M00/00/00/rBBynlPsiXeAdH8xASKM8lGiSWc346[png].jpg",
+        //				new ByteArrayFdfsFileInputStreamHandler());
+        //		System.out.println(bytes.length);
+    }
+    
+    @Test
+    public void testUploadMultiFile() throws IOException
+    {
+        int totalCount = 1000;
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(100);
+        
+        executor.afterPropertiesSet();
+        final AtomicInteger failCount = new AtomicInteger(0);
+        final AtomicInteger count = new AtomicInteger(0);
+        for (int i = 0; i < totalCount; i++)
+        {
+            executor.execute(new Runnable()
+            {
+                
+                @Override
+                public void run()
+                {
+                    try
+                    {
+                        byte[] bytes = FileUtils.readFileToByteArray(new File(
+                                "C:/Users/yuqihuang/Desktop/tmp/img/comp11.jpg"));
+                        // StorePath storePath =
+                        // storageClientService.uploadFile(
+                        // null, new ByteArrayInputStream(bytes),
+                        // bytes.length, "jpg");
+                        // System.out.println(storePath);
+                        // System.out.println(storePath.getPath().length());
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                        failCount.incrementAndGet();
+                    }
+                    finally
+                    {
+                        count.incrementAndGet();
+                    }
+                    
+                }
+            });
+            
+        }
+        while (count.get() < totalCount)
+        {
+            try
+            {
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e)
+            {
+                return;
+            }
+        }
+        executor.destroy();
+        System.out.println("fail count: " + failCount.get());
+        
+    }
+    
 }
