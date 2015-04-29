@@ -23,7 +23,6 @@ import org.csource.fastdfs.TrackerServer;
 
 import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
-import com.sxj.file.common.ImageUtil;
 import com.sxj.file.common.LocalFileUtil;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.logger.SxjLogger;
@@ -395,20 +394,22 @@ public class FastDFSImpl implements IFileUpLoad
             byte[] file_buff = downloadFile(file_id);
             if (file_buff != null && file_buff.length > 0)
             {
-                byte[] smallBytes = ImageUtil.scaleFixed(file_buff,
-                        width,
-                        height,
-                        file_ext_name,
-                        false);
-                if (smallBytes != null && smallBytes.length > 0)
-                {
-                    HierarchicalCacheManager.set(CacheLevel.REDIS,
-                            CACHE_NAME,
-                            key,
-                            smallBytes,
-                            cacheTime);
-                }
-                return smallBytes;
+                //                smallBytes = ImageUtil.scaleFixed(null,
+                //                        null,
+                //                        file_buff,
+                //                        width,
+                //                        height,
+                //                        file_ext_name,
+                //                        false);
+                //                if (smallBytes != null && smallBytes.length > 0)
+                //                {
+                //                    HierarchicalCacheManager.set(CacheLevel.REDIS,
+                //                            CACHE_NAME,
+                //                            key,
+                //                            smallBytes,
+                //                            cacheTime);
+                //                }
+                return null;
             }
             else
             {

@@ -39,7 +39,6 @@ import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequ
 
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
-import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 import com.baidu.ueditor.ActionEnter;
 import com.baidu.ueditor.FileEntity;
@@ -101,8 +100,9 @@ public class BasicController extends BaseController
     @Autowired
     private RedisTopics topics;
     
-	@Autowired
-	private IDevelopersService developerService;
+    @Autowired
+    private IDevelopersService developerService;
+    
     //    @PostConstruct
     //    public void init()
     //    {
@@ -395,6 +395,7 @@ public class BasicController extends BaseController
     {
         try
         {
+            ServletOutputStream output = response.getOutputStream();
             String fileName = "扫描件" + stringDate();
             String group = filePath.substring(0, filePath.indexOf("/"));
             response.addHeader("Content-Disposition", "attachment;filename="
@@ -402,12 +403,7 @@ public class BasicController extends BaseController
             response.setContentType("application/pdf");
             String path = filePath.substring(filePath.indexOf("/") + 1,
                     filePath.length());
-            byte[] file = storageClientService.downloadFile(group,
-                    path,
-                    new ByteArrayFdfsFileInputStreamHandler());
-            System.out.println(file);
-            ServletOutputStream output = response.getOutputStream();
-            output.write(file);
+            storageClientService.downloadFile(group, path, output);
             output.flush();
             output.close();
         }
@@ -558,6 +554,7 @@ public class BasicController extends BaseController
         out.close();
         return null;
     }
+    
     /**
      * 自动感应开发商
      * 
@@ -569,30 +566,31 @@ public class BasicController extends BaseController
      */
     @RequestMapping("autoDevelopers")
     public @ResponseBody Map<String, String> autoDevelopers(
-    		HttpServletRequest request, HttpServletResponse response,
-    		String keyword) throws IOException
-    		{
-    	DevelopersEntity query = new DevelopersEntity();
-    	if (keyword != "" && keyword != null)
-    	{
-    		query.setName(keyword);
-    	}
-    	List<DevelopersEntity> list = developerService.queryDeveloperList(query);
-    	List<String> strlist = new ArrayList<String>();
-    	String sb = "";
-    	for (DevelopersEntity developers : list)
-    	{
-    		sb = "{\"title\":\"" + developers.getName() + "\",\"result\":\""+ developers.getId() + "\"}";
-    		strlist.add(sb);
-    	}
-    	String json = "{\"data\":" + strlist.toString() + "}";
-    	response.setCharacterEncoding("UTF-8");
-    	PrintWriter out = response.getWriter();
-    	out.print(json);
-    	out.flush();
-    	out.close();
-    	return null;
-    		}
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        DevelopersEntity query = new DevelopersEntity();
+        if (keyword != "" && keyword != null)
+        {
+            query.setName(keyword);
+        }
+        List<DevelopersEntity> list = developerService.queryDeveloperList(query);
+        List<String> strlist = new ArrayList<String>();
+        String sb = "";
+        for (DevelopersEntity developers : list)
+        {
+            sb = "{\"title\":\"" + developers.getName() + "\",\"result\":\""
+                    + developers.getId() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
     
     public static String getIpAddr(HttpServletRequest request)
     {
