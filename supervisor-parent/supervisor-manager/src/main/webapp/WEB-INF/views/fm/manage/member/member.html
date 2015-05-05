@@ -296,7 +296,7 @@ Intense( elements );
 								value="${query.bLicenseNo}" />
 						</p>
 						<p>
-							节能标识推广证号 <input type="text" name="energyNo" id="energyNo"
+							资质证书号码 <input type="text" name="energyNo" id="energyNo"
 								value="${query.energyNo}" /> 会员类型 <select name="memberType"
 								id="type">
 								<option value="">-请选择-</option> <#list types as type> <#if
@@ -338,7 +338,7 @@ Intense( elements );
 					<col width="10%" />
 					<col width="10%" />
 					<col width="10%" />
-					<col width="10%" />
+					<!-- <col width="10%" /> -->
 					<col width="8%" />
 					<col width="8%" />
 					<col width="8%" />
@@ -350,8 +350,8 @@ Intense( elements );
 						<th>会员名称</th>
 						<th>联系人名称</th>
 						<th>营业执照号码</th>
-						<th>节能标识<br /> 推广证号
-						</th>
+						<!--  <th>节能标识<br /> 推广证号
+						</th>-->
 						<th>会员类型</th>
 						<th>注册时间</th>
 						<th>认证时间</th>
@@ -369,7 +369,7 @@ Intense( elements );
 						<td>${member.name}</td>
 						<td>${member.contacts}</td>
 						<td>${member.getbLicenseNo()}</td>
-						<td>${member.getEnergyNo()}</td>
+						<!-- <td>${member.getEnergyNo()}</td> -->
 						<td>${member.type.getName()}</td>
 						<td><#if
 							(member.regDate??)>${member.regDate?string("yyyy-MM-dd

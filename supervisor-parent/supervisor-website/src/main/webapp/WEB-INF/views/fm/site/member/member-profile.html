@@ -208,7 +208,7 @@
 				</div>
 				<div class="item certCont ly-clearFix">
 					<label>企业资质</label>
-					<div class="upload">
+					<div class="upload" style="width:120px;">
 						<p>${member.bLicenseNo}</p>
 						<#if member.bLicensePath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
@@ -219,7 +219,33 @@
 							data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
 						</#if>
 					</div>
-					<div class="upload">
+					
+					<#if (member.type.id==0)>
+					<div class="upload" style="width:120px;">
+						<p>${member.qualification_no}</p>
+						<#if member.qualification_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.qualification_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.qualification_img}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					<#if (member.type.id==0)>
+					<div class="upload" style="width:120px;">
+						<p>${member.safety_licenses_no}</p>
+						<#if member.safety_licenses_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.safety_licenses_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					<#if (member.type.id==0)>
+					<div class="upload" style="width:120px;"> 
 						<p>${member.energyNo}</p>
 						<#if member.energyPath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
@@ -228,6 +254,42 @@
 							src="${b.imagePath}${member.energyPath}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.energyPath}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					<#if (member.type.id==1)>
+					<div class="upload" style="width:120px;">
+						<p>${member.ccc_no}</p>
+						<#if member.ccc_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.ccc_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					 <#if (member.type.id==2)>
+					<div class="upload" style="width:120px;">
+						<p>${member.production_license_no}</p>
+						<#if member.production_license_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.production_license_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					
+					<div class="upload" style="width:120px;">
+						<p>${member.qms_no}</p>
+						<#if member.qms_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.qms_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.qms_img}">查看缩略图</a> </#if>
 					</div>
 				</div>
 				<div class="item">
