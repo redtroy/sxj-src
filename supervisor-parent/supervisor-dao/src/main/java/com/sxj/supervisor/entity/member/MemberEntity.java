@@ -226,6 +226,166 @@ public class MemberEntity extends Pagable implements Serializable
     @Version
     private Long version;
     
+    /**
+     * 资质证书
+     */
+    @Column(name = "QUALIFICATION_NO")
+    private String qualification_no;
+    
+    /**
+     * 资质证书图片地址
+     */
+    @Column(name = "QUALIFICATION_IMG")
+    private String qualification_img;
+    
+    /**
+     * 安全许可证
+     */
+    @Column(name = "SAFETY_LICENSES_NO")
+    private String safety_licenses_no;
+    
+    /**
+     * 安全许可证图片地址
+     */
+    @Column(name = "SAFETY_LICENSES_IMG")
+    private String safety_licenses_img;
+    
+    /**
+     * 质量管理体系认证证书
+     */
+    @Column(name = "QMS_NO")
+    private String qms_no;
+    
+    /**
+     * 质量管理体系认证证书图片地址
+     */
+    @Column(name = "QMS_IMG")
+    private String qms_img;
+    
+    /**
+     * 3C认证
+     */
+    @Column(name = "CCC_NO")
+    private String ccc_no;
+    
+    /**
+     * 3C认证图片
+     */
+    @Column(name = "CCC_IMG")
+    private String ccc_img;
+    
+    /**
+     * 工业产品生产许可证 
+     */
+    @Column(name = "PRODUCTION_LICENSE_NO")
+    private String production_license_no;
+    
+    /**
+     * 工业产品生产许可证图片
+     */
+    @Column(name = "PRODUCTION_LICENSE_IMG")
+    private String production_license_img;
+    
+    public String getQualification_no()
+    {
+        return qualification_no;
+    }
+    
+    public void setQualification_no(String qualification_no)
+    {
+        this.qualification_no = qualification_no;
+    }
+    
+    public String getQualification_img()
+    {
+        return qualification_img;
+    }
+    
+    public void setQualification_img(String qualification_img)
+    {
+        this.qualification_img = qualification_img;
+    }
+    
+    public String getSafety_licenses_no()
+    {
+        return safety_licenses_no;
+    }
+    
+    public void setSafety_licenses_no(String safety_licenses_no)
+    {
+        this.safety_licenses_no = safety_licenses_no;
+    }
+    
+    public String getSafety_licenses_img()
+    {
+        return safety_licenses_img;
+    }
+    
+    public void setSafety_licenses_img(String safety_licenses_img)
+    {
+        this.safety_licenses_img = safety_licenses_img;
+    }
+    
+    public String getQms_no()
+    {
+        return qms_no;
+    }
+    
+    public void setQms_no(String qms_no)
+    {
+        this.qms_no = qms_no;
+    }
+    
+    public String getQms_img()
+    {
+        return qms_img;
+    }
+    
+    public void setQms_img(String qms_img)
+    {
+        this.qms_img = qms_img;
+    }
+    
+    public String getCcc_no()
+    {
+        return ccc_no;
+    }
+    
+    public void setCcc_no(String ccc_no)
+    {
+        this.ccc_no = ccc_no;
+    }
+    
+    public String getCcc_img()
+    {
+        return ccc_img;
+    }
+    
+    public void setCcc_img(String ccc_img)
+    {
+        this.ccc_img = ccc_img;
+    }
+    
+    public String getProduction_license_no()
+    {
+        return production_license_no;
+    }
+    
+    public void setProduction_license_no(String production_license_no)
+    {
+        this.production_license_no = production_license_no;
+    }
+    
+    public String getProduction_license_img()
+    {
+        return production_license_img;
+    }
+    
+    public void setProduction_license_img(String production_license_img)
+    {
+        this.production_license_img = production_license_img;
+    }
+    
     public Long getVersion()
     {
         return version;

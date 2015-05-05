@@ -507,6 +507,23 @@ function loadUpload(id,url,isMulti,text,fn){
 	        
 	    });
 }
+function loadUploadMember(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
 </script>
 </#macro>
 <#macro header>
