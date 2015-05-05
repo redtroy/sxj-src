@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.cache.manager.CacheLevel;
@@ -196,7 +197,7 @@ public class MemberController extends BaseController
     /**
      * 添加会员
      */
-    @RequestMapping("regist_save")
+    @RequestMapping(value="regist_save",method = RequestMethod.POST)
     public String regist_save(MemberEntity member, ModelMap map, String ms,
             HttpSession session) throws WebException
     {

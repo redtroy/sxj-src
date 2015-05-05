@@ -1,9 +1,13 @@
 package third.rewrite.fastdfs.service.impl;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 
@@ -24,7 +28,6 @@ import third.rewrite.fastdfs.proto.handler.StorageSetMetadataHandler;
 import third.rewrite.fastdfs.proto.handler.StorageTruncateHandler;
 import third.rewrite.fastdfs.proto.handler.StorageUploadHandler;
 import third.rewrite.fastdfs.proto.handler.StorageUploadSlaveHandler;
-import third.rewrite.fastdfs.service.IFdfsFileInputStreamHandler;
 import third.rewrite.fastdfs.service.IStorageClientService;
 import third.rewrite.fastdfs.service.ITrackerClientService;
 import third.rewrite.fastdfs.socket.FdfsInputStream;
@@ -47,7 +50,7 @@ public class StorageClientService implements IStorageClientService
     
     private String groupName;
     
-    private int cacheTime = 60;
+    private int cacheTime = 3600;
     
     private <T> T process(FdfsSocket socket, ICmdProtoHandler<T> handler)
     {
@@ -169,92 +172,52 @@ public class StorageClientService implements IStorageClientService
     }
     
     @Override
-    public <T> T downloadFile(String groupName, String path,
-            IFdfsFileInputStreamHandler<T> handling)
+    public void downloadFile(String groupName, String path, OutputStream output)
     {
+        
         long offset = 0;
         long size = 0;
-        String file_id = groupName + "/" + path;
-        Object object = HierarchicalCacheManager.get(CacheLevel.REDIS,
-                CACHE_NAME,
-                file_id);
-        if (object != null)
-        {
-            if (object instanceof byte[])
-            {
-                return (T) object;
-            }
-        }
-        return downloadFile(groupName, path, offset, size, handling);
-    }
-    
-    @Override
-    public byte[] downloadSmallImage(String groupName, String path, int width,
-            int height)
-    {
-        String file_id = groupName + "/" + path;
-        String file_ext_name = LocalFileUtil.getFileExtName(file_id);
-        String key = file_id + width + "x" + height + "." + file_ext_name;
-        Object small = HierarchicalCacheManager.get(CacheLevel.REDIS,
-                CACHE_NAME,
-                key);
-        if (small != null)
-        {
-            if (small instanceof byte[])
-            {
-                return (byte[]) small;
-            }
-        }
-        byte[] file_buff = downloadFile(groupName,
-                path,
-                new ByteArrayFdfsFileInputStreamHandler());
-        if (file_buff != null)
-        {
-            byte[] smallBytes = ImageUtil.scaleFixed(file_buff,
-                    width,
-                    height,
-                    file_ext_name,
-                    false);
-            if (smallBytes != null && smallBytes.length > 0)
-            {
-                HierarchicalCacheManager.set(CacheLevel.REDIS,
-                        CACHE_NAME,
-                        key,
-                        smallBytes,
-                        cacheTime);
-            }
-            return smallBytes;
-        }
-        else
-        {
-            return null;
-        }
-    }
-    
-    @Override
-    public <T> T downloadFile(String groupName, String path, long offset,
-            long size, IFdfsFileInputStreamHandler<T> handling)
-    {
+        //String file_id = groupName + "/" + path;
+        //        Object object = HierarchicalCacheManager.get(CacheLevel.REDIS,
+        //                CACHE_NAME,
+        //                file_id);
+        //        if (object != null)
+        //        {
+        //            if (object instanceof byte[])
+        //            {
+        //                try
+        //                {
+        //                    output.write((byte[]) object);
+        //                    return;
+        //                }
+        //                catch (IOException e)
+        //                {
+        //                    throw new FdfsIOException(e);
+        //                }
+        //                
+        //            }
+        //        }
         StorageClient storageClient = trackerClientService.getFetchStorage(groupName,
                 path);
-        
         FdfsSocket socket = fdfsSocketService.getSocket(storageClient.getInetSocketAddress());
         ICmdProtoHandler<FdfsInputStream> handler = new StorageDownloadHandler(
                 socket, groupName, path, offset, size,
                 storageClient.getCharset());
-        
         try
         {
             FdfsInputStream fdfsInputStream = handler.handle();
-            T result = handling.deal(fdfsInputStream);
-            
+            byte[] buffer = new byte[1024];
+            int read = 0;
+            while ((read = fdfsInputStream.read(buffer)) > 0)
+            {
+                output.write(buffer, 0, read);
+            }
             if (!fdfsInputStream.isReadCompleted()
                     && socket instanceof PooledFdfsSocket)
             {
                 ((PooledFdfsSocket) socket).setNeedDestroy(true);
             }
             IOUtils.closeQuietly(fdfsInputStream);
-            return result;
         }
         catch (IOException e)
         {
@@ -271,6 +234,122 @@ public class StorageClientService implements IStorageClientService
         
     }
     
+    @Override
+    public void downloadSmallImage(String groupName, String path, int width,
+            int height, OutputStream output)
+    {
+        long offset = 0;
+        long size = 0;
+        String file_id = groupName + "/" + path;
+        String file_ext_name = LocalFileUtil.getFileExtName(file_id);
+        String key = file_id + width + "x" + height + "." + file_ext_name;
+        Object small = HierarchicalCacheManager.get(CacheLevel.REDIS,
+                CACHE_NAME,
+                key);
+        if (small != null)
+        {
+            if (small instanceof BufferedImage)
+            {
+                try
+                {
+                    ImageIO.write((BufferedImage) small, file_ext_name, output);// 输出到文件流
+                    return;
+                }
+                catch (IOException e)
+                {
+                    throw new FdfsIOException(e);
+                }
+            }
+        }
+        StorageClient storageClient = trackerClientService.getFetchStorage(groupName,
+                path);
+        FdfsSocket socket = fdfsSocketService.getSocket(storageClient.getInetSocketAddress());
+        ICmdProtoHandler<FdfsInputStream> handler = new StorageDownloadHandler(
+                socket, groupName, path, offset, size,
+                storageClient.getCharset());
+        
+        try
+        {
+            FdfsInputStream fdfsInputStream = handler.handle();
+            BufferedImage image = ImageUtil.scaleFixed(fdfsInputStream,
+                    output,
+                    width,
+                    height,
+                    file_ext_name,
+                    false);
+            if (image != null)
+            {
+                HierarchicalCacheManager.set(CacheLevel.REDIS,
+                        CACHE_NAME,
+                        key,
+                        image,
+                        cacheTime);
+            }
+            if (!fdfsInputStream.isReadCompleted()
+                    && socket instanceof PooledFdfsSocket)
+            {
+                ((PooledFdfsSocket) socket).setNeedDestroy(true);
+            }
+            IOUtils.closeQuietly(fdfsInputStream);
+        }
+        catch (Exception e)
+        {
+            if (socket instanceof PooledFdfsSocket)
+            {
+                ((PooledFdfsSocket) socket).setNeedDestroy(true);
+            }
+            throw new FdfsIOException(e);
+        }
+        finally
+        {
+            IOUtils.closeQuietly(socket);
+        }
+        
+    }
+    
+    //    @Override
+    //    public FdfsInputStream downloadFile(String groupName, String path,
+    //            long offset, long size)
+    //    {
+    //        
+    //        StorageClient storageClient = trackerClientService.getFetchStorage(groupName,
+    //                path);
+    //        
+    //        FdfsSocket socket = fdfsSocketService.getSocket(storageClient.getInetSocketAddress());
+    //        ICmdProtoHandler<FdfsInputStream> handler = new StorageDownloadHandler(
+    //                socket, groupName, path, offset, size,
+    //                storageClient.getCharset());
+    //        
+    //        try
+    //        {
+    //            FdfsInputStream fdfsInputStream = handler.handle();
+    //            return fdfsInputStream;
+    //            
+    //            //            T result = handling.deal(fdfsInputStream);
+    //            //            
+    //            //            if (!fdfsInputStream.isReadCompleted()
+    //            //                    && socket instanceof PooledFdfsSocket)
+    //            //            {
+    //            //                ((PooledFdfsSocket) socket).setNeedDestroy(true);
+    //            //            }
+    //            //            IOUtils.closeQuietly(fdfsInputStream);
+    //            //            return null;
+    //        }
+    //        catch (IOException e)
+    //        {
+    //            if (socket instanceof PooledFdfsSocket)
+    //            {
+    //                ((PooledFdfsSocket) socket).setNeedDestroy(true);
+    //            }
+    //            throw new FdfsIOException(e);
+    //        }
+    //        finally
+    //        {
+    //            IOUtils.closeQuietly(socket);
+    //        }
+    //        
+    //    }
+    //    
     @Override
     public NameValuePair[] getMetadata(String groupName, String path)
     {
