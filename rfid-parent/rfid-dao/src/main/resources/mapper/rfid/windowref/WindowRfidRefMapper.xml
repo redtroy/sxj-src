@@ -13,7 +13,7 @@
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR"/>
 		<result property="type" column="TYPE" jdbcType="INTEGER" />
-		<result property="windowsNo" column="WINDOWS_NO" jdbcType="INTEGER" />
+		<result property="windowsNo" column="WINDOWS_NO" jdbcType="VARCHAR" />
 		<result property="glassBatchNo" column="GLASS_BATCH_NO" jdbcType="VARCHAR" />
 		<result property="profileBatchNo" column="PROFILE_BATCH_NO" jdbcType="VARCHAR" />
 		<result property="applyDate" column="APPLY_DATE" jdbcType="TIMESTAMP" />
@@ -44,7 +44,7 @@
 			<![CDATA[AND (GLASS_BATCH_NO = #{condition.batchNo} or PROFILE_BATCH_NO = #{condition.batchNo}) ]]>
 		</if>
 		<if test="condition.windowsNo != null and condition.windowsNo !=''">
-			<![CDATA[AND WINDOWS_NO = #{condition.windowsNo}]]>
+			<![CDATA[AND WINDOWS_NO LIKE CONCAT('%',#{condition.windowsNo},'%')]]>
 		</if>
 		<if test="condition.type != null and condition.type !=''">
 			<![CDATA[AND TYPE = #{condition.type}]]>

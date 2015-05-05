@@ -1673,10 +1673,31 @@ public class ContractServiceImpl implements IContractService
     }
     
     @Override
+    @Transactional(readOnly = true)
+    public List<ContractItemEntity> getRefContractItem(String contractNo,String windowType)
+            throws ServiceException
+    {
+        try
+        {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("contractId", contractNo);
+            map.put("windowType", windowType);
+            List<ContractItemEntity> itemList = contractItemDao.getItem(map);// 产品条目
+            return itemList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("获取条目信息错误", e);
+        }
+    }
+    
+    
+    @Override
     @Transactional
     public void startWindowRfid(Integer startNum, String refContractNo,
             String minRfid, String maxRfid, String gRfid, String lRfid,
-            WindowTypeEnum windowType) throws ServiceException
+            String windowType) throws ServiceException
     {
         try
         {

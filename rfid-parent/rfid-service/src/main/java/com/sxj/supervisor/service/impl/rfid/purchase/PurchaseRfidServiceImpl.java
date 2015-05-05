@@ -237,15 +237,18 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService
                 {
                     throw new ServiceException("未完全导入RFID标签，不能发货！");
                 }
-                for (WindowRfidEntity windowRfid : listRfid)
-                {
-                    if (windowRfid == null)
-                    {
-                        continue;
-                    }
-                    windowRfid.setProgressState(LabelProgressEnum.SHIPPED);
-                }
-                winRfidService.batchUpdateWindowRfid(listRfid.toArray(new WindowRfidEntity[listRfid.size()]));
+                //                for (WindowRfidEntity windowRfid : listRfid)
+                //                {
+                //                    if (windowRfid == null)
+                //                    {
+                //                        continue;
+                //                    }
+                //                    windowRfid.setProgressState(LabelProgressEnum.SHIPPED);
+                //                }
+                WindowRfidEntity windowRfid = new WindowRfidEntity();
+                windowRfid.setPurchaseNo(purchase.getPurchaseNo());
+                windowRfid.setProgressState(LabelProgressEnum.SHIPPED);
+                winRfidService.updateProgressState(windowRfid);
             }
             else
             {
@@ -257,15 +260,18 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService
                 {
                     throw new ServiceException("未完全导入RFID标签，不能发货！");
                 }
-                for (LogisticsRfidEntity rfidEntity : listRfid)
-                {
-                    if (rfidEntity == null)
-                    {
-                        continue;
-                    }
-                    rfidEntity.setProgressState(LabelStateEnum.SHIPPED);
-                }
-                logisticsRfidService.batchUpdateLogistics(listRfid.toArray(new LogisticsRfidEntity[listRfid.size()]));
+                //                for (LogisticsRfidEntity rfidEntity : listRfid)
+                //                {
+                //                    if (rfidEntity == null)
+                //                    {
+                //                        continue;
+                //                    }
+                //                    rfidEntity.setProgressState(LabelStateEnum.SHIPPED);
+                //                }
+                LogisticsRfidEntity rfidEntity = new LogisticsRfidEntity();
+                rfidEntity.setPurchaseNo(purchase.getPurchaseNo());
+                rfidEntity.setProgressState(LabelStateEnum.SHIPPED);
+                logisticsRfidService.updateProgressState(rfidEntity);
             }
         }
         catch (ServiceException e)
@@ -304,15 +310,18 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService
                 {
                     throw new ServiceException("未完全导入RFID标签，不能收货！");
                 }
-                for (WindowRfidEntity windowRfid : listRfid)
-                {
-                    if (windowRfid == null)
-                    {
-                        continue;
-                    }
-                    windowRfid.setProgressState(LabelProgressEnum.HAS_RECEIPT);
-                }
-                winRfidService.batchUpdateWindowRfid(listRfid.toArray(new WindowRfidEntity[listRfid.size()]));
+                //                for (WindowRfidEntity windowRfid : listRfid)
+                //                {
+                //                    if (windowRfid == null)
+                //                    {
+                //                        continue;
+                //                    }
+                //                    windowRfid.setProgressState(LabelProgressEnum.HAS_RECEIPT);
+                //                }
+                WindowRfidEntity windowRfid = new WindowRfidEntity();
+                windowRfid.setPurchaseNo(purchase.getPurchaseNo());
+                windowRfid.setProgressState(LabelProgressEnum.HAS_RECEIPT);
+                winRfidService.updateProgressState(windowRfid);
             }
             else
             {
@@ -324,15 +333,19 @@ public class PurchaseRfidServiceImpl implements IPurchaseRfidService
                 {
                     throw new ServiceException("未完全导入RFID标签，不能收货！");
                 }
-                for (LogisticsRfidEntity rfidEntity : listRfid)
-                {
-                    if (rfidEntity == null)
-                    {
-                        continue;
-                    }
-                    rfidEntity.setProgressState(LabelStateEnum.HAS_RECEIPT);
-                }
-                logisticsRfidService.batchUpdateLogistics(listRfid.toArray(new LogisticsRfidEntity[listRfid.size()]));
+                //                for (LogisticsRfidEntity rfidEntity : listRfid)
+                //                {
+                //                    if (rfidEntity == null)
+                //                    {
+                //                        continue;
+                //                    }
+                //                    rfidEntity.setProgressState(LabelStateEnum.HAS_RECEIPT);
+                //                }
+                //                logisticsRfidService.batchUpdateLogistics(listRfid.toArray(new LogisticsRfidEntity[listRfid.size()]));
+                LogisticsRfidEntity rfidEntity = new LogisticsRfidEntity();
+                rfidEntity.setPurchaseNo(purchase.getPurchaseNo());
+                rfidEntity.setProgressState(LabelStateEnum.HAS_RECEIPT);
+                logisticsRfidService.updateProgressState(rfidEntity);
             }
             
             // 修改申请单状态
