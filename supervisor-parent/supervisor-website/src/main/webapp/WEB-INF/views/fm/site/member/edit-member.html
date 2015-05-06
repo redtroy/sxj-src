@@ -371,12 +371,12 @@ function edit_pwd(id){
           <label>企业资质</label>
           <!-- 营业执照号 -->          
           <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" datatype="ns"  nullmsg="营业执照号不能为空" placeholder="请输入营业执照号" /></p>
+          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}"  datatype="ns"  nullmsg="营业执照号不能为空"   placeholder="输入证书编号"/></p>
           <p>营业执照</p>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}" onerror="errorImage(this)" times="0"/>
 		   <#else>
-		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/>  
+		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/>  
 		</#if>
 		<#if (!member.flag)>
           <div class="uploadify">
@@ -393,12 +393,12 @@ function edit_pwd(id){
          <!-- 资质证书 -->
          <#if (member.type.id==0)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="aptitude" value="${member.qualification_no}" datatype="ns" nullmsg="资质证书不能为空" placeholder="请输入资质证书号"/></p>
+          <p><input class="input input-w140h30 mb5" id="aptitude" value="${member.qualification_no}"  datatype="ns" nullmsg="资质证书不能为空"  placeholder="输入证书编号"/></p>
           <p>资质证书</p>
           <#if (member.bLicensePath??)>
          <img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
@@ -413,12 +413,12 @@ function edit_pwd(id){
          <!-- 安全生产许可证 -->
          <#if (member.type.id==0)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="safety" value="${member.safety_licenses_no}" datatype="ns" nullmsg="安全许可证不能为空" placeholder="请输入安全生产许可证"/></p>
+          <p><input class="input input-w140h30 mb5" id="safety" value="${member.safety_licenses_no}"  datatype="ns" nullmsg="安全许可证不能为空"  placeholder="输入证书编号"/></p>
           <p>安全生产许可证</p>
           <#if (member.bLicensePath??)>
          <img id="safetyPath_img" width="80" height="107" src="${b.imagePath}${member.safety_licenses_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="safetyPath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="safetyPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
@@ -433,12 +433,12 @@ function edit_pwd(id){
          <!-- 节能标识号 -->
          <#if (member.type.id==0)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"/></p>
+          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}"  placeholder="输入证书编号"/></p>
           <p>节能标识</p>
           <#if (member.bLicensePath??)>
          <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="energyPath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="energyPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
@@ -454,12 +454,12 @@ function edit_pwd(id){
          <!-- 3C认证证书 -->
           <#if (member.type.id==1)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}" datatype="ns" nullmsg="3C证书不能为空" placeholder="3C认证证书"/></p>
+          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}"  datatype="ns" nullmsg="3C证书不能为空"  placeholder="输入证书编号"/></p>
           <p>3C认证证书</p>
           <#if (member.bLicensePath??)>
          <img id="cccPath_img" width="80" height="107" src="${b.imagePath}${member.ccc_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="cccPath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="cccPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
@@ -474,12 +474,12 @@ function edit_pwd(id){
          <!-- 工业产品生产许可证 -->
           <#if (member.type.id==2)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="production" value="${member.production_license_no}" datatype="ns" nullmsg="工业许可证不能为空" placeholder="工业许可证"/></p>
-          <p>3C认证证书</p>
+          <p><input class="input input-w140h30 mb5" id="production" value="${member.production_license_no}"  datatype="ns" nullmsg="工业许可证不能为空"  placeholder="输入证书编号"/></p>
+          <p>工业产品生产许可证</p>
           <#if (member.bLicensePath??)>
          <img id="productionPath_img" width="80" height="107" src="${b.imagePath}${member.production_license_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="productionPath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="productionPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
@@ -493,12 +493,12 @@ function edit_pwd(id){
          </#if>
           <!-- 质量管理体系认证证书 -->
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="qms" value="${member.qms_no}" placeholder="质量管理体系认证证书 "/></p>
+          <p><input class="input input-w140h30 mb5" id="qms" value="${member.qms_no}"  placeholder="输入证书编号"/></p>
           <p>质量管理体系认证</p>
           <#if (member.bLicensePath??)>
          <img id="qmsPath_img" width="80" height="107" src="${b.imagePath}${member.qms_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="qmsPath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="qmsPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
