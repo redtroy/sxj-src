@@ -44,7 +44,7 @@ public interface IWindowRfidService
      */
     public void startWindowRfid(Long itemQuantity, Long useQuantity,
             String refContractNo, Integer count, String gRfid, String lRfid,
-            WindowTypeEnum windowType) throws ServiceException;
+            String windowType) throws ServiceException;
     
     /**
      * 批量新增
@@ -135,4 +135,6 @@ public interface IWindowRfidService
     
     void updateGid(List<WindowRfidEntity> winList, String id)
             throws ServiceException;
+    
+    void updateProgressState(WindowRfidEntity windowRfid)throws ServiceException;
 }

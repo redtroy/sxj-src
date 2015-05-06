@@ -257,7 +257,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
     @Transactional
     public void startWindowRfid(Long itemQuantity, Long useQuantity,
             String refContractNo, Integer count, String gRfid, String lRfid,
-            WindowTypeEnum windowType) throws ServiceException {
+            String windowType) throws ServiceException {
         try {
             if (useQuantity >= itemQuantity) {
                 throw new ServiceException("此招标合同已经全部启用完毕");
@@ -405,7 +405,7 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
             }
             String memberNo = null;
             String memberName = null;
-            WindowTypeEnum windowsNo = null;
+            String windowsNo = null;
             String replenishRfid = "";
             String rfidNos = "";
             WindowRefEntity winRef = new WindowRefEntity();
@@ -703,6 +703,20 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
         } catch (Exception e) {
             SxjLogger.error(e.getMessage(), e, this.getClass());
             throw new ServiceException("更新GID失败", e);
+        }
+    }
+
+    @Override
+    public void updateProgressState(WindowRfidEntity windowRfid)
+            throws ServiceException
+    {
+        try {
+            if (windowRfid != null) {
+                windowRfidDao.updateProgressState(windowRfid);
+            }
+        } catch (Exception e) {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("批量修改门窗RFID错误", e);
         }
     }
 }

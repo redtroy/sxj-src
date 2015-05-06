@@ -266,7 +266,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                             wtm.setRfidState(wre.getProgressState().getId());
                             if (wre.getWindowType() != null)
                             {
-                                wtm.setWinType(wre.getWindowType().getName());
+                                wtm.setWinType(wre.getWindowType());
                             }
                             wtm.setState("1");// 成功
                         }
@@ -344,8 +344,7 @@ public class OpenRfidServiceImpl implements IOpenRfidService
                                 wtm.setGid(wre.getGid());
                                 if (wre.getWindowType() != null)
                                 {
-                                    wtm.setWinType(wre.getWindowType()
-                                            .getName());
+                                    wtm.setWinType(wre.getWindowType());
                                 }
                                 wtm.setState("1");// 成功
                                 wtmList.add(wtm);

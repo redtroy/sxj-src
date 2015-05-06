@@ -15,6 +15,7 @@
 var edit_pwd_validform;
 var checkState=${member.checkState.id};
 var flag=true;
+var ul_validform;
 $(document).ready(function() { 
 	loadUploadMember("bLicensePath_File","${basePath}upload.htm",false,"上传",uploadLicense);
 	loadUploadMember("energyPath_File","${basePath}upload.htm",false,"上传" ,uploadenergyPath);
@@ -57,7 +58,35 @@ $(document).ready(function() {
 	edit_pwd_validform=$("#edit_pwd").Validform({
 		tiptype:3});
 	
-
+	ul_validform=$("#checkzs").Validform({
+		datatype:{
+			"ns":/^[A-Za-z0-9\(\)\-]+$/
+		},
+		tiptype:function(msg,o,cssctl){
+				o.obj.parent().children(".checkinfo").remove();
+				var $div=$("<div/>").addClass("checkinfo");
+				var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
+				var left=o.obj.offset().left,
+				top=o.obj.offset().top;
+				var width=o.obj.width();
+				$div.append($p).css({
+					'left':left+width-123,
+					'top':top-32,
+					'position':'absolute'
+				}).show();
+				o.obj.parent().append($div);
+		}});
+	$("#checkzs").find("[datatype]").live("focus",function(){
+		$(this).parent().children(".checkinfo").hide();
+		$(this).removeClass("Validform_error");
+		//$(this).parent().children(".checkinfo").hide();
+	});
+	$("#checkzs").find("[datatype]").live("blur",function(){
+		
+		var pass=ul_validform.check(true,$(this));
+		if(!pass)
+			$(this).parent().children(".checkinfo").show();
+	});
 }); 
 function close_div(){
 	$('.maskdivgen').fadeOut(100);
@@ -231,24 +260,7 @@ function save(id){
 	if (!add_validform.check()){
 		return false;
 	}
-	ul_validform=$("#checkzs").Validform({
-		datatype:{
-			"ns":/^[A-Za-z0-9\(\)\-]+$/
-		},
-		tiptype:function(msg,o,cssctl){
-				o.obj.parent().children(".checkinfo").remove();
-				var $div=$("<div/>").addClass("checkinfo");
-				var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
-				var left=o.obj.offset().left,
-				top=o.obj.offset().top;
-				var width=o.obj.width();
-				$div.append($p).css({
-					'left':left+width-32,
-					'top':top-45,
-					'position':'absolute'
-				}).show();
-				o.obj.parent().append($div);
-		}});
+	
 	if (!ul_validform.check()){
 		return false;
 	}

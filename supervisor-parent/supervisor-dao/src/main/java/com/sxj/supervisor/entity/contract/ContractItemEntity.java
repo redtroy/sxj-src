@@ -87,14 +87,14 @@ public class ContractItemEntity extends Pagable implements Serializable
      * 门窗类型
      */
     @Column(name = "WINDOW_TYPE")
-    private ContractWindowTypeEnum windowType;
+    private String windowType;
     
-    public ContractWindowTypeEnum getWindowType()
+    public String getWindowType()
     {
         return windowType;
     }
     
-    public void setWindowType(ContractWindowTypeEnum windowType)
+    public void setWindowType(String windowType)
     {
         this.windowType = windowType;
     }

@@ -92,11 +92,11 @@
 		<!-- 节能标识(作为资质证书查询) -->
 		<if test="condition.energyNo != null and condition.energyNo != ''">
 			<![CDATA[AND (ENERGY_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
-			<![CDATA[OR (QUALIFICATION_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
-			<![CDATA[OR (SAFETY_LICENSES_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
-			<![CDATA[OR (QMS_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
-			<![CDATA[OR (CCC_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
-			<![CDATA[OR (PRODUCTION_LICENSE_NO LIKE CONCAT('%',#{condition.energyNo},'%') )]]>
+			<![CDATA[OR QUALIFICATION_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR SAFETY_LICENSES_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR QMS_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR CCC_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR PRODUCTION_LICENSE_NO LIKE CONCAT('%',#{condition.energyNo},'%') )]]>
 		</if>
 		<!-- 会员类型 -->
 		<if test="condition.type !=null">

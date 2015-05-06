@@ -105,4 +105,6 @@ public interface ILogisticsRfidDao
     public List<String> getRfid(String... gid) throws SQLException;
     
     public int getRfidState(String rfidNo)throws SQLException;
+    
+    void updateProgressState(LogisticsRfidEntity rfidEntity)throws SQLException;
 }

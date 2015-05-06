@@ -46,4 +46,6 @@ public interface IContractItemDao
     
     @Get
     public ContractItemEntity getItems(String id);
+    
+    public List<ContractItemEntity> getItem(Map<String, Object> map);
 }
