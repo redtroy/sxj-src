@@ -212,6 +212,7 @@
 					<label>企业资质</label>
 					<div class="upload" style="width:120px;">
 						<p>${member.bLicenseNo}&nbsp;</p>
+						<p style="font-size:14px;">营业执照</p>
 						<#if member.bLicensePath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
@@ -225,6 +226,7 @@
 					<#if (member.type.id==0)>
 					<div class="upload" style="width:120px;">
 						<p>${member.qualification_no}&nbsp;</p>
+						<p style="font-size:14px;">资质证书</p>
 						<#if member.qualification_img==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
@@ -237,6 +239,7 @@
 					<#if (member.type.id==0)>
 					<div class="upload" style="width:120px;">
 						<p>${member.safety_licenses_no}&nbsp;</p>
+						 <p style="font-size:14px;">安全生产许可证</p>
 						<#if member.safety_licenses_img==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
@@ -249,6 +252,7 @@
 					<#if (member.type.id==0)>
 					<div class="upload" style="width:120px;"> 
 						<p>${member.energyNo}&nbsp;</p>
+						<p style="font-size:14px;">节能标识</p>
 						<#if member.energyPath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
@@ -261,6 +265,7 @@
 					<#if (member.type.id==1)>
 					<div class="upload" style="width:120px;">
 						<p>${member.ccc_no}&nbsp;</p>
+						<p style="font-size:14px;">3C认证证书</p>
 						<#if member.ccc_img==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
@@ -271,8 +276,9 @@
 					</div>
 					</#if>
 					 <#if (member.type.id==2)>
-					<div class="upload" style="width:120px;">
+					<div class="upload" style="width:130px;">
 						<p>${member.production_license_no}&nbsp;</p>
+						<p style="font-size:14px;">工业产品生产许可证</p>
 						<#if member.production_license_img==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
@@ -285,6 +291,7 @@
 					
 					<div class="upload" style="width:120px;">
 						<p>${member.qms_no}&nbsp;</p>
+						<p style="font-size:14px;">质量管理体系认证</p>
 						<#if member.qms_img==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
