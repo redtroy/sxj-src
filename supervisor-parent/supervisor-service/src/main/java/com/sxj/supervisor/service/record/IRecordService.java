@@ -88,4 +88,6 @@ public interface IRecordService {
 
 	String getRecordNo(String contractNo, MemberEntity menber);
 
+    void editRecord(RecordEntity record) throws ServiceException;
+
 }
