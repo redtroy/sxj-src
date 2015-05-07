@@ -71,8 +71,13 @@ function message(){
 }
 window.onload = function() {
 	$(".demo-image").live("click",function(){
-		var imageSource=$(this).attr("data-image");
-		refreshIviewer($("#viewer2"),imageSource,$("#img_close"))
+		var image =$(this).attr("image");
+		if(image==""){
+			messageInfo("未上传证书图片！");
+		}else{
+			var imageSource=$(this).attr("data-image");
+			refreshIviewer($("#viewer2"),imageSource,$("#img_close"))
+		}
 	});
 }
 
@@ -85,8 +90,13 @@ jQuery(document).ready(function($) {
 		$('.passwordBox').slideUp(200);
 	});
 	$('.demo-image').live("click",function(){
-		$('.maskdivgen').fadeIn(100);
-		$('.viewer').slideDown(200);
+		var image =$(this).attr("image");
+		if(image==""){
+			messageInfo("未上传证书图片！");
+		}else{
+			$('.maskdivgen').fadeIn(100);
+			$('.viewer').slideDown(200);
+		}
 	})
 });
 function close_img(){
