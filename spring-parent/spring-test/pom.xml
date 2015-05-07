@@ -7,9 +7,7 @@
     <artifactId>spring-parent</artifactId>
     <version>4.2.3</version>
   </parent>
-  <groupId>com.sxj</groupId>
   <artifactId>spring-test</artifactId>
-  <version>4.2.3</version>
   <name>spring-test</name>
   <url>http://maven.apache.org</url>
   <properties>
@@ -27,6 +25,11 @@
   	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-context</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.alibaba</groupId>
+  		<artifactId>druid</artifactId>
+  		<version>1.0.7</version>
   	</dependency>
   </dependencies>
 </project>
