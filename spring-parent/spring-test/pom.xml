@@ -26,10 +26,5 @@
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-context</artifactId>
   	</dependency>
-  	<dependency>
-  		<groupId>com.alibaba</groupId>
-  		<artifactId>druid</artifactId>
-  		<version>1.0.7</version>
-  	</dependency>
   </dependencies>
 </project>
