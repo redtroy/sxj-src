@@ -261,8 +261,8 @@ public class WindowRfidController extends BaseController {
 				throw new WebException("标签不是正在使用中的标签，不能用于补损！");
 			}
 			map.put("contractNo", windowRfid.getContractNo());
-			map.put("winTypeId", windowRfid.getWindowType().getId());
-			map.put("winTypeName", windowRfid.getWindowType().getName());
+			map.put("winTypeId", windowRfid.getWindowType());
+			map.put("winTypeName", windowRfid.getWindowType());
 		} catch (Exception e) {
 			SxjLogger.error("标签补损错误", e, this.getClass());
 			map.put("error", e.getMessage());

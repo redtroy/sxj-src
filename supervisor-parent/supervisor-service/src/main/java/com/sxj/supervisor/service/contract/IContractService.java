@@ -205,7 +205,7 @@ public interface IContractService {
 	 */
 	public void startWindowRfid(Integer startNum, String refContractNo,
 			String minRfid, String maxRfid, String gRfid, String lRfid,
-			WindowTypeEnum windowType) throws ServiceException;
+			String windowType) throws ServiceException;
 
 	/**
 	 * 跟据rfid 获取补损批次
@@ -283,6 +283,9 @@ public interface IContractService {
 	ContractBatchModel getBacthsByContractNoAndBatchNo(String contractNo,
 			String bacthNo, String isLossBatch) throws ServiceException,
 			SQLException;
+
+    List<ContractItemEntity> getRefContractItem(String contractNo,
+            String windowType) throws ServiceException;
 
 
 

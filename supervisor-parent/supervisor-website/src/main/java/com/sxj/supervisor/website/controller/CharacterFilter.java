@@ -22,7 +22,6 @@ public class CharacterFilter implements Filter
 {
     
     private String[] characterParams = null;
-    
     private boolean OK = true;
     
     /**
@@ -81,6 +80,8 @@ public class CharacterFilter implements Filter
                 PrintWriter out = servletresponse.getWriter();
                 out.print("<script language='javascript'>alert(\"您提交的相关数据含有非法字符。如：\\\"'\\\".\");window.location.href='"
                         + retUrl + "';</script>");
+            }else{
+                request.getRequestDispatcher(servletrequest.getContextPath()+"/error.htm").forward(request, response);//跳转到信息提示页面！
             }
         }
         else

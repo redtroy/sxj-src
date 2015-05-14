@@ -8,7 +8,7 @@ package com.sxj.supervisor.enu.member;
  */
 public enum MemberTypeEnum
 {
-    DAWP("门窗厂", 0), GLASSFACTORY("玻璃厂", 1), GENRESFACTORY("型材厂", 2);
+    DAWP("门窗厂", 0), GLASSFACTORY("玻璃深加工厂", 1), GENRESFACTORY("型材厂", 2);
     
     // 成员变量
     private Integer id;

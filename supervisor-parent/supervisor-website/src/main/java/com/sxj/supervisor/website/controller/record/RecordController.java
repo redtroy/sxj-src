@@ -338,6 +338,26 @@ public class RecordController extends BaseController {
 			throw new WebException("修改备案错误");
 		}
 	}
+	/**
+	 * 变更备案and补损备案修改
+	 * @param record
+	 * @return
+	 * @throws WebException
+	 */
+	@RequestMapping("/editRecord")
+    public @ResponseBody Map<String, String> editRecord(RecordEntity record)
+            throws WebException {
+        try {
+            recordService.editRecord(record);
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("isOK", "ok");
+            return map;
+        } catch (Exception e) {
+            SxjLogger.error("修改备案错误", e, this.getClass());
+            throw new WebException("修改备案错误");
+        }
+    }
+	
 
 	/**
 	 * 根据ID删除备案

@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
-import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.file.fastdfs.IFileUpLoad;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.WebException;
+import com.sxj.util.logger.SxjLogger;
 
 @Controller
 public class FileController
@@ -108,7 +108,7 @@ public class FileController
             ///     response.setStatus(404);
             //     return;
             //  }
-            
+            ServletOutputStream output = response.getOutputStream();
             response.setDateHeader("expries",
                     System.currentTimeMillis() + 1000 * 3600);
             StringBuffer modifyId = new StringBuffer();
@@ -169,7 +169,6 @@ public class FileController
             idbuff.append(id);
             id = idbuff.append(".").append(type).toString();
             // id = id.replace("-", "/") + "." + type;
-            byte[] image = null;
             if (StringUtils.isEmpty(id))
             {
                 response.setStatus(404);
@@ -180,10 +179,7 @@ public class FileController
             int index2 = id.indexOf(type);
             if (index2 == index + 1)
             {
-                image = storageClientService.downloadFile(group,
-                        id,
-                        new ByteArrayFdfsFileInputStreamHandler());
-                // image = fastDfsClient.downloadFile(id);
+                storageClientService.downloadFile(group, id, output);
             }
             else
             {
@@ -197,25 +193,23 @@ public class FileController
                     width = 500;
                     height = 500;
                 }
-                image = storageClientService.downloadSmallImage(group,
+                storageClientService.downloadSmallImage(group,
                         id,
                         width,
-                        height);
+                        height,
+                        output);
             }
-            if (image != null && image.length > 0)
-            {
-                ServletOutputStream output = response.getOutputStream();
-                type = "image/" + "*";
-                response.setContentType(type);
-                output.write(image);
-                output.flush();
-                output.close();
-            }
+            
+            type = "image/" + "*";
+            //response.setContentType(type);
+            // output.write(image);
+            output.flush();
+            output.close();
+            
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            // SxjLogger.error("获取图片错误", e, this.getClass());
+            SxjLogger.error("获取图片错误", e, this.getClass());
             
         }
         

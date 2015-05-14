@@ -166,12 +166,7 @@ $(document).ready(function() {
   招标合同号<input type="text" name="contractNo" class="input" value="${query.contractNo}" />
   玻璃标签<input type="text" name="glassRfid" class="input" value="${query.glassRfid}" />
   型材标签<input type="text" name="profileRfid" class="input" value="${query.profileRfid}" /></P>
-  窗型代号 <select name="windowType" class="selectx">
-	   		<option value="" selected="selected">全部</option>
-	   		<#list winType as type> 
-          		<option value="${type.getId()}">${type.getName()}</option>
-         	</#list>
-        </select>
+  窗型代号<input type="text" name="windowType" class="input" value="${query.windowType}" />
   标签进度 <select name="progressState" class="selectx">
           <option value="" selected="selected">全部</option>
 		  <#list Label as label> 
@@ -223,11 +218,7 @@ $(document).ready(function() {
           <td><a href="javascript:log('${win.id}');" class="lnk-blue">${win.rfidNo}</a></td>
           <td>${win.applyNo}</td>
           <td><a href="javascript:loadInfo('${win.id}','${win.contractNo}')" class="lnk-blue">${win.contractNo}</a></td>
-          <#if win.windowType??>
-          <td><#if win.rfidState.getId()!=0>${win.windowType.getName()}</#if></td>
-          <#else>
-          <td></td>
-          </#if>
+          <td>${win.windowType}</td>
 		  <td><a href="javascript:blBatch('${win.id}','${win.glassRfid}')" class="lnk-blue">${win.glassRfid}</a></td>
 		  <td><a href="javascript:xcBatch('${win.id}','${win.profileRfid}')" class="lnk-blue">${win.profileRfid}</a></td>
           <td><#if win.replenishNo?exists>${win.replenishNo}<#else>-</#if></td>

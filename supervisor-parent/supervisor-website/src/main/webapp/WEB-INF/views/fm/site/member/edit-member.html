@@ -15,11 +15,23 @@
 var edit_pwd_validform;
 var checkState=${member.checkState.id};
 var flag=true;
+var ul_validform;
 $(document).ready(function() { 
-	loadUpload("bLicensePath_File","${basePath}upload.htm",false,"请上传营业执照扫描件",uploadLicense);
-	loadUpload("energyPath_File","${basePath}upload.htm",false,"请上传节能标识推广证扫描件" ,uploadenergyPath);
-	loadUpload("bLicensePath_File_reload","${basePath}upload.htm",false,"重新上传营业执照扫描件",uploadLicenseReload);
-	loadUpload("energyPath_File_reload","${basePath}upload.htm",false,"重新上传节能标识推广证扫描件",uploadenergyPathReload);
+	loadUploadMember("bLicensePath_File","${basePath}upload.htm",false,"上传",uploadLicense);
+	loadUploadMember("energyPath_File","${basePath}upload.htm",false,"上传" ,uploadenergyPath);
+	loadUploadMember("aptitudePath_File","${basePath}upload.htm",false,"上传" ,uploadaptitudePath);
+	loadUploadMember("safetyPath_File","${basePath}upload.htm",false,"上传" ,uploadsafetyPath);
+	loadUploadMember("qmsPath_File","${basePath}upload.htm",false,"上传" ,uploadqmsPath);
+	loadUploadMember("cccPath_File","${basePath}upload.htm",false,"上传" ,uploadcccPath);
+	loadUploadMember("productionPath_File","${basePath}upload.htm",false,"上传" ,uploadproductionPath);
+	
+	loadUploadMember("bLicensePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadLicenseReload);
+	loadUploadMember("energyPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadenergyPathReload);
+	loadUploadMember("aptitudePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadaptitudeReload);
+	loadUploadMember("safetyPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadsafetyReload);
+	loadUploadMember("qmsPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadqmsReload);
+	loadUploadMember("cccPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadcccReload);
+	loadUploadMember("productionPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadproductionReload);
 	$("#bLicenseNo").click(function(){
 		$("#bLicenseNo_erro").hide();
 	})
@@ -45,11 +57,42 @@ $(document).ready(function() {
 		tiptype:3});
 	edit_pwd_validform=$("#edit_pwd").Validform({
 		tiptype:3});
+	
+	ul_validform=$("#checkzs").Validform({
+		datatype:{
+			"ns":/^[A-Za-z0-9\(\)\-]+$/
+		},
+		tiptype:function(msg,o,cssctl){
+				o.obj.parent().children(".checkinfo").remove();
+				var $div=$("<div/>").addClass("checkinfo");
+				var $p=$("<div/>").addClass("Validform_checktip Validform_wrong").html(msg);
+				var left=o.obj.offset().left,
+				top=o.obj.offset().top;
+				var width=o.obj.width();
+				$div.append($p).css({
+					'left':left+width-123,
+					'top':top-32,
+					'position':'absolute'
+				}).show();
+				o.obj.parent().append($div);
+		}});
+	$("#checkzs").find("[datatype]").live("focus",function(){
+		$(this).parent().children(".checkinfo").hide();
+		$(this).removeClass("Validform_error");
+		//$(this).parent().children(".checkinfo").hide();
+	});
+	$("#checkzs").find("[datatype]").live("blur",function(){
+		
+		var pass=ul_validform.check(true,$(this));
+		if(!pass)
+			$(this).parent().children(".checkinfo").show();
+	});
 }); 
 function close_div(){
 	$('.maskdivgen').fadeOut(100);
 	$('.passwordPop').slideUp(200);
 }
+//上传营业执照扫描件
 function uploadLicense(data){
     var dataObj=eval("("+data+")");//转换为json对象
     if ($("#bLicensePath_img")!=null){
@@ -59,12 +102,43 @@ function uploadLicense(data){
     }
     $("#bLicensePath_hidden").val(dataObj.fileIds);
 }
-
+//上传节能标识推广证扫描件
 function uploadenergyPath(data){
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $("#energyPath_hidden").val(dataObj.fileIds);
 }
+//上传资质证书扫描件
+function uploadaptitudePath(data){
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#aptitudePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $("#aptitudePath_hidden").val(dataObj.fileIds);
+}
+//上传安全生产许可证扫描件
+function uploadsafetyPath(data){
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#safetyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $("#safetyPath_hidden").val(dataObj.fileIds);
+}
+//上传质量管理体系认证扫描件
+function uploadqmsPath(data){
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#qmsPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $("#qmsPath_hidden").val(dataObj.fileIds);
+}
+//上传3C认证扫描件
+function uploadcccPath(data){
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#cccPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $("#cccPath_hidden").val(dataObj.fileIds);
+}
+//上传工业产品生产许可证扫描件
+function uploadproductionPath(data){
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#productionPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $("#productionPath_hidden").val(dataObj.fileIds);
+}
+//重新上传营业执照扫描件
 function uploadLicenseReload(data){
 	checkState=1;
 	flag=false;
@@ -77,7 +151,7 @@ function uploadLicenseReload(data){
     $.post("${basePath}deleteFile.htm",{fileId:$("#bLicensePath_hidden").val()},function(data){})
     $("#bLicensePath_hidden").val(dataObj.fileIds);
 }
-
+//重新上传节能标识推广证扫描件
 function uploadenergyPathReload(data){
 	checkState=1;
 	flag=false;
@@ -86,29 +160,114 @@ function uploadenergyPathReload(data){
     $.post("${basePath}deleteFile.htm",{fileId:$("#energyPath_hidden").val()},function(data){})
     $("#energyPath_hidden").val(dataObj.fileIds);
 }
+//重新上传资质证书扫描件
+function uploadaptitudeReload(data){
+	checkState=1;
+	flag=false;
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#aptitudePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $.post("${basePath}deleteFile.htm",{fileId:$("#aptitudePath_hidden").val()},function(data){})
+    $("#aptitudePath_hidden").val(dataObj.fileIds);
+}
+//重新上传安全生产许可证扫描件
+function uploadsafetyReload(data){
+	checkState=1;
+	flag=false;
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#safetyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $.post("${basePath}deleteFile.htm",{fileId:$("#safetyPath_hidden").val()},function(data){})
+    $("#safetyPath_hidden").val(dataObj.fileIds);
+}
+//重新上传质量管理体系认证扫描
+function uploadqmsReload(data){
+	checkState=1;
+	flag=false;
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#qmsPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $.post("${basePath}deleteFile.htm",{fileId:$("#qmsPath_hidden").val()},function(data){})
+    $("#qmsPath_hidden").val(dataObj.fileIds);
+}
+//重新上传3C认证扫描
+function uploadcccReload(data){
+	checkState=1;
+	flag=false;
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#cccPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $.post("${basePath}deleteFile.htm",{fileId:$("#cccPath_hidden").val()},function(data){})
+    $("#cccPath_hidden").val(dataObj.fileIds);
+}
+//重新上传工业产品生产许可证扫描
+function uploadproductionReload(data){
+	checkState=1;
+	flag=false;
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#productionPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $.post("${basePath}deleteFile.htm",{fileId:$("#productionPath_hidden").val()},function(data){})
+    $("#productionPath_hidden").val(dataObj.fileIds);
+}
 
 function save(id){
+	var type="${member.type.getId()}";
 	var bLicensePath= $("#bLicensePath_hidden").val();
 	var energyPath= $("#energyPath_hidden").val();
 	var bLicenseNo=$("#bLicenseNo").val()+"";
     var energyNo=$("#energyNo").val()+"";
+    //资质证书
+    var qualification_no=$("#aptitude").val()+"";
+    var qualification_img=$("#aptitudePath_hidden").val();
+    //安全许可证safety
+    var safety_licenses_no=$("#safety").val()+"";
+    var safety_licenses_img=$("#safetyPath_hidden").val();
+    //质量管理体系认证证书
+    var qms_no=$("#qms").val()+"";
+    var qms_img=$("#qmsPath_hidden").val();
+    
+    //3c认证证书
+    var ccc_no=$("#ccc").val()+"";
+    var ccc_img=$("#cccPath_hidden").val();
+    
+    //上传工业产品生产许可证
+    var production_license_no=$("#production").val()+"";
+    var production_license_img=$("#productionPath_hidden").val();
+    
 	var erro_flag=false;
-	if (!bLicenseNo.match(/^[A-Za-z0-9\(\)\-]+$/)){
-    	$("#energyNo_erro").show();
+	/*if (!bLicenseNo.match(/^[A-Za-z0-9\(\)\-]+$/)){
+    	
     	erro_flag=true;
     }
-    if (!energyNo.match(/^[A-Za-z0-9\(\)\-]+$/)){
-    	$("#energyNo_erro").show();
+    if (!qualification_no.match(/^[A-Za-z0-9\(\)\-]+$/) && type==0){
+    	
     	erro_flag=true;
     }
+    
+   if (!safety_licenses_no.match(/^[A-Za-z0-9\(\)\-]+$/) && type==0){
+    	
+    	erro_flag=true;
+    }
+   
+   if (!ccc_no.match(/^[A-Za-z0-9\(\)\-]+$/) && type==1){
+   	
+   	erro_flag=true;
+   }
+    
+   if (!production_license_no.match(/^[A-Za-z0-9\(\)\-]+$/) && type==2){
+	   	
+	   	erro_flag=true;
+	 }*/
+   
 	var add_validform=$("#add_form").Validform({
 		tiptype:3});
 	if (!add_validform.check()){
 		return false;
 	}
+	
+	if (!ul_validform.check()){
+		return false;
+	}
 	if (erro_flag){
 		return false;
 	}
+	
 	var telNum=$("#qh").val()+'-'+$("#telNum").val();
 	var address=$("#address").val();
     var code=$("#code").val();	
@@ -119,11 +278,24 @@ function save(id){
     	messageInfo("请上传营业执照图片");
     	return false;
     }
-    if (energyPath==""){
-    	messageInfo("请上传节能标识图片");
+    if (qualification_img=="" && type==0){
+    	messageInfo("请上传资质证书图片");
     	return false;
     }
-    var type="${member.type.getId()}";
+    
+    if (safety_licenses_img=="" && type==0){
+    	messageInfo("请上传安全许可证图片");
+    	return false;
+    }
+    if (ccc_img=="" && type==1){
+    	messageInfo("请上传3c认证证书图片");
+    	return false;
+    }
+    if (production_license_img=="" && type==2){
+    	messageInfo("请上传工业产品生产许可证图片");
+    	return false;
+    }
+    
     dialogBox(function(index){
     	if (!flag){
     		if (${member.checkState.id}==2){
@@ -131,7 +303,9 @@ function save(id){
     		}
     	}
     	  $.post("${basePath}member/save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
-    	    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type,checkState:checkState
+    	    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type,checkState:checkState,qualification_no:qualification_no,
+    	    	qualification_img:qualification_img,safety_licenses_no:safety_licenses_no,safety_licenses_img:safety_licenses_img,qms_no:qms_no,qms_img:qms_img,
+    	    	ccc_no:ccc_no,ccc_img:ccc_img,production_license_no:production_license_no,production_license_img:production_license_img
     	    },function(data){
     	    	if(data.isOK="ok"){
     	    		 succInfo(function(){
@@ -181,7 +355,7 @@ function edit_pwd(id){
 							<span class="title fontYH f20 fb">会员资料修改</span></h1>
       </div>
       <div class="contBox tableMem">
-      <form id="add_form" action="javascript:void(0)" method="post">
+      <form id="" action="javascript:void(0)" method="post">
         <div class="item">
           <label>会员编号</label>
           <span class="color-blue">${member.memberNo}</span></div>
@@ -205,44 +379,153 @@ function edit_pwd(id){
             </#list>
           </select>
         </div>
-        <div class="item  ly-clearFix">
-          <label>企业资质</label>          
+        <div class="item  ly-clearFix" id="checkzs">
+          <label>企业资质</label>
+          <!-- 营业执照号 -->          
           <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}" placeholder="请输入营业执照号" /></p>
+          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" value="${member.bLicenseNo}"  datatype="ns"  nullmsg="营业执照号不能为空"   placeholder="输入证书编号"/></p>
+          <p>营业执照</p>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}" onerror="errorImage(this)" times="0"/>
 		   <#else>
-		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/>  
+		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/>  
 		</#if>
 		<#if (!member.flag)>
           <div class="uploadify">
-          <input type="file" class="input-w180h30" id="bLicensePath_File" name="input5" />
+          <input type="file" class="" id="bLicensePath_File" name="input5" />
            </div>
          <#else>
           <div class="uploadify">
-          <input type="file" class="input-w180h30" id="bLicensePath_File_reload" name="input5" />
+          <input type="file" class="" id="bLicensePath_File_reload" name="input5" />
            </div>
          </#if>
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
-         <div class="ly-left editBox">
-          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" placeholder="请输入节能标识号"/><span class="msg-error pa p5 ml5 f12" style="display:none" id="energyNo_erro">请输入正确的营业执照号和节能标识号</span></p>
-          <#if (member.bLicensePath??)>
-         <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}" onerror="errorImage(this)" times="0"/>
+         
+         <!-- 资质证书 -->
+         <#if (member.type.id==0)>
+         <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="aptitude" value="${member.qualification_no}"  datatype="ns" nullmsg="资质证书不能为空"  placeholder="输入证书编号"/></p>
+          <p>资质证书</p>
+          <#if (member.qualification_img??)>
+         <img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="energyPath_img" width="80" height="107" src="${b.staticPath}images/nopic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
-            <input type="file" class="input-w180h30" id="energyPath_File" name="input6">
+            <input type="file" class="" id="aptitudePath_File" name="input6">
           <#else>
-          <input type="file" class="input-w180h30" id="energyPath_File_reload" name="input6">
+          <input type="file" class="" id="aptitudePath_File_reload" name="input6">
+          </#if>
+            <input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
+          </div>
+         </div>
+         </#if>
+         <!-- 安全生产许可证 -->
+         <#if (member.type.id==0)>
+         <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="safety" value="${member.safety_licenses_no}"  datatype="ns" nullmsg="安全许可证不能为空"  placeholder="输入证书编号"/></p>
+          <p>安全生产许可证</p>
+          <#if (member.safety_licenses_img??)>
+         <img id="safetyPath_img" width="80" height="107" src="${b.imagePath}${member.safety_licenses_img}" onerror="errorImage(this)" times="0"/>
+          <#else>
+		 <img id="safetyPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
+         </#if>
+         <div class="uploadify">
+         <#if (!member.flag)>
+            <input type="file" class="" id="safetyPath_File" name="input6">
+          <#else>
+          <input type="file" class="" id="safetyPath_File_reload" name="input6">
+          </#if>
+            <input type="hidden" class="input-w180h30" id="safetyPath_hidden" name="safetyPath" value="${member.safety_licenses_img}">
+          </div>
+         </div>
+         </#if>
+         <!-- 节能标识号 -->
+         <#if (member.type.id==0)>
+         <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}"  placeholder="输入证书编号"/></p>
+          <p>节能标识</p>
+          <#if (member.energyPath??)>
+         <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}" onerror="errorImage(this)" times="0"/>
+          <#else>
+		 <img id="energyPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
+         </#if>
+         <div class="uploadify">
+         <#if (!member.flag)>
+            <input type="file" class="" id="energyPath_File" name="input6">
+          <#else>
+          <input type="file" class="" id="energyPath_File_reload" name="input6">
           </#if>
             <input type="hidden" class="input-w180h30" id="energyPath_hidden" name="energyPath" value="${member.energyPath}">
           </div>
          </div>
+         </#if>
+         
+         <!-- 3C认证证书 -->
+          <#if (member.type.id==1)>
+         <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}"  datatype="ns" nullmsg="3C证书不能为空"  placeholder="输入证书编号"/></p>
+          <p>3C认证证书</p>
+          <#if (member.ccc_img??)>
+         <img id="cccPath_img" width="80" height="107" src="${b.imagePath}${member.ccc_img}" onerror="errorImage(this)" times="0"/>
+          <#else>
+		 <img id="cccPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
+         </#if>
+         <div class="uploadify">
+         <#if (!member.flag)>
+            <input type="file" class="" id="cccPath_File" name="input6">
+          <#else>
+          <input type="file" class="" id="cccPath_File_reload" name="input6">
+          </#if>
+            <input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
+          </div>
+         </div>
+         </#if>
+         <!-- 工业产品生产许可证 -->
+          <#if (member.type.id==2)>
+         <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="production" value="${member.production_license_no}"  datatype="ns" nullmsg="工业许可证不能为空"  placeholder="输入证书编号"/></p>
+          <p>工业产品生产许可证</p>
+          <#if (member.production_license_img??)>
+         <img id="productionPath_img" width="80" height="107" src="${b.imagePath}${member.production_license_img}" onerror="errorImage(this)" times="0"/>
+          <#else>
+		 <img id="productionPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
+         </#if>
+         <div class="uploadify">
+         <#if (!member.flag)>
+            <input type="file" class="" id="productionPath_File" name="input6">
+          <#else>
+          <input type="file" class="" id="productionPath_File_reload" name="input6">
+          </#if>
+            <input type="hidden" class="input-w180h30" id="productionPath_hidden" name="productionPath" value="${member.production_license_img}">
+          </div>
+         </div>
+         </#if>
+          <!-- 质量管理体系认证证书 -->
+         <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="qms" value="${member.qms_no}"  placeholder="输入证书编号"/></p>
+          <p>质量管理体系认证</p>
+          <#if (member.qms_img??)>
+         <img id="qmsPath_img" width="80" height="107" src="${b.imagePath}${member.qms_img}" onerror="errorImage(this)" times="0"/>
+          <#else>
+		 <img id="qmsPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
+         </#if>
+         <div class="uploadify">
+         <#if (!member.flag)>
+            <input type="file" class="" id="qmsPath_File" name="input6">
+          <#else>
+          <input type="file" class="" id="qmsPath_File_reload" name="input6">
+          </#if>
+            <input type="hidden" class="input-w180h30" id="qmsPath_hidden" name="qmsPath" value="${member.qms_img}">
+          </div>
+         </div>
+         
+         
           
         </div>
+        <div id="add_form">
         <div class="item">
           <label>公司电话</label>
           <input type="text" class="input input-w50h36" value="${member.telNum?split("-")[0]}" name="input" id="qh" datatype="n3-4" errormsg="请填写正确的区号">
@@ -269,6 +552,7 @@ function edit_pwd(id){
         </div>
         <div class="mt15 mb20 tc">
           <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
+        </div>  
           </form>
       </div>
     </div>

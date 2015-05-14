@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.tasks.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
-import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
@@ -328,23 +328,27 @@ public class WindDoorServiceImpl implements IWindDoorService
             String path = wde.getFilePath().substring(wde.getFilePath()
                     .indexOf("/") + 1,
                     wde.getFilePath().length());
-            String file = new String(storageClientService.downloadFile(group,
-                    path,
-                    new ByteArrayFdfsFileInputStreamHandler()));
-            Document doc = Jsoup.parse(file);
-            /*String img = doc.getElementById("ZBGGDetail1_divDS")
-                    .getElementsByTag("img")
-                    .attr("src");
-            if (img != null && !"".equals(img))
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            storageClientService.downloadFile(group, path, output);
+            if (output.toByteArray() != null)
             {
-                doc.getElementById("ZBGGDetail1_divDS")
+                String file = new String(output.toByteArray());
+                Document doc = Jsoup.parse(file);
+                /*String img = doc.getElementById("ZBGGDetail1_divDS")
                         .getElementsByTag("img")
-                        .attr("src", "http://storage.menchuang.org.cn/" + img);
-                doc.getElementById("ZBGGDetail1_divDS").removeAttr("style");
-                doc.getElementById("ZBGGDetail1_divDS").attr("style",
-                        "position: absolute;");
-            }*/
-            wde.setFilePath(doc.toString());
+                        .attr("src");
+                if (img != null && !"".equals(img))
+                {
+                    doc.getElementById("ZBGGDetail1_divDS")
+                            .getElementsByTag("img")
+                            .attr("src", "http://storage.menchuang.org.cn/" + img);
+                    doc.getElementById("ZBGGDetail1_divDS").removeAttr("style");
+                    doc.getElementById("ZBGGDetail1_divDS").attr("style",
+                            "position: absolute;");
+                }*/
+                wde.setFilePath(doc.toString());
+                output.close();
+            }
             return wde;
         }
         catch (Exception e)

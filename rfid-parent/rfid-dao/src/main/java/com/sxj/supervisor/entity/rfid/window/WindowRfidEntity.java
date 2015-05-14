@@ -87,7 +87,7 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 	 * 窗型代号
 	 */
 	@Column(name = "WINDOW_TYPE")
-	private WindowTypeEnum windowType;
+	private String windowType;
 
 	/**
 	 * 玻璃RFID
@@ -174,11 +174,11 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 		this.contractNo = contractNo;
 	}
 
-	public WindowTypeEnum getWindowType() {
+	public String getWindowType() {
 		return windowType;
 	}
 
-	public void setWindowType(WindowTypeEnum windowType) {
+	public void setWindowType(String windowType) {
 		this.windowType = windowType;
 	}
 
@@ -362,7 +362,7 @@ public class WindowRfidEntity extends Pagable implements Serializable {
 		sb.append(StringUtils.trimToNull(this.getContractNo()));
 		sb.append("|");
 		if (this.getWindowType() != null) {
-			sb.append(this.getWindowType().getId());
+			sb.append(StringUtils.trimToNull(this.getWindowType()));
 		}
 		sb.append("|");
 		sb.append(StringUtils.trimToNull(this.getGlassRfid()));

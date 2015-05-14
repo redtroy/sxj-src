@@ -241,7 +241,7 @@ $(document).ready(function() {
 			return;
 		}
 		dialogBox(function(index){
-		$.post("modify.htm",$('#form').serialize(),function(data){
+		$.post("editRecord.htm",$('#form').serialize(),function(data){
 			layer.close(index);
 			if (data.isOK=='ok'){
 				succInfo(function(){
@@ -252,7 +252,43 @@ $(document).ready(function() {
 			}
 		  });},"是否修改备案?");
 	}
+	//数组去重复
+	var uniqueArray =  function(data){  
+		   data = data || [];  
+		   var a = {};  
+		   for (var i=0; i<data.length; i++) {  
+		       var v = data[i];  
+		       if (typeof(a[v]) == 'undefined'){  
+		            a[v] = 1;  
+		       }  
+		   };  
+		   data.length=0;  
+		   for (var i in a){  
+		        data[data.length] = i;  
+		   }  
+		   return data;  
+		}  
 	$(function(){
+		
+		$('.closeBatch').click(function() {
+			$("#batch-list").slideUp(200);
+			$('.maskdivgen1').fadeOut(100);
+		})
+		
+			//获取选中的值
+		$('#batchBtn').click(function() {
+			var strSel='';
+			$("[name='batchRfidNo']:checked").each(function(index, element) {
+                strSel += $(this).val() + ",";
+            });
+			if(strSel!='')
+				strSel = strSel.substring(0, strSel.length - 1);
+			$("#rfid").text(strSel);
+			$("#rfidHide").val(strSel);
+			$("#batch-list").slideUp(200);
+			$('.maskdivgen1').fadeOut(100);
+		})
+		
 		var urlA = "${basePath}autoCompleA.htm";
 		var urlB = "${basePath}autoCompleB.htm";
 		$("#memberNameA").bigAutocomplete({
@@ -326,11 +362,14 @@ $(document).ready(function() {
 					var hide=$("#rfidHide").val();
 					var rfid ;
 					if(hide!=''){
+						
 					 rfid =hide+','+data.rfid;
+					 rfid =uniqueArray(rfid.split(","));
 					}else{
 						rfid=data.rfid;
 					}
 					$("#rfid").text(rfid);
+					$("#rfidHide").val("");
 					$("#rfidHide").val(rfid);
 					} else {
 						errorInfo("没有找到批次相关的RFID!");
@@ -366,6 +405,57 @@ $(document).ready(function() {
 				}
 			});
 	});
+	
+	function openBatch() {
+		var recordId = $("#id").val();
+		$("#batchUl").empty();
+		$.post("getBatch.htm",{recordId : recordId},
+						function(data) {
+							if (data.batch != undefined
+									&& data.batch.length > 0) {
+								$("#batch-list").slideDown(200);
+								$('.maskdivgen1').fadeIn(100);
+								var batch = data.batch;
+								for (var i = 0; i < batch.length; i++) {
+									var bu = '';
+									if (batch[i].type == 3) {
+										bu = '补'
+									}
+									$("#batchUl").append(
+													'<li><input  type="checkbox" name="batchRfidNo"  title="'+batch[i].batchNo+'" value="'+batch[i].rfidNo+'" />'
+															+ bu
+															+ '第'
+															+ batch[i].batchNo
+															+ '批次</li>');
+								}
+							} else {
+								errorInfo("没有找到相关批次!");
+							}
+						});
+	}
+	function bsmodify(){
+		var imgPath = $("#imgPath").val();
+		var rfidNo = $("#rfidHide").val();
+		if(imgPath==''){
+			messageInfo('请上传扫描件！');
+			return;
+		}
+		if(rfidNo==''){
+			messageInfo('请选择补损批次！');
+			return;
+		}
+		dialogBox(function(index){
+		$.post("editRecord.htm",$('#form').serialize(),function(data){
+			layer.close(index);
+			if (data.isOK=='ok'){
+				succInfo(function(){
+					window.location.href="query.htm";
+				},"修改成功!");
+			}else{
+				messageInfo("修改失败");
+			}
+		  });},"是否修改备案?");
+	}
 </script>
 </head>
 
@@ -547,7 +637,6 @@ $(document).ready(function() {
 							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"
 									value="${record.imgPath}" name="imgPath" id="imgPath" />
-									<input type="hidden" name="id" id="id" value="${record.id}" />
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list"></ul>
 								</div>
@@ -562,7 +651,8 @@ $(document).ready(function() {
 								<label>合同号</label> ${record.contractNo}
 							</div>
 							<div class="item">
-								<label>对应批次</label><select name="" id="selectBatch">
+								<label>对应批次</label>
+								<!-- <select name="" id="selectBatch">
 									<#if batch??>
 									<option value="">请选择批次</option>
 									<#list batch as batch>
@@ -571,15 +661,16 @@ $(document).ready(function() {
 									<#else>
 									<option>没有批次</option>
 									</#if>
-								</select>
+								</select> -->
+								<span class="color-green hand ml10" onclick="openBatch();">选择补损批次</span>
 							</div>
 							<div class="item">
-								<label>对应批次RFID编号</label> <input type="hidden" id="rfidHide" name="rfidNo" />${record.rfidNo}<span
-									class="icon icon-add"></span>
+								<label>对应批次RFID编号</label> <input type="hidden" id="rfidHide" name="rfidNo" /><span
+									class="" id="rfid">${record.rfidNo}</span>
 
 							</div>
 							<div class="item">
-								<label>&nbsp;</label> <a href="javascript:modify();"
+								<label>&nbsp;</label> <a href="javascript:bsmodify();"
 									class="button button-orange mr15">确定修改</a><a
 									href="javascript:history.go(-1)" class="button button-gray">取消</a>
 							</div>
@@ -597,6 +688,21 @@ $(document).ready(function() {
 		</div>
 		<div id="viewer2" class="modal-body iviewer"
 			style="width: 100%; display: none; top: 0px"></div>
+	</div>
+	<!-- 批次选择 -->
+	<div class="modal-wrap popDemo dropList notViewer"  id="batch-list"
+		style="display: none; width: 680px; height: 300px;z-index: 10011;">
+		<div class="modal-header">
+			<span class="close closeBatch"><a>关闭窗口</a></span>
+		</div>
+		 <div class="modal-body dropBox">
+		 <div class="item"> <span>
+          </span>
+          <ul id="batchUl">
+          </ul>
+        </div>
+		 <button class="button button-pop" id="batchBtn">确认</button>
+		 </div>
 	</div>
 	<div class="maskdivgen maskdivgen1" style="display: none"></div>
 </body>

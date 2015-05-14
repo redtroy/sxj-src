@@ -327,4 +327,23 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
 		}
 		
 	}
+
+    @Override
+    public void updateProgressState(LogisticsRfidEntity rfidEntity)
+            throws ServiceException
+    {
+        try
+        {
+            if (rfidEntity != null)
+            {
+                logisticsRfidDao.updateProgressState(rfidEntity);
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("批量更新物流RFID错误", e);
+        }
+        
+    }
 }

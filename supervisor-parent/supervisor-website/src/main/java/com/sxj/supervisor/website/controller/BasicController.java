@@ -27,16 +27,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
-import third.rewrite.fastdfs.service.impl.ByteArrayFdfsFileInputStreamHandler;
 
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
@@ -228,7 +229,7 @@ public class BasicController extends BaseController
         return "site/404";
     }
     
-    @RequestMapping("login")
+    @RequestMapping(value="login",method = RequestMethod.POST)
     public String login(String memberName, String accountName, String password,
             HttpSession session, HttpServletRequest request, ModelMap map)
     {
@@ -511,6 +512,7 @@ public class BasicController extends BaseController
     {
         try
         {
+            ServletOutputStream output = response.getOutputStream();
             String fileName = "扫描件" + stringDate();
             String group = filePath.substring(0, filePath.indexOf("/"));
             response.addHeader("Content-Disposition", "attachment;filename="
@@ -518,12 +520,7 @@ public class BasicController extends BaseController
             response.setContentType("application/pdf");
             String path = filePath.substring(filePath.indexOf("/") + 1,
                     filePath.length());
-            byte[] file = storageClientService.downloadFile(group,
-                    path,
-                    new ByteArrayFdfsFileInputStreamHandler());
-            System.out.println(file);
-            ServletOutputStream output = response.getOutputStream();
-            output.write(file);
+            storageClientService.downloadFile(group, path, output);
             output.flush();
             output.close();
         }
@@ -968,5 +965,45 @@ public class BasicController extends BaseController
         }
         return map;
         
+    }
+    
+    /**
+     * 获取招标门窗型号
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("grtWindowType")
+    public @ResponseBody Map<String, String> getRefContractWindwoType(
+            HttpSession session, HttpServletRequest request,
+            HttpServletResponse response, String keyword,String refContractNo) throws IOException
+    {
+        if(StringUtils.isEmpty(refContractNo)){
+            return null;
+        }
+        List<ContractItemEntity> list = contractService.getRefContractItem(refContractNo,keyword);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (ContractItemEntity ci : list)
+        {
+            if (ci != null)
+            {
+                sb = "{\"title\":\"" + ci.getWindowType()
+                        + "\",\"result\":\"" + ci.getId()
+                        + "\"}";
+                strlist.add(sb);
+            }
+            
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
     }
 }

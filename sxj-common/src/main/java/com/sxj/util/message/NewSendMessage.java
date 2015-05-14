@@ -118,7 +118,7 @@ public class NewSendMessage
                 "CEE4D6CC34577FB24D1726F8AFEB",
                 "私享家验证码",
                 "pt");
-        String[] dfdf = { "13852295723", "18551626910", "15150535995" };
+        String[] dfdf = { "13852295723", "18551626910", "13852295723" };
         me.sendMessage(dfdf, "私享家验证码3333");
     }
 }

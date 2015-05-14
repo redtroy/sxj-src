@@ -17,7 +17,8 @@
 			type="text/javascript"></script>
 		<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
 			type="text/css" />
-		<@b.validate/> <@b.dialogBox/> <@b.upload/> <script>
+		<@b.validate/> <@b.dialogBox/> <@b.upload/>
+<script>
 			var validform;
 			jQuery(document).ready(function($) {
 				$('.demo-image').click(function() {
@@ -124,7 +125,8 @@
 
 				});
 			}
-		</script>
+			
+</script>
 </head>
 
 <body>
@@ -134,42 +136,42 @@
 		<div class="yard-870 rightSide pr ly-left" id="rightSide_div">
 			<div class="pa memNews">
 				<#if systemMessageCount??&&systemMessageCount&gt;0>
-				<div class="tipNews" onclick="javascript:window.location.href='${basePath}sysMessage/query.htm'">
+				<div class="tipNews" onclick="javascript:clickFunction('${basePath}sysMessage/query.htm');">
 					<p class="newsNum tr fb f14" id="system_message_1">
 						<span>${systemMessageCount}</span>
 					</p>
 					<p class="newsCont" id="system_message_2">您有${systemMessageCount}条新系统消息</p>
 				</div>
 				<#else>
-				<div class="tipNews" style="display: none;" onclick="javascript:window.location.href='${basePath}sysMessage/query.htm'">
+				<div class="tipNews" style="display: none;" onclick="javascript:clickFunction('${basePath}sysMessage/query.htm');">
 					<p class="newsNum tr fb f14" id="system_message_1">
 						<span>${systemMessageCount}</span>
 					</p>
 					<p class="newsCont" id="system_message_2">您有${systemMessageCount}条新系统消息</p>
 				</div>
 				</#if> <#if transMessageCount??&&transMessageCount&gt;0>
-				<div class="tipMess" onclick="javascript:window.location.href='${basePath}transMessage/query.htm'">
+				<div class="tipMess" onclick="javascript:clickFunction('${basePath}transMessage/query.htm');">
 					<p class="newsNum tr fb f14" id="trans_message_1">
 						<span>${transMessageCount}</span>
 					</p>
 					<p class="newsCont" id="trans_message_2">您有${transMessageCount}条新交易消息</p>
 				</div>
 				<#else>
-				<div class="tipMess" style="display: none;" onclick="javascript:window.location.href='${basePath}transMessage/query.htm'">
+				<div class="tipMess" style="display: none;" onclick="javascript:clickFunction('${basePath}transMessage/query.htm');">
 					<p class="newsNum tr fb f14" id="trans_message_1">
 						<span>${transMessageCount}</span>
 					</p>
 					<p class="newsCont" id="trans_message_2">您有${transMessageCount}条新交易消息</p>
 				</div>
 				</#if> <#if tenderMessageCount??&&tenderMessageCount&gt;0>
-				<div class="tipInv" onclick="javascript:window.location.href='${basePath}systender/query.htm'">
+				<div class="tipInv" onclick="javascript:clickFunction('${basePath}systender/query.htm');">
 					<p class="newsNum tr fb f14" id="tender_message_1">
 						<span>${tenderMessageCount}</span>
 					</p>
 					<p class="newsCont" id="tender_message_2">您有${tenderMessageCount}条招标消息</p>
 				</div>
 				<#else>
-				<div class="tipInv" style="display: none;" onclick="javascript:window.location.href='${basePath}systender/query.htm'">
+				<div class="tipInv" style="display: none;" onclick="javascript:clickFunction('${basePath}systender/query.htm');">
 					<p class="newsNum tr fb f14" id="tender_message_1">
 						<span>${tenderMessageCount}</span>
 					</p>
@@ -208,8 +210,9 @@
 				</div>
 				<div class="item certCont ly-clearFix">
 					<label>企业资质</label>
-					<div class="upload">
-						<p>${member.bLicenseNo}</p>
+					<div class="upload" style="width:120px;">
+						<p>${member.bLicenseNo}&nbsp;</p>
+						<p style="font-size:14px;">营业执照</p>
 						<#if member.bLicensePath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
@@ -219,8 +222,37 @@
 							data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
 						</#if>
 					</div>
-					<div class="upload">
-						<p>${member.energyNo}</p>
+					
+					<#if (member.type.id==0)>
+					<div class="upload" style="width:120px;">
+						<p>${member.qualification_no}&nbsp;</p>
+						<p style="font-size:14px;">资质证书</p>
+						<#if member.qualification_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.qualification_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.qualification_img}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					<#if (member.type.id==0)>
+					<div class="upload" style="width:120px;">
+						<p>${member.safety_licenses_no}&nbsp;</p>
+						 <p style="font-size:14px;">安全生产许可证</p>
+						<#if member.safety_licenses_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.safety_licenses_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					<#if (member.type.id==0)>
+					<div class="upload" style="width:120px;"> 
+						<p>${member.energyNo}&nbsp;</p>
+						<p style="font-size:14px;">节能标识</p>
 						<#if member.energyPath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
@@ -228,6 +260,45 @@
 							src="${b.imagePath}${member.energyPath}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.energyPath}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					<#if (member.type.id==1)>
+					<div class="upload" style="width:120px;">
+						<p>${member.ccc_no}&nbsp;</p>
+						<p style="font-size:14px;">3C认证证书</p>
+						<#if member.ccc_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.ccc_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					 <#if (member.type.id==2)>
+					<div class="upload" style="width:130px;">
+						<p>${member.production_license_no}&nbsp;</p>
+						<p style="font-size:14px;">工业产品生产许可证</p>
+						<#if member.production_license_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.production_license_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a> </#if>
+					</div>
+					</#if>
+					
+					<div class="upload" style="width:120px;">
+						<p>${member.qms_no}&nbsp;</p>
+						<p style="font-size:14px;">质量管理体系认证</p>
+						<#if member.qms_img==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.qms_img}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.qms_img}">查看缩略图</a> </#if>
 					</div>
 				</div>
 				<div class="item">

@@ -3,17 +3,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。"/>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <@b.dialogBox/>
+<@b.validate/>
 <script>
 var reg=/^[0-9]*[1-9][0-9]*$/;
 var contractReg=/^CT[0-9]{8}/;
 var container_a=null;
 var container_b=null;
+var b_validform;
 //var lable=null;
 $(function(){
 	$("#contract_a").change(function(){
@@ -92,6 +94,8 @@ $(function(){
 						$("#cont_div").show();
 						$("#contract_text").hide();
 						$("#num_text").hide();
+						$("#windowType").val("");
+						$("#windowTypeId").val("");
 					}else{
 						 $("#contract_text").show();
 						 $("#contract_text").text(data.error);
@@ -161,6 +165,8 @@ function query(){
 			pc_a();
 			pc_b();
 			$("#cont_div").show();
+			$("#windowType").val("");
+			$("#windowTypeId").val("");
 		}else{
 			errorInfo(data.error);
 			$("#cont_div").hide();
@@ -278,6 +284,9 @@ function star(){
 	if(!validation()){
 		return false;
 	}
+	if (!b_validform.check()) {
+		return;
+	}
 	var refContractNo=$("#refContractNo").val();
 	var num=$("#num").val();
 	var gRfid=$("#rfid_a").text();
@@ -333,6 +342,49 @@ function right(obj){
 	 $(obj).removeClass("tipMsg msg-error");
 	 $(obj).addClass("icon icon16 icon-16-suc");
 }
+//感应显示门窗型号
+$(function(){
+	b_validform = $("#windowTypeDiv").Validform({
+		tiptype : 3
+	});
+$("#windowType").focus(function(){
+	var refContractNo =$("#refContractNo").val();
+	$("#windowType").bigAutocomplete({
+		width: '256',
+		url : "${basePath}grtWindowType.htm?refContractNo="+refContractNo,
+		callback : function(data) {
+			if(data){
+				$("#windowTypeId").val(data.result);
+				var pass = b_validform.check(false, $("#windowTypeId"));
+				$(this).parent().children(".Validform_wrong").hide();
+			}
+		},
+		beforeShow : function(data) {
+			var memberNameA = $("#windowType").val();
+			var match = false;
+			for (var i = 0; i < data.length; i++) {
+				if (data[i].title == memberNameA) {
+					$("#windowTypeId").val(data[i].result);
+					match = true;
+				}
+			}
+			if (!match) {
+				$("#windowTypeId").val("");
+				var pass = b_validform.check(false, $("#windowTypeId"));
+				if (!pass)
+					$(this).parent().children(".Validform_wrong").show();
+			}
+
+		}
+	});
+	$("#windowType").blur(function() {
+		var pass = b_validform.check(false, $("#windowTypeId"));
+		if (!pass)
+			$(this).parent().children(".Validform_wrong").show();
+	})
+});
+});
+
 </script>
 </head>
 <body>
@@ -379,11 +431,10 @@ function right(obj){
   <span class="color-blue ml5" id="rfid_b"></span>&nbsp;&nbsp;&nbsp;<span id="spanB" style="color:red;"></span>
   
    </div>
-<div class="item"><label>窗型代号</label><select name="select" id="windowType">
-            <#list type as t>
-			<option value="${t.id}">${t.getName()}</option>
-			</#list>
-  </select></div>
+<div class="item" id="windowTypeDiv"><label>窗型代号</label>
+		<input type="text" value="" id="windowType" class="input input-w240h36" value="" datatype="*1-50" nullmsg="请输入正确的门窗代号"/>
+		<input type="hidden" value="" id="windowTypeId" class="input input-w240h36" value="" datatype="*1-50" nullmsg="请输入正确的门窗代号" />
+</div>
 <div class="item"><label>&nbsp;</label><a href="javascript:star();" class="button button-orange mr15" title="">确定启用</a><a href="javascript:history.go(-1)" class="button button-gray">取消</a></div>
 </div>
 </div>
