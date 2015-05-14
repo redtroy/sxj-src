@@ -8,7 +8,7 @@ public class X509CredentialsSujbectDNMatcher extends
     public boolean doX509CredentialsMatch(X509AuthenticationToken token,
             X509AuthenticationInfo info)
     {
-        boolean match = doEquals(token.getSubjectDN(), info.getIssuerDN());
+        boolean match = doEquals(token.getSubjectDN(), info.getSubjectDN());
         
         if (match)
         {
