@@ -1,5 +1,5 @@
 <#assign staticPath="http://static.menchuang.org.cn:88/supervisor-website/"/>
-<#assign imagePath="http://storage.menchuang.org.cn:8080/file-web/" />
+<#assign imagePath="http://storage.menchuang.org.cn:88/" />
 <#global csrf=JspTaglibs["/WEB-INF/tld/csrfguard.tld"]>
 <#macro validate>
 <!--<script src="${staticPath}js/jquery.validate.js"></script>-->
@@ -500,6 +500,23 @@ function loadUpload(id,url,isMulti,text,fn){
 	        simUploadLimit:1,
 	        height:30,
 	        width:200,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
+function loadUploadMember(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
 	        buttonText:text,
 	        onUploadSuccess : function(file, data, response) {
 	        	fn(data);

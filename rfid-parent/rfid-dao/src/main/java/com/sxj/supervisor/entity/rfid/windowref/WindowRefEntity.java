@@ -85,7 +85,7 @@ public class WindowRefEntity extends Pagable implements Serializable
      * 窗型代号
      */
     @Column(name = "WINDOWS_NO")
-    private WindowTypeEnum windowsNo;
+    private String windowsNo;
     
     /**
      * 玻璃批次
@@ -131,12 +131,12 @@ public class WindowRefEntity extends Pagable implements Serializable
     @Column(name = "STATE")
     private AuditStateEnum state;
     
-    public WindowTypeEnum getWindowsNo()
+    public String getWindowsNo()
     {
         return windowsNo;
     }
     
-    public void setWindowsNo(WindowTypeEnum windowsNo)
+    public void setWindowsNo(String windowsNo)
     {
         this.windowsNo = windowsNo;
     }

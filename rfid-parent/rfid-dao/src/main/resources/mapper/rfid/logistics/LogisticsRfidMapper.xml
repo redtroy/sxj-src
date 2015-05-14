@@ -155,4 +155,9 @@
 		UPDATE R_LOGISTICS_RFID SET  CONTRACT_NO=#{contractNo}, BATCH_NO=#{batchNo}, IS_LOSS_BATCH=#{isLossBatch}, RFID_STATE=#{rfidState}
 			WHERE  ID=#{id} AND (ISNULL(CONTRACT_NO) OR CONTRACT_NO='') AND (ISNULL(BATCH_NO) or BATCH_NO='')]]>
 	</update>
+	<!-- 更新rfid状态 -->
+	<update id="updateProgressState" parameterType="com.sxj.supervisor.entity.rfid.logistics.LogisticsRfidEntity">
+		<![CDATA[ 
+		UPDATE R_LOGISTICS_RFID SET  PROGRESS_STATE=#{progressState} WHERE  PURCHASE_NO=#{purchaseNo} ]]>
+	</update>
 </mapper>

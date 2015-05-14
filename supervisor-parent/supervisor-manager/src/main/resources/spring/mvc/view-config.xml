@@ -13,7 +13,7 @@
 		<property name="defaultErrorView" value="failure" />
 		<property name="exceptionMappings">
 			<props>
-				<prop key="com.jscn.pay.exception.WebException">manage/error</prop>
+				<prop key="com.sxj.util.exception.WebException">manage/500</prop>
 				<prop key="java.lang.Exception">manage/error</prop>
 				<prop key="java.lang.Throwable">manage/error</prop>
 			</props>

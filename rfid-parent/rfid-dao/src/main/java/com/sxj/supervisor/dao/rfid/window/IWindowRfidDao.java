@@ -104,4 +104,6 @@ public interface IWindowRfidDao
      */
     public void updateStepWindow(WindowRfidEntity window);
     
+    public void updateProgressState(WindowRfidEntity window);
+    
 }

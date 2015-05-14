@@ -170,6 +170,28 @@ public class RecordServiceImpl implements IRecordService {
 		}
 	}
 
+	/**
+     * 更新备案
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void editRecord(RecordEntity record) throws ServiceException {
+        try {
+            Assert.hasText(record.getId());
+            RecordEntity oldRe = getRecord(record.getId());
+            Assert.notNull(oldRe);
+
+            updateImages(record, oldRe);
+            recordDao.updateRecord(record);
+        } catch (ServiceException e) {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException(e.getMessage());
+        } catch (Exception e) {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("更新备案信息错误", e);
+        }
+    }
+	
 	private void updateImages(RecordEntity record, RecordEntity oldRe) {
 		String[] oldPath = null;
 		String[] nowPath = null;

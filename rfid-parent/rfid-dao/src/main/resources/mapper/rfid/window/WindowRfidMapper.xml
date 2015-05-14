@@ -13,7 +13,7 @@
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="contractNo" column="CONTRACT_NO" jdbcType="VARCHAR" />
-		<result property="windowType" column="WINDOW_TYPE" jdbcType="INTEGER" />
+		<result property="windowType" column="WINDOW_TYPE" jdbcType="VARCHAR" />
 		<result property="glassRfid" column="GLASS_RFID" jdbcType="VARCHAR" />
 		<result property="profileRfid" column="PROFILE_RFID" jdbcType="VARCHAR" />
 		<result property="importDate" column="IMPORT_DATE" jdbcType="TIMESTAMP" />
@@ -39,7 +39,7 @@
 			<![CDATA[AND PURCHASE_NO = #{condition.purchaseNo}]]>
 		</if>
 		<if test="condition.memberName != null and condition.memberName !=''">
-			<![CDATA[AND MEMBER_NAME =LIKE CONCAT('%',#{condition.memberName},'%')]]>
+			<![CDATA[AND MEMBER_NAME LIKE CONCAT('%',#{condition.memberName},'%')]]>
 		</if>
 		<if test="condition.contractNo != null and condition.contractNo !=''">
 			<![CDATA[AND CONTRACT_NO = #{condition.contractNo}]]>
@@ -57,7 +57,7 @@
 			<![CDATA[AND MEMBER_NO = #{condition.memberNo} ]]>
 		</if>
 		<if test="condition.windowType != null and condition.windowType !=''">
-			<![CDATA[AND RFID_STATE<>0  AND WINDOW_TYPE = #{condition.windowType}]]>
+			<![CDATA[AND RFID_STATE<>0  AND WINDOW_TYPE LIKE CONCAT('%',#{condition.windowType},'%')]]>
 		</if>
 		<if test="condition.rfidState != null">
 			<![CDATA[AND RFID_STATE = #{condition.rfidState}]]>
@@ -116,5 +116,8 @@
 	</update>
 	<update id="updateStepWindow" parameterType="com.sxj.supervisor.entity.rfid.window.WindowRfidEntity">
 	<![CDATA[	UPDATE R_WINDOW_RFID SET LOG=#{log},PROGRESS_STATE=#{progressState}  WHERE ID=#{id} and PROGRESS_STATE='2' and RFID_STATE='1']]>
+	</update>
+	<update id="updateProgressState" parameterType="com.sxj.supervisor.entity.rfid.window.WindowRfidEntity">
+	<![CDATA[	UPDATE R_WINDOW_RFID SET PROGRESS_STATE=#{progressState}  WHERE PURCHASE_NO=#{purchaseNo} ]]>
 	</update>
 </mapper>

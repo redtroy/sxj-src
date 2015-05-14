@@ -13,7 +13,7 @@
 		<result property="amount" column="AMOUNT" jdbcType="DOUBLE" />
 		<result property="remarks" column="REMARKS" jdbcType="VARCHAR" />
 		<result property="updateState" column="UPDATE_STATE" jdbcType="VARCHAR" />
-		<result property="windowType" column="WINDOW_TYPE" jdbcType="INTEGER" />
+		<result property="windowType" column="WINDOW_TYPE" jdbcType="VARCHAR" />
 	</resultMap>
 <!-- 条件查询合同批次 -->
 	<select id="queryItems" resultMap="ItemResultMap"
@@ -26,4 +26,8 @@
 			<![CDATA[(#{item.id},#{contractNo},#{item.productName},#{item.productModel},#{item.quantity},#{item.price},#{item.amount},#{item.remarks},#{item.updateState},#{item.windowType})]]> 
 			</foreach>
 	</insert>
+	<select id="getItem" resultMap="ItemResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_CONTRACT_ITEM WHERE CONTRACT_ID=#{contractId} AND WINDOW_TYPE LIKE CONCAT('%',#{windowType},'%')]]>
+	</select>
 </mapper>

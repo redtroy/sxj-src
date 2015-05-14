@@ -166,7 +166,7 @@ public class StartWRfidController extends BaseController {
 	@RequestMapping("start_lable")
 	public @ResponseBody Map<Object, Object> start_lable(Integer startNum,
 			String refContractNo, String minRfid, String maxRfid, String gRfid,
-			String lRfid, WindowTypeEnum windowType) throws WebException {
+			String lRfid, String windowType) throws WebException {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
 			contractService.startWindowRfid(startNum, refContractNo, minRfid,

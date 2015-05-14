@@ -32,6 +32,27 @@
 		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
 		<result property="flag" column="FLAG" jdbcType="BOOLEAN" />
 		<result property="version" column="VERSION_LOCK" jdbcType="INTEGER"/>
+		
+		<result property="qualification_img" column="QUALIFICATION_IMG"
+			jdbcType="VARCHAR" />
+		<result property="qualification_no" column="QUALIFICATION_NO"
+			jdbcType="VARCHAR" />
+		<result property="safety_licenses_no" column="SAFETY_LICENSES_NO"
+			jdbcType="VARCHAR" />
+		<result property="safety_licenses_img" column="SAFETY_LICENSES_IMG"
+			jdbcType="VARCHAR" />
+		<result property="qms_no" column="QMS_NO"
+			jdbcType="VARCHAR" />
+		<result property="qms_img" column="QMS_IMG"
+			jdbcType="VARCHAR" />
+		<result property="ccc_no" column="CCC_NO"
+			jdbcType="VARCHAR" />
+		<result property="ccc_img" column="CCC_IMG"
+			jdbcType="VARCHAR" />
+		<result property="production_license_no" column="PRODUCTION_LICENSE_NO"
+			jdbcType="VARCHAR" />
+		<result property="production_license_img" column="PRODUCTION_LICENSE_IMG"
+			jdbcType="VARCHAR" />
 	</resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"
@@ -68,9 +89,14 @@
 		<if test="condition.bLicenseNo != null and condition.bLicenseNo != ''">
 			<![CDATA[AND B_LICENSE_NO LIKE CONCAT('%',#{condition.bLicenseNo},'%') ]]>
 		</if>
-		<!-- 节能标识 -->
+		<!-- 节能标识(作为资质证书查询) -->
 		<if test="condition.energyNo != null and condition.energyNo != ''">
-			<![CDATA[AND ENERGY_NO LIKE CONCAT('%',#{condition.energyNo},'%')]]>
+			<![CDATA[AND (ENERGY_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR QUALIFICATION_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR SAFETY_LICENSES_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR QMS_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR CCC_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR PRODUCTION_LICENSE_NO LIKE CONCAT('%',#{condition.energyNo},'%') )]]>
 		</if>
 		<!-- 会员类型 -->
 		<if test="condition.type !=null">
