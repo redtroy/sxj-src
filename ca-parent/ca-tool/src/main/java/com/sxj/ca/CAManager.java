@@ -160,14 +160,15 @@ public class CAManager
             throws KeyPairException
     {
         KeyPair keypair = null;
-        try
-        {
-            keypair = store.read();
-            logger.debug("Loading CA KeyPair from Store {}", store);
-        }
-        catch (StorageException e1)
-        {
-        }
+        if (store != null)
+            try
+            {
+                keypair = store.read();
+                logger.debug("Loading CA KeyPair from Store {}", store);
+            }
+            catch (StorageException e1)
+            {
+            }
         if (keypair != null)
         {
             logger.debug("Loaded CA KeyPair from Store {}", store);
@@ -203,14 +204,15 @@ public class CAManager
             throws CertificateException
     {
         X509Certificate certificate = null;
-        try
-        {
-            certificate = store.read();
-            logger.debug("Loading CA Certificate from Store {}", store);
-        }
-        catch (StorageException e1)
-        {
-        }
+        if (store != null)
+            try
+            {
+                certificate = store.read();
+                logger.debug("Loading CA Certificate from Store {}", store);
+            }
+            catch (StorageException e1)
+            {
+            }
         if (certificate != null)
         {
             logger.debug("Loaded CA Certificate from Store {}", store);
