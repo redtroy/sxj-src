@@ -46,24 +46,10 @@ public class CAManager
     
     private final static org.slf4j.Logger logger = LoggerFactory.getLogger(CAManager.class);
     
-    private String name;
-    
     static
     {
         // Load BouncyCastle security provider
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-    }
-    
-    /**
-     * Initiates a new certificate signing authority
-     * Attempts to load a CA cert & key from filenames provided otherwise generates new ones
-     * @param caCertFile A valid PEM encoded X.509 CA certificate
-     * @param caKeyFile A valid PEM encoded RSA private key
-     */
-    public CAManager(String name)
-    {
-        this.name = name;
-        
     }
     
     public void init(Store<KeyPair> keystore, Store<X509Certificate> certstore,

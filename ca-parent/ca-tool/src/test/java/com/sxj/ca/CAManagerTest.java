@@ -58,7 +58,7 @@ public class CAManagerTest
      */
     public void initCA() throws KeyPairException, CertificateException
     {
-        ca = new CAManager("江苏私享家绿色门窗平台");
+        ca = new CAManager();
         X509Attrs principals = new X509Attrs();
         principals.setCommonName("绿色门窗平台");
         principals.setCountryCode("AU");

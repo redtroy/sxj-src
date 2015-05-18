@@ -21,8 +21,8 @@ import com.sxj.ca.exception.CRLException;
 public class CRLManager
 {
     
-    public static X509CRL revoke(X509Certificate cacert, KeyPair cakeypair,
-            BigInteger serialNumber) throws CRLException
+    public static X509CRL revoke(X509Certificate cacert, KeyPair cakeypair)
+            throws CRLException
     {
         try
         {
@@ -32,9 +32,37 @@ public class CRLManager
             crlGen.setThisUpdate(now);
             crlGen.setNextUpdate(new Date(now.getTime() + 100000));
             crlGen.setSignatureAlgorithm("SHA256WithRSAEncryption");
-            crlGen.addCRLEntry(serialNumber,
-                    now,
-                    org.bouncycastle.asn1.x509.CRLReason.privilegeWithdrawn);
+            //            crlGen.addCRLEntry(serialNumber,
+            //                    now,
+            //                    org.bouncycastle.asn1.x509.CRLReason.privilegeWithdrawn);
+            crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier,
+                    false,
+                    new AuthorityKeyIdentifierStructure(cacert));
+            crlGen.addExtension(X509Extensions.CRLNumber, false, new CRLNumber(
+                    BigInteger.valueOf(1)));
+            return crlGen.generate(cakeypair.getPrivate(), "BC");
+        }
+        catch (Exception e)
+        {
+            throw new CRLException(e);
+        }
+    }
+    
+    public static X509CRL revoke(X509Certificate cacert, KeyPair cakeypair,
+            BigInteger serialNumber) throws CRLException
+    {
+        try
+        {
+            
+            X509V2CRLGenerator crlGen = new X509V2CRLGenerator();
+            Date now = new Date();
+            crlGen.setIssuerDN(cacert.getSubjectX500Principal());
+            crlGen.setThisUpdate(now);
+            crlGen.setNextUpdate(new Date(now.getTime() + 100000));
+            crlGen.setSignatureAlgorithm("SHA256WithRSAEncryption");
+            //            crlGen.addCRLEntry(serialNumber,
+            //                    now,
+            //                    org.bouncycastle.asn1.x509.CRLReason.privilegeWithdrawn);
             crlGen.addExtension(X509Extensions.AuthorityKeyIdentifier,
                     false,
                     new AuthorityKeyIdentifierStructure(cacert));
