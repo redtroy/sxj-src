@@ -2,7 +2,6 @@ package com.sxj.ca;
 
 import java.io.IOException;
 import java.security.KeyPair;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -15,40 +14,14 @@ import com.sxj.ca.exception.CertificateException;
 import com.sxj.ca.exception.KeyPairException;
 import com.sxj.ca.exception.StorageException;
 import com.sxj.ca.store.PEMFileStore;
-import com.sxj.ca.store.PfxStore;
 
 public class CAManagerTest
 {
-    PEMFileStore<KeyPair> keystore = new PEMFileStore<KeyPair>("D:\\cakey.pem");
+    PEMFileStore<KeyPair> keystore = new PEMFileStore<KeyPair>(
+            "D:\\certs\\ca.key");
     
     PEMFileStore<X509Certificate> certstore = new PEMFileStore<X509Certificate>(
-            "D:\\cacert.crt");
-    
-    PEMFileStore<KeyPair> interkeystore = new PEMFileStore<KeyPair>(
-            "D:\\interkey.pem");
-    
-    PEMFileStore<X509Certificate> intercertstore = new PEMFileStore<X509Certificate>(
-            "D:\\intercert.crt");
-    
-    PEMFileStore<KeyPair> serverkeystore = new PEMFileStore<KeyPair>(
-            "D:\\serverkey.pem");
-    
-    PEMFileStore<PKCS10CertificationRequest> serverrequeststore = new PEMFileStore<PKCS10CertificationRequest>(
-            "D:\\serverreq.pem");
-    
-    PEMFileStore<X509Certificate> servercertstore = new PEMFileStore<X509Certificate>(
-            "D:\\servercert.crt");
-    
-    PEMFileStore<KeyPair> clientkeystore = new PEMFileStore<KeyPair>(
-            "D:\\clientkey.pem");
-    
-    PEMFileStore<PKCS10CertificationRequest> clientrequeststore = new PEMFileStore<PKCS10CertificationRequest>(
-            "D:\\clientreq.pem");
-    
-    PEMFileStore<X509Certificate> clientcertstore = new PEMFileStore<X509Certificate>(
-            "D:\\clientcert.crt");
-    
-    PfxStore pfxstore = new PfxStore("D://client.pfx");
+            "D:\\certs\\ca.crt");
     
     CAManager ca = null;
     
@@ -66,30 +39,6 @@ public class CAManagerTest
     }
     
     /**
-     * Step 2，创建中间证书，后续的证书均有该证书创建
-     * @throws KeyPairException
-     * @throws StorageException
-     * @throws CertificateException 
-     */
-    public void createIntermediateCert() throws KeyPairException,
-            StorageException, CertificateException
-    {
-        KeyPair keypair = KeyPairManager.generateRSAKeyPair();
-        interkeystore.save(keypair, null);
-        X509Certificate cacert = certstore.read();
-        KeyPair cakey = keystore.read();
-        X509Attrs principals = new X509Attrs();
-        principals.setCommonName("中继证书");
-        principals.setCountryCode("CN");
-        X509Certificate intercert = ca.generateCertificate(keypair,
-                cakey,
-                cacert,
-                principals);
-        intercertstore.save(intercert, null);
-        
-    }
-    
-    /**
      * Step 3，生成证书请求
      * @throws KeyPairException 
      * @throws CertificateException 
@@ -98,6 +47,10 @@ public class CAManagerTest
     public void createClientCSR() throws KeyPairException,
             CertificateException, StorageException
     {
+        PEMFileStore<KeyPair> clientkeystore = new PEMFileStore<KeyPair>(
+                "D:\\certs\\client.key");
+        PEMFileStore<PKCS10CertificationRequest> clientrequeststore = new PEMFileStore<PKCS10CertificationRequest>(
+                "D:\\certs\\client.req");
         KeyPair keypair = KeyPairManager.generateRSAKeyPair();
         clientkeystore.save(keypair, null);
         X509Attrs principals = new X509Attrs();
@@ -115,6 +68,14 @@ public class CAManagerTest
     public void createClientCert() throws StorageException,
             CertificateException
     {
+        PEMFileStore<PKCS10CertificationRequest> clientrequeststore = new PEMFileStore<PKCS10CertificationRequest>(
+                "D:\\certs\\client.req");
+        PEMFileStore<KeyPair> serverkeystore = new PEMFileStore<KeyPair>(
+                "D:\\certs\\server.key");
+        PEMFileStore<X509Certificate> servercertstore = new PEMFileStore<X509Certificate>(
+                "D:\\certs\\server.crt");
+        PEMFileStore<X509Certificate> clientcertstore = new PEMFileStore<X509Certificate>(
+                "D:\\certs\\client.crt");
         PKCS10CertificationRequest request = clientrequeststore.read();
         X509Certificate parentcert = servercertstore.read();
         KeyPair parentkey = serverkeystore.read();
@@ -136,38 +97,18 @@ public class CAManagerTest
     public void createClientPfx() throws CertificateException, StorageException
     {
         
-        X509Certificate cacert = certstore.read();
-        X509Certificate intercert = intercertstore.read();
-        X509Certificate servercert = servercertstore.read();
-        X509Certificate clientcert = clientcertstore.read();
-        X509Certificate[] chain = new X509Certificate[4];
-        chain[0] = (clientcert);
-        chain[1] = (servercert);
-        chain[2] = (intercert);
-        chain[3] = (cacert);
-        KeyPair clientkey = clientkeystore.read();
-        KeyStore pkcs12 = ca.generatePKCS12(chain, clientkey);
-        pfxstore.save(pkcs12, "123456");
-    }
-    
-    /**
-     * 生成中继pfx证书链文件
-     * @throws StorageException
-     * @throws CertificateException
-     */
-    public void createInterPfx() throws StorageException, CertificateException
-    {
-        X509Certificate cacert = certstore.read();
-        //X509Certificate intercert = intercertstore.read();
-        //X509Certificate clientcert = clientcertstore.read();
-        X509Certificate[] chain = new X509Certificate[1];
-        chain[0] = (cacert);
-        //        chain[1] = (intercert);
-        //        chain[2] = (cacert);
-        KeyPair interkey = interkeystore.read();
-        KeyStore pkcs12 = ca.generatePKCS12(chain, interkey);
-        PfxStore store = new PfxStore("D:\\inter.pfx");
-        store.save(pkcs12, null);
+        //        X509Certificate cacert = certstore.read();
+        //        X509Certificate intercert = intercertstore.read();
+        //        X509Certificate servercert = servercertstore.read();
+        //        X509Certificate clientcert = clientcertstore.read();
+        //        X509Certificate[] chain = new X509Certificate[4];
+        //        chain[0] = (clientcert);
+        //        chain[1] = (servercert);
+        //        chain[2] = (intercert);
+        //        chain[3] = (cacert);
+        //        KeyPair clientkey = clientkeystore.read();
+        //        KeyStore pkcs12 = ca.generatePKCS12(chain, clientkey);
+        //        pfxstore.save(pkcs12, "123456");
     }
     
     /**
@@ -179,6 +120,10 @@ public class CAManagerTest
     public void createServerCSR() throws KeyPairException,
             CertificateException, StorageException
     {
+        PEMFileStore<KeyPair> serverkeystore = new PEMFileStore<KeyPair>(
+                "D:\\certs\\server.key");
+        PEMFileStore<PKCS10CertificationRequest> serverrequeststore = new PEMFileStore<PKCS10CertificationRequest>(
+                "D:\\certs\\server.req");
         KeyPair keypair = KeyPairManager.generateRSAKeyPair();
         serverkeystore.save(keypair, null);
         X509Attrs principals = new X509Attrs();
@@ -196,6 +141,15 @@ public class CAManagerTest
     public void createServerCert() throws StorageException,
             CertificateException
     {
+        PEMFileStore<PKCS10CertificationRequest> serverrequeststore = new PEMFileStore<PKCS10CertificationRequest>(
+                "D:\\certs\\server.req");
+        PEMFileStore<X509Certificate> intercertstore = new PEMFileStore<X509Certificate>(
+                "D:\\certs\\inter.crt");
+        PEMFileStore<KeyPair> interkeystore = new PEMFileStore<KeyPair>(
+                "D:\\certs\\inter.key");
+        PEMFileStore<X509Certificate> servercertstore = new PEMFileStore<X509Certificate>(
+                "D:\\certs\\server.crt");
+        
         PKCS10CertificationRequest request = serverrequeststore.read();
         X509Certificate parentcert = intercertstore.read();
         KeyPair parentkey = interkeystore.read();
@@ -206,12 +160,47 @@ public class CAManagerTest
         servercertstore.save(certificate, null);
     }
     
+    public void createIntermediateCSR() throws KeyPairException,
+            StorageException, CertificateException
+    {
+        PEMFileStore<KeyPair> interkeystore = new PEMFileStore<KeyPair>(
+                "D:\\certs\\inter.key");
+        PEMFileStore<PKCS10CertificationRequest> interrequeststore = new PEMFileStore<PKCS10CertificationRequest>(
+                "D:\\certs\\inter.req");
+        KeyPair keypair = KeyPairManager.generateRSAKeyPair();
+        interkeystore.save(keypair, null);
+        X509Attrs principals = new X509Attrs();
+        principals.setCommonName("一级子CA证书");
+        principals.setCountryCode("AU");
+        PKCS10CertificationRequest csr = CSRManager.generateCSR(keypair,
+                principals);
+        
+        interrequeststore.save(csr, null);
+    }
+    
+    public void createIntermediateCert() throws StorageException,
+            CertificateException
+    {
+        PEMFileStore<PKCS10CertificationRequest> interrequeststore = new PEMFileStore<PKCS10CertificationRequest>(
+                "D:\\certs\\inter.req");
+        PEMFileStore<X509Certificate> intercertstore = new PEMFileStore<X509Certificate>(
+                "D:\\certs\\inter.crt");
+        PKCS10CertificationRequest request = interrequeststore.read();
+        X509Certificate parentcert = certstore.read();
+        KeyPair parentkey = keystore.read();
+        X509Certificate certificate = ca.issueCertificate(request,
+                365,
+                parentcert,
+                parentkey);
+        intercertstore.save(certificate, null);
+    }
+    
     public void createEmployeeCSR() throws KeyPairException, StorageException,
             CertificateException
     {
         KeyPair keypair = KeyPairManager.generateRSAKeyPair();
         PEMFileStore<KeyPair> employeekeystore = new PEMFileStore<KeyPair>(
-                "D:\\employekey.pem");
+                "D:\\certs\\employee.key");
         employeekeystore.save(keypair, null);
         X509Attrs principals = new X509Attrs();
         principals.setCommonName("测试门窗厂员工");
@@ -219,7 +208,7 @@ public class CAManagerTest
         PKCS10CertificationRequest csr = CSRManager.generateCSR(keypair,
                 principals);
         PEMFileStore<PKCS10CertificationRequest> employeerequeststore = new PEMFileStore<PKCS10CertificationRequest>(
-                "D:\\employeerequest.pem");
+                "D:\\certs\\employee.req");
         employeerequeststore.save(csr, null);
     }
     
@@ -227,7 +216,13 @@ public class CAManagerTest
             CertificateException
     {
         PEMFileStore<PKCS10CertificationRequest> employeerequeststore = new PEMFileStore<PKCS10CertificationRequest>(
-                "D:\\employeerequest.pem");
+                "D:\\certs\\employee.req");
+        PEMFileStore<X509Certificate> employeecertstore = new PEMFileStore<X509Certificate>(
+                "D:\\certs\\employee.crt");
+        PEMFileStore<X509Certificate> clientcertstore = new PEMFileStore<X509Certificate>(
+                "D:\\certs\\client.crt");
+        PEMFileStore<KeyPair> clientkeystore = new PEMFileStore<KeyPair>(
+                "D:\\certs\\client.key");
         PKCS10CertificationRequest request = employeerequeststore.read();
         X509Certificate parentcert = clientcertstore.read();
         KeyPair parentkey = clientkeystore.read();
@@ -235,29 +230,28 @@ public class CAManagerTest
                 365,
                 parentcert,
                 parentkey);
-        PEMFileStore<X509Certificate> employeecertstore = new PEMFileStore<X509Certificate>(
-                "D:\\employeecert.crt");
+        
         employeecertstore.save(certificate, null);
     }
     
     public void createEmployeePfx() throws StorageException,
             CertificateException
     {
-        X509Certificate cacert = certstore.read();
-        X509Certificate intercert = intercertstore.read();
-        X509Certificate servercert = servercertstore.read();
-        X509Certificate clientcert = clientcertstore.read();
-        X509Certificate employeecert = new PEMFileStore<X509Certificate>(
-                "D:\\employeecert.crt").read();
-        X509Certificate[] chain = new X509Certificate[5];
-        chain[0] = (employeecert);
-        chain[1] = (clientcert);
-        chain[2] = (servercert);
-        chain[3] = (intercert);
-        chain[4] = (cacert);
-        KeyPair clientkey = new PEMFileStore<KeyPair>("D:\\employekey.pem").read();
-        KeyStore pkcs12 = ca.generatePKCS12(chain, clientkey);
-        new PfxStore("D://employee.pfx").save(pkcs12, "123456");
+        //        X509Certificate cacert = certstore.read();
+        //        X509Certificate intercert = intercertstore.read();
+        //        X509Certificate servercert = servercertstore.read();
+        //        X509Certificate clientcert = clientcertstore.read();
+        //        X509Certificate employeecert = new PEMFileStore<X509Certificate>(
+        //                "D:\\certs\\employeecert.crt").read();
+        //        X509Certificate[] chain = new X509Certificate[5];
+        //        chain[0] = (employeecert);
+        //        chain[1] = (clientcert);
+        //        chain[2] = (servercert);
+        //        chain[3] = (intercert);
+        //        chain[4] = (cacert);
+        //        KeyPair clientkey = new PEMFileStore<KeyPair>("D:\\certs\\employekey.pem").read();
+        //        KeyStore pkcs12 = ca.generatePKCS12(chain, clientkey);
+        //        new PfxStore("D://employee.pfx").save(pkcs12, "123456");
     }
     
     @Test
@@ -267,6 +261,7 @@ public class CAManagerTest
             IOException
     {
         initCA();
+        createIntermediateCSR();
         createIntermediateCert();
         createServerCSR();
         createServerCert();

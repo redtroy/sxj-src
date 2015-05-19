@@ -16,6 +16,7 @@ import java.util.Date;
 import org.bouncycastle.asn1.DERBMPString;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
@@ -61,53 +62,59 @@ public class CAManager
     
     /**
      * 通过上级证书签发
-     * @param self
-     * @param parent
-     * @param parentCert
+     * @param selfkeypair
+     * @param parentkeypair
+     * @param parentcert
      * @param attrs
      * @return
      * @throws CertificateException
      */
-    public X509Certificate generateCertificate(KeyPair self, KeyPair parent,
-            X509Certificate parentCert, X509Attrs attrs)
+    public X509Certificate generateIntermediaCert(KeyPair selfkeypair,
+            KeyPair parentkeypair, X509Certificate parentcert, X509Attrs attrs)
             throws CertificateException
     {
         try
         {
-            X509V3CertificateGenerator v3CertGen = new X509V3CertificateGenerator();
-            v3CertGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
-            v3CertGen.setIssuerDN(PrincipalUtil.getSubjectX509Principal(parentCert));
-            v3CertGen.setNotBefore(new Date(System.currentTimeMillis() - 10000));
-            v3CertGen.setNotAfter(new Date(System.currentTimeMillis()
+            X509V3CertificateGenerator generator = new X509V3CertificateGenerator();
+            generator.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
+            generator.setIssuerDN(PrincipalUtil.getSubjectX509Principal(parentcert));
+            generator.setNotBefore(new Date(System.currentTimeMillis() - 10000));
+            generator.setNotAfter(new Date(System.currentTimeMillis()
                     + (1000L * 60 * 60 * 24 * 365 * 50))); // CA valid for 50yrs
-            v3CertGen.setSubjectDN(new X509Principal(attrs.getOrdering(),
+            generator.setSubjectDN(new X509Principal(attrs.getOrdering(),
                     attrs.getAttrs()));
-            v3CertGen.setPublicKey(self.getPublic());
-            v3CertGen.setSignatureAlgorithm("SHA256WithRSAEncryption");
+            generator.setPublicKey(selfkeypair.getPublic());
+            generator.setSignatureAlgorithm("SHA256WithRSAEncryption");
             
             //
             // extensions
             //
-            v3CertGen.addExtension(X509Extensions.SubjectKeyIdentifier,
+            generator.addExtension(X509Extensions.AuthorityKeyIdentifier,
                     false,
-                    new SubjectKeyIdentifierStructure(self.getPublic()));
-            v3CertGen.addExtension(X509Extensions.AuthorityKeyIdentifier,
+                    new AuthorityKeyIdentifierStructure(parentcert));
+            generator.addExtension(X509Extensions.SubjectKeyIdentifier,
                     false,
-                    new AuthorityKeyIdentifierStructure(parentCert));
-            v3CertGen.addExtension(X509Extensions.BasicConstraints,
+                    new SubjectKeyIdentifierStructure(selfkeypair.getPublic()));
+            
+            generator.addExtension(X509Extensions.BasicConstraints,
                     true,
                     new BasicConstraints(0));
-            X509Certificate cert = v3CertGen.generate(parent.getPrivate());
+            generator.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
+                    KeyUsage.digitalSignature | KeyUsage.keyEncipherment
+                            | KeyUsage.cRLSign | KeyUsage.keyCertSign));
+            X509Certificate cert = generator.generate(parentkeypair.getPrivate());
             cert.checkValidity(new Date());
-            cert.verify(parentCert.getPublicKey());
-            PKCS12BagAttributeCarrier bagAttr = (PKCS12BagAttributeCarrier) cert;
-            
-            //
-            // this is actually optional - but if you want to have control
-            // over setting the friendly name this is the way to do it...
-            //
-            bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName,
-                    new DERBMPString(attrs.getCommonName()));
+            cert.verify(parentcert.getPublicKey());
+            //            PKCS12BagAttributeCarrier bagAttr = (PKCS12BagAttributeCarrier) cert;
+            //            
+            //            //
+            //            // this is actually optional - but if you want to have control
+            //            // over setting the friendly name this is the way to do it...
+            //            //
+            //            bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName,
+            //                    new DERBMPString(attrs.getCommonName()));
+            //            bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_localKeyId,
+            //                    new SubjectKeyIdentifierStructure(selfkeypair.getPublic()));
             
             return cert;
         }
@@ -257,32 +264,32 @@ public class CAManager
             NoSuchAlgorithmException, java.security.cert.CertificateException
     {
         
-        X509V1CertificateGenerator certGen = new X509V1CertificateGenerator();
+        X509V1CertificateGenerator generator = new X509V1CertificateGenerator();
         
-        certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
-        certGen.setIssuerDN(new X509Principal(principals.getOrdering(),
+        generator.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
+        generator.setIssuerDN(new X509Principal(principals.getOrdering(),
                 principals.getAttrs()));
-        certGen.setNotBefore(new Date(System.currentTimeMillis() - 10000));
-        certGen.setNotAfter(new Date(System.currentTimeMillis()
+        generator.setNotBefore(new Date(System.currentTimeMillis() - 10000));
+        generator.setNotAfter(new Date(System.currentTimeMillis()
                 + (1000L * 60 * 60 * 24 * 365 * 50))); // CA valid for 50yrs
-        certGen.setSubjectDN(new X509Principal(principals.getOrdering(),
+        generator.setSubjectDN(new X509Principal(principals.getOrdering(),
                 principals.getAttrs()));
-        certGen.setPublicKey(pair.getPublic());
-        certGen.setSignatureAlgorithm("SHA256WithRSAEncryption");
+        generator.setPublicKey(pair.getPublic());
+        generator.setSignatureAlgorithm("SHA256WithRSAEncryption");
         
-        X509Certificate cert = certGen.generate(pair.getPrivate(), "BC");
+        X509Certificate cert = generator.generate(pair.getPrivate(), "BC");
         cert.checkValidity(new Date());
         
         cert.verify(pair.getPublic());
         
-        PKCS12BagAttributeCarrier bagAttr = (PKCS12BagAttributeCarrier) cert;
+        //        PKCS12BagAttributeCarrier bagAttr = (PKCS12BagAttributeCarrier) cert;
         
         //
         // this is actually optional - but if you want to have control
         // over setting the friendly name this is the way to do it...
         //
-        bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName,
-                new DERBMPString(principals.getCommonName()));
+        //        bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName,
+        //                new DERBMPString(principals.getCommonName()));
         return cert;
         
     }
@@ -314,8 +321,9 @@ public class CAManager
             //            generator.addExtension(X509Extensions.BasicConstraints,
             //                    true,
             //                    new BasicConstraints(false));
-            //            generator.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
-            //                    KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
+            generator.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
+                    KeyUsage.digitalSignature | KeyUsage.keyEncipherment
+                            | KeyUsage.cRLSign | KeyUsage.keyCertSign));
             //            generator.addExtension(X509Extensions.ExtendedKeyUsage,
             //                    true,
             //                    new ExtendedKeyUsage(purposeId));
@@ -326,24 +334,24 @@ public class CAManager
             
             cert.verify(parentcert.getPublicKey());
             
-            PKCS12BagAttributeCarrier bagAttr = (PKCS12BagAttributeCarrier) cert;
-            
-            //
-            // this is also optional - in the sense that if you leave this
-            // out the keystore will add it automatically, note though that
-            // for the browser to recognise the associated private key this
-            // you should at least use the pkcs_9_localKeyId OID and set it
-            // to the same as you do for the private key's localKeyId.
-            //
-            String cn = (String) request.getCertificationRequestInfo()
-                    .getSubject()
-                    .getValues(X509Principal.CN)
-                    .get(0);
-            bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName,
-                    new DERBMPString(cn));
-            bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_localKeyId,
-                    new SubjectKeyIdentifierStructure(
-                            request.getPublicKey("BC")));
+            //            PKCS12BagAttributeCarrier bagAttr = (PKCS12BagAttributeCarrier) cert;
+            //            
+            //            //
+            //            // this is also optional - in the sense that if you leave this
+            //            // out the keystore will add it automatically, note though that
+            //            // for the browser to recognise the associated private key this
+            //            // you should at least use the pkcs_9_localKeyId OID and set it
+            //            // to the same as you do for the private key's localKeyId.
+            //            //
+            //            String cn = (String) request.getCertificationRequestInfo()
+            //                    .getSubject()
+            //                    .getValues(X509Principal.CN)
+            //                    .get(0);
+            //            bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_friendlyName,
+            //                    new DERBMPString(cn));
+            //            bagAttr.setBagAttribute(PKCSObjectIdentifiers.pkcs_9_at_localKeyId,
+            //                    new SubjectKeyIdentifierStructure(
+            //                            request.getPublicKey("BC")));
             
             return cert;
         }
