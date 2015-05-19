@@ -29,7 +29,8 @@ public class PfxStore implements Store<KeyStore>
         {
             obj.load(null, null);
             obj.store(new FileOutputStream(new File(path)),
-                    password == null ? null : password.toCharArray());
+                    password == null ? "".toCharArray()
+                            : password.toCharArray());
         }
         catch (KeyStoreException e)
         {

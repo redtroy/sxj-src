@@ -59,6 +59,15 @@ public class CAManager
         generateCACertificate(keypair, certstore, principals);
     }
     
+    /**
+     * 通过上级证书签发
+     * @param self
+     * @param parent
+     * @param parentCert
+     * @param attrs
+     * @return
+     * @throws CertificateException
+     */
     public X509Certificate generateCertificate(KeyPair self, KeyPair parent,
             X509Certificate parentCert, X509Attrs attrs)
             throws CertificateException
@@ -88,7 +97,7 @@ public class CAManager
             v3CertGen.addExtension(X509Extensions.BasicConstraints,
                     true,
                     new BasicConstraints(0));
-            X509Certificate cert = v3CertGen.generateX509Certificate(parent.getPrivate());
+            X509Certificate cert = v3CertGen.generate(parent.getPrivate());
             cert.checkValidity(new Date());
             cert.verify(parentCert.getPublicKey());
             PKCS12BagAttributeCarrier bagAttr = (PKCS12BagAttributeCarrier) cert;
@@ -311,7 +320,7 @@ public class CAManager
             //                    true,
             //                    new ExtendedKeyUsage(purposeId));
             
-            X509Certificate cert = generator.generateX509Certificate(parentkey.getPrivate());
+            X509Certificate cert = generator.generate(parentkey.getPrivate());
             
             cert.checkValidity(new Date());
             
