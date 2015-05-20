@@ -4,27 +4,28 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.sxj</groupId>
-    <artifactId>spring-parent</artifactId>
-    <version>4.2.3</version>
+    <artifactId>ca-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>spring-test</artifactId>
-  <name>spring-test</name>
+  <artifactId>ca-tool</artifactId>
+  <name>ca-tool</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-test</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>junit</groupId>
-  		<artifactId>junit</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-context</artifactId>
-  	</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>bouncycastle</groupId>
+    	<artifactId>bcprov-jdk16</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>slf4j-log4j12</artifactId>
+    	<scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

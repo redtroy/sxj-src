@@ -7,24 +7,31 @@
     <artifactId>spring-parent</artifactId>
     <version>4.2.3</version>
   </parent>
-  <artifactId>spring-test</artifactId>
-  <name>spring-test</name>
+  <artifactId>spring-shiro-x509</artifactId>
+  <name>spring-shiro-x509</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
   	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-test</artifactId>
-  	</dependency>
-  	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-context</artifactId>
+  		<groupId>bouncycastle</groupId>
+  		<artifactId>bcprov-jdk16</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.shiro</groupId>
+  		<artifactId>shiro-all</artifactId>
+  		<version>1.2.3</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>javax.servlet</groupId>
+  		<artifactId>javax.servlet-api</artifactId>
+  		<scope>provided</scope>
   	</dependency>
   </dependencies>
 </project>
