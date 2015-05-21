@@ -162,7 +162,7 @@ function dialogBoxOut(html){
 		    type: 1,
 		    title: false,
 		    offset: ['200px', ''],
-		   	area: ['10%', '10%'],
+		   	area: ['20%', '17%'],
 		    border: [0], //去掉默认边框
 		    shade: [0.5,'#000'], //去掉遮罩
 		    closeBtn: [0, false], //去掉默认关闭按钮
@@ -347,7 +347,9 @@ $(".pageNumber").live("keyup",function(){
 <script src="${staticPath}js/jquery.uploadify.js"></script>
 <link href="${staticPath}style/uploadify.css" rel="stylesheet"
 	type="text/css" />
+	<@b.dialogBox/>
 <script>
+
 var iviewer;
 var msie=$.browser.msie
 var elastislideConfig={
@@ -524,6 +526,36 @@ function loadUploadMember(id,url,isMulti,text,fn){
 	        
 	    });
 }
+function flashChecker() {
+    var hasFlash = 0; //是否安装了flash
+    var flashVersion = 0; //flash版本
+    if (document.all) {
+      var swf = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+      if (swf) {
+        hasFlash = 1;
+        VSwf = swf.GetVariable("$version");
+        flashVersion = parseInt(VSwf.split(" ")[1].split(",")[0]);
+      }
+    } else {
+      if (navigator.plugins && navigator.plugins.length > 0) {
+        var swf = navigator.plugins["Shockwave Flash"];
+        if (swf) {
+          hasFlash = 1;
+          var words = swf.description.split(" ");
+          for (var i = 0; i < words.length; ++i) {
+            if (isNaN(parseInt(words[i]))) continue;
+            flashVersion = parseInt(words[i]);
+          }
+        }
+      }
+    }
+    return { f: hasFlash, v: flashVersion };
+  }
+  var fls = flashChecker();
+  var s = "";
+  if (!fls.f) {
+	  dialogBoxOut('<p class="tc fontYH" style="padding:20px;">您没有安装Flash插件,<a href="https://get.adobe.com/cn/flashplayer/" target="_blank" class="lnk-red">点击安装flash插件</a></p><p class="tc fontYH"><a href="javascript:location=location;" class="button button-blue">刷新页面</a></p>');
+  }
 </script>
 </#macro>
 <#macro header>
