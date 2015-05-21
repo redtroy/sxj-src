@@ -201,7 +201,7 @@ public class FileController
             }
             
             type = "image/" + "*";
-            response.setContentType(type);
+            //response.setContentType(type);
             // output.write(image);
             output.flush();
             output.close();

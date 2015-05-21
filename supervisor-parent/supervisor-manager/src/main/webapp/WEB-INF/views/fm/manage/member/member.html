@@ -76,18 +76,19 @@ window.onload = function() {
 			messageInfo("未上传证书图片！");
 		}else{
 			var imageSource=$(this).attr("data-image");
-			refreshIviewer($("#viewer2"),imageSource,$("#img_close"))
+			refreshIviewer($("#viewer2"),imageSource,$("#img_close"));
 		}
 	});
 }
 
 jQuery(document).ready(function($) {
-	$('.modal-header .close').click(function(){
-		$('.popDemo').slideUp(200);
+	$("#passworde_div_close").click(function() {
+		var li = $("#res_password_div").attr("index");
+		layer.close(li)
 	});
-	$('.passwordBox .popBtn').click(function(){
-		$('.maskdivgen').fadeOut(100);
-		$('.passwordBox').slideUp(200);
+	$("#pass_btn").click(function() {
+		var li = $("#res_password_div").attr("index");
+		layer.close(li)
 	});
 	$('.demo-image').live("click",function(){
 		var image =$(this).attr("image");
@@ -102,6 +103,7 @@ jQuery(document).ready(function($) {
 function close_img(){
 	$("#img_close").hide();
 	$(".maskdivgen").hide();
+	//$("#viewer2").empty();
 }
    function query(page){
    	 	var params=$("#search_form").serialize();
@@ -127,7 +129,7 @@ function close_img(){
 			   if (data.isOK=='ok'){
 				   pwd=data.password
 				   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
-				   $('.popDemo').slideDown(200);
+				   dialogBoxOutId("#res_password_div");
 			   }
 			   else{
 					errorInfo("初始化失败！");
@@ -200,10 +202,10 @@ function close_img(){
 		   messageInfo("营业执照号不能为空");
 		   return true;
 	   }
-	   if (energyNo==""){
-		   messageInfo("节能标识推广证号不能为空");
-		   return true;
-	   }
+	   //if (energyNo==""){
+		//   messageInfo("节能标识推广证号不能为空");
+		//   return true;
+	  // }
 	   if (contacts==""){
 		   messageInfo("联系人不能为空");
 		   return true;
@@ -414,9 +416,9 @@ Intense( elements );
 				</table>
 				<@b.pager/>
 				<div id="res_password_div" class="modal-wrap popDemo passwordBox"
-					style="display: none">
+					style="display: none" index="">
 					<div class="modal-header">
-						<span title="关闭" class="close">关闭</span>
+						<span title="关闭" class="close" id="passworde_div_close">关闭</span>
 					</div>
 					<div class="modal-body">
 						<div class="tipBox ly-clearFix">
@@ -436,7 +438,6 @@ Intense( elements );
 			</div>
 			<div id="viewer2" class="modal-body iviewer"></div>
 		</div>
-		<div class="maskdivgen" style="display: none"></div>
 		<@b.footer />
 </body>
 <!-- InstanceEnd -->
