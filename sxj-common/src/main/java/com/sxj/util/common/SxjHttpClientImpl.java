@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -589,14 +587,15 @@ public class SxjHttpClientImpl implements ISxjHttpClient
         //        String string = im.get("http://market.cnal.com/share/market/cj30.json",
         //                host,
         //                agent);
-        Header host = new BasicHeader("Host", "www1.njcein.com.cn");
-        Header referer = new BasicHeader("Referer",
-                "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx");
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("drpBiaoDuanType", "0");
-        params.put("txtProjectName", "门窗");
-        String string = im.post("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx",
-                params);
+        //        Header host = new BasicHeader("Host", "www1.njcein.com.cn");
+        //        Header referer = new BasicHeader("Referer",
+        //                "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx");
+        //        Map<String, String> params = new HashMap<String, String>();
+        //        params.put("drpBiaoDuanType", "0");
+        //        params.put("txtProjectName", "门窗");
+        String json = "{\"name\":\"张三\",\"sex\":1,\"phone\":\"13888888888\",\"unionId\":\"AAAAAAAAAAAAAAAAAAAAAA\",\"productId\":\"产品ID\",\"recommen\":[{\"unionId\":\"11111111\",\"name\":\"推荐人名称\",\"parentId\":\"000000\",\"level\":1},{\"unionId\":\"222222\",\"name\":\"推荐人名称\",\"parentId\":\"1111111\",\"level\":2},{\"unionId\":\"333333\",\"name\":\"推荐人名称\",\"parentId\":\"2222222\",\"level\":3}]}";
+        String string = im.postJson("http://127.0.0.1:8080/crm-manager/open/addCustomer.htm",
+                json);
         System.out.println(string);
         
     }
