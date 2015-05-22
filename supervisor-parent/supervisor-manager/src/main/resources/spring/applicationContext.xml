@@ -21,7 +21,7 @@
 
 
 	<bean id="configBean"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		class="com.sxj.spring.modules.beanfactory.CustomizedPropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
 				<value>classpath*:config/database.properties</value>
