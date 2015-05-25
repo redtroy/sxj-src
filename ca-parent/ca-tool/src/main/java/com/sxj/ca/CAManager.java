@@ -295,8 +295,8 @@ public class CAManager
     }
     
     public X509Certificate issueCertificate(PKCS10CertificationRequest request,
-            int days, X509Certificate parentcert, KeyPair parentkey)
-            throws CertificateException
+            int days, X509Certificate parentcert, KeyPair parentkey,
+            boolean isCA) throws CertificateException
     {
         try
         {
@@ -318,9 +318,15 @@ public class CAManager
                     false,
                     new SubjectKeyIdentifierStructure(
                             request.getPublicKey("BC")));
-            //            generator.addExtension(X509Extensions.BasicConstraints,
-            //                    true,
-            //                    new BasicConstraints(false));
+            /**
+             * 基本用途限制
+             * 
+             * BasicConstraints := SEQUENCE { cA BOOLEAN DEFAULT FALSE, 是否是CA证书
+             * pathLenConstraint INTEGER (0..MAX) OPTIONAL 证书链长度约束 }
+             */
+            generator.addExtension(X509Extensions.BasicConstraints,
+                    true,
+                    new BasicConstraints(isCA));
             generator.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(
                     KeyUsage.digitalSignature | KeyUsage.keyEncipherment
                             | KeyUsage.cRLSign | KeyUsage.keyCertSign));

@@ -279,11 +279,11 @@ public class StorageClientService implements IStorageClientService
                     false);
             if (image != null)
             {
-                HierarchicalCacheManager.set(CacheLevel.REDIS,
-                        CACHE_NAME,
-                        key,
-                        image,
-                        cacheTime);
+                //                HierarchicalCacheManager.set(CacheLevel.REDIS,
+                //                        CACHE_NAME,
+                //                        key,
+                //                        image,
+                //                        cacheTime);
             }
             if (!fdfsInputStream.isReadCompleted()
                     && socket instanceof PooledFdfsSocket)
