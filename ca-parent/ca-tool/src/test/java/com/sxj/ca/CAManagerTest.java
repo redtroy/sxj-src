@@ -84,7 +84,8 @@ public class CAManagerTest
         X509Certificate certificate = ca.issueCertificate(request,
                 365,
                 parentcert,
-                parentkey);
+                parentkey,
+                true);
         clientcertstore.save(certificate, null);
     }
     
@@ -166,7 +167,8 @@ public class CAManagerTest
         X509Certificate certificate = ca.issueCertificate(request,
                 365,
                 parentcert,
-                parentkey);
+                parentkey,
+                true);
         servercertstore.save(certificate, null);
     }
     
@@ -201,7 +203,8 @@ public class CAManagerTest
         X509Certificate certificate = ca.issueCertificate(request,
                 365,
                 parentcert,
-                parentkey);
+                parentkey,
+                true);
         intercertstore.save(certificate, null);
     }
     
@@ -239,7 +242,8 @@ public class CAManagerTest
         X509Certificate certificate = ca.issueCertificate(request,
                 365,
                 parentcert,
-                parentkey);
+                parentkey,
+                false);
         
         employeecertstore.save(certificate, null);
     }
