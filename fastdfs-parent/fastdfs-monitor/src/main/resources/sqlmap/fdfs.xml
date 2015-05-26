@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+        "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="fdfs">
+
+    <delete id="deleteGroup" parameterClass="java.util.Date">
+        delete from tbgroup where created &lt; #date#
+    </delete>
+    <delete id="deleteGroupDay" parameterClass="java.util.Date">
+        delete from tbgroupday where created &lt; #date#
+    </delete>
+    <delete id="deleteGroupHour" parameterClass="java.util.Date">
+        delete from tbgrouphour where created &lt; #date#
+    </delete>
+    <delete id="deleteStorage" parameterClass="java.util.Date">
+        delete from tbstorage where created &lt; #date#
+    </delete>
+    <delete id="deleteStorageDay" parameterClass="java.util.Date">
+        delete from tbstorageday where created &lt; #date#
+    </delete>
+    <delete id="deleteStorageHour" parameterClass="java.util.Date">
+        delete from tbstoragehour where created &lt; #date#
+    </delete>
+</sqlMap>

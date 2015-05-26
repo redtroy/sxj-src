@@ -15,7 +15,7 @@
 		<spring.mybatis.version>1.2.2</spring.mybatis.version>
 		<com.alibaba.druid.version>1.0.7</com.alibaba.druid.version>
 		<mysql.version>5.1.31</mysql.version>
-		<junit>4.11</junit>
+		<junit.version>4.11</junit.version>
 		<spring.version>4.0.6.RELEASE</spring.version>
 		<spring.webflow.version>2.4.0.RELEASE</spring.webflow.version>
 		<servlet.version>3.0.1</servlet.version>
@@ -29,7 +29,128 @@
 		<commons-net.version>3.3</commons-net.version>
 		<slf4j.version>1.7.7</slf4j.version>
 		<logback.version>1.1.2</logback.version>
+		<fastdfs.offical>1.24</fastdfs.offical>
+		<hibernate.version>4.3.6.Final</hibernate.version>
+		<jsch.version>0.1.51</jsch.version>
+		<javax.mail>1.4.7</javax.mail>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<!-- For Mail -->
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>${javax.mail}</version>
+			</dependency>
+			<!-- For SSH -->
+			<dependency>
+				<groupId>com.jcraft</groupId>
+				<artifactId>jsch</artifactId>
+				<version>${jsch.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.ethz.ganymed</groupId>
+				<artifactId>ganymed-ssh2</artifactId>
+				<version>261</version>
+			</dependency>
+			<!-- For Testing -->
+			<dependency>
+				<groupId>com.sxj</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${com.sxj.spring}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.sxj</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${com.sxj.spring}</version>
+			</dependency>
+			<!-- For DAO -->
+			<dependency>
+				<groupId>com.sxj</groupId>
+				<artifactId>mybatis-orm</artifactId>
+				<version>${mybatis.orm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${com.alibaba.druid.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<!-- For FastDFS -->
+			<dependency>
+				<groupId>org.csource</groupId>
+				<artifactId>fastdfs-client</artifactId>
+				<version>${fastdfs.offical}</version>
+			</dependency>
+			<!-- For MVC -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${commons-fileupload.version}</version>
+			</dependency>
+			<!-- For J2EE Web -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${servlet.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>${jsp.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.servlet</groupId>
+						<artifactId>javax.servlet-api</artifactId>
+					</exclusion>
+				</exclusions>
+				<scope>provided</scope>
+			</dependency>
+			<!-- For Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
@@ -103,4 +224,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	<modules>
+		<module>fastdfs-monitor</module>
+	</modules>
 </project>
