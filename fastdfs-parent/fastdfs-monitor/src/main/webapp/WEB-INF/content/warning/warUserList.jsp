@@ -36,7 +36,7 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li><a class="add" href="warning/warUserAdd.shtml" target="dialog" mask="true" rel="warUserAdd"><span>添加</span></a></li>
+            <li><a class="add" url="warning/warUserAdd.shtml" target="dialog" mask="true" rel="warUserAdd"><span>添加</span></a></li>
             <li><a title="确实要删除这些记录吗?" target="selectedTodo" postType="string"  rel="ids" href="warning/delWarUser.shtml" class="delete"><span>批量删除</span></a></li>
             <li class="line">line</li>
         </ul>

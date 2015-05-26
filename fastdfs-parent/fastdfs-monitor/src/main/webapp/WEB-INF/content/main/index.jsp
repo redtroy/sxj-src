@@ -11,16 +11,16 @@
     <!--[if IE]>
     <link href="css/themes/css/ieHack.css" rel="stylesheet" type="text/css" media="screen"/>
     <![endif]-->
-    <script src="js/speedup.js" type="text/javascript"></script>
-    <script src="js/jquery.min.js" type="text/javascript"></script>
-    <script src="js/jquery.cookie.js" type="text/javascript"></script>
-    <script src="js/jquery.validate.js" type="text/javascript"></script>
-    <script src="js/jquery.bgiframe.js" type="text/javascript"></script>
-	<script src="js/jsHashMap.js" type="text/javascript"></script>
-    <script src="js/dwz.min.js" type="text/javascript"></script>
-    <script src="js/dwz.regional.zh.js" type="text/javascript"></script>
-    <script src="js/highcharts.js" type="text/javascript"></script>
-    <script src="js/highcharts-more.js" type="text/javascript"></script>
+    <script src="${basePath }/js/speedup.js" type="text/javascript"></script>
+    <script src="${basePath }/js/jquery.min.js" type="text/javascript"></script>
+    <script src="${basePath }/js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="${basePath }/js/jquery.validate.js" type="text/javascript"></script>
+    <script src="${basePath }/js/jquery.bgiframe.js" type="text/javascript"></script>
+	<script src="${basePath }/js/jsHashMap.js" type="text/javascript"></script>
+    <script src="${basePath }/js/dwz.min.js" type="text/javascript"></script>
+    <script src="${basePath }/js/dwz.regional.zh.js" type="text/javascript"></script>
+    <script src="${basePath }/js/highcharts.js" type="text/javascript"></script>
+    <script src="${basePath }/js/highcharts-more.js" type="text/javascript"></script>
     <script type="text/javascript">
         Highcharts.setOptions({
             global:{
@@ -32,7 +32,7 @@
             }
         });
         $(function(){
-            DWZ.init("js/dwz.frag.xml", {
+            DWZ.init("${basePath }/js/dwz.frag.xml", {
                 loginUrl:"login_dialog.html", loginTitle:"登录",	// 弹出登录对话框
 //		loginUrl:"login.html",	// 跳到登录页面
                 statusCode:{ok:200, error:300, timeout:301}, //【可选】
@@ -40,7 +40,7 @@
                 debug:false,	// 调试模式 【true|false】
                 callback:function(){
                     initEnv();
-                    $("#themeList").theme({themeBase:"css/themes"}); // themeBase 相对于index页面的主题base路径
+                    $("#themeList").theme({themeBase:"${basePath }/css/themes"}); // themeBase 相对于index页面的主题base路径
                 }
             });
         });

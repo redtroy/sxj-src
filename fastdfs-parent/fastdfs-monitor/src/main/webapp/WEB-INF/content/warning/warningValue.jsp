@@ -57,7 +57,7 @@
         <td>${wvs.wdMem}%</td>
         <td>${wvs.wdFreeMB}GB</td>
         <td>
-           <a title="确定要删除吗?" target="ajaxTodo" href="warning/delWarning.shtml?ids=${wvs.id}" class="btnDel">删除</a>
+           <a title="确定要删除吗?" target="ajaxTodo" url="warning/delWarning.shtml?ids=${wvs.id}" class="btnDel">删除</a>
             <%--<a title="删除" id="delWarning" temp="${wvs.id}">删除</a>--%>
             <a title="编辑" href="warning/warningEdit.shtml?id=${wvs.id}"  target="dialog"  rel="warningEdit" class="btnEdit">编辑</a>
         </td>

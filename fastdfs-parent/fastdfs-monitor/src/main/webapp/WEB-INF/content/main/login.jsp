@@ -14,7 +14,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>汽车之家fastdfs监控管理系统</title>
+    <title>私享家fastdfs监控管理系统</title>
     <link href="${basePath }/css/themes/css/login.css" rel="stylesheet" type="text/css" />
 
     <script src="${basePath }/js/speedup.js" type="text/javascript"></script>
@@ -59,7 +59,7 @@
         </div>
         <div class="login_banner" >
             <%--<img src="${basePath }/images/login_banner.png" /></div>--%>
-            <h1 style="font-size: 25px">汽车之家fastdfs监控平台</h1>
+            <h1 style="font-size: 25px">私享家fastdfs监控平台</h1>
         <div class="login_main">
             <ul class="helpList">
 

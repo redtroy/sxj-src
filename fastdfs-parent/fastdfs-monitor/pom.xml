@@ -84,5 +84,13 @@
   	<groupId>javax.servlet</groupId>
   	<artifactId>jstl</artifactId>
   </dependency>
+  <dependency>
+  	<groupId>org.codehaus.jackson</groupId>
+  	<artifactId>jackson-core-lgpl</artifactId>
+  </dependency>
+  <dependency>
+  	<groupId>org.codehaus.jackson</groupId>
+  	<artifactId>jackson-mapper-lgpl</artifactId>
+  </dependency>
   </dependencies>
 </project>

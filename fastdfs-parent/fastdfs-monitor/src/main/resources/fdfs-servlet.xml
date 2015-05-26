@@ -22,7 +22,7 @@
     </bean>
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
         <property name="interceptors">
-            <bean class="cn.me.fdfs.interceptor.SysInterceptor"/>
+            <bean class="com.sxj.fastdfs.monitor.interceptor.SysInterceptor"/>
         </property>
     </bean>
 </beans>
