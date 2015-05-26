@@ -16,7 +16,8 @@ public class RuntimeTest
     @Test
     public void test() throws IOException
     {
-        Runtime.getRuntime().exec("F:\\PSTools\\PsExec.exe -d -s F:\\GG.exe");
+        // Runtime.getRuntime().exec("F:\\PSTools\\PsExec.exe -d -s F:\\GG.exe");
+        System.out.println(Float.MAX_VALUE);
     }
     
 }
