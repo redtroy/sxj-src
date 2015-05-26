@@ -5,9 +5,9 @@
     <base href="${basePath }/" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>汽车之家fastdfs监控管理系统</title>
-    <link href="css/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="css/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
-    <link href="css/themes/css/print.css" rel="stylesheet" type="text/css" media="print"/>
+    <link href="${basePath }/css/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="${basePath }/css/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="${basePath }/css/themes/css/print.css" rel="stylesheet" type="text/css" media="print"/>
     <!--[if IE]>
     <link href="css/themes/css/ieHack.css" rel="stylesheet" type="text/css" media="screen"/>
     <![endif]-->
