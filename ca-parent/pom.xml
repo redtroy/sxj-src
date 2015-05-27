@@ -10,14 +10,14 @@
 		<module>ca-tool</module>
 	</modules>
 	<properties>
-		<bouncycastle.version>140</bouncycastle.version>
+		<bouncycastle.version>1.45</bouncycastle.version>
 		<junit.version>4.11</junit.version>
 		<slf4j.version>1.7.7</slf4j.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>bouncycastle</groupId>
+				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcprov-jdk16</artifactId>
 				<version>${bouncycastle.version}</version>
 			</dependency>
