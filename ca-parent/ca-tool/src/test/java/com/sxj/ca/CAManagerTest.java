@@ -6,6 +6,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 import org.bouncycastle.jce.PKCS10CertificationRequest;
@@ -212,6 +213,10 @@ public class CAManagerTest
             CertificateException
     {
         KeyPair keypair = KeyPairManager.generateRSAKeyPair();
+        PublicKey public1 = keypair.getPublic();
+        PEMFileStore<PublicKey> publicstore = new PEMFileStore<PublicKey>(
+                "D:\\certs\\employee.pub");
+        publicstore.save(public1, null);
         PEMFileStore<KeyPair> employeekeystore = new PEMFileStore<KeyPair>(
                 "D:\\certs\\employee.key");
         employeekeystore.save(keypair, null);
@@ -300,17 +305,26 @@ public class CAManagerTest
             NoSuchAlgorithmException, java.security.cert.CertificateException,
             IOException
     {
-        initCA();
-        createIntermediateCSR();
-        createIntermediateCert();
-        createServerCSR();
-        createServerCert();
-        createServerPfx();
-        createClientCSR();
-        createClientCert();
-        createClientPfx();
-        createEmployeeCSR();
-        createEmployeeCert();
-        createEmployeePfx();
+        //        initCA();
+        //        createIntermediateCSR();
+        //        createIntermediateCert();
+        //        createServerCSR();
+        //        createServerCert();
+        //        createServerPfx();
+        //        createClientCSR();
+        //        createClientCert();
+        //        createClientPfx();
+        //        createEmployeeCSR();
+        //        createEmployeeCert();
+        //        createEmployeePfx();
+        KeyPair keypair = KeyPairManager.generateRSAKeyPair();
+        PublicKey public1 = keypair.getPublic();
+        public1.getEncoded();
+        PEMFileStore<PublicKey> publicstore = new PEMFileStore<PublicKey>(
+                "D:\\certs\\ssh_employee.pub");
+        PEMFileStore<KeyPair> employeekeystore = new PEMFileStore<KeyPair>(
+                "D:\\certs\\ssh_employee.key");
+        employeekeystore.save(keypair, null);
+        publicstore.save(public1, null);
     }
 }

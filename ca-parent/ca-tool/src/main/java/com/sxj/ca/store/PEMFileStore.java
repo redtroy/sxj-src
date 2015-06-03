@@ -31,7 +31,7 @@ public class PEMFileStore<T> implements Store<T>
         PEMWriter writer = null;
         try
         {
-            writer = new PEMWriter(new FileWriter(path));
+            writer = new PemWriter(new FileWriter(path));
             if (password != null)
                 writer.writeObject(obj,
                         "DESEDE",
@@ -74,7 +74,7 @@ public class PEMFileStore<T> implements Store<T>
         PEMReader reader = null;
         try
         {
-            reader = new PEMReader(new FileReader(path));
+            reader = new PemReader(new FileReader(path));
             
             return (T) reader.readObject();
             
