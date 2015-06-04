@@ -137,6 +137,9 @@
 		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
 		</if>
+		<if test="condition.city != null and condition.city != ''">
+			<![CDATA[AND AREA LIKE CONCAT('%',#{condition.city},'%')]]>
+		</if>
 		<!-- 会员类型 -->
 		<if test="condition.type !=null">
 			<![CDATA[AND TYPE = #{condition.type}]]>

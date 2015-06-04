@@ -693,10 +693,10 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
             throws ServiceException {
         try {
             windowRfidDao.updateGid(winList);
-            RfidPurchaseEntity purchase = new RfidPurchaseEntity();
-            purchase.setId(id);
-            purchase.setGidState(1);
-            rfidPurchaseDao.updateRfidPurchase(purchase);
+//            RfidPurchaseEntity purchase = new RfidPurchaseEntity();
+//            purchase.setId(id);
+//            purchase.setGidState(1);
+//            rfidPurchaseDao.updateRfidPurchase(purchase);
         } catch (ServiceException e) {
             SxjLogger.error(e.getMessage(), e, this.getClass());
             throw new ServiceException(e.getMessage());

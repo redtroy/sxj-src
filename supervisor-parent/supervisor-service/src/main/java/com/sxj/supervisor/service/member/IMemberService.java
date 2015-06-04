@@ -38,6 +38,6 @@ public interface IMemberService
     public String createvalidata(String phoneNo, String message)
             throws ServiceException;
 
-    List<ApiModel> apiQueryMembers(String name, String type)
+    List<ApiModel> apiQueryMembers(String name, String type,String city)
             throws ServiceException;
 }
