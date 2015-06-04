@@ -651,7 +651,7 @@ public class PurchaseRfidController extends BaseController
             MultipartFile file = re.getFile("fileName");
             File zipFile = new File(file.getOriginalFilename());
             file.transferTo(zipFile);
-            ZipFile zip = new ZipFile(zipFile,Charset.forName("GBK"));
+            ZipFile zip = new ZipFile(zipFile, Charset.forName("GBK"));
             for (Enumeration entries = zip.entries(); entries.hasMoreElements();)
             {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
@@ -663,13 +663,14 @@ public class PurchaseRfidController extends BaseController
                 {
                     throw new WebException("文件格式错误");
                 }
-                String[] zipNameArr =zipEntryName.split("-");
+                String[] zipNameArr = zipEntryName.split("-");
                 String type = zipNameArr[2];
                 InputStreamReader freader = new InputStreamReader(in, "UTF-8");
                 CsvBeanReader reader = new CsvBeanReader(freader,
                         CsvPreference.STANDARD_PREFERENCE);
                 String[] headers = reader.getHeader(false);
-                if(headers.length<2){
+                if (headers.length < 2)
+                {
                     throw new WebException("文件未写入GID");
                 }
                 if (type.equals("0"))
@@ -738,23 +739,5 @@ public class PurchaseRfidController extends BaseController
             map.put("error", e.getMessage());
         }
         return map;
-    }
-    
-    public static void unZipFiles(java.io.File zipfile, String descDir)
-    {
-        try
-        {
-            ZipFile zip = new ZipFile(zipfile);
-            for (Enumeration entries = zip.entries(); entries.hasMoreElements();)
-            {
-                ZipEntry entry = (ZipEntry) entries.nextElement();
-                String zipEntryName = entry.getName();
-                InputStream in = zip.getInputStream(entry);
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 }
