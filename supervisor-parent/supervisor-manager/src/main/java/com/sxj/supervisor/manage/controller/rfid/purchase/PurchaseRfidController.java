@@ -649,15 +649,23 @@ public class PurchaseRfidController extends BaseController
             DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
             response.setContentType("text/html;charset=utf-8");
             MultipartFile file = re.getFile("fileName");
+            String zipName=file.getOriginalFilename();
+            String prefix1 = zipName.substring(zipName.lastIndexOf(".") + 1);
+            if (!prefix1.equals("zip"))
+            {
+                throw new WebException("文件格式错误");
+            }
             File zipFile = new File(file.getOriginalFilename());
             file.transferTo(zipFile);
             ZipFile zip = new ZipFile(zipFile, Charset.forName("GBK"));
+            if(zip.size()==0){
+                throw new WebException("压缩包没有文件");
+            }
             for (Enumeration entries = zip.entries(); entries.hasMoreElements();)
             {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 String zipEntryName = entry.getName();
                 InputStream in = zip.getInputStream(entry);
-                System.err.println(zipEntryName);
                 String prefix = zipEntryName.substring(zipEntryName.lastIndexOf(".") + 1);
                 if (!prefix.equals("csv"))
                 {
