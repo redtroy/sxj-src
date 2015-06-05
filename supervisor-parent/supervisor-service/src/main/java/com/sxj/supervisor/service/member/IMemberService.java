@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.model.member.MemberQuery;
+import com.sxj.supervisor.model.open.ApiModel;
 import com.sxj.util.exception.ServiceException;
 
 public interface IMemberService
@@ -35,5 +36,8 @@ public interface IMemberService
     public void editPwd(String id, String pwd) throws ServiceException;
     
     public String createvalidata(String phoneNo, String message)
+            throws ServiceException;
+
+    List<ApiModel> apiQueryMembers(String name, String type)
             throws ServiceException;
 }

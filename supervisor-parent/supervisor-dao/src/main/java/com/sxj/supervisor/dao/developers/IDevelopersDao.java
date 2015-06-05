@@ -51,4 +51,7 @@ public interface IDevelopersDao
 	 * @return
 	 */
 	public List<DevelopersEntity> query(QueryCondition<DevelopersEntity> query);
+	
+	public List<DevelopersEntity> apiQueryDevelopers(QueryCondition<DevelopersEntity> query);
+	
 }
