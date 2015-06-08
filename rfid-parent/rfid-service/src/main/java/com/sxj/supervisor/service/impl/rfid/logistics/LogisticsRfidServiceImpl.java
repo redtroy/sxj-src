@@ -300,10 +300,10 @@ public class LogisticsRfidServiceImpl implements ILogisticsRfidService
         try
         {
             logisticsRfidDao.updateGid(list);
-            RfidPurchaseEntity purchase = new RfidPurchaseEntity();
-            purchase.setId(id);
-            purchase.setGidState(1);
-            rfidPurchaseDao.updateRfidPurchase(purchase);
+//            RfidPurchaseEntity purchase = new RfidPurchaseEntity();
+//            purchase.setId(id);
+//            purchase.setGidState(1);
+//            rfidPurchaseDao.updateRfidPurchase(purchase);
         }
         catch (ServiceException e)
         {

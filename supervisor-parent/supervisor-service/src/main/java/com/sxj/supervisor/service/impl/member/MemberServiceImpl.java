@@ -23,6 +23,7 @@ import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
+import com.sxj.supervisor.model.open.ApiModel;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.comet.CometServiceImpl;
@@ -493,5 +494,42 @@ public class MemberServiceImpl implements IMemberService
             throw new ServiceException("发送验证码错误", e);
         }
         return message;
+    }
+    
+    /**
+     * 会员高级查询
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<ApiModel> apiQueryMembers(String name, String type,String city)
+            throws ServiceException
+    {
+        try
+        {
+            List<MemberEntity> memberList = new ArrayList<MemberEntity>();
+            QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
+            condition.addCondition("name", name);// 会员名称
+            condition.addCondition("type", type);// 会员类型
+            condition.addCondition("city", city);// 会员类型
+            memberList = menberDao.apiQueryMembers(condition);
+            List<ApiModel> apiList= new ArrayList<ApiModel>();
+            for (MemberEntity memberEntity : memberList)
+            {
+                ApiModel api = new ApiModel();
+                api.setId(memberEntity.getId());
+                api.setName(memberEntity.getName());
+                api.setTel(memberEntity.getTelNum());
+                api.setAddress(memberEntity.getAddress());
+                apiList.add(api);
+                
+            }
+            return apiList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new ServiceException("查询会员信息错误", e);
+        }
+        
     }
 }

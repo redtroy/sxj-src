@@ -3,8 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗" />
+<meta name="description"
+	content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。" />
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
 <link href="${b.staticPath}style/uploadify.css " rel="stylesheet"
@@ -27,60 +28,80 @@
 	type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
-<script src="${b.staticPath}/js/tytabs.jquery.min.js" type="text/javascript"></script>
+<script src="${b.staticPath}/js/tytabs.jquery.min.js"
+	type="text/javascript"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
-<script type="text/javascript" src="${b.staticPath}js/datepicker.zh-CN.js"></script>
-<link rel="stylesheet" href="${b.staticPath}style/datepicker.css">
-<@b.pageScript/>
-<@b.upload/>
-<@b.dialogBox/>
+<script type="text/javascript"
+	src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="${b.staticPath}style/datepicker.css" />
+<@b.pageScript/> <@b.upload/> <@b.dialogBox/>
+<script>
+	function query(page) {
+		var params = $("#search_form").serialize();
+		if (page != undefined) {
+			params = params + "&currentPage=" + page;
+		}
+		$.post("developers.htm", params, function(data) {
+			var res = $(data).find("#res_table");
+			var pager = $(data).find("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
+		});
+	}
+	function city(cityId) {
+		$("#cityId").val(cityId);
+		query();
+	}
+</script>
 </head>
 
 <body>
-<@b.header />
-<div class="fence-wide ly-clearFix">
-<div class="yard-190 mt15 ly-left">
-<@b.leftMenu />
-</div>
-<div class="yard-870 rightSide ly-left">
-<div class="heading mb15 ly-clearFix">
-<h1>
-  <span class="title fontYH f20 fb">省内开发商资源</span></h1>
-</div>
-<div class="devList">
-<ul class="tabDev ly-clearFix">
-<span class="ly-left fb ml10">江苏省：</span>
- <#list cityList as city>
-<#if (city.id==3201)>
- <li><a href="#com${city.id}" class="on">${city.name}</a></li>
- <#else>
- <li><a href="#com${city.id}">${city.name}</a></li>
-</#if>
- </#list>
-</ul>
-</div>
-<div class="devBox mb20">
-<#list cityList as city>
-	<dl id="com${city.id}" class="devInfo">
-	  <dt class="titDev">${city.name}</dt>
-	  <#list list as dev>
-    <#if (dev.city==("32:江苏省,"+city.id+":"+city.name))>
-  		<dd><span class="comName"><a href="${dev.url}" target="_blank">${dev.name}</a></span><span class="comAdd">${dev.address}</span><span class="comTel">${dev.telPhone}</span></dd>
-	</#if>
-	</#list>
-	</dl>
- </#list>
-</div>
-</div>
-</div>
-<@b.footer />
-<div class="viewer modal-wrap" id="iviewerModal">
-		<div class="modal-header" style="display: none;">
-			<span class="close">关闭</span>
+	<@b.header />
+	<div class="fence-wide ly-clearFix">
+		<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
+		<div class="yard-870 rightSide ly-left">
+			<div class="heading mb15 ly-clearFix">
+				<h1>
+					<span class="title fontYH f20 fb">省内开发商资源</span>
+				</h1>
+			</div>
+			<div id="res_table">
+				<div class="devList">
+					<ul class="tabDev ly-clearFix">
+						<span class="ly-left fb ml10">江苏省：</span> <#list cityList as city>
+						<#if (city.id==query.city)>
+						<li><a href="javascript:city(${city.id})" class="on">${city.name}</a></li>
+						<#else>
+						<li><a href="javascript:city(${city.id})">${city.name}</a></li>
+						</#if> </#list>
+					</ul>
+				</div>
+				<div class="devBox mb20">
+					<form action="" id="search_form">
+						<div class="searBox fontYH f16">
+							<input type="hidden" id="cityId" name="city"
+								value="${query.city}" /> 开发商名称 <input type="text" name="name"
+								value="${query.name}" class="input input-w270h30" />
+							<span onclick="query();" class="button button-search">查询</span>
+						</div>
+					</form>
+
+					<dl class="devInfo">
+						<#list list as dev>
+						<dd>
+							<span class="comName"><a href="${dev.url}" target="_blank">${dev.name}</a></span><span
+								class="comAdd">${dev.address}</span><span class="comTel">${dev.telPhone}</span>
+						</dd>
+						</#list>
+					</dl>
+				</div>
+			</div>
+			<@b.pager/>
 		</div>
-		<div id="viewer2" class="modal-body iviewer"
-			style="width: 100%; display: none; top: 0px"></div>
 	</div>
-	<div class="maskdivgen maskdivgen1" style="display: none"></div>
+	<@b.footer />
 </body>
 </html>

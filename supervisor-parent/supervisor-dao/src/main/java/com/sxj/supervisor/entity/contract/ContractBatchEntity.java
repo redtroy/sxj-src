@@ -2,6 +2,7 @@ package com.sxj.supervisor.entity.contract;
 
 import java.io.Serializable;
 
+
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;

@@ -11,7 +11,7 @@ public class CustomDecimal {
 
 	private static final Character ZERO = HIGHER_DIGITS[0];
 
-	public static final long LOWER = 100000;
+	public static  long LOWER = 100000;
 
 	public static BigDecimal getDecimalNumber(String str) {
 		char[] charArray = str.toUpperCase().toCharArray();
@@ -71,6 +71,36 @@ public class CustomDecimal {
 		sb.append(lower);
 		return sb.toString();
 	}
+	
+	   public static String getDecimalString(int highdigits,int maxBit, BigDecimal value) {
+	        LOWER=maxBit;
+	        long steps = value.divide(BigDecimal.valueOf(LOWER)).longValue();
+	        long thisValue = value.subtract(
+	                BigDecimal.valueOf(steps).multiply(BigDecimal.valueOf(LOWER)))
+	                .longValue();
+	        DecimalFormat formatter = getFormatter();
+	        String lower = formatter.format(thisValue);
+	        StringBuffer sb = new StringBuffer();
+	        int log = log(steps, HIGHER_DIGITS.length);
+	        if (log > highdigits)
+	            throw new RuntimeException("Out of Number range");
+	        long temp = steps;
+	        for (int i = log; i >= 0; i--) {
+	            long a = ((long) Math.pow(HIGHER_DIGITS.length, i));
+	            int x = (int) (temp / a);
+	            sb.append((char) (ZERO + x));
+	            temp = temp - x * a;
+	        }
+	        if (sb.length() < highdigits) {
+	            String prefix = "";
+	            for (int i = 0; i < highdigits - sb.length(); i++)
+	                prefix += ZERO;
+	            sb.insert(0, prefix);
+	        }
+
+	        sb.append(lower);
+	        return sb.toString();
+	    }
 
 	public static int log(long value, int indices) {
 		int logN = 1;
