@@ -518,7 +518,7 @@ public class PurchaseRfidController extends BaseController
                 // 门窗RFID
                 WindowRfidQuery winQuery = new WindowRfidQuery();
                 winQuery.setPagable(true);
-                winQuery.setShowCount(50);//每页20000条
+                winQuery.setShowCount(20000);//每页20000条
                 winQuery.setPurchaseNo(purchaseNo);
                 List<WindowRfidEntity> window1 = windowRfidService.queryWindowRfid(winQuery);
                 for (int i = 0; i < winQuery.getTotalPage(); i++)
@@ -546,7 +546,7 @@ public class PurchaseRfidController extends BaseController
             {
                 LogisticsRfidQuery lQuery = new LogisticsRfidQuery();
                 lQuery.setPagable(true);
-                lQuery.setShowCount(50);//每页20000条
+                lQuery.setShowCount(20000);//每页20000条
                 lQuery.setPurchaseNo(purchaseNo);
                 List<LogisticsRfidEntity> logisticsList1 = logisticsRfidService.queryLogistics(lQuery);
                 for (int i = 0; i < lQuery.getTotalPage(); i++)

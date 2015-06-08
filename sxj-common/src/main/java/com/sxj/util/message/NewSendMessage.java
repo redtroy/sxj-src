@@ -113,9 +113,9 @@ public class NewSendMessage
     {
         SxjHttpClientImpl httpclient = new SxjHttpClientImpl();
         httpclient.setCharset("UTF-8");
-        NewSendMessage me = NewSendMessage.getInstance("http://sms.1xinxi.cn/asmx/smsservice.aspx",
+        NewSendMessage me = NewSendMessage.getInstance("http://web.1xinxi.cn/asmx/smsservice.aspx",
                 "jssxj",
-                "CEE4D6CC34577FB24D1726F8AFEB",
+                "5E7EDAB66DFEAEC957205E18510E",
                 "私享家验证码",
                 "pt");
         String[] dfdf = { "13852295723", "18551626910", "13852295723" };

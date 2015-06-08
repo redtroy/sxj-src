@@ -501,7 +501,7 @@ public class MemberServiceImpl implements IMemberService
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ApiModel> apiQueryMembers(String name, String type)
+    public List<ApiModel> apiQueryMembers(String name, String type,String city)
             throws ServiceException
     {
         try
@@ -510,6 +510,7 @@ public class MemberServiceImpl implements IMemberService
             QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
             condition.addCondition("name", name);// 会员名称
             condition.addCondition("type", type);// 会员类型
+            condition.addCondition("city", city);// 会员类型
             memberList = menberDao.apiQueryMembers(condition);
             List<ApiModel> apiList= new ArrayList<ApiModel>();
             for (MemberEntity memberEntity : memberList)

@@ -40,7 +40,7 @@
 	<!-- 条件查询财务统计 -->
 	<select id="apiQueryDevelopers" resultMap="DevelopersEntity"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID, NAME FROM M_DEVELOPERS WHERE 1=1 ]]>
+		<![CDATA[SELECT ID, NAME,ADDRESS,TEL_PHONE FROM M_DEVELOPERS WHERE 1=1 ]]>
 		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
 		</if>
