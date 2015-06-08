@@ -132,7 +132,7 @@ function modifyState(id,infoId){
 			<input id="configId" type="hidden" name="configId" value="${messageConfig.id}"/>
 		<#else>
 			<input id="configType" name="input" type="checkbox"  value="5"/>
-			<input type="hidden" name="configId" value="${messageConfig.id}"/>
+			<input type="hidden" name="configId" id="configId" value="${messageConfig.id}"/>
 		</#if>
 	<#else>
 		<input id="configType" name="input" type="checkbox"  value="5"/>
