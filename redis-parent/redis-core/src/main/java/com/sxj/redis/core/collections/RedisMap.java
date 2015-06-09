@@ -281,14 +281,14 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         boolean broken = false;
         try
         {
-            Transaction multi = jedis.multi();
+            //            Transaction multi = jedis.multi();
             V retValue = null;
             String serializeKey = K_SERIALIZER.serialize(key);
-            if (multi.exists(serializeKey).get())
+            if (jedis.hexists(name, serializeKey))
             {
-                V deserialize = (V) V_SERIALIZER.deserialize(multi.hget(name,
-                        serializeKey).get());
-                int hdel = multi.hdel(name, serializeKey).get().intValue();
+                V deserialize = (V) V_SERIALIZER.deserialize(jedis.hget(name,
+                        serializeKey));
+                int hdel = jedis.hdel(name, serializeKey).intValue();
                 if (hdel == 1)
                     retValue = deserialize;
             }
