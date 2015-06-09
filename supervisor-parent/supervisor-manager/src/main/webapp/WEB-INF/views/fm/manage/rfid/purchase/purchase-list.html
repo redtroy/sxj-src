@@ -285,6 +285,7 @@
 			errorInfo("请选择上传文件");
 			return;
 		}
+		var load=layer.load('正在导入');
 		$("#fileForm").ajaxSubmit({
 			url : "importFile.htm", 
 			type : "post",
@@ -293,16 +294,16 @@
 			success : function(data){
 				if(data.isOk=='ok'){
 					succInfo(function(){
-						var li = $("#importFile").attr("index");
-						layer.close(li)
 						query($("#pager").attr("currentPage"));
 					},"导入成功");
 				} else {
 					errorInfo(data.error);
+					layer.close(load);
 				}
 			},
 			error : function(){
 				errorInfo("数据加载失败！");
+				layer.close(load);
 			}
 		})
 	}
@@ -462,8 +463,11 @@
 				<form action="importFile.htm" method="post" id="fileForm"
 					enctype="multipart/form-data">
 					<div class="item">
-						<span>请选择导入文件:</span> <input type="file" name="fileName" accept="text/comma-separated-values"
+						<span>请选择导入文件:</span> <input type="file" accept=".zip" name="fileName" accept="text/comma-separated-values"
 							id="fileId" />
+					</div>
+					<div>
+						<font style="color: red;">上传文件为zip压缩包,请勿求改压缩包内文件名称</font>
 					</div>
 					<input type="hidden" id="hideId" name="id" />
 				</form>

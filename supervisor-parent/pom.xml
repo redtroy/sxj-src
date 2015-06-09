@@ -91,7 +91,7 @@
 				<artifactId>mybatis-pagination</artifactId>
 				<version>${mybatis.orm.version}</version>
 			</dependency>
-			<!-- 数据库连�? -->
+			<!-- 数据库连 -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>

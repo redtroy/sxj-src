@@ -128,4 +128,22 @@
 		parameterType="String">
 		<![CDATA[UPDATE M_MEMBER SET ACCOUNT_NUM=(CASE WHEN ACCOUNT_NUM IS NULL THEN 0 ELSE ACCOUNT_NUM END)+1  WHERE MEMBER_NO=#{id}]]>
 	</select>
+	<!-- 条件查询会员 -->
+	<select id="apiQueryMembers" resultMap="MemberResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT *
+		 FROM M_MEMBER WHERE 1=1]]>
+		<!-- 会员名称 -->
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
+		</if>
+		<if test="condition.city != null and condition.city != ''">
+			<![CDATA[AND AREA LIKE CONCAT('%',#{condition.city},'%')]]>
+		</if>
+		<!-- 会员类型 -->
+		<if test="condition.type !=null">
+			<![CDATA[AND TYPE = #{condition.type}]]>
+		</if>
+		<![CDATA[ ORDER BY convert(name using gb2312) asc]]>
+	</select>
 </mapper>

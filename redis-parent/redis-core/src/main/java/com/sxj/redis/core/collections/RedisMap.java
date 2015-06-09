@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Transaction;
 
 import com.sxj.redis.core.RMap;
 import com.sxj.redis.core.exception.RedisException;
@@ -49,11 +48,11 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         }
     }
     
-    private boolean isEqual(Transaction multi, Object key, Object object)
+    private boolean isEqual(Jedis jedis, Object key, Object object)
     {
-        if (multi.exists(K_SERIALIZER.serialize(key)).get())
+        if (jedis.hexists(name, K_SERIALIZER.serialize(key)))
         {
-            String hget = multi.hget(name, K_SERIALIZER.serialize(key)).get();
+            String hget = jedis.hget(name, K_SERIALIZER.serialize(key));
             Object deserialize = V_SERIALIZER.deserialize(hget);
             return deserialize.equals(object);
         }
@@ -68,17 +67,14 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         boolean retValue = false;
         try
         {
-            Transaction multi = jedis.multi();
             
-            if (isEqual(multi, key, value))
+            if (isEqual(jedis, key, value))
             {
-                int intValue = multi.hdel(name, K_SERIALIZER.serialize(key))
-                        .get()
+                int intValue = jedis.hdel(name, K_SERIALIZER.serialize(key))
                         .intValue();
                 if (intValue == 1)
                     retValue = true;
             }
-            multi.exec();
         }
         catch (Exception e)
         {
@@ -100,14 +96,11 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         boolean broken = false;
         try
         {
-            Transaction multi = jedis.multi();
-            if (isEqual(multi, key, oldValue))
+            if (isEqual(jedis, key, oldValue))
             {
-                int intValue = multi.hset(name,
+                int intValue = jedis.hset(name,
                         K_SERIALIZER.serialize(key),
-                        V_SERIALIZER.serialize(newValue))
-                        .get()
-                        .intValue();
+                        V_SERIALIZER.serialize(newValue)).intValue();
                 if (intValue == 1)
                     retValue = true;
             }
@@ -131,12 +124,9 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         boolean broken = false;
         try
         {
-            Transaction multi = jedis.multi();
-            int intValue = multi.hset(name,
+            int intValue = jedis.hset(name,
                     K_SERIALIZER.serialize(key),
-                    V_SERIALIZER.serialize(value))
-                    .get()
-                    .intValue();
+                    V_SERIALIZER.serialize(value)).intValue();
             if (intValue == 1)
                 return value;
             return null;
@@ -281,9 +271,15 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         boolean broken = false;
         try
         {
+<<<<<<< HEAD
             //            Transaction multi = jedis.multi();
             V retValue = null;
             String serializeKey = K_SERIALIZER.serialize(key);
+=======
+            V retValue = null;
+            String serializeKey = K_SERIALIZER.serialize(key);
+            
+>>>>>>> e197f6a3485ce335e5f6a36f595278c909457d5b
             if (jedis.hexists(name, serializeKey))
             {
                 V deserialize = (V) V_SERIALIZER.deserialize(jedis.hget(name,
@@ -297,7 +293,7 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         catch (Exception e)
         {
             broken = true;
-            throw new RedisException("", e);
+            throw new RedisException(e);
         }
         finally
         {
