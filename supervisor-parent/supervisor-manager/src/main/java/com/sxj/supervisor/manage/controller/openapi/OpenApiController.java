@@ -21,7 +21,7 @@ import com.sxj.util.logger.SxjLogger;
 
 @Controller
 @RequestMapping("/api")
-public class OpenApi extends BaseController
+public class OpenApiController extends BaseController
 {
     @Autowired
     private IMemberService memberService;

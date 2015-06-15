@@ -34,8 +34,8 @@
           <!-- <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p> -->
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p>
           </li>
-          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30" nullmsg="节能标识推广证号不能为空" value="${member.getEnergyNo()}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p>
+         <!-- <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30" nullmsg="节能标识推广证号不能为空" value="${member.getEnergyNo()}" />
+          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p> --> 
           <#if (member.type.id==0)>
           <li class="view"><label >资质证书</label><input name="qualification_no" type="text" datatype="*2-30" nullmsg="资质证书不能为空" value="${member.qualification_no}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.qualification_img}" data-image="${b.imagePath}${member.qualification_img}">查看缩略图</a></p>
