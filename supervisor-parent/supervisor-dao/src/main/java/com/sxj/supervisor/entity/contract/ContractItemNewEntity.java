@@ -11,6 +11,7 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractItemNewDao;
 import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
+import com.sxj.supervisor.enu.contract.ItemTypeEnum;
 
 /**
  * 合同产品条目实体
@@ -87,7 +88,7 @@ public class ContractItemNewEntity extends Pagable implements Serializable
      * 门窗类型
      */
     @Column(name = "WINDOW_TYPE")
-    private ContractWindowTypeEnum windowType;
+    private String windowType;
     
     /**
      * 备案号
@@ -111,12 +112,12 @@ public class ContractItemNewEntity extends Pagable implements Serializable
         this.recordNo = recordNo;
     }
 
-    public ContractWindowTypeEnum getWindowType()
+    public String getWindowType()
     {
         return windowType;
     }
     
-    public void setWindowType(ContractWindowTypeEnum windowType)
+    public void setWindowType(String windowType)
     {
         this.windowType = windowType;
     }
