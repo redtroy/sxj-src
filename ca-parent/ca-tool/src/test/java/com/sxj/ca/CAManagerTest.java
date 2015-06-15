@@ -305,18 +305,21 @@ public class CAManagerTest
             NoSuchAlgorithmException, java.security.cert.CertificateException,
             IOException
     {
-        //        initCA();
-        //        createIntermediateCSR();
-        //        createIntermediateCert();
-        //        createServerCSR();
-        //        createServerCert();
-        //        createServerPfx();
-        //        createClientCSR();
-        //        createClientCert();
-        //        createClientPfx();
-        //        createEmployeeCSR();
-        //        createEmployeeCert();
-        //        createEmployeePfx();
+        //                initCA();
+        //                createIntermediateCSR();
+        //                createIntermediateCert();
+        //                
+        //                createServerCSR();
+        //                createServerCert();
+        //                createServerPfx();
+        //                
+        //                createClientCSR();
+        //                createClientCert();
+        //                createClientPfx();
+        //                
+        //                createEmployeeCSR();
+        //                createEmployeeCert();
+        //                createEmployeePfx();
         KeyPair keypair = KeyPairManager.generateRSAKeyPair();
         PublicKey public1 = keypair.getPublic();
         public1.getEncoded();

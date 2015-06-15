@@ -24,7 +24,6 @@ public class RedisMapTest
         testPut();
     }
     
-    @Test
     public void testPut()
     {
         RMap<String, String> map = collections.getMap(MAP_NAME);
@@ -34,7 +33,6 @@ public class RedisMapTest
         }
     }
     
-    @Test
     public void testGet()
     {
         
@@ -71,6 +69,24 @@ public class RedisMapTest
     {
         RMap<String, List<String>> map = collections.getMap(MAP_NAME);
         System.out.println(map.ttl());
+    }
+    
+    @Test
+    public void testOp()
+    {
+        RMap<Object, Object> map = collections.getMap("test-map2");
+        Assert.assertTrue(map.isEmpty());
+        map.put("a", "ab");
+        map.put("b", "bc");
+        Assert.assertFalse(map.isEmpty());
+        Assert.assertEquals(2, map.size());
+        Assert.assertTrue(map.containsKey("a"));
+        Assert.assertTrue(map.containsValue("ab"));
+        //        map.remove("a");
+        //        map.remove("b", "bc");
+        map.replace("a", "ab", "abc");
+        System.out.println(map.get("a"));
+        //        map.delete();
     }
     
 }
