@@ -9,6 +9,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.contract.IContractBatchNewDao;
 
 @Entity(mapper = IContractBatchNewDao.class)
 @Table(name = "M_CONTRACT_BATCH_NEW")

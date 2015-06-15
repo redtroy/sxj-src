@@ -11,7 +11,6 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.contract.IContractItemNewDao;
 import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
-import com.sxj.supervisor.enu.contract.ItemTypeEnum;
 
 /**
  * 合同产品条目实体
