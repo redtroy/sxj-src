@@ -139,8 +139,9 @@ public class CAManagerTest
         KeyPair keypair = KeyPairManager.generateRSAKeyPair();
         serverkeystore.save(keypair, null);
         X509Attrs principals = new X509Attrs();
-        principals.setCommonName("绿色门窗平台服务器二级CA证书");
+        principals.setCommonName("*.sxj.com");
         principals.setCountryCode("CN");
+        //        principals.setOrganizationUnit("static.sxj.com");
         PKCS10CertificationRequest csr = CSRManager.generateCSR(keypair,
                 principals);
         serverrequeststore.save(csr, null);
@@ -305,29 +306,29 @@ public class CAManagerTest
             NoSuchAlgorithmException, java.security.cert.CertificateException,
             IOException
     {
-        //                initCA();
-        //                createIntermediateCSR();
-        //                createIntermediateCert();
-        //                
-        //                createServerCSR();
-        //                createServerCert();
-        //                createServerPfx();
-        //                
-        //                createClientCSR();
-        //                createClientCert();
-        //                createClientPfx();
-        //                
-        //                createEmployeeCSR();
-        //                createEmployeeCert();
-        //                createEmployeePfx();
-        KeyPair keypair = KeyPairManager.generateRSAKeyPair();
-        PublicKey public1 = keypair.getPublic();
-        public1.getEncoded();
-        PEMFileStore<PublicKey> publicstore = new PEMFileStore<PublicKey>(
-                "D:\\certs\\ssh_employee.pub");
-        PEMFileStore<KeyPair> employeekeystore = new PEMFileStore<KeyPair>(
-                "D:\\certs\\ssh_employee.key");
-        employeekeystore.save(keypair, null);
-        publicstore.save(public1, null);
+        initCA();
+        createIntermediateCSR();
+        createIntermediateCert();
+        
+        createServerCSR();
+        createServerCert();
+        createServerPfx();
+        
+        createClientCSR();
+        createClientCert();
+        createClientPfx();
+        
+        createEmployeeCSR();
+        createEmployeeCert();
+        createEmployeePfx();
+        //        KeyPair keypair = KeyPairManager.generateRSAKeyPair();
+        //        PublicKey public1 = keypair.getPublic();
+        //        public1.getEncoded();
+        //        PEMFileStore<PublicKey> publicstore = new PEMFileStore<PublicKey>(
+        //                "D:\\certs\\ssh_employee.pub");
+        //        PEMFileStore<KeyPair> employeekeystore = new PEMFileStore<KeyPair>(
+        //                "D:\\certs\\ssh_employee.key");
+        //        employeekeystore.save(keypair, null);
+        //        publicstore.save(public1, null);
     }
 }
