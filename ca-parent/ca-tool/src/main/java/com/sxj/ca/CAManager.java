@@ -310,7 +310,6 @@ public class CAManager
                     .getSubject());
             generator.setPublicKey(request.getPublicKey("BC"));
             generator.setSignatureAlgorithm("SHA256WithRSAEncryption");
-            
             generator.addExtension(X509Extensions.AuthorityKeyIdentifier,
                     false,
                     new AuthorityKeyIdentifierStructure(parentcert));
@@ -318,6 +317,7 @@ public class CAManager
                     false,
                     new SubjectKeyIdentifierStructure(
                             request.getPublicKey("BC")));
+            
             /**
              * 基本用途限制
              * 
@@ -335,11 +335,9 @@ public class CAManager
             //                    new ExtendedKeyUsage(purposeId));
             
             X509Certificate cert = generator.generate(parentkey.getPrivate());
-            
+            cert.getSubjectDN();
             cert.checkValidity(new Date());
-            
             cert.verify(parentcert.getPublicKey());
-            
             //            PKCS12BagAttributeCarrier bagAttr = (PKCS12BagAttributeCarrier) cert;
             //            
             //            //
