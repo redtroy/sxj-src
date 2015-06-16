@@ -16,7 +16,7 @@ public interface IRoleService
     
     public List<RoleEntity> getRoles(String accountId) throws ServiceException;
     
-    public List<FunctionModel> getRoleFunction(String accountId)
+    public List<FunctionModel> getRoleFunction(String accountId,String type)
             throws ServiceException;
     
     public List<FunctionEntity> getAllRoleFunction(String accountId)

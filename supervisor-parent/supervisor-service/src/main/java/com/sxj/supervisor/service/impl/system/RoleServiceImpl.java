@@ -15,6 +15,7 @@ import com.sxj.supervisor.entity.system.FunctionEntity;
 import com.sxj.supervisor.entity.system.RoleEntity;
 import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.system.IRoleService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -82,22 +83,29 @@ public class RoleServiceImpl implements IRoleService
     }
     
     @Override
-    public List<FunctionModel> getRoleFunction(String accountId)
+    public List<FunctionModel> getRoleFunction(String accountId, String type)
             throws ServiceException
     {
         try
         {
-            Object cache = HierarchicalCacheManager.get(CacheLevel.REDIS,
-                    "sys_role_menu",
-                    accountId);
-            if (cache instanceof List)
+            if (StringUtils.isEmpty(type))
             {
-                return (List<FunctionModel>) cache;
+                Object cache = HierarchicalCacheManager.get(CacheLevel.REDIS,
+                        "sys_role_menu",
+                        accountId);
+                
+                if (cache instanceof List)
+                {
+                    return (List<FunctionModel>) cache;
+                }
             }
             QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
             query.addCondition("parentId", 0);
             query.addCondition("accountId", accountId);
-            query.addCondition("isMenu", 1);
+            if (StringUtils.isEmpty(type))
+            {
+                query.addCondition("isMenu", 1);
+            }
             List<FunctionEntity> functionList = roleDao.getRoleFunction(query);
             List<FunctionModel> list = new ArrayList<FunctionModel>();
             for (FunctionEntity functionEntity : functionList)
@@ -109,7 +117,10 @@ public class RoleServiceImpl implements IRoleService
                 QueryCondition<FunctionEntity> childrenQuery = new QueryCondition<FunctionEntity>();
                 childrenQuery.addCondition("parentId", functionEntity.getId());
                 childrenQuery.addCondition("accountId", accountId);
-                childrenQuery.addCondition("isMenu", 1);
+                if (StringUtils.isEmpty(type))
+                {
+                    childrenQuery.addCondition("isMenu", 1);
+                }
                 List<FunctionEntity> childrenList = roleDao.getRoleFunction(childrenQuery);
                 FunctionModel model = new FunctionModel();
                 model.setFunction(functionEntity);

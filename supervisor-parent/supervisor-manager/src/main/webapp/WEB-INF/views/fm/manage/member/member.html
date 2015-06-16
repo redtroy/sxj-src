@@ -394,7 +394,7 @@ Intense( elements );
 								onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
 						 </@shiro.hasPermission>
 						 <@shiro.lacksPermission name="28">
-							<td>-</td>
+							<td><span class="state normal">待审核</span></td>
 						 </@shiro.lacksPermission>	
 						<#elseif (member.checkState.id==1 && !member.flag)>
 							<td><span class="state normal">完善中</span></td> 
@@ -404,7 +404,7 @@ Intense( elements );
 								onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
 						</@shiro.hasPermission>
 						 <@shiro.lacksPermission name="28">
-							<td>-</td>
+							<td><span class="state normal">未认证</span></td>
 						 </@shiro.lacksPermission>
 						<#elseif (member.checkState.id==2)>
 							<td><em class="state verified">已认证</em></td> 
@@ -415,7 +415,7 @@ Intense( elements );
 								onclick="editState('${member.id}',1)"><span>冻结</span></a></td>
 								</@shiro.hasPermission>
 						 <@shiro.lacksPermission name="28">
-							<td>-</td>
+							<td><span class="state verified">未冻结</span></td>
 						 </@shiro.lacksPermission>
 						<#elseif member.state.id==1>
 						 <@shiro.hasPermission name="28">
@@ -423,7 +423,7 @@ Intense( elements );
 								onclick="editState('${member.id}',0)"><span>解冻</span></a></td>
 								</@shiro.hasPermission>
 						 <@shiro.lacksPermission name="28">
-							<td>-</td>
+							<td><span class="state frozen">冻结</span></td>
 						 </@shiro.lacksPermission>
 						 </#if>
 
