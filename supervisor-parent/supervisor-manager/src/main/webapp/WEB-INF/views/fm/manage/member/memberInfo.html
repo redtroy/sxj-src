@@ -77,7 +77,8 @@
           <li><label>扫描设备号</label><textarea cols="" rows="3" class="textRfid" id="deviceNumber" >${member.deviceNumber}</textarea></li>
           <li><label>邮政编码</label><input type="text" value="${member.code}" id="code" name="code" /></li>
           </ul>
-          <div class="btnBox"><a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info');return false;">确认修改</a><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
+          <div class="btnBox"><@shiro.hasPermission name="28">
+						 <a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info');return false;">确认修改</a></@shiro.hasPermission><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
           </div>
           </td>
  </form>

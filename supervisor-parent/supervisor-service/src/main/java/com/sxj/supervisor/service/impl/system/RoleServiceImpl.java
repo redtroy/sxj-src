@@ -97,6 +97,7 @@ public class RoleServiceImpl implements IRoleService
             QueryCondition<FunctionEntity> query = new QueryCondition<FunctionEntity>();
             query.addCondition("parentId", 0);
             query.addCondition("accountId", accountId);
+            query.addCondition("isMenu", 1);
             List<FunctionEntity> functionList = roleDao.getRoleFunction(query);
             List<FunctionModel> list = new ArrayList<FunctionModel>();
             for (FunctionEntity functionEntity : functionList)
@@ -108,6 +109,7 @@ public class RoleServiceImpl implements IRoleService
                 QueryCondition<FunctionEntity> childrenQuery = new QueryCondition<FunctionEntity>();
                 childrenQuery.addCondition("parentId", functionEntity.getId());
                 childrenQuery.addCondition("accountId", accountId);
+                childrenQuery.addCondition("isMenu", 1);
                 List<FunctionEntity> childrenList = roleDao.getRoleFunction(childrenQuery);
                 FunctionModel model = new FunctionModel();
                 model.setFunction(functionEntity);

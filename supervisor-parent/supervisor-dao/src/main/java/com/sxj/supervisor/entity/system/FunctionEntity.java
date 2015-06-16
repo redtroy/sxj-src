@@ -56,6 +56,22 @@ public class FunctionEntity extends Pagable implements Serializable
     @Column(name = "LEVEL")
     private Integer level;
     
+    /**
+     * 是否是菜单
+     */
+    @Column(name = "IS_MENU")
+    private Integer isMenu;
+    
+    public Integer getIsMenu()
+    {
+        return isMenu;
+    }
+    
+    public void setIsMenu(Integer isMenu)
+    {
+        this.isMenu = isMenu;
+    }
+    
     public String getId()
     {
         return id;

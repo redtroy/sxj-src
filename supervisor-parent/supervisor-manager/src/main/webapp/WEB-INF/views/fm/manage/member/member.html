@@ -387,26 +387,54 @@ Intense( elements );
 							(member.regDate??)>${member.regDate?string("yyyy-MM-dd
 							HH:mm:ss")}</#if></td>
 						<td><#if (member.authorDate??)>
-							${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td> <#if
-						(member.checkState.id==0)>
-						<td><a class="btn btn-gray"
-							onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
+							${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+						 <#if (member.checkState.id==0)>
+						 <@shiro.hasPermission name="28">
+							<td><a class="btn btn-gray"
+								onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
+						 </@shiro.hasPermission>
+						 <@shiro.lacksPermission name="28">
+							<td>-</td>
+						 </@shiro.lacksPermission>	
 						<#elseif (member.checkState.id==1 && !member.flag)>
-						<td><span class="state normal">完善中</span></td> <#elseif
-						(member.checkState.id==1 && member.flag)>
-						<td><a class="btn  btn-green"
-							onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
+							<td><span class="state normal">完善中</span></td> 
+						<#elseif (member.checkState.id==1 && member.flag)>
+						<@shiro.hasPermission name="28">
+							<td><a class="btn  btn-green"
+								onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
+						</@shiro.hasPermission>
+						 <@shiro.lacksPermission name="28">
+							<td>-</td>
+						 </@shiro.lacksPermission>
 						<#elseif (member.checkState.id==2)>
-						<td><em class="state verified">已认证</em></td> </#if> <#if
-						member.state.id==0>
-						<td><a class="btn btn-green"
-							onclick="editState('${member.id}',1)"><span>冻结</span></a></td>
+							<td><em class="state verified">已认证</em></td> 
+						</#if> 
+						<#if member.state.id==0>
+						 <@shiro.hasPermission name="28">
+							<td><a class="btn btn-green"
+								onclick="editState('${member.id}',1)"><span>冻结</span></a></td>
+								</@shiro.hasPermission>
+						 <@shiro.lacksPermission name="28">
+							<td>-</td>
+						 </@shiro.lacksPermission>
 						<#elseif member.state.id==1>
-						<td><a class="btn btn-red"
-							onclick="editState('${member.id}',0)"><span>解冻</span></a></td> </#if>
+						 <@shiro.hasPermission name="28">
+							<td><a class="btn btn-red"
+								onclick="editState('${member.id}',0)"><span>解冻</span></a></td>
+								</@shiro.hasPermission>
+						 <@shiro.lacksPermission name="28">
+							<td>-</td>
+						 </@shiro.lacksPermission>
+						 </#if>
 
+						<@shiro.hasPermission name="28">
 						<td><a class="btn btn-gray btn-password"
 							href="javascript:void(0);" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
+						</@shiro.hasPermission>
+						<@shiro.lacksPermission name="28">
+						<td>-</td>
+						</@shiro.lacksPermission>
+						
 					</tr>
 					<tr class="tableInfo" style="display: none;" id="${member.id}_info"
 						index="">
