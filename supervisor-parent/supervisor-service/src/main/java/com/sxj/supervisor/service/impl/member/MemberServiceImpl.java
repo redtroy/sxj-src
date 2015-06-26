@@ -312,6 +312,8 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("endDate", query.getEndDate());// 结束时间
             condition.addCondition("typeB", query.getMemberTypeB());
             condition.addCondition("flag", query.getFlag());
+            condition.addCondition("startAuthorDate", query.getStartAuthorDate());// 开始时间
+            condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
             condition.setPage(query);
             memberList = menberDao.queryMembers(condition);
             query.setPage(condition);

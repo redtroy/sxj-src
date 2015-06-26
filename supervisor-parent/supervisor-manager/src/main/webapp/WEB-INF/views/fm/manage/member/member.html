@@ -1,4 +1,5 @@
-﻿<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html> 
+<html>
 <!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -6,7 +7,7 @@
 <title>私享家电子商贸平台</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
-<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
@@ -275,6 +276,14 @@ var elements = document.querySelectorAll( '.demo-image' );
 Intense( elements );
 }
 */
+
+function exportExcel(){
+	 dialogBox(function(index){	
+		 layer.close(index);
+		window.location.href="exportExcel.htm?"+$("#search_form").serialize();
+	 },"是否导出Excel");
+}
+
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -304,12 +313,7 @@ Intense( elements );
 								<option value="">-请选择-</option> <#list cityList as city>
 								<option value="${city.id}:${city.name}">${city.name}</option>
 								</#list>
-							</select> 营业执照号码 <input type="text" name="bLicenseNo" id="bLicenseNo"
-								value="${query.bLicenseNo}" />
-						</p>
-						<p>
-							资质证书号码 <input type="text" name="energyNo" id="energyNo"
-								value="${query.energyNo}" /> 会员类型 <select name="memberType"
+							</select>  会员类型 <select name="memberType"
 								id="type">
 								<option value="">-请选择-</option> <#list types as type> <#if
 								type.id==query.memberType>
@@ -317,7 +321,10 @@ Intense( elements );
 								<#else>
 								<option value="${type.getId()}">${type.getName()}</option>
 								</#if> </#list>
-							</select> 审核状态 <select name="checkState" id="checkState">
+							</select>
+						</p>
+						<p>
+							 审核状态 <select name="checkState" id="checkState">
 								<option value="">-请选择-</option> <#list checkStates as state>
 								<#if state.id=query.checkState>
 								<option value="${state.getId()}" selected="selected">${state.getName()}</option>
@@ -335,14 +342,20 @@ Intense( elements );
 							</select> 会员注册时间段 <input class="form-control" type="text" datepicker
 								id="time1" name="startDate"> - <input
 								class="form-control" type="text" datepicker id="time2"
-								name="endDate"> <a class="btn btn-blue ly-right"
+								name="endDate">
+								会员认证时间段 <input class="form-control" type="text" datepicker
+								id="time1" name="startAuthorDate"> - <input
+								class="form-control" type="text" datepicker id="time2"
+								name="endAuthorDate">
+								 <a class="btn btn-blue ly-right"
 								onclick="query();"><span>查询</span></a>
 						</p>
 					</form>
 				</div>
 				<form id="edit_form"></form>
 				<div id="message_div"></div>
-				<div id="message_div_perfcet"></div>
+				<div id="message_div_perfcet"> <a class="btn btn-orange ly-left"
+								onclick="exportExcel();"><span>导出Excel</span></a></div>
 				<@b.pager/>
 				<table border="0" cellpadding="0" cellspacing="0" class="tabList"
 					id="res_table">

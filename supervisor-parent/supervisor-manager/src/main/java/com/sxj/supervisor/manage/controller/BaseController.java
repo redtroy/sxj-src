@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 
 import com.sxj.supervisor.entity.system.SystemAccountEntity;
 import com.sxj.supervisor.enu.contract.ContractWindowTypeEnum;
+import com.sxj.supervisor.enu.member.LevelEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
@@ -82,6 +83,10 @@ public class BaseController
         binder.registerCustomEditor(WindowTypeEnum.class,
                 new EnumPropertyEditorSupport<WindowTypeEnum>(
                         WindowTypeEnum.class));
+        binder.registerCustomEditor(LevelEnum.class,
+                new EnumPropertyEditorSupport<LevelEnum>(
+                        LevelEnum.class));
+        
         binder.registerCustomEditor(String.class,
                 new TrimStringPropertyEditorSupport());
     }
