@@ -271,9 +271,16 @@ public class RedisMap<K, V> extends RedisExpirable implements RMap<K, V>
         boolean broken = false;
         try
         {
+<<<<<<< HEAD
+            
+            //            Transaction multi = jedis.multi();
+            V retValue = null;
+            String serializeKey = K_SERIALIZER.serialize(key);
+=======
             V retValue = null;
             String serializeKey = K_SERIALIZER.serialize(key);
             
+>>>>>>> branch 'master' of scm@192.168.1.10:/home/scm/repositories/sxj-src.git
             if (jedis.hexists(name, serializeKey))
             {
                 V deserialize = (V) V_SERIALIZER.deserialize(jedis.hget(name,
