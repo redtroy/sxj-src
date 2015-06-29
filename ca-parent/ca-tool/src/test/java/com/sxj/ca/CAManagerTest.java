@@ -36,7 +36,7 @@ public class CAManagerTest
     {
         ca = new CAManager();
         X509Attrs principals = new X509Attrs();
-        principals.setCommonName("绿色门窗平台根CA证书");
+        principals.setCommonName("私享家CA根证书");
         principals.setCountryCode("AU");
         ca.init(keystore, certstore, principals);
     }
@@ -57,7 +57,7 @@ public class CAManagerTest
         KeyPair keypair = KeyPairManager.generateRSAKeyPair();
         clientkeystore.save(keypair, null);
         X509Attrs principals = new X509Attrs();
-        principals.setCommonName("测试门窗厂根证书");
+        principals.setCommonName("CRM平台根证书");
         principals.setCountryCode("AU");
         PKCS10CertificationRequest csr = CSRManager.generateCSR(keypair,
                 principals);
@@ -139,7 +139,7 @@ public class CAManagerTest
         KeyPair keypair = KeyPairManager.generateRSAKeyPair();
         serverkeystore.save(keypair, null);
         X509Attrs principals = new X509Attrs();
-        principals.setCommonName("绿色门窗平台服务器二级CA证书");
+        principals.setCommonName("*.zijincaifu.com");
         principals.setCountryCode("CN");
         PKCS10CertificationRequest csr = CSRManager.generateCSR(keypair,
                 principals);
@@ -221,8 +221,9 @@ public class CAManagerTest
                 "D:\\certs\\employee.key");
         employeekeystore.save(keypair, null);
         X509Attrs principals = new X509Attrs();
-        principals.setCommonName("测试门窗厂员工");
+        principals.setCommonName("CRM测试员工");
         principals.setCountryCode("AU");
+        principals.setGiveName("E00001");
         PKCS10CertificationRequest csr = CSRManager.generateCSR(keypair,
                 principals);
         PEMFileStore<PKCS10CertificationRequest> employeerequeststore = new PEMFileStore<PKCS10CertificationRequest>(
@@ -305,29 +306,29 @@ public class CAManagerTest
             NoSuchAlgorithmException, java.security.cert.CertificateException,
             IOException
     {
-        //                initCA();
-        //                createIntermediateCSR();
-        //                createIntermediateCert();
-        //                
-        //                createServerCSR();
-        //                createServerCert();
-        //                createServerPfx();
-        //                
-        //                createClientCSR();
-        //                createClientCert();
-        //                createClientPfx();
-        //                
-        //                createEmployeeCSR();
-        //                createEmployeeCert();
-        //                createEmployeePfx();
-        KeyPair keypair = KeyPairManager.generateRSAKeyPair();
-        PublicKey public1 = keypair.getPublic();
-        public1.getEncoded();
-        PEMFileStore<PublicKey> publicstore = new PEMFileStore<PublicKey>(
-                "D:\\certs\\ssh_employee.pub");
-        PEMFileStore<KeyPair> employeekeystore = new PEMFileStore<KeyPair>(
-                "D:\\certs\\ssh_employee.key");
-        employeekeystore.save(keypair, null);
-        publicstore.save(public1, null);
+        initCA();
+        createIntermediateCSR();
+        createIntermediateCert();
+        
+        createServerCSR();
+        createServerCert();
+        createServerPfx();
+        
+        createClientCSR();
+        createClientCert();
+        createClientPfx();
+        
+        createEmployeeCSR();
+        createEmployeeCert();
+        createEmployeePfx();
+        //        KeyPair keypair = KeyPairManager.generateRSAKeyPair();
+        //        PublicKey public1 = keypair.getPublic();
+        //        public1.getEncoded();
+        //        PEMFileStore<PublicKey> publicstore = new PEMFileStore<PublicKey>(
+        //                "D:\\certs\\ssh_employee.pub");
+        //        PEMFileStore<KeyPair> employeekeystore = new PEMFileStore<KeyPair>(
+        //                "D:\\certs\\ssh_employee.key");
+        //        employeekeystore.save(keypair, null);
+        //        publicstore.save(public1, null);
     }
 }
