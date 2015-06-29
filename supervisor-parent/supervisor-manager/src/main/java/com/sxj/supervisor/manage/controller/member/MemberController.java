@@ -1,8 +1,26 @@
 package com.sxj.supervisor.manage.controller.member;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import jxl.Workbook;
+import jxl.format.Colour;
+import jxl.format.UnderlineStyle;
+import jxl.write.Label;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
+import com.sxj.supervisor.enu.member.LevelEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
@@ -26,6 +45,7 @@ import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 import com.sxj.util.Constraints;
 import com.sxj.util.comet.CometServiceImpl;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.SystemException;
 import com.sxj.util.exception.WebException;
@@ -152,11 +172,13 @@ public class MemberController extends BaseController
             MemberTypeEnum[] types = MemberTypeEnum.values();
             MemberCheckStateEnum[] checkStates = MemberCheckStateEnum.values();
             MemberStatesEnum[] states = MemberStatesEnum.values();
+            LevelEnum[] level = LevelEnum.values();
             List<AreaEntity> cityList = areaService.getChildrenAreas("32");
             map.put("cityList", cityList);
             map.put("types", types);
             map.put("checkStates", checkStates);
             map.put("states", states);
+            map.put("level", level);
             map.put("member", member);
         }
         catch (Exception e)
@@ -298,5 +320,121 @@ public class MemberController extends BaseController
     public void setTopics(RedisTopics topics)
     {
         this.topics = topics;
+    }
+    
+    /**
+     * 导出用户信息
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("exportExcel")
+    public void exportExcel(HttpServletRequest request,
+            HttpServletResponse response, MemberQuery query) throws Exception
+    {
+        List<MemberEntity> list = memberService.queryMembers(query);
+        File file = null;
+        PrintWriter out = null;
+        WritableCellFormat wcf = null;  
+        try
+        {
+            request.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
+            out = response.getWriter();
+            file = new File("excel");//地址
+            file.mkdirs();//创建目录
+            file=new File(file, "会员信息.xls");
+            WritableWorkbook wwb;
+            wwb = Workbook.createWorkbook(new FileOutputStream(file));
+            //设置字体;  
+            WritableFont bold = new WritableFont(WritableFont.createFont("宋体"),   
+                    14,  
+                    WritableFont.BOLD);  
+               wcf = new WritableCellFormat(bold);  
+            WritableSheet ws = wwb.createSheet("会员信息", 0);
+            String[] columns = { "会员ID", "会员名称", "会员类型", "城市", "地址", "联系人",
+                    "联系电话", "法定代表人", "注册资本", "成立日期", "资质等级", "审核状态", "账户状态",
+                    "注册时间", "认证时间" };
+            for (int i = 0; i < columns.length; i++)
+            {
+                ws.setColumnView(i, 20);
+                ws.addCell(new Label(i, 0, columns[i],wcf));
+            }
+            for (int i = 0; i < list.size(); i++)
+            {
+                MemberEntity member = list.get(i);
+                ws.addCell(new Label(0, i + 1, member.getMemberNo()));
+                ws.addCell(new Label(1, i + 1, member.getName()));
+                ws.addCell(new Label(2, i + 1, member.getType().getName()));
+                ws.addCell(new Label(3, i + 1, strArea(member.getArea())));
+                ws.addCell(new Label(4, i + 1, member.getAddress()));
+                ws.addCell(new Label(5, i + 1, member.getContacts()));
+                ws.addCell(new Label(6, i + 1, member.getPhoneNo()));
+                
+                ws.addCell(new Label(7, i + 1, member.getLegalRep()));
+                ws.addCell(new Label(8, i + 1, member.getRegisteredCapital()==null?"":member.getRegisteredCapital().toString()));
+                ws.addCell(new Label(9, i + 1,
+                        DateTimeUtils.formatPageDate(member.getFoundedDate())));
+                ws.addCell(new Label(10, i + 1, (member.getLevel()==null)?"":member.getLevel().getName()));
+                ws.addCell(new Label(11, i + 1, member.getCheckState()
+                        .getName()));
+                ws.addCell(new Label(12, i + 1, member.getState().getName()));
+                ws.addCell(new Label(13, i + 1,
+                        DateTimeUtils.formatPageDate(member.getRegDate())));
+                ws.addCell(new Label(14, i + 1,
+                        DateTimeUtils.formatPageDate(member.getAuthorDate())));
+            }
+            wwb.write();
+            wwb.close();
+            int rsRows = ws.getRows();   
+            System.err.println(rsRows+"----------------------------------------------------------");
+            BufferedInputStream br = new BufferedInputStream(
+                    new FileInputStream(file));
+            byte[] buf = new byte[1024];
+            int len = 0;
+            
+            response.reset(); // 非常重要
+            response.setContentType("application/x-msdownload");
+            response.setHeader("Content-Disposition", "attachment; filename="
+                    + new String(file.getName().getBytes(), "iso-8859-1"));
+            
+            OutputStream outStream = response.getOutputStream();
+            while ((len = br.read(buf)) > 0)
+                outStream.write(buf, 0, len);
+            br.close();
+            outStream.close();
+            
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            out.print("<script>alert('导出用户信息失败、请重试!');</script>");
+        }
+        finally
+        {
+            if (file.exists())
+            {//下载完毕删除文件
+               // file.delete();
+            }
+            if (out != null)
+            {
+                out.flush();
+                out.close();
+            }
+        }
+    }
+    
+    public String strArea(String area)
+    {
+        if (StringUtils.isEmpty(area))
+        {
+            return "";
+        }
+        String[] str = area.split(",");
+        String[] str1 = str[0].split(":");
+        String[] str2 = str[1].split(":");
+        String str3 = str1[1] + str2[1];
+        return str3;
     }
 }

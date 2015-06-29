@@ -290,7 +290,7 @@ public class BasicController extends BaseController
         {
             return LOGIN;
         }
-        List<FunctionModel> list = roleService.getRoleFunction(userName.getId());
+        List<FunctionModel> list = roleService.getRoleFunction(userName.getId(),"");
         map.put("list", list);
         return "manage/menu";
     }
@@ -807,5 +807,6 @@ public class BasicController extends BaseController
         }
         return null;
     }
+    
     
 }

@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
@@ -311,6 +312,8 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("endDate", query.getEndDate());// 结束时间
             condition.addCondition("typeB", query.getMemberTypeB());
             condition.addCondition("flag", query.getFlag());
+            condition.addCondition("startAuthorDate", query.getStartAuthorDate());// 开始时间
+            condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
             condition.setPage(query);
             memberList = menberDao.queryMembers(condition);
             query.setPage(condition);
@@ -508,7 +511,16 @@ public class MemberServiceImpl implements IMemberService
         {
             List<MemberEntity> memberList = new ArrayList<MemberEntity>();
             QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
-            condition.addCondition("name", name);// 会员名称
+            if(!StringUtils.isEmpty(name)){
+                try
+                {
+                    condition.addCondition("name", new String(name.getBytes("iso8859-1"),"utf-8"));// 会员名称
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                } 
+            }
             condition.addCondition("type", type);// 会员类型
             condition.addCondition("city", city);// 会员类型
             memberList = menberDao.apiQueryMembers(condition);

@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.developers;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import com.sxj.supervisor.dao.developers.IDevelopersDao;
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
 import com.sxj.supervisor.model.open.ApiModel;
 import com.sxj.supervisor.service.developers.IDevelopersService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -117,7 +119,16 @@ public class DevelopersServiceImpl implements IDevelopersService
         try
         {
             QueryCondition<DevelopersEntity> condition = new QueryCondition<DevelopersEntity>();
-            condition.addCondition("name", query.getName());// 开发商名称
+            if(!StringUtils.isEmpty(query.getName())){
+                try
+                {
+                    condition.addCondition("name", new String(query.getName().getBytes("iso8859-1"),"utf-8"));// 开发商名称
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                } 
+            }
             condition.addCondition("city", query.getCity());// 城市
             List<DevelopersEntity> recordList = developerDao.apiQueryDevelopers(condition);
             List<ApiModel> apiList = new ArrayList<ApiModel>();

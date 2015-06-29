@@ -8,15 +8,19 @@
 		<result property="url" column="URL" jdbcType="VARCHAR" />
 		<result property="parentId" column="PARENT_ID" jdbcType="VARCHAR" />
 		<result property="level" column="LEVEL" jdbcType="INTEGER" />
+		<result property="isMenu" column="IS_MENU" jdbcType="INTEGER" />
 	</resultMap>
 
 	<!-- 系统功能高级查询 -->
 	<select id="queryFunction" resultMap="FunctionResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT f.ID,f.TITLE,f.URL,f.PARENT_ID,f.LEVEL 
+		<![CDATA[SELECT f.ID,f.TITLE,f.URL,f.PARENT_ID,f.LEVEL,f.IS_MENU  
 		 FROM M_SYS_FUNCTION f WHERE 1=1]]>
 		<if test="condition.parentId != null and condition.parentId!=''">
 			<![CDATA[ AND f.PARENT_ID=#{condition.parentId}]]>
+		</if>
+		<if test="condition.isMenu != null">
+			<![CDATA[ AND f.IS_MENU=#{condition.isMenu}]]>
 		</if>
 		<![CDATA[ ORDER BY f.`DESC`]]>
 	</select>

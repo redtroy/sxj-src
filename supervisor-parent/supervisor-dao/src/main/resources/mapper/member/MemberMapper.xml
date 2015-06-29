@@ -4,56 +4,57 @@
 
 <mapper namespace="com.sxj.supervisor.dao.member.IMemberDao">
 	<resultMap id="MemberResultMap" type="com.sxj.supervisor.entity.member.MemberEntity">
-		<id property="id" column="ID" jdbcType="VARCHAR" />
-		<result property="name" column="NAME" jdbcType="VARCHAR" />
-		<result property="bLicenseNo" column="B_LICENSE_NO" jdbcType="VARCHAR" />
-		<result property="type" column="TYPE" jdbcType="INTEGER"
-			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
-		<result property="area" column="AREA" jdbcType="VARCHAR" />
-		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR" />
-		<result property="energyNo" column="ENERGY_NO" jdbcType="VARCHAR" />
-		<result property="code" column="CODE" jdbcType="VARCHAR" />
-		<result property="phoneNo" column="PHONE_NO" jdbcType="VARCHAR" />
-		<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
-		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
-		<result property="regDate" column="REG_DATE" jdbcType="TIMESTAMP" />
-		<result property="authorDate" column="AUTHOR_DATE" jdbcType="TIMESTAMP" />
-		<result property="state" column="STATE" jdbcType="INTEGER"
-			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
-		<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER"
-			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
-		<result property="totalAmount" column="TOTAL_AMOUNT" jdbcType="INTEGER" />
-		<result property="accountNum" column="ACCOUNT_NUM" jdbcType="INTEGER" />
-		<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
-		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
-		<result property="deviceNumber" column="DEVICE_NUMBER" jdbcType="VARCHAR" />
-		<result property="bLicensePath" column="B_LICENSE_PATH"
-			jdbcType="VARCHAR" />
-		<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
-		<result property="flag" column="FLAG" jdbcType="BOOLEAN" />
-		<result property="version" column="VERSION_LOCK" jdbcType="INTEGER"/>
-		
-		<result property="qualification_img" column="QUALIFICATION_IMG"
-			jdbcType="VARCHAR" />
-		<result property="qualification_no" column="QUALIFICATION_NO"
-			jdbcType="VARCHAR" />
-		<result property="safety_licenses_no" column="SAFETY_LICENSES_NO"
-			jdbcType="VARCHAR" />
-		<result property="safety_licenses_img" column="SAFETY_LICENSES_IMG"
-			jdbcType="VARCHAR" />
-		<result property="qms_no" column="QMS_NO"
-			jdbcType="VARCHAR" />
-		<result property="qms_img" column="QMS_IMG"
-			jdbcType="VARCHAR" />
-		<result property="ccc_no" column="CCC_NO"
-			jdbcType="VARCHAR" />
-		<result property="ccc_img" column="CCC_IMG"
-			jdbcType="VARCHAR" />
-		<result property="production_license_no" column="PRODUCTION_LICENSE_NO"
-			jdbcType="VARCHAR" />
-		<result property="production_license_img" column="PRODUCTION_LICENSE_IMG"
-			jdbcType="VARCHAR" />
-	</resultMap>
+	<id property="id" column="ID" jdbcType="VARCHAR" />
+	<result property="name" column="NAME" jdbcType="VARCHAR" />
+	<result property="bLicenseNo" column="B_LICENSE_NO" jdbcType="VARCHAR" />
+	<result property="type" column="TYPE" jdbcType="INTEGER"
+		typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+	<result property="area" column="AREA" jdbcType="VARCHAR" />
+	<result property="contacts" column="CONTACTS" jdbcType="VARCHAR" />
+	<result property="energyNo" column="ENERGY_NO" jdbcType="VARCHAR" />
+	<result property="code" column="CODE" jdbcType="VARCHAR" />
+	<result property="phoneNo" column="PHONE_NO" jdbcType="VARCHAR" />
+	<result property="address" column="ADDRESS" jdbcType="VARCHAR" />
+	<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
+	<result property="regDate" column="REG_DATE" jdbcType="TIMESTAMP" />
+	<result property="authorDate" column="AUTHOR_DATE" jdbcType="TIMESTAMP" />
+	<result property="state" column="STATE" jdbcType="INTEGER"
+		typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+	<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER"
+		typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+	<result property="totalAmount" column="TOTAL_AMOUNT" jdbcType="INTEGER" />
+	<result property="accountNum" column="ACCOUNT_NUM" jdbcType="INTEGER" />
+	<result property="password" column="PASSWORD" jdbcType="VARCHAR" />
+	<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+	<result property="deviceNumber" column="DEVICE_NUMBER" jdbcType="VARCHAR" />
+	<result property="bLicensePath" column="B_LICENSE_PATH"
+		jdbcType="VARCHAR" />
+	<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
+	<result property="flag" column="FLAG" jdbcType="BOOLEAN" />
+	<result property="version" column="VERSION_LOCK" jdbcType="INTEGER" />
+
+	<result property="qualification_img" column="QUALIFICATION_IMG"
+		jdbcType="VARCHAR" />
+	<result property="qualification_no" column="QUALIFICATION_NO"
+		jdbcType="VARCHAR" />
+	<result property="safety_licenses_no" column="SAFETY_LICENSES_NO"
+		jdbcType="VARCHAR" />
+	<result property="safety_licenses_img" column="SAFETY_LICENSES_IMG"
+		jdbcType="VARCHAR" />
+	<result property="qms_no" column="QMS_NO" jdbcType="VARCHAR" />
+	<result property="qms_img" column="QMS_IMG" jdbcType="VARCHAR" />
+	<result property="ccc_no" column="CCC_NO" jdbcType="VARCHAR" />
+	<result property="ccc_img" column="CCC_IMG" jdbcType="VARCHAR" />
+	<result property="production_license_no" column="PRODUCTION_LICENSE_NO"
+		jdbcType="VARCHAR" />
+	<result property="production_license_img" column="PRODUCTION_LICENSE_IMG"
+		jdbcType="VARCHAR" />
+	<result property="legalRep" column="LEGAL_REP" jdbcType="VARCHAR" />
+	<result property="registeredCapital" column="REGISTERED_CAPITAL"
+		jdbcType="INTEGER" />
+	<result property="foundedDate" column="FOUNDED_DATE" jdbcType="DATE" />
+	<result property="level" column="LEVEL" jdbcType="INTEGER" />
+</resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"
 		parameterType="String">
@@ -83,7 +84,7 @@
 		</if>
 		<!-- 地理位置 -->
 		<if test="condition.area != null and condition.area != ''">
-			<![CDATA[AND AREA = #{condition.area}]]>
+			<![CDATA[AND AREA LIKE CONCAT('%',#{condition.area},'%')]]>
 		</if>
 		<!-- 营业执照号码 -->
 		<if test="condition.bLicenseNo != null and condition.bLicenseNo != ''">
@@ -121,6 +122,11 @@
 		<if
 			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
 			<![CDATA[AND REG_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) AND REG_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
+		</if>
+		<!-- 会员认证时间段 -->
+		<if
+			test="condition.startAuthorDate != null and condition.endAuthorDate != null and condition.startAuthorDate != '' and condition.endAuthorDate != ''">
+			<![CDATA[AND AUTHOR_DATE >=CONCAT(#{condition.startAuthorDate}," 00:00:00" ) AND AUTHOR_DATE <= CONCAT(#{condition.endAuthorDate}," 23:59:59")]]>
 		</if>
 		<![CDATA[ ORDER BY STATE,REG_DATE DESC]]>
 	</select>

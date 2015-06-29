@@ -116,6 +116,7 @@
 			</exclusions>
 		</dependency>
 
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -198,6 +199,17 @@
 			<artifactId>jedis</artifactId>
 			<version>2.5.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.jagregory</groupId>
+			<artifactId>shiro-freemarker-tags</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -227,7 +239,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<!-- <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>  -->
+					 <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes> 
 				</configuration>
 			</plugin>
 		</plugins>

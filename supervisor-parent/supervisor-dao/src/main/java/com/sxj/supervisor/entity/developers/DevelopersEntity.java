@@ -1,6 +1,7 @@
 package com.sxj.supervisor.entity.developers;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import com.sxj.mybatis.orm.annotations.Column;
@@ -11,6 +12,7 @@ import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.developers.IDevelopersDao;
+import com.sxj.util.common.StringUtils;
 
 /**
  * 省内开发商

@@ -30,6 +30,7 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.orm.annotations.Version;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IMemberDao;
+import com.sxj.supervisor.enu.member.LevelEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
@@ -285,6 +286,70 @@ public class MemberEntity extends Pagable implements Serializable
      */
     @Column(name = "PRODUCTION_LICENSE_IMG")
     private String production_license_img;
+    
+    /**
+     * 法人
+     */
+    @Column(name = "LEGAL_REP")
+    private String legalRep;
+    
+    /**
+     * 注册资本
+     */
+    @Column(name = "REGISTERED_CAPITAL")
+    private Integer registeredCapital;
+    
+    /**
+     * 成立日期
+     */
+    @Column(name = "FOUNDED_DATE")
+    private Date foundedDate;
+    
+    /**
+     * 资质等级
+     */
+    @Column(name = "LEVEL")
+    private LevelEnum level;
+    
+    public String getLegalRep()
+    {
+        return legalRep;
+    }
+    
+    public void setLegalRep(String legalRep)
+    {
+        this.legalRep = legalRep;
+    }
+    
+    public Integer getRegisteredCapital()
+    {
+        return registeredCapital;
+    }
+    
+    public void setRegisteredCapital(Integer registeredCapital)
+    {
+        this.registeredCapital = registeredCapital;
+    }
+    
+    public Date getFoundedDate()
+    {
+        return foundedDate;
+    }
+    
+    public void setFoundedDate(Date foundedDate)
+    {
+        this.foundedDate = foundedDate;
+    }
+    
+    public LevelEnum getLevel()
+    {
+        return level;
+    }
+    
+    public void setLevel(LevelEnum level)
+    {
+        this.level = level;
+    }
     
     public String getQualification_no()
     {
