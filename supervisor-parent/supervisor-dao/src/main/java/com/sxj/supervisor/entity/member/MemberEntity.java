@@ -317,6 +317,22 @@ public class MemberEntity extends Pagable implements Serializable
     @Column(name = "MARKETERS")
     private String marketers;
     
+    /**
+     * 备注
+     */
+    @Column(name = "REMARK")
+    private String remark;
+    
+    public String getRemark()
+    {
+        return remark;
+    }
+    
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
+    
     public String getMarketers()
     {
         return marketers;

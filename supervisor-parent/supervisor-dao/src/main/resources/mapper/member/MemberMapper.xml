@@ -55,6 +55,7 @@
 	<result property="foundedDate" column="FOUNDED_DATE" jdbcType="DATE" />
 	<result property="level" column="LEVEL" jdbcType="INTEGER" />
 	<result property="marketers" column="MARKETERS" jdbcType="VARCHAR" />
+	<result property="remark" column="REMARK" jdbcType="VARCHAR" />
 </resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"
