@@ -311,6 +311,22 @@ public class MemberEntity extends Pagable implements Serializable
     @Column(name = "LEVEL")
     private LevelEnum level;
     
+    /**
+     * 市场专员
+     */
+    @Column(name = "MARKETERS")
+    private String marketers;
+    
+    public String getMarketers()
+    {
+        return marketers;
+    }
+    
+    public void setMarketers(String marketers)
+    {
+        this.marketers = marketers;
+    }
+    
     public String getLegalRep()
     {
         return legalRep;

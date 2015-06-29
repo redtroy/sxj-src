@@ -355,7 +355,7 @@ public class MemberController extends BaseController
             WritableSheet ws = wwb.createSheet("会员信息", 0);
             String[] columns = { "会员ID", "会员名称", "会员类型", "城市", "地址", "联系人",
                     "联系电话", "法定代表人", "注册资本", "成立日期", "资质等级", "审核状态", "账户状态",
-                    "注册时间", "认证时间" };
+                    "注册时间", "认证时间","市场专员" };
             for (int i = 0; i < columns.length; i++)
             {
                 ws.setColumnView(i, 20);
@@ -384,6 +384,7 @@ public class MemberController extends BaseController
                         DateTimeUtils.formatPageDate(member.getRegDate())));
                 ws.addCell(new Label(14, i + 1,
                         DateTimeUtils.formatPageDate(member.getAuthorDate())));
+                ws.addCell(new Label(15, i + 1, member.getMarketers()));
             }
             wwb.write();
             wwb.close();

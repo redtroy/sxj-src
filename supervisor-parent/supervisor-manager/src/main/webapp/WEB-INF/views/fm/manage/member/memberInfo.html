@@ -100,6 +100,7 @@
                 
             </#list>
            	</select></li>
+           	<li><label>市场专员</label><input type="text" value="${member.marketers}" id="marketers" name="marketers" /></li>
           </ul>
           <div class="btnBox"><@shiro.hasPermission name="28">
 						 <a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info');return false;">确认修改</a></@shiro.hasPermission><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
