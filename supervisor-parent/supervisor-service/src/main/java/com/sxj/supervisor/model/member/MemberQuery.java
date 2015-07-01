@@ -51,6 +51,20 @@ public class MemberQuery extends Pagable implements Serializable
     
     private String flag;
     
+    private Integer sort;
+    
+    
+    
+    public Integer getSort()
+    {
+        return sort;
+    }
+
+    public void setSort(Integer sort)
+    {
+        this.sort = sort;
+    }
+
     public String getStartAuthorDate()
     {
         return startAuthorDate;

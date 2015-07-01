@@ -83,7 +83,7 @@
           <li><label>邮政编码</label><input type="text" value="${member.code}" id="code" name="code" /></li>
           <li><label>法定代表人</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
           <li><label>注册资本</label><input type="text" value="${member.registeredCapital}" id="registeredCapital" datatype="n1-10" name="registeredCapital" />万元</li>
-          <li><label>成立时间</label><input type="text" <#if (member.foundedDate??)> value="${member.foundedDate?string("yyyy-MM-dd")}" </#if> id="foundedDate" class="foundedDate" name="foundedDate"  /></li>
+          <li><label>成立时间</label><input type="text" <#if (member.foundedDate??)>value="${member.foundedDate?string("yyyy-MM-dd")}" </#if> id="foundedDate" class="foundedDate" name="foundedDate"  /></li>
            <li><label>资质等级</label>
            <select name="level" id=level>
            <option value="">-请选择-</option>

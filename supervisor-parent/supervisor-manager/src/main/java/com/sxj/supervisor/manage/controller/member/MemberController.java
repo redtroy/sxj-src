@@ -220,15 +220,12 @@ public class MemberController extends BaseController
         Map<String, String> map = new HashMap<String, String>();
         try
         {
-            getValidError(result);
+            if(member.getRemark()==null){
+                member.setRemark("");
+            }
+           // getValidError(result);
             memberService.modifyMember(member);
             map.put("isOK", "ok");
-        }
-        catch (SystemException e)
-        {
-            SxjLogger.error("修改会员信息错误", e, this.getClass());
-            map.put("error", e.getMessage());
-            // throw new WebException(e.getMessage());
         }
         catch (Exception e)
         {

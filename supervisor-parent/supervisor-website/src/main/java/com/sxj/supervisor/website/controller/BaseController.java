@@ -20,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.sxj.supervisor.enu.contract.PayStageEnum;
+import com.sxj.supervisor.enu.member.LevelEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.record.ContractTypeEnum;
@@ -86,6 +87,9 @@ public class BaseController
                         WindowTypeEnum.class));
         binder.registerCustomEditor(String.class,
                 new TrimStringPropertyEditorSupport());
+        binder.registerCustomEditor(LevelEnum.class,
+                new EnumPropertyEditorSupport<LevelEnum>(
+                        LevelEnum.class));
     }
     
     protected String getBasePath(HttpServletRequest request)

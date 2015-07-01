@@ -297,7 +297,7 @@ public class MemberEntity extends Pagable implements Serializable
      * 注册资本
      */
     @Column(name = "REGISTERED_CAPITAL")
-    private Integer registeredCapital;
+    private Double registeredCapital;
     
     /**
      * 成立日期
@@ -353,12 +353,12 @@ public class MemberEntity extends Pagable implements Serializable
         this.legalRep = legalRep;
     }
     
-    public Integer getRegisteredCapital()
+    public Double getRegisteredCapital()
     {
         return registeredCapital;
     }
     
-    public void setRegisteredCapital(Integer registeredCapital)
+    public void setRegisteredCapital(Double registeredCapital)
     {
         this.registeredCapital = registeredCapital;
     }
