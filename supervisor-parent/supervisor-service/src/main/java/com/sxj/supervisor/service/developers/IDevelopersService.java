@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.developers;
 import java.util.List;
 
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
+import com.sxj.supervisor.model.open.ApiModel;
 import com.sxj.util.exception.ServiceException;
 
 public interface IDevelopersService {
@@ -42,4 +43,6 @@ public interface IDevelopersService {
 	  * @author nist
 	  */
 	 public DevelopersEntity getDeveloper(String id) throws ServiceException;
+	 
+	 public List<ApiModel> apiQueryDevelopers(DevelopersEntity query)  throws ServiceException;
 }

@@ -179,7 +179,7 @@ public class SystemAccountController extends BaseController {
 	@RequestMapping("get_role_function")
 	public String getRloeFunctions(String accountId, String type, ModelMap map) {
 		if ("get".equals(type)) {
-			List<FunctionModel> list = roleService.getRoleFunction(accountId);
+			List<FunctionModel> list = roleService.getRoleFunction(accountId,type);
 			map.put("list", list);
 			return "manage/system/role_function";
 		} else if ("add".equals(type)) {

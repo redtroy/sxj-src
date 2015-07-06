@@ -342,7 +342,7 @@ public class MemberController extends BaseController
             }
             else
             {
-                map.put("error", " 每一分钟发送一次");
+                map.put("error", "每分钟只能发送一次");
             }
         }
         catch (Exception e)

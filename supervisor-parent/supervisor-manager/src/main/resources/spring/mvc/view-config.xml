@@ -38,7 +38,7 @@
 	</bean>
 
 	<bean id="freeMarkerConfigurer"
-		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		class="com.sxj.supervisor.manage.login.ShiroFreeMarkerConfigurer">
 		<property name="templateLoaderPath" value="/WEB-INF/views/fm/" />
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="freemarkerSettings" ref="freemarkerConfiguration" />

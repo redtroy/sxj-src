@@ -244,14 +244,34 @@ var pageii
      		</div>
       	  </td>
           <#if (account.state.id==0)>
+          <@shiro.hasPermission name="29">
           <td><a class="btn btn-green" onclick="checkState('${account.id}','1')"><span>解冻</span></a></td>
+          </@shiro.hasPermission>
+		<@shiro.lacksPermission name="29">
+			<td><span class="state frozen">冻结</span></td>
+		</@shiro.lacksPermission>
           <#elseif (account.state.id==1)>
+           <@shiro.hasPermission name="29">
           <td><a class="btn btn-red" onclick="checkState('${account.id}','0')"><span>冻结</span></a></td>
+          </@shiro.hasPermission>
+		<@shiro.lacksPermission name="29">
+			<td><span class="state verified">未冻结</span></td>
+		</@shiro.lacksPermission>
           </#if>
           <td>${account.regDate?string("yyyy-MM-dd HH:mm:ss")}</td>
+          <@shiro.hasPermission name="29">
           <td id="edit_td" class="operation"><a class="edit" onclick="edit('${account.id}')">修改</a></td>
+           </@shiro.hasPermission>
+		<@shiro.lacksPermission name="29">
+			<td>-</td>
+		</@shiro.lacksPermission>
           <td id="confim_td" class="operation" style="display: none"><a class="confirm" onclick="editOk('${account.parentId}','${account.id}')">确认</a></td>
+         <@shiro.hasPermission name="29">
           <td><a class="btn" onclick="resetPwd('${account.id}')"><span>初始化密码</span></a></td>
+           </@shiro.hasPermission>
+		<@shiro.lacksPermission name="29">
+			<td>-</td>
+		</@shiro.lacksPermission>
         </tr>
         </#list>
       </table>

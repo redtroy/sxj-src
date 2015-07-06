@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +24,7 @@ import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
+import com.sxj.supervisor.model.open.ApiModel;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.comet.CometServiceImpl;
@@ -310,6 +312,9 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("endDate", query.getEndDate());// 结束时间
             condition.addCondition("typeB", query.getMemberTypeB());
             condition.addCondition("flag", query.getFlag());
+            condition.addCondition("startAuthorDate", query.getStartAuthorDate());// 开始时间
+            condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
+            condition.addCondition("sort",query.getSort());//排序
             condition.setPage(query);
             memberList = menberDao.queryMembers(condition);
             query.setPage(condition);
@@ -493,5 +498,51 @@ public class MemberServiceImpl implements IMemberService
             throw new ServiceException("发送验证码错误", e);
         }
         return message;
+    }
+    
+    /**
+     * 会员高级查询
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<ApiModel> apiQueryMembers(String name, String type,String city)
+            throws ServiceException
+    {
+        try
+        {
+            List<MemberEntity> memberList = new ArrayList<MemberEntity>();
+            QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
+            if(!StringUtils.isEmpty(name)){
+                try
+                {
+                    condition.addCondition("name", new String(name.getBytes("iso8859-1"),"utf-8"));// 会员名称
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    e.printStackTrace();
+                } 
+            }
+            condition.addCondition("type", type);// 会员类型
+            condition.addCondition("city", city);// 会员类型
+            memberList = menberDao.apiQueryMembers(condition);
+            List<ApiModel> apiList= new ArrayList<ApiModel>();
+            for (MemberEntity memberEntity : memberList)
+            {
+                ApiModel api = new ApiModel();
+                api.setId(memberEntity.getId());
+                api.setName(memberEntity.getName());
+                api.setTel(memberEntity.getTelNum());
+                api.setAddress(memberEntity.getAddress());
+                apiList.add(api);
+                
+            }
+            return apiList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new ServiceException("查询会员信息错误", e);
+        }
+        
     }
 }
