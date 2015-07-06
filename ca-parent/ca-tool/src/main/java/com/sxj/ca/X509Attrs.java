@@ -19,6 +19,8 @@ public class X509Attrs
     
     private String commonName;
     
+    private String giveName;
+    
     private Vector v = new Vector();
     
     public X509Attrs()
@@ -29,6 +31,7 @@ public class X509Attrs
         v.addElement(X509Principal.OU);
         v.addElement(X509Principal.EmailAddress);
         v.addElement(X509Principal.L);
+        v.addElement(X509Principal.GIVENNAME);
         
     }
     
@@ -64,6 +67,10 @@ public class X509Attrs
             attrs.put(X509Principal.EmailAddress, getEmailAddress());
         else
             v.remove(X509Principal.EmailAddress);
+        if (getGiveName() != null)
+            attrs.put(X509Principal.GIVENNAME, getGiveName());
+        else
+            v.remove(X509Principal.GIVENNAME);
         return attrs;
     }
     
@@ -126,4 +133,15 @@ public class X509Attrs
     {
         this.commonName = commonName;
     }
+    
+    public String getGiveName()
+    {
+        return giveName;
+    }
+    
+    public void setGiveName(String giveName)
+    {
+        this.giveName = giveName;
+    }
+    
 }

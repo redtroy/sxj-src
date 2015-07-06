@@ -8,6 +8,7 @@ import javax.security.auth.x500.X500Principal;
 
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.HostAuthenticationToken;
+import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.x509.NoSuchStoreException;
 import org.bouncycastle.x509.X509CertStoreSelector;
@@ -45,6 +46,7 @@ public class X509AuthenticationToken implements AuthenticationToken,
         this.issuerDN = certificate.getIssuerX500Principal();
         this.hexSerialNumber = certificate.getSerialNumber().toString(16);
         this.host = host;
+        ((X509Principal) certificate.getSubjectDN()).getValues(X509Principal.GIVENNAME);
     }
     
     public X509AuthenticationToken(X500Principal clientSubjectDN,

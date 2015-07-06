@@ -88,7 +88,7 @@ public class PrincipalTag extends SecureTag
         }
         
         // Print out the principal value if not null
-        if (result != null)
+        if (result != null && !result.equals("null"))
         {
             try
             {

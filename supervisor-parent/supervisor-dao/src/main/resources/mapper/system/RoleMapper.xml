@@ -20,7 +20,7 @@
 	<!-- 获取权限操作列表 -->
 	<select id="getRoleFunction" resultMap="com.sxj.supervisor.dao.system.IFunctionDao.FunctionResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL from M_SYS_FUNCTION f 
+		<![CDATA[select f.ID,f.LEVEL,f.PARENT_ID,f.TITLE,f.URL,f.IS_MENU from M_SYS_FUNCTION f 
 		INNER JOIN M_SYS_ROLE r on f.ID=r.FUNCTION_ID WHERE 1=1 ]]>
 		<if test="condition.accountId != null">
 			<![CDATA[ AND r.ACCOUNT_ID = #{condition.accountId}]]>
@@ -28,6 +28,9 @@
 		<!-- 申请会员ID -->
 		<if test="condition.parentId != null">
 			<![CDATA[ AND f.PARENT_ID = #{condition.parentId}]]>
+		</if>
+		<if test="condition.isMenu != null">
+			<![CDATA[ AND f.IS_MENU=#{condition.isMenu}]]>
 		</if>
 		<![CDATA[ ORDER BY f.DESC]]>
 	</select>
