@@ -197,7 +197,7 @@ public class MemberController extends BaseController
     /**
      * 添加会员
      */
-    @RequestMapping(value="regist_save",method = RequestMethod.POST)
+    @RequestMapping(value = "regist_save", method = RequestMethod.POST)
     public String regist_save(MemberEntity member, ModelMap map, String ms,
             HttpSession session) throws WebException
     {
@@ -442,11 +442,14 @@ public class MemberController extends BaseController
      * @throws WebException
      */
     @RequestMapping("unCertificates")
-    public @ResponseBody String unCertificates() throws WebException
+    public @ResponseBody String unCertificates(String id) throws WebException
     {
         try
         {
-            CometServiceImpl.takeCount(MessageChannel.MEMBER_PERFECT_MESSAGE);
+            CometServiceImpl.add(MessageChannel.MEMBER_PERFECT_MESSAGE_SET, id);
+            CometServiceImpl.setCount(MessageChannel.MEMBER_PERFECT_MESSAGE,
+                    (long) CometServiceImpl.get(MessageChannel.MEMBER_PERFECT_MESSAGE_SET)
+                            .size());
             topics.getTopic(MessageChannel.TOPIC_NAME)
                     .publish(MessageChannel.MEMBER_PERFECT_MESSAGE);
         }
