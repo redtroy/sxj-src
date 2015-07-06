@@ -53,7 +53,7 @@ public class NewNewSendMessage
     {
         String result = "";
         content = URLEncoder.encode(content, "utf8");
-        pwd = EncryptUtil.md5(pwd).toUpperCase();
+        pwd = EncryptUtil.md5Hex(sn + pwd).toUpperCase();
         String soapAction = "http://tempuri.org/mdSmsSend_u";
         String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
         xml += "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">";
