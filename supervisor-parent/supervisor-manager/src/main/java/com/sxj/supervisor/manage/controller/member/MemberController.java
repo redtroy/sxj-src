@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import jxl.Workbook;
-import jxl.format.Colour;
-import jxl.format.UnderlineStyle;
 import jxl.write.Label;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
@@ -47,7 +45,6 @@ import com.sxj.util.Constraints;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
-import com.sxj.util.exception.SystemException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -119,6 +116,7 @@ public class MemberController extends BaseController
             {
                 CometServiceImpl.setCount(MessageChannel.MEMBER_PERFECT_MESSAGE,
                         0l);
+                CometServiceImpl.clear(MessageChannel.MEMBER_PERFECT_MESSAGE_SET);
             }
             //			registChannel(MessageChannel.MEMBER_MESSAGE);
             //			registChannel(MessageChannel.MEMBER_PERFECT_MESSAGE);
@@ -220,10 +218,11 @@ public class MemberController extends BaseController
         Map<String, String> map = new HashMap<String, String>();
         try
         {
-            if(member.getRemark()==null){
+            if (member.getRemark() == null)
+            {
                 member.setRemark("");
             }
-           // getValidError(result);
+            // getValidError(result);
             memberService.modifyMember(member);
             map.put("isOK", "ok");
         }
@@ -333,7 +332,7 @@ public class MemberController extends BaseController
         List<MemberEntity> list = memberService.queryMembers(query);
         File file = null;
         PrintWriter out = null;
-        WritableCellFormat wcf = null;  
+        WritableCellFormat wcf = null;
         try
         {
             request.setCharacterEncoding("UTF-8");
@@ -341,22 +340,21 @@ public class MemberController extends BaseController
             out = response.getWriter();
             file = new File("excel");//地址
             file.mkdirs();//创建目录
-            file=new File(file, "会员信息.xls");
+            file = new File(file, "会员信息.xls");
             WritableWorkbook wwb;
             wwb = Workbook.createWorkbook(new FileOutputStream(file));
             //设置字体;  
-            WritableFont bold = new WritableFont(WritableFont.createFont("宋体"),   
-                    14,  
-                    WritableFont.BOLD);  
-               wcf = new WritableCellFormat(bold);  
+            WritableFont bold = new WritableFont(WritableFont.createFont("宋体"),
+                    14, WritableFont.BOLD);
+            wcf = new WritableCellFormat(bold);
             WritableSheet ws = wwb.createSheet("会员信息", 0);
             String[] columns = { "会员ID", "会员名称", "会员类型", "城市", "地址", "联系人",
                     "联系电话", "法定代表人", "注册资本", "成立日期", "资质等级", "审核状态", "账户状态",
-                    "注册时间", "认证时间","市场专员","备注" };
+                    "注册时间", "认证时间", "市场专员", "备注" };
             for (int i = 0; i < columns.length; i++)
             {
                 ws.setColumnView(i, 20);
-                ws.addCell(new Label(i, 0, columns[i],wcf));
+                ws.addCell(new Label(i, 0, columns[i], wcf));
             }
             for (int i = 0; i < list.size(); i++)
             {
@@ -370,10 +368,14 @@ public class MemberController extends BaseController
                 ws.addCell(new Label(6, i + 1, member.getPhoneNo()));
                 
                 ws.addCell(new Label(7, i + 1, member.getLegalRep()));
-                ws.addCell(new Label(8, i + 1, member.getRegisteredCapital()==null?"":member.getRegisteredCapital().toString()));
+                ws.addCell(new Label(8, i + 1,
+                        member.getRegisteredCapital() == null ? ""
+                                : member.getRegisteredCapital().toString()));
                 ws.addCell(new Label(9, i + 1,
                         DateTimeUtils.formatPageDate(member.getFoundedDate())));
-                ws.addCell(new Label(10, i + 1, (member.getLevel()==null)?"":member.getLevel().getName()));
+                ws.addCell(new Label(10, i + 1,
+                        (member.getLevel() == null) ? "" : member.getLevel()
+                                .getName()));
                 ws.addCell(new Label(11, i + 1, member.getCheckState()
                         .getName()));
                 ws.addCell(new Label(12, i + 1, member.getState().getName()));
@@ -386,8 +388,9 @@ public class MemberController extends BaseController
             }
             wwb.write();
             wwb.close();
-            int rsRows = ws.getRows();   
-            System.err.println(rsRows+"----------------------------------------------------------");
+            int rsRows = ws.getRows();
+            System.err.println(rsRows
+                    + "----------------------------------------------------------");
             BufferedInputStream br = new BufferedInputStream(
                     new FileInputStream(file));
             byte[] buf = new byte[1024];
@@ -414,7 +417,7 @@ public class MemberController extends BaseController
         {
             if (file.exists())
             {//下载完毕删除文件
-               // file.delete();
+             // file.delete();
             }
             if (out != null)
             {
