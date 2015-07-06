@@ -83,7 +83,7 @@
           <li><label>邮政编码</label><input type="text" value="${member.code}" id="code" name="code" /></li>
           <li><label>法定代表人</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
           <li><label>注册资本</label><input type="text" value="${member.registeredCapital}" id="registeredCapital" datatype="n1-10" name="registeredCapital" />万元</li>
-          <li><label>成立时间</label><input type="text" <#if (member.foundedDate??)> value="${member.foundedDate?string("yyyy-MM-dd")}" </#if> id="foundedDate" class="foundedDate" name="foundedDate"  /></li>
+          <li><label>成立时间</label><input type="text" <#if (member.foundedDate??)>value="${member.foundedDate?string("yyyy-MM-dd")}" </#if> id="foundedDate" class="foundedDate" name="foundedDate"  /></li>
            <li><label>资质等级</label>
            <select name="level" id=level>
            <option value="">-请选择-</option>
@@ -100,6 +100,8 @@
                 
             </#list>
            	</select></li>
+           	<li><label>市场专员</label><input type="text" value="${member.marketers}" id="marketers" name="marketers" /></li>
+           	<li style="height:70px;"><label>备注</label><textarea style="width:50%" rows="2" cols="0" name="remark">${member.remark}</textarea></li>
           </ul>
           <div class="btnBox"><@shiro.hasPermission name="28">
 						 <a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info');return false;">确认修改</a></@shiro.hasPermission><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>

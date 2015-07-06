@@ -49,7 +49,6 @@ import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.FileUtil;
 import com.sxj.util.common.StringUtils;
-import com.sxj.util.exception.SystemException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -124,6 +123,7 @@ public class MemberController extends BaseController
             {
                 CometServiceImpl.setCount(MessageChannel.MEMBER_PERFECT_MESSAGE,
                         0l);
+                CometServiceImpl.clear(MessageChannel.MEMBER_PERFECT_MESSAGE_SET);
             }
             //			registChannel(MessageChannel.MEMBER_MESSAGE);
             //			registChannel(MessageChannel.MEMBER_PERFECT_MESSAGE);
@@ -225,15 +225,13 @@ public class MemberController extends BaseController
         Map<String, String> map = new HashMap<String, String>();
         try
         {
-            getValidError(result);
+            if (member.getRemark() == null)
+            {
+                member.setRemark("");
+            }
+            // getValidError(result);
             memberService.modifyMember(member);
             map.put("isOK", "ok");
-        }
-        catch (SystemException e)
-        {
-            SxjLogger.error("修改会员信息错误", e, this.getClass());
-            map.put("error", e.getMessage());
-            // throw new WebException(e.getMessage());
         }
         catch (Exception e)
         {
@@ -359,7 +357,7 @@ public class MemberController extends BaseController
             WritableSheet ws = wwb.createSheet("会员信息", 0);
             String[] columns = { "会员ID", "会员名称", "会员类型", "城市", "地址", "联系人",
                     "联系电话", "法定代表人", "注册资本", "成立日期", "资质等级", "审核状态", "账户状态",
-                    "注册时间", "认证时间" };
+                    "注册时间", "认证时间", "市场专员", "备注" };
             for (int i = 0; i < columns.length; i++)
             {
                 ws.setColumnView(i, 20);
@@ -392,6 +390,8 @@ public class MemberController extends BaseController
                         DateTimeUtils.formatPageDate(member.getRegDate())));
                 ws.addCell(new Label(14, i + 1,
                         DateTimeUtils.formatPageDate(member.getAuthorDate())));
+                ws.addCell(new Label(15, i + 1, member.getMarketers()));
+                ws.addCell(new Label(16, i + 1, member.getRemark()));
             }
             wwb.write();
             wwb.close();

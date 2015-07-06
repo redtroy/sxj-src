@@ -111,7 +111,8 @@
 			handler="com.sxj.supervisor.typehandler.MessageTypeEnumTypehandler"
 			javaType="com.sxj.supervisor.enu.message.MessageTypeEnum" />
 
-
+		<typeHandler handler="com.sxj.supervisor.typehandler.LevelEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.LevelEnum" />
 		<typeHandler
 			handler="com.sxj.supervisor.typehandler.MessageStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.message.MessageStateEnum" />

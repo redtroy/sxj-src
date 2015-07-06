@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html> 
+﻿<!DOCTYPE html>
 <html>
 <!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
@@ -7,7 +7,7 @@
 <title>私享家电子商贸平台</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
-<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script src="${b.staticPath}js/datepicker.js"></script>
 <script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
@@ -21,269 +21,299 @@
 	type="text/css" />
 <@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.upload/>
 <script>
-jQuery(document).ready(function($) {
-	$(".msgBox").live("click",function(){
-		window.location.href="${basePath}member/memberList.htm?isDelMes=true";
-	});
-	$(".msgBoxPrefect").live("click",function(){
-		window.location.href="${basePath}member/memberList.htm?isDelMesPerfect=true&flag=1&checkState=1";
-	});
-// 	JS.Engine.on({
-// 			 start : function(cId, channelList, engine){  
-// 			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
-// 			    },  
-// 			 "${channelName}" : function(data){//侦听一个channel
-// 				 $("#message_div").empty();
-// 	        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的会员注册！</div>";
-// 	        	 $("#message_div").append(bb);
-// 	         },   
-// 	 });
-// 	JS.Engine.on({
-// 		 start : function(cId, channelList, engine){  
-// 		      $.get("${basePath}notifyComet.htm?channelName=${channelNamePerfect}&ram="+Math.random()); 
-// 		    },  
-// 		 "${channelNamePerfect}" : function(data){//侦听一个channel
-// 			 $("#message_div_perfcet").empty();
-//          	 var bb="<div class='msgBoxPrefect msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条客户已完善资料但未认证的记录！</div>";
-//        	     $("#message_div_perfcet").append(bb);
-//         },   
-//      });  
-// 	 JS.Engine.start('${basePath}comet');
-	message();
-	window.setInterval(message, 3000); 
-});
-//提示消息
-function message(){
-	 $.get("${basePath}message.htm?channelName=${channelName}&ram="+Math.random(), function(data){
-		 if(typeof(data.count) != "undefined"){
-			 $("#message_div").empty();
-	    	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data.count+"</strong>条新的会员注册！</div>";
-	    	 $("#message_div").append(bb);
-		 }
-		
-	 });
-	 $.get("${basePath}message.htm?channelName=${channelNamePerfect}&ram="+Math.random(), function(data){
-		 if(typeof(data.count) != "undefined"){
-			 $("#message_div_perfcet").empty();
-	     	 var bb="<div class='msgBoxPrefect msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data.count+"</strong>条客户已完善资料但未认证的记录！</div>";
-	   	     $("#message_div_perfcet").append(bb);
-		 }
-	 });
-}
-window.onload = function() {
-	$(".demo-image").live("click",function(){
-		var image =$(this).attr("image");
-		if(image==""){
-			messageInfo("未上传证书图片！");
-		}else{
-			var imageSource=$(this).attr("data-image");
-			refreshIviewer($("#viewer2"),imageSource,$("#img_close"));
-		}
-	});
-}
+	jQuery(document)
+			.ready(
+					function($) {
+						$(".msgBox")
+								.live(
+										"click",
+										function() {
+											window.location.href = "${basePath}member/memberList.htm?isDelMes=true";
+										});
+						$(".msgBoxPrefect")
+								.live(
+										"click",
+										function() {
+											window.location.href = "${basePath}member/memberList.htm?isDelMesPerfect=true&flag=1&checkState=1&sort=1";
+										});
+						// 	JS.Engine.on({
+						// 			 start : function(cId, channelList, engine){  
+						// 			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
+						// 			    },  
+						// 			 "${channelName}" : function(data){//侦听一个channel
+						// 				 $("#message_div").empty();
+						// 	        	 var bb="<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条新的会员注册！</div>";
+						// 	        	 $("#message_div").append(bb);
+						// 	         },   
+						// 	 });
+						// 	JS.Engine.on({
+						// 		 start : function(cId, channelList, engine){  
+						// 		      $.get("${basePath}notifyComet.htm?channelName=${channelNamePerfect}&ram="+Math.random()); 
+						// 		    },  
+						// 		 "${channelNamePerfect}" : function(data){//侦听一个channel
+						// 			 $("#message_div_perfcet").empty();
+						//          	 var bb="<div class='msgBoxPrefect msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"+data+"</strong>条客户已完善资料但未认证的记录！</div>";
+						//        	     $("#message_div_perfcet").append(bb);
+						//         },   
+						//      });  
+						// 	 JS.Engine.start('${basePath}comet');
+						message();
+						window.setInterval(message, 3000);
+					});
+	//提示消息
+	function message() {
+		$
+				.get(
+						"${basePath}message.htm?channelName=${channelName}&ram="
+								+ Math.random(),
+						function(data) {
+							if (typeof (data.count) != "undefined") {
+								$("#message_div").empty();
+								var bb = "<div class='msgBox msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"
+										+ data.count
+										+ "</strong>条新的会员注册！</div>";
+								$("#message_div").append(bb);
+							}
 
-jQuery(document).ready(function($) {
-	$("#passworde_div_close").click(function() {
-		var li = $("#res_password_div").attr("index");
-		layer.close(li)
+						});
+		$
+				.get(
+						"${basePath}message.htm?channelName=${channelNamePerfect}&ram="
+								+ Math.random(),
+						function(data) {
+							if (typeof (data.count) != "undefined") {
+								$("#message_div_perfcet").empty();
+								var bb = "<div class='msgBoxPrefect msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"
+										+ data.count
+										+ "</strong>条客户已完善资料但未认证的记录！</div>";
+								$("#message_div_perfcet").append(bb);
+							}
+						});
+	}
+	window.onload = function() {
+		$(".demo-image").live("click", function() {
+			var image = $(this).attr("image");
+			if (image == "") {
+				messageInfo("未上传证书图片！");
+			} else {
+				var imageSource = $(this).attr("data-image");
+				refreshIviewer($("#viewer2"), imageSource, $("#img_close"));
+			}
+		});
+	}
+
+	jQuery(document).ready(function($) {
+		$("#passworde_div_close").click(function() {
+			var li = $("#res_password_div").attr("index");
+			layer.close(li)
+		});
+		$("#pass_btn").click(function() {
+			var li = $("#res_password_div").attr("index");
+			layer.close(li)
+		});
+		$('.demo-image').live("click", function() {
+			var image = $(this).attr("image");
+			if (image == "") {
+				messageInfo("未上传证书图片！");
+			} else {
+				$('.maskdivgen').fadeIn(100);
+				$('.viewer').slideDown(200);
+			}
+		})
 	});
-	$("#pass_btn").click(function() {
-		var li = $("#res_password_div").attr("index");
-		layer.close(li)
-	});
-	$('.demo-image').live("click",function(){
-		var image =$(this).attr("image");
-		if(image==""){
-			messageInfo("未上传证书图片！");
-		}else{
-			$('.maskdivgen').fadeIn(100);
-			$('.viewer').slideDown(200);
+	function close_img() {
+		$("#img_close").hide();
+		$(".maskdivgen").hide();
+		//$("#viewer2").empty();
+	}
+	function query(page) {
+		var params = $("#search_form").serialize();
+		if (page != undefined || page != null) {
+			params = params + "&currentPage=" + page;
 		}
-	})
-});
-function close_img(){
-	$("#img_close").hide();
-	$(".maskdivgen").hide();
-	//$("#viewer2").empty();
-}
-   function query(page){
-   	 	var params=$("#search_form").serialize();
-		if(page!=undefined||page!=null){
-		   params=params+"&currentPage="+page;
-	  	}
-		$.post("${basePath}member/memberList.htm",params,function(data){
-			var res=$(data).find("#rightBar").children("#res_table");
-			var pager=$(data).find("#rightBar").children("#pager");
+		$.post("${basePath}member/memberList.htm", params, function(data) {
+			var res = $(data).find("#rightBar").children("#res_table");
+			var pager = $(data).find("#rightBar").children("#pager");
 			$("#res_table").empty();
 			$("#res_table").append(res.html());
-			var totalPage=pager.attr("totalPage");
-			var currentPage=pager.attr("currentPage");
-			loadPage(currentPage,totalPage,query);
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
 		});
-   }
-   //重置密码
-   function resetPwd(id){
-	   var pwd;
-	   dialogBox(function(index){
-		   $.post("${basePath}member/initializePwd.htm",{id:id},function(data){
-			   layer.close(index);
-			   if (data.isOK=='ok'){
-				   pwd=data.password
-				   $("#promptPwd").text("初始密码为："+pwd+"，谢谢!");
-				   dialogBoxOutId("#res_password_div");
-			   }
-			   else{
+	}
+	//重置密码
+	function resetPwd(id) {
+		var pwd;
+		dialogBox(function(index) {
+			$.post("${basePath}member/initializePwd.htm", {
+				id : id
+			}, function(data) {
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					pwd = data.password
+					$("#promptPwd").text("初始密码为：" + pwd + "，谢谢!");
+					dialogBoxOutId("#res_password_div");
+				} else {
 					errorInfo("初始化失败！");
 				}
-		   });
-	   },"请确认是否初始化密码！");
-   }
-   //收起菜单
-   function swallowing(lable){
-	   $("#"+lable).hide();
-	   $("#"+lable).html("");
-   }
-   //打开菜单
-   function openDiv(lable,id){
-	   var temp= $("#"+lable).is(":hidden");//是否隐藏 
-	   if (temp){
-		   $("#"+lable).show();
-		   $("#"+lable).load("${basePath}member/info.htm?id="+id);
-	   }else{
-		   $("#"+lable).hide();
-		   $("#"+lable).html("");
-	   }
-   }
- 
-   //修改
-   function edit(id){
-	var params=$("#"+id).find(":input").serialize();
-	var deviceNumber=$("#"+id).find("#deviceNumber").val();
-	params=params+"&deviceNumber="+deviceNumber;
-	if (check(id)){
-		return false;
-   }
-	$.post("${basePath}member/editMember.htm",params,function(data){
-		if(data.isOK == 'ok'){
-			succInfo(function(){
-				query($("#pager").attr("currentPage"));
-			},"修改成功");
-			
-		}else{
-			errorInfo(data.error);
+			});
+		}, "请确认是否初始化密码！");
+	}
+	//收起菜单
+	function swallowing(lable) {
+		$("#" + lable).hide();
+		$("#" + lable).html("");
+	}
+	//打开菜单
+	function openDiv(lable, id) {
+		var temp = $("#" + lable).is(":hidden");//是否隐藏 
+		if (temp) {
+			$("#" + lable).show();
+			$("#" + lable).load("${basePath}member/info.htm?id=" + id);
+		} else {
+			$("#" + lable).hide();
+			$("#" + lable).html("");
 		}
-	});
-   }
-   //更改账户状态
-   function editState(id,state){
-	   dialogBox(function(index){
-		   $.post("${basePath}member/editState.htm",{id:id,state:state},function(data){
-			   layer.close(index);
-				  if (data.isOK=='ok'){
-					  succInfo(function(){
-						  query($("#pager").attr("currentPage"));
-					  },"修改状态成功！");
-				   }else{
-						errorInfo("修改状态失败！");
-					}
-			  });
-	   },"请确认是否更改账户状态！");
-	   
-   }
-   //状态验证
-   function check(obj){
-	   var bLicenseNo=$("#"+obj).find("[name='bLicenseNo']").val();
-	   var energyNo=$("#"+obj).find("[name='energyNo']").val();
-	   var contacts=$("#"+obj).find("[name='contacts']").val();
-	   var phoneNo=$("#"+obj).find("[name='phoneNo']").val();
-	   var address=$("#"+obj).find("[name='address']").val();
-	   var telNum=$("#"+obj).find("[name='telNum']").val();
-	   var code=$("#"+obj).find("#code").val();
-	   if (bLicenseNo==""){
-		   messageInfo("营业执照号不能为空");
-		   return true;
-	   }
-	   //if (energyNo==""){
+	}
+
+	//修改
+	function edit(id) {
+		var params = $("#" + id).find(":input").serialize();
+		var deviceNumber = $("#" + id).find("#deviceNumber").val();
+		params = params + "&deviceNumber=" + deviceNumber;
+		if (check(id)) {
+			return false;
+		}
+		$.post("${basePath}member/editMember.htm", params, function(data) {
+			if (data.isOK == 'ok') {
+				succInfo(function() {
+					query($("#pager").attr("currentPage"));
+				}, "修改成功");
+
+			} else {
+				errorInfo(data.error);
+			}
+		});
+	}
+	//更改账户状态
+	function editState(id, state) {
+		dialogBox(function(index) {
+			$.post("${basePath}member/editState.htm", {
+				id : id,
+				state : state
+			}, function(data) {
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function() {
+						query($("#pager").attr("currentPage"));
+					}, "修改状态成功！");
+				} else {
+					errorInfo("修改状态失败！");
+				}
+			});
+		}, "请确认是否更改账户状态！");
+
+	}
+	//状态验证
+	function check(obj) {
+		var bLicenseNo = $("#" + obj).find("[name='bLicenseNo']").val();
+		var energyNo = $("#" + obj).find("[name='energyNo']").val();
+		var contacts = $("#" + obj).find("[name='contacts']").val();
+		var phoneNo = $("#" + obj).find("[name='phoneNo']").val();
+		var address = $("#" + obj).find("[name='address']").val();
+		var telNum = $("#" + obj).find("[name='telNum']").val();
+		var code = $("#" + obj).find("#code").val();
+		if (bLicenseNo == "") {
+			messageInfo("营业执照号不能为空");
+			return true;
+		}
+		//if (energyNo==""){
 		//   messageInfo("节能标识推广证号不能为空");
 		//   return true;
-	  // }
-	   if (contacts==""){
-		   messageInfo("联系人不能为空");
-		   return true;
-	   }
-	   if (phoneNo==""){
-		   messageInfo("手机号码不能为空");
-		   return true;
-	   }
-	   if (!phoneNo.match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)){
-		   messageInfo("手机号码格式错误！");
-		   return true;
-	   }
-	   if (address==""){
-		   messageInfo("地址不能为空");
-		   return true;
-	   }
-	   if (code==""){
-		   messageInfo("邮政编码不能为空");
-		   return true;
-	   }
-	   if (telNum==""){
-		   messageInfo("固定号码不能为空！");
-		   return true;
-	   }
-	   if (!telNum.match(/^\d{1,6}-\d{1,8}$/)){
-		   messageInfo("请检查固定号码格式是否正确！");
-		   return true;
-	   }
-	   if (telNum.length>13){
-		  messageInfo("固定号码位数过长！");
-		   return true;
-	  }
-   }
- //更改审核状态
-   function editCheckState(id,state,flag){
-	   $.ajax({
-           type: "post",
-           async: false,
-           url: "checkFlag.htm",
-           data: {id:id},
-           dataType: "json",
-           success: function(data){
-                flag=data.flag;    
-            }
-       });
-	   if (flag=='false' && state!=1){
-		   errorInfo("请确认资料是否已经完善！");
-		   return false;
-	   }
-	   dialogBox(function(index){
-		 $.post("editCheckState.htm",{id:id,state:state},function(data){
-			 layer.close(index);
-			  if (data.isOK=='ok'){
-				  succInfo(function(){
-					  query($("#pager").attr("currentPage"));
-				  },"修改审核状态成功！");
-				 
-			   }else{
+		// }
+		if (contacts == "") {
+			messageInfo("联系人不能为空");
+			return true;
+		}
+		if (phoneNo == "") {
+			messageInfo("手机号码不能为空");
+			return true;
+		}
+		if (!phoneNo
+				.match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)) {
+			messageInfo("手机号码格式错误！");
+			return true;
+		}
+		if (address == "") {
+			messageInfo("地址不能为空");
+			return true;
+		}
+		if (code == "") {
+			messageInfo("邮政编码不能为空");
+			return true;
+		}
+		if (telNum == "") {
+			messageInfo("固定号码不能为空！");
+			return true;
+		}
+		if (!telNum.match(/^\d{1,6}-\d{1,8}$/)) {
+			messageInfo("请检查固定号码格式是否正确！");
+			return true;
+		}
+		if (telNum.length > 13) {
+			messageInfo("固定号码位数过长！");
+			return true;
+		}
+	}
+	//更改审核状态
+	function editCheckState(id, state, flag) {
+		$.ajax({
+			type : "post",
+			async : false,
+			url : "checkFlag.htm",
+			data : {
+				id : id
+			},
+			dataType : "json",
+			success : function(data) {
+				flag = data.flag;
+			}
+		});
+		if (flag == 'false' && state != 1) {
+			errorInfo("请确认资料是否已经完善！");
+			return false;
+		}
+		dialogBox(function(index) {
+			$.post("editCheckState.htm", {
+				id : id,
+				state : state
+			}, function(data) {
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function() {
+						query($("#pager").attr("currentPage"));
+					}, "修改审核状态成功！");
+
+				} else {
 					errorInfo("修改审核状态失败！");
 				}
-		  });
-	 },"是否审核！");
-   }
-/*
-window.onload = function() {
-var elements = document.querySelectorAll( '.demo-image' );
-Intense( elements );
-}
-*/
+			});
+		}, "是否审核！");
+	}
+	/*
+	 window.onload = function() {
+	 var elements = document.querySelectorAll( '.demo-image' );
+	 Intense( elements );
+	 }
+	 */
 
-function exportExcel(){
-	 dialogBox(function(index){	
-		 layer.close(index);
-		window.location.href="exportExcel.htm?"+$("#search_form").serialize();
-	 },"是否导出Excel");
-}
-
+	function exportExcel() {
+		dialogBox(function(index) {
+			layer.close(index);
+			window.location.href = "exportExcel.htm?"
+					+ $("#search_form").serialize();
+		}, "是否导出Excel");
+	}
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
@@ -313,8 +343,7 @@ function exportExcel(){
 								<option value="">-请选择-</option> <#list cityList as city>
 								<option value="${city.id}:${city.name}">${city.name}</option>
 								</#list>
-							</select>  会员类型 <select name="memberType"
-								id="type">
+							</select> 会员类型 <select name="memberType" id="type">
 								<option value="">-请选择-</option> <#list types as type> <#if
 								type.id==query.memberType>
 								<option value="${type.getId()}" selected="selected">${type.getName()}</option>
@@ -324,7 +353,7 @@ function exportExcel(){
 							</select>
 						</p>
 						<p>
-							 审核状态 <select name="checkState" id="checkState">
+							审核状态 <select name="checkState" id="checkState">
 								<option value="">-请选择-</option> <#list checkStates as state>
 								<#if state.id=query.checkState>
 								<option value="${state.getId()}" selected="selected">${state.getName()}</option>
@@ -342,20 +371,22 @@ function exportExcel(){
 							</select> 会员注册时间段 <input class="form-control" type="text" datepicker
 								id="time1" name="startDate"> - <input
 								class="form-control" type="text" datepicker id="time2"
-								name="endDate">
-								会员认证时间段 <input class="form-control" type="text" datepicker
-								id="time1" name="startAuthorDate"> - <input
-								class="form-control" type="text" datepicker id="time2"
-								name="endAuthorDate">
-								 <a class="btn btn-blue ly-right"
+								name="endDate"> 会员认证时间段 <input class="form-control"
+								type="text" datepicker id="time1" name="startAuthorDate">
+							- <input class="form-control" type="text" datepicker id="time2"
+								name="endAuthorDate"> <a class="btn btn-blue ly-right"
 								onclick="query();"><span>查询</span></a>
 						</p>
 					</form>
 				</div>
 				<form id="edit_form"></form>
 				<div id="message_div"></div>
-				<div id="message_div_perfcet"> <a class="btn btn-orange ly-left"
-								onclick="exportExcel();"><span>导出Excel</span></a></div>
+				<div id="message_div_perfcet"></div>
+				<div>
+					<@shiro.hasPermission name="28"> <a class="btn btn-orange ly-left"
+						onclick="exportExcel();"><span>导出Excel</span></a>
+					</@shiro.hasPermission>
+				</div>
 				<@b.pager/>
 				<table border="0" cellpadding="0" cellspacing="0" class="tabList"
 					id="res_table">
@@ -400,54 +431,40 @@ function exportExcel(){
 							(member.regDate??)>${member.regDate?string("yyyy-MM-dd
 							HH:mm:ss")}</#if></td>
 						<td><#if (member.authorDate??)>
-							${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
-						 <#if (member.checkState.id==0)>
-						 <@shiro.hasPermission name="28">
-							<td><a class="btn btn-gray"
-								onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
-						 </@shiro.hasPermission>
-						 <@shiro.lacksPermission name="28">
-							<td><span class="state normal">待审核</span></td>
-						 </@shiro.lacksPermission>	
-						<#elseif (member.checkState.id==1 && !member.flag)>
-							<td><span class="state normal">完善中</span></td> 
-						<#elseif (member.checkState.id==1 && member.flag)>
+							${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td> <#if
+						(member.checkState.id==0)> <@shiro.hasPermission name="28">
+						<td><a class="btn btn-gray"
+							onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>
+						</@shiro.hasPermission> <@shiro.lacksPermission name="28">
+						<td><span class="state normal">待审核</span></td>
+						</@shiro.lacksPermission> <#elseif (member.checkState.id==1 &&
+						!member.flag)>
+						<td><span class="state normal">完善中</span></td> <#elseif
+						(member.checkState.id==1 && member.flag)> <@shiro.hasPermission
+						name="28">
+						<td><a class="btn  btn-green"
+							onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
+						</@shiro.hasPermission> <@shiro.lacksPermission name="28">
+						<td><span class="state normal">未认证</span></td>
+						</@shiro.lacksPermission> <#elseif (member.checkState.id==2)>
+						<td><em class="state verified">已认证</em></td> </#if> <#if
+						member.state.id==0> <@shiro.hasPermission name="28">
+						<td><a class="btn btn-green"
+							onclick="editState('${member.id}',1)"><span>冻结</span></a></td>
+						</@shiro.hasPermission> <@shiro.lacksPermission name="28">
+						<td><span class="state verified">未冻结</span></td>
+						</@shiro.lacksPermission> <#elseif member.state.id==1>
 						<@shiro.hasPermission name="28">
-							<td><a class="btn  btn-green"
-								onclick="editCheckState('${member.id}',2,'${member.flag?string}')"><span>认证</span></a></td>
-						</@shiro.hasPermission>
-						 <@shiro.lacksPermission name="28">
-							<td><span class="state normal">未认证</span></td>
-						 </@shiro.lacksPermission>
-						<#elseif (member.checkState.id==2)>
-							<td><em class="state verified">已认证</em></td> 
-						</#if> 
-						<#if member.state.id==0>
-						 <@shiro.hasPermission name="28">
-							<td><a class="btn btn-green"
-								onclick="editState('${member.id}',1)"><span>冻结</span></a></td>
-								</@shiro.hasPermission>
-						 <@shiro.lacksPermission name="28">
-							<td><span class="state verified">未冻结</span></td>
-						 </@shiro.lacksPermission>
-						<#elseif member.state.id==1>
-						 <@shiro.hasPermission name="28">
-							<td><a class="btn btn-red"
-								onclick="editState('${member.id}',0)"><span>解冻</span></a></td>
-								</@shiro.hasPermission>
-						 <@shiro.lacksPermission name="28">
-							<td><span class="state frozen">冻结</span></td>
-						 </@shiro.lacksPermission>
-						 </#if>
-
-						<@shiro.hasPermission name="28">
+						<td><a class="btn btn-red"
+							onclick="editState('${member.id}',0)"><span>解冻</span></a></td>
+						</@shiro.hasPermission> <@shiro.lacksPermission name="28">
+						<td><span class="state frozen">冻结</span></td>
+						</@shiro.lacksPermission> </#if> <@shiro.hasPermission name="28">
 						<td><a class="btn btn-gray btn-password"
 							href="javascript:void(0);" onclick="resetPwd('${member.id}')"><span>初始化密码</span></a></td>
-						</@shiro.hasPermission>
-						<@shiro.lacksPermission name="28">
-						<td>-</td>
-						</@shiro.lacksPermission>
-						
+						</@shiro.hasPermission> <@shiro.lacksPermission name="28">
+						<td>-</td> </@shiro.lacksPermission>
+
 					</tr>
 					<tr class="tableInfo" style="display: none;" id="${member.id}_info"
 						index="">

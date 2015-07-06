@@ -10,6 +10,7 @@
 //
 package com.sxj.supervisor.dao.member;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.Delete;
@@ -69,7 +70,7 @@ public interface IMemberDao
      * @param member
      * @param memberList
      **/
-    public List<MemberEntity> queryMembers(QueryCondition<MemberEntity> query);
+    public List<MemberEntity> queryMembers(QueryCondition<MemberEntity> query)throws SQLException;
     
     /**
      * 增加会员子帐号数目信息 id 是MEMBER 表的 MEMBER_NO

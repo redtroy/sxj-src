@@ -297,7 +297,7 @@ public class MemberEntity extends Pagable implements Serializable
      * 注册资本
      */
     @Column(name = "REGISTERED_CAPITAL")
-    private Integer registeredCapital;
+    private Double registeredCapital;
     
     /**
      * 成立日期
@@ -311,6 +311,38 @@ public class MemberEntity extends Pagable implements Serializable
     @Column(name = "LEVEL")
     private LevelEnum level;
     
+    /**
+     * 市场专员
+     */
+    @Column(name = "MARKETERS")
+    private String marketers;
+    
+    /**
+     * 备注
+     */
+    @Column(name = "REMARK")
+    private String remark;
+    
+    public String getRemark()
+    {
+        return remark;
+    }
+    
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
+    
+    public String getMarketers()
+    {
+        return marketers;
+    }
+    
+    public void setMarketers(String marketers)
+    {
+        this.marketers = marketers;
+    }
+    
     public String getLegalRep()
     {
         return legalRep;
@@ -321,12 +353,12 @@ public class MemberEntity extends Pagable implements Serializable
         this.legalRep = legalRep;
     }
     
-    public Integer getRegisteredCapital()
+    public Double getRegisteredCapital()
     {
         return registeredCapital;
     }
     
-    public void setRegisteredCapital(Integer registeredCapital)
+    public void setRegisteredCapital(Double registeredCapital)
     {
         this.registeredCapital = registeredCapital;
     }

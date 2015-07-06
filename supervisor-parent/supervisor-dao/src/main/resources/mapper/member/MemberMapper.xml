@@ -51,9 +51,11 @@
 		jdbcType="VARCHAR" />
 	<result property="legalRep" column="LEGAL_REP" jdbcType="VARCHAR" />
 	<result property="registeredCapital" column="REGISTERED_CAPITAL"
-		jdbcType="INTEGER" />
+		jdbcType="DOUBLE" />
 	<result property="foundedDate" column="FOUNDED_DATE" jdbcType="DATE" />
 	<result property="level" column="LEVEL" jdbcType="INTEGER" />
+	<result property="marketers" column="MARKETERS" jdbcType="VARCHAR" />
+	<result property="remark" column="REMARK" jdbcType="VARCHAR" />
 </resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"
@@ -128,7 +130,12 @@
 			test="condition.startAuthorDate != null and condition.endAuthorDate != null and condition.startAuthorDate != '' and condition.endAuthorDate != ''">
 			<![CDATA[AND AUTHOR_DATE >=CONCAT(#{condition.startAuthorDate}," 00:00:00" ) AND AUTHOR_DATE <= CONCAT(#{condition.endAuthorDate}," 23:59:59")]]>
 		</if>
-		<![CDATA[ ORDER BY STATE,REG_DATE DESC]]>
+		<if test="condition.sort !=null">
+			<![CDATA[ ORDER BY STATE,REG_DATE,AUTHOR_DATE DESC]]>
+		</if>
+		<if test="condition.sort ==null">
+			<![CDATA[ ORDER BY STATE,REG_DATE DESC]]>
+		</if>
 	</select>
 	<select id="addAccountNum" resultMap="MemberResultMap"
 		parameterType="String">
