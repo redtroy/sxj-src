@@ -3,6 +3,9 @@ package com.sxj.supervisor.website.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
+import java.security.Principal;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -23,6 +26,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.bouncycastle.openssl.PEMReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
+import sun.security.x509.X500Name;
 import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
@@ -203,9 +208,44 @@ public class BasicController extends BaseController
     }
     
     @RequestMapping("to_login")
-    public String ToLogin()
+    public String ToLogin(HttpServletRequest request, ModelMap map)
+            throws WebException
     {
-        return LOGIN;
+        try
+        {
+            //X509Certificate[] clientCertChain = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
+            String certString = request.getHeader("client-cert");
+            if (StringUtils.isEmpty(certString))
+            {
+                return LOGIN;
+            }
+            certString = certString.replaceAll("\t", "\n");
+            X509Certificate clientCertChain = (X509Certificate) new PEMReader(
+                    new StringReader(certString), null, "SUN").readObject();
+            if (clientCertChain == null)
+            {
+                return LOGIN;
+            }
+            else
+            {
+                Principal dn = clientCertChain.getSubjectDN();
+                X500Name x509Principal = (X500Name) dn;
+                String uid = x509Principal.getGivenName();
+                if (StringUtils.isNotEmpty(uid))
+                {
+                    String[] uids = uid.split(",");
+                    map.put("accountName", uids[1]);
+                    map.put("memberName", uids[0]);
+                }
+                
+            }
+            
+            return LOGIN;
+        }
+        catch (Exception e)
+        {
+            throw new WebException("系统错误", e);
+        }
     }
     
     @RequestMapping("logout")
@@ -229,7 +269,7 @@ public class BasicController extends BaseController
         return "site/404";
     }
     
-    @RequestMapping(value="login",method = RequestMethod.POST)
+    @RequestMapping(value = "login", method = RequestMethod.POST)
     public String login(String memberName, String accountName, String password,
             HttpSession session, HttpServletRequest request, ModelMap map)
     {
@@ -979,21 +1019,23 @@ public class BasicController extends BaseController
     @RequestMapping("grtWindowType")
     public @ResponseBody Map<String, String> getRefContractWindwoType(
             HttpSession session, HttpServletRequest request,
-            HttpServletResponse response, String keyword,String refContractNo) throws IOException
+            HttpServletResponse response, String keyword, String refContractNo)
+            throws IOException
     {
-        if(StringUtils.isEmpty(refContractNo)){
+        if (StringUtils.isEmpty(refContractNo))
+        {
             return null;
         }
-        List<ContractItemEntity> list = contractService.getRefContractItem(refContractNo,keyword);
+        List<ContractItemEntity> list = contractService.getRefContractItem(refContractNo,
+                keyword);
         List strlist = new ArrayList();
         String sb = "";
         for (ContractItemEntity ci : list)
         {
             if (ci != null)
             {
-                sb = "{\"title\":\"" + ci.getWindowType()
-                        + "\",\"result\":\"" + ci.getId()
-                        + "\"}";
+                sb = "{\"title\":\"" + ci.getWindowType() + "\",\"result\":\""
+                        + ci.getId() + "\"}";
                 strlist.add(sb);
             }
             

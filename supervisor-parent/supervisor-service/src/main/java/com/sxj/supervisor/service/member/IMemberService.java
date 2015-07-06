@@ -2,6 +2,7 @@ package com.sxj.supervisor.service.member;
 
 import java.util.List;
 
+import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.open.ApiModel;
@@ -37,7 +38,10 @@ public interface IMemberService
     
     public String createvalidata(String phoneNo, String message)
             throws ServiceException;
-
-    List<ApiModel> apiQueryMembers(String name, String type,String city)
+    
+    List<ApiModel> apiQueryMembers(String name, String type, String city)
+            throws ServiceException;
+    
+    public String createPfx(MemberEntity member, AccountEntity account)
             throws ServiceException;
 }

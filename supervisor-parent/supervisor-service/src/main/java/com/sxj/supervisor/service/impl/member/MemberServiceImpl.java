@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.ca.store.CaTool;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.util.Identities;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.dao.member.IMemberDao;
+import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -64,6 +66,42 @@ public class MemberServiceImpl implements IMemberService
     
     @Value("${mobile.type}")
     private String type;
+    
+    @Value("${ca.employeePath}")
+    private String employeePath;
+    
+    @Value("${ca.cilentName}")
+    private String cilentName;
+    
+    @Value("${ca.cilentPath}")
+    private String cilentPath;
+    
+    @Value("${ca.days}")
+    private String days;
+    
+    @Value("${ca.au}")
+    private String au;
+    
+    @Value("${ca.caName}")
+    private String caName;
+    
+    @Value("${ca.caPath}")
+    private String caPath;
+    
+    @Value("${ca.interName}")
+    private String interName;
+    
+    @Value("${ca.interPath}")
+    private String interPath;
+    
+    @Value("${ca.serverName}")
+    private String serverName;
+    
+    @Value("${ca.serverPath}")
+    private String serverPath;
+    
+    @Value("${ca.password}")
+    private String caPassword;
     
     /**
      * 新增会员
@@ -312,7 +350,8 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("endDate", query.getEndDate());// 结束时间
             condition.addCondition("typeB", query.getMemberTypeB());
             condition.addCondition("flag", query.getFlag());
-            condition.addCondition("startAuthorDate", query.getStartAuthorDate());// 开始时间
+            condition.addCondition("startAuthorDate",
+                    query.getStartAuthorDate());// 开始时间
             condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
             condition.addCondition("sort",query.getSort());//排序
             condition.setPage(query);
@@ -505,27 +544,29 @@ public class MemberServiceImpl implements IMemberService
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ApiModel> apiQueryMembers(String name, String type,String city)
+    public List<ApiModel> apiQueryMembers(String name, String type, String city)
             throws ServiceException
     {
         try
         {
             List<MemberEntity> memberList = new ArrayList<MemberEntity>();
             QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
-            if(!StringUtils.isEmpty(name)){
+            if (!StringUtils.isEmpty(name))
+            {
                 try
                 {
-                    condition.addCondition("name", new String(name.getBytes("iso8859-1"),"utf-8"));// 会员名称
+                    condition.addCondition("name",
+                            new String(name.getBytes("iso8859-1"), "utf-8"));// 会员名称
                 }
                 catch (UnsupportedEncodingException e)
                 {
                     e.printStackTrace();
-                } 
+                }
             }
             condition.addCondition("type", type);// 会员类型
             condition.addCondition("city", city);// 会员类型
             memberList = menberDao.apiQueryMembers(condition);
-            List<ApiModel> apiList= new ArrayList<ApiModel>();
+            List<ApiModel> apiList = new ArrayList<ApiModel>();
             for (MemberEntity memberEntity : memberList)
             {
                 ApiModel api = new ApiModel();
@@ -542,6 +583,50 @@ public class MemberServiceImpl implements IMemberService
         {
             SxjLogger.error("查询会员信息错误", e, this.getClass());
             throw new ServiceException("查询会员信息错误", e);
+        }
+        
+    }
+    
+    @Override
+    @Transactional
+    public String createPfx(MemberEntity member, AccountEntity account)
+            throws ServiceException
+    {
+        try
+        {
+            String employeeName = member.getName() + "_"
+                    + account.getAccountName() + "_employee";
+            String commonName = member.getName() + "_"
+                    + account.getAccountName();
+            String giveName = member.getMemberNo() + ","
+                    + account.getAccountNo();
+            CaTool.createEmployeeCSR(employeeName,
+                    employeePath,
+                    commonName,
+                    au,
+                    giveName);
+            CaTool.createEmployeeCert(employeeName,
+                    employeePath,
+                    cilentName,
+                    cilentPath,
+                    Integer.parseInt(days));
+            CaTool.createEmployeePfx(caName,
+                    caPath,
+                    interName,
+                    interPath,
+                    serverName,
+                    serverPath,
+                    cilentName,
+                    cilentPath,
+                    employeeName,
+                    employeePath,
+                    caPassword);
+            return employeePath;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("生成用户证书失败", e, this.getClass());
+            throw new ServiceException("生成用户证书失败", e);
         }
         
     }

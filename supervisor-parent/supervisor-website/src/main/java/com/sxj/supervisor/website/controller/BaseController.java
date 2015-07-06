@@ -38,7 +38,7 @@ import com.sxj.util.logger.SxjLogger;
 public class BaseController
 {
     
-    public static final String LOGIN = "site/login";
+    public static final String LOGIN = "redirect:/to_login.htm";
     
     public static final String INDEX = "site/index";
     

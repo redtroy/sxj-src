@@ -298,9 +298,9 @@ function save(id){
     
     dialogBox(function(index){
     	if (!flag){
-    		if (${member.checkState.id}==2){
-    		  $.post("${basePath}member/unCertificates.htm",function(data){})
-    		}
+    		//if (${member.checkState.id}==2){
+    		  $.post("${basePath}member/unCertificates.htm?id="+id,function(data){})
+    		//}
     	}
     	  $.post("${basePath}member/save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
     	    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type,checkState:checkState,qualification_no:qualification_no,
