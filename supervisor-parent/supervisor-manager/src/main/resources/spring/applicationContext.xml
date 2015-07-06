@@ -28,6 +28,7 @@
 				<value>classpath*:config/mobile_message.properties</value>
 				<value>classpath*:config/fdfs_client.properties</value>
 				<value>classpath*:config/shiro.properties</value>
+				<value>classpath*:config/ca.properties</value>
 				<value>classpath*:cache.properties</value>
 			</list>
 		</property>
