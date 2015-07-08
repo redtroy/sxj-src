@@ -145,7 +145,7 @@
 	<select id="apiQueryMembers" resultMap="MemberResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT *
-		 FROM M_MEMBER WHERE 1=1]]>
+		 FROM M_MEMBER WHERE NAME NOT IN('测试门窗厂','测试型材厂','测试玻璃厂') AND CHECK_STATE=2 AND STATE !=1]]>
 		<!-- 会员名称 -->
 		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
