@@ -23,9 +23,9 @@ import com.sxj.ldap.annotations.Manager;
 import com.sxj.ldap.exception.LdapNamingException;
 import com.sxj.ldap.exception.ObjectClassNotSupportedException;
 
-public class LDAPEntryImpl implements ILdapEntry, Serializable
+public class LdapEntryImpl implements ILdapEntry, Serializable
 {
-    static final org.slf4j.Logger logger = LoggerFactory.getLogger(LDAPEntryImpl.class);
+    static final org.slf4j.Logger logger = LoggerFactory.getLogger(LdapEntryImpl.class);
     
     protected boolean modified;
     
@@ -57,7 +57,7 @@ public class LDAPEntryImpl implements ILdapEntry, Serializable
      *
      * @throws NamingException when any errors occur
      */
-    public LDAPEntryImpl(final Attributes attributes, final LdapName dn)
+    public LdapEntryImpl(final Attributes attributes, final LdapName dn)
             throws NamingException
     {
         this.attributes = attributes;
@@ -112,7 +112,7 @@ public class LDAPEntryImpl implements ILdapEntry, Serializable
             initialize();
         }*/
     
-    public LDAPEntryImpl()
+    public LdapEntryImpl()
     {
         // do nothing, probably called by serialization?
     }
