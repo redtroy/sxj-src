@@ -217,14 +217,14 @@ public class BasicController extends BaseController
             String certString = request.getHeader("client-cert");
             if (StringUtils.isEmpty(certString))
             {
-                return LOGIN;
+                return LOGINPAGER;
             }
             certString = certString.replaceAll("\t", "\n");
             X509Certificate clientCertChain = (X509Certificate) new PEMReader(
                     new StringReader(certString), null, "SUN").readObject();
             if (clientCertChain == null)
             {
-                return LOGIN;
+                return LOGINPAGER;
             }
             else
             {
@@ -240,7 +240,7 @@ public class BasicController extends BaseController
                 
             }
             
-            return LOGIN;
+            return LOGINPAGER;
         }
         catch (Exception e)
         {
