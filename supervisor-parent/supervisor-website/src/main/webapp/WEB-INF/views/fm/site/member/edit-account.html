@@ -58,8 +58,9 @@ $.ajax({
   	  var pwd1=$(".xuboxPageHtml").find("#pwd1").val();
   	  var pwd2=$(".xuboxPageHtml").find("#pwd2").val();
   	  $.post("save_pwd.htm",{id:editId,password:pwd1},function(data){
+  		closeDiv("");
   		  succInfo(function(){
-  			  closeDiv("");
+  			  /* closeDiv(""); */
   		  },"修改成功！");
   	  })
   }
@@ -223,8 +224,8 @@ $.ajax({
 <div class="modal-wrap popDemo contPop passwordPop" id="edit_pwd" style="width:600px;">
       <div class="modal-header"><span class="close" onclick="closeDiv('${member.id}');">关闭</span></div>
       <div class="modal-body">
-        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>
-        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
+        <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="/^[A-Za-z0-9]{6,32}$/" errormsg="密码只能包含数字字母,且不少于6位" nullmsg="请设置密码！"/></div>
+        <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="/^[A-Za-z0-9]{6,32}$/"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
       <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="save_pwd();">确认修改</button><button class="button button-gray " onclick="closeDiv('${member.id}');">取消</button></div>
   </div>
 </div>

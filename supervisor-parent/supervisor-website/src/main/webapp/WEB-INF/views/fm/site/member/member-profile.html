@@ -351,12 +351,12 @@
 		<div class="modal-body">
 			<div class="item">
 				<label>新密码</label><input class="input input-w180h30" type="password"
-					id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！"
+					id="pwd1" name="pwd1" datatype="/^[A-Za-z0-9]{6,32}$/" errormsg="密码只能包含数字字母,且不少于6位"
 					nullmsg="请设置密码！" />
 			</div>
 			<div class="item">
 				<label>确认密码</label><input class="input input-w180h30"
-					type="password" id="pwd2" datatype="*6-15"
+					type="password" id="pwd2" datatype="/^[A-Za-z0-9]{6,32}$/"
 					errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！" />
 			</div>
 			<div class="item">
