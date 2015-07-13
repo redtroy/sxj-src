@@ -18,11 +18,11 @@
 			</div>
 			<div class="item">
 				<label>帐号密码</label> <input type="password"
-					class="input input-w180h36" id="pwd1" name="password" title="请输入密码" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！" >
+					class="input input-w180h36" id="pwd1" name="password" title="请输入密码" datatype="/^[A-Za-z0-9]{6,32}$/" errormsg="密码只能包含数字字母,且不少于6位" nullmsg="请设置密码！" >
 			</div>
 			<div class="item">
 				<label>确认密码</label> <input type="password"
-					class="input input-w180h36" id="pwd2" name="password_confirm" title="再次输入密码" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="password" nullmsg="请设置密码！">
+					class="input input-w180h36" id="pwd2" name="password_confirm" title="再次输入密码" datatype="/^[A-Za-z0-9]{6,32}$/"  errormsg="您两次输入的账号密码不一致！" recheck="password" nullmsg="请设置密码！">
 			</div>
 			<div class="item">
 				<label>帐号权限</label> <a class="f12 lnk-blue"
