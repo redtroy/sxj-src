@@ -40,6 +40,8 @@ public class BaseController
     
     public static final String LOGIN = "redirect:/to_login.htm";
     
+    public static final String LOGINPAGER = "site/login";
+    
     public static final String INDEX = "site/index";
     
     public static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
