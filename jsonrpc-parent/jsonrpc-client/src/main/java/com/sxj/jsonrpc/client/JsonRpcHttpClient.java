@@ -431,4 +431,11 @@ public class JsonRpcHttpClient extends JsonRpcClient
         this.hostNameVerifier = hostNameVerifier;
     }
     
+    public <T> T createProxy(Class<T> clazz)
+    {
+        return ProxyUtil.createClientProxy(this.getClass().getClassLoader(),
+                clazz,
+                this);
+    }
+    
 }
