@@ -15,16 +15,6 @@ import com.sxj.jsonrpc.core.ReflectionUtil;
 
 public class ProxyUtil extends com.sxj.jsonrpc.core.ProxyUtil
 {
-    /**
-     * Creates a {@link Proxy} of the given {@link proxyInterface}
-     * that uses the given {@link JsonRpcClient}.
-     * @param <T> the proxy type
-     * @param classLoader the {@link ClassLoader}
-     * @param proxyInterface the interface to proxy
-     * @param client the {@link JsonRpcClient}
-     * @param socket the {@link Socket}
-     * @return the proxied interface
-     */
     public static <T> T createClientProxy(ClassLoader classLoader,
             Class<T> proxyInterface, final JsonRpcClient client, Socket socket)
             throws IOException
@@ -38,17 +28,6 @@ public class ProxyUtil extends com.sxj.jsonrpc.core.ProxyUtil
                 socket.getOutputStream());
     }
     
-    /**
-    * Creates a {@link Proxy} of the given {@link proxyInterface}
-    * that uses the given {@link JsonRpcClient}.
-    * @param <T> the proxy type
-    * @param classLoader the {@link ClassLoader}
-    * @param proxyInterface the interface to proxy
-    * @param client the {@link JsonRpcClient}
-    * @param ips the {@link InputStream}
-    * @param ops the {@link OutputStream}
-    * @return the proxied interface
-    */
     @SuppressWarnings("unchecked")
     public static <T> T createClientProxy(ClassLoader classLoader,
             Class<T> proxyInterface, final boolean useNamedParams,
@@ -79,16 +58,6 @@ public class ProxyUtil extends com.sxj.jsonrpc.core.ProxyUtil
                 });
     }
     
-    /**
-    * Creates a {@link Proxy} of the given {@link proxyInterface}
-    * that uses the given {@link JsonRpcHttpClient}.
-    * @param <T> the proxy type
-    * @param classLoader the {@link ClassLoader}
-    * @param proxyInterface the interface to proxy
-    * @param client the {@link JsonRpcHttpClient}
-    * @param extraHeaders extra HTTP headers to be added to each response
-    * @return the proxied interface
-    */
     @SuppressWarnings("unchecked")
     public static <T> T createClientProxy(ClassLoader classLoader,
             Class<T> proxyInterface, final boolean useNamedParams,
