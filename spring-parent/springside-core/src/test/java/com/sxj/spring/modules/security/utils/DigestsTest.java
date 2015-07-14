@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import com.sxj.spring.modules.util.Digests;
 import com.sxj.spring.modules.util.Encodes;
 
 public class DigestsTest
