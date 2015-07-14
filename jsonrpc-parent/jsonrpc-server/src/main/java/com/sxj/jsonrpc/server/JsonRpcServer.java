@@ -41,13 +41,13 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.sxj.jsonrpc.annotation.JsonRpcParam;
 import com.sxj.jsonrpc.annotation.JsonRpcParamName;
 import com.sxj.jsonrpc.core.AnnotationsErrorResolver;
-import com.sxj.jsonrpc.core.Base64;
 import com.sxj.jsonrpc.core.DefaultErrorResolver;
 import com.sxj.jsonrpc.core.ErrorResolver;
 import com.sxj.jsonrpc.core.ErrorResolver.JsonError;
 import com.sxj.jsonrpc.core.MultipleErrorResolver;
 import com.sxj.jsonrpc.core.NoCloseOutputStream;
 import com.sxj.jsonrpc.core.ReadContext;
+import com.sxj.spring.modules.util.Encodes;
 
 public class JsonRpcServer
 {
@@ -295,7 +295,7 @@ public class JsonRpcServer
         
         // decode parameters
         String decodedParams = URLDecoder.decode(new String(
-                Base64.decode(params)),
+                Encodes.decodeBase64(params)),
                 "UTF-8");
         
         // create request

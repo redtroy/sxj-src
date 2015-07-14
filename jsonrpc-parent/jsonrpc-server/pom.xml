@@ -8,9 +8,7 @@
 		<artifactId>jsonrpc-parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	<groupId>com.sxj</groupId>
 	<artifactId>jsonrpc-server</artifactId>
-	<version>1.0</version>
 	<name>jsonrpc-server</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -34,6 +32,11 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1-b06</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-util</artifactId>
+			<version>4.2.3</version>
 		</dependency>
 	</dependencies>
 </project>
