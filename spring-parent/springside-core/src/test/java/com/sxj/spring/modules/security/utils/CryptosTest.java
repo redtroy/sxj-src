@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
+import com.sxj.spring.modules.util.Cryptos;
 import com.sxj.spring.modules.util.Encodes;
 
 public class CryptosTest

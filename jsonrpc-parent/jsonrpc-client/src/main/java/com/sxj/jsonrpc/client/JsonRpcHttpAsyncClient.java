@@ -1,27 +1,3 @@
-/*
-The MIT License (MIT)
-
-Copyright (c) 2014 jsonrpc4j
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
- */
-
 package com.sxj.jsonrpc.client;
 
 import java.io.ByteArrayOutputStream;
@@ -92,34 +68,6 @@ import com.sxj.jsonrpc.core.ExceptionResolver;
 import com.sxj.jsonrpc.core.NoCloseInputStream;
 import com.sxj.jsonrpc.core.exception.JsonRpcClientException;
 
-/**
- * Implements an asynchronous JSON-RPC 2.0 HTTP client. This class has a
- * dependency on Apache Commons Codec, Apache
- * 
- * Because this implementation uses an HTTP request pool, timeouts are
- * controlled at a global level, rather than per-request.
- * <p>
- * The following JVM system properties control the behavior of the pool:
- * <ul>
- * <li>com.googlecode.jsonrpc4j.async.socket.timeout - overall socket idle
- * (keep-alive) timeout in milliseconds, default is 30 seconds</li>
- * <li>com.googlecode.jsonrpc4j.async.connect.timeout - socket connect timeout
- * in milliseconds, default is 30 seconds</li>
- * <li>com.googlecode.jsonrpc4j.async.socket.buffer - socket buffer size in
- * bytes, default is 8Kb (8192 bytes)</li>
- * <li>com.googlecode.jsonrpc4j.async.tcp.nodelay - true to use TCP_NODELAY,
- * false to disable, default is true
- * <li>com.googlecode.jsonrpc4j.async.max.inflight.route - maximum number of
- * in-flight requests per route (unique URL, minus query string), default is 500
- * </li>
- * <li>com.googlecode.jsonrpc4j.async.max.inflight.total - maximum number of
- * total in-flight requests (across all providers), default is 500</li>
- * <li>com.googlecode.jsonrpc4j.async.reactor.threads - number of asynchronous
- * IO reactor threads, default is 2 (more than sufficient for most clients)</li>
- * </ul>
- * 
- * @author Brett Wooldridge
- */
 public class JsonRpcHttpAsyncClient
 {
     private static final Logger LOGGER = Logger.getLogger(JsonRpcHttpAsyncClient.class.getName());

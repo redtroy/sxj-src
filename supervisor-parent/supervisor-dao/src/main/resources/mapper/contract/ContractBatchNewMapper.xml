@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.contract.IContractBatchNewDao">
+	<resultMap id="BacthNewResultMap"
+		type="com.sxj.supervisor.entity.contract.ContractBatchNewEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="contractId" column="CONTRACT_ID" jdbcType="VARCHAR" />
+		<result property="rfidNo" column="RFID_NO" jdbcType="VARCHAR" />
+		<result property="amount" column="AMOUNT" jdbcType="DOUBLE" />
+		<result property="batchItems" column="BATCH_ITEMS" jdbcType="VARCHAR" />
+		<result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR" />
+		<result property="updateState" column="UPDATE_STATE" jdbcType="INTEGER" />
+		<result property="type" column="TYPE" jdbcType="INTEGER" />
+		<result property="payState" column="PAY_STATE" jdbcType="INTEGER" />
+		<result property="warehouseState" column="WAREHOUSE_STATE" jdbcType="INTEGER" />
+		<result property="replenishState" column="REPLENISH_STATE"
+			jdbcType="INTEGER" />
+		<result property="payNo" column="PAY_NO" jdbcType="VARCHAR" />
+		<result property="recordNo" column="RECORD_NO" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 条件查询合同批次 -->
+	<select id="queryBacths" resultMap="BacthNewResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_CONTRACT_BATCH_NEW WHERE 1=1 ]]>
+		<!-- 合同号 -->
+		<if test="condition.contractId != null and condition.contractId != ''">
+			<![CDATA[AND CONTRACT_ID = #{condition.contractId}]]>
+		</if>
+		<if test="condition.rfidNo != null and condition.rfidNo != ''">
+			<![CDATA[AND RFID_NO = #{condition.rfidNo}]]>
+		</if>
+		<if test="condition.batchNo != null and condition.batchNo != ''">
+			<![CDATA[AND BATCH_NO = #{condition.batchNo}]]>
+		</if>
+		<if test="condition.state != null and condition.state != ''">
+			<![CDATA[AND UPDATE_STATE != #{condition.state}]]>
+		</if>
+		<![CDATA[ ORDER BY BATCH_NO ASC ]]>
+	</select>
+</mapper>
