@@ -176,6 +176,8 @@ var resetValidForm=function(){
 				var filePath =el.find("a").attr("data-pdf");
 				window.location.href = "${basePath}downloadFile.htm?filePath=" + filePath;
 			}else{
+				currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
+				currentLi=$(this);
 				refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
 				el.parent().children("li").removeClass("view");
 				el.addClass("view");
@@ -262,6 +264,11 @@ var resetValidForm=function(){
 		$(".tquantity").html(quantity+"镗");
 		$(".tamount").html(amount.toFixed(2)+"元");
 	});
+	
+	closeViewer =function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.viewer').slideUp(200);
+	}
 </script>
 </head>
 <body>

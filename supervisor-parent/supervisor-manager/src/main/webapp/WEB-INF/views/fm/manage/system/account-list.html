@@ -31,6 +31,8 @@ function roleInfo(id,type){
 	$("#roleInfo_div").empty();
 	$.get("${basePath}system/get_role_function.htm?accountId="+id+"&type="+type,function(data){
 		pageii=dialogBoxOut(data);
+		$("#roleInfo_div").css("margin-top","-140px");
+		$("#roleInfo_div").css("margin-left","-280px");
 	});
 }
 
