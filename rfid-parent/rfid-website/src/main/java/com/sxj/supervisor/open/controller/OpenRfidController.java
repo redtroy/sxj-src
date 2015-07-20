@@ -402,6 +402,9 @@ public class OpenRfidController {
             } else if (stepState == 4) {
                 map.put("state", "4");
                 map.put("message", "标签已停用,不能安装");
+            } else if (stepState == 6) {
+                map.put("state", "6");
+                map.put("message", "标签已破损,不能安装");
             } else if (stepState == 5) {
                 map.put("state", "5");
                 map.put("message", "标签未审核,不能安装");

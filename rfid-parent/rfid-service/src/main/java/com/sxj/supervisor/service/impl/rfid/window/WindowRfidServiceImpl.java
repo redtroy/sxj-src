@@ -634,6 +634,9 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
                         } else if (wind.getRfidState().equals(
                                 RfidStateEnum.DISABLE)) {
                             return 4;// 门窗已停用
+                        }else if(wind.getRfidState().equals(
+                                RfidStateEnum.DAMAGED)) {
+                            return 6;// 门窗已破损
                         }
                     } else {
                         return 5;// 未审核
