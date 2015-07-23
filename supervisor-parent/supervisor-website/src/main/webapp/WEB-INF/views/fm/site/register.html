@@ -71,6 +71,7 @@ ${type[0].getName()}</span>/
 <script>
  var message;
  var reName=true;
+ var fullName=true;
  var intDiff = parseInt(59);//倒计时总秒数量
   function regist(){
 	 var flag=false;
@@ -95,6 +96,12 @@ ${type[0].getName()}</span>/
 		 $("#name_text").show();
 		 wrong("#name_text");
 		 $("#name_text").text("公司名称不能为空");
+		 flag=true;
+	 }
+	 if (fullName){
+		 $("#name_text").show();
+		 wrong("#name_text");
+		 $("#name_text").text("公司名称不能超过20个字符");
 		 flag=true;
 	 }
 	 if($("#phoneNo").val()==""){
@@ -192,7 +199,12 @@ ${type[0].getName()}</span>/
 	  })
 	  $("#name").blur(function(){
 		 var name=$("#name").val();
-		 if (name != ""){
+		 if(name.length>20){
+			 fullName=true;
+			 $("#name_text").show();
+			 wrong("#name_text");
+			 $("#name_text").text("公司名称不能超过20个字符");
+		 }else if(name != ""){
 		 $.post("check_member.htm",{name:name},function(data){
 			 if (data.text != undefined){
 				  wrong("#name_text")

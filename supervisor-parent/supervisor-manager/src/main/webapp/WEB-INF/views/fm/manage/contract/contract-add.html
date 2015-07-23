@@ -73,6 +73,14 @@ var ul_validform;
 		if (!ul_validform.check()){
 			return false;
 		}
+		var temBool =true;
+		$("#addForm textarea").each(function(i){
+			if($(this).val().length>200){
+				errorInfo("备注超出字符数量限制");
+				temBool=false;
+			}
+		});
+		if(temBool){
 		$("#formtable").find(".formtr").each(function(i){
 			$(this).find("input").each(function(){
 				var name=$(this).attr("name").replace("index",i);
@@ -99,6 +107,7 @@ var ul_validform;
 				}
 			});
 		},"是否生成合同?");
+		}
 
 	}
 	var resetValidForm=function(){

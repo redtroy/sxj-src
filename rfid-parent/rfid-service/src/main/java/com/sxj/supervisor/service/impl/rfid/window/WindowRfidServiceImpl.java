@@ -620,6 +620,9 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
                 if (!CollectionUtils.isEmpty(winfRefList)) {
                     WindowRefEntity winRef = winfRefList.get(0);
                     if (winRef.getState().equals(AuditStateEnum.APPROVAL)) {
+                        if(wind.getRfidState().equals(RfidStateEnum.DAMAGED)) {
+                            return 6;// 门窗已破损
+                        }
                         if (wind.getProgressState().equals(
                                 LabelProgressEnum.HAS_RECEIPT)) {// 标签是否已收货
                             wind.setProgressState(LabelProgressEnum.INSTALL);
@@ -634,9 +637,6 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
                         } else if (wind.getRfidState().equals(
                                 RfidStateEnum.DISABLE)) {
                             return 4;// 门窗已停用
-                        }else if(wind.getRfidState().equals(
-                                RfidStateEnum.DAMAGED)) {
-                            return 6;// 门窗已破损
                         }
                     } else {
                         return 5;// 未审核

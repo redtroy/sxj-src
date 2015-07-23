@@ -323,6 +323,22 @@ public class MemberEntity extends Pagable implements Serializable
     @Column(name = "REMARK")
     private String remark;
     
+    /**
+     * 注册日期
+     **/
+    @Column(name = "UPDATE_DATE")
+    private Date upDate;
+    
+    public Date getUpDate()
+    {
+        return upDate;
+    }
+
+    public void setUpDate(Date upDate)
+    {
+        this.upDate = upDate;
+    }
+
     public String getRemark()
     {
         return remark;
