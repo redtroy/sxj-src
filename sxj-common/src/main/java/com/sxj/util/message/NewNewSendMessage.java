@@ -13,20 +13,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.sxj.util.common.EncryptUtil;
-import com.sxj.util.common.ISxjHttpClient;
-import com.sxj.util.common.SxjHttpClientImpl;
 import com.sxj.util.exception.SystemException;
 
 public class NewNewSendMessage
 {
     
-    private ISxjHttpClient httpclient;
+    private String serviceURL;
     
-    private String serviceURL = "http://sdk.entinfo.cn:8060/webservice.asmx";
+    private String sn;
     
-    private String sn = "DXX-WSS-11M-06110";
-    
-    private String pwd = "502503";
+    private String pwd;
     
     private String ext = "";
     
@@ -34,26 +30,26 @@ public class NewNewSendMessage
     
     private String rrid = "";
     
-    private NewNewSendMessage()
+    private NewNewSendMessage(String serviceURL, String sn, String pwd)
     {
-        if (httpclient == null)
-        {
-            httpclient = new SxjHttpClientImpl();
-        }
+        this.serviceURL = serviceURL;
+        this.sn = sn;
+        this.pwd = pwd;
+        pwd = EncryptUtil.md5Hex(this.sn + this.pwd).toUpperCase();
         
     }
     
-    public static NewNewSendMessage getInstance()
+    public static NewNewSendMessage getInstance(String serviceURL, String sn,
+            String pwd)
     {
-        return new NewNewSendMessage();
+        return new NewNewSendMessage(serviceURL, sn, pwd);
     }
     
-    public String sendMessage(String mobiles, String content)
+    public String sendMessage(String mobile, String content)
             throws SystemException, UnsupportedEncodingException
     {
         String result = "";
         content = URLEncoder.encode(content, "utf8");
-        pwd = EncryptUtil.md5Hex(sn + pwd).toUpperCase();
         String soapAction = "http://tempuri.org/mdSmsSend_u";
         String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
         xml += "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">";
@@ -61,7 +57,7 @@ public class NewNewSendMessage
         xml += "<mdSmsSend_u xmlns=\"http://tempuri.org/\">";
         xml += "<sn>" + sn + "</sn>";
         xml += "<pwd>" + pwd + "</pwd>";
-        xml += "<mobile>" + mobiles + "</mobile>";
+        xml += "<mobile>" + mobile + "</mobile>";
         xml += "<content>" + content + "</content>";
         xml += "<ext>" + ext + "</ext>";
         xml += "<stime>" + stime + "</stime>";
@@ -123,10 +119,27 @@ public class NewNewSendMessage
      * 参    数：mobile,content,ext,stime,rrid(手机号，URL_UT8编码内容，扩展码，定时时间，唯一标识)
      * 返 回 值：唯一标识，如果不填写rrid将返回系统生成的
      */
-    public String sendMessage(String[] mobiles, String content, String ext,
-            String stime, String rrid)
+    public String sendMessage(String[] mobiles, String content)
+            throws UnsupportedEncodingException
     {
         String result = "";
+        StringBuffer mobile = new StringBuffer();
+        if (mobiles != null)
+        {
+            for (int i = 0; i < mobiles.length; i++)
+            {
+                if (mobiles[i] == null)
+                {
+                    continue;
+                }
+                mobile.append(mobiles[i]);
+                if (i < mobiles.length - 1)
+                {
+                    mobile.append(",");
+                }
+            }
+        }
+        content = URLEncoder.encode(content, "utf8");
         String soapAction = "http://tempuri.org/mdSmsSend_u";
         String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
         xml += "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">";
@@ -134,7 +147,7 @@ public class NewNewSendMessage
         xml += "<mdSmsSend_u xmlns=\"http://tempuri.org/\">";
         xml += "<sn>" + sn + "</sn>";
         xml += "<pwd>" + pwd + "</pwd>";
-        xml += "<mobile>" + mobiles[0] + "</mobile>";
+        xml += "<mobile>" + mobile.toString() + "</mobile>";
         xml += "<content>" + content + "</content>";
         xml += "<ext>" + ext + "</ext>";
         xml += "<stime>" + stime + "</stime>";
@@ -193,10 +206,11 @@ public class NewNewSendMessage
     public static void main(String[] args) throws SystemException,
             UnsupportedEncodingException
     {
-        SxjHttpClientImpl httpclient = new SxjHttpClientImpl();
-        httpclient.setCharset("UTF-8");
-        NewNewSendMessage me = NewNewSendMessage.getInstance();
-        String[] dfdf = { "13852295723", "18551626910", "13852295723" };
-        me.sendMessage("13852295723", "私享家验证码3333");
+        // SxjHttpClientImpl httpclient = new SxjHttpClientImpl();
+        //httpclient.setCharset("UTF-8");
+        //NewNewSendMessage me = NewNewSendMessage.getInstance();
+        //String[] dfdf = { "13852295723", "18551626910", "13852295723" };
+        //String res = me.sendMessage("15950555822,18551626910", "teeee");
+        //System.out.println(res);
     }
 }

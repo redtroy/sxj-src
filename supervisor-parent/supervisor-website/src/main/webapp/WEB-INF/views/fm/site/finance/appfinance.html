@@ -1,0 +1,71 @@
+<div style="border:1px solid #0065c5; width:300px; min-height:356px; margin-left:15px; float:right;-moz-border-radius: 5px;-webkit-border-radius: 5px;border-radius:5px;background-color:#f6f9fa;">
+		 <div style=" width:100%; text-align:center; font-weight:bold; line-height:2.5">融资意向申请表</div>
+         <form action="${basePath}finance/add.htm" id="addForm">
+	         <div class="item">
+	          <label style="width:80px;">联系人姓名</label>
+	          <input name="contactsName" type="text" value="" class="input input-w180h30" datatype="s2-20" errormsg="联系人姓名至少2个字符,最多20个字符！" nullmsg="请输入联系人姓名" >
+	        </div>
+	        <div class="item">
+	          <label style="width:80px;">联系电话</label>
+	          <input name="contactsTel" type="text" value="" class="input input-w180h30" datatype="phone" errormsg="电话格式不正确" nullmsg="请输入手机号码" >
+	        </div>
+	        <div class="item">
+	          <label style="width:80px;">项目名称</label>
+	          <input name="projectName" type="text" value="" class="input input-w180h30" datatype="s2-50" errormsg="项目名称至少2个字符,最多50个字符！" nullmsg="请输入项目名称" >
+	        </div>
+	        <div class="item">
+	          <label style="width:80px;">资金要求</label>
+	          <input name="capital" type="text" value="" class="input input-w180h30" datatype="s2-20" errormsg="资金要求至少2个字符,最多20个字符！" nullmsg="请输入资金要求" >
+	        </div>
+	        <div class="item">
+	          <label style="width:80px;">项目概要</label>
+	          <textarea name="projectRemark" cols="1" style="height:70px; width:166px;" datatype="s2-500" errormsg="项目描述至少2个字符,最多200个字符！" nullmsg="请输入项目描述" ></textarea>
+	        </div>
+	        <div class="item" style="text-align:center">
+	          <a href="sub();" class="button button-brown">我要融资</a>
+	        </div>
+        </form>
+</div>
+
+ <script>
+ $(function(){
+	 $("#addForm").Validform({
+			tiptype:3,
+			datatype:{
+				"phone":function(gets,obj,curform,regxp){
+					var phoneReg=/^0{0,1}(13[0-9]|15[0-9]|18[0-9]|17[0-9])[0-9]{8}?$/;
+					var telReg=/^0[0-9]{10,11}$/;
+					if(phoneReg.test(gets)){
+						return true;
+					}else if(telReg.test(gets)){
+						return true;
+					}else{
+						return "请输入正确的手机号码或者固定电话";
+					}
+				}
+			 },
+			callback:function(form){
+				addCustomer();
+			}
+		});
+ });
+ 
+ function sub(){
+	 $("#addForm").submit();
+  }
+ function addCustomer(){
+		var params=$("#addForm").serialize();
+		 dialogBox(function(index){
+			 $.post("${basePath}finance/add.htm",params,function(data){
+				    layer.close(index);
+					if(data.isOK=="1"){
+						succInfo(function(){
+						 },"申请成功");
+					}
+					else{
+						errorInfo(data.error);
+					}
+			});
+		   },"是否确认申请融资");
+	}
+ </script>
