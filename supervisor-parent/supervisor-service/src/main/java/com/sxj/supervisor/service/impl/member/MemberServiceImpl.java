@@ -103,13 +103,13 @@ public class MemberServiceImpl implements IMemberService
     @Value("${ca.password}")
     private String caPassword;
     
-    @Value("${ca.serviceURL}")
+    @Value("${mobile.serviceURL}")
     private String serviceURL;
     
-    @Value("${ca.sn}")
+    @Value("${mobile.sn}")
     private String sn;
     
-    @Value("${ca.pwd}")
+    @Value("${mobile.pwd}")
     private String pwd;
     
     /**
