@@ -500,6 +500,9 @@ public class MemberController extends BaseController
         else if (infoFlag == 2)
         {
             query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
+        }else if (infoFlag == 3)
+        {
+            query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
         }
         List<MemberEntity> list = memberService.queryMembers(query);
         map.put("list", list);
