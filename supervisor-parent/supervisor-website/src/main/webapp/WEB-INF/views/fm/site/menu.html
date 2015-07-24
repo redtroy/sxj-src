@@ -67,7 +67,11 @@ function clickFunction(url){
 	else{
 		$.get("${basePath}member/checkEditState.htm?"+Math.random(),function(data){
 			if(data){
-				url=url+"?"+Math.random();
+				if(url.indexOf("?")>0){
+					url=url+"&"+Math.random();
+				}else{
+					url=url+"?"+Math.random();
+				}
 				window.location.href=url;
 			}else
 				messageInfo("会员未认证，请完善资料！");
