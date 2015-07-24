@@ -1,7 +1,12 @@
 <div class="leftMenu">
 <#list list as model>
 <h2 class="fontYH f18">
+<#if model.function.id=99>
+<span class="${model.function.style}"></span><a url="${basePath}${model.function.url}" href="javascript:clickFunction('${basePath}${model.function.url}')">${model.function.title}</a></h2>
+<#else>
 <span class="${model.function.style}"></span>${model.function.title}</h2>
+</#if>
+
 <ul>
 <#list model.children as mc>
 <#if  mc.id==6>
@@ -67,7 +72,11 @@ function clickFunction(url){
 	else{
 		$.get("${basePath}member/checkEditState.htm?"+Math.random(),function(data){
 			if(data){
-				url=url+"?"+Math.random();
+				if(url.indexOf("?")>0){
+					url=url+"&"+Math.random();
+				}else{
+					url=url+"?"+Math.random();
+				}
 				window.location.href=url;
 			}else
 				messageInfo("会员未认证，请完善资料！");

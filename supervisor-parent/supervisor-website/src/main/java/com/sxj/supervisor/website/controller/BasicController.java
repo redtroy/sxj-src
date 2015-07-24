@@ -184,96 +184,116 @@ public class BasicController extends BaseController
                 if (info.getMember().getFlag())
                 {
                     List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
-                    List<DevelopersEntity> kfsList=new ArrayList<DevelopersEntity>();
+                    List<DevelopersEntity> kfsList = new ArrayList<DevelopersEntity>();
                     
-                    MemberQuery query=new MemberQuery();
+                    MemberQuery query = new MemberQuery();
                     query.setMemberType(MemberTypeEnum.DAWP.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-                    List<MemberEntity> totalMCList=memberService.queryMembers(query);
-                    List<MemberEntity> mcList=new ArrayList<MemberEntity>();
+                    List<MemberEntity> totalMCList = memberService.queryMembers(query);
+                    List<MemberEntity> mcList = new ArrayList<MemberEntity>();
                     
-                    query=new MemberQuery();
+                    query = new MemberQuery();
                     query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-                    List<MemberEntity> totalBLList=memberService.queryMembers(query);
-                    List<MemberEntity> blList=new ArrayList<MemberEntity>();
+                    List<MemberEntity> totalBLList = memberService.queryMembers(query);
+                    List<MemberEntity> blList = new ArrayList<MemberEntity>();
                     
-                    query=new MemberQuery();
+                    query = new MemberQuery();
                     query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-                    List<MemberEntity> totalXCList=memberService.queryMembers(query);
-                    List<MemberEntity> xcList=new ArrayList<MemberEntity>();
+                    List<MemberEntity> totalXCList = memberService.queryMembers(query);
+                    List<MemberEntity> xcList = new ArrayList<MemberEntity>();
                     
-                    query=new MemberQuery();
+                    query = new MemberQuery();
                     query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-                    List<MemberEntity> totalPJList=memberService.queryMembers(query);
-                    List<MemberEntity> pjList=new ArrayList<MemberEntity>();
+                    List<MemberEntity> totalPJList = memberService.queryMembers(query);
+                    List<MemberEntity> pjList = new ArrayList<MemberEntity>();
                     
-                    if(totalMCList.size()>16){
-                        for(int i=0;i<16;i++){
-                            Random rd1=new Random();
-                            int k1=rd1.nextInt(totalMCList.size());
-                            MemberEntity temMc=totalMCList.get(k1);
+                    if (totalMCList.size() > 16)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            Random rd1 = new Random();
+                            int k1 = rd1.nextInt(totalMCList.size());
+                            MemberEntity temMc = totalMCList.get(k1);
                             mcList.add(temMc);
                             totalMCList.remove(temMc);
                         }
-                    }else{
-                        mcList=totalMCList;
+                    }
+                    else
+                    {
+                        mcList = totalMCList;
                     }
                     
-                    if(totalBLList.size()>16){
-                        for(int i=0;i<16;i++){
-                            Random rd2=new Random();
-                            int k2=rd2.nextInt(totalBLList.size());
-                            MemberEntity temBl=totalBLList.get(k2);
+                    if (totalBLList.size() > 16)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            Random rd2 = new Random();
+                            int k2 = rd2.nextInt(totalBLList.size());
+                            MemberEntity temBl = totalBLList.get(k2);
                             blList.add(temBl);
                             totalBLList.remove(temBl);
                         }
-                    }else{
-                        blList=totalBLList;
                     }
-                        
-                    if(totalXCList.size()>16){
-                        for(int i=0;i<16;i++){
-                            Random rd3=new Random();
-                            int k3=rd3.nextInt(totalXCList.size());
-                            MemberEntity temXc=totalXCList.get(k3);
+                    else
+                    {
+                        blList = totalBLList;
+                    }
+                    
+                    if (totalXCList.size() > 16)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            Random rd3 = new Random();
+                            int k3 = rd3.nextInt(totalXCList.size());
+                            MemberEntity temXc = totalXCList.get(k3);
                             xcList.add(temXc);
                             totalXCList.remove(temXc);
                         }
-                    }else{
-                        xcList=totalXCList;
                     }
-                        
-                    if(totalKFSList.size()>16){
-                        for(int i=0;i<16;i++){
-                            Random rd4=new Random();
-                            int k4=rd4.nextInt(totalKFSList.size());
-                            DevelopersEntity temKfs=totalKFSList.get(k4);
+                    else
+                    {
+                        xcList = totalXCList;
+                    }
+                    
+                    if (totalKFSList.size() > 16)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            Random rd4 = new Random();
+                            int k4 = rd4.nextInt(totalKFSList.size());
+                            DevelopersEntity temKfs = totalKFSList.get(k4);
                             kfsList.add(temKfs);
                             totalKFSList.remove(temKfs);
                         }
-                    }else{
-                        kfsList=totalKFSList;
+                    }
+                    else
+                    {
+                        kfsList = totalKFSList;
                     }
                     
-                    if(totalPJList.size()>16){
-                        for(int i=0;i<16;i++){
-                            Random rd5=new Random();
-                            int k5=rd5.nextInt(totalPJList.size());
-                            MemberEntity tempj=totalPJList.get(k5);
+                    if (totalPJList.size() > 16)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            Random rd5 = new Random();
+                            int k5 = rd5.nextInt(totalPJList.size());
+                            MemberEntity tempj = totalPJList.get(k5);
                             pjList.add(tempj);
                             totalPJList.remove(tempj);
                         }
-                    }else{
-                        pjList=totalPJList;
+                    }
+                    else
+                    {
+                        pjList = totalPJList;
                     }
                     
-                    
-                    TenderMessageQuery messQuery=new TenderMessageQuery();
+                    TenderMessageQuery messQuery = new TenderMessageQuery();
                     messQuery.setPagable(true);
-                    messQuery.setMemberNo(getLoginInfo(session).getMember().getMemberNo());
+                    messQuery.setMemberNo(getLoginInfo(session).getMember()
+                            .getMemberNo());
                     List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);
                     
                     map.put("kfsList", kfsList);
@@ -321,62 +341,64 @@ public class BasicController extends BaseController
     }
     
     @RequestMapping("newIndex")
-    public String NewIndex(HttpServletRequest request, ModelMap map,HttpSession session)
-            throws WebException
+    public String NewIndex(HttpServletRequest request, ModelMap map,
+            HttpSession session) throws WebException
     {
         try
         {
             List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
-            List<DevelopersEntity> kfsList=new ArrayList<DevelopersEntity>();
+            List<DevelopersEntity> kfsList = new ArrayList<DevelopersEntity>();
             
-            MemberQuery query=new MemberQuery();
+            MemberQuery query = new MemberQuery();
             query.setMemberType(MemberTypeEnum.DAWP.getId());
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-            List<MemberEntity> totalMCList=memberService.queryMembers(query);
-            List<MemberEntity> mcList=new ArrayList<MemberEntity>();
+            List<MemberEntity> totalMCList = memberService.queryMembers(query);
+            List<MemberEntity> mcList = new ArrayList<MemberEntity>();
             
-            query=new MemberQuery();
+            query = new MemberQuery();
             query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-            List<MemberEntity> totalBLList=memberService.queryMembers(query);
-            List<MemberEntity> blList=new ArrayList<MemberEntity>();
+            List<MemberEntity> totalBLList = memberService.queryMembers(query);
+            List<MemberEntity> blList = new ArrayList<MemberEntity>();
             
-            query=new MemberQuery();
+            query = new MemberQuery();
             query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-            List<MemberEntity> totalXCList=memberService.queryMembers(query);
-            List<MemberEntity> xcList=new ArrayList<MemberEntity>();
+            List<MemberEntity> totalXCList = memberService.queryMembers(query);
+            List<MemberEntity> xcList = new ArrayList<MemberEntity>();
             
-            for(int i=0;i<16;i++){
-                Random rd1=new Random();
-                int k1=rd1.nextInt(totalMCList.size());
-                MemberEntity temMc=totalMCList.get(k1);
+            for (int i = 0; i < 16; i++)
+            {
+                Random rd1 = new Random();
+                int k1 = rd1.nextInt(totalMCList.size());
+                MemberEntity temMc = totalMCList.get(k1);
                 mcList.add(temMc);
                 totalMCList.remove(temMc);
                 
-                Random rd2=new Random();
-                int k2=rd2.nextInt(totalBLList.size());
-                MemberEntity temBl=totalBLList.get(k2);
+                Random rd2 = new Random();
+                int k2 = rd2.nextInt(totalBLList.size());
+                MemberEntity temBl = totalBLList.get(k2);
                 blList.add(temBl);
                 totalBLList.remove(temBl);
                 
-                Random rd3=new Random();
-                int k3=rd3.nextInt(totalMCList.size());
-                MemberEntity temXc=totalXCList.get(k3);
+                Random rd3 = new Random();
+                int k3 = rd3.nextInt(totalMCList.size());
+                MemberEntity temXc = totalXCList.get(k3);
                 xcList.add(temXc);
                 totalXCList.remove(temXc);
                 
-                Random rd4=new Random();
-                int k4=rd4.nextInt(totalKFSList.size());
-                DevelopersEntity temKfs=totalKFSList.get(k4);
+                Random rd4 = new Random();
+                int k4 = rd4.nextInt(totalKFSList.size());
+                DevelopersEntity temKfs = totalKFSList.get(k4);
                 kfsList.add(temKfs);
                 totalKFSList.remove(temKfs);
                 
             }
             
-            TenderMessageQuery messQuery=new TenderMessageQuery();
+            TenderMessageQuery messQuery = new TenderMessageQuery();
             messQuery.setPagable(true);
-            messQuery.setMemberNo(getLoginInfo(session).getMember().getMemberNo());
+            messQuery.setMemberNo(getLoginInfo(session).getMember()
+                    .getMemberNo());
             List<TenderMessageModel> list = tenderMessageService.queryMessageList(messQuery);
             
             map.put("kfsList", kfsList);
@@ -386,9 +408,8 @@ public class BasicController extends BaseController
             map.put("messageList", list);
             
             return LOGINPAGER;
-            }
-            
-            
+        }
+        
         catch (Exception e)
         {
             throw new WebException("系统错误", e);
@@ -396,11 +417,17 @@ public class BasicController extends BaseController
     }
     
     @RequestMapping("to_login")
-    public String ToLogin(HttpServletRequest request, ModelMap map)
-            throws WebException
+    public String ToLogin(String memberName, String accountName,
+            String message, String pmessage, String amessage,
+            HttpServletRequest request, ModelMap map) throws WebException
     {
         try
         {
+            map.put("accountName", accountName);
+            map.put("memberName", memberName);
+            map.put("message", message);
+            map.put("pmessage", pmessage);
+            map.put("amessage", amessage);
             //X509Certificate[] clientCertChain = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
             String certString = request.getHeader("client-cert");
             if (StringUtils.isEmpty(certString))

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
+import com.sxj.mybatis.orm.annotations.GeneratedValue;
+import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
@@ -23,6 +25,7 @@ public class FinancEntity extends Pagable implements Serializable
      * 主键标识
      **/
     @Id(column = "ID")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     
     @Column(name = "MEMBER_NO")
