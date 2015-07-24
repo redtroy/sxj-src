@@ -136,6 +136,10 @@ public class WindDoorServiceImpl implements IWindDoorService
                     
                     Map<String, String> contentMap = content("http://www1.njcein.com.cn"
                             + url);
+                    if (contentMap == null)
+                    {
+                        continue;
+                    }
                     String filePath = storageClientService.uploadFile(null,
                             new ByteArrayInputStream(contentMap.get("content")
                                     .getBytes()),
@@ -180,6 +184,13 @@ public class WindDoorServiceImpl implements IWindDoorService
                                 Long.valueOf(bathList.size()));
                     }
                 }
+            }
+            for (int iii = 0; iii < bathList.size(); iii++)
+            {
+                //发短信
+                configService.sendAllMessage("您有一条新的开发商招标信息");
+                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+                        bathList.get(iii).getId());
             }
             gatherMQ();
         }
@@ -283,6 +294,10 @@ public class WindDoorServiceImpl implements IWindDoorService
                     
                     Map<String, String> contentMap = content("http://www1.njcein.com.cn"
                             + url);
+                    if (contentMap == null)
+                    {
+                        continue;
+                    }
                     String filePath = storageClientService.uploadFile(null,
                             new ByteArrayInputStream(contentMap.get("content")
                                     .getBytes()),
@@ -302,10 +317,6 @@ public class WindDoorServiceImpl implements IWindDoorService
                         windDoor.setGifPath(contentMap.get("gifPath"));
                     }
                     bathList.add(windDoor);
-                    //发短信
-                    configService.sendAllMessage("您有一条新的开发商招标信息");
-                    CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
-                            windDoor.getId());
                     flag++;
                 }
             }
@@ -327,6 +338,13 @@ public class WindDoorServiceImpl implements IWindDoorService
                                 Long.valueOf(bathList.size()));
                     }
                 }
+            }
+            for (int iii = 0; iii < bathList.size(); iii++)
+            {
+                //发短信
+                configService.sendAllMessage("您有一条新的开发商招标信息");
+                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+                        bathList.get(iii).getId());
             }
         }
         catch (Exception e)
@@ -417,7 +435,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         catch (Exception e)
         {
             SxjLogger.error("抓取门窗信息详情出错", e, this.getClass());
-            throw new ServiceException("抓取门窗信息详情出错", e);
+            return null;
         }
     }
     
