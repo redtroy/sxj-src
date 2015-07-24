@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import javax.servlet.ServletOutputStream;
@@ -43,6 +44,7 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
+import com.sxj.supervisor.entity.developers.DevelopersEntity;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
@@ -59,12 +61,16 @@ import com.sxj.supervisor.model.contract.ContractQuery;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.member.MemberFunctionModel;
 import com.sxj.supervisor.model.member.MemberQuery;
+import com.sxj.supervisor.model.message.TenderMessageModel;
+import com.sxj.supervisor.model.message.TenderMessageQuery;
 import com.sxj.supervisor.service.contract.IContractService;
+import com.sxj.supervisor.service.developers.IDevelopersService;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberLogService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.message.ITenderMessageService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
@@ -101,6 +107,12 @@ public class BasicController extends BaseController
     
     @Autowired
     private RedisTopics topics;
+    
+    @Autowired
+    private IDevelopersService developerService;
+    
+    @Autowired
+    private ITenderMessageService tenderMessageService;
     
     /**
      * getRecordState 合同service
@@ -171,27 +183,128 @@ public class BasicController extends BaseController
                 map.put("member", member);
                 if (info.getMember().getFlag())
                 {
+                    List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
+                    List<DevelopersEntity> kfsList=new ArrayList<DevelopersEntity>();
                     
-                    Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
-                            + member.getMemberNo());
-                    Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
-                            + member.getMemberNo());
-                    Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                            + member.getMemberNo());
-                    map.put("systemMessageCount", systemMessageCount);
-                    map.put("transMessageCount", transMessageCount);
-                    map.put("tenderMessageCount", tenderMessageCount);
+                    MemberQuery query=new MemberQuery();
+                    query.setMemberType(MemberTypeEnum.DAWP.getId());
+                    query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                    List<MemberEntity> totalMCList=memberService.queryMembers(query);
+                    List<MemberEntity> mcList=new ArrayList<MemberEntity>();
                     
-                    map.put("channelName_sys",
-                            MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
-                                    + member.getMemberNo());
-                    map.put("channelName_trans",
-                            MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
-                                    + member.getMemberNo());
-                    map.put("channelName_tender",
-                            MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                                    + member.getMemberNo());
-                    return "site/member/member-profile";
+                    query=new MemberQuery();
+                    query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
+                    query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                    List<MemberEntity> totalBLList=memberService.queryMembers(query);
+                    List<MemberEntity> blList=new ArrayList<MemberEntity>();
+                    
+                    query=new MemberQuery();
+                    query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
+                    query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                    List<MemberEntity> totalXCList=memberService.queryMembers(query);
+                    List<MemberEntity> xcList=new ArrayList<MemberEntity>();
+                    
+                    query=new MemberQuery();
+                    query.setMemberType(3);
+                    query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                    List<MemberEntity> totalPJList=memberService.queryMembers(query);
+                    List<MemberEntity> pjList=new ArrayList<MemberEntity>();
+                    
+                    if(totalMCList.size()>16){
+                        for(int i=0;i<16;i++){
+                            Random rd1=new Random();
+                            int k1=rd1.nextInt(totalMCList.size());
+                            MemberEntity temMc=totalMCList.get(k1);
+                            mcList.add(temMc);
+                            totalMCList.remove(temMc);
+                        }
+                    }else{
+                        mcList=totalMCList;
+                    }
+                    
+                    if(totalBLList.size()>16){
+                        for(int i=0;i<16;i++){
+                            Random rd2=new Random();
+                            int k2=rd2.nextInt(totalBLList.size());
+                            MemberEntity temBl=totalBLList.get(k2);
+                            blList.add(temBl);
+                            totalBLList.remove(temBl);
+                        }
+                    }else{
+                        blList=totalBLList;
+                    }
+                        
+                    if(totalXCList.size()>16){
+                        for(int i=0;i<16;i++){
+                            Random rd3=new Random();
+                            int k3=rd3.nextInt(totalXCList.size());
+                            MemberEntity temXc=totalXCList.get(k3);
+                            xcList.add(temXc);
+                            totalXCList.remove(temXc);
+                        }
+                    }else{
+                        xcList=totalXCList;
+                    }
+                        
+                    if(totalKFSList.size()>16){
+                        for(int i=0;i<16;i++){
+                            Random rd4=new Random();
+                            int k4=rd4.nextInt(totalKFSList.size());
+                            DevelopersEntity temKfs=totalKFSList.get(k4);
+                            kfsList.add(temKfs);
+                            totalKFSList.remove(temKfs);
+                        }
+                    }else{
+                        kfsList=totalKFSList;
+                    }
+                    
+                    if(totalPJList.size()>16){
+                        for(int i=0;i<16;i++){
+                            Random rd5=new Random();
+                            int k5=rd5.nextInt(totalPJList.size());
+                            MemberEntity tempj=totalPJList.get(k5);
+                            pjList.add(tempj);
+                            totalPJList.remove(tempj);
+                        }
+                    }else{
+                        pjList=totalPJList;
+                    }
+                    
+                    
+                    TenderMessageQuery messQuery=new TenderMessageQuery();
+                    messQuery.setPagable(true);
+                    messQuery.setMemberNo(getLoginInfo(session).getMember().getMemberNo());
+                    List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);
+                    
+                    map.put("kfsList", kfsList);
+                    map.put("mcList", mcList);
+                    map.put("blList", blList);
+                    map.put("xcList", xcList);
+//                    map.put("pjList", pjList);
+                    map.put("messageList", messageList);
+                    
+                    /*for (int i = 0; i < kfsList.size(); i++)
+                    {
+                        System.err.println("开发商:"+kfsList.get(i).getName());
+                    }
+                    for (int i = 0; i < mcList.size(); i++)
+                    {
+                        System.err.println("门窗:"+mcList.get(i).getName());
+                    }
+                    for (int i = 0; i < blList.size(); i++)
+                    {
+                        System.err.println("玻璃:"+blList.get(i).getName());
+                    }
+                    for (int i = 0; i < xcList.size(); i++)
+                    {
+                        System.err.println("型材:"+xcList.get(i).getName());
+                    }
+                    for (int i = 0; i < messageList.size(); i++)
+                    {
+                        System.err.println("招标:"+messageList.get(i).getInfoId());
+                    }*/
+                    
+                    return "site/member/platform_index";
                 }
                 else
                 {
@@ -205,6 +318,81 @@ public class BasicController extends BaseController
             
         }
         
+    }
+    
+    @RequestMapping("newIndex")
+    public String NewIndex(HttpServletRequest request, ModelMap map,HttpSession session)
+            throws WebException
+    {
+        try
+        {
+            List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
+            List<DevelopersEntity> kfsList=new ArrayList<DevelopersEntity>();
+            
+            MemberQuery query=new MemberQuery();
+            query.setMemberType(MemberTypeEnum.DAWP.getId());
+            query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            List<MemberEntity> totalMCList=memberService.queryMembers(query);
+            List<MemberEntity> mcList=new ArrayList<MemberEntity>();
+            
+            query=new MemberQuery();
+            query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
+            query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            List<MemberEntity> totalBLList=memberService.queryMembers(query);
+            List<MemberEntity> blList=new ArrayList<MemberEntity>();
+            
+            query=new MemberQuery();
+            query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
+            query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            List<MemberEntity> totalXCList=memberService.queryMembers(query);
+            List<MemberEntity> xcList=new ArrayList<MemberEntity>();
+            
+            for(int i=0;i<16;i++){
+                Random rd1=new Random();
+                int k1=rd1.nextInt(totalMCList.size());
+                MemberEntity temMc=totalMCList.get(k1);
+                mcList.add(temMc);
+                totalMCList.remove(temMc);
+                
+                Random rd2=new Random();
+                int k2=rd2.nextInt(totalBLList.size());
+                MemberEntity temBl=totalBLList.get(k2);
+                blList.add(temBl);
+                totalBLList.remove(temBl);
+                
+                Random rd3=new Random();
+                int k3=rd3.nextInt(totalMCList.size());
+                MemberEntity temXc=totalXCList.get(k3);
+                xcList.add(temXc);
+                totalXCList.remove(temXc);
+                
+                Random rd4=new Random();
+                int k4=rd4.nextInt(totalKFSList.size());
+                DevelopersEntity temKfs=totalKFSList.get(k4);
+                kfsList.add(temKfs);
+                totalKFSList.remove(temKfs);
+                
+            }
+            
+            TenderMessageQuery messQuery=new TenderMessageQuery();
+            messQuery.setPagable(true);
+            messQuery.setMemberNo(getLoginInfo(session).getMember().getMemberNo());
+            List<TenderMessageModel> list = tenderMessageService.queryMessageList(messQuery);
+            
+            map.put("kfsList", kfsList);
+            map.put("mcList", mcList);
+            map.put("blList", blList);
+            map.put("xcList", xcList);
+            map.put("messageList", list);
+            
+            return LOGINPAGER;
+            }
+            
+            
+        catch (Exception e)
+        {
+            throw new WebException("系统错误", e);
+        }
     }
     
     @RequestMapping("to_login")
