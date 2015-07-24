@@ -392,15 +392,16 @@
 					id="res_table">
 					<col width="6%" />
 					<col width="10%" />
-					<col width="10%" />
-					<col width="10%" />
+					<col width="8%" />
+					<col width="8%" />
 					<!-- <col width="10%" /> -->
 					<col width="8%" />
 					<col width="8%" />
 					<col width="8%" />
 					<col width="8%" />
 					<col width="8%" />
-					<col width="14%" />
+					<col width="8%" />
+					<col width="10%" />
 					<tr>
 						<th>会员ID</th>
 						<th>会员名称</th>
@@ -411,6 +412,7 @@
 						<th>会员类型</th>
 						<th>注册时间</th>
 						<th>认证时间</th>
+						<th>修改时间</th>
 						<th>审核状态</th>
 						<th>帐户状态</th>
 						<th class="rLine">操作</th>
@@ -431,7 +433,10 @@
 							(member.regDate??)>${member.regDate?string("yyyy-MM-dd
 							HH:mm:ss")}</#if></td>
 						<td><#if (member.authorDate??)>
-							${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td> <#if
+							${member.authorDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+							<td><#if (member.upDate??)>
+							${member.upDate?string("yyyy-MM-dd HH:mm:ss")}</#if></td>
+							 <#if
 						(member.checkState.id==0)> <@shiro.hasPermission name="28">
 						<td><a class="btn btn-gray"
 							onclick="editCheckState('${member.id}',1,'')"><span>审核</span></a></td>

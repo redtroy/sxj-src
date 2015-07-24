@@ -221,7 +221,7 @@ function rfid_a(pc_a_id){
 	}else{
 		
 		$.post("getRfidState.htm",{rfidNo:container_a[pc_a_id].batch.rfidNo},function(data){
-			num= data.state;
+			var num= data.state;
 			if(num>0){
 				$("#rfid_a").text(container_a[pc_a_id].batch.rfidNo);
 				$("#spanA").text("");
@@ -237,7 +237,7 @@ function rfid_b(pc_b_id){
 		$("#rfid_b").text("");
 	}else{
 		$.post("getRfidState.htm",{rfidNo:container_b[pc_b_id].batch.rfidNo},function(data){
-			num= data.state;
+			var num= data.state;
 			if(num>0){
 				$("#rfid_b").text(container_b[pc_b_id].batch.rfidNo);
 				$("#spanB").text("");
@@ -305,7 +305,7 @@ function star(){
 		messageInfo(contract_b+'合同的第'+pc_b+'批次，货物还未验收！');
 		return;
 	}
-	var windowType=$("#windowType option:selected").val();
+	var windowType=$("#windowType").val();//windowType option:selected
 	if (num=="" || num== null){
 		messageInfo('请输入启用数量');
 		return;

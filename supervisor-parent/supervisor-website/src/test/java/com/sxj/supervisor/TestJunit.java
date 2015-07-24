@@ -12,7 +12,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 public class TestJunit
 {

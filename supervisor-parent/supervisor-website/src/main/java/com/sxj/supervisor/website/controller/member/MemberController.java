@@ -153,6 +153,7 @@ public class MemberController extends BaseController
         {
             Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
+            member.setUpDate(new Date());
             member = memberService.modifyMember(member);
             SupervisorPrincipal login = getLoginInfo(session);
             login.setMember(member);

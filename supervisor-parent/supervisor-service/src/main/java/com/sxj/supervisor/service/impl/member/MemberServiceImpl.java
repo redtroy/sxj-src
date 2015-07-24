@@ -129,6 +129,14 @@ public class MemberServiceImpl implements IMemberService
             {
                 member.setNoType("X");
             }
+            else if (MemberTypeEnum.DEVELOPERS.equals(member.getType()))
+            {
+                member.setNoType("D");
+            }
+            else if (MemberTypeEnum.PRODUCTS.equals(member.getType()))
+            {
+                member.setNoType("P");
+            }
             else
             {
                 member.setNoType("MEM");
@@ -272,6 +280,12 @@ public class MemberServiceImpl implements IMemberService
             case GENRESFACTORY:
                 m.setNoType("X");
                 break;
+            case DEVELOPERS:
+                m.setNoType("D");
+                break;
+            case PRODUCTS:
+                m.setNoType("P");
+                break;
             default:
                 m.setNoType("MEM");
                 break;
@@ -353,7 +367,7 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("startAuthorDate",
                     query.getStartAuthorDate());// 开始时间
             condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
-            condition.addCondition("sort",query.getSort());//排序
+            condition.addCondition("sort", query.getSort());//排序
             condition.setPage(query);
             memberList = menberDao.queryMembers(condition);
             query.setPage(condition);

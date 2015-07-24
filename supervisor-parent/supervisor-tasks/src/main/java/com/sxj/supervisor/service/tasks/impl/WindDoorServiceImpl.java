@@ -136,6 +136,11 @@ public class WindDoorServiceImpl implements IWindDoorService
                     
                     Map<String, String> contentMap = content("http://www1.njcein.com.cn"
                             + url);
+                    if (contentMap == null
+                            || contentMap.get("content").length() < 200)
+                    {
+                        continue;
+                    }
                     String filePath = storageClientService.uploadFile(null,
                             new ByteArrayInputStream(contentMap.get("content")
                                     .getBytes()),
@@ -181,6 +186,14 @@ public class WindDoorServiceImpl implements IWindDoorService
                     }
                 }
             }
+            for (int iii = 0; iii < bathList.size(); iii++)
+            {
+                //发短信
+                configService.sendAllMessage("您有一条新的开发商招标信息");
+                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+                        bathList.get(iii).getId());
+            }
+            gatherMQ();
         }
         catch (Exception e)
         {
@@ -193,6 +206,160 @@ public class WindDoorServiceImpl implements IWindDoorService
         }
         System.out.println("WDGatherEnd");
         
+    }
+    
+    private void gatherMQ() throws ServiceException
+    {
+        String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
+                "MQ",
+                "GongGaoGuid");
+        //   String oldGongGaoGuid = null;
+        System.out.println("MQGatherstar");
+        try
+        {
+            Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
+                    .timeout(30000)
+                    .execute();
+            Document doc = response.parse();
+            String __VIEWSTATE = doc.getElementById("__VIEWSTATE").val();
+            String __EVENTVALIDATION = doc.getElementById("__EVENTVALIDATION")
+                    .val();
+            Map<String, String> cookies = response.cookies();
+            int pageNum = page(__VIEWSTATE, __EVENTVALIDATION, cookies);
+            int flag = 0;
+            if (wda.getMaxWindDoor().size() < 1)
+            {
+                oldGongGaoGuid = null;
+            }
+            List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
+            STOP: for (int i = 1; i <= pageNum; i++)
+            {
+                Map map = new HashMap();
+                // map.put("ImageButton1.x", "32");
+                // map.put("ImageButton1.y", "10");
+                map.put("__EVENTVALIDATION", __EVENTVALIDATION);
+                map.put("__VIEWSTATE", __VIEWSTATE);
+                map.put("__EVENTTARGET", "Pager");
+                map.put("__EVENTARGUMENT", "" + i);
+                map.put("drpBiaoDuanType", "0");
+                map.put("txtProjectName", "幕墙");
+                doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
+                        .data(map)
+                        .timeout(30000)
+                        .cookies(cookies)
+                        .header("Accept",
+                                "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                        .header("Host", "www1.njcein.com.cn")
+                        .header("Referer",
+                                "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
+                        .header("User-Agent",
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0")
+                        .header("Connection", "keep-alive")
+                        .encoding("GBK")
+                        .post();
+                int k = doc.getElementById("tdcontent")
+                        .getElementsByTag("tr")
+                        .size();
+                __VIEWSTATE = doc.getElementById("__VIEWSTATE").val();
+                __EVENTVALIDATION = doc.getElementById("__EVENTVALIDATION")
+                        .val();
+                Elements trs = doc.getElementById("tdcontent")
+                        .getElementsByTag("tr");
+                for (Element tr : trs)
+                {
+                    String bdfl = tr.getElementsByTag("td").get(1).text(); // 标段分类
+                    String xmmc = tr.getElementsByTag("td").get(2).text();// 项目名称
+                    String url = tr.getElementsByTag("td")
+                            .get(2)
+                            .getElementsByTag("a")
+                            .attr("href");
+                    String qy = tr.getElementsByTag("td").get(3).text();// 区域
+                    String jzsj = tr.getElementsByTag("td").get(4).text();// 截至日期
+                    // System.out.println(bdfl);
+                    // System.out.println(xmmc);
+                    // System.out.println(qy);
+                    // System.out.println(jzsj);
+                    // System.out.println(url);
+                    String GongGaoGuid = url.split("GongGaoGuid=")[1];
+                    if (oldGongGaoGuid != null
+                            && GongGaoGuid.equals(oldGongGaoGuid))
+                    {
+                        break STOP;
+                    }
+                    if (flag == 0)
+                    {
+                        HierarchicalCacheManager.set(CacheLevel.REDIS,
+                                "MQ",
+                                "GongGaoGuid",
+                                GongGaoGuid);
+                    }
+                    
+                    Map<String, String> contentMap = content("http://www1.njcein.com.cn"
+                            + url);
+                    if (contentMap == null
+                            || contentMap.get("content").length() < 200)
+                    {
+                        continue;
+                    }
+                    String filePath = storageClientService.uploadFile(null,
+                            new ByteArrayInputStream(contentMap.get("content")
+                                    .getBytes()),
+                            contentMap.get("content").getBytes().length,
+                            "jpg".toUpperCase());
+                    System.out.println(filePath);
+                    WindDoorEntity windDoor = new WindDoorEntity();
+                    windDoor.setId(StringUtils.getUUID());
+                    windDoor.setBdfl(bdfl);
+                    windDoor.setFilePath(filePath);
+                    windDoor.setJzrq(jzsj);
+                    windDoor.setQy(qy);
+                    windDoor.setXmmc(xmmc);
+                    windDoor.setNowDate(new Date());
+                    if (contentMap.get("gifPath") != null)
+                    {
+                        windDoor.setGifPath(contentMap.get("gifPath"));
+                    }
+                    bathList.add(windDoor);
+                    flag++;
+                }
+            }
+            if (bathList.size() > 0)
+            {
+                wda.addWindDoor(bathList);
+                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT,
+                        Long.valueOf(bathList.size()));
+                List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                if (keys != null && keys.size() > 0)
+                {
+                    for (String key : keys)
+                    {
+                        if (key == null)
+                        {
+                            continue;
+                        }
+                        CometServiceImpl.setCount(key,
+                                Long.valueOf(bathList.size()));
+                    }
+                }
+            }
+            for (int iii = 0; iii < bathList.size(); iii++)
+            {
+                //发短信
+                configService.sendAllMessage("您有一条新的开发商招标信息");
+                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+                        bathList.get(iii).getId());
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("抓取幕墙信息出错", e, this.getClass());
+            HierarchicalCacheManager.set(CacheLevel.REDIS,
+                    "MQ",
+                    "GongGaoGuid",
+                    oldGongGaoGuid);
+            throw new ServiceException("抓取幕墙信息出错", e);
+        }
+        System.out.println("MQGatherEnd");
     }
     
     public int page(String __VIEWSTATE, String __EVENTVALIDATION,
@@ -271,7 +438,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         catch (Exception e)
         {
             SxjLogger.error("抓取门窗信息详情出错", e, this.getClass());
-            throw new ServiceException("抓取门窗信息详情出错", e);
+            return null;
         }
     }
     

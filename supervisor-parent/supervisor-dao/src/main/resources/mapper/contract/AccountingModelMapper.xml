@@ -48,8 +48,12 @@
 			<![CDATA[AND (MEMBER_NO_A=#{condition.memberNo} or MEMBER_NO_B=#{condition.memberNo})]]>
 		</if>
 		<if
-			test="condition.startDate != null and condition.endDate != null and condition.startDate != '' and condition.endDate != ''">
-			<![CDATA[AND SIGNED_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) AND SIGNED_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
+			test="condition.startDate != null  and condition.startDate != '' ">
+			<![CDATA[AND SIGNED_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) ]]>
+		</if>
+		<if
+			test="condition.endDate != null and condition.endDate != ''">
+			<![CDATA[AND SIGNED_DATE <= CONCAT(#{condition.endDate}," 23:59:59")]]>
 		</if>
 	</select>
 	<select id="queryAmountItem" resultType="java.lang.Double"
