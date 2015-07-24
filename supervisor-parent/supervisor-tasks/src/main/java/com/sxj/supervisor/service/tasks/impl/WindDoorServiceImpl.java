@@ -212,6 +212,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
                 "MQ",
                 "GongGaoGuid");
+        //   String oldGongGaoGuid = null;
         System.out.println("MQGatherstar");
         try
         {
