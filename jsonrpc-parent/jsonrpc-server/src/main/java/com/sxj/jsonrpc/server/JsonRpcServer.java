@@ -1,27 +1,3 @@
-/*
-The MIT License (MIT)
-
-Copyright (c) 2014 jsonrpc4j
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
- */
-
 package com.sxj.jsonrpc.server;
 
 import static com.sxj.jsonrpc.core.ReflectionUtil.findMethods;
@@ -65,18 +41,14 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.sxj.jsonrpc.annotation.JsonRpcParam;
 import com.sxj.jsonrpc.annotation.JsonRpcParamName;
 import com.sxj.jsonrpc.core.AnnotationsErrorResolver;
-import com.sxj.jsonrpc.core.Base64;
 import com.sxj.jsonrpc.core.DefaultErrorResolver;
 import com.sxj.jsonrpc.core.ErrorResolver;
 import com.sxj.jsonrpc.core.ErrorResolver.JsonError;
 import com.sxj.jsonrpc.core.MultipleErrorResolver;
 import com.sxj.jsonrpc.core.NoCloseOutputStream;
 import com.sxj.jsonrpc.core.ReadContext;
+import com.sxj.spring.modules.util.Encodes;
 
-/**
- * A JSON-RPC request server reads JSON-RPC requests from an
- * input stream and writes responses to an output stream.
- */
 public class JsonRpcServer
 {
     
@@ -323,7 +295,7 @@ public class JsonRpcServer
         
         // decode parameters
         String decodedParams = URLDecoder.decode(new String(
-                Base64.decode(params)),
+                Encodes.decodeBase64(params)),
                 "UTF-8");
         
         // create request

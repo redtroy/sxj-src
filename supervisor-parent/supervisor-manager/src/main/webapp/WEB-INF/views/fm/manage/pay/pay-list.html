@@ -128,7 +128,7 @@ $(function(){
           <th>合同号</th>
           <th>批次</th>
           <th>类型</th>
-          <th>付款会员ID</th>
+          <th>付款会员</th>
           <th>RFID编号</th>
           <th>参考应付金额</th>
           <th>支付时间</th>
@@ -149,7 +149,7 @@ $(function(){
           <td>${model.payNo}</td>
           <td><a href="javascript:loadInfo('${model.contractNo}','${model.id}')" class="lnk-blue">${model.contractNo}</a></td>
           <td>${model.batchNo}</td>
-          <td><#if (model.type??)>${model.type.getName()}</#if></td>
+          <td><#if (model.contractType??)>${model.contractType.getName()}</#if></td>
           <td>${model.memberNameA}</td>
           <td>${model.rfidNo}</td>
           <td>${model.payAmount}</td>

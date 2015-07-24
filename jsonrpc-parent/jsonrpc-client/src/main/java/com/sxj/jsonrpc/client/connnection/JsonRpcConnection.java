@@ -5,12 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
-/**
- * @author Administrator
- *
- */
-public interface JsonRpcConnection {
-
+public interface JsonRpcConnection
+{
     
     /**
      * 从response中读取指定的header
@@ -24,8 +20,7 @@ public interface JsonRpcConnection {
      * @param argMap
      * @throws IOException 
      */
-    public void writeArgument(Map<String,String> argMap) throws IOException;
-    
+    public void writeArgument(Map<String, String> argMap) throws IOException;
     
     /**读取response内容
      * @return

@@ -25,10 +25,10 @@ public class ContractServiceTest
                 new URL(
                         "http://localhost:8080/supervisor-manager/api/service/contract.json"));
         
-        IContractService contractService = com.sxj.jsonrpc.client.ProxyUtil.createClientProxy(getClass().getClassLoader(),
-                IContractService.class,
-                client);
-        
+        //        IContractService contractService = com.sxj.jsonrpc.client.ProxyUtil2.createClientProxy(getClass().getClassLoader(),
+        //                IContractService.class,
+        //                client);
+        IContractService contractService = client.createProxy(IContractService.class);
         ContractModel contract = contractService.getContract("cWFq45GJJSHiNx0M2MgzcT0mjNiu4j8h");
         ContractEntity entity = contract.getContract();
         System.out.println(entity.toString());

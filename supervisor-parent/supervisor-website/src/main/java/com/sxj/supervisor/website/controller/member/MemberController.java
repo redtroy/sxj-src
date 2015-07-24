@@ -90,6 +90,25 @@ public class MemberController extends BaseController
                 map.put("member", member);
                 if (member.getFlag())
                 {
+                    Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                            + member.getMemberNo());
+                    Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                            + member.getMemberNo());
+                    Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                            + member.getMemberNo());
+                    map.put("systemMessageCount", systemMessageCount);
+                    map.put("transMessageCount", transMessageCount);
+                    map.put("tenderMessageCount", tenderMessageCount);
+                    
+                    map.put("channelName_sys",
+                            MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                                    + member.getMemberNo());
+                    map.put("channelName_trans",
+                            MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                                    + member.getMemberNo());
+                    map.put("channelName_tender",
+                            MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+                                    + member.getMemberNo());
                     return "site/member/member-profile";
                 }
                 else
@@ -153,6 +172,7 @@ public class MemberController extends BaseController
         {
             Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
+            member.setUpDate(new Date());
             member = memberService.modifyMember(member);
             SupervisorPrincipal login = getLoginInfo(session);
             login.setMember(member);

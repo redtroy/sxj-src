@@ -138,6 +138,14 @@ public class MemberServiceImpl implements IMemberService
             {
                 member.setNoType("X");
             }
+            else if (MemberTypeEnum.DEVELOPERS.equals(member.getType()))
+            {
+                member.setNoType("D");
+            }
+            else if (MemberTypeEnum.PRODUCTS.equals(member.getType()))
+            {
+                member.setNoType("P");
+            }
             else
             {
                 member.setNoType("MEM");
@@ -280,6 +288,12 @@ public class MemberServiceImpl implements IMemberService
                 break;
             case GENRESFACTORY:
                 m.setNoType("X");
+                break;
+            case DEVELOPERS:
+                m.setNoType("D");
+                break;
+            case PRODUCTS:
+                m.setNoType("P");
                 break;
             default:
                 m.setNoType("MEM");
