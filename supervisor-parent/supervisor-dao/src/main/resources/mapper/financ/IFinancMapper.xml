@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxj.supervisor.dao.financ.IFinancDao">
+<!--<cache type="com.sxj.mybatis.cache.HierarchicalCache">
+		<property name="level" value="2"/>
+		<property name="timeToLive" value="10"/>
+</cache> -->
+	<resultMap id="FinancResultMap" type="com.sxj.supervisor.entity.gather.WindDoorEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="contactsName" column="CONTACTS_NAME" jdbcType="VARCHAR" />
+		<result property="contactsTel" column="CONTACTS_TEL" jdbcType="VARCHAR" />
+		<result property="projectName" column="PROJECT_NAME" jdbcType="VARCHAR" />
+		<result property="capital" column="CAPITAL" jdbcType="VARCHAR" />
+		<result property="projectRemark" column="PROJECT_REMARK" jdbcType="VARCHAR" />
+	</resultMap>
+</mapper>

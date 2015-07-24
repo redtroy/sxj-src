@@ -479,4 +479,35 @@ public class MemberController extends BaseController
         }
         return "";
     }
+    
+    /**
+     * 江苏省信息
+     */
+    @RequestMapping("info")
+    public String info(Integer infoFlag, ModelMap map,MemberQuery query)
+    {
+        query.setPagable(true);
+        query.setShowCount(20);
+        //0:门窗 1:型材 2:配件
+        if (infoFlag == 0)
+        {
+            query.setMemberType(MemberTypeEnum.DAWP.getId());
+        }
+        else if (infoFlag == 1)
+        {
+            query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
+        }
+        else if (infoFlag == 2)
+        {
+            query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
+        }else if (infoFlag == 3)
+        {
+            query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
+        }
+        List<MemberEntity> list = memberService.queryMembers(query);
+        map.put("list", list);
+        map.put("infoFlag", infoFlag);
+        map.put("query", query);
+        return "site/developers/memberList";
+    }
 }
