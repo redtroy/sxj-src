@@ -205,7 +205,7 @@ public class BasicController extends BaseController
                     List<MemberEntity> xcList=new ArrayList<MemberEntity>();
                     
                     query=new MemberQuery();
-                    query.setMemberType(3);
+                    query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
                     List<MemberEntity> totalPJList=memberService.queryMembers(query);
                     List<MemberEntity> pjList=new ArrayList<MemberEntity>();
@@ -280,7 +280,7 @@ public class BasicController extends BaseController
                     map.put("mcList", mcList);
                     map.put("blList", blList);
                     map.put("xcList", xcList);
-//                    map.put("pjList", pjList);
+                    map.put("pjList", pjList);
                     map.put("messageList", messageList);
                     
                     /*for (int i = 0; i < kfsList.size(); i++)

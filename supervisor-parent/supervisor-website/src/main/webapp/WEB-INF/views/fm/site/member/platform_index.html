@@ -19,6 +19,51 @@ $(document).ready(function(){
 							fadespeed:"normal"
 							});
 });
+
+function query(page) {
+	var params = "";
+	if (page != undefined) {
+		params = "currentPage=" + page;
+	}
+	$.post("${basePath}systender/query.htm", params, function(data) {
+		var res = $(data).find(".contBox");
+		var pager = $(data).find("#pager");
+		$(".contBox").empty();
+		$("#wd-info").show();
+		$(".contBox").append(res.html());
+		var totalPage = pager.attr("totalPage");
+		var currentPage = pager.attr("currentPage");
+		loadPage(currentPage, totalPage, query);
+		loadtable();
+		loadHighcharts();
+	});
+}
+
+function modifyState(id,infoId){
+	var state=$("#message_li_"+infoId).attr("state");
+	if(state==0){
+		$.post("${basePath}systender/modifyState.htm","id="+id,function(data){
+			if(data.isOK="ok"){
+				$("#message_li_"+infoId).attr("state",1);
+				$("#message_li_"+infoId).removeClass("bgUnread");
+				$("#message_li_"+infoId).addClass("bgGray");
+				$.get("${basePath}market/info.htm?id="+infoId,function(data){
+					$("#wd-info").hide();
+					$(".contBox").empty();
+					$(".contBox").append(data);
+				});
+			}
+		});
+	}else{
+		$.get("${basePath}market/info.htm?id="+infoId,
+				function(data){
+			$("#wd-info").hide();
+			$(".contBox").empty();
+			$(".contBox").append(data);
+		});
+	}
+ }
+ 
 </script>
 </head>
 
@@ -49,9 +94,9 @@ $(document).ready(function(){
 <#list kfsList as query >
   <#if query_index%2=0>
   <tr>
-  	<td>${query.name}</td>
+  	<td><a style="color: #4291DD;" href="${query.url}">${query.name}</a></td>
   <#else>
-  	<td>${query.name}</td>
+  	<td><a style="color: #4291DD;" href="${query.url}">${query.name}</a></td>
   </tr>
   </#if>
 </#list>
@@ -96,7 +141,19 @@ $(document).ready(function(){
 </#list>
 </table>
 </div>
-<div id="content5" class="tabscontent">#5</div>
+<div id="content5" class="tabscontent">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="color:#4291dd;line-height: 37px;">
+<#list pjList as query >
+  <#if query_index%2=0>
+  <tr>
+  	<td>${query.name}</td>
+  <#else>
+  	<td>${query.name}</td>
+  </tr>
+  </#if>
+</#list>
+</table>
+</div>
   </div>
   </div>
   
@@ -133,28 +190,28 @@ $(document).ready(function(){
 <div id="tabsholder">
 <ul class="tabs">
 <li style="background-color:#4291dd; color:#FFF">江苏省开发商最新招标信息</li>
-<li style="width:670px; text-align:right"><a href="invite.html">更多...</a></li>
+<li style="width:670px; text-align:right"><a href="${basePath}systender/query.htm">更多...</a></li>
 </ul>
 <div class="contents">
-<div class="tabscontent" style="display: block">
-<ul class="invList" style="padding-bottom:0">
-<li class="bgUnread"><span class="icon icon-invi-unread"></span><span class="time mr10">2015-03-03</span><a href="invite-info.html">华夏幸福潮白河孔雀城襄颖园外墙石材幕墙工程招标公告</a></li>
-<li class="bgGray"><span class="icon icon-invi-read"></span><span class="time mr10">2015-03-03</span><a href="invite-info.html">华夏幸福集采基地类入口区园林景观工程招标公告</a></li>
-<li><span class="icon icon-invi-read"></span><span class="time mr10">2015-03-03</span><a href="invite-info.html">华夏幸福潮白河孔雀城襄颖园外墙石材幕墙工程招标公告</a></li>
-<li class="bgGray"><span class="icon icon-invi-read"></span><span class="time mr10">2015-03-02</span><a href="invite-info.html">北方君威君威国际金融中心变配电工程招标公告</a></li>
-<li><span class="icon icon-invi-read"></span><span class="time mr10">2015-03-02</span><a href="invite-info.html">欧亚达石材供应招标公告</a></li>
-<li class="bgGray"><span class="icon icon-invi-read"></span><span class="time mr10">2015-02-28</span><a href="invite-info.html">华联集团房屋屋顶防水翻新工程招标公告</a></li>
-<li><span class="icon icon-invi-read"></span><span class="time mr10">2015-02-28</span><a href="invite-info.html">华夏幸福英国宫1.8期景观灯具采购工程招标公告</a></li>
-<li class="bgGray"><span class="icon icon-invi-read"></span><span class="time mr10">2015-02-26</span><a href="invite-info.html">2015年度中唐投资搅拌站合作商入围供应商库招标公吿</a></li>
-<li><span class="icon icon-invi-read"></span><span class="time mr10">2015-02-26</span><a href="invite-info.html">2015年度中唐投资钢材供应商入围招标公吿</a></li>
-<li class="bgGray"><span class="icon icon-invi-read"></span><span class="time mr10">2015-02-26</span><a href="invite-info.html">济南市阳光100项目国际新城五期智能化工程招标公告</a></li>
-<li><span class="icon icon-invi-read"></span><span class="time mr10">2015-02-26</span><a href="#">2015年度中唐投资钢材供应商入围招标公吿</a></li>
-<li class="bgGray"><span class="icon icon-invi-read"></span><span class="time mr10">2015-02-26</span><a href="#">济南市阳光100项目国际新城五期智能化工程招标公告</a></li>
-<li><span class="icon icon-invi-read"></span><span class="time mr10">2015-02-26</span><a href="#">2015年度中唐投资钢材供应商入围招标公吿</a></li>
+<!-- <ul class="invList" style="padding-bottom:0"> -->
+<ul class="invList">
+<#list messageList as message>
+	<#if message.state.getId()==0>
+		<li class="bgUnread" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
+			<span class="icon icon-invi-unread"></span>
+			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
+			<a href="javascript:void(0);">${message.xmmc}</a>
+		</li>
+	<#else>
+		<li class="bgGray" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
+			<span class="icon icon-invi-read"></span>
+			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
+			<a href="javascript:void(0);">${message.xmmc}</a>
+		</li>
+	</#if>
+</#list>
 </ul>
-</div>
-
-  </div>
+<@b.pager/>
 </div>
 </div>
 </div>
