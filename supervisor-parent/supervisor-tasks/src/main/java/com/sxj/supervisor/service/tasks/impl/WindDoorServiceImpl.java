@@ -136,7 +136,8 @@ public class WindDoorServiceImpl implements IWindDoorService
                     
                     Map<String, String> contentMap = content("http://www1.njcein.com.cn"
                             + url);
-                    if (contentMap == null)
+                    if (contentMap == null
+                            || contentMap.get("content").length() < 200)
                     {
                         continue;
                     }
@@ -295,7 +296,8 @@ public class WindDoorServiceImpl implements IWindDoorService
                     
                     Map<String, String> contentMap = content("http://www1.njcein.com.cn"
                             + url);
-                    if (contentMap == null)
+                    if (contentMap == null
+                            || contentMap.get("content").length() < 200)
                     {
                         continue;
                     }
