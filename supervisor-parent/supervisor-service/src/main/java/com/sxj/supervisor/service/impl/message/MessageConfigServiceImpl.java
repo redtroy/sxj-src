@@ -41,13 +41,13 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     @Value("${mobile.type}")
     private String type;
     
-    @Value("${ca.serviceURL}")
+    @Value("${mobile.serviceURL}")
     private String serviceURL;
     
-    @Value("${ca.sn}")
+    @Value("${mobile.sn}")
     private String sn;
     
-    @Value("${ca.pwd}")
+    @Value("${mobile.pwd}")
     private String pwd;
     
     @Override
