@@ -18,7 +18,7 @@
 			<artifactId>tk-filters</artifactId>
 			<version>1.0.1</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.comet4j</groupId> <artifactId>comet4j-tomcat7</artifactId>
+		<!-- <dependency> <groupId>org.comet4j</groupId> <artifactId>comet4j-tomcat7</artifactId> 
 			<version>1.0</version> </dependency> -->
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -168,6 +168,17 @@
 			<groupId>com.sxj</groupId>
 			<artifactId>spring-quartz</artifactId>
 			<version>4.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>3.2.2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>
