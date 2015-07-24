@@ -62,7 +62,21 @@ function modifyState(id,infoId){
 			$(".contBox").append(data);
 		});
 	}
- }
+ };
+ 
+ function changeLi(type){
+	 if(type==0){
+		 $("a#moerUrl").attr("href","${basePath}developers/developers.htm");
+	 }else if(type==1){
+		 $("a#moerUrl").attr("href","${basePath}member/info.htm?infoFlag=0");
+	 }else if(type==2){
+		 $("a#moerUrl").attr("href","${basePath}member/info.htm?infoFlag=1");
+	 }else if(type==3){
+		 $("a#moerUrl").attr("href","${basePath}member/info.htm?infoFlag=3");
+	 }else if(type==4){
+		 $("a#moerUrl").attr("href","${basePath}member/info.htm?infoFlag=2");
+	 }	 
+ };
  
 </script>
 </head>
@@ -81,12 +95,12 @@ function modifyState(id,infoId){
 <div class="contBox">
 <div id="tabsholder" style="width:550px; float:left;">
 <ul class="tabs">
-<li id="tabz1" style="width:70px;"><a href="#">开发商</a></li>
-<li id="tabz2" style="width:70px;"><a href="#">门窗厂</a></li>
-<li id="tabz3" style="width:70px;"><a href="#">型材厂</a></li>
-<li id="tabz4" style="width:70px;"><a href="#">玻璃厂</a></li>
-<li id="tabz5" style="width:70px;"><a href="#">配件厂</a></li>
-<li style="width:180px; text-align:right"><a href="developers.html">更多...</a></li>
+<li id="tabz1" style="width:70px;" onclick="changeLi(0);"><a href="#">开发商</a></li>
+<li id="tabz2" style="width:70px;" onclick="changeLi(1);"><a href="#">门窗厂</a></li>
+<li id="tabz3" style="width:70px;" onclick="changeLi(2);"><a href="#">型材厂</a></li>
+<li id="tabz4" style="width:70px;" onclick="changeLi(3);"><a href="#">玻璃厂</a></li>
+<li id="tabz5" style="width:70px;" onclick="changeLi(4);"><a href="#">配件厂</a></li>
+<li style="width:180px; text-align:right"><a href="${basePath}developers/developers.htm" id="moerUrl">更多...</a></li>
 </ul>
 <div class="contents" style=" padding-bottom:5px;">
 <div id="content1" class="tabscontent">
