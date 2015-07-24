@@ -14,13 +14,17 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:mvc-config.xml</param-value>
+			<param-value>classpath:servlet.xml</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
+	<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener
+			</listener-class>
+  </listener>
 	<filter>
 		<filter-name>charset</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
