@@ -178,7 +178,7 @@ var basePath ='${basePath}';
 		}
 		var refContractNo = $("#refContractNo").val();
 		if (refContractNo == '') {
-			messageInfo('请输入招标合同号！');
+			messageInfo('请输入销售合同号！');
 			return;
 		}
 		var cgimgPath = $("#cgimgPath").val();
@@ -495,9 +495,9 @@ var basePath ='${basePath}';
 												name="engAddress" />
 										</div>
 										<div class="item">
-											<label>关联招标合同号</label><input class="input input-w240h36" readonly="readonly"
+											<label>关联销售合同号</label><input class="input input-w240h36" readonly="readonly"
 												value="" id="refContractNo" name="refContractNo"
-												datatype="ys" nullmsg="请输入工程地址选择招标合同" errormsg="招标合同号只能用英文+数字"  ajaxurl="getContract.htm"/>
+												datatype="ys" nullmsg="请输入工程地址选择销售合同" errormsg="销售合同号只能用英文+数字"  ajaxurl="getContract.htm"/>
 										</div>
 										<div class="item">
 											<label>&nbsp;</label>
