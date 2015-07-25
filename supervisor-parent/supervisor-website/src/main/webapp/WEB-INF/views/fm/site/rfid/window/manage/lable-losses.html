@@ -21,7 +21,7 @@ $(function(){
 								var contractNo=$("#contractNo").val();
 								
 								if(contractNo!=data.contractNo){
-									message= "新RFID标签对应的招标合同号与被补损的不一致！";
+									message= "新RFID标签对应的销售合同号与被补损的不一致！";
 									return;
 								}
 								$("#winType_span").text(data.winTypeName);
@@ -79,7 +79,7 @@ function rfidLoss() {
 			<label>需补损标签编号</label> <input class="input input-w240h30"  id="replenishNo" name="replenishNo" value="" datatype="replenishNov" nullmsg="请输入RFID编号" errormsg="输入错误"/>
 		</div>
 		<div class="item">
-			<label>门窗招标合同号</label>${windowRfid.contractNo}
+			<label>门窗销售合同号</label>${windowRfid.contractNo}
 		</div>
 		<div class="item">
 			<label>窗型代号</label>

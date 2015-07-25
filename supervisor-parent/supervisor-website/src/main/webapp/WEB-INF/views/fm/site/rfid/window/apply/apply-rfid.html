@@ -63,7 +63,7 @@ function save(){
 		 return false;
 	 }
 	 if (check(contractNo)){
-		 messageInfo('招标合同不存在');
+		 messageInfo('销售合同不存在');
 		 return false;
 	 }else{
 		 dialogBox(function(index){
@@ -104,8 +104,8 @@ function save(){
           ${type}
         </div>
 	    <div class="item">
-          <label>对应门窗招标合同</label>
-          <input class="input input-w180h36 mr5" name="contractNo" id="contractNo" value=""  title="请输入招标合同号" datatype="ys"  nullmsg="请输入招标合同号" ajaxurl="check_contract.htm" errormsg="招标合同号只能用英文+数字"/>
+          <label>对应门窗销售合同</label>
+          <input class="input input-w180h36 mr5" name="contractNo" id="contractNo" value=""  title="请输入销售合同号" datatype="ys"  nullmsg="请输入招标合同号" ajaxurl="check_contract.htm" errormsg="招标合同号只能用英文+数字"/>
           </div>
         <div class="item">
           <label>申请数量</label>
