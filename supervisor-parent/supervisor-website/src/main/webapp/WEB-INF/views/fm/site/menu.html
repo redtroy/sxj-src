@@ -2,7 +2,7 @@
 <#list list as model>
 <h2 class="fontYH f18">
 <#if model.function.id=99>
-<span class="${model.function.style}"></span><a url="${basePath}${model.function.url}" href="javascript:clickFunction('${basePath}${model.function.url}')">${model.function.title}</a></h2>
+<span class="${model.function.style}"></span><a url="${basePath}${model.function.url}" href="javascript:clickFunction('${basePath}${model.function.url}')" class="homelink">${model.function.title}</a></h2>
 <#else>
 <span class="${model.function.style}"></span>${model.function.title}</h2>
 </#if>
