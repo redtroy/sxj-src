@@ -1,12 +1,12 @@
 <div class="leftMenu">
 <#list list as model>
-<h2 class="fontYH f18">
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
 <#if model.function.id=99>
 <span class="${model.function.style}"></span><a url="${basePath}${model.function.url}" href="javascript:clickFunction('${basePath}${model.function.url}')" class="homelink">${model.function.title}</a></h2>
 <#else>
 <span class="${model.function.style}"></span>${model.function.title}</h2>
 </#if>
-
+<#if  model.children?exists && (model.children?size>0) >
 <ul>
 <#list model.children as mc>
 <#if  mc.id==6>
@@ -43,6 +43,7 @@
 <li id="${mc.id}_menu" class=""><a url="${basePath}${mc.url}" href="javascript:clickFunction('${basePath}${mc.url}')">${mc.title}</a></li>
 </#list>
 </ul>
+</#if>
 </#list>
 </div>
 <script>
