@@ -36,6 +36,7 @@ import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.message.NewNewSendMessage;
+import com.sxj.util.message.NewSendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -551,10 +552,10 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             message = Identities.randomNumber(6);
-            //            NewSendMessage.getInstance(smsUrl, userName, password, sign, type)
-            //                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
-            NewNewSendMessage.getInstance(serviceURL, sn, pwd)
-                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
+                        NewSendMessage.getInstance(smsUrl, userName, password, sign, type)
+                                .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
+//            NewNewSendMessage.getInstance(serviceURL, sn, pwd)
+//                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
         }
         catch (Exception e)
         {
