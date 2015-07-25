@@ -108,9 +108,9 @@ function changeLi(type){
 <#list kfsList as query >
   <#if query_index%2=0>
   <tr>
-  	<td><a style="color: #4291DD;" href="${query.url}">${query.name}</a></td>
+  	<td>${query.name}</td>
   <#else>
-  	<td><a style="color: #4291DD;" href="${query.url}">${query.name}</a></td>
+  	<td>${query.name}</td>
   </tr>
   </#if>
 </#list>

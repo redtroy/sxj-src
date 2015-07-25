@@ -30,8 +30,9 @@
 </div>
 
  <script>
+ var validform;
  $(function(){
-	 $("#addForm").Validform({
+	 validform = $("#addForm").Validform({
 			tiptype:3,
 			datatype:{
 				"phone":function(gets,obj,curform,regxp){
@@ -53,6 +54,9 @@
  });
  
  function sub(){
+	 if (!validform.check()) {
+			return;
+		}
 	 dialogBox(function(index){
 		 $("#addForm").submit();
 	   },"是否确认申请融资");
