@@ -47,15 +47,30 @@
 				}
 			 },
 			callback:function(form){
+				//addCustomer();
+			}
+		});
+ });
+ $(function(){
+	 $("#addForm").Validform({
+			tiptype:3,
+			datatype:{
+				"phone":function(gets,obj,curform,regxp){
+					var phoneReg=/^0{0,1}(13[0-9]|15[0-9]|18[0-9]|17[0-9])[0-9]{8}?$/;
+					var telReg=/^0[0-9]{10,11}$/;
+					if(phoneReg.test(gets)){
+						return true;
+					}else if(telReg.test(gets)){
+						return true;
+					}else{
+						return "请输入正确的手机号码或者固定电话";
+					}
+				}
+			 },
+			callback:function(form){
 				
 			}
 		});
  });
- 
- function sub(){
-	 dialogBox(function(index){
-		 $("#addForm").submit();
-	   },"是否确认申请融资");
-  }
  
  </script>
