@@ -30,13 +30,13 @@ function query(page) {
 	}
 	$.post("${basePath}index.htm", params, function(data) {
 		var res = $(data).find(".contBox");
-		var pager = $(data).find("#pager");
+		/* var pager = $(data).find("#pager"); */
 		$(".contBox").empty();
 		//$("#wd-info").show();
 		$(".contBox").append(res.html());
-		var totalPage = pager.attr("totalPage");
+		/* var totalPage = pager.attr("totalPage");
 		var currentPage = pager.attr("currentPage");
-		loadPage(currentPage, totalPage, query);
+		loadPage(currentPage, totalPage, query); */
 		$("#tabsholder").tytabs({
 			prefixtabs:"tabz",
 			prefixcontent:"content",
@@ -230,7 +230,7 @@ function sub(){
 	</#if>
 </#list>
 </ul>
-<@b.pager/>
+<!-- <@b.pager/> -->
 </div>
 </div>
 </div>
