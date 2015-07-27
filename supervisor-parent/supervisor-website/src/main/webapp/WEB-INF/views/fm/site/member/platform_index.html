@@ -149,9 +149,9 @@ function sub(){
 <#list kfsList as query >
   <#if query_index%2=0>
   <ul>
-  	<li  class="tabscontentmem">${query.name}</li>
+  	<li  class="tabscontentmem"><a style="color: #4291DD" href="${query.url}">${query.name}</a></li>
   <#else>
-  	<li  class="tabscontentmem">${query.name}</li>
+  	<li  class="tabscontentmem"><a style="color: #4291DD" href="${query.url}">${query.name}</a></li>
   </ul>
   </#if>
 </#list>
