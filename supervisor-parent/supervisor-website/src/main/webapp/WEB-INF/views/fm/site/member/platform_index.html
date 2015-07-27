@@ -28,7 +28,7 @@ function query(page) {
 	if (page != undefined) {
 		params = "currentPage=" + page;
 	}
-	$.post("${basePath}/index.htm", params, function(data) {
+	$.post("${basePath}index.htm", params, function(data) {
 		var res = $(data).find(".contBox");
 		var pager = $(data).find("#pager");
 		$(".contBox").empty();
