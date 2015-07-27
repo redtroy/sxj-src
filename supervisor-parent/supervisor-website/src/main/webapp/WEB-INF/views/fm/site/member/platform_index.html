@@ -108,9 +108,9 @@ function changeLi(type){
 <#list kfsList as query >
   <#if query_index%2=0>
   <tr>
-  	<td><a style="color: #4291DD;" href="${query.url}">${query.name}</a></td>
+  	<td>${query.name}</td>
   <#else>
-  	<td><a style="color: #4291DD;" href="${query.url}">${query.name}</a></td>
+  	<td>${query.name}</td>
   </tr>
   </#if>
 </#list>
@@ -206,6 +206,6 @@ function changeLi(type){
 </div>
 </div>
 </div>
-<div id="footer" class="f12">&copy; 2014 私享家绿色门窗平台&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14040094号-1</a></span></div>
+<@b.footer />
 </body>
 </html>
