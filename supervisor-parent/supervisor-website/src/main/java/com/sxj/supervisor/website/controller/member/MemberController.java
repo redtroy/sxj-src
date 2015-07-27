@@ -489,6 +489,7 @@ public class MemberController extends BaseController
         query.setPagable(true);
         query.setShowCount(20);
         query.setCheckState(2);
+        query.setFilterStr(1);
         //0:门窗 1:型材 2:配件
         if (infoFlag == 0)
         {
