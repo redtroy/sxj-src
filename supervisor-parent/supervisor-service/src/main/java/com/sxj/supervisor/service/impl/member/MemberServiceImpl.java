@@ -378,6 +378,7 @@ public class MemberServiceImpl implements IMemberService
                     query.getStartAuthorDate());// 开始时间
             condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
             condition.addCondition("sort", query.getSort());//排序
+            condition.addCondition("filterStr", query.getFilterStr());//筛选测试账号
             condition.setPage(query);
             memberList = menberDao.queryMembers(condition);
             query.setPage(condition);

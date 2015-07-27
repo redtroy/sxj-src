@@ -53,8 +53,20 @@ public class MemberQuery extends Pagable implements Serializable
     
     private Integer sort;
     
+    private Integer filterStr;
     
     
+    
+    public Integer getFilterStr()
+    {
+        return filterStr;
+    }
+
+    public void setFilterStr(Integer filterStr)
+    {
+        this.filterStr = filterStr;
+    }
+
     public Integer getSort()
     {
         return sort;

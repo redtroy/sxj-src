@@ -137,7 +137,7 @@ public class BasicController extends BaseController
     }
     
     @RequestMapping("index")
-    public String ToIndex(HttpServletRequest request, ModelMap map)
+    public String ToIndex(HttpServletRequest request, TenderMessageQuery messQuery ,ModelMap map)
     {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userinfo") == null)
@@ -189,24 +189,28 @@ public class BasicController extends BaseController
                     MemberQuery query = new MemberQuery();
                     query.setMemberType(MemberTypeEnum.DAWP.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                    query.setFilterStr(1);
                     List<MemberEntity> totalMCList = memberService.queryMembers(query);
                     List<MemberEntity> mcList = new ArrayList<MemberEntity>();
                     
                     query = new MemberQuery();
                     query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                    query.setFilterStr(1);
                     List<MemberEntity> totalBLList = memberService.queryMembers(query);
                     List<MemberEntity> blList = new ArrayList<MemberEntity>();
                     
                     query = new MemberQuery();
                     query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                    query.setFilterStr(1);
                     List<MemberEntity> totalXCList = memberService.queryMembers(query);
                     List<MemberEntity> xcList = new ArrayList<MemberEntity>();
                     
                     query = new MemberQuery();
                     query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
                     query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                    query.setFilterStr(1);
                     List<MemberEntity> totalPJList = memberService.queryMembers(query);
                     List<MemberEntity> pjList = new ArrayList<MemberEntity>();
                     
@@ -290,7 +294,7 @@ public class BasicController extends BaseController
                         pjList = totalPJList;
                     }
                     
-                    TenderMessageQuery messQuery = new TenderMessageQuery();
+                   // TenderMessageQuery messQuery = new TenderMessageQuery();
                     messQuery.setPagable(true);
                     messQuery.setMemberNo(getLoginInfo(session).getMember()
                             .getMemberNo());
@@ -302,6 +306,7 @@ public class BasicController extends BaseController
                     map.put("xcList", xcList);
                     map.put("pjList", pjList);
                     map.put("messageList", messageList);
+                    map.put("query", messQuery);
                     
                     /*for (int i = 0; i < kfsList.size(); i++)
                     {
@@ -352,18 +357,21 @@ public class BasicController extends BaseController
             MemberQuery query = new MemberQuery();
             query.setMemberType(MemberTypeEnum.DAWP.getId());
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            query.setFilterStr(1);
             List<MemberEntity> totalMCList = memberService.queryMembers(query);
             List<MemberEntity> mcList = new ArrayList<MemberEntity>();
             
             query = new MemberQuery();
             query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            query.setFilterStr(1);
             List<MemberEntity> totalBLList = memberService.queryMembers(query);
             List<MemberEntity> blList = new ArrayList<MemberEntity>();
             
             query = new MemberQuery();
             query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            query.setFilterStr(1);
             List<MemberEntity> totalXCList = memberService.queryMembers(query);
             List<MemberEntity> xcList = new ArrayList<MemberEntity>();
             
@@ -406,6 +414,7 @@ public class BasicController extends BaseController
             map.put("blList", blList);
             map.put("xcList", xcList);
             map.put("messageList", list);
+            map.put("query", messQuery);
             
             return LOGINPAGER;
         }
