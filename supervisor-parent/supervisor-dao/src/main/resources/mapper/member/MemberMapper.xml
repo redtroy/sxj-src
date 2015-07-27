@@ -143,7 +143,7 @@
 		</if>
 		<!-- 筛选测试账号 -->
 		<if
-			test="condition.filter == 1">
+			test="condition.filterStr == 1">
 			<![CDATA[AND NAME NOT IN('测试门窗厂','测试型材厂','测试玻璃厂') ]]>
 		</if>
 			<![CDATA[ ORDER BY STATE,REG_DATE DESC,UPDATE_DATE DESC]]>
