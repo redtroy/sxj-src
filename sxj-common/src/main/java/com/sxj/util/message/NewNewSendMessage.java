@@ -35,7 +35,7 @@ public class NewNewSendMessage
         this.serviceURL = serviceURL;
         this.sn = sn;
         this.pwd = pwd;
-        pwd = EncryptUtil.md5Hex(this.sn + this.pwd).toUpperCase();
+        this.pwd = EncryptUtil.md5Hex(this.sn + this.pwd).toUpperCase();
         
     }
     
@@ -208,9 +208,12 @@ public class NewNewSendMessage
     {
         // SxjHttpClientImpl httpclient = new SxjHttpClientImpl();
         //httpclient.setCharset("UTF-8");
-        //NewNewSendMessage me = NewNewSendMessage.getInstance();
-        //String[] dfdf = { "13852295723", "18551626910", "13852295723" };
-        //String res = me.sendMessage("15950555822,18551626910", "teeee");
-        //System.out.println(res);
+        NewNewSendMessage me = NewNewSendMessage.getInstance("http://sdk.entinfo.cn:8060/webservice.asmx",
+                "DXX-WSS-11M-06110",
+                "502503");
+        String[] dfdf = { "13852295723", "18551626910", "13852295723" };
+        String res = me.sendMessage("13852295723",
+                "test33 （平台注册验证码，10分钟有效）【和融网】");
+        System.out.println(res);
     }
 }
