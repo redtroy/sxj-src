@@ -80,6 +80,7 @@ ${type[0].getName()}</span>/
  var message;
  var reName=true;
  var fullName=true;
+ var fullContacts=true;
  var intDiff = parseInt(59);//倒计时总秒数量
   function regist(){
 	 var flag=false;
@@ -164,13 +165,21 @@ ${type[0].getName()}</span>/
 			     $("#ct").show();
 		})
 		$("#contacts").bind("blur",function(){
-			 if ($("#contacts").val()=="" || $("#contacts").val()==null){
+			var contacts=$("#contacts").val();
+			if(contacts.length>20){
+				fullContacts=true;
 				 $("#ct").show();
-			     wrong("#ct")
+				 wrong("#ct");
+				 $("#ct").text("联系人名称不能超过20个字符");
+			}else if ($("#contacts").val()=="" || $("#contacts").val()==null){
+				 $("#ct").show();
+			     wrong("#ct");
 				 $("#ct").text("联系人不能为空");
+			     fullContacts=false;
 			 }else{
 				 $("#ct").text("");
 				 right("#ct");
+				 fullContacts=false;
 			 }
 		})
 		$("#ms").bind("blur",function(){

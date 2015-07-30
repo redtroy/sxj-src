@@ -7,6 +7,19 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/form.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/msg.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.some_file_queue {
+    background-color: #FFF;
+    border-radius: 3px;
+    height: 103px;
+    margin-bottom: 10px;
+    overflow: visible;
+    padding: 5px 10px;
+    width: 200px;
+    z-index:99999;
+    /* position: absolute; */
+}
+</style>
 <script src="${b.staticPath}js/jquery.js"></script>
 <@b.upload/>
 <@b.validate/>
@@ -439,6 +452,7 @@ function edit_pwd(id){
           <input type="file" class="" id="safetyPath_File_reload" name="input6">
           </#if>
             <input type="hidden" class="input-w180h30" id="safetyPath_hidden" name="safetyPath" value="${member.safety_licenses_img}">
+            <!-- <div class="some_file_queue" id="safetyPath_FileDiv"></div> -->
           </div>
          </div>
          </#if>
