@@ -30,6 +30,6 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<!-- <bean class="com.sjx.jsonrpc.server.spring.AutoJsonRpcServiceExporter">
-	</bean> -->
+	<bean class="com.sjx.jsonrpc.server.spring.AutoJsonRpcServiceExporter">
+	</bean>
 </beans>
