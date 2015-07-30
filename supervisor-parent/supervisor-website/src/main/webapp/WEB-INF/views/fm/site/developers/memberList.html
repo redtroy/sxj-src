@@ -61,11 +61,11 @@
 		<div class="yard-870 rightSide ly-left">
 			<div class="heading mb15 ly-clearFix">
 				<h1>
-					<span class="title fontYH f20 fb">江苏省<#if infoFlag==0>门窗<#elseif infoFlag==1>型材<#else>配件</#if>厂信息</span>
+					<span class="title fontYH f20 fb">江苏省<#if infoFlag==0>门窗<#elseif infoFlag==1>型材<#elseif infoFlag==2>配件<#else>玻璃</#if>厂信息</span>
 				</h1>
 			</div>
 			<div id="res_table">
-				<div class="devBox mb20">
+				<div class="devBox mb20" style="font-size:12px;">
 					<form action="" id="search_form">
 						<div class="searBox fontYH f16">
 							<input type="hidden" id="infoFlag" name="infoFlag"
@@ -77,7 +77,7 @@
 					<dl class="devInfo" style="background-color: #0065C5;">
 						<dd>
 							<span class="comName"><span style="font-weight: bold; color: white;">名称</span></span><span
-								class="comAdd"><span style="font-weight: bold; color: white;">地址</span></span><span class="comTel"><span style="font-weight: bold; color: white;">电话</span></span>
+								class="comAdd"><span style="font-weight: bold; color: white;">地址</span></span><span class="comTel"><span style="font-weight: bold; color: white;">电话&nbsp;/&nbsp;联系人手机</span></span>
 						</dd>
 						
 					</dl>
@@ -85,7 +85,7 @@
 						<#list list as list>
 						<dd>
 							<span class="comName">${list.name}</span><span
-								class="comAdd">${list.address}</span><span class="comTel">${list.telNum}</span>
+								class="comAdd">${list.address}</span><span class="comTel">${list.telNum}&nbsp;/&nbsp;${list.phoneNo}</span>
 						</dd>
 						</#list>
 					</dl>

@@ -1,12 +1,12 @@
 <div class="leftMenu">
 <#list list as model>
-<h2 class="fontYH f18">
-<#if model.function.id=99>
-<span class="${model.function.style}"></span><a url="${basePath}${model.function.url}" href="javascript:clickFunction('${basePath}${model.function.url}')">${model.function.title}</a></h2>
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<#if model.function.id=99 || model.function.id=23>
+<span class="${model.function.style}"></span><a url="${basePath}${model.function.url}" id="${model.function.id}" href="javascript:clickFunction('${basePath}${model.function.url}')" class="homelink">${model.function.title}</a></h2>
 <#else>
 <span class="${model.function.style}"></span>${model.function.title}</h2>
 </#if>
-
+<#if  model.children?exists && (model.children?size>0) >
 <ul>
 <#list model.children as mc>
 <#if  mc.id==6>
@@ -43,6 +43,7 @@
 <li id="${mc.id}_menu" class=""><a url="${basePath}${mc.url}" href="javascript:clickFunction('${basePath}${mc.url}')">${mc.title}</a></li>
 </#list>
 </ul>
+</#if>
 </#list>
 </div>
 <script>
@@ -51,7 +52,12 @@ $(document).ready(function(){
 	$(".leftMenu a").each(function(){
 		var href=window.location.href;
 		if(href.indexOf($(this).attr("url"))>0){
-			$(this).parent().addClass("on");
+			if($(this).attr("id")==99 || $(this).attr("id")==23){
+				$(this).parent().addClass("homelinkon");
+			}else{
+				$(this).parent().addClass("on");
+			}
+			
 			return false;
 		}			
 	});

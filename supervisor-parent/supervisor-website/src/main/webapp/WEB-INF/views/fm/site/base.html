@@ -586,7 +586,7 @@ function createXmlHttpRequest(){
 		<div class="logOut ly-right">
 			<#if Session.userinfo.account?exists> <span class="mr10">${Session.userinfo.account.name}，您好！</span>
 			<#else> <span class="mr10">${Session.userinfo.member.name}，您好！</span>
-			</#if> <a href="${basePath}logout.htm">退出当前帐户</a>
+			</#if> <a href="${b.staticPath}help.html"  target="_blank">帮助说明</a><a href="${basePath}logout.htm">退出当前帐户</a>
 		</div>
 		</#if>
 	</div>
@@ -623,7 +623,7 @@ $(document).ready(function(){
 });
 </script>
 <div class="f12" id="footer">
-	&copy; <span id="yearSapn"></span> 私享家绿色门窗平台&nbsp;版权所有<span class="ml10"><a
+	&copy; <span id="yearSapn"></span> 私享家绿色门窗平台&nbsp;版权所有<span class="ml10">&nbsp;&nbsp;<a href="${b.staticPath}aboutus.html"  target="_blank">关于我们</a>&nbsp;&nbsp;&nbsp;<a href="${b.staticPath}help.html"  target="_blank">帮助说明</a><a
 		target="_blank" href="http://www.miitbeian.gov.cn/">苏ICP备14040094号-1</a></span>
 </div>
 </#macro> <#macro leftMenu isLoad>

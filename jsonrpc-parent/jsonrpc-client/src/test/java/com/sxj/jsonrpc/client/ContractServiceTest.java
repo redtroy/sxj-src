@@ -23,7 +23,7 @@ public class ContractServiceTest
     {
         JsonRpcHttpClient client = new JsonRpcHttpClient(
                 new URL(
-                        "http://localhost:8080/supervisor-manager/api/service/contract.json"));
+                        "http://127.0.0.1:8080/supervisor-manager/api/service/contract.json"));
         
         //        IContractService contractService = com.sxj.jsonrpc.client.ProxyUtil2.createClientProxy(getClass().getClassLoader(),
         //                IContractService.class,

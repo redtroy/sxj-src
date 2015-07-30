@@ -25,7 +25,7 @@ public class StateMachineTest
         StateMachineImpl<DemoStates> machine = (StateMachineImpl<DemoStates>) new StateMachineBuilder<DemoStates>().newNonReentrant(new StateMachineConfig());
         //        machine.fire("AtoB", null);
         machine.setCurrentState(DemoStates.B);
-        machine.fire("BtoC", null);
+        machine.fire("B2B", null);
         DemoStates currentState = machine.getCurrentState();
         System.out.println("==========" + currentState);
     }
