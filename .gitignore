@@ -1,6 +1,5 @@
 /parent/
-
-
+.springBeans
 .project
 bin/
 target/
