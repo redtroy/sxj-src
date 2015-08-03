@@ -146,7 +146,7 @@
 			test="condition.filterStr == 1">
 			<![CDATA[AND NAME NOT IN('测试门窗厂','测试型材厂','测试玻璃厂') ]]>
 		</if>
-			<![CDATA[ ORDER BY STATE,REG_DATE DESC,UPDATE_DATE DESC]]>
+			<![CDATA[ ORDER BY UPDATE_DATE DESC,REG_DATE,STATE ]]>
 		<!-- <if test="condition.sort !=null">
 			<![CDATA[ ORDER BY STATE,REG_DATE,AUTHOR_DATE DESC]]>
 		</if>
