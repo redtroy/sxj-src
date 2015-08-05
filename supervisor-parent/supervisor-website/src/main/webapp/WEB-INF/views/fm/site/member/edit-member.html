@@ -291,7 +291,7 @@ function save(id){
     	messageInfo("请上传营业执照图片");
     	return false;
     }
-    if (qualification_img=="" && type==0){
+    /* if (qualification_img=="" && type==0){
     	messageInfo("请上传资质证书图片");
     	return false;
     }
@@ -307,7 +307,7 @@ function save(id){
     if (production_license_img=="" && type==2){
     	messageInfo("请上传工业产品生产许可证图片");
     	return false;
-    }
+    } */
     
     dialogBox(function(index){
     	if (!flag){
@@ -418,12 +418,12 @@ function edit_pwd(id){
          <!-- 资质证书 -->
          <#if (member.type.id==0)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="aptitude" value="${member.qualification_no}" maxlength="14"  datatype="ns" nullmsg="请填写14位资质证书编号"  placeholder="输入证书编号"/></p>
+          <p><input class="input input-w140h30 mb5" id="aptitude" value="${member.qualification_no}" maxlength="14"    placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
           <p>资质证书</p>
           <#if (member.qualification_img??)>
          <img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
@@ -438,12 +438,12 @@ function edit_pwd(id){
          <!-- 安全生产许可证 -->
          <#if (member.type.id==0)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="safety" value="${member.safety_licenses_no}" maxlength="10"  datatype="ns" nullmsg="请填写10位生产许可证编号"  placeholder="输入证书编号"/></p>
+          <p><input class="input input-w140h30 mb5" id="safety" value="${member.safety_licenses_no}" maxlength="10"   placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写10位生产许可证编号"  -->
           <p>安全生产许可证</p>
           <#if (member.safety_licenses_img??)>
          <img id="safetyPath_img" width="80" height="107" src="${b.imagePath}${member.safety_licenses_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="safetyPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="safetyPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
@@ -480,12 +480,12 @@ function edit_pwd(id){
          <!-- 3C认证证书 -->
           <#if (member.type.id==1)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}" maxlength="16"  datatype="ns" nullmsg="请填写16位3C认证编号"  placeholder="输入证书编号"/></p>
+          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}" maxlength="16"   placeholder="输入证书编号"/></p><!--datatype="ns"   nullmsg="请填写16位3C认证编号" -->
           <p>3C认证证书</p>
           <#if (member.ccc_img??)>
          <img id="cccPath_img" width="80" height="107" src="${b.imagePath}${member.ccc_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="cccPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="cccPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
@@ -500,12 +500,12 @@ function edit_pwd(id){
          <!-- 工业产品生产许可证 -->
           <#if (member.type.id==2)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="production" value="${member.production_license_no}" maxlength="14"  datatype="ns" nullmsg="请填写14位工业产品许可证编号"  placeholder="输入证书编号"/></p>
+          <p><input class="input input-w140h30 mb5" id="production" value="${member.production_license_no}" maxlength="14"    placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写14位工业产品许可证编号" -->
           <p>工业产品生产许可证</p>
           <#if (member.production_license_img??)>
          <img id="productionPath_img" width="80" height="107" src="${b.imagePath}${member.production_license_img}" onerror="errorImage(this)" times="0"/>
           <#else>
-		 <img id="productionPath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/> 
+		 <img id="productionPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
          <div class="uploadify">
          <#if (!member.flag)>
