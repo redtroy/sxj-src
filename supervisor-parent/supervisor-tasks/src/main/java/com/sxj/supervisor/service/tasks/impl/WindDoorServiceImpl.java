@@ -500,6 +500,8 @@ public class WindDoorServiceImpl implements IWindDoorService
             if (output.toByteArray() != null)
             {
                 String file = new String(output.toByteArray());
+                if (file.indexOf("GB2312") > 0 || file.indexOf("gb2312") > 0)
+                    file = new String(output.toByteArray(), "GB2312");
                 Document doc = Jsoup.parse(file);
                 /*String img = doc.getElementById("ZBGGDetail1_divDS")
                         .getElementsByTag("img")
@@ -529,5 +531,61 @@ public class WindDoorServiceImpl implements IWindDoorService
     {
         WindDoorServiceImpl wd = new WindDoorServiceImpl();
         wd.content("http://www1.njcein.com.cn/njxxnew/ZtbInfo/ZBGGInfo.aspx?GongGaoGuid=47ab054f-ce98-4248-994f-906b63e24cd6");
+    }
+    
+    @Override
+    public void insertWordHtml(String filePath, String name)
+            throws ServiceException
+    {
+        try
+        {
+            String[] fileNames = name.split("_");
+            List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
+            WindDoorEntity windDoor = new WindDoorEntity();
+            windDoor.setId(StringUtils.getUUID());
+            windDoor.setBdfl(fileNames[0]);
+            windDoor.setFilePath(filePath);
+            windDoor.setJzrq(fileNames[3].substring(0,
+                    fileNames[3].indexOf(".")));
+            windDoor.setQy(fileNames[2]);
+            windDoor.setXmmc(fileNames[1]);
+            windDoor.setNowDate(new Date());
+            bathList.add(windDoor);
+            configService.sendAllMessage("您有一条新的开发商招标信息");
+            CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+                    windDoor.getId());
+            if (bathList.size() > 0)
+            {
+                wda.addWindDoor(bathList);
+                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT,
+                        Long.valueOf(bathList.size()));
+                List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                if (keys != null && keys.size() > 0)
+                {
+                    for (String key : keys)
+                    {
+                        if (key == null)
+                        {
+                            continue;
+                        }
+                        CometServiceImpl.setCount(key,
+                                Long.valueOf(bathList.size()));
+                    }
+                }
+            }
+            for (int iii = 0; iii < bathList.size(); iii++)
+            {
+                //发短信
+                configService.sendAllMessage("您有一条新的开发商招标信息");
+                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+                        bathList.get(iii).getId());
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("word导入市场信息失败", e, this.getClass());
+            throw new ServiceException("word导入市场信息失败", e);
+        }
+        
     }
 }

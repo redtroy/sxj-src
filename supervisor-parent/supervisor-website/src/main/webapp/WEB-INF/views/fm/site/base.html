@@ -526,6 +526,23 @@ function loadUploadMember(id,url,isMulti,text,fn){
 	        
 	    });
 }
+function loadUploadWord(id,url,isMulti,text){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg;*.html;*.htm',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	alert('ok')
+	        }
+	        
+	    });
+}
 function flashChecker() {
     var hasFlash = 0; //是否安装了flash
     var flashVersion = 0; //flash版本
