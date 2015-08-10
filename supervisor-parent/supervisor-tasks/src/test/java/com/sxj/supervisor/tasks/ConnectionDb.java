@@ -8,7 +8,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 public class ConnectionDb {
-	public static final String url = "jdbc:mysql://192.168.1.12:3306/sxj-supervisor?characterEncoding=utf8";
+	public static final String url = "jdbc:mysql://192.168.1.218:3306/sxj-supervisor?characterEncoding=utf8";
 	public static final String name = "com.mysql.jdbc.Driver";
 	public static final String user = "sxj-supervisor";
 	public static final String password = "sxj-supervisor";
