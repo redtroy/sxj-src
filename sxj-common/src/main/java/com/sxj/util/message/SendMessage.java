@@ -29,13 +29,13 @@ public class SendMessage
     private int csid;
     
     private SendMessage(String sOpenUrl, String sDataUrl, String account,
-            String authkey, int cgit, int csid)
+            String authkey, int cgid, int csid)
     {
         this.sOpenUrl = sOpenUrl;
         this.sDataUrl = sDataUrl;
         this.account = account;
         this.authkey = authkey;
-        this.cgid = cgit;
+        this.cgid = cgid;
         this.csid = csid;
         // 发送参数
         OpenApi.initialzeAccount(this.sOpenUrl,
@@ -52,6 +52,41 @@ public class SendMessage
             String account, String authkey, int cgit, int csid)
     {
         return new SendMessage(sOpenUrl, sDataUrl, account, authkey, cgit, csid);
+    }
+    
+    public void sendMessage(String[] mobiles, String message)
+            throws SystemException
+    {
+        // 取帐户余额
+        BalanceResultBean br = OpenApi.getBalance();
+        if (br.getResult() < 1)
+        {
+            SxjLogger.info("获取短信可用余额失败: " + br.getErrMsg(), this.getClass());
+            throw new SystemException("获取短信可用余额失败: " + br.getErrMsg());
+        }
+        SxjLogger.info("可用条数: " + br.getRemain(), this.getClass());
+        
+        List<SendResultBean> listItem = OpenApi.sendOnce(mobiles,
+                message,
+                cgid,
+                csid,
+                null);
+        if (listItem != null)
+        {
+            for (SendResultBean t : listItem)
+            {
+                if (t.getResult() < 1)
+                {
+                    SxjLogger.error("短信发送提交失败: " + t.getErrMsg(),
+                            this.getClass());
+                    throw new SystemException("短信发送提交失败: " + t.getErrMsg());
+                }
+                SxjLogger.info("发送成功: 消息编号<" + t.getMsgId() + "> 总数<"
+                        + t.getTotal() + "> 余额<" + t.getRemain() + ">",
+                        this.getClass());
+            }
+        }
+        
     }
     
     public void sendMessage(String mobiles, String message)

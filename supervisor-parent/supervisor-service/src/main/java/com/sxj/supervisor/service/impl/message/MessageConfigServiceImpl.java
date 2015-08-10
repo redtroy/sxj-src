@@ -16,8 +16,8 @@ import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.message.NewNewSendMessage;
-import com.sxj.util.message.SendMessage;
 import com.sxj.util.message.NewSendMessage;
+import com.sxj.util.message.SendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -209,15 +209,15 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                     //                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
                     //                            .sendMessage(config.getPhone(),
                     //                                    message + "，请登录私享家绿色门窗平台查看详情！");
-                                        NewSendMessage.getInstance(smsUrl,
-                                                userName,
-                                                password,
-                                                sign,
-                                                type).sendMessage(config.getPhone(),
-                                                message + "，请登录私享家绿色门窗平台查看详情！");
-//                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
-//                            .sendMessage(config.getPhone(),
-//                                    message + "，请登录私享家绿色门窗平台查看详情！");
+                    NewSendMessage.getInstance(smsUrl,
+                            userName,
+                            password,
+                            sign,
+                            type).sendMessage(config.getPhone(),
+                            message + "，请登录私享家绿色门窗平台查看详情！");
+                    //                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
+                    //                            .sendMessage(config.getPhone(),
+                    //                                    message + "，请登录私享家绿色门窗平台查看详情！");
                 }
                 
             }
@@ -257,8 +257,16 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                 //                        type)
                 //                        .sendMessage(phones.toArray(new String[phones.size()]),
                 //                                message + "，请登录私享家绿色门窗平台查看详情！");
-                NewNewSendMessage.getInstance(serviceURL, sn, pwd)
-                        .sendMessage(new String[phones.size()],
+                //                NewNewSendMessage.getInstance(serviceURL, sn, pwd)
+                //                        .sendMessage(new String[phones.size()],
+                //                                message + "，请登录私享家绿色门窗平台查看详情！");
+                SendMessage.getInstance(message,
+                        message,
+                        message,
+                        message,
+                        cgid,
+                        csid)
+                        .sendMessage(phones.toArray(new String[phones.size()]),
                                 message + "，请登录私享家绿色门窗平台查看详情！");
             }
         }
