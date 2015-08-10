@@ -14,4 +14,9 @@ public interface IWindDoorService
      * 获取信息
      */
     public WindDoorEntity getInfoById(String id);
+    
+    /**
+     * 导入word HTML 模版
+     */
+    public void insertWordHtml(String filePath, String name);
 }

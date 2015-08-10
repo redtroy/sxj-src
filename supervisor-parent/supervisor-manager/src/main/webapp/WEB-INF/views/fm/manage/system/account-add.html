@@ -5,7 +5,7 @@
     <form id="add_form" action="javascript:void(0);" method="post">
       <div class="item">
         <label>姓名</label>
-        <input type="text" id="name" name="name" class="text tip" title="由中文组成" datatype="*2-20" nullmsg="请输入姓名" errormsg="姓名只能使用中文"/>
+        <input type="text" id="name" name="name" class="text tip" title="由中文或者英文组成" datatype="regexName" nullmsg="请输入姓名" errormsg="姓名只能使用中文或者英文"/>
         <input id="functionIds_hidden" type="hidden" name="functionIds" value="none" />
       </div>
       <div class="item">
@@ -52,7 +52,8 @@
 	$("#add_form").Validform({
 		tiptype:3,
 		datatype:{
-			"ys":/^[A-Za-z0-9]+$/
+			"ys":/^[A-Za-z0-9]+$/,
+			"regexName":/^[a-zA-Z\u4e00-\u9fa5]{1,20}$/
 		},
 		callback:function(form){
 			add();

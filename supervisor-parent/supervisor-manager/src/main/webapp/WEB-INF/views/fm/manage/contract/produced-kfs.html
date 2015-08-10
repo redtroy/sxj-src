@@ -106,6 +106,14 @@ $(document).ready(function() {
 		if (!ul_validform.check()){
 			return false;
 		}
+		var temBool =true;
+		$("#addForm textarea").each(function(i){
+			if($(this).val().length>200){
+				errorInfo("备注超出字符数量限制");
+				temBool=false;
+			}
+		});
+		if(temBool){
 		$("#formtable").find(".formtr").each(function(i){
 			$(this).find("input").each(function(){
 				var name=$(this).attr("name").replace("index",i);
@@ -131,7 +139,7 @@ $(document).ready(function() {
 				errorInfo("生成合同失败");
 			}
 		});},"是否生成招标合同?");
-
+		}
 	}
 	
 	$(function(){
