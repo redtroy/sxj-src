@@ -72,6 +72,7 @@ import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.ITenderMessageService;
 import com.sxj.supervisor.service.system.IAreaService;
+import com.sxj.supervisor.service.tasks.IWindDoorService;
 import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.comet.CometServiceImpl;
@@ -114,6 +115,9 @@ public class BasicController extends BaseController
     @Autowired
     private ITenderMessageService tenderMessageService;
     
+    @Autowired
+    private IWindDoorService windDoorSercice;
+    
     /**
      * getRecordState 合同service
      */
@@ -137,7 +141,8 @@ public class BasicController extends BaseController
     }
     
     @RequestMapping("index")
-    public String ToIndex(HttpServletRequest request, TenderMessageQuery messQuery ,ModelMap map)
+    public String ToIndex(HttpServletRequest request,
+            TenderMessageQuery messQuery, ModelMap map)
     {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userinfo") == null)
@@ -294,7 +299,7 @@ public class BasicController extends BaseController
                         pjList = totalPJList;
                     }
                     
-                   // TenderMessageQuery messQuery = new TenderMessageQuery();
+                    // TenderMessageQuery messQuery = new TenderMessageQuery();
                     messQuery.setPagable(true);
                     messQuery.setMemberNo(getLoginInfo(session).getMember()
                             .getMemberNo());
@@ -727,6 +732,58 @@ public class BasicController extends BaseController
                         this.getClass());
                 fileIds.add(filePath);
                 
+                // 上传元数据
+                NameValuePair[] metaList = new NameValuePair[1];
+                metaList[0] = new NameValuePair("originalName", originalName);
+                storageClientService.overwriteMetadata(filePath, metaList);
+            }
+        }
+        map.put("fileIds", fileIds);
+        String res = JsonMapper.nonDefaultMapper().toJson(map);
+        response.setContentType("text/plain;UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(res);
+        out.flush();
+        out.close();
+    }
+    
+    /**
+     * 上传市场信息
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping("uploadWord")
+    public void uploadWord(HttpServletRequest request,
+            HttpServletResponse response) throws IOException
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!(request instanceof DefaultMultipartHttpServletRequest))
+        {
+            return;
+        }
+        DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
+        Map<String, MultipartFile> fileMaps = re.getFileMap();
+        Collection<MultipartFile> files = fileMaps.values();
+        List<String> fileIds = new ArrayList<String>();
+        for (MultipartFile myfile : files)
+        {
+            if (myfile.isEmpty())
+            {
+                System.err.println("文件未上传");
+            }
+            else
+            {
+                String originalName = myfile.getOriginalFilename();
+                String extName = FileUtil.getFileExtName(originalName);
+                String filePath = storageClientService.uploadFile(null,
+                        myfile.getInputStream(),
+                        myfile.getSize(),
+                        extName.toUpperCase());
+                SxjLogger.info("siteUploadFilePath=" + filePath,
+                        this.getClass());
+                fileIds.add(filePath);
+                windDoorSercice.insertWordHtml(filePath, originalName);
                 // 上传元数据
                 NameValuePair[] metaList = new NameValuePair[1];
                 metaList[0] = new NameValuePair("originalName", originalName);

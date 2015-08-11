@@ -90,17 +90,40 @@
 			<artifactId>spring-jsoup</artifactId>
 			<version>4.2.3</version>
 		</dependency>
+		<!-- POI核心依赖 -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.8</version>
+		</dependency>
+		<!-- 为POI支持Office Open XML -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.8</version>
+		</dependency>
+		<!-- 支持Word文档的操作 -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.8</version>
+		</dependency>
 	</dependencies>
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
 			<name>Local Nexus Repository</name>
-			<url>http://192.168.1.11:8080/nexus/content/repositories/releases</url>
+			<url>http://192.168.1.217:8080/nexus/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>nexus-snapshots</id>
 			<name>Local Nexus Repository</name>
-			<url>http://192.168.1.11:8080/nexus/content/groups/public</url>
+			<url>http://192.168.1.217:8080/nexus/content/groups/public</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>

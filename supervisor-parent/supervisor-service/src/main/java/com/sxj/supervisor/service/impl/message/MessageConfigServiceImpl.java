@@ -17,6 +17,7 @@ import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.message.NewNewSendMessage;
 import com.sxj.util.message.NewSendMessage;
+import com.sxj.util.message.SendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -26,6 +27,26 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     
     @Autowired
     private IMessageConfigDao dao;
+    
+    @Value("${mobile.sOpenUrl}")
+    private String sOpenUrl;
+    
+    @Value("${mobile.sDataUrl}")
+    private String sDataUrl;
+    
+    @Value("${mobile.account}")
+    private String account;
+    
+    @Value("${mobile.authkey}")
+    private String authkey;
+    
+    @Value("${mobile.cgid}")
+    private Integer cgid;
+    
+    @Value("${mobile.csid}")
+    private Integer csid;
+    
+    /////////////////
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;
@@ -41,6 +62,8 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     
     @Value("${mobile.type}")
     private String type;
+    
+    ///////////////////
     
     @Value("${mobile.serviceURL}")
     private String serviceURL;
@@ -161,15 +184,40 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             {
                 if (config.getIsAccetp())
                 {
-                                        NewSendMessage.getInstance(smsUrl,
-                                                userName,
-                                                password,
-                                                sign,
-                                                type).sendMessage(config.getPhone(),
-                                                message + "，请登录私享家绿色门窗平台查看详情！");
-//                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
-//                            .sendMessage(config.getPhone(),
-//                                    message + "，请登录私享家绿色门窗平台查看详情！");
+                    //                    NewSendMessage.getInstance(smsUrl,
+                    //                            userName,
+                    //                            password,
+                    //                            sign,
+                    //                            type).sendMessage(config.getPhone(),
+                    //                            message + "，请登录私享家绿色门窗平台查看详情！");
+                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
+                            .sendMessage(config.getPhone(),
+                                    message + "，请登录私享家绿色门窗平台查看详情！");
+                    SendMessage.getInstance(sOpenUrl,
+                            sDataUrl,
+                            account,
+                            authkey,
+                            cgid,
+                            csid).sendMessage(config.getPhone(),
+                            message + "，请登录私享家绿色门窗平台查看详情！");
+                    //                    NewSendMessage.getInstance(smsUrl,
+                    //                            userName,
+                    //                            password,
+                    //                            sign,
+                    //                            type).sendMessage(config.getPhone(),
+                    //                            message + "，请登录私享家绿色门窗平台查看详情！");
+                    //                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
+                    //                            .sendMessage(config.getPhone(),
+                    //                                    message + "，请登录私享家绿色门窗平台查看详情！");
+                    NewSendMessage.getInstance(smsUrl,
+                            userName,
+                            password,
+                            sign,
+                            type).sendMessage(config.getPhone(),
+                            message + "，请登录私享家绿色门窗平台查看详情！");
+                    //                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
+                    //                            .sendMessage(config.getPhone(),
+                    //                                    message + "，请登录私享家绿色门窗平台查看详情！");
                 }
                 
             }
@@ -209,8 +257,16 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                 //                        type)
                 //                        .sendMessage(phones.toArray(new String[phones.size()]),
                 //                                message + "，请登录私享家绿色门窗平台查看详情！");
-                NewNewSendMessage.getInstance(serviceURL, sn, pwd)
-                        .sendMessage(new String[phones.size()],
+                //                NewNewSendMessage.getInstance(serviceURL, sn, pwd)
+                //                        .sendMessage(new String[phones.size()],
+                //                                message + "，请登录私享家绿色门窗平台查看详情！");
+                SendMessage.getInstance(message,
+                        message,
+                        message,
+                        message,
+                        cgid,
+                        csid)
+                        .sendMessage(phones.toArray(new String[phones.size()]),
                                 message + "，请登录私享家绿色门窗平台查看详情！");
             }
         }

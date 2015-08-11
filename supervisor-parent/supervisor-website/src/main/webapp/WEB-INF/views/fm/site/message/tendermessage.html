@@ -10,8 +10,10 @@
 <script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="${b.staticPath}js/highcharts.js"></script>
 <@b.pageScript/>
+<@b.upload/>
 <@b.dialogBox/>
 <script type="text/javascript">
+
 function loadtable(){
 	$("#tabsholder").tytabs({
 		prefixtabs:"tabz",
@@ -22,7 +24,9 @@ function loadtable(){
 		fadespeed:"normal"
 	});
 }
-
+$(document).ready(function() { 
+	loadUploadWord("insertWordHtml","${basePath}uploadWord.htm",false,"上传市场信息");
+})
 function loadHighcharts(){
 	 $.post("${basePath}al/info.htm",function(dataList){
 		   var dateList=new Array();
@@ -122,7 +126,7 @@ function modifyState(id,infoId){
 <div class="yard-870 rightSide ly-left inviteBox">
 <div class="heading mb15 ly-clearFix">
 <h1>
-  <span class="title fontYH f20 fb">工程信息</span></h1>
+  <span class="title fontYH f20 fb">工程信息</span> </h1>
 </div>
 <div class="bgOk fb" id="wd-info">
 <#if messageConfig??>
@@ -175,6 +179,7 @@ function modifyState(id,infoId){
      <div class="con"  id="lvchart" style="width:800px;"></div>
   </div>
 <div class="ly-clearFix">
+<div style=""><input type="file" id="insertWordHtml" /></div>
 </div>
 </div>
   </div>

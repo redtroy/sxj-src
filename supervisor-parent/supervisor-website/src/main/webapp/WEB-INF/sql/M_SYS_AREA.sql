@@ -3,7 +3,7 @@ Navicat MySQL Data Transfer
 
 Source Server         : 12
 Source Server Version : 50619
-Source Host           : 192.168.1.12:3306
+Source Host           : 192.168.1.218:3306
 Source Database       : sxj-supervisor
 
 Target Server Type    : MYSQL
