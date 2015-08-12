@@ -85,7 +85,7 @@
 		     <filter-class>com.sxj.supervisor.manage.controller.CharacterFilter</filter-class>
 		     <init-param>
 		         <param-name>characterParams</param-name>
-		         <param-value><![CDATA[|,&,;,$,%,',",\',\",<,>,+,\]]></param-value>
+		         <param-value><![CDATA[|,;,$,%,',",\',\",<,>,+]]></param-value>
 		     </init-param>
 		 </filter>
 		 <filter-mapping>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<@b.pageScript/> 
+<@b.dialogBox/>
+<script type="text/javascript">
+//查询
+function query(page){
+	   var params=$("#title").serialize();
+	   if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+		$.post("query.htm",params,function(data){
+			var res=$(data).find("#govList");
+			var pager=$(data).find("#pager");
+			$("#govList").empty();
+			$("#govList").append(res.html());
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		});
+	   
+}
+</script>
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<@b.menuPath/>
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <@b.leftMenu />
+    <div id="rightBar">
+      <h2 class="title">政务信息管理</h2>
+    <div id="usrBox"><a href="pub.htm" class="button button-green button-news ly-right" style="line-height:1.5; height:20px;">上传信息</a>  
+          标题<input type="text" id="title" name="title" value="${query.title}"/><button class="btn btn-blue ml10" onclick="query();"><span>搜索</span></button>
+    </div>
+    <div class="newsList f14">
+        
+    <ul id="govList">
+     <#if list?exists>
+      <#list list as gov>
+      <li <#if gov_index %2 = 0>class="bgGray" </#if>>
+      <a href="${gov.url}" target="_black" class="lnk-blue">
+      <span class="time mr10">${gov.createDate?string("yyyy-MM-dd HH:mm:ss")}</span>${gov.title}</a></li>
+      </#list>
+      <#else>
+      	<li>没有数据</li>
+     </#if>
+     </ul>
+      <@b.pager/>
+    </div>
+    </div>
+</div>
+</div>
+<@b.footer />
+</body>
+</html>

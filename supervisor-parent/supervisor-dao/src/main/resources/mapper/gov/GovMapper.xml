@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.gov.IGovDao">
+	<resultMap id="govEntity"
+		type="com.sxj.supervisor.entity.gov.GovEntity">
+		<id property="govId" column="GOV_ID" jdbcType="VARCHAR" />
+		<result property="title" column="TITLE" jdbcType="VARCHAR" />
+		<result property="url" column="URL" jdbcType="VARCHAR" />
+		<result property="createDate" column="CREATE_DATE" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<!-- 条件查询财务统计 -->
+	<select id="query" resultMap="govEntity"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_GOV WHERE 1=1 ]]>
+
+		<if test="condition.title != null and condition.title != ''">
+			<![CDATA[AND TITLE LIKE CONCAT('%',#{condition.title},'%')]]>
+		</if>
+		<![CDATA[ ORDER BY CREATE_DATE DESC]]>
+	</select>
+</mapper>

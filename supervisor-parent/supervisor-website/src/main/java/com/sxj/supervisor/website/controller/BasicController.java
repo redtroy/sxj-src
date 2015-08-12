@@ -755,7 +755,7 @@ public class BasicController extends BaseController
      */
     @RequestMapping("uploadWord")
     public void uploadWord(HttpServletRequest request,
-            HttpServletResponse response) throws IOException
+            HttpServletResponse response) throws Exception
     {
         Map<String, Object> map = new HashMap<String, Object>();
         if (!(request instanceof DefaultMultipartHttpServletRequest))
@@ -774,11 +774,14 @@ public class BasicController extends BaseController
             }
             else
             {
-                String originalName = myfile.getOriginalFilename();
+                String originalName = myfile.getOriginalFilename().substring(0,
+                        myfile.getOriginalFilename().lastIndexOf('.'))
+                        + ".JPG";
                 String extName = FileUtil.getFileExtName(originalName);
+                byte[] html = convert2Html(myfile.getInputStream()).getBytes();
                 String filePath = storageClientService.uploadFile(null,
-                        myfile.getInputStream(),
-                        myfile.getSize(),
+                        new ByteArrayInputStream(html),
+                        html.length,
                         extName.toUpperCase());
                 SxjLogger.info("siteUploadFilePath=" + filePath,
                         this.getClass());

@@ -7,6 +7,21 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/form.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/msg.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" />
+<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/jqueryui.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jquery.iviewer.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
+<script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
+<script src="${b.staticPath}/js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+	<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
 <style type="text/css">
 .some_file_queue {
     background-color: #FFF;
@@ -20,7 +35,6 @@
     /* position: absolute; */
 }
 </style>
-<script src="${b.staticPath}js/jquery.js"></script>
 <@b.upload/>
 <@b.validate/>
 <@b.dialogBox/>
@@ -32,7 +46,7 @@ var ul_validform;
 $(document).ready(function() { 
 	loadUploadMember("bLicensePath_File","${basePath}upload.htm",false,"上传",uploadLicense);
 	loadUploadMember("energyPath_File","${basePath}upload.htm",false,"上传" ,uploadenergyPath);
-	loadUploadMember("aptitudePath_File","${basePath}upload.htm",false,"上传" ,uploadaptitudePath);
+// 	loadUploadMember("aptitudePath_File","${basePath}upload.htm",false,"上传" ,uploadaptitudePath);
 	loadUploadMember("safetyPath_File","${basePath}upload.htm",false,"上传" ,uploadsafetyPath);
 	loadUploadMember("qmsPath_File","${basePath}upload.htm",false,"上传" ,uploadqmsPath);
 	loadUploadMember("cccPath_File","${basePath}upload.htm",false,"上传" ,uploadcccPath);
@@ -40,11 +54,26 @@ $(document).ready(function() {
 	
 	loadUploadMember("bLicensePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadLicenseReload);
 	loadUploadMember("energyPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadenergyPathReload);
-	loadUploadMember("aptitudePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadaptitudeReload);
+// 	loadUploadMember("aptitudePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadaptitudeReload);
 	loadUploadMember("safetyPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadsafetyReload);
 	loadUploadMember("qmsPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadqmsReload);
 	loadUploadMember("cccPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadcccReload);
 	loadUploadMember("productionPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadproductionReload);
+	 $("#carousel").elastislide(); 
+	//初始化图片 
+	$('#carousel').find("li").live("click", function() {
+		var el = $(this);
+		var imageSource = el.find("a").attr("data-image");
+			currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
+			currentLi=$(this);
+			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
+			el.parent().children("li").removeClass("view");
+			el.addClass("view");
+			$(".maskdivgen").show();
+			$(".viewer").show();
+	});
+	uploadImg($("#aptitudePath_File_reload"));
+	//
 	$("#bLicenseNo").click(function(){
 		$("#bLicenseNo_erro").hide();
 	})
@@ -101,6 +130,45 @@ $(document).ready(function() {
 			$(this).parent().children(".checkinfo").show();
 	});
 }); 
+function close_img() {
+	$("#img_close").hide();
+}
+var uploadImg = function($file) {
+	var $div = $file.parent().parent();
+	var $carousel = $div.find(".elastislide-list");
+	var $container = $carousel.parent().parent();
+	var $hidden = $("#aptitudePath_hidden");
+	$file.uploadify({
+		swf : '${basePath}upload/uploadify.swf',
+		uploader : "${basePath}upload.htm",
+		 fileTypeExts: '*.jpg',
+		auto : true,
+		multi : true,
+		height : 30,
+		width : 120,
+		buttonText : '上传资质证书',
+		onUploadSuccess : function(file, data, response) {
+			var num = 1;
+			var dataObj = eval("(" + data + ")");//转换为json对象 
+			var hideVal = $hidden.val();
+			if (hideVal == '') {
+				hideVal = dataObj.fileIds;
+			} else {
+				var arrays = hideVal.split(",");
+				for (var i = 0; i < arrays.length; i++) {
+					if (arrays[i]) {
+						num += 1;
+					}
+				}
+				hideVal += "," + dataObj.fileIds;
+			}
+			$hidden.val(hideVal);
+			refreshElastislide($container, $carousel, dataObj);
+		}
+	});
+}
+
+
 function close_div(){
 	$('.maskdivgen').fadeOut(100);
 	$('.passwordPop').slideUp(200);
@@ -415,26 +483,6 @@ function edit_pwd(id){
           <input type="hidden" class="input-w180h30" id="bLicensePath_hidden" name="bLicensePath" value="${member.bLicensePath}" />
           </div>
          
-         <!-- 资质证书1 -->
-         <#if (member.type.id==0)>
-         <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="aptitude" value="${member.qualification_no}" maxlength="14"    placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
-          <p>资质证书</p>
-          <#if (member.qualification_img??)>
-         <img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0"/>
-          <#else>
-		 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
-         </#if>
-         <div class="uploadify">
-         <#if (!member.flag)>
-            <input type="file" class="" id="aptitudePath_File" name="input6">
-          <#else> 
-          <input type="file" class="" id="aptitudePath_File_reload" name="input6">
-          </#if>
-            <input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
-          </div>
-         </div>
-         </#if>
          <!-- 安全生产许可证 -->
          <#if (member.type.id==0)>
          <div class="ly-left editBox mr15">
@@ -535,12 +583,46 @@ function edit_pwd(id){
             <input type="hidden" class="input-w180h30" id="qmsPath_hidden" name="qmsPath" value="${member.qms_img}">
           </div>
          </div>
-         
-         
-          
         </div>
+       
         <div id="add_form">
-        <div class="item">
+						<div class="item">
+							<!-- 资质证书1 -->
+							<label>资质证书</label> <#if (member.type.id==0)>
+							<div class="ly-left editBox mr15" style="float: left;">
+								<p>
+									<input class="input input-w140h30 mb5" id="aptitude"
+										value="${member.qualification_no}" maxlength="14"
+										placeholder="输入证书编号" />
+								</p>
+								<!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
+								<#assign arr=(member.qualification_img?split(","))> <#if arr??>
+								 <input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
+<!-- 								<img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0" /> -->
+								<div class="rollBox">
+									<ul id="carousel" class="elastislide-list">
+										<#list arr as imgPath>
+											<li><a href="javascript:void(0);" class="demo-image"
+											data-image="${b.imagePath}${imgPath}"><img
+												src="${b.imagePath}${imgPath}" width="80"
+												height="107" /></a>
+												<p>${imgPath_index+1}</p>
+												</li> 
+												
+										</#list>
+									</ul>
+								</div>
+								 <#else>
+								 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0" /> </#if>
+							</div>
+							<div class="uploadify" style="float: left;padding-left: 15%;">
+									<#if (!member.flag)> 
+									<input type="file" class="" id="aptitudePath_File" name="input6"> <#else>
+									 <input type="file" class="" id="aptitudePath_File_reload" name="input6"> </#if> 
+								</div>
+							</#if>
+						</div>
+						<div class="item">
           <label>公司电话</label>
           <input type="text" class="input input-w50h36" value="${member.telNum?split("-")[0]}" name="input" id="qh" datatype="n3-4" errormsg="请填写正确的区号">
           --
@@ -582,5 +664,12 @@ function edit_pwd(id){
 	</div>
 </div>
   <@b.footer /> 
+ <div class="maskdivgen" style="display: none"></div>
+	<div class="viewer modal-wrap" id="img_close" style="display: none">
+		<div class="modal-header">
+			<span class="close" onclick="close_img()">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer"></div>
+	</div>
 </body>
 </html>

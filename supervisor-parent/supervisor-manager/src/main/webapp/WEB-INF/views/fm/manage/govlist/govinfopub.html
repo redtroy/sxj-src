@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<@b.validate/>
+<@b.dialogBox/>
+<script type="text/javascript">
+var ul_validform;
+$(function(){
+	//初始化验证
+	ul_validform=$("#submit_form").Validform({
+		tiptype:3
+	});
+});
+function submitForm(){
+	if (!ul_validform.check()){
+		return false;
+	}
+	dialogBox(function(index){
+		var formParam = $("#submit_form").serialize();
+		$.post("edit.htm", formParam, function(data) {
+			layer.close(index);
+			  if (data.isOK=='ok'){
+				  succInfo(function(index){
+				  	window.location.href="query.htm";
+				  },"保存成功");
+			}else{
+				errorInfo(data.error);
+			}
+			
+		});
+	},"是否确认保存");
+}
+</script>
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<@b.menuPath/>
+<div id="mainBg" class="ly-clearFix yard-1200">
+   <@b.leftMenu />
+    <div id="rightBar">
+    <h2 class="title">政务信息上传</h2>
+    <div class="infoBox f14">
+    <form id="submit_form" action="edit.htm">
+      <div>
+        <label>信息标题</label>
+        <input type="text" id="title" name="title" value="" style="width:400px;" datatype="*1-50" nullmsg="请输入标题！" errormsg="标题范围在1~50之间！"/>
+      </div>
+      <div>
+        <label>信息链接</label>
+        <input type="text" id="url" name="url" value="" style="width:400px;" datatype="/^http[s]?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$/" nullmsg="请输入链接！" errormsg="请输入正确的链接！"/>
+      </div>
+      </form>
+		<div class="btnBox">
+			<a  onclick="submitForm();" href="javascript:void(0);" class="button button-orange button-small">确定</a>
+			<a href="query.htm" class="button button-gray button-small">返回</a> 
+		</div>
+    </div>
+   </div>
+</div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>
