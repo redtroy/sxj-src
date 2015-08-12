@@ -52,7 +52,7 @@ $(document).ready(function(){
 	$(".leftMenu a").each(function(){
 		var href=window.location.href;
 		if(href.indexOf($(this).attr("url"))>0){
-			if($(this).attr("id")==99 || $(this).attr("id")==23){
+			if($(this).attr("id")==99 || $(this).attr("id")==23||$(this).attr("id")==30){
 				$(this).parent().addClass("homelinkon");
 			}else{
 				$(this).parent().addClass("on");
