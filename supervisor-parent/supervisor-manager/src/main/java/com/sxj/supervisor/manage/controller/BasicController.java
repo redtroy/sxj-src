@@ -290,7 +290,8 @@ public class BasicController extends BaseController
         {
             return LOGIN;
         }
-        List<FunctionModel> list = roleService.getRoleFunction(userName.getId(),"");
+        List<FunctionModel> list = roleService.getRoleFunction(userName.getId(),
+                "");
         map.put("list", list);
         return "manage/menu";
     }
@@ -380,6 +381,66 @@ public class BasicController extends BaseController
             throw new WebException("文件上传错误");
         }
         
+    }
+    
+    /**
+     * 上传市场信息
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping("uploadWord")
+    public void uploadWord(HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!(request instanceof DefaultMultipartHttpServletRequest))
+        {
+            return;
+        }
+        DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
+        Map<String, MultipartFile> fileMaps = re.getFileMap();
+        Collection<MultipartFile> files = fileMaps.values();
+        List<String> fileIds = new ArrayList<String>();
+        for (MultipartFile myfile : files)
+        {
+            if (myfile.isEmpty())
+            {
+                System.err.println("文件未上传");
+            }
+            else
+            {
+                String originalName = myfile.getOriginalFilename();
+                String extName = FileUtil.getFileExtName(originalName);
+                //原数据路径
+                String filePathBack = storageClientService.uploadFile(null,
+                        myfile.getInputStream(),
+                        myfile.getBytes().length,
+                        extName);
+                //转HTML
+                byte[] html = convert2Html(myfile.getInputStream()).getBytes();
+                String filePath = storageClientService.uploadFile(null,
+                        new ByteArrayInputStream(html),
+                        html.length,
+                        "JPG");
+                SxjLogger.info("siteUploadFilePath=" + filePath,
+                        this.getClass());
+                fileIds.add(filePath);
+                fileIds.add(filePathBack);
+                // 上传元数据
+                NameValuePair[] metaList = new NameValuePair[1];
+                metaList[0] = new NameValuePair("originalName", originalName);
+                storageClientService.overwriteMetadata(filePath, metaList);
+                storageClientService.overwriteMetadata(filePathBack, metaList);
+            }
+        }
+        map.put("fileIds", fileIds);
+        String res = JsonMapper.nonDefaultMapper().toJson(map);
+        response.setContentType("text/plain;UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(res);
+        out.flush();
+        out.close();
     }
     
     /**
@@ -807,6 +868,5 @@ public class BasicController extends BaseController
         }
         return null;
     }
-    
     
 }
