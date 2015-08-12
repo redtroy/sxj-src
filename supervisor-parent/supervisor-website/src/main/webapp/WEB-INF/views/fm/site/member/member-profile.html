@@ -8,6 +8,7 @@
 		content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 		<link href="${b.staticPath}style/style.css" rel="stylesheet"
 			type="text/css" />
+			<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" />
 		<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 		<script src="${b.staticPath}js/jqueryui.js"></script>
 		<script src="${b.staticPath}js/intense.js"></script>
@@ -17,6 +18,15 @@
 			type="text/javascript"></script>
 		<link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
 			type="text/css" />
+			<script src="${b.staticPath}js/jquery.elastislide-style.js"
+	type="text/javascript"></script>
+	<script src="${b.staticPath}js/jquery.elastislide.js"
+	type="text/javascript"></script>
+	<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
+<script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
+<script src="${b.staticPath}/js/jquery.paginate.js"></script>
 		<@b.validate/> <@b.dialogBox/> <@b.upload/>
 <script>
 			var validform;
@@ -25,6 +35,7 @@
 					$('.maskdivgen').fadeIn(100);
 					$('.viewer').slideDown(200);
 				})
+				$("#carousel").elastislide(); 
 				$('#edit_pwd').css({
 					position : 'absolute',
 					left : "33%",
@@ -225,19 +236,6 @@
 					
 					<#if (member.type.id==0)>
 					<div class="upload" style="width:120px;">
-						<p style="font-size: 12px;">${member.qualification_no}&nbsp;</p>
-						<p style="font-size:14px;">资质证书</p>
-						<#if member.qualification_img==null> <img
-							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
-						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
-							src="${b.imagePath}${member.qualification_img}80x107.JPG" width="80"
-							height="107" /> <a class="demo-image button button-blue f12"
-							data-image="${b.imagePath}${member.qualification_img}">查看缩略图</a> </#if>
-					</div>
-					</#if>
-					<#if (member.type.id==0)>
-					<div class="upload" style="width:120px;">
 						<p style="font-size: 12px;">${member.safety_licenses_no}&nbsp;</p>
 						 <p style="font-size:14px;">安全生产许可证</p>
 						<#if member.safety_licenses_img==null> <img
@@ -300,6 +298,29 @@
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.qms_img}">查看缩略图</a> </#if>
 					</div>
+				</div>
+				<div class="item">
+					<#if (member.type.id==0)>
+					<label>资质证书</label>${member.qualification_no}
+					<div class="upload" style="width:120px; padding-left: 13%;">
+						<#if member.qualification_img??> 
+						<#assign arr=(member.qualification_img?split(","))> 
+						<div class="rollBox">
+									<ul id="carousel" class="elastislide-list">
+										<#list arr as imgPath>
+											<li><a href="javascript:void(0);" class="demo-image"
+											data-image="${b.imagePath}${imgPath}"><img
+												src="${b.imagePath}${imgPath}" width="80"
+												height="107" /></a>
+												<p>${imgPath_index+1}</p>
+												</li> 
+												
+										</#list>
+									</ul>
+								</div>
+								</#if>
+					</div>
+					</#if>
 				</div>
 				<div class="item">
 					<label>公司电话</label>${member.telNum}
@@ -367,13 +388,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="maskdivgen" style="display: none"></div>
+	 <div class="maskdivgen" style="display: none"></div>
 	<div class="viewer modal-wrap" id="img_close" style="display: none">
 		<div class="modal-header">
 			<span class="close" onclick="close_img()">关闭</span>
 		</div>
 		<div id="viewer2" class="modal-body iviewer"></div>
 	</div>
-	<div class="maskdivgen" style="display: none"></div>
 </body>
 </html>
