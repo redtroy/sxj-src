@@ -54,6 +54,8 @@ public class WindDoorServiceImpl implements IWindDoorService
         String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
                 "windDoor",
                 "GongGaoGuid");
+        //        oldGongGaoGuid = null;
+        //        CometServiceImpl.clear(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
         System.out.println("WDGatherstar");
         try
         {
@@ -160,10 +162,6 @@ public class WindDoorServiceImpl implements IWindDoorService
                         windDoor.setGifPath(contentMap.get("gifPath"));
                     }
                     bathList.add(windDoor);
-                    //发短信
-                    configService.sendAllMessage("您有一条新的开发商招标信息");
-                    CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
-                            windDoor.getId());
                     flag++;
                 }
             }
@@ -213,7 +211,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
                 "MQ",
                 "GongGaoGuid");
-        //   String oldGongGaoGuid = null;
+        //        oldGongGaoGuid = null;
         System.out.println("MQGatherstar");
         try
         {
@@ -484,6 +482,30 @@ public class WindDoorServiceImpl implements IWindDoorService
         }
     }
     
+    public String codeString(String fileName) throws Exception
+    {
+        ByteArrayInputStream bin = new ByteArrayInputStream(fileName.getBytes());
+        int p = (bin.read() << 8) + bin.read();
+        String code = null;
+        
+        switch (p)
+        {
+            case 0xefbb:
+                code = "UTF-8";
+                break;
+            case 0xfffe:
+                code = "Unicode";
+                break;
+            case 0xfeff:
+                code = "UTF-16BE";
+                break;
+            default:
+                code = "GBK";
+        }
+        
+        return code;
+    }
+    
     @Override
     public WindDoorEntity getInfoById(String id) throws ServiceException
     {
@@ -500,8 +522,8 @@ public class WindDoorServiceImpl implements IWindDoorService
             if (output.toByteArray() != null)
             {
                 String file = new String(output.toByteArray());
-                if (file.indexOf("GB2312") > 0 || file.indexOf("gb2312") > 0)
-                    file = new String(output.toByteArray(), "GB2312");
+                //                if (file.indexOf("GB2312") > 0 || file.indexOf("gb2312") > 0)
+                //                    file = new String(output.toByteArray(), "GB2312");
                 Document doc = Jsoup.parse(file);
                 /*String img = doc.getElementById("ZBGGDetail1_divDS")
                         .getElementsByTag("img")
@@ -551,9 +573,6 @@ public class WindDoorServiceImpl implements IWindDoorService
             windDoor.setXmmc(fileNames[1]);
             windDoor.setNowDate(new Date());
             bathList.add(windDoor);
-            configService.sendAllMessage("您有一条新的开发商招标信息");
-            CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
-                    windDoor.getId());
             if (bathList.size() > 0)
             {
                 wda.addWindDoor(bathList);
@@ -576,7 +595,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             for (int iii = 0; iii < bathList.size(); iii++)
             {
                 //发短信
-                configService.sendAllMessage("您有一条新的开发商招标信息");
+                //                configService.sendAllMessage("您有一条新的开发商招标信息");
                 CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                         bathList.get(iii).getId());
             }
