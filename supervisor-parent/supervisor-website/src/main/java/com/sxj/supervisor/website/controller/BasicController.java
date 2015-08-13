@@ -45,6 +45,7 @@ import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
+import com.sxj.supervisor.entity.gov.GovEntity;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
@@ -65,6 +66,7 @@ import com.sxj.supervisor.model.message.TenderMessageModel;
 import com.sxj.supervisor.model.message.TenderMessageQuery;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.developers.IDevelopersService;
+import com.sxj.supervisor.service.gov.IGovService;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberLogService;
@@ -117,6 +119,9 @@ public class BasicController extends BaseController
     
     @Autowired
     private IWindDoorService windDoorSercice;
+    
+    @Autowired
+    private IGovService govService;
     
     /**
      * getRecordState 合同service
@@ -304,13 +309,14 @@ public class BasicController extends BaseController
                     messQuery.setMemberNo(getLoginInfo(session).getMember()
                             .getMemberNo());
                     List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);
-                    
+                    List<GovEntity> list = govService.queryGovList(new GovEntity());
                     map.put("kfsList", kfsList);
                     map.put("mcList", mcList);
                     map.put("blList", blList);
                     map.put("xcList", xcList);
                     map.put("pjList", pjList);
                     map.put("messageList", messageList);
+                    map.put("govList", list);
                     map.put("query", messQuery);
                     
                     /*for (int i = 0; i < kfsList.size(); i++)
