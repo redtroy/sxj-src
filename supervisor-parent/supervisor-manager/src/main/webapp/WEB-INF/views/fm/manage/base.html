@@ -453,6 +453,38 @@ function classLoadUpload(text){
 	        }
 	    });
 } 
+function loadUploadWord(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg;*.html;*.htm;*.doc;*.docx',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
+function loadUploadAdjunct(idadjunct,url,multi,text,fn){
+/* 	$("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.pdf;*.jpg;*.png;*.doc;*.docx;*.xls;*.xlsx;*.dwg',
+	        auto: true,
+	        multi: false,
+	        height:30,
+	        width:120,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	           fn(data);
+	        }
+	    }); */
+} 
 </script>
 </#macro>
 <#macro header>

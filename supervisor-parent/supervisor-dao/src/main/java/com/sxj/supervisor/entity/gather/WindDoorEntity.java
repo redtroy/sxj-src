@@ -56,6 +56,18 @@ public class WindDoorEntity implements Serializable
     private String filePath;
     
     /**
+     * word备份路径
+     */
+    @Column(name = "FILE_PATH_BACK")
+    private String filePathBack;
+    
+    /**
+     * 附件地址
+     */
+    @Column(name = "ADJUNCT_PATH")
+    private String adjunctPath;
+    
+    /**
      * 图片路径
      */
     @Column(name = "GIF_PATH")
@@ -111,6 +123,26 @@ public class WindDoorEntity implements Serializable
     public void setGifPath(String gifPath)
     {
         this.gifPath = gifPath;
+    }
+    
+    public String getFilePathBack()
+    {
+        return filePathBack;
+    }
+    
+    public void setFilePathBack(String filePathBack)
+    {
+        this.filePathBack = filePathBack;
+    }
+    
+    public String getAdjunctPath()
+    {
+        return adjunctPath;
+    }
+    
+    public void setAdjunctPath(String adjunctPath)
+    {
+        this.adjunctPath = adjunctPath;
     }
     
     public String getId()
