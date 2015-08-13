@@ -13,6 +13,8 @@
 		<result property="qy" column="QY" jdbcType="VARCHAR" />
 		<result property="jzrq" column="JZRQ" jdbcType="VARCHAR" />
 		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
+		<result property="filePathBack" column="FILE_PATH_BACK" jdbcType="VARCHAR" />
+		<result property="adjunctPath" column="ADJUNCT_PATH" jdbcType="VARCHAR" />
 		<result property="gifPath" column="GIF_PATH" jdbcType="VARCHAR" />
 		<result property="flag" column="FLAG" jdbcType="INTEGER" />
 		<result property="nowDate" column="NOW_DATE" jdbcType="TIMESTAMP" />

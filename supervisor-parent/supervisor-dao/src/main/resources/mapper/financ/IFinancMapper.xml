@@ -6,7 +6,7 @@
 		<property name="level" value="2"/>
 		<property name="timeToLive" value="10"/>
 </cache> -->
-	<resultMap id="FinancResultMap" type="com.sxj.supervisor.entity.gather.WindDoorEntity">
+	<resultMap id="FinancResultMap" type="com.sxj.supervisor.entity.financ.FinancEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="contactsName" column="CONTACTS_NAME" jdbcType="VARCHAR" />
@@ -14,5 +14,25 @@
 		<result property="projectName" column="PROJECT_NAME" jdbcType="VARCHAR" />
 		<result property="capital" column="CAPITAL" jdbcType="VARCHAR" />
 		<result property="projectRemark" column="PROJECT_REMARK" jdbcType="VARCHAR" />
+		<result property="createDate" column="CREATE_DATE" jdbcType="TIMESTAMP" />
 	</resultMap>
+	
+	<!-- 条件查询融资信息 -->
+	<select id="financeList" resultMap="FinancResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_FIANC_INFO WHERE 1=1  ]]>
+		<!-- 联系人 -->
+		<if test="condition.contactsName != null and condition.contactsName != ''">
+			<![CDATA[ AND CONTACTS_NAME LIKE CONCAT('%',#{condition.contactsName},'%')]]>
+		</if>
+		<!-- 联系电话 -->
+		<if test="condition.contactsTel != null and condition.contactsTel != ''">
+			<![CDATA[ AND CONTACTS_TEL LIKE CONCAT('%',#{condition.contactsTel},'%')]]>
+		</if>
+		<!-- 	项目名称 -->
+		<if test="condition.projectName != null and condition.projectName != ''">
+			<![CDATA[ AND PROJECT_NAME LIKE CONCAT('%',#{condition.projectName},'%')]]>
+		</if>
+		<![CDATA[ ORDER BY CREATE_DATE DESC]]>
+	</select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.sxj.supervisor.entity.financ;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
@@ -46,6 +47,19 @@ public class FinancEntity extends Pagable implements Serializable
     @Column(name = "PROJECT_REMARK")
     private String projectRemark;
     
+    @Column(name = "CREATE_DATE")
+    private Date createDate;
+    
+    public Date getCreateDate()
+    {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate)
+    {
+        this.createDate = createDate;
+    }
+
     public String getId()
     {
         return id;
