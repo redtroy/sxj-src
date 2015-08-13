@@ -1,0 +1,24 @@
+<<<<<<< HEAD:supervisor-parent/supervisor-website/src/main/resources/dev/config/database.properties
+######\u6570\u636e\u5e93\u914d\u7f6e
+mysql.driverClassName=com.mysql.jdbc.Driver
+sxj.database.url=jdbc:mysql://192.168.1.218:3306/sxj-supervisor?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+sxj.database.username=sxj-supervisor
+sxj.database.password=sxj-supervisor
+
+
+sxj.database.url2=jdbc:mysql://192.168.1.253:33306/sxj-supervisor?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+sxj.database.username2=sxj-supervisor
+=======
+######\u6570\u636e\u5e93\u914d\u7f6e
+mysql.driverClassName=com.mysql.jdbc.Driver
+sxj.database.url=jdbc:mysql://192.168.1.218:3306/sxj-supervisor?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+#sxj.database.url=jdbc:mysql://61.132.53.150:3306/sxj-supervisor?useUnicode=true&amp;characterEncoding=UTF-8
+sxj.database.username=sxj-supervisor
+sxj.database.password=sxj-supervisor
+
+
+sxj.database.url2=jdbc:mysql://192.168.1.253:3306/sxj-supervisor?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+#sxj.database.url=jdbc:mysql://61.132.53.150:3306/sxj-supervisor?useUnicode=true&amp;characterEncoding=UTF-8
+sxj.database.username2=sxj-supervisor
+>>>>>>> 5e8ee844a78ffbc339e5c031a7128b6af01f7828:supervisor-parent/supervisor-website/src/main/resources/config/database.properties
+sxj.database.password2=sxj-supervisor
