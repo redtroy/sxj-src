@@ -588,16 +588,15 @@ function edit_pwd(id){
         <div id="add_form">
 						<div class="item">
 							<!-- 资质证书1 -->
-							<label>资质证书</label> <#if (member.type.id==0)>
-							<div class="ly-left editBox mr15" style="float: left;height:180px;width:500px;">
-								<p>
+							<label>资质证书</label> <p>
 									<input class="input input-w140h30 mb5" id="aptitude"
 										value="${member.qualification_no}" maxlength="14"
-										placeholder="输入证书编号" />
-								</p>
+										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
+								</p><#if (member.type.id==0)>
+							<div class="ly-left editBox mr15" style="float: left;height:180px;width:500px;">
+								
 								<!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
 								<#assign arr=(member.qualification_img?split(","))> <#if arr?exists>
-								 <input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
 <!-- 								<img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0" /> -->
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list">
