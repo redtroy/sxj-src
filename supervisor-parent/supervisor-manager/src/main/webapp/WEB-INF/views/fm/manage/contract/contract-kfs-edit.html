@@ -247,7 +247,7 @@ var resetValidForm=function(){
 		var amount=0;
 		$(".quantity").each(function(){
 			if($(this).val()){
-				quantity+=parsefloat($(this).val());
+				quantity+=parseFloat($(this).val());
 			}
 		});
 		$(".price").each(function(){
