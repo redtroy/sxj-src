@@ -152,7 +152,7 @@ var ul_validform;
 			var tquantity=0;
 			var tamount=0;
 			$(this).parent().parent().parent().find(".quantityClass").each(function(){
-				tquantity+=parseInt($(this).val());
+				tquantity+=parseFloat($(this).val());
 			});
 			if(parseFloat(tquantity))
 				$("#quantitySum").html(tquantity.toFixed(2));
@@ -160,7 +160,7 @@ var ul_validform;
 		$(".amountClass").live("keyup",function(){
 			var tamount=0;
 			$(this).parent().parent().parent().find(".amountClass").each(function(){
-				tamount+=parseInt($(this).val());
+				tamount+=parseFloat($(this).val());
 			});
 			if(parseFloat(tamount))
 				$("#amountSum").html(tamount.toFixed(2));
