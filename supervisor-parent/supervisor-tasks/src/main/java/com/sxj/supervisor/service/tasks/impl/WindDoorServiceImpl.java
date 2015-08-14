@@ -638,4 +638,22 @@ public class WindDoorServiceImpl implements IWindDoorService
             throw new ServiceException("查询市场信息失败", e);
         }
     }
+    
+    @Override
+    public void checkState(String id, Integer state) throws ServiceException
+    {
+        try
+        {
+            WindDoorEntity wd = new WindDoorEntity();
+            wd.setId(id);
+            wd.setState(state);
+            wda.updateWind(wd);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("更改市场信息状态失败", e, this.getClass());
+            throw new ServiceException("更改市场信息状态失败", e);
+        }
+        
+    }
 }

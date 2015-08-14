@@ -27,4 +27,6 @@ public interface IWindDoorService
      * 查询采集列表
      */
     public List<WindDoorEntity> query(WindDoorModel query);
+    
+    public void checkState(String id, Integer state);
 }

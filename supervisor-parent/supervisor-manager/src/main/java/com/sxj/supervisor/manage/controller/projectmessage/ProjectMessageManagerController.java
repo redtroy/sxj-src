@@ -67,8 +67,18 @@ public class ProjectMessageManagerController extends BaseController
     }
     
     @RequestMapping("checkState")
-    public @ResponseBody String checkState() throws WebException
+    public @ResponseBody String checkState(String id, Integer state)
+            throws WebException
     {
-        return "";
+        try
+        {
+            windService.checkState(id, state);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("更改状态失败", e.getClass());
+            return "false";
+        }
+        return "ok";
     }
 }

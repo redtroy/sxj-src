@@ -76,8 +76,10 @@ function sub(){
 	 $.post("${basePath}/projectMessage/saveUpload.htm",{qy:qy,bdfl:bdfl,xmmc:xmmc,jzrq:jzrq,filePath:filePath,filePathBack:filePathBack,adjunctPath:adjunctPath},function(data){
 		if (data=='ok'){
 			messageInfo('上传成功！');
+			location.href="${basePath}/projectMessage/woodList.htm";
 		}else{
  			messageInfo('上传失败！');
+ 			location.href="${basePath}/projectMessage/woodList.htm";
 		}
 	}) 
 }
