@@ -796,7 +796,6 @@ public class BasicController extends BaseController
                 SxjLogger.info("siteUploadFilePath=" + filePath,
                         this.getClass());
                 fileIds.add(filePath);
-                windDoorSercice.insertWordHtml(filePath, originalName);
                 // 上传元数据
                 NameValuePair[] metaList = new NameValuePair[1];
                 metaList[0] = new NameValuePair("originalName", originalName);
