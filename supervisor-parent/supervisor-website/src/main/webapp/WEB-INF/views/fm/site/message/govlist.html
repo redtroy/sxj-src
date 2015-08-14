@@ -28,19 +28,10 @@
 <div class="contents">
 <ul class="invList">
 <#list list as gov>
-<#if gov_index == 0>
-<li class="bgUnread">
-	<span class="icon icon-invi-unread"></span>
-	<span class="time mr10">${gov.createDate?string("yyyy-MM-dd")}</span>
-	<a href="${gov.url}" target="_black" >${gov.title}</a>
-</li>
-<#else>
 <li <#if gov_index %2 = 0>class="bgGray" </#if>><span class="icon icon-invi-read"></span>
 <span class="time mr10">${gov.createDate?string("yyyy-MM-dd")}</span>
 	<a href="${gov.url}" target="_black" >${gov.title}</a>
 </li>
-</#if>
-
  </#list>
 </ul>
 <@b.pager/>
