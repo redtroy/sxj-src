@@ -64,7 +64,7 @@ $(document).ready(function() {
 	$('#carousel').find("li").live("click", function() {
 		var el = $(this);
 		var imageSource = el.find("a").attr("data-image");
-			currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
+			currentHiddenImages=$("#aptitudePath_hidden");
 			currentLi=$(this);
 			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
 			el.parent().children("li").removeClass("view");
@@ -129,9 +129,23 @@ $(document).ready(function() {
 		if(!pass)
 			$(this).parent().children(".checkinfo").show();
 	});
+	//删除图片
+	$(".iviewer_del").unbind();
+	$(".iviewer_del").live("click",function(){
+		var url=$(this).siblings("img").attr("src");
+		var prefix="${b.imagePath}";
+		var image=url.substring(url.indexOf(prefix)+prefix.length);
+		var images=currentHiddenImages.attr("value");
+		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
+		currentHiddenImages.attr("value",result)
+		currentLi.remove();
+		closeViewer();
+	});
+	
 }); 
-function close_img() {
-	$("#img_close").hide();
+closeViewer = function() {
+	$('.maskdivgen').fadeOut(100);
+	$('.viewer').slideUp(200);
 }
 var uploadImg = function($file) {
 	var $div = $file.parent().parent();
@@ -665,7 +679,7 @@ function edit_pwd(id){
  <div class="maskdivgen" style="display: none"></div>
 	<div class="viewer modal-wrap" id="img_close" style="display: none">
 		<div class="modal-header">
-			<span class="close" onclick="close_img()">关闭</span>
+			<span class="close" onclick="closeViewer()">关闭</span>
 		</div>
 		<div id="viewer2" class="modal-body iviewer"></div>
 	</div>
