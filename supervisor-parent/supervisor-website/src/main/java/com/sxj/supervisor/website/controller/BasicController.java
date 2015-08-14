@@ -309,7 +309,10 @@ public class BasicController extends BaseController
                     messQuery.setMemberNo(getLoginInfo(session).getMember()
                             .getMemberNo());
                     List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);
-                    List<GovEntity> list = govService.queryGovList(new GovEntity());
+                    GovEntity gov = new GovEntity();
+                    gov.setShowCount(6);
+                    gov.setPagable(true);
+                    List<GovEntity> list = govService.queryGovList(gov);
                     map.put("kfsList", kfsList);
                     map.put("mcList", mcList);
                     map.put("blList", blList);

@@ -144,9 +144,9 @@ function sub(){
    </ul>
 </div>
  <div id="govinfolist" class="govinfolist">
- 	<ul>
+ 	<ul class="invList">
  	<#list govList as gov>
- 	<li><a href="${gov.url}" title="${gov.title}" target="_blank">
+ 	<li class="govinfolisttit"><a href="${gov.url}" title="${gov.title}" target="_blank">
  	<#if gov.title?length gt 35>
  	${gov.title[0..35]}... 
  	<#else>
