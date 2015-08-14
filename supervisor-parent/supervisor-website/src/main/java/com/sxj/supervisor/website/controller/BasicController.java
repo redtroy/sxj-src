@@ -224,9 +224,9 @@ public class BasicController extends BaseController
                     List<MemberEntity> totalPJList = memberService.queryMembers(query);
                     List<MemberEntity> pjList = new ArrayList<MemberEntity>();
                     
-                    if (totalMCList.size() > 16)
+                    if (totalMCList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd1 = new Random();
                             int k1 = rd1.nextInt(totalMCList.size());
@@ -240,9 +240,9 @@ public class BasicController extends BaseController
                         mcList = totalMCList;
                     }
                     
-                    if (totalBLList.size() > 16)
+                    if (totalBLList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd2 = new Random();
                             int k2 = rd2.nextInt(totalBLList.size());
@@ -256,9 +256,9 @@ public class BasicController extends BaseController
                         blList = totalBLList;
                     }
                     
-                    if (totalXCList.size() > 16)
+                    if (totalXCList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd3 = new Random();
                             int k3 = rd3.nextInt(totalXCList.size());
@@ -272,9 +272,9 @@ public class BasicController extends BaseController
                         xcList = totalXCList;
                     }
                     
-                    if (totalKFSList.size() > 16)
+                    if (totalKFSList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd4 = new Random();
                             int k4 = rd4.nextInt(totalKFSList.size());
@@ -288,9 +288,9 @@ public class BasicController extends BaseController
                         kfsList = totalKFSList;
                     }
                     
-                    if (totalPJList.size() > 16)
+                    if (totalPJList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd5 = new Random();
                             int k5 = rd5.nextInt(totalPJList.size());
