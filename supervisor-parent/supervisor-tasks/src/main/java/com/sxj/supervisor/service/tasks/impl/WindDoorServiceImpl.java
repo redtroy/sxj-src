@@ -584,8 +584,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             if (bathList.size() > 0)
             {
                 wda.addWindDoor(bathList);
-                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT,
-                        Long.valueOf(bathList.size()));
+                CometServiceImpl.takeCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
                 List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
                 if (keys != null && keys.size() > 0)
                 {
@@ -595,8 +594,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                         {
                             continue;
                         }
-                        CometServiceImpl.setCount(key,
-                                Long.valueOf(bathList.size()));
+                        CometServiceImpl.takeCount(key);
                     }
                 }
             }
