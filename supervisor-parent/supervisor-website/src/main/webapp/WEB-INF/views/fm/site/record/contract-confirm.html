@@ -240,8 +240,8 @@
 										<td>&nbsp;&nbsp;&nbsp;</td>
 									</tr>
 									<#assign n = 0> <#assign m = 0> <#list contractModel.itemList
-									as item> <#assign n = (n+item.quantity)?int > <#assign m =
-									(m+item.amount)?int >
+									as item> <#assign n = (n+item.quantity)?float > <#assign m =
+									(m+item.amount)?float >
 									<tr>
 										<td>${item.productName}</td>
 										<td>${item.productModel}</td>
