@@ -156,7 +156,7 @@ $(document).ready(function() {
 			$(this).parent().parent().parent().find(".quantityClass").each(function(){
 				var value=$(this).attr("value");
 				if(parseFloat(value)){
-					$(this).attr("value",parseFloat(value).toFixed(2))
+					$(this).attr("value",parseInt(value))
 				}
 			});
 			
@@ -174,12 +174,12 @@ $(document).ready(function() {
 				tquantity+=parseInt($(this).val());
 			});
 			if(parseFloat(tquantity))
-				$("#quantitySum").html(tquantity.toFixed(2));
+				$("#quantitySum").html(tquantity);
 		})
 		$(".amountClass").live("keyup",function(){
 			var tamount=0;
 			$(this).parent().parent().parent().find(".amountClass").each(function(){
-				tamount+=parseInt($(this).val());
+				tamount+=parseFloat($(this).val());
 			});
 			if(parseFloat(tamount))
 				$("#amountSum").html(tamount.toFixed(2));

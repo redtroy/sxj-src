@@ -8,6 +8,7 @@
 		<result property="infoId" column="INFO_ID" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
+		<result property="checkState" column="CHECK_STATE" jdbcType="INTEGER" />
 		<result property="xmmc" column="XMMC" jdbcType="VARCHAR"/>
 		<result property="nowDate" column="NOW_DATE" jdbcType="TIMESTAMP"/>
 	</resultMap>
@@ -24,7 +25,7 @@
 	<select id="queryMessageList"
 		resultMap="com.sxj.supervisor.dao.message.ITenderMessageDao.message"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT m.ID as ID,m.INFO_ID as INFO_ID,m.MEMBER_NO as MEMBER_NO, m.STATE as STATE,d.XMMC as XMMC,d.NOW_DATE as NOW_DATE FROM M_TENDER_MESSAGE m INNER JOIN M_WIND_DOOR d on m.INFO_ID=d.ID WHERE 1=1]]>
+		<![CDATA[SELECT m.ID as ID,m.INFO_ID as INFO_ID,m.MEMBER_NO as MEMBER_NO, m.STATE as STATE,d.XMMC as XMMC,d.NOW_DATE as NOW_DATE,d.STATE as CHECK_STATE FROM M_TENDER_MESSAGE m INNER JOIN M_WIND_DOOR d on m.INFO_ID=d.ID WHERE 1=1]]>
 		<if test="condition.memberNo!= null and condition.memberNo != ''">
 			<![CDATA[AND m.MEMBER_NO = #{condition.memberNo} ]]>
 		</if>

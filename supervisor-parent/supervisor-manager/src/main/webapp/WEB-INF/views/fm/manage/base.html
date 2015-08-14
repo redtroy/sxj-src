@@ -457,7 +457,7 @@ function loadUploadWord(id,url,isMulti,text,fn){
 	  $("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
-	        fileTypeExts: '*.jpg;*.html;*.htm;*.doc;*.docx',
+	        fileTypeExts: '*.doc;',
 	        auto: true,
 	        multi: false,
 	        simUploadLimit:1,
@@ -470,20 +470,20 @@ function loadUploadWord(id,url,isMulti,text,fn){
 	        
 	    });
 }
-function loadUploadAdjunct(idadjunct,url,multi,text,fn){
-/* 	$("#"+id).uploadify({
+function loadUploadAdjunct(id,url,multi,text,fn){
+ 	$("#"+id).uploadify({
 	        swf: '${basePath}upload/uploadify.swf',
 	        uploader: url,
 	        fileTypeExts: '*.pdf;*.jpg;*.png;*.doc;*.docx;*.xls;*.xlsx;*.dwg',
 	        auto: true,
-	        multi: false,
+	        multi: true,
 	        height:30,
 	        width:120,
 	        buttonText:text,
 	        onUploadSuccess : function(file, data, response) {
 	           fn(data);
 	        }
-	    }); */
+	    }); 
 } 
 </script>
 </#macro>

@@ -5,8 +5,12 @@
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家绿色门窗平台管理系统</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
 <@b.upload/>
+<@b.dialogBox/>
 <script>
 jQuery(document).ready(function($) {
 	$('.sltinput').click(function(){
@@ -21,11 +25,71 @@ jQuery(document).ready(function($) {
 		$('.maskdivgen').fadeOut(100);
 		$('.dropList').slideUp(200);
 	})
-	loadUploadWord("insertWordHtml","${basePath}uploadWord.htm",false,"上传word文档",upload);
-	loadUploadWord("insertFJ","${basePath}upload.htm",false,"上传附件",upload);
+	loadUploadWord("insertWordHtml","${basePath}uploadWord.htm",false,"上传word文档",uploadWord);
+	loadUploadAdjunct("insertFJ","${basePath}upload.htm",false,"上传附件",uploadAdjunct);
 })
-function upload(data){
+function uploadAdjunct(data){
+	var dataObj=eval("("+data+")");
+	/* var adjunctPath='';
+    for (var i=0;i<dataObj.fileIds.length;i++){
+    	if (i==0){
+    		adjunctPath=dataObj.fileIds[i];
+    	}else{
+    		adjunctPath=adjunctPath+","+dataObj.fileIds[i];
+    	}
+    } */
+    fjpath=dataObj.fileIds[0];
+    var adjunctPath= $('#adjunctPath').val();
+    if (adjunctPath==''){
+    	adjunctPath=fjpath;
+    }else{
+    	adjunctPath=adjunctPath+","+fjpath;
+    }
+    $('#adjunctPath').val(adjunctPath);
+}
+function uploadWord(data){
+	 var dataObj=eval("("+data+")");
+	 $('#filePath').val(dataObj.fileIds[0]);
+	 $('#filePathBack').val(dataObj.fileIds[1]);
+}
+function sub(){
+	var qy=$("#qy").val();
+	var bdfl=$("#bdfl").val();
+	var xmmc=$("#xmmc").val();
+	var jzrq=$("#jzrq").val();
+	var filePath=$("#filePath").val();
+	var filePathBack=$("#filePathBack").val();
+	var adjunctPath=$("#adjunctPath").val();
+	if (qy==""){
+		messageInfo("区域不能为空");
+		return false;
+	}
+	if (bdfl==''){
+		messageInfo("标段分类不能为空");
+		return false;
+	}
+	if (xmmc==''){
+		messageInfo("项目名称不能为空");
+		return false;
+	}
+	if (jzrq==''){
+		messageInfo("截至日期不能为空");
+		return false;
+	}
+	if (filePath==''){
+		messageInfo("必须上传word文档");
+		return false;
+	}
 	
+	 $.post("${basePath}projectMessage/saveUpload.htm",{qy:qy,bdfl:bdfl,xmmc:xmmc,jzrq:jzrq,filePath:filePath,filePathBack:filePathBack,adjunctPath:adjunctPath},function(data){
+		if (data=='ok'){
+			messageInfo('上传成功！');
+			location.href="${basePath}projectMessage/woodList.htm";
+		}else{
+ 			messageInfo('上传失败！');
+ 			location.href="${basePath}projectMessage/woodList.htm";
+		}
+	}) 
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -46,26 +110,26 @@ function upload(data){
     <div class="infoBox f14">
       <div>
         <label>标段分类</label>
-        <input type="text" id="" name="" value="" class="input-w200"/>
+        <input type="text" id="bdfl" name="" value="" class="input-w200"/>
       </div>
       <div>
         <label>区　　域</label>
-        <input type="text" id="" name="" value="" class="input-w200"/>
+        <input type="text" id="qy" name="" value="" class="input-w200"/>
       </div>
       <div>
         <label>项目名称</label>
-        <input type="text" id="" name="" value="" class="input-w200"/>
+        <input type="text" id="xmmc" name="" value="" class="input-w200"/>
       </div>
       <div>
         <label>截止日期</label>
-        <input type="text" id="" name="" value="" class="input-w200"/>
+        <input type="text" id="jzrq" name="" value="" datepicker class="input-w200"/>
       </div>
       <input type="hidden" id="filePath" value="" />   
       <input type="hidden" id="filePathBack" value="" />
       <input type="hidden" id="adjunctPath" value="" />      
       <div id="upload_doc"><ul><li><label>&nbsp;</label><input type="file" id="insertWordHtml" /></li>
       <li><label>&nbsp;</label><input type="file" id="insertFJ" /></li></ul></div>
-      <div class="btnBox" style="clear:both; margin-top:20px;"><a href="#" class="button button-orange button-small">确定</a><a href="projectlistman.html" class="button button-gray button-small">返回</a> </div></div>
+      <div class="btnBox" style="clear:both; margin-top:20px;"><a href="javascript:sub();" class="button button-orange button-small">确定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div></div>
     <!-- InstanceEndEditable --></div>
 </div>
 <@b.footer />

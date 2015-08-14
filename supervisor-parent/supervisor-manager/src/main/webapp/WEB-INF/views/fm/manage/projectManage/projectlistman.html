@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<@b.pageScript/>
+<@b.dialogBox/>
+<script>
+//查询
+function query(page){
+	   var params=$("#serch").serialize();
+	   if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	   }
+		$.post("${basePath}projectMessage/woodList.htm",params,function(data){
+			var res=$(data).find("#res_table");
+			var pager=$(data).find("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		});
+	   
+}
+function checkstate(id,state){
+	$.post("${basePath}projectMessage/checkState.htm",{id:id,state:state},function(data){
+		if (data=='ok'){
+			query($("#pager").attr("currentPage"));
+		}else{
+			messageInfo("更改失败");
+		}
+	})
+}
+</script>
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>信息管理<span>&gt;</span>工程信息管理</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+     <@b.leftMenu />
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">工程信息管理</h2>
+    <div id="devBox" style="line-height:3.0">
+     <form action="javascript:void(0);" id="serch">
+      <a href="${basePath}projectMessage/uploadPage.htm" class="button button-green button-news ly-right" style="line-height:1.8">上传信息</a>
+      
+          发布单位
+          <input type="text" name="publishFirm" value="" />
+        发布时间段
+        <input name="starDate" type="text" value="" style="width:150px;"/>-<input type="text" name="endDate" value="" style="width:150px;"/><br/>
+          项目名称
+          <input type="text" name="xmmc" value="" />
+         <!--  　审核状态
+          <select name="select">
+            <option selected="selected">全部</option>
+			<option>已审核</option>
+            <option>未审核</option>
+          </select> -->
+          　生效状态
+          <select name="state" id="state">
+            <option selected="selected" value="">全部</option>
+			<option value="0">已生效</option>
+            <option value="1">失效</option>
+          </select>
+        <button class="btn btn-blue" style="margin-left:75px;" onclick="query()"><span>查询</span></button>
+        </form>
+    </div>
+      <div class="developers">
+       <div id="res_table">
+        <ul class="devList">
+        <li class="titDev"><span class="comName1">发布单位</span><span class="comCity1">发布时间</span><span class="comLink1">项目名称</span><span class="comEdit1">操作</span></li>
+         <#list list as model>
+          <li><span class="comName1">${model.publishFirm}</span><span class="comCity1"><#if (model.nowDate??)>${model.nowDate?string("yyyy-MM-dd")}</#if></span><span class="comLink1"><a href="${basePath}projectMessage/info.htm?id=${model.id}">${model.xmmc}</a></span><span class="comEdit1 operation"><#if (model.state=='0')><a href="javascript:checkstate('${model.id}','1')" class="del">失效</a><#elseif (model.state=='1')><a href="javascript:checkstate('${model.id}','0')" class="del">生效</a></#if></span></li>
+         </#list>
+         </ul>
+         </div>
+         <@b.pager/>
+      </div>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>

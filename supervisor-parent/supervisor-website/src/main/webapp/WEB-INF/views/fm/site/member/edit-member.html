@@ -64,7 +64,7 @@ $(document).ready(function() {
 	$('#carousel').find("li").live("click", function() {
 		var el = $(this);
 		var imageSource = el.find("a").attr("data-image");
-			currentHiddenImages=$(this).parent().parent().parent().parent().siblings(":hidden");
+			currentHiddenImages=$("#aptitudePath_hidden");
 			currentLi=$(this);
 			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
 			el.parent().children("li").removeClass("view");
@@ -129,9 +129,23 @@ $(document).ready(function() {
 		if(!pass)
 			$(this).parent().children(".checkinfo").show();
 	});
+	//删除图片
+	$(".iviewer_del").unbind();
+	$(".iviewer_del").live("click",function(){
+		var url=$(this).siblings("img").attr("src");
+		var prefix="${b.imagePath}";
+		var image=url.substring(url.indexOf(prefix)+prefix.length);
+		var images=currentHiddenImages.attr("value");
+		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
+		currentHiddenImages.attr("value",result)
+		currentLi.remove();
+		closeViewer();
+	});
+	
 }); 
-function close_img() {
-	$("#img_close").hide();
+closeViewer = function() {
+	$('.maskdivgen').fadeOut(100);
+	$('.viewer').slideUp(200);
 }
 var uploadImg = function($file) {
 	var $div = $file.parent().parent();
@@ -588,27 +602,27 @@ function edit_pwd(id){
         <div id="add_form">
 						<div class="item">
 							<!-- 资质证书1 -->
-							<label>资质证书</label> <#if (member.type.id==0)>
-							<div class="ly-left editBox mr15" style="float: left;">
-								<p>
+							<label>资质证书</label> <p>
 									<input class="input input-w140h30 mb5" id="aptitude"
 										value="${member.qualification_no}" maxlength="14"
-										placeholder="输入证书编号" />
-								</p>
+										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
+								</p><#if (member.type.id==0)>
+							<div class="ly-left editBox mr15" style="float: left;height:180px;width:500px;">
+								
 								<!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
-								<#assign arr=(member.qualification_img?split(","))> <#if arr??>
-								 <input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
+								<#assign arr=(member.qualification_img?split(","))> <#if arr?exists>
 <!-- 								<img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0" /> -->
 								<div class="rollBox">
 									<ul id="carousel" class="elastislide-list">
 										<#list arr as imgPath>
+										<#if imgPath !=''>
 											<li><a href="javascript:void(0);" class="demo-image"
 											data-image="${b.imagePath}${imgPath}"><img
 												src="${b.imagePath}${imgPath}" width="80"
 												height="107" /></a>
 												<p>${imgPath_index+1}</p>
 												</li> 
-												
+												</#if>
 										</#list>
 									</ul>
 								</div>
@@ -616,9 +630,7 @@ function edit_pwd(id){
 								 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0" /> </#if>
 							</div>
 							<div class="uploadify" style="float: left;padding-left: 15%;">
-									<#if (!member.flag)> 
-									<input type="file" class="" id="aptitudePath_File" name="input6"> <#else>
-									 <input type="file" class="" id="aptitudePath_File_reload" name="input6"> </#if> 
+									 <input type="file" class="" id="aptitudePath_File_reload" name="input6">
 								</div>
 							</#if>
 						</div>
@@ -667,7 +679,7 @@ function edit_pwd(id){
  <div class="maskdivgen" style="display: none"></div>
 	<div class="viewer modal-wrap" id="img_close" style="display: none">
 		<div class="modal-header">
-			<span class="close" onclick="close_img()">关闭</span>
+			<span class="close" onclick="closeViewer()">关闭</span>
 		</div>
 		<div id="viewer2" class="modal-body iviewer"></div>
 	</div>

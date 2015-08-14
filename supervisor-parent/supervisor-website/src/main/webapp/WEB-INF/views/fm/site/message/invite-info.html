@@ -25,5 +25,15 @@ $(document).ready(function(){
 	 ${model.filePath}
   </div>
 </div>
+<div class="invBox">
+  <h2 class="invTit fb fontYH f16">下载相关附件</h2>
+  <div class="invInfo">
+  	<ul>
+  	<#list fileList as file>
+    	<li class="att"><a href="${basePath}downloadFileFJ.htm?filePath=${file.filePath}">${file.fileName}</a></li>
+    </#list>
+    </ul>
+  </div>
+</div>
 <div class="tr pt15 pr5 pb20 f12" ><a class="button button-gray" href="javascript:query();">返回</a></div>
 

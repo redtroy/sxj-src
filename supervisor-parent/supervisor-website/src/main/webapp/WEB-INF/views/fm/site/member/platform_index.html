@@ -146,13 +146,13 @@ function sub(){
  <div id="govinfolist" class="govinfolist">
  	<ul>
  	<#list govList as gov>
- 	<li><a href="${gov.url}" title="${gov.title}" target="_blank">
+ 	<li class="govinfolisttit"><a href="${gov.url}" title="${gov.title}" target="_blank">
  	<#if gov.title?length gt 35>
  	${gov.title[0..35]}... 
  	<#else>
  	${gov.title}
  	</#if>
- 	</a></li>
+ 	</a></li><li class="govinfolistdate">（${gov.createDate?string("MM/dd")}）</li>
  	</#list>
     </ul>
  </div>
@@ -164,11 +164,11 @@ function sub(){
    </ul>
 </div>
  <div id="govinfolist" class="govinfolist">
- <ul class="invList">
+ <ul>
 <#list messageList as message>
 		<li class="govinfolisttit" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
 			<a href="javascript:void(0);">${message.xmmc}</a>
-		</li>
+		</li><li class="govinfolistdate">（${message.nowDate?string("MM/dd")}）</li>
 </#list>
 </ul>
 </div>
@@ -179,7 +179,7 @@ function sub(){
 <div class="contBox">
 <div style="width:550px;" id="tabsholder">
 <ul class="tabs">
-<li style="width:110px;" class="colname">最新加入会员</li>
+<li style="width:120px;" class="colname">最新加入会员</li>
 <li id="tabz1" style="width:70px;" onclick="changeLi(0);"><a href="#">开发商</a></li>
 <li id="tabz2" style="width:70px;" onclick="changeLi(1);"><a href="#">门窗厂</a></li>
 <li id="tabz3" style="width:70px;" onclick="changeLi(2);"><a href="#">型材厂</a></li>

@@ -1,6 +1,9 @@
 package com.sxj.supervisor.service.tasks;
 
+import java.util.List;
+
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
+import com.sxj.supervisor.model.tasks.WindDoorModel;
 
 public interface IWindDoorService
 {
@@ -18,5 +21,12 @@ public interface IWindDoorService
     /**
      * 导入word HTML 模版
      */
-    public void insertWordHtml(String filePath, String name);
+    public void insertWordHtml(WindDoorEntity wind);
+    
+    /**
+     * 查询采集列表
+     */
+    public List<WindDoorEntity> query(WindDoorModel query);
+    
+    public void checkState(String id, Integer state);
 }

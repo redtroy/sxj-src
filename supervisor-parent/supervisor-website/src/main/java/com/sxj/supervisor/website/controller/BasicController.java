@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -224,9 +226,9 @@ public class BasicController extends BaseController
                     List<MemberEntity> totalPJList = memberService.queryMembers(query);
                     List<MemberEntity> pjList = new ArrayList<MemberEntity>();
                     
-                    if (totalMCList.size() > 16)
+                    if (totalMCList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd1 = new Random();
                             int k1 = rd1.nextInt(totalMCList.size());
@@ -240,9 +242,9 @@ public class BasicController extends BaseController
                         mcList = totalMCList;
                     }
                     
-                    if (totalBLList.size() > 16)
+                    if (totalBLList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd2 = new Random();
                             int k2 = rd2.nextInt(totalBLList.size());
@@ -256,9 +258,9 @@ public class BasicController extends BaseController
                         blList = totalBLList;
                     }
                     
-                    if (totalXCList.size() > 16)
+                    if (totalXCList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd3 = new Random();
                             int k3 = rd3.nextInt(totalXCList.size());
@@ -272,9 +274,9 @@ public class BasicController extends BaseController
                         xcList = totalXCList;
                     }
                     
-                    if (totalKFSList.size() > 16)
+                    if (totalKFSList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd4 = new Random();
                             int k4 = rd4.nextInt(totalKFSList.size());
@@ -288,9 +290,9 @@ public class BasicController extends BaseController
                         kfsList = totalKFSList;
                     }
                     
-                    if (totalPJList.size() > 16)
+                    if (totalPJList.size() > 18)
                     {
-                        for (int i = 0; i < 16; i++)
+                        for (int i = 0; i < 18; i++)
                         {
                             Random rd5 = new Random();
                             int k5 = rd5.nextInt(totalPJList.size());
@@ -306,10 +308,14 @@ public class BasicController extends BaseController
                     
                     // TenderMessageQuery messQuery = new TenderMessageQuery();
                     messQuery.setPagable(true);
+                    messQuery.setShowCount(6);
                     messQuery.setMemberNo(getLoginInfo(session).getMember()
                             .getMemberNo());
                     List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);
-                    List<GovEntity> list = govService.queryGovList(new GovEntity());
+                    GovEntity gov = new GovEntity();
+                    gov.setShowCount(6);
+                    gov.setPagable(true);
+                    List<GovEntity> list = govService.queryGovList(gov);
                     map.put("kfsList", kfsList);
                     map.put("mcList", mcList);
                     map.put("blList", blList);
@@ -740,7 +746,8 @@ public class BasicController extends BaseController
                 
                 // 上传元数据
                 NameValuePair[] metaList = new NameValuePair[1];
-                metaList[0] = new NameValuePair("originalName", originalName);
+                metaList[0] = new NameValuePair("originalName",
+                        URLEncoder.encode(originalName, "UTF-8"));
                 storageClientService.overwriteMetadata(filePath, metaList);
             }
         }
@@ -792,10 +799,10 @@ public class BasicController extends BaseController
                 SxjLogger.info("siteUploadFilePath=" + filePath,
                         this.getClass());
                 fileIds.add(filePath);
-                windDoorSercice.insertWordHtml(filePath, originalName);
                 // 上传元数据
                 NameValuePair[] metaList = new NameValuePair[1];
-                metaList[0] = new NameValuePair("originalName", originalName);
+                metaList[0] = new NameValuePair("originalName",
+                        URLEncoder.encode(originalName, "UTF-8"));
                 storageClientService.overwriteMetadata(filePath, metaList);
             }
         }
@@ -850,6 +857,41 @@ public class BasicController extends BaseController
             response.setContentType("application/pdf");
             String path = filePath.substring(filePath.indexOf("/") + 1,
                     filePath.length());
+            storageClientService.downloadFile(group, path, output);
+            output.flush();
+            output.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            SxjLogger.debug("下载文件出错", e.getClass());
+        }
+    }
+    
+    /**
+     * 下载附件
+     * @param request
+     * @param response
+     * @param filePath
+     * @throws IOException
+     */
+    @RequestMapping("downloadFileFJ")
+    public void downloadFileFJ(HttpServletRequest request,
+            HttpServletResponse response, String filePath) throws IOException
+    {
+        try
+        {
+            ServletOutputStream output = response.getOutputStream();
+            String group = filePath.substring(0, filePath.indexOf("/"));
+            String path = filePath.substring(filePath.indexOf("/") + 1,
+                    filePath.length());
+            NameValuePair[] metaList = storageClientService.getMetadata(group,
+                    path);
+            String fjname = metaList[0].getValue();
+            response.addHeader("Content-Disposition", "attachment;filename="
+                    + new String(URLDecoder.decode(fjname, "UTF-8").getBytes(),"ISO8859-1"));
+            response.setContentType("application/"
+                    + FileUtil.getFileExtName(fjname));
             storageClientService.downloadFile(group, path, output);
             output.flush();
             output.close();
