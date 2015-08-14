@@ -30,12 +30,20 @@ jQuery(document).ready(function($) {
 })
 function uploadAdjunct(data){
 	var dataObj=eval("("+data+")");
-	var adjunctPath='';
+	/* var adjunctPath='';
     for (var i=0;i<dataObj.fileIds.length;i++){
-    	adjunctPath=adjunctPath+dataObj.fileIds[i]+',';
-    	if (i==(dataObj.fileIds.length-1) && i>0){
-    		adjunctPath=adjunctPath+dataObj.fileIds[i];
+    	if (i==0){
+    		adjunctPath=dataObj.fileIds[i];
+    	}else{
+    		adjunctPath=adjunctPath+","+dataObj.fileIds[i];
     	}
+    } */
+    fjpath=dataObj.fileIds[0];
+    var adjunctPath= $('#adjunctPath').val();
+    if (adjunctPath==''){
+    	adjunctPath=fjpath;
+    }else{
+    	adjunctPath=adjunctPath+","+fjpath;
     }
     $('#adjunctPath').val(adjunctPath);
 }

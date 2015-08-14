@@ -29,9 +29,9 @@ $(document).ready(function(){
   <h2 class="invTit fb fontYH f16">下载相关附件</h2>
   <div class="invInfo">
   	<ul>
-    	<li class="att"><a href="#">ITO导电膜玻璃生产线技术改造项目C栋门窗工程附件.xls</a></li>
-        <li class="att"><a href="#">ITO导电膜玻璃生产线技术改造项目C栋门窗工程附件.dwg</a></li>
-        <li class="att"><a href="#">ITO导电膜玻璃生产线技术改造项目C栋门窗工程附件.jpg</a></li>
+  	<#list fileList as file>
+    	<li class="att"><a href="${basePath}downloadFileFJ.htm?filePath=${file.filePath}">${file.fileName}</a></li>
+    </#list>
     </ul>
   </div>
 </div>

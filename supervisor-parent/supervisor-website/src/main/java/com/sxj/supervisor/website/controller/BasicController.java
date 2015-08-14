@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -744,7 +746,8 @@ public class BasicController extends BaseController
                 
                 // 上传元数据
                 NameValuePair[] metaList = new NameValuePair[1];
-                metaList[0] = new NameValuePair("originalName", originalName);
+                metaList[0] = new NameValuePair("originalName",
+                        URLEncoder.encode(originalName, "UTF-8"));
                 storageClientService.overwriteMetadata(filePath, metaList);
             }
         }
@@ -798,7 +801,8 @@ public class BasicController extends BaseController
                 fileIds.add(filePath);
                 // 上传元数据
                 NameValuePair[] metaList = new NameValuePair[1];
-                metaList[0] = new NameValuePair("originalName", originalName);
+                metaList[0] = new NameValuePair("originalName",
+                        URLEncoder.encode(originalName, "UTF-8"));
                 storageClientService.overwriteMetadata(filePath, metaList);
             }
         }
@@ -853,6 +857,41 @@ public class BasicController extends BaseController
             response.setContentType("application/pdf");
             String path = filePath.substring(filePath.indexOf("/") + 1,
                     filePath.length());
+            storageClientService.downloadFile(group, path, output);
+            output.flush();
+            output.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            SxjLogger.debug("下载文件出错", e.getClass());
+        }
+    }
+    
+    /**
+     * 下载附件
+     * @param request
+     * @param response
+     * @param filePath
+     * @throws IOException
+     */
+    @RequestMapping("downloadFileFJ")
+    public void downloadFileFJ(HttpServletRequest request,
+            HttpServletResponse response, String filePath) throws IOException
+    {
+        try
+        {
+            ServletOutputStream output = response.getOutputStream();
+            String group = filePath.substring(0, filePath.indexOf("/"));
+            String path = filePath.substring(filePath.indexOf("/") + 1,
+                    filePath.length());
+            NameValuePair[] metaList = storageClientService.getMetadata(group,
+                    path);
+            String fjname = metaList[0].getValue();
+            response.addHeader("Content-Disposition", "attachment;filename="
+                    + new String(URLDecoder.decode(fjname, "UTF-8").getBytes(),"ISO8859-1"));
+            response.setContentType("application/"
+                    + FileUtil.getFileExtName(fjname));
             storageClientService.downloadFile(group, path, output);
             output.flush();
             output.close();

@@ -85,7 +85,7 @@ function checkstate(id,state){
         <ul class="devList">
         <li class="titDev"><span class="comName1">发布单位</span><span class="comCity1">发布时间</span><span class="comLink1">项目名称</span><span class="comEdit1">操作</span></li>
          <#list list as model>
-          <li><span class="comName1">${model.publishFirm}</span><span class="comCity1"><#if (model.nowDate??)>${model.nowDate?string("yyyy-MM-dd")}</#if></span><span class="comLink1"><a href="#" target="_blank">${model.xmmc}</a></span><span class="comEdit1 operation"><#if (model.state=='0')><a href="javascript:checkstate('${model.id}','1')" class="del">失效</a><#elseif (model.state=='1')><a href="javascript:checkstate('${model.id}','0')" class="del">生效</a></#if></span></li>
+          <li><span class="comName1">${model.publishFirm}</span><span class="comCity1"><#if (model.nowDate??)>${model.nowDate?string("yyyy-MM-dd")}</#if></span><span class="comLink1"><a href="${basePath}projectMessage/info.htm?id=${model.id}">${model.xmmc}</a></span><span class="comEdit1 operation"><#if (model.state=='0')><a href="javascript:checkstate('${model.id}','1')" class="del">失效</a><#elseif (model.state=='1')><a href="javascript:checkstate('${model.id}','0')" class="del">生效</a></#if></span></li>
          </#list>
          </ul>
          </div>
