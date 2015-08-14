@@ -99,7 +99,8 @@ public class ProjectMessageManagerController extends BaseController
         try
         {
             WindDoorEntity wde = windService.getInfoById(id);
-            if (wde.getAdjunctPath().length() > 1)
+            if (wde.getAdjunctPath() != null
+                    && !"".equals(wde.getAdjunctPath()))
             {
                 String[] fj = wde.getAdjunctPath().split(",");
                 List<Map<String, String>> list = new ArrayList<Map<String, String>>();
