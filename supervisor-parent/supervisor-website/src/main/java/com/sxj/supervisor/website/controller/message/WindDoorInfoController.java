@@ -36,7 +36,8 @@ public class WindDoorInfoController
         try
         {
             WindDoorEntity wde = iwds.getInfoById(id);
-            if (wde.getAdjunctPath().length() > 1)
+            if (wde.getAdjunctPath() != null
+                    && !"".equals(wde.getAdjunctPath()))
             {
                 String[] fj = wde.getAdjunctPath().split(",");
                 List<Map<String, String>> list = new ArrayList<Map<String, String>>();

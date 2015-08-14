@@ -32,7 +32,7 @@
 		<if test="condition.infoId!= null and condition.infoId != ''">
 			<![CDATA[AND m.INFO_ID = #{condition.infoId} ]]>
 		</if>
-		<![CDATA[ ORDER BY m.STATE]]>
+		<![CDATA[ ORDER BY m.STATE,d.NOW_DATE DESC]]>
 	</select>
 	<update id="updateMessage" parameterType="com.sxj.supervisor.entity.message.TenderMessageEntity">
 		<![CDATA[ UPDATE M_TENDER_MESSAGE SET STATE=#{state} WHERE ID=#{id} AND STATE=0]]>

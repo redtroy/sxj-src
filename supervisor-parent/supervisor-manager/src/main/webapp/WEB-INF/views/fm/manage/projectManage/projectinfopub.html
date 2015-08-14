@@ -81,13 +81,13 @@ function sub(){
 		return false;
 	}
 	
-	 $.post("${basePath}/projectMessage/saveUpload.htm",{qy:qy,bdfl:bdfl,xmmc:xmmc,jzrq:jzrq,filePath:filePath,filePathBack:filePathBack,adjunctPath:adjunctPath},function(data){
+	 $.post("${basePath}projectMessage/saveUpload.htm",{qy:qy,bdfl:bdfl,xmmc:xmmc,jzrq:jzrq,filePath:filePath,filePathBack:filePathBack,adjunctPath:adjunctPath},function(data){
 		if (data=='ok'){
 			messageInfo('上传成功！');
-			location.href="${basePath}/projectMessage/woodList.htm";
+			location.href="${basePath}projectMessage/woodList.htm";
 		}else{
  			messageInfo('上传失败！');
- 			location.href="${basePath}/projectMessage/woodList.htm";
+ 			location.href="${basePath}projectMessage/woodList.htm";
 		}
 	}) 
 }
@@ -100,7 +100,6 @@ function sub(){
 <@b.header />
 <div id="main" class="fence-wide">
 <!-- InstanceBeginEditable name="local" -->
-<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>信息管理<span>&gt;</span>工程信息管理</div>
 <!-- InstanceEndEditable -->
 <div id="mainBg" class="ly-clearFix yard-1200">
       <@b.leftMenu />
