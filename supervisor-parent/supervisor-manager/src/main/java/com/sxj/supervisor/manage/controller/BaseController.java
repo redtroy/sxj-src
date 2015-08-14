@@ -1,12 +1,25 @@
 package com.sxj.supervisor.manage.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.converter.WordToHtmlConverter;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -84,8 +97,7 @@ public class BaseController
                 new EnumPropertyEditorSupport<WindowTypeEnum>(
                         WindowTypeEnum.class));
         binder.registerCustomEditor(LevelEnum.class,
-                new EnumPropertyEditorSupport<LevelEnum>(
-                        LevelEnum.class));
+                new EnumPropertyEditorSupport<LevelEnum>(LevelEnum.class));
         
         binder.registerCustomEditor(String.class,
                 new TrimStringPropertyEditorSupport());
@@ -116,13 +128,13 @@ public class BaseController
     //
     // }''
     
-//    protected void registChannel(final String channelName)
-//    {
-//        if (!CometContext.getInstance().getAppModules().contains(channelName))
-//        {
-//            CometContext.getInstance().registChannel(channelName);// 注册应用的channel
-//        }
-//    }
+    //    protected void registChannel(final String channelName)
+    //    {
+    //        if (!CometContext.getInstance().getAppModules().contains(channelName))
+    //        {
+    //            CometContext.getInstance().registChannel(channelName);// 注册应用的channel
+    //        }
+    //    }
     
     protected String getValidError(BindingResult result) throws SystemException
     {
@@ -157,4 +169,27 @@ public class BaseController
         
     }
     
+    public String convert2Html(InputStream fileName)
+            throws TransformerException, IOException,
+            ParserConfigurationException
+    {
+        HWPFDocument wordDocument = new HWPFDocument(fileName);//WordToHtmlUtils.loadDoc(new FileInputStream(inputFile));    
+        WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(
+                DocumentBuilderFactory.newInstance()
+                        .newDocumentBuilder()
+                        .newDocument());
+        wordToHtmlConverter.processDocument(wordDocument);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        DOMSource domSource = new DOMSource(wordToHtmlConverter.getDocument());
+        StreamResult streamResult = new StreamResult(out);
+        
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer serializer = tf.newTransformer();
+        serializer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+        serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+        serializer.setOutputProperty(OutputKeys.METHOD, "html");
+        serializer.transform(domSource, streamResult);
+        out.close();
+        return out.toString();
+    }
 }

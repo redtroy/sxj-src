@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.upload/>
+<@b.dialogBox/>
+<script>
+jQuery(document).ready(function($) {
+	$('.sltinput').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.dropList').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+	$('.popBtn').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+	loadUploadWord("insertWordHtml","${basePath}uploadWord.htm",false,"上传word文档",uploadWord);
+	loadUploadAdjunct("insertFJ","${basePath}upload.htm",false,"上传附件",uploadAdjunct);
+})
+function uploadAdjunct(data){
+	var dataObj=eval("("+data+")");
+	var adjunctPath='';
+    for (var i=0;i<dataObj.fileIds.length;i++){
+    	adjunctPath=adjunctPath+dataObj.fileIds[i]+',';
+    	if (i==(dataObj.fileIds.length-1) && i>0){
+    		adjunctPath=adjunctPath+dataObj.fileIds[i];
+    	}
+    }
+    $('#adjunctPath').val(adjunctPath);
+}
+function uploadWord(data){
+	 var dataObj=eval("("+data+")");
+	 $('#filePath').val(dataObj.fileIds[0]);
+	 $('#filePathBack').val(dataObj.fileIds[1]);
+}
+function sub(){
+	var qy=$("#qy").val();
+	var bdfl=$("#bdfl").val();
+	var xmmc=$("#xmmc").val();
+	var jzrq=$("#jzrq").val();
+	var filePath=$("#filePath").val();
+	var filePathBack=$("#filePathBack").val();
+	var adjunctPath=$("#adjunctPath").val();
+	if (qy==""){
+		messageInfo("区域不能为空");
+		return false;
+	}
+	if (bdfl==''){
+		messageInfo("标段分类不能为空");
+		return false;
+	}
+	if (xmmc==''){
+		messageInfo("项目名称不能为空");
+		return false;
+	}
+	if (jzrq==''){
+		messageInfo("截至日期不能为空");
+		return false;
+	}
+	if (filePath==''){
+		messageInfo("必须上传word文档");
+		return false;
+	}
+	
+	 $.post("${basePath}/projectMessage/saveUpload.htm",{qy:qy,bdfl:bdfl,xmmc:xmmc,jzrq:jzrq,filePath:filePath,filePathBack:filePathBack,adjunctPath:adjunctPath},function(data){
+		if (data=='ok'){
+			messageInfo('上传成功！');
+			location.href="${basePath}/projectMessage/woodList.htm";
+		}else{
+ 			messageInfo('上传失败！');
+ 			location.href="${basePath}/projectMessage/woodList.htm";
+		}
+	}) 
+}
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>信息管理<span>&gt;</span>工程信息管理</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+      <@b.leftMenu />
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+    <h2 class="title">工程信息上传</h2>
+    <div class="infoBox f14">
+      <div>
+        <label>标段分类</label>
+        <input type="text" id="bdfl" name="" value="" class="input-w200"/>
+      </div>
+      <div>
+        <label>区　　域</label>
+        <input type="text" id="qy" name="" value="" class="input-w200"/>
+      </div>
+      <div>
+        <label>项目名称</label>
+        <input type="text" id="xmmc" name="" value="" class="input-w200"/>
+      </div>
+      <div>
+        <label>截止日期</label>
+        <input type="text" id="jzrq" name="" value="" datepicker class="input-w200"/>
+      </div>
+      <input type="hidden" id="filePath" value="" />   
+      <input type="hidden" id="filePathBack" value="" />
+      <input type="hidden" id="adjunctPath" value="" />      
+      <div id="upload_doc"><ul><li><label>&nbsp;</label><input type="file" id="insertWordHtml" /></li>
+      <li><label>&nbsp;</label><input type="file" id="insertFJ" /></li></ul></div>
+      <div class="btnBox" style="clear:both; margin-top:20px;"><a href="javascript:sub();" class="button button-orange button-small">确定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div></div>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>

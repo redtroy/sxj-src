@@ -27,12 +27,14 @@ import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.supervisor.model.comet.MessageChannel;
+import com.sxj.supervisor.model.tasks.WindDoorModel;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
 import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
+import com.sxj.util.persistent.QueryCondition;
 
 @Service
 public class WindDoorServiceImpl implements IWindDoorService
@@ -556,21 +558,21 @@ public class WindDoorServiceImpl implements IWindDoorService
     }
     
     @Override
-    public void insertWordHtml(String filePath, String name)
-            throws ServiceException
+    @Transactional
+    public void insertWordHtml(WindDoorEntity wind) throws ServiceException
     {
         try
         {
-            String[] fileNames = name.split("_");
             List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
             WindDoorEntity windDoor = new WindDoorEntity();
             windDoor.setId(StringUtils.getUUID());
-            windDoor.setBdfl(fileNames[0]);
-            windDoor.setFilePath(filePath);
-            windDoor.setJzrq(fileNames[3].substring(0,
-                    fileNames[3].indexOf(".")));
-            windDoor.setQy(fileNames[2]);
-            windDoor.setXmmc(fileNames[1]);
+            windDoor.setBdfl(wind.getBdfl());
+            windDoor.setFilePath(wind.getFilePath());
+            windDoor.setFilePathBack(wind.getFilePathBack());
+            windDoor.setJzrq(wind.getJzrq());
+            windDoor.setQy(wind.getQy());
+            windDoor.setXmmc(wind.getXmmc());
+            windDoor.setAdjunctPath(wind.getAdjunctPath());
             windDoor.setNowDate(new Date());
             bathList.add(windDoor);
             if (bathList.size() > 0)
@@ -604,6 +606,53 @@ public class WindDoorServiceImpl implements IWindDoorService
         {
             SxjLogger.error("word导入市场信息失败", e, this.getClass());
             throw new ServiceException("word导入市场信息失败", e);
+        }
+        
+    }
+    
+    @Override
+    public List<WindDoorEntity> query(WindDoorModel query)
+            throws ServiceException
+    {
+        try
+        {
+            QueryCondition<WindDoorEntity> condition = new QueryCondition<WindDoorEntity>();
+            List<WindDoorEntity> windList = new ArrayList<WindDoorEntity>();
+            if (query == null)
+            {
+                return windList;
+            }
+            condition.addCondition("publishFirm", query.getPublishFirm());// 发布单位
+            condition.addCondition("xmmc", query.getXmmc());// 项目名称
+            condition.addCondition("starDate", query.getStarDate());// 开始时间
+            condition.addCondition("endDate", query.getEndDate());// 结束时间
+            condition.addCondition("state", query.getState());// 状态
+            condition.setPage(query);
+            windList = wda.queryList(condition);
+            query.setPage(condition);
+            return windList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询市场信息失败", e, this.getClass());
+            throw new ServiceException("查询市场信息失败", e);
+        }
+    }
+    
+    @Override
+    public void checkState(String id, Integer state) throws ServiceException
+    {
+        try
+        {
+            WindDoorEntity wd = new WindDoorEntity();
+            wd.setId(id);
+            wd.setState(state);
+            wda.updateWind(wd);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("更改市场信息状态失败", e, this.getClass());
+            throw new ServiceException("更改市场信息状态失败", e);
         }
         
     }
