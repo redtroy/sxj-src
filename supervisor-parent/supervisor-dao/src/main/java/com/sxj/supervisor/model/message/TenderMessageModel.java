@@ -20,6 +20,18 @@ public class TenderMessageModel extends Pagable implements Serializable
     
     private TenderMessageEntity message = new TenderMessageEntity();
     
+    private Integer checkState;
+    
+    public Integer getCheckState()
+    {
+        return checkState;
+    }
+    
+    public void setCheckState(Integer checkState)
+    {
+        this.checkState = checkState;
+    }
+    
     public String getId()
     {
         return message.getId();
