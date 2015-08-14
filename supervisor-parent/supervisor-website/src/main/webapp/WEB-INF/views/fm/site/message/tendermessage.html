@@ -2,9 +2,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>私享家绿色门窗平�/title>
-<meta name="keywords" content="私享家绿色门窗平�门窗,型材�玻璃�门窗">
-<meta name="description" content="私享家绿色门窗平�为门窗行业的玻璃�型材厂提供产品盘�物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业�>
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script> 
 <script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
@@ -40,7 +40,7 @@ function loadHighcharts(){
 			   averageList[dataList.list.length-1-i]=parseInt(dataList.list[i].average);
 		   }
 		   $("#lvchart").highcharts({
-			   title: { text: '�0天铝价格走势�, x: -20 //center 
+			   title: { text: '近30天铝价格走势图', x: -20 //center 
 				   },
 				   xAxis: { categories: dateList,tickInterval:3},
 				    credits: {  
@@ -48,8 +48,8 @@ function loadHighcharts(){
 				      },  
 				   yAxis: { title: { text: '单位（元/吨）' }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
 				   legend: { layout: 'vertical', align: 'right', verticalAlign: 'middle', borderWidth: 0 },
-				   series: [{ name: '最�, data: maxList},
-				           { name: '最�, data: minList }, 
+				   series: [{ name: '最高', data: maxList},
+				           { name: '最低', data: minList }, 
 				           { name: '均价', data: averageList }]
 			   });
 	   });
@@ -163,14 +163,12 @@ function modifyState(id,infoId){
 			<span class="icon icon-invi-unread"></span>
 			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
 			<a href="javascript:void(0);">${message.xmmc}</a>
-			${message.checkSate}
 		</li>
 	<#else>
 		<li class="bgGray" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
 			<span class="icon icon-invi-read"></span>
 			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
 			<a href="javascript:void(0);">${message.xmmc}</a>
-			${message.checkSate}
 		</li>
 	</#if>
 </#list>
