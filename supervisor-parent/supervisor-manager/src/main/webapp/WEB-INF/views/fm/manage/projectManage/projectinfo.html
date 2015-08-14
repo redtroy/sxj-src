@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css">
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span><a href="news-list.html">信息管理</a><span>&gt;</span>政务信息管理</div>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+     <@b.leftMenu />
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      
+      <div class="yard-870 rightSide ly-left inviteBox">
+<div class="heading mb15 ly-clearFix">
+<h1>
+  <span class="title fontYH f20 fb">工程信息</span></h1>
+</div>
+<div class="invBox">
+  <h2 class="invTit fb fontYH f16">招标预告信息</h2>
+<ul class="invCont">
+<li><label class="fb fontYH">标段分类：</label><span>${model.bdfl}</span></li>
+<li><label class="fb fontYH">项目名称：</label><span>${model.xmmc}</span></li>
+<li><label class="fb fontYH">区域：</label><span>${model.qy}</span></li>
+<li><label class="fb fontYH">截止日期：</label><span class="fb color-red">${model.jzrq}</span></li>
+<li></li>
+</ul>
+</div>
+<div class="invBox">
+  <h2 class="invTit fb fontYH f16">招标详情</h2>
+  <div class="invInfo" id="contentDiv">
+	 ${model.filePath}
+  </div>
+</div>
+<div class="invBox">
+  <h2 class="invTit fb fontYH f16">下载相关附件</h2>
+  <div class="invInfo">
+  	<ul>
+  	<#list fileList as file>
+    	<li class="att"><a href="${basePath}downloadFileFJ.htm?filePath=${file.filePath}">${file.fileName}</a></li>
+    </#list>
+    </ul>
+  </div>
+</div>
+<div class="tr pr5 pb15 f12"><a class="button button-gray" href="javascript:history.go(-1);" style="width:30px; height:16px; margin-left:910px;">返回</a></div>
+</div>
+</div>
+      
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>

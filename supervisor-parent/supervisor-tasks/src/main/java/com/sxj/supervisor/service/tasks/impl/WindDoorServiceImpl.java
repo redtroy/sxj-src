@@ -158,6 +158,8 @@ public class WindDoorServiceImpl implements IWindDoorService
                     windDoor.setJzrq(jzsj);
                     windDoor.setQy(qy);
                     windDoor.setXmmc(xmmc);
+                    windDoor.setState(0);
+                    windDoor.setPublishFirm("网站采集");
                     windDoor.setNowDate(new Date());
                     if (contentMap.get("gifPath") != null)
                     {
@@ -314,6 +316,8 @@ public class WindDoorServiceImpl implements IWindDoorService
                     windDoor.setJzrq(jzsj);
                     windDoor.setQy(qy);
                     windDoor.setXmmc(xmmc);
+                    windDoor.setState(0);
+                    windDoor.setPublishFirm("网站采集");
                     windDoor.setNowDate(new Date());
                     if (contentMap.get("gifPath") != null)
                     {
@@ -572,7 +576,9 @@ public class WindDoorServiceImpl implements IWindDoorService
             windDoor.setJzrq(wind.getJzrq());
             windDoor.setQy(wind.getQy());
             windDoor.setXmmc(wind.getXmmc());
+            windDoor.setState(0);
             windDoor.setAdjunctPath(wind.getAdjunctPath());
+            windDoor.setPublishFirm(wind.getPublishFirm());
             windDoor.setNowDate(new Date());
             bathList.add(windDoor);
             if (bathList.size() > 0)
