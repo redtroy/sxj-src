@@ -163,12 +163,14 @@ function modifyState(id,infoId){
 			<span class="icon icon-invi-unread"></span>
 			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
 			<a href="javascript:void(0);">${message.xmmc}</a>
+			${message.checkSate}
 		</li>
 	<#else>
 		<li class="bgGray" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
 			<span class="icon icon-invi-read"></span>
 			<span class="time mr10"><#if (message.nowDate??)> ${message.nowDate?date}</#if></span>
 			<a href="javascript:void(0);">${message.xmmc}</a>
+			${message.checkSate}
 		</li>
 	</#if>
 </#list>
