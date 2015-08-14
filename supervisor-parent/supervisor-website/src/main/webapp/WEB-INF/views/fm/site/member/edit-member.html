@@ -665,8 +665,6 @@ function edit_pwd(id){
       </div>
     </div>
 </div>
-</div>
-</div>
 <div class="modal-wrap popDemo contPop passwordPop" style="display:none;width:550px;" id="edit_pwd">
       <div class="modal-header"><span class="close" onclick="close_div('${member.id}');">关闭</span></div>
       <div class="modal-body">
@@ -675,13 +673,18 @@ function edit_pwd(id){
       <div class="item"><label>&nbsp;</label><button class="button button-pop" onclick="edit_pwd('${member.id}')">确认修改</button><button class="button button-gray " onclick="close_div('${member.id}');">取消</button></div>
 	</div>
 </div>
-  <@b.footer /> 
- <div class="maskdivgen" style="display: none"></div>
-	<div class="viewer modal-wrap" id="img_close" style="display: none">
+	<div class="viewer modal-wrap" style="display: none">
 		<div class="modal-header">
 			<span class="close" onclick="closeViewer()">关闭</span>
 		</div>
 		<div id="viewer2" class="modal-body iviewer"></div>
 	</div>
+	<div class="maskdivgen" style="display: none"></div>
+	<script>
+		$(document).ready(function(){
+			$("#viewer2").width($(window).width());
+		});
+	</script>
+  <@b.footer /> 
 </body>
 </html>
