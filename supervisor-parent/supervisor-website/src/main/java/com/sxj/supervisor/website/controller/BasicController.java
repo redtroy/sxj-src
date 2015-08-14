@@ -306,6 +306,7 @@ public class BasicController extends BaseController
                     
                     // TenderMessageQuery messQuery = new TenderMessageQuery();
                     messQuery.setPagable(true);
+                    messQuery.setShowCount(6);
                     messQuery.setMemberNo(getLoginInfo(session).getMember()
                             .getMemberNo());
                     List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);

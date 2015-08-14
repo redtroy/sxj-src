@@ -144,7 +144,7 @@ function sub(){
    </ul>
 </div>
  <div id="govinfolist" class="govinfolist">
- 	<ul class="invList">
+ 	<ul>
  	<#list govList as gov>
  	<li class="govinfolisttit"><a href="${gov.url}" title="${gov.title}" target="_blank">
  	<#if gov.title?length gt 35>
@@ -152,7 +152,7 @@ function sub(){
  	<#else>
  	${gov.title}
  	</#if>
- 	</a></li>
+ 	</a></li><li class="govinfolistdate">（${gov.createDate?string("MM/dd")}）</li>
  	</#list>
     </ul>
  </div>
@@ -164,11 +164,11 @@ function sub(){
    </ul>
 </div>
  <div id="govinfolist" class="govinfolist">
- <ul class="invList">
+ <ul>
 <#list messageList as message>
 		<li class="govinfolisttit" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
 			<a href="javascript:void(0);">${message.xmmc}</a>
-		</li>
+		</li><li class="govinfolistdate">（${message.nowDate?string("MM/dd")}）</li>
 </#list>
 </ul>
 </div>
