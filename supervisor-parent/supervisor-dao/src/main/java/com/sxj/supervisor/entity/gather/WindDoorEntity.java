@@ -7,11 +7,12 @@ import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
+import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 
 @Entity(mapper = WindDoorDao.class)
 @Table(name = "M_WIND_DOOR")
-public class WindDoorEntity implements Serializable
+public class WindDoorEntity extends Pagable implements Serializable
 {
     
     /**
@@ -30,6 +31,12 @@ public class WindDoorEntity implements Serializable
      */
     @Column(name = "BDFL")
     private String bdfl;
+    
+    /**
+     * 发布单位
+     */
+    @Column(name = "PUBLISH_FIRM")
+    private String publishFirm;
     
     /**
      * 项目名称
@@ -83,7 +90,13 @@ public class WindDoorEntity implements Serializable
      * 抓去最新数据的标记
      */
     @Column(name = "FLAG")
-    private int flag;
+    private Integer flag;
+    
+    /**
+     * 状态：0代表生效，1代表失效
+     */
+    @Column(name = "STATE")
+    private Integer state;
     
     public Date getNowDate()
     {
@@ -95,19 +108,19 @@ public class WindDoorEntity implements Serializable
         this.nowDate = nowDate;
     }
     
-    public int getFlag()
-    {
-        return flag;
-    }
-    
-    public void setFlag(int flag)
-    {
-        this.flag = flag;
-    }
-    
     public String getFilePath()
     {
         return filePath;
+    }
+    
+    public String getPublishFirm()
+    {
+        return publishFirm;
+    }
+    
+    public void setPublishFirm(String publishFirm)
+    {
+        this.publishFirm = publishFirm;
     }
     
     public void setFilePath(String filePath)
@@ -193,6 +206,26 @@ public class WindDoorEntity implements Serializable
     public void setJzrq(String jzrq)
     {
         this.jzrq = jzrq;
+    }
+    
+    public Integer getFlag()
+    {
+        return flag;
+    }
+    
+    public void setFlag(Integer flag)
+    {
+        this.flag = flag;
+    }
+    
+    public Integer getState()
+    {
+        return state;
+    }
+    
+    public void setState(Integer state)
+    {
+        this.state = state;
     }
     
 }

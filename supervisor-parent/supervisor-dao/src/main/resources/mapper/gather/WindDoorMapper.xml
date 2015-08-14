@@ -12,11 +12,13 @@
 		<result property="xmmc" column="XMMC" jdbcType="VARCHAR" />
 		<result property="qy" column="QY" jdbcType="VARCHAR" />
 		<result property="jzrq" column="JZRQ" jdbcType="VARCHAR" />
+		<result property="publishFirm" column="PUBLISH_FIRM" jdbcType="VARCHAR" />
 		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
 		<result property="filePathBack" column="FILE_PATH_BACK" jdbcType="VARCHAR" />
 		<result property="adjunctPath" column="ADJUNCT_PATH" jdbcType="VARCHAR" />
 		<result property="gifPath" column="GIF_PATH" jdbcType="VARCHAR" />
 		<result property="flag" column="FLAG" jdbcType="INTEGER" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="nowDate" column="NOW_DATE" jdbcType="TIMESTAMP" />
 	</resultMap>
 
@@ -25,5 +27,33 @@
 	<select id="getMaxWindDoor" resultMap="WindDoorResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM M_WIND_DOOR ORDER BY FLAG DESC ]]>
+	</select>
+	<!--  -->
+	<select id="queryList" resultMap="WindDoorResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_WIND_DOOR where 1=1 ]]>
+		<!-- 发布单位 -->
+	  <if test="condition.publishFirm != null and condition.publishFirm !=''">
+	     <![CDATA[AND PUBLISH_FIRM LIKE CONCAT('%',#{condition.publishFirm},'%')]]>
+	  </if>
+	  <!-- 项目名称 -->
+	  <if test="condition.xmmc != null and condition.xmmc !=''">
+	     <![CDATA[AND XMMC LIKE CONCAT('%',#{condition.xmmc},'%')]]>
+	  </if>
+	   <!-- 状态 -->
+	  <if test="condition.state != null and condition.state!=''">
+	     <![CDATA[AND STATE =#{condition.state}]]>
+	  </if>
+	  <!-- 发布开始查找时间 -->
+		<if
+			test="condition.starDate != null  and condition.starDate != '' ">
+			<![CDATA[AND NOW_DATE >=CONCAT(#{condition.starDate}," 00:00:00" ) ]]>
+		</if>
+		<!-- 结束查找时间 -->
+		<if
+			test="condition.endDate != null  and condition.endDate != ''">
+			<![CDATA[AND NOW_DATE <= CONCAT(#{condition.endDate}," 23:59:59") ]]>
+		</if>
+		<![CDATA[order by NOW_DATE desc ]]>
 	</select>
 </mapper>
