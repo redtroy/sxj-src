@@ -531,6 +531,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                 //                if (file.indexOf("GB2312") > 0 || file.indexOf("gb2312") > 0)
                 //                    file = new String(output.toByteArray(), "GB2312");
                 Document doc = Jsoup.parse(file);
+                doc.select("body").removeClass("b2");
                 /*String img = doc.getElementById("ZBGGDetail1_divDS")
                         .getElementsByTag("img")
                         .attr("src");
