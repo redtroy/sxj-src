@@ -135,31 +135,24 @@ public class RecordServiceImpl implements IRecordService {
 
 			updateImages(record, oldRe);
 			// 更改用户---修改备案状态
-			if (oldRe.getContractType() != null
-					&& oldRe.getContractType() != ContractTypeEnum.BIDDING) {
-				MemberEntity member = memberService.memberInfo(record
-						.getMemberIdB());
-				Assert.notNull(member);
-				switch (member.getType()) {
-				case GLASSFACTORY:
-					record.setContractType(ContractTypeEnum.GLASS);
-					break;
-				case GENRESFACTORY:
-					record.setContractType(ContractTypeEnum.EXTRUSIONS);
-					break;
-				default:
-					break;
+			if (oldRe.getFlag().equals(RecordFlagEnum.A)) {
+				if (oldRe.getContractType() != null
+						&& oldRe.getContractType() != ContractTypeEnum.BIDDING) {
+					MemberEntity member = memberService.memberInfo(record
+							.getMemberIdB());
+					Assert.notNull(member);
+					switch (member.getType()) {
+					case GLASSFACTORY:
+						record.setContractType(ContractTypeEnum.GLASS);
+						break;
+					case GENRESFACTORY:
+						record.setContractType(ContractTypeEnum.EXTRUSIONS);
+						break;
+					default:
+						break;
+					}
 				}
-				// if (member.getType() == MemberTypeEnum.glassFactory)
-				// {
-				//
-				// }
-				// else if (member.getType() == MemberTypeEnum.genresFactory)
-				// {
-				// record.setContractType(ContractTypeEnum.extrusions);
-				// }
 			}
-
 			recordDao.updateRecord(record);
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
