@@ -271,8 +271,8 @@ var ul_validform;
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
-								<th>数量（<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if>）</th>
-								<th>单价（<span class="money">&yen;</span>／<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if>）
+								<th>数量（<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>kg</#if>）</th>
+								<th>单价（<span class="money">&yen;</span>／<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>kg</#if>）
 								</th>
 								<th>金额（<span class="money">&yen;</span>）</th>
 								<th>备注说明</th>
@@ -293,7 +293,7 @@ var ul_validform;
 							<tr id="total_tr">
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td><span id="quantitySum">0</span><#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if></td>
+								<td><span id="quantitySum">0</span><#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>/kg</#if></td>
 								<td>&nbsp;</td>
 								<td><span id="amountSum">0</span>元</td>
 								<td>&nbsp;</td>
