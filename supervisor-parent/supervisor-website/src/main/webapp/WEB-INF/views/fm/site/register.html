@@ -110,7 +110,7 @@ ${type[0].getName()}</span>/
 	 if (fullName){
 		 $("#name_text").show();
 		 wrong("#name_text");
-		 $("#name_text").text("公司名称不能超过20个字符");
+		 $("#name_text").text("公司名称过长");
 		 flag=true;
 	 }
 	 if($("#phoneNo").val()==""){
@@ -216,11 +216,11 @@ ${type[0].getName()}</span>/
 	  })
 	  $("#name").blur(function(){
 		 var name=$("#name").val();
-		 if(name.length>20){
+		 if(name.length>40){
 			 fullName=true;
 			 $("#name_text").show();
 			 wrong("#name_text");
-			 $("#name_text").text("公司名称不能超过20个字符");
+			 $("#name_text").text("公司名称过长");
 		 }else if(name != ""){
 		 $.post("check_member.htm",{name:name},function(data){
 			 if (data.text != undefined){

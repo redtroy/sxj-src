@@ -36,6 +36,7 @@
 					$('.viewer').slideDown(200);
 				})
 				$("#carousel").elastislide(); 
+				$("#carouselCCC").elastislide(); 
 				$('#edit_pwd').css({
 					position : 'absolute',
 					left : "33%",
@@ -260,7 +261,7 @@
 							data-image="${b.imagePath}${member.energyPath}">查看缩略图</a> </#if>
 					</div>
 					</#if>
-					<#if (member.type.id==1)>
+					<!-- <#if (member.type.id==1)>
 					<div class="upload" style="width:120px;">
 						<p style="font-size: 12px;">${member.ccc_no}&nbsp;</p>
 						<p style="font-size:14px;">3C认证证书</p>
@@ -272,7 +273,7 @@
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a> </#if>
 					</div>
-					</#if>
+					</#if> -->
 					 <#if (member.type.id==2)>
 					<div class="upload" style="width:130px;">
 						<p style="font-size: 12px;">${member.production_license_no}&nbsp;</p>
@@ -298,6 +299,30 @@
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.qms_img}">查看缩略图</a> </#if>
 					</div>
+				</div>
+				<div class="item">
+        <div class="item">
+					<#if (member.type.id==1)>
+					<label>资质证书</label>${member.ccc_no}
+					<div class="upload" style="width:120px; padding-left: 13%;">
+						<#if member.ccc_img??> 
+						<#assign arr=(member.ccc_img?split(","))> 
+						<div class="rollBox">
+									<ul id="carouselCCC" class="elastislide-list">
+										<#list arr as imgPath>
+											<li><a href="javascript:void(0);" class="demo-image"
+											data-image="${b.imagePath}${imgPath}"><img
+												src="${b.imagePath}${imgPath}" width="80"
+												height="107" /></a>
+												<p>${imgPath_index+1}</p>
+												</li> 
+												
+										</#list>
+									</ul>
+								</div>
+								</#if>
+					</div>
+					</#if>
 				</div>
 				<div class="item">
 					<#if (member.type.id==0)>

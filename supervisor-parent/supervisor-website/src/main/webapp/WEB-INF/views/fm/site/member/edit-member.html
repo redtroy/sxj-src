@@ -49,7 +49,7 @@ $(document).ready(function() {
 // 	loadUploadMember("aptitudePath_File","${basePath}upload.htm",false,"上传" ,uploadaptitudePath);
 	loadUploadMember("safetyPath_File","${basePath}upload.htm",false,"上传" ,uploadsafetyPath);
 	loadUploadMember("qmsPath_File","${basePath}upload.htm",false,"上传" ,uploadqmsPath);
-	loadUploadMember("cccPath_File","${basePath}upload.htm",false,"上传" ,uploadcccPath);
+//	loadUploadMember("cccPath_File","${basePath}upload.htm",false,"上传" ,uploadcccPath);
 	loadUploadMember("productionPath_File","${basePath}upload.htm",false,"上传" ,uploadproductionPath);
 	
 	loadUploadMember("bLicensePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadLicenseReload);
@@ -57,9 +57,10 @@ $(document).ready(function() {
 // 	loadUploadMember("aptitudePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadaptitudeReload);
 	loadUploadMember("safetyPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadsafetyReload);
 	loadUploadMember("qmsPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadqmsReload);
-	loadUploadMember("cccPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadcccReload);
+//	loadUploadMember("cccPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadcccReload);
 	loadUploadMember("productionPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadproductionReload);
 	 $("#carousel").elastislide(); 
+	 $("#carouselCCC").elastislide(); 
 	//初始化图片 
 	$('#carousel').find("li").live("click", function() {
 		var el = $(this);
@@ -72,7 +73,19 @@ $(document).ready(function() {
 			$(".maskdivgen").show();
 			$(".viewer").show();
 	});
+	$('#carouselCCC').find("li").live("click", function() {
+		var el = $(this);
+		var imageSource = el.find("a").attr("data-image");
+			currentHiddenImages=$("#cccPath_hidden");
+			currentLi=$(this);
+			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
+			el.parent().children("li").removeClass("view");
+			el.addClass("view");
+			$(".maskdivgen").show();
+			$(".viewer").show();
+	});
 	uploadImg($("#aptitudePath_File_reload"));
+	uploadImgCCC($("#cccPath_File"));
 	//
 	$("#bLicenseNo").click(function(){
 		$("#bLicenseNo_erro").hide();
@@ -182,6 +195,45 @@ var uploadImg = function($file) {
 	});
 }
 
+var uploadImgCCC = function($file) {
+	var shflag=${member.flag};
+	if (shflag==1){
+		checkState=1;
+		flag=false;
+	}
+	var $div = $file.parent().parent();
+	var $carouselCCC = $div.find(".elastislide-list");
+	var $container = $carouselCCC.parent().parent();
+	var $hidden = $("#cccPath_hidden");
+	$file.uploadify({
+		swf : '${basePath}upload/uploadify.swf',
+		uploader : "${basePath}upload.htm",
+		 fileTypeExts: '*.jpg',
+		auto : true,
+		multi : true,
+		height : 30,
+		width : 120,
+		buttonText : '上传资质证书',
+		onUploadSuccess : function(file, data, response) {
+			var num = 1;
+			var dataObj = eval("(" + data + ")");//转换为json对象 
+			var hideVal = $hidden.val();
+			if (hideVal == '') {
+				hideVal = dataObj.fileIds;
+			} else {
+				var arrays = hideVal.split(",");
+				for (var i = 0; i < arrays.length; i++) {
+					if (arrays[i]) {
+						num += 1;
+					}
+				}
+				hideVal += "," + dataObj.fileIds;
+			}
+			$hidden.val(hideVal);
+			refreshElastislide($container, $carouselCCC, dataObj);
+		}
+	});
+}
 
 function close_div(){
 	$('.maskdivgen').fadeOut(100);
@@ -540,9 +592,9 @@ function edit_pwd(id){
          </#if>
          
          <!-- 3C认证证书 -->
-          <#if (member.type.id==1)>
+       <!--    <#if (member.type.id==1)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}" maxlength="16"   placeholder="输入证书编号"/></p><!--datatype="ns"   nullmsg="请填写16位3C认证编号" -->
+          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}" maxlength="16"   placeholder="输入证书编号"/></p>datatype="ns"   nullmsg="请填写16位3C认证编号"
           <p>3C认证证书</p>
           <#if (member.ccc_img??)>
          <img id="cccPath_img" width="80" height="107" src="${b.imagePath}${member.ccc_img}" onerror="errorImage(this)" times="0"/>
@@ -558,7 +610,7 @@ function edit_pwd(id){
             <input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
           </div>
          </div>
-         </#if>
+         </#if> -->
          <!-- 工业产品生产许可证 -->
           <#if (member.type.id==2)>
          <div class="ly-left editBox mr15">
@@ -598,15 +650,52 @@ function edit_pwd(id){
           </div>
          </div>
         </div>
+       <div id="add_form">
+       <div class="item">
+         <#if (member.type.id==1)>
+							<!-- 3C证书1 -->
+							<label>3C证书</label> <p>
+									<input class="input input-w140h30 mb5" id="ccc"
+										value="${member.ccc_no}" maxlength="14"
+										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
+								</p> 
+							<div class="ly-left editBox mr15" style="float: left;height:180px;width:500px;">
+								
+								<!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
+								<#assign arr=(member.ccc_img?split(","))> <#if arr?exists>
+<!-- 								<img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0" /> -->
+								<div class="rollBox">
+									<ul id="carouselCCC" class="elastislide-list">
+										<#list arr as imgPath>
+										<#if imgPath !=''>
+											<li><a href="javascript:void(0);" class="demo-image"
+											data-image="${b.imagePath}${imgPath}"><img
+												src="${b.imagePath}${imgPath}" width="80"
+												height="107" /></a>
+												<p>${imgPath_index+1}</p>
+												</li> 
+												</#if>
+										</#list>
+									</ul>
+								</div>
+								 <#else>
+								 <img id="cccPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0" /> </#if>
+							</div>
+							<div class="uploadify" style="float: left;padding-left: 15%;">
+									 <input type="file" class="" id="cccPath_File" name="input6">
+								</div>
+							</#if>
+						</div>
        
-        <div id="add_form">
+        
+       <#if (member.type.id==0)>
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
 									<input class="input input-w140h30 mb5" id="aptitude"
 										value="${member.qualification_no}" maxlength="14"
 										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
-								</p><#if (member.type.id==0)>
+								</p> 
 							<div class="ly-left editBox mr15" style="float: left;height:180px;width:500px;">
 								
 								<!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
