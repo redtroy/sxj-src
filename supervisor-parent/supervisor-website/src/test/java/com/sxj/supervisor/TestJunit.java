@@ -33,8 +33,23 @@ public class TestJunit
     @Test
     public void test()
     {
-        ids.WindDoorGather();
+        //ids.WindDoorGather();
         //        CometServiceImpl.takeCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
         //                + "MEM000001");
+        /* FileInputStream doc = new FileInputStream(new File(
+                 "D:\\scm-repository\\git\\sxj\\abc.doc"));
+         FileOutputStream docHTML = new FileOutputStream(new File(
+                 "D:\\scm-repository\\git\\sxj\\abc.html"));
+         FileInputStream docx = new FileInputStream(new File(
+                 "D:\\scm-repository\\git\\sxj\\abc.docx"));
+         FileOutputStream docxHTML = new FileOutputStream(new File(
+                 "D:\\scm-repository\\git\\sxj\\bcd.html"));
+          WordTransformer transformer = new WordTransformer();
+          AbstractPictureExactor exactor = new LocalPictureExactor("c:\\test",
+                  "file");
+          transformer.setPictureExactor(exactor)
+          //        transformer.toHTML(doc, docHTML);
+          transformer.toHTML(docx, docxHTML);*/
+        
     }
 }
