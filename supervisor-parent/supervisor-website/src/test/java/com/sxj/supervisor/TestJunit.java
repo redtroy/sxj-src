@@ -9,8 +9,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sxj.supervisor.service.tasks.IWindDoorService;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
@@ -36,20 +34,20 @@ public class TestJunit
         //ids.WindDoorGather();
         //        CometServiceImpl.takeCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
         //                + "MEM000001");
-        /* FileInputStream doc = new FileInputStream(new File(
-                 "D:\\scm-repository\\git\\sxj\\abc.doc"));
-         FileOutputStream docHTML = new FileOutputStream(new File(
-                 "D:\\scm-repository\\git\\sxj\\abc.html"));
-         FileInputStream docx = new FileInputStream(new File(
-                 "D:\\scm-repository\\git\\sxj\\abc.docx"));
-         FileOutputStream docxHTML = new FileOutputStream(new File(
-                 "D:\\scm-repository\\git\\sxj\\bcd.html"));
-          WordTransformer transformer = new WordTransformer();
-          AbstractPictureExactor exactor = new LocalPictureExactor("c:\\test",
-                  "file");
-          transformer.setPictureExactor(exactor)
-          //        transformer.toHTML(doc, docHTML);
-          transformer.toHTML(docx, docxHTML);*/
+        //         FileInputStream doc = new FileInputStream(new File(
+        //                 "D:\\scm-repository\\git\\sxj\\abc.doc"));
+        //         FileOutputStream docHTML = new FileOutputStream(new File(
+        //                 "D:\\scm-repository\\git\\sxj\\abc.html"));
+        //  FileInputStream docx = new FileInputStream(new File(
+        //        "D:\\scm-repository\\git\\sxj\\abc.docx"));
+        //         FileOutputStream docxHTML = new FileOutputStream(new File(
+        //                 "D:\\scm-repository\\git\\sxj\\bcd.html"));
+        /* WordTransformer transformer = new WordTransformer();
+         AbstractPictureExactor exactor = new LocalPictureExactor("c:\\test",
+                 "file");
+         transformer.setPictureExactor(exactor)
+         //        transformer.toHTML(doc, docHTML);
+         transformer.toHTML(docx, docxHTML);*/
         
     }
 }
