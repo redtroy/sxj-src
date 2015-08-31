@@ -787,23 +787,29 @@ public class BasicController extends BaseController
             }
             else
             {
-                String originalName = myfile.getOriginalFilename().substring(0,
-                        myfile.getOriginalFilename().lastIndexOf('.'))
-                        + ".JPG";
+                String originalName = myfile.getOriginalFilename();
                 String extName = FileUtil.getFileExtName(originalName);
+                //原数据路径
+                String filePathBack = storageClientService.uploadFile(null,
+                        myfile.getInputStream(),
+                        myfile.getBytes().length,
+                        extName);
+                //转HTML
                 byte[] html = convert2Html(myfile.getInputStream()).getBytes();
                 String filePath = storageClientService.uploadFile(null,
                         new ByteArrayInputStream(html),
                         html.length,
-                        extName.toUpperCase());
+                        "JPG");
                 SxjLogger.info("siteUploadFilePath=" + filePath,
                         this.getClass());
                 fileIds.add(filePath);
+                fileIds.add(filePathBack);
                 // 上传元数据
                 NameValuePair[] metaList = new NameValuePair[1];
                 metaList[0] = new NameValuePair("originalName",
                         URLEncoder.encode(originalName, "UTF-8"));
                 storageClientService.overwriteMetadata(filePath, metaList);
+                storageClientService.overwriteMetadata(filePathBack, metaList);
             }
         }
         map.put("fileIds", fileIds);
@@ -889,7 +895,8 @@ public class BasicController extends BaseController
                     path);
             String fjname = metaList[0].getValue();
             response.addHeader("Content-Disposition", "attachment;filename="
-                    + new String(URLDecoder.decode(fjname, "UTF-8").getBytes(),"ISO8859-1"));
+                    + new String(URLDecoder.decode(fjname, "UTF-8").getBytes(),
+                            "ISO8859-1"));
             response.setContentType("application/"
                     + FileUtil.getFileExtName(fjname));
             storageClientService.downloadFile(group, path, output);
