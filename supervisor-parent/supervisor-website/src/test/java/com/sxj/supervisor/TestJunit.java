@@ -15,8 +15,8 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 public class TestJunit
 {
     
-    @Autowired
-    private IWindDoorService ids;
+//    @Autowired
+//    private IWindDoorService ids;
     
     @AfterClass
     public static void tearDownAfterClass() throws Exception
