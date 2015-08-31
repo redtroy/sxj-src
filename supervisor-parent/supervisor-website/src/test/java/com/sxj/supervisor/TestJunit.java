@@ -19,8 +19,8 @@ import com.sxj.supervisor.service.tasks.IWindDoorService;
 public class TestJunit
 {
     
-    @Autowired
-    private IWindDoorService ids;
+//    @Autowired
+//    private IWindDoorService ids;
     
     @Test
     public void test()
