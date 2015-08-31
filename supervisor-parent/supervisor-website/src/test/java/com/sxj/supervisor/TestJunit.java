@@ -10,7 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sxj.poi.transformer.WordTransformer;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,11 +33,11 @@ public class TestJunit
             //                 "D:\\scm-repository\\git\\sxj\\abc.doc"));
             //         FileOutputStream docHTML = new FileOutputStream(new File(
             //                 "D:\\scm-repository\\git\\sxj\\abc.html"));
-            FileInputStream docx = new FileInputStream(new File(
-                    "D:\\采集导入\\江苏省交通技师学院新校区建设工程项目三标段幕墙工程{镇江}.docx"));
+//            FileInputStream docx = new FileInputStream(new File(
+//                    "D:\\采集导入\\江苏省交通技师学院新校区建设工程项目三标段幕墙工程{镇江}.docx"));
             //         FileOutputStream docxHTML = new FileOutputStream(new File(
             //                 "D:\\scm-repository\\git\\sxj\\bcd.html"));
-            WordTransformer transformer = new WordTransformer();
+//            WordTransformer transformer = new WordTransformer();
             //         AbstractPictureExactor exactor = new LocalPictureExactor("c:\\test",
             //                 "file");
             //         transformer.setPictureExactor(exactor)
