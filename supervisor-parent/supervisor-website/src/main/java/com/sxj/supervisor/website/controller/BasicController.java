@@ -347,7 +347,7 @@ public class BasicController extends BaseController
                     }*/
                     if (info.getMember().getCheckState().ordinal() < 2)
                     {
-                        return "site/member/memberInfo";
+                        return "site/member/member-profile";
                     }
                     return "site/member/platform_index";
                 }
