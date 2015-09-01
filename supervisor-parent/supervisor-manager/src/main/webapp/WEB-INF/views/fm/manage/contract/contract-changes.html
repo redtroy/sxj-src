@@ -353,15 +353,15 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td class="editable amountClass"
 									name="modifyItemList[index].quantity"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${item.quantity?string('0.00')}</td>
+									errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${item.quantity}</td>
 								<td class="editable priceClass"
 									name="modifyItemList[index].price"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${item.price?string("0.00")}</td>
+									errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${item.price}</td>
 								<td class="editable amountClass"
 									name="modifyItemList[index].amount"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${item.amount?string("0.00")}</td>
+									errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${item.amount}</td>
 								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
 								<td value="${item.id}"><#if item.updateState==1><span
 									style="color: red;">!</span><#else><a href="javascript:void(0)"
@@ -372,9 +372,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<tr>
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td>${n?string("0.00")}</td>
+								<td>${n}</td>
 								<td>&nbsp;</td>
-								<td>${m?string("0.00")}</td>
+								<td>${m}</td>
 								<td>&nbsp;</td>
 								<td>&nbsp;</td>
 							</tr>
@@ -431,7 +431,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td class="editable amountClass"
 									name="modifyBatchList[i].modifyBatch.amount"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${batch.batch.amount?string("0.00")}</td>
+									errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${batch.batch.amount}</td>
 								<td class="editable"
 									name="modifyBatchList[i].modifyBatch.rfidNo"
 									readonly="readonly">${batch.batch.rfidNo}</td>
@@ -451,7 +451,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</div>
 						<div>
 							<label>合同定金</label>
-							&nbsp;${contractModel.contract.deposit?string("0.00")}&nbsp;元
+							&nbsp;${contractModel.contract.deposit}&nbsp;元
 						</div>
 						<div>
 							<label>合同备注</label>
@@ -543,15 +543,15 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable amountClass"
 											name="modifyItemList[index].quantity"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity?string("0.00")}</td>
+											errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity}</td>
 										<td class="editable priceClass"
 											name="modifyItemList[index].price"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price}</td>
 										<td class="editable amountClass"
 											name="modifyItemList[index].amount"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${modifyItem.amount?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${modifyItem.amount}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
 										<td value="${modifyItem.id}"><#if
 											modifyItem.updateState==1><span style="color: red;">!</span><#else><a
@@ -611,7 +611,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable amountClass"
 											name="modifyBatchList[i].modifyBatch.amount"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${modifyBatch.modifyBatch.amount?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${modifyBatch.modifyBatch.amount}</td>
 										<td class="editable"
 											name="modifyBatchList[i].modifyBatch.rfidNo"
 											readonly="readonly">${modifyBatch.modifyBatch.rfidNo}</td>

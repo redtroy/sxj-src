@@ -396,8 +396,8 @@ var caculateRow=function($tr){
 						<#assign n = 0> 
 						<#assign m = 0>
 						 <#list contractModel.itemList as item>
-						  <#assign n = (n+item.price)?int > 
-						  <#assign m = (m+item.amount)?int >
+						  <#assign n = (n+item.price) > 
+						  <#assign m = (m+item.amount) >
 						  
 						<tr id="trDataRow${item_index}" class="CaseRow">
 							<input type="hidden" value="${item.id}" name="itemList[index].id"/>
@@ -476,7 +476,7 @@ var caculateRow=function($tr){
 						<label>合同总批次</label> <input type="text"  name="contract.batchCount" id="batchCount" datatype="/^[0-9]*[1-9][0-9]*$/" errormsg="请输入大于0的数字" nullmsg="请输入合同批次 ！" value="${contractModel.contract.batchCount}"/><input type="hidden" id="hideBatchCount" name="hideBatchCount" value="${contractModel.batchList?size}"/><#if ((contractModel.contract.batchCount-contractModel.batchList?size)?int>0)>本合同还有${(contractModel.contract.batchCount-contractModel.batchList?size)?int}批次待交付 </#if> 
 					</div>
 					<div>
-						<label>合同定金</label> <input name="contract.deposit" class="deposit" type="text" value="${contractModel.contract.deposit?string('0.00')}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！"  />
+						<label>合同定金</label> <input name="contract.deposit" class="deposit" type="text" value="${contractModel.contract.deposit}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！"  />
 						元
 					</div>
 					<div>
@@ -550,9 +550,9 @@ var caculateRow=function($tr){
 								<td><input type="text" value="${modifyItem.productName}"  name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！"  /></td>
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productModel" id="textarea9" cols="25" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！"
 										rows="1">${modifyItem.productModel}</textarea></td>
-								<td><input type="text" class="bgquantity" value="${modifyItem.quantity?string('0.00')}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
-								<td><input type="text" class="bgprice" value="${modifyItem.price?string('0.00')}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
-								<td><input type="text" class="bgamount" value="${modifyItem.amount?string('0.00')}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"/></td>
+								<td><input type="text" class="bgquantity" value="${modifyItem.quantity}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
+								<td><input type="text" class="bgprice" value="${modifyItem.price}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
+								<td><input type="text" class="bgamount" value="${modifyItem.amount}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"/></td>
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].remarks" id="textarea10" cols="25"
 										rows="1">${modifyItem.remarks}</textarea> 
 										&nbsp;&nbsp; </td>

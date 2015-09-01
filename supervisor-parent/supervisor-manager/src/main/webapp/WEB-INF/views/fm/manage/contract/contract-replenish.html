@@ -232,23 +232,23 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<th class="rLine">备注说明</th>
 							</tr>
 							<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
-							item> <#assign n = (n+item.quantity)?int > <#assign m =
-							(m+item.amount)?int >
+							item> <#assign n = (n+item.quantity) > <#assign m =
+							(m+item.amount) >
 							<tr id="item${item.id}">
 								<td>${item.productName}</td>
 								<td>${item.productModel}</td>
-								<td>${item.quantity?string("0.00")}</td>
-								<td>${item.price?string("0.00")}</td>
-								<td>${item.amount?string("0.00")}</td>
+								<td>${item.quantity}</td>
+								<td>${item.price}</td>
+								<td>${item.amount}</td>
 								<td>${item.remarks}</td>
 							</tr>
 							</#list>
 							<tr>
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td>${n?string("0.00")}</td>
+								<td>${n}</td>
 								<td>&nbsp;</td>
-								<td>${m?string("0.00")}</td>
+								<td>${m}</td>
 								<td>&nbsp;</td>
 							</tr>
 						</table>
@@ -294,13 +294,13 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<tr>
 											<td class="editable dynamictr"
 												data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-												errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！">${batchItem.quantity?string("0.00")}</td>
+												errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！">${batchItem.quantity}</td>
 										</tr>
 										</#list>
 									</table></td>
 								<td class="editable" name="batchList[i].replenishBatch.amount"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${batch.batch.amount?string("0.00")}</td>
+									errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${batch.batch.amount}</td>
 								<td class="editable" name="batchList[i].replenishBatch.rfidNo"
 									readonly="readonly">${batch.batch.rfidNo}</td>
 							</tr>
@@ -409,15 +409,15 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable amountClass"
 											name="modifyItemList[index].quantity"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity?string("0.00")}</td>
+											errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity}</td>
 										<td class="editable priceClass"
 											name="modifyItemList[index].price"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price}</td>
 										<td class="editable amountClass"
 											name="modifyItemList[index].amount"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${modifyItem.amount?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${modifyItem.amount}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
 										<td value="${modifyItem.id}"><#if
 											modifyItem.updateState==1><span style="color: red;">!</span>
@@ -467,14 +467,14 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 												<tr>
 													<td class="editable dynamictr"
 														data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-														errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${modifyBatchItems.quantity?string("0.00")}</td>
+														errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${modifyBatchItems.quantity}</td>
 												</tr>
 												</#list>
 											</table></td>
 										<td class="editable amountClass"
 											name="batchList[i].replenishBatch.amount"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${modifyBatch.modifyBatch.amount?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${modifyBatch.modifyBatch.amount}</td>
 										<td class="editable" name="batchList[i].replenishBatch.rfidNo"
 											readonly="readonly">${modifyBatch.modifyBatch.rfidNo}</td>
 									</tr>
@@ -565,14 +565,14 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 												<tr>
 													<td class="editable dynamictr"
 														data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-														errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${replenishBatchItems.quantity?string("0.00")}</td>
+														errormsg="输入范围在1~20位之间！" nullmsg="请输入产品规格！">${replenishBatchItems.quantity}</td>
 												</tr>
 												</#list>
 											</table></td>
 										<td class="editable amountClass"
 											name="batchList[i].replenishBatch.amount"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${replenishItem.replenishBatch.amount?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${replenishItem.replenishBatch.amount}</td>
 										<td class="editable" name="batchList[i].replenishBatch.rfidNo"
 											readonly="readonly">${replenishItem.replenishBatch.newRfidNo}</td>
 									</tr>

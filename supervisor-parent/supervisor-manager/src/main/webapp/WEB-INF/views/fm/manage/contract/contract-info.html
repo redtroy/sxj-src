@@ -106,14 +106,14 @@
             <#assign n = 0> 
             <#assign m = 0> 
             <#list contractModel.itemList as item>
-            <#assign n = (n+item.quantity)?float > 
-            <#assign m = (m+item.amount)?float > 
+            <#assign n = (n+item.quantity) > 
+            <#assign m = (m+item.amount) > 
             <tr>
               <td>${item.productName}</td>
               <td>${item.productModel}</td>
-              <td>${item.quantity?string('0.00')}</td>
-              <td>${item.price?string('0.00')}</td>
-              <td>${item.amount?string('0.00')}</td>
+              <td>${item.quantity}</td>
+              <td>${item.price}</td>
+              <td>${item.amount}</td>
               <td>${item.remarks}</td>
               <td><#if item.updateState==1><span class="color-red">！</span></#if></td>
             </tr>
@@ -121,9 +121,9 @@
             <tr>
               <td><strong>合计</strong></td>
               <td>&nbsp;</td>
-              <td>${n?string('0.00')}</td>
+              <td>${n}</td>
               <td>&nbsp;</td>
-              <td>${m?string('0.00')}</td>
+              <td>${m}</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
             </tr>
@@ -158,7 +158,7 @@
               <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                  <#list batch.batchItems as batchItem>
                   <tr>
-                    <td>${batchItem.quantity?string('0.00')}</td>
+                    <td>${batchItem.quantity}</td>
                   </tr>
                   </#list>
                 </table></td>
@@ -179,7 +179,7 @@
             	批次待交付 </div>
           <div>
             <label>合同定金</label>
-            ${contractModel.contract.deposit?string('0.00')}元 </div>
+            ${contractModel.contract.deposit}元 </div>
           <div>
             <label>合同备注</label>
             <textarea name="textarea2" id="textarea2" cols="80" rows="3" readonly="readonly">${contractModel.contract.remarks}</textarea>
@@ -257,9 +257,9 @@
               <tr>
                 <td>${modifyItem.productName}</td>
                 <td>${modifyItem.productModel}</td>
-                <td>${modifyItem.quantity?string('0.00')}</td>
-                <td>${modifyItem.price?string('0.00')}</td>
-                <td>${modifyItem.amount?string('0.00')}</td>
+                <td>${modifyItem.quantity}</td>
+                <td>${modifyItem.price}</td>
+                <td>${modifyItem.amount}</td>
                 <td>${modifyItem.remarks}</td>
                 <td><#if modifyItem.updateState==1><span class="color-red">！</span></#if></td>
               </tr>
@@ -297,7 +297,7 @@
                 <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                    <#list modifyBatch.modifyBatchItems  as modifyBatchItems>
                     <tr>
-                      <td>${modifyBatchItems.quantity?string('0.00')}</td>
+                      <td>${modifyBatchItems.quantity}</td>
                     </tr>
                   </#list>
                   </table></td>
@@ -371,11 +371,11 @@
                 <td><table border="0" cellpadding="0" cellspacing="0" class="tabList prodIable">
                      <#list replenishItem.replenishBatchItems as replenishBatchItems>
                     <tr>
-                      <td>${replenishBatchItems.quantity?string('0.00')}</td>
+                      <td>${replenishBatchItems.quantity}</td>
                     </tr>
                  </#list>
                   </table></td>
-                <td>${replenishItem.replenishBatch.amount?string('0.00')}</td>
+                <td>${replenishItem.replenishBatch.amount}</td>
                 <td>${replenishItem.replenishBatch.newRfidNo}</td>
                 <td><#if replenishItem.replenishBatch.updateState==1><span class="color-red">！</span></#if></td>
               </tr>

@@ -131,24 +131,23 @@ $(document).ready(function(){
 				<#assign n = 0> 
 				<#assign m = 0> 
 				<#list contractModel.itemList as item> 
-				<#assign n = (n+item.quantity)?float > 
-				<#assign m = (m+item.amount)?float >
+				<#assign n = (n+item.quantity) > 
+				<#assign m = (m+item.amount)>
 				<tr>
 					<td>${item.productName}</td>
 					<td>${item.productModel}</td>
-					<td>${item.quantity?string('0.00')}</td>
-					<td>${item.price?string('0.00')}</td>
-					<td>${item.amount?string('0.00')}</td>
+					<td>${item.quantity}</td>
+					<td>${item.price}</td>
+					<td>${item.amount}</td>
 					<td>${item.remarks}</td>
 					<td><#if item.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 				</tr>
 				</#list>
 				<tr class="fb">
 					<td>合计</td>
+					<td>&nbsp;</td>}</td>
 					<td>&nbsp;</td>
-					<td>约${n?string('0.00')}</td>
-					<td>&nbsp;</td>
-					<td>${m?string('0.00')}元</td> <#if contractModel.contract.imgPath!=null>
+					<td>${m}元</td> <#if contractModel.contract.imgPath!=null>
 					<td class="tl"><#assign
 						arr=(contractModel.contract.imgPath?split(","))>
 						本合同附件清单共${arr?size}页</td> <#else>
@@ -192,12 +191,12 @@ $(document).ready(function(){
                         <td><table border="0" cellspacing="0" cellpadding="0" class="tabProd tabBatch">
                            <#list batch.batchItems as batchItem>
                           <tr>
-                            <td>${batchItem.quantity?string('0.00')}</td>
+                            <td>${batchItem.quantity}</td>
                           </tr>
                            </#list>
                         </table>
                         </td>
-                        <td>${batch.batch.amount?string("0.00")}元</td>
+                        <td>${batch.batch.amount}元</td>
                         <td>${batch.batch.rfidNo}</td>
                        <td><#if batch.batch.updateState==1><span class="color-red">！</span></#if></td>
                       </tr>
@@ -213,7 +212,7 @@ $(document).ready(function(){
 				<#else> ${contractModel.contract.batchCount} </#if></span>个待交付
 		</div>
 		<div class="item">
-			<label>合同定金</label> ${contractModel.contract.deposit?string('0.00')}元
+			<label>合同定金</label> ${contractModel.contract.deposit}元
 		</div>
 		<div class="item">
 			<label>合同备注</label> ${contractModel.contract.remarks}
@@ -295,9 +294,9 @@ $(document).ready(function(){
 					<tr>
 						<td>${modifyItem.productName}</td>
 						<td>${modifyItem.productModel}</td>
-						<td>${modifyItem.quantity?string('0.00')}</td>
-						<td>${modifyItem.price?string('0.00')}</td>
-						<td>${modifyItem.amount?string('0.00')}</td>
+						<td>${modifyItem.quantity}</td>
+						<td>${modifyItem.price}</td>
+						<td>${modifyItem.amount}</td>
 						<td>${modifyItem.remarks}</td>
 						<td><#if modifyItem.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 					</tr>
@@ -341,11 +340,11 @@ $(document).ready(function(){
 								class="tabProd tabBatch">
 								<#list modifyBatch.modifyBatchItems as modifyBatchItems>
 								<tr>
-									<td>${modifyBatchItems.quantity?string('0.00')}</td>
+									<td>${modifyBatchItems.quantity}</td>
 								</tr>
 								</#list>
 							</table></td>
-						<td>${modifyBatch.modifyBatch.amount?string('0.00')}元</td>
+						<td>${modifyBatch.modifyBatch.amount}元</td>
 						<td>${modifyBatch.modifyBatch.rfidNo}</td>
 						<td><#if modifyBatch.modifyBatch.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 					</tr>
@@ -418,11 +417,11 @@ $(document).ready(function(){
 								class="tabProd tabBatch">
 								<#list replenishItem.replenishBatchItems as replenishBatchItems>
 								<tr>
-									<td>${replenishBatchItems.quantity?string('0.00')}</td>
+									<td>${replenishBatchItems.quantity}</td>
 								</tr>
 								</#list>
 							</table></td>
-						<td>${replenishItem.replenishBatch.amount?string('0.00')}</td>
+						<td>${replenishItem.replenishBatch.amount}</td>
 						<td>${replenishItem.replenishBatch.newRfidNo}</td>
 						<td><#if replenishItem.replenishBatch.updateState==1><span class="color-red">！</span></#if>&nbsp;</td>
 					</tr>
