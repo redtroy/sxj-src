@@ -345,7 +345,10 @@ public class BasicController extends BaseController
                     {
                         System.err.println("招标:"+messageList.get(i).getInfoId());
                     }*/
-                    
+                    if (info.getMember().getCheckState().ordinal() < 2)
+                    {
+                        return "site/member/edit-member";
+                    }
                     return "site/member/platform_index";
                 }
                 else
