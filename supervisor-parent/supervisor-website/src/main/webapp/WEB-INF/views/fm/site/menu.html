@@ -71,7 +71,7 @@ function getUrlParam(name){
 }
 function clickFunction(url){
 	var state="${Session.userinfo.member.checkState.id}";
-	if(state=='0'){
+	if(state=='0' || url.indexOf("member/memberInfo.htm")>0 ){
 		url=url+"?"+Math.random();
 		window.location.href=url;
 	}
