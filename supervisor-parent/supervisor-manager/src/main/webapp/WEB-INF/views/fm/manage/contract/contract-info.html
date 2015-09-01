@@ -106,8 +106,8 @@
             <#assign n = 0> 
             <#assign m = 0> 
             <#list contractModel.itemList as item>
-            <#assign n = (n+item.quantity) > 
-            <#assign m = (m+item.amount) > 
+            <#assign n = (n+item.quantity?double) > 
+            <#assign m = (m+item.amount?double) > 
             <tr>
               <td>${item.productName}</td>
               <td>${item.productModel}</td>
@@ -162,7 +162,7 @@
                   </tr>
                   </#list>
                 </table></td>
-              <td>${batch.batch.amount?string("0.00")}</td>
+              <td>${batch.batch.amount}</td>
               <td>${batch.batch.rfidNo}</td>
               <td><#if batch.batch.updateState==1><span class="color-red">！</span></#if></td>
             </tr>
@@ -170,11 +170,11 @@
           </table>
           </#if>
           <div>
-            <label>本合同共有</label><span class="color-red fb ml5 mr5">${contractModel.contract.batchCount}</span>批次,还有<span class="color-red fb ml5 mr5">
+            <label>本合同共有</label><span class="color-red fb ml5 mr5">${contractModel.contract.batchCount?string("0")}</span>批次,还有<span class="color-red fb ml5 mr5">
             <#if contractModel.batchList?exists>
-            ${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
+            ${(contractModel.contract.batchCount-contractModel.batchList?size)?string("0")}
             <#else>
-            ${contractModel.contract.batchCount}
+            ${contractModel.contract.batchCount?string("0")}
              </#if></span>
             	批次待交付 </div>
           <div>

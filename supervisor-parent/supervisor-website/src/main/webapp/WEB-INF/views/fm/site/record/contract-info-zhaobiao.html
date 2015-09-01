@@ -147,7 +147,7 @@
                         <#if contractModel.contract.imgPath!=null>
                         <td class="tl">
                         <#assign arr=(contractModel.contract.imgPath?split(","))>
-                 		本合同附件清单共${arr?size}页</td>
+                 		本合同附件清单共${(arr?size)?string("0")}页</td>
                  		<#else>
                  		<td class="tl">
                  		本合同附件清单共0页</td>

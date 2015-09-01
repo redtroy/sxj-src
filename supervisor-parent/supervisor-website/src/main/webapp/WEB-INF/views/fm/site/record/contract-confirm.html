@@ -240,8 +240,8 @@
 										<td>&nbsp;&nbsp;&nbsp;</td>
 									</tr>
 									<#assign n = 0> <#assign m = 0> <#list contractModel.itemList
-									as item> <#assign n = (n+item.quantity) > <#assign m =
-									(m+item.amount) >
+									as item> <#assign n = (n+item.quantity?double) > <#assign m =
+									(m+item.amount?double) >
 									<tr>
 										<td>${item.productName}</td>
 										<td>${item.productModel}</td>
@@ -261,7 +261,7 @@
 										<td>${m}元</td>
 										<td class="tl"><#assign
 											arr=(contractModel.contract.imgPath?split(","))>
-											本合同附件清单共${arr?size}页</td>
+											本合同附件清单共${(arr?size)?string("0")}页</td>
 										<td>&nbsp;</td>
 									</tr>
 								</table>
@@ -319,10 +319,10 @@
 							</#if>
 							<div class="item">
 								<label>交货批次</label> 本合同共<span class="color-red fb ml5 mr5">
-					 ${contractModel.contract.batchCount}</span>个交付批次,还有<span class="color-red fb ml5 mr5"><#if
+					 ${contractModel.contract.batchCount?string("0")}</span>个交付批次,还有<span class="color-red fb ml5 mr5"><#if
 						contractModel.batchList?exists>
-						${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
-						<#else> ${contractModel.contract.batchCount} </#if></span>个待交付
+						${(contractModel.contract.batchCount-contractModel.batchList?size)?string("0")}
+						<#else> ${contractModel.contract.batchCount?string("0")} </#if></span>个待交付
 									</div>
 							<div class="item">
 								<label>合同定金</label>

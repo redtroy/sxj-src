@@ -232,8 +232,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<th class="rLine">备注说明</th>
 							</tr>
 							<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
-							item> <#assign n = (n+item.quantity) > <#assign m =
-							(m+item.amount) >
+							item> <#assign n = (n+item.quantity?double) > <#assign m =
+							(m+item.amount?double) >
 							<tr id="item${item.id}">
 								<td>${item.productName}</td>
 								<td>${item.productModel}</td>
@@ -309,8 +309,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</#if>
 						<div>
 							<label>本合同还有</label> &nbsp;<#if contractModel.batchList?exists>
-							${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
-							<#else> ${contractModel.contract.batchCount} </#if>&nbsp; 批次待交付
+							${(contractModel.contract.batchCount-contractModel.batchList?size)?string("0")}
+							<#else> ${contractModel.contract.batchCount?string("0")} </#if>&nbsp; 批次待交付
 						</div>
 						<div>
 							<label>合同定金</label>

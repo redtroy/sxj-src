@@ -397,7 +397,7 @@
 						<td>${list.rfidType.getName()} <input type="hidden"
 							id="editType" value="${list.rfidType.getId()}" />
 						</td>
-						<td class="editCount">${list.count}</td>
+						<td class="editCount">${list.count?string("0")}</td>
 						<input type="hidden" class="oldCount" value="${list.count}" />
 						<td class="editPrice">${list.price?string('0.00')}</td>
 						<td>${list.purchaseDate?string("yyyy-MM-dd HH:mm:ss")}</td>
