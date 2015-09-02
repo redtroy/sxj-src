@@ -214,7 +214,7 @@ var resetValidForm=function(){
 			var tquantity=0;
 			var tamount=0;
 			$(".quantity").each(function(){
-				tquantity+=parsefloat($(this).val());
+				tquantity+=parseInt($(this).val());
 			});
 			$(".amount").each(function(){
 				tamount+=parseFloat($(this).val());
@@ -247,7 +247,7 @@ var resetValidForm=function(){
 		var amount=0;
 		$(".quantity").each(function(){
 			if($(this).val()){
-				quantity+=parseFloat($(this).val());
+				quantity+=parseInt($(this).val());
 			}
 		});
 		$(".price").each(function(){
@@ -341,7 +341,7 @@ var resetValidForm=function(){
 									value="${item.windowType}" datatype="*1-100"
 									errormsg="输入范围在1~100位之间！" nullmsg="请输入型号规格！" /></td>
 								<td><input name="itemList[index].quantity" type="text"
-									value="${item.quantity}" class="quantity number"
+									value="${item.quantity?string('0')}" class="quantity number"
 									datatype="n1-20" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
 								<td><input name="itemList[index].price" type="text"
 									value="${item.price}" class="price number"
