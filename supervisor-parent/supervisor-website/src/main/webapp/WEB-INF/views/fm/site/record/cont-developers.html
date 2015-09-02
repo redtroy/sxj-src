@@ -231,7 +231,7 @@
 							</tr>
 							<#list contractModel.itemList as item>
 							<tr>
-								<td>${item_index+1}</td>
+								<td>${(item_index+1)?string("0")}</td>
 								<td>${item.productName}</td>
 								<td>${item.windowType}</td>
 								<td><span class="fontAR ml5">樘</span></td>
