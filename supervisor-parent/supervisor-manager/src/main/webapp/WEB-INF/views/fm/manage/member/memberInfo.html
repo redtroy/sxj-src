@@ -89,10 +89,10 @@
           <#if (member.type.id==0)>
           <li class="view"><label >资质证书</label><input name="qualification_no" type="text" datatype="*2-30" nullmsg="资质证书不能为空" value="${member.qualification_no}" />
           </li>
-          <li class="view">
+          <li class="view" > 
           		<#if member.qualification_img??> 
 						<#assign arr=(member.qualification_img?split(","))> 
-						<div class="rollBox">
+						<div class="rollBox" >
 									<ul id="carousel" class="elastislide-list">
 										<#list arr as imgPath>
 											<li><a href="javascript:void(0);" class="demo-image"
