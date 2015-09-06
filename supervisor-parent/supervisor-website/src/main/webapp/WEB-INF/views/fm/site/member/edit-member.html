@@ -196,11 +196,11 @@ var uploadImg = function($file) {
 }
 
 var uploadImgCCC = function($file) {
-	var shflag='${member.flag}';
+	/* var shflag='${member.flag}';
 	if (shflag==1){
 		checkState=1;
 		flag=false;
-	}
+	} */
 	var $div = $file.parent().parent();
 	var $carouselCCC = $div.find(".elastislide-list");
 	var $container = $carouselCCC.parent().parent();
@@ -300,8 +300,8 @@ function uploadLicenseReload(data){
 }
 //重新上传节能标识推广证扫描件
 function uploadenergyPathReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#energyPath_hidden").val()},function(data){})
@@ -309,8 +309,8 @@ function uploadenergyPathReload(data){
 }
 //重新上传资质证书扫描件
 function uploadaptitudeReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+//	flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#aptitudePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#aptitudePath_hidden").val()},function(data){})
@@ -318,8 +318,8 @@ function uploadaptitudeReload(data){
 }
 //重新上传安全生产许可证扫描件
 function uploadsafetyReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#safetyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#safetyPath_hidden").val()},function(data){})
@@ -327,8 +327,8 @@ function uploadsafetyReload(data){
 }
 //重新上传质量管理体系认证扫描
 function uploadqmsReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#qmsPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#qmsPath_hidden").val()},function(data){})
@@ -336,8 +336,8 @@ function uploadqmsReload(data){
 }
 //重新上传3C认证扫描
 function uploadcccReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#cccPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#cccPath_hidden").val()},function(data){})
@@ -345,8 +345,8 @@ function uploadcccReload(data){
 }
 //重新上传工业产品生产许可证扫描
 function uploadproductionReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#productionPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#productionPath_hidden").val()},function(data){})
