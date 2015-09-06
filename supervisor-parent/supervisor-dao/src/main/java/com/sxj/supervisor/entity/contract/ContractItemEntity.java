@@ -57,7 +57,7 @@ public class ContractItemEntity extends Pagable implements Serializable
      * 数量
      **/
     @Column(name = "QUANTITY")
-    private Float quantity;
+    private Double quantity;
     
     /**
      * 单价
@@ -149,12 +149,12 @@ public class ContractItemEntity extends Pagable implements Serializable
         this.productModel = productModel;
     }
     
-    public Float getQuantity()
+    public Double getQuantity()
     {
         return quantity;
     }
     
-    public void setQuantity(Float quantity)
+    public void setQuantity(Double quantity)
     {
         this.quantity = quantity;
     }
