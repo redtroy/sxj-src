@@ -60,7 +60,25 @@
           </#if>
             <#if (member.type.id==1)>
           <li class="view"><label >3C认证证书</label><input name="ccc_no" type="text" datatype="*2-30" nullmsg="3C认证证书不能为空" value="${member.ccc_no}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.ccc_img}" data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a></p>
+         <!--  <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.ccc_img}" data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a></p> -->
+          </li>
+          <li class="view">
+          		<#if member.ccc_img??> 
+						<#assign arr=(member.ccc_img?split(","))> 
+						<div class="rollBox">
+									<ul id="carousel" class="elastislide-list">
+										<#list arr as imgPath>
+											<li><a href="javascript:void(0);" class="demo-image"
+											data-image="${b.imagePath}${imgPath}"><img
+												src="${b.imagePath}${imgPath}" width="80"
+												height="107" /></a>
+												<p>${imgPath_index+1}</p>
+												</li> 
+												
+										</#list>
+									</ul>
+								</div>
+								</#if>
           </li>
           </#if>
            <#if (member.type.id==2)>
