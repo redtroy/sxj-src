@@ -284,6 +284,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 </head>
 <body>
 	<@b.header />
+	<#setting number_format="0.00">
 	<div id="main" class="fence-wide">
 		<!-- InstanceBeginEditable name="local" -->
 		<@b.menuPath/>
@@ -467,11 +468,11 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<li><a href="javascript:void(0);" class="demo-pdf"
 										data-pdf="${imgPath}"> <img
 											src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-										<p>${imgPath_index+1}</p></li> <#else>
+										</li> <#else>
 									<li><a href="javascript:void(0);"
 										data-image="${b.imagePath}${imgPath}"><img
 											data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a>
-									<p>${imgPath_index+1}</p></li> </#if> </#list>
+									</li> </#if> </#list>
 								</ul>
 							</div>
 						</div>
@@ -501,12 +502,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 											<li><a href="javascript:void(0);" class="demo-pdf"
 												data-pdf="${imgPath}"> <img
 													src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-												<p>${imgPath_index+1}</p></li> <#else>
+												</li> <#else>
 											<li><a href="javascript:void(0);"
 												data-image="${b.imagePath}${imgPath}"><img
 													data-image="${b.imagePath}${imgPath}" width="80"
 													height="107" /></a>
-											<p>${imgPath_index+1}</p></li> </#if> </#list>
+											</li> </#if> </#list>
 										</ul>
 									</div>
 								</div>
@@ -651,12 +652,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 											<li><a href="javascript:void(0);" class="demo-pdf"
 												data-pdf="${imgPath}"> <img
 													src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-												<p>${imgPath_index+1}</p></li> <#else>
+												</li> <#else>
 											<li><a href="javascript:void(0);"
 												data-image="${b.imagePath}${imgPath}"><img
 													data-image="${b.imagePath}${imgPath}" width="80"
 													height="107" /></a>
-											<p>${imgPath_index+1}</p></li> </#if> </#list>
+											</li> </#if> </#list>
 										</ul>
 									</div>
 								</div>

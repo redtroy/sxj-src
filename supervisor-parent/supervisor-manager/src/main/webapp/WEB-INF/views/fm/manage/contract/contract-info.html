@@ -53,6 +53,7 @@
 		
 	});
 	</script>
+	<#setting number_format="0.00">
         <div class="infoBox text-left">
           <ul class="ly-clearFix">
             <li>
@@ -194,10 +195,10 @@
 						<#if suffix[1]=="PDF">
 					<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="${imgPath}">
 						<img src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-						<p>${imgPath_index+1}</p>
+						
 					</li>
 					<#else>
-                 <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
+                 <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a></li>
                  </#if>
                  </#list>
 				</ul>
@@ -226,10 +227,10 @@
 						<#if suffix[1]=="PDF">
 					<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="${imgPath}">
 						<img src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-						<p>${imgPath_index+1}</p>
+						
 					</li>
 					<#else>
-                 <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
+                 <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a></li>
                  </#if>
                  </#list>
 				</ul>
@@ -332,10 +333,10 @@
 						<#if suffix[1]=="PDF">
 					<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="${imgPath}">
 						<img src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-						<p>${imgPath_index+1}</p>
+						
 					</li>
 					<#else>
-                 <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a><p>${imgPath_index+1}</p></li>
+                 <li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}"><img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a></li>
                  </#if>
                  </#list>
 				</ul>

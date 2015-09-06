@@ -429,10 +429,10 @@ var refreshElastislide=function($container,$carousel,data,empty){
 				}
 				
 				$a.append($img);
-				var $p=$('<p>'+(i+1)+'</p>');
+// 				var $p=$('<p>'+(i+1)+'</p>');
 				var $li=$('<li></li>');
 				$li.append($a);
-				$li.append($p);
+// 				$li.append($p);
 				$carousel.append($li);
 			}
 		}else{
@@ -451,8 +451,8 @@ var refreshElastislide=function($container,$carousel,data,empty){
 			$li.append($a);
 			
 			$carousel.append($li);
-			var $p=$('<p>'+$carousel.children().length+'</p>');
-			$li.append($p);
+// 			var $p=$('<p>'+$carousel.children().length+'</p>');
+// 			$li.append($p);
 			start=$carousel.children().length;
 		}
 	}
