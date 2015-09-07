@@ -1,7 +1,8 @@
  <td colspan="11">
  <script type="text/javascript">
- $.Elastislide.defaults = {minItems:2};
- $("#carousel").elastislide(); 
+ $(document).ready(function() { 
+	    $( '#carousel' ).elastislide(); 
+}); 
  </script>
 <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
  <input type="hidden" name ="id" value="${member.id}"/>
