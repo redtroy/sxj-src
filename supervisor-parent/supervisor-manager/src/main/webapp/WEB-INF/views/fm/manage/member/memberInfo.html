@@ -46,21 +46,21 @@
           </li>
          <!-- <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30" nullmsg="节能标识推广证号不能为空" value="${member.getEnergyNo()}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p> --> 
-          <li class="view"><label >质量管理体系证书</label><input name="qms_no" type="text" datatype="*2-30"  value="${member.qms_no}" />
+          <li class="view"><label >质量管理体系证书</label><input name="qms_no" type="text"   value="${member.qms_no}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}">查看缩略图</a></p>
           </li>
           <#if (member.type.id==0)>
-          <li class="view"><label >安全生产许可证</label><input name="safety_licenses_no" type="text" datatype="*2-30" nullmsg="安全生产许可证不能为空" value="${member.safety_licenses_no}" />
+          <li class="view"><label >安全生产许可证</label><input name="safety_licenses_no" type="text"  nullmsg="安全生产许可证不能为空" value="${member.safety_licenses_no}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.safety_licenses_img}" data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a></p>
           </li>
           </#if>
           <#if (member.type.id==0)>
-          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30"  value="${member.getEnergyNo()}" />
+          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text"   value="${member.getEnergyNo()}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.energyPath}" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p>
           </li>
           </#if>
             <#if (member.type.id==1)>
-          <li class="view"><label >3C认证证书</label><input name="ccc_no" type="text" datatype="*2-30" nullmsg="3C认证证书不能为空" value="${member.ccc_no}" />
+          <li class="view"><label >3C认证证书</label><input name="ccc_no" type="text"  nullmsg="3C认证证书不能为空" value="${member.ccc_no}" />
          <!--  <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.ccc_img}" data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a></p> -->
           </li>
           <li class="view">
@@ -83,12 +83,12 @@
           </li>
           </#if>
            <#if (member.type.id==2)>
-          <li class="view"><label >工业产品生产许可证</label><input name="production_license_no" type="text" datatype="*2-30" nullmsg="工业产品生产许可证不能为空" value="${member.production_license_no}" />
+          <li class="view"><label >工业产品生产许可证</label><input name="production_license_no" type="text"  value="${member.production_license_no}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.production_license_img}" data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a></p>
           </li>
           </#if>
           <#if (member.type.id==0)>
-          <li class="view"><label >资质证书</label><input name="qualification_no" type="text" datatype="*2-30" nullmsg="资质证书不能为空" value="${member.qualification_no}" />
+          <li class="view"><label >资质证书</label><input name="qualification_no" type="text"  value="${member.qualification_no}" />
           </li>
           <li class="view" > 
           		<#if member.qualification_img??> 
