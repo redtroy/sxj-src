@@ -202,12 +202,21 @@ public class MemberController extends BaseController
      */
     @RequestMapping("initializePwd")
     public @ResponseBody Map<String, Object> initializePwd(String id)
+            throws WebException
     {
-        String password = memberService.initializePwd(id);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("isOK", "ok");
-        map.put("password", password);
-        return map;
+        try
+        {
+            String password = memberService.initializePwd(id);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("isOK", "ok");
+            map.put("password", password);
+            return map;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("初始化密码失败", e, this.getClass());
+            throw new WebException("初始化密码失败");
+        }
     }
     
     /**
