@@ -52,30 +52,53 @@ function query(page) {
 }
 
 function modifyState(id,infoId){
-	alert("aa");
 	var state=$("#message_li_"+infoId).attr("state");
 	if(state==0){
-		$.post("${basePath}systender/modifyState.htm","id="+id,function(data){
+		alert(0);
+		$.post("modifyState.htm","id="+id,function(data){
 			if(data.isOK="ok"){
 				$("#message_li_"+infoId).attr("state",1);
 				$("#message_li_"+infoId).removeClass("bgUnread");
 				$("#message_li_"+infoId).addClass("bgGray");
 				$.get("${basePath}market/info.htm?id="+infoId,function(data){
 					$("#wd-info").hide();
-					$("#body_div").empty();
-					$("#body_div").append(data);
+					$(".body_div").empty();
+					$(".body_div").append(data);
 				});
 			}
 		});
 	}else{
 		$.get("${basePath}market/info.htm?id="+infoId,
 				function(data){
-			$("#wd-info").hide();
-			$("#body_div").empty();
-			$("#body_div").append(data);
-			$("#title_id").text("工程信息");
+			//$("#wd-info").hide();
+			$("#contBox").empty();
+			//console.log($(".contBox"))
+			$("#contBox").html(data);
 		});
 	}
+// 	var state=$("#message_li_"+infoId).attr("state");
+// 	if(state==0){
+// 		$.post("${basePath}systender/modifyState.htm","id="+id,function(data){
+// 			if(data.isOK="ok"){
+// 				$("#message_li_"+infoId).attr("state",1);
+// 				$("#message_li_"+infoId).removeClass("bgUnread");
+// 				$("#message_li_"+infoId).addClass("bgGray");
+// 				$.get("${basePath}market/info.htm?id="+infoId,function(data){
+// 					$("#wd-info").hide();
+// 					$("#body_div").empty();
+// 					$("#body_div").append(data);
+// 				});
+// 			}
+// 		});
+// 	}else{
+// 		$.get("${basePath}market/info.htm?id="+infoId,
+// 				function(data){
+// 			$("#wd-info").hide();
+// 			$("#body_div").empty();
+// 			$("#body_div").append(data);
+// 			$("#title_id").text("工程信息");
+// 		});
+// 	}
  }
  
 function changeLi(type){
@@ -131,12 +154,12 @@ function sub(){
 <div class="yard-190 mt15 ly-left">
 <@b.leftMenu /> 
 </div>
-<div id="body_div" class="yard-870 rightSide ly-left">
+<div id="body_div" class="yard-870 rightSide ly-left inviteBox">
 <div class="heading mb15 ly-clearFix">
 <h1>
   <span class="title fontYH f20 fb" id="title_id">平台首页</span></h1>
 </div>
-<div class="contBox">
+<div class="" id="contBox">
 <div style="float:left">
  <div id="govinfo" class="govinfo">
 	<ul>
@@ -176,7 +199,7 @@ function sub(){
 </#list>
 </div>
 </div>
-</div>
+
 <#include "site/finance/appfinance.html">
 <div id="tabsholder"  class="yard-870 rightSide ly-left inviteBox" style="padding-left:0; margin-left:0; min-height:270px;width:100%;">
 <div class="contBox">
@@ -245,6 +268,7 @@ function sub(){
   </ul>
   </#if>
 </#list>
+</div>
 </div>
 </div>
 </div>
