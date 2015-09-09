@@ -1,8 +1,5 @@
 package com.sxj.supervisor;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sxj.supervisor.service.tasks.IWindDoorService;
+import com.sxj.supervisor.service.tasks.impl.AlGatherImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
@@ -18,8 +15,10 @@ import com.sxj.supervisor.service.tasks.IWindDoorService;
 public class TestJunit
 {
     
-//    @Autowired
-//    private IWindDoorService ids;
+    //    @Autowired
+    //    private IWindDoorService ids;
+    @Autowired
+    private AlGatherImpl al;
     
     @Test
     public void test()
@@ -33,11 +32,11 @@ public class TestJunit
             //                 "D:\\scm-repository\\git\\sxj\\abc.doc"));
             //         FileOutputStream docHTML = new FileOutputStream(new File(
             //                 "D:\\scm-repository\\git\\sxj\\abc.html"));
-//            FileInputStream docx = new FileInputStream(new File(
-//                    "D:\\采集导入\\江苏省交通技师学院新校区建设工程项目三标段幕墙工程{镇江}.docx"));
+            //            FileInputStream docx = new FileInputStream(new File(
+            //                    "D:\\采集导入\\江苏省交通技师学院新校区建设工程项目三标段幕墙工程{镇江}.docx"));
             //         FileOutputStream docxHTML = new FileOutputStream(new File(
             //                 "D:\\scm-repository\\git\\sxj\\bcd.html"));
-//            WordTransformer transformer = new WordTransformer();
+            //            WordTransformer transformer = new WordTransformer();
             //         AbstractPictureExactor exactor = new LocalPictureExactor("c:\\test",
             //                 "file");
             //         transformer.setPictureExactor(exactor)
@@ -45,6 +44,7 @@ public class TestJunit
             //   OutputStream docxHTML = response.getOutputStream();
             //   transformer.toHTML(docx, docxHTML);
             // System.out.println(docxHTML.toString());
+            al.gather();
         }
         catch (Exception e)
         {

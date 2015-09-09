@@ -52,6 +52,7 @@ function query(page) {
 }
 
 function modifyState(id,infoId){
+	alert("aa");
 	var state=$("#message_li_"+infoId).attr("state");
 	if(state==0){
 		$.post("${basePath}systender/modifyState.htm","id="+id,function(data){
