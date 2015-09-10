@@ -232,8 +232,25 @@ function check(id,recordNo,contractType,contractNo){
         </td>
         <td><#if model.contract.state.getId() ==1><em class="state verified">${model.contract.state.getName()}</em><#else><a class="btn" onclick="check('${model.contract.id}','${model.contract.recordNo}','${model.contract.type.getId()}','${model.contract.contractNo}');"><span>审核</span></a></#if></td>
         <td class="operation">
-        <#if model.contract.type.getId()==0><a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a><#else> <a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a></#if>
-        <!-- <a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a> --></td>
+        <#if model.contract.state.getId() ==0>
+        
+        	<#if model.contract.type.getId()==0>
+        		<a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
+        	<#else> 
+        		<a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
+        	</#if>
+        	<a href="javascript:void(0)" class="del" onclick="delContract('${model.contract.id}')">删除</a>
+        	<#elseif model.contract.state.getId() ==1>
+			<!--  高级权限 -->
+			<@shiro.hasPermission name="30">
+	        	<#if model.contract.type.getId()==0>
+	        		<a href="toKfsModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
+	        	<#else> 
+        			<a href="toModify.htm?contractId=${model.contract.id}" class="edit">修改</a>
+        		</#if>
+        	</@shiro.hasPermission>
+        	</#if>
+        </td>
       </tr>
       <tr  class="tableInfo" style="display: none;" id="info${model.contract.id}" isopen="0"> </tr>
       </#list>

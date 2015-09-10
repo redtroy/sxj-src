@@ -2,6 +2,7 @@ package com.sxj.supervisor.service.contract;
 
 import java.util.List;
 
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.model.contract.ContractPayModel;
 import com.sxj.supervisor.model.statistics.AccountingModel;
@@ -79,4 +80,11 @@ public interface IContractPayService {
 	 */
 	public PayRecordEntity getPayNoBypayNo(String payNo)
 			throws ServiceException;
+	
+	/**
+	 * 更新支付金额
+	 * @param contract
+	 * @throws ServiceException
+	 */
+	public void updatePayAmountByContractNo(ContractEntity contract) throws ServiceException;
 }

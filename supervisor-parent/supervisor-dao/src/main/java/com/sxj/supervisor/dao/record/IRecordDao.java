@@ -82,4 +82,13 @@ public interface IRecordDao {
 	 * @return
 	 */
 	public int getBindingState(String contractNo)throws SQLException;
+	
+	/**
+	 * 清除备案与合同关联数据回滚状态
+	 * @param record
+	 * @return
+	 * @throws SQLException
+	 */
+	public int updateContractByRecordNo(String... record)throws SQLException;
+	
 }

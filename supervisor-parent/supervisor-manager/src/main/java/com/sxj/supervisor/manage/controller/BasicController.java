@@ -129,7 +129,8 @@ public class BasicController extends BaseController
         {
             request.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "text/html");
-            InputStream stream = ClassLoaderUtil.getResource("config/config.json");
+            
+            InputStream stream = ClassLoaderUtil.getResourceAsStream("config/config.json");
             
             //String rootPath = request.getRealPath("/");
             if (request instanceof DefaultMultipartHttpServletRequest)
