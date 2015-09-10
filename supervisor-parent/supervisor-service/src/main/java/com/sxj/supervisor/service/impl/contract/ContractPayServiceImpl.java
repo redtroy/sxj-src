@@ -13,6 +13,7 @@ import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.supervisor.dao.contract.IAccountingDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.message.TransMessageEntity;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.supervisor.enu.contract.PayModeEnum;
@@ -404,6 +405,18 @@ public class ContractPayServiceImpl implements IContractPayService
             throw new ServiceException("查询付款管理出错!", e);
         }
     }
+
+	@Override
+	public void updatePayAmountByContractNo(ContractEntity contract)
+			throws ServiceException {
+		try {
+			payDao.updatePayAmountByContractNo(contract);
+		} catch (Exception e) {
+			SxjLogger.error("查询付款管理出错!", e, this.getClass());
+			throw new ServiceException("查询付款管理出错!", e);
+		}
+
+	}
     
     // @Override
     // public String changeState(String payNo, String state)
