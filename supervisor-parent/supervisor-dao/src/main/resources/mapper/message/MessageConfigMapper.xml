@@ -20,10 +20,10 @@
 		<where>
 		    <![CDATA[ mmc.MEMBER_NO = m.MEMBER_NO and m.CHECK_STATE=2]]>
 			<if test="condition.memberNo!= null and condition.memberNo != ''">
-			<![CDATA[ mmc.MEMBER_NO = #{condition.memberNo} ]]>
+			<![CDATA[ and mmc.MEMBER_NO = #{condition.memberNo} ]]>
 			</if>
 			<if test="condition.messageType!= null">
-			<![CDATA[ mmc.MESSAGE_TYPE = #{condition.messageType} ]]>
+			<![CDATA[ and mmc.MESSAGE_TYPE = #{condition.messageType} ]]>
 			</if>
 		</where>
 		<![CDATA[ ORDER BY mmc.MESSAGE_TYPE DESC]]>
