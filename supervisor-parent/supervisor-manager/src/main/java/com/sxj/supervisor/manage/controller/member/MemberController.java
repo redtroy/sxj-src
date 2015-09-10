@@ -239,7 +239,7 @@ public class MemberController extends BaseController
                 member.setRemark("");
             }
             // getValidError(result);
-            memberService.modifyMember(member);
+            memberService.modifyMember(member, false);
             map.put("isOK", "ok");
         }
         catch (Exception e)

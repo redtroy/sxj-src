@@ -173,7 +173,7 @@ public class MemberController extends BaseController
             Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
             member.setUpDate(new Date());
-            member = memberService.modifyMember(member);
+            member = memberService.modifyMember(member, true);
             SupervisorPrincipal login = getLoginInfo(session);
             login.setMember(member);
             session.setAttribute("userinfo", login);
@@ -484,7 +484,7 @@ public class MemberController extends BaseController
      * 江苏省信息
      */
     @RequestMapping("info")
-    public String info(Integer infoFlag, ModelMap map,MemberQuery query)
+    public String info(Integer infoFlag, ModelMap map, MemberQuery query)
     {
         query.setPagable(true);
         query.setShowCount(20);
@@ -502,7 +502,8 @@ public class MemberController extends BaseController
         else if (infoFlag == 2)
         {
             query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
-        }else if (infoFlag == 3)
+        }
+        else if (infoFlag == 3)
         {
             query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
         }

@@ -13,7 +13,10 @@ public interface IMemberService
     
     public void addMember(MemberEntity member) throws ServiceException;
     
-    public MemberEntity modifyMember(MemberEntity member)
+    /**
+     * 修改会员，前台调用传TRUE，后来传FALSE
+     */
+    public MemberEntity modifyMember(MemberEntity member, Boolean flag)
             throws ServiceException;
     
     public String initializePwd(String memberId) throws ServiceException;

@@ -224,7 +224,7 @@ public class MemberServiceImpl implements IMemberService
      */
     @Override
     @Transactional
-    public MemberEntity modifyMember(MemberEntity member)
+    public MemberEntity modifyMember(MemberEntity member, Boolean flag)
             throws ServiceException
     {
         try
@@ -256,7 +256,7 @@ public class MemberServiceImpl implements IMemberService
                 configService.addConfig(member.getMemberNo(), configList);
             }
             // 如果该会员之前没有完善会员资料，则提示
-            if (!m.getFlag())
+            if (!m.getFlag() && flag)
             {
                 CometServiceImpl.takeCount(MessageChannel.MEMBER_PERFECT_MESSAGE);
                 redisTopics.getTopic(MessageChannel.TOPIC_NAME)
