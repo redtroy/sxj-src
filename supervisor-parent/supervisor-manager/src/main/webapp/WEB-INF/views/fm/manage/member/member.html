@@ -186,9 +186,6 @@
 		var params = $("#" + id).find(":input").serialize();
 		var deviceNumber = $("#" + id).find("#deviceNumber").val();
 		params = params + "&deviceNumber=" + deviceNumber;
-		if (check(id)) {
-			return false;
-		}
 		$.post("${basePath}member/editMember.htm", params, function(data) {
 			if (data.isOK == 'ok') {
 				succInfo(function() {
