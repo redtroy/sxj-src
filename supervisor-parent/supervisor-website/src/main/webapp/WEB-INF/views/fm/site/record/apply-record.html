@@ -163,7 +163,7 @@ var basePath ='${basePath}';
 			});
 
 	/**
-	 * 甲方申请采购
+	 * 需方申请采购
 	 */
 	function AcgApplyRecord() {
 		var memberIdB = $("#memberIdB").val();
@@ -205,7 +205,7 @@ var basePath ='${basePath}';
 		  $("#cgForm").submit();
 	}
 	/**
-	 * 甲方申请招标
+	 * 需方申请招标
 	 */
 	function zbApplyRecord() {
 		if (!zb_validform.check()) {
@@ -213,7 +213,7 @@ var basePath ='${basePath}';
 		}
 		var memberNameA = $("#memberA").val();
 		if (memberNameA == '') {
-			messageInfo('请输入甲方用户！');
+			messageInfo('请输入需方用户！');
 			return;
 		}
 		var zbimgPath = $("#zbimgPath").val();
@@ -236,7 +236,7 @@ var basePath ='${basePath}';
 		}, "是否生成备案?");
 	}
 	/**
-	 * 乙方申请采购
+	 * 供方申请采购
 	 */
 	function BzbApplyRecord() {
 		if (!b_validform.check()) {
@@ -444,12 +444,12 @@ var basePath ='${basePath}';
 									<input type="hidden" name="memberNameB" value="${name}" />
 									<div id="content1" class="tabscontent">
 										<div class="item">
-											<label>甲方</label> <input class="input input-w240h36" value=""
+											<label>需方</label> <input class="input input-w240h36" value=""
 												id="memberA" name="memberNameA" datatype="*1-50"
-												nullmsg="请输入甲方名称" />
+												nullmsg="请输入需方名称" />
 										</div>
 										<div class="item">
-											<label>乙方</label> ${name}<input type="hidden"
+											<label>供方</label> ${name}<input type="hidden"
 												name="memberIdB" id="" value="${id}" />
 										</div>
 										<div class="item">
@@ -479,15 +479,15 @@ var basePath ='${basePath}';
 									<input type="hidden" name="memberNameA" value="${name}" />
 									<div id="content2" class="tabscontent">
 										<div class="item">
-											<label>甲方</label>${name}<input type="hidden" name="memberIdA"
+											<label>需方</label>${name}<input type="hidden" name="memberIdA"
 												id="" value="${id}" />
 										</div>
 										<div class="item">
-											<label>乙方</label><input class="input input-w240h36" value=""
-												datatype="*1-50" nullmsg="请输入正确的乙方名称" id="memberNameB"
+											<label>供方</label><input class="input input-w240h36" value=""
+												datatype="*1-50" nullmsg="请输入正确的供方名称" id="memberNameB"
 												name="memberNameB" /><input type="hidden" id="memberIdB"
 												name="memberIdB" id="" value="" datatype="*1-50"
-												nullmsg="请输入正确的乙方名称" />
+												nullmsg="请输入正确的供方名称" />
 										</div>
 										<div class="item">
 											<label>工程地址</label><input class="input input-w240h36" value=""
@@ -533,13 +533,13 @@ var basePath ='${basePath}';
 						<form action="" id="BcgForm" method="post" autocomplete="off">
 							<input type="hidden" name="memberNameB" value="${name}" />
 							<div class="item">
-								<label>甲方</label> <input class="input input-w240h36" value=""
-									datatype="*1-50" nullmsg="请输入甲方名称" id="memberNameA"
+								<label>需方</label> <input class="input input-w240h36" value=""
+									datatype="*1-50" nullmsg="请输入需方名称" id="memberNameA"
 									name="memberNameA" /> <input type="hidden" datatype="*1-50"
-									nullmsg="请输入甲方名称" name="memberIdA" id="memberIdA" value="" />
+									nullmsg="请输入需方名称" name="memberIdA" id="memberIdA" value="" />
 							</div>
 							<div class="item">
-								<label>乙方</label> ${name}<input type="hidden" name="memberIdB"
+								<label>供方</label> ${name}<input type="hidden" name="memberIdB"
 									id="" value="${id}" />
 							</div>
 							<div class="item">
