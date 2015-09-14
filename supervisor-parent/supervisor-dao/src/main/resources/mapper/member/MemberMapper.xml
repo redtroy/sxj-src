@@ -57,6 +57,7 @@
 	<result property="marketers" column="MARKETERS" jdbcType="VARCHAR" />
 	<result property="remark" column="REMARK" jdbcType="VARCHAR" />
 	<result property="upDate" column="UPDATE_DATE" jdbcType="TIMESTAMP" />
+	<result property="isHave" column="IS_HAVE" jdbcType="INTEGER" />
 </resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"
