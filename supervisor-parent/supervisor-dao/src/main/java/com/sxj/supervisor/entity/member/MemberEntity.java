@@ -329,16 +329,33 @@ public class MemberEntity extends Pagable implements Serializable
     @Column(name = "UPDATE_DATE")
     private Date upDate;
     
+    /**
+     * 是否拥有生产附框厂的资质
+     **/
+    @Column(name = "IS_HAVE")
+    private Integer isHave;
+    
+    //附加属性
+    /**
+     * 上级型材厂编号
+     */
+    private String parentNo;
+    
+    /**
+     * 上级型材厂名称
+     */
+    private String parentName;
+    
     public Date getUpDate()
     {
         return upDate;
     }
-
+    
     public void setUpDate(Date upDate)
     {
         this.upDate = upDate;
     }
-
+    
     public String getRemark()
     {
         return remark;
@@ -747,6 +764,36 @@ public class MemberEntity extends Pagable implements Serializable
     public void setNoType(String noType)
     {
         this.noType = noType;
+    }
+    
+    public Integer getIsHave()
+    {
+        return isHave;
+    }
+    
+    public void setIsHave(Integer isHave)
+    {
+        this.isHave = isHave;
+    }
+    
+    public String getParentNo()
+    {
+        return parentNo;
+    }
+    
+    public void setParentNo(String parentNo)
+    {
+        this.parentNo = parentNo;
+    }
+    
+    public String getParentName()
+    {
+        return parentName;
+    }
+    
+    public void setParentName(String parentName)
+    {
+        this.parentName = parentName;
     }
     
 }

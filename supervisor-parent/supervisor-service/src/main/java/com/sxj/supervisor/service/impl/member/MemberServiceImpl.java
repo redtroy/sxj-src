@@ -17,8 +17,10 @@ import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.util.Identities;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.dao.member.IMemberDao;
+import com.sxj.supervisor.dao.member.IMemberToMemberDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
@@ -51,6 +53,9 @@ public class MemberServiceImpl implements IMemberService
     
     @Autowired
     private IMessageConfigService configService;
+    
+    @Autowired
+    private IMemberToMemberDao memberToMemberDao;
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;
@@ -146,11 +151,31 @@ public class MemberServiceImpl implements IMemberService
             {
                 member.setNoType("P");
             }
+            else if (MemberTypeEnum.FRAMEFACTORY.equals(member.getType()))//副框厂
+            {
+                member.setNoType("F");
+            }
+            else if (MemberTypeEnum.AGENT.equals(member.getType())
+                    || MemberTypeEnum.DISTRIBUTOR.equals(member.getType()))//如果为代理商，经销商则用型材厂类型
+            {
+                member.setNoType("X");
+            }
             else
             {
                 member.setNoType("MEM");
             }
             menberDao.addMember(member);
+            //如果是代理商或者是经销商
+            if (MemberTypeEnum.AGENT.equals(member.getType())
+                    || MemberTypeEnum.DISTRIBUTOR.equals(member.getType()))
+            {
+                MemberToMemberEntity mm = new MemberToMemberEntity();
+                mm.setMemberNo(member.getMemberNo());
+                mm.setParentNo(member.getParentNo());
+                mm.setParentName(member.getParentName());
+                mm.setMemberType(member.getType().getId());
+                memberToMemberDao.addTo(mm);
+            }
             List<MessageConfigEntity> configList = buildMessageConfig(member);
             configService.addConfig(member.getMemberNo(), configList);
             CometServiceImpl.takeCount(MessageChannel.MEMBER_MESSAGE);
@@ -294,6 +319,15 @@ public class MemberServiceImpl implements IMemberService
                 break;
             case PRODUCTS:
                 m.setNoType("P");
+                break;
+            case FRAMEFACTORY:
+                m.setNoType("F");
+                break;
+            case AGENT:
+                m.setNoType("X");
+                break;
+            case DISTRIBUTOR:
+                m.setNoType("X");
                 break;
             default:
                 m.setNoType("MEM");

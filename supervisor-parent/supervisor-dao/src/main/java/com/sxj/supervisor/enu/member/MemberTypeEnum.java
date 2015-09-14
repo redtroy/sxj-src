@@ -9,7 +9,8 @@ package com.sxj.supervisor.enu.member;
 public enum MemberTypeEnum
 {
     DAWP("门窗厂", 0), GLASSFACTORY("玻璃深加工厂", 1), GENRESFACTORY("型材厂", 2), DEVELOPERS(
-            "开发商", 3), PRODUCTS("配件厂", 4);
+            "开发商", 3), PRODUCTS("配件厂", 4), FRAMEFACTORY("附框厂", 5), AGENT("代理商",
+            6), DISTRIBUTOR("经销商", 7);
     
     // 成员变量
     private Integer id;
