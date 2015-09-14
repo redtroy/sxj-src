@@ -1,5 +1,6 @@
  <td colspan="11">
  <script type="text/javascript">
+
  $(document).ready(function() { 
 	  //--------------
 		$("#carousel_${member.id}").elastislide(); 
@@ -18,9 +19,9 @@
 		uploadImg($("#upload_${member.id}"));
 });
 //证书上传
-	var uploadImg = function($file) {
+	/* var uploadImg = */ function uploadImg($file) {
 		var $div = $file.parent().parent();
-		var $carousel = $div.find(".elastislide-list");
+		var $carousel = $("#carousel_${member.id}");
 		var $container = $carousel.parent().parent();
 		var $hidden = $("#Path_hidden_${member.id}");
 		$file.uploadify({
@@ -111,7 +112,7 @@
           </#if>
             <#if (member.type.id==1)>
           <li class="view"><label >3C认证证书</label><input name="ccc_no" type="text"  nullmsg="3C认证证书不能为空" value="${member.ccc_no}" />
-          <p><a href="#" id="upload_${member.id}">上传3C证书</a><input type="hidden" id="Path_hidden_${member.id}" value="${member.ccc_img}" name="cccPath"></p>
+          <p><input type="file" class="" id="upload_${member.id}" name="input6"><input type="hidden" id="Path_hidden_${member.id}" value="${member.ccc_img}" name="ccc_img"></p>
          <!--  <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.ccc_img}" data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a></p> -->
           </li>
           <li class="view">
@@ -140,13 +141,13 @@
           </#if>
           <#if (member.type.id==0)>
           <li class="view"><label >资质证书</label><input name="qualification_no" type="text"  value="${member.qualification_no}" />
-          <p><a href="javascript:void(0);">上传资质证书</a></p>
+           <p><input type="file" class="" id="upload_${member.id}" name="input6"><input type="hidden" id="Path_hidden_${member.id}" value="${member.qualification_img}" name="qualification_img"></p>
           </li>
           <li class="view" > 
           		<#if member.qualification_img??> 
 						<#assign arr=(member.qualification_img?split(","))> 
 						<div class="rollBox" >
-									<ul id="carousel" class="elastislide-list">
+									<ul id="carousel_${member.id}" class="elastislide-list">
 										<#list arr as imgPath>
 											<li><a href="javascript:void(0);" class="demo-image"
 											data-image="${b.imagePath}${imgPath}"><img
