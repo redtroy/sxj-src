@@ -2,6 +2,11 @@
  <script type="text/javascript">
 
  $(document).ready(function() { 
+	 loadUpload("bLicensePath_File_${member.id}","${basePath}upload.htm",false,"上传",uploadLicense_${member.id});
+	 loadUpload("energyPath_File_${member.id}","${basePath}upload.htm",false,"上传" ,uploadenergyPath_${member.id});
+	 loadUpload("safetyPath_File_${member.id}","${basePath}upload.htm",false,"上传" ,uploadsafetyPath_${member.id});
+	 loadUpload("qmsPath_File_${member.id}","${basePath}upload.htm",false,"上传" ,uploadqmsPath_${member.id});
+	 loadUpload("productionPath_File_${member.id}","${basePath}upload.htm",false,"上传" ,uploadproductionPath_${member.id});
 	  //--------------
 		$("#carousel_${member.id}").elastislide(); 
 		//初始化图片 
@@ -65,7 +70,41 @@
 			}
 		});
 	}
-	
+	//上传营业执照扫描件
+	function uploadLicense_${member.id}(data){
+	    var dataObj=eval("("+data+")");//转换为json对象
+	    $("#bLicensePath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#bLicensePath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
+	    $("#bLicensePath_hidden_${member.id}").val(dataObj.fileIds);
+	}
+	//上传节能标识推广证扫描件
+	function uploadenergyPath_${member.id}(data){
+	    var dataObj=eval("("+data+")");//转换为json对象 
+	    $("#energyPath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#energyPath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
+	    $("#energyPath_hidden_${member.id}").val(dataObj.fileIds);
+	}
+	//上传安全生产许可证扫描件
+	function uploadsafetyPath_${member.id}(data){
+	    var dataObj=eval("("+data+")");//转换为json对象 
+	    $("#safetyPath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#safetyPath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
+	    $("#safetyPath_hidden_${member.id}").val(dataObj.fileIds);
+	}
+	//上传质量管理体系认证扫描件
+	function uploadqmsPath_${member.id}(data){
+	    var dataObj=eval("("+data+")");//转换为json对象 
+	    $("#qmsPath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#qmsPath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
+	    $("#qmsPath_hidden_${member.id}").val(dataObj.fileIds);
+	}
+	//上传工业产品生产许可证扫描件
+	function uploadproductionPath_${member.id}(data){
+	    var dataObj=eval("("+data+")");//转换为json对象 
+	    $("#productionPath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#productionPath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
+	    $("#productionPath_hidden_${member.id}").val(dataObj.fileIds);
+	}
  </script>
 <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
  <input type="hidden" name ="id" value="${member.id}"/>
@@ -105,21 +144,21 @@
           </li>
           <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo"  value="${member.getbLicenseNo()}" />
           <!-- <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p> -->
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p>
+          <p><a href="javascript:void(0);" id="bLicensePath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a><input type="file" class="" id="bLicensePath_File_${member.id}" name="input6"><input type="hidden" id="bLicensePath_hidden_${member.id}" name="bLicensePath"></p>
           </li>
          <!-- <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30" nullmsg="节能标识推广证号不能为空" value="${member.getEnergyNo()}" />
           <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p> --> 
           <li class="view"><label >质量管理体系证书</label><input name="qms_no" type="text"   value="${member.qms_no}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}">查看缩略图</a></p>
+          <p><a href="javascript:void(0);" id="qmsPath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}">查看缩略图</a><input type="file" class="" id="qmsPath_File_${member.id}" name="input6"><input type="hidden" id="qmsPath_hidden_${member.id}" name="qms_img"></p>
           </li>
           <#if (member.type.id==0)>
           <li class="view"><label >安全生产许可证</label><input name="safety_licenses_no" type="text"  nullmsg="安全生产许可证不能为空" value="${member.safety_licenses_no}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.safety_licenses_img}" data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a></p>
+          <p><a href="javascript:void(0);" id="safetyPath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.safety_licenses_img}" data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a><input type="file" class="" id="safetyPath_File_${member.id}" name="input6"><input type="hidden" id="safetyPath_hidden_${member.id}" name="safety_licenses_img"></p>
           </li>
           </#if>
           <#if (member.type.id==0)>
           <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text"   value="${member.getEnergyNo()}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.energyPath}" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p>
+          <p><a href="javascript:void(0);" id="energyPath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.energyPath}" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a><input type="file" class="" id="energyPath_File_${member.id}" name="input6"><input type="hidden" id="energyPath_hidden_${member.id}" name="energyPath"></p>
           </li>
           </#if>
             <#if (member.type.id==1)>
@@ -148,7 +187,7 @@
           </#if>
            <#if (member.type.id==2)>
           <li class="view"><label >工业产品生产许可证</label><input name="production_license_no" type="text"  value="${member.production_license_no}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.production_license_img}" data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a></p>
+          <p><a href="javascript:void(0);" id="productionPath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.production_license_img}" data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a><input type="file" class="" id="productionPath_File_${member.id}" name="input6"><input type="hidden" id="productionPath_hidden_${member.id}" name="production_license_img"></p>
           </li>
           </#if>
           <#if (member.type.id==0)>
