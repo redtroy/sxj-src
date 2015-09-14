@@ -1,8 +1,58 @@
  <td colspan="11">
  <script type="text/javascript">
  $(document).ready(function() { 
-	    $( '#carousel' ).elastislide(); 
-}); 
+	  //--------------
+		$("#carousel_${member.id}").elastislide(); 
+		//初始化图片 
+		$('#carousel_${member.id}').find("li").live("click", function() {
+			var el = $(this);
+			var imageSource = el.find("a").attr("data-image");
+				currentHiddenImages=$("#Path_hidden_${member.id}");
+				currentLi=$(this);
+				refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
+				el.parent().children("li").removeClass("view");
+				el.addClass("view");
+				$(".maskdivgen").show();
+				$(".viewer").show();
+		});
+		uploadImg($("#upload_${member.id}"));
+});
+//证书上传
+	var uploadImg = function($file) {
+		var $div = $file.parent().parent();
+		var $carousel = $div.find(".elastislide-list");
+		var $container = $carousel.parent().parent();
+		var $hidden = $("#Path_hidden_${member.id}");
+		$file.uploadify({
+			swf : '${basePath}upload/uploadify.swf',
+			uploader : "${basePath}upload.htm",
+			 fileTypeExts: '*.jpg',
+			auto : true,
+			multi : true,
+			height : 30,
+			width : 120,
+			buttonText : '上传资质证书',
+			onUploadSuccess : function(file, data, response) {
+				var num = 1;
+				var dataObj = eval("(" + data + ")");//转换为json对象 
+				var hideVal = $hidden.val();
+				if (hideVal == '') {
+					hideVal = dataObj.fileIds;
+				} else {
+					var arrays = hideVal.split(",");
+					for (var i = 0; i < arrays.length; i++) {
+						if (arrays[i]) {
+							num += 1;
+						}
+					}
+					hideVal += "," + dataObj.fileIds;
+				}
+				$hidden.val(hideVal);
+				refreshElastislide($container, $carousel, dataObj);
+			}
+		});
+	}
+	
  </script>
 <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
  <input type="hidden" name ="id" value="${member.id}"/>
@@ -61,13 +111,14 @@
           </#if>
             <#if (member.type.id==1)>
           <li class="view"><label >3C认证证书</label><input name="ccc_no" type="text"  nullmsg="3C认证证书不能为空" value="${member.ccc_no}" />
+          <p><a href="#" id="upload_${member.id}">上传3C证书</a><input type="hidden" id="Path_hidden_${member.id}" value="${member.ccc_img}" name="cccPath"></p>
          <!--  <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.ccc_img}" data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a></p> -->
           </li>
           <li class="view">
           		<#if member.ccc_img??> 
 						<#assign arr=(member.ccc_img?split(","))> 
 						<div class="rollBox">
-									<ul id="carousel" class="elastislide-list">
+									<ul id="carousel_${member.id}" class="elastislide-list">
 										<#list arr as imgPath>
 											<li><a href="javascript:void(0);" class="demo-image"
 											data-image="${b.imagePath}${imgPath}"><img
@@ -89,6 +140,7 @@
           </#if>
           <#if (member.type.id==0)>
           <li class="view"><label >资质证书</label><input name="qualification_no" type="text"  value="${member.qualification_no}" />
+          <p><a href="javascript:void(0);">上传资质证书</a></p>
           </li>
           <li class="view" > 
           		<#if member.qualification_img??> 
