@@ -1,5 +1,6 @@
 package com.sxj.supervisor.website.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,8 +82,10 @@ import com.sxj.supervisor.service.tasks.IWindDoorService;
 import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.comet.CometServiceImpl;
+import com.sxj.util.common.AuthImg;
 import com.sxj.util.common.FileUtil;
 import com.sxj.util.common.StringUtils;
+import com.sxj.util.common.ValidateImage;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -1060,12 +1064,16 @@ public class BasicController extends BaseController
     @RequestMapping("autoCompleMember")
     public @ResponseBody Map<String, String> autoCompleMember(
             HttpServletRequest request, HttpServletResponse response,
-            String keyword) throws IOException
+            String keyword, Integer memberType) throws IOException
     {
         MemberQuery mq = new MemberQuery();
         if (keyword != "" && keyword != null)
         {
             mq.setMemberName(keyword);
+        }
+        if (null != memberType)
+        {
+            mq.setMemberType(memberType);
         }
         //mq.setMemberTypeB(0);
         List<MemberEntity> list = memberService.queryMembers(mq);
@@ -1386,6 +1394,59 @@ public class BasicController extends BaseController
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 获取图片验证码
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("getAuthImg")
+    public @ResponseBody Map<String, String> getAuthImg(HttpSession session,
+            HttpServletRequest request, HttpServletResponse response)
+            throws IOException
+    {
+        try
+        {
+            AuthImg img = new AuthImg();
+            ValidateImage image = img.getImage();
+            String str = image.getImgStr();
+            BufferedImage bImg = image.getImg();
+            session.setAttribute("imgStr", str);
+            System.out.println("第一：" + str);
+            ImageIO.write(bImg, "JPEG", response.getOutputStream());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+        return null;
+    }
+    
+    /**
+     * 获取图片验证码字符
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("getImgStr")
+    public @ResponseBody Map<String, String> getImgStr(HttpSession session,
+            HttpServletRequest request, HttpServletResponse response)
+            throws IOException
+    {
+        String res = session.getAttribute("imgStr").toString();
+        PrintWriter out = response.getWriter();
+        System.out.println("第二：" + res);
+        out.print(res);
         out.flush();
         out.close();
         return null;

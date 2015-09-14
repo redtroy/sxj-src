@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.IMemberToMemberDao">
+	<resultMap id="MemberToMemberEntity"
+		type="com.sxj.supervisor.entity.member.MemberToMemberEntity">
+		<id property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="parentNo" column="PARENT_NO" jdbcType="VARCHAR" />
+		<result property="parentName" column="PARENT_NAME" jdbcType="VARCHAR" />
+		<result property="memberType" column="MEMBER_TYPE" jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 获取权限列表 -->
+	<select id="query" resultMap="MemberToMemberEntity"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_MEMBER_TO_MEMBER WHERE 1=1]]>
+		<if test="condition.memberNo != null and condition.memberNo!=''">
+			<![CDATA[ AND MEMBER_NO = #{condition.memberNo}]]>
+		</if>
+		<if test="condition.parentNo != null and condition.parentNo!=''">
+			<![CDATA[ AND PARENT_NO = #{condition.parentNo}]]>
+		</if>
+		<if test="condition.memberType != null">
+			<![CDATA[ AND MEMBER_TYPE = #{condition.memberType}]]>
+		</if>
+	</select>
+
+</mapper>
