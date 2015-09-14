@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -54,11 +55,13 @@ import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.entity.member.MemberLogEntity;
+import com.sxj.supervisor.entity.message.TenderMessageEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -309,7 +312,35 @@ public class BasicController extends BaseController
                     {
                         pjList = totalPJList;
                     }
-                    
+                    //
+                    SupervisorPrincipal user = getLoginInfo(session);
+                    if (user == null)
+                    {
+                        return LOGIN;
+                    }
+                    String memberNo = user.getMember().getMemberNo();
+                    List<String> infoIdList = CometServiceImpl.get(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
+                    if (infoIdList != null && infoIdList.size() > 0)
+                    {
+                        List<TenderMessageEntity> messageList = new ArrayList<TenderMessageEntity>();
+                        for (Iterator<String> iterator = infoIdList.iterator(); iterator.hasNext();)
+                        {
+                            String infoId = iterator.next();
+                            TenderMessageQuery query2 = new TenderMessageQuery();
+                            query2.setMemberNo(memberNo);
+                            query2.setInfoId(infoId);
+                            List<TenderMessageModel> list = tenderMessageService.queryMessageList(query2);
+                            if (list == null || list.size() == 0)
+                            {
+                                TenderMessageEntity message = new TenderMessageEntity();
+                                message.setInfoId(infoId);
+                                message.setMemberNo(memberNo);
+                                message.setState(MessageStateEnum.UNREAD);
+                                messageList.add(message);
+                            }
+                        }
+                        tenderMessageService.addMessage(messageList);
+                    }
                     // TenderMessageQuery messQuery = new TenderMessageQuery();
                     messQuery.setPagable(true);
                     messQuery.setShowCount(6);
