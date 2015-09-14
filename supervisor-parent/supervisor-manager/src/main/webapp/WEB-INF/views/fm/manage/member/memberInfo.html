@@ -17,6 +17,18 @@
 				$(".viewer").show();
 		});
 		uploadImg($("#upload_${member.id}"));
+		//删除图片
+		$(".iviewer_del").unbind();
+		$(".iviewer_del").live("click",function(){
+			var url=$(this).siblings("img").attr("src");
+			var prefix="${b.imagePath}";
+			var image=url.substring(url.indexOf(prefix)+prefix.length);
+			var images=currentHiddenImages.attr("value");
+			var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
+			currentHiddenImages.attr("value",result)
+			currentLi.remove();
+			closeViewer();
+		});
 });
 //证书上传
 	/* var uploadImg = */ function uploadImg($file) {
