@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.IMemberImageDao">
+	<resultMap id="MemberImageEntity"
+		type="com.sxj.supervisor.entity.member.MemberImageEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="image" column="IMAGE" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
+		<result property="certificateType" column="CERTIFICATE_TYPE"
+			jdbcType="INTEGER" />
+		<result property="certificateNo" column="CERTIFICATE_NO"
+			jdbcType="VARCHAR" />
+		<result property="issueDate" column="ISSUE_DATE" jdbcType="DATE" />
+		<result property="dueDate" column="DUE_DATE" jdbcType="DATE" />
+		<result property="version" column="VERSION" jdbcType="VARCHAR" />
+		<result property="creationDate" column="CREATION_DATE"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<select id="queryMemberImage" resultMap="MemberImageEntity"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_MEMBER_IMAGE WHERE MEMBER_NO= ]]>
+		<if test="condition.state != null and condition.state!=''">
+			<![CDATA[ AND STATE=#{condition.state}]]>
+		</if>
+		<if test="condition.creationDate != null and condition.creationDate!=''">
+			<![CDATA[ AND CREATION_DATE=#{condition.creationDate}]]>
+		</if>
+		<if
+			test="condition.certificateType != null and condition.certificateType!=''">
+			<![CDATA[ AND CERTIFICATE_TYPE=#{condition.certificateType}]]>
+		</if>
+		<if test="condition.certificateNo != null and condition.certificateNo!=''">
+			<![CDATA[ AND CERTIFICATE_NO=#{condition.certificateNo}]]>
+		</if>
+	</select>
+</mapper>
