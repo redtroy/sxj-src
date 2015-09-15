@@ -428,7 +428,14 @@ public class BasicController extends BaseController
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
             query.setFilterStr(1);
             List<MemberEntity> totalXCList = memberService.queryMembers(query);
+            //附框厂
+            query = new MemberQuery();
+            query.setMemberType(MemberTypeEnum.FRAMEFACTORY.getId());
+            query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            query.setFilterStr(1);
+            List<MemberEntity> totalfcList = memberService.queryMembers(query);
             List<MemberEntity> xcList = new ArrayList<MemberEntity>();
+            List<MemberEntity> fcList = new ArrayList<MemberEntity>();
             
             for (int i = 0; i < 16; i++)
             {
@@ -456,6 +463,11 @@ public class BasicController extends BaseController
                 kfsList.add(temKfs);
                 totalKFSList.remove(temKfs);
                 
+                Random rd5 = new Random();
+                int k5 = rd5.nextInt(totalfcList.size());
+                MemberEntity fc = totalfcList.get(k5);
+                fcList.add(fc);
+                totalfcList.remove(fc);
             }
             
             TenderMessageQuery messQuery = new TenderMessageQuery();
@@ -468,6 +480,7 @@ public class BasicController extends BaseController
             map.put("mcList", mcList);
             map.put("blList", blList);
             map.put("xcList", xcList);
+            map.put("fcList", fcList);
             map.put("messageList", list);
             map.put("query", messQuery);
             
