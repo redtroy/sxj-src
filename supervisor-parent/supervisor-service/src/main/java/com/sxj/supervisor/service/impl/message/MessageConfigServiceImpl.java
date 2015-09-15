@@ -15,7 +15,6 @@ import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
-import com.sxj.util.message.NewNewSendMessage;
 import com.sxj.util.message.NewSendMessage;
 import com.sxj.util.message.SendMessage;
 import com.sxj.util.persistent.QueryCondition;
@@ -190,9 +189,9 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                     //                            sign,
                     //                            type).sendMessage(config.getPhone(),
                     //                            message + "，请登录私享家绿色门窗平台查看详情！");
-//                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
-//                            .sendMessage(config.getPhone(),
-//                                    message + "，请登录私享家绿色门窗平台查看详情！");
+                    //                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
+                    //                            .sendMessage(config.getPhone(),
+                    //                                    message + "，请登录私享家绿色门窗平台查看详情！");
                     SendMessage.getInstance(sOpenUrl,
                             sDataUrl,
                             account,
@@ -260,10 +259,10 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                 //                NewNewSendMessage.getInstance(serviceURL, sn, pwd)
                 //                        .sendMessage(new String[phones.size()],
                 //                                message + "，请登录私享家绿色门窗平台查看详情！");
-                SendMessage.getInstance(message,
-                        message,
-                        message,
-                        message,
+                SendMessage.getInstance(sOpenUrl,
+                        sDataUrl,
+                        account,
+                        authkey,
                         cgid,
                         csid)
                         .sendMessage(phones.toArray(new String[phones.size()]),
