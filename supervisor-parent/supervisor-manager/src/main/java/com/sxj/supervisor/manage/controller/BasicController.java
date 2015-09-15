@@ -421,10 +421,14 @@ public class BasicController extends BaseController
                         myfile.getBytes().length,
                         extName);
                 //转HTML
-                byte[] html = convert2Html(myfile.getInputStream()).getBytes();
+                WordTransformer transformer = new WordTransformer();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                transformer.setPictureExactor(new LocalPictureExactor(
+                        "storage.menchuang.org.cn", "http"));
+                transformer.toHTML(myfile.getInputStream(), bos);
                 String filePath = storageClientService.uploadFile(null,
-                        new ByteArrayInputStream(html),
-                        html.length,
+                        new ByteArrayInputStream(bos.toString().getBytes()),
+                        bos.toByteArray().length,
                         "JPG");
                 SxjLogger.info("siteUploadFilePath=" + filePath,
                         this.getClass());
