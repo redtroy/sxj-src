@@ -73,35 +73,35 @@
 	//上传营业执照扫描件
 	function uploadLicense_${member.id}(data){
 	    var dataObj=eval("("+data+")");//转换为json对象
-	    $("#bLicensePath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#bLicensePath_src_${member.id}").attr("image",dataObj.fileIds);
 	    $("#bLicensePath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
 	    $("#bLicensePath_hidden_${member.id}").val(dataObj.fileIds);
 	}
 	//上传节能标识推广证扫描件
 	function uploadenergyPath_${member.id}(data){
 	    var dataObj=eval("("+data+")");//转换为json对象 
-	    $("#energyPath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#energyPath_src_${member.id}").attr("image",dataObj.fileIds);
 	    $("#energyPath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
 	    $("#energyPath_hidden_${member.id}").val(dataObj.fileIds);
 	}
 	//上传安全生产许可证扫描件
 	function uploadsafetyPath_${member.id}(data){
 	    var dataObj=eval("("+data+")");//转换为json对象 
-	    $("#safetyPath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#safetyPath_src_${member.id}").attr("image",dataObj.fileIds);
 	    $("#safetyPath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
 	    $("#safetyPath_hidden_${member.id}").val(dataObj.fileIds);
 	}
 	//上传质量管理体系认证扫描件
 	function uploadqmsPath_${member.id}(data){
 	    var dataObj=eval("("+data+")");//转换为json对象 
-	    $("#qmsPath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#qmsPath_src_${member.id}").attr("image",dataObj.fileIds);
 	    $("#qmsPath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
 	    $("#qmsPath_hidden_${member.id}").val(dataObj.fileIds);
 	}
 	//上传工业产品生产许可证扫描件
 	function uploadproductionPath_${member.id}(data){
 	    var dataObj=eval("("+data+")");//转换为json对象 
-	    $("#productionPath_src_${member.id}").attr("img",dataObj.fileIds);
+	    $("#productionPath_src_${member.id}").attr("image",dataObj.fileIds);
 	    $("#productionPath_src_${member.id}").attr("data-image","${b.imagePath}"+dataObj.fileIds)
 	    $("#productionPath_hidden_${member.id}").val(dataObj.fileIds);
 	}
