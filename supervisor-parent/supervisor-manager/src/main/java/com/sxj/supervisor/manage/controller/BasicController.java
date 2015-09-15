@@ -1,6 +1,8 @@
 package com.sxj.supervisor.manage.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hwpf.usermodel.PictureType;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -44,6 +47,8 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.baidu.ueditor.ActionEnter;
 import com.baidu.ueditor.FileEntity;
+import com.sxj.poi.transformer.AbstractPictureExactor;
+import com.sxj.poi.transformer.WordTransformer;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.spring.modules.util.ClassLoaderUtil;
@@ -421,10 +426,14 @@ public class BasicController extends BaseController
                         myfile.getBytes().length,
                         extName);
                 //转HTML
-                byte[] html = convert2Html(myfile.getInputStream()).getBytes();
+                WordTransformer transformer = new WordTransformer();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                transformer.setPictureExactor(new LocalPictureExactor(
+                        "storage.menchuang.org.cn", "http"));
+                transformer.toHTML(myfile.getInputStream(), bos);
                 String filePath = storageClientService.uploadFile(null,
-                        new ByteArrayInputStream(html),
-                        html.length,
+                        new ByteArrayInputStream(bos.toString().getBytes()),
+                        bos.toByteArray().length,
                         "JPG");
                 SxjLogger.info("siteUploadFilePath=" + filePath,
                         this.getClass());
@@ -909,4 +918,66 @@ public class BasicController extends BaseController
         return null;
     }
     
+    /**
+     * WORD图片上传存放
+     */
+    class LocalPictureExactor extends AbstractPictureExactor
+    {
+        private String path;
+        
+        private String scheme;
+        
+        public LocalPictureExactor(String path, String scheme)
+        {
+            super();
+            this.path = path;
+            this.scheme = scheme;
+        }
+        
+        public String save(byte[] content, PictureType pictureType,
+                String suggestedName, float widthInches, float heightInches)
+        {
+            try
+            {
+                //                FileOutputStream fos = new FileOutputStream(new File(path
+                //                        + File.separator + suggestedName));
+                //                fos.write(content);
+                //                fos.close();
+                DataInputStream in = new DataInputStream(
+                        new ByteArrayInputStream(content));
+                String gifPath = storageClientService.uploadFile(null,
+                        in,
+                        in.available(),
+                        "gif".toUpperCase());
+                in.close();
+                return gifPath;/* 网络资源截取并存储本地成功返回true */
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        
+        public String getPath()
+        {
+            return path;
+        }
+        
+        public void setPath(String path)
+        {
+            this.path = path;
+        }
+        
+        public String getScheme()
+        {
+            return scheme;
+        }
+        
+        public void setScheme(String scheme)
+        {
+            this.scheme = scheme;
+        }
+        
+    }
 }
