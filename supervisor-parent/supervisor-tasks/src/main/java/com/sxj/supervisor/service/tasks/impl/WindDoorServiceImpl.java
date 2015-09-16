@@ -602,7 +602,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             for (int iii = 0; iii < bathList.size(); iii++)
             {
                 //发短信
-                //                configService.sendAllMessage("您有一条新的开发商招标信息");
+                configService.sendAllMessage("您有一条新的开发商招标信息");
                 CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                         bathList.get(iii).getId());
             }

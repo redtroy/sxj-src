@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -54,11 +55,13 @@ import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.entity.member.MemberLogEntity;
+import com.sxj.supervisor.entity.message.TenderMessageEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -309,7 +312,35 @@ public class BasicController extends BaseController
                     {
                         pjList = totalPJList;
                     }
-                    
+                    //
+                    SupervisorPrincipal user = getLoginInfo(session);
+                    if (user == null)
+                    {
+                        return LOGIN;
+                    }
+                    String memberNo = user.getMember().getMemberNo();
+                    List<String> infoIdList = CometServiceImpl.get(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
+                    if (infoIdList != null && infoIdList.size() > 0)
+                    {
+                        List<TenderMessageEntity> messageList = new ArrayList<TenderMessageEntity>();
+                        for (Iterator<String> iterator = infoIdList.iterator(); iterator.hasNext();)
+                        {
+                            String infoId = iterator.next();
+                            TenderMessageQuery query2 = new TenderMessageQuery();
+                            query2.setMemberNo(memberNo);
+                            query2.setInfoId(infoId);
+                            List<TenderMessageModel> list = tenderMessageService.queryMessageList(query2);
+                            if (list == null || list.size() == 0)
+                            {
+                                TenderMessageEntity message = new TenderMessageEntity();
+                                message.setInfoId(infoId);
+                                message.setMemberNo(memberNo);
+                                message.setState(MessageStateEnum.UNREAD);
+                                messageList.add(message);
+                            }
+                        }
+                        tenderMessageService.addMessage(messageList);
+                    }
                     // TenderMessageQuery messQuery = new TenderMessageQuery();
                     messQuery.setPagable(true);
                     messQuery.setShowCount(6);
@@ -397,7 +428,14 @@ public class BasicController extends BaseController
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
             query.setFilterStr(1);
             List<MemberEntity> totalXCList = memberService.queryMembers(query);
+            //附框厂
+            query = new MemberQuery();
+            query.setMemberType(MemberTypeEnum.FRAMEFACTORY.getId());
+            query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            query.setFilterStr(1);
+            List<MemberEntity> totalfcList = memberService.queryMembers(query);
             List<MemberEntity> xcList = new ArrayList<MemberEntity>();
+            List<MemberEntity> fcList = new ArrayList<MemberEntity>();
             
             for (int i = 0; i < 16; i++)
             {
@@ -425,6 +463,11 @@ public class BasicController extends BaseController
                 kfsList.add(temKfs);
                 totalKFSList.remove(temKfs);
                 
+                Random rd5 = new Random();
+                int k5 = rd5.nextInt(totalfcList.size());
+                MemberEntity fc = totalfcList.get(k5);
+                fcList.add(fc);
+                totalfcList.remove(fc);
             }
             
             TenderMessageQuery messQuery = new TenderMessageQuery();
@@ -437,6 +480,7 @@ public class BasicController extends BaseController
             map.put("mcList", mcList);
             map.put("blList", blList);
             map.put("xcList", xcList);
+            map.put("fcList", fcList);
             map.put("messageList", list);
             map.put("query", messQuery);
             
