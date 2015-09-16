@@ -1,13 +1,7 @@
  <td colspan="11">
-<form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
- <input type="hidden" name ="id" value="${member.id}"/>
-            <script>
-			  $(function() {
-			    $( ".foundedDate" ).datepicker();
-			  });
- 		 </script>
- 		 
- 		  <div class="infoBox" id="basic-message">  
+ 		  <div class="infoBox" id="basic-message"> 
+ 		  <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
+ 			<input type="hidden" name ="id" value="${member.id}"/> 
 		        <div id="block-name">基本信息</div>
           <div class="left-news">
           <ul class="ly-clearFix">
@@ -44,53 +38,79 @@
           <li style=" width:99%"><label class="lable">联系人手机</label><input type="text" value="${member.phoneNo}" datatype="m" nullmsg="手机号码不能为空" name="phoneNo"/></li>
           <li style=" width:99%"><label class="lable">公司地址</label><input type="text" value="${member.address}" datatype="*2-50" nullmsg="地址不能为空" name="address"/></li>
           <li style=" width:99%"><label class="lable">固定电话</label><input type="text" value="${member.telNum}" name="telNum"/></li>
-          <li style=" width:99%"><label class="lable">原有资质证书</label>10个</li>
-          <li style=" width:99%"><label class="lable">现有资质证书</label>16个</li>
-          </ul>
-          </div>
-          <div class="right-news">
-          <ul class="ly-clearFix">
-          <li style="width:99%">
-          </li>
-          <li style="width:99%" class="view"><label class="lable">营业执照</label><input type="text" name="bLicenseNo"  value="${member.getbLicenseNo()}" />
-          <a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
-          </li>
-          <li style="width:99%" class="view"><label class="lable">质量管理体系证书</label><input type="text" value="JTGH2342345" />
-			<a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}">查看缩略图</a>         
-		  </li>
-		   <#if (member.type.id==0)>
-		    <li style="width:99%" class="view"><label class="lable">安全生产许可证</label><input name="safety_licenses_no" type="text"  nullmsg="安全生产许可证不能为空" value="${member.safety_licenses_no}" />
-			<a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.safety_licenses_img}" data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a>         
-		  </li>
-		   <li style="width:99%" class="view"><label class="lable">节能标识推广证</label><input name="energyNo" type="text"   value="${member.getEnergyNo()}" />
-			<a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.energyPath}" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a>         
-		  </li>
-          </#if>
-          <#if (member.type.id==2)>
-          <li style="width:99%" class="view"><label class="lable">工业产品生产许可证</label><input name="production_license_no" type="text"  value="${member.production_license_no}" />
-			<a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.production_license_img}" data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a>       
-		  </li>
-          </#if>
           <li style=" width:99%"><label class="lable">注册时间</label><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
           <li style=" width:99%"><label class="lable">认证时间</label><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
-          <li style=" width:99%"><label class="lable">审核状态</label><em class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
-          <li style=" width:99%"><label class="lable">帐户状态</label><em class="state verified" id="state1">${member.state.getName()}</em></li>
+
           <li style=" width:99%"><label class="lable">子帐号数</label>${member.getAccountNum()}个</li>
-          <li style=" width:99%"><label class="lable">总交易额</label>${member.totalAmount}元</li>
-          
-          <li style=" width:99%"><label class="lable">扫描设备号</label><textarea cols="" rows="3" class="textRfid" id="deviceNumber" >${member.deviceNumber}</textarea></li>
-          <li style=" width:99%"><label class="lable">邮政编码</label><input type="text" value="${member.code}" id="code" name="code" /></li>
-          <li style=" width:99%"><label class="lable">法人代表</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
+           <li style=" width:99%"><label class="lable">法人代表</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
           <li style=" width:99%"><label class="lable">注册资本</label><input type="text" value="${member.registeredCapital}" id="registeredCapital" datatype="n1-10" name="registeredCapital" />万元</li>
-          <li style=" width:99%"><label class="lable">成立时间</label><input type="text" <#if (member.foundedDate??)>value="${member.foundedDate?string("yyyy-MM-dd")}" </#if> id="foundedDate" class="foundedDate" name="foundedDate"  /></li>
-          <li style=" width:99%"><label class="lable">市场专员</label><input type="text" value="${member.marketers}" id="marketers" name="marketers" /></li>
           <li style=" width:99%"><label class="lable">备注</label><textarea style="width:50%" rows="2" cols="0" name="remark">${member.remark}</textarea></li>
-          
           </ul>
           </div>
-          <div style="clear:both"></div>
-          <div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
+			<div class="right-news">
+				<ul class="ly-clearFix">
+					<li style="width: 99%"></li>
+					<li style="width: 99%" class="view"><label class="lable">营业执照</label><input
+						type="text" name="bLicenseNo" value="${member.getbLicenseNo()}" />
+						<a href="javascript:void(0);"
+						class="lnk-blue lnk-underline demo-image"
+						image="${member.bLicensePath}"
+						data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></li>
+					<li style="width: 99%" class="view"><label class="lable">质量管理体系证书</label><input
+						type="text" value="JTGH2342345" /> <a href="javascript:void(0);"
+						class="lnk-blue lnk-underline demo-image"
+						image="${member.qms_img}"
+						data-image="${b.imagePath}${member.qms_img}">查看缩略图</a></li> <#if
+					(member.type.id==0)>
+					<li style="width: 99%" class="view"><label class="lable">安全生产许可证</label><input
+						name="safety_licenses_no" type="text" nullmsg="安全生产许可证不能为空"
+						value="${member.safety_licenses_no}" /> <a
+						href="javascript:void(0);"
+						class="lnk-blue lnk-underline demo-image"
+						image="${member.safety_licenses_img}"
+						data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a>
+					</li>
+					<li style="width: 99%" class="view"><label class="lable">节能标识推广证</label><input
+						name="energyNo" type="text" value="${member.getEnergyNo()}" /> <a
+						href="javascript:void(0);"
+						class="lnk-blue lnk-underline demo-image"
+						image="${member.energyPath}"
+						data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></li> </#if>
+					<#if (member.type.id==2)>
+					<li style="width: 99%" class="view"><label class="lable">工业产品生产许可证</label><input
+						name="production_license_no" type="text"
+						value="${member.production_license_no}" /> <a
+						href="javascript:void(0);"
+						class="lnk-blue lnk-underline demo-image"
+						image="${member.production_license_img}"
+						data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a>
+					</li> </#if>
+					<li style="width: 99%"><label class="lable">总交易额</label>${member.totalAmount}元</li>
+
+					<li style="width: 99%"><label class="lable">扫描设备号</label>
+					<textarea cols="" rows="3" class="textRfid" id="deviceNumber">${member.deviceNumber}</textarea></li>
+					<li style="width: 99%"><label class="lable">邮政编码</label><input
+						type="text" value="${member.code}" id="code" name="code" /></li>
+					<li style="width: 99%"><label class="lable">审核状态</label><em
+						class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
+					<li style="width: 99%"><label class="lable">帐户状态</label><em
+						class="state verified" id="state1">${member.state.getName()}</em></li>
+					<li style="width: 99%"><label class="lable">成立时间</label><input
+						type="text"<#if
+						(member.foundedDate??)>value="${member.foundedDate?string("yyyy-MM-dd")}"
+						</#if> id="foundedDate" class="foundedDate" name="foundedDate" /></li>
+					<li style="width: 99%"><label class="lable">市场专员</label><input
+						type="text" value="${member.marketers}" id="marketers"
+						name="marketers" /></li>
+
+				</ul>
+			</div>
+			<div style="clear:both"></div>
+          <div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small" onclick="edit('${member.id}_info');return false;">确认修改</a></@shiro.hasPermission></div>
+          </form>
           </div>
+		<!-- 资质证书开始 -->
+		<#if (member.type.id==0)>
             <div class="infoBox" id="meb-news"> 		
 		        <div id="block-name">资质证书</div>
                 <div class="left-news">
@@ -104,40 +124,58 @@
                     </ul>
                 </div>
 				<div>
-                 <ul class="ly-clearFix">          
-                    <li style=" width:99%"><label class="lable">删除资质证书</label>4个</li>
-                    <li id="li">
-          		        <i class="picSildeLeft"><img src="../images/icon/picSlideLeft.gif" width="20" height="60" /></i> 
-				        <i class="picSildeRight"><img src="../images/icon/picSlideRight.gif" width="20" height="60" /></i>
-                        <ul id="picture">
-                            <li><img src="../images/small/1.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/2.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/3.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/4.jpg" width="78" height="100" /></li>
-                        </ul>
-                    </li>
-                    <li style=" width:99%"><label class="lable">新上传证书</label>10个
-                           <a href="#" class="lnk-blue demo-image" data-image="../images/jntg.gif">证书上传</a>
-                    </li>
-                    <li id="li">
-          		        <i class="picSildeLeft"><img src="../images/icon/picSlideLeft.gif" width="20" height="60" /></i> 
-				        <i class="picSildeRight"><img src="../images/icon/picSlideRight.gif" width="20" height="60" /></i>
-                        <ul id="picture">
-                            <li><img src="../images/small/1.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/2.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/3.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/4.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/5.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/6.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/7.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/8.jpg" width="78" height="100" /></li>
-                            <li><img src="../images/small/9.jpg" width="78" height="100" /></li>
-                        </ul>
-                    </li>
-			     </ul>
-				</div>
+			<ul class="ly-clearFix">
+				<li style="width: 99%"><label class="lable">删除资质证书</label>4个</li>
+				<li
+					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
+					<div id="SlideUl1" class="slideui">
+						<i class="buttonSildeLeft left" id="aleft"><img width="20"
+							height="60" src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
+						<i class="buttonSildeRight right" id="aright"><img width="20"
+							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
+						<div class="line-con">
+							<#if member.qualification_img??> <#assign
+							arr=(member.qualification_img?split(","))>
+							<ul class="imageList">
+								<#list arr as imgPath>
+								<li style="width: 86px; height: 120px"><img
+									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+								<tt></tt></li> </#list>
+							</ul>
+							</#if>
+						</div>
+					</div>
+				</li>
+				<li style="width: 99%"><label class="lable">新上传证书</label>10个 <a
+					id="button-upload" href="javascript:fullImage();" class="normal">证书上传</a></li>
+				<li
+					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
+					<div id="SlideUl2" class="slideui">
+						<i class="buttonSildeLeft left" id="aleft"><img width="20"
+							height="60" src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
+						<i class="buttonSildeRight right" id="aright"><img width="20"
+							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
+						<div class="line-con">
+							<#if member.qualification_img??> <#assign
+							arr=(member.qualification_img?split(","))>
+							<ul class="imageList">
+								<#list arr as imgPath>
+								<li style="width: 86px; height: 120px"><img
+									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+								<tt></tt></li> </#list>
+							</ul>
+							</#if>
+						</div>
+					</div>
+
+
+				</li>
+			</ul>
+		</div>
 				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
 			</div>
+			</#if>
+			<!-- 资质证书结束 -->
  		 
  		   <div class="infoBox" id="associated-enterprise"> 
 		        <div id="block-name">关联企业</div>
@@ -150,7 +188,7 @@
 			         <th id="th" width="15%">联系人电话</th>
 			         <th id="th" width="10%">关联类型</th>
 			         <th id="th" width="15%">备注</th>
-		           	 <th id="th" width="5%"><a id="add-button" title="新加一行"><img src="../images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
+		           	 <th id="th" width="5%"><a id="add-button" title="新加一行"><img src="${b.staticPath}images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
 			        </tr>
 			        <tr>
 			         <td id="td">江苏私享家</td>
@@ -158,7 +196,7 @@
 			         <td id="td">15894932890</td>
 			         <td id="td">紧密型</td>
 			         <td id="td">企业名称</td>
-		          	 <td id="td"><a id="Delete-button" title="删除此行"><img src="../images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+		          	 <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 		        	</tr>
 			        <tr>
 			         <td id="td">凯恩装饰公司</td>
@@ -166,7 +204,7 @@
 			         <td id="td">15890874567</td>
 			         <td id="td">专注型</td>
 			         <td id="td">企业名称</td>
-			         <td id="td"><a id="Delete-button" title="删除此行"><img src="../images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+			         <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 			        </tr>
 			         <tr>
 			         <td id="td">思美建设集团</td>
@@ -174,7 +212,7 @@
 			         <td id="td">12129312303</td>
 			         <td id="td">凝聚型</td>
 			         <td id="td">企业名称</td>
-			         <td id="td"><a id="Delete-button" title="删除此行"><img src="../images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+			         <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 		         	</tr>
 			        <tr>
 			         <td id="td">江苏私享家</td>
@@ -182,7 +220,7 @@
 			         <td id="td">15894932890</td>
 			         <td id="td">紧密型</td>
 			         <td id="td">企业名称</td>
-		          	 <td id="td"><a id="Delete-button" title="删除此行"><img src="../images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+		          	 <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 		        	</tr>
 			        <tr>
 			         <td id="td">凯恩装饰公司</td>
@@ -190,7 +228,7 @@
 			         <td id="td">15890874567</td>
 			         <td id="td">专注型</td>
 			         <td id="td">企业名称</td>
-			         <td id="td"><a id="Delete-button" title="删除此行"><img src="../images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+			         <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 			        </tr>
 			         <tr>
 			         <td id="td">思美建设集团</td>
@@ -198,7 +236,7 @@
 			         <td id="td">12129312303</td>
 			         <td id="td">凝聚型</td>
 			         <td id="td">企业名称</td>
-			         <td id="td"><a id="Delete-button" title="删除此行"><img src="../images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+			         <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 		         	</tr>
 		         	<tr>
 		         	 <td id="td">&nbsp;</td>
@@ -206,7 +244,7 @@
 			         <td id="td">&nbsp;</td>
 		         	 <td id="td">&nbsp;</td>
 		         	 <td id="td">&nbsp;</td>
-		         	 <td id="td"><a id="Delete-button" title="删除此行"><img src="../images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+		         	 <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 		            </tr>
 			      </table>
 				 </div>
@@ -216,3 +254,4 @@
  		 <div id="btnBox" class="btnBox" style="margin:auto"><a href="#" class="button button-gray button-small">收起</a> </div>
  </form>
  </td>
+ 

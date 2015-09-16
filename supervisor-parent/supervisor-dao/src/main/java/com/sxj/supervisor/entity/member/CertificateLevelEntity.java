@@ -9,6 +9,7 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
+import com.sxj.supervisor.dao.member.ICertificateLevelDao;
 import com.sxj.supervisor.dao.member.IMemberDao;
 
 /**
@@ -17,8 +18,8 @@ import com.sxj.supervisor.dao.member.IMemberDao;
  * @author anshaoshuai
  *
  */
-@Entity(mapper = IMemberDao.class)
-@Table(name = "M_MEMBER_IMAGE")
+@Entity(mapper = ICertificateLevelDao.class)
+@Table(name = "M_CERTIFICATE_LEVEL")
 public class CertificateLevelEntity extends Pagable implements Serializable {
 
 	/**

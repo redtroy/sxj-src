@@ -18,10 +18,12 @@
 		<result property="version" column="VERSION" jdbcType="VARCHAR" />
 		<result property="creationDate" column="CREATION_DATE"
 			jdbcType="TIMESTAMP" />
+		<result property="certificateNname" column="CERTIFICATE_NAME"
+			jdbcType="VARCHAR" />
 	</resultMap>
 	<select id="queryMemberImage" resultMap="MemberImageEntity"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM M_MEMBER_IMAGE WHERE MEMBER_NO= ]]>
+		<![CDATA[SELECT * FROM M_MEMBER_IMAGE WHERE MEMBER_NO=#{condition.memberNo} ]]>
 		<if test="condition.state != null and condition.state!=''">
 			<![CDATA[ AND STATE=#{condition.state}]]>
 		</if>

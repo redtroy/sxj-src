@@ -1,119 +1,140 @@
 <#assign staticPath="http://static.menchuang.org.cn/supervisor-manager/" />
 <#assign imagePath="http://storage.menchuang.org.cn/" />
+<#macro iviewer>
+<script type="text/javascript">
+	function closeViewer(){
+		$('#imageViewer').hide();
+	}
+</script>
+<div class="cer-bg" id="imageViewer"   style="display: none;">
+    <div class="cer-l">
+        <!-- wrapper div is needed for opera because it shows scroll bars for reason -->
+        <div class="wrapper" style="height:622px">
+            <div id="viewer" class="viewer" style="height:612;width:666pxpx"></div>
+        </div>
+    </div>
+    <div class="cer-r">
+        <div style="margin:20px">
+            <table id="noborder">
+                <tr>
+                    <th id="noborder" width="70%" style="height;20px;line-height:20px">证书类型</th>
+                    <td id="noborder" width="20%">
+                         <input class="types" name="types" type="text"/>
+                    </td>
+                    <td id="noborder" width="5%"><a class="in"></a></td>
+                    <td id="noborder" width="5%">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                </tr>
+                <tr>
+                    <th id="noborder">证书编号</th>
+                    <td id="noborder">
+                        <input class="num" name="num" type="text" />
+                    </td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                </tr>
+                <tr>
+                    <th id="noborder">证书有效期</th>
+                    <td id="noborder"><input class="time" name="time" type="text" /></td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                </tr>
+                <tr>
+                    <th id="noborder">证书等级</th>
+                    <td id="noborder">
+                        <input class="level" name="level" type="text"/>
+                    </td>
+                    <td id="noborder"><a class="in"></a></td>
+                    <td id="noborder"><a class="del"></a></td>
+                </tr>
+                <tr>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                </tr>
+                <tr>
+                    <th id="noborder">备注</th>
+                    <td id="noborder">
+                        <textarea class="notes" name="notes" cols="" rows=""></textarea>
+                    </td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="div-button">
+            <table id="noborder">
+                <tr style="height:50px;line-height:50px">
+                    <td id="noborder"><a href="" class="button1">新增等级</a></td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder"><a href="" class="button2">提 交</a></td>
+                </tr>
+                <tr style="height:50px;line-height:50px">
+                    <td id="noborder"><a href="javascript:void(0);" class="button2" id="addImage">增加图片</a></td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder"><a href="javascript:void(0);" class="button2" id="replaceImage">替换图片</a></td>
+                </tr>
+                <tr style="height:50px;line-height:50px">
+                    <td id="noborder"><a href="javascript:void(0);" class="button2" id="addImage">关闭</a></td>
+                    <td id="noborder">&nbsp;</td>
+                    <td id="noborder">&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="clear"></div>
+<div id="picSlideWrap" class="clearfix" style="width:1078px">
+	<div class="imgnav" id="imgnav"> 
+        <div id="front" title="上一张"><a href="javaScript:void(0)" class="pngFix"></a></div>
+        <div id="next" title="下一张"><a href="javaScript:void(0)" class="pngFix"></a></div>		
+           <div id="cbtn">
+            	<i class="picSildeLeft"><img src="${b.staticPath}images/icon/picSlideLeft.gif"/></i> 
+            	<i class="picSildeRight"><img src="${b.staticPath}images/icon/picSlideRight.gif"/></i> 
+                <div id="cSlideUl">
+            		<ul>
+            			<li><img src="${b.staticPath}images/temp/100260_1306276811398.jpg" data="${b.staticPath}images/temp/100260_1306276811398.jpg"/><tt></tt></li>
+            			<li><img src="${b.staticPath}images/temp/100261_1306276853791.jpg" data="${b.staticPath}images/temp/100261_1306276853791.jpg"/><tt></tt></li>
+            			<li><img src="${b.staticPath}images/temp/100391_4381_1306217104406.jpg" data="${b.staticPath}images/temp/100391_4381_1306217104406.jpg"/><tt></tt></li>
+            		</ul>
+        	    </div>
+        	</div>         		
+    </div>	
+</div>
+</div>
+</#macro>
 <#macro dialogBox>
-<script src="${staticPath}js/layer.min.js"></script>
-<script src="${staticPath}js/layer.ext.js"></script>
-<div id="diglog_div" style="display:none;">
-<div class="modal-wrap popDemo">
-      <div class="modal-header">
-     	<div class="tit">确认提示</div><span id="dialog_close_span" class="close" onclick="">关闭</span>
-     </div>
-     <div class="modal-body popbtnBox">
-     <p class="fontYH f18 mb10" id="diglog_message">是否确认修改</p>
-     <button id="dialog_confirm_click" class="popBtn">确认</button>
-     <button class="popBtn btnGray" id="dialog_close_button">取消</button>
-     </div>
-   </div>
-</div>
-
-
-<div id="error_info_div" style="display:none;">
-<div class="modal-wrap popDemo">
-        <div class="modal-header">
-     <div class="tit">消息提示</div>
-     <span class="close" id="dialog_close_span">关闭</span></div>
-     <div class="modal-body">
-     <div class="tipBox ly-clearFix">
-     <span class="icon32 icon-32-error"></span>
-     <p class="color-red fontYH f18" id="message_error">错误提示内容</p>
-     </div>
-     <button class="popBtn" id="dialog_close_button">确认</button>
-     </div>
-</div>
-</div>
-<div id="message_info_div" style="display:none;">
-<div class="modal-wrap popDemo">
-        <div class="modal-header">
-     <div class="tit">消息提示</div>
-     <span class="close" id="dialog_close_span">关闭</span></div>
-     <div class="modal-body">
-     <div class="tipBox ly-clearFix">
-     <span class="icon32 icon-32-info"></span>
-     <p class="color-blue fontYH f18" id="message_hint">一般性网站提示内容</p>
-     </div>
-     <button class="popBtn" id="dialog_close_button">确认</button>
-     </div>
-   </div>
-</div>
-<div id="succ_info_div" style="display:none;">
-<div class="modal-wrap popDemo">
-        <div class="modal-header">
-     <div class="tit">消息提示</div>
-     <span class="close" id="dialog_close_span">关闭</span></div>
-     <div class="modal-body">
-    <div class="tipBox ly-clearFix">
-     <span class="icon32 icon-32-suc"></span>
-     <p class="color-green fontYH f18" id="message_succ">成功提示内容</p>
-     </div>
-     <button class="popBtn" id="dialog_close_button">确认</button>
-     </div>
-   </div>
-</div>
-
-
+<script src="${staticPath}js/layer/layer.js"></script>
 <script>
 function loadingImg(){
-	var loadInfoIndex = $.layer({
-		    type: 3,
-		    title: false,
-		   	area: ['20%', '20%'],
-		    offset: ['35%', '52%'],
-		    border: [0], //去掉默认边框
-		    shade: [0.1, '#000'], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    loading: {
-   				type: 1
-			}
-		});
+var loadInfoIndex =layer.msg('加载中...',{icon:16,offset: ['40%', '45%'],shade: [0.1, '#000']});
 	return loadInfoIndex;
 }
 
 function dialogBox(confirm,message){
-	var data=$("#diglog_div");
-	$("#diglog_message").text(message);
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		    offset: ['192px', ''],
-		   	area: ['20%', '20%'],
-		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
+		 var pageii =layer.confirm(message, {icon: 3,offset: ['40%', '43%']}, function(index){
+			 	confirm(index);
+			    layer.close(index);
 		});
 	 
-	 	$("#dialog_confirm_click").live('click', function(){
-	 		layer.close(pageii);
-	 		var loadInfoIndex=loadingImg();
-			confirm(loadInfoIndex);
-			$("#dialog_confirm_click").die("click");
-		});
-		//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		    $("#dialog_confirm_click").die("click");
-		});
-		
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		    $("#dialog_confirm_click").die("click");
-		});
  }
  
 function dialogBoxOut(html){
@@ -133,19 +154,18 @@ function dialogBoxOut(html){
 	 return pageii;
  }
 function dialogBoxOutId(id){
-	 var pageii = $.layer({
+	 var pageii  =layer.open({
 		    type: 1,
-		    title: false,
-		    offset: ['200px', ''],
-		   	area: ['10%', '10%'],
-		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        dom: id
+		    shade: false,
+		    title: false, //不显示标题
+		    content: id, //捕获的元素
+		    cancel: function(index){
+		        layer.close(index);
+		        this.content.show();
 		    }
 		});
+	 
+	 
 	$(id).attr("index",pageii);
 	return pageii;
 }
@@ -160,97 +180,23 @@ var isNumber=function(str){
 		return true;
 }
 function errorInfo(message){
-	var data=$("#error_info_div");
-	data.find("#message_error").text(message);
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		   	area: ['20%', '20%'],
-		    offset: ['192px', ''],
-		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
-		});
-	//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		});
-		
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		});
+	var pageii = layer.alert(message, {icon: 2,offset: ['40%', '43%']});
+
  }
 function messageInfo(message){
-	var data=$("#message_info_div");
-	data.find("#message_hint").text(message);
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		   	area: ['20%', '20%'],
-		    offset: ['192px', ''],
-		    border: [0], //去掉默认边框
-		    shade: [0.5,'#000'], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
-		});
-		//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		});
-		
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		});
+		var pageii = layer.alert(message, {icon: 1,offset: ['40%', '43%']});
  }
  
 function succInfo(confirm,message){
-	var data=$("#succ_info_div");
-	data.find("#message_succ").text(message);
-	 var pageii = $.layer({
-		    type: 1,
-		    title: false,
-		   	area: ['20%', '20%'],
-		    offset: ['192px', ''],
-		    border: [0], //去掉默认边框
-		    shade: [0.5], //去掉遮罩
-		    closeBtn: [0, false], //去掉默认关闭按钮
-		    //shift: 'left', //从左动画弹出
-		    page: {
-		        html: data.html()
-		    }
-		});
-		//自设关闭
-		$('#dialog_close_button').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_button").die("click");
-		    if (confirm != undefined) {
-		    	confirm();
-			}
-		});
-		$('#dialog_close_span').live('click', function(){
-		    layer.close(pageii);
-		    $("#dialog_close_span").die("click");
-		    if (confirm != undefined) {
-		    	confirm();
-			}
+		var pageii = layer.alert(message, {icon: 1,offset: ['40%', '43%']},function(index){
+		 	confirm(index);
+		    layer.close(index);
 		});
  }
- 
-</script>
+ </script>
 </#macro>
+
 <#macro validate>
-<!--<script src="${staticPath}js/jquery.validate.js"></script>-->
 <script src="${staticPath}js/Validform_v5.3.2.js"></script>
 <script src="${staticPath}js/jquery.poshytip.min.js"></script>
 <script>
@@ -274,8 +220,8 @@ $(function(){
 <!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
 <script src="${staticPath}js/jquery.pagination_2.js"></script>
 <link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
-<script src="${staticPath}js/layer.min.js"></script>
-<script src="${staticPath}js/layer.ext.js"></script>
+<script src="${staticPath}js/layer/layer.js"></script>
+
 <script>
 function loadPage(currentPage,totalPage) {
 	layer.closeAll();

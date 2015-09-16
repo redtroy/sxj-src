@@ -20,6 +20,7 @@ function loadItem(type){
 }
 
 function query(page){
+	loadingImg();
 	var params=$("#search_form").serialize();
 	$.post("query.htm",params,function(data){
 		var res=$(data).find("#rightBar").children("#res_table");

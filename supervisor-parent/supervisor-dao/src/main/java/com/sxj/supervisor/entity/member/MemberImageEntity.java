@@ -10,7 +10,8 @@ import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.member.IMemberDao;
+import com.sxj.supervisor.dao.member.IMemberImageDao;
+import com.sxj.supervisor.enu.member.CertificateTypeEnum;
 
 /**
  * 会员证书图片
@@ -19,7 +20,7 @@ import com.sxj.supervisor.dao.member.IMemberDao;
  *
  */
 
-@Entity(mapper = IMemberDao.class)
+@Entity(mapper = IMemberImageDao.class)
 @Table(name = "M_MEMBER_IMAGE")
 public class MemberImageEntity extends Pagable implements Serializable {
 
@@ -56,13 +57,19 @@ public class MemberImageEntity extends Pagable implements Serializable {
 	 * 证书类型
 	 */
 	@Column(name = "CERTIFICATE_TYPE")
-	private String certificateType;
+	private CertificateTypeEnum certificateType;
 
 	/**
 	 * 证书编号
 	 */
 	@Column(name = "CERTIFICATE_NO")
 	private String certificateNo;
+
+	/**
+	 * 证书名称
+	 */
+	@Column(name = "CERTIFICATE_NAME")
+	private String certificateName;
 
 	/**
 	 * 发证日期
@@ -86,6 +93,14 @@ public class MemberImageEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "CREATION_DATE")
 	private String creationDate;
+
+	public String getCertificateName() {
+		return certificateName;
+	}
+
+	public void setCertificateName(String certificateName) {
+		this.certificateName = certificateName;
+	}
 
 	public String getCreationDate() {
 		return creationDate;
@@ -119,11 +134,11 @@ public class MemberImageEntity extends Pagable implements Serializable {
 		this.image = image;
 	}
 
-	public String getCertificateType() {
+	public CertificateTypeEnum getCertificateType() {
 		return certificateType;
 	}
 
-	public void setCertificateType(String certificateType) {
+	public void setCertificateType(CertificateTypeEnum certificateType) {
 		this.certificateType = certificateType;
 	}
 
