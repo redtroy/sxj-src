@@ -70,7 +70,8 @@ public interface IMemberDao
      * @param member
      * @param memberList
      **/
-    public List<MemberEntity> queryMembers(QueryCondition<MemberEntity> query)throws SQLException;
+    public List<MemberEntity> queryMembers(QueryCondition<MemberEntity> query)
+            throws SQLException;
     
     /**
      * 增加会员子帐号数目信息 id 是MEMBER 表的 MEMBER_NO
@@ -84,4 +85,13 @@ public interface IMemberDao
      * @param memberList
      **/
     public List<MemberEntity> apiQueryMembers(QueryCondition<MemberEntity> query);
+    
+    /**
+     * 查询附框厂列表
+     *
+     * @param member
+     * @param memberList
+     **/
+    public List<MemberEntity> queryFramefactory(
+            QueryCondition<MemberEntity> query);
 }

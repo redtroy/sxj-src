@@ -9,6 +9,31 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<style>
+.bg{height:200px;width:400px;background-color:#ccdcdc;border-radius:8px;}
+.codebg{height: 140px;width: 350px;
+	background-color: #fff;
+	padding: 20px;
+	font-family: "微软雅黑";
+	top:10px;
+}
+.delete-ch{
+	width: 30px;
+	height: 30px;
+	float: right;
+	background: url(${b.staticPath}images/view/icons+.png) no-repeat -46px -4px;
+}
+.input-w50h-ch{width:60px; height:22px; line-height:22px}
+.button-yes{
+	color: #06F;
+	background-color: #0C6;
+	color: #FFF;
+	text-decoration: none;
+	padding: 5px 15px;
+	border-radius: 3px;
+}
+</style>
+<@b.dialogBox />
 </head>
 <body>
 <@b.header />
@@ -61,16 +86,10 @@ ${type[0].getName()}</span>/
   <div class="tipMsg msg-gray" style="display:none;" id="ct">请输入公司联系人</div>
 </div>
 <div class="item">
-  <label><span class="color-red mr5 fb">*</span>图片验证码</label>
-  <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="图片验证码" id="img" />
-  <input type="hidden" id="imgStr" />
-<img src="" id = "authImag1" width="77" style="position: absolute;" onclick="refresh1()" height="29" title="请输入此验证码，如看不清请点击刷新。" />
-  <div class="tipMsg msg-gray" id="imgMsg" style="position: absolute;float:left; display:none;margin-left: 80px">请输入验证码</div>
-</div>
-<div class="item">
   <label><span class="color-red mr5 fb">*</span>联系人手机</label>
   <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人手机" id="phoneNo" name="phoneNo" value="${member.phoneNo}" />
-  <span class="button button-gray f12 " onclick="send_ms(this);return false;">获取短信验证码</span>
+  <span class="button button-gray f12 " id="sendms" onclick="showImg();">获取短信验证码</span>
+<!--   <span class="button button-gray f12 " id="sendms" onclick="send_ms(this);return false;">获取短信验证码</span> -->
   <div class="tipMsg msg-gray" id="moileMsg" style="display:none;">通过验证后，您可以用该手机号找回密码</div>
 </div>
 
@@ -96,7 +115,26 @@ ${type[0].getName()}</span>/
 
 </div></div>
 <@b.footer />
-
+<div id="divImg" style="display: none;">
+<div class="codebg">
+<div class="delete-ch" style="cursor:pointer;" id="closeImg"></div>
+<table style="margin:30px;">
+  <tr style="height: 24px; line-height: 24px;padding: 2px;margin: 0;">
+      <td width="30%" style="text-align: right;padding-right: 10px;"><label>图片验证码 </label></td>
+      <td width="28%"><input class="input-w50h-ch" type="text" title="图片验证码" id="img" name="" value="" /><input type="hidden" id="imgStr" /></td>
+      <td width="42%"><img id = "authImag1" style="height: 24px;" alt="" clstag="regist|keycount|personalreg|06" onclick="refresh1()" /> </td>
+   </tr>
+  	<tr>
+      <td colspan="3" style="text-align:  center;padding-top: 4px;"><div id="imgMsg" class="tipMsg msg-error" style="display: none;width: 100%">请输入验证码</div></td>
+  </tr>
+  	<tr style="line-height: 35px">
+      <td>&nbsp;</td>
+      <td><div><a class="button-yes" href="#" onclick="sendms();">确定</a></div></td>
+      <td>&nbsp;</td>
+  </tr>
+</table>
+</div>
+</div>
 </body>
 <script>
  var message;
@@ -319,30 +357,20 @@ ${type[0].getName()}</span>/
 
 			}
 		});
+		$("#closeImg").click(function() {
+			$("#imgMsg").hide();
+			$("#img").val("");
+			var li = $("#divImg").attr("index");
+			layer.close(li)
+		});
   });
   //发送短信
   var send_flag=false;
   
-  function send_ms(obj){
+  function send_ms(){
+	 var obj=$("#sendms");
 	  send_flag=true;
-	  var imgStr = $("#imgStr").val();
 	  var phoneNo=$("#phoneNo").val();
-	  var img=$("#img").val();
-	  if(!img){
-			$("#imgMsg").show();
-			wrong("#imgMsg");
-			$("#imgMsg").text("请输入验证码"); 
-			return false;
-		  }
-		  if(img.toLowerCase() !=imgStr){
-			$("#imgMsg").show();
-			wrong("#imgMsg");
-			$("#imgMsg").text("您输入的验证码错误"); 
-			return false;
-		  }else{
-			  refresh1();
-			  $("#imgMsg").css('display','none');
-		  }
 	  if (!checkSubmitMobil()){
 		  return false;
 	  }
@@ -454,6 +482,34 @@ var o=new Object();
 	 $.post('${basePath}getImgStr.htm?',function(data){
        document.getElementById('imgStr').value=data;
    });
+}
+
+function showImg(){
+	refresh1();
+	$("#img").val("");
+	dialogBoxOutId("#divImg");
+}
+function sendms(){
+	var imgStr = $("#imgStr").val();
+	  var phoneNo=$("#phoneNo").val();
+	  var img=$("#img").val();
+	  if(!img){
+			$("#imgMsg").show();
+			wrong("#imgMsg");
+			$("#imgMsg").text("请输入验证码"); 
+			return false;
+		  }
+		  if(img.toLowerCase() !=imgStr){
+			$("#imgMsg").show();
+			wrong("#imgMsg");
+			$("#imgMsg").text("您输入的验证码错误"); 
+			return false;
+		  }else{
+			  var li = $("#divImg").attr("index");
+			  layer.close(li);
+			  $("#imgMsg").hide();
+			  send_ms();
+		  }
 }
 </script>
 
