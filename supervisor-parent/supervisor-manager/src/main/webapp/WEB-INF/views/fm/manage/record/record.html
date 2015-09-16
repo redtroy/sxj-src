@@ -97,6 +97,7 @@ function message(){
 }
 //按条件查找	
 function query(page){
+	loadingImg();
 	var params=$("#search_box").serialize();
 	if(page!=undefined){
 	   params=params+"&currentPage="+page;

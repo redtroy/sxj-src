@@ -28,6 +28,7 @@
 		});
 	});
 	function query(page) {
+		loadingImg();
 		var params = $("#search_form").serialize();
 		if (page != undefined) {
 			params = params + "&currentPage=" + page;
