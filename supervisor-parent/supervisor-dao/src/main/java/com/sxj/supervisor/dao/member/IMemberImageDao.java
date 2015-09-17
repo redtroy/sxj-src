@@ -48,4 +48,13 @@ public interface IMemberImageDao {
 	 */
 	public List<MemberImageEntity> queryMemberImage(
 			QueryCondition<MemberImageEntity> condition) throws SQLException;
+
+	/**
+	 * 历史图片
+	 * @param menber
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<MemberImageEntity> historyImage(String memberNo)
+			throws SQLException;
 }

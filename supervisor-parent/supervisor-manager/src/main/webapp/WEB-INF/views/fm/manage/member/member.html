@@ -316,10 +316,10 @@
 				if (data.isOK == 'ok') {
 					succInfo(function() {
 						query($("#pager").attr("currentPage"));
-					}, "修改审核状态成功！");
+					}, temText+"成功！");
 
 				} else {
-					errorInfo("修改审核状态失败！");
+					errorInfo(temText+"失败！");
 				}
 			});
 		}, "是否"+temText+"！");

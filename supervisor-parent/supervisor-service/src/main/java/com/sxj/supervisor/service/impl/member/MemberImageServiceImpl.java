@@ -87,4 +87,14 @@ public class MemberImageServiceImpl implements IMemberImageService {
 		}
 	}
 
+	public List<MemberImageEntity> historyImage(String memberNo){
+		try {
+			imageDao.historyImage(memberNo);
+		} catch (Exception e) {
+			SxjLogger.error("查询历史数据错误", e, this.getClass());
+			throw new ServiceException("查询历史数据错误");
+		}
+		return null;
+		
+	}
 }
