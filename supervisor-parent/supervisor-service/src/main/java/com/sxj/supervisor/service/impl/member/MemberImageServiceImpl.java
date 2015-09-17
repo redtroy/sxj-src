@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,7 @@ public class MemberImageServiceImpl implements IMemberImageService {
 		try {
 			QueryCondition<MemberImageEntity> condition = new QueryCondition<MemberImageEntity>();
 			condition.addCondition("memberNo", memberNo);// 会员号
-			condition.addCondition("state", state);// 状态
-			condition.addCondition("certificateType", certificateType);// 状态
+			condition.addCondition("certificateType", certificateType);// 类型
 			List<MemberImageEntity> list = imageDao.queryMemberImage(condition);
 			return list;
 		} catch (Exception e) {
@@ -77,7 +77,8 @@ public class MemberImageServiceImpl implements IMemberImageService {
 	}
 
 	@Override
-	public List<CertificateEntity> getCertificate(String name) {
+	public List<CertificateEntity> getCertificate(String name)
+			throws ServiceException {
 		try {
 			List<CertificateEntity> list = certificateDao.getCertificate(name);
 			return list;
@@ -87,14 +88,59 @@ public class MemberImageServiceImpl implements IMemberImageService {
 		}
 	}
 
-	public List<MemberImageEntity> historyImage(String memberNo){
+	@Override
+	public List<MemberImageEntity> historyImage(String memberNo)
+			throws ServiceException {
 		try {
-			imageDao.historyImage(memberNo);
+			List<MemberImageEntity> list = imageDao.historyImage(memberNo);
+			return list;
 		} catch (Exception e) {
 			SxjLogger.error("查询历史数据错误", e, this.getClass());
 			throw new ServiceException("查询历史数据错误");
 		}
-		return null;
-		
+
+	}
+
+	@Override
+	public List<MemberImageEntity> delImage(String memberNo)
+			throws ServiceException {
+		try {
+			QueryCondition<MemberImageEntity> condition = new QueryCondition<MemberImageEntity>();
+			condition.addCondition("memberNo", memberNo);// 会员号
+			condition.addCondition("state", -1);// 会员号
+			List<MemberImageEntity> list = imageDao.queryMemberImage(condition);
+			return list;
+		} catch (Exception e) {
+			SxjLogger.error("查询删除数据错误", e, this.getClass());
+			throw new ServiceException("查询删除数据错误");
+		}
+
+	}
+
+	@Override
+	public List<MemberImageEntity> newImage(String memberNo)
+			throws ServiceException {
+		try {
+			List<MemberImageEntity> newList = new ArrayList<MemberImageEntity>();
+			QueryCondition<MemberImageEntity> condition = new QueryCondition<MemberImageEntity>();
+			condition.addCondition("memberNo", memberNo);// 会员号
+			condition.addCondition("state", 1);// 类型
+			List<MemberImageEntity> list = imageDao.queryMemberImage(condition);
+			List<MemberImageEntity> historyList = imageDao
+					.queryMemberImage(condition);
+			for (MemberImageEntity memberImage : list) {
+				for (MemberImageEntity oldMenberImage : historyList) {
+					if (memberImage.getImage()
+							.equals(oldMenberImage.getImage())) {
+						newList.add(memberImage);
+					}
+				}
+			}
+			return newList;
+		} catch (Exception e) {
+			SxjLogger.error("查询新数据错误", e, this.getClass());
+			throw new ServiceException("查询新数据错误");
+		}
+
 	}
 }
