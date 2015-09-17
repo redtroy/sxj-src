@@ -22,9 +22,6 @@
                &nbsp; ${member.type.getName()}<input type="hidden" name="type" value="${member.type.getId()}" />
             </#if>
           </li>
-          <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo"  value="${member.getbLicenseNo()}" />
-          <!-- <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p> -->
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p>
           <li style="width:99%"><label class="lable">城市</label> 江苏省-
                       <select name="area" id="city">
            	<option value="">-请选择-</option>
@@ -35,11 +32,7 @@
             <option value="32:江苏省,${city.id}:${city.name}">${city.name}</option>
             </#if>
             </#list>
-          </select>
-          <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo"  value="${member.getbLicenseNo()}" />
-          <!-- <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p> -->
-          <p><a href="javascript:void(0);" id="bLicensePath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a><input type="file" class="" id="bLicensePath_File_${member.id}" name="input6"><input type="hidden" id="bLicensePath_hidden_${member.id}" name="bLicensePath"></p>
-          </li>
+          </select></li>
           <li style=" width:99%"><label class="lable">联系人名称</label><input type="text" value="${member.getContacts()}" datatype="*2-25" nullmsg="联系人不能为空" name="contacts"/></li>
           <li style=" width:99%"><label class="lable">联系人手机</label><input type="text" value="${member.phoneNo}" datatype="m" nullmsg="手机号码不能为空" name="phoneNo"/></li>
           <li style=" width:99%"><label class="lable">公司地址</label><input type="text" value="${member.address}" datatype="*2-50" nullmsg="地址不能为空" name="address"/></li>
@@ -50,7 +43,7 @@
           <li style=" width:99%"><label class="lable">子帐号数</label>${member.getAccountNum()}个</li>
            <li style=" width:99%"><label class="lable">法人代表</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
           <li style=" width:99%"><label class="lable">注册资本</label><input type="text" value="${member.registeredCapital}" id="registeredCapital" datatype="n1-10" name="registeredCapital" />万元</li>
-          <li style=" width:99%"><label class="lable">备注</label><textarea style="width:50%" rows="2" cols="0" name="remark">${member.remark}</textarea></li>
+          <li style=" width:99%;height: 70px;"><label class="lable">备注</label><textarea style="width:38%" rows="2" cols="0" name="remark">${member.remark}</textarea></li>
           </ul>
           </div>
 			<div class="right-news">

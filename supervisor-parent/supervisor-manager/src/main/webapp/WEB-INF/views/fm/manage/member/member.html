@@ -27,7 +27,7 @@
 <script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
 <link href="${b.staticPath}style/cer-ch.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/ch.css" rel="stylesheet" type="text/css" />
-<@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.upload/><@b.iviewer/>
+<@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.upload/>
 <script>
 	jQuery(document)
 			.ready(
@@ -316,10 +316,10 @@
 				if (data.isOK == 'ok') {
 					succInfo(function() {
 						query($("#pager").attr("currentPage"));
-					}, "修改审核状态成功！");
+					}, temText+"成功！");
 
 				} else {
-					errorInfo("修改审核状态失败！");
+					errorInfo(temText+"失败！");
 				}
 			});
 		}, "是否"+temText+"！");
@@ -340,13 +340,13 @@
 	}
 	 function fullImage(){
 		 var index = layer.open({
-			 type: 1,
-			    title: false,
-			    closeBtn: false,
-			    shadeClose: true,
-			    skin: 'yourclass',
-			    content: $('#imageViewer')
-			});
+		     type: 1,
+		     title:'图片编辑',
+		     shade: true,
+		     skin: 'layui-layer-rim',
+		     content: $('#imageViewer')
+		 });
+		 layer.full(index);
 		}
 </script>
 <!-- InstanceEndEditable -->
@@ -539,4 +539,5 @@
 		<@b.footer />
 </body>
 <!-- InstanceEnd -->
+<@b.iviewer/>
 </html>
