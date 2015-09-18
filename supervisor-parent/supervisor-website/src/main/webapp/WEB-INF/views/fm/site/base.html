@@ -22,11 +22,23 @@ $(function(){
 });
 </script>
 </#macro>
-<#macro errorInfo>
-<script>
+<#macro iviewer>
 
-</script>
+<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 9999;" id="imageviewer">
 
+        <div class="cer-bg">
+
+            <div class="cer-l-full"><div style="position:absolute; right:3%; z-index: 99999"><input id="btnClsVie" type="button" value="关闭"  /></div>
+                <!-- wrapper div is needed for opera because it shows scroll bars for reason -->
+                <div id="viewer" class="viewer">
+                    <div id="front" title="上一张"><a href="javaScript:void(0)" class="pngFix"></a></div>
+                    <div id="next" title="下一张"><a href="javaScript:void(0)" class="pngFix"></a></div>
+                </div>
+            </div>
+
+            <div style="clear:both; height:0px"  id="iviewerDiv"></div>
+        </div>
+    </div>
 </#macro>
 <#macro dialogBox>
 <script src="${staticPath}js/layer.min.js"></script>
