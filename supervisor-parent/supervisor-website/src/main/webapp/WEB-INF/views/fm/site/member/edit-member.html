@@ -38,6 +38,8 @@
     z-index:99999;
     /* position: absolute; */
 }
+.slideui{width:790px;margin:0px 40px}
+.line-con{width:685px}
 </style>
 <@b.upload/>
 <@b.validate/>
@@ -63,31 +65,7 @@ $(document).ready(function() {
 	loadUploadMember("qmsPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadqmsReload);
 //	loadUploadMember("cccPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadcccReload);
 	loadUploadMember("productionPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadproductionReload);
-	 $("#carousel").elastislide(); 
-	 $("#carouselCCC").elastislide(); 
-	//初始化图片 
-	$('#carousel').find("li").live("click", function() {
-		var el = $(this);
-		var imageSource = el.find("a").attr("data-image");
-			currentHiddenImages=$("#aptitudePath_hidden");
-			currentLi=$(this);
-			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
-			el.parent().children("li").removeClass("view");
-			el.addClass("view");
-			$(".maskdivgen").show();
-			$(".viewer").show();
-	});
-	$('#carouselCCC').find("li").live("click", function() {
-		var el = $(this);
-		var imageSource = el.find("a").attr("data-image");
-			currentHiddenImages=$("#cccPath_hidden");
-			currentLi=$(this);
-			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
-			el.parent().children("li").removeClass("view");
-			el.addClass("view");
-			$(".maskdivgen").show();
-			$(".viewer").show();
-	});
+
 	uploadImg($("#aptitudePath_File_reload"));
 	uploadImgCCC($("#cccPath_File"));
 	//
@@ -146,28 +124,19 @@ $(document).ready(function() {
 		if(!pass)
 			$(this).parent().children(".checkinfo").show();
 	});
-	//删除图片
-	$(".iviewer_del").unbind();
-	$(".iviewer_del").live("click",function(){
-		var url=$(this).siblings("img").attr("src");
-		var prefix="${b.imagePath}";
-		var image=url.substring(url.indexOf(prefix)+prefix.length);
-		var images=currentHiddenImages.attr("value");
-		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
-		currentHiddenImages.attr("value",result)
-		currentLi.remove();
-		closeViewer();
-	});
 	
-}); 
+});
+var a=new $.slide({container:".slideui",imagesPerPage:7,onImageFocus:function(li){
+	
+}});
 closeViewer = function() {
 	$('.maskdivgen').fadeOut(100);
 	$('.viewer').slideUp(200);
 }
 var uploadImg = function($file) {
-	var $div = $file.parent().parent();
-	var $carousel = $div.find(".elastislide-list");
-	var $container = $carousel.parent().parent();
+	//var $div = $file.parent().parent();
+//	var $carousel = $div.find(".elastislide-list");
+	//var $container = $carousel.parent().parent();
 	var $hidden = $("#aptitudePath_hidden");
 	$file.uploadify({
 		swf : '${basePath}upload/uploadify.swf',
@@ -191,6 +160,7 @@ var uploadImg = function($file) {
 						num += 1;
 					}
 				}
+				a.addImage('${b.imagePath}'+dataObj.fileIds);
 				hideVal += "," + dataObj.fileIds;
 			}
 			$hidden.val(hideVal);
@@ -205,9 +175,9 @@ var uploadImgCCC = function($file) {
 		checkState=1;
 		flag=false;
 	} */
-	var $div = $file.parent().parent();
-	var $carouselCCC = $div.find(".elastislide-list");
-	var $container = $carouselCCC.parent().parent();
+	//var $div = $file.parent().parent();
+//	var $carouselCCC = $div.find(".elastislide-list");
+//	var $container = $carouselCCC.parent().parent();
 	var $hidden = $("#cccPath_hidden");
 	$file.uploadify({
 		swf : '${basePath}upload/uploadify.swf',
@@ -217,7 +187,7 @@ var uploadImgCCC = function($file) {
 		multi : true,
 		height : 30,
 		width : 120,
-		buttonText : '上传资质证书',
+		buttonText : '上传3C证书',
 		onUploadSuccess : function(file, data, response) {
 			var num = 1;
 			var dataObj = eval("(" + data + ")");//转换为json对象 
@@ -231,10 +201,12 @@ var uploadImgCCC = function($file) {
 						num += 1;
 					}
 				}
+				a.addImage('${b.imagePath}'+dataObj.fileIds);
 				hideVal += "," + dataObj.fileIds;
+				
 			}
 			$hidden.val(hideVal);
-			refreshElastislide($container, $carouselCCC, dataObj);
+			//refreshElastislide($container, $carouselCCC, dataObj);
 		}
 	});
 }
@@ -486,6 +458,54 @@ function edit_pwd(id){
 			
 		})
 }	
+//===
+$(document).ready(function(){
+	var firstImage=$(".imageList").find("img:eq(0)").attr("data");
+	var iv = $("#viewer").iviewer(
+                  {
+                      src: firstImage  
+                  });
+	$(".right").click(function(){
+		a.slideNext();
+		//alert(a.getCurrentImageData())
+		iv.iviewer('loadImage', a.getCurrentImageData());
+	});
+	$(".left").click(function(){
+		a.slideFront();
+		iv.iviewer('loadImage', a.getCurrentImageData());
+	});
+	$("li").live("click",function(){
+	    iv.iviewer('loadImage', a.getCurrentImageData());
+	});
+	
+	/* $("#replaceImage").click(function(){
+		a.replaceImage("../images/temp/test_image2.jpg","../images/temp/test_image2.jpg");
+		iv.iviewer('loadImage', a.getCurrentImageData());
+	});
+	$("#addImage").click(function(){
+		a.addImage("../images/temp/100391_4381_1306217104406.jpg","../images/temp/100391_4381_1306217104406.jpg");
+		iv.iviewer('loadImage', a.getCurrentImageData());
+	}); */
+	
+	$(".iviewer_del").click(function(){
+		a.deleteImage();
+		iv.iviewer('loadImage', a.getCurrentImageData());
+	});
+	$("#next,#front").hover(function(){
+		$(this).children("a").fadeIn();
+	},function(){
+		$(this).children("a").fadeOut();
+	});
+	$("#next").click(function(){
+		a.slideNext();
+		iv.iviewer('loadImage', a.getCurrentImageData());
+	});
+	
+	$("#front").click(function(){
+		a.slideFront();
+		iv.iviewer('loadImage', a.getCurrentImageData());
+	});
+});
 </script>
 <STYLE type=text/css>
 .tipMsg{height:13px; line-height:13px;}
@@ -658,15 +678,14 @@ function edit_pwd(id){
        <div class="item">
          <#if (member.type.id==1)>
 							<!-- 3C证书1 -->
-							<label>3C证书</label> <p>
-									<input class="input input-w140h30 mb5" id="ccc"
+							<label>3C证书</label> 
+							<input class="input input-w140h30 mb5" id="ccc"
 										value="${member.ccc_no}" maxlength="14"
 										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
-								</p> 
-							
-							<div id="SlideUl" class="slideui">
-								<i class="buttonSildeLeft left"><img src="${b.imagePath}images/ico/picSlideLeft.gif"/></i>
-								<i class="buttonSildeRight right"><img src="${b.imagePath}images/ico/picSlideRight.gif"/></i> 
+							<p>&nbsp;</p>
+							<div id="SlideUl" class="slideui" style="">
+								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
+								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
 				                <div class="line-con">					
 									<ul class="imageList">
 									   <#assign arr=(member.ccc_img?split(","))> <#if arr?exists>
@@ -675,10 +694,11 @@ function edit_pwd(id){
 										<li><img src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></li>
 										</#if>
 									</#list>
+									</#if>
 									</ul>
 								</div>
 							</div>
-							<div class="uploadify" style="float: left;padding-left: 15%;">
+							<div class="uploadify" style="float: left;padding-left: 15%;margin-top:20px;">
 									 <input type="file" class="" id="cccPath_File" name="input6">
 								</div>
 							</#if>
@@ -695,8 +715,8 @@ function edit_pwd(id){
 								</p> 
 							
 							<div id="SlideUl" class="slideui">
-								<i class="buttonSildeLeft left"><img src="${b.imagePath}images/ico/picSlideLeft.gif"/></i>
-								<i class="buttonSildeRight right"><img src="${b.imagePath}images/ico/picSlideRight.gif"/></i> 
+								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
+								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
 				                <div class="line-con">					
 									<ul class="imageList">
 									   <#assign arr=(member.qualification_img?split(","))> <#if arr?exists>
@@ -705,10 +725,11 @@ function edit_pwd(id){
 										<li><img src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></li>
 										</#if>
 									</#list>
+									</#if>
 									</ul>
 								</div>
 							</div>
-							<div class="uploadify" style="float: left;padding-left: 15%;">
+							<div class="uploadify" style="float: left;padding-left: 15%;margin-top:20px;">
 									 <input type="file" class="" id="aptitudePath_File_reload" name="input6">
 								</div>
 							</#if>
