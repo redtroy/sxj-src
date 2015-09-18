@@ -13,7 +13,6 @@ import com.sxj.supervisor.dao.member.IMemberImageDao;
 import com.sxj.supervisor.entity.member.CertificateEntity;
 import com.sxj.supervisor.entity.member.CertificateLevelEntity;
 import com.sxj.supervisor.entity.member.LevelEntity;
-import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberImageEntity;
 import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.util.common.StringUtils;
@@ -120,18 +119,17 @@ public class MemberImageServiceImpl implements IMemberImageService
         
     }
     
-    public void websiteAddImage(MemberEntity member) throws ServiceException
+    public void websiteAddImage(String memberNo, String images)
+            throws ServiceException
     {
         try
         {
-            List<MemberImageEntity> list = getImages(member.getMemberNo(),
-                    "1",
-                    null);
+            List<MemberImageEntity> list = getImages(memberNo, "1", null);
             if (list.size() > 0)
             {
                 for (MemberImageEntity image : list)
                 {
-                    int flag = imageDao.updatelock(member.getMemberNo(),
+                    int flag = imageDao.updatelock(memberNo,
                             image.getVersion(),
                             StringUtils.getUUID());
                     if (flag == 0)
@@ -142,7 +140,10 @@ public class MemberImageServiceImpl implements IMemberImageService
             }
             else
             {
-                
+                for (String image : images.split(","))
+                {
+                    
+                }
             }
         }
         catch (Exception e)

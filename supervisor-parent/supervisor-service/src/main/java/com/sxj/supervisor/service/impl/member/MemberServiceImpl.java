@@ -400,10 +400,15 @@ public class MemberServiceImpl implements IMemberService
                     images = images + mImage.getImage() + ",";
                 }
                 images = images.substring(0, images.length() - 1);
-                if (){
-                    
+                if (member.getType().getId() == 1)
+                {
+                    member.setCcc_img(images);
                 }
-                member.setCcc_img(images);
+                else if (member.getType().getId() == 0)
+                {
+                    member.setQualification_img(images);
+                }
+                
             }
             return member;
         }
