@@ -5,119 +5,107 @@
 	function closeViewer(index){
 	}
 </script>
- <div id="imageViewer" style="display: none;" align="center">
-                        <div class="cer-l">
-                            <div class="wrapper" style="height:622px">
-                                <div id="viewer" class="viewer" style="height:612;width:666pxpx"></div>
-                            </div>
-                        </div>
-                        <div class="cer-r">
-                            <div style="margin:20px">
-                                <table id="noborder">
-                                    <tr>
-                                        <th id="noborder" width="70%" style="height;20px;line-height:20px">证书类型</th>
-                                        <td id="noborder" width="20%">
-                                             <input class="types" name="types" type="text"/>
-                                        </td>
-                                        <td id="noborder" width="5%"><a class="in"></a></td>
-                                        <td id="noborder" width="5%">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <th id="noborder">证书编号</th>
-                                        <td id="noborder">
-                                            <input class="num" name="num" type="text" />
-                                        </td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <th id="noborder">证书有效期</th>
-                                        <td id="noborder"><input class="time" name="time" type="text" /></td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <th id="noborder">证书等级</th>
-                                        <td id="noborder">
-                                            <input class="level" name="level" type="text"/>
-                                        </td>
-                                        <td id="noborder"><a class="in"></a></td>
-                                        <td id="noborder"><a class="del"></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <th id="noborder">备注</th>
-                                        <td id="noborder">
-                                            <textarea class="notes" name="notes" cols="" rows=""></textarea>
-                                        </td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                    </tr>
-                                </table>
-                            </div>
+<div style="width:1100px;margin:auto;display: none;" id="imageViewer">
+    <div class="cer-l">
+        <!-- wrapper div is needed for opera because it shows scroll bars for reason -->
+		<div id="viewer" class="viewer">
+		<div id="front" title="上一张"><a href="javaScript:void(0)" class="pngFix"></a></div>
+		<div id="next" title="下一张"><a href="javaScript:void(0)" class="pngFix"></a></div>
+        </div>
+    </div>
+    <div class="cer-r">
+        <div style="margin:60px 20px">
+         <table>
+            <tr>
+               <th>证书类型</th>
+               <td>
+                 <input class="types" name="types" type="text"/>
+                </td>
+                <td><a class="in"></a></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>证书编号</th>
+                <td>
+                  <input class="num" name="num" type="text" />
+                </td>
+                <td>&nbsp;</a></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>证书有效期</th>
+                <td><input class="time" name="time" type="text" /></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>证书等级</th>
+                <td>
+                  <input class="level" name="level" type="text"/>
+                </td>
+                <td><a class="in"></a></td>
+                <td><a class="del"></a></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <th>备注</th>
+                <td>
+                 <textarea class="notes" name="notes" cols="" rows=""></textarea>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+         </table>
+        </div>
+        <div class="div-button">
+            <table>
+             <tr style="height:50px;line-height:50px">
+                 <td><a href="" class="button1">新增等级</a></td>
+                 <td>&nbsp;</td>
+                 <td><a href="" class="button2">提 交</a></td>
+             </tr>
+             <tr style="height:50px;line-height:50px">
+                 <td><a href="javascript:void(0);" class="button2" id="addImage">增加图片</a></td>
+                 <td>&nbsp;</td>
+                 <td><a href="javascript:void(0);" class="button2" id="replaceImage">替换图片</a></td>
+             </tr>
+             </table>
+         </div>
+   </div>
+   <div style="clear:both; height:0px"></div>
 
-                            <div class="div-button">
-                                <table id="noborder">
-                                    <tr style="height:50px;line-height:50px">
-                                        <td id="noborder"><a href="" class="button1">新增等级</a></td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder"><a href="" class="button2">提 交</a></td>
-                                    </tr>
-                                    <tr style="height:50px;line-height:50px">
-                                        <td id="noborder"><a href="javascript:void(0);" class="button2" id="addImage">增加图片</a></td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder"><a href="javascript:void(0);" class="button2" id="replaceImage">替换图片</a></td>
-                                    </tr>
-                                    <tr style="height:50px;line-height:50px">
-                                        <td id="noborder"><a href="javascript:void(0);" class="button2" id="addImage">关闭</a></td>
-                                        <td id="noborder">&nbsp;</td>
-                                        <td id="noborder">&nbsp;</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="clear"></div>
-                    <div id="picSlideWrap" class="clearfix" style="width:1078px">
-                    	<div class="imgnav" id="imgnav"> 
-	                        <div id="front" title="上一张"><a href="javaScript:void(0)" class="pngFix"></a></div>
-	                        <div id="next" title="下一张"><a href="javaScript:void(0)" class="pngFix"></a></div>		
-	                           <div id="cbtn">
-	                            	<i class="picSildeLeft"><img src="../images/icon/picSlideLeft.gif"/></i> 
-	                            	<i class="picSildeRight"><img src="../images/icon/picSlideRight.gif"/></i> 
-	                                <div id="cSlideUl">
-	                            		<ul>
-	                            			<li><img src="../images/temp/100260_1306276811398.jpg" data="../images/temp/100260_1306276811398.jpg"/><tt></tt></li>
-	                            			<li><img src="../images/temp/100261_1306276853791.jpg" data="../images/temp/100261_1306276853791.jpg"/><tt></tt></li>
-	                            			<li><img src="../images/temp/100391_4381_1306217104406.jpg" data="../images/temp/100391_4381_1306217104406.jpg"/><tt></tt></li>
-	                            		</ul>
-                            	    </div>
-                            	</div>         		
-                        </div>	
-                    </div>
-                <!--end滚动看图-->
+   <div id="SlideUl" class="slideui">
+				<i class="buttonSildeLeft left"><img src="${staticPath}images/ico/picSlideLeft.gif"/></i>
+				<i class="buttonSildeRight right"><img src="${staticPath}images/ico/picSlideRight.gif"/></i> 
+                <div class="line-con">					
+					<ul class="imageList">
+						
+					</ul>
+				</div>
+    </div>
 </div>
 </#macro>
 <#macro dialogBox>
