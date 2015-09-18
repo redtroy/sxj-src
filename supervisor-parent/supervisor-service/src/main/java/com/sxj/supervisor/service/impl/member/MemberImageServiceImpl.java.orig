@@ -47,8 +47,7 @@ public class MemberImageServiceImpl implements IMemberImageService
         {
             QueryCondition<MemberImageEntity> condition = new QueryCondition<MemberImageEntity>();
             condition.addCondition("memberNo", memberNo);// 会员号
-            condition.addCondition("state", state);// 状态
-            condition.addCondition("certificateType", certificateType);// 状态
+            condition.addCondition("certificateType", certificateType);// 类型
             List<MemberImageEntity> list = imageDao.queryMemberImage(condition);
             return list;
         }
@@ -93,6 +92,7 @@ public class MemberImageServiceImpl implements IMemberImageService
     
     @Override
     public List<CertificateEntity> getCertificate(String name)
+            throws ServiceException
     {
         try
         {
@@ -106,87 +106,21 @@ public class MemberImageServiceImpl implements IMemberImageService
         }
     }
     
+    @Override
     public List<MemberImageEntity> historyImage(String memberNo)
+            throws ServiceException
     {
         try
         {
-            imageDao.historyImage(memberNo);
+            List<MemberImageEntity> list = imageDao.historyImage(memberNo);
+            return list;
         }
         catch (Exception e)
         {
             SxjLogger.error("查询历史数据错误", e, this.getClass());
             throw new ServiceException("查询历史数据错误");
         }
-        return null;
         
-    }
-    
-    @Override
-    @Transactional
-    public void websiteAddImage(String memberNo, String images)
-            throws ServiceException
-    {
-        try
-        {
-            List<MemberImageEntity> list = getImages(memberNo, "1", null);
-            if (list.size() > 0)
-            {
-                String viso = StringUtils.getUUID();
-                int flag = imageDao.updatelock(memberNo, list.get(0)
-                        .getVersion(), viso);
-                if (flag == 0)
-                {
-                    throw new ServiceException("增加图片失败");
-                }
-                Date date = new Date();
-                viso = StringUtils.getUUID();
-                for (String image : images.split(","))
-                {
-                    Boolean Flag = true;
-                    for (MemberImageEntity mem : list)
-                    {
-                        if (image.equals(mem.getImage()))
-                        {
-                            Flag = false;
-                            mem.setCreationDate(date);
-                            mem.setVersion(viso);
-                            mem.setMemberNo(memberNo);
-                            imageDao.addMemberImage(mem);
-                        }
-                    }
-                    if (Flag)
-                    {
-                        MemberImageEntity mem = new MemberImageEntity();
-                        mem.setCreationDate(date);
-                        mem.setVersion(viso);
-                        mem.setImage(image);
-                        mem.setMemberNo(memberNo);
-                        imageDao.addMemberImage(mem);
-                    }
-                }
-                
-            }
-            else
-            {
-                Date date = new Date();
-                String viso = StringUtils.getUUID();
-                for (String image : images.split(","))
-                {
-                    MemberImageEntity mem = new MemberImageEntity();
-                    mem.setCreationDate(date);
-                    mem.setVersion(viso);
-                    mem.setImage(image);
-                    mem.setMemberNo(memberNo);
-                    mem.setState(1);
-                    imageDao.addMemberImage(mem);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            SxjLogger.error("增加图片失败", e, this.getClass());
-            throw new ServiceException("增加图片失败");
-        }
     }
     
     @Override
@@ -240,5 +174,45 @@ public class MemberImageServiceImpl implements IMemberImageService
             throw new ServiceException("查询新数据错误");
         }
         
+    }
+    
+    public void websiteAddImage(String memberNo, String images)
+            throws ServiceException
+    {
+        try
+        {
+            List<MemberImageEntity> list = getImages(memberNo, "1", null);
+            if (list.size() > 0)
+            {
+                for (MemberImageEntity image : list)
+                {
+                    int flag = imageDao.updatelock(memberNo,
+                            image.getVersion(),
+                            StringUtils.getUUID());
+                    if (flag == 0)
+                    {
+                        throw new ServiceException("增加图片失败");
+                    }
+                }
+            }
+            else
+            {
+                Date date = new Date();
+                String viso = StringUtils.getUUID();
+                for (String image : images.split(","))
+                {
+                    MemberImageEntity mem = new MemberImageEntity();
+                    mem.setCreationDate(date.toString());
+                    mem.setVersion(viso);
+                    mem.setImage(image);
+                    imageDao.updateMemberImage(mem);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("增加图片失败", e, this.getClass());
+            throw new ServiceException("增加图片失败");
+        }
     }
 }

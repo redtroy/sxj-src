@@ -20,6 +20,7 @@ import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.dao.member.IMemberToMemberDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberImageEntity;
 import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -56,6 +57,9 @@ public class MemberServiceImpl implements IMemberService
     
     @Autowired
     private IMemberToMemberDao memberToMemberDao;
+    
+    @Autowired
+    private MemberImageServiceImpl memberImageService;
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;
@@ -369,6 +373,45 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             return menberDao.getMember(id);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("会员查找失败！", e);
+        }
+    }
+    
+    /**
+     * 前台会员中心查询兼容新老3C，资质证书图片
+     */
+    @Override
+    public MemberEntity getMemberNew(String id)
+    {
+        try
+        {
+            MemberEntity member = menberDao.getMember(id);
+            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(),
+                    "1",
+                    null);
+            if (list.size() > 0)
+            {
+                String images = "";
+                for (MemberImageEntity mImage : list)
+                {
+                    images = images + mImage.getImage() + ",";
+                }
+                images = images.substring(0, images.length() - 1);
+                if (member.getType().getId() == 1)
+                {
+                    member.setCcc_img(images);
+                }
+                else if (member.getType().getId() == 0)
+                {
+                    member.setQualification_img(images);
+                }
+                
+            }
+            return member;
         }
         catch (Exception e)
         {
@@ -696,5 +739,34 @@ public class MemberServiceImpl implements IMemberService
             throw new ServiceException("生成用户证书失败", e);
         }
         
+    }
+    
+    @Override
+    @Transactional
+    public MemberEntity websiteModifyMember(MemberEntity member)
+            throws ServiceException
+    {
+        try
+        {
+            MemberEntity newMember = modifyMember(member, true);
+            if (newMember.getType().getId() == 1)
+            {
+                memberImageService.websiteAddImage(member.getMemberNo(),
+                        member.getCcc_img());
+                newMember.setCcc_img(member.getCcc_img());
+            }
+            else if (newMember.getType().getId() == 0)
+            {
+                memberImageService.websiteAddImage(member.getMemberNo(),
+                        member.getQualification_img());
+                newMember.setQualification_img(member.getQualification_img());
+            }
+            return newMember;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("更新会员失败", e, this.getClass());
+            throw new ServiceException("更新会员失败", e);
+        }
     }
 }
