@@ -141,8 +141,31 @@
 
 				});
 			}
-			
+			$(document).ready(function(){
+				a=new $.slide({container:".slideui",imagesPerPage:7,onImageFocus:function(li){
+					//alert(li.find("img").attr("src"))
+				},
+				onSlide:function(li){
+					//iv.iviewer('loadImage', li.find("img").attr("data")); 
+				}});
+				$("#next,#front").hover(function(){
+					$(this).children("a").fadeIn();
+				},function(){
+					$(this).children("a").fadeOut();
+				});
+				$("#next").click(function(){
+					a.slideNext();
+				});
+				
+				$("#front").click(function(){
+					a.slideFront();
+				});
+			});	
 </script>
+<style type="text/css">
+.slideui{width:855px;}
+.line-con{width:750px}
+</style>
 </head>
 
 <body>
@@ -307,6 +330,7 @@
 				<div class="item">
         <div class="item">
 					<#if (member.type.id==1)>
+					<label>3C证书</label>${member.ccc_no}
 					<div id="SlideUl" class="slideui" style="">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
 								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
