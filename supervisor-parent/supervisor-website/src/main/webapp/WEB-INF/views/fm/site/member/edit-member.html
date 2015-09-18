@@ -44,6 +44,7 @@
 <@b.upload/>
 <@b.validate/>
 <@b.dialogBox/>
+<@b.iviewer/>
 <script>
 var edit_pwd_validform;
 var checkState=${member.checkState.id};
@@ -131,7 +132,7 @@ closeViewer = function() {
 	$('.maskdivgen').fadeOut(100);
 	$('.viewer').slideUp(200);
 }
-var a;
+var b;
 var uploadImg = function($file) {
 	//var $div = $file.parent().parent();
 //	var $carousel = $div.find(".elastislide-list");
@@ -159,7 +160,7 @@ var uploadImg = function($file) {
 						num += 1;
 					}
 				}
-				a.addImage('${b.imagePath}'+dataObj.fileIds);
+				b.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
 				hideVal += "," + dataObj.fileIds;
 			}
 			$hidden.val(hideVal);
@@ -167,7 +168,6 @@ var uploadImg = function($file) {
 		}
 	});
 }
-
 var uploadImgCCC = function($file) {
 	/* var shflag='${member.flag}';
 	if (shflag==1){
@@ -200,7 +200,7 @@ var uploadImgCCC = function($file) {
 						num += 1;
 					}
 				}
-				a.addImage('${b.imagePath}'+dataObj.fileIds);
+				a.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
 				hideVal += "," + dataObj.fileIds;
 				
 			}
@@ -459,24 +459,44 @@ function edit_pwd(id){
 }	
 //===
 $(document).ready(function(){
-	a=new $.slide({container:".slideui",imagesPerPage:7,onImageFocus:function(li){
-		//alert(li.find("img").attr("src"))
-	},
-	onSlide:function(li){
-		//iv.iviewer('loadImage', li.find("img").attr("data")); 
-	}});
 	$("#next,#front").hover(function(){
-		$(this).children("a").fadeIn();
+	    $(this).children("a").fadeIn();
 	},function(){
-		$(this).children("a").fadeOut();
-	});
-	$("#next").click(function(){
-		a.slideNext();
+	    $(this).children("a").fadeOut();
 	});
 	
-	$("#front").click(function(){
-		a.slideFront();
-	});
+	 b=new $.slide({container:"#SlideUl",imagesPerPage:8,imageWidth:88});
+	$("#SlideUl .imageList li").live("click",function(){
+	        	var newSlide=$("#SlideUl").clone();
+	        	$("#iviewerDiv").after(newSlide);
+	        	newSlide.attr("id","iviewerUl");
+	        	var iv = $("#viewer").iviewer();
+	        	var a=new $.slide({container:"#iviewerUl",imagesPerPage:8,imageWidth:88,onImageFocus:function(li){
+	        		iv.iviewer('loadImage', li.find("img").attr("data"));
+	        	},
+	        	onSlide:function(li,index){
+	        		iv.iviewer('loadImage', li.find("img").attr("data"));
+	        	}});
+	        	a.slideTo(b.getIndex());
+	        	$("#next").click(function(){
+	        	    a.slideNext();
+	        	    iv.iviewer('loadImage', a.getCurrentImageData());
+	        	});
+	        	$("#front").click(function(){
+	        	    a.slideFront();
+	        	    iv.iviewer('loadImage', a.getCurrentImageData());
+	        	});
+	            $('.maskdivgen').fadeIn(100);
+	            $("#imageviewer").css("visibility","visible");
+	        }
+	);
+	$("#btnClsVie").click(
+	        function () {
+	            $('.maskdivgen').fadeOut(100);
+	            $("#imageviewer").css("visibility","hidden");
+	            $("#imageviewer").find(".slideui").remove();
+	        }
+	);
 });
 </script>
 <STYLE type=text/css>
@@ -694,7 +714,7 @@ $(document).ready(function(){
 									   <#assign arr=(member.qualification_img?split(","))> <#if arr?exists>
 									   <#list arr as imgPath>
 										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></li>
+										<li><img src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></tt></li>
 										</#if>
 									</#list>
 									</#if>
