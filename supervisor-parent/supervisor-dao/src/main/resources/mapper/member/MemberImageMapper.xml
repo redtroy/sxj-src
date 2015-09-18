@@ -43,4 +43,7 @@
 	 FROM M_MEMBER_IMAGE m  WHERE m.MEMBER_NO = #{memberNo} AND m.STATE = 0 )as temp WHERE mm.VERSION =temp.VERSION 
 	   AND mm.MEMBER_NO =#{memberNo} AND mm.STATE = 0]]>
 	</select>
+	<update id="updatelock">
+		<![CDATA[update M_MEMBER_IMAGE set VERSION=#{newvison},STATE=0 where VERSION=#{oldvison} and MEMBER_NO=#{memberNo}]]>
+	</update>
 </mapper>

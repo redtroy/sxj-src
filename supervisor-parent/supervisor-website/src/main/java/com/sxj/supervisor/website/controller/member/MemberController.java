@@ -149,7 +149,7 @@ public class MemberController extends BaseController
     @RequestMapping("edit_member")
     public String edit_member(String id, ModelMap map)
     {
-        MemberEntity member = memberService.getMember(id);
+        MemberEntity member = memberService.getMemberNew(id);
         List<AreaEntity> cityList = areaService.getChildrenAreas("32");
         map.put("cityList", cityList);
         map.put("member", member);
@@ -170,10 +170,14 @@ public class MemberController extends BaseController
     {
         try
         {
+            SupervisorPrincipal info = getLoginInfo(session);
+            MemberEntity memberNew = memberService.getMember(info.getMember()
+                    .getId());
             Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
             member.setUpDate(new Date());
-            member = memberService.modifyMember(member, true);
+            member.setMemberNo(memberNew.getMemberNo());
+            member = memberService.websiteModifyMember(member);
             SupervisorPrincipal login = getLoginInfo(session);
             login.setMember(member);
             session.setAttribute("userinfo", login);

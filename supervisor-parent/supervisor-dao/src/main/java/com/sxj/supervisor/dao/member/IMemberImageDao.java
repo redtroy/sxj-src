@@ -3,6 +3,8 @@ package com.sxj.supervisor.dao.member;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
@@ -62,5 +64,7 @@ public interface IMemberImageDao
     /**
      * 根据条件更新数据
      */
-    public int updatelock(String memberNo, String oldvison, String newvison);
+    public int updatelock(@Param("memberNo") String memberNo,
+            @Param("oldvison") String oldvison,
+            @Param("newvison") String newvison);
 }

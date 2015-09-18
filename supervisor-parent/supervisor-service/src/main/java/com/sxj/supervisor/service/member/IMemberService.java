@@ -47,4 +47,16 @@ public interface IMemberService
     
     public String createPfx(MemberEntity member, AccountEntity account)
             throws ServiceException;
+    
+    /**
+     * 更新前台会员
+     * @param member
+     * @return
+     */
+    public MemberEntity websiteModifyMember(MemberEntity member);
+    
+    /**
+     * 前台会员查询
+     */
+    public MemberEntity getMemberNew(String id);
 }

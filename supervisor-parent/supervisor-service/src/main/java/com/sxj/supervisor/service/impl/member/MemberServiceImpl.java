@@ -384,6 +384,7 @@ public class MemberServiceImpl implements IMemberService
     /**
      * 前台会员中心查询兼容新老3C，资质证书图片
      */
+    @Override
     public MemberEntity getMemberNew(String id)
     {
         try
@@ -740,13 +741,26 @@ public class MemberServiceImpl implements IMemberService
         
     }
     
+    @Override
+    @Transactional
     public MemberEntity websiteModifyMember(MemberEntity member)
             throws ServiceException
     {
         try
         {
             MemberEntity newMember = modifyMember(member, true);
-            
+            if (newMember.getType().getId() == 1)
+            {
+                memberImageService.websiteAddImage(member.getMemberNo(),
+                        member.getCcc_img());
+                newMember.setCcc_img(member.getCcc_img());
+            }
+            else if (newMember.getType().getId() == 0)
+            {
+                memberImageService.websiteAddImage(member.getMemberNo(),
+                        member.getQualification_img());
+                newMember.setQualification_img(member.getQualification_img());
+            }
             return newMember;
         }
         catch (Exception e)
