@@ -54,7 +54,6 @@ function query(page) {
 function modifyState(id,infoId){
 	var state=$("#message_li_"+infoId).attr("state");
 	if(state==0){
-		alert(0);
 		$.post("modifyState.htm","id="+id,function(data){
 			if(data.isOK="ok"){
 				$("#message_li_"+infoId).attr("state",1);
