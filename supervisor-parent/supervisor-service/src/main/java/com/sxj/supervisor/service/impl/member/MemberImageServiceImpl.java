@@ -140,6 +140,10 @@ public class MemberImageServiceImpl implements IMemberImageService
                     }
                 }
             }
+            else
+            {
+                
+            }
         }
         catch (Exception e)
         {
