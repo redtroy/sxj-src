@@ -11,8 +11,7 @@ import com.sxj.util.exception.ServiceException;
 public interface IMemberImageService
 {
     
-    public List<MemberImageEntity> getImages(String memberNo, String state,
-            String certificateType) throws ServiceException;
+    public List<MemberImageEntity> getImages(String memberNo, String state) throws ServiceException;
     
     public List<CertificateLevelEntity> getCertificateLevels(String imageId)
             throws ServiceException;

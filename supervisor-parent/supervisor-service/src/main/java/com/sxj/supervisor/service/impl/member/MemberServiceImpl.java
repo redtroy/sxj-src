@@ -30,6 +30,7 @@ import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.open.ApiModel;
+import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.comet.CometServiceImpl;
@@ -59,7 +60,7 @@ public class MemberServiceImpl implements IMemberService
     private IMemberToMemberDao memberToMemberDao;
     
     @Autowired
-    private MemberImageServiceImpl memberImageService;
+    private IMemberImageService memberImageService;
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;
@@ -390,9 +391,7 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             MemberEntity member = menberDao.getMember(id);
-            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(),
-                    "1",
-                    null);
+            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(), "1");
             if (list.size() > 0)
             {
                 String images = "";

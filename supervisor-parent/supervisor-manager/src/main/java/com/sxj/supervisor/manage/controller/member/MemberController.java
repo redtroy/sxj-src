@@ -168,7 +168,7 @@ public class MemberController extends BaseController {
 			List<AreaEntity> cityList = areaService.getChildrenAreas("32");
 			// 删除的资质证书
 			List<MemberImageEntity> delzizhi = imageService.getImages(
-					member.getMemberNo(), "0", "0");
+					member.getMemberNo(), "0");
 			// 新上传的资质证书
 
 			

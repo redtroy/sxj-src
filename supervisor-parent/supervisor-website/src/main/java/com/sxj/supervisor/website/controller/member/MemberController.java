@@ -23,13 +23,16 @@ import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.redis.core.concurrent.RedisConcurrent;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberImageEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
+import com.sxj.supervisor.model.member.MemberModel;
 import com.sxj.supervisor.model.member.MemberQuery;
+import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
@@ -63,6 +66,9 @@ public class MemberController extends BaseController
     @Autowired
     private CachingSessionDAO sessionDAO;
     
+    @Autowired
+    private IMemberImageService memberImageService;
+    
     /**
      * 根据会员号获取会员信息
      * 
@@ -85,6 +91,9 @@ public class MemberController extends BaseController
                 {
                     member.setAccountNum(0);
                 }
+                //图片列表
+                List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(), "1");
+                map.put("imageList", imageList);
                 List<AreaEntity> cityList = areaService.getChildrenAreas("32");
                 map.put("cityList", cityList);
                 map.put("member", member);
@@ -151,6 +160,8 @@ public class MemberController extends BaseController
     {
         MemberEntity member = memberService.getMemberNew(id);
         List<AreaEntity> cityList = areaService.getChildrenAreas("32");
+        List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(), "1");
+        map.put("imageList", imageList);
         map.put("cityList", cityList);
         map.put("member", member);
         return "site/member/edit-member";
@@ -168,12 +179,12 @@ public class MemberController extends BaseController
     public @ResponseBody Map<String, Object> save_member(MemberEntity member,
             HttpSession session) throws WebException
     {
+    	Map<String, Object> map = new HashMap<String, Object>();
         try
         {
             SupervisorPrincipal info = getLoginInfo(session);
             MemberEntity memberNew = memberService.getMember(info.getMember()
                     .getId());
-            Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
             member.setUpDate(new Date());
             member.setMemberNo(memberNew.getMemberNo());
@@ -186,14 +197,14 @@ public class MemberController extends BaseController
                     .publish(Constraints.UN_EDIT_CHECK_STATE_SET + ","
                             + member.getId());
             map.put("isOK", "ok");
-            return map;
         }
         catch (Exception e)
         {
+        	map.put("isOK", "no");
             SxjLogger.error("修改会员信息错误", e, this.getClass());
             throw new WebException(e.getMessage());
         }
-        
+        return map;
     }
     
     /**
