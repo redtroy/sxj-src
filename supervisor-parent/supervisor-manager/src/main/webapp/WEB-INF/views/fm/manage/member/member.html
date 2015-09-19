@@ -128,6 +128,10 @@
 				$('.viewer').slideDown(200);
 			}
 		})
+		$("#Delete-button").live('click',function(){
+		    $(this).parent().parent().remove();
+	    })
+		
 	});
 	
 	function close_img() {
@@ -369,6 +373,25 @@
 				newb.slideTo(index)
 			}});
 		}
+	
+	//=====联系人模块JS 
+	 //新增联系人
+	 function addrelevance(member_id){
+		 var add=$("#"+member_id+"_info").find("#tr_relevance").html();
+		 $("#"+member_id+"_info").find("#table_relevance").append(add);
+	 }
+	 
+	function saverelevance(member_id){
+		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
+		alert(relist)
+		 $.post("${basePath}editRelevanceMember.htm",relist,function(data){
+			if (data=='ok'){
+				messageInfo("修改成功");
+			}else {
+				errorInfo("修改失败");
+			}
+		}) 
+	}
 </script>
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->

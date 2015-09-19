@@ -246,77 +246,44 @@
 		        <div id="block-name">关联企业</div>
 		  	    <div id="relation">
 				 <div>
-		    	  <table style="background-color:#fff;">
+		    	  <table style="background-color:#fff;" id="table_relevance">
 			        <tr>
 			         <th id="th" width="43%">企业名称</th>
 			         <th id="th" width="12%">联系人</th>
 			         <th id="th" width="15%">联系人电话</th>
 			         <th id="th" width="10%">关联类型</th>
 			         <th id="th" width="15%">备注</th>
-		           	 <th id="th" width="5%"><a id="add-button" title="新加一行"><img src="${b.staticPath}images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
+		           	 <th id="th" width="5%"><a id="add-button" href="javascript:addrelevance('${member.id}');" title="新加一行"><img src="${b.staticPath}images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
 			        </tr>
-			        <tr>
-			         <td id="td">江苏私享家</td>
-		             <td id="td">力达非</td>
-			         <td id="td">15894932890</td>
-			         <td id="td">紧密型</td>
-			         <td id="td">企业名称</td>
-		          	 <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
-		        	</tr>
-			        <tr>
-			         <td id="td">凯恩装饰公司</td>
-			         <td id="td">黄一名</td>
-			         <td id="td">15890874567</td>
-			         <td id="td">专注型</td>
-			         <td id="td">企业名称</td>
-			         <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
-			        </tr>
-			         <tr>
-			         <td id="td">思美建设集团</td>
-			         <td id="td">贾建明</td>
-			         <td id="td">12129312303</td>
-			         <td id="td">凝聚型</td>
-			         <td id="td">企业名称</td>
-			         <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
-		         	</tr>
-			        <tr>
-			         <td id="td">江苏私享家</td>
-		             <td id="td">力达非</td>
-			         <td id="td">15894932890</td>
-			         <td id="td">紧密型</td>
-			         <td id="td">企业名称</td>
-		          	 <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
-		        	</tr>
-			        <tr>
-			         <td id="td">凯恩装饰公司</td>
-			         <td id="td">黄一名</td>
-			         <td id="td">15890874567</td>
-			         <td id="td">专注型</td>
-			         <td id="td">企业名称</td>
-			         <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
-			        </tr>
-			         <tr>
-			         <td id="td">思美建设集团</td>
-			         <td id="td">贾建明</td>
-			         <td id="td">12129312303</td>
-			         <td id="td">凝聚型</td>
-			         <td id="td">企业名称</td>
-			         <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
-		         	</tr>
-		         	<tr>
-		         	 <td id="td">&nbsp;</td>
-		         	 <td id="td">&nbsp;</td>
-			         <td id="td">&nbsp;</td>
-		         	 <td id="td">&nbsp;</td>
-		         	 <td id="td">&nbsp;</td>
-		         	 <td id="td"><a id="Delete-button" title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
-		            </tr>
+			        <#list relist as re>
+			              <tr>
+			                 <input type="hidden" value="${member.memberNo}" name="memberNo">
+					         <td id="td"><input type="text" name="company" value="${re.company}" /></td>
+				             <td id="td"><input type="text" name="linkman" value="${re.linkman}" /></td>
+					         <td id="td"><input type="text" name="phone"  value="${re.phone}" /></td>
+					         <td id="td"><select name="relevanceType" ><option value="2" <#if (re.relevanceType==2)> selected="selected" </#if> >型材厂</option><option value="6" <#if (re.relevanceType==6)> selected="selected" </#if> >代理商</option><option value="7" <#if (re.relevanceType==7)> selected="selected" </#if>>经销商</option><option value="10" <#if (re.relevanceType==10)> selected="selected" </#if>>同一出资方</option></select></td>
+					         <td id="td"><input type="text" name="remark" value="${re.remark}" /></td>
+				          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+				          </tr>
+			        </#list>
 			      </table>
 				 </div>
 		        </div>			  
-                <div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
+                <div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:saverelevance('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
             </div>
  		 <div id="btnBox" class="btnBox" style="margin:auto"><a href="#" class="button button-gray button-small">收起</a> </div>
- </form>
+ 		 <div style="display: none;">
+          <table id="tr_relevance">
+               <tr >
+                 <input type="hidden" value="${member.memberNo}" name="relist[0].memberNo">
+		         <td id="td"><input type="text" name="relist[0].company"></td>
+	             <td id="td"><input type="text" name="relist[0].linkman"></td>
+		         <td id="td"><input type="text" name="relist[0].phone"></td>
+		         <td id="td"><select name="relist[0].relevanceType" ><option value="2">型材厂</option><option value="6">代理商</option><option value="7">经销商</option><option value="10">同一出资方</option></select></td>
+		         <td id="td"><input type="text" name="relist[0].remark"></td>
+	          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+	           </tr>
+         </table>
+        </div>
  </td>
  

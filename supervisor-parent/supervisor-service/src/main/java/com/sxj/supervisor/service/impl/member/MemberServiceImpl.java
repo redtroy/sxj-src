@@ -18,10 +18,12 @@ import com.sxj.spring.modules.util.Identities;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.dao.member.IMemberToMemberDao;
+import com.sxj.supervisor.dao.member.IRelevanceMemberDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberImageEntity;
 import com.sxj.supervisor.entity.member.MemberToMemberEntity;
+import com.sxj.supervisor.entity.member.RelevanceMember;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
@@ -61,6 +63,9 @@ public class MemberServiceImpl implements IMemberService
     
     @Autowired
     private IMemberImageService memberImageService;
+    
+    @Autowired
+    private IRelevanceMemberDao relevanceMemberDao;
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;
@@ -589,6 +594,47 @@ public class MemberServiceImpl implements IMemberService
             return member;
         }
         return member;
+    }
+    
+    /**
+     * 根据会员号查询关联企业
+     * 
+     */
+    @Override
+    public List<RelevanceMember> getListRelevanceMember(String memberNo)
+            throws ServiceException
+    {
+        try
+        {
+            List<RelevanceMember> list = relevanceMemberDao.getEnityBymemberNo(memberNo);
+            return list;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询关联企业错误", e, this.getClass());
+            throw new ServiceException("查询关联企业错误", e);
+        }
+    }
+    
+    @Override
+    @Transactional
+    public String addRelevanceMember(List<RelevanceMember> list)
+            throws ServiceException
+    {
+        try
+        {
+            relevanceMemberDao.del(list.get(0).getMemberNo());
+            for (RelevanceMember re : list)
+            {
+                relevanceMemberDao.add(re);
+            }
+            return "ok";
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("新增关联企业错误", e, this.getClass());
+            throw new ServiceException("新增关联企业错误", e);
+        }
     }
     
     /**
