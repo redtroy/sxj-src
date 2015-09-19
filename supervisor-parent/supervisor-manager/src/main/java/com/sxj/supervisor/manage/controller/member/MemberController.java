@@ -527,4 +527,5 @@ public class MemberController extends BaseController
         String str3 = str1[1] + str2[1];
         return str3;
     }
+    
 }

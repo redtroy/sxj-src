@@ -40,15 +40,13 @@ public class MemberImageServiceImpl implements IMemberImageService
     private ICertificateDao certificateDao;
     
     @Override
-    public List<MemberImageEntity> getImages(String memberNo, String state,
-            String certificateType) throws ServiceException
+    public List<MemberImageEntity> getImages(String memberNo, String state) throws ServiceException
     {
         try
         {
             QueryCondition<MemberImageEntity> condition = new QueryCondition<MemberImageEntity>();
             condition.addCondition("memberNo", memberNo);// 会员号
             condition.addCondition("state", state);// 状态
-            condition.addCondition("certificateType", certificateType);// 状态
             List<MemberImageEntity> list = imageDao.queryMemberImage(condition);
             return list;
         }
@@ -128,7 +126,7 @@ public class MemberImageServiceImpl implements IMemberImageService
     {
         try
         {
-            List<MemberImageEntity> list = getImages(memberNo, "1", null);
+            List<MemberImageEntity> list = getImages(memberNo, "1");
             if (list.size() > 0)
             {
                 String viso = StringUtils.getUUID();

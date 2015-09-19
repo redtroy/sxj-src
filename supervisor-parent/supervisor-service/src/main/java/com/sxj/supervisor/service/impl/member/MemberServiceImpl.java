@@ -396,9 +396,7 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             MemberEntity member = menberDao.getMember(id);
-            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(),
-                    "1",
-                    null);
+            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(), "1");
             if (list.size() > 0)
             {
                 String images = "";
