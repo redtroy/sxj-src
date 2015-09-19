@@ -3,9 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
 	<meta name="description"
-		content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+		content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。"/>
 		<link href="${b.staticPath}style/style.css" rel="stylesheet"
 			type="text/css" />
 			<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" />
@@ -31,7 +31,7 @@
 <script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
 <link href="${b.staticPath}style/imageditor.css" rel="stylesheet" type="text/css" />
 <!--  -->
-		<@b.validate/> <@b.dialogBox/> <@b.upload/>
+		<@b.validate/> <@b.dialogBox/> <@b.upload/><@b.iviewer/>
 <script>
 			var validform;
 			jQuery(document).ready(function($) {
@@ -142,25 +142,45 @@
 				});
 			}
 			$(document).ready(function(){
-				a=new $.slide({container:".slideui",imagesPerPage:7,onImageFocus:function(li){
-					//alert(li.find("img").attr("src"))
-				},
-				onSlide:function(li){
-					//iv.iviewer('loadImage', li.find("img").attr("data")); 
-				}});
 				$("#next,#front").hover(function(){
-					$(this).children("a").fadeIn();
+				    $(this).children("a").fadeIn();
 				},function(){
-					$(this).children("a").fadeOut();
-				});
-				$("#next").click(function(){
-					a.slideNext();
+				    $(this).children("a").fadeOut();
 				});
 				
-				$("#front").click(function(){
-					a.slideFront();
-				});
-			});	
+				 var b=new $.slide({container:"#SlideUl",imagesPerPage:8,imageWidth:88});
+				$("#SlideUl .imageList li").live("click",function(){
+				        	var newSlide=$("#SlideUl").clone();
+				        	$("#iviewerDiv").after(newSlide);
+				        	newSlide.attr("id","iviewerUl");
+				        	var iv = $("#viewer").iviewer();
+				        	var a=new $.slide({container:"#iviewerUl",imagesPerPage:8,imageWidth:88,onImageFocus:function(li){
+				        		iv.iviewer('loadImage', li.find("img").attr("data"));
+				        	},
+				        	onSlide:function(li,index){
+				        		iv.iviewer('loadImage', li.find("img").attr("data"));
+				        	}});
+				        	a.slideTo(b.getIndex());
+				        	$("#next").click(function(){
+				        	    a.slideNext();
+				        	    iv.iviewer('loadImage', a.getCurrentImageData());
+				        	});
+				        	$("#front").click(function(){
+				        	    a.slideFront();
+				        	    iv.iviewer('loadImage', a.getCurrentImageData());
+				        	});
+				            $('.maskdivgen').fadeIn(100);
+				            $("#imageviewer").css("visibility","visible");
+				        }
+				);
+				$("#btnClsVie").click(
+				        function () {
+				            $('.maskdivgen').fadeOut(100);
+				            $("#imageviewer").css("visibility","hidden");
+				            $("#imageviewer").find(".slideui").remove();
+				        }
+				);
+			});
 </script>
 <style type="text/css">
 .slideui{width:855px;}

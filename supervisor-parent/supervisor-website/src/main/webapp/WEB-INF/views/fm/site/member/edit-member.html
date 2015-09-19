@@ -419,6 +419,8 @@ function save(id){
     } */
     
     dialogBox(function(index){
+    	var img=$(".imageList").find("img").attr("value");
+    	alert(img);
     	if (!flag){
     		//if (${member.checkState.id}==2){
     		  $.post("${basePath}member/unCertificates.htm?id="+id,function(data){})
@@ -683,7 +685,7 @@ $(document).ready(function(){
 									   <#assign arr=(member.ccc_img?split(","))> <#if arr?exists>
 									   <#list arr as imgPath>
 										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></li>
+										<li><img src="${b.imagePath}${imgPath}" value="${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></li>
 										</#if>
 									</#list>
 									</#if>
@@ -714,7 +716,7 @@ $(document).ready(function(){
 									   <#assign arr=(member.qualification_img?split(","))> <#if arr?exists>
 									   <#list arr as imgPath>
 										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></tt></li>
+										<li><img src="${b.imagePath}${imgPath}" value="${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></tt></li>
 										</#if>
 									</#list>
 									</#if>
