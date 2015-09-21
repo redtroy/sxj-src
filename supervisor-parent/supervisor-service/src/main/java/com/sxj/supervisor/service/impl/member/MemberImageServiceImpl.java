@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.sxj.supervisor.entity.member.CertificateEntity;
 import com.sxj.supervisor.entity.member.CertificateLevelEntity;
 import com.sxj.supervisor.entity.member.LevelEntity;
 import com.sxj.supervisor.entity.member.MemberImageEntity;
+import com.sxj.supervisor.model.member.MemberImageModel;
 import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
@@ -291,4 +293,36 @@ public class MemberImageServiceImpl implements IMemberImageService
         }
         
     }
+
+	@Override
+	public MemberImageModel getMemberImageByImageId(String imageId)
+			throws ServiceException {
+		try {
+			MemberImageModel model = new MemberImageModel();
+			MemberImageEntity imageEntity= imageDao.getMemberImageByImageId(imageId);
+			List<CertificateLevelEntity> level = certificateLevelDao.getCertificateLevel(imageId);
+			model.setMemberImage(imageEntity);
+			model.setList(level);
+			return model;
+		} catch (Exception e) {
+			SxjLogger.error("查询新数据错误", e, this.getClass());
+			throw new ServiceException("查询新数据错误");
+		}
+	}
+
+	@Override
+	public void addMemberImage(MemberImageEntity memberImage)
+			throws SQLException {
+		try {
+			if(memberImage.getId()==null){
+				imageDao.addMemberImage(memberImage);
+			}else{
+				imageDao.updateMemberImage(memberImage);
+			}
+		} catch (Exception e) {
+			SxjLogger.error("查询新数据错误", e, this.getClass());
+			throw new ServiceException("查询新数据错误");
+		}
+		
+	}
 }

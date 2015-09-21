@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
@@ -937,32 +937,6 @@ $(document).ready(function(){
         </div>
       
        <div id="add_form">
-         <#if (member.type.id==1)>
-       <div class="item">
-							<label>3C证书</label> 
-							<input type="hidden" class="input-w180h30" id="cccPath_hidden" name="ccc_img" value="${member.ccc_img}">
-							<p>&nbsp;</p>
-							<div id="original" class="slideui" style="">
-								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
-								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
-				                <div class="line-con">					
-									<ul class="imageList">
-									   <#if imageList?exists>
-									   <#list imageList as imgPath>
-										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath.image}"  data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
-										</#if>
-									</#list>
-									</#if>
-									</ul>
-								</div>
-							</div>
-							<div class="uploadify" style="float: left;padding-left: 15%;margin-top:20px;">
-									 <input type="file" class="" id="cccPath_File" name="input6">
-								</div>
-						</div>
-		</#if>
-       
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
