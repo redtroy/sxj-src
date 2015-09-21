@@ -23,14 +23,18 @@ import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.redis.core.concurrent.RedisConcurrent;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.entity.member.MemberImageEntity;
+<<<<<<< HEAD
 import com.sxj.supervisor.entity.member.MemberToMemberEntity;
+=======
+import com.sxj.supervisor.entity.member.MemberImageEntity;
+>>>>>>> 06bfe4b6690cd66cf01fa5f17eb5f38bf6fa124b
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
+import com.sxj.supervisor.model.member.MemberModel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
@@ -96,8 +100,7 @@ public class MemberController extends BaseController
                     member.setAccountNum(0);
                 }
                 //图片列表
-                List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(),
-                        "1");
+                List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(), "1");
                 map.put("imageList", imageList);
                 List<AreaEntity> cityList = areaService.getChildrenAreas("32");
                 map.put("cityList", cityList);
@@ -179,7 +182,7 @@ public class MemberController extends BaseController
     {
         MemberEntity member = memberService.getMemberNew(id);
         List<AreaEntity> cityList = areaService.getChildrenAreas("32");
-        
+<<<<<<< HEAD
         MemberToMemberEntity query = new MemberToMemberEntity();
         
         if (member.getType() == MemberTypeEnum.GENRESFACTORY)
@@ -193,9 +196,10 @@ public class MemberController extends BaseController
         }
         List<MemberToMemberEntity> mlist = memberToMemberService.query(query);
         
-        List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(),
-                "1");
+=======
+        List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(), "1");
         map.put("imageList", imageList);
+>>>>>>> 06bfe4b6690cd66cf01fa5f17eb5f38bf6fa124b
         map.put("cityList", cityList);
         map.put("member", member);
         map.put("mlist", mlist);
@@ -214,7 +218,7 @@ public class MemberController extends BaseController
     public @ResponseBody Map<String, Object> save_member(MemberEntity member,
             HttpSession session) throws WebException
     {
-        Map<String, Object> map = new HashMap<String, Object>();
+    	Map<String, Object> map = new HashMap<String, Object>();
         try
         {
             SupervisorPrincipal info = getLoginInfo(session);
@@ -222,13 +226,16 @@ public class MemberController extends BaseController
                     .getId());
             member.setFlag(true);
             member.setUpDate(new Date());
+<<<<<<< HEAD
             for (int i = 0; i < member.getDlList().size(); i++)
             {
                 System.out.println(member.getDlList().get(0).getMemberNo());
             }
             MemberEntity newMember = memberService.modifyMember(member, true);
+=======
             member.setMemberNo(memberNew.getMemberNo());
             member = memberService.websiteModifyMember(member);
+>>>>>>> 06bfe4b6690cd66cf01fa5f17eb5f38bf6fa124b
             SupervisorPrincipal login = getLoginInfo(session);
             login.setMember(newMember);
             session.setAttribute("userinfo", login);
@@ -281,7 +288,7 @@ public class MemberController extends BaseController
         }
         catch (Exception e)
         {
-            map.put("isOK", "no");
+        	map.put("isOK", "no");
             SxjLogger.error("修改会员信息错误", e, this.getClass());
             throw new WebException(e.getMessage());
         }

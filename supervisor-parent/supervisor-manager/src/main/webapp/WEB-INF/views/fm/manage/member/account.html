@@ -31,6 +31,7 @@ var pageii
    }
    //查询
    function query(page){
+	   loadingImg();
 	   var params=$("#serchAccount").serialize();
 	   if(page!=undefined){
 		   params=params+"&currentPage="+page;
@@ -113,8 +114,8 @@ var pageii
 		   $.post("${basePath}member/account/initializePwd.htm",{id:id},function(data){
 			   layer.close(index);
 			   if (data.isOK=='ok'){
-				   $("#promptPwd").text("初始密码为："+data.password+"，谢谢!");
-				   pageii=dialogBoxOut($("#init_password_div").html());
+				   var msg ="<span style='font-size:20px;'>初始密码为：<span style='color:red;'>" + data.password + "</span>   谢谢!</span>";
+					 layer.alert(msg,{icon: 6,offset: ['40%', '43%']});
 			   }else{
 					errorInfo(data);
 				}
@@ -128,8 +129,10 @@ var pageii
 		   $.post("${basePath}member/account/editState.htm",{id:id,state:stateId},function(data){
 			  	layer.close(index);
 				  if (data.isOK=='ok'){
-					 var page=$("#rightBar").children("#pager").attr("currentPage");
-					 query(page);
+					  succInfo(function() {
+						 var page=$("#rightBar").children("#pager").attr("currentPage");
+						 query(page);
+					  }, "修改状态成功！");
 				   }else{
 						errorInfo(data);
 					}

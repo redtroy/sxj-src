@@ -3,9 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
 	<meta name="description"
-		content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+		content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。"/>
 		<link href="${b.staticPath}style/style.css" rel="stylesheet"
 			type="text/css" />
 			<link rel="stylesheet" type="text/css" href="${b.staticPath}style/elastislide.css" />
@@ -27,14 +27,14 @@
 <script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
 <script src="${b.staticPath}/js/jquery.paginate.js"></script>
-		<@b.validate/> <@b.dialogBox/> <@b.upload/>
+<!-- 新图片控件 -->
+<script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
+<link href="${b.staticPath}style/imageditor.css" rel="stylesheet" type="text/css" />
+<!--  -->
+		<@b.validate/> <@b.dialogBox/> <@b.upload/><@b.iviewer/>
 <script>
 			var validform;
 			jQuery(document).ready(function($) {
-				$('.demo-image').click(function() {
-					$('.maskdivgen').fadeIn(100);
-					$('.viewer').slideDown(200);
-				})
 				$("#carousel").elastislide(); 
 				$("#carouselCCC").elastislide(); 
 				$('#edit_pwd').css({
@@ -60,14 +60,6 @@
 				window.setInterval(queryMessage, 5000);
 			});
 
-			window.onload = function() {
-				$(".demo-image").click(
-						function() {
-							var imageSource = $(this).attr("data-image");
-							refreshIviewer($("#viewer2"), imageSource,
-									$("#img_close"));
-						});
-			}
 			function close_img() {
 				$("#img_close").hide();
 			}
@@ -137,8 +129,75 @@
 
 				});
 			}
+			$(document).ready(function(){
+				var iv=$("#viewer").iviewer();
+				//iv.iviewer('loadImage', "../images/temp/100260_1306276811398.jpg"); 
+				/**弹出层滚动条
+				滚动式更新iviewer
+				**/
+				 var hSlide=new $.slide({container:"#hidden",imageWidth:90,imagesPerPage:8,
+				onSlide:function(li,index){
+					iv.iviewer('loadImage', li.find("img").attr("data")); 
+				}
+				});
+				/**原图片滚动条
+				点击后显示控件层
+				**/
+				 var oSlide=new $.slide({container:"#original",imageWidth:90,imagesPerPage:5,onClick:function(self,li,index,i){
+					self.copyTo($("#hidden .line-con"));
+					$(".maskdivgen").fadeIn(100);
+			        $("#imagecomponent").css("visibility","visible");
+					hSlide.reset(index,i);
+					hSlide.slideTo(index);
+					iv.iviewer('destroy'); 
+					iv=$("#viewer").iviewer();
+					iv.iviewer('loadImage', li.find("img").attr("data"));
+				}});
+				/**
+				iviewer上左右按钮
+				**/
+				$("#next,#front").hover(function(){
+					$(this).children("a").fadeIn();
+				},function(){
+					$(this).children("a").fadeOut();
+				});
+				$("#next").click(function(){
+					hSlide.slideNext();
+					iv.iviewer('loadImage', hSlide.getCurrentImageData());
+				});
+				$("#front").click(function(){
+					hSlide.slideFront();
+					iv.iviewer('loadImage', hSlide.getCurrentImageData());
+				});
+				$(".submit").click(function(){
+					alert(oSlide.trimFid("../images"));
+				});
+				$("#btnClsVie").click(
+				        function () {
+				            $('.maskdivgen').fadeOut(100);
+				            $("#imagecomponent").css("visibility","hidden");
+				        }
+				)
+				$(".demo-image").click(
+			        function () {
+			        	var imagePath=$(this).attr("data-image");
+			        	$(".maskdivgen").fadeIn(100);
+				        $("#imagecomponent").css("visibility","visible");
+			    		hSlide.clear();
+			    		hSlide.addImage(imagePath,imagePath);
+			    		iv.iviewer('destroy'); 
+			    		iv=$("#viewer").iviewer({showTool:false})
+			    		iv.iviewer('loadImage', imagePath);
+			    });
+
+			});
+			
 			
 </script>
+<style type="text/css">
+.slideui{width:855px;}
+.line-con{width:750px}
+</style>
 </head>
 
 <body>
@@ -228,10 +287,10 @@
 						<#if member.bLicensePath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							data-image="${b.staticPath}images/nopic.jpg" >查看缩略图</a> <#else> <img
 							src="${b.imagePath}${member.bLicensePath}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
-							data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
+							data-image="${b.imagePath}${member.bLicensePath}" >查看缩略图</a>
 						</#if>
 					</div>
 					
@@ -303,46 +362,42 @@
 				<div class="item">
         <div class="item">
 					<#if (member.type.id==1)>
-					<label>3C证书</label>${member.ccc_no}
-					<div class="upload" style="width:120px; padding-left: 13%;">
-						<#if member.ccc_img??> 
-						<#assign arr=(member.ccc_img?split(","))> 
-						<div class="rollBox">
-									<ul id="carouselCCC" class="elastislide-list">
-										<#list arr as imgPath>
-											<li><a href="javascript:void(0);" class="demo-image"
-											data-image="${b.imagePath}${imgPath}"><img
-												src="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a>
-												</li> 
-												
-										</#list>
+					<label>3C证书</label>
+					<div id="original" class="slideui" style="">
+								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
+								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
+				                <div class="line-con">					
+									<ul class="imageList">
+									   <#if imageList?exists>
+									   <#list imageList as imgPath>
+										<#if imgPath !=''>
+										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
+										</#if>
+									</#list>
+									</#if>
 									</ul>
 								</div>
-								</#if>
-					</div>
+							</div>
 					</#if>
 				</div>
 				<div class="item">
 					<#if (member.type.id==0)>
-					<label>资质证书</label>${member.qualification_no}
-					<div class="upload" style="width:120px; padding-left: 13%;">
-						<#if member.qualification_img??> 
-						<#assign arr=(member.qualification_img?split(","))> 
-						<div class="rollBox">
-									<ul id="carousel" class="elastislide-list">
-										<#list arr as imgPath>
-											<li><a href="javascript:void(0);" class="demo-image"
-											data-image="${b.imagePath}${imgPath}"><img
-												src="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a>
-												</li> 
-												
-										</#list>
+					<label>资质证书</label>
+					<div id="original" class="slideui">
+								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
+								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
+				                <div class="line-con">					
+									<ul class="imageList">
+									   <#if imageList?exists>
+									   <#list imageList as imgPath>
+										<#if imgPath !=''>
+										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
+										</#if>
+									</#list>
+									</#if>
 									</ul>
 								</div>
-								</#if>
-					</div>
+							</div>
 					</#if>
 				</div>
 				<#if (member.type.id==2)>

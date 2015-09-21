@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.RelevanceMember;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.LevelEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -41,6 +43,7 @@ import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IAccountService;
+import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.validator.hibernate.UpdateGroup;
@@ -68,6 +71,9 @@ public class MemberController extends BaseController
     
     @Autowired
     private RedisTopics topics;
+    
+    @Autowired
+    private IMemberImageService imageService;
     
     /**
      * 会员管理列表
@@ -125,8 +131,8 @@ public class MemberController extends BaseController
                         0l);
                 CometServiceImpl.clear(MessageChannel.MEMBER_PERFECT_MESSAGE_SET);
             }
-            //			registChannel(MessageChannel.MEMBER_MESSAGE);
-            //			registChannel(MessageChannel.MEMBER_PERFECT_MESSAGE);
+            // registChannel(MessageChannel.MEMBER_MESSAGE);
+            // registChannel(MessageChannel.MEMBER_PERFECT_MESSAGE);
             return "manage/member/member";
         }
         catch (Exception e)
@@ -179,6 +185,18 @@ public class MemberController extends BaseController
             MemberStatesEnum[] states = MemberStatesEnum.values();
             LevelEnum[] level = LevelEnum.values();
             List<AreaEntity> cityList = areaService.getChildrenAreas("32");
+            // 删除的资质证书
+            /*List<MemberImageEntity> delzizhi = imageService.getImages(member.getMemberNo(),
+                    "0",
+                    "0");*/
+            // 新上传的资质证书
+            List<RelevanceMember> relist = memberService.getListRelevanceMember(member.getMemberNo());
+            /*  if (relist.size() > 0)
+              {
+                  
+              }*/
+            map.put("relist", relist);
+            // map.put("delzizhi", delzizhi);
             map.put("cityList", cityList);
             map.put("types", types);
             map.put("checkStates", checkStates);
@@ -192,6 +210,35 @@ public class MemberController extends BaseController
             throw new WebException("查询会员信息错误");
         }
         return "manage/member/memberInfo";
+    }
+    
+    @RequestMapping("editRelevanceMember")
+    public @ResponseBody String editRelevanceMember(String[] memberNo,
+            String[] company, String[] linkman, String[] phone,
+            String[] relevanceType, String[] remark) throws WebException
+    {
+        try
+        {
+            List<RelevanceMember> list = new ArrayList<RelevanceMember>();
+            for (int i = memberNo.length - 1; i >= 0; i--)
+            {
+                RelevanceMember re = new RelevanceMember();
+                re.setMemberNo(memberNo[i]);
+                re.setCompany(company[i]);
+                re.setLinkman(linkman[i]);
+                re.setPhone(phone[i]);
+                re.setRelevanceType(Integer.valueOf(relevanceType[i]));
+                re.setRemark(remark[i]);
+                list.add(re);
+            }
+            memberService.addRelevanceMember(list);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new WebException("查询会员信息错误");
+        }
+        return "ok";
     }
     
     /**
@@ -336,6 +383,7 @@ public class MemberController extends BaseController
     
     /**
      * 导出用户信息
+     * 
      * @param request
      * @param response
      * @return
@@ -354,12 +402,12 @@ public class MemberController extends BaseController
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html;charset=UTF-8");
             out = response.getWriter();
-            file = new File("excel");//地址
-            file.mkdirs();//创建目录
+            file = new File("excel");// 地址
+            file.mkdirs();// 创建目录
             file = new File(file, "会员信息.xls");
             WritableWorkbook wwb;
             wwb = Workbook.createWorkbook(new FileOutputStream(file));
-            //设置字体;  
+            // 设置字体;
             WritableFont bold = new WritableFont(WritableFont.createFont("宋体"),
                     14, WritableFont.BOLD);
             wcf = new WritableCellFormat(bold);
@@ -432,7 +480,7 @@ public class MemberController extends BaseController
         finally
         {
             if (file.exists())
-            {//下载完毕删除文件
+            {// 下载完毕删除文件
              // file.delete();
             }
             if (out != null)
@@ -492,4 +540,5 @@ public class MemberController extends BaseController
         String str3 = str1[1] + str2[1];
         return str3;
     }
+    
 }

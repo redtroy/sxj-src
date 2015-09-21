@@ -22,10 +22,29 @@ $(function(){
 });
 </script>
 </#macro>
-<#macro errorInfo>
-<script>
+<#macro iviewer>
+<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 9999;"  id="imagecomponent">
+	<!--大图展示区-->
+	<div class="cer-bg">
+		<div class="cer-l-full"><div style="position:absolute; right:3%; z-index: 99999"><input id="btnClsVie" type="button" value="关闭"  /></div>
+			<div id="viewer" class="viewer">
+			<div id="front" title="上一张"><a href="javaScript:void(0)" class="pngFix"></a></div>
+			<div id="next" title="下一张"><a href="javaScript:void(0)" class="pngFix"></a></div>
+			</div>
+		</div>
 
-</script>
+	   <div style="clear:both; height:0px"></div>
+	</div>
+	<!--滚动图展示区-->
+	<div id="hidden" class="slideui">
+		<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
+		<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
+		<div class="line-con">					
+			<ul class="imageList">
+			</ul>
+		</div>
+	</div>
+</div>
 
 </#macro>
 <#macro dialogBox>

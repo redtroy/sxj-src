@@ -114,6 +114,7 @@ function message(){
   },"请确认是否更改审核状态！");
   }
   function query(page){
+	  loadingImg();
  	 	var params=$("#search_form").serialize();
 		if(page!=undefined){
 		   params=params+"&currentPage="+page;

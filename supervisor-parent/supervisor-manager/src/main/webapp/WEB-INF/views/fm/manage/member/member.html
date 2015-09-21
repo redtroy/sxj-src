@@ -24,6 +24,9 @@
 	type="text/javascript"></script>
 	<script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
+	<link rel="stylesheet" href="${b.staticPath}style/jquery.iviewer.css" />
+<script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
+<link href="${b.staticPath}style/imageditor.css" rel="stylesheet" type="text/css" />
 <@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.upload/>
 <script>
 	jQuery(document)
@@ -125,6 +128,10 @@
 				$('.viewer').slideDown(200);
 			}
 		})
+		$("#Delete-button").live('click',function(){
+		    $(this).parent().parent().remove();
+	    })
+		
 	});
 	
 	function close_img() {
@@ -133,6 +140,7 @@
 		//$("#viewer2").empty();
 	}
 	function query(page) {
+		loadingImg();
 		var params = $("#search_form").serialize();
 		if (page != undefined || page != null) {
 			params = params + "&currentPage=" + page;
@@ -157,8 +165,9 @@
 				layer.close(index);
 				if (data.isOK == 'ok') {
 					pwd = data.password
-					$("#promptPwd").text("初始密码为：" + pwd + "，谢谢!");
-					dialogBoxOutId("#res_password_div");
+					//$("#promptPwd").text("初始密码为：" + pwd + "，谢谢!");
+					var msg ="<span style='font-size:20px;'>初始密码为：<span style='color:red;'>" + pwd + "</span>   谢谢!</span>";
+					 layer.alert(msg,{icon: 6,offset: ['40%', '43%']});
 				} else {
 					errorInfo("初始化失败！");
 				}
@@ -175,7 +184,22 @@
 		var temp = $("#" + lable).is(":hidden");//是否隐藏 
 		if (temp) {
 			$("#" + lable).show();
-			$("#" + lable).load("${basePath}member/info.htm?id=" + id);
+			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
+					  $( ".foundedDate" ).datepicker();
+				    	var a=new $.slide({container:"#SlideUl1",imagesPerPage:7,onImageFocus:function(li){
+				    		//alert(li.find("img").attr("src"))
+				    	},
+				    	onSlide:function(li,index){
+				    		iv.iviewer('loadImage', li.find("img").attr("data")); 
+				    	}});
+				    	var b=new $.slide({container:"#SlideUl2",imagesPerPage:7,onImageFocus:function(li){
+				    		//alert(li.find("img").attr("src"))
+				    	},
+				    	onSlide:function(li,index){
+				    		iv.iviewer('loadImage', li.find("img").attr("data")); 
+				    	}});
+				    	
+			});
 		} else {
 			$("#" + lable).hide();
 			$("#" + lable).html("");
@@ -306,10 +330,10 @@
 				if (data.isOK == 'ok') {
 					succInfo(function() {
 						query($("#pager").attr("currentPage"));
-					}, "修改审核状态成功！");
+					}, temText+"成功！");
 
 				} else {
-					errorInfo("修改审核状态失败！");
+					errorInfo(temText+"失败！");
 				}
 			});
 		}, "是否"+temText+"！");
@@ -327,6 +351,45 @@
 			window.location.href = "exportExcel.htm?"
 					+ $("#search_form").serialize();
 		}, "是否导出Excel");
+	}
+	 function fullImage(){
+		 var index = layer.open({
+		     type: 1,
+		     title:'图片编辑',
+		     shade: true,
+		     skin: 'layui-layer-rim',
+		     content: $('#imageViewer')
+		 });
+		 layer.full(index);
+		 var newSlide=$("#SlideUl1").clone();
+		 var iv = $("#viewer").iviewer();
+			$("#SlideUl").after(newSlide);
+			newSlide.attr("id","newSlideUl");
+			var newb=new $.slide({container:"#newSlideUl",imagesPerPage:7,onImageFocus:function(li){
+				//alert(li.find("img").attr("src"))
+			},
+			onSlide:function(li,index){
+				iv.iviewer('loadImage', li.find("img").attr("src")); 
+				newb.slideTo(index)
+			}});
+		}
+	
+	//=====联系人模块JS 
+	 //新增联系人
+	 function addrelevance(member_id){
+		 var add=$("#"+member_id+"_info").find("#tr_relevance").html();
+		 $("#"+member_id+"_info").find("#table_relevance").append(add);
+	 }
+	 
+	function saverelevance(member_id){
+		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
+		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
+			if (data=='ok'){
+				messageInfo("修改成功");
+			}else {
+				errorInfo("修改失败");
+			}
+		}) 
 	}
 </script>
 <!-- InstanceEndEditable -->
@@ -492,19 +555,19 @@
 					</#list>
 				</table>
 				<@b.pager/>
-				<div id="res_password_div" class="modal-wrap popDemo passwordBox"
-					style="display: none" index="">
-					<div class="modal-header">
-						<span title="关闭" class="close" id="passworde_div_close">关闭</span>
-					</div>
-					<div class="modal-body">
-						<div class="tipBox ly-clearFix">
-							<span class="icon32 icon-32-info"></span>
-							<p class="color-blue fontYH f18" id="promptPwd"></p>
-						</div>
-						<button class="popBtn" id="pass_btn">确认</button>
-					</div>
-				</div>
+<!-- 				<div id="res_password_div" class="modal-wrap popDemo passwordBox" -->
+<!-- 					style="" index=""> -->
+<!-- 					<div class="modal-header"> -->
+<!-- 						<span title="关闭" class="close" id="passworde_div_close">关闭</span> -->
+<!-- 					</div> -->
+<!-- 					<div class="modal-body"> -->
+<!-- 						<div class="tipBox ly-clearFix"> -->
+<!-- 							<span class="icon32 icon-32-info"></span> -->
+<!-- 							<p class="color-blue fontYH f18" id="promptPwd"></p> -->
+<!-- 						</div> -->
+<!-- 						<button class="popBtn" id="pass_btn">确认</button> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 				<!-- InstanceEndEditable -->
 			</div>
 		</div>
@@ -519,4 +582,5 @@
 		<@b.footer />
 </body>
 <!-- InstanceEnd -->
+<@b.iviewer/>
 </html>

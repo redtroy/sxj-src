@@ -106,15 +106,21 @@
 		<typeHandler handler="com.sxj.supervisor.typehandler.PayTypeEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.contract.PayTypeEnum" />
 
-		<typeHandler handler="com.sxj.supervisor.typehandler.MessageTypeEnumTypehandler"
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MessageTypeEnumTypehandler"
 			javaType="com.sxj.supervisor.enu.message.MessageTypeEnum" />
 
 
-		<typeHandler handler="com.sxj.supervisor.typehandler.MessageStateEnumTypeHandler"
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.MessageStateEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.message.MessageStateEnum" />
-			
+
 		<typeHandler handler="com.sxj.supervisor.typehandler.LevelEnumTypeHandler"
 			javaType="com.sxj.supervisor.enu.member.LevelEnum" />
+
+		<typeHandler
+			handler="com.sxj.supervisor.typehandler.CertificateTypeEnumTypeHandler"
+			javaType="com.sxj.supervisor.enu.member.CertificateTypeEnum" />
 	</typeHandlers>
 	<plugins>
 		<plugin interceptor="com.sxj.mybatis.pagination.interceptor.PaginationInterceptor" />

@@ -16,6 +16,7 @@
 <script>
  //查询
    function query(page){
+	   loadingImg();
 	   var params=$("#serch").serialize();
 	   if(page!=undefined){
 		   params=params+"&currentPage="+page;

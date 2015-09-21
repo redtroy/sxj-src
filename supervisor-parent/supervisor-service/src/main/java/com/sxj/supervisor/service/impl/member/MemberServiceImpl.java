@@ -18,9 +18,12 @@ import com.sxj.spring.modules.util.Identities;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.dao.member.IMemberToMemberDao;
+import com.sxj.supervisor.dao.member.IRelevanceMemberDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberImageEntity;
 import com.sxj.supervisor.entity.member.MemberToMemberEntity;
+import com.sxj.supervisor.entity.member.RelevanceMember;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
@@ -29,6 +32,7 @@ import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.open.ApiModel;
+import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.comet.CometServiceImpl;
@@ -56,6 +60,12 @@ public class MemberServiceImpl implements IMemberService
     
     @Autowired
     private IMemberToMemberDao memberToMemberDao;
+    
+    @Autowired
+    private IMemberImageService memberImageService;
+    
+    @Autowired
+    private IRelevanceMemberDao relevanceMemberDao;
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;
@@ -379,6 +389,43 @@ public class MemberServiceImpl implements IMemberService
     }
     
     /**
+     * 前台会员中心查询兼容新老3C，资质证书图片
+     */
+    @Override
+    public MemberEntity getMemberNew(String id)
+    {
+        try
+        {
+            MemberEntity member = menberDao.getMember(id);
+            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(), "1");
+            if (list.size() > 0)
+            {
+                String images = "";
+                for (MemberImageEntity mImage : list)
+                {
+                    images = images + mImage.getImage() + ",";
+                }
+                images = images.substring(0, images.length() - 1);
+                if (member.getType().getId() == 1)
+                {
+                    member.setCcc_img(images);
+                }
+                else if (member.getType().getId() == 0)
+                {
+                    member.setQualification_img(images);
+                }
+                
+            }
+            return member;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("会员查找失败！", e);
+        }
+    }
+    
+    /**
      * 会员高级查询
      */
     @Override
@@ -549,6 +596,47 @@ public class MemberServiceImpl implements IMemberService
     }
     
     /**
+     * 根据会员号查询关联企业
+     * 
+     */
+    @Override
+    public List<RelevanceMember> getListRelevanceMember(String memberNo)
+            throws ServiceException
+    {
+        try
+        {
+            List<RelevanceMember> list = relevanceMemberDao.getEnityBymemberNo(memberNo);
+            return list;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询关联企业错误", e, this.getClass());
+            throw new ServiceException("查询关联企业错误", e);
+        }
+    }
+    
+    @Override
+    @Transactional
+    public String addRelevanceMember(List<RelevanceMember> list)
+            throws ServiceException
+    {
+        try
+        {
+            relevanceMemberDao.del(list.get(0).getMemberNo());
+            for (RelevanceMember re : list)
+            {
+                relevanceMemberDao.add(re);
+            }
+            return "ok";
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("新增关联企业错误", e, this.getClass());
+            throw new ServiceException("新增关联企业错误", e);
+        }
+    }
+    
+    /**
      * 修改密码
      */
     @Override
@@ -697,5 +785,34 @@ public class MemberServiceImpl implements IMemberService
             throw new ServiceException("生成用户证书失败", e);
         }
         
+    }
+    
+    @Override
+    @Transactional
+    public MemberEntity websiteModifyMember(MemberEntity member)
+            throws ServiceException
+    {
+        try
+        {
+            MemberEntity newMember = modifyMember(member, true);
+            if (newMember.getType().getId() == 1)
+            {
+                memberImageService.websiteAddImage(member.getMemberNo(),
+                        member.getCcc_img());
+                newMember.setCcc_img(member.getCcc_img());
+            }
+            else if (newMember.getType().getId() == 0)
+            {
+                memberImageService.websiteAddImage(member.getMemberNo(),
+                        member.getQualification_img());
+                newMember.setQualification_img(member.getQualification_img());
+            }
+            return newMember;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("更新会员失败", e, this.getClass());
+            throw new ServiceException("更新会员失败", e);
+        }
     }
 }

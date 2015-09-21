@@ -2,7 +2,7 @@ package com.sxj.supervisor.enu.member;
 
 public enum LevelEnum
 {
-    ONE("一级", 0), TWO("二级", 1), THREE("三级", 2);
+	SUPER("特级", 0),ONE("一级", 1), TWO("二级", 2), THREE("三级",3),A("甲",4),B("乙",5);
     
     // 成员变量
     private Integer id;
