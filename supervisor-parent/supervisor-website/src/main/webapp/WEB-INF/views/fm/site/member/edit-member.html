@@ -493,14 +493,16 @@ $(document).ready(function(){
 	**/
 	$('.iviewer_del').unbind(); 
 	$(".iviewer_del").live("click",function(){
-		var i=hSlide.deleteImage();
-		if(hSlide.getCurrentImageData()){
+		var i=hSlide.deleteImage(hSlide.getIndex());
+		
+		//if(hSlide.getCurrentImageData()){
 			iv.iviewer('loadImage', hSlide.getCurrentImageData());
-			oSlide.deleteImage(i);
+			oSlide.deleteImage(i<=0?0:i+1);
 			oSlide.slideTo(hSlide.getIndex());
-			}
-		else
+		//	}
+		if(!hSlide.getCurrentImageData())
 			iv.children("img").attr("src","");
+		
 	});
 	/**
 	iviewer上左右按钮
