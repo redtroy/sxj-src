@@ -1,5 +1,6 @@
 package com.sxj.supervisor.website.controller.member;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -239,6 +240,7 @@ public class MemberController extends BaseController
             }
             if (null != member.getDlList())
             {
+                List<MemberToMemberEntity> list = new ArrayList<MemberToMemberEntity>();
                 //新增关系
                 for (int i = 0; i < member.getDlList().size(); i++)
                 {
@@ -252,7 +254,7 @@ public class MemberController extends BaseController
                         m.setTelNum(newMember.getTelNum());
                         if (StringUtils.isNotEmpty(m.getParentName()))
                         {
-                            memberToMemberService.addMemberToMember(m);
+                            list.add(m);
                         }
                     }
                     else if (newMember.getType() == MemberTypeEnum.GENRESFACTORY)
@@ -263,10 +265,11 @@ public class MemberController extends BaseController
                         m.setParentTelNum(newMember.getTelNum());
                         if (StringUtils.isNotEmpty(m.getMemberName()))
                         {
-                            memberToMemberService.addMemberToMember(m);
+                            list.add(m);
                         }
                     }
                 }
+                memberToMemberService.addMemberToMember(list);
             }
             
             topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)

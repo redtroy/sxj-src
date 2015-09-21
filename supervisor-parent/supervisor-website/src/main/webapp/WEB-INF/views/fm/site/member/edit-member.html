@@ -424,7 +424,6 @@ function save(id){
     var memberType = "#{member.type.id}";
     	var qualification_img=imageVal.join(",");
     	$("#aptitudePath_hidden").val(qualification_img);
-    
     dialogBox(function(index){
     	if (!flag){
     		//if (${member.checkState.id}==2){
@@ -543,6 +542,7 @@ $(document).ready(function(){
 		tr.find("input:eq(0)").attr("name","dlList["+dlNum+"].memberName");
 		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].memberNo");
 		tr.find("input:eq(2)").attr("name","dlList["+dlNum+"].memberType");
+		tr.find("input:eq(2)").attr("value","6");
 		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].contacts");
 		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].telNum");
 		dlNum++;
@@ -594,6 +594,7 @@ $(document).ready(function(){
 		tr.find("input:eq(0)").attr("name","dlList["+dlNum+"].memberName");
 		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].memberNo");
 		tr.find("input:eq(2)").attr("name","dlList["+dlNum+"].memberType");
+		tr.find("input:eq(2)").attr("value","7");
 		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].contacts");
 		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].telNum");
 		dlNum++;
@@ -645,6 +646,7 @@ $(document).ready(function(){
 		tr.find("input:eq(0)").attr("name","dlList["+dlNum+"].memberName");
 		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].memberNo");
 		tr.find("input:eq(2)").attr("name","dlList["+dlNum+"].memberType");
+		tr.find("input:eq(2)").attr("value","2");
 		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].contacts");
 		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].telNum");
 		dlNum++;
@@ -961,7 +963,6 @@ $(document).ready(function(){
 						</div>
 		</#if>
        
-       <#if (member.type.id==0 || member.type.id==6 || member.type.id==7  )>
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
@@ -990,7 +991,6 @@ $(document).ready(function(){
 									 <input type="file" class="" id="aptitudePath_File_reload" name="input6">
 								</div>
 						</div>
-				</#if>		
 		<#if (member.type.id==2)>
 		<div class="item">
           <label>代理商</label>
