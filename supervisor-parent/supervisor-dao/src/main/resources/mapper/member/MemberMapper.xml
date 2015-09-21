@@ -58,6 +58,8 @@
 	<result property="remark" column="REMARK" jdbcType="VARCHAR" />
 	<result property="upDate" column="UPDATE_DATE" jdbcType="TIMESTAMP" />
 	<result property="isHave" column="IS_HAVE" jdbcType="INTEGER" />
+	<result property="enclosedNo" column="ENCLOSED_NO" jdbcType="VARCHAR" />
+	<result property="enclosedImg" column="ENCLOSED_IMG" jdbcType="VARCHAR" />
 </resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"

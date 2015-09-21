@@ -927,8 +927,8 @@ $(document).ready(function(){
          </div>
          </#if>
         </div>
-      
        <div id="add_form">
+<<<<<<< HEAD
          <#if (member.type.id==1)>
        <div class="item">
 							<label>3C证书</label> 
@@ -955,7 +955,10 @@ $(document).ready(function(){
 						</div>
 		</#if>
        
+        
        <#if (member.type.id==0 || member.type.id==6 || member.type.id==7  )>
+=======
+>>>>>>> a207c4063afd3d34bcd2bf6481031cb5372edf02
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
@@ -984,7 +987,7 @@ $(document).ready(function(){
 									 <input type="file" class="" id="aptitudePath_File_reload" name="input6">
 								</div>
 						</div>
-				</#if>		
+						
 		<#if (member.type.id==2)>
 		<div class="item">
           <label>代理商</label>
@@ -1118,7 +1121,6 @@ $(document).ready(function(){
         <div class="mt15 mb20 tc">
          <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
         </div>  
-        
         <!-- 隐藏数据 -->
         <input type="hidden" name="id" value="${member.id}" />
         <input type="hidden" id="newTelNum" name="telNum" value="" />

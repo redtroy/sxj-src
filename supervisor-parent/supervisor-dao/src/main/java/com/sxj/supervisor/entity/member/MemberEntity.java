@@ -336,6 +336,18 @@ public class MemberEntity extends Pagable implements Serializable
     @Column(name = "IS_HAVE")
     private Integer isHave;
     
+    /**
+     * 附框推广证编号
+     **/
+    @Column(name = "ENCLOSED_NO")
+    private String enclosedNo;
+    
+    /**
+     * 附框推广证图片
+     **/
+    @Column(name = "ENCLOSED_IMG")
+    private String enclosedImg;
+    
     //附加属性
     /**
      * 上级型材厂编号
@@ -825,6 +837,26 @@ public class MemberEntity extends Pagable implements Serializable
     public void setJxList(List<MemberToMemberEntity> jxList)
     {
         this.jxList = jxList;
+    }
+    
+    public String getEnclosedNo()
+    {
+        return enclosedNo;
+    }
+    
+    public void setEnclosedNo(String enclosedNo)
+    {
+        this.enclosedNo = enclosedNo;
+    }
+    
+    public String getEnclosedImg()
+    {
+        return enclosedImg;
+    }
+    
+    public void setEnclosedImg(String enclosedImg)
+    {
+        this.enclosedImg = enclosedImg;
     }
     
 }
