@@ -491,6 +491,7 @@ $(document).ready(function(){
 	/**
 	同步删除两个图片滚动层
 	**/
+	$('.iviewer_del').unbind(); 
 	$(".iviewer_del").live("click",function(){
 		var i=hSlide.deleteImage();
 		if(hSlide.getCurrentImageData()){
@@ -702,9 +703,7 @@ $(document).ready(function(){
          <#if (member.type.id==1)>
 							<!-- 3C证书1 -->
 							<label>3C证书</label> 
-							<input class="input input-w140h30 mb5" id="ccc"
-										value="${member.ccc_no}" maxlength="14"
-										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
+							<input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
 							<p>&nbsp;</p>
 							<div id="original" class="slideui" style="">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
@@ -732,9 +731,7 @@ $(document).ready(function(){
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
-									<input class="input input-w140h30 mb5" id="aptitude"
-										value="${member.qualification_no}" maxlength="14"
-										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
+									<input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
 								</p> 
 							
 							<div id="original" class="slideui">
