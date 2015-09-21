@@ -24,7 +24,7 @@
           <textarea name="projectRemark" cols="1" style="height:75px; width:166px;" datatype="s2-500" errormsg="项目描述至少2~200个字符！" nullmsg="请输入项目概要"></textarea>
         </div>
         <div class="item" style="text-align:center; margin-top:6px">
-          <a href="${basePath}developers/developers.htm" class="button button-brown">我要融资</a>
+          <a href="#" onclick="sub()" class="button button-brown">我要融资</a>
         </div>
       </form>
 </div>
@@ -42,7 +42,7 @@
 					}else if(telReg.test(gets)){
 						return true;
 					}else{
-						return "请输入正确的手机号码或者固定电诿";
+						return "请输入正确的手机号码或者固定电话";
 					}
 				}
 			 },
@@ -58,6 +58,6 @@
 		}
 	 dialogBox(function(index){
 		 $("#addForm").submit();
-	   },"昡ƥЦ确认申请融赿");
+	   },"是否确认申请融资");
   }
   </script>
