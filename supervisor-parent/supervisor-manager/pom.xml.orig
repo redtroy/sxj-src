@@ -1,0 +1,299 @@
+﻿<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sxj</groupId>
+		<artifactId>supervisor-parent</artifactId>
+		<version>1.0</version>
+	</parent>
+	<artifactId>supervisor-manager</artifactId>
+	<packaging>war</packaging>
+	<name>supervisor-manager Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>2.6.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tacitknowledge</groupId>
+			<artifactId>tk-filters</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.comet4j</groupId> <artifactId>comet4j-tomcat7</artifactId> 
+			<version>1.0</version> </dependency> -->
+		<!-- springside -->
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-extension</artifactId>
+		</dependency>
+		<!-- sxj -->
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>supervisor-tasks</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>rfid-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.webflow</groupId>
+			<artifactId>spring-webflow</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+		</dependency>
+
+		<!-- mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+		</dependency>
+
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+		<!-- 数据库连接 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>tools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>jconsole</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<!-- apache commons -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-all</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>cache.manager</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>mybatis-shard</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>jsonrpc-server-spring</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.supercsv</groupId>
+			<artifactId>super-csv</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>4.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>statemachine-core</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>spring-quartz</artifactId>
+			<version>4.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jagregory</groupId>
+			<artifactId>shiro-freemarker-tags</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
+		</dependency>
+		<!-- POI核心依赖 -->
+		<dependency>
+			<groupId>com.sxj</groupId>
+			<artifactId>poi-transformer</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!-- 为POI支持Office Open XML -->
+		<!-- 支持Word文档的操作 -->
+	</dependencies>
+
+	<build>
+		<finalName>supervisor-manager</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includeTypes>jar</includeTypes>
+					<overWriteSnapshots>true</overWriteSnapshots>
+					<type>jar</type>
+					<outputDirectory>${project.build.directory}/extlib</outputDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+<<<<<<< HEAD
+ 					  <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>  
+=======
+ 					    <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>   
+>>>>>>> 5b03a241b5683b65de6bba00e250aee8c6991fe2
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<!-- 资源根目录排除各环境的配置，使用单独的资源目录来指定 -->
+				<excludes>
+					<exclude>test253/*</exclude>
+					<exclude>product/*</exclude>
+					<exclude>dev/*</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/${profiles.active}</directory>
+			</resource>
+		</resources>
+	</build>
+
+	<profiles>
+		<profile>
+			<!-- 本地开发环境 -->
+			<id>dev</id>
+			<properties>
+				<profiles.active>dev</profiles.active>
+				<deploy.url>http://host:port/manager/text</deploy.url>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<!-- 测试环境 -->
+			<id>test253</id>
+			<properties>
+				<profiles.active>test253</profiles.active>
+				<deploy.url>http://host:port/manager/text</deploy.url>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 生产环境 -->
+			<id>product</id>
+			<properties>
+				<profiles.active>product</profiles.active>
+				<deploy.url>http://host:port/manager/text</deploy.url>
+			</properties>
+		</profile>
+	</profiles>
+
+</project>

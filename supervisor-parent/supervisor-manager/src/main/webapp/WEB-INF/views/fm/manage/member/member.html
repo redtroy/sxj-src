@@ -383,8 +383,7 @@
 	 
 	function saverelevance(member_id){
 		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
-		alert(relist)
-		 $.post("${basePath}editRelevanceMember.htm",relist,function(data){
+		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
 			if (data=='ok'){
 				messageInfo("修改成功");
 			}else {
