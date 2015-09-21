@@ -22,103 +22,6 @@
                &nbsp; ${member.type.getName()}<input type="hidden" name="type" value="${member.type.getId()}" />
             </#if>
           </li>
-          <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo"  value="${member.getbLicenseNo()}" />
-          <!-- <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p> -->
-          <p><a href="javascript:void(0);" id="bLicensePath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a><input type="file" class="" id="bLicensePath_File_${member.id}" name="input6"><input type="hidden" id="bLicensePath_hidden_${member.id}" name="bLicensePath"></p>
-          </li>
-         <!-- <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30" nullmsg="节能标识推广证号不能为空" value="${member.getEnergyNo()}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p> --> 
-          <li class="view"><label >质量管理体系证书</label><input name="qms_no" type="text"   value="${member.qms_no}" />
-          <p><a href="javascript:void(0);" id="qmsPath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}">查看缩略图</a><input type="file" class="" id="qmsPath_File_${member.id}" name="input6"><input type="hidden" id="qmsPath_hidden_${member.id}" name="qms_img"></p>
-          </li>
-          <#if (member.type.id==0)>
-          <li class="view"><label >安全生产许可证</label><input name="safety_licenses_no" type="text"  nullmsg="安全生产许可证不能为空" value="${member.safety_licenses_no}" />
-          <p><a href="javascript:void(0);" id="safetyPath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.safety_licenses_img}" data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a><input type="file" class="" id="safetyPath_File_${member.id}" name="input6"><input type="hidden" id="safetyPath_hidden_${member.id}" name="safety_licenses_img"></p>
-          </li>
-          </#if>
-          <#if (member.type.id==0)>
-          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text"   value="${member.getEnergyNo()}" />
-          <p><a href="javascript:void(0);" id="energyPath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.energyPath}" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a><input type="file" class="" id="energyPath_File_${member.id}" name="input6"><input type="hidden" id="energyPath_hidden_${member.id}" name="energyPath"></p>
-          </li>
-          </#if>
-            <#if (member.type.id==1)>
-          <li class="view"><label >3C认证证书</label><input name="ccc_no" type="text"  nullmsg="3C认证证书不能为空" value="${member.ccc_no}" />
-          <p><input type="file" class="" id="upload_${member.id}" name="input6"><input type="hidden" id="Path_hidden_${member.id}" value="${member.ccc_img}" name="ccc_img"></p>
-         <!--  <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.ccc_img}" data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a></p> -->
-          </li>
-          <li class="view">
-          		<#if member.ccc_img??> 
-						<#assign arr=(member.ccc_img?split(","))> 
-						<div class="rollBox">
-									<ul id="carousel_${member.id}" class="elastislide-list">
-										<#list arr as imgPath>
-											<li><a href="javascript:void(0);" class="demo-image"
-											data-image="${b.imagePath}${imgPath}"><img
-												src="${b.imagePath}${imgPath}80x100.JPG" /></a>
-												<p>${imgPath_index+1}</p>
-												</li> 
-												
-										</#list>
-									</ul>
-								</div>
-								</#if>
-          </li>
-          </#if>
-           <#if (member.type.id==2)>
-          <li class="view"><label >工业产品生产许可证</label><input name="production_license_no" type="text"  value="${member.production_license_no}" />
-          <p><a href="javascript:void(0);" id="productionPath_src_${member.id}" class="lnk-blue lnk-underline demo-image" image="${member.production_license_img}" data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a><input type="file" class="" id="productionPath_File_${member.id}" name="input6"><input type="hidden" id="productionPath_hidden_${member.id}" name="production_license_img"></p>
-          </li>
-          </#if>
-          <#if (member.type.id==0)>
-          <li class="view"><label >资质证书</label><input name="qualification_no" type="text"  value="${member.qualification_no}" />
-           <p><input type="file" class="" id="upload_${member.id}" name="input6"><input type="hidden" id="Path_hidden_${member.id}" value="${member.qualification_img}" name="qualification_img"></p>
-          </li>
-          <li class="view" > 
-          		<#if member.qualification_img??> 
-						<#assign arr=(member.qualification_img?split(","))> 
-						<div class="rollBox" >
-									<ul id="carousel_${member.id}" class="elastislide-list">
-										<#list arr as imgPath>
-											<li><a href="javascript:void(0);" class="demo-image"
-											data-image="${b.imagePath}${imgPath}"><img
-												src="${b.imagePath}${imgPath}80x100.JPG"  /></a>
-												<p>${imgPath_index+1}</p>
-												</li> 
-												
-										</#list>
-									</ul>
-								</div>
-								</#if>
-          </li>
-          </#if>
-          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" datatype="*2-25" nullmsg="联系人不能为空" name="contacts"/></li>
-          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" datatype="m" nullmsg="手机号码不能为空" name="phoneNo"/></li>
-          <li><label>公司地址</label><input type="text" value="${member.address}" datatype="*2-50" nullmsg="地址不能为空" name="address"/></li>
-          <li><label>固定电话</label><input type="text" value="${member.telNum}" name="telNum"/></li>
-          <li><label>注册时间</label><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
-          <li><label>认证时间</label><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
-          <li><label>审核状态</label><em class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
-          <li><label>帐户状态</label><em class="state verified" id="state1">${member.state.getName()}</em></li>
-          <li><label>子帐号</label>${member.getAccountNum()}</li>
-          <li><label>总交易额</label>${member.totalAmount}元</li>
-          <li><label>扫描设备号</label><textarea cols="" rows="3" class="textRfid" id="deviceNumber" >${member.deviceNumber}</textarea></li>
-          <li><label>邮政编码</label><input type="text" value="${member.code}" id="code" name="code" /></li>
-          <li><label>法定代表人</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
-          <li><label>注册资本</label><input type="text" value="${member.registeredCapital}" id="registeredCapital" datatype="n1-10" name="registeredCapital" />万元</li>
-          <li><label>成立时间</label><input type="text" <#if (member.foundedDate??)>value="${member.foundedDate?string("yyyy-MM-dd")}" </#if> id="foundedDate" class="foundedDate" name="foundedDate"  /></li>
-           <li><label>资质等级</label>
-           <select name="level" id=level>
-           <option value="">-请选择-</option>
-           <#list level as le>
-           <#if member.level??>
-	           <#if (le.getId()==member.level.getId())>
-	                      <option value="${le.getId()}" selected="selected">${le.getName()}</option>
-	                <#else>
-	                      <option value="${le.getId()}">${le.getName()}</option>
-	                </#if>
-	          <#else>
-	           <option value="${le.getId()}">${le.getName()}</option>
-           </#if>
           <li style="width:99%"><label class="lable">城市</label> 江苏省-
                       <select name="area" id="city">
            	<option value="">-请选择-</option>
@@ -206,22 +109,22 @@
           </form>
           </div>
 		<!-- 资质证书开始 -->
-		<#if (member.type.id==0)>
+		<#if (member.type.id==0 || member.type.id==5 || member.type.id==6 || member.type.id==7)>
             <div class="infoBox" id="meb-news"> 		
 		        <div id="block-name">资质证书</div>
                 <div class="left-news">
                     <ul class="ly-clearFix">
-                        <li style=" width:99%"><label class="lable">原有资质证书</label>10个</li>
+                        <li style=" width:99%"><label class="lable">原有资质证书</label>${oldNum}个</li>
                     </ul>
                 </div>
                 <div class="right-news">
                     <ul class="ly-clearFix">
-                       <li style=" width:99%"><label class="lable">现有资质证书</label>16个</li>
+                       <li style=" width:99%"><label class="lable">现有资质证书</label>${num}个</li>
                     </ul>
                 </div>
 				<div>
 			<ul class="ly-clearFix">
-				<li style="width: 99%"><label class="lable">删除资质证书</label>4个</li>
+				<li style="width: 99%"><label class="lable">删除资质证书</label>${delNum}个</li>
 				<li
 					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
 					<div id="SlideUl1" class="slideui">
@@ -230,20 +133,22 @@
 						<i class="buttonSildeRight right" id="aright"><img width="20"
 							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<#if member.qualification_img??> <#assign
-							arr=(member.qualification_img?split(","))>
-							<ul class="imageList">
-								<#list arr as imgPath>
-								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+							<ul class="imageList" id="imagelist_${member.id}">
+								<#list ImageList as imageModel>
+								<li style="width: 86px; height: 120px">
+								<input type="hidden" name="image" value="${imageModel.image}" />
+								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
+								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
+								<input type="hidden" name="remark" value="${imageModel.remark}" />
+								<img
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
-							</#if>
 						</div>
 					</div>
 				</li>
 				<li style="width: 99%"><label class="lable">新上传证书</label>10个 <a
-					id="button-upload" href="javascript:fullImage();" class="normal">证书上传</a></li>
+					id="button-upload" href="javascript:uploadImage();" class="normal">证书上传</a></li>
 				<li
 					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
 					<div id="SlideUl2" class="slideui">
@@ -252,15 +157,12 @@
 						<i class="buttonSildeRight right" id="aright"><img width="20"
 							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<#if member.qualification_img??> <#assign
-							arr=(member.qualification_img?split(","))>
 							<ul class="imageList">
-								<#list arr as imgPath>
+								<#list newImagList as imageModel>
 								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
-							</#if>
 						</div>
 					</div>
 
@@ -268,7 +170,7 @@
 				</li>
 			</ul>
 		</div>
-				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
+				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:editImage('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
 			</div>
 			</#if>
 			<!-- 资质证书结束 -->
@@ -278,17 +180,17 @@
 		        <div id="block-name">3C证书</div>
                 <div class="left-news">
                     <ul class="ly-clearFix">
-                        <li style=" width:99%"><label class="lable">原有3C证书</label>10个</li>
+                        <li style=" width:99%"><label class="lable">原有3C证书</label>${oldNum}个</li>
                     </ul>
                 </div>
                 <div class="right-news">
                     <ul class="ly-clearFix">
-                       <li style=" width:99%"><label class="lable">现有3C证书</label>16个</li>
+                       <li style=" width:99%"><label class="lable">现有3C证书</label>${num}个</li>
                     </ul>
                 </div>
 				<div>
 			<ul class="ly-clearFix">
-				<li style="width: 99%"><label class="lable">删除3C证书</label>4个</li>
+				<li style="width: 99%"><label class="lable">删除3C证书</label>${delNum}个</li>
 				<li
 					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
 					<div id="SlideUl1" class="slideui">
@@ -297,15 +199,17 @@
 						<i class="buttonSildeRight right" id="aright"><img width="20"
 							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<#if member.ccc_img??> <#assign
-							arr=(member.ccc_img?split(","))>
-							<ul class="imageList">
-								<#list arr as imgPath>
-								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+							<ul class="imageList" id="cccimagelist_${member.id}">
+								<#list ImageList as imageModel>
+								<li style="width: 86px; height: 120px">
+								<input type="hidden" name="image" value="${imageModel.image}" />
+								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
+								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
+								<input type="hidden" name="remark" value="${imageModel.remark}" />
+								<img
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
-							</#if>
 						</div>
 					</div>
 				</li>
@@ -319,15 +223,12 @@
 						<i class="buttonSildeRight right" id="aright"><img width="20"
 							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<#if member.ccc_img??> <#assign
-							arr=(member.ccc_img?split(","))>
 							<ul class="imageList">
-								<#list arr as imgPath>
+								<#list newImagList as imageModel>
 								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
-							</#if>
 						</div>
 					</div>
 
@@ -335,7 +236,7 @@
 				</li>
 			</ul>
 		</div>
-				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
+				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:editImage('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
 			</div>
 			</#if>
 			<!-- 3C证书结束 -->
@@ -355,7 +256,7 @@
 			        <#list relist as re>
 			              <tr>
 			                 <input type="hidden" value="${member.memberNo}" name="memberNo">
-					         <td id="td"><input type="text" name="company" value="${re.company}" /></td>
+					         <td id="td"><input type="text" class="company" name="company" value="${re.company}" /></td>
 				             <td id="td"><input type="text" name="linkman" value="${re.linkman}" /></td>
 					         <td id="td"><input type="text" name="phone"  value="${re.phone}" /></td>
 					         <td id="td"><select name="relevanceType" ><option value="2" <#if (re.relevanceType==2)> selected="selected" </#if> >型材厂</option><option value="6" <#if (re.relevanceType==6)> selected="selected" </#if> >代理商</option><option value="7" <#if (re.relevanceType==7)> selected="selected" </#if>>经销商</option><option value="10" <#if (re.relevanceType==10)> selected="selected" </#if>>同一出资方</option></select></td>
@@ -373,7 +274,7 @@
           <table id="tr_relevance">
                <tr >
                  <input type="hidden" value="${member.memberNo}" name="memberNo">
-		         <td id="td"><input type="text" name="company"></td>
+		         <td id="td"><input type="text" class="company" name="company"></td>
 	             <td id="td"><input type="text" name="linkman"></td>
 		         <td id="td"><input type="text" name="phone"></td>
 		         <td id="td"><select name="relevanceType" ><option value="2">型材厂</option><option value="6">代理商</option><option value="7">经销商</option><option value="10">同一出资方</option></select></td>
