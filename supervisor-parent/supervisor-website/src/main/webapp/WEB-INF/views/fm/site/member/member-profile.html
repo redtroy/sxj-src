@@ -360,47 +360,24 @@
 					</div>
 					</#if>
 				</div>
+				<#if imageList?exists>
 				<div class="item">
-        <div class="item">
-					<#if (member.type.id==1)>
-					<label>3C证书</label>
-					<div id="original" class="slideui" style="">
-								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
-								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
-				                <div class="line-con">					
-									<ul class="imageList">
-									   <#if imageList?exists>
-									   <#list imageList as imgPath>
-										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
-										</#if>
-									</#list>
-									</#if>
-									</ul>
-								</div>
-							</div>
-					</#if>
-				</div>
-				<div class="item">
-					<#if (member.type.id==0 || member.type.id==5 || member.type.id==6 || member.type.id==7 )>
 					<label>资质证书</label>
 					<div id="original" class="slideui">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
 								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
 				                <div class="line-con">					
 									<ul class="imageList">
-									   <#if imageList?exists>
 									   <#list imageList as imgPath>
 										<#if imgPath !=''>
 										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
 										</#if>
 									</#list>
-									</#if>
 									</ul>
 								</div>
 							</div>
-					</#if>
 				</div>
+				</#if>
 				<#if (member.type.id==2)>
 		<div class="item">
           <label>代理商</label>
