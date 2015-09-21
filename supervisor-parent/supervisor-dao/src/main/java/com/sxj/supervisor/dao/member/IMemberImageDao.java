@@ -67,4 +67,13 @@ public interface IMemberImageDao
     public int updatelock(@Param("memberNo") String memberNo,
             @Param("oldvison") String oldvison,
             @Param("newvison") String newvison);
+    
+    /**
+     * 获取会员证书
+     * 
+     * @param imageId
+     * @return
+     * @throws SQLException
+     */
+    public MemberImageEntity getMemberImageByImageId(String imageId) throws SQLException;
 }

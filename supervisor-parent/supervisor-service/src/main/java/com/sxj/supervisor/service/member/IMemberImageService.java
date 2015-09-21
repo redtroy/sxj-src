@@ -1,11 +1,13 @@
 package com.sxj.supervisor.service.member;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.supervisor.entity.member.CertificateEntity;
 import com.sxj.supervisor.entity.member.CertificateLevelEntity;
 import com.sxj.supervisor.entity.member.LevelEntity;
 import com.sxj.supervisor.entity.member.MemberImageEntity;
+import com.sxj.supervisor.model.member.MemberImageModel;
 import com.sxj.util.exception.ServiceException;
 
 public interface IMemberImageService
@@ -59,4 +61,9 @@ public interface IMemberImageService
      * @param list
      */
     public void ManageAddImage(List<MemberImageEntity> list);
+    
+	MemberImageModel getMemberImageByImageId(String imageId)
+			throws ServiceException;
+	
+	void addMemberImage(MemberImageEntity memberImage)throws SQLException;
 }

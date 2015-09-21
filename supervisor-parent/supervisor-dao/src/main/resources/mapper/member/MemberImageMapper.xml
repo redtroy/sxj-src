@@ -19,7 +19,7 @@
 		<result property="version" column="VERSION" jdbcType="VARCHAR" />
 		<result property="creationDate" column="CREATION_DATE"
 			jdbcType="TIMESTAMP" />
-		<result property="certificateNname" column="CERTIFICATE_NAME"
+		<result property="certificateName" column="CERTIFICATE_NAME"
 			jdbcType="VARCHAR" />
 	</resultMap>
 	<select id="queryMemberImage" resultMap="MemberImageEntity"
@@ -47,4 +47,8 @@
 	<update id="updatelock">
 		<![CDATA[update M_MEMBER_IMAGE set VERSION=#{newvison},STATE=0 where VERSION=#{oldvison} and MEMBER_NO=#{memberNo}]]>
 	</update>
+	<select id="getMemberImageByImageId" resultMap="MemberImageEntity"
+		parameterType="string">
+	<![CDATA[SELECT * FROM M_MEMBER_IMAGE WHERE IMAGE=#{imageId} ]]>
+	</select>
 </mapper>
