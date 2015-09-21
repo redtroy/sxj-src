@@ -334,7 +334,6 @@
           </form>
           </div>
 		<!-- 资质证书开始 -->
-		<#if (member.type.id==0 || member.type.id==5 || member.type.id==6 || member.type.id==7)>
             <div class="infoBox" id="meb-news"> 		
 		        <div id="block-name">资质证书</div>
                 <div class="left-news">
@@ -389,81 +388,12 @@
 							</ul>
 						</div>
 					</div>
-
-
 				</li>
 			</ul>
 		</div>
 				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:editImage('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
 			</div>
-			</#if>
 			<!-- 资质证书结束 -->
- 		 <!-- 3C证书开始 -->
-		<#if (member.type.id==1)>
-            <div class="infoBox" id="meb-news"> 		
-		        <div id="block-name">3C证书</div>
-                <div class="left-news">
-                    <ul class="ly-clearFix">
-                        <li style=" width:99%"><label class="lable">原有3C证书</label>${oldNum}个</li>
-                    </ul>
-                </div>
-                <div class="right-news">
-                    <ul class="ly-clearFix">
-                       <li style=" width:99%"><label class="lable">现有3C证书</label>${num}个</li>
-                    </ul>
-                </div>
-				<div>
-			<ul class="ly-clearFix">
-				<li style="width: 99%"><label class="lable">删除3C证书</label>${delNum}个</li>
-				<li
-					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
-					<div id="SlideUl1" class="slideui">
-						<i class="buttonSildeLeft left" id="aleft"><img width="20"
-							height="60" src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
-						<i class="buttonSildeRight right" id="aright"><img width="20"
-							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
-						<div class="line-con">
-							<ul class="imageList" id="cccimagelist_${member.id}">
-								<#list ImageList as imageModel>
-								<li style="width: 86px; height: 120px">
-								<input type="hidden" name="image" value="${imageModel.image}" />
-								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
-								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
-								<input type="hidden" name="remark" value="${imageModel.remark}" />
-								<img
-									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
-								<tt></tt></li> </#list>
-							</ul>
-						</div>
-					</div>
-				</li>
-				<li style="width: 99%"><label class="lable">新上传证书</label>10个 <a
-					id="button-upload" href="javascript:fullImage();" class="normal">证书上传</a></li>
-				<li
-					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
-					<div id="SlideUl2" class="slideui">
-						<i class="buttonSildeLeft left" id="aleft"><img width="20"
-							height="60" src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
-						<i class="buttonSildeRight right" id="aright"><img width="20"
-							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
-						<div class="line-con">
-							<ul class="imageList">
-								<#list newImagList as imageModel>
-								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
-								<tt></tt></li> </#list>
-							</ul>
-						</div>
-					</div>
-
-
-				</li>
-			</ul>
-		</div>
-				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:editImage('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
-			</div>
-			</#if>
-			<!-- 3C证书结束 -->
  		   <div class="infoBox" id="associated-enterprise"> 
 		        <div id="block-name">关联企业</div>
 		  	    <div id="relation">
