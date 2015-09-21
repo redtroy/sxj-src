@@ -146,6 +146,7 @@ public class MemberImageServiceImpl implements IMemberImageService
                         if (image.equals(mem.getImage()))
                         {
                             Flag = false;
+                            mem.setId(null);
                             mem.setCreationDate(date);
                             mem.setVersion(viso);
                             mem.setMemberNo(memberNo);
@@ -158,6 +159,7 @@ public class MemberImageServiceImpl implements IMemberImageService
                         mem.setCreationDate(date);
                         mem.setVersion(viso);
                         mem.setImage(image);
+                        mem.setState(1);
                         mem.setMemberNo(memberNo);
                         imageDao.addMemberImage(mem);
                     }
