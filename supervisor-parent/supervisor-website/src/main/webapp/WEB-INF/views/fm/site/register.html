@@ -371,9 +371,7 @@ ${type[0].getName()}</span>/
 	 var obj=$("#sendms");
 	  send_flag=true;
 	  var phoneNo=$("#phoneNo").val();
-	  if (!checkSubmitMobil()){
-		  return false;
-	  }
+	  
 	  
 	  $.post("send_ms.htm",{phoneNo:phoneNo},function(data){
 	     if(data.error){
@@ -479,12 +477,15 @@ ${type[0].getName()}</span>/
 //获取图片验证码字符
 function setRegisterRand(){
 var o=new Object();
-	 $.post('${basePath}getImgStr.htm?',function(data){
+	 $.post('${basePath}getImgStr.htm',function(data){
        document.getElementById('imgStr').value=data;
    });
 }
 
 function showImg(){
+	 if (!checkSubmitMobil()){
+		  return false;
+	  }
 	refresh1();
 	$("#img").val("");
 	dialogBoxOutId("#divImg");
@@ -493,6 +494,7 @@ function sendms(){
 	var imgStr = $("#imgStr").val();
 	  var phoneNo=$("#phoneNo").val();
 	  var img=$("#img").val();
+	 
 	  if(!img){
 			$("#imgMsg").show();
 			wrong("#imgMsg");

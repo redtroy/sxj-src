@@ -23,6 +23,7 @@ import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.redis.core.concurrent.RedisConcurrent;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
@@ -31,6 +32,7 @@ import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.member.IMemberToMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.Constraints;
@@ -47,6 +49,9 @@ public class MemberController extends BaseController
     
     @Autowired
     private IMemberService memberService;
+    
+    @Autowired
+    private IMemberToMemberService memberToMemberService;
     
     @Autowired
     private IAreaService areaService;
@@ -88,6 +93,20 @@ public class MemberController extends BaseController
                 List<AreaEntity> cityList = areaService.getChildrenAreas("32");
                 map.put("cityList", cityList);
                 map.put("member", member);
+                
+                MemberToMemberEntity query = new MemberToMemberEntity();
+                if (member.getType() == MemberTypeEnum.GENRESFACTORY)
+                {
+                    query.setParentNo(member.getMemberNo());
+                }
+                else if (member.getType() == MemberTypeEnum.AGENT
+                        || member.getType() == MemberTypeEnum.DISTRIBUTOR)
+                {
+                    query.setMemberNo(member.getMemberNo());
+                }
+                List<MemberToMemberEntity> mlist = memberToMemberService.query(query);
+                map.put("mlist", mlist);
+                
                 if (member.getFlag())
                 {
                     Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
@@ -151,8 +170,22 @@ public class MemberController extends BaseController
     {
         MemberEntity member = memberService.getMember(id);
         List<AreaEntity> cityList = areaService.getChildrenAreas("32");
+        MemberToMemberEntity query = new MemberToMemberEntity();
+        
+        if (member.getType() == MemberTypeEnum.GENRESFACTORY)
+        {
+            query.setParentNo(member.getMemberNo());
+        }
+        else if (member.getType() == MemberTypeEnum.AGENT
+                || member.getType() == MemberTypeEnum.DISTRIBUTOR)
+        {
+            query.setMemberNo(member.getMemberNo());
+        }
+        List<MemberToMemberEntity> mlist = memberToMemberService.query(query);
+        
         map.put("cityList", cityList);
         map.put("member", member);
+        map.put("mlist", mlist);
         return "site/member/edit-member";
     }
     
@@ -173,14 +206,59 @@ public class MemberController extends BaseController
             Map<String, Object> map = new HashMap<String, Object>();
             member.setFlag(true);
             member.setUpDate(new Date());
-            member = memberService.modifyMember(member, true);
+            for (int i = 0; i < member.getDlList().size(); i++)
+            {
+                System.out.println(member.getDlList().get(0).getMemberNo());
+            }
+            MemberEntity newMember = memberService.modifyMember(member, true);
             SupervisorPrincipal login = getLoginInfo(session);
-            login.setMember(member);
+            login.setMember(newMember);
             session.setAttribute("userinfo", login);
+            
+            //删除代理商或经销商
+            if (null != member.getParentNo())
+            {
+                String memberNo[] = member.getParentNo().split(",");
+                for (int i = 0; i < memberNo.length; i++)
+                {
+                    memberToMemberService.delInfo(memberNo[i]);
+                }
+            }
+            if (null != member.getDlList())
+            {
+                //新增关系
+                for (int i = 0; i < member.getDlList().size(); i++)
+                {
+                    MemberToMemberEntity m = member.getDlList().get(i);
+                    if (newMember.getType() == MemberTypeEnum.AGENT
+                            || newMember.getType() == MemberTypeEnum.DISTRIBUTOR)
+                    {
+                        m.setMemberNo(newMember.getMemberNo());
+                        m.setMemberName(newMember.getName());
+                        m.setContacts(newMember.getContacts());
+                        m.setTelNum(newMember.getTelNum());
+                        if (StringUtils.isNotEmpty(m.getParentName()))
+                        {
+                            memberToMemberService.addMemberToMember(m);
+                        }
+                    }
+                    else if (newMember.getType() == MemberTypeEnum.GENRESFACTORY)
+                    {
+                        m.setParentNo(newMember.getMemberNo());
+                        m.setParentName(newMember.getName());
+                        m.setParentContacts(newMember.getContacts());
+                        m.setParentTelNum(newMember.getTelNum());
+                        if (StringUtils.isNotEmpty(m.getMemberName()))
+                        {
+                            memberToMemberService.addMemberToMember(m);
+                        }
+                    }
+                }
+            }
             
             topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)
                     .publish(Constraints.UN_EDIT_CHECK_STATE_SET + ","
-                            + member.getId());
+                            + newMember.getId());
             map.put("isOK", "ok");
             return map;
         }

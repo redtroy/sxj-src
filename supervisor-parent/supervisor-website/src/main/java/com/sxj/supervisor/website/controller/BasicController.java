@@ -55,6 +55,7 @@ import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.entity.member.MemberLogEntity;
+import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.entity.message.TenderMessageEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
@@ -79,6 +80,7 @@ import com.sxj.supervisor.service.member.IMemberFunctionService;
 import com.sxj.supervisor.service.member.IMemberLogService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.member.IMemberToMemberService;
 import com.sxj.supervisor.service.message.ITenderMessageService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
@@ -131,6 +133,9 @@ public class BasicController extends BaseController
     
     @Autowired
     private IGovService govService;
+    
+    @Autowired
+    private IMemberToMemberService memberToMemberService;
     
     /**
      * getRecordState 合同service
@@ -200,6 +205,18 @@ public class BasicController extends BaseController
                 }
                 map.put("cityList", cityList);
                 map.put("member", member);
+                MemberToMemberEntity m = new MemberToMemberEntity();
+                if (member.getType() == MemberTypeEnum.GENRESFACTORY)
+                {
+                    m.setParentNo(member.getMemberNo());
+                }
+                else if (member.getType() == MemberTypeEnum.AGENT
+                        || member.getType() == MemberTypeEnum.DISTRIBUTOR)
+                {
+                    m.setMemberNo(member.getMemberNo());
+                }
+                List<MemberToMemberEntity> mlist = memberToMemberService.query(m);
+                map.put("mlist", mlist);
                 if (info.getMember().getFlag())
                 {
                     List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
