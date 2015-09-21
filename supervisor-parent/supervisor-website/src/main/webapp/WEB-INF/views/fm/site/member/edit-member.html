@@ -669,7 +669,12 @@ $(document).ready(function(){
 			}
 		});
 	});
-
+	var offsetTop = $(window).scrollTop() +"px";
+	 //alert(offsetTop)
+	 $(window).scroll(function (){
+		    offsetTop = $(window).scrollTop() +"px";
+	        $("#imagecomponent").css({top : offsetTop });
+	    });
 	var iv=$("#viewer").iviewer();
 	//iv.iviewer('loadImage', "../images/temp/100260_1306276811398.jpg"); 
 	/**弹出层滚动条
@@ -686,6 +691,7 @@ $(document).ready(function(){
 	 oSlide=new $.slide({container:"#original",imageWidth:90,imagesPerPage:5,onClick:function(self,li,index,i){
 		self.copyTo($("#hidden .line-con"));
 		$(".maskdivgen").fadeIn(100);
+		$("#imagecomponent").css({top : offsetTop });
         $("#imagecomponent").css("visibility","visible");
         hSlide.reset(0,1);
 		hSlide.slideTo(index);
