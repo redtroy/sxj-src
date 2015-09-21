@@ -35,10 +35,6 @@
 <script>
 			var validform;
 			jQuery(document).ready(function($) {
-				$('.demo-image').click(function() {
-					$('.maskdivgen').fadeIn(100);
-					$('.viewer').slideDown(200);
-				})
 				$("#carousel").elastislide(); 
 				$("#carouselCCC").elastislide(); 
 				$('#edit_pwd').css({
@@ -64,14 +60,6 @@
 				window.setInterval(queryMessage, 5000);
 			});
 
-			window.onload = function() {
-				$(".demo-image").click(
-						function() {
-							var imageSource = $(this).attr("data-image");
-							refreshIviewer($("#viewer2"), imageSource,
-									$("#img_close"));
-						});
-			}
 			function close_img() {
 				$("#img_close").hide();
 			}
@@ -190,9 +178,21 @@
 				            $("#imagecomponent").css("visibility","hidden");
 				        }
 				)
-
+				$(".demo-image").click(
+			        function () {
+			        	var imagePath=$(this).attr("data-image");
+			        	$(".maskdivgen").fadeIn(100);
+				        $("#imagecomponent").css("visibility","visible");
+			    		hSlide.clear();
+			    		hSlide.addImage(imagePath,imagePath);
+			    		iv.iviewer('destroy'); 
+			    		iv=$("#viewer").iviewer({showTool:false})
+			    		iv.iviewer('loadImage', imagePath);
+			    });
 
 			});
+			
+			
 </script>
 <style type="text/css">
 .slideui{width:855px;}
@@ -287,10 +287,10 @@
 						<#if member.bLicensePath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							data-image="${b.staticPath}images/nopic.jpg" >查看缩略图</a> <#else> <img
 							src="${b.imagePath}${member.bLicensePath}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
-							data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a>
+							data-image="${b.imagePath}${member.bLicensePath}" >查看缩略图</a>
 						</#if>
 					</div>
 					

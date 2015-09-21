@@ -418,11 +418,10 @@ function save(id){
     } */
     var imageVal =oSlide.trimFid("${b.imagePath}");
     var memberType = "#{member.type.id}";
-    
     if(memberType==0){
-    	var qualification_img=imageVal.join("");
+    	var qualification_img=imageVal.join(",");
     }else if(memberType==1){
-    	 var ccc_img=imageVal.join("");
+    	 var ccc_img=imageVal.join(",");
     }
     
     dialogBox(function(index){
@@ -715,7 +714,7 @@ $(document).ready(function(){
 									   <#if imageList?exists>
 									   <#list imageList as imgPath>
 										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath}" value="${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></li>
+										<li><img src="${b.imagePath}${imgPath.image}"  data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
 										</#if>
 									</#list>
 									</#if>
@@ -746,7 +745,7 @@ $(document).ready(function(){
 									   <#if imageList?exists>
 									   <#list imageList as imgPath>
 										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath}" value="${imgPath}" data="${b.imagePath}${imgPath}"/><tt></tt></tt></li>
+										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
 										</#if>
 									</#list>
 									</#if>
