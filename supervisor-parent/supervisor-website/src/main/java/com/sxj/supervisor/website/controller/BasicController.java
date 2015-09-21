@@ -1155,6 +1155,50 @@ public class BasicController extends BaseController
         return null;
     }
     
+    /**
+     * 会员联想(可以获取到联系人和联系电话)
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCompleMemberInfo")
+    public @ResponseBody Map<String, String> autoCompleMemberInfo(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword, Integer memberType) throws IOException
+    {
+        MemberQuery mq = new MemberQuery();
+        if (keyword != "" && keyword != null)
+        {
+            mq.setMemberName(keyword);
+        }
+        if (null != memberType)
+        {
+            mq.setMemberType(memberType);
+        }
+        //mq.setMemberTypeB(0);
+        List<MemberEntity> list = memberService.queryMembers(mq);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (MemberEntity memberEntity : list)
+        {
+            sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+                    + memberEntity.getMemberNo() + "\",\"contacts\":\""
+                    + memberEntity.getContacts() + "\",\"telNum\":\""
+                    + memberEntity.getTelNum() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
     @RequestMapping("filesort")
     public @ResponseBody List<String> fileSort(String fileId)
             throws IOException

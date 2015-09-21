@@ -346,7 +346,7 @@
 							data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a> </#if>
 					</div>
 					</#if>
-					
+					<#if (member.type.id !=5 && member.type.id !=6 && member.type.id !=7)>
 					<div class="upload" style="width:120px;">
 						<p style="font-size: 12px;"> ${member.qms_no}&nbsp;</p>
 						<p style="font-size:14px;">质量管理体系认证</p>
@@ -358,6 +358,7 @@
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.qms_img}">查看缩略图</a> </#if>
 					</div>
+					</#if>
 				</div>
 				<div class="item">
         <div class="item">
@@ -381,7 +382,7 @@
 					</#if>
 				</div>
 				<div class="item">
-					<#if (member.type.id==0)>
+					<#if (member.type.id==0 || member.type.id==5 || member.type.id==6 || member.type.id==7 )>
 					<label>资质证书</label>
 					<div id="original" class="slideui">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
