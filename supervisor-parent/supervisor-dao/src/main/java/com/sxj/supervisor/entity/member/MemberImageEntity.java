@@ -86,6 +86,12 @@ public class MemberImageEntity extends Pagable implements Serializable
     private Date dueDate;
     
     /**
+     * 备注
+     */
+    @Column(name = "REMARK")
+    private String remark;
+    
+    /**
      * 版本
      */
     @Column(name = "VERSION")
@@ -205,6 +211,16 @@ public class MemberImageEntity extends Pagable implements Serializable
     public void setDueDate(Date dueDate)
     {
         this.dueDate = dueDate;
+    }
+    
+    public String getRemark()
+    {
+        return remark;
+    }
+    
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
     }
     
 }

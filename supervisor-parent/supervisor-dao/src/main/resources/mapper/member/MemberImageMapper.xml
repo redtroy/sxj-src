@@ -8,6 +8,7 @@
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="image" column="IMAGE" jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="certificateType" column="CERTIFICATE_TYPE"
 			jdbcType="INTEGER" />

@@ -1,4 +1,34 @@
 ﻿ <td colspan="11">
+ <script>
+ $(document).ready(function() { 
+		uploadImg($("#upload_${member.id}"));
+});
+  function uploadImage()
+  {
+	  $file.uploadify({
+			swf : '${basePath}upload/uploadify.swf',
+			uploader : "${basePath}upload.htm",
+			 fileTypeExts: '*.jpg',
+			auto : true,
+			multi : true,
+			height : 30,
+			width : 120,
+			buttonText : '上传证书',
+			onUploadSuccess : function(file, data, response) {
+				var num = 1;
+				var dataObj = eval("(" + data + ")");//转换为json对象 
+					var arrays = hideVal.split(",");
+					for (var i = 0; i < arrays.length; i++) {
+						if (arrays[i]) {
+							num += 1;
+						}
+					}
+					alert (dataObj.fileIds);
+				}
+			
+		});
+  }
+ </script>
  		  <div class="infoBox" id="basic-message"> 
  		  <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
  			<input type="hidden" name ="id" value="${member.id}"/> 
@@ -109,22 +139,22 @@
           </form>
           </div>
 		<!-- 资质证书开始 -->
-		<#if (member.type.id==0)>
+		<#if (member.type.id==0 || member.type.id==5 || member.type.id==6 || member.type.id==7)>
             <div class="infoBox" id="meb-news"> 		
 		        <div id="block-name">资质证书</div>
                 <div class="left-news">
                     <ul class="ly-clearFix">
-                        <li style=" width:99%"><label class="lable">原有资质证书</label>10个</li>
+                        <li style=" width:99%"><label class="lable">原有资质证书</label>${oldNum}个</li>
                     </ul>
                 </div>
                 <div class="right-news">
                     <ul class="ly-clearFix">
-                       <li style=" width:99%"><label class="lable">现有资质证书</label>16个</li>
+                       <li style=" width:99%"><label class="lable">现有资质证书</label>${num}个</li>
                     </ul>
                 </div>
 				<div>
 			<ul class="ly-clearFix">
-				<li style="width: 99%"><label class="lable">删除资质证书</label>4个</li>
+				<li style="width: 99%"><label class="lable">删除资质证书</label>${delNum}个</li>
 				<li
 					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
 					<div id="SlideUl1" class="slideui">
@@ -133,20 +163,22 @@
 						<i class="buttonSildeRight right" id="aright"><img width="20"
 							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<#if member.qualification_img??> <#assign
-							arr=(member.qualification_img?split(","))>
-							<ul class="imageList">
-								<#list arr as imgPath>
-								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+							<ul class="imageList" id="imagelist_${member.id}">
+								<#list ImageList as imageModel>
+								<li style="width: 86px; height: 120px">
+								<input type="hidden" name="image" value="${imageModel.image}" />
+								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
+								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
+								<input type="hidden" name="remark" value="${imageModel.remark}" />
+								<img
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
-							</#if>
 						</div>
 					</div>
 				</li>
 				<li style="width: 99%"><label class="lable">新上传证书</label>10个 <a
-					id="button-upload" href="javascript:fullImage();" class="normal">证书上传</a></li>
+					id="button-upload" href="javascript:uploadImage();" class="normal">证书上传</a></li>
 				<li
 					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
 					<div id="SlideUl2" class="slideui">
@@ -155,15 +187,12 @@
 						<i class="buttonSildeRight right" id="aright"><img width="20"
 							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<#if member.qualification_img??> <#assign
-							arr=(member.qualification_img?split(","))>
 							<ul class="imageList">
-								<#list arr as imgPath>
+								<#list newImagList as imageModel>
 								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
-							</#if>
 						</div>
 					</div>
 
@@ -171,7 +200,7 @@
 				</li>
 			</ul>
 		</div>
-				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
+				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:editImage('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
 			</div>
 			</#if>
 			<!-- 资质证书结束 -->
@@ -181,17 +210,17 @@
 		        <div id="block-name">3C证书</div>
                 <div class="left-news">
                     <ul class="ly-clearFix">
-                        <li style=" width:99%"><label class="lable">原有3C证书</label>10个</li>
+                        <li style=" width:99%"><label class="lable">原有3C证书</label>${oldNum}个</li>
                     </ul>
                 </div>
                 <div class="right-news">
                     <ul class="ly-clearFix">
-                       <li style=" width:99%"><label class="lable">现有3C证书</label>16个</li>
+                       <li style=" width:99%"><label class="lable">现有3C证书</label>${num}个</li>
                     </ul>
                 </div>
 				<div>
 			<ul class="ly-clearFix">
-				<li style="width: 99%"><label class="lable">删除3C证书</label>4个</li>
+				<li style="width: 99%"><label class="lable">删除3C证书</label>${delNum}个</li>
 				<li
 					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
 					<div id="SlideUl1" class="slideui">
@@ -200,15 +229,17 @@
 						<i class="buttonSildeRight right" id="aright"><img width="20"
 							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<#if member.ccc_img??> <#assign
-							arr=(member.ccc_img?split(","))>
-							<ul class="imageList">
-								<#list arr as imgPath>
-								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+							<ul class="imageList" id="cccimagelist_${member.id}">
+								<#list ImageList as imageModel>
+								<li style="width: 86px; height: 120px">
+								<input type="hidden" name="image" value="${imageModel.image}" />
+								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
+								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
+								<input type="hidden" name="remark" value="${imageModel.remark}" />
+								<img
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
-							</#if>
 						</div>
 					</div>
 				</li>
@@ -222,15 +253,12 @@
 						<i class="buttonSildeRight right" id="aright"><img width="20"
 							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<#if member.ccc_img??> <#assign
-							arr=(member.ccc_img?split(","))>
 							<ul class="imageList">
-								<#list arr as imgPath>
+								<#list newImagList as imageModel>
 								<li style="width: 86px; height: 120px"><img
-									src="${b.imagePath}${imgPath}" data="${b.imagePath}${imgPath}" />
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
-							</#if>
 						</div>
 					</div>
 
@@ -238,7 +266,7 @@
 				</li>
 			</ul>
 		</div>
-				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
+				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:editImage('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
 			</div>
 			</#if>
 			<!-- 3C证书结束 -->
@@ -258,7 +286,7 @@
 			        <#list relist as re>
 			              <tr>
 			                 <input type="hidden" value="${member.memberNo}" name="memberNo">
-					         <td id="td"><input type="text" name="company" value="${re.company}" /></td>
+					         <td id="td"><input type="text" class="company" name="company" value="${re.company}" /></td>
 				             <td id="td"><input type="text" name="linkman" value="${re.linkman}" /></td>
 					         <td id="td"><input type="text" name="phone"  value="${re.phone}" /></td>
 					         <td id="td"><select name="relevanceType" ><option value="2" <#if (re.relevanceType==2)> selected="selected" </#if> >型材厂</option><option value="6" <#if (re.relevanceType==6)> selected="selected" </#if> >代理商</option><option value="7" <#if (re.relevanceType==7)> selected="selected" </#if>>经销商</option><option value="10" <#if (re.relevanceType==10)> selected="selected" </#if>>同一出资方</option></select></td>
@@ -276,7 +304,7 @@
           <table id="tr_relevance">
                <tr >
                  <input type="hidden" value="${member.memberNo}" name="memberNo">
-		         <td id="td"><input type="text" name="company"></td>
+		         <td id="td"><input type="text" class="company" name="company"></td>
 	             <td id="td"><input type="text" name="linkman"></td>
 		         <td id="td"><input type="text" name="phone"></td>
 		         <td id="td"><select name="relevanceType" ><option value="2">型材厂</option><option value="6">代理商</option><option value="7">经销商</option><option value="10">同一出资方</option></select></td>

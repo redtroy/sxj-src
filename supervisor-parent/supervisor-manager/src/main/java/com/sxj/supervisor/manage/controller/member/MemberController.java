@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberImageEntity;
 import com.sxj.supervisor.entity.member.RelevanceMember;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.LevelEnum;
@@ -185,18 +186,64 @@ public class MemberController extends BaseController
             MemberStatesEnum[] states = MemberStatesEnum.values();
             LevelEnum[] level = LevelEnum.values();
             List<AreaEntity> cityList = areaService.getChildrenAreas("32");
-            // 删除的资质证书
-            /*List<MemberImageEntity> delzizhi = imageService.getImages(member.getMemberNo(),
-                    "0",
-                    "0");*/
-            // 新上传的资质证书
-            List<RelevanceMember> relist = memberService.getListRelevanceMember(member.getMemberNo());
-            /*  if (relist.size() > 0)
+            // 获取证书
+            List<MemberImageEntity> ImageList = imageService.getImages(member.getMemberNo(),
+                    "1");
+            // 获取上一版本证书
+            List<MemberImageEntity> oldImageList = imageService.historyImage(member.getMemberNo());
+            List<MemberImageEntity> newImagList = new ArrayList<MemberImageEntity>();
+            //获取新的图片集合
+            int newNum = 0;
+            int delNum = 0;
+            if (ImageList.size() > 0 && oldImageList.size() > 0)
+            {
+                for (MemberImageEntity image1 : ImageList)
+                {
+                    boolean flag = true;
+                    for (MemberImageEntity image2 : oldImageList)
+                    {
+                        if (image1.getImage().equals(image2.getImage()))
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        newNum++;
+                        newImagList.add(image1);
+                    }
+                }
+                
+                for (MemberImageEntity image1 : oldImageList)
+                {
+                    boolean flag = true;
+                    for (MemberImageEntity image2 : ImageList)
+                    {
+                        if (image1.getImage().equals(image2.getImage()))
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        delNum++;
+                    }
+                }
+            }
+            /*  if (relist.size() > 0)e
               {
                   
               }*/
+            List<RelevanceMember> relist = memberService.getListRelevanceMember(member.getMemberNo());
             map.put("relist", relist);
             // map.put("delzizhi", delzizhi);
+            map.put("oldNum", oldImageList.size());//原有证书数目
+            map.put("delNum", delNum);//删除图片数目
+            map.put("num", ImageList.size());
+            map.put("ImageList", ImageList);
+            map.put("newImagList", newImagList);
             map.put("cityList", cityList);
             map.put("types", types);
             map.put("checkStates", checkStates);
@@ -212,13 +259,49 @@ public class MemberController extends BaseController
         return "manage/member/memberInfo";
     }
     
-    @RequestMapping("editRelevanceMember")
-    public @ResponseBody String editRelevanceMember(String[] memberNo,
-            String[] company, String[] linkman, String[] phone,
-            String[] relevanceType, String[] remark) throws WebException
+    /**
+     * 修改3C证书，资质证书
+     * @return
+     * @throws WebException
+     */
+    @RequestMapping("editImage")
+    public @ResponseBody Map<String, String> editImage(String[] memberNo,
+            String[] image, String[] certificateNo, String[] remark)
+            throws WebException
     {
         try
         {
+            Map<String, String> map = new HashMap<String, String>();
+            List<MemberImageEntity> list = new ArrayList<MemberImageEntity>();
+            for (int i = 0; i < memberNo.length; i++)
+            {
+                MemberImageEntity mi = new MemberImageEntity();
+                mi.setMemberNo(memberNo[i]);
+                mi.setImage(image[i]);
+                mi.setCertificateNo(certificateNo[i]);
+                mi.setRemark(remark[i]);
+                list.add(mi);
+            }
+            imageService.ManageAddImage(list);
+            map.put("isok", "ok");
+            return map;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("修改3C证书，资质证书错误", e, this.getClass());
+            throw new WebException("修改3C证书，资质证书错误");
+        }
+    }
+    
+    @RequestMapping("editRelevanceMember")
+    public @ResponseBody Map<String, String> editRelevanceMember(
+            String[] memberNo, String[] company, String[] linkman,
+            String[] phone, String[] relevanceType, String[] remark)
+            throws WebException
+    {
+        try
+        {
+            Map<String, String> map = new HashMap<String, String>();
             List<RelevanceMember> list = new ArrayList<RelevanceMember>();
             for (int i = memberNo.length - 1; i >= 0; i--)
             {
@@ -232,13 +315,14 @@ public class MemberController extends BaseController
                 list.add(re);
             }
             memberService.addRelevanceMember(list);
+            map.put("isok", "ok");
+            return map;
         }
         catch (Exception e)
         {
             SxjLogger.error("查询会员信息错误", e, this.getClass());
             throw new WebException("查询会员信息错误");
         }
-        return "ok";
     }
     
     /**

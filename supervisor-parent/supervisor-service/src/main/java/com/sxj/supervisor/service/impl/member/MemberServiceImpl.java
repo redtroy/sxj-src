@@ -396,7 +396,8 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             MemberEntity member = menberDao.getMember(id);
-            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(), "1");
+            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(),
+                    "1");
             if (list.size() > 0)
             {
                 String images = "";
@@ -594,10 +595,6 @@ public class MemberServiceImpl implements IMemberService
         return member;
     }
     
-    /**
-     * 根据会员号查询关联企业
-     * 
-     */
     @Override
     public List<RelevanceMember> getListRelevanceMember(String memberNo)
             throws ServiceException
@@ -609,8 +606,8 @@ public class MemberServiceImpl implements IMemberService
         }
         catch (Exception e)
         {
-            SxjLogger.error("查询关联企业错误", e, this.getClass());
-            throw new ServiceException("查询关联企业错误", e);
+            SxjLogger.error("查询新上传资质证书", e, this.getClass());
+            throw new ServiceException("查询新上传资质证书", e);
         }
     }
     
