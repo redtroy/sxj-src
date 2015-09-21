@@ -15,8 +15,10 @@
 	 $(window).scroll(function (){
 		    offsetTop = $(window).scrollTop() +"px";
 	        $("#imagecomponent").css({top : offsetTop });
+	        $("#imagecomponent2").css({top : offsetTop });
 	    });
 		var iv=$("#viewer").iviewer();
+		var iv=$("#viewer2").iviewer();
 		//iv.iviewer('loadImage', "../images/temp/100260_1306276811398.jpg"); 
 		/**弹出层滚动条
 		滚动式更新iviewer
@@ -76,15 +78,21 @@
 		            $("#imagecomponent").css("visibility","hidden");
 		        }
 		)
+		$("#btnClsVie2").click(
+		        function () {
+		            $('.maskdivgen').fadeOut(100);
+		            $("#imagecomponent2").css("visibility","hidden");
+		        }
+		)
 		$(".demo-image").click(
 	        function () {
 	        	var imagePath=$(this).attr("data-image");
 	        	$(".maskdivgen").fadeIn(100);
-		        $("#imagecomponent").css("visibility","visible");
+		        $("#imagecomponent2").css("visibility","visible");
 	    		hSlide.clear();
 	    		hSlide.addImage(imagePath,imagePath);
 	    		iv.iviewer('destroy'); 
-	    		iv=$("#viewer").iviewer({showTool:false})
+	    		iv=$("#viewer2").iviewer({showTool:false})
 	    		iv.iviewer('loadImage', imagePath);
 	    });
 
