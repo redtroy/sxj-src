@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,6 @@ import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.manage.controller.BaseController;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.member.MemberQuery;
-import com.sxj.supervisor.model.member.RelistModel;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
@@ -213,12 +213,25 @@ public class MemberController extends BaseController
     }
     
     @RequestMapping("editRelevanceMember")
-    public @ResponseBody String editRelevanceMember(RelistModel list)
-            throws WebException
+    public @ResponseBody String editRelevanceMember(String[] memberNo,
+            String[] company, String[] linkman, String[] phone,
+            String[] relevanceType, String[] remark) throws WebException
     {
         try
         {
-            memberService.addRelevanceMember(list.getRelist());
+            List<RelevanceMember> list = new ArrayList<RelevanceMember>();
+            for (int i = memberNo.length - 1; i >= 0; i--)
+            {
+                RelevanceMember re = new RelevanceMember();
+                re.setMemberNo(memberNo[i]);
+                re.setCompany(company[i]);
+                re.setLinkman(linkman[i]);
+                re.setPhone(phone[i]);
+                re.setRelevanceType(Integer.valueOf(relevanceType[i]));
+                re.setRemark(remark[i]);
+                list.add(re);
+            }
+            memberService.addRelevanceMember(list);
         }
         catch (Exception e)
         {

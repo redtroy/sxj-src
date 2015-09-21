@@ -275,12 +275,12 @@
  		 <div style="display: none;">
           <table id="tr_relevance">
                <tr >
-                 <input type="hidden" value="${member.memberNo}" name="relist[0].memberNo">
-		         <td id="td"><input type="text" name="relist[0].company"></td>
-	             <td id="td"><input type="text" name="relist[0].linkman"></td>
-		         <td id="td"><input type="text" name="relist[0].phone"></td>
-		         <td id="td"><select name="relist[0].relevanceType" ><option value="2">型材厂</option><option value="6">代理商</option><option value="7">经销商</option><option value="10">同一出资方</option></select></td>
-		         <td id="td"><input type="text" name="relist[0].remark"></td>
+                 <input type="hidden" value="${member.memberNo}" name="memberNo">
+		         <td id="td"><input type="text" name="company"></td>
+	             <td id="td"><input type="text" name="linkman"></td>
+		         <td id="td"><input type="text" name="phone"></td>
+		         <td id="td"><select name="relevanceType" ><option value="2">型材厂</option><option value="6">代理商</option><option value="7">经销商</option><option value="10">同一出资方</option></select></td>
+		         <td id="td"><input type="text" name="remark"></td>
 	          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 	           </tr>
          </table>
