@@ -169,21 +169,21 @@ var basePath ='${basePath}';
 		var memberIdB = $("#memberIdB").val();
 		var memberNameB = $("#memberNameB").val();
 		if (memberIdB == '') {
-			messageInfo('请选择系统自动感应的用户！');
+			errorInfo('请选择系统自动感应的用户！');
 			return;
 		}
 		if (memberNameB == '') {
-			messageInfo('请选择系统自动感应的用户！');
+			errorInfo('请选择系统自动感应的用户！');
 			return;
 		}
 		var refContractNo = $("#refContractNo").val();
 		if (refContractNo == '') {
-			messageInfo('请输入销售合同号！');
+			errorInfo('请输入销售合同号！');
 			return;
 		}
 		var cgimgPath = $("#cgimgPath").val();
 		if (cgimgPath == '') {
-			messageInfo('请上传扫描件！');
+			errorInfo('请上传扫描件！');
 			return;
 		}
 				dialogBox(function(index) {
@@ -195,7 +195,7 @@ var basePath ='${basePath}';
 									$("#contBox").show();
 									$("#cgDiv").hide();
 								} else if (data.isOK == 'no') {
-									messageInfo("您还没有通过认证,不能申请备案!");
+									errorInfo("您还没有通过认证,不能申请备案!");
 								}
 							});
 				}, "是否生成备案?");
@@ -213,12 +213,12 @@ var basePath ='${basePath}';
 		}
 		var memberNameA = $("#memberA").val();
 		if (memberNameA == '') {
-			messageInfo('请输入需方用户！');
+			errorInfo('请输入需方用户！');
 			return;
 		}
 		var zbimgPath = $("#zbimgPath").val();
 		if (zbimgPath == '') {
-			messageInfo('请上传扫描件！');
+			errorInfo('请上传扫描件！');
 			return;
 		}
 		dialogBox(function(index) {
@@ -230,7 +230,7 @@ var basePath ='${basePath}';
 							$("#contBox").show();
 							$("#cgDiv").hide();
 						} else if (data.isOK == 'no') {
-							messageInfo("您还没有通过认证,不能申请备案!");
+							errorInfo("您还没有通过认证,不能申请备案!");
 						}
 					});
 		}, "是否生成备案?");
@@ -245,16 +245,16 @@ var basePath ='${basePath}';
 		var memberNameA = $("#memberNameA").val();
 		var memberIdA = $("#memberIdA").val();
 		if (memberIdA == '') {
-			messageInfo('请选择系统自动感应的用户！');
+			errorInfo('请选择系统自动感应的用户！');
 			return;
 		}
 		if (memberNameA == '') {
-			messageInfo('请选择系统自动感应的用户！');
+			errorInfo('请选择系统自动感应的用户！');
 			return;
 		}
 		var bcgimgPath = $("#bcgimgPath").val();
 		if (bcgimgPath == '') {
-			messageInfo('请上传扫描件！');
+			errorInfo('请上传扫描件！');
 			return;
 		}
 		dialogBox(function(index) {
@@ -265,7 +265,7 @@ var basePath ='${basePath}';
 					$("#contBox").show();
 					$("#BcgDiv").hide();
 				} else if (data.isOK == 'no') {
-					messageInfo("您还没有通过认证,不能申请备案!");
+					errorInfo("您还没有通过认证,不能申请备案!");
 				}
 			})
 		}, "是否生成备案?");
