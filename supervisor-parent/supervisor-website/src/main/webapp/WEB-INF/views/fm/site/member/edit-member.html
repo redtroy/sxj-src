@@ -56,6 +56,7 @@ $(document).ready(function() {
 // 	loadUploadMember("aptitudePath_File","${basePath}upload.htm",false,"上传" ,uploadaptitudePath);
 	loadUploadMember("safetyPath_File","${basePath}upload.htm",false,"上传" ,uploadsafetyPath);
 	loadUploadMember("qmsPath_File","${basePath}upload.htm",false,"上传" ,uploadqmsPath);
+	loadUploadMember("enclosedImg_File","${basePath}upload.htm",false,"上传" ,uploadEnclosedImgReload);
 //	loadUploadMember("cccPath_File","${basePath}upload.htm",false,"上传" ,uploadcccPath);
 	loadUploadMember("productionPath_File","${basePath}upload.htm",false,"上传" ,uploadproductionPath);
 	
@@ -64,6 +65,7 @@ $(document).ready(function() {
 // 	loadUploadMember("aptitudePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadaptitudeReload);
 	loadUploadMember("safetyPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadsafetyReload);
 	loadUploadMember("qmsPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadqmsReload);
+	loadUploadMember("enclosedImg_File_reload","${basePath}upload.htm",false,"重新上传",uploadEnclosedImgReload);
 //	loadUploadMember("cccPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadcccReload);
 	loadUploadMember("productionPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadproductionReload);
 
@@ -246,6 +248,12 @@ function uploadqmsPath(data){
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#qmsPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $("#qmsPath_hidden").val(dataObj.fileIds);
+}
+//重新上传附框许可证
+function uploadEnclosedImgReload(data){
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#enclosed_Img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $("#enclosedImg").val(dataObj.fileIds);
 }
 //上传3C认证扫描件
 function uploadcccPath(data){
@@ -903,6 +911,26 @@ $(document).ready(function(){
           </div>
          </div>
          </#if>
+          <!-- 附框推广证 -->
+          <#if (member.type.id ==5)>
+         <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="enclosedNo" name="enclosedNo" value="${member.enclosedNo}"  maxlength="14" placeholder="输入证书编号"/></p>
+          <p>附框推广证 </p>
+          <#if (member.enclosedImg??)>
+         <img id="enclosed_Img" width="80" height="107" src="${b.imagePath}${member.enclosedImg}" onerror="errorImage(this)" times="0"/>
+          <#else>
+		 <img id="enclosed_Img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
+         </#if>
+         <div class="uploadify">
+         <#if (!member.flag)>
+            <input type="file" class="" id="enclosedImg_File">
+          <#else>
+          <input type="file" class="" id="enclosedImg_File_reload" >
+          </#if>
+            <input type="hidden" class="input-w180h30" id="enclosedImg" name="enclosedImg" value="${member.enclosedImg}">
+          </div>
+         </div>
+         </#if>
         </div>
        <div id="add_form">
          <#if (member.type.id==1)>
@@ -932,7 +960,7 @@ $(document).ready(function(){
 		</#if>
        
         
-       <#if (member.type.id==0 || member.type.id==5 || member.type.id==6 || member.type.id==7  )>
+       <#if (member.type.id==0 || member.type.id==6 || member.type.id==7  )>
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
