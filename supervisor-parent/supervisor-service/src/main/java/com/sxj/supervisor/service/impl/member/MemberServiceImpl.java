@@ -397,7 +397,8 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             MemberEntity member = menberDao.getMember(id);
-            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(), "1");
+            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(),
+                    "1");
             if (list.size() > 0)
             {
                 String images = "";
@@ -801,7 +802,10 @@ public class MemberServiceImpl implements IMemberService
                         member.getCcc_img());
                 newMember.setCcc_img(member.getCcc_img());
             }
-            else if (newMember.getType().getId() == 0)
+            else if (newMember.getType().getId() == 0
+                    || newMember.getType().getId() == 5
+                    || newMember.getType().getId() == 6
+                    || newMember.getType().getId() == 7)
             {
                 memberImageService.websiteAddImage(member.getMemberNo(),
                         member.getQualification_img());

@@ -515,17 +515,20 @@ var dlNum=3;
 $(document).ready(function(){
 	$("#dlName").bigAutocomplete({
 		width: '256',
-		url : '${basePath}autoCompleMember.htm?memberType=6',
-/* 		url : '${basePath}autoCompleMember.htm?memberType=6', *///没有数据暂时用所有会员
+		url : '${basePath}autoCompleMemberInfo.htm?memberType=6',
 		callback : function(data) {
 			if (data){
 				$("#dlNo").val(data.result);
+				$("#dlcontacts").val(data.contacts);
+				$("#dltelNum").val(data.telNum);
 			}
 		},
 		beforeShow : function(data){
 			if(data.length==1){
 				$("#dlName").val(data[0].title);
 				$("#dlNo").val(data[0].result);
+				$("#dlcontacts").val(data[0].contacts);
+				$("#dltelNum").val(data[0].telNum);
 			}
 		}
 	});
@@ -543,34 +546,40 @@ $(document).ready(function(){
 		
 		tr.find("input:eq(0)").bigAutocomplete({
 			width: '256',
-			url : '${basePath}autoCompleMember.htm?memberType=6',
-			/* 		url : '${basePath}autoCompleMember.htm?memberType=6', *///没有数据暂时用所有会员
+			url : '${basePath}autoCompleMemberInfo.htm?memberType=6',
 			callback : function(data) {
 				if (data){
-					tr.find("input:eq(0)").siblings("input:eq(0)").val(data.result);
+					$(this).siblings("input:eq(0)").val(data.result);
+					tr.find("input:eq(3)").attr("value",data.contacts);
+					tr.find("input:eq(4)").attr("value",data.telNum);
 				}
 			},
 			beforeShow : function(data){
 				if(data.length==1){
 					tr.find("input:eq(0)").val(data[0].title);
-					tr.find("input:eq(0)").siblings("input:eq(0)").val(data[0].result);
+					tr.find("input:eq(1)").val(data[0].result);
+					tr.find("input:eq(3)").attr("value",data[0].contacts);
+					tr.find("input:eq(4)").attr("value",data[0].telNum);
 				}
 			}
 		});
 	});
 	$("#jxName").bigAutocomplete({
 		width: '256',
-		url : '${basePath}autoCompleMember.htm?memberType=7',
-/* 		url : '${basePath}autoCompleMember.htm?memberType=7', *///没有数据暂时用所有会员
+		url : '${basePath}autoCompleMemberInfo.htm?memberType=7',
 		callback : function(data) {
 			if (data){
 				$("#jxNo").val(data.result);
+				$("#jxcontacts").val(data.contacts);
+				$("#dltelNum").val(data.telNum);
 			}
 		},
 		beforeShow : function(data){
 			if(data.length==1){
 				$("#jxName").val(data[0].title);
 				$("#jxNo").val(data[0].result);
+				$("#jxcontacts").val(data[0].contacts);
+				$("#jxtelNum").val(data[0].telNum);
 			}
 		}
 	});
@@ -588,34 +597,40 @@ $(document).ready(function(){
 		
 		tr.find("input:eq(0)").bigAutocomplete({
 			width: '256',
-			url : '${basePath}autoCompleMember.htm?memberType=7',
-			/* 		url : '${basePath}autoCompleMember.htm?memberType=7', *///没有数据暂时用所有会员
+			url : '${basePath}autoCompleMemberInfo.htm?memberType=7',
 			callback : function(data) {
 				if (data){
-					tr.find("input:eq(0)").siblings("input:eq(0)").val(data.result);
+					tr.find("input:eq(1)").val(data.result);
+					tr.find("input:eq(3)").attr("value",data.contacts);
+					tr.find("input:eq(4)").attr("value",data.telNum);
 				}
 			},
 			beforeShow : function(data){
 				if(data.length==1){
 					tr.find("input:eq(0)").val(data[0].title);
-					tr.find("input:eq(0)").siblings("input:eq(0)").val(data[0].result);
+					tr.find("input:eq(1)").val(data[0].result);
+					tr.find("input:eq(3)").attr("value",data[0].contacts);
+					tr.find("input:eq(4)").attr("value",data[0].telNum);
 				}
 			}
 		});
 	});
 	$("#xcName").bigAutocomplete({
 		width: '256',
-		url : '${basePath}autoCompleMember.htm?memberType=2',
-/* 		url : '${basePath}autoCompleMember.htm?memberType=2', *///没有数据暂时用所有会员
+		url : '${basePath}autoCompleMemberInfo.htm?memberType=2',
 		callback : function(data) {
 			if (data){
 				$("#xcNo").val(data.result);
+				$("#xccontacts").val(data.contacts);
+				$("#xctelNum").val(data.telNum);
 			}
 		},
 		beforeShow : function(data){
 			if(data.length==1){
 				$("#xcName").val(data[0].title);
 				$("#xcNo").val(data[0].result);
+				$("#xccontacts").val(data[0].contacts);
+				$("#xctelNum").val(data[0].telNum);
 			}
 		}
 	});
@@ -633,17 +648,20 @@ $(document).ready(function(){
 		
 		tr.find("input:eq(0)").bigAutocomplete({
 			width: '256',
-			url : '${basePath}autoCompleMember.htm?memberType=2',
-			/* 		url : '${basePath}autoCompleMember.htm?memberType=2', *///没有数据暂时用所有会员
+			url : '${basePath}autoCompleMemberInfo.htm?memberType=2',
 			callback : function(data) {
 				if (data){
-					tr.find("input:eq(0)").siblings("input:eq(0)").val(data.result);
+					tr.find("input:eq(1)").val(data.result);
+					tr.find("input:eq(3)").attr("value",data.contacts);
+					tr.find("input:eq(4)").attr("value",data.telNum);
 				}
 			},
 			beforeShow : function(data){
 				if(data.length==1){
 					tr.find("input:eq(0)").val(data[0].title);
-					tr.find("input:eq(0)").siblings("input:eq(0)").val(data[0].result);
+					tr.find("input:eq(1)").val(data[0].result);
+					tr.find("input:eq(3)").attr("value",data[0].contacts);
+					tr.find("input:eq(4)").attr("value",data[0].telNum);
 				}
 			}
 		});
@@ -866,6 +884,7 @@ $(document).ready(function(){
          </div>
          </#if>
           <!-- 质量管理体系认证证书 -->
+          <#if (member.type.id !=5 && member.type.id !=6 && member.type.id !=7)>
          <div class="ly-left editBox mr15">
           <p><input class="input input-w140h30 mb5" id="qms" name="qms_no" value="${member.qms_no}"  maxlength="14" placeholder="输入证书编号"/></p>
           <p>质量管理体系认证</p>
@@ -883,6 +902,7 @@ $(document).ready(function(){
             <input type="hidden" class="input-w180h30" id="qmsPath_hidden" name="qms_img" value="${member.qms_img}">
           </div>
          </div>
+         </#if>
         </div>
        <div id="add_form">
          <#if (member.type.id==1)>
@@ -912,13 +932,14 @@ $(document).ready(function(){
 		</#if>
        
         
-       <#if (member.type.id==0)>
+       <#if (member.type.id==0 || member.type.id==5 || member.type.id==6 || member.type.id==7  )>
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
-									<input class="input input-w140h30 mb5" id="aptitude" name="qualification_no"
+									<!-- <input class="input input-w140h30 mb5" id="aptitude" name="qualification_no"
 										value="${member.qualification_no}" maxlength="14"
-										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="qualification_img" value="${member.qualification_img}">
+										placeholder="输入证书编号" /> -->
+										<input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="qualification_img" value="${member.qualification_img}">
 								</p> 
 							
 							<div id="original" class="slideui">
@@ -969,8 +990,8 @@ $(document).ready(function(){
 			 		<input type='hidden' id='dlNo' name='dlList[0].memberNo' />
 			 		<input type='hidden' name='dlList[0].memberType' value="6" />
 			 	</td>
-	         <td><input type="text" class="input input-w100h36" name="dlList[0].contacts" datatype="*2-30" nullmsg="请输入公司名" /></td>
-	         <td><input type="text" class="input input-w100h36" name="dlList[0].telNum" datatype="n11-11" nullmsg="请输入手机号码"/></td>
+	         <td><input type="text" class="input input-w100h36" id="dlcontacts" name="dlList[0].contacts"/></td>
+	         <td><input type="text" class="input input-w100h36" id="dltelNum" name="dlList[0].telNum" /></td>
 	         <td>
 	         	<a href='javascript:void(0);' onclick='delDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
 	         </td>
@@ -1004,8 +1025,8 @@ $(document).ready(function(){
 			 		<input type='hidden' id='jxNo' name='dlList[1].memberNo' />
 			 		<input type='hidden' name='dlList[1].memberType' value="7" />
 			 	</td>
-	         <td><input type="text" class="input input-w100h36" name="dlList[1].contacts" datatype="*2-30" nullmsg="请输入公司名" /></td>
-	         <td><input type="text" class="input input-w100h36" name="dlList[1].telNum" datatype="n11-11" nullmsg="请输入手机号码"/></td>
+	         <td><input type="text" class="input input-w100h36" id="jxcontacts" name="dlList[1].contacts" /></td>
+	         <td><input type="text" class="input input-w100h36" id="jxtelNum" name="dlList[1].telNum"/></td>
 	         <td>
 	         	<a href='javascript:void(0);' onclick='delJX(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
 	         </td>
@@ -1039,8 +1060,8 @@ $(document).ready(function(){
 			 		<input type='hidden' id='xcNo' name='dlList[2].parentNo' />
 			 		<input type='hidden' name='dlList[2].memberType' value="${member.type.getId()}" />
 			 	</td>
-	         <td><input type="text" class="input input-w100h36" name="dlList[2].parentContacts" datatype="*2-30" nullmsg="请输入公司名" /></td>
-	         <td><input type="text" class="input input-w100h36" name="dlList[2].parentTelNum" datatype="n11-11" nullmsg="请输入手机号码"/></td>
+	         <td><input type="text" class="input input-w100h36" id="xccontacts" name="dlList[2].parentContacts" /></td>
+	         <td><input type="text" class="input input-w100h36" id="xctelNum" name="dlList[2].parentTelNum"/></td>
 	         <td>
 	         	<a href='javascript:void(0);' onclick='delXC(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
 	         </td>
