@@ -184,6 +184,7 @@ public class MemberServiceImpl implements IMemberService
                 mm.setParentNo(member.getParentNo());
                 mm.setParentName(member.getParentName());
                 mm.setMemberType(member.getType().getId());
+                mm.setMemberName(member.getName());
                 memberToMemberDao.addTo(mm);
             }
             List<MessageConfigEntity> configList = buildMessageConfig(member);

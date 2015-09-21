@@ -328,6 +328,8 @@ function uploadproductionReload(data){
 }
 
 function save(id){
+<<<<<<< HEAD
+=======
 	var type="${member.type.getId()}";
 	var bLicensePath= $("#bLicensePath_hidden").val();
 	var energyPath= $("#energyPath_hidden").val();
@@ -375,6 +377,7 @@ function save(id){
 	   	erro_flag=true;
 	 }*/
    
+>>>>>>> 06bfe4b6690cd66cf01fa5f17eb5f38bf6fa124b
 	var add_validform=$("#add_form").Validform({
 		tiptype:3});
 	
@@ -395,6 +398,8 @@ function save(id){
     	messageInfo("请上传营业执照图片");
     	return false;
     }
+<<<<<<< HEAD
+=======
     /* if (qualification_img=="" && type==0){
     	messageInfo("请上传资质证书图片");
     	return false;
@@ -420,6 +425,7 @@ function save(id){
     	 var ccc_img=imageVal.join(",");
     }
     
+>>>>>>> 06bfe4b6690cd66cf01fa5f17eb5f38bf6fa124b
     dialogBox(function(index){
     	if (!flag){
     		//if (${member.checkState.id}==2){
@@ -455,6 +461,7 @@ function edit_pwd(id){
 			
 		})
 }	
+<<<<<<< HEAD
 
 //删除一条新的代理商
 function delDL(obj){
@@ -646,6 +653,7 @@ $(document).ready(function(){
 			}
 		});
 	});
+=======
 //===
 $(document).ready(function(){
 	var iv=$("#viewer").iviewer();
@@ -714,6 +722,7 @@ $(document).ready(function(){
 	)
 
 
+>>>>>>> 06bfe4b6690cd66cf01fa5f17eb5f38bf6fa124b
 });
 </script>
 <STYLE type=text/css>
@@ -887,6 +896,7 @@ $(document).ready(function(){
        <div class="item">
          <#if (member.type.id==1)>
 							<!-- 3C证书1 -->
+<<<<<<< HEAD
 							<label>3C证书</label> <p>
 									<input class="input input-w140h30 mb5" id="ccc" name="ccc_no"
 										value="${member.ccc_no}" maxlength="14"
@@ -900,16 +910,18 @@ $(document).ready(function(){
 								<div class="rollBox">
 									<ul id="carouselCCC" class="elastislide-list">
 										<#list arr as imgPath>
+=======
 							<label>3C证书</label> 
 							<input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
 							<p>&nbsp;</p>
-							<div id="original" class="slideui" style="">
+							<div id="original" class="slideui slideui-small" style="">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
 								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
 				                <div class="line-con">					
 									<ul class="imageList">
 									   <#if imageList?exists>
 									   <#list imageList as imgPath>
+>>>>>>> 06bfe4b6690cd66cf01fa5f17eb5f38bf6fa124b
 										<#if imgPath !=''>
 										<li><img src="${b.imagePath}${imgPath.image}"  data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
 										</#if>
@@ -929,13 +941,16 @@ $(document).ready(function(){
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
+<<<<<<< HEAD
 									<input class="input input-w140h30 mb5" id="aptitude" name="qualification_no"
 										value="${member.qualification_no}" maxlength="14"
 										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="qualification_img" value="${member.qualification_img}">
+=======
 									<input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
+>>>>>>> 06bfe4b6690cd66cf01fa5f17eb5f38bf6fa124b
 								</p> 
 							
-							<div id="original" class="slideui">
+							<div id="original" class="slideui slideui-small">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
 								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
 				                <div class="line-con">					

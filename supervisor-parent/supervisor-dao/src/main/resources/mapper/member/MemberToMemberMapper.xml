@@ -5,10 +5,17 @@
 <mapper namespace="com.sxj.supervisor.dao.member.IMemberToMemberDao">
 	<resultMap id="MemberToMemberEntity"
 		type="com.sxj.supervisor.entity.member.MemberToMemberEntity">
-		<id property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="parentNo" column="PARENT_NO" jdbcType="VARCHAR" />
 		<result property="parentName" column="PARENT_NAME" jdbcType="VARCHAR" />
+		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
 		<result property="memberType" column="MEMBER_TYPE" jdbcType="INTEGER" />
+		
+		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR" />
+		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
+		<result property="parentContacts" column="PARENT_CONTACTS" jdbcType="VARCHAR" />
+		<result property="parentTelNum" column="PARENT_TEL_NUM" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 获取权限列表 -->
@@ -25,5 +32,4 @@
 			<![CDATA[ AND MEMBER_TYPE = #{condition.memberType}]]>
 		</if>
 	</select>
-
 </mapper>
