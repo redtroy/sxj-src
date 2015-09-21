@@ -907,7 +907,7 @@ $(document).ready(function(){
          </div>
          </#if>
           <!-- 附框推广证 -->
-          <#if (member.type.id ==5)>
+          <#if (member.type.id ==5 || (member.type.id==2 && member.isHave==1))>
          <div class="ly-left editBox mr15">
           <p><input class="input input-w140h30 mb5" id="enclosedNo" name="enclosedNo" value="${member.enclosedNo}"  maxlength="14" placeholder="输入证书编号"/></p>
           <p>附框推广证 </p>
