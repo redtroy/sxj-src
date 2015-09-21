@@ -34,14 +34,10 @@
 		<@b.validate/> <@b.dialogBox/> <@b.upload/><@b.iviewer/>
 <script>
 			var validform;
+			var show ;
 			jQuery(document).ready(function($) {
 				$("#carousel").elastislide(); 
 				$("#carouselCCC").elastislide(); 
-				$('#edit_pwd').css({
-					position : 'absolute',
-					left : "33%",
-					top : "40%"
-				});
 				validform = $("#edit_pwd").Validform({
 					tiptype : 3
 				});
@@ -49,8 +45,15 @@
 				$('.btnPassword').click(function() {
 					$("#edit_pwd").find("input").val("");
 					validform.resetForm();
-					$('.maskdivgen').fadeIn(100);
-					$('.passwordPop').slideDown(200);
+					 show  =layer.open({
+					    type: 1,
+					    offset: ['30%', '35%'],
+					    area: ['590px', '210px'],
+					    title: false, //不显示标题
+					    content: $("#edit_pwd")
+					});
+// 					$('.maskdivgen').fadeIn(100);
+// 					$('.passwordPop').slideDown(200);
 				});
 				$('.modal-header .close').click(function() {
 					$('.maskdivgen').fadeOut(100);
@@ -64,9 +67,7 @@
 				$("#img_close").hide();
 			}
 			function close_div(id) {
-				$('.maskdivgen').fadeOut(100);
-				$('.passwordPop').slideUp(200);
-				//reset_edit_pwd();
+				layer.close(show);
 			}
 			function edit_pwd(id) {
 				if (!validform.check()) {
@@ -79,8 +80,7 @@
 					password : pwd1
 				}, function(data) {
 					succInfo(function() {
-						$('.maskdivgen').fadeOut(100);
-						$('.passwordPop').slideUp(200);
+						layer.close(show);
 					}, "修改成功！");
 
 				})
@@ -147,7 +147,7 @@
 					self.copyTo($("#hidden .line-con"));
 					$(".maskdivgen").fadeIn(100);
 			        $("#imagecomponent").css("visibility","visible");
-					hSlide.reset(index,i);
+			        hSlide.reset(0,1);
 					hSlide.slideTo(index);
 					iv.iviewer('destroy'); 
 					iv=$("#viewer").iviewer();
@@ -400,6 +400,91 @@
 							</div>
 					</#if>
 				</div>
+				<#if (member.type.id==2)>
+		<div class="item">
+          <label>代理商</label>
+          <div class="info1">
+		     <table id="dltbody" class="co-name" style="font-size: 13px;line-height: 30px;">
+		     
+		        <tr>
+		         <th width="50%">公司名称</th>
+		         <th width="20%">联系人</th>
+		         <th width="30%">联系人电话</th>
+		        </tr>
+		        <#if (mlist?size>0)>
+		        <#list mlist as dl>
+			        <#if (dl.memberType==6)>
+				        <tr class="dlhidden">
+				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
+				         <td>${dl.contacts}</td>
+				         <td>${dl.telNum}</td>
+				        </tr>
+			        </#if>
+		        </#list>
+		        <#else>
+		         <tr>
+			         <td colspan="3" style="text-align: center;color: #cdcdcd">没有关联代理商</td>
+			        </tr>
+		        </#if>
+			      </table>
+		  </div>
+        </div>
+		<div class="item">
+          <label>经销商</label>
+          <div class="info1">
+		     <table class="co-name" style="font-size: 13px;line-height: 30px;">
+		        <tr>
+		         <th width="50%">公司名称</th>
+		         <th width="20%">联系人</th>
+		         <th width="30%">联系人电话</th>
+		        </tr>
+		        <#if (mlist?size>0)>
+		        <#list mlist as dl>
+			        <#if (dl.memberType==7)>
+				        <tr class="jxhidden">
+				         <td>${dl.memberName}</td>
+				         <td>${dl.contacts}</td>
+				         <td>${dl.telNum}</td>
+				        </tr>
+			        </#if>
+		        </#list>
+		         <#else>
+		         <tr>
+			         <td colspan="3" style="text-align: center;color: #cdcdcd">没有关联经销商</td>
+			        </tr>
+		        </#if>
+			      </table>
+		  </div>
+        </div>
+        </#if>
+		<#if (member.type.id==6 || member.type.id==7)>
+		<div class="item">
+          <label>货源厂家</label>
+          <div class="info1">
+		     <table id="dltbody" class="co-name" style="font-size: 13px;line-height: 30px;">
+		     
+		        <tr>
+		         <th width="50%">公司名称</th>
+		         <th width="20%">联系人</th>
+		         <th width="30%">联系人电话</th>
+		        </tr>
+		        <#if (mlist?size>0)>
+		        <#list mlist as dl>
+				        <tr class="dlhidden">
+				          <td>${dl.parentName}</td>
+				         <td>${dl.parentContacts}</td>
+				         <td>${dl.parentTelNum}</td>
+				        </tr>
+		        </#list>
+		        <#else>
+		         <tr>
+			         <td colspan="3" style="text-align: center;color: #cdcdcd">没有关联货源厂家</td>
+			        </tr>
+		        </#if>
+			      </table>
+		  </div>
+        </div>
+        </#if>
 				<div class="item">
 					<label>公司电话</label>${member.telNum}
 				</div>
@@ -442,11 +527,7 @@
 		</div>
 	</div>
 	<@b.footer />
-	<div class="modal-wrap popDemo contPop passwordPop"
-		style="display: none; width: 550px;" id="edit_pwd">
-		<div class="modal-header">
-			<span class="close" onclick="close_div('${member.id}');">关闭</span>
-		</div>
+	<div  style="display: none;" id="edit_pwd">
 		<div class="modal-body">
 			<div class="item">
 				<label>新密码</label><input class="input input-w180h30" type="password"

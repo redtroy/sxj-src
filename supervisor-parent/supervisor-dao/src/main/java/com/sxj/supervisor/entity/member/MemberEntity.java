@@ -14,6 +14,7 @@ package com.sxj.supervisor.entity.member;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -345,6 +346,16 @@ public class MemberEntity extends Pagable implements Serializable
      * 上级型材厂名称
      */
     private String parentName;
+    
+    /**
+     * 关联的代理商
+     */
+    private List<MemberToMemberEntity> dlList;
+    
+    /**
+     * 关联的代理商
+     */
+    private List<MemberToMemberEntity> jxList;
     
     public Date getUpDate()
     {
@@ -794,6 +805,26 @@ public class MemberEntity extends Pagable implements Serializable
     public void setParentName(String parentName)
     {
         this.parentName = parentName;
+    }
+    
+    public List<MemberToMemberEntity> getDlList()
+    {
+        return dlList;
+    }
+    
+    public void setDlList(List<MemberToMemberEntity> dlList)
+    {
+        this.dlList = dlList;
+    }
+    
+    public List<MemberToMemberEntity> getJxList()
+    {
+        return jxList;
+    }
+    
+    public void setJxList(List<MemberToMemberEntity> jxList)
+    {
+        this.jxList = jxList;
     }
     
 }

@@ -24,16 +24,17 @@ import com.sxj.redis.core.concurrent.RedisConcurrent;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberImageEntity;
+import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
-import com.sxj.supervisor.model.member.MemberModel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.member.IMemberToMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.Constraints;
@@ -50,6 +51,9 @@ public class MemberController extends BaseController
     
     @Autowired
     private IMemberService memberService;
+    
+    @Autowired
+    private IMemberToMemberService memberToMemberService;
     
     @Autowired
     private IAreaService areaService;
@@ -92,11 +96,26 @@ public class MemberController extends BaseController
                     member.setAccountNum(0);
                 }
                 //图片列表
-                List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(), "1");
+                List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(),
+                        "1");
                 map.put("imageList", imageList);
                 List<AreaEntity> cityList = areaService.getChildrenAreas("32");
                 map.put("cityList", cityList);
                 map.put("member", member);
+                
+                MemberToMemberEntity query = new MemberToMemberEntity();
+                if (member.getType() == MemberTypeEnum.GENRESFACTORY)
+                {
+                    query.setParentNo(member.getMemberNo());
+                }
+                else if (member.getType() == MemberTypeEnum.AGENT
+                        || member.getType() == MemberTypeEnum.DISTRIBUTOR)
+                {
+                    query.setMemberNo(member.getMemberNo());
+                }
+                List<MemberToMemberEntity> mlist = memberToMemberService.query(query);
+                map.put("mlist", mlist);
+                
                 if (member.getFlag())
                 {
                     Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
@@ -160,10 +179,26 @@ public class MemberController extends BaseController
     {
         MemberEntity member = memberService.getMemberNew(id);
         List<AreaEntity> cityList = areaService.getChildrenAreas("32");
-        List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(), "1");
+        
+        MemberToMemberEntity query = new MemberToMemberEntity();
+        
+        if (member.getType() == MemberTypeEnum.GENRESFACTORY)
+        {
+            query.setParentNo(member.getMemberNo());
+        }
+        else if (member.getType() == MemberTypeEnum.AGENT
+                || member.getType() == MemberTypeEnum.DISTRIBUTOR)
+        {
+            query.setMemberNo(member.getMemberNo());
+        }
+        List<MemberToMemberEntity> mlist = memberToMemberService.query(query);
+        
+        List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(),
+                "1");
         map.put("imageList", imageList);
         map.put("cityList", cityList);
         map.put("member", member);
+        map.put("mlist", mlist);
         return "site/member/edit-member";
     }
     
@@ -179,7 +214,7 @@ public class MemberController extends BaseController
     public @ResponseBody Map<String, Object> save_member(MemberEntity member,
             HttpSession session) throws WebException
     {
-    	Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         try
         {
             SupervisorPrincipal info = getLoginInfo(session);
@@ -188,19 +223,60 @@ public class MemberController extends BaseController
             member.setFlag(true);
             member.setUpDate(new Date());
             member.setMemberNo(memberNew.getMemberNo());
-            member = memberService.websiteModifyMember(member);
+            MemberEntity newMember = memberService.websiteModifyMember(member);
             SupervisorPrincipal login = getLoginInfo(session);
-            login.setMember(member);
+            login.setMember(newMember);
             session.setAttribute("userinfo", login);
+            
+            //删除代理商或经销商
+            if (null != member.getParentNo())
+            {
+                String memberNo[] = member.getParentNo().split(",");
+                for (int i = 0; i < memberNo.length; i++)
+                {
+                    memberToMemberService.delInfo(memberNo[i]);
+                }
+            }
+            if (null != member.getDlList())
+            {
+                //新增关系
+                for (int i = 0; i < member.getDlList().size(); i++)
+                {
+                    MemberToMemberEntity m = member.getDlList().get(i);
+                    if (newMember.getType() == MemberTypeEnum.AGENT
+                            || newMember.getType() == MemberTypeEnum.DISTRIBUTOR)
+                    {
+                        m.setMemberNo(newMember.getMemberNo());
+                        m.setMemberName(newMember.getName());
+                        m.setContacts(newMember.getContacts());
+                        m.setTelNum(newMember.getTelNum());
+                        if (StringUtils.isNotEmpty(m.getParentName()))
+                        {
+                            memberToMemberService.addMemberToMember(m);
+                        }
+                    }
+                    else if (newMember.getType() == MemberTypeEnum.GENRESFACTORY)
+                    {
+                        m.setParentNo(newMember.getMemberNo());
+                        m.setParentName(newMember.getName());
+                        m.setParentContacts(newMember.getContacts());
+                        m.setParentTelNum(newMember.getTelNum());
+                        if (StringUtils.isNotEmpty(m.getMemberName()))
+                        {
+                            memberToMemberService.addMemberToMember(m);
+                        }
+                    }
+                }
+            }
             
             topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)
                     .publish(Constraints.UN_EDIT_CHECK_STATE_SET + ","
-                            + member.getId());
+                            + newMember.getId());
             map.put("isOK", "ok");
         }
         catch (Exception e)
         {
-        	map.put("isOK", "no");
+            map.put("isOK", "no");
             SxjLogger.error("修改会员信息错误", e, this.getClass());
             throw new WebException(e.getMessage());
         }

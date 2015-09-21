@@ -40,7 +40,7 @@
 <div class="joinBox">
 <div class="joinSign fence-wide">
 <div class="header">
-<span class="ly-right f12">我已经注册，现在就<a href="${basePath}to_login.htm">登录</a></span>
+<span class="ly-right f12">我已经注册，现在就<a href="${basePath}to_login.htm" >登录</a></span>
 <h1 class="fontYH f18">欢迎注册成为私享家绿色门窗平台用户</h1></div>
 <div class="regBox ly-clearFix">
 <div class="regInfo ly-left">
@@ -117,12 +117,11 @@ ${type[0].getName()}</span>/
 <@b.footer />
 <div id="divImg" style="display: none;">
 <div class="codebg">
-<div class="delete-ch" style="cursor:pointer;" id="closeImg"></div>
 <table style="margin:30px;">
   <tr style="height: 24px; line-height: 24px;padding: 2px;margin: 0;">
       <td width="30%" style="text-align: right;padding-right: 10px;"><label>图片验证码 </label></td>
       <td width="28%"><input class="input-w50h-ch" type="text" title="图片验证码" id="img" name="" value="" /><input type="hidden" id="imgStr" /></td>
-      <td width="42%"><img id = "authImag1" style="height: 24px;" alt="" clstag="regist|keycount|personalreg|06" onclick="refresh1()" /> </td>
+      <td width="42%"><img id = "authImag1" style="height: 24px;cursor:pointer;" title="点击刷新验证码"  clstag="regist|keycount|personalreg|06" onclick="refresh1()" /> </td>
    </tr>
   	<tr>
       <td colspan="3" style="text-align:  center;padding-top: 4px;"><div id="imgMsg" class="tipMsg msg-error" style="display: none;width: 100%">请输入验证码</div></td>
@@ -371,9 +370,7 @@ ${type[0].getName()}</span>/
 	 var obj=$("#sendms");
 	  send_flag=true;
 	  var phoneNo=$("#phoneNo").val();
-	  if (!checkSubmitMobil()){
-		  return false;
-	  }
+	  
 	  
 	  $.post("send_ms.htm",{phoneNo:phoneNo},function(data){
 	     if(data.error){
@@ -479,20 +476,30 @@ ${type[0].getName()}</span>/
 //获取图片验证码字符
 function setRegisterRand(){
 var o=new Object();
-	 $.post('${basePath}getImgStr.htm?',function(data){
+	 $.post('${basePath}getImgStr.htm',function(data){
        document.getElementById('imgStr').value=data;
    });
 }
-
+var show;
 function showImg(){
+	 if (!checkSubmitMobil()){
+		  return false;
+	  }
 	refresh1();
 	$("#img").val("");
-	dialogBoxOutId("#divImg");
+// 	dialogBoxOutId($("#divImg"));
+	 show  =layer.open({
+	    type: 1,
+	    area: ['400px', '180px'],
+	    title: false, //不显示标题
+	    content: $("#divImg")
+	});
 }
 function sendms(){
 	var imgStr = $("#imgStr").val();
 	  var phoneNo=$("#phoneNo").val();
 	  var img=$("#img").val();
+	 
 	  if(!img){
 			$("#imgMsg").show();
 			wrong("#imgMsg");
@@ -505,8 +512,7 @@ function sendms(){
 			$("#imgMsg").text("您输入的验证码错误"); 
 			return false;
 		  }else{
-			  var li = $("#divImg").attr("index");
-			  layer.close(li);
+			  layer.close(show);
 			  $("#imgMsg").hide();
 			  send_ms();
 		  }

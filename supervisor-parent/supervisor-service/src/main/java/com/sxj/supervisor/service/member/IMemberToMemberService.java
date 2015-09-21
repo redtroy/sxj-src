@@ -16,6 +16,13 @@ public interface IMemberToMemberService
             throws ServiceException;
     
     /**
+     * 删除会员关系
+     * @param member
+     * @throws ServiceException
+     */
+    public void delInfo(String id) throws ServiceException;
+    
+    /**
      * 获取会员关系列表
      * @param query
      * @return

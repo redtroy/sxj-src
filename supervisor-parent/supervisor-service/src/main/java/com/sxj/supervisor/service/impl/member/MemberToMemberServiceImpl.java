@@ -42,4 +42,11 @@ public class MemberToMemberServiceImpl implements IMemberToMemberService
         return list;
     }
     
+    @Override
+    public void delInfo(String id) throws ServiceException
+    {
+        memberToMemberDao.deleteInfo(id);
+        
+    }
+    
 }
