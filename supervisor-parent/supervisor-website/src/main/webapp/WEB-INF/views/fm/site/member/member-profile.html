@@ -130,12 +130,18 @@
 				});
 			}
 			$(document).ready(function(){
+				var offsetTop = $(window).scrollTop() +"px";
+				 //alert(offsetTop)
+				 $(window).scroll(function (){
+					    offsetTop = $(window).scrollTop() +"px";
+				        $("#imagecomponent").css({top : offsetTop });
+				    });
 				var iv=$("#viewer").iviewer();
 				//iv.iviewer('loadImage', "../images/temp/100260_1306276811398.jpg"); 
 				/**弹出层滚动条
 				滚动式更新iviewer
 				**/
-				 var hSlide=new $.slide({container:"#hidden",imageWidth:90,imagesPerPage:8,
+				var hSlide=new $.slide({container:"#hidden",imageWidth:90,imagesPerPage:8,
 				onSlide:function(li,index){
 					iv.iviewer('loadImage', li.find("img").attr("data")); 
 				}
@@ -146,6 +152,7 @@
 				 var oSlide=new $.slide({container:"#original",imageWidth:90,imagesPerPage:5,onClick:function(self,li,index,i){
 					self.copyTo($("#hidden .line-con"));
 					$(".maskdivgen").fadeIn(100);
+					$("#imagecomponent").css({top : offsetTop });
 			        $("#imagecomponent").css("visibility","visible");
 			        hSlide.reset(0,1);
 					hSlide.slideTo(index);
@@ -359,48 +366,38 @@
 							data-image="${b.imagePath}${member.qms_img}">查看缩略图</a> </#if>
 					</div>
 					</#if>
-				</div>
-				<div class="item">
-        <div class="item">
-					<#if (member.type.id==1)>
-					<label>3C证书</label>
-					<div id="original" class="slideui" style="">
-								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
-								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
-				                <div class="line-con">					
-									<ul class="imageList">
-									   <#if imageList?exists>
-									   <#list imageList as imgPath>
-										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
-										</#if>
-									</#list>
-									</#if>
-									</ul>
-								</div>
-							</div>
+					<#if (member.type.id ==5 || (member.type.id==2 && member.isHave==1))>
+					<div class="upload" style="width:120px;">
+						<p style="font-size: 12px;"> ${member.enclosedNo}&nbsp;</p>
+						<p style="font-size:14px;">附框推广证 </p>
+						<#if member.enclosedImg==null> <img
+							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
+						<a class="demo-image button button-blue f12"
+							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							src="${b.imagePath}${member.enclosedImg}80x107.JPG" width="80"
+							height="107" /> <a class="demo-image button button-blue f12"
+							data-image="${b.imagePath}${member.enclosedImg}">查看缩略图</a> </#if>
+					</div>
 					</#if>
 				</div>
+				<#if imageList?exists>
 				<div class="item">
-					<#if (member.type.id==0 || member.type.id==5 || member.type.id==6 || member.type.id==7 )>
 					<label>资质证书</label>
 					<div id="original" class="slideui">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
 								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
 				                <div class="line-con">					
 									<ul class="imageList">
-									   <#if imageList?exists>
 									   <#list imageList as imgPath>
 										<#if imgPath !=''>
 										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
 										</#if>
 									</#list>
-									</#if>
 									</ul>
 								</div>
 							</div>
-					</#if>
 				</div>
+				</#if>
 				<#if (member.type.id==2)>
 		<div class="item">
           <label>代理商</label>

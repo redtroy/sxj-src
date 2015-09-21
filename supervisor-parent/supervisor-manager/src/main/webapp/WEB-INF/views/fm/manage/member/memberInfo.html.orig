@@ -1,5 +1,6 @@
 ﻿ <td colspan="11">
  <script>
+<<<<<<< HEAD
 
  $(document).ready(function() { 
 		uploadImg($("#uploadify_${member.id}"));
@@ -9,6 +10,38 @@
 		})
 });
 
+=======
+ $(function () {
+     $("#uploadify_${member.id}").uploadify({
+         //指定swf文件
+         swf: '${basePath}upload/uploadify.swf',
+         //后台处理的页面
+         uploader: '${basePath}upload.htm',
+         //按钮显示的文字
+         buttonText: '上传图片',
+         //显示的高度和宽度，默认 height 30；width 120
+         //'height': 15,
+         //'width': 80,
+         //上传文件的类型  默认为所有文件    'All Files'  ;  '*.*'
+         //在浏览窗口底部的文件类型下拉菜单中显示的文本
+         fileTypeDesc: 'Image Files',
+         //允许上传的文件后缀
+         fileTypeExts: '*.jpg;',
+         //发送给后台的其他参数通过formData指定
+         //'formData': { 'someKey': 'someValue', 'someOtherKey': 1 },
+         //上传文件页面中，你想要用来作为文件队列的元素的id, 默认为false  自动生成,  不带#
+         //'queueID': 'fileQueue',
+         //选择文件后自动上传
+         auto: true,
+         //设置为true将允许多文件上传
+         multi: true,
+ 		onUploadSuccess : function(file, data, response) {
+			var num = 1;
+			var dataObj = eval("(" + data + ")");//转换为json对象 
+				alert(dataObj.fileIds);
+			}
+     });
+ });
  $(document).ready(function(){
 	 var offsetTop = $(window).scrollTop() +"px";
 	 //alert(offsetTop)
@@ -89,6 +122,7 @@
 	    });
 
 	});
+>>>>>>> 262d6b762d69d20129a2ac971196b150784efe89
  </script>
  		  <div class="infoBox" id="basic-message"> 
  		  <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
