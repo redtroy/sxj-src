@@ -153,42 +153,42 @@
 					iv=$("#viewer").iviewer();
 					iv.iviewer('loadImage', li.find("img").attr("data"));
 				}});
-				/**
-				iviewer上左右按钮
-				**/
-				$("#next,#front").hover(function(){
-					$(this).children("a").fadeIn();
-				},function(){
-					$(this).children("a").fadeOut();
-				});
-				$("#next").click(function(){
-					hSlide.slideNext();
-					iv.iviewer('loadImage', hSlide.getCurrentImageData());
-				});
-				$("#front").click(function(){
-					hSlide.slideFront();
-					iv.iviewer('loadImage', hSlide.getCurrentImageData());
-				});
-				$(".submit").click(function(){
-					alert(oSlide.trimFid("../images"));
-				});
-				$("#btnClsVie").click(
-				        function () {
-				            $('.maskdivgen').fadeOut(100);
-				            $("#imagecomponent").css("visibility","hidden");
-				        }
-				)
-				$(".demo-image").click(
-			        function () {
-			        	var imagePath=$(this).attr("data-image");
-			        	$(".maskdivgen").fadeIn(100);
-				        $("#imagecomponent").css("visibility","visible");
-			    		hSlide.clear();
-			    		hSlide.addImage(imagePath,imagePath);
-			    		iv.iviewer('destroy'); 
-			    		iv=$("#viewer").iviewer({showTool:false})
-			    		iv.iviewer('loadImage', imagePath);
-			    });
+// 				/**
+// 				iviewer上左右按钮
+// 				**/
+// 				$("#next,#front").hover(function(){
+// 					$(this).children("a").fadeIn();
+// 				},function(){
+// 					$(this).children("a").fadeOut();
+// 				});
+// 				$("#next").click(function(){
+// 					hSlide.slideNext();
+// 					iv.iviewer('loadImage', hSlide.getCurrentImageData());
+// 				});
+// 				$("#front").click(function(){
+// 					hSlide.slideFront();
+// 					iv.iviewer('loadImage', hSlide.getCurrentImageData());
+// 				});
+// 				$(".submit").click(function(){
+// 					alert(oSlide.trimFid("../images"));
+// 				});
+// 				$("#btnClsVie").click(
+// 				        function () {
+// 				            $('.maskdivgen').fadeOut(100);
+// 				            $("#imagecomponent").css("visibility","hidden");
+// 				        }
+// 				)
+// 				$(".demo-image").click(
+// 			        function () {
+// 			        	var imagePath=$(this).attr("data-image");
+// 			        	$(".maskdivgen").fadeIn(100);
+// 				        $("#imagecomponent").css("visibility","visible");
+// 			    		hSlide.clear();
+// 			    		hSlide.addImage(imagePath,imagePath);
+// 			    		iv.iviewer('destroy'); 
+// 			    		iv=$("#viewer").iviewer({showTool:false})
+// 			    		iv.iviewer('loadImage', imagePath);
+// 			    });
 
 			});
 			

@@ -5,7 +5,8 @@
 	function closeViewer(index){
 	}
 </script>
-<div style="width:1100px;margin:auto;display: none;" id="imageViewer">
+<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 9999;"  id="imagecomponent">
+<div style="position:absolute; right:3%; z-index: 99999"><input id="btnClsVie" type="button" value="关闭"  /></div>
     <div class="cer-l">
         <!-- wrapper div is needed for opera because it shows scroll bars for reason -->
 		<div id="viewer" class="viewer">
@@ -97,9 +98,9 @@
    </div>
    <div style="clear:both; height:0px"></div>
 
-   <div id="SlideUl" class="slideui">
-				<i class="buttonSildeLeft left"><img src="${staticPath}images/ico/picSlideLeft.gif"/></i>
-				<i class="buttonSildeRight right"><img src="${staticPath}images/ico/picSlideRight.gif"/></i> 
+   <div id="hidden" class="slideui">
+				<i class="buttonSildeLeft left"><img src="${staticPath}images/icon/picSlideLeft.gif"/></i>
+				<i class="buttonSildeRight right"><img src="${staticPath}images/icon/picSlideRight.gif"/></i> 
                 <div class="line-con">					
 					<ul class="imageList">
 						
