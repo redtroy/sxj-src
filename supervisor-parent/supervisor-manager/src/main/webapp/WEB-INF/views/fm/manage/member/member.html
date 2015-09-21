@@ -274,8 +274,8 @@
 
 	//修改
 	function edit(id) {
-		var params = $("#" + id).find(":input").serialize();
-		var deviceNumber = $("#" + id).find("#deviceNumber").val();
+		var params = $("#"+id+"_info_form").serialize();
+		var deviceNumber = $("#"+id+"_info").find("#deviceNumber").val();
 		params = params + "&deviceNumber=" + deviceNumber;
 		/* if (check(id)) {
 			return false;
@@ -289,7 +289,7 @@
 			} else {
 				errorInfo(data.error);
 			}
-		});
+		}); 
 	}
 	//更改账户状态
 	function editState(id, state) {
