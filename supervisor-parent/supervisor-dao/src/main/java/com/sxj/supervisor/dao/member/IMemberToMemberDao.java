@@ -38,4 +38,6 @@ public interface IMemberToMemberDao
     public List<MemberToMemberEntity> query(
             QueryCondition<MemberToMemberEntity> query);
     
+    public void del(String memberNo);
+    
 }

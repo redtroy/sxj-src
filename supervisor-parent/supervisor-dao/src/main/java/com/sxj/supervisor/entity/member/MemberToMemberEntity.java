@@ -78,6 +78,12 @@ public class MemberToMemberEntity extends Pagable implements Serializable
     private String telNum;
     
     /**
+     * 备注
+     **/
+    @Column(name = "REMARK")
+    private String remark;
+    
+    /**
      * 型材厂联系人名称
      **/
     @Column(name = "PARENT_CONTACTS")
@@ -90,6 +96,16 @@ public class MemberToMemberEntity extends Pagable implements Serializable
     @Column(name = "PARENT_TEL_NUM")
     @Length(max = 100, message = "型材厂联系电话长度过长", groups = { AddGroup.class })
     private String parentTelNum;
+    
+    public String getRemark()
+    {
+        return remark;
+    }
+    
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
+    }
     
     public String getMemberNo()
     {

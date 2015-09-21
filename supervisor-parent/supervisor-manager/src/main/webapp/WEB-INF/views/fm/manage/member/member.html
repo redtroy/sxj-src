@@ -110,7 +110,47 @@
 			}
 		});
 	}
-
+	//证书上传
+	function uploadImg($file) {
+			$file.uploadify({
+				swf : '${basePath}upload/uploadify.swf',
+				uploader : "${basePath}upload.htm",
+				fileTypeExts: '*.jpg',
+				auto : true,
+				multi : true,
+				height : 22,
+				width : 120,
+				buttonText : '上传证书',
+				onUploadSuccess : function(file, data, response) {
+					{
+						var num = 1;
+						var dataObj = eval("(" + data + ")");//转换为json对象 
+							alert(dataObj.fileIds);
+					}
+				}
+			});
+		}
+	function uploadImgSingle(obj){
+		var objem=obj.parent().parent().find("a");
+		var objInput=obj.parent().parent().find(":input");
+		obj.uploadify({
+			swf : '${basePath}upload/uploadify.swf',
+			uploader : "${basePath}upload.htm",
+			fileTypeExts: '*.jpg',
+			auto : true,
+			multi : false,
+			height : 22,
+			width : 90,
+			buttonText : '上传证书',
+			onUploadSuccess : function(file, data, response) {
+					var num = 1;
+					var dataObj = eval("(" + data + ")");//转换为json对象 
+					objem.attr("image",dataObj.fileIds);
+					objem.attr("data-image","${b.imagePath}"+dataObj.fileIds);
+					objInput.val(dataObj.fileIds);
+			}
+		});
+	}
 	jQuery(document).ready(function($) {
 		$("#passworde_div_close").click(function() {
 			var li = $("#res_password_div").attr("index");
@@ -133,20 +173,26 @@
 		    $(this).parent().parent().remove();
 	    })
 	   
-       $(".company").live("focus",function(){
+       $(".memberName").live("focus",function(){
+    	   var obj=$(this);
     	   $(this).bigAutocomplete({
    			width: '256',
    			url : '${basePath}autoCompleMember.htm?memberType=6',
    	/* 		url : '${basePath}autoCompleMember.htm?memberType=6', *///没有数据暂时用所有会员
    			callback : function(data) {
    				if (data){
-   					$("#dlNo").val(data.result);
+   					obj.parent().parent().find("input:eq(1)").val(data.result);
+   					obj.parent().parent().find("input:eq(2)").val(data.title);
+   					obj.parent().parent().find("input:eq(3)").val(data.contacts);
+   					obj.parent().parent().find("input:eq(4)").val(data.telNum);
    				}
    			},
    			beforeShow : function(data){
    				if(data.length==1){
-   					$("#dlName").val(data[0].title);
-   					$("#dlNo").val(data[0].result);
+   					obj.parent().parent().find("input:eq(1)").val(data[0].result);
+   					obj.parent().parent().find("input:eq(2)").val(data[0].title);
+   					obj.parent().parent().find("input:eq(3)").val(data[0].contacts);
+   					obj.parent().parent().find("input:eq(4)").val(data[0].telNum);
    				}
    			}
    		});
@@ -206,13 +252,13 @@
 			$("#" + lable).show();
 			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
 					  $( ".foundedDate" ).datepicker();
-				    	var a=new $.slide({container:"#SlideUl1",imagesPerPage:7,onImageFocus:function(li){
+				    	var a=new $.slide({container:"#SlideUl1",imageWidth:85,imagesPerPage:7,onImageFocus:function(li){
 				    		//alert(li.find("img").attr("src"))
 				    	},
 				    	onSlide:function(li,index){
 				    		iv.iviewer('loadImage', li.find("img").attr("data")); 
 				    	}});
-				    	var b=new $.slide({container:"#SlideUl2",imagesPerPage:7,onImageFocus:function(li){
+				    	var b=new $.slide({container:"#SlideUl2",imageWidth:85,imagesPerPage:7,onImageFocus:function(li){
 				    		//alert(li.find("img").attr("src"))
 				    	},
 				    	onSlide:function(li,index){
