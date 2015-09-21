@@ -11,7 +11,8 @@ import com.sxj.util.exception.ServiceException;
 public interface IMemberImageService
 {
     
-    public List<MemberImageEntity> getImages(String memberNo, String state) throws ServiceException;
+    public List<MemberImageEntity> getImages(String memberNo, String state)
+            throws ServiceException;
     
     public List<CertificateLevelEntity> getCertificateLevels(String imageId)
             throws ServiceException;
@@ -52,4 +53,10 @@ public interface IMemberImageService
      * @param images
      */
     public void websiteAddImage(String memberNo, String images);
+    
+    /**
+     * 新增图片（保存，后台）
+     * @param list
+     */
+    public void ManageAddImage(List<MemberImageEntity> list);
 }

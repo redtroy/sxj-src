@@ -40,7 +40,8 @@ public class MemberImageServiceImpl implements IMemberImageService
     private ICertificateDao certificateDao;
     
     @Override
-    public List<MemberImageEntity> getImages(String memberNo, String state) throws ServiceException
+    public List<MemberImageEntity> getImages(String memberNo, String state)
+            throws ServiceException
     {
         try
         {
@@ -108,14 +109,13 @@ public class MemberImageServiceImpl implements IMemberImageService
     {
         try
         {
-            imageDao.historyImage(memberNo);
+            return imageDao.historyImage(memberNo);
         }
         catch (Exception e)
         {
             SxjLogger.error("查询历史数据错误", e, this.getClass());
             throw new ServiceException("查询历史数据错误");
         }
-        return null;
         
     }
     
@@ -179,6 +179,56 @@ public class MemberImageServiceImpl implements IMemberImageService
                     mem.setMemberNo(memberNo);
                     mem.setState(1);
                     imageDao.addMemberImage(mem);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("增加图片失败", e, this.getClass());
+            throw new ServiceException("增加图片失败");
+        }
+    }
+    
+    @Override
+    @Transactional
+    public void ManageAddImage(List<MemberImageEntity> list)
+            throws ServiceException
+    {
+        try
+        {
+            List<MemberImageEntity> querylist = getImages(list.get(0)
+                    .getMemberNo(), "1");
+            if (querylist.size() > 0)
+            {
+                String viso = StringUtils.getUUID();
+                int flag = imageDao.updatelock(list.get(0).getMemberNo(),
+                        querylist.get(0).getVersion(),
+                        viso);
+                if (flag == 0)
+                {
+                    throw new ServiceException("增加图片失败");
+                }
+                Date date = new Date();
+                viso = StringUtils.getUUID();
+                for (MemberImageEntity mi : list)
+                {
+                    mi.setCreationDate(date);
+                    mi.setVersion(viso);
+                    mi.setState(1);
+                    imageDao.addMemberImage(mi);
+                }
+                
+            }
+            else
+            {
+                Date date = new Date();
+                String viso = StringUtils.getUUID();
+                for (MemberImageEntity mi : list)
+                {
+                    mi.setCreationDate(date);
+                    mi.setVersion(viso);
+                    mi.setState(1);
+                    imageDao.addMemberImage(mi);
                 }
             }
         }

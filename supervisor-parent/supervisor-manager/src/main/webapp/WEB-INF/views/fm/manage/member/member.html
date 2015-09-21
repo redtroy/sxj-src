@@ -18,6 +18,7 @@
 <script type="text/javascript"
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
 	type="text/css" />
 				<script src="${b.staticPath}js/jquery.elastislide-style.js"
@@ -131,6 +132,25 @@
 		$("#Delete-button").live('click',function(){
 		    $(this).parent().parent().remove();
 	    })
+	   
+       $(".company").live("focus",function(){
+    	   $(this).bigAutocomplete({
+   			width: '256',
+   			url : '${basePath}autoCompleMember.htm?memberType=6',
+   	/* 		url : '${basePath}autoCompleMember.htm?memberType=6', *///没有数据暂时用所有会员
+   			callback : function(data) {
+   				if (data){
+   					$("#dlNo").val(data.result);
+   				}
+   			},
+   			beforeShow : function(data){
+   				if(data.length==1){
+   					$("#dlName").val(data[0].title);
+   					$("#dlNo").val(data[0].result);
+   				}
+   			}
+   		});
+       })
 		
 	});
 	
@@ -363,7 +383,7 @@
 		 layer.full(index);
 		 var newSlide=$("#SlideUl1").clone();
 		 var iv = $("#viewer").iviewer();
-			$("#SlideUl").after(newSlide);
+			$("#SlideUl").clone(newSlide);
 			newSlide.attr("id","newSlideUl");
 			var newb=new $.slide({container:"#newSlideUl",imagesPerPage:7,onImageFocus:function(li){
 				//alert(li.find("img").attr("src"))
@@ -384,7 +404,19 @@
 	function saverelevance(member_id){
 		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
 		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
-			if (data=='ok'){
+			if (data.isok=='ok'){
+				messageInfo("修改成功");
+			}else {
+				errorInfo("修改失败");
+			}
+		}) 
+	}
+	//修改图片
+	function editImage(member_id)
+	{
+		var list=$("#"+member_id+"_info").find("#imagelist_"+member_id).find(":input").serialize();
+		$.post("${basePath}member/editImage.htm",list,function(data){
+			if (data.isok=='ok'){
 				messageInfo("修改成功");
 			}else {
 				errorInfo("修改失败");
