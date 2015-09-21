@@ -134,6 +134,23 @@ ${type[0].getName()}</span>/
 </table>
 </div>
 </div>
+
+<!-- <div id="divImg"  style="display:none"> -->
+<!-- 			<div style="height:80px;line-height:80px;padding:0px 60px"> -->
+<!-- 		       <label style="background-color:#ffffff;width:80px;text-align:right;display:inline-block;padding:2px">图片验证码</label> -->
+<!-- 			   <input name="" type="text" class="input-w75h24" placeholder="请输入验证码" style="padding:2px;font-size:12px;color:#959393;border:#d8d8d8 1px solid;display:inline-block;"/><input type="hidden" id="imgStr" /> -->
+<!-- 			   <span class="img" style="display:inline-block;padding:2px;position:relative;top:11px;left:6px"> -->
+<!-- 				 <img id = "authImag1" style="height: 24px;cursor:pointer;" title="点击刷新验证码"  clstag="regist|keycount|personalreg|06" onclick="refresh1()" /> -->
+<!-- 			   </span> -->
+<!-- 			</div> -->
+<!-- 			 <div id="imgMsg" class="tipMsg msg-error" style="display: none;width: 10%">请输入验证码</div> -->
+<!-- 			<div style="height:22px;line-height:22px;font-size:12px;color:#959393;text-align:right;margin-right:100px"> -->
+<!-- 				<a style="text-decoration:none" href="javascript:refresh1()">看不清，刷新一下</a> -->
+<!-- 			</div> -->
+<!-- 			<div style="padding:10px 148px 20px"> -->
+<!-- 		       <button class="button button-pop" onclick="sendms();">提交</button> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 </body>
 <script>
  var message;
@@ -490,7 +507,7 @@ function showImg(){
 // 	dialogBoxOutId($("#divImg"));
 	 show  =layer.open({
 	    type: 1,
-	    area: ['400px', '180px'],
+	    area: ['500px', '210px'],
 	    title: false, //不显示标题
 	    content: $("#divImg")
 	});

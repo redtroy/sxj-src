@@ -792,21 +792,9 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             MemberEntity newMember = modifyMember(member, true);
-            if (newMember.getType().getId() == 1)
-            {
-                memberImageService.websiteAddImage(member.getMemberNo(),
-                        member.getCcc_img());
-                newMember.setCcc_img(member.getCcc_img());
-            }
-            else if (newMember.getType().getId() == 0
-                    || newMember.getType().getId() == 5
-                    || newMember.getType().getId() == 6
-                    || newMember.getType().getId() == 7)
-            {
                 memberImageService.websiteAddImage(member.getMemberNo(),
                         member.getQualification_img());
                 newMember.setQualification_img(member.getQualification_img());
-            }
             return newMember;
         }
         catch (Exception e)

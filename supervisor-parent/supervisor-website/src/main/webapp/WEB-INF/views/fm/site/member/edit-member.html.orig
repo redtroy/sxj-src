@@ -928,6 +928,7 @@ $(document).ready(function(){
          </#if>
         </div>
        <div id="add_form">
+<<<<<<< HEAD
          <#if (member.type.id==1)>
        <div class="item">
 							<label>3C证书</label> 
@@ -956,6 +957,8 @@ $(document).ready(function(){
        
         
        <#if (member.type.id==0 || member.type.id==6 || member.type.id==7  )>
+=======
+>>>>>>> a207c4063afd3d34bcd2bf6481031cb5372edf02
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
