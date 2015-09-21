@@ -10,6 +10,7 @@
 		<result property="parentNo" column="PARENT_NO" jdbcType="VARCHAR" />
 		<result property="parentName" column="PARENT_NAME" jdbcType="VARCHAR" />
 		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
 		<result property="memberType" column="MEMBER_TYPE" jdbcType="INTEGER" />
 		
 		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR" />
@@ -32,4 +33,8 @@
 			<![CDATA[ AND MEMBER_TYPE = #{condition.memberType}]]>
 		</if>
 	</select>
+	<!-- 根据会员号删除 -->
+     <delete id="del">
+         <![CDATA[delete FROM M_MEMBER_TO_MEMBER WHERE MEMBER_NO=#{memberNo}]]>
+     </delete>
 </mapper>

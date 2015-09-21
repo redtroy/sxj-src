@@ -34,7 +34,7 @@ import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberImageEntity;
-import com.sxj.supervisor.entity.member.RelevanceMember;
+import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.LevelEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
@@ -46,6 +46,7 @@ import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.member.IMemberToMemberService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.validator.hibernate.UpdateGroup;
 import com.sxj.util.Constraints;
@@ -75,6 +76,9 @@ public class MemberController extends BaseController
     
     @Autowired
     private IMemberImageService imageService;
+    
+    @Autowired
+    private IMemberToMemberService mtmservice;
     
     /**
      * 会员管理列表
@@ -236,7 +240,9 @@ public class MemberController extends BaseController
               {
                   
               }*/
-            List<RelevanceMember> relist = memberService.getListRelevanceMember(member.getMemberNo());
+            MemberToMemberEntity mtm = new MemberToMemberEntity();
+            mtm.setMemberNo(member.getMemberNo());
+            List<MemberToMemberEntity> relist = mtmservice.query(mtm);
             map.put("relist", relist);
             // map.put("delzizhi", delzizhi);
             map.put("oldNum", oldImageList.size());//原有证书数目
@@ -295,26 +301,27 @@ public class MemberController extends BaseController
     
     @RequestMapping("editRelevanceMember")
     public @ResponseBody Map<String, String> editRelevanceMember(
-            String[] memberNo, String[] company, String[] linkman,
-            String[] phone, String[] relevanceType, String[] remark)
-            throws WebException
+            String[] memberNo, String[] parentNo, String[] memberName,
+            String[] contacts, String[] telNum, String[] memberType,
+            String[] remark) throws WebException
     {
         try
         {
             Map<String, String> map = new HashMap<String, String>();
-            List<RelevanceMember> list = new ArrayList<RelevanceMember>();
+            List<MemberToMemberEntity> list = new ArrayList<MemberToMemberEntity>();
             for (int i = memberNo.length - 1; i >= 0; i--)
             {
-                RelevanceMember re = new RelevanceMember();
+                MemberToMemberEntity re = new MemberToMemberEntity();
                 re.setMemberNo(memberNo[i]);
-                re.setCompany(company[i]);
-                re.setLinkman(linkman[i]);
-                re.setPhone(phone[i]);
-                re.setRelevanceType(Integer.valueOf(relevanceType[i]));
+                re.setParentNo(parentNo[i]);
+                re.setMemberName(memberName[i]);
+                re.setContacts(contacts[i]);
+                re.setTelNum(telNum[i]);
+                re.setMemberType(Integer.valueOf(memberType[i]));
                 re.setRemark(remark[i]);
                 list.add(re);
             }
-            memberService.addRelevanceMember(list);
+            mtmservice.addMemberToMember(list);
             map.put("isok", "ok");
             return map;
         }

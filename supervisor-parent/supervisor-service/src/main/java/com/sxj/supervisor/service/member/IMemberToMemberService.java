@@ -30,4 +30,6 @@ public interface IMemberToMemberService
      */
     public List<MemberToMemberEntity> query(MemberToMemberEntity query)
             throws ServiceException;
+    
+    public String addMemberToMember(List<MemberToMemberEntity> list);
 }

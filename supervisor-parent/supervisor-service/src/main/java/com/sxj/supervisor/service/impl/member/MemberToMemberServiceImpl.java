@@ -10,6 +10,7 @@ import com.sxj.supervisor.dao.member.IMemberToMemberDao;
 import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.service.member.IMemberToMemberService;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -49,4 +50,37 @@ public class MemberToMemberServiceImpl implements IMemberToMemberService
         
     }
     
+    public void delbyName(String memberNo) throws ServiceException
+    {
+        try
+        {
+            memberToMemberDao.del(memberNo);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("删除关联企业错误", e, this.getClass());
+            throw new ServiceException("删除关联企业错误", e);
+        }
+    }
+    
+    @Override
+    @Transactional
+    public String addMemberToMember(List<MemberToMemberEntity> list)
+            throws ServiceException
+    {
+        try
+        {
+            delbyName(list.get(0).getMemberNo());
+            for (MemberToMemberEntity re : list)
+            {
+                addMemberToMember(re);
+            }
+            return "ok";
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("新增关联企业错误", e, this.getClass());
+            throw new ServiceException("新增关联企业错误", e);
+        }
+    }
 }
