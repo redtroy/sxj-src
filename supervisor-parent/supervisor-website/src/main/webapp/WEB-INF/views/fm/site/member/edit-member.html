@@ -416,8 +416,10 @@ function save(id){
     var memberType = "#{member.type.id}";
     if(memberType==0){
     	var qualification_img=imageVal.join(",");
+    	$("#aptitudePath_hidden").val(qualification_img);
     }else if(memberType==1){
     	 var ccc_img=imageVal.join(",");
+    	 $("#cccPath_hidden").val(ccc_img);
     }
     
     dialogBox(function(index){
@@ -581,7 +583,7 @@ $(document).ready(function(){
 		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].memberNo");
 		tr.find("input:eq(2)").attr("name","dlList["+dlNum+"].memberType");
 		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].contacts");
-		tr.find("input:eq(5)").attr("name","dlList["+dlNum+"].telNum");
+		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].telNum");
 		dlNum++;
 		
 		tr.find("input:eq(0)").bigAutocomplete({
@@ -646,8 +648,7 @@ $(document).ready(function(){
 			}
 		});
 	});
-//===
-$(document).ready(function(){
+
 	var iv=$("#viewer").iviewer();
 	//iv.iviewer('loadImage', "../images/temp/100260_1306276811398.jpg"); 
 	/**弹出层滚动条
@@ -884,24 +885,10 @@ $(document).ready(function(){
          </div>
         </div>
        <div id="add_form">
-       <div class="item">
          <#if (member.type.id==1)>
-							<!-- 3C证书1 -->
-							<label>3C证书</label> <p>
-									<input class="input input-w140h30 mb5" id="ccc" name="ccc_no"
-										value="${member.ccc_no}" maxlength="14"
-										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="cccPath_hidden" name="ccc_img" value="${member.ccc_img}">
-								</p> 
-							<div class="ly-left editBox mr15" style="float: left;height:180px;width:500px;">
-								
-								<!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
-								<#assign arr=(member.ccc_img?split(","))> <#if arr?exists>
-<!-- 								<img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0" /> -->
-								<div class="rollBox">
-									<ul id="carouselCCC" class="elastislide-list">
-										<#list arr as imgPath>
+       <div class="item">
 							<label>3C证书</label> 
-							<input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
+							<input type="hidden" class="input-w180h30" id="cccPath_hidden" name="ccc_img" value="${member.ccc_img}">
 							<p>&nbsp;</p>
 							<div id="original" class="slideui slideui-small" style="">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
@@ -921,8 +908,8 @@ $(document).ready(function(){
 							<div class="uploadify" style="float: left;padding-left: 15%;margin-top:20px;">
 									 <input type="file" class="" id="cccPath_File" name="input6">
 								</div>
-							</#if>
 						</div>
+		</#if>
        
         
        <#if (member.type.id==0)>
@@ -932,7 +919,6 @@ $(document).ready(function(){
 									<input class="input input-w140h30 mb5" id="aptitude" name="qualification_no"
 										value="${member.qualification_no}" maxlength="14"
 										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="qualification_img" value="${member.qualification_img}">
-									<input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
 								</p> 
 							
 							<div id="original" class="slideui slideui-small">

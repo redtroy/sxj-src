@@ -222,10 +222,6 @@ public class MemberController extends BaseController
                     .getId());
             member.setFlag(true);
             member.setUpDate(new Date());
-            for (int i = 0; i < member.getDlList().size(); i++)
-            {
-                System.out.println(member.getDlList().get(0).getMemberNo());
-            }
             MemberEntity newMember = memberService.modifyMember(member, true);
             member.setMemberNo(memberNew.getMemberNo());
             member = memberService.websiteModifyMember(member);
