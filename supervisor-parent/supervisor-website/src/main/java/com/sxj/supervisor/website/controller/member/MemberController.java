@@ -222,9 +222,8 @@ public class MemberController extends BaseController
                     .getId());
             member.setFlag(true);
             member.setUpDate(new Date());
-            MemberEntity newMember = memberService.modifyMember(member, true);
             member.setMemberNo(memberNew.getMemberNo());
-            member = memberService.websiteModifyMember(member);
+            MemberEntity newMember = memberService.websiteModifyMember(member);
             SupervisorPrincipal login = getLoginInfo(session);
             login.setMember(newMember);
             session.setAttribute("userinfo", login);
