@@ -40,7 +40,6 @@
 }
 .line-con{width:685px}
 </style>
-<@b.upload/>
 <@b.validate/>
 <@b.dialogBox/>
 <@b.iviewer/>
@@ -50,6 +49,24 @@ var checkState=${member.checkState.id};
 var flag=true;
 var ul_validform;
 var show;
+function loadUploadMember(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        /* queueID: 'safetyPath_FileDiv', */
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
 $(document).ready(function() { 
 	loadUploadMember("bLicensePath_File","${basePath}upload.htm",false,"上传",uploadLicense);
 	loadUploadMember("energyPath_File","${basePath}upload.htm",false,"上传" ,uploadenergyPath);
@@ -646,12 +663,15 @@ $(document).ready(function(){
 	$('.iviewer_del').unbind(); 
 	$(".iviewer_del").live("click",function(){
 		var i=hSlide.deleteImage(hSlide.getIndex());
-		
-		//if(hSlide.getCurrentImageData()){
 			iv.iviewer('loadImage', hSlide.getCurrentImageData());
 			oSlide.deleteImage(i<=0?0:i+1);
 			oSlide.slideTo(hSlide.getIndex());
-		//	}
+			var imgLength =$(oSlide.getImageLis()).find("img").length;
+			if(imgLength==0){
+				 $('.maskdivgen').fadeOut(100);
+		            $("#imagecomponent").css("visibility","hidden");
+			}
+				
 		if(!hSlide.getCurrentImageData())
 			iv.children("img").attr("src","");
 		
