@@ -88,7 +88,7 @@ ${type[0].getName()}</span>/
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>联系人手机</label>
   <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人手机" id="phoneNo" name="phoneNo" value="${member.phoneNo}" />
-  <span class="button button-gray f12 " id="sendms" onclick="showImg();">获取短信验证码</span>
+  <input type="button" class="button button-gray f12 " id="sendms" value="获取短信验证码" onclick="send_ms();" />
 <!--   <span class="button button-gray f12 " id="sendms" onclick="send_ms(this);return false;">获取短信验证码</span> -->
   <div class="tipMsg msg-gray" id="moileMsg" style="display:none;">通过验证后，您可以用该手机号找回密码</div>
 </div>

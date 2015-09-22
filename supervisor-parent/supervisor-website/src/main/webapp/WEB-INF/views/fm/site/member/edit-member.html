@@ -643,12 +643,12 @@ $(document).ready(function(){
 		$(this).parent().parent().parent().append(tr);
 		tr.find("input").attr("value","");
 		
-		tr.find("input:eq(0)").attr("name","dlList["+dlNum+"].memberName");
-		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].memberNo");
+		tr.find("input:eq(0)").attr("name","dlList["+dlNum+"].parentName");
+		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].parentNo");
 		tr.find("input:eq(2)").attr("name","dlList["+dlNum+"].memberType");
-		tr.find("input:eq(2)").attr("value","2");
-		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].contacts");
-		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].telNum");
+		tr.find("input:eq(2)").attr("value","${member.type.getId()}");
+		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].parentContacts");
+		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].parentTelNum");
 		dlNum++;
 		
 		tr.find("input:eq(0)").bigAutocomplete({
@@ -954,7 +954,7 @@ $(document).ready(function(){
 									   <#if imageList?exists>
 									   <#list imageList as imgPath>
 										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
+										<li><img src="${b.imagePath}${imgPath.image}80x107.JPG" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
 										</#if>
 									</#list>
 									</#if>
@@ -1093,7 +1093,8 @@ $(document).ready(function(){
         </div>
         <div class="item">
           <label>联系人手机</label>
-          ${member.phoneNo}
+          <input name="phoneNo" id="phoneNo" type="text" value="${member.phoneNo}"  readonly="readonly" class="input input-w120h36" />
+		    <a onclick="javascript:showImg()" style="font-size:13px;text-decoration:none">修改手机号码</a>
         </div>
         <div class="mt15 mb20 tc">
          <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
@@ -1126,10 +1127,198 @@ $(document).ready(function(){
 		<div id="viewer2" class="modal-body iviewer"></div>
 	</div>
 	<div class="maskdivgen" style="display: none"></div>
+	
+	<!-- 修改手机号码 -->
+	<div id="popDiv" class="mydiv" style="display:none;">
+			<div style="height:35px;line-height:35px;padding:0px 60px;font-size:12px;color:#959393">为了保护您的帐号安全，操作前请您进行安全验证</div>
+			<div style="height:50px;line-height:50px;margin-left: 60px">
+		       <span style="background-color:#ffffff;width:80px;text-align:right;display:inline-block;padding:2px">新手机号码</span>
+			   <input id="newPhoneNo" type="text" class="input-w140h24" placeholder="请输入新手机号码" style="padding:2px;color:#959393;border:#d8d8d8 1px solid"/>
+			 <div class="tipMsg msg-gray" id="moileMsg" style="display:none;max-width: 100px;height: 37px;">通过验证后，您可以用该手机号找回密码</div>
+			</div>
+			<div style="height:50px;line-height:50px;padding:0px 60px">
+		       <span style="background-color:#ffffff;width:80px;text-align:right;display:inline-block;padding:2px">短信验证码</span>
+			   <input name="ms" id="ms" type="text" class="input-w75h24" placeholder="请输入验证码" style="padding:2px;font-size:12px;color:#959393;border:#d8d8d8 1px solid"/>
+			   <input type="button" class="button button-gray f12 " id="sendms" value="获取短信验证码" onclick="send_ms();" />
+			</div>
+			<em class="color-green f12" id="time" style="display:none;margin-left: 100px;">60秒后重新获取验证码</em>
+			<div id="sm_erro" class="tipMsg msg-error" style="display:none;"></div>
+			<div style="padding:10px 148px 20px">
+		       <button class="button button-pop" onclick="editPhone()">提交</button>
+			</div>
+		</div>
+		<div id="bg" class="bg" style="display:none"></div>
 	<script>
 		$(document).ready(function(){
 			$("#viewer2").width($(window).width());
+			$("#newPhoneNo").blur(function(){
+				  checkSubmitMobil();
+			  });
 		});
+	  //发送短信
+	  var send_flag=false;
+	  var intDiff = parseInt(10);//倒计时总秒数量
+		var show;
+		function showImg(){
+			 show  =layer.open({
+			    type: 1,
+			    offset: ['30%', '35%'],
+			    title: "修改手机号码", //不显示标题
+			    content: $("#popDiv")
+			});
+		}
+		function send_ms(){
+			 var obj=$("#sendms");
+			  send_flag=true;
+			  var phoneNo=$("#newPhoneNo").val();
+			  if (!checkSubmitMobil()){
+				  return false;
+			  }
+			  
+			  $.post("${basePath}member/send_ms.htm",{phoneNo:phoneNo},function(data){
+			     if(data.error){
+			    	 $("#moileMsg").show();
+					 wrong("#moileMsg");
+					$("#moileMsg").text(data.error); 
+			     }else{
+			    	 $(obj).attr("disabled", "disabled"); 
+					 $(obj).addClass("button-disable");
+					 $("#time").show();
+				     timer(intDiff,obj)
+			     }
+			  }); 
+		  }
+		function editPhone(){
+			 var flag=false;
+			 if($("#newPhoneNo").val()==""){
+				 $("#moileMsg").show();
+				 wrong("#moileMsg");
+				 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
+				 flag=true;
+			 }
+			 $("#sm_erro").show();
+			 if ($("#ms").val()==""){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请输入验证码");
+				 flag=true;
+			 }
+			 if (!send_flag){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请先获取验证码");
+				 flag=true;
+			 }
+			 if ($("#ms").val()==""){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("验证码不能为空");
+				 flag=true;
+			 }else 
+			 if (!$("#ms").val().match(/^\d{6}$/)){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请填写六位验证码");
+				 flag=true;
+			 }
+			 var param=$("#ms").val();
+			 if (flag){
+				 return false;
+			 }
+			 $.get("${basePath}member/check_ms.htm?ms="+param+"&phoneNo="+$("#newPhoneNo").val(),function(data){
+				 if(data.flag=="false"){
+					 wrong("#sm_erro");
+				     $("#sm_erro").text("验证码错误");
+					 return false;
+				 }else{
+					 right("#sm_erro");
+					 $("#sm_erro").text("");
+					 $("#phoneNo").val($("#newPhoneNo").val());
+					 succInfo(function(){
+						 	layer.close(show);
+						},"修改成功！");
+				 }
+			 });
+		  }
+		
+		  //手机号码验证
+		  function checkSubmitMobil() {
+			  $("#moileMsg").hide();
+			  if ($("#newPhoneNo").val() == "") {
+			  $("#moileMsg").show();
+			 wrong("#moileMsg");
+			 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
+			  return false;
+			  }
+
+			  if (!$("#newPhoneNo").val().match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)) {
+			  $("#moileMsg").show();
+			  wrong("#moileMsg");
+			  $("#moileMsg").text("手机号码格式不正确！请重新输入！");
+			  return false;
+			  }
+			  var phone_flag=false;
+			  $.ajax({
+				   type: "POST",
+				   async:false,
+				   url: "${basePath}member/check_phone.htm",
+				   data: "phone="+$("#newPhoneNo").val(),
+				   success: function(msg){
+				     if (msg.flag=="true"){
+				    	 phone_flag=true;
+				     }
+				   }
+				 });
+			  if (phone_flag){
+				  $("#moileMsg").show();
+				  wrong("#moileMsg");
+				  $("#moileMsg").text("该手机号码已使用！");
+				  return false;
+			  }
+			  $("#moileMsg").show();
+			//  $("#moileMsg").html("<font color='green'>手机号输入正确！</font>");
+			 right("#moileMsg");
+			 $("#moileMsg").text("");
+			  return true;
+			  
+		 }
+		  var timer1;
+		  function timer(intDiff,obj){
+			   timer1=window.setInterval(function(){
+			    var day=0,
+			        hour=0,
+			        minute=0,
+			        second=0;//时间默认值       
+			    if(intDiff > 0){
+			        day = Math.floor(intDiff / (60 * 60 * 24));
+			        hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+			        minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+			        second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+			    }
+			    if (minute <= 9) minute = '0' + minute;
+			    if (second <= 9) second = '0' + second;
+			    /*
+			    $('#day_show').html(day+"天");
+			    $('#hour_show').html('<s id="h"></s>'+hour+'时');
+			    $('#minute_show').html('<s></s>'+minute+'分');
+			    $('#second_show').html('<s></s>'+second+'秒');
+			    */
+			    $("#time").text(second+"秒后重新获取验证码")
+			    if (second==0){
+			    	 $(obj).removeAttr("disabled", "disabled");
+			    	 $(obj).removeClass("button-disable");
+			    	 clearInterval(timer1);
+			    	 $("#time").text("")
+			    }
+			    intDiff--;
+			    }, 1000);
+			} 
+		  function wrong(obj){
+				 $(obj).removeClass("tipMsg msg-gray");
+				 $(obj).removeClass("icon icon16 icon-16-suc");
+				 $(obj).addClass("tipMsg msg-error");
+			 }
+			 function right(obj){
+				 $(obj).removeClass("tipMsg msg-gray");
+				 $(obj).removeClass("tipMsg msg-error");
+				 $(obj).addClass("icon icon16 icon-16-suc");
+			 }
 	</script>
   <@b.footer /> 
 </body>
