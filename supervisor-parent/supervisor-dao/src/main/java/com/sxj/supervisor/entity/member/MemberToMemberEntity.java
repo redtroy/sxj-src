@@ -1,6 +1,7 @@
 package com.sxj.supervisor.entity.member;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -76,6 +77,12 @@ public class MemberToMemberEntity extends Pagable implements Serializable
     @Column(name = "TEL_NUM")
     @Length(max = 100, message = "会员联系电话长度过长", groups = { AddGroup.class })
     private String telNum;
+    
+    /**
+     * 备注
+     **/
+    @Column(name = "CREATE_TIME")
+    private Date createTime;
     
     /**
      * 备注
@@ -205,6 +212,16 @@ public class MemberToMemberEntity extends Pagable implements Serializable
     public void setId(String id)
     {
         this.id = id;
+    }
+    
+    public Date getCreateTime()
+    {
+        return createTime;
+    }
+    
+    public void setCreateTime(Date createTime)
+    {
+        this.createTime = createTime;
     }
     
 }

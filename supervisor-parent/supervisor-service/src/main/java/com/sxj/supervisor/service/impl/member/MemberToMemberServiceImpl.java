@@ -1,5 +1,6 @@
 package com.sxj.supervisor.service.impl.member;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class MemberToMemberServiceImpl implements IMemberToMemberService
     public void addMemberToMember(MemberToMemberEntity member)
             throws ServiceException
     {
+        member.setCreateTime(new Date());
         memberToMemberDao.addTo(member);
         
     }
