@@ -1,7 +1,10 @@
 ﻿ <td colspan="11">
+ <style>
+ .uploadnew .swfupload{left:0px}
+ </style>
  <script>
  $(document).ready(function() { 
-		uploadImg($("#uploadify_${member.id}"));
+		
 		$("#${member.id}_info_form").find("[type='file']").each(function(){
 			//console.log(this)
 			uploadImgSingle($(this));
@@ -148,6 +151,7 @@
 							$("#form")[0].reset();
 						}
 					});
+					uploadImg($("#uploadify_${member.id}"),oSlide,oSlide2,'${member.id}');
 					/**
 					iviewer上左右按钮
 					 **/
@@ -261,14 +265,14 @@
 					</li>
 					 <li style="width:99%;padding-left:140px;padding-top:0px" class="view">
                          <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.bLicensePath}" name="bLicensePath" ><a style="color:#fff;text-decoration:none" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}" href="#" class="button22 demo-image">查看缩略图</a></em>
-						 <em class="state" style="margin-top:0px"><input type="file" id="a"/></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="a"/></em>
                         </li>
                     <#if (member.type.id !=5 && member.type.id!=6 && member.type.id!=7)>
 					<li style="width: 99%" class="view"><label class="lable">质量管理体系证书</label><input
 						type="text" value="JTGH2342345" /> </li> 
 						<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
                          <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.qms_img}" name="qms_img" ><a style="color:#fff;text-decoration:none" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}" href="#" class="button22 demo-image">查看缩略图</a></em>
-						 <em class="state" style="margin-top:0px"><input type="file" id="b"/></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="b"/></em>
                         </li>
                      </#if>
 						<#if
@@ -279,14 +283,14 @@
 					</li>
 					<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
                         <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.safety_licenses_img}" name="safety_licenses_img" ><a style="color:#fff;text-decoration:none" image="${member.safety_licenses_img}" data-image="${b.imagePath}${member.safety_licenses_img}" href="#" class="button22 demo-image">查看缩略图</a></em>
-						<em class="state" style="margin-top:0px"><input type="file" id="c"/></em>
+						<em class="state uploadnew" style="margin-top:0px"><input type="file" id="c"/></em>
                         </li>
 					<li style="width: 99%" class="view"><label class="lable">节能标识推广证</label><input
 						name="energyNo" type="text" value="${member.getEnergyNo()}" /> 
 						</li>
 						<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
                          <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.energyPath}" name="energyPath" ><a style="color:#fff;text-decoration:none" image="${member.energyPath}" data-image="${b.imagePath}${member.energyPath}" href="#" class="button22 demo-image">查看缩略图</a></em>
-						 <em class="state" style="margin-top:0px"><input type="file" id="d"/></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="d"/></em>
                         </li> 
 						</#if>
 					<#if (member.type.id==2)>
@@ -296,7 +300,7 @@
 					</li> 
 					<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
                          <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.production_license_img}" name="production_license_img" ><a style="color:#fff;text-decoration:none" image="${member.production_license_img}" data-image="${b.imagePath}${member.production_license_img}" href="#" class="button22 demo-image">查看缩略图</a></em>
-						 <em class="state" style="margin-top:0px"><input type="file" id="e"/></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="e"/></em>
                       </li> 
 					</#if>
 					
@@ -307,7 +311,7 @@
 					</li> 
 					<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
                          <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.enclosedImg}" name="enclosedImg" ><a style="color:#fff;text-decoration:none" image="${member.enclosedImg}" data-image="${b.imagePath}${member.enclosedImg}" href="#" class="button22 demo-image">查看缩略图</a></em>
-						 <em class="state" style="margin-top:0px"><input type="file" id="f"/></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="f"/></em>
                       </li> 
 					</#if>
 					<li style="width: 99%"><label class="lable">总交易额</label>${member.totalAmount}元</li>
@@ -359,25 +363,25 @@
 							<ul class="imageList" id="imagelist_${member.id}">
 								<#list ImageList as imageModel>
 								<li style="width: 80px; height: 110px">
-								<input type="hidden" name="image" value="${imageModel.image}" />
+								<!-- <input type="hidden" name="image" value="${imageModel.image}" />
 								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
 								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
-								<input type="hidden" name="remark" value="${imageModel.remark}" />
+								<input type="hidden" name="remark" value="${imageModel.remark}" /> -->
 								<img
-									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}"/>
 								<tt></tt></li> </#list>
 							</ul>
 						</div>
 					</div>
 				</li>
-				<li style="width: 99%"><label class="lable">新上传证书</label>10个 <em class="state" style="margin-top:0px"><input type="file" name="uploadify" id="uploadify_${member.id}" /></em>
+				<li style="width: 99%"><label class="lable">新上传证书</label>10个 <em class="state uploadnew" style="margin-top:0px"><input type="file" name="uploadify" id="uploadify_${member.id}" /></em>
 				<li
 					style="height:150px;width:843px;padding:0px">
 					<div id="original" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px">
 						<i class="buttonSildeLeft left" id="aleft"><img  src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
 						<i class="buttonSildeRight right" id="aright"><img  src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
-							<ul class="imageList">
+							<ul class="imageList" id="imageList_${member.id}">
 								<#list newImagList as imageModel>
 								<li style="width: 80px; height: 110px"><img
 									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
@@ -387,7 +391,7 @@
 					</div>
 				</li>
 			</ul>
-		</div>
+		   </div>
 				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:editImage('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
 			</div>
 			<!-- 资质证书结束 -->
@@ -435,5 +439,14 @@
 	          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 	           </tr>
          </table>
+         <div id="liImage">
+         <li style="width: 86px; height: 120px">
+								<input type="hidden" name="image" value="${imageModel.image}" />
+								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
+								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
+								<input type="hidden" name="remark" value="${imageModel.remark}" />
+								<img
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
+			<tt></tt></li>
         </div>
  </td>
