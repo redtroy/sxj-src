@@ -197,7 +197,18 @@
    			}
    		});
        })
-		
+		$(".level").live("focus",function(){
+		   var obj=$(this);
+		   $(this).bigAutocomplete({
+			width: '200',
+			url : '${basePath}autoCertificate.htm',
+			callback : function(data) {
+				alert(data.title);
+			},
+			beforeShow : function(data){
+			}
+		});
+	})
 	});
 	
 	function close_img() {
@@ -649,7 +660,7 @@
 				<!-- InstanceEndEditable -->
 			</div>
 		</div>
-		<div class="maskdivgen" style="display: none"></div>
+		<div class="maskdivgen" style="display: none;z-index: 96"></div>
 		<div class="viewer modal-wrap" id="img_close" style="display: none">
 			<div class="modal-header">
 				<span class="close" onclick="close_img()">关闭</span>
