@@ -254,7 +254,7 @@ public class MemberController extends BaseController
                         m.setTelNum(newMember.getTelNum());
                         if (StringUtils.isNotEmpty(m.getParentName()))
                         {
-                            list.add(m);
+                            memberToMemberService.addMemberToMember(m);
                         }
                     }
                     else if (newMember.getType() == MemberTypeEnum.GENRESFACTORY)
@@ -265,11 +265,11 @@ public class MemberController extends BaseController
                         m.setParentTelNum(newMember.getTelNum());
                         if (StringUtils.isNotEmpty(m.getMemberName()))
                         {
-                            list.add(m);
+                            
+                            memberToMemberService.addMemberToMember(m);
                         }
                     }
                 }
-                memberToMemberService.addMemberToMember(list);
             }
             
             topics.getTopic(Constraints.WEBSITE_CHANNEL_NAME)

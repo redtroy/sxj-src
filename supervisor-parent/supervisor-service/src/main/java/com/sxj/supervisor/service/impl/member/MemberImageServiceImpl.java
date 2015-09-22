@@ -172,15 +172,19 @@ public class MemberImageServiceImpl implements IMemberImageService
             {
                 Date date = new Date();
                 String viso = StringUtils.getUUID();
-                for (String image : images.split(","))
+                if (StringUtils.isNotEmpty(images))
                 {
-                    MemberImageEntity mem = new MemberImageEntity();
-                    mem.setCreationDate(date);
-                    mem.setVersion(viso);
-                    mem.setImage(image);
-                    mem.setMemberNo(memberNo);
-                    mem.setState(1);
-                    imageDao.addMemberImage(mem);
+                    String[] is = images.split(",");
+                    for (String image : is)
+                    {
+                        MemberImageEntity mem = new MemberImageEntity();
+                        mem.setCreationDate(date);
+                        mem.setVersion(viso);
+                        mem.setImage(image);
+                        mem.setMemberNo(memberNo);
+                        mem.setState(1);
+                        imageDao.addMemberImage(mem);
+                    }
                 }
             }
         }

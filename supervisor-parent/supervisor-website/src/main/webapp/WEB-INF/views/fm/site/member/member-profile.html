@@ -31,7 +31,7 @@
 <script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
 <link href="${b.staticPath}style/imageditor.css" rel="stylesheet" type="text/css" />
 <!--  -->
-		<@b.validate/> <@b.dialogBox/> <@b.upload/><@b.iviewer/>
+		<@b.validate/> <@b.dialogBox/><@b.iviewer/>
 <script>
 			var validform;
 			var show ;
@@ -136,7 +136,7 @@
 					    offsetTop = $(window).scrollTop() +"px";
 				        $("#imagecomponent").css({top : offsetTop });
 				    });
-				var iv=$("#viewer").iviewer();
+				var iv=$("#viewer").iviewer({showTool:false});
 				//iv.iviewer('loadImage', "../images/temp/100260_1306276811398.jpg"); 
 				/**弹出层滚动条
 				滚动式更新iviewer
@@ -157,7 +157,7 @@
 			        hSlide.reset(0,1);
 					hSlide.slideTo(index);
 					iv.iviewer('destroy'); 
-					iv=$("#viewer").iviewer();
+					iv=$("#viewer").iviewer({showTool:false});
 					iv.iviewer('loadImage', li.find("img").attr("data"));
 				}});
 				/**
@@ -188,13 +188,18 @@
 				$(".demo-image").click(
 			        function () {
 			        	var imagePath=$(this).attr("data-image");
-			        	$(".maskdivgen").fadeIn(100);
-				        $("#imagecomponent").css("visibility","visible");
-			    		hSlide.clear();
-			    		hSlide.addImage(imagePath,imagePath);
-			    		iv.iviewer('destroy'); 
-			    		iv=$("#viewer").iviewer({showTool:false})
-			    		iv.iviewer('loadImage', imagePath);
+			        	if(imagePath!=''){
+			        		$(".maskdivgen").fadeIn(100);
+					        $("#imagecomponent").css("visibility","visible");
+				    		hSlide.clear();
+				    		hSlide.addImage(imagePath,imagePath);
+				    		iv.iviewer('destroy'); 
+				    		iv=$("#viewer").iviewer({showTool:false})
+				    		iv.iviewer('loadImage', imagePath);
+			        	}else{
+			        		errorInfo("暂无图片!");
+			        	}
+			        	
 			    });
 
 			});
@@ -294,7 +299,7 @@
 						<#if member.bLicensePath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg" >查看缩略图</a> <#else> <img
+							data-image="" >查看缩略图</a> <#else> <img
 							src="${b.imagePath}${member.bLicensePath}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.bLicensePath}" >查看缩略图</a>
@@ -308,7 +313,7 @@
 						<#if member.safety_licenses_img==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							data-image="">查看缩略图</a> <#else> <img
 							src="${b.imagePath}${member.safety_licenses_img}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a> </#if>
@@ -321,7 +326,7 @@
 						<#if member.energyPath==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							data-image="">查看缩略图</a> <#else> <img
 							src="${b.imagePath}${member.energyPath}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.energyPath}">查看缩略图</a> </#if>
@@ -347,7 +352,7 @@
 						<#if member.production_license_img==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							data-image="">查看缩略图</a> <#else> <img
 							src="${b.imagePath}${member.production_license_img}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a> </#if>
@@ -360,7 +365,7 @@
 						<#if member.qms_img==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							data-image="">查看缩略图</a> <#else> <img
 							src="${b.imagePath}${member.qms_img}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.qms_img}">查看缩略图</a> </#if>
@@ -373,16 +378,16 @@
 						<#if member.enclosedImg==null> <img
 							src="${b.staticPath}images/nopic.jpg" width="80" height="107" />
 						<a class="demo-image button button-blue f12"
-							data-image="${b.staticPath}images/nopic.jpg">查看缩略图</a> <#else> <img
+							data-image="">查看缩略图</a> <#else> <img
 							src="${b.imagePath}${member.enclosedImg}80x107.JPG" width="80"
 							height="107" /> <a class="demo-image button button-blue f12"
 							data-image="${b.imagePath}${member.enclosedImg}">查看缩略图</a> </#if>
 					</div>
 					</#if>
 				</div>
-				<#if imageList?exists>
+				<#if imageList?exists && (imageList?size>0)>
 				<div class="item">
-					<label>资质证书</label>
+					<label>资质证w书</label>
 					<div id="original" class="slideui">
 								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
 								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
@@ -390,7 +395,7 @@
 									<ul class="imageList">
 									   <#list imageList as imgPath>
 										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
+										<li><img src="${b.imagePath}${imgPath.image}80x107.JPG" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
 										</#if>
 									</#list>
 									</ul>
@@ -510,7 +515,7 @@
 					</#if>
 				</div>
 				<div class="item">
-					<label>总交易额</label><a href="${basePath}finance/finance.htm"
+					<label>总交易额</label><a href="javascript:clickFunction('${basePath}finance/finance.htm')"
 						class="lnk-blue">查看明细</a>
 				</div>
 				<div class="item">
@@ -552,5 +557,6 @@
 		</div>
 		<div id="viewer2" class="modal-body iviewer"></div>
 	</div>
+	
 </body>
 </html>

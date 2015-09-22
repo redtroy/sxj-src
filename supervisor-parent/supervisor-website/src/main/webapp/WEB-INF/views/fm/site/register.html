@@ -88,7 +88,7 @@ ${type[0].getName()}</span>/
 <div class="item">
   <label><span class="color-red mr5 fb">*</span>联系人手机</label>
   <input class="input input-w180h36" type="text" autocomplete="off" placeholder="" title="联系人手机" id="phoneNo" name="phoneNo" value="${member.phoneNo}" />
-  <span class="button button-gray f12 " id="sendms" onclick="showImg();">获取短信验证码</span>
+  <input type="button" class="button button-gray f12 " id="sendms" value="获取短信验证码" onclick="showImg();" />
 <!--   <span class="button button-gray f12 " id="sendms" onclick="send_ms(this);return false;">获取短信验证码</span> -->
   <div class="tipMsg msg-gray" id="moileMsg" style="display:none;">通过验证后，您可以用该手机号找回密码</div>
 </div>
@@ -115,7 +115,7 @@ ${type[0].getName()}</span>/
 
 </div></div>
 <@b.footer />
-<div id="divImg" style="display: none;">
+<!-- <div id="divImg" style="display: none;">
 <div class="codebg">
 <table style="margin:30px;">
   <tr style="height: 24px; line-height: 24px;padding: 2px;margin: 0;">
@@ -133,24 +133,20 @@ ${type[0].getName()}</span>/
   </tr>
 </table>
 </div>
-</div>
-
-<!-- <div id="divImg"  style="display:none"> -->
-<!-- 			<div style="height:80px;line-height:80px;padding:0px 60px"> -->
-<!-- 		       <label style="background-color:#ffffff;width:80px;text-align:right;display:inline-block;padding:2px">图片验证码</label> -->
-<!-- 			   <input name="" type="text" class="input-w75h24" placeholder="请输入验证码" style="padding:2px;font-size:12px;color:#959393;border:#d8d8d8 1px solid;display:inline-block;"/><input type="hidden" id="imgStr" /> -->
-<!-- 			   <span class="img" style="display:inline-block;padding:2px;position:relative;top:11px;left:6px"> -->
-<!-- 				 <img id = "authImag1" style="height: 24px;cursor:pointer;" title="点击刷新验证码"  clstag="regist|keycount|personalreg|06" onclick="refresh1()" /> -->
-<!-- 			   </span> -->
-<!-- 			</div> -->
-<!-- 			 <div id="imgMsg" class="tipMsg msg-error" style="display: none;width: 10%">请输入验证码</div> -->
-<!-- 			<div style="height:22px;line-height:22px;font-size:12px;color:#959393;text-align:right;margin-right:100px"> -->
-<!-- 				<a style="text-decoration:none" href="javascript:refresh1()">看不清，刷新一下</a> -->
-<!-- 			</div> -->
-<!-- 			<div style="padding:10px 148px 20px"> -->
-<!-- 		       <button class="button button-pop" onclick="sendms();">提交</button> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
+</div> -->
+<div id="divImg" class="mydiv" style="display:none;">
+			<div style="height:50px;line-height:50px;margin-left: 60px">
+		       <div style="width: 160px;float: left;"><span style="background-color:#ffffff;width:80px;text-align:right;display:inline-block;padding:2px">图片验证码</span>
+			   <input class="input-w50h-ch" type="text" title="图片验证码" id="img" name="" value="" /><input type="hidden" id="imgStr" /></div>
+			 <div  style="float: left;margin-top: 16px;"><img id = "authImag1" style="height: 24px;cursor:pointer;" title="点击刷新验证码"  clstag="regist|keycount|personalreg|06" onclick="refresh1()" /></div>
+			</div>
+			<div style="height:22px;line-height:22px;">
+		       <div id="imgMsg" class="tipMsg msg-error" style="display: none;">请输入验证码</div>
+			</div>
+			<div style="padding:10px 148px 20px">
+		       <button class="button button-pop" onclick="sendms()">确定</button>
+			</div>
+		</div>
 </body>
 <script>
  var message;
@@ -507,8 +503,8 @@ function showImg(){
 // 	dialogBoxOutId($("#divImg"));
 	 show  =layer.open({
 	    type: 1,
-	    area: ['500px', '210px'],
-	    title: false, //不显示标题
+	    area: ['400px', '180px'],
+	    title: "图片验证码", //不显示标题
 	    content: $("#divImg")
 	});
 }
