@@ -1086,7 +1086,6 @@ $(document).ready(function(){
 		       <button class="button button-pop" onclick="editPhone()">提交</button>
 			</div>
 		</div>
-		<div id="bg" class="bg" style="display:none"></div>
 	<script>
 		$(document).ready(function(){
 			$("#viewer2").width($(window).width());
@@ -1096,7 +1095,7 @@ $(document).ready(function(){
 		});
 	  //发送短信
 	  var send_flag=false;
-	  var intDiff = parseInt(10);//倒计时总秒数量
+	  var intDiff = parseInt(60);//倒计时总秒数量
 		var show;
 		function showImg(){
 			 show  =layer.open({
