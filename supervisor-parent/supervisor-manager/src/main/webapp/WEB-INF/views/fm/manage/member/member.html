@@ -111,7 +111,7 @@
 		});
 	}
 	//证书上传
-	function uploadImg($file) {
+	function uploadImg($file,oSlide,oSlide2,id) {
 			$file.uploadify({
 				swf : '${basePath}upload/uploadify.swf',
 				uploader : "${basePath}upload.htm",
@@ -125,7 +125,12 @@
 					{
 						var num = 1;
 						var dataObj = eval("(" + data + ")");//转换为json对象 
-							alert(dataObj.fileIds);
+						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+						oSlide2.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+                        /* var listImage="<li style='width: 86px; height: 120px'>" +
+                                      "<img src='${b.imagePath}"+dataObj.fileIds+"' data='${b.imagePath}"+dataObj.fileIds+"' />"+
+                                      "<tt></tt></li>"; */
+//                        $("#imageList_"+id).append(listImage); 
 					}
 				}
 			});
@@ -170,7 +175,10 @@
 			}
 		})
 		$("#Delete-button").live('click',function(){
-		    $(this).parent().parent().remove();
+			var obj=$(this).parent().parent()
+			dialogBox(function(){
+				obj.remove();
+			},"是否确认删除")
 	    })
 	   
        $(".memberName").live("focus",function(){
@@ -449,6 +457,7 @@
 	 
 	function saverelevance(member_id){
 		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
+		relist=relist+"&memberId="+member_id;
 		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
 			if (data.isok=='ok'){
 				messageInfo("修改成功");
@@ -460,14 +469,19 @@
 	//修改图片
 	function editImage(member_id)
 	{
-		var list=$("#"+member_id+"_info").find("#imagelist_"+member_id).find(":input").serialize();
-		$.post("${basePath}member/editImage.htm",list,function(data){
+		//var list=$("#"+member_id+"_info").find("#imagelist_"+member_id).find(":input").serialize();
+		var images="";
+		$("#"+member_id+"_info").find("#imagelist_"+member_id).find("img").each(function(){
+			 images=images+","+$(this).attr("data").split("http://storage.menchuang.org.cn\/")[1];
+		})
+		images=images.substr(1,images.length);
+		 $.post("${basePath}member/newEditImage.htm",{memberId:member_id,images:images},function(data){
 			if (data.isok=='ok'){
 				messageInfo("修改成功");
 			}else {
 				errorInfo("修改失败");
 			}
-		}) 
+		})  
 	}
 </script>
 <!-- InstanceEndEditable -->

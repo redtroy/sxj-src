@@ -50,6 +50,8 @@ public class MemberToMemberServiceImpl implements IMemberToMemberService
         
     }
     
+    @Override
+    @Transactional
     public void delbyName(String memberNo) throws ServiceException
     {
         try
