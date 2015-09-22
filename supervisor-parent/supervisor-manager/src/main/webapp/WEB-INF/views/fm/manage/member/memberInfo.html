@@ -29,6 +29,8 @@
 			$.post("getMemberImage.htm", {
 				"imageId" : imageVal
 			}, function(data) {
+				
+				$("#levelTd").children().remove();
 				$("#id").val(data.model.memberImage.id);
 				$("#image").val(imageVal);
 				$("#certificateType").val(
@@ -42,26 +44,15 @@
 				$("#remark").val(data.model.memberImage.remark);
 				$("#memberNo").val(data.model.memberImage.memberNo);
 				console.log(data.model.clist.length)
-				if (data.model.clist.length==1){
-					$("#levelids").val(data.model.clist[0].certificateLevel);
-					$("#level").val(data.model.clist[0].certificateName);
-				}else if (data.model.clist.length>1){
+				 if (data.model.clist.length>=1){
 					var zzobj=$("#levelids").parent().parent();
 					 var obj=$("#addlvImage").html();
+					 alert(data.model.clist.length);
 					for (var i=0;i<data.model.clist.length-1;i++){
-						if (i==0){
-							$("#levelids").val(data.model.clist[0].certificateLevel);
-							$("#level").val(data.model.clist[0].certificateName);
-						}else{
-							zzobj.after(obj);
-							obj.find("input:eq(0)").val(data.model.clist[i].certificateLevel)
-							obj.find("input:eq(1)").val(data.model.clist[i].certificateName)
-							zzobj=obj;
-						}
+							$("#levelTd").append('<input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/>')
 					}
 				}else{
-					$("#levelids").val("");
-					$("#level").val("");
+					$("#levelTd").append('<input  name="levelids" type="hidden"  id="levelids"/><input class="level"   name="levels" type="text" id="level"/>')
 				}
 			});
 		}
@@ -130,6 +121,7 @@
 						onClick : function(self, li, index, i) {
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
+							
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
 							self.copyTo($("#hidden .line-con"));
@@ -142,8 +134,7 @@
 							hSlide.slideTo(index);
 							iv.iviewer('destroy');
 							iv = $("#viewer").iviewer();
-							iv
-									.iviewer('loadImage', li.find("img").attr(
+							iv.iviewer('loadImage', li.find("img").attr(
 											"data"));
 							currentSlide = self;
 						},
@@ -156,8 +147,10 @@
 						imageWidth : 90,
 						imagesPerPage : 5,
 						onClick : function(self, li, index, i) {
+							
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
+							alert(data);
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
 							self.copyTo($("#hidden .line-con"));
