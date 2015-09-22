@@ -755,7 +755,7 @@ $(document).ready(function(){
           <p><input class="input input-w140h30 mb5 " name="bLicenseNo" id="bLicenseNo" maxlength="15" value="${member.bLicenseNo}"  datatype="ns"  nullmsg="请填写15位营业执照注册号"   placeholder="输入证书编号"/></p>
           <p>营业执照</p>
            <#if (member.bLicensePath??)>
-		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}" onerror="errorImage(this)" times="0"/>
+		<img id="bLicensePath_img" src="${b.imagePath}${member.bLicensePath}80x107.JPG" onerror="errorImage(this)" times="0"/>
 		   <#else>
 		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/>  
 		</#if>
@@ -777,7 +777,7 @@ $(document).ready(function(){
           <p><input class="input input-w140h30 mb5" id="safety" name="safety_licenses_no" value="${member.safety_licenses_no}" maxlength="10"   placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写10位生产许可证编号"  -->
           <p>安全生产许可证</p>
           <#if (member.safety_licenses_img??)>
-         <img id="safetyPath_img" width="80" height="107" src="${b.imagePath}${member.safety_licenses_img}" onerror="errorImage(this)" times="0"/>
+         <img id="safetyPath_img"  src="${b.imagePath}${member.safety_licenses_img}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="safetyPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
@@ -798,7 +798,7 @@ $(document).ready(function(){
           <p><input class="input input-w140h30 mb5" id="energyNo" name="energyNo" value="${member.energyNo}" maxlength="7" placeholder="输入证书编号"/></p>
           <p>节能标识</p>
           <#if (member.energyPath??)>
-         <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}" onerror="errorImage(this)" times="0"/>
+         <img id="energyPath_img"  src="${b.imagePath}${member.energyPath}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="energyPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
@@ -839,7 +839,7 @@ $(document).ready(function(){
           <p><input class="input input-w140h30 mb5" id="production" name="production_license_no" value="${member.production_license_no}" maxlength="14"    placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写14位工业产品许可证编号" -->
           <p>工业产品生产许可证</p>
           <#if (member.production_license_img??)>
-         <img id="productionPath_img" width="80" height="107" src="${b.imagePath}${member.production_license_img}" onerror="errorImage(this)" times="0"/>
+         <img id="productionPath_img"  src="${b.imagePath}${member.production_license_img}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="productionPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
@@ -859,7 +859,7 @@ $(document).ready(function(){
           <p><input class="input input-w140h30 mb5" id="qms" name="qms_no" value="${member.qms_no}"  maxlength="14" placeholder="输入证书编号"/></p>
           <p>质量管理体系认证</p>
           <#if (member.qms_img??)>
-         <img id="qmsPath_img" width="80" height="107" src="${b.imagePath}${member.qms_img}" onerror="errorImage(this)" times="0"/>
+         <img id="qmsPath_img"  src="${b.imagePath}${member.qms_img}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="qmsPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
@@ -879,7 +879,7 @@ $(document).ready(function(){
           <p><input class="input input-w140h30 mb5" id="enclosedNo" name="enclosedNo" value="${member.enclosedNo}"  maxlength="14" placeholder="输入证书编号"/></p>
           <p>附框推广证 </p>
           <#if (member.enclosedImg??)>
-         <img id="enclosed_Img" width="80" height="107" src="${b.imagePath}${member.enclosedImg}" onerror="errorImage(this)" times="0"/>
+         <img id="enclosed_Img"  src="${b.imagePath}${member.enclosedImg}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="enclosed_Img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
