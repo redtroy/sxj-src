@@ -172,15 +172,19 @@ public class MemberImageServiceImpl implements IMemberImageService
             {
                 Date date = new Date();
                 String viso = StringUtils.getUUID();
-                for (String image : images.split(","))
+                if (StringUtils.isNotEmpty(images))
                 {
-                    MemberImageEntity mem = new MemberImageEntity();
-                    mem.setCreationDate(date);
-                    mem.setVersion(viso);
-                    mem.setImage(image);
-                    mem.setMemberNo(memberNo);
-                    mem.setState(1);
-                    imageDao.addMemberImage(mem);
+                    String[] is = images.split(",");
+                    for (String image : is)
+                    {
+                        MemberImageEntity mem = new MemberImageEntity();
+                        mem.setCreationDate(date);
+                        mem.setVersion(viso);
+                        mem.setImage(image);
+                        mem.setMemberNo(memberNo);
+                        mem.setState(1);
+                        imageDao.addMemberImage(mem);
+                    }
                 }
             }
         }
@@ -293,36 +297,47 @@ public class MemberImageServiceImpl implements IMemberImageService
         }
         
     }
-
-	@Override
-	public MemberImageModel getMemberImageByImageId(String imageId)
-			throws ServiceException {
-		try {
-			MemberImageModel model = new MemberImageModel();
-			MemberImageEntity imageEntity= imageDao.getMemberImageByImageId(imageId);
-			List<CertificateLevelEntity> level = certificateLevelDao.getCertificateLevel(imageId);
-			model.setMemberImage(imageEntity);
-			model.setList(level);
-			return model;
-		} catch (Exception e) {
-			SxjLogger.error("查询新数据错误", e, this.getClass());
-			throw new ServiceException("查询新数据错误");
-		}
-	}
-
-	@Override
-	public void addMemberImage(MemberImageEntity memberImage)
-			throws SQLException {
-		try {
-			if(memberImage.getId()==null){
-				imageDao.addMemberImage(memberImage);
-			}else{
-				imageDao.updateMemberImage(memberImage);
-			}
-		} catch (Exception e) {
-			SxjLogger.error("查询新数据错误", e, this.getClass());
-			throw new ServiceException("查询新数据错误");
-		}
-		
-	}
+    
+    @Override
+    public MemberImageModel getMemberImageByImageId(String imageId)
+            throws ServiceException
+    {
+        try
+        {
+            MemberImageModel model = new MemberImageModel();
+            MemberImageEntity imageEntity = imageDao.getMemberImageByImageId(imageId);
+            List<CertificateLevelEntity> level = certificateLevelDao.getCertificateLevel(imageId);
+            model.setMemberImage(imageEntity);
+            model.setList(level);
+            return model;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询新数据错误", e, this.getClass());
+            throw new ServiceException("查询新数据错误");
+        }
+    }
+    
+    @Override
+    public void addMemberImage(MemberImageEntity memberImage)
+            throws SQLException
+    {
+        try
+        {
+            if (memberImage.getId() == null)
+            {
+                imageDao.addMemberImage(memberImage);
+            }
+            else
+            {
+                imageDao.updateMemberImage(memberImage);
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询新数据错误", e, this.getClass());
+            throw new ServiceException("查询新数据错误");
+        }
+        
+    }
 }

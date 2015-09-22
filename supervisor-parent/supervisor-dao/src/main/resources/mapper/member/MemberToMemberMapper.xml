@@ -17,6 +17,7 @@
 		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
 		<result property="parentContacts" column="PARENT_CONTACTS" jdbcType="VARCHAR" />
 		<result property="parentTelNum" column="PARENT_TEL_NUM" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP" />
 	</resultMap>
 
 	<!-- 获取权限列表 -->
@@ -32,6 +33,7 @@
 		<if test="condition.memberType != null">
 			<![CDATA[ AND MEMBER_TYPE = #{condition.memberType}]]>
 		</if>
+		<![CDATA[ ORDER BY CREATE_TIME ]]>
 	</select>
 	<!-- 根据会员号删除 -->
      <delete id="del">
