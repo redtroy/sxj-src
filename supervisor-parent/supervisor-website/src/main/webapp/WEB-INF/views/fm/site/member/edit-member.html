@@ -70,7 +70,6 @@ $(document).ready(function() {
 	loadUploadMember("productionPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadproductionReload);
 
 	uploadImg($("#aptitudePath_File_reload"));
-	uploadImgCCC($("#cccPath_File"));
 	//
 	$("#bLicenseNo").click(function(){
 		$("#bLicenseNo_erro").hide();
@@ -136,10 +135,6 @@ closeViewer = function() {
 }
 var oSlide;
 var uploadImg = function($file) {
-	//var $div = $file.parent().parent();
-//	var $carousel = $div.find(".elastislide-list");
-	//var $container = $carousel.parent().parent();
-	var $hidden = $("#aptitudePath_hidden");
 	$file.uploadify({
 		swf : '${basePath}upload/uploadify.swf',
 		uploader : "${basePath}upload.htm",
@@ -150,64 +145,8 @@ var uploadImg = function($file) {
 		width : 120,
 		buttonText : '上传资质证书',
 		onUploadSuccess : function(file, data, response) {
-			var num = 1;
 			var dataObj = eval("(" + data + ")");//转换为json对象 
-			var hideVal = $hidden.val();
-			if (hideVal == '') {
-				hideVal = dataObj.fileIds;
-			} else {
-				var arrays = hideVal.split(",");
-				for (var i = 0; i < arrays.length; i++) {
-					if (arrays[i]) {
-						num += 1;
-					}
-				}
 				oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
-				hideVal += "," + dataObj.fileIds;
-			}
-			$hidden.val(hideVal);
-		/* 	refreshElastislide($container, $carousel, dataObj); */
-		}
-	});
-}
-var uploadImgCCC = function($file) {
-	/* var shflag='${member.flag}';
-	if (shflag==1){
-		checkState=1;
-		flag=false;
-	} */
-	//var $div = $file.parent().parent();
-//	var $carouselCCC = $div.find(".elastislide-list");
-//	var $container = $carouselCCC.parent().parent();
-	var $hidden = $("#cccPath_hidden");
-	$file.uploadify({
-		swf : '${basePath}upload/uploadify.swf',
-		uploader : "${basePath}upload.htm",
-		 fileTypeExts: '*.jpg',
-		auto : true,
-		multi : true,
-		height : 30,
-		width : 120,
-		buttonText : '上传3C证书',
-		onUploadSuccess : function(file, data, response) {
-			var num = 1;
-			var dataObj = eval("(" + data + ")");//转换为json对象 
-			var hideVal = $hidden.val();
-			if (hideVal == '') {
-				hideVal = dataObj.fileIds;
-			} else {
-				var arrays = hideVal.split(",");
-				for (var i = 0; i < arrays.length; i++) {
-					if (arrays[i]) {
-						num += 1;
-					}
-				}
-				oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
-				hideVal += "," + dataObj.fileIds;
-				
-			}
-			$hidden.val(hideVal);
-			//refreshElastislide($container, $carouselCCC, dataObj);
 		}
 	});
 }

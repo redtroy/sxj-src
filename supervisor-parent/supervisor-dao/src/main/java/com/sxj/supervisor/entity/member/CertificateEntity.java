@@ -30,6 +30,17 @@ public class CertificateEntity extends Pagable implements Serializable {
 	@Column(name = "CERTIFICATE_NAME")
 	private String certificateName;
 
+	@Column(name = "CERTIFICATE_LEVEL")
+	private String certificateLevel;
+
+	public String getCertificateLevel() {
+		return certificateLevel;
+	}
+
+	public void setCertificateLevel(String certificateLevel) {
+		this.certificateLevel = certificateLevel;
+	}
+
 	public String getId() {
 		return id;
 	}

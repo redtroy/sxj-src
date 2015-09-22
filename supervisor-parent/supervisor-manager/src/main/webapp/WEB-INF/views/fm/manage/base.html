@@ -3,8 +3,8 @@
 <#macro iviewer>
 <script type="text/javascript">
 </script>
-<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 9999;"  id="imagecomponent">
-<div style="position:absolute; right:3%; z-index: 99999"><input id="btnClsVie" type="button" value="关闭"  /></div>
+<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 98;"  id="imagecomponent">
+<div style="position:absolute; right:3%; z-index: 99"><input id="btnClsVie" type="button" value="关闭"  /></div>
     <div class="cer-l">
         <!-- wrapper div is needed for opera because it shows scroll bars for reason -->
 		<div id="viewer" class="viewer">
@@ -17,6 +17,7 @@
         <form action="" id="form">
         <input type="hidden" id="id" name="id"/>
          <input type="hidden" id="image" name="image"/>
+          <input type="hidden" id="memberNo" name="memberNo"/>
          <table>
             <tr>
                 <td>&nbsp;</td>
@@ -59,7 +60,7 @@
             <tr>
                 <th>证书等级</th>
                 <td>
-                  <input class="level" name="" type="text"/>
+                  <input class="level" name="level" type="text"/>
                 </td>
                 <td><a class="in"></a></td>
                 <td><a class="del"></a></td>
@@ -109,10 +110,10 @@
     </div>
 </div>
 <!-- single -->
-<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 9999;"  id="imagecomponent2">
+<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 98;"  id="imagecomponent2">
 	<!--大图展示区-->
 	<div class="cer-bg">
-		<div class="cer-l-full"><div style="position:absolute; right:3%; z-index: 99999"><input id="btnClsVie2" type="button" value="关闭"  /></div>
+		<div class="cer-l-full"><div style="position:absolute; right:3%; z-index: 99"><input id="btnClsVie2" type="button" value="关闭"  /></div>
 			<div id="viewer2" class="viewer" >
 			</div>
 		</div>

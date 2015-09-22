@@ -362,13 +362,18 @@
 						<div class="line-con">
 							<ul class="imageList" id="imagelist_${member.id}">
 								<#list ImageList as imageModel>
-								<li style="width: 80px; height: 110px">
+<<<<<<< HEAD
+								<li style="width: 86px; height: 120px">
 								<!-- <input type="hidden" name="image" value="${imageModel.image}" />
+=======
+								<li style="width: 80px; height: 110px">
+								<input type="hidden" name="image" value="${imageModel.image}" />
+>>>>>>> 0a041584659b96ec36ac697bc9386eb9821f705c
 								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
 								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
 								<input type="hidden" name="remark" value="${imageModel.remark}" /> -->
 								<img
-									src="${b.imagePath}${imageModel.image}80x100.JPG" data="${b.imagePath}${imageModel.image}"/>
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}"/>
 								<tt></tt></li> </#list>
 							</ul>
 						</div>
@@ -384,7 +389,7 @@
 							<ul class="imageList" id="imageList_${member.id}">
 								<#list newImagList as imageModel>
 								<li style="width: 80px; height: 110px"><img
-									src="${b.imagePath}${imageModel.image}80x100.JPG" data="${b.imagePath}${imageModel.image}" />
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
 						</div>

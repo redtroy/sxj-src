@@ -32,4 +32,6 @@ public interface IMemberToMemberService
             throws ServiceException;
     
     public String addMemberToMember(List<MemberToMemberEntity> list);
+    
+    public void delbyName(String memberNo);
 }

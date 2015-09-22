@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
+<link href="${b.staticPath}style/imageditor.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
@@ -27,7 +28,6 @@
 	type="text/javascript"></script>
 	<link rel="stylesheet" href="${b.staticPath}style/jquery.iviewer.css" />
 <script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
-<link href="${b.staticPath}style/imageditor.css" rel="stylesheet" type="text/css" />
 <@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.upload/>  <@b.iviewer/> 
 <script>
 	jQuery(document)
@@ -111,7 +111,7 @@
 		});
 	}
 	//证书上传
-	function uploadImg($file) {
+	function uploadImg($file,oSlide,oSlide2,id) {
 			$file.uploadify({
 				swf : '${basePath}upload/uploadify.swf',
 				uploader : "${basePath}upload.htm",
@@ -125,7 +125,12 @@
 					{
 						var num = 1;
 						var dataObj = eval("(" + data + ")");//转换为json对象 
-							alert(dataObj.fileIds);
+						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+						oSlide2.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+                        /* var listImage="<li style='width: 86px; height: 120px'>" +
+                                      "<img src='${b.imagePath}"+dataObj.fileIds+"' data='${b.imagePath}"+dataObj.fileIds+"' />"+
+                                      "<tt></tt></li>"; */
+//                        $("#imageList_"+id).append(listImage); 
 					}
 				}
 			});
@@ -170,7 +175,10 @@
 			}
 		})
 		$("#Delete-button").live('click',function(){
-		    $(this).parent().parent().remove();
+			var obj=$(this).parent().parent()
+			dialogBox(function(){
+				obj.remove();
+			},"是否确认删除")
 	    })
 	   
        $(".memberName").live("focus",function(){
@@ -197,7 +205,18 @@
    			}
    		});
        })
-		
+		$(".level").live("focus",function(){
+		   var obj=$(this);
+		   $(this).bigAutocomplete({
+			width: '200',
+			url : '${basePath}autoCertificate.htm',
+			callback : function(data) {
+				alert(data.title);
+			},
+			beforeShow : function(data){
+			}
+		});
+	})
 	});
 	
 	function close_img() {
@@ -449,6 +468,7 @@
 	 
 	function saverelevance(member_id){
 		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
+		relist=relist+"&memberId="+member_id;
 		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
 			if (data.isok=='ok'){
 				messageInfo("修改成功");
@@ -460,14 +480,19 @@
 	//修改图片
 	function editImage(member_id)
 	{
-		var list=$("#"+member_id+"_info").find("#imagelist_"+member_id).find(":input").serialize();
-		$.post("${basePath}member/editImage.htm",list,function(data){
+		//var list=$("#"+member_id+"_info").find("#imagelist_"+member_id).find(":input").serialize();
+		var images="";
+		$("#"+member_id+"_info").find("#imagelist_"+member_id).find("img").each(function(){
+			 images=images+","+$(this).attr("data").split("http://storage.menchuang.org.cn\/")[1];
+		})
+		images=images.substr(1,images.length);
+		 $.post("${basePath}member/newEditImage.htm",{memberId:member_id,images:images},function(data){
 			if (data.isok=='ok'){
 				messageInfo("修改成功");
 			}else {
 				errorInfo("修改失败");
 			}
-		}) 
+		})  
 	}
 </script>
 <!-- InstanceEndEditable -->
@@ -649,7 +674,7 @@
 				<!-- InstanceEndEditable -->
 			</div>
 		</div>
-		<div class="maskdivgen" style="display: none"></div>
+		<div class="maskdivgen" style="display: none;z-index: 96"></div>
 		<div class="viewer modal-wrap" id="img_close" style="display: none">
 			<div class="modal-header">
 				<span class="close" onclick="close_img()">关闭</span>
