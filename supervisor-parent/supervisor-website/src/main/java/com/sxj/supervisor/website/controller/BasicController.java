@@ -249,7 +249,7 @@ public class BasicController extends BaseController
                     query.setFilterStr(1);
                     List<MemberEntity> totalPJList = memberService.queryMembers(query);
                     List<MemberEntity> pjList = new ArrayList<MemberEntity>();
-                    
+                    List<MemberEntity> fcList = new ArrayList<MemberEntity>();
                     if (totalMCList.size() > 18)
                     {
                         for (int i = 0; i < 18; i++)
@@ -358,6 +358,16 @@ public class BasicController extends BaseController
                         }
                         tenderMessageService.addMessage(messageList);
                     }
+                    List<MemberEntity> totalfcList = memberService.queryMembers(query);
+                    for (int i = 0; i < 16; i++)
+                    {
+                        
+                        Random rd5 = new Random();
+                        int k5 = rd5.nextInt(totalfcList.size());
+                        MemberEntity fc = totalfcList.get(k5);
+                        fcList.add(fc);
+                        totalfcList.remove(fc);
+                    }
                     // TenderMessageQuery messQuery = new TenderMessageQuery();
                     messQuery.setPagable(true);
                     messQuery.setShowCount(6);
@@ -374,6 +384,7 @@ public class BasicController extends BaseController
                     map.put("xcList", xcList);
                     map.put("pjList", pjList);
                     map.put("messageList", messageList);
+                    map.put("fcList", fcList);
                     map.put("govList", list);
                     map.put("query", messQuery);
                     
