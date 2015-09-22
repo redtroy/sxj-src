@@ -390,7 +390,7 @@
 									<ul class="imageList">
 									   <#list imageList as imgPath>
 										<#if imgPath !=''>
-										<li><img src="${b.imagePath}${imgPath.image}" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
+										<li><img src="${b.imagePath}${imgPath.image}80x107.JPG" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
 										</#if>
 									</#list>
 									</ul>
@@ -510,7 +510,7 @@
 					</#if>
 				</div>
 				<div class="item">
-					<label>总交易额</label><a href="${basePath}finance/finance.htm"
+					<label>总交易额</label><a href="javascript:clickFunction('${basePath}finance/finance.htm')"
 						class="lnk-blue">查看明细</a>
 				</div>
 				<div class="item">
