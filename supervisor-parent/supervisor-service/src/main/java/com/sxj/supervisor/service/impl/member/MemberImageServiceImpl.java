@@ -338,6 +338,10 @@ public class MemberImageServiceImpl implements IMemberImageService
             }
             if (memberImage.getId() == null)
             {
+                List<MemberImageEntity> list = getImages(memberImage.getMemberNo(),
+                        "1");
+                memberImage.setVersion(list.get(0).getVersion());
+                memberImage.setCreationDate(list.get(0).getCreationDate());
                 imageDao.addMemberImage(memberImage);
             }
             else
