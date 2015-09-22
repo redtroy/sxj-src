@@ -38,4 +38,6 @@ public interface ICertificateLevelDao
     public List<CertificateLevelEntity> getCertificateLevel(String imageId)
             throws SQLException;
     
+    public void delbyImage(String image);
+    
 }

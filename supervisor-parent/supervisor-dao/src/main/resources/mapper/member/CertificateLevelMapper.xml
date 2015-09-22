@@ -14,4 +14,7 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM M_CERTIFICATE_LEVEL WHERE IMAGE_ID=#{condition.imageId}]]>
 	</select>
+	<delete id="delbyImage" parameterType="String">
+		<![CDATA[DELETE FROM M_CERTIFICATE_LEVEL WHERE IMAGE_ID=#{image}]]>
+	</delete>
 </mapper>

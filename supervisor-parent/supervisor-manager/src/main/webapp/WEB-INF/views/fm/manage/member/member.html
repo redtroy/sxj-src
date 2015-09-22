@@ -211,7 +211,8 @@
 			width: '200',
 			url : '${basePath}autoCertificate.htm',
 			callback : function(data) {
-				alert(data.title);
+				obj.parent().find("input:eq(0)").val(data.result);
+				obj.parent().find("input:eq(1)").val(data.title);
 			},
 			beforeShow : function(data){
 			}
@@ -270,20 +271,7 @@
 		if (temp) {
 			$("#" + lable).show();
 			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
-					  $( ".foundedDate" ).datepicker();
-				    	var a=new $.slide({container:"#SlideUl1",imageWidth:85,imagesPerPage:7,onImageFocus:function(li){
-				    		//alert(li.find("img").attr("src"))
-				    	},
-				    	onSlide:function(li,index){
-				    		iv.iviewer('loadImage', li.find("img").attr("data")); 
-				    	}});
-				    	var b=new $.slide({container:"#SlideUl2",imageWidth:85,imagesPerPage:7,onImageFocus:function(li){
-				    		//alert(li.find("img").attr("src"))
-				    	},
-				    	onSlide:function(li,index){
-				    		iv.iviewer('loadImage', li.find("img").attr("data")); 
-				    	}});
-				    	
+					  $(".foundedDate" ).datepicker();				    	
 			});
 		} else {
 			$("#" + lable).hide();

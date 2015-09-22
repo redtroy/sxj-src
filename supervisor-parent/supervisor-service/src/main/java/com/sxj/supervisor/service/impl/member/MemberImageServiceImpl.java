@@ -293,36 +293,59 @@ public class MemberImageServiceImpl implements IMemberImageService
         }
         
     }
-
-	@Override
-	public MemberImageModel getMemberImageByImageId(String imageId)
-			throws ServiceException {
-		try {
-			MemberImageModel model = new MemberImageModel();
-			MemberImageEntity imageEntity= imageDao.getMemberImageByImageId(imageId);
-			List<CertificateLevelEntity> level = certificateLevelDao.getCertificateLevel(imageId);
-			model.setMemberImage(imageEntity);
-			model.setList(level);
-			return model;
-		} catch (Exception e) {
-			SxjLogger.error("查询新数据错误", e, this.getClass());
-			throw new ServiceException("查询新数据错误");
-		}
-	}
-
-	@Override
-	public void addMemberImage(MemberImageEntity memberImage)
-			throws SQLException {
-		try {
-			if(memberImage.getId()==null){
-				imageDao.addMemberImage(memberImage);
-			}else{
-				imageDao.updateMemberImage(memberImage);
-			}
-		} catch (Exception e) {
-			SxjLogger.error("查询新数据错误", e, this.getClass());
-			throw new ServiceException("查询新数据错误");
-		}
-		
-	}
+    
+    @Override
+    public MemberImageModel getMemberImageByImageId(String imageId)
+            throws ServiceException
+    {
+        try
+        {
+            MemberImageModel model = new MemberImageModel();
+            MemberImageEntity imageEntity = imageDao.getMemberImageByImageId(imageId);
+            List<CertificateEntity> level = certificateDao.getListImage(imageEntity.getImage());
+            model.setMemberImage(imageEntity);
+            model.setClist(level);
+            return model;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询新数据错误", e, this.getClass());
+            throw new ServiceException("查询新数据错误");
+        }
+    }
+    
+    @Override
+    @Transactional
+    public void addMemberImage(MemberImageEntity memberImage, String[] levelids)
+            throws SQLException
+    {
+        try
+        {
+            certificateLevelDao.delbyImage(memberImage.getImage());
+            if (levelids != null && levelids.length > 0)
+            {
+                for (String id : levelids)
+                {
+                    CertificateLevelEntity cfe = new CertificateLevelEntity();
+                    cfe.setImageId(memberImage.getImage());
+                    cfe.setLevel(id);
+                    certificateLevelDao.addLevel(cfe);
+                }
+            }
+            if (memberImage.getId() == null)
+            {
+                imageDao.addMemberImage(memberImage);
+            }
+            else
+            {
+                imageDao.updateMemberImage(memberImage);
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询新数据错误", e, this.getClass());
+            throw new ServiceException("查询新数据错误");
+        }
+        
+    }
 }

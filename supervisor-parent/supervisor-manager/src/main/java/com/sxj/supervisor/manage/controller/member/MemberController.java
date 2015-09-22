@@ -688,12 +688,13 @@ public class MemberController extends BaseController
     
     @RequestMapping("addMemberImage")
     public @ResponseBody Map<String, String> addMemberImage(
-            MemberImageEntity memberImage) throws WebException
+            MemberImageEntity memberImage, String[] levelids)
+            throws WebException
     {
         Map<String, String> map = new HashMap<String, String>();
         try
         {
-            imageService.addMemberImage(memberImage);
+            imageService.addMemberImage(memberImage, levelids);
             map.put("isok", "ok");
         }
         catch (Exception e)
