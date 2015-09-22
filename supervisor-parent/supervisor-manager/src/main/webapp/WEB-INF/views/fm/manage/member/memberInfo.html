@@ -40,6 +40,7 @@
 				$("#dueDate").val(new Date(data.model.memberImage.dueDate)
 				.Format("yyyy-MM-dd"));
 				$("#remark").val(data.model.memberImage.remark);
+				$("#memberNo").val(data.model.memberImage.memberNo);
 			});
 		}
 		$("#submitComponent").click(
@@ -354,16 +355,14 @@
 			<ul class="ly-clearFix">
 				<li style="width: 99%"><label class="lable">删除资质证书</label>${delNum}个</li>
 				<li
-					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
-					<div id="original2" class="slideui">
-						<i class="buttonSildeLeft left" id="aleft"><img width="20"
-							height="60" src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
-						<i class="buttonSildeRight right" id="aright"><img width="20"
-							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
+					style="height:150px;width:843px;padding:0px">
+					<div id="original2" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px">
+						<i class="buttonSildeLeft left" id="aleft"><img src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
+						<i class="buttonSildeRight right" id="aright"><img src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
 							<ul class="imageList" id="imagelist_${member.id}">
 								<#list ImageList as imageModel>
-								<li style="width: 86px; height: 120px">
+								<li style="width: 80px; height: 110px">
 								<!-- <input type="hidden" name="image" value="${imageModel.image}" />
 								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
 								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
@@ -377,16 +376,14 @@
 				</li>
 				<li style="width: 99%"><label class="lable">新上传证书</label>10个 <em class="state uploadnew" style="margin-top:0px"><input type="file" name="uploadify" id="uploadify_${member.id}" /></em>
 				<li
-					style="height: 147px; width: 873px; background-color: #FFF; border: 1px solid #efefef; margin: 0px 5">
-					<div id="original" class="slideui">
-						<i class="buttonSildeLeft left" id="aleft"><img width="20"
-							height="60" src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
-						<i class="buttonSildeRight right" id="aright"><img width="20"
-							height="60" src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
+					style="height:150px;width:843px;padding:0px">
+					<div id="original" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px">
+						<i class="buttonSildeLeft left" id="aleft"><img  src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
+						<i class="buttonSildeRight right" id="aright"><img  src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
 							<ul class="imageList" id="imageList_${member.id}">
 								<#list newImagList as imageModel>
-								<li style="width: 86px; height: 120px"><img
+								<li style="width: 80px; height: 110px"><img
 									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
 								<tt></tt></li> </#list>
 							</ul>
