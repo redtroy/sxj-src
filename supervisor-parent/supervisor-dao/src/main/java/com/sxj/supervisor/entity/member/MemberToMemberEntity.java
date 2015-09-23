@@ -229,12 +229,12 @@ public class MemberToMemberEntity implements Serializable
         this.createTime = createTime;
     }
     
-    public Integer getOrder()
+    public Integer getOrderSeq()
     {
         return orderSeq;
     }
     
-    public void setOrder(Integer orderSeq)
+    public void setOrderSeq(Integer orderSeq)
     {
         this.orderSeq = orderSeq;
     }
