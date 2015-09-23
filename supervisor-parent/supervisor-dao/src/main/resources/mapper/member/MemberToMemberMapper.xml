@@ -34,7 +34,7 @@
 		<if test="condition.memberType != null">
 			<![CDATA[ AND MEMBER_TYPE = #{condition.memberType}]]>
 		</if>
-		<![CDATA[ ORDER BY ORDER ]]>
+		<![CDATA[ ORDER BY ORDER_SEQ ]]>
 	</select>
 	<!-- 根据会员号删除 -->
      <delete id="del">
