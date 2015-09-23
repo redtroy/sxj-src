@@ -59,8 +59,7 @@
             </tr>
             <tr>
                 <th>证书等级</th>
-                <td>
-                  <input class="level" name="level" type="text"/>
+                <td id="levelTd">
                 </td>
                 <td><a class="in"></a></td>
                 <td><a class="del"></a></td>
@@ -85,14 +84,9 @@
         <div class="div-button">
             <table>
              <tr style="height:50px;line-height:50px">
-                 <td><a href="javascript:void(0);" class="button1">新增等级</a></td>
+                 <td>&nbsp;</td>
                  <td>&nbsp;</td>
                  <td><a href="javascript:void(0);" id="submitComponent" class="button2">提 交</a></td>
-             </tr>
-             <tr style="height:50px;line-height:50px">
-                 <td><a href="javascript:void(0);" class="button2" id="addImage">增加图片</a></td>
-                 <td>&nbsp;</td>
-                 <td><a href="javascript:void(0);" class="button2" id="replaceImage">替换图片</a></td>
              </tr>
              </table>
          </div>
@@ -110,10 +104,10 @@
     </div>
 </div>
 <!-- single -->
-<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 98;"  id="imagecomponent2">
+<div style="width:1100px;margin:auto;position: absolute; top: 0; left:50%; margin-left:-550px; visibility: hidden; background-color: #FFFFFF; padding: 0 12px 0 12px; z-index: 9998;"  id="imagecomponent2">
 	<!--大图展示区-->
 	<div class="cer-bg">
-		<div class="cer-l-full"><div style="position:absolute; right:3%; z-index: 99"><input id="btnClsVie2" type="button" value="关闭"  /></div>
+		<div class="cer-l-full"><div style="position:absolute; right:3%; z-index: 9999"><input id="btnClsVie2" type="button" value="关闭"  /></div>
 			<div id="viewer2" class="viewer" >
 			</div>
 		</div>
@@ -121,6 +115,8 @@
 	</div>
 	<!--滚动图展示区-->
 </div>
+<!-- delImage -->
+
 </#macro>
 <#macro dialogBox>
 <script src="${staticPath}js/layer/layer.js"></script>

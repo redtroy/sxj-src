@@ -991,7 +991,8 @@ public class BasicController extends BaseController
         for (CertificateEntity certificate : list)
         {
             sb = "{\"title\":\"" + certificate.getCertificateName()
-                    + "\",\"result\":\"" + certificate.getId() + "\"}";
+                    + "\",\"result\":\"" + certificate.getCertificateLevel()
+                    + "\"}";
             strlist.add(sb);
         }
         String json = "{\"data\":" + strlist.toString() + "}";

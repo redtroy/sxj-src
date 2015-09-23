@@ -62,8 +62,11 @@ public interface IMemberImageService
      */
     public void ManageAddImage(List<MemberImageEntity> list);
     
-	MemberImageModel getMemberImageByImageId(String imageId)
-			throws ServiceException;
-	
-	void addMemberImage(MemberImageEntity memberImage)throws SQLException;
+    MemberImageModel getMemberImageByImageId(String imageId)
+            throws ServiceException;
+    
+    void addMemberImage(MemberImageEntity memberImage, String[] levels)
+            throws SQLException;
+    
+    public void delImageByImagePath(String image);
 }

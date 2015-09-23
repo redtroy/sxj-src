@@ -197,6 +197,7 @@ public class MemberController extends BaseController
             // 获取上一版本证书
             List<MemberImageEntity> oldImageList = imageService.historyImage(member.getMemberNo());
             List<MemberImageEntity> newImagList = new ArrayList<MemberImageEntity>();
+            List<MemberImageEntity> delList = new ArrayList<MemberImageEntity>();
             // 获取新的图片集合
             int newNum = 0;
             int delNum = 0;
@@ -233,6 +234,7 @@ public class MemberController extends BaseController
                     }
                     if (flag)
                     {
+                        delList.add(image1);
                         delNum++;
                     }
                 }
@@ -248,10 +250,12 @@ public class MemberController extends BaseController
             map.put("relist", relist);
             // map.put("delzizhi", delzizhi);
             map.put("oldNum", oldImageList.size());// 原有证书数目
+            map.put("newNum", newNum);// 原有证书数目
             map.put("delNum", delNum);// 删除图片数目
             map.put("num", ImageList.size());
             map.put("ImageList", ImageList);
             map.put("newImagList", newImagList);
+            map.put("delList", delList);
             map.put("cityList", cityList);
             map.put("types", types);
             map.put("checkStates", checkStates);
@@ -265,6 +269,25 @@ public class MemberController extends BaseController
             throw new WebException("查询会员信息错误");
         }
         return "manage/member/memberInfo";
+    }
+    
+    @RequestMapping("delEmage")
+    public @ResponseBody Map<String, String> delEmage(String image)
+            throws WebException
+    {
+        try
+        {
+            Map<String, String> map = new HashMap<String, String>();
+            imageService.delImageByImagePath(image);
+            map.put("ok", "ok");
+            return map;
+            
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("删除图片出错", e, this.getClass());
+            throw new WebException("删除图片出错");
+        }
     }
     
     /**
@@ -688,12 +711,13 @@ public class MemberController extends BaseController
     
     @RequestMapping("addMemberImage")
     public @ResponseBody Map<String, String> addMemberImage(
-            MemberImageEntity memberImage) throws WebException
+            MemberImageEntity memberImage, String[] levelids)
+            throws WebException
     {
         Map<String, String> map = new HashMap<String, String>();
         try
         {
-            imageService.addMemberImage(memberImage);
+            imageService.addMemberImage(memberImage, levelids);
             map.put("isok", "ok");
         }
         catch (Exception e)

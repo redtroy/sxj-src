@@ -75,4 +75,5 @@ public interface IMemberService
      * @return
      */
     public String addRelevanceMember(List<RelevanceMember> list);
+    
 }

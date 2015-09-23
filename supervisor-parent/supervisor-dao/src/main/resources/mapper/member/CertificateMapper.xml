@@ -18,4 +18,7 @@
 			<![CDATA[AND CERTIFICATE_NAME LIKE CONCAT('%',#{name},'%')]]>
 		</if>
 	</select>
+	<select id="getListImage" resultMap="CertificateResultMap">
+	  <![CDATA[SELECT * FROM M_CERTIFICATE WHERE CERTIFICATE_LEVEL in (SELECT LEVEL FROM M_CERTIFICATE_LEVEL WHERE IMAGE_ID=#{image})]]>
+	</select>
 </mapper>

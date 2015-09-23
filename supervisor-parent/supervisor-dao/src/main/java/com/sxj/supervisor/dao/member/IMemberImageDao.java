@@ -75,5 +75,11 @@ public interface IMemberImageDao
      * @return
      * @throws SQLException
      */
-    public MemberImageEntity getMemberImageByImageId(String imageId) throws SQLException;
+    public MemberImageEntity getMemberImageByImageId(String imageId)
+            throws SQLException;
+    
+    /**
+     * 根据图片路径删除图片
+     */
+    public void delByImage(String image);
 }
