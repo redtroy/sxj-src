@@ -403,7 +403,7 @@
 							</div>
 				</div>
 				</#if>
-				<#if (member.type.id==2)>
+	<#if (member.type.id==2)>
 		<div class="item">
           <label>代理商</label>
           <div class="info1">
@@ -414,8 +414,7 @@
 		         <th width="20%">联系人</th>
 		         <th width="30%">联系人电话</th>
 		        </tr>
-		        <#if (mlist?size>0)>
-		        <#list mlist as dl>
+		       <#list mlist as dl>
 			        <#if (dl.memberType==6)>
 				        <tr class="dlhidden">
 				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
@@ -424,11 +423,15 @@
 				        </tr>
 			        </#if>
 		        </#list>
-		        <#else>
-		         <tr>
-			         <td colspan="3" style="text-align: center;color: #cdcdcd">没有关联代理商</td>
-			        </tr>
-		        </#if>
+		        <#list plist as dl>
+			        <#if (dl.memberType==6)>
+				        <tr class="dlhidden">
+				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
+				         <td>${dl.parentContacts}</td>
+				         <td>${dl.parentTelNum}</td>
+				        </tr>
+			        </#if>
+			        </#list>
 			      </table>
 		  </div>
         </div>
@@ -441,21 +444,24 @@
 		         <th width="20%">联系人</th>
 		         <th width="30%">联系人电话</th>
 		        </tr>
-		        <#if (mlist?size>0)>
 		        <#list mlist as dl>
 			        <#if (dl.memberType==7)>
 				        <tr class="jxhidden">
-				         <td>${dl.memberName}</td>
+				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
 				         <td>${dl.contacts}</td>
 				         <td>${dl.telNum}</td>
 				        </tr>
 			        </#if>
 		        </#list>
-		         <#else>
-		         <tr>
-			         <td colspan="3" style="text-align: center;color: #cdcdcd">没有关联经销商</td>
-			        </tr>
-		        </#if>
+		        <#list plist as dl>
+			        <#if (dl.memberType==7)>
+				        <tr class="dlhidden">
+				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
+				         <td>${dl.parentContacts}</td>
+				         <td>${dl.parentTelNum}</td>
+				        </tr>
+			        </#if>
+		        </#list>
 			      </table>
 		  </div>
         </div>
@@ -471,19 +477,20 @@
 		         <th width="20%">联系人</th>
 		         <th width="30%">联系人电话</th>
 		        </tr>
-		        <#if (mlist?size>0)>
-		        <#list mlist as dl>
-				        <tr class="dlhidden">
-				          <td>${dl.parentName}</td>
+		        <#list plist as dl>
+				        <tr>
+				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
 				         <td>${dl.parentContacts}</td>
 				         <td>${dl.parentTelNum}</td>
 				        </tr>
 		        </#list>
-		        <#else>
-		         <tr>
-			         <td colspan="3" style="text-align: center;color: #cdcdcd">没有关联货源厂家</td>
-			        </tr>
-		        </#if>
+		        <#list mlist as dl>
+				        <tr>
+				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
+				         <td>${dl.contacts}</td>
+				         <td>${dl.telNum}</td>
+				        </tr>
+		        </#list>
 			      </table>
 		  </div>
         </div>

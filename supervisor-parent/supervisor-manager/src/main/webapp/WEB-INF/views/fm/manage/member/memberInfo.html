@@ -501,7 +501,15 @@
 					         <td id="td">${re.parentName}<input type='hidden' value="${re.id}" /></td>
 				             <td id="td">${re.parentContacts}</td>
 					         <td id="td">${re.parentTelNum}</td>
-					         <td id="td"><select name="memberType" disabled="disabled" ><option value="2" <#if (re.memberType==2)> selected="selected" </#if> >型材厂</option><option value="6" <#if (re.memberType==6)> selected="selected" </#if> >代理商</option><option value="7" <#if (re.memberType==7)> selected="selected" </#if>>经销商</option><option value="10" <#if (re.memberType==10)> selected="selected" </#if>>同一出资方</option></select></td> 
+					         <td id="td">
+					         <#if (member.type.id==2)>
+					         	<#if (re.memberType==6)>代理商<#elseif (re.memberType==7)>经销商<#elseif (re.memberType==10)>同一出资方</#if>
+					         <#elseif (member.type.id==6)>
+					         	<#if (re.memberType==6)>型材厂<#elseif (re.memberType==10)>同一出资方</#if>
+					         <#elseif (member.type.id==7)>
+					         	<#if (re.memberType==7)>型材厂<#elseif (re.memberType==10)>同一出资方</#if>
+					         </#if>
+					         </td> 
 					         <td id="td">${re.remark}</td>
 				          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 				          </tr>
@@ -511,7 +519,15 @@
 					         <td id="td">${re.memberName}<input type='hidden' value="${re.id}" /></td>
 				             <td id="td">${re.contacts}</td>
 					         <td id="td">${re.telNum}</td>
-					         <td id="td"><select name="memberType" disabled="disabled" ><option value="2" <#if (re.memberType==2)> selected="selected" </#if> >型材厂</option><option value="6" <#if (re.memberType==6)> selected="selected" </#if> >代理商</option><option value="7" <#if (re.memberType==7)> selected="selected" </#if>>经销商</option><option value="10" <#if (re.memberType==10)> selected="selected" </#if>>同一出资方</option></select></td> 
+					         <td id="td">
+						         <#if (member.type.id==2)>
+						         	<#if (re.memberType==6)>代理商<#elseif (re.memberType==7)>经销商<#elseif (re.memberType==10)>同一出资方</#if>
+						         <#elseif (member.type.id==6)>
+						         	<#if (re.memberType==6)>型材厂<#elseif (re.memberType==10)>同一出资方</#if>
+						         <#elseif (member.type.id==7)>
+						         	<#if (re.memberType==7)>型材厂<#elseif (re.memberType==10)>同一出资方</#if>
+						         </#if>
+					         </td> 
 					         <td id="td">${re.remark}</td>
 				          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 				          </tr>
@@ -532,8 +548,13 @@
 			         <input type="text" class="memberName" name="memberName" />
                  </td>
 	             <td id="td"><input type="text" name="contacts"></td>
-		         <td id="td"><input type="text" name="telNum"></td>
-		         <td id="td"><select name="memberType" ><option value="2">型材厂</option><option value="6">代理商</option><option value="7">经销商</option><option value="10">同一出资方</option></select></td>
+		         <td id="td"><input type="text" name="telNum"><input type="hidden" value="${member.type.id}" /></td>
+		         <td id="td">
+		         <select name="memberType" >
+		         <option value="2">型材厂</option>
+		         <option value="6">代理商</option>
+		         <option value="7">经销商</option>
+		         <option value="10">同一出资方</option></select></td>
 		         <td id="td"><input type="text" name="remark"></td>
 	          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 	           </tr>

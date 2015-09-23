@@ -893,7 +893,9 @@ public class BasicController extends BaseController
             }
             sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
                     + memberEntity.getMemberNo() + "\",\"contacts\":\""
-                    + contacts + "\",\"telNum\":\"" + telNum + "\"}";
+                    + contacts + "\",\"telNum\":\"" + telNum
+                    + "\",\"memberType\":\"" + memberEntity.getType().getId()
+                    + "\"}";
             strlist.add(sb);
         }
         String json = "{\"data\":" + strlist.toString() + "}";

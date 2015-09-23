@@ -11,13 +11,12 @@ import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
-import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IMemberToMemberDao;
 import com.sxj.supervisor.validator.hibernate.AddGroup;
 
 @Entity(mapper = IMemberToMemberDao.class)
 @Table(name = "M_MEMBER_TO_MEMBER")
-public class MemberToMemberEntity extends Pagable implements Serializable
+public class MemberToMemberEntity implements Serializable
 {
     
     /**

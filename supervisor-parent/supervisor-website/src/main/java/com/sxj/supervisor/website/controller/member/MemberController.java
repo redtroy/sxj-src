@@ -105,17 +105,31 @@ public class MemberController extends BaseController
                 map.put("member", member);
                 
                 MemberToMemberEntity query = new MemberToMemberEntity();
+                List<MemberToMemberEntity> mlist = null;
+                List<MemberToMemberEntity> plist = null;
                 if (member.getType() == MemberTypeEnum.GENRESFACTORY)
                 {
                     query.setParentNo(member.getMemberNo());
+                    mlist = memberToMemberService.query(query);
+                    
+                    query = new MemberToMemberEntity();
+                    query.setMemberNo(member.getMemberNo());
+                    plist = memberToMemberService.query(query);
                 }
                 else if (member.getType() == MemberTypeEnum.AGENT
                         || member.getType() == MemberTypeEnum.DISTRIBUTOR)
                 {
                     query.setMemberNo(member.getMemberNo());
+                    query.setMemberType(member.getType().getId());
+                    plist = memberToMemberService.query(query);
+                    
+                    query = new MemberToMemberEntity();
+                    query.setParentNo(member.getMemberNo());
+                    query.setMemberType(member.getType().getId());
+                    mlist = memberToMemberService.query(query);
                 }
-                List<MemberToMemberEntity> mlist = memberToMemberService.query(query);
                 map.put("mlist", mlist);
+                map.put("plist", plist);
                 
                 if (member.getFlag())
                 {
@@ -183,16 +197,29 @@ public class MemberController extends BaseController
         
         MemberToMemberEntity query = new MemberToMemberEntity();
         
+        List<MemberToMemberEntity> mlist = null;
+        List<MemberToMemberEntity> plist = null;
         if (member.getType() == MemberTypeEnum.GENRESFACTORY)
         {
             query.setParentNo(member.getMemberNo());
+            mlist = memberToMemberService.query(query);
+            
+            query = new MemberToMemberEntity();
+            query.setMemberNo(member.getMemberNo());
+            plist = memberToMemberService.query(query);
         }
         else if (member.getType() == MemberTypeEnum.AGENT
                 || member.getType() == MemberTypeEnum.DISTRIBUTOR)
         {
             query.setMemberNo(member.getMemberNo());
+            query.setMemberType(member.getType().getId());
+            plist = memberToMemberService.query(query);
+            
+            query = new MemberToMemberEntity();
+            query.setParentNo(member.getMemberNo());
+            query.setMemberType(member.getType().getId());
+            mlist = memberToMemberService.query(query);
         }
-        List<MemberToMemberEntity> mlist = memberToMemberService.query(query);
         
         List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(),
                 "1");
@@ -200,6 +227,7 @@ public class MemberController extends BaseController
         map.put("cityList", cityList);
         map.put("member", member);
         map.put("mlist", mlist);
+        map.put("plist", plist);
         return "site/member/edit-member";
     }
     
