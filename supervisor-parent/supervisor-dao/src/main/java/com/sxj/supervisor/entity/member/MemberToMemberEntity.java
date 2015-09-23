@@ -78,7 +78,7 @@ public class MemberToMemberEntity implements Serializable
     private String telNum;
     
     /**
-     * 备注
+     * 创建时间
      **/
     @Column(name = "CREATE_TIME")
     private Date createTime;
@@ -88,6 +88,12 @@ public class MemberToMemberEntity implements Serializable
      **/
     @Column(name = "REMARK")
     private String remark;
+    
+    /**
+     * 序号
+     **/
+    @Column(name = "ORDER")
+    private Integer order;
     
     /**
      * 型材厂联系人名称
@@ -221,6 +227,16 @@ public class MemberToMemberEntity implements Serializable
     public void setCreateTime(Date createTime)
     {
         this.createTime = createTime;
+    }
+    
+    public Integer getOrder()
+    {
+        return order;
+    }
+    
+    public void setOrder(Integer order)
+    {
+        this.order = order;
     }
     
 }
