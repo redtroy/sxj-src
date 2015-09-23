@@ -44,10 +44,16 @@
 				$("#memberNo").val(data.model.memberImage.memberNo);
 				 if (data.model.clist.length>=1){
 					for (var i=0;i<data.model.clist.length;i++){
-							$("#levelTd").append('<input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/>')
+						if(i==(data.model.clist.length-1)){
+							$("#levelTd").after('<tr class="levelTr"><th>证书等级</th><td><input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/></td><td><a class="del"></a></td><td>&nbsp;</td></tr>')
+
+						}else{
+							$("#levelTd").after('<tr class="levelTr"><td>&nbsp;</td><td><input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/></td><td><a class="del"></a></td><td>&nbsp;</td></tr>')
+
+						}
 					}
 				}else{
-					$("#levelTd").append('<input  name="levelids" type="hidden"  id="levelids"/><input class="level"   name="levels" type="text" id="level"/>')
+					$("#levelTd").append('<th>证书等级</th><td><input  name="levelids" type="hidden"  id="levelids"/><input class="level"   name="levels" type="text" id="level"/></td><td><a class="del"></a></td><td>&nbsp;</td>')
 				}
 			});
 		}
@@ -62,17 +68,14 @@
 								}
 							});
 				});
-         $(".in").live("click",function(){
-        	 var obj=$("#addlvImage").html();
-        	 $(this).parent().parent().parent().after(obj);
+         $("#addLevel").live("click",function(){
+        	 $(".levelTr:last").after('<tr><td>&nbsp;</td><td><input  name="levelids" type="hidden"  id="levelids"/><input class="level"   name="levels" type="text" id="level"/></td><td><a class="del"></a></td><td>&nbsp;</td></tr>')
         })
         $(".del").live("click",function(){
         	 $(this).parent().parent().remove();
         })
 		$(document).ready(
 				function() {
-					var indexArr = new Array();
-					var dataArr = new Array();
 					var currentSlide;
 					var offsetTop = $(window).scrollTop() + "px";
 					//alert(offsetTop)
@@ -84,7 +87,7 @@
 						$("#imagecomponent2").css({top : offsetTop });
 					});
 					var iv = $("#viewer").iviewer();
-					var iv=$("#viewer2").iviewer();
+					var iv2=$("#viewer2").iviewer();
 					/**弹出层滚动条
 					滚动式更新iviewer
 					 **/
@@ -263,9 +266,9 @@
 		        		        $("#imagecomponent2").css("visibility","visible");
 		        	    		hSlide.clear();
 		        	    		hSlide.addImage(imagePath,imagePath);
-		        	    		iv.iviewer('destroy'); 
-		        	    		iv=$("#viewer2").iviewer({showTool:false})
-		        	    		iv.iviewer('loadImage', imagePath);
+		        	    		iv2.iviewer('destroy'); 
+		        	    		iv2=$("#viewer2").iviewer({showTool:false})
+		        	    		iv2.iviewer('loadImage', imagePath);
 		        	    });
 					$(".showComponent").click(function(){
 						oSlide3.copyTo($("#hidden .line-con"));
