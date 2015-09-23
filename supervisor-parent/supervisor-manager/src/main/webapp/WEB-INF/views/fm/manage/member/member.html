@@ -103,17 +103,6 @@
 							}
 						});
 	}
-	window.onload = function() {
-		$(".demo-image").live("click", function() {
-			var image = $(this).attr("image");
-			if (image == "") {
-				messageInfo("未上传证书图片！");
-			} else {
-				var imageSource = $(this).attr("data-image");
-				refreshIviewer($("#viewer2"), imageSource, $("#img_close"));
-			}
-		});
-	}
 	//证书上传
 	function uploadImg($file,oSlide,oSlide2,id) {
 			$file.uploadify({
@@ -670,13 +659,6 @@
 			</div>
 		</div>
 		<div class="maskdivgen" style="display: none;z-index: 96"></div>
-		<div class="viewer modal-wrap" id="img_close" style="display: none">
-			<div class="modal-header">
-				<span class="close" onclick="close_img()">关闭</span>
-			</div>
-			<div id="viewer2" class="modal-body iviewer"
-			style="width: 100%; display: none; top: 0px"></div>
-		</div>
 		<@b.footer />
 </body>
 <!-- InstanceEnd -->
