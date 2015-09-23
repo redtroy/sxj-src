@@ -92,8 +92,8 @@ public class MemberToMemberEntity implements Serializable
     /**
      * 序号
      **/
-    @Column(name = "ORDER")
-    private Integer order;
+    @Column(name = "ORDER_SEQ")
+    private Integer orderSeq;
     
     /**
      * 型材厂联系人名称
@@ -231,12 +231,12 @@ public class MemberToMemberEntity implements Serializable
     
     public Integer getOrder()
     {
-        return order;
+        return orderSeq;
     }
     
-    public void setOrder(Integer order)
+    public void setOrder(Integer orderSeq)
     {
-        this.order = order;
+        this.orderSeq = orderSeq;
     }
     
 }
