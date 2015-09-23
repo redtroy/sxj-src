@@ -18,73 +18,74 @@
         <input type="hidden" id="id" name="id"/>
          <input type="hidden" id="image" name="image"/>
           <input type="hidden" id="memberNo" name="memberNo"/>
-         <table>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <th>证书编号</th>
-                <td>
-                  <input class="num" name="certificateNo" id="certificateNo" type="text" />
-                </td>
-                <td>&nbsp;</a></td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <th>证书发布日期</th>
-                <td><input class="time" name="issueDate" id="issueDate"  type="text" datepicker /></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <th>证书截止日期</th>
-                <td><input class="time" name="dueDate" id="dueDate"  type="text" datepicker /></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <th>证书等级</th>
-                <td id="levelTd">
-                </td>
-                <td><a class="in"></a></td>
-                <td><a class="del"></a></td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <th>备注</th>
-                <td>
-                 <textarea class="notes" name="remark" id="remark" cols="" rows=""></textarea>
-                </td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-         </table>
+           <table>
+				<tr>
+					<th>证书编号</th>
+					<td>
+					   <input class="num" name="certificateNo" id="certificateNo" type="text" />
+					</td>
+					<td>&nbsp;</a></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<th>发布日期</th>
+					<td><input class="time" name="issueDate" id="issueDate"  type="text" datepicker /></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<th>截止日期</th>
+					<td><input class="time" name="dueDate" id="dueDate"  type="text" datepicker /></td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr id="levelTd">
+					<th>证书等级</th>
+					<td>
+					  <input class="level" name="level" type="text"/>
+					</td>
+					<td><a class="in"></a></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<th>备注</th>
+					<td>
+					 <textarea class="notes" name="remark" id="remark" cols="" rows=""></textarea>
+					</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+			 </table>
          </form>
         </div>
         <div class="div-button">
             <table>
              <tr style="height:50px;line-height:50px">
-                 <td>&nbsp;</td>
+                 <td><a href="javascript:void(0);" class="button1" id="addLevel">新增等级</a></td>
                  <td>&nbsp;</td>
                  <td><a href="javascript:void(0);" id="submitComponent" class="button2">提 交</a></td>
              </tr>

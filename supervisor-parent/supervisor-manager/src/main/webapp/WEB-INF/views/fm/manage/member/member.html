@@ -263,6 +263,7 @@
 			});
 		}, "请确认是否初始化密码！");
 	}
+	var closeLable="";
 	//收起菜单
 	function swallowing(lable) {
 		$("#" + lable).hide();
@@ -270,7 +271,7 @@
 	}
 	//打开菜单
 	function openDiv(lable, id) {
-		var temp = $("#" + lable).is(":hidden");//是否隐藏 
+		/* var temp = $("#" + lable).is(":hidden");//是否隐藏 
 		if (temp) {
 			$("#" + lable).show();
 			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
@@ -279,7 +280,21 @@
 		} else {
 			$("#" + lable).hide();
 			$("#" + lable).html("");
+		} */
+		if (closeLable!=""){
+			$("#" + closeLable).hide();
+			$("#" + closeLable).html("");
 		}
+		if (closeLable != lable){
+			$("#" + lable).show();
+			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
+					  $(".foundedDate" ).datepicker();				    	
+			});
+			closeLable=lable;
+		}else{
+			closeLable ="";
+		}
+		
 	}
 
 	//修改
