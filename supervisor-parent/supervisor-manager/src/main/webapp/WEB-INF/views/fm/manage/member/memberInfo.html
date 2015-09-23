@@ -124,7 +124,6 @@
 						onClick : function(self, li, index, i) {
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
-							
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
 							self.copyTo($("#hidden .line-con"));
@@ -153,7 +152,6 @@
 						onClick : function(self, li, index, i) {
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
-							
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
 							self.copyTo($("#hidden .line-con"));
@@ -180,7 +178,6 @@
 						imageWidth : 90,
 						imagesPerPage : 5,
 						onClick : function(self, li, index, i) {
-							
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
 							var imageVal = data.replace("${b.imagePath}", "");
@@ -434,7 +431,7 @@
 				<li style="width: 99%"><label class="lable">删除资质证书</label>${delNum}个</li>
 				<li
 					style="height:150px;width:843px;padding:0px">
-					<div id="original2" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px">
+					<div id="original2" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;<#if (newImagList??)>display: none; </#if>;">
 						<i class="buttonSildeLeft left" id="aleft"><img src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
 						<i class="buttonSildeRight right" id="aright"><img src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
@@ -465,10 +462,10 @@
 						</div>
 					</div>
 				</li>
-				<li style="width: 99%"><label class="lable">新上传证书</label>#{newNum}个 <em class="state uploadnew" style="margin-top:0px"><input type="file" name="uploadify" id="uploadify_${member.id}" /></em>
+				<li style="width: 99%"><label class="lable">新上传证书</label>#{newNum}个 <em class="state uploadnew" style="margin-top:0px;"><input type="file" name="uploadify" id="uploadify_${member.id}"/></em>
 				<li
 					style="height:150px;width:843px;padding:0px">
-					<div id="original" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px">
+					<div id="original" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;<#if (newImagList??)>display: none; </#if>;">
 						<i class="buttonSildeLeft left" id="aleft"><img  src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
 						<i class="buttonSildeRight right" id="aright"><img  src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
