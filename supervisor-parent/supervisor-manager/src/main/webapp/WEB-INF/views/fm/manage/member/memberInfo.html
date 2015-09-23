@@ -95,20 +95,25 @@
 						onSlide : function(li, index) {
 							iv.iviewer('loadImage', li.find("img").attr("data"));
 							var data = li.find("img").attr("data");
+							if(data){
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
+							}
 						},
 						onClick : function(self, li, index, i) {
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
+							if(data){
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
+							}
 						}
 
 					});
 					/**原图片滚动条
 					点击后显示控件层
 					 **/
+					 //新加
 					var oSlide = new $.slide({
 						container : "#original",
 						imageWidth : 90,
@@ -166,6 +171,7 @@
 							$("#form")[0].reset();
 						}
 					});
+					//现有
 					var oSlide3 = new $.slide({
 						container : "#original3",
 						imageWidth : 90,
@@ -209,23 +215,19 @@
 					 **/
 						$('.iviewer_del').unbind(); 
 						$(".iviewer_del").live("click",function(){
-							var i=hSlide.deleteImage(hSlide.getIndex());
-								iv.iviewer('loadImage', hSlide.getCurrentImageData());
-								oSlide.deleteImage(i<=0?0:i+1);
-								oSlide.slideTo(hSlide.getIndex());
-								alert(oSlide.slideTo(hSlide.getIndex()))
-								var imgLength =$(oSlide.getImageLis()).find("img").length;
-								var imagePath=iv.children("img").attr("src").replace("${b.imagePath}", "");
-								if(imgLength==0){
-									 $('.maskdivgen').fadeOut(100);
-							            $("#imagecomponent").css("visibility","hidden");
-								}
+							var i=hSlide.deleteImage(hSlide.getIndex())
+							var deleted=hSlide.getDeleteLi();
+							oSlide.deleteImageByData(deleted.find("img").attr("data"));
+							oSlide3.deleteImageByData(deleted.find("img").attr("data"));
+							iv.iviewer('loadImage', hSlide.getCurrentImageData());
+							//currentSlide.deleteImage(i<=0?0:i+1);
+							currentSlide.slideTo(hSlide.getIndex());
+							var imagePath=deleted.find("img").attr("data").replace("${b.imagePath}", "");
 							 $.post("${basePath}member/delEmage.htm",{image:imagePath},function(){
-								
-							})		
+									
+								})		
 							if(!hSlide.getCurrentImageData())
 								iv.children("img").attr("src","");
-							
 						});
 					$("#next").click(function() {
 						hSlide.slideNext();
@@ -511,7 +513,7 @@
 		        </div>			  
                 <div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:saverelevance('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
             </div>
- 		 <div id="btnBox" class="btnBox" style="margin:auto"><a href="#" class="button button-gray button-small">收起</a> </div>
+ 		 <div id="btnBox" class="btnBox" style="margin:auto"><a href="javascript:swallowing('${member.id}_info')" class="button button-gray button-small">收起</a> </div>
  		 <div style="display: none;">
           <table id="tr_relevance">
                <tr >
