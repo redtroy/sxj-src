@@ -168,8 +168,20 @@
 			}
 		})
 		$("#Delete-button").live('click',function(){
-			var obj=$(this).parent().parent()
+			var obj=$(this).parent().parent();
 			dialogBox(function(){
+				$(obj).each(function(){
+					var dlNo= $(this).find("input:eq(0)").val();
+					var delId = $("#delId").val();
+					if(dlNo != ""){
+						if(delId == ""){
+							delId=dlNo;
+						}else{
+							delId=delId+","+dlNo;
+						}
+						$("#delId").val(delId);
+					}
+				})
 				obj.remove();
 			},"是否确认删除")
 	    })
@@ -178,22 +190,20 @@
     	   var obj=$(this);
     	   $(this).bigAutocomplete({
    			width: '256',
-   			url : '${basePath}autoCompleMember.htm?memberType=6',
-   	/* 		url : '${basePath}autoCompleMember.htm?memberType=6', *///没有数据暂时用所有会员
+   			url : '${basePath}autoCompleMember.htm',
    			callback : function(data) {
    				if (data){
-   					obj.parent().parent().find("input:eq(1)").val(data.result);
-   					obj.parent().parent().find("input:eq(2)").val(data.title);
-   					obj.parent().parent().find("input:eq(3)").val(data.contacts);
-   					obj.parent().parent().find("input:eq(4)").val(data.telNum);
+   					obj.parent().parent().find("input:eq(0)").val(data.result);
+   					obj.parent().parent().find("input:eq(2)").val(data.contacts);
+   					obj.parent().parent().find("input:eq(3)").val(data.telNum);
    				}
    			},
    			beforeShow : function(data){
    				if(data.length==1){
-   					obj.parent().parent().find("input:eq(1)").val(data[0].result);
-   					obj.parent().parent().find("input:eq(2)").val(data[0].title);
-   					obj.parent().parent().find("input:eq(3)").val(data[0].contacts);
-   					obj.parent().parent().find("input:eq(4)").val(data[0].telNum);
+   					obj.parent().parent().find("input:eq(0)").val(data[0].result);
+   					obj.parent().parent().find("input:eq(1)").val(data[0].title);
+   					obj.parent().parent().find("input:eq(2)").val(data[0].contacts);
+   					obj.parent().parent().find("input:eq(3)").val(data[0].telNum);
    				}
    			}
    		});
@@ -448,8 +458,9 @@
 	 }
 	 
 	function saverelevance(member_id){
+		var delId=$("#delId").val();
 		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
-		relist=relist+"&memberId="+member_id;
+		relist=relist+"&memberId="+member_id+"&delId="+delId;
 		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
 			if (data.isok=='ok'){
 				messageInfo("修改成功");
