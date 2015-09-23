@@ -213,13 +213,14 @@
 								iv.iviewer('loadImage', hSlide.getCurrentImageData());
 								oSlide.deleteImage(i<=0?0:i+1);
 								oSlide.slideTo(hSlide.getIndex());
+								alert(oSlide.slideTo(hSlide.getIndex()))
 								var imgLength =$(oSlide.getImageLis()).find("img").length;
 								var imagePath=iv.children("img").attr("src").replace("${b.imagePath}", "");
 								if(imgLength==0){
 									 $('.maskdivgen').fadeOut(100);
 							            $("#imagecomponent").css("visibility","hidden");
 								}
-							$.post("${basePath}member/delEmage.htm",{image:imagePath},function(){
+							 $.post("${basePath}member/delEmage.htm",{image:imagePath},function(){
 								
 							})		
 							if(!hSlide.getCurrentImageData())
