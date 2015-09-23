@@ -67,4 +67,6 @@ public interface IMemberImageService
     
     void addMemberImage(MemberImageEntity memberImage, String[] levels)
             throws SQLException;
+    
+    public void delImageByImagePath(String image);
 }

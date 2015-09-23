@@ -51,4 +51,7 @@
 		parameterType="string">
 	<![CDATA[SELECT * FROM M_MEMBER_IMAGE WHERE IMAGE=#{imageId} AND  STATE=1]]>
 	</select>
+	 <delete id="delByImage">
+         <![CDATA[delete FROM M_MEMBER_IMAGE WHERE IMAGE=#{image}]]>
+     </delete>
 </mapper>

@@ -28,7 +28,11 @@
 	type="text/javascript"></script>
 	<link rel="stylesheet" href="${b.staticPath}style/jquery.iviewer.css" />
 <script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
-<@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.upload/>  <@b.iviewer/> 
+
+<script src="${b.staticPath}js/jquery.uploadify.js"></script>
+<link href="${b.staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
+
+<@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.iviewer/> 
 <script>
 	jQuery(document)
 			.ready(
@@ -473,6 +477,9 @@
 		$("#"+member_id+"_info").find("#imagelist_"+member_id).find("img").each(function(){
 			 images=images+","+$(this).attr("data").split("http://storage.menchuang.org.cn\/")[1];
 		})
+		/* $("#"+member_id+"_info").find("#new_imagelist_"+member_id).find("img").each(function(){
+			 images=images+","+$(this).attr("data").split("http://storage.menchuang.org.cn\/")[1];
+		}) */
 		images=images.substr(1,images.length);
 		 $.post("${basePath}member/newEditImage.htm",{memberId:member_id,images:images},function(data){
 			if (data.isok=='ok'){

@@ -1,6 +1,5 @@
 package com.sxj.supervisor.service.impl.member;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -321,7 +320,7 @@ public class MemberImageServiceImpl implements IMemberImageService
     @Override
     @Transactional
     public void addMemberImage(MemberImageEntity memberImage, String[] levelids)
-            throws SQLException
+            throws ServiceException
     {
         try
         {
@@ -355,5 +354,20 @@ public class MemberImageServiceImpl implements IMemberImageService
             throw new ServiceException("查询新数据错误");
         }
         
+    }
+    
+    @Override
+    @Transactional
+    public void delImageByImagePath(String image) throws ServiceException
+    {
+        try
+        {
+            imageDao.delByImage(image);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("删除图片错误", e, this.getClass());
+            throw new ServiceException("删除图片错误");
+        }
     }
 }
