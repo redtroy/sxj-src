@@ -120,6 +120,7 @@
 						var dataObj = eval("(" + data + ")");//转换为json对象 
 						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
 						oSlide2.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+						$("#"+id+"_info").find("#original").show();
                         /* var listImage="<li style='width: 86px; height: 120px'>" +
                                       "<img src='${b.imagePath}"+dataObj.fileIds+"' data='${b.imagePath}"+dataObj.fileIds+"' />"+
                                       "<tt></tt></li>"; */
