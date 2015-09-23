@@ -254,8 +254,8 @@ public class MemberController extends BaseController
             map.put("pelist", pelist);
             // map.put("delzizhi", delzizhi);
             map.put("oldNum", oldImageList.size());// 原有证书数目
-            map.put("newNum", newNum);// 原有证书数目
-            map.put("delNum", delNum);// 删除图片数目
+            map.put("newNum", newImagList.size());// 原有证书数目
+            map.put("delNum", delList.size());// 删除图片数目
             map.put("num", ImageList.size());
             map.put("ImageList", ImageList);
             map.put("newImagList", newImagList);

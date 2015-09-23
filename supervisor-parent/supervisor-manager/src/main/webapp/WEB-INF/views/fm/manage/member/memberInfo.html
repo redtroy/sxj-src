@@ -44,16 +44,10 @@
 				$("#memberNo").val(data.model.memberImage.memberNo);
 				 if (data.model.clist.length>=1){
 					for (var i=0;i<data.model.clist.length;i++){
-						if(i==(data.model.clist.length-1)){
-							$("#levelTd").after('<tr class="levelTr"><th>证书等级</th><td><input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/></td><td><a class="del"></a></td><td>&nbsp;</td></tr>')
-
-						}else{
-							$("#levelTd").after('<tr class="levelTr"><td>&nbsp;</td><td><input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/></td><td><a class="del"></a></td><td>&nbsp;</td></tr>')
-
-						}
-					}
+						$("#levelTd").append(' <li><input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="input-tt level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/><a class="del"></a></li>')
+					} 
 				}else{
-					$("#levelTd").append('<th>证书等级</th><td><input  name="levelids" type="hidden"  id="levelids"/><input class="level"   name="levels" type="text" id="level"/></td><td><a class="del"></a></td><td>&nbsp;</td>')
+				        $("#levelTd").append(' <li><input  name="levelids" type="hidden"  id="levelids"/><input class="input-tt level"   name="levels" type="text" id="level"/><a class="del"></a></li>');
 				}
 			});
 		}
@@ -69,10 +63,10 @@
 							});
 				});
          $("#addLevel").live("click",function(){
-        	 $(".levelTr:last").after('<tr><td>&nbsp;</td><td><input  name="levelids" type="hidden"  id="levelids"/><input class="level"   name="levels" type="text" id="level"/></td><td><a class="del"></a></td><td>&nbsp;</td></tr>')
+        	 $("#levelTd").append(' <li><input  name="levelids" type="hidden"  id="levelids"/><input class="input-tt level"   name="levels" type="text" id="level"/><a class="del"></a></li>');
         })
         $(".del").live("click",function(){
-        	 $(this).parent().parent().remove();
+        	 $(this).parent().remove();
         })
 		$(document).ready(
 				function() {
@@ -430,8 +424,8 @@
 			<ul class="ly-clearFix">
 				<li style="width: 99%"><label class="lable">删除资质证书</label>${delNum}个</li>
 				<li
-					style="height:150px;width:843px;padding:0px">
-					<div id="original2" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;<#if (newImagList??)>display: none; </#if>;">
+					style="height:150px;width:843px;padding:0px;<#if ((delList?size)<1)>display: none; </#if>;">
+					<div id="original2" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;">
 						<i class="buttonSildeLeft left" id="aleft"><img src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
 						<i class="buttonSildeRight right" id="aright"><img src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
@@ -462,10 +456,10 @@
 						</div>
 					</div>
 				</li>
-				<li style="width: 99%"><label class="lable">新上传证书</label>#{newNum}个 <em class="state uploadnew" style="margin-top:0px;"><input type="file" name="uploadify" id="uploadify_${member.id}"/></em>
+				<li style="width: 99%"><label class="lable">新上传证书  </label>#{newNum}个 <em class="state uploadnew" style="margin-top:0px;"><input type="file" name="uploadify" id="uploadify_${member.id}"/></em>
 				<li
-					style="height:150px;width:843px;padding:0px">
-					<div id="original" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;<#if (newImagList??)>display: none; </#if>;">
+					style="height:150px;width:843px;padding:0px;<#if ((newImagList?size)<1)>display: none; </#if>;" id="newImageShow">
+					<div id="original" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;">
 						<i class="buttonSildeLeft left" id="aleft"><img  src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
 						<i class="buttonSildeRight right" id="aright"><img  src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
