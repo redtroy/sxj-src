@@ -75,6 +75,9 @@ public interface IMemberService
      * @return
      */
     public String addRelevanceMember(List<RelevanceMember> list);
+
+	List<MemberEntity> queryWebsiteMembers(MemberQuery query)
+			throws ServiceException;
     
     /**
      * 资质证书变动标记清0

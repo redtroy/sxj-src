@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -196,6 +196,28 @@
 			<![CDATA[AND AREA LIKE CONCAT('%',#{condition.city},'%')]]>
 		</if>
 		<![CDATA[ ORDER BY convert(name using gb2312) asc]]>
+	</select>
+	<!-- 条件查询会员 -->
+	<select id="queryWebsiteMembers" resultMap="MemberResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[ SELECT DISTINCT M.MEMBER_NO AS A, M.*  FROM M_MEMBER M
+ 					LEFT JOIN M_MEMBER_IMAGE I ON M.MEMBER_NO = I.MEMBER_NO
+ 					LEFT JOIN M_CERTIFICATE_LEVEL L ON L.IMAGE_ID = I.IMAGE
+ 					LEFT JOIN M_CERTIFICATE C ON C.ID = L.`LEVEL`
+ 					WHERE M.NAME NOT IN('测试门窗厂','测试型材厂','测试玻璃厂')   ]]>
+		<!-- 会员名称 -->
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND M.NAME LIKE CONCAT('%',#{condition.name},'%')]]>
+		</if>
+		<if test="condition.type !=null">
+			<![CDATA[AND M.TYPE = #{condition.type}]]>
+		</if>
+		<if test="condition.level != null and condition.level != ''">
+			<![CDATA[AND C.CERTIFICATE_NAME  LIKE CONCAT('%',#{condition.level},'%') AND I.STATE='1']]>
+		</if>
+		<if test="condition.sort ==null">
+			<![CDATA[  ORDER BY M.STATE,M.REG_DATE DESC]]>
+		</if>
 	</select>
 	<update id="updateChangeImageFlag">
 	   <![CDATA[ UPDATE M_MEMBER SET CHANGE_IMAGE_FLAG=0 ]]>

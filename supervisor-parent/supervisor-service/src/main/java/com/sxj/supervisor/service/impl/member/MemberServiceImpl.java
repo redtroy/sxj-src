@@ -805,6 +805,44 @@ public class MemberServiceImpl implements IMemberService
             throw new ServiceException("更新会员失败", e);
         }
     }
+    /**
+     * 会员高级查询
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemberEntity> queryWebsiteMembers(MemberQuery query)
+            throws ServiceException
+    {
+        try
+        {
+            List<MemberEntity> memberList = new ArrayList<MemberEntity>();
+            if (query == null)
+            {
+                return memberList;
+            }
+            QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
+            condition.addCondition("name", query.getMemberName());// 会员名称
+            condition.addCondition("type", query.getMemberType());// 会员类型
+            condition.addCondition("level", query.getLevelName());// 会员类型
+            condition.setPage(query);
+            if (query.getMemberType() == MemberTypeEnum.FRAMEFACTORY.getId())
+            {
+                memberList = menberDao.queryFramefactory(condition);
+            }
+            else
+            {
+                memberList = menberDao.queryWebsiteMembers(condition);
+            }
+            query.setPage(condition);
+            return memberList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new ServiceException("查询会员信息错误", e);
+        }
+        
+    }
     
     @Override
     public void ChangeImageFlagClear() throws ServiceException
