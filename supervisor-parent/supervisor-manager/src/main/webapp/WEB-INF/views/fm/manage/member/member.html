@@ -31,7 +31,6 @@
 
 <script src="${b.staticPath}js/jquery.uploadify.js"></script>
 <link href="${b.staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
-
 <@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.iviewer/> 
 <script>
 	jQuery(document)
@@ -118,8 +117,9 @@
 					{
 						var num = 1;
 						var dataObj = eval("(" + data + ")");//转换为json对象 
-						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds,null,oSlide);
 						oSlide2.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+						$("#"+id+"_info").find("#newImageShow").show();
                         /* var listImage="<li style='width: 86px; height: 120px'>" +
                                       "<img src='${b.imagePath}"+dataObj.fileIds+"' data='${b.imagePath}"+dataObj.fileIds+"' />"+
                                       "<tt></tt></li>"; */
@@ -168,32 +168,96 @@
 			}
 		})
 		$("#Delete-button").live('click',function(){
-			var obj=$(this).parent().parent()
+			var obj=$(this).parent().parent();
 			dialogBox(function(){
+				$(obj).each(function(){
+					var dlNo= $(this).find("input:eq(0)").val();
+					var delId = $("#delId").val();
+					if(dlNo != ""){
+						if(delId == ""){
+							delId=dlNo;
+						}else{
+							delId=delId+","+dlNo;
+						}
+						$("#delId").val(delId);
+					}
+				})
 				obj.remove();
 			},"是否确认删除")
 	    })
 	   
        $(".memberName").live("focus",function(){
-    	   var obj=$(this);
+    	  	var obj=$(this);
+			var type=obj.parent().parent().find("input:eq(4)").val();
     	   $(this).bigAutocomplete({
    			width: '256',
-   			url : '${basePath}autoCompleMember.htm?memberType=6',
-   	/* 		url : '${basePath}autoCompleMember.htm?memberType=6', *///没有数据暂时用所有会员
+   			url : '${basePath}autoCompleMember.htm',
    			callback : function(data) {
    				if (data){
-   					obj.parent().parent().find("input:eq(1)").val(data.result);
-   					obj.parent().parent().find("input:eq(2)").val(data.title);
-   					obj.parent().parent().find("input:eq(3)").val(data.contacts);
-   					obj.parent().parent().find("input:eq(4)").val(data.telNum);
+   					obj.parent().parent().find("input:eq(0)").val(data.result);
+   					obj.parent().parent().find("input:eq(2)").val(data.contacts);
+   					obj.parent().parent().find("input:eq(3)").val(data.telNum);
+   					var ckType = data.memberType;
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   						if(ckType==6){
+   	   						sObj.append("<option value='6'>代理商</option>");
+   						}
+   						if(ckType==7){
+   	   						sObj.append("<option value='7'>经销商</option>");
+   						}
+   					}else if(type==6){
+   						if(ckType==2){
+   	   						sObj.append("<option value='6'>型材厂</option>");
+   						}
+   					}else if(type==7){
+   						if(ckType==2){
+   	   						sObj.append("<option value='7'>型材厂</option>");
+   						}
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
    				}
    			},
    			beforeShow : function(data){
    				if(data.length==1){
-   					obj.parent().parent().find("input:eq(1)").val(data[0].result);
-   					obj.parent().parent().find("input:eq(2)").val(data[0].title);
-   					obj.parent().parent().find("input:eq(3)").val(data[0].contacts);
-   					obj.parent().parent().find("input:eq(4)").val(data[0].telNum);
+   					obj.parent().parent().find("input:eq(0)").val(data[0].result);
+   					obj.parent().parent().find("input:eq(1)").val(data[0].title);
+   					obj.parent().parent().find("input:eq(2)").val(data[0].contacts);
+   					obj.parent().parent().find("input:eq(3)").val(data[0].telNum);
+   					var ckType = data[0].memberType;
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   						if(ckType==6){
+   	   						sObj.append("<option value='6'>代理商</option>");
+   						}
+   						if(ckType==7){
+   	   						sObj.append("<option value='7'>经销商</option>");
+   						}
+   					}else if(type==6){
+   						if(ckType==2){
+   	   						sObj.append("<option value='6'>型材厂</option>");
+   						}
+   					}else if(type==7){
+   						if(ckType==2){
+   	   						sObj.append("<option value='7'>型材厂</option>");
+   						}
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
+   				}
+   				if(data.length<1){
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   	   					sObj.append("<option value='6'>代理商</option>");
+   	   					sObj.append("<option value='7'>经销商</option>");
+   					}else if(type==6){
+   	   					sObj.append("<option value='6'>型材厂</option>");
+   					}else if(type==7){
+   	   					sObj.append("<option value='7'>型材厂</option>");
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
    				}
    			}
    		});
@@ -253,6 +317,7 @@
 			});
 		}, "请确认是否初始化密码！");
 	}
+	var closeLable="";
 	//收起菜单
 	function swallowing(lable) {
 		$("#" + lable).hide();
@@ -260,7 +325,7 @@
 	}
 	//打开菜单
 	function openDiv(lable, id) {
-		var temp = $("#" + lable).is(":hidden");//是否隐藏 
+		/* var temp = $("#" + lable).is(":hidden");//是否隐藏 
 		if (temp) {
 			$("#" + lable).show();
 			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
@@ -269,7 +334,21 @@
 		} else {
 			$("#" + lable).hide();
 			$("#" + lable).html("");
+		} */
+		if (closeLable!=""){
+			$("#" + closeLable).hide();
+			$("#" + closeLable).html("");
 		}
+		if (closeLable != lable){
+			$("#" + lable).show();
+			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
+					  $(".foundedDate" ).datepicker();				    	
+			});
+			closeLable=lable;
+		}else{
+			closeLable ="";
+		}
+		
 	}
 
 	//修改
@@ -448,11 +527,13 @@
 	 }
 	 
 	function saverelevance(member_id){
+		var delId=$("#delId").val();
 		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
-		relist=relist+"&memberId="+member_id;
+		relist=relist+"&memberId="+member_id+"&delId="+delId;
 		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
 			if (data.isok=='ok'){
 				messageInfo("修改成功");
+				swallowing(member_id+"_info");
 			}else {
 				errorInfo("修改失败");
 			}
@@ -659,6 +740,7 @@
 			</div>
 		</div>
 		<div class="maskdivgen" style="display: none;z-index: 96"></div>
+		
 		<@b.footer />
 </body>
 <!-- InstanceEnd -->

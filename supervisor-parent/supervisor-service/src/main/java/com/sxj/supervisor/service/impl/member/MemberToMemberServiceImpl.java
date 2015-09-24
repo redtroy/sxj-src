@@ -39,9 +39,7 @@ public class MemberToMemberServiceImpl implements IMemberToMemberService
         condition.addCondition("memberNo", query.getMemberNo());// 会员id
         condition.addCondition("parentNo", query.getParentNo());// 型材厂id
         condition.addCondition("memberType", query.getMemberType());// 会员类型
-        condition.setPage(query);
         List<MemberToMemberEntity> list = memberToMemberDao.query(condition);
-        query.setPage(condition);
         return list;
     }
     

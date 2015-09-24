@@ -11,13 +11,12 @@ import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
 import com.sxj.mybatis.orm.annotations.Table;
-import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.member.IMemberToMemberDao;
 import com.sxj.supervisor.validator.hibernate.AddGroup;
 
 @Entity(mapper = IMemberToMemberDao.class)
 @Table(name = "M_MEMBER_TO_MEMBER")
-public class MemberToMemberEntity extends Pagable implements Serializable
+public class MemberToMemberEntity implements Serializable
 {
     
     /**
@@ -79,7 +78,7 @@ public class MemberToMemberEntity extends Pagable implements Serializable
     private String telNum;
     
     /**
-     * 备注
+     * 创建时间
      **/
     @Column(name = "CREATE_TIME")
     private Date createTime;
@@ -89,6 +88,12 @@ public class MemberToMemberEntity extends Pagable implements Serializable
      **/
     @Column(name = "REMARK")
     private String remark;
+    
+    /**
+     * 序号
+     **/
+    @Column(name = "ORDER_SEQ")
+    private Integer orderSeq;
     
     /**
      * 型材厂联系人名称
@@ -222,6 +227,16 @@ public class MemberToMemberEntity extends Pagable implements Serializable
     public void setCreateTime(Date createTime)
     {
         this.createTime = createTime;
+    }
+    
+    public Integer getOrderSeq()
+    {
+        return orderSeq;
+    }
+    
+    public void setOrderSeq(Integer orderSeq)
+    {
+        this.orderSeq = orderSeq;
     }
     
 }

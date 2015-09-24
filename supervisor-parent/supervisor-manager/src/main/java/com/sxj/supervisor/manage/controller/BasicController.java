@@ -881,10 +881,21 @@ public class BasicController extends BaseController
         String sb = "";
         for (MemberEntity memberEntity : list)
         {
+            String contacts = memberEntity.getContacts();
+            String telNum = memberEntity.getTelNum();
+            if (StringUtils.isEmpty(contacts))
+            {
+                contacts = "";
+            }
+            if (StringUtils.isEmpty(telNum))
+            {
+                telNum = "";
+            }
             sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
                     + memberEntity.getMemberNo() + "\",\"contacts\":\""
-                    + memberEntity.getContacts() + "\",\"telNum\":\""
-                    + memberEntity.getTelNum() + "\"}";
+                    + contacts + "\",\"telNum\":\"" + telNum
+                    + "\",\"memberType\":\"" + memberEntity.getType().getId()
+                    + "\"}";
             strlist.add(sb);
         }
         String json = "{\"data\":" + strlist.toString() + "}";

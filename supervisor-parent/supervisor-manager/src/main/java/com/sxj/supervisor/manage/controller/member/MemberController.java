@@ -239,6 +239,10 @@ public class MemberController extends BaseController
                     }
                 }
             }
+            if (oldImageList.size() < 1)
+            {
+                newImagList = ImageList;
+            }
             /*
              * if (relist.size() > 0)e {
              * 
@@ -247,11 +251,15 @@ public class MemberController extends BaseController
             MemberToMemberEntity mtm = new MemberToMemberEntity();
             mtm.setMemberNo(member.getMemberNo());
             List<MemberToMemberEntity> relist = mtmservice.query(mtm);
+            mtm = new MemberToMemberEntity();
+            mtm.setParentNo(member.getMemberNo());
+            List<MemberToMemberEntity> pelist = mtmservice.query(mtm);
             map.put("relist", relist);
+            map.put("pelist", pelist);
             // map.put("delzizhi", delzizhi);
             map.put("oldNum", oldImageList.size());// 原有证书数目
-            map.put("newNum", newNum);// 原有证书数目
-            map.put("delNum", delNum);// 删除图片数目
+            map.put("newNum", newImagList.size());// 原有证书数目
+            map.put("delNum", delList.size());// 删除图片数目
             map.put("num", ImageList.size());
             map.put("ImageList", ImageList);
             map.put("newImagList", newImagList);
@@ -354,32 +362,39 @@ public class MemberController extends BaseController
     public @ResponseBody Map<String, String> editRelevanceMember(
             String[] memberNo, String[] parentNo, String[] memberName,
             String[] contacts, String[] telNum, String[] memberType,
-            String[] remark, String memberId) throws WebException
+            String[] remark, String memberId, String delId) throws WebException
     {
         try
         {
+            MemberEntity member = memberService.getMember(memberId);
             Map<String, String> map = new HashMap<String, String>();
             List<MemberToMemberEntity> list = new ArrayList<MemberToMemberEntity>();
-            if (memberNo == null || memberNo.length < 1)
+            if (StringUtils.isNotEmpty(delId))
             {
-                mtmservice.delbyName(memberService.getMember(memberId)
-                        .getMemberNo());
+                String delIds[] = delId.split(",");
+                for (int i = 0; i < delIds.length; i++)
+                {
+                    mtmservice.delInfo(delIds[i]);
+                }
             }
-            else
+            if (null != memberNo)
             {
-                for (int i = memberNo.length - 1; i >= 0; i--)
+                for (int i = 0; i < memberNo.length; i++)
                 {
                     MemberToMemberEntity re = new MemberToMemberEntity();
                     re.setMemberNo(memberNo[i]);
-                    re.setParentNo(parentNo[i]);
                     re.setMemberName(memberName[i]);
                     re.setContacts(contacts[i]);
                     re.setTelNum(telNum[i]);
+                    
+                    re.setParentNo(member.getMemberNo());
+                    re.setParentName(member.getName());
+                    re.setParentContacts(member.getContacts());
+                    re.setParentTelNum(member.getTelNum());
                     re.setMemberType(Integer.valueOf(memberType[i]));
                     re.setRemark(remark[i]);
-                    list.add(re);
+                    mtmservice.addMemberToMember(re);
                 }
-                mtmservice.addMemberToMember(list);
             }
             map.put("isok", "ok");
             return map;
