@@ -30,6 +30,8 @@
 				"imageId" : imageVal
 			}, function(data) {
 				$("#levelTd").children().remove();
+				$("#issueDate").val("")
+				$("#dueDate").val("")
 				$("#id").val(data.model.memberImage.id);
 				$("#image").val(imageVal);
 				$("#certificateType").val(

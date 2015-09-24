@@ -76,4 +76,9 @@ public interface IMemberService
      */
     public String addRelevanceMember(List<RelevanceMember> list);
     
+    /**
+     * 资质证书变动标记清0
+     */
+    public void ChangeImageFlagClear();
+    
 }

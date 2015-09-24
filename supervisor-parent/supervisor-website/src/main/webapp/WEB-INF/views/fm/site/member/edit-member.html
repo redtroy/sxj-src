@@ -48,6 +48,7 @@
 var edit_pwd_validform;
 var checkState=${member.checkState.id};
 var flag=true;
+var imageChangeFlag=true;
 var ul_validform;
 var show;
 function loadUploadMember(id,url,isMulti,text,fn){
@@ -163,6 +164,7 @@ var uploadImg = function($file) {
 		width : 120,
 		buttonText : '上传资质证书',
 		onUploadSuccess : function(file, data, response) {
+			imageChangeFlag=false;
 			var dataObj = eval("(" + data + ")");//转换为json对象 
 				oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
 		}
@@ -386,6 +388,10 @@ function save(id){
     		//if (${member.checkState.id}==2){
     		  $.post("${basePath}member/unCertificates.htm?id="+id,function(data){})
     		//}
+    	}
+    	if (!imageChangeFlag){
+    		 $("#changeImageFlag").val("1");
+    		 $.post("${basePath}member/ImageChangeMessage.htm?id="+id,function(data){})
     	}
     	  $.post("${basePath}member/save_member.htm",$("#updateForm").serialize(),function(data){
     	    	if(data.isOK="ok"){
@@ -1094,6 +1100,7 @@ $(document).ready(function(){
         <input type="hidden" name="contacts" value="${member.contacts}" />
         <input type="hidden" name="type" value="${member.type.getId()}" />
         <input type="hidden" id="checkState" name="checkState" value="" />
+        <input type="hidden" id="changeImageFlag" name="changeImageFlag" value="" />
         <input type="hidden" id="parentNo" name="parentNo" value="" />
         <input type="hidden" id="parentName" name="parentName" value="" />
           </form>

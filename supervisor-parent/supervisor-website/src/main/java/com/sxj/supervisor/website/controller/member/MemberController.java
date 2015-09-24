@@ -603,6 +603,30 @@ public class MemberController extends BaseController
     }
     
     /**
+     * 资质证书改变提醒
+     */
+    @RequestMapping("ImageChangeMessage")
+    public @ResponseBody String ImageChangeMessage(String id)
+            throws WebException
+    {
+        try
+        {
+            CometServiceImpl.add(MessageChannel.MEMBER_IMAGECHANGE_MESSAGE_SET,
+                    id);
+            CometServiceImpl.setCount(MessageChannel.MEMBER_IMAGECHANGE_MESSAGE,
+                    (long) CometServiceImpl.get(MessageChannel.MEMBER_IMAGECHANGE_MESSAGE_SET)
+                            .size());
+            topics.getTopic(MessageChannel.TOPIC_NAME)
+                    .publish(MessageChannel.MEMBER_IMAGECHANGE_MESSAGE);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+        }
+        return "";
+    }
+    
+    /**
      * 江苏省信息
      */
     @RequestMapping("info")
