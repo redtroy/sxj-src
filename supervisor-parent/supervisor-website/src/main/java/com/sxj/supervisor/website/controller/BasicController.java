@@ -52,6 +52,8 @@ import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
 import com.sxj.supervisor.entity.gov.GovEntity;
 import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.CertificateEntity;
+import com.sxj.supervisor.entity.member.LevelEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.entity.member.MemberLogEntity;
@@ -77,6 +79,7 @@ import com.sxj.supervisor.service.developers.IDevelopersService;
 import com.sxj.supervisor.service.gov.IGovService;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
+import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberLogService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
@@ -142,6 +145,9 @@ public class BasicController extends BaseController
      */
     @Autowired
     private IContractService contractService;
+    
+    @Autowired
+    private IMemberImageService memberImageService;
     
     //    @PostConstruct
     //    public void init()
@@ -1585,6 +1591,38 @@ public class BasicController extends BaseController
         PrintWriter out = response.getWriter();
         System.out.println("第二：" + res);
         out.print(res);
+        out.flush();
+        out.close();
+        return null;
+    }
+    /**
+     * 证书联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCertificate")
+    public @ResponseBody Map<String, String> autoCertificate(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        List<CertificateEntity> list = memberImageService.getCertificate(keyword);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (CertificateEntity certificate : list)
+        {
+            sb = "{\"title\":\"" + certificate.getCertificateName()
+                    + "\",\"result\":\"" + certificate.getCertificateLevel()
+                    + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
         out.flush();
         out.close();
         return null;

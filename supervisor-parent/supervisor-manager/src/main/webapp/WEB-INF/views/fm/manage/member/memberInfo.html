@@ -30,18 +30,22 @@
 				"imageId" : imageVal
 			}, function(data) {
 				$("#levelTd").children().remove();
-				$("#issueDate").val("")
-				$("#dueDate").val("")
+				$("#issueDate").val("");
+				$("#dueDate").val("");
 				$("#id").val(data.model.memberImage.id);
 				$("#image").val(imageVal);
 				$("#certificateType").val(
 						data.model.memberImage.certificateType);
 				$("#certificateNo").val(data.model.memberImage.certificateNo);
+				if (data.model.memberImage.issueDate!=null){
 				$("#issueDate").val(
 						new Date(data.model.memberImage.issueDate)
 								.Format("yyyy-MM-dd"));
+				}
+				if (data.model.memberImage.dueDate!=null){
 				$("#dueDate").val(new Date(data.model.memberImage.dueDate)
 				.Format("yyyy-MM-dd"));
+				}
 				$("#remark").val(data.model.memberImage.remark);
 				$("#memberNo").val(data.model.memberImage.memberNo);
 				 if (data.model.clist.length>=1){
