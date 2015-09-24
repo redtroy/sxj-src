@@ -38,6 +38,13 @@ public interface IMemberToMemberDao
     public List<MemberToMemberEntity> query(
             QueryCondition<MemberToMemberEntity> query);
     
+    /**
+     * 获取会员关系列表
+     *
+     * @param accountId
+     **/
+    public List<MemberToMemberEntity> queryInfo(String memberNo);
+    
     public void del(String memberNo);
     
 }

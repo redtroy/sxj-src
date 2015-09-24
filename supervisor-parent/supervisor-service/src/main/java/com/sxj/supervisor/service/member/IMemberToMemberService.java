@@ -34,4 +34,7 @@ public interface IMemberToMemberService
     public String addMemberToMember(List<MemberToMemberEntity> list);
     
     public void delbyName(String memberNo);
+    
+    public List<MemberToMemberEntity> queryInfo(String memberNo)
+            throws ServiceException;
 }

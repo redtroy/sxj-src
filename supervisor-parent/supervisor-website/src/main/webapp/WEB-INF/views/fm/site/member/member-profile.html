@@ -423,15 +423,6 @@
 				        </tr>
 			        </#if>
 		        </#list>
-		        <#list plist as dl>
-			        <#if (dl.memberType==6)>
-				        <tr class="dlhidden">
-				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
-				         <td>${dl.parentContacts}</td>
-				         <td>${dl.parentTelNum}</td>
-				        </tr>
-			        </#if>
-			        </#list>
 			      </table>
 		  </div>
         </div>
@@ -453,15 +444,6 @@
 				        </tr>
 			        </#if>
 		        </#list>
-		        <#list plist as dl>
-			        <#if (dl.memberType==7)>
-				        <tr class="dlhidden">
-				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
-				         <td>${dl.parentContacts}</td>
-				         <td>${dl.parentTelNum}</td>
-				        </tr>
-			        </#if>
-		        </#list>
 			      </table>
 		  </div>
         </div>
@@ -477,19 +459,14 @@
 		         <th width="20%">联系人</th>
 		         <th width="30%">联系人电话</th>
 		        </tr>
-		        <#list plist as dl>
-				        <tr>
-				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
-				         <td>${dl.parentContacts}</td>
-				         <td>${dl.parentTelNum}</td>
-				        </tr>
-		        </#list>
 		        <#list mlist as dl>
+		        	<#if (dl.memberType==member.type.id)>
 				        <tr>
 				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
 				         <td>${dl.contacts}</td>
 				         <td>${dl.telNum}</td>
 				        </tr>
+				     </#if>
 		        </#list>
 			      </table>
 		  </div>

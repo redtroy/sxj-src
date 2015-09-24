@@ -40,4 +40,11 @@
      <delete id="del">
          <![CDATA[delete FROM M_MEMBER_TO_MEMBER WHERE MEMBER_NO=#{memberNo}]]>
      </delete>
+     <select id="queryInfo" resultMap="MemberToMemberEntity" parameterType="String" >
+     <![CDATA[select t.ID,]]>
+	<![CDATA[(case when t.MEMBER_NO =#{memberNo} then t.PARENT_NAME else t.MEMBER_NAME end) as MEMBER_NAME,]]>
+	<![CDATA[(case when t.MEMBER_NO =#{memberNo} then t.PARENT_CONTACTS else t.CONTACTS end) as CONTACTS,]]>
+	<![CDATA[(case when t.MEMBER_NO =#{memberNo} then t.PARENT_TEL_NUM else t.TEL_NUM end) as TEL_NUM,t.MEMBER_TYPE,t.REMARK]]>
+	<![CDATA[from M_MEMBER_TO_MEMBER t where t.MEMBER_NO =#{memberNo} or t.PARENT_NO =#{memberNo} order by ORDER_SEQ]]>
+     </select>
 </mapper>

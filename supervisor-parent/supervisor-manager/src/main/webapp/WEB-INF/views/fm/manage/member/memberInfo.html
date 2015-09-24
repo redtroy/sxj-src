@@ -492,26 +492,6 @@
 			        </tr>
 			        <#list relist as re>
 			              <tr>
-					         <td id="td">${re.parentName}<input type='hidden' value="${re.id}" /></td>
-				             <td id="td">${re.parentContacts}</td>
-					         <td id="td">${re.parentTelNum}</td>
-					         <td id="td">
-					         <#if (member.type.id==2)>
-					         	<#if (re.memberType==6)>代理商<#elseif (re.memberType==7)>经销商<#elseif (re.memberType==10)>同一出资方</#if>
-					         <#elseif (member.type.id==6)>
-					         	<#if (re.memberType==6)>型材厂<#elseif (re.memberType==10)>同一出资方</#if>
-					         <#elseif (member.type.id==7)>
-					         	<#if (re.memberType==7)>型材厂<#elseif (re.memberType==10)>同一出资方</#if>
-					         	<#else>
-					         	同一出资方
-					         </#if>
-					         </td> 
-					         <td id="td">${re.remark}</td>
-				          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
-				          </tr>
-			        </#list>
-			        <#list pelist as re>
-			              <tr>
 					         <td id="td">${re.memberName}<input type='hidden' value="${re.id}" /></td>
 				             <td id="td">${re.contacts}</td>
 					         <td id="td">${re.telNum}</td>
