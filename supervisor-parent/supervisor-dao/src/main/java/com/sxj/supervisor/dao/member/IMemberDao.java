@@ -94,4 +94,9 @@ public interface IMemberDao
      **/
     public List<MemberEntity> queryFramefactory(
             QueryCondition<MemberEntity> query);
+    
+    /**
+     * 资政证书变动数目清0
+     */
+    public void updateChangeImageFlag();
 }

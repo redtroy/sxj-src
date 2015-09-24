@@ -217,6 +217,14 @@ public class MemberEntity extends Pagable implements Serializable
     private Boolean flag;
     
     /**
+     * 资质证书变更标记
+     * 
+     * @return
+     */
+    @Column(name = "CHANGE_IMAGE_FLAG")
+    private Boolean changeImageFlag;
+    
+    /**
      * 扫描设备号
      * 
      * @return
@@ -368,6 +376,16 @@ public class MemberEntity extends Pagable implements Serializable
      * 关联的代理商
      */
     private List<MemberToMemberEntity> jxList;
+    
+    public Boolean getChangeImageFlag()
+    {
+        return changeImageFlag;
+    }
+    
+    public void setChangeImageFlag(Boolean changeImageFlag)
+    {
+        this.changeImageFlag = changeImageFlag;
+    }
     
     public Date getUpDate()
     {

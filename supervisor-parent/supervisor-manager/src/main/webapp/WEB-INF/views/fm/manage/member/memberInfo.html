@@ -30,6 +30,8 @@
 				"imageId" : imageVal
 			}, function(data) {
 				$("#levelTd").children().remove();
+				$("#issueDate").val("")
+				$("#dueDate").val("")
 				$("#id").val(data.model.memberImage.id);
 				$("#image").val(imageVal);
 				$("#certificateType").val(
@@ -463,6 +465,7 @@
 						<i class="buttonSildeLeft left" id="aleft"><img  src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
 						<i class="buttonSildeRight right" id="aright"><img  src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
 						<div class="line-con">
+						    
 							<ul class="imageList" id="new_imageList_${member.id}">
 								<#list newImagList as imageModel>
 								<li style="width: 80px; height: 110px"><img

@@ -49,34 +49,56 @@ public class MemberQuery extends Pagable implements Serializable
     
     private String isDelMesPerfect;
     
+    private String isDelChangeImage;
+    
     private String flag;
+    
+    private String changeImageFlag;
     
     private Integer sort;
     
     private Integer filterStr;
     
+    public String getIsDelChangeImage()
+    {
+        return isDelChangeImage;
+    }
     
+    public void setIsDelChangeImage(String isDelChangeImage)
+    {
+        this.isDelChangeImage = isDelChangeImage;
+    }
     
     public Integer getFilterStr()
     {
         return filterStr;
     }
-
+    
+    public String getChangeImageFlag()
+    {
+        return changeImageFlag;
+    }
+    
+    public void setChangeImageFlag(String changeImageFlag)
+    {
+        this.changeImageFlag = changeImageFlag;
+    }
+    
     public void setFilterStr(Integer filterStr)
     {
         this.filterStr = filterStr;
     }
-
+    
     public Integer getSort()
     {
         return sort;
     }
-
+    
     public void setSort(Integer sort)
     {
         this.sort = sort;
     }
-
+    
     public String getStartAuthorDate()
     {
         return startAuthorDate;

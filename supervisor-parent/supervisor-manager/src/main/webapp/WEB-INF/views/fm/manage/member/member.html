@@ -31,7 +31,6 @@
 
 <script src="${b.staticPath}js/jquery.uploadify.js"></script>
 <link href="${b.staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
-
 <@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.iviewer/> 
 <script>
 	jQuery(document)
@@ -49,6 +48,12 @@
 										function() {
 											window.location.href = "${basePath}member/memberList.htm?isDelMesPerfect=true&flag=1&checkState=1&sort=1";
 										});
+						$(".msgBoxChangeImage")
+						.live(
+								"click",
+								function() {
+									window.location.href = "${basePath}member/memberList.htm?isDelChangeImage=true&changeImageFlag=1";
+								});
 						// 	JS.Engine.on({
 						// 			 start : function(cId, channelList, engine){  
 						// 			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
@@ -102,6 +107,19 @@
 								$("#message_div_perfcet").append(bb);
 							}
 						});
+		$
+		.get(
+				"${basePath}message.htm?channelName=${channelNamechangeImage}&ram="
+						+ Math.random(),
+				function(data) {
+					if (typeof (data.count) != "undefined") {
+						$("#message_div_changeImage").empty();
+						var bb = "<div class='msgBoxChangeImage msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"
+								+ data.count
+								+ "</strong>条客户变更资质证书！</div>";
+						$("#message_div_changeImage").append(bb);
+					}
+				});
 	}
 	//证书上传
 	function uploadImg($file,oSlide,oSlide2,id) {
@@ -118,7 +136,7 @@
 					{
 						var num = 1;
 						var dataObj = eval("(" + data + ")");//转换为json对象 
-						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds,null,oSlide);
 						oSlide2.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
 						$("#"+id+"_info").find("#newImageShow").show();
                         /* var listImage="<li style='width: 86px; height: 120px'>" +
@@ -628,6 +646,7 @@
 				<form id="edit_form"></form>
 				<div id="message_div"></div>
 				<div id="message_div_perfcet"></div>
+				<div id="message_div_changeImage"></div>
 				<div>
 					<@shiro.hasPermission name="28"> <a class="btn btn-orange ly-left"
 						onclick="exportExcel();"><span>导出Excel</span></a>
@@ -741,6 +760,7 @@
 			</div>
 		</div>
 		<div class="maskdivgen" style="display: none;z-index: 96"></div>
+		
 		<@b.footer />
 </body>
 <!-- InstanceEnd -->
