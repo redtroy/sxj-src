@@ -208,17 +208,31 @@ public class BasicController extends BaseController
                     map.put("cityList", cityList);
                     map.put("member", member);
                     MemberToMemberEntity m = new MemberToMemberEntity();
+                    List<MemberToMemberEntity> mlist = null;
+                    List<MemberToMemberEntity> plist = null;
                     if (member.getType() == MemberTypeEnum.GENRESFACTORY)
                     {
                         m.setParentNo(member.getMemberNo());
+                        mlist = memberToMemberService.query(m);
+                        
+                        m = new MemberToMemberEntity();
+                        m.setMemberNo(member.getMemberNo());
+                        plist = memberToMemberService.query(m);
                     }
                     else if (member.getType() == MemberTypeEnum.AGENT
                             || member.getType() == MemberTypeEnum.DISTRIBUTOR)
                     {
                         m.setMemberNo(member.getMemberNo());
+                        m.setMemberType(member.getType().getId());
+                        plist = memberToMemberService.query(m);
+                        
+                        m = new MemberToMemberEntity();
+                        m.setParentNo(member.getMemberNo());
+                        m.setMemberType(member.getType().getId());
+                        mlist = memberToMemberService.query(m);
                     }
-                    List<MemberToMemberEntity> mlist = memberToMemberService.query(m);
                     map.put("mlist", mlist);
+                    map.put("plist", plist);
                     if (info.getMember().getFlag())
                     {
                         List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());

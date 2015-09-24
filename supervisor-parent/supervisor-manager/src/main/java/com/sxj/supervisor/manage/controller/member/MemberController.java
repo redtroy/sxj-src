@@ -377,9 +377,9 @@ public class MemberController extends BaseController
                     mtmservice.delInfo(delIds[i]);
                 }
             }
-            else
+            if (null != memberNo)
             {
-                for (int i = memberNo.length - 1; i >= 0; i--)
+                for (int i = 0; i < memberNo.length; i++)
                 {
                     MemberToMemberEntity re = new MemberToMemberEntity();
                     re.setMemberNo(memberNo[i]);

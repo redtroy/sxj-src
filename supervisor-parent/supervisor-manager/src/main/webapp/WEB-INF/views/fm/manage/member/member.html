@@ -187,7 +187,8 @@
 	    })
 	   
        $(".memberName").live("focus",function(){
-    	   var obj=$(this);
+    	  	var obj=$(this);
+			var type=obj.parent().parent().find("input:eq(4)").val();
     	   $(this).bigAutocomplete({
    			width: '256',
    			url : '${basePath}autoCompleMember.htm',
@@ -196,6 +197,26 @@
    					obj.parent().parent().find("input:eq(0)").val(data.result);
    					obj.parent().parent().find("input:eq(2)").val(data.contacts);
    					obj.parent().parent().find("input:eq(3)").val(data.telNum);
+   					var ckType = data.memberType;
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   						if(ckType==6){
+   	   						sObj.append("<option value='6'>代理商</option>");
+   						}
+   						if(ckType==7){
+   	   						sObj.append("<option value='7'>经销商</option>");
+   						}
+   					}else if(type==6){
+   						if(ckType==2){
+   	   						sObj.append("<option value='6'>型材厂</option>");
+   						}
+   					}else if(type==7){
+   						if(ckType==2){
+   	   						sObj.append("<option value='7'>型材厂</option>");
+   						}
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
    				}
    			},
    			beforeShow : function(data){
@@ -204,6 +225,39 @@
    					obj.parent().parent().find("input:eq(1)").val(data[0].title);
    					obj.parent().parent().find("input:eq(2)").val(data[0].contacts);
    					obj.parent().parent().find("input:eq(3)").val(data[0].telNum);
+   					var ckType = data[0].memberType;
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   						if(ckType==6){
+   	   						sObj.append("<option value='6'>代理商</option>");
+   						}
+   						if(ckType==7){
+   	   						sObj.append("<option value='7'>经销商</option>");
+   						}
+   					}else if(type==6){
+   						if(ckType==2){
+   	   						sObj.append("<option value='6'>型材厂</option>");
+   						}
+   					}else if(type==7){
+   						if(ckType==2){
+   	   						sObj.append("<option value='7'>型材厂</option>");
+   						}
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
+   				}
+   				if(data.length<1){
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   	   					sObj.append("<option value='6'>代理商</option>");
+   	   					sObj.append("<option value='7'>经销商</option>");
+   					}else if(type==6){
+   	   					sObj.append("<option value='6'>型材厂</option>");
+   					}else if(type==7){
+   	   					sObj.append("<option value='7'>型材厂</option>");
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
    				}
    			}
    		});
@@ -479,6 +533,7 @@
 		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
 			if (data.isok=='ok'){
 				messageInfo("修改成功");
+				swallowing(member_id+"_info");
 			}else {
 				errorInfo("修改失败");
 			}
