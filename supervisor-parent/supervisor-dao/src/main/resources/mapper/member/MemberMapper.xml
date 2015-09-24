@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -31,6 +31,7 @@
 		jdbcType="VARCHAR" />
 	<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
 	<result property="flag" column="FLAG" jdbcType="BOOLEAN" />
+	<result property="changeImageFlag" column="CHANGE_IMAGE_FLAG" jdbcType="BOOLEAN" />
 	<result property="version" column="VERSION_LOCK" jdbcType="INTEGER" />
 
 	<result property="qualification_img" column="QUALIFICATION_IMG"
@@ -124,6 +125,10 @@
 		<if test="condition.flag !=null and condition.flag!=''">
 			<![CDATA[AND FLAG = #{condition.flag}]]>
 		</if>
+		<!-- 资质证书变更通知 -->
+		<if test="condition.changeImageFlag !=null and condition.changeImageFlag!=''">
+			<![CDATA[AND CHANGE_IMAGE_FLAG = #{condition.changeImageFlag}]]>
+		</if>
 		<!-- 会员注册时间段 -->
 		<if
 			test="condition.startDate != null  and condition.startDate != '' ">
@@ -214,4 +219,7 @@
 			<![CDATA[  ORDER BY M.STATE,M.REG_DATE DESC]]>
 		</if>
 	</select>
+	<update id="updateChangeImageFlag">
+	   <![CDATA[ UPDATE M_MEMBER SET CHANGE_IMAGE_FLAG=0 ]]>
+	</update>
 </mapper>

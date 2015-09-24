@@ -946,6 +946,7 @@ public class BasicController extends BaseController
                 || channelName.contains(MessageChannel.WEBSITE_PAY_MESSAGE)
                 || channelName.contains(MessageChannel.WEBSITE_FINANCE_MESSAGE)
                 || channelName.equals(MessageChannel.MEMBER_MESSAGE)
+                || channelName.equals(MessageChannel.MEMBER_IMAGECHANGE_MESSAGE)
                 || channelName.equals(MessageChannel.MEMBER_PERFECT_MESSAGE))
         {
             Long count = CometServiceImpl.getCount(channelName);

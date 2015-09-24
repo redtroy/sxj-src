@@ -127,6 +127,8 @@ public class MemberController extends BaseController
             map.put("query", query);
             map.put("channelName", MessageChannel.MEMBER_MESSAGE);
             map.put("channelNamePerfect", MessageChannel.MEMBER_PERFECT_MESSAGE);
+            map.put("channelNamechangeImage",
+                    MessageChannel.MEMBER_IMAGECHANGE_MESSAGE);
             if (StringUtils.isNotEmpty(query.getIsDelMes()))
             {
                 CometServiceImpl.setCount(MessageChannel.MEMBER_MESSAGE, 0l);
@@ -136,6 +138,13 @@ public class MemberController extends BaseController
                 CometServiceImpl.setCount(MessageChannel.MEMBER_PERFECT_MESSAGE,
                         0l);
                 CometServiceImpl.clear(MessageChannel.MEMBER_PERFECT_MESSAGE_SET);
+            }
+            if (StringUtils.isNotEmpty(query.getIsDelChangeImage()))
+            {
+                CometServiceImpl.setCount(MessageChannel.MEMBER_IMAGECHANGE_MESSAGE,
+                        0l);
+                CometServiceImpl.clear(MessageChannel.MEMBER_IMAGECHANGE_MESSAGE_SET);
+                memberService.ChangeImageFlagClear();
             }
             // registChannel(MessageChannel.MEMBER_MESSAGE);
             // registChannel(MessageChannel.MEMBER_PERFECT_MESSAGE);
@@ -248,14 +257,8 @@ public class MemberController extends BaseController
              * 
              * }
              */
-            MemberToMemberEntity mtm = new MemberToMemberEntity();
-            mtm.setMemberNo(member.getMemberNo());
-            List<MemberToMemberEntity> relist = mtmservice.query(mtm);
-            mtm = new MemberToMemberEntity();
-            mtm.setParentNo(member.getMemberNo());
-            List<MemberToMemberEntity> pelist = mtmservice.query(mtm);
+            List<MemberToMemberEntity> relist = mtmservice.queryInfo(member.getMemberNo());
             map.put("relist", relist);
-            map.put("pelist", pelist);
             // map.put("delzizhi", delzizhi);
             map.put("oldNum", oldImageList.size());// 原有证书数目
             map.put("newNum", newImagList.size());// 原有证书数目

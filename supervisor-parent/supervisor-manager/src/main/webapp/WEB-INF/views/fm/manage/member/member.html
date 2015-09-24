@@ -48,6 +48,12 @@
 										function() {
 											window.location.href = "${basePath}member/memberList.htm?isDelMesPerfect=true&flag=1&checkState=1&sort=1";
 										});
+						$(".msgBoxChangeImage")
+						.live(
+								"click",
+								function() {
+									window.location.href = "${basePath}member/memberList.htm?isDelChangeImage=true&changeImageFlag=1";
+								});
 						// 	JS.Engine.on({
 						// 			 start : function(cId, channelList, engine){  
 						// 			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
@@ -101,6 +107,19 @@
 								$("#message_div_perfcet").append(bb);
 							}
 						});
+		$
+		.get(
+				"${basePath}message.htm?channelName=${channelNamechangeImage}&ram="
+						+ Math.random(),
+				function(data) {
+					if (typeof (data.count) != "undefined") {
+						$("#message_div_changeImage").empty();
+						var bb = "<div class='msgBoxChangeImage msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"
+								+ data.count
+								+ "</strong>位客户变更资质证书！</div>";
+						$("#message_div_changeImage").append(bb);
+					}
+				});
 	}
 	//证书上传
 	function uploadImg($file,oSlide,oSlide2,id) {
@@ -627,6 +646,7 @@
 				<form id="edit_form"></form>
 				<div id="message_div"></div>
 				<div id="message_div_perfcet"></div>
+				<div id="message_div_changeImage"></div>
 				<div>
 					<@shiro.hasPermission name="28"> <a class="btn btn-orange ly-left"
 						onclick="exportExcel();"><span>导出Excel</span></a>

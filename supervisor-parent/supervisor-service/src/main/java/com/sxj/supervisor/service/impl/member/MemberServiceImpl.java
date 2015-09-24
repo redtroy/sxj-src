@@ -1,4 +1,4 @@
-package com.sxj.supervisor.service.impl.member;
+﻿package com.sxj.supervisor.service.impl.member;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -456,6 +456,8 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("endDate", query.getEndDate());// 结束时间
             condition.addCondition("typeB", query.getMemberTypeB());
             condition.addCondition("flag", query.getFlag());
+            condition.addCondition("changeImageFlag",
+                    query.getChangeImageFlag());
             condition.addCondition("startAuthorDate",
                     query.getStartAuthorDate());// 开始时间
             condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
@@ -792,9 +794,9 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             MemberEntity newMember = modifyMember(member, true);
-                memberImageService.websiteAddImage(member.getMemberNo(),
-                        member.getQualification_img());
-                newMember.setQualification_img(member.getQualification_img());
+            memberImageService.websiteAddImage(member.getMemberNo(),
+                    member.getQualification_img());
+            newMember.setQualification_img(member.getQualification_img());
             return newMember;
         }
         catch (Exception e)
@@ -838,6 +840,21 @@ public class MemberServiceImpl implements IMemberService
         {
             SxjLogger.error("查询会员信息错误", e, this.getClass());
             throw new ServiceException("查询会员信息错误", e);
+        }
+        
+    }
+    
+    @Override
+    public void ChangeImageFlagClear() throws ServiceException
+    {
+        try
+        {
+            menberDao.updateChangeImageFlag();
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("资质证书标记清0 报错", e, this.getClass());
+            throw new ServiceException("资质证书标记清0 报错", e);
         }
         
     }

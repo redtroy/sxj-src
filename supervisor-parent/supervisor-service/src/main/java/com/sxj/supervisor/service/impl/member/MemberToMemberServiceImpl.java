@@ -44,6 +44,14 @@ public class MemberToMemberServiceImpl implements IMemberToMemberService
     }
     
     @Override
+    public List<MemberToMemberEntity> queryInfo(String memberNo)
+            throws ServiceException
+    {
+        List<MemberToMemberEntity> list = memberToMemberDao.queryInfo(memberNo);
+        return list;
+    }
+    
+    @Override
     public void delInfo(String id) throws ServiceException
     {
         memberToMemberDao.deleteInfo(id);

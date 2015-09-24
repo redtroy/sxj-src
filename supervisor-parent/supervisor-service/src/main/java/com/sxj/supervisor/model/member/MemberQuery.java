@@ -1,4 +1,4 @@
-package com.sxj.supervisor.model.member;
+﻿package com.sxj.supervisor.model.member;
 
 import java.io.Serializable;
 
@@ -48,82 +48,21 @@ public class MemberQuery extends Pagable implements Serializable {
 
 	private String isDelMesPerfect;
 
+	private String isDelChangeImage;
+
 	private String flag;
+
+	private String changeImageFlag;
 
 	private Integer sort;
 
 	private Integer filterStr;
-
 	/**
 	 * 资质等级
 	 */
 	private String levelId;
 
 	private String levelName;
-
-	public String getLevelName() {
-		return levelName;
-	}
-
-	public void setLevelName(String levelName) {
-		this.levelName = levelName;
-	}
-
-	public String getLevelId() {
-		return levelId;
-	}
-
-	public void setLevelId(String levelId) {
-		this.levelId = levelId;
-	}
-
-	public Integer getFilterStr() {
-		return filterStr;
-	}
-
-	public void setFilterStr(Integer filterStr) {
-		this.filterStr = filterStr;
-	}
-
-	public Integer getSort() {
-		return sort;
-	}
-
-	public void setSort(Integer sort) {
-		this.sort = sort;
-	}
-
-	public String getStartAuthorDate() {
-		return startAuthorDate;
-	}
-
-	public void setStartAuthorDate(String startAuthorDate) {
-		this.startAuthorDate = startAuthorDate;
-	}
-
-	public String getEndAuthorDate() {
-		return endAuthorDate;
-	}
-
-	public void setEndAuthorDate(String endAuthorDate) {
-		this.endAuthorDate = endAuthorDate;
-	}
-
-	public Integer getMemberTypeB() {
-		return memberTypeB;
-	}
-
-	public void setMemberTypeB(Integer memberTypeB) {
-		this.memberTypeB = memberTypeB;
-	}
-
-	public Integer getCheckState() {
-		return checkState;
-	}
-
-	public void setCheckState(Integer checkState) {
-		this.checkState = checkState;
-	}
 
 	public String getMemberNo() {
 		return memberNo;
@@ -213,6 +152,38 @@ public class MemberQuery extends Pagable implements Serializable {
 		this.endDate = endDate;
 	}
 
+	public String getStartAuthorDate() {
+		return startAuthorDate;
+	}
+
+	public void setStartAuthorDate(String startAuthorDate) {
+		this.startAuthorDate = startAuthorDate;
+	}
+
+	public String getEndAuthorDate() {
+		return endAuthorDate;
+	}
+
+	public void setEndAuthorDate(String endAuthorDate) {
+		this.endAuthorDate = endAuthorDate;
+	}
+
+	public Integer getCheckState() {
+		return checkState;
+	}
+
+	public void setCheckState(Integer checkState) {
+		this.checkState = checkState;
+	}
+
+	public Integer getMemberTypeB() {
+		return memberTypeB;
+	}
+
+	public void setMemberTypeB(Integer memberTypeB) {
+		this.memberTypeB = memberTypeB;
+	}
+
 	public String getIsDelMes() {
 		return isDelMes;
 	}
@@ -229,12 +200,60 @@ public class MemberQuery extends Pagable implements Serializable {
 		this.isDelMesPerfect = isDelMesPerfect;
 	}
 
+	public String getIsDelChangeImage() {
+		return isDelChangeImage;
+	}
+
+	public void setIsDelChangeImage(String isDelChangeImage) {
+		this.isDelChangeImage = isDelChangeImage;
+	}
+
 	public String getFlag() {
 		return flag;
 	}
 
 	public void setFlag(String flag) {
 		this.flag = flag;
+	}
+
+	public String getChangeImageFlag() {
+		return changeImageFlag;
+	}
+
+	public void setChangeImageFlag(String changeImageFlag) {
+		this.changeImageFlag = changeImageFlag;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+
+	public Integer getFilterStr() {
+		return filterStr;
+	}
+
+	public void setFilterStr(Integer filterStr) {
+		this.filterStr = filterStr;
+	}
+
+	public String getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(String levelId) {
+		this.levelId = levelId;
+	}
+
+	public String getLevelName() {
+		return levelName;
+	}
+
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
 	}
 
 }
