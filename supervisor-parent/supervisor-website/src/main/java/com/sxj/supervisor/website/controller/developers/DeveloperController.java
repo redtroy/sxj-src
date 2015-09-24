@@ -50,7 +50,7 @@ public class DeveloperController extends BaseController
         {
             if (StringUtils.isEmpty(query.getCity()))
             {
-                query.setCity(getCity(request));
+                query.setCity("3201");
             }
             
             query.setPagable(true);
