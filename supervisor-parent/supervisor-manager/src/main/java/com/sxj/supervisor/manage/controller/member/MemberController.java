@@ -257,14 +257,8 @@ public class MemberController extends BaseController
              * 
              * }
              */
-            MemberToMemberEntity mtm = new MemberToMemberEntity();
-            mtm.setMemberNo(member.getMemberNo());
-            List<MemberToMemberEntity> relist = mtmservice.query(mtm);
-            mtm = new MemberToMemberEntity();
-            mtm.setParentNo(member.getMemberNo());
-            List<MemberToMemberEntity> pelist = mtmservice.query(mtm);
+            List<MemberToMemberEntity> relist = mtmservice.queryInfo(member.getMemberNo());
             map.put("relist", relist);
-            map.put("pelist", pelist);
             // map.put("delzizhi", delzizhi);
             map.put("oldNum", oldImageList.size());// 原有证书数目
             map.put("newNum", newImagList.size());// 原有证书数目

@@ -102,7 +102,7 @@ $(document).ready(function() {
 		show  =layer.open({
 		    type: 1,
 		    offset: ['30%', '35%'],
-		    area: ['590px', '210px'],
+		    area: ['450px', '210px'],
 		    title: false, //不显示标题
 		    content: $("#edit_pwd")
 		});
@@ -952,16 +952,6 @@ $(document).ready(function(){
 				        </tr>
 			        </#if>
 		        </#list>
-		        <#list plist as dl>
-			        <#if (dl.memberType==6)>
-				        <tr class="dlhidden">
-				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
-				         <td>${dl.parentContacts}</td>
-				         <td>${dl.parentTelNum}</td>
-			           	 <td><a href='javascript:void(0);' onclick='delOldDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a></td>
-				        </tr>
-			        </#if>
-		        </#list>
 		        <tr class="dlclass">
 		        <td>
 		        	<input class='input input-w270h36' type='text' id='dlName' name='dlList[0].memberName' />
@@ -997,16 +987,6 @@ $(document).ready(function(){
 				        </tr>
 			        </#if>
 		        </#list>
-		        <#list plist as dl>
-			        <#if (dl.memberType==7)>
-				        <tr class="dlhidden">
-				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
-				         <td>${dl.parentContacts}</td>
-				         <td>${dl.parentTelNum}</td>
-			           	 <td><a href='javascript:void(0);' onclick='delOldDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a></td>
-				        </tr>
-			        </#if>
-		        </#list>
 		        <tr class="jxclass">
 		        <td>
 		        	<input class='input input-w270h36' type='text' id='jxName' name='dlList[1].memberName' />
@@ -1034,21 +1014,15 @@ $(document).ready(function(){
 		         <th width="16%">联系人电话</th>
 	           	 <th width="10%"><a id="add-parent" title="新加一行"><img src="${b.staticPath}images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
 		        </tr>
-		        <#list plist as dl>
-				        <tr>
-				         <td>${dl.parentName}<input type='hidden' value="${dl.id}" /></td>
-				         <td>${dl.parentContacts}</td>
-				         <td>${dl.parentTelNum}</td>
-			           	 <td><a href='javascript:void(0);' onclick='delOldDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a></td>
-				        </tr>
-		        </#list>
 		        <#list mlist as dl>
+		       		<#if (dl.memberType==member.type.id)>
 				        <tr>
 				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
 				         <td>${dl.contacts}</td>
 				         <td>${dl.telNum}</td>
 			           	 <td><a href='javascript:void(0);' onclick='delOldDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a></td>
 				        </tr>
+				    </#if>
 		        </#list>
 		        <tr class="xcclass">
 		        <td>

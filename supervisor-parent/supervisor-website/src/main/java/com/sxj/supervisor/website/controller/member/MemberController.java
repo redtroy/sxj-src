@@ -1,6 +1,5 @@
 package com.sxj.supervisor.website.controller.member;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -104,32 +103,8 @@ public class MemberController extends BaseController
                 map.put("cityList", cityList);
                 map.put("member", member);
                 
-                MemberToMemberEntity query = new MemberToMemberEntity();
-                List<MemberToMemberEntity> mlist = null;
-                List<MemberToMemberEntity> plist = null;
-                if (member.getType() == MemberTypeEnum.GENRESFACTORY)
-                {
-                    query.setParentNo(member.getMemberNo());
-                    mlist = memberToMemberService.query(query);
-                    
-                    query = new MemberToMemberEntity();
-                    query.setMemberNo(member.getMemberNo());
-                    plist = memberToMemberService.query(query);
-                }
-                else if (member.getType() == MemberTypeEnum.AGENT
-                        || member.getType() == MemberTypeEnum.DISTRIBUTOR)
-                {
-                    query.setMemberNo(member.getMemberNo());
-                    query.setMemberType(member.getType().getId());
-                    plist = memberToMemberService.query(query);
-                    
-                    query = new MemberToMemberEntity();
-                    query.setParentNo(member.getMemberNo());
-                    query.setMemberType(member.getType().getId());
-                    mlist = memberToMemberService.query(query);
-                }
+                List<MemberToMemberEntity> mlist = memberToMemberService.queryInfo(member.getMemberNo());
                 map.put("mlist", mlist);
-                map.put("plist", plist);
                 
                 if (member.getFlag())
                 {
@@ -195,31 +170,7 @@ public class MemberController extends BaseController
         MemberEntity member = memberService.getMemberNew(id);
         List<AreaEntity> cityList = areaService.getChildrenAreas("32");
         
-        MemberToMemberEntity query = new MemberToMemberEntity();
-        
-        List<MemberToMemberEntity> mlist = null;
-        List<MemberToMemberEntity> plist = null;
-        if (member.getType() == MemberTypeEnum.GENRESFACTORY)
-        {
-            query.setParentNo(member.getMemberNo());
-            mlist = memberToMemberService.query(query);
-            
-            query = new MemberToMemberEntity();
-            query.setMemberNo(member.getMemberNo());
-            plist = memberToMemberService.query(query);
-        }
-        else if (member.getType() == MemberTypeEnum.AGENT
-                || member.getType() == MemberTypeEnum.DISTRIBUTOR)
-        {
-            query.setMemberNo(member.getMemberNo());
-            query.setMemberType(member.getType().getId());
-            plist = memberToMemberService.query(query);
-            
-            query = new MemberToMemberEntity();
-            query.setParentNo(member.getMemberNo());
-            query.setMemberType(member.getType().getId());
-            mlist = memberToMemberService.query(query);
-        }
+        List<MemberToMemberEntity> mlist = memberToMemberService.queryInfo(member.getMemberNo());
         
         List<MemberImageEntity> imageList = memberImageService.getImages(member.getMemberNo(),
                 "1");
@@ -227,7 +178,6 @@ public class MemberController extends BaseController
         map.put("cityList", cityList);
         map.put("member", member);
         map.put("mlist", mlist);
-        map.put("plist", plist);
         return "site/member/edit-member";
     }
     
@@ -268,7 +218,6 @@ public class MemberController extends BaseController
             }
             if (null != member.getDlList())
             {
-                List<MemberToMemberEntity> list = new ArrayList<MemberToMemberEntity>();
                 //新增关系
                 for (int i = 0; i < member.getDlList().size(); i++)
                 {
