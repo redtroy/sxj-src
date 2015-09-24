@@ -75,5 +75,8 @@ public interface IMemberService
      * @return
      */
     public String addRelevanceMember(List<RelevanceMember> list);
+
+	List<MemberEntity> queryWebsiteMembers(MemberQuery query)
+			throws ServiceException;
     
 }

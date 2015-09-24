@@ -94,4 +94,13 @@ public interface IMemberDao
      **/
     public List<MemberEntity> queryFramefactory(
             QueryCondition<MemberEntity> query);
+    
+   /**
+    * 前台会员信息查询
+    * @param query
+    * @return
+    * @throws SQLException
+    */
+    public List<MemberEntity> queryWebsiteMembers(QueryCondition<MemberEntity> query)
+            throws SQLException; 
 }
