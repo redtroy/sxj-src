@@ -40,8 +40,8 @@
 		</if>
 	</select>
 	<select id="historyImage" parameterType="string"  resultMap="MemberImageEntity">
-	<![CDATA[  SELECT mm.* FROM M_MEMBER_IMAGE mm,(SELECT  m.VERSION,MAX(m.CREATION_DATE) 
-	 FROM M_MEMBER_IMAGE m  WHERE m.MEMBER_NO = #{memberNo} AND m.STATE = 0 )as temp WHERE mm.VERSION =temp.VERSION 
+	<![CDATA[  SELECT mm.* FROM M_MEMBER_IMAGE mm,(SELECT  MAX(m.CREATION_DATE) AS  CREATION_DATE
+	 FROM M_MEMBER_IMAGE m  WHERE m.MEMBER_NO = #{memberNo} AND m.STATE = 0 )as temp WHERE mm.CREATION_DATE =temp.CREATION_DATE 
 	   AND mm.MEMBER_NO =#{memberNo} AND mm.STATE = 0]]>
 	</select>
 	<update id="updatelock">
