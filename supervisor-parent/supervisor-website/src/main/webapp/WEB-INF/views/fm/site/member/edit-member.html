@@ -102,7 +102,7 @@ $(document).ready(function() {
 		show  =layer.open({
 		    type: 1,
 		    offset: ['30%', '35%'],
-		    area: ['450px', '210px'],
+		    area: ['500px', '180px'],
 		    title: false, //不显示标题
 		    content: $("#edit_pwd")
 		});
@@ -1157,36 +1157,37 @@ $(document).ready(function(){
 		  }
 		function editPhone(){
 			 var flag=false;
+			 var param=$("#ms").val();
 			 if($("#newPhoneNo").val()==""){
 				 $("#moileMsg").show();
 				 wrong("#moileMsg");
 				 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
 				 flag=true;
+				 return;
 			 }
 			 $("#sm_erro").show();
 			 if ($("#ms").val()==""){
 				 wrong("#sm_erro");
 				 $("#sm_erro").text("请输入验证码");
 				 flag=true;
+				 return;
 			 }
 			 if (!send_flag){
 				 wrong("#sm_erro");
 				 $("#sm_erro").text("请先获取验证码");
 				 flag=true;
+				 return;
 			 }
 			 if ($("#ms").val()==""){
 				 wrong("#sm_erro");
 				 $("#sm_erro").text("验证码不能为空");
 				 flag=true;
+				 return;
 			 }else 
 			 if (!$("#ms").val().match(/^\d{6}$/)){
 				 wrong("#sm_erro");
 				 $("#sm_erro").text("请填写六位验证码");
-				 flag=true;
-			 }
-			 var param=$("#ms").val();
-			 if (flag){
-				 return false;
+				 return;
 			 }
 			 $.get("${basePath}member/check_ms.htm?ms="+param+"&phoneNo="+$("#newPhoneNo").val(),function(data){
 				 if(data.flag=="false"){
