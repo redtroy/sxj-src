@@ -530,17 +530,17 @@
                <tr >
 		         <td id="td">
 	                 <input type="hidden" value="" name="memberNo" />
-			         <input type="text" class="memberName" name="memberName" />
+			         <input type="text" class="memberName" name="memberName"  datatype="*0-50" errormsg="公司名称太长" />
                  </td>
-	             <td id="td"><input type="text" name="contacts"></td>
-		         <td id="td"><input type="text" name="telNum"><input type="hidden" value="${member.type.id}" /></td>
+	             <td id="td"><input type="text" name="contacts" datatype="*0-50" errormsg="联系人名称太长"></td>
+		         <td id="td"><input type="text" name="telNum"><input type="hidden" value="${member.type.id}" datatype="*0-50" errormsg="联系人电话太长"  /></td>
 		         <td id="td">
 		         <select name="memberType" >
 		         <option value="2">型材厂</option>
 		         <option value="6">代理商</option>
 		         <option value="7">经销商</option>
 		         <option value="10">同一出资方</option></select></td>
-		         <td id="td"><input type="text" name="remark"></td>
+		         <td id="td"><input type="text" name="remark" datatype="*0-200" errormsg="备注太长" ></td>
 	          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
 	           </tr>
          </table>

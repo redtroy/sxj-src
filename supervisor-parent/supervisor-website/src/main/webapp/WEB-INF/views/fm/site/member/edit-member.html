@@ -954,12 +954,12 @@ $(document).ready(function(){
 		        </#list>
 		        <tr class="dlclass">
 		        <td>
-		        	<input class='input input-w270h36' type='text' id='dlName' name='dlList[0].memberName' />
+		        	<input class='input input-w270h36' type='text' id='dlName' datatype="*0-50" errormsg="公司名称太长" name='dlList[0].memberName' />
 			 		<input type='hidden' id='dlNo' name='dlList[0].memberNo' />
 			 		<input type='hidden' name='dlList[0].memberType' value="6" />
 			 	</td>
-	         <td><input type="text" class="input input-w100h36" id="dlcontacts" name="dlList[0].contacts"/></td>
-	         <td><input type="text" class="input input-w100h36" id="dltelNum" name="dlList[0].telNum" /></td>
+	         <td><input type="text" class="input input-w100h36" id="dlcontacts" name="dlList[0].contacts" datatype="*0-50" errormsg="联系人名称太长"/></td>
+	         <td><input type="text" class="input input-w100h36" id="dltelNum" name="dlList[0].telNum"  datatype="*0-50" errormsg="联系人电话太长" /></td>
 	         <td>
 	         	<a href='javascript:void(0);' onclick='delDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
 	         </td>
@@ -989,12 +989,12 @@ $(document).ready(function(){
 		        </#list>
 		        <tr class="jxclass">
 		        <td>
-		        	<input class='input input-w270h36' type='text' id='jxName' name='dlList[1].memberName' />
+		        	<input class='input input-w270h36' type='text' id='jxName' datatype="*0-50" errormsg="公司名称太长" name='dlList[1].memberName' />
 			 		<input type='hidden' id='jxNo' name='dlList[1].memberNo' />
-			 		<input type='hidden' name='dlList[1].memberType' value="7" />
+			 		<input type='hidden' name='dlList[1].memberType' value="6" />
 			 	</td>
-	         <td><input type="text" class="input input-w100h36" id="jxcontacts" name="dlList[1].contacts" /></td>
-	         <td><input type="text" class="input input-w100h36" id="jxtelNum" name="dlList[1].telNum"/></td>
+	         <td><input type="text" class="input input-w100h36" id="jxcontacts" name="dlList[1].contacts" datatype="*0-50" errormsg="联系人名称太长"/></td>
+	         <td><input type="text" class="input input-w100h36" id="jxtelNum" name="dlList[1].telNum"  datatype="*0-50" errormsg="联系人电话太长" /></td>
 	         <td>
 	         	<a href='javascript:void(0);' onclick='delJX(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
 	         </td>
@@ -1026,12 +1026,12 @@ $(document).ready(function(){
 		        </#list>
 		        <tr class="xcclass">
 		        <td>
-		        	<input class='input input-w270h36' type='text' id='xcName' name='dlList[2].parentName' />
-			 		<input type='hidden' id='xcNo' name='dlList[2].parentNo' />
-			 		<input type='hidden' name='dlList[2].memberType' value="${member.type.getId()}" />
+		        	<input class='input input-w270h36' type='text' id='xcName' datatype="*0-50" errormsg="公司名称太长" name='dlList[2].memberName' />
+			 		<input type='hidden' id='xcNo' name='dlList[2].memberNo' />
+			 		<input type='hidden' name='dlList[2].memberType' value="6" />
 			 	</td>
-	         <td><input type="text" class="input input-w100h36" id="xccontacts" name="dlList[2].parentContacts" /></td>
-	         <td><input type="text" class="input input-w100h36" id="xctelNum" name="dlList[2].parentTelNum"/></td>
+	         <td><input type="text" class="input input-w100h36" id="xccontacts" name="dlList[2].contacts" datatype="*0-50" errormsg="联系人名称太长"/></td>
+	         <td><input type="text" class="input input-w100h36" id="xctelNum" name="dlList[2].telNum"  datatype="*0-50" errormsg="联系人电话太长" /></td>
 	         <td>
 	         	<a href='javascript:void(0);' onclick='delXC(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
 	         </td>
