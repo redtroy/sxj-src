@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.service.impl.member;
+package com.sxj.supervisor.service.impl.member;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
