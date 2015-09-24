@@ -239,6 +239,10 @@ public class MemberController extends BaseController
                     }
                 }
             }
+            if (oldImageList.size() < 1)
+            {
+                newImagList = ImageList;
+            }
             /*
              * if (relist.size() > 0)e {
              * 

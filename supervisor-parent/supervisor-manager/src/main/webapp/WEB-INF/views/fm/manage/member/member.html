@@ -31,7 +31,6 @@
 
 <script src="${b.staticPath}js/jquery.uploadify.js"></script>
 <link href="${b.staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
-
 <@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.iviewer/> 
 <script>
 	jQuery(document)
@@ -118,7 +117,7 @@
 					{
 						var num = 1;
 						var dataObj = eval("(" + data + ")");//转换为json对象 
-						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds,null,oSlide);
 						oSlide2.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
 						$("#"+id+"_info").find("#newImageShow").show();
                         /* var listImage="<li style='width: 86px; height: 120px'>" +
@@ -686,6 +685,7 @@
 			</div>
 		</div>
 		<div class="maskdivgen" style="display: none;z-index: 96"></div>
+		
 		<@b.footer />
 </body>
 <!-- InstanceEnd -->
