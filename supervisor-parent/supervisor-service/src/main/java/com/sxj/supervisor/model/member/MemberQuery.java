@@ -1,4 +1,4 @@
-﻿package com.sxj.supervisor.model.member;
+package com.sxj.supervisor.model.member;
 
 import java.io.Serializable;
 
