@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -729,12 +731,23 @@ public class MemberController extends BaseController
     
     @RequestMapping("addMemberImage")
     public @ResponseBody Map<String, String> addMemberImage(
-            MemberImageEntity memberImage, String[] levelids)
-            throws WebException
+            MemberImageEntity memberImage, String[] levelids,
+            String issueDateNew, String dueDateNew) throws WebException
     {
         Map<String, String> map = new HashMap<String, String>();
         try
         {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            if (issueDateNew != null)
+            {
+                Date issueDate = sdf.parse(issueDateNew);
+                memberImage.setIssueDate(issueDate);
+            }
+            if (dueDateNew != null)
+            {
+                Date dueDate = sdf.parse(dueDateNew);
+                memberImage.setDueDate(dueDate);
+            }
             imageService.addMemberImage(memberImage, levelids);
             map.put("isok", "ok");
         }
