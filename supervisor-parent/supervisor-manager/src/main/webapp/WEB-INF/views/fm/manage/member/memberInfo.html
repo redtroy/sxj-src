@@ -30,13 +30,24 @@
 				"imageId" : imageVal
 			}, function(data) {
 				$("#levelTd").children().remove();
-				$("#issueDate").val("");
+				$("#form")[0].reset();
+				/* $("#issueDate").val("");
 				$("#dueDate").val("");
+				$("#certificateType").val("");
+				$("#certificateNo").val("");
+				$("#remark").val("") */
+				//==
+				if (data.model.memberImage.id!=null){
 				$("#id").val(data.model.memberImage.id);
+				}
 				$("#image").val(imageVal);
+				if (data.model.memberImage.certificateType!=null){
 				$("#certificateType").val(
 						data.model.memberImage.certificateType);
-				$("#certificateNo").val(data.model.memberImage.certificateNo);
+				}
+				if (data.model.memberImage.certificateNo!=null){
+				  $("#certificateNo").val(data.model.memberImage.certificateNo);
+				}
 				if (data.model.memberImage.issueDate!=null){
 				$("#issueDate").val(
 						new Date(data.model.memberImage.issueDate)
@@ -46,8 +57,10 @@
 				$("#dueDate").val(new Date(data.model.memberImage.dueDate)
 				.Format("yyyy-MM-dd"));
 				}
+				if (data.model.memberImage.remark!=null){
 				$("#remark").val(data.model.memberImage.remark);
-				$("#memberNo").val(data.model.memberImage.memberNo);
+				}
+				$("#memberNo").val('${member.memberNo}');
 				 if (data.model.clist.length>=1){
 					for (var i=0;i<data.model.clist.length;i++){
 						$("#levelTd").append(' <li><input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="input-tt level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/><a class="del"></a></li>')
@@ -122,6 +135,7 @@
 						imageWidth : 90,
 						imagesPerPage : 5,
 						onClick : function(self, li, index, i) {
+							alert(1)
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
 							var imageVal = data.replace("${b.imagePath}", "");
@@ -231,21 +245,22 @@
 								iv.children("img").attr("src","");
 							},"是否确定删除！")
 						});
+					$("#next,#front").unbind("click");
 					$("#next").click(function() {
 						hSlide.slideNext();
 						currentSlide.slideNext();
 						iv.iviewer('loadImage', hSlide.getCurrentImageData());
-						var data = hSlide.getImageData(hSlide.getIndex());
-						var imageVal = data.replace("${b.imagePath}", "");
-						getImage(imageVal);
+						//var data = hSlide.getImageData(hSlide.getIndex());
+						//var imageVal = data.replace("${b.imagePath}", "");
+						//getImage(imageVal);
 					});
 					$("#front").click(function() {
 						hSlide.slideFront();
 						currentSlide.slideNext();
 						iv.iviewer('loadImage', hSlide.getCurrentImageData());
-						var data = hSlide.getImageData(hSlide.getIndex());
-						var imageVal = data.replace("${b.imagePath}", "");
-						getImage(imageVal);
+						//var data = hSlide.getImageData(hSlide.getIndex());
+						//var imageVal = data.replace("${b.imagePath}", "");
+						//getImage(imageVal);
 					});
 					$("#btnClsVie").click(function() {
 						$("#form")[0].reset();
@@ -283,6 +298,7 @@
 						iv.iviewer('destroy');
 						iv = $("#viewer").iviewer();
 						iv.iviewer('loadImage', oSlide3.getImageData(oSlide3.getIndex()));
+						getImage(oSlide3.getImageData(oSlide3.getIndex()).replace("${b.imagePath}", ""));
 						currentSlide = oSlide3;
 					});
 				});
