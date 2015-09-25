@@ -76,16 +76,18 @@ public interface IMemberService
      * @return
      */
     public String addRelevanceMember(List<RelevanceMember> list);
-
-	List<MemberEntity> queryWebsiteMembers(MemberQuery query)
-			throws ServiceException;
+    
+    List<MemberEntity> queryWebsiteMembers(MemberQuery query)
+            throws ServiceException;
     
     /**
      * 资质证书变动标记清0
      */
     public void ChangeImageFlagClear();
-
+    
     public List<ExportMemberModel> queryExportMemberModel(MemberQuery query)
-			throws ServiceException;
+            throws ServiceException;
+    
+    public List<MemberEntity> queryMembersWebSite(MemberQuery query);
     
 }

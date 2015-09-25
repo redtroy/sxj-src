@@ -494,6 +494,63 @@ public class MemberServiceImpl implements IMemberService
     }
     
     /**
+     * 会员高级查询
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemberEntity> queryMembersWebSite(MemberQuery query)
+            throws ServiceException
+    {
+        try
+        {
+            List<MemberEntity> memberList = new ArrayList<MemberEntity>();
+            if (query == null)
+            {
+                return memberList;
+            }
+            QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
+            condition.addCondition("memberNo", query.getMemberNo());// 会员号
+            condition.addCondition("name", query.getMemberName());// 会员名称
+            condition.addCondition("contacts", query.getContacts());// 联系人名称
+            condition.addCondition("phoneNo", query.getContactsPhone());// 联系人电话
+            condition.addCondition("area", query.getArea());// 地理区域
+            condition.addCondition("bLicenseNo", query.getbLicenseNo());// 营业执照号
+            condition.addCondition("energyNo", query.getEnergyNo());// 节能标识号
+            condition.addCondition("type", query.getMemberType());// 会员类型
+            condition.addCondition("checkState", query.getCheckState());
+            condition.addCondition("state", query.getMemberState());
+            condition.addCondition("startDate", query.getStartDate());// 开始时间
+            condition.addCondition("endDate", query.getEndDate());// 结束时间
+            condition.addCondition("typeB", query.getMemberTypeB());
+            condition.addCondition("flag", query.getFlag());
+            condition.addCondition("changeImageFlag",
+                    query.getChangeImageFlag());
+            condition.addCondition("startAuthorDate",
+                    query.getStartAuthorDate());// 开始时间
+            condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
+            condition.addCondition("sort", query.getSort());//排序
+            condition.addCondition("filterStr", query.getFilterStr());//筛选测试账号
+            condition.setPage(query);
+            if (query.getMemberType() == MemberTypeEnum.FRAMEFACTORY.getId())
+            {
+                memberList = menberDao.queryFramefactory(condition);
+            }
+            else
+            {
+                memberList = menberDao.queryMembers(condition);
+            }
+            query.setPage(condition);
+            return memberList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new ServiceException("查询会员信息错误", e);
+        }
+        
+    }
+    
+    /**
      * 删除会员
      */
     @Override
@@ -869,91 +926,97 @@ public class MemberServiceImpl implements IMemberService
         }
         
     }
+    
     /**
-	 * 封装导出Model
-	 */
-	@Override
-	@Transactional(readOnly = true)
-	public List<ExportMemberModel> queryExportMemberModel(MemberQuery query)
-			throws ServiceException {
-		try {
-			List<ExportMemberModel> modelList = new ArrayList<ExportMemberModel>();
-			List<MemberEntity> list = this.queryMembers(query);
-			for (MemberEntity memberEntity : list) {
-				ExportMemberModel model = new ExportMemberModel();
-				model.setMemberNo(memberEntity.getMemberNo());
-				model.setName(memberEntity.getName());
-				model.setType(memberEntity.getType().getName());
-				model.setArea(strArea(memberEntity.getArea()));
-				model.setContacts(memberEntity.getContacts());
-				model.setPhoneNo(memberEntity.getPhoneNo());
-				model.setAddress(memberEntity.getAddress());
-				model.setTelNum(memberEntity.getTelNum());
-				if (memberEntity.getRegDate() != null) {
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(memberEntity.getRegDate());
-					int year = cal.get(cal.YEAR);// 获取年份
-					int month = cal.get(cal.MONTH) + 1;// 获取月份
-					model.setRegDateYear(String.valueOf(year));
-					model.setRegDateMonth(String.valueOf(month));
-				}
-				model.setRegDate(DateTimeUtils.formatPageDate(memberEntity
-						.getRegDate()));// 注册日期
-				if (memberEntity.getAuthorDate() != null) {
-					Calendar cal2 = Calendar.getInstance();
-					cal2.setTime(memberEntity.getAuthorDate());
-					int year2 = cal2.get(cal2.YEAR);// 获取年份
-					int month2 = cal2.get(cal2.MONTH) + 1;// 获取月份
-					model.setAuthorDateYear(String.valueOf(year2));
-					model.setAuthorDateMonth(String.valueOf(month2));
-				}
-				model.setAuthorDate(DateTimeUtils.formatPageDate(memberEntity
-						.getAuthorDate()));// 认证日期
-				model.setState(memberEntity.getState().getName());
-				model.setCheckState(memberEntity.getCheckState().getName());
-				model.setLegalRep(memberEntity.getLegalRep());
-				model.setRegisteredCapital(memberEntity.getRegisteredCapital());
-				model.setFoundedDate(DateTimeUtils.formatPageDate(memberEntity
-						.getFoundedDate()));
-				model.setLevel(memberImageService.getLevelStr(memberEntity
-						.getMemberNo()));// 资质等级
-				model.setMarketers(memberEntity.getMarketers());
-				model.setRemark(memberEntity.getRemark());
-				model.setFirstDate(DateTimeUtils.formatPageDate(memberEntity
-						.getFirstDate()));// 第一次认证日期
-				if (memberEntity.getFirstDate() != null) {
-					Calendar cal3 = Calendar.getInstance();
-					cal3.setTime(memberEntity.getFirstDate());
-					int year3 = cal3.get(cal3.YEAR);// 获取年份
-					int month3 = cal3.get(cal3.MONTH) + 1;// 获取月份
-					model.setFirstDateYear(String.valueOf(year3));
-					model.setFirstDateMonth(String.valueOf(month3));
-				}
-				modelList.add(model);
-			}
-
-			return modelList;
-		} catch (Exception e) {
-			SxjLogger.error("查询会员信息错误", e, this.getClass());
-			throw new ServiceException("查询会员信息错误", e);
-		}
-
-	}
-
-	/**
-	 * 封装地址
-	 * 
-	 * @param area
-	 * @return
-	 */
-	public String strArea(String area) {
-		if (StringUtils.isEmpty(area)) {
-			return "";
-		}
-		String[] str = area.split(",");
-		String[] str1 = str[0].split(":");
-		String[] str2 = str[1].split(":");
-		String str3 = str1[1] + str2[1];
-		return str3;
-	}
+     * 封装导出Model
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<ExportMemberModel> queryExportMemberModel(MemberQuery query)
+            throws ServiceException
+    {
+        try
+        {
+            List<ExportMemberModel> modelList = new ArrayList<ExportMemberModel>();
+            List<MemberEntity> list = this.queryMembers(query);
+            for (MemberEntity memberEntity : list)
+            {
+                ExportMemberModel model = new ExportMemberModel();
+                model.setMemberNo(memberEntity.getMemberNo());
+                model.setName(memberEntity.getName());
+                model.setType(memberEntity.getType().getName());
+                model.setArea(strArea(memberEntity.getArea()));
+                model.setContacts(memberEntity.getContacts());
+                model.setPhoneNo(memberEntity.getPhoneNo());
+                model.setAddress(memberEntity.getAddress());
+                model.setTelNum(memberEntity.getTelNum());
+                if (memberEntity.getRegDate() != null)
+                {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(memberEntity.getRegDate());
+                    int year = cal.get(cal.YEAR);// 获取年份
+                    int month = cal.get(cal.MONTH) + 1;// 获取月份
+                    model.setRegDateYear(String.valueOf(year));
+                    model.setRegDateMonth(String.valueOf(month));
+                }
+                model.setRegDate(DateTimeUtils.formatPageDate(memberEntity.getRegDate()));// 注册日期
+                if (memberEntity.getAuthorDate() != null)
+                {
+                    Calendar cal2 = Calendar.getInstance();
+                    cal2.setTime(memberEntity.getAuthorDate());
+                    int year2 = cal2.get(cal2.YEAR);// 获取年份
+                    int month2 = cal2.get(cal2.MONTH) + 1;// 获取月份
+                    model.setAuthorDateYear(String.valueOf(year2));
+                    model.setAuthorDateMonth(String.valueOf(month2));
+                }
+                model.setAuthorDate(DateTimeUtils.formatPageDate(memberEntity.getAuthorDate()));// 认证日期
+                model.setState(memberEntity.getState().getName());
+                model.setCheckState(memberEntity.getCheckState().getName());
+                model.setLegalRep(memberEntity.getLegalRep());
+                model.setRegisteredCapital(memberEntity.getRegisteredCapital());
+                model.setFoundedDate(DateTimeUtils.formatPageDate(memberEntity.getFoundedDate()));
+                model.setLevel(memberImageService.getLevelStr(memberEntity.getMemberNo()));// 资质等级
+                model.setMarketers(memberEntity.getMarketers());
+                model.setRemark(memberEntity.getRemark());
+                model.setFirstDate(DateTimeUtils.formatPageDate(memberEntity.getFirstDate()));// 第一次认证日期
+                if (memberEntity.getFirstDate() != null)
+                {
+                    Calendar cal3 = Calendar.getInstance();
+                    cal3.setTime(memberEntity.getFirstDate());
+                    int year3 = cal3.get(cal3.YEAR);// 获取年份
+                    int month3 = cal3.get(cal3.MONTH) + 1;// 获取月份
+                    model.setFirstDateYear(String.valueOf(year3));
+                    model.setFirstDateMonth(String.valueOf(month3));
+                }
+                modelList.add(model);
+            }
+            
+            return modelList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new ServiceException("查询会员信息错误", e);
+        }
+        
+    }
+    
+    /**
+     * 封装地址
+     * 
+     * @param area
+     * @return
+     */
+    public String strArea(String area)
+    {
+        if (StringUtils.isEmpty(area))
+        {
+            return "";
+        }
+        String[] str = area.split(",");
+        String[] str1 = str[0].split(":");
+        String[] str2 = str[1].split(":");
+        String str3 = str1[1] + str2[1];
+        return str3;
+    }
 }

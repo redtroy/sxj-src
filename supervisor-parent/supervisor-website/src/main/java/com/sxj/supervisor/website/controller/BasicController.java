@@ -53,7 +53,6 @@ import com.sxj.supervisor.entity.developers.DevelopersEntity;
 import com.sxj.supervisor.entity.gov.GovEntity;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.CertificateEntity;
-import com.sxj.supervisor.entity.member.LevelEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.entity.member.MemberLogEntity;
@@ -226,7 +225,7 @@ public class BasicController extends BaseController
                         query.setMemberType(MemberTypeEnum.DAWP.getId());
                         query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
                         query.setFilterStr(1);
-                        List<MemberEntity> totalMCList = memberService.queryMembers(query);
+                        List<MemberEntity> totalMCList = memberService.queryMembersWebSite(query);
                         List<MemberEntity> mcList = new ArrayList<MemberEntity>();
                         
                         query = new MemberQuery();
@@ -1595,6 +1594,7 @@ public class BasicController extends BaseController
         out.close();
         return null;
     }
+    
     /**
      * 证书联想
      * 
