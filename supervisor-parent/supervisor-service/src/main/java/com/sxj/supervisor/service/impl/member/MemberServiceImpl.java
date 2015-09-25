@@ -561,7 +561,10 @@ public class MemberServiceImpl implements IMemberService
                 member.setCheckState(MemberCheckStateEnum.getEnum(state));
                 if (state == 2)
                 {
-                    member.setAuthorDate(new Date());
+                	Date date= new Date();
+                    member.setAuthorDate(date);
+                    member.setFoundedDate(date);
+                    menberDao.updateMemberFirstDate(member);
                 }
                 member.setVersion(menberDao.getMember(id).getVersion());
                 menberDao.updateMember(member);

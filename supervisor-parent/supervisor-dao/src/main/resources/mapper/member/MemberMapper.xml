@@ -61,6 +61,7 @@
 	<result property="isHave" column="IS_HAVE" jdbcType="INTEGER" />
 	<result property="enclosedNo" column="ENCLOSED_NO" jdbcType="VARCHAR" />
 	<result property="enclosedImg" column="ENCLOSED_IMG" jdbcType="VARCHAR" />
+	<result property="firstDate" column="FIRST_DATE" jdbcType="TIMESTAMP" />
 </resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"
@@ -222,4 +223,8 @@
 	<update id="updateChangeImageFlag">
 	   <![CDATA[ UPDATE M_MEMBER SET CHANGE_IMAGE_FLAG=0 ]]>
 	</update>
+	<update id="updateMemberFirstDate" parameterType="com.sxj.supervisor.entity.member.MemberEntity">
+	   <![CDATA[ UPDATE M_MEMBER FIRST_DATE=#{member.firstDate} WHERE ID = #{member.id}  AND REG_DATE>date_format('2015-09-25','%Y-%m-%d') AND FIRST_DATE IS NULL ]]>
+	</update>
+	
 </mapper>
