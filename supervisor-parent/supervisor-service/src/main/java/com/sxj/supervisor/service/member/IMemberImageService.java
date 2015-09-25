@@ -69,4 +69,6 @@ public interface IMemberImageService
             throws SQLException;
     
     public void delImageByImagePath(String image);
+    
+    public String getLevelStr(String memberNo)throws ServiceException;
 }

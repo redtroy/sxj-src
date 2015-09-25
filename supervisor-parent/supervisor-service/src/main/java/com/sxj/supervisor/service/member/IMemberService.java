@@ -5,6 +5,7 @@ import java.util.List;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.RelevanceMember;
+import com.sxj.supervisor.model.member.ExportMemberModel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.open.ApiModel;
 import com.sxj.util.exception.ServiceException;
@@ -83,5 +84,8 @@ public interface IMemberService
      * 资质证书变动标记清0
      */
     public void ChangeImageFlagClear();
+
+    public List<ExportMemberModel> queryExportMemberModel(MemberQuery query)
+			throws ServiceException;
     
 }

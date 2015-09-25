@@ -377,7 +377,21 @@ public class MemberEntity extends Pagable implements Serializable
      */
     private List<MemberToMemberEntity> jxList;
     
-    public Boolean getChangeImageFlag()
+    /**
+     * 第一次认证时间
+     */
+    @Column(name = "FIRST_DATE")
+    private Date firstDate;
+    
+    public Date getFirstDate() {
+		return firstDate;
+	}
+
+	public void setFirstDate(Date firstDate) {
+		this.firstDate = firstDate;
+	}
+
+	public Boolean getChangeImageFlag()
     {
         return changeImageFlag;
     }

@@ -54,4 +54,8 @@
 	 <delete id="delByImage">
          <![CDATA[delete FROM M_MEMBER_IMAGE WHERE IMAGE=#{image}]]>
      </delete>
+     <select id="getLevelStr" parameterType="string" resultType="string"> 
+     <![CDATA[SELECT GROUP_CONCAT(C.CERTIFICATE_NAME)  from M_CERTIFICATE C LEFT JOIN M_CERTIFICATE_LEVEL L ON C.ID=L.`LEVEL` 
+		LEFT JOIN M_MEMBER_IMAGE M ON M.IMAGE=L.IMAGE_ID WHERE M.MEMBER_NO=#{memberNo} AND M.STATE=1]]>
+	</select>
 </mapper>

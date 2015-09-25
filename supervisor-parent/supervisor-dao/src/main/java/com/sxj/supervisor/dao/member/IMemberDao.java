@@ -107,4 +107,10 @@ public interface IMemberDao
      * 资政证书变动数目清0
      */
     public void updateChangeImageFlag();
+    
+    /**
+     * 更新会员第一次认证时间
+     * @param member
+     */
+    public void updateMemberFirstDate(MemberEntity member);
 }
