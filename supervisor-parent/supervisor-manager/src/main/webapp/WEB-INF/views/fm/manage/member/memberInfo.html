@@ -135,7 +135,6 @@
 						imageWidth : 90,
 						imagesPerPage : 5,
 						onClick : function(self, li, index, i) {
-							alert(1)
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
 							var imageVal = data.replace("${b.imagePath}", "");
