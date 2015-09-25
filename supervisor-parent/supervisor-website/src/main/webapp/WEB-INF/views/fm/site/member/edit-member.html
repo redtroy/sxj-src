@@ -394,7 +394,7 @@ function save(id){
     		 $.post("${basePath}member/ImageChangeMessage.htm?id="+id,function(data){})
     	}
     	  $.post("${basePath}member/save_member.htm",$("#updateForm").serialize(),function(data){
-    	    	if(data.isOK="ok"){
+    	    	if(data.isOK=="ok"){
     	    		 succInfo(function(){
     	    			 window.location.href="${basePath}member/memberInfo.htm"; 
     	    		 },"修改成功！");

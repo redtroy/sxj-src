@@ -602,6 +602,10 @@ public class MemberController extends BaseController
         {
             query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
         }
+        else if (infoFlag == 4)
+        {
+            query.setMemberType(MemberTypeEnum.FRAMEFACTORY.getId());
+        }
         List<MemberEntity> list = memberService.queryWebsiteMembers(query);
         map.put("list", list);
         map.put("infoFlag", infoFlag);
