@@ -82,4 +82,8 @@ public interface IMemberImageDao
      * 根据图片路径删除图片
      */
     public void delByImage(String image);
+    
+    public String getLevelStr(String memberNo)
+            throws SQLException;
+    
 }

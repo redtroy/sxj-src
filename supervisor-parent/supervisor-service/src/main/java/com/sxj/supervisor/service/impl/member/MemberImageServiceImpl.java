@@ -370,4 +370,18 @@ public class MemberImageServiceImpl implements IMemberImageService
             throw new ServiceException("删除图片错误");
         }
     }
+
+    @Override
+	public String getLevelStr(String memberNo) throws ServiceException {
+		 try
+	        {
+	            String level=imageDao.getLevelStr(memberNo);
+	            return level;
+	        }
+	        catch (Exception e)
+	        {
+	            SxjLogger.error("查询等级错误", e, this.getClass());
+	            throw new ServiceException("查询等级错误");
+	        }		
+	}
 }

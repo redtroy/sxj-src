@@ -383,7 +383,15 @@ public class MemberEntity extends Pagable implements Serializable
     @Column(name = "FIRST_DATE")
     private Date firstDate;
     
-    public Boolean getChangeImageFlag()
+    public Date getFirstDate() {
+		return firstDate;
+	}
+
+	public void setFirstDate(Date firstDate) {
+		this.firstDate = firstDate;
+	}
+
+	public Boolean getChangeImageFlag()
     {
         return changeImageFlag;
     }

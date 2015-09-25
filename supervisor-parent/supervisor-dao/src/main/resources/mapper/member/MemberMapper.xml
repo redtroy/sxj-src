@@ -224,7 +224,6 @@
 	   <![CDATA[ UPDATE M_MEMBER SET CHANGE_IMAGE_FLAG=0 ]]>
 	</update>
 	<update id="updateMemberFirstDate" parameterType="com.sxj.supervisor.entity.member.MemberEntity">
-	   <![CDATA[ UPDATE M_MEMBER FIRST_DATE=#{member.firstDate} WHERE ID = #{member.id}  AND REG_DATE>date_format('2015-09-25','%Y-%m-%d') AND FIRST_DATE IS NULL ]]>
+	   <![CDATA[ UPDATE M_MEMBER SET FIRST_DATE=#{firstDate} WHERE ID = #{id}  AND REG_DATE>date_format('2015-09-23','%Y-%m-%d') AND FIRST_DATE IS NULL ]]>
 	</update>
-	
 </mapper>
