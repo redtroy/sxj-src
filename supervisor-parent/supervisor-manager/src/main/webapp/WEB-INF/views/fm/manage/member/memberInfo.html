@@ -505,10 +505,10 @@
 				             <td id="td">${re.contacts}</td>
 					         <td id="td">${re.telNum}</td>
 					         <td id="td">
-				         	<#if (member.type.id==6)>
-				         		<#if (re.memberType==6)>型材厂</#if>
-				         	<#elseif (member.type.id==7)>
-				         		<#if (re.memberType==7)>型材厂</#if>
+				         	<#if (member.type.id==6 && re.memberType==6)>
+				         		型材厂
+				         	<#elseif (member.type.id==7 &&re.memberType==7)>
+				         		型材厂
 				         	<#else>
 					         	<#if (re.memberType==2)>型材厂<#elseif (re.memberType==6)>代理商<#elseif (re.memberType==7)>经销商<#else>同一出资方</#if>
 					        </#if>
