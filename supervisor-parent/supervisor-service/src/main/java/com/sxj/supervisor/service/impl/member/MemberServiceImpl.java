@@ -474,14 +474,7 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("sort", query.getSort());//排序
             condition.addCondition("filterStr", query.getFilterStr());//筛选测试账号
             condition.setPage(query);
-            if (query.getMemberType() == MemberTypeEnum.FRAMEFACTORY.getId())
-            {
-                memberList = menberDao.queryFramefactory(condition);
-            }
-            else
-            {
-                memberList = menberDao.queryMembers(condition);
-            }
+            memberList = menberDao.queryMembers(condition);
             query.setPage(condition);
             return memberList;
         }
