@@ -285,11 +285,18 @@ public class MemberServiceImpl implements IMemberService
             }
             else
             {
-                assembleMemeberToModify(member, m);
-                menberDao.deleteMember(member.getId());
-                menberDao.addMember(m);
-                List<MessageConfigEntity> configList = buildMessageConfig(member);
-                configService.addConfig(member.getMemberNo(), configList);
+                if (member.getCheckState().getId() < 2)
+                {
+                    assembleMemeberToModify(member, m);
+                    menberDao.deleteMember(member.getId());
+                    menberDao.addMember(m);
+                    List<MessageConfigEntity> configList = buildMessageConfig(member);
+                    configService.addConfig(member.getMemberNo(), configList);
+                }
+                else
+                {
+                    throw new ServiceException("更改会员失败！会员类型已认证！不能更改");
+                }
             }
             // 如果该会员之前没有完善会员资料，则提示
             if (!m.getFlag() && flag)
@@ -805,6 +812,7 @@ public class MemberServiceImpl implements IMemberService
             throw new ServiceException("更新会员失败", e);
         }
     }
+    
     /**
      * 会员高级查询
      */
