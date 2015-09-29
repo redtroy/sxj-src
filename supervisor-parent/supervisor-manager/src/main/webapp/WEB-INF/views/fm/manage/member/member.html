@@ -359,6 +359,7 @@
 			$("#" + closeLable).html("");
 		}
 		if (closeLable != lable){
+			$(".tableInfo").empty();
 			$("#" + lable).show();
 			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
 					  $(".foundedDate" ).datepicker();				    	

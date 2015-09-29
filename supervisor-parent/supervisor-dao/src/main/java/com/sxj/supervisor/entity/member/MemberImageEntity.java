@@ -77,13 +77,13 @@ public class MemberImageEntity extends Pagable implements Serializable
      * 发证日期
      */
     @Column(name = "ISSUE_DATE")
-    private Date issueDate;
+    private String issueDate;
     
     /**
      * 截止日期
      */
     @Column(name = "DUE_DATE")
-    private Date dueDate;
+    private String dueDate;
     
     /**
      * 备注
@@ -193,22 +193,22 @@ public class MemberImageEntity extends Pagable implements Serializable
         this.state = state;
     }
     
-    public Date getIssueDate()
+    public String getIssueDate()
     {
         return issueDate;
     }
     
-    public void setIssueDate(Date issueDate)
+    public void setIssueDate(String issueDate)
     {
         this.issueDate = issueDate;
     }
     
-    public Date getDueDate()
+    public String getDueDate()
     {
         return dueDate;
     }
     
-    public void setDueDate(Date dueDate)
+    public void setDueDate(String dueDate)
     {
         this.dueDate = dueDate;
     }

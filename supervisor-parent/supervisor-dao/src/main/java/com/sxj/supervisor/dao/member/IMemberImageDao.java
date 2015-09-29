@@ -75,7 +75,8 @@ public interface IMemberImageDao
      * @return
      * @throws SQLException
      */
-    public MemberImageEntity getMemberImageByImageId(String imageId)
+    public MemberImageEntity getMemberImageByImageId(
+            @Param("imageId") String imageId, @Param("memberNo") String memberNo)
             throws SQLException;
     
     /**
@@ -83,7 +84,6 @@ public interface IMemberImageDao
      */
     public void delByImage(String image);
     
-    public String getLevelStr(String memberNo)
-            throws SQLException;
+    public String getLevelStr(String memberNo) throws SQLException;
     
 }
