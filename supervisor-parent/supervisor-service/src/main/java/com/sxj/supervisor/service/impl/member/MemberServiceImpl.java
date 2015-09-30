@@ -530,7 +530,7 @@ public class MemberServiceImpl implements IMemberService
             }
             else
             {
-                memberList = menberDao.queryMembers(condition);
+                memberList = menberDao.queryWebsiteMembers(condition);
             }
             query.setPage(condition);
             return memberList;

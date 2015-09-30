@@ -339,6 +339,9 @@ public class MemberImageServiceImpl implements IMemberImageService
                     certificateLevelDao.addLevel(cfe);
                 }
             }
+            MemberImageEntity imageEntity = imageDao.getMemberImageByImageId(memberImage.getImage(),
+                    memberImage.getMemberNo());
+            memberImage.setId(imageEntity.getId());
             if (memberImage.getId() == null)
             {
                 List<MemberImageEntity> list = getImages(memberImage.getMemberNo(),
