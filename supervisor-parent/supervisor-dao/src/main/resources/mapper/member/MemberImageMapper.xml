@@ -14,8 +14,8 @@
 			jdbcType="INTEGER" />
 		<result property="certificateNo" column="CERTIFICATE_NO"
 			jdbcType="VARCHAR" />
-		<result property="issueDate" column="ISSUE_DATE" jdbcType="DATE" />
-		<result property="dueDate" column="DUE_DATE" jdbcType="DATE" />
+		<result property="issueDate" column="ISSUE_DATE" jdbcType="VARCHAR" />
+		<result property="dueDate" column="DUE_DATE" jdbcType="VARCHAR" />
 		<result property="version" column="VERSION" jdbcType="VARCHAR" />
 		<result property="creationDate" column="CREATION_DATE"
 			jdbcType="TIMESTAMP" />
@@ -49,7 +49,7 @@
 	</update>
 	<select id="getMemberImageByImageId" resultMap="MemberImageEntity"
 		parameterType="string">
-	<![CDATA[SELECT * FROM M_MEMBER_IMAGE WHERE IMAGE=#{imageId} AND  STATE=1]]>
+	<![CDATA[SELECT * FROM M_MEMBER_IMAGE WHERE IMAGE=#{imageId} AND  STATE=1 AND MEMBER_NO=#{memberNo}]]>
 	</select>
 	 <delete id="delByImage">
          <![CDATA[delete FROM M_MEMBER_IMAGE WHERE IMAGE=#{image}]]>

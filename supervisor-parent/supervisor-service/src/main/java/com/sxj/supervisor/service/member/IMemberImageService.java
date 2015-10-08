@@ -62,7 +62,7 @@ public interface IMemberImageService
      */
     public void ManageAddImage(List<MemberImageEntity> list);
     
-    MemberImageModel getMemberImageByImageId(String imageId)
+    MemberImageModel getMemberImageByImageId(String imageId, String memberNo)
             throws ServiceException;
     
     void addMemberImage(MemberImageEntity memberImage, String[] levels)
@@ -70,5 +70,5 @@ public interface IMemberImageService
     
     public void delImageByImagePath(String image);
     
-    public String getLevelStr(String memberNo)throws ServiceException;
+    public String getLevelStr(String memberNo) throws ServiceException;
 }

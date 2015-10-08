@@ -12,6 +12,8 @@ public class AuthImg
     String[] fontTypes = { "\u5b8b\u4f53", "\u65b0\u5b8b\u4f53",
             "\u9ed1\u4f53", "\u6977\u4f53", "\u96b6\u4e66" };
     
+    private Random random = new Random();
+    
     // 生成随机颜色
     Color getRandColor(Random random, int fc, int bc)
     {
@@ -63,11 +65,52 @@ public class AuthImg
             // 将此汉字画到图片上
             g.drawString(rand, 24 * i + 10 + random.nextInt(8), 24);
         }
+        // 添加噪点  
+        float yawpRate = 0.05f;// 噪声率  
+        int area = (int) (yawpRate * width * height);
+        for (int i = 0; i < area; i++)
+        {
+            int x = random.nextInt(width);
+            int y = random.nextInt(height);
+            int rgb = getRandomIntColor();
+            image.setRGB(x, y, rgb);
+        }
+        g.setColor(getRandColor(random, 160, 200));// 设置线条的颜色  
+        for (int i = 0; i < 20; i++)
+        {
+            int x = random.nextInt(width - 1);
+            int y = random.nextInt(height - 1);
+            int xl = random.nextInt(6) + 1;
+            int yl = random.nextInt(12) + 1;
+            g.drawLine(x, y, x + xl + 40, y + yl + 20);
+        }
         String str = sRand.toLowerCase();
         g.dispose();
         ValidateImage img = new ValidateImage();
         img.setImg(image);
         img.setImgStr(str);
         return img;
+    }
+    
+    private int getRandomIntColor()
+    {
+        int[] rgb = getRandomRgb();
+        int color = 0;
+        for (int c : rgb)
+        {
+            color = color << 8;
+            color = color | c;
+        }
+        return color;
+    }
+    
+    private int[] getRandomRgb()
+    {
+        int[] rgb = new int[3];
+        for (int i = 0; i < 3; i++)
+        {
+            rgb[i] = random.nextInt(255);
+        }
+        return rgb;
     }
 }

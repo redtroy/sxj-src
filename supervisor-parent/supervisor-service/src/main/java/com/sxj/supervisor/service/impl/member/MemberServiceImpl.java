@@ -530,7 +530,7 @@ public class MemberServiceImpl implements IMemberService
             }
             else
             {
-                memberList = menberDao.queryMembers(condition);
+                memberList = menberDao.queryWebsiteMembers(condition);
             }
             query.setPage(condition);
             return memberList;
@@ -969,6 +969,8 @@ public class MemberServiceImpl implements IMemberService
                 model.setRegisteredCapital(memberEntity.getRegisteredCapital());
                 model.setFoundedDate(DateTimeUtils.formatPageDate(memberEntity.getFoundedDate()));
                 model.setLevel(memberImageService.getLevelStr(memberEntity.getMemberNo()));// 资质等级
+                model.setoLevel(memberEntity.getLevel() == null ? null
+                        : memberEntity.getLevel().getName());
                 model.setMarketers(memberEntity.getMarketers());
                 model.setRemark(memberEntity.getRemark());
                 model.setFirstDate(DateTimeUtils.formatPageDate(memberEntity.getFirstDate()));// 第一次认证日期

@@ -4,6 +4,7 @@
  </style>
  <script>
  $(document).ready(function() { 
+	 
 		
 		$("#${member.id}_info_form").find("[type='file']").each(function(){
 			//console.log(this)
@@ -27,40 +28,29 @@
 	}
 		var getImage = function(imageVal) {
 			$.post("getMemberImage.htm", {
-				"imageId" : imageVal
+				"imageId" : imageVal,memberNo:'${member.memberNo}'
 			}, function(data) {
 				$("#levelTd").children().remove();
-				$("#form")[0].reset();
-				/* $("#issueDate").val("");
+				//$("#form")[0].reset();
+				$("#id").val("");
+				$("#issueDate").val("");
 				$("#dueDate").val("");
 				$("#certificateType").val("");
 				$("#certificateNo").val("");
-				$("#remark").val("") */
+				$("#remark").val("") ;
 				//==
-				if (data.model.memberImage.id!=null){
-				$("#id").val(data.model.memberImage.id);
-				}
 				$("#image").val(imageVal);
-				if (data.model.memberImage.certificateType!=null){
-				$("#certificateType").val(
-						data.model.memberImage.certificateType);
-				}
-				if (data.model.memberImage.certificateNo!=null){
-				  $("#certificateNo").val(data.model.memberImage.certificateNo);
-				}
-				if (data.model.memberImage.issueDate!=null){
-				$("#issueDate").val(
-						new Date(data.model.memberImage.issueDate)
-								.Format("yyyy-MM-dd"));
-				}
-				if (data.model.memberImage.dueDate!=null){
-				$("#dueDate").val(new Date(data.model.memberImage.dueDate)
-				.Format("yyyy-MM-dd"));
-				}
-				if (data.model.memberImage.remark!=null){
-				$("#remark").val(data.model.memberImage.remark);
-				}
 				$("#memberNo").val('${member.memberNo}');
+				if (data.flag=="ok"){
+				 $("#id").val(data.model.memberImage.id);
+				
+				 $("#certificateType").val(
+						data.model.memberImage.certificateType);
+				
+				 $("#certificateNo").val(data.model.memberImage.certificateNo);
+				 $("#issueDate").val(data.model.memberImage.issueDate);
+				$("#dueDate").val(data.model.memberImage.dueDate);
+				$("#remark").val(data.model.memberImage.remark);
 				 if (data.model.clist.length>=1){
 					for (var i=0;i<data.model.clist.length;i++){
 						$("#levelTd").append(' <li><input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="input-tt level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/><a class="del"></a></li>')
@@ -68,8 +58,12 @@
 				}else{
 				        $("#levelTd").append(' <li><input  name="levelids" type="hidden"  id="levelids"/><input class="input-tt level"   name="levels" type="text" id="level"/><a class="del"></a></li>');
 				}
+				}else{
+					$("#levelTd").html(' <li><input  name="levelids" type="hidden"  id="levelids"/><input class="input-tt level"   name="levels" type="text" id="level"/><a class="del"></a></li>');
+				}
 			});
 		}
+		$("#submitComponent").unbind("click");
 		$("#submitComponent").click(
 				function() {
 					$.post("addMemberImage.htm", $("#form").serialize(),
@@ -81,12 +75,14 @@
 								}
 							});
 				});
-         $("#addLevel").live("click",function(){
+		$("#addLevel").unbind("click");
+         $("#addLevel").click(function(){
         	 $("#levelTd").append(' <li><input  name="levelids" type="hidden"  id="levelids"/><input class="input-tt level"   name="levels" type="text" id="level"/><a class="del"></a></li>');
         })
         $(".del").live("click",function(){
         	 $(this).parent().remove();
         })
+       
 		$(document).ready(
 				function() {
 					var currentSlide;
@@ -104,7 +100,7 @@
 					/**弹出层滚动条
 					滚动式更新iviewer
 					 **/
-					var hSlide = new $.slide({
+					hSlide = new $.slide({
 						container : "#hidden",
 						imageWidth : 90,
 						imagesPerPage : 8,
@@ -130,15 +126,17 @@
 					点击后显示控件层
 					 **/
 					 //新加
-					var oSlide = new $.slide({
+					oSlide = new $.slide({
 						container : "#original",
 						imageWidth : 90,
 						imagesPerPage : 5,
 						onClick : function(self, li, index, i) {
+							$("#form").show();
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
+							//$("#image").val(imageVal);
 							self.copyTo($("#hidden .line-con"));
 							$(".maskdivgen").fadeIn(100);
 							$("#imagecomponent").css({
@@ -158,11 +156,12 @@
 						}
 					});
 					//删除的
-					var oSlide2 = new $.slide({
+					oSlide2 = new $.slide({
 						container : "#original2",
 						imageWidth : 90,
 						imagesPerPage : 5,
 						onClick : function(self, li, index, i) {
+							$("#form").hide();
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
 							var imageVal = data.replace("${b.imagePath}", "");
@@ -186,7 +185,7 @@
 						}
 					});
 					//现有
-					var oSlide3 = new $.slide({
+					oSlide3 = new $.slide({
 						container : "#original3",
 						imageWidth : 90,
 						imagesPerPage : 5,
@@ -286,6 +285,7 @@
 		        	    		iv2.iviewer('loadImage', imagePath);
 		        	    });
 					$(".showComponent").click(function(){
+						$("#form").show();
 						oSlide3.copyTo($("#hidden .line-con"));
 						$(".maskdivgen").fadeIn(100);
 						$("#imagecomponent").css({
@@ -361,7 +361,7 @@
                         </li>
                     <#if (member.type.id !=5 && member.type.id!=6 && member.type.id!=7)>
 					<li style="width: 99%" class="view"><label class="lable">质量管理体系证书</label><input
-						type="text" value="JTGH2342345" /> </li> 
+						type="text" name="qms_no" value="${member.qms_no}" /> </li> 
 						<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
                          <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.qms_img}" name="qms_img" ><a style="color:#fff;text-decoration:none" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}" href="#" class="button22 demo-image">查看缩略图</a></em>
 						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="b"/></em>

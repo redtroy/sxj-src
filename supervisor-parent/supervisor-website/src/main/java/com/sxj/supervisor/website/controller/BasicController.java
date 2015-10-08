@@ -232,21 +232,21 @@ public class BasicController extends BaseController
                         query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
                         query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
                         query.setFilterStr(1);
-                        List<MemberEntity> totalBLList = memberService.queryMembers(query);
+                        List<MemberEntity> totalBLList = memberService.queryMembersWebSite(query);
                         List<MemberEntity> blList = new ArrayList<MemberEntity>();
                         
                         query = new MemberQuery();
                         query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
                         query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
                         query.setFilterStr(1);
-                        List<MemberEntity> totalXCList = memberService.queryMembers(query);
+                        List<MemberEntity> totalXCList = memberService.queryMembersWebSite(query);
                         List<MemberEntity> xcList = new ArrayList<MemberEntity>();
                         
                         query = new MemberQuery();
                         query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
                         query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
                         query.setFilterStr(1);
-                        List<MemberEntity> totalPJList = memberService.queryMembers(query);
+                        List<MemberEntity> totalPJList = memberService.queryMembersWebSite(query);
                         List<MemberEntity> pjList = new ArrayList<MemberEntity>();
                         List<MemberEntity> fcList = new ArrayList<MemberEntity>();
                         if (totalMCList.size() > 18)
@@ -361,7 +361,7 @@ public class BasicController extends BaseController
                         q.setMemberType(MemberTypeEnum.FRAMEFACTORY.getId());
                         q.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
                         q.setFilterStr(1);
-                        List<MemberEntity> totalfcList = memberService.queryMembers(q);
+                        List<MemberEntity> totalfcList = memberService.queryMembersWebSite(q);
                         if (totalfcList.size() > 16)
                         {
                             for (int i = 0; i < 16; i++)

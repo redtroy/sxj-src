@@ -416,8 +416,7 @@ function edit_pwd(id){
 	var pwd2=$("#pwd2").val();
 		$.post("${basePath}member/edit_pwd.htm",{id:id,password:pwd1},function(data){
 			succInfo(function(){
-				$('.maskdivgen').fadeOut(100);
-				$('.passwordPop').slideUp(200);
+				layer.close(show);
 			},"修改成功！");
 			
 		})

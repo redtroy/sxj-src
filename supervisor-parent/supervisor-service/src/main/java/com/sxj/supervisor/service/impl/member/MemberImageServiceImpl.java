@@ -298,16 +298,20 @@ public class MemberImageServiceImpl implements IMemberImageService
     }
     
     @Override
-    public MemberImageModel getMemberImageByImageId(String imageId)
-            throws ServiceException
+    public MemberImageModel getMemberImageByImageId(String imageId,
+            String memberNo) throws ServiceException
     {
         try
         {
             MemberImageModel model = new MemberImageModel();
-            MemberImageEntity imageEntity = imageDao.getMemberImageByImageId(imageId);
-            List<CertificateEntity> level = certificateDao.getListImage(imageEntity.getImage());
+            MemberImageEntity imageEntity = imageDao.getMemberImageByImageId(imageId,
+                    memberNo);
+            if (imageEntity != null)
+            {
+                List<CertificateEntity> level = certificateDao.getListImage(imageEntity.getImage());
+                model.setClist(level);
+            }
             model.setMemberImage(imageEntity);
-            model.setClist(level);
             return model;
         }
         catch (Exception e)
@@ -335,12 +339,25 @@ public class MemberImageServiceImpl implements IMemberImageService
                     certificateLevelDao.addLevel(cfe);
                 }
             }
+            MemberImageEntity imageEntity = imageDao.getMemberImageByImageId(memberImage.getImage(),
+                    memberImage.getMemberNo());
+            memberImage.setId(imageEntity.getId());
             if (memberImage.getId() == null)
             {
                 List<MemberImageEntity> list = getImages(memberImage.getMemberNo(),
                         "1");
-                memberImage.setVersion(list.get(0).getVersion());
-                memberImage.setCreationDate(list.get(0).getCreationDate());
+                if (list.size() > 0)
+                {
+                    memberImage.setVersion(list.get(0).getVersion());
+                    memberImage.setCreationDate(list.get(0).getCreationDate());
+                    memberImage.setState(1);
+                }
+                else
+                {
+                    memberImage.setVersion(StringUtils.getUUID());
+                    memberImage.setCreationDate(new Date());
+                    memberImage.setState(1);
+                }
                 imageDao.addMemberImage(memberImage);
             }
             else
@@ -370,18 +387,19 @@ public class MemberImageServiceImpl implements IMemberImageService
             throw new ServiceException("删除图片错误");
         }
     }
-
+    
     @Override
-	public String getLevelStr(String memberNo) throws ServiceException {
-		 try
-	        {
-	            String level=imageDao.getLevelStr(memberNo);
-	            return level;
-	        }
-	        catch (Exception e)
-	        {
-	            SxjLogger.error("查询等级错误", e, this.getClass());
-	            throw new ServiceException("查询等级错误");
-	        }		
-	}
+    public String getLevelStr(String memberNo) throws ServiceException
+    {
+        try
+        {
+            String level = imageDao.getLevelStr(memberNo);
+            return level;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询等级错误", e, this.getClass());
+            throw new ServiceException("查询等级错误");
+        }
+    }
 }

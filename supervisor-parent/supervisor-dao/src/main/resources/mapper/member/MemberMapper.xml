@@ -163,6 +163,96 @@
 			<![CDATA[ ORDER BY STATE,REG_DATE DESC]]>
 		</if>
 	</select>
+	<!-- 条件查询会员 -->
+	<select id="queryMembersWebSite" resultMap="MemberResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT *
+		 FROM M_MEMBER WHERE 1=1 AND STATE = 0 ]]>
+		<!-- 会员号 -->
+		<if test="condition.memberNo != null and condition.memberNo !=''">
+			<![CDATA[AND MEMBER_NO LIKE CONCAT('%',#{condition.memberNo},'%')]]>
+		</if>
+		<!-- 会员名称 -->
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
+		</if>
+		<!-- 联系人 -->
+		<if test="condition.contacts != null and condition.contacts != ''">
+			<![CDATA[AND CONTACTS LIKE CONCAT('%',#{condition.contacts},'%') ]]>
+		</if>
+		<!-- 联系人电话 -->
+		<if test="condition.phoneNo != null and condition.phoneNo != ''">
+			<![CDATA[AND PHONE_NO LIKE CONCAT('%',#{condition.phoneNo},'%')]]>
+		</if>
+		<!-- 地理位置 -->
+		<if test="condition.area != null and condition.area != ''">
+			<![CDATA[AND AREA LIKE CONCAT('%',#{condition.area},'%')]]>
+		</if>
+		<!-- 营业执照号码 -->
+		<if test="condition.bLicenseNo != null and condition.bLicenseNo != ''">
+			<![CDATA[AND B_LICENSE_NO LIKE CONCAT('%',#{condition.bLicenseNo},'%') ]]>
+		</if>
+		<!-- 节能标识(作为资质证书查询) -->
+		<if test="condition.energyNo != null and condition.energyNo != ''">
+			<![CDATA[AND (ENERGY_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR QUALIFICATION_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR SAFETY_LICENSES_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR QMS_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR CCC_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR PRODUCTION_LICENSE_NO LIKE CONCAT('%',#{condition.energyNo},'%') )]]>
+		</if>
+		<!-- 会员类型 -->
+		<if test="condition.type !=null">
+			<![CDATA[AND TYPE = #{condition.type}]]>
+		</if>
+		<if test="condition.typeB !=null">
+			<![CDATA[AND TYPE != #{condition.typeB}]]>
+		</if>
+		<!-- 会员状态 -->
+		<if test="condition.checkState !=null">
+			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>
+		</if>
+		<!-- 是否完善资料 -->
+		<if test="condition.flag !=null and condition.flag!=''">
+			<![CDATA[AND FLAG = #{condition.flag}]]>
+		</if>
+		<!-- 资质证书变更通知 -->
+		<if test="condition.changeImageFlag !=null and condition.changeImageFlag!=''">
+			<![CDATA[AND CHANGE_IMAGE_FLAG = #{condition.changeImageFlag}]]>
+		</if>
+		<!-- 会员注册时间段 -->
+		<if
+			test="condition.startDate != null  and condition.startDate != '' ">
+			<![CDATA[AND REG_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) ]]>
+		</if>
+		<!-- 会员注册时间段 -->
+		<if
+			test="condition.endDate != null and condition.endDate != ''">
+			<![CDATA[AND REG_DATE <= CONCAT(#{condition.endDate}," 23:59:59") ]]>
+		</if>
+		<!-- 会员认证时间段 -->
+		<if
+			test="condition.startAuthorDate != null  and condition.startAuthorDate != '' ">
+			<![CDATA[AND AUTHOR_DATE >=CONCAT(#{condition.startAuthorDate}," 00:00:00" ) ]]>
+		</if>
+		<!-- 会员认证时间段 -->
+		<if
+			test="condition.endAuthorDate != null  and condition.endAuthorDate != ''">
+			<![CDATA[AND AUTHOR_DATE <= CONCAT(#{condition.endAuthorDate}," 23:59:59") ]]>
+		</if>
+		<!-- 筛选测试账号 -->
+		<if
+			test="condition.filterStr == 1">
+			<![CDATA[AND NAME NOT IN('测试门窗厂','测试型材厂','测试玻璃厂') ]]>
+		</if>
+			
+		<if test="condition.sort !=null">
+			<![CDATA[ ORDER BY UPDATE_DATE DESC,REG_DATE ]]>
+		</if>
+		<if test="condition.sort ==null">
+			<![CDATA[ ORDER BY STATE,REG_DATE DESC]]>
+		</if>
+	</select>
 	<select id="addAccountNum" resultMap="MemberResultMap"
 		parameterType="String">
 		<![CDATA[UPDATE M_MEMBER SET ACCOUNT_NUM=(CASE WHEN ACCOUNT_NUM IS NULL THEN 0 ELSE ACCOUNT_NUM END)+1  WHERE MEMBER_NO=#{id}]]>
