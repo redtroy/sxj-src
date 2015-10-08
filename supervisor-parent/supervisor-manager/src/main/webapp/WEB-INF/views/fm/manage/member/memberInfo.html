@@ -2,10 +2,10 @@
  <style>
  .uploadnew .swfupload{left:0px}
  </style>
+  
  <script>
  $(document).ready(function() { 
-	 
-		
+	
 		$("#${member.id}_info_form").find("[type='file']").each(function(){
 			//console.log(this)
 			uploadImgSingle($(this));
@@ -100,6 +100,9 @@
 					/**弹出层滚动条
 					滚动式更新iviewer
 					 **/
+					if (hSlide!=null){
+						hSlide.destroy();
+					}
 					hSlide = new $.slide({
 						container : "#hidden",
 						imageWidth : 90,
@@ -113,12 +116,9 @@
 							}
 						},
 						onClick : function(self, li, index, i) {
-							console.log(self)
-							console.log(li)
-							console.log(index)
-							console.log(i)
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
+							alert(index)
 							if(data){
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
@@ -586,3 +586,4 @@
         </table>
         </div>
  </td>
+

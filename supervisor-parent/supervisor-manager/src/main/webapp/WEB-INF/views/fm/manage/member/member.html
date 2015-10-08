@@ -31,9 +31,10 @@
 
 <script src="${b.staticPath}js/jquery.uploadify.js"></script>
 <link href="${b.staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
-<@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.iviewer/> 
+<@b.pageScript/> <@b.dialogBox/> <@b.validate/><@b.iviewer/>
 <script>
 var oSlide,oSlide2,oSlide3,hSlide;
+//var imagecomponent=$("#imagecomponent").html();
 	jQuery(document)
 			.ready(
 					function($) {
@@ -363,7 +364,9 @@ var oSlide,oSlide2,oSlide3,hSlide;
 			$(".tableInfo").empty();
 			$("#" + lable).show();
 			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
-					  $(".foundedDate" ).datepicker();				    	
+					  $(".foundedDate" ).datepicker();
+					 // $("#imagecomponent").html(imagecomponent);
+					 // $("#imagecomponent").find("#hidden").attr("id","hidden_"+id);
 			});
 			closeLable=lable;
 		}else{
