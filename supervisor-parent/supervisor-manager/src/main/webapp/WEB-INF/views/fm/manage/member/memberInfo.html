@@ -118,7 +118,6 @@
 						onClick : function(self, li, index, i) {
 							var data = $(self.getImageLis()).find("li").eq(
 									index).find("img").attr("data");
-							alert(index)
 							if(data){
 							var imageVal = data.replace("${b.imagePath}", "");
 							getImage(imageVal);
