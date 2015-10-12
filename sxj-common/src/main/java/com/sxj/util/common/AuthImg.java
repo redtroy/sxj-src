@@ -75,14 +75,14 @@ public class AuthImg
             int rgb = getRandomIntColor();
             image.setRGB(x, y, rgb);
         }
-        g.setColor(getRandColor(random, 160, 200));// 设置线条的颜色  
         for (int i = 0; i < 20; i++)
         {
-            int x = random.nextInt(width - 1);
-            int y = random.nextInt(height - 1);
-            int xl = random.nextInt(6) + 1;
-            int yl = random.nextInt(12) + 1;
-            g.drawLine(x, y, x + xl + 40, y + yl + 20);
+            g.setColor(getRandColor(random, 0, 255));// 设置线条的颜色  
+            int x1 = random.nextInt(width);
+            int y1 = random.nextInt(height);
+            int x2 = random.nextInt(width);
+            int y2 = random.nextInt(height);
+            g.drawLine(x1, y1, x2, y2);
         }
         String str = sRand.toLowerCase();
         g.dispose();
