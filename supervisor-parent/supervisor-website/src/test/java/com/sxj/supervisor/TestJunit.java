@@ -7,7 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sxj.supervisor.service.tasks.impl.AlGatherImpl;
+import com.sxj.supervisor.service.message.IMessageConfigService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
@@ -18,7 +18,10 @@ public class TestJunit
     //    @Autowired
     //    private IWindDoorService ids;
     @Autowired
-    private AlGatherImpl al;
+    private IMessageConfigService configService;
+    
+    //    @Autowired
+    //    private AlGatherImpl al;
     
     @Test
     public void test()
@@ -44,7 +47,8 @@ public class TestJunit
             //   OutputStream docxHTML = response.getOutputStream();
             //   transformer.toHTML(docx, docxHTML);
             // System.out.println(docxHTML.toString());
-            al.gather();
+            //   al.gather();
+            configService.sendAllMessage("测试短信");
         }
         catch (Exception e)
         {
