@@ -158,16 +158,19 @@ var jump = function(currentPage){
 		$(".pageNumber").each(function(i){
 			if(i==0){
 				var totalPage=$(".pagination").attr("totalPage");
+				var currentpage=$(".pagination").attr("currentpage");
 				var pageNumber = $(this).val();
-				$(this).val(pageNumber.replace(/\D/gi, ""));
-				pageNumber=pageNumber.replace(/\D/gi, "");
 				if(pageNumber!=''){
-					if(parseInt(pageNumber)>parseInt(totalPage)){
-						//数值大于当前最大页码,返回当前最大页码
-						$(this).val(totalPage);
-						pageNumber=totalPage;
+					if(!isNaN(pageNumber)){
+						if(parseInt(pageNumber)>parseInt(totalPage)){
+							//数值大于当前最大页码,返回当前最大页码
+							$(this).val(totalPage);
+							pageNumber=totalPage;
+						}
+						query(pageNumber);
+						}else{
+						   $(this).val(currentpage);
 					}
-					query(pageNumber);
 				}
 			}
 		})
