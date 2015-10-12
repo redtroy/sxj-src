@@ -383,9 +383,9 @@ ${type[0].getName()}</span>/
 	 var obj=$("#sendms");
 	  send_flag=true;
 	  var phoneNo=$("#phoneNo").val();
+	  var img=$("#img").val();
 	  
-	  
-	  $.post("send_ms.htm",{phoneNo:phoneNo},function(data){
+	  $.post("send_ms.htm",{phoneNo:phoneNo,img:img},function(data){
 	     if(data.error){
 	    	 $("#moileMsg").show();
 			 wrong("#moileMsg");
@@ -516,7 +516,7 @@ function sendms(){
 	  if(!img){
 			$("#imgMsg").show();
 			wrong("#imgMsg");
-			$("#imgMsg").text("请输入验证码"); 
+			$("#imgMsg").text("请输入验证码");
 			return false;
 		  }
 		  if(img.toLowerCase() !=imgStr){
