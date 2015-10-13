@@ -13,6 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.supervisor.sms.ChannelManager;
+import com.supervisor.sms.SendStatus;
+import com.supervisor.sms.Sender;
+import com.supervisor.sms.impl.c123.C123Sender;
+import com.supervisor.sms.impl.xinxi1.Xinxi1Sender;
 import com.sxj.ca.store.CaTool;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.util.Identities;
@@ -44,7 +49,6 @@ import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
-import com.sxj.util.message.NewSendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -741,8 +745,22 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             message = Identities.randomNumber(6);
-            NewSendMessage.getInstance(smsUrl, userName, password, sign, type)
-                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
+            ChannelManager manager = ChannelManager.getInstance("classpath:/sms.properties");
+            Sender sender = manager.getSender(Xinxi1Sender.class.getName());
+            SendStatus status = sender.send(phoneNo, message
+                    + "(平台注册验证码，10分钟有效)");
+            System.out.println("Xinxi1Sender发送结果:" + status + "  短线内容:"
+                    + message + "(平台注册验证码，10分钟有效)");
+            if (!status.getStatus().equals("0"))
+            {
+                sender = manager.getSender(C123Sender.class.getName());
+                status = sender.send(phoneNo, message + "(平台注册验证码，10分钟有效)");
+                System.out.println("C123Sender发送结果:" + status + "  短线内容:"
+                        + message + "(平台注册验证码，10分钟有效)");
+            }
+            
+            /*NewSendMessage.getInstance(smsUrl, userName, password, sign, type)
+                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");*/
             //            NewNewSendMessage.getInstance(serviceURL, sn, pwd)
             //                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
         }
