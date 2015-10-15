@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.supervisor.sms.ChannelManager;
+import com.supervisor.sms.SendStatus;
+import com.supervisor.sms.Sender;
+import com.supervisor.sms.impl.c123.C123Sender;
+import com.supervisor.sms.impl.xinxi1.Xinxi1Sender;
 import com.sxj.supervisor.dao.message.IMessageConfigDao;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.message.MessageTypeEnum;
@@ -16,7 +21,6 @@ import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.message.NewSendMessage;
-import com.sxj.util.message.SendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -183,6 +187,20 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             {
                 if (config.getIsAccetp())
                 {
+                    ChannelManager manager = ChannelManager.getInstance("classpath:config/sms.properties");
+                    Sender sender = manager.getSender(Xinxi1Sender.class.getName());
+                    SendStatus status = sender.send(config.getPhone(), message
+                            + "，请登录私享家绿色门窗平台查看详情！");
+                    System.out.println("Xinxi1Sender发送结果:" + status + "  短线内容:"
+                            + message + "，请登录私享家绿色门窗平台查看详情！");
+                    if (status.getStatus().equals(""))
+                    {
+                        sender = manager.getSender(C123Sender.class.getName());
+                        status = sender.send(config.getPhone(), message
+                                + "，请登录私享家绿色门窗平台查看详情！");
+                        System.out.println("C123Sender发送结果:" + status
+                                + "  短线内容:" + message + "，请登录私享家绿色门窗平台查看详情！");
+                    }
                     //                    NewSendMessage.getInstance(smsUrl,
                     //                            userName,
                     //                            password,
@@ -192,13 +210,13 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                     //                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
                     //                            .sendMessage(config.getPhone(),
                     //                                    message + "，请登录私享家绿色门窗平台查看详情！");
-                    SendMessage.getInstance(sOpenUrl,
+                    /*SendMessage.getInstance(sOpenUrl,
                             sDataUrl,
                             account,
                             authkey,
                             cgid,
                             csid).sendMessage(config.getPhone(),
-                            message + "，请登录私享家绿色门窗平台查看详情！");
+                            message + "，请登录私享家绿色门窗平台查看详情！");*/
                     //                    NewSendMessage.getInstance(smsUrl,
                     //                            userName,
                     //                            password,
@@ -208,12 +226,12 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                     //                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
                     //                            .sendMessage(config.getPhone(),
                     //                                    message + "，请登录私享家绿色门窗平台查看详情！");
-                    NewSendMessage.getInstance(smsUrl,
-                            userName,
-                            password,
-                            sign,
-                            type).sendMessage(config.getPhone(),
-                            message + "，请登录私享家绿色门窗平台查看详情！");
+                    /* NewSendMessage.getInstance(smsUrl,
+                             userName,
+                             password,
+                             sign,
+                             type).sendMessage(config.getPhone(),
+                             message + "，请登录私享家绿色门窗平台查看详情！");*/
                     //                    NewNewSendMessage.getInstance(serviceURL, sn, pwd)
                     //                            .sendMessage(config.getPhone(),
                     //                                    message + "，请登录私享家绿色门窗平台查看详情！");

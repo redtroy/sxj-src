@@ -398,7 +398,7 @@ public class MemberController extends BaseController
      */
     @RequestMapping("send_ms")
     public @ResponseBody Map<String, String> send_ms(HttpSession session,
-            String phoneNo) throws WebException
+            String phoneNo, String img) throws WebException
     {
         
         Map<String, String> map = new HashMap<String, String>();
@@ -408,6 +408,20 @@ public class MemberController extends BaseController
             {
                 map.put("error", "手机号不能为空");
                 return map;
+            }
+            String res = session.getAttribute("imgStr").toString();
+            if (res == null || "".equals(res) || "".equals(img))
+            {
+                map.put("error", "请输入图形验证码");
+                return map;
+            }
+            else
+            {
+                if (!res.equalsIgnoreCase(img))
+                {
+                    map.put("error", "图形验证码错误");
+                    return map;
+                }
             }
             phoneNo = phoneNo.trim();
             RAtomicLong num = redisConcurrent.getAtomicLong("num_" + phoneNo,
@@ -420,11 +434,18 @@ public class MemberController extends BaseController
                 {
                     String message = "";
                     message = memberService.createvalidata(phoneNo, message);
-                    HierarchicalCacheManager.set(CacheLevel.REDIS,
-                            "checkMs",
-                            phoneNo + "_checkMs",
-                            message,
-                            600);
+                    if (message.equals("-9999"))
+                    {
+                        map.put("error", "该号码已被拉入黑名单");
+                    }
+                    else
+                    {
+                        HierarchicalCacheManager.set(CacheLevel.REDIS,
+                                "checkMs",
+                                phoneNo + "_checkMs",
+                                message,
+                                600);
+                    }
                 }
                 else
                 {
