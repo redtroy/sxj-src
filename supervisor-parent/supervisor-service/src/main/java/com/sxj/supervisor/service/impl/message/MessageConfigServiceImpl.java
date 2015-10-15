@@ -187,7 +187,7 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             {
                 if (config.getIsAccetp())
                 {
-                    ChannelManager manager = ChannelManager.getInstance("classpath:/sms.properties");
+                    ChannelManager manager = ChannelManager.getInstance("classpath:config/sms.properties");
                     Sender sender = manager.getSender(Xinxi1Sender.class.getName());
                     SendStatus status = sender.send(config.getPhone(), message
                             + "，请登录私享家绿色门窗平台查看详情！");

@@ -745,7 +745,7 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             message = Identities.randomNumber(6);
-            ChannelManager manager = ChannelManager.getInstance("classpath:/sms.properties");
+            ChannelManager manager = ChannelManager.getInstance("classpath:config/sms.properties");
             Sender sender = manager.getSender(Xinxi1Sender.class.getName());
             SendStatus status = sender.send(phoneNo, message
                     + "(平台注册验证码，10分钟有效)");
@@ -763,9 +763,14 @@ public class MemberServiceImpl implements IMemberService
                     .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");*/
             //            NewNewSendMessage.getInstance(serviceURL, sn, pwd)
             //                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
+            if (status.getStatus().equals("ERROR"))
+            {
+                return status.getMessageId();
+            }
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             SxjLogger.error("发送验证码错误", e, this.getClass());
             throw new ServiceException("发送验证码错误", e);
         }
