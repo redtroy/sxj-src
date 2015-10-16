@@ -3,10 +3,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" name="renderer" content="webkit"/>
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。"/>
 <link href="${b.staticPath}style/regin.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/jquery.placeholder.js"></script>
 <script>
 (function() {
 	XMLHttpRequest.prototype._send = XMLHttpRequest.prototype.send;
@@ -26,6 +27,7 @@ $(function(){
 	if("${pmessage}"!=""){
 		$("#pmessage_div").show();
 	}
+	$('input').placeholder();
 });
 $(document).keyup(function(event){
 	  if(event.keyCode ==13){
@@ -42,6 +44,9 @@ function login()
 	
 }
 </script>
+<style>
+.placeholder { color: #aaa; }
+</style>
 </head>
 <body id="signBox">
 <div id="header">
@@ -69,7 +74,7 @@ function login()
   </div>
 <div class="item">
   <label>登录密码</label>
-  <input id="password_input" class="input input-error input-w240h36" type="password" name="password" autocomplete="off" placeholder=""  value=""/>
+  <input id="password_input" class="input input-error input-w240h36" type="password" name="password" autocomplete="off" placeholder="请输入密码"  value=""/>
    <div id="message_div" style="display:none;" class="tip msg-error f12">${message}</div>
     <div id="amessage_div" class="tip msg-error f12" style="display:none;">${amessage}</div>
   <div id="pmessage_div" class="tip msg-error f12" style="display:none;">${pmessage}</div>
