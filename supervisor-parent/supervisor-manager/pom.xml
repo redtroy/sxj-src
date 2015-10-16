@@ -232,6 +232,10 @@
 					<groupId>org.apache.poi</groupId>
 					<artifactId>poi-ooxml</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -239,7 +243,7 @@
 			<artifactId>jxls-jexcel</artifactId>
 			<version>1.0.3</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
@@ -269,7 +273,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
- 					    <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>  
+					<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
 				</configuration>
 			</plugin>
 		</plugins>
