@@ -20,7 +20,6 @@ import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
-import com.sxj.util.message.NewSendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -285,13 +284,29 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                 //                        csid)
                 //                        .sendMessage(phones.toArray(new String[phones.size()]),
                 //                                message + "，请登录私享家绿色门窗平台查看详情！");
-                NewSendMessage.getInstance(smsUrl,
+                ChannelManager manager = ChannelManager.getInstance("classpath:config/sms.properties");
+                Sender sender = manager.getSender(Xinxi1Sender.class.getName());
+                SendStatus status = sender.sendBatch(phones.toArray(new String[phones.size()]),
+                        message + "，请登录私享家绿色门窗平台查看详情！",
+                        false);
+                System.out.println("Xinxi1Sender发送结果:" + status + "  短线内容:"
+                        + message + "，请登录私享家绿色门窗平台查看详情！");
+                if (status.getStatus().equals(""))
+                {
+                    sender = manager.getSender(C123Sender.class.getName());
+                    status = sender.sendBatch(phones.toArray(new String[phones.size()]),
+                            message + "，请登录私享家绿色门窗平台查看详情！",
+                            false);
+                    System.out.println("C123Sender发送结果:" + status + "  短线内容:"
+                            + message + "，请登录私享家绿色门窗平台查看详情！");
+                }
+                /*NewSendMessage.getInstance(smsUrl,
                         userName,
                         password,
                         sign,
                         type)
                         .sendMessage(phones.toArray(new String[phones.size()]),
-                                message + "，请登录私享家绿色门窗平台查看详情！");
+                                message + "，请登录私享家绿色门窗平台查看详情！");*/
             }
         }
         catch (Exception e)
