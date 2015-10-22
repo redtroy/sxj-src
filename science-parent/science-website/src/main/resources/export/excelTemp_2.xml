@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet>
+		<loop startRow="0" endRow="40" items="docList" var="doc"
+			varType="com.sxj.science.model.DocModel">
+			<section startRow="0" endRow="1"></section>
+			<loop startRow="2" endRow="2" items="doc.scienceList" var="science"
+				varType="com.sxj.science.entity.export.ScienceEntity">
+				<section startRow="2" endRow="2">
+					<mapping row="2" col="12">science.used</mapping>
+					<mapping row="2" col="13">science.name</mapping>
+					<mapping row="2" col="14">science.type</mapping>
+					<mapping row="2" col="15">science.length</mapping>
+					<mapping row="2" col="16">science.quantity</mapping>
+					<mapping row="2" col="17">science.remark</mapping>
+				</section>
+				<loopbreakcondition>
+					<rowcheck offset="0">
+						<cellcheck offset="5">图号：</cellcheck>
+					</rowcheck>
+				</loopbreakcondition>
+			</loop>
+			<section startRow="3" endRow="4" />
+			<loopbreakcondition>
+				<rowcheck offset="0" />
+				<rowcheck offset="1" />
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

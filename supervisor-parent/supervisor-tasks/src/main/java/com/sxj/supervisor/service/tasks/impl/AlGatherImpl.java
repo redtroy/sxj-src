@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,7 @@ public class AlGatherImpl implements IAlGather
                     alEntity.setMax(map.get("max"));
                     alEntity.setMin(map.get("min"));
                     alEntity.setAverage(map.get("average"));
+                    alEntity.setGatherDate(new Date());
                     ad.addAl(alEntity);
                     newDate = map.get("date");
                 }

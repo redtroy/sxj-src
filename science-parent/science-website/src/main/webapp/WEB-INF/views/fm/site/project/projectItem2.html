@@ -1,0 +1,79 @@
+<tr><td colspan="5"  id="item_${projectId}">
+     <form id="form_${projectId}" action="javascript:void(0);">
+        <div class="item">
+            <ul> 
+            	<li>
+                <button href="#delxls" data-toggle="modal" class="button button-croci" onclick="removeItem('${projectId}');">删除下料单文件</button>
+                </li>
+                <div id="delxls" class="modal in" style="display: none;"> <a data-dismiss="modal" class="close">×</a>
+			        <h1>删除下料单文件</h1>
+			        <p>您确定删除选中的下料单文件？</p>
+			<div class="choose">
+			<ul>
+			<li><button data-dismiss="modal" class=" button button-orange">确定</button></li>
+			<li><button data-dismiss="modal" class=" button button-green">取消</button></li>
+			</ul>
+			</div>
+     		 </div>
+              <li>
+                <button data-toggle="modal" class="button button-croci" onclick="openDiv('downxls_${projectId}');">下载下料单文件</button>
+                </li>
+              <li style="margin-left:420px;">
+                <button href="#prereport" data-toggle="modal" class="button button-croci"><strong>查看统计报表</strong></button>
+                </li>
+                <li>
+                <button data-toggle="modal" class="button button-croci" onclick="getScienceItems('${projectId}');"><strong>下料优化</strong></button>
+                </li>
+            </ul>
+            <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
+            <colgroup><col width="55%">
+            <col width="10%">
+            <col width="25%">
+            </colgroup><tbody><tr>
+              <th>上传文件名</th>
+              <th>下料单数</th>
+              <th>上传时间</th>
+            </tr>
+          </tbody>
+          </table>
+          <#list projectItems as projectItem>
+           <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
+            <colgroup><col width="55%">
+            <col width="10%">
+            <col width="25%">
+            </colgroup><tbody><tr>
+              <td class="sheetliststart">
+              <input id="${projectItem.id}" parentId="0" childrensize=${projectItem.itemList?size} type="checkbox" name="projectItemId" value="${projectItem.id}">${projectItem.fileName}
+              </td>
+              <td>${projectItem.count}</td>
+              <td>${projectItem.uploadTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+            </tr>
+            <#list projectItem.itemList as item>
+             <tr id="children_td_${projectItem.id}">
+              <td class="sheetlist">
+              <input parentId="${projectItem.id}" count=${item_index} type="checkbox" name="itemId" value="${item.id}">${item.name}
+              </td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            </#list>
+          </tbody>
+          </table>
+          </#list>
+        </div>
+        </form>
+        <div id="downxls_${projectId}" class="modal in"  aria-hidden="false" style="display: none;">
+			<a data-dismiss="modal" class="close"  onclick="closeDiv();">×</a>
+	        <h1>下载下料单文件</h1>
+			        <p>您确定下载选中的下料单文件？</p>
+			<div class="choose">
+			<ul>
+			<li><button data-dismiss="modal" class=" button button-orange" onclick="downItem('${projectId}');">确定</button></li>
+			<li><button data-dismiss="modal" class=" button button-green"  onclick="closeDiv();">取消</button></li>
+			</ul>
+			</div>
+		</div>
+        </td>
+      </tr>
+
+      
