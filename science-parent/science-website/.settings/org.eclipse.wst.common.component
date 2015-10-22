@@ -16,19 +16,7 @@
         <dependent-module archiveName="sxj-common-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sxj-common/sxj-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="mybatis-pagination-3.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-pagination/mybatis-pagination">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="mybatis-dialect-3.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-dialect/mybatis-dialect">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="science-dao-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/science-dao/science-dao">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="mybatis-orm-3.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-orm/mybatis-orm">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="mybatis-shard-3.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/mybatis-shard/mybatis-shard">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="shiro-freemarker-tags-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/shiro-freemarker-tags/shiro-freemarker-tags">
