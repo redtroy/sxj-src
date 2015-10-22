@@ -570,8 +570,8 @@ function busunSeav(){
 						<tr>
 							<th>备案号</th>
 							<th>合同号</th>
-							<th>甲方</th>
-							<th>乙方</th>
+							<th>需方</th>
+							<th>供方</th>
 							<th>备案<br /> 类型
 							</th>
 							<th>合同<br /> 类型
@@ -610,8 +610,8 @@ function busunSeav(){
 								class="state normal">受理中</span> </#if> <#if
 								record.confirmState.getId() ==1> <span class="state frozen">未确认</span>
 								</#if> <#if record.confirmState.getId() ==2> <span
-								class="state process">甲方已确认</span> </#if> <#if
-								record.confirmState.getId() ==3> <span class="state process">乙方已确认</span>
+								class="state process">需方已确认</span> </#if> <#if
+								record.confirmState.getId() ==3> <span class="state process">供方已确认</span>
 								</#if> <#if record.confirmState.getId() ==4> <span
 								class="state verified">已备案</span> </#if>
 							</td>

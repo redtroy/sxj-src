@@ -81,6 +81,7 @@
 		$(".tamount").html(amount.toFixed(2)+"元");
 	});
 	</script>
+	<#setting number_format="0.00">
 		<div class="contInfo tl">
 		<ul class="tabMenu tabs">
               <li class="current">合同信息</li>
@@ -99,10 +100,10 @@
                       <label>工程地点</label>
                      ${contractModel.contract.engAddress} </div>
                     <div class="item">
-                      <label>甲方</label>
+                      <label>需方</label>
                       ${contractModel.contract.memberNameA}</div>
                     <div class="item">
-                      <label>乙方</label>
+                      <label>供方</label>
                       ${contractModel.contract.memberNameB}</div>
                     <div class="item">
                       <label>签订地点</label>
@@ -133,8 +134,8 @@
                          <td>${item.productName}</td>
 			              <td>${item.windowType}</td>
 			              <td class="quantity">${item.quantity}</td>
-			              <td class="price">${item.price?string('0.00')}</td>
-			              <td class="amount">${item.amount?string('0.00')}</td>
+			              <td class="price">${item.price}</td>
+			              <td class="amount">${item.amount}</td>
 			              <td>${item.remarks}</td>
                       </tr>
                        </#list>
@@ -147,7 +148,7 @@
                         <#if contractModel.contract.imgPath!=null>
                         <td class="tl">
                         <#assign arr=(contractModel.contract.imgPath?split(","))>
-                 		本合同附件清单共${arr?size}页</td>
+                 		本合同附件清单共${(arr?size)?string("0")}页</td>
                  		<#else>
                  		<td class="tl">
                  		本合同附件清单共0页</td>

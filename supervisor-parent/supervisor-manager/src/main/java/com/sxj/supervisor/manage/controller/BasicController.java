@@ -1,6 +1,8 @@
 package com.sxj.supervisor.manage.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hwpf.usermodel.PictureType;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -44,10 +47,14 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.baidu.ueditor.ActionEnter;
 import com.baidu.ueditor.FileEntity;
+import com.sxj.poi.transformer.AbstractPictureExactor;
+import com.sxj.poi.transformer.WordTransformer;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.spring.modules.util.ClassLoaderUtil;
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
+import com.sxj.supervisor.entity.member.CertificateEntity;
+import com.sxj.supervisor.entity.member.LevelEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.rfid.base.RfidSupplierEntity;
 import com.sxj.supervisor.entity.system.FunctionEntity;
@@ -60,6 +67,7 @@ import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.rfid.base.RfidSupplierQuery;
 import com.sxj.supervisor.model.system.FunctionModel;
 import com.sxj.supervisor.service.developers.IDevelopersService;
+import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.rfid.base.IRfidSupplierService;
 import com.sxj.supervisor.service.system.IFunctionService;
@@ -105,15 +113,18 @@ public class BasicController extends BaseController
     @Autowired
     private IDevelopersService developerService;
     
-    //    @PostConstruct
-    //    public void init()
-    //    {
-    //        CometEngine engine = CometContext.getInstance().getEngine();
-    //        // 启动 Comet Server Thread
-    //        MessageThread cometServer = MessageThread.newInstance(engine);
-    //        RTopic<String> topic1 = topics.getTopic("topic1");
-    //        topic1.addListener(new CometMessageListener(cometServer));
-    //    }
+    @Autowired
+    private IMemberImageService memberImageService;
+    
+    // @PostConstruct
+    // public void init()
+    // {
+    // CometEngine engine = CometContext.getInstance().getEngine();
+    // // 启动 Comet Server Thread
+    // MessageThread cometServer = MessageThread.newInstance(engine);
+    // RTopic<String> topic1 = topics.getTopic("topic1");
+    // topic1.addListener(new CometMessageListener(cometServer));
+    // }
     
     @RequestMapping("notifyComet")
     public @ResponseBody void notifyComet(String channelName)
@@ -129,9 +140,10 @@ public class BasicController extends BaseController
         {
             request.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "text/html");
-            InputStream stream = ClassLoaderUtil.getResource("config/config.json");
             
-            //String rootPath = request.getRealPath("/");
+            InputStream stream = ClassLoaderUtil.getResourceAsStream("config/config.json");
+            
+            // String rootPath = request.getRealPath("/");
             if (request instanceof DefaultMultipartHttpServletRequest)
             {
                 DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
@@ -420,10 +432,14 @@ public class BasicController extends BaseController
                         myfile.getBytes().length,
                         extName);
                 //转HTML
-                byte[] html = convert2Html(myfile.getInputStream()).getBytes();
+                WordTransformer transformer = new WordTransformer();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                transformer.setPictureExactor(new LocalPictureExactor(
+                        "storage.menchuang.org.cn", "http"));
+                transformer.toHTML(myfile.getInputStream(), bos);
                 String filePath = storageClientService.uploadFile(null,
-                        new ByteArrayInputStream(html),
-                        html.length,
+                        new ByteArrayInputStream(bos.toString().getBytes()),
+                        bos.toByteArray().length,
                         "JPG");
                 SxjLogger.info("siteUploadFilePath=" + filePath,
                         this.getClass());
@@ -448,6 +464,7 @@ public class BasicController extends BaseController
     
     /**
      * 下载文件
+     * 
      * @param request
      * @param response
      * @param filePath
@@ -480,6 +497,7 @@ public class BasicController extends BaseController
     
     /**
      * 下载附件
+     * 
      * @param request
      * @param response
      * @param filePath
@@ -517,12 +535,12 @@ public class BasicController extends BaseController
     private String stringDate()
     {
         Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);//获取年份         
-        int month = cal.get(Calendar.MONTH);//获取月份         
-        int day = cal.get(Calendar.DATE);//获取日         
-        int hour = cal.get(Calendar.HOUR);//小时          
-        int minute = cal.get(Calendar.MINUTE);//分                     
-        int second = cal.get(Calendar.SECOND);//秒     
+        int year = cal.get(Calendar.YEAR);// 获取年份         
+        int month = cal.get(Calendar.MONTH);// 获取月份        
+        int day = cal.get(Calendar.DATE);// 获取日        
+        int hour = cal.get(Calendar.HOUR);// 小时         
+        int minute = cal.get(Calendar.MINUTE);// 分                    
+        int second = cal.get(Calendar.SECOND);// 秒    
         String date = year + "" + month + "" + day + "" + hour + "" + minute
                 + "" + second;
         
@@ -842,6 +860,58 @@ public class BasicController extends BaseController
         return null;
     }
     
+    /**
+     * 会员联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCompleMember")
+    public @ResponseBody Map<String, String> autoCompleMember(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword, Integer memberType) throws IOException
+    {
+        MemberQuery mq = new MemberQuery();
+        if (keyword != "" && keyword != null)
+        {
+            mq.setMemberName(keyword);
+        }
+        
+        //mq.setMemberTypeB(0);
+        List<MemberEntity> list = memberService.queryMembers(mq);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (MemberEntity memberEntity : list)
+        {
+            String contacts = memberEntity.getContacts();
+            String telNum = memberEntity.getTelNum();
+            if (StringUtils.isEmpty(contacts))
+            {
+                contacts = "";
+            }
+            if (StringUtils.isEmpty(telNum))
+            {
+                telNum = "";
+            }
+            sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+                    + memberEntity.getMemberNo() + "\",\"contacts\":\""
+                    + contacts + "\",\"telNum\":\"" + telNum
+                    + "\",\"memberType\":\"" + memberEntity.getType().getId()
+                    + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
     public static void main(String... args)
     {
         try
@@ -881,6 +951,7 @@ public class BasicController extends BaseController
                 || channelName.contains(MessageChannel.WEBSITE_PAY_MESSAGE)
                 || channelName.contains(MessageChannel.WEBSITE_FINANCE_MESSAGE)
                 || channelName.equals(MessageChannel.MEMBER_MESSAGE)
+                || channelName.equals(MessageChannel.MEMBER_IMAGECHANGE_MESSAGE)
                 || channelName.equals(MessageChannel.MEMBER_PERFECT_MESSAGE))
         {
             Long count = CometServiceImpl.getCount(channelName);
@@ -908,4 +979,130 @@ public class BasicController extends BaseController
         return null;
     }
     
+    /**
+     * 证书联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCertificate")
+    public @ResponseBody Map<String, String> autoCertificate(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        List<CertificateEntity> list = memberImageService.getCertificate(keyword);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (CertificateEntity certificate : list)
+        {
+            sb = "{\"title\":\"" + certificate.getCertificateName()
+                    + "\",\"result\":\"" + certificate.getId() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 等级联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoLevel")
+    public @ResponseBody Map<String, String> autoLevel(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        List<LevelEntity> list = memberImageService.getLevel(keyword);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (LevelEntity level : list)
+        {
+            sb = "{\"title\":\"" + level.getLevelName() + "\",\"result\":\""
+                    + level.getId() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+    * WORD图片上传存放
+    */
+    class LocalPictureExactor extends AbstractPictureExactor
+    {
+        private String path;
+        
+        private String scheme;
+        
+        public LocalPictureExactor(String path, String scheme)
+        {
+            super();
+            this.path = path;
+            this.scheme = scheme;
+        }
+        
+        public String save(byte[] content, PictureType pictureType,
+                String suggestedName, float widthInches, float heightInches)
+        {
+            try
+            {
+                //                FileOutputStream fos = new FileOutputStream(new File(path
+                //                        + File.separator + suggestedName));
+                //                fos.write(content);
+                //                fos.close();
+                DataInputStream in = new DataInputStream(
+                        new ByteArrayInputStream(content));
+                String gifPath = storageClientService.uploadFile(null,
+                        in,
+                        in.available(),
+                        "gif".toUpperCase());
+                in.close();
+                return gifPath;/* 网络资源截取并存储本地成功返回true */
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        
+        public String getPath()
+        {
+            return path;
+        }
+        
+        public void setPath(String path)
+        {
+            this.path = path;
+        }
+        
+        public String getScheme()
+        {
+            return scheme;
+        }
+        
+        public void setScheme(String scheme)
+        {
+            this.scheme = scheme;
+        }
+        
+    }
 }

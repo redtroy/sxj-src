@@ -64,7 +64,6 @@ import com.sxj.supervisor.enu.rfid.logistics.LabelStateEnum;
 import com.sxj.supervisor.enu.rfid.ref.AssociationTypesEnum;
 import com.sxj.supervisor.enu.rfid.ref.AuditStateEnum;
 import com.sxj.supervisor.enu.rfid.window.LabelProgressEnum;
-import com.sxj.supervisor.enu.rfid.window.WindowTypeEnum;
 import com.sxj.supervisor.enu.rfid.windowref.LinkStateEnum;
 import com.sxj.supervisor.model.contract.BatchItemModel;
 import com.sxj.supervisor.model.contract.ContractBatchModel;
@@ -78,6 +77,7 @@ import com.sxj.supervisor.model.rfid.RfidLog;
 import com.sxj.supervisor.model.rfid.logistics.LogisticsRfidQuery;
 import com.sxj.supervisor.model.rfid.ref.LogisticsRefQuery;
 import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
+import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
@@ -163,6 +163,12 @@ public class ContractServiceImpl implements IContractService
      */
     @Autowired
     private IRecordDao recordDao;
+    
+    /**
+     * 支付service
+     */
+    @Autowired
+    private IContractPayService payService;
     
     /**
      * 备案service
@@ -357,6 +363,8 @@ public class ContractServiceImpl implements IContractService
                 }
                 contract.getContract().setItemQuantity(itemQuantity);
                 contractDao.updateContract(contract.getContract());
+                //同步修改支付单金额
+                payService.updatePayAmountByContractNo(contract.getContract());
             }
             
             // 批次
@@ -797,10 +805,13 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            ContractEntity ce = new ContractEntity();
+            ContractEntity ce = contractDao.getContract(id);
             ce.setId(id);
             ce.setDeleteState(true);
             contractDao.updateContract(ce);
+            //回滚备案
+            String[] recordNo=ce.getRecordNo().split(",");
+            recordDao.updateContractByRecordNo(recordNo);
         }
         catch (Exception e)
         {

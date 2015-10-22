@@ -205,7 +205,7 @@ jQuery(document).ready(function($) {
             <option value="M_1">融资受理中</option>
             <option value="M_3">融资已放款</option>
             <option value="M_2">融资已搁置</option>
-            <option value="S_1">乙方确认中</option>
+            <option value="S_1">供方确认中</option>
             <option value="S_2">已完成支付</option>
           </select>
    <#else>
@@ -260,8 +260,8 @@ jQuery(document).ready(function($) {
       <td>${model.content}</td>
       <#if (model.state.ordinal()==0 && model.payMode.ordinal()==0)>
           <#if (state=="a")>
-           <td><button class="button button-orange btn-pay mr10" pay_id="pay_info_${model.id}">支付</button>
-           <button class="button button-orange" onclick="to_finance('${model.id}');">融资</button>
+           <td><span class="state paying btn-pay" pay_id="pay_info_${model.id}">支付</span>
+           <span class="state paying" onclick="to_finance('${model.id}');">融资</span>
            <div class="modal-wrap payPop" style="display:none;" id="pay_info_${model.id}">
               <div class="modal-body">
                 <div class="ly-clearFix">
@@ -336,7 +336,7 @@ jQuery(document).ready(function($) {
             </#if>
           <#elseif (model.state.ordinal()==1)> 
              <#if (state=="a")>
-               <td><span class="state normal">乙方确认中</span></td>
+               <td><span class="state normal">供方确认中</span></td>
             <#else>
                <td><button class="button button-red btn-pay" pay_id="pay_info_${model.id}" >确认收款</button>
                <div style="display:none;" class="modal-wrap payPop" id="pay_info_${model.id}">

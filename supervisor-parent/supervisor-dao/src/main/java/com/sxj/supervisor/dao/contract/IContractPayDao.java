@@ -1,5 +1,6 @@
 package com.sxj.supervisor.dao.contract;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -7,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -76,4 +78,10 @@ public interface IContractPayDao {
 	 * 根据payNo查询实体
 	 */
 	public PayRecordEntity getEntityByPayNo(String payNo);
+	/**
+	 * 更新支付单金额
+	 * @param contract
+	 * @throws SQLException
+	 */
+	public void updatePayAmountByContractNo(ContractEntity contract)throws SQLException;
 }

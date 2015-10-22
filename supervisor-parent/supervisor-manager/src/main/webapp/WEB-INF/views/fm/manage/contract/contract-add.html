@@ -225,6 +225,7 @@ var ul_validform;
 </head>
 <body>
 	<@b.header/>
+	<#setting number_format="0.00">
 	<div id="main" class="fence-wide">
 		<!-- InstanceBeginEditable name="local" -->
 		<!-- InstanceEndEditable -->
@@ -242,11 +243,11 @@ var ul_validform;
 							<li><label>工程名称</label><input type="text" value="" name="contract.engName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入工程名称！" /></li>
 							<li><label>工程地址</label><input type="text" value=""
 								name="contract.engAddress" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入工程地址！"/></li>
-							<li><label>甲方</label><span class="jquery-live-search-example"><input type="text" readonly="readonly" value="${record.memberNameA}" id="memberNameA"
+							<li><label>需方</label><span class="jquery-live-search-example"><input type="text" readonly="readonly" value="${record.memberNameA}" id="memberNameA"
 								class="batch-text" name="contract.memberNameA" /></span>
 								<input type="hidden" value="${record.memberIdA}" id="memberIdA" class="batch-text" name="contract.memberIdA" />
 								</li>
-							<li><label>乙方</label><span class="jquery-live-search-example"><input type="text"  readonly="readonly" value="${record.memberNameB}" id="memberNameB"
+							<li><label>供方</label><span class="jquery-live-search-example"><input type="text"  readonly="readonly" value="${record.memberNameB}" id="memberNameB"
 								class="batch-text" name="contract.memberNameB" /></span>
 								<input type="hidden" value="${record.memberIdB}" id="memberIdB" class="batch-text" name="contract.memberIdB" />
 								</li>
@@ -271,8 +272,8 @@ var ul_validform;
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
-								<th>数量（<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if>）</th>
-								<th>单价（<span class="money">&yen;</span>／<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if>）
+								<th>数量（<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>kg</#if>）</th>
+								<th>单价（<span class="money">&yen;</span>／<#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>kg</#if>）
 								</th>
 								<th>金额（<span class="money">&yen;</span>）</th>
 								<th>备注说明</th>
@@ -293,7 +294,7 @@ var ul_validform;
 							<tr id="total_tr">
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td><span id="quantitySum">0</span><#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>吨</#if></td>
+								<td><span id="quantitySum">0</span><#if record.contractType.getId()==1>㎡</#if><#if record.contractType.getId()==2>/kg</#if></td>
 								<td>&nbsp;</td>
 								<td><span id="amountSum">0</span>元</td>
 								<td>&nbsp;</td>

@@ -531,6 +531,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                 //                if (file.indexOf("GB2312") > 0 || file.indexOf("gb2312") > 0)
                 //                    file = new String(output.toByteArray(), "GB2312");
                 Document doc = Jsoup.parse(file);
+                doc.select("body").removeClass("b2");
                 /*String img = doc.getElementById("ZBGGDetail1_divDS")
                         .getElementsByTag("img")
                         .attr("src");
@@ -601,7 +602,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             for (int iii = 0; iii < bathList.size(); iii++)
             {
                 //发短信
-                //                configService.sendAllMessage("您有一条新的开发商招标信息");
+                configService.sendAllMessage("您有一条新的开发商招标信息");
                 CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
                         bathList.get(iii).getId());
             }

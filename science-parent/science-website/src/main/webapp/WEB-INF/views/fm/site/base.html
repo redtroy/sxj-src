@@ -1,0 +1,651 @@
+﻿<#assign staticPath="http://static.menchuang.org.cn/science-website/"/>
+<#assign imagePath="http://storage.menchuang.org.cn/" />
+<#global csrf=JspTaglibs["/WEB-INF/tld/csrfguard.tld"]>
+<#macro validate>
+<!--<script src="${staticPath}js/jquery.validate.js"></script>-->
+<script src="${staticPath}js/Validform_v5.3.2.js"></script>
+<script src="${staticPath}js/jquery.poshytip.min.js"></script>
+<script>
+$(function(){
+	$(":input").each(function(){
+		if($(this).attr("title"))
+			$(this).poshytip({
+		className: 'tipMsg msg-gray ml5',
+		showOn: 'focus',
+		alignTo: 'target',
+		alignX: 'right',
+		alignY: 'inner-top',
+		offsetX: 5
+	});
+	
+	});
+});
+</script>
+</#macro>
+<#macro errorInfo>
+<script>
+
+</script>
+
+</#macro>
+<#macro dialogBox>
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
+<div id="diglog_div" style="display: none;">
+		<div id="delxls" class="modal delxls in" style="display: block;" aria-hidden="false">
+		<a data-dismiss="modal" class="close" id="dialog_close_span">×</a>
+		        <h1>确认提示框</h1>
+		        <p id="dialog_message">您确定删除选中的下料单文件？</p>
+		<div class="choose choose_two">
+		<ul>
+		<li><button id="dialog_confirm_click" data-dismiss="modal" class=" button button-orange">确定</button></li>
+		<li><button id="dialog_close_button"  data-dismiss="modal" class=" button button-green">取消</button></li>
+		</ul>
+		</div>
+      </div>
+
+<!-- 	<div class="modal-wrap popDemo popWin mb20" style="width: 400px"> -->
+<!-- 		<div class="modal-header"> -->
+<!-- 			<div class="tit">&nbsp;</div> -->
+<!-- 			<span id="dialog_close_span" class="close">关闭</span> -->
+<!-- 		</div> -->
+<!-- 		<div class="modal-body"> -->
+<!-- 			<p class=" fontYH f18" style="margin-left: 20%;" id="dialog_message">是否确认更改！</p> -->
+<!-- 			<div class="button-box"> -->
+<!-- 				<button id="dialog_confirm_click" -->
+<!-- 					class="button button-pop btn-ok mr20">确认</button> -->
+<!-- 				<button id="dialog_close_button" class="button button-gray">取消</button> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+</div>
+
+<div id="error_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px;z-index: 99999">
+		<div class="modal-header">
+			<div class="tit"></div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-error"></span>
+				<p class="color-red fontYH f18" id="message_error">错误提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div> 
+</div>
+
+<div id="succ_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px;z-index: 99999">
+		<div class="modal-header">
+			<div class="tit"></div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="message_succ_div" class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-suc"></span>
+				<p class="color-green  fontYH f18" id="message_succ">成功提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="message_info_div" style="display: none;">
+	<div class="modal-wrap popDemo popMsg mb20" style="width: 400px">
+		<div class="modal-header">
+			<div class="tit"></div>
+			<span class="close" id="dialog_close_span">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="message_hint_div" class="tipBox ly-clearFix">
+				<span class="icon icon32 icon-32-info"></span>
+				<p class="color-blue fontYH f18" id="message_hint">一般性网站提示内容</p>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop btn-ok" id="dialog_close_button">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+function loadingImg(){
+	var loadInfoIndex = $.layer({
+		    type: 3,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['35%', '52%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.1, '#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    loading: {
+   				type: 1
+			}
+		});
+	return loadInfoIndex;
+}
+function dialogBox(confirm,message){
+	var data=$("#diglog_div");
+	$("#diglog_div").find("#dialog_message").text(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '15%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+	 
+	 	$("#dialog_confirm_click").live('click', function(){
+	 		layer.close(pageii);
+	 		var loadInfoIndex=loadingImg();
+			confirm(loadInfoIndex);
+			$("#dialog_confirm_click").die("click");
+			//layer.close(loadInfoIndex);
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		    $("#dialog_confirm_click").die("click");
+		});
+		
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		    $("#dialog_confirm_click").die("click");
+		});
+ }
+ 
+function dialogBoxOut(html){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		    offset: ['200px', ''],
+		   	area: ['20%', '17%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    fix:false,
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: html
+		    }
+		});
+	 return pageii;
+}
+
+
+function dialogBoxOutId(id){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		    offset: ['200px', ''],
+		   	area: ['10%', '10%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        dom: id
+		    }
+		});
+	$(id).attr("index",pageii);
+	return pageii;
+}
+ 
+function errorInfo(message){
+	var data=$("#error_info_div");
+	data.find("#message_error").text(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		});
+		
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		});
+ }
+function messageInfo(message){
+	var data=$("#message_info_div");
+	data.find("#message_hint").html(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		});
+		
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		});
+ }
+function succInfo(confirm,message){
+	var data=$("#succ_info_div");
+	data.find("#message_succ").text(message);
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		   	area: ['20%', '20%'],
+		    offset: ['192px', ''],
+		    border: [0], //去掉默认边框
+		    shade: [0.5], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: data.html()
+		    }
+		});
+		//自设关闭
+		$('#dialog_close_button').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_button").die("click");
+		    if (confirm != undefined) {
+		    	confirm();
+			}
+		});
+		$('#dialog_close_span').live('click', function(){
+		    layer.close(pageii);
+		    $("#dialog_close_span").die("click");
+		    if (confirm != undefined) {
+		    	confirm();
+			}
+		});
+ }
+</script>
+</#macro>
+<#macro pageScript>
+<!--<script src="${staticPath}js/jquery.paginate.js"></script>  -->
+<script src="${staticPath}js/jquery.pagination_2.js"></script>
+<script src="${staticPath}js/layer.min.js"></script>
+<script src="${staticPath}js/layer.ext.js"></script>
+<link rel="stylesheet" href="${staticPath}style/pagination_2.css" />
+<script>
+function loadPage(currentPage,totalPage) {
+	$(".jump").die("click");
+	layer.closeAll();
+	// 创建分页
+	$(".pagination").attr("currentPage",currentPage);
+	$(".pagination").attr("totalPage",totalPage);
+	$(".pagination").pagination(totalPage, {
+		num_edge_entries: 1, //边缘页数
+		num_display_entries: 4, //主体页数
+		callback: function(page_index,jp){
+			loadingImg();
+			query(page_index+1);
+			$(".pagination").attr("currentPage",page_index+1);
+			return false;
+		},
+		current_page:currentPage-1,
+		items_per_page:1, //每页显示1项
+		prev_text: "前一页",
+		next_text: "后一页"
+	});
+	jump(currentPage);
+ }
+$(".pagination").ready(function(){
+	
+	loadPage(${query.currentPage},${query.totalPage});
+});
+var jump = function(currentPage){
+	$(".pagination").append("&nbsp;<span style='color:#15b;'>到第<input name=''class='pageNumber' style=' width: 35px;margin:0 3px;' value='"+currentPage+"'/>页</span><a class='next jump' >确定</a>");
+	$(".jump").live("click",function(){
+		$(".pageNumber").each(function(i){
+			if(i==0){
+				var totalPage=$(".pagination").attr("totalPage");
+				var pageNumber = $(this).val();
+				$(this).val(pageNumber.replace(/\D/gi, ""));
+				pageNumber=pageNumber.replace(/\D/gi, "");
+				if(pageNumber!=''){
+					if(parseInt(pageNumber)>parseInt(totalPage)){
+						//数值大于当前最大页码,返回当前最大页码
+						$(this).val(totalPage);
+						pageNumber=totalPage;
+					}
+					query(pageNumber);
+				}
+			}
+		})
+	});
+}
+$(".pageNumber").live("keyup",function(){
+	var $val = $(this).val();
+	$(".pageNumber").each(function(){
+		$(this).val($val);
+	})
+})
+</script>
+</#macro>
+<#macro upload>
+<script src="${staticPath}js/jquery.uploadify.js"></script>
+<link href="${staticPath}style/uploadify.css" rel="stylesheet"
+	type="text/css" />
+	<@b.dialogBox/>
+<script>
+
+var iviewer;
+var msie=$.browser.msie
+var elastislideConfig={
+		count:6//当前显示数量
+}
+var slideTimes=elastislideConfig.count;
+var currentHiddenImages;
+var currentLi;
+var closeViewer;
+$(document).ready(function(){
+	$(".iviewer_del").live("click",function(){
+		var url=$(this).siblings("img").attr("src");
+		var prefix="${b.imagePath}";
+		var image=url.substring(url.indexOf(prefix)+prefix.length);
+		var images=currentHiddenImages.attr("value");
+		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
+		currentHiddenImages.attr("value",result)
+		currentLi.remove();
+		closeViewer();
+	});
+});
+var refreshIviewer=function($viewer,src,$container){
+	$viewer.find("img").attr("src","");
+	if($viewer.children().length==0){
+		iviewer=$viewer.iviewer({
+			src : src,
+			mousewheel : true
+		});
+	}else{
+		iviewer.iviewer('loadImage', src);
+	}
+	if($container){
+		$container.css("top",$(window).scrollTop());
+		$container.show();
+		$container.find(".modal-header").show();
+	}else{
+		$(".modal-wrap").show();
+		$(".modal-header").show();
+	}
+	$viewer.show();
+}
+var errorImage=function($this){
+	var times=parseInt($($this).attr("times"));
+	if(times<3){
+		$($this).attr("src", $($this).attr("src"));
+		$($this).attr("times",times+1);
+	}else if(times==3){
+		$($this).attr("src", "http://static.menchuang.org.cn/images/bg404.jpg");
+		$($this).attr("times",times+1);
+	}
+}
+
+var imageSrc=function(src){
+	if($.browser.msie) {
+		return src;
+	} 
+	return "";
+}
+
+var refreshElastislide=function($container,$carousel,data,empty){
+	if(!data)
+		return;
+	var start=0;
+	if(empty)
+		$carousel.empty();
+	if(data){
+		if(data instanceof Array){
+			for (var i = 0; i < data.length; i++) {
+				var suffix=/\.[^\.]+$/.exec(data[i]);
+				var $img,$a;
+				if(suffix==".PDF"){
+					 $img=$('<img src="${b.staticPath}images/pdf.png" times="0" title="点击下载文件"/>');
+					 $a=$('<a href="javascript:void(0);" class="demo-pdf" data-pdf="'+data[i]+'"></a>');
+				}else{
+					 $img=$('<img data-image="${b.imagePath}'+data[i]+'80x100.JPG" alt="" src="'+imageSrc(data[i])+'" onerror="errorImage(this)" times="0"/>');
+					 $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data[i]+'"></a>');
+				}
+				
+				$a.append($img);
+				var $p=$('<p>'+(i+1)+'</p>');
+				var $li=$('<li></li>');
+				$li.append($a);
+				$li.append($p);
+				$carousel.append($li);
+			}
+		}else{
+			var suffix=/\.[^\.]+$/.exec(data.fileIds);
+			var $img,$a;
+			if(suffix==".PDF"){
+				 $img=$('<img src="${b.staticPath}images/pdf.png" times="0" title="点击下载文件"/>');
+				 $a=$('<a href="javascript:void(0);" class="demo-pdf" data-pdf="'+data.fileIds+'"></a>');
+			}else{
+				 $img=$('<img src="${b.imagePath}'+data.fileIds+'80x100.JPG" src="'+imageSrc(data.fileIds)+'"  onerror="errorImage(this)" times="0"/>');
+				 $a=$('<a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}'+data.fileIds+'"></a>');
+			}
+			
+			$a.append($img);
+			var $li=$('<li></li>');
+			$li.append($a);
+			
+			$carousel.append($li);
+			var $p=$('<p>'+$carousel.children().length+'</p>');
+			$li.append($p);
+			start=$carousel.children().length;
+		}
+	}
+	$container.empty();
+	$container.append($carousel);
+	$carousel.elastislide({
+		orientation : 'horizontal',
+		speed : 500,
+		easing : 'ease-in-out',
+		minItems : elastislideConfig.count,
+		start : start,
+		onClick : function( el, position, evt ) { 
+			return false; 
+		},
+		onReady : function() { 
+			$carousel.children("li:lt("+elastislideConfig.count+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			if($carousel.children("li").length<elastislideConfig.count)
+				$(".elastislide-prev").hide();
+			return false; },
+		onBeforeSlide : function() { return false; },
+		onAfterSlide : function() { 
+			if(start>0)
+				slideTimes=slideTimes+start;
+			$carousel.children("li:lt("+slideTimes+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			slideTimes=slideTimes+elastislideConfig.count;
+			return false; }
+	});
+	$container.show();
+	
+}
+
+function loadUpload(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:200,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
+function loadUploadMember(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        /* queueID: 'safetyPath_FileDiv', */
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
+function loadUploadWord(id,url,isMulti,text){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	
+	        }
+	        
+	    });
+}
+function flashChecker() {
+    var hasFlash = 0; //是否安装了flash
+    var flashVersion = 0; //flash版本
+    if (document.all) {
+      var swf = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+      if (swf) {
+        hasFlash = 1;
+        VSwf = swf.GetVariable("$version");
+        flashVersion = parseInt(VSwf.split(" ")[1].split(",")[0]);
+      }
+    } else {
+      if (navigator.plugins && navigator.plugins.length > 0) {
+        var swf = navigator.plugins["Shockwave Flash"];
+        if (swf) {
+          hasFlash = 1;
+          var words = swf.description.split(" ");
+          for (var i = 0; i < words.length; ++i) {
+            if (isNaN(parseInt(words[i]))) continue;
+            flashVersion = parseInt(words[i]);
+          }
+        }
+      }
+    }
+    return { f: hasFlash, v: flashVersion };
+  }
+  var fls = flashChecker();
+  var s = "";
+  if (!fls.f) {
+	  dialogBoxOut('<p class="tc fontYH" style="padding:20px;">您没有安装Flash插件,<a href="https://get.adobe.com/cn/flashplayer/" target="_blank" class="lnk-red">点击安装flash插件</a></p><p class="tc fontYH"><a href="javascript:location=location;" class="button button-blue">刷新页面</a></p>');
+  }
+</script>
+</#macro>
+<#macro header>
+<meta name="renderer" content="webkit">
+<@csrf.ajaxenabled>
+<script>
+function createXmlHttpRequest(){  
+    if(window.ActiveXObject){ //如果是IE浏览器  
+        return new ActiveXObject("Microsoft.XMLHTTP");  
+    }else if(window.XMLHttpRequest){ //非IE浏览器  
+        return new XMLHttpRequest();  
+    }  
+}
+(function() {
+	XMLHttpRequest.prototype._send = XMLHttpRequest.prototype.send;
+	XMLHttpRequest.prototype.send = function(data) {
+		this.setRequestHeader("X-Requested-With", "COM_SXJ_CSRFGUARD")
+		this.setRequestHeader("<@csrf.tokenname/>", "<@csrf.tokenvalue/>");
+		this._send.apply(this, arguments);
+	};
+	
+})();
+</script>
+</@csrf.ajaxenabled>
+<div id="header">
+	<div class="fence-wide">
+		<div class="logOut ly-right"><a href="#">退出当前帐户</a></div>
+	</div>
+	<h1 class="fence-wide"><a href="http://www.menchuang.org.cn/index.htm" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a></h1>
+</div>
+<#if Session.userinfo?exists>
+<script>
+$(document).ready(function(){
+	var currentUrl=window.location.href;
+	var functionId=getUrlParam("function");
+	$.get("${basePath}enter.htm?functionId="+functionId+"&url="+currentUrl);
+});
+
+function getUrlParam(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	if (r!=null) return unescape(r[2]); return null; //返回参数值
+}
+</script>
+</#if>
+</#macro>
+<#macro footer>
+<script type="text/javascript">
+$(document).ready(function(){
+	var newDate = new Date();
+	var year = newDate.getFullYear();
+	$("#yearSapn").text(year);
+});
+</script>
+<div id="footer" class="f12">© 2014 私享家绿色门窗平台&nbsp;版权所有<span class="ml10"><a href="http://www.miitbeian.gov.cn/" target="_blank">苏ICP备14040094号-1</a></span></div>
+</#macro>
+<#macro pager>
+<div id="pager" class="pagination f12 mt10 ly-right"
+	totalPage="${query.totalPage}" currentPage="${query.currentPage}"></div>
+</#macro>
+
+

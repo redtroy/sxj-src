@@ -3,25 +3,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
-<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
-<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗"/>
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。"/>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<style>
+#gcdome{height:130px; overflow:hidden;} 
+</style>
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/tytabs.jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-var validform;
 $(document).ready(function(){
-	loaaValid();
 	$("#tabsholder").tytabs({
 							prefixtabs:"tabz",
 							prefixcontent:"content",
 							classcontent:"tabscontent",
-							tabinit:"1",
+							tabinit:"0",
 							catchget:"tab2",
 							fadespeed:"normal"
 							});
 });
-
 function query(page) {
 	var params = "";
 	if (page != undefined) {
@@ -54,40 +54,68 @@ function query(page) {
 function modifyState(id,infoId){
 	var state=$("#message_li_"+infoId).attr("state");
 	if(state==0){
-		$.post("${basePath}systender/modifyState.htm","id="+id,function(data){
+		$.post("modifyState.htm","id="+id,function(data){
 			if(data.isOK="ok"){
 				$("#message_li_"+infoId).attr("state",1);
 				$("#message_li_"+infoId).removeClass("bgUnread");
 				$("#message_li_"+infoId).addClass("bgGray");
 				$.get("${basePath}market/info.htm?id="+infoId,function(data){
 					$("#wd-info").hide();
-					$("#body_div").empty();
-					$("#body_div").append(data);
+					$(".body_div").empty();
+					$(".body_div").append(data);
 				});
 			}
 		});
 	}else{
 		$.get("${basePath}market/info.htm?id="+infoId,
 				function(data){
-			$("#wd-info").hide();
-			$("#body_div").empty();
-			$("#body_div").append(data);
-			$("#title_id").text("工程信息");
+			//$("#wd-info").hide();
+			$("#contBox").empty();
+			//console.log($(".contBox"))
+			$("#contBox").html(data);
 		});
 	}
+// 	var state=$("#message_li_"+infoId).attr("state");
+// 	if(state==0){
+// 		$.post("${basePath}systender/modifyState.htm","id="+id,function(data){
+// 			if(data.isOK="ok"){
+// 				$("#message_li_"+infoId).attr("state",1);
+// 				$("#message_li_"+infoId).removeClass("bgUnread");
+// 				$("#message_li_"+infoId).addClass("bgGray");
+// 				$.get("${basePath}market/info.htm?id="+infoId,function(data){
+// 					$("#wd-info").hide();
+// 					$("#body_div").empty();
+// 					$("#body_div").append(data);
+// 				});
+// 			}
+// 		});
+// 	}else{
+// 		$.get("${basePath}market/info.htm?id="+infoId,
+// 				function(data){
+// 			$("#wd-info").hide();
+// 			$("#body_div").empty();
+// 			$("#body_div").append(data);
+// 			$("#title_id").text("工程信息");
+// 		});
+// 	}
  }
  
 function changeLi(type){
 	 if(type==0){
 		 $("a#moerUrl").attr("href","${basePath}developers/developers.htm");
+		 $("a#moerUrl").show();
 	 }else if(type==1){
 		 $("a#moerUrl").attr("href","${basePath}member/info.htm?infoFlag=0");
+		 $("a#moerUrl").hide();
 	 }else if(type==2){
 		 $("a#moerUrl").attr("href","${basePath}member/info.htm?infoFlag=1");
+		 $("a#moerUrl").hide();
 	 }else if(type==3){
 		 $("a#moerUrl").attr("href","${basePath}member/info.htm?infoFlag=3");
+		 $("a#moerUrl").hide();
 	 }else if(type==4){
 		 $("a#moerUrl").attr("href","${basePath}member/info.htm?infoFlag=2");
+		 $("a#moerUrl").hide();
 	 }	 
 };
 function loaaValid(){
@@ -135,18 +163,20 @@ function sub(){
 <h1>
   <span class="title fontYH f20 fb" id="title_id">平台首页</span></h1>
 </div>
-<div class="contBox">
-<div style="float:left">
- <div id="govinfo" class="govinfo">
-	<ul>
-   	<li class="colname" style="width:110px;">政务信息</li>
-       <li style="width:55px; float:right; line-height:37px;"><a href="${basePath}government/query.htm">更多...</a></li>
-   </ul>
-</div>
- <div id="govinfolist" class="govinfolist">
+<div id="contBox" class="contBox" style="float:left; width:550px">
+<div>
+<div id="govinfo" class="govinfo">
  	<ul>
- 	<#list govList as gov>
- 	<li class="govinfolisttit"><a href="${gov.url}" title="${gov.title}" target="_blank">
+    	<li class="colname" style="width:110px;">政务信息</li>
+        <li style="width:55px; float:right; line-height:37px;"><a href="${basePath}government/query.htm">更多...</a></li>
+    </ul>
+ </div>
+<div id="book_class"> 
+<div id="dome"> 
+ <div id="dome1" style="overflow:hidden">
+ 	<ul id="express">
+    <#list govList as gov>
+ 	<li class="point govinfolisttit"><a href="${gov.url}" title="${gov.title}" target="_blank">
  	<#if gov.title?length gt 35>
  	${gov.title[0..35]}... 
  	<#else>
@@ -154,41 +184,57 @@ function sub(){
  	</#if>
  	</a></li><li class="govinfolistdate">（${gov.createDate?string("MM/dd")}）</li>
  	</#list>
+ 	</ul>    
+ </div>
+<div id="dome2"></div> 
+</div> 
+</div> 
+<div id="govinfo" class="govinfo">
+ 	<ul>
+    	<li class="colname" style="width:110px;">工程信息</li>
+        <li style="width:55px; float:right; line-height:37px;"><a href="${basePath}systender/query.htm">更多...</a></li>
     </ul>
  </div>
- 
- <div id="govinfo" class="govinfo">
-	<ul>
-   	<li class="colname" style="width:110px;">工程信息</li>
-       <li style="width:55px; float:right; line-height:37px;"><a href="${basePath}systender/query.htm">更多...</a></li>
-   </ul>
-</div>
- <div id="govinfolist" class="govinfolist">
- <ul>
-<#list messageList as message>
-		<li class="govinfolisttit" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
+
+ <div id="book_class">
+<div id="gcdome"> 
+ <div id="gcdome1" style="overflow:hidden">
+ 	<ul id="express">
+ 	<#list messageList as message>
+    <li class="point govinfolisttit" id="message_li_${message.infoId}" state="${message.state.getId()}"  onclick="modifyState('${message.id}','${message.infoId}');">
 			<a href="javascript:void(0);">${message.xmmc}</a>
-		</li><li class="govinfolistdate">（${message.nowDate?string("MM/dd")}）</li>
-</#list>
-</ul>
-</div>
-</div>
+		</li>
+		<li class="govinfolistdate">（${message.nowDate?string("MM/dd")}）</li>
+
+</#list> 
+</ul>   
+
+ </div>
+ <div id="gcdome2"></div> 
+</div> 
+</div> 
+ 
+ </div>
+</div>  
+<div style="width:300px; min-height:76px; margin-left:15px; float:right; margin-bottom:12px">
+<a href=""><img src="${b.staticPath}images/pic-small.png" width="300" height="76" /></a>
 </div>
 <#include "site/finance/appfinance.html">
-<div id="tabsholder"  class="yard-870 rightSide ly-left inviteBox" style="padding-left:0; margin-left:0; min-height:270px;width:100%;">
+<div class="yard-870 rightSide ly-left inviteBox" style="padding-left:0; margin-left:0; min-height:270px;">
 <div class="contBox">
-<div style="width:550px;" id="tabsholder">
+<div id="tabsholder" style="width:550px;">
 <ul class="tabs">
-<li style="width:120px;" class="colname">最新加入会员</li>
+<li class="colname" style="width:130px;text-align: left;">最新加入会员</li>
 <li id="tabz1" style="width:70px;" onclick="changeLi(0);"><a href="#">开发商</a></li>
-<li id="tabz2" style="width:70px;" onclick="changeLi(1);"><a href="#">门窗厂</a></li>
+<!-- <li id="tabz2" style="width:70px;" onclick="changeLi(1);"><a href="#">门窗厂</a></li>
 <li id="tabz3" style="width:70px;" onclick="changeLi(2);"><a href="#">型材厂</a></li>
 <li id="tabz4" style="width:70px;" onclick="changeLi(3);"><a href="#">玻璃厂</a></li>
 <li id="tabz5" style="width:70px;" onclick="changeLi(4);"><a href="#">配件厂</a></li>
-<li style="width:385px; text-align:right"><a href="${basePath}developers/developers.htm"  id="moerUrl">更多...</a></li>
+<li id="tabz6" style="width:70px;" onclick="changeLi(5);"><a href="#">附框厂</a></li> -->
+<li style="width:80px;float: right;"><a href="${basePath}developers/developers.htm"  id="moerUrl">更多...</a></li>
 </ul>
-<div class="contents_index" style="padding-bottom:5px;">
-<div  class="tabscontent" id="content1"  style="display: block;">
+<div class="contents_index" style=" padding-bottom:5px;">
+<div id="content1" class="tabscontent">
 <#list kfsList as query >
   <#if query_index%2=0>
   <ul>
@@ -243,12 +289,80 @@ function sub(){
   </#if>
 </#list>
 </div>
+<div id="content6" class="tabscontent">
+<#list fcList as query >
+  <#if query_index%2=0>
+  <ul>
+  	<li class="tabscontentmem">${query.name}</li>
+  <#else>
+  	<li class="tabscontentmem">${query.name}</li>
+  </ul>
+  </#if>
+</#list>
+</div>
+  </div>
+  </div>
+
 </div>
 </div>
-</div>
-</div>
+
+
 </div>
 </div>
 <@b.footer />
+<!---------滚动脚本1----------> 
+<script type="text/javascript"> 
+var myFunction
+var gcFunction;
+var dome=document.getElementById("dome"); 
+var dome1=document.getElementById("dome1"); 
+var dome2=document.getElementById("dome2");  
+var speed=100;//设置向上轮动的速度 
+dome2.innerHTML=dome1.innerHTML;//复制节点  
+function moveTop(){ 
+	if(myFunction) clearInterval(myFunction);//这个是重点  
+if(dome1.offsetHeight-dome.scrollTop<=0){ 
+dome.scrollTop=0; 
+}else{ 
+dome.scrollTop++; 
+} 
+
+myFunction=setInterval("moveTop()",speed); 
+} 
+dome.onmouseover=function(){ 
+clearInterval(myFunction); 
+} 
+dome.onmouseout=function(){ 
+myFunction=setInterval(moveTop,speed); 
+} 
+
+
+var gcdome=document.getElementById("gcdome"); 
+var gcdome1=document.getElementById("gcdome1"); 
+var gcdome2=document.getElementById("gcdome2");  
+var gcspeed=100;//设置向上轮动的速度 
+gcdome2.innerHTML=gcdome1.innerHTML;//复制节点  
+function gcmoveTop(){ 
+	if(gcFunction) clearInterval(gcFunction);//这个是重点  
+	if(gcdome1.offsetHeight-gcdome.scrollTop<=0){ 
+		gcdome.scrollTop=0; 
+	}else{ 
+		gcdome.scrollTop++; 
+	} 
+
+	gcFunction=setInterval("gcmoveTop()",gcspeed); 
+} 
+
+
+gcdome.onmouseover=function(){ 
+	clearInterval(gcFunction); 
+} 
+gcdome.onmouseout=function(){ 
+	gcFunction=setInterval(gcmoveTop,gcspeed); 
+}
+moveTop();
+gcmoveTop();
+</script> 
 </body>
+
 </html>

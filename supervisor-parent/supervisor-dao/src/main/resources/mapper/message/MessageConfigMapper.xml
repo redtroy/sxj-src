@@ -16,16 +16,17 @@
 	<select id="queryConfigList"
 		resultMap="com.sxj.supervisor.dao.message.IMessageConfigDao.messageConfig"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM M_MESSAGE_CONFIG]]>
+		<![CDATA[SELECT mmc.* FROM M_MESSAGE_CONFIG mmc, M_MEMBER m ]]>
 		<where>
+		    <![CDATA[ mmc.MEMBER_NO = m.MEMBER_NO and m.CHECK_STATE=2]]>
 			<if test="condition.memberNo!= null and condition.memberNo != ''">
-			<![CDATA[ MEMBER_NO = #{condition.memberNo} ]]>
+			<![CDATA[ and mmc.MEMBER_NO = #{condition.memberNo} ]]>
 			</if>
 			<if test="condition.messageType!= null">
-			<![CDATA[ MESSAGE_TYPE = #{condition.messageType} ]]>
+			<![CDATA[ and mmc.MESSAGE_TYPE = #{condition.messageType} ]]>
 			</if>
 		</where>
-		<![CDATA[ ORDER BY MESSAGE_TYPE DESC]]>
+		<![CDATA[ ORDER BY mmc.MESSAGE_TYPE DESC]]>
 	</select>
 
 	<delete id="delConfig" parameterType="java.lang.String">

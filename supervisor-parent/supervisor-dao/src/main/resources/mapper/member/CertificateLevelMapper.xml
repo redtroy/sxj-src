@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.ICertificateLevelDao">
+	<resultMap id="CertificateLevelEntity"
+		type="com.sxj.supervisor.entity.member.CertificateLevelEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="imageId" column="IMAGE_ID" jdbcType="VARCHAR" />
+		<result property="level" column="LEVEL" jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="getCertificateLevel" resultMap="CertificateLevelEntity"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_CERTIFICATE_LEVEL WHERE IMAGE_ID=#{condition.imageId}]]>
+	</select>
+	<delete id="delbyImage" parameterType="String">
+		<![CDATA[DELETE FROM M_CERTIFICATE_LEVEL WHERE IMAGE_ID=#{image}]]>
+	</delete>
+</mapper>

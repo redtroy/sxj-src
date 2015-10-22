@@ -145,6 +145,7 @@ function message(){
 	  
   }
   function query(page){
+	  	loadingImg();
 		var params=$("#search_form").serialize();
 		if(page!=undefined){
 		   params=params+"&currentPage="+page;
@@ -233,7 +234,7 @@ function message(){
           <td>${model.memberName}</td>
           <td>${model.rfidType.getName()}</td>
           <td>${model.contractNo}</td>
-		  <td id="count_td">${model.count}</td>
+		  <td id="count_td">${model.count?string("0")}</td>
 		  <td id="count_input" style="display: none;"><input id="count_val"  type="text" name="count" value="${model.count}" /></td>
 		  <td><#if (model.applyDate??)> ${model.applyDate?string("yyyy-MM-dd HH:mm:ss")} </#if></td>
 		  <#if (model.payState.id==1)>

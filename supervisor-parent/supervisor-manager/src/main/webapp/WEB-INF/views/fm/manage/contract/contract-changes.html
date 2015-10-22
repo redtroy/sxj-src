@@ -284,6 +284,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 </head>
 <body>
 	<@b.header />
+	<#setting number_format="0.00">
 	<div id="main" class="fence-wide">
 		<!-- InstanceBeginEditable name="local" -->
 		<@b.menuPath/>
@@ -301,8 +302,8 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								name="modifyContract.contractId" />
 								${contractModel.contract.contractNo}</li>
 							<li><label>签订地点</label> ${contractModel.contract.address}</li>
-							<li><label>甲方</label> ${contractModel.contract.memberNameA}</li>
-							<li><label>乙方</label> ${contractModel.contract.memberNameB}
+							<li><label>需方</label> ${contractModel.contract.memberNameA}</li>
+							<li><label>供方</label> ${contractModel.contract.memberNameB}
 							</li>
 							<li><label>工程名称</label> ${contractModel.contract.engName}</li>
 							<li><label>工程地址</label> ${contractModel.contract.engAddress}
@@ -330,17 +331,17 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<th>产品规格</th>
 								<th>数量<span>（<#if
 										contractModel.contract.type.getId()==1>㎡</#if><#if
-										contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+										contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 								<th>单价<span>(元<#if
-										contractModel.contract.type.getId()==1>㎡</#if><#if
-										contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+										contractModel.contract.type.getId()==1>/㎡</#if><#if
+										contractModel.contract.type.getId()==2>/kg</#if>)</span></th>
 								<th>金额<span>(元)</span></th>
 								<th>备注说明</th>
 								<th class="rLine">&nbsp;</th>
 							</tr>
 							<#assign n = 0> <#assign m = 0> <#list contractModel.itemList as
-							item> <#assign n = (n+item.quantity)?int > <#assign m =
-							(m+item.amount)?int >
+							item> <#assign n = (n+item.quantity?double) > <#assign m =
+							(m+item.amount?double) >
 							<input type="hidden" value="${item.updateState}"
 								name="itemModel[${item_index}].updateState" />
 							<input type="hidden" value="${item.id}"
@@ -353,15 +354,15 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td class="editable amountClass"
 									name="modifyItemList[index].quantity"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${item.quantity?string('0.00')}</td>
+									errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${item.quantity}</td>
 								<td class="editable priceClass"
 									name="modifyItemList[index].price"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${item.price?string("0.00")}</td>
+									errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${item.price}</td>
 								<td class="editable amountClass"
 									name="modifyItemList[index].amount"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${item.amount?string("0.00")}</td>
+									errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${item.amount}</td>
 								<td class="editable" name="modifyItemList[index].remarks">${item.remarks}</td>
 								<td value="${item.id}"><#if item.updateState==1><span
 									style="color: red;">!</span><#else><a href="javascript:void(0)"
@@ -372,9 +373,9 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 							<tr>
 								<td><strong>合计</strong></td>
 								<td>&nbsp;</td>
-								<td>${n?string("0.00")}</td>
+								<td>${n}</td>
 								<td>&nbsp;</td>
-								<td>${m?string("0.00")}</td>
+								<td>${m}</td>
 								<td>&nbsp;</td>
 								<td>&nbsp;</td>
 							</tr>
@@ -397,7 +398,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<th>产品规格</th>
 								<th>数量<span>（<#if
 										contractModel.contract.type.getId()==1>㎡</#if><#if
-										contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+										contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 								<th>应付货款<span>（元）</span></th>
 								<th class="rLine">对应批次RFID编号</th>
 								<th class="rLine"></th>
@@ -431,7 +432,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 								<td class="editable amountClass"
 									name="modifyBatchList[i].modifyBatch.amount"
 									data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-									errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${batch.batch.amount?string("0.00")}</td>
+									errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${batch.batch.amount}</td>
 								<td class="editable"
 									name="modifyBatchList[i].modifyBatch.rfidNo"
 									readonly="readonly">${batch.batch.rfidNo}</td>
@@ -446,12 +447,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 						</#if>
 						<div>
 							<label>本合同还有</label> &nbsp;<#if contractModel.batchList?exists>
-							${(contractModel.contract.batchCount-contractModel.batchList?size)?int}
-							<#else> ${contractModel.contract.batchCount} </#if>&nbsp; 批次待交付
+							${(contractModel.contract.batchCount-contractModel.batchList?size)?string("0")}
+							<#else> ${contractModel.contract.batchCount?string("0")} </#if>&nbsp; 批次待交付
 						</div>
 						<div>
 							<label>合同定金</label>
-							&nbsp;${contractModel.contract.deposit?string("0.00")}&nbsp;元
+							&nbsp;${contractModel.contract.deposit}&nbsp;元
 						</div>
 						<div>
 							<label>合同备注</label>
@@ -467,11 +468,11 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 									<li><a href="javascript:void(0);" class="demo-pdf"
 										data-pdf="${imgPath}"> <img
 											src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-										<p>${imgPath_index+1}</p></li> <#else>
+										</li> <#else>
 									<li><a href="javascript:void(0);"
 										data-image="${b.imagePath}${imgPath}"><img
 											data-image="${b.imagePath}${imgPath}" width="80" height="107" /></a>
-									<p>${imgPath_index+1}</p></li> </#if> </#list>
+									</li> </#if> </#list>
 								</ul>
 							</div>
 						</div>
@@ -501,12 +502,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 											<li><a href="javascript:void(0);" class="demo-pdf"
 												data-pdf="${imgPath}"> <img
 													src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-												<p>${imgPath_index+1}</p></li> <#else>
+												</li> <#else>
 											<li><a href="javascript:void(0);"
 												data-image="${b.imagePath}${imgPath}"><img
 													data-image="${b.imagePath}${imgPath}" width="80"
 													height="107" /></a>
-											<p>${imgPath_index+1}</p></li> </#if> </#list>
+											</li> </#if> </#list>
 										</ul>
 									</div>
 								</div>
@@ -526,10 +527,10 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<th>产品规格</th>
 										<th>数量<span>（<#if
 												contractModel.contract.type.getId()==1>㎡</#if><#if
-												contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+												contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 										<th>单价<span>(元<#if
-												contractModel.contract.type.getId()==1>㎡</#if><#if
-												contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+												contractModel.contract.type.getId()==1>/㎡</#if><#if
+												contractModel.contract.type.getId()==2>/kg</#if>)</span></th>
 										<th>金额<span>(元)</span></th>
 										<th>备注说明</th>
 										<th class="rLine">&nbsp;</th>
@@ -543,15 +544,15 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable amountClass"
 											name="modifyItemList[index].quantity"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity?string("0.00")}</td>
+											errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！">${modifyItem.quantity}</td>
 										<td class="editable priceClass"
 											name="modifyItemList[index].price"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！">${modifyItem.price}</td>
 										<td class="editable amountClass"
 											name="modifyItemList[index].amount"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${modifyItem.amount?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！">${modifyItem.amount}</td>
 										<td class="editable" name="modifyItemList[index].remarks">${modifyItem.remarks}</td>
 										<td value="${modifyItem.id}"><#if
 											modifyItem.updateState==1><span style="color: red;">!</span><#else><a
@@ -576,7 +577,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<th>产品规格</th>
 										<th>数量<span>（<#if
 												contractModel.contract.type.getId()==1>㎡</#if><#if
-												contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+												contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 										<th>应付货款<span>（元）</span></th>
 										<th>对应批次RFID编号</th>
 										<th class="rLine">&nbsp;</th>
@@ -611,7 +612,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<td class="editable amountClass"
 											name="modifyBatchList[i].modifyBatch.amount"
 											data="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/"
-											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${modifyBatch.modifyBatch.amount?string("0.00")}</td>
+											errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！">${modifyBatch.modifyBatch.amount}</td>
 										<td class="editable"
 											name="modifyBatchList[i].modifyBatch.rfidNo"
 											readonly="readonly">${modifyBatch.modifyBatch.rfidNo}</td>
@@ -651,12 +652,12 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 											<li><a href="javascript:void(0);" class="demo-pdf"
 												data-pdf="${imgPath}"> <img
 													src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-												<p>${imgPath_index+1}</p></li> <#else>
+												</li> <#else>
 											<li><a href="javascript:void(0);"
 												data-image="${b.imagePath}${imgPath}"><img
 													data-image="${b.imagePath}${imgPath}" width="80"
 													height="107" /></a>
-											<p>${imgPath_index+1}</p></li> </#if> </#list>
+											</li> </#if> </#list>
 										</ul>
 									</div>
 								</div>
@@ -675,10 +676,10 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<th>产品规格</th>
 										<th>数量<span>（<#if
 												contractModel.contract.type.getId()==1>㎡</#if><#if
-												contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+												contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 										<th>单价<span>(元<#if
-												contractModel.contract.type.getId()==1>㎡</#if><#if
-												contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+												contractModel.contract.type.getId()==1>/㎡</#if><#if
+												contractModel.contract.type.getId()==2>/kg</#if>)</span></th>
 										<th>金额<span>(元)</span></th>
 										<th>备注说明</th>
 										<th class="rLine">&nbsp;</th>
@@ -699,7 +700,7 @@ var $minus=$("<a>").addClass("lnk-red deltr").attr("href","javascript:void(0);")
 										<th>产品规格</th>
 										<th>数量<span>（<#if
 												contractModel.contract.type.getId()==1>㎡</#if><#if
-												contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+												contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 										<th>应付货款<span>（元）</span></th>
 										<th>对应批次RFID编号</th>
 										<th class="rLine">&nbsp;</th>

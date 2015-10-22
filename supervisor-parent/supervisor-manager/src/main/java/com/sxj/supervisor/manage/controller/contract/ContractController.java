@@ -52,22 +52,22 @@ public class ContractController extends BaseController {
 				if (recordList.size() > 0) {
 					RecordEntity recordEntity = recordList.get(0);
 					if (contractModel.getContract().getType().getId() == 0) {
-						contractModel.getContract().setStateLog("乙方已申请备案");
+						contractModel.getContract().setStateLog("供方已申请备案");
 					} else {
 						if (recordEntity.getType().getId() == 0) {
 							if (recordEntity.getFlag().getId() == 0) {
 								contractModel.getContract().setStateLog(
-										"甲方已申请备案");
+										"需方已申请备案");
 							} else {
 								contractModel.getContract().setStateLog(
-										"乙方已申请备案");
+										"供方已申请备案");
 							}
 						} else if (recordEntity.getType().getId() == 1) {
 							contractModel.getContract()
-									.setStateLog("甲方已申请变更备案");
+									.setStateLog("需方已申请变更备案");
 						} else {
 							contractModel.getContract()
-									.setStateLog("甲方已申请补损备案");
+									.setStateLog("需方已申请补损备案");
 						}
 					}
 				}
@@ -103,22 +103,22 @@ public class ContractController extends BaseController {
 			for (RecordEntity recordEntity : recordList) {
 				StateLogModel sl = new StateLogModel();
 				if (contractModel.getContract().getType().getId() == 0) {
-					sl.setStateTitle("乙方已申请备案");
+					sl.setStateTitle("供方已申请备案");
 					sl.setModifyDate(recordEntity.getApplyDate());
 				} else {
 					if (recordEntity.getType().getId() == 0) {
 						if (recordEntity.getFlag().getId() == 0) {
-							sl.setStateTitle("甲方已申请备案");
+							sl.setStateTitle("需方已申请备案");
 							sl.setModifyDate(recordEntity.getApplyDate());
 						} else {
-							sl.setStateTitle("乙方已申请备案");
+							sl.setStateTitle("供方已申请备案");
 							sl.setModifyDate(recordEntity.getApplyDate());
 						}
 					} else if (recordEntity.getType().getId() == 1) {
-						sl.setStateTitle("甲方已申请变更备案");
+						sl.setStateTitle("需方已申请变更备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
 					} else {
-						sl.setStateTitle("甲方已申请补损备案");
+						sl.setStateTitle("需方已申请补损备案");
 						sl.setModifyDate(recordEntity.getApplyDate());
 					}
 				}

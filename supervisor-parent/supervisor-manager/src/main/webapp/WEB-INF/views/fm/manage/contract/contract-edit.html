@@ -281,7 +281,7 @@ var caculateRow=function($tr){
 		var amount=0;
 		$(".quantityClass").each(function(){
 			if($(this).val()){
-				quantity+=parseInt($(this).val());
+				quantity+=parseFloat($(this).val());
 				$(this).val(parseFloat($(this).val()).toFixed(2));
 			}
 		});
@@ -325,8 +325,8 @@ var caculateRow=function($tr){
 				}
 		})
 		
-		$("#quantitySum").html(quantity.toFixed(2));
-		$("#amountSum").html(amount.toFixed(2));
+		$("#quantitySum").html(parseFloat(quantity).toFixed(2));
+		$("#amountSum").html(parseFloat(amount).toFixed(2));
 		//修改批次
 		$("#batchCount").live("blur",function(){
 			var value=$(this).val();
@@ -343,6 +343,7 @@ var caculateRow=function($tr){
 </head>
 <body>
 <@b.header/>
+<#setting number_format="0.00">
 	<div id="main" class="fence-wide">
 		<!-- InstanceBeginEditable name="local" -->
 		<@b.menuPath/>
@@ -359,9 +360,9 @@ var caculateRow=function($tr){
 						<li><label>合同号</label> ${contractModel.contract.contractNo}</li>
 						<li><label>签订地点</label> <input name="contract.address" type="text" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入签订地点！" 
 							value="${contractModel.contract.address}" /></li>
-						<li><label>甲方</label> <input name="contract.memberNameA" type="text"
+						<li><label>需方</label> <input name="contract.memberNameA" type="text"
 							value="${contractModel.contract.memberNameA}" readonly="readonly" /></li>
-						<li><label>乙方</label> <input name="contract.memberNameB" type="text"
+						<li><label>供方</label> <input name="contract.memberNameB" type="text"
 							value="${contractModel.contract.memberNameB}" readonly="readonly" /></li>
 						<li><label>工程名称</label> <input name="contract.engName" type="text" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入工程名称！" 
 							value="${contractModel.contract.engName}" /></li>
@@ -387,8 +388,8 @@ var caculateRow=function($tr){
 						<tr>
 							<th>产品名称</th>
 							<th>产品规格</th>
-							<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
-							<th>单价<span>(元<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+							<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>kg</#if>）</span></th>
+							<th>单价<span>(元<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/kg</#if>)</span></th>
 							<th>金额<span>(元)</span></th>
 							<th>备注说明</th>
 							<th class="rLine">&nbsp;</th>
@@ -396,8 +397,8 @@ var caculateRow=function($tr){
 						<#assign n = 0> 
 						<#assign m = 0>
 						 <#list contractModel.itemList as item>
-						  <#assign n = (n+item.price)?int > 
-						  <#assign m = (m+item.amount)?int >
+						  <#assign n = (n+item.quantity?double) > 
+						  <#assign m = (m+item.amount?double) >
 						  
 						<tr id="trDataRow${item_index}" class="CaseRow">
 							<input type="hidden" value="${item.id}" name="itemList[index].id"/>
@@ -415,7 +416,7 @@ var caculateRow=function($tr){
 						<tr id="total_tr">
 							<td><strong>合计</strong></td>
 							<td>&nbsp;</td>
-							<td><span id="quantitySum"></span> <#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if></td>
+							<td><span id="quantitySum"></span> <#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>/kg</#if></td>
 							<td>&nbsp;</td>
 							<td><span id="amountSum"></span> 元</td>
 							<td>&nbsp;</td>
@@ -437,12 +438,12 @@ var caculateRow=function($tr){
 						<tr>
 							<th>交货批次</th>
 							<th>产品规格</th>
-							<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+							<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 							<th>应付货款<span>（元）</span></th>
 							<th class="rLine">对应批次RFID编号</th>
 						</tr>
 						<#list contractModel.batchList  as batchList>
-						<input name="batchList[${batchList_index}].batch.id" type="hidden" value="${batchList.batch.id}" />
+						<input name="batchList[${batchList_index?string('0')}].batch.id" type="hidden" value="${batchList.batch.id}" />
 						<tr>
 							<td>第 ${batchList.batch.batchNo}批次
 							</td>
@@ -450,9 +451,9 @@ var caculateRow=function($tr){
 									class="tabList prodIable">
 									 <#list batchList.batchItems  as modifyBatchItems>
 									<tr>
-										<td><input  datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].productModel" type="text"
+										<td><input  datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="batchList[${batchList_index?string('0')}].batchItems[${modifyBatchItems_index?string('0')}].productModel" type="text"
 											value="${modifyBatchItems.productModel}" />
-										<input name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].id" type="hidden"
+										<input name="batchList[${batchList_index?string('0')}].batchItems[${modifyBatchItems_index?string('0')}].id" type="hidden"
 											value="${modifyBatchItems.id}" />	
 										</td>
 									</tr>
@@ -462,21 +463,21 @@ var caculateRow=function($tr){
 									class="tabList prodIable">
 									  <#list batchList.batchItems  as modifyBatchItems>
 									<tr>
-										<td><input class="bgquantity"  name="batchList[${batchList_index}].batchItems[${modifyBatchItems_index}].quantity" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！" type="text" value="${modifyBatchItems.quantity}" /> &nbsp;</td>
+										<td><input class="bgquantity"  name="batchList[${batchList_index?string('0')}].batchItems[${modifyBatchItems_index?string('0')}].quantity" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！" type="text" value="${modifyBatchItems.quantity}" /> &nbsp;</td>
 									</tr>
 									 </#list>
 								</table></td>
-							<td><input name="batchList[${batchList_index}].batch.amount" class="bgamount"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"type="text" value="${batchList.batch.amount}" /></td>
+							<td><input name="batchList[${batchList_index?string('0')}].batch.amount" class="bgamount"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"type="text" value="${batchList.batch.amount}" /></td>
 							<td>${batchList.batch.rfidNo}</td>
 						</tr>
               </#list>
 					</table>
 					</#if>
 					<div>
-						<label>合同总批次</label> <input type="text"  name="contract.batchCount" id="batchCount" datatype="/^[0-9]*[1-9][0-9]*$/" errormsg="请输入大于0的数字" nullmsg="请输入合同批次 ！" value="${contractModel.contract.batchCount}"/><input type="hidden" id="hideBatchCount" name="hideBatchCount" value="${contractModel.batchList?size}"/><#if ((contractModel.contract.batchCount-contractModel.batchList?size)?int>0)>本合同还有${(contractModel.contract.batchCount-contractModel.batchList?size)?int}批次待交付 </#if> 
+						<label>合同总批次</label> <input type="text"  name="contract.batchCount" id="batchCount" datatype="/^[0-9]*[1-9][0-9]*$/" errormsg="请输入大于0的数字" nullmsg="请输入合同批次 ！" value="${contractModel.contract.batchCount?string('0')}"/><input type="hidden" id="hideBatchCount" name="hideBatchCount" value="${(contractModel.batchList?size)?string('0')}"/><#if ((contractModel.contract.batchCount-contractModel.batchList?size)?int>0)>本合同还有${(contractModel.contract.batchCount-contractModel.batchList?size)?string("0")}批次待交付 </#if> 
 					</div>
 					<div>
-						<label>合同定金</label> <input name="contract.deposit" class="deposit" type="text" value="${contractModel.contract.deposit?string('0.00')}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！"  />
+						<label>合同定金</label> <input name="contract.deposit" class="deposit" type="text" value="${contractModel.contract.deposit}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~100位之间！" nullmsg="请输入合同定金！"  />
 						元
 					</div>
 					<div>
@@ -504,7 +505,7 @@ var caculateRow=function($tr){
 				<#list contractModel.modifyList as modifyList>
 					<h2 class="title">合同变更信息</h2>
 					
-					<input type="hidden" value="${modifyList.modifyContract.id}" name="modifyList[${modifyList_index}].modifyContract.id" />
+					<input type="hidden" value="${modifyList.modifyContract.id}" name="modifyList[${modifyList_index?string('0')}].modifyContract.id" />
 					<div class="infoBox producedBox f14">
 						<div>
 							<label>合同变更备案号</label> ${modifyList.modifyContract.recordNo}
@@ -517,7 +518,7 @@ var caculateRow=function($tr){
 						<div class="rollBox" id="contractRollBox">
 								<ul id="contractUl" class="elastislide-list"></ul>
 						</div>
-						<input type="hidden" name="modifyList[${modifyList_index}].modifyContract.imgPath" class="imgPathHide" value="${modifyList.modifyContract.imgPath}"/>
+						<input type="hidden" name="modifyList[${modifyList_index?string('0')}].modifyContract.imgPath" class="imgPathHide" value="${modifyList.modifyContract.imgPath}"/>
 					</div>
 					</div>
 					<div class="contPic">
@@ -538,8 +539,8 @@ var caculateRow=function($tr){
 							<tr>
 								<th>产品名称</th>
 								<th>产品规格</th>
-								<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
-								<th>单价<span>(元<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>)</span></th>
+								<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>kg</#if>）</span></th>
+								<th>单价<span>(元<#if contractModel.contract.type.getId()==1>/㎡</#if><#if contractModel.contract.type.getId()==2>/kg</#if>)</span></th>
 								<th>金额<span>(元)</span></th>
 								<th class="rLine">备注说明</th>
 								<th></th>
@@ -547,16 +548,16 @@ var caculateRow=function($tr){
              			<#list modifyList.modifyItemList  as modifyItem>
              			
 							<tr>
-								<td><input type="text" value="${modifyItem.productName}"  name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！"  /></td>
+								<td><input type="text" value="${modifyItem.productName}"  name="modifyList[${modifyList_index?string('0')}].modifyItemList[${modifyItem_index?string('0')}].productName" datatype="*1-50" errormsg="输入范围在1~50位之间！" nullmsg="请输入产品名称！"  /></td>
 								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].productModel" id="textarea9" cols="25" datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！"
 										rows="1">${modifyItem.productModel}</textarea></td>
-								<td><input type="text" class="bgquantity" value="${modifyItem.quantity?string('0.00')}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].quantity"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
-								<td><input type="text" class="bgprice" value="${modifyItem.price?string('0.00')}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].price" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
-								<td><input type="text" class="bgamount" value="${modifyItem.amount?string('0.00')}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].amount" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"/></td>
-								<td><textarea name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].remarks" id="textarea10" cols="25"
+								<td><input type="text" class="bgquantity" value="${modifyItem.quantity}" name="modifyList[${modifyList_index?string('0')}].modifyItemList[${modifyItem_index?string('0')}].quantity"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位数字之间！" nullmsg="请输入产品数量！" /></td>
+								<td><input type="text" class="bgprice" value="${modifyItem.price}" name="modifyList[${modifyList_index?string('0')}].modifyItemList[${modifyItem_index?string('0')}].price" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品单价！"  /></td>
+								<td><input type="text" class="bgamount" value="${modifyItem.amount}" name="modifyList[${modifyList_index?string('0')}].modifyItemList[${modifyItem_index?string('0')}].amount" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入产品金额！"/></td>
+								<td><textarea name="modifyList[${modifyList_index?string('0')}].modifyItemList[${modifyItem_index?string('0')}].remarks" id="textarea10" cols="25"
 										rows="1">${modifyItem.remarks}</textarea> 
 										&nbsp;&nbsp; </td>
-										<td><a href="javascript:void(0);" class="lnk-red">X</a><input type="hidden" value="${modifyItem.id}" name="modifyList[${modifyList_index}].modifyItemList[${modifyItem_index}].id"/></td>
+										<td><a href="javascript:void(0);" class="lnk-red">X</a><input type="hidden" value="${modifyItem.id}" name="modifyList[${modifyList_index?string('0')}].modifyItemList[${modifyItem_index?string('0')}].id"/></td>
 							</tr>
 						 </#list>
 						</table>
@@ -572,21 +573,21 @@ var caculateRow=function($tr){
 							<tr>
 								<th>交货批次</th>
 								<th>产品规格</th>
-								<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+								<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 								<th>应付货款<span>（元）</span></th>
 								<th class="rLine">对应批次RFID编号</th>
 							</tr>
 							<#list modifyList.modifyBatchList  as modifyBatch>
-							<input type="hidden" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.id" value="${modifyBatch.id}" /> 
+							<input type="hidden" name="modifyList[${modifyList_index?string('0')}].modifyBatchList[${modifyBatch_index?string('0')}].modifyBatch.id" value="${modifyBatch.id}" /> 
 							<tr>
 								<td>第${modifyBatch.modifyBatch.batchNo}批次</td>
 								<td><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
                   					<#list modifyBatch.modifyBatchItems  as modifyBatchItems>
 										<tr>
-											<td><textarea datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].productModel" id="textarea15"
+											<td><textarea datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="modifyList[${modifyList_index?string('0')}].modifyBatchList[${modifyBatch_index?string('0')}].modifyBatchItems[${modifyBatchItems_index?string('0')}].productModel" id="textarea15"
 													cols="25" rows="1">${modifyBatchItems.productModel}</textarea>
-											<input type="hidden" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].id" value="${modifyBatchItems.id}" /> 
+											<input type="hidden" name="modifyList[${modifyList_index?string('0')}].modifyBatchList[${modifyBatch_index?string('0')}].modifyBatchItems[${modifyBatchItems_index?string('0')}].id" value="${modifyBatchItems.id}" /> 
 													
 											</td>
 										</tr>
@@ -596,12 +597,12 @@ var caculateRow=function($tr){
 										class="tabList prodIable">
 										<#list modifyBatch.modifyBatchItems  as modifyBatchItems>
 										<tr>
-											<td><input type="text" value="${modifyBatchItems.quantity}"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！"  class="bgquantity" name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatchItems[${modifyBatchItems_index}].quantity" /> &nbsp;<a
+											<td><input type="text" value="${modifyBatchItems.quantity}"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！"  class="bgquantity" name="modifyList[${modifyList_index?string('0')}].modifyBatchList[${modifyBatch_index?string('0')}].modifyBatchItems[${modifyBatchItems_index?string('0')}].quantity" /> &nbsp;<a
 												href="#" class="lnk-green">+</a></td>
 										</tr>
 										 </#list>
 									</table></td>
-								<td><input type="text" value="${modifyBatch.modifyBatch.amount}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"  class="bgamount"  name="modifyList[${modifyList_index}].modifyBatchList[${modifyBatch_index}].modifyBatch.amount" /></td>
+								<td><input type="text" value="${modifyBatch.modifyBatch.amount}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"  class="bgamount"  name="modifyList[${modifyList_index?string('0')}].modifyBatchList[${modifyBatch_index?string('0')}].modifyBatch.amount" /></td>
 								<td>${modifyBatch.modifyBatch.rfidNo}></td>
 							</tr>
 							</#list>
@@ -615,7 +616,7 @@ var caculateRow=function($tr){
 				<div class="changeBox">
 					<h2 class="title">合同补损信息</h2>
 					<#list contractModel.replenishList as replenishList>
-					<input type="hidden" value="${replenishList.replenishContract.id}" name="replenishList[${replenishList_index}].replenishContract.id" />
+					<input type="hidden" value="${replenishList.replenishContract.id}" name="replenishList[${replenishList_index?string('0')}].replenishContract.id" />
 					<div class="infoBox producedBox f14">
 						<div>
 							<label>合同补损备案号</label> ${replenishList.replenishContract.recordNo}
@@ -626,7 +627,7 @@ var caculateRow=function($tr){
 						<div class="contPic">
 							<label>合同补损扫描件</label>
 						<div class="ly-left">
-						<input type="hidden" name="replenishList[${replenishList_index}].replenishContract.imgPath" class="imgPathHide" value="${replenishList.replenishContract.imgPath}"/>
+						<input type="hidden" name="replenishList[${replenishList_index?string('0')}].replenishContract.imgPath" class="imgPathHide" value="${replenishList.replenishContract.imgPath}"/>
 						<div class="rollBox">
 								<ul class="elastislide-list"></ul>
 						</div>
@@ -650,20 +651,20 @@ var caculateRow=function($tr){
 							<tr>
 								<th>交货批次</th>
 								<th>产品规格</th>
-								<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>吨</#if>）</span></th>
+								<th>数量<span>（<#if contractModel.contract.type.getId()==1>㎡</#if><#if contractModel.contract.type.getId()==2>kg</#if>）</span></th>
 								<th>应付货款<span>（元）</span></th>
 								<th class="rLine">对应批次RFID编号</th>
 							</tr>
 							<#list replenishList.batchItems as replenishItem>
 							<tr>
 								<td>补第${replenishItem.replenishBatch.batchNo}批次
-								<input type="hidden" value="${replenishItem.replenishBatch.id}" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.id" />
+								<input type="hidden" value="${replenishItem.replenishBatch.id}" name="replenishList[${replenishList_index?string('0')}].batchItems[${replenishItem_index?string('0')}].replenishBatch.id" />
 								</td>
 								<td><table border="0" cellpadding="0" cellspacing="0"
 										class="tabList prodIable">
 										 <#list replenishItem.replenishBatchItems as replenishBatchItems>
 										<tr>
-											<td><textarea datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatchItems[${replenishBatchItems_index}].productModel" id="textarea14"
+											<td><textarea datatype="*1-100" errormsg="输入范围在1~100位之间！" nullmsg="请输入产品规格！" name="replenishList[${replenishList_index?string('0')}].batchItems[${replenishItem_index?string('0')}].replenishBatchItems[${replenishBatchItems_index?string('0')}].productModel" id="textarea14"
 													cols="25" rows="1">${replenishBatchItems.productModel}</textarea></td>
 										</tr>
 										</#list>
@@ -672,12 +673,12 @@ var caculateRow=function($tr){
 										class="tabList prodIable">
 										<#list replenishItem.replenishBatchItems as replenishBatchItems>
 										<tr>
-											<td><input type="text" value="${replenishBatchItems.quantity}"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！"class="bgquantity" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatchItems[${replenishBatchItems_index}].quantity" />
+											<td><input type="text" value="${replenishBatchItems.quantity}"  datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入数量！"class="bgquantity" name="replenishList[${replenishList_index?string('0')}].batchItems[${replenishItem_index?string('0')}].replenishBatchItems[${replenishBatchItems_index?string('0')}].quantity" />
 											</td>
 										</tr>
 										</#list>
 									</table></td>
-								<td><input type="text" value="${replenishItem.replenishBatch.amount}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"  class="bgamount" name="replenishList[${replenishList_index}].batchItems[${replenishItem_index}].replenishBatch.amount" /></td>
+								<td><input type="text" value="${replenishItem.replenishBatch.amount}" datatype="/^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,2})?$/" errormsg="输入范围在1~20位之间！" nullmsg="请输入应付货款！"  class="bgamount" name="replenishList[${replenishList_index?string('0')}].batchItems[${replenishItem_index?string('0')}].replenishBatch.amount" /></td>
 								<td>${replenishItem.replenishBatch.newRfidNo}</td>
 							</tr>
 							</#list>

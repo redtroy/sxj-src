@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.ICertificateDao">
+	<resultMap id="CertificateResultMap"
+		type="com.sxj.supervisor.entity.member.CertificateEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="certificateName" column="CERTIFICATE_NAME" jdbcType="VARCHAR" />
+		<result property="certificateLevel" column="CERTIFICATE_LEVEL" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 条件查询 -->
+	<select id="getCertificate" resultMap="CertificateResultMap"
+		parameterType="String">
+		<![CDATA[SELECT * FROM M_CERTIFICATE WHERE 1=1]]>
+		<!-- 会员号 -->
+		<if test="name != null and name !=''">
+			<![CDATA[AND CERTIFICATE_NAME LIKE CONCAT('%',#{name},'%')]]>
+		</if>
+	</select>
+	<select id="getListImage" resultMap="CertificateResultMap">
+	  <![CDATA[SELECT * FROM M_CERTIFICATE WHERE ID in (SELECT LEVEL FROM M_CERTIFICATE_LEVEL WHERE IMAGE_ID=#{image})]]>
+	</select>
+</mapper>

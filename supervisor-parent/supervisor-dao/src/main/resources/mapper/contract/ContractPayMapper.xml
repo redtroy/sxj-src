@@ -247,4 +247,8 @@
 		<![CDATA[ ORDER BY P.PAY_NO DESC
 		]]>
 	</select>
+	<update id="updatePayAmountByContractNo" parameterType="com.sxj.supervisor.entity.contract.ContractEntity">
+	<![CDATA[UPDATE M_CONTRACT_PAY P SET P.PAY_AMOUNT=#{deposit} WHERE P.CONTRACT_NO=#{contractNo} AND P.PAY_TYPE=0
+		]]>
+	</update>
 </mapper>

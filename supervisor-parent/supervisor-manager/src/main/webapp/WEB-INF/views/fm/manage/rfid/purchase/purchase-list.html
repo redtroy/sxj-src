@@ -28,11 +28,12 @@
 		});
 	});
 	function query(page) {
+		loadingImg();
 		var params = $("#search_form").serialize();
 		if (page != undefined) {
 			params = params + "&currentPage=" + page;
 		}
-		$.post("query.htm", params, function(data) {
+		$.post("query.htm", params, function(data) { 
 			var res = $(data).find("#res_table");
 			var pager = $(data).find("#pager");
 			$("#res_table").empty();
@@ -277,7 +278,13 @@
 		var file = $("#fileId")
 		file.after(file.clone().val(""));
 		file.remove();
-		dialogBoxOutId("#importFile");
+		var show  =layer.open({
+		    type: 1,
+		    offset: ['30%', '35%'],
+		    area: ['500px', '210px'],
+		    title: "导入RFID标签", //不显示标题
+		    content: $("#importFile")
+		});
 	}
 	function importFile(){
 		var file =$("#fileId").val();
@@ -379,7 +386,7 @@
 						<th>单价</th>
 						<th>采购单时间</th>
 						<th>付款状态</th>
-						<th>收货状态</th>
+						<th>发货状态</th>
 						<th>导入状态</th>
 						<th class="rLine">操作</th>
 					</tr>
@@ -397,7 +404,7 @@
 						<td>${list.rfidType.getName()} <input type="hidden"
 							id="editType" value="${list.rfidType.getId()}" />
 						</td>
-						<td class="editCount">${list.count}</td>
+						<td class="editCount">${list.count?string("0")}</td>
 						<input type="hidden" class="oldCount" value="${list.count}" />
 						<td class="editPrice">${list.price?string('0.00')}</td>
 						<td>${list.purchaseDate?string("yyyy-MM-dd HH:mm:ss")}</td>
@@ -454,11 +461,8 @@
 			</div>
 		</div>
 		<@b.footer />
-		<div class="modal-wrap popDemo passwordBox" id="importFile"
-			style="display: none; width: 550px; height: 180px; margin-left: -174px; margin-top: -30px;">
-			<div class="modal-header">
-				<span class="close" id="importFile_close"><a>关闭窗口</a></span>
-			</div>
+		<div class="" id="importFile"
+			style="display: none;">
 			<div class="modal-body">
 				<form action="importFile.htm" method="post" id="fileForm"
 					enctype="multipart/form-data">
@@ -467,7 +471,7 @@
 							id="fileId" />
 					</div>
 					<div>
-						<font style="color: red;">上传文件为zip压缩包,请勿求改压缩包内文件名称</font>
+						<font style="color: red;">*上传文件为zip压缩包,请勿求改压缩包内文件名称</font>
 					</div>
 					<input type="hidden" id="hideId" name="id" />
 				</form>

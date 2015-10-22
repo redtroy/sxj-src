@@ -233,20 +233,20 @@
 								name="applyId" value="${record.applyId}" />
 							<li><label>备案号</label>${record.recordNo}</li>
 							<li><label>申请会员</label>${record.applyName}</li>
-							<li><label>甲方名称</label><#if record.applyId
+							<li><label>需方名称</label><#if record.applyId
 								==record.memberIdA>${record.memberNameA}<#else></else><input
 								type="text" value="${record.memberNameA}" id="memberNameA"
 								AUTOCOMPLETE="off" name="memberNameA" datatype="*1-50"
-								nullmsg="请输入正确的甲方名称" /> <input type="hidden"
+								nullmsg="请输入正确的需方名称" /> <input type="hidden"
 								value="${record.memberIdA}" datatype="*"
-								nullmsg="请输入正确的甲方名称"  id="memberIdA" name="memberIdA" />
+								nullmsg="请输入正确的需方名称"  id="memberIdA" name="memberIdA" />
 								</#if></li>
-							<li><label>乙方名称</label><#if record.applyId
+							<li><label>供方名称</label><#if record.applyId
 								==record.memberIdB>${record.memberNameB}<#else><input
 								type="text" value="${record.memberNameB}" id="memberNameB"
-								name="memberNameB" datatype="*1-50" nullmsg="请输入正确的乙方名称"
+								name="memberNameB" datatype="*1-50" nullmsg="请输入正确的供方名称"
 								AUTOCOMPLETE="off" /><input type="hidden"
-								value="${record.memberIdB}" id="memberIdB" name="memberIdB" datatype="*" nullmsg="请输入正确的乙方名称" /></#if></li>
+								value="${record.memberIdB}" id="memberIdB" name="memberIdB" datatype="*" nullmsg="请输入正确的供方名称" /></#if></li>
 							<li><label>合同类型</label>${record.contractType.getName()}</li>
 							<li class="contPic ly-clearFix"><label>备案扫描件</label> <!--  <span class="ly-left"><button id="img_path" class="button button-green button-middle"></button><input type="hidden" id="imgPath" name="imgPath"></span>-->
 								<input type="hidden" value="${record.imgPath}" name="imgPath" id="contractImgPath" />

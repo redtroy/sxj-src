@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>私享家电子商贸平台</title>
+<link href="${b.staticPath}style/imageditor.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/style.css" rel="stylesheet"
 	type="text/css" />
 <link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
@@ -18,14 +19,22 @@
 <script type="text/javascript"
 	src="${b.staticPath}js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="${b.staticPath}js/jquery.iviewer.js"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
 <link href="${b.staticPath}style/jquery.iviewer.css" rel="stylesheet"
 	type="text/css" />
 				<script src="${b.staticPath}js/jquery.elastislide-style.js"
 	type="text/javascript"></script>
 	<script src="${b.staticPath}js/jquery.elastislide.js"
 	type="text/javascript"></script>
-<@b.pageScript/> <@b.dialogBox/> <@b.validate/> <@b.upload/>
+	<link rel="stylesheet" href="${b.staticPath}style/jquery.iviewer.css" />
+<script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
+
+<script src="${b.staticPath}js/jquery.uploadify.js"></script>
+<link href="${b.staticPath}style/uploadify.css" rel="stylesheet" type="text/css" />
+<@b.pageScript/> <@b.dialogBox/> <@b.validate/><@b.iviewer/>
 <script>
+var oSlide,oSlide2,oSlide3,hSlide;
+//var imagecomponent=$("#imagecomponent").html();
 	jQuery(document)
 			.ready(
 					function($) {
@@ -41,6 +50,12 @@
 										function() {
 											window.location.href = "${basePath}member/memberList.htm?isDelMesPerfect=true&flag=1&checkState=1&sort=1";
 										});
+						$(".msgBoxChangeImage")
+						.live(
+								"click",
+								function() {
+									window.location.href = "${basePath}member/memberList.htm?isDelChangeImage=true&changeImageFlag=1";
+								});
 						// 	JS.Engine.on({
 						// 			 start : function(cId, channelList, engine){  
 						// 			      $.get("${basePath}notifyComet.htm?channelName=${channelName}&ram="+Math.random()); 
@@ -94,19 +109,67 @@
 								$("#message_div_perfcet").append(bb);
 							}
 						});
+		$
+		.get(
+				"${basePath}message.htm?channelName=${channelNamechangeImage}&ram="
+						+ Math.random(),
+				function(data) {
+					if (typeof (data.count) != "undefined") {
+						$("#message_div_changeImage").empty();
+						var bb = "<div class='msgBoxChangeImage msg-remind record-tip'><span class='icon icon16 icon-remind'></span>有<strong>"
+								+ data.count
+								+ "</strong>位客户变更资质证书！</div>";
+						$("#message_div_changeImage").append(bb);
+					}
+				});
 	}
-	window.onload = function() {
-		$(".demo-image").live("click", function() {
-			var image = $(this).attr("image");
-			if (image == "") {
-				messageInfo("未上传证书图片！");
-			} else {
-				var imageSource = $(this).attr("data-image");
-				refreshIviewer($("#viewer2"), imageSource, $("#img_close"));
+	//证书上传
+	function uploadImg($file,oSlide,oSlide2,id) {
+			$file.uploadify({
+				swf : '${basePath}upload/uploadify.swf',
+				uploader : "${basePath}upload.htm",
+				fileTypeExts: '*.jpg',
+				auto : true,
+				multi : true,
+				height : 22,
+				width : 120,
+				buttonText : '上传证书',
+				onUploadSuccess : function(file, data, response) {
+					{
+						var num = 1;
+						var dataObj = eval("(" + data + ")");//转换为json对象 
+						oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds,null,oSlide);
+						oSlide2.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
+						$("#"+id+"_info").find("#newImageShow").show();
+                        /* var listImage="<li style='width: 86px; height: 120px'>" +
+                                      "<img src='${b.imagePath}"+dataObj.fileIds+"' data='${b.imagePath}"+dataObj.fileIds+"' />"+
+                                      "<tt></tt></li>"; */
+//                        $("#imageList_"+id).append(listImage); 
+					}
+				}
+			});
+		}
+	function uploadImgSingle(obj){
+		var objem=obj.parent().parent().find("a");
+		var objInput=obj.parent().parent().find(":input");
+		obj.uploadify({
+			swf : '${basePath}upload/uploadify.swf',
+			uploader : "${basePath}upload.htm",
+			fileTypeExts: '*.jpg',
+			auto : true,
+			multi : false,
+			height : 22,
+			width : 90,
+			buttonText : '上传证书',
+			onUploadSuccess : function(file, data, response) {
+					var num = 1;
+					var dataObj = eval("(" + data + ")");//转换为json对象 
+					objem.attr("image",dataObj.fileIds);
+					objem.attr("data-image","${b.imagePath}"+dataObj.fileIds);
+					objInput.val(dataObj.fileIds);
 			}
 		});
 	}
-
 	jQuery(document).ready(function($) {
 		$("#passworde_div_close").click(function() {
 			var li = $("#res_password_div").attr("index");
@@ -125,13 +188,123 @@
 				$('.viewer').slideDown(200);
 			}
 		})
+		$("#Delete-button").live('click',function(){
+			var obj=$(this).parent().parent();
+			dialogBox(function(){
+				$(obj).each(function(){
+					var dlNo= $(this).find("input:eq(0)").val();
+					var delId = $("#delId").val();
+					if(dlNo != ""){
+						if(delId == ""){
+							delId=dlNo;
+						}else{
+							delId=delId+","+dlNo;
+						}
+						$("#delId").val(delId);
+					}
+				})
+				obj.remove();
+			},"是否确认删除")
+	    })
+	   
+       $(".memberName").live("focus",function(){
+    	  	var obj=$(this);
+			var type=obj.parent().parent().find("input:eq(4)").val();
+    	   $(this).bigAutocomplete({
+   			width: '256',
+   			url : '${basePath}autoCompleMember.htm',
+   			callback : function(data) {
+   				if (data){
+   					obj.parent().parent().find("input:eq(0)").val(data.result);
+   					obj.parent().parent().find("input:eq(2)").val(data.contacts);
+   					obj.parent().parent().find("input:eq(3)").val(data.telNum);
+   					var ckType = data.memberType;
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   						if(ckType==6){
+   	   						sObj.append("<option value='6'>代理商</option>");
+   						}
+   						if(ckType==7){
+   	   						sObj.append("<option value='7'>经销商</option>");
+   						}
+   					}else if(type==6){
+   						if(ckType==2){
+   	   						sObj.append("<option value='6'>型材厂</option>");
+   						}
+   					}else if(type==7){
+   						if(ckType==2){
+   	   						sObj.append("<option value='7'>型材厂</option>");
+   						}
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
+   				}
+   			},
+   			beforeShow : function(data){
+   				if(data.length==1){
+   					obj.parent().parent().find("input:eq(0)").val(data[0].result);
+   					obj.parent().parent().find("input:eq(1)").val(data[0].title);
+   					obj.parent().parent().find("input:eq(2)").val(data[0].contacts);
+   					obj.parent().parent().find("input:eq(3)").val(data[0].telNum);
+   					var ckType = data[0].memberType;
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   						if(ckType==6){
+   	   						sObj.append("<option value='6'>代理商</option>");
+   						}
+   						if(ckType==7){
+   	   						sObj.append("<option value='7'>经销商</option>");
+   						}
+   					}else if(type==6){
+   						if(ckType==2){
+   	   						sObj.append("<option value='6'>型材厂</option>");
+   						}
+   					}else if(type==7){
+   						if(ckType==2){
+   	   						sObj.append("<option value='7'>型材厂</option>");
+   						}
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
+   				}
+   				if(data.length<1){
+   					var sObj=obj.parent().parent().find("select");
+						sObj.empty();
+   					if(type==2){
+   	   					sObj.append("<option value='6'>代理商</option>");
+   	   					sObj.append("<option value='7'>经销商</option>");
+   					}else if(type==6){
+   	   					sObj.append("<option value='6'>型材厂</option>");
+   					}else if(type==7){
+   	   					sObj.append("<option value='7'>型材厂</option>");
+   					}
+					sObj.append("<option value='10'>同一出资方</option>");
+   				}
+   			}
+   		});
+       })
+		$(".level").live("focus",function(){
+		   var obj=$(this);
+		   $(this).bigAutocomplete({
+			width: '200',
+			url : '${basePath}autoCertificate.htm',
+			callback : function(data) {
+				obj.parent().find("input:eq(0)").val(data.result);
+				obj.parent().find("input:eq(1)").val(data.title);
+			},
+			beforeShow : function(data){
+			}
+		});
+	})
 	});
+	
 	function close_img() {
 		$("#img_close").hide();
 		$(".maskdivgen").hide();
 		//$("#viewer2").empty();
 	}
 	function query(page) {
+		loadingImg();
 		var params = $("#search_form").serialize();
 		if (page != undefined || page != null) {
 			params = params + "&currentPage=" + page;
@@ -156,14 +329,16 @@
 				layer.close(index);
 				if (data.isOK == 'ok') {
 					pwd = data.password
-					$("#promptPwd").text("初始密码为：" + pwd + "，谢谢!");
-					dialogBoxOutId("#res_password_div");
+					//$("#promptPwd").text("初始密码为：" + pwd + "，谢谢!");
+					var msg ="<span style='font-size:20px;'>初始密码为：<span style='color:red;'>" + pwd + "</span>   谢谢!</span>";
+					 layer.alert(msg,{icon: 6,offset: ['40%', '43%']});
 				} else {
 					errorInfo("初始化失败！");
 				}
 			});
 		}, "请确认是否初始化密码！");
 	}
+	var closeLable="";
 	//收起菜单
 	function swallowing(lable) {
 		$("#" + lable).hide();
@@ -171,24 +346,43 @@
 	}
 	//打开菜单
 	function openDiv(lable, id) {
-		var temp = $("#" + lable).is(":hidden");//是否隐藏 
+		/* var temp = $("#" + lable).is(":hidden");//是否隐藏 
 		if (temp) {
 			$("#" + lable).show();
-			$("#" + lable).load("${basePath}member/info.htm?id=" + id);
+			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
+					  $(".foundedDate" ).datepicker();				    	
+			});
 		} else {
 			$("#" + lable).hide();
 			$("#" + lable).html("");
+		} */
+		if (closeLable!=""){
+			$("#" + closeLable).hide();
+			$("#" + closeLable).html("");
 		}
+		if (closeLable != lable){
+			$(".tableInfo").empty();
+			$("#" + lable).show();
+			$("#" + lable).load("${basePath}member/info.htm?id=" + id,function(){
+					  $(".foundedDate" ).datepicker();
+					 // $("#imagecomponent").html(imagecomponent);
+					 // $("#imagecomponent").find("#hidden").attr("id","hidden_"+id);
+			});
+			closeLable=lable;
+		}else{
+			closeLable ="";
+		}
+		
 	}
 
 	//修改
 	function edit(id) {
-		var params = $("#" + id).find(":input").serialize();
-		var deviceNumber = $("#" + id).find("#deviceNumber").val();
+		var params = $("#"+id+"_info_form").serialize();
+		var deviceNumber = $("#"+id+"_info").find("#deviceNumber").val();
 		params = params + "&deviceNumber=" + deviceNumber;
-		if (check(id)) {
+		/* if (check(id)) {
 			return false;
-		}
+		} */
 		$.post("${basePath}member/editMember.htm", params, function(data) {
 			if (data.isOK == 'ok') {
 				succInfo(function() {
@@ -198,7 +392,7 @@
 			} else {
 				errorInfo(data.error);
 			}
-		});
+		}); 
 	}
 	//更改账户状态
 	function editState(id, state) {
@@ -228,10 +422,10 @@
 		var address = $("#" + obj).find("[name='address']").val();
 		var telNum = $("#" + obj).find("[name='telNum']").val();
 		var code = $("#" + obj).find("#code").val();
-		if (bLicenseNo == "") {
-			messageInfo("营业执照号不能为空");
-			return true;
-		}
+		//if (bLicenseNo == "") {
+		//	messageInfo("营业执照号不能为空");
+		//	return true;
+		//}
 		//if (energyNo==""){
 		//   messageInfo("节能标识推广证号不能为空");
 		//   return true;
@@ -305,10 +499,10 @@
 				if (data.isOK == 'ok') {
 					succInfo(function() {
 						query($("#pager").attr("currentPage"));
-					}, "修改审核状态成功！");
+					}, temText+"成功！");
 
 				} else {
-					errorInfo("修改审核状态失败！");
+					errorInfo(temText+"失败！");
 				}
 			});
 		}, "是否"+temText+"！");
@@ -326,6 +520,68 @@
 			window.location.href = "exportExcel.htm?"
 					+ $("#search_form").serialize();
 		}, "是否导出Excel");
+	}
+	 function fullImage(){
+		 var index = layer.open({
+		     type: 1,
+		     title:'图片编辑',
+		     shade: true,
+		     skin: 'layui-layer-rim',
+		     content: $('#imageViewer')
+		 });
+		 layer.full(index);
+		 var newSlide=$("#SlideUl1").clone();
+		 var iv = $("#viewer").iviewer();
+			$("#SlideUl").clone(newSlide);
+			newSlide.attr("id","newSlideUl");
+			var newb=new $.slide({container:"#newSlideUl",imagesPerPage:7,onImageFocus:function(li){
+				//alert(li.find("img").attr("src"))
+			},
+			onSlide:function(li,index){
+				iv.iviewer('loadImage', li.find("img").attr("src")); 
+				newb.slideTo(index)
+			}});
+		}
+	
+	//=====联系人模块JS 
+	 //新增联系人
+	 function addrelevance(member_id){
+		 var add=$("#"+member_id+"_info").find("#tr_relevance").html();
+		 $("#"+member_id+"_info").find("#table_relevance").append(add);
+	 }
+	 
+	function saverelevance(member_id){
+		var delId=$("#delId").val();
+		var relist=$("#"+member_id+"_info").find("#table_relevance").find(":input").serialize();
+		relist=relist+"&memberId="+member_id+"&delId="+delId;
+		$.post("${basePath}member/editRelevanceMember.htm",relist,function(data){
+			if (data.isok=='ok'){
+				messageInfo("修改成功");
+				swallowing(member_id+"_info");
+			}else {
+				errorInfo("修改失败");
+			}
+		}) 
+	}
+	//修改图片
+	function editImage(member_id)
+	{
+		//var list=$("#"+member_id+"_info").find("#imagelist_"+member_id).find(":input").serialize();
+		var images="";
+		$("#"+member_id+"_info").find("#imagelist_"+member_id).find("img").each(function(){
+			 images=images+","+$(this).attr("data").split("http://storage.menchuang.org.cn\/")[1];
+		})
+		/* $("#"+member_id+"_info").find("#new_imagelist_"+member_id).find("img").each(function(){
+			 images=images+","+$(this).attr("data").split("http://storage.menchuang.org.cn\/")[1];
+		}) */
+		images=images.substr(1,images.length);
+		 $.post("${basePath}member/newEditImage.htm",{memberId:member_id,images:images},function(data){
+			if (data.isok=='ok'){
+				messageInfo("修改成功");
+			}else {
+				errorInfo("修改失败");
+			}
+		})  
 	}
 </script>
 <!-- InstanceEndEditable -->
@@ -395,6 +651,7 @@
 				<form id="edit_form"></form>
 				<div id="message_div"></div>
 				<div id="message_div_perfcet"></div>
+				<div id="message_div_changeImage"></div>
 				<div>
 					<@shiro.hasPermission name="28"> <a class="btn btn-orange ly-left"
 						onclick="exportExcel();"><span>导出Excel</span></a>
@@ -491,30 +748,24 @@
 					</#list>
 				</table>
 				<@b.pager/>
-				<div id="res_password_div" class="modal-wrap popDemo passwordBox"
-					style="display: none" index="">
-					<div class="modal-header">
-						<span title="关闭" class="close" id="passworde_div_close">关闭</span>
-					</div>
-					<div class="modal-body">
-						<div class="tipBox ly-clearFix">
-							<span class="icon32 icon-32-info"></span>
-							<p class="color-blue fontYH f18" id="promptPwd"></p>
-						</div>
-						<button class="popBtn" id="pass_btn">确认</button>
-					</div>
-				</div>
+<!-- 				<div id="res_password_div" class="modal-wrap popDemo passwordBox" -->
+<!-- 					style="" index=""> -->
+<!-- 					<div class="modal-header"> -->
+<!-- 						<span title="关闭" class="close" id="passworde_div_close">关闭</span> -->
+<!-- 					</div> -->
+<!-- 					<div class="modal-body"> -->
+<!-- 						<div class="tipBox ly-clearFix"> -->
+<!-- 							<span class="icon32 icon-32-info"></span> -->
+<!-- 							<p class="color-blue fontYH f18" id="promptPwd"></p> -->
+<!-- 						</div> -->
+<!-- 						<button class="popBtn" id="pass_btn">确认</button> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 				<!-- InstanceEndEditable -->
 			</div>
 		</div>
-		<div class="maskdivgen" style="display: none"></div>
-		<div class="viewer modal-wrap" id="img_close" style="display: none">
-			<div class="modal-header">
-				<span class="close" onclick="close_img()">关闭</span>
-			</div>
-			<div id="viewer2" class="modal-body iviewer"
-			style="width: 100%; display: none; top: 0px"></div>
-		</div>
+		<div class="maskdivgen" style="display: none;z-index: 96"></div>
+		
 		<@b.footer />
 </body>
 <!-- InstanceEnd -->

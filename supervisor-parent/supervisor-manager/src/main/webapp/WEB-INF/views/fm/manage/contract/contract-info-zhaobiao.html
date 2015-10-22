@@ -133,14 +133,15 @@
 
 					});
 </script>
+<#setting number_format="0.00">
 	<div class="infoBox text-left">
 		<ul class="ly-clearFix">
 			<li><label>合同号</label> ${contractModel.contract.contractNo}</li>
 			<li><label>&nbsp;</label> &nbsp;</li>
 			<li><label>工程名称</label> ${contractModel.contract.engName}</li>
 			<li><label>工程地址</label> ${contractModel.contract.engAddress}</li>
-			<li><label>甲方</label> ${contractModel.contract.memberNameA}</li>
-			<li><label>乙方</label> ${contractModel.contract.memberNameB}</li>
+			<li><label>需方</label> ${contractModel.contract.memberNameA}</li>
+			<li><label>供方</label> ${contractModel.contract.memberNameB}</li>
 			<li><label>签订地点</label> ${contractModel.contract.address}</li>
 			<li><label>签订时间</label> <#if
 				contractModel.contract.signedDate?exists>
@@ -169,8 +170,8 @@
 				<td>${item.productName}</td>
 				<td>${item.windowType}</td>
 				<td class="quantity">${item.quantity}</td>
-				<td>${item.price?string('0.00')}</td>
-				<td class="amount">${item.amount?string('0.00')}</td>
+				<td>${item.price}</td>
+				<td class="amount">${item.amount}</td>
 				<td>${item.remarks}</td>
 				<td><#if item.updateState==1><span class="color-red">！</span></#if>
 				</td>
@@ -201,12 +202,12 @@
 					<#if suffix[1]=="PDF">
 					<li><a href="javascript:void(0);" class="demo-pdf" data-pdf="${imgPath}">
 						<img src="${b.staticPath}images/pdf.png" title="点击下载" /></a>
-						<p>${imgPath_index+1}</p>
+						
 					</li>
 					<#else>
 					<li><a href="javascript:void(0);" class="demo-image" data-image="${b.imagePath}${imgPath}">
 						<img src="${b.imagePath}${imgPath}80x100.JPG" alt="" /></a>
-						<p>${imgPath_index+1}</p>
+						
 					</li>
 					
 					</#if>
