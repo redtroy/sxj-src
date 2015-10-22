@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<@b.dialogBox/>
+<@b.pageScript/> 
+<script>
+jQuery(document).ready(function($) {
+// 	$('.lnk-view').click(function(){
+// 		$('.popDemo').slideDown(200);
+// 	})
+	$('.modal-header .close').click(function(){
+		$('.popDemo').slideUp(200);
+	})
+})
+</script>
+<script>
+window.onload = function() {
+var elements = document.querySelectorAll( '.demo-image' );
+Intense( elements );
+}
+</script>
+<script>
+	function query(page){
+		var params=$("#search_box").serialize();
+		if(page!=undefined){
+		   params=params+"&currentPage="+page;
+	  	}
+		$.post("${basePath}openCount/query.htm",params,function(data){
+			var res=$(data).find("#rightBar").children("#res_table");
+			var pager=$(data).find("#rightBar").children("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage=pager.attr("totalPage");
+			var currentPage=pager.attr("currentPage");
+			loadPage(currentPage,totalPage,query);
+		});
+	}
+	
+	function downloadTem(modelPath,name){
+		window.location.href = "${basePath}openCount/downloadTem.htm?modelPath="+modelPath+"&&name="+name;
+	}
+	
+	function showImg(imageSrc){
+		$("#imgId").attr("src","${b.imagePath}"+imageSrc);
+		$('#imgDiv').slideDown(200);
+	}
+	
+	function loadAdd(){
+		window.location.href="${basePath}openCount/loadAddPage.htm";
+	}
+	
+	function deleteTem(id){
+		dialogBox(function(index){
+	 		 $.post("${basePath}openCount/delCountTem.htm?id="+id,null,function(data){
+	 			  layer.close(index);
+	 				if(data.isOk == "true"){
+	 					succInfo(function(){
+	 						query()
+	 					},"删除成功");
+	 				}else{
+	 					errorInfo(data.error);
+	 				}
+	 			});
+	 	 },"是否删除下料单模板");
+	}
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<!-- <div class="local"><a href="welcome.html" class="lnk-green">私享家绿色门窗平台管理系统</a><span>&gt;</span>算料管理<span>&gt;</span>下料单模板管理</div> -->
+<@b.menuPath/>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <@b.leftMenu />
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+      <h2 class="title">下料单模板管理</h2>
+      <div id="searchBox"><button onclick="javascript:loadAdd()" class="btn btn-blue ly-right"><span>新增模板</span></button>
+      <form id="search_box" action="javascript:void(0);">
+      <p>型材公司所属地区
+        <select name="area">
+          <option selected="selected"  value="">所有地区</option>
+          <#list areaList as model>
+          <option value="${model.id}">${model.name}</option>
+          </#list>
+        </select>
+       型材公司名称
+       <input type="text" name="companyName" value="">
+       类别名称
+       <input type="text"  name="type" value="" class="input-w200"/></p>
+       系列名称
+       <input type="text" name="series" value="">
+       窗型名称
+       <input type="text" name="name" value="">
+       
+        <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
+        </form>
+    </div>
+    <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
+      	<col width="10%" />
+        <col width="12%" />
+		<col/>
+        <col width="15%" />
+        <col width="15%" />
+        <col width="10%" />
+        <col width="5%" />
+		<col width="15%" />
+        <tr>
+          <th>编号</th>        
+		  <th>型材公司所属地区</th>
+          <th>型材公司名称</th>
+          <th>类别名称</th>
+          <th>系列名称</th>
+          <th>窗型名称</th>
+          <th>窗型图</th>
+		  <th>操作</th>
+        </tr>
+        <#list list as model>
+        <tr>
+		  <td><a href="${basePath}openCount/loadFeeding.htm?id=${model.id}" target="_blank">${model.winId}</a></td>
+		  <td>${model.areaName}</td>
+          <td>${model.companyName}</td>
+          <td>${model.type}</td>
+          <td>${model.series}</td>
+		  <td>${model.name}</td>
+          <td><a href="javascript:showImg('${model.imageSrc}')" class="lnk-blue lnk-underline lnk-view">查看</a></td>
+		  <td class="operation">
+<!-- 		  <a href="javascript:downloadTem('${model.modelPath}','${model.name}')" class="download">下载</a> -->
+		  <a href="javascript:deleteTem('${model.id}')" class="del">删除</a></td>
+        </tr>
+        </#list>
+      </table>
+      <@b.pager/>
+      <div class="modal-wrap popDemo popView" style="display:none;" id="imgDiv">
+        <div class="modal-header">       
+           <span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></div>
+        <div class="modal-body infoBox">
+         <div class="rollBox">
+            <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
+            <div class="Cont" id="ISL_Cont">
+              <div class="ScrCont">
+                <div id="List1">
+                  <!-- 图片列表 begin -->
+                  <div class="pic"><a href="#" class="demo-image" data-image="../images/ht01.gif"><img id="imgId" src=""  /></a></div>
+                  <!-- 图片列表 end -->
+                </div>
+                <div id="List2"></div>
+              </div>
+            </div>
+            <div class="RightBotton" onmousedown="ISL_GoDown()" onmouseup="ISL_StopDown()" onmouseout="ISL_StopDown()"></div>
+          </div>
+        </div>        
+      </div>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>
