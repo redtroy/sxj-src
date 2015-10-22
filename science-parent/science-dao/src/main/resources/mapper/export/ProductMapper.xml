@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.science.dao.export.IProductDao">
+	<resultMap id="ProductResultMap" type="com.sxj.science.entity.export.ProductEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="width" column="WIDTH" jdbcType="VARCHAR" />
+		<result property="height" column="HEIGHT" jdbcType="VARCHAR" />
+		<result property="quantity" column="QUANTITY" jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
+		<result property="docId" column="DOC_ID" jdbcType="VARCHAR" />
+	</resultMap>
+	<delete id="deleteProduct" parameterType="String">
+		<![CDATA[DELETE FROM S_P_PRODUCT WHERE DOC_ID IN ]]>
+		<foreach item="item" collection="array" open="(" close=")"
+			separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 条件查询备案 -->
+	<select id="getProductByDocIds" resultMap="ProductResultMap"
+		parameterType="java.util.Map">
+		<![CDATA[SELECT * FROM S_P_PRODUCT WHERE 1=1  ]]>
+		<!-- 	公司名称 -->
+		<if test="docIds != null">
+			<![CDATA[ AND DOC_ID IN ]]>
+			<foreach item="item" collection="docIds" open="(" close=")"
+			separator=",">
+			#{item}
+			</foreach> 
+		</if>
+	</select>
+</mapper> 
