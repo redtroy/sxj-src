@@ -1,0 +1,72 @@
+<a data-dismiss="modal" class="close" onclick="closeDiv();">×</a>
+        <h1>下料优化</h1>
+<table width="700px" border="1" align="center">
+  <tbody>
+    <tr>
+      <td width="100" align="left">锯缝（mm）:</td>
+      <td width="80" align="left"><input type="text" name="kerf" size="3" value="10"></td>
+      <td width="120" align="center">整料长度（mm）:</td>
+      <td width="52" align="left"><input type="text" value="minLength" size="5" value="6000"></td>
+      <td width="10" align="center">-</td>
+      <td width="80" align="left"><input type="text" name="maxLength" size="5" value="6000"></td>
+      <td width="100" align="left">步长（mm）:</td>
+      <td width="80" align="left"><input type="text" name="step" size="3" value="500"></td>
+      <td align="right"><button data-dismiss="modal" class=" button button-orange">一键优化</button></td>
+    </tr>
+  </tbody>
+</table>
+<div class="optablevis">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" id="optable">
+  <tbody>
+    <tr bgcolor="#888" class="whitecolor">
+   	 <td width="40" valign="middle" height="40" align="center">选择</td>
+      <td width="40" valign="middle" height="40" align="center">序号</td>
+      <td valign="middle" align="center">材料名称</td>
+      <td width="150" valign="middle" height="40" align="center">整料长度（mm）</td>
+      <td width="150" valign="middle" height="40" align="center">余料长度（mm）</td>
+      <td width="150" valign="middle" height="40" align="center">需用整料（支）</td>
+      <td width="100" valign="middle" height="40" align="center">利用率</td>
+    </tr>
+    <#list list as item>
+    <tr id="td_${item_index}">
+    <td height="30" align="center">
+    <input type="checkbox" name="checktd" value="${item_index}" >
+    <input type="hidden" name="name" value="${item.sectionName}"/>
+    <input type="hidden" name="type" value="${item.sectionType}"/>
+    </td>
+      <td height="30" align="center">${item_index}</td>
+      <td align="center">${item.sectionName}(${item.sectionType})</td>
+      <td height="30" align="center" onmouseout="MM_out(this)" onmouseover="MM_over(this)">${item.param.length}<div class="dataedit" style="display: none;"><button title="点击修改" class="button-edit"></button></div></td>
+     <#assign left=0>
+     <#assign materialNum=0>
+     <#list item.layOffs as lay>
+      <#assign left=lay.left+left>
+      <#assign materialNum=lay.materialNum+materialNum>
+     </#list>
+      <td height="30" align="center">${left}</td>
+      <td height="30" align="center">${materialNum}</td>
+      <td height="30" align="center">${(item.param.length-left)/item.param.length*100}%</td>
+    </tr>
+    </#list>
+  </tbody>
+</table>
+</div>
+<div style="width:290px;" class="choose">
+<ul>
+<li><button data-dismiss="modal" class=" button button-green">全屏查看</button></li>
+<li><button data-dismiss="modal" class=" button button-orange" onclick="toDownload();">下一步</button></li>
+<li><button data-dismiss="modal" class=" button button-green" onclick="closeDiv();">取消</button></li>
+</ul>
+</div>
+<script>
+function toDownload(){
+	closeDiv();
+	$.get("${basePath}optim/toDownload.htm",function(data){
+		$("#opreport").empty();
+		$("#opreport").append(data);
+		$("#opreport").show();
+		 pageIndex=dialogBoxOutId("#opreport");
+	});
+}
+
+</script>
