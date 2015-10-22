@@ -434,11 +434,18 @@ public class MemberController extends BaseController
                 {
                     String message = "";
                     message = memberService.createvalidata(phoneNo, message);
-                    HierarchicalCacheManager.set(CacheLevel.REDIS,
-                            "checkMs",
-                            phoneNo + "_checkMs",
-                            message,
-                            600);
+                    if (message.equals("-9999"))
+                    {
+                        map.put("error", "该号码已被拉入黑名单");
+                    }
+                    else
+                    {
+                        HierarchicalCacheManager.set(CacheLevel.REDIS,
+                                "checkMs",
+                                phoneNo + "_checkMs",
+                                message,
+                                600);
+                    }
                 }
                 else
                 {
