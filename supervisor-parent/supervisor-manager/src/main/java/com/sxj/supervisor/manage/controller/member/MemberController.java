@@ -75,10 +75,7 @@ public class MemberController extends BaseController
     private IMemberImageService imageService;
     
     @Autowired
-    private IMemberToMemberService mtmservice;
-    
-    @Value("${excelPath.member}")
-    private String excelTemPath;
+    private IMemberToMemberService mtmservice;   
     
     /**
      * 会员管理列表

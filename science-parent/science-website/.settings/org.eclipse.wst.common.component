@@ -7,12 +7,6 @@
         <dependent-module archiveName="science-service-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/science-service/science-service">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="file-client-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/file-client/file-client">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="file-common-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/file-common/file-common">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="sxj-common-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sxj-common/sxj-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>

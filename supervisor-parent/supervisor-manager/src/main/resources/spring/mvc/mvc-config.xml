@@ -32,6 +32,14 @@
 	<bean id="flowController" class="org.springframework.webflow.mvc.servlet.FlowController">
 		<property name="flowExecutor" ref="flowExecutor" />
 	</bean>
+	<bean id="countConfig"
+		class="com.sxj.spring.modules.beanfactory.CustomizedPropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:config/countManager.properties</value>
+			</list>
+		</property>
+	</bean>
 	<import resource="classpath*:spring/mvc/view-config.xml" />
 	<import resource="classpath*:spring/webflow/webflow-config.xml" />
 </beans>

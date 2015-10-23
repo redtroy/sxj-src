@@ -80,18 +80,18 @@
 		    <url-pattern>*.html</url-pattern>
 		  </filter-mapping>
 		  <!-- 特殊字符过滤 -->
-		  <filter>
-		     <filter-name>CharacterFilter</filter-name>
-		     <filter-class>com.sxj.supervisor.manage.controller.CharacterFilter</filter-class>
-		     <init-param>
-		         <param-name>characterParams</param-name>
-		         <param-value><![CDATA[$,',",\',\",<,>]]></param-value>
-		     </init-param>
-		 </filter>
-		 <filter-mapping>
-		     <filter-name>CharacterFilter</filter-name>
-		     <url-pattern>/*</url-pattern>
-		 </filter-mapping>
+<!-- 		  <filter> -->
+<!-- 		     <filter-name>CharacterFilter</filter-name> -->
+<!-- 		     <filter-class>com.sxj.supervisor.manage.controller.CharacterFilter</filter-class> -->
+<!-- 		     <init-param> -->
+<!-- 		         <param-name>characterParams</param-name> -->
+<!-- 		         <param-value><![CDATA[$,',",\',\",<,>]]></param-value> -->
+<!-- 		     </init-param> -->
+<!-- 		 </filter> -->
+<!-- 		 <filter-mapping> -->
+<!-- 		     <filter-name>CharacterFilter</filter-name> -->
+<!-- 		     <url-pattern>/*</url-pattern> -->
+<!-- 		 </filter-mapping> -->
 		 <!-- 特殊字符过滤 end-->
 		<welcome-file-list>
 			<welcome-file>/index.htm</welcome-file>

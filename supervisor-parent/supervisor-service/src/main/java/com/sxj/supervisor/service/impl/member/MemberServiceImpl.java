@@ -292,7 +292,7 @@ public class MemberServiceImpl implements IMemberService
             }
             else
             {
-                if (member.getCheckState().getId() < 2)
+                if (m.getCheckState().getId() < 2)
                 {
                     assembleMemeberToModify(member, m);
                     menberDao.deleteMember(member.getId());
