@@ -30,6 +30,7 @@
 				<value>classpath*:config/shiro.properties</value>
 				<value>classpath*:config/ca.properties</value>
 				<value>classpath*:cache.properties</value>
+				<value>classpath*:config/httpclient.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -93,6 +94,13 @@
 	<bean class="com.sxj.statemachine.spring.StateMachineFactoryBean">
 		<property name="basePackages" value="com.sxj.supervisor.machine">
 		</property>
+	</bean>
+	
+	<bean id="httpClient" class="com.sxj.util.common.SxjHttpClientImpl">
+		<property name="charset" value="${httpclient.charset}" />
+		<property name="keyStoreType" value="${httpclient.keyStoreType}" />
+		<property name="keyStorePath" value="${httpclient.keyStorePath}" />
+		<property name="keyPassword" value="${httpclient.keyPassword}" />
 	</bean>
 	
 </beans>

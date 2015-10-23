@@ -88,10 +88,12 @@ window.setInterval("heartBeat()",1);
 var paramIndex=1;
 function saveHtml(id){
 	var htmlData=$("#tableId").html();
+	alert(id);
 	var params = {
 			htmlData:htmlData,
 			id:id
 	};
+	alert(1);
 	$.post("${basePath}openCount/saveHtml.htm",params,function(data){
 			if(data.isOK == 'true'){
 				alert("新增成功")

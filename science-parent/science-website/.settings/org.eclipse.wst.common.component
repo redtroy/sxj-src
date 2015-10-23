@@ -7,12 +7,6 @@
         <dependent-module archiveName="science-service-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/science-service/science-service">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="file-client-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/file-client/file-client">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="file-common-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/file-common/file-common">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="sxj-common-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sxj-common/sxj-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
@@ -22,7 +16,7 @@
         <dependent-module archiveName="shiro-freemarker-tags-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/shiro-freemarker-tags/shiro-freemarker-tags">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="supervisor-website"/>
         <property name="java-output-path" value="/science-website/target/classes"/>
+        <property name="context-root" value="science-website"/>
     </wb-module>
 </project-modules>
