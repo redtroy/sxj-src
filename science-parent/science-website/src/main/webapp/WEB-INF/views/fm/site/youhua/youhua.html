@@ -1,17 +1,19 @@
 <a data-dismiss="modal" class="close" onclick="closeDiv();">×</a>
         <h1>下料优化</h1>
+<form id="optimized_form" action="javascript:void(0);">
+ <input type="hidden" name="projectId" value="${projectId}"/>
 <table width="700px" border="1" align="center">
   <tbody>
     <tr>
       <td width="100" align="left">锯缝（mm）:</td>
-      <td width="80" align="left"><input type="text" name="kerf" size="3" value="10"></td>
+      <td width="80" align="left"><input type="text" name="kerf" size="3" value="${kerf}"></td>
       <td width="120" align="center">整料长度（mm）:</td>
-      <td width="52" align="left"><input type="text" value="minLength" size="5" value="6000"></td>
+      <td width="52" align="left"><input type="text" name="minLength" size="5" value="${minLength}"></td>
       <td width="10" align="center">-</td>
-      <td width="80" align="left"><input type="text" name="maxLength" size="5" value="6000"></td>
+      <td width="80" align="left"><input type="text" name="maxLength" size="5" value="${maxLength}"></td>
       <td width="100" align="left">步长（mm）:</td>
-      <td width="80" align="left"><input type="text" name="step" size="3" value="500"></td>
-      <td align="right"><button data-dismiss="modal" class=" button button-orange">一键优化</button></td>
+      <td width="80" align="left"><input type="text" name="step" size="3" value="${step}"></td>
+      <td align="right"><button data-dismiss="modal" class=" button button-orange" onclick="optimization();">一键优化</button></td>
     </tr>
   </tbody>
 </table>
@@ -33,10 +35,21 @@
     <input type="checkbox" name="checktd" value="${item_index}" >
     <input type="hidden" name="name" value="${item.sectionName}"/>
     <input type="hidden" name="type" value="${item.sectionType}"/>
+     <input type="hidden" name="quantity" value="${item.quantity}"/>
     </td>
       <td height="30" align="center">${item_index}</td>
       <td align="center">${item.sectionName}(${item.sectionType})</td>
-      <td height="30" align="center" onmouseout="MM_out(this)" onmouseover="MM_over(this)">${item.param.length}<div class="dataedit" style="display: none;"><button title="点击修改" class="button-edit"></button></div></td>
+      <td id="length_td_${item_index}" height="30" align="center" onmouseout="MM_out(this)" onmouseover="MM_over(this)">${item.param.length}
+      	<div class="dataedit" style="display: none;"><button title="点击修改" class="button-edit" onclick="toEditLength('${item_index}');"></button></div>
+      </td>
+       <input id="length_hidden_${item_index}" type="hidden" name="length" value="${item.param.length}"/>
+      <td id="edit_length_td_${item_index}" height="30" align="center" style="display: none;">
+            <input id="length_value_${item_index}" type="text" name="value" value="${item.param.length}" class="inputedit">
+            <div class="editok">
+                <button class="button-yes" title="确定修改" onclick="editLength('${item_index}');"></button>
+                <button class="button-no" title="取消修改" onclick="unEditLength('${item_index}');"></button>
+            </div>
+       </td>
      <#assign left=0>
      <#assign materialNum=0>
      <#list item.layOffs as lay>
@@ -50,6 +63,7 @@
     </#list>
   </tbody>
 </table>
+</form>
 </div>
 <div style="width:290px;" class="choose">
 <ul>
@@ -68,5 +82,34 @@ function toDownload(){
 		 pageIndex=dialogBoxOutId("#opreport");
 	});
 }
+function toEditLength(index){
+	$("#length_td_"+index).hide();
+	$("#edit_length_td_"+index).show();
+}
+function unEditLength(index){
+	alert("fsdfsd");
+	$("#length_td_"+index).show();
+	$("#edit_length_td_"+index).hide();
+}
+function editLength(index){
+	$("#length_td_"+index).show();
+	$("#edit_length_td_"+index).hide();
+	var value=$("#length_value_"+index).val();
+	$("#length_td_"+index).text(value);
+	$("#length_hidden_"+index).val(value);
+}
 
+function optimization(){
+	var params=$("#optimized_form").serialize();
+	dialogBox(function(index){
+		 $.post("${basePath}optim/optimization.htm",params,function(data){
+			 		layer.close(index);
+					layer.close(pageIndex);
+					 $("#optimize").empty();
+					 $("#optimize").append(data);
+					 $("#optimize").show();
+					 pageIndex=dialogBoxOutId("#optimize");
+			});
+	 },"是否确认优化");
+}
 </script>

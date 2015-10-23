@@ -1,6 +1,8 @@
 package com.sxj.science.website.controller.project;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import com.sxj.science.model.DocModel;
 import com.sxj.science.service.IDocService;
 import com.sxj.science.service.IProjectService;
 import com.sxj.science.website.controller.BaseController;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
@@ -29,7 +32,8 @@ public class DocController extends BaseController
     private IProjectService projectService;
     
     @RequestMapping("/toAdd")
-    public String toAdd(String projectId, String itemId, ModelMap map)
+    public String toAdd(String projectId, String itemId, String docId,
+            ModelMap map)
     {
         ProjectEntity project = projectService.getProject(projectId);
         map.put("projectId", projectId);
@@ -39,6 +43,27 @@ public class DocController extends BaseController
             map.put("projectName", project.getName());
         }
         map.put("memberNo", "E00001");
+        if (StringUtils.isEmpty(docId))
+        {
+            List<DocModel> docList = docService.queryDocModel(itemId);
+            if (docList != null && docList.size() > 0)
+            {
+                map.put("docList", docList);
+                return "site/editmtable";
+            }
+        }
+        else
+        {
+            DocModel docModel = docService.getDocModel(docId);
+            if (docModel != null)
+            {
+                List<DocModel> docList = new ArrayList<DocModel>();
+                docList.add(docModel);
+                map.put("docList", docList);
+                return "site/editmtable";
+            }
+        }
+        
         return "site/mtable";
     }
     
@@ -58,5 +83,22 @@ public class DocController extends BaseController
             map.put("error", e.getMessage());
         }
         return map;
+    }
+    
+    @RequestMapping("/toEdit")
+    public String toAdd(String projectId, String itemId, String[] docIds,
+            ModelMap map)
+    {
+        ProjectEntity project = projectService.getProject(projectId);
+        map.put("projectId", projectId);
+        map.put("itemId", itemId);
+        if (project != null)
+        {
+            map.put("projectName", project.getName());
+        }
+        map.put("memberNo", "E00001");
+        List<DocModel> docList = docService.queryDocModel(docIds);
+        map.put("docList", docList);
+        return "site/editmtable";
     }
 }
