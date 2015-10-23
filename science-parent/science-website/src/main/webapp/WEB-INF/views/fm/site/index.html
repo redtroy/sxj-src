@@ -304,6 +304,10 @@ function hidePrereport(){
 }
 
 function previewReport(){
+	if(itemIds.length==0){
+		alert("请选择下料单");
+		return false;
+	}
 	var type=$('input[name="reportType"]:checked').val();
 	if(type=='product'){
 		window.location.href = "${basePath}countReport/previewProductReport.htm?itemIds="+itemIds+"&&projectName="+projectName;
@@ -315,6 +319,10 @@ function previewReport(){
 }
 
 function downloadReport(){
+	if(itemIds.length==0){
+		alert("请选择下料单");
+		return false;
+	}
 	var type=$('input[name="reportType"]:checked').val();
 	if(type=='product'){
 		window.location.href = "${basePath}countReport/downloadProductReport.htm?itemIds="+itemIds+"&&projectName="+projectName;
