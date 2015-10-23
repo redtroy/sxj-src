@@ -46,6 +46,7 @@ import com.sxj.science.model.statis.StatisticsItemModel;
 import com.sxj.science.service.IScienceService;
 import com.sxj.science.service.OptimizedResultReader;
 import com.sxj.spring.modules.util.LocalFileUtil;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
@@ -209,6 +210,7 @@ public class ScienceServiceImpl implements IScienceService
                 excelData.add(list);
                 String text = "";
                 int index2 = 1;
+                double quantity = 0d;
                 for (ScienceEntity scienceEntity : list)
                 {
                     if (index2 == 1)
@@ -221,6 +223,11 @@ public class ScienceServiceImpl implements IScienceService
                     }
                     text = text + scienceEntity.getLength() + "\r\n";
                     text = text + scienceEntity.getQuantity() + "\r\n";
+                    if (StringUtils.isNotEmpty(scienceEntity.getQuantity()))
+                    {
+                        quantity = quantity
+                                + Double.parseDouble(scienceEntity.getQuantity());
+                    }
                     if (list.size() == 16)
                     {
                         System.out.println("dfdfd");
@@ -247,6 +254,7 @@ public class ScienceServiceImpl implements IScienceService
                 OptimizedResult result = OptimizedResultReader.read(new FileInputStream(
                         filePath + "XABC.TXT"),
                         "GBK");
+                result.setQuantity(quantity);
                 resultList.add(result);
             }
             model.setResult(resultList);

@@ -31,6 +31,11 @@ public class OptimizedResult
     private Long materialNum;
     
     /**
+     * 数量
+     */
+    private Double quantity;
+    
+    /**
      * 利用率
      */
     private Double usagePercent;
@@ -117,6 +122,16 @@ public class OptimizedResult
     public void setSectionType(String sectionType)
     {
         this.sectionType = sectionType;
+    }
+    
+    public Double getQuantity()
+    {
+        return quantity;
+    }
+    
+    public void setQuantity(Double quantity)
+    {
+        this.quantity = quantity;
     }
     
 }

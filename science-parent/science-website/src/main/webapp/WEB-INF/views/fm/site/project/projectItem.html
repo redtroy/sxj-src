@@ -61,7 +61,7 @@
 	              <input id="${projectItem.id}"  parentId="0" childrensize=${projectItem.docList?size} type="checkbox" name="itemId" value="${projectItem.id}">
 	              <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}">(未完成)</a></span>
 	              ${projectItem.name}
-	              <a target="_blank" onclick="toProjectItemRename('${projectItem.id}');"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a>
+	              <a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a>
               </div>
               <div id="project_item_modify_${projectItem.id}" class="contraction contraction_xlsname" style="display: none;">
 	              <input id="${projectItem.id}"  parentId="0" childrensize=${projectItem.docList?size} type="checkbox" name="itemId" value="${projectItem.id}"/>
@@ -74,16 +74,16 @@
               <td>${projectItem.uploadTime?string("yyyy-MM-dd HH:mm:ss")}</td>
               <td>
               <button href="#delxls" data-toggle="modal" class="button button-croci" onclick="removeItem('${projectItem.id}');">删除批次</button>&#12288;
-<!--               <button href="#downxls" data-toggle="modal" class="button button-croci" onclick="openDiv('downsourcexls_${projectItem.id}');">下载文件</button> -->
+              <button href="#downxls" data-toggle="modal" class="button button-croci" onclick="toProjectItemRename('${projectItem.id}');">重命名</button>
               </td>
             </tr>
              <#list projectItem.docList as doc>
             <tr id="children_td_${projectItem.id}">
               <td class="sheetlist" colspan="3">
               <input parentId="${projectItem.id}" count=${doc_index} type="checkbox" name="docId" value="${doc.id}">
-              <span class="unfinised"><a target="_blank" href="feeding single.html">(未完成)</a></span>
+              <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&docId=${doc.id}">(未完成)</a></span>
               ${doc.series}
-              <a target="_blank"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a>
+              <a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&docId=${doc.id}"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a>
               </td>
             </tr>
               </#list>

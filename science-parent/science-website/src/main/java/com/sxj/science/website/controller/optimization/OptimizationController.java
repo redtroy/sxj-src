@@ -55,6 +55,11 @@ public class OptimizationController extends BaseController
                     projectId,
                     "6000",
                     "10.0");
+            map.put("minLength", "6000");
+            map.put("maxLength", "6000");
+            map.put("kerf", "10");
+            map.put("step", "500");
+            map.put("projectId", projectId);
             map.put("list", model.getResult());
             session.setAttribute("cllingliaoPath", model.getCllingliaoPath());
             session.setAttribute("cltongjiPath", model.getCltongjiPath());
@@ -117,6 +122,11 @@ public class OptimizationController extends BaseController
             session.setAttribute("cllingliaoPath", max.getCllingliaoPath());
             session.setAttribute("cltongjiPath", max.getCltongjiPath());
             session.setAttribute("xlyouhuaPath", max.getXlyouhuaPath());
+            map.put("minLength", minLength);
+            map.put("maxLength", maxLength);
+            map.put("kerf", kerf);
+            map.put("step", step);
+            map.put("projectId", projectId);
             return "site/youhua/youhua";
         }
         catch (Exception e)
