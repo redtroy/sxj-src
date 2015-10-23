@@ -77,7 +77,7 @@ public class AuthImg
         }
         for (int i = 0; i < 20; i++)
         {
-            g.setColor(getRandColor(random, 0, 255));// 设置线条的颜色  
+            g.setColor(getRandColor(random, 100, 255));// 设置线条的颜色  
             int x1 = random.nextInt(width);
             int y1 = random.nextInt(height);
             int x2 = random.nextInt(width);
