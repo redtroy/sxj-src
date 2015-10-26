@@ -66,7 +66,7 @@ public class AuthImg
             g.drawString(rand, 24 * i + 10 + random.nextInt(8), 24);
         }
         // 添加噪点  
-        float yawpRate = 0.05f;// 噪声率  
+        /*float yawpRate = 0.05f;// 噪声率  
         int area = (int) (yawpRate * width * height);
         for (int i = 0; i < area; i++)
         {
@@ -74,7 +74,7 @@ public class AuthImg
             int y = random.nextInt(height);
             int rgb = getRandomIntColor();
             image.setRGB(x, y, rgb);
-        }
+        }*/
         for (int i = 0; i < 10; i++)
         {
             g.setColor(getRandColor(random, 100, 255));// 设置线条的颜色  
