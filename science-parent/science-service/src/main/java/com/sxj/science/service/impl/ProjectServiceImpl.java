@@ -24,6 +24,7 @@ import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.model.ItemModel;
 import com.sxj.science.model.ProjectQuery;
 import com.sxj.science.service.IProjectService;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -71,7 +72,9 @@ public class ProjectServiceImpl implements IProjectService
     {
         try
         {
+            project.setNoType("GC" + DateTimeUtils.getTime("yyMM"));
             projectDao.addProject(project);
+            
             ItemEntity item = new ItemEntity();
             item.setProjectId(project.getId());
             item.setName("第一批次");

@@ -1,5 +1,6 @@
 package com.sxj.science.dao.export;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
@@ -7,6 +8,7 @@ import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.science.entity.export.GlassEntity;
+import com.sxj.util.persistent.QueryCondition;
 
 public interface IGlassDao
 {
@@ -23,4 +25,7 @@ public interface IGlassDao
     public GlassEntity getGlass(String id);
     
     public void deleteGlass(String[] docIds);
+    
+    public List<GlassEntity> query(QueryCondition<GlassEntity> query)
+            throws SQLException;
 }

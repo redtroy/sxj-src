@@ -5,9 +5,12 @@
 <mapper namespace="com.sxj.science.dao.export.IProjectDao">
 	<resultMap id="ProjectResultMap" type="com.sxj.science.entity.export.ProjectEntity">
 		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="projectNo" column="PROJECT_NO" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="fileCount" column="FILE_COUNT" jdbcType="INTEGER" />
+		<result property="batchCount" column="BATCH_COUNT" jdbcType="INTEGER" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="uploadTime" column="UPLOAD_TIME"  jdbcType="TIMESTAMP" />
 	</resultMap>
 	

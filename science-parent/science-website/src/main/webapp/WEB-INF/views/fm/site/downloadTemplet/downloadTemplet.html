@@ -117,9 +117,7 @@ function moreSeries(){
 }
 
 function comfir(){
-	alert(idArr);
 	$.get("${basePath}downloadTem/getTemp.htm?id="+idArr,function(data){
- 		  alert(data);
  		  $("#in_table").append(data);
  		});
 }

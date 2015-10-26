@@ -57,6 +57,16 @@ $(document).ready(function()
     			}
             });
         });
+function MM_over(mmObj) {
+    var mSubObj = mmObj.getElementsByTagName("div")[0];
+    mSubObj.style.display = "block";
+}
+function MM_out(mmObj) {
+    var mSubObj = mmObj.getElementsByTagName("div")[0];
+    mSubObj.style.display = "none";
+
+}
+
 <!--tab切换开始-->
 function setTab(projectId,index){
 	if(index==1){
@@ -304,6 +314,10 @@ function hidePrereport(){
 }
 
 function previewReport(){
+	if(itemIds.length==0){
+		alert("请选择下料单");
+		return false;
+	}
 	var type=$('input[name="reportType"]:checked').val();
 	if(type=='product'){
 		window.location.href = "${basePath}countReport/previewProductReport.htm?itemIds="+itemIds+"&&projectName="+projectName;
@@ -315,6 +329,10 @@ function previewReport(){
 }
 
 function downloadReport(){
+	if(itemIds.length==0){
+		alert("请选择下料单");
+		return false;
+	}
 	var type=$('input[name="reportType"]:checked').val();
 	if(type=='product'){
 		window.location.href = "${basePath}countReport/downloadProductReport.htm?itemIds="+itemIds+"&&projectName="+projectName;
@@ -367,7 +385,7 @@ function downloadReport(){
     </tr>
     <#list projectList as project>
     <tr id="project_${project.id}" isopen="close">
-    <td>GC15090001</td>
+    <td>${project.projectNo}</td>
       <td id="project_info_${project.id}" class="proname">
 	      <img src="${b.staticPath}images/flex_1.png" width="9" height="8" alt="点击显示文件列表" title="点击显示文件列表" onclick="getItem('${project.id}');"/>
 	      <div title="${project.name}" class="contraction contraction_proname">

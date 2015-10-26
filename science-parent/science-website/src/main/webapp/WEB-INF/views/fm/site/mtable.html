@@ -87,18 +87,19 @@ function addDoc(){
 	dialogBox(function(index){
 		 $.post("${basePath}doc/addDoc.htm",params,function(data){
 			  layer.close(index);
-			  alert(data.isOK)
 				if(data.isOK == true){
 					layer.close(pageIndex);
 					alert("添加成功");
-					window.location.href="${basePath}index.htm";
+					//window.location.href="${basePath}index.htm";
 				}else{
 					errorInfo(data.error);
 				}
 			});
 	},"是否确认添加");
 }
-
+function reset(){
+	$('#doc_form')[0].reset();
+}
 
 </script>
 <!--返回顶部脚本结束-->
@@ -1072,7 +1073,7 @@ function addDoc(){
 <div style="width:440px;margin:auto;height:80px">
 			<ul>
 			<li><button onclick="addDoc();" class=" btn btn-blue" data-dismiss="modal"><span>保存</span></button></li>
-			<li><button onclick="removeElement()" class=" btn btn-green" data-dismiss="modal"><span>一键还原</span></button></li>
+			<li><button onclick="reset();" class=" btn btn-green" data-dismiss="modal"><span>一键还原</span></button></li>
 			<li><button onclick="removeElement()" class=" btn btn-blue" data-dismiss="modal"><span>复制</span></button></li>
 			<li><button onclick="removeElement()" class=" btn btn-red" data-dismiss="modal"><span>删除</span></button></li>
 			<li><button onclick="removeElement()" class=" btn btn-blue" data-dismiss="modal"><span>打印</span></button></li>
