@@ -87,7 +87,7 @@ window.setInterval("heartBeat()",1);
 <script>
 var paramIndex=1;
 function saveHtml(id){
-	var htmlData=$("#tableId").html();
+	var htmlData=$("#divId").html();
 	alert(id);
 	var params = {
 			htmlData:htmlData,
@@ -130,12 +130,16 @@ function showParamDiv(){
 	<div id="rightBar">
 	<!-- InstanceBeginEditable name="rightBar" -->
 	<!--生出新下料表开始-->
-		<div class="new-box" id="divId">
-		
-		<table style="border:1px solid #cdcdcd;width:931px" coordinate="0,-1" cellpadding="0" cellspacing="0" class="tabList" id="tableId">
+		<div class="new-box" >
+		<div id="divId">
 		<#if windowType.htmlData!="">
               ${windowType.htmlData}
         <#else>
+		<form id="doc_form_${windowType.id}" action="javascript:void(0);" method="post">
+		<input type="hidden" name="projectId" value=""/>
+		<input type="hidden" name="itemId" value=""/>
+		<input type="hidden" name="memberNo" value=""/>
+		<table style="border:1px solid #cdcdcd;width:931px" coordinate="0,-1" cellpadding="0" cellspacing="0" class="tabList" id="tableId">
 			<tbody><tr>
 			    <th class="bgcolor-top" colspan="2">序列号</th>
 			    <th width="8%" scope="col"><input type="text" class="input input-w50h25 nontrace" id="location" value="" name="input"></th>
@@ -1061,8 +1065,10 @@ function showParamDiv(){
 			    <th scope="row">61</th>
 			  </tr>
 			</tbody>
-        </#if>
 		</table>
+		</form>
+		  </#if>
+		  </div>
 		<!--生出新下料表结束-->
 		<div style="width:140px;margin:auto;height:30px">
 			<ul>
