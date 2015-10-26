@@ -122,7 +122,7 @@ function sub(){
 	}
 	var params=$("#add_form").serialize();
 	dialogBox(function(index){
- 		 $.post("${basePath}openCount/addCountTem.htm",params,function(data){
+ 		 $.post("${basePath}openCount/editCountTem.htm",params,function(data){
  			  layer.close(index);
  				if(data.isOk == "true"){
  					winId=data.winId;
@@ -233,43 +233,48 @@ function changeCompanyName(){
 <@b.leftMenu />
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
-    <h2 class="title">新增模板</h2>
+    <h2 class="title">编辑模板</h2>
     <form action="javascript:void(0);" id="add_form" >
+    <input type="hidden" name="id" id="id" value="${windowType.id}"/>
     <div class="infoBox f14">
       <div>
         <label style="width:120px">型材公司所属地区</label>
         <select name="area">
           <#list areaList as model>
-          <option value="${model.id}">${model.name}</option>
+          <#if windowType.area==model.id>
+          	<option value="${model.id}" selected="selected">${model.name}</option>
+          <#else>
+          	<option value="${model.id}">${model.name}</option>
+          </#if>
           </#list>
         </select>
       </div>
       <div>
         <label>型材公司名称</label>
-        <input type="text" id="companyName" name="companyName" value="" class="input-w200"  datatype="s1-64"  nullmsg="请输入型材公司名称" autocomplete="off" onchange="changeCompanyName()"/>
+        <input type="text" id="companyName" name="companyName" value="${windowType.companyName}" class="input-w200"  datatype="s1-64"  nullmsg="请输入型材公司名称" autocomplete="off" onchange="changeCompanyName()"/>
         <span class="msg-error icon" id="companyNameErr" style="display: none;">请输入型材公司名称</span>
       </div>
       <div>
         <label>类别名称</label>
-        <input type="text" id="type" name="type" value="" class="input-w200" datatype="s1-64"  nullmsg="请输入类别名称" autocomplete="off"/>
+        <input type="text" id="type" name="type" value="${windowType.type}" class="input-w200" datatype="s1-64"  nullmsg="请输入类别名称" autocomplete="off"/>
         <span class="msg-error icon" id="typeErr" style="display: none;">请输入类别名称</span>
       </div>
       <div>
         <label>系列名称</label>
-        <input type="text" id="series" name="series" value="" class="input-w200" datatype="s1-64"  nullmsg="请输入系列名称" autocomplete="off"/>
+        <input type="text" id="series" name="series" value="${windowType.series}" class="input-w200" datatype="s1-64"  nullmsg="请输入系列名称" autocomplete="off"/>
         <span class="msg-error icon" id="seriesErr" style="display: none;">请输入系列名称</span>
       </div>   
       <div>
         <label>窗型名称</label>
-        <input type="text" id="name" name="name" value="" class="input-w200" datatype="s1-64"  nullmsg="请输入窗型名称" autocomplete="off"/>
+        <input type="text" id="name" name="name" value="${windowType.name}" class="input-w200" datatype="s1-64"  nullmsg="请输入窗型名称" autocomplete="off"/>
         <span class="msg-error icon" id="nameErr" style="display: none;">请输入窗型名称</span>
       </div> 
       <div id="upload_doc">
       <ul><li>
       	<label>&nbsp;</label>
-    	<input name="imageSrc"  id="imageSrc"  type="hidden" />
+    	<input name="imageSrc"  id="imageSrc"  type="hidden" value="${windowType.imageSrc}"/>
 <!--       	<span class="msg-error icon" id="imgErr" style="">请上传窗型图</span> -->
-		<span id="imgSpan" style="display: none;"><img id="showImg" src="" width="120" height="120" /></span>
+		<span id="imgSpan" ><img id="showImg" src="${b.imagePath}${windowType.imageSrc}" width="120" height="120" /></span>
     	<input type="file" name="imageFile" id="imageFile" multiple="true" />
 <!--       	<button class="button button-brown">上传窗型图</button> -->
       	<label>&nbsp;</label>

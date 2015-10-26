@@ -36,8 +36,17 @@ public class ProjectEntity extends Pagable implements Serializable
     @Column(name = "MEMBER_NO")
     private String memberNo;
     
+    @Column(name = "MEMBER_NAME")
+    private String memberName;
+    
     @Column(name = "NAME")
     private String name;
+    
+    @Column(name="ZHAOBIAO_NO")
+    private String zhaoBiaoNo;
+    
+    @Column(name="BEIAN_NO")
+    private String beiAnNo;
     
     @Column(name = "FILE_COUNT")
     private Integer fileCount;
@@ -51,6 +60,36 @@ public class ProjectEntity extends Pagable implements Serializable
     @Column(name = "STATE")
     private Integer state;
     
+    public String getMemberName()
+    {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName)
+    {
+        this.memberName = memberName;
+    }
+
+    public String getZhaoBiaoNo()
+    {
+        return zhaoBiaoNo;
+    }
+
+    public void setZhaoBiaoNo(String zhaoBiaoNo)
+    {
+        this.zhaoBiaoNo = zhaoBiaoNo;
+    }
+
+    public String getBeiAnNo()
+    {
+        return beiAnNo;
+    }
+
+    public void setBeiAnNo(String beiAnNo)
+    {
+        this.beiAnNo = beiAnNo;
+    }
+
     public String getId()
     {
         return id;

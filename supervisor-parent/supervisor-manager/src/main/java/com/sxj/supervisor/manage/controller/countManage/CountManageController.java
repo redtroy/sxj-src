@@ -30,6 +30,8 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.countManage.ProjectListModel;
+import com.sxj.supervisor.model.countManage.ProjectModel;
 import com.sxj.supervisor.model.countManage.WindowTypeAndAreaModel;
 import com.sxj.supervisor.model.countManage.WindowTypeModel;
 import com.sxj.supervisor.service.system.IAreaService;
@@ -60,6 +62,7 @@ public class CountManageController extends BaseController
            if (query != null)
            {
                query.setPagable(true);
+               query.setShowCount(20);
            }
             Map<String,String> params=new HashMap<String,String>();
             if(!StringUtil.isBlank(query.getArea())){
@@ -211,6 +214,35 @@ public class CountManageController extends BaseController
         return "manage/countManage/count_template_add";
     }
     
+    @RequestMapping("/loadEditPage")
+    public String loadEditPage(String id,ModelMap map){
+        List<AreaEntity> areaList=areaService.getChildrenAreas("32");
+        map.put("areaList", areaList);
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", id);
+        String res;
+        try
+        {
+            res = httpClient.post(hostName+"loadFeeding.htm", params);
+            System.err.println(res);
+            JsonMapper jm=new JsonMapper(); 
+            WindowTypeModel windowType=jm.fromJson(res, WindowTypeModel.class);
+            map.put("windowType", windowType);
+        }
+        catch (ClientProtocolException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return "manage/countManage/count_template_edit";
+    }
+    
     @RequestMapping("/addCountTem")
     public @ResponseBody Map<String, Object> addCountTem(WindowTypeModel model) throws ClientProtocolException, IOException{
         Map<String,Object> map=new HashMap<String,Object>();
@@ -225,6 +257,29 @@ public class CountManageController extends BaseController
         String res = httpClient.post(hostName+"addCountTem.htm", params);
         if(!StringUtils.isBlank(res)){
             map.put("isOk", "true");
+            map.put("winId", res);
+        }else{
+            map.put("isOk", "false");
+        }
+        return map;
+    }
+    
+    @RequestMapping("/editCountTem")
+    public @ResponseBody Map<String, Object> editCountTem(WindowTypeModel model) throws ClientProtocolException, IOException{
+        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", model.getId());
+        params.put("area",model.getArea());
+        params.put("companyName",model.getCompanyName());
+        params.put("type",model.getType());
+        params.put("series", model.getSeries());
+        params.put("name",model.getName());
+        params.put("modelPath", model.getModelPath());
+        params.put("imageSrc", model.getImageSrc());
+        String res = httpClient.post(hostName+"editCountTem.htm", params);
+        if(!StringUtils.isBlank(res)){
+            map.put("isOk", "true");
+            map.put("winId", res);
         }else{
             map.put("isOk", "false");
         }
@@ -333,4 +388,55 @@ public class CountManageController extends BaseController
         }
         return map;
     }
+    
+    @RequestMapping("/queryProject")
+    public String queryProject(ProjectModel query,ModelMap map){
+       try
+       {
+           if (query != null)
+           {
+               query.setPagable(true);
+           }
+            Map<String,String> params=new HashMap<String,String>();
+            if(!StringUtil.isBlank(query.getProjectNo())){
+                params.put("projectNo", query.getProjectNo());
+            }
+            if(!StringUtil.isBlank(query.getName())){
+                params.put("name", query.getName());
+            }
+            if(!StringUtil.isBlank(query.getMemberName())){
+                params.put("memberName", query.getMemberName());
+            }
+            if(!StringUtil.isBlank(query.getZhaoBiaoNo())){
+                params.put("zhaoBiaoNo",query.getZhaoBiaoNo());
+            }
+            if(!StringUtil.isBlank(query.getBeiAnNo())){
+                params.put("beiAnNo", query.getBeiAnNo());
+            }
+            Integer currentPage=query.getCurrentPage();
+            params.put("currentPage", currentPage.toString());
+            String res = httpClient.post(hostName+"openQueryProject.htm", params);
+            System.err.println(res);
+            JsonMapper jm=new JsonMapper();
+            ProjectListModel resultMap=jm.fromJson(res, ProjectListModel.class);
+            List<ProjectModel> list= resultMap.getList();
+//            List<AreaEntity> areaList=resultMap.getAreaList();
+            query.setPage(resultMap.getQuery());
+            
+            map.put("list", list);
+//            map.put("areaList", areaList);
+            map.put("query", query);
+        }
+        catch (ClientProtocolException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+            return "manage/countManage/countman";
+        }
 }
