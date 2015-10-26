@@ -104,6 +104,7 @@
 		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[ AND NAME LIKE CONCAT('%',#{condition.name},'%') ]]>
 		</if>
+		<![CDATA[ ORDER BY WINID DESC ]]>
 	</select>
 	
 	<!-- 条件查询备案 -->
