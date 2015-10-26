@@ -9,6 +9,7 @@
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="fileCount" column="FILE_COUNT" jdbcType="INTEGER" />
+		<result property="batchCount" column="BATCH_COUNT" jdbcType="INTEGER" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="uploadTime" column="UPLOAD_TIME"  jdbcType="TIMESTAMP" />
 	</resultMap>

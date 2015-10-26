@@ -42,6 +42,9 @@ public class ProjectEntity extends Pagable implements Serializable
     @Column(name = "FILE_COUNT")
     private Integer fileCount;
     
+    @Column(name = "BATCH_COUNT")
+    private Integer batchCount;
+    
     @Column(name = "UPLOAD_TIME")
     private Date uploadTime;
     
@@ -116,6 +119,26 @@ public class ProjectEntity extends Pagable implements Serializable
     public void setNoType(String noType)
     {
         this.noType = noType;
+    }
+    
+    public Integer getBatchCount()
+    {
+        return batchCount;
+    }
+    
+    public void setBatchCount(Integer batchCount)
+    {
+        this.batchCount = batchCount;
+    }
+    
+    public Integer getState()
+    {
+        return state;
+    }
+    
+    public void setState(Integer state)
+    {
+        this.state = state;
     }
     
 }
