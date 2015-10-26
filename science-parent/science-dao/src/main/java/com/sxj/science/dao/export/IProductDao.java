@@ -21,6 +21,8 @@ public interface IProductDao
     
     public void deleteProduct(String[] docIds);
     
+    public void deleteProductByDocId(String docId);
+    
     @Update
     public void updateProduct(ProductEntity doc);
     

@@ -219,4 +219,34 @@ public class DocModel implements Serializable
         doc.setItemId(itemId);
     }
     
+    public String getWidth()
+    {
+        return doc.getWidth();
+    }
+    
+    public void setWidth(String width)
+    {
+        doc.setWidth(width);
+    }
+    
+    public String getHeight()
+    {
+        return doc.getHeight();
+    }
+    
+    public void setHeight(String height)
+    {
+        doc.setHeight(height);
+    }
+    
+    public String getHtmlData()
+    {
+        return doc.getHtmlData();
+    }
+    
+    public void setHtmlData(String htmlData)
+    {
+        doc.setHtmlData(htmlData);
+    }
+    
 }

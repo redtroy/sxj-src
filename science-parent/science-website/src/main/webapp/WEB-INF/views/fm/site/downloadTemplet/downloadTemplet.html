@@ -1,5 +1,5 @@
 <script type="text/javascript">
-var idArr=new Array();
+var idArr="";
 function clickCompanyName(e){
 	$(e).toggleClass("onfoucs_companyName");
 	clickSearch();
@@ -13,14 +13,16 @@ function clickSeries(e){
 	clickSearch();
 }
 function clickMask(id,e){
-	$("#"+id).toggle();
-	var path=$(e).attr("id");
-	var index=$.inArray(path, idArr);
-	if(index!=-1){
-		idArr.splice(index,1);
-	}else{
-		idArr.push(path);
-	}
+	$(".mask").hide();
+	$("#div_"+id).toggle();
+	idArr=id;
+// 	var path=$(e).attr("id");
+// 	var index=$.inArray(path, idArr);
+// 	if(index!=-1){
+// 		idArr.splice(index,1);
+// 	}else{
+// 		idArr.push(path);
+// 	}
 }
 
 function downloadTem(){
@@ -117,8 +119,36 @@ function moreSeries(){
 }
 
 function comfir(){
+	var index=$("#index_hidden").val();
+	index=parseInt(index);
 	$.get("${basePath}downloadTem/getTemp.htm?id="+idArr,function(data){
- 		  $("#in_table").append(data);
+ 		  if($("#button_div_"+idArr+"_"+index).html()==undefined){
+ 			$("#table_div").prepend(data);
+ 			 $("#table_div").find("#button_div_"+idArr).css("display","");
+ 			 
+ 			$('#doc_form_'+idArr).attr("index",index);
+ 			$("#table_div").find("#button_div_"+idArr).find("ul").attr("index",index);
+ 			$('#doc_form_'+idArr).attr("id","doc_form_"+idArr+"_"+index);
+ 			$("#table_div").find("#button_div_"+idArr).attr("id","button_div_"+idArr+"_"+index);
+ 			$("#index_hidden").val(index+1);
+ 			
+ 			$('#doc_form_'+idArr+"_"+index).find("input[name=projectId]").val(projectId);
+ 			$('#doc_form_'+idArr+"_"+index).find("input[name=projectName]").val(projectName);
+ 			$('#doc_form_'+idArr+"_"+index).find("input[name=itemId]").val(itemId);
+ 			$('#doc_form_'+idArr+"_"+index).find("input[name=memberNo]").val(memberNo);
+ 			
+ 		  }
+//  		  else{
+//  			index=$('#doc_form_'+idArr).attr("index");
+//  			index=parseInt(index);
+//  			alert(index);
+//  			 $("#table_div").prepend(data);
+//  			 $('#doc_form_'+idArr).attr("index",index+1);
+//   			 $("#table_div").find("#button_div_"+idArr).find("ul").attr("index",index+1);
+//   			 $("#table_div").find("#button_div_"+idArr).css("display","");
+//   			$('#doc_form_'+idArr).attr("id"+"doc_form_"+idArr+"_"+index);
+//  			$("#table_div").find("#button_div_"+idArr).attr("id","button_div_"+idArr+"_"+index);
+//  		  }
  		});
 }
 </script>
@@ -183,7 +213,7 @@ function comfir(){
     	<ul>
         	<!-- <li><div class="mask" style="display:none"><img src="${b.staticPath}images/Check.png" width="67" height="57" alt=""/></div><div class="img"><img src="${b.staticPath}images/type1.gif" alt=""></div></li> -->
             <#list list as model>
-            <li onclick="clickMask('div_${model.id}',this)" id="${model.id}"><div id="div_${model.id}" class="mask" style="display:none"><img src="${b.staticPath}images/Check.png" width="67" height="57" alt=""/></div><div class="img" ><img src="${b.imagePath}${model.imageSrc}" width="182" height="166" alt="${model.name}"></div></li>
+            <li onclick="clickMask('${model.id}',this)" id="${model.id}"><div id="div_${model.id}" class="mask" style="display:none"><img src="${b.staticPath}images/Check.png" width="67" height="57" alt=""/></div><div class="img" ><img src="${b.imagePath}${model.imageSrc}" width="182" height="166" alt="${model.name}"></div></li>
             </#list>
             <#if list?size=0>
             	<li>无符合条件数据!</li>

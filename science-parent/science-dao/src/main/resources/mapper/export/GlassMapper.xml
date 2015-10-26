@@ -18,6 +18,9 @@
 			#{item}
 		</foreach>
 	</delete>
+	<delete id="deleteGlassByDocId" parameterType="String">
+		<![CDATA[DELETE FROM S_GLASS WHERE DOC_ID =#{docId}]]>
+	</delete>
 	<select id="query" resultMap="GlassResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * from S_GLASS d WHERE 1 = 1]]>

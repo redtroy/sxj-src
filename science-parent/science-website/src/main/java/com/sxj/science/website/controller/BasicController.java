@@ -35,8 +35,10 @@ public class BasicController extends BaseController
     {
         query.setPagable(true);
         List<ProjectEntity> list = projectService.query(query);
+        Integer count = projectService.queryFileCount(query);
         map.put("projectList", list);
         map.put("query", query);
+        map.put("maxCount", count);
         return INDEX;
         
     }

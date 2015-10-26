@@ -85,6 +85,25 @@ public class DocController extends BaseController
         return map;
     }
     
+    @RequestMapping("/editDoc")
+    public @ResponseBody Map<String, Object> editDoc(
+            @ModelAttribute DocModel doc)
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        try
+        {
+            docService.editDocModel(doc);
+            map.put("isOK", true);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("修改下料单错误", e, this.getClass());
+            map.put("isOK", false);
+            map.put("error", e.getMessage());
+        }
+        return map;
+    }
+    
     @RequestMapping("/toEdit")
     public String toAdd(String projectId, String itemId, String[] docIds,
             ModelMap map)

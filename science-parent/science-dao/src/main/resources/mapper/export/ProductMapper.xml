@@ -19,6 +19,9 @@
 			#{item}
 		</foreach>
 	</delete>
+	<delete id="deleteProductByDocId" parameterType="String">
+		<![CDATA[DELETE FROM S_P_PRODUCT WHERE DOC_ID =#{docId}]]>
+	</delete>
 	<select id="query" resultMap="ProductResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * from S_P_PRODUCT d WHERE 1 = 1]]>
@@ -37,13 +40,13 @@
 	<select id="getProductByDocIds" resultMap="ProductResultMap"
 		parameterType="java.util.Map">
 		<![CDATA[SELECT * FROM S_P_PRODUCT WHERE 1=1  ]]>
-		<!-- 	公司名称 -->
+		<!-- 公司名称 -->
 		<if test="docIds != null">
 			<![CDATA[ AND DOC_ID IN ]]>
 			<foreach item="item" collection="docIds" open="(" close=")"
-			separator=",">
-			#{item}
-			</foreach> 
+				separator=",">
+				#{item}
+			</foreach>
 		</if>
 	</select>
 </mapper> 

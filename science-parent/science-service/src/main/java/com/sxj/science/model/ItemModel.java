@@ -101,4 +101,14 @@ public class ItemModel extends Pagable implements Serializable
         this.item = item;
     }
     
+    public Integer getState()
+    {
+        return item.getState();
+    }
+    
+    public void setState(Integer state)
+    {
+        item.setState(state);
+    }
+    
 }

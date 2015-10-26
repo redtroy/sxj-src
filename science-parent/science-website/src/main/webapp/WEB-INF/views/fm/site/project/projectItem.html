@@ -59,7 +59,15 @@
               <td class="sheetliststart">
               <div id="project_item_info_${projectItem.id}" class="contraction contraction_xlsname">
 	              <input id="${projectItem.id}"  parentId="0" childrensize=${projectItem.docList?size} type="checkbox" name="itemId" value="${projectItem.id}">
-	              <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}">(未完成)</a></span>
+	              <#if projectItem.state==0>
+	               <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}">(未填写)</a></span>
+	              </#if>
+	              <#if projectItem.state==1>
+	               <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}">(未完成)</a></span>
+	              </#if>
+	               <#if projectItem.state==2>
+	               <span class="finised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}">(已完成)</a></span>
+	              </#if>
 	              ${projectItem.name}
 	              <a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a>
               </div>
