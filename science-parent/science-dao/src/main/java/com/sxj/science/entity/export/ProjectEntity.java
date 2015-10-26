@@ -8,6 +8,7 @@ import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
+import com.sxj.mybatis.orm.annotations.Sn;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.science.dao.export.IProjectDao;
@@ -26,6 +27,12 @@ public class ProjectEntity extends Pagable implements Serializable
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     
+    @Column(name = "PROJECT_NO")
+    @Sn(pattern = "0000", step = 1, table = "T_SN", stub = "F_SN_NAME", sn = "F_SN_NUMBER", stubValueProperty = "noType")
+    private String projectNo;
+    
+    private String noType;
+    
     @Column(name = "MEMBER_NO")
     private String memberNo;
     
@@ -37,6 +44,9 @@ public class ProjectEntity extends Pagable implements Serializable
     
     @Column(name = "UPLOAD_TIME")
     private Date uploadTime;
+    
+    @Column(name = "STATE")
+    private Integer state;
     
     public String getId()
     {
@@ -76,6 +86,36 @@ public class ProjectEntity extends Pagable implements Serializable
     public void setFileCount(Integer fileCount)
     {
         this.fileCount = fileCount;
+    }
+    
+    public String getProjectNo()
+    {
+        return projectNo;
+    }
+    
+    public void setProjectNo(String projectNo)
+    {
+        this.projectNo = projectNo;
+    }
+    
+    public Date getUploadTime()
+    {
+        return uploadTime;
+    }
+    
+    public void setUploadTime(Date uploadTime)
+    {
+        this.uploadTime = uploadTime;
+    }
+    
+    public String getNoType()
+    {
+        return noType;
+    }
+    
+    public void setNoType(String noType)
+    {
+        this.noType = noType;
     }
     
 }

@@ -385,7 +385,7 @@ function downloadReport(){
     </tr>
     <#list projectList as project>
     <tr id="project_${project.id}" isopen="close">
-    <td>GC15090001</td>
+    <td>${project.projectNo}</td>
       <td id="project_info_${project.id}" class="proname">
 	      <img src="${b.staticPath}images/flex_1.png" width="9" height="8" alt="点击显示文件列表" title="点击显示文件列表" onclick="getItem('${project.id}');"/>
 	      <div title="${project.name}" class="contraction contraction_proname">

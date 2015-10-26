@@ -87,7 +87,6 @@ function addDoc(){
 	dialogBox(function(index){
 		 $.post("${basePath}doc/addDoc.htm",params,function(data){
 			  layer.close(index);
-			  alert(data.isOK)
 				if(data.isOK == true){
 					layer.close(pageIndex);
 					alert("添加成功");
