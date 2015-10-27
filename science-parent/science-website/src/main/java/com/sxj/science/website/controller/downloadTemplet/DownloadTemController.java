@@ -587,6 +587,7 @@ public class DownloadTemController extends BaseController
                 query.setPagable(true);
             }
             query.setCurrentPage(Integer.parseInt(currentPage));
+            query.setShowCount(20);            
             Map<String, Object> resultMap = new HashMap<String, Object>();
             if (!StringUtil.isBlank(projectNo))
             {
@@ -608,7 +609,7 @@ public class DownloadTemController extends BaseController
             {
                 query.setBeiAnNo(beiAnNo);
             }
-            List<ProjectEntity> list = projectService.query(query);
+            List<ProjectEntity> list = projectService.openQueryProject(query);
             resultMap.put("list", list);
             resultMap.put("query", query);
             return resultMap;

@@ -396,6 +396,7 @@ public class CountManageController extends BaseController
            if (query != null)
            {
                query.setPagable(true);
+               query.setShowCount(20);
            }
             Map<String,String> params=new HashMap<String,String>();
             if(!StringUtil.isBlank(query.getProjectNo())){
