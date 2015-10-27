@@ -297,5 +297,24 @@ public class ProjectServiceImpl implements IProjectService
             throw new ServiceException("查询工程错误", e);
         }
     }
+
+    @Override
+    public List<ProjectEntity> openQueryProject(ProjectQuery query)
+    {
+        try
+        {
+            QueryCondition<ProjectEntity> condition = new QueryCondition<>();
+            condition.addAllCondition(query);
+            condition.setPage(query);
+            List<ProjectEntity> list = projectDao.openQueryProject(condition);
+            query.setPage(condition);
+            return list;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询工程错误", e, this.getClass());
+            throw new ServiceException("查询工程错误", e);
+        }
+    }
     
 }

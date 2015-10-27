@@ -7,10 +7,10 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/feeding_single.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
-<script src="${b.staticPath}js/mtable.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
 <@b.dialogBox/>
+<@b.pageScript/> 
 <script>
 <!--
 function setTab(name,cursel,n){
@@ -26,6 +26,39 @@ function setTab(name,cursel,n){
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
+<script>
+function query(page){
+	var params=$("#search_box").serialize();
+	if(page!=undefined){
+	   params=params+"&currentPage="+page;
+  	}
+	$.post("${basePath}openCount/queryProject.htm",params,function(data){
+		var res=$(data).find("#rightBar").children("#res_table");
+		var pager=$(data).find("#rightBar").children("#pager");
+		$("#res_table").empty();
+		$("#res_table").append(res.html());
+		var totalPage=pager.attr("totalPage");
+		var currentPage=pager.attr("currentPage");
+		loadPage(currentPage,totalPage,query);
+	});
+}
+
+function getItem(id){
+	 var open=$("#project_"+id).attr("isopen");
+	if(open=='close'){
+		 $.get("${basePath}openCount/getItems.htm?projectId="+id,function(data){
+			 var currentPage= $("#content_box").find("#pager").attr("currentPage");
+			 query(currentPage);
+			  $("#project_"+id).after($(data).html());
+			  $("#project_"+id).attr("isopen",'open');
+		 });
+	}else{
+		  $("#item_"+id).remove();
+		  $("#project_"+id).attr("isopen",'close');
+	}
+	
+}
+</script>
 </head>
 <body>
 <@b.header />
@@ -38,22 +71,25 @@ function setTab(name,cursel,n){
     <div id="rightBar">
     <!-- InstanceBeginEditable name="rightBar" -->
       <h2 class="title">工程报表管理</h2>
+      <form id="search_box" action="javascript:void(0);">
       <div id="searchBox">
       <p>
       编号
-        <input type="text" name="" value="">
+        <input type="text" name="projectNo" id="projectNo" value="">
       工程名称
-        <input type="text" name="" value="">
+        <input type="text" name="name" id="name" value="">
        会员名称
-       <input type="text" name="" value="">
+       <input type="text" name="memberName" id="memberName" value="">
        招标合同号
-       <input type="text" name="" value="">
+       <input type="text" name="zhaoBiaoNo" id="zhaoBiaoNo" value="">
        备案号
-       <input type="text" name="" value="">
+       <input type="text" name="beiAnNo" id="beiAnNo" value="">
        
-        <button class="btn btn-blue"><span>查询</span></button>
+        <button class="btn btn-blue" onclick="query()"><span>查询</span></button>
     </div>
-      <table border="0" cellpadding="0" cellspacing="0" class="tabList">
+    </form>
+    <@b.pager/>
+      <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
       	<col width="10%"/>
         <col />
 		<col width="20%"/>
@@ -73,174 +109,160 @@ function setTab(name,cursel,n){
 		  <th>操作</th>
         </tr>
         <#list list as model>
-        <tr>
+        <tr id="project_${model.id}" isopen="close">
           <td>${model.projectNo}</td>
-		  <td><a href="#" class="lnk-blue a-width">${model.name}</a></td>
+		  <td><a href="javascript:getItem('${model.id}')" class="lnk-blue a-width">${model.name}</a></td>
           <td>${model.memberName}</td>
           <td>${model.zhaoBiaoNo}</td>
-          <td>${model.BeiAnNo}</td>
+          <td>${model.beiAnNo}</td>
 		  <td>${model.batchCount}</td>
           <td>${model.fileCount}</td>
 		  <td class="operation"><a href="counthistory.html" class="edit">报表历史</a><a href="counthistory.html" class="edit">前台显示</a><a href="#" class="delpro">删除工程</a></td>
         </tr>
 		</#list>
-<!--        <tr> -->
-<!--           <td>GC15090001</td> -->
-<!-- 		  <td><a href="#" class="lnk-blue a-width">ITO导电膜玻璃生产线技术改造项目C栋门窗工程</a></td> -->
-<!--           <td>南京安丰节能建筑工程有限公司</td> -->
-<!--           <td>CT15080002</td> -->
-<!--           <td>BA15080003</td> -->
-<!-- 		  <td>4</td> -->
-<!--           <td>4</td> -->
-<!-- 		  <td class="operation"><a href="counthistory.html" class="edit">报表历史</a><a href="#" class="edit">前台隐藏</a><a href="#" class="delpro">删除工程</a></td> -->
-<!--         </tr> -->
 
-
-<!-- 		<tr class="tableInfo"> -->
-<!--         <td colspan="8"> -->
-<!--         <div class="countinfoBox"> -->
-<!--               <div id="lib_Tab1"> -->
-<!-- <div id="lib_Menubox"> -->
-<!-- <ul> -->
-<!--    <li id="11" onclick="setTab('1',1,4)" class="hover">下料单管理</li> -->
-<!--    <li class="spacing"></li> -->
-<!--    <li id="12" onclick="setTab('1',2,4)">单独型材优化管理</li> -->
-<!-- </ul> -->
-<!-- </div> -->
-<!--  <div class="lib_Contentbox lib_tabborder">   -->
-<!--    <div id="con_1_1" > -->
-<!--    		<div class="countitem"> -->
-<!--             <table border="0" align="center" cellpadding="0" cellspacing="0" id="xlsList"> -->
-<!--             <col/> -->
-<!--             <col width="9%" /> -->
-<!--             <col width="18%" /> -->
-<!--             <col width="25%" /> -->
-<!--             <tr> -->
-<!--               <th>批次及系列名称</th> -->
-<!--               <th>下料单数</th> -->
-<!--               <th>创建时间</th> -->
-<!--               <th>操作</th> -->
-<!--             </tr> -->
-<!--           </table> -->
-<!--           <table border="0" cellpadding="0" cellspacing="0" id="xlsList"> -->
-<!--             <col/> -->
-<!--             <col width="9%" /> -->
-<!--             <col width="18%" /> -->
-<!--             <col width="25%" /> -->
-<!--             <tr> -->
-<!--               <td class="sheetliststart"><div class="contraction contraction_xlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼程招标1-5程招标1-5</div></td> -->
-<!--               <td class="sheetlistcenter">25</td> -->
-<!--               <td class="sheetlistcenter">2015-08-25 18:25:00</td> -->
-<!--               <td class="operation sheetlistcenter"><a href="#" class="edit">查看</a><a href="#" class="edit">前台隐藏</a><a href="#" class="del">删除</a></td> -->
-<!--             </tr> -->
-<!--             <tr> -->
-<!--               <td colspan="4" class="countsheetlist">普通平开窗</td> -->
-
-<!--             </tr> -->
-<!--             <tr> -->
-<!--               <td colspan="4" class="countsheetlist">普通平开窗</td> -->
-
-<!--             </tr> -->
-<!--             <tr> -->
-<!--               <td colspan="4" class="sheetlistend">普通平开窗</td> -->
-
-<!--             </tr> -->
-<!--           </table> -->
-<!--           <table border="0" cellpadding="0" cellspacing="0" id="xlsList" style="background:#ddd;"> -->
-<!--             <col/> -->
-<!--             <col width="9%" /> -->
-<!--             <col width="18%" /> -->
-<!--             <col width="25%" /> -->
-<!--             <tr> -->
-<!--               <td class="left"><div class="contraction contraction_xlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼</div></td> -->
-<!--               <td class="sheetlistcenter">25</td> -->
-<!--               <td class="sheetlistcenter">2015-08-25 18:25:00</td> -->
-<!--               <td class="operation sheetlistcenter"><a href="#" class="edit">查看</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td> -->
-<!--             </tr> -->
-<!--           </table> -->
-<!--           <table border="0" cellpadding="0" cellspacing="0" id="xlsList" style="background:#ddd;"> -->
-<!--             <col/> -->
-<!--             <col width="9%" /> -->
-<!--             <col width="18%" /> -->
-<!--             <col width="25%" /> -->
-<!--             <tr> -->
-<!--               <td class="sheetliststart"><div class="contraction contraction_xlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼</div></td> -->
-<!--               <td class="sheetlistcenter">25</td> -->
-<!--               <td class="sheetlistcenter">2015-08-25 18:25:00</td> -->
-<!--               <td class="operation sheetlistcenter"><a href="#" class="edit">查看</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td> -->
-<!--             </tr> -->
-<!--             <tr> -->
-<!--               <td colspan="4" class="countsheetlist">普通平开字符超出测试字符超出测试字符超出测试字符超出测试字符超出测试字符超出测试</td> -->
-
-<!--             </tr> -->
-<!--             <tr> -->
-<!--               <td colspan="4" class="countsheetlist">普通平开窗</td> -->
-
-<!--             </tr> -->
-<!--             <tr> -->
-<!--               <td colspan="4" class="sheetlistend">普通平开窗</td> -->
-
-<!--             </tr> -->
-<!--           </table> -->
-         
-<!--         </div></div> -->
-<!--    <div id="con_1_2" style="display:none"> -->
-<!--    		<div class="countitem"> -->
-<!--             <table border="0" cellpadding="0" cellspacing="0" id="xlsList"> -->
-<!--             <col /> -->
-<!--             <col width="18%" /> -->
-<!--             <col width="25%" /> -->
-<!--             <tr> -->
-<!--               <th>文件名</th> -->
-<!--               <th>上传时间</th> -->
-<!--               <th>操作</th> -->
-<!--             </tr> -->
-<!--           </table> -->
-<!--           <table border="0" cellpadding="0" cellspacing="0" id="xlsList"> -->
-<!--             <col /> -->
-<!--             <col width="18%" /> -->
-<!--             <col width="25%" /> -->
-<!--             <tr> -->
-<!--               <td class="left"><div class="contraction contraction_sourcexlsname">1ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼超出长度测试测试. xls</div></td> -->
-<!--               <td class="sheetlistcenter">2015-08-25 18:25:00</td> -->
-<!--               <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台隐藏</a><a href="#" class="del">删除</a></td> -->
-<!--             </tr> -->
-<!--           </table> -->
-<!--           <table border="0" cellpadding="0" cellspacing="0" id="xlsList"> -->
-<!--             <col /> -->
-<!--             <col width="18%" /> -->
-<!--             <col width="25%" /> -->
-<!--             <tr> -->
-<!--               <td class="left"><div class="contraction contraction_sourcexlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td> -->
-<!--               <td class="sheetlistcenter">2015-08-25 18:25:00</td> -->
-<!--               <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台隐藏</a><a href="#" class="del">删除</a></td> -->
-<!--             </tr> -->
-<!--           </table> -->
-<!--           <table border="0" cellpadding="0" cellspacing="0" id="xlsList"  style="background:#ddd;"> -->
-<!--             <col /> -->
-<!--             <col width="18%" /> -->
-<!--             <col width="25%" /> -->
-<!--             <tr> -->
-<!--               <td class="left"><div class="contraction contraction_sourcexlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td> -->
-<!--               <td class="sheetlistcenter">2015-08-25 18:25:00</td> -->
-<!--               <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td> -->
-<!--             </tr> -->
-<!--           </table> -->
-         
-<!--         </div></div> -->
-<!--  </div> -->
-<!-- </div> -->
-<!-- 			 <div class="btnBox text-center" style="margin:0"><a href="#" class="button button-gray button-small">收起</a></div> -->
-<!-- 			  </div>		  </td>		   -->
-<!-- 	   </tr> -->
+		<tr class="tableInfo" style="display: none;">
+        <td colspan="8">
+        <div class="countinfoBox">
+              <div id="lib_Tab1">
+				<div id="lib_Menubox">
+				<ul>
+				   <li id="11" onclick="setTab('1',1,4)" class="hover">下料单管理</li>
+				   <li class="spacing"></li>
+				   <li id="12" onclick="setTab('1',2,4)">单独型材优化管理</li>
+				</ul>
+				</div>
+		 <div class="lib_Contentbox lib_tabborder">  
+		   <div id="con_1_1" >
+		   		<div class="countitem">
+		            <table border="0" align="center" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col/>
+		            <col width="9%" />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <th>批次及系列名称</th>
+		              <th>下料单数</th>
+		              <th>创建时间</th>
+		              <th>操作</th>
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col/>
+		            <col width="9%" />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="sheetliststart"><div class="contraction contraction_xlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼程招标1-5程招标1-5</div></td>
+		              <td class="sheetlistcenter">25</td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="edit">查看</a><a href="#" class="edit">前台隐藏</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		            <tr>
+		              <td colspan="4" class="countsheetlist">普通平开窗</td>
+		
+		            </tr>
+		            <tr>
+		              <td colspan="4" class="countsheetlist">普通平开窗</td>
+		
+		            </tr>
+		            <tr>
+		              <td colspan="4" class="sheetlistend">普通平开窗</td>
+		
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList" style="background:#ddd;">
+		            <col/>
+		            <col width="9%" />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="left"><div class="contraction contraction_xlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼</div></td>
+		              <td class="sheetlistcenter">25</td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="edit">查看</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList" style="background:#ddd;">
+		            <col/>
+		            <col width="9%" />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="sheetliststart"><div class="contraction contraction_xlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼</div></td>
+		              <td class="sheetlistcenter">25</td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="edit">查看</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		            <tr>
+		              <td colspan="4" class="countsheetlist">普通平开字符超出测试字符超出测试字符超出测试字符超出测试字符超出测试字符超出测试</td>
+		
+		            </tr>
+		            <tr>
+		              <td colspan="4" class="countsheetlist">普通平开窗</td>
+		
+		            </tr>
+		            <tr>
+		              <td colspan="4" class="sheetlistend">普通平开窗</td>
+		
+		            </tr>
+		          </table>
+		         
+		        </div></div>
+		   <div id="con_1_2" style="display:none">
+		   		<div class="countitem">
+		            <table border="0" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <th>文件名</th>
+		              <th>上传时间</th>
+		              <th>操作</th>
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="left"><div class="contraction contraction_sourcexlsname">1ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼超出长度测试测试. xls</div></td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台隐藏</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="left"><div class="contraction contraction_sourcexlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台隐藏</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList"  style="background:#ddd;">
+		            <col />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="left"><div class="contraction contraction_sourcexlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		          </table>
+		         
+		        </div></div>
+		 </div>
+	</div>
+			 <div class="btnBox text-center" style="margin:0"><a href="#" class="button button-gray button-small">收起</a></div>
+			  </div>		  </td>		  
+	   </tr>
 		
       </table>
+      <@b.pager/>
     <!-- InstanceEndEditable --></div>
 </div>
-<div id="footer" class="fence-wide">
-  <div class="yard-1200">
-    <p>&copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
-  </div>
-</div>
+<@b.footer />
 </body>
 <!-- InstanceEnd --></html>

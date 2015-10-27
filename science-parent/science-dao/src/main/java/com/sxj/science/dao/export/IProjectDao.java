@@ -29,4 +29,7 @@ public interface IProjectDao
     
     public Integer queryFileCount(QueryCondition<ProjectEntity> query)
             throws SQLException;
+
+    public List<ProjectEntity> openQueryProject(
+            QueryCondition<ProjectEntity> condition);
 }

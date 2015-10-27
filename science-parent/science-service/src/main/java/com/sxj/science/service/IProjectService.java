@@ -33,4 +33,6 @@ public interface IProjectService
     public void removeProject(String id) throws ServiceException;
     
     public void removeItem(String itemId) throws ServiceException;
+
+    public List<ProjectEntity> openQueryProject(ProjectQuery query);
 }
