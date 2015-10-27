@@ -27,10 +27,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 
+import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.entity.export.WindowTypeEntity;
 import com.sxj.science.entity.system.AreaEntity;
+import com.sxj.science.model.ProjectQuery;
 import com.sxj.science.service.IAreaService;
 import com.sxj.science.service.IDownloadTemService;
+import com.sxj.science.service.IProjectService;
 import com.sxj.science.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
@@ -48,6 +51,9 @@ public class DownloadTemController extends BaseController
     
     @Autowired
     private IStorageClientService storageClientService;
+    
+    @Autowired
+    private IProjectService projectService;
     
     @RequestMapping("/getTemp")
     public void getTemp(String[] id, HttpServletResponse response)
@@ -342,6 +348,7 @@ public class DownloadTemController extends BaseController
                 query.setPagable(true);
             }
             query.setCurrentPage(Integer.parseInt(currentPage));
+            query.setShowCount(20);
             Map<String, Object> resultMap = new HashMap<String, Object>();
             if (!StringUtil.isBlank(area))
             {
@@ -421,11 +428,27 @@ public class DownloadTemController extends BaseController
         {
             this.downloadTemService.addWindowType(query);
             //            resultMap.put("isOk", true);
-            return "true";
+            return query.getId();
         }
         catch (Exception e)
         {
             //            resultMap.put("isOk", false);
+            SxjLogger.error("加载模板接口错误", e, this.getClass());
+            throw new WebException("加载模板接口错误");
+        }
+    }
+    
+    @RequestMapping("/editCountTem")
+    public @ResponseBody String editCountTem(WindowTypeEntity query)
+            throws WebException
+    {
+        try
+        {
+            this.downloadTemService.updateWindowType(query);
+            return query.getId();
+        }
+        catch (Exception e)
+        {
             SxjLogger.error("加载模板接口错误", e, this.getClass());
             throw new WebException("加载模板接口错误");
         }
@@ -548,6 +571,52 @@ public class DownloadTemController extends BaseController
             //            resultMap.put("isOk", false);
             SxjLogger.error("加载模板接口错误", e, this.getClass());
             throw new WebException("加载模板接口错误");
+        }
+    }
+    
+    @RequestMapping("/openQueryProject")
+    public @ResponseBody Map<String, Object> openQueryProject(String projectNo,
+            String name, String memberName, String zhaoBiaoNo, String beiAnNo,
+            String currentPage) throws WebException
+    {
+        try
+        {
+            ProjectQuery query = new ProjectQuery();
+            if (query != null)
+            {
+                query.setPagable(true);
+            }
+            query.setCurrentPage(Integer.parseInt(currentPage));
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            if (!StringUtil.isBlank(projectNo))
+            {
+                query.setProjectNo(projectNo);
+            }
+            if (!StringUtil.isBlank(name))
+            {
+                query.setName(name);
+            }
+            if (!StringUtil.isBlank(memberName))
+            {
+                query.setMemberName(memberName);
+            }
+            if (!StringUtil.isBlank(zhaoBiaoNo))
+            {
+                query.setZhaoBiaoNo(zhaoBiaoNo);
+            }
+            if (!StringUtil.isBlank(beiAnNo))
+            {
+                query.setBeiAnNo(beiAnNo);
+            }
+            List<ProjectEntity> list = projectService.query(query);
+            resultMap.put("list", list);
+            resultMap.put("query", query);
+            return resultMap;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("加载工程接口错误", e, this.getClass());
+            throw new WebException("加载工程接口错误");
         }
     }
 }

@@ -10,6 +10,7 @@
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
 		<result property="count" column="COUNT" jdbcType="INTEGER" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="uploadTime" column="UPLOAD_TIME" jdbcType="TIMESTAMP" />
 	</resultMap>
 
@@ -19,6 +20,6 @@
 		<if test="condition.projectId!= null and condition.projectId != ''">
 			<![CDATA[ AND p.PROJECT_ID =#{condition.projectId}]]>
 		</if>
-		<![CDATA[  ORDER BY p.ID DESC]]>
+		<![CDATA[  ORDER BY p.UPLOAD_TIME DESC]]>
 	</select>
 </mapper>

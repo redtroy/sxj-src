@@ -73,6 +73,9 @@ public class ProjectServiceImpl implements IProjectService
         try
         {
             project.setNoType("GC" + DateTimeUtils.getTime("yyMM"));
+            project.setState(0);
+            project.setBatchCount(1);
+            project.setUploadTime(new Date());
             projectDao.addProject(project);
             
             ItemEntity item = new ItemEntity();
@@ -80,6 +83,7 @@ public class ProjectServiceImpl implements IProjectService
             item.setName("第一批次");
             item.setCount(0);
             item.setUploadTime(new Date());
+            item.setState(0);
             itemDao.addItem(item);
         }
         catch (Exception e)
@@ -273,6 +277,24 @@ public class ProjectServiceImpl implements IProjectService
         {
             SxjLogger.error("获取下料单错误", e, this.getClass());
             throw new ServiceException("获取下料单错误", e);
+        }
+    }
+    
+    @Override
+    public Integer queryFileCount(ProjectQuery query) throws ServiceException
+    {
+        try
+        {
+            QueryCondition<ProjectEntity> condition = new QueryCondition<>();
+            condition.addAllCondition(query);
+            condition.setPage(query);
+            Integer count = projectDao.queryFileCount(condition);
+            return count;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询工程错误", e, this.getClass());
+            throw new ServiceException("查询工程错误", e);
         }
     }
     

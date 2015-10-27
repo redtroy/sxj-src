@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.sxj.mybatis.orm.annotations.BatchDelete;
 import com.sxj.mybatis.orm.annotations.BatchInsert;
+import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
@@ -23,6 +24,9 @@ public interface IDocDao
     @BatchDelete
     public void deleteDoc(String[] ids) throws SQLException;
     
+    @Delete
+    public void deleteDocById(String id) throws SQLException;
+    
     @Update
     public void updateDoc(DocEntity doc) throws SQLException;
     
@@ -31,6 +35,6 @@ public interface IDocDao
     
     public List<DocEntity> query(QueryCondition<DocEntity> query)
             throws SQLException;
-
+    
     public List<DocEntity> getDocByItemIds(Map<String, Object> paramMap);
 }

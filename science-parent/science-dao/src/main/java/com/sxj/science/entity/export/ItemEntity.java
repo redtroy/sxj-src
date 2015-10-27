@@ -38,6 +38,9 @@ public class ItemEntity extends Pagable implements Serializable
     @Column(name = "COUNT")
     private Integer count;
     
+    @Column(name = "STATE")
+    private Integer state;
+    
     @Column(name = "UPLOAD_TIME")
     private Date uploadTime;
     
@@ -99,6 +102,16 @@ public class ItemEntity extends Pagable implements Serializable
     public void setUploadTime(Date uploadTime)
     {
         this.uploadTime = uploadTime;
+    }
+    
+    public Integer getState()
+    {
+        return state;
+    }
+    
+    public void setState(Integer state)
+    {
+        this.state = state;
     }
     
 }

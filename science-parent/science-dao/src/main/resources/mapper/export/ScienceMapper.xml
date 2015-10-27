@@ -20,7 +20,9 @@
 			#{item}
 		</foreach>
 	</delete>
-
+	<delete id="deleteScienceByDocId" parameterType="String">
+		<![CDATA[DELETE FROM S_SCIENCE WHERE DOC_ID =#{docId}]]>
+	</delete>
 	<select id="query" resultMap="ScienceResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * from S_SCIENCE d WHERE 1 = 1]]>

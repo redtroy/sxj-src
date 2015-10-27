@@ -23,6 +23,8 @@ public interface IProjectService
     public List<ProjectEntity> query(ProjectQuery query)
             throws ServiceException;
     
+    public Integer queryFileCount(ProjectQuery query) throws ServiceException;
+    
     public List<ItemModel> queryItems(String projectId) throws ServiceException;
     
     public List<ItemEntity> getItem(String[] projectItemIds)
