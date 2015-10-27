@@ -111,6 +111,10 @@ function showParamDiv(){
 		errorInfo("参数设置已达上限");
 	}
 }
+
+function returnList(){
+	window.location.href = "${basePath}openCount/query.htm";
+}
 </script>
 <!--返回顶部脚本结束-->
 <!--坐标固定-->
@@ -138,6 +142,7 @@ function showParamDiv(){
 		<input type="hidden" name="projectId" value=""/>
 		<input type="hidden" name="itemId" value=""/>
 		<input type="hidden" name="memberNo" value=""/>
+		<input type="hidden" name="htmlData" value=""/>
 		<table style="border:1px solid #cdcdcd;width:931px" coordinate="0,-1" cellpadding="0" cellspacing="0" class="tabList" id="tableId_${windowType.id}">
 			<tbody><tr>
 			    <th class="bgcolor-top" colspan="2">序列号</th>
@@ -1065,7 +1070,6 @@ function showParamDiv(){
 			  </tr>
 			</tbody>
 		</table>
-		</form>
 		<div id="button_div_${windowType.id}" style="width:440px;margin:auto;height:80px;display: none;">
 			<ul>
 			<li><button onclick="addDoc('${windowType.id}',this);" class=" btn btn-blue" data-dismiss="modal"><span>保存</span></button></li>
@@ -1075,13 +1079,14 @@ function showParamDiv(){
 			<li><button onclick="printTable('${windowType.id}',this);" class=" btn btn-blue" data-dismiss="modal"><span>打印</span></button></li>
 			</ul>
 		</div>
+		</form>
 		  </#if>
 		  </div>
 		<!--生出新下料表结束-->
 		<div style="width:140px;margin:auto;height:30px">
 			<ul>
 			<li style="float:left"><button name="button" type="button" value="保存" class="button button-orange ly-center" onclick="saveHtml('${windowType.id}')">保存</button></li>
-			<li style="float:right"><button name="button" type="button" value="取消" class="button button-green ly-center"  onclick="javascript:window.close()">取消</button></li>
+			<li style="float:right"><button name="button" type="button" value="取消" class="button button-green ly-center"  onclick="returnList()">取消</button></li>
 			</ul>
 		</div>
 	  </div>
