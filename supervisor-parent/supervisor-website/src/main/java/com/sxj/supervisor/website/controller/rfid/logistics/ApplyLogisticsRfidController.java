@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.entity.rfid.apply.RfidApplicationEntity;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.enu.rfid.apply.ReceiptStateEnum;
 import com.sxj.supervisor.enu.rfid.applymanager.M_PayStateEnum;
 import com.sxj.supervisor.model.rfid.app.RfidApplicationQuery;
 import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -43,7 +46,8 @@ public class ApplyLogisticsRfidController extends BaseController {
 			if(member==null){
 			    return LOGIN;
 			}
-			String type = RfidTypeEnum.getName(member.getType().getId());
+			
+			String type =setRfidType(member);
 			map.put("member", member);
 			map.put("type", type);
 		} catch (Exception e) {
@@ -53,6 +57,27 @@ public class ApplyLogisticsRfidController extends BaseController {
 		return "site/rfid/logistics/apply/apply";
 	}
 
+	private String setRfidType( MemberEntity member) {
+		String type ="";
+		switch (member.getType()) {
+		case GLASSFACTORY:
+			 type = RfidTypeEnum.getName(member.getType().getId());
+			break;
+		case GENRESFACTORY:
+			 type = RfidTypeEnum.getName(member.getType().getId());
+			break;
+		case AGENT:
+			 type = RfidTypeEnum.getName(2);
+			break;
+		case DISTRIBUTOR:
+			 type = RfidTypeEnum.getName(2);
+			break;
+
+		default:
+			throw new ServiceException("用户类型错误");
+		}
+		return type;
+	}
 	/**
 	 * 提交物流标签申请
 	 */

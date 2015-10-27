@@ -180,6 +180,12 @@ public class RecordController extends BaseController {
 		case GENRESFACTORY:
 			record.setContractType(ContractTypeEnum.EXTRUSIONS);// 合同类型
 			break;
+		case AGENT:
+			record.setContractType(ContractTypeEnum.EXTRUSIONS);// 合同类型
+			break;
+		case DISTRIBUTOR:
+			record.setContractType(ContractTypeEnum.EXTRUSIONS);// 合同类型
+			break;
 
 		default:
 			throw new ServiceException("用户类型错误");

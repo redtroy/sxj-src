@@ -42,7 +42,14 @@ function subForm(){
 	 if (!check.check()){
 		 return false;
 	 }
-	 var rfidType=${member.type.id};
+	 var id=${member.type.id};
+	 var rfidType;
+	 if(id==6||id==7){
+		 rfidType=2;
+	 }else{
+		 rfidType=id;
+	 }
+	
 	 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType},function(data){
 		 if (data.isOk="ok"){
 			 succInfo(function(){
