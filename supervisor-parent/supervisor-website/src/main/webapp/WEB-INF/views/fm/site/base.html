@@ -223,7 +223,7 @@ var refreshIviewer=function($viewer,src,$container){
 		iviewer.iviewer('loadImage', src);
 	}
 	if($container){
-		//$container.css("top",$(window).scrollTop());
+		$container.css("top",$(window).scrollTop());
 		$container.show();
 		$container.find(".modal-header").show();
 	}else{
@@ -416,6 +416,14 @@ function flashChecker() {
 	  dialogBoxOut('<p class="tc fontYH" style="padding:20px;">您没有安装Flash插件,<a href="https://get.adobe.com/cn/flashplayer/" target="_blank" class="lnk-red">点击安装flash插件</a></p><p class="tc fontYH"><a href="javascript:location=location;" class="button button-blue">刷新页面</a></p>');
   }
 </script>
+<style>
+<!--
+.viewer {
+    position: absolute;
+    z-index:999999;
+}
+-->
+</style>
 </#macro>
 <#macro header>
 <meta name="renderer" content="webkit">
