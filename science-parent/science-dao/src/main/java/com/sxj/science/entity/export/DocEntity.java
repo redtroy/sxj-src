@@ -67,6 +67,9 @@ public class DocEntity extends Pagable implements Serializable
     @Column(name = "HEIGHT")
     private String height;
     
+    @Column(name = "HTML_DATA")
+    private String htmlData;
+    
     public String getWidth()
     {
         return width;
@@ -205,6 +208,16 @@ public class DocEntity extends Pagable implements Serializable
     public void setItemId(String itemId)
     {
         this.itemId = itemId;
+    }
+    
+    public String getHtmlData()
+    {
+        return htmlData;
+    }
+    
+    public void setHtmlData(String htmlData)
+    {
+        this.htmlData = htmlData;
     }
     
     @Override

@@ -20,6 +20,8 @@ public interface IScienceDao
     
     public void deleteScience(String[] docIds);
     
+    public void deleteScienceByDocId(String docId);
+    
     @Update
     public void updateScience(ScienceEntity doc);
     

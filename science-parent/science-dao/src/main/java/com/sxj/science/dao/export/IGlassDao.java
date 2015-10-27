@@ -26,6 +26,8 @@ public interface IGlassDao
     
     public void deleteGlass(String[] docIds);
     
+    public void deleteGlassByDocId(String docId);
+    
     public List<GlassEntity> query(QueryCondition<GlassEntity> query)
             throws SQLException;
 }

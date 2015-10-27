@@ -10,6 +10,8 @@ public interface IDocService
     
     public void addDocModel(DocModel doc) throws ServiceException;
     
+    public void editDocModel(DocModel doc) throws ServiceException;
+    
     public DocModel getDocModel(String docId) throws ServiceException;
     
     public List<DocModel> queryDocModel(String itemId) throws ServiceException;

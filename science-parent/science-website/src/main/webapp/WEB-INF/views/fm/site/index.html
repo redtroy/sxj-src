@@ -123,13 +123,18 @@ function query(page){
 }
 function addProject(){
 	var name=$("#newProjectName").val();
+	if(name==""){
+		alert("工程名称不能为空");
+		return;
+	}
 	dialogBox(function(index){
 		 $.post("${basePath}project/addProject.htm?name="+name,function(data){
 			  layer.close(index);
 				if(data.isOK == true){
 					layer.close(pageIndex);
 					alert("添加成功");
-					query();
+					var currentPage= $("#content_box").find("#pager").attr("currentPage");
+					query(currentPage);
 					$("#newProjectName").val("");
 				}else{
 					errorInfo(data.error);
@@ -147,7 +152,8 @@ function addItem(){
 				if(data.isOK == true){
 					layer.close(pageIndex);
 					alert("添加成功");
-					query();
+					var currentPage= $("#content_box").find("#pager").attr("currentPage");
+					query(currentPage);
 					$("#newItemName").val("");
 				}else{
 					errorInfo(data.error);
@@ -160,6 +166,8 @@ function getItem(id){
 	 var open=$("#project_"+id).attr("isopen");
 	if(open=='close'){
 		 $.get("${basePath}project/getItems.htm?projectId="+id,function(data){
+			 var currentPage= $("#content_box").find("#pager").attr("currentPage");
+			 query(currentPage);
 			  $("#project_"+id).after($(data).html());
 			  $("#project_"+id).attr("isopen",'open');
 		 });
@@ -216,7 +224,8 @@ function removeItem(id){
 					if(data.isOK == true){
 						layer.close(pageIndex);
 						alert("删除成功");
-						query();
+						var currentPage= $("#content_box").find("#pager").attr("currentPage");
+						query(currentPage);
 					}else{
 						errorInfo(data.error);
 					}
@@ -239,7 +248,8 @@ function removeProject(id){
 					if(data.isOK == true){
 						layer.close(pageIndex);
 						alert("删除成功");
-						query();
+						var currentPage= $("#content_box").find("#pager").attr("currentPage");
+						query(currentPage);
 					}else{
 						errorInfo(data.error);
 					}
@@ -273,7 +283,8 @@ function reProjectItemName(id){
 				if(data.isOK == true){
 					layer.close(pageIndex);
 					alert("修改成功");
-					query();
+					var currentPage= $("#content_box").find("#pager").attr("currentPage");
+					query(currentPage);
 				}else{
 					errorInfo(data.error);
 				}
@@ -289,7 +300,8 @@ function reName(id){
 				if(data.isOK == true){
 					layer.close(pageIndex);
 					alert("修改成功");
-					query();
+					var currentPage= $("#content_box").find("#pager").attr("currentPage");
+					query(currentPage);
 				}else{
 					errorInfo(data.error);
 				}
@@ -362,7 +374,7 @@ function downloadReport(){
 <!--         </li> -->
         <form id="search_form" action="javascript:void(0);">
         <li style="margin-left:460px;">
-        <input type="text" name="name" placeholder="请输入工程名称" value="" />
+        <input type="text" name="name" placeholder="请输入工程或批次名称关键字" value="" />
         </li>
         <li>
         <button class=" button button-green" onclick="query();">搜索</button>
@@ -378,8 +390,8 @@ function downloadReport(){
     </colgroup>
     <tr>
       <th>编号</th>
-      <th>工程名称<span class="remark">（共3个）</span></th>
-      <th>下料单文件数<span class="remark">（共25个）</span></th>
+      <th>工程名称<span class="remark">（共${query.totalResult}个）</span></th>
+      <th>批次总数<span class="remark">（共${maxCount}个）</span></th>
       <th>原始数据文件数</th>
       <th>操作</th>
     </tr>
@@ -389,7 +401,16 @@ function downloadReport(){
       <td id="project_info_${project.id}" class="proname">
 	      <img src="${b.staticPath}images/flex_1.png" width="9" height="8" alt="点击显示文件列表" title="点击显示文件列表" onclick="getItem('${project.id}');"/>
 	      <div title="${project.name}" class="contraction contraction_proname">
-			<span class="unfinised">(未完成)</span>${project.name}
+	      <#if project.state==0>
+	      <span class="unfinised">(未填写)</span>
+	      </#if>
+	       <#if project.state==1>
+	      <span class="unfinised">(未完成)</span>
+	      </#if>
+	      <#if project.state==2>
+	      <span class="finised">(已完成)</span>
+	      </#if>
+			${project.name}
 		 </div>
       </td>
       <td id="project_modify_${project.id}" class="proname" style="display: none;">
@@ -397,7 +418,7 @@ function downloadReport(){
 	      <button class="button-yes" onclick="reName('${project.id}');"></button>
 	      <button class="button-no" onclick="noRename('${project.id}');"></button>
       </td>
-      <td>${project.fileCount}</td>
+      <td>${project.batchCount}</td>
       <td>${project.fileCount}</td>
       <td>
 	      <button class="button-gray" data-toggle="modal" onclick="removeProject('${project.id}');">删除工程</button>

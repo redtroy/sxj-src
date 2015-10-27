@@ -1,0 +1,83 @@
+package com.sxj.supervisor.website.controller.purchase;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
+
+import third.rewrite.fastdfs.NameValuePair;
+import third.rewrite.fastdfs.service.IStorageClientService;
+
+import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.common.FileUtil;
+import com.sxj.util.logger.SxjLogger;
+
+@Controller
+@RequestMapping("/purchase")
+public class PurchaseController extends BaseController {
+
+	@Autowired
+	private IStorageClientService storageClientService;
+
+	/**
+	 * 上传文件
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping("upload")
+	public void uploadFile(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (!(request instanceof DefaultMultipartHttpServletRequest)) {
+			return;
+		}
+		DefaultMultipartHttpServletRequest re = (DefaultMultipartHttpServletRequest) request;
+		Map<String, MultipartFile> fileMaps = re.getFileMap();
+		Collection<MultipartFile> files = fileMaps.values();
+		List<String> fileIds = new ArrayList<String>();
+		for (MultipartFile myfile : files) {
+			if (myfile.isEmpty()) {
+				System.err.println("文件未上传");
+			} else {
+				String originalName = myfile.getOriginalFilename();
+				String extName = FileUtil.getFileExtName(originalName);
+				String filePath = storageClientService.uploadFile(null,
+						new ByteArrayInputStream(myfile.getBytes()),
+						myfile.getBytes().length, extName.toUpperCase());
+				SxjLogger.info("siteUploadFilePath=" + filePath,
+						this.getClass());
+				fileIds.add(filePath);
+
+				// 上传元数据
+				NameValuePair[] metaList = new NameValuePair[1];
+				metaList[0] = new NameValuePair("originalName",
+						URLEncoder.encode(originalName, "UTF-8"));
+				storageClientService.overwriteMetadata(filePath, metaList);
+			}
+		}
+		map.put("fileIds", fileIds);
+		String res = JsonMapper.nonDefaultMapper().toJson(map);
+		response.setContentType("text/plain;UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(res);
+		out.flush();
+		out.close();
+	}
+}

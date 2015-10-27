@@ -21,6 +21,8 @@ public interface IPartsDao
     
     public void deleteParts(String[] docIds);
     
+    public void deletePartsByDocId(String docId);
+    
     @Update
     public void updateParts(PartsEntity doc);
     

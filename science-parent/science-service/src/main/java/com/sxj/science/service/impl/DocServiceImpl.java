@@ -4,19 +4,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.science.dao.export.IDocDao;
 import com.sxj.science.dao.export.IGlassDao;
+import com.sxj.science.dao.export.IItemDao;
 import com.sxj.science.dao.export.IPartsDao;
 import com.sxj.science.dao.export.IProductDao;
+import com.sxj.science.dao.export.IProjectDao;
 import com.sxj.science.dao.export.IScienceDao;
 import com.sxj.science.entity.export.DocEntity;
 import com.sxj.science.entity.export.GlassEntity;
+import com.sxj.science.entity.export.ItemEntity;
 import com.sxj.science.entity.export.PartsEntity;
 import com.sxj.science.entity.export.ProductEntity;
+import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.entity.export.ScienceEntity;
 import com.sxj.science.model.DocModel;
 import com.sxj.science.service.IDocService;
@@ -33,6 +40,12 @@ public class DocServiceImpl implements IDocService
     private IDocDao docDao;
     
     @Autowired
+    private IProjectDao projectDao;
+    
+    @Autowired
+    private IItemDao itemDao;
+    
+    @Autowired
     private IGlassDao glassDao;
     
     @Autowired
@@ -44,16 +57,40 @@ public class DocServiceImpl implements IDocService
     @Autowired
     private IScienceDao scienceDao;
     
+    private IDocService self;
+    
+    @Autowired
+    private ApplicationContext context;
+    
+    @PostConstruct
+    public void init()
+    {
+        self = context.getBean(IDocService.class);
+    }
+    
     @Override
     public void addDocModel(DocModel docModel) throws ServiceException
     {
         try
         {
+            if (docModel == null)
+            {
+                throw new ServiceException("工程批次不能为空");
+            }
             List<GlassEntity> glassList = docModel.getGlassList();
             List<ScienceEntity> scienceList = docModel.getScienceList();
             List<ProductEntity> productList = docModel.getProductList();
             List<PartsEntity> partsList = docModel.getPartsList();
             DocEntity doc = docModel.getDoc();
+            ProjectEntity project = projectDao.getProject(doc.getProjectId());
+            project.setBatchCount(project.getBatchCount() + 1);
+            project.setState(1);
+            projectDao.updateProject(project);
+            
+            ItemEntity item = itemDao.getItem(doc.getItemId());
+            item.setCount(item.getCount() + 1);
+            item.setState(1);
+            itemDao.updateItem(item);
             //doc.setMemberNo(memberNo);
             //doc.setProjectName(project.getName());
             // doc.setProjectId(project.getId());
@@ -102,6 +139,31 @@ public class DocServiceImpl implements IDocService
         {
             SxjLogger.error("新增工程批次错误", e, this.getClass());
             throw new ServiceException("新增工程批次错误", e);
+        }
+        
+    }
+    
+    @Override
+    public void editDocModel(DocModel doc) throws ServiceException
+    {
+        try
+        {
+            if (doc == null)
+            {
+                throw new ServiceException("工程批次不能为空");
+            }
+            docDao.deleteDocById(doc.getId());
+            glassDao.deleteGlassByDocId(doc.getId());
+            partsDao.deletePartsByDocId(doc.getId());
+            productDao.deleteProductByDocId(doc.getId());
+            scienceDao.deleteScienceByDocId(doc.getId());
+            doc.setId("");
+            self.addDocModel(doc);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("删除工程批次错误", e, this.getClass());
+            throw new ServiceException("删除工程批次错误", e);
         }
         
     }
@@ -228,4 +290,5 @@ public class DocServiceImpl implements IDocService
             throw new ServiceException("查询下料信息错误", e);
         }
     }
+    
 }
