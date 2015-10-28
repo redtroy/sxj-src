@@ -36,6 +36,7 @@ import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -420,9 +421,17 @@ public class RecordServiceImpl implements IRecordService {
 			ContractModel conModel = contractService.getContract(contractId);
 			Assert.notNull(conModel);
 			ContractEntity con = conModel.getContract();
+			switch (memType) {
+			case AGENT:
+				memType = MemberTypeEnum.GENRESFACTORY;
+				break;
+			case DISTRIBUTOR:
+				memType = MemberTypeEnum.GENRESFACTORY;
+				break;
+			}
 			contractSureStatefsm.setCurrentState(con.getConfirmState());
 			contractSureStatefsm.fire(con.getConfirmState().toString()
-					+ memType.toString() + con.getType().toString(), con);
+					+ memType + con.getType().toString(), con);
 			// con.setConfirmState(contractSureStatefsm.getCurrentState());
 			contractDao.updateContract(con);
 			// 更改合同关联所有备案状态
