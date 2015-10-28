@@ -84,6 +84,7 @@ public class PurchaseController extends BaseController {
 		map.put("fileIds", fileIds);
 		String res = JsonMapper.nonDefaultMapper().toJson(map);
 		response.setContentType("text/plain;UTF-8");
+		response.setHeader("Access-Control-Allow-Origin","*");
 		PrintWriter out = response.getWriter();
 		out.print(res);
 		out.flush();
