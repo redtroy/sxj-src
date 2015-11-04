@@ -168,7 +168,7 @@ var uploadImg = function($file) {
 // 			}
 			$hidden.val(hideVal);
 			succInfo(function(){
-				$("#imgSpan").show();
+// 				$("#imgSpan").show();
 				$("#showImg").attr("src","${b.imagePath}"+hideVal);
 			},"窗型图上传成功");
 // 			refreshElastislide($container, $carousel, dataObj);
@@ -265,21 +265,15 @@ function changeCompanyName(){
         <span class="msg-error icon" id="nameErr" style="display: none;">请输入窗型名称</span>
       </div> 
       <div id="upload_doc">
+      <span id="imgSpan" ><img id="showImg" style="background-color: gray;" src="${b.staticPath}images/type1.gif" width="120" height="120" /></span>
       <ul><li>
-      	<label>&nbsp;</label>
+      <label>&nbsp;</label>
     	<input name="imageSrc"  id="imageSrc"  type="hidden" />
-<!--       	<span class="msg-error icon" id="imgErr" style="">请上传窗型图</span> -->
-		<span id="imgSpan" style="display: none;"><img id="showImg" src="" width="120" height="120" /></span>
-    	<input type="file" name="imageFile" id="imageFile" multiple="true" />
-<!--       	<button class="button button-brown">上传窗型图</button> -->
-      	<label>&nbsp;</label>
-      	<input name="modelPath" id="modelPath" type="hidden"/>
-<!--       	<input type="file" name="excelFile" id="excelFile" multiple="true" /> -->
-<!-- 	    <button class="button button-brown">上传下料单模板</button> -->
+    	<input type="file" name="imageFile" id="imageFile" multiple="true" />    
       </li>
       </ul>
       </div>
-      <div class="btnBox" style="margin-top: 90px" ><span onclick="sub()"><a  class="button button-orange button-small">确定</a></span><a href="${basePath}openCount/query.htm" class="button button-gray button-small">返回</a> </div></div>
+      <div class="btnBox" style="margin-top: 180px" ><span onclick="sub()"><a  class="button button-orange button-small">确定</a></span><a href="${basePath}openCount/query.htm" class="button button-gray button-small">返回</a> </div></div>
       </form>
 <!--       <button onclick="showHidden()">测试</button> -->
       <div id="succDiv" class="modal-wrap popDemo" style="display: none;">

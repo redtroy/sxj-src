@@ -111,6 +111,10 @@ function showParamDiv(){
 		errorInfo("参数设置已达上限");
 	}
 }
+
+function returnList(){
+	window.location.href = "${basePath}openCount/query.htm";
+}
 </script>
 <!--返回顶部脚本结束-->
 <!--坐标固定-->
@@ -138,6 +142,7 @@ function showParamDiv(){
 		<input type="hidden" name="projectId" value=""/>
 		<input type="hidden" name="itemId" value=""/>
 		<input type="hidden" name="memberNo" value=""/>
+		<input type="hidden" name="htmlData" value=""/>
 		<table style="border:1px solid #cdcdcd;width:931px" coordinate="0,-1" cellpadding="0" cellspacing="0" class="tabList" id="tableId_${windowType.id}">
 			<tbody><tr>
 			    <th class="bgcolor-top" colspan="2">序列号</th>
@@ -285,63 +290,63 @@ function showParamDiv(){
 			</tr>
 			<tr>
 				<th scope="row">5</th>
-				<td><div style="display: none;" class="paramDiv1"><input name="input" type="text" value="h1:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv1"><input name="input" type="text" value="" class="input input-w49h25 left param" id="h1"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv1"><input name="input" type="text" value="h1:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv1"><input name="input" type="text" value="" class="input input-w49h25 left param" id="h1"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">6</th>
-				<td><div style="display: none;" class="paramDiv2"><input name="input5" type="text" value="h2:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv2"><input name="input6" type="text" value="" class="input input-w49h25 left param" id="h2"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv2"><input name="input5" type="text" value="h2:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv2"><input name="input6" type="text" value="" class="input input-w49h25 left param" id="h2"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">7</th>
-				<td><div style="display: none;" class="paramDiv3"><input name="input9" type="text" value="h3:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv3"><input name="input11" type="text" value="" class="input input-w49h25 left param" id="h3"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv3"><input name="input9" type="text" value="h3:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv3"><input name="input11" type="text" value="" class="input input-w49h25 left param" id="h3"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">8</th>
-				<td><div style="display: none;" class="paramDiv4"><input name="input10" type="text" value="h4:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv4"><input name="input12" type="text" value="" class="input input-w49h25 left param" id="h4"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv4"><input name="input10" type="text" value="h4:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv4"><input name="input12" type="text" value="" class="input input-w49h25 left param" id="h4"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">9</th>
-				<td><div style="display: none;" class="paramDiv5"><input name="input21" type="text" value="h5:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv5"><input name="input13" type="text" value="" class="input input-w49h25 left param" id="h5"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv5"><input name="input21" type="text" value="h5:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv5"><input name="input13" type="text" value="" class="input input-w49h25 left param" id="h5"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">10</th>
-				<td><div style="display: none;" class="paramDiv6"><input name="input22" type="text" value="h6:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv6"><input name="input14" type="text" value="" class="input input-w49h25 left param" id="h6"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv6"><input name="input22" type="text" value="h6:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv6"><input name="input14" type="text" value="" class="input input-w49h25 left param" id="h6"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">11</th>
-				<td><div style="display: none;" class="paramDiv7"><input name="input23" type="text" value="h7:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv7"><input name="input15" type="text" value="" class="input input-w49h25 left param" id="h7"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv7"><input name="input23" type="text" value="h7:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv7"><input name="input15" type="text" value="" class="input input-w49h25 left param" id="h7"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">12</th>
-				<td><div style="display: none;" class="paramDiv8"><input name="input24" type="text" value="h8:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv8"><input name="input16" type="text" value="" class="input input-w49h25 left param" id="h8"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv8"><input name="input24" type="text" value="h8:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv8"><input name="input16" type="text" value="" class="input input-w49h25 left param" id="h8"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">13</th>
-				<td><div style="display: none;" class="paramDiv9"><input name="input25" type="text" value="h9:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv9"><input name="input17" type="text" value="" class="input input-w49h25 left param" id="h9"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv9"><input name="input25" type="text" value="h9:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv9"><input name="input17" type="text" value="" class="input input-w49h25 left param" id="h9"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">14</th>
-				<td><div style="display: none;" class="paramDiv10"><input name="input26" type="text" value="h10:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv10"><input name="input18" type="text" value="" class="input input-w49h25 left param" id="h10"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv10"><input name="input26" type="text" value="h10:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv10"><input name="input18" type="text" value="" class="input input-w49h25 left param" id="h10"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">15</th>
-				<td><div style="display: none;" class="paramDiv11"><input name="input27" type="text" value="h11:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv11"><input name="input19" type="text" value="" class="input input-w49h25 left param" id="h11"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv11"><input name="input27" type="text" value="h11:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv11"><input name="input19" type="text" value="" class="input input-w49h25 left param" id="h11"/></div></td>
 			</tr>
 			<tr>
 				<th scope="row">16</th>
-				<td><div style="display: none;" class="paramDiv12"><input name="input28" type="text" value="h12:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none;" class="paramDiv12"><input name="input20" type="text" value="" class="input input-w49h25 left param" id="h12"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv12"><input name="input28" type="text" value="h12:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv12"><input name="input20" type="text" value="" class="input input-w49h25 left param" id="h12"/></div></td>
 			    <td rowspan="8" colspan="6">
 					<table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-left:1px solid #e0e0e0" coordinate="6,16">
 					  <tbody><tr>
@@ -1065,7 +1070,6 @@ function showParamDiv(){
 			  </tr>
 			</tbody>
 		</table>
-		</form>
 		<div id="button_div_${windowType.id}" style="width:440px;margin:auto;height:80px;display: none;">
 			<ul>
 			<li><button onclick="addDoc('${windowType.id}',this);" class=" btn btn-blue" data-dismiss="modal"><span>保存</span></button></li>
@@ -1075,13 +1079,14 @@ function showParamDiv(){
 			<li><button onclick="printTable('${windowType.id}',this);" class=" btn btn-blue" data-dismiss="modal"><span>打印</span></button></li>
 			</ul>
 		</div>
+		</form>
 		  </#if>
 		  </div>
 		<!--生出新下料表结束-->
 		<div style="width:140px;margin:auto;height:30px">
 			<ul>
 			<li style="float:left"><button name="button" type="button" value="保存" class="button button-orange ly-center" onclick="saveHtml('${windowType.id}')">保存</button></li>
-			<li style="float:right"><button name="button" type="button" value="取消" class="button button-green ly-center"  onclick="javascript:window.close()">取消</button></li>
+			<li style="float:right"><button name="button" type="button" value="取消" class="button button-green ly-center"  onclick="returnList()">取消</button></li>
 			</ul>
 		</div>
 	  </div>

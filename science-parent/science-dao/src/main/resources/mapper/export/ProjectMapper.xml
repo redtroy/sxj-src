@@ -21,19 +21,19 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT distinct p.* from S_PROJECT p left join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
 		<if test="condition.name != null and condition.name != ''">
-			<![CDATA[ AND (p.NAME LIKE CONCAT(#{condition.name},'%') OR i.NAME LIKE CONCAT(#{condition.name},'%'))]]>
+			<![CDATA[ AND (p.NAME LIKE CONCAT('%',#{condition.name},'%') OR i.NAME LIKE CONCAT('%',#{condition.name},'%'))]]>
 		</if>
 		<if test="condition.projectNo != null and condition.projectNo != ''">
-			<![CDATA[ AND p.PROJECT_NO LIKE CONCAT(#{condition.projectNo},'%')]]>
+			<![CDATA[ AND p.PROJECT_NO LIKE CONCAT('%',#{condition.projectNo},'%')]]>
 		</if>
 		<if test="condition.memberName != null and condition.memberName != ''">
-			<![CDATA[ AND p.MEMBER_NAME LIKE CONCAT(#{condition.memberName},'%')]]>
+			<![CDATA[ AND p.MEMBER_NAME LIKE CONCAT('%',#{condition.memberName},'%')]]>
 		</if>
 		<if test="condition.zhaoBiaoNo != null and condition.zhaoBiaoNo != ''">
-			<![CDATA[ AND p.ZHAOBIAO_NO LIKE CONCAT(#{condition.zhaoBiaoNo},'%')]]>
+			<![CDATA[ AND p.ZHAOBIAO_NO LIKE CONCAT('%',#{condition.zhaoBiaoNo},'%')]]>
 		</if>
 		<if test="condition.beiAnNo != null and condition.beiAnNo != ''">
-			<![CDATA[ AND p.BEIAN_NO LIKE CONCAT(#{condition.beiAnNo},'%')]]>
+			<![CDATA[ AND p.BEIAN_NO LIKE CONCAT('%',#{condition.beiAnNo},'%')]]>
 		</if>
 		<![CDATA[  ORDER BY p.UPLOAD_TIME DESC]]>
 	</select>
@@ -44,5 +44,26 @@
 		<if test="condition.name != null and condition.name != ''">
 		<![CDATA[ AND (p.NAME LIKE CONCAT(#{condition.name},'%') OR i.NAME LIKE CONCAT(#{condition.name},'%'))]]>
 		</if>
+	</select>
+	
+	<select id="openQueryProject" resultMap="ProjectResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * from S_PROJECT p WHERE 1 = 1]]>
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[ AND p.NAME LIKE CONCAT('%',#{condition.name},'%' ]]>
+		</if>
+		<if test="condition.projectNo != null and condition.projectNo != ''">
+			<![CDATA[ AND p.PROJECT_NO LIKE CONCAT('%',#{condition.projectNo},'%')]]>
+		</if>
+		<if test="condition.memberName != null and condition.memberName != ''">
+			<![CDATA[ AND p.MEMBER_NAME LIKE CONCAT('%',#{condition.memberName},'%')]]>
+		</if>
+		<if test="condition.zhaoBiaoNo != null and condition.zhaoBiaoNo != ''">
+			<![CDATA[ AND p.ZHAOBIAO_NO LIKE CONCAT('%',#{condition.zhaoBiaoNo},'%')]]>
+		</if>
+		<if test="condition.beiAnNo != null and condition.beiAnNo != ''">
+			<![CDATA[ AND p.BEIAN_NO LIKE CONCAT('%',#{condition.beiAnNo},'%')]]>
+		</if>
+		<![CDATA[  ORDER BY p.UPLOAD_TIME DESC]]>
 	</select>
 </mapper>
