@@ -7,6 +7,9 @@
 		<id property="id" column="ID" jdbcType="VARCHAR" />
 		<result property="projectNo" column="PROJECT_NO" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
+		<result property="zhaoBiaoNo" column="ZHAOBIAO_NO" jdbcType="VARCHAR" />
+		<result property="beiAnNo" column="BEIAN_NO" jdbcType="VARCHAR" />
 		<result property="name" column="NAME" jdbcType="VARCHAR" />
 		<result property="fileCount" column="FILE_COUNT" jdbcType="INTEGER" />
 		<result property="batchCount" column="BATCH_COUNT" jdbcType="INTEGER" />
@@ -16,7 +19,7 @@
 	
 	<select id="query" resultMap="ProjectResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * from S_PROJECT p left join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
+		<![CDATA[SELECT distinct p.* from S_PROJECT p left join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
 		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[ AND (p.NAME LIKE CONCAT(#{condition.name},'%') OR i.NAME LIKE CONCAT(#{condition.name},'%'))]]>
 		</if>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.science.dao.export.IAloneOptimDao">
+	<resultMap id="OptimResultMap"
+		type="com.sxj.science.entity.export.AloneOptimEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="projectId" column="PROJECT_ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="fileName" column="FILE_NAME" jdbcType="VARCHAR" />
+		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
+		<result property="uploadTime" column="UPLOAD_TIME" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="query" resultMap="OptimResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * from S_ALONE_OPTIM p WHERE 1 = 1]]>
+		<if test="condition.projectId != null and condition.projectId != ''">
+			<![CDATA[ AND p.PROJECT_ID =#{condition.projectId}]]>
+		</if>
+		<if test="condition.memberNo!= null and condition.memberNo != ''">
+			<![CDATA[ AND p.MEMBER_NO =#{condition.memberName}]]>
+		</if>
+		<if test="condition.ids != null and condition.ids !=''">
+		  <![CDATA[ and p.ID IN ]]>
+			<foreach item="item" collection="condition.ids" open="("
+				close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<![CDATA[  ORDER BY p.UPLOAD_TIME DESC]]>
+	</select>
+
+	<delete id="deleteAloneOptimByProject" parameterType="String">
+		<![CDATA[DELETE FROM S_ALONE_OPTIM WHERE PROJECT_ID =#{projectId}]]>
+	</delete>
+</mapper>

@@ -2,7 +2,6 @@ package com.sxj.science.dao.export;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 import com.sxj.mybatis.orm.annotations.BatchDelete;
 import com.sxj.mybatis.orm.annotations.BatchInsert;
@@ -36,5 +35,4 @@ public interface IDocDao
     public List<DocEntity> query(QueryCondition<DocEntity> query)
             throws SQLException;
     
-    public List<DocEntity> getDocByItemIds(Map<String, Object> paramMap);
 }

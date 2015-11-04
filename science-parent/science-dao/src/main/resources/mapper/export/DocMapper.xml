@@ -26,6 +26,9 @@
 		<if test="condition.itemId != null and condition.itemId !=''">
 			<![CDATA[ and d.ITEM_ID =#{condition.itemId}]]>
 		</if>
+		<if test="condition.series != null and condition.series !=''">
+			<![CDATA[ and d.SERIES =#{condition.series}]]>
+		</if>
 		<if test="condition.ids != null and condition.ids !=''">
 		  <![CDATA[ and d.ID IN ]]>
 			<foreach item="item" collection="condition.ids" open="(" close=")"
@@ -39,6 +42,12 @@
 			separator=",">
 			#{item}
 			</foreach>
+		</if>
+		<if test="groups.size() > 0">
+		 <![CDATA[ GROUP BY ]]>
+		<foreach item="item" collection="groups" separator=",">
+			${item}
+		</foreach>
 		</if>
 	</select>
 	

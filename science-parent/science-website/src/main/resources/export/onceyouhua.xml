@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet>
+		<section startRow="0" endRow="4"></section>
+		<loop startRow="5" endRow="5" items="scienceList" var="science"
+			varType="com.sxj.science.entity.export.ScienceEntity">
+			<section startRow="5" endRow="5">
+				<mapping row="5" col="1">science.name</mapping>
+				<mapping row="5" col="2">science.type</mapping>
+				<mapping row="5" col="3">science.length</mapping>
+				<mapping row="5" col="4">science.quantity</mapping>
+				<mapping row="5" col="5">science.remark</mapping>
+			</section>
+			<loopbreakcondition>
+				<rowcheck offset="0">
+						<cellcheck offset="4">制表人</cellcheck>
+					</rowcheck>
+			</loopbreakcondition>
+		</loop>
+	</worksheet>
+</workbook>

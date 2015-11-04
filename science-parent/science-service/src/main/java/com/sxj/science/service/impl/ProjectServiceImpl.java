@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.science.dao.export.IAloneOptimDao;
 import com.sxj.science.dao.export.IDocDao;
 import com.sxj.science.dao.export.IGlassDao;
 import com.sxj.science.dao.export.IItemDao;
@@ -56,6 +57,9 @@ public class ProjectServiceImpl implements IProjectService
     @Autowired
     private IScienceDao scienceDao;
     
+    @Autowired
+    private IAloneOptimDao optimDao;
+    
     private IProjectService self;
     
     @Autowired
@@ -99,6 +103,9 @@ public class ProjectServiceImpl implements IProjectService
     {
         try
         {
+            ProjectEntity project = projectDao.getProject(item.getProjectId());
+            project.setBatchCount(project.getBatchCount() + 1);
+            projectDao.updateProject(project);
             itemDao.addItem(item);
         }
         catch (Exception e)
@@ -144,6 +151,7 @@ public class ProjectServiceImpl implements IProjectService
                 {
                     QueryCondition<DocEntity> queryItem = new QueryCondition<>();
                     queryItem.addCondition("itemId", item.getId());
+                    queryItem.addGroup("SERIES");
                     List<DocEntity> docList = docDao.query(queryItem);
                     ItemModel model = new ItemModel();
                     model.setItem(item);
@@ -167,6 +175,7 @@ public class ProjectServiceImpl implements IProjectService
         try
         {
             projectDao.deleteProject(id);
+            optimDao.deleteAloneOptimByProject(id);
             List<ItemModel> items = queryItems(id);
             for (ItemModel item : items)
             {
