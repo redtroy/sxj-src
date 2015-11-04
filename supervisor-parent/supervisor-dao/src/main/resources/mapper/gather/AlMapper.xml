@@ -11,12 +11,13 @@
 		<result property="date" column="DATE" jdbcType="VARCHAR" />
 		<result property="min" column="MIN" jdbcType="VARCHAR" />
 		<result property="max" column="MAX" jdbcType="VARCHAR" />
+		<result property="gatherDate" column="GATHERDATE" jdbcType="DATE" />
 		<result property="average" column="AVERAGE" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 高级查询 -->
 	<select id="getAl" resultMap="AlResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM AL_PRICE ORDER BY DATE DESC LIMIT 0,30]]>
+		<![CDATA[SELECT * FROM AL_PRICE ORDER BY GATHER_DATE DESC,DATE DESC LIMIT 0,30]]>
 	</select>
 </mapper>

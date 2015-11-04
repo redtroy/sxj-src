@@ -1,5 +1,4 @@
- <div id="roleInfo_div" style="width:800px;margin-left:-200px;margin-top:-55px;">
-      <div class="modal-header"><span class="close" onclick="closeDiv('roleInfo_div');">关闭</span></div>
+ <div id="roleInfo_div" style="width:800px;">
       <div class="modal-body dropBox">
         <#list allList as model>
         <div class="item"> <span id="parent_span_${model.function.id}">
@@ -7,7 +6,7 @@
         	<#list roleList as check>
         		<#if check.id==model.function.id>
           			<#assign isCheck=true>
-          		</#if>
+          		</#if> 
           	</#list>
           	<#if isCheck=true>
           	<input  type="checkbox"  title="${model.function.title}" value="${model.function.id}" checked="checked" id="${model.function.id}"/>

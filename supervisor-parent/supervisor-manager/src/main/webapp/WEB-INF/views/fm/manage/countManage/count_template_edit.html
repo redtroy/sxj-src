@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css" />
+<link href="${b.staticPath}style/jquery.bigautocomplete.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<script src="${b.staticPath}js/jquery.bigautocomplete.js"></script>
+<@b.dialogBox/>
+<@b.validate/>
+<@b.upload/>
+<script>
+jQuery(document).ready(function($) {
+	$('.sltinput').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.dropList').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+	$('.popBtn').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+	uploadImg($("#imageFile"));
+// 	uploadExcel($("#excelFile"));
+})
+</script>
+<script>
+var winId;
+$(function(){
+	$("#companyName").bigAutocomplete({
+		url : "${basePath}openCount/autoCompanyName.htm",
+		callback : function(data) {
+			if(data){
+// 				$("#productId_hidden").val(data.result);
+// 				$("#productUrl_hidden").val(data.url);
+// 				$("#proNameSpan").attr("class","Validform_checktip Validform_right");
+			}
+		},
+		beforeShow : function() {
+			$("#bigAutocompleteContent").hide();
+// 			var name = $("#productName").val();
+// 			var match = false;
+// 			for (var i = 0; i < data.length; i++) {
+// 				if (data[i].title == name) {
+// 					$("#productId_hidden").val(data[i].result);
+// 					$("#productUrl_hidden").val(data[i].url);
+// 					$("#proNameSpan").attr("class","Validform_checktip Validform_right");
+// 				}
+// 			}
+		}
+	});
+	
+	$("#type").bigAutocomplete({
+		url : "${basePath}openCount/autoType.htm",
+		callback : function(data) {
+			if(data){
+			}
+		},
+		beforeShow : function() {
+			$("#bigAutocompleteContent").hide();
+		}
+	});
+	
+	$("#series").bigAutocomplete({
+		url : "${basePath}openCount/autoSeries.htm",
+		callback : function(data) {
+			if(data){
+			}
+		},
+		beforeShow : function() {
+			$("#bigAutocompleteContent").hide();
+		}
+	});
+});
+
+function sub(){
+	var checkInput='true';
+	
+	if($("#companyName").val()==''){
+		$("#companyNameErr").show();
+		checkInput='false';
+	}else{
+		$("#companyNameErr").hide();
+// 		checkInput='true';
+	}
+	if($("#type").val()==''){
+		$("#typeErr").show();
+		checkInput='false';
+	}else{
+		$("#typeErr").hide();
+// 		checkInput='true';
+	}
+	if($("#series").val()==''){
+		$("#seriesErr").show();
+		checkInput='false';
+	}else{
+		$("#seriesErr").hide();
+// 		checkInput='true';
+	}
+	if($("#name").val()==''){
+		$("#nameErr").show();
+		checkInput='false';
+	}else{
+		$("#nameErr").hide();
+// 		checkInput='true';
+	}
+	if(checkInput=='false'){
+		return false;
+	}
+	if($("#imageSrc").val()==''){
+		errorInfo("请上传窗型图")
+		return false;
+	}
+	var params=$("#add_form").serialize();
+	dialogBox(function(index){
+ 		 $.post("${basePath}openCount/editCountTem.htm",params,function(data){
+ 			  layer.close(index);
+ 				if(data.isOk == "true"){
+ 					winId=data.winId;
+ 					$("#succDiv").show();
+ 				}else{
+ 					errorInfo(data.error);
+ 				}
+ 			});
+ 	 },"是否确认修改模板");
+}
+
+
+
+var uploadImg = function($file) {
+// 	var $div = $file.parent().parent().parent();
+// 	var $carousel = $div.find(".elastislide-list");
+// 	var $container = $carousel.parent();
+	var $hidden = $("#imageSrc");
+	$file.uploadify({
+		swf : '${basePath}upload/uploadify.swf',
+		uploader : "${basePath}upload.htm",
+		 fileTypeExts: '*.jpg;*.png',
+		auto : true,
+		multi : true,
+		height : 30,
+		width : 120,
+		buttonText : '上传窗型图',
+		onUploadSuccess : function(file, data, response) {
+			var num = 1;
+			var dataObj = eval("(" + data + ")");//转换为json对象 
+// 			var hideVal = $hidden.val();
+// 			if (hideVal == '') {
+				hideVal = dataObj.fileIds;
+// 			} else {
+// 				alert(hideVal);
+// 				var arrays = hideVal.split(",");
+// 				for (var i = 0; i < arrays.length; i++) {
+// 					if (arrays[i]) {
+// 						num += 1;
+// 					}
+// 				}
+// 				hideVal += "," + dataObj.fileIds;
+// 			}
+			$hidden.val(hideVal);
+			succInfo(function(){
+				$("#imgSpan").show();
+				$("#showImg").attr("src","${b.imagePath}"+hideVal);
+			},"窗型图上传成功");
+// 			refreshElastislide($container, $carousel, dataObj);
+		}
+	});
+}
+
+var uploadExcel = function($file) {
+	var $hidden = $("#modelPath");
+	$file.uploadify({
+		swf : '${basePath}upload/uploadify.swf',
+		uploader : "${basePath}upload.htm",
+		 fileTypeExts: '*.xlsx;*.xls',
+		auto : true,
+		multi : true,
+		height : 30,
+		width : 120,
+		buttonText : '上传下料单模板',
+		onUploadSuccess : function(file, data, response) {
+			var num = 1;
+			var dataObj = eval("(" + data + ")");//转换为json对象 
+				hideVal = dataObj.fileIds;
+				$hidden.val(hideVal);
+				succInfo(null,"下料单模板上传成功");
+		}
+	});
+}
+
+function editTem(){
+	window.location.href = "${basePath}openCount/loadFeeding.htm?id="+winId;
+}
+
+function returnList(){
+	window.location.href = "${basePath}openCount/query.htm";
+}
+
+function stayHtml(){
+	window.location.href="${basePath}openCount/loadAddPage.htm";
+}
+
+function showHidden(){
+	var imageSrc=$("#imageSrc").val();
+	var modelPath=$("#modelPath").val();
+	alert(imageSrc+"---"+modelPath);
+}
+
+function changeCompanyName(){
+	$("#bigAutocompleteContent").hide();
+}
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+<body>
+<@b.header />
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<@b.menuPath/>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+<@b.leftMenu />
+    <div id="rightBar">
+    <!-- InstanceBeginEditable name="rightBar" -->
+    <h2 class="title">修改模板</h2>
+    <form action="javascript:void(0);" id="add_form" >
+    <input type="hidden" name="id" id="id" value="${windowType.id}"/>
+    <div class="infoBox f14">
+      <div>
+        <label style="width:120px">型材公司所属地区</label>
+        <select name="area">
+          <#list areaList as model>
+          <#if windowType.area==model.id>
+          	<option value="${model.id}" selected="selected">${model.name}</option>
+          <#else>
+          	<option value="${model.id}">${model.name}</option>
+          </#if>
+          </#list>
+        </select>
+      </div>
+      <div>
+        <label>型材公司名称</label>
+        <input type="text" id="companyName" name="companyName" value="${windowType.companyName}" class="input-w200"  datatype="s1-64"  nullmsg="请输入型材公司名称" autocomplete="off" onchange="changeCompanyName()"/>
+        <span class="msg-error icon" id="companyNameErr" style="display: none;">请输入型材公司名称</span>
+      </div>
+      <div>
+        <label>类别名称</label>
+        <input type="text" id="type" name="type" value="${windowType.type}" class="input-w200" datatype="s1-64"  nullmsg="请输入类别名称" autocomplete="off"/>
+        <span class="msg-error icon" id="typeErr" style="display: none;">请输入类别名称</span>
+      </div>
+      <div>
+        <label>系列名称</label>
+        <input type="text" id="series" name="series" value="${windowType.series}" class="input-w200" datatype="s1-64"  nullmsg="请输入系列名称" autocomplete="off"/>
+        <span class="msg-error icon" id="seriesErr" style="display: none;">请输入系列名称</span>
+      </div>   
+      <div>
+        <label>窗型名称</label>
+        <input type="text" id="name" name="name" value="${windowType.name}" class="input-w200" datatype="s1-64"  nullmsg="请输入窗型名称" autocomplete="off"/>
+        <span class="msg-error icon" id="nameErr" style="display: none;">请输入窗型名称</span>
+      </div> 
+      <div id="upload_doc">
+      <span id="imgSpan" ><img id="showImg" src="${b.imagePath}${windowType.imageSrc}" width="120" height="120" /></span>
+      <ul><li>
+      	<label>&nbsp;</label>
+    	<input name="imageSrc"  id="imageSrc"  type="hidden" value="${windowType.imageSrc}"/>
+<!--       	<span class="msg-error icon" id="imgErr" style="">请上传窗型图</span> -->
+		
+    	<input type="file" name="imageFile" id="imageFile" multiple="true" />
+<!--       	<button class="button button-brown">上传窗型图</button> -->
+<!--       	<label>&nbsp;</label> -->
+      	<input name="modelPath" id="modelPath" type="hidden"/>
+<!--       	<input type="file" name="excelFile" id="excelFile" multiple="true" /> -->
+<!-- 	    <button class="button button-brown">上传下料单模板</button> -->
+      </li>
+      </ul>
+      </div>
+      <div class="btnBox" style="margin-top: 180px" ><span onclick="sub()"><a  class="button button-orange button-small">确定</a></span><a href="${basePath}openCount/query.htm" class="button button-gray button-small">返回</a> </div></div>
+      </form>
+<!--       <button onclick="showHidden()">测试</button> -->
+      <div id="succDiv" class="modal-wrap popDemo" style="display: none;">
+        <div class="modal-header">
+     <span class="close">关闭</span></div>
+     <div class="modal-body">
+      <div class="tipBox ly-clearFix">
+     <span class="icon32 icon-32-suc"></span>
+     <p class="color-green fontYH f18">模板上传成功！</p>
+     </div>
+     <button class="popBtn" onclick="editTem()">编辑模板</button>
+     <button class="popBtn" onclick="returnList()">返回列表</button>
+     <button class="popBtn" onclick="stayHtml()">留在本页</button>
+     </div>
+   </div>
+    <!-- InstanceEndEditable --></div>
+</div>
+<@b.footer />
+</body>
+<!-- InstanceEnd --></html>

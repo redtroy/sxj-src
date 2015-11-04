@@ -1,5 +1,6 @@
 package com.sxj.supervisor.website.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,11 +16,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,14 +52,18 @@ import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
 import com.sxj.supervisor.entity.gov.GovEntity;
 import com.sxj.supervisor.entity.member.AccountEntity;
+import com.sxj.supervisor.entity.member.CertificateEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberFunctionEntity;
 import com.sxj.supervisor.entity.member.MemberLogEntity;
+import com.sxj.supervisor.entity.member.MemberToMemberEntity;
+import com.sxj.supervisor.entity.message.TenderMessageEntity;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.enu.member.AccountStatesEnum;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.comet.RfidChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
@@ -71,17 +78,21 @@ import com.sxj.supervisor.service.developers.IDevelopersService;
 import com.sxj.supervisor.service.gov.IGovService;
 import com.sxj.supervisor.service.member.IAccountService;
 import com.sxj.supervisor.service.member.IMemberFunctionService;
+import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberLogService;
 import com.sxj.supervisor.service.member.IMemberRoleService;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.member.IMemberToMemberService;
 import com.sxj.supervisor.service.message.ITenderMessageService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
 import com.sxj.supervisor.website.login.SupervisorShiroRedisCache;
 import com.sxj.supervisor.website.login.SupervisorSiteToken;
 import com.sxj.util.comet.CometServiceImpl;
+import com.sxj.util.common.AuthImg;
 import com.sxj.util.common.FileUtil;
 import com.sxj.util.common.StringUtils;
+import com.sxj.util.common.ValidateImage;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -125,11 +136,17 @@ public class BasicController extends BaseController
     @Autowired
     private IGovService govService;
     
+    @Autowired
+    private IMemberToMemberService memberToMemberService;
+    
     /**
      * getRecordState 合同service
      */
     @Autowired
     private IContractService contractService;
+    
+    @Autowired
+    private IMemberImageService memberImageService;
     
     //    @PostConstruct
     //    public void init()
@@ -149,217 +166,284 @@ public class BasicController extends BaseController
     
     @RequestMapping("index")
     public String ToIndex(HttpServletRequest request,
-            TenderMessageQuery messQuery, ModelMap map)
+            TenderMessageQuery messQuery, ModelMap map) throws WebException
     {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userinfo") == null)
+        try
         {
-            return LOGIN;
-        }
-        else
-        {
-            SupervisorPrincipal info = getLoginInfo(session);
-            if (info.getAccount() != null && info.getMember() != null)
-            {
-                AccountEntity newAccount = accountService.getAccount(info.getAccount()
-                        .getId());
-                if (newAccount == null)
-                {
-                    return LOGIN;
-                }
-                if (newAccount.getState().equals(AccountStatesEnum.STOP))
-                {
-                    return LOGIN;
-                }
-                if (StringUtils.isEmpty(newAccount.getPassword()))
-                {
-                    return LOGIN;
-                }
-                if (!newAccount.getPassword().equals(info.getAccount()
-                        .getPassword()))
-                {
-                    return LOGIN;
-                }
-                return "site/member/account-index";
-            }
-            else if (info.getAccount() == null && info.getMember() != null)
-            {
-                List<AreaEntity> cityList = areaService.getChildrenAreas("32");
-                MemberEntity member = memberService.getMember(info.getMember()
-                        .getId());
-                if (member.getAccountNum() == null)
-                {
-                    member.setAccountNum(0);
-                }
-                map.put("cityList", cityList);
-                map.put("member", member);
-                if (info.getMember().getFlag())
-                {
-                    List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
-                    List<DevelopersEntity> kfsList = new ArrayList<DevelopersEntity>();
-                    
-                    MemberQuery query = new MemberQuery();
-                    query.setMemberType(MemberTypeEnum.DAWP.getId());
-                    query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-                    query.setFilterStr(1);
-                    List<MemberEntity> totalMCList = memberService.queryMembers(query);
-                    List<MemberEntity> mcList = new ArrayList<MemberEntity>();
-                    
-                    query = new MemberQuery();
-                    query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
-                    query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-                    query.setFilterStr(1);
-                    List<MemberEntity> totalBLList = memberService.queryMembers(query);
-                    List<MemberEntity> blList = new ArrayList<MemberEntity>();
-                    
-                    query = new MemberQuery();
-                    query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
-                    query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-                    query.setFilterStr(1);
-                    List<MemberEntity> totalXCList = memberService.queryMembers(query);
-                    List<MemberEntity> xcList = new ArrayList<MemberEntity>();
-                    
-                    query = new MemberQuery();
-                    query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
-                    query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
-                    query.setFilterStr(1);
-                    List<MemberEntity> totalPJList = memberService.queryMembers(query);
-                    List<MemberEntity> pjList = new ArrayList<MemberEntity>();
-                    
-                    if (totalMCList.size() > 18)
-                    {
-                        for (int i = 0; i < 18; i++)
-                        {
-                            Random rd1 = new Random();
-                            int k1 = rd1.nextInt(totalMCList.size());
-                            MemberEntity temMc = totalMCList.get(k1);
-                            mcList.add(temMc);
-                            totalMCList.remove(temMc);
-                        }
-                    }
-                    else
-                    {
-                        mcList = totalMCList;
-                    }
-                    
-                    if (totalBLList.size() > 18)
-                    {
-                        for (int i = 0; i < 18; i++)
-                        {
-                            Random rd2 = new Random();
-                            int k2 = rd2.nextInt(totalBLList.size());
-                            MemberEntity temBl = totalBLList.get(k2);
-                            blList.add(temBl);
-                            totalBLList.remove(temBl);
-                        }
-                    }
-                    else
-                    {
-                        blList = totalBLList;
-                    }
-                    
-                    if (totalXCList.size() > 18)
-                    {
-                        for (int i = 0; i < 18; i++)
-                        {
-                            Random rd3 = new Random();
-                            int k3 = rd3.nextInt(totalXCList.size());
-                            MemberEntity temXc = totalXCList.get(k3);
-                            xcList.add(temXc);
-                            totalXCList.remove(temXc);
-                        }
-                    }
-                    else
-                    {
-                        xcList = totalXCList;
-                    }
-                    
-                    if (totalKFSList.size() > 18)
-                    {
-                        for (int i = 0; i < 18; i++)
-                        {
-                            Random rd4 = new Random();
-                            int k4 = rd4.nextInt(totalKFSList.size());
-                            DevelopersEntity temKfs = totalKFSList.get(k4);
-                            kfsList.add(temKfs);
-                            totalKFSList.remove(temKfs);
-                        }
-                    }
-                    else
-                    {
-                        kfsList = totalKFSList;
-                    }
-                    
-                    if (totalPJList.size() > 18)
-                    {
-                        for (int i = 0; i < 18; i++)
-                        {
-                            Random rd5 = new Random();
-                            int k5 = rd5.nextInt(totalPJList.size());
-                            MemberEntity tempj = totalPJList.get(k5);
-                            pjList.add(tempj);
-                            totalPJList.remove(tempj);
-                        }
-                    }
-                    else
-                    {
-                        pjList = totalPJList;
-                    }
-                    
-                    // TenderMessageQuery messQuery = new TenderMessageQuery();
-                    messQuery.setPagable(true);
-                    messQuery.setShowCount(6);
-                    messQuery.setMemberNo(getLoginInfo(session).getMember()
-                            .getMemberNo());
-                    List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);
-                    GovEntity gov = new GovEntity();
-                    gov.setShowCount(6);
-                    gov.setPagable(true);
-                    List<GovEntity> list = govService.queryGovList(gov);
-                    map.put("kfsList", kfsList);
-                    map.put("mcList", mcList);
-                    map.put("blList", blList);
-                    map.put("xcList", xcList);
-                    map.put("pjList", pjList);
-                    map.put("messageList", messageList);
-                    map.put("govList", list);
-                    map.put("query", messQuery);
-                    
-                    /*for (int i = 0; i < kfsList.size(); i++)
-                    {
-                        System.err.println("开发商:"+kfsList.get(i).getName());
-                    }
-                    for (int i = 0; i < mcList.size(); i++)
-                    {
-                        System.err.println("门窗:"+mcList.get(i).getName());
-                    }
-                    for (int i = 0; i < blList.size(); i++)
-                    {
-                        System.err.println("玻璃:"+blList.get(i).getName());
-                    }
-                    for (int i = 0; i < xcList.size(); i++)
-                    {
-                        System.err.println("型材:"+xcList.get(i).getName());
-                    }
-                    for (int i = 0; i < messageList.size(); i++)
-                    {
-                        System.err.println("招标:"+messageList.get(i).getInfoId());
-                    }*/
-                    
-                    return "site/member/platform_index";
-                }
-                else
-                {
-                    return "site/member/edit-member";
-                }
-            }
-            else
+            if (session == null || session.getAttribute("userinfo") == null)
             {
                 return LOGIN;
             }
-            
+            else
+            {
+                SupervisorPrincipal info = getLoginInfo(session);
+                if (info.getAccount() != null && info.getMember() != null)
+                {
+                    AccountEntity newAccount = accountService.getAccount(info.getAccount()
+                            .getId());
+                    if (newAccount == null)
+                    {
+                        return LOGIN;
+                    }
+                    if (newAccount.getState().equals(AccountStatesEnum.STOP))
+                    {
+                        return LOGIN;
+                    }
+                    if (StringUtils.isEmpty(newAccount.getPassword()))
+                    {
+                        return LOGIN;
+                    }
+                    if (!newAccount.getPassword().equals(info.getAccount()
+                            .getPassword()))
+                    {
+                        return LOGIN;
+                    }
+                    return "site/member/account-index";
+                }
+                else if (info.getAccount() == null && info.getMember() != null)
+                {
+                    List<AreaEntity> cityList = areaService.getChildrenAreas("32");
+                    MemberEntity member = memberService.getMember(info.getMember()
+                            .getId());
+                    if (member.getAccountNum() == null)
+                    {
+                        member.setAccountNum(0);
+                    }
+                    map.put("cityList", cityList);
+                    map.put("member", member);
+                    MemberToMemberEntity m = new MemberToMemberEntity();
+                    
+                    List<MemberToMemberEntity> mlist = memberToMemberService.queryInfo(member.getMemberNo());
+                    map.put("mlist", mlist);
+                    if (info.getMember().getFlag())
+                    {
+                        List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
+                        List<DevelopersEntity> kfsList = new ArrayList<DevelopersEntity>();
+                        
+                        MemberQuery query = new MemberQuery();
+                        query.setMemberType(MemberTypeEnum.DAWP.getId());
+                        query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        query.setFilterStr(1);
+                        List<MemberEntity> totalMCList = memberService.queryMembersWebSite(query);
+                        List<MemberEntity> mcList = new ArrayList<MemberEntity>();
+                        
+                        query = new MemberQuery();
+                        query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
+                        query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        query.setFilterStr(1);
+                        List<MemberEntity> totalBLList = memberService.queryMembersWebSite(query);
+                        List<MemberEntity> blList = new ArrayList<MemberEntity>();
+                        
+                        query = new MemberQuery();
+                        query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
+                        query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        query.setFilterStr(1);
+                        List<MemberEntity> totalXCList = memberService.queryMembersWebSite(query);
+                        List<MemberEntity> xcList = new ArrayList<MemberEntity>();
+                        
+                        query = new MemberQuery();
+                        query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
+                        query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        query.setFilterStr(1);
+                        List<MemberEntity> totalPJList = memberService.queryMembersWebSite(query);
+                        List<MemberEntity> pjList = new ArrayList<MemberEntity>();
+                        List<MemberEntity> fcList = new ArrayList<MemberEntity>();
+                        if (totalMCList.size() > 18)
+                        {
+                            for (int i = 0; i < 18; i++)
+                            {
+                                Random rd1 = new Random();
+                                int k1 = rd1.nextInt(totalMCList.size());
+                                MemberEntity temMc = totalMCList.get(k1);
+                                mcList.add(temMc);
+                                totalMCList.remove(temMc);
+                            }
+                        }
+                        else
+                        {
+                            mcList = totalMCList;
+                        }
+                        
+                        if (totalBLList.size() > 18)
+                        {
+                            for (int i = 0; i < 18; i++)
+                            {
+                                Random rd2 = new Random();
+                                int k2 = rd2.nextInt(totalBLList.size());
+                                MemberEntity temBl = totalBLList.get(k2);
+                                blList.add(temBl);
+                                totalBLList.remove(temBl);
+                            }
+                        }
+                        else
+                        {
+                            blList = totalBLList;
+                        }
+                        
+                        if (totalXCList.size() > 18)
+                        {
+                            for (int i = 0; i < 18; i++)
+                            {
+                                Random rd3 = new Random();
+                                int k3 = rd3.nextInt(totalXCList.size());
+                                MemberEntity temXc = totalXCList.get(k3);
+                                xcList.add(temXc);
+                                totalXCList.remove(temXc);
+                            }
+                        }
+                        else
+                        {
+                            xcList = totalXCList;
+                        }
+                        
+                        if (totalKFSList.size() > 18)
+                        {
+                            for (int i = 0; i < 18; i++)
+                            {
+                                Random rd4 = new Random();
+                                int k4 = rd4.nextInt(totalKFSList.size());
+                                DevelopersEntity temKfs = totalKFSList.get(k4);
+                                kfsList.add(temKfs);
+                                totalKFSList.remove(temKfs);
+                            }
+                        }
+                        else
+                        {
+                            kfsList = totalKFSList;
+                        }
+                        
+                        if (totalPJList.size() > 18)
+                        {
+                            for (int i = 0; i < 18; i++)
+                            {
+                                Random rd5 = new Random();
+                                int k5 = rd5.nextInt(totalPJList.size());
+                                MemberEntity tempj = totalPJList.get(k5);
+                                pjList.add(tempj);
+                                totalPJList.remove(tempj);
+                            }
+                        }
+                        else
+                        {
+                            pjList = totalPJList;
+                        }
+                        //
+                        SupervisorPrincipal user = getLoginInfo(session);
+                        if (user == null)
+                        {
+                            return LOGIN;
+                        }
+                        String memberNo = user.getMember().getMemberNo();
+                        List<String> infoIdList = CometServiceImpl.get(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
+                        if (infoIdList != null && infoIdList.size() > 0)
+                        {
+                            List<TenderMessageEntity> messageList = new ArrayList<TenderMessageEntity>();
+                            for (Iterator<String> iterator = infoIdList.iterator(); iterator.hasNext();)
+                            {
+                                String infoId = iterator.next();
+                                TenderMessageQuery query2 = new TenderMessageQuery();
+                                query2.setMemberNo(memberNo);
+                                query2.setInfoId(infoId);
+                                List<TenderMessageModel> list = tenderMessageService.queryMessageList(query2);
+                                if (list == null || list.size() == 0)
+                                {
+                                    TenderMessageEntity message = new TenderMessageEntity();
+                                    message.setInfoId(infoId);
+                                    message.setMemberNo(memberNo);
+                                    message.setState(MessageStateEnum.UNREAD);
+                                    messageList.add(message);
+                                }
+                            }
+                            tenderMessageService.addMessage(messageList);
+                        }
+                        MemberQuery q = new MemberQuery();
+                        q.setMemberType(MemberTypeEnum.FRAMEFACTORY.getId());
+                        q.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        q.setFilterStr(1);
+                        List<MemberEntity> totalfcList = memberService.queryMembersWebSite(q);
+                        if (totalfcList.size() > 16)
+                        {
+                            for (int i = 0; i < 16; i++)
+                            {
+                                
+                                Random rd5 = new Random();
+                                int k5 = rd5.nextInt(totalfcList.size());
+                                MemberEntity fc = totalfcList.get(k5);
+                                fcList.add(fc);
+                                totalfcList.remove(fc);
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < totalfcList.size(); i++)
+                            {
+                                fcList.add(totalfcList.get(i));
+                            }
+                        }
+                        // TenderMessageQuery messQuery = new TenderMessageQuery();
+                        messQuery.setPagable(true);
+                        messQuery.setShowCount(6);
+                        messQuery.setMemberNo(getLoginInfo(session).getMember()
+                                .getMemberNo());
+                        List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);
+                        GovEntity gov = new GovEntity();
+                        gov.setShowCount(6);
+                        gov.setPagable(true);
+                        List<GovEntity> list = govService.queryGovList(gov);
+                        map.put("kfsList", kfsList);
+                        map.put("mcList", mcList);
+                        map.put("blList", blList);
+                        map.put("xcList", xcList);
+                        map.put("pjList", pjList);
+                        map.put("messageList", messageList);
+                        map.put("fcList", fcList);
+                        map.put("govList", list);
+                        map.put("query", messQuery);
+                        
+                        /*for (int i = 0; i < kfsList.size(); i++)
+                        {
+                            System.err.println("开发商:"+kfsList.get(i).getName());
+                        }
+                        for (int i = 0; i < mcList.size(); i++)
+                        {
+                            System.err.println("门窗:"+mcList.get(i).getName());
+                        }
+                        for (int i = 0; i < blList.size(); i++)
+                        {
+                            System.err.println("玻璃:"+blList.get(i).getName());
+                        }
+                        for (int i = 0; i < xcList.size(); i++)
+                        {
+                            System.err.println("型材:"+xcList.get(i).getName());
+                        }
+                        for (int i = 0; i < messageList.size(); i++)
+                        {
+                            System.err.println("招标:"+messageList.get(i).getInfoId());
+                        }*/
+                        if (info.getMember().getCheckState().ordinal() < 2)
+                        {
+                            return "site/member/member-profile";
+                        }
+                        return "site/member/platform_index";
+                    }
+                    else
+                    {
+                        return "site/member/edit-member";
+                    }
+                }
+                else
+                {
+                    return LOGIN;
+                }
+                
+            }
         }
-        
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
     }
     
     @RequestMapping("newIndex")
@@ -390,7 +474,14 @@ public class BasicController extends BaseController
             query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
             query.setFilterStr(1);
             List<MemberEntity> totalXCList = memberService.queryMembers(query);
+            //附框厂
+            query = new MemberQuery();
+            query.setMemberType(MemberTypeEnum.FRAMEFACTORY.getId());
+            query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+            query.setFilterStr(1);
+            List<MemberEntity> totalfcList = memberService.queryMembers(query);
             List<MemberEntity> xcList = new ArrayList<MemberEntity>();
+            List<MemberEntity> fcList = new ArrayList<MemberEntity>();
             
             for (int i = 0; i < 16; i++)
             {
@@ -418,6 +509,11 @@ public class BasicController extends BaseController
                 kfsList.add(temKfs);
                 totalKFSList.remove(temKfs);
                 
+                Random rd5 = new Random();
+                int k5 = rd5.nextInt(totalfcList.size());
+                MemberEntity fc = totalfcList.get(k5);
+                fcList.add(fc);
+                totalfcList.remove(fc);
             }
             
             TenderMessageQuery messQuery = new TenderMessageQuery();
@@ -430,6 +526,7 @@ public class BasicController extends BaseController
             map.put("mcList", mcList);
             map.put("blList", blList);
             map.put("xcList", xcList);
+            map.put("fcList", fcList);
             map.put("messageList", list);
             map.put("query", messQuery);
             
@@ -787,23 +884,29 @@ public class BasicController extends BaseController
             }
             else
             {
-                String originalName = myfile.getOriginalFilename().substring(0,
-                        myfile.getOriginalFilename().lastIndexOf('.'))
-                        + ".JPG";
+                String originalName = myfile.getOriginalFilename();
                 String extName = FileUtil.getFileExtName(originalName);
+                //原数据路径
+                String filePathBack = storageClientService.uploadFile(null,
+                        myfile.getInputStream(),
+                        myfile.getBytes().length,
+                        extName);
+                //转HTML
                 byte[] html = convert2Html(myfile.getInputStream()).getBytes();
                 String filePath = storageClientService.uploadFile(null,
                         new ByteArrayInputStream(html),
                         html.length,
-                        extName.toUpperCase());
+                        "JPG");
                 SxjLogger.info("siteUploadFilePath=" + filePath,
                         this.getClass());
                 fileIds.add(filePath);
+                fileIds.add(filePathBack);
                 // 上传元数据
                 NameValuePair[] metaList = new NameValuePair[1];
                 metaList[0] = new NameValuePair("originalName",
                         URLEncoder.encode(originalName, "UTF-8"));
                 storageClientService.overwriteMetadata(filePath, metaList);
+                storageClientService.overwriteMetadata(filePathBack, metaList);
             }
         }
         map.put("fileIds", fileIds);
@@ -889,7 +992,8 @@ public class BasicController extends BaseController
                     path);
             String fjname = metaList[0].getValue();
             response.addHeader("Content-Disposition", "attachment;filename="
-                    + new String(URLDecoder.decode(fjname, "UTF-8").getBytes(),"ISO8859-1"));
+                    + new String(URLDecoder.decode(fjname, "UTF-8").getBytes(),
+                            "ISO8859-1"));
             response.setContentType("application/"
                     + FileUtil.getFileExtName(fjname));
             storageClientService.downloadFile(group, path, output);
@@ -1050,12 +1154,16 @@ public class BasicController extends BaseController
     @RequestMapping("autoCompleMember")
     public @ResponseBody Map<String, String> autoCompleMember(
             HttpServletRequest request, HttpServletResponse response,
-            String keyword) throws IOException
+            String keyword, Integer memberType) throws IOException
     {
         MemberQuery mq = new MemberQuery();
         if (keyword != "" && keyword != null)
         {
             mq.setMemberName(keyword);
+        }
+        if (null != memberType)
+        {
+            mq.setMemberType(memberType);
         }
         //mq.setMemberTypeB(0);
         List<MemberEntity> list = memberService.queryMembers(mq);
@@ -1065,6 +1173,59 @@ public class BasicController extends BaseController
         {
             sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
                     + memberEntity.getMemberNo() + "\"}";
+            strlist.add(sb);
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 会员联想(可以获取到联系人和联系电话)
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCompleMemberInfo")
+    public @ResponseBody Map<String, String> autoCompleMemberInfo(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword, Integer memberType) throws IOException
+    {
+        MemberQuery mq = new MemberQuery();
+        if (keyword != "" && keyword != null)
+        {
+            mq.setMemberName(keyword);
+        }
+        if (null != memberType)
+        {
+            mq.setMemberType(memberType);
+        }
+        //mq.setMemberTypeB(0);
+        List<MemberEntity> list = memberService.queryMembers(mq);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (MemberEntity memberEntity : list)
+        {
+            String contacts = memberEntity.getContacts();
+            String telNum = memberEntity.getTelNum();
+            if (StringUtils.isEmpty(contacts))
+            {
+                contacts = "";
+            }
+            if (StringUtils.isEmpty(telNum))
+            {
+                telNum = "";
+            }
+            sb = "{\"title\":\"" + memberEntity.getName() + "\",\"result\":\""
+                    + memberEntity.getMemberNo() + "\",\"contacts\":\""
+                    + contacts + "\",\"telNum\":\"" + telNum + "\"}";
             strlist.add(sb);
         }
         String json = "{\"data\":" + strlist.toString() + "}";
@@ -1371,6 +1532,92 @@ public class BasicController extends BaseController
                 strlist.add(sb);
             }
             
+        }
+        String json = "{\"data\":" + strlist.toString() + "}";
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(json);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 获取图片验证码
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("getAuthImg")
+    public @ResponseBody Map<String, String> getAuthImg(HttpSession session,
+            HttpServletRequest request, HttpServletResponse response)
+            throws IOException
+    {
+        try
+        {
+            AuthImg img = new AuthImg();
+            ValidateImage image = img.getImage();
+            String str = image.getImgStr();
+            BufferedImage bImg = image.getImg();
+            session.setAttribute("imgStr", str);
+            System.out.println("第一：" + str);
+            ImageIO.write(bImg, "JPEG", response.getOutputStream());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+        return null;
+    }
+    
+    /**
+     * 获取图片验证码字符
+     * 
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("getImgStr")
+    public @ResponseBody Map<String, String> getImgStr(HttpSession session,
+            HttpServletRequest request, HttpServletResponse response)
+            throws IOException
+    {
+        String res = session.getAttribute("imgStr").toString();
+        PrintWriter out = response.getWriter();
+        System.out.println("第二：" + res);
+        out.print(res);
+        out.flush();
+        out.close();
+        return null;
+    }
+    
+    /**
+     * 证书联想
+     * 
+     * @param request
+     * @param response
+     * @param keyword
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("autoCertificate")
+    public @ResponseBody Map<String, String> autoCertificate(
+            HttpServletRequest request, HttpServletResponse response,
+            String keyword) throws IOException
+    {
+        List<CertificateEntity> list = memberImageService.getCertificate(keyword);
+        List strlist = new ArrayList();
+        String sb = "";
+        for (CertificateEntity certificate : list)
+        {
+            sb = "{\"title\":\"" + certificate.getCertificateName()
+                    + "\",\"result\":\"" + certificate.getCertificateLevel()
+                    + "\"}";
+            strlist.add(sb);
         }
         String json = "{\"data\":" + strlist.toString() + "}";
         response.setCharacterEncoding("UTF-8");

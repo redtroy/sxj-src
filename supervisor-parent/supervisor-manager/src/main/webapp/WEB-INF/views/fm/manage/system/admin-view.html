@@ -10,6 +10,7 @@
 <@b.pageScript/>
 <script>
 function query(page){
+	loadingImg();
 	var params="accountNo=${query.accountNo}";
 	 if(page!=undefined){
 		   params=params+"&currentPage="+page;

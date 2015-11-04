@@ -14,6 +14,7 @@ package com.sxj.supervisor.entity.member;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -216,6 +217,14 @@ public class MemberEntity extends Pagable implements Serializable
     private Boolean flag;
     
     /**
+     * 资质证书变更标记
+     * 
+     * @return
+     */
+    @Column(name = "CHANGE_IMAGE_FLAG")
+    private Boolean changeImageFlag;
+    
+    /**
      * 扫描设备号
      * 
      * @return
@@ -329,16 +338,79 @@ public class MemberEntity extends Pagable implements Serializable
     @Column(name = "UPDATE_DATE")
     private Date upDate;
     
+    /**
+     * 是否拥有生产附框厂的资质
+     **/
+    @Column(name = "IS_HAVE")
+    private Integer isHave;
+    
+    /**
+     * 附框推广证编号
+     **/
+    @Column(name = "ENCLOSED_NO")
+    private String enclosedNo;
+    
+    /**
+     * 附框推广证图片
+     **/
+    @Column(name = "ENCLOSED_IMG")
+    private String enclosedImg;
+    
+    //附加属性
+    /**
+     * 上级型材厂编号
+     */
+    private String parentNo;
+    
+    /**
+     * 上级型材厂名称
+     */
+    private String parentName;
+    
+    /**
+     * 关联的代理商
+     */
+    private List<MemberToMemberEntity> dlList;
+    
+    /**
+     * 关联的代理商
+     */
+    private List<MemberToMemberEntity> jxList;
+    
+    /**
+     * 第一次认证时间
+     */
+    @Column(name = "FIRST_DATE")
+    private Date firstDate;
+    
+    public Date getFirstDate() {
+		return firstDate;
+	}
+
+	public void setFirstDate(Date firstDate) {
+		this.firstDate = firstDate;
+	}
+
+	public Boolean getChangeImageFlag()
+    {
+        return changeImageFlag;
+    }
+    
+    public void setChangeImageFlag(Boolean changeImageFlag)
+    {
+        this.changeImageFlag = changeImageFlag;
+    }
+    
     public Date getUpDate()
     {
         return upDate;
     }
-
+    
     public void setUpDate(Date upDate)
     {
         this.upDate = upDate;
     }
-
+    
     public String getRemark()
     {
         return remark;
@@ -747,6 +819,76 @@ public class MemberEntity extends Pagable implements Serializable
     public void setNoType(String noType)
     {
         this.noType = noType;
+    }
+    
+    public Integer getIsHave()
+    {
+        return isHave;
+    }
+    
+    public void setIsHave(Integer isHave)
+    {
+        this.isHave = isHave;
+    }
+    
+    public String getParentNo()
+    {
+        return parentNo;
+    }
+    
+    public void setParentNo(String parentNo)
+    {
+        this.parentNo = parentNo;
+    }
+    
+    public String getParentName()
+    {
+        return parentName;
+    }
+    
+    public void setParentName(String parentName)
+    {
+        this.parentName = parentName;
+    }
+    
+    public List<MemberToMemberEntity> getDlList()
+    {
+        return dlList;
+    }
+    
+    public void setDlList(List<MemberToMemberEntity> dlList)
+    {
+        this.dlList = dlList;
+    }
+    
+    public List<MemberToMemberEntity> getJxList()
+    {
+        return jxList;
+    }
+    
+    public void setJxList(List<MemberToMemberEntity> jxList)
+    {
+        this.jxList = jxList;
+    }
+    
+    public String getEnclosedNo()
+    {
+        return enclosedNo;
+    }
+    
+    public void setEnclosedNo(String enclosedNo)
+    {
+        this.enclosedNo = enclosedNo;
+    }
+    
+    public String getEnclosedImg()
+    {
+        return enclosedImg;
+    }
+    
+    public void setEnclosedImg(String enclosedImg)
+    {
+        this.enclosedImg = enclosedImg;
     }
     
 }

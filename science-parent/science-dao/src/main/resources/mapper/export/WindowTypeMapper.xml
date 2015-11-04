@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.science.dao.export.IWindowTypeDao">
+	<resultMap id="WinTypeResultMap" type="com.sxj.science.entity.export.WindowTypeEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="winId" column="WINID" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="modelPath" column="MODEL_PATH" jdbcType="VARCHAR" />
+		<result property="area" column="AREA" jdbcType="VARCHAR" />
+		<result property="companyName" column="COMPANY_NAME" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="VARCHAR" />
+		<result property="series" column="SERIES" jdbcType="VARCHAR" />
+		<result property="imageSrc" column="IMAGE_SRC" jdbcType="VARCHAR" />
+		<result property="htmlData" column="HTMLDATA" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 条件查询备案 -->
+	<select id="queryWindowType" resultMap="WinTypeResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM S_WINDOW_TYPE WHERE 1=1  ]]>
+		<!-- 所属地区 -->
+		<if test="condition.area != null and condition.area != ''">
+			<![CDATA[ AND AREA = #{condition.area} ]]>
+		</if>
+		<!-- 	公司名称 -->
+		<if test="condition.companyName != null and condition.companyName != ''">
+			<![CDATA[ AND COMPANY_NAME = #{condition.companyName} ]]>
+		</if>
+		<!-- 类别 -->
+		<if test="condition.type != null and condition.type != ''">
+			<![CDATA[ AND TYPE = #{condition.type}) ]]>
+		</if>
+		<!-- 系列 -->
+		<if test="condition.series != null and condition.series != ''">
+			<![CDATA[ AND SERIES = #{condition.series} ]]>
+		</if>
+		<!-- 名称或系列 -->
+		<if test="condition.searchStr != null and condition.searchStr != ''">
+			<![CDATA[ AND COMPANY_NAME LIKE CONCAT('%',#{condition.searchStr},'%') OR SERIES LIKE CONCAT('%',#{condition.searchStr},'%') ]]>
+		</if>
+	</select>
+	
+	<!-- 条件查询备案 -->
+	<select id="searchWindowType" resultMap="WinTypeResultMap"
+		parameterType="java.util.Map">
+		<![CDATA[SELECT * FROM S_WINDOW_TYPE WHERE 1=1  ]]>
+		<!-- 所属地区 -->
+		<if test="area != null and area != ''">
+			<![CDATA[ AND AREA = #{area} ]]>
+		</if>
+		<!-- 	公司名称 -->
+		<if test="companyNameArr != null">
+			<![CDATA[ AND COMPANY_NAME IN ]]>
+			<foreach item="item" collection="companyNameArr" open="(" close=")"
+			separator=",">
+			#{item}
+			</foreach> 
+		</if>
+		<!-- 类别 -->
+		<if test="typeArr != null">
+			<![CDATA[ AND TYPE IN ]]>
+			<foreach item="item" collection="typeArr" open="(" close=")"
+			separator=",">
+			#{item}
+			</foreach>
+		</if>
+		<!-- 系列 -->
+		<if test="seriesArr != null">
+			<![CDATA[ AND SERIES IN ]]>
+			<foreach item="item" collection="seriesArr" open="(" close=")"
+			separator=",">
+			#{item}
+			</foreach>
+		</if>
+		<!-- 名称或系列 -->
+		<if test="searchStr != null and searchStr != ''">
+			<![CDATA[ AND ( COMPANY_NAME LIKE CONCAT('%',#{searchStr},'%') OR SERIES LIKE CONCAT('%',#{searchStr},'%')) ]]>
+		</if>
+	</select>
+	
+	<!-- 条件查询备案 -->
+	<select id="openQueryWindowType" resultMap="WinTypeResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM S_WINDOW_TYPE WHERE 1=1  ]]>
+		<!-- 所属地区 -->
+		<if test="condition.area != null and condition.area != ''">
+			<![CDATA[ AND AREA = #{condition.area} ]]>
+		</if>
+		<!-- 	公司名称 -->
+		<if test="condition.companyName != null and condition.companyName != ''">
+			<![CDATA[ AND COMPANY_NAME LIKE CONCAT('%',#{condition.companyName},'%') ]]>
+		</if>
+		<!-- 类别 -->
+		<if test="condition.type != null and condition.type != ''">
+			<![CDATA[ AND TYPE LIKE CONCAT('%',#{condition.type},'%') ]]>
+		</if>
+		<!-- 系列 -->
+		<if test="condition.series != null and condition.series != ''">
+			<![CDATA[ AND SERIES LIKE CONCAT('%',#{condition.series},'%') ]]>
+		</if>
+		<!-- 系列 -->
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[ AND NAME LIKE CONCAT('%',#{condition.name},'%') ]]>
+		</if>
+		<![CDATA[ ORDER BY WINID DESC ]]>
+	</select>
+	
+	<!-- 条件查询备案 -->
+	<select id="autoWindowType" resultMap="WinTypeResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM S_WINDOW_TYPE WHERE 1=1  ]]>
+		<!-- 	公司名称 -->
+		<if test="condition.companyName != null and condition.companyName != ''">
+			<![CDATA[ AND COMPANY_NAME LIKE CONCAT(#{condition.companyName},'%') ]]>
+			<![CDATA[ GROUP BY COMPANY_NAME  ]]>
+		</if>
+		<!-- 类别 -->
+		<if test="condition.type != null and condition.type != ''">
+			<![CDATA[ AND TYPE LIKE CONCAT(#{condition.type},'%') ]]>
+			<![CDATA[ GROUP BY TYPE  ]]>
+		</if>
+		<!-- 系列 -->
+		<if test="condition.series != null and condition.series != ''">
+			<![CDATA[ AND SERIES LIKE CONCAT(#{condition.series},'%') ]]>
+			<![CDATA[ GROUP BY SERIES  ]]>
+		</if>
+	</select>
+</mapper>

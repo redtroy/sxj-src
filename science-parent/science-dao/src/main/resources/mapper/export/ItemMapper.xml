@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.science.dao.export.IItemDao">
+	<resultMap id="ItemResultMap"
+		type="com.sxj.science.entity.export.ItemEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="projectId" column="PROJECT_ID" jdbcType="VARCHAR" />
+		<result property="name" column="NAME" jdbcType="VARCHAR" />
+		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
+		<result property="count" column="COUNT" jdbcType="INTEGER" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
+		<result property="uploadTime" column="UPLOAD_TIME" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="query" resultMap="ItemResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * from S_ITEM p WHERE 1 = 1]]>
+		<if test="condition.projectId!= null and condition.projectId != ''">
+			<![CDATA[ AND p.PROJECT_ID =#{condition.projectId}]]>
+		</if>
+		<![CDATA[  ORDER BY p.UPLOAD_TIME DESC]]>
+	</select>
+</mapper>

@@ -1,4 +1,5 @@
-<html>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>私享家绿色门窗平台</title>
@@ -18,6 +19,10 @@
 <script src="${b.staticPath}js/jquery.mousewheel.js" type="text/javascript" ></script>
 <script src="${b.staticPath}js/jquery.uploadify.js" type="text/javascript"></script>
 <script src="${b.staticPath}/js/jquery.paginate.js"></script>
+<!-- 新图片控件 -->
+<script type="text/javascript" src="${b.staticPath}js/jslide.js" ></script>
+<link href="${b.staticPath}style/imageditor.css" rel="stylesheet" type="text/css" />
+<!--  -->
 <script src="${b.staticPath}js/jquery.elastislide-style.js"
 	type="text/javascript"></script>
 	<script src="${b.staticPath}js/jquery.elastislide.js"
@@ -34,22 +39,44 @@
     z-index:99999;
     /* position: absolute; */
 }
+.line-con{width:685px}
 </style>
-<@b.upload/>
 <@b.validate/>
 <@b.dialogBox/>
+<@b.iviewer/>
 <script>
 var edit_pwd_validform;
 var checkState=${member.checkState.id};
 var flag=true;
+var imageChangeFlag=true;
 var ul_validform;
+var show;
+function loadUploadMember(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '${basePath}upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        /* queueID: 'safetyPath_FileDiv', */
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
 $(document).ready(function() { 
 	loadUploadMember("bLicensePath_File","${basePath}upload.htm",false,"上传",uploadLicense);
 	loadUploadMember("energyPath_File","${basePath}upload.htm",false,"上传" ,uploadenergyPath);
 // 	loadUploadMember("aptitudePath_File","${basePath}upload.htm",false,"上传" ,uploadaptitudePath);
 	loadUploadMember("safetyPath_File","${basePath}upload.htm",false,"上传" ,uploadsafetyPath);
 	loadUploadMember("qmsPath_File","${basePath}upload.htm",false,"上传" ,uploadqmsPath);
-	loadUploadMember("cccPath_File","${basePath}upload.htm",false,"上传" ,uploadcccPath);
+	loadUploadMember("enclosedImg_File","${basePath}upload.htm",false,"上传" ,uploadEnclosedImgReload);
+//	loadUploadMember("cccPath_File","${basePath}upload.htm",false,"上传" ,uploadcccPath);
 	loadUploadMember("productionPath_File","${basePath}upload.htm",false,"上传" ,uploadproductionPath);
 	
 	loadUploadMember("bLicensePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadLicenseReload);
@@ -57,21 +84,10 @@ $(document).ready(function() {
 // 	loadUploadMember("aptitudePath_File_reload","${basePath}upload.htm",false,"重新上传",uploadaptitudeReload);
 	loadUploadMember("safetyPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadsafetyReload);
 	loadUploadMember("qmsPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadqmsReload);
-	loadUploadMember("cccPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadcccReload);
+	loadUploadMember("enclosedImg_File_reload","${basePath}upload.htm",false,"重新上传",uploadEnclosedImgReload);
+//	loadUploadMember("cccPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadcccReload);
 	loadUploadMember("productionPath_File_reload","${basePath}upload.htm",false,"重新上传",uploadproductionReload);
-	 $("#carousel").elastislide(); 
-	//初始化图片 
-	$('#carousel').find("li").live("click", function() {
-		var el = $(this);
-		var imageSource = el.find("a").attr("data-image");
-			currentHiddenImages=$("#aptitudePath_hidden");
-			currentLi=$(this);
-			refreshIviewer($("#viewer2"), imageSource, $("#iviewerModal"));
-			el.parent().children("li").removeClass("view");
-			el.addClass("view");
-			$(".maskdivgen").show();
-			$(".viewer").show();
-	});
+
 	uploadImg($("#aptitudePath_File_reload"));
 	//
 	$("#bLicenseNo").click(function(){
@@ -83,14 +99,14 @@ $(document).ready(function() {
 	$('.btnPassword').click(function(){
 		$("#edit_pwd").find("input").val("");
 		edit_pwd_validform.resetForm();
-		$('.maskdivgen').fadeIn(100);
-		$('.passwordPop').slideDown(200);
+		show  =layer.open({
+		    type: 1,
+		    offset: ['30%', '35%'],
+		    area: ['500px', '180px'],
+		    title: "修改密码", //不显示标题
+		    content: $("#edit_pwd")
+		});
 	})
-    $('#edit_pwd').css({
-		  position:'absolute',
-		  left: "40%",
-		  top: "60%"
-		  });
 	$('.modal-header .close').click(function(){
 		$('.maskdivgen').fadeOut(100);
 		$('.passwordPop').slideUp(200);
@@ -129,29 +145,15 @@ $(document).ready(function() {
 		if(!pass)
 			$(this).parent().children(".checkinfo").show();
 	});
-	//删除图片
-	$(".iviewer_del").unbind();
-	$(".iviewer_del").live("click",function(){
-		var url=$(this).siblings("img").attr("src");
-		var prefix="${b.imagePath}";
-		var image=url.substring(url.indexOf(prefix)+prefix.length);
-		var images=currentHiddenImages.attr("value");
-		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
-		currentHiddenImages.attr("value",result)
-		currentLi.remove();
-		closeViewer();
-	});
 	
-}); 
+});
+
 closeViewer = function() {
 	$('.maskdivgen').fadeOut(100);
 	$('.viewer').slideUp(200);
 }
+var oSlide;
 var uploadImg = function($file) {
-	var $div = $file.parent().parent();
-	var $carousel = $div.find(".elastislide-list");
-	var $container = $carousel.parent().parent();
-	var $hidden = $("#aptitudePath_hidden");
 	$file.uploadify({
 		swf : '${basePath}upload/uploadify.swf',
 		uploader : "${basePath}upload.htm",
@@ -162,30 +164,15 @@ var uploadImg = function($file) {
 		width : 120,
 		buttonText : '上传资质证书',
 		onUploadSuccess : function(file, data, response) {
-			var num = 1;
+			imageChangeFlag=false;
 			var dataObj = eval("(" + data + ")");//转换为json对象 
-			var hideVal = $hidden.val();
-			if (hideVal == '') {
-				hideVal = dataObj.fileIds;
-			} else {
-				var arrays = hideVal.split(",");
-				for (var i = 0; i < arrays.length; i++) {
-					if (arrays[i]) {
-						num += 1;
-					}
-				}
-				hideVal += "," + dataObj.fileIds;
-			}
-			$hidden.val(hideVal);
-			refreshElastislide($container, $carousel, dataObj);
+				oSlide.addImage('${b.imagePath}'+dataObj.fileIds,'${b.imagePath}'+dataObj.fileIds);
 		}
 	});
 }
 
-
 function close_div(){
-	$('.maskdivgen').fadeOut(100);
-	$('.passwordPop').slideUp(200);
+	layer.close(show);
 }
 //上传营业执照扫描件
 function uploadLicense(data){
@@ -221,6 +208,12 @@ function uploadqmsPath(data){
     $("#qmsPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $("#qmsPath_hidden").val(dataObj.fileIds);
 }
+//重新上传附框许可证
+function uploadEnclosedImgReload(data){
+    var dataObj=eval("("+data+")");//转换为json对象 
+    $("#enclosed_Img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
+    $("#enclosedImg").val(dataObj.fileIds);
+}
 //上传3C认证扫描件
 function uploadcccPath(data){
     var dataObj=eval("("+data+")");//转换为json对象 
@@ -248,8 +241,8 @@ function uploadLicenseReload(data){
 }
 //重新上传节能标识推广证扫描件
 function uploadenergyPathReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#energyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#energyPath_hidden").val()},function(data){})
@@ -257,8 +250,8 @@ function uploadenergyPathReload(data){
 }
 //重新上传资质证书扫描件
 function uploadaptitudeReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+//	flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#aptitudePath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#aptitudePath_hidden").val()},function(data){})
@@ -266,8 +259,8 @@ function uploadaptitudeReload(data){
 }
 //重新上传安全生产许可证扫描件
 function uploadsafetyReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#safetyPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#safetyPath_hidden").val()},function(data){})
@@ -275,8 +268,8 @@ function uploadsafetyReload(data){
 }
 //重新上传质量管理体系认证扫描
 function uploadqmsReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#qmsPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#qmsPath_hidden").val()},function(data){})
@@ -284,8 +277,8 @@ function uploadqmsReload(data){
 }
 //重新上传3C认证扫描
 function uploadcccReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#cccPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#cccPath_hidden").val()},function(data){})
@@ -293,8 +286,8 @@ function uploadcccReload(data){
 }
 //重新上传工业产品生产许可证扫描
 function uploadproductionReload(data){
-	checkState=1;
-	flag=false;
+	//checkState=1;
+	//flag=false;
     var dataObj=eval("("+data+")");//转换为json对象 
     $("#productionPath_img").attr("src","${b.imagePath}"+dataObj.fileIds+"80x107.JPG");
     $.post("${basePath}deleteFile.htm",{fileId:$("#productionPath_hidden").val()},function(data){})
@@ -309,7 +302,6 @@ function save(id){
     var energyNo=$("#energyNo").val()+"";
     //资质证书
     var qualification_no=$("#aptitude").val()+"";
-    var qualification_img=$("#aptitudePath_hidden").val();
     //安全许可证safety
     var safety_licenses_no=$("#safety").val()+"";
     var safety_licenses_img=$("#safetyPath_hidden").val();
@@ -319,7 +311,7 @@ function save(id){
     
     //3c认证证书
     var ccc_no=$("#ccc").val()+"";
-    var ccc_img=$("#cccPath_hidden").val();
+    
     
     //上传工业产品生产许可证
     var production_license_no=$("#production").val()+"";
@@ -352,6 +344,7 @@ function save(id){
    
 	var add_validform=$("#add_form").Validform({
 		tiptype:3});
+	
 	if (!add_validform.check()){
 		return false;
 	}
@@ -359,16 +352,12 @@ function save(id){
 	if (!ul_validform.check()){
 		return false;
 	}
-	if (erro_flag){
-		return false;
-	}
-	
-	var telNum=$("#qh").val()+'-'+$("#telNum").val();
-	var address=$("#address").val();
-    var code=$("#code").val();	
-    var contacts=$("#contacts").val();
-    var phoneNo=$("#phoneNo").val();
-    var area= $("#city  option:selected").val();
+    
+    var telNum=$("#qh").val()+'-'+$("#telNum").val();
+	$("#newTelNum").val(telNum);
+	$("#checkState").val(checkState);
+
+	var bLicensePath= $("#bLicensePath_hidden").val();
     if (bLicensePath==""){
     	messageInfo("请上传营业执照图片");
     	return false;
@@ -390,19 +379,22 @@ function save(id){
     	messageInfo("请上传工业产品生产许可证图片");
     	return false;
     } */
-    
+    var imageVal =oSlide.trimFid("${b.imagePath}");
+    var memberType = "#{member.type.id}";
+    	var qualification_img=imageVal.join(",");
+    	$("#aptitudePath_hidden").val(qualification_img);
     dialogBox(function(index){
     	if (!flag){
     		//if (${member.checkState.id}==2){
     		  $.post("${basePath}member/unCertificates.htm?id="+id,function(data){})
     		//}
     	}
-    	  $.post("${basePath}member/save_member.htm",{id:id,telNum:telNum,address:address,code:code,contacts:contacts,phoneNo:phoneNo,bLicensePath:bLicensePath
-    	    	,energyPath:energyPath,area:area,bLicenseNo:bLicenseNo,energyNo:energyNo,type:type,checkState:checkState,qualification_no:qualification_no,
-    	    	qualification_img:qualification_img,safety_licenses_no:safety_licenses_no,safety_licenses_img:safety_licenses_img,qms_no:qms_no,qms_img:qms_img,
-    	    	ccc_no:ccc_no,ccc_img:ccc_img,production_license_no:production_license_no,production_license_img:production_license_img
-    	    },function(data){
-    	    	if(data.isOK="ok"){
+    	if (!imageChangeFlag){
+    		 $("#changeImageFlag").val("1");
+    		 $.post("${basePath}member/ImageChangeMessage.htm?id="+id,function(data){})
+    	}
+    	  $.post("${basePath}member/save_member.htm",$("#updateForm").serialize(),function(data){
+    	    	if(data.isOK=="ok"){
     	    		 succInfo(function(){
     	    			 window.location.href="${basePath}member/memberInfo.htm"; 
     	    		 },"修改成功！");
@@ -424,12 +416,300 @@ function edit_pwd(id){
 	var pwd2=$("#pwd2").val();
 		$.post("${basePath}member/edit_pwd.htm",{id:id,password:pwd1},function(data){
 			succInfo(function(){
-				$('.maskdivgen').fadeOut(100);
-				$('.passwordPop').slideUp(200);
+				layer.close(show);
 			},"修改成功！");
 			
 		})
 }	
+
+//删除一条新的代理商
+function delDL(obj){
+	var trlength=$(".dlclass").length;
+	if(trlength==1){
+		$(".dlclass").each(function(){
+			$(this).find("input").attr("value","");
+		})
+	}else{
+	 	$(obj).parent().parent().remove(); 
+	}
+}
+//删除一条新的代理商
+function delJX(obj){
+	var trlength=$(".jxclass").length;
+	if(trlength==1){
+		$(".dlclass").each(function(){
+			$(this).find("input").attr("value","");
+		})
+	}else{
+	 	$(obj).parent().parent().remove(); 
+	}
+}
+//删除一条新的代理商
+function delXC(obj){
+	var trlength=$(".xcclass").length;
+	if(trlength==1){
+		$(".dlclass").each(function(){
+			$(this).find("input").attr("value","");
+		})
+	}else{
+	 	$(obj).parent().parent().remove(); 
+	}
+}
+//删除一条旧的代理商或经销商
+function delOldDL(obj){
+	dialogBox(function(index){
+		$(obj).parent().parent().each(function(){
+			var dlNo= $(this).find("input:eq(0)").val();
+			var parentNo = $("#parentNo").val();
+			if(dlNo != ""){
+				if(parentNo == ""){
+					parentNo=dlNo;
+				}else{
+					parentNo=parentNo+","+dlNo;
+				}
+				$("#parentNo").val(parentNo);
+			}
+		})
+		$(obj).parent().parent().remove(); 
+		layer.close(index);
+    },"是否确认删除");
+}
+
+var dlNum=3;
+$(document).ready(function(){
+	$("#dlName").bigAutocomplete({
+		width: '256',
+		url : '${basePath}autoCompleMemberInfo.htm?memberType=6',
+		callback : function(data) {
+			if (data){
+				$("#dlNo").val(data.result);
+				$("#dlcontacts").val(data.contacts);
+				$("#dltelNum").val(data.telNum);
+			}
+		},
+		beforeShow : function(data){
+			if(data.length==1){
+				$("#dlName").val(data[0].title);
+				$("#dlNo").val(data[0].result);
+				$("#dlcontacts").val(data[0].contacts);
+				$("#dltelNum").val(data[0].telNum);
+			}
+		}
+	});
+	$("#add-button").click(function(){
+		var tr=$(this).parent().parent().parent().find("tr:last").clone();
+		$(this).parent().parent().parent().append(tr);
+		tr.find("input").attr("value","");
+		
+		tr.find("input:eq(0)").attr("name","dlList["+dlNum+"].memberName");
+		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].memberNo");
+		tr.find("input:eq(2)").attr("name","dlList["+dlNum+"].memberType");
+		tr.find("input:eq(2)").attr("value","6");
+		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].contacts");
+		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].telNum");
+		dlNum++;
+		
+		tr.find("input:eq(0)").bigAutocomplete({
+			width: '256',
+			url : '${basePath}autoCompleMemberInfo.htm?memberType=6',
+			callback : function(data) {
+				if (data){
+					$(this).siblings("input:eq(0)").val(data.result);
+					tr.find("input:eq(3)").attr("value",data.contacts);
+					tr.find("input:eq(4)").attr("value",data.telNum);
+				}
+			},
+			beforeShow : function(data){
+				if(data.length==1){
+					tr.find("input:eq(0)").val(data[0].title);
+					tr.find("input:eq(1)").val(data[0].result);
+					tr.find("input:eq(3)").attr("value",data[0].contacts);
+					tr.find("input:eq(4)").attr("value",data[0].telNum);
+				}
+			}
+		});
+	});
+	$("#jxName").bigAutocomplete({
+		width: '256',
+		url : '${basePath}autoCompleMemberInfo.htm?memberType=7',
+		callback : function(data) {
+			if (data){
+				$("#jxNo").val(data.result);
+				$("#jxcontacts").val(data.contacts);
+				$("#dltelNum").val(data.telNum);
+			}
+		},
+		beforeShow : function(data){
+			if(data.length==1){
+				$("#jxName").val(data[0].title);
+				$("#jxNo").val(data[0].result);
+				$("#jxcontacts").val(data[0].contacts);
+				$("#jxtelNum").val(data[0].telNum);
+			}
+		}
+	});
+	$("#add-jx").click(function(){
+		var tr=$(this).parent().parent().parent().find("tr:last").clone();
+		$(this).parent().parent().parent().append(tr);
+		tr.find("input").attr("value","");
+		
+		tr.find("input:eq(0)").attr("name","dlList["+dlNum+"].memberName");
+		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].memberNo");
+		tr.find("input:eq(2)").attr("name","dlList["+dlNum+"].memberType");
+		tr.find("input:eq(2)").attr("value","7");
+		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].contacts");
+		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].telNum");
+		dlNum++;
+		
+		tr.find("input:eq(0)").bigAutocomplete({
+			width: '256',
+			url : '${basePath}autoCompleMemberInfo.htm?memberType=7',
+			callback : function(data) {
+				if (data){
+					tr.find("input:eq(1)").val(data.result);
+					tr.find("input:eq(3)").attr("value",data.contacts);
+					tr.find("input:eq(4)").attr("value",data.telNum);
+				}
+			},
+			beforeShow : function(data){
+				if(data.length==1){
+					tr.find("input:eq(0)").val(data[0].title);
+					tr.find("input:eq(1)").val(data[0].result);
+					tr.find("input:eq(3)").attr("value",data[0].contacts);
+					tr.find("input:eq(4)").attr("value",data[0].telNum);
+				}
+			}
+		});
+	});
+	$("#xcName").bigAutocomplete({
+		width: '256',
+		url : '${basePath}autoCompleMemberInfo.htm?memberType=2',
+		callback : function(data) {
+			if (data){
+				$("#xcNo").val(data.result);
+				$("#xccontacts").val(data.contacts);
+				$("#xctelNum").val(data.telNum);
+			}
+		},
+		beforeShow : function(data){
+			if(data.length==1){
+				$("#xcName").val(data[0].title);
+				$("#xcNo").val(data[0].result);
+				$("#xccontacts").val(data[0].contacts);
+				$("#xctelNum").val(data[0].telNum);
+			}
+		}
+	});
+	$("#add-parent").click(function(){
+		var tr=$(this).parent().parent().parent().find("tr:last").clone();
+		$(this).parent().parent().parent().append(tr);
+		tr.find("input").attr("value","");
+		
+		tr.find("input:eq(0)").attr("name","dlList["+dlNum+"].parentName");
+		tr.find("input:eq(1)").attr("name","dlList["+dlNum+"].parentNo");
+		tr.find("input:eq(2)").attr("name","dlList["+dlNum+"].memberType");
+		tr.find("input:eq(2)").attr("value","${member.type.getId()}");
+		tr.find("input:eq(3)").attr("name","dlList["+dlNum+"].parentContacts");
+		tr.find("input:eq(4)").attr("name","dlList["+dlNum+"].parentTelNum");
+		dlNum++;
+		
+		tr.find("input:eq(0)").bigAutocomplete({
+			width: '256',
+			url : '${basePath}autoCompleMemberInfo.htm?memberType=2',
+			callback : function(data) {
+				if (data){
+					tr.find("input:eq(1)").val(data.result);
+					tr.find("input:eq(3)").attr("value",data.contacts);
+					tr.find("input:eq(4)").attr("value",data.telNum);
+				}
+			},
+			beforeShow : function(data){
+				if(data.length==1){
+					tr.find("input:eq(0)").val(data[0].title);
+					tr.find("input:eq(1)").val(data[0].result);
+					tr.find("input:eq(3)").attr("value",data[0].contacts);
+					tr.find("input:eq(4)").attr("value",data[0].telNum);
+				}
+			}
+		});
+	});
+	var offsetTop = $(window).scrollTop() +"px";
+	 //alert(offsetTop)
+	 $(window).scroll(function (){
+		    offsetTop = $(window).scrollTop() +"px";
+	        $("#imagecomponent").css({top : offsetTop });
+	    });
+	var iv=$("#viewer").iviewer();
+	//iv.iviewer('loadImage', "../images/temp/100260_1306276811398.jpg"); 
+	/**弹出层滚动条
+	滚动式更新iviewer
+	**/
+	 var hSlide=new $.slide({container:"#hidden",imageWidth:90,imagesPerPage:8,
+	onSlide:function(li,index){
+		iv.iviewer('loadImage', li.find("img").attr("data")); 
+	}
+	});
+	/**原图片滚动条
+	点击后显示控件层
+	**/
+	 oSlide=new $.slide({container:"#original",imageWidth:90,imagesPerPage:5,onClick:function(self,li,index,i){
+		self.copyTo($("#hidden .line-con"));
+		$(".maskdivgen").fadeIn(100);
+		$("#imagecomponent").css({top : offsetTop });
+        $("#imagecomponent").css("visibility","visible");
+        hSlide.reset(0,1);
+		hSlide.slideTo(index);
+		iv.iviewer('destroy'); 
+		iv=$("#viewer").iviewer();
+		iv.iviewer('loadImage', li.find("img").attr("data"));
+	}});
+	/**
+	同步删除两个图片滚动层
+	**/
+	$('.iviewer_del').unbind(); 
+	$(".iviewer_del").live("click",function(){
+		var i=hSlide.deleteImage(hSlide.getIndex());
+			iv.iviewer('loadImage', hSlide.getCurrentImageData());
+			oSlide.deleteImage(i<=0?0:i+1);
+			oSlide.slideTo(hSlide.getIndex());
+			var imgLength =$(oSlide.getImageLis()).find("img").length;
+			if(imgLength==0){
+				 $('.maskdivgen').fadeOut(100);
+		            $("#imagecomponent").css("visibility","hidden");
+			}
+				
+		if(!hSlide.getCurrentImageData())
+			iv.children("img").attr("src","");
+		
+	});
+	/**
+	iviewer上左右按钮
+	**/
+	$("#next,#front").hover(function(){
+		$(this).children("a").fadeIn();
+	},function(){
+		$(this).children("a").fadeOut();
+	});
+	$("#next").click(function(){
+		hSlide.slideNext();
+		iv.iviewer('loadImage', hSlide.getCurrentImageData());
+	});
+	$("#front").click(function(){
+		hSlide.slideFront();
+		iv.iviewer('loadImage', hSlide.getCurrentImageData());
+	});
+	$(".submit").click(function(){
+		alert(oSlide.trimFid("../images"));
+	});
+	$("#btnClsVie").click(
+	        function () {
+	            $('.maskdivgen').fadeOut(100);
+	            $("#imagecomponent").css("visibility","hidden");
+	        }
+	)
+
+
+});
 </script>
 <STYLE type=text/css>
 .tipMsg{height:13px; line-height:13px;}
@@ -450,7 +730,7 @@ function edit_pwd(id){
 							<span class="title fontYH f20 fb">会员资料修改</span></h1>
       </div>
       <div class="contBox tableMem">
-      <form id="" action="javascript:void(0)" method="post">
+      <form id="updateForm" action="javascript:void(0)" method="post">
         <div class="item">
           <label>会员编号</label>
           <span class="color-blue">${member.memberNo}</span></div>
@@ -478,10 +758,10 @@ function edit_pwd(id){
           <label>企业资质</label>
           <!-- 营业执照号 -->          
           <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5 " id="bLicenseNo" maxlength="15" value="${member.bLicenseNo}"  datatype="ns"  nullmsg="请填写15位营业执照注册号"   placeholder="输入证书编号"/></p>
+          <p><input class="input input-w140h30 mb5 " name="bLicenseNo" id="bLicenseNo" maxlength="15" value="${member.bLicenseNo}"  datatype="ns"  nullmsg="请填写15位营业执照注册号"   placeholder="输入证书编号"/></p>
           <p>营业执照</p>
            <#if (member.bLicensePath??)>
-		<img id="bLicensePath_img" width="80" height="107" src="${b.imagePath}${member.bLicensePath}" onerror="errorImage(this)" times="0"/>
+		<img id="bLicensePath_img" src="${b.imagePath}${member.bLicensePath}80x107.JPG" onerror="errorImage(this)" times="0"/>
 		   <#else>
 		 <img id="bLicensePath_img" width="80" height="107" src="${b.staticPath}images/topic.jpg" onerror="errorImage(this)" times="0"/>  
 		</#if>
@@ -500,10 +780,10 @@ function edit_pwd(id){
          <!-- 安全生产许可证 -->
          <#if (member.type.id==0)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="safety" value="${member.safety_licenses_no}" maxlength="10"   placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写10位生产许可证编号"  -->
+          <p><input class="input input-w140h30 mb5" id="safety" name="safety_licenses_no" value="${member.safety_licenses_no}" maxlength="10"   placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写10位生产许可证编号"  -->
           <p>安全生产许可证</p>
           <#if (member.safety_licenses_img??)>
-         <img id="safetyPath_img" width="80" height="107" src="${b.imagePath}${member.safety_licenses_img}" onerror="errorImage(this)" times="0"/>
+         <img id="safetyPath_img"  src="${b.imagePath}${member.safety_licenses_img}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="safetyPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
@@ -513,7 +793,7 @@ function edit_pwd(id){
           <#else>
           <input type="file" class="" id="safetyPath_File_reload" name="input6">
           </#if>
-            <input type="hidden" class="input-w180h30" id="safetyPath_hidden" name="safetyPath" value="${member.safety_licenses_img}">
+            <input type="hidden" class="input-w180h30" id="safetyPath_hidden"  name="safety_licenses_img" value="${member.safety_licenses_img}">
             <!-- <div class="some_file_queue" id="safetyPath_FileDiv"></div> -->
           </div>
          </div>
@@ -521,10 +801,10 @@ function edit_pwd(id){
          <!-- 节能标识号 -->
          <#if (member.type.id==0)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="energyNo" value="${member.energyNo}" maxlength="7" placeholder="输入证书编号"/></p>
+          <p><input class="input input-w140h30 mb5" id="energyNo" name="energyNo" value="${member.energyNo}" maxlength="7" placeholder="输入证书编号"/></p>
           <p>节能标识</p>
           <#if (member.energyPath??)>
-         <img id="energyPath_img" width="80" height="107" src="${b.imagePath}${member.energyPath}" onerror="errorImage(this)" times="0"/>
+         <img id="energyPath_img"  src="${b.imagePath}${member.energyPath}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="energyPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
@@ -540,9 +820,9 @@ function edit_pwd(id){
          </#if>
          
          <!-- 3C认证证书 -->
-          <#if (member.type.id==1)>
+       <!--    <#if (member.type.id==1)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}" maxlength="16"   placeholder="输入证书编号"/></p><!--datatype="ns"   nullmsg="请填写16位3C认证编号" -->
+          <p><input class="input input-w140h30 mb5" id="ccc" value="${member.ccc_no}" maxlength="16"   placeholder="输入证书编号"/></p>datatype="ns"   nullmsg="请填写16位3C认证编号"
           <p>3C认证证书</p>
           <#if (member.ccc_img??)>
          <img id="cccPath_img" width="80" height="107" src="${b.imagePath}${member.ccc_img}" onerror="errorImage(this)" times="0"/>
@@ -558,14 +838,14 @@ function edit_pwd(id){
             <input type="hidden" class="input-w180h30" id="cccPath_hidden" name="cccPath" value="${member.ccc_img}">
           </div>
          </div>
-         </#if>
+         </#if> -->
          <!-- 工业产品生产许可证 -->
           <#if (member.type.id==2)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="production" value="${member.production_license_no}" maxlength="14"    placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写14位工业产品许可证编号" -->
+          <p><input class="input input-w140h30 mb5" id="production" name="production_license_no" value="${member.production_license_no}" maxlength="14"    placeholder="输入证书编号"/></p><!--datatype="ns"  nullmsg="请填写14位工业产品许可证编号" -->
           <p>工业产品生产许可证</p>
           <#if (member.production_license_img??)>
-         <img id="productionPath_img" width="80" height="107" src="${b.imagePath}${member.production_license_img}" onerror="errorImage(this)" times="0"/>
+         <img id="productionPath_img"  src="${b.imagePath}${member.production_license_img}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="productionPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
@@ -575,16 +855,17 @@ function edit_pwd(id){
           <#else>
           <input type="file" class="" id="productionPath_File_reload" name="input6">
           </#if>
-            <input type="hidden" class="input-w180h30" id="productionPath_hidden" name="productionPath" value="${member.production_license_img}">
+            <input type="hidden" class="input-w180h30" id="productionPath_hidden" name="production_license_img" value="${member.production_license_img}">
           </div>
          </div>
          </#if>
           <!-- 质量管理体系认证证书 -->
+          <#if (member.type.id !=5 && member.type.id !=6 && member.type.id !=7)>
          <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5" id="qms" value="${member.qms_no}"  maxlength="14" placeholder="输入证书编号"/></p>
+          <p><input class="input input-w140h30 mb5" id="qms" name="qms_no" value="${member.qms_no}"  maxlength="14" placeholder="输入证书编号"/></p>
           <p>质量管理体系认证</p>
           <#if (member.qms_img??)>
-         <img id="qmsPath_img" width="80" height="107" src="${b.imagePath}${member.qms_img}" onerror="errorImage(this)" times="0"/>
+         <img id="qmsPath_img"  src="${b.imagePath}${member.qms_img}80x107.JPG" onerror="errorImage(this)" times="0"/>
           <#else>
 		 <img id="qmsPath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
          </#if>
@@ -594,47 +875,172 @@ function edit_pwd(id){
           <#else>
           <input type="file" class="" id="qmsPath_File_reload" name="input6">
           </#if>
-            <input type="hidden" class="input-w180h30" id="qmsPath_hidden" name="qmsPath" value="${member.qms_img}">
+            <input type="hidden" class="input-w180h30" id="qmsPath_hidden" name="qms_img" value="${member.qms_img}">
           </div>
          </div>
+         </#if>
+          <!-- 附框推广证 -->
+          <#if (member.type.id ==5 || (member.type.id==2 && member.isHave==1))>
+         <div class="ly-left editBox mr15">
+          <p><input class="input input-w140h30 mb5" id="enclosedNo" name="enclosedNo" value="${member.enclosedNo}"  maxlength="14" placeholder="输入证书编号"/></p>
+          <p>附框推广证 </p>
+          <#if (member.enclosedImg??)>
+         <img id="enclosed_Img"  src="${b.imagePath}${member.enclosedImg}80x107.JPG" onerror="errorImage(this)" times="0"/>
+          <#else>
+		 <img id="enclosed_Img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0"/> 
+         </#if>
+         <div class="uploadify">
+         <#if (!member.flag)>
+            <input type="file" class="" id="enclosedImg_File">
+          <#else>
+          <input type="file" class="" id="enclosedImg_File_reload" >
+          </#if>
+            <input type="hidden" class="input-w180h30" id="enclosedImg" name="enclosedImg" value="${member.enclosedImg}">
+          </div>
+         </div>
+         </#if>
         </div>
-       
-        <div id="add_form">
+      
+       <div id="add_form">
 						<div class="item">
 							<!-- 资质证书1 -->
 							<label>资质证书</label> <p>
-									<input class="input input-w140h30 mb5" id="aptitude"
+									<!-- <input class="input input-w140h30 mb5" id="aptitude" name="qualification_no"
 										value="${member.qualification_no}" maxlength="14"
-										placeholder="输入证书编号" /><input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="aptitudePath" value="${member.qualification_img}">
-								</p><#if (member.type.id==0)>
-							<div class="ly-left editBox mr15" style="float: left;height:180px;width:500px;">
-								
-								<!--datatype="ns"  nullmsg="请填写14位资质证书编号" -->
-								<#assign arr=(member.qualification_img?split(","))> <#if arr?exists>
-<!-- 								<img id="aptitudePath_img" width="80" height="107" src="${b.imagePath}${member.qualification_img}" onerror="errorImage(this)" times="0" /> -->
-								<div class="rollBox">
-									<ul id="carousel" class="elastislide-list">
-										<#list arr as imgPath>
+										placeholder="输入证书编号" /> -->
+										<input type="hidden" class="input-w180h30" id="aptitudePath_hidden" name="qualification_img" value="${member.qualification_img}">
+								</p> 
+							
+							<div id="original" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:18px">
+								<i class="buttonSildeLeft left"><img src="${b.staticPath}images/ico/picSlideLeft.gif"/></i>
+								<i class="buttonSildeRight right"><img src="${b.staticPath}images/ico/picSlideRight.gif"/></i> 
+				                <div class="line-con">					
+									<ul class="imageList">
+									   <#if imageList?exists>
+									   <#list imageList as imgPath>
 										<#if imgPath !=''>
-											<li><a href="javascript:void(0);" class="demo-image"
-											data-image="${b.imagePath}${imgPath}"><img
-												src="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a>
-												<p>${imgPath_index+1}</p>
-												</li> 
-												</#if>
-										</#list>
+										<li><img src="${b.imagePath}${imgPath.image}80x107.JPG" data="${b.imagePath}${imgPath.image}"/><tt></tt></li>
+										</#if>
+									</#list>
+									</#if>
 									</ul>
 								</div>
-								 <#else>
-								 <img id="aptitudePath_img" width="80" height="107" src="${b.staticPath}images/notic.jpg" onerror="errorImage(this)" times="0" /> </#if>
 							</div>
-							<div class="uploadify" style="float: left;padding-left: 15%;">
+							<div class="uploadify" style="float: left;padding-left: 15%;margin-top:20px;">
 									 <input type="file" class="" id="aptitudePath_File_reload" name="input6">
 								</div>
-							</#if>
 						</div>
-						<div class="item">
+		<#if (member.type.id==2)>
+		<div class="item">
+          <label>代理商</label>
+          <div class="info1">
+		     <table id="dltbody" class="co-name" style="font-size: 13px;line-height: 30px;">
+		        <tr>
+		         <th width="60%">公司名称</th>
+		         <th width="14%">联系人</th>
+		         <th width="16%">联系人电话</th>
+	           	 <th width="10%"><a id="add-button" title="新加一行"><img src="${b.staticPath}images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
+		        </tr>
+		        <#list mlist as dl>
+			        <#if (dl.memberType==6)>
+				        <tr class="dlhidden">
+				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
+				         <td>${dl.contacts}</td>
+				         <td>${dl.telNum}</td>
+			           	 <td><a href='javascript:void(0);' onclick='delOldDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a></td>
+				        </tr>
+			        </#if>
+		        </#list>
+		        <tr class="dlclass">
+		        <td>
+		        	<input class='input input-w270h36' type='text' id='dlName' datatype="*0-50" errormsg="公司名称太长" name='dlList[0].memberName' />
+			 		<input type='hidden' id='dlNo' name='dlList[0].memberNo' />
+			 		<input type='hidden' name='dlList[0].memberType' value="6" />
+			 	</td>
+	         <td><input type="text" class="input input-w100h36" id="dlcontacts" name="dlList[0].contacts" datatype="*0-50" errormsg="联系人名称太长"/></td>
+	         <td><input type="text" class="input input-w100h36" id="dltelNum" name="dlList[0].telNum"  datatype="*0-50" errormsg="联系人电话太长" /></td>
+	         <td>
+	         	<a href='javascript:void(0);' onclick='delDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
+	         </td>
+         	</tr>
+			      </table>
+		  </div>
+        </div>
+		<div class="item">
+          <label>经销商</label>
+          <div class="info1">
+		     <table class="co-name" style="font-size: 13px;line-height: 30px;">
+		        <tr>
+		         <th width="60%">公司名称</th>
+		         <th width="14%">联系人</th>
+		         <th width="16%">联系人电话</th>
+	           	 <th width="10%"><a id="add-jx" title="新加一行"><img src="${b.staticPath}images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
+		        </tr>
+		        <#list mlist as dl>
+			        <#if (dl.memberType==7)>
+				        <tr class="jxhidden">
+				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
+				         <td>${dl.contacts}</td>
+				         <td>${dl.telNum}</td>
+			           	 <td><a href='javascript:void(0);' onclick='delOldDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a></td>
+				        </tr>
+			        </#if>
+		        </#list>
+		        <tr class="jxclass">
+		        <td>
+		        	<input class='input input-w270h36' type='text' id='jxName' datatype="*0-50" errormsg="公司名称太长" name='dlList[1].memberName' />
+			 		<input type='hidden' id='jxNo' name='dlList[1].memberNo' />
+			 		<input type='hidden' name='dlList[1].memberType' value="6" />
+			 	</td>
+	         <td><input type="text" class="input input-w100h36" id="jxcontacts" name="dlList[1].contacts" datatype="*0-50" errormsg="联系人名称太长"/></td>
+	         <td><input type="text" class="input input-w100h36" id="jxtelNum" name="dlList[1].telNum"  datatype="*0-50" errormsg="联系人电话太长" /></td>
+	         <td>
+	         	<a href='javascript:void(0);' onclick='delJX(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
+	         </td>
+         	</tr>
+			      </table>
+		  </div>
+        </div>
+        </#if>
+		<#if (member.type.id==6||member.type.id==7)>
+		<div class="item">
+          <label>货源厂家</label>
+          <div class="info1">
+		     <table class="co-name" style="font-size: 13px;line-height: 30px;">
+		        <tr>
+		         <th width="60%">公司名称</th>
+		         <th width="14%">联系人</th>
+		         <th width="16%">联系人电话</th>
+	           	 <th width="10%"><a id="add-parent" title="新加一行"><img src="${b.staticPath}images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
+		        </tr>
+		        <#list mlist as dl>
+		       		<#if (dl.memberType==member.type.id)>
+				        <tr>
+				         <td>${dl.memberName}<input type='hidden' value="${dl.id}" /></td>
+				         <td>${dl.contacts}</td>
+				         <td>${dl.telNum}</td>
+			           	 <td><a href='javascript:void(0);' onclick='delOldDL(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a></td>
+				        </tr>
+				    </#if>
+		        </#list>
+		        <tr class="xcclass">
+		        <td>
+		        	<input class='input input-w270h36' type='text' id='xcName' datatype="*0-50" errormsg="公司名称太长" name='dlList[2].memberName' />
+			 		<input type='hidden' id='xcNo' name='dlList[2].memberNo' />
+			 		<input type='hidden' name='dlList[2].memberType' value="6" />
+			 	</td>
+	         <td><input type="text" class="input input-w100h36" id="xccontacts" name="dlList[2].contacts" datatype="*0-50" errormsg="联系人名称太长"/></td>
+	         <td><input type="text" class="input input-w100h36" id="xctelNum" name="dlList[2].telNum"  datatype="*0-50" errormsg="联系人电话太长" /></td>
+	         <td>
+	         	<a href='javascript:void(0);' onclick='delXC(this)' title='删除此行'><img src='${b.staticPath}images/view/iviewer.zoom_del.gif' width='20' height='20' /></a>
+	         </td>
+         	</tr>
+			      </table>
+		  </div>
+        </div>
+        </#if>
+        
+        <div class="item">
           <label>公司电话</label>
           <input type="text" class="input input-w50h36" value="${member.telNum?split("-")[0]}" name="input" id="qh" datatype="n3-4" errormsg="请填写正确的区号">
           --
@@ -642,31 +1048,39 @@ function edit_pwd(id){
         </div>
         <div class="item">
           <label>公司地址</label>
-          <input type="text" class="input input-w270h36" value="${member.address}" title="请输入公司地址" name="input3" id="address" datatype="*2-30" nullmsg="公司地址不能为空" />
+          <input type="text" class="input input-w270h36" value="${member.address}" title="请输入公司地址" name="address" id="address" datatype="*2-30" nullmsg="公司地址不能为空" />
         </div>
         <div class="item">
           <label>邮政编码</label>
-          <input type="text" class="input input-w100h36" value="${member.code}" title="请输入邮政编码" name="input4" id="code" datatype="n6-6" errormsg="邮政编码为6位数字！" nullmsg="请输入邮政编码" />
+          <input type="text" class="input input-w100h36" value="${member.code}" title="请输入邮政编码" name="code" id="code" datatype="n6-6" errormsg="邮政编码为6位数字！" nullmsg="请输入邮政编码" />
         </div>
         <div class="item">
           <label>联系人</label>
-          <!-- <input type="text" class="input input-w100h36" value="${member.contacts}" title="请输入联系人" name="input5" id="contacts" datatype="*2-30" nullmsg="请输入公司名" /> -->
           ${member.contacts}
         </div>
         <div class="item">
           <label>联系人手机</label>
-          <!-- <input type="text" class="input input-w100h36" value="${member.phoneNo}" name="input3" id="phoneNo" datatype="n11-11" nullmsg="请输入手机号码" title="请输入手机号码"/>-->
-          ${member.phoneNo}
+          <input name="phoneNo" id="phoneNo" type="text" value="${member.phoneNo}"  readonly="readonly" class="input input-w120h36" />
+		    <a onclick="javascript:showImg()" style="font-size:13px;text-decoration:none">修改手机号码</a>
         </div>
         <div class="mt15 mb20 tc">
-          <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
+         <a class="button button-orange mr15" href="" onclick="save('${member.id}');return false;">完善会员资料</a><a class="button button-orange btnPassword">修改超级密码</a></div>
         </div>  
+        
+        <!-- 隐藏数据 -->
+        <input type="hidden" name="id" value="${member.id}" />
+        <input type="hidden" id="newTelNum" name="telNum" value="" />
+        <input type="hidden" name="contacts" value="${member.contacts}" />
+        <input type="hidden" name="type" value="${member.type.getId()}" />
+        <input type="hidden" id="checkState" name="checkState" value="" />
+        <input type="hidden" id="changeImageFlag" name="changeImageFlag" value="" />
+        <input type="hidden" id="parentNo" name="parentNo" value="" />
+        <input type="hidden" id="parentName" name="parentName" value="" />
           </form>
       </div>
     </div>
 </div>
-<div class="modal-wrap popDemo contPop passwordPop" style="display:none;width:550px;" id="edit_pwd">
-      <div class="modal-header"><span class="close" onclick="close_div('${member.id}');">关闭</span></div>
+<div style="display:none;" id="edit_pwd">
       <div class="modal-body">
         <div class="item"><label>新密码</label><input class="input input-w180h30" type="password" id="pwd1" name="pwd1" datatype="*6-15" errormsg="密码范围在6~15位之间！" nullmsg="请设置密码！"/></div>
         <div class="item"><label>确认密码</label><input class="input input-w180h30" type="password" id="pwd2" datatype="*6-15"  errormsg="您两次输入的账号密码不一致！" recheck="pwd1" nullmsg="请设置密码！"/></div>
@@ -680,10 +1094,189 @@ function edit_pwd(id){
 		<div id="viewer2" class="modal-body iviewer"></div>
 	</div>
 	<div class="maskdivgen" style="display: none"></div>
+	
+	<!-- 修改手机号码 -->
+	<div id="popDiv" class="mydiv" style="display:none;">
+			<div style="height:35px;line-height:35px;padding:0px 60px;font-size:12px;color:#959393">为了保护您的帐号安全，操作前请您进行安全验证</div>
+			<div style="height:50px;line-height:50px;margin-left: 60px">
+		       <span style="background-color:#ffffff;width:80px;text-align:right;display:inline-block;padding:2px">新手机号码</span>
+			   <input id="newPhoneNo" type="text" class="input-w140h24" placeholder="请输入新手机号码" style="padding:2px;color:#959393;border:#d8d8d8 1px solid"/>
+			 <div class="tipMsg msg-gray" id="moileMsg" style="display:none;max-width: 100px;height: 37px;">通过验证后，您可以用该手机号找回密码</div>
+			</div>
+			<div style="height:50px;line-height:50px;padding:0px 60px">
+		       <span style="background-color:#ffffff;width:80px;text-align:right;display:inline-block;padding:2px">短信验证码</span>
+			   <input name="ms" id="ms" type="text" class="input-w75h24" placeholder="请输入验证码" style="padding:2px;font-size:12px;color:#959393;border:#d8d8d8 1px solid"/>
+			   <input type="button" class="button button-gray f12 " id="sendms" value="获取短信验证码" onclick="send_ms();" />
+			</div>
+			<em class="color-green f12" id="time" style="display:none;margin-left: 100px;">60秒后重新获取验证码</em>
+			<div id="sm_erro" class="tipMsg msg-error" style="display:none;"></div>
+			<div style="padding:10px 148px 20px">
+		       <button class="button button-pop" onclick="editPhone()">提交</button>
+			</div>
+		</div>
 	<script>
 		$(document).ready(function(){
 			$("#viewer2").width($(window).width());
+			$("#newPhoneNo").blur(function(){
+				  checkSubmitMobil();
+			  });
 		});
+	  //发送短信
+	  var send_flag=false;
+	  var intDiff = parseInt(60);//倒计时总秒数量
+		var show;
+		function showImg(){
+			$("#newPhoneNo").val("");
+			$("#ms").val("");
+			$("#moileMsg").hide();
+			$("#time").hide();
+			 show  =layer.open({
+			    type: 1,
+			    offset: ['30%', '35%'],
+			    title: "修改手机号码", //不显示标题
+			    content: $("#popDiv")
+			});
+		}
+		function send_ms(){
+			 var obj=$("#sendms");
+			  send_flag=true;
+			  var phoneNo=$("#newPhoneNo").val();
+			  if (!checkSubmitMobil()){
+				  return false;
+			  }
+			  
+			   $.post("${basePath}member/send_ms.htm",{phoneNo:phoneNo},function(data){
+			     if(data.error){
+			    	 $("#moileMsg").show();
+					 wrong("#moileMsg");
+					$("#moileMsg").text(data.error); 
+			     }else{
+			    	 $(obj).attr("disabled", "disabled"); 
+					 $(obj).addClass("button-disable");
+					 $("#time").show();
+				     timer(intDiff,obj)
+			     }
+			  });
+	    	 /* $(obj).attr("disabled", "disabled"); 
+			 $(obj).addClass("button-disable");
+			 $("#time").show();
+		     timer(intDiff,obj); */
+		  }
+		function editPhone(){
+			 var flag=false;
+			 var param=$("#ms").val();
+			 if($("#newPhoneNo").val()==""){
+				 $("#moileMsg").show();
+				 wrong("#moileMsg");
+				 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
+				 flag=true;
+				 return;
+			 }
+			 $("#sm_erro").show();
+			 if ($("#ms").val()==""){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请输入验证码");
+				 flag=true;
+				 return;
+			 }
+			 if (!send_flag){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请先获取验证码");
+				 flag=true;
+				 return;
+			 }
+			 if ($("#ms").val()==""){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("验证码不能为空");
+				 flag=true;
+				 return;
+			 }else 
+			 if (!$("#ms").val().match(/^\d{6}$/)){
+				 wrong("#sm_erro");
+				 $("#sm_erro").text("请填写六位验证码");
+				 return;
+			 }
+			 $.get("${basePath}member/check_ms.htm?ms="+param+"&phoneNo="+$("#newPhoneNo").val(),function(data){
+				 if(data.flag=="true"){
+					 right("#sm_erro");
+					 $("#sm_erro").text("");
+					 $("#phoneNo").val($("#newPhoneNo").val());
+					 succInfo(function(){
+						 	layer.close(show);
+						},"修改成功！");
+				 }else{
+					 wrong("#sm_erro");
+				     $("#sm_erro").text("验证码错误");
+					 return false;
+				 }
+			 });
+		  }
+		
+		  //手机号码验证
+		  function checkSubmitMobil() {
+			  $("#moileMsg").hide();
+			  if ($("#newPhoneNo").val() == "") {
+			  $("#moileMsg").show();
+			 wrong("#moileMsg");
+			 $("#moileMsg").text("手机号码不能为空！请输入正确的手机号码！");
+			  return false;
+			  }
+
+			  if (!$("#newPhoneNo").val().match(/^((13[0-9])|(17[0-9])|(147)|(15[^4,\D])|(18[0-9]))\d{8}$/)) {
+			  $("#moileMsg").show();
+			  wrong("#moileMsg");
+			  $("#moileMsg").text("手机号码格式不正确！请重新输入！");
+			  return false;
+			  }
+			  var phone_flag=false;
+			  $.ajax({
+				   type: "POST",
+				   async:false,
+				   url: "${basePath}member/check_phone.htm",
+				   data: "phone="+$("#newPhoneNo").val(),
+				   success: function(msg){
+				     if (msg.flag=="true"){
+				    	 phone_flag=true;
+				     }
+				   }
+				 });
+			  if (phone_flag){
+				  $("#moileMsg").show();
+				  wrong("#moileMsg");
+				  $("#moileMsg").text("该手机号码已使用！");
+				  return false;
+			  }
+			  $("#moileMsg").show();
+			//  $("#moileMsg").html("<font color='green'>手机号输入正确！</font>");
+			 right("#moileMsg");
+			 $("#moileMsg").text("");
+			  return true;
+			  
+		 }
+		  var timerU;
+		  function timer(intDiff,obj){
+			  timerU=window.setInterval(function(){
+			    if (intDiff <= 9) intDiff = '0' + intDiff;
+			    $("#time").text(intDiff+"秒后重新获取验证码")
+			    if (intDiff==0){
+			    	 $(obj).removeAttr("disabled", "disabled");
+			    	 $(obj).removeClass("button-disable");
+			    	 clearInterval(timerU);
+			    	 $("#time").text("")
+			    }
+			    intDiff--;
+			    }, 1000);
+			}
+		  function wrong(obj){
+				 $(obj).removeClass("tipMsg msg-gray");
+				 $(obj).removeClass("icon icon16 icon-16-suc");
+				 $(obj).addClass("tipMsg msg-error");
+			 }
+			 function right(obj){
+				 $(obj).removeClass("tipMsg msg-gray");
+				 $(obj).removeClass("tipMsg msg-error");
+				 $(obj).addClass("icon icon16 icon-16-suc");
+			 }
 	</script>
   <@b.footer /> 
 </body>

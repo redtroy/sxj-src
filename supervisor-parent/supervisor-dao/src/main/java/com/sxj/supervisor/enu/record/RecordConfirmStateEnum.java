@@ -8,8 +8,8 @@ package com.sxj.supervisor.enu.record;
  */
 public enum RecordConfirmStateEnum
 {
-    ACCEPTED("受理中", 0), UNCONFIRMED("未确认", 1), CONFIRMEDA("甲方已确认", 2), CONFIRMEDB(
-            "乙方已确认", 3), HASRECORD("已备案", 4);
+    ACCEPTED("受理中", 0), UNCONFIRMED("未确认", 1), CONFIRMEDA("需方已确认", 2), CONFIRMEDB(
+            "供方已确认", 3), HASRECORD("已备案", 4);
     // 成员变量
     private Integer id;
     

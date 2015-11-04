@@ -1,0 +1,236 @@
+<script type="text/javascript">
+var idArr="";
+function clickCompanyName(e){
+	$(e).toggleClass("onfoucs_companyName");
+	clickSearch();
+}
+function clickType(e){
+	$(e).toggleClass("onfoucs_type");
+	clickSearch();
+}
+function clickSeries(e){
+	$(e).toggleClass("onfoucs_series");
+	clickSearch();
+}
+function clickMask(id,e){
+	$(".mask").hide();
+	$("#div_"+id).toggle();
+	idArr=id;
+// 	var path=$(e).attr("id");
+// 	var index=$.inArray(path, idArr);
+// 	if(index!=-1){
+// 		idArr.splice(index,1);
+// 	}else{
+// 		idArr.push(path);
+// 	}
+}
+
+function downloadTem(){
+	window.location.href = "${basePath}downloadTem/downloadTem.htm?idArr="+idArr;
+}
+
+function clickSearch(){
+	var areaId=$("#areaSel").val();
+	var companyArr=new Array();
+	var typeArr=new Array();
+	var seriesArr=new Array();
+	$(".onfoucs_companyName").each(function(){
+		companyArr.push($(this).html());
+	})
+	$(".onfoucs_type").each(function(){
+		typeArr.push($(this).html());
+	})
+	$(".onfoucs_series").each(function(){
+		seriesArr.push($(this).html());
+	})
+// 	alert(companyArr+"---"+typeArr+"---"+seriesArr);
+	var searchStr =$("#searchStr").val();
+	$.post("${basePath}downloadTem/clickSearch.htm?areaId="+areaId+"&&companyArr="+companyArr+"&&typeArr="+typeArr+"&&seriesArr="+seriesArr+"&&searchStr="+searchStr,function(data){
+		  $("#box").empty();
+		  $("#box").append(data);
+		  $("#box").attr("lsload","true");
+	});
+// 	window.location.href="${basePath}downloadTem/clickSearch.htm?areaId="+areaId+"&&companyArr="+companyArr+"&&typeArr="+typeArr+"&&seriesArr="+seriesArr;
+}
+
+function searchComOrser(){
+	var searchStr =$("#searchStr").val();
+	//window.location.href="${basePath}downloadTem/query.htm?searchStr="+searchStr;
+	  $.post("${basePath}downloadTem/query.htm?searchStr="+searchStr,function(data){
+		  $("#box").empty();
+		  $("#box").append(data);
+		  $("#box").attr("lsload","true");
+		});
+}
+//按条件查找	
+function changeSel(){
+	var areaId=$("#areaSel").val();
+	//window.location.href="${basePath}downloadTem/query.htm?areaId="+areaId;
+	  $.post("${basePath}downloadTem/query.htm?areaId="+areaId,function(data){
+		  $("#box").empty();
+		  $("#box").append(data);
+		  $("#box").attr("lsload","true");
+		});
+	/* var params=$("#search_box").serialize();
+	if(page!=undefined){
+	   params=params+"&currentPage="+page;
+  	} */
+  	//var areaId=$("#areaSel").val();
+	//$.post("${basePath}downloadTem/query.htm?areaId="+areaId,function(data){
+	//	alert(data);
+	//	var res=$(data).find("#allDiv");
+	//	alert(res.html());
+// 		var pager=$(data).find("#down_filter").children("#pager");
+	//	$("#allDiv").empty();
+	//	$("#allDiv").append(res.html());
+// 		var totalPage=pager.attr("totalPage");
+// 		var currentPage=pager.attr("currentPage");
+// 		loadPage(currentPage,totalPage,query);
+	//});
+}
+
+function moreCompany(){
+	var heightValue=$("#moreCompanyDiv").css("height");
+	if(heightValue=="50px"){
+		$("#moreCompanyDiv").css("height","150px");
+		$("#moreCompanyDiv").css("overflow-y","auto");
+	}else{
+		$("#moreCompanyDiv").css("height","50px");
+		$("#moreCompanyDiv").css("overflow-y","");
+	}
+}
+
+function moreType(){
+	var heightValue=$("#moreTypeDiv").css("height");
+	if(heightValue=="50px"){
+		$("#moreTypeDiv").css("height","150px");
+		$("#moreTypeDiv").css("overflow-y","auto");
+	}else{
+		$("#moreTypeDiv").css("height","50px");
+		$("#moreTypeDiv").css("overflow-y","");
+	}
+}
+
+function moreSeries(){
+	var heightValue=$("#moreSeriesDiv").css("height");
+	if(heightValue=="50px"){
+		$("#moreSeriesDiv").css("height","150px");
+		$("#moreSeriesDiv").css("overflow-y","auto");
+	}else{
+		$("#moreSeriesDiv").css("height","50px");
+		$("#moreSeriesDiv").css("overflow-y","");
+	}
+}
+
+function comfir(){
+	var index=$("#index_hidden").val();
+	index=parseInt(index);
+	if(idArr==""){
+		alert("请选择对应窗型");
+	}
+	$.get("${basePath}downloadTem/getTemp.htm?id="+idArr,function(data){
+ 		  if($("#button_div_"+idArr+"_"+index).html()==undefined){
+ 			$("#table_div").prepend(data);
+ 			 $("#table_div").find("#button_div_"+idArr).css("display","");
+ 			 
+ 			$('#doc_form_'+idArr).attr("index",index);
+ 			$("#table_div").find("#button_div_"+idArr).find("ul").attr("index",index);
+ 			$('#doc_form_'+idArr).attr("id","doc_form_"+idArr+"_"+index);
+ 			$("#table_div").find("#button_div_"+idArr).attr("id","button_div_"+idArr+"_"+index);
+ 			$("#table_div").find("#button_doc_"+idArr).attr("id","button_doc_"+idArr+"_"+index);
+ 			$("#index_hidden").val(index+1);
+ 			
+ 			$('#doc_form_'+idArr+"_"+index).find("input[name=projectId]").val(projectId);
+ 			$('#doc_form_'+idArr+"_"+index).find("input[name=projectName]").val(projectName);
+ 			$('#doc_form_'+idArr+"_"+index).find("input[name=itemId]").val(itemId);
+ 			$('#doc_form_'+idArr+"_"+index).find("input[name=memberNo]").val(memberNo);
+ 			
+ 		  }
+//  		  else{
+//  			index=$('#doc_form_'+idArr).attr("index");
+//  			index=parseInt(index);
+//  			alert(index);
+//  			 $("#table_div").prepend(data);
+//  			 $('#doc_form_'+idArr).attr("index",index+1);
+//   			 $("#table_div").find("#button_div_"+idArr).find("ul").attr("index",index+1);
+//   			 $("#table_div").find("#button_div_"+idArr).css("display","");
+//   			$('#doc_form_'+idArr).attr("id"+"doc_form_"+idArr+"_"+index);
+//  			$("#table_div").find("#button_div_"+idArr).attr("id","button_div_"+idArr+"_"+index);
+//  		  }
+ 		});
+}
+</script>
+</head>
+
+	<div id="down_filter">
+		<ul style="border:none; height:50px;">
+			<li><img src="${b.staticPath}images/down_00.png" width="24" height="24" alt=""/></li>
+            <li style="margin-left:0;"><strong>型材公司所属地区</strong></li>
+            <li><select id="areaSel" onchange="changeSel()">
+              <option value="">所在地</option>
+              <#list areaList as model>
+              <#if model.id==query.area>
+					<option  value="${model.id}"  selected="selected">${model.name}</option>
+					<#else>
+					<option  value="${model.id}" >${model.name}</option>
+					</#if>
+              </#list>
+            </select></li>
+            <li style="float:right"><button onclick="searchComOrser()" class=" button button-green">搜索</button></li>
+            <li style="float:right"><input type="text" value="${query.searchStr}"  id="searchStr" /></li>
+        </ul>
+        <ul>
+        	<div class="launch launchloa" onclick="moreCompany()"></div>
+        	<li><img src="${b.staticPath}images/down_01.png" width="24" height="22" alt=""/></li>
+            <li style="margin-left:0;"><strong>公司名称</strong></li>
+        	<div class="list" style="height:50px;" id="moreCompanyDiv">
+        	<ul>
+        	<#list companyNameList as model>
+            <li onclick="clickCompanyName(this)">${model}</li>
+            </#list>
+            </ul>
+            </div>
+        </ul>
+        <ul>
+        	<div class="launch launchloa" onclick="moreType()"></div>
+        	<li><img src="${b.staticPath}images/down_02.png" width="24" height="22" alt=""/></li>
+            <li style="margin-left:0;"><strong>类别</strong></li>
+            <div class="list" style="height:50px;" id="moreTypeDiv">
+            <ul>
+            <#list typeList as model>
+            <li onclick="clickType(this)">${model}</li>
+            </#list>
+            </ul>
+            </div>
+        </ul>
+        <ul>
+        	<div class="launch launchlob" onclick="moreSeries()"></div>
+        	<li><img src="${b.staticPath}images/down_03.png" width="24" height="22" alt=""/></li>
+            <li style="margin-left:0;"><strong>系列</strong></li>
+            <div class="list" style="height:50px;" id="moreSeriesDiv">
+            <ul>
+            <#list seriesList as model>
+            <li onclick="clickSeries(this)">${model}</li>
+            </#list>
+            </ul>
+            </div>
+            
+        </ul>
+	</div>
+<div id="down_type">
+    	<ul>
+        	<!-- <li><div class="mask" style="display:none"><img src="${b.staticPath}images/Check.png" width="67" height="57" alt=""/></div><div class="img"><img src="${b.staticPath}images/type1.gif" alt=""></div></li> -->
+            <#list list as model>
+            <li onclick="clickMask('${model.id}',this)" id="${model.id}"><div id="div_${model.id}" class="mask" style="display:none"><img src="${b.staticPath}images/Check.png" width="67" height="57" alt=""/></div><div class="img" ><img src="${b.imagePath}${model.imageSrc}" width="182" height="166" alt="${model.name}"></div></li>
+            </#list>
+            <#if list?size=0>
+            	<li>无符合条件数据!</li>
+            </#if>
+        </ul>
+ </div>
+	<div style="width:155px;margin:auto;height:60px;line-height:60px">
+			<ul>
+			<li><button class=" button button-orange" data-dismiss="modal" onclick="comfir();">确认</button></li>
+			<li><button class=" button button-green" data-dismiss="modal">取消</button></li>
+			</ul>
+	</div>

@@ -1,4 +1,4 @@
-﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -42,7 +42,14 @@ function subForm(){
 	 if (!check.check()){
 		 return false;
 	 }
-	 var rfidType=${member.type.id};
+	 var id=${member.type.id};
+	 var rfidType;
+	 if(id==6||id==7){
+		 rfidType=2;
+	 }else{
+		 rfidType=id;
+	 }
+	
 	 $.post("apply.htm",{memberNo:memberNo,memberName:memberName,count:count,rfidType:rfidType},function(data){
 		 if (data.isOk="ok"){
 			 succInfo(function(){

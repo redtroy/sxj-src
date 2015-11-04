@@ -124,4 +124,10 @@
 	<select id="getBindingState" resultType="int" parameterType="String">
 		<![CDATA[SELECT COUNT(R.ID) FROM M_CONTRACT_RECORD R  WHERE  R.CONTRACT_NO=#{contractNo} AND R.STATE=0]]>
 	</select>
+	<update id="updateContractByRecordNo" parameterType="String">
+	<![CDATA[ UPDATE M_CONTRACT_RECORD M SET M.STATE =0, M.CONTRACT_NO=NULL WHERE M.RECORD_NO IN ]]> 
+			<foreach collection="array" open="(" close=")" separator="," item="recordNo">
+			#{recordNo}
+		</foreach> 
+	</update>
 </mapper>

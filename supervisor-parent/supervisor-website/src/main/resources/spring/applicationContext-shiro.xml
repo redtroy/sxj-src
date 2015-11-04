@@ -107,6 +107,7 @@
 				/index.htm=anon
 				/unauth.htm =anon
 				/member/memberInfo.htm=user
+				/member/edit_member.htm=user
 				/member/account/accountList.htm=user,frameperms
 				/record/to_apply.htm=user,frameperms
 				/record/query.htm=user,frameperms

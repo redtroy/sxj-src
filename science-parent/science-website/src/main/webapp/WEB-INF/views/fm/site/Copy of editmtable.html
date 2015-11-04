@@ -1,0 +1,647 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加下料表</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/feeding_single.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script language="javascript" src="${b.staticPath}js/jquery.jqprint-0.3.js"></script>
+<script src="${b.staticPath}js/mtable.js"></script>
+<!--显示优化编辑整料长度图标开始-->
+<@b.dialogBox/>
+<@b.validate/>
+<script>
+function MM_over(mmObj) {
+	var mSubObj = mmObj.getElementsByTagName("div")[0];
+	mSubObj.style.display = "block";
+}
+function MM_out(mmObj) {
+	var mSubObj = mmObj.getElementsByTagName("div")[0];
+	mSubObj.style.display = "none";
+	
+}
+</script>
+<!--显示优化编辑整料长度图标开始-->
+<!--tab切换开始-->
+<script>
+<!--
+function setTab(name,cursel,n){
+ for(i=1;i<=n;i++){
+  var menu=document.getElementById(name+i);
+  var con=document.getElementById("con_"+name+"_"+i);
+  menu.className=i==cursel?"hover":"";
+  con.style.display=i==cursel?"block":"none";
+ }
+}
+//-->
+</script>
+<!--tab切换结束-->
+<!--添加下料表开始-->
+ <script type="text/javascript" language="javascript" >
+ function display(){
+	  var isload=$("#box").attr("lsload");
+	  if(isload=="false"){
+		  $.post("${basePath}downloadTem/query.htm",function(data){
+			  $("#box").empty();
+			  $("#box").append(data);
+			  $("#box").attr("lsload","true");
+			});
+	  }
+	  $("#box").show();
+		//document.getElementById("box").style.display="block"; 
+ }
+ function disappear(){
+	//document.getElementById("box").style.display="none";
+	 $("#box").hide();
+	 //$("#box").attr("lsload","false");
+ }
+
+ </script>
+<!--添加下料表开始-->
+<!--返回顶部脚本开始-->
+<script>
+ lastScrollY=0;
+function heartBeat(){ 
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+ 
+percent=.1*(diffY-lastScrollY); 
+if(percent>0)percent=Math.ceil(percent); 
+else percent=Math.floor(percent); 
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent; 
+if(diffY == 0){document.getElementById("full").style.display = "none"}
+else{document.getElementById("full").style.display = "block"}
+}
+suspendcode="<div id=\"full\" style='display:none;width:100px; height:60px; position:absolute;right:0; top:500px; margin-left:460px;z-index:100; text-align:center;'><a href='#'><img src='${b.staticPath}images/top.png' border=0 alt='返回顶部'></a></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+
+var pageIndex;
+function addDoc(id,th){
+	var index=$(th).parent().parent().attr("index");
+	var htmlData=$("#table_div").html();
+	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData);
+	var params=$("#doc_form_"+id+"_"+index).serialize();
+	dialogBox(function(index){
+		 $.post("${basePath}doc/addDoc.htm",params,function(data){
+			  layer.close(index);
+				if(data.isOK == true){
+					layer.close(pageIndex);
+					alert("添加成功");
+					//window.location.href="${basePath}index.htm";
+				}else{
+					errorInfo(data.error);
+				}
+			});
+	},"是否确认添加");
+}
+function modifyDoc(id,th){
+	var index=$(th).parent().parent().attr("index");
+	var htmlData=$("#table_div").html();
+	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData);
+	var params=$("#doc_form_"+id+"_"+index).serialize();
+	dialogBox(function(index){
+		 $.post("${basePath}doc/editDoc.htm",params,function(data){
+			  layer.close(index);
+				if(data.isOK == true){
+					layer.close(pageIndex);
+					alert("修改成功");
+					//window.location.href="${basePath}index.htm";
+				}else{
+					errorInfo(data.error);
+				}
+			});
+	},"是否确认修改");
+}
+function resetTable(id,th){
+	var index=$(th).parent().parent().attr("index");
+	$('#doc_form_'+id+"_"+index)[0].reset();
+}
+function copyTable(id,th){
+	//$.get("${basePath}downloadTem/getTemp.htm?id="+id,function(data){
+		var index=$(th).parent().parent().attr("index");
+		index=parseInt(index);
+		$('#button_div_'+id+"_"+index).clone().prependTo("#table_div");
+		$('#doc_form_'+id+"_"+index).clone().prependTo("#table_div");
+			$('#doc_form_'+id+"_"+index).attr("index",(index+1));
+			$("#table_div").find("#button_div_"+id+"_"+index).find("ul").attr("index",(index+1));
+			$('#doc_form_'+id+"_"+index).attr("id","doc_form_"+idArr+"_"+(index+1));
+			$("#table_div").find("#button_div_"+id+"_"+index).attr("id","button_div_"+idArr+"_"+(index+1));
+			$("#index_hidden").val(index+1);
+ 		//});
+}
+
+function removeTable(id,th){
+	var index=$(th).parent().parent().attr("index");
+	index=parseInt(index);
+	$('#doc_form_'+id+"_"+index).remove();
+	$("#table_div").find("#button_div_"+id+"_"+index).remove();
+	//$("#index_hidden").val(index-1);
+}
+function  printTable(id,th){
+	var index=$(th).parent().parent().attr("index");
+	$("#tableId_"+id+"_"+index+ " .nb").attr("style","");
+	$("#tableId_"+id+"_"+index+ " .na").attr("style","");
+	$("#tableId_"+id+"_"+index).jqprint();
+	}
+</script>
+<!--返回顶部脚本结束-->
+<!--table脚本结束-->
+</head>
+
+<body class="return">
+<@b.header />
+<div id="content_box">
+	<h1>私享家门窗算料优化系统</h1>
+<!--下料表开始-->
+  <ul>
+    	<li>
+         <a data-toggle="modal" href="#createpro" onmouseover="display();" onmouseout="disappear();"><button class=" button button-greenp">添加下料表</button></a>
+		    <div class="box-c"></div>
+			<div id="box" class="box checkfile" onmouseover="display();" onmouseout="disappear();"  lsload="false">
+				
+			</div>	
+        </li>
+        <li>
+        <a href="downloadtemplet.html" target="_blank"><button class=" button button-orange">+显示全部</button></a>
+        </li>
+        <li style="float:right">
+        <a href="${basePath}index.htm" target="_blank"><button class=" button button-orange">返回首页</button></a>
+        </li>
+        <form>
+        <li style="float:right">
+        <button class="button button-green">搜索</button>
+        </li>
+        <li style="float:right">
+        <input type="text" value="请输入工程名称关键字" />
+        </li>     
+        </form>
+    </ul>
+<!--下料表结束-->	
+
+<!--生出新下料表开始-->
+<input id="index_hidden" value="${docList?size}" type="hidden"/>
+<div id="table_div">
+<#list docList as doc>
+<form id="doc_form_${doc.windowId}_${doc_index}" action="javascript:void(0);" method="post" index="${doc_index}">
+<input type="hidden" name="id" value="${doc.id}"/>
+<input type="hidden" name="windowId" value="${doc.windowId}"/>
+<input type="hidden" name="projectId" value="${doc.projectId}"/>
+<input type="hidden" name="itemId" value="${doc.itemId}"/>
+<input type="hidden" name="memberNo" value="${doc.memberNo}"/>
+<input type="hidden" name="htmlData" value="${doc.htmlData}"/>
+<table id="in_table" cellspacing="0" cellpadding="0" class="tabList" style="border:1px solid #cdcdcd" coordinate="0,-1">
+  <tbody><tr>
+    <th class="bgcolor-top" colspan="2">序列号</th>
+    <th width="8%" scope="col"><input type="text" class="input input-w50h25 nontrace" id="location" value="" name="input"/></th>
+    <th width="12%" class="bgcolor-top" scope="col">函数</th>
+    <th scope="col" colspan="9"><input type="text" class="input input-w660h25 nontrace" id="fvalue" value="" name="input"/></th>
+    </tr>
+  <tr>
+    <th width="1%">&nbsp;</th>
+    <th width="5%" scope="col">A</th>
+    <th width="8%" scope="col">B</th>
+    <th width="12%" scope="col">C</th>
+    <th width="8%" scope="col">D</th>
+    <th width="8%" scope="col">E</th>
+    <th width="8%" scope="col">F</th>
+    <th width="5%" scope="col">G</th>
+    <th width="8%" scope="col">H</th>
+    <th width="12%" scope="col">I</th>
+    <th width="8%" scope="col">J</th>
+    <th width="8%" scope="col">K</th>
+    <th width="9%" scope="col">L</th>
+  </tr>
+  <tr>
+    <th width="1%" scope="row">1</th>
+    <td colspan="3" class="bgcolor border-left">门窗立面</td>
+    <td class="bgcolor" colspan="3">门窗系列</td>
+    <td class="bgcolor" colspan="2">门窗代号</td>
+    <td class="bgcolor">数量</td>
+    <td class="bgcolor">颜色</td>
+    <td colspan="2" class="bgcolor">外形尺寸</td>
+  </tr>
+  <tr style="border-bottom:1px solid #e0e0e0">
+    <th scope="row">2</th>
+    <td colspan="3"><input type="text" class="input input-w130h25" value="${doc.windowFaca}" name="windowFaca"/></td>
+    <td colspan="3"><input type="text" class="input input-w130h25" value="${doc.series}" name="series"/></td>
+    <td colspan="2"><input type="text" class="input input-w100h25" value="${doc.windowCode}" name="windowCode"/></td>
+    <td><input type="text" class="input input-w100h25" value="${doc.quantity}" name="quantity"/></td>
+    <td><input type="text" class="input input-w50h25" value="${doc.color}" name="color"/></td>
+    <td colspan="2"><input type="text" class="input input-w150h25" value="见图" name="input"/></td>
+    </tr>
+  <tr>
+    <th scope="row">3</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w100h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    <td rowspan="13" colspan="6">
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-left:1px solid #e0e0e0" coordinate="6,3">
+		  <tbody><tr>
+			<th class="noborder-top" scope="col" colspan="12">玻璃尺寸表</th>
+		  </tr>
+		  <tr>
+			<td width="10%" class="bgcolor">序号</td>
+			<td width="16%" class="bgcolor">玻璃宽</td>
+			<td width="24%" class="bgcolor">玻璃高</td>
+			<td width="16%" class="bgcolor">数量</td>
+			<td width="34%" class="bgcolor">玻璃种类</td>
+		  </tr>
+		  <#list doc.glassList as glass>
+		  <tr>
+			<td>${glass_index+1}</td>
+			<td><input name="glassList[${glass_index}].width" type="text" value="${glass.width}" class="input input-w50h25"/></td>
+			<td><input name="glassList[${glass_index}].height" type="text" value="${glass.height}" class="input input-w100h25"/></td>
+			<td><input name="glassList[${glass_index}].quantity" type="text" value="${glass.quantity}" class="input input-w50h25"/></td>
+			<td><input name="glassList[${glass_index}].type" type="text" value="${glass.type}" title="" class="input input-w150h25"/></td>
+		  </tr>
+		  </#list>
+		</tbody></table>
+    </td>
+    </tr>
+  <tr>
+    <th scope="row">4</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"/></td>
+    <td rowspan="13" colspan="4"><div style="width:300px;height:320px; background-color:#CCC;z-index:8;"><img width="300" height="320" src="${b.staticPath}images/chx1.jpg"></div></td>
+    <td><label>h1: </label><input type="text" class="input input-w35h24 param" value="1500" name="input" id="h1"></td>
+    </tr>
+  <tr>
+    <th scope="row">5</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><label>h2: </label><input type="text" class="input input-w35h25 param" value="1500" name="input" id="h2"></td>
+    </tr><tr>
+    <th scope="row">6</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><label>w1: </label><input type="text" class="input input-w35h25 param" value="1500" name="input" id="w1"></td>
+    </tr>
+  <tr>
+    <th scope="row">7</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><label>w2: </label><input type="text" class="input input-w35h25 param" value="1500" name="input" id="w2"></td>
+    </tr>
+  <tr>
+    <th scope="row">8</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">9</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">10</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">11</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">12</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">13</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">14</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">15</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">16</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    <td rowspan="8" colspan="6">
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-left:1px solid #e0e0e0" coordinate="6,16">
+		  <tbody><tr>
+			<th class="noborder-top" scope="col" colspan="12">半成品规格</th>
+		  </tr>
+		  <tr>
+			<td width="10%" class="bgcolor">序号</td>
+			<td width="16%" class="bgcolor">配件名称</td>
+			<td width="24%" class="bgcolor">规格代号</td>
+			<td width="16%" class="bgcolor">单位</td>
+			<td width="34%" class="bgcolor">数量</td>
+		  </tr>
+		   <#list doc.productList as product>
+		  <tr>
+			<td>${product_index+1}</td>
+			<td><input name="productList[${product_index}].name" type="text" value="${product.name}" class="input input-w50h25"/></td>
+			<td><input name="productList[${product_index}].width" type="text" value="${product.width}" class="input input-w100h25"/></td>
+			<td><input name="productList[${product_index}].height" type="text" value="${product.height}" class="input input-w50h25"/></td>
+			<td><input name="productList[${product_index}].quantity" type="text" value="${product.quantity}" title="" class="input input-w150h25"/></td>
+		  </tr>
+		  </#list>
+		  <tr>
+		</tr></tbody></table>
+    </td>
+    </tr>
+  <tr>
+    <th scope="row">17</th>
+    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w100h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+  </tr>
+  <tr>
+    <th scope="row">18</th>
+    <td style="text-align:left; padding-left:8px" colspan="6">技术说明：</td>
+    </tr>
+  <tr>
+    <th scope="row">19</th>
+    <td style="text-align:left; padding-left:8px" colspan="6"><label style="display:inline">1、</label><input type="text" class="input input-w400h25" value="技术室实施600" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">20</th>
+    <td style="text-align:left; padding-left:8px" colspan="6"><label style="display:inline">2、<input type="text" class="input input-w400h25" value="技术室实施600" name="input"></label></td>
+    </tr>
+  <tr>
+    <th scope="row">21</th>
+    <td style="text-align:left; padding-left:8px" colspan="6"><label style="display:inline">3、<input type="text" class="input input-w400h25" value="技术室实施600" name="input"></label></td>
+    </tr>
+  <tr>
+    <th scope="row">22</th>
+    <td colspan="2">洞口尺寸:</td>
+    <td><input type="text" class="input input-w50h25" value="600" name="input"></td>
+    <td>*</td>
+    <td><input type="text" class="input input-w50h25" value="1200" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="0.72平方" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">23</th>
+    <td colspan="2">制作尺寸:</td>
+    <td><input type="text" class="input input-w50h25" value="550" name="input"></td>
+    <td>*</td>
+    <td><input type="text" class="input input-w50h25" value="1500" name="input"></td>
+    <td><input type="text" class="input input-w50h25" value="0.63平方" name="input"></td>
+    </tr>
+  <tr>
+    <th scope="row">24</th>
+    <td style="padding:0px" rowspan="15" colspan="12">
+<!--配件表开始-->		
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" coordinate="0,24">
+		  <tbody><tr>
+			<th class="noborder-right" scope="col" colspan="12">配件表</th>
+		  </tr>
+		  <tr>
+			<td width="5%" class="bgcolor">用途</td>
+			<td width="8%" class="bgcolor">配件名称</td>
+			<td width="12%" class="bgcolor">规格代号</td>
+			<td width="8%" class="bgcolor">单位</td>
+			<td width="8%" class="bgcolor">数量</td>
+			<td width="8.2%" class="bgcolor">技术要求</td>
+			<td width="5.4%" class="bgcolor">用途</td>
+			<td width="8%" class="bgcolor">配件名称</td>
+			<td width="12%" class="bgcolor">规格代号</td>
+			<td width="8%" class="bgcolor">单位</td>
+			<td width="8%" class="bgcolor">数量</td>
+			<td width="9%" class="bgcolor">技术要求</td>
+		  </tr>
+		  <#list doc.partsList as parts>
+		  <#if parts_index%2==0>
+		   <tr>
+		    <td><input name="partsList[${parts_index}].used" type="text" value="${parts.used}" class="input input-w35h25"/></td>
+			 <td><input name="partsList[${parts_index}].name" type="text" value="${parts.name}" class="input input-w50h25"/></td>
+			 <td><input name="partsList[${parts_index}].type" type="text" value="${parts.type}" class="input input-w100h25"/></td>
+			 <td><input name="partsList[${parts_index}].unit" type="text" value="${parts.unit}" class="input input-w50h25"/></td>
+			 <td><input name="partsList[${parts_index}].quantity" type="text" value="${parts.quantity}" class="input input-w50h25"/></td>
+			 <td><input name="partsList[${parts_index}].techonlogy" type="text" value="${parts.techonlogy}" class="input input-w50h25"/></td>
+		   <#else>
+		     <td><input name="partsList[${parts_index}].used" type="text" value="${parts.used}" class="input input-w35h25"/></td>
+			 <td><input name="partsList[${parts_index}].name" type="text" value="${parts.name}" class="input input-w50h25"/></td>
+			 <td><input name="partsList[${parts_index}].type" type="text" value="${parts.type}" class="input input-w100h25"/></td>
+			 <td><input name="partsList[${parts_index}].unit" type="text" value="${parts.unit}" class="input input-w50h25"/></td>
+			 <td><input name="partsList[${parts_index}].quantity" type="text" value="${parts.quantity}" class="input input-w50h25"/></td>
+			 <td><input name="partsList[${parts_index}].techonlogy" type="text" value="${parts.techonlogy}" class="input input-w50h25"/></td>
+			  </tr>
+		  </#if>
+		 </#list>
+		  </tr>
+		</tbody></table>
+<!--配件表结束-->
+    </td>
+    </tr>
+  <tr>
+    <th scope="row">25</th>
+    </tr>
+  <tr>
+    <th scope="row">26</th>
+    </tr>
+  <tr>
+    <th scope="row">27</th>
+    </tr>
+  <tr>
+    <th scope="row">28</th>
+    </tr>
+  <tr>
+    <th scope="row">29</th>
+    </tr>
+  <tr>
+    <th scope="row">30</th>
+    </tr>
+  <tr>
+    <th scope="row">31</th>
+    </tr>
+  <tr>
+    <th scope="row">32</th>
+    </tr>
+  <tr>
+    <th scope="row">33</th>
+    </tr>
+  <tr>
+    <th scope="row">34</th>
+    </tr>
+  <tr>
+    <th scope="row">35</th>
+    </tr>
+  <tr>
+    <th scope="row">36</th>
+    </tr>
+  <tr>
+    <th scope="row">37</th>
+    </tr>
+  <tr>
+    <th scope="row">38</th>
+  </tr>
+  <tr>
+    <th scope="row">39</th>
+    <td style="padding:0px" rowspan="20" colspan="12">
+<!--下料尺寸表开始-->		
+		<table width="100%" cellspacing="0" cellpadding="0" border="0" coordinate="0,39">
+		  <tbody><tr>
+			<th class="noborder-top" scope="col" colspan="12">下料尺寸表</th>
+		  </tr>
+		  <tr>
+			<td width="5%" class="bgcolor">用途</td>
+			<td width="8%" class="bgcolor">构件名称</td>
+			<td width="12%" class="bgcolor">规格代号</td>
+			<td width="8%" class="bgcolor">长度</td>
+			<td width="8%" class="bgcolor">数量</td>
+			<td width="8.2%" class="bgcolor">备注</td>
+			<td width="5.4%" class="bgcolor">用途</td>
+			<td width="8%" class="bgcolor">构件名称</td>
+			<td width="12%" class="bgcolor">规格代号</td>
+			<td width="8%" class="bgcolor">长度</td>
+			<td width="8%" class="bgcolor">数量</td>
+			<td width="9%" class="bgcolor">备注</td>
+		  </tr>
+		  <#list doc.scienceList as science>
+		  <#if science_index%2==0>
+		   <tr>
+			 <td><input name="scienceList[${science_index}].used" type="text" value="${science.used}" class="input input-w35h25"/></td>
+			 <td><input name="scienceList[${science_index}].name" type="text" value="${science.name}" class="input input-w50h25"/></td>
+			 <td><input name="scienceList[${science_index}].type" type="text" value="${science.type}" class="input input-w100h25"/></td>
+			 <td><input name="scienceList[${science_index}].length" type="text" value="${science.length}" class="input input-w50h25"/></td>
+			 <td><input name="scienceList[${science_index}].quantity" type="text" value="${science.quantity}" class="input input-w50h25"/></td>
+			 <td><input name="scienceList[${science_index}].remark" type="text" value="${science.remark}" class="input input-w50h25"/></td>
+		  <#else>
+			 <td><input name="scienceList[${science_index}].used" type="text" value="${science.used}" class="input input-w35h25"/></td>
+			 <td><input name="scienceList[${science_index}].name" type="text" value="${science.name}" class="input input-w50h25"/></td>
+			 <td><input name="scienceList[${science_index}].type" type="text" value="${science.type}" class="input input-w100h25"/></td>
+			 <td><input name="scienceList[${science_index}].length" type="text" value="${science.length}" class="input input-w50h25"/></td>
+			 <td><input name="scienceList[${science_index}].quantity" type="text" value="${science.quantity}" class="input input-w50h25"/></td>
+			 <td><input name="scienceList[${science_index}].remark" type="text" value="${science.remark}" class="input input-w50h25"/></td>
+		  </tr>
+		  </#if>
+		  </#list>
+		</tbody></table>
+<!--下料尺寸表结束-->
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">40</th>
+    </tr>
+  <tr>
+    <th scope="row">41</th>
+    </tr>
+  <tr>
+    <th scope="row">42</th>
+    </tr>
+  <tr>
+    <th scope="row">43</th>
+    </tr>
+  <tr>
+    <th scope="row">44</th>
+    </tr>
+  <tr>
+    <th scope="row">45</th>
+    </tr>
+  <tr>
+    <th scope="row">46</th>
+    </tr>
+  <tr>
+    <th scope="row">47</th>
+    </tr>
+  <tr>
+    <th scope="row">48</th>
+    </tr>
+  <tr>
+    <th scope="row">49</th>
+    </tr>
+  <tr>
+    <th scope="row">50</th>
+    </tr>
+  <tr>
+    <th scope="row">51</th>
+    </tr>
+  <tr>
+    <th scope="row">52</th>
+    </tr>
+  <tr>
+    <th scope="row">53</th>
+    </tr>
+  <tr>
+    <th scope="row">54</th>
+    </tr>
+  <tr>
+    <th scope="row">55</th>
+    </tr>
+  <tr>
+    <th scope="row">56</th>
+    </tr>
+  <tr>
+    <th scope="row">57</th>
+    </tr>
+  <tr>
+    <th scope="row">58</th>
+    </tr>
+  <tr>
+    <th scope="row">59</th>
+    <td rowspan="3" colspan="12">
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+		  <tbody><tr>
+			<td width="12.4%" class="noborder-top bgcolor" colspan="2">工程名称：</td>
+			<td width="26.4%" class="noborder-top" colspan="3"><input type="text" class="input input-w235h25 nontrace" value="${projectName}" name="projectName"/></td>
+			<td width="7.9%" class="noborder-top bgcolor">日期：</td>
+			<td width="12.7%" class="noborder-top" colspan="2"><input type="text" class="input input-w100h25 nontrace" value="" name="input"/></td>
+			<td width="11.5%" class="noborder-top bgcolor">设计：</td>
+			<td width="15.1%" class="noborder-top" colspan="2"><input type="text" class="input input-w130h25 nontrace" value="" name="input"/></td>
+			<td width="8.5%" class="noborder-top">&nbsp;</td>
+		  </tr>
+		  <tr>
+			<td rowspan="2" colspan="5"><input type="text" class="com-name input input-w340h25" value="江苏私享家科技有限公司" name="input"/></td>
+			<td class="bgcolor">图号：</td>
+			<td colspan="2"><input type="text" class="input input-w100h25 nontrace" value="" name="input"/></td>
+			<td class="bgcolor">审核：</td>
+			<td colspan="2"><input type="text" class="input input-w130h25 nontrace" value="" name="input"/></td>
+			<td>&nbsp;</td>
+		  </tr>
+		  <tr>
+			<td class="bgcolor">批次：</td>
+			<td colspan="2"><input type="text" class="input input-w100h25 nontrace" value="" name="input"/></td>
+			<td class="bgcolor">批准：</td>
+			<td colspan="2"><input type="text" class="input input-w130h25 nontrace" value="" name="input"/></td>
+			<td>&nbsp;</td>    
+		  </tr>
+		</tbody></table>
+      </td>
+  </tr>
+  <tr>
+    <th scope="row">60</th>
+  </tr>
+  <tr>
+    <th scope="row">61</th>
+  </tr>
+</tbody>
+</table>
+</form>
+<div id="button_div_${doc.windowId}_${doc_index}" style="width:440px;margin:auto;height:80px">
+			<ul index="${doc_index}">
+			<li><button onclick="modifyDoc('${doc.windowId}',this);" class=" btn btn-blue" data-dismiss="modal"><span>保存</span></button></li>
+			<li><button onclick="resetTable('${doc.windowId}',this);" class=" btn btn-green" data-dismiss="modal"><span>一键还原</span></button></li>
+			<li><button onclick="copyTable('${doc.windowId}',this);" class=" btn btn-blue" data-dismiss="modal"><span>复制</span></button></li>
+			<li><button onclick="removeTable('${doc.windowId}',this);" class=" btn btn-red" data-dismiss="modal"><span>删除</span></button></li>
+			<li><button onclick="printTable('${doc.windowId}',this);" class=" btn btn-blue" data-dismiss="modal"><span>打印</span></button></li>
+			</ul>
+</div>
+</#list>
+</div>
+<!--生出新下料表结束-->
+</div>
+<@b.footer />
+</body>
+</html>

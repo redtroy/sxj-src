@@ -3,6 +3,7 @@ package com.sxj.supervisor.service.impl.member;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -12,30 +13,42 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.supervisor.sms.ChannelManager;
+import com.supervisor.sms.SendStatus;
+import com.supervisor.sms.Sender;
+import com.supervisor.sms.impl.c123.C123Sender;
+import com.supervisor.sms.impl.xinxi1.Xinxi1Sender;
 import com.sxj.ca.store.CaTool;
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.util.Identities;
 import com.sxj.spring.modules.util.Reflections;
 import com.sxj.supervisor.dao.member.IMemberDao;
+import com.sxj.supervisor.dao.member.IMemberToMemberDao;
+import com.sxj.supervisor.dao.member.IRelevanceMemberDao;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberImageEntity;
+import com.sxj.supervisor.entity.member.MemberToMemberEntity;
+import com.sxj.supervisor.entity.member.RelevanceMember;
 import com.sxj.supervisor.entity.message.MessageConfigEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
+import com.sxj.supervisor.model.member.ExportMemberModel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.open.ApiModel;
+import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.comet.CometServiceImpl;
+import com.sxj.util.common.DateTimeUtils;
 import com.sxj.util.common.EncryptUtil;
 import com.sxj.util.common.NumberUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
-import com.sxj.util.message.NewSendMessage;
 import com.sxj.util.persistent.QueryCondition;
 
 @Service
@@ -51,6 +64,15 @@ public class MemberServiceImpl implements IMemberService
     
     @Autowired
     private IMessageConfigService configService;
+    
+    @Autowired
+    private IMemberToMemberDao memberToMemberDao;
+    
+    @Autowired
+    private IMemberImageService memberImageService;
+    
+    @Autowired
+    private IRelevanceMemberDao relevanceMemberDao;
     
     @Value("${mobile.smsUrl}")
     private String smsUrl;
@@ -146,11 +168,32 @@ public class MemberServiceImpl implements IMemberService
             {
                 member.setNoType("P");
             }
+            else if (MemberTypeEnum.FRAMEFACTORY.equals(member.getType()))//副框厂
+            {
+                member.setNoType("F");
+            }
+            else if (MemberTypeEnum.AGENT.equals(member.getType())
+                    || MemberTypeEnum.DISTRIBUTOR.equals(member.getType()))//如果为代理商，经销商则用型材厂类型
+            {
+                member.setNoType("X");
+            }
             else
             {
                 member.setNoType("MEM");
             }
             menberDao.addMember(member);
+            //如果是代理商或者是经销商
+            if (MemberTypeEnum.AGENT.equals(member.getType())
+                    || MemberTypeEnum.DISTRIBUTOR.equals(member.getType()))
+            {
+                MemberToMemberEntity mm = new MemberToMemberEntity();
+                mm.setMemberNo(member.getMemberNo());
+                mm.setParentNo(member.getParentNo());
+                mm.setParentName(member.getParentName());
+                mm.setMemberType(member.getType().getId());
+                mm.setMemberName(member.getName());
+                memberToMemberDao.addTo(mm);
+            }
             List<MessageConfigEntity> configList = buildMessageConfig(member);
             configService.addConfig(member.getMemberNo(), configList);
             CometServiceImpl.takeCount(MessageChannel.MEMBER_MESSAGE);
@@ -224,7 +267,7 @@ public class MemberServiceImpl implements IMemberService
      */
     @Override
     @Transactional
-    public MemberEntity modifyMember(MemberEntity member)
+    public MemberEntity modifyMember(MemberEntity member, Boolean flag)
             throws ServiceException
     {
         try
@@ -249,14 +292,21 @@ public class MemberServiceImpl implements IMemberService
             }
             else
             {
-                assembleMemeberToModify(member, m);
-                menberDao.deleteMember(member.getId());
-                menberDao.addMember(m);
-                List<MessageConfigEntity> configList = buildMessageConfig(member);
-                configService.addConfig(member.getMemberNo(), configList);
+                if (m.getCheckState().getId() < 2)
+                {
+                    assembleMemeberToModify(member, m);
+                    menberDao.deleteMember(member.getId());
+                    menberDao.addMember(m);
+                    List<MessageConfigEntity> configList = buildMessageConfig(member);
+                    configService.addConfig(member.getMemberNo(), configList);
+                }
+                else
+                {
+                    throw new ServiceException("更改会员失败！会员类型已认证！不能更改");
+                }
             }
             // 如果该会员之前没有完善会员资料，则提示
-            if (!m.getFlag())
+            if (!m.getFlag() && flag)
             {
                 CometServiceImpl.takeCount(MessageChannel.MEMBER_PERFECT_MESSAGE);
                 redisTopics.getTopic(MessageChannel.TOPIC_NAME)
@@ -294,6 +344,15 @@ public class MemberServiceImpl implements IMemberService
                 break;
             case PRODUCTS:
                 m.setNoType("P");
+                break;
+            case FRAMEFACTORY:
+                m.setNoType("F");
+                break;
+            case AGENT:
+                m.setNoType("X");
+                break;
+            case DISTRIBUTOR:
+                m.setNoType("X");
                 break;
             default:
                 m.setNoType("MEM");
@@ -344,6 +403,44 @@ public class MemberServiceImpl implements IMemberService
     }
     
     /**
+     * 前台会员中心查询兼容新老3C，资质证书图片
+     */
+    @Override
+    public MemberEntity getMemberNew(String id)
+    {
+        try
+        {
+            MemberEntity member = menberDao.getMember(id);
+            List<MemberImageEntity> list = memberImageService.getImages(member.getMemberNo(),
+                    "1");
+            if (list.size() > 0)
+            {
+                String images = "";
+                for (MemberImageEntity mImage : list)
+                {
+                    images = images + mImage.getImage() + ",";
+                }
+                images = images.substring(0, images.length() - 1);
+                if (member.getType().getId() == 1)
+                {
+                    member.setCcc_img(images);
+                }
+                else if (member.getType().getId() == 0)
+                {
+                    member.setQualification_img(images);
+                }
+                
+            }
+            return member;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error(e.getMessage(), e, this.getClass());
+            throw new ServiceException("会员查找失败！", e);
+        }
+    }
+    
+    /**
      * 会员高级查询
      */
     @Override
@@ -373,6 +470,8 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("endDate", query.getEndDate());// 结束时间
             condition.addCondition("typeB", query.getMemberTypeB());
             condition.addCondition("flag", query.getFlag());
+            condition.addCondition("changeImageFlag",
+                    query.getChangeImageFlag());
             condition.addCondition("startAuthorDate",
                     query.getStartAuthorDate());// 开始时间
             condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
@@ -380,6 +479,63 @@ public class MemberServiceImpl implements IMemberService
             condition.addCondition("filterStr", query.getFilterStr());//筛选测试账号
             condition.setPage(query);
             memberList = menberDao.queryMembers(condition);
+            query.setPage(condition);
+            return memberList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new ServiceException("查询会员信息错误", e);
+        }
+        
+    }
+    
+    /**
+     * 会员高级查询
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemberEntity> queryMembersWebSite(MemberQuery query)
+            throws ServiceException
+    {
+        try
+        {
+            List<MemberEntity> memberList = new ArrayList<MemberEntity>();
+            if (query == null)
+            {
+                return memberList;
+            }
+            QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
+            condition.addCondition("memberNo", query.getMemberNo());// 会员号
+            condition.addCondition("name", query.getMemberName());// 会员名称
+            condition.addCondition("contacts", query.getContacts());// 联系人名称
+            condition.addCondition("phoneNo", query.getContactsPhone());// 联系人电话
+            condition.addCondition("area", query.getArea());// 地理区域
+            condition.addCondition("bLicenseNo", query.getbLicenseNo());// 营业执照号
+            condition.addCondition("energyNo", query.getEnergyNo());// 节能标识号
+            condition.addCondition("type", query.getMemberType());// 会员类型
+            condition.addCondition("checkState", query.getCheckState());
+            condition.addCondition("state", query.getMemberState());
+            condition.addCondition("startDate", query.getStartDate());// 开始时间
+            condition.addCondition("endDate", query.getEndDate());// 结束时间
+            condition.addCondition("typeB", query.getMemberTypeB());
+            condition.addCondition("flag", query.getFlag());
+            condition.addCondition("changeImageFlag",
+                    query.getChangeImageFlag());
+            condition.addCondition("startAuthorDate",
+                    query.getStartAuthorDate());// 开始时间
+            condition.addCondition("endAuthorDate", query.getEndAuthorDate());// 结束时间
+            condition.addCondition("sort", query.getSort());//排序
+            condition.addCondition("filterStr", query.getFilterStr());//筛选测试账号
+            condition.setPage(query);
+            if (query.getMemberType() == MemberTypeEnum.FRAMEFACTORY.getId())
+            {
+                memberList = menberDao.queryFramefactory(condition);
+            }
+            else
+            {
+                memberList = menberDao.queryWebsiteMembers(condition);
+            }
             query.setPage(condition);
             return memberList;
         }
@@ -506,6 +662,43 @@ public class MemberServiceImpl implements IMemberService
         return member;
     }
     
+    @Override
+    public List<RelevanceMember> getListRelevanceMember(String memberNo)
+            throws ServiceException
+    {
+        try
+        {
+            List<RelevanceMember> list = relevanceMemberDao.getEnityBymemberNo(memberNo);
+            return list;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询新上传资质证书", e, this.getClass());
+            throw new ServiceException("查询新上传资质证书", e);
+        }
+    }
+    
+    @Override
+    @Transactional
+    public String addRelevanceMember(List<RelevanceMember> list)
+            throws ServiceException
+    {
+        try
+        {
+            relevanceMemberDao.del(list.get(0).getMemberNo());
+            for (RelevanceMember re : list)
+            {
+                relevanceMemberDao.add(re);
+            }
+            return "ok";
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("新增关联企业错误", e, this.getClass());
+            throw new ServiceException("新增关联企业错误", e);
+        }
+    }
+    
     /**
      * 修改密码
      */
@@ -552,13 +745,32 @@ public class MemberServiceImpl implements IMemberService
         try
         {
             message = Identities.randomNumber(6);
-            NewSendMessage.getInstance(smsUrl, userName, password, sign, type)
-                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
+            ChannelManager manager = ChannelManager.getInstance("classpath:config/sms.properties");
+            Sender sender = manager.getSender(Xinxi1Sender.class.getName());
+            SendStatus status = sender.send(phoneNo, message
+                    + "(平台注册验证码，10分钟有效)");
+            System.out.println("Xinxi1Sender发送结果:" + status + "  短线内容:"
+                    + message + "(平台注册验证码，10分钟有效)");
+            if (!status.getStatus().equals("0"))
+            {
+                sender = manager.getSender(C123Sender.class.getName());
+                status = sender.send(phoneNo, message + "(平台注册验证码，10分钟有效)");
+                System.out.println("C123Sender发送结果:" + status + "  短线内容:"
+                        + message + "(平台注册验证码，10分钟有效)");
+            }
+            
+            /*NewSendMessage.getInstance(smsUrl, userName, password, sign, type)
+                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");*/
             //            NewNewSendMessage.getInstance(serviceURL, sn, pwd)
             //                    .sendMessage(phoneNo, message + "(平台注册验证码，10分钟有效)");
+            if (status.getStatus().equals("ERROR"))
+            {
+                return status.getMessageId();
+            }
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             SxjLogger.error("发送验证码错误", e, this.getClass());
             throw new ServiceException("发送验证码错误", e);
         }
@@ -655,5 +867,174 @@ public class MemberServiceImpl implements IMemberService
             throw new ServiceException("生成用户证书失败", e);
         }
         
+    }
+    
+    @Override
+    @Transactional
+    public MemberEntity websiteModifyMember(MemberEntity member)
+            throws ServiceException
+    {
+        try
+        {
+            MemberEntity newMember = modifyMember(member, true);
+            memberImageService.websiteAddImage(member.getMemberNo(),
+                    member.getQualification_img());
+            newMember.setQualification_img(member.getQualification_img());
+            return newMember;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("更新会员失败", e, this.getClass());
+            throw new ServiceException("更新会员失败", e);
+        }
+    }
+    
+    /**
+     * 会员高级查询
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemberEntity> queryWebsiteMembers(MemberQuery query)
+            throws ServiceException
+    {
+        try
+        {
+            List<MemberEntity> memberList = new ArrayList<MemberEntity>();
+            if (query == null)
+            {
+                return memberList;
+            }
+            QueryCondition<MemberEntity> condition = new QueryCondition<MemberEntity>();
+            condition.addCondition("name", query.getMemberName());// 会员名称
+            condition.addCondition("type", query.getMemberType());// 会员类型
+            condition.addCondition("level", query.getLevelName());// 会员类型
+            condition.setPage(query);
+            if (query.getMemberType() == MemberTypeEnum.FRAMEFACTORY.getId())
+            {
+                memberList = menberDao.queryFramefactory(condition);
+            }
+            else
+            {
+                memberList = menberDao.queryWebsiteMembers(condition);
+            }
+            query.setPage(condition);
+            return memberList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new ServiceException("查询会员信息错误", e);
+        }
+        
+    }
+    
+    @Override
+    public void ChangeImageFlagClear() throws ServiceException
+    {
+        try
+        {
+            menberDao.updateChangeImageFlag();
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("资质证书标记清0 报错", e, this.getClass());
+            throw new ServiceException("资质证书标记清0 报错", e);
+        }
+        
+    }
+    
+    /**
+     * 封装导出Model
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<ExportMemberModel> queryExportMemberModel(MemberQuery query)
+            throws ServiceException
+    {
+        try
+        {
+            List<ExportMemberModel> modelList = new ArrayList<ExportMemberModel>();
+            List<MemberEntity> list = this.queryMembers(query);
+            for (MemberEntity memberEntity : list)
+            {
+                ExportMemberModel model = new ExportMemberModel();
+                model.setMemberNo(memberEntity.getMemberNo());
+                model.setName(memberEntity.getName());
+                model.setType(memberEntity.getType().getName());
+                model.setArea(strArea(memberEntity.getArea()));
+                model.setContacts(memberEntity.getContacts());
+                model.setPhoneNo(memberEntity.getPhoneNo());
+                model.setAddress(memberEntity.getAddress());
+                model.setTelNum(memberEntity.getTelNum());
+                if (memberEntity.getRegDate() != null)
+                {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(memberEntity.getRegDate());
+                    int year = cal.get(cal.YEAR);// 获取年份
+                    int month = cal.get(cal.MONTH) + 1;// 获取月份
+                    model.setRegDateYear(String.valueOf(year));
+                    model.setRegDateMonth(String.valueOf(month));
+                }
+                model.setRegDate(DateTimeUtils.formatPageDate(memberEntity.getRegDate()));// 注册日期
+                if (memberEntity.getAuthorDate() != null)
+                {
+                    Calendar cal2 = Calendar.getInstance();
+                    cal2.setTime(memberEntity.getAuthorDate());
+                    int year2 = cal2.get(cal2.YEAR);// 获取年份
+                    int month2 = cal2.get(cal2.MONTH) + 1;// 获取月份
+                    model.setAuthorDateYear(String.valueOf(year2));
+                    model.setAuthorDateMonth(String.valueOf(month2));
+                }
+                model.setAuthorDate(DateTimeUtils.formatPageDate(memberEntity.getAuthorDate()));// 认证日期
+                model.setState(memberEntity.getState().getName());
+                model.setCheckState(memberEntity.getCheckState().getName());
+                model.setLegalRep(memberEntity.getLegalRep());
+                model.setRegisteredCapital(memberEntity.getRegisteredCapital());
+                model.setFoundedDate(DateTimeUtils.formatPageDate(memberEntity.getFoundedDate()));
+                model.setLevel(memberImageService.getLevelStr(memberEntity.getMemberNo()));// 资质等级
+                model.setoLevel(memberEntity.getLevel() == null ? null
+                        : memberEntity.getLevel().getName());
+                model.setMarketers(memberEntity.getMarketers());
+                model.setRemark(memberEntity.getRemark());
+                model.setFirstDate(DateTimeUtils.formatPageDate(memberEntity.getFirstDate()));// 第一次认证日期
+                if (memberEntity.getFirstDate() != null)
+                {
+                    Calendar cal3 = Calendar.getInstance();
+                    cal3.setTime(memberEntity.getFirstDate());
+                    int year3 = cal3.get(cal3.YEAR);// 获取年份
+                    int month3 = cal3.get(cal3.MONTH) + 1;// 获取月份
+                    model.setFirstDateYear(String.valueOf(year3));
+                    model.setFirstDateMonth(String.valueOf(month3));
+                }
+                modelList.add(model);
+            }
+            
+            return modelList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询会员信息错误", e, this.getClass());
+            throw new ServiceException("查询会员信息错误", e);
+        }
+        
+    }
+    
+    /**
+     * 封装地址
+     * 
+     * @param area
+     * @return
+     */
+    public String strArea(String area)
+    {
+        if (StringUtils.isEmpty(area))
+        {
+            return "";
+        }
+        String[] str = area.split(",");
+        String[] str1 = str[0].split(":");
+        String[] str2 = str[1].split(":");
+        String str3 = str1[1] + str2[1];
+        return str3;
     }
 }

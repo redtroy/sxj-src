@@ -51,6 +51,14 @@
 			loadPage(currentPage, totalPage, query);
 		});
 	}
+	$(document).ready(function() {
+		$("#levelName").live("focus",function(){
+			$("#levelName").bigAutocomplete({
+				width: '264',
+				url : '${basePath}autoCertificate.htm'
+			});
+		});
+	});
 </script>
 </head>
 
@@ -71,6 +79,10 @@
 							<input type="hidden" id="infoFlag" name="infoFlag"
 								value="${infoFlag}" />名称 <input type="text" name="memberName"
 								value="${query.memberName}" class="input input-w270h30" />
+								资质等级 <input type="text" name="levelName" id="levelName"
+								value="${query.levelName}" class="input input-w270h30" />
+								<input type="hidden" id="levelId" name="levelId"
+								value="${query.levelId}" />
 							<span onclick="query();" class="button button-search">查询</span>
 						</div>
 					</form>

@@ -2,7 +2,7 @@ package com.sxj.supervisor.enu.record;
 
 public enum RecordFlagEnum
 {
-    A("甲方", 0), B("乙方", 1);
+    A("需方", 0), B("供方", 1);
     
     // 成员变量
     private Integer id;

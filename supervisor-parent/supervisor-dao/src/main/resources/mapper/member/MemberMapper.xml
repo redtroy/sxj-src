@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -31,6 +31,7 @@
 		jdbcType="VARCHAR" />
 	<result property="energyPath" column="ENERGY_PATH" jdbcType="VARCHAR" />
 	<result property="flag" column="FLAG" jdbcType="BOOLEAN" />
+	<result property="changeImageFlag" column="CHANGE_IMAGE_FLAG" jdbcType="BOOLEAN" />
 	<result property="version" column="VERSION_LOCK" jdbcType="INTEGER" />
 
 	<result property="qualification_img" column="QUALIFICATION_IMG"
@@ -57,6 +58,10 @@
 	<result property="marketers" column="MARKETERS" jdbcType="VARCHAR" />
 	<result property="remark" column="REMARK" jdbcType="VARCHAR" />
 	<result property="upDate" column="UPDATE_DATE" jdbcType="TIMESTAMP" />
+	<result property="isHave" column="IS_HAVE" jdbcType="INTEGER" />
+	<result property="enclosedNo" column="ENCLOSED_NO" jdbcType="VARCHAR" />
+	<result property="enclosedImg" column="ENCLOSED_IMG" jdbcType="VARCHAR" />
+	<result property="firstDate" column="FIRST_DATE" jdbcType="TIMESTAMP" />
 </resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"
@@ -121,6 +126,100 @@
 		<if test="condition.flag !=null and condition.flag!=''">
 			<![CDATA[AND FLAG = #{condition.flag}]]>
 		</if>
+		<!-- 资质证书变更通知 -->
+		<if test="condition.changeImageFlag !=null and condition.changeImageFlag!=''">
+			<![CDATA[AND CHANGE_IMAGE_FLAG = #{condition.changeImageFlag}]]>
+		</if>
+		<!-- 会员注册时间段 -->
+		<if
+			test="condition.startDate != null  and condition.startDate != '' ">
+			<![CDATA[AND REG_DATE >=CONCAT(#{condition.startDate}," 00:00:00" ) ]]>
+		</if>
+		<!-- 会员注册时间段 -->
+		<if
+			test="condition.endDate != null and condition.endDate != ''">
+			<![CDATA[AND REG_DATE <= CONCAT(#{condition.endDate}," 23:59:59") ]]>
+		</if>
+		<!-- 会员认证时间段 -->
+		<if
+			test="condition.startAuthorDate != null  and condition.startAuthorDate != '' ">
+			<![CDATA[AND AUTHOR_DATE >=CONCAT(#{condition.startAuthorDate}," 00:00:00" ) ]]>
+		</if>
+		<!-- 会员认证时间段 -->
+		<if
+			test="condition.endAuthorDate != null  and condition.endAuthorDate != ''">
+			<![CDATA[AND AUTHOR_DATE <= CONCAT(#{condition.endAuthorDate}," 23:59:59") ]]>
+		</if>
+		<!-- 筛选测试账号 -->
+		<if
+			test="condition.filterStr == 1">
+			<![CDATA[AND NAME NOT IN('测试门窗厂','测试型材厂','测试玻璃厂') ]]>
+		</if>
+			
+		<if test="condition.sort !=null">
+			<![CDATA[ ORDER BY UPDATE_DATE DESC,REG_DATE ]]>
+		</if>
+		<if test="condition.sort ==null">
+			<![CDATA[ ORDER BY STATE,REG_DATE DESC]]>
+		</if>
+	</select>
+	<!-- 条件查询会员 -->
+	<select id="queryMembersWebSite" resultMap="MemberResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT *
+		 FROM M_MEMBER WHERE 1=1 AND STATE = 0 ]]>
+		<!-- 会员号 -->
+		<if test="condition.memberNo != null and condition.memberNo !=''">
+			<![CDATA[AND MEMBER_NO LIKE CONCAT('%',#{condition.memberNo},'%')]]>
+		</if>
+		<!-- 会员名称 -->
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
+		</if>
+		<!-- 联系人 -->
+		<if test="condition.contacts != null and condition.contacts != ''">
+			<![CDATA[AND CONTACTS LIKE CONCAT('%',#{condition.contacts},'%') ]]>
+		</if>
+		<!-- 联系人电话 -->
+		<if test="condition.phoneNo != null and condition.phoneNo != ''">
+			<![CDATA[AND PHONE_NO LIKE CONCAT('%',#{condition.phoneNo},'%')]]>
+		</if>
+		<!-- 地理位置 -->
+		<if test="condition.area != null and condition.area != ''">
+			<![CDATA[AND AREA LIKE CONCAT('%',#{condition.area},'%')]]>
+		</if>
+		<!-- 营业执照号码 -->
+		<if test="condition.bLicenseNo != null and condition.bLicenseNo != ''">
+			<![CDATA[AND B_LICENSE_NO LIKE CONCAT('%',#{condition.bLicenseNo},'%') ]]>
+		</if>
+		<!-- 节能标识(作为资质证书查询) -->
+		<if test="condition.energyNo != null and condition.energyNo != ''">
+			<![CDATA[AND (ENERGY_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR QUALIFICATION_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR SAFETY_LICENSES_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR QMS_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR CCC_NO LIKE CONCAT('%',#{condition.energyNo},'%') ]]>
+			<![CDATA[OR PRODUCTION_LICENSE_NO LIKE CONCAT('%',#{condition.energyNo},'%') )]]>
+		</if>
+		<!-- 会员类型 -->
+		<if test="condition.type !=null">
+			<![CDATA[AND TYPE = #{condition.type}]]>
+		</if>
+		<if test="condition.typeB !=null">
+			<![CDATA[AND TYPE != #{condition.typeB}]]>
+		</if>
+		<!-- 会员状态 -->
+		<if test="condition.checkState !=null">
+			<![CDATA[AND CHECK_STATE = #{condition.checkState}]]>
+		</if>
+		<!-- 是否完善资料 -->
+		<if test="condition.flag !=null and condition.flag!=''">
+			<![CDATA[AND FLAG = #{condition.flag}]]>
+		</if>
+		<!-- 资质证书变更通知 -->
+		<if test="condition.changeImageFlag !=null and condition.changeImageFlag!=''">
+			<![CDATA[AND CHANGE_IMAGE_FLAG = #{condition.changeImageFlag}]]>
+		</if>
 		<!-- 会员注册时间段 -->
 		<if
 			test="condition.startDate != null  and condition.startDate != '' ">
@@ -176,4 +275,45 @@
 		</if>
 		<![CDATA[ ORDER BY convert(name using gb2312) asc]]>
 	</select>
+	<!-- 条件查询会员 -->
+	<select id="queryFramefactory" resultMap="MemberResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[select * from M_MEMBER where type=5 or (type=2 and IS_HAVE=1)]]>
+		<!-- 会员名称 -->
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND NAME LIKE CONCAT('%',#{condition.name},'%')]]>
+		</if>
+		<if test="condition.city != null and condition.city != ''">
+			<![CDATA[AND AREA LIKE CONCAT('%',#{condition.city},'%')]]>
+		</if>
+		<![CDATA[ ORDER BY convert(name using gb2312) asc]]>
+	</select>
+	<!-- 条件查询会员 -->
+	<select id="queryWebsiteMembers" resultMap="MemberResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[ SELECT DISTINCT M.MEMBER_NO AS A, M.*  FROM M_MEMBER M
+ 					LEFT JOIN M_MEMBER_IMAGE I ON M.MEMBER_NO = I.MEMBER_NO
+ 					LEFT JOIN M_CERTIFICATE_LEVEL L ON L.IMAGE_ID = I.IMAGE
+ 					LEFT JOIN M_CERTIFICATE C ON C.ID = L.`LEVEL`
+ 					WHERE M.NAME NOT IN('测试门窗厂','测试型材厂','测试玻璃厂')   ]]>
+		<!-- 会员名称 -->
+		<if test="condition.name != null and condition.name != ''">
+			<![CDATA[AND M.NAME LIKE CONCAT('%',#{condition.name},'%')]]>
+		</if>
+		<if test="condition.type !=null">
+			<![CDATA[AND M.TYPE = #{condition.type}]]>
+		</if>
+		<if test="condition.level != null and condition.level != ''">
+			<![CDATA[AND C.CERTIFICATE_NAME  LIKE CONCAT('%',#{condition.level},'%') AND I.STATE='1']]>
+		</if>
+		<if test="condition.sort ==null">
+			<![CDATA[  ORDER BY M.STATE,M.REG_DATE DESC]]>
+		</if>
+	</select>
+	<update id="updateChangeImageFlag">
+	   <![CDATA[ UPDATE M_MEMBER SET CHANGE_IMAGE_FLAG=0 ]]>
+	</update>
+	<update id="updateMemberFirstDate" parameterType="com.sxj.supervisor.entity.member.MemberEntity">
+	   <![CDATA[ UPDATE M_MEMBER SET FIRST_DATE=#{firstDate} WHERE ID = #{id}  AND REG_DATE>date_format('2015-09-23','%Y-%m-%d') AND FIRST_DATE IS NULL ]]>
+	</update>
 </mapper>

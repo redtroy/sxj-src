@@ -9,9 +9,10 @@
 <script src="${b.staticPath}js/intense.js"></script>
 <@b.pageScript/>
 <@b.dialogBox/>
-<@b.validate/>
+<@b.validate/> 
 <script>
 function query(page){
+	loadingImg();
 	var params=$("#search_form").serialize();
 	 if(page!=undefined){
 		   params=params+"&currentPage="+page;
@@ -31,8 +32,6 @@ function roleInfo(id,type){
 	$("#roleInfo_div").empty();
 	$.get("${basePath}system/get_role_function.htm?accountId="+id+"&type="+type,function(data){
 		pageii=dialogBoxOut(data);
-		$("#roleInfo_div").css("margin-top","-140px");
-		$("#roleInfo_div").css("margin-left","-280px");
 	});
 }
 

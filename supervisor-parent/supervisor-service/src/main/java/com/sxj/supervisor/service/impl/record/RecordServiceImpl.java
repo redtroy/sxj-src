@@ -36,6 +36,7 @@ import com.sxj.supervisor.enu.record.ContractTypeEnum;
 import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.enu.rfid.RfidTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.record.RecordQuery;
@@ -135,31 +136,24 @@ public class RecordServiceImpl implements IRecordService {
 
 			updateImages(record, oldRe);
 			// 更改用户---修改备案状态
-			if (oldRe.getContractType() != null
-					&& oldRe.getContractType() != ContractTypeEnum.BIDDING) {
-				MemberEntity member = memberService.memberInfo(record
-						.getMemberIdB());
-				Assert.notNull(member);
-				switch (member.getType()) {
-				case GLASSFACTORY:
-					record.setContractType(ContractTypeEnum.GLASS);
-					break;
-				case GENRESFACTORY:
-					record.setContractType(ContractTypeEnum.EXTRUSIONS);
-					break;
-				default:
-					break;
+			if (oldRe.getFlag().equals(RecordFlagEnum.A)) {
+				if (oldRe.getContractType() != null
+						&& oldRe.getContractType() != ContractTypeEnum.BIDDING) {
+					MemberEntity member = memberService.memberInfo(record
+							.getMemberIdB());
+					Assert.notNull(member);
+					switch (member.getType()) {
+					case GLASSFACTORY:
+						record.setContractType(ContractTypeEnum.GLASS);
+						break;
+					case GENRESFACTORY:
+						record.setContractType(ContractTypeEnum.EXTRUSIONS);
+						break;
+					default:
+						break;
+					}
 				}
-				// if (member.getType() == MemberTypeEnum.glassFactory)
-				// {
-				//
-				// }
-				// else if (member.getType() == MemberTypeEnum.genresFactory)
-				// {
-				// record.setContractType(ContractTypeEnum.extrusions);
-				// }
 			}
-
 			recordDao.updateRecord(record);
 		} catch (ServiceException e) {
 			SxjLogger.error(e.getMessage(), e, this.getClass());
@@ -427,9 +421,17 @@ public class RecordServiceImpl implements IRecordService {
 			ContractModel conModel = contractService.getContract(contractId);
 			Assert.notNull(conModel);
 			ContractEntity con = conModel.getContract();
+			switch (memType) {
+			case AGENT:
+				memType = MemberTypeEnum.GENRESFACTORY;
+				break;
+			case DISTRIBUTOR:
+				memType = MemberTypeEnum.GENRESFACTORY;
+				break;
+			}
 			contractSureStatefsm.setCurrentState(con.getConfirmState());
 			contractSureStatefsm.fire(con.getConfirmState().toString()
-					+ memType.toString() + con.getType().toString(), con);
+					+ memType + con.getType().toString(), con);
 			// con.setConfirmState(contractSureStatefsm.getCurrentState());
 			contractDao.updateContract(con);
 			// 更改合同关联所有备案状态

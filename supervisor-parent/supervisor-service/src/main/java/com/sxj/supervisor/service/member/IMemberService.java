@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.RelevanceMember;
+import com.sxj.supervisor.model.member.ExportMemberModel;
 import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.model.open.ApiModel;
 import com.sxj.util.exception.ServiceException;
@@ -13,7 +15,10 @@ public interface IMemberService
     
     public void addMember(MemberEntity member) throws ServiceException;
     
-    public MemberEntity modifyMember(MemberEntity member)
+    /**
+     * 修改会员，前台调用传TRUE，后来传FALSE
+     */
+    public MemberEntity modifyMember(MemberEntity member, Boolean flag)
             throws ServiceException;
     
     public String initializePwd(String memberId) throws ServiceException;
@@ -44,4 +49,45 @@ public interface IMemberService
     
     public String createPfx(MemberEntity member, AccountEntity account)
             throws ServiceException;
+    
+    /**
+     * 更新前台会员
+     * @param member
+     * @return
+     */
+    public MemberEntity websiteModifyMember(MemberEntity member);
+    
+    /**
+     * 前台会员查询
+     */
+    public MemberEntity getMemberNew(String id);
+    
+    /**
+     * 查询关联企业
+     * @param memberNo
+     * @return
+     */
+    public List<RelevanceMember> getListRelevanceMember(String memberNo);
+    
+    /**
+     * 跟新关联企业
+     * @param memberNo
+     * @param list
+     * @return
+     */
+    public String addRelevanceMember(List<RelevanceMember> list);
+    
+    List<MemberEntity> queryWebsiteMembers(MemberQuery query)
+            throws ServiceException;
+    
+    /**
+     * 资质证书变动标记清0
+     */
+    public void ChangeImageFlagClear();
+    
+    public List<ExportMemberModel> queryExportMemberModel(MemberQuery query)
+            throws ServiceException;
+    
+    public List<MemberEntity> queryMembersWebSite(MemberQuery query);
+    
 }

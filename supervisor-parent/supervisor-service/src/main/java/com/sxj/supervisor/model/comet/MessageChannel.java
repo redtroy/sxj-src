@@ -13,6 +13,10 @@ public class MessageChannel
     
     public static final String MEMBER_PERFECT_MESSAGE_SET = "member_perfect_message_set";
     
+    public static final String MEMBER_IMAGECHANGE_MESSAGE = "member_imagechange_message";
+    
+    public static final String MEMBER_IMAGECHANGE_MESSAGE_SET = "member_imagechange_message_set";
+    
     public static final String WEBSITE_RECORD_MESSAGE = "record_push_message_";
     
     public static final String WEBSITE_PAY_MESSAGE = "pay_push_message_";

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.science.dao.export.IGlassDao">
+	<resultMap id="GlassResultMap" type="com.sxj.science.entity.export.GlassEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="width" column="WIDTH" jdbcType="VARCHAR" />
+		<result property="height" column="HEIGHT" jdbcType="VARCHAR" />
+		<result property="quantity" column="QUANTITY" jdbcType="VARCHAR" />
+		<result property="type" column="TYPE" jdbcType="VARCHAR" />
+		<result property="docId" column="DOC_ID" jdbcType="VARCHAR" />
+	</resultMap>
+	<delete id="deleteGlass" parameterType="String">
+		<![CDATA[DELETE FROM S_GLASS WHERE DOC_ID IN]]>
+		<foreach item="item" collection="array" open="(" close=")"
+			separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	<delete id="deleteGlassByDocId" parameterType="String">
+		<![CDATA[DELETE FROM S_GLASS WHERE DOC_ID =#{docId}]]>
+	</delete>
+	<select id="query" resultMap="GlassResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * from S_GLASS d WHERE 1 = 1]]>
+		<if test="condition.docId != null and condition.docId != ''">
+			<![CDATA[ and d.DOC_ID=#{condition.docId}]]>
+		</if>
+		<if test="condition.docIds != null">
+		  <![CDATA[ and d.DOC_ID IN ]]>
+			<foreach item="item" collection="condition.docIds" open="("
+				close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+</mapper> 

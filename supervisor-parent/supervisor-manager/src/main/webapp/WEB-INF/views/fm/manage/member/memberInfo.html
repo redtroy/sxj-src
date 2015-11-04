@@ -1,31 +1,320 @@
- <td colspan="11">
- <script type="text/javascript">
- $.Elastislide.defaults = {minItems:2};
- $("#carousel").elastislide(); 
- </script>
-<form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
- <input type="hidden" name ="id" value="${member.id}"/>
-            <script>
-			  $(function() {
-			    $( ".foundedDate" ).datepicker();
-			  });
- 		 </script>
-          <div class="infoBox">
+﻿ <td colspan="11">
+ <style>
+ .uploadnew .swfupload{left:0px}
+ </style>
+  
+ <script>
+ $(document).ready(function() { 
+	
+		$("#${member.id}_info_form").find("[type='file']").each(function(){
+			//console.log(this)
+			uploadImgSingle($(this));
+		})
+});
+	Date.prototype.Format = function (fmt) { //author: meizz 
+	    var o = {
+	        "M+": this.getMonth() + 1, //月份 
+	        "d+": this.getDate(), //日 
+	        "h+": this.getHours(), //小时 
+	        "m+": this.getMinutes(), //分 
+	        "s+": this.getSeconds(), //秒 
+	        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+	        "S": this.getMilliseconds() //毫秒 
+	    };
+	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	    for (var k in o)
+	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	    return fmt;
+	}
+		var getImage = function(imageVal) {
+			$.post("getMemberImage.htm", {
+				"imageId" : imageVal,memberNo:'${member.memberNo}'
+			}, function(data) {
+				$("#levelTd").children().remove();
+				//$("#form")[0].reset();
+				$("#id").val("");
+				$("#issueDate").val("");
+				$("#dueDate").val("");
+				$("#certificateType").val("");
+				$("#certificateNo").val("");
+				$("#remark").val("") ;
+				//==
+				$("#image").val(imageVal);
+				$("#memberNo").val('${member.memberNo}');
+				if (data.flag=="ok"){
+				 $("#id").val(data.model.memberImage.id);
+				
+				 $("#certificateType").val(
+						data.model.memberImage.certificateType);
+				
+				 $("#certificateNo").val(data.model.memberImage.certificateNo);
+				 $("#issueDate").val(data.model.memberImage.issueDate);
+				$("#dueDate").val(data.model.memberImage.dueDate);
+				$("#remark").val(data.model.memberImage.remark);
+				 if (data.model.clist.length>=1){
+					for (var i=0;i<data.model.clist.length;i++){
+						$("#levelTd").append(' <li><input  name="levelids" type="hidden" value="'+data.model.clist[i].certificateLevel+'" id="levelids"/><input class="input-tt level" value="'+data.model.clist[i].certificateName+'"  name="levels" type="text" id="level"/><a class="del"></a></li>')
+					} 
+				}else{
+				        $("#levelTd").append(' <li><input  name="levelids" type="hidden"  id="levelids"/><input class="input-tt level"   name="levels" type="text" id="level"/><a class="del"></a></li>');
+				}
+				}else{
+					$("#levelTd").html(' <li><input  name="levelids" type="hidden"  id="levelids"/><input class="input-tt level"   name="levels" type="text" id="level"/><a class="del"></a></li>');
+				}
+			});
+		}
+		$("#submitComponent").unbind("click");
+		$("#submitComponent").click(
+				function() {
+					$.post("addMemberImage.htm", $("#form").serialize(),
+							function(data) {
+								if (data.isok == 'ok') {
+									alert("成功");
+								} else {
+									alert("失败");
+								}
+							});
+				});
+		$("#addLevel").unbind("click");
+         $("#addLevel").click(function(){
+        	 $("#levelTd").append(' <li><input  name="levelids" type="hidden"  id="levelids"/><input class="input-tt level"   name="levels" type="text" id="level"/><a class="del"></a></li>');
+        })
+        $(".del").live("click",function(){
+        	 $(this).parent().remove();
+        })
+       
+		$(document).ready(
+				function() {
+					var currentSlide;
+					var offsetTop = $(window).scrollTop() + "px";
+					//alert(offsetTop)
+					$(window).scroll(function() {
+						offsetTop = $(window).scrollTop() + "px";
+						$("#imagecomponent").css({
+							top : offsetTop
+						});
+						$("#imagecomponent2").css({top : offsetTop });
+					});
+					var iv = $("#viewer").iviewer();
+					var iv2=$("#viewer2").iviewer();
+					/**弹出层滚动条
+					滚动式更新iviewer
+					 **/
+					if (hSlide!=null){
+						hSlide.destroy();
+					}
+					hSlide = new $.slide({
+						container : "#hidden",
+						imageWidth : 90,
+						imagesPerPage : 8,
+						onSlide : function(li, index) {
+							iv.iviewer('loadImage', li.find("img").attr("data"));
+							var data = li.find("img").attr("data");
+							if(data){
+							var imageVal = data.replace("${b.imagePath}", "");
+							getImage(imageVal);
+							}
+						},
+						onClick : function(self, li, index, i) {
+							var data = $(self.getImageLis()).find("li").eq(
+									index).find("img").attr("data");
+							if(data){
+							var imageVal = data.replace("${b.imagePath}", "");
+							getImage(imageVal);
+							}
+						}
+
+					});
+					/**原图片滚动条
+					点击后显示控件层
+					 **/
+					 //新加
+					oSlide = new $.slide({
+						container : "#original_${member.memberNo}",
+						imageWidth : 90,
+						imagesPerPage : 5,
+						onClick : function(self, li, index, i) {
+							$("#form").show();
+							var data = $(self.getImageLis()).find("li").eq(
+									index).find("img").attr("data");
+							var imageVal = data.replace("${b.imagePath}", "");
+							getImage(imageVal);
+							//$("#image").val(imageVal);
+							self.copyTo($("#hidden .line-con"));
+							$(".maskdivgen").fadeIn(100);
+							$("#imagecomponent").css({
+								top : offsetTop
+							});
+							$("#imagecomponent").css("visibility", "visible");
+							hSlide.reset(0, 1);
+							hSlide.slideTo(index);
+							iv.iviewer('destroy');
+							iv = $("#viewer").iviewer();
+							iv.iviewer('loadImage', li.find("img").attr(
+											"data"));
+							currentSlide = self;
+						},
+						onSlide : function() {
+							$("#form")[0].reset();
+						}
+					});
+					//删除的
+					oSlide2 = new $.slide({
+						container : "#original2_${member.memberNo}",
+						imageWidth : 90,
+						imagesPerPage : 5,
+						onClick : function(self, li, index, i) {
+							$("#form").hide();
+							var data = $(self.getImageLis()).find("li").eq(
+									index).find("img").attr("data");
+							var imageVal = data.replace("${b.imagePath}", "");
+							getImage(imageVal);
+							self.copyTo($("#hidden .line-con"));
+							$(".maskdivgen").fadeIn(100);
+							$("#imagecomponent").css({
+								top : offsetTop
+							});
+							$("#imagecomponent").css("visibility", "visible");
+							hSlide.reset(0, 1);
+							hSlide.slideTo(index);
+							iv.iviewer('destroy');
+							iv = $("#viewer").iviewer();
+							iv.iviewer('loadImage', li.find("img").attr(
+											"data"));
+							currentSlide = self;
+						},
+						onSlide : function() {
+							$("#form")[0].reset();
+						}
+					});
+					//现有
+					oSlide3 = new $.slide({
+						container : "#original3_${member.memberNo}",
+						imageWidth : 90,
+						imagesPerPage : 5,
+						onClick : function(self, li, index, i) {
+							var data = $(self.getImageLis()).find("li").eq(
+									index).find("img").attr("data");
+							var imageVal = data.replace("${b.imagePath}", "");
+							getImage(imageVal);
+							self.copyTo($("#hidden .line-con"));
+							$(".maskdivgen").fadeIn(100);
+							$("#imagecomponent").css({
+								top : offsetTop
+							});
+							$("#imagecomponent").css("visibility", "visible");
+							hSlide.reset(0, 1);
+							hSlide.slideTo(index);
+							iv.iviewer('destroy');
+							iv = $("#viewer").iviewer();
+							iv
+									.iviewer('loadImage', li.find("img").attr(
+											"data"));
+							currentSlide = self;
+						},
+						onSlide : function() {
+							$("#form")[0].reset();
+						}
+					});
+					uploadImg($("#uploadify_${member.id}"),oSlide,oSlide3,'${member.id}');
+					/**
+					iviewer上左右按钮
+					 **/
+					$("#next,#front").hover(function() {
+						$(this).children("a").fadeIn();
+					}, function() {
+						$(this).children("a").fadeOut();
+					});
+					/**
+					同步删除两个图片滚动层
+					 **/
+						$('.iviewer_del').unbind(); 
+						$(".iviewer_del").live("click",function(){
+							dialogBox(function(index) {
+							var i=hSlide.deleteImage(hSlide.getIndex())
+							var deleted=hSlide.getDeleteLi();
+							oSlide.deleteImageByData(deleted.find("img").attr("data"));
+							oSlide3.deleteImageByData(deleted.find("img").attr("data"));
+							iv.iviewer('loadImage', hSlide.getCurrentImageData());
+							//currentSlide.deleteImage(i<=0?0:i+1);
+							currentSlide.slideTo(hSlide.getIndex());
+							var imagePath=deleted.find("img").attr("data").replace("${b.imagePath}", "");
+							 $.post("${basePath}member/delEmage.htm",{image:imagePath},function(){
+									
+								})		
+							if(!hSlide.getCurrentImageData())
+								iv.children("img").attr("src","");
+							},"是否确定删除！")
+						});
+					$("#next,#front").unbind("click");
+					$("#next").click(function() {
+						hSlide.slideNext();
+						currentSlide.slideNext();
+						iv.iviewer('loadImage', hSlide.getCurrentImageData());
+						//var data = hSlide.getImageData(hSlide.getIndex());
+						//var imageVal = data.replace("${b.imagePath}", "");
+						//getImage(imageVal);
+					});
+					$("#front").click(function() {
+						hSlide.slideFront();
+						currentSlide.slideNext();
+						iv.iviewer('loadImage', hSlide.getCurrentImageData());
+						//var data = hSlide.getImageData(hSlide.getIndex());
+						//var imageVal = data.replace("${b.imagePath}", "");
+						//getImage(imageVal);
+					});
+					$("#btnClsVie").click(function() {
+						$("#form")[0].reset();
+						$('.maskdivgen').fadeOut(100);
+						$("#imagecomponent").css("visibility", "hidden");
+					})
+					$("#btnClsVie2").click(function () {
+			            $('.maskdivgen').fadeOut(100);
+			            $("#imagecomponent2").css("visibility","hidden");
+		        	})
+		        	$("#btnClsVie3").click(function () {
+			            $('.maskdivgen').fadeOut(100);
+			            $("#imagecomponent3").css("visibility","hidden");
+		        	})
+		        	$(".demo-image").click(
+		        	        function () {
+		        	        	var imagePath=$(this).attr("data-image");
+		        	        	$(".maskdivgen").fadeIn(100);
+		        		        $("#imagecomponent2").css("visibility","visible");
+		        	    		hSlide.clear();
+		        	    		hSlide.addImage(imagePath,imagePath);
+		        	    		iv2.iviewer('destroy'); 
+		        	    		iv2=$("#viewer2").iviewer({showTool:false})
+		        	    		iv2.iviewer('loadImage', imagePath);
+		        	    });
+					$(".showComponent").click(function(){
+						$("#form").show();
+						oSlide3.copyTo($("#hidden .line-con"));
+						$(".maskdivgen").fadeIn(100);
+						$("#imagecomponent").css({
+							top : offsetTop
+						});
+						$("#imagecomponent").css("visibility", "visible");
+						hSlide.reset(0, 1);
+						hSlide.slideTo(oSlide3.getIndex());
+						iv.iviewer('destroy');
+						iv = $("#viewer").iviewer();
+						iv.iviewer('loadImage', oSlide3.getImageData(oSlide3.getIndex()));
+						getImage(oSlide3.getImageData(oSlide3.getIndex()).replace("${b.imagePath}", ""));
+						currentSlide = oSlide3;
+					});
+				});
+	</script>
+ 		<div class="infoBox" id="basic-message"> 
+ 		  <form action="javascirpt:void(0)" id="${member.id}_info_form" class="needValid">
+ 			<input type="hidden" name ="id" value="${member.id}"/> 
+		        <div id="block-name">基本信息</div>
+          <div class="left-news">
           <ul class="ly-clearFix">
-          <li><label>会员名称</label>${member.name}</li>
-          <li><label>城市</label> 江苏省-
-            <select name="area" id="city">
-           	<option value="">-请选择-</option>
-          	<#list cityList as city>
-          	<#if (("32:江苏省,"+city.id+":"+city.name)==member.area)>
-          	 <option value="32:江苏省,${city.id}:${city.name}" selected="selected">${city.name}</option>
-          	<#else>
-            <option value="32:江苏省,${city.id}:${city.name}">${city.name}</option>
-            </#if>
-            </#list>
-          </select>
-           	 会员类型
-           	<#if (member.checkState.getId() != 2)>
+          <li style="width:99%"><label class="lable">会员名称</label>${member.name}</li>
+          <li style="width:99%">
+            <label class="lable">会员类型</label>
+           <#if (member.checkState.getId() != 2)>
             <select name="type">
               <#list types as type>
                 <#if (type.getId()==member.type.getId())>
@@ -39,93 +328,261 @@
                &nbsp; ${member.type.getName()}<input type="hidden" name="type" value="${member.type.getId()}" />
             </#if>
           </li>
-          <li class="view"><label>营业执照</label><input type="text" name="bLicenseNo" datatype="*2-30" nullmsg="营业执照号不能为空" value="${member.getbLicenseNo()}" />
-          <!-- <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p> -->
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}">查看缩略图</a></p>
-          </li>
-         <!-- <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30" nullmsg="节能标识推广证号不能为空" value="${member.getEnergyNo()}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p> --> 
-          <li class="view"><label >质量管理体系证书</label><input name="qms_no" type="text" datatype="*2-30"  value="${member.qms_no}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}">查看缩略图</a></p>
-          </li>
-          <#if (member.type.id==0)>
-          <li class="view"><label >安全生产许可证</label><input name="safety_licenses_no" type="text" datatype="*2-30" nullmsg="安全生产许可证不能为空" value="${member.safety_licenses_no}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.safety_licenses_img}" data-image="${b.imagePath}${member.safety_licenses_img}">查看缩略图</a></p>
-          </li>
-          </#if>
-          <#if (member.type.id==0)>
-          <li class="view"><label >节能标识推广证</label><input name="energyNo" type="text" datatype="*2-30"  value="${member.getEnergyNo()}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.energyPath}" data-image="${b.imagePath}${member.energyPath}">查看缩略图</a></p>
-          </li>
-          </#if>
-            <#if (member.type.id==1)>
-          <li class="view"><label >3C认证证书</label><input name="ccc_no" type="text" datatype="*2-30" nullmsg="3C认证证书不能为空" value="${member.ccc_no}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.ccc_img}" data-image="${b.imagePath}${member.ccc_img}">查看缩略图</a></p>
-          </li>
-          </#if>
-           <#if (member.type.id==2)>
-          <li class="view"><label >工业产品生产许可证</label><input name="ccc_no" type="text" datatype="*2-30" nullmsg="工业产品生产许可证不能为空" value="${member.production_license_no}" />
-          <p><a href="javascript:void(0);" class="lnk-blue lnk-underline demo-image" image="${member.production_license_img}" data-image="${b.imagePath}${member.production_license_img}">查看缩略图</a></p>
-          </li>
-          </#if>
-          <#if (member.type.id==0)>
-          <li class="view"><label >资质证书</label><input name="qualification_no" type="text" datatype="*2-30" nullmsg="资质证书不能为空" value="${member.qualification_no}" />
-          </li>
-          <li class="view">
-          		<#if member.qualification_img??> 
-						<#assign arr=(member.qualification_img?split(","))> 
-						<div class="rollBox">
-									<ul id="carousel" class="elastislide-list">
-										<#list arr as imgPath>
-											<li><a href="javascript:void(0);" class="demo-image"
-											data-image="${b.imagePath}${imgPath}"><img
-												src="${b.imagePath}${imgPath}" width="80"
-												height="107" /></a>
-												<p>${imgPath_index+1}</p>
-												</li> 
-												
-										</#list>
-									</ul>
-								</div>
-								</#if>
-          </li>
-          </#if>
-          <li><label>联系人名称</label><input type="text" value="${member.getContacts()}" datatype="*2-25" nullmsg="联系人不能为空" name="contacts"/></li>
-          <li><label>联系人手机</label><input type="text" value="${member.phoneNo}" datatype="m" nullmsg="手机号码不能为空" name="phoneNo"/></li>
-          <li><label>公司地址</label><input type="text" value="${member.address}" datatype="*2-50" nullmsg="地址不能为空" name="address"/></li>
-          <li><label>固定电话</label><input type="text" value="${member.telNum}" name="telNum"/></li>
-          <li><label>注册时间</label><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
-          <li><label>认证时间</label><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
-          <li><label>审核状态</label><em class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
-          <li><label>帐户状态</label><em class="state verified" id="state1">${member.state.getName()}</em></li>
-          <li><label>子帐号</label>${member.getAccountNum()}</li>
-          <li><label>总交易额</label>${member.totalAmount}元</li>
-          <li><label>扫描设备号</label><textarea cols="" rows="3" class="textRfid" id="deviceNumber" >${member.deviceNumber}</textarea></li>
-          <li><label>邮政编码</label><input type="text" value="${member.code}" id="code" name="code" /></li>
-          <li><label>法定代表人</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
-          <li><label>注册资本</label><input type="text" value="${member.registeredCapital}" id="registeredCapital" datatype="n1-10" name="registeredCapital" />万元</li>
-          <li><label>成立时间</label><input type="text" <#if (member.foundedDate??)>value="${member.foundedDate?string("yyyy-MM-dd")}" </#if> id="foundedDate" class="foundedDate" name="foundedDate"  /></li>
-           <li><label>资质等级</label>
-           <select name="level" id=level>
-           <option value="">-请选择-</option>
-           <#list level as le>
-           <#if member.level??>
-	           <#if (le.getId()==member.level.getId())>
-	                      <option value="${le.getId()}" selected="selected">${le.getName()}</option>
-	                <#else>
-	                      <option value="${le.getId()}">${le.getName()}</option>
-	                </#if>
-	          <#else>
-	           <option value="${le.getId()}">${le.getName()}</option>
-           </#if>
-                
+          <li style="width:99%"><label class="lable">城市</label> 江苏省-
+                      <select name="area" id="city">
+           	<option value="">-请选择-</option>
+          	<#list cityList as city>
+          	<#if (("32:江苏省,"+city.id+":"+city.name)==member.area)>
+          	 <option value="32:江苏省,${city.id}:${city.name}" selected="selected">${city.name}</option>
+          	<#else>
+            <option value="32:江苏省,${city.id}:${city.name}">${city.name}</option>
+            </#if>
             </#list>
-           	</select></li>
-           	<li><label>市场专员</label><input type="text" value="${member.marketers}" id="marketers" name="marketers" /></li>
-           	<li style="height:70px;"><label>备注</label><textarea style="width:50%" rows="2" cols="0" name="remark">${member.remark}</textarea></li>
+          </select></li>
+          <li style=" width:99%"><label class="lable">联系人名称</label><input type="text" value="${member.getContacts()}" datatype="*2-25" nullmsg="联系人不能为空" name="contacts"/></li>
+          <li style=" width:99%"><label class="lable">联系人手机</label><input type="text" value="${member.phoneNo}" datatype="m" nullmsg="手机号码不能为空" name="phoneNo"/></li>
+          <li style=" width:99%"><label class="lable">公司地址</label><input type="text" value="${member.address}" datatype="*2-50" nullmsg="地址不能为空" name="address"/></li>
+          <li style=" width:99%"><label class="lable">固定电话</label><input type="text" value="${member.telNum}" name="telNum"/></li>
+          <li style=" width:99%"><label class="lable">注册时间</label><#if (member.regDate??)>${member.regDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
+          <li style=" width:99%"><label class="lable">认证时间</label><#if (member.authorDate??)> ${member.authorDate?string("yyyy-MM-dd HH:mm:ss")} </#if></li>
+
+          <li style=" width:99%"><label class="lable">子帐号数</label>${member.getAccountNum()}个</li>
+           <li style=" width:99%"><label class="lable">法人代表</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
+          <li style=" width:99%"><label class="lable">注册资本</label><input type="text" value="${member.registeredCapital}" id="registeredCapital" datatype="n1-10" name="registeredCapital" />万元</li>
+          <li style=" width:99%;height: 70px;"><label class="lable">备注</label><textarea style="width:38%" rows="2" cols="0" name="remark">${member.remark}</textarea></li>
           </ul>
-          <div class="btnBox"><@shiro.hasPermission name="28">
-						 <a href="javascript:void(0)" class="button button-orange button-small" onclick="edit('${member.id}_info');return false;">确认修改</a></@shiro.hasPermission><a href="javascript:void(0)" class="button button-gray button-small" onclick="swallowing('${member.id}_info')">收起</a> </div>
           </div>
- </form>
+			<div class="right-news">
+				<ul class="ly-clearFix">
+					<li style="width: 99%"></li>
+					<li style="width: 99%" class="view"><label class="lable">营业执照</label><input
+						type="text" name="bLicenseNo" value="${member.getbLicenseNo()}" />
+					</li>
+					 <li style="width:99%;padding-left:140px;padding-top:0px" class="view">
+                         <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.bLicensePath}" name="bLicensePath" ><a style="color:#fff;text-decoration:none" image="${member.bLicensePath}" data-image="${b.imagePath}${member.bLicensePath}" href="#" class="button22 demo-image">查看缩略图</a></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="a"/></em>
+                        </li>
+                    <#if (member.type.id !=5 && member.type.id!=6 && member.type.id!=7)>
+					<li style="width: 99%" class="view"><label class="lable">质量管理体系证书</label><input
+						type="text" name="qms_no" value="${member.qms_no}" /> </li> 
+						<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
+                         <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.qms_img}" name="qms_img" ><a style="color:#fff;text-decoration:none" image="${member.qms_img}" data-image="${b.imagePath}${member.qms_img}" href="#" class="button22 demo-image">查看缩略图</a></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="b"/></em>
+                        </li>
+                     </#if>
+						<#if
+					(member.type.id==0)>
+					<li style="width: 99%" class="view"><label class="lable">安全生产许可证</label><input
+						name="safety_licenses_no" type="text" nullmsg="安全生产许可证不能为空"
+						value="${member.safety_licenses_no}" />
+					</li>
+					<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
+                        <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.safety_licenses_img}" name="safety_licenses_img" ><a style="color:#fff;text-decoration:none" image="${member.safety_licenses_img}" data-image="${b.imagePath}${member.safety_licenses_img}" href="#" class="button22 demo-image">查看缩略图</a></em>
+						<em class="state uploadnew" style="margin-top:0px"><input type="file" id="c"/></em>
+                        </li>
+					<li style="width: 99%" class="view"><label class="lable">节能标识推广证</label><input
+						name="energyNo" type="text" value="${member.getEnergyNo()}" /> 
+						</li>
+						<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
+                         <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.energyPath}" name="energyPath" ><a style="color:#fff;text-decoration:none" image="${member.energyPath}" data-image="${b.imagePath}${member.energyPath}" href="#" class="button22 demo-image">查看缩略图</a></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="d"/></em>
+                        </li> 
+						</#if>
+					<#if (member.type.id==2)>
+					<li style="width: 99%" class="view"><label class="lable">工业产品生产许可证</label><input
+						name="production_license_no" type="text"
+						value="${member.production_license_no}" /> 
+					</li> 
+					<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
+                         <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.production_license_img}" name="production_license_img" ><a style="color:#fff;text-decoration:none" image="${member.production_license_img}" data-image="${b.imagePath}${member.production_license_img}" href="#" class="button22 demo-image">查看缩略图</a></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="e"/></em>
+                      </li> 
+					</#if>
+					
+					<#if (member.type.id ==5 || (member.type.id==2 && member.isHave==1))>
+					<li style="width: 99%" class="view"><label class="lable">附框推广证</label><input
+						name="enclosedNo" type="text"
+						value="${member.enclosedNo}" /> 
+					</li> 
+					<li style="width:99%;padding-left:140px;padding-top:0px" class="view">
+                         <em class="state normal" style="margin-top:0px"><input type="hidden" value="${member.enclosedImg}" name="enclosedImg" ><a style="color:#fff;text-decoration:none" image="${member.enclosedImg}" data-image="${b.imagePath}${member.enclosedImg}" href="#" class="button22 demo-image">查看缩略图</a></em>
+						 <em class="state uploadnew" style="margin-top:0px"><input type="file" id="f"/></em>
+                      </li> 
+					</#if>
+					<li style="width: 99%"><label class="lable">总交易额</label>${member.totalAmount}元</li>
+
+					<li style="width: 99%"><label class="lable">扫描设备号</label>
+					<textarea cols="" rows="3" class="textRfid" id="deviceNumber">${member.deviceNumber}</textarea></li>
+					<li style="width: 99%"><label class="lable">邮政编码</label><input
+						type="text" value="${member.code}" id="code" name="code" /></li>
+					<li style="width: 99%"><label class="lable">审核状态</label><em
+						class="state normal" id="checkState1">${member.checkState.getName()}</em></li>
+					<li style="width: 99%"><label class="lable">帐户状态</label><em
+						class="state verified" id="state1">${member.state.getName()}</em></li>
+					<li style="width: 99%"><label class="lable">成立时间</label><input
+						type="text"<#if
+						(member.foundedDate??)>value="${member.foundedDate?string("yyyy-MM-dd")}"
+						</#if> id="foundedDate" class="foundedDate" name="foundedDate" /></li>
+					<li style="width: 99%"><label class="lable">市场专员</label><input
+						type="text" value="${member.marketers}" id="marketers"
+						name="marketers" /></li>
+
+				</ul>
+			</div>
+			<div style="clear:both"></div>
+          <div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="#" class="button button-orange button-small" onclick="edit('${member.id}');return false;">确认修改</a></@shiro.hasPermission></div>
+          </form>
+          </div>
+		<!-- 资质证书开始 -->
+            <div class="infoBox" id="meb-news"> 		
+		        <div id="block-name">资质证书</div>
+                <div class="left-news">
+                    <ul class="ly-clearFix">
+                        <li style=" width:99%"><label class="lable">原有资质证书</label>${oldNum}个</li>
+                    </ul>
+                </div>
+                <div class="right-news">
+                    <ul class="ly-clearFix">
+                       <li style=" width:99%"><label class="lable"><a class="showComponent">现有资质证书</a></label>${num}个</li>
+                    </ul>
+                </div>
+				<div>
+			<ul class="ly-clearFix">
+				<li style="width: 99%"><label class="lable">删除资质证书</label>${delNum}个</li>
+				<li
+					style="height:150px;width:843px;padding:0px;<#if ((delList?size)<1)>display: none; </#if>;">
+					<div id="original2_${member.memberNo}" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;">
+						<i class="buttonSildeLeft left" id="aleft"><img src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
+						<i class="buttonSildeRight right" id="aright"><img src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
+						<div class="line-con">
+							<ul class="imageList">
+								<#list delList as imageModel>
+								<li style="width: 80px; height: 110px">
+								<!-- <input type="hidden" name="image" value="${imageModel.image}" />
+								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
+								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
+								<input type="hidden" name="remark" value="${imageModel.remark}" /> -->
+								<img
+									src="${b.imagePath}${imageModel.image}80x100.JPG" data="${b.imagePath}${imageModel.image}"/>
+								<tt></tt></li> </#list>
+							</ul>
+						</div>
+					</div>
+					<div id="original3_${member.memberNo}" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;display: none;">
+						<i class="buttonSildeLeft left" id="aleft"><img src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
+						<i class="buttonSildeRight right" id="aright"><img src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
+						<div class="line-con">
+							<ul class="imageList" id="imagelist_${member.id}">
+								<#list ImageList as imageModel>
+								<li style="width: 80px; height: 110px">
+								<img
+									src="${b.imagePath}${imageModel.image}80x110.JPG" data="${b.imagePath}${imageModel.image}"/>
+								<tt></tt></li> </#list>
+							</ul>
+						</div>
+					</div>
+				</li>
+				<li style="width: 99%"><label class="lable">新上传证书  </label>#{newNum}个 <em class="state uploadnew" style="margin-top:0px;"><input type="file" name="uploadify" id="uploadify_${member.id}"/></em>
+				<li
+					style="height:150px;width:843px;padding:0px;<#if ((newImagList?size)<1)>display: none; </#if>;" id="newImageShow">
+					<div id="original_${member.memberNo}" class="slideui" style="height:130px;width:833px;padding:0px;margin-left:28px;">
+						<i class="buttonSildeLeft left" id="aleft"><img  src="${b.staticPath}images/icon/picSlideLeft.gif" /></i>
+						<i class="buttonSildeRight right" id="aright"><img  src="${b.staticPath}images/icon/picSlideRight.gif" /></i>
+						<div class="line-con">
+						    
+							<ul class="imageList" id="new_imageList_${member.id}">
+								<#list newImagList as imageModel>
+								<li style="width: 80px; height: 110px"><img
+									src="${b.imagePath}${imageModel.image}80x110.JPG" data="${b.imagePath}${imageModel.image}" />
+								<tt></tt></li> </#list>
+							</ul>
+						</div>
+					</div>
+				</li>
+			</ul>
+		   </div>
+				<div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28"><a href="javascript:editImage('${member.id}')" class="button button-orange button-small">确认修改</a></@shiro.hasPermission></div>
+			</div>
+			<!-- 资质证书结束 -->
+ 		   <div class="infoBox" id="associated-enterprise"> 
+		        <div id="block-name">关联企业</div>
+		  	    <div id="relation">
+				 <div>
+		    	  <table style="background-color:#fff;" id="table_relevance">
+			        <tr>
+			         <th id="th" width="43%">企业名称</th>
+			         <th id="th" width="12%">联系人</th>
+			         <th id="th" width="15%">联系人电话</th>
+			         <th id="th" width="10%">关联类型</th>
+			         <th id="th" width="15%">备注</th>
+		           	 <th id="th" width="5%"><a id="add-button" href="javascript:addrelevance('${member.id}');" title="新加一行"><img src="${b.staticPath}images/view/iviewer.zoom_in.gif" width="28" height="28" /></a></th>
+			        </tr>
+			        <#list relist as re>
+			              <tr>
+					         <td id="td">${re.memberName}<input type='hidden' value="${re.id}" /></td>
+				             <td id="td">${re.contacts}</td>
+					         <td id="td">${re.telNum}</td>
+					         <td id="td">
+				         	<#if (member.type.id==6 && re.memberType==6)>
+				         		型材厂
+				         	<#elseif (member.type.id==7 &&re.memberType==7)>
+				         		型材厂
+				         	<#else>
+					         	<#if (re.memberType==2)>型材厂<#elseif (re.memberType==6)>代理商<#elseif (re.memberType==7)>经销商<#else>同一出资方</#if>
+					        </#if>
+					         </td> 
+					         <td id="td">${re.remark}</td>
+				          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+				          </tr>
+			        </#list>
+			      </table>
+				 </div>
+		        </div>		<input type="hidden" value="" id="delId" />	  
+                <div id="btnBox" class="btnBox" style="margin:auto"><@shiro.hasPermission name="28">
+                <a href="javascript:saverelevance('${member.id}')" class="button button-orange button-small">确认修改</a>
+                </@shiro.hasPermission></div>
+            </div>
+ 		 <div id="btnBox" class="btnBox" style="margin:auto"><a href="javascript:swallowing('${member.id}_info')" class="button button-gray button-small">收起</a> </div>
+ 		 <div style="display: none;">
+          <table id="tr_relevance">
+               <tr >
+		         <td id="td">
+	                 <input type="hidden" value="" name="memberNo" />
+			         <input type="text" class="memberName" name="memberName"  datatype="*0-50" errormsg="公司名称太长" />
+                 </td>
+	             <td id="td"><input type="text" name="contacts" datatype="*0-50" errormsg="联系人名称太长"></td>
+		         <td id="td"><input type="text" name="telNum"><input type="hidden" value="${member.type.id}" datatype="*0-50" errormsg="联系人电话太长"  /></td>
+		         <td id="td">
+		         <select name="memberType" >
+		         <option value="2">型材厂</option>
+		         <option value="6">代理商</option>
+		         <option value="7">经销商</option>
+		         <option value="10">同一出资方</option></select></td>
+		         <td id="td"><input type="text" name="remark" datatype="*0-200" errormsg="备注太长" ></td>
+	          	 <td id="td"><a id="Delete-button"   title="删除此行"><img src="${b.staticPath}images/view/iviewer.zoom_del.gif" width="20" height="20" /></a></td>
+	           </tr>
+         </table>
+         <div id="liImage">
+         <li style="width: 86px; height: 120px">
+								<input type="hidden" name="image" value="${imageModel.image}" />
+								<input type="hidden" name="memberNo" value="${imageModel.memberNo}" />
+								<input type="hidden" name="certificateNo" value="${imageModel.certificateNo}" />
+								<input type="hidden" name="remark" value="${imageModel.remark}" />
+								<img
+									src="${b.imagePath}${imageModel.image}" data="${b.imagePath}${imageModel.image}" />
+			<tt></tt></li>
+        </div>
+        <table id="addlvImage">
+           <tr>
+                <th>&nbsp;</th>
+                <td>
+                  <input class="level" name="levelids" type="hidden"/>
+                  <input class="level" name="levels" type="text"/>
+                </td>
+                 <td><a class="in"></a></td>
+                <td><a class="del"></a></td>
+            </tr>
+        </table>
+        </div>
  </td>
+

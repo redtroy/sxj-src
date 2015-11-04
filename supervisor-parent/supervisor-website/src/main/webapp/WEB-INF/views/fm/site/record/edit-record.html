@@ -145,7 +145,7 @@ $(document).ready(function() {
 	imgBinding();
 });
 				
-	//甲方采购
+	//需方采购
 	function AcgModify(){
 		var memberIdB = $("#memberIdB").val();
 		var memberNameB = $("#memberNameB").val();
@@ -174,14 +174,14 @@ $(document).ready(function() {
 			}
 		  });},"是否修改备案?");
 	}
-	//甲方招标
+	//需方招标
 	function zbmodify(){
 		if (!validform.check()){
 			return false;
 		}
 		var memberNameA = $("#memberNameA").val();
 		if(memberNameA==''){
-			messageInfo('请输入甲方用户！');
+			messageInfo('请输入需方用户！');
 			return;
 		}
 		var zbimgPath = $("#imgPath").val();
@@ -201,7 +201,7 @@ $(document).ready(function() {
 			}
 		  });},"是否修改备案?");
 	}
-	//乙方采购
+	//供方采购
 	function BcgModify(){
 		if (!validform.check()){
 			return false;
@@ -469,7 +469,7 @@ $(document).ready(function() {
 							<span class="title fontYH f20 fb">修改备案信息</span>
 						</h1>
 					</div>
-					<!-- 甲方(门窗厂采购) -->
+					<!-- 需方(门窗厂采购) -->
 					<#if record.type.getId()==0>
 					<#if type==0>
 					<#if record.contractType.getId()!=0>
@@ -480,15 +480,15 @@ $(document).ready(function() {
 								<label>备案号</label> ${record.recordNo}
 							</div>
 							<div class="item">
-								<label>甲方</label>${record.memberNameA}
+								<label>需方</label>${record.memberNameA}
 							</div>
 							<div class="item">
-								<label>乙方</label><input class="input input-w240h36"
+								<label>供方</label><input class="input input-w240h36"
 									id="memberNameB" name="memberNameB" autocomplete="off"
-									value="${record.memberNameB}" datatype="*1-50" nullmsg="请输入正确的乙方名称" />
+									value="${record.memberNameB}" datatype="*1-50" nullmsg="请输入正确的供方名称" />
 									<input type="hidden"
 									id="memberIdB" name="memberIdB"
-									value="${record.memberIdB}" datatype="*1-50" nullmsg="请输入正确的乙方名称" />
+									value="${record.memberIdB}" datatype="*1-50" nullmsg="请输入正确的供方名称" />
 							</div>
 							<div class="item">
 											<label>工程地址</label><input autocomplete="off" class="input input-w240h36" value="${engAddress}"
@@ -523,7 +523,7 @@ $(document).ready(function() {
 							</div>
 					</form>
 					<#else>
-					<!-- 甲方 门窗厂 招标 -->
+					<!-- 需方 门窗厂 招标 -->
 					<form id="form"  action="" method="post">
 					<input type="hidden" name="id" id="id" value="${record.id}" />
 						<div class="contBox">
@@ -531,11 +531,11 @@ $(document).ready(function() {
 								<label>备案号</label> ${record.recordNo}
 							</div>
 							<div class="item">
-								<label>甲方</label> <input class="input input-w270h30"
-									value="${record.memberNameA}" AUTOCOMPLETE="off" name="memberNameA" id="" datatype="*1-50" nullmsg="请输入正确的甲方名称" />
+								<label>需方</label> <input class="input input-w270h30"
+									value="${record.memberNameA}" AUTOCOMPLETE="off" name="memberNameA" id="" datatype="*1-50" nullmsg="请输入正确的需方名称" />
 							</div>
 							<div class="item">
-								<label>乙方</label>${record.memberNameB}
+								<label>供方</label>${record.memberNameB}
 							</div>
 							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"
@@ -559,7 +559,7 @@ $(document).ready(function() {
 					</form>
 					</#if> </#if> 
 					<#if type!=0>
-					<!-- 乙方(玻璃厂/型材厂 采购) -->
+					<!-- 供方(玻璃厂/型材厂 采购) -->
 					<form id="form"  action="" method="post">
 					<input type="hidden" name="id" id="id" value="${record.id}" />
 						<div class="contBox">
@@ -567,13 +567,13 @@ $(document).ready(function() {
 								<label>备案号</label>${record.recordNo}
 							</div>
 							<div class="item">
-								<label>甲方</label> <input class="input input-w240h36" datatype="*1-50" nullmsg="请输入正确的甲方名称"
+								<label>需方</label> <input class="input input-w240h36" datatype="*1-50" nullmsg="请输入正确的需方名称"
 									value="${record.memberNameA}" name="memberNameA" autocomplete="off"
-									id="memberNameA" /> <input type="hidden" name="memberIdA" id="memberIdA" datatype="*" nullmsg="请输入正确的甲方名称"
+									id="memberNameA" /> <input type="hidden" name="memberIdA" id="memberIdA" datatype="*" nullmsg="请输入正确的需方名称"
 									value="${record.memberIdA}" />
 							</div>
 							<div class="item">
-								<label>乙方</label>${record.memberNameB}
+								<label>供方</label>${record.memberNameB}
 							</div>
 							<div class="item">
 								<label>&nbsp;</label> <input type="hidden"

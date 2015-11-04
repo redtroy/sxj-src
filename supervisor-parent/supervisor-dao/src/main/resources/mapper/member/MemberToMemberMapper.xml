@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.IMemberToMemberDao">
+	<resultMap id="MemberToMemberEntity"
+		type="com.sxj.supervisor.entity.member.MemberToMemberEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="parentNo" column="PARENT_NO" jdbcType="VARCHAR" />
+		<result property="parentName" column="PARENT_NAME" jdbcType="VARCHAR" />
+		<result property="memberName" column="MEMBER_NAME" jdbcType="VARCHAR" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
+		<result property="memberType" column="MEMBER_TYPE" jdbcType="INTEGER" />
+		
+		<result property="contacts" column="CONTACTS" jdbcType="VARCHAR" />
+		<result property="telNum" column="TEL_NUM" jdbcType="VARCHAR" />
+		<result property="parentContacts" column="PARENT_CONTACTS" jdbcType="VARCHAR" />
+		<result property="parentTelNum" column="PARENT_TEL_NUM" jdbcType="VARCHAR" />
+		<result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP" />
+		<result property="orderSeq" column="ORDER_SEQ" jdbcType="INTEGER" />
+	</resultMap>
+
+	<!-- 获取权限列表 -->
+	<select id="query" resultMap="MemberToMemberEntity"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_MEMBER_TO_MEMBER WHERE 1=1]]>
+		<if test="condition.memberNo != null and condition.memberNo!=''">
+			<![CDATA[ AND MEMBER_NO = #{condition.memberNo}]]>
+		</if>
+		<if test="condition.parentNo != null and condition.parentNo!=''">
+			<![CDATA[ AND PARENT_NO = #{condition.parentNo}]]>
+		</if>
+		<if test="condition.memberType != null">
+			<![CDATA[ AND MEMBER_TYPE = #{condition.memberType}]]>
+		</if>
+		<![CDATA[ ORDER BY ORDER_SEQ ]]>
+	</select>
+	<!-- 根据会员号删除 -->
+     <delete id="del">
+         <![CDATA[delete FROM M_MEMBER_TO_MEMBER WHERE MEMBER_NO=#{memberNo}]]>
+     </delete>
+     <select id="queryInfo" resultMap="MemberToMemberEntity" parameterType="String" >
+     <![CDATA[select t.ID,]]>
+	<![CDATA[(case when t.MEMBER_NO =#{memberNo} then t.PARENT_NAME else t.MEMBER_NAME end) as MEMBER_NAME,]]>
+	<![CDATA[(case when t.MEMBER_NO =#{memberNo} then t.PARENT_CONTACTS else t.CONTACTS end) as CONTACTS,]]>
+	<![CDATA[(case when t.MEMBER_NO =#{memberNo} then t.PARENT_TEL_NUM else t.TEL_NUM end) as TEL_NUM,t.MEMBER_TYPE,t.REMARK]]>
+	<![CDATA[from M_MEMBER_TO_MEMBER t where t.MEMBER_NO =#{memberNo} or t.PARENT_NO =#{memberNo} order by ORDER_SEQ]]>
+     </select>
+</mapper>

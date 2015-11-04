@@ -3,9 +3,11 @@ package com.sxj.util.persistent;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +29,7 @@ public class QueryCondition<T> extends Pagable implements Serializable
     
     private Set<String> columns = new HashSet<String>();
     
-    private Set<String> groups = new HashSet<String>();
+    private List<String> groups = new ArrayList<String>();
     
     /**
      * 增加条件
@@ -148,12 +150,12 @@ public class QueryCondition<T> extends Pagable implements Serializable
         this.columns = columns;
     }
     
-    public Set<String> getGroups()
+    public List<String> getGroups()
     {
         return groups;
     }
     
-    public void setGroups(Set<String> groups)
+    public void setGroups(List<String> groups)
     {
         this.groups = groups;
     }

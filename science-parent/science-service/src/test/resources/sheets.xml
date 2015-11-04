@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet>
+		<section startRow="0" endRow="3">
+			<mapping cell="F1">doc.series</mapping>
+			<mapping cell="G2">doc.windowCode</mapping>
+			<mapping cell="J2">doc.color</mapping>
+			<mapping cell="I2">doc.quantity</mapping>
+			<mapping cell="F1">doc.series</mapping>
+			<mapping cell="C1">doc.windowFaca</mapping>
+		</section>
+	</worksheet>
+</workbook>

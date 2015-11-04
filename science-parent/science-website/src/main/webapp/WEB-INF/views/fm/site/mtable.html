@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加下料表</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/feeding_single.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script language="javascript" src="${b.staticPath}js/jquery.jqprint-0.3.js"></script>
+<script src="${b.staticPath}js/mtable2.js"></script>
+<!--显示优化编辑整料长度图标开始-->
+<@b.dialogBox/>
+<@b.validate/>
+<script>
+function MM_over(mmObj) {
+	var mSubObj = mmObj.getElementsByTagName("div")[0];
+	mSubObj.style.display = "block";
+}
+function MM_out(mmObj) {
+	var mSubObj = mmObj.getElementsByTagName("div")[0];
+	mSubObj.style.display = "none";
+	
+}
+</script>
+<!--显示优化编辑整料长度图标开始-->
+<!--tab切换开始-->
+<script>
+<!--
+function setTab(name,cursel,n){
+ for(i=1;i<=n;i++){
+  var menu=document.getElementById(name+i);
+  var con=document.getElementById("con_"+name+"_"+i);
+  menu.className=i==cursel?"hover":"";
+  con.style.display=i==cursel?"block":"none";
+ }
+}
+//-->
+</script>
+<!--tab切换结束-->
+<!--添加下料表开始-->
+ <script type="text/javascript" language="javascript" >
+ function display(){
+	  var isload=$("#box").attr("lsload");
+	  if(isload=="false"){
+		  $.post("${basePath}downloadTem/query.htm",function(data){
+			  $("#box").empty();
+			  $("#box").append(data);
+			  $("#box").attr("lsload","true");
+			});
+	  }
+	  $("#box").show();
+		//document.getElementById("box").style.display="block"; 
+ }
+ function disappear(){
+	//document.getElementById("box").style.display="none";
+	 $("#box").hide();
+	 //$("#box").attr("lsload","false");
+ }
+
+ </script>
+<!--添加下料表开始-->
+<!--返回顶部脚本开始-->
+<script>
+ lastScrollY=0;
+function heartBeat(){ 
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+ 
+percent=.1*(diffY-lastScrollY); 
+if(percent>0)percent=Math.ceil(percent); 
+else percent=Math.floor(percent); 
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent; 
+if(diffY == 0){document.getElementById("full").style.display = "none"}
+else{document.getElementById("full").style.display = "block"}
+}
+suspendcode="<div id=\"full\" style='display:none;width:100px; height:60px; position:absolute;right:0; top:500px; margin-left:460px;z-index:100; text-align:center;'><a href='#'><img src='${b.staticPath}images/top.png' border=0 alt='返回顶部'></a></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+
+var pageIndex;
+var projectId="${projectId}";
+var projectName="${projectName}";
+var itemId="${itemId}";
+var memberNo="${memberNo}";
+function addDoc(id,th){
+	var index=$(th).parent().parent().attr("index");
+	$("#button_doc_"+id+"_"+index).attr("onclick","modifyDoc('"+id+"',this);");
+	var htmlData=$("#doc_form_"+id+"_"+index).html();
+	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData);
+	var params=$("#doc_form_"+id+"_"+index).serialize();
+	dialogBox(function(index2){
+		 $.post("${basePath}doc/addDoc.htm",params,function(data){
+			  layer.close(index2);
+				if(data.isOK == true){
+					var docId=data.docId;
+					$("#doc_form_"+id+"_"+index).attr("docid",docId);
+					$("#doc_form_"+id+"_"+index).find("input[name=id]").val(docId);
+					layer.close(pageIndex);
+					alert("添加成功");
+					//window.location.href="${basePath}index.htm";
+				}else{
+					$("button_doc_"+id+"_"+index).attr("onclick","addDoc('"+id+"',this);");
+					errorInfo(data.error);
+				}
+			});
+	},"是否确认添加");
+}
+function modifyDoc(id,th){
+	var index=$(th).parent().parent().attr("index");
+	var docId=$("#doc_form_"+id+"_"+index).attr("docid");
+	$("#doc_form_"+id+"_"+index).find("input[name=id]").val(docId);
+	var htmlData=$("#doc_form_"+id+"_"+index).html();
+	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData);
+	var params=$("#doc_form_"+id+"_"+index).serialize();
+	dialogBox(function(index2){
+		 $.post("${basePath}doc/editDoc.htm",params,function(data){
+			  layer.close(index2);
+				if(data.isOK == true){
+					layer.close(pageIndex);
+					alert("修改成功");
+					//window.location.href="${basePath}index.htm";
+				}else{
+					errorInfo(data.error);
+				}
+			});
+	},"是否确认修改");
+}
+function resetTable(id,th){
+	//var index=$(th).parent().parent().attr("index");
+	//$('#doc_form_'+id+"_"+index)[0].reset();
+	window.location.reload();
+}
+function copyTable(id,th){
+	//$.get("${basePath}downloadTem/getTemp.htm?id="+id,function(data){
+		var index=$(th).parent().parent().attr("index");
+		index=parseInt(index);
+		//$('#button_div_'+id+"_"+index).clone().prependTo("#table_div");
+		$('#doc_form_'+id+"_"+index).clone().prependTo("#table_div");
+			$('#doc_form_'+id+"_"+index).attr("index",(index+1));
+			$("#table_div").find("#button_div_"+id+"_"+index).find("ul").attr("index",(index+1));
+			$('#doc_form_'+id+"_"+index).attr("id","doc_form_"+idArr+"_"+(index+1));
+			$("#table_div").find("#button_div_"+id+"_"+index).attr("id","button_div_"+idArr+"_"+(index+1));
+			$("#index_hidden").val(index+1);
+ 		//});
+}
+
+function removeTable(id,th){
+	var index=$(th).parent().parent().attr("index");
+	index=parseInt(index);
+	$('#doc_form_'+id+"_"+index).remove();
+	$("#table_div").find("#button_div_"+id+"_"+index).remove();
+	//$("#index_hidden").val(index-1);
+}
+function  printTable(id,th){
+	var index=$(th).parent().parent().attr("index");
+	$("#tableId_"+id+"_"+index+ " .nb").attr("style","");
+	$("#tableId_"+id+"_"+index+ " .na").attr("style","");
+	$("#tableId_"+id+"_"+index).jqprint();
+	}
+function search_project(){
+	var name=$("#search_name_input").val();
+	window.location.href="${basePath}index.htm?name="+name;
+}
+</script>
+<!--返回顶部脚本结束-->
+<!--table脚本结束-->
+</head>
+
+<body class="return">
+<@b.header />
+<div id="content_box">
+	<h1>私享家门窗算料优化系统</h1>
+<!--下料表开始-->
+  <ul>
+    	<li>
+         <a data-toggle="modal" href="#createpro" onmouseover="display();" onmouseout="disappear();"><button class=" button button-greenp">添加下料表</button></a>
+		    <div class="box-c"></div>
+			<div id="box" class="box checkfile" onmouseover="display();" onmouseout="disappear();"  lsload="false">
+				
+			</div>	
+        </li>
+        <li>
+        <a href="${basePath}doc/toAdd.htm?projectId=${projectId}&itemId=${itemId}"><button class=" button button-orange">+显示全部</button></a>
+        </li>
+        <li style="float:right">
+        <a href="${basePath}index.htm"><button class=" button button-orange">返回首页</button></a>
+        </li>
+        <li style="float:right">
+        <button class="button button-green" onclick="search_project();">搜索</button>
+        </li>
+        <li style="float:right">
+        <input id="search_name_input" type="text" value="" name="search_name" placeholder="请输入工程或批次名称关键字" />
+        </li>     
+    </ul>
+<!--下料表结束-->	
+
+<!--生出新下料表开始-->
+<input id="index_hidden" value="0" type="hidden"/>
+<div id="table_div">
+</div>
+<!-- <div id="button_div" style="width:440px;margin:auto;height:80px;display:none;"> -->
+<!-- 			<ul> -->
+<!-- 			<li><button onclick="addDoc(id);" class=" btn btn-blue" data-dismiss="modal"><span>保存</span></button></li> -->
+<!-- 			<li><button onclick="resetTable(id);" class=" btn btn-green" data-dismiss="modal"><span>一键还原</span></button></li> -->
+<!-- 			<li><button onclick="copyTable(id);" class=" btn btn-blue" data-dismiss="modal"><span>复制</span></button></li> -->
+<!-- 			<li><button onclick="removeTable(id);" class=" btn btn-red" data-dismiss="modal"><span>删除</span></button></li> -->
+<!-- 			<li><button onclick="printTable(id);" class=" btn btn-blue" data-dismiss="modal"><span>打印</span></button></li> -->
+<!-- 			</ul> -->
+<!-- </div> -->
+<!--生出新下料表结束-->
+</div>
+<@b.footer />
+</body>
+</html>
+
+

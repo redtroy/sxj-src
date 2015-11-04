@@ -161,6 +161,7 @@
 </head>
 
 <body>
+<#setting number_format="0.00">
 	<div id="header" class="fence"><@b.header /></div>
 	<div class="fence-wide ly-clearFix">
 		<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
@@ -190,10 +191,10 @@
 							<label>对应备案号</label> ${contractModel.contract.recordNo}
 						</div>
 						<div class="item">
-							<label>甲方</label> ${contractModel.contract.memberNameA}
+							<label>需方</label> ${contractModel.contract.memberNameA}
 						</div>
 						<div class="item">
-							<label>乙方</label> ${contractModel.contract.memberNameB}
+							<label>供方</label> ${contractModel.contract.memberNameB}
 						</div>
 						<div class="item">
 							<label>签订地点</label> ${contractModel.contract.address}
@@ -230,7 +231,7 @@
 							</tr>
 							<#list contractModel.itemList as item>
 							<tr>
-								<td>${item_index+1}</td>
+								<td>${(item_index+1)?string("0")}</td>
 								<td>${item.productName}</td>
 								<td>${item.windowType}</td>
 								<td><span class="fontAR ml5">樘</span></td>

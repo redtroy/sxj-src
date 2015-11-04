@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.member.IRelevanceMemberDao">
+	<resultMap id="RelevanceMember"
+		type="com.sxj.supervisor.entity.member.RelevanceMember">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+		<result property="company" column="COMPANY" jdbcType="VARCHAR" />
+		<result property="linkman" column="LINKMAN" jdbcType="VARCHAR" />
+		<result property="phone" column="PHONE" jdbcType="VARCHAR" />
+		<result property="relevanceType" column="RELEVANCE_TYPE" jdbcType="INTEGER" />
+		<result property="remark" column="REMARK" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 根据会员号查询 -->
+	<select id="getEnityBymemberNo" resultMap="RelevanceMember" >
+		<![CDATA[SELECT * FROM M_RELEVANCEMEMBER WHERE MEMBER_NO=#{memberNo}]]>
+	</select>
+	<!-- 根据会员号删除 -->
+     <delete id="del">
+         <![CDATA[delete FROM M_RELEVANCEMEMBER WHERE MEMBER_NO=#{memberNo}]]>
+     </delete>
+</mapper>

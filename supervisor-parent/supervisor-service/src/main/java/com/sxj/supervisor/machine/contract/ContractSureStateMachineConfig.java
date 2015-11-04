@@ -40,7 +40,6 @@ public class ContractSureStateMachineConfig {
 	public void noop2(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
-
 	@Transitions({ @Transition(source = "NOAFFIRM", event = "NOAFFIRMGENRESFACTORYEXTRUSIONS", target = "BAFFIRM") })
 	public void noop3(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
@@ -70,7 +69,6 @@ public class ContractSureStateMachineConfig {
 	public void noop8(TransitionInfo event) {
 		System.out.println("tx@:" + event.getEvent());
 	}
-
 	@OnEnter(value = "AAFFIRM")
 	public EventInfo enterA(TransitionInfo event) {
 		ContractEntity contract = (ContractEntity) event.getObject();
