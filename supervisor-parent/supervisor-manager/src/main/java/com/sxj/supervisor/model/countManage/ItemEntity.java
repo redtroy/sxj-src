@@ -1,19 +1,10 @@
-package com.sxj.science.entity.export;
+package com.sxj.supervisor.model.countManage;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import com.sxj.mybatis.orm.annotations.Column;
-import com.sxj.mybatis.orm.annotations.Entity;
-import com.sxj.mybatis.orm.annotations.GeneratedValue;
-import com.sxj.mybatis.orm.annotations.GenerationType;
-import com.sxj.mybatis.orm.annotations.Id;
-import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.science.dao.export.IItemDao;
 
-@Entity(mapper = IItemDao.class)
-@Table(name = "S_ITEM")
 public class ItemEntity extends Pagable implements Serializable
 {
     
@@ -22,29 +13,20 @@ public class ItemEntity extends Pagable implements Serializable
      */
     private static final long serialVersionUID = -5530506440954048996L;
     
-    @Id(column = "ID")
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     
-    @Column(name = "PROJECT_ID")
     private String projectId;
     
-    @Column(name = "NAME")
     private String name;
     
-    @Column(name = "FILE_PATH")
     private String filePath;
     
-    @Column(name = "COUNT")
     private Integer count;
     
-    @Column(name = "STATE")
     private Integer state;
     
-    @Column(name = "UPLOAD_TIME")
     private Date uploadTime;
     
-    @Column(name="IS_SHOW")
     private Integer isShow;
     
     public Integer getIsShow()

@@ -1,5 +1,6 @@
 package com.sxj.science.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -144,7 +145,7 @@ public class ProjectServiceImpl implements IProjectService
                 {
                     QueryCondition<DocEntity> queryItem = new QueryCondition<>();
                     queryItem.addCondition("itemId", item.getId());
-                    List<DocEntity> docList = docDao.query(queryItem);
+                    List<DocEntity> docList = docDao.openQuery(queryItem);
                     ItemModel model = new ItemModel();
                     model.setItem(item);
                     model.setDocList(docList);
@@ -315,6 +316,36 @@ public class ProjectServiceImpl implements IProjectService
             SxjLogger.error("查询工程错误", e, this.getClass());
             throw new ServiceException("查询工程错误", e);
         }
+    }
+
+    @Override
+    public void deleteProject(String id) throws SQLException
+    {
+        this.projectDao.deleteProject(id);
+    }
+
+    @Override
+    public void deleteProjectItem(String id) throws SQLException
+    {
+        this.itemDao.deleteItem(id);
+    }
+
+    @Override
+    public void updateProject(ProjectEntity temPro) throws SQLException
+    {
+        projectDao.updateProject(temPro);
+    }
+
+    @Override
+    public void updateItem(ItemEntity temItem) throws SQLException
+    {
+        itemDao.updateItem(temItem);
+    }
+
+    @Override
+    public ItemEntity getItemById(String id)
+    {
+        return itemDao.getItem(id);
     }
     
 }

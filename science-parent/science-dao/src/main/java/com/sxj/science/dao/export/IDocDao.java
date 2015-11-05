@@ -37,4 +37,6 @@ public interface IDocDao
             throws SQLException;
     
     public List<DocEntity> getDocByItemIds(Map<String, Object> paramMap);
+
+    public List<DocEntity> openQuery(QueryCondition<DocEntity> queryItem);
 }

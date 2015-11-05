@@ -27,12 +27,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 
+import com.sxj.science.entity.export.HistoryEntity;
+import com.sxj.science.entity.export.ItemEntity;
 import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.entity.export.WindowTypeEntity;
 import com.sxj.science.entity.system.AreaEntity;
+import com.sxj.science.model.ItemModel;
 import com.sxj.science.model.ProjectQuery;
 import com.sxj.science.service.IAreaService;
 import com.sxj.science.service.IDownloadTemService;
+import com.sxj.science.service.IHistoryService;
 import com.sxj.science.service.IProjectService;
 import com.sxj.science.website.controller.BaseController;
 import com.sxj.util.exception.WebException;
@@ -54,6 +58,9 @@ public class DownloadTemController extends BaseController
     
     @Autowired
     private IProjectService projectService;
+    
+    @Autowired
+    private IHistoryService historyService;
     
     @RequestMapping("/getTemp")
     public void getTemp(String[] id, HttpServletResponse response)
@@ -619,5 +626,131 @@ public class DownloadTemController extends BaseController
             SxjLogger.error("加载工程接口错误", e, this.getClass());
             throw new WebException("加载工程接口错误");
         }
+    }
+    
+    @RequestMapping("/getItems")
+    public @ResponseBody Map<String, Object> getProjectItem(String projectId)
+            throws WebException
+    {
+        try
+        {
+            List<ItemModel> list = projectService.queryItems(projectId);
+            ProjectEntity temPro = projectService.getProject(projectId);
+            
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("projectItems", list);
+            resultMap.put("project", temPro);
+            resultMap.put("projectName", temPro.getName());
+            return resultMap;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询工程条目错误", e, this.getClass());
+            throw new WebException("查询工程条目错误", e);
+        }
+    }
+    
+    @RequestMapping("/deleteProject")
+    public @ResponseBody Map<String, Object> deleteProject(String id)
+            throws WebException
+    {
+        try
+        {
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            List<ItemModel> list = projectService.queryItems(id);
+            if(list!=null&&list.size()>0){
+                resultMap.put("isOK", "false");
+            }else{
+                projectService.deleteProject(id);
+                resultMap.put("isOK", "true");
+            }
+            
+            return resultMap;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("删除工程错误", e, this.getClass());
+            throw new WebException("删除工程错误", e);
+        }
+    }
+    
+    @RequestMapping("/deleteProjectItem")
+    public @ResponseBody Map<String, Object> deleteProjectItem(String id)
+            throws WebException
+    {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try
+        {
+            projectService.deleteProjectItem(id);
+            resultMap.put("isOK", "true");
+        }
+        catch (Exception e)
+        {
+            resultMap.put("isOK", "false");
+            SxjLogger.error("删除批次错误", e, this.getClass());
+            throw new WebException("删除批次错误", e);
+        }
+        return resultMap;
+    }
+    
+    @RequestMapping("/queryHistory")
+    public @ResponseBody Map<String, Object> queryHistory(String projectId)
+            throws WebException
+    {
+        try
+        {
+            List<HistoryEntity> list = historyService.queryHistory(projectId);
+            
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("list", list);
+            return resultMap;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询工程条目错误", e, this.getClass());
+            throw new WebException("查询工程条目错误", e);
+        }
+    }
+    
+    @RequestMapping("/changeShow")
+    public @ResponseBody Map<String, Object> changeShow(String id,String isShow)
+            throws WebException
+    {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try
+        {
+            ProjectEntity temPro=projectService.getProject(id);
+            temPro.setIsShow(Integer.parseInt(isShow));
+            projectService.updateProject(temPro);
+            resultMap.put("isOK", "true");
+        }
+        catch (Exception e)
+        {
+            resultMap.put("isOK", "false");
+            SxjLogger.error("删除批次错误", e, this.getClass());
+            throw new WebException("删除批次错误", e);
+        }
+        return resultMap;
+    }
+    
+    @RequestMapping("/changeItemShow")
+    public @ResponseBody Map<String, Object> changeItemShow(String id,String isShow)
+            throws WebException
+    {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try
+        {
+            ItemEntity temItem=projectService.getItemById(id);
+            temItem.setIsShow(Integer.parseInt(isShow));
+            projectService.updateItem(temItem);
+            resultMap.put("isOK", "true");
+        }
+        catch (Exception e)
+        {
+            resultMap.put("isOK", "false");
+            SxjLogger.error("删除批次错误", e, this.getClass());
+            throw new WebException("删除批次错误", e);
+        }
+        return resultMap;
     }
 }
