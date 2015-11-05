@@ -9,7 +9,6 @@
 	</div>
  <div class="lib_Contentbox lib_tabborder">  
    <div id="tab_1_${projectId}" style="display: block;">
-   <form id="form_${projectId}" action="javascript:void(0);">
    		<div class="item">
             <ul>
 <!--             	<li> -->
@@ -46,7 +45,9 @@
 			  <th>创建时间</th>
 			  <th>操作</th>
 			</tr>
-          </tbody></table>
+          </tbody>
+          </table>
+           <form id="form_${projectId}" action="javascript:void(0);">
           <#list projectItems as projectItem>
           <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
             <colgroup><col width="51%">
@@ -73,7 +74,7 @@
               </div>
               <div id="project_item_modify_${projectItem.id}" class="contraction contraction_xlsname" style="display: none;">
 	              <input id="${projectItem.id}"  parentId="0" childrensize=${projectItem.docList?size} type="checkbox" name="itemId" value="${projectItem.id}"/>
-	              <input id="project_item_name_${projectItem.id}" type="text" name="projectItemName" class="alter300" value="${projectItem.name}"/>
+	              <input id="project_item_name_${projectItem.id}" type="text" name="projectItemName" class="alter300" value="${projectItem.name}"  placeholder="请输入批次名称"/>
 	              <button class="button-yes" onclick="reProjectItemName('${projectItem.id}');"></button>
 	              <button class="button-no" onclick="noProjectItemRename('${projectItem.id}');"></button>
               </div>
@@ -89,87 +90,97 @@
             <tr id="children_td_${projectItem.id}">
               <td class="sheetlist" colspan="3">
               <input parentId="${projectItem.id}" count=${doc_index} type="checkbox" name="docId" value="${doc.id}">
-              <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&docId=${doc.id}">(未完成)</a></span>
+              <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&series=${doc.series}">(未完成)</a></span>
               ${doc.series}
-              <a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&docId=${doc.id}"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a>
+              <a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&series=${doc.series}"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a>
               </td>
             </tr>
               </#list>
           </tbody>
           </table>
-           <div id="downsourcexls_${projectItem.id}" class="modal in downsourcexls" style="display:none;" aria-hidden="false"> <a data-dismiss="modal" class="close">×</a>
-        <h1>下载原始数据文件</h1>
-		        <p>您确定下载选中的原始数据文件？</p>
-		<div class="choose choose_two">
-		<ul>
-		<li><button data-dismiss="modal" class=" button button-orange"  onclick="downItem('${projectItem.id}');">确定</button></li>
-		<li><button data-dismiss="modal" class=" button button-green"   onclick="closeDiv();">取消</button></li>
-		</ul>
-		</div>
-  </div> 
+         <div id="downsourcexls_${projectItem.id}" class="modal in downsourcexls" style="display:none;" aria-hidden="false"> <a data-dismiss="modal" class="close">×</a>
+	        <h1>下载原始数据文件</h1>
+			        <p>您确定下载选中的原始数据文件？</p>
+			<div class="choose choose_two">
+			<ul>
+			<li><button data-dismiss="modal" class=" button button-orange"  onclick="downItem('${projectItem.id}');">确定</button></li>
+			<li><button data-dismiss="modal" class=" button button-green"   onclick="closeDiv();">取消</button></li>
+			</ul>
+			</div>
+  		</div> 
+  		</#list>
   		</form>
-         </#list>
-        </div>
-        </div>
-   <div style="display: none;" id="tab_2_${projectId}">
-   		<div class="item">
-            <ul>
-            	<li>
-                	<a href="#"><button class="button button-croci">下载原始数据模板</button></a>
-                </li>
-            	<li>
-                	<button href="#uploadsourcexls" data-toggle="modal" class="button button-croci">上传原始数据文件</button>
-                </li>
-                <li style="float:right;">
-                <button href="#optimize" data-toggle="modal" class="button button-croci"><strong>下料优化</strong></button>
-                </li>
-                
-            </ul>
-            <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
-            <colgroup><col width="55%">
-            <col width="20%">
-            <col width="25%">
-            </colgroup><tbody><tr>
-              <th>文件名</th>
-              <th>上传时间</th>
-              <th>操作</th>
-            </tr>
-          </tbody></table>
-          <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
-            <colgroup><col width="55%">
-            <col width="20%">
-            <col width="25%">
-            </colgroup><tbody><tr>
-              <td class="left"><div class="contraction contraction_sourcexlsname"><input type="checkbox" name="check" value="None">1ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼超出长度测试测试. xls</div></td>
-              <td>2015-08-25 18:25:00</td>
-              <td><button href="#delsourcexls" data-toggle="modal" class="button button-croci"  onclick="removeItem('${projectId}');">删除文件
-              </button>&#12288;<button href="#downsourcexls" data-toggle="modal" class="button button-croci">下载文件</button></td>
-            </tr>
-          </tbody></table>
-          <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
-            <colgroup><col width="55%">
-            <col width="20%">
-            <col width="25%">
-            </colgroup><tbody><tr>
-              <td class="left"><div class="contraction contraction_sourcexlsname"><input type="checkbox" name="check" value="None">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td>
-              <td>2015-08-25 18:25:00</td>
-              <td><button href="#delsourcexls" data-toggle="modal" class="button button-croci">删除文件</button>&#12288;<button href="#downsourcexls" data-toggle="modal" class="button button-croci">下载文件</button></td>
-            </tr>
-          </tbody></table>
-          <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
-            <colgroup><col width="55%">
-            <col width="20%">
-            <col width="25%">
-            </colgroup><tbody><tr>
-              <td class="left"><div class="contraction contraction_sourcexlsname"><input type="checkbox" name="check" value="None">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td>
-              <td>2015-08-25 18:25:00</td>
-              <td><button href="#delsourcexls" data-toggle="modal" class="button button-croci">删除文件</button>&#12288;<button href="#downsourcexls" data-toggle="modal" class="button button-croci">下载文件</button></td>
-            </tr>
-          </tbody></table>
+  		</div>
          
-        </div></div>
+        </div>
+        
+   		<div style="display: none;" id="tab_2_${projectId}">
+	   		<div class="item">
+	            <ul>
+	            	<li>
+	                	<a href="#"><button class="button button-croci" onclick="downAloneTmp();">下载原始数据模板</button></a>
+	                </li>
+	            	<li>
+	                	<button href="#uploadsourcexls" data-toggle="modal" class="button button-croci"  onclick="openUpload('${projectId}');">上传原始数据文件</button>
+	                </li>
+	                <li style="float:right;">
+	                <button   data-toggle="modal" class="button button-croci" onclick="aloneOptim('${projectId}');"><strong>下料优化</strong></button>
+	                </li>
+	                
+	            </ul>
+	           <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
+		            <colgroup><col width="55%">
+		            <col width="20%">
+		            <col width="25%">
+		            </colgroup>
+		            <tbody>
+		            <tr>
+		              <th>文件名</th>
+		              <th>上传时间</th>
+		              <th>操作</th>
+		            </tr>
+		          	</tbody>
+	          </table>
+	          <form id="alone_form_${projectId}" action="javascript:void(0);">
+	          <#list optimList as optim>
+	          <table cellspacing="0" cellpadding="0" border="0" class="xlsList">
+	            <colgroup>
+	            <col width="55%">
+	            <col width="20%">
+	            <col width="25%">
+	            </colgroup>
+	            <tbody>
+	            <tr>
+	              <td class="left">
+	              <div class="contraction contraction_sourcexlsname">
+	              <input type="checkbox" name="ids" value="${optim.id}"/>${optim.fileName}
+	              </div>
+	              </td>
+	              <td>${optim.uploadTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+	              <td>
+	              <button data-toggle="modal" class="button button-croci"  onclick="removeOptim('${optim.id}');">删除文件</button>&#12288;
+	              <button data-toggle="modal" class="button button-croci" onclick="openDiv('downsourcexls_${optim.id}');">下载文件</button>
+	              </td>
+	            </tr>
+	          </tbody>
+	          </table>
+	          <!-- 下载原始数据模板 -->
+				<div class="modal downsourcexls in" id="downsourcexls_${optim.id}" aria-hidden="false" style="display: none;">
+				    <a class="close" data-dismiss="modal">×</a>
+				    <h1>下载原始数据文件</h1>
+				    <p>您确定下载选中的原始数据文件？</p>
+				    <div class="choose choose_two">
+				        <ul>
+				            <li><button class=" button button-orange" data-dismiss="modal" onclick="downAloneOptim('${optim.id}');"> 确定</button></li>
+				            <li><button class=" button button-green" data-dismiss="modal" onclick="closeDiv();">取消</button></li>
+				        </ul>
+				    </div>
+				</div>
+	          </#list>
+	          </form>
+	        </div>
+        </div>
  </div>
-</div>
-        </td>
-      </tr>
+</td>
+</tr>
  

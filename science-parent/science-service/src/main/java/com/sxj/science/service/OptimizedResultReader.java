@@ -84,6 +84,7 @@ public class OptimizedResultReader
                 .trim()));
         parseLayOffPartSepcifications(layoff, s1[0].substring(l0.length())
                 .trim());
+        layoff.getPartStr();
         result.getLayOffs().add(layoff);
     }
     

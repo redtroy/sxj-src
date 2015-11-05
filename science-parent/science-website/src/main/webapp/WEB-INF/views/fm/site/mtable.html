@@ -7,7 +7,7 @@
 <link href="${b.staticPath}style/feeding_single.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
 <script language="javascript" src="${b.staticPath}js/jquery.jqprint-0.3.js"></script>
-<script src="${b.staticPath}js/mtable.js"></script>
+<script src="${b.staticPath}js/mtable2.js"></script>
 <!--显示优化编辑整料长度图标开始-->
 <@b.dialogBox/>
 <@b.validate/>
@@ -90,32 +90,57 @@ var itemId="${itemId}";
 var memberNo="${memberNo}";
 function addDoc(id,th){
 	var index=$(th).parent().parent().attr("index");
+	$("#button_doc_"+id+"_"+index).attr("onclick","modifyDoc('"+id+"',this);");
 	var htmlData=$("#doc_form_"+id+"_"+index).html();
-	alert(htmlData);
 	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData);
 	var params=$("#doc_form_"+id+"_"+index).serialize();
-	dialogBox(function(index){
+	dialogBox(function(index2){
 		 $.post("${basePath}doc/addDoc.htm",params,function(data){
-			  layer.close(index);
+			  layer.close(index2);
 				if(data.isOK == true){
+					var docId=data.docId;
+					$("#doc_form_"+id+"_"+index).attr("docid",docId);
+					$("#doc_form_"+id+"_"+index).find("input[name=id]").val(docId);
 					layer.close(pageIndex);
 					alert("添加成功");
 					//window.location.href="${basePath}index.htm";
 				}else{
+					$("button_doc_"+id+"_"+index).attr("onclick","addDoc('"+id+"',this);");
 					errorInfo(data.error);
 				}
 			});
 	},"是否确认添加");
 }
-function resetTable(id,th){
+function modifyDoc(id,th){
 	var index=$(th).parent().parent().attr("index");
-	$('#doc_form_'+id+"_"+index)[0].reset();
+	var docId=$("#doc_form_"+id+"_"+index).attr("docid");
+	$("#doc_form_"+id+"_"+index).find("input[name=id]").val(docId);
+	var htmlData=$("#doc_form_"+id+"_"+index).html();
+	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData);
+	var params=$("#doc_form_"+id+"_"+index).serialize();
+	dialogBox(function(index2){
+		 $.post("${basePath}doc/editDoc.htm",params,function(data){
+			  layer.close(index2);
+				if(data.isOK == true){
+					layer.close(pageIndex);
+					alert("修改成功");
+					//window.location.href="${basePath}index.htm";
+				}else{
+					errorInfo(data.error);
+				}
+			});
+	},"是否确认修改");
+}
+function resetTable(id,th){
+	//var index=$(th).parent().parent().attr("index");
+	//$('#doc_form_'+id+"_"+index)[0].reset();
+	window.location.reload();
 }
 function copyTable(id,th){
 	//$.get("${basePath}downloadTem/getTemp.htm?id="+id,function(data){
 		var index=$(th).parent().parent().attr("index");
 		index=parseInt(index);
-		$('#button_div_'+id+"_"+index).clone().prependTo("#table_div");
+		//$('#button_div_'+id+"_"+index).clone().prependTo("#table_div");
 		$('#doc_form_'+id+"_"+index).clone().prependTo("#table_div");
 			$('#doc_form_'+id+"_"+index).attr("index",(index+1));
 			$("#table_div").find("#button_div_"+id+"_"+index).find("ul").attr("index",(index+1));
@@ -138,6 +163,10 @@ function  printTable(id,th){
 	$("#tableId_"+id+"_"+index+ " .na").attr("style","");
 	$("#tableId_"+id+"_"+index).jqprint();
 	}
+function search_project(){
+	var name=$("#search_name_input").val();
+	window.location.href="${basePath}index.htm?name="+name;
+}
 </script>
 <!--返回顶部脚本结束-->
 <!--table脚本结束-->
@@ -157,19 +186,17 @@ function  printTable(id,th){
 			</div>	
         </li>
         <li>
-        <a href="downloadtemplet.html" target="_blank"><button class=" button button-orange">+显示全部</button></a>
+        <a href="${basePath}doc/toAdd.htm?projectId=${projectId}&itemId=${itemId}"><button class=" button button-orange">+显示全部</button></a>
         </li>
         <li style="float:right">
-        <a href="${basePath}index.htm" target="_blank"><button class=" button button-orange">返回首页</button></a>
-        </li>
-        <form>
-        <li style="float:right">
-        <button class="button button-green">搜索</button>
+        <a href="${basePath}index.htm"><button class=" button button-orange">返回首页</button></a>
         </li>
         <li style="float:right">
-        <input type="text" value="请输入工程名称关键字" />
+        <button class="button button-green" onclick="search_project();">搜索</button>
+        </li>
+        <li style="float:right">
+        <input id="search_name_input" type="text" value="" name="search_name" placeholder="请输入工程或批次名称关键字" />
         </li>     
-        </form>
     </ul>
 <!--下料表结束-->	
 
