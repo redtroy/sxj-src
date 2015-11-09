@@ -30,6 +30,7 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.countManage.AloneOptimEntity;
 import com.sxj.supervisor.model.countManage.HistoryListModel;
 import com.sxj.supervisor.model.countManage.HistoryModel;
 import com.sxj.supervisor.model.countManage.ItemModel;
@@ -456,9 +457,11 @@ public class CountManageController extends BaseController
             
             List<ItemModel> list = projectItemsModel.getProjectItems();
             ProjectEntity temPro = projectItemsModel.getProject();
+            List<AloneOptimEntity> optimList=projectItemsModel.getOptimList();
             map.put("projectItems", list);
             map.put("projectId", projectId);
             map.put("project", temPro);
+            map.put("optimList", optimList);
             return "manage/countManage/projectItem";
         }
         catch (Exception e)
@@ -550,6 +553,24 @@ public class CountManageController extends BaseController
         params.put("id", id);
         params.put("isShow", isShow);
         String res = httpClient.post(hostName+"changeItemShow.htm", params);
+        JsonMapper jm=new JsonMapper();
+        Map<String,String> resMap=jm.fromJson(res, Map.class);
+        String result=resMap.get("isOK");
+        if(result.equals("true")){
+            map.put("isOK", "true");
+        }else{
+            map.put("isOK", "false");
+        }
+        return map;
+    }
+    
+    @RequestMapping("/changeAloneShow")
+    public @ResponseBody Map<String, Object> changeAloneShow(String id,String isShow) throws ClientProtocolException, IOException{
+        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", id);
+        params.put("isShow", isShow);
+        String res = httpClient.post(hostName+"changeAloneShow.htm", params);
         JsonMapper jm=new JsonMapper();
         Map<String,String> resMap=jm.fromJson(res, Map.class);
         String result=resMap.get("isOK");

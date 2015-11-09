@@ -19,4 +19,6 @@ public interface IAloneOptimService
     public List<ScienceEntity> readExcel(String[] ids) throws ServiceException;
     
     public void removeAloneOptim(String id) throws ServiceException;
+
+    public void updateAloneOptim(AloneOptimEntity temAlone);
 }
