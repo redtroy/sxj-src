@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
@@ -26,11 +25,9 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.model.open.BatchModel;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.FileUtil;
-import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
@@ -99,9 +96,10 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "member/syncMember/{json}")
-	public void getRfidBatchInfo(@PathVariable String json,
-			HttpServletResponse response) {
+	@RequestMapping("syncMember")
+	public void getRfidBatchInfo(String json,
+			HttpServletResponse response,HttpServletRequest request) {
+		response.setHeader("Access-Control-Allow-Origin","*");
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		PrintWriter out = null;
 		try {

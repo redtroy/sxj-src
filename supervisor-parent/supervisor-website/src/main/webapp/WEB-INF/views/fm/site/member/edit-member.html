@@ -536,7 +536,7 @@ $(document).ready(function(){
 			if (data){
 				$("#jxNo").val(data.result);
 				$("#jxcontacts").val(data.contacts);
-				$("#dltelNum").val(data.telNum);
+				$("#jxtelNum").val(data.telNum);
 			}
 		},
 		beforeShow : function(data){
@@ -1145,7 +1145,7 @@ $(document).ready(function(){
 				  return false;
 			  }
 			  
-			   $.post("${basePath}member/send_ms.htm",{phoneNo:phoneNo},function(data){
+			   $.post("${basePath}member/sendMessage.htm",{phoneNo:phoneNo},function(data){
 			     if(data.error){
 			    	 $("#moileMsg").show();
 					 wrong("#moileMsg");
