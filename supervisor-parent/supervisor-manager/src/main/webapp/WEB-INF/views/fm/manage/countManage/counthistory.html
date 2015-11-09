@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>私享家绿色门窗平台管理系统</title>
+    <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/feeding_single.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<@b.dialogBox/>
+<@b.pageScript/> 
+    <!-- InstanceEndEditable -->
+    <!-- InstanceBeginEditable name="head" -->
+    <!-- InstanceEndEditable -->
+    <style type="text/css">
+   .viewTable td { text-align:center;}
+    </style>
+</head>
+<body>
+    <@b.header />
+    <div id="main" class="fence-wide">
+        <!-- InstanceBeginEditable name="local" -->
+        <@b.menuPath/>
+        <!-- InstanceEndEditable -->
+        <div id="mainBg" class="ly-clearFix yard-1200">
+            <@b.leftMenu />
+            <div id="rightBar">
+                <!-- InstanceBeginEditable name="rightBar" -->
+                <div class="producedBox">
+                    <h2 class="title">
+                        报表历史</h2>
+                    <table border="0" cellpadding="0" cellspacing="0" class="tabList viewTable">
+                        <col width="5%"/>
+                        <col width="15%" />
+                        <col width="40%" />
+                        <col width="40%" />
+                        <tr>
+                            <th>
+                                序号
+                            </th>
+                            <th class="rLine">
+                                操作人
+                            </th>
+                            <th class="rLine">
+                                操作时间
+                            </th>
+                            <th class="rLine">
+                                类型
+                            </th>
+                        </tr>
+                        <#list list as model>
+                        <tr>
+                            <td>
+                                ${model.historyNo}
+                            </td>
+                            <td>
+                                ${model.memberName}
+                            </td>
+                            <td>
+                                ${model.uploadTime?string("yyyy-MM-dd HH:mm:ss")}
+                            </td>
+                            <td>
+                                ${model.type}
+                            </td>
+                        </tr>
+                        </#list>
+<!--                         <tr> -->
+<!--                              <td> -->
+<!--                                 4 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 曹慧 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 2014-6-17 12:30:30 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 统计 -->
+<!--                             </td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                              <td> -->
+<!--                                 4 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 曹慧 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 2014-6-17 12:30:30 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 统计 -->
+<!--                             </td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                              <td> -->
+<!--                                 2 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 曹慧 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 2014-6-17 12:30:30 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 统计 -->
+<!--                             </td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                              <td> -->
+<!--                                 1 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 曹慧 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 2014-6-17 12:30:30 -->
+<!--                             </td> -->
+<!--                             <td> -->
+<!--                                 统计 -->
+<!--                             </td> -->
+<!--                         </tr> -->
+                    </table>
+                    <div class="btnBox">
+                        <a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a></div>
+                </div>
+                <!-- InstanceEndEditable -->
+            </div>
+        </div>
+        <div id="footer" class="fence-wide">
+            <div class="yard-1200">
+                <p>
+                    &copy; 2014 私享家绿色门窗平台 版权所有 苏ICP备14040094号</p>
+            </div>
+        </div>
+</body>
+<!-- InstanceEnd -->
+</html>

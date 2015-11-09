@@ -123,6 +123,10 @@ public class ScienceServiceImpl implements IScienceService
             Map<String, ScienceEntity> map = new HashMap<>();
             for (ScienceEntity scienceEntity : listValue)
             {
+                if (scienceEntity.hashCode() == 0)
+                {
+                    continue;
+                }
                 String key = scienceEntity.getUsed() + scienceEntity.getName()
                         + scienceEntity.getType() + scienceEntity.getLength()
                         + scienceEntity.getRemark();
@@ -137,6 +141,10 @@ public class ScienceServiceImpl implements IScienceService
                 {
                     map.put(key, scienceEntity);
                 }
+            }
+            if (map.size() == 0)
+            {
+                return null;
             }
             return executeExe(map, projectId, length, interval);
         }
@@ -217,7 +225,15 @@ public class ScienceServiceImpl implements IScienceService
                     {
                         text = scienceEntity.getName() + "("
                                 + scienceEntity.getType() + ")\r\n";
-                        text = text + length + "\r\n";
+                        if (StringUtils.isNotEmpty(length))
+                        {
+                            text = text + length + "\r\n";
+                        }
+                        else
+                        {
+                            text = text + scienceEntity.getyLength() + "\r\n";
+                        }
+                        
                         text = text + interval + "\r\n";
                         text = text + list.size() + "\r\n";
                     }
@@ -251,6 +267,7 @@ public class ScienceServiceImpl implements IScienceService
                 output.close();
                 Process p = java.lang.Runtime.getRuntime()
                         .exec("D:/sheji/execute.bat");
+                p.waitFor();
                 OptimizedResult result = OptimizedResultReader.read(new FileInputStream(
                         filePath + "XABC.TXT"),
                         "GBK");

@@ -1,0 +1,325 @@
+<tr class="tableInfo" style="display: none;">
+        <td colspan="8" id="item_${projectId}">
+        <div class="countinfoBox">
+              <div id="lib_Tab1">
+				<div id="lib_Menubox">
+				<ul>
+				   <li id="11" onclick="setTab('1',1,4)" class="hover">下料单管理</li>
+				   <li class="spacing"></li>
+				   <li id="12" onclick="setTab('1',2,4)">单独型材优化管理</li>
+				</ul>
+				</div>
+		 <div class="lib_Contentbox lib_tabborder">  
+		   <div id="con_1_1" >
+		   		<div class="countitem">
+		            <table border="0" align="center" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col/>
+		            <col width="9%" />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <th>批次及系列名称</th>
+		              <th>下料单数</th>
+		              <th>创建时间</th>
+		              <th>操作</th>
+		            </tr>
+		          </table>
+		          <#list projectItems as projectItem>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col/>
+		            <col width="9%" />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="sheetliststart"><div class="contraction contraction_xlsname">${projectItem.name}</div></td>
+		              <td class="sheetlistcenter">${projectItem.count}</td>
+		              <td class="sheetlistcenter">${projectItem.uploadTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+		              <td class="operation sheetlistcenter"><!-- <a href="#" class="edit">查看</a> -->
+		              <#if projectItem.isShow==0>
+		                <a href="javascript:changeItemShow('${projectItem.id}',1,'${projectId}')" class="edit">前台显示</a>
+		               <#else>
+		               <a href="javascript:changeItemShow('${projectItem.id}',0,'${projectId}')" class="edit">前台隐藏</a>
+		               </#if>
+		                <a href="javascript:delItem('${projectItem.id}','${projectId}')" class="del">删除</a></td>
+		            </tr>
+					<#list projectItem.docList as doc>		            
+		            <tr>
+		              <td colspan="4" class="countsheetlist">${doc.series}</td>
+		
+		            </tr>
+		            </#list>
+<!-- 		            <tr> -->
+<!-- 		              <td colspan="4" class="countsheetlist">普通平开窗</td> -->
+		
+<!-- 		            </tr> -->
+<!-- 		            <tr> -->
+<!-- 		              <td colspan="4" class="sheetlistend">普通平开窗</td> -->
+		
+<!-- 		            </tr> -->
+		          </table>
+		          </#list>
+<!-- 		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList" style="background:#ddd;"> -->
+<!-- 		            <col/> -->
+<!-- 		            <col width="9%" /> -->
+<!-- 		            <col width="18%" /> -->
+<!-- 		            <col width="25%" /> -->
+<!-- 		            <tr> -->
+<!-- 		              <td class="left"><div class="contraction contraction_xlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼</div></td> -->
+<!-- 		              <td class="sheetlistcenter">25</td> -->
+<!-- 		              <td class="sheetlistcenter">2015-08-25 18:25:00</td> -->
+<!-- 		              <td class="operation sheetlistcenter"><a href="#" class="edit">查看</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td> -->
+<!-- 		            </tr> -->
+<!-- 		          </table> -->
+<!-- 		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList" style="background:#ddd;"> -->
+<!-- 		            <col/> -->
+<!-- 		            <col width="9%" /> -->
+<!-- 		            <col width="18%" /> -->
+<!-- 		            <col width="25%" /> -->
+<!-- 		            <tr> -->
+<!-- 		              <td class="sheetliststart"><div class="contraction contraction_xlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼</div></td> -->
+<!-- 		              <td class="sheetlistcenter">25</td> -->
+<!-- 		              <td class="sheetlistcenter">2015-08-25 18:25:00</td> -->
+<!-- 		              <td class="operation sheetlistcenter"><a href="#" class="edit">查看</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td> -->
+<!-- 		            </tr> -->
+<!-- 		            <tr> -->
+<!-- 		              <td colspan="4" class="countsheetlist">普通平开字符超出测试字符超出测试字符超出测试字符超出测试字符超出测试字符超出测试</td> -->
+		
+<!-- 		            </tr> -->
+<!-- 		            <tr> -->
+<!-- 		              <td colspan="4" class="countsheetlist">普通平开窗</td> -->
+		
+<!-- 		            </tr> -->
+<!-- 		            <tr> -->
+<!-- 		              <td colspan="4" class="sheetlistend">普通平开窗</td> -->
+		
+<!-- 		            </tr> -->
+<!-- 		          </table> -->
+		         
+		        </div></div>
+		   <div id="con_1_2" style="display:none">
+		   		<div class="countitem">
+		            <table border="0" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <th>文件名</th>
+		              <th>上传时间</th>
+		              <th>操作</th>
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="left"><div class="contraction contraction_sourcexlsname">1ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼超出长度测试测试. xls</div></td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台隐藏</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList">
+		            <col />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="left"><div class="contraction contraction_sourcexlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台隐藏</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		          </table>
+		          <table border="0" cellpadding="0" cellspacing="0" id="xlsList"  style="background:#ddd;">
+		            <col />
+		            <col width="18%" />
+		            <col width="25%" />
+		            <tr>
+		              <td class="left"><div class="contraction contraction_sourcexlsname">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td>
+		              <td class="sheetlistcenter">2015-08-25 18:25:00</td>
+		              <td class="operation sheetlistcenter"><a href="#" class="download">下载</a><a href="#" class="edit">前台显示</a><a href="#" class="del">删除</a></td>
+		            </tr>
+		          </table>
+		         
+		        </div></div>
+		 </div>
+	</div>
+			 <div class="btnBox text-center" style="margin:0"><a href="javascript:getItem('${projectId}')" class="button button-gray button-small">收起</a></div>
+			  </div>		  </td>		  
+	   </tr>
+
+
+
+<!-- <tr><td colspan="5"  id="item_${projectId}"> -->
+<!--     <div id="lib_Tab1"> -->
+<!-- 	<div id="lib_Menubox"> -->
+<!-- 	<ul> -->
+<!-- 	   <li class="hover" onclick="setTab('${projectId}',1)" id="tab_button_1">下料单管理</li> -->
+<!-- 	   <li class="spacing"></li> -->
+<!-- 	   <li onclick="setTab('${projectId}',2)" id="tab_button_2" class="">单独型材优化管理</li> -->
+<!-- 	</ul> -->
+<!-- 	</div> -->
+<!--  <div class="lib_Contentbox lib_tabborder">   -->
+<!--    <div id="tab_1_${projectId}" style="display: block;"> -->
+<!--    <form id="form_${projectId}" action="javascript:void(0);"> -->
+<!--    		<div class="item"> -->
+<!--             <ul> -->
+<!-- <!--             	<li> --> -->
+<!-- <!--                 	<a target="_blank" href="downloadtemplet.html"><button class="button button-croci">下载下料单模板</button></a> --> -->
+<!-- <!--                 </li> --> -->
+<!-- <li> -->
+<!-- 				<li> -->
+<!-- 					<a href="javascript:void(0);" data-toggle="modal"> -->
+<!-- 					<button onclick="openNewItem('${projectId}');"> -->
+<!-- 					<img style="pointer:cursor;border:none" onclick="this.src='${b.staticPath}images/botton/2-2.png'" src="${b.staticPath}images/botton/2.png"> -->
+<!-- 					</button> -->
+<!-- 					</a> -->
+<!-- 				</li> -->
+<!-- <!--             	<li> --> -->
+<!-- <!--                 	<button href="#uploadxls" data-toggle="modal" class="button button-croci"  onclick="openUpload('${projectId}');">上传下料单文件</button> --> -->
+<!-- <!--                 </li> --> -->
+<!--                 <li style="float:right;"> -->
+<!--                 <button href="#optimize" data-toggle="modal" class="button button-croci" onclick="getScienceItems('${projectId}');"><strong>下料优化</strong></button> -->
+<!--                 </li> -->
+<!--               <li style="float:right;"> -->
+<!--                 <button  onclick="showPrereport('${projectId}','${projectName}')" data-toggle="modal" class="button button-croci"><strong>查看统计报表</strong></button> -->
+<!--                 </li> -->
+                
+<!--             </ul> -->
+<!--             <table cellspacing="0" cellpadding="0" border="0" align="center" class="xlsList"> -->
+<!--             <colgroup><col width="51%"> -->
+<!--             <col width="9%"> -->
+<!--             <col width="18%"> -->
+<!--             <col width="22%"> -->
+<!--             </colgroup><tbody> -->
+<!--             <tr> -->
+<!-- 			  <th>批次及系列名称</th> -->
+<!-- 			  <th>下料单数</th> -->
+<!-- 			  <th>创建时间</th> -->
+<!-- 			  <th>操作</th> -->
+<!-- 			</tr> -->
+<!--           </tbody></table> -->
+<!--           <#list projectItems as projectItem> -->
+<!--           <table cellspacing="0" cellpadding="0" border="0" class="xlsList"> -->
+<!--             <colgroup><col width="51%"> -->
+<!--             <col width="9%"> -->
+<!--             <col width="18%"> -->
+<!--             <col width="22%"> -->
+<!--             </colgroup> -->
+<!--             <tbody> -->
+<!--             <tr> -->
+<!--               <td class="sheetliststart"> -->
+<!--               <div id="project_item_info_${projectItem.id}" class="contraction contraction_xlsname"> -->
+<!-- 	              <input id="${projectItem.id}"  parentId="0" childrensize=${projectItem.docList?size} type="checkbox" name="itemId" value="${projectItem.id}"> -->
+<!-- 	              <#if projectItem.state==0> -->
+<!-- 	               <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}">(未填写)</a></span> -->
+<!-- 	              </#if> -->
+<!-- 	              <#if projectItem.state==1> -->
+<!-- 	               <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}">(未完成)</a></span> -->
+<!-- 	              </#if> -->
+<!-- 	               <#if projectItem.state==2> -->
+<!-- 	               <span class="finised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}">(已完成)</a></span> -->
+<!-- 	              </#if> -->
+<!-- 	              ${projectItem.name} -->
+<!-- 	              <a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a> -->
+<!--               </div> -->
+<!--               <div id="project_item_modify_${projectItem.id}" class="contraction contraction_xlsname" style="display: none;"> -->
+<!-- 	              <input id="${projectItem.id}"  parentId="0" childrensize=${projectItem.docList?size} type="checkbox" name="itemId" value="${projectItem.id}"/> -->
+<!-- 	              <input id="project_item_name_${projectItem.id}" type="text" name="projectItemName" class="alter300" value="${projectItem.name}"/> -->
+<!-- 	              <button class="button-yes" onclick="reProjectItemName('${projectItem.id}');"></button> -->
+<!-- 	              <button class="button-no" onclick="noProjectItemRename('${projectItem.id}');"></button> -->
+<!--               </div> -->
+<!--               </td> -->
+<!--               <td>${projectItem.count}</td> -->
+<!--               <td>${projectItem.uploadTime?string("yyyy-MM-dd HH:mm:ss")}</td> -->
+<!--               <td> -->
+<!--               <button href="#delxls" data-toggle="modal" class="button button-croci" onclick="removeItem('${projectItem.id}');">删除批次</button>&#12288; -->
+<!--               <button href="#downxls" data-toggle="modal" class="button button-croci" onclick="toProjectItemRename('${projectItem.id}');">重命名</button> -->
+<!--               </td> -->
+<!--             </tr> -->
+<!--              <#list projectItem.docList as doc> -->
+<!--             <tr id="children_td_${projectItem.id}"> -->
+<!--               <td class="sheetlist" colspan="3"> -->
+<!--               <input parentId="${projectItem.id}" count=${doc_index} type="checkbox" name="docId" value="${doc.id}"> -->
+<!--               <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&docId=${doc.id}">(未完成)</a></span> -->
+<!--               ${doc.series} -->
+<!--               <a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&docId=${doc.id}"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a> -->
+<!--               </td> -->
+<!--             </tr> -->
+<!--               </#list> -->
+<!--           </tbody> -->
+<!--           </table> -->
+<!--            <div id="downsourcexls_${projectItem.id}" class="modal in downsourcexls" style="display:none;" aria-hidden="false"> <a data-dismiss="modal" class="close">×</a> -->
+<!--         <h1>下载原始数据文件</h1> -->
+<!-- 		        <p>您确定下载选中的原始数据文件？</p> -->
+<!-- 		<div class="choose choose_two"> -->
+<!-- 		<ul> -->
+<!-- 		<li><button data-dismiss="modal" class=" button button-orange"  onclick="downItem('${projectItem.id}');">确定</button></li> -->
+<!-- 		<li><button data-dismiss="modal" class=" button button-green"   onclick="closeDiv();">取消</button></li> -->
+<!-- 		</ul> -->
+<!-- 		</div> -->
+<!--   </div>  -->
+<!--   		</form> -->
+<!--          </#list> -->
+<!--         </div> -->
+<!--         </div> -->
+<!--    <div style="display: none;" id="tab_2_${projectId}"> -->
+<!--    		<div class="item"> -->
+<!--             <ul> -->
+<!--             	<li> -->
+<!--                 	<a href="#"><button class="button button-croci">下载原始数据模板</button></a> -->
+<!--                 </li> -->
+<!--             	<li> -->
+<!--                 	<button href="#uploadsourcexls" data-toggle="modal" class="button button-croci">上传原始数据文件</button> -->
+<!--                 </li> -->
+<!--                 <li style="float:right;"> -->
+<!--                 <button href="#optimize" data-toggle="modal" class="button button-croci"><strong>下料优化</strong></button> -->
+<!--                 </li> -->
+                
+<!--             </ul> -->
+<!--             <table cellspacing="0" cellpadding="0" border="0" class="xlsList"> -->
+<!--             <colgroup><col width="55%"> -->
+<!--             <col width="20%"> -->
+<!--             <col width="25%"> -->
+<!--             </colgroup><tbody><tr> -->
+<!--               <th>文件名</th> -->
+<!--               <th>上传时间</th> -->
+<!--               <th>操作</th> -->
+<!--             </tr> -->
+<!--           </tbody></table> -->
+<!--           <table cellspacing="0" cellpadding="0" border="0" class="xlsList"> -->
+<!--             <colgroup><col width="55%"> -->
+<!--             <col width="20%"> -->
+<!--             <col width="25%"> -->
+<!--             </colgroup><tbody><tr> -->
+<!--               <td class="left"><div class="contraction contraction_sourcexlsname"><input type="checkbox" name="check" value="None">1ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼超出长度测试测试. xls</div></td> -->
+<!--               <td>2015-08-25 18:25:00</td> -->
+<!--               <td><button href="#delsourcexls" data-toggle="modal" class="button button-croci"  onclick="removeItem('${projectId}');">删除文件 -->
+<!--               </button>&#12288;<button href="#downsourcexls" data-toggle="modal" class="button button-croci">下载文件</button></td> -->
+<!--             </tr> -->
+<!--           </tbody></table> -->
+<!--           <table cellspacing="0" cellpadding="0" border="0" class="xlsList"> -->
+<!--             <colgroup><col width="55%"> -->
+<!--             <col width="20%"> -->
+<!--             <col width="25%"> -->
+<!--             </colgroup><tbody><tr> -->
+<!--               <td class="left"><div class="contraction contraction_sourcexlsname"><input type="checkbox" name="check" value="None">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td> -->
+<!--               <td>2015-08-25 18:25:00</td> -->
+<!--               <td><button href="#delsourcexls" data-toggle="modal" class="button button-croci">删除文件</button>&#12288;<button href="#downsourcexls" data-toggle="modal" class="button button-croci">下载文件</button></td> -->
+<!--             </tr> -->
+<!--           </tbody></table> -->
+<!--           <table cellspacing="0" cellpadding="0" border="0" class="xlsList"> -->
+<!--             <colgroup><col width="55%"> -->
+<!--             <col width="20%"> -->
+<!--             <col width="25%"> -->
+<!--             </colgroup><tbody><tr> -->
+<!--               <td class="left"><div class="contraction contraction_sourcexlsname"><input type="checkbox" name="check" value="None">ITO导电膜玻璃生产线技术改造项目C栋门窗工程招标1-5楼. xls</div></td> -->
+<!--               <td>2015-08-25 18:25:00</td> -->
+<!--               <td><button href="#delsourcexls" data-toggle="modal" class="button button-croci">删除文件</button>&#12288;<button href="#downsourcexls" data-toggle="modal" class="button button-croci">下载文件</button></td> -->
+<!--             </tr> -->
+<!--           </tbody></table> -->
+         
+<!--         </div></div> -->
+<!--  </div> -->
+<!-- </div> -->
+<!--         </td> -->
+<!--       </tr> -->
+ 

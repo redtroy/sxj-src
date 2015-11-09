@@ -1,6 +1,5 @@
 package com.sxj.science.website.controller.project;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.model.DocModel;
+import com.sxj.science.model.DocQuery;
 import com.sxj.science.service.IDocService;
 import com.sxj.science.service.IProjectService;
 import com.sxj.science.website.controller.BaseController;
@@ -32,7 +32,7 @@ public class DocController extends BaseController
     private IProjectService projectService;
     
     @RequestMapping("/toAdd")
-    public String toAdd(String projectId, String itemId, String docId,
+    public String toAdd(String projectId, String itemId, String series,
             ModelMap map)
     {
         ProjectEntity project = projectService.getProject(projectId);
@@ -43,9 +43,11 @@ public class DocController extends BaseController
             map.put("projectName", project.getName());
         }
         map.put("memberNo", "E00001");
-        if (StringUtils.isEmpty(docId))
+        if (StringUtils.isEmpty(series))
         {
-            List<DocModel> docList = docService.queryDocModel(itemId);
+            DocQuery query = new DocQuery();
+            query.setItemId(itemId);
+            List<DocModel> docList = docService.queryDocModel(query);
             if (docList != null && docList.size() > 0)
             {
                 map.put("docList", docList);
@@ -54,11 +56,11 @@ public class DocController extends BaseController
         }
         else
         {
-            DocModel docModel = docService.getDocModel(docId);
-            if (docModel != null)
+            DocQuery query = new DocQuery();
+            query.setSeries(series);
+            List<DocModel> docList = docService.queryDocModel(query);
+            if (docList != null && docList.size() > 0)
             {
-                List<DocModel> docList = new ArrayList<DocModel>();
-                docList.add(docModel);
                 map.put("docList", docList);
                 return "site/editmtable";
             }
@@ -74,6 +76,7 @@ public class DocController extends BaseController
         try
         {
             docService.addDocModel(doc);
+            map.put("docId", doc.getId());
             map.put("isOK", true);
         }
         catch (Exception e)
@@ -93,6 +96,7 @@ public class DocController extends BaseController
         try
         {
             docService.editDocModel(doc);
+            map.put("docId", doc.getId());
             map.put("isOK", true);
         }
         catch (Exception e)
@@ -116,7 +120,10 @@ public class DocController extends BaseController
             map.put("projectName", project.getName());
         }
         map.put("memberNo", "E00001");
-        List<DocModel> docList = docService.queryDocModel(docIds);
+        
+        DocQuery query = new DocQuery();
+        query.setIds(docIds);
+        List<DocModel> docList = docService.queryDocModel(query);
         map.put("docList", docList);
         return "site/editmtable";
     }

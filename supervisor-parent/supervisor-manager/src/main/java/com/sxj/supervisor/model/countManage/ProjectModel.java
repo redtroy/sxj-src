@@ -39,6 +39,18 @@ public class ProjectModel extends Pagable implements Serializable
     private Date uploadTime;
     
     private Integer state;
+    
+    private Integer isShow;
+    
+    public Integer getIsShow()
+    {
+        return isShow;
+    }
+
+    public void setIsShow(Integer isShow)
+    {
+        this.isShow = isShow;
+    }
 
     public String getId()
     {

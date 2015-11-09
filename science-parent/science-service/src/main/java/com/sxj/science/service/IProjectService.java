@@ -1,5 +1,6 @@
 package com.sxj.science.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.science.entity.export.ItemEntity;
@@ -35,4 +36,14 @@ public interface IProjectService
     public void removeItem(String itemId) throws ServiceException;
 
     public List<ProjectEntity> openQueryProject(ProjectQuery query);
+
+    public void deleteProject(String id) throws SQLException;
+
+    public void deleteProjectItem(String id) throws SQLException;
+
+    public void updateProject(ProjectEntity temPro) throws SQLException;
+
+    public void updateItem(ItemEntity temItem) throws SQLException;
+
+    public ItemEntity getItemById(String id);
 }

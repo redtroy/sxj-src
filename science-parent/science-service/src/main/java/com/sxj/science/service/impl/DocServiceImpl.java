@@ -26,6 +26,7 @@ import com.sxj.science.entity.export.ProductEntity;
 import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.entity.export.ScienceEntity;
 import com.sxj.science.model.DocModel;
+import com.sxj.science.model.DocQuery;
 import com.sxj.science.service.IDocService;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
@@ -83,7 +84,7 @@ public class DocServiceImpl implements IDocService
             List<PartsEntity> partsList = docModel.getPartsList();
             DocEntity doc = docModel.getDoc();
             ProjectEntity project = projectDao.getProject(doc.getProjectId());
-            project.setBatchCount(project.getBatchCount() + 1);
+            //project.setBatchCount(project.getBatchCount() + 1);
             project.setState(1);
             projectDao.updateProject(project);
             
@@ -95,6 +96,7 @@ public class DocServiceImpl implements IDocService
             //doc.setProjectName(project.getName());
             // doc.setProjectId(project.getId());
             // doc.setItemId(item.getId());
+            doc.setId(null);
             docDao.addDoc(doc);
             
             if (glassList != null && glassList.size() > 0)
@@ -157,7 +159,7 @@ public class DocServiceImpl implements IDocService
             partsDao.deletePartsByDocId(doc.getId());
             productDao.deleteProductByDocId(doc.getId());
             scienceDao.deleteScienceByDocId(doc.getId());
-            doc.setId("");
+            doc.setId(null);
             self.addDocModel(doc);
         }
         catch (Exception e)
@@ -169,14 +171,13 @@ public class DocServiceImpl implements IDocService
     }
     
     @Override
-    public List<DocModel> queryDocModel(String[] docIds)
-            throws ServiceException
+    public List<DocModel> queryDocModel(DocQuery query) throws ServiceException
     {
         try
         {
-            QueryCondition<DocEntity> query = new QueryCondition<>();
-            query.addCondition("ids", docIds);
-            List<DocEntity> docList = docDao.query(query);
+            QueryCondition<DocEntity> condition = new QueryCondition<>();
+            condition.addAllCondition(query);
+            List<DocEntity> docList = docDao.query(condition);
             List<DocModel> list = new ArrayList<DocModel>();
             for (DocEntity docEntity : docList)
             {
@@ -213,40 +214,14 @@ public class DocServiceImpl implements IDocService
     }
     
     @Override
-    public List<DocModel> queryDocModel(String itemId) throws ServiceException
+    public List<DocEntity> queryDoc(DocQuery query) throws ServiceException
     {
         try
         {
-            QueryCondition<DocEntity> query = new QueryCondition<>();
-            query.addCondition("itemId", itemId);
-            List<DocEntity> docList = docDao.query(query);
-            List<DocModel> list = new ArrayList<DocModel>();
-            for (DocEntity docEntity : docList)
-            {
-                DocModel model = new DocModel();
-                QueryCondition<GlassEntity> g_query = new QueryCondition<>();
-                g_query.addCondition("docId", docEntity.getId());
-                List<GlassEntity> glassList = glassDao.query(g_query);
-                
-                QueryCondition<PartsEntity> p_query = new QueryCondition<>();
-                p_query.addCondition("docId", docEntity.getId());
-                List<PartsEntity> partsList = partsDao.query(p_query);
-                
-                QueryCondition<ProductEntity> pd_query = new QueryCondition<>();
-                pd_query.addCondition("docId", docEntity.getId());
-                List<ProductEntity> productList = productDao.query(pd_query);
-                
-                QueryCondition<ScienceEntity> s_query = new QueryCondition<>();
-                s_query.addCondition("docId", docEntity.getId());
-                List<ScienceEntity> scienceList = scienceDao.query(s_query);
-                model.setDoc(docEntity);
-                model.setScienceList(scienceList);
-                model.setPartsList(partsList);
-                model.setProductList(productList);
-                model.setGlassList(glassList);
-                list.add(model);
-            }
-            return list;
+            QueryCondition<DocEntity> condition = new QueryCondition<>();
+            condition.addAllCondition(query);
+            List<DocEntity> docList = docDao.query(condition);
+            return docList;
         }
         catch (Exception e)
         {

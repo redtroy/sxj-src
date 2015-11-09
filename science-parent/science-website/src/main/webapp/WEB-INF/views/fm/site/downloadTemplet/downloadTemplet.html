@@ -46,27 +46,31 @@ function clickSearch(){
 // 	alert(companyArr+"---"+typeArr+"---"+seriesArr);
 	var searchStr =$("#searchStr").val();
 	$.post("${basePath}downloadTem/clickSearch.htm?areaId="+areaId+"&&companyArr="+companyArr+"&&typeArr="+typeArr+"&&seriesArr="+seriesArr+"&&searchStr="+searchStr,function(data){
-// 		alert(data);
-		var res=$(data).find("#down_type");
-// 		alert(res.html());
-// 		var pager=$(data).find("#down_filter").children("#pager");
-		$("#down_type").empty();
-		$("#down_type").append(res.html());
-// 		var totalPage=pager.attr("totalPage");
-// 		var currentPage=pager.attr("currentPage");
-// 		loadPage(currentPage,totalPage,query);
+		  $("#box").empty();
+		  $("#box").append(data);
+		  $("#box").attr("lsload","true");
 	});
 // 	window.location.href="${basePath}downloadTem/clickSearch.htm?areaId="+areaId+"&&companyArr="+companyArr+"&&typeArr="+typeArr+"&&seriesArr="+seriesArr;
 }
 
 function searchComOrser(){
 	var searchStr =$("#searchStr").val();
-	window.location.href="${basePath}downloadTem/query.htm?searchStr="+searchStr;
+	//window.location.href="${basePath}downloadTem/query.htm?searchStr="+searchStr;
+	  $.post("${basePath}downloadTem/query.htm?searchStr="+searchStr,function(data){
+		  $("#box").empty();
+		  $("#box").append(data);
+		  $("#box").attr("lsload","true");
+		});
 }
 //按条件查找	
 function changeSel(){
 	var areaId=$("#areaSel").val();
-	window.location.href="${basePath}downloadTem/query.htm?areaId="+areaId;
+	//window.location.href="${basePath}downloadTem/query.htm?areaId="+areaId;
+	  $.post("${basePath}downloadTem/query.htm?areaId="+areaId,function(data){
+		  $("#box").empty();
+		  $("#box").append(data);
+		  $("#box").attr("lsload","true");
+		});
 	/* var params=$("#search_box").serialize();
 	if(page!=undefined){
 	   params=params+"&currentPage="+page;
@@ -121,6 +125,9 @@ function moreSeries(){
 function comfir(){
 	var index=$("#index_hidden").val();
 	index=parseInt(index);
+	if(idArr==""){
+		alert("请选择对应窗型");
+	}
 	$.get("${basePath}downloadTem/getTemp.htm?id="+idArr,function(data){
  		  if($("#button_div_"+idArr+"_"+index).html()==undefined){
  			$("#table_div").prepend(data);
@@ -130,6 +137,7 @@ function comfir(){
  			$("#table_div").find("#button_div_"+idArr).find("ul").attr("index",index);
  			$('#doc_form_'+idArr).attr("id","doc_form_"+idArr+"_"+index);
  			$("#table_div").find("#button_div_"+idArr).attr("id","button_div_"+idArr+"_"+index);
+ 			$("#table_div").find("#button_doc_"+idArr).attr("id","button_doc_"+idArr+"_"+index);
  			$("#index_hidden").val(index+1);
  			
  			$('#doc_form_'+idArr+"_"+index).find("input[name=projectId]").val(projectId);

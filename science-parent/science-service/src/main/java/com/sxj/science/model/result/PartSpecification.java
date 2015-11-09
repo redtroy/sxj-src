@@ -1,12 +1,19 @@
 package com.sxj.science.model.result;
 
+import java.io.Serializable;
+
 /**
  * 下料规格
  * @author Administrator
  *
  */
-public class PartSpecification
+public class PartSpecification implements Serializable
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2391509489925726239L;
+    
     /**
      * 长度
      */

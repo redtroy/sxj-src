@@ -15,6 +15,7 @@
 		<result property="batchCount" column="BATCH_COUNT" jdbcType="INTEGER" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="uploadTime" column="UPLOAD_TIME"  jdbcType="TIMESTAMP" />
+		<result property="isShow" column="IS_SHOW" jdbcType="INTEGER" />
 	</resultMap>
 	
 	<select id="query" resultMap="ProjectResultMap"

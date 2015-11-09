@@ -26,14 +26,15 @@ $(document).ready(function()
         {
             $("#uploadify").uploadify({
             	swf : '${basePath}upload/uploadify.swf',
-    			uploader : "${basePath}project/upload.htm",
+    			uploader : "${basePath}optim/uploadOptim.htm",
     			formData : {'someKey' : 'someValue', 'projectId' : 1},
     			fileTypeExts: '*.xls;*.xlsx',
     			auto : true,
     			multi : true,
+    			simUploadLimit:10,
     			height : 30,
     			width : 120,
-    			buttonText : '上传下料单文件',
+    			buttonText : '上传原始数据文件',
     			onUploadStart : function(file) {
     				$('#uploadify').uploadify("settings","formData", { 'projectId': projectId });
     			},
@@ -94,7 +95,7 @@ function openNewItem(projectId){
 }
 function openUpload(id){
 	projectId=id;
-	pageIndex=dialogBoxOutId("#uploadxls");
+	pageIndex=dialogBoxOutId("#uploadsourcexls");
 }
 function closeDiv(){
 	layer.close(pageIndex);
@@ -103,6 +104,9 @@ function query(page){
 	var params=$("#search_form").serialize();
 	 if(page!=undefined){
 		   params=params+"&currentPage="+page;
+	   }else{
+		   var currentPage= $("#content_box").find("#pager").attr("currentPage");
+		   params=params+"&currentPage="+currentPage;
 	   }
 	 $.ajax({
 		   type: "GET",
@@ -146,6 +150,10 @@ function addProject(){
 function addItem(){
 	var projectId=$("#newbatch").attr("projectId");
 	var name=$("#newItemName").val();
+	if(name==""){
+		alert("批次名称不能为空");
+		return;
+	}
 	dialogBox(function(index){
 		 $.post("${basePath}project/addItem.htm?name="+name+"&projectId="+projectId,function(data){
 			  layer.close(index);
@@ -189,7 +197,18 @@ function getScienceItems(id){
 		
 	 
 }
-
+function aloneOptim(id){
+	   var params=$("#alone_form_"+id).serialize();
+	   alert(params);
+	 	$.post("${basePath}optim/aloneOptim.htm?projectId="+id,params,function(data){
+			 $("#optimize").empty();
+			 $("#optimize").append(data);
+			 $("#optimize").show();
+			 pageIndex=dialogBoxOutId("#optimize");
+		});
+		
+	 
+}
 $(":checkbox").live("change",function () {
 	   var thisId=$(this).val();
 	   var parentId=$(this).attr("parentId");
@@ -216,7 +235,22 @@ $(":checkbox").live("change",function () {
 		});
 	   
 	});
-	
+function removeOptim(id){
+	   dialogBox(function(index){
+			 $.post("${basePath}optim/removeOptim.htm?id="+id,function(data){
+				  layer.close(index);
+					if(data.isOK == true){
+						layer.close(pageIndex);
+						alert("删除成功");
+						var currentPage= $("#content_box").find("#pager").attr("currentPage");
+						query(currentPage);
+					}else{
+						errorInfo(data.error);
+					}
+				});
+		 },"确认原始数据文件？");
+	 
+}
 function removeItem(id){
 	   dialogBox(function(index){
 			 $.post("${basePath}project/removeItem.htm?itemId="+id,function(data){
@@ -240,7 +274,14 @@ function downItem(id){
 	   window.location.href="${basePath}project/downloadFile.htm?projectItemId="+id;
 	   closeDiv();
 }
+function downAloneTmp(){
+	   window.location.href="${basePath}optim/downloadAloneTmp.htm";
+}
 
+function downAloneOptim(id){
+	   window.location.href="${basePath}optim/downloadAloneFile.htm?id="+id;
+	   closeDiv();
+}
 function removeProject(id){
 	   dialogBox(function(index){
 			 $.post("${basePath}project/removeProject.htm?projectId="+id,function(data){
@@ -254,7 +295,7 @@ function removeProject(id){
 						errorInfo(data.error);
 					}
 				});
-		 },"是否确认删除工程");
+		 },"工程下所有批次的下料单也将同时删除！您确定删除该工程");
 	 
 }
 function toRename(id){
@@ -365,7 +406,7 @@ function downloadReport(){
    		<li>
 			<a href="javascript:openDiv('createpro');" data-toggle="modal">
 				<button>
-					<img style="pointer:cursor;border:none" onclick="this.src='${b.staticPath}images/botton/1-1.png'" src="${b.staticPath}images/botton/1.png">
+					<img style="pointer:cursor;border:none" onclick="this.src='${b.staticPath}images/botton/1-1.png'" src="${b.staticPath}images/botton/1.png"/>
 				</button>
 			</a>
 		</li>
@@ -473,26 +514,46 @@ function downloadReport(){
 	        </ul>
 	    </div>
 	</div>
-    <div class="modal in uploadxls" id="uploadxls" aria-hidden="false"  style="display: none;"> 
-    <a class="close" data-dismiss="modal" onclick="closeDiv();">×</a>
-        <h1>上传下料单文件</h1>
-        <div class="upload">
-		<ul>
-		<li><button class=" button button-orange">下载下料单模板</button></li>
-		<li>
-		 <input type="file" name="uploadify" id="uploadify" />
-<!-- 		<button class=" button button-orange" id="uploadify">上传下料单文件</button> -->
-		</li>
-		</ul>
-		</div><p>温馨提示：目前仅支持依照本站模板格式填写的Excel下料单文件,若无模板，请先下载模板</p>
-		<div class="choose">
-		<ul>
-		<li><button class=" button button-orange" data-dismiss="modal" onclick="query();">确定</button></li>
-		<li><button class=" button button-green" data-dismiss="modal" onclick="closeDiv();">取消</button></li>
-		</ul>
-		</div>
+<!--     <div class="modal in uploadxls" id="uploadxls" aria-hidden="false"  style="display: none;">  -->
+<!--     <a class="close" data-dismiss="modal" onclick="closeDiv();">×</a> -->
+<!--         <h1>上传下料单文件</h1> -->
+<!--         <div class="upload"> -->
+<!-- 		<ul> -->
+<!-- 		<li><button class=" button button-orange">下载下料单模板</button></li> -->
+<!-- 		<li> -->
+<!-- 		 <input type="file" name="uploadify" id="uploadify" /> -->
+<!-- <!-- 		<button class=" button button-orange" id="uploadify">上传下料单文件</button> --> -->
+<!-- 		</li> -->
+<!-- 		</ul> -->
+<!-- 		</div><p>温馨提示：目前仅支持依照本站模板格式填写的Excel下料单文件,若无模板，请先下载模板</p> -->
+<!-- 		<div class="choose"> -->
+<!-- 		<ul> -->
+<!-- 		<li><button class=" button button-orange" data-dismiss="modal" onclick="query();">确定</button></li> -->
+<!-- 		<li><button class=" button button-green" data-dismiss="modal" onclick="closeDiv();">取消</button></li> -->
+<!-- 		</ul> -->
+<!-- 		</div> -->
+<!--     </div> -->
+<!-- 上传原始数据文件 -->
+<div class="modal in uploadsourcexls" id="uploadsourcexls" aria-hidden="false" style="display: none;">
+    <a class="close" data-dismiss="modal"  onclick="closeDiv();">×</a>
+    <h1>
+        上传原始数据文件</h1>
+    <div class="upload choose_two_source">
+        <ul>
+            <li><button class="button button-orange" onclick="downAloneTmp();">下载原始数据模板</button></li>
+            <li><input type="file" name="uploadify" id="uploadify" /></li>
+<!-- 		            <li><button class="button button-orange">上传原始数据文件</button></li> -->
+        </ul>
     </div>
-
+    <p>
+        温馨提示：目前仅支持依照本站模板格式填写的Excel原始数据文件,若无模板，请先下载模板</p>
+    <div class="choose choose_one">
+        <ul>
+       		<li><button class="button button-green" data-dismiss="modal" onclick="query();">确定</button></li>
+            <li><button class="button button-green" data-dismiss="modal" onclick="closeDiv();">取消</button></li>
+        </ul>
+    </div>
+</div>
 <div class="modal in uploadxls_suc" id="uploadxls_suc" style="display: none;"> <a class="close" data-dismiss="modal">×</a><h1>上传下料单文件</h1>
 	<div class="filelist">
 		<ul>

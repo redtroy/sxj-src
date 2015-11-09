@@ -44,6 +44,19 @@ public class ItemEntity extends Pagable implements Serializable
     @Column(name = "UPLOAD_TIME")
     private Date uploadTime;
     
+    @Column(name="IS_SHOW")
+    private Integer isShow;
+    
+    public Integer getIsShow()
+    {
+        return isShow;
+    }
+
+    public void setIsShow(Integer isShow)
+    {
+        this.isShow = isShow;
+    }
+    
     public String getId()
     {
         return id;

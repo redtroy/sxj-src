@@ -47,6 +47,8 @@ public class ScienceEntity extends Pagable implements Serializable
     @Column(name = "DOC_ID")
     private String docId;
     
+    private String yLength;
+    
     public String getId()
     {
         return id;
@@ -125,6 +127,16 @@ public class ScienceEntity extends Pagable implements Serializable
     public void setDocId(String docId)
     {
         this.docId = docId;
+    }
+    
+    public String getyLength()
+    {
+        return yLength;
+    }
+    
+    public void setyLength(String yLength)
+    {
+        this.yLength = yLength;
     }
     
     @Override

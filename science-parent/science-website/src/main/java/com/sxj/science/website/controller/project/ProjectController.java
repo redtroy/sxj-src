@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,9 +32,12 @@ import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.sxj.file.common.LocalFileUtil;
+import com.sxj.science.entity.export.AloneOptimEntity;
 import com.sxj.science.entity.export.ItemEntity;
 import com.sxj.science.entity.export.ProjectEntity;
+import com.sxj.science.model.AloneOptimQuery;
 import com.sxj.science.model.ItemModel;
+import com.sxj.science.service.IAloneOptimService;
 import com.sxj.science.service.IExeclOperator;
 import com.sxj.science.service.IProjectService;
 import com.sxj.science.website.controller.BaseController;
@@ -56,9 +60,12 @@ public class ProjectController extends BaseController
     @Autowired
     private IExeclOperator excelOperator;
     
+    @Autowired
+    private IAloneOptimService optimService;
+    
     @RequestMapping("/addProject")
-    public @ResponseBody Map<String, Object> addProject(String name)
-            throws WebException
+    public @ResponseBody Map<String, Object> addProject(String name,
+            HttpSession session) throws WebException
     {
         Map<String, Object> map = new HashMap<String, Object>();
         try
@@ -66,7 +73,8 @@ public class ProjectController extends BaseController
             ProjectEntity project = new ProjectEntity();
             project.setName(name);
             project.setFileCount(0);
-            project.setMemberNo(getLoginInfo());
+            project.setMemberName(getLoginInfo(session));
+            project.setMemberNo(getLoginInfo(session));
             projectService.addProject(project);
             map.put("isOK", true);
         }
@@ -91,6 +99,7 @@ public class ProjectController extends BaseController
             item.setName(name);
             item.setUploadTime(new Date());
             item.setCount(0);
+            item.setState(0);
             projectService.addItem(item);
             map.put("isOK", true);
         }
@@ -114,6 +123,11 @@ public class ProjectController extends BaseController
             map.put("projectItems", list);
             map.put("projectId", projectId);
             map.put("projectName", temPro.getName());
+            
+            AloneOptimQuery optimQuery = new AloneOptimQuery();
+            optimQuery.setProjectId(projectId);
+            List<AloneOptimEntity> optimList = optimService.query(optimQuery);
+            map.put("optimList", optimList);
             return "site/project/projectItem";
         }
         catch (Exception e)
@@ -252,7 +266,7 @@ public class ProjectController extends BaseController
                 metaList[0] = new NameValuePair("originalName",
                         URLEncoder.encode(originalName, "UTF-8"));
                 storageClientService.overwriteMetadata(filePath, metaList);
-                excelOperator.uploadExcel(getLoginInfo(),
+                excelOperator.uploadExcel(getLoginInfo(request.getSession()),
                         originalName,
                         filePath,
                         projectId,

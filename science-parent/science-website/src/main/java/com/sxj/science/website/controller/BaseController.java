@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -128,16 +129,10 @@ public class BaseController
         return message;
     }
     
-    protected String getLoginInfo()
+    protected String getLoginInfo(HttpSession session)
     {
-        //        Subject subject = SecurityUtils.getSubject();
-        //        if (subject.getPrincipal() == null)
-        //        {
-        //            return null;
-        //        }
-        //        PersonnelEntity user = (String) subject.getPrincipal();
-        //        return user;
-        return "";
+        String memberNo = (String) session.getAttribute("memberNo");
+        return memberNo;
         
     }
     

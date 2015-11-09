@@ -81,16 +81,6 @@ public class ItemModel extends Pagable implements Serializable
         item.setUploadTime(uploadTime);
     }
     
-    public List<DocEntity> getDocList()
-    {
-        return docList;
-    }
-    
-    public void setDocList(List<DocEntity> docList)
-    {
-        this.docList = docList;
-    }
-    
     public ItemEntity getItem()
     {
         return item;
@@ -109,6 +99,16 @@ public class ItemModel extends Pagable implements Serializable
     public void setState(Integer state)
     {
         item.setState(state);
+    }
+    
+    public List<DocEntity> getDocList()
+    {
+        return docList;
+    }
+    
+    public void setDocList(List<DocEntity> docList)
+    {
+        this.docList = docList;
     }
     
 }
