@@ -27,13 +27,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 
+import com.sxj.science.entity.export.AloneOptimEntity;
 import com.sxj.science.entity.export.HistoryEntity;
 import com.sxj.science.entity.export.ItemEntity;
 import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.entity.export.WindowTypeEntity;
 import com.sxj.science.entity.system.AreaEntity;
+import com.sxj.science.model.AloneOptimQuery;
 import com.sxj.science.model.ItemModel;
 import com.sxj.science.model.ProjectQuery;
+import com.sxj.science.service.IAloneOptimService;
 import com.sxj.science.service.IAreaService;
 import com.sxj.science.service.IDownloadTemService;
 import com.sxj.science.service.IHistoryService;
@@ -61,6 +64,9 @@ public class DownloadTemController extends BaseController
     
     @Autowired
     private IHistoryService historyService;
+    
+    @Autowired
+    private IAloneOptimService optimService;
     
     @RequestMapping("/getTemp")
     public void getTemp(String[] id, HttpServletResponse response)
@@ -641,6 +647,12 @@ public class DownloadTemController extends BaseController
             resultMap.put("projectItems", list);
             resultMap.put("project", temPro);
             resultMap.put("projectName", temPro.getName());
+            
+            AloneOptimQuery optimQuery = new AloneOptimQuery();
+            optimQuery.setProjectId(projectId);
+            List<AloneOptimEntity> optimList = optimService.query(optimQuery);
+            resultMap.put("optimList", optimList);
+            
             return resultMap;
         }
         catch (Exception e)
@@ -743,6 +755,27 @@ public class DownloadTemController extends BaseController
             ItemEntity temItem=projectService.getItemById(id);
             temItem.setIsShow(Integer.parseInt(isShow));
             projectService.updateItem(temItem);
+            resultMap.put("isOK", "true");
+        }
+        catch (Exception e)
+        {
+            resultMap.put("isOK", "false");
+            SxjLogger.error("删除批次错误", e, this.getClass());
+            throw new WebException("删除批次错误", e);
+        }
+        return resultMap;
+    }
+    
+    @RequestMapping("/changeAloneShow")
+    public @ResponseBody Map<String, Object> changeAloneShow(String id,String isShow)
+            throws WebException
+    {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try
+        {
+            AloneOptimEntity temAlone=optimService.getAloneOptim(id);
+            temAlone.setIsShow(Integer.parseInt(isShow));
+            optimService.updateAloneOptim(temAlone);
             resultMap.put("isOK", "true");
         }
         catch (Exception e)

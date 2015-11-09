@@ -1,47 +1,32 @@
-package com.sxj.science.entity.export;
+package com.sxj.supervisor.model.countManage;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import com.sxj.mybatis.orm.annotations.Column;
-import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.GeneratedValue;
 import com.sxj.mybatis.orm.annotations.GenerationType;
 import com.sxj.mybatis.orm.annotations.Id;
-import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.science.dao.export.IAloneOptimDao;
 
-@Entity(mapper = IAloneOptimDao.class)
-@Table(name = "S_ALONE_OPTIM")
 public class AloneOptimEntity extends Pagable implements Serializable
 {
-    
+
     /**
      * 
      */
-    private static final long serialVersionUID = -1574980688443682003L;
+    private static final long serialVersionUID = -4084761970899604505L;
     
-    @Id(column = "ID")
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     
-    @Column(name = "MEMBER_NO")
     private String memberNo;
     
-    @Column(name = "FILE_NAME")
     private String fileName;
     
-    @Column(name = "FILE_PATH")
     private String filePath;
     
-    @Column(name = "UPLOAD_TIME")
     private Date uploadTime;
     
-    @Column(name = "PROJECT_ID")
-    private String projectId;
-    
-    @Column(name = "IS_SHOW")
     private Integer isShow;
     
     public Integer getIsShow()
@@ -54,6 +39,8 @@ public class AloneOptimEntity extends Pagable implements Serializable
         this.isShow = isShow;
     }
 
+    private String projectId;
+    
     public String getId()
     {
         return id;
@@ -113,5 +100,4 @@ public class AloneOptimEntity extends Pagable implements Serializable
     {
         this.projectId = projectId;
     }
-    
 }

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -62,6 +62,9 @@
 	<result property="enclosedNo" column="ENCLOSED_NO" jdbcType="VARCHAR" />
 	<result property="enclosedImg" column="ENCLOSED_IMG" jdbcType="VARCHAR" />
 	<result property="firstDate" column="FIRST_DATE" jdbcType="TIMESTAMP" />
+	<!-- 增加汇窗平台属性 -->
+	<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
+	<result property="purchaseState" column="PURCHASE_STATE" jdbcType="INTEGER" />
 </resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"

@@ -14,7 +14,15 @@
 var pageii;
 	var to_edit_pwd=function() {
 		var editPage=$("#edit_password").html();
-		pageii=dialogBoxOut(editPage);
+		//pageii=dialogBoxOutId("#edit_password");
+		
+		 pageii  =layer.open({
+			    type: 1,
+			    offset: ['30%', '35%'],
+			    area: ['500px', '250px'],
+			    title: "修改密码", //不显示标题
+			    content: $("#edit_password")
+			});
 	}
 	function edit_pwd(){
 		var validform=$(".xubox_page").Validform({
@@ -22,8 +30,8 @@ var pageii;
 		if (!validform.check()){
 			return false;
 		}
-		var pwd1 = $(".xubox_page").find("#loginpassword").val();
-		var pwd2 =  $(".xubox_page").find("#newpassword").val();
+		var pwd1 = $("#loginpassword").val();
+		var pwd2 =  $("#newpassword").val();
 		if (pwd1 == "" || pwd2 == "") {
 			messageInfo("密码不能为空！")
 			return false;
@@ -76,10 +84,6 @@ var pageii;
 						class="button button-green button-middle edit-password fontYH f14" onclick="to_edit_pwd();">修改登录密码</a>
 				</div>
 				<div id="edit_password"  style="display: none">
-					<div class="modal-wrap">
-						<div class="modal-header">
-							<span class="close" onclick="close_pwd();">关闭</span>
-						</div>
 						<div class="modal-body passdwordBox">
 							<div class="form-group">
 								<label>新密码</label> <input type="password" name="loginpassword"
@@ -97,7 +101,6 @@ var pageii;
 							</div>
 							<button class="popBtn" onclick="edit_pwd();">确认修改</button>
 						</div>
-					</div>
 				</div>
 				<!-- InstanceEndEditable -->
 			</div>

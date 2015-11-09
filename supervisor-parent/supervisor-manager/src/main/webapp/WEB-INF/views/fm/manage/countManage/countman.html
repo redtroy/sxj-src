@@ -112,6 +112,17 @@ function changeItemShow(id,isShow,proId){
 		}
 	});
 }
+
+function changeAloneShow(id,isShow,proId){
+	$.post("${basePath}openCount/changeAloneShow.htm?id="+id+"&&isShow="+isShow,function(data){
+		if(data.isOK == 'true'){
+			getItem(proId);
+			getItem(proId);
+		}else{
+			errorInfo("修改出错");
+		}
+	});
+}
 </script>
 </head>
 <body>

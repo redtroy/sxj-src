@@ -11,6 +11,7 @@
 		<result property="fileName" column="FILE_NAME" jdbcType="VARCHAR" />
 		<result property="filePath" column="FILE_PATH" jdbcType="VARCHAR" />
 		<result property="uploadTime" column="UPLOAD_TIME" jdbcType="TIMESTAMP" />
+		<result property="isShow" column="IS_SHOW" jdbcType="INTEGER"/>
 	</resultMap>
 
 	<select id="query" resultMap="OptimResultMap"

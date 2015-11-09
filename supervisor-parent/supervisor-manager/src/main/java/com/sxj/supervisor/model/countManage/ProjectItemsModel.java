@@ -16,6 +16,18 @@ public class ProjectItemsModel extends Pagable implements Serializable
     private List<ItemModel> projectItems;
     
     private ProjectEntity project;
+    
+    private List<AloneOptimEntity> optimList;
+
+    public List<AloneOptimEntity> getOptimList()
+    {
+        return optimList;
+    }
+
+    public void setOptimList(List<AloneOptimEntity> optimList)
+    {
+        this.optimList = optimList;
+    }
 
     public List<ItemModel> getProjectItems()
     {
