@@ -50,6 +50,8 @@ public class OptimizedResult
      */
     private List<LayOff> layOffs;
     
+    private List<LayOff> layOffs2;
+    
     public String getSectionName()
     {
         return sectionName;
@@ -132,6 +134,11 @@ public class OptimizedResult
     public void setQuantity(Double quantity)
     {
         this.quantity = quantity;
+    }
+    
+    public List<LayOff> getLayOffs2()
+    {
+        return getLayOffs();
     }
     
 }
