@@ -1,5 +1,6 @@
 package com.sxj.science.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxj.science.dao.export.IAloneOptimDao;
 import com.sxj.science.dao.export.IDocDao;
 import com.sxj.science.dao.export.IGlassDao;
 import com.sxj.science.dao.export.IItemDao;
@@ -57,9 +57,6 @@ public class ProjectServiceImpl implements IProjectService
     @Autowired
     private IScienceDao scienceDao;
     
-    @Autowired
-    private IAloneOptimDao optimDao;
-    
     private IProjectService self;
     
     @Autowired
@@ -103,9 +100,6 @@ public class ProjectServiceImpl implements IProjectService
     {
         try
         {
-            ProjectEntity project = projectDao.getProject(item.getProjectId());
-            project.setBatchCount(project.getBatchCount() + 1);
-            projectDao.updateProject(project);
             itemDao.addItem(item);
         }
         catch (Exception e)
@@ -151,8 +145,7 @@ public class ProjectServiceImpl implements IProjectService
                 {
                     QueryCondition<DocEntity> queryItem = new QueryCondition<>();
                     queryItem.addCondition("itemId", item.getId());
-                    queryItem.addGroup("SERIES");
-                    List<DocEntity> docList = docDao.query(queryItem);
+                    List<DocEntity> docList = docDao.openQuery(queryItem);
                     ItemModel model = new ItemModel();
                     model.setItem(item);
                     model.setDocList(docList);
@@ -175,7 +168,6 @@ public class ProjectServiceImpl implements IProjectService
         try
         {
             projectDao.deleteProject(id);
-            optimDao.deleteAloneOptimByProject(id);
             List<ItemModel> items = queryItems(id);
             for (ItemModel item : items)
             {
@@ -324,6 +316,36 @@ public class ProjectServiceImpl implements IProjectService
             SxjLogger.error("查询工程错误", e, this.getClass());
             throw new ServiceException("查询工程错误", e);
         }
+    }
+
+    @Override
+    public void deleteProject(String id) throws SQLException
+    {
+        this.projectDao.deleteProject(id);
+    }
+
+    @Override
+    public void deleteProjectItem(String id) throws SQLException
+    {
+        this.itemDao.deleteItem(id);
+    }
+
+    @Override
+    public void updateProject(ProjectEntity temPro) throws SQLException
+    {
+        projectDao.updateProject(temPro);
+    }
+
+    @Override
+    public void updateItem(ItemEntity temItem) throws SQLException
+    {
+        itemDao.updateItem(temItem);
+    }
+
+    @Override
+    public ItemEntity getItemById(String id)
+    {
+        return itemDao.getItem(id);
     }
     
 }

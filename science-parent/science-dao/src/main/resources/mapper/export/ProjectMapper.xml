@@ -15,11 +15,12 @@
 		<result property="batchCount" column="BATCH_COUNT" jdbcType="INTEGER" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="uploadTime" column="UPLOAD_TIME"  jdbcType="TIMESTAMP" />
+		<result property="isShow" column="IS_SHOW" jdbcType="INTEGER" />
 	</resultMap>
 	
 	<select id="query" resultMap="ProjectResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT distinct p.* from S_PROJECT p left join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
+		<![CDATA[SELECT * from S_PROJECT p left join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
 		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[ AND (p.NAME LIKE CONCAT('%',#{condition.name},'%') OR i.NAME LIKE CONCAT('%',#{condition.name},'%'))]]>
 		</if>
