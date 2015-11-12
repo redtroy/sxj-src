@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
@@ -26,6 +25,7 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.purchase.IPurchaseService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.FileUtil;
 import com.sxj.util.logger.SxjLogger;
@@ -39,6 +39,9 @@ public class PurchaseController extends BaseController {
 
 	@Autowired
 	private IMemberService memberService;
+	
+	@Autowired
+	private IPurchaseService  purchaseService;
 
 	/**
 	 * 上传文件
@@ -105,7 +108,7 @@ public class PurchaseController extends BaseController {
 		try {
 			MemberEntity memberEntity = JsonMapper.nonEmptyMapper().fromJson(
 					json, MemberEntity.class);
-			memberService.addMember(memberEntity);
+			purchaseService.syncMember(memberEntity);
 			retVal.put("status", "1");
 			response.setContentType("text/plain;UTF-8");
 			out = response.getWriter();
