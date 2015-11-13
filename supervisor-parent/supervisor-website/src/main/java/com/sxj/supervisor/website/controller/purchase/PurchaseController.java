@@ -106,6 +106,7 @@ public class PurchaseController extends BaseController {
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		PrintWriter out = null;
 		try {
+			String jsonString =request.getParameter("json");
 			MemberEntity memberEntity = JsonMapper.nonEmptyMapper().fromJson(
 					json, MemberEntity.class);
 			purchaseService.syncMember(memberEntity);
