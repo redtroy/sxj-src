@@ -39,6 +39,7 @@ $(document).ready(function()
     				$('#uploadify').uploadify("settings","formData", { 'projectId': projectId });
     			},
     			onUploadSuccess : function(file, data, response) {
+    				alert("上传成功");
     				var num = 1;
     				var dataObj = eval("(" + data + ")");//转换为json对象 
     				var hideVal = $hidden.val();
@@ -102,6 +103,7 @@ function closeDiv(){
 }
 function query(page){
 	var params=$("#search_form").serialize();
+	var search_name=$("#search_name").val();
 	 if(page!=undefined){
 		   params=params+"&currentPage="+page;
 	   }else{
@@ -121,6 +123,10 @@ function query(page){
 				var totalPage=pager.attr("totalPage");
 				var currentPage=pager.attr("currentPage");
 				loadPage(currentPage,totalPage,query);
+				var sdsd=$(".tabList").find(".project_class");
+				if(sdsd.html()==undefined){
+					alert("抱歉没有找到包含"+search_name+"关键字的工程信息");
+				}
 				//loadValidform();
 		   }
 	});
@@ -187,27 +193,52 @@ function getItem(id){
 }
 
 function getScienceItems(id){
-	   var params=$("#form_"+id).serialize();
-	 	$.post("${basePath}optim/getScienceItems.htm?projectId="+id,params,function(data){
-			 $("#optimize").empty();
-			 $("#optimize").append(data);
-			 $("#optimize").show();
-			 pageIndex=dialogBoxOutId("#optimize");
+	var children=$("#form_"+id).find(":checkbox");
+	var count=0;
+	  children.each(function(i){
+			if($(this).is(":checked")){
+				count=count+1;
+			}
 		});
-		
-	 
+	  if(count==0){
+		  alert("请选择批次或下料单条目");
+		 return;
+	  }else{
+		  var params=$("#form_"+id).serialize();
+		  var imgIndex=loadingImg();
+		 	$.post("${basePath}optim/getScienceItems.htm?projectId="+id,params,function(data){
+				 $("#optimize").empty();
+				 $("#optimize").append(data);
+				 $("#optimize").show();
+				 layer.close(imgIndex);
+				 pageIndex=dialogBoxOutId("#optimize");
+			});
+		 	return;
+	  }
 }
 function aloneOptim(id){
-	   var params=$("#alone_form_"+id).serialize();
-	   alert(params);
-	 	$.post("${basePath}optim/aloneOptim.htm?projectId="+id,params,function(data){
-			 $("#optimize").empty();
-			 $("#optimize").append(data);
-			 $("#optimize").show();
-			 pageIndex=dialogBoxOutId("#optimize");
+	var children=$("#alone_form_"+id).find(":checkbox");
+	var count=0;
+	 children.each(function(i){
+			if($(this).is(":checked")){
+				count=count+1;
+			}
 		});
-		
-	 
+	 if(count==0){
+		  alert("请选择需要优化的条目");
+		 return;
+	  }else{
+		  var params=$("#alone_form_"+id).serialize();
+		  var imgIndex=loadingImg();
+		 	$.post("${basePath}optim/aloneOptim.htm?projectId="+id,params,function(data){
+				 $("#optimize").empty();
+				 $("#optimize").append(data);
+				 $("#optimize").show();
+				 layer.close(imgIndex);
+				 pageIndex=dialogBoxOutId("#optimize");
+			});
+		 	return;
+	  }
 }
 $(":checkbox").live("change",function () {
 	   var thisId=$(this).val();
@@ -216,7 +247,7 @@ $(":checkbox").live("change",function () {
 	   var isCheck=$(this).attr("checked");
 	   var childrensize=$("#"+parentId).attr("childrensize");
 	   var count=$(this).attr("count");
-	   var children=$("#children_td_"+thisId).find(":checkbox");
+	   var children=$(".children_td_"+thisId).find(":checkbox");
 	   if(isCheck=="checked"){
 		   if(Number(count)+1==Number(childrensize)){
 			   parent.attr("checked","checked");
@@ -415,7 +446,7 @@ function downloadReport(){
 <!--         </li> -->
         <form id="search_form" action="javascript:void(0);">
         <li style="margin-left:460px;">
-        <input type="text" name="name" placeholder="请输入工程或批次名称关键字" value="" />
+        <input id="search_name" type="text" name="name" placeholder="请输入工程或批次名称" value="" />
         </li>
         <li>
         <button class=" button button-green" onclick="query();">搜索</button>
@@ -437,7 +468,7 @@ function downloadReport(){
       <th>操作</th>
     </tr>
     <#list projectList as project>
-    <tr id="project_${project.id}" isopen="close">
+    <tr id="project_${project.id}" isopen="close" class="project_class">
     <td>${project.projectNo}</td>
       <td id="project_info_${project.id}" class="proname">
 	      <img src="${b.staticPath}images/flex_1.png" width="9" height="8" alt="点击显示文件列表" title="点击显示文件列表" onclick="getItem('${project.id}');"/>
@@ -550,7 +581,7 @@ function downloadReport(){
     <div class="choose choose_one">
         <ul>
        		<li><button class="button button-green" data-dismiss="modal" onclick="query();">确定</button></li>
-            <li><button class="button button-green" data-dismiss="modal" onclick="closeDiv();">取消</button></li>
+            <li><button class="button button-green" data-dismiss="modal" onclick="closeDiv();">关闭</button></li>
         </ul>
     </div>
 </div>

@@ -91,21 +91,20 @@ var memberNo="${memberNo}";
 function addDoc(id,th){
 	var index=$(th).parent().parent().attr("index");
 	$("#button_doc_"+id+"_"+index).attr("onclick","modifyDoc('"+id+"',this);");
-	var htmlData=$("#doc_form_"+id+"_"+index).html();
-	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData);
+	var htmlData=$("#doc_form_"+id+"_"+index).get(0);
+	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData.outerHTML);
 	var params=$("#doc_form_"+id+"_"+index).serialize();
 	dialogBox(function(index2){
 		 $.post("${basePath}doc/addDoc.htm",params,function(data){
 			  layer.close(index2);
 				if(data.isOK == true){
 					var docId=data.docId;
-					$("#doc_form_"+id+"_"+index).attr("docid",docId);
+					$("#doc_form_"+id+"_"+index).after("<input id='docid_value' value='"+docId+"' type='hidden'/>");
 					$("#doc_form_"+id+"_"+index).find("input[name=id]").val(docId);
 					layer.close(pageIndex);
 					alert("添加成功");
-					//window.location.href="${basePath}index.htm";
 				}else{
-					$("button_doc_"+id+"_"+index).attr("onclick","addDoc('"+id+"',this);");
+					$("#button_doc_"+id+"_"+index).attr("onclick","addDoc('"+id+"',this);");
 					errorInfo(data.error);
 				}
 			});
@@ -113,18 +112,18 @@ function addDoc(id,th){
 }
 function modifyDoc(id,th){
 	var index=$(th).parent().parent().attr("index");
-	var docId=$("#doc_form_"+id+"_"+index).attr("docid");
+	var docId=$("#doc_form_"+id+"_"+index).next("#docid_value").val();
 	$("#doc_form_"+id+"_"+index).find("input[name=id]").val(docId);
-	var htmlData=$("#doc_form_"+id+"_"+index).html();
-	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData);
+	var htmlData=$("#doc_form_"+id+"_"+index).get(0);
+	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData.outerHTML);
 	var params=$("#doc_form_"+id+"_"+index).serialize();
 	dialogBox(function(index2){
 		 $.post("${basePath}doc/editDoc.htm",params,function(data){
 			  layer.close(index2);
 				if(data.isOK == true){
+					$("#doc_form_"+id+"_"+index).next("#docid_value").val(data.docId);
 					layer.close(pageIndex);
 					alert("修改成功");
-					//window.location.href="${basePath}index.htm";
 				}else{
 					errorInfo(data.error);
 				}
@@ -137,25 +136,41 @@ function resetTable(id,th){
 	window.location.reload();
 }
 function copyTable(id,th){
-	//$.get("${basePath}downloadTem/getTemp.htm?id="+id,function(data){
-		var index=$(th).parent().parent().attr("index");
-		index=parseInt(index);
-		//$('#button_div_'+id+"_"+index).clone().prependTo("#table_div");
-		$('#doc_form_'+id+"_"+index).clone().prependTo("#table_div");
-			$('#doc_form_'+id+"_"+index).attr("index",(index+1));
-			$("#table_div").find("#button_div_"+id+"_"+index).find("ul").attr("index",(index+1));
-			$('#doc_form_'+id+"_"+index).attr("id","doc_form_"+idArr+"_"+(index+1));
-			$("#table_div").find("#button_div_"+id+"_"+index).attr("id","button_div_"+idArr+"_"+(index+1));
-			$("#index_hidden").val(index+1);
- 		//});
+	var index=$(th).parent().parent().attr("index");
+	index=parseInt(index);
+	var newIndex=$("#index_hidden").val();
+	newIndex=parseInt(newIndex);
+	var copydata=$('#doc_form_'+id+"_"+index).clone();
+	$('#doc_form_'+id+"_"+index).attr("id","copy_doc_form_"+id+"_"+index);
+	$("#table_div").prepend(copydata);
+	$('#doc_form_'+id+"_"+index).attr("index",newIndex);
+	$("#table_div").find("#button_div_"+id+"_"+index).find("ul").attr("index",newIndex);
+	$('#doc_form_'+id+"_"+index).attr("id","doc_form_"+id+"_"+newIndex);
+	$("#table_div").find("#button_div_"+id+"_"+index).attr("id","button_div_"+id+"_"+newIndex);
+	$("#table_div").find("#button_doc_"+id+"_"+index).attr("id","button_doc_"+id+"_"+newIndex);
+	$("#table_div").find("#button_doc_"+id+"_"+newIndex).attr("onclick","addDoc('"+id+"',this);");
+	//$("#doc_form_"+id+"_"+newIndex).after("<input id='docid_value' value='"+docId+"' type='hidden'/>");
+	$("#index_hidden").val(newIndex+1);
+	$('#copy_doc_form_'+id+"_"+index).attr("id","doc_form_"+id+"_"+index);
 }
 
 function removeTable(id,th){
 	var index=$(th).parent().parent().attr("index");
-	index=parseInt(index);
-	$('#doc_form_'+id+"_"+index).remove();
-	$("#table_div").find("#button_div_"+id+"_"+index).remove();
-	//$("#index_hidden").val(index-1);
+	var docId=$("#doc_form_"+id+"_"+index).next("#docid_value").val();
+	dialogBox(function(index2){
+		 $.post("${basePath}doc/removeDoc.htm?docId="+docId,function(data){
+			  layer.close(index2);
+				if(data.isOK == true){
+					index=parseInt(index);
+					alert("删除成功");
+					$("#doc_form_"+id+"_"+index).next("#docid_value").remove();
+					$('#doc_form_'+id+"_"+index).remove();
+					$("#table_div").find("#button_div_"+id+"_"+index).remove();
+				}else{
+					alert("删除失败");
+				}
+			});
+	},"是否确认删除");
 }
 function  printTable(id,th){
 	var index=$(th).parent().parent().attr("index");
@@ -163,6 +178,14 @@ function  printTable(id,th){
 	$("#tableId_"+id+"_"+index+ " .na").attr("style","");
 	$("#tableId_"+id+"_"+index).jqprint();
 	}
+	
+function  printTableAll(){
+	//var index=$(th).parent().parent().attr("index");
+	//$("#tableId_"+id+"_"+index+ " .nb").attr("style","");
+	//$("#tableId_"+id+"_"+index+ " .na").attr("style","");
+	$("#table_div").jqprint();
+	}	
+
 function search_project(){
 	var name=$("#search_name_input").val();
 	window.location.href="${basePath}index.htm?name="+name;
@@ -190,6 +213,9 @@ function search_project(){
         </li>
         <li style="float:right">
         <a href="${basePath}index.htm"><button class=" button button-orange">返回首页</button></a>
+        </li>
+        <li>
+        <a href="javascript:void(0);"><button class=" button button-orange" onclick="printTableAll();">全部打印</button></a>
         </li>
         <li style="float:right">
         <button class="button button-green" onclick="search_project();">搜索</button>

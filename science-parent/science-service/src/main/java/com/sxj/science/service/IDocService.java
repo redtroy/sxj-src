@@ -14,6 +14,8 @@ public interface IDocService
     
     public void editDocModel(DocModel doc) throws ServiceException;
     
+    public void removeDoc(String docId) throws ServiceException;
+    
     public DocModel getDocModel(String docId) throws ServiceException;
     
     public List<DocModel> queryDocModel(DocQuery query) throws ServiceException;

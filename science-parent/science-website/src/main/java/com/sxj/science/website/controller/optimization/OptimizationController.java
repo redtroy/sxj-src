@@ -260,7 +260,7 @@ public class OptimizationController extends BaseController
             {
                 for (int i = numMinLength; i <= numMaxLength; i = i + numStep)
                 {
-                    OptimizedModel model = scienceService.process(list,
+                    OptimizedModel model = scienceService.process(list2,
                             optims.getProjectId(),
                             i + "",
                             optims.getKerf());

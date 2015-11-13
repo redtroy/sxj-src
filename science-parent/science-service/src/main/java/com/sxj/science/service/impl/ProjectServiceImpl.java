@@ -174,13 +174,13 @@ public class ProjectServiceImpl implements IProjectService
     {
         try
         {
-            projectDao.deleteProject(id);
-            optimDao.deleteAloneOptimByProject(id);
             List<ItemModel> items = queryItems(id);
             for (ItemModel item : items)
             {
                 self.removeItem(item.getId());
             }
+            optimDao.deleteAloneOptimByProject(id);
+            projectDao.deleteProject(id);
         }
         catch (Exception e)
         {
@@ -198,6 +198,11 @@ public class ProjectServiceImpl implements IProjectService
             List<String> docIds = new ArrayList<>();
             if (StringUtils.isNotEmpty(itemId))
             {
+                ItemEntity item = itemDao.getItem(itemId);
+                ProjectEntity project = projectDao.getProject(item.getProjectId());
+                project.setBatchCount(project.getBatchCount() - 1);
+                projectDao.updateProject(project);
+                
                 itemDao.deleteItem(itemId);
                 QueryCondition<DocEntity> query = new QueryCondition<>();
                 query.addCondition("itemId", itemId);
@@ -306,7 +311,7 @@ public class ProjectServiceImpl implements IProjectService
             throw new ServiceException("查询工程错误", e);
         }
     }
-
+    
     @Override
     public List<ProjectEntity> openQueryProject(ProjectQuery query)
     {

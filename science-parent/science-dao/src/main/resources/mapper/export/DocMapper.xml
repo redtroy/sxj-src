@@ -29,6 +29,9 @@
 		<if test="condition.series != null and condition.series !=''">
 			<![CDATA[ and d.SERIES =#{condition.series}]]>
 		</if>
+		<if test="condition.windowCode != null and condition.windowCode != ''">
+			<![CDATA[ AND d.WINDOW_CODE LIKE CONCAT('%',#{condition.windowCode},'%')]]>
+		</if>
 		<if test="condition.ids != null and condition.ids !=''">
 		  <![CDATA[ and d.ID IN ]]>
 			<foreach item="item" collection="condition.ids" open="(" close=")"
@@ -49,6 +52,7 @@
 			${item}
 		</foreach>
 		</if>
+		 <![CDATA[ ORDER BY d.ID DESC ]]>
 	</select>
 	
 	<!-- 条件查询备案 -->
