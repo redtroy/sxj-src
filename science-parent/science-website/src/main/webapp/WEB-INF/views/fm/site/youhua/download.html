@@ -39,11 +39,21 @@
 </div>
 <script>
 	function download() {
+		var val=$("#youhuaform").find("input:radio:checked").val();
+		if(val==undefined){
+			alert("请选择需要下载的类型");
+			return;
+		}
 		$("#youhuaform").attr("action", "${basePath}optim/downloadFile.htm");
 		$("#youhuaform").submit();
 		
 	}
 	function viewExcel() {
+		var val=$("#youhuaform").find("input:radio:checked").val();
+		if(val==undefined){
+			alert("请选择需要预览的类型");
+			return;
+		}
 		$("#youhuaform").attr("action", "${basePath}optim/viewExcel.htm");
 		$("#youhuaform").submit();
 		
