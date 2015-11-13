@@ -43,7 +43,7 @@
 		<property name="templateLoaderPath" value="/WEB-INF/views/fm/" />
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="freemarkerSettings" ref="freemarkerConfiguration" />
-		
+
 		<!-- <property name="freemarkerVariables"> <map> <entry key="shiro" value-ref="shiroTags" 
 			/> <entry key="xw" value-ref="xwTags"></entry> </map> </property> -->
 	</bean>
@@ -112,6 +112,12 @@
 				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 				<property name="prettyPrint" value="true" />
 			</bean>
+			<!-- 接受json  415错误 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+			<bean
+				class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+			<bean
+				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	<bean id="multipartResolver"
