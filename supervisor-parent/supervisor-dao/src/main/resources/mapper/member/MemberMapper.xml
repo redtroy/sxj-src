@@ -62,6 +62,9 @@
 	<result property="enclosedNo" column="ENCLOSED_NO" jdbcType="VARCHAR" />
 	<result property="enclosedImg" column="ENCLOSED_IMG" jdbcType="VARCHAR" />
 	<result property="firstDate" column="FIRST_DATE" jdbcType="TIMESTAMP" />
+	<!-- 增加汇窗平台属性 -->
+	<result property="purchaseNo" column="PURCHASE_NO" jdbcType="VARCHAR" />
+	<result property="purchaseState" column="PURCHASE_STATE" jdbcType="INTEGER" />
 </resultMap>
 	
 	<select id="getMemberByName" resultMap="MemberResultMap"

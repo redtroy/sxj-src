@@ -6,6 +6,7 @@ import java.util.List;
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
+import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.science.entity.export.AloneOptimEntity;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -23,6 +24,9 @@ public interface IAloneOptimDao
     
     @Delete
     public void deleteAloneOptim(String id) throws SQLException;
+    
+    @Update
+    public void updateAloneOptim(AloneOptimEntity query);
     
     public void deleteAloneOptimByProject(String projectId) throws SQLException;
     

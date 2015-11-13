@@ -168,4 +168,10 @@ public class AloneOptimServiceImpl implements IAloneOptimService
             throw new ServiceException("获取单独优化文件错误", e);
         }
     }
+
+    @Override
+    public void updateAloneOptim(AloneOptimEntity temAlone)
+    {
+        this.optimDao.updateAloneOptim(temAlone);
+    }
 }

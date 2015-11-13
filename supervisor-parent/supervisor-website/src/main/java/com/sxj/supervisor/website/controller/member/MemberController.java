@@ -409,7 +409,7 @@ public class MemberController extends BaseController
                 map.put("error", "手机号不能为空");
                 return map;
             }
-            String res = session.getAttribute("imgStr").toString();
+            String res = session.getAttribute("imgStr")==null ? null :session.getAttribute("imgStr").toString();
             if (res == null || "".equals(res) || "".equals(img))
             {
                 map.put("error", "请输入图形验证码");
@@ -464,7 +464,63 @@ public class MemberController extends BaseController
         }
         return map;
     }
-    
+    /**
+     * 会员中心发送验证码
+     */
+    @RequestMapping("sendMessage")
+    public @ResponseBody Map<String, String> sendMessage(HttpSession session,
+            String phoneNo, String img) throws WebException
+    {
+        
+        Map<String, String> map = new HashMap<String, String>();
+        try
+        {
+            if (StringUtils.isEmpty(phoneNo))
+            {
+                map.put("error", "手机号不能为空");
+                return map;
+            }
+            phoneNo = phoneNo.trim();
+            RAtomicLong num = redisConcurrent.getAtomicLong("num_" + phoneNo,
+                    59);// 记录次数59秒只能发送一次
+            if (num.incrementAndGet() == 1)
+            {
+                RAtomicLong sendMax = redisConcurrent.getAtomicLong("sendMax_"
+                        + phoneNo, DateTimeUtils.getNextZeroTime());
+                if (sendMax.incrementAndGet() <= 5)
+                {
+                    String message = "";
+                    message = memberService.createvalidata(phoneNo, message);
+                    if (message.equals("-9999"))
+                    {
+                        map.put("error", "该号码已被拉入黑名单");
+                    }
+                    else
+                    {
+                        HierarchicalCacheManager.set(CacheLevel.REDIS,
+                                "checkMs",
+                                phoneNo + "_checkMs",
+                                message,
+                                600);
+                    }
+                }
+                else
+                {
+                    map.put("error", "每个号码每天限制发送5次");
+                }
+            }
+            else
+            {
+                map.put("error", "每分钟只能发送一次");
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("信息发送错误", e, this.getClass());
+            throw new WebException("发送信息错误");
+        }
+        return map;
+    }
     /**
      * 短信验证
      */

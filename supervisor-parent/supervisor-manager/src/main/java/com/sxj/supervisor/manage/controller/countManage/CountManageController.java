@@ -30,6 +30,12 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.system.AreaEntity;
 import com.sxj.supervisor.manage.controller.BaseController;
+import com.sxj.supervisor.model.countManage.AloneOptimEntity;
+import com.sxj.supervisor.model.countManage.HistoryListModel;
+import com.sxj.supervisor.model.countManage.HistoryModel;
+import com.sxj.supervisor.model.countManage.ItemModel;
+import com.sxj.supervisor.model.countManage.ProjectEntity;
+import com.sxj.supervisor.model.countManage.ProjectItemsModel;
 import com.sxj.supervisor.model.countManage.ProjectListModel;
 import com.sxj.supervisor.model.countManage.ProjectModel;
 import com.sxj.supervisor.model.countManage.WindowTypeAndAreaModel;
@@ -83,7 +89,6 @@ public class CountManageController extends BaseController
             Integer currentPage=query.getCurrentPage();
             params.put("currentPage", currentPage.toString());
             String res = httpClient.post(hostName+"openQuery.htm", params);
-            System.err.println(res);
             JsonMapper jm=new JsonMapper();
             WindowTypeAndAreaModel resultMap=jm.fromJson(res, WindowTypeAndAreaModel.class);
             List<WindowTypeModel> list= resultMap.getList();
@@ -224,7 +229,6 @@ public class CountManageController extends BaseController
         try
         {
             res = httpClient.post(hostName+"loadFeeding.htm", params);
-            System.err.println(res);
             JsonMapper jm=new JsonMapper(); 
             WindowTypeModel windowType=jm.fromJson(res, WindowTypeModel.class);
             map.put("windowType", windowType);
@@ -356,7 +360,6 @@ public class CountManageController extends BaseController
         try
         {
             res = httpClient.post(hostName+"loadFeeding.htm", params);
-            System.err.println(res);
             JsonMapper jm=new JsonMapper(); 
             WindowTypeModel windowType=jm.fromJson(res, WindowTypeModel.class);
             map.put("windowType", windowType);
@@ -417,7 +420,6 @@ public class CountManageController extends BaseController
             Integer currentPage=query.getCurrentPage();
             params.put("currentPage", currentPage.toString());
             String res = httpClient.post(hostName+"openQueryProject.htm", params);
-            System.err.println(res);
             JsonMapper jm=new JsonMapper();
             ProjectListModel resultMap=jm.fromJson(res, ProjectListModel.class);
             List<ProjectModel> list= resultMap.getList();
@@ -440,4 +442,143 @@ public class CountManageController extends BaseController
         }
             return "manage/countManage/countman";
         }
+    
+    @RequestMapping("/getItems")
+    public String getProjectItem(String projectId, ModelMap map)
+            throws WebException
+    {
+        try
+        {
+            Map<String,String> params=new HashMap<String,String>();
+            params.put("projectId", projectId);
+            String res = httpClient.post(hostName+"getItems.htm", params);
+            JsonMapper jm=new JsonMapper();
+            ProjectItemsModel projectItemsModel=jm.fromJson(res, ProjectItemsModel.class);
+            
+            List<ItemModel> list = projectItemsModel.getProjectItems();
+            ProjectEntity temPro = projectItemsModel.getProject();
+            List<AloneOptimEntity> optimList=projectItemsModel.getOptimList();
+            map.put("projectItems", list);
+            map.put("projectId", projectId);
+            map.put("project", temPro);
+            map.put("optimList", optimList);
+            return "manage/countManage/projectItem";
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询工程条目错误", e, this.getClass());
+            throw new WebException("查询工程条目错误", e);
+        }
+    }
+    
+    @RequestMapping("/deleteProject")
+    public @ResponseBody Map<String, Object> deleteProject(String id) throws ClientProtocolException, IOException{
+        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", id);
+        String res = httpClient.post(hostName+"deleteProject.htm", params);
+        JsonMapper jm=new JsonMapper();
+        Map<String,String> resMap=jm.fromJson(res, Map.class);
+        String result=resMap.get("isOK");
+        if(result.equals("true")){
+            map.put("isOK", "true");
+        }else{
+            map.put("isOK", "false");
+        }
+        return map;
+    }
+    
+    @RequestMapping("/deleteProjectItem")
+    public @ResponseBody Map<String, Object> deleteProjectItem(String id) throws ClientProtocolException, IOException{
+        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", id);
+        String res = httpClient.post(hostName+"deleteProjectItem.htm", params);
+        JsonMapper jm=new JsonMapper();
+        Map<String,String> resMap=jm.fromJson(res, Map.class);
+        String result=resMap.get("isOK");
+        if(result.equals("true")){
+            map.put("isOK", "true");
+        }else{
+            map.put("isOK", "false");
+        }
+        return map;
+    }
+    
+    @RequestMapping("/queryHistory")
+    public String queryHistory(String projectId, ModelMap map)
+            throws WebException
+    {
+        try
+        {
+            Map<String,String> params=new HashMap<String,String>();
+            params.put("projectId", projectId);
+            String res = httpClient.post(hostName+"queryHistory.htm", params);
+            JsonMapper jm=new JsonMapper();
+            HistoryListModel historyListModel=jm.fromJson(res, HistoryListModel.class);
+            List<HistoryModel> list=historyListModel.getList();
+            map.put("list", list);
+            map.put("projectId", projectId);
+            return "manage/countManage/counthistory";
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询报表历史错误", e, this.getClass());
+            throw new WebException("查询报表历史错误", e);
+        }
+    }
+    
+    @RequestMapping("/changeShow")
+    public @ResponseBody Map<String, Object> changeShow(String id,String isShow) throws ClientProtocolException, IOException{
+        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", id);
+        params.put("isShow", isShow);
+        String res = httpClient.post(hostName+"changeShow.htm", params);
+        JsonMapper jm=new JsonMapper();
+        Map<String,String> resMap=jm.fromJson(res, Map.class);
+        String result=resMap.get("isOK");
+        if(result.equals("true")){
+            map.put("isOK", "true");
+        }else{
+            map.put("isOK", "false");
+        }
+        return map;
+    }
+    
+    @RequestMapping("/changeItemShow")
+    public @ResponseBody Map<String, Object> changeItemShow(String id,String isShow) throws ClientProtocolException, IOException{
+        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", id);
+        params.put("isShow", isShow);
+        String res = httpClient.post(hostName+"changeItemShow.htm", params);
+        JsonMapper jm=new JsonMapper();
+        Map<String,String> resMap=jm.fromJson(res, Map.class);
+        String result=resMap.get("isOK");
+        if(result.equals("true")){
+            map.put("isOK", "true");
+        }else{
+            map.put("isOK", "false");
+        }
+        return map;
+    }
+    
+    @RequestMapping("/changeAloneShow")
+    public @ResponseBody Map<String, Object> changeAloneShow(String id,String isShow) throws ClientProtocolException, IOException{
+        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", id);
+        params.put("isShow", isShow);
+        String res = httpClient.post(hostName+"changeAloneShow.htm", params);
+        JsonMapper jm=new JsonMapper();
+        Map<String,String> resMap=jm.fromJson(res, Map.class);
+        String result=resMap.get("isOK");
+        if(result.equals("true")){
+            map.put("isOK", "true");
+        }else{
+            map.put("isOK", "false");
+        }
+        return map;
+    }
 }
