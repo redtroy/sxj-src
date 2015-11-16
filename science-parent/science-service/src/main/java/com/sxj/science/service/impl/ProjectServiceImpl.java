@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.science.dao.export.IAloneOptimDao;
 import com.sxj.science.dao.export.IDocDao;
 import com.sxj.science.dao.export.IGlassDao;
 import com.sxj.science.dao.export.IItemDao;
@@ -56,6 +57,9 @@ public class ProjectServiceImpl implements IProjectService
     
     @Autowired
     private IScienceDao scienceDao;
+    
+    @Autowired
+    private IAloneOptimDao optimDao;
     
     private IProjectService self;
     
@@ -146,6 +150,21 @@ public class ProjectServiceImpl implements IProjectService
                     QueryCondition<DocEntity> queryItem = new QueryCondition<>();
                     queryItem.addCondition("itemId", item.getId());
                     List<DocEntity> docList = docDao.openQuery(queryItem);
+                    for (DocEntity docEntity : docList)
+                    {
+                        if (docEntity.getState() == 0)
+                        {
+                            item.setState(0);
+                        }
+                        if (docEntity.getState() == 1)
+                        {
+                            item.setState(1);
+                        }
+                        if (docEntity.getState() == 2)
+                        {
+                            item.setState(2);
+                        }
+                    }
                     ItemModel model = new ItemModel();
                     model.setItem(item);
                     model.setDocList(docList);
@@ -323,31 +342,31 @@ public class ProjectServiceImpl implements IProjectService
             throw new ServiceException("查询工程错误", e);
         }
     }
-
+    
     @Override
     public void deleteProject(String id) throws SQLException
     {
         this.projectDao.deleteProject(id);
     }
-
+    
     @Override
     public void deleteProjectItem(String id) throws SQLException
     {
         this.itemDao.deleteItem(id);
     }
-
+    
     @Override
     public void updateProject(ProjectEntity temPro) throws SQLException
     {
         projectDao.updateProject(temPro);
     }
-
+    
     @Override
     public void updateItem(ItemEntity temItem) throws SQLException
     {
         itemDao.updateItem(temItem);
     }
-
+    
     @Override
     public ItemEntity getItemById(String id)
     {
