@@ -58,6 +58,7 @@ public class DocController extends BaseController
         {
             DocQuery query = new DocQuery();
             query.setSeries(series);
+            query.setItemId(itemId);
             List<DocModel> docList = docService.queryDocModel(query);
             if (docList != null && docList.size() > 0)
             {
@@ -88,6 +89,24 @@ public class DocController extends BaseController
         return map;
     }
     
+    @RequestMapping("/removeDoc")
+    public @ResponseBody Map<String, Object> removeDoc(String docId)
+    {
+        Map<String, Object> map = new HashMap<String, Object>();
+        try
+        {
+            docService.removeDoc(docId);
+            map.put("isOK", true);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("删除下料单错误", e, this.getClass());
+            map.put("isOK", false);
+            map.put("error", e.getMessage());
+        }
+        return map;
+    }
+    
     @RequestMapping("/editDoc")
     public @ResponseBody Map<String, Object> editDoc(
             @ModelAttribute DocModel doc)
@@ -109,7 +128,7 @@ public class DocController extends BaseController
     }
     
     @RequestMapping("/toEdit")
-    public String toAdd(String projectId, String itemId, String[] docIds,
+    public String toEdit(String projectId, String itemId, String[] docIds,
             ModelMap map)
     {
         ProjectEntity project = projectService.getProject(projectId);
@@ -123,6 +142,27 @@ public class DocController extends BaseController
         
         DocQuery query = new DocQuery();
         query.setIds(docIds);
+        List<DocModel> docList = docService.queryDocModel(query);
+        map.put("docList", docList);
+        return "site/editmtable";
+    }
+    
+    @RequestMapping("/query")
+    public String query(String projectId, String itemId, String windowCode,
+            ModelMap map)
+    {
+        ProjectEntity project = projectService.getProject(projectId);
+        map.put("projectId", projectId);
+        map.put("itemId", itemId);
+        if (project != null)
+        {
+            map.put("projectName", project.getName());
+        }
+        map.put("memberNo", "E00001");
+        
+        DocQuery query = new DocQuery();
+        query.setWindowCode(windowCode);
+        query.setItemId(itemId);
         List<DocModel> docList = docService.queryDocModel(query);
         map.put("docList", docList);
         return "site/editmtable";
