@@ -17,9 +17,11 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
@@ -27,6 +29,7 @@ import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.spring.modules.web.MediaTypes;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.purchase.IPurchaseService;
@@ -103,15 +106,16 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("syncMember")
-	public void getRfidBatchInfo(@RequestBody MemberEntity menEntity,
+	@RequestMapping(value="syncMember",consumes=MediaTypes.JSON)
+	@ResponseBody
+	public void getRfidBatchInfo(@RequestBody String json,
 			HttpServletResponse response,HttpServletRequest request) {
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		PrintWriter out = null;
 		try {
-			System.err.println(menEntity.getName());
+			System.err.println(json);
 //			MemberEntity memberEntity=JsonMapper.nonDefaultMapper().fromJson(json, MemberEntity.class);
-			purchaseService.syncMember(menEntity);
+//			purchaseService.syncMember(menEntity);
 			retVal.put("status", "1");
 			response.setContentType("text/plain;UTF-8");
 			out = response.getWriter();

@@ -67,10 +67,9 @@ public class TestJunit
 			memberEntity.setAddress("仙林大道");
 			String json = JsonMapper.nonDefaultMapper().toJson(memberEntity);
 			System.err.println(json);
-			String encoderJson = URLEncoder.encode(json, HTTP.UTF_8);
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("json", encoderJson);
-			String a=httpClient.post(loginUrl, map);
+			map.put("json", json);
+			String a=httpClient.postJson(loginUrl, json);
 			System.err.println(a);
         }
         catch (Exception e)
