@@ -349,7 +349,7 @@ public class DownloadTemController extends BaseController
     }
     
     @RequestMapping("/openQuery")
-    public @ResponseBody Map<String, Object> openQuery(String area,
+    public @ResponseBody Map<String, Object> openQuery(String winId,String area,
             String companyName, String type, String series, String name,
             String currentPage) throws WebException
     {
@@ -363,6 +363,10 @@ public class DownloadTemController extends BaseController
             query.setCurrentPage(Integer.parseInt(currentPage));
             query.setShowCount(20);
             Map<String, Object> resultMap = new HashMap<String, Object>();
+            if (!StringUtil.isBlank(winId))
+            {
+                query.setWinId(winId);
+            }
             if (!StringUtil.isBlank(area))
             {
                 query.setArea(area);
@@ -777,6 +781,46 @@ public class DownloadTemController extends BaseController
             temAlone.setIsShow(Integer.parseInt(isShow));
             optimService.updateAloneOptim(temAlone);
             resultMap.put("isOK", "true");
+        }
+        catch (Exception e)
+        {
+            resultMap.put("isOK", "false");
+            SxjLogger.error("删除批次错误", e, this.getClass());
+            throw new WebException("删除批次错误", e);
+        }
+        return resultMap;
+    }
+    
+    @RequestMapping("/delAlone")
+    public @ResponseBody Map<String, Object> delAlone(String id)
+            throws WebException
+    {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try
+        {
+            this.optimService.deleteAlone(id);
+            resultMap.put("isOK", "true");
+        }
+        catch (Exception e)
+        {
+            resultMap.put("isOK", "false");
+            SxjLogger.error("删除批次错误", e, this.getClass());
+            throw new WebException("删除批次错误", e);
+        }
+        return resultMap;
+    }
+    
+    @RequestMapping("/getAlone")
+    public @ResponseBody Map<String, Object> getAlone(String id)
+            throws WebException
+    {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try
+        {
+            AloneOptimEntity alone=this.optimService.getAloneOptim(id);
+            List<AloneOptimEntity> optimList = new ArrayList<AloneOptimEntity>();
+            optimList.add(alone);
+            resultMap.put("optimList", optimList);
         }
         catch (Exception e)
         {
