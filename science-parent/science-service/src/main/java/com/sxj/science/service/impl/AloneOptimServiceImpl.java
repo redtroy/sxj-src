@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -173,5 +174,11 @@ public class AloneOptimServiceImpl implements IAloneOptimService
     public void updateAloneOptim(AloneOptimEntity temAlone)
     {
         this.optimDao.updateAloneOptim(temAlone);
+    }
+
+    @Override
+    public void deleteAlone(String id) throws SQLException
+    {
+        this.optimDao.deleteAloneOptim(id);
     }
 }

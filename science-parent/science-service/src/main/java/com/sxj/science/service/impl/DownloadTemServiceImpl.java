@@ -120,6 +120,7 @@ public class DownloadTemServiceImpl implements IDownloadTemService
                 return null;
             }
             QueryCondition<WindowTypeEntity> condition = new QueryCondition<WindowTypeEntity>();
+            condition.addCondition("winId", query.getWinId());// 编号
             condition.addCondition("area", query.getArea());// 地区
             condition.addCondition("companyName", query.getCompanyName());// 公司名称
             condition.addCondition("type", query.getType());// 类型

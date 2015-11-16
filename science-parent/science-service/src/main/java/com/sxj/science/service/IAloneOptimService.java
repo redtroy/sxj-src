@@ -1,5 +1,6 @@
 package com.sxj.science.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.sxj.science.entity.export.AloneOptimEntity;
@@ -21,4 +22,6 @@ public interface IAloneOptimService
     public void removeAloneOptim(String id) throws ServiceException;
 
     public void updateAloneOptim(AloneOptimEntity temAlone);
+
+    public void deleteAlone(String id) throws SQLException;
 }

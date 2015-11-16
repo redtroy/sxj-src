@@ -85,6 +85,10 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM S_WINDOW_TYPE WHERE 1=1  ]]>
 		<!-- 所属地区 -->
+		<if test="condition.winId != null and condition.winId != ''">
+			<![CDATA[ AND WINID LIKE CONCAT('%',#{condition.winId},'%') ]]>
+		</if>
+		<!-- 所属地区 -->
 		<if test="condition.area != null and condition.area != ''">
 			<![CDATA[ AND AREA = #{condition.area} ]]>
 		</if>

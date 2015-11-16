@@ -1,5 +1,6 @@
 package com.sxj.supervisor.manage.controller.countManage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -71,6 +72,9 @@ public class CountManageController extends BaseController
                query.setShowCount(20);
            }
             Map<String,String> params=new HashMap<String,String>();
+            if(!StringUtil.isBlank(query.getWinId())){
+                params.put("winId", query.getWinId());
+            }
             if(!StringUtil.isBlank(query.getArea())){
                 params.put("area", query.getArea());
             }
@@ -580,5 +584,78 @@ public class CountManageController extends BaseController
             map.put("isOK", "false");
         }
         return map;
+    }
+    
+    @RequestMapping("/delAlone")
+    public @ResponseBody Map<String, Object> delAlone(String id) throws ClientProtocolException, IOException{
+        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String,String> params=new HashMap<String,String>();
+        params.put("id", id);
+        String res = httpClient.post(hostName+"delAlone.htm", params);
+        JsonMapper jm=new JsonMapper();
+        Map<String,String> resMap=jm.fromJson(res, Map.class);
+        String result=resMap.get("isOK");
+        if(result.equals("true")){
+            map.put("isOK", "true");
+        }else{
+            map.put("isOK", "false");
+        }
+        return map;
+    }
+    
+    @RequestMapping("downloadAloneFile")
+    public void downloadAloneFile(String id, HttpServletResponse response,
+            HttpServletRequest request) throws WebException
+    {
+        try
+        {
+            String agent = request.getHeader("User-Agent");
+            boolean isMSIE = (agent != null && agent.indexOf("MSIE") != -1);
+            Map<String,String> params=new HashMap<String,String>();
+            params.put("id", id);
+            String res = httpClient.post(hostName+"getAlone.htm", params);
+            JsonMapper jm=new JsonMapper();
+            ProjectItemsModel projectItemsModel=jm.fromJson(res, ProjectItemsModel.class);
+            List<AloneOptimEntity>temList= projectItemsModel.getOptimList();
+            AloneOptimEntity optim=temList.get(0);
+            
+            if (StringUtils.isNotEmpty(optim.getFilePath()))
+            {
+                
+                String group = optim.getFilePath().substring(0,
+                        optim.getFilePath().indexOf("/"));
+                String fileId = optim.getFilePath()
+                        .substring(optim.getFilePath().indexOf("/") + 1,
+                                optim.getFilePath().length());
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                storageClientService.downloadFile(group, fileId, out);
+                String fileName = optim.getFileName();
+                if (isMSIE)
+                {
+                    fileName = URLEncoder.encode(fileName, "UTF-8");
+                }
+                else
+                {
+                    fileName = new String(fileName.getBytes("UTF-8"),
+                            "ISO-8859-1");
+                }
+                response.reset();
+                response.addHeader("Content-Disposition",
+                        "attachment;filename=" + fileName);
+                response.setContentType("application/x-download");
+                response.addHeader("Content-Length", "" + out.size());
+                response.setContentLength((int) out.size());
+                ServletOutputStream output = response.getOutputStream();//输出流  
+                output.write(out.toByteArray());
+                output.flush();
+                output.close();
+                response.flushBuffer();
+            }
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("获取文件错误", e, this.getClass());
+            
+        }
     }
 }

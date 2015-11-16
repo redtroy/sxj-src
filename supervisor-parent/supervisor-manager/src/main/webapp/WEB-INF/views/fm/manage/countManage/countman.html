@@ -118,10 +118,32 @@ function changeAloneShow(id,isShow,proId){
 		if(data.isOK == 'true'){
 			getItem(proId);
 			getItem(proId);
+			setTab('1',2,4);
 		}else{
 			errorInfo("修改出错");
 		}
 	});
+}
+
+function delAlone(id,proId){
+	dialogBox(function(index){
+		 $.post("${basePath}openCount/delAlone.htm?id="+id,function(data){
+//			  layer.close(index);
+				if(data.isOK == 'true'){
+//					layer.close(pageIndex);
+					alert("删除成功");
+//					$("#project_"+proId).attr("isopen",'close');
+					getItem(proId);
+					getItem(proId);
+				}else{
+					errorInfo("删除出错");
+				}
+			});
+	 },"是否确认删除单独型材优化");
+}
+
+function downAloneOptim(id){
+	   window.location.href="${basePath}openCount/downloadAloneFile.htm?id="+id;
 }
 </script>
 </head>

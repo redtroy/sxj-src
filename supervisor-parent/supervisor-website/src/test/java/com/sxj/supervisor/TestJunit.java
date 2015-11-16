@@ -1,5 +1,11 @@
 package com.sxj.supervisor;
 
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.protocol.HTTP;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +13,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.service.message.IMessageConfigService;
+import com.sxj.util.common.ISxjHttpClient;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext_2.xml" })
@@ -20,6 +29,8 @@ public class TestJunit
     @Autowired
     private IMessageConfigService configService;
     
+    @Autowired
+    private ISxjHttpClient httpClient;
     //    @Autowired
     //    private AlGatherImpl al;
     
@@ -48,7 +59,18 @@ public class TestJunit
             //   transformer.toHTML(docx, docxHTML);
             // System.out.println(docxHTML.toString());
             //   al.gather();
-            configService.sendAllMessage("测试短信");
+            //configService.sendAllMessage("测试短信");
+        	
+        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/syncMember.htm";
+			MemberEntity memberEntity = new MemberEntity();
+			memberEntity.setName("南京市测试厂");
+			memberEntity.setAddress("仙林大道");
+			String json = JsonMapper.nonDefaultMapper().toJson(memberEntity);
+			System.err.println(json);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("json", json);
+			String a=httpClient.postJson(loginUrl, json);
+			System.err.println(a);
         }
         catch (Exception e)
         {
