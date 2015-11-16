@@ -106,18 +106,17 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value="syncMember",consumes=MediaTypes.JSON)
+	@RequestMapping(value="syncMember")
 	@ResponseBody
-	public void getRfidBatchInfo(@RequestBody String json,
+	public void getRfidBatchInfo(@RequestBody MemberEntity memberEntity,
 			HttpServletResponse response,HttpServletRequest request) {
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		PrintWriter out = null;
 		try {
-			System.err.println(json);
-//			MemberEntity memberEntity=JsonMapper.nonDefaultMapper().fromJson(json, MemberEntity.class);
-//			purchaseService.syncMember(menEntity);
+			purchaseService.syncMember(memberEntity);
 			retVal.put("status", "1");
 			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin","*");
 			out = response.getWriter();
 		} catch (Exception e) {
 			SxjLogger.error("同步会员出错 ", e, this.getClass());
