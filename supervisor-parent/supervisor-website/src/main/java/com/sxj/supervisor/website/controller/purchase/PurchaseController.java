@@ -13,6 +13,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -101,13 +104,14 @@ public class PurchaseController extends BaseController {
 	 * @throws IOException
 	 */
 	@RequestMapping("syncMember")
-	public void getRfidBatchInfo(@RequestBody MemberEntity memberEntity,
+	public void getRfidBatchInfo(@RequestBody MemberEntity menEntity,
 			HttpServletResponse response,HttpServletRequest request) {
-		response.setHeader("Access-Control-Allow-Origin","*");
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		PrintWriter out = null;
 		try {
-			purchaseService.syncMember(memberEntity);
+			System.err.println(menEntity.getName());
+//			MemberEntity memberEntity=JsonMapper.nonDefaultMapper().fromJson(json, MemberEntity.class);
+			purchaseService.syncMember(menEntity);
 			retVal.put("status", "1");
 			response.setContentType("text/plain;UTF-8");
 			out = response.getWriter();
