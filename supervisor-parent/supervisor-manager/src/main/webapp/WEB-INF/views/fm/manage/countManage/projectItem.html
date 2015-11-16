@@ -117,13 +117,13 @@
 		              <td class="left"><div class="contraction contraction_sourcexlsname">${optim.fileName}</div></td>
 		              <td class="sheetlistcenter">${optim.uploadTime?string("yyyy-MM-dd HH:mm:ss")}</td>
 		              <td class="operation sheetlistcenter">
-		              	<a href="#" class="download">下载</a>
+		              	<a href="javascript:downAloneOptim('${optim.id}')" class="download">下载</a>
 		              	<#if optim.isShow==0>
 		                <a href="javascript:changeAloneShow('${optim.id}',1,'${projectId}')" class="edit">前台显示</a>
 		               <#else>
 		               <a href="javascript:changeAloneShow('${optim.id}',0,'${projectId}')" class="edit">前台隐藏</a>
 		               </#if>
-		             	<a href="#" class="del">删除</a>
+		             	<a href="javascript:delAlone('${optim.id}','${projectId}')" class="del">删除</a>
 		              </td>
 		            </tr>
 		          </table>

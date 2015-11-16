@@ -93,7 +93,10 @@ Intense( elements );
       <h2 class="title">下料单模板管理</h2>
       <div id="searchBox"><button onclick="javascript:loadAdd()" class="btn btn-blue ly-right"><span>新增模板</span></button>
       <form id="search_box" action="javascript:void(0);">
-      <p>型材公司所属地区
+      <p>
+      编号
+       <input type="text" name="winId" value="">
+      型材公司所属地区
         <select name="area">
           <option selected="selected"  value="">所有地区</option>
           <#list areaList as model>

@@ -13,9 +13,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
@@ -23,6 +29,7 @@ import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.spring.modules.web.MediaTypes;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.purchase.IPurchaseService;
@@ -99,18 +106,17 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("syncMember")
-	public void getRfidBatchInfo(String json,
+	@RequestMapping(value="syncMember")
+	@ResponseBody
+	public void getRfidBatchInfo(@RequestBody MemberEntity memberEntity,
 			HttpServletResponse response,HttpServletRequest request) {
-		response.setHeader("Access-Control-Allow-Origin","*");
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		PrintWriter out = null;
 		try {
-			MemberEntity memberEntity = JsonMapper.nonEmptyMapper().fromJson(
-					json, MemberEntity.class);
 			purchaseService.syncMember(memberEntity);
 			retVal.put("status", "1");
 			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin","*");
 			out = response.getWriter();
 		} catch (Exception e) {
 			SxjLogger.error("同步会员出错 ", e, this.getClass());
