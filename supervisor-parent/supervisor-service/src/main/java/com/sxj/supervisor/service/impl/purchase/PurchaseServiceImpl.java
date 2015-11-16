@@ -43,9 +43,6 @@ public class PurchaseServiceImpl implements IPurchaseService {
 				 memberDao.addMember(memberEntity);
 			 }
 			 //更新关联企业
-			 if(member.getAffiliates()!=null){
-				 
-			 }
 		} catch (Exception e) {
 			SxjLogger.error("同步会员出错", e, this.getClass());
 			throw new ServiceException("同步会员出错", e);

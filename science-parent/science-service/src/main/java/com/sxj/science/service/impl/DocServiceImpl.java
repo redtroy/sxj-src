@@ -266,4 +266,27 @@ public class DocServiceImpl implements IDocService
         }
     }
     
+    @Override
+    public void removeDoc(String docId) throws ServiceException
+    {
+        try
+        {
+            DocEntity doc = docDao.getDoc(docId);
+            ItemEntity item = itemDao.getItem(doc.getItemId());
+            item.setCount(item.getCount() - 1);
+            item.setState(1);
+            itemDao.updateItem(item);
+            docDao.deleteDocById(docId);
+            glassDao.deleteGlassByDocId(docId);
+            partsDao.deletePartsByDocId(docId);
+            productDao.deleteProductByDocId(docId);
+            scienceDao.deleteScienceByDocId(docId);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询下料信息错误", e, this.getClass());
+            throw new ServiceException("查询下料信息错误", e);
+        }
+        
+    }
 }
