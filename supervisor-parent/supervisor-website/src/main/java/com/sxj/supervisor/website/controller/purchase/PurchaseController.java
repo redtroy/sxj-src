@@ -16,13 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
-import org.bouncycastle.asn1.ocsp.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
@@ -108,15 +106,15 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value="/syncMember",method=RequestMethod.POST,consumes=MediaTypes.JSON)
+	@RequestMapping(value="syncMember")
 	@ResponseBody
-	public void syncMember(@RequestBody String json,
+	public void syncMember(@RequestBody MemberEntity memberEntity,
 			HttpServletResponse response,HttpServletRequest request) {
 		Map<String, Object> retVal = new HashMap<String, Object>();
 		PrintWriter out = null;
 		try {
-			System.err.println(json);
-//			purchaseService.syncMember(memberEntity);
+			System.err.println(memberEntity.getAddress());
+	//		purchaseService.syncMember(memberEntity);
 			retVal.put("status", "1");
 			response.setContentType("text/plain;UTF-8");
 			response.setHeader("Access-Control-Allow-Origin","*");
