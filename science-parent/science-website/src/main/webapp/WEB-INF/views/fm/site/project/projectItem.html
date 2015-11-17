@@ -90,7 +90,15 @@
             <tr class="children_td_${projectItem.id}">
               <td class="sheetlist" colspan="3">
               <input parentId="${projectItem.id}" count=${doc_index} type="checkbox" name="docId" value="${doc.id}">
+              <#if doc.state==0>
+              <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&series=${doc.series}">(未填写)</a></span>
+              </#if>
+               <#if doc.state==1>
               <span class="unfinised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&series=${doc.series}">(未完成)</a></span>
+              </#if>
+               <#if doc.state==2>
+              <span class="finised"><a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&series=${doc.series}">(已完成)</a></span>
+              </#if>
               ${doc.series}
               <a target="_blank" href="${basePath}doc/toAdd.htm?projectId=${projectItem.projectId}&itemId=${projectItem.id}&series=${doc.series}"><img style="margin-left:6px" src="${b.staticPath}images/botton/3-4 icon.png"></a>
               </td>

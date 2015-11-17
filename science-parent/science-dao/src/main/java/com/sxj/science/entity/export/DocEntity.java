@@ -70,6 +70,9 @@ public class DocEntity extends Pagable implements Serializable
     @Column(name = "HTML_DATA")
     private String htmlData;
     
+    @Column(name = "STATE")
+    private Integer state;
+    
     public String getWidth()
     {
         return width;
@@ -218,6 +221,16 @@ public class DocEntity extends Pagable implements Serializable
     public void setHtmlData(String htmlData)
     {
         this.htmlData = htmlData;
+    }
+    
+    public Integer getState()
+    {
+        return state;
+    }
+    
+    public void setState(Integer state)
+    {
+        this.state = state;
     }
     
     @Override
