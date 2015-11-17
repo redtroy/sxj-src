@@ -104,6 +104,9 @@ public class ProjectServiceImpl implements IProjectService
     {
         try
         {
+            ProjectEntity project = projectDao.getProject(item.getProjectId());
+            project.setBatchCount(project.getBatchCount() + 1);
+            projectDao.updateProject(project);
             itemDao.addItem(item);
         }
         catch (Exception e)
@@ -149,7 +152,8 @@ public class ProjectServiceImpl implements IProjectService
                 {
                     QueryCondition<DocEntity> queryItem = new QueryCondition<>();
                     queryItem.addCondition("itemId", item.getId());
-                    List<DocEntity> docList = docDao.openQuery(queryItem);
+                    queryItem.addGroup("SERIES");
+                    List<DocEntity> docList = docDao.query(queryItem);
                     for (DocEntity docEntity : docList)
                     {
                         if (docEntity.getState() == 0)

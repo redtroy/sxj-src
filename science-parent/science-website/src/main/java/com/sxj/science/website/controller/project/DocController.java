@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.science.entity.export.ItemEntity;
 import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.model.DocModel;
 import com.sxj.science.model.DocQuery;
@@ -36,11 +37,16 @@ public class DocController extends BaseController
             ModelMap map)
     {
         ProjectEntity project = projectService.getProject(projectId);
+        ItemEntity item = projectService.getItemById(itemId);
         map.put("projectId", projectId);
         map.put("itemId", itemId);
         if (project != null)
         {
             map.put("projectName", project.getName());
+        }
+        if (item != null)
+        {
+            map.put("itemName", item.getName());
         }
         map.put("memberNo", "E00001");
         if (StringUtils.isEmpty(series))
@@ -132,11 +138,16 @@ public class DocController extends BaseController
             ModelMap map)
     {
         ProjectEntity project = projectService.getProject(projectId);
+        ItemEntity item = projectService.getItemById(itemId);
         map.put("projectId", projectId);
         map.put("itemId", itemId);
         if (project != null)
         {
             map.put("projectName", project.getName());
+        }
+        if (item != null)
+        {
+            map.put("itemName", item.getName());
         }
         map.put("memberNo", "E00001");
         
