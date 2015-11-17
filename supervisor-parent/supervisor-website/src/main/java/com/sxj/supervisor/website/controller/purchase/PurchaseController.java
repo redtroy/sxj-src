@@ -109,23 +109,21 @@ public class PurchaseController extends BaseController {
 	@RequestMapping(value="syncMember")
 	@ResponseBody
 	public void syncMember(@RequestBody MemberEntity memberEntity,
-			HttpServletResponse response,HttpServletRequest request) {
-		Map<String, Object> retVal = new HashMap<String, Object>();
-		PrintWriter out = null;
+			HttpServletResponse response,HttpServletRequest request) throws IOException {
+		PrintWriter out = response.getWriter();
 		try {
 			System.err.println(memberEntity.getAddress());
-	//		purchaseService.syncMember(memberEntity);
-			retVal.put("status", "1");
+			purchaseService.syncMember(memberEntity);
+			out.print("1");
 			response.setContentType("text/plain;UTF-8");
 			response.setHeader("Access-Control-Allow-Origin","*");
-			out = response.getWriter();
 		} catch (Exception e) {
 			SxjLogger.error("同步会员出错 ", e, this.getClass());
-			retVal.put("status", "0");
+			out.print("0");
+		}finally{
+			out.flush();
+			out.close();
 		}
-		String res = JsonMapper.nonDefaultMapper().toJson(retVal);
-		out.print(res);
-		out.flush();
-		out.close();
+		
 	}
 }
