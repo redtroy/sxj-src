@@ -32,7 +32,7 @@
     <#list list as item>
     <tr id="td_${item_index}">
     <td height="30" align="center">
-    <input type="checkbox" name="checktd" value="${item_index}" >
+    <input type="checkbox" name="checktd" value="${item_index}" checked="checked">
     <input type="hidden" name="paramList[${item_index}].name" value="${item.sectionName}"/>
     <input type="hidden" name="paramList[${item_index}].type" value="${item.sectionType}"/>
     <#list item.partSpecifications as part>
@@ -102,16 +102,29 @@ function editLength(index){
 }
 
 function optimization(){
-	var params=$("#optimized_form").serialize();
-	dialogBox(function(index){
-		 $.post("${basePath}optim/optimization.htm",params,function(data){
-			 		layer.close(index);
-					layer.close(pageIndex);
-					 $("#optimize").empty();
-					 $("#optimize").append(data);
-					 $("#optimize").show();
-					 pageIndex=dialogBoxOutId("#optimize");
-			});
-	 },"是否确认优化");
+	var children=$("#optimized_form").find(":checkbox");
+	var count=0;
+	  children.each(function(i){
+			if($(this).is(":checked")){
+				count=count+1;
+			}
+		});
+	  if(count==0){
+		  alert("请勾选参与一键优化的数据");
+		 return;
+	  }else{
+		  var params=$("#optimized_form").serialize();
+			dialogBox(function(index){
+				 $.post("${basePath}optim/optimization.htm",params,function(data){
+					 		layer.close(index);
+							layer.close(pageIndex);
+							 $("#optimize").empty();
+							 $("#optimize").append(data);
+							 $("#optimize").show();
+							 pageIndex=dialogBoxOutId("#optimize");
+					});
+			 },"是否确认优化");
+	  }
+	
 }
 </script>

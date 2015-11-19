@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sxj.science.entity.export.ProjectEntity;
+import com.sxj.science.model.ItemModel;
 import com.sxj.science.model.ProjectQuery;
 import com.sxj.science.service.IAloneOptimService;
 import com.sxj.science.service.IProjectService;
@@ -42,6 +43,26 @@ public class BasicController extends BaseController
         query.setPagable(true);
         query.setShowCount(20);
         List<ProjectEntity> list = projectService.query(query);
+        for (ProjectEntity projectEntity : list)
+        {
+            List<ItemModel> items = projectService.queryItems(projectEntity.getId());
+            for (ItemModel item : items)
+            {
+                if (item.getState() == 0)
+                {
+                    projectEntity.setState(0);
+                }
+                if (item.getState() == 1)
+                {
+                    projectEntity.setState(1);
+                }
+                if (item.getState() == 2)
+                {
+                    projectEntity.setState(2);
+                }
+            }
+        }
+        
         Integer count = projectService.queryFileCount(query);
         if (count == null)
         {

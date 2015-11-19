@@ -154,11 +154,12 @@ public class DocServiceImpl implements IDocService
             {
                 throw new ServiceException("工程批次不能为空");
             }
-            docDao.deleteDocById(doc.getId());
-            glassDao.deleteGlassByDocId(doc.getId());
-            partsDao.deletePartsByDocId(doc.getId());
-            productDao.deleteProductByDocId(doc.getId());
-            scienceDao.deleteScienceByDocId(doc.getId());
+            //            docDao.deleteDocById(doc.getId());
+            //            glassDao.deleteGlassByDocId(doc.getId());
+            //            partsDao.deletePartsByDocId(doc.getId());
+            //            productDao.deleteProductByDocId(doc.getId());
+            //            scienceDao.deleteScienceByDocId(doc.getId());
+            self.removeDoc(doc.getId());
             doc.setId(null);
             self.addDocModel(doc);
         }
