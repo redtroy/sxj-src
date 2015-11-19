@@ -72,7 +72,7 @@ public class PurchaseServiceImpl implements IPurchaseService {
 				// 更新汇窗编号
 				memberEntity.setPurchaseNo(member.getPurchaseNo());
 				memberEntity.setPurchaseState(1);
-				memberDao.addMember(memberEntity);
+				memberDao.update(memberEntity);
 			}
 			// 更新关联企业
 			if (member.getType().equals(MemberTypeEnum.AGENT)
