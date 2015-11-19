@@ -61,7 +61,7 @@ function setTab(name,cursel,n){
 <!--添加下料表开始-->
 <!--返回顶部脚本开始-->
 <script>
- lastScrollY=0;
+lastScrollY=0;
 function heartBeat(){ 
 var diffY;
 if (document.documentElement && document.documentElement.scrollTop)
@@ -87,7 +87,9 @@ var pageIndex;
 var projectId="${projectId}";
 var projectName="${projectName}";
 var itemId="${itemId}";
+var itemName="${itemName}";
 var memberNo="${memberNo}";
+$("#last_project_name").val(projectName);
 function addDoc(id,th){
 	var index=$(th).parent().parent().attr("index");
 	$("#button_doc_"+id+"_"+index).attr("onclick","modifyDoc('"+id+"',this);");
@@ -152,6 +154,7 @@ function copyTable(id,th){
 	//$("#doc_form_"+id+"_"+newIndex).after("<input id='docid_value' value='"+docId+"' type='hidden'/>");
 	$("#index_hidden").val(newIndex+1);
 	$('#copy_doc_form_'+id+"_"+index).attr("id","doc_form_"+id+"_"+index);
+	scroll(0,0);
 }
 
 function removeTable(id,th){

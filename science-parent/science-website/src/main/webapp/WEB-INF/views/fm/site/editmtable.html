@@ -87,6 +87,7 @@ var pageIndex;
 var projectId="${projectId}";
 var projectName="${projectName}";
 var itemId="${itemId}";
+var itemName="${itemName}";
 var memberNo="${memberNo}";
 function addDoc(id,th){
 	var index=$(th).parent().parent().attr("index");
@@ -150,6 +151,7 @@ function copyTable(id,th){
 		//$("#doc_form_"+id+"_"+newIndex).after("<input id='docid_value' value='"+docId+"' type='hidden'/>");
 		$("#index_hidden").val(newIndex+1);
 		$('#copy_doc_form_'+id+"_"+index).attr("id","doc_form_"+id+"_"+index);
+		scroll(0,0);
 }
 
 function removeTable(id,th){
@@ -239,4 +241,8 @@ ${doc.htmlData}
 </div>
 <@b.footer />
 </body>
+<script>
+$("#last_project_name").val(projectName);
+$("#last_item_name").val(itemName);
+</script>
 </html>

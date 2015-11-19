@@ -23,7 +23,13 @@
 	</resultMap>
 	<select id="query" resultMap="DocResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * from S_DOC d WHERE 1 = 1]]>
+		<![CDATA[SELECT tmp.*,CASE WHEN (gCount > 0 AND pCount > 0 AND paCount > 0 AND sCount > 0) THEN 2 WHEN ]]>
+		<![CDATA[(gCount = 0 AND pCount = 0 AND paCount = 0 AND sCount = 0) THEN 0 ELSE 1 END AS STATE FROM (SELECT ID,WINDOW_ID,PROJECT_ID,PROJECT_NAME,ITEM_ID,MEMBER_NO,FILE_PATH,WINDOW_CODE,QUANTITY,SERIES,WINDOW_FACA,WIDTH,HEIGHT,HTML_DATA,]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_GLASS g WHERE g.DOC_ID = d.ID AND g.HEIGHT <> '' AND g.QUANTITY <> '' AND g.WIDTH <> '' AND g.TYPE <> '') AS gCount,]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_P_PRODUCT p WHERE p.DOC_ID = d.ID AND p.HEIGHT <> '' AND p.NAME <> '' AND p.QUANTITY <> '' AND p.WIDTH <> '' ) AS pCount,]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_PARTS pa WHERE pa.DOC_ID = d.ID AND pa.`NAME` <> '' AND pa.QUANTITY <> '' AND pa.TECHONLOGY <> '' AND pa.TYPE <> '' AND pa.UNIT <> '' AND pa.USED <> '') AS paCount,]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_SCIENCE s WHERE s.DOC_ID = d.ID AND s.LENGTH <> '' AND s.NAME <> '' AND s.QUANTITY <> '' AND s.REMARK <> '' AND s.TYPE <> '' AND s.USED <> '' ) AS sCount]]>
+		<![CDATA[ FROM S_DOC d WHERE 1 = 1]]>
 		<if test="condition.itemId != null and condition.itemId !=''">
 			<![CDATA[ and d.ITEM_ID =#{condition.itemId}]]>
 		</if>
@@ -54,6 +60,7 @@
 			</foreach>
 		</if>
 		 <![CDATA[ ORDER BY d.ID DESC ]]>
+		<![CDATA[) AS tmp]]>
 	</select>
 
 	<!-- 条件查询备案 -->
@@ -72,34 +79,23 @@
 
 	<select id="openQuery" resultMap="DocResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT ID,WINDOW_ID,PROJECT_ID,PROJECT_NAME,MEMBER_NO,FILE_PATH,WINDOW_CODE,SERIES,CASE WHEN (gCount > 0 AND pCount > 0 AND paCount > 0 AND sCount > 0) THEN 2 WHEN ]]>
-		<![CDATA[(gCount = 0 AND pCount = 0 AND paCount = 0 AND sCount = 0) THEN 0 ELSE 1 END AS STATE FROM (SELECT ID,WINDOW_ID,PROJECT_ID,PROJECT_NAME,MEMBER_NO,FILE_PATH,WINDOW_CODE,SERIES,]]>
-		<![CDATA[(SELECT COUNT(*) FROM S_GLASS g WHERE g.DOC_ID = d.ID AND g.HEIGHT <> '' AND g.QUANTITY <> '' AND g.WIDTH <> '' AND g.TYPE <> '') AS gCount,]]>
-		<![CDATA[(SELECT COUNT(*) FROM S_P_PRODUCT p WHERE p.DOC_ID = d.ID AND p.HEIGHT <> '' AND p.NAME <> '' AND p.QUANTITY <> '' AND p.WIDTH <> '' ) AS pCount,]]>
-		<![CDATA[(SELECT COUNT(*) FROM S_PARTS pa WHERE pa.DOC_ID = d.ID AND pa.`NAME` <> '' AND pa.QUANTITY <> '' AND pa.TECHONLOGY <> '' AND pa.TYPE <> '' AND pa.UNIT <> '' AND pa.USED <> '') AS paCount,]]>
-		<![CDATA[(SELECT COUNT(*) FROM S_SCIENCE s WHERE s.DOC_ID = d.ID AND s.LENGTH <> '' AND s.NAME <> '' AND s.QUANTITY <> '' AND s.REMARK <> '' AND s.TYPE <> '' AND s.USED <> '' ) AS sCount]]>
-		<![CDATA[ FROM S_DOC d WHERE 1 = 1]]>
+		<![CDATA[SELECT ID,WINDOW_ID,PROJECT_ID,PROJECT_NAME,MEMBER_NO,FILE_PATH,WINDOW_CODE,SERIES from S_DOC d WHERE 1 = 1]]>
 		<if test="condition.itemId != null and condition.itemId !=''">
 			<![CDATA[ and d.ITEM_ID =#{condition.itemId}]]>
 		</if>
-		<if test="condition.projectId!= null and condition.projectId !=''">
-			<![CDATA[ and d.PROJECT_ID =#{condition.itemId}]]>
-		</if>
 		<if test="condition.ids != null and condition.ids !=''">
 		  <![CDATA[ and d.ID IN ]]>
-			<foreach item="item" collection="condition.ids" open="("
-				close=")" separator=",">
-				#{item}
+			<foreach item="item" collection="condition.ids" open="(" close=")"
+			separator=",">
+			#{item}
 			</foreach>
 		</if>
 		<if test="condition.itemIds != null and condition.itemIds !=''">
 		  <![CDATA[ and d.ITEM_ID IN ]]>
-			<foreach item="item" collection="condition.itemIds" open="("
-				close=")" separator=",">
-				#{item}
+			<foreach item="item" collection="condition.itemIds" open="(" close=")"
+			separator=",">
+			#{item}
 			</foreach>
 		</if>
-		<![CDATA[) AS tmp]]>
-
 	</select>
 </mapper>

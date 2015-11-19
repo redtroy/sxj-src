@@ -58,6 +58,32 @@ public class WindowTypeEntity extends Pagable implements Serializable
     @Column(name="HTMLDATA")
     private String htmlData;
     
+    @Column(name="HTMLDATABACKUP")
+    private String htmlDataBackup;
+    
+    @Column(name="FINISH")
+    private String finish;
+    
+    public String getFinish()
+    {
+        return finish;
+    }
+
+    public void setFinish(String finish)
+    {
+        this.finish = finish;
+    }
+
+    public String getHtmlDataBackup()
+    {
+        return htmlDataBackup;
+    }
+
+    public void setHtmlDataBackup(String htmlDataBackup)
+    {
+        this.htmlDataBackup = htmlDataBackup;
+    }
+
     public String getHtmlData()
     {
         return htmlData;

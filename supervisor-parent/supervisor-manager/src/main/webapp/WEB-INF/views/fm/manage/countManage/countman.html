@@ -44,6 +44,8 @@ function query(page){
 }
 
 function getItem(id){
+	$(".itemTd").remove();
+// 	$(".projectTr").attr("isopen",'close');
 	 var open=$("#project_"+id).attr("isopen");
 	if(open=='close'){
 		 $.get("${basePath}openCount/getItems.htm?projectId="+id,function(data){
@@ -175,7 +177,6 @@ function downAloneOptim(id){
         <button class="btn btn-blue" onclick="query()"><span>查询</span></button>
     </div>
     </form>
-    <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
       	<col width="10%"/>
         <col />
@@ -196,7 +197,7 @@ function downAloneOptim(id){
 		  <th>操作</th>
         </tr>
         <#list list as model>
-        <tr id="project_${model.id}" isopen="close">
+        <tr id="project_${model.id}" isopen="close" class="projectTr">
           <td>${model.projectNo}</td>
 		  <td><a href="javascript:getItem('${model.id}')" class="lnk-blue a-width">${model.name}</a></td>
           <td>${model.memberName}</td>
