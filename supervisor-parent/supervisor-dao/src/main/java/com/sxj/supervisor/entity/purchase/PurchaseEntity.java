@@ -14,8 +14,6 @@ import com.sxj.supervisor.dao.purchase.IPurchaseDao;
  * @author anshaoshuai
  *
  */
-@Entity(mapper = IPurchaseDao.class)
-@Table(name = "M_PURCHASE")
 public class PurchaseEntity extends Pagable implements Serializable {
 
 	/**
