@@ -6,8 +6,6 @@ import com.sxj.mybatis.orm.annotations.Column;
 import com.sxj.mybatis.orm.annotations.Entity;
 import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
-import com.sxj.supervisor.dao.purchase.IPurchaseDao;
-
 /**
  * 不同采购类型的最终采购量
  * 
