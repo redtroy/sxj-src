@@ -350,6 +350,10 @@
            <li style=" width:99%"><label class="lable">法人代表</label><input type="text" value="${member.legalRep}" id="legalRep" name="legalRep" /></li>
           <li style=" width:99%"><label class="lable">注册资本</label><input type="text" value="${member.registeredCapital}" id="registeredCapital" datatype="n1-10" name="registeredCapital" />万元</li>
           <li style=" width:99%;height: 70px;"><label class="lable">备注</label><textarea style="width:38%" rows="2" cols="0" name="remark">${member.remark}</textarea></li>
+          <#if member.purchaseState==1>
+          <li style=" width:99%"><label class="lable">同步状态</label><em class="state normal">汇窗同步</em></li>
+          <li style=" width:99%"><label class="lable">汇窗编号</label>${member.purchaseNo}</li>
+         </#if>
           </ul>
           </div>
 			<div class="right-news">

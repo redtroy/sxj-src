@@ -1,5 +1,7 @@
 package com.sxj.supervisor.service.impl.purchase;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,11 +9,14 @@ import org.springframework.util.Assert;
 
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.enu.member.MemberCheckStateEnum;
 import com.sxj.supervisor.enu.member.MemberStatesEnum;
 import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.service.member.IMemberService;
+import com.sxj.supervisor.service.member.IMemberToMemberService;
 import com.sxj.supervisor.service.purchase.IPurchaseService;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 
@@ -24,6 +29,9 @@ public class PurchaseServiceImpl implements IPurchaseService {
 
 	@Autowired
 	private IMemberDao memberDao;
+
+	@Autowired
+	private IMemberToMemberService memberToMemberService;
 
 	@Override
 	public void syncMember(MemberEntity member) throws ServiceException {
@@ -56,7 +64,8 @@ public class PurchaseServiceImpl implements IPurchaseService {
 				}
 				member.setState(MemberStatesEnum.NORMAL);
 				member.setCheckState(MemberCheckStateEnum.UNRECOGNIZED);
-				member.setFlag(true);
+				member.setPurchaseState(1);
+				member.setFlag(false);
 				// 增加汇窗编号 状态
 				memberDao.addMember(member);
 			} else {
@@ -66,6 +75,28 @@ public class PurchaseServiceImpl implements IPurchaseService {
 				memberDao.addMember(memberEntity);
 			}
 			// 更新关联企业
+			if (member.getType().equals(MemberTypeEnum.AGENT)
+					|| member.getType().equals(MemberTypeEnum.DISTRIBUTOR)) {
+				if (!StringUtils.isEmpty(member.getAffiliates())) {
+					MemberEntity affiliates = memberService
+							.getMemberByName(member.getAffiliates());
+					MemberToMemberEntity m = new MemberToMemberEntity();
+
+					m.setMemberNo(member.getMemberNo());
+					m.setMemberName(member.getName());
+					m.setContacts(member.getContacts());
+					m.setTelNum(member.getTelNum());
+					m.setParentNo(affiliates.getMemberNo());
+					m.setParentContacts(affiliates.getContacts());
+					m.setParentName(member.getAffiliates());
+					m.setParentTelNum(affiliates.getTelNum());
+					m.setCreateTime(new Date());
+					m.setMemberType(2);// 型材厂
+					if (StringUtils.isNotEmpty(m.getParentName())) {
+						memberToMemberService.addMemberToMember(m);
+					}
+				}
+			}
 		} catch (Exception e) {
 			SxjLogger.error("同步会员出错", e, this.getClass());
 			throw new ServiceException("同步会员出错", e);

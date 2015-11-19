@@ -140,9 +140,8 @@ public class PurchaseController extends BaseController {
 	 */
 	@RequestMapping(value="getContract")
 	public void getContract(HttpServletResponse response,HttpServletRequest request,String contractNo) throws IOException{
-		
-		PrintWriter out = response.getWriter();
 		response.setContentType("application/json; charset=utf-8");
+		PrintWriter out = response.getWriter();
 		try {
 			contractNo="CT15110013";
 			ContractModel contract = contractService.getContractModelByContractNo(contractNo);
