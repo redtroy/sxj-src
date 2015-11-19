@@ -34,6 +34,7 @@ public class PurchaseServiceImpl implements IPurchaseService {
 	private IMemberToMemberService memberToMemberService;
 
 	@Override
+	@Transactional
 	public void syncMember(MemberEntity member) throws ServiceException {
 		try {
 			Assert.notNull(member, "会员数据为空!");
@@ -72,7 +73,7 @@ public class PurchaseServiceImpl implements IPurchaseService {
 				// 更新汇窗编号
 				memberEntity.setPurchaseNo(member.getPurchaseNo());
 				memberEntity.setPurchaseState(1);
-				memberDao.update(memberEntity);
+				memberDao.updateMember(memberEntity);
 			}
 			// 更新关联企业
 			if (member.getType().equals(MemberTypeEnum.AGENT)
