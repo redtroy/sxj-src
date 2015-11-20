@@ -557,6 +557,23 @@ public class MemberController extends BaseController
     public void exportExcel(HttpServletRequest request,
             HttpServletResponse response, MemberQuery query) throws Exception
     {
+    	 if (StringUtils.isNotEmpty(query.getArea()))
+         {
+             String areaId = query.getArea();
+             areaId = "32:江苏省," + areaId;
+             query.setArea(areaId);
+         }
+         if (query.getCheckState() != null && query.getCheckState() == 1)
+         {
+             query.setCheckState(1);
+             query.setFlag("1");
+         }
+         else if (query.getCheckState() != null
+                 && query.getCheckState() == 3)
+         {
+             query.setCheckState(1);
+             query.setFlag("0");
+         }
         
         String fileNameString = "会员信息"
                 + DateTimeUtils.formateDate2Str(new Date(), "MM月dd日hh时mm分")

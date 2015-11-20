@@ -82,15 +82,22 @@ public class PurchaseServiceImpl implements IPurchaseService {
 					MemberEntity affiliates = memberService
 							.getMemberByName(member.getAffiliates());
 					MemberToMemberEntity m = new MemberToMemberEntity();
-
-					m.setMemberNo(member.getMemberNo());
+					if (memberEntity == null) {
+						m.setMemberNo(member.getMemberNo());
+					} else {
+						m.setMemberNo(memberEntity.getMemberNo());
+					}
+					//删除关联企业
+					memberToMemberService.delbyName(m.getMemberNo());
 					m.setMemberName(member.getName());
 					m.setContacts(member.getContacts());
 					m.setTelNum(member.getTelNum());
-					m.setParentNo(affiliates.getMemberNo());
-					m.setParentContacts(affiliates.getContacts());
+					if (affiliates != null) {
+						m.setParentNo(affiliates.getMemberNo());
+						m.setParentContacts(affiliates.getContacts());
+						m.setParentTelNum(affiliates.getTelNum());
+					}
 					m.setParentName(member.getAffiliates());
-					m.setParentTelNum(affiliates.getTelNum());
 					m.setCreateTime(new Date());
 					m.setMemberType(2);// 型材厂
 					if (StringUtils.isNotEmpty(m.getParentName())) {
