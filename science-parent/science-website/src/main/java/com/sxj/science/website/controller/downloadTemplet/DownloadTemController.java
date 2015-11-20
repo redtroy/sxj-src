@@ -699,7 +699,7 @@ public class DownloadTemController extends BaseController
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try
         {
-            projectService.deleteProjectItem(id);
+            projectService.removeItem(id);
             resultMap.put("isOK", "true");
         }
         catch (Exception e)
