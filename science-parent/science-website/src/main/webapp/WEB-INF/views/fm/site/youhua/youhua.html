@@ -25,7 +25,7 @@
       <td width="40" valign="middle" height="40" align="center">序号</td>
       <td valign="middle" align="center">材料名称</td>
       <td width="150" valign="middle" height="40" align="center">整料长度（mm）</td>
-      <td width="150" valign="middle" height="40" align="center">余料长度（mm）</td>
+<!--       <td width="150" valign="middle" height="40" align="center">余料长度（mm）</td> -->
       <td width="150" valign="middle" height="40" align="center">需用整料（支）</td>
       <td width="100" valign="middle" height="40" align="center">利用率</td>
     </tr>
@@ -59,7 +59,7 @@
       <#assign left=lay.left+left>
       <#assign materialNum=lay.materialNum+materialNum>
      </#list>
-      <td height="30" align="center">${left}</td>
+<!--       <td height="30" align="center">${left}</td> -->
       <td height="30" align="center">${materialNum}</td>
       <td height="30" align="center">${(item.param.length-left)/item.param.length*100}%</td>
     </tr>

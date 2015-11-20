@@ -42,10 +42,20 @@ public class BasicController extends BaseController
     {
         query.setPagable(true);
         query.setShowCount(20);
+        query.setIsShow(1);
         List<ProjectEntity> list = projectService.query(query);
         for (ProjectEntity projectEntity : list)
         {
             List<ItemModel> items = projectService.queryItems(projectEntity.getId());
+            if (items.size() > 0)
+            {
+                projectEntity.setState(2);
+            }
+            else
+            {
+                projectEntity.setState(0);
+            }
+            
             for (ItemModel item : items)
             {
                 if (item.getState() == 0)
@@ -55,10 +65,7 @@ public class BasicController extends BaseController
                 if (item.getState() == 1)
                 {
                     projectEntity.setState(1);
-                }
-                if (item.getState() == 2)
-                {
-                    projectEntity.setState(2);
+                    break;
                 }
             }
         }

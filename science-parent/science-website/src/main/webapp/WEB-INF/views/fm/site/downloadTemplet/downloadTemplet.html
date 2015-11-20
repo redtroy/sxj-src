@@ -144,10 +144,11 @@ function comfir(){
  			$('#doc_form_'+idArr+"_"+index).find("input[name=projectName]").val(projectName);
  			$('#doc_form_'+idArr+"_"+index).find("input[name=itemId]").val(itemId);
  			$('#doc_form_'+idArr+"_"+index).find("input[name=memberNo]").val(memberNo);
- 			$("#last_project_name").val(projectName);
- 			$("#last_item_name").val(itemName);
+ 			$(".last_project_name").val(projectName);
+ 			$(".last_item_name").val(itemName);
  			
  		  }
+ 		 $("#box").hide();
 //  		  else{
 //  			index=$('#doc_form_'+idArr).attr("index");
 //  			index=parseInt(index);
@@ -160,6 +161,10 @@ function comfir(){
 //  			$("#table_div").find("#button_div_"+idArr).attr("id","button_div_"+idArr+"_"+index);
 //  		  }
  		});
+}
+
+function closetemp(){
+	 $("#box").hide();
 }
 </script>
 </head>
@@ -183,7 +188,7 @@ function comfir(){
         </ul>
         <ul>
         	<div class="launch launchloa" onclick="moreCompany()"></div>
-        	<li><img src="${b.staticPath}images/down_01.png" width="24" height="22" alt=""/></li>
+        	<li><img src="${b.staticPath}images/down_01.png" width="24" height="24" alt=""/></li>
             <li style="margin-left:0;"><strong>公司名称</strong></li>
         	<div class="list" style="height:50px;" id="moreCompanyDiv">
         	<ul>
@@ -195,7 +200,7 @@ function comfir(){
         </ul>
         <ul>
         	<div class="launch launchloa" onclick="moreType()"></div>
-        	<li><img src="${b.staticPath}images/down_02.png" width="24" height="22" alt=""/></li>
+        	<li><img src="${b.staticPath}images/down_02.png" width="24" height="24" alt=""/></li>
             <li style="margin-left:0;"><strong>类别</strong></li>
             <div class="list" style="height:50px;" id="moreTypeDiv">
             <ul>
@@ -207,7 +212,7 @@ function comfir(){
         </ul>
         <ul>
         	<div class="launch launchlob" onclick="moreSeries()"></div>
-        	<li><img src="${b.staticPath}images/down_03.png" width="24" height="22" alt=""/></li>
+        	<li><img src="${b.staticPath}images/down_03.png" width="24" height="24" alt=""/></li>
             <li style="margin-left:0;"><strong>系列</strong></li>
             <div class="list" style="height:50px;" id="moreSeriesDiv">
             <ul>
@@ -219,8 +224,8 @@ function comfir(){
             
         </ul>
 	</div>
-<div id="down_type">
-    	<ul>
+<div id="down_type" style="width:790px;clear:both">
+    	<ul style="min-height:400px">
         	<!-- <li><div class="mask" style="display:none"><img src="${b.staticPath}images/Check.png" width="67" height="57" alt=""/></div><div class="img"><img src="${b.staticPath}images/type1.gif" alt=""></div></li> -->
             <#list list as model>
             <li onclick="clickMask('${model.id}',this)" id="${model.id}"><div id="div_${model.id}" class="mask" style="display:none"><img src="${b.staticPath}images/Check.png" width="67" height="57" alt=""/></div><div class="img" ><img src="${b.imagePath}${model.imageSrc}" width="182" height="166" alt="${model.name}"></div></li>
@@ -229,10 +234,12 @@ function comfir(){
             	<li>无符合条件数据!</li>
             </#if>
         </ul>
+
  </div>
-	<div style="width:155px;margin:auto;height:60px;line-height:60px">
-			<ul>
+ 
+	<div style="width:870px;clear:both">
+			<ul style="width:155px;margin:auto;height:60px;line-height:60px">
 			<li><button class=" button button-orange" data-dismiss="modal" onclick="comfir();">确认</button></li>
-			<li><button class=" button button-green" data-dismiss="modal">取消</button></li>
+			<li><button class=" button button-green" data-dismiss="modal" onclick="closetemp();">取消</button></li>
 			</ul>
 	</div>

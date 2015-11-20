@@ -22,6 +22,8 @@ public class DocQuery extends Pagable implements Serializable
     
     private String windowCode;
     
+    private Integer isShow;
+    
     public String getItemId()
     {
         return itemId;
@@ -70,6 +72,16 @@ public class DocQuery extends Pagable implements Serializable
     public void setWindowCode(String windowCode)
     {
         this.windowCode = windowCode;
+    }
+    
+    public Integer getIsShow()
+    {
+        return isShow;
+    }
+    
+    public void setIsShow(Integer isShow)
+    {
+        this.isShow = isShow;
     }
     
 }

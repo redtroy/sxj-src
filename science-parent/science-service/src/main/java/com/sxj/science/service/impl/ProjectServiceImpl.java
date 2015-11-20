@@ -81,6 +81,7 @@ public class ProjectServiceImpl implements IProjectService
             project.setState(0);
             project.setBatchCount(1);
             project.setUploadTime(new Date());
+            project.setIsShow(1);
             projectDao.addProject(project);
             
             ItemEntity item = new ItemEntity();
@@ -89,6 +90,7 @@ public class ProjectServiceImpl implements IProjectService
             item.setCount(0);
             item.setUploadTime(new Date());
             item.setState(0);
+            item.setIsShow(1);
             itemDao.addItem(item);
         }
         catch (Exception e)
@@ -107,6 +109,7 @@ public class ProjectServiceImpl implements IProjectService
             ProjectEntity project = projectDao.getProject(item.getProjectId());
             project.setBatchCount(project.getBatchCount() + 1);
             projectDao.updateProject(project);
+            item.setIsShow(1);
             itemDao.addItem(item);
         }
         catch (Exception e)
@@ -144,6 +147,7 @@ public class ProjectServiceImpl implements IProjectService
         {
             List<ItemModel> modelList = new ArrayList<ItemModel>();
             QueryCondition<ItemEntity> query = new QueryCondition<>();
+            query.addCondition("isShow", 1);
             query.addCondition("projectId", projectId);
             List<ItemEntity> itemList = itemDao.query(query);
             if (itemList != null && itemList.size() > 0)
@@ -154,6 +158,15 @@ public class ProjectServiceImpl implements IProjectService
                     queryItem.addCondition("itemId", item.getId());
                     queryItem.addGroup("SERIES");
                     List<DocEntity> docList = docDao.query(queryItem);
+                    if (docList.size() > 0)
+                    {
+                        item.setState(2);
+                    }
+                    else
+                    {
+                        item.setState(0);
+                    }
+                    
                     for (DocEntity docEntity : docList)
                     {
                         if (docEntity.getState() == 0)
@@ -163,10 +176,7 @@ public class ProjectServiceImpl implements IProjectService
                         if (docEntity.getState() == 1)
                         {
                             item.setState(1);
-                        }
-                        if (docEntity.getState() == 2)
-                        {
-                            item.setState(2);
+                            break;
                         }
                     }
                     ItemModel model = new ItemModel();
