@@ -571,7 +571,7 @@ public class DownloadTemController extends BaseController
     }
     
     @RequestMapping("/saveHtml")
-    public @ResponseBody String saveHtml(String id, String htmlData)
+    public @ResponseBody String saveHtml(String id,String finish, String htmlData,String htmlDataBackup)
             throws WebException
     {
         //        Map<String,Object> resultMap=new HashMap<String,Object>();
@@ -579,6 +579,8 @@ public class DownloadTemController extends BaseController
         {
             WindowTypeEntity windowType = downloadTemService.getWindowTypeById(id);
             windowType.setHtmlData(htmlData);
+            windowType.setHtmlDataBackup(htmlDataBackup);
+            windowType.setFinish(finish);
             downloadTemService.updateWindowType(windowType);
             //            resultMap.put("isOk", true);
             return "true";
@@ -697,7 +699,7 @@ public class DownloadTemController extends BaseController
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try
         {
-            projectService.deleteProjectItem(id);
+            projectService.removeItem(id);
             resultMap.put("isOK", "true");
         }
         catch (Exception e)

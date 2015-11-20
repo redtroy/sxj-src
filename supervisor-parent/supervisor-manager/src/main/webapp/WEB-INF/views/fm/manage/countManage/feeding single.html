@@ -7,9 +7,16 @@
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/feeding_single.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
-<script src="${b.staticPath}js/mtable.js"></script>
 <script src="${b.staticPath}js/intense.js"></script>
 <script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<!-- <script src="${b.staticPath}js/jquery.jqprint.js"></script> -->
+<script src="${b.staticPath}js/mtable2.js"></script>
+<style type="text/css">
+.new{background-color:#faeaea;color:#ff0000;position:absolute;z-index:9999999; padding:2px 6px; margin-top:-52px; text-align:center; border:1px solid #ffb4b4;}
+</style>
 <@b.dialogBox/>
 <script>
 jQuery(document).ready(function($) {
@@ -27,6 +34,9 @@ jQuery(document).ready(function($) {
 	})
 })
 </script>
+
+
+
 <!-- InstanceEndEditable -->
 <!-- InstanceBeginEditable name="head" -->
 <!-- InstanceEndEditable -->
@@ -87,15 +97,28 @@ window.setInterval("heartBeat()",1);
 <script>
 var paramIndex=1;
 function saveHtml(id){
+	var finish='1';
+	checkInput();
+// 	alert(complete);
+// 	return false;
+	if(complete==false){
+		finish='0';
+	}
+	var htmlDataBackup=$("#divId").html();
+	$("#insertParam").remove();
 	var htmlData=$("#divId").html();
+	
 	var params = {
+			finish:finish,
+			htmlDataBackup:htmlDataBackup,
 			htmlData:htmlData,
 			id:id
 	};
 	$.post("${basePath}openCount/saveHtml.htm",params,function(data){
 			if(data.isOK == 'true'){
 				alert("新增成功")
-  				window.close();
+//   				window.close();
+				returnList();
 			}else{
 				errorInfo("新增模板错误");
 // 				alert("新增模板错误");
@@ -114,6 +137,11 @@ function showParamDiv(){
 
 function returnList(){
 	window.location.href = "${basePath}openCount/query.htm";
+}
+
+function changeParam(hh){
+	var value=$(hh).val();
+	$(hh).attr("value",value);
 }
 </script>
 <!--返回顶部脚本结束-->
@@ -134,8 +162,8 @@ function returnList(){
 	<!--生出新下料表开始-->
 		<div class="new-box" >
 		<div id="divId">
-		<#if windowType.htmlData!="">
-              ${windowType.htmlData}
+		<#if windowType.htmlDataBackup!="">
+              ${windowType.htmlDataBackup}
         <#else>
 		<form id="doc_form_${windowType.id}" action="javascript:void(0);" method="post">
 		<input type="hidden" name="windowId" value="${windowType.id}"/>
@@ -177,11 +205,11 @@ function returnList(){
 			  </tr>
 			  <tr style="border-bottom:1px solid #e0e0e0">
 			    <th scope="row">2</th>
-			    <td colspan="3"><input type="text" class="input input-w130h25" value="" name="windowFaca"/></td>
-			    <td colspan="3"><input type="text" class="input input-w130h25" value="" name="series"/></td>
-			    <td colspan="2"><input type="text" class="input input-w100h25" value="" name="windowCode"/></td>
-			    <td><input type="text" class="input input-w100h25" value="" name="quantity"/></td>
-			    <td><input type="text" class="input input-w50h25" value="" name="color"/></td>
+			    <td colspan="3"><input type="text" class="input input-w130h25 checkStr" value="" name="windowFaca"/></td>
+			    <td colspan="3"><input type="text" class="input input-w130h25 checkStr" value="${windowType.series}" name="series"/></td>
+			    <td colspan="2"><input type="text" class="input input-w100h25 checkStr" value="${windowType.winId}" name="windowCode"/></td>
+			    <td><input type="text" class="input input-w100h25 checkNan" value="" name="quantity"/></td>
+			    <td><input type="text" class="input input-w50h25 checkStr" value="" name="color"/></td>
 			    <td colspan="2"><input type="text" class="input input-w150h25" value="见图" name="input"/></td>
 			    </tr>
 			  <tr>
@@ -197,12 +225,12 @@ function returnList(){
 					  <tbody><tr>
 						<th class="noborder-top" scope="col" colspan="12">玻璃尺寸表</th>
 					  </tr>
-					  <tr>
-						<td width="10%" class="bgcolor">序号</td>
-						<td width="16%" class="bgcolor">玻璃宽</td>
-						<td width="24%" class="bgcolor">玻璃高</td>
-						<td width="16%" class="bgcolor">数量</td>
-						<td width="34%" class="bgcolor">玻璃种类</td>
+					  <tr class="header">
+						<td width="10%" class="bgcolor" >序号</td>
+						<td width="16%" class="bgcolor" check="checkNan">玻璃宽</td>
+						<td width="24%" class="bgcolor" check="checkNan">玻璃高</td>
+						<td width="16%" class="bgcolor" check="checkNan">数量</td>
+						<td width="34%" class="bgcolor" check="checkStr">玻璃种类</td>
 					  </tr>
 					  <tr>
 						<td>1</td>
@@ -287,106 +315,111 @@ function returnList(){
 			  <tr>
 				<th scope="row">4</th>
 				<td colspan="4" rowspan="13"><div style="width:300px;height:320px; background-color:#CCC;z-index:8;"><img src="${b.imagePath}${windowType.imageSrc}" width="300" height="320" /></div></td>
-				<td colspan="2"><button name="button" type="button" value="增加参数" class="btn btn-blue" onclick="showParamDiv()"><span>增加参数+</span></button></td>
+				<td colspan="2" ><button id="insertParam" name="button" type="button" value="增加参数" class="btn btn-blue" onclick="showParamDiv()"><span>增加参数+</span></button></td>
 			</tr>
 			<tr>
 				<th scope="row">5</th>
 				<td><div style="display: none; width: 60px" class="paramDiv1"><input name="input" type="text" value="h1:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv1"><input name="input" type="text" value="" class="input input-w49h25 left param" id="h1"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv1"><input name="input" type="text"  class="input input-w49h25 left param" id="h1"   /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">6</th>
 				<td><div style="display: none; width: 60px" class="paramDiv2"><input name="input5" type="text" value="h2:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv2"><input name="input6" type="text" value="" class="input input-w49h25 left param" id="h2"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv2"><input name="input6" type="text"  class="input input-w49h25 left param" id="h2"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">7</th>
 				<td><div style="display: none; width: 60px" class="paramDiv3"><input name="input9" type="text" value="h3:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv3"><input name="input11" type="text" value="" class="input input-w49h25 left param" id="h3"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv3"><input name="input11" type="text"  class="input input-w49h25 left param" id="h3"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">8</th>
 				<td><div style="display: none; width: 60px" class="paramDiv4"><input name="input10" type="text" value="h4:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv4"><input name="input12" type="text" value="" class="input input-w49h25 left param" id="h4"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv4"><input name="input12" type="text"  class="input input-w49h25 left param" id="h4"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">9</th>
 				<td><div style="display: none; width: 60px" class="paramDiv5"><input name="input21" type="text" value="h5:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv5"><input name="input13" type="text" value="" class="input input-w49h25 left param" id="h5"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv5"><input name="input13" type="text"  class="input input-w49h25 left param" id="h5"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">10</th>
 				<td><div style="display: none; width: 60px" class="paramDiv6"><input name="input22" type="text" value="h6:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv6"><input name="input14" type="text" value="" class="input input-w49h25 left param" id="h6"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv6"><input name="input14" type="text"  class="input input-w49h25 left param" id="h6"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">11</th>
 				<td><div style="display: none; width: 60px" class="paramDiv7"><input name="input23" type="text" value="h7:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv7"><input name="input15" type="text" value="" class="input input-w49h25 left param" id="h7"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv7"><input name="input15" type="text"  class="input input-w49h25 left param" id="h7"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">12</th>
 				<td><div style="display: none; width: 60px" class="paramDiv8"><input name="input24" type="text" value="h8:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv8"><input name="input16" type="text" value="" class="input input-w49h25 left param" id="h8"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv8"><input name="input16" type="text" value="" class="input input-w49h25 left param" id="h8"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">13</th>
 				<td><div style="display: none; width: 60px" class="paramDiv9"><input name="input25" type="text" value="h9:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv9"><input name="input17" type="text" value="" class="input input-w49h25 left param" id="h9"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv9"><input name="input17" type="text"  class="input input-w49h25 left param" id="h9"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">14</th>
 				<td><div style="display: none; width: 60px" class="paramDiv10"><input name="input26" type="text" value="h10:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv10"><input name="input18" type="text" value="" class="input input-w49h25 left param" id="h10"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv10"><input name="input18" type="text"  class="input input-w49h25 left param" id="h10"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">15</th>
 				<td><div style="display: none; width: 60px" class="paramDiv11"><input name="input27" type="text" value="h11:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv11"><input name="input19" type="text" value="" class="input input-w49h25 left param" id="h11"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv11"><input name="input19" type="text"  class="input input-w49h25 left param" id="h11"  /></div></td>
 			</tr>
 			<tr>
 				<th scope="row">16</th>
 				<td><div style="display: none; width: 60px" class="paramDiv12"><input name="input28" type="text" value="h12:" class="input input-w35h25 center nontrace"/></div></td>
-				<td><div style="display: none; width: 60px" class="paramDiv12"><input name="input20" type="text" value="" class="input input-w49h25 left param" id="h12"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv12"><input name="input20" type="text"  class="input input-w49h25 left param" id="h12"  /></div></td>
 			    <td rowspan="8" colspan="6">
 					<table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-left:1px solid #e0e0e0" coordinate="6,16">
 					  <tbody><tr>
 						<th class="noborder-top" scope="col" colspan="12">半成品规格</th>
 					  </tr>
-					  <tr>
-						<td width="10%" class="bgcolor">序号</td>
-						<td width="16%" class="bgcolor">配件名称</td>
-						<td width="24%" class="bgcolor">规格代号</td>
-						<td width="16%" class="bgcolor">单位</td>
-						<td width="34%" class="bgcolor">数量</td>
-					  </tr>
-					  <tr>
+					  <tr class="header">
+					<td width="10%" class="bgcolor">序号</td>
+					<td width="16%" class="bgcolor"  check="checkStr">名称</td>
+					<td width="24%" class="bgcolor"  check="checkNan">宽度</td>
+					<td width="10.6%" class="bgcolor"  check="checkNan">高度</td>
+					<td width="19.6%" class="bgcolor"  check="checkNan">数量</td>
+					<td width="19.6%" class="bgcolor" >备注</td>
+		  			</tr>
+			  			<tr>
 						<td>1</td>
-						<td><input name="productList[0].name" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[0].width" type="text" value="" class="input input-w100h25"/></td>
-						<td><input name="productList[0].height" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[0].quantity" type="text" value="" title="" class="input input-w150h25"/></td>
+						<td><input type="text"  name="productList[0].name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[0].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[0].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[0].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[0].remark" class="input input-w50h25" value="" name="input55"/></td>
 					  </tr>
-					  <tr>
+					 <tr>
 						<td>2</td>
-						<td><input name="productList[1].name" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[1].width" type="text" value="" class="input input-w100h25"/></td>
-						<td><input name="productList[1].height" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[1].quantity" type="text" value="" title="" class="input input-w150h25"/></td>
-					  </tr> 
+						<td><input type="text"  name="productList[1.name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[1].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[1].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[1].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[1].remark" class="input input-w50h25" value="" name="input55"/></td>
+					  </tr>
 					  <tr>
 						<td>3</td>
-						<td><input name="productList[2].name" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[2].width" type="text" value="" class="input input-w100h25"/></td>
-						<td><input name="productList[2].height" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[2].quantity" type="text" value="" title="" class="input input-w150h25"/></td>
+						<td><input type="text"  name="productList[2].name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[2].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[2].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[2].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[2].remark" class="input input-w50h25" value="" name="input55"/></td>
 					  </tr>
-					  <tr>
+					 <tr>
 						<td>4</td>
-						<td><input name="productList[3].name" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[3].width" type="text" value="" class="input input-w100h25"/></td>
-						<td><input name="productList[3].height" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[3].quantity" type="text" value="" title="" class="input input-w150h25"/></td>
+						<td><input type="text"  name="productList[3].name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[3].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[3].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[3].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[3].remark" class="input input-w50h25" value="" name="input55"/></td>
 					  </tr>
 					  <tr>
 						<td>5</td>
@@ -396,12 +429,13 @@ function returnList(){
 						<td><input name="productList[4].quantity" type="text" value="" title="" class="input input-w150h25"/></td>
 					  </tr>
 					  <tr>
-						<td class="noborder-bottom">6</td>
-						<td><input name="productList[5].name" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[5].width" type="text" value="" class="input input-w100h25"/></td>
-						<td><input name="productList[5].height" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[5].quantity" type="text" value="" title="" class="input input-w150h25"/></td>
-					  </tr>  
+						<td>6</td>
+						<td><input type="text"  name="productList[5].name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[5].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[5].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[5].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[5].remark" class="input input-w50h25" value="" name="input55"/></td>
+					  </tr>
 					  <tr>
 					</tr></tbody></table>
 			    </td>
@@ -434,18 +468,18 @@ function returnList(){
 			  <tr>
 			    <th scope="row">22</th>
 			    <td colspan="2">洞口尺寸:</td>
-			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
 			    <td>*</td>
-			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
-			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
 			    </tr>
 			  <tr>
 			    <th scope="row">23</th>
 			    <td colspan="2">制作尺寸:</td>
-			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
 			    <td>*</td>
-			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
-			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
 			    </tr>
 			  <tr>
 			    <th scope="row">24</th>
@@ -455,19 +489,19 @@ function returnList(){
 					  <tbody><tr>
 						<th class="noborder-right" scope="col" colspan="12">配件表</th>
 					  </tr>
-					  <tr>
-						<td width="5%" class="bgcolor">用途</td>
-						<td width="8%" class="bgcolor">配件名称</td>
-						<td width="12%" class="bgcolor">规格代号</td>
-						<td width="8%" class="bgcolor">单位</td>
-						<td width="8%" class="bgcolor">数量</td>
-						<td width="8.2%" class="bgcolor">技术要求</td>
-						<td width="5.4%" class="bgcolor">用途</td>
-						<td width="8%" class="bgcolor">配件名称</td>
-						<td width="12%" class="bgcolor">规格代号</td>
-						<td width="8%" class="bgcolor">单位</td>
-						<td width="8%" class="bgcolor">数量</td>
-						<td width="9%" class="bgcolor">技术要求</td>
+					  <tr class="header" split="5">
+						<td width="5%" class="bgcolor" check="checkStr">用途</td>
+						<td width="8%" class="bgcolor" check="checkStr">配件名称</td>
+						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
+						<td width="8%" class="bgcolor" check="checkStr">单位</td>
+						<td width="8%" class="bgcolor" check="checkNan">数量</td>
+						<td width="8.2%" class="bgcolor" >技术要求</td>
+						<td width="5.4%" class="bgcolor" check="checkStr">用途</td>
+						<td width="8%" class="bgcolor" check="checkStr">配件名称</td>
+						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
+						<td width="8%" class="bgcolor" check="checkStr">单位</td>
+						<td width="8%" class="bgcolor" check="checkNan">数量</td>
+						<td width="9%" class="bgcolor" >技术要求</td>
 					  </tr>
 					  <tr>
 						 <td><input name="partsList[0].used" type="text" value="" class="input input-w35h25"/></td>
@@ -705,18 +739,18 @@ function returnList(){
 					  <tbody><tr>
 						<th class="noborder-top" scope="col" colspan="12">下料尺寸表</th>
 					  </tr>
-					  <tr>
-						<td width="5%" class="bgcolor">用途</td>
-						<td width="8%" class="bgcolor">构件名称</td>
-						<td width="12%" class="bgcolor">规格代号</td>
-						<td width="8%" class="bgcolor">长度</td>
-						<td width="8%" class="bgcolor">数量</td>
+					  <tr class="header" split="5" >
+						<td width="5%" class="bgcolor" check="checkStr">用途</td>
+						<td width="8%" class="bgcolor" check="checkStr">构件名称</td>
+						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
+						<td width="8%" class="bgcolor" check="checkNan">长度</td>
+						<td width="8%" class="bgcolor" check="checkNan">数量</td>
 						<td width="8.2%" class="bgcolor">备注</td>
-						<td width="5.4%" class="bgcolor">用途</td>
-						<td width="8%" class="bgcolor">构件名称</td>
-						<td width="12%" class="bgcolor">规格代号</td>
-						<td width="8%" class="bgcolor">长度</td>
-						<td width="8%" class="bgcolor">数量</td>
+						<td width="5.4%" class="bgcolor" check="checkStr">用途</td>
+						<td width="8%" class="bgcolor" check="checkStr">构件名称</td>
+						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
+						<td width="8%" class="bgcolor" check="checkNan">长度</td>
+						<td width="8%" class="bgcolor" check="checkNan">数量</td>
 						<td width="9%" class="bgcolor">备注</td>
 					  </tr>
 					   <tr>
@@ -1038,26 +1072,26 @@ function returnList(){
 					<table width="100%" cellspacing="0" cellpadding="0" border="0">
 					  <tbody><tr>
 						<td width="12.4%" class="noborder-top bgcolor" colspan="2">工程名称：</td>
-						<td width="26.4%" class="noborder-top" colspan="3"><input type="text" class="input input-w235h25 nontrace" value="${projectName}" name="projectName"/></td>
+						<td width="26.4%" class="noborder-top" colspan="3"><input type="text"  class="input input-w235h25 nontrace last_project_name checkStr"  name="projectName"/></td>
 						<td width="7.9%" class="noborder-top bgcolor">日期：</td>
-						<td width="12.7%" class="noborder-top" colspan="2"><input type="text" class="input input-w100h25 nontrace" value="" name="input"/></td>
+						<td width="12.7%" class="noborder-top" colspan="2"><input type="text" value="${.now?date}" class="input input-w100h25 nontrace checkStr"  name="input" datepicker/></td>
 						<td width="11.5%" class="noborder-top bgcolor">设计：</td>
-						<td width="15.1%" class="noborder-top" colspan="2"><input type="text" class="input input-w130h25 nontrace" value="" name="input"/></td>
+						<td width="15.1%" class="noborder-top" colspan="2"><input type="text" class="input input-w130h25 nontrace"  name="input"/></td>
 						<td width="8.5%" class="noborder-top">&nbsp;</td>
 					  </tr>
 					  <tr>
 						<td rowspan="2" colspan="5"><input type="text" class="com-name input input-w340h25" value="江苏私享家科技有限公司" name="input"/></td>
 						<td class="bgcolor">图号：</td>
-						<td colspan="2"><input type="text" class="input input-w100h25 nontrace" value="" name="input"/></td>
+						<td colspan="2"><input type="text" class="input input-w100h25 nontrace"  name="input"/></td>
 						<td class="bgcolor">审核：</td>
-						<td colspan="2"><input type="text" class="input input-w130h25 nontrace" value="" name="input"/></td>
+						<td colspan="2"><input type="text" class="input input-w130h25 nontrace"  name="input"/></td>
 						<td>&nbsp;</td>
 					  </tr>
 					  <tr>
 						<td class="bgcolor">批次：</td>
-						<td colspan="2"><input type="text" class="input input-w100h25 nontrace" value="" name="input"/></td>
+						<td colspan="2"><input type="text" class="input input-w100h25 nontrace last_item_name checkStr"  name="input"/></td>
 						<td class="bgcolor">批准：</td>
-						<td colspan="2"><input type="text" class="input input-w130h25 nontrace" value="" name="input"/></td>
+						<td colspan="2"><input type="text" class="input input-w130h25 nontrace"  name="input"/></td>
 						<td>&nbsp;</td>    
 					  </tr>
 					</tbody></table>

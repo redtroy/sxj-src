@@ -115,7 +115,6 @@ Intense( elements );
         <button class="btn btn-blue" onclick="query();"><span>查询</span></button>
         </form>
     </div>
-    <@b.pager/>
       <table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
       	<col width="10%" />
         <col width="12%" />
@@ -136,7 +135,11 @@ Intense( elements );
 		  <th>操作</th>
         </tr>
         <#list list as model>
+        <#if model.finish=='0'>
+        <tr style="background-color: #ddd">
+        <#else>
         <tr>
+        </#if>
 		  <td><a href="${basePath}openCount/loadFeeding.htm?id=${model.id}" target="_blank">${model.winId}</a></td>
 		  <td>${model.areaName}</td>
           <td>${model.companyName}</td>
@@ -155,7 +158,7 @@ Intense( elements );
       <div class="modal-wrap popDemo popView" style="display:none;" id="imgDiv">
         <div class="modal-header">       
            <span class="close"><a onclick=".hide(class='popDemo')">关闭窗口</a></div>
-        <div class="modal-body infoBox">
+        <div class="modal-body">
          <div class="rollBox">
             <div class="LeftBotton" onmousedown="ISL_GoUp()" onmouseup="ISL_StopUp()" onmouseout="ISL_StopUp()"></div>
             <div class="Cont" id="ISL_Cont">

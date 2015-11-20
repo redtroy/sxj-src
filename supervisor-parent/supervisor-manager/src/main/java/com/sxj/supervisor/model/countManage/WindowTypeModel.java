@@ -36,6 +36,30 @@ public class WindowTypeModel extends Pagable implements Serializable
     
     private String htmlData;
     
+    private String htmlDataBackup;
+    
+    private String finish;
+    
+    public String getFinish()
+    {
+        return finish;
+    }
+
+    public void setFinish(String finish)
+    {
+        this.finish = finish;
+    }
+
+    public String getHtmlDataBackup()
+    {
+        return htmlDataBackup;
+    }
+
+    public void setHtmlDataBackup(String htmlDataBackup)
+    {
+        this.htmlDataBackup = htmlDataBackup;
+    }
+
     public String getHtmlData()
     {
         return htmlData;

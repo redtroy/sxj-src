@@ -758,7 +758,7 @@ $(document).ready(function(){
           <label>企业资质</label>
           <!-- 营业执照号 -->          
           <div class="ly-left editBox mr15">
-          <p><input class="input input-w140h30 mb5 " name="bLicenseNo" id="bLicenseNo" maxlength="15" value="${member.bLicenseNo}"  datatype="ns"  nullmsg="请填写15位营业执照注册号"   placeholder="输入证书编号"/></p>
+          <p><input class="input input-w140h30 mb5 " name="bLicenseNo" id="bLicenseNo" maxlength="30" value="${member.bLicenseNo}"  datatype="ns"  nullmsg="请填写30位营业执照注册号"   placeholder="输入证书编号"/></p>
           <p>营业执照</p>
            <#if (member.bLicensePath??)>
 		<img id="bLicensePath_img" src="${b.imagePath}${member.bLicensePath}80x107.JPG" onerror="errorImage(this)" times="0"/>

@@ -1,6 +1,8 @@
 package com.sxj.supervisor;
 
+import java.awt.Menu;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +17,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.enu.member.MemberTypeEnum;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.common.ISxjHttpClient;
 
@@ -62,9 +65,18 @@ public class TestJunit
             //configService.sendAllMessage("测试短信");
         	
         	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/syncMember.htm";
+        	
 			MemberEntity memberEntity = new MemberEntity();
-			memberEntity.setName("南京市测试厂");
+			memberEntity.setName("南京海阔天空科技有限公司");
 			memberEntity.setAddress("仙林大道");
+			memberEntity.setParentNo("Z00001");
+			memberEntity.setType(MemberTypeEnum.AGENT);
+			memberEntity.setContacts("嵇康");
+			memberEntity.setPhoneNo("18913039663");
+			memberEntity.setRegDate(new Date());
+			memberEntity.setAffiliates("南京市型材巡航厂");
+			memberEntity.setbLicenseNo("21092982382938");
+			memberEntity.setbLicensePath("group1/M00/00/EC/wKgB21ZFlNeAfAd1ABWE8XUxiFI910.PNG");
 			String json = JsonMapper.nonDefaultMapper().toJson(memberEntity);
 			System.err.println(json);
 			Map<String, String> map = new HashMap<String, String>();
