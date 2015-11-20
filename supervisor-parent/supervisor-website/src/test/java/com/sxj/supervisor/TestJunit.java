@@ -64,17 +64,17 @@ public class TestJunit
             //   al.gather();
             //configService.sendAllMessage("测试短信");
         	
-        	String loginUrl = "http://www.menchuang.org.cn/purchase/syncMember.htm";
+        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/syncMember.htm";
         	
 			MemberEntity memberEntity = new MemberEntity();
 			memberEntity.setName("南京海阔天空科技有限公司");
 			memberEntity.setAddress("仙林大道");
 			memberEntity.setParentNo("Z00001");
-			memberEntity.setType(MemberTypeEnum.GLASSFACTORY);
+			memberEntity.setType(MemberTypeEnum.AGENT);
 			memberEntity.setContacts("嵇康");
 			memberEntity.setPhoneNo("18913039663");
 			memberEntity.setRegDate(new Date());
-			memberEntity.setAffiliates("嵇德荣玻璃厂");
+			memberEntity.setAffiliates("南京市型材巡航厂");
 			memberEntity.setbLicenseNo("21092982382938");
 			memberEntity.setbLicensePath("group1/M00/00/EC/wKgB21ZFlNeAfAd1ABWE8XUxiFI910.PNG");
 			String json = JsonMapper.nonDefaultMapper().toJson(memberEntity);
