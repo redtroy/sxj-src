@@ -35,6 +35,7 @@ public class OptimizedResultReader
     }
     
     public static OptimizedResult read(InputStream input, String charset)
+            throws IOException
     {
         try
         {
@@ -62,6 +63,10 @@ public class OptimizedResultReader
         catch (IOException e)
         {
             throw new OptimizedException(e);
+        }
+        finally
+        {
+            input.close();
         }
     }
     
