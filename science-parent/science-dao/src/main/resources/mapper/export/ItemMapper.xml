@@ -21,6 +21,9 @@
 		<if test="condition.projectId!= null and condition.projectId != ''">
 			<![CDATA[ AND p.PROJECT_ID =#{condition.projectId}]]>
 		</if>
+		<if test="condition.isShow!= null and condition.isShow != ''">
+			<![CDATA[ AND p.IS_SHOW =#{condition.isShow}]]>
+		</if>
 		<![CDATA[  ORDER BY p.UPLOAD_TIME DESC]]>
 	</select>
 </mapper>

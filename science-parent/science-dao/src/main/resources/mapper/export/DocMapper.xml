@@ -20,6 +20,7 @@
 		<result property="height" column="HEIGHT" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="htmlData" column="HTML_DATA" jdbcType="VARCHAR" />
+		<result property="isShow" column="IS_SHOW" jdbcType="INTEGER" />
 	</resultMap>
 	<select id="query" resultMap="DocResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
@@ -35,6 +36,9 @@
 		</if>
 		<if test="condition.windowCode != null and condition.windowCode != ''">
 			<![CDATA[ AND d.WINDOW_CODE LIKE CONCAT('%',#{condition.windowCode},'%')]]>
+		</if>
+		<if test="condition.isShow!= null and condition.isShow != ''">
+			<![CDATA[ AND d.IS_SHOW =#{condition.isShow}]]>
 		</if>
 		<if test="condition.series != null and condition.series !=''">
 			<![CDATA[ and d.SERIES =#{condition.series}]]>
@@ -53,14 +57,14 @@
 				#{item}
 			</foreach>
 		</if>
+		 <![CDATA[ ORDER BY d.ID DESC ]]>
+		<![CDATA[) AS tmp]]>
 		<if test="groups.size() > 0">
 		 <![CDATA[ GROUP BY ]]>
 			<foreach item="item" collection="groups" separator=",">
 				${item}
 			</foreach>
 		</if>
-		 <![CDATA[ ORDER BY d.ID DESC ]]>
-		<![CDATA[) AS tmp]]>
 	</select>
 
 	<!-- 条件查询备案 -->

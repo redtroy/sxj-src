@@ -98,6 +98,9 @@ window.setInterval("heartBeat()",1);
 var paramIndex=1;
 function saveHtml(id){
 	var finish='1';
+	checkInput();
+// 	alert(complete);
+// 	return false;
 	if(complete==false){
 		finish='0';
 	}
@@ -203,8 +206,8 @@ function changeParam(hh){
 			  <tr style="border-bottom:1px solid #e0e0e0">
 			    <th scope="row">2</th>
 			    <td colspan="3"><input type="text" class="input input-w130h25 checkStr" value="" name="windowFaca"/></td>
-			    <td colspan="3"><input type="text" class="input input-w130h25 checkStr" value="" name="series"/></td>
-			    <td colspan="2"><input type="text" class="input input-w100h25 checkStr" value="" name="windowCode"/></td>
+			    <td colspan="3"><input type="text" class="input input-w130h25 checkStr" value="${windowType.series}" name="series"/></td>
+			    <td colspan="2"><input type="text" class="input input-w100h25 checkStr" value="${windowType.winId}" name="windowCode"/></td>
 			    <td><input type="text" class="input input-w100h25 checkNan" value="" name="quantity"/></td>
 			    <td><input type="text" class="input input-w50h25 checkStr" value="" name="color"/></td>
 			    <td colspan="2"><input type="text" class="input input-w150h25" value="见图" name="input"/></td>
@@ -423,7 +426,8 @@ function changeParam(hh){
 						<td><input name="productList[4].name" type="text" value="" class="input input-w50h25"/></td>
 						<td><input name="productList[4].width" type="text" value="" class="input input-w100h25"/></td>
 						<td><input name="productList[4].height" type="text" value="" class="input input-w50h25"/></td>
-						<td><input name="productList[4].quantity" type="text" value="" title="" class="input input-w150h25"/></td>
+						<td><input name="productList[4].quantity" type="text" value="" title="" class="input input-w50h25"/></td>
+						<td><input name="productList[4].remark"  type="text" class="input input-w50h25" value="" name="input55"/></td>
 					  </tr>
 					  <tr>
 						<td>6</td>
@@ -492,13 +496,13 @@ function changeParam(hh){
 						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
 						<td width="8%" class="bgcolor" check="checkStr">单位</td>
 						<td width="8%" class="bgcolor" check="checkNan">数量</td>
-						<td width="8.2%" class="bgcolor" check="checkStr">技术要求</td>
+						<td width="8.2%" class="bgcolor" >技术要求</td>
 						<td width="5.4%" class="bgcolor" check="checkStr">用途</td>
 						<td width="8%" class="bgcolor" check="checkStr">配件名称</td>
 						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
 						<td width="8%" class="bgcolor" check="checkStr">单位</td>
 						<td width="8%" class="bgcolor" check="checkNan">数量</td>
-						<td width="9%" class="bgcolor" check="checkStr">技术要求</td>
+						<td width="9%" class="bgcolor" >技术要求</td>
 					  </tr>
 					  <tr>
 						 <td><input name="partsList[0].used" type="text" value="" class="input input-w35h25"/></td>

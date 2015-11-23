@@ -73,6 +73,9 @@ public class DocEntity extends Pagable implements Serializable
     @Column(name = "STATE")
     private Integer state;
     
+    @Column(name = "IS_SHOW")
+    private Integer isShow;
+    
     public String getWidth()
     {
         return width;
@@ -231,6 +234,16 @@ public class DocEntity extends Pagable implements Serializable
     public void setState(Integer state)
     {
         this.state = state;
+    }
+    
+    public Integer getIsShow()
+    {
+        return isShow;
+    }
+    
+    public void setIsShow(Integer isShow)
+    {
+        this.isShow = isShow;
     }
     
     @Override

@@ -199,7 +199,7 @@ function downAloneOptim(id){
         <#list list as model>
         <tr id="project_${model.id}" isopen="close" class="projectTr">
           <td>${model.projectNo}</td>
-		  <td><a href="javascript:getItem('${model.id}')" class="lnk-blue a-width">${model.name}</a></td>
+		  <td><a title="${model.name}"  href="javascript:getItem('${model.id}')" class="lnk-blue a-width">${model.name}</a></td>
           <td>${model.memberName}</td>
           <td>${model.zhaoBiaoNo}</td>
           <td>${model.beiAnNo}</td>

@@ -144,7 +144,9 @@ public class ProjectController extends BaseController
         Map<String, Object> map = new HashMap<String, Object>();
         try
         {
-            projectService.removeItem(itemId);
+            ItemEntity item = projectService.getItemById(itemId);
+            item.setIsShow(0);
+            projectService.updateItem(item);
             map.put("isOK", true);
         }
         catch (Exception e)
@@ -163,7 +165,9 @@ public class ProjectController extends BaseController
         Map<String, Object> map = new HashMap<String, Object>();
         try
         {
-            projectService.removeProject(projectId);
+            ProjectEntity project = projectService.getProject(projectId);
+            project.setIsShow(0);
+            projectService.updateProject(project);
             map.put("isOK", true);
         }
         catch (Exception e)
