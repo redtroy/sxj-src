@@ -1,13 +1,8 @@
 package com.sxj.supervisor;
 
-import java.awt.Menu;
-import java.net.URLEncoder;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.protocol.HTTP;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
-import com.sxj.supervisor.entity.member.MemberEntity;
-import com.sxj.supervisor.enu.member.MemberTypeEnum;
+import com.sxj.supervisor.entity.purchase.PurchaseEntity;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.common.ISxjHttpClient;
 
@@ -64,20 +58,59 @@ public class TestJunit
             //   al.gather();
             //configService.sendAllMessage("测试短信");
         	
-        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/syncMember.htm";
+        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/updatePurchase.htm";
         	
-			MemberEntity memberEntity = new MemberEntity();
-			memberEntity.setName("南京海阔天空科技有限公司");
-			memberEntity.setAddress("仙林大道");
-			memberEntity.setParentNo("Z00001");
-			memberEntity.setType(MemberTypeEnum.AGENT);
-			memberEntity.setContacts("嵇康");
-			memberEntity.setPhoneNo("18913039663");
-			memberEntity.setRegDate(new Date());
-			memberEntity.setAffiliates("南京市型材巡航厂");
-			memberEntity.setbLicenseNo("21092982382938");
-			memberEntity.setbLicensePath("group1/M00/00/EC/wKgB21ZFlNeAfAd1ABWE8XUxiFI910.PNG");
-			String json = JsonMapper.nonDefaultMapper().toJson(memberEntity);
+//			MemberEntity memberEntity = new MemberEntity();
+//			memberEntity.setName("南京海阔天空科技有限公司");
+//			memberEntity.setAddress("仙林大道");
+//			memberEntity.setParentNo("Z00001");
+//			memberEntity.setType(MemberTypeEnum.AGENT);
+//			memberEntity.setContacts("嵇康");
+//			memberEntity.setPhoneNo("18913039663");
+//			memberEntity.setRegDate(new Date());
+//			memberEntity.setAffiliates("南京市型材巡航厂");
+//			memberEntity.setbLicenseNo("21092982382938");
+//			memberEntity.setbLicensePath("group1/M00/00/EC/wKgB21ZFlNeAfAd1ABWE8XUxiFI910.PNG");
+        	
+//        	ReleaseRecordEntity rr = new ReleaseRecordEntity();
+//        	rr.setId("12345");
+//        	rr.setAdminId("3290");
+//        	rr.setPurchase(1);
+//        	rr.setNum(1000);
+//        	rr.setPriceType(0);
+//        	rr.setPriceRange("5000-10000");
+//        	rr.setReleaseTime(new Date());
+//        	rr.setRecordNumber("123456789");
+        	
+//        	ApplyEntity rr = new ApplyEntity();
+//        	rr.setId("10");
+//        	rr.setSerialNumber("213123");
+//        	rr.setCompany("南京门窗厂");
+//        	rr.setApplyType(1);
+//        	rr.setApplyNum(1000);
+//        	rr.setPrice("2000");
+//        	rr.setApplyTime(new Date());
+//        	rr.setApplyStatus(1);
+//        	rr.setBeianStatus(1);
+//        	rr.setScanNumber("group1/M00/00/EC/wKgB21ZFlNqAZSmnAAB2qqmXN4g298.PNG");
+//        	rr.setSetNumber("213123");
+//        	rr.setMemberNo("X000039");
+        	
+        	PurchaseEntity rr = new  PurchaseEntity();
+        	rr.setcId("1");
+        	rr.setDeepGlass(1000);
+        	rr.setDeepIncrease(100);
+        	rr.setDeepReduce(100);
+        	rr.setFitting(1000);
+        	rr.setFittingIncrease(100);
+        	rr.setFittingReduce(100);
+        	rr.setOrdinaryGlass(1000);
+        	rr.setOrdinaryIncrease(100);
+        	rr.setOrdinaryReduce(100);
+        	rr.setProfiles(1000);
+        	rr.setProfilesIncrease(100);
+        	rr.setProfilesReduce(100);
+        	String json = JsonMapper.nonDefaultMapper().toJson(rr);
 			System.err.println(json);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("json", json);

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.purchase.IApplyDao">
+	<resultMap id="ApplyEntityResultMap"
+		type="com.sxj.supervisor.entity.purchase.ApplyEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="serialNumber" column="SERIAL_NUMBER"
+			jdbcType="VARCHAR" />
+		<result property="company" column="COMPANY" jdbcType="VARCHAR" />
+		<result property="applyType" column="APPLY_TYPE" jdbcType="INTEGER" />
+		<result property="applyNum" column="APPLY_NUM" jdbcType="INTEGER" />
+		<result property="applyTime" column="APPLY_TIME" jdbcType="TIMESTAMP" />
+		<result property="price" column="PRICE" jdbcType="VARCHAR" />
+		<result property="applyStatus" column="APPLY_STATUS" jdbcType="INTEGER" />
+		<result property="beianStatus" column="BEIAN_STATUS" jdbcType="INTEGER" />
+		<result property="scanNumber" column="SCAN_NUMBER" jdbcType="VARCHAR" />
+		<result property="setNumber" column="SET_NUMBER" jdbcType="VARCHAR" />
+		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="queryApplysList" resultMap="ApplyEntityResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_SXJ_APPLY WHERE 1=1]]>
+		<!-- 会员号 -->
+		<if test="condition.memberNo != null and condition.memberNo !=''">
+			<![CDATA[AND MEMBER_NO =#{condition.memberNo} ]]>
+		</if>
+	</select>
+</mapper>
