@@ -60,7 +60,6 @@ public class Dome2
                     .timeout(3000)
                     .execute();
             Document doc = response.parse();
-            ;
             String __VIEWSTATE = doc.getElementById("__VIEWSTATE").val();
             String __EVENTVALIDATION = doc.getElementById("__EVENTVALIDATION")
                     .val();
@@ -76,7 +75,7 @@ public class Dome2
                 map.put("__EVENTTARGET", "Pager");
                 map.put("__EVENTARGUMENT", "" + i);
                 map.put("drpBiaoDuanType", "0");
-                map.put("txtProjectName", "门窗");
+                map.put("txtProjectName", "幕墙");
                 doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                         .data(map)
                         .timeout(3000)
