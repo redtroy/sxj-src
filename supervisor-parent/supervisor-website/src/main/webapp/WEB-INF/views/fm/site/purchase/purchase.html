@@ -903,6 +903,21 @@
 		</div>
 	</div>
 	<@b.footer />
+	<div id="modal" class="apply-box">
+	<div class="close-box"><a onclick="removeElement()" class="close">关闭</a></div>
+	<div><p>请选择和填写您的采购信息！</p></div>
+	<div class="typ">
+	<strong>申请采购类型：</strong>
+	<label class="typ-inp">
+	</label>		
+	</div>		
+	<div class="num-s"><strong>申请采购数量：<input type="text" value="请填写申请采购的数量" name="check" class="num-inp" /></div>			  
+	<div class="price"><strong>价格：</strong><input type="text" value="请填写价格" name="check" class="price-inp" /></div>	
+	<div class="but-box">
+		<button class="but-yes" onclick="removeElement()">申请</button>
+		<button class="but-canc" onclick="removeElement()">取消</button>
+	</div>
+</div>
 </body>
 </html>
 
