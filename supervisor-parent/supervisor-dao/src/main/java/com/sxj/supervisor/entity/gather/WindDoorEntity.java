@@ -10,6 +10,11 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 
+/**
+ * 工程信息
+ * @author Administrator
+ *
+ */
 @Entity(mapper = WindDoorDao.class)
 @Table(name = "M_WIND_DOOR")
 public class WindDoorEntity extends Pagable implements Serializable
