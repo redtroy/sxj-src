@@ -20,11 +20,20 @@
 			var menu = document.getElementById(name + i);
 			menu.className = i == cursel ? "hover" : "";
 			$("#purchaseType").val(cursel);
+			if (cursel == 1) {
+				$("#cg").text("普通玻璃");
+			} else if (cursel == 2) {
+				$("#cg").text("深加工玻璃");
+			} else if (cursel == 3) {
+				$("#cg").text("型材");
+			} else if (cursel == 4) {
+				$("#cg").text("配件");
+			}
 			query();
 		}
 	}
 	var show;
-	function openApply(id, type) {
+	function openApply(recordNumber, type) {
 		$("#applyType").val(type);
 		
 		if (type == 1) {
@@ -36,7 +45,9 @@
 		} else if (type == 4) {
 			$("#typeValue").text("配件");
 		}
-		$("#releaseRecordId").val(id);
+		var applyNum = $("#applyNum").val("");
+		var applyPrice = $("#applyPrice").val("");
+		$("#releaseRecordId").val(recordNumber);
 		show = layer.open({
 			type : 1,
 			area: ['500px', '300px'],
@@ -60,6 +71,31 @@
 			var currentPage = pager.attr("currentPage");
 			loadPage(currentPage, totalPage, query);
 		});
+	}
+	
+	function saveApply(){
+		var company = "${company}";
+		var memberNo = "${memberNo}";
+		var applyNum = $("#applyNum").val();
+		var applyPrice = $("#applyPrice").val();
+		var applyType = $("#applyType").val();
+		var releaseRecordId = $("#releaseRecordId").val();
+		var json ='{"memberNo":"'+memberNo+'","company":"'+company+'","num":"'+applyNum+'","price":"'+applyPrice+'","applyType":'+applyType+',"recordNumber":"'+releaseRecordId+'"}';
+// 		$.ajax({
+// 	        type: "POST",
+// 	        url: "http://192.168.1.234/houtai/admin.php/Index/purchase",
+// 	        contentType: "application/json; charset=utf-8",
+// 	        data: JSON.stringify(json),
+// 	        dataType: "html",
+// 	        success: function (result) {
+// 	            if (result > 0) {
+// 	                alert("请求已提交！我们会尽快与您取得联系");
+// 	            }
+// 	        },
+// 	        error: function (result) {
+// 	            $("#request-process-patent").html("提交数据失败！");
+// 	        }
+// 	    });
 	}
 </script>
 <!--tab切换结束-->
@@ -147,7 +183,7 @@
 							</div>
 
 							<div id="con_1a_1">
-								<div class="t-name">普通玻璃采购池</div>
+								<div class="t-name"><span id="cg">普通玻璃</span>采购池</div>
 								<div class="detail-con">
 									<table width="97%" border="0" align="right" id="res_table">
 										<tbody>
@@ -169,7 +205,7 @@
 												<td id="red">${list.priceRange}</td>
 												<td>${list.releaseTime?string("yyyy-MM-dd")}</td>
 												<td><button class="button-ora fillet"
-														onclick="openApply('${list.id}','${list.purchase}');">点击申请</button></td>
+														onclick="openApply('${list.recordNumber}','${list.purchase}');">点击申请</button></td>
 											</tr>
 											</#list>
 										</tbody>
@@ -234,7 +270,7 @@
 								</div>
 							</div>
 							<div id="con_1a_3" style="display: none">
-								<div class="t-name">普通玻璃消耗采购量</div>
+								<div class="t-name"><span id="cg"></span>消耗采购量</div>
 								<div class="detail-con">
 									<table width="97%" border="0" align="right">
 										<tbody>
@@ -927,9 +963,9 @@
 	<div id="modal" class="apply-box">
 		<form action="" id="applyForm">
 			<input type="hidden" name="applyType" id="applyType" value=""/> 
-			<input type="hidden" name="memberNo" value="${memberNo}" value=""/> 
+			<input type="hidden" name="memberNo" id="memberNo" value="${memberNo}" /> 
 			<input type="hidden" name="id" id="releaseRecordId" value="" />
-			<input type="hidden" name="company" id="company" value="" />
+			<input type="hidden" name="company" id="company" value="${company}" />
 			<table width="90%">
 				<tr>
 					<td class="lt">申请采购类型：</td>
@@ -948,7 +984,7 @@
 			</table>
 			</form>
 			<div class="but-box">
-				<button class="but-yes" onclick="removeElement()">申请</button>
+				<button class="but-yes" onclick="saveApply()">申请</button>
 				<button class="but-canc" onclick="javascript:layer.close(show);">取消</button>
 			</div>
 		
