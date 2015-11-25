@@ -16,6 +16,10 @@
 	</resultMap>
 	<select id="queryReleaseRecordList" resultMap="ReleaseRecordEntityResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM M_RELEASE_RECORD WHERE 1=1 ORDER BY RELEASE_TIME DESC]]>
+		<![CDATA[SELECT * FROM M_RELEASE_RECORD WHERE 1=1 ]]>
+		<if test="condition.purchase != null and condition.purchase !=''">
+			<![CDATA[AND PURCHASE =#{condition.purchase} ]]>
+		</if>
+		<![CDATA[ ORDER BY RELEASE_TIME DESC]]>
 	</select>
 </mapper>

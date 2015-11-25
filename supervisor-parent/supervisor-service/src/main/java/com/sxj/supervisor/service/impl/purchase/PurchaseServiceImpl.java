@@ -89,9 +89,15 @@ public class PurchaseServiceImpl implements IPurchaseService {
 				memberDao.addMember(member);
 			} else {
 				// 更新汇窗编号
+				member.setId(memberEntity.getId());
+				member.setMemberNo(memberEntity.getMemberNo());
 				memberEntity.setPurchaseNo(member.getPurchaseNo());
-				memberEntity.setPurchaseState(1);
-				memberDao.updateMember(memberEntity);
+				if(memberEntity.getPurchaseState()==0){
+					memberDao.updateMember(memberEntity);
+				}else{
+					memberDao.updateMember(member);
+				}
+				
 			}
 			// 更新关联企业
 			if (member.getType().equals(MemberTypeEnum.AGENT)
@@ -205,7 +211,7 @@ public class PurchaseServiceImpl implements IPurchaseService {
 				return releaseRecordList;
 			}
 			QueryCondition<ReleaseRecordEntity> condition = new QueryCondition<ReleaseRecordEntity>();
-		//	condition.addCondition("memberNo", apply.getMemberNo());// 会员号
+			condition.addCondition("purchase", releaseRecordEntity.getPurchase());// 类型
 			// condition.addCondition("name", query.getMemberName());// 会员名称
 			condition.setPage(releaseRecordEntity);
 			releaseRecordList = releaseRecordDao.queryReleaseRecordList(condition);

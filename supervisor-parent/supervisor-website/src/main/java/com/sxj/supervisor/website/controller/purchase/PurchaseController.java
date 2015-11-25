@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ import com.sxj.supervisor.entity.purchase.ApplyEntity;
 import com.sxj.supervisor.entity.purchase.PurchaseEntity;
 import com.sxj.supervisor.entity.purchase.ReleaseRecordEntity;
 import com.sxj.supervisor.model.contract.ContractModel;
+import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.purchase.IPurchaseService;
@@ -198,11 +200,18 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("getPurchase")
-	public String getPurchase(ModelMap map,ReleaseRecordEntity releaseRecordEntity) {
+	public String getPurchase(ModelMap map,ReleaseRecordEntity releaseRecordEntity,HttpSession session) {
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
 		PurchaseEntity purchaseEntity = purchaseService.getPurchase();
+		releaseRecordEntity.setPagable(true);
+		releaseRecordEntity.setShowCount(5);
 		List<ReleaseRecordEntity> rrList = purchaseService.queryReleaseRecords(releaseRecordEntity);
 		map.put("purchase", purchaseEntity);
 		map.put("rrList", rrList);
+		map.put("query", releaseRecordEntity);
+		map.put("memberNo", userBean.getMember().getMemberNo());
+		map.put("company", userBean.getMember().getName());
 		return "site/purchase/purchase";
 	}
 
