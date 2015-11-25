@@ -225,7 +225,7 @@ function aloneOptim(id){
 			}
 		});
 	 if(count==0){
-		  alert("请选择需要优化的条目");
+		  alert("请选择参与本次优化的原始数据文件");
 		 return;
 	  }else{
 		  var params=$("#alone_form_"+id).serialize();
@@ -390,6 +390,10 @@ function showPrereport(proId,pName){
 		if($(this).attr("checked"))
 			itemIds.push($(this).val())
 	});
+	if(itemIds.length==0){
+		alert("请先勾选您要统计的下料单文件");
+		return;
+	}
 	$("#prereport").show();
 }
 
@@ -404,11 +408,11 @@ function previewReport(){
 	}
 	var type=$('input[name="reportType"]:checked').val();
 	if(type=='product'){
-		window.location.href = "${basePath}countReport/previewProductReport.htm?itemIds="+itemIds+"&&projectName="+projectName;
+		window.open("${basePath}countReport/previewProductReport.htm?itemIds="+itemIds+"&&projectName="+projectName);
 	}else if(type=='parts'){
-		window.location.href = "${basePath}countReport/previewPartsReport.htm?itemIds="+itemIds+"&&projectName="+projectName;
+		window.open("${basePath}countReport/previewPartsReport.htm?itemIds="+itemIds+"&&projectName="+projectName);
 	}else if(type=='doc'){
-		window.location.href = "${basePath}countReport/previewDocReport.htm?itemIds="+itemIds+"&&projectName="+projectName;
+		window.open("${basePath}countReport/previewDocReport.htm?itemIds="+itemIds+"&&projectName="+projectName);
 	}
 }
 
@@ -614,11 +618,11 @@ function downloadReport(){
 
 <div class="modal in prereport" id="prereport" > <a class="close" data-dismiss="modal" href="javascript:hidePrereport()">×</a>
         <h1>查看统计报表</h1>
-<form action="javascript:void(0);"  id="reportForm()">
+<form action="javascript:void(0);"  id="reportForm" target="_blank">
 <div class="prereporticon">
 	<ul>
     	<label><li class="li1 icon1"><input type="radio" name="reportType"  value="product" /></li></label>
-        <li class="li2"><a href="#" target="_blank" title="点击预览">外框加工清单</a></li>
+        <li class="li2">外框加工清单</li>
     </ul>
 <!-- 	<ul> -->
 <!--     	<label><li class="li1 icon2"><input type="checkbox" /></li></label> -->
@@ -630,11 +634,11 @@ function downloadReport(){
 <!--     </ul> -->
 	<ul>
         <label><li class="li1 icon4"><input type="radio" name="reportType"  value="parts"/></li></label>
-        <li class="li2"><a href="#" target="_blank" title="点击预览">五金配件采购计划单</a></li>
+        <li class="li2">五金配件采购计划单</li>
     </ul>
 	<ul>
     	<label><li class="li1 icon5"><input type="radio" name="reportType"  value="doc"/></li></label>
-        <li class="li2"><a href="#" target="_blank" title="点击预览">门窗结算清单表</a></li>
+        <li class="li2">门窗结算清单表</li>
     </ul>
 </div>
 </form>
@@ -642,7 +646,7 @@ function downloadReport(){
 <ul>
 <li><button class=" button button-orange" data-dismiss="modal" onclick="previewReport()">预览</button></li>
 <li><button class=" button button-orange" data-dismiss="modal" onclick="downloadReport()">下载</button></li>
-<li><button class=" button button-green" data-dismiss="modal">取消</button></li>
+<li><button class=" button button-green" data-dismiss="modal" onclick="hidePrereport();">取消</button></li>
 </ul>
 </div>
 </div>

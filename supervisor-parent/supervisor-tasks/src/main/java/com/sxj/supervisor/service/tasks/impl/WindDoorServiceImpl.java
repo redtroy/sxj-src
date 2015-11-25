@@ -59,6 +59,7 @@ public class WindDoorServiceImpl implements IWindDoorService
         //        oldGongGaoGuid = null;
         //        CometServiceImpl.clear(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
         System.out.println("WDGatherstar");
+        List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
         try
         {
             Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
@@ -75,7 +76,6 @@ public class WindDoorServiceImpl implements IWindDoorService
             {
                 oldGongGaoGuid = null;
             }
-            List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
             STOP: for (int i = 1; i <= pageNum; i++)
             {
                 Map map = new HashMap();
@@ -188,13 +188,6 @@ public class WindDoorServiceImpl implements IWindDoorService
                     }
                 }
             }
-            for (int iii = 0; iii < bathList.size(); iii++)
-            {
-                //发短信
-                configService.sendAllMessage("您有一条新的开发商招标信息");
-                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
-                        bathList.get(iii).getId());
-            }
             gatherMQ();
         }
         catch (Exception e)
@@ -205,6 +198,13 @@ public class WindDoorServiceImpl implements IWindDoorService
                     "GongGaoGuid",
                     oldGongGaoGuid);
             throw new ServiceException("抓取门窗信息出错", e);
+        }
+        for (int iii = 0; iii < bathList.size(); iii++)
+        {
+            //发短信
+            configService.sendAllMessage("您有一条新的开发商招标信息");
+            CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+                    bathList.get(iii).getId());
         }
         System.out.println("WDGatherEnd");
         
@@ -217,6 +217,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                 "GongGaoGuid");
         //        oldGongGaoGuid = null;
         System.out.println("MQGatherstar");
+        List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
         try
         {
             Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
@@ -233,7 +234,6 @@ public class WindDoorServiceImpl implements IWindDoorService
             {
                 oldGongGaoGuid = null;
             }
-            List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
             STOP: for (int i = 1; i <= pageNum; i++)
             {
                 Map map = new HashMap();
@@ -346,13 +346,6 @@ public class WindDoorServiceImpl implements IWindDoorService
                     }
                 }
             }
-            for (int iii = 0; iii < bathList.size(); iii++)
-            {
-                //发短信
-                configService.sendAllMessage("您有一条新的开发商招标信息");
-                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
-                        bathList.get(iii).getId());
-            }
         }
         catch (Exception e)
         {
@@ -362,6 +355,13 @@ public class WindDoorServiceImpl implements IWindDoorService
                     "GongGaoGuid",
                     oldGongGaoGuid);
             throw new ServiceException("抓取幕墙信息出错", e);
+        }
+        for (int iii = 0; iii < bathList.size(); iii++)
+        {
+            //发短信
+            configService.sendAllMessage("您有一条新的开发商招标信息");
+            CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+                    bathList.get(iii).getId());
         }
         System.out.println("MQGatherEnd");
     }

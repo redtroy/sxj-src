@@ -25,14 +25,14 @@
       <td width="40" valign="middle" height="40" align="center">序号</td>
       <td valign="middle" align="center">材料名称</td>
       <td width="150" valign="middle" height="40" align="center">整料长度（mm）</td>
-      <td width="150" valign="middle" height="40" align="center">余料长度（mm）</td>
+<!--       <td width="150" valign="middle" height="40" align="center">余料长度（mm）</td> -->
       <td width="150" valign="middle" height="40" align="center">需用整料（支）</td>
       <td width="100" valign="middle" height="40" align="center">利用率</td>
     </tr>
     <#list list as item>
     <tr id="td_${item_index}">
     <td height="30" align="center">
-    <input type="checkbox" name="checktd" value="${item_index}" >
+    <input type="checkbox" name="checktd" value="${item_index}" checked="checked">
     <input type="hidden" name="paramList[${item_index}].name" value="${item.sectionName}"/>
     <input type="hidden" name="paramList[${item_index}].type" value="${item.sectionType}"/>
     <#list item.partSpecifications as part>
@@ -59,7 +59,7 @@
       <#assign left=lay.left+left>
       <#assign materialNum=lay.materialNum+materialNum>
      </#list>
-      <td height="30" align="center">${left}</td>
+<!--       <td height="30" align="center">${left}</td> -->
       <td height="30" align="center">${materialNum}</td>
       <td height="30" align="center">${(item.param.length-left)/item.param.length*100}%</td>
     </tr>
@@ -102,16 +102,29 @@ function editLength(index){
 }
 
 function optimization(){
-	var params=$("#optimized_form").serialize();
-	dialogBox(function(index){
-		 $.post("${basePath}optim/optimization.htm",params,function(data){
-			 		layer.close(index);
-					layer.close(pageIndex);
-					 $("#optimize").empty();
-					 $("#optimize").append(data);
-					 $("#optimize").show();
-					 pageIndex=dialogBoxOutId("#optimize");
-			});
-	 },"是否确认优化");
+	var children=$("#optimized_form").find(":checkbox");
+	var count=0;
+	  children.each(function(i){
+			if($(this).is(":checked")){
+				count=count+1;
+			}
+		});
+	  if(count==0){
+		  alert("请勾选参与一键优化的数据");
+		 return;
+	  }else{
+		  var params=$("#optimized_form").serialize();
+			dialogBox(function(index){
+				 $.post("${basePath}optim/optimization.htm",params,function(data){
+					 		layer.close(index);
+							layer.close(pageIndex);
+							 $("#optimize").empty();
+							 $("#optimize").append(data);
+							 $("#optimize").show();
+							 pageIndex=dialogBoxOutId("#optimize");
+					});
+			 },"是否确认优化");
+	  }
+	
 }
 </script>

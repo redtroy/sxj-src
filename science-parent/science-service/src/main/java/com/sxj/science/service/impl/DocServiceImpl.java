@@ -97,6 +97,7 @@ public class DocServiceImpl implements IDocService
             // doc.setProjectId(project.getId());
             // doc.setItemId(item.getId());
             doc.setId(null);
+            doc.setIsShow(1);
             docDao.addDoc(doc);
             
             if (glassList != null && glassList.size() > 0)
@@ -154,11 +155,12 @@ public class DocServiceImpl implements IDocService
             {
                 throw new ServiceException("工程批次不能为空");
             }
-            docDao.deleteDocById(doc.getId());
-            glassDao.deleteGlassByDocId(doc.getId());
-            partsDao.deletePartsByDocId(doc.getId());
-            productDao.deleteProductByDocId(doc.getId());
-            scienceDao.deleteScienceByDocId(doc.getId());
+            //            docDao.deleteDocById(doc.getId());
+            //            glassDao.deleteGlassByDocId(doc.getId());
+            //            partsDao.deletePartsByDocId(doc.getId());
+            //            productDao.deleteProductByDocId(doc.getId());
+            //            scienceDao.deleteScienceByDocId(doc.getId());
+            self.removeDoc(doc.getId());
             doc.setId(null);
             self.addDocModel(doc);
         }
@@ -267,6 +269,21 @@ public class DocServiceImpl implements IDocService
     }
     
     @Override
+    public DocEntity getDoc(String docId) throws ServiceException
+    {
+        try
+        {
+            DocEntity doc = docDao.getDoc(docId);
+            return doc;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询下料信息错误", e, this.getClass());
+            throw new ServiceException("查询下料信息错误", e);
+        }
+    }
+    
+    @Override
     public void removeDoc(String docId) throws ServiceException
     {
         try
@@ -289,4 +306,20 @@ public class DocServiceImpl implements IDocService
         }
         
     }
+    
+    @Override
+    public void editDoc(DocEntity doc) throws ServiceException
+    {
+        try
+        {
+            docDao.updateDoc(doc);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询下料信息错误", e, this.getClass());
+            throw new ServiceException("查询下料信息错误", e);
+        }
+        
+    }
+    
 }

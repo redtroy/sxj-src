@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sxj.science.entity.export.DocEntity;
+import com.sxj.science.entity.export.ItemEntity;
 import com.sxj.science.entity.export.ProjectEntity;
 import com.sxj.science.model.DocModel;
 import com.sxj.science.model.DocQuery;
@@ -36,17 +38,23 @@ public class DocController extends BaseController
             ModelMap map)
     {
         ProjectEntity project = projectService.getProject(projectId);
+        ItemEntity item = projectService.getItemById(itemId);
         map.put("projectId", projectId);
         map.put("itemId", itemId);
         if (project != null)
         {
             map.put("projectName", project.getName());
         }
+        if (item != null)
+        {
+            map.put("itemName", item.getName());
+        }
         map.put("memberNo", "E00001");
         if (StringUtils.isEmpty(series))
         {
             DocQuery query = new DocQuery();
             query.setItemId(itemId);
+            query.setIsShow(1);
             List<DocModel> docList = docService.queryDocModel(query);
             if (docList != null && docList.size() > 0)
             {
@@ -59,6 +67,7 @@ public class DocController extends BaseController
             DocQuery query = new DocQuery();
             query.setSeries(series);
             query.setItemId(itemId);
+            query.setIsShow(1);
             List<DocModel> docList = docService.queryDocModel(query);
             if (docList != null && docList.size() > 0)
             {
@@ -95,7 +104,8 @@ public class DocController extends BaseController
         Map<String, Object> map = new HashMap<String, Object>();
         try
         {
-            docService.removeDoc(docId);
+            DocEntity doc = docService.getDoc(docId);
+            docService.editDoc(doc);
             map.put("isOK", true);
         }
         catch (Exception e)
@@ -132,11 +142,16 @@ public class DocController extends BaseController
             ModelMap map)
     {
         ProjectEntity project = projectService.getProject(projectId);
+        ItemEntity item = projectService.getItemById(itemId);
         map.put("projectId", projectId);
         map.put("itemId", itemId);
         if (project != null)
         {
             map.put("projectName", project.getName());
+        }
+        if (item != null)
+        {
+            map.put("itemName", item.getName());
         }
         map.put("memberNo", "E00001");
         
@@ -163,6 +178,7 @@ public class DocController extends BaseController
         DocQuery query = new DocQuery();
         query.setWindowCode(windowCode);
         query.setItemId(itemId);
+        query.setIsShow(1);
         List<DocModel> docList = docService.queryDocModel(query);
         map.put("docList", docList);
         return "site/editmtable";

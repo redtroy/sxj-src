@@ -14,6 +14,8 @@
 		<result property="series" column="SERIES" jdbcType="VARCHAR" />
 		<result property="imageSrc" column="IMAGE_SRC" jdbcType="VARCHAR" />
 		<result property="htmlData" column="HTMLDATA" jdbcType="VARCHAR" />
+		<result property="htmlDataBackup" column="HTMLDATABACKUP" jdbcType="VARCHAR" />
+		<result property="finish" column="FINISH" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<!-- 条件查询备案 -->
@@ -83,7 +85,7 @@
 	<!-- 条件查询备案 -->
 	<select id="openQueryWindowType" resultMap="WinTypeResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * FROM S_WINDOW_TYPE WHERE 1=1  ]]>
+		<![CDATA[SELECT ID,WINID,NAME,MODEL_PATH,AREA,COMPANY_NAME,TYPE,SERIES,IMAGE_SRC,FINISH FROM S_WINDOW_TYPE WHERE 1=1  ]]>
 		<!-- 所属地区 -->
 		<if test="condition.winId != null and condition.winId != ''">
 			<![CDATA[ AND WINID LIKE CONCAT('%',#{condition.winId},'%') ]]>

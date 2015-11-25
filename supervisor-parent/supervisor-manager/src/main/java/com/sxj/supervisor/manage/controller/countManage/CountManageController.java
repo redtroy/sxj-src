@@ -262,6 +262,7 @@ public class CountManageController extends BaseController
         params.put("name",model.getName());
         params.put("modelPath", model.getModelPath());
         params.put("imageSrc", model.getImageSrc());
+        params.put("finish", "0");
         String res = httpClient.post(hostName+"addCountTem.htm", params);
         if(!StringUtils.isBlank(res)){
             map.put("isOk", "true");
@@ -382,11 +383,13 @@ public class CountManageController extends BaseController
     }
     
     @RequestMapping("/saveHtml")
-    public @ResponseBody Map<String, Object> saveHtml(String id,String htmlData) throws ClientProtocolException, IOException{
+    public @ResponseBody Map<String, Object> saveHtml(String id,String finish,String htmlData,String htmlDataBackup) throws ClientProtocolException, IOException{
         Map<String,Object> map=new HashMap<String,Object>();
         Map<String,String> params=new HashMap<String,String>();
         params.put("id", id);
+        params.put("htmlDataBackup", htmlDataBackup);
         params.put("htmlData", htmlData);
+        params.put("finish", finish);
         String res = httpClient.post(hostName+"saveHtml.htm", params);
         if(!StringUtils.isBlank(res)){
             map.put("isOK", "true");

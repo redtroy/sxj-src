@@ -20,7 +20,7 @@
 	
 	<select id="query" resultMap="ProjectResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * from S_PROJECT p left join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
+		<![CDATA[SELECT distinct p.*  from S_PROJECT p left join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
 		<if test="condition.name != null and condition.name != ''">
 			<![CDATA[ AND (p.NAME LIKE CONCAT('%',#{condition.name},'%') OR i.NAME LIKE CONCAT('%',#{condition.name},'%'))]]>
 		</if>
@@ -36,15 +36,19 @@
 		<if test="condition.beiAnNo != null and condition.beiAnNo != ''">
 			<![CDATA[ AND p.BEIAN_NO LIKE CONCAT('%',#{condition.beiAnNo},'%')]]>
 		</if>
+		<if test="condition.isShow!= null and condition.isShow != ''">
+			<![CDATA[ AND p.IS_SHOW =#{condition.isShow}]]>
+		</if>
 		<![CDATA[  ORDER BY p.UPLOAD_TIME DESC]]>
 	</select>
 	
 	<select id="queryFileCount" resultType="Integer"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT SUM(p.BATCH_COUNT) from S_PROJECT p left join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
+		<![CDATA[SELECT SUM(tmp.BATCH_COUNT) from (SELECT DISTINCT p.* from S_PROJECT p INNER join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
 		<if test="condition.name != null and condition.name != ''">
 		<![CDATA[ AND (p.NAME LIKE CONCAT(#{condition.name},'%') OR i.NAME LIKE CONCAT(#{condition.name},'%'))]]>
 		</if>
+		<![CDATA[ ) as tmp ]]>
 	</select>
 	
 	<select id="openQueryProject" resultMap="ProjectResultMap"

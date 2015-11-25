@@ -8,6 +8,9 @@
 <script src="${b.staticPath}js/jquery.js"></script>
 <script language="javascript" src="${b.staticPath}js/jquery.jqprint-0.3.js"></script>
 <script src="${b.staticPath}js/mtable2.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
 <!--显示优化编辑整料长度图标开始-->
 <@b.dialogBox/>
 <@b.validate/>
@@ -61,7 +64,7 @@ function setTab(name,cursel,n){
 <!--添加下料表开始-->
 <!--返回顶部脚本开始-->
 <script>
- lastScrollY=0;
+lastScrollY=0;
 function heartBeat(){ 
 var diffY;
 if (document.documentElement && document.documentElement.scrollTop)
@@ -87,14 +90,16 @@ var pageIndex;
 var projectId="${projectId}";
 var projectName="${projectName}";
 var itemId="${itemId}";
+var itemName="${itemName}";
 var memberNo="${memberNo}";
+$("#last_project_name").val(projectName);
 function addDoc(id,th){
-	var index=$(th).parent().parent().attr("index");
-	$("#button_doc_"+id+"_"+index).attr("onclick","modifyDoc('"+id+"',this);");
-	var htmlData=$("#doc_form_"+id+"_"+index).get(0);
-	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData.outerHTML);
-	var params=$("#doc_form_"+id+"_"+index).serialize();
 	dialogBox(function(index2){
+		var index=$(th).parent().parent().attr("index");
+		$("#button_doc_"+id+"_"+index).attr("onclick","modifyDoc('"+id+"',this);");
+		var htmlData=$("#doc_form_"+id+"_"+index).get(0);
+		$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData.outerHTML);
+		var params=$("#doc_form_"+id+"_"+index).serialize();
 		 $.post("${basePath}doc/addDoc.htm",params,function(data){
 			  layer.close(index2);
 				if(data.isOK == true){
@@ -111,13 +116,13 @@ function addDoc(id,th){
 	},"是否确认添加");
 }
 function modifyDoc(id,th){
-	var index=$(th).parent().parent().attr("index");
-	var docId=$("#doc_form_"+id+"_"+index).next("#docid_value").val();
-	$("#doc_form_"+id+"_"+index).find("input[name=id]").val(docId);
-	var htmlData=$("#doc_form_"+id+"_"+index).get(0);
-	$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData.outerHTML);
-	var params=$("#doc_form_"+id+"_"+index).serialize();
 	dialogBox(function(index2){
+		var index=$(th).parent().parent().attr("index");
+		var docId=$("#doc_form_"+id+"_"+index).next("#docid_value").val();
+		$("#doc_form_"+id+"_"+index).find("input[name=id]").val(docId);
+		var htmlData=$("#doc_form_"+id+"_"+index).get(0);
+		$("#doc_form_"+id+"_"+index).find("input[name=htmlData]").val(htmlData.outerHTML);
+		var params=$("#doc_form_"+id+"_"+index).serialize();
 		 $.post("${basePath}doc/editDoc.htm",params,function(data){
 			  layer.close(index2);
 				if(data.isOK == true){
@@ -152,6 +157,7 @@ function copyTable(id,th){
 	//$("#doc_form_"+id+"_"+newIndex).after("<input id='docid_value' value='"+docId+"' type='hidden'/>");
 	$("#index_hidden").val(newIndex+1);
 	$('#copy_doc_form_'+id+"_"+index).attr("id","doc_form_"+id+"_"+index);
+	scroll(0,0);
 }
 
 function removeTable(id,th){
@@ -202,9 +208,10 @@ function search_project(){
 <!--下料表开始-->
   <ul>
     	<li>
-         <a data-toggle="modal" href="#createpro" onmouseover="display();" onmouseout="disappear();"><button class=" button button-greenp">添加下料表</button></a>
-		    <div class="box-c"></div>
-			<div id="box" class="box checkfile" onmouseover="display();" onmouseout="disappear();"  lsload="false">
+         <a data-toggle="modal" onclick="display();">
+          <img src="${b.staticPath}images/botton/5-5.png" onclick="this.src='${b.staticPath}images/botton/5-5.png'" style="pointer:cursor;border:none">
+         </a>
+			<div id="box" class="box checkfile" lsload="false" style="z-index: 99999999999">
 				
 			</div>	
         </li>

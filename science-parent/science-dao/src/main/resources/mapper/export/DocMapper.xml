@@ -18,48 +18,69 @@
 		<result property="windowFaca" column="WINDOW_FACA" jdbcType="VARCHAR" />
 		<result property="width" column="WIDTH" jdbcType="VARCHAR" />
 		<result property="height" column="HEIGHT" jdbcType="VARCHAR" />
+		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="htmlData" column="HTML_DATA" jdbcType="VARCHAR" />
+		<result property="isShow" column="IS_SHOW" jdbcType="INTEGER" />
 	</resultMap>
 	<select id="query" resultMap="DocResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
-		<![CDATA[SELECT * from S_DOC d WHERE 1 = 1]]>
+		<![CDATA[SELECT tmp.*,CASE WHEN (gCount > 0 AND pCount > 0 AND paCount > 0 AND sCount > 0) THEN 2 WHEN ]]>
+		<![CDATA[(gCount = 0 AND pCount = 0 AND paCount = 0 AND sCount = 0) THEN 0 ELSE 1 END AS STATE FROM (SELECT ID,WINDOW_ID,PROJECT_ID,PROJECT_NAME,ITEM_ID,MEMBER_NO,FILE_PATH,WINDOW_CODE,QUANTITY,SERIES,WINDOW_FACA,WIDTH,HEIGHT,HTML_DATA,]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_GLASS g WHERE g.DOC_ID = d.ID AND g.HEIGHT <> '' AND g.QUANTITY <> '' AND g.WIDTH <> '' AND g.TYPE <> '') AS gCount,]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_P_PRODUCT p WHERE p.DOC_ID = d.ID AND p.HEIGHT <> '' AND p.NAME <> '' AND p.QUANTITY <> '' AND p.WIDTH <> '' ) AS pCount,]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_PARTS pa WHERE pa.DOC_ID = d.ID AND pa.`NAME` <> '' AND pa.QUANTITY <> '' AND pa.TECHONLOGY <> '' AND pa.TYPE <> '' AND pa.UNIT <> '' AND pa.USED <> '') AS paCount,]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_SCIENCE s WHERE s.DOC_ID = d.ID AND s.LENGTH <> '' AND s.NAME <> '' AND s.QUANTITY <> '' AND s.REMARK <> '' AND s.TYPE <> '' AND s.USED <> '' ) AS sCount]]>
+		<![CDATA[ FROM S_DOC d WHERE 1 = 1]]>
 		<if test="condition.itemId != null and condition.itemId !=''">
 			<![CDATA[ and d.ITEM_ID =#{condition.itemId}]]>
 		</if>
 		<if test="condition.windowCode != null and condition.windowCode != ''">
 			<![CDATA[ AND d.WINDOW_CODE LIKE CONCAT('%',#{condition.windowCode},'%')]]>
 		</if>
+		<if test="condition.isShow!= null and condition.isShow != ''">
+			<![CDATA[ AND d.IS_SHOW =#{condition.isShow}]]>
+		</if>
+		<if test="condition.series != null and condition.series !=''">
+			<![CDATA[ and d.SERIES =#{condition.series}]]>
+		</if>
 		<if test="condition.ids != null and condition.ids !=''">
 		  <![CDATA[ and d.ID IN ]]>
-			<foreach item="item" collection="condition.ids" open="(" close=")"
-			separator=",">
-			#{item}
+			<foreach item="item" collection="condition.ids" open="("
+				close=")" separator=",">
+				#{item}
 			</foreach>
 		</if>
 		<if test="condition.itemIds != null and condition.itemIds !=''">
 		  <![CDATA[ and d.ITEM_ID IN ]]>
-			<foreach item="item" collection="condition.itemIds" open="(" close=")"
-			separator=",">
-			#{item}
+			<foreach item="item" collection="condition.itemIds" open="("
+				close=")" separator=",">
+				#{item}
 			</foreach>
 		</if>
 		 <![CDATA[ ORDER BY d.ID DESC ]]>
+		<![CDATA[) AS tmp]]>
+		<if test="groups.size() > 0">
+		 <![CDATA[ GROUP BY ]]>
+			<foreach item="item" collection="groups" separator=",">
+				${item}
+			</foreach>
+		</if>
 	</select>
-	
+
 	<!-- 条件查询备案 -->
 	<select id="getDocByItemIds" resultMap="DocResultMap"
 		parameterType="java.util.Map">
 		<![CDATA[SELECT * FROM S_DOC WHERE 1=1  ]]>
-		<!-- 	公司名称 -->
+		<!-- 公司名称 -->
 		<if test="itemIds != null">
 			<![CDATA[ AND ITEM_ID IN ]]>
 			<foreach item="item" collection="itemIds" open="(" close=")"
-			separator=",">
-			#{item}
-			</foreach> 
+				separator=",">
+				#{item}
+			</foreach>
 		</if>
 	</select>
-	
+
 	<select id="openQuery" resultMap="DocResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT ID,WINDOW_ID,PROJECT_ID,PROJECT_NAME,MEMBER_NO,FILE_PATH,WINDOW_CODE,SERIES from S_DOC d WHERE 1 = 1]]>

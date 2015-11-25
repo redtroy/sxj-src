@@ -147,6 +147,7 @@ var uploadImg = function($file) {
 		 fileTypeExts: '*.jpg;*.png',
 		auto : true,
 		multi : true,
+		fileSizeLimit:1024,
 		height : 30,
 		width : 120,
 		buttonText : '上传窗型图',
@@ -172,6 +173,12 @@ var uploadImg = function($file) {
 				$("#showImg").attr("src","${b.imagePath}"+hideVal);
 			},"窗型图上传成功");
 // 			refreshElastislide($container, $carousel, dataObj);
+		},
+		onSelectError:function(file, errorCode, errorMsg){
+			if(errorCode='FILE_EXCEEDS_SIZE_LIMIT'){
+				alert('文件大小超出范围,不能超过1MB');
+				stop();
+			}
 		}
 	});
 }
@@ -217,6 +224,19 @@ function showHidden(){
 
 function changeCompanyName(){
 	$("#bigAutocompleteContent").hide();
+}
+
+function amplifyImg(ii){
+	var width=$(ii).css("width");
+	if(width=='120px'){
+		$(ii).css("width","420px");
+		$(ii).css("height","420px");
+		$("#upload_doc").css("height","350px");
+	}else{
+		$(ii).css("width","120px");
+		$(ii).css("height","120px");
+		$("#upload_doc").css("height","20px");
+	}
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -265,7 +285,7 @@ function changeCompanyName(){
         <span class="msg-error icon" id="nameErr" style="display: none;">请输入窗型名称</span>
       </div> 
       <div id="upload_doc">
-      <span id="imgSpan" ><img id="showImg" style="background-color: gray;" src="${b.staticPath}images/type1.gif" width="120" height="120" /></span>
+      <span id="imgSpan" ><img id="showImg" onclick="amplifyImg(this)" style="background-color: gray;" src="${b.staticPath}images/type1.gif" width="120" height="120" /></span>
       <ul><li>
       <label>&nbsp;</label>
     	<input name="imageSrc"  id="imageSrc"  type="hidden" />
@@ -278,7 +298,7 @@ function changeCompanyName(){
 <!--       <button onclick="showHidden()">测试</button> -->
       <div id="succDiv" class="modal-wrap popDemo" style="display: none;">
         <div class="modal-header">
-     <span class="close">关闭</span></div>
+     <span class="close" onclick="stayHtml()">关闭</span></div>
      <div class="modal-body">
       <div class="tipBox ly-clearFix">
      <span class="icon32 icon-32-suc"></span>

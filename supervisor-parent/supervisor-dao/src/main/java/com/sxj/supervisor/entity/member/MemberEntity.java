@@ -389,14 +389,9 @@ public class MemberEntity extends Pagable implements Serializable {
 	private String purchaseNo;
 
 	/**
-	 * 经销商
+	 * 关联企业
 	 */
-	private String dealer;
-	
-	/**
-	 * 代理商
-	 */
-	private String agents;
+	private String affiliates;
 
 	/**
 	 * 汇窗平台同步状态
@@ -404,21 +399,12 @@ public class MemberEntity extends Pagable implements Serializable {
 	@Column(name = "PURCHASE_STATE")
 	private Integer purchaseState;
 
-
-	public String getDealer() {
-		return dealer;
+	public String getAffiliates() {
+		return affiliates;
 	}
 
-	public void setDealer(String dealer) {
-		this.dealer = dealer;
-	}
-
-	public String getAgents() {
-		return agents;
-	}
-
-	public void setAgents(String agents) {
-		this.agents = agents;
+	public void setAffiliates(String affiliates) {
+		this.affiliates = affiliates;
 	}
 
 	public String getPurchaseNo() {

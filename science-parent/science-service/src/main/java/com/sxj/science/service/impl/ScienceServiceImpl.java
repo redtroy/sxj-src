@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sxj.file.common.LocalFileUtil;
 import com.sxj.science.dao.export.IDocDao;
 import com.sxj.science.dao.export.IProjectDao;
 import com.sxj.science.dao.export.IScienceDao;
@@ -43,9 +44,10 @@ import com.sxj.science.model.result.OptimizedResult;
 import com.sxj.science.model.statis.StatisticsItemModel;
 import com.sxj.science.service.IScienceService;
 import com.sxj.science.service.OptimizedResultReader;
-import com.sxj.spring.modules.util.LocalFileUtil;
+import com.sxj.spring.modules.util.NumberUtils;
 import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
+import com.sxj.util.exception.SystemException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
@@ -133,8 +135,9 @@ public class ScienceServiceImpl implements IScienceService
                 if (map.containsKey(key))
                 {
                     ScienceEntity value = map.get(key);
-                    value.setQuantity(
-                            value.getQuantity() + scienceEntity.getQuantity());
+                    Double totleQuantity = Double.parseDouble(value.getQuantity())
+                            + Double.parseDouble(scienceEntity.getQuantity());
+                    value.setQuantity(totleQuantity + "");
                     map.put(key, value);
                 }
                 else
@@ -165,14 +168,14 @@ public class ScienceServiceImpl implements IScienceService
             String projectId, String length, String interval)
     {
         //合并需要优化的项
-        String filePath = "D:/sheji/CAD_FILE/";
-        String fileName = "xdata.txt";
-        File rootFile = new File(filePath);
-        if (!rootFile.exists())
-        {
-            rootFile.mkdir();
-        }
-        File xdata = new File(filePath + fileName);
+        //        String filePath = "D:/sheji/CAD_FILE/";
+        //        String fileName = "xdata.txt";
+        //        File rootFile = new File(filePath);
+        //        if (!rootFile.exists())
+        //        {
+        //            rootFile.mkdir();
+        //        }
+        //        File xdata = new File(filePath + fileName);
         BufferedWriter output = null;
         OptimizedModel model = new OptimizedModel();
         List<OptimizedResult> resultList = new ArrayList<OptimizedResult>();
@@ -211,14 +214,11 @@ public class ScienceServiceImpl implements IScienceService
             List<List<ScienceEntity>> excelData = new ArrayList<List<ScienceEntity>>();
             for (String key : map2.keySet())
             {
-                if (!xdata.exists())
-                {
-                    xdata.createNewFile();
-                }
-                else
-                {
-                    LocalFileUtil.delete(xdata);
-                }
+                int random = NumberUtils.getRandomIntInMax(10000000);
+                String newPath = "D:\\youhua\\" + random + "_sheji";
+                new File(newPath + "\\CAD_FILE").mkdirs();
+                File xdata = new File(newPath + "\\CAD_FILE\\xdata.txt");
+                xdata.createNewFile();
                 List<ScienceEntity> list = map2.get(key);
                 excelData.add(list);
                 String text = "";
@@ -270,13 +270,39 @@ public class ScienceServiceImpl implements IScienceService
                 output.write(text);
                 output.flush();
                 output.close();
-                Process p = java.lang.Runtime.getRuntime()
-                        .exec("D:/sheji/execute.bat");
+                Process p = java.lang.Runtime.getRuntime().exec(new String[] {
+                        "D:\\sheji\\execute.bat", newPath });
                 p.waitFor();
-                OptimizedResult result = OptimizedResultReader.read(
-                        new FileInputStream(filePath + "XABC.TXT"), "GBK");
-                result.setQuantity(quantity);
-                resultList.add(result);
+                long now = System.currentTimeMillis();
+                while (true)
+                {
+                    if (System.currentTimeMillis() - now > 300000)
+                    {
+                        throw new SystemException("读取文件超时");
+                    }
+                    try
+                    {
+                        OptimizedResult result = OptimizedResultReader.read(new FileInputStream(
+                                newPath + "\\CAD_FILE\\XABC.TXT"),
+                                "GBK");
+                        result.setQuantity(quantity);
+                        resultList.add(result);
+                        
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        //                        Thread.currentThread().sleep(5000);
+                    }
+                }
+                //LocalFileUtil.deleteFromDir(newPath)
+                while (!(LocalFileUtil.deleteFromDir(newPath)))
+                {
+                }
+                while (!(new File(newPath).delete()))
+                {
+                }
+                
             }
             model.setResult(resultList);
             //生成材料统计单excel
