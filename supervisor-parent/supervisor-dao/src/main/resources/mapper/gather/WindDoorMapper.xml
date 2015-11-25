@@ -28,6 +28,10 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM M_WIND_DOOR ORDER BY FLAG DESC ]]>
 	</select>
+	
+	<select id="getByOid" resultMap="WindDoorResultMap">
+		select * from M_WIND_DOOR where OID=#{oid}
+	</select>
 	<!--  -->
 	<select id="queryList" resultMap="WindDoorResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">

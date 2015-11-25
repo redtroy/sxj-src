@@ -25,6 +25,7 @@ import com.sxj.spring.modules.util.StringUtils;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.supervisor.service.tasks.grabber.Info;
 import com.sxj.supervisor.service.tasks.grabber.RequestHeader;
+import com.sxj.util.exception.ServiceException;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 
@@ -60,7 +61,7 @@ public class ProjectGrabber
     @Autowired
     private IStorageClientService storageClientService;
     
-    public void grab(String projectName)
+    public List<WindDoorEntity> grab(String projectName) throws ServiceException
     {
         try
         {
@@ -68,15 +69,12 @@ public class ProjectGrabber
             RequestHeader param = touch();
             List<WindDoorEntity> list = new ArrayList<>();
             page(projectName, param, list);
-            logger.debug("");
-            for (WindDoorEntity entity : list)
-                System.out.println(
-                        entity.getXmmc() + "------" + entity.getGifPath()
-                                + "------" + entity.getFilePath());
+            return list;
         }
         catch (IOException e)
         {
             logger.error("---------抓取数据异常---------", e);
+            throw new ServiceException(e);
         }
     }
     
@@ -150,9 +148,14 @@ public class ProjectGrabber
                 windDoor.setJzrq(jzsj);
                 windDoor.setQy(qy);
                 windDoor.setXmmc(xmmc);
-                windDoor.setState(0);
+                if (xmmc.indexOf("已作废") > 0)
+                    windDoor.setState(1);
+                else
+                    windDoor.setState(0);
+                ;
                 windDoor.setPublishFirm("网站采集");
                 windDoor.setNowDate(new Date());
+                windDoor.setOid(info.getOid());
                 if (StringUtils.isNotEmpty(info.getImage()))
                 {
                     windDoor.setGifPath(info.getImage());
@@ -172,6 +175,7 @@ public class ProjectGrabber
     {
         logger.debug("正在从{}抓取单行数据", url);
         Document doc = (Document) Jsoup.connect(url).timeout(10000).get();
+        String oid = url.split("GongGaoGuid=")[1];
         Element element = doc.getElementById("ZBGGDetail1_tblInfo");
         if (element.getElementById("ZBGGDetail1_trAttach") != null
                 && !"".equals(element.getElementById("ZBGGDetail1_trAttach")))
@@ -183,6 +187,7 @@ public class ProjectGrabber
                 .getElementsByTag("img")
                 .attr("src");
         Info info = new Info();
+        info.setOid(oid);
         if (StringUtils.isNotEmpty(img))
         {
             String gifPath = fetchImage(

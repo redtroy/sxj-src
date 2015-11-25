@@ -16,16 +16,23 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import third.rewrite.fastdfs.service.IStorageClientService;
-
 import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
+import com.sxj.redis.core.RSet;
+import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
+import com.sxj.supervisor.dao.member.IMemberDao;
+import com.sxj.supervisor.dao.message.IMessageConfigDao;
+import com.sxj.supervisor.dao.message.ITenderMessageDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
+import com.sxj.supervisor.entity.member.MemberEntity;
+import com.sxj.supervisor.entity.message.TenderMessageEntity;
+import com.sxj.supervisor.enu.message.MessageStateEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.tasks.WindDoorModel;
 import com.sxj.supervisor.service.message.IMessageConfigService;
@@ -36,6 +43,8 @@ import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
+import third.rewrite.fastdfs.service.IStorageClientService;
+
 @Service
 public class WindDoorServiceImpl implements IWindDoorService
 {
@@ -44,183 +53,139 @@ public class WindDoorServiceImpl implements IWindDoorService
     private WindDoorDao wda;
     
     @Autowired
+    private ITenderMessageDao tenderMessageDao;
+    
+    @Autowired
+    private IMessageConfigDao messageConfigDao;
+    
+    @Autowired
+    private IMemberDao memberDao;
+    
+    @Autowired
     private IStorageClientService storageClientService;
     
     @Autowired
     private IMessageConfigService configService;
     
+    @Autowired
+    private ProjectGrabber grabber;
+    
+    @Autowired
+    private RedisCollections collections;
+    
     @Override
     @Transactional
     public void WindDoorGather() throws ServiceException
     {
-        String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
-                "windDoor",
-                "GongGaoGuid");
-        //        oldGongGaoGuid = null;
-        //        CometServiceImpl.clear(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
-        System.out.println("WDGatherstar");
-        List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
+        List<WindDoorEntity> grab = grabber.grab("门窗");
+        List<WindDoorEntity> created = new ArrayList<>();
+        for (WindDoorEntity entity : grab)
+        {
+            if (!saveWithoutTransaction(entity))
+            {
+                updateWithoutTransaction(entity);
+            }
+            else
+            {
+                created.add(entity);
+            }
+        }
+        sendSmsSync(created.size());
+    }
+    
+    private void sendSmsSync(final int count)
+    {
+        //final List<WindDoorEntity> list
+        new Thread()
+        {
+            public void run()
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    configService.sendAllMessage("您有一条新的开发商招标信息");
+                }
+            }
+        }.start();
+    }
+    
+    private void updateTenderMessageSync(final List<WindDoorEntity> list)
+    {
+        new Thread()
+        {
+            public void run()
+            {
+                try
+                {
+                    for (WindDoorEntity entity : list)
+                    {
+                        QueryCondition<MemberEntity> query = new QueryCondition<>();
+                        List<MemberEntity> members = memberDao
+                                .queryMembers(query);
+                        for (MemberEntity e : members)
+                        {
+                            TenderMessageEntity message = new TenderMessageEntity();
+                            message.setInfoId(entity.getId());
+                            message.setMemberNo(e.getMemberNo());
+                            message.setState(MessageStateEnum.UNREAD);
+                            tenderMessageDao.save(message);
+                            //更新用户未读列表
+                            RSet<Object> set = collections
+                                    .getSet(MessageChannel.MEMBER_UNREAD_TENDER_MESSAGE
+                                            + e.getMemberNo());
+                            set.add(entity.getId());
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                
+                }
+            }
+        }.start();
+    }
+    
+    private boolean updateWithoutTransaction(WindDoorEntity entity)
+    {
         try
         {
-            Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
-                    .timeout(30000)
-                    .execute();
-            Document doc = response.parse();
-            String __VIEWSTATE = doc.getElementById("__VIEWSTATE").val();
-            String __EVENTVALIDATION = doc.getElementById("__EVENTVALIDATION")
-                    .val();
-            Map<String, String> cookies = response.cookies();
-            int pageNum = page(__VIEWSTATE, __EVENTVALIDATION, cookies);
-            int flag = 0;
-            if (wda.getMaxWindDoor().size() < 1)
-            {
-                oldGongGaoGuid = null;
-            }
-            STOP: for (int i = 1; i <= pageNum; i++)
-            {
-                Map map = new HashMap();
-                // map.put("ImageButton1.x", "32");
-                // map.put("ImageButton1.y", "10");
-                map.put("__EVENTVALIDATION", __EVENTVALIDATION);
-                map.put("__VIEWSTATE", __VIEWSTATE);
-                map.put("__EVENTTARGET", "Pager");
-                map.put("__EVENTARGUMENT", "" + i);
-                map.put("drpBiaoDuanType", "0");
-                map.put("txtProjectName", "门窗");
-                doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
-                        .data(map)
-                        .timeout(30000)
-                        .cookies(cookies)
-                        .header("Accept",
-                                "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-                        .header("Host", "www1.njcein.com.cn")
-                        .header("Referer",
-                                "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
-                        .header("User-Agent",
-                                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0")
-                        .header("Connection", "keep-alive")
-                        .encoding("GBK")
-                        .post();
-                int k = doc.getElementById("tdcontent")
-                        .getElementsByTag("tr")
-                        .size();
-                __VIEWSTATE = doc.getElementById("__VIEWSTATE").val();
-                __EVENTVALIDATION = doc.getElementById("__EVENTVALIDATION")
-                        .val();
-                Elements trs = doc.getElementById("tdcontent")
-                        .getElementsByTag("tr");
-                for (Element tr : trs)
-                {
-                    String bdfl = tr.getElementsByTag("td").get(1).text(); // 标段分类
-                    String xmmc = tr.getElementsByTag("td").get(2).text();// 项目名称
-                    String url = tr.getElementsByTag("td")
-                            .get(2)
-                            .getElementsByTag("a")
-                            .attr("href");
-                    String qy = tr.getElementsByTag("td").get(3).text();// 区域
-                    String jzsj = tr.getElementsByTag("td").get(4).text();// 截至日期
-                    // System.out.println(bdfl);
-                    // System.out.println(xmmc);
-                    // System.out.println(qy);
-                    // System.out.println(jzsj);
-                    // System.out.println(url);
-                    String GongGaoGuid = url.split("GongGaoGuid=")[1];
-                    if (oldGongGaoGuid != null
-                            && GongGaoGuid.equals(oldGongGaoGuid))
-                    {
-                        break STOP;
-                    }
-                    if (flag == 0)
-                    {
-                        HierarchicalCacheManager.set(CacheLevel.REDIS,
-                                "windDoor",
-                                "GongGaoGuid",
-                                GongGaoGuid);
-                    }
-                    
-                    Map<String, String> contentMap = content("http://www1.njcein.com.cn"
-                            + url);
-                    if (contentMap == null
-                            || contentMap.get("content").length() < 200)
-                    {
-                        continue;
-                    }
-                    String filePath = storageClientService.uploadFile(null,
-                            new ByteArrayInputStream(contentMap.get("content")
-                                    .getBytes()),
-                            contentMap.get("content").getBytes().length,
-                            "jpg".toUpperCase());
-                    System.out.println(filePath);
-                    WindDoorEntity windDoor = new WindDoorEntity();
-                    windDoor.setId(StringUtils.getUUID());
-                    windDoor.setBdfl(bdfl);
-                    windDoor.setFilePath(filePath);
-                    windDoor.setJzrq(jzsj);
-                    windDoor.setQy(qy);
-                    windDoor.setXmmc(xmmc);
-                    windDoor.setState(0);
-                    windDoor.setPublishFirm("网站采集");
-                    windDoor.setNowDate(new Date());
-                    if (contentMap.get("gifPath") != null)
-                    {
-                        windDoor.setGifPath(contentMap.get("gifPath"));
-                    }
-                    bathList.add(windDoor);
-                    flag++;
-                }
-            }
-            if (bathList.size() > 0)
-            {
-                wda.addWindDoor(bathList);
-                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT,
-                        Long.valueOf(bathList.size()));
-                List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
-                if (keys != null && keys.size() > 0)
-                {
-                    for (String key : keys)
-                    {
-                        if (key == null)
-                        {
-                            continue;
-                        }
-                        CometServiceImpl.setCount(key,
-                                Long.valueOf(bathList.size()));
-                    }
-                }
-            }
-            gatherMQ();
+            WindDoorEntity old = wda.getByOid(entity.getOid());
+            String id = old.getId();
+            BeanUtils.copyProperties(entity, old);
+            old.setId(id);
+            wda.updateWind(old);
+            return true;
         }
         catch (Exception e)
         {
-            SxjLogger.error("抓取门窗信息出错", e, this.getClass());
-            HierarchicalCacheManager.set(CacheLevel.REDIS,
-                    "windDoor",
-                    "GongGaoGuid",
-                    oldGongGaoGuid);
-            throw new ServiceException("抓取门窗信息出错", e);
+            return false;
         }
-        for (int iii = 0; iii < bathList.size(); iii++)
+    }
+    
+    private boolean saveWithoutTransaction(WindDoorEntity entity)
+    {
+        try
         {
-            //发短信
-            configService.sendAllMessage("您有一条新的开发商招标信息");
-            CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
-                    bathList.get(iii).getId());
+            wda.save(entity);
+            return true;
         }
-        System.out.println("WDGatherEnd");
-        
+        catch (Exception e)
+        {
+            return false;
+        }
     }
     
     private void gatherMQ() throws ServiceException
     {
-        String oldGongGaoGuid = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
-                "MQ",
-                "GongGaoGuid");
+        String oldGongGaoGuid = (String) HierarchicalCacheManager
+                .get(CacheLevel.REDIS, "MQ", "GongGaoGuid");
         //        oldGongGaoGuid = null;
         System.out.println("MQGatherstar");
         List<WindDoorEntity> bathList = new ArrayList<WindDoorEntity>();
         try
         {
-            Response response = Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
+            Response response = Jsoup
+                    .connect(
+                            "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                     .timeout(30000)
                     .execute();
             Document doc = response.parse();
@@ -245,7 +210,9 @@ public class WindDoorServiceImpl implements IWindDoorService
                 map.put("__EVENTARGUMENT", "" + i);
                 map.put("drpBiaoDuanType", "0");
                 map.put("txtProjectName", "幕墙");
-                doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
+                doc = (Document) Jsoup
+                        .connect(
+                                "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                         .data(map)
                         .timeout(30000)
                         .cookies(cookies)
@@ -296,16 +263,16 @@ public class WindDoorServiceImpl implements IWindDoorService
                                 GongGaoGuid);
                     }
                     
-                    Map<String, String> contentMap = content("http://www1.njcein.com.cn"
-                            + url);
+                    Map<String, String> contentMap = content(
+                            "http://www1.njcein.com.cn" + url);
                     if (contentMap == null
                             || contentMap.get("content").length() < 200)
                     {
                         continue;
                     }
                     String filePath = storageClientService.uploadFile(null,
-                            new ByteArrayInputStream(contentMap.get("content")
-                                    .getBytes()),
+                            new ByteArrayInputStream(
+                                    contentMap.get("content").getBytes()),
                             contentMap.get("content").getBytes().length,
                             "jpg".toUpperCase());
                     System.out.println(filePath);
@@ -330,9 +297,11 @@ public class WindDoorServiceImpl implements IWindDoorService
             if (bathList.size() > 0)
             {
                 wda.addWindDoor(bathList);
-                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT,
+                CometServiceImpl.setCount(
+                        MessageChannel.MEMBER_TENDER_MESSAGE_COUNT,
                         Long.valueOf(bathList.size()));
-                List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                List<String> keys = CometServiceImpl
+                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
                 if (keys != null && keys.size() > 0)
                 {
                     for (String key : keys)
@@ -380,7 +349,9 @@ public class WindDoorServiceImpl implements IWindDoorService
             map.put("__EVENTARGUMENT", "1");
             map.put("drpBiaoDuanType", "0");
             map.put("txtProjectName", "门窗");
-            Document doc = (Document) Jsoup.connect("http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
+            Document doc = (Document) Jsoup
+                    .connect(
+                            "http://www1.njcein.com.cn/njxxnew/xmxx/zbgg/default.aspx")
                     .data(map)
                     .timeout(30000)
                     .cookies(cookies)
@@ -415,8 +386,8 @@ public class WindDoorServiceImpl implements IWindDoorService
             Map<String, String> map = new HashMap<String, String>();
             Document doc = (Document) Jsoup.connect(url).timeout(10000).get();
             Element element = doc.getElementById("ZBGGDetail1_tblInfo");
-            if (element.getElementById("ZBGGDetail1_trAttach") != null
-                    && !"".equals(element.getElementById("ZBGGDetail1_trAttach")))
+            if (element.getElementById("ZBGGDetail1_trAttach") != null && !""
+                    .equals(element.getElementById("ZBGGDetail1_trAttach")))
             {
                 element.getElementById("ZBGGDetail1_trAttach").remove();
             }
@@ -426,8 +397,8 @@ public class WindDoorServiceImpl implements IWindDoorService
                     .attr("src");
             if (img != null && !"".equals(img))
             {
-                String gifPath = downPicture("http://www1.njcein.com.cn/njxxnew/ZtbInfo/"
-                        + img);
+                String gifPath = downPicture(
+                        "http://www1.njcein.com.cn/njxxnew/ZtbInfo/" + img);
                 map.put("gifPath", gifPath);
                 element.getElementById("ZBGGDetail1_divDS")
                         .getElementsByTag("img")
@@ -452,14 +423,15 @@ public class WindDoorServiceImpl implements IWindDoorService
         {
             /* 将网络资源地址传给,即赋值给url */
             URL url = new URL(picttrueUrl);
-            String fileName = picttrueUrl.substring(picttrueUrl.lastIndexOf("=") + 1,
-                    picttrueUrl.length());
+            String fileName = picttrueUrl.substring(
+                    picttrueUrl.lastIndexOf("=") + 1, picttrueUrl.length());
             System.out.println(fileName);
             /* 此为联系获得网络资源的固定格式用法，以便后面的in变量获得url截取网络资源的输入流 */
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
             DataInputStream in = new DataInputStream(
                     connection.getInputStream());
-            
+                    
             /* 此处也可用BufferedInputStream与BufferedOutputStream 需要保存的路径 */
             // DataOutputStream out = new DataOutputStream(new FileOutputStream(
             // "D:\\test\\" + fileName + ".gif"));
@@ -479,7 +451,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             in.close();
             connection.disconnect();
             return gifPath;/* 网络资源截取并存储本地成功返回true */
-            
+                           
         }
         catch (Exception e)
         {
@@ -490,7 +462,8 @@ public class WindDoorServiceImpl implements IWindDoorService
     
     public String codeString(String fileName) throws Exception
     {
-        ByteArrayInputStream bin = new ByteArrayInputStream(fileName.getBytes());
+        ByteArrayInputStream bin = new ByteArrayInputStream(
+                fileName.getBytes());
         int p = (bin.read() << 8) + bin.read();
         String code = null;
         
@@ -520,8 +493,8 @@ public class WindDoorServiceImpl implements IWindDoorService
             WindDoorEntity wde = wda.getInfoById(id);
             String group = wde.getFilePath().substring(0,
                     wde.getFilePath().indexOf("/"));
-            String path = wde.getFilePath().substring(wde.getFilePath()
-                    .indexOf("/") + 1,
+            String path = wde.getFilePath().substring(
+                    wde.getFilePath().indexOf("/") + 1,
                     wde.getFilePath().length());
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             storageClientService.downloadFile(group, path, output);
@@ -559,7 +532,8 @@ public class WindDoorServiceImpl implements IWindDoorService
     public static void main(String[] args)
     {
         WindDoorServiceImpl wd = new WindDoorServiceImpl();
-        wd.content("http://www1.njcein.com.cn/njxxnew/ZtbInfo/ZBGGInfo.aspx?GongGaoGuid=47ab054f-ce98-4248-994f-906b63e24cd6");
+        wd.content(
+                "http://www1.njcein.com.cn/njxxnew/ZtbInfo/ZBGGInfo.aspx?GongGaoGuid=47ab054f-ce98-4248-994f-906b63e24cd6");
     }
     
     @Override
@@ -585,8 +559,10 @@ public class WindDoorServiceImpl implements IWindDoorService
             if (bathList.size() > 0)
             {
                 wda.addWindDoor(bathList);
-                CometServiceImpl.takeCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
-                List<String> keys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                CometServiceImpl
+                        .takeCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+                List<String> keys = CometServiceImpl
+                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
                 if (keys != null && keys.size() > 0)
                 {
                     for (String key : keys)

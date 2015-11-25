@@ -41,6 +41,8 @@ public class MessageChannel
     
     public static final String MEMBER_READTENDER_MESSAGE_KEYS = "MEMBER_READTENDER_MESSAGE_KEYS";
     
+    public static final String MEMBER_UNREAD_TENDER_MESSAGE = "MEMBER_UNREAD_TENDER_MESSAGE_";
+    
     private MessageChannel()
     {
         super();
