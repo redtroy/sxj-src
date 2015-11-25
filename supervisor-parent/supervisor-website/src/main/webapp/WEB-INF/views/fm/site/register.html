@@ -490,7 +490,7 @@ ${type[0].getName()}</span>/
 function setRegisterRand(){
 var o=new Object();
 	 $.post('${basePath}getImgStr.htm',function(data){
-       document.getElementById('imgStr').value=data;
+       $('#imgStr').val(data.imgStr);
    });
 }
 var show;

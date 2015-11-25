@@ -58,7 +58,7 @@ public class TestJunit
             //   al.gather();
             //configService.sendAllMessage("测试短信");
         	
-        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/updatePurchase.htm";
+        	String loginUrl = "http://www.menchuang.org.cn/purchase/updatePurchase.htm";
         	
 //			MemberEntity memberEntity = new MemberEntity();
 //			memberEntity.setName("南京海阔天空科技有限公司");
@@ -71,9 +71,9 @@ public class TestJunit
 //			memberEntity.setAffiliates("南京市型材巡航厂");
 //			memberEntity.setbLicenseNo("21092982382938");
 //			memberEntity.setbLicensePath("group1/M00/00/EC/wKgB21ZFlNeAfAd1ABWE8XUxiFI910.PNG");
-        	
+//        	
 //        	ReleaseRecordEntity rr = new ReleaseRecordEntity();
-//        	rr.setId("12345");
+//        	rr.setId("223");
 //        	rr.setAdminId("3290");
 //        	rr.setPurchase(1);
 //        	rr.setNum(1000);
@@ -98,24 +98,26 @@ public class TestJunit
         	
         	PurchaseEntity rr = new  PurchaseEntity();
         	rr.setcId("1");
-        	rr.setDeepGlass(1000);
-        	rr.setDeepIncrease(100);
-        	rr.setDeepReduce(100);
-        	rr.setFitting(1000);
-        	rr.setFittingIncrease(100);
-        	rr.setFittingReduce(100);
-        	rr.setOrdinaryGlass(1000);
-        	rr.setOrdinaryIncrease(100);
-        	rr.setOrdinaryReduce(100);
-        	rr.setProfiles(1000);
-        	rr.setProfilesIncrease(100);
-        	rr.setProfilesReduce(100);
+        	rr.setDeepGlass(1001);
+        	rr.setDeepIncrease(101);
+        	rr.setDeepReduce(101);
+        	rr.setFitting(1001);
+        	rr.setFittingIncrease(101);
+        	rr.setFittingReduce(101);
+        	rr.setOrdinaryGlass(1001);
+        	rr.setOrdinaryIncrease(101);
+        	rr.setOrdinaryReduce(101);
+        	rr.setProfiles(1001);
+        	rr.setProfilesIncrease(101);
+        	rr.setProfilesReduce(101);
         	String json = JsonMapper.nonDefaultMapper().toJson(rr);
 			System.err.println(json);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("json", json);
 			String a=httpClient.postJson(loginUrl, json);
 			System.err.println(a);
+        	
+        	
         }
         catch (Exception e)
         {
