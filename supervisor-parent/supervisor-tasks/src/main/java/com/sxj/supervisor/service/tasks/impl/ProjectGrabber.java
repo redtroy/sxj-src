@@ -135,28 +135,35 @@ public class ProjectGrabber
             String url = tds.get(2).getElementsByTag("a").attr("href");
             String qy = tds.get(3).text();// 区域
             String jzsj = tds.get(4).text();// 截至日期
-            
-            Info info = row(DOMAIN + url);
-            byte[] bytes = info.getContent().getBytes();
-            String filePath = storageClientService.uploadFile(null,
-                    new ByteArrayInputStream(bytes),
-                    bytes.length,
-                    "JPG");
-            WindDoorEntity windDoor = new WindDoorEntity();
-            windDoor.setId(StringUtils.getUUID());
-            windDoor.setBdfl(bdfl);
-            windDoor.setFilePath(filePath);
-            windDoor.setJzrq(jzsj);
-            windDoor.setQy(qy);
-            windDoor.setXmmc(xmmc);
-            windDoor.setState(0);
-            windDoor.setPublishFirm("网站采集");
-            windDoor.setNowDate(new Date());
-            if (StringUtils.isNotEmpty(info.getImage()))
+            try
             {
-                windDoor.setGifPath(info.getImage());
+                Info info = row(DOMAIN + url);
+                byte[] bytes = info.getContent().getBytes();
+                String filePath = storageClientService.uploadFile(null,
+                        new ByteArrayInputStream(bytes),
+                        bytes.length,
+                        "JPG");
+                WindDoorEntity windDoor = new WindDoorEntity();
+                windDoor.setId(StringUtils.getUUID());
+                windDoor.setBdfl(bdfl);
+                windDoor.setFilePath(filePath);
+                windDoor.setJzrq(jzsj);
+                windDoor.setQy(qy);
+                windDoor.setXmmc(xmmc);
+                windDoor.setState(0);
+                windDoor.setPublishFirm("网站采集");
+                windDoor.setNowDate(new Date());
+                if (StringUtils.isNotEmpty(info.getImage()))
+                {
+                    windDoor.setGifPath(info.getImage());
+                }
+                list.add(windDoor);
             }
-            list.add(windDoor);
+            catch (IOException ioe)
+            {
+                logger.error("{}抓取异常，继续下一条", url, ioe);
+            }
+            
         }
         return list;
     }
