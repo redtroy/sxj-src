@@ -24,7 +24,7 @@ public class ProjectGrabberTest
         //        IStorageClientService createMock = EasyMock
         //                .createMock(IStorageClientService.class);
         //        grabber.setStorageClientService(createMock);
-        grabber.grab("门窗");
+        grabber.grab("幕墙");
     }
     
 }

@@ -6,6 +6,8 @@ public class Info
     
     private String image;
     
+    private String oid;
+    
     public Info(String content, String image)
     {
         super();
@@ -37,6 +39,16 @@ public class Info
     public void setImage(String image)
     {
         this.image = image;
+    }
+    
+    public String getOid()
+    {
+        return oid;
+    }
+    
+    public void setOid(String oid)
+    {
+        this.oid = oid;
     }
     
 }
