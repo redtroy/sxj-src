@@ -27,7 +27,6 @@ import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.dao.member.IMemberDao;
-import com.sxj.supervisor.dao.message.IMessageConfigDao;
 import com.sxj.supervisor.dao.message.ITenderMessageDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
@@ -54,9 +53,6 @@ public class WindDoorServiceImpl implements IWindDoorService
     
     @Autowired
     private ITenderMessageDao tenderMessageDao;
-    
-    @Autowired
-    private IMessageConfigDao messageConfigDao;
     
     @Autowired
     private IMemberDao memberDao;
@@ -90,6 +86,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                 created.add(entity);
             }
         }
+        updateTenderMessageSync(created);
         sendSmsSync(created.size());
     }
     
