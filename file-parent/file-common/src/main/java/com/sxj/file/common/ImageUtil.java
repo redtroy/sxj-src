@@ -18,6 +18,7 @@ import java.awt.image.ColorConvertOp;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,6 +26,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageDecoder;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sxj.util.common.NumberUtils;
 import com.sxj.util.exception.SystemException;
@@ -640,17 +642,22 @@ public class ImageUtil
     // }
     // }
     
+    @SuppressWarnings("restriction")
     public static void main(String[] args)
     {
         try
         {
-            long aa = System.currentTimeMillis();
-            scaleFixedImageFile("D:/My Documents/My Pictures/279106_hyFFzuu8_o.jpg",
-                    "D:/My Documents/My Pictures/dq5nds_001_small2.jpg",
-                    100,
-                    100,
-                    false);
-            System.out.println(System.currentTimeMillis() - aa);
+            JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(new FileInputStream(
+                    new File("c:\\a.jpg")));
+            BufferedImage image = decoder.decodeAsBufferedImage();
+            ImageIO.write(image, "jpg", new File("C:\\b.jpg"));
+            //            long aa = System.currentTimeMillis();
+            //            scaleFixedImageFile("D:/My Documents/My Pictures/279106_hyFFzuu8_o.jpg",
+            //                    "D:/My Documents/My Pictures/dq5nds_001_small2.jpg",
+            //                    100,
+            //                    100,
+            //                    false);
+            //            System.out.println(System.currentTimeMillis() - aa);
         }
         catch (IOException e)
         {

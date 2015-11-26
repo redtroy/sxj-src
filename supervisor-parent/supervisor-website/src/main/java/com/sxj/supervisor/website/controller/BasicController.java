@@ -780,6 +780,7 @@ public class BasicController extends BaseController
                 String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
                         + userBean.getMember().getMemberNo();
                 List<String> userKeys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                userKeys.add(key);
                 Long totalCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
                 if (userKeys != null && userKeys.size() > 0)
                 {
@@ -1474,6 +1475,8 @@ public class BasicController extends BaseController
                     {
                         CometServiceImpl.setCount(key, totalCount);
                         tenderMessageCount = totalCount;
+                        userKeys.add(key);
+                        CometServiceImpl.sendMessage(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS, userKeys);
                     }
                 }
                 else
@@ -1586,13 +1589,15 @@ public class BasicController extends BaseController
             HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {
+    	Map<String, String> map = new HashMap<String, String>();
         String res = session.getAttribute("imgStr").toString();
-        PrintWriter out = response.getWriter();
+//        PrintWriter out = response.getWriter();
         System.out.println("第二：" + res);
-        out.print(res);
-        out.flush();
-        out.close();
-        return null;
+//        out.print(res);
+//        out.flush();
+//        out.close();
+        map.put("imgStr", res);
+        return map;
     }
     
     /**
