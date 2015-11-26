@@ -74,13 +74,13 @@
 	}
 	
 	function saveApply(){
-		var company = "${company}";
-		var memberNo = "${memberNo}";
-		var applyNum = $("#applyNum").val();
-		var applyPrice = $("#applyPrice").val();
-		var applyType = $("#applyType").val();
-		var releaseRecordId = $("#releaseRecordId").val();
-		var json ='{"memberNo":"'+memberNo+'","company":"'+company+'","num":"'+applyNum+'","price":"'+applyPrice+'","applyType":'+applyType+',"recordNumber":"'+releaseRecordId+'"}';
+// 		var company = "${company}";
+// 		var memberNo = "${memberNo}";
+// 		var applyNum = $("#applyNum").val();
+// 		var applyPrice = $("#applyPrice").val();
+// 		var applyType = $("#applyType").val();
+// 		var releaseRecordId = $("#releaseRecordId").val();
+// 		var json ='{"memberNo":"'+memberNo+'","company":"'+company+'","num":"'+applyNum+'","price":"'+applyPrice+'","applyType":'+applyType+',"recordNumber":"'+releaseRecordId+'"}';
 // 		$.ajax({
 // 	        type: "POST",
 // 	        url: "http://192.168.1.234/houtai/admin.php/Index/purchase",
@@ -96,6 +96,17 @@
 // 	            $("#request-process-patent").html("提交数据失败！");
 // 	        }
 // 	    });
+		dialogBox(function(index) {
+			$.post("saveApply.htm", $("#applyForm").serialize(),
+					function(data) {
+						alert(data.isok);
+						if (data.isok == 'ok') {
+							messageInfo("申请成功");
+						} else {
+							errorInfo(data.isok );
+						}
+					});
+		}, "是否申请采购?");
 	}
 </script>
 <!--tab切换结束-->
@@ -885,72 +896,7 @@
 				<!--采购池结束------------------------------------------------------------------------------------------------------------>
 				<!--申报采购开始------------------------------------------------------------------------------------------------------------>
 				<div class="declare">
-					<div class="declare-t">申报采购</div>
-					<div class="declare-c">
-						<table width="100%" border="0">
-							<tbody>
-								<tr>
-									<th scope="col">编号</th>
-									<th scope="col">产品类型</th>
-									<th scope="col">采购数量(㎡)</th>
-									<th scope="col">采购价格(元)</th>
-									<th scope="col">申报时间</th>
-									<th scope="col">状态</th>
-								</tr>
-								<tr>
-									<td>33</td>
-									<td>33</td>
-									<td>33</td>
-									<td>1-10</td>
-									<td>2015/10/30 12:35</td>
-									<td><em class="states receive fillet">已接收</em></td>
-								</tr>
-								<tr>
-									<td>333</td>
-									<td>33</td>
-									<td>33</td>
-									<td>1-10</td>
-									<td>2015/10/30 12:35</td>
-									<td><em class="states no fillet">未接收</em></td>
-								</tr>
-								<tr>
-									<td>33</td>
-									<td>33</td>
-									<td>33</td>
-									<td>1-10</td>
-									<td>2015/10/30 12:35</td>
-									<td><em class="states fail fillet">审核不通过</em></td>
-								</tr>
-								<tr>
-									<td>33</td>
-									<td>33</td>
-									<td>33</td>
-									<td>1-10</td>
-									<td>2015/10/30 12:35</td>
-									<td><em class="states success fillet">审核通过</em></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div id="pager">
-						<ul class="pages">
-							<li class="pgNext pgEmpty">首页</li>
-							<li class="pgNext pgEmpty">上一页</li>
-							<li class="page-number pgCurrent">1</li>
-							<li class="page-number">2</li>
-							<li class="page-number">3</li>
-							<li class="page-number">4</li>
-							<li class="page-number">5</li>
-							<li class="page-number">6</li>
-							<li class="page-number">7</li>
-							<li class="page-number">8</li>
-							<li class="page-number">9</li>
-							<li class="page-number">...</li>
-							<li class="page-number">100</li>
-							<li class="pgNext">下一页</li>
-							<li class="pgNext">尾页</li>
-						</ul>
-					</div>
+					
 				</div>
 
 				<!--申报采购结束------------------------------------------------------------------------------------------------------------>
@@ -964,7 +910,7 @@
 		<form action="" id="applyForm">
 			<input type="hidden" name="applyType" id="applyType" value=""/> 
 			<input type="hidden" name="memberNo" id="memberNo" value="${memberNo}" /> 
-			<input type="hidden" name="id" id="releaseRecordId" value="" />
+			<input type="hidden" name="serialNumber" id="releaseRecordId" value="" />
 			<input type="hidden" name="company" id="company" value="${company}" />
 			<table width="90%">
 				<tr>
