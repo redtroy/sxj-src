@@ -86,8 +86,10 @@ public class TenderMessageServiceImpl implements ITenderMessageService
                 }
                 String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
                         + message.getMemberNo();
-                List<String> userKeys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
-                Long totalCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+                List<String> userKeys = CometServiceImpl
+                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+                Long totalCount = CometServiceImpl
+                        .getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
                 if (userKeys != null && userKeys.size() > 0)
                 {
                     if (userKeys.contains(key))
@@ -106,7 +108,8 @@ public class TenderMessageServiceImpl implements ITenderMessageService
                     CometServiceImpl.subCount(key);
                 }
                 
-                CometServiceImpl.add(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS,
+                CometServiceImpl.add(
+                        MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS,
                         MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
                                 + message.getMemberNo());
             }
@@ -117,5 +120,11 @@ public class TenderMessageServiceImpl implements ITenderMessageService
             throw new ServiceException("更新招标消息状态错误", e);
         }
         
+    }
+    
+    @Override
+    public Long queryUnread(String memberNo)
+    {
+        return dao.countUnreadByMember(memberNo);
     }
 }

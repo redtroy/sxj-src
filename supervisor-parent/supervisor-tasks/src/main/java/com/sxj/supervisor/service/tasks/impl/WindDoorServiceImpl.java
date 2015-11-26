@@ -628,4 +628,10 @@ public class WindDoorServiceImpl implements IWindDoorService
         }
         
     }
+    
+    @Override
+    public List<WindDoorEntity> queryUnread(String memberNo)
+    {
+        return wda.queryUnreadByMember(memberNo);
+    }
 }

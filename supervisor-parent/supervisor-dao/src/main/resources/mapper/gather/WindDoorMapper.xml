@@ -32,6 +32,11 @@
 	<select id="getByOid" resultMap="WindDoorResultMap">
 		select * from M_WIND_DOOR where OID=#{oid}
 	</select>
+	
+	<select id="queryUnreadByMember" resultMap="WindDoorResultMap">
+		select door.* from M_WIND_DOOR door left join M_TENDER_MESSAGE message on door.ID=message.INFO_ID
+and message.MEMBER_NO=#{memberNo} where message.ID is null;
+	</select>
 	<!--  -->
 	<select id="queryList" resultMap="WindDoorResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">

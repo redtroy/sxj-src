@@ -12,11 +12,13 @@ public interface ITenderMessageService
 {
     public void addMessage(List<TenderMessageEntity> message)
             throws ServiceException;
-    
+            
     public List<TenderMessageModel> queryMessageList(TenderMessageQuery query)
             throws ServiceException;
-    
+            
     public void modifyState(String id, MessageStateEnum state)
             throws ServiceException;
+            
+    public Long queryUnread(String memberNo);
     
 }
