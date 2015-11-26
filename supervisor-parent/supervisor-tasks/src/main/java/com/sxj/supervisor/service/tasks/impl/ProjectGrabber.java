@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sxj.spring.modules.util.StringUtils;
+import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.supervisor.service.tasks.grabber.Info;
 import com.sxj.supervisor.service.tasks.grabber.RequestHeader;
@@ -60,6 +61,9 @@ public class ProjectGrabber
             
     @Autowired
     private IStorageClientService storageClientService;
+    
+    @Autowired
+    private WindDoorDao windDoorDao;
     
     public List<WindDoorEntity> grab(String projectName) throws ServiceException
     {
@@ -162,7 +166,7 @@ public class ProjectGrabber
                 }
                 list.add(windDoor);
             }
-            catch (IOException ioe)
+            catch (Exception ioe)
             {
                 logger.error("{}抓取异常，继续下一条", url, ioe);
             }
@@ -176,6 +180,10 @@ public class ProjectGrabber
         logger.debug("正在从{}抓取单行数据", url);
         Document doc = (Document) Jsoup.connect(url).timeout(10000).get();
         String oid = url.split("GongGaoGuid=")[1];
+        WindDoorEntity byOid = windDoorDao.getByOid(oid);
+        if (byOid != null)
+            throw new RuntimeException("工程信息已存在");
+            
         Element element = doc.getElementById("ZBGGDetail1_tblInfo");
         if (element.getElementById("ZBGGDetail1_trAttach") != null
                 && !"".equals(element.getElementById("ZBGGDetail1_trAttach")))
