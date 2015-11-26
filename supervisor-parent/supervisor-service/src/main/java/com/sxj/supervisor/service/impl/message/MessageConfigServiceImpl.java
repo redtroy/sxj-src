@@ -291,15 +291,15 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                         false);
                 System.out.println("Xinxi1Sender发送结果:" + status + "  短线内容:"
                         + message + "，请登录私享家绿色门窗平台查看详情！");
-                if (status.getStatus().equals(""))
-                {
-                    sender = manager.getSender(C123Sender.class.getName());
-                    status = sender.sendBatch(phones.toArray(new String[phones.size()]),
-                            message + "，请登录私享家绿色门窗平台查看详情！",
-                            false);
-                    System.out.println("C123Sender发送结果:" + status + "  短线内容:"
-                            + message + "，请登录私享家绿色门窗平台查看详情！");
-                }
+//                if (status.getStatus().equals(""))
+//                {
+//                    sender = manager.getSender(C123Sender.class.getName());
+//                    status = sender.sendBatch(phones.toArray(new String[phones.size()]),
+//                            message + "，请登录私享家绿色门窗平台查看详情！",
+//                            false);
+//                    System.out.println("C123Sender发送结果:" + status + "  短线内容:"
+//                            + message + "，请登录私享家绿色门窗平台查看详情！");
+//                }
                 /*NewSendMessage.getInstance(smsUrl,
                         userName,
                         password,

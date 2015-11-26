@@ -1,4 +1,4 @@
-<!DOCTYPE html >
+﻿<!DOCTYPE html >
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -20,11 +20,20 @@
 			var menu = document.getElementById(name + i);
 			menu.className = i == cursel ? "hover" : "";
 			$("#purchaseType").val(cursel);
+			if (cursel == 1) {
+				$("#cg").text("普通玻璃");
+			} else if (cursel == 2) {
+				$("#cg").text("深加工玻璃");
+			} else if (cursel == 3) {
+				$("#cg").text("型材");
+			} else if (cursel == 4) {
+				$("#cg").text("配件");
+			}
 			query();
 		}
 	}
 	var show;
-	function openApply(id, type) {
+	function openApply(recordNumber, type) {
 		$("#applyType").val(type);
 		
 		if (type == 1) {
@@ -36,7 +45,9 @@
 		} else if (type == 4) {
 			$("#typeValue").text("配件");
 		}
-		$("#releaseRecordId").val(id);
+		var applyNum = $("#applyNum").val("");
+		var applyPrice = $("#applyPrice").val("");
+		$("#releaseRecordId").val(recordNumber);
 		show = layer.open({
 			type : 1,
 			area: ['500px', '300px'],
@@ -60,6 +71,42 @@
 			var currentPage = pager.attr("currentPage");
 			loadPage(currentPage, totalPage, query);
 		});
+	}
+	
+	function saveApply(){
+// 		var company = "${company}";
+// 		var memberNo = "${memberNo}";
+// 		var applyNum = $("#applyNum").val();
+// 		var applyPrice = $("#applyPrice").val();
+// 		var applyType = $("#applyType").val();
+// 		var releaseRecordId = $("#releaseRecordId").val();
+// 		var json ='{"memberNo":"'+memberNo+'","company":"'+company+'","num":"'+applyNum+'","price":"'+applyPrice+'","applyType":'+applyType+',"recordNumber":"'+releaseRecordId+'"}';
+// 		$.ajax({
+// 	        type: "POST",
+// 	        url: "http://192.168.1.234/houtai/admin.php/Index/purchase",
+// 	        contentType: "application/json; charset=utf-8",
+// 	        data: JSON.stringify(json),
+// 	        dataType: "html",
+// 	        success: function (result) {
+// 	            if (result > 0) {
+// 	                alert("请求已提交！我们会尽快与您取得联系");
+// 	            }
+// 	        },
+// 	        error: function (result) {
+// 	            $("#request-process-patent").html("提交数据失败！");
+// 	        }
+// 	    });
+		dialogBox(function(index) {
+			$.post("saveApply.htm", $("#applyForm").serialize(),
+					function(data) {
+						alert(data.isok);
+						if (data.isok == 'ok') {
+							messageInfo("申请成功");
+						} else {
+							errorInfo(data.isok );
+						}
+					});
+		}, "是否申请采购?");
 	}
 </script>
 <!--tab切换结束-->
@@ -147,7 +194,7 @@
 							</div>
 
 							<div id="con_1a_1">
-								<div class="t-name">普通玻璃采购池</div>
+								<div class="t-name"><span id="cg">普通玻璃</span>采购池</div>
 								<div class="detail-con">
 									<table width="97%" border="0" align="right" id="res_table">
 										<tbody>
@@ -169,7 +216,7 @@
 												<td id="red">${list.priceRange}</td>
 												<td>${list.releaseTime?string("yyyy-MM-dd")}</td>
 												<td><button class="button-ora fillet"
-														onclick="openApply('${list.id}','${list.purchase}');">点击申请</button></td>
+														onclick="openApply('${list.recordNumber}','${list.purchase}');">点击申请</button></td>
 											</tr>
 											</#list>
 										</tbody>
@@ -234,7 +281,7 @@
 								</div>
 							</div>
 							<div id="con_1a_3" style="display: none">
-								<div class="t-name">普通玻璃消耗采购量</div>
+								<div class="t-name"><span id="cg"></span>消耗采购量</div>
 								<div class="detail-con">
 									<table width="97%" border="0" align="right">
 										<tbody>
@@ -849,72 +896,7 @@
 				<!--采购池结束------------------------------------------------------------------------------------------------------------>
 				<!--申报采购开始------------------------------------------------------------------------------------------------------------>
 				<div class="declare">
-					<div class="declare-t">申报采购</div>
-					<div class="declare-c">
-						<table width="100%" border="0">
-							<tbody>
-								<tr>
-									<th scope="col">编号</th>
-									<th scope="col">产品类型</th>
-									<th scope="col">采购数量(㎡)</th>
-									<th scope="col">采购价格(元)</th>
-									<th scope="col">申报时间</th>
-									<th scope="col">状态</th>
-								</tr>
-								<tr>
-									<td>33</td>
-									<td>33</td>
-									<td>33</td>
-									<td>1-10</td>
-									<td>2015/10/30 12:35</td>
-									<td><em class="states receive fillet">已接收</em></td>
-								</tr>
-								<tr>
-									<td>333</td>
-									<td>33</td>
-									<td>33</td>
-									<td>1-10</td>
-									<td>2015/10/30 12:35</td>
-									<td><em class="states no fillet">未接收</em></td>
-								</tr>
-								<tr>
-									<td>33</td>
-									<td>33</td>
-									<td>33</td>
-									<td>1-10</td>
-									<td>2015/10/30 12:35</td>
-									<td><em class="states fail fillet">审核不通过</em></td>
-								</tr>
-								<tr>
-									<td>33</td>
-									<td>33</td>
-									<td>33</td>
-									<td>1-10</td>
-									<td>2015/10/30 12:35</td>
-									<td><em class="states success fillet">审核通过</em></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div id="pager">
-						<ul class="pages">
-							<li class="pgNext pgEmpty">首页</li>
-							<li class="pgNext pgEmpty">上一页</li>
-							<li class="page-number pgCurrent">1</li>
-							<li class="page-number">2</li>
-							<li class="page-number">3</li>
-							<li class="page-number">4</li>
-							<li class="page-number">5</li>
-							<li class="page-number">6</li>
-							<li class="page-number">7</li>
-							<li class="page-number">8</li>
-							<li class="page-number">9</li>
-							<li class="page-number">...</li>
-							<li class="page-number">100</li>
-							<li class="pgNext">下一页</li>
-							<li class="pgNext">尾页</li>
-						</ul>
-					</div>
+					
 				</div>
 
 				<!--申报采购结束------------------------------------------------------------------------------------------------------------>
@@ -927,9 +909,9 @@
 	<div id="modal" class="apply-box">
 		<form action="" id="applyForm">
 			<input type="hidden" name="applyType" id="applyType" value=""/> 
-			<input type="hidden" name="memberNo" value="${memberNo}" value=""/> 
-			<input type="hidden" name="id" id="releaseRecordId" value="" />
-			<input type="hidden" name="company" id="company" value="" />
+			<input type="hidden" name="memberNo" id="memberNo" value="${memberNo}" /> 
+			<input type="hidden" name="serialNumber" id="releaseRecordId" value="" />
+			<input type="hidden" name="company" id="company" value="${company}" />
 			<table width="90%">
 				<tr>
 					<td class="lt">申请采购类型：</td>
@@ -948,7 +930,7 @@
 			</table>
 			</form>
 			<div class="but-box">
-				<button class="but-yes" onclick="removeElement()">申请</button>
+				<button class="but-yes" onclick="saveApply()">申请</button>
 				<button class="but-canc" onclick="javascript:layer.close(show);">取消</button>
 			</div>
 		

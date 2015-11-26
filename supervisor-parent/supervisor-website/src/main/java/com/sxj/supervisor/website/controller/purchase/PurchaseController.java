@@ -38,6 +38,8 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.purchase.IPurchaseService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.FileUtil;
+import com.sxj.util.common.ISxjHttpClient;
+import com.sxj.util.common.StringUtils;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
@@ -55,6 +57,10 @@ public class PurchaseController extends BaseController {
 
 	@Autowired
 	private IContractService contractService;
+
+	@Autowired
+	private ISxjHttpClient httpClient;
+	
 
 	/**
 	 * 上传文件
@@ -200,18 +206,21 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("getPurchase")
-	public String getPurchase(ModelMap map,ReleaseRecordEntity releaseRecordEntity,HttpSession session) {
+	public String getPurchase(ModelMap map,
+			ReleaseRecordEntity releaseRecordEntity, HttpSession session) {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
 		PurchaseEntity purchaseEntity = purchaseService.getPurchase();
 		releaseRecordEntity.setPagable(true);
 		releaseRecordEntity.setShowCount(5);
-		List<ReleaseRecordEntity> rrList = purchaseService.queryReleaseRecords(releaseRecordEntity);
+		List<ReleaseRecordEntity> rrList = purchaseService
+				.queryReleaseRecords(releaseRecordEntity);
 		map.put("purchase", purchaseEntity);
 		map.put("rrList", rrList);
 		map.put("query", releaseRecordEntity);
 		map.put("memberNo", userBean.getMember().getMemberNo());
 		map.put("company", userBean.getMember().getName());
+		
 		return "site/purchase/purchase";
 	}
 
@@ -254,7 +263,7 @@ public class PurchaseController extends BaseController {
 	public String queryApply(ModelMap map, ApplyEntity applyEntity) {
 		List<ApplyEntity> applyList = purchaseService.queryApply(applyEntity);
 		map.put("applyList", applyList);
-		return "site/member/edit-member";
+		return "site/purchase/applyList";
 	}
 
 	/**
@@ -285,5 +294,46 @@ public class PurchaseController extends BaseController {
 			out.close();
 		}
 
+	}
+
+	/**
+	 * 请求汇窗平台
+	 * @param apply
+	 * @param response
+	 * @param request
+	 * @param session
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "saveApply")
+	public @ResponseBody Map<String, String> saveApply(ApplyEntity apply,
+			HttpServletResponse response, HttpServletRequest request, HttpSession session)
+			throws IOException {
+		Map<String, String> map = new HashMap<String, String>();
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		Map<String, String> jsonMap = new HashMap<String, String>();
+		jsonMap.put("memberNo", userBean.getMember().getMemberNo());
+		jsonMap.put("company", userBean.getMember().getName());
+		jsonMap.put("num", apply.getApplyNum().toString());
+		jsonMap.put("price", apply.getPrice());
+		jsonMap.put("applyType", apply.getApplyType().toString());
+		jsonMap.put("recordNumber", apply.getSerialNumber());
+//		String json =JsonMapper.nonEmptyMapper().toJson(jsonMap);
+//		String msg = httpClient.postJson("http://192.168.1.234/houtai/admin.php/Index/purchase", json);
+		
+		String msg = httpClient.post("http://192.168.1.234/houtai/admin.php/Index/purchase", jsonMap);
+		if (!StringUtils.notEquals(msg, "success")){
+			map.put("isok", "ok");
+		}else{
+			map.put("isok", msg);
+		}
+		
+		try {
+		} catch (Exception e) {
+			SxjLogger.error("保存采购申请单出错 ", e, this.getClass());
+			map.put("isok", "no");
+		}
+		return map;
 	}
 }

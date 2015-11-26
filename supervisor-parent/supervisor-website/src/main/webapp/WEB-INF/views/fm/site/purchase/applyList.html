@@ -1,0 +1,106 @@
+<script>
+function loadPage(currentPage,totalPage) {
+	$(".jump").die("click");
+	layer.closeAll();
+	// 创建分页
+	$(".pagination").attr("currentPage",currentPage);
+	$(".pagination").attr("totalPage",totalPage);
+	$(".pagination").pagination(totalPage, {
+		num_edge_entries: 1, //边缘页数
+		num_display_entries: 4, //主体页数
+		callback: function(page_index,jp){
+			loadingImg();
+			query(page_index+1);
+			$(".pagination").attr("currentPage",page_index+1);
+			return false;
+		},
+		current_page:currentPage-1,
+		items_per_page:1, //每页显示1项
+		prev_text: "前一页",
+		next_text: "后一页"
+	});
+	jump(currentPage);
+ }
+$(".pagination").ready(function(){
+	
+	loadPage(${query.currentPage},${query.totalPage});
+});
+var jump = function(currentPage){
+	$(".pagination").append("&nbsp;<span style='color:#15b;'>到第<input name=''class='pageNumber' style=' width: 35px;margin:0 3px;' value='"+currentPage+"'/>页</span><a class='next jump' >确定</a>");
+	$(".jump").live("click",function(){
+		$(".pageNumber").each(function(i){
+			if(i==0){
+				var totalPage=$(".pagination").attr("totalPage");
+				var currentpage=$(".pagination").attr("currentpage");
+				var pageNumber = $(this).val();
+				if(pageNumber!=''){
+					if(!isNaN(pageNumber)){
+						if(parseInt(pageNumber)>parseInt(totalPage)){
+							//数值大于当前最大页码,返回当前最大页码
+							$(this).val(totalPage);
+							pageNumber=totalPage;
+						}
+						query(pageNumber);
+						}else{
+						   $(this).val(currentpage);
+					}
+				}
+			}
+		})
+	});
+}
+$(".pageNumber").live("keyup",function(){
+	var $val = $(this).val();
+	$(".pageNumber").each(function(){
+		$(this).val($val);
+	})
+})
+</script>
+<div class="declare-t">申报采购</div>
+<div class="declare-c">
+	<table width="100%" border="0">
+		<tbody>
+			<tr>
+				<th scope="col">编号</th>
+				<th scope="col">产品类型</th>
+				<th scope="col">采购数量(㎡)</th>
+				<th scope="col">采购价格(元)</th>
+				<th scope="col">申报时间</th>
+				<th scope="col">状态</th>
+			</tr>
+			<tr>
+				<td>33</td>
+				<td>33</td>
+				<td>33</td>
+				<td>1-10</td>
+				<td>2015/10/30 12:35</td>
+				<td><em class="states receive fillet">已接收</em></td>
+			</tr>
+			<tr>
+				<td>333</td>
+				<td>33</td>
+				<td>33</td>
+				<td>1-10</td>
+				<td>2015/10/30 12:35</td>
+				<td><em class="states no fillet">未接收</em></td>
+			</tr>
+			<tr>
+				<td>33</td>
+				<td>33</td>
+				<td>33</td>
+				<td>1-10</td>
+				<td>2015/10/30 12:35</td>
+				<td><em class="states fail fillet">审核不通过</em></td>
+			</tr>
+			<tr>
+				<td>33</td>
+				<td>33</td>
+				<td>33</td>
+				<td>1-10</td>
+				<td>2015/10/30 12:35</td>
+				<td><em class="states success fillet">审核通过</em></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div id="pager"></div>
