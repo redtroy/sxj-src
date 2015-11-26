@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
-import com.sxj.redis.core.RSet;
 import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.dao.member.IMemberDao;
@@ -86,7 +85,7 @@ public class WindDoorServiceImpl implements IWindDoorService
                 created.add(entity);
             }
         }
-        updateTenderMessageSync(created);
+        //updateTenderMessageSync(created);
         sendSmsSync(created.size());
     }
     
@@ -125,11 +124,6 @@ public class WindDoorServiceImpl implements IWindDoorService
                             message.setMemberNo(e.getMemberNo());
                             message.setState(MessageStateEnum.UNREAD);
                             tenderMessageDao.save(message);
-                            //更新用户未读列表
-                            RSet<Object> set = collections
-                                    .getSet(MessageChannel.MEMBER_UNREAD_TENDER_MESSAGE
-                                            + e.getMemberNo());
-                            set.add(entity.getId());
                         }
                     }
                 }
