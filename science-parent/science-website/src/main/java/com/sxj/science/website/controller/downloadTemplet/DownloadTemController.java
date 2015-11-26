@@ -646,7 +646,7 @@ public class DownloadTemController extends BaseController
     {
         try
         {
-            List<ItemModel> list = projectService.queryItems(projectId);
+            List<ItemModel> list = projectService.openQueryItems(projectId);
             ProjectEntity temPro = projectService.getProject(projectId);
             
             Map<String, Object> resultMap = new HashMap<String, Object>();
