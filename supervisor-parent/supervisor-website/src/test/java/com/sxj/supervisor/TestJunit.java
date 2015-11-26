@@ -1,7 +1,9 @@
 package com.sxj.supervisor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,10 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.supercsv.io.CsvBeanReader;
+import org.supercsv.prefs.CsvPreference;
 
-import com.sxj.spring.modules.mapper.JsonMapper;
-import com.sxj.supervisor.entity.purchase.PurchaseEntity;
+import com.sxj.redis.core.RAtomicLong;
+import com.sxj.redis.core.RConcurrent;
+import com.sxj.redis.core.concurrent.RedisConcurrent;
+import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.service.message.IMessageConfigService;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.ISxjHttpClient;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -26,10 +34,13 @@ public class TestJunit
     @Autowired
     private IMessageConfigService configService;
     
-    @Autowired
+    
     private ISxjHttpClient httpClient;
     //    @Autowired
     //    private AlGatherImpl al;
+    @Autowired
+    RedisConcurrent rConcurrent;
+    
     
     @Test
     public void test()
@@ -96,28 +107,48 @@ public class TestJunit
 //        	rr.setSetNumber("213123");
 //        	rr.setMemberNo("X000039");
         	
-        	PurchaseEntity rr = new  PurchaseEntity();
-        	rr.setcId("1");
-        	rr.setDeepGlass(1001);
-        	rr.setDeepIncrease(101);
-        	rr.setDeepReduce(101);
-        	rr.setFitting(1001);
-        	rr.setFittingIncrease(101);
-        	rr.setFittingReduce(101);
-        	rr.setOrdinaryGlass(1001);
-        	rr.setOrdinaryIncrease(101);
-        	rr.setOrdinaryReduce(101);
-        	rr.setProfiles(1001);
-        	rr.setProfilesIncrease(101);
-        	rr.setProfilesReduce(101);
-        	String json = JsonMapper.nonDefaultMapper().toJson(rr);
-			System.err.println(json);
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("json", json);
-			String a=httpClient.postJson(loginUrl, json);
-			System.err.println(a);
-        	
-        	
+//        	PurchaseEntity rr = new  PurchaseEntity();
+//        	rr.setcId("1");
+//        	rr.setDeepGlass(1001);
+//        	rr.setDeepIncrease(101);
+//        	rr.setDeepReduce(101);
+//        	rr.setFitting(1001);
+//        	rr.setFittingIncrease(101);
+//        	rr.setFittingReduce(101);
+//        	rr.setOrdinaryGlass(1001);
+//        	rr.setOrdinaryIncrease(101);
+//        	rr.setOrdinaryReduce(101);
+//        	rr.setProfiles(1001);
+//        	rr.setProfilesIncrease(101);
+//        	rr.setProfilesReduce(101);
+//        	String json = JsonMapper.nonDefaultMapper().toJson(rr);
+//			System.err.println(json);
+//			Map<String, String> map = new HashMap<String, String>();
+//			map.put("json", json);
+//			String a=httpClient.postJson(loginUrl, json);
+//			System.err.println(a);
+        	InputStream is = TestJunit.class.getClassLoader().getResourceAsStream("config/11.csv");
+        	InputStreamReader freader = new InputStreamReader(is, "UTF-8");
+            CsvBeanReader reader = new CsvBeanReader(freader,
+                    CsvPreference.STANDARD_PREFERENCE);
+            String[] headers = reader.getHeader(false);
+            WindowRfidEntity bean = null;
+            List<WindowRfidEntity> windowList = new ArrayList<WindowRfidEntity>();
+            while ((bean = reader.read(WindowRfidEntity.class, headers)) != null)
+            {
+                windowList.add(bean);
+            }
+            for (WindowRfidEntity windowRfidEntity : windowList) {
+            	//CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo(),Long.valueOf(windowRfidEntity.getGid()));
+//            	Long a =CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo());
+            	long s = rConcurrent.getAtomicLong(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo()).ttl();
+            	if(s==-1){
+                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo(),Long.valueOf(windowRfidEntity.getGid()));
+            	}
+            	Long a =CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo());
+            	System.err.println(a+"____________"+windowRfidEntity.getGid()+"_____"+windowRfidEntity.getRfidNo());
+			}
+            
         }
         catch (Exception e)
         {
