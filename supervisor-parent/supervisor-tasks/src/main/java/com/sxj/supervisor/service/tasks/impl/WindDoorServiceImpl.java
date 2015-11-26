@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.cache.manager.CacheLevel;
 import com.sxj.cache.manager.HierarchicalCacheManager;
-import com.sxj.redis.core.collections.RedisCollections;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.dao.message.ITenderMessageDao;
@@ -65,16 +64,15 @@ public class WindDoorServiceImpl implements IWindDoorService
     @Autowired
     private ProjectGrabber grabber;
     
-    @Autowired
-    private RedisCollections collections;
-    
     @Override
     @Transactional
     public void WindDoorGather() throws ServiceException
     {
-        List<WindDoorEntity> grab = grabber.grab("门窗");
+        List<WindDoorEntity> mc = grabber.grab("门窗");
+        List<WindDoorEntity> mq = grabber.grab("幕墙");
+        mc.addAll(mq);
         List<WindDoorEntity> created = new ArrayList<>();
-        for (WindDoorEntity entity : grab)
+        for (WindDoorEntity entity : mc)
         {
             if (!saveWithoutTransaction(entity))
             {
