@@ -1,9 +1,8 @@
 package com.sxj.supervisor;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,16 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.supercsv.io.CsvBeanReader;
-import org.supercsv.prefs.CsvPreference;
 
-import com.sxj.redis.core.RAtomicLong;
-import com.sxj.redis.core.RConcurrent;
 import com.sxj.redis.core.concurrent.RedisConcurrent;
-import com.sxj.supervisor.entity.rfid.window.WindowRfidEntity;
-import com.sxj.supervisor.model.comet.MessageChannel;
+import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.entity.purchase.ApplyEntity;
 import com.sxj.supervisor.service.message.IMessageConfigService;
-import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.ISxjHttpClient;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,7 +28,7 @@ public class TestJunit
     @Autowired
     private IMessageConfigService configService;
     
-    
+    @Autowired
     private ISxjHttpClient httpClient;
     //    @Autowired
     //    private AlGatherImpl al;
@@ -69,7 +63,7 @@ public class TestJunit
             //   al.gather();
             //configService.sendAllMessage("测试短信");
         	
-        	String loginUrl = "http://www.menchuang.org.cn/purchase/updatePurchase.htm";
+        	String loginUrl = "http://www.menchuang.org.cn/purchase/addReleaseRecord.htm";
         	
 //			MemberEntity memberEntity = new MemberEntity();
 //			memberEntity.setName("南京海阔天空科技有限公司");
@@ -84,7 +78,6 @@ public class TestJunit
 //			memberEntity.setbLicensePath("group1/M00/00/EC/wKgB21ZFlNeAfAd1ABWE8XUxiFI910.PNG");
 //        	
 //        	ReleaseRecordEntity rr = new ReleaseRecordEntity();
-//        	rr.setId("223");
 //        	rr.setAdminId("3290");
 //        	rr.setPurchase(1);
 //        	rr.setNum(1000);
@@ -93,19 +86,17 @@ public class TestJunit
 //        	rr.setReleaseTime(new Date());
 //        	rr.setRecordNumber("123456789");
         	
-//        	ApplyEntity rr = new ApplyEntity();
-//        	rr.setId("10");
-//        	rr.setSerialNumber("213123");
-//        	rr.setCompany("南京门窗厂");
-//        	rr.setApplyType(1);
-//        	rr.setApplyNum(1000);
-//        	rr.setPrice("2000");
-//        	rr.setApplyTime(new Date());
-//        	rr.setApplyStatus(1);
-//        	rr.setBeianStatus(1);
-//        	rr.setScanNumber("group1/M00/00/EC/wKgB21ZFlNqAZSmnAAB2qqmXN4g298.PNG");
-//        	rr.setSetNumber("213123");
-//        	rr.setMemberNo("X000039");
+        	ApplyEntity rr = new ApplyEntity();
+        	rr.setSerialNumber("213123");
+        	rr.setCompany("南京门窗厂");
+        	rr.setApplyType(1);
+        	rr.setApplyNum(1000);
+        	rr.setPrice("2000");
+        	rr.setApplyTime(new Date());
+        	rr.setApplyStatus(1);
+        	rr.setScanNumber("group1/M00/00/EC/wKgB21ZFlNqAZSmnAAB2qqmXN4g298.PNG");
+        	rr.setSetNumber("213123");
+        	rr.setMemberNo("X000039");
         	
 //        	PurchaseEntity rr = new  PurchaseEntity();
 //        	rr.setcId("1");
@@ -121,34 +112,34 @@ public class TestJunit
 //        	rr.setProfiles(1001);
 //        	rr.setProfilesIncrease(101);
 //        	rr.setProfilesReduce(101);
-//        	String json = JsonMapper.nonDefaultMapper().toJson(rr);
-//			System.err.println(json);
-//			Map<String, String> map = new HashMap<String, String>();
-//			map.put("json", json);
-//			String a=httpClient.postJson(loginUrl, json);
-//			System.err.println(a);
-        	InputStream is = TestJunit.class.getClassLoader().getResourceAsStream("config/11.csv");
-        	InputStreamReader freader = new InputStreamReader(is, "UTF-8");
-            CsvBeanReader reader = new CsvBeanReader(freader,
-                    CsvPreference.STANDARD_PREFERENCE);
-            String[] headers = reader.getHeader(false);
-            WindowRfidEntity bean = null;
-            List<WindowRfidEntity> windowList = new ArrayList<WindowRfidEntity>();
-            while ((bean = reader.read(WindowRfidEntity.class, headers)) != null)
-            {
-                windowList.add(bean);
-            }
-            for (WindowRfidEntity windowRfidEntity : windowList) {
-            	//CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo(),Long.valueOf(windowRfidEntity.getGid()));
+        	String json = JsonMapper.nonDefaultMapper().toJson(rr);
+			System.err.println(json);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("json", json);
+			String a=httpClient.postJson(loginUrl, json);
+			System.err.println(a);
+//        	InputStream is = TestJunit.class.getClassLoader().getResourceAsStream("config/11.csv");
+//        	InputStreamReader freader = new InputStreamReader(is, "UTF-8");
+//            CsvBeanReader reader = new CsvBeanReader(freader,
+//                    CsvPreference.STANDARD_PREFERENCE);
+//            String[] headers = reader.getHeader(false);
+//            WindowRfidEntity bean = null;
+//            List<WindowRfidEntity> windowList = new ArrayList<WindowRfidEntity>();
+//            while ((bean = reader.read(WindowRfidEntity.class, headers)) != null)
+//            {
+//                windowList.add(bean);
+//            }
+//            for (WindowRfidEntity windowRfidEntity : windowList) {
+//            	//CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo(),Long.valueOf(windowRfidEntity.getGid()));
+////            	Long a =CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo());
+//            	long s = rConcurrent.getAtomicLong(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo()).ttl();
+//            	if(s==-1){
+//                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo(),Long.valueOf(windowRfidEntity.getGid()));
+//            	}
 //            	Long a =CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo());
-            	long s = rConcurrent.getAtomicLong(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo()).ttl();
-            	if(s==-1){
-                CometServiceImpl.setCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo(),Long.valueOf(windowRfidEntity.getGid()));
-            	}
-            	Long a =CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT+windowRfidEntity.getRfidNo());
-            	System.err.println(a+"____________"+windowRfidEntity.getGid()+"_____"+windowRfidEntity.getRfidNo());
-			}
-            
+//            	System.err.println(a+"____________"+windowRfidEntity.getGid()+"_____"+windowRfidEntity.getRfidNo());
+//			}
+//            
         }
         catch (Exception e)
         {

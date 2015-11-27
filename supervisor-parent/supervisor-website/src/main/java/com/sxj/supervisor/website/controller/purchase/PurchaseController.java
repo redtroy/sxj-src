@@ -235,8 +235,7 @@ public class PurchaseController extends BaseController {
 	@RequestMapping(value = "addApply")
 	@ResponseBody
 	public void addApply(@RequestBody ApplyEntity applyEntity,
-			HttpServletResponse response, HttpServletRequest request)
-			throws IOException {
+			HttpServletResponse response, HttpServletRequest request) throws IOException {
 		PrintWriter out = response.getWriter();
 		try {
 			purchaseService.addApply(applyEntity);
