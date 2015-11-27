@@ -70,11 +70,6 @@ public class ApplyEntity extends Pagable implements Serializable {
 	@Column(name = "APPLY_STATUS")
 	private Integer applyStatus;
 
-	/**
-	 * (1代表未提交备案 2代表备案待确认 3代表备案已备案 4代表备案不成功)
-	 */
-	@Column(name = "BEIAN_STATUS")
-	private Integer beianStatus;
 
 	/**
 	 * 备案合同扫描件存放路径
@@ -163,14 +158,6 @@ public class ApplyEntity extends Pagable implements Serializable {
 
 	public void setApplyStatus(Integer applyStatus) {
 		this.applyStatus = applyStatus;
-	}
-
-	public Integer getBeianStatus() {
-		return beianStatus;
-	}
-
-	public void setBeianStatus(Integer beianStatus) {
-		this.beianStatus = beianStatus;
 	}
 
 	public String getScanNumber() {

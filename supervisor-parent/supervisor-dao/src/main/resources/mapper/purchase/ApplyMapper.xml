@@ -14,7 +14,6 @@
 		<result property="applyTime" column="APPLY_TIME" jdbcType="TIMESTAMP" />
 		<result property="price" column="PRICE" jdbcType="VARCHAR" />
 		<result property="applyStatus" column="APPLY_STATUS" jdbcType="INTEGER" />
-		<result property="beianStatus" column="BEIAN_STATUS" jdbcType="INTEGER" />
 		<result property="scanNumber" column="SCAN_NUMBER" jdbcType="VARCHAR" />
 		<result property="setNumber" column="SET_NUMBER" jdbcType="VARCHAR" />
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
