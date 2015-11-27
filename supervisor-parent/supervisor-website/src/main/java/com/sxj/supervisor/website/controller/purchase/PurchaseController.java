@@ -336,4 +336,32 @@ public class PurchaseController extends BaseController {
 		}
 		return map;
 	}
+	/**
+	 * 添加更新申请单数据
+	 * 
+	 * @param json
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "updateApply")
+	@ResponseBody
+	public void updateApply(@RequestBody ApplyEntity applyEntity,
+			HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
+		PrintWriter out = response.getWriter();
+		try {
+			purchaseService.updateApply(applyEntity);
+			out.print("1");
+			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+		} catch (Exception e) {
+			SxjLogger.error("更新申请单数据出错 ", e, this.getClass());
+			out.print("0");
+		} finally {
+			out.flush();
+			out.close();
+		}
+
+	}
 }

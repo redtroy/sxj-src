@@ -147,7 +147,18 @@ public class PurchaseServiceImpl implements IPurchaseService {
 			throw new ServiceException("添加采购申请单出错", e);
 		}
 	}
-
+	
+	@Override
+	@Transactional
+	public void updateApply(ApplyEntity apply) {
+		try {
+			Assert.notNull(apply, "采购申请单数据为空!");
+			applyDao.updateApply(apply);
+		} catch (Exception e) {
+			SxjLogger.error("更新采购申请单出错", e, this.getClass());
+			throw new ServiceException("更新采购申请单出错", e);
+		}
+	}
 	@Override
 	@Transactional
 	public void updatePurchase(PurchaseEntity purchaseEntity) {
