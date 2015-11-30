@@ -148,6 +148,9 @@ public class BasicController extends BaseController
     @Autowired
     private IMemberImageService memberImageService;
     
+    @Autowired
+    private ITenderMessageService service;
+    
     //    @PostConstruct
     //    public void init()
     //    {
@@ -803,6 +806,7 @@ public class BasicController extends BaseController
         }
         if (userBean.getMember() != null)
         {
+        	service.fetchUnreads(userBean.getMember().getMemberNo());//更新工程信息
             Long transMessageCount = CometServiceImpl
                     .getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                             + userBean.getMember().getMemberNo());
@@ -1510,6 +1514,7 @@ public class BasicController extends BaseController
                 return map;
             }
             MemberEntity member = login.getMember();
+            service.fetchUnreads(member.getMemberNo());
             Long transMessageCount = CometServiceImpl
                     .getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                             + member.getMemberNo());
