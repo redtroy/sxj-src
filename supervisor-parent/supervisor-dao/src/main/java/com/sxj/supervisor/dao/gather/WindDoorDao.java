@@ -47,4 +47,6 @@ public interface WindDoorDao
     public void updateWind(WindDoorEntity wd);
     
     public WindDoorEntity getByOid(String oid);
+    
+    public List<WindDoorEntity> queryUnreadByMember(String memberNo);
 }

@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -42,14 +41,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
-import sun.security.x509.X500Name;
-import third.rewrite.fastdfs.NameValuePair;
-import third.rewrite.fastdfs.service.IStorageClientService;
-
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
 import com.sxj.supervisor.entity.developers.DevelopersEntity;
+import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.supervisor.entity.gov.GovEntity;
 import com.sxj.supervisor.entity.member.AccountEntity;
 import com.sxj.supervisor.entity.member.CertificateEntity;
@@ -95,6 +91,10 @@ import com.sxj.util.common.StringUtils;
 import com.sxj.util.common.ValidateImage;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
+
+import sun.security.x509.X500Name;
+import third.rewrite.fastdfs.NameValuePair;
+import third.rewrite.fastdfs.service.IStorageClientService;
 
 @Controller
 public class BasicController extends BaseController
@@ -180,8 +180,8 @@ public class BasicController extends BaseController
                 SupervisorPrincipal info = getLoginInfo(session);
                 if (info.getAccount() != null && info.getMember() != null)
                 {
-                    AccountEntity newAccount = accountService.getAccount(info.getAccount()
-                            .getId());
+                    AccountEntity newAccount = accountService
+                            .getAccount(info.getAccount().getId());
                     if (newAccount == null)
                     {
                         return LOGIN;
@@ -194,8 +194,8 @@ public class BasicController extends BaseController
                     {
                         return LOGIN;
                     }
-                    if (!newAccount.getPassword().equals(info.getAccount()
-                            .getPassword()))
+                    if (!newAccount.getPassword()
+                            .equals(info.getAccount().getPassword()))
                     {
                         return LOGIN;
                     }
@@ -203,9 +203,10 @@ public class BasicController extends BaseController
                 }
                 else if (info.getAccount() == null && info.getMember() != null)
                 {
-                    List<AreaEntity> cityList = areaService.getChildrenAreas("32");
-                    MemberEntity member = memberService.getMember(info.getMember()
-                            .getId());
+                    List<AreaEntity> cityList = areaService
+                            .getChildrenAreas("32");
+                    MemberEntity member = memberService
+                            .getMember(info.getMember().getId());
                     if (member.getAccountNum() == null)
                     {
                         member.setAccountNum(0);
@@ -214,39 +215,51 @@ public class BasicController extends BaseController
                     map.put("member", member);
                     MemberToMemberEntity m = new MemberToMemberEntity();
                     
-                    List<MemberToMemberEntity> mlist = memberToMemberService.queryInfo(member.getMemberNo());
+                    List<MemberToMemberEntity> mlist = memberToMemberService
+                            .queryInfo(member.getMemberNo());
                     map.put("mlist", mlist);
                     if (info.getMember().getFlag())
                     {
-                        List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
+                        List<DevelopersEntity> totalKFSList = developerService
+                                .queryDeveloperList(new DevelopersEntity());
                         List<DevelopersEntity> kfsList = new ArrayList<DevelopersEntity>();
                         
                         MemberQuery query = new MemberQuery();
                         query.setMemberType(MemberTypeEnum.DAWP.getId());
-                        query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        query.setCheckState(
+                                MemberCheckStateEnum.CERTIFIED.getId());
                         query.setFilterStr(1);
-                        List<MemberEntity> totalMCList = memberService.queryMembersWebSite(query);
+                        List<MemberEntity> totalMCList = memberService
+                                .queryMembersWebSite(query);
                         List<MemberEntity> mcList = new ArrayList<MemberEntity>();
                         
                         query = new MemberQuery();
-                        query.setMemberType(MemberTypeEnum.GLASSFACTORY.getId());
-                        query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        query.setMemberType(
+                                MemberTypeEnum.GLASSFACTORY.getId());
+                        query.setCheckState(
+                                MemberCheckStateEnum.CERTIFIED.getId());
                         query.setFilterStr(1);
-                        List<MemberEntity> totalBLList = memberService.queryMembersWebSite(query);
+                        List<MemberEntity> totalBLList = memberService
+                                .queryMembersWebSite(query);
                         List<MemberEntity> blList = new ArrayList<MemberEntity>();
                         
                         query = new MemberQuery();
-                        query.setMemberType(MemberTypeEnum.GENRESFACTORY.getId());
-                        query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        query.setMemberType(
+                                MemberTypeEnum.GENRESFACTORY.getId());
+                        query.setCheckState(
+                                MemberCheckStateEnum.CERTIFIED.getId());
                         query.setFilterStr(1);
-                        List<MemberEntity> totalXCList = memberService.queryMembersWebSite(query);
+                        List<MemberEntity> totalXCList = memberService
+                                .queryMembersWebSite(query);
                         List<MemberEntity> xcList = new ArrayList<MemberEntity>();
                         
                         query = new MemberQuery();
                         query.setMemberType(MemberTypeEnum.PRODUCTS.getId());
-                        query.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
+                        query.setCheckState(
+                                MemberCheckStateEnum.CERTIFIED.getId());
                         query.setFilterStr(1);
-                        List<MemberEntity> totalPJList = memberService.queryMembersWebSite(query);
+                        List<MemberEntity> totalPJList = memberService
+                                .queryMembersWebSite(query);
                         List<MemberEntity> pjList = new ArrayList<MemberEntity>();
                         List<MemberEntity> fcList = new ArrayList<MemberEntity>();
                         if (totalMCList.size() > 18)
@@ -335,33 +348,51 @@ public class BasicController extends BaseController
                             return LOGIN;
                         }
                         String memberNo = user.getMember().getMemberNo();
-                        List<String> infoIdList = CometServiceImpl.get(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
-                        if (infoIdList != null && infoIdList.size() > 0)
+                        List<WindDoorEntity> queryUnread = windDoorSercice
+                                .queryUnread(memberNo);
+                        if (queryUnread.size() > 0)
                         {
                             List<TenderMessageEntity> messageList = new ArrayList<TenderMessageEntity>();
-                            for (Iterator<String> iterator = infoIdList.iterator(); iterator.hasNext();)
+                            for (WindDoorEntity entity : queryUnread)
                             {
-                                String infoId = iterator.next();
-                                TenderMessageQuery query2 = new TenderMessageQuery();
-                                query2.setMemberNo(memberNo);
-                                query2.setInfoId(infoId);
-                                List<TenderMessageModel> list = tenderMessageService.queryMessageList(query2);
-                                if (list == null || list.size() == 0)
-                                {
-                                    TenderMessageEntity message = new TenderMessageEntity();
-                                    message.setInfoId(infoId);
-                                    message.setMemberNo(memberNo);
-                                    message.setState(MessageStateEnum.UNREAD);
-                                    messageList.add(message);
-                                }
+                                TenderMessageEntity message = new TenderMessageEntity();
+                                message.setInfoId(entity.getId());
+                                message.setMemberNo(memberNo);
+                                message.setState(MessageStateEnum.UNREAD);
+                                messageList.add(message);
                             }
                             tenderMessageService.addMessage(messageList);
                         }
+                        
+                        //                        List<String> infoIdList = CometServiceImpl.get(MessageChannel.MEMBER_TENDER_MESSAGE_INFO);
+                        //                        if (infoIdList != null && infoIdList.size() > 0)
+                        //                        {
+                        //                            List<TenderMessageEntity> messageList = new ArrayList<TenderMessageEntity>();
+                        //                            for (Iterator<String> iterator = infoIdList.iterator(); iterator.hasNext();)
+                        //                            {
+                        //                                String infoId = iterator.next();
+                        //                                TenderMessageQuery query2 = new TenderMessageQuery();
+                        //                                query2.setMemberNo(memberNo);
+                        //                                query2.setInfoId(infoId);
+                        //                                List<TenderMessageModel> list = tenderMessageService.queryMessageList(query2);
+                        //                                if (list == null || list.size() == 0)
+                        //                                {
+                        //                                    TenderMessageEntity message = new TenderMessageEntity();
+                        //                                    message.setInfoId(infoId);
+                        //                                    message.setMemberNo(memberNo);
+                        //                                    message.setState(MessageStateEnum.UNREAD);
+                        //                                    messageList.add(message);
+                        //                                }
+                        //                            }
+                        //                            tenderMessageService.addMessage(messageList);
+                        //                        }
+                        tenderMessageService.fetchUnreads(memberNo);
                         MemberQuery q = new MemberQuery();
                         q.setMemberType(MemberTypeEnum.FRAMEFACTORY.getId());
                         q.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
                         q.setFilterStr(1);
-                        List<MemberEntity> totalfcList = memberService.queryMembersWebSite(q);
+                        List<MemberEntity> totalfcList = memberService
+                                .queryMembersWebSite(q);
                         if (totalfcList.size() > 16)
                         {
                             for (int i = 0; i < 16; i++)
@@ -386,7 +417,8 @@ public class BasicController extends BaseController
                         messQuery.setShowCount(6);
                         messQuery.setMemberNo(getLoginInfo(session).getMember()
                                 .getMemberNo());
-                        List<TenderMessageModel> messageList = tenderMessageService.queryMessageList(messQuery);
+                        List<TenderMessageModel> messageList = tenderMessageService
+                                .queryMessageList(messQuery);
                         GovEntity gov = new GovEntity();
                         gov.setShowCount(6);
                         gov.setPagable(true);
@@ -453,7 +485,8 @@ public class BasicController extends BaseController
     {
         try
         {
-            List<DevelopersEntity> totalKFSList = developerService.queryDeveloperList(new DevelopersEntity());
+            List<DevelopersEntity> totalKFSList = developerService
+                    .queryDeveloperList(new DevelopersEntity());
             List<DevelopersEntity> kfsList = new ArrayList<DevelopersEntity>();
             
             MemberQuery query = new MemberQuery();
@@ -519,10 +552,11 @@ public class BasicController extends BaseController
             
             TenderMessageQuery messQuery = new TenderMessageQuery();
             messQuery.setPagable(true);
-            messQuery.setMemberNo(getLoginInfo(session).getMember()
-                    .getMemberNo());
-            List<TenderMessageModel> list = tenderMessageService.queryMessageList(messQuery);
-            
+            messQuery.setMemberNo(
+                    getLoginInfo(session).getMember().getMemberNo());
+            List<TenderMessageModel> list = tenderMessageService
+                    .queryMessageList(messQuery);
+                    
             map.put("kfsList", kfsList);
             map.put("mcList", mcList);
             map.put("blList", blList);
@@ -541,9 +575,9 @@ public class BasicController extends BaseController
     }
     
     @RequestMapping("to_login")
-    public String ToLogin(String memberName, String accountName,
-            String message, String pmessage, String amessage,
-            HttpServletRequest request, ModelMap map) throws WebException
+    public String ToLogin(String memberName, String accountName, String message,
+            String pmessage, String amessage, HttpServletRequest request,
+            ModelMap map) throws WebException
     {
         try
         {
@@ -696,14 +730,15 @@ public class BasicController extends BaseController
             PrincipalCollection principals = currentUser.getPrincipals();
             if (userBean.getAccount() != null)
             {
-                SupervisorShiroRedisCache.addToMap(userBean.getAccount()
-                        .getId(), principals);
+                SupervisorShiroRedisCache
+                        .addToMap(userBean.getAccount().getId(), principals);
             }
             else
             {
-                SupervisorShiroRedisCache.addToMap(userBean.getMember()
-                        .getMemberNo(), principals);
+                SupervisorShiroRedisCache.addToMap(
+                        userBean.getMember().getMemberNo(), principals);
             }
+            
         }
         catch (AuthenticationException e)
         {
@@ -742,7 +777,8 @@ public class BasicController extends BaseController
         {
             return LOGIN;
         }
-        SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+        SupervisorPrincipal userBean = (SupervisorPrincipal) session
+                .getAttribute("userinfo");
         if (userBean.getMember() != null && userBean.getAccount() == null)
         {
             MemberTypeEnum type = userBean.getMember().getType();
@@ -755,48 +791,55 @@ public class BasicController extends BaseController
             {
                 flag = 2;
             }
-            List<MemberFunctionModel> list = functionService.queryFunctions(flag);
+            List<MemberFunctionModel> list = functionService
+                    .queryFunctions(flag);
             map.put("list", list);
         }
         else if (userBean.getMember() != null && userBean.getAccount() != null)
         {
-            List<MemberFunctionModel> list = roleService.getRoleFunctions(userBean.getAccount()
-                    .getId());
+            List<MemberFunctionModel> list = roleService
+                    .getRoleFunctions(userBean.getAccount().getId());
             map.put("list", list);
         }
         if (userBean.getMember() != null)
         {
-            Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
-                    + userBean.getMember().getMemberNo());
-            Long sysMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
-                    + userBean.getMember().getMemberNo());
-            Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                    + userBean.getMember().getMemberNo());
-            Long contractMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
-                    + userBean.getMember().getMemberNo());
-            Long payMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
-                    + userBean.getMember().getMemberNo());
-            if (tenderMessageCount <= 0)
-            {
-                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                        + userBean.getMember().getMemberNo();
-                List<String> userKeys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
-                userKeys.add(key);
-                Long totalCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
-                if (userKeys != null && userKeys.size() > 0)
-                {
-                    if (!userKeys.contains(key))
-                    {
-                        CometServiceImpl.setCount(key, totalCount);
-                        tenderMessageCount = totalCount;
-                    }
-                }
-                else
-                {
-                    CometServiceImpl.setCount(key, totalCount);
-                    tenderMessageCount = totalCount;
-                }
-            }
+            Long transMessageCount = CometServiceImpl
+                    .getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                            + userBean.getMember().getMemberNo());
+            Long sysMessageCount = CometServiceImpl
+                    .getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                            + userBean.getMember().getMemberNo());
+            Long tenderMessageCount = tenderMessageService
+                    .countUnreads(userBean.getMember().getMemberNo());
+            Long contractMessageCount = CometServiceImpl
+                    .getCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+                            + userBean.getMember().getMemberNo());
+            Long payMessageCount = CometServiceImpl
+                    .getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                            + userBean.getMember().getMemberNo());
+            //            if (tenderMessageCount <= 0)
+            //            {
+            //                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+            //                        + userBean.getMember().getMemberNo();
+            //                List<String> userKeys = CometServiceImpl
+            //                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+            //                userKeys.add(key);
+            //                Long totalCount = CometServiceImpl
+            //                        .getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+            //                if (userKeys != null && userKeys.size() > 0)
+            //                {
+            //                    if (!userKeys.contains(key))
+            //                    {
+            //                        CometServiceImpl.setCount(key, totalCount);
+            //                        tenderMessageCount = totalCount;
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    CometServiceImpl.setCount(key, totalCount);
+            //                    tenderMessageCount = totalCount;
+            //                }
+            //            }
             map.put("transMessageCount", transMessageCount);
             map.put("sysMessageCount", sysMessageCount);
             map.put("tenderMessageCount", tenderMessageCount);
@@ -957,8 +1000,8 @@ public class BasicController extends BaseController
             ServletOutputStream output = response.getOutputStream();
             String fileName = "扫描件" + stringDate();
             String group = filePath.substring(0, filePath.indexOf("/"));
-            response.addHeader("Content-Disposition", "attachment;filename="
-                    + fileName + ".pdf");
+            response.addHeader("Content-Disposition",
+                    "attachment;filename=" + fileName + ".pdf");
             response.setContentType("application/pdf");
             String path = filePath.substring(filePath.indexOf("/") + 1,
                     filePath.length());
@@ -993,11 +1036,12 @@ public class BasicController extends BaseController
             NameValuePair[] metaList = storageClientService.getMetadata(group,
                     path);
             String fjname = metaList[0].getValue();
-            response.addHeader("Content-Disposition", "attachment;filename="
-                    + new String(URLDecoder.decode(fjname, "UTF-8").getBytes(),
+            response.addHeader("Content-Disposition",
+                    "attachment;filename=" + new String(
+                            URLDecoder.decode(fjname, "UTF-8").getBytes(),
                             "ISO8859-1"));
-            response.setContentType("application/"
-                    + FileUtil.getFileExtName(fjname));
+            response.setContentType(
+                    "application/" + FileUtil.getFileExtName(fjname));
             storageClientService.downloadFile(group, path, output);
             output.flush();
             output.close();
@@ -1020,7 +1064,7 @@ public class BasicController extends BaseController
         int second = cal.get(Calendar.SECOND);//秒     
         String date = year + "" + month + "" + day + "" + hour + "" + minute
                 + "" + second;
-        
+                
         return date;
     }
     
@@ -1081,7 +1125,8 @@ public class BasicController extends BaseController
         {
             query.setEngAddress(keyword);
         }
-        SupervisorPrincipal userBean = (SupervisorPrincipal) session.getAttribute("userinfo");
+        SupervisorPrincipal userBean = (SupervisorPrincipal) session
+                .getAttribute("userinfo");
         query.setMemberIdB(userBean.getMember().getMemberNo());
         List<ContractModel> list = contractService.queryContracts(query);
         List strlist = new ArrayList();
@@ -1240,8 +1285,7 @@ public class BasicController extends BaseController
     }
     
     @RequestMapping("filesort")
-    public @ResponseBody List<String> fileSort(String fileId)
-            throws IOException
+    public @ResponseBody List<String> fileSort(String fileId) throws IOException
     {
         List<String> sortFile = new ArrayList<String>();
         try
@@ -1252,7 +1296,8 @@ public class BasicController extends BaseController
             }
             String[] fileids = fileId.split(",");
             Map<String, String> nameMap = new TreeMap<String, String>();
-            Map<String, NameValuePair[]> values = storageClientService.getMetadata(fileids);
+            Map<String, NameValuePair[]> values = storageClientService
+                    .getMetadata(fileids);
             for (String key : values.keySet())
             {
                 if (key == null)
@@ -1342,7 +1387,8 @@ public class BasicController extends BaseController
         Date enterTime = (Date) session.getAttribute("enterTime");
         Date nowTime = new Date();
         String currentUrl = (String) session.getAttribute("currentUrl");
-        String currentFunction = (String) session.getAttribute("currentFunction");
+        String currentFunction = (String) session
+                .getAttribute("currentFunction");
         String nextUrl = (String) session.getAttribute("nextUrl");
         String nextFunction = (String) session.getAttribute("nextFunction");
         if (currentUrl == null)
@@ -1369,7 +1415,8 @@ public class BasicController extends BaseController
             log.setNextpage(url);
             log.setPrePage(currentUrl);
             
-            MemberFunctionEntity function = functionService.getFunction(nextFunction);
+            MemberFunctionEntity function = functionService
+                    .getFunction(nextFunction);
             if (function != null)
             {
                 log.setNowName(function.getTitle());
@@ -1391,7 +1438,8 @@ public class BasicController extends BaseController
             log.setIp(getIpAddr(request));
             if (enterTime != null)
             {
-                long waitTime = (nowTime.getTime() - enterTime.getTime()) / 1000;
+                long waitTime = (nowTime.getTime() - enterTime.getTime())
+                        / 1000;
                 log.setWaitTime(waitTime + "");
             }
             logService.addLog(log);
@@ -1401,9 +1449,8 @@ public class BasicController extends BaseController
     }
     
     @RequestMapping("message")
-    public @ResponseBody Map<String, Object> message(
-            HttpServletRequest request, HttpServletResponse response,
-            String channelName) throws IOException
+    public @ResponseBody Map<String, Object> message(HttpServletRequest request,
+            HttpServletResponse response, String channelName) throws IOException
     {
         Map<String, Object> map = new HashMap<String, Object>();
         if (channelName.contains(MessageChannel.RECORD_MESSAGE)
@@ -1412,11 +1459,16 @@ public class BasicController extends BaseController
                 || channelName.contains(MessageChannel.WEBSITE_FINANCE_MESSAGE)
                 || channelName.contains(MessageChannel.MEMBER_MESSAGE)
                 || channelName.contains(MessageChannel.MEMBER_PERFECT_MESSAGE)
-                || channelName.contains(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT)
-                || channelName.contains(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT)
-                || channelName.contains(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT)
-                || channelName.contains(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT)
-                || channelName.contains(MessageChannel.MEMBER_PAY_MESSAGE_COUNT))
+                || channelName
+                        .contains(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT)
+                || channelName
+                        .contains(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT)
+                || channelName
+                        .contains(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT)
+                || channelName
+                        .contains(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT)
+                || channelName
+                        .contains(MessageChannel.MEMBER_PAY_MESSAGE_COUNT))
         {
             Long count = CometServiceImpl.getCount(channelName);
             SxjLogger.debug("Sending Message to Comet Client:" + count,
@@ -1458,38 +1510,49 @@ public class BasicController extends BaseController
                 return map;
             }
             MemberEntity member = login.getMember();
-            Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
-                    + member.getMemberNo());
-            Long sysMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
-                    + member.getMemberNo());
-            Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                    + member.getMemberNo());
-            if (tenderMessageCount <= 0)
-            {
-                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                        + login.getMember().getMemberNo();
-                List<String> userKeys = CometServiceImpl.get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
-                Long totalCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
-                if (userKeys != null && userKeys.size() > 0)
-                {
-                    if (!userKeys.contains(key))
-                    {
-                        CometServiceImpl.setCount(key, totalCount);
-                        tenderMessageCount = totalCount;
-                        userKeys.add(key);
-                        CometServiceImpl.sendMessage(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS, userKeys);
-                    }
-                }
-                else
-                {
-                    CometServiceImpl.setCount(key, totalCount);
-                    tenderMessageCount = totalCount;
-                }
-            }
-            Long contractMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
-                    + member.getMemberNo());
-            Long payMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
-                    + member.getMemberNo());
+            Long transMessageCount = CometServiceImpl
+                    .getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
+                            + member.getMemberNo());
+            Long sysMessageCount = CometServiceImpl
+                    .getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
+                            + member.getMemberNo());
+            Long tenderMessageCount = tenderMessageService
+                    .queryUnread(member.getMemberNo());
+            //            Long tenderMessageCount = CometServiceImpl
+            //                    .getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+            //                            + member.getMemberNo());
+            //            if (tenderMessageCount <= 0)
+            //            {
+            //                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+            //                        + login.getMember().getMemberNo();
+            //                List<String> userKeys = CometServiceImpl
+            //                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+            //                Long totalCount = CometServiceImpl
+            //                        .getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+            //                if (userKeys != null && userKeys.size() > 0)
+            //                {
+            //                    if (!userKeys.contains(key))
+            //                    {
+            //                        CometServiceImpl.setCount(key, totalCount);
+            //                        tenderMessageCount = totalCount;
+            //                        userKeys.add(key);
+            //                        CometServiceImpl.sendMessage(
+            //                                MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS,
+            //                                userKeys);
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    CometServiceImpl.setCount(key, totalCount);
+            //                    tenderMessageCount = totalCount;
+            //                }
+            //            }
+            Long contractMessageCount = CometServiceImpl
+                    .getCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+                            + member.getMemberNo());
+            Long payMessageCount = CometServiceImpl
+                    .getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
+                            + member.getMemberNo());
             map.put("transMessageCount", transMessageCount);
             map.put("sysMessageCount", sysMessageCount);
             map.put("tenderMessageCount", tenderMessageCount);
@@ -1517,14 +1580,14 @@ public class BasicController extends BaseController
     public @ResponseBody Map<String, String> getRefContractWindwoType(
             HttpSession session, HttpServletRequest request,
             HttpServletResponse response, String keyword, String refContractNo)
-            throws IOException
+                    throws IOException
     {
         if (StringUtils.isEmpty(refContractNo))
         {
             return null;
         }
-        List<ContractItemEntity> list = contractService.getRefContractItem(refContractNo,
-                keyword);
+        List<ContractItemEntity> list = contractService
+                .getRefContractItem(refContractNo, keyword);
         List strlist = new ArrayList();
         String sb = "";
         for (ContractItemEntity ci : list)
@@ -1557,7 +1620,7 @@ public class BasicController extends BaseController
     @RequestMapping("getAuthImg")
     public @ResponseBody Map<String, String> getAuthImg(HttpSession session,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException
+                    throws IOException
     {
         try
         {
@@ -1588,15 +1651,15 @@ public class BasicController extends BaseController
     @RequestMapping("getImgStr")
     public @ResponseBody Map<String, String> getImgStr(HttpSession session,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException
+                    throws IOException
     {
-    	Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
         String res = session.getAttribute("imgStr").toString();
-//        PrintWriter out = response.getWriter();
+        //        PrintWriter out = response.getWriter();
         System.out.println("第二：" + res);
-//        out.print(res);
-//        out.flush();
-//        out.close();
+        //        out.print(res);
+        //        out.flush();
+        //        out.close();
         map.put("imgStr", res);
         return map;
     }
@@ -1615,7 +1678,8 @@ public class BasicController extends BaseController
             HttpServletRequest request, HttpServletResponse response,
             String keyword) throws IOException
     {
-        List<CertificateEntity> list = memberImageService.getCertificate(keyword);
+        List<CertificateEntity> list = memberImageService
+                .getCertificate(keyword);
         List strlist = new ArrayList();
         String sb = "";
         for (CertificateEntity certificate : list)

@@ -25,4 +25,6 @@ public interface ITenderMessageDao
     
     public List<TenderMessageModel> queryMessageList(
             QueryCondition<TenderMessageModel> query);
+            
+    public long countUnreadByMember(String memberNo);
 }

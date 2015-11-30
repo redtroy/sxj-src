@@ -182,7 +182,7 @@ public class ProjectGrabber
         String oid = url.split("GongGaoGuid=")[1];
         WindDoorEntity byOid = windDoorDao.getByOid(oid);
         if (byOid != null)
-            throw new RuntimeException("工程信息已存在");
+            throw new RuntimeException("工程信息已存在,URL:" + url);
             
         Element element = doc.getElementById("ZBGGDetail1_tblInfo");
         if (element.getElementById("ZBGGDetail1_trAttach") != null
