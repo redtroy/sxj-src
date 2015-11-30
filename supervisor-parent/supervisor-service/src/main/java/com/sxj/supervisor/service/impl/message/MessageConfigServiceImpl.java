@@ -286,7 +286,7 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                         message + "，请登录私享家绿色门窗平台查看详情！",
                         false);
                 System.out.println(
-                        "Xinxi1Sender 短线内容:" + message + "，请登录私享家绿色门窗平台查看详情！");
+                        "Xinxi1Sender 短线内容:" + message + "，请登录私享家绿色门窗平台查看详情2！");
                 //                if (status.getStatus().equals(""))
                 //                {
                 //                    sender = manager.getSender(C123Sender.class.getName());
