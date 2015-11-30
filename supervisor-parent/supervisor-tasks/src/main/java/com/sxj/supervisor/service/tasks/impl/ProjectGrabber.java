@@ -134,6 +134,8 @@ public class ProjectGrabber
             Elements tds = tr.getElementsByTag("td");
             String bdfl = tds.get(1).text(); // 标段分类
             String xmmc = tds.get(2).text();// 项目名称
+            if (xmmc.indexOf("已作废") > 0)
+                continue;
             String url = tds.get(2).getElementsByTag("a").attr("href");
             String qy = tds.get(3).text();// 区域
             String jzsj = tds.get(4).text();// 截至日期
