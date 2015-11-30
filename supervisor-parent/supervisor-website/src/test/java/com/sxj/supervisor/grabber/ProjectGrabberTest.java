@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.service.tasks.impl.ProjectGrabber;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -18,6 +19,9 @@ public class ProjectGrabberTest
     @Autowired
     private ProjectGrabber grabber;
     
+    @Autowired
+    private WindDoorDao winDoorDao;
+    
     @Test
     public void testGrab()
     {
@@ -25,6 +29,11 @@ public class ProjectGrabberTest
         //                .createMock(IStorageClientService.class);
         //        grabber.setStorageClientService(createMock);
         grabber.grab("幕墙");
+    }
+    
+    public void testGetByOid()
+    {
+        winDoorDao.getByOid("");
     }
     
 }

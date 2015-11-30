@@ -16,6 +16,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,9 @@ import third.rewrite.fastdfs.service.IStorageClientService;
 public class WindDoorServiceImpl implements IWindDoorService
 {
     
+    private static final Logger logger = LoggerFactory
+            .getLogger(WindDoorServiceImpl.class);
+            
     @Autowired
     private WindDoorDao wda;
     
@@ -69,7 +74,9 @@ public class WindDoorServiceImpl implements IWindDoorService
     public void WindDoorGather() throws ServiceException
     {
         List<WindDoorEntity> mc = grabber.grab("门窗");
+        logger.info("共采集门窗信息:{}", mc.size());
         List<WindDoorEntity> mq = grabber.grab("幕墙");
+        logger.info("共采集幕墙信息:{}", mq.size());
         mc.addAll(mq);
         List<WindDoorEntity> created = new ArrayList<>();
         for (WindDoorEntity entity : mc)
@@ -84,7 +91,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             }
         }
         //updateTenderMessageSync(created);
-        sendSmsSync(created.size());
+        //sendSmsSync(created.size());
     }
     
     private void sendSmsSync(final int count)

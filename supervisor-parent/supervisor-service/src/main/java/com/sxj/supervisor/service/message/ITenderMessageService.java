@@ -21,4 +21,8 @@ public interface ITenderMessageService
             
     public Long queryUnread(String memberNo);
     
+    public void fetchUnreads(String memberNo);
+    
+    public Long countUnreads(String memberNo);
+    
 }

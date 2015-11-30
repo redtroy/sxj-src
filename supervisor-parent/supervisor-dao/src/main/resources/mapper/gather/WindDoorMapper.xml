@@ -20,6 +20,7 @@
 		<result property="flag" column="FLAG" jdbcType="INTEGER" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="nowDate" column="NOW_DATE" jdbcType="TIMESTAMP" />
+		<result property="oid" column="OID" jdbcType="VARCHAR"/> 
 	</resultMap>
 
 
@@ -29,8 +30,8 @@
 		<![CDATA[SELECT * FROM M_WIND_DOOR ORDER BY FLAG DESC ]]>
 	</select>
 	
-	<select id="getByOid" resultMap="WindDoorResultMap">
-		select * from M_WIND_DOOR where OID=#{oid}
+	<select id="getByOid" resultMap="WindDoorResultMap" parameterType="String">
+		<![CDATA[select * from M_WIND_DOOR where OID=#{oid}]]>
 	</select>
 	
 	<select id="queryUnreadByMember" resultMap="WindDoorResultMap">

@@ -386,6 +386,7 @@ public class BasicController extends BaseController
                         //                            }
                         //                            tenderMessageService.addMessage(messageList);
                         //                        }
+                        tenderMessageService.fetchUnreads(memberNo);
                         MemberQuery q = new MemberQuery();
                         q.setMemberType(MemberTypeEnum.FRAMEFACTORY.getId());
                         q.setCheckState(MemberCheckStateEnum.CERTIFIED.getId());
@@ -736,6 +737,7 @@ public class BasicController extends BaseController
                 SupervisorShiroRedisCache.addToMap(
                         userBean.getMember().getMemberNo(), principals);
             }
+            
         }
         catch (AuthenticationException e)
         {
@@ -806,38 +808,37 @@ public class BasicController extends BaseController
             Long sysMessageCount = CometServiceImpl
                     .getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
                             + userBean.getMember().getMemberNo());
-            Long tenderMessageCount = CometServiceImpl
-                    .getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                            + userBean.getMember().getMemberNo());
+            Long tenderMessageCount = tenderMessageService
+                    .countUnreads(userBean.getMember().getMemberNo());
             Long contractMessageCount = CometServiceImpl
                     .getCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
                             + userBean.getMember().getMemberNo());
             Long payMessageCount = CometServiceImpl
                     .getCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
                             + userBean.getMember().getMemberNo());
-            if (tenderMessageCount <= 0)
-            {
-                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                        + userBean.getMember().getMemberNo();
-                List<String> userKeys = CometServiceImpl
-                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
-                userKeys.add(key);
-                Long totalCount = CometServiceImpl
-                        .getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
-                if (userKeys != null && userKeys.size() > 0)
-                {
-                    if (!userKeys.contains(key))
-                    {
-                        CometServiceImpl.setCount(key, totalCount);
-                        tenderMessageCount = totalCount;
-                    }
-                }
-                else
-                {
-                    CometServiceImpl.setCount(key, totalCount);
-                    tenderMessageCount = totalCount;
-                }
-            }
+            //            if (tenderMessageCount <= 0)
+            //            {
+            //                String key = MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+            //                        + userBean.getMember().getMemberNo();
+            //                List<String> userKeys = CometServiceImpl
+            //                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+            //                userKeys.add(key);
+            //                Long totalCount = CometServiceImpl
+            //                        .getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+            //                if (userKeys != null && userKeys.size() > 0)
+            //                {
+            //                    if (!userKeys.contains(key))
+            //                    {
+            //                        CometServiceImpl.setCount(key, totalCount);
+            //                        tenderMessageCount = totalCount;
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    CometServiceImpl.setCount(key, totalCount);
+            //                    tenderMessageCount = totalCount;
+            //                }
+            //            }
             map.put("transMessageCount", transMessageCount);
             map.put("sysMessageCount", sysMessageCount);
             map.put("tenderMessageCount", tenderMessageCount);
