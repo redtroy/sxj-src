@@ -31,6 +31,7 @@ import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
 import com.sxj.supervisor.entity.purchase.PurchaseEntity;
 import com.sxj.supervisor.entity.purchase.ReleaseRecordEntity;
+import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -356,6 +357,34 @@ public class PurchaseController extends BaseController {
 		PrintWriter out = response.getWriter();
 		try {
 			purchaseService.updateApply(applyEntity);
+			out.print("1");
+			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+		} catch (Exception e) {
+			SxjLogger.error("更新申请单数据出错 ", e, this.getClass());
+			out.print("0");
+		} finally {
+			out.flush();
+			out.close();
+		}
+
+	}
+	/**
+	 * 添加备案信息
+	 * 
+	 * @param json
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "addRecord")
+	@ResponseBody
+	public void addRecord(@RequestBody RecordEntity record,
+			HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
+		PrintWriter out = response.getWriter();
+		try {
+			//purchaseService.updateApply(applyEntity);
 			out.print("1");
 			response.setContentType("text/plain;UTF-8");
 			response.setHeader("Access-Control-Allow-Origin", "*");
