@@ -1,106 +1,104 @@
-<script>
-function loadPage(currentPage,totalPage) {
-	$(".jump").die("click");
-	layer.closeAll();
-	// 创建分页
-	$(".pagination").attr("currentPage",currentPage);
-	$(".pagination").attr("totalPage",totalPage);
-	$(".pagination").pagination(totalPage, {
-		num_edge_entries: 1, //边缘页数
-		num_display_entries: 4, //主体页数
-		callback: function(page_index,jp){
-			loadingImg();
-			query(page_index+1);
-			$(".pagination").attr("currentPage",page_index+1);
-			return false;
-		},
-		current_page:currentPage-1,
-		items_per_page:1, //每页显示1项
-		prev_text: "前一页",
-		next_text: "后一页"
-	});
-	jump(currentPage);
- }
-$(".pagination").ready(function(){
-	
-	loadPage(${query.currentPage},${query.totalPage});
-});
-var jump = function(currentPage){
-	$(".pagination").append("&nbsp;<span style='color:#15b;'>到第<input name=''class='pageNumber' style=' width: 35px;margin:0 3px;' value='"+currentPage+"'/>页</span><a class='next jump' >确定</a>");
-	$(".jump").live("click",function(){
-		$(".pageNumber").each(function(i){
-			if(i==0){
-				var totalPage=$(".pagination").attr("totalPage");
-				var currentpage=$(".pagination").attr("currentpage");
-				var pageNumber = $(this).val();
-				if(pageNumber!=''){
-					if(!isNaN(pageNumber)){
-						if(parseInt(pageNumber)>parseInt(totalPage)){
-							//数值大于当前最大页码,返回当前最大页码
-							$(this).val(totalPage);
-							pageNumber=totalPage;
-						}
-						query(pageNumber);
-						}else{
-						   $(this).val(currentpage);
-					}
-				}
-			}
-		})
-	});
-}
-$(".pageNumber").live("keyup",function(){
-	var $val = $(this).val();
-	$(".pageNumber").each(function(){
-		$(this).val($val);
-	})
-})
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗" />
+<meta name="description"
+	content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<link type="text/css" rel="stylesheet"
+	href="${b.staticPath}style/purchasing-pool.css" />
+<@b.dialogBox/><@b.pageScript/>
+<script type="text/javascript">
+	function query(page) {
+		var params = $("#search_form").serialize();
+		if (page != undefined) {
+			params = params + "&currentPage=" + page;
+		}
+		$.post("queryApply.htm", params, function(data) {
+			var res = $(data).find("#res_table");
+			var pager = $(data).find("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
+		});
+	}
 </script>
-<div class="declare-t">申报采购</div>
-<div class="declare-c">
-	<table width="100%" border="0">
-		<tbody>
-			<tr>
-				<th scope="col">编号</th>
-				<th scope="col">产品类型</th>
-				<th scope="col">采购数量(㎡)</th>
-				<th scope="col">采购价格(元)</th>
-				<th scope="col">申报时间</th>
-				<th scope="col">状态</th>
-			</tr>
-			<tr>
-				<td>33</td>
-				<td>33</td>
-				<td>33</td>
-				<td>1-10</td>
-				<td>2015/10/30 12:35</td>
-				<td><em class="states receive fillet">已接收</em></td>
-			</tr>
-			<tr>
-				<td>333</td>
-				<td>33</td>
-				<td>33</td>
-				<td>1-10</td>
-				<td>2015/10/30 12:35</td>
-				<td><em class="states no fillet">未接收</em></td>
-			</tr>
-			<tr>
-				<td>33</td>
-				<td>33</td>
-				<td>33</td>
-				<td>1-10</td>
-				<td>2015/10/30 12:35</td>
-				<td><em class="states fail fillet">审核不通过</em></td>
-			</tr>
-			<tr>
-				<td>33</td>
-				<td>33</td>
-				<td>33</td>
-				<td>1-10</td>
-				<td>2015/10/30 12:35</td>
-				<td><em class="states success fillet">审核通过</em></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<div id="pager"></div>
+<!--tab切换结束-->
+</head>
+
+<body>
+	<div id="header"><@b.header /></div>
+	<div class="fence-wide ly-clearFix">
+		<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
+		<div class="yard-870 rightSide ly-left inviteBox">
+			<div class="heading mb15 ly-clearFix">
+				<h1>
+					<span class="title fontYH f20 fb">申报采购</span>
+				</h1>
+			</div>
+			<div class="contBox">
+				<form id="search_form" action="javascript:void(0);" method="post">
+
+					<div class="searBox f12 mb10">
+						编号 <input type="text" class="input" name="serialNumber"
+							value="${query.serialNumber}" /> 
+						申报类型 <select name="applyStatus" class="input-w120h36">
+							<option selected="selected" value="">全部</option>
+							<option value="1" >未接收</option>
+							<option value="2">审核中</option>
+							<option value="3">审核通过</option>
+							<option value="4">审核不通过</option>
+						</select>
+						<button class="button button-search" onclick="query();">查询</button>
+					</div>
+				</form>
+				<table border="0" cellpadding="0" cellspacing="0" class="tabList" id="res_table">
+					<col width="15%" />
+					<col width="15%" />
+					<col width="12%" />
+					<col width="12%" />
+					<col width="20%" />
+					<col width="15%" />
+					<tr>
+						<th>编号</th>
+						<th>产品类型</th>
+						<th>采购数量(㎡)</th>
+						<th>采购价格(元/㎡)</th>
+						<th>申报时间</th>
+						<th>状态</th>
+					</tr>
+					<#list applyList as list>
+					<tr class="disable">
+						<td>${list.serialNumber}</td>
+						<td><#if list.applyType==1>普通玻璃<#elseif
+							list.applyType==2>深加工玻璃<#elseif list.applyType==3>型材<#elseif
+							list.applyType==4>配件</#if></td>
+						<td>${list.applyNum}</td>
+						<td>${list.price}</td>
+						<td>${list.applyTime?string("yyyy-MM-dd")}</td>
+						<td><#if list.applyStatus==1> <em class="states no fillet">未接收</em><#elseif
+							list.applyStatus==2> <em class="states receive fillet">已接收</em><#elseif
+							list.applyStatus==3> <em class="states success fillet">审核通过</em><#elseif
+							list.applyStatus==4> <em class="states fail fillet">审核不通过</em>
+							</#if>
+						</td>
+					</tr>
+					</#list>
+				</table>
+				<div class="ly-clearFix">
+					<div  class="jPaginate"><@b.pager/></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<@b.footer />
+</body>
+</html>

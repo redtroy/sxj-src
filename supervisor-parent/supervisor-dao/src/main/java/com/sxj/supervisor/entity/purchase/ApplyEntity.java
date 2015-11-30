@@ -65,16 +65,10 @@ public class ApplyEntity extends Pagable implements Serializable {
 	private Date applyTime;
 
 	/**
-	 * (1代表审核中 2代表审核通过 3代表审核不通过)
+	 * (1代表未接收 2代表审核中 3代表审核通过 4代表审核不通过 5代表已提交备案 6代表合同备案待确认 7代表合同备案已备案)' ,
 	 */
 	@Column(name = "APPLY_STATUS")
 	private Integer applyStatus;
-
-	/**
-	 * (1代表未提交备案 2代表备案待确认 3代表备案已备案 4代表备案不成功)
-	 */
-	@Column(name = "BEIAN_STATUS")
-	private Integer beianStatus;
 
 	/**
 	 * 备案合同扫描件存放路径
@@ -92,6 +86,26 @@ public class ApplyEntity extends Pagable implements Serializable {
 	 */
 	@Column(name = "MEMBER_NO")
 	private String memberNo;
+
+	private String startDate;
+
+	private String endDate;
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
 
 	public String getMemberNo() {
 		return memberNo;
@@ -163,14 +177,6 @@ public class ApplyEntity extends Pagable implements Serializable {
 
 	public void setApplyStatus(Integer applyStatus) {
 		this.applyStatus = applyStatus;
-	}
-
-	public Integer getBeianStatus() {
-		return beianStatus;
-	}
-
-	public void setBeianStatus(Integer beianStatus) {
-		this.beianStatus = beianStatus;
 	}
 
 	public String getScanNumber() {

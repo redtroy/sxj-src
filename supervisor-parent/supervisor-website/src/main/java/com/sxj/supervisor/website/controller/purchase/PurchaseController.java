@@ -235,8 +235,7 @@ public class PurchaseController extends BaseController {
 	@RequestMapping(value = "addApply")
 	@ResponseBody
 	public void addApply(@RequestBody ApplyEntity applyEntity,
-			HttpServletResponse response, HttpServletRequest request)
-			throws IOException {
+			HttpServletResponse response, HttpServletRequest request) throws IOException {
 		PrintWriter out = response.getWriter();
 		try {
 			purchaseService.addApply(applyEntity);
@@ -260,8 +259,13 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("queryApply")
-	public String queryApply(ModelMap map, ApplyEntity applyEntity) {
+	public String queryApply(ModelMap map, ApplyEntity applyEntity,HttpSession session) {
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		applyEntity.setPagable(true);
+		applyEntity.setMemberNo(userBean.getMember().getMemberNo());
 		List<ApplyEntity> applyList = purchaseService.queryApply(applyEntity);
+		map.put("query", applyEntity);
 		map.put("applyList", applyList);
 		return "site/purchase/applyList";
 	}
@@ -335,5 +339,33 @@ public class PurchaseController extends BaseController {
 			map.put("isok", "no");
 		}
 		return map;
+	}
+	/**
+	 * 添加更新申请单数据
+	 * 
+	 * @param json
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "updateApply")
+	@ResponseBody
+	public void updateApply(@RequestBody ApplyEntity applyEntity,
+			HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
+		PrintWriter out = response.getWriter();
+		try {
+			purchaseService.updateApply(applyEntity);
+			out.print("1");
+			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+		} catch (Exception e) {
+			SxjLogger.error("更新申请单数据出错 ", e, this.getClass());
+			out.print("0");
+		} finally {
+			out.flush();
+			out.close();
+		}
+
 	}
 }
