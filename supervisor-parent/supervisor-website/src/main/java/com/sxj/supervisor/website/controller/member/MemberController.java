@@ -35,6 +35,7 @@ import com.sxj.supervisor.model.member.MemberQuery;
 import com.sxj.supervisor.service.member.IMemberImageService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.member.IMemberToMemberService;
+import com.sxj.supervisor.service.message.ITenderMessageService;
 import com.sxj.supervisor.service.system.IAreaService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.Constraints;
@@ -72,6 +73,9 @@ public class MemberController extends BaseController
     
     @Autowired
     private IMemberImageService memberImageService;
+    
+    @Autowired
+    private ITenderMessageService tenderMessageService;
     
     /**
      * 根据会员号获取会员信息
@@ -586,12 +590,15 @@ public class MemberController extends BaseController
                 return map;
             }
             MemberEntity member = login.getMember();
+            tenderMessageService.fetchUnreads(member.getMemberNo());
             Long systemMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_SYSTEM_MESSAGE_COUNT
                     + member.getMemberNo());
             Long transMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TRANS_MESSAGE_COUNT
                     + member.getMemberNo());
-            Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
-                    + member.getMemberNo());
+//            Long tenderMessageCount = CometServiceImpl.getCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT
+//                    + member.getMemberNo());
+            Long tenderMessageCount = tenderMessageService
+                    .queryUnread(member.getMemberNo());
             map.put("systemMessageCount", systemMessageCount);
             map.put("transMessageCount", transMessageCount);
             map.put("tenderMessageCount", tenderMessageCount);
