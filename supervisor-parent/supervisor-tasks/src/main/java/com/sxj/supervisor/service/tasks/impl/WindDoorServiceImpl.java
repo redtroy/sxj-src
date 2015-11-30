@@ -551,28 +551,28 @@ public class WindDoorServiceImpl implements IWindDoorService
             if (bathList.size() > 0)
             {
                 wda.addWindDoor(bathList);
-                CometServiceImpl
-                        .takeCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
-                List<String> keys = CometServiceImpl
-                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
-                if (keys != null && keys.size() > 0)
-                {
-                    for (String key : keys)
-                    {
-                        if (key == null)
-                        {
-                            continue;
-                        }
-                        CometServiceImpl.takeCount(key);
-                    }
-                }
+//                CometServiceImpl
+//                        .takeCount(MessageChannel.MEMBER_TENDER_MESSAGE_COUNT);
+//                List<String> keys = CometServiceImpl
+//                        .get(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS);
+//                if (keys != null && keys.size() > 0)
+//                {
+//                    for (String key : keys)
+//                    {
+//                        if (key == null)
+//                        {
+//                            continue;
+//                        }
+//                        CometServiceImpl.takeCount(key);
+//                    }
+//                }
             }
             for (int iii = 0; iii < bathList.size(); iii++)
             {
                 //发短信
                 configService.sendAllMessage("您有一条新的开发商招标信息");
-                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
-                        bathList.get(iii).getId());
+//                CometServiceImpl.add(MessageChannel.MEMBER_TENDER_MESSAGE_INFO,
+//                        bathList.get(iii).getId());
             }
         }
         catch (Exception e)
