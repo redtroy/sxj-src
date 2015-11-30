@@ -25,5 +25,18 @@
 		<if test="condition.memberNo != null and condition.memberNo !=''">
 			<![CDATA[AND MEMBER_NO =#{condition.memberNo} ]]>
 		</if>
+		<if test="condition.applyType != null">
+			<![CDATA[AND APPLY_TYPE =#{condition.applyType} ]]>
+		</if>
+		<if test="condition.applyStatus != null">
+			<![CDATA[AND APPLY_STATUS =#{condition.applyStatus} ]]>
+		</if>
+		<if test="condition.serialNumber != null and condition.serialNumber !=''">
+			<![CDATA[AND SERIAL_NUMBER =#{condition.serialNumber} ]]>
+		</if>
+		<if
+			test="condition.startDate != null and condition.endDate != null and  condition.startDate != '' and condition.endDate != ''">
+			<![CDATA[AND APPLY_TIME >=#{condition.startDate} AND APPLY_TIME < DATE_ADD(#{condition.endDate},INTERVAL 1 DAY) ]]>
+		</if>
 	</select>
 </mapper>

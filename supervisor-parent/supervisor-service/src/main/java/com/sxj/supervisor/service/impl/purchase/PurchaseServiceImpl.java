@@ -191,7 +191,11 @@ public class PurchaseServiceImpl implements IPurchaseService {
 			}
 			QueryCondition<ApplyEntity> condition = new QueryCondition<ApplyEntity>();
 			condition.addCondition("memberNo", apply.getMemberNo());// 会员号
-			// condition.addCondition("name", query.getMemberName());// 会员名称
+			condition.addCondition("applyType", apply.getApplyType());//类型
+			condition.addCondition("applyStatus", apply.getApplyStatus());//类型
+			condition.addCondition("serialNumber", apply.getSerialNumber());//类型
+			condition.addCondition("starDate", apply.getStartDate());
+			condition.addCondition("endDate", apply.getEndDate());
 			condition.setPage(apply);
 			applyList = applyDao.queryApplysList(condition);
 			apply.setPage(condition);

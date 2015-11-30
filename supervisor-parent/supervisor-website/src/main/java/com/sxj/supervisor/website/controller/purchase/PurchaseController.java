@@ -259,8 +259,13 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("queryApply")
-	public String queryApply(ModelMap map, ApplyEntity applyEntity) {
+	public String queryApply(ModelMap map, ApplyEntity applyEntity,HttpSession session) {
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		applyEntity.setPagable(true);
+		applyEntity.setMemberNo(userBean.getMember().getMemberNo());
 		List<ApplyEntity> applyList = purchaseService.queryApply(applyEntity);
+		map.put("query", applyEntity);
 		map.put("applyList", applyList);
 		return "site/purchase/applyList";
 	}
