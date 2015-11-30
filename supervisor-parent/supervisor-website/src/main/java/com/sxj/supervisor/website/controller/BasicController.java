@@ -400,6 +400,7 @@ public class BasicController extends BaseController
                         map.put("fcList", fcList);
                         map.put("govList", list);
                         map.put("query", messQuery);
+                        map.put("memberNo", memberNo);
                         
                         /*for (int i = 0; i < kfsList.size(); i++)
                         {
