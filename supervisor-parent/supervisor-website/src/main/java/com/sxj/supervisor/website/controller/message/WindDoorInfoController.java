@@ -10,14 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import third.rewrite.fastdfs.NameValuePair;
-import third.rewrite.fastdfs.service.IStorageClientService;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.supervisor.service.tasks.IWindDoorService;
 import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
+
+import third.rewrite.fastdfs.NameValuePair;
+import third.rewrite.fastdfs.service.IStorageClientService;
 
 @Controller
 @RequestMapping("market")
@@ -29,6 +30,14 @@ public class WindDoorInfoController
     
     @Autowired
     private IStorageClientService storageClientService;
+    
+    @RequestMapping("grab")
+    @ResponseBody
+    public String grab()
+    {
+        iwds.WindDoorGather();
+        return "OK";
+    }
     
     @RequestMapping("info")
     public String info(ModelMap map, String id) throws WebException
@@ -47,8 +56,8 @@ public class WindDoorInfoController
                     String path = fj[i].substring(fj[i].indexOf("/") + 1,
                             fj[i].length());
                     Map<String, String> fjmap = new HashMap<String, String>();
-                    NameValuePair[] metaList = storageClientService.getMetadata(group,
-                            path);
+                    NameValuePair[] metaList = storageClientService
+                            .getMetadata(group, path);
                     String fjname = metaList[0].getValue();
                     fjmap.put("fileName", URLDecoder.decode(fjname, "utf-8"));
                     fjmap.put("filePath", fj[i]);
