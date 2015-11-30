@@ -21,7 +21,7 @@ public class MessageConfigServiceTest
     @Test
     public void testSendAllMessage()
     {
-        messageConfigService.sendAllMessage("您有一条新的开发商招标信息");
+        messageConfigService.sendAllMessage("您有一条新的开发商招标信息3");
     }
     
 }
