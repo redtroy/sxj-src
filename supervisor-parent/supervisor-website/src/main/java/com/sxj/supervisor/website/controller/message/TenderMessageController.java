@@ -70,6 +70,7 @@ public class TenderMessageController extends BaseController
         //        }
         query.setPagable(true);
         query.setMemberNo(memberNo);
+        service.fetchUnreads(memberNo);
         List<TenderMessageModel> list = service.queryMessageList(query);
         map.put("messageList", list);
         //        MessageConfigEntity config = null;
