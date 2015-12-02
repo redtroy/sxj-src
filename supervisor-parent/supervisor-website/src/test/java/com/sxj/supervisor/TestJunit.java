@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.poi.hslf.record.Record;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import com.sxj.redis.core.concurrent.RedisConcurrent;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
+import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.service.message.IMessageConfigService;
 import com.sxj.util.common.ISxjHttpClient;
 
@@ -63,8 +65,8 @@ public class TestJunit
             //   al.gather();
             //configService.sendAllMessage("测试短信");
         	
-        	String loginUrl = "http://www.menchuang.org.cn/purchase/addReleaseRecord.htm";
-        	
+        //	String loginUrl = "http://www.menchuang.org.cn/purchase/addRecord.htm";
+        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/addRecord.htm";
 //			MemberEntity memberEntity = new MemberEntity();
 //			memberEntity.setName("南京海阔天空科技有限公司");
 //			memberEntity.setAddress("仙林大道");
@@ -85,18 +87,18 @@ public class TestJunit
 //        	rr.setPriceRange("5000-10000");
 //        	rr.setReleaseTime(new Date());
 //        	rr.setRecordNumber("123456789");
-        	
-        	ApplyEntity rr = new ApplyEntity();
-        	rr.setSerialNumber("213123");
-        	rr.setCompany("南京门窗厂");
-        	rr.setApplyType(1);
-        	rr.setApplyNum(1000);
-        	rr.setPrice("2000");
-        	rr.setApplyTime(new Date());
-        	rr.setApplyStatus(1);
-        	rr.setScanNumber("group1/M00/00/EC/wKgB21ZFlNqAZSmnAAB2qqmXN4g298.PNG");
-        	rr.setSetNumber("213123");
-        	rr.setMemberNo("X000039");
+//        	
+//        	ApplyEntity rr = new ApplyEntity();
+//        	rr.setSerialNumber("213123");
+//        	rr.setCompany("南京门窗厂");
+//        	rr.setApplyType(1);
+//        	rr.setApplyNum(1000);
+//        	rr.setPrice("2000");
+//        	rr.setApplyTime(new Date());
+//        	rr.setApplyStatus(1);
+//        	rr.setScanNumber("group1/M00/00/EC/wKgB21ZFlNqAZSmnAAB2qqmXN4g298.PNG");
+//        	rr.setSetNumber("213123");
+//        	rr.setMemberNo("X000039");
         	
 //        	PurchaseEntity rr = new  PurchaseEntity();
 //        	rr.setcId("1");
@@ -112,6 +114,11 @@ public class TestJunit
 //        	rr.setProfiles(1001);
 //        	rr.setProfilesIncrease(101);
 //        	rr.setProfilesReduce(101);
+        	RecordEntity rr = new RecordEntity();
+        	rr.setApplyId("B000159");
+        	rr.setMemberIdA("MEM000001");
+        	rr.setImgPath("22222");
+        	rr.setRecordType(1);
         	String json = JsonMapper.nonDefaultMapper().toJson(rr);
 			System.err.println(json);
 			Map<String, String> map = new HashMap<String, String>();

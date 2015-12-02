@@ -672,20 +672,20 @@ public class WindowRfidServiceImpl implements IWindowRfidService {
                         wind.setProgressState(LabelProgressEnum.HAS_QUALITY);
                         wind.setAddress(address);
                         windowRfidDao.updateTestWindow(wind);
-                        map.put(rfidNo, "1");
+                        map.put(rfidNo, "1");//质检成功
                     } else if (wind.getProgressState().equals(
                             LabelProgressEnum.HAS_QUALITY)) {
-                        map.put(rfidNo, "2");
+                        map.put(rfidNo, "2");//门窗已经质检
                     } else if (wind.getRfidState().equals(RfidStateEnum.DISABLE)) {
-                        map.put(rfidNo, "3");
+                        map.put(rfidNo, "3");//标签已经停用
                     }
                 }else{
-                    map.put(rfidNo, "4");
+                    map.put(rfidNo, "4");//招标合同号不正确
                 }
             }
         } catch (Exception e) {
             SxjLogger.error(e.getMessage(), e, this.getClass());
-             map.put("state", "0");
+             map.put("state", "0");//质检失败
         }
         return map;
     }
