@@ -787,6 +787,9 @@ public class BasicController extends BaseController
                     {
                         CometServiceImpl.setCount(key, totalCount);
                         tenderMessageCount = totalCount;
+                        userKeys.add(key);
+                        CometServiceImpl.sendMessage(MessageChannel.MEMBER_READTENDER_MESSAGE_KEYS,
+                                userKeys);
                     }
                 }
                 else

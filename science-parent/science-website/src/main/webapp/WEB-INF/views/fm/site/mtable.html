@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>添加下料表</title>
+<title>私享家门窗算料优化系统(测试版本)</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <link href="${b.staticPath}style/feeding_single.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js"></script>
@@ -42,6 +42,19 @@ function setTab(name,cursel,n){
 <!--tab切换结束-->
 <!--添加下料表开始-->
  <script type="text/javascript" language="javascript" >
+ $(document).ready(function(){ 
+	    $(".btn-d").click(function(){
+	      var isload=$("#box").attr("lsload");
+	   	  if(isload=="false"){
+	   		  $.post("${basePath}downloadTem/query.htm",function(data){
+	   			  $("#box").empty();
+	   			  $("#box").append(data);
+	   			  $("#box").attr("lsload","true");
+	   			});
+	   	  }
+			$("#box").toggle(); //toggle()方法进行显示隐藏交互事件，如果显示的就进行隐藏，如果是隐藏的就显示 
+		}); 
+	}); 
  function display(){
 	  var isload=$("#box").attr("lsload");
 	  if(isload=="false"){
@@ -151,6 +164,7 @@ function copyTable(id,th){
 	$('#doc_form_'+id+"_"+index).attr("index",newIndex);
 	$("#table_div").find("#button_div_"+id+"_"+index).find("ul").attr("index",newIndex);
 	$('#doc_form_'+id+"_"+index).attr("id","doc_form_"+id+"_"+newIndex);
+	$('#tableId_'+id+"_"+index).attr("id","tableId_"+id+"_"+newIndex);
 	$("#table_div").find("#button_div_"+id+"_"+index).attr("id","button_div_"+id+"_"+newIndex);
 	$("#table_div").find("#button_doc_"+id+"_"+index).attr("id","button_doc_"+id+"_"+newIndex);
 	$("#table_div").find("#button_doc_"+id+"_"+newIndex).attr("onclick","addDoc('"+id+"',this);");
@@ -180,8 +194,8 @@ function removeTable(id,th){
 }
 function  printTable(id,th){
 	var index=$(th).parent().parent().attr("index");
-	$("#tableId_"+id+"_"+index+ " .nb").attr("style","");
-	$("#tableId_"+id+"_"+index+ " .na").attr("style","");
+	//$("#tableId_"+id+"_"+index).attr("style","");
+	//$("#tableId_"+id+"_"+index).attr("style","");
 	$("#tableId_"+id+"_"+index).jqprint();
 	}
 	
@@ -208,8 +222,8 @@ function search_project(){
 <!--下料表开始-->
   <ul>
     	<li>
-         <a data-toggle="modal" onclick="display();">
-          <img src="${b.staticPath}images/botton/5-5.png" onclick="this.src='${b.staticPath}images/botton/5-5.png'" style="pointer:cursor;border:none">
+         <a data-toggle="modal">
+          <img src="${b.staticPath}images/botton/5-5.png" class="btn-d" style="pointer:cursor;border:none"/>
          </a>
 			<div id="box" class="box checkfile" lsload="false" style="z-index: 99999999999">
 				
@@ -218,16 +232,16 @@ function search_project(){
         <li>
         <a href="${basePath}doc/toAdd.htm?projectId=${projectId}&itemId=${itemId}"><button class=" button button-orange">+显示全部</button></a>
         </li>
-        <li style="float:right">
+        <li  class="flo-r">
         <a href="${basePath}index.htm"><button class=" button button-orange">返回首页</button></a>
         </li>
         <li>
         <a href="javascript:void(0);"><button class=" button button-orange" onclick="printTableAll();">全部打印</button></a>
         </li>
-        <li style="float:right">
+        <li  class="flo-r">
         <button class="button button-green" onclick="search_project();">搜索</button>
         </li>
-        <li style="float:right">
+        <li class="flo-r">
         <input id="search_name_input" type="text" value="" name="search_name" placeholder="请输入工程或批次名称关键字" />
         </li>     
     </ul>

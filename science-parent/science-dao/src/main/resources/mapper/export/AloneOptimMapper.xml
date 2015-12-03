@@ -21,7 +21,7 @@
 			<![CDATA[ AND p.PROJECT_ID =#{condition.projectId}]]>
 		</if>
 		<if test="condition.memberNo!= null and condition.memberNo != ''">
-			<![CDATA[ AND p.MEMBER_NO =#{condition.memberName}]]>
+			<![CDATA[ AND p.MEMBER_NO =#{condition.memberNo}]]>
 		</if>
 		<if test="condition.ids != null and condition.ids !=''">
 		  <![CDATA[ and p.ID IN ]]>
